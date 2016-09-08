@@ -31,8 +31,8 @@
     "graphql",
     "react"
   ],
-  "author": "SysGears",
-  "license": "UNLICENSED",
+  "author": "SysGears INC",
+  "license": "MIT",
   "dependencies": {
     "aphrodite": "^0.5.0",
     "apollo-client": "^0.4.14",

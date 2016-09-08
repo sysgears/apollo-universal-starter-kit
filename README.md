@@ -32,3 +32,8 @@
   ```
   npm start
   ```
+
+## License
+This starter kit is released under [MIT][] license.
+
+[MIT]: LICENSE

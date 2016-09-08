@@ -34,6 +34,6 @@
   ```
 
 ## License
-This starter kit is released under [MIT][] license.
+Copyright © 2016 SysGears INC. This source code is licensed under the [MIT][] license.
 
 [MIT]: LICENSE

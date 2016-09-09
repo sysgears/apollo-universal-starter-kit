@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react'
 
-function Html({ content, state, css, commonCss }) {
+export const footerHeight = '40px';
+
+const Html = ({ content, state, css }) => {
   return (
     <html lang="en">
     <head>
@@ -8,7 +10,16 @@ function Html({ content, state, css, commonCss }) {
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Apollo Fullstack Starter Kit</title>
       <style data-aphrodite>${css.content}</style>
-      <style>${commonCss}</style>
+      <style type="text/css" dangerouslySetInnerHTML={{ __html: `
+        html {
+          min-height: 100%;
+          position: relative;
+        }
+
+        body {
+          margin-bottom: ${footerHeight}
+        }
+      ` }}/>
     </head>
     <body>
     <div id="content" dangerouslySetInnerHTML={{ __html: content }} />
@@ -20,13 +31,12 @@ function Html({ content, state, css, commonCss }) {
     </body>
     </html>
   );
-}
+};
 
 Html.propTypes = {
   content: PropTypes.string.isRequired,
   state: PropTypes.object.isRequired,
   css: PropTypes.object.isRequired,
-  commonCss: PropTypes.string.isRequired,
 };
 
 export default Html;

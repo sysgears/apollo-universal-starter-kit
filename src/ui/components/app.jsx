@@ -1,29 +1,31 @@
 import React from 'react'
 import { StyleSheet, css } from 'aphrodite'
 import { Row } from 'react-bootstrap'
+import classnames from 'classnames'
+
 import NavBar from './nav_bar'
+import { footerHeight } from './html'
 
 const styles = StyleSheet.create({
-  greyRow: {
-    backgroundColor: 'grey',
+  footer: {
+    position: 'absolute',
+    bottom: 0,
     width: '100%',
-    height: '5px'
+    lineHeight: footerHeight,
+    height: footerHeight
   },
 });
-
 
 export default function App({ children }) {
   return (
     <div>
-      <div className={css(styles.greyRow)}>
-      </div>
       <NavBar>
       </NavBar>
       <div className="container">
         {children}
       </div>
-      <footer id="footer" className="container">
-        <Row className="text-center">
+      <footer className={classnames('container', css(styles.footer))}>
+        <Row className='text-center'>
           &copy; 2016. Example Apollo App.
         </Row>
       </footer>

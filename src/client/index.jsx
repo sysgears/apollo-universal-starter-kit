@@ -5,7 +5,6 @@ import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client
 import { ApolloProvider } from 'react-apollo'
 
 import routes from '../routes'
-import '../ui/styles.scss'
 
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({

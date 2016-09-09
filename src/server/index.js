@@ -10,7 +10,6 @@ import bodyParser from 'body-parser'
 import { match, RouterContext } from 'react-router';
 import { StyleSheetServer } from 'aphrodite'
 import fetch from 'isomorphic-fetch' // eslint-disable-line no-unused-vars
-import sass from 'node-sass'
 
 import log from '../log'
 import routes from '../routes'
@@ -84,11 +83,9 @@ app.use((req, res) => {
       StyleSheetServer.renderStatic(() => getDataFromTree(component).then(context => {
         res.status(200);
 
-        let styles = sass.renderSync({ file: 'src/ui/styles.scss', outputStyle: 'compact' }).css.toString('utf-8');
-
         const { html, css } = StyleSheetServer.renderStatic(() => ReactDOM.renderToString(component));
 
-        const page = <Html content={html} state={context.store.getState()} css={css} commonCss={styles} />;
+        const page = <Html content={html} state={context.store.getState()} css={css} />;
         res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
         res.end();
       }).catch(e => log.error('RENDERING ERROR:', e)));

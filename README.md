@@ -1,6 +1,6 @@
 ## Apollo Fullstack Isomorphic Starter Kit
 
-> Apollo Fullstack Isomorphic Starter Kit is an boilerplate for isomorphic web app development built on top 
+> Apollo Fullstack Isomorphic Starter Kit is an boilerplate for [isomorphic] web app development built on top 
 > of [Apollo](http://www.apollostack.com/), [GraphQL](http://graphql.org/), [React](https://facebook.github.io/react/), 
 > [Express](http://expressjs.com/) with SQL storage support and 
 > [Twtiter Bootstrap](http://getbootstrap.com/) integration and containing modern web development
@@ -43,3 +43,4 @@
 Copyright © 2016 [SysGears INC](http://sysgears.com). This source code is licensed under the [MIT][] license.
 
 [MIT]: LICENSE
+[isomorphic]: (http://isomorphic.net/javascript)

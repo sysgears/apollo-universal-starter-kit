@@ -41,9 +41,10 @@
   ```
 
 ## Deploying to [Heroku]
-1. Deploy your app to [Heroku]
+1. Add your app to [Heroku]
 1. Allow [Heroku] to install build time dependencies from the devDependencies in package.json:
    `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
+1. Deploy your app on [Heroku]
 
 [Heroku]: (https://heroku.com)
 

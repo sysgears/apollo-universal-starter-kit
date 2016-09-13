@@ -16,7 +16,7 @@
     "lint": "eslint --fix --ext js --ext jsx src",
     "seed": "knex seed:run",
     "migrate": "knex migrate:latest",
-    "postinstall": "if [ \"$NODE_ENV\" = production ]; then rm -rf ./build && npm run prod-build; fi",
+    "postinstall": "if [ \"$NODE_ENV\" = production ]; then rm -rf ./build && npm run prod-build && npm run migrate && npm run seed; fi",
     "prod-build": "concurrently \"npm run prod-build-frontend\" \"npm run prod-build-backend\"",
     "prod-build-frontend": "webpack --config ./webpack/frontend.js",
     "prod-build-backend": "babel ./src -d './build' --source-maps"

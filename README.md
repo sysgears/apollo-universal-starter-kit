@@ -1,7 +1,8 @@
 ## Apollo Fullstack Isomorphic Starter Kit
 
-> Apollo Fullstack Isomorphic Starter Kit is an boilerplate for isomorphic web app development built on top 
-> of [Apollo](http://www.apollostack.com/), [GraphQL](http://graphql.org/), [React](https://facebook.github.io/react/), 
+> Apollo Fullstack Isomorphic Starter Kit is an boilerplate for [isomorphic](http://isomorphic.net/javascript)
+> web app development built on topof [Apollo](http://www.apollostack.com/), 
+> [GraphQL](http://graphql.org/), [React](https://facebook.github.io/react/), 
 > [Express](http://expressjs.com/) with SQL storage support and 
 > [Twtiter Bootstrap](http://getbootstrap.com/) integration and containing modern web development
 > tools such as [Webpack](http://webpack.github.io/), [Babel](http://babeljs.io/) to help you stay productive.

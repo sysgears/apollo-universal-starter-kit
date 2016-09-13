@@ -40,6 +40,10 @@
   npm start
   ```
 
+## Demo 
+You can see latest version of this app deployed to Heroku here:
+https://apollo-fullstack-starter-kit.herokuapp.com
+
 ## Deploying to [Heroku]
 1. Add your app to [Heroku]
 1. Allow [Heroku] to install build time dependencies from the devDependencies in package.json:

@@ -8,20 +8,18 @@ const plugins = [
     'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
   })
 ];
-const assetsDir = process.env.ASSETS_DIR;
-const assetMapFile = process.env.ASSETS_MAP_FILE;
 const outputFile = DEBUG ? '[name].js' : '[name].[chunkhash].js';
 
 if (!DEBUG) {
   plugins.push(new ManifestPlugin({
-    fileName: assetMapFile
+    fileName: 'assets.json'
   }));
   plugins.push(new webpack.optimize.UglifyJsPlugin({ minimize: true }));
 }
 
 const config = {
   entry: {
-    bundle: ['babel-polyfill', 'bootstrap-loader', './src/client/index.jsx']
+    bundle: ['babel-polyfill', 'bootstrap-loader', './src/frontend/index.jsx']
   },
   module: {
     noParse: [],
@@ -50,7 +48,7 @@ const config = {
   plugins,
   output: {
     filename: outputFile,
-    path: DEBUG ? '/' : assetsDir,
+    path: DEBUG ? '/' : './build/frontend',
     publicPath: '/assets/'
   },
 };

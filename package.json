@@ -2,20 +2,25 @@
   "name": "apollo-fullstack-starter-kit",
   "private": true,
   "version": "1.0.0",
-  "main": "src/server",
+  "main": "src/backend",
   "engines": {
     "node": "6.2.2",
     "npm": "3.7.3"
   },
   "scripts": {
-    "start-client": "babel-node ./webpack/server.js",
-    "start-server": "nodemon -e js,jsx,md,mustache -w ./src --exec babel-node -- ./src/server/index.js",
-    "start": "concurrently \"npm run start-client\" \"npm run start-server\"",
+    "start-frontend": "babel-node ./webpack/dev_server.js",
+    "start-backend": "nodemon -e js,jsx,md,mustache -w ./src --exec babel-node -- ./src/backend/index.js",
+    "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
+    "prod-start": "node ./build/backend",
     "test": "mocha --compilers js:babel-core/register --reporter spec --full-trace 'src/**/*.test.js' && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src",
     "seed": "knex seed:run",
-    "migrate": "knex migrate:latest"
-  },
+    "migrate": "knex migrate:latest",
+    "postinstall": "if [ \"$NODE_ENV\" = production ]; then npm run prod-build; fi",
+    "prod-build": "concurrently \"npm run prod-build-frontend\" \"npm run prod-build-backend\"",
+    "prod-build-frontend": "webpack --config ./webpack/frontend.js",
+    "prod-build-backend": "babel ./src -d './build/backend' --source-maps"
+ },
   "repository": {
     "type": "git",
     "url": "git@github.com:sysgears/apollo-fullstack-starter-kit.git"
@@ -79,7 +84,7 @@
     "css-loader": "^0.25.0",
     "eslint": "^3.5.0",
     "eslint-config-airbnb": "^11.0.0",
-    "eslint-import-resolver-webpack": "^0.5.1",
+    "eslint-import-resolver-webpack": "^0.6.0",
     "eslint-plugin-import": "^1.14.0",
     "eslint-plugin-jsx-a11y": "^2.2.1",
     "eslint-plugin-react": "^6.2.0",

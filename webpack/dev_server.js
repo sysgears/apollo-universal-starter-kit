@@ -2,7 +2,7 @@ import dotEnv from 'dotenv'
 
 import WebpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
-import config from './config'
+import config from './frontend'
 import log from '../src/log'
 
 dotEnv.config();

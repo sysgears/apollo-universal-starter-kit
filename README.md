@@ -39,6 +39,13 @@
   npm start
   ```
 
+## Deploying to [Heroku]
+1. Deploy your app to [Heroku]
+1. Allow [Heroku] to install build time dependencies from the devDependencies in package.json:
+   `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
+
+[Heroku]: (https://heroku.com)
+
 ## License
 Copyright © 2016 [SysGears INC](http://sysgears.com). This source code is licensed under the [MIT][] license.
 

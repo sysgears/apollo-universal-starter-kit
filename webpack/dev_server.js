@@ -1,14 +1,10 @@
-import dotEnv from 'dotenv'
-
 import WebpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
 import config from './frontend'
 import log from '../src/log'
 
-dotEnv.config();
-
 const webpackPort = 3000;
-const appPort = process.env.DEV_APP_PORT;
+const appPort = 8080;
 
 Object.keys(config.entry)
 .forEach((key) => {

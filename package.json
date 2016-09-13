@@ -11,15 +11,15 @@
     "start-frontend": "babel-node ./webpack/dev_server.js",
     "start-backend": "nodemon -e js,jsx,md,mustache -w ./src --exec babel-node -- ./src/backend/index.js",
     "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
-    "prod-start": "node ./build/backend",
+    "prod-start": "NODE_ENV=production node ./build/backend",
     "test": "mocha --compilers js:babel-core/register --reporter spec --full-trace 'src/**/*.test.js' && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src",
     "seed": "knex seed:run",
     "migrate": "knex migrate:latest",
-    "postinstall": "if [ \"$NODE_ENV\" = production ]; then npm run prod-build; fi",
+    "postinstall": "if [ \"$NODE_ENV\" = production ]; then rm -rf ./build && npm run prod-build; fi",
     "prod-build": "concurrently \"npm run prod-build-frontend\" \"npm run prod-build-backend\"",
     "prod-build-frontend": "webpack --config ./webpack/frontend.js",
-    "prod-build-backend": "babel ./src -d './build/backend' --source-maps"
+    "prod-build-backend": "babel ./src -d './build' --source-maps"
  },
   "repository": {
     "type": "git",

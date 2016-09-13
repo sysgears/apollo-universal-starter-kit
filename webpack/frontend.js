@@ -48,7 +48,7 @@ const config = {
   plugins,
   output: {
     filename: outputFile,
-    path: DEBUG ? '/' : './build/frontend',
+    path: DEBUG ? '/' : './build/assets',
     publicPath: '/assets/'
   },
 };

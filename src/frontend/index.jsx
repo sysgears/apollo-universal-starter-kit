@@ -7,8 +7,7 @@ import { ApolloProvider } from 'react-apollo'
 import routes from '../routes'
 
 const client = new ApolloClient({
-  networkInterface: createNetworkInterface({
-    uri: '/graphql',
+  networkInterface: createNetworkInterface('/graphql', {
     opts: {
       credentials: 'same-origin',
     },

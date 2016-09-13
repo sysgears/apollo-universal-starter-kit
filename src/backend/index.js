@@ -1,4 +1,3 @@
-import dotEnv from 'dotenv'
 import express from 'express';
 import React from 'react'
 import ReactDOM from 'react-dom/server'
@@ -10,14 +9,14 @@ import bodyParser from 'body-parser'
 import { match, RouterContext } from 'react-router';
 import { StyleSheetServer } from 'aphrodite'
 import fetch from 'isomorphic-fetch' // eslint-disable-line no-unused-vars
+import fs from 'fs'
+import path from 'path'
 
 import log from '../log'
 import routes from '../routes'
 import Html from '../ui/components/html'
 import schema from './api/schema'
 import Count from './sql/count'
-
-dotEnv.config();
 
 process.on('uncaughtException', (ex) => {
   log.error(ex);
@@ -27,7 +26,8 @@ process.on('uncaughtException', (ex) => {
 const app = express();
 
 // Heroku requires you to use process.env.PORT
-const port = process.env.DEV_APP_PORT || process.env.PORT;
+const port = process.env.PORT || 8080;
+let apiPort = port;
 // Don't rate limit heroku
 app.enable('trust proxy');
 
@@ -36,9 +36,11 @@ app.use(bodyParser.json());
 
 // In development, we use webpack server
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(process.env.PUBLIC_DIR, {
+  app.use(express.static('./build', {
     maxAge: '180 days',
   }));
+} else {
+  apiPort = 3000;
 }
 
 app.use('/graphql', apolloExpress(() => {
@@ -54,9 +56,17 @@ app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
 }));
 
-const apiPort = 3000;
-const baseUrl = `http://localhost:${apiPort}`;
-const apiUrl = `${baseUrl}/graphql`;
+const apiUrl = `http://localhost:${port}/graphql`;
+
+let assetMap = {
+  'bundle.js': 'bundle.js'
+};
+
+if (process.env.NODE_ENV === 'production') {
+  assetMap = JSON.parse(
+    fs.readFileSync('./build/assets/assets.json')
+  )
+}
 
 app.use((req, res) => {
   match({ routes, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
@@ -85,7 +95,7 @@ app.use((req, res) => {
 
         const { html, css } = StyleSheetServer.renderStatic(() => ReactDOM.renderToString(component));
 
-        const page = <Html content={html} state={context.store.getState()} css={css} />;
+        const page = <Html content={html} state={context.store.getState()} assetMap={assetMap} css={css} />;
         res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
         res.end();
       }).catch(e => log.error('RENDERING ERROR:', e)));

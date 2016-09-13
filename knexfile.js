@@ -17,7 +17,7 @@ module.exports = {
   production: {
     client: 'sqlite3',
     connection: {
-      filename: './dev-db.sqlite3'
+      filename: './prod-db.sqlite3'
     },
     seeds: {
       directory: './src/database/seeds'

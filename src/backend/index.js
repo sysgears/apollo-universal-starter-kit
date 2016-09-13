@@ -10,7 +10,6 @@ import { match, RouterContext } from 'react-router';
 import { StyleSheetServer } from 'aphrodite'
 import fetch from 'isomorphic-fetch' // eslint-disable-line no-unused-vars
 import fs from 'fs'
-import path from 'path'
 
 import log from '../log'
 import routes from '../routes'
@@ -27,7 +26,6 @@ const app = express();
 
 // Heroku requires you to use process.env.PORT
 const port = process.env.PORT || 8080;
-let apiPort = port;
 // Don't rate limit heroku
 app.enable('trust proxy');
 
@@ -39,8 +37,6 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static('./build', {
     maxAge: '180 days',
   }));
-} else {
-  apiPort = 3000;
 }
 
 app.use('/graphql', apolloExpress(() => {

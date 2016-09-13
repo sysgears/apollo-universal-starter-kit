@@ -118,7 +118,7 @@
     "settings": {
       "import/resolver": {
         "webpack": {
-          "config": "./webpack/config.js"
+          "config": "./webpack/frontend.js"
         }
       }
     },

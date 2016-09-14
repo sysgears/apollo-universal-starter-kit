@@ -10,8 +10,9 @@
   "scripts": {
     "start-frontend": "babel-node ./webpack/dev_server.js",
     "start-backend": "nodemon -e js,jsx,md,mustache -w ./src --exec babel-node -- ./src/backend/index.js",
-    "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
-    "prod-start": "NODE_ENV=production node ./build/backend",
+    "dev-start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
+    "prod-start": "node ./build/backend",
+    "start": "if [ \"$NODE_ENV\" != production ]; then npm run dev-start; else npm run prod-start; fi",
     "test": "mocha --compilers js:babel-core/register --reporter spec --full-trace 'src/**/*.test.js' && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src",
     "seed": "knex seed:run",

@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 import { Router, browserHistory } from 'react-router'
 import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
+require('../ui/styles.scss');
 
 import routes from '../routes'
 

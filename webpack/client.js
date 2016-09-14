@@ -1,12 +1,14 @@
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const DEBUG = process.env.NODE_ENV !== 'production';
 
 const plugins = [
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
-  })
+  }),
+  new ExtractTextPlugin("app.css")
 ];
 const outputFile = DEBUG ? '[name].js' : '[name].[chunkhash].js';
 
@@ -19,13 +21,18 @@ if (!DEBUG) {
 
 const config = {
   entry: {
-    bundle: ['babel-polyfill', 'bootstrap-loader', './src/client/index.jsx']
+    bundle: ['babel-polyfill', './src/client/index.jsx']
   },
   module: {
     noParse: [],
     loaders: [
       { test: /\.json$/, loader: 'json' },
-      { test: /\.scss$/, loader: "style!css!sass" },
+      {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract(
+          "style",
+          "css!sass")
+      },
       { test: /\.css$/, loader: 'style!css' },
       { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
       { test: /\.(ttf|eot)$/, loader: 'file' },
@@ -36,7 +43,7 @@ const config = {
         query: {
           cacheDirectory: DEBUG
         }
-      }
+      },
     ]
   },
   resolve: {

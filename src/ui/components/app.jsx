@@ -4,7 +4,8 @@ import { Row } from 'react-bootstrap'
 import classnames from 'classnames'
 
 import NavBar from './nav_bar'
-import { footerHeight } from './html'
+
+const footerHeight = '40px';
 
 const styles = StyleSheet.create({
   footer: {

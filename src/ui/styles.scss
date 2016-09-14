@@ -1,0 +1,13 @@
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+
+$footer-height: 40px;
+
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+body {
+  margin-bottom: $footer-height;
+}

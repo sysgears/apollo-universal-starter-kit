@@ -21,7 +21,7 @@
     "prod-build": "concurrently \"npm run prod-build-client\" \"npm run prod-build-server\"",
     "prod-build-client": "webpack --config ./webpack/client.js",
     "prod-build-server": "babel ./src -d './build' --source-maps"
- },
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:sysgears/apollo-fullstack-starter-kit.git"
@@ -54,7 +54,6 @@
     "isomorphic-fetch": "^2.2.1",
     "knex": "^0.12.0",
     "minilog": "^3.0.1",
-    "node-sass": "^3.9.3",
     "react": "^15.3.1",
     "react-addons-update": "^15.3.1",
     "react-apollo": "^0.5.4",
@@ -95,6 +94,7 @@
     "json-loader": "^0.5.4",
     "mocha": "^3.0.2",
     "nodemon": "^1.10.2",
+    "node-sass": "^3.9.3",
     "react-redux": "^4.4.5",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.2",

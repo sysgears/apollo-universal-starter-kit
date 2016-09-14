@@ -2,25 +2,25 @@
   "name": "apollo-fullstack-starter-kit",
   "private": true,
   "version": "1.0.0",
-  "main": "src/backend",
+  "main": "src/server",
   "engines": {
     "node": "6.2.2",
     "npm": "3.7.3"
   },
   "scripts": {
-    "start-frontend": "babel-node ./webpack/dev_server.js",
-    "start-backend": "nodemon -e js,jsx,md,mustache -w ./src --exec babel-node -- ./src/backend/index.js",
-    "dev-start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
-    "prod-start": "node ./build/backend",
+    "start-client": "babel-node ./webpack/client-watch.js",
+    "start-server": "nodemon -e js,jsx,md,mustache -w ./src --exec babel-node -- ./src/server/index.js",
+    "dev-start": "concurrently \"npm run start-client\" \"npm run start-server\"",
+    "prod-start": "node ./build/server",
     "start": "if [ \"$NODE_ENV\" != production ]; then npm run dev-start; else npm run prod-start; fi",
     "test": "mocha --compilers js:babel-core/register --reporter spec --full-trace 'src/**/*.test.js' && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src",
     "seed": "knex seed:run",
     "migrate": "knex migrate:latest",
     "postinstall": "if [ \"$NODE_ENV\" = production ]; then rm -rf ./build && npm run prod-build && npm run migrate && npm run seed; fi",
-    "prod-build": "concurrently \"npm run prod-build-frontend\" \"npm run prod-build-backend\"",
-    "prod-build-frontend": "webpack --config ./webpack/frontend.js",
-    "prod-build-backend": "babel ./src -d './build' --source-maps"
+    "prod-build": "concurrently \"npm run prod-build-client\" \"npm run prod-build-server\"",
+    "prod-build-client": "webpack --config ./webpack/client.js",
+    "prod-build-server": "babel ./src -d './build' --source-maps"
  },
   "repository": {
     "type": "git",
@@ -119,7 +119,7 @@
     "settings": {
       "import/resolver": {
         "webpack": {
-          "config": "./webpack/frontend.js"
+          "config": "./webpack/client.js"
         }
       }
     },

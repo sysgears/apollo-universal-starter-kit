@@ -19,7 +19,7 @@ if (!DEBUG) {
 
 const config = {
   entry: {
-    bundle: ['babel-polyfill', 'bootstrap-loader', './src/frontend/index.jsx']
+    bundle: ['babel-polyfill', 'bootstrap-loader', './src/client/index.jsx']
   },
   module: {
     noParse: [],

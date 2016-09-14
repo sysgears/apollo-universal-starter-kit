@@ -1,6 +1,6 @@
 import WebpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
-import config from './frontend'
+import config from './client'
 import log from '../src/log'
 
 const webpackPort = 3000;

@@ -55,7 +55,8 @@ app.use('/graphiql', graphiqlExpress({
 const apiUrl = `http://localhost:${port}/graphql`;
 
 let assetMap = {
-  'bundle.js': 'bundle.js'
+  'bundle.js': 'bundle.js',
+  'bundle.css': 'bundle.css'
 };
 
 if (process.env.NODE_ENV === 'production') {

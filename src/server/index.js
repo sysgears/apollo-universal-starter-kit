@@ -50,6 +50,12 @@ app.use('/graphql', apolloExpress(() => {
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
+  query:
+    '{\n' +
+    '  count {\n' +
+    '    amount\n' +
+    '  }\n' +
+    '}'
 }));
 
 const apiUrl = `http://localhost:${port}/graphql`;

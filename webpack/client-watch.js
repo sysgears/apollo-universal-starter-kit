@@ -8,8 +8,12 @@ const appPort = 8080;
 
 Object.keys(config.entry)
 .forEach((key) => {
-  config.entry[key].unshift(`webpack-dev-server/client?http://localhost:${webpackPort}/`)
+  config.entry[key].unshift(
+    `webpack-dev-server/client?http://localhost:${webpackPort}/`, 'webpack/hot/dev-server'
+  )
 });
+
+config.plugins.unshift(new webpack.HotModuleReplacementPlugin());
 
 const compiler = webpack(config);
 const connString = `http://localhost:${appPort}`;
@@ -17,8 +21,9 @@ const connString = `http://localhost:${appPort}`;
 log.info(`Proxying requests to:${connString}`);
 
 const app = new WebpackDevServer(compiler, {
+  hot: true,
   contentBase: '/assets/',
-  publicPath: '/assets/',
+  publicPath: 'http://localhost:3000/assets/',
   headers: { 'Access-Control-Allow-Origin': '*' },
   proxy: {
     '*': `http://localhost:${appPort}`

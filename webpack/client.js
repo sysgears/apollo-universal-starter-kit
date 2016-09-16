@@ -33,7 +33,6 @@ const config = {
           "style",
           "css!sass")
       },
-      { test: /\.css$/, loader: 'style!css' },
       { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
       { test: /\.(ttf|eot)$/, loader: 'file' },
       {

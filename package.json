@@ -10,7 +10,7 @@
   "scripts": {
     "build": "babel-node tools/run build",
     "clean": "rm -rf ./build",
-    "start": "babel-node tools/run watch",
+    "start": "if [ \"$NODE_ENV\" = production ]; then node --harmony build/server; else babel-node tools/run watch; fi",
     "test": "mocha --compilers js:babel-core/register --reporter spec --full-trace 'src/**/*.test.js' && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src",
     "seed": "knex seed:run",

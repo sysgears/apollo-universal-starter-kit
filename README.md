@@ -40,6 +40,8 @@
   npm start
   ```
 
+6. Point your browser to http://localhost:3000
+
 ## Demo 
 You can see latest version of this app deployed to Heroku here:
 https://apollo-fullstack-starter-kit.herokuapp.com

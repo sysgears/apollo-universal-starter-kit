@@ -1,10 +1,16 @@
 {
   "passPerPreset": true,
-  "presets": [
-    "react",
-    "es2015",
-    "stage-0"
-  ],
+  "presets": ["react", "es2015", "stage-0"],
+  "env": {
+    "development": {
+      "plugins": [
+        "transform-class-properties",
+        "transform-object-rest-spread",
+        "transform-object-assign",
+        "react-hot-loader/babel"
+      ]
+    }
+  },
   "plugins": [
     "babel-plugin-inline-import"
   ],

@@ -17,7 +17,7 @@ if (module.hot) {
   module.hot.status(event => {
     if (event === 'abort' || event === 'fail') {
       log('HMR error status: ' + event);
-      // Signal run.js to do full-reload of the back-end
+      // Signal webpack.run.js to do full-reload of the back-end
       process.exit(250);
     }
   });

@@ -8,9 +8,9 @@
     "npm": "3.7.3"
   },
   "scripts": {
-    "build": "babel-node tools/run build",
+    "build": "babel-node tools/webpack.run build",
     "clean": "rm -rf ./build",
-    "start": "if [ \"$NODE_ENV\" = production ]; then node --harmony build/server; else babel-node tools/run watch; fi",
+    "start": "if [ \"$NODE_ENV\" = production ]; then node --harmony build/server; else babel-node tools/webpack.run watch; fi",
     "test": "mocha --compilers js:babel-core/register --reporter spec --full-trace 'src/**/*.test.js' && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src",
     "seed": "knex seed:run",

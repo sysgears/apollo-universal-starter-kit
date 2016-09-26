@@ -41,7 +41,7 @@ const baseConfig = {
 let serverPlugins = [
   new webpack.BannerPlugin('require("source-map-support").install();',
       { raw: true, entryOnly: false }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __DEV__: true}))
+  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __DEV__: __DEV__}))
 ];
 
 const serverConfig = merge.smart(baseConfig, {

@@ -1,11 +1,9 @@
-## Apollo Fullstack Isomorphic Starter Kit
+## Apollo Universal Starter Kit with Hot Code Reload of backend & frontend 
 
-> Apollo Fullstack Isomorphic Starter Kit is an boilerplate for [isomorphic](http://isomorphic.net/javascript)
-> web app development built on topof [Apollo](http://www.apollostack.com/), 
-> [GraphQL](http://graphql.org/), [React](https://facebook.github.io/react/), 
-> [Express](http://expressjs.com/) with SQL storage support and 
-> [Twtiter Bootstrap](http://getbootstrap.com/) integration and containing modern web development
-> tools such as [Webpack](http://webpack.github.io/), [Babel](http://babeljs.io/) to help you stay productive.
+> Apollo Universal Starter Kit is an boilerplate for [Universal] web app development built on top of [Apollo], 
+> [GraphQL], [React], [Express] with SQL storage support and [Twitter Bootstrap] integration. 
+> Hot Code Reload of backend & frontend using [Webpack] and [React Hot Loader 3] to reflect your changes instantly 
+> and help you stay productive.
 
 ## Getting Started
 
@@ -41,6 +39,7 @@
   ```
 
 6. Point your browser to http://localhost:3000
+7. Change any app code and see the changes applied immediately!
 
 ## Demo 
 You can see latest version of this app deployed to Heroku here:
@@ -52,9 +51,50 @@ https://apollo-fullstack-starter-kit.herokuapp.com
    `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
 1. Deploy your app on [Heroku]
 
-[Heroku]: (https://heroku.com)
+## Features
+- Hot Code Reload for backend and frontend
+Hot Code Reload for backend is done using [Webpack]. When [Webpack] prepares hot patches on the filesystem,
+SIGUSR2 signal is sent to Node.js app and embedded Webpack Hot Module Runtime reacts to this signal and 
+applies patches to running modules from filesystem. Hot code reload for frontend is using Webpack Dev Server
+and [React Hot Loader 3] to apply patches to frontend code. Hot patches for React components are applied on the 
+frontend and backend at the same time, so React should not complain about differences in client and server code.
+
+- Server Side Rendering with Apollo Redux Store sync
+On the initial web page request backend fully renders UI and hands off Apollo Redux Store state to frontend. Frontend
+then starts off from there and updates itself on user interactions.
+
+- [GraphQL] API
+[GraphQL] is used as very flexible and much faster API in terms of bandwidth and round-trips, compared to REST. 
+[GraphQL] requests are batched together automatically by [Apollo]
+
+- SQL and arbitrary data sources support
+[Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL]. 
+NoSQL storage or any other data source can be used the same way.
+
+- Powerful stylesheets with Hot Reloading
+[Twitter Bootstrap] in form of SASS stylesheets is used for styling demo application. Application has stylesheet
+in `styles.scss` for global styling which is Hot Reloaded on change. React components styling is done by [Aphrodite CSS].` 
+
+- [Babel] for ES6 or ES7 transpiling
+
+- [ESLint] to enforce proper code style
+
 
 ## License
-Copyright © 2016 [SysGears INC](http://sysgears.com). This source code is licensed under the [MIT][] license.
+Copyright © 2016 [SysGears INC]. This source code is licensed under the [MIT] license.
 
 [MIT]: LICENSE
+[Universal]: https://medium.com/@mjackson/universal-javascript-4761051b7ae9
+[Apollo]: http://www.apollostack.com
+[GraphQL]: http://graphql.org
+[React]: https://facebook.github.io/react
+[Express]: http://expressjs.com
+[Twitter Bootstrap]: http://getbootstrap.com
+[Webpack]: http://webpack.github.io
+[Babel]: http://babeljs.io
+[React Hot Loader 3]: https://github.com/gaearon/react-hot-loader
+[Aphrodite CSS]: https://github.com/Khan/aphrodite
+[Knex]: http://knexjs.org
+[Heroku]: https://heroku.com
+[ESLint]: http://eslint.org
+[SysGears INC]: http://sysgears.com

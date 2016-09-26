@@ -7,6 +7,7 @@ const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 
 global.__DEV__ = process.argv.length >= 3 && process.argv[2] === 'watch';
+const buildNodeEnv = __DEV__ ? 'development' : 'production';
 
 let basePlugins = [];
 
@@ -41,7 +42,8 @@ const baseConfig = {
 let serverPlugins = [
   new webpack.BannerPlugin('require("source-map-support").install();',
       { raw: true, entryOnly: false }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __DEV__: __DEV__}))
+  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true,
+    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`}))
 ];
 
 const serverConfig = merge.smart(baseConfig, {
@@ -81,7 +83,8 @@ let clientPlugins = [
   new ManifestPlugin({
     fileName: 'assets.json'
   }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false, __DEV__: __DEV__}))
+  new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false,
+    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`}))
 ];
 
 if (!__DEV__) {

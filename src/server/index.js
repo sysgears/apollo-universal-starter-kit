@@ -1,7 +1,6 @@
 import express from 'express';
-import { graphiqlExpress, apolloExpress } from 'apollo-server'
 import bodyParser from 'body-parser'
-import fetch from 'isomorphic-fetch' // eslint-disable-line no-unused-vars
+import { app as settings } from '../../package.json'
 
 import log from '../log'
 
@@ -9,6 +8,7 @@ log('Started Node app....');
 
 // Hot reloadable modules
 var websiteMiddleware = require('./middleware/website').default;
+var graphiqlMiddleware = require('./middleware/graphiql').default;
 var graphqlMiddleware = require('./middleware/graphql').default;
 
 var server;
@@ -33,6 +33,7 @@ if (module.hot) {
   // Reload reloadable modules
   module.hot.accept('./middleware/website', () => { websiteMiddleware = require('./middleware/website').default; });
   module.hot.accept('./middleware/graphql', () => { graphqlMiddleware = require('./middleware/graphql').default; });
+  module.hot.accept('./middleware/graphiql', () => { graphiqlMiddleware = require('./middleware/graphiql').default; });
 }
 
 process.on('uncaughtException', (ex) => {
@@ -42,28 +43,18 @@ process.on('uncaughtException', (ex) => {
 
 const app = express();
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || settings.appPort;
 // Don't rate limit heroku
 app.enable('trust proxy');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/graphql', apolloExpress(graphqlMiddleware));
+app.use('/assets', express.static(settings.frontendBuildDir, {maxAge: '180 days'}));
 
-app.use('/graphiql', graphiqlExpress({
-  endpointURL: '/graphql',
-  query:
-    '{\n' +
-    '  count {\n' +
-    '    amount\n' +
-    '  }\n' +
-    '}'
-}));
-
-app.use('/assets', express.static('build/client', {maxAge: '180 days'}));
-
-app.use((req, res) => websiteMiddleware(req, res));
+app.use('/graphql', (...args) => graphqlMiddleware(...args));
+app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
+app.use((...args) => websiteMiddleware(...args));
 
 server = app.listen(port, () => {
   log.info(`Node app is running on port ${port}`);

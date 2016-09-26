@@ -1,11 +1,14 @@
-import schema from '../api/schema';
-import Count from '../sql/count';
+import { apolloExpress } from 'apollo-server'
+import 'isomorphic-fetch'
 
-export default () => {
+import schema from '../api/schema'
+import Count from '../sql/count'
+
+export default apolloExpress(() => {
   return {
     schema,
     context: {
       Count: new Count(),
     },
   };
-};
+});

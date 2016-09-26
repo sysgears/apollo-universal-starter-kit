@@ -3,31 +3,36 @@ import ReactDOM from 'react-dom/server'
 import ApolloClient, { createNetworkInterface } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
 import { getDataFromTree } from 'react-apollo/server'
-import { match, RouterContext } from 'react-router';
+import { match, RouterContext } from 'react-router'
 import { StyleSheetServer } from 'aphrodite'
 import fs from 'fs'
+import path from 'path'
 
-import Html from '../../ui/components/html';
-import routes from '../../routes';
+import Html from '../../ui/components/html'
+import routes from '../../routes'
 import log from '../../log'
+import { app as settings } from '../../../package.json'
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || settings.appPort;
 
 const apiUrl = `http://localhost:${port}/graphql`;
 
-let assetMap = {'bundle.js': 'bundle.js', 'bundle.css': 'bundle.css'};
-
+let jsUrl, cssUrl;
 if (__DEV__) {
   try {
-    fs.mkdirSync('build/client');
+    fs.mkdirSync(settings.frontendBuildDir);
   } catch(e) {
     if ( e.code != 'EEXIST' ) throw e;
   }
-  fs.writeFileSync('./build/client/bundle.css', require('../../ui/styles.scss')._getCss());
+  fs.writeFileSync(path.join(settings.frontendBuildDir, 'bundle.css'), require('../../ui/styles.scss')._getCss());
+
+  jsUrl = `/assets/bundle.js`;
+  cssUrl = '/assets/bundle.css';
 } else {
-  assetMap = JSON.parse(
-      fs.readFileSync('build/client/assets.json')
-  );
+  let assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
+
+  jsUrl = `/assets/${assetMap['bundle.js']}`;
+  cssUrl = `/assets/${assetMap['bundle.css']}`;
 }
 
 export default (req, res) => {
@@ -57,7 +62,7 @@ export default (req, res) => {
 
         const { html, css } = StyleSheetServer.renderStatic(() => ReactDOM.renderToString(component));
 
-        const page = <Html content={html} state={context.store.getState()} assetMap={assetMap} css={css}/>;
+        const page = <Html content={html} state={context.store.getState()} jsUrl={jsUrl} cssUrl={cssUrl} aphroditeCss={css}/>;
         res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
         res.end();
       }).catch(e => log.error('RENDERING ERROR:', e)));

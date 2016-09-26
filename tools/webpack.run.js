@@ -13,11 +13,6 @@ const logFront = minilog('webpack-for-frontend');
 
 const [ serverConfig, clientConfig ] = configs;
 
-const appPort = 8080;
-const webpackDevPort = 3000;
-
-const isBuild = process.argv.length >= 3 && process.argv[2] === 'build';
-
 var server;
 var startBackend = false;
 
@@ -79,13 +74,9 @@ async function startClient() {
   try {
     const reporter = (...args) => webpackReporter(logFront, ...args);
 
-    if (isBuild) {
-      const compiler = webpack(clientConfig);
-
-      compiler.run(reporter);
-    } else {
+    if (__DEV__) {
       clientConfig.entry.bundle.push('webpack/hot/dev-server',
-          `webpack-dev-server/client?http://localhost:${webpackDevPort}/`);
+          `webpack-dev-server/client?http://localhost:${process.env.npm_package_app_webpackDevPort}/`);
       clientConfig.entry.bundle.unshift('react-hot-loader/patch');
       clientConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
           new webpack.HotModuleReplacementPlugin(),
@@ -93,6 +84,10 @@ async function startClient() {
       clientConfig.output.path = '/';
       clientConfig.debug = true;
       startWebpackDevServer(clientConfig, reporter);
+    } else {
+      const compiler = webpack(clientConfig);
+
+      compiler.run(reporter);
     }
   } catch (err) {
     logFront(err.stack);
@@ -103,7 +98,7 @@ async function startServer() {
   try {
     const reporter = (...args) => webpackReporter(logBack, ...args);
 
-    if (!isBuild) {
+    if (__DEV__) {
       serverConfig.entry.bundle.push('webpack/hot/signal.js');
       serverConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
       serverConfig.debug = true;
@@ -111,9 +106,7 @@ async function startServer() {
 
     const compiler = webpack(serverConfig);
 
-    if (isBuild) {
-      compiler.run(reporter);
-    } else {
+    if (__DEV__) {
       compiler.watch({}, reporter);
 
       compiler.plugin('done', () => {
@@ -125,6 +118,8 @@ async function startServer() {
           runServer(path.join(output.path, output.filename));
         }
       });
+    } else {
+      compiler.run(reporter);
     }
   } catch (err) {
     logBack(err.stack);
@@ -134,7 +129,7 @@ async function startServer() {
 function startWebpackDevServer(clientConfig, reporter) {
   let compiler = webpack(clientConfig);
 
-  waitForPort('localhost', appPort, function(err) {
+  waitForPort('localhost', process.env.npm_package_app_appPort, function(err) {
     if (err) throw new Error(err);
 
     const app = new WebpackDevServer(compiler, {
@@ -143,7 +138,7 @@ function startWebpackDevServer(clientConfig, reporter) {
       publicPath: clientConfig.output.publicPath,
       headers: { 'Access-Control-Allow-Origin': '*' },
       proxy: {
-        '*': `http://localhost:${appPort}`
+        '*': `http://localhost:${process.env.npm_package_app_appPort}`
       },
       noInfo: true,
       reporter: ({state, stats}) => {
@@ -156,8 +151,8 @@ function startWebpackDevServer(clientConfig, reporter) {
       }
     });
 
-    logFront(`Webpack dev server listening on ${webpackDevPort}`);
-    app.listen(webpackDevPort);
+    logFront(`Webpack dev server listening on ${process.env.npm_package_app_webpackDevPort}`);
+    app.listen(process.env.npm_package_app_webpackDevPort);
   });
 }
 

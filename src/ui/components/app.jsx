@@ -27,7 +27,7 @@ export default function App({ children }) {
       </div>
       <footer className={classnames('container', css(styles.footer))}>
         <Row className='text-center'>
-          &copy; 2017. Example Apollo App.
+          &copy; 2016. Example Apollo App.
         </Row>
       </footer>
     </div>

@@ -6,17 +6,11 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 
-const isBuild = process.argv.length >= 3 && process.argv[2] === 'build';
+global.__DEV__ = process.argv.length >= 3 && process.argv[2] === 'watch';
 
-const isProduction = process.env.NODE_ENV === 'production';
+let basePlugins = [];
 
-let basePlugins = [
-  new webpack.DefinePlugin({
-    'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
-  }),
-];
-
-if (isProduction) {
+if (!__DEV__) {
   basePlugins.push(new webpack.optimize.UglifyJsPlugin({ minimize: true }));
 }
 
@@ -29,7 +23,7 @@ const baseConfig = {
         loader: 'babel-loader',
         exclude: /(node_modules|bower_components)/,
         query: {
-          cacheDirectory: !isProduction,
+          cacheDirectory: __DEV__,
           plugins: []
         },
       },
@@ -47,11 +41,11 @@ const baseConfig = {
 let serverPlugins = [
   new webpack.BannerPlugin('require("source-map-support").install();',
       { raw: true, entryOnly: false }),
-  new webpack.DefinePlugin({__CLIENT__: false, __SERVER__: true, __DEV__: !isBuild}),
+  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __DEV__: true}))
 ];
 
 const serverConfig = merge.smart(baseConfig, {
-  devtool: isBuild ? '#source-map' : '#eval',
+  devtool: __DEV__ ? '#eval' : '#source-map',
   target: 'node',
   entry: {
     bundle: ['babel-polyfill', './src/server/index.js']
@@ -67,7 +61,7 @@ const serverConfig = merge.smart(baseConfig, {
     loaders: [
       {
         test: /\.scss$/,
-        loaders: !isBuild ? [
+        loaders: __DEV__ ? [
           'isomorphic-style-loader',
           'css',
           'sass'] : ['ignore-loader']
@@ -87,15 +81,15 @@ let clientPlugins = [
   new ManifestPlugin({
     fileName: 'assets.json'
   }),
-  new webpack.DefinePlugin({__CLIENT__: true, __SERVER__: false, __DEV__: !isBuild}),
+  new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false, __DEV__: __DEV__}))
 ];
 
-if (isBuild) {
+if (!__DEV__) {
   clientPlugins.push(new ExtractTextPlugin('[name].[chunkhash].css'));
 }
 
 const clientConfig = merge.smart(baseConfig, {
-  devtool: isBuild ? '#source-map' : '#eval',
+  devtool: __DEV__ ? '#eval' : '#source-map',
   entry: {
     bundle: ['babel-polyfill', './src/client/index.jsx']
   },
@@ -103,12 +97,12 @@ const clientConfig = merge.smart(baseConfig, {
     loaders: [
       {
         test: /\.scss$/,
-        loader: isBuild ? ExtractTextPlugin.extract("style", "css!sass") : 'style!css!sass'
+        loader: __DEV__ ? 'style!css!sass' : ExtractTextPlugin.extract("style", "css!sass")
       }
     ]
   },
   output: {
-    filename: isBuild ? '[name].[chunkhash].js' : '[name].js',
+    filename: __DEV__ ? '[name].js' : '[name].[chunkhash].js',
     path: 'build/client',
     publicPath: '/assets/'
   },

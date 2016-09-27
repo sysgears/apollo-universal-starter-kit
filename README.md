@@ -41,19 +41,19 @@
 6. Point your browser to http://localhost:3000
 7. Change any app code and see the changes applied immediately!
 
-## Demo 
+## Heroku Demo 
 You can see latest version of this app deployed to Heroku here:
 https://apollo-fullstack-starter-kit.herokuapp.com
 
 ## Deploying to [Heroku]
-1. Add your app to [Heroku]
-1. Allow [Heroku] to install build time dependencies from the devDependencies in package.json:
+1. Add your app to Heroku
+1. Allow Heroku to install build time dependencies from the devDependencies in package.json:
    `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
-1. Deploy your app on [Heroku]
+1. Deploy your app on Heroku
 
 ## Features
 - Hot Code Reload for backend and frontend
-Hot Code Reload for backend is done using [Webpack]. When [Webpack] prepares hot patches on the filesystem,
+Hot Code Reload for backend is done using [Webpack]. When Webpack prepares hot patches on the filesystem,
 SIGUSR2 signal is sent to Node.js app and embedded Webpack Hot Module Runtime reacts to this signal and 
 applies patches to running modules from filesystem. Hot code reload for frontend is using Webpack Dev Server
 and [React Hot Loader 3] to apply patches to frontend code. Hot patches for React components are applied on the 
@@ -63,9 +63,13 @@ frontend and backend at the same time, so React should not complain about differ
 On the initial web page request backend fully renders UI and hands off Apollo Redux Store state to frontend. Frontend
 then starts off from there and updates itself on user interactions.
 
+- Optimistic UI updates
+This example application uses Apollo optimistic UI updates, that result in immediate UI update on user interaction and then, 
+after data arrives from the server, UI state is finalized.
+
 - [GraphQL] API
-[GraphQL] is used as very flexible and much faster API in terms of bandwidth and round-trips, compared to REST. 
-[GraphQL] requests are batched together automatically by [Apollo]
+GraphQL is used as very flexible and much faster API in terms of bandwidth and round-trips, compared to REST. 
+GraphQL requests are batched together automatically by [Apollo]
 
 - SQL and arbitrary data sources support
 [Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL]. 

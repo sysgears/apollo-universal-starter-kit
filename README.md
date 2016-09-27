@@ -41,7 +41,7 @@
   npm start
   ```
 
-6. Point your browser to http://localhost:3000
+6. Point your browser to [http://localhost:3000](http://localhost:3000)
 7. Change any app code and see the changes applied immediately!
 
 ## Deploying to [Heroku]
@@ -52,7 +52,7 @@
 
 ## Heroku Demo 
 You can see latest version of this app deployed to Heroku here:
-https://apollo-fullstack-starter-kit.herokuapp.com
+[https://apollo-fullstack-starter-kit.herokuapp.com](https://apollo-fullstack-starter-kit.herokuapp.com)
 
 ## Features
 - [Webpack] for backend

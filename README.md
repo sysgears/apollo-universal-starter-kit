@@ -52,31 +52,43 @@ https://apollo-fullstack-starter-kit.herokuapp.com
 1. Deploy your app on Heroku
 
 ## Features
+- [Webpack] for backend
+
+  This starter kit is different from most of the starter kits out there, because it uses Webpack not only for frontend,
+but for backend code as well. This enables powerful Webpack features for backend code, such as conditional compilation, 
+embedding non-js files and CSS stylesheets into the code, hot code reload, etc.
+
 - Hot Code Reload for backend and frontend
-Hot Code Reload for backend is done using [Webpack]. When Webpack prepares hot patches on the filesystem,
+  
+  Hot Code Reload for backend is done using [Webpack]. When Webpack prepares hot patches on the filesystem,
 SIGUSR2 signal is sent to Node.js app and embedded Webpack Hot Module Runtime reacts to this signal and 
 applies patches to running modules from filesystem. Hot code reload for frontend is using Webpack Dev Server
 and [React Hot Loader 3] to apply patches to frontend code. Hot patches for React components are applied on the 
 frontend and backend at the same time, so React should not complain about differences in client and server code.
 
 - Server Side Rendering with Apollo Redux Store sync
-On the initial web page request backend fully renders UI and hands off Apollo Redux Store state to frontend. Frontend
+
+  On the initial web page request backend fully renders UI and hands off Apollo Redux Store state to frontend. Frontend
 then starts off from there and updates itself on user interactions.
 
 - Optimistic UI updates
-This example application uses Apollo optimistic UI updates, that result in immediate UI update on user interaction and then, 
+
+  This example application uses Apollo optimistic UI updates, that result in immediate UI update on user interaction and then, 
 after data arrives from the server, UI state is finalized.
 
 - [GraphQL] API
-GraphQL is used as very flexible and much faster API in terms of bandwidth and round-trips, compared to REST. 
+
+  GraphQL is used as very flexible and much faster API in terms of bandwidth and round-trips, compared to REST. 
 GraphQL requests are batched together automatically by [Apollo]
 
 - SQL and arbitrary data sources support
-[Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL]. 
+
+  [Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL]. 
 NoSQL storage or any other data source can be used the same way.
 
 - Powerful stylesheets with Hot Reloading
-[Twitter Bootstrap] in form of SASS stylesheets is used for styling demo application. Application has stylesheet
+
+  [Twitter Bootstrap] in form of SASS stylesheets is used for styling demo application. Application has stylesheet
 in `styles.scss` for global styling which is Hot Reloaded on change. React components styling is done by [Aphrodite CSS].` 
 
 - [Babel] for ES6 or ES7 transpiling

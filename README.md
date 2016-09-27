@@ -41,15 +41,18 @@
 6. Point your browser to http://localhost:3000
 7. Change any app code and see the changes applied immediately!
 
-## Heroku Demo 
-You can see latest version of this app deployed to Heroku here:
-https://apollo-fullstack-starter-kit.herokuapp.com
+# Hot Code Reload demo
+![screencast](https://cloud.githubusercontent.com/assets/1259926/18871714/5d122a8a-84bf-11e6-8d7a-8c941e301fa8.gif)
 
 ## Deploying to [Heroku]
 1. Add your app to Heroku
 1. Allow Heroku to install build time dependencies from the devDependencies in package.json:
    `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
 1. Deploy your app on Heroku
+
+## Heroku Demo 
+You can see latest version of this app deployed to Heroku here:
+https://apollo-fullstack-starter-kit.herokuapp.com
 
 ## Features
 - Hot Code Reload for backend and frontend

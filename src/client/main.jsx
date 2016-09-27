@@ -4,6 +4,7 @@ import { ApolloProvider } from 'react-apollo'
 import { Router, browserHistory } from 'react-router'
 import routes from '../routes'
 
+import '../ui/bootstrap.scss'
 import '../ui/styles.scss'
 
 const client = new ApolloClient({

@@ -1,13 +1,15 @@
 import React, { PropTypes } from 'react'
 
-const Html = ({ content, state, jsUrl, cssUrl, aphroditeCss }) => {
+const Html = ({ content, state, jsUrl, cssUrls, aphroditeCss }) => {
   return (
     <html lang="en">
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Apollo Fullstack Starter Kit</title>
-      <link rel="stylesheet" type="text/css" href={cssUrl} />
+      {cssUrls.map(cssUrl =>
+        <link rel="stylesheet" type="text/css" href={cssUrl} />
+      )}
       <link rel="shortcut icon" href=""/>
       <style data-aphrodite>{aphroditeCss.content}</style>
     </head>
@@ -27,7 +29,7 @@ Html.propTypes = {
   content:      PropTypes.string.isRequired,
   state:        PropTypes.object.isRequired,
   jsUrl:        PropTypes.string.isRequired,
-  cssUrl:       PropTypes.string.isRequired,
+  cssUrls:      PropTypes.arrayOf(PropTypes.string),
   aphroditeCss: PropTypes.object.isRequired,
 };
 

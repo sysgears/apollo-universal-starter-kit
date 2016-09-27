@@ -17,22 +17,23 @@ const port = process.env.PORT || settings.appPort;
 
 const apiUrl = `http://localhost:${port}/graphql`;
 
-let jsUrl, cssUrl;
+let jsUrl, cssUrls;
 if (__DEV__) {
   try {
     fs.mkdirSync(settings.frontendBuildDir);
   } catch(e) {
     if ( e.code != 'EEXIST' ) throw e;
   }
-  fs.writeFileSync(path.join(settings.frontendBuildDir, 'bundle.css'), require('../../ui/styles.scss')._getCss());
+  fs.writeFileSync(path.join(settings.frontendBuildDir, 'styles.css'), require('../../ui/styles.scss')._getCss());
+  fs.writeFileSync(path.join(settings.frontendBuildDir, 'bootstrap.css'), require('../../ui/bootstrap.scss')._getCss());
 
   jsUrl = `/assets/bundle.js`;
-  cssUrl = '/assets/bundle.css';
+  cssUrls = ['/assets/bootstrap.css', '/assets/styles.css'];
 } else {
   let assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
 
   jsUrl = `/assets/${assetMap['bundle.js']}`;
-  cssUrl = `/assets/${assetMap['bundle.css']}`;
+  cssUrls = [`/assets/${assetMap['bundle.css']}`];
 }
 
 export default (req, res) => {
@@ -62,7 +63,7 @@ export default (req, res) => {
 
         const { html, css } = StyleSheetServer.renderStatic(() => ReactDOM.renderToString(component));
 
-        const page = <Html content={html} state={context.store.getState()} jsUrl={jsUrl} cssUrl={cssUrl} aphroditeCss={css}/>;
+        const page = <Html content={html} state={context.store.getState()} jsUrl={jsUrl} cssUrls={cssUrls} aphroditeCss={css}/>;
         res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
         res.end();
       }).catch(e => log.error('RENDERING ERROR:', e)));

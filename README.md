@@ -5,6 +5,9 @@
 > Hot Code Reload of backend & frontend using [Webpack] and [React Hot Loader 3] to reflect your changes instantly 
 > and help you stay productive.
 
+## Hot Code Reload demo
+![screencast](https://cloud.githubusercontent.com/assets/1259926/18871714/5d122a8a-84bf-11e6-8d7a-8c941e301fa8.gif)
+
 ## Getting Started
 
 1. Clone starter kit locally.
@@ -40,9 +43,6 @@
 
 6. Point your browser to http://localhost:3000
 7. Change any app code and see the changes applied immediately!
-
-# Hot Code Reload demo
-![screencast](https://cloud.githubusercontent.com/assets/1259926/18871714/5d122a8a-84bf-11e6-8d7a-8c941e301fa8.gif)
 
 ## Deploying to [Heroku]
 1. Add your app to Heroku

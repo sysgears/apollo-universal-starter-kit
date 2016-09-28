@@ -10,8 +10,8 @@
     "appPort": 8080
   },
   "engines": {
-    "node": "6.2.2",
-    "npm": "3.7.3"
+    "node": "6.6.0",
+    "npm": "3.10.3"
   },
   "scripts": {
     "build": "babel-node --presets es2015 tools/webpack.run build",

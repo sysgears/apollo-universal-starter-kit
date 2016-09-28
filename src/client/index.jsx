@@ -24,7 +24,7 @@ if (__DEV__) {
 
         render((
           <AppContainer>
-            <Main router={router}/>
+            <Main/>
           </AppContainer>
         ), root);
       } catch (err) {
@@ -34,6 +34,6 @@ if (__DEV__) {
   }
 } else {
   render((
-    <Main router={router}/>
+    <Main/>
   ), root);
 }

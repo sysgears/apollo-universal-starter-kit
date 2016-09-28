@@ -14,10 +14,10 @@
     "npm": "3.7.3"
   },
   "scripts": {
-    "build": "babel-node tools/webpack.run build",
+    "build": "babel-node --presets es2015 tools/webpack.run build",
     "clean": "rm -rf $npm_package_app_frontendBuildDir $npm_package_app_backendBuildDir",
     "tst": "set",
-    "start": "if [ \"$NODE_ENV\" = production ]; then node --harmony $npm_package_app_backendBuildDir; else babel-node tools/webpack.run watch; fi",
+    "start": "if [ \"$NODE_ENV\" = production ]; then node --harmony $npm_package_app_backendBuildDir; else babel-node --presets es2015 tools/webpack.run watch; fi",
     "test": "mocha --compilers js:babel-core/register --reporter spec --full-trace 'src/**/*.test.js' && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src",
     "seed": "knex seed:run",
@@ -63,9 +63,7 @@
     "react-hot-loader": "^3.0.0-beta.5",
     "react-router": "^2.8.1",
     "source-map-support": "^0.4.2",
-    "sqlite3": "^3.1.4",
-    "webpack": "^1.13.2",
-    "webpack-manifest-plugin": "^1.0.1"
+    "sqlite3": "^3.1.4"
   },
   "devDependencies": {
     "babel-cli": "^6.14.0",
@@ -90,7 +88,7 @@
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
-    "extract-text-webpack-plugin": "^1.0.1",
+    "extract-text-webpack-plugin": "^2.0.0-beta.4",
     "file-loader": "^0.9.0",
     "graphql": "^0.7.0",
     "isomorphic-style-loader": "^1.0.0",
@@ -102,7 +100,9 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "wait-for-port": "0.0.2",
-    "webpack-dev-server": "^1.16.1",
+    "webpack": "^2.1.0-beta.25",
+    "webpack-dev-server": "^2.1.0-beta.7",
+    "webpack-manifest-plugin": "^1.0.1",
     "webpack-merge": "^0.14.1",
     "webpack-node-externals": "^1.4.3"
   },

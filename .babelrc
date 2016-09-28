@@ -1,6 +1,6 @@
 {
   "passPerPreset": true,
-  "presets": ["react", "es2015", "stage-0"],
+  "presets": ["react", ["es2015", {"modules": false}], "stage-0"],
   "env": {
     "development": {
       "plugins": [

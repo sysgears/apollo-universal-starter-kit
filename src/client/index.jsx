@@ -20,8 +20,6 @@ if (__DEV__) {
 
     module.hot.accept('./main', () => {
       try {
-        const Main = require('./main').default;
-
         render((
           <AppContainer>
             <Main/>

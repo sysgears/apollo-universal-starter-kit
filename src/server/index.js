@@ -1,15 +1,13 @@
 import express from 'express';
 import bodyParser from 'body-parser'
 import { app as settings } from '../../package.json'
+import websiteMiddleware from './middleware/website'
+import graphiqlMiddleware from './middleware/graphiql'
+import graphqlMiddleware from './middleware/graphql'
 
 import log from '../log'
 
 log('Started Node app....');
-
-// Hot reloadable modules
-var websiteMiddleware = require('./middleware/website').default;
-var graphiqlMiddleware = require('./middleware/graphiql').default;
-var graphqlMiddleware = require('./middleware/graphql').default;
 
 var server;
 
@@ -31,9 +29,11 @@ if (module.hot) {
   module.hot.accept();
 
   // Reload reloadable modules
-  module.hot.accept('./middleware/website', () => { websiteMiddleware = require('./middleware/website').default; });
-  module.hot.accept('./middleware/graphql', () => { graphqlMiddleware = require('./middleware/graphql').default; });
-  module.hot.accept('./middleware/graphiql', () => { graphiqlMiddleware = require('./middleware/graphiql').default; });
+  module.hot.accept([
+    './middleware/website',
+    './middleware/graphql',
+    './middleware/graphiql'
+  ]);
 }
 
 process.on('uncaughtException', (ex) => {

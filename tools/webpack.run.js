@@ -1,10 +1,11 @@
-import webpack from 'webpack';
+import webpack from 'webpack'
 import path from 'path'
-import { spawn } from 'child_process';
+import { spawn } from 'child_process'
 import WebpackDevServer from 'webpack-dev-server'
-import waitForPort from 'wait-for-port';
+import waitForPort from 'wait-for-port'
 import minilog from 'minilog'
-import configs from './webpack.config';
+import _ from 'lodash'
+import configs from './webpack.config'
 
 minilog.enable();
 
@@ -78,11 +79,11 @@ async function startClient() {
       clientConfig.entry.bundle.push('webpack/hot/dev-server',
           `webpack-dev-server/client?http://localhost:${process.env.npm_package_app_webpackDevPort}/`);
       clientConfig.entry.bundle.unshift('react-hot-loader/patch');
-      clientConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
+      clientConfig.plugins.push(new webpack.optimize.OccurrenceOrderPlugin(),
           new webpack.HotModuleReplacementPlugin(),
+          new webpack.NamedModulesPlugin(),
           new webpack.NoErrorsPlugin());
       clientConfig.output.path = '/';
-      clientConfig.debug = true;
       startWebpackDevServer(clientConfig, reporter);
     } else {
       const compiler = webpack(clientConfig);
@@ -100,8 +101,10 @@ async function startServer() {
 
     if (__DEV__) {
       serverConfig.entry.bundle.push('webpack/hot/signal.js');
-      serverConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-      serverConfig.debug = true;
+      serverConfig.plugins.push(
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin()
+      );
     }
 
     const compiler = webpack(serverConfig);
@@ -109,7 +112,8 @@ async function startServer() {
     if (__DEV__) {
       compiler.watch({}, reporter);
 
-      compiler.plugin('done', () => {
+      // Debounce is a temporary work around for Webpack bug: https://github.com/webpack/webpack/issues/2983
+      compiler.plugin('done', _.debounce(() => {
         const { output } = serverConfig;
         startBackend = true;
         if (server) {
@@ -117,7 +121,7 @@ async function startServer() {
         } else {
           runServer(path.join(output.path, output.filename));
         }
-      });
+      }, 2000, {leading: true, trailing: true}));
     } else {
       compiler.run(reporter);
     }

@@ -100,7 +100,7 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "wait-for-port": "0.0.2",
-    "webpack": "2.1.0-beta.22",
+    "webpack": "^2.1.0-beta.25",
     "webpack-dev-server": "^2.1.0-beta.7",
     "webpack-manifest-plugin": "^1.0.1",
     "webpack-merge": "^0.14.1",

@@ -34,14 +34,14 @@ const baseConfig = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['', '.js', '.jsx']
   },
   plugins: basePlugins,
 };
 
 let serverPlugins = [
-  new webpack.BannerPlugin({ raw: true, entryOnly: false,
-    banner: 'require("source-map-support").install();'}),
+  new webpack.BannerPlugin('require("source-map-support").install();',
+      { raw: true, entryOnly: false }),
   new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true,
     __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`}))
 ];
@@ -100,7 +100,7 @@ const clientConfig = merge.smart(baseConfig, {
     loaders: [
       {
         test: /\.scss$/,
-        loader: __DEV__ ? 'style!css!sass' : ExtractTextPlugin.extract({fallbackLoader: "style", loader: "css!sass"})
+        loader: __DEV__ ? 'style!css!sass' : ExtractTextPlugin.extract("style", "css!sass")
       }
     ]
   },

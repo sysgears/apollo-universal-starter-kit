@@ -8,7 +8,7 @@ const Html = ({ content, state, jsUrl, cssUrls, aphroditeCss }) => {
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Apollo Fullstack Starter Kit</title>
       {cssUrls.map(cssUrl =>
-        <link key={cssUrl} rel="stylesheet" type="text/css" href={cssUrl} />
+        <link rel="stylesheet" type="text/css" href={cssUrl} />
       )}
       <link rel="shortcut icon" href=""/>
       <style data-aphrodite>{aphroditeCss.content}</style>

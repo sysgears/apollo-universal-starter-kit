@@ -1,11 +1,10 @@
-import webpack from 'webpack'
+import webpack from 'webpack';
 import path from 'path'
-import { spawn } from 'child_process'
+import { spawn } from 'child_process';
 import WebpackDevServer from 'webpack-dev-server'
-import waitForPort from 'wait-for-port'
+import waitForPort from 'wait-for-port';
 import minilog from 'minilog'
-import _ from 'lodash'
-import configs from './webpack.config'
+import configs from './webpack.config';
 
 minilog.enable();
 
@@ -34,7 +33,7 @@ function runServer(path) {
     server.stderr.on('data', data => {
       process.stderr.write(data);
     });
-    server.on('close', code => {
+    server.on('exit', code => {
       if (code === 250) {
         // App requested full reload
         startBackend = true;
@@ -79,11 +78,11 @@ async function startClient() {
       clientConfig.entry.bundle.push('webpack/hot/dev-server',
           `webpack-dev-server/client?http://localhost:${process.env.npm_package_app_webpackDevPort}/`);
       clientConfig.entry.bundle.unshift('react-hot-loader/patch');
-      clientConfig.plugins.push(new webpack.optimize.OccurrenceOrderPlugin(),
+      clientConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
           new webpack.HotModuleReplacementPlugin(),
-          new webpack.NamedModulesPlugin(),
           new webpack.NoErrorsPlugin());
       clientConfig.output.path = '/';
+      clientConfig.debug = true;
       startWebpackDevServer(clientConfig, reporter);
     } else {
       const compiler = webpack(clientConfig);
@@ -101,10 +100,8 @@ async function startServer() {
 
     if (__DEV__) {
       serverConfig.entry.bundle.push('webpack/hot/signal.js');
-      serverConfig.plugins.push(
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NamedModulesPlugin()
-      );
+      serverConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+      serverConfig.debug = true;
     }
 
     const compiler = webpack(serverConfig);
@@ -112,8 +109,7 @@ async function startServer() {
     if (__DEV__) {
       compiler.watch({}, reporter);
 
-      // Debounce is a temporary work around for Webpack bug: https://github.com/webpack/webpack/issues/2983
-      compiler.plugin('done', _.debounce(() => {
+      compiler.plugin('done', () => {
         const { output } = serverConfig;
         startBackend = true;
         if (server) {
@@ -121,7 +117,7 @@ async function startServer() {
         } else {
           runServer(path.join(output.path, output.filename));
         }
-      }, 2000, {leading: true, trailing: true}));
+      });
     } else {
       compiler.run(reporter);
     }

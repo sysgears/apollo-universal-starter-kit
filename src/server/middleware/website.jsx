@@ -17,6 +17,8 @@ const port = process.env.PORT || settings.appPort;
 
 const apiUrl = `http://localhost:${port}/graphql`;
 
+log('w4');
+
 let jsUrl, cssUrls;
 if (__DEV__) {
   try {

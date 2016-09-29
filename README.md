@@ -2,7 +2,7 @@
 
 > Apollo Universal Starter Kit is an boilerplate for [Universal] web app development built on top of [Apollo], 
 > [GraphQL], [React], [Express] with SQL storage support and [Twitter Bootstrap] integration. 
-> Hot Code Reload of backend & frontend using [Webpack 2] and [React Hot Loader 3] to reflect your changes instantly 
+> Hot Code Reload of backend & frontend using [Webpack] and [React Hot Loader 3] to reflect your changes instantly 
 > and help you stay productive.
 
 ## Hot Code Reload demo
@@ -55,7 +55,7 @@ You can see latest version of this app deployed to Heroku here:
 [https://apollo-fullstack-starter-kit.herokuapp.com](https://apollo-fullstack-starter-kit.herokuapp.com)
 
 ## Features
-- [Webpack 2] for backend
+- [Webpack] for backend
 
   This starter kit is different from most of the starter kits out there, because it uses Webpack not only for frontend,
 but for backend code as well. This enables powerful Webpack features for backend code, such as conditional compilation, 
@@ -63,7 +63,7 @@ embedding non-js files and CSS stylesheets into the code, hot code reload, etc.
 
 - Hot Code Reload for backend and frontend
   
-  Hot Code Reload for backend is done using [Webpack 2]. When Webpack prepares hot patches on the filesystem,
+  Hot Code Reload for backend is done using [Webpack]. When Webpack prepares hot patches on the filesystem,
 SIGUSR2 signal is sent to Node.js app and embedded Webpack Hot Module Runtime reacts to this signal and 
 applies patches to running modules from filesystem. Hot code reload for frontend is using Webpack Dev Server
 and [React Hot Loader 3] to apply patches to frontend code. Hot patches for React components are applied on the 
@@ -109,7 +109,7 @@ Copyright © 2016 [SysGears INC]. This source code is licensed under the [MIT] l
 [React]: https://facebook.github.io/react
 [Express]: http://expressjs.com
 [Twitter Bootstrap]: http://getbootstrap.com
-[Webpack 2]: http://webpack.github.io
+[Webpack]: http://webpack.github.io
 [Babel]: http://babeljs.io
 [React Hot Loader 3]: https://github.com/gaearon/react-hot-loader
 [Aphrodite CSS]: https://github.com/Khan/aphrodite

@@ -84,6 +84,12 @@ after data arrives from the server, UI state is finalized.
   GraphQL is used as very flexible and much faster API in terms of bandwidth and round-trips, compared to REST. 
 GraphQL requests are batched together automatically by [Apollo]
 
+- [GraphQL] subscription example
+  
+  GraphQL subscription is utilized to make counter updating in real-time. However you will not be able to see this
+on [Heroku] demo app, because Heroku allows to have only one listening port per application and it is used for GraphQL 
+API, another port, needed for WebSockets is not available.
+
 - SQL and arbitrary data sources support
 
   [Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL]. 

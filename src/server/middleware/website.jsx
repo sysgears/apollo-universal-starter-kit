@@ -13,11 +13,9 @@ import routes from '../../routes'
 import log from '../../log'
 import { app as settings } from '../../../package.json'
 
-const port = process.env.PORT || settings.appPort;
+const port = process.env.PORT || settings.apiPort;
 
 const apiUrl = `http://localhost:${port}/graphql`;
-
-log('w4');
 
 let jsUrl, cssUrls;
 if (__DEV__) {

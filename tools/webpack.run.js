@@ -100,7 +100,8 @@ async function startServer() {
 
     if (__DEV__) {
       serverConfig.entry.bundle.push('webpack/hot/signal.js');
-      serverConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+      serverConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.HotModuleReplacementPlugin());
       serverConfig.debug = true;
     }
 
@@ -129,7 +130,7 @@ async function startServer() {
 function startWebpackDevServer(clientConfig, reporter) {
   let compiler = webpack(clientConfig);
 
-  waitForPort('localhost', process.env.npm_package_app_appPort, function(err) {
+  waitForPort('localhost', process.env.npm_package_app_apiPort, function(err) {
     if (err) throw new Error(err);
 
     const app = new WebpackDevServer(compiler, {
@@ -138,7 +139,7 @@ function startWebpackDevServer(clientConfig, reporter) {
       publicPath: clientConfig.output.publicPath,
       headers: { 'Access-Control-Allow-Origin': '*' },
       proxy: {
-        '*': `http://localhost:${process.env.npm_package_app_appPort}`
+        '*': `http://localhost:${process.env.npm_package_app_apiPort}`
       },
       noInfo: true,
       reporter: ({state, stats}) => {

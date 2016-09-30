@@ -1,7 +1,10 @@
 import { makeExecutableSchema, addErrorLoggingToSchema } from 'graphql-tools'
+import { PubSub } from 'graphql-subscriptions'
 
 import log from '../../log'
-import schema from './schema_def.graphql'
+import schema from './schema_def'
+
+export const pubsub = new PubSub();
 
 const resolvers = {
   Query: {
@@ -12,11 +15,18 @@ const resolvers = {
   Mutation: {
     addCount(_, { amount }, context) {
       return context.Count.addCount(amount)
-        .then(() => {
-          return context.Count.getCount();
+        .then(() => context.Count.getCount())
+        .then(count => {
+          pubsub.publish('countUpdated', count);
+          return count;
         });
     },
   },
+  Subscription: {
+    countUpdated(amount) {
+      return amount;
+    }
+  }
 };
 
 const executableSchema = makeExecutableSchema({

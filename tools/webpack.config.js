@@ -5,6 +5,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
+const path = require('path');
 
 global.__DEV__ = process.argv.length >= 3 && process.argv[2] === 'watch';
 const buildNodeEnv = __DEV__ ? 'development' : 'production';
@@ -31,10 +32,13 @@ const baseConfig = {
       { test: /\.json$/, loader: 'json' },
       { test: /\.(woff2?|svg)$/, loader: 'url?limit=10000' },
       { test: /\.(ttf|eot)$/, loader: 'file' },
+      { test: /\.graphqls/, loader: 'raw' }
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    moduleDirectories: [],
+    root: [path.resolve('./node_modules')],
+    extensions: ['', '.js', '.jsx', '.graphqls']
   },
   plugins: basePlugins,
 };

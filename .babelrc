@@ -1,6 +1,6 @@
 {
   "passPerPreset": true,
-  "presets": ["react", "es2015", "stage-0"],
+  "presets": ["react", "es2015", "stage-2"],
   "env": {
     "development": {
       "plugins": [
@@ -11,8 +11,5 @@
       ]
     }
   },
-  "plugins": [
-    "babel-plugin-inline-import"
-  ],
-  "only": ["*.js", "*.jsx", "*.graphql"]
+  "only": ["*.js", "*.jsx"]
 }

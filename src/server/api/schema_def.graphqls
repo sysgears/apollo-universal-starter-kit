@@ -17,7 +17,13 @@ type Mutation {
   ): Count
 }
 
+type Subscription {
+  # Subscription fired when anyone increases counter
+  countUpdated(ids: String): Count
+}
+
 schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }

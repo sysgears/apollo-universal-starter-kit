@@ -35,5 +35,5 @@ export default function App({ children }) {
 }
 
 App.propTypes = {
-  children: React.PropTypes.object,
+  children: React.PropTypes.element,
 };

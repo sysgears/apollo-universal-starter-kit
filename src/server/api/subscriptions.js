@@ -5,7 +5,7 @@ const subscriptionManager = new SubscriptionManager({
   schema,
   pubsub,
   setupFunctions: {
-    countUpdated: (options, args) => ({
+    countUpdated: () => ({
       // Run the query each time count updated
       countUpdated: () => true
     })

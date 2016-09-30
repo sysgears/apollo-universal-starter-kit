@@ -2,11 +2,10 @@ import { createServer } from 'http'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 import { app as settings } from '../../package.json'
+import log from '../log'
 
 // Hot reloadable modules
 var subscriptionManager = require('./api/subscriptions').subscriptionManager;
-
-import log from '../log'
 
 var server;
 

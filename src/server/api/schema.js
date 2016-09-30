@@ -2,7 +2,7 @@ import { makeExecutableSchema, addErrorLoggingToSchema } from 'graphql-tools'
 import { PubSub } from 'graphql-subscriptions'
 
 import log from '../../log'
-import schema from './schema_def'
+import schema from './schema_def.graphqls'
 
 export const pubsub = new PubSub();
 

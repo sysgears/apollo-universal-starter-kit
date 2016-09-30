@@ -38,7 +38,7 @@ const baseConfig = {
   resolve: {
     moduleDirectories: [],
     root: [path.resolve('./node_modules')],
-    extensions: ['', '.js', '.jsx', '.graphqls']
+    extensions: ['', '.js', '.jsx']
   },
   plugins: basePlugins,
 };

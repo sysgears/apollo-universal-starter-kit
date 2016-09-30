@@ -17,7 +17,6 @@
   "scripts": {
     "build": "babel-node tools/webpack.run build",
     "clean": "rm -rf $npm_package_app_frontendBuildDir $npm_package_app_backendBuildDir",
-    "tst": "set",
     "start": "if [ \"$NODE_ENV\" = production ]; then node --harmony $npm_package_app_backendBuildDir; else babel-node tools/webpack.run watch; fi",
     "test": "mocha --compilers js:babel-core/register --reporter spec --full-trace 'src/**/*.test.js' && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src",

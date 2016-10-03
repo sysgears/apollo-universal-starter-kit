@@ -43,6 +43,8 @@
 
 6. Point your browser to [http://localhost:3000](http://localhost:3000)
 7. Change any app code and see the changes applied immediately!
+8. Open app in multiple tabs, try to increase counter in one tab and then switch to another tab. You will see that 
+counter value updated there as well, because counter is live updated via subscriptions.
 
 ## Deploying to [Heroku]
 1. Add your app to Heroku
@@ -86,9 +88,7 @@ GraphQL requests are batched together automatically by [Apollo]
 
 - [GraphQL] subscription example
   
-  GraphQL subscription is utilized to make counter updating in real-time. However you will not be able to see this
-on [Heroku] demo app, because Heroku allows to have only one listening port per application and it is used for GraphQL 
-API, another port, needed for WebSockets is not available.
+  GraphQL subscription is utilized to make counter updating in real-time.
 
 - SQL and arbitrary data sources support
 

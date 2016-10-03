@@ -10,7 +10,7 @@ import { app as settings } from '../../package.json'
 import '../ui/bootstrap.scss'
 import '../ui/styles.scss'
 
-const wsClient = new Client(`ws://localhost:${settings.wsPort}`);
+const wsClient = new Client(`ws://localhost:${settings.apiPort}`);
 
 const networkInterface = createNetworkInterface({
   uri: '/graphql',

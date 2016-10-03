@@ -1,6 +1,5 @@
 import log from '../log'
 import './api_server'
-import './websockets_server'
 
 process.on('uncaughtException', (ex) => {
   log.error(ex);

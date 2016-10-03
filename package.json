@@ -7,8 +7,7 @@
     "backendBuildDir": "build/server",
     "frontendBuildDir": "build/client",
     "webpackDevPort": 3000,
-    "apiPort": 8080,
-    "wsPort": 8081
+    "apiPort": 8080
   },
   "engines": {
     "node": "6.6.0",

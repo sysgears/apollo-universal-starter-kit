@@ -1,5 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser'
+import { SubscriptionServer } from 'subscriptions-transport-ws'
+import http from 'http'
+
 import { app as settings } from '../../package.json'
 import log from '../log'
 
@@ -7,6 +10,7 @@ import log from '../log'
 var websiteMiddleware = require('./middleware/website').default;
 var graphiqlMiddleware = require('./middleware/graphiql').default;
 var graphqlMiddleware = require('./middleware/graphql').default;
+var subscriptionManager = require('./api/subscriptions').subscriptionManager;
 
 var server;
 
@@ -26,7 +30,13 @@ app.use('/graphql', (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(...args));
 
-server = app.listen(port, () => {
+server = http.createServer(app);
+
+new SubscriptionServer({
+  subscriptionManager
+}, server);
+
+server.listen(port, () => {
   log.info(`API is now running on port ${port}`);
 });
 
@@ -48,6 +58,7 @@ if (module.hot) {
     module.hot.accept('./middleware/website', () => { websiteMiddleware = require('./middleware/website').default; });
     module.hot.accept('./middleware/graphql', () => { graphqlMiddleware = require('./middleware/graphql').default; });
     module.hot.accept('./middleware/graphiql', () => { graphiqlMiddleware = require('./middleware/graphiql').default; });
+    module.hot.accept('./api/subscriptions', () => { subscriptionManager = require('./api/subscriptions').subscriptionManager; });
   } catch (err) {
     log(err.stack);
   }

@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 import http from 'http'
+import path from 'path'
 
 import { app as settings } from '../../package.json'
 import log from '../log'
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/assets', express.static(settings.frontendBuildDir, {maxAge: '180 days'}));
+app.use('/assets', express.static(path.join(settings.backendBuildDir, 'assets'), {maxAge: '180 days'}));
 
 app.use('/graphql', (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));

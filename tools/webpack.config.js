@@ -41,7 +41,7 @@ const baseConfig = {
     extensions: ['', '.js', '.jsx']
   },
   plugins: basePlugins,
-  bail: __DEV__
+  bail: !__DEV__
 };
 
 let serverPlugins = [

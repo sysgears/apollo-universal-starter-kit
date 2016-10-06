@@ -1,10 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router'
 
 const NavBar = () => (
   <nav className="navbar navbar-default">
     <div className="container">
       <div className="navbar-header">
-        <a href="#" className="navbar-brand">Apollo Starter Kit</a>
+        <Link to="/counter" className="navbar-brand">Apollo Starter Kit</Link>
       </div>
 
       <ul className="nav navbar-nav">

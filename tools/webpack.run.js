@@ -70,7 +70,7 @@ function webpackReporter(log, err, stats) {
   }
 }
 
-async function startClient() {
+function startClient() {
   try {
     const reporter = (...args) => webpackReporter(logFront, ...args);
 
@@ -94,7 +94,7 @@ async function startClient() {
   }
 }
 
-async function startServer() {
+function startServer() {
   try {
     const reporter = (...args) => webpackReporter(logBack, ...args);
 

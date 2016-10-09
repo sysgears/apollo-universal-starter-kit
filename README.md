@@ -100,7 +100,7 @@ NoSQL storage or any other data source can be used the same way.
   [Twitter Bootstrap] in form of SASS stylesheets is used for styling demo application. Application has stylesheet
 in `styles.scss` for global styling which is Hot Reloaded on change. React components styling is done by [Aphrodite CSS].` 
 
-- [Babel] for ES6 or ES7 transpiling
+- [Babel] for ES2017 transpiling
 
 - [ESLint] to enforce proper code style
 

@@ -1,10 +1,9 @@
 {
-  "passPerPreset": true,
-  "presets": ["react", "es2015", "stage-2"],
+  "presets": ["react", "es2015", "es2017"],
   "plugins": [
+    "transform-runtime",
+    "transform-decorators-legacy",
     "transform-class-properties",
-    "transform-object-rest-spread",
-    "transform-object-assign",
     "react-hot-loader/babel"
   ],
   "only": ["*.js", "*.jsx"]

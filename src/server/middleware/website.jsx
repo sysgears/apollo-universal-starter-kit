@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/server'
-import ApolloClient, { createNetworkInterface } from 'apollo-client'
+import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
 import { getDataFromTree } from 'react-apollo/server'
 import { match, RouterContext } from 'react-router'
@@ -46,6 +46,13 @@ export default (req, res) => {
     } else if (renderProps) {
       const client = new ApolloClient({
         ssrMode: true,
+        queryTransformer: addTypename,
+        dataIdFromObject: (result) => {
+          if (result.id && result.__typename) { // eslint-disable-line no-underscore-dangle
+            return result.__typename + result.id; // eslint-disable-line no-underscore-dangle
+          }
+          return null;
+        },
         networkInterface: createNetworkInterface(apiUrl, {
           credentials: 'same-origin',
           headers: req.headers,

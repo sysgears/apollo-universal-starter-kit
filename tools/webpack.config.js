@@ -92,11 +92,18 @@ let clientPlugins = [
     fileName: 'assets.json'
   }),
   new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false,
-    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`}))
+    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`})),
+  new webpack.optimize.CommonsChunkPlugin(
+    "vendor",
+    "[name].[hash].js",
+    function (module) {
+      return module.resource && module.resource.indexOf(path.resolve('./node_modules')) === 0;
+    }
+  )
 ];
 
 if (!__DEV__) {
-  clientPlugins.push(new ExtractTextPlugin('[name].[chunkhash].css'));
+  clientPlugins.push(new ExtractTextPlugin('[name].[contenthash].css', { allChunks: true }));
 }
 
 const clientConfig = merge.smart(baseConfig, {
@@ -113,7 +120,7 @@ const clientConfig = merge.smart(baseConfig, {
     ]
   },
   output: {
-    filename: __DEV__ ? '[name].js' : '[name].[chunkhash].js',
+    filename: '[name].[hash].js',
     path: 'build/client',
     publicPath: '/assets/'
   },

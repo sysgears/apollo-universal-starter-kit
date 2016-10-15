@@ -17,24 +17,7 @@ const port = process.env.PORT || settings.apiPort;
 
 const apiUrl = `http://localhost:${port}/graphql`;
 
-let jsUrl, cssUrls;
-if (__DEV__) {
-  try {
-    fs.mkdirSync(settings.frontendBuildDir);
-  } catch(e) {
-    if ( e.code != 'EEXIST' ) throw e;
-  }
-  fs.writeFileSync(path.join(settings.frontendBuildDir, 'styles.css'), require('../../ui/styles.scss')._getCss());
-  fs.writeFileSync(path.join(settings.frontendBuildDir, 'bootstrap.css'), require('../../ui/bootstrap.scss')._getCss());
-
-  jsUrl = `/assets/bundle.js`;
-  cssUrls = ['/assets/bootstrap.css', '/assets/styles.css'];
-} else {
-  let assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
-
-  jsUrl = `/assets/${assetMap['bundle.js']}`;
-  cssUrls = [`/assets/${assetMap['bundle.css']}`];
-}
+var assetMap;
 
 export default (req, res) => {
   match({ routes, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
@@ -70,7 +53,11 @@ export default (req, res) => {
 
         const { html, css } = StyleSheetServer.renderStatic(() => ReactDOM.renderToString(component));
 
-        const page = <Html content={html} state={context.store.getState()} jsUrl={jsUrl} cssUrls={cssUrls} aphroditeCss={css}/>;
+        if (!assetMap) {
+          assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
+        }
+
+        const page = <Html content={html} state={context.store.getState()} assetMap={assetMap} aphroditeCss={css}/>;
         res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
         res.end();
       }).catch(e => log.error('RENDERING ERROR:', e)));

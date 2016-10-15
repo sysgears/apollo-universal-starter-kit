@@ -1,15 +1,19 @@
 import React, { PropTypes } from 'react'
 
-const Html = ({ content, state, jsUrl, cssUrls, aphroditeCss }) => {
+const Html = ({ content, state, assetMap, aphroditeCss }) => {
   return (
     <html lang="en">
     <head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Apollo Fullstack Starter Kit</title>
-      {cssUrls.map(cssUrl =>
-        <link key={cssUrl} rel="stylesheet" type="text/css" href={cssUrl} />
-      )}
+      {!__DEV__ && <link rel="stylesheet" type="text/css" href={`/assets/${assetMap['bundle.css']}`} />}
+      {__DEV__ &&
+        <style dangerouslySetInnerHTML={{ __html:
+          require('../styles.scss')._getCss() +
+          require('../bootstrap.scss')._getCss()
+        }}/>
+      }
       <link rel="shortcut icon" href=""/>
       <style data-aphrodite>{aphroditeCss.content}</style>
     </head>
@@ -19,7 +23,7 @@ const Html = ({ content, state, jsUrl, cssUrls, aphroditeCss }) => {
       dangerouslySetInnerHTML={{ __html: `window.__APOLLO_STATE__=${JSON.stringify(state)};` }}
       charSet="UTF-8"
     />
-    <script src={jsUrl} charSet="utf-8" />
+    <script src={`/assets/${assetMap['bundle.js']}`} charSet="utf-8" />
     </body>
     </html>
   );
@@ -28,8 +32,7 @@ const Html = ({ content, state, jsUrl, cssUrls, aphroditeCss }) => {
 Html.propTypes = {
   content:      PropTypes.string.isRequired,
   state:        PropTypes.object.isRequired,
-  jsUrl:        PropTypes.string.isRequired,
-  cssUrls:      PropTypes.arrayOf(PropTypes.string),
+  assetMap:     PropTypes.object.isRequired,
   aphroditeCss: PropTypes.object.isRequired,
 };
 

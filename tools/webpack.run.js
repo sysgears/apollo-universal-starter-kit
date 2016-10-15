@@ -1,10 +1,13 @@
-import webpack from 'webpack';
-import path from 'path'
-import { spawn } from 'child_process';
+import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
-import waitForPort from 'wait-for-port';
+import { spawn } from 'child_process'
+import waitForPort from 'wait-for-port'
+import fs from 'fs'
+import path from 'path'
 import minilog from 'minilog'
-import configs from './webpack.config';
+import _ from 'lodash/fp'
+
+import configs from './webpack.config'
 
 minilog.enable();
 
@@ -21,6 +24,14 @@ process.on('exit', () => {
     server.kill('SIGTERM');
   }
 });
+
+function createDirs(dir) {
+  try {
+    fs.mkdirSync(dir);
+  } catch(e) {
+    if ( e.code != 'EEXIST' ) throw e;
+  }
+}
 
 function runServer(path) {
   if (startBackend) {
@@ -129,6 +140,17 @@ function startServer() {
 
 function startWebpackDevServer(clientConfig, reporter) {
   let compiler = webpack(clientConfig);
+
+  compiler.plugin('done', stats => {
+    const dir = process.env.npm_package_app_frontendBuildDir;
+    createDirs(dir);
+    const assetsMap = JSON.parse(stats.compilation.assets['assets.json'].source());
+    _.each(stats.toJson().assetsByChunkName, (assets, bundle) => {
+      assetsMap[`${bundle}.js`] = assets[0];
+      assetsMap[`${bundle}.js.map`] = `${assets[0]}.map`;
+    });
+    fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
+  });
 
   waitForPort('localhost', process.env.npm_package_app_apiPort, function(err) {
     if (err) throw new Error(err);

@@ -107,7 +107,7 @@ if (!__DEV__) {
 }
 
 const clientConfig = merge.smart(baseConfig, {
-  devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
+  devtool: __DEV__ ? '#eval' : '#source-map',
   entry: {
     bundle: ['babel-polyfill', './src/client/index.jsx']
   },

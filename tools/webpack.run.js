@@ -5,7 +5,7 @@ import waitForPort from 'wait-for-port'
 import fs from 'fs'
 import path from 'path'
 import minilog from 'minilog'
-import _ from 'lodash/fp'
+import _ from 'lodash'
 
 import configs from './webpack.config'
 
@@ -146,8 +146,11 @@ function startWebpackDevServer(clientConfig, reporter) {
     createDirs(dir);
     const assetsMap = JSON.parse(stats.compilation.assets['assets.json'].source());
     _.each(stats.toJson().assetsByChunkName, (assets, bundle) => {
-      assetsMap[`${bundle}.js`] = assets[0];
-      assetsMap[`${bundle}.js.map`] = `${assets[0]}.map`;
+      const bundleJs = assets.constructor === Array ? assets[0] : assets;
+      assetsMap[`${bundle}.js`] = bundleJs;
+      if (assets.length > 1) {
+        assetsMap[`${bundle}.js.map`] = `${bundleJs}.map`;
+      }
     });
     fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
   });

@@ -93,6 +93,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
     "graphql": "^0.7.0",
+    "ignore-loader": "^0.1.1",
     "isomorphic-style-loader": "^1.0.0",
     "json-loader": "^0.5.4",
     "mocha": "^3.1.0",

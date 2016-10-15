@@ -53,7 +53,7 @@ let serverPlugins = [
 ];
 
 const serverConfig = merge.smart(baseConfig, {
-  devtool: __DEV__ ? '#eval' : '#source-map',
+  devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   target: 'node',
   entry: {
     bundle: ['babel-polyfill', './src/server/index.js']
@@ -77,6 +77,8 @@ const serverConfig = merge.smart(baseConfig, {
     ]
   },
   output: {
+    devtoolModuleFilenameTemplate: __DEV__ ? info =>
+     { return path.resolve(info.absoluteResourcePath); } : undefined,
     filename: 'index.js',
     sourceMapFilename: 'index.js.map',
     path: 'build/server',
@@ -98,7 +100,7 @@ if (!__DEV__) {
 }
 
 const clientConfig = merge.smart(baseConfig, {
-  devtool: __DEV__ ? '#eval' : '#source-map',
+  devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   entry: {
     bundle: ['babel-polyfill', './src/client/index.jsx']
   },

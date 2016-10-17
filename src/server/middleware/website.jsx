@@ -53,7 +53,7 @@ export default (req, res) => {
 
         const { html, css } = StyleSheetServer.renderStatic(() => ReactDOM.renderToString(component));
 
-        if (!assetMap) {
+        if (__DEV__ || !assetMap) {
           assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
         }
 

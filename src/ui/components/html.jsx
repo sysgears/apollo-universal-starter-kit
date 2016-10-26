@@ -14,7 +14,7 @@ const Html = ({ content, state, assetMap, aphroditeCss }) => {
           require('../bootstrap.scss')._getCss()
         }}/>
       }
-      <link rel="shortcut icon" href=""/>
+      <link rel="shortcut icon" href="/favicon.ico"/>
       <style data-aphrodite>{aphroditeCss.content}</style>
     </head>
     <body>

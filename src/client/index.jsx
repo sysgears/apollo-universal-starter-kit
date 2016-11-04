@@ -1,8 +1,7 @@
 import React from 'react'
 import { render } from 'react-dom'
-import Main from './main';
-import router from '../routes'
-import log from '../log';
+import Main from './main'
+import log from '../log'
 
 const root = document.getElementById('content');
 

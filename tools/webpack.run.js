@@ -88,7 +88,6 @@ function startClient() {
     if (__DEV__) {
       clientConfig.entry.bundle.push('webpack/hot/dev-server',
           `webpack-dev-server/client?http://localhost:${process.env.npm_package_app_webpackDevPort}/`);
-      clientConfig.entry.bundle.unshift('react-hot-loader/patch');
       clientConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
           new webpack.HotModuleReplacementPlugin(),
           new webpack.NoErrorsPlugin());

@@ -3,8 +3,7 @@
   "plugins": [
     "transform-runtime",
     "transform-decorators-legacy",
-    "transform-class-properties",
-    "react-hot-loader/babel"
+    "transform-class-properties"
   ],
   "only": ["*.js", "*.jsx"]
 }

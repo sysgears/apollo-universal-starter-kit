@@ -2,7 +2,7 @@
 
 > Apollo Universal Starter Kit is an boilerplate for [Universal] web app development built on top of [Apollo], 
 > [GraphQL], [React], [Express] with SQL storage support and [Twitter Bootstrap] integration. 
-> Hot Code Reload of backend & frontend using [Webpack] and [React Hot Loader 3] to reflect your changes instantly 
+> Hot Code Reload of backend & frontend using [Webpack] and Hot Module Replacement to reflect your changes instantly 
 > and help you stay productive.
 
 ## Hot Code Reload demo
@@ -68,7 +68,7 @@ embedding non-js files and CSS stylesheets into the code, hot code reload, etc.
   Hot Code Reload for backend is done using [Webpack]. When Webpack prepares hot patches on the filesystem,
 SIGUSR2 signal is sent to Node.js app and embedded Webpack Hot Module Runtime reacts to this signal and 
 applies patches to running modules from filesystem. Hot code reload for frontend is using Webpack Dev Server
-and [React Hot Loader 3] to apply patches to frontend code. Hot patches for React components are applied on the 
+and Hot Module Replacement to apply patches to frontend code. Hot patches for React components are applied on the 
 frontend and backend at the same time, so React should not complain about differences in client and server code.
 
 - Server Side Rendering with Apollo Redux Store sync
@@ -117,7 +117,6 @@ Copyright © 2016 [SysGears INC]. This source code is licensed under the [MIT] l
 [Twitter Bootstrap]: http://getbootstrap.com
 [Webpack]: http://webpack.github.io
 [Babel]: http://babeljs.io
-[React Hot Loader 3]: https://github.com/gaearon/react-hot-loader
 [Aphrodite CSS]: https://github.com/Khan/aphrodite
 [Knex]: http://knexjs.org
 [Heroku]: https://heroku.com

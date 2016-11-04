@@ -4,6 +4,7 @@ import { spawn } from 'child_process'
 import waitForPort from 'wait-for-port'
 import fs from 'fs'
 import path from 'path'
+import mkdirp from 'mkdirp'
 import minilog from 'minilog'
 import _ from 'lodash'
 
@@ -26,11 +27,7 @@ process.on('exit', () => {
 });
 
 function createDirs(dir) {
-  try {
-    fs.mkdirSync(dir);
-  } catch(e) {
-    if ( e.code != 'EEXIST' ) throw e;
-  }
+  mkdirp.sync(dir);
 }
 
 function runServer(path) {
@@ -78,6 +75,14 @@ function webpackReporter(log, err, stats) {
       publicPath: false,
       colors: true
     }));
+
+    if (!__DEV__) {
+      const dir = log === logFront ?
+        process.env.npm_package_app_frontendBuildDir :
+        process.env.npm_package_app_backendBuildDir;
+      createDirs(dir);
+      fs.writeFileSync(path.join(dir, 'stats.json'), JSON.stringify(stats.toJson()));
+    }
   }
 }
 

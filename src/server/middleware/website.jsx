@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/server'
-import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client'
+import { createBatchingNetworkInterface } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
 import { getDataFromTree } from 'react-apollo/server'
 import { match, RouterContext } from 'react-router'
@@ -8,6 +8,7 @@ import { StyleSheetServer } from 'aphrodite'
 import fs from 'fs'
 import path from 'path'
 
+import createApolloClient from '../../apollo_client'
 import Html from '../../ui/components/html'
 import routes from '../../routes'
 import log from '../../log'
@@ -27,20 +28,14 @@ export default (req, res) => {
       log.error('ROUTER ERROR:', error);
       res.status(500);
     } else if (renderProps) {
-      const client = new ApolloClient({
-        ssrMode: true,
-        queryTransformer: addTypename,
-        dataIdFromObject: (result) => {
-          if (result.id && result.__typename) { // eslint-disable-line no-underscore-dangle
-            return result.__typename + result.id; // eslint-disable-line no-underscore-dangle
-          }
-          return null;
-        },
-        networkInterface: createNetworkInterface(apiUrl, {
-          credentials: 'same-origin',
+      const client = createApolloClient(createBatchingNetworkInterface({
+        uri: apiUrl,
+        opts: {
+          credentials: "same-origin",
           headers: req.headers,
-        }),
-      });
+        },
+        batchInterval: 500,
+      }));
 
       const component = (
         <ApolloProvider client={client}>

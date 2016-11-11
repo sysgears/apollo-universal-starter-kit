@@ -5,6 +5,7 @@ import { ApolloProvider } from 'react-apollo'
 import { getDataFromTree } from 'react-apollo/server'
 import { match, RouterContext } from 'react-router'
 import { StyleSheetServer } from 'aphrodite'
+import { reset, startBuffering } from 'aphrodite/lib/inject'
 import fs from 'fs'
 import path from 'path'
 
@@ -43,7 +44,14 @@ export default (req, res) => {
         </ApolloProvider>
       );
 
-      StyleSheetServer.renderStatic(() => getDataFromTree(component).then(context => {
+      // Work around Aphrodite not supporting async rendering
+      // See: https://github.com/Khan/aphrodite/pull/132 for discussion
+      reset();
+      startBuffering();
+      getDataFromTree(component).then(context => {
+        // Work around Aphrodite not supporting async rendering
+        reset();
+
         res.status(200);
 
         const { html, css } = StyleSheetServer.renderStatic(() => ReactDOM.renderToString(component));
@@ -55,7 +63,7 @@ export default (req, res) => {
         const page = <Html content={html} state={context.store.getState()} assetMap={assetMap} aphroditeCss={css}/>;
         res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
         res.end();
-      }).catch(e => log.error('RENDERING ERROR:', e)));
+      }).catch(e => log.error('RENDERING ERROR:', e));
     } else {
       res.status(404).send('Not found');
     }

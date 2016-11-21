@@ -19,6 +19,8 @@ if (__DEV__) {
       try {
         log.debug("Reloading front-end");
         frontendReloadCount = (frontendReloadCount || 0) + 1;
+        // Force Apollo to fetch the latest data from the server
+        delete window.__APOLLO_STATE__;
 
         const Main = require('./main').default;
 

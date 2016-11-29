@@ -13,7 +13,7 @@
 1. Clone starter kit locally.
 
   ```
-  git clone git@github.com:sysgears/apollo-fullstack-starter-kit.git
+  git clone https://github.com/sysgears/apollo-fullstack-starter-kit.git
   cd apollo-fullstack-starter-kit
   ```
 

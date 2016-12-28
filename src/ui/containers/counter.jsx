@@ -16,8 +16,8 @@ const SUBSCRIPTION_QUERY = gql`
 
 class Counter extends React.Component {
 
-  componentDidMount() {
-    if (this.props.loading === false) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.loading === false) {
       this.subscribe();
     }
   }

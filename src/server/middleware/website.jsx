@@ -28,7 +28,7 @@ export default (req, res) => {
     } else if (error) {
       log.error('ROUTER ERROR:', error);
       res.status(500);
-    } else if (renderProps) {
+    } else if (__SSR__ && renderProps) {
       const client = createApolloClient(createBatchingNetworkInterface({
         uri: apiUrl,
         opts: {
@@ -60,10 +60,17 @@ export default (req, res) => {
           assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
         }
 
-        const page = <Html content={html} state={context.store.getState()} assetMap={assetMap} aphroditeCss={css}/>;
+        const page = <Html content={html} state={context.store.getState()} assetMap={assetMap} aphroditeCss={css.content}/>;
         res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
         res.end();
       }).catch(e => log.error('RENDERING ERROR:', e));
+    } else if (!__SSR__ && renderProps) {
+      if (__DEV__ || !assetMap) {
+        assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
+      }
+      const page = <Html content="" state={({})} assetMap={assetMap} aphroditeCss="" />;
+      res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
+      res.end();
     } else {
       res.status(404).send('Not found');
     }

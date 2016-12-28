@@ -76,6 +76,8 @@ frontend and backend at the same time, so React should not complain about differ
   On the initial web page request backend fully renders UI and hands off Apollo Redux Store state to frontend. Frontend
 then starts off from there and updates itself on user interactions.
 
+  If you don't need Server Side Rendering, set package.json `ssr` field to `false`
+
 - Optimistic UI updates
 
   This example application uses Apollo optimistic UI updates, that result in immediate UI update on user interaction and then, 

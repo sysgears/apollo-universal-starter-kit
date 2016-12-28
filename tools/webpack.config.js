@@ -6,6 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
+const settings = require('../package.json').app;
 
 global.__DEV__ = process.argv.length >= 3 && process.argv[2] === 'watch';
 const buildNodeEnv = __DEV__ ? 'development' : 'production';
@@ -48,7 +49,7 @@ const baseConfig = {
 let serverPlugins = [
   new webpack.BannerPlugin('require("source-map-support").install();',
       { raw: true, entryOnly: false }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true,
+  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __SSR__: settings.ssr,
     __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`}))
 ];
 
@@ -91,7 +92,7 @@ let clientPlugins = [
   new ManifestPlugin({
     fileName: 'assets.json'
   }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false,
+  new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false, __SSR__: settings.ssr,
     __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`})),
   new webpack.optimize.CommonsChunkPlugin(
     "vendor",

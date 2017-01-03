@@ -128,7 +128,7 @@ const clientConfig = merge.smart(baseConfig, {
   plugins: clientPlugins
 });
 
-module.exports = 
-  process.env.npm_lifecycle_script.indexOf('mocha-webpack') >= 0 ? 
-    serverConfig : 
+module.exports =
+  process.env.npm_lifecycle_script.indexOf('mocha-webpack') >= 0 ?
+    serverConfig :
     [ serverConfig, clientConfig ];

@@ -15,22 +15,27 @@ const SUBSCRIPTION_QUERY = gql`
 `;
 
 class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.subscription = null;
+  }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.loading === false) {
+    if (!this.subscription && nextProps.loading === false) {
       this.subscribe();
     }
   }
 
   componentWillUnmount() {
-    if(this.subscriptionObserver) {
-      this.subscriptionObserver.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 
   subscribe() {
     const { client, updateCountQuery } = this.props;
-    this.subscriptionObserver = client.subscribe({
+    this.subscription                  = client.subscribe({
       query: SUBSCRIPTION_QUERY,
       variables: {},
     }).subscribe({

@@ -16,6 +16,7 @@ const logBack = minilog('webpack-for-backend');
 const logFront = minilog('webpack-for-frontend');
 
 const [ serverConfig, clientConfig ] = configs;
+const __WINDOWS__ = /^win/.test(process.platform);
 
 var server;
 var startBackend = false;
@@ -114,7 +115,11 @@ function startServer() {
     const reporter = (...args) => webpackReporter(logBack, ...args);
 
     if (__DEV__) {
-      serverConfig.entry.bundle.push('webpack/hot/signal.js');
+      if (__WINDOWS__) {
+        serverConfig.entry.bundle.push('webpack/hot/poll?1000');
+      } else {
+        serverConfig.entry.bundle.push('webpack/hot/signal.js');
+      }
       serverConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin());
       serverConfig.debug = true;
@@ -129,7 +134,9 @@ function startServer() {
         const { output } = serverConfig;
         startBackend = true;
         if (server) {
-          server.kill('SIGUSR2');
+          if (!__WINDOWS__) {
+            server.kill('SIGUSR2');
+          }
         } else {
           runServer(path.join(output.path, output.filename));
         }

@@ -13,7 +13,9 @@ const buildNodeEnv = __DEV__ ? 'development' : 'production';
 
 let basePlugins = [];
 
-if (!__DEV__) {
+if (__DEV__) {
+  basePlugins.push(new webpack.NamedModulesPlugin());
+} else {
   basePlugins.push(new webpack.optimize.UglifyJsPlugin({ minimize: true }));
 }
 

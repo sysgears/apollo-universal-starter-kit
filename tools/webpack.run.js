@@ -4,6 +4,7 @@ import { spawn } from 'child_process'
 import waitForPort from 'wait-for-port'
 import fs from 'fs'
 import path from 'path'
+import mkdirp from 'mkdirp'
 import minilog from 'minilog'
 import _ from 'lodash'
 
@@ -15,6 +16,7 @@ const logBack = minilog('webpack-for-backend');
 const logFront = minilog('webpack-for-frontend');
 
 const [ serverConfig, clientConfig ] = configs;
+const __WINDOWS__ = /^win/.test(process.platform);
 
 var server;
 var startBackend = false;
@@ -26,11 +28,7 @@ process.on('exit', () => {
 });
 
 function createDirs(dir) {
-  try {
-    fs.mkdirSync(dir);
-  } catch(e) {
-    if ( e.code != 'EEXIST' ) throw e;
-  }
+  mkdirp.sync(dir);
 }
 
 function runServer(path) {
@@ -78,6 +76,14 @@ function webpackReporter(log, err, stats) {
       publicPath: false,
       colors: true
     }));
+
+    if (!__DEV__) {
+      const dir = log === logFront ?
+        process.env.npm_package_app_frontendBuildDir :
+        process.env.npm_package_app_backendBuildDir;
+      createDirs(dir);
+      fs.writeFileSync(path.join(dir, 'stats.json'), JSON.stringify(stats.toJson()));
+    }
   }
 }
 
@@ -88,7 +94,6 @@ function startClient() {
     if (__DEV__) {
       clientConfig.entry.bundle.push('webpack/hot/dev-server',
           `webpack-dev-server/client?http://localhost:${process.env.npm_package_app_webpackDevPort}/`);
-      clientConfig.entry.bundle.unshift('react-hot-loader/patch');
       clientConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
           new webpack.HotModuleReplacementPlugin(),
           new webpack.NoErrorsPlugin());
@@ -110,7 +115,11 @@ function startServer() {
     const reporter = (...args) => webpackReporter(logBack, ...args);
 
     if (__DEV__) {
-      serverConfig.entry.bundle.push('webpack/hot/signal.js');
+      if (__WINDOWS__) {
+        serverConfig.entry.bundle.push('webpack/hot/poll?1000');
+      } else {
+        serverConfig.entry.bundle.push('webpack/hot/signal.js');
+      }
       serverConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin());
       serverConfig.debug = true;
@@ -125,7 +134,9 @@ function startServer() {
         const { output } = serverConfig;
         startBackend = true;
         if (server) {
-          server.kill('SIGUSR2');
+          if (!__WINDOWS__) {
+            server.kill('SIGUSR2');
+          }
         } else {
           runServer(path.join(output.path, output.filename));
         }

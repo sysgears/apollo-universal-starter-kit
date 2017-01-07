@@ -1,9 +1,11 @@
 import React from 'react'
-import ApolloClient, { createNetworkInterface, addTypename } from 'apollo-client'
+import { createBatchingNetworkInterface } from 'apollo-client'
 import { Client } from 'subscriptions-transport-ws';
 import { ApolloProvider } from 'react-apollo'
 import { Router, browserHistory } from 'react-router'
-import addGraphQLSubscriptions from './subscriptions';
+
+import createApolloClient from '../apollo_client'
+import addGraphQLSubscriptions from './subscriptions'
 import routes from '../routes'
 import { app as settings} from '../../package.json'
 
@@ -13,12 +15,12 @@ import '../ui/styles.scss'
 const wsClient = new Client(window.location.origin.replace(/^http/, 'ws')
   .replace(':' + settings.webpackDevPort, ':' + settings.apiPort));
 
-const networkInterface = createNetworkInterface({
-  uri: '/graphql',
+const networkInterface = createBatchingNetworkInterface({
   opts: {
-    credentials: 'same-origin',
+    credentials: "same-origin",
   },
-  transportBatching: true
+  batchInterval: 500,
+  uri: "/graphql",
 });
 
 const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
@@ -26,19 +28,7 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
   wsClient,
 );
 
-const client = new ApolloClient({
-  networkInterface: networkInterfaceWithSubscriptions,
-  queryTransformer: addTypename,
-  dataIdFromObject: (result) => {
-    if (result.id && result.__typename) { // eslint-disable-line no-underscore-dangle
-      return result.__typename + result.id; // eslint-disable-line no-underscore-dangle
-    }
-    return null;
-  },
-  shouldBatch: true,
-  initialState: window.__APOLLO_STATE__, // eslint-disable-line no-underscore-dangle
-  ssrForceFetchDelay: 100,
-});
+const client = createApolloClient(networkInterfaceWithSubscriptions);
 
 export default class Main extends React.Component {
   render() {

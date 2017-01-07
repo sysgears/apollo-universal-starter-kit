@@ -15,7 +15,7 @@ const Html = ({ content, state, assetMap, aphroditeCss }) => {
         }}/>
       }
       <link rel="shortcut icon" href="/favicon.ico"/>
-      <style data-aphrodite>{aphroditeCss.content}</style>
+      <style data-aphrodite>{aphroditeCss}</style>
     </head>
     <body>
     <div id="content" dangerouslySetInnerHTML={{ __html: content }} />
@@ -34,7 +34,7 @@ Html.propTypes = {
   content:      PropTypes.string.isRequired,
   state:        PropTypes.object.isRequired,
   assetMap:     PropTypes.object.isRequired,
-  aphroditeCss: PropTypes.object.isRequired,
+  aphroditeCss: PropTypes.string.isRequired,
 };
 
 export default Html;

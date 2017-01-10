@@ -116,9 +116,9 @@ function startServer() {
 
     if (__DEV__) {
       if (__WINDOWS__) {
-        serverConfig.entry.bundle.push('webpack/hot/poll?1000');
+        serverConfig.entry.index.push('webpack/hot/poll?1000');
       } else {
-        serverConfig.entry.bundle.push('webpack/hot/signal.js');
+        serverConfig.entry.index.push('webpack/hot/signal.js');
       }
       serverConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin());
@@ -138,7 +138,7 @@ function startServer() {
             server.kill('SIGUSR2');
           }
         } else {
-          runServer(path.join(output.path, output.filename));
+          runServer(path.join(output.path, 'index.js'));
         }
       });
     } else {

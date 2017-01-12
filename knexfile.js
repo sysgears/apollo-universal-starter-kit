@@ -1,4 +1,7 @@
-require('babel-register');
+const isBabel = !(class {}.toString().indexOf('class ') === 0);
+if (!isBabel) {
+  require('babel-register');
+}
 
 module.exports = {
   development: {

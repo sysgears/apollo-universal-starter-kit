@@ -81,7 +81,7 @@ const serverConfig = merge.smart(baseConfig, {
   },
   output: {
     devtoolModuleFilenameTemplate: __DEV__ ? '../../[resource-path]' : undefined,
-    devtoolFallbackModuleFilenameTemplate: __DEV__ ? '../../[resource-path]:[hash]' : undefined,
+    devtoolFallbackModuleFilenameTemplate: __DEV__ ? '../../[resource-path];[hash]' : undefined,
     filename: '[name].js',
     sourceMapFilename: '[name].[chunkhash].js.map',
     path: 'build/server',

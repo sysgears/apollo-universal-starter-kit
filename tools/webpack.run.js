@@ -128,6 +128,20 @@ function startServer() {
     const compiler = webpack(serverConfig);
 
     if (__DEV__) {
+      compiler.plugin('compilation', compilation => {
+        compilation.plugin('after-optimize-assets', assets => {
+          // Patch webpack-generated original source files path, by stripping hash after filename
+          const mapKey = _.findKey(assets, (v, k) => k.endsWith('.map'));
+          if (mapKey) {
+            var srcMap = JSON.parse(assets[mapKey]._value);
+            for (var idx in srcMap.sources) {
+              srcMap.sources[idx] = srcMap.sources[idx].split(';')[0];
+            }
+            assets[mapKey]._value = JSON.stringify(srcMap);
+          }
+        });
+      });
+
       compiler.watch({}, reporter);
 
       compiler.plugin('done', () => {

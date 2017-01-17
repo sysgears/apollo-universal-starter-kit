@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/server'
 import { createBatchingNetworkInterface } from 'apollo-client'
-import { ApolloProvider } from 'react-apollo'
-import { getDataFromTree } from 'react-apollo/server'
+import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { match, RouterContext } from 'react-router'
 import { StyleSheetServer } from 'aphrodite'
 import { reset, startBuffering } from 'aphrodite/lib/inject'
@@ -48,7 +47,7 @@ export default (req, res) => {
       // See: https://github.com/Khan/aphrodite/pull/132 for discussion
       reset();
       startBuffering();
-      getDataFromTree(component).then(context => {
+      getDataFromTree(component).then(() => {
         // Work around Aphrodite not supporting async rendering
         reset();
 
@@ -59,8 +58,9 @@ export default (req, res) => {
         if (__DEV__ || !assetMap) {
           assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
         }
+        const initialState = {[client.reduxRootKey]: client.getInitialState()};
 
-        const page = <Html content={html} state={context.store.getState()} assetMap={assetMap} aphroditeCss={css.content}/>;
+        const page = <Html content={html} state={initialState} assetMap={assetMap} aphroditeCss={css.content}/>;
         res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
         res.end();
       }).catch(e => log.error('RENDERING ERROR:', e));

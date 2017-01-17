@@ -59,7 +59,7 @@ const serverConfig = merge.smart(baseConfig, {
   devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   target: 'node',
   entry: {
-    bundle: ['babel-polyfill', './src/server/index.js']
+    index: ['babel-polyfill', './src/server/index.js']
   },
   node: {
     __dirname: true,
@@ -80,10 +80,10 @@ const serverConfig = merge.smart(baseConfig, {
     ]
   },
   output: {
-    devtoolModuleFilenameTemplate: __DEV__ ? info =>
-     { return path.resolve(info.absoluteResourcePath); } : undefined,
-    filename: 'index.js',
-    sourceMapFilename: 'index.js.map',
+    devtoolModuleFilenameTemplate: __DEV__ ? '../../[resource-path]' : undefined,
+    devtoolFallbackModuleFilenameTemplate: __DEV__ ? '../../[resource-path];[hash]' : undefined,
+    filename: '[name].js',
+    sourceMapFilename: '[name].[chunkhash].js.map',
     path: 'build/server',
     publicPath: '/'
   },

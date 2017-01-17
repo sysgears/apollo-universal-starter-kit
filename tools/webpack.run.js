@@ -116,9 +116,9 @@ function startServer() {
 
     if (__DEV__) {
       if (__WINDOWS__) {
-        serverConfig.entry.bundle.push('webpack/hot/poll?1000');
+        serverConfig.entry.index.push('webpack/hot/poll?1000');
       } else {
-        serverConfig.entry.bundle.push('webpack/hot/signal.js');
+        serverConfig.entry.index.push('webpack/hot/signal.js');
       }
       serverConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin());
@@ -128,6 +128,20 @@ function startServer() {
     const compiler = webpack(serverConfig);
 
     if (__DEV__) {
+      compiler.plugin('compilation', compilation => {
+        compilation.plugin('after-optimize-assets', assets => {
+          // Patch webpack-generated original source files path, by stripping hash after filename
+          const mapKey = _.findKey(assets, (v, k) => k.endsWith('.map'));
+          if (mapKey) {
+            var srcMap = JSON.parse(assets[mapKey]._value);
+            for (var idx in srcMap.sources) {
+              srcMap.sources[idx] = srcMap.sources[idx].split(';')[0];
+            }
+            assets[mapKey]._value = JSON.stringify(srcMap);
+          }
+        });
+      });
+
       compiler.watch({}, reporter);
 
       compiler.plugin('done', () => {
@@ -138,7 +152,7 @@ function startServer() {
             server.kill('SIGUSR2');
           }
         } else {
-          runServer(path.join(output.path, output.filename));
+          runServer(path.join(output.path, 'index.js'));
         }
       });
     } else {

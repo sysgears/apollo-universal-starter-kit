@@ -1,0 +1,5 @@
+query getCount {
+    count {
+        amount
+    }
+}

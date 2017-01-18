@@ -5,6 +5,8 @@ import gql from 'graphql-tag'
 import update from 'react-addons-update'
 import { Row, Button } from 'react-bootstrap'
 import log from '../../log'
+import AMOUNT_QUERY from '../graphql/CountGet.graphql'
+import ADD_COUNT_MUTATION from '../graphql/CountAddMutation.graphql'
 
 const SUBSCRIPTION_QUERY = gql`
   subscription onCountUpdated {
@@ -86,24 +88,6 @@ Counter.propTypes = {
   addCount: React.PropTypes.func.isRequired,
   client: React.PropTypes.instanceOf(ApolloClient).isRequired,
 };
-
-const AMOUNT_QUERY = gql`
-  query getCount {
-    count {
-      amount
-    }
-  }
-`;
-
-const ADD_COUNT_MUTATION = gql`
-  mutation addCount(
-    $amount: Int!
-  ) {
-    addCount(amount: $amount) {
-      amount
-    }
-  }
-`;
 
 export default withApollo(compose(
   graphql(AMOUNT_QUERY, {

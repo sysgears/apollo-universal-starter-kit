@@ -36,7 +36,12 @@ const baseConfig = {
       { test: /\.json$/, loader: 'json' },
       { test: /\.(woff2?|svg)$/, loader: 'url?name=./assets/[hash].[ext]&limit=10000' },
       { test: /\.(ttf|eot)$/, loader: 'file?name=./assets/[hash].[ext]' },
-      { test: /\.graphqls/, loader: 'raw' }
+      { test: /\.graphqls/, loader: 'raw' },
+      {
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        loader: 'graphql-tag/loader'
+      }
     ]
   },
   resolve: {

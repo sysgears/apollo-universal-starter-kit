@@ -34,7 +34,7 @@ const baseConfig = {
         },
       },
       { test: /\.json$/, loader: 'json' },
-      { test: /\.(woff2?|svg)$/, loader: 'url?name=./assets/[hash].[ext]&limit=10000' },
+      { test: /\.(woff2?|svg|png|jpg)$/, loader: 'url?name=./assets/[hash].[ext]&limit=10000' },
       { test: /\.(ttf|eot)$/, loader: 'file?name=./assets/[hash].[ext]' },
       { test: /\.graphqls/, loader: 'raw' },
       {

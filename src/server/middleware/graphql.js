@@ -1,10 +1,10 @@
-import { apolloExpress } from 'apollo-server'
+import { graphqlExpress } from 'graphql-server-express'
 import 'isomorphic-fetch'
 
 import schema from '../api/schema'
 import Count from '../sql/count'
 
-export default apolloExpress(() => {
+export default graphqlExpress(() => {
   return {
     schema,
     context: {

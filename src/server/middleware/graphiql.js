@@ -1,4 +1,4 @@
-import { graphiqlExpress } from 'apollo-server'
+import { graphiqlExpress } from 'graphql-server-express'
 
 export default graphiqlExpress({
   endpointURL: '/graphql',

@@ -34,7 +34,7 @@ export default (req, res) => {
           credentials: "same-origin",
           headers: req.headers,
         },
-        batchInterval: 500,
+        batchInterval: 20,
       }));
 
       const component = (

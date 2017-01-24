@@ -19,7 +19,7 @@ const networkInterface = createBatchingNetworkInterface({
   opts: {
     credentials: "same-origin",
   },
-  batchInterval: 500,
+  batchInterval: 20,
   uri: "/graphql",
 });
 

@@ -8,7 +8,8 @@
     "frontendBuildDir": "build/client",
     "webpackDevPort": 3000,
     "apiPort": 8080,
-    "ssr": true
+    "ssr": true,
+    "webpackDll": true
   },
   "engines": {
     "node": "6.6.0",

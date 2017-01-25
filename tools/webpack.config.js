@@ -6,7 +6,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
-const settings = require('../package.json').app;
+const pkg = require('../package.json');
+const _ = require('lodash');
 
 global.__DEV__ = process.argv.length >= 3 && process.argv[2] === 'watch';
 const buildNodeEnv = __DEV__ ? 'development' : 'production';
@@ -56,11 +57,11 @@ const baseConfig = {
 let serverPlugins = [
   new webpack.BannerPlugin('require("source-map-support").install();',
       { raw: true, entryOnly: false }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __SSR__: settings.ssr,
+  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __SSR__: pkg.app.ssr,
     __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`}))
 ];
 
-const serverConfig = merge.smart(baseConfig, {
+const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
   devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   target: 'node',
   entry: {
@@ -89,7 +90,7 @@ const serverConfig = merge.smart(baseConfig, {
     devtoolFallbackModuleFilenameTemplate: __DEV__ ? '../../[resource-path];[hash]' : undefined,
     filename: '[name].js',
     sourceMapFilename: '[name].[chunkhash].js.map',
-    path: 'build/server',
+    path: pkg.app.backendBuildDir,
     publicPath: '/'
   },
   plugins: serverPlugins
@@ -99,22 +100,22 @@ let clientPlugins = [
   new ManifestPlugin({
     fileName: 'assets.json'
   }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false, __SSR__: settings.ssr,
+  new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false, __SSR__: pkg.app.ssr,
     __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`})),
-  new webpack.optimize.CommonsChunkPlugin(
+];
+
+if (!__DEV__) {
+  clientPlugins.push(new ExtractTextPlugin('[name].[contenthash].css', { allChunks: true }));
+  clientPlugins.push(new webpack.optimize.CommonsChunkPlugin(
     "vendor",
     "[name].[hash].js",
     function (module) {
       return module.resource && module.resource.indexOf(path.resolve('./node_modules')) === 0;
     }
-  )
-];
-
-if (!__DEV__) {
-  clientPlugins.push(new ExtractTextPlugin('[name].[contenthash].css', { allChunks: true }));
+  ));
 }
 
-const clientConfig = merge.smart(baseConfig, {
+const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
   devtool: __DEV__ ? '#eval' : '#source-map',
   entry: {
     bundle: ['babel-polyfill', './src/client/index.jsx']
@@ -129,13 +130,30 @@ const clientConfig = merge.smart(baseConfig, {
   },
   output: {
     filename: '[name].[hash].js',
-    path: 'build/client',
+    path: pkg.app.frontendBuildDir,
     publicPath: '/assets/'
   },
   plugins: clientPlugins
 });
 
+const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
+  entry: {
+    vendor: _.keys(pkg.dependencies),
+  },
+  plugins: [
+    new webpack.DllPlugin({
+      name: '[name]',
+      path: path.join(pkg.app.frontendBuildDir, '[name]_dll.json'),
+    }),
+  ],
+  output: {
+    filename: '[name]_dll.js',
+    path: pkg.app.frontendBuildDir,
+    library: '[name]',
+  },
+});
+
 module.exports = 
   process.env.npm_lifecycle_script.indexOf('mocha-webpack') >= 0 ? 
     serverConfig : 
-    [ serverConfig, clientConfig ];
+    [ serverConfig, clientConfig, dllConfig ];

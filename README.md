@@ -71,6 +71,13 @@ applies patches to running modules from filesystem. Hot code reload for frontend
 and Hot Module Replacement to apply patches to frontend code. Hot patches for React components are applied on the 
 frontend and backend at the same time, so React should not complain about differences in client and server code.
 
+- Webpack DLL vendor bundle generation and updating out of the box
+
+  For all the non-development dependencies of project `package.json` the [Webpack] vendor DLL bundle is generated 
+  and updated automatically, so that Webpack didn't process vendor libraries on each change to the project, but only
+  when they are actually changed. This boosts speed of cold project start in development mode and speed of hot code reload
+  even if the number of dependencies is huge.
+
 - Server Side Rendering with Apollo Redux Store sync
 
   On the initial web page request backend fully renders UI and hands off Apollo Redux Store state to frontend. Frontend

@@ -7,6 +7,8 @@ import path from 'path'
 import mkdirp from 'mkdirp'
 import minilog from 'minilog'
 import _ from 'lodash'
+import crypto from 'crypto'
+const pkg = require('../package.json');
 
 import configs from './webpack.config'
 
@@ -15,7 +17,7 @@ minilog.enable();
 const logBack = minilog('webpack-for-backend');
 const logFront = minilog('webpack-for-frontend');
 
-const [ serverConfig, clientConfig ] = configs;
+const [ serverConfig, clientConfig, dllConfig ] = configs;
 const __WINDOWS__ = /^win/.test(process.platform);
 
 var server;
@@ -79,8 +81,8 @@ function webpackReporter(log, err, stats) {
 
     if (!__DEV__) {
       const dir = log === logFront ?
-        process.env.npm_package_app_frontendBuildDir :
-        process.env.npm_package_app_backendBuildDir;
+        pkg.app.frontendBuildDir :
+        pkg.app.backendBuildDir;
       createDirs(dir);
       fs.writeFileSync(path.join(dir, 'stats.json'), JSON.stringify(stats.toJson()));
     }
@@ -93,7 +95,7 @@ function startClient() {
 
     if (__DEV__) {
       clientConfig.entry.bundle.push('webpack/hot/dev-server',
-          `webpack-dev-server/client?http://localhost:${process.env.npm_package_app_webpackDevPort}/`);
+          `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`);
       clientConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
           new webpack.HotModuleReplacementPlugin(),
           new webpack.NoErrorsPlugin());
@@ -167,7 +169,7 @@ function startWebpackDevServer(clientConfig, reporter) {
   let compiler = webpack(clientConfig);
 
   compiler.plugin('done', stats => {
-    const dir = process.env.npm_package_app_frontendBuildDir;
+    const dir = pkg.app.frontendBuildDir;
     createDirs(dir);
     const assetsMap = JSON.parse(stats.compilation.assets['assets.json'].source());
     _.each(stats.toJson().assetsByChunkName, (assets, bundle) => {
@@ -177,10 +179,13 @@ function startWebpackDevServer(clientConfig, reporter) {
         assetsMap[`${bundle}.js.map`] = `${bundleJs}.map`;
       }
     });
+    if (pkg.app.webpackDll) {
+      assetsMap['vendor.js'] = 'vendor_dll.js';
+    }
     fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
   });
 
-  waitForPort('localhost', process.env.npm_package_app_apiPort, function(err) {
+  waitForPort('localhost', pkg.app.apiPort, function(err) {
     if (err) throw new Error(err);
 
     const app = new WebpackDevServer(compiler, {
@@ -189,7 +194,7 @@ function startWebpackDevServer(clientConfig, reporter) {
       publicPath: clientConfig.output.publicPath,
       headers: { 'Access-Control-Allow-Origin': '*' },
       proxy: {
-        '*': `http://localhost:${process.env.npm_package_app_apiPort}`
+        '*': `http://localhost:${pkg.app.apiPort}`
       },
       noInfo: true,
       reporter: ({state, stats}) => {
@@ -202,10 +207,82 @@ function startWebpackDevServer(clientConfig, reporter) {
       }
     });
 
-    logFront(`Webpack dev server listening on ${process.env.npm_package_app_webpackDevPort}`);
-    app.listen(process.env.npm_package_app_webpackDevPort);
+    logFront(`Webpack dev server listening on ${pkg.app.webpackDevPort}`);
+    app.listen(pkg.app.webpackDevPort);
   });
 }
 
-startClient();
-startServer();
+function useWebpackDll() {
+  console.log("Using Webpack DLL vendor bundle");
+  const jsonPath = path.join('..', pkg.app.frontendBuildDir, 'vendor_dll.json');
+  clientConfig.plugins.push(new webpack.DllReferencePlugin({
+    context:  process.cwd(),
+    manifest: require(jsonPath)
+  }));
+  serverConfig.plugins.push(new webpack.DllReferencePlugin({
+    context:  process.cwd(),
+    manifest: require(jsonPath)
+  }));
+}
+
+function isDllValid() {
+  try {
+    let meta = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
+    if (!_.isEqual(meta.modules, dllConfig.entry.vendor)) {
+      console.warn('Modules bundled into vendor DLL changed, need to rebuild it');
+      return false;
+    }
+
+    let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
+
+    for (let filename of Object.keys(json.content)) {
+      const hash = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
+      if (meta.hashes[filename] !== hash) {
+        console.warn(`Hash for vendor DLL file ${filename} changed, need to rebuild vendor bundle`);
+        return false;
+      }
+    }
+
+    return true;
+  } catch (e) {
+    console.warn('Vendor file absent or invalid, rebuilding it');
+
+    return false;
+  }
+}
+
+function buildDll() {
+  return new Promise((done) => {
+    if (!isDllValid()) {
+      console.log("Generating vendor DLL bundle...");
+
+      const compiler = webpack(dllConfig);
+
+      compiler.run(() => {
+        let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
+        const meta = {hashes: {}, modules: dllConfig.entry.vendor};
+        for (let filename of Object.keys(json.content)) {
+          meta.hashes[filename] = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
+          fs.writeFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json'), JSON.stringify(meta));
+        }
+        done();
+      });
+    } else {
+      done();
+    }
+  });
+}
+
+function startWebpack() {
+  startServer();
+  startClient();
+}
+
+if (!__DEV__ || !pkg.app.webpackDll) {
+  startWebpack();
+} else {
+  buildDll().then(function() {
+    useWebpackDll();
+    startWebpack();
+  });
+}

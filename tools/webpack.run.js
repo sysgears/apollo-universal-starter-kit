@@ -180,7 +180,8 @@ function startWebpackDevServer(clientConfig, reporter) {
       }
     });
     if (pkg.app.webpackDll) {
-      assetsMap['vendor.js'] = 'vendor_dll.js';
+      let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
+      assetsMap['vendor.js'] = json.name;
     }
     fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
   });
@@ -227,7 +228,16 @@ function useWebpackDll() {
 
 function isDllValid() {
   try {
-    let meta = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
+    const hashesPath = path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json');
+    if (!fs.existsSync(hashesPath)) {
+      console.warn("Vendor DLL does not exists");
+      return false;
+    }
+    let meta = JSON.parse(fs.readFileSync(hashesPath));
+    if (!fs.existsSync(path.join(pkg.app.frontendBuildDir, meta.name))) {
+      console.warn("Vendor DLL does not exists");
+      return false;
+    }
     if (!_.isEqual(meta.modules, dllConfig.entry.vendor)) {
       console.warn('Modules bundled into vendor DLL changed, need to rebuild it');
       return false;
@@ -245,7 +255,7 @@ function isDllValid() {
 
     return true;
   } catch (e) {
-    console.warn('Vendor file absent or invalid, rebuilding it');
+    console.warn('Error checking vendor bundle, regenerating it...', e);
 
     return false;
   }
@@ -258,9 +268,9 @@ function buildDll() {
 
       const compiler = webpack(dllConfig);
 
-      compiler.run(() => {
+      compiler.run((err, stats) => {
         let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
-        const meta = {hashes: {}, modules: dllConfig.entry.vendor};
+        const meta = {name: _.keys(stats.compilation.assets)[0], hashes: {}, modules: dllConfig.entry.vendor};
         for (let filename of Object.keys(json.content)) {
           meta.hashes[filename] = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
           fs.writeFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json'), JSON.stringify(meta));

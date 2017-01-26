@@ -147,7 +147,7 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
     }),
   ],
   output: {
-    filename: '[name]_dll.js',
+    filename: '[name].[hash]_dll.js',
     path: pkg.app.frontendBuildDir,
     library: '[name]',
   },

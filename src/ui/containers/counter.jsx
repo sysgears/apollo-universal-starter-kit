@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux';
 import { graphql, compose, withApollo } from 'react-apollo'
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
@@ -35,6 +36,17 @@ class Counter extends React.Component {
     }
   }
 
+  handleTestIncrement(e) {
+    let value;
+    if (e && e.target) {
+      value = e.target.value;
+    } else {
+      value = e;
+    }
+
+    this.props.onTestIncrement(value);
+  }
+
   subscribe() {
     const { client, updateCountQuery } = this.props;
     this.subscription                  = client.subscribe({
@@ -58,7 +70,7 @@ class Counter extends React.Component {
   }
 
   render() {
-    const { loading, count, addCount } = this.props;
+    const { loading, count, addCount, test } = this.props;
     if (loading) {
       return (
         <Row className="text-center">
@@ -75,6 +87,12 @@ class Counter extends React.Component {
           <Button bsStyle="primary" onClick={addCount(1)}>
             Click to increase count
           </Button>
+          <br /><br /><br />
+          <div>Current test, is {test}. This is being stored client-side with Redux.</div>
+          <br />
+          <Button bsStyle="primary" value="1" onClick={this.handleTestIncrement.bind(this)}>
+            Click to increase test
+          </Button>
         </Row>
       );
     }
@@ -87,9 +105,10 @@ Counter.propTypes = {
   updateCountQuery: React.PropTypes.func,
   addCount: React.PropTypes.func.isRequired,
   client: React.PropTypes.instanceOf(ApolloClient).isRequired,
+  test: React.PropTypes.number.isRequired,
 };
 
-export default withApollo(compose(
+const CounterWithApollo = withApollo(compose(
   graphql(AMOUNT_QUERY, {
     props({data: {loading, count, updateQuery}}) {
       return {loading, count, updateCountQuery: updateQuery};
@@ -124,3 +143,16 @@ export default withApollo(compose(
     }),
   })
 )(Counter));
+
+export default connect(
+  (state) => ({ test: state.counter.test }),
+  (dispatch) => ({
+    onTestIncrement(value)
+    {
+      dispatch({
+        type: 'COUNTER_TEST_INCREMENT',
+        value: Number(value)
+      });
+    }
+  }),
+)(CounterWithApollo);

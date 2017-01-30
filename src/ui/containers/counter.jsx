@@ -36,7 +36,7 @@ class Counter extends React.Component {
     }
   }
 
-  handleTestIncrement(e) {
+  handleReduxIncrement(e) {
     let value;
     if (e && e.target) {
       value = e.target.value;
@@ -44,7 +44,7 @@ class Counter extends React.Component {
       value = e;
     }
 
-    this.props.onTestIncrement(value);
+    this.props.onReduxIncrement(value);
   }
 
   subscribe() {
@@ -70,7 +70,7 @@ class Counter extends React.Component {
   }
 
   render() {
-    const { loading, count, addCount, test } = this.props;
+    const { loading, count, addCount, reduxCount } = this.props;
     if (loading) {
       return (
         <Row className="text-center">
@@ -88,10 +88,10 @@ class Counter extends React.Component {
             Click to increase count
           </Button>
           <br /><br /><br />
-          <div>Current test, is {test}. This is being stored client-side with Redux.</div>
+          <div>Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.</div>
           <br />
-          <Button bsStyle="primary" value="1" onClick={this.handleTestIncrement.bind(this)}>
-            Click to increase test
+          <Button bsStyle="primary" value="1" onClick={this.handleReduxIncrement.bind(this)}>
+            Click to increase reduxCount
           </Button>
         </Row>
       );
@@ -105,7 +105,7 @@ Counter.propTypes = {
   updateCountQuery: React.PropTypes.func,
   addCount: React.PropTypes.func.isRequired,
   client: React.PropTypes.instanceOf(ApolloClient).isRequired,
-  test: React.PropTypes.number.isRequired,
+  reduxCount: React.PropTypes.number.isRequired,
 };
 
 const CounterWithApollo = withApollo(compose(
@@ -145,12 +145,12 @@ const CounterWithApollo = withApollo(compose(
 )(Counter));
 
 export default connect(
-  (state) => ({ test: state.counter.test }),
+  (state) => ({ reduxCount: state.counter.reduxCount }),
   (dispatch) => ({
-    onTestIncrement(value)
+    onReduxIncrement(value)
     {
       dispatch({
-        type: 'COUNTER_TEST_INCREMENT',
+        type: 'COUNTER_INCREMENT',
         value: Number(value)
       });
     }

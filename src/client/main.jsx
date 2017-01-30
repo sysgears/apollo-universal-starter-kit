@@ -3,8 +3,10 @@ import { createBatchingNetworkInterface } from 'apollo-client'
 import { Client } from 'subscriptions-transport-ws';
 import { ApolloProvider } from 'react-apollo'
 import { Router, browserHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
 
 import createApolloClient from '../apollo_client'
+import createReduxStore from '../redux_store'
 import addGraphQLSubscriptions from './subscriptions'
 import routes from '../routes'
 import { app as settings} from '../../package.json'
@@ -30,11 +32,21 @@ const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
 
 const client = createApolloClient(networkInterfaceWithSubscriptions);
 
+let initialState = {};
+
+if (window.__APOLLO_STATE__) {
+  initialState = window.__APOLLO_STATE__;
+}
+
+const store = createReduxStore(initialState, client);
+
+const history = syncHistoryWithStore(browserHistory, store);
+
 export default class Main extends React.Component {
   render() {
     return (
-      <ApolloProvider client={client}>
-        <Router history={browserHistory}>
+      <ApolloProvider store={store} client={client}>
+        <Router history={history}>
           {routes}
         </Router>
       </ApolloProvider>

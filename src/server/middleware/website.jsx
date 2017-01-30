@@ -9,6 +9,7 @@ import fs from 'fs'
 import path from 'path'
 
 import createApolloClient from '../../apollo_client'
+import createReduxStore from '../../redux_store'
 import Html from '../../ui/components/html'
 import routes from '../../routes'
 import log from '../../log'
@@ -37,8 +38,11 @@ export default (req, res) => {
         batchInterval: 20,
       }));
 
+      let initialState = {};
+      const store = createReduxStore(initialState, client);
+
       const component = (
-        <ApolloProvider client={client}>
+        <ApolloProvider store={store} client={client}>
           <RouterContext {...renderProps} />
         </ApolloProvider>
       );
@@ -58,9 +62,8 @@ export default (req, res) => {
         if (__DEV__ || !assetMap) {
           assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
         }
-        const initialState = {[client.reduxRootKey]: client.getInitialState()};
 
-        const page = <Html content={html} state={initialState} assetMap={assetMap} aphroditeCss={css.content}/>;
+        const page = <Html content={html} state={client.store.getState()} assetMap={assetMap} aphroditeCss={css.content}/>;
         res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
         res.end();
       }).catch(e => log.error('RENDERING ERROR:', e));

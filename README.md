@@ -1,7 +1,7 @@
 ## Apollo Universal Starter Kit with Hot Code Reload of backend & frontend 
 
 > Apollo Universal Starter Kit is an boilerplate for [Universal] web app development built on top of [Apollo], 
-> [GraphQL], [React], [Express] with SQL storage support and [Twitter Bootstrap] integration. 
+> [GraphQL], [React], [Redux], [Express] with SQL storage support and [Twitter Bootstrap] integration. 
 > Hot Code Reload of backend & frontend using [Webpack] and Hot Module Replacement to reflect your changes instantly 
 > and help you stay productive.
 
@@ -122,6 +122,7 @@ Copyright © 2016 [SysGears INC]. This source code is licensed under the [MIT] l
 [Apollo]: http://www.apollostack.com
 [GraphQL]: http://graphql.org
 [React]: https://facebook.github.io/react
+[Redux]: http://redux.js.org
 [Express]: http://expressjs.com
 [Twitter Bootstrap]: http://getbootstrap.com
 [Webpack]: http://webpack.github.io

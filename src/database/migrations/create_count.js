@@ -3,7 +3,7 @@ export function up(knex, Promise) {
     knex.schema.createTable('count', (table) => {
       table.increments();
       table.timestamps();
-      table.integer('amount');
+      table.integer('amount').notNull();
     }),
   ]);
 }

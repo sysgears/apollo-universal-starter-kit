@@ -38,7 +38,10 @@ server = http.createServer(app);
 
 new SubscriptionServer({
   subscriptionManager
-}, server);
+}, {
+  server: server,
+  path: '/'
+});
 
 server.listen(port, () => {
   log.info(`API is now running on port ${port}`);

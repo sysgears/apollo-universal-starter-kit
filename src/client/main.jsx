@@ -1,6 +1,5 @@
 import React from 'react'
 import { createBatchingNetworkInterface } from 'apollo-client'
-import { Client } from 'subscriptions-transport-ws';
 import { ApolloProvider } from 'react-apollo'
 import { Router, browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
@@ -14,10 +13,7 @@ import { app as settings} from '../../package.json'
 import '../ui/bootstrap.scss'
 import '../ui/styles.scss'
 
-const wsClient = new Client(window.location.origin.replace(/^http/, 'ws')
-  .replace(':' + settings.webpackDevPort, ':' + settings.apiPort));
-
-const networkInterface = createBatchingNetworkInterface({
+let networkInterface = createBatchingNetworkInterface({
   opts: {
     credentials: "same-origin",
   },
@@ -25,12 +21,19 @@ const networkInterface = createBatchingNetworkInterface({
   uri: "/graphql",
 });
 
-const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-  networkInterface,
-  wsClient,
-);
+if (__CLIENT__) {
+  const SubscriptionClient = require('subscriptions-transport-ws').SubscriptionClient;
 
-const client = createApolloClient(networkInterfaceWithSubscriptions);
+  const wsClient = new SubscriptionClient(window.location.origin.replace(/^http/, 'ws')
+    .replace(':' + settings.webpackDevPort, ':' + settings.apiPort));
+
+  networkInterface = addGraphQLSubscriptions(
+    networkInterface,
+    wsClient,
+  );
+}
+
+const client = createApolloClient(networkInterface);
 
 let initialState = {};
 

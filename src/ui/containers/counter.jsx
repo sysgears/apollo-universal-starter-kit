@@ -103,6 +103,7 @@ Counter.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   count: React.PropTypes.object,
   updateCountQuery: React.PropTypes.func,
+  onReduxIncrement: React.PropTypes.func,
   addCount: React.PropTypes.func.isRequired,
   client: React.PropTypes.instanceOf(ApolloClient).isRequired,
   reduxCount: React.PropTypes.number.isRequired,

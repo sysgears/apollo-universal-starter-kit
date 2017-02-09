@@ -132,7 +132,7 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
   output: {
     filename: '[name].[hash].js',
     path: pkg.app.frontendBuildDir,
-    publicPath: '/assets/'
+    publicPath: '/'
   },
   plugins: clientPlugins
 });

@@ -171,19 +171,21 @@ function startWebpackDevServer(clientConfig, reporter) {
   compiler.plugin('done', stats => {
     const dir = pkg.app.frontendBuildDir;
     createDirs(dir);
-    const assetsMap = JSON.parse(stats.compilation.assets['assets.json'].source());
-    _.each(stats.toJson().assetsByChunkName, (assets, bundle) => {
-      const bundleJs = assets.constructor === Array ? assets[0] : assets;
-      assetsMap[`${bundle}.js`] = bundleJs;
-      if (assets.length > 1) {
-        assetsMap[`${bundle}.js.map`] = `${bundleJs}.map`;
+    if (stats.compilation.assets['assets.json']) {
+      const assetsMap = JSON.parse(stats.compilation.assets['assets.json'].source());
+      _.each(stats.toJson().assetsByChunkName, (assets, bundle) => {
+        const bundleJs = assets.constructor === Array ? assets[0] : assets;
+        assetsMap[`${bundle}.js`] = bundleJs;
+        if (assets.length > 1) {
+          assetsMap[`${bundle}.js.map`] = `${bundleJs}.map`;
+        }
+      });
+      if (pkg.app.webpackDll) {
+        let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
+        assetsMap['vendor.js'] = json.name;
       }
-    });
-    if (pkg.app.webpackDll) {
-      let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
-      assetsMap['vendor.js'] = json.name;
+      fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
     }
-    fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
   });
 
   waitForPort('localhost', pkg.app.apiPort, function(err) {
@@ -191,7 +193,7 @@ function startWebpackDevServer(clientConfig, reporter) {
 
     const app = new WebpackDevServer(compiler, {
       hot: true,
-      contentBase: '/assets/',
+      contentBase: '/',
       publicPath: clientConfig.output.publicPath,
       headers: { 'Access-Control-Allow-Origin': '*' },
       proxy: {

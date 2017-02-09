@@ -13,6 +13,10 @@ import { app as settings} from '../../package.json'
 import '../ui/bootstrap.scss'
 import '../ui/styles.scss'
 
+// Require all files from assets dir recursively addding them into assets.json
+var req = require.context('!file?name=[hash].[ext]!../assets', true, /.*/);
+req.keys().map(req);
+
 let networkInterface = createBatchingNetworkInterface({
   opts: {
     credentials: "same-origin",

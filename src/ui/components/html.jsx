@@ -7,6 +7,15 @@ const Html = ({ content, state, assetMap, aphroditeCss }) => {
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <title>Apollo Fullstack Starter Kit</title>
+
+      <link rel="apple-touch-icon" sizes="180x180" href={`/assets/${assetMap["apple-touch-icon.png"]}`}/>
+      <link rel="icon" type="image/png" href={`/assets/${assetMap["favicon-32x32.png"]}`} sizes="32x32"/>
+      <link rel="icon" type="image/png" href={`/assets/${assetMap["favicon-16x16.png"]}`} sizes="16x16"/>
+      <link rel="manifest" href={`/assets/${assetMap["manifest.json"]}`}/>
+      <link rel="mask-icon" href={`/assets/${assetMap["safari-pinned-tab.svg"]}`} color="#5bbad5"/>
+      <link rel="shortcut icon" href={`/assets/${assetMap["favicon.ico"]}`} />
+      <meta name="msapplication-config" content={`/assets/${assetMap["browserconfig.xml"]}`} />
+      <meta name="theme-color" content="#ffffff"/>
       {!__DEV__ && <link rel="stylesheet" type="text/css" href={`/assets/${assetMap['bundle.css']}`} />}
       {__DEV__ &&
         <style dangerouslySetInnerHTML={{ __html:
@@ -14,7 +23,6 @@ const Html = ({ content, state, assetMap, aphroditeCss }) => {
           require('../bootstrap.scss')._getCss()
         }}/>
       }
-      <link rel="shortcut icon" href="/favicon.ico"/>
       <style data-aphrodite>{aphroditeCss}</style>
     </head>
     <body>

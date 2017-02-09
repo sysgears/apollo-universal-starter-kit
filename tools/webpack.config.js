@@ -35,8 +35,6 @@ const baseConfig = {
         },
       },
       { test: /\.json$/, loader: 'json' },
-      { test: /\.(woff2?|svg|png|jpg)$/, loader: 'url?name=./assets/[hash].[ext]&limit=10000' },
-      { test: /\.(ttf|eot)$/, loader: 'file?name=./assets/[hash].[ext]' },
       { test: /\.graphqls/, loader: 'raw' },
       {
         test: /\.(graphql|gql)$/,
@@ -82,7 +80,8 @@ const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
           'isomorphic-style-loader',
           'css',
           'sass'] : ['ignore-loader']
-      }
+      },
+      { test: /\.(woff2?|svg|png|ico|jpg|ttf|eot)$/, loader: 'ignore-loader' }
     ]
   },
   output: {
@@ -125,7 +124,9 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
       {
         test: /\.scss$/,
         loader: __DEV__ ? 'style!css!sass' : ExtractTextPlugin.extract("style", "css!sass")
-      }
+      },
+      { test: /\.(woff2?|svg|png|ico|jpg|xml)$/, loader: 'url?name=[hash].[ext]&limit=10000' },
+      { test: /\.(ttf|eot)$/, loader: 'file?name=[hash].[ext]' },
     ]
   },
   output: {

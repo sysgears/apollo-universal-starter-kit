@@ -23,6 +23,7 @@
     "lint": "eslint --fix --ext js --ext jsx src",
     "seed": "knex seed:run",
     "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
     "postinstall": "if [ \"$NODE_ENV\" = production ]; then npm run clean && npm run build && npm run migrate && npm run seed; fi"
   },
   "repository": {
@@ -45,7 +46,7 @@
   "license": "MIT",
   "dependencies": {
     "aphrodite": "^1.0.0",
-    "apollo-client": "^0.8.1",
+    "apollo-client": "^0.8.4",
     "body-parser": "^1.15.2",
     "classnames": "^2.2.5",
     "express": "^4.14.0",

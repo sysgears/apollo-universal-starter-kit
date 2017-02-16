@@ -154,7 +154,7 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
   },
 });
 
-module.exports = 
-  process.env.npm_lifecycle_script.indexOf('mocha-webpack') >= 0 ? 
+module.exports =
+  process.argv.length >= 2 && process.argv[1].indexOf('mocha-webpack') >= 0 ?
     serverConfig : 
     [ serverConfig, clientConfig, dllConfig ];

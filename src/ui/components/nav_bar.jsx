@@ -1,18 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router'
+import { Container, Row, Navbar, Nav, NavItem } from 'reactstrap'
 
 const NavBar = () => (
-  <nav className="navbar navbar-default">
-    <div className="container">
-      <div className="navbar-header">
+  <Navbar color="faded" light>
+    <Container>
+      <Row className="align-items-center">
         <Link to="/counter" className="navbar-brand">Apollo Starter Kit</Link>
-      </div>
-
-      <ul className="nav navbar-nav">
-        <li><a href="/graphiql">GraphiQL</a></li>
-      </ul>
-    </div>
-  </nav>
+        <Nav navbar>
+          <NavItem>
+            <a href="/graphiql">GraphiQL</a>
+          </NavItem>
+        </Nav>
+      </Row>
+    </Container>
+  </Navbar>
 );
 
 export default NavBar;

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, css } from 'aphrodite'
-import { Row } from 'react-bootstrap'
+import { Container, Row } from 'reactstrap'
 import classnames from 'classnames'
 
 import NavBar from './nav_bar'
@@ -20,15 +20,14 @@ const styles = StyleSheet.create({
 export default function App({ children }) {
   return (
     <div>
-      <NavBar>
-      </NavBar>
-      <div className="container">
+      <NavBar />
+      <Container>
         {children}
-      </div>
+      </Container>
       <footer className={classnames('container', css(styles.footer))}>
-        <Row className='text-center'>
+        <div className='text-center'>
           &copy; 2016. Example Apollo App.
-        </Row>
+        </div>
       </footer>
     </div>
   );

@@ -22,11 +22,19 @@
   ```
   npm i
   ```
+  or 
+  ```
+  yarn i
+  ```
 
 3. Create sample SQLite database schema.
 
   ```
   npm run migrate
+  ```
+  or 
+  ```
+  yarn migrate
   ```
 
 4. Seed sample database data.
@@ -34,11 +42,19 @@
   ```
   npm run seed
   ```
+  or
+  ```
+  yarn seed
+  ```
 
 5. Run starter kit in development mode.
 
   ```
   npm start
+  ```
+  or
+  ```
+  yarn start
   ```
 
 6. Point your browser to [http://localhost:3000](http://localhost:3000)

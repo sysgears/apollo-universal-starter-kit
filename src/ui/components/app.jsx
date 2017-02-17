@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, css } from 'aphrodite'
-import { Container, Row } from 'reactstrap'
+import { Container } from 'reactstrap'
 import classnames from 'classnames'
 
 import NavBar from './nav_bar'

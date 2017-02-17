@@ -4,7 +4,7 @@ import { graphql, compose, withApollo } from 'react-apollo'
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
 import update from 'react-addons-update'
-import { Row, Button } from 'react-bootstrap'
+import { Button } from 'reactstrap'
 import log from '../../log'
 import AMOUNT_QUERY from '../graphql/CountGet.graphql'
 import ADD_COUNT_MUTATION from '../graphql/CountAddMutation.graphql'
@@ -73,27 +73,30 @@ class Counter extends React.Component {
     const { loading, count, addCount, reduxCount } = this.props;
     if (loading) {
       return (
-        <Row className="text-center">
+        <div className="text-center">
           Loading...
-        </Row>
+        </div>
       );
     } else {
       return (
-        <Row className="text-center">
-          <div>
-            Current count, is {count.amount}. This is being stored server-side in the database and using Apollo subscription for real-time updates.
-          </div>
-          <br />
-          <Button bsStyle="primary" onClick={addCount(1)}>
+        <div className="text-center mt-4 mb-4">
+          Current count, is {count.amount}. This is being stored server-side in the database and using Apollo subscription for real-time updates.
+          <br/>
+          <br/>
+          <Button color="primary" onClick={addCount(1)}>
             Click to increase count
           </Button>
-          <br /><br /><br />
-          <div>Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.</div>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.
           <br />
-          <Button bsStyle="primary" value="1" onClick={this.handleReduxIncrement.bind(this)}>
+          <br />
+          <Button color="primary" value="1" onClick={this.handleReduxIncrement.bind(this)}>
             Click to increase reduxCount
           </Button>
-        </Row>
+        </div>
       );
     }
   }

@@ -91,8 +91,8 @@ class Counter extends React.Component {
           <br/>
           <br/>
           Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.
-          <br />
-          <br />
+          <br/>
+          <br/>
           <Button color="primary" value="1" onClick={this.handleReduxIncrement.bind(this)}>
             Click to increase reduxCount
           </Button>

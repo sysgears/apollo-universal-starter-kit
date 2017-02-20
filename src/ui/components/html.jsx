@@ -19,7 +19,6 @@ const Html = ({ content, state, assetMap, aphroditeCss }) => {
       {!__DEV__ && <link rel="stylesheet" type="text/css" href={`${assetMap['bundle.css']}`} />}
       {__DEV__ &&
         <style dangerouslySetInnerHTML={{ __html:
-          require('../bootstrap.scss')._getCss() +
           require('../styles.scss')._getCss()
         }}/>
       }

@@ -2,8 +2,10 @@ import express from 'express';
 import bodyParser from 'body-parser'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 import http from 'http'
+import { invert } from 'lodash'
 
 import { app as settings } from '../../package.json'
+import queryMap from '../../extracted_queries.json'
 import log from '../log'
 
 // Hot reloadable modules
@@ -25,6 +27,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/', express.static(settings.frontendBuildDir, {maxAge: '180 days'}));
+
+if (settings.persistedQueries) {
+  const invertedMap = invert(queryMap);
+
+  app.use(
+    '/graphql',
+    (req, resp, next) => {
+
+      req.body = req.body.map(body => {
+        return {
+          query: invertedMap[ body.id ],
+          ...body
+        };
+      });
+
+      next();
+    },
+  );
+}
 
 app.use('/graphql', (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));

@@ -7,8 +7,10 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import createApolloClient from '../apollo_client'
 import createReduxStore from '../redux_store'
 import addGraphQLSubscriptions from './subscriptions'
+import { addPersistedQueries } from 'persistgraphql'
 import routes from '../routes'
-import { app as settings} from '../../package.json'
+import { app as settings } from '../../package.json'
+import queryMap from '../../extracted_queries.json'
 
 import '../ui/bootstrap.scss'
 import '../ui/styles.scss'
@@ -38,6 +40,10 @@ if (__CLIENT__) {
     networkInterface,
     wsClient,
   );
+}
+
+if (settings.persistedQueries) {
+  networkInterface = addPersistedQueries(networkInterface, queryMap);
 }
 
 const client = createApolloClient(networkInterface);

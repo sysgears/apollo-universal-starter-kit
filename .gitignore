@@ -4,3 +4,5 @@
 npm-debug.*
 *.sqlite3
 .DS_Store
+
+extracted_queries.json

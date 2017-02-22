@@ -15,6 +15,9 @@ import routes from '../../routes'
 import log from '../../log'
 import { app as settings } from '../../../package.json'
 
+import { addPersistedQueries } from 'persistgraphql'
+import queryMap from '../../../extracted_queries.json'
+
 const port = process.env.PORT || settings.apiPort;
 
 const apiUrl = `http://localhost:${port}/graphql`;
@@ -29,14 +32,21 @@ export default (req, res) => {
       log.error('ROUTER ERROR:', error);
       res.status(500);
     } else if (__SSR__ && renderProps) {
-      const client = createApolloClient(createBatchingNetworkInterface({
+
+      let networkInterface = createBatchingNetworkInterface({
         uri: apiUrl,
         opts: {
           credentials: "same-origin",
           headers: req.headers,
         },
         batchInterval: 20,
-      }));
+      });
+
+      if (settings.persistedQueries) {
+        networkInterface = addPersistedQueries(networkInterface, queryMap);
+      }
+
+      const client = createApolloClient(networkInterface);
 
       let initialState = {};
       const store = createReduxStore(initialState, client);
@@ -71,7 +81,7 @@ export default (req, res) => {
       if (__DEV__ || !assetMap) {
         assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
       }
-      const page = <Html content="" state={({})} assetMap={assetMap} aphroditeCss="" />;
+      const page = <Html content="" state={({})} assetMap={assetMap} aphroditeCss=""/>;
       res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
       res.end();
     } else {

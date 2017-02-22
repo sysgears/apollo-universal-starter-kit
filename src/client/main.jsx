@@ -6,7 +6,6 @@ import { syncHistoryWithStore } from 'react-router-redux'
 
 import createApolloClient from '../apollo_client'
 import createReduxStore from '../redux_store'
-import addGraphQLSubscriptions from './subscriptions'
 import routes from '../routes'
 import { app as settings} from '../../package.json'
 
@@ -29,12 +28,12 @@ let networkInterface = createBatchingNetworkInterface({
 });
 
 if (__CLIENT__) {
-  const SubscriptionClient = require('subscriptions-transport-ws').SubscriptionClient;
+  const subscriptions = require('subscriptions-transport-ws');
 
-  const wsClient = new SubscriptionClient(window.location.origin.replace(/^http/, 'ws')
+  const wsClient = new subscriptions.SubscriptionClient(window.location.origin.replace(/^http/, 'ws')
     .replace(':' + settings.webpackDevPort, ':' + settings.apiPort));
 
-  networkInterface = addGraphQLSubscriptions(
+  networkInterface = subscriptions.addGraphQLSubscriptions(
     networkInterface,
     wsClient,
   );

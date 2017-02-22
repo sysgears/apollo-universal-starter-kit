@@ -63,7 +63,13 @@ export default (req, res) => {
           assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
         }
 
-        const page = <Html content={html} state={client.store.getState()} assetMap={assetMap} aphroditeCss={css.content}/>;
+        const apolloState = Object.assign({}, client.store.getState());
+
+        // // Temporary workaround for bug in AC@0.5.0: https://github.com/apollostack/apollo-client/issues/845
+        delete apolloState.apollo.queries;
+        delete apolloState.apollo.mutations;
+
+        const page = <Html content={html} state={apolloState} assetMap={assetMap} aphroditeCss={css.content}/>;
         res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
         res.end();
       }).catch(e => log.error('RENDERING ERROR:', e));

@@ -56,10 +56,22 @@
   ```
   yarn start
   ```
+  
+6. [Optional] Extract queries for PersistGraphQL to work.
 
-6. Point your browser to [http://localhost:3000](http://localhost:3000)
-7. Change any app code and see the changes applied immediately!
-8. Open app in multiple tabs, try to increase counter in one tab and then switch to another tab. You will see that 
+    ```
+    npm run persistgraphql
+    ```
+    or
+    ```
+    yarn persistgraphql
+    ```
+    
+    Set package.json `persistedQueries` field to `true`
+
+7. Point your browser to [http://localhost:3000](http://localhost:3000)
+8. Change any app code and see the changes applied immediately!
+9. Open app in multiple tabs, try to increase counter in one tab and then switch to another tab. You will see that 
 counter value updated there as well, because counter is live updated via subscriptions.
 
 ## Deploying to [Heroku]
@@ -115,6 +127,10 @@ GraphQL requests are batched together automatically by [Apollo]
   
   GraphQL subscription is utilized to make counter updating in real-time.
 
+- [PersistGraphQL] is a simple build tool that enables query whitelisting and persisted queries for GraphQL projects that use statically analyze-able GraphQL queries.
+
+  If you would like to enable PersistGraphQL, set package.json `persistedQueries` field to `true`
+
 - SQL and arbitrary data sources support
 
   [Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL]. 
@@ -137,6 +153,7 @@ Copyright © 2016 [SysGears INC]. This source code is licensed under the [MIT] l
 [Universal]: https://medium.com/@mjackson/universal-javascript-4761051b7ae9
 [Apollo]: http://www.apollostack.com
 [GraphQL]: http://graphql.org
+[PersistGraphQL]: https://github.com/apollographql/persistgraphql
 [React]: https://facebook.github.io/react
 [Redux]: http://redux.js.org
 [Express]: http://expressjs.com

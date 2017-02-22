@@ -1,0 +1,1 @@
+{"mutation addCount($amount: Int!) {\n  addCount(amount: $amount) {\n    amount\n    __typename\n  }\n}\n":1,"query getCount {\n  count {\n    amount\n    __typename\n  }\n}\n":2}

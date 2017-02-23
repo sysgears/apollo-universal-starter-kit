@@ -24,7 +24,7 @@
   ```
   or 
   ```
-  yarn i
+  yarn install
   ```
 
 3. Create sample SQLite database schema.

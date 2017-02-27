@@ -1,5 +1,6 @@
 ## Apollo Universal Starter Kit with Hot Code Reload of backend & frontend 
 
+[![Build Status](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit)
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-fullstack-starter-kit.svg)](https://greenkeeper.io/)
 
 > Apollo Universal Starter Kit is an boilerplate for [Universal] web app development built on top of [Apollo], 

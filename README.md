@@ -1,5 +1,7 @@
 ## Apollo Universal Starter Kit with Hot Code Reload of backend & frontend 
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-fullstack-starter-kit.svg)](https://greenkeeper.io/)
+
 > Apollo Universal Starter Kit is an boilerplate for [Universal] web app development built on top of [Apollo], 
 > [GraphQL], [React], [Redux], [Express] with SQL storage support and [Twitter Bootstrap] integration. 
 > Hot Code Reload of backend & frontend using [Webpack] and Hot Module Replacement to reflect your changes instantly 

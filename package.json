@@ -46,7 +46,7 @@
   "license": "MIT",
   "dependencies": {
     "aphrodite": "^1.0.0",
-    "apollo-client": "^0.9.0",
+    "apollo-client": "^0.10.0",
     "body-parser": "^1.15.2",
     "bootstrap": "^4.0.0-alpha.6",
     "classnames": "^2.2.5",

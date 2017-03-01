@@ -27,7 +27,7 @@
   ```
   or 
   ```
-  yarn install
+  yarn
   ```
 
 3. Create sample SQLite database schema.
@@ -65,7 +65,70 @@
 8. Open app in multiple tabs, try to increase counter in one tab and then switch to another tab. You will see that 
 counter value updated there as well, because counter is live updated via subscriptions.
 
-## Deploying to [Heroku]
+## Deployment to Production
+
+### Deploying to Linux running Node.js
+1. Clone starter kit locally.
+
+  ```
+  git clone https://github.com/sysgears/apollo-fullstack-starter-kit.git
+  cd apollo-fullstack-starter-kit
+  ```
+
+2. Install dependencies.
+
+  ```
+  npm i
+  ```
+  or 
+  ```
+  yarn
+  ```
+3. Create SQLite database schema for production.
+
+  ```
+  npm run migrate --prod
+  ```
+  or 
+  ```
+  NODE_ENV=production yarn migrate
+  ```
+
+4. Seed production database data.
+
+  ```
+  npm run seed --prod
+  ```
+  or
+  ```
+  NODE_ENV=production yarn seed
+  ```
+
+5. Compile project.
+
+  ```
+  npm run build --prod
+  ```
+  or 
+  ```
+  NODE_ENV=production yarn build
+  ```
+  
+6. Run project in production mode.
+
+  ```
+  node build/server
+  ```
+  or
+  ```
+  npm start --prod
+  ```
+  or
+  ```
+  NODE_ENV=production yarn start
+  ```
+  
+### Deploying to [Heroku]
 1. Add your app to Heroku
 1. Allow Heroku to install build time dependencies from the devDependencies in package.json:
    `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.

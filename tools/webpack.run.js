@@ -112,6 +112,13 @@ function startClient() {
   }
 }
 
+var backendReloadCount = 0;
+function increaseBackendReloadCount() {
+  fs.writeFileSync(path.join(pkg.app.backendBuildDir, 'backend_reload_count.js'),
+    `module.exports = {reloadCount: ${backendReloadCount}};\n`);
+  backendReloadCount++;
+}
+
 function startServer() {
   try {
     const reporter = (...args) => webpackReporter(logBack, ...args);
@@ -125,6 +132,9 @@ function startServer() {
       serverConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin());
       serverConfig.debug = true;
+      if (pkg.app.frontendRefreshOnBackendChange) {
+        increaseBackendReloadCount();
+      }
     }
 
     const compiler = webpack(serverConfig);
@@ -146,12 +156,24 @@ function startServer() {
 
       compiler.watch({}, reporter);
 
-      compiler.plugin('done', () => {
+      compiler.plugin('done', stats => {
         const { output } = serverConfig;
         startBackend = true;
         if (server) {
           if (!__WINDOWS__) {
             server.kill('SIGUSR2');
+          }
+
+          if (pkg.app.frontendRefreshOnBackendChange) {
+            for(let module of stats.compilation.modules) {
+              if(module.built && module.resource &&
+                module.resource.indexOf(path.resolve('./src/server')) === 0) {
+                // Force front-end refresh on back-end change
+                logBack.debug('Force front-end current page refresh, due to change in backend at:', module.resource);
+                increaseBackendReloadCount();
+                break;
+              }
+            }
           }
         } else {
           runServer(path.join(output.path, 'index.js'));

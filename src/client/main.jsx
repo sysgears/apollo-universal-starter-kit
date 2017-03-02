@@ -7,10 +7,17 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import createApolloClient from '../apollo_client'
 import createReduxStore from '../redux_store'
 import routes from '../routes'
-import { app as settings} from '../../package.json'
+import { app as settings } from '../../package.json'
 
 import '../ui/bootstrap.scss'
 import '../ui/styles.scss'
+
+if (__DEV__ && __CLIENT__ && settings.frontendRefreshOnBackendChange) {
+  const req = require.context("../../build/server", false, /backend_reload_count.js/);
+  if (req.keys().length) {
+    module.exports.backendReloadCount = req(req.keys()[0]).reloadCount;
+  }
+}
 
 // Favicon.ico should not be hashed, since some browsers expect it to be exactly on /favicon.ico URL
 require('!file?name=[name].[ext]!../assets/favicon.ico'); // eslint-disable-line import/no-webpack-loader-syntax

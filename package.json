@@ -9,7 +9,8 @@
     "webpackDevPort": 3000,
     "apiPort": 8080,
     "ssr": true,
-    "webpackDll": true
+    "webpackDll": true,
+    "frontendRefreshOnBackendChange": true
   },
   "engines": {
     "node": "6.6.0",

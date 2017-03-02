@@ -32,12 +32,14 @@ app.use((...args) => websiteMiddleware(...args));
 
 server = http.createServer(app);
 
-new SubscriptionServer({
-  subscriptionManager
-}, {
+var subscriptionServerConfig = {
   server: server,
   path: '/'
-});
+};
+
+var subscriptionServer = new SubscriptionServer({
+  subscriptionManager
+}, subscriptionServerConfig);
 
 server.listen(port, () => {
   log.info(`API is now running on port ${port}`);
@@ -61,7 +63,23 @@ if (module.hot) {
     module.hot.accept('./middleware/website', () => { websiteMiddleware = require('./middleware/website').default; });
     module.hot.accept('./middleware/graphql', () => { graphqlMiddleware = require('./middleware/graphql').default; });
     module.hot.accept('./middleware/graphiql', () => { graphiqlMiddleware = require('./middleware/graphiql').default; });
-    module.hot.accept('./api/subscriptions', () => { subscriptionManager = require('./api/subscriptions').subscriptionManager; });
+    module.hot.accept('./api/subscriptions', () => {
+      try {
+        subscriptionManager = require('./api/subscriptions').subscriptionManager;
+
+        log.debug('Reloading the subscription server.');
+
+        if (subscriptionServer && subscriptionServer.wsServer) {
+          subscriptionServer.wsServer.close(() => {
+            subscriptionServer = new SubscriptionServer({
+              subscriptionManager
+            }, subscriptionServerConfig);
+          });
+        }
+      } catch (error) {
+        log(error.stack);
+      }
+    });
   } catch (err) {
     log(err.stack);
   }

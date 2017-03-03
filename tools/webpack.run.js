@@ -114,6 +114,7 @@ function startClient() {
 
 var backendReloadCount = 0;
 function increaseBackendReloadCount() {
+  createDirs(pkg.app.backendBuildDir);
   fs.writeFileSync(path.join(pkg.app.backendBuildDir, 'backend_reload_count.js'),
     `module.exports = {reloadCount: ${backendReloadCount}};\n`);
   backendReloadCount++;

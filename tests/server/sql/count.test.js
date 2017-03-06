@@ -1,5 +1,5 @@
-import Count from './count'
-import log from '../../log'
+import Count from '../../../src/server/sql/count'
+import log from '../../../src/log'
 
 const count = new Count();
 

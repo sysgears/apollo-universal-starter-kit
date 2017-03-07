@@ -20,7 +20,19 @@ describe('Count Get', () => {
     it('should get the current value of a counter', () => {
         return mockedServer
             .query(AMOUNT_QUERY)
-            .then((value) => value.data.count.amount)
+            .then(value => value.data.count.amount)
             .should.eventually.equal(counterValue)
+    });
+    it('should not get a nonexistent value', () => {
+        const queryForNonexistentField = `
+        query getCount {
+            count {
+                nonexistentField
+            }
+        }`;
+        return mockedServer
+            .query(queryForNonexistentField)
+            .then(value => value.errors)
+            .should.eventually.have.lengthOf(1)
     });
 });

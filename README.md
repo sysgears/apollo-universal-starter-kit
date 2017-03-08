@@ -1,4 +1,6 @@
 ## Apollo Universal Starter Kit with Hot Code Reload of backend & frontend 
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 [![Build Status](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit)
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-fullstack-starter-kit.svg)](https://greenkeeper.io/)
@@ -195,6 +197,16 @@ in `styles.scss` for global styling which is Hot Reloaded on change. React compo
 
 - [ESLint] to enforce proper code style
 
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+| [<img src="https://avatars2.githubusercontent.com/u/1845914?v=3" width="100px;"/><br /><sub>Dmitry Pavlenko</sub>](https://github.com/dmitriypdv)<br />[💻](https://github.com/vlasenko/apollo-fullstack-starter-kit/commits?author=dmitriypdv) 🚇 | [<img src="https://avatars3.githubusercontent.com/u/26156?v=3" width="100px;"/><br /><sub>mitjade</sub>](http://www.internetne-storitve.si)<br />[💻](https://github.com/vlasenko/apollo-fullstack-starter-kit/commits?author=mitjade) 🚇 | [<img src="https://avatars0.githubusercontent.com/u/1349077?v=3" width="100px;"/><br /><sub>Joe</sub>](http://j0ey.co)<br />[💻](https://github.com/vlasenko/apollo-fullstack-starter-kit/commits?author=josephdburdick) 🚇 | [<img src="https://avatars0.githubusercontent.com/u/7948838?v=3" width="100px;"/><br /><sub>Nikita Pavlov</sub>](https://github.com/NickPavlov)<br />[💻](https://github.com/vlasenko/apollo-fullstack-starter-kit/commits?author=NickPavlov) | [<img src="https://avatars2.githubusercontent.com/u/13224812?v=3" width="100px;"/><br /><sub>Yishai Chernovitzky</sub>](https://github.com/yishaic)<br />🚇 |
+| :---: | :---: | :---: | :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
 
 ## License
 Copyright © 2016 [SysGears INC]. This source code is licensed under the [MIT] license.
@@ -214,3 +226,4 @@ Copyright © 2016 [SysGears INC]. This source code is licensed under the [MIT] l
 [Heroku]: https://heroku.com
 [ESLint]: http://eslint.org
 [SysGears INC]: http://sysgears.com
+

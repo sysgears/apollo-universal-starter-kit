@@ -32,17 +32,7 @@
   yarn
   ```
 
-3. Create sample SQLite database schema.
-
-  ```
-  npm run migrate
-  ```
-  or 
-  ```
-  yarn migrate
-  ```
-
-4. Seed sample database data.
+3. Seed sample database data.
 
   ```
   npm run seed
@@ -52,14 +42,14 @@
   yarn seed
   ```
 
-5. Run starter kit in development mode.
+4. Run starter kit in development mode.
 
   ```
-  npm start
+  npm watch
   ```
   or
   ```
-  yarn start
+  yarn watch
   ```
 
 6. Point your browser to [http://localhost:3000](http://localhost:3000)
@@ -86,17 +76,7 @@ counter value updated there as well, because counter is live updated via subscri
   ```
   yarn
   ```
-3. Create SQLite database schema for production.
-
-  ```
-  npm run migrate --prod
-  ```
-  or 
-  ```
-  NODE_ENV=production yarn migrate
-  ```
-
-4. Seed production database data.
+3. Seed production database data.
 
   ```
   npm run seed --prod
@@ -109,11 +89,11 @@ counter value updated there as well, because counter is live updated via subscri
 5. Compile project.
 
   ```
-  npm run build --prod
+  npm run build
   ```
   or 
   ```
-  NODE_ENV=production yarn build
+  yarn build
   ```
   
 6. Run project in production mode.
@@ -123,11 +103,11 @@ counter value updated there as well, because counter is live updated via subscri
   ```
   or
   ```
-  npm start --prod
+  npm start
   ```
   or
   ```
-  NODE_ENV=production yarn start
+  yarn start
   ```
   
 ### Deploying to [Heroku]

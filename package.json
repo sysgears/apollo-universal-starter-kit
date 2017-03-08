@@ -17,15 +17,15 @@
     "npm": "3.10.3"
   },
   "scripts": {
-    "build": "babel-node tools/build",
-    "start": "babel-node tools/start",
-    "clean": "babel-node tools/clean",
+    "build": "babel-node tools/webpack.run",
+    "start": "node --harmony build/server",
     "test": "mocha-webpack --webpack-config tools/webpack.config.js --full-trace --exit 'src/**/*.test.js' && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src",
-    "seed": "knex seed:run",
+    "seed": "knex migrate:latest && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
-    "heroku-postbuild": "npm run clean && npm run build && npm run migrate && npm run seed"
+    "watch": "babel-node tools/webpack.run watch",
+    "heroku-postbuild": "rm -rf build && npm run build && npm run seed"
   },
   "repository": {
     "type": "git",

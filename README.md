@@ -1,7 +1,5 @@
 ## Apollo Universal Starter Kit with Hot Code Reload of backend & frontend 
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors)
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
-
 [![Build Status](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit)
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-fullstack-starter-kit.svg)](https://greenkeeper.io/)
 

@@ -25,7 +25,7 @@
     "seed": "knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
-    "postinstall": "babel-node tools/postinstall"
+    "heroku-postbuild": "npm run clean && npm run build && npm run migrate && npm run seed"
   },
   "repository": {
     "type": "git",

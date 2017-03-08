@@ -9,7 +9,7 @@ const path = require('path');
 const pkg = require('../package.json');
 const _ = require('lodash');
 
-global.__DEV__ = process.argv.length >= 3 && (process.argv[2] === 'watch' || process.argv[1].indexOf('mocha-webpack') >= 0);
+global.__DEV__ = process.argv.length >= 2 && (process.argv[1].indexOf('build') < 0 || process.argv[1].indexOf('mocha-webpack') >= 0);
 const buildNodeEnv = __DEV__ ? 'development' : 'production';
 
 let basePlugins = [];

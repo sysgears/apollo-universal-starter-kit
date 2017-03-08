@@ -17,15 +17,15 @@
     "npm": "3.10.3"
   },
   "scripts": {
-    "build": "babel-node tools/webpack.run build",
-    "clean": "rm -rf $npm_package_app_frontendBuildDir $npm_package_app_backendBuildDir",
-    "start": "if [ \"$NODE_ENV\" = production ]; then node --harmony $npm_package_app_backendBuildDir; else babel-node tools/webpack.run watch; fi",
+    "build": "babel-node tools/build",
+    "start": "babel-node tools/start",
+    "clean": "babel-node tools/clean",
     "test": "mocha-webpack --webpack-config tools/webpack.config.js --full-trace --exit 'src/**/*.test.js' && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src",
     "seed": "knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
-    "postinstall": "if [ \"$NODE_ENV\" = production ]; then npm run clean && npm run build && npm run migrate && npm run seed; fi"
+    "postinstall": "babel-node tools/postinstall"
   },
   "repository": {
     "type": "git",
@@ -100,6 +100,7 @@
     "eslint-plugin-react": "^6.3.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.10.0",
+    "fs-extra": "^2.0.0",
     "ignore-loader": "^0.1.1",
     "isomorphic-style-loader": "^1.0.0",
     "json-loader": "^0.5.4",

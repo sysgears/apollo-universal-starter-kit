@@ -17,9 +17,9 @@ const mockedServer = mockServer(schema, {
         amount: counterValue
     }),
     Mutation: () => ({
-        addCount: {
-            amount: increasedValue
-        }
+        addCount: (obj, {amount}) => ({
+            amount: amount
+        })
     })
 });
 

@@ -1,0 +1,73 @@
+{
+  "projectName": "apollo-fullstack-starter-kit",
+  "projectOwner": "sysgears",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "vlasenko",
+      "name": "Victor Vlasenko",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1259926?v=3",
+      "profile": "https://ua.linkedin.com/in/victorvlasenko",
+      "contributions": [
+        "code",
+        "tool",
+        "doc",
+        "test",
+        "question",
+        "review"
+      ]
+    },
+    {
+      "login": "dmitriypdv",
+      "name": "Dmitry Pavlenko",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1845914?v=3",
+      "profile": "https://github.com/dmitriypdv",
+      "contributions": [
+        "code",
+        "tool"
+      ]
+    },
+    {
+      "login": "mitjade",
+      "name": "mitjade",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/26156?v=3",
+      "profile": "http://www.internetne-storitve.si",
+      "contributions": [
+        "code",
+        "tool"
+      ]
+    },
+    {
+      "login": "josephdburdick",
+      "name": "Joe",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1349077?v=3",
+      "profile": "http://j0ey.co",
+      "contributions": [
+        "code",
+        "tool"
+      ]
+    },
+    {
+      "login": "NickPavlov",
+      "name": "Nikita Pavlov",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7948838?v=3",
+      "profile": "https://github.com/NickPavlov",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "yishaic",
+      "name": "Yishai Chernovitzky",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/13224812?v=3",
+      "profile": "https://github.com/yishaic",
+      "contributions": [
+        "tool"
+      ]
+    }
+  ]
+}

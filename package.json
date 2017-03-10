@@ -65,7 +65,7 @@
     "react-addons-css-transition-group": "^15.4.2",
     "react-addons-transition-group": "^15.4.2",
     "react-addons-update": "^15.3.2",
-    "react-apollo": "^0.13.0",
+    "react-apollo": "^1.0.0-rc.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.2",
     "react-router": "^3.0.2",

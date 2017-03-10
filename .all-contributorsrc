@@ -69,6 +69,15 @@
       "contributions": [
         "tool"
       ]
+    },
+    {
+      "login": "alexandervetrov",
+      "name": "Alexander Vetrov",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5399002?v=3",
+      "profile": "https://github.com/alexandervetrov",
+      "contributions": [
+        "test"
+      ]
     }
   ]
 }

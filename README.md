@@ -43,7 +43,7 @@
 4. Run starter kit in development mode.
 
   ```
-  npm watch
+  npm run watch
   ```
   or
   ```

@@ -271,6 +271,10 @@ function isDllValid() {
     let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
 
     for (let filename of Object.keys(json.content)) {
+      if (!fs.existsSync(filename)) {
+        console.warn("Vendor bundle need to be regenerated, file: " + filename + " is missing.");
+        return false;
+      }
       const hash = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
       if (meta.hashes[filename] !== hash) {
         console.warn(`Hash for vendor DLL file ${filename} changed, need to rebuild vendor bundle`);

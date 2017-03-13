@@ -188,7 +188,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
 
 ## License
-Copyright © 2016 [SysGears INC]. This source code is licensed under the [MIT] license.
+Copyright © 2017 [SysGears INC]. This source code is licensed under the [MIT] license.
 
 [MIT]: LICENSE
 [Universal]: https://medium.com/@mjackson/universal-javascript-4761051b7ae9

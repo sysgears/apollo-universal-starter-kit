@@ -3,8 +3,7 @@ import ReactDOMServer from 'react-dom/server'
 import { createBatchingNetworkInterface } from 'apollo-client'
 import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { StaticRouter } from 'react-router'
-import { StyleSheetServer } from 'aphrodite'
-import { reset, startBuffering } from 'aphrodite/lib/inject'
+import { StyleSheetServer, StyleSheetTestUtils } from 'aphrodite'
 import fs from 'fs'
 import path from 'path'
 
@@ -47,13 +46,10 @@ export default (req, res) => {
       </ApolloProvider>
     );
 
-    // Work around Aphrodite not supporting async rendering
-    // See: https://github.com/Khan/aphrodite/pull/132 for discussion
-    reset();
-    startBuffering();
+    // Ignore CSS rendering during extraction of GraphQL queries
+    StyleSheetTestUtils.suppressStyleInjection();
     getDataFromTree(component).then(() => {
-      // Work around Aphrodite not supporting async rendering
-      reset();
+      StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
 
       res.status(200);
 

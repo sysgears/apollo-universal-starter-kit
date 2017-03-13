@@ -1,12 +1,13 @@
 import React from 'react'
-import { Route, IndexRedirect } from 'react-router'
+import { Route, Switch } from 'react-router-dom'
 
 import Counter from './ui/containers/counter'
 import App from './ui/components/app'
 
 export default (
-  <Route path="/" component={App}>
-    <IndexRedirect to="/counter" />
-    <Route path="counter" component={Counter} />
-  </Route>
+  <App>
+    <Switch>
+      <Route exact path="/" component={Counter} />
+    </Switch>
+  </App>
 );

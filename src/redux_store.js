@@ -1,21 +1,21 @@
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { routerReducer } from 'react-router-redux'
+import { composeWithDevTools } from 'redux-devtools-extension';
+
 import CounterReducers from './store/reducers/counter_reducers';
 
-const createReduxStore = (initialState, client) => {
+const createReduxStore = (initialState, client, routerMiddleware) => {
   const store = createStore(
     combineReducers({
       counter: CounterReducers,
       apollo: client.reducer(),
-      routing: routerReducer
+      router: routerReducer
     }),
     initialState, // initial state
-    compose(
-      applyMiddleware(client.middleware()),
-      // If you are using the devToolsExtension, you can add it here also
-      (typeof window !== 'undefined' && window.devToolsExtension) ? window.devToolsExtension() : f => f
-    )
+    routerMiddleware ? composeWithDevTools(applyMiddleware(client.middleware(), routerMiddleware))
+      : applyMiddleware(client.middleware())
   );
+
   return store;
 };
 

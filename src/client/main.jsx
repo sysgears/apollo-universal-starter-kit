@@ -9,8 +9,8 @@ import createReduxStore from '../redux_store'
 import routes from '../routes'
 import { app as settings } from '../../package.json'
 
-import '../ui/bootstrap.scss'
-import '../ui/styles.scss'
+import '../ui/styles/bootstrap.scss'
+import '../ui/styles/styles.scss'
 
 if (__DEV__ && __CLIENT__ && settings.frontendRefreshOnBackendChange) {
   const req = require.context("../../build/server", false, /backend_reload_count.js/);

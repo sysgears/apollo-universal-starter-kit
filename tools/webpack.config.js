@@ -41,8 +41,15 @@ const baseConfig = {
         exclude: /node_modules/,
         loader: 'graphql-tag/loader'
       },
-      { test: /\.(woff2?|svg|png|ico|jpg|xml)$/, loader: 'url?name=[hash].[ext]&limit=10000' },
-      { test: /\.(ttf|eot)$/, loader: 'file?name=[hash].[ext]' },
+      { test: /\.(png|ico|jpg|xml)$/, loader: 'url?name=[hash].[ext]&limit=10000' },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url?name=./assets/[hash].[ext]&limit=10000',
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file?name=./assets/[hash].[ext]',
+      },
     ]
   },
   resolve: {

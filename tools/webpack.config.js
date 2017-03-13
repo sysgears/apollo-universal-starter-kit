@@ -80,9 +80,9 @@ const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
         test: /\.scss$/,
         loaders: __DEV__ ? [
           'isomorphic-style-loader',
-          'css',
+          'css?sourceMap',
           'postcss',
-          'sass'] : ['ignore-loader']
+          'sass?sourceMap'] : ['ignore-loader']
       }
     ]
   },
@@ -125,7 +125,7 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
     loaders: [
       {
         test: /\.scss$/,
-        loader: __DEV__ ? 'style!css?importLoaders=1!postcss?sourceMap=inline!sass' : ExtractTextPlugin.extract("style", "css!postcss!sass")
+        loader: __DEV__ ? 'style!css?sourceMap&importLoaders=1!postcss?sourceMap=inline!sass?sourceMap' : ExtractTextPlugin.extract("style", "css!postcss!sass")
       }
     ]
   },

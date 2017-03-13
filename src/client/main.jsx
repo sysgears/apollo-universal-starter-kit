@@ -1,8 +1,8 @@
 import React from 'react'
 import { createBatchingNetworkInterface } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
-import { Router, browserHistory } from 'react-router'
-import { syncHistoryWithStore } from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory'
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
 
 import createApolloClient from '../apollo_client'
 import createReduxStore from '../redux_store'
@@ -54,18 +54,16 @@ if (window.__APOLLO_STATE__) {
   initialState = window.__APOLLO_STATE__;
 }
 
-const store = createReduxStore(initialState, client);
+const history = createHistory();
 
-const history = syncHistoryWithStore(browserHistory, store);
+const store = createReduxStore(initialState, client, routerMiddleware(history));
 
-export default class Main extends React.Component {
-  render() {
-    return (
-      <ApolloProvider store={store} client={client}>
-        <Router history={history}>
-          {routes}
-        </Router>
-      </ApolloProvider>
-    );
-  }
-}
+const Main = () => (
+  <ApolloProvider store={store} client={client}>
+    <ConnectedRouter history={history}>
+      {routes}
+    </ConnectedRouter>
+  </ApolloProvider>
+);
+
+export default Main;

@@ -1,8 +1,8 @@
 import React from 'react'
-import ReactDOM from 'react-dom/server'
+import ReactDOMServer from 'react-dom/server'
 import { createBatchingNetworkInterface } from 'apollo-client'
 import { ApolloProvider, getDataFromTree } from 'react-apollo'
-import { match, RouterContext } from 'react-router'
+import { StaticRouter } from 'react-router'
 import { StyleSheetServer } from 'aphrodite'
 import { reset, startBuffering } from 'aphrodite/lib/inject'
 import fs from 'fs'
@@ -22,43 +22,47 @@ const apiUrl = `http://localhost:${port}/graphql`;
 var assetMap;
 
 export default (req, res) => {
-  match({ routes, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
-    if (redirectLocation) {
-      res.redirect(redirectLocation.pathname + redirectLocation.search);
-    } else if (error) {
-      log.error('ROUTER ERROR:', error);
-      res.status(500);
-    } else if (__SSR__ && renderProps) {
-      const client = createApolloClient(createBatchingNetworkInterface({
-        uri: apiUrl,
-        opts: {
-          credentials: "same-origin",
-          headers: req.headers,
-        },
-        batchInterval: 20,
-      }));
+  if (__SSR__) {
+    const client = createApolloClient(createBatchingNetworkInterface({
+      uri: apiUrl,
+      opts: {
+        credentials: "same-origin",
+        headers: req.headers,
+      },
+      batchInterval: 20,
+    }));
 
-      let initialState = {};
-      const store = createReduxStore(initialState, client);
+    let initialState = {};
+    const store = createReduxStore(initialState, client);
 
-      const component = (
-        <ApolloProvider store={store} client={client}>
-          <RouterContext {...renderProps} />
-        </ApolloProvider>
-      );
+    const context = {};
+    const component = (
+      <ApolloProvider store={store} client={client}>
+        <StaticRouter
+          location={req.url}
+          context={context}
+        >
+          {routes}
+        </StaticRouter>
+      </ApolloProvider>
+    );
 
+    // Work around Aphrodite not supporting async rendering
+    // See: https://github.com/Khan/aphrodite/pull/132 for discussion
+    reset();
+    startBuffering();
+    getDataFromTree(component).then(() => {
       // Work around Aphrodite not supporting async rendering
-      // See: https://github.com/Khan/aphrodite/pull/132 for discussion
       reset();
-      startBuffering();
-      getDataFromTree(component).then(() => {
-        // Work around Aphrodite not supporting async rendering
-        reset();
 
-        res.status(200);
+      res.status(200);
 
-        const { html, css } = StyleSheetServer.renderStatic(() => ReactDOM.renderToString(component));
+      const { html, css } = StyleSheetServer.renderStatic(() => ReactDOMServer.renderToString(component));
 
+      if (context.url) {
+        res.writeHead(301, { Location: context.url });
+        res.end()
+      } else {
         if (__DEV__ || !assetMap) {
           assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
         }
@@ -70,18 +74,16 @@ export default (req, res) => {
         delete apolloState.apollo.mutations;
 
         const page = <Html content={html} state={apolloState} assetMap={assetMap} aphroditeCss={css.content}/>;
-        res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
+        res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
         res.end();
-      }).catch(e => log.error('RENDERING ERROR:', e));
-    } else if (!__SSR__ && renderProps) {
-      if (__DEV__ || !assetMap) {
-        assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
       }
-      const page = <Html content="" state={({})} assetMap={assetMap} aphroditeCss="" />;
-      res.send(`<!doctype html>\n${ReactDOM.renderToStaticMarkup(page)}`);
-      res.end();
-    } else {
-      res.status(404).send('Not found');
-    }
-  });
+    }).catch(e => log.error('RENDERING ERROR:', e));
+  } else {
+     if(__DEV__ || !assetMap) {
+       assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
+     }
+     const page = <Html content="" state={({})} assetMap={assetMap} aphroditeCss=""/>;
+     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
+     res.end();
+   }
 };

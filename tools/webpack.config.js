@@ -18,52 +18,57 @@ if (__DEV__) {
   basePlugins.push(new webpack.NamedModulesPlugin());
 } else {
   basePlugins.push(new webpack.optimize.UglifyJsPlugin({ minimize: true }));
+  basePlugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
 }
 
 const baseConfig = {
   module: {
-    noParse: [],
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel',
         exclude: /(node_modules|bower_components)/,
-        query: {
-          cacheDirectory: __DEV__,
-          presets: ['es2015', 'es2017', 'react'],
-          plugins: ['transform-runtime', 'transform-decorators-legacy', 'transform-class-properties'],
-        },
+        use: 'babel-loader',
+
       },
-      { test: /\.json$/, loader: 'json' },
-      { test: /\.graphqls/, loader: 'raw' },
+      {
+        test: /\.graphqls/,
+        use: 'raw-loader'
+      },
       {
         test: /\.(graphql|gql)$/,
         exclude: /node_modules/,
-        loader: 'graphql-tag/loader'
+        use: [{
+          loader: 'graphql-tag/loader',
+        }]
       },
-      { test: /\.(png|ico|jpg|xml)$/, loader: 'url?name=[hash].[ext]&limit=10000' },
+      {
+        test: /\.(png|ico|jpg|xml)$/,
+        use: 'url-loader?name=[hash].[ext]&limit=10000'
+      },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url?name=./assets/[hash].[ext]&limit=10000',
+        use: 'url-loader?name=./assets/[hash].[ext]&limit=10000'
       },
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file?name=./assets/[hash].[ext]',
+        use: 'file-loader?name=./assets/[hash].[ext]'
       },
     ]
   },
   resolve: {
-    moduleDirectories: [],
-    root: [path.resolve('./node_modules')],
-    extensions: ['', '.js', '.jsx']
+    modules: [path.join(__dirname, '../src'), 'node_modules'],
+    extensions: ['.js', '.jsx']
   },
   plugins: basePlugins,
+  watchOptions: {
+    ignored: /build/
+  },
   bail: !__DEV__
 };
 
 let serverPlugins = [
-  new webpack.BannerPlugin('require("source-map-support").install();',
-      { raw: true, entryOnly: false }),
+  new webpack.BannerPlugin({ banner: 'require("source-map-support").install();',
+      raw: true, entryOnly: false }),
   new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __SSR__: pkg.app.ssr,
     __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`}))
 ];
@@ -82,14 +87,15 @@ const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
     whitelist: [/^webpack/]
   }),
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.scss$/,
-        loaders: __DEV__ ? [
-          'isomorphic-style-loader',
-          'css?sourceMap',
-          'postcss',
-          'sass?sourceMap'] : ['ignore-loader']
+        use: __DEV__ ? [
+          { loader: 'isomorphic-style-loader' },
+          { loader: 'css-loader', options: { sourceMap: true } },
+          { loader: 'postcss-loader' },
+          { loader: 'sass-loader', options: { sourceMap: true } }] :
+          [{ loader: 'ignore-loader' }]
       }
     ]
   },
@@ -113,14 +119,14 @@ let clientPlugins = [
 ];
 
 if (!__DEV__) {
-  clientPlugins.push(new ExtractTextPlugin('[name].[contenthash].css', { allChunks: true }));
-  clientPlugins.push(new webpack.optimize.CommonsChunkPlugin(
-    "vendor",
-    "[name].[hash].js",
-    function (module) {
+  clientPlugins.push(new ExtractTextPlugin({ filename: '[name].[contenthash].css', allChunks: true }));
+  clientPlugins.push(new webpack.optimize.CommonsChunkPlugin({
+    name: "vendor",
+    filename: "[name].[hash].js",
+    minChunks: function (module) {
       return module.resource && module.resource.indexOf(path.resolve('./node_modules')) === 0;
     }
-  ));
+  }));
 }
 
 const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
@@ -129,10 +135,16 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
     bundle: ['babel-polyfill', './src/client/index.jsx']
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.scss$/,
-        loader: __DEV__ ? 'style!css?sourceMap&importLoaders=1!postcss?sourceMap=inline!sass?sourceMap' : ExtractTextPlugin.extract("style", "css!postcss!sass")
+        use: __DEV__ ? [
+          { loader: 'style-loader' },
+          { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
+          { loader: 'postcss-loader', options: { sourceMap: true } },
+          { loader: 'sass-loader', options: { sourceMap: true } },
+        ] : ExtractTextPlugin.extract({ fallback: "style-loader",
+          use: ['css-loader', 'postcss-loader', 'sass-loader']})
       }
     ]
   },

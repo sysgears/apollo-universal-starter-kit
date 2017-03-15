@@ -116,7 +116,7 @@
     "raw-loader": "^0.5.1",
     "resolve-url-loader": "^2.0.0",
     "sass-loader": "^4.1.1",
-    "style-loader": "^0.13.1",
+    "style-loader": "^0.14.0",
     "url-loader": "^0.5.7",
     "wait-for-port": "0.0.2",
     "webpack": "^1.14.0",

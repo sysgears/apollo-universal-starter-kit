@@ -37,13 +37,7 @@ function runServer(path) {
   if (startBackend) {
     startBackend = false;
     logBack('Starting backend');
-    server = spawn('node', [path]);
-    server.stdout.on('data', data => {
-      process.stdout.write(data);
-    });
-    server.stderr.on('data', data => {
-      process.stderr.write(data);
-    });
+    server = spawn('node', [path], {stdio: [0, 1, 2]});
     server.on('exit', code => {
       if (code === 250) {
         // App requested full reload
@@ -94,13 +88,12 @@ function startClient() {
     const reporter = (...args) => webpackReporter(logFront, ...args);
 
     if (__DEV__) {
-      clientConfig.entry.bundle.push('webpack/hot/dev-server',
-          `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`);
-      clientConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
-          new webpack.HotModuleReplacementPlugin(),
-          new webpack.NoErrorsPlugin());
+      clientConfig.entry.bundle.unshift(
+          `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`,
+          'webpack/hot/dev-server');
+      clientConfig.plugins.push(new webpack.HotModuleReplacementPlugin(),
+          new webpack.NoEmitOnErrorsPlugin());
       clientConfig.output.path = '/';
-      clientConfig.debug = true;
       startWebpackDevServer(clientConfig, reporter);
     } else {
       const compiler = webpack(clientConfig);
@@ -108,15 +101,19 @@ function startClient() {
       compiler.run(reporter);
     }
   } catch (err) {
-    logFront(err.stack);
+    logFront(err.message, err.stack);
   }
 }
 
 var backendReloadCount = 0;
 function increaseBackendReloadCount() {
   createDirs(pkg.app.backendBuildDir);
-  fs.writeFileSync(path.join(pkg.app.backendBuildDir, 'backend_reload_count.js'),
+  const fullPath = path.join(pkg.app.backendBuildDir, 'backend_reload_count.js');
+  fs.writeFileSync(fullPath,
     `module.exports = {reloadCount: ${backendReloadCount}};\n`);
+  // Work around issue: https://github.com/webpack/watchpack/issues/25
+  const time = Date.now() / 1000 - 11;
+  fs.utimesSync(fullPath, time, time);
   backendReloadCount++;
 }
 
@@ -130,12 +127,8 @@ function startServer() {
       } else {
         serverConfig.entry.index.push('webpack/hot/signal.js');
       }
-      serverConfig.plugins.push(new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.HotModuleReplacementPlugin());
-      serverConfig.debug = true;
-      if (pkg.app.frontendRefreshOnBackendChange) {
-        increaseBackendReloadCount();
-      }
+      serverConfig.plugins.push(new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin());
     }
 
     const compiler = webpack(serverConfig);
@@ -184,11 +177,15 @@ function startServer() {
       compiler.run(reporter);
     }
   } catch (err) {
-    logBack(err.stack);
+    logBack(err.message, err.stack);
   }
 }
 
 function startWebpackDevServer(clientConfig, reporter) {
+  if (pkg.app.frontendRefreshOnBackendChange) {
+    increaseBackendReloadCount();
+  }
+
   let compiler = webpack(clientConfig);
 
   compiler.plugin('done', stats => {
@@ -222,7 +219,6 @@ function startWebpackDevServer(clientConfig, reporter) {
       proxy: {
         '*': `http://localhost:${pkg.app.apiPort}`
       },
-      noInfo: true,
       reporter: ({state, stats}) => {
         if (state) {
           logFront("bundle is now VALID.");
@@ -271,14 +267,16 @@ function isDllValid() {
     let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
 
     for (let filename of Object.keys(json.content)) {
-      if (!fs.existsSync(filename)) {
-        console.warn("Vendor bundle need to be regenerated, file: " + filename + " is missing.");
-        return false;
-      }
-      const hash = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
-      if (meta.hashes[filename] !== hash) {
-        console.warn(`Hash for vendor DLL file ${filename} changed, need to rebuild vendor bundle`);
-        return false;
+      if (filename.indexOf(' ') < 0) {
+        if(!fs.existsSync(filename)) {
+          console.warn("Vendor bundle need to be regenerated, file: " + filename + " is missing.");
+          return false;
+        }
+        const hash = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
+        if(meta.hashes[filename] !== hash) {
+          console.warn(`Hash for vendor DLL file ${filename} changed, need to rebuild vendor bundle`);
+          return false;
+        }
       }
     }
 
@@ -301,8 +299,10 @@ function buildDll() {
         let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
         const meta = {name: _.keys(stats.compilation.assets)[0], hashes: {}, modules: dllConfig.entry.vendor};
         for (let filename of Object.keys(json.content)) {
-          meta.hashes[filename] = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
-          fs.writeFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json'), JSON.stringify(meta));
+          if (filename.indexOf(' ') < 0) {
+            meta.hashes[filename] = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
+            fs.writeFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json'), JSON.stringify(meta));
+          }
         }
         done();
       });

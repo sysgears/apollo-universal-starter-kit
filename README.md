@@ -175,6 +175,11 @@ in `styles.scss` for global styling which is Hot Reloaded on change. React compo
 
 - [ESLint] to enforce proper code style
 
+- [React Hot Loader v3] for the sake of completeness this project also supports `React Hot Loader v3`, but it is turned off.
+By default this starter kit uses pure `Webpack HMR` for all hot reloading purposes and we think it covers all
+practical needs during development and using `React Hot Loader v3` in addition to `Webpack HMR` makes hot reloading less
+predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` field of `package.json` to `true`. 
+
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
@@ -195,6 +200,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Apollo]: http://www.apollostack.com
 [GraphQL]: http://graphql.org
 [React]: https://facebook.github.io/react
+[React Hot Loader v3]: https://github.com/gaearon/react-hot-loader
 [Redux]: http://redux.js.org
 [Express]: http://expressjs.com
 [Twitter Bootstrap]: http://getbootstrap.com

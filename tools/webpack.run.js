@@ -88,6 +88,9 @@ function startClient() {
     const reporter = (...args) => webpackReporter(logFront, ...args);
 
     if (__DEV__) {
+      if (pkg.app.reactHotLoader) {
+        clientConfig.entry.bundle.unshift('react-hot-loader/patch');
+      }
       clientConfig.entry.bundle.unshift(
           `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`,
           'webpack/hot/dev-server');

@@ -10,7 +10,8 @@
     "apiPort": 8080,
     "ssr": true,
     "webpackDll": true,
-    "frontendRefreshOnBackendChange": true
+    "frontendRefreshOnBackendChange": true,
+    "reactHotLoader": false
   },
   "engines": {
     "node": "6.6.0",
@@ -68,6 +69,7 @@
     "react-addons-update": "^15.4.2",
     "react-apollo": "^1.0.0-rc.2",
     "react-dom": "^15.4.2",
+    "react-hot-loader": "^3.0.0-beta.6",
     "react-redux": "^5.0.3",
     "react-router": "^4.0.0",
     "react-router-dom": "^4.0.0",

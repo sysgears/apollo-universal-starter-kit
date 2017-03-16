@@ -54,6 +54,13 @@ const history = createHistory();
 
 const store = createReduxStore(initialState, client, routerMiddleware(history));
 
+if (module.hot) {
+  module.hot.dispose(() => {
+    // Force Apollo to fetch the latest data from the server
+    delete window.__APOLLO_STATE__;
+  });
+}
+
 const Main = () => (
   <ApolloProvider store={store} client={client}>
     <ConnectedRouter history={history}>

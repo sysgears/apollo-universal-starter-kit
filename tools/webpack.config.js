@@ -35,7 +35,7 @@ const baseConfig = {
               "transform-runtime",
               "transform-decorators-legacy",
               "transform-class-properties"
-            ].concat(pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
+            ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
             "only": ["*.js", "*.jsx"],
           }
         }

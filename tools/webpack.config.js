@@ -27,7 +27,9 @@ const baseConfig = {
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
-        use: {
+        use: (__DEV__ && pkg.app.reactHotLoader ? [{
+          loader: 'react-hot-loader/webpack'
+        }] : []).concat([{
           loader: 'babel-loader',
           options: {
             "presets": ["react", ["es2015", { "modules": false }], "stage-2"],
@@ -38,7 +40,7 @@ const baseConfig = {
             ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
             "only": ["*.js", "*.jsx"],
           }
-        }
+        }])
       },
       {
         test: /\.graphqls/,

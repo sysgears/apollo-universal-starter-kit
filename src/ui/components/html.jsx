@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 
-const Html = ({ content, state, assetMap, aphroditeCss }) => {
+const Html = ({ content, state, assetMap, css }) => {
   return (
     <html lang="en">
     <head>
@@ -22,10 +22,10 @@ const Html = ({ content, state, assetMap, aphroditeCss }) => {
           require('../styles/styles.scss')._getCss()
         }}/>
       }
-      <style data-aphrodite>{aphroditeCss}</style>
+      {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
     </head>
     <body>
-    <div id="content" dangerouslySetInnerHTML={{ __html: content }} />
+    <div id="content" dangerouslySetInnerHTML={{ __html: content || "" }} />
     <script
       dangerouslySetInnerHTML={{ __html: `window.__APOLLO_STATE__=${JSON.stringify(state)};` }}
       charSet="UTF-8"
@@ -38,10 +38,10 @@ const Html = ({ content, state, assetMap, aphroditeCss }) => {
 };
 
 Html.propTypes = {
-  content:      PropTypes.string.isRequired,
-  state:        PropTypes.object.isRequired,
-  assetMap:     PropTypes.object.isRequired,
-  aphroditeCss: PropTypes.string.isRequired,
+  content:  PropTypes.string,
+  state:    PropTypes.object.isRequired,
+  assetMap: PropTypes.object.isRequired,
+  css:      PropTypes.string
 };
 
 export default Html;

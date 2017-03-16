@@ -1,20 +1,17 @@
 import React from 'react'
-import { StyleSheet, css } from 'aphrodite'
+import { css } from 'glamor'
 import { Container } from 'reactstrap'
-import classnames from 'classnames'
 
 import NavBar from './nav_bar'
 
 const footerHeight = '40px';
 
-const styles = StyleSheet.create({
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    lineHeight: footerHeight,
-    height: footerHeight
-  },
+const footerStyle = css({
+  position: 'absolute',
+  bottom: 0,
+  width: '100%',
+  lineHeight: footerHeight,
+  height: footerHeight
 });
 
 export default function App({ children }) {
@@ -24,7 +21,7 @@ export default function App({ children }) {
       <Container>
         {children}
       </Container>
-      <footer className={classnames('container', css(styles.footer))}>
+      <footer {...footerStyle}>
         <div className='text-center'>
           &copy; 2016. Example Apollo App.
         </div>

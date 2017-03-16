@@ -3,7 +3,7 @@ import ReactDOMServer from 'react-dom/server'
 import { createBatchingNetworkInterface } from 'apollo-client'
 import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import { StaticRouter } from 'react-router'
-import { StyleSheetServer, StyleSheetTestUtils } from 'aphrodite'
+import { renderStatic } from 'glamor-server'
 import fs from 'fs'
 import path from 'path'
 
@@ -20,66 +20,66 @@ const apiUrl = `http://localhost:${port}/graphql`;
 
 var assetMap;
 
-export default (req, res) => {
-  if (__SSR__) {
-    const client = createApolloClient(createBatchingNetworkInterface({
-      uri: apiUrl,
-      opts: {
-        credentials: "same-origin",
-        headers: req.headers,
-      },
-      batchInterval: 20,
-    }));
+export default (req, res, next) => {
+  if (req.url.indexOf('.') < 0) {
+    if (__SSR__) {
+      const client = createApolloClient(createBatchingNetworkInterface({
+        uri: apiUrl,
+        opts: {
+          credentials: "same-origin",
+          headers: req.headers,
+        },
+        batchInterval: 20,
+      }));
 
-    let initialState = {};
-    const store = createReduxStore(initialState, client);
+      let initialState = {};
+      const store = createReduxStore(initialState, client);
 
-    const context = {};
-    const component = (
-      <ApolloProvider store={store} client={client}>
-        <StaticRouter
-          location={req.url}
-          context={context}
-        >
-          {routes}
-        </StaticRouter>
-      </ApolloProvider>
-    );
+      const context = {};
+      const component = (
+        <ApolloProvider store={store} client={client}>
+          <StaticRouter
+            location={req.url}
+            context={context}
+          >
+            {routes}
+          </StaticRouter>
+        </ApolloProvider>
+      );
 
-    // Ignore CSS rendering during extraction of GraphQL queries
-    StyleSheetTestUtils.suppressStyleInjection();
-    getDataFromTree(component).then(() => {
-      StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+      getDataFromTree(component).then(() => {
+        res.status(200);
 
-      res.status(200);
+        const { html, css } = renderStatic(() => ReactDOMServer.renderToString(component));
 
-      const { html, css } = StyleSheetServer.renderStatic(() => ReactDOMServer.renderToString(component));
+        if (context.url) {
+          res.writeHead(301, { Location: context.url });
+          res.end()
+        } else {
+          if (__DEV__ || !assetMap) {
+            assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
+          }
 
-      if (context.url) {
-        res.writeHead(301, { Location: context.url });
-        res.end()
-      } else {
-        if (__DEV__ || !assetMap) {
-          assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
+          const apolloState = Object.assign({}, client.store.getState());
+
+          // // Temporary workaround for bug in AC@0.5.0: https://github.com/apollostack/apollo-client/issues/845
+          delete apolloState.apollo.queries;
+          delete apolloState.apollo.mutations;
+
+          const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} />;
+          res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
+          res.end();
         }
-
-        const apolloState = Object.assign({}, client.store.getState());
-
-        // // Temporary workaround for bug in AC@0.5.0: https://github.com/apollostack/apollo-client/issues/845
-        delete apolloState.apollo.queries;
-        delete apolloState.apollo.mutations;
-
-        const page = <Html content={html} state={apolloState} assetMap={assetMap} aphroditeCss={css.content}/>;
-        res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
-        res.end();
+      }).catch(e => log.error('RENDERING ERROR:', e));
+    } else {
+      if(__DEV__ || !assetMap) {
+        assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
       }
-    }).catch(e => log.error('RENDERING ERROR:', e));
+      const page = <Html state={({})} assetMap={assetMap}/>;
+      res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
+      res.end();
+    }
   } else {
-     if(__DEV__ || !assetMap) {
-       assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
-     }
-     const page = <Html content="" state={({})} assetMap={assetMap} aphroditeCss=""/>;
-     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
-     res.end();
-   }
+    next();
+  }
 };

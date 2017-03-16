@@ -169,7 +169,7 @@ NoSQL storage or any other data source can be used the same way.
 - Powerful stylesheets with Hot Reloading
 
   [Twitter Bootstrap] in form of SASS stylesheets is used for styling demo application. Application has stylesheet
-in `styles.scss` for global styling which is Hot Reloaded on change. React components styling is done by [Aphrodite CSS].`
+in `styles.scss` for global styling which is Hot Reloaded on change. React components styling is done by [Glamor v3].
 
 - [Babel] for ES2017 transpiling
 
@@ -206,7 +206,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Twitter Bootstrap]: http://getbootstrap.com
 [Webpack]: http://webpack.github.io
 [Babel]: http://babeljs.io
-[Aphrodite CSS]: https://github.com/Khan/aphrodite
+[Glamor v3]: https://github.com/threepointone/glamor/tree/v3
 [Knex]: http://knexjs.org
 [Heroku]: https://heroku.com
 [ESLint]: http://eslint.org

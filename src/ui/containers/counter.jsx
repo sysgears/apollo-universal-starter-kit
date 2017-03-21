@@ -7,8 +7,8 @@ import update from 'react-addons-update'
 import { Button } from 'reactstrap'
 
 import log from '../../log'
-import AMOUNT_QUERY from '../graphql/CountGet.graphql'
-import ADD_COUNT_MUTATION from '../graphql/CountAddMutation.graphql'
+import AMOUNT_QUERY from '../graphql/count_get.graphql'
+import ADD_COUNT_MUTATION from '../graphql/count_add_mutation.graphql'
 
 const SUBSCRIPTION_QUERY = gql`
   subscription onCountUpdated {

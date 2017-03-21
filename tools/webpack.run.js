@@ -20,8 +20,8 @@ const logFront = minilog('webpack-for-frontend');
 const [ serverConfig, clientConfig, dllConfig ] = configs;
 const __WINDOWS__ = /^win/.test(process.platform);
 
-var server;
-var startBackend = false;
+let server;
+let startBackend = false;
 
 process.on('exit', () => {
   if (server) {
@@ -108,7 +108,7 @@ function startClient() {
   }
 }
 
-var backendReloadCount = 0;
+let backendReloadCount = 0;
 function increaseBackendReloadCount() {
   createDirs(pkg.app.backendBuildDir);
   const fullPath = path.join(pkg.app.backendBuildDir, 'backend_reload_count.js');

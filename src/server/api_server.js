@@ -7,12 +7,12 @@ import { app as settings } from '../../package.json'
 import log from '../log'
 
 // Hot reloadable modules
-var websiteMiddleware = require('./middleware/website').default;
-var graphiqlMiddleware = require('./middleware/graphiql').default;
-var graphqlMiddleware = require('./middleware/graphql').default;
-var subscriptionManager = require('./api/subscriptions').subscriptionManager;
+let websiteMiddleware = require('./middleware/website').default;
+let graphiqlMiddleware = require('./middleware/graphiql').default;
+let graphqlMiddleware = require('./middleware/graphql').default;
+let subscriptionManager = require('./api/subscriptions').subscriptionManager;
 
-var server;
+let server;
 
 const app = express();
 
@@ -32,12 +32,12 @@ app.use((...args) => websiteMiddleware(...args));
 
 server = http.createServer(app);
 
-var subscriptionServerConfig = {
+let subscriptionServerConfig = {
   server: server,
   path: '/'
 };
 
-var subscriptionServer = new SubscriptionServer({
+let subscriptionServer = new SubscriptionServer({
   subscriptionManager
 }, subscriptionServerConfig);
 

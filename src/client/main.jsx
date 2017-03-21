@@ -19,7 +19,7 @@ export const backendReloadCount = __DEV__ && __CLIENT__ && settings.frontendRefr
 require('!file-loader?name=[name].[ext]!../assets/favicon.ico'); // eslint-disable-line import/no-webpack-loader-syntax
 
 // Require all files from assets dir recursively addding them into assets.json
-var req = require.context('!file-loader?name=[hash].[ext]!../assets', true, /.*/);
+let req = require.context('!file-loader?name=[hash].[ext]!../assets', true, /.*/);
 req.keys().map(req);
 
 let networkInterface = createBatchingNetworkInterface({

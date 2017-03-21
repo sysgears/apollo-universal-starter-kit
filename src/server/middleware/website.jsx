@@ -18,7 +18,7 @@ const port = process.env.PORT || settings.apiPort;
 
 const apiUrl = `http://localhost:${port}/graphql`;
 
-var assetMap;
+let assetMap;
 
 export default (req, res, next) => {
   if (req.url.indexOf('.') < 0) {

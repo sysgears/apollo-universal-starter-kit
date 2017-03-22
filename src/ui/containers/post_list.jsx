@@ -1,33 +1,76 @@
 import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
+import { InfiniteLoader, List } from 'react-virtualized';
 
 import log from '../../log'
 import POSTS_QUERY from '../graphql/posts_get.graphql'
 
+let virtualizingList = [];
+
 class PostList extends React.Component {
 
-  renderPosts() {
-    const { postsQuery } = this.props;
+  isRowLoaded({ index }) {
+    return !!virtualizingList[ index ];
+  }
 
-    return postsQuery.edges.map(({ node: { id, title } }) => {
-      return (
-        <a href="#" className="list-group-item" key={id}>{title}</a>
-      );
-    });
+  rowRenderer({ key, index, style }) {
+    let content;
+
+    if (index < virtualizingList.length) {
+      content = virtualizingList[ index ].node.title
+    }
+    else {
+      content = (
+        <div>Loading...</div>
+      )
+    }
+
+    return (
+      <div key={key} style={style} className="list-group-item">{content}</div>
+    )
+  }
+
+  noRowsRenderer() {
+    return <h1>No Rows returned from GraphQL fetch....</h1>
   }
 
   render() {
-    const { loading } = this.props;
-    if (loading) {
+    const { loading, postsQuery, loadMoreRows } = this.props;
+
+    if (loading && virtualizingList.length == 0 ) {
       return (
         <div className="text-center">
           Loading...
         </div>
       );
     } else {
+
+      virtualizingList = postsQuery.edges;
+
       return (
-        <div className="text-center mt-4 mb-4">
-          {this.renderPosts()}
+        <div className="mt-4 mb-4">
+          <h2>Posts</h2>
+
+          <InfiniteLoader
+            isRowLoaded={this.isRowLoaded}
+            loadMoreRows={loadMoreRows}
+            rowCount={postsQuery.totalCount}
+          >
+            {({ onRowsRendered, registerChild }) => (
+              <List
+                height={800}
+                onRowsRendered={onRowsRendered}
+                noRowsRenderer={this.noRowsRenderer}
+                ref={registerChild}
+                rowCount={postsQuery.totalCount}
+                rowHeight={40}
+                rowRenderer={this.rowRenderer}
+                width={500}
+                overscanRowCount={0}
+              />
+            )}
+          </InfiniteLoader>
+
         </div>
       );
     }
@@ -44,11 +87,37 @@ const PostListWithApollo = withApollo(compose(
     options: (props) => {
       let after = props.endCursor || 0;
       return {
-        variables: { first: 10, after: after },
+        variables: { first: 20, after: after },
       };
     },
-    props({data: {loading, postsQuery}}) {
-      return {loading, postsQuery};
+    props: ({ ownProps, data }) => {
+
+      const { loading, postsQuery, fetchMore } = data;
+
+      const loadMoreRows = () => {
+        return fetchMore({
+          variables: {
+            after: postsQuery.pageInfo.endCursor,
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            const totalCount = fetchMoreResult.postsQuery.totalCount;
+            const newEdges = fetchMoreResult.postsQuery.edges;
+            const pageInfo = fetchMoreResult.postsQuery.pageInfo;
+
+            return {
+              // By returning `cursor` here, we update the `loadMore` function
+              // to the new cursor.
+              postsQuery: {
+                totalCount,
+                edges: [ ...previousResult.postsQuery.edges, ...newEdges ],
+                pageInfo
+              }
+            };
+          }
+        })
+      };
+
+      return { loading, postsQuery, loadMoreRows };
     }
   })
 )(PostList));

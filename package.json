@@ -76,7 +76,6 @@
     "react-router": "^4.0.0",
     "react-router-dom": "^4.0.0",
     "react-router-redux": "git+https://github.com/sysgears/react-router-redux.git",
-    "react-virtualized": "^9.3.0",
     "reactstrap": "^4.3.0",
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.0",

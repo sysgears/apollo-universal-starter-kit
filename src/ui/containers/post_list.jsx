@@ -1,82 +1,43 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { graphql, compose, withApollo } from 'react-apollo'
-import { InfiniteLoader, List } from 'react-virtualized'
-import _ from 'lodash'
 
 import log from '../../log'
 import POSTS_QUERY from '../graphql/posts_get.graphql'
 
-let virtualizingList = [];
-
 class PostList extends React.Component {
 
-  isRowLoaded({ index }) {
-    return !!virtualizingList[ index ];
-  }
+  renderPosts() {
+    const { postsQuery } = this.props;
 
-  rowRenderer({ key, index, style }) {
-    let content, url;
+    return postsQuery.edges.map(({ node: { id, title } }) => {
+      const url = `/post/${id}`;
 
-    if (index < virtualizingList.length) {
-      url = `/post/${virtualizingList[ index ].node.id}`;
-      content = virtualizingList[ index ].node.title
-    }
-    else {
-      url = '#';
-      content = (
-        <div>Loading...</div>
-      )
-    }
-
-    return (
-      <div key={key} style={style} className="list-group-item">
-        <Link to={url} className="nav-link">{content}</Link>
-      </div>
-    )
-  }
-
-  noRowsRenderer() {
-    return <h1>No Rows returned from GraphQL fetch....</h1>
+      return (
+        <Link className="list-group-item" key={id} to={url}>{title}</Link>
+      );
+    });
   }
 
   render() {
     const { loading, postsQuery, loadMoreRows } = this.props;
 
-    if (loading && virtualizingList.length == 0) {
+    if (loading && !postsQuery) {
       return (
         <div className="text-center">
           Loading...
         </div>
       );
     } else {
-
-      virtualizingList = postsQuery.edges;
-
       return (
         <div className="mt-4 mb-4">
           <h2>Posts</h2>
 
-          <InfiniteLoader
-            isRowLoaded={this.isRowLoaded}
-            loadMoreRows={loadMoreRows}
-            rowCount={postsQuery.totalCount}
-          >
-            {({ onRowsRendered, registerChild }) => (
-              <List
-                height={800}
-                onRowsRendered={onRowsRendered}
-                noRowsRenderer={this.noRowsRenderer}
-                ref={registerChild}
-                rowCount={postsQuery.totalCount}
-                rowHeight={40}
-                rowRenderer={this.rowRenderer}
-                width={500}
-                overscanRowCount={0}
-              />
-            )}
-          </InfiniteLoader>
-
+          <ul className="list-group">
+            {this.renderPosts()}
+          </ul>
+          <br />
+          <button type="button" className="btn btn-primary" onClick={loadMoreRows}>Load more ...</button>
         </div>
       );
     }
@@ -93,7 +54,7 @@ const PostListWithApollo = withApollo(compose(
     options: (props) => {
       let after = props.endCursor || 0;
       return {
-        variables: { first: 20, after: after },
+        variables: { first: 10, after: after },
       };
     },
     props: ({ ownProps, data }) => {
@@ -115,7 +76,7 @@ const PostListWithApollo = withApollo(compose(
               // to the new cursor.
               postsQuery: {
                 totalCount,
-                edges: _.unionBy(previousResult.postsQuery.edges, newEdges, 'cursor'),
+                edges: [ ... previousResult.postsQuery.edges, ... newEdges ],
                 pageInfo
               }
             };

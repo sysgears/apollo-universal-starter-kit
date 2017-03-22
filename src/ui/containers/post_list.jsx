@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { graphql, compose, withApollo } from 'react-apollo'
 import { InfiniteLoader, List } from 'react-virtualized';
 
@@ -14,19 +15,23 @@ class PostList extends React.Component {
   }
 
   rowRenderer({ key, index, style }) {
-    let content;
+    let content, url;
 
     if (index < virtualizingList.length) {
+      url = `/post/${virtualizingList[ index ].node.id}`;
       content = virtualizingList[ index ].node.title
     }
     else {
+      url = '#';
       content = (
         <div>Loading...</div>
       )
     }
 
     return (
-      <div key={key} style={style} className="list-group-item">{content}</div>
+      <div key={key} style={style} className="list-group-item">
+        <Link to={url} className="nav-link">{content}</Link>
+      </div>
     )
   }
 

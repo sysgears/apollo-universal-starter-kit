@@ -42,6 +42,9 @@ const resolvers = {
         });
       });
     },
+    post(obj, { id }, context) {
+      return context.Post.getPost(id);
+    },
   },
   Post: {
     comments({ id }, args, context) {

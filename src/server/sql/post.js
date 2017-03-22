@@ -38,4 +38,13 @@ export default class Post {
   getNextPageFlag(id) {
     return knex('post').count('id as count').where('id', '>', id).first();
   }
+
+
+  getPost(id) {
+    return knex
+      .select('id', 'title', 'content')
+      .from('post')
+      .where('id', '=', id)
+      .first();
+  }
 }

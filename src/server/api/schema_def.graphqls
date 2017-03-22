@@ -41,6 +41,8 @@ type Query {
   count: Count
   #Posts pagination query
   postsQuery(first: Int, after: ID): PostsQuery
+  #Post
+  post(id: ID!): Post
 }
 
 type Mutation {

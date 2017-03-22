@@ -19,8 +19,18 @@ class PostList extends React.Component {
     });
   }
 
+  renderLoadMore() {
+    const { postsQuery, loadMoreRows } = this.props;
+
+    if (postsQuery.pageInfo.hasNextPage) {
+      return (
+        <button type="button" className="btn btn-primary" onClick={loadMoreRows}>Load more ...</button>
+      );
+    }
+  }
+
   render() {
-    const { loading, postsQuery, loadMoreRows } = this.props;
+    const { loading, postsQuery } = this.props;
 
     if (loading && !postsQuery) {
       return (
@@ -36,8 +46,8 @@ class PostList extends React.Component {
           <ul className="list-group">
             {this.renderPosts()}
           </ul>
-          <br />
-          <button type="button" className="btn btn-primary" onClick={loadMoreRows}>Load more ...</button>
+          <div><small>({postsQuery.edges.length} / {postsQuery.totalCount})</small></div>
+          {this.renderLoadMore()}
         </div>
       );
     }

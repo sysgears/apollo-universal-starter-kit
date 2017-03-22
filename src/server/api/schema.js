@@ -8,12 +8,20 @@ export const pubsub = new PubSub();
 
 const resolvers = {
   Query: {
-    count(ignored1, ignored2, context) {
+    count(obj, args, context) {
       return context.Count.getCount();
+    },
+    posts(obj, args, context) {
+      return context.Post.getPosts();
+    },
+  },
+  Post: {
+    comments({ id }, args, context) {
+      return context.loaders.getCommentsForPostIds.load(id);
     },
   },
   Mutation: {
-    addCount(_, { amount }, context) {
+    addCount(obj, { amount }, context) {
       return context.Count.addCount(amount)
         .then(() => context.Count.getCount())
         .then(count => {

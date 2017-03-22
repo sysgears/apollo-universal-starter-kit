@@ -4,9 +4,25 @@ type Count {
   amount: Int!
 }
 
+#Post
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  comments: [Comment]
+}
+
+#Comment
+type Comment {
+  id: ID!
+  content: String!
+}
+
 type Query {
   # Counter
   count: Count
+  #Posts
+  posts: [Post]
 }
 
 type Mutation {

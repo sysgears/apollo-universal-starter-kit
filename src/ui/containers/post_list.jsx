@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { graphql, compose, withApollo } from 'react-apollo'
-import { InfiniteLoader, List } from 'react-virtualized';
+import { InfiniteLoader, List } from 'react-virtualized'
+import _ from 'lodash'
 
 import log from '../../log'
 import POSTS_QUERY from '../graphql/posts_get.graphql'
@@ -42,7 +43,7 @@ class PostList extends React.Component {
   render() {
     const { loading, postsQuery, loadMoreRows } = this.props;
 
-    if (loading && virtualizingList.length == 0 ) {
+    if (loading && virtualizingList.length == 0) {
       return (
         <div className="text-center">
           Loading...
@@ -110,11 +111,11 @@ const PostListWithApollo = withApollo(compose(
             const pageInfo = fetchMoreResult.postsQuery.pageInfo;
 
             return {
-              // By returning `cursor` here, we update the `loadMore` function
+              // By returning `cursor` here, we update the `fetchMore` function
               // to the new cursor.
               postsQuery: {
                 totalCount,
-                edges: [ ...previousResult.postsQuery.edges, ...newEdges ],
+                edges: _.unionBy(previousResult.postsQuery.edges, newEdges, 'cursor'),
                 pageInfo
               }
             };

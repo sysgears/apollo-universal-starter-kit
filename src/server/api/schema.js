@@ -27,7 +27,7 @@ const resolvers = {
           });
         });
 
-        let endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length-1].cursor : NaN;
+        let endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length-1].cursor : 0;
 
         return Promise.all([context.Post.getTotal(),context.Post.getNextPageFlag(endCursor)]).then((values) => {
 

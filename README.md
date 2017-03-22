@@ -215,7 +215,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Heroku]: https://heroku.com
 [ESLint]: http://eslint.org
 [SysGears INC]: http://sysgears.com
-[GraphQL Cursor Pagination] https://medium.com/@gethylgeorge/infinite-scrolling-in-react-using-apollo-and-react-virtualized-graphql-cursor-pagination-bf80617a8a1a#.jkmmu9qz8
-[Dataloader] https://github.com/facebook/dataloader
-[React-Virtualized] https://github.com/bvaughn/react-virtualized
-[Relay-style cursor pagination] http://dev.apollodata.com/react/pagination.html#relay-cursors
+[GraphQL Cursor Pagination]: https://medium.com/@gethylgeorge/infinite-scrolling-in-react-using-apollo-and-react-virtualized-graphql-cursor-pagination-bf80617a8a1a#.jkmmu9qz8
+[Dataloader]: https://github.com/facebook/dataloader
+[React-Virtualized]: https://github.com/bvaughn/react-virtualized
+[Relay-style cursor pagination]: http://dev.apollodata.com/react/pagination.html#relay-cursors

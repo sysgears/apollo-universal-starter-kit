@@ -18,11 +18,29 @@ type Comment {
   content: String!
 }
 
+#Edges for PostsQuery
+type Edges {
+  node: Post
+  cursor: ID
+}
+
+#PageInfo for PostsQuery
+type PageInfo {
+  endCursor: ID
+  hasNextPage: Boolean
+}
+
+type PostsQuery {
+  totalCount: Int
+  edges: [Edges]
+  pageInfo: PageInfo
+}
+
 type Query {
   # Counter
   count: Count
-  #Posts
-  posts: [Post]
+  #Posts pagination query
+  postsQuery(first: Int, after: ID): PostsQuery
 }
 
 type Mutation {

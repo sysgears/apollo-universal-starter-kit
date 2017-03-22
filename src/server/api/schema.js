@@ -11,8 +11,36 @@ const resolvers = {
     count(obj, args, context) {
       return context.Count.getCount();
     },
-    posts(obj, args, context) {
-      return context.Post.getPosts();
+    postsQuery(obj, { first, after }, context) {
+      let edgesArray = [];
+      return context.Post.getPostsPagination(first, after).then(posts => {
+
+        posts.map(post => {
+
+          edgesArray.push({
+            cursor: post.id,
+            node: {
+              id: post.id,
+              title: post.title,
+              content: post.content,
+            }
+          });
+        });
+
+        let endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length-1].cursor : NaN;
+
+        return Promise.all([context.Post.getTotal(),context.Post.getNextPageFlag(endCursor)]).then((values) => {
+
+          return {
+            totalCount: values[0].count,
+            edges: edgesArray,
+            pageInfo:{
+              endCursor: endCursor,
+              hasNextPage: (values[1].count > 0 ? true : false)
+            }
+          };
+        });
+      });
     },
   },
   Post: {

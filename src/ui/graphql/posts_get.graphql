@@ -1,11 +1,21 @@
-query getPosts {
-    posts {
-        id
-        title
-        content
-        comments {
-            id
-            content
+query getPosts($first: Int!, $after: ID) {
+    postsQuery(first: $first, after: $after) {
+        totalCount
+        edges {
+            cursor
+            node {
+                id
+                title
+                content
+                comments {
+                    id
+                    content
+                }
+            }
+        }
+        pageInfo {
+            endCursor
+            hasNextPage
         }
     }
 }

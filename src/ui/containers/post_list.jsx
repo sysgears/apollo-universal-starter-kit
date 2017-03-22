@@ -7,10 +7,11 @@ import POSTS_QUERY from '../graphql/posts_get.graphql'
 class PostList extends React.Component {
 
   renderPosts() {
-    const { posts } = this.props;
-    return posts.map(post => {
+    const { postsQuery } = this.props;
+
+    return postsQuery.edges.map(({ node: { id, title } }) => {
       return (
-        <a href="#" className="list-group-item" key={post.id}>{post.title}</a>
+        <a href="#" className="list-group-item" key={id}>{title}</a>
       );
     });
   }
@@ -35,13 +36,19 @@ class PostList extends React.Component {
 
 PostList.propTypes = {
   loading: React.PropTypes.bool.isRequired,
-  posts: React.PropTypes.array,
+  postsQuery: React.PropTypes.object,
 };
 
 const PostListWithApollo = withApollo(compose(
   graphql(POSTS_QUERY, {
-    props({data: {loading, posts}}) {
-      return {loading, posts};
+    options: (props) => {
+      let after = props.endCursor || 0;
+      return {
+        variables: { first: 10, after: after },
+      };
+    },
+    props({data: {loading, postsQuery}}) {
+      return {loading, postsQuery};
     }
   })
 )(PostList));

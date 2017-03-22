@@ -7,7 +7,12 @@ const NavBar = () => (
     <Container>
       <Row className="align-items-center">
         <Link to="/" className="navbar-brand">Apollo Starter Kit</Link>
-        <Nav navbar>
+        <Nav>
+          <NavItem>
+            <Link to="/posts" className="nav-link">Posts</Link>
+          </NavItem>
+        </Nav>
+        <Nav className="ml-auto" navbar>
           <NavItem>
             <a href="/graphiql">GraphiQL</a>
           </NavItem>

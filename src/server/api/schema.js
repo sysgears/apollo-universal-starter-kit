@@ -60,6 +60,14 @@ const resolvers = {
           return count;
         });
     },
+    addPost(obj, { title, content }, context) {
+      return context.Post.addPost(title, content)
+        .then((id) => context.Post.getPost(id[0]))
+        .then(post => {
+          //pubsub.publish('addPost', post);
+          return post;
+        });
+    }
   },
   Subscription: {
     countUpdated(amount) {

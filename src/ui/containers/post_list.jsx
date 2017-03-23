@@ -46,6 +46,8 @@ class PostList extends React.Component {
         <div className="mt-4 mb-4">
           <h2>Posts</h2>
 
+          <Link to="/post/add">Add</Link>
+
           <ul className="list-group">
             {this.renderPosts()}
           </ul>

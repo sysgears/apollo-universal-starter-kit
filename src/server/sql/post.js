@@ -47,4 +47,8 @@ export default class Post {
       .where('id', '=', id)
       .first();
   }
+
+  addPost(title, content) {
+    return knex('post').insert({title, content});
+  }
 }

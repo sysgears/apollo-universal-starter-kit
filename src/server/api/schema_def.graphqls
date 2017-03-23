@@ -52,6 +52,9 @@ type Mutation {
     # Amount to add to counter
     amount: Int!
   ): Count
+
+  # Create new post
+  addPost(title: String!, content: String!): Post
 }
 
 type Subscription {

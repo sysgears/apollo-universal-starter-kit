@@ -13,7 +13,7 @@ export function seed(knex, Promise) { // eslint-disable-line import/prefer-defau
 
         let posts = [];
 
-        for (let ii = 0; ii < 100; ++ii) {
+        for (let ii = 0; ii < 5; ++ii) {
           posts.push(knex('post').insert({
             title: `Post title ${ii + 1}`,
             content: `Post content ${ii + 1}`

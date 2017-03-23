@@ -4,9 +4,46 @@ type Count {
   amount: Int!
 }
 
+# Post
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  comments: [Comment]
+}
+
+# Comment
+type Comment {
+  id: ID!
+  content: String!
+}
+
+# Edges for PostsQuery
+type Edges {
+  node: Post
+  cursor: ID
+}
+
+# PageInfo for PostsQuery
+type PageInfo {
+  endCursor: ID
+  hasNextPage: Boolean
+}
+
+# Posts relay-style pagination query
+type PostsQuery {
+  totalCount: Int
+  edges: [Edges]
+  pageInfo: PageInfo
+}
+
 type Query {
   # Counter
   count: Count
+  # Posts pagination query
+  postsQuery(first: Int, after: ID): PostsQuery
+  # Post
+  post(id: ID!): Post
 }
 
 type Mutation {

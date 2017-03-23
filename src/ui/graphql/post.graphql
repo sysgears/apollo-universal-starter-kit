@@ -1,0 +1,9 @@
+fragment PostInfo on Post {
+    id
+    title
+    content
+    comments {
+        id
+        content
+    }
+}

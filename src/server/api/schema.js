@@ -8,12 +8,51 @@ export const pubsub = new PubSub();
 
 const resolvers = {
   Query: {
-    count(ignored1, ignored2, context) {
+    count(obj, args, context) {
       return context.Count.getCount();
+    },
+    postsQuery(obj, { first, after }, context) {
+      let edgesArray = [];
+      return context.Post.getPostsPagination(first, after).then(posts => {
+
+        posts.map(post => {
+
+          edgesArray.push({
+            cursor: post.id,
+            node: {
+              id: post.id,
+              title: post.title,
+              content: post.content,
+            }
+          });
+        });
+
+        let endCursor = edgesArray.length > 0 ? edgesArray[ edgesArray.length - 1 ].cursor : 0;
+
+        return Promise.all([ context.Post.getTotal(), context.Post.getNextPageFlag(endCursor) ]).then((values) => {
+
+          return {
+            totalCount: values[ 0 ].count,
+            edges: edgesArray,
+            pageInfo: {
+              endCursor: endCursor,
+              hasNextPage: (values[ 1 ].count > 0 ? true : false)
+            }
+          };
+        });
+      });
+    },
+    post(obj, { id }, context) {
+      return context.Post.getPost(id);
+    },
+  },
+  Post: {
+    comments({ id }, args, context) {
+      return context.loaders.getCommentsForPostIds.load(id);
     },
   },
   Mutation: {
-    addCount(_, { amount }, context) {
+    addCount(obj, { amount }, context) {
       return context.Count.addCount(amount)
         .then(() => context.Count.getCount())
         .then(count => {

@@ -62,7 +62,7 @@ const resolvers = {
     },
     addPost(obj, { title, content }, context) {
       return context.Post.addPost(title, content)
-        .then((id) => context.Post.getPost(id[0]))
+        .then((id) => context.Post.getPost(id[ 0 ]))
         .then(post => {
           //pubsub.publish('addPost', post);
           return post;
@@ -82,7 +82,15 @@ const resolvers = {
           //pubsub.publish('editPost', post);
           return post;
         });
-    }
+    },
+    addComment(obj, { content, postId }, context) {
+      return context.Post.addComment(content, postId)
+        .then(() => context.Post.getPost(postId))
+        .then(post => {
+          //pubsub.publish('addComment', post);
+          return post;
+        });
+    },
   },
   Subscription: {
     countUpdated(amount) {

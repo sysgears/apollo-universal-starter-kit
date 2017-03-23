@@ -1,6 +1,9 @@
 import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
+import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
+
+import CommentAdd from './post_comment_add'
 
 import POST_EDIT from '../graphql/post_edit.graphql'
 import POST_QUERY from '../graphql/post_get.graphql'
@@ -36,18 +39,18 @@ class PostEdit extends React.Component {
   }
 
   render() {
-    const { loading, post } = this.props;
+    const { loading, match } = this.props;
 
     if (loading) {
       return (
-        <div className="text-center">
-          Loading...
-        </div>
+        <div>{ /* loading... */ }</div>
       );
     } else {
 
       return (
         <div className="mt-4 mb-4">
+          <Link to="/posts">Back</Link>
+          <h2>Edit Post</h2>
           <form onSubmit={this.onSubmit.bind(this)}>
             <label>Title</label>
             <input type="text" onChange={event => this.setState({ title: event.target.value })}
@@ -59,6 +62,10 @@ class PostEdit extends React.Component {
               Submit
             </Button>
           </form>
+
+          <h3>Comments</h3>
+          <CommentAdd postId={match.params.id} />
+          <div>{this.renderComments()}</div>
         </div>
       );
     }

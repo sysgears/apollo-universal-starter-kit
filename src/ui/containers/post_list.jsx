@@ -13,7 +13,6 @@ class PostList extends React.Component {
     const { postsQuery, deletePost } = this.props;
 
     return postsQuery.edges.map(({ node: { id, title, comments } }) => {
-      const url = `/post/${id}`;
 
       let commentStr = '';
       if (comments.length > 0) {
@@ -22,7 +21,7 @@ class PostList extends React.Component {
 
       return (
         <li className="list-group-item justify-content-between" key={id}>
-          <span><Link to={url}>{title}</Link><small>{commentStr}</small></span>
+          <span><Link to={`/post/${id}`}>{title}</Link><small>{commentStr}</small></span>
           <span className="badge badge-default badge-pill" onClick={deletePost(id)}>X</span>
         </li>
       );
@@ -46,9 +45,7 @@ class PostList extends React.Component {
 
     if (loading && !postsQuery) {
       return (
-        <div className="text-center">
-          Loading...
-        </div>
+        <div>{ /* loading... */ }</div>
       );
     } else {
       return (

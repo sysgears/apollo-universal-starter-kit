@@ -67,6 +67,13 @@ const resolvers = {
           //pubsub.publish('addPost', post);
           return post;
         });
+    },
+    deletePost(obj, { id }, context) {
+      return context.Post.deletePost(id)
+        .then(() => {
+          //pubsub.publish('deletePost', id);
+          return { id };
+        });
     }
   },
   Subscription: {

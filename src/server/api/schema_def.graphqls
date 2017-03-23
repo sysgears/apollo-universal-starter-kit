@@ -55,6 +55,9 @@ type Mutation {
 
   # Create new post
   addPost(title: String!, content: String!): Post
+
+  # Delete a post
+  deletePost(id: ID!): Post
 }
 
 type Subscription {

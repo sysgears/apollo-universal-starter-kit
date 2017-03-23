@@ -1,6 +1,7 @@
 import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
 import { Link } from 'react-router-dom'
+import { Button } from 'reactstrap'
 
 import POST_ADD from '../graphql/post_add.graphql'
 import POSTS_QUERY from '../graphql/posts_get.graphql'
@@ -29,7 +30,9 @@ class PostAdd extends React.Component {
           <input type="text" onChange={event => this.setState({ title: event.target.value })} value={this.state.title} />
           <label>Contnent</label>
           <input type="text" onChange={event => this.setState({ content: event.target.value })} value={this.state.content} />
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <Button color="primary" type="submit">
+            Submit
+          </Button>
         </form>
       </div>
     );

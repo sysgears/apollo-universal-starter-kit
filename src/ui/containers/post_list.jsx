@@ -1,21 +1,30 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { graphql, compose, withApollo } from 'react-apollo'
+import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 
 import log from '../../log'
 import POSTS_QUERY from '../graphql/posts_get.graphql'
+import POST_DELETE from '../graphql/post_delete.graphql'
 
 class PostList extends React.Component {
 
   renderPosts() {
-    const { postsQuery } = this.props;
+    const { postsQuery, deletePost } = this.props;
 
-    return postsQuery.edges.map(({ node: { id, title } }) => {
+    return postsQuery.edges.map(({ node: { id, title, comments } }) => {
       const url = `/post/${id}`;
 
+      let commentStr = '';
+      if (comments.length > 0) {
+        commentStr = `(${comments.length} comments)`;
+      }
+
       return (
-        <Link className="list-group-item" key={id} to={url}>{title}</Link>
+        <li className="list-group-item justify-content-between" key={id}>
+          <span><Link to={url}>{title}</Link><small>{commentStr}</small></span>
+          <span className="badge badge-default badge-pill" onClick={deletePost(id)}>X</span>
+        </li>
       );
     });
   }
@@ -46,7 +55,9 @@ class PostList extends React.Component {
         <div className="mt-4 mb-4">
           <h2>Posts</h2>
 
-          <Link to="/post/add">Add</Link>
+          <Link to="/post/add">
+            <Button color="primary">Add</Button>
+          </Link>
 
           <ul className="list-group">
             {this.renderPosts()}
@@ -64,6 +75,7 @@ class PostList extends React.Component {
 PostList.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   postsQuery: React.PropTypes.object,
+  deletePost: React.PropTypes.func.isRequired,
 };
 
 const PostListWithApollo = withApollo(compose(
@@ -101,6 +113,19 @@ const PostListWithApollo = withApollo(compose(
 
       return { loading, postsQuery, loadMoreRows };
     }
+  }),
+  graphql(POST_DELETE, {
+    props: ({ ownProps, mutate }) => ({
+      deletePost(id){
+        return () => mutate({
+          variables: { id },
+          refetchQueries: [{
+            query: POSTS_QUERY,
+            variables: { first: 10, after: 0 }
+          }]
+        })
+      },
+    })
   })
 )(PostList));
 

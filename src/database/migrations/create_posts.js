@@ -6,12 +6,12 @@ export function up(knex, Promise) {
       table.string('title');
       table.string('content');
     })
-    .createTable('comment', (table) => {
-      table.increments();
-      table.timestamps();
-      table.string('content');
-      table.integer('post_id').unsigned().references('id').inTable('post').onDelete('CASCADE');
-    })
+      .createTable('comment', (table) => {
+        table.increments();
+        table.timestamps();
+        table.string('content');
+        table.integer('post_id').unsigned().references('id').inTable('post').onDelete('CASCADE');
+      })
   ]);
 }
 

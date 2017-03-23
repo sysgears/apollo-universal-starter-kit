@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { graphql, compose, withApollo } from 'react-apollo'
+import { Button } from 'reactstrap'
 
 import log from '../../log'
 import POSTS_QUERY from '../graphql/posts_get.graphql'
@@ -24,7 +25,9 @@ class PostList extends React.Component {
 
     if (postsQuery.pageInfo.hasNextPage) {
       return (
-        <button type="button" className="btn btn-primary" onClick={loadMoreRows}>Load more ...</button>
+        <Button color="primary" onClick={loadMoreRows}>
+          Load more ...
+        </Button>
       );
     }
   }
@@ -46,7 +49,9 @@ class PostList extends React.Component {
           <ul className="list-group">
             {this.renderPosts()}
           </ul>
-          <div><small>({postsQuery.edges.length} / {postsQuery.totalCount})</small></div>
+          <div>
+            <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
+          </div>
           {this.renderLoadMore()}
         </div>
       );
@@ -68,9 +73,7 @@ const PostListWithApollo = withApollo(compose(
       };
     },
     props: ({ ownProps, data }) => {
-
       const { loading, postsQuery, fetchMore } = data;
-
       const loadMoreRows = () => {
         return fetchMore({
           variables: {

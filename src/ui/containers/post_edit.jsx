@@ -31,11 +31,8 @@ class PostEdit extends React.Component {
       return (
         <div className="mt-4 mb-4">
           <h2>{post.title}</h2>
-
           <div>{post.content}</div>
-
           <div>{this.renderComments()}</div>
-
         </div>
       );
     }

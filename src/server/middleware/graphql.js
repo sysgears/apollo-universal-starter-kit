@@ -1,6 +1,6 @@
 import { graphqlExpress } from 'graphql-server-express'
 import 'isomorphic-fetch'
-import DataLoader from 'dataloader';
+import DataLoader from 'dataloader'
 
 import schema from '../api/schema'
 import Count from '../sql/count'

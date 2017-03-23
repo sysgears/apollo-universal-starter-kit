@@ -27,16 +27,16 @@ const resolvers = {
           });
         });
 
-        let endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length-1].cursor : 0;
+        let endCursor = edgesArray.length > 0 ? edgesArray[ edgesArray.length - 1 ].cursor : 0;
 
-        return Promise.all([context.Post.getTotal(),context.Post.getNextPageFlag(endCursor)]).then((values) => {
+        return Promise.all([ context.Post.getTotal(), context.Post.getNextPageFlag(endCursor) ]).then((values) => {
 
           return {
-            totalCount: values[0].count,
+            totalCount: values[ 0 ].count,
             edges: edgesArray,
-            pageInfo:{
+            pageInfo: {
               endCursor: endCursor,
-              hasNextPage: (values[1].count > 0 ? true : false)
+              hasNextPage: (values[ 1 ].count > 0 ? true : false)
             }
           };
         });

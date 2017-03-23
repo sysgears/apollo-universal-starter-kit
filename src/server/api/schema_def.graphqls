@@ -52,12 +52,12 @@ type Mutation {
     # Amount to add to counter
     amount: Int!
   ): Count
-
   # Create new post
   addPost(title: String!, content: String!): Post
-
   # Delete a post
   deletePost(id: ID!): Post
+  # Edit a post
+  editPost(id: ID!, title: String!, content: String!): Post
 }
 
 type Subscription {

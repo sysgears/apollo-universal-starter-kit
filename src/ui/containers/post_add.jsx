@@ -27,9 +27,11 @@ class PostAdd extends React.Component {
         <h2>Create Post</h2>
         <form onSubmit={this.onSubmit.bind(this)}>
           <label>Title</label>
-          <input type="text" onChange={event => this.setState({ title: event.target.value })} value={this.state.title} />
+          <input type="text" onChange={event => this.setState({ title: event.target.value })}
+                 value={this.state.title}/>
           <label>Contnent</label>
-          <input type="text" onChange={event => this.setState({ content: event.target.value })} value={this.state.content} />
+          <input type="text" onChange={event => this.setState({ content: event.target.value })}
+                 value={this.state.content}/>
           <Button color="primary" type="submit">
             Submit
           </Button>
@@ -48,11 +50,11 @@ const PostAddWithApollo = withApollo(compose(
     props: ({ ownProps, mutate }) => ({
       addPost: (title, content) => mutate({
         variables: { title, content },
-        refetchQueries: [{
+        refetchQueries: [ {
           query: POSTS_QUERY,
           variables: { first: 10, after: 0 }
-        }]
-      }).then( () => ownProps.history.push('/posts')),
+        } ]
+      }).then(() => ownProps.history.push('/posts')),
     })
   })
 )(PostAdd));

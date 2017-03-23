@@ -74,6 +74,14 @@ const resolvers = {
           //pubsub.publish('deletePost', id);
           return { id };
         });
+    },
+    editPost(obj, { id, title, content }, context) {
+      return context.Post.editPost(id, title, content)
+        .then(() => context.Post.getPost(id))
+        .then(post => {
+          //pubsub.publish('editPost', post);
+          return post;
+        });
     }
   },
   Subscription: {

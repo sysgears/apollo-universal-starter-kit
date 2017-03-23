@@ -1,9 +1,20 @@
 import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
+import { Button } from 'reactstrap'
 
+import POST_EDIT from '../graphql/post_edit.graphql'
 import POST_QUERY from '../graphql/post_get.graphql'
 
 class PostEdit extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { title: '', content: '' };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ title: nextProps.post.title, content: nextProps.post.content });
+  }
 
   renderComments() {
     const { post:  { comments } } = this.props;
@@ -15,6 +26,13 @@ class PostEdit extends React.Component {
         </div>
       );
     });
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    const { post, editPost } = this.props;
+
+    editPost(post.id, this.state.title, this.state.content);
   }
 
   render() {
@@ -30,9 +48,17 @@ class PostEdit extends React.Component {
 
       return (
         <div className="mt-4 mb-4">
-          <h2>{post.title}</h2>
-          <div>{post.content}</div>
-          <div>{this.renderComments()}</div>
+          <form onSubmit={this.onSubmit.bind(this)}>
+            <label>Title</label>
+            <input type="text" onChange={event => this.setState({ title: event.target.value })}
+                   value={this.state.title}/>
+            <label>Contnent</label>
+            <input type="text" onChange={event => this.setState({ content: event.target.value })}
+                   value={this.state.content}/>
+            <Button color="primary" type="submit">
+              Submit
+            </Button>
+          </form>
         </div>
       );
     }
@@ -42,6 +68,7 @@ class PostEdit extends React.Component {
 PostEdit.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   post: React.PropTypes.object,
+  editPost: React.PropTypes.func.isRequired,
 };
 
 const PostEditWithApollo = withApollo(compose(
@@ -54,6 +81,13 @@ const PostEditWithApollo = withApollo(compose(
     props({ data: { loading, post } }) {
       return { loading, post };
     }
+  }),
+  graphql(POST_EDIT, {
+    props: ({ ownProps, mutate }) => ({
+      editPost: (id, title, content) => mutate({
+        variables: { id, title, content }
+      }).then(() => ownProps.history.push('/posts')),
+    })
   })
 )(PostEdit));
 

@@ -55,4 +55,13 @@ export default class Post {
   deletePost(id) {
     return knex('post').where('id', '=', id).del();
   }
+
+  editPost(id, title, content) {
+    return knex('post')
+      .where('id', '=', id)
+      .update({
+        title: title,
+        content: content
+      });
+  }
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
+import update from 'react-addons-update'
 import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 
@@ -116,10 +117,34 @@ const PostListWithApollo = withApollo(compose(
       deletePost(id){
         return () => mutate({
           variables: { id },
-          refetchQueries: [{
-            query: POSTS_QUERY,
-            variables: { first: 10, after: 0 }
-          }]
+          optimisticResponse: {
+            __typename: 'Mutation',
+            deletePost: {
+              id: id,
+              __typename: 'Post',
+            },
+          },
+          updateQueries: {
+            getPosts: (prev, { mutationResult }) => {
+              const index = prev.postsQuery.edges.findIndex(x => x.node.id == mutationResult.data.deletePost.id);
+
+              return update(prev, {
+                postsQuery: {
+                  totalCount: {
+                    $set: prev.postsQuery.totalCount -1
+                  },
+                  edges: {
+                    $splice: [[index, 1]],
+                  }
+                }
+              });
+            }
+          }
+          // if you want to just refetch queries instead of using updateQueries
+          //refetchQueries: [{
+          //  query: POSTS_QUERY,
+          //  variables: { first: 10, after: 0 }
+          //}]
         })
       },
     })

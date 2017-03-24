@@ -1,5 +1,6 @@
 import React from 'react'
-import { graphql, compose, withApollo } from 'react-apollo'
+import { graphql, gql, compose, withApollo } from 'react-apollo'
+import update from 'react-addons-update'
 import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 
@@ -50,10 +51,51 @@ const PostAddWithApollo = withApollo(compose(
     props: ({ ownProps, mutate }) => ({
       addPost: (title, content) => mutate({
         variables: { title, content },
-        refetchQueries: [ {
-          query: POSTS_QUERY,
-          variables: { first: 10, after: 0 }
-        } ]
+        optimisticResponse: {
+          addPost: {
+            id: null,
+            title: title,
+            content: content,
+            comments: [],
+            __typename: 'Post',
+          },
+        },
+        updateQueries: {
+          getPosts: (prev, { mutationResult }) => {
+            const edge = {
+              cursor: mutationResult.data.addPost.id,
+              node: {
+                id: mutationResult.data.addPost.id,
+                title: mutationResult.data.addPost.title,
+                content: mutationResult.data.addPost.content,
+                comments: [],
+                __typename: 'Post'
+              },
+              __typename: 'Edges'
+            };
+
+            return update(prev, {
+              postsQuery: {
+                totalCount: {
+                  $set: prev.postsQuery.totalCount + 1
+                },
+                edges: {
+                  $push: [edge],
+                },
+                pageInfo: {
+                  endCursor: {
+                    $set: mutationResult.data.addPost.id
+                  }
+                }
+              }
+            });
+          }
+        },
+        // if you want to just refetch queries instead of using updateQueries
+        //refetchQueries: [ {
+        //  query: POSTS_QUERY,
+        //  variables: { first: 10, after: 0 }
+        //} ]
       }).then(() => ownProps.history.push('/posts')),
     })
   })

@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql, gql, compose, withApollo } from 'react-apollo'
+import { graphql, compose, withApollo } from 'react-apollo'
 import update from 'react-addons-update'
 import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'

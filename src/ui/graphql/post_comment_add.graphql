@@ -1,7 +1,6 @@
-#import "./post.graphql"
-
 mutation addComment($content: String!, $postId: ID!) {
     addComment(content: $content, postId: $postId) {
-        ... PostInfo
+        id
+        content
     }
 }

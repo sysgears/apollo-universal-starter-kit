@@ -59,7 +59,7 @@ type Mutation {
   # Edit a post
   editPost(id: ID!, title: String!, content: String!): Post
   # Add comment to Post
-  addComment(content: String!, postId: ID!): Post
+  addComment(content: String!, postId: ID!): Comment
 }
 
 type Subscription {

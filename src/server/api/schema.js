@@ -85,10 +85,10 @@ const resolvers = {
     },
     addComment(obj, { content, postId }, context) {
       return context.Post.addComment(content, postId)
-        .then(() => context.Post.getPost(postId))
-        .then(post => {
-          //pubsub.publish('addComment', post);
-          return post;
+        .then((id) => context.Post.getComment(id[ 0 ]))
+        .then(comment => {
+          //pubsub.publish('addComment', comment);
+          return comment;
         });
     },
   },

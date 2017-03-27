@@ -116,7 +116,7 @@ const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
     devtoolFallbackModuleFilenameTemplate: __DEV__ ? '../../[resource-path];[hash]' : undefined,
     filename: '[name].js',
     sourceMapFilename: '[name].[chunkhash].js.map',
-    path: pkg.app.backendBuildDir,
+    path: path.resolve(pkg.app.backendBuildDir),
     publicPath: '/'
   },
   plugins: serverPlugins
@@ -162,7 +162,7 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
   },
   output: {
     filename: '[name].[hash].js',
-    path: pkg.app.frontendBuildDir,
+    path: path.resolve(pkg.app.frontendBuildDir),
     publicPath: '/'
   },
   plugins: clientPlugins
@@ -180,7 +180,7 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
   ],
   output: {
     filename: '[name].[hash]_dll.js',
-    path: pkg.app.frontendBuildDir,
+    path: path.resolve(pkg.app.frontendBuildDir),
     library: '[name]',
   },
 });

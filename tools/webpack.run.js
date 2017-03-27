@@ -1,7 +1,6 @@
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import { spawn } from 'child_process'
-import waitForPort from 'wait-for-port'
 import fs from 'fs'
 import path from 'path'
 import mkdirp from 'mkdirp'
@@ -211,30 +210,26 @@ function startWebpackDevServer(clientConfig, reporter) {
     }
   });
 
-  waitForPort('localhost', pkg.app.apiPort, function(err) {
-    if (err) throw new Error(err);
-
-    const app = new WebpackDevServer(compiler, {
-      hot: true,
-      contentBase: '/',
-      publicPath: clientConfig.output.publicPath,
-      headers: { 'Access-Control-Allow-Origin': '*' },
-      proxy: {
-        '*': `http://localhost:${pkg.app.apiPort}`
-      },
-      reporter: ({state, stats}) => {
-        if (state) {
-          logFront("bundle is now VALID.");
-        } else {
-          logFront("bundle is now INVALID.");
-        }
-        reporter(null, stats);
+  const app = new WebpackDevServer(compiler, {
+    hot: true,
+    contentBase: '/',
+    publicPath: clientConfig.output.publicPath,
+    headers: { 'Access-Control-Allow-Origin': '*' },
+    proxy: {
+      '*': `http://localhost:${pkg.app.apiPort}`
+    },
+    reporter: ({state, stats}) => {
+      if (state) {
+        logFront("bundle is now VALID.");
+      } else {
+        logFront("bundle is now INVALID.");
       }
-    });
-
-    logFront(`Webpack dev server listening on ${pkg.app.webpackDevPort}`);
-    app.listen(pkg.app.webpackDevPort);
+      reporter(null, stats);
+    }
   });
+
+  logFront(`Webpack dev server listening on ${pkg.app.webpackDevPort}`);
+  app.listen(pkg.app.webpackDevPort);
 }
 
 function useWebpackDll() {

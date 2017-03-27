@@ -49,7 +49,7 @@ export default class Post {
   }
 
   addPost(title, content) {
-    return knex('post').insert({title, content});
+    return knex('post').insert({ title, content });
   }
 
   deletePost(id) {
@@ -66,7 +66,7 @@ export default class Post {
   }
 
   addComment(content, postId) {
-    return knex('comment').insert({content, post_id: postId});
+    return knex('comment').insert({ content, post_id: postId });
   }
 
   getComment(id) {
@@ -75,5 +75,17 @@ export default class Post {
       .from('comment')
       .where('id', '=', id)
       .first();
+  }
+
+  deleteComment(id) {
+    return knex('comment').where('id', '=', id).del();
+  }
+
+  editComment(id, content) {
+    return knex('comment')
+      .where('id', '=', id)
+      .update({
+        content: content
+      });
   }
 }

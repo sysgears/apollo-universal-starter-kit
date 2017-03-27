@@ -91,6 +91,21 @@ const resolvers = {
           return comment;
         });
     },
+    deleteComment(obj, { id }, context) {
+      return context.Post.deleteComment(id)
+        .then(() => {
+          //pubsub.publish('deleteComment', id);
+          return { id };
+        });
+    },
+    editComment(obj, { id, content }, context) {
+      return context.Post.editComment(id, content)
+        .then(() => context.Post.getComment(id))
+        .then(comment => {
+          //pubsub.publish('editComment', post);
+          return comment;
+        });
+    },
   },
   Subscription: {
     countUpdated(amount) {

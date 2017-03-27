@@ -1,12 +1,17 @@
 import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
 import update from 'react-addons-update'
+import { css } from 'glamor'
 import { Link } from 'react-router-dom'
-import { Button } from 'reactstrap'
+import { ListGroup, ListGroupItem, Button } from 'reactstrap'
 
 import log from '../../log'
 import POSTS_QUERY from '../graphql/posts_get.graphql'
 import POST_DELETE from '../graphql/post_delete.graphql'
+
+const commentStyle = css({
+  marginLeft: '10px'
+});
 
 class PostList extends React.Component {
 
@@ -21,10 +26,10 @@ class PostList extends React.Component {
       }
 
       return (
-        <li className="list-group-item justify-content-between" key={id}>
-          <span><Link to={`/post/${id}`}>{title}</Link><small>{commentStr}</small></span>
-          <span className="badge badge-default badge-pill" onClick={deletePost(id)}>X</span>
-        </li>
+        <ListGroupItem className="justify-content-between" key={id}>
+          <span><Link to={`/post/${id}`}>{title}</Link><small {...commentStyle}>{commentStr}</small></span>
+          <span className="badge badge-default badge-pill" onClick={deletePost(id)}>Delete</span>
+        </ListGroupItem>
       );
     });
   }
@@ -50,16 +55,15 @@ class PostList extends React.Component {
       );
     } else {
       return (
-        <div className="mt-4 mb-4">
+        <div>
           <h2>Posts</h2>
-
           <Link to="/post/add">
             <Button color="primary">Add</Button>
           </Link>
-
-          <ul className="list-group">
+          <h1/>
+          <ListGroup>
             {this.renderPosts()}
-          </ul>
+          </ListGroup>
           <div>
             <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
           </div>
@@ -101,7 +105,7 @@ const PostListWithApollo = withApollo(compose(
               // to the new cursor.
               postsQuery: {
                 totalCount,
-                edges: [ ... previousResult.postsQuery.edges, ... newEdges ],
+                edges: [ ...previousResult.postsQuery.edges, ...newEdges ],
                 pageInfo
               }
             };
@@ -131,10 +135,10 @@ const PostListWithApollo = withApollo(compose(
               return update(prev, {
                 postsQuery: {
                   totalCount: {
-                    $set: prev.postsQuery.totalCount -1
+                    $set: prev.postsQuery.totalCount - 1
                   },
                   edges: {
-                    $splice: [[index, 1]],
+                    $splice: [ [ index, 1 ] ],
                   }
                 }
               });

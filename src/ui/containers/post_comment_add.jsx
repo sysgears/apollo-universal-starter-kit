@@ -1,6 +1,7 @@
 import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
 import update from 'react-addons-update'
+import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap'
 
 import COMMENT_ADD from '../graphql/post_comment_add.graphql'
 
@@ -17,16 +18,24 @@ class CommentAdd extends React.Component {
 
     addComment(this.state.content, postId);
 
-    this.setState({ content: ''});
+    this.setState({ content: '' });
   }
 
   render() {
     return (
-      <form onSubmit={this.onSubmit.bind(this)}>
-        <label>Add acomment</label>
-        <input onChange={event => this.setState({ content: event.target.value })}
-               value={this.state.content}/>
-      </form>
+      <Form onSubmit={this.onSubmit.bind(this)}>
+        <FormGroup>
+          <Row>
+            <Col xs="2"><Label>Add acomment</Label></Col>
+            <Col xs="8"><Input onChange={event => this.setState({ content: event.target.value })}
+                               value={this.state.content}/></Col>
+            <Col xs="2"><Button color="primary" type="submit" className="float-right">
+              Submit
+            </Button></Col>
+          </Row>
+        </FormGroup>
+
+      </Form>
     );
   }
 }
@@ -52,7 +61,7 @@ const CommentAddWithApollo = withApollo(compose(
             return update(prev, {
               post: {
                 comments: {
-                  $push: [mutationResult.data.addComment],
+                  $push: [ mutationResult.data.addComment ],
                 }
               }
             });

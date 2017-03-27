@@ -5,6 +5,7 @@ import Counter from './ui/containers/counter'
 import PostList from './ui/containers/post_list'
 import PostAdd from './ui/containers/post_add'
 import PostEdit from './ui/containers/post_edit'
+import TestComponent from './ui/components/test'
 import App from './ui/components/app'
 
 export default (
@@ -14,6 +15,7 @@ export default (
       <Route exact path="/posts" component={PostList} />
       <Route exact path="/post/add" component={PostAdd} />
       <Route exact path="/post/:id" component={PostEdit} />
+      <Route exact path="/test" component={TestComponent} />
     </Switch>
   </App>
 );

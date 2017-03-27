@@ -11,6 +11,9 @@ const NavBar = () => (
           <NavItem>
             <Link to="/posts" className="nav-link">Posts</Link>
           </NavItem>
+          <NavItem>
+            <Link to="/test" className="nav-link">Test</Link>
+          </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
           <NavItem>

@@ -9,12 +9,6 @@ import log from '../../log'
 import POST_ADD from '../graphql/post_add.graphql'
 
 class PostAdd extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { title: '', content: '' };
-  }
-
   onSubmit(values) {
     const { addPost } = this.props;
 

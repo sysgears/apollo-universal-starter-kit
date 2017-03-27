@@ -144,11 +144,6 @@ const PostListWithApollo = withApollo(compose(
               });
             }
           }
-          // if you want to just refetch queries instead of using updateQueries
-          //refetchQueries: [{
-          //  query: POSTS_QUERY,
-          //  variables: { first: 10, after: 0 }
-          //}]
         })
       },
     })

@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import { Button } from 'reactstrap'
 
 import POST_ADD from '../graphql/post_add.graphql'
-import POSTS_QUERY from '../graphql/posts_get.graphql'
 
 class PostAdd extends React.Component {
   constructor(props) {
@@ -90,12 +89,7 @@ const PostAddWithApollo = withApollo(compose(
               }
             });
           }
-        },
-        // if you want to just refetch queries instead of using updateQueries
-        //refetchQueries: [ {
-        //  query: POSTS_QUERY,
-        //  variables: { first: 10, after: 0 }
-        //} ]
+        }
       }).then(() => ownProps.history.push('/posts')),
     })
   })

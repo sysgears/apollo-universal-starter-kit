@@ -58,7 +58,7 @@ type Mutation {
   deletePost(id: ID!): Post
   # Edit a post
   editPost(id: ID!, title: String!, content: String!): Post
-  # Add comment to Post
+  # Add comment to post
   addComment(content: String!, postId: ID!): Comment
   # Delete a comment
   deleteComment(id: ID!): Comment

@@ -49,7 +49,6 @@ class CommentForm extends React.Component {
             </Button></Col>
           </Row>
         </FormGroup>
-
       </Form>
     );
   }

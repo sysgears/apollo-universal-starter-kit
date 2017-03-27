@@ -1,9 +1,11 @@
 import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
 import update from 'react-addons-update'
+import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom'
-import { Button } from 'reactstrap'
+import { Form, FormGroup, Label, Button } from 'reactstrap'
 
+import log from '../../log'
 import POST_ADD from '../graphql/post_add.graphql'
 
 class PostAdd extends React.Component {
@@ -13,29 +15,33 @@ class PostAdd extends React.Component {
     this.state = { title: '', content: '' };
   }
 
-  onSubmit(event) {
-    event.preventDefault();
+  onSubmit(values) {
     const { addPost } = this.props;
 
-    addPost(this.state.title, this.state.content);
+    addPost(values.title, values.content);
   }
 
   render() {
+    const { handleSubmit } = this.props;
+
     return (
       <div className="mt-4 mb-4">
         <Link to="/posts">Back</Link>
         <h2>Create Post</h2>
-        <form onSubmit={this.onSubmit.bind(this)}>
-          <label>Title</label>
-          <input type="text" onChange={event => this.setState({ title: event.target.value })}
-                 value={this.state.title}/>
-          <label>Contnent</label>
-          <input type="text" onChange={event => this.setState({ content: event.target.value })}
-                 value={this.state.content}/>
+
+        <Form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+          <FormGroup>
+            <Label htmlFor="title">Title</Label>
+            <Field name="title" className="form-control" component="input" type="text"/>
+          </FormGroup>
+          <FormGroup>
+            <Label htmlFor="content">Contnent</Label>
+            <Field name="content" className="form-control" component="input" type="text"/>
+          </FormGroup>
           <Button color="primary" type="submit">
             Submit
           </Button>
-        </form>
+        </Form>
       </div>
     );
   }
@@ -46,6 +52,9 @@ PostAdd.propTypes = {
 };
 
 const PostAddWithApollo = withApollo(compose(
+  reduxForm({
+    form: 'contact'
+  }),
   graphql(POST_ADD, {
     props: ({ ownProps, mutate }) => ({
       addPost: (title, content) => mutate({
@@ -79,7 +88,7 @@ const PostAddWithApollo = withApollo(compose(
                   $set: prev.postsQuery.totalCount + 1
                 },
                 edges: {
-                  $push: [edge],
+                  $push: [ edge ],
                 },
                 pageInfo: {
                   endCursor: {

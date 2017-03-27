@@ -1,5 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { routerReducer } from 'react-router-redux'
+import { reducer as formReducer } from 'redux-form'
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import CounterReducers from './store/reducers/counter_reducers';
@@ -9,7 +10,8 @@ const createReduxStore = (initialState, client, routerMiddleware) => {
     combineReducers({
       counter: CounterReducers,
       apollo: client.reducer(),
-      router: routerReducer
+      router: routerReducer,
+      form: formReducer
     }),
     initialState, // initial state
     routerMiddleware ? composeWithDevTools(applyMiddleware(client.middleware(), routerMiddleware))

@@ -1,21 +1,34 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { graphql, compose, withApollo } from 'react-apollo'
-import { Button } from 'reactstrap'
+import update from 'react-addons-update'
+import { css } from 'glamor'
+import { Link } from 'react-router-dom'
+import { ListGroup, ListGroupItem, Button } from 'reactstrap'
 
-import log from '../../log'
 import POSTS_QUERY from '../graphql/posts_get.graphql'
+import POST_DELETE from '../graphql/post_delete.graphql'
+
+const commentStyle = css({
+  marginLeft: '10px'
+});
 
 class PostList extends React.Component {
 
   renderPosts() {
-    const { postsQuery } = this.props;
+    const { postsQuery, deletePost } = this.props;
 
-    return postsQuery.edges.map(({ node: { id, title } }) => {
-      const url = `/post/${id}`;
+    return postsQuery.edges.map(({ node: { id, title, comments } }) => {
+
+      let commentStr = '';
+      if (comments.length > 0) {
+        commentStr = `(${comments.length} comments)`;
+      }
 
       return (
-        <Link className="list-group-item" key={id} to={url}>{title}</Link>
+        <ListGroupItem className="justify-content-between" key={id}>
+          <span><Link to={`/post/${id}`}>{title}</Link><small {...commentStyle}>{commentStr}</small></span>
+          <span className="badge badge-default badge-pill" onClick={deletePost(id)}>Delete</span>
+        </ListGroupItem>
       );
     });
   }
@@ -37,18 +50,19 @@ class PostList extends React.Component {
 
     if (loading && !postsQuery) {
       return (
-        <div className="text-center">
-          Loading...
-        </div>
+        <div>{ /* loading... */ }</div>
       );
     } else {
       return (
-        <div className="mt-4 mb-4">
+        <div>
           <h2>Posts</h2>
-
-          <ul className="list-group">
+          <Link to="/post/add">
+            <Button color="primary">Add</Button>
+          </Link>
+          <h1/>
+          <ListGroup>
             {this.renderPosts()}
-          </ul>
+          </ListGroup>
           <div>
             <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
           </div>
@@ -62,6 +76,7 @@ class PostList extends React.Component {
 PostList.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   postsQuery: React.PropTypes.object,
+  deletePost: React.PropTypes.func.isRequired,
 };
 
 const PostListWithApollo = withApollo(compose(
@@ -89,7 +104,7 @@ const PostListWithApollo = withApollo(compose(
               // to the new cursor.
               postsQuery: {
                 totalCount,
-                edges: [ ... previousResult.postsQuery.edges, ... newEdges ],
+                edges: [ ...previousResult.postsQuery.edges, ...newEdges ],
                 pageInfo
               }
             };
@@ -99,6 +114,38 @@ const PostListWithApollo = withApollo(compose(
 
       return { loading, postsQuery, loadMoreRows };
     }
+  }),
+  graphql(POST_DELETE, {
+    props: ({ ownProps, mutate }) => ({
+      deletePost(id){
+        return () => mutate({
+          variables: { id },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            deletePost: {
+              id: id,
+              __typename: 'Post',
+            },
+          },
+          updateQueries: {
+            getPosts: (prev, { mutationResult }) => {
+              const index = prev.postsQuery.edges.findIndex(x => x.node.id == mutationResult.data.deletePost.id);
+
+              return update(prev, {
+                postsQuery: {
+                  totalCount: {
+                    $set: prev.postsQuery.totalCount - 1
+                  },
+                  edges: {
+                    $splice: [ [ index, 1 ] ],
+                  }
+                }
+              });
+            }
+          }
+        })
+      },
+    })
   })
 )(PostList));
 

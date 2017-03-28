@@ -75,10 +75,11 @@
     "react-redux": "^5.0.3",
     "react-router": "^4.0.0",
     "react-router-dom": "^4.0.0",
-    "react-router-redux": "git+https://github.com/sysgears/react-router-redux.git",
+    "react-router-redux": "^5.0.0-alpha.4",
     "reactstrap": "^4.3.0",
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.0",
+    "redux-form": "^6.6.0",
     "source-map-support": "^0.4.12",
     "sqlite3": "^3.1.8",
     "subscriptions-transport-ws": "^0.5.5-alpha.0"

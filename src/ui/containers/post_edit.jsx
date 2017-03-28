@@ -1,38 +1,35 @@
 import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
+import { Link } from 'react-router-dom'
 
+import PostForm from './post_form'
+import PostComments from './post_comments'
+
+import POST_EDIT from '../graphql/post_edit.graphql'
 import POST_QUERY from '../graphql/post_get.graphql'
 
 class PostEdit extends React.Component {
+  onSubmit(values) {
+    const { post, editPost } = this.props;
 
-  renderComments() {
-    const { post:  { comments } } = this.props;
-
-    return comments.map(comment => {
-      return (
-        <div key={comment.id}>
-          <small>{comment.content}</small>
-        </div>
-      );
-    });
+    editPost(post.id, values.title, values.content);
   }
 
   render() {
-    const { loading, post } = this.props;
+    const { loading, post, match } = this.props;
 
     if (loading) {
       return (
-        <div className="text-center">
-          Loading...
-        </div>
+        <div>{ /* loading... */ }</div>
       );
     } else {
-
       return (
-        <div className="mt-4 mb-4">
-          <h2>{post.title}</h2>
-          <div>{post.content}</div>
-          <div>{this.renderComments()}</div>
+        <div>
+          <Link to="/posts">Back</Link>
+          <h2>Edit Post</h2>
+          <PostForm onSubmit={this.onSubmit.bind(this)} initialValues={post}/>
+          <br/>
+          <PostComments postId={match.params.id} comments={post.comments}/>
         </div>
       );
     }
@@ -42,6 +39,7 @@ class PostEdit extends React.Component {
 PostEdit.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   post: React.PropTypes.object,
+  editPost: React.PropTypes.func.isRequired,
 };
 
 const PostEditWithApollo = withApollo(compose(
@@ -54,6 +52,13 @@ const PostEditWithApollo = withApollo(compose(
     props({ data: { loading, post } }) {
       return { loading, post };
     }
+  }),
+  graphql(POST_EDIT, {
+    props: ({ ownProps, mutate }) => ({
+      editPost: (id, title, content) => mutate({
+        variables: { id, title, content }
+      }).then(() => ownProps.history.push('/posts')),
+    })
   })
 )(PostEdit));
 

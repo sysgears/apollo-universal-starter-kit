@@ -15,10 +15,17 @@ const orderedFor = (rows, collection, field, singleObject) => {
 
 export default class Post {
   getPostsPagination(first, after) {
+
+    let where = '';
+    if (after > 0 ) {
+      where = `id < ${after}`;
+    }
+
     return knex
       .select('id', 'title', 'content')
       .from('post')
-      .where('id', '>', after)
+      .whereRaw(where)
+      .orderBy('id', 'desc')
       .limit(first);
   }
 
@@ -36,7 +43,7 @@ export default class Post {
   }
 
   getNextPageFlag(id) {
-    return knex('post').count('id as count').where('id', '>', id).first();
+    return knex('post').count('id as count').where('id', '<', id).first();
   }
 
 
@@ -46,5 +53,46 @@ export default class Post {
       .from('post')
       .where('id', '=', id)
       .first();
+  }
+
+  addPost(title, content) {
+    return knex('post').insert({ title, content });
+  }
+
+  deletePost(id) {
+    return knex('post').where('id', '=', id).del();
+  }
+
+  editPost(id, title, content) {
+    return knex('post')
+      .where('id', '=', id)
+      .update({
+        title: title,
+        content: content
+      });
+  }
+
+  addComment(content, postId) {
+    return knex('comment').insert({ content, post_id: postId });
+  }
+
+  getComment(id) {
+    return knex
+      .select('id', 'content')
+      .from('comment')
+      .where('id', '=', id)
+      .first();
+  }
+
+  deleteComment(id) {
+    return knex('comment').where('id', '=', id).del();
+  }
+
+  editComment(id, content) {
+    return knex('comment')
+      .where('id', '=', id)
+      .update({
+        content: content
+      });
   }
 }

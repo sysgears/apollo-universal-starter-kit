@@ -15,10 +15,17 @@ const orderedFor = (rows, collection, field, singleObject) => {
 
 export default class Post {
   getPostsPagination(first, after) {
+
+    let where = '';
+    if (after > 0 ) {
+      where = `id < ${after}`;
+    }
+
     return knex
       .select('id', 'title', 'content')
       .from('post')
-      .where('id', '>', after)
+      .whereRaw(where)
+      .orderBy('id', 'desc')
       .limit(first);
   }
 
@@ -36,7 +43,7 @@ export default class Post {
   }
 
   getNextPageFlag(id) {
-    return knex('post').count('id as count').where('id', '>', id).first();
+    return knex('post').count('id as count').where('id', '<', id).first();
   }
 
 

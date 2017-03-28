@@ -27,11 +27,21 @@ class PostComments extends React.Component {
           {content}
           <div>
             <span className="badge badge-default badge-pill" onClick={() => onCommentSelect({ id, content })}>Edit</span>
-            <span className="badge badge-default badge-pill" onClick={deleteComment(id)}>Delete</span>
+            <span className="badge badge-default badge-pill" onClick={() => this.onCommentDelete(id)}>Delete</span>
           </div>
         </ListGroupItem>
       );
     });
+  }
+
+  onCommentDelete(id) {
+    const { comment, deleteComment, onCommentSelect } = this.props;
+
+    if ( comment.id === id) {
+      onCommentSelect({ id: null, content: '' });
+    }
+
+    deleteComment(id);
   }
 
   onSubmit(values) {
@@ -80,7 +90,7 @@ const PostCommentsWithApollo = withApollo(compose(
         variables: { content, postId },
         optimisticResponse: {
           addComment: {
-            id: null,
+            id: -1,
             content: content,
             __typename: 'Comment',
           },
@@ -116,31 +126,29 @@ const PostCommentsWithApollo = withApollo(compose(
   }),
   graphql(COMMENT_DELETE, {
     props: ({ ownProps, mutate }) => ({
-      deleteComment(id){
-        return () => mutate({
-          variables: { id },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            deleteComment: {
-              id: id,
-              __typename: 'Comment',
-            },
+      deleteComment: (id) => mutate({
+        variables: { id },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          deleteComment: {
+            id: id,
+            __typename: 'Comment',
           },
-          updateQueries: {
-            getPost: (prev, { mutationResult }) => {
-              const index = prev.post.comments.findIndex(x => x.id == mutationResult.data.deleteComment.id);
+        },
+        updateQueries: {
+          getPost: (prev, { mutationResult }) => {
+            const index = prev.post.comments.findIndex(x => x.id == mutationResult.data.deleteComment.id);
 
-              return update(prev, {
-                post: {
-                  comments: {
-                    $splice: [ [ index, 1 ] ],
-                  }
+            return update(prev, {
+              post: {
+                comments: {
+                  $splice: [ [ index, 1 ] ],
                 }
-              });
-            }
+              }
+            });
           }
-        })
-      },
+        }
+      }),
     })
   })
 )(PostComments));

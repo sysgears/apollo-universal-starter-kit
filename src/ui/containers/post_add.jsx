@@ -36,7 +36,7 @@ const PostAddWithApollo = withApollo(compose(
         variables: { title, content },
         optimisticResponse: {
           addPost: {
-            id: null,
+            id: -1,
             title: title,
             content: content,
             comments: [],
@@ -63,12 +63,7 @@ const PostAddWithApollo = withApollo(compose(
                   $set: prev.postsQuery.totalCount + 1
                 },
                 edges: {
-                  $push: [ edge ],
-                },
-                pageInfo: {
-                  endCursor: {
-                    $set: mutationResult.data.addPost.id
-                  }
+                  $unshift: [ edge ],
                 }
               }
             });

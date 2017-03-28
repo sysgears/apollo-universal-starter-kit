@@ -1,21 +1,34 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { Form, FormGroup, Label, Button } from 'reactstrap'
+import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap'
+
+const required = value => value ? undefined : 'Required';
+
+const renderField = ({ input, label, type, meta: { touched, error } }) => {
+  let color = 'normal';
+  if (touched && error) {
+    color = 'danger';
+  }
+
+  return (
+    <FormGroup color={color}>
+      <Label>{label}</Label>
+      <div>
+        <Input {...input} placeholder={label} type={type}/>
+        {touched && ((error && <FormFeedback>{error}</FormFeedback>))}
+      </div>
+    </FormGroup>
+  )
+};
 
 const PostForm = (props) => {
-  const { handleSubmit, onSubmit } = props;
+  const { handleSubmit, submitting, onSubmit } = props;
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormGroup>
-        <Label htmlFor="title">Title</Label>
-        <Field name="title" className="form-control" component="input" type="text"/>
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="content">Contnent</Label>
-        <Field name="content" className="form-control" component="input" type="text"/>
-      </FormGroup>
-      <Button color="primary" type="submit">
+      <Field name="title" component={renderField} type="text" label="Title" validate={required}/>
+      <Field name="content" component={renderField} type="text" label="Contnent" validate={required}/>
+      <Button color="primary" type="submit" disabled={submitting}>
         Submit
       </Button>
     </Form>

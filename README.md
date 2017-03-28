@@ -184,6 +184,8 @@ predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` fi
 
 - [GraphQL Cursor Pagination] Example of [Relay-style cursor pagination]
 
+- [ReduxForm] Full CRUD funcionality in post example
+
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
@@ -206,6 +208,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [React]: https://facebook.github.io/react
 [React Hot Loader v3]: https://github.com/gaearon/react-hot-loader
 [Redux]: http://redux.js.org
+[ReduxForm]: http://redux-form.com
 [Express]: http://expressjs.com
 [Twitter Bootstrap]: http://getbootstrap.com
 [Webpack]: http://webpack.github.io

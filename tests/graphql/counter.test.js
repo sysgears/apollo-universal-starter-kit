@@ -2,7 +2,7 @@ import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { mockServer } from "graphql-tools";
 
-import schema from "../../src/server/api/schema_def.graphqls";
+import schema from "../../src/server/api/graphqls/schema_def.graphqls";
 import AMOUNT_QUERY from '!raw-loader!../../src/ui/graphql/CountGet.graphql'
 import ADD_COUNT_MUTATION from "!raw-loader!../../src/ui/graphql/CountAddMutation.graphql";
 

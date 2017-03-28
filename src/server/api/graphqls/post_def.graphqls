@@ -1,9 +1,3 @@
-# Database counter
-type Count {
-  # Current amount
-  amount: Int!
-}
-
 # Post
 type Post {
   id: ID!
@@ -37,21 +31,14 @@ type PostsQuery {
   pageInfo: PageInfo
 }
 
-type Query {
-  # Counter
-  count: Count
+extend type Query {
   # Posts pagination query
   postsQuery(first: Int, after: ID): PostsQuery
   # Post
   post(id: ID!): Post
 }
 
-type Mutation {
-  # Increase counter value, returns current counter amount
-  addCount(
-    # Amount to add to counter
-    amount: Int!
-  ): Count
+extend type Mutation {
   # Create new post
   addPost(title: String!, content: String!): Post
   # Delete a post
@@ -64,15 +51,4 @@ type Mutation {
   deleteComment(id: ID!): Comment
   # Edit a comment
   editComment(id: ID!, content: String!): Comment
-}
-
-type Subscription {
-  # Subscription fired when anyone increases counter
-  countUpdated(ids: String): Count
-}
-
-schema {
-  query: Query
-  mutation: Mutation
-  subscription: Subscription
 }

@@ -3,7 +3,7 @@ import { graphql, compose, withApollo } from 'react-apollo'
 import update from 'react-addons-update'
 import { Link } from 'react-router-dom'
 
-import PostForm from './post_form'
+import PostForm from '../components/post_form'
 
 import POST_ADD from '../graphql/post_add.graphql'
 

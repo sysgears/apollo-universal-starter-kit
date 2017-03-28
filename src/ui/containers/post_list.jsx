@@ -5,7 +5,6 @@ import { css } from 'glamor'
 import { Link } from 'react-router-dom'
 import { ListGroup, ListGroupItem, Button } from 'reactstrap'
 
-import log from '../../log'
 import POSTS_QUERY from '../graphql/posts_get.graphql'
 import POST_DELETE from '../graphql/post_delete.graphql'
 

@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 
 import PostForm from './post_form'
 
-import log from '../../log'
 import POST_ADD from '../graphql/post_add.graphql'
 
 class PostAdd extends React.Component {
@@ -20,7 +19,6 @@ class PostAdd extends React.Component {
       <div>
         <Link to="/posts">Back</Link>
         <h2>Create Post</h2>
-
         <PostForm onSubmit={this.onSubmit.bind(this)} />
       </div>
     );

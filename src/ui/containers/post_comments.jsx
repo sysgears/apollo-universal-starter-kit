@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { graphql, compose, withApollo } from 'react-apollo'
 import update from 'react-addons-update'
-import { reset } from 'redux-form';
+import { reset } from 'redux-form'
 import { ListGroup, ListGroupItem } from 'reactstrap'
 
 import CommentForm from './post_comment_form'
@@ -15,18 +15,18 @@ class PostComments extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { id: null, content: '' };
+    props.onCommentSelect({ id: null, content: '' });
   }
 
   renderComments() {
-    const { comments, deleteComment } = this.props;
+    const { comments, deleteComment, onCommentSelect } = this.props;
 
     return comments.map(({ id, content }) => {
       return (
         <ListGroupItem className="justify-content-between" key={id}>
           {content}
           <div>
-            <span className="badge badge-default badge-pill" onClick={event => this.setState({ id, content })}>Edit</span>
+            <span className="badge badge-default badge-pill" onClick={() => onCommentSelect({ id, content })}>Edit</span>
             <span className="badge badge-default badge-pill" onClick={deleteComment(id)}>Delete</span>
           </div>
         </ListGroupItem>
@@ -35,26 +35,26 @@ class PostComments extends React.Component {
   }
 
   onSubmit(values) {
-    const { addComment, editComment, postId, onFormSubmitted } = this.props;
+    const { addComment, editComment, postId, comment, onCommentSelect, onFormSubmitted } = this.props;
 
-    if (this.state.id === null) {
+    if (comment.id === null) {
       addComment(values.content, postId);
     }
     else {
-      editComment(this.state.id, values.content);
+      editComment(comment.id, values.content);
     }
 
-    this.setState({ id: null, content: '' });
+    onCommentSelect({ id: null, content: '' });
     onFormSubmitted();
   }
 
   render() {
-    const { postId } = this.props;
+    const { postId, comment } = this.props;
 
     return (
       <div>
         <h3>Comments</h3>
-        <CommentForm postId={postId} onSubmit={this.onSubmit.bind(this)} initialValues={this.state}/>
+        <CommentForm postId={postId} onSubmit={this.onSubmit.bind(this)} initialValues={comment}/>
         <h1/>
         <ListGroup>{this.renderComments()}</ListGroup>
       </div>
@@ -65,9 +65,11 @@ class PostComments extends React.Component {
 PostComments.propTypes = {
   postId: React.PropTypes.string.isRequired,
   comments: React.PropTypes.array.isRequired,
+  comment: React.PropTypes.object.isRequired,
   addComment: React.PropTypes.func.isRequired,
   editComment: React.PropTypes.func.isRequired,
   deleteComment: React.PropTypes.func.isRequired,
+  onCommentSelect: React.PropTypes.func.isRequired,
   onFormSubmitted: React.PropTypes.func.isRequired,
 };
 
@@ -144,10 +146,15 @@ const PostCommentsWithApollo = withApollo(compose(
 )(PostComments));
 
 export default connect(
-  (state) => ({}),
+  (state) => ({ comment: state.post.comment }),
   (dispatch) => ({
-    onFormSubmitted()
-    {
+    onCommentSelect(comment) {
+      dispatch({
+        type: 'COMMENT_SELECT',
+        value: comment
+      });
+    },
+    onFormSubmitted() {
       dispatch(reset('comment'));
     }
   }),

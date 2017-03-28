@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form'
 import { Form, FormGroup, Label, Button } from 'reactstrap'
 
 const PostForm = (props) => {

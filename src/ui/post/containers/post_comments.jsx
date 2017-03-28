@@ -5,7 +5,7 @@ import update from 'react-addons-update'
 import { reset } from 'redux-form'
 import { ListGroup, ListGroupItem } from 'reactstrap'
 
-import CommentForm from './post_comment_form'
+import CommentForm from '../components/post_comment_form'
 
 import COMMENT_ADD from '../graphql/post_comment_add.graphql'
 import COMMENT_EDIT from '../graphql/post_comment_edit.graphql'

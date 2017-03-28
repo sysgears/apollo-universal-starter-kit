@@ -1,10 +1,10 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import Counter from './ui/containers/counter'
-import PostList from './ui/containers/post_list'
-import PostAdd from './ui/containers/post_add'
-import PostEdit from './ui/containers/post_edit'
+import Counter from './ui/counter/containers/counter'
+import PostList from './ui/post/containers/post_list'
+import PostAdd from './ui/post/containers/post_add'
+import PostEdit from './ui/post/containers/post_edit'
 import App from './ui/components/app'
 
 export default (

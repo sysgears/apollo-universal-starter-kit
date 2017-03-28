@@ -2,7 +2,7 @@ import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
 import { Link } from 'react-router-dom'
 
-import PostForm from './post_form'
+import PostForm from '../components/post_form'
 import PostComments from './post_comments'
 
 import POST_EDIT from '../graphql/post_edit.graphql'

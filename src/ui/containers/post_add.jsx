@@ -1,9 +1,9 @@
 import React from 'react'
 import { graphql, compose, withApollo } from 'react-apollo'
 import update from 'react-addons-update'
-import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom'
-import { Form, FormGroup, Label, Button } from 'reactstrap'
+
+import PostForm from './post_form'
 
 import log from '../../log'
 import POST_ADD from '../graphql/post_add.graphql'
@@ -16,26 +16,12 @@ class PostAdd extends React.Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
-
     return (
-      <div className="mt-4 mb-4">
+      <div>
         <Link to="/posts">Back</Link>
         <h2>Create Post</h2>
 
-        <Form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-          <FormGroup>
-            <Label htmlFor="title">Title</Label>
-            <Field name="title" className="form-control" component="input" type="text"/>
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="content">Contnent</Label>
-            <Field name="content" className="form-control" component="input" type="text"/>
-          </FormGroup>
-          <Button color="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
+        <PostForm onSubmit={this.onSubmit.bind(this)} />
       </div>
     );
   }
@@ -46,9 +32,6 @@ PostAdd.propTypes = {
 };
 
 const PostAddWithApollo = withApollo(compose(
-  reduxForm({
-    form: 'contact'
-  }),
   graphql(POST_ADD, {
     props: ({ ownProps, mutate }) => ({
       addPost: (title, content) => mutate({

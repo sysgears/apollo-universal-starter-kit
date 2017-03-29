@@ -33,7 +33,7 @@ const PostAddWithApollo = withApollo(compose(
   graphql(POST_ADD, {
     props: ({ ownProps, mutate }) => ({
       addPost: (title, content) => mutate({
-        variables: { title, content },
+        variables: { input: { title, content } },
         optimisticResponse: {
           addPost: {
             id: -1,

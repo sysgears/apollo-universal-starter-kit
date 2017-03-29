@@ -40,15 +40,36 @@ extend type Query {
 
 extend type Mutation {
   # Create new post
-  addPost(title: String!, content: String!): Post
+  addPost(input: AddPostInput!): Post
   # Delete a post
   deletePost(id: ID!): Post
   # Edit a post
-  editPost(id: ID!, title: String!, content: String!): Post
+  editPost(input: EditPostInput!): Post
   # Add comment to post
-  addComment(content: String!, postId: ID!): Comment
+  addComment(input: AddCommentInput!): Comment
   # Delete a comment
   deleteComment(id: ID!): Comment
   # Edit a comment
-  editComment(id: ID!, content: String!): Comment
+  editComment(input: EditCommentInput!): Comment
+}
+
+input AddPostInput {
+  title: String!
+  content: String!
+}
+
+input EditPostInput {
+  id: ID!
+  title: String!
+  content: String!
+}
+
+input AddCommentInput {
+  content: String!
+  postId: ID!
+}
+
+input EditCommentInput {
+  id: ID!
+  content: String!
 }

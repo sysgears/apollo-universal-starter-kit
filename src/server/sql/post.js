@@ -17,7 +17,7 @@ export default class Post {
   getPostsPagination(first, after) {
 
     let where = '';
-    if (after > 0 ) {
+    if (after > 0) {
       where = `id < ${after}`;
     }
 
@@ -55,15 +55,15 @@ export default class Post {
       .first();
   }
 
-  addPost(title, content) {
-    return knex('post').insert({ title, content });
+  addPost(input) {
+    return knex('post').insert({ ...input });
   }
 
   deletePost(id) {
     return knex('post').where('id', '=', id).del();
   }
 
-  editPost(id, title, content) {
+  editPost({ id, title, content }) {
     return knex('post')
       .where('id', '=', id)
       .update({
@@ -72,7 +72,7 @@ export default class Post {
       });
   }
 
-  addComment(content, postId) {
+  addComment({content, postId}) {
     return knex('comment').insert({ content, post_id: postId });
   }
 
@@ -88,7 +88,7 @@ export default class Post {
     return knex('comment').where('id', '=', id).del();
   }
 
-  editComment(id, content) {
+  editComment({id, content}) {
     return knex('comment')
       .where('id', '=', id)
       .update({

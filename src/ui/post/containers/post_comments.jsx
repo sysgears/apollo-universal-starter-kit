@@ -87,7 +87,7 @@ const PostCommentsWithApollo = withApollo(compose(
   graphql(COMMENT_ADD, {
     props: ({ ownProps, mutate }) => ({
       addComment: (content, postId) => mutate({
-        variables: { content, postId },
+        variables: { input: { content, postId } },
         optimisticResponse: {
           addComment: {
             id: -1,
@@ -112,7 +112,7 @@ const PostCommentsWithApollo = withApollo(compose(
   graphql(COMMENT_EDIT, {
     props: ({ ownProps, mutate }) => ({
       editComment: (id, content) => mutate({
-        variables: { id, content },
+        variables: { input: { id, content } },
         optimisticResponse: {
           __typename: 'Mutation',
           editComment: {

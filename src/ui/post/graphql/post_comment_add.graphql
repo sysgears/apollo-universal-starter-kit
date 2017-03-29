@@ -1,6 +1,7 @@
-mutation addComment($content: String!, $postId: ID!) {
-    addComment(content: $content, postId: $postId) {
-        id
-        content
+#import "./comment.graphql"
+
+mutation addComment($input: AddCommentInput!) {
+    addComment(input: $input) {
+        ... CommentInfo
     }
 }

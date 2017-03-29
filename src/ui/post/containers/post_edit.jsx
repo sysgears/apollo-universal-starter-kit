@@ -56,7 +56,7 @@ const PostEditWithApollo = withApollo(compose(
   graphql(POST_EDIT, {
     props: ({ ownProps, mutate }) => ({
       editPost: (id, title, content) => mutate({
-        variables: { id, title, content }
+        variables: { input: { id, title, content } }
       }).then(() => ownProps.history.push('/posts')),
     })
   })

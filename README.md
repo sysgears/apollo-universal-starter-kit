@@ -182,7 +182,7 @@ predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` fi
 
 - [Dataloader] for loading comments in post example
 
-- [GraphQL Cursor Pagination] Example of [Relay-style cursor pagination]
+- [GraphQL Cursor Pagination] Example of  [Relay-style cursor pagination]
 
 - [ReduxForm] Full CRUD funcionality in post example
 

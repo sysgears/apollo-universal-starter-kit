@@ -35,6 +35,11 @@ const PostForm = (props) => {
   );
 };
 
+PostForm.propTypes = {
+  handleSubmit: React.PropTypes.func,
+  onSubmit: React.PropTypes.func,
+};
+
 export default reduxForm({
   form: 'post'
 })(PostForm);

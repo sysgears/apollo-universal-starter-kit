@@ -8,7 +8,10 @@ const subscriptionManager = new SubscriptionManager({
     countUpdated: () => ({
       // Run the query each time count updated
       countUpdated: () => true
-    })
+    }),
+    commentUpdated: () => ({
+      commentUpdated: () => true,
+    }),
   },
 });
 

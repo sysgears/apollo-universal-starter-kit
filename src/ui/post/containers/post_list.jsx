@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql, compose, withApollo } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import update from 'react-addons-update'
 import { css } from 'glamor'
 import { Link } from 'react-router-dom'
@@ -77,9 +77,10 @@ PostList.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   postsQuery: React.PropTypes.object,
   deletePost: React.PropTypes.func.isRequired,
+  loadMoreRows: React.PropTypes.func.isRequired,
 };
 
-const PostListWithApollo = withApollo(compose(
+const PostListWithApollo = compose(
   graphql(POSTS_QUERY, {
     options: (props) => {
       let after = props.endCursor || 0;
@@ -87,7 +88,7 @@ const PostListWithApollo = withApollo(compose(
         variables: { first: 10, after: after },
       };
     },
-    props: ({ ownProps, data }) => {
+    props: ({ data }) => {
       const { loading, postsQuery, fetchMore } = data;
       const loadMoreRows = () => {
         return fetchMore({
@@ -116,7 +117,7 @@ const PostListWithApollo = withApollo(compose(
     }
   }),
   graphql(POST_DELETE, {
-    props: ({ ownProps, mutate }) => ({
+    props: ({ mutate }) => ({
       deletePost(id){
         return () => mutate({
           variables: { id },
@@ -147,6 +148,6 @@ const PostListWithApollo = withApollo(compose(
       },
     })
   })
-)(PostList));
+)(PostList);
 
 export default PostListWithApollo;

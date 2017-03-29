@@ -73,3 +73,13 @@ input EditCommentInput {
   id: ID!
   content: String!
 }
+
+extend type Subscription {
+  commentUpdated(commentIds: [ID!]): UpdateCommentPayload
+}
+
+type UpdateCommentPayload {
+  mutation: String!
+  node: Comment
+  previousValue: Comment
+}

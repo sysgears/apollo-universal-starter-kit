@@ -43,6 +43,12 @@ const CommentForm = (props) => {
   );
 };
 
+CommentForm.propTypes = {
+  handleSubmit: React.PropTypes.func,
+  initialValues: React.PropTypes.object,
+  onSubmit: React.PropTypes.func,
+};
+
 export default reduxForm({
   form: 'comment',
   enableReinitialize: true

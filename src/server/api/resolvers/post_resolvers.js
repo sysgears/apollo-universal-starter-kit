@@ -1,4 +1,6 @@
-export const resolvers = {
+import { pubsub } from '../schema'
+
+export const postResolvers = {
   Query: {
     postsQuery(obj, { first, after }, context) {
       let edgesArray = [];
@@ -68,14 +70,14 @@ export const resolvers = {
       return context.Post.addComment(input)
         .then((id) => context.Post.getComment(id[ 0 ]))
         .then(comment => {
-          //pubsub.publish('addComment', comment);
+          pubsub.publish('commentUpdated', { mutation: 'CREATED', node: comment, previousValue: null });
           return comment;
         });
     },
     deleteComment(obj, { id }, context) {
       return context.Post.deleteComment(id)
         .then(() => {
-          //pubsub.publish('deleteComment', id);
+          pubsub.publish('commentUpdated', { mutation: 'DELETED', node: null, previousValue: { id, content: '' } });
           return { id };
         });
     },
@@ -83,9 +85,14 @@ export const resolvers = {
       return context.Post.editComment(input)
         .then(() => context.Post.getComment(input.id))
         .then(comment => {
-          //pubsub.publish('editComment', post);
+          pubsub.publish('commentUpdated', { mutation: 'UPDATED', node: comment, previousValue: null });
           return comment;
         });
+    },
+  },
+  Subscription: {
+    commentUpdated(value) {
+      return value;
     },
   }
 };

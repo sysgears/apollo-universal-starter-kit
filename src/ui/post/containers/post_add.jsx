@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql, compose, withApollo } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import update from 'react-addons-update'
 import { Link } from 'react-router-dom'
 
@@ -29,7 +29,7 @@ PostAdd.propTypes = {
   addPost: React.PropTypes.func.isRequired,
 };
 
-const PostAddWithApollo = withApollo(compose(
+const PostAddWithApollo = compose(
   graphql(POST_ADD, {
     props: ({ ownProps, mutate }) => ({
       addPost: (title, content) => mutate({
@@ -72,6 +72,6 @@ const PostAddWithApollo = withApollo(compose(
       }).then(() => ownProps.history.push('/posts')),
     })
   })
-)(PostAdd));
+)(PostAdd);
 
 export default PostAddWithApollo;

@@ -1,0 +1,13 @@
+#import "./comment.graphql"
+
+subscription onCommentUpdated($commentIds: [ID!]) {
+    commentUpdated(commentIds: $commentIds) {
+        mutation
+        node {
+            ... CommentInfo
+        }
+        previousValue {
+            ... CommentInfo
+        }
+    }
+}

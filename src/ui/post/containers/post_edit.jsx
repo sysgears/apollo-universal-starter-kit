@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql, compose, withApollo } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import { Link } from 'react-router-dom'
 
 import PostForm from '../components/post_form'
@@ -16,7 +16,7 @@ class PostEdit extends React.Component {
   }
 
   render() {
-    const { loading, post, match } = this.props;
+    const { loading, post, match, subscribeToMore } = this.props;
 
     if (loading) {
       return (
@@ -29,7 +29,7 @@ class PostEdit extends React.Component {
           <h2>Edit Post</h2>
           <PostForm onSubmit={this.onSubmit.bind(this)} initialValues={post}/>
           <br/>
-          <PostComments postId={match.params.id} comments={post.comments}/>
+          <PostComments postId={match.params.id} comments={post.comments} subscribeToMore={subscribeToMore}/>
         </div>
       );
     }
@@ -40,17 +40,19 @@ PostEdit.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   post: React.PropTypes.object,
   editPost: React.PropTypes.func.isRequired,
+  match: React.PropTypes.object.isRequired,
+  subscribeToMore: React.PropTypes.func.isRequired,
 };
 
-const PostEditWithApollo = withApollo(compose(
+const PostEditWithApollo = compose(
   graphql(POST_QUERY, {
     options: (props) => {
       return {
         variables: { id: props.match.params.id }
       };
     },
-    props({ data: { loading, post } }) {
-      return { loading, post };
+    props({ data: { loading, post, subscribeToMore } }) {
+      return { loading, post, subscribeToMore };
     }
   }),
   graphql(POST_EDIT, {
@@ -60,6 +62,6 @@ const PostEditWithApollo = withApollo(compose(
       }).then(() => ownProps.history.push('/posts')),
     })
   })
-)(PostEdit));
+)(PostEdit);
 
 export default PostEditWithApollo;

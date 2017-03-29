@@ -26,27 +26,21 @@ class PostComments extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // Check if props have changed and, if necessary, stop the subscription
-    if (this.subscription && this.props.comments !== nextProps.comments) {
+    if (this.subscription && this.props.postId !== nextProps.postId) {
       this.subscription.unsubscribe();
       this.subscription = null;
     }
 
-    let commentIds = [];
-    nextProps.comments.map(comment => {
-      commentIds.push(parseInt(comment.id));
-    });
-
     // Subscribe or re-subscribe
     if (!this.subscription) {
-      this.systemsSub = nextProps.subscribeToMore({
+      this.subscription = nextProps.subscribeToMore({
         document: COMMENT_SUBSCRIPTION,
-        variables: { commentIds: commentIds },
-        updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, node, previousValue } } } }) => {
+        variables: { postId: nextProps.postId },
+        updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
 
           let newResult;
 
-          if (mutation == 'CREATED') {
-
+          if (mutation === 'CREATED') {
             if (isDuplicateComment(node, prev.post.comments)) {
               return prev;
             }
@@ -58,8 +52,8 @@ class PostComments extends React.Component {
                 }
               }
             });
-          } else if (mutation == 'DELETED') {
-            const index = prev.post.comments.findIndex(x => x.id == previousValue.id);
+          } else if (mutation === 'DELETED') {
+            const index = prev.post.comments.findIndex(x => x.id === id);
 
             if (index >= 0) {
               newResult = update(prev, {
@@ -186,9 +180,9 @@ const PostCommentsWithApollo = compose(
     })
   }),
   graphql(COMMENT_EDIT, {
-    props: ({ mutate }) => ({
+    props: ({ ownProps: { postId }, mutate }) => ({
       editComment: (id, content) => mutate({
-        variables: { input: { id, content } },
+        variables: { input: { id, postId, content } },
         optimisticResponse: {
           __typename: 'Mutation',
           editComment: {
@@ -201,9 +195,9 @@ const PostCommentsWithApollo = compose(
     })
   }),
   graphql(COMMENT_DELETE, {
-    props: ({ mutate }) => ({
+    props: ({ ownProps: { postId },  mutate }) => ({
       deleteComment: (id) => mutate({
-        variables: { id },
+        variables: { input: { id, postId } },
         optimisticResponse: {
           __typename: 'Mutation',
           deleteComment: {
@@ -213,7 +207,7 @@ const PostCommentsWithApollo = compose(
         },
         updateQueries: {
           getPost: (prev, { mutationResult: { data: { deleteComment } } }) => {
-            const index = prev.post.comments.findIndex(x => x.id == deleteComment.id);
+            const index = prev.post.comments.findIndex(x => x.id === deleteComment.id);
 
             if (index >= 0) {
               return update(prev, {

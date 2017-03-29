@@ -129,8 +129,8 @@ const PostListWithApollo = compose(
             },
           },
           updateQueries: {
-            getPosts: (prev, { mutationResult }) => {
-              const index = prev.postsQuery.edges.findIndex(x => x.node.id == mutationResult.data.deletePost.id);
+            getPosts: (prev, { mutationResult: { data: { deletePost } } }) => {
+              const index = prev.postsQuery.edges.findIndex(x => x.node.id === deletePost.id);
 
               return update(prev, {
                 postsQuery: {

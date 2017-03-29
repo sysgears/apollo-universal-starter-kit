@@ -1,6 +1,6 @@
 import { pubsub } from '../schema'
 
-export const postResolvers = {
+const postResolvers = {
   Query: {
     postsQuery(obj, { first, after }, context) {
       let edgesArray = [];
@@ -70,14 +70,14 @@ export const postResolvers = {
       return context.Post.addComment(input)
         .then((id) => context.Post.getComment(id[ 0 ]))
         .then(comment => {
-          pubsub.publish('commentUpdated', { mutation: 'CREATED', node: comment, previousValue: null });
+          pubsub.publish('commentUpdated', { mutation: 'CREATED', id: comment.id, postId: input.postId, node: comment });
           return comment;
         });
     },
-    deleteComment(obj, { id }, context) {
+    deleteComment(obj, { input: { id, postId } }, context) {
       return context.Post.deleteComment(id)
         .then(() => {
-          pubsub.publish('commentUpdated', { mutation: 'DELETED', node: null, previousValue: { id, content: '' } });
+          pubsub.publish('commentUpdated', { mutation: 'DELETED', id, postId, node: null });
           return { id };
         });
     },
@@ -85,7 +85,7 @@ export const postResolvers = {
       return context.Post.editComment(input)
         .then(() => context.Post.getComment(input.id))
         .then(comment => {
-          pubsub.publish('commentUpdated', { mutation: 'UPDATED', node: comment, previousValue: null });
+          pubsub.publish('commentUpdated', { mutation: 'UPDATED', id: input.id, postId: input.postId, node: comment });
           return comment;
         });
     },
@@ -96,3 +96,5 @@ export const postResolvers = {
     },
   }
 };
+
+export default postResolvers;

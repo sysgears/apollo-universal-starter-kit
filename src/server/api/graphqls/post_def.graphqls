@@ -48,7 +48,7 @@ extend type Mutation {
   # Add comment to post
   addComment(input: AddCommentInput!): Comment
   # Delete a comment
-  deleteComment(id: ID!): Comment
+  deleteComment(input: DeleteCommentInput!): Comment
   # Edit a comment
   editComment(input: EditCommentInput!): Comment
 }
@@ -65,21 +65,27 @@ input EditPostInput {
 }
 
 input AddCommentInput {
+  postId: ID!
   content: String!
+}
+
+input DeleteCommentInput {
+  id: ID!
   postId: ID!
 }
 
 input EditCommentInput {
   id: ID!
+  postId: ID!
   content: String!
 }
 
 extend type Subscription {
-  commentUpdated(commentIds: [ID!]): UpdateCommentPayload
+  commentUpdated(postId: ID!): UpdateCommentPayload
 }
 
 type UpdateCommentPayload {
   mutation: String!
+  id: ID
   node: Comment
-  previousValue: Comment
 }

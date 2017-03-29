@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import serialize from 'serialize-javascript'
 
 const Html = ({ content, state, assetMap, css }) => {
   return (
@@ -27,7 +28,7 @@ const Html = ({ content, state, assetMap, css }) => {
     <body>
     <div id="content" dangerouslySetInnerHTML={{ __html: content || "" }} />
     <script
-      dangerouslySetInnerHTML={{ __html: `window.__APOLLO_STATE__=${JSON.stringify(state)};` }}
+      dangerouslySetInnerHTML={{ __html: `window.__APOLLO_STATE__=${serialize(state, { isJSON: true })};` }}
       charSet="UTF-8"
     />
     {assetMap["vendor.js"] && <script src={`/${assetMap["vendor.js"]}`} charSet="utf-8" />}

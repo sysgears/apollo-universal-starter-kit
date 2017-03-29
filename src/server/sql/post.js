@@ -72,7 +72,7 @@ export default class Post {
       });
   }
 
-  addComment({content, postId}) {
+  addComment({ content, postId }) {
     return knex('comment').insert({ content, post_id: postId });
   }
 
@@ -88,7 +88,7 @@ export default class Post {
     return knex('comment').where('id', '=', id).del();
   }
 
-  editComment({id, content}) {
+  editComment({ id, content }) {
     return knex('comment')
       .where('id', '=', id)
       .update({

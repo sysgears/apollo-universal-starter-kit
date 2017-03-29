@@ -1,10 +1,9 @@
 import { makeExecutableSchema, addErrorLoggingToSchema } from 'graphql-tools'
 import { PubSub } from 'graphql-subscriptions'
-import { merge } from 'lodash';
+import { merge } from 'lodash'
 
 import log from '../../log'
-
-import { resolvers as postResolvers } from './resolvers/post_resolvers';
+import postResolvers from './resolvers/post_resolvers'
 
 import schema from './graphqls/schema_def.graphqls'
 import postSchema from './graphqls/post_def.graphqls'

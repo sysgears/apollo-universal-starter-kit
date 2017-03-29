@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { graphql, compose, withApollo } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import update from 'react-addons-update'
 import { reset } from 'redux-form'
 import { ListGroup, ListGroupItem } from 'reactstrap'
@@ -10,23 +10,87 @@ import CommentForm from '../components/post_comment_form'
 import COMMENT_ADD from '../graphql/post_comment_add.graphql'
 import COMMENT_EDIT from '../graphql/post_comment_edit.graphql'
 import COMMENT_DELETE from '../graphql/post_comment_delete.graphql'
+import COMMENT_SUBSCRIPTION from '../graphql/post_comment_subscription.graphql'
+
+function isDuplicateComment(newComment, existingComments) {
+  return newComment.id !== null && existingComments.some(comment => newComment.id === comment.id);
+}
 
 class PostComments extends React.Component {
   constructor(props) {
     super(props);
 
     props.onCommentSelect({ id: null, content: '' });
+    this.subscription = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // Check if props have changed and, if necessary, stop the subscription
+    if (this.subscription && this.props.postId !== nextProps.postId) {
+      this.subscription.unsubscribe();
+      this.subscription = null;
+    }
+
+    // Subscribe or re-subscribe
+    if (!this.subscription) {
+      this.subscription = nextProps.subscribeToMore({
+        document: COMMENT_SUBSCRIPTION,
+        variables: { postId: nextProps.postId },
+        updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
+
+          let newResult;
+
+          if (mutation === 'CREATED') {
+            if (isDuplicateComment(node, prev.post.comments)) {
+              return prev;
+            }
+
+            newResult = update(prev, {
+              post: {
+                comments: {
+                  $push: [ node ],
+                }
+              }
+            });
+          } else if (mutation === 'DELETED') {
+            const index = prev.post.comments.findIndex(x => x.id === id);
+
+            if (index >= 0) {
+              newResult = update(prev, {
+                post: {
+                  comments: {
+                    $splice: [ [ index, 1 ] ],
+                  }
+                }
+              });
+            }
+          } else {
+            newResult = prev;
+          }
+
+          return newResult;
+        },
+        onError: (err) => console.error(err),
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   renderComments() {
-    const { comments, deleteComment, onCommentSelect } = this.props;
+    const { comments, onCommentSelect } = this.props;
 
     return comments.map(({ id, content }) => {
       return (
         <ListGroupItem className="justify-content-between" key={id}>
           {content}
           <div>
-            <span className="badge badge-default badge-pill" onClick={() => onCommentSelect({ id, content })}>Edit</span>
+            <span className="badge badge-default badge-pill"
+                  onClick={() => onCommentSelect({ id, content })}>Edit</span>
             <span className="badge badge-default badge-pill" onClick={() => this.onCommentDelete(id)}>Delete</span>
           </div>
         </ListGroupItem>
@@ -37,7 +101,7 @@ class PostComments extends React.Component {
   onCommentDelete(id) {
     const { comment, deleteComment, onCommentSelect } = this.props;
 
-    if ( comment.id === id) {
+    if (comment.id === id) {
       onCommentSelect({ id: null, content: '' });
     }
 
@@ -81,11 +145,12 @@ PostComments.propTypes = {
   deleteComment: React.PropTypes.func.isRequired,
   onCommentSelect: React.PropTypes.func.isRequired,
   onFormSubmitted: React.PropTypes.func.isRequired,
+  subscribeToMore: React.PropTypes.func.isRequired,
 };
 
-const PostCommentsWithApollo = withApollo(compose(
+const PostCommentsWithApollo = compose(
   graphql(COMMENT_ADD, {
-    props: ({ ownProps, mutate }) => ({
+    props: ({ mutate }) => ({
       addComment: (content, postId) => mutate({
         variables: { input: { content, postId } },
         optimisticResponse: {
@@ -96,11 +161,16 @@ const PostCommentsWithApollo = withApollo(compose(
           },
         },
         updateQueries: {
-          getPost: (prev, { mutationResult }) => {
+          getPost: (prev, { mutationResult: { data: { addComment } } }) => {
+
+            if (isDuplicateComment(addComment, prev.post.comments)) {
+              return prev;
+            }
+
             return update(prev, {
               post: {
                 comments: {
-                  $push: [ mutationResult.data.addComment ],
+                  $push: [ addComment ],
                 }
               }
             });
@@ -110,9 +180,9 @@ const PostCommentsWithApollo = withApollo(compose(
     })
   }),
   graphql(COMMENT_EDIT, {
-    props: ({ ownProps, mutate }) => ({
+    props: ({ ownProps: { postId }, mutate }) => ({
       editComment: (id, content) => mutate({
-        variables: { input: { id, content } },
+        variables: { input: { id, postId, content } },
         optimisticResponse: {
           __typename: 'Mutation',
           editComment: {
@@ -125,9 +195,9 @@ const PostCommentsWithApollo = withApollo(compose(
     })
   }),
   graphql(COMMENT_DELETE, {
-    props: ({ ownProps, mutate }) => ({
+    props: ({ ownProps: { postId },  mutate }) => ({
       deleteComment: (id) => mutate({
-        variables: { id },
+        variables: { input: { id, postId } },
         optimisticResponse: {
           __typename: 'Mutation',
           deleteComment: {
@@ -136,22 +206,24 @@ const PostCommentsWithApollo = withApollo(compose(
           },
         },
         updateQueries: {
-          getPost: (prev, { mutationResult }) => {
-            const index = prev.post.comments.findIndex(x => x.id == mutationResult.data.deleteComment.id);
+          getPost: (prev, { mutationResult: { data: { deleteComment } } }) => {
+            const index = prev.post.comments.findIndex(x => x.id === deleteComment.id);
 
-            return update(prev, {
-              post: {
-                comments: {
-                  $splice: [ [ index, 1 ] ],
+            if (index >= 0) {
+              return update(prev, {
+                post: {
+                  comments: {
+                    $splice: [ [ index, 1 ] ],
+                  }
                 }
-              }
-            });
+              });
+            }
           }
         }
       }),
     })
   })
-)(PostComments));
+)(PostComments);
 
 export default connect(
   (state) => ({ comment: state.post.comment }),

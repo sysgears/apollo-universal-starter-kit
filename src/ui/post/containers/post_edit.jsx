@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import { Link } from 'react-router-dom'
 
@@ -71,6 +72,7 @@ PostEdit.propTypes = {
   editPost: React.PropTypes.func.isRequired,
   match: React.PropTypes.object.isRequired,
   subscribeToMore: React.PropTypes.func.isRequired,
+  endCursor: React.PropTypes.string.isRequired,
 };
 
 const PostEditWithApollo = compose(
@@ -85,12 +87,15 @@ const PostEditWithApollo = compose(
     }
   }),
   graphql(POST_EDIT, {
-    props: ({ ownProps, mutate }) => ({
+    props: ({ ownProps: { endCursor, history }, mutate }) => ({
       editPost: (id, title, content) => mutate({
-        variables: { input: { id, title, content } }
-      }).then(() => ownProps.history.push('/posts')),
+        variables: { input: { id, title, content, endCursor } }
+      }).then(() => history.push('/posts')),
     })
   })
 )(PostEdit);
 
-export default PostEditWithApollo;
+export default connect(
+  (state) => ({ endCursor: state.post.endCursor }),
+  (dispatch) => ({}),
+)(PostEditWithApollo);

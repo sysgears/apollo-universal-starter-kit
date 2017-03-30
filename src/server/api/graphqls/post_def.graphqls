@@ -42,7 +42,7 @@ extend type Mutation {
   # Create new post
   addPost(input: AddPostInput!): Post
   # Delete a post
-  deletePost(id: ID!): Post
+  deletePost(input: DeletePostInput!): Post
   # Edit a post
   editPost(input: EditPostInput!): Post
   # Add comment to post
@@ -56,12 +56,19 @@ extend type Mutation {
 input AddPostInput {
   title: String!
   content: String!
+  endCursor: ID
+}
+
+input DeletePostInput {
+  id: ID!
+  endCursor: ID
 }
 
 input EditPostInput {
   id: ID!
   title: String!
   content: String!
+  endCursor: ID
 }
 
 input AddCommentInput {

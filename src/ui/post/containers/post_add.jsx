@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { graphql, compose } from 'react-apollo'
 import update from 'react-addons-update'
 import { Link } from 'react-router-dom'
@@ -31,19 +32,19 @@ class PostAdd extends React.Component {
 
 PostAdd.propTypes = {
   addPost: React.PropTypes.func.isRequired,
+  endCursor: React.PropTypes.string.isRequired,
 };
 
 const PostAddWithApollo = compose(
   graphql(POST_ADD, {
-    props: ({ ownProps, mutate }) => ({
+    props: ({ ownProps: { endCursor, history }, mutate }) => ({
       addPost: (title, content) => mutate({
-        variables: { input: { title, content } },
+        variables: { input: { title, content, endCursor } },
         optimisticResponse: {
           addPost: {
             id: -1,
             title: title,
             content: content,
-            comments: [],
             __typename: 'Post',
           },
         },
@@ -59,7 +60,6 @@ const PostAddWithApollo = compose(
                 id: addPost.id,
                 title: addPost.title,
                 content: addPost.content,
-                comments: [],
                 __typename: 'Post'
               },
               __typename: 'Edges'
@@ -77,9 +77,12 @@ const PostAddWithApollo = compose(
             });
           }
         }
-      }).then(() => ownProps.history.push('/posts')),
+      }).then(() => history.push('/posts')),
     })
   })
 )(PostAdd);
 
-export default PostAddWithApollo;
+export default connect(
+  (state) => ({ endCursor: state.post.endCursor }),
+  (dispatch) => ({}),
+)(PostAddWithApollo);

@@ -5,7 +5,9 @@ const postSetupFunctions = {
     },
   }),
   postsUpdated: (options, args) => ({
-    postsUpdated: () => true
+    postsUpdated: {
+      filter: post => args.endCursor <= post.id
+    }
   }),
   commentUpdated: (options, args) => ({
     commentUpdated: {

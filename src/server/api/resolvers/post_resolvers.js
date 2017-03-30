@@ -47,14 +47,14 @@ const postResolvers = {
       return context.Post.addPost(input)
         .then((id) => context.Post.getPost(id[ 0 ]))
         .then(post => {
-          pubsub.publish('postsUpdated', { mutation: 'CREATED', id: post.id, endCursor: 0, node: post });
+          pubsub.publish('postsUpdated', { mutation: 'CREATED', id: post.id, endCursor: input.endCursor, node: post });
           return post;
         });
     },
-    deletePost(obj, { id }, context) {
+    deletePost(obj, { input: { id, endCursor } }, context) {
       return context.Post.deletePost(id)
         .then(() => {
-          pubsub.publish('postsUpdated', { mutation: 'DELETED', id, endCursor: 0, node: null });
+          pubsub.publish('postsUpdated', { mutation: 'DELETED', id, endCursor: endCursor, node: null });
           return { id };
         });
     },
@@ -62,7 +62,7 @@ const postResolvers = {
       return context.Post.editPost(input)
         .then(() => context.Post.getPost(input.id))
         .then(post => {
-          pubsub.publish('postsUpdated', { mutation: 'UPDATED', id: input.id, endCursor: 0, node: post });
+          pubsub.publish('postsUpdated', { mutation: 'UPDATED', id: input.id, endCursor: input.endCursor, node: post });
           pubsub.publish('postUpdated', post);
           return post;
         });

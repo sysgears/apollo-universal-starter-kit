@@ -82,7 +82,15 @@ input EditCommentInput {
 
 extend type Subscription {
   postUpdated(id: ID!): Post
+  postsUpdated(endCursor: ID!): UpdatePostPayload
   commentUpdated(postId: ID!): UpdateCommentPayload
+}
+
+type UpdatePostPayload {
+  mutation: String!
+  id: ID
+  endCursor: ID!
+  node: Post
 }
 
 type UpdateCommentPayload {

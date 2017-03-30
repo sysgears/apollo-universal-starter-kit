@@ -41,13 +41,10 @@ class PostComments extends React.Component {
         variables: { postId: postId },
         updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
 
-          let newResult;
+          let newResult = prev;
 
           if (mutation === 'CREATED') {
-            if (isDuplicateComment(node, prev.post.comments)) {
-              return prev;
-            }
-
+            if (!isDuplicateComment(node, prev.post.comments)) {
             newResult = update(prev, {
               post: {
                 comments: {
@@ -55,6 +52,7 @@ class PostComments extends React.Component {
                 }
               }
             });
+            }
           } else if (mutation === 'DELETED') {
             const index = prev.post.comments.findIndex(x => x.id === id);
 
@@ -67,8 +65,6 @@ class PostComments extends React.Component {
                 }
               });
             }
-          } else {
-            newResult = prev;
           }
 
           return newResult;
@@ -159,7 +155,6 @@ const PostCommentsWithApollo = compose(
         },
         updateQueries: {
           getPost: (prev, { mutationResult: { data: { addComment } } }) => {
-
             if (isDuplicateComment(addComment, prev.post.comments)) {
               return prev;
             }
@@ -192,7 +187,7 @@ const PostCommentsWithApollo = compose(
     })
   }),
   graphql(COMMENT_DELETE, {
-    props: ({ ownProps: { postId },  mutate }) => ({
+    props: ({ ownProps: { postId }, mutate }) => ({
       deleteComment: (id) => mutate({
         variables: { input: { id, postId } },
         optimisticResponse: {
@@ -206,15 +201,17 @@ const PostCommentsWithApollo = compose(
           getPost: (prev, { mutationResult: { data: { deleteComment } } }) => {
             const index = prev.post.comments.findIndex(x => x.id === deleteComment.id);
 
-            if (index >= 0) {
-              return update(prev, {
-                post: {
-                  comments: {
-                    $splice: [ [ index, 1 ] ],
-                  }
-                }
-              });
+            if (index < 0) {
+              return prev;
             }
+
+            return update(prev, {
+              post: {
+                comments: {
+                  $splice: [ [ index, 1 ] ],
+                }
+              }
+            });
           }
         }
       }),

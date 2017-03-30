@@ -4,6 +4,9 @@ const postSetupFunctions = {
       filter: post => args.id == post.id
     },
   }),
+  postsUpdated: (options, args) => ({
+    postsUpdated: () => true
+  }),
   commentUpdated: (options, args) => ({
     commentUpdated: {
       filter: comment => args.postId === comment.postId

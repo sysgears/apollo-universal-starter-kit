@@ -6,13 +6,94 @@ import { Link } from 'react-router-dom'
 import { ListGroup, ListGroupItem, Button } from 'reactstrap'
 
 import POSTS_QUERY from '../graphql/posts_get.graphql'
+import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql'
 import POST_DELETE from '../graphql/post_delete.graphql'
 
 const commentStyle = css({
   marginLeft: '10px'
 });
 
+function isDuplicatePost(newPost, existingPosts) {
+  return newPost.id !== null && existingPosts.some(post => newPost.id === post.cursor);
+}
+
 class PostList extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.subscription = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { postsQuery, subscribeToMore } = this.props;
+
+    // Check if props have changed and, if necessary, stop the subscription
+    //if (this.subscription && postsQuery.pageInfo.endCursor !== nextProps.postsQuery.pageInfo.endCursor) {
+    //  this.subscription.unsubscribe();
+    //  this.subscription = null;
+    //}
+
+    // Subscribe or re-subscribe
+    if (!this.subscription && !nextProps.loading) {
+      this.subscription = subscribeToMore({
+        document: POSTS_SUBSCRIPTION,
+        variables: { endCursor: postsQuery.pageInfo.endCursor },
+        updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, id, node } } } }) => {
+
+          //console.log(prev.postsQuery.edges);
+          //console.log(node);
+
+          let newResult = prev;
+
+          if (mutation === 'CREATED') {
+            if (!isDuplicatePost(node, prev.postsQuery.edges)) {
+
+              const edge = {
+                cursor: node.id,
+                node: {
+                  id: node.id,
+                  title: node.title,
+                  content: node.content,
+                  comments: [],
+                  __typename: 'Post'
+                },
+                __typename: 'Edges'
+              };
+
+              newResult = update(prev, {
+                postsQuery: {
+                  totalCount: {
+                    $set: prev.postsQuery.totalCount + 1
+                  },
+                  edges: {
+                    $unshift: [ edge ],
+                  }
+                }
+              });
+            }
+          } else if (mutation === 'DELETED') {
+            const index = prev.postsQuery.edges.findIndex(x => x.node.id === id);
+
+            if (index >= 0) {
+              newResult = update(prev, {
+                postsQuery: {
+                  totalCount: {
+                    $set: prev.postsQuery.totalCount - 1
+                  },
+                  edges: {
+                    $splice: [ [ index, 1 ] ],
+                  }
+                }
+              });
+            }
+          }
+
+          return newResult;
+        },
+        onError: (err) => console.error(err),
+      });
+    }
+  }
 
   renderPosts() {
     const { postsQuery, deletePost } = this.props;
@@ -78,6 +159,7 @@ PostList.propTypes = {
   postsQuery: React.PropTypes.object,
   deletePost: React.PropTypes.func.isRequired,
   loadMoreRows: React.PropTypes.func.isRequired,
+  subscribeToMore: React.PropTypes.func.isRequired,
 };
 
 const PostListWithApollo = compose(
@@ -89,7 +171,7 @@ const PostListWithApollo = compose(
       };
     },
     props: ({ data }) => {
-      const { loading, postsQuery, fetchMore } = data;
+      const { loading, postsQuery, fetchMore, subscribeToMore } = data;
       const loadMoreRows = () => {
         return fetchMore({
           variables: {
@@ -113,7 +195,7 @@ const PostListWithApollo = compose(
         })
       };
 
-      return { loading, postsQuery, loadMoreRows };
+      return { loading, postsQuery, subscribeToMore, loadMoreRows };
     }
   }),
   graphql(POST_DELETE, {
@@ -131,6 +213,10 @@ const PostListWithApollo = compose(
           updateQueries: {
             getPosts: (prev, { mutationResult: { data: { deletePost } } }) => {
               const index = prev.postsQuery.edges.findIndex(x => x.node.id === deletePost.id);
+
+              if (index < 0) {
+                return prev;
+              }
 
               return update(prev, {
                 postsQuery: {

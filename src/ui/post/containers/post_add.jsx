@@ -7,6 +7,10 @@ import PostForm from '../components/post_form'
 
 import POST_ADD from '../graphql/post_add.graphql'
 
+function isDuplicatePost(newPost, existingPosts) {
+  return newPost.id !== null && existingPosts.some(post => newPost.id === post.cursor);
+}
+
 class PostAdd extends React.Component {
   onSubmit(values) {
     const { addPost } = this.props;
@@ -44,13 +48,17 @@ const PostAddWithApollo = compose(
           },
         },
         updateQueries: {
-          getPosts: (prev, { mutationResult }) => {
+          getPosts: (prev, { mutationResult: { data: { addPost } } }) => {
+            if (isDuplicatePost(addPost, prev.postsQuery.edges)) {
+              return prev;
+            }
+
             const edge = {
-              cursor: mutationResult.data.addPost.id,
+              cursor: addPost.id,
               node: {
-                id: mutationResult.data.addPost.id,
-                title: mutationResult.data.addPost.title,
-                content: mutationResult.data.addPost.content,
+                id: addPost.id,
+                title: addPost.title,
+                content: addPost.content,
                 comments: [],
                 __typename: 'Post'
               },

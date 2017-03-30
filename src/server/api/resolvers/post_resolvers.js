@@ -62,7 +62,7 @@ const postResolvers = {
       return context.Post.editPost(input)
         .then(() => context.Post.getPost(input.id))
         .then(post => {
-          //pubsub.publish('editPost', post);
+          pubsub.publish('postUpdated', post);
           return post;
         });
     },
@@ -91,6 +91,9 @@ const postResolvers = {
     },
   },
   Subscription: {
+    postUpdated(value) {
+      return value;
+    },
     commentUpdated(value) {
       return value;
     },

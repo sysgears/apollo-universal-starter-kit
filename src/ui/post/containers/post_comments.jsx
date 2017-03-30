@@ -21,21 +21,24 @@ class PostComments extends React.Component {
     super(props);
 
     props.onCommentSelect({ id: null, content: '' });
+
     this.subscription = null;
   }
 
   componentWillReceiveProps(nextProps) {
+    const { postId, subscribeToMore } = this.props;
+
     // Check if props have changed and, if necessary, stop the subscription
-    if (this.subscription && this.props.postId !== nextProps.postId) {
+    if (this.subscription && postId !== nextProps.postId) {
       this.subscription.unsubscribe();
       this.subscription = null;
     }
 
     // Subscribe or re-subscribe
     if (!this.subscription) {
-      this.subscription = nextProps.subscribeToMore({
+      this.subscription = subscribeToMore({
         document: COMMENT_SUBSCRIPTION,
-        variables: { postId: nextProps.postId },
+        variables: { postId: postId },
         updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
 
           let newResult;
@@ -72,12 +75,6 @@ class PostComments extends React.Component {
         },
         onError: (err) => console.error(err),
       });
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
     }
   }
 

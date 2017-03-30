@@ -1,0 +1,7 @@
+subscription onPostUpdated($id: ID!) {
+    postUpdated(id: $id) {
+        id
+        title
+        content
+    }
+}

@@ -81,6 +81,7 @@ input EditCommentInput {
 }
 
 extend type Subscription {
+  postUpdated(id: ID!): Post
   commentUpdated(postId: ID!): UpdateCommentPayload
 }
 

@@ -5,10 +5,39 @@ import { Link } from 'react-router-dom'
 import PostForm from '../components/post_form'
 import PostComments from './post_comments'
 
-import POST_EDIT from '../graphql/post_edit.graphql'
 import POST_QUERY from '../graphql/post_get.graphql'
+import POST_EDIT from '../graphql/post_edit.graphql'
+import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql'
 
 class PostEdit extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.subscription = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { post, loading, subscribeToMore } = this.props;
+
+    // Check if props have changed and, if necessary, stop the subscription
+    if (this.subscription && post.id !== nextProps.post.id) {
+      this.subscription.unsubscribe();
+      this.subscription = null;
+    }
+
+    // Subscribe or re-subscribe
+    if (!this.subscription && !loading) {
+      this.subscription = subscribeToMore({
+        document: POST_SUBSCRIPTION,
+        variables: { id: post.id },
+        updateQuery: (prev) => {
+          return prev;
+        },
+        onError: (err) => console.error(err),
+      });
+    }
+  }
+
   onSubmit(values) {
     const { post, editPost } = this.props;
 

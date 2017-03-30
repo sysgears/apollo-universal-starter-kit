@@ -71,7 +71,12 @@ const postResolvers = {
       return context.Post.addComment(input)
         .then((id) => context.Post.getComment(id[ 0 ]))
         .then(comment => {
-          pubsub.publish('commentUpdated', { mutation: 'CREATED', id: comment.id, postId: input.postId, node: comment });
+          pubsub.publish('commentUpdated', {
+            mutation: 'CREATED',
+            id: comment.id,
+            postId: input.postId,
+            node: comment
+          });
           return comment;
         });
     },

@@ -45,13 +45,13 @@ class PostComments extends React.Component {
 
           if (mutation === 'CREATED') {
             if (!isDuplicateComment(node, prev.post.comments)) {
-            newResult = update(prev, {
-              post: {
-                comments: {
-                  $push: [ node ],
+              newResult = update(prev, {
+                post: {
+                  comments: {
+                    $push: [ node ],
+                  }
                 }
-              }
-            });
+              });
             }
           } else if (mutation === 'DELETED') {
             const index = prev.post.comments.findIndex(x => x.id === id);

@@ -100,7 +100,7 @@
     "babel-register": "^6.24.0",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
-    "css-loader": "^0.27.3",
+    "css-loader": "^0.28.0",
     "eslint": "^3.17.1",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-import-resolver-webpack": "^0.8.1",

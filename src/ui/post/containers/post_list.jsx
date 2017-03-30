@@ -30,62 +30,63 @@ class PostList extends React.Component {
       if (this.subscription && endCursor !== nextProps.postsQuery.pageInfo.endCursor) {
         this.subscription = null;
       }
-    }
 
-    // Subscribe or re-subscribe
-    if (!this.subscription && !nextProps.loading) {
-      this.subscription = subscribeToMore({
-        document: POSTS_SUBSCRIPTION,
-        variables: { endCursor: nextProps.postsQuery.pageInfo.endCursor },
-        updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, id, node } } } }) => {
-          let newResult = prev;
 
-          if (mutation === 'CREATED') {
-            if (!isDuplicatePost(node, prev.postsQuery.edges)) {
+      // Subscribe or re-subscribe
+      if (!this.subscription) {
+        this.subscription = subscribeToMore({
+          document: POSTS_SUBSCRIPTION,
+          variables: { endCursor: nextProps.postsQuery.pageInfo.endCursor },
+          updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, id, node } } } }) => {
+            let newResult = prev;
 
-              const edge = {
-                cursor: node.id,
-                node: {
-                  id: node.id,
-                  title: node.title,
-                  content: node.content,
-                  __typename: 'Post'
-                },
-                __typename: 'Edges'
-              };
+            if (mutation === 'CREATED') {
+              if (!isDuplicatePost(node, prev.postsQuery.edges)) {
 
-              newResult = update(prev, {
-                postsQuery: {
-                  totalCount: {
-                    $set: prev.postsQuery.totalCount + 1
+                const edge = {
+                  cursor: node.id,
+                  node: {
+                    id: node.id,
+                    title: node.title,
+                    content: node.content,
+                    __typename: 'Post'
                   },
-                  edges: {
-                    $unshift: [ edge ],
-                  }
-                }
-              });
-            }
-          } else if (mutation === 'DELETED') {
-            const index = prev.postsQuery.edges.findIndex(x => x.node.id === id);
+                  __typename: 'Edges'
+                };
 
-            if (index >= 0) {
-              newResult = update(prev, {
-                postsQuery: {
-                  totalCount: {
-                    $set: prev.postsQuery.totalCount - 1
-                  },
-                  edges: {
-                    $splice: [ [ index, 1 ] ],
+                newResult = update(prev, {
+                  postsQuery: {
+                    totalCount: {
+                      $set: prev.postsQuery.totalCount + 1
+                    },
+                    edges: {
+                      $unshift: [ edge ],
+                    }
                   }
-                }
-              });
-            }
-          }
+                });
+              }
+            } else if (mutation === 'DELETED') {
+              const index = prev.postsQuery.edges.findIndex(x => x.node.id === id);
 
-          return newResult;
-        },
-        onError: (err) => console.error(err),
-      });
+              if (index >= 0) {
+                newResult = update(prev, {
+                  postsQuery: {
+                    totalCount: {
+                      $set: prev.postsQuery.totalCount - 1
+                    },
+                    edges: {
+                      $splice: [ [ index, 1 ] ],
+                    }
+                  }
+                });
+              }
+            }
+
+            return newResult;
+          },
+          onError: (err) => console.error(err),
+        });
+      }
     }
   }
 

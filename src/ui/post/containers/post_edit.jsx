@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 
 import PostForm from '../components/post_form'
 import PostComments from './post_comments'
-
 import POST_QUERY from '../graphql/post_get.graphql'
 import POST_EDIT from '../graphql/post_edit.graphql'
 import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql'
@@ -22,7 +21,6 @@ class PostEdit extends React.Component {
 
     // Check if props have changed and, if necessary, stop the subscription
     if (this.subscription && post.id !== nextProps.post.id) {
-      this.subscription.unsubscribe();
       this.subscription = null;
     }
 
@@ -96,6 +94,5 @@ const PostEditWithApollo = compose(
 )(PostEdit);
 
 export default connect(
-  (state) => ({ endCursor: state.post.endCursor }),
-  (dispatch) => ({}),
+  (state) => ({ endCursor: state.post.endCursor })
 )(PostEditWithApollo);

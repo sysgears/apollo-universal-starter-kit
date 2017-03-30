@@ -47,6 +47,7 @@ const postResolvers = {
       return context.Post.addPost(input)
         .then((id) => context.Post.getPost(id[ 0 ]))
         .then(post => {
+          // publish for post list
           pubsub.publish('postsUpdated', { mutation: 'CREATED', id: post.id, endCursor: input.endCursor, node: post });
           return post;
         });
@@ -54,6 +55,7 @@ const postResolvers = {
     deletePost(obj, { input: { id, endCursor } }, context) {
       return context.Post.deletePost(id)
         .then(() => {
+          // publish for post list
           pubsub.publish('postsUpdated', { mutation: 'DELETED', id, endCursor: endCursor, node: null });
           return { id };
         });
@@ -62,7 +64,9 @@ const postResolvers = {
       return context.Post.editPost(input)
         .then(() => context.Post.getPost(input.id))
         .then(post => {
+          // publish for post list
           pubsub.publish('postsUpdated', { mutation: 'UPDATED', id: input.id, endCursor: input.endCursor, node: post });
+          // publish for edit post page
           pubsub.publish('postUpdated', post);
           return post;
         });
@@ -71,6 +75,7 @@ const postResolvers = {
       return context.Post.addComment(input)
         .then((id) => context.Post.getComment(id[ 0 ]))
         .then(comment => {
+          // publish for edit post page
           pubsub.publish('commentUpdated', {
             mutation: 'CREATED',
             id: comment.id,
@@ -83,6 +88,7 @@ const postResolvers = {
     deleteComment(obj, { input: { id, postId } }, context) {
       return context.Post.deleteComment(id)
         .then(() => {
+          // publish for edit post page
           pubsub.publish('commentUpdated', { mutation: 'DELETED', id, postId, node: null });
           return { id };
         });
@@ -91,6 +97,7 @@ const postResolvers = {
       return context.Post.editComment(input)
         .then(() => context.Post.getComment(input.id))
         .then(comment => {
+          // publish for edit post page
           pubsub.publish('commentUpdated', { mutation: 'UPDATED', id: input.id, postId: input.postId, node: comment });
           return comment;
         });

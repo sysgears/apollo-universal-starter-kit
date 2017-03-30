@@ -5,7 +5,6 @@ import update from 'react-addons-update'
 import { Link } from 'react-router-dom'
 
 import PostForm from '../components/post_form'
-
 import POST_ADD from '../graphql/post_add.graphql'
 
 function isDuplicatePost(newPost, existingPosts) {
@@ -83,6 +82,5 @@ const PostAddWithApollo = compose(
 )(PostAdd);
 
 export default connect(
-  (state) => ({ endCursor: state.post.endCursor }),
-  (dispatch) => ({}),
+  (state) => ({ endCursor: state.post.endCursor })
 )(PostAddWithApollo);

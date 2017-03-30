@@ -30,7 +30,6 @@ class PostComments extends React.Component {
 
     // Check if props have changed and, if necessary, stop the subscription
     if (this.subscription && postId !== nextProps.postId) {
-      this.subscription.unsubscribe();
       this.subscription = null;
     }
 

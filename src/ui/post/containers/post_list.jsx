@@ -86,7 +86,6 @@ const PostListWithApollo = compose(
       let after = props.endCursor || 0;
       return {
         variables: { first: 10, after: after },
-        pollInterval: 10000
       };
     },
     props: ({ data }) => {

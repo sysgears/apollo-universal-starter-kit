@@ -88,5 +88,6 @@ extend type Subscription {
 type UpdateCommentPayload {
   mutation: String!
   id: ID
+  postId: ID!
   node: Comment
 }

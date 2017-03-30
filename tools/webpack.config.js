@@ -6,11 +6,23 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
-const pkg = require('../package.json');
+const PersistGraphQLPlugin = require('persistgraphql-webpack-plugin');
 const _ = require('lodash');
+
+const pkg = require('../package.json');
 
 global.__DEV__ = process.argv.length >= 3 && (process.argv[2].indexOf('watch') >= 0 || process.argv[1].indexOf('mocha-webpack') >= 0);
 const buildNodeEnv = __DEV__ ? 'development' : 'production';
+
+let clientPersistPlugin, serverPersistPlugin;
+if (pkg.app.persistGraphQL) {
+  clientPersistPlugin = new PersistGraphQLPlugin({ filename: 'persisted_queries.json' });
+  serverPersistPlugin = new PersistGraphQLPlugin({ provider: clientPersistPlugin });
+} else {
+  // Dummy plugin instances just to create persisted_queries.json virtual module
+  clientPersistPlugin = new PersistGraphQLPlugin();
+  serverPersistPlugin = new PersistGraphQLPlugin();
+}
 
 let basePlugins = [];
 
@@ -40,7 +52,10 @@ const baseConfig = {
             ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
             "only": ["*.js", "*.jsx"],
           }
-        }])
+        }]).concat(
+          pkg.app.persistGraphQL ?
+          ['persistgraphql-webpack-plugin/js-loader'] : []
+        )
       },
       {
         test: /\.graphqls/,
@@ -49,9 +64,10 @@ const baseConfig = {
       {
         test: /\.(graphql|gql)$/,
         exclude: /node_modules/,
-        use: [{
-          loader: 'graphql-tag/loader',
-        }]
+        use: ['graphql-tag/loader'].concat(
+          pkg.app.persistGraphQL ?
+            ['persistgraphql-webpack-plugin/graphql-loader']: []
+        )
       },
       {
         test: /\.(png|ico|jpg|xml)$/,
@@ -82,10 +98,12 @@ let serverPlugins = [
   new webpack.BannerPlugin({ banner: 'require("source-map-support").install();',
       raw: true, entryOnly: false }),
   new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __SSR__: pkg.app.ssr,
-    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`}))
+    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`})),
+  serverPersistPlugin
 ];
 
 const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
+  name: 'backend',
   devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   target: 'node',
   entry: {
@@ -128,6 +146,7 @@ let clientPlugins = [
   }),
   new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false, __SSR__: pkg.app.ssr,
     __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`})),
+  clientPersistPlugin
 ];
 
 if (!__DEV__) {
@@ -142,6 +161,7 @@ if (!__DEV__) {
 }
 
 const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
+  name: 'frontend',
   devtool: __DEV__ ? '#eval' : '#source-map',
   entry: {
     bundle: ['babel-polyfill', './src/client/index.jsx']
@@ -169,6 +189,7 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
 });
 
 const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
+  name: 'dll',
   entry: {
     vendor: _.keys(pkg.dependencies),
   },

@@ -11,7 +11,8 @@
     "ssr": true,
     "webpackDll": true,
     "frontendRefreshOnBackendChange": true,
-    "reactHotLoader": false
+    "reactHotLoader": false,
+    "persistGraphQL": true
   },
   "engines": {
     "node": "6.6.0",
@@ -117,6 +118,7 @@
     "mocha": "^3.2.0",
     "mocha-webpack": "^0.7.0",
     "node-sass": "^4.5.0",
+    "persistgraphql-webpack-plugin": "^0.1.3",
     "postcss-loader": "^1.3.3",
     "raw-loader": "^0.5.1",
     "resolve-url-loader": "^2.0.2",

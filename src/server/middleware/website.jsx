@@ -20,6 +20,9 @@ const apiUrl = `http://localhost:${port}/graphql`;
 
 let assetMap;
 
+const queryMap = require('persisted_queries.json');
+console.log("backend queryMap:", queryMap);
+
 export default (req, res, next) => {
   if (req.url.indexOf('.') < 0) {
     if (__SSR__) {

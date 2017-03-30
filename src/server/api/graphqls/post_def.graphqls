@@ -42,7 +42,7 @@ extend type Mutation {
   # Create new post
   addPost(input: AddPostInput!): Post
   # Delete a post
-  deletePost(id: ID!): Post
+  deletePost(input: DeletePostInput!): Post
   # Edit a post
   editPost(input: EditPostInput!): Post
   # Add comment to post
@@ -53,39 +53,73 @@ extend type Mutation {
   editComment(input: EditCommentInput!): Comment
 }
 
+# Input for addPost Mutation
 input AddPostInput {
   title: String!
   content: String!
+  # Needed for postsUpdated Subscription filter
+  endCursor: ID
 }
 
+# Input for deletePost Mutation
+input DeletePostInput {
+  id: ID!
+  # Needed for postsUpdated Subscription filter
+  endCursor: ID
+}
+
+# Input for editPost Mutation
 input EditPostInput {
   id: ID!
   title: String!
   content: String!
+  # Needed for postsUpdated Subscription filter
+  endCursor: ID
 }
 
+# Input for addComment Mutation
 input AddCommentInput {
-  postId: ID!
   content: String!
+  # Needed for commentUpdated Subscription filter
+  postId: ID!
 }
 
+# Input for editComment Mutation
 input DeleteCommentInput {
   id: ID!
+  # Needed for commentUpdated Subscription filter
   postId: ID!
 }
 
+# Input for deleteComment Mutation
 input EditCommentInput {
   id: ID!
-  postId: ID!
   content: String!
+  # Needed for commentUpdated Subscription filter
+  postId: ID!
 }
 
 extend type Subscription {
+  # Subscription for when editing a post
+  postUpdated(id: ID!): Post
+  # Subscription for post list
+  postsUpdated(endCursor: ID!): UpdatePostPayload
+  # Subscription for comments
   commentUpdated(postId: ID!): UpdateCommentPayload
 }
 
+# Payload for postsUpdated Subscription
+type UpdatePostPayload {
+  mutation: String!
+  id: ID
+  endCursor: ID!
+  node: Post
+}
+
+# Payload for commentUpdated Subscription
 type UpdateCommentPayload {
   mutation: String!
   id: ID
+  postId: ID!
   node: Comment
 }

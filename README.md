@@ -184,7 +184,7 @@ predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` fi
 
 - [GraphQL Cursor Pagination] Example of  [Relay-style cursor pagination]
 
-- [ReduxForm] Full CRUD funcionality in post example
+- Full CRUD funcionality with Subscriptions in post example, with [ReduxForm]
 
 ## Contributors
 

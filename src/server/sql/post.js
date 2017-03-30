@@ -1,5 +1,5 @@
-import knex from './connector'
 import _ from 'lodash'
+import knex from './connector'
 
 const orderedFor = (rows, collection, field, singleObject) => {
   // return the rows ordered for the collection
@@ -55,8 +55,8 @@ export default class Post {
       .first();
   }
 
-  addPost(input) {
-    return knex('post').insert({ ...input });
+  addPost({ title, content }) {
+    return knex('post').insert({ title, content });
   }
 
   deletePost(id) {

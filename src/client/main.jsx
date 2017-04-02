@@ -45,8 +45,8 @@ if (__CLIENT__) {
 
 if (settings.persistGraphQL) {
   const queryMap = require('persisted_queries.json');
-  console.log("frontend queryMap:", queryMap);
-  //networkInterface = addPersistedQueries(networkInterface, queryMap);
+  //console.log("frontend queryMap:", queryMap);
+  networkInterface = addPersistedQueries(networkInterface, queryMap);
 }
 
 const client = createApolloClient(networkInterface);

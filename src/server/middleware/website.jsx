@@ -21,7 +21,7 @@ const apiUrl = `http://localhost:${port}/graphql`;
 
 let assetMap;
 
-export default (req, res, next) => {
+export default queryMap => (req, res, next) => {
   if (req.url.indexOf('.') < 0) {
     if (__SSR__) {
       let networkInterface = createBatchingNetworkInterface({
@@ -34,9 +34,8 @@ export default (req, res, next) => {
       });
 
       if (settings.persistGraphQL) {
-        const queryMap = require('persisted_queries.json');
-        console.log("backend queryMap:", queryMap);
-        //networkInterface = addPersistedQueries(networkInterface, queryMap);
+        //console.log("backend queryMap:", queryMap);
+        networkInterface = addPersistedQueries(networkInterface, queryMap);
       }
 
       const client = createApolloClient(networkInterface);
@@ -71,7 +70,7 @@ export default (req, res, next) => {
 
           const apolloState = Object.assign({}, client.store.getState());
 
-          // // Temporary workaround for bug in AC@0.5.0: https://github.com/apollostack/apollo-client/issues/845
+          // Temporary workaround for bug in AC@0.5.0: https://github.com/apollostack/apollo-client/issues/845
           delete apolloState.apollo.queries;
           delete apolloState.apollo.mutations;
 

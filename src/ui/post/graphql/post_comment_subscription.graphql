@@ -4,6 +4,7 @@ subscription onCommentUpdated($postId: ID!) {
     commentUpdated(postId: $postId) {
         mutation
         id
+        postId
         node {
             ... CommentInfo
         }

@@ -21,37 +21,37 @@ class PostComments extends React.Component {
     super(props);
 
     props.onCommentSelect({ id: null, content: '' });
+
     this.subscription = null;
   }
 
   componentWillReceiveProps(nextProps) {
+    const { postId, subscribeToMore } = this.props;
+
     // Check if props have changed and, if necessary, stop the subscription
-    if (this.subscription && this.props.postId !== nextProps.postId) {
-      this.subscription.unsubscribe();
+    if (this.subscription && postId !== nextProps.postId) {
       this.subscription = null;
     }
 
     // Subscribe or re-subscribe
     if (!this.subscription) {
-      this.subscription = nextProps.subscribeToMore({
+      this.subscription = subscribeToMore({
         document: COMMENT_SUBSCRIPTION,
-        variables: { postId: nextProps.postId },
+        variables: { postId: postId },
         updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
 
-          let newResult;
+          let newResult = prev;
 
           if (mutation === 'CREATED') {
-            if (isDuplicateComment(node, prev.post.comments)) {
-              return prev;
-            }
-
-            newResult = update(prev, {
-              post: {
-                comments: {
-                  $push: [ node ],
+            if (!isDuplicateComment(node, prev.post.comments)) {
+              newResult = update(prev, {
+                post: {
+                  comments: {
+                    $push: [ node ],
+                  }
                 }
-              }
-            });
+              });
+            }
           } else if (mutation === 'DELETED') {
             const index = prev.post.comments.findIndex(x => x.id === id);
 
@@ -64,20 +64,12 @@ class PostComments extends React.Component {
                 }
               });
             }
-          } else {
-            newResult = prev;
           }
 
           return newResult;
         },
         onError: (err) => console.error(err),
       });
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
     }
   }
 
@@ -162,7 +154,6 @@ const PostCommentsWithApollo = compose(
         },
         updateQueries: {
           getPost: (prev, { mutationResult: { data: { addComment } } }) => {
-
             if (isDuplicateComment(addComment, prev.post.comments)) {
               return prev;
             }
@@ -195,7 +186,7 @@ const PostCommentsWithApollo = compose(
     })
   }),
   graphql(COMMENT_DELETE, {
-    props: ({ ownProps: { postId },  mutate }) => ({
+    props: ({ ownProps: { postId }, mutate }) => ({
       deleteComment: (id) => mutate({
         variables: { input: { id, postId } },
         optimisticResponse: {
@@ -209,15 +200,17 @@ const PostCommentsWithApollo = compose(
           getPost: (prev, { mutationResult: { data: { deleteComment } } }) => {
             const index = prev.post.comments.findIndex(x => x.id === deleteComment.id);
 
-            if (index >= 0) {
-              return update(prev, {
-                post: {
-                  comments: {
-                    $splice: [ [ index, 1 ] ],
-                  }
-                }
-              });
+            if (index < 0) {
+              return prev;
             }
+
+            return update(prev, {
+              post: {
+                comments: {
+                  $splice: [ [ index, 1 ] ],
+                }
+              }
+            });
           }
         }
       }),

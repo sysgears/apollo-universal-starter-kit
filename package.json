@@ -48,7 +48,7 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
-    "apollo-client": "^1.0.0-rc.8",
+    "apollo-client": "1.0.0-rc.9",
     "body-parser": "^1.17.1",
     "bootstrap": "^4.0.0-alpha.6",
     "dataloader": "^1.3.0",
@@ -109,7 +109,7 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
     "extract-text-webpack-plugin": "^2.1.0",
-    "file-loader": "^0.10.1",
+    "file-loader": "^0.11.0",
     "fs-extra": "^2.1.0",
     "ignore-loader": "^0.1.2",
     "isomorphic-style-loader": "^1.1.0",

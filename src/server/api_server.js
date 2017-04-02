@@ -27,10 +27,12 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(settings.frontendBuildDir, { maxAge: '180 days' }));
 
+
+let queryMap = null;
 if (settings.persistGraphQL) {
-  //const queryMap = require('persisted_queries.json');
+  queryMap = require('persisted_queries.json');
   //console.log("backend queryMap:", queryMap);
-  /*const invertedMap = invert(queryMap);
+  const invertedMap = invert(queryMap);
 
   app.use(
     '/graphql',
@@ -45,12 +47,12 @@ if (settings.persistGraphQL) {
 
       next();
     },
-  );*/
+  );
 }
 
 app.use('/graphql', (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
-app.use((...args) => websiteMiddleware(...args));
+app.use((...args) => websiteMiddleware(queryMap)(...args));
 
 server = http.createServer(app);
 

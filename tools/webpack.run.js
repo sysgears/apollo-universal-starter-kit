@@ -7,8 +7,9 @@ import mkdirp from 'mkdirp'
 import minilog from 'minilog'
 import _ from 'lodash'
 import crypto from 'crypto'
-const pkg = require('../package.json');
+import VirtualModules from 'webpack-virtual-modules'
 
+const pkg = require('../package.json');
 import configs from './webpack.config'
 
 minilog.enable();
@@ -82,9 +83,13 @@ function webpackReporter(log, err, stats) {
   }
 }
 
+var frontendVirtualModules = new VirtualModules();
+
 function startClient() {
   try {
     const reporter = (...args) => webpackReporter(logFront, ...args);
+
+    clientConfig.plugins.push(frontendVirtualModules);
 
     if (__DEV__) {
       if (pkg.app.reactHotLoader) {
@@ -100,6 +105,8 @@ function startClient() {
     } else {
       const compiler = webpack(clientConfig);
 
+      increaseBackendReloadCount();
+
       compiler.run(reporter);
     }
   } catch (err) {
@@ -107,15 +114,11 @@ function startClient() {
   }
 }
 
+
 let backendReloadCount = 0;
 function increaseBackendReloadCount() {
-  createDirs(pkg.app.backendBuildDir);
-  const fullPath = path.join(pkg.app.backendBuildDir, 'backend_reload_count.js');
-  fs.writeFileSync(fullPath,
+  frontendVirtualModules.writeModule('node_modules/backend_reload.js',
     `module.exports = {reloadCount: ${backendReloadCount}};\n`);
-  // Work around issue: https://github.com/webpack/watchpack/issues/25
-  const time = Date.now() / 1000 - 11;
-  fs.utimesSync(fullPath, time, time);
   backendReloadCount++;
 }
 
@@ -161,8 +164,8 @@ function startServer() {
           }
 
           if (pkg.app.frontendRefreshOnBackendChange) {
-            for(let module of stats.compilation.modules) {
-              if(module.built && module.resource &&
+            for (let module of stats.compilation.modules) {
+              if (module.built && module.resource &&
                 module.resource.indexOf(path.resolve('./src/server')) === 0) {
                 // Force front-end refresh on back-end change
                 logBack.debug('Force front-end current page refresh, due to change in backend at:', module.resource);
@@ -184,11 +187,11 @@ function startServer() {
 }
 
 function startWebpackDevServer(clientConfig, reporter) {
-  if (pkg.app.frontendRefreshOnBackendChange) {
-    increaseBackendReloadCount();
-  }
+  clientConfig.plugins.push(frontendVirtualModules);
 
   let compiler = webpack(clientConfig);
+
+  increaseBackendReloadCount();
 
   compiler.plugin('done', stats => {
     const dir = pkg.app.frontendBuildDir;

@@ -132,7 +132,8 @@
     "webpack-dev-server": "^2.4.2",
     "webpack-manifest-plugin": "^1.1.0",
     "webpack-merge": "^4.0.0",
-    "webpack-node-externals": "^1.5.4"
+    "webpack-node-externals": "^1.5.4",
+    "webpack-virtual-modules": "^0.1.5"
   },
   "eslintConfig": {
     "parser": "babel-eslint",

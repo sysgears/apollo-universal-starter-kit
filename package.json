@@ -12,7 +12,7 @@
     "webpackDll": true,
     "frontendRefreshOnBackendChange": true,
     "reactHotLoader": false,
-    "degugSQL": false,
+    "debugSQL": false,
     "persistGraphQL": true
   },
   "engines": {

@@ -8,7 +8,7 @@ import Post from '../sql/post'
 
 import { app as settings } from '../../../package.json'
 
-if (__DEV__ && settings.degugSQL) {
+if (__DEV__ && settings.debugSQL) {
   require('../sql/debug');
 }
 export default graphqlExpress(() => {

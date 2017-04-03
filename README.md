@@ -166,7 +166,7 @@ GraphQL requests are batched together automatically by [Apollo]
   [Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL].
 NoSQL storage or any other data source can be used the same way.
 
-  [Debug SQL] Prints out execuded queries, with respective times in development mode and can be set in package.json by `degugSQL` field `true`
+  [Debug SQL] Prints out execuded queries, with respective times in development mode and can be set in package.json by `debugSQL` field `true`
 
 - Powerful stylesheets with Hot Reloading
 

@@ -83,7 +83,7 @@ function webpackReporter(log, err, stats) {
   }
 }
 
-var frontendVirtualModules = new VirtualModules();
+var frontendVirtualModules = new VirtualModules({'node_modules/backend_reload.js': ''});
 
 function startClient() {
   try {
@@ -105,8 +105,6 @@ function startClient() {
     } else {
       const compiler = webpack(clientConfig);
 
-      increaseBackendReloadCount();
-
       compiler.run(reporter);
     }
   } catch (err) {
@@ -118,7 +116,7 @@ function startClient() {
 let backendReloadCount = 0;
 function increaseBackendReloadCount() {
   frontendVirtualModules.writeModule('node_modules/backend_reload.js',
-    `module.exports = {reloadCount: ${backendReloadCount}};\n`);
+    `module.exports = {default: ${backendReloadCount}};\n`);
   backendReloadCount++;
 }
 
@@ -190,8 +188,6 @@ function startWebpackDevServer(clientConfig, reporter) {
   clientConfig.plugins.push(frontendVirtualModules);
 
   let compiler = webpack(clientConfig);
-
-  increaseBackendReloadCount();
 
   compiler.plugin('done', stats => {
     const dir = pkg.app.frontendBuildDir;

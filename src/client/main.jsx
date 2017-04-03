@@ -9,11 +9,10 @@ import createApolloClient from '../apollo_client'
 import createReduxStore from '../redux_store'
 import routes from '../routes'
 import { app as settings } from '../../package.json'
+// Virtual module, see webpack-virtual-modules usage in webpack.run.js
+export { default as backendReloadCount } from 'backend_reload'
 
 import '../ui/styles/styles.scss'
-
-// Virtual module, see webpack-virtual-modules usage in webpack.run.js
-export const backendReloadCount = require('backend_reload').reloadCount;
 
 // Favicon.ico should not be hashed, since some browsers expect it to be exactly on /favicon.ico URL
 require('!file-loader?name=[name].[ext]!../assets/favicon.ico'); // eslint-disable-line import/no-webpack-loader-syntax

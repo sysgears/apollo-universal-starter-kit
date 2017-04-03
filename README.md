@@ -180,7 +180,9 @@ By default this starter kit uses pure `Webpack HMR` for all hot reloading purpos
 practical needs during development and using `React Hot Loader v3` in addition to `Webpack HMR` makes hot reloading less
 predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` field of `package.json` to `true`. 
 
-- [PersistGraphQL] is a simple build tool that enables query whitelisting and persisted queries for GraphQL projects that use statically analyze-able GraphQL queries.
+- [PersistGraphQL Webpack Plugin] is a tool to gather static GraphQL queries for GraphQL projects and inject them into build.
+It will make front end and back end aware of static queries used in the project and will only allow these queries
+for better security and less bandwidth. 
 
 - [Dataloader] for loading comments in post example
 
@@ -220,7 +222,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Heroku]: https://heroku.com
 [ESLint]: http://eslint.org
 [SysGears INC]: http://sysgears.com
-[PersistGraphQL]: https://github.com/apollographql/persistgraphql
+[PersistGraphQL Webpack Plugin]: https://github.com/sysgears/persistgraphql-webpack-plugin
 [Dataloader]: https://github.com/facebook/dataloader
 [GraphQL Cursor Pagination]: https://medium.com/@gethylgeorge/infinite-scrolling-in-react-using-apollo-and-react-virtualized-graphql-cursor-pagination-bf80617a8a1a#.jkmmu9qz8
 [Relay-style cursor pagination]: http://dev.apollodata.com/react/pagination.html#relay-cursors

@@ -22,30 +22,21 @@
       ]
     },
     {
-      "login": "dmitriypdv",
-      "name": "Dmitry Pavlenko",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/1845914?v=3",
-      "profile": "https://github.com/dmitriypdv",
-      "contributions": [
-        "code",
-        "tool"
-      ]
-    },
-    {
-      "login": "GiladShoham",
-      "name": "Gilad Shoham",
-      "avatar_url": "https://avatars3.githubusercontent.com/u/3840769?v=3",
-      "profile": "http://shohamgilad.wordpress.com/",
-      "contributions": [
-        "code",
-        "tool"
-      ]
-    },
-    {
       "login": "mitjade",
       "name": "mitjade",
       "avatar_url": "https://avatars3.githubusercontent.com/u/26156?v=3",
       "profile": "http://www.internetne-storitve.si",
+      "contributions": [
+        "code",
+        "tool",
+        "question"
+      ]
+    },
+    {
+      "login": "dmitriypdv",
+      "name": "Dmitry Pavlenko",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1845914?v=3",
+      "profile": "https://github.com/dmitriypdv",
       "contributions": [
         "code",
         "tool"
@@ -59,7 +50,29 @@
       "contributions": [
         "code",
         "tool",
-        "doc"
+        "doc",
+        "question"
+      ]
+    },
+    {
+      "login": "GiladShoham",
+      "name": "Gilad Shoham",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/3840769?v=3",
+      "profile": "http://shohamgilad.wordpress.com/",
+      "contributions": [
+        "code",
+        "tool",
+        "question"
+      ]
+    },
+    {
+      "login": "alexandervetrov",
+      "name": "Alexander Vetrov",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5399002?v=3",
+      "profile": "https://github.com/alexandervetrov",
+      "contributions": [
+        "code",
+        "test"
       ]
     },
     {
@@ -79,16 +92,6 @@
       "contributions": [
         "code",
         "tool"
-      ]
-    },
-    {
-      "login": "alexandervetrov",
-      "name": "Alexander Vetrov",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/5399002?v=3",
-      "profile": "https://github.com/alexandervetrov",
-      "contributions": [
-        "code",
-        "test"
       ]
     }
   ]

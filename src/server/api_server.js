@@ -60,8 +60,10 @@ if (module.hot) {
     module.hot.accept();
 
     // Reload reloadable modules
-    module.hot.accept('./middleware/website', () => { websiteMiddleware = require('./middleware/website').default; });
-    module.hot.accept(['./middleware/graphql', './api/subscriptions'], () => {
+    module.hot.accept('./middleware/website', () => {
+      websiteMiddleware = require('./middleware/website').default;
+    });
+    module.hot.accept([ './middleware/graphql', './api/subscriptions' ], () => {
       try {
         graphqlMiddleware = require('./middleware/graphql').default;
 
@@ -80,7 +82,9 @@ if (module.hot) {
         log(error.stack);
       }
     });
-    module.hot.accept('./middleware/graphiql', () => { graphiqlMiddleware = require('./middleware/graphiql').default; });
+    module.hot.accept('./middleware/graphiql', () => {
+      graphiqlMiddleware = require('./middleware/graphiql').default;
+    });
   } catch (err) {
     log(err.stack);
   }

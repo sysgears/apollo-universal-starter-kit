@@ -166,6 +166,8 @@ GraphQL requests are batched together automatically by [Apollo]
   [Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL].
 NoSQL storage or any other data source can be used the same way.
 
+  [Debug SQL] Prints out execuded queries, with respective times in development mode and can be set in package.json by `degugSQL` field `true`
+
 - Powerful stylesheets with Hot Reloading
 
   [Twitter Bootstrap] in form of SASS stylesheets is used for styling demo application. Application has stylesheet
@@ -215,6 +217,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Babel]: http://babeljs.io
 [Glamor v3]: https://github.com/threepointone/glamor/tree/v3
 [Knex]: http://knexjs.org
+[Debug SQL]: https://spin.atomicobject.com/2017/03/27/timing-queries-knexjs-nodejs/
 [Heroku]: https://heroku.com
 [ESLint]: http://eslint.org
 [SysGears INC]: http://sysgears.com

@@ -16,7 +16,7 @@ const buildNodeEnv = __DEV__ ? 'development' : 'production';
 
 let clientPersistPlugin, serverPersistPlugin;
 if (pkg.app.persistGraphQL) {
-  clientPersistPlugin = new PersistGraphQLPlugin({ filename: 'persisted_queries.json' });
+  clientPersistPlugin = new PersistGraphQLPlugin({ filename: 'extracted_queries.json', addTypename: true });
   serverPersistPlugin = new PersistGraphQLPlugin({ provider: clientPersistPlugin });
 } else {
   // Dummy plugin instances just to create persisted_queries.json virtual module

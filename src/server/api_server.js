@@ -31,7 +31,6 @@ app.use('/', express.static(settings.frontendBuildDir, { maxAge: '180 days' }));
 let queryMap = null;
 if (settings.persistGraphQL) {
   queryMap = require('persisted_queries.json');
-  //console.log("backend queryMap:", queryMap);
   const invertedMap = invert(queryMap);
 
   app.use(

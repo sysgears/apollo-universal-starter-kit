@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 import http from 'http'
+import { invert } from 'lodash'
 
 import { app as settings } from '../../package.json'
 import log from '../log'
@@ -26,9 +27,30 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(settings.frontendBuildDir, { maxAge: '180 days' }));
 
+let queryMap = null;
+if (settings.persistGraphQL) {
+  queryMap = require('persisted_queries.json');
+  const invertedMap = invert(queryMap);
+
+  app.use(
+    '/graphql',
+    (req, resp, next) => {
+
+      req.body = req.body.map(body => {
+        return {
+          query: invertedMap[ body.id ],
+          ...body
+        };
+      });
+
+      next();
+    },
+  );
+}
+
 app.use('/graphql', (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
-app.use((...args) => websiteMiddleware(...args));
+app.use((...args) => websiteMiddleware(queryMap)(...args));
 
 server = http.createServer(app);
 

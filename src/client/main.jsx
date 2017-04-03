@@ -3,6 +3,7 @@ import { createBatchingNetworkInterface } from 'apollo-client'
 import { ApolloProvider } from 'react-apollo'
 import createHistory from 'history/createBrowserHistory'
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
+import { addPersistedQueries } from 'persistgraphql'
 
 import createApolloClient from '../apollo_client'
 import createReduxStore from '../redux_store'
@@ -40,6 +41,11 @@ if (__CLIENT__) {
     networkInterface,
     wsClient,
   );
+}
+
+if (settings.persistGraphQL) {
+  const queryMap = require('persisted_queries.json');
+  networkInterface = addPersistedQueries(networkInterface, queryMap);
 }
 
 const client = createApolloClient(networkInterface);

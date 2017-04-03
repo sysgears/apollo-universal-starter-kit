@@ -1,4 +1,5 @@
 .idea
+/.tmp
 /node_modules
 /build
 npm-debug.*

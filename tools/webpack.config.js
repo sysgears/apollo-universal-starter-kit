@@ -86,6 +86,7 @@ let serverPlugins = [
 ];
 
 const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
+  name: 'backend',
   devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   target: 'node',
   entry: {
@@ -142,6 +143,7 @@ if (!__DEV__) {
 }
 
 const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
+  name: 'frontend',
   devtool: __DEV__ ? '#eval' : '#source-map',
   entry: {
     bundle: ['babel-polyfill', './src/client/index.jsx']
@@ -169,6 +171,7 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
 });
 
 const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
+  name: 'dll',
   entry: {
     vendor: _.keys(pkg.dependencies),
   },

@@ -24,7 +24,7 @@ app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/', express.static(settings.frontendBuildDir, {maxAge: '180 days'}));
+app.use('/', express.static(settings.frontendBuildDir, { maxAge: '180 days' }));
 
 app.use('/graphql', (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));

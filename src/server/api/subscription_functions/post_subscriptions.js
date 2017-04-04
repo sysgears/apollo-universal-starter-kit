@@ -16,4 +16,4 @@ const postSetupFunctions = {
   }),
 };
 
-export default  postSetupFunctions;
+export default postSetupFunctions;

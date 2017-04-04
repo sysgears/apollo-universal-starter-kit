@@ -3,10 +3,9 @@ import { PubSub } from 'graphql-subscriptions'
 import { merge } from 'lodash'
 
 import log from '../../log'
-import postResolvers from './resolvers/post_resolvers'
 
-import schema from './graphqls/schema_def.graphqls'
-import postSchema from './graphqls/post_def.graphqls'
+import typeDefs from './graphqls'
+import allResolvers from './resolvers'
 
 export const pubsub = new PubSub();
 
@@ -33,10 +32,10 @@ const rootResolvers = {
   }
 };
 
-const resolvers = merge(rootResolvers, postResolvers);
+const resolvers = merge(rootResolvers, ...allResolvers);
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [postSchema, schema],
+  typeDefs,
   resolvers,
 });
 

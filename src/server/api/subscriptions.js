@@ -2,8 +2,7 @@ import { SubscriptionManager } from 'graphql-subscriptions'
 import { merge } from 'lodash'
 
 import schema, { pubsub } from './schema'
-
-import postSetupFunctions from './subscriptions/post_subscriptions'
+import allSetupFunctions from './subscription_functions'
 
 const rootSetupFunctions = {
   countUpdated: () => ({
@@ -12,7 +11,7 @@ const rootSetupFunctions = {
   })
 };
 
-const setupFunctions = merge(rootSetupFunctions, postSetupFunctions);
+const setupFunctions = merge(rootSetupFunctions, ...allSetupFunctions);
 
 const subscriptionManager = new SubscriptionManager({
   schema,

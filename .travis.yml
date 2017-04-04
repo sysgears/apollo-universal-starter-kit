@@ -1,8 +1,10 @@
 language: node_js
+cache: yarn
 node_js:
   - "node"
-install: true
-script: true
+script:
+  - yarn seed
+  - yarn test
 deploy:
   provider: heroku
   api_key:

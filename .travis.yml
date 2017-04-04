@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "node"
 script:
-  - npm seed
+  - npm run seed
   - npm test
 deploy:
   provider: heroku

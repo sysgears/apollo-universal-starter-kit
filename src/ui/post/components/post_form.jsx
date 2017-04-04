@@ -21,6 +21,13 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
   )
 };
 
+renderField.propTypes = {
+  input: React.PropTypes.object,
+  label: React.PropTypes.string,
+  type: React.PropTypes.string,
+  meta: React.PropTypes.object
+};
+
 const PostForm = (props) => {
   const { handleSubmit, submitting, onSubmit } = props;
 
@@ -38,6 +45,7 @@ const PostForm = (props) => {
 PostForm.propTypes = {
   handleSubmit: React.PropTypes.func,
   onSubmit: React.PropTypes.func,
+  submitting: React.PropTypes.bool
 };
 
 export default reduxForm({

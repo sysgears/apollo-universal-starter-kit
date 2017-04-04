@@ -9,10 +9,11 @@ import createApolloClient from '../apollo_client'
 import createReduxStore from '../redux_store'
 import routes from '../routes'
 import { app as settings } from '../../package.json'
-// Virtual module, see webpack-virtual-modules usage in webpack.run.js
-export { default as backendReloadCount } from 'backend_reload'
 
 import '../ui/styles/styles.scss'
+
+// Virtual module, see webpack-virtual-modules usage in webpack.run.js
+export { default as backendReloadCount } from 'backend_reload' // eslint-disable-line import/no-unresolved
 
 // Favicon.ico should not be hashed, since some browsers expect it to be exactly on /favicon.ico URL
 require('!file-loader?name=[name].[ext]!../assets/favicon.ico'); // eslint-disable-line import/no-webpack-loader-syntax
@@ -42,6 +43,7 @@ if (__CLIENT__) {
 }
 
 if (settings.persistGraphQL) {
+  // eslint-disable-next-line import/no-extraneous-dependencies, import/no-unresolved
   const queryMap = require('persisted_queries.json');
   networkInterface = addPersistedQueries(networkInterface, queryMap);
 }

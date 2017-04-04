@@ -1,8 +1,12 @@
 language: node_js
 node_js:
   - "node"
-install: true
-script: true
+cache:
+  directories:
+    - node_modules
+script:
+  - npm run seed
+  - npm test
 deploy:
   provider: heroku
   api_key:

@@ -18,6 +18,13 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
   )
 };
 
+renderField.propTypes = {
+  input: React.PropTypes.object,
+  label: React.PropTypes.string,
+  type: React.PropTypes.string,
+  meta: React.PropTypes.object
+};
+
 const CommentForm = (props) => {
   const { handleSubmit, submitting, initialValues, onSubmit } = props;
 
@@ -47,6 +54,7 @@ CommentForm.propTypes = {
   handleSubmit: React.PropTypes.func,
   initialValues: React.PropTypes.object,
   onSubmit: React.PropTypes.func,
+  submitting: React.PropTypes.bool
 };
 
 export default reduxForm({

@@ -4,7 +4,7 @@ import { reducer as formReducer } from 'redux-form'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 import CounterReducers from './ui/counter/reducers/counter_reducers'
-import PostReducers from './ui/post/reducers/post_reducers'
+import PostReducers from './modules/post/ui/reducers/post_reducers'
 
 const createReduxStore = (initialState, client, routerMiddleware) => {
   const store = createStore(

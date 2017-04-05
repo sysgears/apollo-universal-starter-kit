@@ -1,4 +1,4 @@
-import { pubsub } from '../schema'
+import { pubsub } from '../../../../server/api/schema'
 
 const postResolvers = {
   Query: {

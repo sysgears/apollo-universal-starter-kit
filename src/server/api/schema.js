@@ -4,7 +4,7 @@ import { merge } from 'lodash'
 
 import log from '../../log'
 
-import typeDefs from './graphqls'
+import typeDefs from './schema_defs'
 import allResolvers from './resolvers'
 
 export const pubsub = new PubSub();

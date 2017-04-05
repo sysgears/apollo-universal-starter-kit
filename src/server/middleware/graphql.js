@@ -4,7 +4,7 @@ import DataLoader from 'dataloader'
 
 import schema from '../api/schema'
 import Count from '../sql/count'
-import Post from '../sql/post'
+import Post from '../../modules/post/server/sql/post'
 
 import { app as settings } from '../../../package.json'
 

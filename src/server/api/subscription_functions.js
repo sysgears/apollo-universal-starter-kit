@@ -1,4 +1,4 @@
-import postSubscriptions from './post_subscriptions'
+import postSubscriptions from '../../modules/post/server/api/post_subscriptions'
 
 export default [
   postSubscriptions,

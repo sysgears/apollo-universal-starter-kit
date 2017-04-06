@@ -1,5 +1,5 @@
-import log from '../log'
-import './api_server'
+import log from '../log';
+import './api_server';
 
 process.on('uncaughtException', (ex) => {
   log.error(ex);

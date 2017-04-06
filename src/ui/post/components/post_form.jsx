@@ -1,6 +1,6 @@
-import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap'
+import React from 'react';
+import { Field, reduxForm } from 'redux-form';
+import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
 
 const required = value => value ? undefined : 'Required';
 
@@ -18,7 +18,7 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
         {touched && ((error && <FormFeedback>{error}</FormFeedback>))}
       </div>
     </FormGroup>
-  )
+  );
 };
 
 renderField.propTypes = {

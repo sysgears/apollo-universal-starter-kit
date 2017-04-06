@@ -1,11 +1,11 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
-import update from 'react-addons-update'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
+import update from 'react-addons-update';
+import { Link } from 'react-router-dom';
 
-import PostForm from '../components/post_form'
-import POST_ADD from '../graphql/post_add.graphql'
+import PostForm from '../components/post_form';
+import POST_ADD from '../graphql/post_add.graphql';
 
 function isDuplicatePost(newPost, existingPosts) {
   return newPost.id !== null && existingPosts.some(post => newPost.id === post.cursor);

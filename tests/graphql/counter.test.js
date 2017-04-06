@@ -2,13 +2,12 @@ import chai from "chai";
 import chaiAsPromised from "chai-as-promised";
 import { mockServer } from "graphql-tools";
 
-import schema from "../../src/server/api/graphqls/schema_def.graphqls";
-import AMOUNT_QUERY from '!raw-loader!../../src/ui/counter/graphql/count_get.graphql'
+import AMOUNT_QUERY from '!raw-loader!../../src/ui/counter/graphql/count_get.graphql';
 import ADD_COUNT_MUTATION from "!raw-loader!../../src/ui/counter/graphql/count_add_mutation.graphql";
+import schema from "../../src/server/api/graphqls/schema_def.graphqls";
 
 chai.use(chaiAsPromised);
-
-const should = chai.should();
+chai.should();
 
 const counterValue = 10;
 const increasedValue = 11;
@@ -29,12 +28,12 @@ describe('Counter', () => {
         return mockedServer
             .query(AMOUNT_QUERY)
             .then(value => value.data.count.amount)
-            .should.eventually.equal(counterValue)
+            .should.eventually.equal(counterValue);
     });
     it('should return a new value of a counter after a mutation', () => {
         return mockedServer
             .query(ADD_COUNT_MUTATION, {"amount": increasedValue})
             .then(value => value.data.addCount.amount)
-            .should.eventually.equal(increasedValue)
+            .should.eventually.equal(increasedValue);
     });
 });

@@ -1,19 +1,19 @@
-import React from 'react'
-import ReactDOMServer from 'react-dom/server'
-import { createBatchingNetworkInterface } from 'apollo-client'
-import { ApolloProvider, getDataFromTree } from 'react-apollo'
-import { StaticRouter } from 'react-router'
-import { renderStatic } from 'glamor-server'
-import { addPersistedQueries } from 'persistgraphql'
-import fs from 'fs'
-import path from 'path'
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import { createBatchingNetworkInterface } from 'apollo-client';
+import { ApolloProvider, getDataFromTree } from 'react-apollo';
+import { StaticRouter } from 'react-router';
+import { renderStatic } from 'glamor-server';
+import { addPersistedQueries } from 'persistgraphql';
+import fs from 'fs';
+import path from 'path';
 
-import createApolloClient from '../../apollo_client'
-import createReduxStore from '../../redux_store'
-import Html from '../../ui/components/html'
-import routes from '../../routes'
-import log from '../../log'
-import { app as settings } from '../../../package.json'
+import createApolloClient from '../../apollo_client';
+import createReduxStore from '../../redux_store';
+import Html from '../../ui/components/html';
+import routes from '../../routes';
+import log from '../../log';
+import { app as settings } from '../../../package.json';
 
 const port = process.env.PORT || settings.apiPort;
 
@@ -62,7 +62,7 @@ export default queryMap => (req, res, next) => {
 
         if (context.url) {
           res.writeHead(301, { Location: context.url });
-          res.end()
+          res.end();
         } else {
           if (__DEV__ || !assetMap) {
             assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));

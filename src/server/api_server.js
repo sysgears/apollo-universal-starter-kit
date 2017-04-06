@@ -1,11 +1,11 @@
 import express from 'express';
-import bodyParser from 'body-parser'
-import { SubscriptionServer } from 'subscriptions-transport-ws'
-import http from 'http'
-import { invert } from 'lodash'
+import bodyParser from 'body-parser';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import http from 'http';
+import { invert } from 'lodash';
 
-import { app as settings } from '../../package.json'
-import log from '../log'
+import { app as settings } from '../../package.json';
+import log from '../log';
 
 // Hot reloadable modules
 let websiteMiddleware = require('./middleware/website').default;

@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react'
-import serialize from 'serialize-javascript'
+import React, { PropTypes } from 'react';
+import serialize from 'serialize-javascript';
 
 const Html = ({ content, state, assetMap, css }) => {
   return (

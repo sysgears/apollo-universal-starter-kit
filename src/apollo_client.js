@@ -1,4 +1,4 @@
-import ApolloClient from 'apollo-client'
+import ApolloClient from 'apollo-client';
 
 const createApolloClient = networkInterface => {
   const params = {

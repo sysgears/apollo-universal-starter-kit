@@ -23,7 +23,7 @@
     "build": "babel-node --presets es2015 tools/webpack.run",
     "start": "node --harmony build/server",
     "test": "mocha-webpack --webpack-config tools/webpack.config.js --full-trace --exit 'tests/**/*.test.js' && npm run lint",
-    "lint": "eslint --fix --ext js --ext jsx src",
+    "lint": "eslint --fix --ext js --ext jsx src tests tools",
     "seed": "npm run migrate && babel-node --presets es2015 node_modules/.bin/knex seed:run",
     "migrate": "babel-node --presets es2015 node_modules/.bin/knex migrate:latest",
     "rollback": "babel-node --presets es2015 node_modules/.bin/knex migrate:rollback",
@@ -147,7 +147,9 @@
       "no-use-before-define": 0,
       "arrow-body-style": 0,
       "dot-notation": 0,
-      "no-console": 0
+      "no-console": 0,
+      "semi": 2,
+      "import/no-webpack-loader-syntax": 0
     },
     "settings": {
       "import/resolver": {

@@ -1,8 +1,8 @@
-import React from 'react'
-import { render } from 'react-dom'
-import Main from './main'
-import log from '../log'
-import { app as settings } from '../../package.json'
+import React from 'react';
+import { render } from 'react-dom';
+import Main from './main';
+import log from '../log';
+import { app as settings } from '../../package.json';
 
 const root = document.getElementById('content');
 

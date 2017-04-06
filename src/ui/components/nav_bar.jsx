@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Container, Row, Navbar, Nav, NavItem } from 'reactstrap'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Container, Row, Navbar, Nav, NavItem } from 'reactstrap';
 
 const NavBar = () => (
   <Navbar color="faded" light>

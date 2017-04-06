@@ -1,13 +1,13 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
-import update from 'react-addons-update'
-import { Link } from 'react-router-dom'
-import { ListGroup, ListGroupItem, Button } from 'reactstrap'
+import React from 'react';
+import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
+import update from 'react-addons-update';
+import { Link } from 'react-router-dom';
+import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
-import POSTS_QUERY from '../graphql/posts_get.graphql'
-import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql'
-import POST_DELETE from '../graphql/post_delete.graphql'
+import POSTS_QUERY from '../graphql/posts_get.graphql';
+import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
+import POST_DELETE from '../graphql/post_delete.graphql';
 
 function isDuplicatePost(newPost, existingPosts) {
   return newPost.id !== null && existingPosts.some(post => newPost.id === post.cursor);
@@ -186,7 +186,7 @@ const PostListWithApollo = compose(
               }
             };
           }
-        })
+        });
       };
 
       return { loading, postsQuery, subscribeToMore, loadMoreRows };
@@ -224,7 +224,7 @@ const PostListWithApollo = compose(
               });
             }
           }
-        })
+        });
       },
     })
   })

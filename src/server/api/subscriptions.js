@@ -1,8 +1,8 @@
-import { SubscriptionManager } from 'graphql-subscriptions'
-import { merge } from 'lodash'
+import { SubscriptionManager } from 'graphql-subscriptions';
+import { merge } from 'lodash';
 
-import schema, { pubsub } from './schema'
-import allSetupFunctions from './subscription_functions'
+import schema, { pubsub } from './schema';
+import allSetupFunctions from './subscription_functions';
 
 const rootSetupFunctions = {
   countUpdated: () => ({

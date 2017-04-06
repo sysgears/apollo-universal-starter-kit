@@ -1,7 +1,7 @@
-import now from 'performance-now'
+import now from 'performance-now';
 
-import knex from './connector'
-import log from '../../log'
+import knex from './connector';
+import log from '../../log';
 
 // The map used to store the query times, where the query unique
 // identifier is the key.

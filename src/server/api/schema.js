@@ -1,11 +1,11 @@
-import { makeExecutableSchema, addErrorLoggingToSchema } from 'graphql-tools'
-import { PubSub } from 'graphql-subscriptions'
-import { merge } from 'lodash'
+import { makeExecutableSchema, addErrorLoggingToSchema } from 'graphql-tools';
+import { PubSub } from 'graphql-subscriptions';
+import { merge } from 'lodash';
 
-import log from '../../log'
+import log from '../../log';
 
-import typeDefs from './graphqls'
-import allResolvers from './resolvers'
+import typeDefs from './graphqls';
+import allResolvers from './resolvers';
 
 export const pubsub = new PubSub();
 

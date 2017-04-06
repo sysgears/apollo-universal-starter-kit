@@ -1,8 +1,8 @@
-import React from 'react'
-import { css } from 'glamor'
-import { Container } from 'reactstrap'
+import React from 'react';
+import { css } from 'glamor';
+import { Container } from 'reactstrap';
 
-import NavBar from './nav_bar'
+import NavBar from './nav_bar';
 
 const footerHeight = '40px';
 

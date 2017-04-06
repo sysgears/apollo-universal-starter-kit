@@ -1,14 +1,14 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { graphql, compose, withApollo } from 'react-apollo'
-import ApolloClient from 'apollo-client'
-import gql from 'graphql-tag'
-import update from 'react-addons-update'
-import { Button } from 'reactstrap'
+import React from 'react';
+import { connect } from 'react-redux';
+import { graphql, compose, withApollo } from 'react-apollo';
+import ApolloClient from 'apollo-client';
+import gql from 'graphql-tag';
+import update from 'react-addons-update';
+import { Button } from 'reactstrap';
 
-import log from '../../../log'
-import AMOUNT_QUERY from '../graphql/count_get.graphql'
-import ADD_COUNT_MUTATION from '../graphql/count_add_mutation.graphql'
+import log from '../../../log';
+import AMOUNT_QUERY from '../graphql/count_get.graphql';
+import ADD_COUNT_MUTATION from '../graphql/count_add_mutation.graphql';
 
 const SUBSCRIPTION_QUERY = gql`
   subscription onCountUpdated {

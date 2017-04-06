@@ -1,19 +1,19 @@
-import React from 'react'
-import { createBatchingNetworkInterface } from 'apollo-client'
-import { ApolloProvider } from 'react-apollo'
-import createHistory from 'history/createBrowserHistory'
-import { ConnectedRouter, routerMiddleware } from 'react-router-redux'
-import { addPersistedQueries } from 'persistgraphql'
+import React from 'react';
+import { createBatchingNetworkInterface } from 'apollo-client';
+import { ApolloProvider } from 'react-apollo';
+import createHistory from 'history/createBrowserHistory';
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
+import { addPersistedQueries } from 'persistgraphql';
 
-import createApolloClient from '../apollo_client'
-import createReduxStore from '../redux_store'
-import routes from '../routes'
-import { app as settings } from '../../package.json'
+import createApolloClient from '../apollo_client';
+import createReduxStore from '../redux_store';
+import routes from '../routes';
+import { app as settings } from '../../package.json';
 
-import '../ui/styles/styles.scss'
+import '../ui/styles/styles.scss';
 
 // Virtual module, see webpack-virtual-modules usage in webpack.run.js
-export { default as backendReloadCount } from 'backend_reload' // eslint-disable-line import/no-unresolved
+export { default as backendReloadCount } from 'backend_reload'; // eslint-disable-line import/no-unresolved
 
 // Favicon.ico should not be hashed, since some browsers expect it to be exactly on /favicon.ico URL
 require('!file-loader?name=[name].[ext]!../assets/favicon.ico'); // eslint-disable-line import/no-webpack-loader-syntax

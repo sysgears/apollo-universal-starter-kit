@@ -1,13 +1,13 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { graphql, compose } from 'react-apollo'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
+import { Link } from 'react-router-dom';
 
-import PostForm from '../components/post_form'
-import PostComments from './post_comments'
-import POST_QUERY from '../graphql/post_get.graphql'
-import POST_EDIT from '../graphql/post_edit.graphql'
-import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql'
+import PostForm from '../components/post_form';
+import PostComments from './post_comments';
+import POST_QUERY from '../graphql/post_get.graphql';
+import POST_EDIT from '../graphql/post_edit.graphql';
+import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql';
 
 class PostEdit extends React.Component {
   constructor(props) {

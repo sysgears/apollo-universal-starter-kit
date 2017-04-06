@@ -1,4 +1,4 @@
-import minilog from 'minilog'
+import minilog from 'minilog';
 
 minilog.enable();
 
@@ -12,7 +12,7 @@ if (__DEV__ && __SERVER__) {
     } else {
       console_log.apply(console_log, arguments);
     }
-  }
+  };
 }
 
 export default log;

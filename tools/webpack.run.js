@@ -1,16 +1,16 @@
-import webpack from 'webpack'
-import WebpackDevServer from 'webpack-dev-server'
-import { spawn } from 'child_process'
-import fs from 'fs'
-import path from 'path'
-import mkdirp from 'mkdirp'
-import minilog from 'minilog'
-import _ from 'lodash'
-import crypto from 'crypto'
-import VirtualModules from 'webpack-virtual-modules'
+import webpack from 'webpack';
+import WebpackDevServer from 'webpack-dev-server';
+import { spawn } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import mkdirp from 'mkdirp';
+import minilog from 'minilog';
+import _ from 'lodash';
+import crypto from 'crypto';
+import VirtualModules from 'webpack-virtual-modules';
 
-const pkg = require('../package.json');
-import configs from './webpack.config'
+import pkg from '../package.json';
+import configs from './webpack.config';
 
 minilog.enable();
 
@@ -236,11 +236,11 @@ function useWebpackDll() {
   const jsonPath = path.join('..', pkg.app.frontendBuildDir, 'vendor_dll.json');
   clientConfig.plugins.push(new webpack.DllReferencePlugin({
     context:  process.cwd(),
-    manifest: require(jsonPath)
+    manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
   }));
   serverConfig.plugins.push(new webpack.DllReferencePlugin({
     context:  process.cwd(),
-    manifest: require(jsonPath)
+    manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
   }));
 }
 

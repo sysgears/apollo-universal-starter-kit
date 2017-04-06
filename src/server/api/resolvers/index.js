@@ -1,4 +1,4 @@
-import postResolvers from './post_resolvers'
+import postResolvers from './post_resolvers';
 
 export default [
   postResolvers,

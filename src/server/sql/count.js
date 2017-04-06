@@ -1,4 +1,4 @@
-import knex from './connector'
+import knex from './connector';
 
 export default class Count {
   getCount() {

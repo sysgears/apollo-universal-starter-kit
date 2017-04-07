@@ -9,8 +9,48 @@ import POSTS_QUERY from '../graphql/posts_get.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
 import POST_DELETE from '../graphql/post_delete.graphql';
 
-function isDuplicatePost(newPost, existingPosts) {
-  return newPost.id !== null && existingPosts.some(post => newPost.id === post.cursor);
+export function AddPost(prev, node) {
+  // ignore if duplicate
+  if (node.id !== null && prev.postsQuery.edges.some(post => node.id === post.cursor) {
+    return prev;
+  }
+
+  const edge = {
+    cursor: node.id,
+    node: node,
+    __typename: 'Edges'
+  };
+
+  return update(prev, {
+    postsQuery: {
+      totalCount: {
+        $set: prev.postsQuery.totalCount + 1
+      },
+      edges: {
+        $unshift: [ edge ],
+      }
+    }
+  });
+}
+
+function DeletePost(prev, id) {
+  const index = prev.postsQuery.edges.findIndex(x => x.node.id === id);
+
+  // ignore if not found
+  if (index < 0) {
+    return prev;
+  }
+
+  return update(prev, {
+    postsQuery: {
+      totalCount: {
+        $set: prev.postsQuery.totalCount - 1
+      },
+      edges: {
+        $splice: [ [ index, 1 ] ],
+      }
+    }
+  });
 }
 
 class PostList extends React.Component {
@@ -41,40 +81,9 @@ class PostList extends React.Component {
             let newResult = prev;
 
             if (mutation === 'CREATED') {
-              if (!isDuplicatePost(node, prev.postsQuery.edges)) {
-
-                const edge = {
-                  cursor: node.id,
-                  node: node,
-                  __typename: 'Edges'
-                };
-
-                newResult = update(prev, {
-                  postsQuery: {
-                    totalCount: {
-                      $set: prev.postsQuery.totalCount + 1
-                    },
-                    edges: {
-                      $unshift: [ edge ],
-                    }
-                  }
-                });
-              }
+              newResult = AddPost(prev, node);
             } else if (mutation === 'DELETED') {
-              const index = prev.postsQuery.edges.findIndex(x => x.node.id === id);
-
-              if (index >= 0) {
-                newResult = update(prev, {
-                  postsQuery: {
-                    totalCount: {
-                      $set: prev.postsQuery.totalCount - 1
-                    },
-                    edges: {
-                      $splice: [ [ index, 1 ] ],
-                    }
-                  }
-                });
-              }
+              newResult = DeletePost(prev, id);
             }
 
             return newResult;
@@ -201,22 +210,7 @@ const PostListWithApollo = compose(
           },
           updateQueries: {
             getPosts: (prev, { mutationResult: { data: { deletePost } } }) => {
-              const index = prev.postsQuery.edges.findIndex(x => x.node.id === deletePost.id);
-
-              if (index < 0) {
-                return prev;
-              }
-
-              return update(prev, {
-                postsQuery: {
-                  totalCount: {
-                    $set: prev.postsQuery.totalCount - 1
-                  },
-                  edges: {
-                    $splice: [ [ index, 1 ] ],
-                  }
-                }
-              });
+              return DeletePost(prev, deletePost.id);
             }
           }
         });

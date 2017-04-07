@@ -7,9 +7,7 @@ import { Link } from 'react-router-dom';
 import PostForm from '../components/post_form';
 import POST_ADD from '../graphql/post_add.graphql';
 
-function isDuplicatePost(newPost, existingPosts) {
-  return newPost.id !== null && existingPosts.some(post => newPost.id === post.cursor);
-}
+import { AddPost } from './post_list';
 
 class PostAdd extends React.Component {
   onSubmit(values) {
@@ -49,26 +47,7 @@ const PostAddWithApollo = compose(
         },
         updateQueries: {
           getPosts: (prev, { mutationResult: { data: { addPost } } }) => {
-            if (isDuplicatePost(addPost, prev.postsQuery.edges)) {
-              return prev;
-            }
-
-            const edge = {
-              cursor: addPost.id,
-              node: addPost,
-              __typename: 'Edges'
-            };
-
-            return update(prev, {
-              postsQuery: {
-                totalCount: {
-                  $set: prev.postsQuery.totalCount + 1
-                },
-                edges: {
-                  $unshift: [ edge ],
-                }
-              }
-            });
+            return AddPost(prev, addPost);
           }
         }
       }).then(() => history.push('/posts')),

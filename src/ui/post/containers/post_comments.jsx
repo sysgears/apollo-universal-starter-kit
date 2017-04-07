@@ -12,8 +12,36 @@ import COMMENT_EDIT from '../graphql/post_comment_edit.graphql';
 import COMMENT_DELETE from '../graphql/post_comment_delete.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/post_comment_subscription.graphql';
 
-function isDuplicateComment(newComment, existingComments) {
-  return newComment.id !== null && existingComments.some(comment => newComment.id === comment.id);
+function AddComment(prev, node) {
+  // ignore if duplicate
+  if (node.id !== null && prev.post.comments.some(comment => node.id === comment.id)) {
+    return prev;
+  }
+
+  return update(prev, {
+    post: {
+      comments: {
+        $push: [ node ],
+      }
+    }
+  });
+}
+
+function DeleteComment(prev, id) {
+  const index = prev.post.comments.findIndex(x => x.id === id);
+
+  // ignore if not found
+  if (index < 0) {
+    return prev;
+  }
+
+  return update(prev, {
+    post: {
+      comments: {
+        $splice: [ [ index, 1 ] ],
+      }
+    }
+  });
 }
 
 class PostComments extends React.Component {
@@ -43,27 +71,9 @@ class PostComments extends React.Component {
           let newResult = prev;
 
           if (mutation === 'CREATED') {
-            if (!isDuplicateComment(node, prev.post.comments)) {
-              newResult = update(prev, {
-                post: {
-                  comments: {
-                    $push: [ node ],
-                  }
-                }
-              });
-            }
+            newResult = AddComment(prev, node);
           } else if (mutation === 'DELETED') {
-            const index = prev.post.comments.findIndex(x => x.id === id);
-
-            if (index >= 0) {
-              newResult = update(prev, {
-                post: {
-                  comments: {
-                    $splice: [ [ index, 1 ] ],
-                  }
-                }
-              });
-            }
+            newResult = DeleteComment(prev, id);
           }
 
           return newResult;
@@ -154,17 +164,7 @@ const PostCommentsWithApollo = compose(
         },
         updateQueries: {
           getPost: (prev, { mutationResult: { data: { addComment } } }) => {
-            if (isDuplicateComment(addComment, prev.post.comments)) {
-              return prev;
-            }
-
-            return update(prev, {
-              post: {
-                comments: {
-                  $push: [ addComment ],
-                }
-              }
-            });
+            return AddComment(prev, addComment);
           }
         },
       })
@@ -198,19 +198,7 @@ const PostCommentsWithApollo = compose(
         },
         updateQueries: {
           getPost: (prev, { mutationResult: { data: { deleteComment } } }) => {
-            const index = prev.post.comments.findIndex(x => x.id === deleteComment.id);
-
-            if (index < 0) {
-              return prev;
-            }
-
-            return update(prev, {
-              post: {
-                comments: {
-                  $splice: [ [ index, 1 ] ],
-                }
-              }
-            });
+            return DeleteComment(prev, deleteComment.id);
           }
         }
       }),

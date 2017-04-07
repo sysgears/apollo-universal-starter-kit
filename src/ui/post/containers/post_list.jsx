@@ -45,12 +45,7 @@ class PostList extends React.Component {
 
                 const edge = {
                   cursor: node.id,
-                  node: {
-                    id: node.id,
-                    title: node.title,
-                    content: node.content,
-                    __typename: 'Post'
-                  },
+                  node: node,
                   __typename: 'Edges'
                 };
 

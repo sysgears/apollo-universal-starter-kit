@@ -55,12 +55,7 @@ const PostAddWithApollo = compose(
 
             const edge = {
               cursor: addPost.id,
-              node: {
-                id: addPost.id,
-                title: addPost.title,
-                content: addPost.content,
-                __typename: 'Post'
-              },
+              node: addPost,
               __typename: 'Edges'
             };
 

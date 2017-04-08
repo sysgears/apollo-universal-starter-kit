@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import http from 'http';
-import { invert } from 'lodash';
+import { invert, isArray } from 'lodash';
 
 import { app as settings } from '../../package.json';
 import log from '../log';
@@ -36,13 +36,18 @@ if (settings.persistGraphQL) {
   app.use(
     '/graphql',
     (req, resp, next) => {
-
-      req.body = req.body.map(body => {
-        return {
-          query: invertedMap[ body.id ],
-          ...body
-        };
-      });
+      if (isArray(req.body)) {
+        req.body = req.body.map(body => {
+          return {
+            query: invertedMap[ body.id ],
+            ...body
+          };
+        });
+      } else {
+        if (!__DEV__ || !req.header('Referer').endsWith('/graphiql')) {
+          resp.status(500).send("Unknown GraphQL query has been received, rejecting...");
+        }
+      }
 
       next();
     },

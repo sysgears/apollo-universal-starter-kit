@@ -20,10 +20,10 @@ req.keys().map(name => {
 export const moduleReducers = reducers;
 
 export const modulesRoutes = routeList.map((component, idx) =>
-  React.cloneElement(component, {key: idx})
+  React.cloneElement(component, { key: idx })
 );
 
 export const moduleNavItems = navItemList.map((component, idx) =>
-  React.cloneElement(component, {key: idx})
+  React.cloneElement(component, { key: idx })
 );
 

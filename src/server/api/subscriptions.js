@@ -6,7 +6,7 @@ import { createModulesSubscriptionSetup } from '../modules';
 const subscriptionManager = new SubscriptionManager({
   schema,
   pubsub,
-  setupFunctions : createModulesSubscriptionSetup(),
+  setupFunctions: createModulesSubscriptionSetup(),
 });
 
 export { subscriptionManager, pubsub };

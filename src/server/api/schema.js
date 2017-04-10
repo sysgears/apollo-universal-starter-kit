@@ -8,7 +8,7 @@ import log from '../../common/log';
 export const pubsub = new PubSub();
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [rootSchemaDef].concat(getModulesSchema()),
+  typeDefs: [ rootSchemaDef ].concat(getModulesSchema()),
   resolvers: createModulesResolvers(pubsub),
 });
 

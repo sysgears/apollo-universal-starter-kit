@@ -17,7 +17,7 @@ export const getNavItems = () => [
 ];
 
 export const getRoutes = () => [
-  (<Route exact path="/posts" component={PostList} />),
-  (<Route exact path="/post/add" component={PostAdd} />),
-  (<Route exact path="/post/:id" component={PostEdit} />)
+  (<Route exact path="/posts" component={PostList}/>),
+  (<Route exact path="/post/add" component={PostAdd}/>),
+  (<Route exact path="/post/:id" component={PostEdit}/>)
 ];

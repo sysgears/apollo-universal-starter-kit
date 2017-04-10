@@ -12,7 +12,7 @@ const _ = require('lodash');
 const appConfigs = require('./webpack.app_config');
 const pkg = require('../package.json');
 
-global.__DEV__ = process.argv.length >= 3 && (process.argv[2].indexOf('watch') >= 0 || process.argv[1].indexOf('mocha-webpack') >= 0);
+global.__DEV__ = process.argv.length >= 3 && (process.argv[ 2 ].indexOf('watch') >= 0 || process.argv[ 1 ].indexOf('mocha-webpack') >= 0);
 const buildNodeEnv = __DEV__ ? 'development' : 'production';
 
 let clientPersistPlugin, serverPersistPlugin;
@@ -40,22 +40,22 @@ const baseConfig = {
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
-        use: (__DEV__ && pkg.app.reactHotLoader ? [{
+        use: (__DEV__ && pkg.app.reactHotLoader ? [ {
           loader: 'react-hot-loader/webpack'
-        }] : []).concat([{
+        } ] : []).concat([ {
           loader: 'babel-loader',
           options: {
-            "presets": ["react", ["es2015", { "modules": false }], "stage-2"],
+            "presets": [ "react", [ "es2015", { "modules": false } ], "stage-2" ],
             "plugins": [
               "transform-runtime",
               "transform-decorators-legacy",
               "transform-class-properties"
-            ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-            "only": ["*.js", "*.jsx"],
+            ].concat(__DEV__ && pkg.app.reactHotLoader ? [ 'react-hot-loader/babel' ] : []),
+            "only": [ "*.js", "*.jsx" ],
           }
-        }]).concat(
+        } ]).concat(
           pkg.app.persistGraphQL ?
-          ['persistgraphql-webpack-plugin/js-loader'] : []
+            [ 'persistgraphql-webpack-plugin/js-loader' ] : []
         )
       },
       {
@@ -65,9 +65,9 @@ const baseConfig = {
       {
         test: /\.(graphql|gql)$/,
         exclude: /node_modules/,
-        use: ['graphql-tag/loader'].concat(
+        use: [ 'graphql-tag/loader' ].concat(
           pkg.app.persistGraphQL ?
-            ['persistgraphql-webpack-plugin/graphql-loader']: []
+            [ 'persistgraphql-webpack-plugin/graphql-loader' ] : []
         )
       },
       {
@@ -85,8 +85,8 @@ const baseConfig = {
     ]
   },
   resolve: {
-    modules: [path.join(__dirname, '../src'), './', 'node_modules'],
-    extensions: ['.js', '.jsx']
+    modules: [ path.join(__dirname, '../src'), './', 'node_modules' ],
+    extensions: [ '.js', '.jsx' ]
   },
   plugins: basePlugins,
   watchOptions: {
@@ -96,10 +96,14 @@ const baseConfig = {
 };
 
 let serverPlugins = [
-  new webpack.BannerPlugin({ banner: 'require("source-map-support").install();',
-      raw: true, entryOnly: false }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __SSR__: pkg.app.ssr,
-    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`})),
+  new webpack.BannerPlugin({
+    banner: 'require("source-map-support").install();',
+    raw: true, entryOnly: false
+  }),
+  new webpack.DefinePlugin(Object.assign({
+    __CLIENT__: false, __SERVER__: true, __SSR__: pkg.app.ssr,
+    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
+  })),
   serverPersistPlugin
 ];
 
@@ -112,7 +116,7 @@ const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
     __filename: true
   },
   externals: nodeExternals({
-    whitelist: [/^webpack/]
+    whitelist: [ /^webpack/ ]
   }),
   module: {
     rules: [
@@ -122,8 +126,8 @@ const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
           { loader: 'isomorphic-style-loader' },
           { loader: 'css-loader', options: { sourceMap: true } },
           { loader: 'postcss-loader' },
-          { loader: 'sass-loader', options: { sourceMap: true } }] :
-          [{ loader: 'ignore-loader' }]
+          { loader: 'sass-loader', options: { sourceMap: true } } ] :
+          [ { loader: 'ignore-loader' } ]
       }
     ]
   },
@@ -142,8 +146,10 @@ let clientPlugins = [
   new ManifestPlugin({
     fileName: 'assets.json'
   }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false, __SSR__: pkg.app.ssr,
-    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`})),
+  new webpack.DefinePlugin(Object.assign({
+    __CLIENT__: true, __SERVER__: false, __SSR__: pkg.app.ssr,
+    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
+  })),
   clientPersistPlugin
 ];
 
@@ -170,8 +176,10 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
           { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
           { loader: 'postcss-loader', options: { sourceMap: true } },
           { loader: 'sass-loader', options: { sourceMap: true } },
-        ] : ExtractTextPlugin.extract({ fallback: "style-loader",
-          use: ['css-loader', 'postcss-loader', 'sass-loader']})
+        ] : ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: [ 'css-loader', 'postcss-loader', 'sass-loader' ]
+        })
       }
     ]
   },
@@ -202,6 +210,6 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
 });
 
 module.exports =
-  process.argv.length >= 2 && process.argv[1].indexOf('mocha-webpack') >= 0 ?
+  process.argv.length >= 2 && process.argv[ 1 ].indexOf('mocha-webpack') >= 0 ?
     serverConfig :
     [ serverConfig, clientConfig, dllConfig ];

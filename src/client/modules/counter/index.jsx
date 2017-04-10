@@ -6,6 +6,6 @@ import reducers from './reducers';
 
 export const getReducers = () => ({ counter: reducers });
 
-export const getRoutes = () => [(
-  <Route exact path="/" component={Counter} />
-)];
+export const getRoutes = () => [ (
+  <Route exact path="/" component={Counter}/>
+) ];

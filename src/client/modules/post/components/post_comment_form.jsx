@@ -38,9 +38,11 @@ const CommentForm = (props) => {
       <FormGroup>
         <Row>
           <Col xs="2"><Label>{operation} comment</Label></Col>
-          <Col xs="8"><Field name="content" component={renderField} type="text" label="Contnent"  validate={required}/></Col>
+          <Col xs="8">
+            <Field name="content" component={renderField} type="text" label="Contnent" validate={required}/>
+          </Col>
           <Col xs="2">
-            <Button color="primary" type="submit" className="float-right"  disabled={submitting}>
+            <Button color="primary" type="submit" className="float-right" disabled={submitting}>
               Submit
             </Button>
           </Col>

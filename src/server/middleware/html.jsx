@@ -5,8 +5,8 @@ const Html = ({ content, state, assetMap, css }) => {
   return (
     <html lang="en">
     <head>
-      <meta charSet="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta charSet="utf-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
       <title>Apollo Fullstack Starter Kit</title>
 
       <link rel="apple-touch-icon" sizes="180x180" href={`/${assetMap["apple-touch-icon.png"]}`}/>
@@ -15,9 +15,9 @@ const Html = ({ content, state, assetMap, css }) => {
       <link rel="manifest" href={`/${assetMap["manifest.json"]}`}/>
       <link rel="mask-icon" href={`/${assetMap["safari-pinned-tab.svg"]}`} color="#5bbad5"/>
       <link rel="shortcut icon" href={`/${assetMap["favicon.ico"]}`} />
-      <meta name="msapplication-config" content={`/${assetMap["browserconfig.xml"]}`} />
+      <meta name="msapplication-config" content={`/${assetMap["browserconfig.xml"]}`}/>
       <meta name="theme-color" content="#ffffff"/>
-      {!__DEV__ && <link rel="stylesheet" type="text/css" href={`/${assetMap['bundle.css']}`} />}
+      {!__DEV__ && <link rel="stylesheet" type="text/css" href={`/${assetMap['bundle.css']}`}/>}
       {__DEV__ &&
         <style dangerouslySetInnerHTML={{ __html:
           require('../../client/styles/styles.scss')._getCss()
@@ -26,13 +26,13 @@ const Html = ({ content, state, assetMap, css }) => {
       {css && <style dangerouslySetInnerHTML={{ __html: css }} />}
     </head>
     <body>
-    <div id="content" dangerouslySetInnerHTML={{ __html: content || "" }} />
+    <div id="content" dangerouslySetInnerHTML={{ __html: content || "" }}/>
     <script
       dangerouslySetInnerHTML={{ __html: `window.__APOLLO_STATE__=${serialize(state, { isJSON: true })};` }}
       charSet="UTF-8"
     />
-    {assetMap["vendor.js"] && <script src={`/${assetMap["vendor.js"]}`} charSet="utf-8" />}
-    <script src={`/${assetMap['bundle.js']}`} charSet="utf-8" />
+    {assetMap["vendor.js"] && <script src={`/${assetMap["vendor.js"]}`} charSet="utf-8"/>}
+    <script src={`/${assetMap['bundle.js']}`} charSet="utf-8"/>
     </body>
     </html>
   );

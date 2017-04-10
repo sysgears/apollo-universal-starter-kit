@@ -9,6 +9,7 @@ const path = require('path');
 const PersistGraphQLPlugin = require('persistgraphql-webpack-plugin');
 const _ = require('lodash');
 
+const appConfigs = require('./webpack.app_config');
 const pkg = require('../package.json');
 
 global.__DEV__ = process.argv.length >= 3 && (process.argv[2].indexOf('watch') >= 0 || process.argv[1].indexOf('mocha-webpack') >= 0);
@@ -84,7 +85,7 @@ const baseConfig = {
     ]
   },
   resolve: {
-    modules: [path.join(__dirname, '../src'), 'node_modules'],
+    modules: [path.join(__dirname, '../src'), './', 'node_modules'],
     extensions: ['.js', '.jsx']
   },
   plugins: basePlugins,
@@ -106,9 +107,6 @@ const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
   name: 'backend',
   devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   target: 'node',
-  entry: {
-    index: ['babel-polyfill', './src/server/index.js']
-  },
   node: {
     __dirname: true,
     __filename: true
@@ -138,7 +136,7 @@ const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
     publicPath: '/'
   },
   plugins: serverPlugins
-});
+}, appConfigs.serverConfig);
 
 let clientPlugins = [
   new ManifestPlugin({
@@ -163,9 +161,6 @@ if (!__DEV__) {
 const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
   name: 'frontend',
   devtool: __DEV__ ? '#eval' : '#source-map',
-  entry: {
-    bundle: ['babel-polyfill', './src/client/index.jsx']
-  },
   module: {
     rules: [
       {
@@ -186,7 +181,7 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
     publicPath: '/'
   },
   plugins: clientPlugins
-});
+}, appConfigs.clientConfig);
 
 const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
   name: 'dll',

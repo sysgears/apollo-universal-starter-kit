@@ -5,7 +5,7 @@ import http from 'http';
 import { invert, isArray } from 'lodash';
 
 import { app as settings } from '../../package.json';
-import log from '../log';
+import log from '../common/log';
 
 // Hot reloadable modules
 let websiteMiddleware = require('./middleware/website').default;

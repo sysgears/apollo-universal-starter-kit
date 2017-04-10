@@ -1,7 +1,6 @@
 export function seed(knex, Promise) { // eslint-disable-line import/prefer-default-export
   return Promise.all([
     knex('post').truncate(),
-    knex('comment').truncate(),
   ]).then(() => {
     let posts = [];
 

@@ -44,7 +44,7 @@ if (settings.persistGraphQL) {
           };
         });
       } else {
-        if (!__DEV__ || !req.header('Referer').endsWith('/graphiql')) {
+        if (!__DEV__ || req.header('Referer').indexOf('/graphiql') < 0) {
           resp.status(500).send("Unknown GraphQL query has been received, rejecting...");
         }
       }

@@ -15,7 +15,7 @@ global.__DEV__ = process.argv.length >= 3 && (process.argv[2].indexOf('watch') >
 const buildNodeEnv = __DEV__ ? 'development' : 'production';
 
 let clientPersistPlugin, serverPersistPlugin;
-if (pkg.app.persistGraphQL) {
+if (!global.__DEV__ && pkg.app.persistGraphQL) {
   clientPersistPlugin = new PersistGraphQLPlugin({ filename: 'extracted_queries.json', addTypename: true });
   serverPersistPlugin = new PersistGraphQLPlugin({ provider: clientPersistPlugin });
 } else {

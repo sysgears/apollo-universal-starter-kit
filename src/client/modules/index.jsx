@@ -15,7 +15,7 @@ export const addNavItems = (...navItemsArg) => {
 };
 
 export const addReducers = reducersArg => {
-  Object.assign(reducers, reducersArg)
+  Object.assign(reducers, reducersArg);
 };
 export const reducers = {};
 

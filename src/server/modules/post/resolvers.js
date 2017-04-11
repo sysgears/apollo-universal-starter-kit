@@ -113,4 +113,3 @@ export default pubsub => ({
     },
   }
 });
-

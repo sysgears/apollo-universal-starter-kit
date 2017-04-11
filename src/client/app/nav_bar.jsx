@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Container, Row, Navbar, Nav, NavItem } from 'reactstrap';
 
 import { app as settings } from '../../../package.json';
-import { moduleNavItems } from '../modules';
+import { navItems } from '../modules';
 
 const NavBar = () => (
   <Navbar color="faded" light>
@@ -11,7 +11,7 @@ const NavBar = () => (
       <Row className="align-items-center">
         <Link to="/" className="navbar-brand">Apollo Starter Kit</Link>
         <Nav>
-          {moduleNavItems}
+          {navItems}
         </Nav>
         {(!settings.persistGraphQL || __DEV__) && <Nav className="ml-auto" navbar>
           <NavItem>

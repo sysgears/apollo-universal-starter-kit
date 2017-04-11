@@ -8,16 +8,16 @@ import PostEdit from './containers/post_edit';
 
 import reducers from './reducers';
 
-export const getReducers = () => ({ post: reducers });
+import { addReducers, addNavItems, addRoutes } from '../';
 
-export const getNavItems = () => [
-  (<NavItem>
+addReducers({ post: reducers });
+addNavItems(
+  <NavItem>
     <Link to="/posts" className="nav-link">Posts</Link>
-  </NavItem>)
-];
-
-export const getRoutes = () => [
-  (<Route exact path="/posts" component={PostList}/>),
-  (<Route exact path="/post/add" component={PostAdd}/>),
-  (<Route exact path="/post/:id" component={PostEdit}/>)
-];
+  </NavItem>
+);
+addRoutes(
+  <Route exact path="/posts" component={PostList}/>,
+  <Route exact path="/post/add" component={PostAdd}/>,
+  <Route exact path="/post/:id" component={PostEdit}/>
+);

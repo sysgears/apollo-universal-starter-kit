@@ -1,29 +1,24 @@
 import React from 'react';
 
-let routeList = [];
-let navItemList = [];
+export const routes = [];
+export const addRoutes = (...routesArg) => {
+  routes.push(...routesArg.map((component, idx) =>
+    React.cloneElement(component, { key: idx + routes.length })
+  ));
+};
+
+export const navItems = [];
+export const addNavItems = (...navItemsArg) => {
+  navItems.push(...navItemsArg.map((component, idx) =>
+    React.cloneElement(component, { key: idx + navItems.length })
+  ));
+};
+
+export const addReducers = reducersArg => {
+  Object.assign(reducers, reducersArg)
+};
+export const reducers = {};
+
+// Require all the modules in the current dir
 let req = require.context('.', true, /\.\/[^\/]+\/index$/);
-const reducers = {};
-req.keys().map(name => {
-  const module = req(name);
-  if (module.getRoutes) {
-    routeList = routeList.concat(module.getRoutes());
-  }
-  if (module.getNavItems) {
-    navItemList = navItemList.concat(module.getNavItems());
-  }
-  if (module.getReducers) {
-    Object.assign(reducers, module.getReducers());
-  }
-});
-
-export const moduleReducers = reducers;
-
-export const modulesRoutes = routeList.map((component, idx) =>
-  React.cloneElement(component, { key: idx })
-);
-
-export const moduleNavItems = navItemList.map((component, idx) =>
-  React.cloneElement(component, { key: idx })
-);
-
+req.keys().map(req);

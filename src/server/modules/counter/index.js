@@ -1,7 +1,12 @@
 import Count from './sql';
 
-export { default as schema } from './schema.graphqls';
-export { default as createResolvers } from './resolvers';
-export { default as subscriptionsSetup } from './subscriptions_setup';
+import schema from './schema.graphqls';
+import createResolvers from './resolvers';
+import subscriptionsSetup from './subscriptions_setup';
+import { addGraphQLSchema, addResolversFactory, addSubscriptionSetup, addContextFactory } from '../';
 
-export const createContext = () => ({ Count: new Count() });
+addGraphQLSchema(schema);
+addResolversFactory(createResolvers);
+addSubscriptionSetup(subscriptionsSetup);
+
+addContextFactory(() => ({ Count: new Count() }));

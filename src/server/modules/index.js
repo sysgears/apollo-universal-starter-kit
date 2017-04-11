@@ -1,33 +1,25 @@
 import { merge } from 'lodash';
 
-let req = require.context('.', true, /\.\/[^\/]+\/index$/);
-const contextCreateFns = [];
-const resolversCreateFns = [];
-const subscriptionSetupObjs = [];
-const schemaList = [];
-req.keys().map(name => {
-  const module = req(name);
-  if (module.createContext) {
-    contextCreateFns.push(module.createContext);
-  }
-  if (module.schema) {
-    schemaList.push(module.schema);
-  }
-  if (module.createResolvers) {
-    resolversCreateFns.push(module.createResolvers);
-  }
-  if (module.subscriptionSetup) {
-    subscriptionSetupObjs.push(module.subscriptionSetup);
-  }
-});
-
-export const createModulesContext = () =>
+const contextCreateFns         = [];
+export const addContextFactory = createContextFunc => {
+  contextCreateFns.push(createContextFunc);
+};
+export const createContext     = () =>
   merge({}, ...contextCreateFns.map(createContext => createContext()));
 
-export const getModulesSchema = () => schemaList;
+export const graphQLSchemas = [];
+export const addGraphQLSchema = schema => graphQLSchemas.push(schema);
 
-export const createModulesResolvers = pubsub =>
+const resolversCreateFns         = [];
+export const addResolversFactory = createResolverFunc =>
+  resolversCreateFns.push(createResolverFunc);
+export const createResolvers     = pubsub =>
   merge({}, ...resolversCreateFns.map(createResolvers => createResolvers(pubsub)));
 
-export const createModulesSubscriptionSetup = () =>
-  merge({}, ...subscriptionSetupObjs);
+export const graphQLSubscriptionSetup = {};
+export const addSubscriptionSetup     = subscriptionSetup =>
+  merge(graphQLSubscriptionSetup, subscriptionSetup);
+
+// Require all the modules in the current dir
+let req = require.context('.', true, /\.\/[^\/]+\/index$/);
+req.keys().map(req);

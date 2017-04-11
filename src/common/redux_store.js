@@ -3,7 +3,7 @@ import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { moduleReducers } from '../client/modules';
+import { reducers } from '../client/modules';
 
 const createReduxStore = (initialState, client, routerMiddleware) => {
   const store = createStore(
@@ -12,7 +12,7 @@ const createReduxStore = (initialState, client, routerMiddleware) => {
       router: routerReducer,
       form: formReducer,
 
-      ...moduleReducers
+      ...reducers
     }),
     initialState, // initial state
     routerMiddleware ? composeWithDevTools(applyMiddleware(client.middleware(), routerMiddleware))

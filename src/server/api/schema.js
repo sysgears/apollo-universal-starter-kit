@@ -8,7 +8,7 @@ import log from '../../common/log';
 export const pubsub = new PubSub();
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [ rootSchemaDef ].concat(graphQLSchemas),
+  typeDefs: [rootSchemaDef].concat(graphQLSchemas),
   resolvers: createResolvers(pubsub),
 });
 

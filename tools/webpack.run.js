@@ -37,7 +37,7 @@ function runServer(path) {
   if (startBackend) {
     startBackend = false;
     logBack('Starting backend');
-    server = spawn('node', [ path ], { stdio: [ 0, 1, 2 ] });
+    server = spawn('node', [path], {stdio: [0, 1, 2]});
     server.on('exit', code => {
       if (code === 250) {
         // App requested full reload
@@ -83,7 +83,7 @@ function webpackReporter(log, err, stats) {
   }
 }
 
-var frontendVirtualModules = new VirtualModules({ 'node_modules/backend_reload.js': '' });
+var frontendVirtualModules = new VirtualModules({'node_modules/backend_reload.js': ''});
 
 function startClient() {
   try {
@@ -96,10 +96,10 @@ function startClient() {
         clientConfig.entry.bundle.unshift('react-hot-loader/patch');
       }
       clientConfig.entry.bundle.unshift(
-        `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`,
-        'webpack/hot/dev-server');
+          `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`,
+          'webpack/hot/dev-server');
       clientConfig.plugins.push(new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin());
+          new webpack.NoEmitOnErrorsPlugin());
       clientConfig.output.path = '/';
       startWebpackDevServer(clientConfig, reporter);
     } else {
@@ -142,11 +142,11 @@ function startServer() {
           // Patch webpack-generated original source files path, by stripping hash after filename
           const mapKey = _.findKey(assets, (v, k) => k.endsWith('.map'));
           if (mapKey) {
-            var srcMap = JSON.parse(assets[ mapKey ]._value);
+            var srcMap = JSON.parse(assets[mapKey]._value);
             for (var idx in srcMap.sources) {
-              srcMap.sources[ idx ] = srcMap.sources[ idx ].split(';')[ 0 ];
+              srcMap.sources[idx] = srcMap.sources[idx].split(';')[0];
             }
-            assets[ mapKey ]._value = JSON.stringify(srcMap);
+            assets[mapKey]._value = JSON.stringify(srcMap);
           }
         });
       });
@@ -192,18 +192,18 @@ function startWebpackDevServer(clientConfig, reporter) {
   compiler.plugin('done', stats => {
     const dir = pkg.app.frontendBuildDir;
     createDirs(dir);
-    if (stats.compilation.assets[ 'assets.json' ]) {
-      const assetsMap = JSON.parse(stats.compilation.assets[ 'assets.json' ].source());
+    if (stats.compilation.assets['assets.json']) {
+      const assetsMap = JSON.parse(stats.compilation.assets['assets.json'].source());
       _.each(stats.toJson().assetsByChunkName, (assets, bundle) => {
-        const bundleJs = assets.constructor === Array ? assets[ 0 ] : assets;
-        assetsMap[ `${bundle}.js` ] = bundleJs;
+        const bundleJs = assets.constructor === Array ? assets[0] : assets;
+        assetsMap[`${bundle}.js`] = bundleJs;
         if (assets.length > 1) {
-          assetsMap[ `${bundle}.js.map` ] = `${bundleJs}.map`;
+          assetsMap[`${bundle}.js.map`] = `${bundleJs}.map`;
         }
       });
       if (pkg.app.webpackDll) {
         let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
-        assetsMap[ 'vendor.js' ] = json.name;
+        assetsMap['vendor.js'] = json.name;
       }
       fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
     }
@@ -217,7 +217,7 @@ function startWebpackDevServer(clientConfig, reporter) {
     proxy: {
       '*': `http://localhost:${pkg.app.apiPort}`
     },
-    reporter: ({ state, stats }) => {
+    reporter: ({state, stats}) => {
       if (state) {
         logFront("bundle is now VALID.");
       } else {
@@ -235,11 +235,11 @@ function useWebpackDll() {
   console.log("Using Webpack DLL vendor bundle");
   const jsonPath = path.join('..', pkg.app.frontendBuildDir, 'vendor_dll.json');
   clientConfig.plugins.push(new webpack.DllReferencePlugin({
-    context: process.cwd(),
+    context:  process.cwd(),
     manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
   }));
   serverConfig.plugins.push(new webpack.DllReferencePlugin({
-    context: process.cwd(),
+    context:  process.cwd(),
     manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
   }));
 }
@@ -265,12 +265,12 @@ function isDllValid() {
 
     for (let filename of Object.keys(json.content)) {
       if (filename.indexOf(' ') < 0) {
-        if (!fs.existsSync(filename)) {
+        if(!fs.existsSync(filename)) {
           console.warn("Vendor bundle need to be regenerated, file: " + filename + " is missing.");
           return false;
         }
         const hash = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
-        if (meta.hashes[ filename ] !== hash) {
+        if(meta.hashes[filename] !== hash) {
           console.warn(`Hash for vendor DLL file ${filename} changed, need to rebuild vendor bundle`);
           return false;
         }
@@ -294,10 +294,10 @@ function buildDll() {
 
       compiler.run((err, stats) => {
         let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
-        const meta = { name: _.keys(stats.compilation.assets)[ 0 ], hashes: {}, modules: dllConfig.entry.vendor };
+        const meta = {name: _.keys(stats.compilation.assets)[0], hashes: {}, modules: dllConfig.entry.vendor};
         for (let filename of Object.keys(json.content)) {
           if (filename.indexOf(' ') < 0) {
-            meta.hashes[ filename ] = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
+            meta.hashes[filename] = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
             fs.writeFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json'), JSON.stringify(meta));
           }
         }
@@ -317,7 +317,7 @@ function startWebpack() {
 if (!__DEV__ || !pkg.app.webpackDll) {
   startWebpack();
 } else {
-  buildDll().then(function () {
+  buildDll().then(function() {
     useWebpackDll();
     startWebpack();
   });

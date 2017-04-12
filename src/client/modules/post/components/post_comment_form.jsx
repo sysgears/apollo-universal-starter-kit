@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { Row, Col, Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
 
@@ -19,10 +20,10 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
 };
 
 renderField.propTypes = {
-  input: React.PropTypes.object,
-  label: React.PropTypes.string,
-  type: React.PropTypes.string,
-  meta: React.PropTypes.object
+  input: PropTypes.object,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  meta: PropTypes.object
 };
 
 const CommentForm = (props) => {
@@ -51,10 +52,10 @@ const CommentForm = (props) => {
 };
 
 CommentForm.propTypes = {
-  handleSubmit: React.PropTypes.func,
-  initialValues: React.PropTypes.object,
-  onSubmit: React.PropTypes.func,
-  submitting: React.PropTypes.bool
+  handleSubmit: PropTypes.func,
+  initialValues: PropTypes.object,
+  onSubmit: PropTypes.func,
+  submitting: PropTypes.bool
 };
 
 export default reduxForm({

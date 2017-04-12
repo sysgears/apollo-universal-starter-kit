@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import update from 'react-addons-update';
@@ -139,15 +140,15 @@ class PostComments extends React.Component {
 }
 
 PostComments.propTypes = {
-  postId: React.PropTypes.string.isRequired,
-  comments: React.PropTypes.array.isRequired,
-  comment: React.PropTypes.object.isRequired,
-  addComment: React.PropTypes.func.isRequired,
-  editComment: React.PropTypes.func.isRequired,
-  deleteComment: React.PropTypes.func.isRequired,
-  onCommentSelect: React.PropTypes.func.isRequired,
-  onFormSubmitted: React.PropTypes.func.isRequired,
-  subscribeToMore: React.PropTypes.func.isRequired,
+  postId: PropTypes.string.isRequired,
+  comments: PropTypes.array.isRequired,
+  comment: PropTypes.object.isRequired,
+  addComment: PropTypes.func.isRequired,
+  editComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
+  onCommentSelect: PropTypes.func.isRequired,
+  onFormSubmitted: PropTypes.func.isRequired,
+  subscribeToMore: PropTypes.func.isRequired,
 };
 
 const PostCommentsWithApollo = compose(

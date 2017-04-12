@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose, withApollo } from 'react-apollo';
 import ApolloClient from 'apollo-client';
@@ -104,13 +105,13 @@ class Counter extends React.Component {
 }
 
 Counter.propTypes = {
-  loading: React.PropTypes.bool.isRequired,
-  count: React.PropTypes.object,
-  updateCountQuery: React.PropTypes.func,
-  onReduxIncrement: React.PropTypes.func,
-  addCount: React.PropTypes.func.isRequired,
-  client: React.PropTypes.instanceOf(ApolloClient).isRequired,
-  reduxCount: React.PropTypes.number.isRequired,
+  loading: PropTypes.bool.isRequired,
+  count: PropTypes.object,
+  updateCountQuery: PropTypes.func,
+  onReduxIncrement: PropTypes.func,
+  addCount: PropTypes.func.isRequired,
+  client: PropTypes.instanceOf(ApolloClient).isRequired,
+  reduxCount: PropTypes.number.isRequired,
 };
 
 const CounterWithApollo = withApollo(compose(

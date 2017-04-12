@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import update from 'react-addons-update';
@@ -149,13 +150,13 @@ class PostList extends React.Component {
 }
 
 PostList.propTypes = {
-  loading: React.PropTypes.bool.isRequired,
-  postsQuery: React.PropTypes.object,
-  deletePost: React.PropTypes.func.isRequired,
-  loadMoreRows: React.PropTypes.func.isRequired,
-  subscribeToMore: React.PropTypes.func.isRequired,
-  onFetchMore: React.PropTypes.func.isRequired,
-  endCursor: React.PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
+  postsQuery: PropTypes.object,
+  deletePost: PropTypes.func.isRequired,
+  loadMoreRows: PropTypes.func.isRequired,
+  subscribeToMore: PropTypes.func.isRequired,
+  onFetchMore: PropTypes.func.isRequired,
+  endCursor: PropTypes.string.isRequired,
 };
 
 const PostListWithApollo = compose(

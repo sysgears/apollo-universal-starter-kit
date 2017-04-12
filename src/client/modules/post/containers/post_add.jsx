@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
@@ -27,8 +28,8 @@ class PostAdd extends React.Component {
 }
 
 PostAdd.propTypes = {
-  addPost: React.PropTypes.func.isRequired,
-  endCursor: React.PropTypes.string.isRequired,
+  addPost: PropTypes.func.isRequired,
+  endCursor: PropTypes.string.isRequired,
 };
 
 const PostAddWithApollo = compose(

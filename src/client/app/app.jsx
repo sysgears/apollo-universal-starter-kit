@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { css } from 'glamor';
 import { Container } from 'reactstrap';
 
@@ -31,5 +32,5 @@ export default function App({ children }) {
 }
 
 App.propTypes = {
-  children: React.PropTypes.element,
+  children: PropTypes.element,
 };

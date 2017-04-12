@@ -20,7 +20,7 @@ const Html = ({ content, state, assetMap, css }) => {
       {!__DEV__ && <link rel="stylesheet" type="text/css" href={`/${assetMap['bundle.css']}`} />}
       {__DEV__ &&
         <style dangerouslySetInnerHTML={{ __html:
-          require('../styles/styles.scss')._getCss()
+          require('client/styles/styles.scss')._getCss()
         }}/>
       }
       {css && <style dangerouslySetInnerHTML={{ __html: css }} />}

@@ -1,17 +1,30 @@
 import { graphqlExpress } from 'graphql-server-express';
 import 'isomorphic-fetch';
-import log from 'common/log';
+import DataLoader from 'dataloader';
 
 import schema from '../api/schema';
-import { createContext } from '../modules';
+import Count from '../sql/count';
+import Post from '../sql/post';
 
+import { app as settings } from '../../../package.json';
+
+if (__DEV__ && settings.debugSQL) {
+  require('../sql/debug');
+}
 export default graphqlExpress(() => {
-  try {
-    return {
-      schema,
-      context: createContext()
-    };
-  } catch (e) {
-    log(e.stack);
-  }
+
+  const post = new Post();
+
+  const loaders = {
+    getCommentsForPostIds: new DataLoader(post.getCommentsForPostIds),
+  };
+
+  return {
+    schema,
+    context: {
+      Count: new Count(),
+      Post: post,
+      loaders,
+    },
+  };
 });

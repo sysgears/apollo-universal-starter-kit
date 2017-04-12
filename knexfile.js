@@ -4,10 +4,10 @@ export const development = {
     filename: './dev-db.sqlite3'
   },
   seeds: {
-    directory: './src/server/database/seeds'
+    directory: './src/database/seeds'
   },
   migrations: {
-    directory: './src/server/database/migrations'
+    directory: './src/database/migrations'
   },
   useNullAsDefault: true
 };
@@ -18,10 +18,10 @@ export const production = {
     filename: './prod-db.sqlite3'
   },
   seeds: {
-    directory: './src/server/database/seeds'
+    directory: './src/database/seeds'
   },
   migrations: {
-    directory: './src/server/database/migrations'
+    directory: './src/database/migrations'
   },
   useNullAsDefault: true
 };

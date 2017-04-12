@@ -8,7 +8,7 @@ import PostEdit from './containers/post_edit';
 
 import reducers from './reducers';
 
-import { addReducers, addNavItems, addRoutes } from '../';
+import { addReducers, addNavItems, addRoutes } from '../connector';
 
 addReducers({ post: reducers });
 addNavItems(

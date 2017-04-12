@@ -1,24 +1,5 @@
-import React from 'react';
+import './counter';
+import './favicon';
+import './post';
 
-export const routes = [];
-export const addRoutes = (...routesArg) => {
-  routes.push(...routesArg.map((component, idx) =>
-    React.cloneElement(component, { key: idx + routes.length })
-  ));
-};
-
-export const navItems = [];
-export const addNavItems = (...navItemsArg) => {
-  navItems.push(...navItemsArg.map((component, idx) =>
-    React.cloneElement(component, { key: idx + navItems.length })
-  ));
-};
-
-export const addReducers = reducersArg => {
-  Object.assign(reducers, reducersArg);
-};
-export const reducers = {};
-
-// Require all the modules in the current dir
-let req = require.context('.', true, /\.\/[^\/]+\/index$/);
-req.keys().map(req);
+export * from './connector';

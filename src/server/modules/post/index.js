@@ -5,7 +5,7 @@ import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import subscriptionsSetup from './subscriptions_setup';
 
-import { addGraphQLSchema, addResolversFactory, addSubscriptionSetup, addContextFactory } from '../';
+import { addGraphQLSchema, addResolversFactory, addSubscriptionSetup, addContextFactory } from '../connector';
 
 addGraphQLSchema(schema);
 addResolversFactory(createResolvers);

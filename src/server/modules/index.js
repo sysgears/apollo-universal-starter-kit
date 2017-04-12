@@ -1,24 +1,24 @@
 import { merge } from 'lodash';
 
-const contextCreateFns         = [];
+const contextCreateFns = [];
 export const addContextFactory = createContextFunc => {
   contextCreateFns.push(createContextFunc);
 };
-export const createContext     = () =>
-  merge({}, ...contextCreateFns.map(createContext => createContext()));
+export const createContext = () =>
+    merge({}, ...contextCreateFns.map(createContext => createContext()));
 
 export const graphQLSchemas = [];
 export const addGraphQLSchema = schema => graphQLSchemas.push(schema);
 
-const resolversCreateFns         = [];
+const resolversCreateFns = [];
 export const addResolversFactory = createResolverFunc =>
-  resolversCreateFns.push(createResolverFunc);
-export const createResolvers     = pubsub =>
-  merge({}, ...resolversCreateFns.map(createResolvers => createResolvers(pubsub)));
+    resolversCreateFns.push(createResolverFunc);
+export const createResolvers = pubsub =>
+    merge({}, ...resolversCreateFns.map(createResolvers => createResolvers(pubsub)));
 
 export const graphQLSubscriptionSetup = {};
-export const addSubscriptionSetup     = subscriptionSetup =>
-  merge(graphQLSubscriptionSetup, subscriptionSetup);
+export const addSubscriptionSetup = subscriptionSetup =>
+    merge(graphQLSubscriptionSetup, subscriptionSetup);
 
 // Require all the modules in the current dir
 let req = require.context('.', true, /\.\/[^\/]+\/index$/);

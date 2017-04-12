@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
@@ -65,12 +66,12 @@ class PostEdit extends React.Component {
 }
 
 PostEdit.propTypes = {
-  loading: React.PropTypes.bool.isRequired,
-  post: React.PropTypes.object,
-  editPost: React.PropTypes.func.isRequired,
-  match: React.PropTypes.object.isRequired,
-  subscribeToMore: React.PropTypes.func.isRequired,
-  endCursor: React.PropTypes.string.isRequired,
+  loading: PropTypes.bool.isRequired,
+  post: PropTypes.object,
+  editPost: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
+  subscribeToMore: PropTypes.func.isRequired,
+  endCursor: PropTypes.string.isRequired,
 };
 
 const PostEditWithApollo = compose(

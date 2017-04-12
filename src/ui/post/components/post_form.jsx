@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
 
@@ -22,10 +23,10 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
 };
 
 renderField.propTypes = {
-  input: React.PropTypes.object,
-  label: React.PropTypes.string,
-  type: React.PropTypes.string,
-  meta: React.PropTypes.object
+  input: PropTypes.object,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  meta: PropTypes.object
 };
 
 const PostForm = (props) => {
@@ -43,9 +44,9 @@ const PostForm = (props) => {
 };
 
 PostForm.propTypes = {
-  handleSubmit: React.PropTypes.func,
-  onSubmit: React.PropTypes.func,
-  submitting: React.PropTypes.bool
+  handleSubmit: PropTypes.func,
+  onSubmit: PropTypes.func,
+  submitting: PropTypes.bool
 };
 
 export default reduxForm({

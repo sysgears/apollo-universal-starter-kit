@@ -40,7 +40,7 @@ const CommentForm = (props) => {
         <Row>
           <Col xs="2"><Label>{operation} comment</Label></Col>
           <Col xs="8">
-            <Field name="content" component={renderField} type="text" label="Contnent" validate={required}/>
+            <Field name="content" component={renderField} type="text" label="Content" validate={required}/>
           </Col>
           <Col xs="2">
             <Button color="primary" type="submit" className="float-right" disabled={submitting}>

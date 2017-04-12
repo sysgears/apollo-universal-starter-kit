@@ -65,4 +65,4 @@ const Main = () => (
   </ApolloProvider>
 );
 
-export default Main;
+export default Main

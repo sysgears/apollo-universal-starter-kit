@@ -23,7 +23,7 @@ export default function App({ children }) {
         {children}
       </Container>
       <footer {...footerStyle}>
-        <div className='text-center'>
+        <div className="text-center">
           &copy; 2016. Example Apollo App.
         </div>
       </footer>

@@ -22,7 +22,7 @@ function AddComment(prev, node) {
   return update(prev, {
     post: {
       comments: {
-        $push: [ node ],
+        $push: [node],
       }
     }
   });
@@ -39,7 +39,7 @@ function DeleteComment(prev, id) {
   return update(prev, {
     post: {
       comments: {
-        $splice: [ [ index, 1 ] ],
+        $splice: [[index, 1]],
       }
     }
   });

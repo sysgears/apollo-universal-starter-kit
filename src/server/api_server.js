@@ -39,7 +39,7 @@ if (settings.persistGraphQL) {
       if (isArray(req.body)) {
         req.body = req.body.map(body => {
           return {
-            query: invertedMap[ body.id ],
+            query: invertedMap[body.id],
             ...body
           };
         });
@@ -91,7 +91,7 @@ if (module.hot) {
     module.hot.accept('./middleware/website', () => {
       websiteMiddleware = require('./middleware/website').default;
     });
-    module.hot.accept([ './middleware/graphql', './api/subscriptions' ], () => {
+    module.hot.accept(['./middleware/graphql', './api/subscriptions'], () => {
       try {
         graphqlMiddleware = require('./middleware/graphql').default;
 

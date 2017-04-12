@@ -16,16 +16,16 @@ export default pubsub => ({
           });
         });
 
-        let endCursor = edgesArray.length > 0 ? edgesArray[ edgesArray.length - 1 ].cursor : 0;
+        let endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
 
-        return Promise.all([ context.Post.getTotal(), context.Post.getNextPageFlag(endCursor) ]).then((values) => {
+        return Promise.all([context.Post.getTotal(), context.Post.getNextPageFlag(endCursor)]).then((values) => {
 
           return {
-            totalCount: values[ 0 ].count,
+            totalCount: values[0].count,
             edges: edgesArray,
             pageInfo: {
               endCursor: endCursor,
-              hasNextPage: (values[ 1 ].count > 0 ? true : false)
+              hasNextPage: (values[1].count > 0 ? true : false)
             }
           };
         });
@@ -43,7 +43,7 @@ export default pubsub => ({
   Mutation: {
     addPost(obj, { input }, context) {
       return context.Post.addPost(input)
-        .then((id) => context.Post.getPost(id[ 0 ]))
+        .then((id) => context.Post.getPost(id[0]))
         .then(post => {
           // publish for post list
           pubsub.publish('postsUpdated', { mutation: 'CREATED', id: post.id, endCursor: input.endCursor, node: post });
@@ -71,7 +71,7 @@ export default pubsub => ({
     },
     addComment(obj, { input }, context) {
       return context.Post.addComment(input)
-        .then((id) => context.Post.getComment(id[ 0 ]))
+        .then((id) => context.Post.getComment(id[0]))
         .then(comment => {
           // publish for edit post page
           pubsub.publish('commentUpdated', {

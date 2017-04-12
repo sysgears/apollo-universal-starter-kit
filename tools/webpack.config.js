@@ -53,7 +53,7 @@ const baseConfig = {
           }
         }].concat(
           pkg.app.persistGraphQL ?
-          ['persistgraphql-webpack-plugin/js-loader'] : []
+            ['persistgraphql-webpack-plugin/js-loader'] : []
         )
       },
       {
@@ -65,7 +65,7 @@ const baseConfig = {
         exclude: /node_modules/,
         use: ['graphql-tag/loader'].concat(
           pkg.app.persistGraphQL ?
-            ['persistgraphql-webpack-plugin/graphql-loader']: []
+            ['persistgraphql-webpack-plugin/graphql-loader'] : []
         )
       },
       {
@@ -94,10 +94,14 @@ const baseConfig = {
 };
 
 let serverPlugins = [
-  new webpack.BannerPlugin({ banner: 'require("source-map-support").install();',
-      raw: true, entryOnly: false }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: false, __SERVER__: true, __SSR__: pkg.app.ssr,
-    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`})),
+  new webpack.BannerPlugin({
+    banner: 'require("source-map-support").install();',
+    raw: true, entryOnly: false
+  }),
+  new webpack.DefinePlugin(Object.assign({
+    __CLIENT__: false, __SERVER__: true, __SSR__: pkg.app.ssr,
+    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
+  })),
   serverPersistPlugin
 ];
 
@@ -140,8 +144,10 @@ let clientPlugins = [
   new ManifestPlugin({
     fileName: 'assets.json'
   }),
-  new webpack.DefinePlugin(Object.assign({__CLIENT__: true, __SERVER__: false, __SSR__: pkg.app.ssr,
-    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`})),
+  new webpack.DefinePlugin(Object.assign({
+    __CLIENT__: true, __SERVER__: false, __SSR__: pkg.app.ssr,
+    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
+  })),
   clientPersistPlugin
 ];
 
@@ -150,7 +156,7 @@ if (!__DEV__) {
   clientPlugins.push(new webpack.optimize.CommonsChunkPlugin({
     name: "vendor",
     filename: "[name].[hash].js",
-    minChunks: function (module) {
+    minChunks: function(module) {
       return module.resource && module.resource.indexOf(path.resolve('./node_modules')) === 0;
     }
   }));
@@ -168,8 +174,10 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
           { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
           { loader: 'postcss-loader', options: { sourceMap: true } },
           { loader: 'sass-loader', options: { sourceMap: true } },
-        ] : ExtractTextPlugin.extract({ fallback: "style-loader",
-          use: ['css-loader', 'postcss-loader', 'sass-loader']})
+        ] : ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: ['css-loader', 'postcss-loader', 'sass-loader']
+        })
       }
     ]
   },
@@ -202,4 +210,4 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
 module.exports =
   process.argv.length >= 2 && process.argv[1].indexOf('mocha-webpack') >= 0 ?
     serverConfig :
-    [ serverConfig, clientConfig, dllConfig ];
+    [serverConfig, clientConfig, dllConfig];

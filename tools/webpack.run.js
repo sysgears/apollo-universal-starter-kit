@@ -115,9 +115,9 @@ function startClient() {
 
 let backendReloadCount = 0;
 function increaseBackendReloadCount() {
-  frontendVirtualModules.writeModule('node_modules/backend_reload.js',
-    `module.exports = {default: ${backendReloadCount}};\n`);
   backendReloadCount++;
+  frontendVirtualModules.writeModule('node_modules/backend_reload.js',
+    `var count = ${backendReloadCount};\n`);
 }
 
 function startServer() {

@@ -12,9 +12,6 @@ import { app as settings } from '../../../package.json';
 
 import '../styles/styles.scss';
 
-// Virtual module, see webpack-virtual-modules usage in webpack.run.js
-export { default as backendReloadCount } from 'backend_reload'; // eslint-disable-line import/no-unresolved
-
 let networkInterface = createBatchingNetworkInterface({
   opts: {
     credentials: "same-origin",

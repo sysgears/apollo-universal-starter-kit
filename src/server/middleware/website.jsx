@@ -8,11 +8,11 @@ import { addPersistedQueries } from 'persistgraphql';
 import fs from 'fs';
 import path from 'path';
 
-import createApolloClient from '../../apollo_client';
-import createReduxStore from '../../redux_store';
-import Html from '../../ui/components/html';
-import routes from '../../routes';
-import log from '../../log';
+import createApolloClient from '../../common/apollo_client';
+import createReduxStore from '../../common/redux_store';
+import Html from './html';
+import routes from '../../client/app/routes';
+import log from '../../common/log';
 import { app as settings } from '../../../package.json';
 
 const port = process.env.PORT || settings.apiPort;

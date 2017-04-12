@@ -1,4 +1,4 @@
-import log from '../log';
+import log from '../common/log';
 import './api_server';
 
 process.on('uncaughtException', (ex) => {

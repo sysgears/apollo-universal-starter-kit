@@ -12,11 +12,11 @@ import AMOUNT_QUERY from '../graphql/count_get.graphql';
 import ADD_COUNT_MUTATION from '../graphql/count_add_mutation.graphql';
 
 const SUBSCRIPTION_QUERY = gql`
-  subscription onCountUpdated {
-    countUpdated {
-      amount
+    subscription onCountUpdated {
+        countUpdated {
+            amount
+        }
     }
-  }
 `;
 
 class Counter extends React.Component {
@@ -51,7 +51,7 @@ class Counter extends React.Component {
 
   subscribe() {
     const { client, updateCountQuery } = this.props;
-    this.subscription                  = client.subscribe({
+    this.subscription = client.subscribe({
       query: SUBSCRIPTION_QUERY,
       variables: {},
     }).subscribe({
@@ -67,7 +67,9 @@ class Counter extends React.Component {
           });
         });
       },
-      error(err) { log.error(err); },
+      error(err) {
+        log.error(err);
+      },
     });
   }
 
@@ -82,7 +84,8 @@ class Counter extends React.Component {
     } else {
       return (
         <div className="text-center mt-4 mb-4">
-          Current count, is {count.amount}. This is being stored server-side in the database and using Apollo subscription for real-time updates.
+          Current count, is {count.amount}. This is being stored server-side in the database and using Apollo
+          subscription for real-time updates.
           <br/>
           <br/>
           <Button color="primary" onClick={addCount(1)}>
@@ -116,8 +119,8 @@ Counter.propTypes = {
 
 const CounterWithApollo = withApollo(compose(
   graphql(AMOUNT_QUERY, {
-    props({data: {loading, count, updateQuery}}) {
-      return {loading, count, updateCountQuery: updateQuery};
+    props({ data: { loading, count, updateQuery } }) {
+      return { loading, count, updateCountQuery: updateQuery };
     }
   }),
   graphql(ADD_COUNT_MUTATION, {

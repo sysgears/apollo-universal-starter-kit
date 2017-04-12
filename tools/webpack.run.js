@@ -17,7 +17,7 @@ minilog.enable();
 const logBack = minilog('webpack-for-backend');
 const logFront = minilog('webpack-for-frontend');
 
-const [ serverConfig, clientConfig, dllConfig ] = configs;
+const [serverConfig, clientConfig, dllConfig] = configs;
 const __WINDOWS__ = /^win/.test(process.platform);
 
 let server;
@@ -37,7 +37,7 @@ function runServer(path) {
   if (startBackend) {
     startBackend = false;
     logBack('Starting backend');
-    server = spawn('node', [path], {stdio: [0, 1, 2]});
+    server = spawn('node', [path], { stdio: [0, 1, 2] });
     server.on('exit', code => {
       if (code === 250) {
         // App requested full reload
@@ -83,7 +83,7 @@ function webpackReporter(log, err, stats) {
   }
 }
 
-var frontendVirtualModules = new VirtualModules({'node_modules/backend_reload.js': ''});
+var frontendVirtualModules = new VirtualModules({ 'node_modules/backend_reload.js': '' });
 
 function startClient() {
   try {
@@ -96,10 +96,10 @@ function startClient() {
         clientConfig.entry.bundle.unshift('react-hot-loader/patch');
       }
       clientConfig.entry.bundle.unshift(
-          `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`,
-          'webpack/hot/dev-server');
+        `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`,
+        'webpack/hot/dev-server');
       clientConfig.plugins.push(new webpack.HotModuleReplacementPlugin(),
-          new webpack.NoEmitOnErrorsPlugin());
+        new webpack.NoEmitOnErrorsPlugin());
       clientConfig.output.path = '/';
       startWebpackDevServer(clientConfig, reporter);
     } else {
@@ -217,7 +217,7 @@ function startWebpackDevServer(clientConfig, reporter) {
     proxy: {
       '*': `http://localhost:${pkg.app.apiPort}`
     },
-    reporter: ({state, stats}) => {
+    reporter: ({ state, stats }) => {
       if (state) {
         logFront("bundle is now VALID.");
       } else {
@@ -235,11 +235,11 @@ function useWebpackDll() {
   console.log("Using Webpack DLL vendor bundle");
   const jsonPath = path.join('..', pkg.app.frontendBuildDir, 'vendor_dll.json');
   clientConfig.plugins.push(new webpack.DllReferencePlugin({
-    context:  process.cwd(),
+    context: process.cwd(),
     manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
   }));
   serverConfig.plugins.push(new webpack.DllReferencePlugin({
-    context:  process.cwd(),
+    context: process.cwd(),
     manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
   }));
 }
@@ -265,12 +265,12 @@ function isDllValid() {
 
     for (let filename of Object.keys(json.content)) {
       if (filename.indexOf(' ') < 0) {
-        if(!fs.existsSync(filename)) {
+        if (!fs.existsSync(filename)) {
           console.warn("Vendor bundle need to be regenerated, file: " + filename + " is missing.");
           return false;
         }
         const hash = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
-        if(meta.hashes[filename] !== hash) {
+        if (meta.hashes[filename] !== hash) {
           console.warn(`Hash for vendor DLL file ${filename} changed, need to rebuild vendor bundle`);
           return false;
         }
@@ -294,7 +294,7 @@ function buildDll() {
 
       compiler.run((err, stats) => {
         let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
-        const meta = {name: _.keys(stats.compilation.assets)[0], hashes: {}, modules: dllConfig.entry.vendor};
+        const meta = { name: _.keys(stats.compilation.assets)[0], hashes: {}, modules: dllConfig.entry.vendor };
         for (let filename of Object.keys(json.content)) {
           if (filename.indexOf(' ') < 0) {
             meta.hashes[filename] = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');

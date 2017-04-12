@@ -28,7 +28,7 @@ export function AddPost(prev, node) {
         $set: prev.postsQuery.totalCount + 1
       },
       edges: {
-        $unshift: [ edge ],
+        $unshift: [edge],
       }
     }
   });
@@ -48,7 +48,7 @@ function DeletePost(prev, id) {
         $set: prev.postsQuery.totalCount - 1
       },
       edges: {
-        $splice: [ [ index, 1 ] ],
+        $splice: [[index, 1]],
       }
     }
   });
@@ -186,7 +186,7 @@ const PostListWithApollo = compose(
               // to the new cursor.
               postsQuery: {
                 totalCount,
-                edges: [ ...previousResult.postsQuery.edges, ...newEdges ],
+                edges: [...previousResult.postsQuery.edges, ...newEdges],
                 pageInfo
               }
             };

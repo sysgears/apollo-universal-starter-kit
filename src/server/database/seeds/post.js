@@ -15,8 +15,8 @@ export function seed(knex, Promise) { // eslint-disable-line import/prefer-defau
 
         for (let jj = 0; jj < 2; ++jj) {
           comments.push(knex('comment').insert({
-            post_id: post[ 0 ],
-            content: `Comment title ${jj + 1} for post ${post[ 0 ]}`
+            post_id: post[0],
+            content: `Comment title ${jj + 1} for post ${post[0]}`
           }));
         }
 

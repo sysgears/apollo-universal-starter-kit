@@ -10,7 +10,7 @@ const times = {};
 let count = 0;
 
 const printQueryWithTime = (uid) => {
-  const { startTime, endTime, query } = times[ uid ];
+  const { startTime, endTime, query } = times[uid];
   const elapsedTime = endTime - startTime;
 
   // I print the sql generated for a given query, as well as
@@ -20,14 +20,14 @@ const printQueryWithTime = (uid) => {
 
   // After I print out the query, I have no more use to it,
   // so I delete it from my map so it doesn't grow out of control.
-  delete times[ uid ];
+  delete times[uid];
 };
 
 const printIfPossible = (uid) => {
-  const { position } = times[ uid ];
+  const { position } = times[uid];
 
   // Look of a query with a position one less than the current query
-  const previousTimeUid = Object.keys(times).find(key => times[ key ].position === position - 1);
+  const previousTimeUid = Object.keys(times).find(key => times[key].position === position - 1);
 
   // If we didn't find it, it must have been printed already and we can safely print ourselves.
   if (!previousTimeUid) {
@@ -37,11 +37,11 @@ const printIfPossible = (uid) => {
 
 const printQueriesAfterGivenPosition = (position) => {
   // Look for the next query in the queue
-  const nextTimeUid = Object.keys(times).find(key => times[ key ].position === position + 1);
+  const nextTimeUid = Object.keys(times).find(key => times[key].position === position + 1);
 
   // If we find one and it is marked as finished, we can go ahead and print it
-  if (nextTimeUid && times[ nextTimeUid ].finished) {
-    const nextPosition = times[ nextTimeUid ].position;
+  if (nextTimeUid && times[nextTimeUid].finished) {
+    const nextPosition = times[nextTimeUid].position;
     printQueryWithTime(nextTimeUid);
 
     // There might be more queries that need to printed, so we should keep looking...
@@ -51,7 +51,7 @@ const printQueriesAfterGivenPosition = (position) => {
 
 knex.on('query', (query) => {
   const uid = query.__knexQueryUid;
-  times[ uid ] = {
+  times[uid] = {
     position: count,
     query,
     startTime: now(),
@@ -63,9 +63,9 @@ knex.on('query', (query) => {
 })
   .on('query-response', (response, query) => {
     const uid = query.__knexQueryUid;
-    times[ uid ].endTime = now();
-    times[ uid ].finished = true;
-    const position = times[ uid ].position;
+    times[uid].endTime = now();
+    times[uid].finished = true;
+    const position = times[uid].position;
 
     // Print the current query, if I'm able
     printIfPossible(uid);

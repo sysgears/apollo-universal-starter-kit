@@ -33,7 +33,7 @@ export default queryMap => (req, res, next) => {
         batchInterval: 20,
       });
 
-      if (settings.persistGraphQL) {
+      if (!__DEV__ && settings.persistGraphQL) {
         //console.log("backend queryMap:", queryMap);
         networkInterface = addPersistedQueries(networkInterface, queryMap);
       }

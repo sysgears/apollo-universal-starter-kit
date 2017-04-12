@@ -39,7 +39,7 @@ if (__CLIENT__) {
   );
 }
 
-if (settings.persistGraphQL) {
+if (!__DEV__ && settings.persistGraphQL) {
   // eslint-disable-next-line import/no-extraneous-dependencies, import/no-unresolved
   const queryMap = require('persisted_queries.json');
   networkInterface = addPersistedQueries(networkInterface, queryMap);

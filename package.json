@@ -22,7 +22,9 @@
   "scripts": {
     "build": "babel-node --presets es2015 tools/webpack.run",
     "start": "node --harmony build/server",
-    "test": "mocha-webpack --webpack-config tools/webpack.config.js --full-trace --exit 'src/**/*.test.js' && npm run lint",
+    "tests": "mocha-webpack --webpack-config tools/webpack.config.js --full-trace --exit 'src/**/*.test.js'",
+    "tests:watch": "mocha-webpack --webpack-config tools/webpack.config.js --full-trace --watch 'src/**/*.test.js'",
+    "test": "npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src tests tools",
     "seed": "npm run migrate && babel-node --presets es2015 node_modules/.bin/knex seed:run",
     "migrate": "babel-node --presets es2015 node_modules/.bin/knex migrate:latest",

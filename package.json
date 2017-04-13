@@ -151,8 +151,7 @@
       "arrow-body-style": 0,
       "dot-notation": 0,
       "no-console": 0,
-      "semi": 2,
-      "import/no-webpack-loader-syntax": 0
+      "semi": 2
     },
     "settings": {
       "import/resolver": {

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { graphql, compose, withApollo } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import gql from 'graphql-tag';
-import update from 'react-addons-update';
+import update from 'immutability-helper';
 import { Button } from 'reactstrap';
 import log from 'common/log';
 

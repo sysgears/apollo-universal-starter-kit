@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
-import update from 'react-addons-update';
+import update from 'immutability-helper';
 import { reset } from 'redux-form';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 

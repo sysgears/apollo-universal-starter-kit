@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import update from 'immutability-helper';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
@@ -78,7 +79,74 @@ const PostEditWithApollo = compose(
   graphql(POST_QUERY, {
     options: (props) => {
       return {
-        variables: { id: props.match.params.id }
+        variables: { id: props.match.params.id },
+        reducer(previousResult, action) {
+          let operation = 'UPDATED';
+          let node;
+          let id;
+
+          switch (action.operationName) {
+            // subscriptions
+            case 'onCommentUpdated':
+              operation = action.result.data.commentUpdated.mutation;
+              node = action.result.data.commentUpdated.node;
+              id = action.result.data.commentUpdated.id;
+              break;
+
+            case 'addComment':
+              operation = 'CREATED';
+              node = action.result.data.addComment;
+
+              break;
+
+            case 'deleteComment':
+              operation = 'DELETED';
+              id = action.result.data.deleteComment.id;
+
+              break;
+          }
+
+          switch (operation) {
+            case 'CREATED':
+              // ignore if duplicate
+              if (node.id !== null && previousResult.post.comments.some(comment => node.id === comment.id)) {
+                return previousResult;
+              }
+
+              return update(previousResult, {
+                post: {
+                  comments: {
+                    $push: [node],
+                  }
+                }
+              });
+
+              break;
+
+            case 'DELETED':
+              const index = previousResult.post.comments.findIndex(x => x.id === id);
+
+              // ignore if not found
+              if (index < 0) {
+                return previousResult;
+              }
+
+              return update(previousResult, {
+                post: {
+                  comments: {
+                    $splice: [[index, 1]],
+                  }
+                }
+              });
+
+              break;
+
+            default:
+
+              // default case: just return previous results unchanged
+              return previousResult;
+          }
+        }
       };
     },
     props({ data: { loading, post, subscribeToMore } }) {

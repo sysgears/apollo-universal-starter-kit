@@ -3,21 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose, withApollo } from 'react-apollo';
 import ApolloClient from 'apollo-client';
-import gql from 'graphql-tag';
 import update from 'immutability-helper';
 import { Button } from 'reactstrap';
 import log from 'common/log';
 
 import AMOUNT_QUERY from '../graphql/count_get.graphql';
 import ADD_COUNT_MUTATION from '../graphql/count_add_mutation.graphql';
-
-const SUBSCRIPTION_QUERY = gql`
-    subscription onCountUpdated {
-        countUpdated {
-            amount
-        }
-    }
-`;
+import COUNT_SUBSCRIPTION from '../graphql/count_subscribe.graphql';
 
 class Counter extends React.Component {
   constructor(props) {
@@ -52,7 +44,7 @@ class Counter extends React.Component {
   subscribe() {
     const { client, updateCountQuery } = this.props;
     this.subscription = client.subscribe({
-      query: SUBSCRIPTION_QUERY,
+      query: COUNT_SUBSCRIPTION,
       variables: {},
     }).subscribe({
       next(data) {
@@ -88,7 +80,7 @@ class Counter extends React.Component {
           subscription for real-time updates.
           <br/>
           <br/>
-          <Button color="primary" onClick={addCount(1)}>
+          <Button id="graphql-button" color="primary" onClick={addCount(1)}>
             Click to increase count
           </Button>
           <br/>
@@ -98,7 +90,7 @@ class Counter extends React.Component {
           Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.
           <br/>
           <br/>
-          <Button color="primary" value="1" onClick={this.handleReduxIncrement.bind(this)}>
+          <Button id="redux-button" color="primary" value="1" onClick={this.handleReduxIncrement.bind(this)}>
             Click to increase reduxCount
           </Button>
         </div>

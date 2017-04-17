@@ -19,7 +19,7 @@ export default function App({ children }) {
   return (
     <div>
       <NavBar />
-      <Container>
+      <Container id="content">
         {children}
       </Container>
       <footer {...footerStyle}>

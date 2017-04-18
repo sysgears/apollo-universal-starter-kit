@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import { step } from 'mocha-steps';
 import { createNetworkInterface } from 'apollo-client';
 
-import createApolloClient from '../../../common/apollo_client'
+import createApolloClient from '../../../common/apollo_client';
 import knex from '../../sql/connector';
 import COUNT_GET_QUERY from '../../../client/modules/counter/graphql/count_get.graphql';
 

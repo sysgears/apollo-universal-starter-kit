@@ -27,6 +27,7 @@
     "window": true,
     "document": true,
     "__DEV__": true,
+    "__TEST__": true,
     "__CLIENT__": true,
     "__SERVER__": true,
     "__SSR__": true

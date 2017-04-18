@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use('/', express.static(settings.frontendBuildDir, { maxAge: '180 days' }));
 
 let queryMap = null;
-if (settings.persistGraphQL) {
+if (settings.persistGraphQL && process.env.NODE_ENV !== 'test') {
   // eslint-disable-next-line import/no-extraneous-dependencies, import/no-unresolved
   queryMap = require('persisted_queries.json');
   const invertedMap = invert(queryMap);
@@ -117,3 +117,5 @@ if (module.hot) {
     log(err.stack);
   }
 }
+
+export default app;

@@ -107,6 +107,7 @@
     "babel-register": "^6.24.1",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
+    "chai-http": "^3.0.0",
     "css-loader": "^0.28.0",
     "enzyme": "^2.8.2",
     "eslint": "^3.19.0",

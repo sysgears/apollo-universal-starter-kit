@@ -1,4 +1,4 @@
-export function up(knex, Promise) {
+exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.createTable('post', (table) => {
       table.increments();
@@ -13,11 +13,11 @@ export function up(knex, Promise) {
         table.integer('post_id').unsigned().references('id').inTable('post').onDelete('CASCADE');
       })
   ]);
-}
+};
 
-export function down(knex, Promise) {
+exports.down = function(knex, Promise) {
   return Promise.all([
     knex.schema.dropTable('post'),
     knex.schema.dropTable('comment'),
   ]);
-}
+};

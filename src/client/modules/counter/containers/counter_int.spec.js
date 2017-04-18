@@ -26,7 +26,7 @@ const mocks = {
   })
 };
 
-describe('Counter example works', () => {
+describe('Counter example UI works', () => {
   const renderer = new Renderer([schema], mocks,
     { counter: { reduxCount: REDUX_VALUE } }, reducers);
   let app;

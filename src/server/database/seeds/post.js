@@ -1,4 +1,4 @@
-export function seed(knex, Promise) { // eslint-disable-line import/prefer-default-export
+exports.seed = function seed(knex, Promise) {
   return Promise.all([
     knex('post').truncate(),
     knex('comment').truncate(),
@@ -26,4 +26,4 @@ export function seed(knex, Promise) { // eslint-disable-line import/prefer-defau
 
     return Promise.all(posts);
   });
-}
+};

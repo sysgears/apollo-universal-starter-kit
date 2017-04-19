@@ -13,6 +13,7 @@ let graphiqlMiddleware = require('./middleware/graphiql').default;
 let graphqlMiddleware = require('./middleware/graphql').default;
 let subscriptionManager = require('./api/subscriptions').subscriptionManager;
 
+// eslint-disable-next-line import/no-mutable-exports
 let server;
 
 const app = express();

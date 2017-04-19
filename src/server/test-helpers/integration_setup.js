@@ -12,7 +12,7 @@ before(() => {
 
 after(() => {
   if (server) {
-    server.close()
+    server.close();
   }
 });
 

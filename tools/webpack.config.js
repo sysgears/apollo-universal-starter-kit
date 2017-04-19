@@ -211,6 +211,6 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
 });
 
 module.exports =
-  process.argv.length >= 2 && process.argv[1].indexOf('mocha-webpack') >= 0 ?
+  IS_TEST ?
     serverConfig :
     [serverConfig, clientConfig, dllConfig];

@@ -118,4 +118,4 @@ if (module.hot) {
   }
 }
 
-export default app;
+export default server;

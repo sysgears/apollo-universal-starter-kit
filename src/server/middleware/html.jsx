@@ -19,12 +19,12 @@ const Html = ({ content, state, assetMap, css }) => {
       <meta name="msapplication-config" content={`/${assetMap["browserconfig.xml"]}`}/>
       <meta name="theme-color" content="#ffffff"/>
       {!__DEV__ && <link rel="stylesheet" type="text/css" href={`/${assetMap['bundle.css']}`}/>}
-      {__DEV__ &&
+      {!!__DEV__ &&
       <style dangerouslySetInnerHTML={{
         __html: require('client/styles/styles.scss')._getCss()
       }}/>
       }
-      {css && <style dangerouslySetInnerHTML={{ __html: css }}/>}
+      {!!css && <style dangerouslySetInnerHTML={{ __html: css }}/>}
     </head>
     <body>
     <div id="content" dangerouslySetInnerHTML={{ __html: content || "" }}/>

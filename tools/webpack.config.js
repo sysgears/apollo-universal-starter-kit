@@ -12,17 +12,20 @@ const _ = require('lodash');
 const appConfigs = require('./webpack.app_config');
 const pkg = require('../package.json');
 
-global.__DEV__ = process.argv.length >= 3 && (process.argv[2].indexOf('watch') >= 0 || process.argv[1].indexOf('mocha-webpack') >= 0);
-const buildNodeEnv = __DEV__ ? 'development' : 'production';
+const IS_TEST = process.argv[1].indexOf('mocha-webpack') >= 0;
+global.__DEV__ = process.argv.length >= 3 && (process.argv[2].indexOf('watch') >= 0 || IS_TEST);
+const buildNodeEnv = __DEV__ ? (IS_TEST ? 'test' : 'development') : 'production';
 
 let clientPersistPlugin, serverPersistPlugin;
-if (pkg.app.persistGraphQL) {
+if (pkg.app.persistGraphQL && !IS_TEST) {
   clientPersistPlugin = new PersistGraphQLPlugin({ filename: 'extracted_queries.json', addTypename: true });
   serverPersistPlugin = new PersistGraphQLPlugin({ provider: clientPersistPlugin });
 } else {
   // Dummy plugin instances just to create persisted_queries.json virtual module
-  clientPersistPlugin = new PersistGraphQLPlugin();
-  serverPersistPlugin = new PersistGraphQLPlugin();
+  // Use absolute path for persisted_queries.json module to be compatible with mocha-webpack
+  const moduleName = path.resolve('node_modules/persisted_queries.json');
+  clientPersistPlugin = new PersistGraphQLPlugin({ moduleName });
+  serverPersistPlugin = new PersistGraphQLPlugin({ moduleName });
 }
 
 let basePlugins = [];
@@ -208,6 +211,6 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
 });
 
 module.exports =
-  process.argv.length >= 2 && process.argv[1].indexOf('mocha-webpack') >= 0 ?
+  IS_TEST ?
     serverConfig :
     [serverConfig, clientConfig, dllConfig];

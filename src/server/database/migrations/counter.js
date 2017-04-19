@@ -1,4 +1,4 @@
-export function up(knex, Promise) {
+exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.createTable('count', (table) => {
       table.increments();
@@ -6,10 +6,10 @@ export function up(knex, Promise) {
       table.integer('amount').notNull();
     }),
   ]);
-}
+};
 
-export function down(knex, Promise) {
+exports.down = function(knex, Promise) {
   return Promise.all([
     knex.schema.dropTable('count'),
   ]);
-}
+};

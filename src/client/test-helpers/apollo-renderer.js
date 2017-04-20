@@ -7,6 +7,7 @@ import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { graphql, print } from 'graphql';
 
 import rootSchema from "server/api/root_schema.graphqls";
+import { graphQLSchemas } from "../../server/modules";
 
 global.document = jsdom.jsdom('<!doctype html><html><body><div id="root"><div></body></html>');
 global.window = document.defaultView;
@@ -16,6 +17,7 @@ global.navigator = window.navigator;
 const React = require('react');
 const { ApolloProvider } = require('react-apollo');
 const { mount } = require('enzyme');
+const { reducers } = require("../modules");
 
 class MockNetworkInterface
 {
@@ -68,8 +70,8 @@ class MockNetworkInterface
 }
 
 export default class Renderer {
-  constructor(graphqlSchemas, graphqlMocks, reduxState, reducerMap) {
-    const schema = makeExecutableSchema({ typeDefs: [rootSchema, ...graphqlSchemas] });
+  constructor(graphqlMocks, reduxState) {
+    const schema = makeExecutableSchema({ typeDefs: [rootSchema, ...graphQLSchemas] });
     addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
 
     const mockNetworkInterface = new MockNetworkInterface(schema);
@@ -81,7 +83,7 @@ export default class Renderer {
     const store = createStore(
       combineReducers({
         apollo: client.reducer(),
-        ...reducerMap
+        ...reducers
       }),
       reduxState,
       applyMiddleware(client.middleware())

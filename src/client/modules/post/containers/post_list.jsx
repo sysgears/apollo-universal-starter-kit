@@ -62,7 +62,7 @@ class PostList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { endCursor, onFetchMore, subscribeToMore } = this.props;
+    const { endCursor, onFetchMore } = this.props;
 
     if (!nextProps.loading) {
       onFetchMore(nextProps.postsQuery.pageInfo.endCursor);
@@ -75,23 +75,39 @@ class PostList extends React.Component {
 
       // Subscribe or re-subscribe
       if (!this.subscription) {
-        this.subscription = subscribeToMore({
-          document: POSTS_SUBSCRIPTION,
-          variables: { endCursor: nextProps.postsQuery.pageInfo.endCursor },
-          updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, id, node } } } }) => {
-            let newResult = prev;
-
-            if (mutation === 'CREATED') {
-              newResult = AddPost(prev, node);
-            } else if (mutation === 'DELETED') {
-              newResult = DeletePost(prev, id);
-            }
-
-            return newResult;
-          },
-          onError: (err) => console.error(err),
-        });
+        this.subscribeToPostList(this, nextProps);
       }
+    }
+  }
+
+  subscribeToPostList = (componentRef, nextProps) => {
+    const { subscribeToMore } = this.props;
+
+    this.subscription = subscribeToMore({
+      document: POSTS_SUBSCRIPTION,
+      variables: { endCursor: nextProps.postsQuery.pageInfo.endCursor },
+      updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, id, node } } } }) => {
+        let newResult = prev;
+
+        if (mutation === 'CREATED') {
+          newResult = AddPost(prev, node);
+        } else if (mutation === 'DELETED') {
+          newResult = DeletePost(prev, id);
+        }
+
+        return newResult;
+      },
+      onError: (err) => {
+        console.error('Post List - An error occurred while being subscribed: ', err, 'Subscribe again');
+        componentRef.subscribeToPostEdit(componentRef);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    if (this.subscription) {
+      // unsubscribe
+      this.subscription();
     }
   }
 

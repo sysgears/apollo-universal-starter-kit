@@ -55,7 +55,7 @@ class PostComments extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { postId, subscribeToMore } = this.props;
+    const { postId } = this.props;
 
     // Check if props have changed and, if necessary, stop the subscription
     if (this.subscription && postId !== nextProps.postId) {
@@ -64,23 +64,39 @@ class PostComments extends React.Component {
 
     // Subscribe or re-subscribe
     if (!this.subscription) {
-      this.subscription = subscribeToMore({
-        document: COMMENT_SUBSCRIPTION,
-        variables: { postId: postId },
-        updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
+      this.subscribeToCommentList(this);
+    }
+  }
 
-          let newResult = prev;
+  subscribeToCommentList = (componentRef) => {
+    const { postId, subscribeToMore } = this.props;
 
-          if (mutation === 'CREATED') {
-            newResult = AddComment(prev, node);
-          } else if (mutation === 'DELETED') {
-            newResult = DeleteComment(prev, id);
-          }
+    this.subscription = subscribeToMore({
+      document: COMMENT_SUBSCRIPTION,
+      variables: { postId: postId },
+      updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
 
-          return newResult;
-        },
-        onError: (err) => console.error(err),
-      });
+        let newResult = prev;
+
+        if (mutation === 'CREATED') {
+          newResult = AddComment(prev, node);
+        } else if (mutation === 'DELETED') {
+          newResult = DeleteComment(prev, id);
+        }
+
+        return newResult;
+      },
+      onError: (err) => {
+        console.error('Comment List - An error occurred while being subscribed: ', err, 'Subscribe again');
+        componentRef.subscribeToPostEdit(componentRef);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    if (this.subscription) {
+      // unsubscribe
+      this.subscription();
     }
   }
 

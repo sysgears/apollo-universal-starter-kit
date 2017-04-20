@@ -25,7 +25,7 @@ export default pubsub => ({
             edges: edgesArray,
             pageInfo: {
               endCursor: endCursor,
-              hasNextPage: (values[1].count > 0 ? true : false)
+              hasNextPage: values[1].count > 0
             }
           };
         });

@@ -18,7 +18,7 @@ class PostEdit extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { post, loading, subscribeToMore } = this.props;
+    const { post, loading } = this.props;
 
     // Check if props have changed and, if necessary, stop the subscription
     if (this.subscription && post.id !== nextProps.post.id) {
@@ -27,14 +27,30 @@ class PostEdit extends React.Component {
 
     // Subscribe or re-subscribe
     if (!this.subscription && !loading) {
-      this.subscription = subscribeToMore({
-        document: POST_SUBSCRIPTION,
-        variables: { id: post.id },
-        updateQuery: (prev) => {
-          return prev;
-        },
-        onError: (err) => console.error(err),
-      });
+      this.subscribeToPostEdit(this);
+    }
+  }
+
+  subscribeToPostEdit = (componentRef) => {
+    const { post, subscribeToMore } = this.props;
+
+    this.subscription = subscribeToMore({
+      document: POST_SUBSCRIPTION,
+      variables: { id: post.id },
+      updateQuery: (prev) => {
+        return prev;
+      },
+      onError: (err) => {
+        console.error('Post Edit - An error occurred while being subscribed: ', err, 'Subscribe again');
+        componentRef.subscribeToPostEdit(componentRef);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    if (this.subscription) {
+      // unsubscribe
+      this.subscription();
     }
   }
 

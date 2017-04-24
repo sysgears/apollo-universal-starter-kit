@@ -1,16 +1,17 @@
 import ApolloClient, { addTypenameToDocument } from 'apollo-client';
 import { Router } from 'react-router-dom';
 import createHistory from 'history/createMemoryHistory';
-import jsdom from 'jsdom';
+import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { graphql, print } from 'graphql';
 
 import rootSchema from "server/api/root_schema.graphqls";
 
-global.document = jsdom.jsdom('<!doctype html><html><body><div id="root"><div></body></html>');
-global.window = document.defaultView;
-global.navigator = window.navigator;
+const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
+global.document = dom.window.document;
+global.window = dom.window;
+global.navigator = dom.window.navigator;
 
 // React imports MUST come after `global.document =` in order for enzyme `unmount` to work
 const React = require('react');

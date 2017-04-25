@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - "node"
+os:
+  - linux
+  - osx
 cache:
   directories:
     - node_modules

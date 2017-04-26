@@ -130,7 +130,7 @@ class PostList extends React.Component {
 
     if (postsQuery.pageInfo.hasNextPage) {
       return (
-        <Button color="primary" onClick={loadMoreRows}>
+        <Button id="load-more" color="primary" onClick={loadMoreRows}>
           Load more ...
         </Button>
       );

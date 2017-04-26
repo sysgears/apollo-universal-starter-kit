@@ -9,7 +9,7 @@ chai.should();
 
 const mocks = {
   Query: () => ({
-    postsQuery(obj, { limit, after }, context) {
+    postsQuery(_, { after }) {
       const totalCount = 4;
       const edges = [];
       for (let i = +after + 1; i <= +after + 2; i++) {
@@ -29,7 +29,7 @@ const mocks = {
           endCursor: edges[edges.length - 1].cursor,
           hasNextPage: true
         },
-      }
+      };
     }
   })
 };

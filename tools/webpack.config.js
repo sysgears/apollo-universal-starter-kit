@@ -16,14 +16,15 @@ const IS_TEST = process.argv[1].indexOf('mocha-webpack') >= 0;
 global.__DEV__ = process.argv.length >= 3 && (process.argv[2].indexOf('watch') >= 0 || IS_TEST);
 const buildNodeEnv = __DEV__ ? (IS_TEST ? 'test' : 'development') : 'production';
 
+const moduleName = path.resolve('node_modules/persisted_queries.json');
 let clientPersistPlugin, serverPersistPlugin;
 if (pkg.app.persistGraphQL && !IS_TEST) {
-  clientPersistPlugin = new PersistGraphQLPlugin({ filename: 'extracted_queries.json', addTypename: true });
-  serverPersistPlugin = new PersistGraphQLPlugin({ provider: clientPersistPlugin });
+  clientPersistPlugin = new PersistGraphQLPlugin({ moduleName,
+    filename: 'extracted_queries.json', addTypename: true });
+  serverPersistPlugin = new PersistGraphQLPlugin({ moduleName,
+    provider: clientPersistPlugin });
 } else {
   // Dummy plugin instances just to create persisted_queries.json virtual module
-  // Use absolute path for persisted_queries.json module to be compatible with mocha-webpack
-  const moduleName = path.resolve('node_modules/persisted_queries.json');
   clientPersistPlugin = new PersistGraphQLPlugin({ moduleName });
   serverPersistPlugin = new PersistGraphQLPlugin({ moduleName });
 }

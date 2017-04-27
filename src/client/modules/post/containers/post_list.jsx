@@ -69,9 +69,9 @@ class PostList extends React.Component {
 
       // Check if props have changed and, if necessary, stop the subscription
       if (this.subscription && endCursor !== nextProps.postsQuery.pageInfo.endCursor) {
+        this.subscription();
         this.subscription = null;
       }
-
 
       // Subscribe or re-subscribe
       if (!this.subscription) {

@@ -94,7 +94,6 @@ class PostList extends React.Component {
         } else if (mutation === 'DELETED') {
           newResult = DeletePost(prev, id);
         }
-        console.log(mutation, newResult.postsQuery);
 
         return newResult;
       },

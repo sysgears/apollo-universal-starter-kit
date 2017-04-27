@@ -26,6 +26,7 @@ class MockNetworkInterface
     this.schema = schema;
     this.handlers = {};
     this.subscriptions = {};
+    this.subscriptionQueries = {};
     this.subId = 1;
   }
 
@@ -35,20 +36,30 @@ class MockNetworkInterface
   }
 
   _getSubscriptions(query, variables) {
-    const key = JSON.stringify({ query: print(addTypenameToDocument(query)),
+    const self = this;
+    const queryStr = print(addTypenameToDocument(query));
+    const key = JSON.stringify({ query: queryStr,
       variables: variables || {} });
+    const subscriptions = (!variables ? this.subscriptionQueries[queryStr] :
+        this.subscriptions[key]) || [];
 
-    return this.subscriptions[key].map(subId => this.handlers[subId].handler );
+    return subscriptions.map(subId => {
+      const res = function() { return self.handlers[subId].handler.apply(this, arguments); };
+      res.variables = self.handlers[subId].variables;
+      return res;
+    });
   }
 
   subscribe(request, handler) {
     try {
       const subId = this.subId++;
-      const key = JSON.stringify({ query: print(request.query), variables: request.variables });
-      this.handlers[subId] = { handler: handler, key: key};
+      const queryStr = print(request.query);
+      const key = JSON.stringify({ query: queryStr, variables: request.variables });
+      this.handlers[subId] = { handler: handler, key: key, query: queryStr, variables: request.variables};
       this.subscriptions[key] = this.subscriptions[key] || [];
       this.subscriptions[key].push(subId);
-
+      this.subscriptionQueries[queryStr] = this.subscriptionQueries[queryStr] || [];
+      this.subscriptionQueries[queryStr].push(subId);
       return subId;
     } catch (e) {
       console.error(e);
@@ -61,8 +72,9 @@ class MockNetworkInterface
     }
 
     try {
-      const key = this.handlers[subId].key;
+      const { key, query } = this.handlers[subId];
       this.subscriptions[key].splice(this.subscriptions[key].indexOf(subId), 1);
+      this.subscriptionQueries[query].splice(this.subscriptionQueries[query].indexOf(subId), 1);
       delete this.handlers[subId];
     } catch (e) {
       console.error(e);

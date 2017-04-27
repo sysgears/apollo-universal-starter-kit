@@ -1,8 +1,8 @@
 export default pubsub => ({
   Query: {
-    postsQuery(obj, { first, after }, context) {
+    postsQuery(obj, { limit, after }, context) {
       let edgesArray = [];
-      return context.Post.getPostsPagination(first, after).then(posts => {
+      return context.Post.getPostsPagination(limit, after).then(posts => {
 
         posts.map(post => {
 

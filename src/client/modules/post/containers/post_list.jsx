@@ -94,6 +94,7 @@ class PostList extends React.Component {
         } else if (mutation === 'DELETED') {
           newResult = DeletePost(prev, id);
         }
+        console.log(mutation, newResult.postsQuery);
 
         return newResult;
       },
@@ -179,7 +180,7 @@ const PostListWithApollo = compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
-        variables: { first: 10, after: 0 },
+        variables: { limit: 10, after: 0 },
       };
     },
     props: ({ ownProps, data }) => {

@@ -14,7 +14,7 @@ const orderedFor = (rows, collection, field, singleObject) => {
 };
 
 export default class Post {
-  getPostsPagination(first, after) {
+  getPostsPagination(limit, after) {
 
     let where = '';
     if (after > 0) {
@@ -26,7 +26,7 @@ export default class Post {
       .from('post')
       .whereRaw(where)
       .orderBy('id', 'desc')
-      .limit(first);
+      .limit(limit);
   }
 
   getCommentsForPostIds(postIds) {

@@ -33,7 +33,7 @@ type PostsQuery {
 
 extend type Query {
   # Posts pagination query
-  postsQuery(first: Int, after: ID): PostsQuery
+  postsQuery(limit: Int, after: ID): PostsQuery
   # Post
   post(id: ID!): Post
 }

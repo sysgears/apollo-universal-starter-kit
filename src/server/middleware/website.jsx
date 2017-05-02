@@ -34,7 +34,6 @@ export default queryMap => (req, res, next) => {
       });
 
       if (settings.persistGraphQL) {
-        //console.log("backend queryMap:", queryMap);
         networkInterface = addPersistedQueries(networkInterface, queryMap);
       }
 

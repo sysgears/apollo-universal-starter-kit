@@ -1,8 +1,7 @@
 const initialAmount = 5;
 
-exports.seed = function(knex) {
-  return knex('count').truncate()
-    .then(() => {
-      return knex('count').insert({ amount: initialAmount });
-    });
-};
+export async function seed(knex) {
+  await knex('count').truncate();
+
+  return knex('count').insert({ amount: initialAmount });
+}

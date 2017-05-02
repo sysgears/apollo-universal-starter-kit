@@ -35,22 +35,26 @@ PostAdd.propTypes = {
 const PostAddWithApollo = compose(
   graphql(POST_ADD, {
     props: ({ ownProps: { endCursor, history }, mutate }) => ({
-      addPost: (title, content) => mutate({
-        variables: { input: { title, content, endCursor } },
-        optimisticResponse: {
-          addPost: {
-            id: -1,
-            title: title,
-            content: content,
-            __typename: 'Post',
+      addPost: async (title, content) => {
+        await mutate({
+          variables: { input: { title, content, endCursor } },
+          optimisticResponse: {
+            addPost: {
+              id: -1,
+              title: title,
+              content: content,
+              __typename: 'Post',
+            },
           },
-        },
-        updateQueries: {
-          getPosts: (prev, { mutationResult: { data: { addPost } } }) => {
-            return AddPost(prev, addPost);
+          updateQueries: {
+            getPosts: (prev, { mutationResult: { data: { addPost } } }) => {
+              return AddPost(prev, addPost);
+            }
           }
-        }
-      }).then(() => history.push('/posts')),
+        });
+
+        return history.push('/posts');
+      }
     })
   })
 )(PostAdd);

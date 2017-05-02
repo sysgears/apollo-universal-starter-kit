@@ -29,13 +29,13 @@ export default class Post {
       .limit(limit);
   }
 
-  getCommentsForPostIds(postIds) {
-    return knex
+  async getCommentsForPostIds(postIds) {
+    let res = await knex
       .select('id', 'content', 'post_id AS postId')
       .from('comment')
-      .whereIn('post_id', postIds).then(res => {
-        return orderedFor(res, postIds, 'postId', false);
-      });
+      .whereIn('post_id', postIds);
+
+    return orderedFor(res, postIds, 'postId', false);
   }
 
   getTotal() {

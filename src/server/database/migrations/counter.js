@@ -1,15 +1,11 @@
-exports.up = function(knex, Promise) {
-  return Promise.all([
-    knex.schema.createTable('count', (table) => {
+export async function up(knex) {
+  return knex.schema.createTable('count', table => {
       table.increments();
       table.timestamps();
       table.integer('amount').notNull();
-    }),
-  ]);
-};
+    });
+}
 
-exports.down = function(knex, Promise) {
-  return Promise.all([
-    knex.schema.dropTable('count'),
-  ]);
-};
+export async function down(knex) {
+  return knex.schema.dropTable('count');
+}

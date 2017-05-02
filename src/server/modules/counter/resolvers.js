@@ -5,13 +5,13 @@ export default pubsub => ({
     },
   },
   Mutation: {
-    addCount(obj, { amount }, context) {
-      return context.Count.addCount(amount)
-        .then(() => context.Count.getCount())
-        .then(count => {
-          pubsub.publish('countUpdated', count);
-          return count;
-        });
+    async addCount(obj, { amount }, context) {
+      await context.Count.addCount(amount);
+      let count = await context.Count.getCount();
+
+      pubsub.publish('countUpdated', count);
+
+      return count;
     },
   },
   Subscription: {

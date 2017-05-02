@@ -22,16 +22,16 @@ describe('Counter example API works', () => {
     });
   });
 
-  step('Responds to counter get GraphQL query', () => {
-    return apollo.query({ query: COUNT_GET_QUERY }).then(result => {
-      result.data.should.deep.equal({ count: { amount: 5, __typename: 'Count' } });
-    });
+  step('Responds to counter get GraphQL query', async () => {
+    let result = await apollo.query({ query: COUNT_GET_QUERY });
+
+    result.data.should.deep.equal({ count: { amount: 5, __typename: 'Count' } });
   });
 
-  step('Increments counter on GraphQL mutation', () => {
-    return apollo.mutate({ mutation: COUNT_ADD_MUTATION, variables: { amount: 2 } }).then(result => {
-      result.data.should.deep.equal({ addCount: { amount: 7, __typename: 'Count' } });
-    });
+  step('Increments counter on GraphQL mutation', async () => {
+    let result = await apollo.mutate({ mutation: COUNT_ADD_MUTATION, variables: { amount: 2 } });
+
+    result.data.should.deep.equal({ addCount: { amount: 7, __typename: 'Count' } });
   });
 
   step('Triggers subscription on GraphQL mutation', done => {

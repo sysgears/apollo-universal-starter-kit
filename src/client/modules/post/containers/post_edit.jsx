@@ -103,9 +103,13 @@ const PostEditWithApollo = compose(
   }),
   graphql(POST_EDIT, {
     props: ({ ownProps: { endCursor, history }, mutate }) => ({
-      editPost: (id, title, content) => mutate({
-        variables: { input: { id, title, content, endCursor } }
-      }).then(() => history.push('/posts')),
+      editPost: async (id, title, content) => {
+        await mutate({
+          variables: { input: { id, title, content, endCursor } }
+        });
+
+        return history.push('/posts');
+      }
     })
   })
 )(PostEdit);

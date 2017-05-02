@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
+import styles from 'client/styles/styles.scss';
 
 const Html = ({ content, state, assetMap, css }) => {
   return (
@@ -21,7 +22,7 @@ const Html = ({ content, state, assetMap, css }) => {
       {!__DEV__ && <link rel="stylesheet" type="text/css" href={`/${assetMap['bundle.css']}`}/>}
       {!!__DEV__ &&
       <style dangerouslySetInnerHTML={{
-        __html: require('client/styles/styles.scss')._getCss()
+        __html: styles._getCss()
       }}/>
       }
       {!!css && <style dangerouslySetInnerHTML={{ __html: css }}/>}

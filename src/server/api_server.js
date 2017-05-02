@@ -3,15 +3,15 @@ import bodyParser from 'body-parser';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import http from 'http';
 import { invert, isArray } from 'lodash';
+// eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
+import queryMap from 'persisted_queries.json';
 
+import websiteMiddleware from './middleware/website';
+import graphiqlMiddleware from './middleware/graphiql';
+import graphqlMiddleware from './middleware/graphql';
+import { subscriptionManager } from './api/subscriptions';
 import { app as settings } from '../../package.json';
 import log from '../common/log';
-
-// Hot reloadable modules
-let websiteMiddleware = require('./middleware/website').default;
-let graphiqlMiddleware = require('./middleware/graphiql').default;
-let graphqlMiddleware = require('./middleware/graphql').default;
-let subscriptionManager = require('./api/subscriptions').subscriptionManager;
 
 // eslint-disable-next-line import/no-mutable-exports
 let server;
@@ -28,10 +28,7 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(settings.frontendBuildDir, { maxAge: '180 days' }));
 
-let queryMap = null;
 if (settings.persistGraphQL && process.env.NODE_ENV !== 'test') {
-  // eslint-disable-next-line import/no-extraneous-dependencies, import/no-unresolved
-  queryMap = require('persisted_queries.json');
   const invertedMap = invert(queryMap);
 
   app.use(
@@ -80,44 +77,34 @@ server.on('close', () => {
 });
 
 if (module.hot) {
-  try {
-    module.hot.dispose(() => {
+  module.hot.dispose(() => {
+    try {
       if (server) {
         server.close();
       }
-    });
+    } catch (error) {
+      log(error.stack);
+    }
+  });
 
-    module.hot.accept();
+  module.hot.accept();
 
-    // Reload reloadable modules
-    module.hot.accept('./middleware/website', () => {
-      websiteMiddleware = require('./middleware/website').default;
-    });
-    module.hot.accept(['./middleware/graphql', './api/subscriptions'], () => {
-      try {
-        graphqlMiddleware = require('./middleware/graphql').default;
+  // Reload reloadable modules
+  module.hot.accept(['./middleware/graphql', './api/subscriptions'], () => {
+    try {
+      log.debug('Reloading the subscription server.');
 
-        subscriptionManager = require('./api/subscriptions').subscriptionManager;
-
-        log.debug('Reloading the subscription server.');
-
-        if (subscriptionServer && subscriptionServer.wsServer) {
-          subscriptionServer.wsServer.close(() => {
-            subscriptionServer = new SubscriptionServer({
-              subscriptionManager
-            }, subscriptionServerConfig);
-          });
-        }
-      } catch (error) {
-        log(error.stack);
+      if (subscriptionServer && subscriptionServer.wsServer) {
+        subscriptionServer.wsServer.close(() => {
+          subscriptionServer = new SubscriptionServer({
+            subscriptionManager
+          }, subscriptionServerConfig);
+        });
       }
-    });
-    module.hot.accept('./middleware/graphiql', () => {
-      graphiqlMiddleware = require('./middleware/graphiql').default;
-    });
-  } catch (err) {
-    log(err.stack);
-  }
+    } catch (error) {
+      log(error.stack);
+    }
+  });
 }
 
 export default server;

@@ -25,7 +25,7 @@ const Html = ({ content, state, assetMap, css }) => {
         __html: styles._getCss()
       }}/>
       }
-      {!!css && <style dangerouslySetInnerHTML={{ __html: css }}/>}
+      {!!css && css}
     </head>
     <body>
     <div id="content" dangerouslySetInnerHTML={{ __html: content || "" }}/>
@@ -44,7 +44,7 @@ Html.propTypes = {
   content: PropTypes.string,
   state: PropTypes.object.isRequired,
   assetMap: PropTypes.object.isRequired,
-  css: PropTypes.string
+  css: PropTypes.array
 };
 
 export default Html;

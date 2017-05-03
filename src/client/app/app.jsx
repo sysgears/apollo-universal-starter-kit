@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { css } from 'glamor';
+import styled from 'styled-components';
 import { Container } from 'reactstrap';
 
 import NavBar from './nav_bar';
 
 const footerHeight = '40px';
 
-const footerStyle = css({
+const Footer = styled.footer`
   position: 'absolute',
   bottom: 0,
   width: '100%',
-  lineHeight: footerHeight,
-  height: footerHeight
-});
+  lineHeight: ${footerHeight},
+  height: ${footerHeight}
+`;
 
 export default function App({ children }) {
   return (
@@ -22,11 +22,11 @@ export default function App({ children }) {
       <Container id="content">
         {children}
       </Container>
-      <footer {...footerStyle}>
+      <Footer>
         <div className="text-center">
           &copy; 2016. Example Apollo App.
         </div>
-      </footer>
+      </Footer>
     </div>
   );
 }

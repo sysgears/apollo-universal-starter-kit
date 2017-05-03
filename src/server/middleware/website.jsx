@@ -3,7 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 import { createBatchingNetworkInterface } from 'apollo-client';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { StaticRouter } from 'react-router';
-import { renderStatic } from 'glamor-server';
+import { ServerStyleSheet } from 'styled-components';
 import { addPersistedQueries } from 'persistgraphql';
 import fs from 'fs';
 import path from 'path';
@@ -56,7 +56,9 @@ async function renderServerSide(req, res, queryMap) {
 
   res.status(200);
 
-  const { html, css } = renderStatic(() => ReactDOMServer.renderToString(component));
+  const sheet = new ServerStyleSheet();
+  const html = ReactDOMServer.renderToString(sheet.collectStyles(component));
+  const css = sheet.getStyleElement();
 
   if (context.url) {
     res.writeHead(301, { Location: context.url });

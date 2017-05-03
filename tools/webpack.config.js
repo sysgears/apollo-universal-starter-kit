@@ -47,7 +47,7 @@ const baseConfig = {
         use: [{
           loader: 'babel-loader',
           options: {
-            "presets": ["react", ["es2015", { "modules": false }], "stage-2"],
+            "presets": ["react", ["es2015", { "modules": false }], "stage-0"],
             "plugins": [
               "transform-runtime",
               "transform-decorators-legacy",

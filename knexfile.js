@@ -1,4 +1,4 @@
-require('babel-register')({presets: ['es2015', 'stage-2']}) ;
+require('babel-register')({presets: ['es2015', 'stage-0']}) ;
 require('babel-polyfill');
 const config = require('./knexdata');
 

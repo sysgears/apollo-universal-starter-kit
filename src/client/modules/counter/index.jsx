@@ -4,9 +4,9 @@ import { Route } from 'react-router-dom';
 import Counter from './containers/counter';
 import reducers from './reducers';
 
-import { addReducers, addRoutes } from '../connector';
+import Feature from '../connector';
 
-addReducers({ counter: reducers });
-addRoutes(
-  <Route exact path="/" component={Counter}/>
-);
+export default new Feature({
+  route: <Route exact path="/" component={Counter}/>,
+  reducer: { counter: reducers }
+});

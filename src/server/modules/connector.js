@@ -1,21 +1,30 @@
-import { merge } from 'lodash';
+import { merge, map, union, without, castArray } from 'lodash';
 
-const contextCreateFns = [];
-export const addContextFactory = createContextFunc => {
-  contextCreateFns.push(createContextFunc);
-};
-export const createContext = () =>
-  merge({}, ...contextCreateFns.map(createContext => createContext()));
+const combine = (features, extractor) =>
+  without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
-export const graphQLSchemas = [];
-export const addGraphQLSchema = schema => graphQLSchemas.push(schema);
+export default class {
+  // eslint-disable-next-line no-unused-vars
+  constructor({schema, createResolversFunc, subscriptionsSetup, createContextFunc}, ...features) {
+    this.schema = combine(arguments, arg => arg.schema);
+    this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
+    this.subscriptionsSetup = combine(arguments, arg => arg.subscriptionsSetup);
+    this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
+  }
 
-const resolversCreateFns = [];
-export const addResolversFactory = createResolverFunc =>
-  resolversCreateFns.push(createResolverFunc);
-export const createResolvers = pubsub =>
-  merge({}, ...resolversCreateFns.map(createResolvers => createResolvers(pubsub)));
+  get schemas() {
+    return this.schema;
+  }
 
-export const graphQLSubscriptionSetup = {};
-export const addSubscriptionSetup = subscriptionSetup =>
-  merge(graphQLSubscriptionSetup, subscriptionSetup);
+  get subscriptionsSetups() {
+    return merge(...this.subscriptionsSetup);
+  }
+
+  createContext() {
+    return merge({}, ...this.createContextFunc.map(createContext => createContext()));
+  }
+
+  createResolvers(pubsub)  {
+    return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
+  }
+}

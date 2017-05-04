@@ -3,13 +3,13 @@ import 'isomorphic-fetch';
 import log from 'common/log';
 
 import schema from '../api/schema';
-import { createContext } from '../modules';
+import modules from '../modules';
 
 export default graphqlExpress(() => {
   try {
     return {
       schema,
-      context: createContext()
+      context: modules.createContext()
     };
   } catch (e) {
     log(e.stack);

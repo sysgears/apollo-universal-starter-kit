@@ -5,19 +5,17 @@ import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import subscriptionsSetup from './subscriptions_setup';
 
-import { addGraphQLSchema, addResolversFactory, addSubscriptionSetup, addContextFactory } from '../connector';
+import Feature from '../connector';
 
-addGraphQLSchema(schema);
-addResolversFactory(createResolvers);
-addSubscriptionSetup(subscriptionsSetup);
+export default new Feature({schema, createResolversFunc: createResolvers, subscriptionsSetup,
+  createContextFunc: () => {
+    const post = new Post();
 
-addContextFactory(() => {
-  const post = new Post();
-
-  return {
-    Post: post,
-    loaders: {
-      getCommentsForPostIds: new DataLoader(post.getCommentsForPostIds),
-    }
-  };
+    return {
+      Post: post,
+      loaders: {
+        getCommentsForPostIds: new DataLoader(post.getCommentsForPostIds),
+      }
+    };
+  }
 });

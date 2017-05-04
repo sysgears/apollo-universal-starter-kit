@@ -8,16 +8,17 @@ import PostEdit from './containers/post_edit';
 
 import reducers from './reducers';
 
-import { addReducers, addNavItems, addRoutes } from '../connector';
+import Feature from '../connector';
 
-addReducers({ post: reducers });
-addNavItems(
-  <NavItem>
-    <Link to="/posts" className="nav-link">Posts</Link>
-  </NavItem>
-);
-addRoutes(
-  <Route exact path="/posts" component={PostList}/>,
-  <Route exact path="/post/add" component={PostAdd}/>,
-  <Route exact path="/post/:id" component={PostEdit}/>
-);
+export default new Feature({
+  route: [
+    <Route exact path="/posts" component={PostList}/>,
+    <Route exact path="/post/add" component={PostAdd}/>,
+    <Route exact path="/post/:id" component={PostEdit}/>
+  ],
+  navItem:
+    <NavItem>
+      <Link to="/posts" className="nav-link">Posts</Link>
+    </NavItem>,
+  reducer: { post: reducers }
+});

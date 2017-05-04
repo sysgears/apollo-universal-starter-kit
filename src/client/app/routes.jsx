@@ -2,12 +2,12 @@ import React from 'react';
 import { Switch } from 'react-router-dom';
 
 import App from './app';
-import { routes } from '../modules';
+import modules from '../modules';
 
 export default (
   <App>
     <Switch>
-      {routes}
+      {modules.routes}
     </Switch>
   </App>
 );

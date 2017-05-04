@@ -1,5 +1,7 @@
-import './counter';
+import counter from './counter';
 import './debug';
-import './post';
+import post from './post';
 
-export * from './connector';
+import Feature from './connector';
+
+export default new Feature(counter, post);

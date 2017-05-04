@@ -1,12 +1,12 @@
 import { SubscriptionManager } from 'graphql-subscriptions';
 
 import schema, { pubsub } from './schema';
-import { graphQLSubscriptionSetup } from '../modules';
+import modules from '../modules';
 
 const subscriptionManager = new SubscriptionManager({
   schema,
   pubsub,
-  setupFunctions: graphQLSubscriptionSetup,
+  setupFunctions: modules.subscriptionsSetups,
 });
 
 export { subscriptionManager, pubsub };

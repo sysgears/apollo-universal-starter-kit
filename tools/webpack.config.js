@@ -51,7 +51,8 @@ const baseConfig = {
             "plugins": [
               "transform-runtime",
               "transform-decorators-legacy",
-              "transform-class-properties"
+              "transform-class-properties",
+              ["styled-components", { "ssr": true } ]
             ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
             "only": ["*.js", "*.jsx"],
           }

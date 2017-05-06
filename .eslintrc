@@ -11,6 +11,7 @@
     "arrow-body-style": 0,
     "dot-notation": 0,
     "no-console": 0,
+    "react/jsx-key": 0,
     "semi": 2
   },
   "settings": {

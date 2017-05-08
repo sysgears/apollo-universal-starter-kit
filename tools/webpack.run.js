@@ -8,6 +8,7 @@ import minilog from 'minilog';
 import _ from 'lodash';
 import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
+import waitForPort from 'wait-for-port';
 
 import pkg from '../package.json';
 import configs from './webpack.config';
@@ -189,6 +190,17 @@ function startWebpackDevServer(clientConfig, reporter) {
 
   let compiler = webpack(clientConfig);
 
+  compiler.plugin('after-emit', (compilation, callback) => {
+    logFront.debug("Webpack dev server is waiting for backend to start...");
+    waitForPort('localhost', pkg.app.apiPort, err => {
+      if (err) {
+        logFront.error(err);
+      } else {
+        logFront.debug("Backend has been started already, resuming webpack dev server...");
+        callback();
+      }
+    });
+  });
   compiler.plugin('done', stats => {
     const dir = pkg.app.frontendBuildDir;
     createDirs(dir);

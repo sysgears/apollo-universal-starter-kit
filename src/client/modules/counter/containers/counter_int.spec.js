@@ -1,4 +1,4 @@
-import Renderer from 'client/test-helpers/apollo-renderer';
+import Renderer from 'client/test-helpers/apollo_renderer';
 import chai from 'chai';
 import { step } from 'mocha-steps';
 import routes from 'client/app/routes';

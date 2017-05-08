@@ -14,11 +14,13 @@ const SUBSCRIPTION_VALUE = 17;
 
 const mocks = {
   Count: () => ({
-    amount: COUNTER_VALUE
+    amount: COUNTER_VALUE,
+    __typename: 'Count'
   }),
   Mutation: () => ({
     addCount: (obj, { amount }) => ({
-      amount: INC_COUNTER_VALUE + amount
+      amount: INC_COUNTER_VALUE + amount,
+      __typename: 'Count'
     })
   })
 };
@@ -62,7 +64,7 @@ describe('Counter example UI works', () => {
 
   step('Updates counter on data from subscription', () => {
     const subscription = renderer.getSubscriptions(COUNT_SUBSCRIBE)[0];
-    subscription(null, { countUpdated: { amount: SUBSCRIPTION_VALUE } });
+    subscription(null, { countUpdated: { amount: SUBSCRIPTION_VALUE, __typename: 'Count' } });
     content.text().should.has.string(`Current count, is ${SUBSCRIPTION_VALUE}.`);
   });
 

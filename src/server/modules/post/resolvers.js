@@ -42,20 +42,25 @@ export default pubsub => ({
       let id = await context.Post.addPost(input);
       let post = await context.Post.getPost(id[0]);
       // publish for post list
-      pubsub.publish('postsUpdated', { mutation: 'CREATED', id: post.id, endCursor: input.endCursor, node: post });
+      pubsub.publish('postsUpdated', { mutation: 'CREATED', node: post });
       return post;
     },
-    async deletePost(obj, { input: { id, endCursor } }, context) {
-      await context.Post.deletePost(id);
-      // publish for post list
-      pubsub.publish('postsUpdated', { mutation: 'DELETED', id, endCursor: endCursor, node: null });
-      return { id };
+    async deletePost(obj, { id }, context) {
+      let post = await context.Post.getPost(id);
+      let isDeleted = await context.Post.deletePost(id);
+      if (isDeleted) {
+        // publish for post list
+        pubsub.publish('postsUpdated', { mutation: 'DELETED', node: post });
+        return { id: post.id };
+      } else {
+        return { id: null };
+      }
     },
     async editPost(obj, { input }, context) {
       await context.Post.editPost(input);
       let post = await context.Post.getPost(input.id);
       // publish for post list
-      pubsub.publish('postsUpdated', { mutation: 'UPDATED', id: input.id, endCursor: input.endCursor, node: post });
+      pubsub.publish('postsUpdated', { mutation: 'UPDATED', node: post });
       // publish for edit post page
       pubsub.publish('postUpdated', post);
       return post;

@@ -39,6 +39,11 @@ const mocks = {
         __typename: "PostsQuery"
       };
     }
+  }),
+  Mutation: () => ({
+    deletePost(obj, { id }) {
+      return createNode(id);
+    }
   })
 };
 
@@ -77,15 +82,37 @@ describe('Posts and comments example UI works', () => {
 
   step('Updates post list on post delete from subscription', () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
-    subscription(null, { postsUpdated: { mutation: 'DELETED', id: "2", node: null } });
+    subscription(null, {
+      postsUpdated: {
+        mutation: 'DELETED', node: createNode(2), __typename: 'UpdatePostPayload'
+      }
+    });
     content.text().should.not.include('Post title 2');
     content.text().should.include('3 / 3');
   });
 
   step('Updates post list on post create from subscription', () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
-    subscription(null, _.cloneDeep({ postsUpdated: { mutation: 'CREATED', id: "2", node: createNode(2) } }));
+    subscription(null, _.cloneDeep({
+      postsUpdated: {
+        mutation: 'CREATED', node: createNode(2),  __typename: 'UpdatePostPayload'
+      }
+    }));
     content.text().should.include('Post title 2');
     content.text().should.include('4 / 4');
+  });
+
+  step('Clicking delete optimistically removes post', () => {
+    const deleteButtons = content.find('.delete-button');
+    deleteButtons.should.have.lengthOf(4);
+    deleteButtons.last().simulate("click");
+    content.text().should.not.include('Post title 4');
+    content.text().should.include('3 / 3');
+  });
+
+  step('Clicking delete removes the post', () => {
+    content.text().should.include('Post title 3');
+    content.text().should.not.include('Post title 4');
+    content.text().should.include('3 / 3');
   });
 });

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 import { Link } from 'react-router-dom';
@@ -62,37 +61,36 @@ class PostList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { endCursor, onFetchMore } = this.props;
-
     if (!nextProps.loading) {
-      onFetchMore(nextProps.postsQuery.pageInfo.endCursor);
+        const endCursor = this.props.postsQuery ? this.props.postsQuery.pageInfo.endCursor : 0;
+        const nextEndCursor = nextProps.postsQuery.pageInfo.endCursor;
 
-      // Check if props have changed and, if necessary, stop the subscription
-      if (this.subscription && endCursor !== nextProps.postsQuery.pageInfo.endCursor) {
-        this.subscription();
-        this.subscription = null;
-      }
+        // Check if props have changed and, if necessary, stop the subscription
+        if (this.subscription && endCursor !== nextEndCursor) {
+          this.subscription();
+          this.subscription = null;
+        }
 
-      // Subscribe or re-subscribe
-      if (!this.subscription) {
-        this.subscribeToPostList(this, nextProps);
-      }
+        // Subscribe or re-subscribe
+        if (!this.subscription) {
+          this.subscribeToPostList(this, nextEndCursor);
+        }
     }
   }
 
-  subscribeToPostList = (componentRef, nextProps) => {
+  subscribeToPostList = (componentRef, endCursor) => {
     const { subscribeToMore } = this.props;
 
     this.subscription = subscribeToMore({
       document: POSTS_SUBSCRIPTION,
-      variables: { endCursor: nextProps.postsQuery.pageInfo.endCursor },
-      updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, id, node } } } }) => {
+      variables: { endCursor },
+      updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, node } } } }) => {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
           newResult = AddPost(prev, node);
         } else if (mutation === 'DELETED') {
-          newResult = DeletePost(prev, id);
+          newResult = DeletePost(prev, node.id);
         }
 
         return newResult;
@@ -115,11 +113,10 @@ class PostList extends React.Component {
     const { postsQuery, deletePost } = this.props;
 
     return postsQuery.edges.map(({ node: { id, title } }) => {
-
       return (
         <ListGroupItem className="justify-content-between" key={id}>
           <span><Link to={`/post/${id}`}>{title}</Link></span>
-          <span className="badge badge-default badge-pill" onClick={deletePost(id)}>Delete</span>
+          <span className="badge badge-default badge-pill delete-button" onClick={deletePost(id)}>Delete</span>
         </ListGroupItem>
       );
     });
@@ -171,23 +168,18 @@ PostList.propTypes = {
   deletePost: PropTypes.func.isRequired,
   loadMoreRows: PropTypes.func.isRequired,
   subscribeToMore: PropTypes.func.isRequired,
-  onFetchMore: PropTypes.func.isRequired,
-  endCursor: PropTypes.string.isRequired,
 };
 
-const PostListWithApollo = compose(
+export default compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
         variables: { limit: 10, after: 0 },
       };
     },
-    props: ({ ownProps, data }) => {
+    props: ({ data }) => {
       const { loading, postsQuery, fetchMore, subscribeToMore } = data;
       const loadMoreRows = () => {
-
-        ownProps.onFetchMore(postsQuery.pageInfo.endCursor);
-
         return fetchMore({
           variables: {
             after: postsQuery.pageInfo.endCursor,
@@ -203,7 +195,8 @@ const PostListWithApollo = compose(
               postsQuery: {
                 totalCount,
                 edges: [...previousResult.postsQuery.edges, ...newEdges],
-                pageInfo
+                pageInfo,
+                __typename: "PostsQuery"
               }
             };
           }
@@ -214,10 +207,10 @@ const PostListWithApollo = compose(
     }
   }),
   graphql(POST_DELETE, {
-    props: ({ ownProps: { endCursor }, mutate }) => ({
-      deletePost(id){
+    props: ({ mutate }) => ({
+      deletePost(id) {
         return () => mutate({
-          variables: { input: { id, endCursor } },
+          variables: { id },
           optimisticResponse: {
             __typename: 'Mutation',
             deletePost: {
@@ -235,15 +228,3 @@ const PostListWithApollo = compose(
     })
   })
 )(PostList);
-
-export default connect(
-  (state) => ({ endCursor: state.post.endCursor }),
-  (dispatch) => ({
-    onFetchMore(endCursor) {
-      dispatch({
-        type: 'POST_ENDCURSOR',
-        value: endCursor
-      });
-    }
-  }),
-)(PostListWithApollo);

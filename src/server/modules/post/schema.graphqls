@@ -42,7 +42,7 @@ extend type Mutation {
   # Create new post
   addPost(input: AddPostInput!): Post
   # Delete a post
-  deletePost(input: DeletePostInput!): Post
+  deletePost(id: ID!): Post
   # Edit a post
   editPost(input: EditPostInput!): Post
   # Add comment to post
@@ -57,13 +57,6 @@ extend type Mutation {
 input AddPostInput {
   title: String!
   content: String!
-  # Needed for postsUpdated Subscription filter
-  endCursor: ID
-}
-
-# Input for deletePost Mutation
-input DeletePostInput {
-  id: ID!
   # Needed for postsUpdated Subscription filter
   endCursor: ID
 }
@@ -111,8 +104,7 @@ extend type Subscription {
 # Payload for postsUpdated Subscription
 type UpdatePostPayload {
   mutation: String!
-  id: ID
-  endCursor: ID!
+  id: ID!
   node: Post
 }
 

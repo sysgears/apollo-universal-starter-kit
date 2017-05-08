@@ -215,7 +215,10 @@ function startWebpackDevServer(clientConfig, reporter) {
     publicPath: clientConfig.output.publicPath,
     headers: { 'Access-Control-Allow-Origin': '*' },
     proxy: {
-      '*': `http://localhost:${pkg.app.apiPort}`
+      '!/*.hot-update.{json,js}': {
+        target: `http://localhost:${pkg.app.apiPort}`,
+        logLevel: 'info'
+      }
     },
     reporter: ({ state, stats }) => {
       if (state) {

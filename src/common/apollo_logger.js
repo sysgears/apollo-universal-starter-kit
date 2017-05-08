@@ -46,7 +46,6 @@ const addSubscriptionManagerLogger = manager => {
   manager.setupFunctions = {};
   for (let key of Object.keys(setupFunctions)) {
     manager.setupFunctions[key] = (...setupArgs) => {
-      console.log(111);
       let triggerMap = setupFunctions[key](...setupArgs);
       const loggedMap = {};
       for (let key of Object.keys(triggerMap)) {

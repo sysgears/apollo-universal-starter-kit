@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
 
@@ -87,10 +86,9 @@ PostEdit.propTypes = {
   editPost: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
   subscribeToMore: PropTypes.func.isRequired,
-  endCursor: PropTypes.string.isRequired,
 };
 
-const PostEditWithApollo = compose(
+export default compose(
   graphql(POST_QUERY, {
     options: (props) => {
       return {
@@ -102,10 +100,10 @@ const PostEditWithApollo = compose(
     }
   }),
   graphql(POST_EDIT, {
-    props: ({ ownProps: { endCursor, history }, mutate }) => ({
+    props: ({ ownProps: { history }, mutate }) => ({
       editPost: async (id, title, content) => {
         await mutate({
-          variables: { input: { id, title, content, endCursor } }
+          variables: { input: { id, title, content } }
         });
 
         return history.push('/posts');
@@ -113,7 +111,3 @@ const PostEditWithApollo = compose(
     })
   })
 )(PostEdit);
-
-export default connect(
-  (state) => ({ endCursor: state.post.endCursor })
-)(PostEditWithApollo);

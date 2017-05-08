@@ -8,6 +8,8 @@ import { graphql, print } from 'graphql';
 
 import rootSchema from "server/api/root_schema.graphqls";
 import serverModules from "../../server/modules";
+import { app as settings } from '../../../package.json';
+import { addApolloLogging } from '../../common/apollo_logger';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;
@@ -90,7 +92,9 @@ export default class Renderer {
     const mockNetworkInterface = new MockNetworkInterface(schema);
 
     const client = new ApolloClient({
-      networkInterface: mockNetworkInterface,
+      networkInterface: settings.apolloLogging ?
+        addApolloLogging(mockNetworkInterface) :
+        mockNetworkInterface,
     });
 
     const store = createStore(

@@ -14,6 +14,7 @@ import Html from './html';
 import routes from '../../client/app/routes';
 import log from '../../common/log';
 import { app as settings } from '../../../package.json';
+import { addApolloLogging } from '../../common/apollo_logger';
 
 const port = process.env.PORT || settings.apiPort;
 
@@ -33,6 +34,10 @@ async function renderServerSide(req, res, queryMap) {
 
   if (settings.persistGraphQL) {
     networkInterface = addPersistedQueries(networkInterface, queryMap);
+  }
+
+  if (settings.apolloLogging) {
+    networkInterface = addApolloLogging(networkInterface);
   }
 
   const client = createApolloClient(networkInterface);

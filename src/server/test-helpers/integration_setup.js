@@ -7,6 +7,8 @@ import subscriptions from 'subscriptions-transport-ws';
 import createApolloClient from '../../common/apollo_client';
 import '../../../knexfile';
 import knex from '../sql/connector';
+import { app as settings } from '../../../package.json';
+import { addApolloLogging } from '../../common/apollo_logger';
 
 chai.use(chaiHttp);
 chai.should();
@@ -29,7 +31,7 @@ before(async () => {
     wsClient
   );
 
-  apollo = createApolloClient(networkInterface);
+  apollo = createApolloClient(settings.apolloLogging ? addApolloLogging(networkInterface) : networkInterface);
 });
 
 after(() => {

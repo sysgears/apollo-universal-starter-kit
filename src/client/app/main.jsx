@@ -12,6 +12,7 @@ import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
 import routes from '../app/routes';
 import { app as settings } from '../../../package.json';
+import { addApolloLogging } from '../../common/apollo_logger';
 
 import '../styles/styles.scss';
 
@@ -35,6 +36,10 @@ if (__CLIENT__) {
 
 if (settings.persistGraphQL) {
   networkInterface = addPersistedQueries(networkInterface, queryMap);
+}
+
+if (settings.apolloLogging) {
+  networkInterface = addApolloLogging(networkInterface);
 }
 
 const client = createApolloClient(networkInterface);

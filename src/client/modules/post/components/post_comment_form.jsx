@@ -35,7 +35,7 @@ const CommentForm = (props) => {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form name="comment" onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
         <Row>
           <Col xs="2"><Label>{operation} comment</Label></Col>

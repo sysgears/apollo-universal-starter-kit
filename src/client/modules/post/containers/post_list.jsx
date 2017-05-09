@@ -115,7 +115,7 @@ class PostList extends React.Component {
     return postsQuery.edges.map(({ node: { id, title } }) => {
       return (
         <ListGroupItem className="justify-content-between" key={id}>
-          <span><Link to={`/post/${id}`}>{title}</Link></span>
+          <span><Link className="post-link" to={`/post/${id}`}>{title}</Link></span>
           <span className="badge badge-default badge-pill delete-button" onClick={deletePost(id)}>Delete</span>
         </ListGroupItem>
       );

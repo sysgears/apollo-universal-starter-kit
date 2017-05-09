@@ -1,13 +1,11 @@
 import Renderer from 'client/test-helpers/apollo_renderer';
 
-import chai from 'chai';
+import { expect } from 'chai';
 import { step } from 'mocha-steps';
 import _ from 'lodash';
 
 import routes from 'client/app/routes';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
-
-chai.should();
 
 const createNode = (id) => ({
   id: `${id}`,
@@ -15,6 +13,13 @@ const createNode = (id) => ({
   content: `Post content ${id}`,
   __typename: "Post"
 });
+
+let mutations = {
+  deletePost: true,
+  editPost: true,
+  addComment: true,
+  deleteComment: true
+};
 
 const mocks = {
   Query: () => ({
@@ -38,13 +43,12 @@ const mocks = {
         },
         __typename: "PostsQuery"
       };
-    }
-  }),
-  Mutation: () => ({
-    deletePost(obj, { id }) {
+    },
+    post(obj, { id }) {
       return createNode(id);
-    }
-  })
+    },
+  }),
+  Mutation: () => mutations
 };
 
 describe('Posts and comments example UI works', () => {
@@ -52,17 +56,22 @@ describe('Posts and comments example UI works', () => {
   let app;
   let content;
 
+  beforeEach(() => {
+    Object.keys(mutations).forEach(key => mutations[key] = true);
+  });
+
   step('Posts page renders without data', () => {
     app = renderer.mount(routes);
     renderer.history.push('/posts');
     content = app.find('#content');
-    content.children().html().should.equal('<div></div>');
+
+    expect(content.children().html()).to.equal('<div></div>');
   });
 
   step('Posts page renders with data', () => {
-    content.text().should.include('Post title 1');
-    content.text().should.include('Post title 2');
-    content.text().should.include('2 / 4');
+    expect(content.text()).to.include('Post title 1');
+    expect(content.text()).to.include('Post title 2');
+    expect(content.text()).to.include('2 / 4');
   });
 
   step('Clicking load more works', () => {
@@ -71,24 +80,29 @@ describe('Posts and comments example UI works', () => {
   });
 
   step('Clicking load more loads more posts', () => {
-    content.text().should.include('Post title 3');
-    content.text().should.include('Post title 4');
-    content.text().should.include('4 / 4');
+    expect(content.text()).to.include('Post title 3');
+    expect(content.text()).to.include('Post title 4');
+    expect(content.text()).to.include('4 / 4');
   });
 
   step('Check subscribed to post updates', () => {
-    renderer.getSubscriptions(POSTS_SUBSCRIPTION).should.has.lengthOf(1);
+    expect(renderer.getSubscriptions(POSTS_SUBSCRIPTION)).has.lengthOf(1);
   });
 
   step('Updates post list on post delete from subscription', () => {
+    mutations.deletePost = (obj, { id }) => {
+      return createNode(id);
+    };
+
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
     subscription(null, {
       postsUpdated: {
         mutation: 'DELETED', node: createNode(2), __typename: 'UpdatePostPayload'
       }
     });
-    content.text().should.not.include('Post title 2');
-    content.text().should.include('3 / 3');
+
+    expect(content.text()).to.not.include('Post title 2');
+    expect(content.text()).to.include('3 / 3');
   });
 
   step('Updates post list on post create from subscription', () => {
@@ -98,21 +112,101 @@ describe('Posts and comments example UI works', () => {
         mutation: 'CREATED', node: createNode(2),  __typename: 'UpdatePostPayload'
       }
     }));
-    content.text().should.include('Post title 2');
-    content.text().should.include('4 / 4');
+
+    expect(content.text()).to.include('Post title 2');
+    expect(content.text()).to.include('4 / 4');
   });
 
   step('Clicking delete optimistically removes post', () => {
+    mutations.deletePost = (obj, { id }) => {
+      return createNode(id);
+    };
+
     const deleteButtons = content.find('.delete-button');
-    deleteButtons.should.have.lengthOf(4);
+    expect(deleteButtons).has.lengthOf(4);
     deleteButtons.last().simulate("click");
-    content.text().should.not.include('Post title 4');
-    content.text().should.include('3 / 3');
+
+    expect(content.text()).to.not.include('Post title 4');
+    expect(content.text()).to.include('3 / 3');
   });
 
   step('Clicking delete removes the post', () => {
-    content.text().should.include('Post title 3');
-    content.text().should.not.include('Post title 4');
-    content.text().should.include('3 / 3');
+    expect(content.text()).to.include('Post title 3');
+    expect(content.text()).to.not.include('Post title 4');
+    expect(content.text()).to.include('3 / 3');
   });
+
+  step('Clicking on post works', () => {
+    const postLinks = content.find('.post-link');
+    postLinks.last().simulate("click", { button: 0 });
+  });
+
+  step('Clicking on post opens post form', () => {
+    const postForm = content.find('form[name="post"]');
+
+    expect(content.text()).to.include('Edit Post');
+    expect(postForm.find('[name="title"]').node.value).to.equal('Post title 3');
+    expect(postForm.find('[name="content"]').node.value).to.equal('Post content 3');
+  });
+
+  step('Post editing form works', done => {
+    mutations.editPost = (obj, { input })  => {
+      expect(input.id).to.equal('3');
+      expect(input.title).to.equal('Post title 33');
+      expect(input.content).to.equal('Post content 33');
+      done();
+      return input;
+    };
+
+    const postForm = content.find('form[name="post"]');
+    postForm.find('[name="title"]').simulate('change', { target: { value: 'Post title 33' } });
+    postForm.find('[name="content"]').simulate('change', { target: { value: 'Post content 33' } });
+    postForm.simulate('submit');
+  });
+
+  step('Check opening post by URL', () => {
+    renderer.history.push('/post/3');
+  });
+
+  step('Opening post by URL works', () => {
+    const postForm = content.find('form[name="post"]');
+
+    expect(content.text()).to.include('Edit Post');
+    expect(postForm.find('[name="title"]').node.value).to.equal('Post title 33');
+    expect(postForm.find('[name="content"]').node.value).to.equal('Post content 33');
+    expect(content.text()).to.include('Edit Post');
+  });
+
+  step('Comment adding works', done => {
+    mutations.addComment = (obj, { input })  => {
+      expect(input.postId).to.equal('3');
+      expect(input.content).to.equal('Post comment 24');
+      done();
+      return input;
+    };
+
+    const commentForm = content.find('form[name="comment"]');
+    commentForm.find('[name="content"]').simulate('change', { target: { value: 'Post comment 24' } });
+    commentForm.simulate('submit');
+    expect(content.text()).to.include('Post comment 24');
+  });
+
+  step('Comment deleting optimistically removes comment', () => {
+    mutations.deleteComment = (obj, { input })  => {
+      return input;
+    };
+
+    const deleteButtons = content.find('.delete-comment');
+    expect(deleteButtons).has.lengthOf(3);
+    deleteButtons.last().simulate("click");
+
+    expect(content.text()).to.not.include('Post comment 24');
+    expect(content.find('.delete-comment')).has.lengthOf(2);
+  });
+
+  step('Clicking comment delete removes the comment', () => {
+    expect(content.text()).to.not.include('Post comment 24');
+    expect(content.find('.delete-comment')).has.lengthOf(2);
+  });
+
 });

@@ -108,9 +108,9 @@ class PostComments extends React.Component {
         <ListGroupItem className="justify-content-between" key={id}>
           {content}
           <div>
-            <span className="badge badge-default badge-pill"
+            <span className="badge badge-default badge-pill edit-comment"
                   onClick={() => onCommentSelect({ id, content })}>Edit</span>
-            <span className="badge badge-default badge-pill" onClick={() => this.onCommentDelete(id)}>Delete</span>
+            <span className="badge badge-default badge-pill delete-comment" onClick={() => this.onCommentDelete(id)}>Delete</span>
           </div>
         </ListGroupItem>
       );

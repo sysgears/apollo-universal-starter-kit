@@ -4,6 +4,7 @@ import createHistory from 'history/createMemoryHistory';
 import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 import { graphql, print } from 'graphql';
 
 import rootSchema from "server/api/root_schema.graphqls";
@@ -100,6 +101,7 @@ export default class Renderer {
     const store = createStore(
       combineReducers({
         apollo: client.reducer(),
+        form: formReducer,
         ...clientModules.reducers
       }),
       reduxState,

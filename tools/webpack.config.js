@@ -128,7 +128,7 @@ const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
         use: __DEV__ ? [
           { loader: 'isomorphic-style-loader' },
           { loader: 'css-loader', options: { sourceMap: true } },
-          { loader: 'postcss-loader' },
+          { loader: 'postcss-loader', options: { sourceMap: true } },
           { loader: 'sass-loader', options: { sourceMap: true } }] :
           [{ loader: 'ignore-loader' }]
       }

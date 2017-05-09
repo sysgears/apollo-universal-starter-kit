@@ -14,11 +14,10 @@ const createNode = (id) => ({
   __typename: "Post"
 });
 
-let mutations = {
-  deletePost: true,
+const mutations = {
   editPost: true,
   addComment: true,
-  deleteComment: true
+  editComment: true
 };
 
 const mocks = {
@@ -48,7 +47,11 @@ const mocks = {
       return createNode(id);
     },
   }),
-  Mutation: () => mutations
+  Mutation: () => ({
+    deletePost: (obj, { id }) => createNode(id),
+    deleteComment: (obj, {input}) => input,
+    ...mutations
+  })
 };
 
 describe('Posts and comments example UI works', () => {
@@ -57,7 +60,8 @@ describe('Posts and comments example UI works', () => {
   let content;
 
   beforeEach(() => {
-    Object.keys(mutations).forEach(key => mutations[key] = true);
+    // Reset spy mutations on each step
+    Object.keys(mutations).forEach(key => delete mutations[key]);
   });
 
   step('Posts page renders without data', () => {
@@ -90,10 +94,6 @@ describe('Posts and comments example UI works', () => {
   });
 
   step('Updates post list on post delete from subscription', () => {
-    mutations.deletePost = (obj, { id }) => {
-      return createNode(id);
-    };
-
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
     subscription(null, {
       postsUpdated: {
@@ -192,10 +192,6 @@ describe('Posts and comments example UI works', () => {
   });
 
   step('Comment deleting optimistically removes comment', () => {
-    mutations.deleteComment = (obj, { input })  => {
-      return input;
-    };
-
     const deleteButtons = content.find('.delete-comment');
     expect(deleteButtons).has.lengthOf(3);
     deleteButtons.last().simulate("click");
@@ -209,4 +205,29 @@ describe('Posts and comments example UI works', () => {
     expect(content.find('.delete-comment')).has.lengthOf(2);
   });
 
+  step('Comment editing works', done => {
+    mutations.editComment = (obj, { input })  => {
+      expect(input.postId).to.equal('3');
+      expect(input.content).to.equal('Updated comment 2');
+      done();
+      return input;
+    };
+
+    const editButtons = content.find('.edit-comment');
+    expect(editButtons).has.lengthOf(2);
+    editButtons.last().simulate("click");
+
+    const commentForm = content.find('form[name="comment"]');
+    expect(commentForm.find('[name="content"]').node.value).to.equal('Hello World');
+    commentForm.find('[name="content"]').simulate('change', { target: { value: 'Updated comment 2' } });
+    commentForm.simulate('submit');
+
+    expect(content.text()).to.include('Updated comment 2');
+  });
+
+  step('Clicking back button takes to post list', () => {
+    const backButton = content.find('#back-button');
+    backButton.simulate('click', { button: 0 });
+    expect(content.text()).to.include('Post title 33');
+  });
 });

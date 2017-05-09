@@ -69,7 +69,7 @@ class PostEdit extends React.Component {
     } else {
       return (
         <div>
-          <Link to="/posts">Back</Link>
+          <Link id="back-button" to="/posts">Back</Link>
           <h2>Edit Post</h2>
           <PostForm onSubmit={this.onSubmit.bind(this)} initialValues={post}/>
           <br/>

@@ -1,9 +1,10 @@
-import { print } from 'graphql';
-
 var apolloLogging = true;
 
 export const enableApolloLogging = () => apolloLogging = true;
 export const disableApolloLogging = () => apolloLogging = false;
+
+const formatRequest = req =>
+  !req.variables ? req.operationName : `${req.operationName}(${JSON.stringify(req.variables)})`;
 
 const addNetworkInterfaceLogger = netIfc => {
   return {
@@ -12,7 +13,7 @@ const addNetworkInterfaceLogger = netIfc => {
       try {
         result = await netIfc.query(request);
       } finally {
-        if (apolloLogging) { console.log(print(request.query).trim(), "=>", JSON.stringify(result)); }
+        if (apolloLogging) { console.log(formatRequest(request), "=>", JSON.stringify(result)); }
       }
       return result;
     },
@@ -27,7 +28,7 @@ const addNetworkInterfaceLogger = netIfc => {
         };
         result = netIfc.subscribe(request, logHandler);
       } finally {
-        if (apolloLogging) { console.log(print(request.query).trim(), "=>", result); }
+        if (apolloLogging) { console.log(formatRequest(request), "=> subscription:", result); }
       }
       return result;
     },
@@ -35,7 +36,7 @@ const addNetworkInterfaceLogger = netIfc => {
       try {
         netIfc.unsubscribe(subId);
       } finally {
-        if (apolloLogging) { console.log("unsubscribe =>", subId); }
+        if (apolloLogging) { console.log("unsubscribe from subscription:", subId); }
       }
     }
   };

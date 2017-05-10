@@ -70,16 +70,16 @@ const addSubscriptionManagerLogger = manager => {
       console.log('pubsub publish', args);
       return pubsub.publish(...args);
     },
-    async subscribe(trigger, handler) {
+    async subscribe(opName, handler) {
       let result;
       try {
         const logHandler = !apolloLogging ? handler : (msg) => {
-          console.log("pubsub msg", JSON.stringify(msg));
+          console.log("pubsub msg", `${opName}(${JSON.stringify(msg)})`);
           return handler(msg);
         };
-        result = await pubsub.subscribe(trigger, logHandler);
+        result = await pubsub.subscribe(opName, logHandler);
       } finally {
-        if (apolloLogging) { console.log('pubsub subscribe', trigger, "=>", result); }
+        if (apolloLogging) { console.log('pubsub subscribe', opName, "=>", result); }
       }
       return result;
     },

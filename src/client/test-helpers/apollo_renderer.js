@@ -23,6 +23,10 @@ const { ApolloProvider } = require('react-apollo');
 const { mount } = require('enzyme');
 const clientModules = require('../modules').default;
 
+process.on('uncaughtException', (ex) => {
+  console.error("Uncaught error", ex.stack);
+});
+
 class MockNetworkInterface
 {
   constructor(schema) {
@@ -40,6 +44,9 @@ class MockNetworkInterface
 
   _getSubscriptions(query, variables) {
     const self = this;
+    if (!query) {
+      return this.subscriptionQueries;
+    }
     const queryStr = print(addTypenameToDocument(query));
     const key = JSON.stringify({ query: queryStr,
       variables: variables || {} });
@@ -77,7 +84,13 @@ class MockNetworkInterface
     try {
       const { key, query } = this.handlers[subId];
       this.subscriptions[key].splice(this.subscriptions[key].indexOf(subId), 1);
+      if (!this.subscriptions[key].length) {
+        delete this.subscriptions[key];
+      }
       this.subscriptionQueries[query].splice(this.subscriptionQueries[query].indexOf(subId), 1);
+      if (!this.subscriptionQueries[query].length) {
+        delete this.subscriptionQueries[query];
+      }
       delete this.handlers[subId];
     } catch (e) {
       console.error(e);

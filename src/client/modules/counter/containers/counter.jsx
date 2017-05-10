@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose, withApollo } from 'react-apollo';
-import ApolloClient from 'apollo-client';
 import update from 'immutability-helper';
 import { Button } from 'reactstrap';
-import log from 'common/log';
 
 import AMOUNT_QUERY from '../graphql/count_get.graphql';
 import ADD_COUNT_MUTATION from '../graphql/count_add_mutation.graphql';
@@ -19,14 +17,22 @@ class Counter extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.subscription && nextProps.loading === false) {
-      this.subscribe();
+    if (!nextProps.loading) {
+      if (this.subscription) {
+        this.subscription();
+        this.subscription = null;
+      }
+
+      // Subscribe or re-subscribe
+      if (!this.subscription) {
+        this.subscribeToCount();
+      }
     }
   }
 
   componentWillUnmount() {
     if (this.subscription) {
-      this.subscription.unsubscribe();
+      this.subscription();
     }
   }
 
@@ -41,27 +47,20 @@ class Counter extends React.Component {
     this.props.onReduxIncrement(value);
   }
 
-  subscribe() {
-    const { client, updateCountQuery } = this.props;
-    this.subscription = client.subscribe({
-      query: COUNT_SUBSCRIPTION,
+  subscribeToCount() {
+    const { subscribeToMore } = this.props;
+    this.subscription = subscribeToMore({
+      document: COUNT_SUBSCRIPTION,
       variables: {},
-    }).subscribe({
-      next(data) {
-        updateCountQuery(prev => {
-          let newAmount = data.countUpdated.amount;
-          return update(prev, {
-            count: {
-              amount: {
-                $set: newAmount,
-              },
+      updateQuery: (prev, {subscriptionData: {data: {countUpdated: { amount }}}}) => {
+        return update(prev, {
+          count: {
+            amount: {
+              $set: amount,
             },
-          });
+          }
         });
-      },
-      error(err) {
-        log.error(err);
-      },
+      }
     });
   }
 
@@ -105,14 +104,14 @@ Counter.propTypes = {
   updateCountQuery: PropTypes.func,
   onReduxIncrement: PropTypes.func,
   addCount: PropTypes.func.isRequired,
-  client: PropTypes.instanceOf(ApolloClient).isRequired,
+  subscribeToMore: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired,
 };
 
 const CounterWithApollo = withApollo(compose(
   graphql(AMOUNT_QUERY, {
-    props({ data: { loading, count, updateQuery } }) {
-      return { loading, count, updateCountQuery: updateQuery };
+    props({ data: { loading, count, subscribeToMore } }) {
+      return { loading, count, subscribeToMore };
     }
   }),
   graphql(ADD_COUNT_MUTATION, {

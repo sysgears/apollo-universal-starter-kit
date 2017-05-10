@@ -62,23 +62,23 @@ class PostList extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
-        const endCursor = this.props.postsQuery ? this.props.postsQuery.pageInfo.endCursor : 0;
-        const nextEndCursor = nextProps.postsQuery.pageInfo.endCursor;
+      const endCursor = this.props.postsQuery ? this.props.postsQuery.pageInfo.endCursor : 0;
+      const nextEndCursor = nextProps.postsQuery.pageInfo.endCursor;
 
-        // Check if props have changed and, if necessary, stop the subscription
-        if (this.subscription && endCursor !== nextEndCursor) {
-          this.subscription();
-          this.subscription = null;
-        }
+      // Check if props have changed and, if necessary, stop the subscription
+      if (this.subscription && endCursor !== nextEndCursor) {
+        this.subscription();
+        this.subscription = null;
+      }
 
-        // Subscribe or re-subscribe
-        if (!this.subscription) {
-          this.subscribeToPostList(this, nextEndCursor);
-        }
+      // Subscribe or re-subscribe
+      if (!this.subscription) {
+        this.subscribeToPostList(nextEndCursor);
+      }
     }
   }
 
-  subscribeToPostList = (componentRef, endCursor) => {
+  subscribeToPostList = endCursor => {
     const { subscribeToMore } = this.props;
 
     this.subscription = subscribeToMore({
@@ -94,10 +94,6 @@ class PostList extends React.Component {
         }
 
         return newResult;
-      },
-      onError: (err) => {
-        console.error('Post List - An error occurred while being subscribed: ', err, 'Subscribe again');
-        componentRef.subscribeToPostEdit(componentRef);
       }
     });
   };

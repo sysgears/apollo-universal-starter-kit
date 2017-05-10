@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 import routes from 'client/app/routes';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
+import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql';
 
 const createNode = (id) => ({
   id: `${id}`,
@@ -89,7 +90,7 @@ describe('Posts and comments example UI works', () => {
     expect(content.text()).to.include('4 / 4');
   });
 
-  step('Check subscribed to post updates', () => {
+  step('Check subscribed to post list updates', () => {
     expect(renderer.getSubscriptions(POSTS_SUBSCRIPTION)).has.lengthOf(1);
   });
 
@@ -147,6 +148,26 @@ describe('Posts and comments example UI works', () => {
     expect(content.text()).to.include('Edit Post');
     expect(postForm.find('[name="title"]').node.value).to.equal('Post title 3');
     expect(postForm.find('[name="content"]').node.value).to.equal('Post content 3');
+  });
+
+  step('Check subscribed to post updates', () => {
+    expect(renderer.getSubscriptions(POST_SUBSCRIPTION)).has.lengthOf(1);
+  });
+
+  step('Updates post form on post updated from subscription', () => {
+    const subscription = renderer.getSubscriptions(POST_SUBSCRIPTION)[0];
+    subscription(null, {
+      postUpdated: {
+        id: "3",
+        title: "Post title 203",
+        content: "Post content 204",
+        __typename: "Post"
+      }
+    });
+    const postForm = content.find('form[name="post"]');
+
+    expect(postForm.find('[name="title"]').node.value).to.equal('Post title 203');
+    expect(postForm.find('[name="content"]').node.value).to.equal('Post content 204');
   });
 
   step('Post editing form works', done => {

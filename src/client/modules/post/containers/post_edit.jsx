@@ -17,32 +17,26 @@ class PostEdit extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { post, loading } = this.props;
+    if (!nextProps.loading) {
+      // Check if props have changed and, if necessary, stop the subscription
+      if (this.subscription && this.props.post.id !== nextProps.post.id) {
+        this.subscription();
+        this.subscription = null;
+      }
 
-    // Check if props have changed and, if necessary, stop the subscription
-    if (this.subscription && post.id !== nextProps.post.id) {
-      this.subscription = null;
-    }
-
-    // Subscribe or re-subscribe
-    if (!this.subscription && !loading) {
-      this.subscribeToPostEdit(this);
+      // Subscribe or re-subscribe
+      if (!this.subscription) {
+        this.subscribeToPostEdit(nextProps.post.id);
+      }
     }
   }
 
-  subscribeToPostEdit = (componentRef) => {
-    const { post, subscribeToMore } = this.props;
+  subscribeToPostEdit = postId => {
+    const { subscribeToMore } = this.props;
 
     this.subscription = subscribeToMore({
       document: POST_SUBSCRIPTION,
-      variables: { id: post.id },
-      updateQuery: (prev) => {
-        return prev;
-      },
-      onError: (err) => {
-        console.error('Post Edit - An error occurred while being subscribed: ', err, 'Subscribe again');
-        componentRef.subscribeToPostEdit(componentRef);
-      }
+      variables: { id: postId }
     });
   };
 

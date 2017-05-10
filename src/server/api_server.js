@@ -1,6 +1,5 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
 import http from 'http';
 import { invert, isArray } from 'lodash';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
@@ -9,7 +8,7 @@ import queryMap from 'persisted_queries.json';
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
-import { subscriptionManager } from './api/subscriptions';
+import { addGraphQLSubscriptions } from './api/subscriptions';
 import { app as settings } from '../../package.json';
 import log from '../common/log';
 
@@ -59,14 +58,7 @@ app.use((...args) => websiteMiddleware(queryMap)(...args));
 
 server = http.createServer(app);
 
-let subscriptionServerConfig = {
-  server: server,
-  path: '/'
-};
-
-let subscriptionServer = new SubscriptionServer({
-  subscriptionManager
-}, subscriptionServerConfig);
+addGraphQLSubscriptions(server);
 
 server.listen(port, () => {
   log.info(`API is now running on port ${port}`);
@@ -87,24 +79,15 @@ if (module.hot) {
     }
   });
 
-  module.hot.accept();
-
-  // Reload reloadable modules
-  module.hot.accept(['./middleware/graphql', './api/subscriptions'], () => {
+  module.hot.accept(['./api/subscriptions'], () => {
     try {
-      log.debug('Reloading the subscription server.');
-
-      if (subscriptionServer && subscriptionServer.wsServer) {
-        subscriptionServer.wsServer.close(() => {
-          subscriptionServer = new SubscriptionServer({
-            subscriptionManager
-          }, subscriptionServerConfig);
-        });
-      }
+      addGraphQLSubscriptions(server);
     } catch (error) {
       log(error.stack);
     }
   });
+
+  module.hot.accept();
 }
 
 export default server;

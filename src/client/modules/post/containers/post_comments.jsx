@@ -55,25 +55,25 @@ class PostComments extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { postId } = this.props;
+    if (!nextProps.loading) {
+      // Check if props have changed and, if necessary, stop the subscription
+      if (this.subscription && this.props.postId !== nextProps.postId) {
+        this.subscription = null;
+      }
 
-    // Check if props have changed and, if necessary, stop the subscription
-    if (this.subscription && postId !== nextProps.postId) {
-      this.subscription = null;
-    }
-
-    // Subscribe or re-subscribe
-    if (!this.subscription) {
-      this.subscribeToCommentList(this);
+      // Subscribe or re-subscribe
+      if (!this.subscription) {
+        this.subscribeToCommentList(nextProps.postId);
+      }
     }
   }
 
-  subscribeToCommentList = (componentRef) => {
-    const { postId, subscribeToMore } = this.props;
+  subscribeToCommentList = postId => {
+    const { subscribeToMore } = this.props;
 
     this.subscription = subscribeToMore({
       document: COMMENT_SUBSCRIPTION,
-      variables: { postId: postId },
+      variables: { postId },
       updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
 
         let newResult = prev;
@@ -85,10 +85,6 @@ class PostComments extends React.Component {
         }
 
         return newResult;
-      },
-      onError: (err) => {
-        console.error('Comment List - An error occurred while being subscribed: ', err, 'Subscribe again');
-        componentRef.subscribeToPostEdit(componentRef);
       }
     });
   };
@@ -156,6 +152,7 @@ class PostComments extends React.Component {
 }
 
 PostComments.propTypes = {
+  loading: PropTypes.bool.isRequired,
   postId: PropTypes.string.isRequired,
   comments: PropTypes.array.isRequired,
   comment: PropTypes.object.isRequired,

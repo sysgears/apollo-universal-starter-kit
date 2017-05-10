@@ -23,6 +23,7 @@ const __WINDOWS__ = /^win/.test(process.platform);
 
 let server;
 let startBackend = false;
+let backendFirstStart = true;
 
 process.on('exit', () => {
   if (server) {
@@ -37,6 +38,7 @@ function createDirs(dir) {
 function runServer(path) {
   if (startBackend) {
     startBackend = false;
+    backendFirstStart = false;
     logBack('Starting backend');
     server = spawn('node', [path], { stdio: [0, 1, 2] });
     server.on('exit', code => {
@@ -191,15 +193,19 @@ function startWebpackDevServer(clientConfig, reporter) {
   let compiler = webpack(clientConfig);
 
   compiler.plugin('after-emit', (compilation, callback) => {
-    logFront.debug("Webpack dev server is waiting for backend to start...");
-    waitOn({ resources: [`tcp:localhost:${pkg.app.apiPort}`] }, err => {
-      if (err) {
-        logFront.error(err);
-      } else {
-        logFront.debug("Backend has been started, resuming webpack dev server...");
-        callback();
-      }
-    });
+    if (backendFirstStart) {
+      logFront.debug("Webpack dev server is waiting for backend to start...");
+      waitOn({ resources: [`tcp:localhost:${pkg.app.apiPort}`] }, err => {
+        if (err) {
+          logFront.error(err);
+        } else {
+          logFront.debug("Backend has been started, resuming webpack dev server...");
+          callback();
+        }
+      });
+    } else {
+      callback();
+    }
   });
   compiler.plugin('done', stats => {
     const dir = pkg.app.frontendBuildDir;

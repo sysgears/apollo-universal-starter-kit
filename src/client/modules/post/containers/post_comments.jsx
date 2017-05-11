@@ -55,16 +55,14 @@ class PostComments extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.loading) {
-      // Check if props have changed and, if necessary, stop the subscription
-      if (this.subscription && this.props.postId !== nextProps.postId) {
-        this.subscription = null;
-      }
+    // Check if props have changed and, if necessary, stop the subscription
+    if (this.subscription && this.props.postId !== nextProps.postId) {
+      this.subscription = null;
+    }
 
-      // Subscribe or re-subscribe
-      if (!this.subscription) {
-        this.subscribeToCommentList(nextProps.postId);
-      }
+    // Subscribe or re-subscribe
+    if (!this.subscription) {
+      this.subscribeToCommentList(nextProps.postId);
     }
   }
 
@@ -152,7 +150,6 @@ class PostComments extends React.Component {
 }
 
 PostComments.propTypes = {
-  loading: PropTypes.bool.isRequired,
   postId: PropTypes.string.isRequired,
   comments: PropTypes.array.isRequired,
   comment: PropTypes.object.isRequired,

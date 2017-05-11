@@ -153,8 +153,6 @@ describe('Posts and comments example UI works', () => {
     expect(content.text()).to.include('Edit Post');
     expect(postForm.find('[name="title"]').node.value).to.equal('Post title 3');
     expect(postForm.find('[name="content"]').node.value).to.equal('Post content 3');
-
-    console.log(content.text());
   });
 
   step('Check subscribed to post updates', () => {

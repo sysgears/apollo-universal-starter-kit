@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
+
+import Counter from '../modules/counter/containers/counter';
 
 const networkInterface = createNetworkInterface({ uri: 'http://localhost:8080/graphql' });
 
@@ -26,21 +27,8 @@ export default class Main extends Component {
   render() {
     return (
       <ApolloProvider store={store} client={client}>
-        <View style={styles.container}>
-          <Text>Open up App.js to start working on your app!</Text>
-          <Text>Changes you make will automatically reload.</Text>
-          <Text>Shake your phone to open the developer menu.</Text>
-        </View>
+        <Counter />
       </ApolloProvider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

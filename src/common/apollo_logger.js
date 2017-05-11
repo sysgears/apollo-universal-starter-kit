@@ -70,20 +70,26 @@ const addSubscriptionManagerLogger = manager => {
   const setupFunctions = manager.setupFunctions;
   manager.setupFunctions = {};
   for (let key of Object.keys(setupFunctions)) {
-    manager.setupFunctions[key] = (...setupArgs) => {
-      let triggerMap = setupFunctions[key](...setupArgs);
+    manager.setupFunctions[key] = (opts, args, name) => {
+      let triggerMap = setupFunctions[key](opts, args, name);
       const loggedMap = {};
       for (let key of Object.keys(triggerMap)) {
-        loggedMap[key] = (...args) => {
-          let result;
-          try {
-            result = triggerMap[key](...args);
-          } finally {
-            console.log(args, setupArgs);
-            if (apolloLogging) { console.log('pubsub trigger', key, `(${args.join(',')})`, 'setup args ', `(${setupArgs.join(',')})`, '=>', result); }
-          }
-          return result;
-        };
+        loggedMap[key] = Object.assign({}, triggerMap[key]);
+        const originalFilter = triggerMap[key].filter;
+        if (originalFilter) {
+          loggedMap[key].filter = (val, ctx) => {
+            let result;
+            try {
+              result = originalFilter(val, ctx);
+            } finally {
+              if (apolloLogging) {
+                console.log(`pubsub filter ${key}(opts = ${JSON.stringify(opts)}, args = ${JSON.stringify(args)}, name = ${name})`);
+                console.log(`.${key}(val = ${JSON.stringify(val)}, ctx = ${JSON.stringify(ctx)}) =>`, result);
+              }
+            }
+            return result;
+          };
+        }
       }
       return loggedMap;
     };

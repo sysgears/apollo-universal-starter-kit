@@ -7,11 +7,16 @@ import _ from 'lodash';
 import routes from 'client/app/routes';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql';
+import COMMENT_SUBSCRIPTION from '../graphql/post_comment_subscription.graphql';
 
 const createNode = (id) => ({
   id: `${id}`,
   title: `Post title ${id}`,
   content: `Post content ${id}`,
+  comments: [
+    {id: id * 1000 + 1, content: "Post comment 1", __typename: "Comment"},
+    {id: id * 1000 + 2, content: "Post comment 2", __typename: "Comment"},
+  ],
   __typename: "Post"
 });
 
@@ -148,6 +153,8 @@ describe('Posts and comments example UI works', () => {
     expect(content.text()).to.include('Edit Post');
     expect(postForm.find('[name="title"]').node.value).to.equal('Post title 3');
     expect(postForm.find('[name="content"]').node.value).to.equal('Post content 3');
+
+    console.log(content.text());
   });
 
   step('Check subscribed to post updates', () => {
@@ -212,6 +219,43 @@ describe('Posts and comments example UI works', () => {
     expect(content.text()).to.include('Post comment 24');
   });
 
+  step('Updates comment form on comment added got from subscription', () => {
+    const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
+    subscription(null, {
+      commentUpdated: {
+        mutation: "CREATED",
+        id: "3003",
+        postId: "3",
+        node: {
+          id: "3003",
+          content: "Post comment 3",
+          __typename: "Comment"
+        },
+        __typename: "UpdateCommentPayload"
+      }
+    });
+
+    expect(content.text()).to.include("Post comment 3");
+  });
+
+  step('Updates comment form on comment deleted got from subscription', () => {
+    const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
+    subscription(null, {
+      commentUpdated: {
+        mutation: "DELETED",
+        id: "3003",
+        postId: "3",
+        node: {
+          id: "3003",
+          content: "Post comment 3",
+          __typename: "Comment"
+        },
+        __typename: "UpdateCommentPayload"
+      }
+    });
+    expect(content.text()).to.not.include("Post comment 3");
+  });
+
   step('Comment deleting optimistically removes comment', () => {
     const deleteButtons = content.find('.delete-comment');
     expect(deleteButtons).has.lengthOf(3);
@@ -229,7 +273,7 @@ describe('Posts and comments example UI works', () => {
   step('Comment editing works', done => {
     mutations.editComment = (obj, { input })  => {
       expect(input.postId).to.equal('3');
-      expect(input.content).to.equal('Updated comment 2');
+      expect(input.content).to.equal('Edited comment 2');
       done();
       return input;
     };
@@ -239,11 +283,11 @@ describe('Posts and comments example UI works', () => {
     editButtons.last().simulate("click");
 
     const commentForm = content.find('form[name="comment"]');
-    expect(commentForm.find('[name="content"]').node.value).to.equal('Hello World');
-    commentForm.find('[name="content"]').simulate('change', { target: { value: 'Updated comment 2' } });
+    expect(commentForm.find('[name="content"]').node.value).to.equal('Post comment 2');
+    commentForm.find('[name="content"]').simulate('change', { target: { value: 'Edited comment 2' } });
     commentForm.simulate('submit');
 
-    expect(content.text()).to.include('Updated comment 2');
+    expect(content.text()).to.include('Edited comment 2');
   });
 
   step('Clicking back button takes to post list', () => {

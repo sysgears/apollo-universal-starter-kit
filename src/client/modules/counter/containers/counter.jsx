@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { graphql, compose, withApollo } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 import { Button } from 'reactstrap';
 
@@ -108,7 +108,7 @@ Counter.propTypes = {
   reduxCount: PropTypes.number.isRequired,
 };
 
-const CounterWithApollo = withApollo(compose(
+const CounterWithApollo = compose(
   graphql(AMOUNT_QUERY, {
     props({ data: { loading, count, subscribeToMore } }) {
       return { loading, count, subscribeToMore };
@@ -142,7 +142,7 @@ const CounterWithApollo = withApollo(compose(
       },
     }),
   })
-)(Counter));
+)(Counter);
 
 export default connect(
   (state) => ({ reduxCount: state.counter.reduxCount }),

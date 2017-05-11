@@ -42,6 +42,30 @@ const addNetworkInterfaceLogger = netIfc => {
   };
 };
 
+const addPubSubLogging = pubsub => ({
+  publish(...args) {
+    console.log('pubsub publish', args);
+    return pubsub.publish(...args);
+  },
+  async subscribe(opName, handler) {
+    let result;
+    try {
+      const logHandler = !apolloLogging ? handler : (msg) => {
+        console.log("pubsub msg", `${opName}(${JSON.stringify(msg)})`);
+        return handler(msg);
+      };
+      result = await pubsub.subscribe(opName, logHandler);
+    } finally {
+      if (apolloLogging) { console.log('pubsub subscribe', opName, "=>", result); }
+    }
+    return result;
+  },
+  unsubscribe(...args) {
+    console.log('pubsub unsubscribe', args);
+    return pubsub.unsubscribe(...args);
+  }
+});
+
 const addSubscriptionManagerLogger = manager => {
   const setupFunctions = manager.setupFunctions;
   manager.setupFunctions = {};
@@ -64,33 +88,12 @@ const addSubscriptionManagerLogger = manager => {
       return loggedMap;
     };
   }
-  const pubsub = manager.pubsub;
-  manager.pubsub = {
-    publish(...args) {
-      console.log('pubsub publish', args);
-      return pubsub.publish(...args);
-    },
-    async subscribe(opName, handler) {
-      let result;
-      try {
-        const logHandler = !apolloLogging ? handler : (msg) => {
-          console.log("pubsub msg", `${opName}(${JSON.stringify(msg)})`);
-          return handler(msg);
-        };
-        result = await pubsub.subscribe(opName, logHandler);
-      } finally {
-        if (apolloLogging) { console.log('pubsub subscribe', opName, "=>", result); }
-      }
-      return result;
-    },
-    unsubscribe(...args) {
-      console.log('pubsub unsubscribe', args);
-      return pubsub.unsubscribe(...args);
-    }
-  };
   return manager;
 };
 
 export const addApolloLogging = obj => obj.query ?
-  addNetworkInterfaceLogger(obj) :
-  addSubscriptionManagerLogger(obj);
+  addNetworkInterfaceLogger(obj) : (
+    obj.setupFunctions ?
+      addSubscriptionManagerLogger(obj) :
+      addPubSubLogging(obj)
+  );

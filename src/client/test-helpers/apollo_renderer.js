@@ -23,7 +23,7 @@ const { ApolloProvider } = require('react-apollo');
 const { mount } = require('enzyme');
 const clientModules = require('../modules').default;
 
-process.on('uncaughtException', (ex) => {
+process.on('uncaughtException', ex => {
   console.error("Uncaught error", ex.stack);
 });
 

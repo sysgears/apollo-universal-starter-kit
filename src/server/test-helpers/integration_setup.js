@@ -1,10 +1,9 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import WebSocket from 'ws';
-import { createNetworkInterface } from 'apollo-client';
+import { createNetworkInterface, ApolloClient } from 'apollo-client';
 import subscriptions from 'subscriptions-transport-ws';
 
-import createApolloClient from '../../common/apollo_client';
 import '../../../knexfile';
 import knex from '../sql/connector';
 import { app as settings } from '../../../package.json';
@@ -31,7 +30,9 @@ before(async () => {
     wsClient
   );
 
-  apollo = createApolloClient(settings.apolloLogging ? addApolloLogging(networkInterface) : networkInterface);
+  apollo = new ApolloClient({
+    networkInterface: settings.apolloLogging ? addApolloLogging(networkInterface) : networkInterface
+  });
 });
 
 after(() => {

@@ -34,17 +34,16 @@ describe('Counter example API works', () => {
     result.data.should.deep.equal({ addCount: { amount: 7, __typename: 'Count' } });
   });
 
-  step('Triggers subscription on GraphQL mutation', done => {
-    apollo.subscribe({
+  step('Triggers subscription on GraphQL mutation', async () => {
+    apollo.mutate({ mutation: COUNT_ADD_MUTATION, variables: { amount: 1 } });
+
+    await apollo.subscribe({
       query: COUNT_SUBSCRIPTION,
       variables: {},
     }).subscribe({
       next(data) {
         data.should.deep.equal({ countUpdated: { amount: 8, __typename: 'Count' } });
-        done();
       }
     });
-
-    apollo.mutate({ mutation: COUNT_ADD_MUTATION, variables: { amount: 1 } });
   });
 });

@@ -109,7 +109,7 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
     "chai-http": "^3.0.0",
-    "cross-env": "^4.0.0",
+    "cross-env": "^5.0.0",
     "css-loader": "^0.28.1",
     "enzyme": "^2.8.2",
     "eslint": "^3.19.0",

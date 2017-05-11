@@ -109,7 +109,7 @@ describe('Post and comments example API works', () => {
 
     subscription = apollo.subscribe({
       query: POSTS_SUBSCRIPTION,
-      variables: {endCursor: 10},
+      variables: { endCursor: 10 },
     }).subscribe({
       next(data) {
         expect(data).to.deep.equal({

@@ -42,7 +42,7 @@ export default pubsub => ({
       let id = await context.Post.addPost(input);
       let post = await context.Post.getPost(id[0]);
       // publish for post list
-      pubsub.publish('postsUpdated', { mutation: 'CREATED', node: post });
+      pubsub.publish('postsUpdated', { mutation: 'CREATED', id, node: post });
       return post;
     },
     async deletePost(obj, { id }, context) {
@@ -50,7 +50,7 @@ export default pubsub => ({
       let isDeleted = await context.Post.deletePost(id);
       if (isDeleted) {
         // publish for post list
-        pubsub.publish('postsUpdated', { mutation: 'DELETED', node: post });
+        pubsub.publish('postsUpdated', { mutation: 'DELETED', id, node: post });
         return { id: post.id };
       } else {
         return { id: null };
@@ -60,7 +60,7 @@ export default pubsub => ({
       await context.Post.editPost(input);
       let post = await context.Post.getPost(input.id);
       // publish for post list
-      pubsub.publish('postsUpdated', { mutation: 'UPDATED', node: post });
+      pubsub.publish('postsUpdated', { mutation: 'UPDATED', id: post.id, node: post });
       // publish for edit post page
       pubsub.publish('postUpdated', post);
       return post;

@@ -2,12 +2,12 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import WebSocket from 'ws';
 import { createNetworkInterface, ApolloClient } from 'apollo-client';
+import { addApolloLogging } from 'apollo-logger';
 import subscriptions from 'subscriptions-transport-ws';
 
 import '../../../knexfile';
 import knex from '../sql/connector';
 import { app as settings } from '../../../package.json';
-import { addApolloLogging } from '../../common/apollo_logger';
 
 chai.use(chaiHttp);
 chai.should();

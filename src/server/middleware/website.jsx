@@ -4,6 +4,7 @@ import { createBatchingNetworkInterface } from 'apollo-client';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
+import { addApolloLogging } from 'apollo-logger';
 import { addPersistedQueries } from 'persistgraphql';
 import fs from 'fs';
 import path from 'path';
@@ -14,7 +15,6 @@ import Html from './html';
 import routes from '../../client/app/routes';
 import log from '../../common/log';
 import { app as settings } from '../../../package.json';
-import { addApolloLogging } from '../../common/apollo_logger';
 
 const port = process.env.PORT || settings.apiPort;
 

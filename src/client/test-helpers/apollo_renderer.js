@@ -1,4 +1,5 @@
 import ApolloClient, { addTypenameToDocument } from 'apollo-client';
+import { addApolloLogging } from 'apollo-logger';
 import { Router } from 'react-router-dom';
 import createHistory from 'history/createMemoryHistory';
 import { JSDOM } from 'jsdom';
@@ -10,7 +11,6 @@ import { graphql, print } from 'graphql';
 import rootSchema from "server/api/root_schema.graphqls";
 import serverModules from "../../server/modules";
 import { app as settings } from '../../../package.json';
-import { addApolloLogging } from '../../common/apollo_logger';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;

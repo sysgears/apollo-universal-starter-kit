@@ -1,11 +1,11 @@
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { SubscriptionManager } from 'graphql-subscriptions';
+import { addApolloLogging } from 'apollo-logger';
 
 import schema, { pubsub } from './schema';
 import modules from '../modules';
 import log from '../../common/log';
 import { app as settings } from '../../../package.json';
-import { addApolloLogging } from '../../common/apollo_logger';
 
 const manager = new SubscriptionManager({
   schema,

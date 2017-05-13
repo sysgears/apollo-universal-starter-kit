@@ -1,5 +1,6 @@
 import React from 'react';
 import { createBatchingNetworkInterface } from 'apollo-client';
+import { addApolloLogging } from 'apollo-logger';
 import { ApolloProvider } from 'react-apollo';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
@@ -12,7 +13,6 @@ import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
 import routes from '../app/routes';
 import { app as settings } from '../../../package.json';
-import { addApolloLogging } from '../../common/apollo_logger';
 
 import '../styles/styles.scss';
 

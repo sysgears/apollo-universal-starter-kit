@@ -188,8 +188,6 @@ function startServer() {
 }
 
 function startWebpackDevServer(clientConfig, reporter) {
-  clientConfig.plugins.push(frontendVirtualModules);
-
   let compiler = webpack(clientConfig);
 
   compiler.plugin('after-emit', (compilation, callback) => {

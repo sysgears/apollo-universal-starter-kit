@@ -12,7 +12,23 @@ const serverConfig = {
   }
 };
 
+// App-specific iOS React Native config should be here
+const androidConfig = {
+  entry: {
+    'index.android': ['babel-polyfill', './src/mobile/index.js']
+  }
+};
+
+// App-specific iOS React Native config should be here
+const iOSConfig = {
+  entry: {
+    'index.ios': ['babel-polyfill', './src/mobile/index.js']
+  }
+};
+
 module.exports = {
   clientConfig: clientConfig,
-  serverConfig: serverConfig
+  serverConfig: serverConfig,
+  androidConfig: androidConfig,
+  iOSConfig: iOSConfig
 };

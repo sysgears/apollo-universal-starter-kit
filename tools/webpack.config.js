@@ -145,30 +145,43 @@ const serverConfig = merge.smart(_.cloneDeep(baseConfig), {
   plugins: serverPlugins
 }, appConfigs.serverConfig);
 
-let clientPlugins = [
-  new ManifestPlugin({
-    fileName: 'assets.json'
-  }),
-  new webpack.DefinePlugin(Object.assign({
-    __CLIENT__: true, __SERVER__: false, __SSR__: pkg.app.ssr,
-    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
-  })),
-  clientPersistPlugin
-];
+const createClientPlugins = () => {
+  let clientPlugins = [
+    new ManifestPlugin({
+      fileName: 'assets.json'
+    }),
+    new webpack.DefinePlugin(Object.assign({
+      __CLIENT__: true, __SERVER__: false, __SSR__: pkg.app.ssr,
+      __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
+    })),
+    clientPersistPlugin
+  ];
 
-if (!__DEV__) {
-  clientPlugins.push(new ExtractTextPlugin({ filename: '[name].[contenthash].css', allChunks: true }));
-  clientPlugins.push(new webpack.optimize.CommonsChunkPlugin({
-    name: "vendor",
-    filename: "[name].[hash].js",
-    minChunks: function(module) {
-      return module.resource && module.resource.indexOf(path.resolve('./node_modules')) === 0;
-    }
-  }));
-}
+  if (!__DEV__) {
+    clientPlugins.push(new ExtractTextPlugin({ filename: '[name].[contenthash].css', allChunks: true }));
+    clientPlugins.push(new webpack.optimize.CommonsChunkPlugin({
+      name: "vendor",
+      filename: "[name].[hash].js",
+      minChunks: function(module) {
+        return module.resource && module.resource.indexOf(path.resolve('./node_modules')) === 0;
+      }
+    }));
+  }
+  return clientPlugins;
+};
+
+const baseDevServerConfig = {
+  hot: true,
+  contentBase: '/',
+  publicPath: '/',
+  headers: { 'Access-Control-Allow-Origin': '*' },
+  quiet: false,
+  noInfo: true,
+  stats: { colors: true, chunkModules: false }
+};
 
 const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
-  name: 'frontend',
+  name: 'web-frontend',
   devtool: __DEV__ ? '#eval' : '#source-map',
   module: {
     rules: [
@@ -191,8 +204,72 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
     path: path.resolve(pkg.app.frontendBuildDir),
     publicPath: '/'
   },
-  plugins: clientPlugins
+  plugins: createClientPlugins(),
+  devServer: _.merge({}, baseDevServerConfig, {
+    port: pkg.app.webpackDevPort,
+    proxy: {
+      '!/*.hot-update.{json,js}': {
+        target: `http://localhost:${pkg.app.apiPort}`,
+        logLevel: 'info'
+      }
+    }
+  })
 }, appConfigs.clientConfig);
+
+let mobilePlugins = createClientPlugins();
+
+const baseMobileConfig = merge.smart(_.cloneDeep(baseConfig), {
+  devtool: __DEV__ ? '#eval' : '#source-map',
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /(node_modules|bower_components)/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            "presets": ["react-native", ["es2015", { "modules": false }], "stage-0"],
+            "plugins": [
+              "transform-runtime",
+              "transform-decorators-legacy",
+              "transform-class-properties",
+              ["styled-components", { "ssr": true } ]
+            ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
+            "only": ["*.js", "*.jsx"],
+          }
+        }].concat(
+          pkg.app.persistGraphQL ?
+            ['persistgraphql-webpack-plugin/js-loader'] : []
+        )
+      },
+    ]
+  },
+  output: {
+    filename: '[name].js',
+    publicPath: '/'
+  },
+  plugins: mobilePlugins
+});
+
+const androidConfig = merge.smart(_.cloneDeep(baseMobileConfig), {
+  name: 'android-frontend',
+  output: {
+    path: path.resolve(path.join(pkg.app.frontendBuildDir, 'android')),
+  },
+  devServer: _.merge({}, baseDevServerConfig, {
+    port: 3010
+  })
+}, appConfigs.androidConfig);
+
+const iOSConfig = merge.smart(_.cloneDeep(baseMobileConfig), {
+  name: 'ios-frontend',
+  output: {
+    path: path.resolve(path.join(pkg.app.frontendBuildDir, 'ios')),
+  },
+  devServer: _.merge({}, baseDevServerConfig, {
+    port: 3020
+  })
+}, appConfigs.iOSConfig);
 
 const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
   name: 'dll',
@@ -215,4 +292,4 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
 module.exports =
   IS_TEST ?
     serverConfig :
-    [serverConfig, clientConfig, dllConfig];
+    [serverConfig, clientConfig, dllConfig, androidConfig, iOSConfig];

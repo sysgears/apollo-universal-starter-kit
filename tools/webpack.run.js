@@ -12,13 +12,13 @@ import waitOn from 'wait-on';
 
 import pkg from '../package.json';
 import configs from './webpack.config';
+import { createMobileEntry } from './webpack.mobile';
 
 minilog.enable();
 
 const logBack = minilog('webpack-for-backend');
-const logFront = minilog('webpack-for-frontend');
 
-const [serverConfig, clientConfig, dllConfig] = configs;
+const [serverConfig, clientConfig, dllConfig, androidConfig, iOSConfig] = configs;
 const __WINDOWS__ = /^win/.test(process.platform);
 
 let server;
@@ -30,10 +30,6 @@ process.on('exit', () => {
     server.kill('SIGTERM');
   }
 });
-
-function createDirs(dir) {
-  mkdirp.sync(dir);
-}
 
 function runServer(path) {
   if (startBackend) {
@@ -53,7 +49,7 @@ function runServer(path) {
   }
 }
 
-function webpackReporter(log, err, stats) {
+function webpackReporter(outputPath, log, err, stats) {
   if (err) {
     log(err.stack);
     throw new Error("Build error");
@@ -77,41 +73,38 @@ function webpackReporter(log, err, stats) {
     }));
 
     if (!__DEV__) {
-      const dir = log === logFront ?
-        pkg.app.frontendBuildDir :
-        pkg.app.backendBuildDir;
-      createDirs(dir);
-      fs.writeFileSync(path.join(dir, 'stats.json'), JSON.stringify(stats.toJson()));
+      mkdirp.sync(outputPath);
+      fs.writeFileSync(path.join(outputPath, 'stats.json'), JSON.stringify(stats.toJson()));
     }
   }
 }
 
 var frontendVirtualModules = new VirtualModules({ 'node_modules/backend_reload.js': '' });
 
-function startClient() {
+function startClient(config) {
+  const logger = minilog(`webpack-for-${config.name}`);
   try {
-    const reporter = (...args) => webpackReporter(logFront, ...args);
+    const reporter = (...args) => webpackReporter(config.output.path, logger, ...args);
 
-    clientConfig.plugins.push(frontendVirtualModules);
+    config.plugins.push(frontendVirtualModules);
 
     if (__DEV__) {
       if (pkg.app.reactHotLoader) {
-        clientConfig.entry.bundle.unshift('react-hot-loader/patch');
+        config.entry[Object.keys(config.entry)[0]].unshift('react-hot-loader/patch');
       }
-      clientConfig.entry.bundle.unshift(
-        `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`,
+      config.entry[Object.keys(config.entry)[0]].unshift(
+        `webpack-dev-server/client?http://localhost:${clientConfig.devServer.port}/`,
         'webpack/hot/dev-server');
-      clientConfig.plugins.push(new webpack.HotModuleReplacementPlugin(),
+      config.plugins.push(new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin());
-      clientConfig.output.path = '/';
-      startWebpackDevServer(clientConfig, reporter);
+      startWebpackDevServer(config, reporter, logger);
     } else {
-      const compiler = webpack(clientConfig);
+      const compiler = webpack(config);
 
       compiler.run(reporter);
     }
   } catch (err) {
-    logFront(err.message, err.stack);
+    logger(err.message, err.stack);
   }
 }
 
@@ -125,7 +118,7 @@ function increaseBackendReloadCount() {
 
 function startServer() {
   try {
-    const reporter = (...args) => webpackReporter(logBack, ...args);
+    const reporter = (...args) => webpackReporter(serverConfig.output.path, logBack, ...args);
 
     if (__DEV__) {
       if (__WINDOWS__) {
@@ -187,19 +180,22 @@ function startServer() {
   }
 }
 
-function startWebpackDevServer(clientConfig, reporter) {
-  clientConfig.plugins.push(frontendVirtualModules);
+function startWebpackDevServer(config, reporter, logger) {
+  const configOutputPath = config.output.path;
+  config.output.path = '/';
 
-  let compiler = webpack(clientConfig);
+  config.plugins.push(frontendVirtualModules);
+
+  let compiler = webpack(config);
 
   compiler.plugin('after-emit', (compilation, callback) => {
     if (backendFirstStart) {
-      logFront.debug("Webpack dev server is waiting for backend to start...");
+      logger.debug("Webpack dev server is waiting for backend to start...");
       waitOn({ resources: [`tcp:localhost:${pkg.app.apiPort}`] }, err => {
         if (err) {
-          logFront.error(err);
+          logger.error(err);
         } else {
-          logFront.debug("Backend has been started, resuming webpack dev server...");
+          logger.debug("Backend has been started, resuming webpack dev server...");
           callback();
         }
       });
@@ -208,8 +204,8 @@ function startWebpackDevServer(clientConfig, reporter) {
     }
   });
   compiler.plugin('done', stats => {
-    const dir = pkg.app.frontendBuildDir;
-    createDirs(dir);
+    const dir = configOutputPath;
+    mkdirp.sync(dir);
     if (stats.compilation.assets['assets.json']) {
       const assetsMap = JSON.parse(stats.compilation.assets['assets.json'].source());
       _.each(stats.toJson().assetsByChunkName, (assets, bundle) => {
@@ -227,29 +223,19 @@ function startWebpackDevServer(clientConfig, reporter) {
     }
   });
 
-  const app = new WebpackDevServer(compiler, {
-    hot: true,
-    contentBase: '/',
-    publicPath: clientConfig.output.publicPath,
-    headers: { 'Access-Control-Allow-Origin': '*' },
-    proxy: {
-      '!/*.hot-update.{json,js}': {
-        target: `http://localhost:${pkg.app.apiPort}`,
-        logLevel: 'info'
-      }
-    },
-    reporter: ({ state, stats }) => {
+  const app = new WebpackDevServer(compiler, _.merge({}, config.devServer, {
+    reporter: ({state, stats}) => {
       if (state) {
-        logFront("bundle is now VALID.");
+        logger("bundle is now VALID.");
       } else {
-        logFront("bundle is now INVALID.");
+        logger("bundle is now INVALID.");
       }
       reporter(null, stats);
     }
-  });
+  }));
 
-  logFront(`Webpack dev server listening on ${pkg.app.webpackDevPort}`);
-  app.listen(pkg.app.webpackDevPort);
+  logger(`Webpack ${config.name} dev server listening on ${config.devServer.port}`);
+  app.listen(config.devServer.port);
 }
 
 function useWebpackDll() {
@@ -332,7 +318,10 @@ function buildDll() {
 
 function startWebpack() {
   startServer();
-  startClient();
+  startClient(clientConfig);
+  startClient(androidConfig);
+  startClient(iOSConfig);
+  createMobileEntry();
 }
 
 if (!__DEV__ || !pkg.app.webpackDll) {

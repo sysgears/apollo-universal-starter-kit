@@ -12,7 +12,7 @@ import waitOn from 'wait-on';
 
 import pkg from '../package.json';
 import configs from './webpack.config';
-import { createMobileEntry } from './webpack.mobile';
+import createMobileEntry from './webpack.mobile';
 
 minilog.enable();
 

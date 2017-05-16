@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import mkdirp from 'mkdirp';
-import { spawn } from 'child_process';
+// import { spawn } from 'child_process';
 import ReactPackager from 'react-native/packager';
 
 const ENTRY_JS = '\
@@ -10,7 +10,7 @@ global.__reactNative = require("react-native");\n\
 global.__expo = require("expo");\n\
 ';
 
-export function createMobileEntry() {
+export default function createMobileEntry() {
   const entryRoot = path.resolve('.expo');
   mkdirp.sync(entryRoot);
   const entryPath = path.join(entryRoot, 'index.js');

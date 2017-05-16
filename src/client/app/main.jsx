@@ -5,7 +5,7 @@ import { ApolloProvider } from 'react-apollo';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import { addPersistedQueries } from 'persistgraphql';
-import subscriptions from 'subscriptions-transport-ws';
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 
@@ -25,10 +25,10 @@ let networkInterface = createBatchingNetworkInterface({
 });
 
 if (__CLIENT__) {
-  const wsClient = new subscriptions.SubscriptionClient(window.location.origin.replace(/^http/, 'ws')
+  const wsClient = new SubscriptionClient(window.location.origin.replace(/^http/, 'ws')
     .replace(':' + settings.webpackDevPort, ':' + settings.apiPort));
 
-  networkInterface = subscriptions.addGraphQLSubscriptions(
+  networkInterface = addGraphQLSubscriptions(
     networkInterface,
     wsClient,
   );

@@ -56,7 +56,7 @@ export default class Post {
   }
 
   addPost({ title, content }) {
-    return knex('post').insert({ title, content });
+    return knex('post').insert({ title, content }).returning('id');
   }
 
   deletePost(id) {

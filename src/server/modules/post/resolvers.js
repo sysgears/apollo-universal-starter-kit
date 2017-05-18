@@ -39,10 +39,10 @@ export default pubsub => ({
   },
   Mutation: {
     async addPost(obj, { input }, context) {
-      let id = await context.Post.addPost(input);
-      let post = await context.Post.getPost(id[0]);
+      let [ id ] = await context.Post.addPost(input);
+      let post = await context.Post.getPost(id);
       // publish for post list
-      pubsub.publish('postsUpdated', { mutation: 'CREATED', id: id[0], node: post });
+      pubsub.publish('postsUpdated', { mutation: 'CREATED', id, node: post });
       return post;
     },
     async deletePost(obj, { id }, context) {

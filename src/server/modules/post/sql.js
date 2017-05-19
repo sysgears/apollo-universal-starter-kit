@@ -73,7 +73,7 @@ export default class Post {
   }
 
   addComment({ content, postId }) {
-    return knex('comment').insert({ content, post_id: postId });
+    return knex('comment').insert({ content, post_id: postId }).returning('id');
   }
 
   getComment(id) {

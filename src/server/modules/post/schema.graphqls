@@ -13,13 +13,13 @@ type Comment {
 }
 
 # Edges for PostsQuery
-type Edges {
+type PostEdges {
   node: Post
   cursor: ID
 }
 
 # PageInfo for PostsQuery
-type PageInfo {
+type PostPageInfo {
   endCursor: ID
   hasNextPage: Boolean
 }
@@ -27,8 +27,8 @@ type PageInfo {
 # Posts relay-style pagination query
 type PostsQuery {
   totalCount: Int
-  edges: [Edges]
-  pageInfo: PageInfo
+  edges: [PostEdges]
+  pageInfo: PostPageInfo
 }
 
 extend type Query {

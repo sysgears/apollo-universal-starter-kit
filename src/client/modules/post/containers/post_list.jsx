@@ -18,7 +18,7 @@ export function AddPost(prev, node) {
   const edge = {
     cursor: node.id,
     node: node,
-    __typename: 'Edges'
+    __typename: 'PostEdges'
   };
 
   return update(prev, {

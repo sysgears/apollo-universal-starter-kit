@@ -54,8 +54,8 @@
 
 6. Point your browser to [http://localhost:3000](http://localhost:3000)
 7. Change any app code and see the changes applied immediately!
-8. Open app in multiple tabs, try to increase counter in one tab and then switch to another tab. You will see that
-counter value updated there as well, because counter is live updated via subscriptions.
+8. Open app in multiple tabs, try to increase counter or add a new post/comment in one tab and then switch to another tab. You will see that
+counter value and post/comment are updated there as well, because the application is live updated via subscriptions.
 
 ## Deployment to Production
 
@@ -119,6 +119,52 @@ counter value updated there as well, because counter is live updated via subscri
 ## Heroku Demo
 You can see latest version of this app deployed to Heroku here:
 [https://apollo-fullstack-starter-kit.herokuapp.com](https://apollo-fullstack-starter-kit.herokuapp.com)
+
+## Additioinal scripts
+
+While developing, you will probably rely mostly on `npm run watch` or `yarn watch`; however, there are additional scripts at your disposal:
+
+|`npm run or yarn <script>`|Description|
+|--------------------------|-----------|
+|`watch`|Run your app in develooment mode and watch your changes. Hot code reload will be enabled in development.|
+|`start`|Run your app in production mode.|
+|`build`|Compiles the application to the build folder.|
+|`tests`|Runs unit tests with Mocha.|
+|`tests:watch`|Runs unit tests with Mocha and watches for changes automatically to re-run tests.|
+|`test`|Runs unit tests with Mocha and check for lint errors|
+|`lint`|Check for lint errors and runs for all `.js` and `.jsx` files.|
+|`seed`|Seed sample database using SQLite. Use `--prod` flag to run in "production" mode.|
+|`migrate`|Migrate the sample database|
+|`rollback`|Rollback the sample database to previous state.|
+
+
+## Project Structure
+
+The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by feature rather than file type. This structure is only meant to serve as a guide, it is by no means prescriptive. That said, it aims to represent generally accepted guidelines and patterns for building scalable applications.
+
+```
+.
+├── src                      # Application source code
+│   ├── client               # Fractal route for client side code
+│   │   ├── app              # Fractal route for common client application code
+│   │   └── modules          # Fractal route for client-side application module splitting (components, containers, GraphQL queries, redux reducers)
+│   │   └── styles           # Application-wide styles
+│   │   └── test-helpers     # Test helper for apollo client tests
+│   │   └── index.jsx        # Render client with hot reload
+│   ├── common               # Apollo client, redux store and logging
+│   └── server               # Fractal route for server side code
+│   │   ├── api              # Initialization of GraphQL schema and subscription.
+│   │   └── database         # Fractal route for application module splitting
+│   │   │   └── migrations   # Database migration script using Knex
+│   │   │   └── seeds        # Database seed script using Knex
+│   │   └── middleware       # Graphiql, GraphQL express and SSR rendering
+│   │   └── modules          # Fractal route for server-side application module splitting (schema definition, resolvers, sql queries)
+│   │   └── sql              # Knex connector
+│   │   └── test-helpers     # Test helper for apollo server tests
+│   │   └── api_server.js    # GraphQL api server set up
+│   │   └── index.js         # Render server with hot reload
+└── tools                    # All build related files (Webpack)
+```
 
 ## Features
 - [Webpack] for back end

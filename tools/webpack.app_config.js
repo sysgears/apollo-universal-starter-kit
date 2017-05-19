@@ -15,14 +15,22 @@ const serverConfig = {
 // App-specific iOS React Native config should be here
 const androidConfig = {
   entry: {
-    'index.android': ['babel-polyfill', './src/mobile/index.js']
+    'index.android.bundle': [
+      'babel-polyfill',
+      require.resolve('haul-cli/src/utils/polyfillEnvironment.js'),
+      './src/mobile/index.js'
+    ]
   }
 };
 
 // App-specific iOS React Native config should be here
 const iOSConfig = {
   entry: {
-    'index.ios': ['babel-polyfill', './src/mobile/index.js']
+    'index.ios.bundle': [
+      'babel-polyfill',
+      require.resolve('haul-cli/src/utils/polyfillEnvironment.js'),
+      './src/mobile/index.js'
+    ]
   }
 };
 

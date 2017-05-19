@@ -12,7 +12,6 @@ import waitOn from 'wait-on';
 
 import pkg from '../package.json';
 import configs from './webpack.config';
-import createMobileEntry from './webpack.mobile';
 
 minilog.enable();
 
@@ -321,7 +320,6 @@ function startWebpack() {
   startClient(clientConfig);
   startClient(androidConfig);
   startClient(iOSConfig);
-  createMobileEntry();
 }
 
 if (!__DEV__ || !pkg.app.webpackDll) {

@@ -1,13 +1,13 @@
-// Don't use ES6 here to stay compatible with ESLint plugins
-
-const webpack = require('webpack');
-const ManifestPlugin = require('webpack-manifest-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const merge = require('webpack-merge');
-const nodeExternals = require('webpack-node-externals');
-const path = require('path');
-const PersistGraphQLPlugin = require('persistgraphql-webpack-plugin');
-const _ = require('lodash');
+import webpack from 'webpack';
+import ManifestPlugin from 'webpack-manifest-plugin';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import merge from 'webpack-merge';
+import nodeExternals from 'webpack-node-externals';
+import path from 'path';
+import PersistGraphQLPlugin from 'persistgraphql-webpack-plugin';
+import _ from 'lodash';
+import AssetResolver from 'haul-cli/src/resolvers/AssetResolver';
+import HasteResolver from 'haul-cli/src/resolvers/HasteResolver';
 
 const appConfigs = require('./webpack.app_config');
 const pkg = require('../package.json');
@@ -218,13 +218,13 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
 
 let mobilePlugins = createClientPlugins();
 
-const baseMobileConfig = merge.smart(_.cloneDeep(baseConfig), {
+const createMobileConfig = platform => merge.smart(_.cloneDeep(baseConfig), {
   devtool: __DEV__ ? '#eval' : '#source-map',
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /node_modules\/(?!react|@expo|haul)/,
         use: [{
           loader: 'babel-loader',
           options: {
@@ -233,6 +233,7 @@ const baseMobileConfig = merge.smart(_.cloneDeep(baseConfig), {
               "transform-runtime",
               "transform-decorators-legacy",
               "transform-class-properties",
+              require.resolve('haul-cli/src/utils/fixRequireIssues'),
               ["styled-components", { "ssr": true } ]
             ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
             "only": ["*.js", "*.jsx"],
@@ -242,16 +243,39 @@ const baseMobileConfig = merge.smart(_.cloneDeep(baseConfig), {
             ['persistgraphql-webpack-plugin/js-loader'] : []
         )
       },
+      {
+        test: AssetResolver.test,
+        use: {
+          loader: require.resolve('haul-cli/src/loaders/assetLoader'),
+          query: { platform, root: path.resolve('.'), bundle: false },
+        },
+      },
     ]
   },
   output: {
-    filename: '[name].js',
+    filename: `[name]`,
     publicPath: '/'
   },
-  plugins: mobilePlugins
+  resolve: {
+    plugins: [
+      new HasteResolver({
+        directories: [path.resolve('node_modules/react-native')],
+      }),
+      new AssetResolver({ platform }),
+    ],
+    mainFields: ['react-native', 'browser', 'main'],
+    extensions: [`.${platform}.js`, '.native.js', '.js'],
+  },
+  plugins: [
+    new webpack.SourceMapDevToolPlugin({
+      test: /\.(js|jsx|css|bundle)($|\?)/i,
+      filename: '[file].map',
+    }),
+    ...mobilePlugins
+  ]
 });
 
-const androidConfig = merge.smart(_.cloneDeep(baseMobileConfig), {
+const androidConfig = merge.smart(_.cloneDeep(createMobileConfig('android')), {
   name: 'android-frontend',
   output: {
     path: path.resolve(path.join(pkg.app.frontendBuildDir, 'android')),
@@ -261,7 +285,7 @@ const androidConfig = merge.smart(_.cloneDeep(baseMobileConfig), {
   })
 }, appConfigs.androidConfig);
 
-const iOSConfig = merge.smart(_.cloneDeep(baseMobileConfig), {
+const iOSConfig = merge.smart(_.cloneDeep(createMobileConfig('ios')), {
   name: 'ios-frontend',
   output: {
     path: path.resolve(path.join(pkg.app.frontendBuildDir, 'ios')),

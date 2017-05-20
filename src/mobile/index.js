@@ -23,4 +23,3 @@ class AwakeInDevApp extends React.Component {
 }
 
 Expo.registerRootComponent(AwakeInDevApp);
-

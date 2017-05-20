@@ -9,6 +9,7 @@ import _ from 'lodash';
 import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
+import { Config, Project, ProjectSettings } from 'xdl';
 
 import pkg from '../package.json';
 // eslint-disable-next-line import/default
@@ -320,7 +321,24 @@ function buildDll() {
   });
 }
 
+async function startExpoServer() {
+  try {
+    Config.validation.reactNativeVersionWarnings = false;
+    Config.developerTool = 'crna';
+    Config.offline = true;
+
+    const projectRoot = path.resolve('.');
+    await Project.startExpoServerAsync(projectRoot);
+    await ProjectSettings.setPackagerInfoAsync(projectRoot, {
+      packagerPort: 3010
+    });
+  } catch (e) {
+    console.error(e.stack);
+  }
+}
+
 function startWebpack() {
+  startExpoServer();
   startServer();
   startClient(clientConfig);
   startClient(androidConfig);

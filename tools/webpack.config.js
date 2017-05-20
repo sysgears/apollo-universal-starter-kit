@@ -182,7 +182,7 @@ const baseDevServerConfig = {
 
 const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
   name: 'web-frontend',
-  devtool: __DEV__ ? '#eval' : '#source-map',
+  devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   module: {
     rules: [
       {
@@ -219,12 +219,12 @@ const clientConfig = merge.smart(_.cloneDeep(baseConfig), {
 let mobilePlugins = createClientPlugins();
 
 const createMobileConfig = platform => merge.smart(_.cloneDeep(baseConfig), {
-  devtool: __DEV__ ? '#eval' : '#source-map',
+  devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules\/(?!react|@expo|haul)/,
+        exclude: /node_modules\/(?!react|@expo|expo|lottie-react-native|haul-cli)/,
         use: [{
           loader: 'babel-loader',
           options: {
@@ -299,6 +299,28 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
   name: 'dll',
   entry: {
     vendor: _.keys(pkg.dependencies),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules\/(?!react|@expo|expo|lottie-react-native|haul-cli)/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            "presets": ["react-native", ["es2015", {"modules": false}], "stage-0"],
+            "plugins": [
+              "transform-runtime",
+              "transform-decorators-legacy",
+              "transform-class-properties",
+              require.resolve('haul-cli/src/utils/fixRequireIssues'),
+              ["styled-components", {"ssr": true}]
+            ],
+            "only": ["*.js", "*.jsx"],
+          }
+        }]
+      }
+    ]
   },
   plugins: [
     new webpack.DllPlugin({

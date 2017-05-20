@@ -241,10 +241,12 @@ function startWebpackDevServer(config, reporter, logger) {
 function useWebpackDll() {
   console.log("Using Webpack DLL vendor bundle");
   const jsonPath = path.join('..', pkg.app.frontendBuildDir, 'vendor_dll.json');
-  clientConfig.plugins.push(new webpack.DllReferencePlugin({
-    context: process.cwd(),
-    manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
-  }));
+  [clientConfig, androidConfig, iOSConfig].forEach(config =>
+    config.plugins.push(new webpack.DllReferencePlugin({
+      context: process.cwd(),
+      manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
+    }))
+  );
   serverConfig.plugins.push(new webpack.DllReferencePlugin({
     context: process.cwd(),
     manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
@@ -301,7 +303,9 @@ function buildDll() {
 
       compiler.run((err, stats) => {
         let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
-        const meta = { name: _.keys(stats.compilation.assets)[0], hashes: {}, modules: dllConfig.entry.vendor };
+        const vendorKey = _.findKey(stats.compilation.assets,
+          (v, key) => key.startsWith('vendor') && key.endsWith('_dll.js'));
+        const meta = { name: vendorKey, hashes: {}, modules: dllConfig.entry.vendor };
         for (let filename of Object.keys(json.content)) {
           if (filename.indexOf(' ') < 0) {
             meta.hashes[filename] = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');

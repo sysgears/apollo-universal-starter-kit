@@ -11,6 +11,7 @@ import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
 
 import pkg from '../package.json';
+// eslint-disable-next-line import/default
 import configs from './webpack.config';
 
 minilog.enable();

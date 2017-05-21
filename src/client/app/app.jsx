@@ -8,11 +8,11 @@ import NavBar from './nav_bar';
 const footerHeight = '40px';
 
 const Footer = styled.footer`
-  position: 'absolute',
-  bottom: 0,
-  width: '100%',
-  lineHeight: ${footerHeight},
-  height: ${footerHeight}
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  line-height: ${footerHeight};
+  height: ${footerHeight};
 `;
 
 export default function App({ children }) {

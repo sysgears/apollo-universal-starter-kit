@@ -323,10 +323,13 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
     ]
   },
   plugins: [
+    new webpack.DefinePlugin(Object.assign({
+      __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
+    })),
     new webpack.DllPlugin({
       name: '[name]',
       path: path.join(pkg.app.frontendBuildDir, '[name]_dll.json'),
-    }),
+    })
   ],
   output: {
     filename: '[name].[hash]_dll.js',

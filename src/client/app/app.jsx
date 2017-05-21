@@ -9,6 +9,7 @@ const footerHeight = '40px';
 
 const Footer = styled.footer`
   position: absolute;
+  background: blue;
   bottom: 0;
   width: 100%;
   line-height: ${footerHeight};

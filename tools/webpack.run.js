@@ -1,5 +1,9 @@
 import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
+import httpProxyMiddleware from 'http-proxy-middleware';
+import express from 'express';
+import http from 'http';
 import { spawn } from 'child_process';
 import fs from 'fs';
 import path from 'path';
@@ -9,7 +13,20 @@ import _ from 'lodash';
 import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
-import { Config, Project, ProjectSettings } from 'xdl';
+import { Android, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
+import devToolsMiddleware from 'haul-cli/src/server/middleware/devToolsMiddleware';
+import liveReloadMiddleware from 'haul-cli/src/server/middleware/liveReloadMiddleware';
+import statusPageMiddleware from 'haul-cli/src/server/middleware/statusPageMiddleware';
+import symbolicateMiddleware from 'haul-cli/src/server/middleware/symbolicateMiddleware';
+import loggerMiddleware from 'haul-cli/src/server/middleware/loggerMiddleware';
+import missingBundleMiddleware from 'haul-cli/src/server/middleware/missingBundleMiddleware';
+import systraceMiddleware from 'haul-cli/src/server/middleware/systraceMiddleware';
+import rawBodyMiddleware from 'haul-cli/src/server/middleware/rawBodyMiddleware';
+import bodyParser from 'body-parser';
+import WebSocketProxy from 'haul-cli/src/server/util/WebsocketProxy';
+import ConcatSource from 'webpack-sources/lib/ConcatSource';
+import RawSource from 'webpack-sources/lib/RawSource';
+import which from 'which';
 
 import pkg from '../package.json';
 // eslint-disable-next-line import/default
@@ -82,7 +99,7 @@ function webpackReporter(outputPath, log, err, stats) {
 
 var frontendVirtualModules = new VirtualModules({ 'node_modules/backend_reload.js': '' });
 
-function startClient(config) {
+function startClient(config, platform) {
   const logger = minilog(`webpack-for-${config.name}`);
   try {
     const reporter = (...args) => webpackReporter(config.output.path, logger, ...args);
@@ -94,11 +111,10 @@ function startClient(config) {
         config.entry[Object.keys(config.entry)[0]].unshift('react-hot-loader/patch');
       }
       config.entry[Object.keys(config.entry)[0]].unshift(
-        `webpack-dev-server/client?http://localhost:${clientConfig.devServer.port}/`,
-        'webpack/hot/dev-server');
+        `webpack-hot-middleware/client?http://localhost:${clientConfig.devServer.port}/`);
       config.plugins.push(new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin());
-      startWebpackDevServer(config, reporter, logger);
+      startWebpackDevServer(config, platform, reporter, logger);
     } else {
       const compiler = webpack(config);
 
@@ -181,7 +197,7 @@ function startServer() {
   }
 }
 
-function startWebpackDevServer(config, reporter, logger) {
+function startWebpackDevServer(config, platform, reporter, logger) {
   const configOutputPath = config.output.path;
   config.output.path = '/';
 
@@ -204,6 +220,18 @@ function startWebpackDevServer(config, reporter, logger) {
       callback();
     }
   });
+  if (pkg.app.webpackDll && platform !== 'web') {
+    compiler.plugin('after-compile', (compilation, callback) => {
+      let vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
+      Object.keys(compilation.assets).forEach(key => {
+        if (key.endsWith('.bundle')) {
+          const vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
+          compilation.assets[key] = new ConcatSource(new RawSource(vendorContents), compilation.assets[key]);
+        }
+      });
+      callback();
+    });
+  }
   compiler.plugin('done', stats => {
     const dir = configOutputPath;
     mkdirp.sync(dir);
@@ -217,15 +245,37 @@ function startWebpackDevServer(config, reporter, logger) {
         }
       });
       if (pkg.app.webpackDll) {
-        let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
-        assetsMap['vendor.js'] = json.name;
+        let vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
+        assetsMap['vendor.js'] = vendorHashesJson.name;
       }
       fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
     }
   });
 
-  const app = new WebpackDevServer(compiler, _.merge({}, config.devServer, {
-    reporter: ({state, stats}) => {
+  const app = express();
+
+  const httpServer = http.createServer(app);
+
+  app.use((req, res, next) => {
+    console.log("req:", req.url);
+    next();
+  });
+
+  if (platform !== 'web') {
+    const debuggerProxy = new WebSocketProxy(httpServer, '/debugger-proxy');
+
+    app.use(rawBodyMiddleware)
+      .use(bodyParser.text())
+      .use(devToolsMiddleware(debuggerProxy))
+      .use(liveReloadMiddleware(compiler))
+      .use(statusPageMiddleware)
+      .use(symbolicateMiddleware(compiler))
+      .use('/systrace', systraceMiddleware)
+      .use(loggerMiddleware);
+  }
+
+  app.use(webpackDevMiddleware(compiler, _.merge({}, config.devServer, {
+    reporter({state, stats}) {
       if (state) {
         logger("bundle is now VALID.");
       } else {
@@ -233,7 +283,17 @@ function startWebpackDevServer(config, reporter, logger) {
       }
       reporter(null, stats);
     }
-  }));
+  })))
+  .use(webpackHotMiddleware(compiler, { log: false }));
+
+  if (config.devServer.proxy) {
+    Object.keys(config.devServer.proxy).forEach(key => {
+      app.use(httpProxyMiddleware(key, config.devServer.proxy[key]));
+    });
+  }
+  if (platform !== 'web') {
+    app.use(missingBundleMiddleware);
+  }
 
   logger(`Webpack ${config.name} dev server listening on ${config.devServer.port}`);
   app.listen(config.devServer.port);
@@ -326,12 +386,23 @@ async function startExpoServer() {
     Config.validation.reactNativeVersionWarnings = false;
     Config.developerTool = 'crna';
     Config.offline = true;
+    Exp.determineEntryPointAsync = () => 'index.android';
 
     const projectRoot = path.resolve('.');
     await Project.startExpoServerAsync(projectRoot);
     await ProjectSettings.setPackagerInfoAsync(projectRoot, {
       packagerPort: 3010
     });
+
+    const address = await UrlUtils.constructManifestUrlAsync(projectRoot);
+    console.log("Expo address:", address);
+    which('adb', (err, result) => {
+      console.log("Using adb at:", result);
+    });
+    const { success, error } = await Android.openProjectAsync(projectRoot);
+    if (!success) {
+      console.log(error.message);
+    }
   } catch (e) {
     console.error(e.stack);
   }
@@ -340,9 +411,9 @@ async function startExpoServer() {
 function startWebpack() {
   startExpoServer();
   startServer();
-  startClient(clientConfig);
-  startClient(androidConfig);
-  startClient(iOSConfig);
+  startClient(clientConfig, "web");
+  startClient(androidConfig, "android");
+  // startClient(iOSConfig, "ios");
 }
 
 if (!__DEV__ || !pkg.app.webpackDll) {

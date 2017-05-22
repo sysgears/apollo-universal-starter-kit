@@ -9,7 +9,7 @@ import POST_ADD from '../graphql/post_add.graphql';
 import { AddPost } from './post_list';
 
 class PostAdd extends React.Component {
-  onSubmit(values) {
+  onSubmit = (values) => {
     const { addPost } = this.props;
 
     addPost(values.title, values.content);
@@ -20,7 +20,7 @@ class PostAdd extends React.Component {
       <div>
         <Link to="/posts">Back</Link>
         <h2>Create Post</h2>
-        <PostForm onSubmit={this.onSubmit.bind(this)}/>
+        <PostForm onSubmit={this.onSubmit}/>
       </div>
     );
   }

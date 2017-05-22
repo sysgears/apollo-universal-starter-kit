@@ -47,7 +47,7 @@ class PostEdit extends React.Component {
     }
   }
 
-  onSubmit(values) {
+  onSubmit = (values) => {
     const { post, editPost } = this.props;
 
     editPost(post.id, values.title, values.content);
@@ -65,7 +65,7 @@ class PostEdit extends React.Component {
         <div>
           <Link id="back-button" to="/posts">Back</Link>
           <h2>Edit Post</h2>
-          <PostForm onSubmit={this.onSubmit.bind(this)} initialValues={post}/>
+          <PostForm onSubmit={this.onSubmit} initialValues={post}/>
           <br/>
           <PostComments postId={match.params.id} comments={post.comments} subscribeToMore={subscribeToMore}/>
         </div>

@@ -124,7 +124,7 @@
     "fs-extra": "^3.0.1",
     "ignore-loader": "^0.1.2",
     "isomorphic-style-loader": "^2.0.0",
-    "jsdom": "^10.1.0",
+    "jsdom": "^11.0.0",
     "json-loader": "^0.5.4",
     "mkdirp": "^0.5.1",
     "mocha": "^3.3.0",

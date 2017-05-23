@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit)
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-fullstack-starter-kit.svg)](https://greenkeeper.io/)
 
-> Apollo Universal Starter Kit is an boilerplate for [Universal] web app development built on top of [Apollo],
+> Apollo Universal Starter Kit is an SEO friendly boilerplate for [Universal] web app development built on top of [Apollo],
 > [GraphQL], [React], [Redux], [Express] with SQL storage support and [Twitter Bootstrap] integration.
 > Hot Code Reload of back end & front end using [Webpack] and Hot Module Replacement to reflect your changes instantly
 > and help you stay productive.
@@ -238,6 +238,8 @@ for better security and less bandwidth.
 
 - [GraphQL Cursor Pagination] Example of  [Relay-style cursor pagination]
 
+- Declarative/dynamic `head` section, using [React Helmet]
+
 - Full CRUD funcionality with Subscriptions in post example, with [ReduxForm]
 
 ## Contributors
@@ -277,3 +279,4 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Dataloader]: https://github.com/facebook/dataloader
 [GraphQL Cursor Pagination]: https://medium.com/@gethylgeorge/infinite-scrolling-in-react-using-apollo-and-react-virtualized-graphql-cursor-pagination-bf80617a8a1a#.jkmmu9qz8
 [Relay-style cursor pagination]: http://dev.apollodata.com/react/pagination.html#relay-cursors
+[React Helmet]: https://github.com/nfl/react-helmet

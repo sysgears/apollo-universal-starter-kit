@@ -8,6 +8,7 @@ import { addApolloLogging } from 'apollo-logger';
 import { addPersistedQueries } from 'persistgraphql';
 import fs from 'fs';
 import path from 'path';
+import Helmet from 'react-helmet';
 
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
@@ -64,6 +65,7 @@ async function renderServerSide(req, res, queryMap) {
   const sheet = new ServerStyleSheet();
   const html = ReactDOMServer.renderToString(sheet.collectStyles(component));
   const css = sheet.getStyleElement();
+  const helmet = Helmet.renderStatic();
 
   if (context.url) {
     res.writeHead(301, { Location: context.url });
@@ -79,7 +81,7 @@ async function renderServerSide(req, res, queryMap) {
     delete apolloState.apollo.queries;
     delete apolloState.apollo.mutations;
 
-    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css}/>;
+    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} head={helmet}/>;
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
     res.end();
   }

@@ -46,7 +46,8 @@ Html.propTypes = {
   content: PropTypes.string,
   state: PropTypes.object.isRequired,
   assetMap: PropTypes.object.isRequired,
-  css: PropTypes.array
+  css: PropTypes.array,
+  head: PropTypes.array
 };
 
 export default Html;

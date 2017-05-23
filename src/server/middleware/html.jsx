@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
 import styles from 'client/styles/styles.scss';
 
-const Html = ({ content, state, assetMap, css }) => {
+const Html = ({ content, state, assetMap, css, head }) => {
+  const htmlAttrs = head.htmlAttributes.toComponent(); // SSR for react-helmet html document meta tags
+
   return (
-    <html lang="en">
+    <html lang="en" {...htmlAttrs}>
     <head>
+      {head.title.toComponent()} {/* Render component specific title tag */}
+      {head.meta.toComponent()}  {/* Render component meta tag */}
       <meta charSet="utf-8"/>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-
       <link rel="apple-touch-icon" sizes="180x180" href={`/${assetMap["apple-touch-icon.png"]}`}/>
       <link rel="icon" type="image/png" href={`/${assetMap["favicon-32x32.png"]}`} sizes="32x32"/>
       <link rel="icon" type="image/png" href={`/${assetMap["favicon-16x16.png"]}`} sizes="16x16"/>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
+import Helmet from 'react-helmet';
 
 import PostForm from '../components/post_form';
 import POST_ADD from '../graphql/post_add.graphql';
@@ -18,6 +19,12 @@ class PostAdd extends React.Component {
   render() {
     return (
       <div>
+        <Helmet
+          title="Apollo Starter Kit - Add post"
+          meta={[{
+            name: 'description',
+            content: 'Add new post page example page'
+          }]}/>
         <Link to="/posts">Back</Link>
         <h2>Create Post</h2>
         <PostForm onSubmit={this.onSubmit}/>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
+import Helmet from 'react-helmet';
 import { Button } from 'reactstrap';
 
 import AMOUNT_QUERY from '../graphql/count_get.graphql';
@@ -74,7 +75,14 @@ class Counter extends React.Component {
       );
     } else {
       return (
-        <div className="text-center mt-4 mb-4">
+        <div>
+          <Helmet
+            title="Apollo Starter Kit - Counter"
+            meta={[{
+              name: 'description',
+              content: 'Apollo Fullstack Starter Kit - Counter example page'
+            }]}/>
+          <div className="text-center mt-4 mb-4">
           Current count, is {count.amount}. This is being stored server-side in the database and using Apollo
           subscription for real-time updates.
           <br/>
@@ -92,7 +100,8 @@ class Counter extends React.Component {
           <Button id="redux-button" color="primary" value="1" onClick={this.handleReduxIncrement}>
             Click to increase reduxCount
           </Button>
-        </div>
+          </div>
+        </div>  
       );
     }
   }

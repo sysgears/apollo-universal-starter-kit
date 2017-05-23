@@ -23,7 +23,7 @@ class PostAdd extends React.Component {
           title="Apollo Starter Kit - Add post"
           meta={[{
             name: 'description',
-            content: 'Add new post page example page'
+            content: 'Add new post example page'
           }]}/>
         <Link to="/posts">Back</Link>
         <h2>Create Post</h2>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
+import Helmet from 'react-helmet';
 
 import PostForm from '../components/post_form';
 import PostComments from './post_comments';
@@ -63,6 +64,12 @@ class PostEdit extends React.Component {
     } else {
       return (
         <div>
+          <Helmet
+            title="Apollo Starter Kit - Edit post"
+            meta={[{
+              name: 'description',
+              content: 'Edit post example page'
+            }]}/>
           <Link id="back-button" to="/posts">Back</Link>
           <h2>Edit Post</h2>
           <PostForm onSubmit={this.onSubmit} initialValues={post}/>

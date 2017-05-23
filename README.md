@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit)
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-fullstack-starter-kit.svg)](https://greenkeeper.io/)
 
-> Apollo Universal Starter Kit is an SEO friendly boilerplate for [Universal] web app development built on top of [Apollo],
+> Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] web app development built on top of [Apollo],
 > [GraphQL], [React], [Redux], [Express] with SQL storage support and [Twitter Bootstrap] integration.
 > Hot Code Reload of back end & front end using [Webpack] and Hot Module Replacement to reflect your changes instantly
 > and help you stay productive.

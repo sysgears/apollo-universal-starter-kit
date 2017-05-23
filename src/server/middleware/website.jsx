@@ -65,7 +65,7 @@ async function renderServerSide(req, res, queryMap) {
   const sheet = new ServerStyleSheet();
   const html = ReactDOMServer.renderToString(sheet.collectStyles(component));
   const css = sheet.getStyleElement();
-  const helmet = Helmet.renderStatic();
+  const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
 
   if (context.url) {
     res.writeHead(301, { Location: context.url });
@@ -81,17 +81,19 @@ async function renderServerSide(req, res, queryMap) {
     delete apolloState.apollo.queries;
     delete apolloState.apollo.mutations;
 
-    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} head={helmet}/>;
+    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} helmet={helmet}/>;
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
     res.end();
   }
 }
 
 async function renderClientSide(req, res) {
+  const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
+  
   if (__DEV__ || !assetMap) {
     assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
   }
-  const page = <Html state={({})} assetMap={assetMap}/>;
+  const page = <Html state={({})} assetMap={assetMap} helmet={helmet}/>;
   res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
   res.end();
 }

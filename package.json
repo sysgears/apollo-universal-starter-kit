@@ -123,6 +123,7 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
     "fs-extra": "^3.0.1",
+    "html-webpack-plugin": "^2.28.0",
     "ignore-loader": "^0.1.2",
     "isomorphic-style-loader": "^2.0.0",
     "jsdom": "^11.0.0",
@@ -146,6 +147,7 @@
     "webpack-manifest-plugin": "^1.1.0",
     "webpack-merge": "^4.1.0",
     "webpack-node-externals": "^1.6.0",
+    "webpack-sources": "^0.2.3",
     "webpack-virtual-modules": "^0.1.5",
     "ws": "^3.0.0"
   },

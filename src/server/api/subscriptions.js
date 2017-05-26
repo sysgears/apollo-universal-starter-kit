@@ -19,7 +19,7 @@ var subscriptionServer;
 const addSubscriptions = httpServer => {
   let subscriptionServerConfig = {
     server: httpServer,
-    path: '/'
+    path: '/graphql'
   };
 
   subscriptionServer = new SubscriptionServer({

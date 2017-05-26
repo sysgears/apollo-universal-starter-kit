@@ -9,6 +9,7 @@ import _ from 'lodash';
 import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
+import { ConcatSource, RawSource } from 'webpack-sources';
 
 import pkg from '../package.json';
 import configs from './webpack.config';
@@ -23,7 +24,7 @@ const __WINDOWS__ = /^win/.test(process.platform);
 
 let server;
 let startBackend = false;
-let backendFirstStart = true;
+let backendFirstStart = !serverConfig.url;
 
 process.on('exit', () => {
   if (server) {
@@ -95,12 +96,14 @@ function startClient() {
     clientConfig.plugins.push(frontendVirtualModules);
 
     if (__DEV__) {
-      if (pkg.app.reactHotLoader) {
-        clientConfig.entry.bundle.unshift('react-hot-loader/patch');
-      }
-      clientConfig.entry.bundle.unshift(
-        `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`,
-        'webpack/hot/dev-server');
+      _.each(clientConfig.entry, entry => {
+        if (pkg.app.reactHotLoader) {
+          entry.unshift('react-hot-loader/patch');
+        }
+        entry.unshift(
+          `webpack-dev-server/client?http://localhost:${pkg.app.webpackDevPort}/`,
+          'webpack/hot/dev-server');
+      });
       clientConfig.plugins.push(new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin());
       clientConfig.output.path = '/';
@@ -128,11 +131,13 @@ function startServer() {
     const reporter = (...args) => webpackReporter(logBack, ...args);
 
     if (__DEV__) {
-      if (__WINDOWS__) {
-        serverConfig.entry.index.push('webpack/hot/poll?1000');
-      } else {
-        serverConfig.entry.index.push('webpack/hot/signal.js');
-      }
+      _.each(serverConfig.entry, entry => {
+        if (__WINDOWS__) {
+          entry.push('webpack/hot/poll?1000');
+        } else {
+          entry.push('webpack/hot/signal.js');
+        }
+      });
       serverConfig.plugins.push(new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin());
     }
@@ -205,6 +210,18 @@ function startWebpackDevServer(clientConfig, reporter) {
       callback();
     }
   });
+  if (pkg.app.webpackDll) {
+    compiler.plugin('after-compile', (compilation, callback) => {
+      let vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
+      const vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
+      _.each(compilation.chunks, chunk => {
+        _.each(chunk.files, file => {
+          compilation.assets[file] = new ConcatSource(new RawSource(vendorContents), compilation.assets[file]);
+        });
+      });
+      callback();
+    });
+  }
   compiler.plugin('done', stats => {
     const dir = pkg.app.frontendBuildDir;
     createDirs(dir);
@@ -217,10 +234,6 @@ function startWebpackDevServer(clientConfig, reporter) {
           assetsMap[`${bundle}.js.map`] = `${bundleJs}.map`;
         }
       });
-      if (pkg.app.webpackDll) {
-        let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
-        assetsMap['vendor.js'] = json.name;
-      }
       fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
     }
   });
@@ -329,7 +342,9 @@ function buildDll() {
 }
 
 function startWebpack() {
-  startServer();
+  if (!serverConfig.url) {
+    startServer();
+  }
   startClient();
 }
 

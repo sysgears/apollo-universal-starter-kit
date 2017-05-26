@@ -8,17 +8,23 @@ const nodeExternals = require('webpack-node-externals');
 const path = require('path');
 const PersistGraphQLPlugin = require('persistgraphql-webpack-plugin');
 const _ = require('lodash');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const appConfigs = require('./webpack.app_config');
 const pkg = require('../package.json');
 
 const IS_TEST = process.argv[1].indexOf('mocha-webpack') >= 0;
+if (IS_TEST) {
+  delete appConfigs.serverConfig.url;
+}
+const IS_SSR = pkg.app.ssr && !appConfigs.serverConfig.url && !IS_TEST;
+const IS_PERSIST_GQL = pkg.app.persistGraphQL && !appConfigs.serverConfig.url && !IS_TEST;
 global.__DEV__ = process.argv.length >= 3 && (process.argv[2].indexOf('watch') >= 0 || IS_TEST);
 const buildNodeEnv = __DEV__ ? (IS_TEST ? 'test' : 'development') : 'production';
 
 const moduleName = path.resolve('node_modules/persisted_queries.json');
 let clientPersistPlugin, serverPersistPlugin;
-if (pkg.app.persistGraphQL && !IS_TEST) {
+if (IS_PERSIST_GQL) {
   clientPersistPlugin = new PersistGraphQLPlugin({ moduleName,
     filename: 'extracted_queries.json', addTypename: true });
   serverPersistPlugin = new PersistGraphQLPlugin({ moduleName,
@@ -52,12 +58,12 @@ const baseConfig = {
               "transform-runtime",
               "transform-decorators-legacy",
               "transform-class-properties",
-              ["styled-components", { "ssr": true } ]
+              ["styled-components", { "ssr": IS_SSR } ]
             ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
             "only": ["*.js", "*.jsx"],
           }
         }].concat(
-          pkg.app.persistGraphQL ?
+          IS_PERSIST_GQL ?
             ['persistgraphql-webpack-plugin/js-loader'] : []
         )
       },
@@ -69,7 +75,7 @@ const baseConfig = {
         test: /\.(graphql|gql)$/,
         exclude: /node_modules/,
         use: ['graphql-tag/loader'].concat(
-          pkg.app.persistGraphQL ?
+          IS_PERSIST_GQL ?
             ['persistgraphql-webpack-plugin/graphql-loader'] : []
         )
       },
@@ -104,8 +110,9 @@ let serverPlugins = [
     raw: true, entryOnly: false
   }),
   new webpack.DefinePlugin(Object.assign({
-    __CLIENT__: false, __SERVER__: true, __SSR__: pkg.app.ssr,
-    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
+    __CLIENT__: false, __SERVER__: true, __SSR__: IS_SSR,
+    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`,
+    __PERSIST_GQL__: IS_PERSIST_GQL
   })),
   serverPersistPlugin
 ];
@@ -150,11 +157,20 @@ let clientPlugins = [
     fileName: 'assets.json'
   }),
   new webpack.DefinePlugin(Object.assign({
-    __CLIENT__: true, __SERVER__: false, __SSR__: pkg.app.ssr,
-    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
+    __CLIENT__: true, __SERVER__: false, __SSR__: IS_SSR,
+    __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`,
+    __PERSIST_GQL__: IS_PERSIST_GQL,
+    __EXTERNAL_BACKEND_URL__: appConfigs.serverConfig.url ? `"${appConfigs.serverConfig.url}"`: false
   })),
   clientPersistPlugin
 ];
+
+if (appConfigs.serverConfig.url) {
+  clientPlugins.push(new HtmlWebpackPlugin({
+    template: 'tools/html-plugin-template.ejs',
+    inject: 'body',
+  }));
+}
 
 if (!__DEV__) {
   clientPlugins.push(new ExtractTextPlugin({ filename: '[name].[contenthash].css', allChunks: true }));

@@ -20,7 +20,7 @@ before(async () => {
   await knex.seed.run();
 
   server = require('../api_server').default;
-  const wsClient = new SubscriptionClient(`ws://localhost:${process.env['PORT']}`, {}, WebSocket);
+  const wsClient = new SubscriptionClient(`ws://localhost:${process.env['PORT']}/graphql`, {}, WebSocket);
 
   const networkInterface = addGraphQLSubscriptions(
     createNetworkInterface({ uri: `http://localhost:${process.env['PORT']}/graphql` }),

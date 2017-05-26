@@ -33,7 +33,7 @@ async function renderServerSide(req, res, queryMap) {
     batchInterval: 20,
   });
 
-  if (settings.persistGraphQL) {
+  if (__PERSIST_GQL__) {
     networkInterface = addPersistedQueries(networkInterface, queryMap);
   }
 

@@ -116,11 +116,11 @@ counter value and post/comment are updated there as well, because the applicatio
    `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
 1. Deploy your app on Heroku
 
-## Heroku Demo
+### Heroku Demo
 You can see latest version of this app deployed to Heroku here:
 [https://apollo-fullstack-starter-kit.herokuapp.com](https://apollo-fullstack-starter-kit.herokuapp.com)
 
-## Additioinal scripts
+## Additional scripts
 
 While developing, you will probably rely mostly on `npm run watch` or `yarn watch`; however, there are additional scripts at your disposal:
 
@@ -171,7 +171,8 @@ The project structure presented in this boilerplate is **fractal**, where functi
 
   This starter kit is different from most of the starter kits out there, because it uses Webpack not only for front end,
 but for back-end code as well. This enables powerful Webpack features for back-end code, such as conditional compilation,
-embedding non-js files and CSS stylesheets into the code, hot code reload, etc.
+embedding non-js files and CSS stylesheets into the code, hot code reload, etc. To use external backend set 
+`serverConfig.url` at `tools/webpack.app_config.js`
 
 - Hot Code Reload for back end and front end
 

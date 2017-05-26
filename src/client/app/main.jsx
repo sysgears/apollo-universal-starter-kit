@@ -21,11 +21,12 @@ let networkInterface = createBatchingNetworkInterface({
     credentials: "same-origin",
   },
   batchInterval: 20,
-  uri: "/graphql",
+  uri: __EXTERNAL_BACKEND_URL__ || "/graphql",
 });
 
 if (__CLIENT__) {
-  const wsClient = new SubscriptionClient(window.location.origin.replace(/^http/, 'ws')
+  const wsClient = new SubscriptionClient((__EXTERNAL_BACKEND_URL__ || (window.location.origin + '/graphql'))
+    .replace(/^http/, 'ws')
     .replace(':' + settings.webpackDevPort, ':' + settings.apiPort));
 
   networkInterface = addGraphQLSubscriptions(
@@ -34,7 +35,7 @@ if (__CLIENT__) {
   );
 }
 
-if (settings.persistGraphQL) {
+if (__PERSIST_GQL__) {
   networkInterface = addPersistedQueries(networkInterface, queryMap);
 }
 

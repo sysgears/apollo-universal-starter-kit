@@ -37,7 +37,6 @@ const Html = ({ content, state, assetMap, css, helmet }) => {
           dangerouslySetInnerHTML={{ __html: `window.__APOLLO_STATE__=${serialize(state, { isJSON: true })};` }}
           charSet="UTF-8"
         />
-        {assetMap["vendor.js"] && <script src={`/${assetMap["vendor.js"]}`} charSet="utf-8"/>}
         <script src={`/${assetMap['bundle.js']}`} charSet="utf-8"/>
       </body>
     </html>

@@ -133,7 +133,7 @@
     "mocha-steps": "^1.0.2",
     "mocha-webpack": "^0.7.0",
     "node-sass": "^4.5.2",
-    "persistgraphql-webpack-plugin": "^0.2.3",
+    "persistgraphql-webpack-plugin": "^0.3.0",
     "postcss-loader": "^2.0.5",
     "raw-loader": "^0.5.1",
     "react-test-renderer": "^15.5.4",

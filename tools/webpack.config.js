@@ -53,14 +53,15 @@ const baseConfig = {
         use: [{
           loader: 'babel-loader',
           options: {
-            "presets": ["react", ["es2015", { "modules": false }], "stage-0"],
-            "plugins": [
+            cacheDirectory: __DEV__,
+            presets: ["react", ["es2015", { "modules": false }], "stage-0"],
+            plugins: [
               "transform-runtime",
               "transform-decorators-legacy",
               "transform-class-properties",
               ["styled-components", { "ssr": IS_SSR } ]
             ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-            "only": ["*.js", "*.jsx"],
+            only: ["*.js", "*.jsx"],
           }
         }].concat(
           IS_PERSIST_GQL ?

@@ -2,9 +2,7 @@ import Expo from 'expo';
 import React from 'react';
 import { View } from 'react-native';
 
-const App = () => {
-  return React.createElement('div', null, 'Hello, from React Native!');
-};
+import App from './app';
 
 // we don't want this to require transformation
 class AwakeInDevApp extends React.Component {

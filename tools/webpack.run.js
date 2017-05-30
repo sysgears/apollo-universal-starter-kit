@@ -18,6 +18,7 @@ import devToolsMiddleware from 'haul-cli/src/server/middleware/devToolsMiddlewar
 import liveReloadMiddleware from 'haul-cli/src/server/middleware/liveReloadMiddleware';
 import statusPageMiddleware from 'haul-cli/src/server/middleware/statusPageMiddleware';
 import symbolicateMiddleware from 'haul-cli/src/server/middleware/symbolicateMiddleware';
+import openInEditorMiddleware from 'haul-cli/src/server/middleware/openInEditorMiddleware';
 import loggerMiddleware from 'haul-cli/src/server/middleware/loggerMiddleware';
 import missingBundleMiddleware from 'haul-cli/src/server/middleware/missingBundleMiddleware';
 import systraceMiddleware from 'haul-cli/src/server/middleware/systraceMiddleware';
@@ -270,6 +271,7 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       .use(liveReloadMiddleware(compiler))
       .use(statusPageMiddleware)
       .use(symbolicateMiddleware(compiler))
+      .use(openInEditorMiddleware())
       .use('/systrace', systraceMiddleware)
       .use(loggerMiddleware);
   }

@@ -225,19 +225,20 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(baseConfig), {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules\/(?!react|@expo|expo|lottie-react-native|haul-cli)/,
+        exclude: /node_modules\/(?!react|@expo|expo|lottie-react-native|haul-cli|pretty-format)/,
         use: [{
           loader: 'babel-loader',
           options: {
-            "presets": ["react-native", ["es2015", { "modules": false }], "stage-0"],
-            "plugins": [
+            cacheDirectory: __DEV__,
+            presets: ["react-native", ["es2015", { "modules": false }], "stage-0"],
+            plugins: [
               "transform-runtime",
               "transform-decorators-legacy",
               "transform-class-properties",
               require.resolve('haul-cli/src/utils/fixRequireIssues'),
               ["styled-components", { "ssr": true } ]
             ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-            "only": ["*.js", "*.jsx"],
+            only: ["*.js", "*.jsx"],
           }
         }].concat(
           pkg.app.persistGraphQL ?
@@ -309,15 +310,16 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
         use: [{
           loader: 'babel-loader',
           options: {
-            "presets": ["react-native", ["es2015", {"modules": false}], "stage-0"],
-            "plugins": [
+            cacheDirectory: __DEV__,
+            presets: ["react-native", ["es2015", {"modules": false}], "stage-0"],
+            plugins: [
               "transform-runtime",
               "transform-decorators-legacy",
               "transform-class-properties",
               require.resolve('haul-cli/src/utils/fixRequireIssues'),
               ["styled-components", {"ssr": true}]
             ],
-            "only": ["*.js", "*.jsx"],
+            only: ["*.js", "*.jsx"],
           }
         }]
       }

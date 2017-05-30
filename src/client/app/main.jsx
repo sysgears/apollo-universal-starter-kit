@@ -8,6 +8,7 @@ import { addPersistedQueries } from 'persistgraphql';
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
+import ReactGA from 'react-ga';
 
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
@@ -52,6 +53,14 @@ if (window.__APOLLO_STATE__) {
 }
 
 const history = createHistory();
+
+// Initialize Google Analytics and send events on each location change 
+ReactGA.initialize('UA-000000-01'); // Replace your Google tracking code here
+
+history.listen((location) => {
+  ReactGA.set({ page: location.pathname });
+  ReactGA.pageview(location.pathname);
+});
 
 const store = createReduxStore(initialState, client, routerMiddleware(history));
 

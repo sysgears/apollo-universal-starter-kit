@@ -241,6 +241,8 @@ for better security and less bandwidth.
 
 - Declarative/dynamic `head` section, using [React Helmet]
 
+- Google Analytics integration using [React GA]
+
 - Full CRUD funcionality with Subscriptions in post example, with [ReduxForm]
 
 ## Contributors
@@ -281,3 +283,4 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [GraphQL Cursor Pagination]: https://medium.com/@gethylgeorge/infinite-scrolling-in-react-using-apollo-and-react-virtualized-graphql-cursor-pagination-bf80617a8a1a#.jkmmu9qz8
 [Relay-style cursor pagination]: http://dev.apollodata.com/react/pagination.html#relay-cursors
 [React Helmet]: https://github.com/nfl/react-helmet
+[React GA]: https://github.com/react-ga/react-ga

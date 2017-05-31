@@ -17,7 +17,7 @@ const androidConfig = {
   entry: {
     'index.android.bundle': [
       'babel-polyfill',
-      require.resolve('haul-cli/src/utils/polyfillEnvironment.js'),
+      require.resolve('./react-native-polyfill.js'),
       './src/mobile/index.js'
     ]
   }
@@ -28,7 +28,7 @@ const iOSConfig = {
   entry: {
     'index.ios.bundle': [
       'babel-polyfill',
-      require.resolve('haul-cli/src/utils/polyfillEnvironment.js'),
+      require.resolve('./react-native-polyfill.js'),
       './src/mobile/index.js'
     ]
   }

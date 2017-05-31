@@ -24,7 +24,6 @@ import loggerMiddleware from 'haul-cli/src/server/middleware/loggerMiddleware';
 import missingBundleMiddleware from 'haul-cli/src/server/middleware/missingBundleMiddleware';
 import systraceMiddleware from 'haul-cli/src/server/middleware/systraceMiddleware';
 import rawBodyMiddleware from 'haul-cli/src/server/middleware/rawBodyMiddleware';
-import bodyParser from 'body-parser';
 import WebSocketProxy from 'haul-cli/src/server/util/WebsocketProxy';
 import ConcatSource from 'webpack-sources/lib/ConcatSource';
 import RawSource from 'webpack-sources/lib/RawSource';
@@ -269,8 +268,8 @@ function startWebpackDevServer(config, platform, reporter, logger) {
   if (platform !== 'web') {
     const debuggerProxy = new WebSocketProxy(httpServer, '/debugger-proxy');
 
-    app.use(rawBodyMiddleware)
-      .use(bodyParser.text())
+    app
+      .use(rawBodyMiddleware)
       .use(devToolsMiddleware(debuggerProxy))
       .use(liveReloadMiddleware(compiler))
       .use(statusPageMiddleware)
@@ -280,6 +279,7 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       .use(loggerMiddleware);
   }
 
+  // app.use('/', express.static(path.resolve('.'), { maxAge: '180 days' }));
   app.use(webpackDevMiddleware(compiler, _.merge({}, config.devServer, {
     reporter({state, stats}) {
       if (state) {

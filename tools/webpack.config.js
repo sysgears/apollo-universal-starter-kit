@@ -230,7 +230,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(baseConfig), {
           loader: 'babel-loader',
           options: {
             cacheDirectory: __DEV__,
-            presets: ["react-native", ["es2015", { "modules": false }], "stage-0"],
+            presets: ["babel-preset-expo", ["es2015", { "modules": false }], "stage-0"],
             plugins: [
               "transform-runtime",
               "transform-decorators-legacy",
@@ -239,6 +239,11 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(baseConfig), {
               ["styled-components", { "ssr": true } ]
             ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
             only: ["*.js", "*.jsx"],
+            env: {
+              development: {
+                plugins: ["transform-react-jsx-source"]
+              }
+            }
           }
         }].concat(
           pkg.app.persistGraphQL ?
@@ -311,7 +316,7 @@ const dllConfig = merge.smart(_.cloneDeep(baseConfig), {
           loader: 'babel-loader',
           options: {
             cacheDirectory: __DEV__,
-            presets: ["react-native", ["es2015", {"modules": false}], "stage-0"],
+            presets: ["babel-preset-expo", ["es2015", {"modules": false}], "stage-0"],
             plugins: [
               "transform-runtime",
               "transform-decorators-legacy",

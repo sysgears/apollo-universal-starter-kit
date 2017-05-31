@@ -302,7 +302,7 @@ function startWebpackDevServer(config, platform, reporter, logger) {
   }
 
   logger(`Webpack ${config.name} dev server listening on ${config.devServer.port}`);
-  app.listen(config.devServer.port);
+  httpServer.listen(config.devServer.port);
 }
 
 function useWebpackDll() {

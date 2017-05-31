@@ -9,6 +9,7 @@ import fs from 'fs';
 import path from 'path';
 import mkdirp from 'mkdirp';
 import minilog from 'minilog';
+import mime from 'mime';
 import _ from 'lodash';
 import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
@@ -388,6 +389,7 @@ function buildDll() {
 
 async function startExpoServer(config, platform) {
   try {
+    mime.define({'application/javascript': ['bundle']});
     if (platform === 'android') {
       which('adb', (err, result) => {
         console.log("Using adb at:", result);

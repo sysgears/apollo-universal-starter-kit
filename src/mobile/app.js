@@ -1,3 +1,4 @@
+import React, { Component } from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';

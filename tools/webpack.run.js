@@ -13,7 +13,7 @@ import _ from 'lodash';
 import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
-import { Android, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
+import { Android, Simulator, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
 import devToolsMiddleware from 'haul-cli/src/server/middleware/devToolsMiddleware';
 import liveReloadMiddleware from 'haul-cli/src/server/middleware/liveReloadMiddleware';
 import statusPageMiddleware from 'haul-cli/src/server/middleware/statusPageMiddleware';
@@ -108,6 +108,9 @@ function startClient(config, platform) {
     config.plugins.push(frontendVirtualModules);
 
     if (__DEV__) {
+      if (['android', 'ios'].indexOf(platform) >= 0) {
+        startExpoServer(config, platform);
+      }
       if (pkg.app.reactHotLoader) {
         config.entry[Object.keys(config.entry)[0]].unshift('react-hot-loader/patch');
       }
@@ -383,27 +386,43 @@ function buildDll() {
   });
 }
 
-async function startExpoServer() {
+async function startExpoServer(config, platform) {
   try {
+    if (platform === 'android') {
+      which('adb', (err, result) => {
+        console.log("Using adb at:", result);
+      });
+      spawn('adb', ['reverse', 'tcp:8080', 'tcp:8080'], {stdio: [0, 1, 2]});
+    }
+
     Config.validation.reactNativeVersionWarnings = false;
     Config.developerTool = 'crna';
     Config.offline = true;
-    Exp.determineEntryPointAsync = () => 'index.android';
+    Exp.determineEntryPointAsync = () => `index.${platform}`;
 
     const projectRoot = path.resolve('.');
     await Project.startExpoServerAsync(projectRoot);
     await ProjectSettings.setPackagerInfoAsync(projectRoot, {
-      packagerPort: 3010
+      packagerPort: config.devServer.port
     });
 
     const address = await UrlUtils.constructManifestUrlAsync(projectRoot);
     console.log("Expo address:", address);
-    which('adb', (err, result) => {
-      console.log("Using adb at:", result);
-    });
-    const { success, error } = await Android.openProjectAsync(projectRoot);
-    if (!success) {
-      console.log(error.message);
+    if (platform === 'android') {
+      const { success, error } = await Android.openProjectAsync(projectRoot);
+
+      if (!success) {
+        console.error(error.message);
+      }
+    } else if (platform === 'ios') {
+      const localAddress = await UrlUtils.constructManifestUrlAsync(projectRoot, {
+        hostType: 'localhost',
+      });
+      const { success, msg } = await Simulator.openUrlInSimulatorSafeAsync(localAddress);
+
+      if (!success) {
+        console.error(error.message);
+      }
     }
   } catch (e) {
     console.error(e.stack);
@@ -411,7 +430,6 @@ async function startExpoServer() {
 }
 
 function startWebpack() {
-  startExpoServer();
   startServer();
   startClient(clientConfig, "web");
   startClient(androidConfig, "android");

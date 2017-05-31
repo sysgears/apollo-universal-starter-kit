@@ -35,7 +35,7 @@ const mocks = {
         edges.push({
           cursor: `${i}`,
           node: createNode(i),
-          __typename: "Edges"
+          __typename: "PostEdges"
         });
       }
       return {
@@ -44,7 +44,7 @@ const mocks = {
         pageInfo: {
           endCursor: edges[edges.length - 1].cursor,
           hasNextPage: true,
-          __typename: "PageInfo"
+          __typename: "PostPageInfo"
         },
         __typename: "PostsQuery"
       };

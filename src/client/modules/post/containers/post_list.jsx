@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
+import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
@@ -18,7 +19,7 @@ export function AddPost(prev, node) {
   const edge = {
     cursor: node.id,
     node: node,
-    __typename: 'Edges'
+    __typename: 'PostEdges'
   };
 
   return update(prev, {
@@ -140,6 +141,12 @@ class PostList extends React.Component {
     } else {
       return (
         <div>
+          <Helmet
+            title="Apollo Starter Kit - Posts list"
+            meta={[{
+              name: 'description',
+              content: 'List of all posts example page'
+            }]}/>
           <h2>Posts</h2>
           <Link to="/post/add">
             <Button color="primary">Add</Button>

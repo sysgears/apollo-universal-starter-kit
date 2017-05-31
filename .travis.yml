@@ -16,3 +16,13 @@ deploy:
   app: apollo-fullstack-starter-kit
   on:
     repo: sysgears/apollo-fullstack-starter-kit
+sudo: false
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.8
+    - g++-4.8

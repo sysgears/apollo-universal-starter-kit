@@ -4,9 +4,11 @@ import { createBatchingNetworkInterface } from 'apollo-client';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
+import { addApolloLogging } from 'apollo-logger';
 import { addPersistedQueries } from 'persistgraphql';
 import fs from 'fs';
 import path from 'path';
+import Helmet from 'react-helmet';
 
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
@@ -14,7 +16,6 @@ import Html from './html';
 import routes from '../../client/app/routes';
 import log from '../../common/log';
 import { app as settings } from '../../../package.json';
-import { addApolloLogging } from '../../common/apollo_logger';
 
 const port = process.env.PORT || settings.apiPort;
 
@@ -32,7 +33,7 @@ async function renderServerSide(req, res, queryMap) {
     batchInterval: 20,
   });
 
-  if (settings.persistGraphQL) {
+  if (__PERSIST_GQL__) {
     networkInterface = addPersistedQueries(networkInterface, queryMap);
   }
 
@@ -64,6 +65,7 @@ async function renderServerSide(req, res, queryMap) {
   const sheet = new ServerStyleSheet();
   const html = ReactDOMServer.renderToString(sheet.collectStyles(component));
   const css = sheet.getStyleElement();
+  const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
 
   if (context.url) {
     res.writeHead(301, { Location: context.url });
@@ -79,17 +81,19 @@ async function renderServerSide(req, res, queryMap) {
     delete apolloState.apollo.queries;
     delete apolloState.apollo.mutations;
 
-    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css}/>;
+    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} helmet={helmet}/>;
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
     res.end();
   }
 }
 
 async function renderClientSide(req, res) {
+  const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
+  
   if (__DEV__ || !assetMap) {
     assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
   }
-  const page = <Html state={({})} assetMap={assetMap}/>;
+  const page = <Html state={({})} assetMap={assetMap} helmet={helmet}/>;
   res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
   res.end();
 }

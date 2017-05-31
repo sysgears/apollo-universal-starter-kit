@@ -121,7 +121,7 @@ class PostComments extends React.Component {
     deleteComment(id);
   }
 
-  onSubmit(values) {
+  onSubmit = (values) => {
     const { addComment, editComment, postId, comment, onCommentSelect, onFormSubmitted } = this.props;
 
     if (comment.id === null) {
@@ -141,7 +141,7 @@ class PostComments extends React.Component {
     return (
       <div>
         <h3>Comments</h3>
-        <CommentForm postId={postId} onSubmit={this.onSubmit.bind(this)} initialValues={comment}/>
+        <CommentForm postId={postId} onSubmit={this.onSubmit} initialValues={comment}/>
         <h1/>
         <ListGroup>{this.renderComments()}</ListGroup>
       </div>

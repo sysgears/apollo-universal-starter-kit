@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(settings.frontendBuildDir, { maxAge: '180 days' }));
 
-if (settings.persistGraphQL && process.env.NODE_ENV !== 'test') {
+if (__PERSIST_GQL__) {
   const invertedMap = invert(queryMap);
 
   app.use(

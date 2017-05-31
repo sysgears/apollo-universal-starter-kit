@@ -28,6 +28,7 @@ import WebSocketProxy from 'haul-cli/src/server/util/WebsocketProxy';
 import ConcatSource from 'webpack-sources/lib/ConcatSource';
 import RawSource from 'webpack-sources/lib/RawSource';
 import which from 'which';
+import { ConcatSource, RawSource } from 'webpack-sources';
 
 import pkg from '../package.json';
 // eslint-disable-next-line import/default
@@ -42,7 +43,7 @@ const __WINDOWS__ = /^win/.test(process.platform);
 
 let server;
 let startBackend = false;
-let backendFirstStart = true;
+let backendFirstStart = !serverConfig.url;
 
 process.on('exit', () => {
   if (server) {
@@ -111,11 +112,14 @@ function startClient(config, platform) {
       if (['android', 'ios'].indexOf(platform) >= 0) {
         startExpoServer(config, platform);
       }
-      if (pkg.app.reactHotLoader) {
-        config.entry[Object.keys(config.entry)[0]].unshift('react-hot-loader/patch');
-      }
-      config.entry[Object.keys(config.entry)[0]].unshift(
-        `webpack-hot-middleware/client?http://localhost:${clientConfig.devServer.port}/`);
+      _.each(config.entry, entry => {
+        if (pkg.app.reactHotLoader) {
+          entry.unshift('react-hot-loader/patch');
+        }
+        entry.unshift(
+          `webpack-hot-middleware/client?http://localhost:${config.devServer.port}/`);
+          'webpack/hot/dev-server');
+      });
       config.plugins.push(new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin());
       startWebpackDevServer(config, platform, reporter, logger);
@@ -142,11 +146,13 @@ function startServer() {
     const reporter = (...args) => webpackReporter(serverConfig.output.path, logBack, ...args);
 
     if (__DEV__) {
-      if (__WINDOWS__) {
-        serverConfig.entry.index.push('webpack/hot/poll?1000');
-      } else {
-        serverConfig.entry.index.push('webpack/hot/signal.js');
-      }
+      _.each(serverConfig.entry, entry => {
+        if (__WINDOWS__) {
+          entry.push('webpack/hot/poll?1000');
+        } else {
+          entry.push('webpack/hot/signal.js');
+        }
+      });
       serverConfig.plugins.push(new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin());
     }
@@ -227,11 +233,11 @@ function startWebpackDevServer(config, platform, reporter, logger) {
   if (pkg.app.webpackDll && platform !== 'web') {
     compiler.plugin('after-compile', (compilation, callback) => {
       let vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
-      Object.keys(compilation.assets).forEach(key => {
-        if (key.endsWith('.bundle')) {
-          const vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
-          compilation.assets[key] = new ConcatSource(new RawSource(vendorContents), compilation.assets[key]);
-        }
+      const vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
+      _.each(compilation.chunks, chunk => {
+        _.each(chunk.files, file => {
+          compilation.assets[file] = new ConcatSource(new RawSource(vendorContents), compilation.assets[file]);
+        });
       });
       callback();
     });
@@ -432,7 +438,9 @@ async function startExpoServer(config, platform) {
 }
 
 function startWebpack() {
-  startServer();
+  if (!serverConfig.url) {
+    startServer();
+  }
   startClient(clientConfig, "web");
   startClient(androidConfig, "android");
   // startClient(iOSConfig, "ios");

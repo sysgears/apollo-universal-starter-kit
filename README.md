@@ -1,11 +1,11 @@
 ## Apollo Universal Starter Kit with back-end & front-end Hot Code Reload
 
 [![Join the chat at https://gitter.im/sysgears/apollo-fullstack-starter-kit](https://badges.gitter.im/sysgears/apollo-fullstack-starter-kit.svg)](https://gitter.im/sysgears/apollo-fullstack-starter-kit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors)
 [![Build Status](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-fullstack-starter-kit)
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-fullstack-starter-kit.svg)](https://greenkeeper.io/)
 
-> Apollo Universal Starter Kit is an boilerplate for [Universal] web app development built on top of [Apollo],
+> Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] web app development built on top of [Apollo],
 > [GraphQL], [React], [Redux], [Express] with SQL storage support and [Twitter Bootstrap] integration.
 > Hot Code Reload of back end & front end using [Webpack] and Hot Module Replacement to reflect your changes instantly
 > and help you stay productive.
@@ -54,8 +54,8 @@
 
 6. Point your browser to [http://localhost:3000](http://localhost:3000)
 7. Change any app code and see the changes applied immediately!
-8. Open app in multiple tabs, try to increase counter in one tab and then switch to another tab. You will see that
-counter value updated there as well, because counter is live updated via subscriptions.
+8. Open app in multiple tabs, try to increase counter or add a new post/comment in one tab and then switch to another tab. You will see that
+counter value and post/comment are updated there as well, because the application is live updated via subscriptions.
 
 ## Deployment to Production
 
@@ -116,16 +116,63 @@ counter value updated there as well, because counter is live updated via subscri
    `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
 1. Deploy your app on Heroku
 
-## Heroku Demo
+### Heroku Demo
 You can see latest version of this app deployed to Heroku here:
 [https://apollo-fullstack-starter-kit.herokuapp.com](https://apollo-fullstack-starter-kit.herokuapp.com)
+
+## Additional scripts
+
+While developing, you will probably rely mostly on `npm run watch` or `yarn watch`; however, there are additional scripts at your disposal:
+
+|`npm run or yarn <script>`|Description|
+|--------------------------|-----------|
+|`watch`|Run your app in develooment mode and watch your changes. Hot code reload will be enabled in development.|
+|`start`|Run your app in production mode.|
+|`build`|Compiles the application to the build folder.|
+|`tests`|Runs unit tests with Mocha.|
+|`tests:watch`|Runs unit tests with Mocha and watches for changes automatically to re-run tests.|
+|`test`|Runs unit tests with Mocha and check for lint errors|
+|`lint`|Check for lint errors and runs for all `.js` and `.jsx` files.|
+|`seed`|Seed sample database using SQLite. Use `--prod` flag to run in "production" mode.|
+|`migrate`|Migrate the sample database|
+|`rollback`|Rollback the sample database to previous state.|
+
+
+## Project Structure
+
+The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by feature rather than file type. This structure is only meant to serve as a guide, it is by no means prescriptive. That said, it aims to represent generally accepted guidelines and patterns for building scalable applications.
+
+```
+.
+├── src                      # Application source code
+│   ├── client               # Fractal route for client side code
+│   │   ├── app              # Fractal route for common client application code
+│   │   └── modules          # Fractal route for client-side application module splitting (components, containers, GraphQL queries, redux reducers)
+│   │   └── styles           # Application-wide styles
+│   │   └── test-helpers     # Test helper for apollo client tests
+│   │   └── index.jsx        # Render client with hot reload
+│   ├── common               # Apollo client, redux store and logging
+│   └── server               # Fractal route for server side code
+│   │   ├── api              # Initialization of GraphQL schema and subscription.
+│   │   └── database         # Fractal route for application module splitting
+│   │   │   └── migrations   # Database migration script using Knex
+│   │   │   └── seeds        # Database seed script using Knex
+│   │   └── middleware       # Graphiql, GraphQL express and SSR rendering
+│   │   └── modules          # Fractal route for server-side application module splitting (schema definition, resolvers, sql queries)
+│   │   └── sql              # Knex connector
+│   │   └── test-helpers     # Test helper for apollo server tests
+│   │   └── api_server.js    # GraphQL api server set up
+│   │   └── index.js         # Render server with hot reload
+└── tools                    # All build related files (Webpack)
+```
 
 ## Features
 - [Webpack] for back end
 
   This starter kit is different from most of the starter kits out there, because it uses Webpack not only for front end,
 but for back-end code as well. This enables powerful Webpack features for back-end code, such as conditional compilation,
-embedding non-js files and CSS stylesheets into the code, hot code reload, etc.
+embedding non-js files and CSS stylesheets into the code, hot code reload, etc. To use external backend set 
+`serverConfig.url` at `tools/webpack.app_config.js`
 
 - Hot Code Reload for back end and front end
 
@@ -192,6 +239,10 @@ for better security and less bandwidth.
 
 - [GraphQL Cursor Pagination] Example of  [Relay-style cursor pagination]
 
+- Declarative/dynamic `head` section, using [React Helmet]
+
+- Google Analytics integration using [React GA]
+
 - Full CRUD funcionality with Subscriptions in post example, with [ReduxForm]
 
 ## Contributors
@@ -199,9 +250,9 @@ for better security and less bandwidth.
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-| [<img src="https://avatars1.githubusercontent.com/u/1259926?v=3" width="100px;"/><br /><sub>Victor Vlasenko</sub>](https://ua.linkedin.com/in/victorvlasenko)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko) 🔧 [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko) [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko) 💬 👀 | [<img src="https://avatars3.githubusercontent.com/u/26156?v=3" width="100px;"/><br /><sub>mitjade</sub>](http://www.internetne-storitve.si)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade) 🔧 💬 | [<img src="https://avatars2.githubusercontent.com/u/1845914?v=3" width="100px;"/><br /><sub>Dmitry Pavlenko</sub>](https://github.com/dmitriypdv)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=dmitriypdv) 🔧 | [<img src="https://avatars0.githubusercontent.com/u/1349077?v=3" width="100px;"/><br /><sub>Joe</sub>](http://j0ey.co)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=josephdburdick) 🔧 [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=josephdburdick) 💬 | [<img src="https://avatars3.githubusercontent.com/u/3840769?v=3" width="100px;"/><br /><sub>Gilad Shoham</sub>](http://shohamgilad.wordpress.com/)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=GiladShoham) 🔧 💬 | [<img src="https://avatars1.githubusercontent.com/u/5399002?v=3" width="100px;"/><br /><sub>Alexander Vetrov</sub>](https://github.com/alexandervetrov)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=alexandervetrov) [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=alexandervetrov) | [<img src="https://avatars0.githubusercontent.com/u/7948838?v=3" width="100px;"/><br /><sub>Nikita Pavlov</sub>](https://github.com/NickPavlov)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=NickPavlov) |
+| [<img src="https://avatars1.githubusercontent.com/u/1259926?v=3" width="100px;"/><br /><sub>Victor Vlasenko</sub>](https://ua.linkedin.com/in/victorvlasenko)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Code") [🔧](#tool-vlasenko "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Documentation") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Tests") [💬](#question-vlasenko "Answering Questions") [👀](#review-vlasenko "Reviewed Pull Requests") | [<img src="https://avatars3.githubusercontent.com/u/26156?v=3" width="100px;"/><br /><sub>mitjade</sub>](http://www.internetne-storitve.si)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade "Code") [🔧](#tool-mitjade "Tools") [💬](#question-mitjade "Answering Questions") | [<img src="https://avatars2.githubusercontent.com/u/1845914?v=3" width="100px;"/><br /><sub>Dmitry Pavlenko</sub>](https://github.com/dmitriypdv)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=dmitriypdv "Code") [🔧](#tool-dmitriypdv "Tools") | [<img src="https://avatars0.githubusercontent.com/u/1349077?v=3" width="100px;"/><br /><sub>Joe</sub>](http://j0ey.co)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=josephdburdick "Code") [🔧](#tool-josephdburdick "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=josephdburdick "Documentation") [💬](#question-josephdburdick "Answering Questions") | [<img src="https://avatars3.githubusercontent.com/u/3840769?v=3" width="100px;"/><br /><sub>Gilad Shoham</sub>](http://shohamgilad.wordpress.com/)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=GiladShoham "Code") [🔧](#tool-GiladShoham "Tools") [💬](#question-GiladShoham "Answering Questions") | [<img src="https://avatars1.githubusercontent.com/u/5399002?v=3" width="100px;"/><br /><sub>Alexander Vetrov</sub>](https://github.com/alexandervetrov)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=alexandervetrov "Code") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=alexandervetrov "Tests") | [<img src="https://avatars0.githubusercontent.com/u/7948838?v=3" width="100px;"/><br /><sub>Nikita Pavlov</sub>](https://github.com/NickPavlov)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=NickPavlov "Code") |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [<img src="https://avatars2.githubusercontent.com/u/13224812?v=3" width="100px;"/><br /><sub>Yishai Chernovitzky</sub>](https://github.com/yishaic)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=yishaic) 🔧 |
+| [<img src="https://avatars2.githubusercontent.com/u/13224812?v=3" width="100px;"/><br /><sub>Yishai Chernovitzky</sub>](https://github.com/yishaic)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=yishaic "Code") [🔧](#tool-yishaic "Tools") | [<img src="https://avatars0.githubusercontent.com/u/4072250?v=3" width="100px;"/><br /><sub>Ujjwal</sub>](https://github.com/mairh)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Code") [🔧](#tool-mairh "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Documentation") [💬](#question-mairh "Answering Questions") |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
@@ -231,3 +282,5 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Dataloader]: https://github.com/facebook/dataloader
 [GraphQL Cursor Pagination]: https://medium.com/@gethylgeorge/infinite-scrolling-in-react-using-apollo-and-react-virtualized-graphql-cursor-pagination-bf80617a8a1a#.jkmmu9qz8
 [Relay-style cursor pagination]: http://dev.apollodata.com/react/pagination.html#relay-cursors
+[React Helmet]: https://github.com/nfl/react-helmet
+[React GA]: https://github.com/react-ga/react-ga

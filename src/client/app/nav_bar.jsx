@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Navbar, Nav, NavItem } from 'reactstrap';
 
-import { app as settings } from '../../../package.json';
 import modules from '../modules';
 
 const NavBar = () => (
@@ -13,7 +12,7 @@ const NavBar = () => (
         <Nav>
           {modules.navItems}
         </Nav>
-        {(!settings.persistGraphQL || __DEV__) && <Nav className="ml-auto" navbar>
+        {(!__PERSIST_GQL__ || __DEV__) && <Nav className="ml-auto" navbar>
           <NavItem>
             <a href="/graphiql">GraphiQL</a>
           </NavItem>

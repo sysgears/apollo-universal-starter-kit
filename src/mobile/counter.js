@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
-import AMOUNT_QUERY from '../graphql/count_get.graphql';
+import AMOUNT_QUERY from '../client/modules/counter/graphql/count_get.graphql';
 
 class Counter extends Component {
   render() {

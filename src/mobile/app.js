@@ -1,4 +1,32 @@
-import React from 'react';
-import { Text } from 'react-native';
+import { ApolloProvider } from 'react-apollo';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import ApolloClient, { createNetworkInterface } from 'apollo-client';
 
-export default () => <Text>Hello React Native with Webpack!</Text>;
+import Counter from './counter';
+
+const networkInterface = createNetworkInterface({ uri: 'http://localhost:8080/graphql' });
+
+const client = new ApolloClient({
+  networkInterface,
+});
+
+const store = createStore(
+  combineReducers({
+    apollo: client.reducer(),
+  }),
+  {}, // initial state
+  composeWithDevTools(
+    applyMiddleware(client.middleware()),
+  ),
+);
+
+export default class Main extends Component {
+  render() {
+    return (
+      <ApolloProvider store={store} client={client}>
+        <Counter />
+      </ApolloProvider>
+    );
+  }
+}

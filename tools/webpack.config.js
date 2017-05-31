@@ -1,6 +1,7 @@
 import webpack from 'webpack';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import merge from 'webpack-merge';
 import nodeExternals from 'webpack-node-externals';
 import path from 'path';

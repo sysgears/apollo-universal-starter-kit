@@ -25,8 +25,6 @@ import missingBundleMiddleware from 'haul-cli/src/server/middleware/missingBundl
 import systraceMiddleware from 'haul-cli/src/server/middleware/systraceMiddleware';
 import rawBodyMiddleware from 'haul-cli/src/server/middleware/rawBodyMiddleware';
 import WebSocketProxy from 'haul-cli/src/server/util/WebsocketProxy';
-import ConcatSource from 'webpack-sources/lib/ConcatSource';
-import RawSource from 'webpack-sources/lib/RawSource';
 import which from 'which';
 import { ConcatSource, RawSource } from 'webpack-sources';
 
@@ -117,7 +115,7 @@ function startClient(config, platform) {
           entry.unshift('react-hot-loader/patch');
         }
         entry.unshift(
-          `webpack-hot-middleware/client?http://localhost:${config.devServer.port}/`);
+          `webpack-hot-middleware/client?http://localhost:${config.devServer.port}/`,
           'webpack/hot/dev-server');
       });
       config.plugins.push(new webpack.HotModuleReplacementPlugin(),

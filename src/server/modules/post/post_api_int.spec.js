@@ -89,8 +89,8 @@ describe('Post and comments example API works', () => {
   step('Adding post works', async () => {
     let result = await apollo.query({ query: POSTS_GET, variables: { limit: 1, after: 0 }, fetchPolicy: 'network-only' });
     expect(result.data.postsQuery).to.have.property("totalCount", 21);
-    expect(result.data.postsQuery).to.have.deep.property("edges[0].node.title", "New post 1");
-    expect(result.data.postsQuery).to.have.deep.property("edges[0].node.content", "New post content 1");
+    expect(result.data.postsQuery).to.have.nested.property("edges[0].node.title", "New post 1");
+    expect(result.data.postsQuery).to.have.nested.property("edges[0].node.content", "New post content 1");
   });
 
   step('Publishes post on update', done => {
@@ -133,8 +133,8 @@ describe('Post and comments example API works', () => {
   step('Updating post works', async () => {
     let result = await apollo.query({ query: POSTS_GET, variables: { limit: 1, after: 0 }, fetchPolicy: 'network-only' });
     expect(result.data.postsQuery).to.have.property("totalCount", 21);
-    expect(result.data.postsQuery).to.have.deep.property("edges[0].node.title", "New post 2");
-    expect(result.data.postsQuery).to.have.deep.property("edges[0].node.content", "New post content 2");
+    expect(result.data.postsQuery).to.have.nested.property("edges[0].node.title", "New post 2");
+    expect(result.data.postsQuery).to.have.nested.property("edges[0].node.content", "New post content 2");
   });
 
   step('Publishes post on removal', done => {
@@ -171,7 +171,7 @@ describe('Post and comments example API works', () => {
   step('Deleting post works', async () => {
     let result = await apollo.query({ query: POSTS_GET, variables: { limit: 2, after: 0 }, fetchPolicy: 'network-only' });
     expect(result.data.postsQuery).to.have.property("totalCount", 20);
-    expect(result.data.postsQuery).to.have.deep.property("edges[0].node.title", "Post title 20");
-    expect(result.data.postsQuery).to.have.deep.property("edges[0].node.content", "Post content 20");
+    expect(result.data.postsQuery).to.have.nested.property("edges[0].node.title", "Post title 20");
+    expect(result.data.postsQuery).to.have.nested.property("edges[0].node.content", "Post content 20");
   });
 });

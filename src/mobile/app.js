@@ -5,7 +5,8 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 
-import Counter from './counter';
+import counterReducer from '../client/modules/counter/reducers';
+import Counter from '../client/modules/counter/containers/counter';
 
 let networkInterface = createNetworkInterface({ uri: 'http://localhost:8080/graphql' });
 
@@ -23,6 +24,7 @@ networkInterface = addGraphQLSubscriptions(
 const store = createStore(
   combineReducers({
     apollo: client.reducer(),
+    counter: counterReducer,
   }),
   {}, // initial state
   composeWithDevTools(

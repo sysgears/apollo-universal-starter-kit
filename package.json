@@ -14,7 +14,10 @@
     "reactHotLoader": false,
     "debugSQL": false,
     "persistGraphQL": false,
-    "apolloLogging": false
+    "apolloLogging": false,
+    "android": true,
+    "ios": false
+
   },
   "engines": {
     "node": "6.6.0",

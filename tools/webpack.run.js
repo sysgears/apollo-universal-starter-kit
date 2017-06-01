@@ -285,7 +285,7 @@ function startWebpackDevServer(config, platform, reporter, logger) {
 
   // app.use('/', express.static(path.resolve('.'), { maxAge: '180 days' }));
   app.use(webpackDevMiddleware(compiler, _.merge({}, config.devServer, {
-    reporter({state, stats}) {
+    reporter({ state, stats }) {
       if (state) {
         logger("bundle is now VALID.");
       } else {
@@ -294,7 +294,7 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       reporter(null, stats);
     }
   })))
-  .use(webpackHotMiddleware(compiler, { log: false }));
+    .use(webpackHotMiddleware(compiler, { log: false }));
 
   if (config.devServer.proxy) {
     Object.keys(config.devServer.proxy).forEach(key => {
@@ -393,12 +393,12 @@ function buildDll() {
 
 async function startExpoServer(config, platform) {
   try {
-    mime.define({'application/javascript': ['bundle']});
+    mime.define({ 'application/javascript': ['bundle'] });
     if (platform === 'android') {
       which('adb', (err, result) => {
         console.log("Using adb at:", result);
       });
-      spawn('adb', ['reverse', 'tcp:8080', 'tcp:8080'], {stdio: [0, 1, 2]});
+      spawn('adb', ['reverse', 'tcp:8080', 'tcp:8080'], { stdio: [0, 1, 2] });
     }
 
     Config.validation.reactNativeVersionWarnings = false;
@@ -440,14 +440,18 @@ function startWebpack() {
     startServer();
   }
   startClient(clientConfig, "web");
-  startClient(androidConfig, "android");
-  // startClient(iOSConfig, "ios");
+  if (pkg.app.android) {
+    startClient(androidConfig, "android");
+  }
+  if (pkg.app.ios) {
+    startClient(iOSConfig, "ios");
+  }
 }
 
 if (!__DEV__ || !pkg.app.webpackDll) {
   startWebpack();
 } else {
-  buildDll().then(function() {
+  buildDll().then(function () {
     useWebpackDll();
     startWebpack();
   });

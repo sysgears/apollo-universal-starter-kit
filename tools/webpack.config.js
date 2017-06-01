@@ -62,9 +62,7 @@ const createBaseConfig = platform => {
                 "transform-class-properties",
                 ["styled-components", { "ssr": IS_SSR } ]
               ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-              only: ['android', 'ios'].indexOf(platform) >= 0 ?
-                ["*.js", "*.jsx"] :
-                ["*.js", "*.web.js", "*.jsx", "*.web.jsx"]
+              only: ["*.js", "*.jsx"]
             }
           }].concat(
             IS_PERSIST_GQL ?
@@ -99,9 +97,7 @@ const createBaseConfig = platform => {
     },
     resolve: {
       modules: [path.join(__dirname, '../src'), 'node_modules'],
-      extensions: ['android', 'ios'].indexOf(platform) >= 0 ?
-        ['.js', '.jsx'] :
-        [".web.js", ".web.jsx", ".js", ".jsx"]
+      extensions: [`.${platform}.js`, `.${platform}.jsx`, '.js', '.jsx']
     },
     plugins: basePlugins,
     watchOptions: {
@@ -136,7 +132,7 @@ const nodeExternalsFn = nodeExternals({
   whitelist: [/(^webpack|^react-native)/]
 });
 
-const serverConfig = merge.smart(_.cloneDeep(createBaseConfig("server")), {
+const serverConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
   name: 'backend',
   devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   target: 'node',
@@ -278,7 +274,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
               require.resolve('haul-cli/src/utils/fixRequireIssues'),
               ["styled-components", { "ssr": true } ]
             ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-            only: ["*.js", "*.web.js", "*.jsx", "*.web.jsx"],
+            only: ["*.js", "*.jsx"],
             env: {
               development: {
                 plugins: ["transform-react-jsx-source"]
@@ -310,8 +306,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
       }),
       new AssetResolver({ platform }),
     ],
-    mainFields: ['react-native', 'browser', 'main'],
-    extensions: [`.${platform}.js`, '.native.js', '.js'],
+    mainFields: ['react-native', 'browser', 'main']
   },
   plugins: [
     new webpack.SourceMapDevToolPlugin({

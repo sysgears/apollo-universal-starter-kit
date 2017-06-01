@@ -132,6 +132,10 @@ let serverPlugins = [
   serverPersistPlugin
 ];
 
+const nodeExternalsFn = nodeExternals({
+  whitelist: [/(^webpack|^react-native)/]
+});
+
 const serverConfig = merge.smart(_.cloneDeep(createBaseConfig("server")), {
   name: 'backend',
   devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
@@ -140,9 +144,15 @@ const serverConfig = merge.smart(_.cloneDeep(createBaseConfig("server")), {
     __dirname: true,
     __filename: true
   },
-  externals: nodeExternals({
-    whitelist: [/(^webpack|^react-native)/]
-  }),
+  externals(context, request, callback) {
+    return nodeExternalsFn(context, request, function() {
+      if (request.indexOf('react-native') >= 0) {
+        return callback(null, 'commonjs ' + request + '-web');
+      } else {
+        return callback(...arguments);
+      }
+    });
+  },
   module: {
     rules: [
       {

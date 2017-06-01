@@ -101,7 +101,7 @@ const createBaseConfig = platform => {
       modules: [path.join(__dirname, '../src'), 'node_modules'],
       extensions: ['android', 'ios'].indexOf(platform) >= 0 ?
         ['.js', '.jsx'] :
-        ['.js', 'web.js', '.jsx', '.web.jsx']
+        [".web.js", ".web.jsx", ".js", ".jsx"]
     },
     plugins: basePlugins,
     watchOptions: {

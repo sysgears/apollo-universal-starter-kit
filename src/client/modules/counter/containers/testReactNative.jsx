@@ -5,7 +5,7 @@ export default class TestReactNativeWeb extends Component {
   render() {
     return (
       <View>
-        <Text style={styles.title}>NATIVE</Text>
+        <Text style={styles.title}>UNIVERSAL</Text>
       </View>
     );
   }

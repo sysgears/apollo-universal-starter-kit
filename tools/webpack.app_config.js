@@ -25,6 +25,7 @@ const androidConfig = {
   entry: {
     'index.android.bundle': [
       'babel-polyfill',
+      require.resolve('./react-native-polyfill.js'),
       './src/mobile/index.js'
     ]
   }

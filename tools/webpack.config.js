@@ -345,30 +345,7 @@ const iOSConfig = merge.smart(_.cloneDeep(createMobileConfig('ios')), {
 const dllConfig = merge.smart(_.cloneDeep(createBaseConfig("dll")), {
   name: 'dll',
   entry: {
-    vendor: _.keys(pkg.dependencies),
-  },
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules\/(?!react|@expo|expo|lottie-react-native|haul-cli)/,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: __DEV__,
-            presets: ["babel-preset-expo", ["es2015", {"modules": false}], "stage-0"],
-            plugins: [
-              "transform-runtime",
-              "transform-decorators-legacy",
-              "transform-class-properties",
-              require.resolve('haul-cli/src/utils/fixRequireIssues'),
-              ["styled-components", {"ssr": true}]
-            ],
-            only: ["*.js", "*.jsx"],
-          }
-        }]
-      }
-    ]
+    vendor: _.without(_.keys(pkg.dependencies), 'expo', 'react-native'),
   },
   plugins: [
     new webpack.DefinePlugin(Object.assign({

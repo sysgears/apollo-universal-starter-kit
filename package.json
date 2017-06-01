@@ -9,7 +9,7 @@
     "webpackDevPort": 3000,
     "apiPort": 8080,
     "ssr": true,
-    "webpackDll": false,
+    "webpackDll": true,
     "frontendRefreshOnBackendChange": true,
     "reactHotLoader": false,
     "debugSQL": false,

@@ -10,7 +10,7 @@ import AMOUNT_QUERY from '../graphql/count_get.graphql';
 import ADD_COUNT_MUTATION from '../graphql/count_add_mutation.graphql';
 import COUNT_SUBSCRIPTION from '../graphql/count_subscribe.graphql';
 
-import TestReactNativeWeb from './testReactNativeWeb';
+import TestReactNativeWeb from './testReactNative';
 
 class Counter extends React.Component {
   constructor(props) {

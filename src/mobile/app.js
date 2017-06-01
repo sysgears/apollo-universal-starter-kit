@@ -26,7 +26,7 @@ export default class Main extends Component {
   render() {
     return (
       <ApolloProvider store={store} client={client}>
-        <Counter />
+        <Counter/>
       </ApolloProvider>
     );
   }

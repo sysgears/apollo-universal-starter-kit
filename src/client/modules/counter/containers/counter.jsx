@@ -10,6 +10,8 @@ import AMOUNT_QUERY from '../graphql/count_get.graphql';
 import ADD_COUNT_MUTATION from '../graphql/count_add_mutation.graphql';
 import COUNT_SUBSCRIPTION from '../graphql/count_subscribe.graphql';
 
+import TestReactNativeWeb from './testReactNativeWeb';
+
 class Counter extends React.Component {
   constructor(props) {
     super(props);
@@ -92,6 +94,7 @@ class Counter extends React.Component {
           </Button>
           <br/>
           <br/>
+            <TestReactNativeWeb/>
           <br/>
           <br/>
           Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.

@@ -5,6 +5,8 @@ import { graphql, compose } from 'react-apollo';
 
 import AMOUNT_QUERY from '../client/modules/counter/graphql/count_get.graphql';
 
+import TestReactNativeWeb from '../client/modules/counter/containers/testReactNativeWeb';
+
 class Counter extends Component {
   render() {
     const { loading, count } = this.props;
@@ -19,6 +21,7 @@ class Counter extends Component {
       return (
         <View style={styles.container}>
           <Text>Current count, is {count.amount}.</Text>
+          <TestReactNativeWeb/>
         </View>
       );
     }

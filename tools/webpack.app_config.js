@@ -1,7 +1,10 @@
 // App-specific front-end config should be here
-const clientConfig = {
+const webConfig = {
   entry: {
-    bundle: ['babel-polyfill', './src/client/index.jsx']
+    bundle: [
+      'babel-polyfill',
+      './src/client/index.jsx'
+    ]
   }
 };
 
@@ -10,7 +13,10 @@ const serverConfig = {
   // Uncomment the next line and set URL if you use external GraphQL server
   // url: 'http://localhost:8080/graphql',
   entry: {
-    index: ['babel-polyfill', './src/server/index.js']
+    index: [
+      'babel-polyfill',
+      './src/server/index.js'
+    ]
   }
 };
 
@@ -19,7 +25,6 @@ const androidConfig = {
   entry: {
     'index.android.bundle': [
       'babel-polyfill',
-      require.resolve('./react-native-polyfill.js'),
       './src/mobile/index.js'
     ]
   }
@@ -37,7 +42,7 @@ const iOSConfig = {
 };
 
 module.exports = {
-  clientConfig: clientConfig,
+  webConfig: webConfig,
   serverConfig: serverConfig,
   androidConfig: androidConfig,
   iOSConfig: iOSConfig

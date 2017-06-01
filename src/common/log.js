@@ -1,14 +1,5 @@
 import minilog from 'minilog';
 
-// Temp workaround for React alpha 6
-if (__SERVER__) {
-  global.window = global;
-  window.addEventListener = () => {};
-  window.requestAnimationFrame = () => {
-    throw new Error('requestAnimationFrame is not supported in Node');
-  };
-}
-
 minilog.enable();
 
 const log = typeof window !== 'undefined' ? minilog('frontend') : minilog('backend');

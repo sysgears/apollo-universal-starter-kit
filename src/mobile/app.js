@@ -3,14 +3,22 @@ import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 
 import Counter from './counter';
 
-const networkInterface = createNetworkInterface({ uri: 'http://localhost:8080/graphql' });
+let networkInterface = createNetworkInterface({ uri: 'http://localhost:8080/graphql' });
 
 const client = new ApolloClient({
   networkInterface,
 });
+
+const wsClient = new SubscriptionClient('ws://localhost:8080/graphql');
+
+networkInterface = addGraphQLSubscriptions(
+  networkInterface,
+  wsClient,
+);
 
 const store = createStore(
   combineReducers({

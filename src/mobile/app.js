@@ -2,13 +2,19 @@ import React, { Component } from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import ApolloClient, { createBatchingNetworkInterface } from 'apollo-client';
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 
-import counterReducer from '../client/modules/counter/reducers';
+import modules from '../client/modules';
 import Counter from '../client/modules/counter/containers/counter';
 
-let networkInterface = createNetworkInterface({ uri: 'http://localhost:8080/graphql' });
+let networkInterface = createBatchingNetworkInterface({
+  opts: {
+    credentials: "same-origin",
+  },
+  batchInterval: 20,
+  uri: 'http://localhost:8080/graphql',
+});
 
 const client = new ApolloClient({
   networkInterface,
@@ -24,7 +30,8 @@ networkInterface = addGraphQLSubscriptions(
 const store = createStore(
   combineReducers({
     apollo: client.reducer(),
-    counter: counterReducer,
+
+    ...modules.reducers
   }),
   {}, // initial state
   composeWithDevTools(

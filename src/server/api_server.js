@@ -78,7 +78,7 @@ if (module.hot) {
       log(error.stack);
     }
   });
-
+  module.hot.accept(['./middleware/website', './middleware/graphql']);
   module.hot.accept(['./api/subscriptions'], () => {
     try {
       addGraphQLSubscriptions(server);

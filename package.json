@@ -13,24 +13,27 @@
     "frontendRefreshOnBackendChange": true,
     "reactHotLoader": false,
     "debugSQL": false,
-    "persistGraphQL": true,
-    "apolloLogging": false
+    "persistGraphQL": false,
+    "apolloLogging": false,
+    "android": true,
+    "ios": false
+
   },
   "engines": {
     "node": "6.6.0",
     "npm": "3.10.3"
   },
   "scripts": {
-    "build": "babel-node --presets es2015 tools/webpack.run",
+    "build": "node tools/webpack.entry",
     "start": "node --harmony build/server",
-    "tests": "cross-env NODE_ENV=test PORT=7070 mocha-webpack --include babel-polyfill --webpack-config tools/webpack.config.js --full-trace --exit \"src/**/*.spec.js\"",
-    "tests:watch": "cross-env NODE_ENV=test PORT=7070 mocha-webpack --include babel-polyfill --webpack-config tools/webpack.config.js --full-trace --watch \"src/**/*.spec.js\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 mocha-webpack --include babel-polyfill --webpack-config tools/webpack.entry.js --full-trace --exit \"src/**/*.spec.js\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 mocha-webpack --include babel-polyfill --webpack-config tools/webpack.entry.js --full-trace --watch \"src/**/*.spec.js\"",
     "test": "npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx src tests tools",
     "seed": "npm run migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
-    "watch": "babel-node --presets es2015 tools/webpack.run watch",
+    "watch": "node tools/webpack.entry watch",
     "heroku-postbuild": "rm -rf build && npm run build && npm run seed"
   },
   "repository": {
@@ -57,6 +60,7 @@
     "body-parser": "^1.17.1",
     "bootstrap": "^4.0.0-alpha.6",
     "dataloader": "^1.3.0",
+    "expo": "^15.1.0",
     "express": "^4.15.2",
     "graphql": "^0.9.6",
     "graphql-server-express": "^0.7.2",
@@ -72,13 +76,14 @@
     "minilog": "^3.1.0",
     "performance-now": "^2.1.0",
     "persistgraphql": "^0.3.1",
-    "prop-types": "^15.5.9",
-    "react": "^15.5.4",
+    "prop-types": "^15.5.8",
+    "react": "~15.4.0",
     "react-apollo": "^1.2.0",
-    "react-dom": "^15.5.4",
+    "react-dom": "~15.4.0",
     "react-ga": "^2.2.0",
     "react-helmet": "^5.1.3",
     "react-hot-loader": "^3.0.0-beta.6",
+    "react-native": "0.42.3",
     "react-redux": "^5.0.4",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
@@ -105,6 +110,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
@@ -124,11 +130,15 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
     "fs-extra": "^3.0.1",
+    "haul-cli": "^0.6.0",
     "html-webpack-plugin": "^2.28.0",
+    "http-proxy-middleware": "^0.17.4",
     "ignore-loader": "^0.1.2",
+    "image-size": "^0.5.3",
     "isomorphic-style-loader": "^2.0.0",
     "jsdom": "^11.0.0",
     "json-loader": "^0.5.4",
+    "mime": "^1.3.6",
     "mkdirp": "^0.5.1",
     "mocha": "^3.3.0",
     "mocha-steps": "^1.0.2",
@@ -137,56 +147,26 @@
     "persistgraphql-webpack-plugin": "^0.3.1",
     "postcss-loader": "^2.0.5",
     "raw-loader": "^0.5.1",
-    "react-test-renderer": "^15.5.4",
+    "react-addons-test-utils": "^15.5.1",
+    "react-native-web": "^0.0.95",
+    "react-test-renderer": "~15.4.1",
+    "react-transition-group": "^1.1.3",
     "resolve-url-loader": "^2.0.2",
     "sass-loader": "^6.0.5",
     "style-loader": "^0.18.0",
     "url-loader": "^0.5.8",
     "wait-on": "^2.0.2",
     "webpack": "^2.5.1",
+    "webpack-dev-middleware": "^1.10.2",
     "webpack-dev-server": "^2.4.5",
+    "webpack-hot-middleware": "^2.18.0",
     "webpack-manifest-plugin": "^1.1.0",
     "webpack-merge": "^4.1.0",
     "webpack-node-externals": "^1.6.0",
     "webpack-sources": "^0.2.3",
     "webpack-virtual-modules": "^0.1.5",
-    "ws": "^3.0.0"
-  },
-  "eslintConfig": {
-    "parser": "babel-eslint",
-    "extends": [
-      "airbnb/base",
-      "plugin:import/errors",
-      "eslint:recommended",
-      "plugin:react/recommended"
-    ],
-    "rules": {
-      "no-use-before-define": 0,
-      "arrow-body-style": 0,
-      "dot-notation": 0,
-      "no-console": 0,
-      "semi": 2
-    },
-    "settings": {
-      "import/resolver": {
-        "webpack": {
-          "config": "./tools/webpack.config.js"
-        }
-      }
-    },
-    "env": {
-      "mocha": true
-    },
-    "globals": {
-      "window": true,
-      "document": true,
-      "__DEV__": true,
-      "__CLIENT__": true,
-      "__SERVER__": true,
-      "__SSR__": true
-    },
-    "plugins": [
-      "react"
-    ]
+    "which": "^1.2.14",
+    "ws": "^3.0.0",
+    "xdl": "^37.0.0"
   }
 }

@@ -296,7 +296,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
     ]
   },
   output: {
-    filename: `[name]`,
+    filename: `index.${platform}.bundle`,
     publicPath: '/'
   },
   resolve: {

@@ -234,7 +234,9 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       const vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
       _.each(compilation.chunks, chunk => {
         _.each(chunk.files, file => {
-          compilation.assets[file] = new ConcatSource(new RawSource(vendorContents), compilation.assets[file]);
+          if (!file.endsWith('.map')) {
+            compilation.assets[file] = new ConcatSource(new RawSource(vendorContents), compilation.assets[file]);
+          }
         });
       });
       callback();

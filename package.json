@@ -15,7 +15,7 @@
     "debugSQL": false,
     "persistGraphQL": false,
     "apolloLogging": false,
-    "android": true,
+    "android": false,
     "ios": false
 
   },
@@ -115,7 +115,6 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
     "chai": "^4.0.0",
-    "chai-as-promised": "^6.0.0",
     "chai-http": "^3.0.0",
     "cross-env": "^5.0.0",
     "css-loader": "^0.28.1",

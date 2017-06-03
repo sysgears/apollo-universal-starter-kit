@@ -1,10 +1,9 @@
-import Renderer from 'client/test-helpers/apollo_renderer';
-
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 import _ from 'lodash';
 
-import routes from 'client/app/routes';
+import Renderer from '../../../../client/test-helpers/apollo_renderer';
+import routes from '../../../../client/app/routes';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/post_comment_subscription.graphql';

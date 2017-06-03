@@ -170,13 +170,8 @@ function create(compiler: *, offset): Middleware {
       stack: convertedFrames,
     };
     const response = JSON.stringify(responseObject);
-    Promise.resolve(response).then(
-      response => {
-        console.log("symbol resp:", response);
-        res.write(response);
-        res.end();
-      }
-    );
+    res.header('Content-Type', 'application/json');
+    res.end(response);
   }
 
   return symbolicateMiddleware;

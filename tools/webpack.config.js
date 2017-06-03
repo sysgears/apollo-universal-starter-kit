@@ -96,7 +96,6 @@ const createBaseConfig = platform => {
       ]
     },
     resolve: {
-      modules: [path.join(__dirname, '../src'), 'node_modules'],
       extensions: [`.${platform}.js`, `.${platform}.jsx`, '.js', '.jsx']
     },
     plugins: basePlugins,

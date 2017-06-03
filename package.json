@@ -115,6 +115,7 @@
     "babel-register": "^6.24.1",
     "chai": "^4.0.0",
     "chai-http": "^3.0.0",
+    "compression": "^1.6.2",
     "cross-env": "^5.0.0",
     "css-loader": "^0.28.1",
     "enzyme": "^2.8.2",

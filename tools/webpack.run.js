@@ -3,6 +3,7 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import httpProxyMiddleware from 'http-proxy-middleware';
 import express from 'express';
+import compression from 'compression';
 import http from 'http';
 import { spawn } from 'child_process';
 import fs from 'fs';
@@ -15,14 +16,6 @@ import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
 import { Android, Simulator, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
-import devToolsMiddleware from 'haul-cli/src/server/middleware/devToolsMiddleware';
-import statusPageMiddleware from 'haul-cli/src/server/middleware/statusPageMiddleware';
-import openInEditorMiddleware from 'haul-cli/src/server/middleware/openInEditorMiddleware';
-import loggerMiddleware from 'haul-cli/src/server/middleware/loggerMiddleware';
-import missingBundleMiddleware from 'haul-cli/src/server/middleware/missingBundleMiddleware';
-import systraceMiddleware from 'haul-cli/src/server/middleware/systraceMiddleware';
-import rawBodyMiddleware from 'haul-cli/src/server/middleware/rawBodyMiddleware';
-import WebSocketProxy from 'haul-cli/src/server/util/WebsocketProxy';
 import which from 'which';
 import { ConcatSource, RawSource } from 'webpack-sources';
 
@@ -31,6 +24,20 @@ import symbolicateMiddleware from './middleware/symbolicateMiddleware';
 import pkg from '../package.json';
 // eslint-disable-next-line import/default
 import configs from './webpack.config';
+
+const InspectorProxy = require('react-native/local-cli/server/util/inspectorProxy.js');
+const copyToClipBoardMiddleware = require('react-native/local-cli/server/middleware/copyToClipBoardMiddleware');
+const cpuProfilerMiddleware = require('react-native/local-cli/server/middleware/cpuProfilerMiddleware');
+const getDevToolsMiddleware = require('react-native/local-cli/server/middleware/getDevToolsMiddleware');
+const heapCaptureMiddleware = require('react-native/local-cli/server/middleware/heapCaptureMiddleware.js');
+const indexPageMiddleware = require('react-native/local-cli/server/middleware/indexPage');
+const loadRawBodyMiddleware = require('react-native/local-cli/server/middleware/loadRawBodyMiddleware');
+const messageSocket = require('react-native/local-cli/server/util/messageSocket.js');
+const openStackFrameInEditorMiddleware = require('react-native/local-cli/server/middleware/openStackFrameInEditorMiddleware');
+const statusPageMiddleware = require('react-native/local-cli/server/middleware/statusPageMiddleware.js');
+const systraceProfileMiddleware = require('react-native/local-cli/server/middleware/systraceProfileMiddleware.js');
+const unless = require('react-native/local-cli/server/middleware/unless');
+const webSocketProxy = require('react-native/local-cli/server/util/webSocketProxy.js');
 
 minilog.enable();
 
@@ -207,12 +214,6 @@ function startServer() {
 
 let vendorHashesJson, vendorContents, vendorLineCount;
 
-if (__DEV__ && pkg.app.webpackDll) {
-  vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
-  vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
-  vendorLineCount = vendorContents.split(/\r\n|\r|\n/).length - 1;
-}
-
 function startWebpackDevServer(config, platform, reporter, logger) {
   const configOutputPath = config.output.path;
   config.output.path = '/';
@@ -269,20 +270,28 @@ function startWebpackDevServer(config, platform, reporter, logger) {
 
   const app = express();
 
-  const httpServer = http.createServer(app);
+  const serverInstance = http.createServer(app);
+
+  let wsProxy, ms, inspectorProxy;
 
   if (platform !== 'web') {
-    const debuggerProxy = new WebSocketProxy(httpServer, '/debugger-proxy');
-
+    inspectorProxy = new InspectorProxy();
+    const args = {port: config.devServer.port, projectRoots: [path.resolve('.')]};
     app
-      .use(rawBodyMiddleware)
-      .use(devToolsMiddleware(debuggerProxy))
+      .use(loadRawBodyMiddleware)
+      .use(compression())
+      .use(getDevToolsMiddleware(args, () => wsProxy && wsProxy.isChromeConnected()))
+      .use(getDevToolsMiddleware(args, () => ms && ms.isChromeConnected()))
       .use(liveReloadMiddleware(compiler))
-      .use(statusPageMiddleware)
       .use(symbolicateMiddleware(compiler, vendorLineCount))
-      .use(openInEditorMiddleware())
-      .use('/systrace', systraceMiddleware)
-      .use(loggerMiddleware);
+      .use(openStackFrameInEditorMiddleware(args))
+      .use(copyToClipBoardMiddleware)
+      .use(statusPageMiddleware)
+      .use(systraceProfileMiddleware)
+      .use(heapCaptureMiddleware)
+      .use(cpuProfilerMiddleware)
+      .use(indexPageMiddleware)
+      .use(unless('/inspector', inspectorProxy.processRequest.bind(inspectorProxy)));
   }
 
   // app.use('/', express.static(path.resolve('.'), { maxAge: '180 days' }));
@@ -303,13 +312,17 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       app.use(httpProxyMiddleware(key, config.devServer.proxy[key]));
     });
   }
-  if (platform !== 'web') {
-    app.use(missingBundleMiddleware);
-  }
 
   logger(`Webpack ${config.name} dev server listening on ${config.devServer.port}`);
-  httpServer.listen(config.devServer.port);
-  httpServer.timeout = 0;
+  serverInstance.listen(config.devServer.port, function() {
+    if (platform !== 'web') {
+      wsProxy = webSocketProxy.attachToServer(serverInstance, '/debugger-proxy');
+      ms = messageSocket.attachToServer(serverInstance, '/message');
+      webSocketProxy.attachToServer(serverInstance, '/devtools');
+      inspectorProxy.attachToServer(serverInstance, '/inspector');
+    }
+  });
+  serverInstance.timeout = 0;
 }
 
 function useWebpackDll() {
@@ -325,6 +338,9 @@ function useWebpackDll() {
     context: process.cwd(),
     manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
   }));
+  vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
+  vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
+  vendorLineCount = vendorContents.split(/\r\n|\r|\n/).length - 1;
 }
 
 function isDllValid() {

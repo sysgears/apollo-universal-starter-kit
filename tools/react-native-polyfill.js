@@ -13,5 +13,9 @@ global['__DEV__'] = __DEV__;
 global.__BUNDLE_START_TIME__ = Date.now();
 
 require("react-native/Libraries/BatchedBridge/NativeModules.js");
+
+if (!global.self) {
+  global.self = global; /* eslint-disable-line */
+}
+
 require("react-native/Libraries/Core/InitializeCore.js");
-require("react-native/Libraries/Network/fetch.js");

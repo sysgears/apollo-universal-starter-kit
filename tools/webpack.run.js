@@ -16,9 +16,7 @@ import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
 import { Android, Simulator, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
 import devToolsMiddleware from 'haul-cli/src/server/middleware/devToolsMiddleware';
-import liveReloadMiddleware from 'haul-cli/src/server/middleware/liveReloadMiddleware';
 import statusPageMiddleware from 'haul-cli/src/server/middleware/statusPageMiddleware';
-import symbolicateMiddleware from 'haul-cli/src/server/middleware/symbolicateMiddleware';
 import openInEditorMiddleware from 'haul-cli/src/server/middleware/openInEditorMiddleware';
 import loggerMiddleware from 'haul-cli/src/server/middleware/loggerMiddleware';
 import missingBundleMiddleware from 'haul-cli/src/server/middleware/missingBundleMiddleware';
@@ -28,6 +26,8 @@ import WebSocketProxy from 'haul-cli/src/server/util/WebsocketProxy';
 import which from 'which';
 import { ConcatSource, RawSource } from 'webpack-sources';
 
+import liveReloadMiddleware from './middleware/liveReloadMiddleware';
+import symbolicateMiddleware from './middleware/symbolicateMiddleware';
 import pkg from '../package.json';
 // eslint-disable-next-line import/default
 import configs from './webpack.config';
@@ -97,7 +97,7 @@ function webpackReporter(outputPath, log, err, stats) {
   }
 }
 
-var frontendVirtualModules = new VirtualModules({ 'node_modules/backend_reload.js': '' });
+let frontendVirtualModules = new VirtualModules({ 'node_modules/backend_reload.js': '' });
 
 function startClient(config, platform) {
   const logger = minilog(`webpack-for-${config.name}`);
@@ -163,8 +163,8 @@ function startServer() {
           // Patch webpack-generated original source files path, by stripping hash after filename
           const mapKey = _.findKey(assets, (v, k) => k.endsWith('.map'));
           if (mapKey) {
-            var srcMap = JSON.parse(assets[mapKey]._value);
-            for (var idx in srcMap.sources) {
+            let srcMap = JSON.parse(assets[mapKey]._value);
+            for (let idx in srcMap.sources) {
               srcMap.sources[idx] = srcMap.sources[idx].split(';')[0];
             }
             assets[mapKey]._value = JSON.stringify(srcMap);
@@ -205,6 +205,14 @@ function startServer() {
   }
 }
 
+let vendorHashesJson, vendorContents, vendorLineCount;
+
+if (__DEV__ && pkg.app.webpackDll) {
+  vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
+  vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
+  vendorLineCount = vendorContents.split(/\r\n|\r|\n/).length - 1;
+}
+
 function startWebpackDevServer(config, platform, reporter, logger) {
   const configOutputPath = config.output.path;
   config.output.path = '/';
@@ -228,10 +236,8 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       callback();
     }
   });
-  if (pkg.app.webpackDll && platform !== 'web') {
+  if (pkg.app.webpackDll && platform !== 'web' && __DEV__) {
     compiler.plugin('after-compile', (compilation, callback) => {
-      let vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
-      const vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
       _.each(compilation.chunks, chunk => {
         _.each(chunk.files, file => {
           if (!file.endsWith('.map')) {
@@ -255,7 +261,6 @@ function startWebpackDevServer(config, platform, reporter, logger) {
         }
       });
       if (pkg.app.webpackDll) {
-        let vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
         assetsMap['vendor.js'] = vendorHashesJson.name;
       }
       fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
@@ -266,11 +271,6 @@ function startWebpackDevServer(config, platform, reporter, logger) {
 
   const httpServer = http.createServer(app);
 
-  app.use((req, res, next) => {
-    console.log("req:", req.url);
-    next();
-  });
-
   if (platform !== 'web') {
     const debuggerProxy = new WebSocketProxy(httpServer, '/debugger-proxy');
 
@@ -279,7 +279,7 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       .use(devToolsMiddleware(debuggerProxy))
       .use(liveReloadMiddleware(compiler))
       .use(statusPageMiddleware)
-      .use(symbolicateMiddleware(compiler))
+      .use(symbolicateMiddleware(compiler, vendorLineCount))
       .use(openInEditorMiddleware())
       .use('/systrace', systraceMiddleware)
       .use(loggerMiddleware);
@@ -309,6 +309,7 @@ function startWebpackDevServer(config, platform, reporter, logger) {
 
   logger(`Webpack ${config.name} dev server listening on ${config.devServer.port}`);
   httpServer.listen(config.devServer.port);
+  httpServer.timeout = 0;
 }
 
 function useWebpackDll() {

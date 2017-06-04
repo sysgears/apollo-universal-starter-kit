@@ -134,7 +134,9 @@ function create(compiler: *, offset): Middleware {
       (originalFrame): ReactNativeStackFrame => {
         // find the original home of this line of code.
         const lookup = consumer.originalPositionFor({
-          line: originalFrame.lineNumber - offset,
+          line: originalFrame.lineNumber - offset >= 1 ?
+              originalFrame.lineNumber - offset :
+              originalFrame.lineNumber,
           column: originalFrame.column,
         });
 

@@ -68,21 +68,23 @@ class PostEdit extends React.Component {
 
     if (loading) {
       return (
-        <div>
+        <section>
           {this.renderMetaData()}
-          { /* loading... */ }
-        </div>
+          <div>
+            Loading...
+          </div>
+        </section>
       );
     } else {
       return (
-        <div>
+        <section>
           {this.renderMetaData()}
           <Link id="back-button" to="/posts">Back</Link>
           <h2>Edit Post</h2>
           <PostForm onSubmit={this.onSubmit} initialValues={post}/>
           <br/>
           <PostComments postId={match.params.id} comments={post.comments} subscribeToMore={subscribeToMore}/>
-        </div>
+        </section>
       );
     }
   }

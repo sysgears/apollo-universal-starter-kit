@@ -30,19 +30,21 @@ class PostAdd extends React.Component {
 
     if (loading) {
       return (
-        <div>
+        <section>
           {this.renderMetaData()}
-          { /* loading... */}
-        </div>
+          <div>
+            Loading...
+          </div>
+        </section>
       );
     } else {
       return (
-        <div>
+        <section>
           {this.renderMetaData()}
           <Link to="/posts">Back</Link>
           <h2>Create Post</h2>
           <PostForm onSubmit={this.onSubmit}/>
-        </div>
+        </section>
       );
     }
   }

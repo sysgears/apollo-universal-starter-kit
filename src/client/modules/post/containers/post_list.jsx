@@ -145,14 +145,16 @@ class PostList extends React.Component {
 
     if (loading && !postsQuery) {
       return (
-        <div>
+        <section>
           {this.renderMetaData()}
-          { /* loading... */ }
-        </div>
+          <div>
+            Loading...
+          </div>
+        </section>
       );
     } else {
       return (
-        <div>
+        <section>
           {this.renderMetaData()}
           <h2>Posts</h2>
           <Link to="/post/add">
@@ -166,7 +168,7 @@ class PostList extends React.Component {
             <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
           </div>
           {this.renderLoadMore()}
-        </div>
+        </section>
       );
     }
   }

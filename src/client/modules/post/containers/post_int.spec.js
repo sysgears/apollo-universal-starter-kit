@@ -74,7 +74,7 @@ describe('Posts and comments example UI works', () => {
     renderer.history.push('/posts');
     content = app.find('#content');
 
-    expect(content.children().html()).to.equal('<div></div>');
+    content.text().should.equal('Loading...');
   });
 
   step('Posts page renders with data', () => {

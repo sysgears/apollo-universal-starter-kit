@@ -17,7 +17,7 @@
     "persistGraphQL": false,
     "apolloLogging": false,
     "android": false,
-    "ios": false
+    "ios": true
   },
   "engines": {
     "node": "6.6.0",

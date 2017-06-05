@@ -145,6 +145,7 @@
     "node-sass": "^4.5.2",
     "persistgraphql-webpack-plugin": "^0.3.1",
     "postcss-loader": "^2.0.5",
+    "qrcode-terminal": "^0.11.0",
     "raw-loader": "^0.5.1",
     "react-addons-test-utils": "^15.5.1",
     "react-native-web": "^0.0.96",

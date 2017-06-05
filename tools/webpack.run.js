@@ -17,6 +17,7 @@ import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
 import { Android, Simulator, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
 import which from 'which';
+import qr from 'qrcode-terminal';
 import { ConcatSource, RawSource } from 'webpack-sources';
 
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';
@@ -40,6 +41,14 @@ const unless = require('react-native/local-cli/server/middleware/unless');
 const webSocketProxy = require('react-native/local-cli/server/util/webSocketProxy.js');
 
 minilog.enable();
+
+process.on('uncaughtException', (ex) => {
+  console.error(ex);
+});
+
+process.on('unhandledRejection', reason => {
+  console.error(reason);
+});
 
 const logBack = minilog('webpack-for-backend');
 
@@ -275,6 +284,8 @@ function startWebpackDevServer(config, platform, reporter, logger) {
   let wsProxy, ms, inspectorProxy;
 
   if (platform !== 'web') {
+    mime.define({ 'application/javascript': ['bundle'] });
+
     inspectorProxy = new InspectorProxy();
     const args = {port: config.devServer.port, projectRoots: [path.resolve('.')]};
     app
@@ -412,7 +423,6 @@ function buildDll() {
 
 async function startExpoServer(config, platform) {
   try {
-    mime.define({ 'application/javascript': ['bundle'] });
     if (platform === 'android') {
       which('adb', (err, result) => {
         console.log("Using adb at:", result);
@@ -433,6 +443,10 @@ async function startExpoServer(config, platform) {
 
     const address = await UrlUtils.constructManifestUrlAsync(projectRoot);
     console.log("Expo address:", address);
+    console.log("To open this app on your phone scan this QR code in Expo Client (if it doesn't get started automatically)");
+    qr.generate(address, code => {
+      console.log(code);
+    });
     if (platform === 'android') {
       const { success, error } = await Android.openProjectAsync(projectRoot);
 

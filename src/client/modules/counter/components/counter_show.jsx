@@ -18,14 +18,14 @@ const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement })
     return (
       <View style={styles.container}>
         <View style={styles.element}>
-          <Text>
+          <Text style={styles.box}>
             Current count, is {count.amount}. This is being stored server-side in the database and using Apollo
             subscription for real-time updates.
           </Text>
         </View>
         <Button onPress={addCount(1)}>Click to increase count</Button>
         <View style={styles.element}>
-          <Text>
+          <Text style={styles.box}>
             Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.
           </Text>
         </View>
@@ -40,10 +40,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   element: {
     paddingTop: 30
+  },
+  box: {
+    textAlign: 'center',
+    marginLeft: 15,
+    marginRight: 15
   }
 });
 

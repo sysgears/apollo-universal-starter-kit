@@ -45,6 +45,21 @@ if (__DEV__) {
   basePlugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
 }
 
+const babelRule = {
+  loader: 'babel-loader',
+  options: {
+    cacheDirectory: __DEV__,
+    presets: ["react", ["es2015", { "modules": false }], "stage-0"],
+    plugins: [
+      "transform-runtime",
+      "transform-decorators-legacy",
+      "transform-class-properties",
+      ["styled-components", { "ssr": IS_SSR } ]
+    ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
+    only: ["*.js", "*.jsx"]
+  }
+};
+
 const createBaseConfig = platform => {
   const baseConfig = {
     module: {
@@ -85,27 +100,14 @@ const createBaseConfig = platform => {
     bail: !__DEV__
   };
 
-  if (['android', 'ios'].indexOf(platform) < 0) {
+  if (['web'].indexOf(platform) >= 0) {
     baseConfig.module.rules.unshift({
         test: /\.jsx?$/,
-          exclude: /(node_modules|bower_components)/,
-        use: [{
-        loader: 'babel-loader',
-        options: {
-          cacheDirectory: __DEV__,
-          presets: ["react", ["es2015", { "modules": false }], "stage-0"],
-          plugins: [
-            "transform-runtime",
-            "transform-decorators-legacy",
-            "transform-class-properties",
-            ["styled-components", { "ssr": IS_SSR } ]
-          ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-          only: ["*.js", "*.jsx"]
-        }
-      }].concat(
-        IS_PERSIST_GQL ?
-          ['persistgraphql-webpack-plugin/js-loader'] : []
-      )
+        exclude: /(node_modules|bower_components)/,
+        use: [babelRule].concat(
+          IS_PERSIST_GQL ?
+            ['persistgraphql-webpack-plugin/js-loader'] : []
+        )
     });
 
     baseConfig.resolve.alias = {
@@ -196,7 +198,7 @@ const createClientPlugins = (platform) => {
       inject: 'body',
     }));
   }
-  
+
   if (!__DEV__) {
     clientPlugins.push(new ExtractTextPlugin({ filename: '[name].[contenthash].css', allChunks: true }));
     clientPlugins.push(new webpack.optimize.CommonsChunkPlugin({
@@ -267,27 +269,6 @@ const reactNativeRule = {
   }
 };
 
-const mobileRule = {
-  loader: 'babel-loader',
-  options: {
-    cacheDirectory: __DEV__,
-    presets: ["babel-preset-expo", ["es2015", { "modules": false }], "stage-0"],
-    plugins: [
-      "transform-runtime",
-      "transform-decorators-legacy",
-      "transform-class-properties",
-      require.resolve('haul-cli/src/utils/fixRequireIssues'),
-      ["styled-components", { "ssr": true } ]
-    ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-    only: ["*.js", "*.jsx"],
-    env: {
-      development: {
-        plugins: ["transform-react-jsx-source"]
-      }
-    }
-  }
-};
-
 const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(platform)), {
   devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   module: {
@@ -301,7 +282,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
             if (req.resource.indexOf('node_modules') >= 0) {
               result = reactNativeRule;
             } else {
-              result = mobileRule;
+              result = babelRule;
             }
             return result;
           }

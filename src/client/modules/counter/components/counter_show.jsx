@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+
+import Button from '../../common/components/button';
 
 const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement }) => {
 
@@ -21,23 +23,13 @@ const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement })
             subscription for real-time updates.
           </Text>
         </View>
-        <Button
-          color="#0275d8"
-          onPress={addCount(1)}
-          title="Click to increase count"
-        />
-
+        <Button onPress={addCount(1)}>Click to increase count</Button>
         <View style={styles.element}>
           <Text>
             Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.
           </Text>
         </View>
-        <Button
-          color="#0275d8"
-          onPress={onReduxIncrement(1)}
-          title="Click to increase reduxCount"
-        />
-
+        <Button onPress={onReduxIncrement(1)}>Click to increase reduxCount</Button>
       </View>
     );
   }

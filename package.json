@@ -149,7 +149,7 @@
     "qrcode-terminal": "^0.11.0",
     "raw-loader": "^0.5.1",
     "react-addons-test-utils": "^15.5.1",
-    "react-native-web": "^0.0.96",
+    "react-native-web": "^0.0.97",
     "react-test-renderer": "~15.4.2",
     "resolve-url-loader": "^2.0.2",
     "sass-loader": "^6.0.5",
@@ -163,7 +163,7 @@
     "webpack-manifest-plugin": "^1.1.0",
     "webpack-merge": "^4.1.0",
     "webpack-node-externals": "^1.6.0",
-    "webpack-sources": "^0.2.3",
+    "webpack-sources": "^1.0.1",
     "webpack-virtual-modules": "^0.1.5",
     "ws": "^3.0.0",
     "xdl": "^41.0.0"

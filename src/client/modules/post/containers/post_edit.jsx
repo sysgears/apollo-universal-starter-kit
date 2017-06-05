@@ -54,22 +54,29 @@ class PostEdit extends React.Component {
     editPost(post.id, values.title, values.content);
   }
 
+  renderMetaData = () => (
+    <Helmet
+      title="Apollo Starter Kit - Edit post"
+      meta={[{
+        name: 'description',
+        content: 'Edit post example page'
+      }]} />
+  );
+
   render() {
     const { loading, post, match, subscribeToMore } = this.props;
 
     if (loading) {
       return (
-        <div>{ /* loading... */ }</div>
+        <div>
+          {this.renderMetaData()}
+          { /* loading... */ }
+        </div>
       );
     } else {
       return (
         <div>
-          <Helmet
-            title="Apollo Starter Kit - Edit post"
-            meta={[{
-              name: 'description',
-              content: 'Edit post example page'
-            }]}/>
+          {this.renderMetaData()}
           <Link id="back-button" to="/posts">Back</Link>
           <h2>Edit Post</h2>
           <PostForm onSubmit={this.onSubmit} initialValues={post}/>

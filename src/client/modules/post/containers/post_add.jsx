@@ -16,24 +16,40 @@ class PostAdd extends React.Component {
     addPost(values.title, values.content);
   }
 
+  renderMetaData = () => (
+    <Helmet
+      title="Apollo Starter Kit - Add post"
+      meta={[{
+        name: 'description',
+        content: 'Add new post example page'
+      }]}/>
+  );
+
   render() {
-    return (
-      <div>
-        <Helmet
-          title="Apollo Starter Kit - Add post"
-          meta={[{
-            name: 'description',
-            content: 'Add new post example page'
-          }]}/>
-        <Link to="/posts">Back</Link>
-        <h2>Create Post</h2>
-        <PostForm onSubmit={this.onSubmit}/>
-      </div>
-    );
+    const { loading } = this.props;
+
+    if (loading) {
+      return (
+        <div>
+          {this.renderMetaData()}
+          { /* loading... */}
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          {this.renderMetaData()}
+          <Link to="/posts">Back</Link>
+          <h2>Create Post</h2>
+          <PostForm onSubmit={this.onSubmit}/>
+        </div>
+      );
+    }
   }
 }
 
 PostAdd.propTypes = {
+  loading: PropTypes.bool.isRequired,
   addPost: PropTypes.func.isRequired
 };
 

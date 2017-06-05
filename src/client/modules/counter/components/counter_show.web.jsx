@@ -9,21 +9,29 @@ const Section = styled.section`
 `;
 
 const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement }) => {
+
+  const renderMetaData = () => (
+    <Helmet
+      title="Apollo Starter Kit - Counter"
+      meta={[{
+        name: 'description',
+        content: 'Apollo Fullstack Starter Kit - Counter example page'
+      }]}/>
+  );
+
   if (loading) {
     return (
-      <div className="text-center">
-        Loading...
-      </div>
+      <section>
+        {renderMetaData()}
+        <div className="text-center">
+          Loading...
+        </div>
+      </section>
     );
   } else {
     return (
       <div>
-        <Helmet
-          title="Apollo Starter Kit - Counter"
-          meta={[{
-            name: 'description',
-            content: 'Apollo Fullstack Starter Kit - Counter example page'
-          }]}/>
+        {renderMetaData()}
         <div className="text-center mt-4 mb-4">
           <Section>
             <p>

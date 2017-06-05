@@ -134,6 +134,7 @@
     "http-proxy-middleware": "^0.17.4",
     "ignore-loader": "^0.1.2",
     "image-size": "^0.5.3",
+    "ip": "^1.1.5",
     "isomorphic-style-loader": "^2.0.0",
     "jsdom": "^11.0.0",
     "json-loader": "^0.5.4",
@@ -164,7 +165,6 @@
     "webpack-node-externals": "^1.6.0",
     "webpack-sources": "^0.2.3",
     "webpack-virtual-modules": "^0.1.5",
-    "which": "^1.2.14",
     "ws": "^3.0.0",
     "xdl": "^41.0.0"
   }

@@ -22,11 +22,11 @@ let networkInterface = createBatchingNetworkInterface({
     credentials: "same-origin",
   },
   batchInterval: 20,
-  uri: __EXTERNAL_BACKEND_URL__ || "/graphql",
+  uri: __BACKEND_URL__ || "/graphql",
 });
 
 if (__CLIENT__) {
-  const wsClient = new SubscriptionClient((__EXTERNAL_BACKEND_URL__ || (window.location.origin + '/graphql'))
+  const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws')
     .replace(':' + settings.webpackDevPort, ':' + settings.apiPort));
 

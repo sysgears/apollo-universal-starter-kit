@@ -5,6 +5,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import merge from 'webpack-merge';
 import nodeExternals from 'webpack-node-externals';
 import path from 'path';
+import ip from 'ip';
 import PersistGraphQLPlugin from 'persistgraphql-webpack-plugin';
 import _ from 'lodash';
 import AssetResolver from 'haul-cli/src/resolvers/AssetResolver';
@@ -173,7 +174,7 @@ const serverConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
   plugins: serverPlugins
 }, appConfigs.serverConfig);
 
-const createClientPlugins = () => {
+const createClientPlugins = (platform) => {
   let clientPlugins = [
     new ManifestPlugin({
       fileName: 'assets.json'
@@ -182,7 +183,9 @@ const createClientPlugins = () => {
       __CLIENT__: true, __SERVER__: false, __SSR__: IS_SSR,
       __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`,
       __PERSIST_GQL__: IS_PERSIST_GQL,
-      __EXTERNAL_BACKEND_URL__: appConfigs.serverConfig.url ? `"${appConfigs.serverConfig.url}"`: false
+      __BACKEND_URL__: appConfigs.serverConfig.url ?
+        `"${appConfigs.serverConfig.url}"`
+        : (platform !== 'web' ? `\"http://${ip.address()}:${pkg.app.apiPort}/graphql\"` : false)
     })),
     clientPersistPlugin
   ];
@@ -241,7 +244,7 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
     path: path.resolve(pkg.app.frontendBuildDir),
     publicPath: '/'
   },
-  plugins: createClientPlugins(),
+  plugins: createClientPlugins("web"),
   devServer: _.merge({}, baseDevServerConfig, {
     port: pkg.app.webpackDevPort,
     proxy: {
@@ -252,8 +255,6 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
     }
   }),
 }, appConfigs.webConfig);
-
-let mobilePlugins = createClientPlugins();
 
 const reactNativeRule = {
   loader: 'babel-loader',
@@ -336,7 +337,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
       test: /\.(js|jsx|css|bundle)($|\?)/i,
       filename: '[file].map',
     }),
-    ...mobilePlugins
+    ...createClientPlugins(platform)
   ]
 });
 

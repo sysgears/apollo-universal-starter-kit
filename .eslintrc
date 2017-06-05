@@ -33,7 +33,7 @@
     "__SERVER__": true,
     "__SSR__": true,
     "__PERSIST_GQL__": true,
-    "__EXTERNAL_BACKEND_URL__": true
+    "__BACKEND_URL__": true
   },
   "plugins": [
     "react"

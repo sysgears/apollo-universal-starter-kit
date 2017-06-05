@@ -16,7 +16,6 @@ import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
 import { Android, Simulator, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
-import which from 'which';
 import qr from 'qrcode-terminal';
 import { ConcatSource, RawSource } from 'webpack-sources';
 
@@ -423,13 +422,6 @@ function buildDll() {
 
 async function startExpoServer(config, platform) {
   try {
-    if (platform === 'android') {
-      which('adb', (err, result) => {
-        console.log("Using adb at:", result);
-      });
-      spawn('adb', ['reverse', 'tcp:8080', 'tcp:8080'], { stdio: [0, 1, 2] });
-    }
-
     Config.validation.reactNativeVersionWarnings = false;
     Config.developerTool = 'crna';
     Config.offline = true;

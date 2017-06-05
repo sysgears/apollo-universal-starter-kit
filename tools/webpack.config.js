@@ -49,27 +49,6 @@ const createBaseConfig = platform => {
     module: {
       rules: [
         {
-          test: /\.jsx?$/,
-          exclude: /(node_modules|bower_components)/,
-          use: [{
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: __DEV__,
-              presets: ["react", ["es2015", { "modules": false }], "stage-0"],
-              plugins: [
-                "transform-runtime",
-                "transform-decorators-legacy",
-                "transform-class-properties",
-                ["styled-components", { "ssr": IS_SSR } ]
-              ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-              only: ["*.js", "*.jsx"]
-            }
-          }].concat(
-            IS_PERSIST_GQL ?
-              ['persistgraphql-webpack-plugin/js-loader'] : []
-          )
-        },
-        {
           test: /\.graphqls/,
           use: 'raw-loader'
         },
@@ -106,6 +85,28 @@ const createBaseConfig = platform => {
   };
 
   if (['android', 'ios'].indexOf(platform) < 0) {
+    baseConfig.module.rules.unshift({
+        test: /\.jsx?$/,
+          exclude: /(node_modules|bower_components)/,
+        use: [{
+        loader: 'babel-loader',
+        options: {
+          cacheDirectory: __DEV__,
+          presets: ["react", ["es2015", { "modules": false }], "stage-0"],
+          plugins: [
+            "transform-runtime",
+            "transform-decorators-legacy",
+            "transform-class-properties",
+            ["styled-components", { "ssr": IS_SSR } ]
+          ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
+          only: ["*.js", "*.jsx"]
+        }
+      }].concat(
+        IS_PERSIST_GQL ?
+          ['persistgraphql-webpack-plugin/js-loader'] : []
+      )
+    });
+
     baseConfig.resolve.alias = {
       'react-native': 'react-native-web'
     };
@@ -254,6 +255,38 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
 
 let mobilePlugins = createClientPlugins();
 
+const reactNativeRule = {
+  loader: 'babel-loader',
+  options: {
+    cacheDirectory: __DEV__,
+    presets: ["react-native"],
+    plugins: [
+      require.resolve('haul-cli/src/utils/fixRequireIssues')
+    ]
+  }
+};
+
+const mobileRule = {
+  loader: 'babel-loader',
+  options: {
+    cacheDirectory: __DEV__,
+    presets: ["babel-preset-expo", ["es2015", { "modules": false }], "stage-0"],
+    plugins: [
+      "transform-runtime",
+      "transform-decorators-legacy",
+      "transform-class-properties",
+      require.resolve('haul-cli/src/utils/fixRequireIssues'),
+      ["styled-components", { "ssr": true } ]
+    ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
+    only: ["*.js", "*.jsx"],
+    env: {
+      development: {
+        plugins: ["transform-react-jsx-source"]
+      }
+    }
+  }
+};
+
 const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(platform)), {
   devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   module: {
@@ -261,26 +294,17 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
       {
         test: /\.jsx?$/,
         exclude: /node_modules\/(?!react|@expo|expo|lottie-react-native|haul-cli|pretty-format)/,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: __DEV__,
-            presets: ["babel-preset-expo", ["es2015", { "modules": false }], "stage-0"],
-            plugins: [
-              "transform-runtime",
-              "transform-decorators-legacy",
-              "transform-class-properties",
-              require.resolve('haul-cli/src/utils/fixRequireIssues'),
-              ["styled-components", { "ssr": true } ]
-            ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-            only: ["*.js", "*.jsx"],
-            env: {
-              development: {
-                plugins: ["transform-react-jsx-source"]
-              }
+        use: [
+          function (req) {
+            let result;
+            if (req.resource.indexOf('node_modules') >= 0) {
+              result = reactNativeRule;
+            } else {
+              result = mobileRule;
             }
+            return result;
           }
-        }].concat(
+        ].concat(
           pkg.app.persistGraphQL ?
             ['persistgraphql-webpack-plugin/js-loader'] : []
         )

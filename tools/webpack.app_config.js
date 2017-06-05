@@ -24,7 +24,6 @@ const serverConfig = {
 const androidConfig = {
   entry: {
     'index.android.bundle': [
-      'babel-polyfill',
       require.resolve('./react-native-polyfill.js'),
       './src/mobile/index.js'
     ]
@@ -35,7 +34,6 @@ const androidConfig = {
 const iOSConfig = {
   entry: {
     'index.ios.bundle': [
-      'babel-polyfill',
       require.resolve('./react-native-polyfill.js'),
       './src/mobile/index.js'
     ]

@@ -13,14 +13,14 @@ let networkInterface = createBatchingNetworkInterface({
     credentials: "same-origin",
   },
   batchInterval: 20,
-  uri: 'http://localhost:8080/graphql',
+  uri: __BACKEND_URL__,
 });
 
 const client = new ApolloClient({
   networkInterface,
 });
 
-const wsClient = new SubscriptionClient('ws://localhost:8080/graphql');
+const wsClient = new SubscriptionClient(__BACKEND_URL__.replace(/^http/, 'ws'));
 
 networkInterface = addGraphQLSubscriptions(
   networkInterface,

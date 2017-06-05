@@ -131,22 +131,31 @@ class PostList extends React.Component {
     }
   }
 
+  renderMetaData = () => (
+    <Helmet
+      title="Apollo Starter Kit - Posts list"
+      meta={[{
+        name: 'description',
+        content: 'List of all posts example page'
+      }]}/>
+  );
+
   render() {
     const { loading, postsQuery } = this.props;
 
     if (loading && !postsQuery) {
       return (
-        <div>{ /* loading... */ }</div>
+        <section>
+          {this.renderMetaData()}
+          <div>
+            Loading...
+          </div>
+        </section>
       );
     } else {
       return (
-        <div>
-          <Helmet
-            title="Apollo Starter Kit - Posts list"
-            meta={[{
-              name: 'description',
-              content: 'List of all posts example page'
-            }]}/>
+        <section>
+          {this.renderMetaData()}
           <h2>Posts</h2>
           <Link to="/post/add">
             <Button color="primary">Add</Button>
@@ -159,7 +168,7 @@ class PostList extends React.Component {
             <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
           </div>
           {this.renderLoadMore()}
-        </div>
+        </section>
       );
     }
   }

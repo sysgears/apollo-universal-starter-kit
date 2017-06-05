@@ -9,7 +9,6 @@ const footerHeight = '40px';
 
 const Footer = styled.footer`
   position: absolute;
-  background: blue;
   bottom: 0;
   width: 100%;
   line-height: ${footerHeight};
@@ -25,7 +24,7 @@ export default function App({ children }) {
       </Container>
       <Footer>
         <div className="text-center">
-          &copy; 2016. Example Apollo App.
+          &copy; 2017. Example Apollo App.
         </div>
       </Footer>
     </div>

@@ -3,6 +3,7 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import httpProxyMiddleware from 'http-proxy-middleware';
 import express from 'express';
+import compression from 'compression';
 import http from 'http';
 import { spawn } from 'child_process';
 import fs from 'fs';
@@ -15,24 +16,38 @@ import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
 import { Android, Simulator, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
-import devToolsMiddleware from 'haul-cli/src/server/middleware/devToolsMiddleware';
-import liveReloadMiddleware from 'haul-cli/src/server/middleware/liveReloadMiddleware';
-import statusPageMiddleware from 'haul-cli/src/server/middleware/statusPageMiddleware';
-import symbolicateMiddleware from 'haul-cli/src/server/middleware/symbolicateMiddleware';
-import openInEditorMiddleware from 'haul-cli/src/server/middleware/openInEditorMiddleware';
-import loggerMiddleware from 'haul-cli/src/server/middleware/loggerMiddleware';
-import missingBundleMiddleware from 'haul-cli/src/server/middleware/missingBundleMiddleware';
-import systraceMiddleware from 'haul-cli/src/server/middleware/systraceMiddleware';
-import rawBodyMiddleware from 'haul-cli/src/server/middleware/rawBodyMiddleware';
-import WebSocketProxy from 'haul-cli/src/server/util/WebsocketProxy';
-import which from 'which';
+import qr from 'qrcode-terminal';
 import { ConcatSource, RawSource } from 'webpack-sources';
 
+import liveReloadMiddleware from './middleware/liveReloadMiddleware';
+import symbolicateMiddleware from './middleware/symbolicateMiddleware';
 import pkg from '../package.json';
 // eslint-disable-next-line import/default
 import configs from './webpack.config';
 
+const InspectorProxy = require('react-native/local-cli/server/util/inspectorProxy.js');
+const copyToClipBoardMiddleware = require('react-native/local-cli/server/middleware/copyToClipBoardMiddleware');
+const cpuProfilerMiddleware = require('react-native/local-cli/server/middleware/cpuProfilerMiddleware');
+const getDevToolsMiddleware = require('react-native/local-cli/server/middleware/getDevToolsMiddleware');
+const heapCaptureMiddleware = require('react-native/local-cli/server/middleware/heapCaptureMiddleware.js');
+const indexPageMiddleware = require('react-native/local-cli/server/middleware/indexPage');
+const loadRawBodyMiddleware = require('react-native/local-cli/server/middleware/loadRawBodyMiddleware');
+const messageSocket = require('react-native/local-cli/server/util/messageSocket.js');
+const openStackFrameInEditorMiddleware = require('react-native/local-cli/server/middleware/openStackFrameInEditorMiddleware');
+const statusPageMiddleware = require('react-native/local-cli/server/middleware/statusPageMiddleware.js');
+const systraceProfileMiddleware = require('react-native/local-cli/server/middleware/systraceProfileMiddleware.js');
+const unless = require('react-native/local-cli/server/middleware/unless');
+const webSocketProxy = require('react-native/local-cli/server/util/webSocketProxy.js');
+
 minilog.enable();
+
+process.on('uncaughtException', (ex) => {
+  console.error(ex);
+});
+
+process.on('unhandledRejection', reason => {
+  console.error(reason);
+});
 
 const logBack = minilog('webpack-for-backend');
 
@@ -97,7 +112,7 @@ function webpackReporter(outputPath, log, err, stats) {
   }
 }
 
-var frontendVirtualModules = new VirtualModules({ 'node_modules/backend_reload.js': '' });
+let frontendVirtualModules = new VirtualModules({ 'node_modules/backend_reload.js': '' });
 
 function startClient(config, platform) {
   const logger = minilog(`webpack-for-${config.name}`);
@@ -163,8 +178,8 @@ function startServer() {
           // Patch webpack-generated original source files path, by stripping hash after filename
           const mapKey = _.findKey(assets, (v, k) => k.endsWith('.map'));
           if (mapKey) {
-            var srcMap = JSON.parse(assets[mapKey]._value);
-            for (var idx in srcMap.sources) {
+            let srcMap = JSON.parse(assets[mapKey]._value);
+            for (let idx in srcMap.sources) {
               srcMap.sources[idx] = srcMap.sources[idx].split(';')[0];
             }
             assets[mapKey]._value = JSON.stringify(srcMap);
@@ -205,6 +220,8 @@ function startServer() {
   }
 }
 
+let vendorHashesJson, vendorContents, vendorLineCount;
+
 function startWebpackDevServer(config, platform, reporter, logger) {
   const configOutputPath = config.output.path;
   config.output.path = '/';
@@ -228,13 +245,13 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       callback();
     }
   });
-  if (pkg.app.webpackDll && platform !== 'web') {
+  if (pkg.app.webpackDll && platform !== 'web' && __DEV__) {
     compiler.plugin('after-compile', (compilation, callback) => {
-      let vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
-      const vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
       _.each(compilation.chunks, chunk => {
         _.each(chunk.files, file => {
-          compilation.assets[file] = new ConcatSource(new RawSource(vendorContents), compilation.assets[file]);
+          if (!file.endsWith('.map')) {
+            compilation.assets[file] = new ConcatSource(new RawSource(vendorContents), compilation.assets[file]);
+          }
         });
       });
       callback();
@@ -253,7 +270,6 @@ function startWebpackDevServer(config, platform, reporter, logger) {
         }
       });
       if (pkg.app.webpackDll) {
-        let vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
         assetsMap['vendor.js'] = vendorHashesJson.name;
       }
       fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
@@ -262,25 +278,30 @@ function startWebpackDevServer(config, platform, reporter, logger) {
 
   const app = express();
 
-  const httpServer = http.createServer(app);
+  const serverInstance = http.createServer(app);
 
-  app.use((req, res, next) => {
-    console.log("req:", req.url);
-    next();
-  });
+  let wsProxy, ms, inspectorProxy;
 
   if (platform !== 'web') {
-    const debuggerProxy = new WebSocketProxy(httpServer, '/debugger-proxy');
+    mime.define({ 'application/javascript': ['bundle'] });
 
+    inspectorProxy = new InspectorProxy();
+    const args = {port: config.devServer.port, projectRoots: [path.resolve('.')]};
     app
-      .use(rawBodyMiddleware)
-      .use(devToolsMiddleware(debuggerProxy))
+      .use(loadRawBodyMiddleware)
+      .use(compression())
+      .use(getDevToolsMiddleware(args, () => wsProxy && wsProxy.isChromeConnected()))
+      .use(getDevToolsMiddleware(args, () => ms && ms.isChromeConnected()))
       .use(liveReloadMiddleware(compiler))
+      .use(symbolicateMiddleware(compiler, vendorLineCount))
+      .use(openStackFrameInEditorMiddleware(args))
+      .use(copyToClipBoardMiddleware)
       .use(statusPageMiddleware)
-      .use(symbolicateMiddleware(compiler))
-      .use(openInEditorMiddleware())
-      .use('/systrace', systraceMiddleware)
-      .use(loggerMiddleware);
+      .use(systraceProfileMiddleware)
+      .use(heapCaptureMiddleware)
+      .use(cpuProfilerMiddleware)
+      .use(indexPageMiddleware)
+      .use(unless('/inspector', inspectorProxy.processRequest.bind(inspectorProxy)));
   }
 
   // app.use('/', express.static(path.resolve('.'), { maxAge: '180 days' }));
@@ -301,12 +322,17 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       app.use(httpProxyMiddleware(key, config.devServer.proxy[key]));
     });
   }
-  if (platform !== 'web') {
-    app.use(missingBundleMiddleware);
-  }
 
   logger(`Webpack ${config.name} dev server listening on ${config.devServer.port}`);
-  httpServer.listen(config.devServer.port);
+  serverInstance.listen(config.devServer.port, function() {
+    if (platform !== 'web') {
+      wsProxy = webSocketProxy.attachToServer(serverInstance, '/debugger-proxy');
+      ms = messageSocket.attachToServer(serverInstance, '/message');
+      webSocketProxy.attachToServer(serverInstance, '/devtools');
+      inspectorProxy.attachToServer(serverInstance, '/inspector');
+    }
+  });
+  serverInstance.timeout = 0;
 }
 
 function useWebpackDll() {
@@ -322,6 +348,9 @@ function useWebpackDll() {
     context: process.cwd(),
     manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
   }));
+  vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
+  vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
+  vendorLineCount = vendorContents.split(/\r\n|\r|\n/).length - 1;
 }
 
 function isDllValid() {
@@ -393,14 +422,6 @@ function buildDll() {
 
 async function startExpoServer(config, platform) {
   try {
-    mime.define({ 'application/javascript': ['bundle'] });
-    if (platform === 'android') {
-      which('adb', (err, result) => {
-        console.log("Using adb at:", result);
-      });
-      spawn('adb', ['reverse', 'tcp:8080', 'tcp:8080'], { stdio: [0, 1, 2] });
-    }
-
     Config.validation.reactNativeVersionWarnings = false;
     Config.developerTool = 'crna';
     Config.offline = true;
@@ -414,6 +435,10 @@ async function startExpoServer(config, platform) {
 
     const address = await UrlUtils.constructManifestUrlAsync(projectRoot);
     console.log("Expo address:", address);
+    console.log("To open this app on your phone scan this QR code in Expo Client (if it doesn't get started automatically)");
+    qr.generate(address, code => {
+      console.log(code);
+    });
     if (platform === 'android') {
       const { success, error } = await Android.openProjectAsync(projectRoot);
 

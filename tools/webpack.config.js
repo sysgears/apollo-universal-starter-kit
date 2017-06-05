@@ -5,6 +5,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import merge from 'webpack-merge';
 import nodeExternals from 'webpack-node-externals';
 import path from 'path';
+import ip from 'ip';
 import PersistGraphQLPlugin from 'persistgraphql-webpack-plugin';
 import _ from 'lodash';
 import AssetResolver from 'haul-cli/src/resolvers/AssetResolver';
@@ -44,31 +45,25 @@ if (__DEV__) {
   basePlugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
 }
 
+const babelRule = {
+  loader: 'babel-loader',
+  options: {
+    cacheDirectory: __DEV__,
+    presets: ["react", ["es2015", { "modules": false }], "stage-0"],
+    plugins: [
+      "transform-runtime",
+      "transform-decorators-legacy",
+      "transform-class-properties",
+      ["styled-components", { "ssr": IS_SSR } ]
+    ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
+    only: ["*.js", "*.jsx"]
+  }
+};
+
 const createBaseConfig = platform => {
   const baseConfig = {
     module: {
       rules: [
-        {
-          test: /\.jsx?$/,
-          exclude: /(node_modules|bower_components)/,
-          use: [{
-            loader: 'babel-loader',
-            options: {
-              cacheDirectory: __DEV__,
-              presets: ["react", ["es2015", { "modules": false }], "stage-0"],
-              plugins: [
-                "transform-runtime",
-                "transform-decorators-legacy",
-                "transform-class-properties",
-                ["styled-components", { "ssr": IS_SSR } ]
-              ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-              only: ["*.js", "*.jsx"]
-            }
-          }].concat(
-            IS_PERSIST_GQL ?
-              ['persistgraphql-webpack-plugin/js-loader'] : []
-          )
-        },
         {
           test: /\.graphqls/,
           use: 'raw-loader'
@@ -96,7 +91,6 @@ const createBaseConfig = platform => {
       ]
     },
     resolve: {
-      modules: [path.join(__dirname, '../src'), 'node_modules'],
       extensions: [`.${platform}.js`, `.${platform}.jsx`, '.js', '.jsx']
     },
     plugins: basePlugins,
@@ -106,7 +100,16 @@ const createBaseConfig = platform => {
     bail: !__DEV__
   };
 
-  if (['android', 'ios'].indexOf(platform) < 0) {
+  if (['web'].indexOf(platform) >= 0) {
+    baseConfig.module.rules.unshift({
+        test: /\.jsx?$/,
+        exclude: /(node_modules|bower_components)/,
+        use: [babelRule].concat(
+          IS_PERSIST_GQL ?
+            ['persistgraphql-webpack-plugin/js-loader'] : []
+        )
+    });
+
     baseConfig.resolve.alias = {
       'react-native': 'react-native-web'
     };
@@ -173,7 +176,7 @@ const serverConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
   plugins: serverPlugins
 }, appConfigs.serverConfig);
 
-const createClientPlugins = () => {
+const createClientPlugins = (platform) => {
   let clientPlugins = [
     new ManifestPlugin({
       fileName: 'assets.json'
@@ -182,7 +185,9 @@ const createClientPlugins = () => {
       __CLIENT__: true, __SERVER__: false, __SSR__: IS_SSR,
       __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`,
       __PERSIST_GQL__: IS_PERSIST_GQL,
-      __EXTERNAL_BACKEND_URL__: appConfigs.serverConfig.url ? `"${appConfigs.serverConfig.url}"`: false
+      __BACKEND_URL__: appConfigs.serverConfig.url ?
+        `"${appConfigs.serverConfig.url}"`
+        : (platform !== 'web' ? `\"http://${ip.address()}:${pkg.app.apiPort}/graphql\"` : false)
     })),
     clientPersistPlugin
   ];
@@ -193,7 +198,7 @@ const createClientPlugins = () => {
       inject: 'body',
     }));
   }
-  
+
   if (!__DEV__) {
     clientPlugins.push(new ExtractTextPlugin({ filename: '[name].[contenthash].css', allChunks: true }));
     clientPlugins.push(new webpack.optimize.CommonsChunkPlugin({
@@ -241,7 +246,7 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
     path: path.resolve(pkg.app.frontendBuildDir),
     publicPath: '/'
   },
-  plugins: createClientPlugins(),
+  plugins: createClientPlugins("web"),
   devServer: _.merge({}, baseDevServerConfig, {
     port: pkg.app.webpackDevPort,
     proxy: {
@@ -253,7 +258,16 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
   }),
 }, appConfigs.webConfig);
 
-let mobilePlugins = createClientPlugins();
+const reactNativeRule = {
+  loader: 'babel-loader',
+  options: {
+    cacheDirectory: __DEV__,
+    presets: ["react-native"],
+    plugins: [
+      require.resolve('haul-cli/src/utils/fixRequireIssues')
+    ]
+  }
+};
 
 const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(platform)), {
   devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
@@ -262,26 +276,17 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
       {
         test: /\.jsx?$/,
         exclude: /node_modules\/(?!react|@expo|expo|lottie-react-native|haul-cli|pretty-format)/,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: __DEV__,
-            presets: ["babel-preset-expo", ["es2015", { "modules": false }], "stage-0"],
-            plugins: [
-              "transform-runtime",
-              "transform-decorators-legacy",
-              "transform-class-properties",
-              require.resolve('haul-cli/src/utils/fixRequireIssues'),
-              ["styled-components", { "ssr": true } ]
-            ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
-            only: ["*.js", "*.jsx"],
-            env: {
-              development: {
-                plugins: ["transform-react-jsx-source"]
-              }
+        use: [
+          function (req) {
+            let result;
+            if (req.resource.indexOf('node_modules') >= 0) {
+              result = reactNativeRule;
+            } else {
+              result = babelRule;
             }
+            return result;
           }
-        }].concat(
+        ].concat(
           pkg.app.persistGraphQL ?
             ['persistgraphql-webpack-plugin/js-loader'] : []
         )
@@ -296,7 +301,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
     ]
   },
   output: {
-    filename: `[name]`,
+    filename: `index.${platform}.bundle`,
     publicPath: '/'
   },
   resolve: {
@@ -313,7 +318,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
       test: /\.(js|jsx|css|bundle)($|\?)/i,
       filename: '[file].map',
     }),
-    ...mobilePlugins
+    ...createClientPlugins(platform)
   ]
 });
 

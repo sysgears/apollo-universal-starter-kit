@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
-import styles from 'client/styles/styles.scss';
+
+import styles from '../../client/styles/styles.scss';
 
 const Html = ({ content, state, assetMap, css, helmet }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent(); // react-helmet html document tags

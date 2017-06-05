@@ -1,8 +1,8 @@
-import Renderer from 'client/test-helpers/apollo_renderer';
 import chai from 'chai';
 import { step } from 'mocha-steps';
-import routes from 'client/app/routes';
 
+import Renderer from '../../../../client/test-helpers/apollo_renderer';
+import routes from '../../../../client/app/routes';
 import COUNT_SUBSCRIBE from '../graphql/count_subscribe.graphql';
 
 chai.should();

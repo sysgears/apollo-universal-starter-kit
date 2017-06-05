@@ -1,10 +1,9 @@
-import Renderer from 'client/test-helpers/apollo_renderer';
-
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 import _ from 'lodash';
 
-import routes from 'client/app/routes';
+import Renderer from '../../../../client/test-helpers/apollo_renderer';
+import routes from '../../../../client/app/routes';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/post_comment_subscription.graphql';
@@ -75,7 +74,7 @@ describe('Posts and comments example UI works', () => {
     renderer.history.push('/posts');
     content = app.find('#content');
 
-    expect(content.children().html()).to.equal('<div></div>');
+    content.text().should.equal('Loading...');
   });
 
   step('Posts page renders with data', () => {

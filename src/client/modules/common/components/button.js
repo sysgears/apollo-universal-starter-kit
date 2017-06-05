@@ -37,4 +37,4 @@ Button.propTypes = {
   onPress: PropTypes.func,
 };
 
-export default Button;
+export { Button };

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
-import Button from '../../common/components/button';
+import { Button } from '../../common/components';
 
 const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement }) => {
 

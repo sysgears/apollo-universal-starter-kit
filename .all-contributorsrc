@@ -33,6 +33,18 @@
       ]
     },
     {
+      "login": "mairh",
+      "name": "Ujjwal",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4072250?v=3",
+      "profile": "https://github.com/mairh",
+      "contributions": [
+        "code",
+        "tool",
+        "doc",
+        "question"
+      ]
+    },
+    {
       "login": "dmitriypdv",
       "name": "Dmitry Pavlenko",
       "avatar_url": "https://avatars2.githubusercontent.com/u/1845914?v=3",
@@ -92,18 +104,6 @@
       "contributions": [
         "code",
         "tool"
-      ]
-    },
-    {
-      "login": "mairh",
-      "name": "Ujjwal",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/4072250?v=3",
-      "profile": "https://github.com/mairh",
-      "contributions": [
-        "code",
-        "tool",
-        "doc",
-        "question"
       ]
     }
   ]

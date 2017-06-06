@@ -17,10 +17,11 @@ import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
 import { Android, Simulator, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
 import qr from 'qrcode-terminal';
-import { ConcatSource, RawSource } from 'webpack-sources';
+import { RawSource } from 'webpack-sources';
+import symbolicateMiddleware from 'haul-cli/src/server/middleware/symbolicateMiddleware';
+import { fromStringWithSourceMap, SourceListMap } from 'source-list-map';
 
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';
-import symbolicateMiddleware from './middleware/symbolicateMiddleware';
 import pkg from '../package.json';
 // eslint-disable-next-line import/default
 import configs from './webpack.config';
@@ -220,7 +221,7 @@ function startServer() {
   }
 }
 
-let vendorHashesJson, vendorContents, vendorLineCount;
+let vendorHashesJson, vendorSourceListMap;
 
 function startWebpackDevServer(config, platform, reporter, logger) {
   const configOutputPath = config.output.path;
@@ -250,7 +251,13 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       _.each(compilation.chunks, chunk => {
         _.each(chunk.files, file => {
           if (!file.endsWith('.map')) {
-            compilation.assets[file] = new ConcatSource(new RawSource(vendorContents), compilation.assets[file]);
+            let sourceListMap = new SourceListMap();
+            sourceListMap.add(vendorSourceListMap);
+            sourceListMap.add(fromStringWithSourceMap(compilation.assets[file].source(),
+              JSON.parse(compilation.assets[file + ".map"].source())));
+            let sourceAndMap = sourceListMap.toStringWithSourceMap({ file });
+            compilation.assets[file] = new RawSource(sourceAndMap.source);
+            compilation.assets[file + ".map"] = new RawSource(JSON.stringify(sourceAndMap.map));
           }
         });
       });
@@ -289,11 +296,15 @@ function startWebpackDevServer(config, platform, reporter, logger) {
     const args = {port: config.devServer.port, projectRoots: [path.resolve('.')]};
     app
       .use(loadRawBodyMiddleware)
+      // .use(function(req, res, next) {
+      //   console.log("req:", req.url, req.rawBody);
+      //   next();
+      // })
       .use(compression())
       .use(getDevToolsMiddleware(args, () => wsProxy && wsProxy.isChromeConnected()))
       .use(getDevToolsMiddleware(args, () => ms && ms.isChromeConnected()))
       .use(liveReloadMiddleware(compiler))
-      .use(symbolicateMiddleware(compiler, vendorLineCount))
+      .use(symbolicateMiddleware(compiler))
       .use(openStackFrameInEditorMiddleware(args))
       .use(copyToClipBoardMiddleware)
       .use(statusPageMiddleware)
@@ -349,8 +360,10 @@ function useWebpackDll() {
     manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
   }));
   vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
-  vendorContents = fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString();
-  vendorLineCount = vendorContents.split(/\r\n|\r|\n/).length - 1;
+  vendorSourceListMap = fromStringWithSourceMap(
+    fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString() + "\n",
+    JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name + ".map")).toString())
+  );
 }
 
 function isDllValid() {

@@ -1,8 +1,3 @@
-All of Apollo Universal Starter Kit source code is available under MIT license below.
-
-Some files in tools/middleware directory have been taken from other projects,
-they have MIT license too, please refer to the license inside the headers of these files.
-=======================================================================
                             The MIT License
 
 Copyright (c) 2016, 2017 SysGears INC.

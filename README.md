@@ -277,9 +277,6 @@ Next, open up Xcode, go to preferences and click the Components tab, install a s
 After the installation if you run the server, simulator should start on it's own and open the app in Expo.
 To bring up the developer menu press ⌘+D.
 
-#### Watchman
-[Watchman] is needed for hot reload the changes to your device.
-
 ### Writing the code
 This starter kit is designed so you can use it for just web, mobile or projects using both together. 
 In case you do not not want to use mobile, just set both `ios` or `android` settings in package.json to `false`.

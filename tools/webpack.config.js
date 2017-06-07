@@ -323,6 +323,7 @@ const androidConfig = merge.smart(_.cloneDeep(createMobileConfig('android')), {
     path: path.resolve(path.join(pkg.app.frontendBuildDir, 'android')),
   },
   devServer: _.merge({}, baseDevServerConfig, {
+    hot: false,
     port: 3010
   })
 }, appConfigs.androidConfig);
@@ -333,6 +334,7 @@ const iOSConfig = merge.smart(_.cloneDeep(createMobileConfig('ios')), {
     path: path.resolve(path.join(pkg.app.frontendBuildDir, 'ios')),
   },
   devServer: _.merge({}, baseDevServerConfig, {
+    hot: false,
     port: 3020
   })
 }, appConfigs.iOSConfig);
@@ -374,10 +376,14 @@ const dependencyPlatforms = {
 };
 
 const getDepsForPlatform = platform => {
-  return _.filter(_.keys(pkg.dependencies), key => {
+  let deps = _.filter(_.keys(pkg.dependencies), key => {
     const val = dependencyPlatforms[key];
     return (!val || val === platform || (_.isArray(val) && val.indexOf(platform) >= 0));
   });
+  if (['android', 'ios'].indexOf(platform) >= 0) {
+    deps = deps.concat(require.resolve('./react-native-polyfill.js'));
+  }
+  return deps;
 };
 
 const createDllConfig = platform => {

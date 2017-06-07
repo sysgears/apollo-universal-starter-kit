@@ -2,8 +2,6 @@ import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import httpProxyMiddleware from 'http-proxy-middleware';
-import express from 'express';
-import compression from 'compression';
 import http from 'http';
 import { spawn } from 'child_process';
 import fs from 'fs';
@@ -26,6 +24,7 @@ import pkg from '../package.json';
 // eslint-disable-next-line import/named
 import { backend, web, ios, android } from './webpack.config';
 
+const connect = require('connect');
 const InspectorProxy = require('react-native/local-cli/server/util/inspectorProxy.js');
 const copyToClipBoardMiddleware = require('react-native/local-cli/server/middleware/copyToClipBoardMiddleware');
 const cpuProfilerMiddleware = require('react-native/local-cli/server/middleware/cpuProfilerMiddleware');
@@ -122,16 +121,18 @@ function startClientWebpack({config, dll, platform}) {
     config.plugins.push(frontendVirtualModules);
 
     if (__DEV__) {
-      _.each(config.entry, entry => {
-        if (pkg.app.reactHotLoader) {
-          entry.unshift('react-hot-loader/patch');
-        }
-        entry.unshift(
-          `webpack-hot-middleware/client?http://localhost:${config.devServer.port}/`,
-          'webpack/hot/dev-server');
-      });
-      config.plugins.push(new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin());
+      if (config.devServer.hot) {
+        _.each(config.entry, entry => {
+          if (pkg.app.reactHotLoader) {
+            entry.unshift('react-hot-loader/patch');
+          }
+          entry.unshift(
+            `webpack-hot-middleware/client?http://localhost:${config.devServer.port}/`,
+            'webpack/hot/dev-server');
+        });
+        config.plugins.push(new webpack.HotModuleReplacementPlugin());
+      }
+      config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
       startWebpackDevServer(config, dll, platform, reporter, logger);
     } else {
       const compiler = webpack(config);
@@ -292,7 +293,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     }
   });
 
-  const app = express();
+  const app = connect();
 
   const serverInstance = http.createServer(app);
 
@@ -306,10 +307,10 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     app
       .use(loadRawBodyMiddleware)
       .use(function(req, res, next) {
-        console.log("req:", req.url, req.rawBody);
+        req.path = req.url;
         next();
       })
-      .use(compression())
+      .use(connect.compress())
       .use(getDevToolsMiddleware(args, () => wsProxy && wsProxy.isChromeConnected()))
       .use(getDevToolsMiddleware(args, () => ms && ms.isChromeConnected()))
       .use(liveReloadMiddleware(compiler))

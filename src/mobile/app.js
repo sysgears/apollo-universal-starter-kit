@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import ApolloClient, { createBatchingNetworkInterface } from 'apollo-client';
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 
-import modules from '../client/modules';
+import modules from '../client/modules/counter';
 import Counter from '../client/modules/counter/containers/counter';
 
 let networkInterface = createBatchingNetworkInterface({

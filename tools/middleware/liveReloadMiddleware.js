@@ -1,15 +1,23 @@
+function notifyWatcher(watcher) {
+  const headers = {
+    'Content-Type': 'application/json; charset=UTF-8',
+  };
+
+  watcher.res.writeHead(205, headers);
+  watcher.res.end(JSON.stringify({ changed: true }));
+}
+
 function liveReloadMiddleware(compiler) {
   let watchers = [];
+  let notify = false;
 
   compiler.plugin('done', () => {
-    const headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
-
     watchers.forEach(watcher => {
-      watcher.res.writeHead(205, headers);
-      watcher.res.end(JSON.stringify({ changed: true }));
+      notifyWatcher(watcher);
     });
+    if (!watchers.length) {
+      notify = true;
+    }
 
     watchers = [];
   });
@@ -17,6 +25,11 @@ function liveReloadMiddleware(compiler) {
   return (req, res, next) => {
     if (req.path === '/onchange') {
       const watcher = { req, res };
+
+      if (notify) {
+        notifyWatcher(watcher);
+        notify = false;
+      }
 
       watchers.push(watcher);
 

@@ -14,7 +14,7 @@ import HasteResolver from 'haul-cli/src/resolvers/HasteResolver';
 const appConfigs = require('./webpack.app_config');
 const pkg = require('../package.json');
 
-const IS_TEST = process.argv[1].indexOf('mocha-webpack') >= 0;
+const IS_TEST = process.argv[1].indexOf('mocha-webpack') >= 0 || process.argv[1].indexOf('eslint') >= 0;
 if (IS_TEST) {
   delete appConfigs.serverConfig.url;
 }
@@ -60,10 +60,44 @@ const babelRule = {
   }
 };
 
+const reactNativeRule = {
+  loader: 'babel-loader',
+  options: {
+    cacheDirectory: __DEV__,
+    presets: ["react-native"],
+    plugins: [
+      require.resolve('haul-cli/src/utils/fixRequireIssues')
+    ]
+  }
+};
+
 const createBaseConfig = platform => {
   const baseConfig = {
+    devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
     module: {
       rules: [
+        {
+          test: /\.jsx?$/,
+          exclude: ['ios', 'android'].indexOf(platform) >= 0 ?
+            /node_modules\/(?!react-native|@expo|expo|lottie-react-native|haul-cli|pretty-format)$/ :
+            /node_modules/,
+          use: [
+            ['ios', 'android'].indexOf(platform) >= 0 ?
+              function (req) {
+                let result;
+                if (req.resource.indexOf('node_modules') >= 0) {
+                  result = reactNativeRule;
+                } else {
+                  result = babelRule;
+                }
+                return result;
+              } :
+              babelRule
+          ].concat(
+            pkg.app.persistGraphQL ?
+              ['persistgraphql-webpack-plugin/js-loader'] : []
+          )
+        },
         {
           test: /\.graphqls/,
           use: 'raw-loader'
@@ -91,7 +125,9 @@ const createBaseConfig = platform => {
       ]
     },
     resolve: {
-      extensions: [`.${platform}.js`, `.${platform}.jsx`, '.js', '.jsx']
+      extensions: platform === 'server' ?
+        [`.web.js`, `.web.jsx`, '.js', '.jsx'] :
+        [`.${platform}.js`, `.${platform}.jsx`, '.js', '.jsx']
     },
     plugins: basePlugins,
     watchOptions: {
@@ -100,16 +136,7 @@ const createBaseConfig = platform => {
     bail: !__DEV__
   };
 
-  if (['web'].indexOf(platform) >= 0) {
-    baseConfig.module.rules.unshift({
-        test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components)/,
-        use: [babelRule].concat(
-          IS_PERSIST_GQL ?
-            ['persistgraphql-webpack-plugin/js-loader'] : []
-        )
-    });
-
+  if (['web', 'server'].indexOf(platform) >= 0) {
     baseConfig.resolve.alias = {
       'react-native': 'react-native-web'
     };
@@ -135,9 +162,8 @@ const nodeExternalsFn = nodeExternals({
   whitelist: [/(^webpack|^react-native)/]
 });
 
-const serverConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
+const serverConfig = merge.smart(_.cloneDeep(createBaseConfig("server")), {
   name: 'backend',
-  devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   target: 'node',
   node: {
     __dirname: true,
@@ -224,7 +250,6 @@ const baseDevServerConfig = {
 
 const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
   name: 'web-frontend',
-  devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   module: {
     rules: [
       {
@@ -258,39 +283,9 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
   }),
 }, appConfigs.webConfig);
 
-const reactNativeRule = {
-  loader: 'babel-loader',
-  options: {
-    cacheDirectory: __DEV__,
-    presets: ["react-native"],
-    plugins: [
-      require.resolve('haul-cli/src/utils/fixRequireIssues')
-    ]
-  }
-};
-
 const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(platform)), {
-  devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
   module: {
     rules: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules\/(?!react|@expo|expo|lottie-react-native|haul-cli|pretty-format)/,
-        use: [
-          function (req) {
-            let result;
-            if (req.resource.indexOf('node_modules') >= 0) {
-              result = reactNativeRule;
-            } else {
-              result = babelRule;
-            }
-            return result;
-          }
-        ].concat(
-          pkg.app.persistGraphQL ?
-            ['persistgraphql-webpack-plugin/js-loader'] : []
-        )
-      },
       {
         test: AssetResolver.test,
         use: {
@@ -342,29 +337,99 @@ const iOSConfig = merge.smart(_.cloneDeep(createMobileConfig('ios')), {
   })
 }, appConfigs.iOSConfig);
 
-const dllConfig = merge.smart(_.cloneDeep(createBaseConfig("dll")), {
-  name: 'dll',
-  devtool: '#cheap-module-source-map',
-  entry: {
-    vendor: _.without(_.keys(pkg.dependencies), 'expo', 'react-native'),
-  },
-  plugins: [
-    new webpack.DefinePlugin(Object.assign({
-      __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
-    })),
-    new webpack.DllPlugin({
-      name: '[name]',
-      path: path.join(pkg.app.frontendBuildDir, '[name]_dll.json'),
-    })
-  ],
-  output: {
-    filename: '[name].[hash]_dll.js',
-    path: path.resolve(pkg.app.frontendBuildDir),
-    library: '[name]',
-  },
-});
+const dependencyPlatforms = {
+  "body-parser": "server",
+  "bootstrap": "web",
+  "dataloader": "server",
+  "expo": ["ios", "android"],
+  "express": "server",
+  "graphql-server-express": "server",
+  "graphql-subscriptions": "server",
+  "graphql-tools": "server",
+  "history": "web",
+  "immutability-helper": ["ios", "android", "web"],
+  "isomorphic-fetch": "server",
+  "knex": "server",
+  "persistgraphql": ["server", "web"],
+  "performance-now": "server",
+  "react-dom": "web",
+  "react-ga": "web",
+  "react-helmet": "web",
+  "react-hot-loader": "web",
+  "react-native": ["ios", "android"],
+  "react-native-web": "web",
+  "react-redux": "web",
+  "react-router": "web",
+  "react-router-dom": "web",
+  "react-router-redux": "web",
+  "react-transition-group": "web",
+  "reactstrap": "web",
+  "redux-devtools-extension": "web",
+  "redux-form": "web",
+  "serialize-javascript": "server",
+  "source-map-support": "server",
+  "sqlite3": "server",
+  "styled-components": ["server", "web"],
+  "subscriptions-transport-ws": ["ios", "android", "web"]
+};
+
+const getDepsForPlatform = platform => {
+  return _.filter(_.keys(pkg.dependencies), key => {
+    const val = dependencyPlatforms[key];
+    return (!val || val === platform || (_.isArray(val) && val.indexOf(platform) >= 0));
+  });
+};
+
+const createDllConfig = platform => {
+  const config = ['android', 'ios'].indexOf(platform) >= 0 ?
+    createMobileConfig(platform) :
+    createBaseConfig(platform);
+  const name = `vendor_${platform}`;
+  return {
+    ...config,
+    devtool: '#cheap-module-source-map',
+    name: `${platform}-dll`,
+    entry: {
+      vendor: getDepsForPlatform(platform),
+    },
+    plugins: [
+      new webpack.DefinePlugin(Object.assign({
+        __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`
+      })),
+      new webpack.DllPlugin({
+        name,
+        path: path.join(pkg.app.dllBuildDir, `${name}_dll.json`),
+      })
+    ],
+    output: {
+      filename: `${name}.[hash]_dll.js`,
+      path: path.resolve(pkg.app.dllBuildDir),
+      library: name
+    },
+  };
+};
 
 module.exports =
   IS_TEST ?
     serverConfig :
-    [serverConfig, webConfig, dllConfig, androidConfig, iOSConfig];
+    {
+      backend: {
+        platform: 'server',
+        config: serverConfig
+      },
+      web: {
+        platform: 'web',
+        config: webConfig,
+        dll: createDllConfig("web")
+      },
+      android: {
+        platform: 'android',
+        config: androidConfig,
+        dll: createDllConfig("android")
+      },
+      ios: {
+        platform: 'ios',
+        config: iOSConfig,
+        dll: createDllConfig("ios")
+      }
+    };

@@ -23,8 +23,8 @@ import { fromStringWithSourceMap, SourceListMap } from 'source-list-map';
 
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';
 import pkg from '../package.json';
-// eslint-disable-next-line import/default
-import configs from './webpack.config';
+// eslint-disable-next-line import/named
+import { backend, web, ios, android } from './webpack.config';
 
 const InspectorProxy = require('react-native/local-cli/server/util/inspectorProxy.js');
 const copyToClipBoardMiddleware = require('react-native/local-cli/server/middleware/copyToClipBoardMiddleware');
@@ -52,12 +52,11 @@ process.on('unhandledRejection', reason => {
 
 const logBack = minilog('webpack-for-backend');
 
-const [serverConfig, clientConfig, dllConfig, androidConfig, iOSConfig] = configs;
 const __WINDOWS__ = /^win/.test(process.platform);
 
 let server;
 let startBackend = false;
-let backendFirstStart = !serverConfig.url;
+let backendFirstStart = !backend.config.url;
 
 process.on('exit', () => {
   if (server) {
@@ -115,7 +114,7 @@ function webpackReporter(outputPath, log, err, stats) {
 
 let frontendVirtualModules = new VirtualModules({ 'node_modules/backend_reload.js': '' });
 
-function startClient(config, platform) {
+function startClientWebpack({config, dll, platform}) {
   const logger = minilog(`webpack-for-${config.name}`);
   try {
     const reporter = (...args) => webpackReporter(config.output.path, logger, ...args);
@@ -133,7 +132,7 @@ function startClient(config, platform) {
       });
       config.plugins.push(new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin());
-      startWebpackDevServer(config, platform, reporter, logger);
+      startWebpackDevServer(config, dll, platform, reporter, logger);
     } else {
       const compiler = webpack(config);
 
@@ -152,23 +151,23 @@ function increaseBackendReloadCount() {
     `var count = ${backendReloadCount};\n`);
 }
 
-function startServer() {
+function startServerWebpack() {
   try {
-    const reporter = (...args) => webpackReporter(serverConfig.output.path, logBack, ...args);
+    const reporter = (...args) => webpackReporter(backend.config.output.path, logBack, ...args);
 
     if (__DEV__) {
-      _.each(serverConfig.entry, entry => {
+      _.each(backend.config.entry, entry => {
         if (__WINDOWS__) {
           entry.push('webpack/hot/poll?1000');
         } else {
           entry.push('webpack/hot/signal.js');
         }
       });
-      serverConfig.plugins.push(new webpack.HotModuleReplacementPlugin(),
+      backend.config.plugins.push(new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin());
     }
 
-    const compiler = webpack(serverConfig);
+    const compiler = webpack(backend.config);
 
     if (__DEV__) {
       compiler.plugin('compilation', compilation => {
@@ -188,7 +187,7 @@ function startServer() {
       compiler.watch({}, reporter);
 
       compiler.plugin('done', stats => {
-        const { output } = serverConfig;
+        const { output } = backend.config;
         startBackend = true;
         if (server) {
           if (!__WINDOWS__) {
@@ -218,13 +217,26 @@ function startServer() {
   }
 }
 
-let vendorHashesJson, vendorSourceListMap;
-
-function startWebpackDevServer(config, platform, reporter, logger) {
+function startWebpackDevServer(config, dll, platform, reporter, logger) {
   const configOutputPath = config.output.path;
   config.output.path = '/';
 
   config.plugins.push(frontendVirtualModules);
+
+  let vendorHashesJson, vendorSourceListMap;
+  if (pkg.app.webpackDll && dll) {
+    const name = `vendor_${platform}`;
+    const jsonPath = path.join('..', pkg.app.dllBuildDir, `${name}_dll.json`);
+    config.plugins.push(new webpack.DllReferencePlugin({
+      context: process.cwd(),
+      manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
+    }));
+    vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.dllBuildDir, `${name}_dll_hashes.json`)));
+    vendorSourceListMap = fromStringWithSourceMap(
+      fs.readFileSync(path.join(pkg.app.dllBuildDir, vendorHashesJson.name)).toString() + "\n",
+      JSON.parse(fs.readFileSync(path.join(pkg.app.dllBuildDir, vendorHashesJson.name + ".map")).toString())
+    );
+  }
 
   let compiler = webpack(config);
 
@@ -243,7 +255,7 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       callback();
     }
   });
-  if (pkg.app.webpackDll && platform !== 'web' && __DEV__) {
+  if (pkg.app.webpackDll && dll && platform !== 'web' && __DEV__) {
     compiler.plugin('after-compile', (compilation, callback) => {
       _.each(compilation.chunks, chunk => {
         _.each(chunk.files, file => {
@@ -293,10 +305,10 @@ function startWebpackDevServer(config, platform, reporter, logger) {
     const args = {port: config.devServer.port, projectRoots: [path.resolve('.')]};
     app
       .use(loadRawBodyMiddleware)
-      // .use(function(req, res, next) {
-      //   console.log("req:", req.url, req.rawBody);
-      //   next();
-      // })
+      .use(function(req, res, next) {
+        console.log("req:", req.url, req.rawBody);
+        next();
+      })
       .use(compression())
       .use(getDevToolsMiddleware(args, () => wsProxy && wsProxy.isChromeConnected()))
       .use(getDevToolsMiddleware(args, () => ms && ms.isChromeConnected()))
@@ -344,54 +356,32 @@ function startWebpackDevServer(config, platform, reporter, logger) {
   serverInstance.timeout = 0;
 }
 
-function useWebpackDll() {
-  console.log("Using Webpack DLL vendor bundle");
-  const jsonPath = path.join('..', pkg.app.frontendBuildDir, 'vendor_dll.json');
-  [clientConfig, androidConfig, iOSConfig].forEach(config =>
-    config.plugins.push(new webpack.DllReferencePlugin({
-      context: process.cwd(),
-      manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
-    }))
-  );
-  serverConfig.plugins.push(new webpack.DllReferencePlugin({
-    context: process.cwd(),
-    manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
-  }));
-  vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json')));
-  vendorSourceListMap = fromStringWithSourceMap(
-    fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name)).toString() + "\n",
-    JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, vendorHashesJson.name + ".map")).toString())
-  );
-}
-
-function isDllValid() {
+function isDllValid(node) {
+  const name = `vendor_${node.platform}`;
   try {
-    const hashesPath = path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json');
+    const hashesPath = path.join(pkg.app.dllBuildDir, `${name}_dll_hashes.json`);
     if (!fs.existsSync(hashesPath)) {
-      console.warn("Vendor DLL does not exists");
       return false;
     }
     let meta = JSON.parse(fs.readFileSync(hashesPath));
-    if (!fs.existsSync(path.join(pkg.app.frontendBuildDir, meta.name))) {
-      console.warn("Vendor DLL does not exists");
+    if (!fs.existsSync(path.join(pkg.app.dllBuildDir, meta.name))) {
       return false;
     }
-    if (!_.isEqual(meta.modules, dllConfig.entry.vendor)) {
-      console.warn('Modules bundled into vendor DLL changed, need to rebuild it');
+    if (!_.isEqual(meta.modules, node.dll.entry.vendor)) {
       return false;
     }
 
-    let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
+    let json = JSON.parse(fs.readFileSync(path.join(pkg.app.dllBuildDir, `${name}_dll.json`)));
 
     for (let filename of Object.keys(json.content)) {
       if (filename.indexOf(' ') < 0) {
         if (!fs.existsSync(filename)) {
-          console.warn("Vendor bundle need to be regenerated, file: " + filename + " is missing.");
+          console.warn(`${name} DLL need to be regenerated, file: ${filename} is missing.`);
           return false;
         }
         const hash = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
         if (meta.hashes[filename] !== hash) {
-          console.warn(`Hash for vendor DLL file ${filename} changed, need to rebuild vendor bundle`);
+          console.warn(`Hash for ${name} DLL file ${filename} has changed, need to rebuild it`);
           return false;
         }
       }
@@ -399,32 +389,39 @@ function isDllValid() {
 
     return true;
   } catch (e) {
-    console.warn('Error checking vendor bundle, regenerating it...', e);
+    console.warn(`Error checking vendor bundle ${name}, regenerating it...`, e);
 
     return false;
   }
 }
 
-function buildDll() {
-  return new Promise((done) => {
-    if (!isDllValid()) {
-      console.log("Generating vendor DLL bundle...");
+function buildDll(node) {
+  return new Promise(done => {
+    const name = `vendor_${node.platform}`;
+    const logger = minilog(`webpack-for-${node.dll.name}`);
+    const reporter = (...args) => webpackReporter(node.dll.output.path, logger, ...args);
 
-      const compiler = webpack(dllConfig);
+    if (!isDllValid(node)) {
+      console.log(`Generating ${name} DLL bundle with modules:\n${JSON.stringify(node.dll.entry.vendor)}`);
 
-      compiler.run((err, stats) => {
-        let json = JSON.parse(fs.readFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll.json')));
+      mkdirp.sync(pkg.app.dllBuildDir);
+      const compiler = webpack(node.dll);
+
+      compiler.plugin('done', stats => {
+        let json = JSON.parse(fs.readFileSync(path.join(pkg.app.dllBuildDir, `${name}_dll.json`)));
         const vendorKey = _.findKey(stats.compilation.assets,
           (v, key) => key.startsWith('vendor') && key.endsWith('_dll.js'));
-        const meta = { name: vendorKey, hashes: {}, modules: dllConfig.entry.vendor };
+        const meta = { name: vendorKey, hashes: {}, modules: node.dll.entry.vendor };
         for (let filename of Object.keys(json.content)) {
           if (filename.indexOf(' ') < 0) {
             meta.hashes[filename] = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
-            fs.writeFileSync(path.join(pkg.app.frontendBuildDir, 'vendor_dll_hashes.json'), JSON.stringify(meta));
+            fs.writeFileSync(path.join(pkg.app.dllBuildDir, `${name}_dll_hashes.json`), JSON.stringify(meta));
           }
         }
         done();
       });
+
+      compiler.run(reporter);
     } else {
       done();
     }
@@ -471,24 +468,21 @@ async function startExpoServer(config, platform) {
   }
 }
 
-function startWebpack() {
-  if (!serverConfig.url) {
-    startServer();
-  }
-  startClient(clientConfig, "web");
-  if (pkg.app.android) {
-    startClient(androidConfig, "android");
-  }
-  if (pkg.app.ios) {
-    startClient(iOSConfig, "ios");
+function startWebpack(node) {
+  if (node.platform === 'server') {
+    startServerWebpack();
+  } else {
+    startClientWebpack(node);
   }
 }
 
-if (!__DEV__ || !pkg.app.webpackDll) {
-  startWebpack();
-} else {
-  buildDll().then(function () {
-    useWebpackDll();
-    startWebpack();
-  });
-}
+const nodes = []
+  .concat(!backend.config.url ? [backend] : [])
+  .concat([web])
+  .concat(pkg.app.android ? [android] : [])
+  .concat(pkg.app.ios ? [ios]: []);
+
+nodes.forEach(node =>
+  ((__DEV__ && pkg.app.webpackDll && node.dll) ? buildDll(node) : Promise.resolve({}))
+    .then(() => startWebpack(node))
+);

@@ -262,7 +262,7 @@ running both at the same time, since Expo does not support this.
 
 ### Running on a device
 You need to install [Expo] app on your Android or iOS device and then you can scan the QR shown in the terminal, 
-to start the app on your device. 
+to start the app on your device. Download and install Watchman.
 
 ### Running in a simulator
 
@@ -272,9 +272,13 @@ Create a new emulator and start it. After starting the server Expo app should st
 To bring up the developer menu press ⌘+M.
 
 #### iOS
-You need to install [xcode]. After the installation if you run the server, simulator should start on it's own and open 
-the app in Expo.
+You need to install [Xcode]. Command Line Tools are also required, you can install them by running `xcode-select --install`.
+Next, open up Xcode, go to preferences and click the Components tab, install a simulator from the list.
+After the installation if you run the server, simulator should start on it's own and open the app in Expo.
 To bring up the developer menu press ⌘+D.
+
+### Watchman
+[Watchman] is needed for hot reload the changes to your device.
 
 ### Writing the code
 This starter kit is designed so you can use it for just web, mobile or projects using both together. 
@@ -347,4 +351,5 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [React Native Web]: https://github.com/necolas/react-native-web
 [Expo]: https://expo.io
 [Genymotion]: https://www.genymotion.com
-[xcode]: https://developer.apple.com/xcode/
+[Xcode]: https://developer.apple.com/xcode/
+[Watchman]: https://facebook.github.io/watchman/docs/install.html

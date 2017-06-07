@@ -175,6 +175,12 @@ but for back-end code as well. This enables powerful Webpack features for back-e
 embedding non-js files and CSS stylesheets into the code, hot code reload, etc. To use external backend set 
 `serverConfig.url` at `tools/webpack.app_config.js`
 
+- [Webpack] and [Expo] for mobile front-end
+
+  For the best code sharing support between back-end, web front-end and mobile front-end the Webpack is used to build 
+React Native JavaScript bundles with the help of using [Haul] project parts. Resulting React Native JavaScript bundles
+use [Expo[, so no native code compilation tools are needed in order to develop native mobile applications with this kit.
+
 - Hot Code Reload for back end and front end
 
   Hot Code Reload for back end is done using [Webpack]. When Webpack prepares hot patches on the filesystem,
@@ -247,8 +253,9 @@ for better security and less bandwidth.
 - Full CRUD funcionality with Subscriptions in post example, with [ReduxForm]
 
 ## React Native integration
-This starter kit adds full [React Native] integration, with [Webpack] as a packager. You are able to run both web and 
-mobile versions of your app at the same time connected to the same backend.
+This starter kit adds full [React Native] integration, with [Webpack] as a packager and [Expo]. 
+No native code compilation tools are needed in order to develop native mobile applications with this kit.
+You are able to run both web and mobile versions of your app at the same time connected to the same backend.
 
 For running Android or iOS you need to set in package.json `ios` or `android` field `true`. Currently we do not support
 running both at the same time, since Expo does not support this.

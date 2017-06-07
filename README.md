@@ -254,7 +254,8 @@ For running Android or iOS you need to set in package.json `ios` or `android` fi
 running both at the same time, since Expo does not support this.
 
 ### Running on a device
-You need to install [Expo] app on you Android or iOS device and then you can scan the QR, to start the app on your device. 
+You need to install [Expo] app on your Android or iOS device and then you can scan the QR shown in the terminal, 
+to start the app on your device. 
 
 ### Running in a simulator
 

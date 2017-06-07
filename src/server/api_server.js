@@ -27,6 +27,10 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(settings.frontendBuildDir, { maxAge: '180 days' }));
 
+if (__DEV__ && settings.webpackDll) {
+  app.use('/', express.static(settings.dllBuildDir, { maxAge: '180 days' }));
+}
+
 if (__PERSIST_GQL__) {
   const invertedMap = invert(queryMap);
 

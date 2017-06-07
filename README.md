@@ -57,115 +57,57 @@
 8. Open app in multiple tabs, try to increase counter or add a new post/comment in one tab and then switch to another tab. You will see that
 counter value and post/comment are updated there as well, because the application is live updated via subscriptions.
 
-## Deployment to Production
+### Getting Started with React Native
+This starter kit adds full [React Native] integration, with [Webpack] as a packager and [Expo]. 
+No native code compilation tools are needed in order to develop native mobile applications with this kit.
+You are able to run both web and mobile versions of your app at the same time connected to the same backend.
 
-### Deploying to Linux running Node.js
-1. Clone starter kit locally.
+For running Android or iOS you need to set in package.json `ios` or `android` field `true`. Currently we do not support
+running both at the same time, since Expo does not support this.
 
-  ```
-  git clone https://github.com/sysgears/apollo-universal-starter-kit.git
-  cd apollo-universal-starter-kit
-  ```
+#### Running on a device
+You need to install [Expo] app on your Android or iOS device and then you can scan the QR shown in the terminal, 
+to start the app on your device. Download and install Watchman.
 
-2. Install dependencies.
+#### Running in a simulator
 
-  ```
-  npm i
-  ```
-  or
-  ```
-  yarn
-  ```
-3. Seed production database data.
+##### Android
+You can use [Genymotion]. After downloading and installing you might need to install VirtualBox unless you already have it.
+Create a new emulator and start it. After starting the server Expo app should start on it's own.
+To bring up the developer menu press ⌘+M.
 
-  ```
-  npm run seed --prod
-  ```
-  or
-  ```
-  NODE_ENV=production yarn seed
-  ```
+##### iOS
+You need to install [Xcode]. Then install Command Line Tools by running `xcode-select --install`.
+Next, open up Xcode, go to preferences and click the Components tab, install a simulator from the list.
+After the installation if you run the server, simulator should start on it's own and open the app in Expo.
+To bring up the developer menu press ⌘+D.
 
-5. Compile project.
+#### Writing the code
+This starter kit is designed so you can use it for just web, mobile or projects using both together. 
+In case you do not not want to use mobile, just set both `ios` or `android` settings in package.json to `false`.
 
-  ```
-  npm run build
-  ```
-  or
-  ```
-  yarn build
-  ```
+We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
+is possible. In this case you can write your components with React Native's building blocks that are supported in
+[React Native Web] and run them both on web and mobile.
 
-6. Run project in production mode.
-
-  ```
-  node build/server
-  ```
-  or
-  ```
-  npm start
-  ```
-  or
-  ```
-  yarn start
-  ```
-
-### Deploying to [Heroku]
-1. Add your app to Heroku
-1. Allow Heroku to install build time dependencies from the devDependencies in package.json:
-   `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
-1. Deploy your app on Heroku
-
-### Heroku Demo
-You can see latest version of this app deployed to Heroku here:
-[https://apollo-universal-starter-kit.herokuapp.com](https://apollo-universal-starter-kit.herokuapp.com)
-
-## Additional scripts
-
-While developing, you will probably rely mostly on `npm run watch` or `yarn watch`; however, there are additional scripts at your disposal:
-
-|`npm run or yarn <script>`|Description|
-|--------------------------|-----------|
-|`watch`|Run your app in develooment mode and watch your changes. Hot code reload will be enabled in development.|
-|`start`|Run your app in production mode.|
-|`build`|Compiles the application to the build folder.|
-|`tests`|Runs unit tests with Mocha.|
-|`tests:watch`|Runs unit tests with Mocha and watches for changes automatically to re-run tests.|
-|`test`|Runs unit tests with Mocha and check for lint errors|
-|`lint`|Check for lint errors and runs for all `.js` and `.jsx` files.|
-|`seed`|Seed sample database using SQLite. Use `--prod` flag to run in "production" mode.|
-|`migrate`|Migrate the sample database|
-|`rollback`|Rollback the sample database to previous state.|
-
-
-## Project Structure
-
-The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by feature rather than file type. This structure is only meant to serve as a guide, it is by no means prescriptive. That said, it aims to represent generally accepted guidelines and patterns for building scalable applications.
+To cover more differences you can use platform-specific files.
 
 ```
-.
-├── src                      # Application source code
-│   ├── client               # Fractal route for client side code
-│   │   ├── app              # Fractal route for common client application code
-│   │   └── modules          # Fractal route for client-side application module splitting (components, containers, GraphQL queries, redux reducers)
-│   │   └── styles           # Application-wide styles
-│   │   └── test-helpers     # Test helper for apollo client tests
-│   │   └── index.jsx        # Render client with hot reload
-│   ├── common               # Apollo client, redux store and logging
-│   ├── mobile               # Render mobile client
-│   └── server               # Fractal route for server side code
-│   │   ├── api              # Initialization of GraphQL schema and subscription.
-│   │   └── database         # Fractal route for application module splitting
-│   │   │   └── migrations   # Database migration script using Knex
-│   │   │   └── seeds        # Database seed script using Knex
-│   │   └── middleware       # Graphiql, GraphQL express and SSR rendering
-│   │   └── modules          # Fractal route for server-side application module splitting (schema definition, resolvers, sql queries)
-│   │   └── sql              # Knex connector
-│   │   └── test-helpers     # Test helper for apollo server tests
-│   │   └── api_server.js    # GraphQL api server set up
-│   │   └── index.js         # Render server with hot reload
-└── tools                    # All build related files (Webpack)
+my_component.web.jsx
+my_component.android.jsx
+my_component.ios.jsx
 ```
+
+In case you only want to use it for `web` and do not intend to later add `mobile` version, you can omit `.web.jsx` extension
+and just use `my_component.jsx`. Same applies if you just wish to use it for `mobile`.
+
+Currently `counter` example is implemented to support web and mobile version. If you want to try running `counter_show.jsx`
+as `universal` component, just delete or rename `counter_show.web.jsx` and you can see how the same component can be used 
+for both web and mobile.
+
+#### Known issues
+Currently we do not yet support persisted queries. This can be used in this starter kit currently only for web, but it is
+planed in the future.
 
 ## Features
 - [Webpack] for back end
@@ -252,57 +194,114 @@ for better security and less bandwidth.
 
 - Full CRUD funcionality with Subscriptions in post example, with [ReduxForm]
 
-## React Native integration
-This starter kit adds full [React Native] integration, with [Webpack] as a packager and [Expo]. 
-No native code compilation tools are needed in order to develop native mobile applications with this kit.
-You are able to run both web and mobile versions of your app at the same time connected to the same backend.
+## Project Structure
 
-For running Android or iOS you need to set in package.json `ios` or `android` field `true`. Currently we do not support
-running both at the same time, since Expo does not support this.
-
-### Running on a device
-You need to install [Expo] app on your Android or iOS device and then you can scan the QR shown in the terminal, 
-to start the app on your device. Download and install Watchman.
-
-### Running in a simulator
-
-#### Android
-You can use [Genymotion]. After downloading and installing you might need to install VirtualBox unless you already have it.
-Create a new emulator and start it. After starting the server Expo app should start on it's own.
-To bring up the developer menu press ⌘+M.
-
-#### iOS
-You need to install [Xcode]. Then install Command Line Tools by running `xcode-select --install`.
-Next, open up Xcode, go to preferences and click the Components tab, install a simulator from the list.
-After the installation if you run the server, simulator should start on it's own and open the app in Expo.
-To bring up the developer menu press ⌘+D.
-
-### Writing the code
-This starter kit is designed so you can use it for just web, mobile or projects using both together. 
-In case you do not not want to use mobile, just set both `ios` or `android` settings in package.json to `false`.
-
-We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
-is possible. In this case you can write your components with React Native's building blocks that are supported in
-[React Native Web] and run them both on web and mobile.
-
-To cover more differences you can use platform-specific files.
+The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by feature rather than file type. This structure is only meant to serve as a guide, it is by no means prescriptive. That said, it aims to represent generally accepted guidelines and patterns for building scalable applications.
 
 ```
-my_component.web.jsx
-my_component.android.jsx
-my_component.ios.jsx
+.
+├── src                      # Application source code
+│   ├── client               # Fractal route for client side code
+│   │   ├── app              # Fractal route for common client application code
+│   │   └── modules          # Fractal route for client-side application module splitting (components, containers, GraphQL queries, redux reducers)
+│   │   └── styles           # Application-wide styles
+│   │   └── test-helpers     # Test helper for apollo client tests
+│   │   └── index.jsx        # Render client with hot reload
+│   ├── common               # Apollo client, redux store and logging
+│   ├── mobile               # Render mobile client
+│   └── server               # Fractal route for server side code
+│   │   ├── api              # Initialization of GraphQL schema and subscription.
+│   │   └── database         # Fractal route for application module splitting
+│   │   │   └── migrations   # Database migration script using Knex
+│   │   │   └── seeds        # Database seed script using Knex
+│   │   └── middleware       # Graphiql, GraphQL express and SSR rendering
+│   │   └── modules          # Fractal route for server-side application module splitting (schema definition, resolvers, sql queries)
+│   │   └── sql              # Knex connector
+│   │   └── test-helpers     # Test helper for apollo server tests
+│   │   └── api_server.js    # GraphQL api server set up
+│   │   └── index.js         # Render server with hot reload
+└── tools                    # All build related files (Webpack)
 ```
 
-In case you only want to use it for `web` and do not intend to later add `mobile` version, you can omit `.web.jsx` extension
-and just use `my_component.jsx`. Same applies if you just wish to use it for `mobile`.
+## Additional scripts
 
-Currently `counter` example is implemented to support web and mobile version. If you want to try running `counter_show.jsx`
-as `universal` component, just delete or rename `counter_show.web.jsx` and you can see how the same component can be used 
-for both web and mobile.
+While developing, you will probably rely mostly on `npm run watch` or `yarn watch`; however, there are additional scripts at your disposal:
 
-### Known issues
-Currently we do not yet support persisted queries. This can be used in this starter kit currently only for web, but it is
-planed in the future.
+|`npm run or yarn <script>`|Description|
+|--------------------------|-----------|
+|`watch`|Run your app in develooment mode and watch your changes. Hot code reload will be enabled in development.|
+|`start`|Run your app in production mode.|
+|`build`|Compiles the application to the build folder.|
+|`tests`|Runs unit tests with Mocha.|
+|`tests:watch`|Runs unit tests with Mocha and watches for changes automatically to re-run tests.|
+|`test`|Runs unit tests with Mocha and check for lint errors|
+|`lint`|Check for lint errors and runs for all `.js` and `.jsx` files.|
+|`seed`|Seed sample database using SQLite. Use `--prod` flag to run in "production" mode.|
+|`migrate`|Migrate the sample database|
+|`rollback`|Rollback the sample database to previous state.|
+
+## Deployment to Production
+
+### Deploying to Linux running Node.js
+1. Clone starter kit locally.
+
+  ```
+  git clone https://github.com/sysgears/apollo-universal-starter-kit.git
+  cd apollo-universal-starter-kit
+  ```
+
+2. Install dependencies.
+
+  ```
+  npm i
+  ```
+  or
+  ```
+  yarn
+  ```
+3. Seed production database data.
+
+  ```
+  npm run seed --prod
+  ```
+  or
+  ```
+  NODE_ENV=production yarn seed
+  ```
+
+5. Compile project.
+
+  ```
+  npm run build
+  ```
+  or
+  ```
+  yarn build
+  ```
+
+6. Run project in production mode.
+
+  ```
+  node build/server
+  ```
+  or
+  ```
+  npm start
+  ```
+  or
+  ```
+  yarn start
+  ```
+
+### Deploying to [Heroku]
+1. Add your app to Heroku
+1. Allow Heroku to install build time dependencies from the devDependencies in package.json:
+   `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
+1. Deploy your app on Heroku
+
+### Heroku Demo
+You can see latest version of this app deployed to Heroku here:
+[https://apollo-universal-starter-kit.herokuapp.com](https://apollo-universal-starter-kit.herokuapp.com)
 
 ## Contributors
 

@@ -376,10 +376,14 @@ const dependencyPlatforms = {
 };
 
 const getDepsForPlatform = platform => {
-  return _.filter(_.keys(pkg.dependencies), key => {
+  let deps = _.filter(_.keys(pkg.dependencies), key => {
     const val = dependencyPlatforms[key];
     return (!val || val === platform || (_.isArray(val) && val.indexOf(platform) >= 0));
   });
+  if (['android', 'ios'].indexOf(platform) >= 0) {
+    deps = deps.concat(require.resolve('./react-native-polyfill.js'));
+  }
+  return deps;
 };
 
 const createDllConfig = platform => {

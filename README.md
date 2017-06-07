@@ -67,7 +67,7 @@ running both at the same time, since Expo does not support this.
 
 #### Running on a device
 You need to install [Expo] app on your Android or iOS device and then you can scan the QR shown in the terminal, 
-to start the app on your device. Download and install Watchman.
+to start the app on your device.
 
 #### Running in a simulator
 

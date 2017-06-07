@@ -323,6 +323,7 @@ const androidConfig = merge.smart(_.cloneDeep(createMobileConfig('android')), {
     path: path.resolve(path.join(pkg.app.frontendBuildDir, 'android')),
   },
   devServer: _.merge({}, baseDevServerConfig, {
+    hot: false,
     port: 3010
   })
 }, appConfigs.androidConfig);
@@ -333,6 +334,7 @@ const iOSConfig = merge.smart(_.cloneDeep(createMobileConfig('ios')), {
     path: path.resolve(path.join(pkg.app.frontendBuildDir, 'ios')),
   },
   devServer: _.merge({}, baseDevServerConfig, {
+    hot: false,
     port: 3020
   })
 }, appConfigs.iOSConfig);

@@ -121,16 +121,18 @@ function startClientWebpack({config, dll, platform}) {
     config.plugins.push(frontendVirtualModules);
 
     if (__DEV__) {
-      _.each(config.entry, entry => {
-        if (pkg.app.reactHotLoader) {
-          entry.unshift('react-hot-loader/patch');
-        }
-        entry.unshift(
-          `webpack-hot-middleware/client?http://localhost:${config.devServer.port}/`,
-          'webpack/hot/dev-server');
-      });
-      config.plugins.push(new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin());
+      if (config.devServer.hot) {
+        _.each(config.entry, entry => {
+          if (pkg.app.reactHotLoader) {
+            entry.unshift('react-hot-loader/patch');
+          }
+          entry.unshift(
+            `webpack-hot-middleware/client?http://localhost:${config.devServer.port}/`,
+            'webpack/hot/dev-server');
+        });
+        config.plugins.push(new webpack.HotModuleReplacementPlugin());
+      }
+      config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
       startWebpackDevServer(config, dll, platform, reporter, logger);
     } else {
       const compiler = webpack(config);

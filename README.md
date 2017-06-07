@@ -179,7 +179,7 @@ embedding non-js files and CSS stylesheets into the code, hot code reload, etc. 
 
   For the best code sharing support between back-end, web front-end and mobile front-end the Webpack is used to build 
 React Native JavaScript bundles with the help of using [Haul] project parts. Resulting React Native JavaScript bundles
-use [Expo[, so no native code compilation tools are needed in order to develop native mobile applications with this kit.
+use [Expo], so no native code compilation tools are needed in order to develop native mobile applications with this kit.
 
 - Hot Code Reload for back end and front end
 

@@ -344,6 +344,7 @@ const iOSConfig = merge.smart(_.cloneDeep(createMobileConfig('ios')), {
 
 const dllConfig = merge.smart(_.cloneDeep(createBaseConfig("dll")), {
   name: 'dll',
+  devtool: '#cheap-module-source-map',
   entry: {
     vendor: _.without(_.keys(pkg.dependencies), 'expo', 'react-native'),
   },

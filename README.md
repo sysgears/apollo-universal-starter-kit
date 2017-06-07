@@ -6,7 +6,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-universal-starter-kit.svg)](https://greenkeeper.io/)
 
 > Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] web app development built on top of [Apollo],
-> [GraphQL], [React], [Redux], [Express], [Haul], [Expo] with SQL storage support and [Twitter Bootstrap] integration.
+> [GraphQL], [React], [React Native], [Expo], [Redux], [Express] with SQL storage support and [Twitter Bootstrap] integration.
 > Hot Code Reload of back end & front end using [Webpack] and Hot Module Replacement to reflect your changes instantly
 > and help you stay productive.
 
@@ -247,27 +247,32 @@ for better security and less bandwidth.
 - Full CRUD funcionality with Subscriptions in post example, with [ReduxForm]
 
 ## React Native integration
-This starter kit adds full [React Native] native integration, with custom [Webpack] configuration for packing using [Haul]. You are able to run both web and mobile versions of you app at the same time connected to the same backend.
+This starter kit adds full [React Native] integration, with [Webpack] as a packager. You are able to run both web and 
+mobile versions of your app at the same time connected to the same backend.
 
-For running Android or iOS you need to set in package.json `ios` or `android` field `true`. Currently we do not support running both at the same time, since Expo does not support this.
+For running Android or iOS you need to set in package.json `ios` or `android` field `true`. Currently we do not support
+running both at the same time, since Expo does not support this.
 
 ### Running on a device
-You need to install [Expo] app on you Android or iOS device and then you can scan the QR code provided by [qrcode-terminal], to start the app on your device. 
+You need to install [Expo] app on you Android or iOS device and then you can scan the QR, to start the app on your device. 
 
 ### Running in a simulator
+
 #### Android
 You can use [Genymotion].
 
 #### iOS
 You need to install [xcode]. After the installation if you run this starter kit, simulator should start on it's own.
 
-### Writing code
-This starter kit is designed so you can use it for just web, mobile or projects using both together. In case you do not not want to use mobile, just set both `ios` or `android` settings in package.json to `false`.
+### Writing the code
+This starter kit is designed so you can use it for just web, mobile or projects using both together. 
+In case you do not not want to use mobile, just set both `ios` or `android` settings in package.json to `false`.
 
-We integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms is possible.
-In this case you can write your components with React Native's building blocks that are supported in [React Native Web] and run them both on web and mobile.
+We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
+is possible. In this case you can write your components with React Native's building blocks that are supported in
+[React Native Web] and run them both on web and mobile.
 
-For more platform specific differences you can use platform-specific files.
+To cover more differences you can use platform-specific files.
 
 ```
 my_component.web.jsx
@@ -275,12 +280,16 @@ my_component.android.jsx
 my_component.ios.jsx
 ```
 
-In case you only want to use it for `web` and do not intend to later add `mobile` version, you can omit `.web.jsx` extension and just use `my_component.jsx`. Same applies if you just wish to use it for `mobile`.
+In case you only want to use it for `web` and do not intend to later add `mobile` version, you can omit `.web.jsx` extension
+and just use `my_component.jsx`. Same applies if you just wish to use it for `mobile`.
 
-Currently `counter` example is implemented to support web and mobile version. If you want to try running `counter_show.jsx` as `universal` component, just delete or rename `counter_show.web.jsx` and you can see how the same component can be used for both web and mobile.
+Currently `counter` example is implemented to support web and mobile version. If you want to try running `counter_show.jsx`
+as `universal` component, just delete or rename `counter_show.web.jsx` and you can see how the same component can be used 
+for both web and mobile.
 
 ### Known issues
-Currently we do not jet support persisted queries. This can be used in this starter kit currently only for web, but it is planed in the future.
+Currently we do not yet support persisted queries. This can be used in this starter kit currently only for web, but it is
+planed in the future.
 
 ## Contributors
 
@@ -325,6 +334,5 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [React Native]: https://github.com/facebook/react-native
 [React Native Web]: https://github.com/necolas/react-native-web
 [Expo]: https://expo.io
-[qrcode-terminal]: https://github.com/gtanner/qrcode-terminal
 [Genymotion]: https://www.genymotion.com
 [xcode]: https://developer.apple.com/xcode/

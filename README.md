@@ -6,7 +6,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-universal-starter-kit.svg)](https://greenkeeper.io/)
 
 > Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] web app development built on top of [Apollo],
-> [GraphQL], [React], [Redux], [Express] with SQL storage support and [Twitter Bootstrap] integration.
+> [GraphQL], [React], [React Native], [Expo], [Redux], [Express] with SQL storage support and [Twitter Bootstrap] integration.
 > Hot Code Reload of back end & front end using [Webpack] and Hot Module Replacement to reflect your changes instantly
 > and help you stay productive.
 
@@ -152,6 +152,7 @@ The project structure presented in this boilerplate is **fractal**, where functi
 │   │   └── test-helpers     # Test helper for apollo client tests
 │   │   └── index.jsx        # Render client with hot reload
 │   ├── common               # Apollo client, redux store and logging
+│   ├── mobile               # Render mobile client
 │   └── server               # Fractal route for server side code
 │   │   ├── api              # Initialization of GraphQL schema and subscription.
 │   │   └── database         # Fractal route for application module splitting
@@ -173,6 +174,12 @@ The project structure presented in this boilerplate is **fractal**, where functi
 but for back-end code as well. This enables powerful Webpack features for back-end code, such as conditional compilation,
 embedding non-js files and CSS stylesheets into the code, hot code reload, etc. To use external backend set 
 `serverConfig.url` at `tools/webpack.app_config.js`
+
+- [Webpack] and [Expo] for mobile front-end
+
+  For the best code sharing support between back-end, web front-end and mobile front-end the Webpack is used to build 
+React Native JavaScript bundles with the help of using [Haul] project parts. Resulting React Native JavaScript bundles
+use [Expo], so no native code compilation tools are needed in order to develop native mobile applications with this kit.
 
 - Hot Code Reload for back end and front end
 
@@ -245,6 +252,58 @@ for better security and less bandwidth.
 
 - Full CRUD funcionality with Subscriptions in post example, with [ReduxForm]
 
+## React Native integration
+This starter kit adds full [React Native] integration, with [Webpack] as a packager and [Expo]. 
+No native code compilation tools are needed in order to develop native mobile applications with this kit.
+You are able to run both web and mobile versions of your app at the same time connected to the same backend.
+
+For running Android or iOS you need to set in package.json `ios` or `android` field `true`. Currently we do not support
+running both at the same time, since Expo does not support this.
+
+### Running on a device
+You need to install [Expo] app on your Android or iOS device and then you can scan the QR shown in the terminal, 
+to start the app on your device. Download and install Watchman.
+
+### Running in a simulator
+
+#### Android
+You can use [Genymotion]. After downloading and installing you might need to install VirtualBox unless you already have it.
+Create a new emulator and start it. After starting the server Expo app should start on it's own.
+To bring up the developer menu press ⌘+M.
+
+#### iOS
+You need to install [Xcode]. Then install Command Line Tools by running `xcode-select --install`.
+Next, open up Xcode, go to preferences and click the Components tab, install a simulator from the list.
+After the installation if you run the server, simulator should start on it's own and open the app in Expo.
+To bring up the developer menu press ⌘+D.
+
+### Writing the code
+This starter kit is designed so you can use it for just web, mobile or projects using both together. 
+In case you do not not want to use mobile, just set both `ios` or `android` settings in package.json to `false`.
+
+We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
+is possible. In this case you can write your components with React Native's building blocks that are supported in
+[React Native Web] and run them both on web and mobile.
+
+To cover more differences you can use platform-specific files.
+
+```
+my_component.web.jsx
+my_component.android.jsx
+my_component.ios.jsx
+```
+
+In case you only want to use it for `web` and do not intend to later add `mobile` version, you can omit `.web.jsx` extension
+and just use `my_component.jsx`. Same applies if you just wish to use it for `mobile`.
+
+Currently `counter` example is implemented to support web and mobile version. If you want to try running `counter_show.jsx`
+as `universal` component, just delete or rename `counter_show.web.jsx` and you can see how the same component can be used 
+for both web and mobile.
+
+### Known issues
+Currently we do not yet support persisted queries. This can be used in this starter kit currently only for web, but it is
+planed in the future.
+
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
@@ -284,3 +343,10 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Relay-style cursor pagination]: http://dev.apollodata.com/react/pagination.html#relay-cursors
 [React Helmet]: https://github.com/nfl/react-helmet
 [React GA]: https://github.com/react-ga/react-ga
+[Haul]: https://github.com/callstack-io/haul
+[React Native]: https://github.com/facebook/react-native
+[React Native Web]: https://github.com/necolas/react-native-web
+[Expo]: https://expo.io
+[Genymotion]: https://www.genymotion.com
+[Xcode]: https://developer.apple.com/xcode/
+[Watchman]: https://facebook.github.io/watchman/docs/install.html

@@ -117,6 +117,7 @@
     "chai": "^4.0.0",
     "chai-http": "^3.0.0",
     "compression": "^1.6.2",
+    "connect": "^2.8.3",
     "cross-env": "^5.0.0",
     "css-loader": "^0.28.1",
     "enzyme": "^2.8.2",
@@ -172,6 +173,7 @@
   },
   "greenkeeper": {
     "ignore": [
+      "connect",
       "expo",
       "react",
       "react-dom",

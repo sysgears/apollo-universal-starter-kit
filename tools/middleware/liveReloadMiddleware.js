@@ -1,4 +1,4 @@
-const safeWay = true;
+const safeWay = false;
 
 function notifyWatcher(watcher) {
   const headers = {

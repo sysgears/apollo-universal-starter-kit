@@ -2,8 +2,6 @@ import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import httpProxyMiddleware from 'http-proxy-middleware';
-import express from 'express';
-import compression from 'compression';
 import http from 'http';
 import { spawn } from 'child_process';
 import fs from 'fs';
@@ -26,6 +24,7 @@ import pkg from '../package.json';
 // eslint-disable-next-line import/named
 import { backend, web, ios, android } from './webpack.config';
 
+const connect = require('connect');
 const InspectorProxy = require('react-native/local-cli/server/util/inspectorProxy.js');
 const copyToClipBoardMiddleware = require('react-native/local-cli/server/middleware/copyToClipBoardMiddleware');
 const cpuProfilerMiddleware = require('react-native/local-cli/server/middleware/cpuProfilerMiddleware');
@@ -292,7 +291,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     }
   });
 
-  const app = express();
+  const app = connect();
 
   const serverInstance = http.createServer(app);
 
@@ -305,11 +304,11 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     const args = {port: config.devServer.port, projectRoots: [path.resolve('.')]};
     app
       .use(loadRawBodyMiddleware)
-      // .use(function(req, res, next) {
-      //   console.log("req:", req.url, req.rawBody);
-      //   next();
-      // })
-      .use(compression())
+      .use(function(req, res, next) {
+        req.path = req.url;
+        next();
+      })
+      .use(connect.compress())
       .use(getDevToolsMiddleware(args, () => wsProxy && wsProxy.isChromeConnected()))
       .use(getDevToolsMiddleware(args, () => ms && ms.isChromeConnected()))
       .use(liveReloadMiddleware(compiler))

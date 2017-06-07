@@ -1,5 +1,3 @@
-const safeWay = false;
-
 function notifyWatcher(watcher) {
   const headers = {
     'Content-Type': 'application/json; charset=UTF-8',
@@ -14,38 +12,35 @@ function liveReloadMiddleware(compiler) {
   let notify = false;
 
   compiler.plugin('done', () => {
-    if (safeWay) {
+    watchers.forEach(watcher => {
+      notifyWatcher(watcher);
+    });
+    if (!watchers.length) {
       notify = true;
-    } else {
-      watchers.forEach(watcher => {
-        notifyWatcher(watcher);
-      });
-
-      watchers = [];
     }
+
+    watchers = [];
   });
 
   return (req, res, next) => {
     if (req.path === '/onchange') {
       const watcher = { req, res };
 
-      if (safeWay) {
-        if (notify) {
-          notifyWatcher(watcher);
-          notify = false;
-        }
-      } else {
-        watchers.push(watcher);
-
-        req.on('close', () => {
-          for (let i = 0; i < watchers.length; i++) {
-            if (watchers[i] && watchers[i].req === req) {
-              watchers.splice(i, 1);
-              break;
-            }
-          }
-        });
+      if (notify) {
+        notifyWatcher(watcher);
+        notify = false;
       }
+
+      watchers.push(watcher);
+
+      req.on('close', () => {
+        for (let i = 0; i < watchers.length; i++) {
+          if (watchers[i] && watchers[i].req === req) {
+            watchers.splice(i, 1);
+            break;
+          }
+        }
+      });
     } else {
       next();
     }

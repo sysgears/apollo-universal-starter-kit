@@ -267,10 +267,14 @@ to start the app on your device.
 ### Running in a simulator
 
 #### Android
-You can use [Genymotion].
+You can use [Genymotion]. After downloading and installing you might need to install VirtualBox unless you already have it.
+Create a new emulator and start it. After starting the server Expo app should start on it's own.
+To bring up the developer menu press ⌘+M.
 
 #### iOS
-You need to install [xcode]. After the installation if you run this starter kit, simulator should start on it's own.
+You need to install [xcode]. After the installation if you run the server, simulator should start on it's own and open 
+the app in Expo.
+To bring up the developer menu press ⌘+D.
 
 ### Writing the code
 This starter kit is designed so you can use it for just web, mobile or projects using both together. 

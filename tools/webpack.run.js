@@ -123,9 +123,6 @@ function startClient(config, platform) {
     config.plugins.push(frontendVirtualModules);
 
     if (__DEV__) {
-      if (['android', 'ios'].indexOf(platform) >= 0) {
-        startExpoServer(config, platform);
-      }
       _.each(config.entry, entry => {
         if (pkg.app.reactHotLoader) {
           entry.unshift('react-hot-loader/patch');
@@ -341,6 +338,7 @@ function startWebpackDevServer(config, platform, reporter, logger) {
       ms = messageSocket.attachToServer(serverInstance, '/message');
       webSocketProxy.attachToServer(serverInstance, '/devtools');
       inspectorProxy.attachToServer(serverInstance, '/inspector');
+      startExpoServer(config, platform);
     }
   });
   serverInstance.timeout = 0;
@@ -465,7 +463,7 @@ async function startExpoServer(config, platform) {
       const { success, error } = await Simulator.openUrlInSimulatorSafeAsync(localAddress);
 
       if (!success) {
-        console.error(error);
+        console.error("Failed to start Simulator: ", error);
       }
     }
   } catch (e) {

@@ -272,12 +272,12 @@ Create a new emulator and start it. After starting the server Expo app should st
 To bring up the developer menu press ⌘+M.
 
 #### iOS
-You need to install [Xcode]. Command Line Tools are also required, you can install them by running `xcode-select --install`.
+You need to install [Xcode]. Then install Command Line Tools by running `xcode-select --install`.
 Next, open up Xcode, go to preferences and click the Components tab, install a simulator from the list.
 After the installation if you run the server, simulator should start on it's own and open the app in Expo.
 To bring up the developer menu press ⌘+D.
 
-### Watchman
+#### Watchman
 [Watchman] is needed for hot reload the changes to your device.
 
 ### Writing the code

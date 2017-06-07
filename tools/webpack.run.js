@@ -305,10 +305,10 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     const args = {port: config.devServer.port, projectRoots: [path.resolve('.')]};
     app
       .use(loadRawBodyMiddleware)
-      .use(function(req, res, next) {
-        console.log("req:", req.url, req.rawBody);
-        next();
-      })
+      // .use(function(req, res, next) {
+      //   console.log("req:", req.url, req.rawBody);
+      //   next();
+      // })
       .use(compression())
       .use(getDevToolsMiddleware(args, () => wsProxy && wsProxy.isChromeConnected()))
       .use(getDevToolsMiddleware(args, () => ms && ms.isChromeConnected()))

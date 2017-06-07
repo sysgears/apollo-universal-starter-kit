@@ -84,7 +84,7 @@ To bring up the developer menu press ⌘+D.
 
 #### Writing the code
 This starter kit is designed so you can use it for just web, mobile or projects using both together. 
-In case you do not not want to use mobile, just set both `ios` or `android` settings in package.json to `false`.
+In case you do not want to use mobile, just set both `ios` or `android` settings in package.json to `false`.
 
 We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
 is possible. In this case you can write your components with React Native's building blocks that are supported in

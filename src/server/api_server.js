@@ -8,7 +8,7 @@ import queryMap from 'persisted_queries.json';
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
-import { addGraphQLSubscriptions } from './api/subscriptions';
+import addGraphQLSubscriptions from './api/subscriptions';
 import { app as settings } from '../../package.json';
 import log from '../common/log';
 

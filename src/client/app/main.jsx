@@ -5,7 +5,7 @@ import { ApolloProvider } from 'react-apollo';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import { addPersistedQueries } from 'persistgraphql';
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
@@ -17,23 +17,21 @@ import { app as settings } from '../../../package.json';
 
 import '../styles/styles.scss';
 
-let networkInterface = createBatchingNetworkInterface({
-  opts: {
-    credentials: "same-origin",
-  },
-  batchInterval: 20,
-  uri: __BACKEND_URL__ || "/graphql",
-});
-
+let networkInterface;
 if (__CLIENT__) {
-  const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
+  networkInterface = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws')
-    .replace(':' + settings.webpackDevPort, ':' + settings.apiPort));
-
-  networkInterface = addGraphQLSubscriptions(
-    networkInterface,
-    wsClient,
-  );
+    .replace(':' + settings.webpackDevPort, ':' + settings.apiPort), {
+      reconnect: true
+  });
+} else {
+  networkInterface = createBatchingNetworkInterface({
+    opts: {
+      credentials: "same-origin",
+    },
+    batchInterval: 20,
+    uri: __BACKEND_URL__ || "/graphql",
+  });
 }
 
 if (__PERSIST_GQL__) {

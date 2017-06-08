@@ -1,30 +1,23 @@
 import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { SubscriptionManager } from 'graphql-subscriptions';
-import { addApolloLogging } from 'apollo-logger';
+import { execute, subscribe } from 'graphql';
 
-import schema, { pubsub } from './schema';
-import modules from '../modules';
+import schema from './schema';
 import log from '../../common/log';
-import { app as settings } from '../../../package.json';
-
-const manager = new SubscriptionManager({
-  schema,
-  pubsub,
-  setupFunctions: modules.subscriptionsSetups,
-});
-const subscriptionManager = settings.apolloLogging ? addApolloLogging(manager) : manager;
+import modules from '../../server/modules';
 
 var subscriptionServer;
 
 const addSubscriptions = httpServer => {
-  let subscriptionServerConfig = {
+  subscriptionServer = SubscriptionServer.create({
+    schema,
+    execute,
+    subscribe,
+    onConnect: () => modules.createContext()
+  },
+  {
     server: httpServer,
-    path: '/graphql'
-  };
-
-  subscriptionServer = new SubscriptionServer({
-    subscriptionManager
-  }, subscriptionServerConfig);
+    path: '/graphql',
+  });
 };
 
 const addGraphQLSubscriptions = httpServer => {
@@ -51,4 +44,4 @@ if (module.hot) {
   });
 }
 
-export { addGraphQLSubscriptions, pubsub };
+export default addGraphQLSubscriptions;

@@ -5,19 +5,14 @@ const combine = (features, extractor) =>
 
 export default class {
   // eslint-disable-next-line no-unused-vars
-  constructor({schema, createResolversFunc, subscriptionsSetup, createContextFunc}, ...features) {
+  constructor({schema, createResolversFunc, createContextFunc}, ...features) {
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
-    this.subscriptionsSetup = combine(arguments, arg => arg.subscriptionsSetup);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
   }
 
   get schemas() {
     return this.schema;
-  }
-
-  get subscriptionsSetups() {
-    return merge(...this.subscriptionsSetup);
   }
 
   createContext() {

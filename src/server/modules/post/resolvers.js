@@ -1,3 +1,9 @@
+import { withFilter } from 'graphql-subscriptions';
+
+const POST_UPDATED_TOPIC = "post_updated";
+const POSTS_UPDATED_TOPIC = "posts_updated";
+const COMMENT_UPDATED_TOPIC = "comment_updated";
+
 export default pubsub => ({
   Query: {
     async postsQuery(obj, { limit, after }, context) {
@@ -42,7 +48,13 @@ export default pubsub => ({
       let [ id ] = await context.Post.addPost(input);
       let post = await context.Post.getPost(id);
       // publish for post list
-      pubsub.publish('postsUpdated', { mutation: 'CREATED', id, node: post });
+      pubsub.publish(POSTS_UPDATED_TOPIC, {
+        postsUpdated: {
+          mutation: 'CREATED',
+          id,
+          node: post
+        }
+      });
       return post;
     },
     async deletePost(obj, { id }, context) {
@@ -50,7 +62,13 @@ export default pubsub => ({
       let isDeleted = await context.Post.deletePost(id);
       if (isDeleted) {
         // publish for post list
-        pubsub.publish('postsUpdated', { mutation: 'DELETED', id, node: post });
+        pubsub.publish(POSTS_UPDATED_TOPIC, {
+          postsUpdated: {
+            mutation: 'DELETED',
+            id,
+            node: post
+          }
+        });
         return { id: post.id };
       } else {
         return { id: null };
@@ -60,46 +78,74 @@ export default pubsub => ({
       await context.Post.editPost(input);
       let post = await context.Post.getPost(input.id);
       // publish for post list
-      pubsub.publish('postsUpdated', { mutation: 'UPDATED', id: post.id, node: post });
+      pubsub.publish(POSTS_UPDATED_TOPIC, {
+        postsUpdated: {
+          mutation: 'UPDATED',
+          id: post.id,
+          node: post
+        }
+      });
       // publish for edit post page
-      pubsub.publish('postUpdated', post);
+      pubsub.publish(POST_UPDATED_TOPIC, { postUpdated: post });
       return post;
     },
     async addComment(obj, { input }, context) {
       let [ id ] = await context.Post.addComment(input);
       let comment = await context.Post.getComment(id);
       // publish for edit post page
-      pubsub.publish('commentUpdated', {
-        mutation: 'CREATED',
-        id: comment.id,
-        postId: input.postId,
-        node: comment
+      pubsub.publish(COMMENT_UPDATED_TOPIC, {
+        commentUpdated: {
+          mutation: 'CREATED',
+          id: comment.id,
+          postId: input.postId,
+          node: comment
+        }
       });
       return comment;
     },
     async deleteComment(obj, { input: { id, postId } }, context) {
       await context.Post.deleteComment(id);
       // publish for edit post page
-      pubsub.publish('commentUpdated', { mutation: 'DELETED', id, postId, node: null });
+      pubsub.publish(COMMENT_UPDATED_TOPIC, {
+        commentUpdated: {
+          mutation: 'DELETED',
+          id,
+          postId,
+          node: null
+        }
+      });
       return { id };
     },
     async editComment(obj, { input }, context) {
       await context.Post.editComment(input);
       let comment = await context.Post.getComment(input.id);
       // publish for edit post page
-      pubsub.publish('commentUpdated', { mutation: 'UPDATED', id: input.id, postId: input.postId, node: comment });
+      pubsub.publish(COMMENT_UPDATED_TOPIC, {
+        commentUpdated: {
+          mutation: 'UPDATED',
+          id: input.id,
+          postId: input.postId,
+          node: comment
+        }
+      });
       return comment;
     },
   },
   Subscription: {
-    postUpdated(value) {
-      return value;
+    postUpdated: {
+      subscribe: withFilter(() => pubsub.asyncIterator(POST_UPDATED_TOPIC), (payload, variables) => {
+        return Number(payload.postUpdated.id) === Number(variables.id);
+      }),
     },
-    postsUpdated(value) {
-      return value;
+    postsUpdated: {
+      subscribe: withFilter(() => pubsub.asyncIterator(POSTS_UPDATED_TOPIC), (payload, variables) => {
+        return Number(variables.endCursor) <= Number(payload.postsUpdated.id);
+      }),
     },
-    commentUpdated(value) {
-      return value;
+    commentUpdated: {
+      subscribe: withFilter(() => pubsub.asyncIterator(COMMENT_UPDATED_TOPIC), (payload, variables) => {
+        return Number(payload.commentUpdated.postId) === Number(variables.postId);
+      }),
     },
   }
 });

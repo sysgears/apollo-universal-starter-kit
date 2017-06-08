@@ -1,9 +1,9 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import WebSocket from 'ws';
-import { createNetworkInterface, ApolloClient } from 'apollo-client';
+import { ApolloClient } from 'apollo-client';
 import { addApolloLogging } from 'apollo-logger';
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import '../../../knexfile';
 import knex from '../sql/connector';
@@ -20,12 +20,7 @@ before(async () => {
   await knex.seed.run();
 
   server = require('../api_server').default;
-  const wsClient = new SubscriptionClient(`ws://localhost:${process.env['PORT']}/graphql`, {}, WebSocket);
-
-  const networkInterface = addGraphQLSubscriptions(
-    createNetworkInterface({ uri: `http://localhost:${process.env['PORT']}/graphql` }),
-    wsClient
-  );
+  const networkInterface = new SubscriptionClient(`ws://localhost:${process.env['PORT']}/graphql`, {}, WebSocket);
 
   apollo = new ApolloClient({
     networkInterface: settings.apolloLogging ? addApolloLogging(networkInterface) : networkInterface

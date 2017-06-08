@@ -1,14 +1,4 @@
-// App-specific front-end config should be here
-const webConfig = {
-  entry: {
-    bundle: [
-      'babel-polyfill',
-      './src/client/index.jsx'
-    ]
-  }
-};
-
-// App-specific back-end config should be here
+// App-specific back-end Webpack config should be here
 const serverConfig = {
   // Uncomment the next line and set URL if you use external GraphQL server
   // url: 'http://localhost:8080/graphql',
@@ -20,7 +10,17 @@ const serverConfig = {
   }
 };
 
-// App-specific iOS React Native config should be here
+// App-specific web front-end Webpack config should be here
+const webConfig = {
+  entry: {
+    bundle: [
+      'babel-polyfill',
+      './src/client/index.jsx'
+    ]
+  }
+};
+
+// App-specific Android React Native front-end Webpack config should be here
 const androidConfig = {
   entry: {
     'index.android.bundle': [
@@ -30,7 +30,7 @@ const androidConfig = {
   }
 };
 
-// App-specific iOS React Native config should be here
+// App-specific iOS React Native front-end Webpack config should be here
 const iOSConfig = {
   entry: {
     'index.ios.bundle': [

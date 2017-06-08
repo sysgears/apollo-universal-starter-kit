@@ -1,3 +1,5 @@
+const COUNT_UPDATED_TOPIC = "count_updated";
+
 export default pubsub => ({
   Query: {
     count(obj, args, context) {
@@ -9,14 +11,14 @@ export default pubsub => ({
       await context.Count.addCount(amount);
       let count = await context.Count.getCount();
 
-      pubsub.publish('countUpdated', count);
+      pubsub.publish(COUNT_UPDATED_TOPIC, { countUpdated: { amount: count.amount } });
 
       return count;
     },
   },
   Subscription: {
-    countUpdated(amount) {
-      return amount;
+    countUpdated: {
+      subscribe: () => pubsub.asyncIterator(COUNT_UPDATED_TOPIC),
     }
   }
 });

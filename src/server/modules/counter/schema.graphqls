@@ -19,5 +19,5 @@ extend type Mutation {
 
 extend type Subscription {
   # Subscription fired when anyone increases counter
-  countUpdated(ids: String): Count
+  countUpdated: Count
 }

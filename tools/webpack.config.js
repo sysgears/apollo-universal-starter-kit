@@ -10,8 +10,8 @@ import PersistGraphQLPlugin from 'persistgraphql-webpack-plugin';
 import _ from 'lodash';
 import AssetResolver from 'haul-cli/src/resolvers/AssetResolver';
 import HasteResolver from 'haul-cli/src/resolvers/HasteResolver';
+import * as appConfigs from './webpack.app_config';
 
-const appConfigs = require('./webpack.app_config');
 const pkg = require('../package.json');
 
 const IS_TEST = process.argv[1].indexOf('mocha-webpack') >= 0 || process.argv[1].indexOf('eslint') >= 0;
@@ -339,45 +339,9 @@ const iOSConfig = merge.smart(_.cloneDeep(createMobileConfig('ios')), {
   })
 }, appConfigs.iOSConfig);
 
-const dependencyPlatforms = {
-  "body-parser": "server",
-  "bootstrap": "web",
-  "dataloader": "server",
-  "expo": ["ios", "android"],
-  "express": "server",
-  "graphql-server-express": "server",
-  "graphql-subscriptions": "server",
-  "graphql-tools": "server",
-  "history": "web",
-  "immutability-helper": ["ios", "android", "web"],
-  "isomorphic-fetch": "server",
-  "knex": "server",
-  "persistgraphql": ["server", "web"],
-  "performance-now": "server",
-  "react-dom": "web",
-  "react-ga": "web",
-  "react-helmet": "web",
-  "react-hot-loader": "web",
-  "react-native": ["ios", "android"],
-  "react-native-web": "web",
-  "react-redux": "web",
-  "react-router": "web",
-  "react-router-dom": "web",
-  "react-router-redux": "web",
-  "react-transition-group": "web",
-  "reactstrap": "web",
-  "redux-devtools-extension": "web",
-  "redux-form": "web",
-  "serialize-javascript": "server",
-  "source-map-support": "server",
-  "sqlite3": "server",
-  "styled-components": ["server", "web"],
-  "subscriptions-transport-ws": ["ios", "android", "web"]
-};
-
 const getDepsForPlatform = platform => {
   let deps = _.filter(_.keys(pkg.dependencies), key => {
-    const val = dependencyPlatforms[key];
+    const val = appConfigs.dependencyPlatforms[key];
     return (!val || val === platform || (_.isArray(val) && val.indexOf(platform) >= 0));
   });
   if (['android', 'ios'].indexOf(platform) >= 0) {

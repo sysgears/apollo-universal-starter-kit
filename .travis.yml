@@ -3,12 +3,9 @@ node_js:
   - "node"
 os:
   - linux
-cache:
-  directories:
-    - node_modules
 script:
-  - npm run seed
-  - npm test
+  - yarn seed
+  - yarn test
 deploy:
   provider: heroku
   api_key:
@@ -16,13 +13,3 @@ deploy:
   app: apollo-universal-starter-kit
   on:
     repo: sysgears/apollo-universal-starter-kit
-sudo: false
-env:
-  - CXX=g++-4.8
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - gcc-4.8
-    - g++-4.8

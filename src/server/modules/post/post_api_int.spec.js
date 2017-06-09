@@ -23,28 +23,28 @@ describe('Post and comments example API works', () => {
       postsQuery: {
         totalCount: 20,
         edges: [{
-          cursor: "20",
-          node: {id: "20", title: "Post title 20", content: "Post content 20", __typename: "Post"},
+          cursor: 20,
+          node: {id: 20, title: "Post title 20", content: "Post content 20", __typename: "Post"},
           __typename: "PostEdges"
         }],
-        pageInfo: {endCursor: "20", hasNextPage: true, __typename: "PostPageInfo"},
+        pageInfo: {endCursor: 20, hasNextPage: true, __typename: "PostPageInfo"},
         __typename: "PostsQuery"
       }
     });
   });
 
   step('Query single post with comments works', async() => {
-    let result = await apollo.query({ query: POST_GET, variables: { id: "1" }});
+    let result = await apollo.query({ query: POST_GET, variables: { id: 1 }});
 
     expect(result.data).to.deep.equal({
       post: {
-        id: "1",
+        id: 1,
         title: "Post title 1",
         content: "Post content 1",
         __typename: "Post",
         comments: [
-          {id: "1", content: "Comment title 1 for post 1", __typename: "Comment"},
-          {id: "2", content: "Comment title 2 for post 1", __typename: "Comment"}
+          {id: 1, content: "Comment title 1 for post 1", __typename: "Comment"},
+          {id: 2, content: "Comment title 2 for post 1", __typename: "Comment"}
         ]
       }
     });
@@ -72,7 +72,7 @@ describe('Post and comments example API works', () => {
             mutation: 'CREATED',
             node:
             {
-              id: '21',
+              id: 21,
               title: 'New post 1',
               content: 'New post content 1',
               __typename: 'Post'
@@ -98,7 +98,7 @@ describe('Post and comments example API works', () => {
       mutation: POST_EDIT,
       variables: {
         input: {
-          id: '21',
+          id: 21,
           title: "New post 2",
           content: "New post content 2"
         }
@@ -116,7 +116,7 @@ describe('Post and comments example API works', () => {
           postsUpdated: {
             mutation: 'UPDATED',
             node: {
-              id: '21',
+              id: 21,
               title: 'New post 2',
               content: 'New post content 2',
               __typename: 'Post'
@@ -154,7 +154,7 @@ describe('Post and comments example API works', () => {
             mutation: 'DELETED',
             node:
             {
-              id: '21',
+              id: 21,
               title: 'New post 2',
               content: 'New post content 2',
               __typename: 'Post'

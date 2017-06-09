@@ -1,7 +1,7 @@
 #import "./post.graphql"
 #import "./comment.graphql"
 
-query getPost($id: ID!) {
+query getPost($id: Int!) {
     post(id: $id) {
         ... PostInfo
         comments {

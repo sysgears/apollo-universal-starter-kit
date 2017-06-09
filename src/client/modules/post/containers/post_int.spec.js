@@ -32,7 +32,7 @@ const mocks = {
       const edges = [];
       for (let i = +after + 1; i <= +after + 2; i++) {
         edges.push({
-          cursor: `${i}`,
+          cursor: i,
           node: createNode(i),
           __typename: "PostEdges"
         });
@@ -176,7 +176,7 @@ describe('Posts and comments example UI works', () => {
 
   step('Post editing form works', done => {
     mutations.editPost = (obj, { input })  => {
-      expect(input.id).to.equal('3');
+      expect(input.id).to.equal(3);
       expect(input.title).to.equal('Post title 33');
       expect(input.content).to.equal('Post content 33');
       done();
@@ -204,7 +204,7 @@ describe('Posts and comments example UI works', () => {
 
   step('Comment adding works', done => {
     mutations.addComment = (obj, { input })  => {
-      expect(input.postId).to.equal('3');
+      expect(input.postId).to.equal(3);
       expect(input.content).to.equal('Post comment 24');
       done();
       return input;
@@ -221,10 +221,10 @@ describe('Posts and comments example UI works', () => {
     subscription(null, {
       commentUpdated: {
         mutation: "CREATED",
-        id: "3003",
-        postId: "3",
+        id: 3003,
+        postId: 3,
         node: {
-          id: "3003",
+          id: 3003,
           content: "Post comment 3",
           __typename: "Comment"
         },
@@ -240,10 +240,10 @@ describe('Posts and comments example UI works', () => {
     subscription(null, {
       commentUpdated: {
         mutation: "DELETED",
-        id: "3003",
-        postId: "3",
+        id: 3003,
+        postId: 3,
         node: {
-          id: "3003",
+          id: 3003,
           content: "Post comment 3",
           __typename: "Comment"
         },
@@ -269,7 +269,7 @@ describe('Posts and comments example UI works', () => {
 
   step('Comment editing works', done => {
     mutations.editComment = (obj, { input })  => {
-      expect(input.postId).to.equal('3');
+      expect(input.postId).to.equal(3);
       expect(input.content).to.equal('Edited comment 2');
       done();
       return input;

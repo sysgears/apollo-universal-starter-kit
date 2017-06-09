@@ -27,7 +27,7 @@ describe('Post and comments example API works', () => {
           node: {id: 20, title: "Post title 20", content: "Post content 20", __typename: "Post"},
           __typename: "PostEdges"
         }],
-        pageInfo: {endCursor: "20", hasNextPage: true, __typename: "PostPageInfo"},
+        pageInfo: {endCursor: 20, hasNextPage: true, __typename: "PostPageInfo"},
         __typename: "PostsQuery"
       }
     });

@@ -201,25 +201,28 @@ The project structure presented in this boilerplate is **fractal**, where functi
 ```
 .
 ├── src                      # Application source code
-│   ├── client               # Fractal route for client side code
-│   │   ├── app              # Fractal route for common client application code
-│   │   └── modules          # Fractal route for client-side application module splitting (components, containers, GraphQL queries, redux reducers)
+│   ├── client               # Front-end source code
+│   │   ├── app              # Common front-end application code
+│   │   └── modules          # Front-end feature-modules, each module has:
+│   │   │                    # (components, containers, GraphQL queries, redux reducers)
 │   │   └── styles           # Application-wide styles
-│   │   └── test-helpers     # Test helper for apollo client tests
-│   │   └── index.jsx        # Render client with hot reload
-│   ├── common               # Apollo client, redux store and logging
-│   ├── mobile               # Render mobile client
-│   └── server               # Fractal route for server side code
-│   │   ├── api              # Initialization of GraphQL schema and subscription.
-│   │   └── database         # Fractal route for application module splitting
-│   │   │   └── migrations   # Database migration script using Knex
-│   │   │   └── seeds        # Database seed script using Knex
+│   │   └── test-helpers     # Test helper for front-end integration tests
+│   │   └── index.jsx        # Entry point to web front-end wtih hot code reload
+│   ├── common               # Common code, redux store and logging
+│   ├── mobile               # Mobile front-end source code
+│   │   ├── index.js         # Entry point to mobile front-end wtih live code reload
+│   └── server               # Back-end server source code
+│   │   ├── api              # GraphQL API implementation
+│   │   └── database         # Database migrations and seeds
+│   │   │   └── migrations   # Database migration scripts using Knex
+│   │   │   └── seeds        # Database seed scripts using Knex
 │   │   └── middleware       # Graphiql, GraphQL express and SSR rendering
-│   │   └── modules          # Fractal route for server-side application module splitting (schema definition, resolvers, sql queries)
+│   │   └── modules          # Back-end server feature-modules, each module has:
+│   │   │                    # (schema definition, resolvers, sql queries)
 │   │   └── sql              # Knex connector
-│   │   └── test-helpers     # Test helper for apollo server tests
+│   │   └── test-helpers     # Test helper for back-end integration tests
 │   │   └── api_server.js    # GraphQL api server set up
-│   │   └── index.js         # Render server with hot reload
+│   │   └── index.js         # Entry point to back-end wtih hot code reload
 └── tools                    # All build related files (Webpack)
 ```
 

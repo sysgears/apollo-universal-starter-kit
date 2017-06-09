@@ -25,29 +25,17 @@
 2. Install dependencies.
 
   ```
-  npm i
-  ```
-  or
-  ```
   yarn
   ```
 
 3. Seed sample database data.
 
   ```
-  npm run seed
-  ```
-  or
-  ```
   yarn seed
   ```
 
 4. Run starter kit in development mode.
 
-  ```
-  npm run watch
-  ```
-  or
   ```
   yarn watch
   ```
@@ -228,7 +216,7 @@ The project structure presented in this boilerplate is **fractal**, where functi
 
 ## Additional scripts
 
-While developing, you will probably rely mostly on `npm run watch` or `yarn watch`; however, there are additional scripts at your disposal:
+While developing, you will probably rely mostly on `yarn watch`; however, there are additional scripts at your disposal:
 
 |`npm run or yarn <script>`|Description|
 |--------------------------|-----------|
@@ -256,18 +244,10 @@ While developing, you will probably rely mostly on `npm run watch` or `yarn watc
 2. Install dependencies.
 
   ```
-  npm i
-  ```
-  or
-  ```
   yarn
   ```
 3. Seed production database data.
 
-  ```
-  npm run seed --prod
-  ```
-  or
   ```
   NODE_ENV=production yarn seed
   ```
@@ -275,23 +255,11 @@ While developing, you will probably rely mostly on `npm run watch` or `yarn watc
 5. Compile project.
 
   ```
-  npm run build
-  ```
-  or
-  ```
   yarn build
   ```
 
 6. Run project in production mode.
 
-  ```
-  node build/server
-  ```
-  or
-  ```
-  npm start
-  ```
-  or
   ```
   yarn start
   ```

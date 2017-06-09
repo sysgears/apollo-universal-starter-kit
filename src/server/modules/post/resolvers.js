@@ -134,17 +134,17 @@ export default pubsub => ({
   Subscription: {
     postUpdated: {
       subscribe: withFilter(() => pubsub.asyncIterator(POST_UPDATED_TOPIC), (payload, variables) => {
-        return Number(payload.postUpdated.id) === Number(variables.id);
+        return payload.postUpdated.id === variables.id;
       }),
     },
     postsUpdated: {
       subscribe: withFilter(() => pubsub.asyncIterator(POSTS_UPDATED_TOPIC), (payload, variables) => {
-        return Number(variables.endCursor) <= Number(payload.postsUpdated.id);
+        return variables.endCursor <= payload.postsUpdated.id;
       }),
     },
     commentUpdated: {
       subscribe: withFilter(() => pubsub.asyncIterator(COMMENT_UPDATED_TOPIC), (payload, variables) => {
-        return Number(payload.commentUpdated.postId) === Number(variables.postId);
+        return payload.commentUpdated.postId === variables.postId;
       }),
     },
   }

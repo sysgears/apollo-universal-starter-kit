@@ -26,32 +26,18 @@ class PostAdd extends React.Component {
   );
 
   render() {
-    const { loading } = this.props;
-
-    if (loading) {
-      return (
-        <section>
-          {this.renderMetaData()}
-          <div>
-            Loading...
-          </div>
-        </section>
-      );
-    } else {
-      return (
-        <section>
-          {this.renderMetaData()}
-          <Link to="/posts">Back</Link>
-          <h2>Create Post</h2>
-          <PostForm onSubmit={this.onSubmit}/>
-        </section>
-      );
-    }
+    return (
+      <section>
+        {this.renderMetaData()}
+        <Link to="/posts">Back</Link>
+        <h2>Create Post</h2>
+        <PostForm onSubmit={this.onSubmit}/>
+      </section>
+    );
   }
 }
 
 PostAdd.propTypes = {
-  loading: PropTypes.bool.isRequired,
   addPost: PropTypes.func.isRequired
 };
 

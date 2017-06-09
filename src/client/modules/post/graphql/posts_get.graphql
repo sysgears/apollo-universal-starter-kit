@@ -1,6 +1,6 @@
 #import "./post.graphql"
 
-query getPosts($limit: Int!, $after: ID) {
+query getPosts($limit: Int!, $after: Int) {
     postsQuery(limit: $limit, after: $after) {
         totalCount
         edges {

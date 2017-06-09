@@ -29,7 +29,10 @@
       "contributions": [
         "code",
         "tool",
-        "question"
+        "doc",
+        "test",
+        "question",
+        "review"
       ]
     },
     {
@@ -41,7 +44,9 @@
         "code",
         "tool",
         "doc",
-        "question"
+        "test",
+        "question",
+        "review"
       ]
     },
     {

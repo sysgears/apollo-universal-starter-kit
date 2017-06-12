@@ -13,7 +13,7 @@ import ReactGA from 'react-ga';
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
 import routes from '../app/routes';
-import { app as settings } from '../../../package.json';
+import { app as settings } from '../../../app.json';
 
 import '../styles/styles.scss';
 

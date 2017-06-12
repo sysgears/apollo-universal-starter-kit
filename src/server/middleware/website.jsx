@@ -15,7 +15,7 @@ import createReduxStore from '../../common/redux_store';
 import Html from './html';
 import routes from '../../client/app/routes';
 import log from '../../common/log';
-import { app as settings } from '../../../package.json';
+import { app as settings } from '../../../app.json';
 
 const port = process.env.PORT || settings.apiPort;
 

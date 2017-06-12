@@ -11,7 +11,7 @@
 > and help you stay productive.
 
 ## Hot Code Reload demo
-![screencast](https://cloud.githubusercontent.com/assets/1259926/18871714/5d122a8a-84bf-11e6-8d7a-8c941e301fa8.gif)
+![screencast](https://user-images.githubusercontent.com/1259926/27050558-a06941e8-4fbb-11e7-9ad0-fb08666f9526.gif)
 
 ## Getting Started
 

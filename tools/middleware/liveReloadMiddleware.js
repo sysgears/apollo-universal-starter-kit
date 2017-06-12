@@ -29,18 +29,18 @@ function liveReloadMiddleware(compiler) {
       if (notify) {
         notifyWatcher(watcher);
         notify = false;
-      }
+      } else {
+        watchers.push(watcher);
 
-      watchers.push(watcher);
-
-      req.on('close', () => {
-        for (let i = 0; i < watchers.length; i++) {
-          if (watchers[i] && watchers[i].req === req) {
-            watchers.splice(i, 1);
-            break;
+        req.on('close', () => {
+          for (let i = 0; i < watchers.length; i++) {
+            if (watchers[i] && watchers[i].req === req) {
+              watchers.splice(i, 1);
+              break;
+            }
           }
-        }
-      });
+        });
+      }
     } else {
       next();
     }

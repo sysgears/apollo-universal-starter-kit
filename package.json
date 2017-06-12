@@ -131,7 +131,7 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
     "fs-extra": "^3.0.1",
-    "haul-cli": "^0.6.0",
+    "haul": "^1.0.0-beta.0",
     "html-webpack-plugin": "^2.28.0",
     "http-proxy-middleware": "^0.17.4",
     "ignore-loader": "^0.1.2",

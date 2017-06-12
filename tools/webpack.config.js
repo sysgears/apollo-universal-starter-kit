@@ -8,8 +8,8 @@ import path from 'path';
 import ip from 'ip';
 import PersistGraphQLPlugin from 'persistgraphql-webpack-plugin';
 import _ from 'lodash';
-import AssetResolver from 'haul-cli/src/resolvers/AssetResolver';
-import HasteResolver from 'haul-cli/src/resolvers/HasteResolver';
+import AssetResolver from 'haul/src/resolvers/AssetResolver';
+import HasteResolver from 'haul/src/resolvers/HasteResolver';
 import * as appConfigs from './webpack.app_config';
 
 const pkg = require('../package.json');
@@ -66,7 +66,7 @@ const reactNativeRule = {
     cacheDirectory: __DEV__,
     presets: ["react-native"],
     plugins: [
-      require.resolve('haul-cli/src/utils/fixRequireIssues')
+      require.resolve('haul/src/utils/fixRequireIssues')
     ]
   }
 };
@@ -79,7 +79,7 @@ const createBaseConfig = platform => {
         {
           test: /\.jsx?$/,
           exclude: ['ios', 'android'].indexOf(platform) >= 0 ?
-            /node_modules\/(?!react-native|@expo|expo|lottie-react-native|haul-cli|pretty-format)$/ :
+            /node_modules\/(?!react-native|@expo|expo|lottie-react-native|haul|pretty-format)$/ :
             /node_modules/,
           use: [
             ['ios', 'android'].indexOf(platform) >= 0 ?
@@ -289,7 +289,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
       {
         test: AssetResolver.test,
         use: {
-          loader: require.resolve('haul-cli/src/loaders/assetLoader'),
+          loader: require.resolve('haul/src/loaders/assetLoader'),
           query: { platform, root: path.resolve('.'), bundle: false },
         },
       },

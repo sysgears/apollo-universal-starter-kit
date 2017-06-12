@@ -16,7 +16,7 @@ import waitOn from 'wait-on';
 import { Android, Simulator, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
 import qr from 'qrcode-terminal';
 import { RawSource } from 'webpack-sources';
-import symbolicateMiddleware from 'haul-cli/src/server/middleware/symbolicateMiddleware';
+import symbolicateMiddleware from 'haul/src/server/middleware/symbolicateMiddleware';
 import { fromStringWithSourceMap, SourceListMap } from 'source-list-map';
 
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';

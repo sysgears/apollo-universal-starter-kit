@@ -1,8 +1,13 @@
+/*eslint-disable no-unused-vars*/
+// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+// Apollo
 import { graphql, compose } from 'react-apollo';
 
+// Components
 import [Module]Show from '../components/[module]_show';
 
 class [Module] extends React.Component {

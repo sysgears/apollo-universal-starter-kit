@@ -1,7 +1,11 @@
+// React
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
+
+// Web UI
 import { NavItem } from 'reactstrap';
 
+// Component and helpers
 import [Module] from './containers/[module]';
 import reducers from './reducers';
 

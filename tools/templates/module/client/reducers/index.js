@@ -1,3 +1,4 @@
+// Redux reducer to manage client side state
 const defaultState = {
 };
 

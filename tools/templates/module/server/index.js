@@ -1,3 +1,4 @@
+// Components
 import [Module] from './sql';
 
 import schema from './schema.graphqls';

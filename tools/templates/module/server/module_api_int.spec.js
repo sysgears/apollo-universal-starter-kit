@@ -1,6 +1,9 @@
+/*eslint-disable no-unused-vars*/
+// General imports
 import chai from 'chai';
 import { step } from 'mocha-steps';
 
+// Helpers
 import { getServer, getApollo } from '../../test-helpers/integration_setup';
 
 describe('[Module] API works', () => {

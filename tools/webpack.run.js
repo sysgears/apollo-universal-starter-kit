@@ -18,6 +18,7 @@ import qr from 'qrcode-terminal';
 import { RawSource } from 'webpack-sources';
 import symbolicateMiddleware from 'haul/src/server/middleware/symbolicateMiddleware';
 import { fromStringWithSourceMap, SourceListMap } from 'source-list-map';
+import openurl from 'openurl';
 
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';
 // eslint-disable-next-line import/named
@@ -249,6 +250,11 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
           logger.error(err);
         } else {
           logger.debug("Backend has been started, resuming webpack dev server...");
+          if (platform === 'web') {
+            try {
+              openurl.open(`http://localhost:${config.devServer.port}`);
+            } catch (e) { console.error(e.stack); }
+          }
           callback();
         }
       });
@@ -344,7 +350,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     });
   }
 
-  logger(`Webpack ${config.name} dev server listening on ${config.devServer.port}`);
+  logger(`Webpack ${config.name} dev server listening on http://localhost:${config.devServer.port}`);
   serverInstance.listen(config.devServer.port, function() {
     if (platform !== 'web') {
       wsProxy = webSocketProxy.attachToServer(serverInstance, '/debugger-proxy');

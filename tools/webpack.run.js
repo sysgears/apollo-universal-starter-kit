@@ -128,8 +128,7 @@ function startClientWebpack({config, dll, platform}) {
             entry.unshift('react-hot-loader/patch');
           }
           entry.unshift(
-            `webpack-hot-middleware/client?http://localhost:${config.devServer.port}/`,
-            'webpack/hot/dev-server');
+            `webpack-hot-middleware/client`);
         });
         config.plugins.push(new webpack.HotModuleReplacementPlugin());
       }
@@ -361,6 +360,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     }
   });
   serverInstance.timeout = 0;
+  serverInstance.keepAliveTimeout = 0;
 }
 
 function isDllValid(node) {

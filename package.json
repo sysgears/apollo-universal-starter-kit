@@ -34,7 +34,8 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "watch": "node tools/webpack.entry watch",
-    "heroku-postbuild": "rm -rf build && npm run build && npm run seed"
+    "heroku-postbuild": "rm -rf build && npm run build && npm run seed",
+    "cli": "node tools/cli"
   },
   "repository": {
     "type": "git",
@@ -114,6 +115,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
+    "caporal": "^0.6.0",
     "chai": "^4.0.0",
     "chai-http": "^3.0.0",
     "compression": "^1.6.2",
@@ -156,6 +158,7 @@
     "react-test-renderer": "~15.4.2",
     "resolve-url-loader": "^2.0.2",
     "sass-loader": "^6.0.5",
+    "shelljs": "^0.7.8",
     "source-list-map": "^2.0.0",
     "style-loader": "^0.18.0",
     "url-loader": "^0.5.8",

@@ -8,18 +8,18 @@ import path from 'path';
 import ip from 'ip';
 import PersistGraphQLPlugin from 'persistgraphql-webpack-plugin';
 import _ from 'lodash';
-import AssetResolver from 'haul-cli/src/resolvers/AssetResolver';
-import HasteResolver from 'haul-cli/src/resolvers/HasteResolver';
+import AssetResolver from 'haul/src/resolvers/AssetResolver';
+import HasteResolver from 'haul/src/resolvers/HasteResolver';
 import * as appConfigs from './webpack.app_config';
-
-const pkg = require('../package.json');
+import pkg from '../package.json';
+import { app as settings } from '../app.json';
 
 const IS_TEST = process.argv[1].indexOf('mocha-webpack') >= 0 || process.argv[1].indexOf('eslint') >= 0;
 if (IS_TEST) {
   delete appConfigs.serverConfig.url;
 }
-const IS_SSR = pkg.app.ssr && !appConfigs.serverConfig.url && !IS_TEST;
-const IS_PERSIST_GQL = pkg.app.persistGraphQL && !appConfigs.serverConfig.url && !IS_TEST;
+const IS_SSR = settings.ssr && !appConfigs.serverConfig.url && !IS_TEST;
+const IS_PERSIST_GQL = settings.persistGraphQL && !appConfigs.serverConfig.url && !IS_TEST;
 global.__DEV__ = process.argv.length >= 3 && (process.argv[2].indexOf('watch') >= 0 || IS_TEST);
 const buildNodeEnv = __DEV__ ? (IS_TEST ? 'test' : 'development') : 'production';
 
@@ -55,7 +55,7 @@ const babelRule = {
       "transform-decorators-legacy",
       "transform-class-properties",
       ["styled-components", { "ssr": IS_SSR } ]
-    ].concat(__DEV__ && pkg.app.reactHotLoader ? ['react-hot-loader/babel'] : []),
+    ].concat(__DEV__ && settings.reactHotLoader ? ['react-hot-loader/babel'] : []),
     only: ["*.js", "*.jsx"]
   }
 };
@@ -66,7 +66,7 @@ const reactNativeRule = {
     cacheDirectory: __DEV__,
     presets: ["react-native"],
     plugins: [
-      require.resolve('haul-cli/src/utils/fixRequireIssues')
+      require.resolve('haul/src/utils/fixRequireIssues')
     ]
   }
 };
@@ -79,7 +79,7 @@ const createBaseConfig = platform => {
         {
           test: /\.jsx?$/,
           exclude: ['ios', 'android'].indexOf(platform) >= 0 ?
-            /node_modules\/(?!react-native|@expo|expo|lottie-react-native|haul-cli|pretty-format)$/ :
+            /node_modules\/(?!react-native|@expo|expo|lottie-react-native|haul|pretty-format)$/ :
             /node_modules/,
           use: [
             ['ios', 'android'].indexOf(platform) >= 0 ?
@@ -94,7 +94,7 @@ const createBaseConfig = platform => {
               } :
               babelRule
           ].concat(
-            pkg.app.persistGraphQL ?
+            settings.persistGraphQL ?
               ['persistgraphql-webpack-plugin/js-loader'] : []
           )
         },
@@ -196,7 +196,7 @@ const serverConfig = merge.smart(_.cloneDeep(createBaseConfig("server")), {
     devtoolFallbackModuleFilenameTemplate: __DEV__ ? '../../[resource-path];[hash]' : undefined,
     filename: '[name].js',
     sourceMapFilename: '[name].[chunkhash].js.map',
-    path: path.resolve(pkg.app.backendBuildDir),
+    path: path.resolve(settings.backendBuildDir),
     publicPath: '/'
   },
   plugins: serverPlugins
@@ -213,7 +213,7 @@ const createClientPlugins = (platform) => {
       __PERSIST_GQL__: IS_PERSIST_GQL,
       __BACKEND_URL__: appConfigs.serverConfig.url ?
         `"${appConfigs.serverConfig.url}"`
-        : (platform !== 'web' ? `\"http://${ip.address()}:${pkg.app.apiPort}/graphql\"` : false)
+        : (platform !== 'web' ? `\"http://${ip.address()}:${settings.apiPort}/graphql\"` : false)
     })),
     clientPersistPlugin
   ];
@@ -268,15 +268,15 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
   },
   output: {
     filename: '[name].[hash].js',
-    path: path.resolve(pkg.app.frontendBuildDir),
+    path: path.resolve(settings.frontendBuildDir),
     publicPath: '/'
   },
   plugins: createClientPlugins("web"),
   devServer: _.merge({}, baseDevServerConfig, {
-    port: pkg.app.webpackDevPort,
+    port: settings.webpackDevPort,
     proxy: {
       '!/*.hot-update.{json,js}': {
-        target: `http://localhost:${pkg.app.apiPort}`,
+        target: `http://localhost:${settings.apiPort}`,
         logLevel: 'info'
       }
     }
@@ -289,7 +289,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
       {
         test: AssetResolver.test,
         use: {
-          loader: require.resolve('haul-cli/src/loaders/assetLoader'),
+          loader: require.resolve('haul/src/loaders/assetLoader'),
           query: { platform, root: path.resolve('.'), bundle: false },
         },
       },
@@ -320,7 +320,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
 const androidConfig = merge.smart(_.cloneDeep(createMobileConfig('android')), {
   name: 'android-frontend',
   output: {
-    path: path.resolve(path.join(pkg.app.frontendBuildDir, 'android')),
+    path: path.resolve(path.join(settings.frontendBuildDir, 'android')),
   },
   devServer: _.merge({}, baseDevServerConfig, {
     hot: false,
@@ -331,7 +331,7 @@ const androidConfig = merge.smart(_.cloneDeep(createMobileConfig('android')), {
 const iOSConfig = merge.smart(_.cloneDeep(createMobileConfig('ios')), {
   name: 'ios-frontend',
   output: {
-    path: path.resolve(path.join(pkg.app.frontendBuildDir, 'ios')),
+    path: path.resolve(path.join(settings.frontendBuildDir, 'ios')),
   },
   devServer: _.merge({}, baseDevServerConfig, {
     hot: false,
@@ -368,12 +368,12 @@ const createDllConfig = platform => {
       })),
       new webpack.DllPlugin({
         name,
-        path: path.join(pkg.app.dllBuildDir, `${name}_dll.json`),
+        path: path.join(settings.dllBuildDir, `${name}_dll.json`),
       })
     ],
     output: {
       filename: `${name}.[hash]_dll.js`,
-      path: path.resolve(pkg.app.dllBuildDir),
+      path: path.resolve(settings.dllBuildDir),
       library: name
     },
   };

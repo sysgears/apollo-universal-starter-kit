@@ -3,22 +3,6 @@
   "private": true,
   "version": "1.0.0",
   "main": "src/server",
-  "app": {
-    "backendBuildDir": "build/server",
-    "frontendBuildDir": "build/client",
-    "dllBuildDir": "build/dll",
-    "webpackDevPort": 3000,
-    "apiPort": 8080,
-    "ssr": true,
-    "webpackDll": true,
-    "frontendRefreshOnBackendChange": true,
-    "reactHotLoader": false,
-    "debugSQL": false,
-    "persistGraphQL": false,
-    "apolloLogging": false,
-    "android": false,
-    "ios": false
-  },
   "engines": {
     "node": "6.6.0",
     "npm": "3.10.3"
@@ -133,7 +117,7 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
     "fs-extra": "^3.0.1",
-    "haul-cli": "^0.6.0",
+    "haul": "^1.0.0-beta.0",
     "html-webpack-plugin": "^2.28.0",
     "http-proxy-middleware": "^0.17.4",
     "ignore-loader": "^0.1.2",

@@ -1,4 +1,20 @@
 {
+  "app": {
+    "backendBuildDir": "build/server",
+    "frontendBuildDir": "build/client",
+    "dllBuildDir": "build/dll",
+    "webpackDevPort": 3000,
+    "apiPort": 8080,
+    "ssr": true,
+    "webpackDll": true,
+    "frontendRefreshOnBackendChange": true,
+    "reactHotLoader": false,
+    "debugSQL": false,
+    "persistGraphQL": false,
+    "apolloLogging": false,
+    "android": false,
+    "ios": false
+  },
   "expo": {
     "sdkVersion": "15.0.0"
   }

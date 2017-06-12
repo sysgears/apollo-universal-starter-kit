@@ -9,7 +9,7 @@ import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
 import addGraphQLSubscriptions from './api/subscriptions';
-import { app as settings } from '../../package.json';
+import { app as settings } from '../../app.json';
 import log from '../common/log';
 
 // eslint-disable-next-line import/no-mutable-exports

@@ -20,9 +20,9 @@ import symbolicateMiddleware from 'haul-cli/src/server/middleware/symbolicateMid
 import { fromStringWithSourceMap, SourceListMap } from 'source-list-map';
 
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';
-import pkg from '../package.json';
 // eslint-disable-next-line import/named
 import { backend, web, ios, android } from './webpack.config';
+import { app as settings } from '../app.json';
 
 const connect = require('connect');
 const InspectorProxy = require('react-native/local-cli/server/util/inspectorProxy.js');
@@ -123,7 +123,7 @@ function startClientWebpack({config, dll, platform}) {
     if (__DEV__) {
       if (config.devServer.hot) {
         _.each(config.entry, entry => {
-          if (pkg.app.reactHotLoader) {
+          if (settings.reactHotLoader) {
             entry.unshift('react-hot-loader/patch');
           }
           entry.unshift(
@@ -195,7 +195,7 @@ function startServerWebpack() {
             server.kill('SIGUSR2');
           }
 
-          if (pkg.app.frontendRefreshOnBackendChange) {
+          if (settings.frontendRefreshOnBackendChange) {
             for (let module of stats.compilation.modules) {
               if (module.built && module.resource &&
                 module.resource.indexOf(path.resolve('./src/server')) === 0) {
@@ -225,17 +225,17 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
   config.plugins.push(frontendVirtualModules);
 
   let vendorHashesJson, vendorSourceListMap;
-  if (pkg.app.webpackDll && dll) {
+  if (settings.webpackDll && dll) {
     const name = `vendor_${platform}`;
-    const jsonPath = path.join('..', pkg.app.dllBuildDir, `${name}_dll.json`);
+    const jsonPath = path.join('..', settings.dllBuildDir, `${name}_dll.json`);
     config.plugins.push(new webpack.DllReferencePlugin({
       context: process.cwd(),
       manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
     }));
-    vendorHashesJson = JSON.parse(fs.readFileSync(path.join(pkg.app.dllBuildDir, `${name}_dll_hashes.json`)));
+    vendorHashesJson = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, `${name}_dll_hashes.json`)));
     vendorSourceListMap = fromStringWithSourceMap(
-      fs.readFileSync(path.join(pkg.app.dllBuildDir, vendorHashesJson.name)).toString() + "\n",
-      JSON.parse(fs.readFileSync(path.join(pkg.app.dllBuildDir, vendorHashesJson.name + ".map")).toString())
+      fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name)).toString() + "\n",
+      JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name + ".map")).toString())
     );
   }
 
@@ -244,7 +244,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
   compiler.plugin('after-emit', (compilation, callback) => {
     if (backendFirstStart) {
       logger.debug("Webpack dev server is waiting for backend to start...");
-      waitOn({ resources: [`tcp:localhost:${pkg.app.apiPort}`] }, err => {
+      waitOn({ resources: [`tcp:localhost:${settings.apiPort}`] }, err => {
         if (err) {
           logger.error(err);
         } else {
@@ -256,7 +256,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       callback();
     }
   });
-  if (pkg.app.webpackDll && dll && platform !== 'web' && __DEV__) {
+  if (settings.webpackDll && dll && platform !== 'web' && __DEV__) {
     compiler.plugin('after-compile', (compilation, callback) => {
       _.each(compilation.chunks, chunk => {
         _.each(chunk.files, file => {
@@ -286,7 +286,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
           assetsMap[`${bundle}.js.map`] = `${bundleJs}.map`;
         }
       });
-      if (pkg.app.webpackDll) {
+      if (settings.webpackDll) {
         assetsMap['vendor.js'] = vendorHashesJson.name;
       }
       fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
@@ -360,19 +360,19 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 function isDllValid(node) {
   const name = `vendor_${node.platform}`;
   try {
-    const hashesPath = path.join(pkg.app.dllBuildDir, `${name}_dll_hashes.json`);
+    const hashesPath = path.join(settings.dllBuildDir, `${name}_dll_hashes.json`);
     if (!fs.existsSync(hashesPath)) {
       return false;
     }
     let meta = JSON.parse(fs.readFileSync(hashesPath));
-    if (!fs.existsSync(path.join(pkg.app.dllBuildDir, meta.name))) {
+    if (!fs.existsSync(path.join(settings.dllBuildDir, meta.name))) {
       return false;
     }
     if (!_.isEqual(meta.modules, node.dll.entry.vendor)) {
       return false;
     }
 
-    let json = JSON.parse(fs.readFileSync(path.join(pkg.app.dllBuildDir, `${name}_dll.json`)));
+    let json = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, `${name}_dll.json`)));
 
     for (let filename of Object.keys(json.content)) {
       if (filename.indexOf(' ') < 0) {
@@ -405,18 +405,18 @@ function buildDll(node) {
     if (!isDllValid(node)) {
       console.log(`Generating ${name} DLL bundle with modules:\n${JSON.stringify(node.dll.entry.vendor)}`);
 
-      mkdirp.sync(pkg.app.dllBuildDir);
+      mkdirp.sync(settings.dllBuildDir);
       const compiler = webpack(node.dll);
 
       compiler.plugin('done', stats => {
-        let json = JSON.parse(fs.readFileSync(path.join(pkg.app.dllBuildDir, `${name}_dll.json`)));
+        let json = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, `${name}_dll.json`)));
         const vendorKey = _.findKey(stats.compilation.assets,
           (v, key) => key.startsWith('vendor') && key.endsWith('_dll.js'));
         const meta = { name: vendorKey, hashes: {}, modules: node.dll.entry.vendor };
         for (let filename of Object.keys(json.content)) {
           if (filename.indexOf(' ') < 0) {
             meta.hashes[filename] = crypto.createHash('md5').update(fs.readFileSync(filename)).digest('hex');
-            fs.writeFileSync(path.join(pkg.app.dllBuildDir, `${name}_dll_hashes.json`), JSON.stringify(meta));
+            fs.writeFileSync(path.join(settings.dllBuildDir, `${name}_dll_hashes.json`), JSON.stringify(meta));
           }
         }
         done();
@@ -480,10 +480,10 @@ function startWebpack(node) {
 const nodes = []
   .concat(!backend.config.url ? [backend] : [])
   .concat([web])
-  .concat(pkg.app.android ? [android] : [])
-  .concat(pkg.app.ios ? [ios]: []);
+  .concat(settings.android ? [android] : [])
+  .concat(settings.ios ? [ios]: []);
 
 nodes.forEach(node =>
-  ((__DEV__ && pkg.app.webpackDll && node.dll) ? buildDll(node) : Promise.resolve({}))
+  ((__DEV__ && settings.webpackDll && node.dll) ? buildDll(node) : Promise.resolve({}))
     .then(() => startWebpack(node))
 );

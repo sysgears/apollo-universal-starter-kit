@@ -97,6 +97,25 @@ for both web and mobile.
 Currently we do not yet support persisted queries. This can be used in this starter kit currently only for web, but it is
 planed in the future.
 
+### Feature Modules Scaffolding with CLI
+
+This starter kit encourages modular design of application features. 
+Each feature should be designed as a decoupled module, deleting feature should ideally not break the remaining application.
+Basic feature module scaffolding is provided with the following command:
+```
+yarn cli module <module-name>
+```
+This will create all the necessary files to start developing on a new feature module. It creates `client` and `server` module.
+If you would like to only add one or the other, add a second parameter like:
+```
+yarn cli module <module-name> [client|server]
+```
+Run the following command to see the CLI help:
+```
+yarn cli
+```
+You still need to add the module into `/src/client/index.jsx` for client and `/src/server/modules/index.js` for server.
+ 
 ## Features
 - [Webpack] for back end
 
@@ -230,6 +249,7 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
 |`seed`|Seed sample database using SQLite. Use `--prod` flag to run in "production" mode.|
 |`migrate`|Migrate the sample database|
 |`rollback`|Rollback the sample database to previous state.|
+|`cli`|CLI tool, currently used for modules scaffolding only.|
 
 ## Deployment to Production
 

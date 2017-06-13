@@ -15,33 +15,37 @@ String.prototype.capitalize = function() {
 function copyFiles(logger, templatePath, module, location) {
   logger.info(`Copying ${location} files…`);
 
-  shell.mkdir(`${__dirname}/../../src/${location}/modules/${module}`);
+  // create new module directory
+  const mkdir = shell.mkdir(`${__dirname}/../../src/${location}/modules/${module}`);
 
-  const destinationPath = `${__dirname}/../../src/${location}/modules/${module}`;
-  shell.cp('-R', `${templatePath}/${location}/*`, destinationPath);
+  // continue only if directory does not jet exist
+  if(mkdir.code === 0) {
+    const destinationPath = `${__dirname}/../../src/${location}/modules/${module}`;
+    shell.cp('-R', `${templatePath}/${location}/*`, destinationPath);
 
-  logger.info(`✔ The ${location} files have been copied!`);
+    logger.info(`✔ The ${location} files have been copied!`);
 
+    // change to destination directory
+    shell.cd(destinationPath);
 
-  // Replace variable values in all files
-  shell.cd(destinationPath);
+    // rename files
+    shell.ls('-Rl', '.').forEach(entry => {
+      if (entry.isFile()) {
+        const moduleFile = entry.name.replace('module', module);
+        shell.mv(entry.name, moduleFile);
+      }
+    });
 
-  // rename files
-  shell.ls('-Rl', '.').forEach(entry => {
-    if (entry.isFile()) {
-      const moduleFile = entry.name.replace('module', module);
-      shell.mv(entry.name, moduleFile);
-    }
-  });
+    // replace module names
+    shell.ls('-Rl', '.').forEach(entry => {
+      if (entry.isFile()) {
+        shell.sed('-i', /\[module\]/g, module, entry.name);
+        shell.sed('-i', /\[Module\]/g, module.toCamelCase().capitalize(), entry.name);
+      }
+    });
 
-  // replace module names
-  shell.ls('-Rl', '.').forEach(entry => {
-    if (entry.isFile()) {
-      shell.sed('-i', `\\[module\\]`, module, entry.name);
-      shell.sed('-i', `\\[Module\\]`, module.toCamelCase().capitalize(), entry.name);
-      shell.sed('-i', `\\[Module\\]`, module.toCamelCase().capitalize(), entry.name);
-    }
-  });
+    logger.info(`✔Module for ${location} successfully created!`);
+  }
 }
 
 module.exports = (args, options, logger) => {
@@ -62,6 +66,4 @@ module.exports = (args, options, logger) => {
   if (args.location === 'server' || args.location === 'both') {
     copyFiles(logger, templatePath, args.module, 'server');
   }
-
-  logger.info('✔Module successfully created!');
 };

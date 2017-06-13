@@ -483,6 +483,14 @@ function startWebpack(node) {
   }
 }
 
+function validateConfig() {
+  if (settings.android && settings.ios) {
+    throw new Error("Unfortunately Expo doesn't support serving iOS and Android bundles at the same time");
+  }
+}
+
+validateConfig();
+
 const nodes = []
   .concat(!backend.config.url ? [backend] : [])
   .concat([web])

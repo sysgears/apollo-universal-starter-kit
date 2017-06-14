@@ -64,8 +64,46 @@ function copyFiles(logger, templatePath, module, location) {
   }
 }
 
-module.exports = (args, options, logger) => {
+function deleteFiles(logger, templatePath, module, location) {
+  logger.info(`Deleting ${location} files…`);
 
+  const modulePath = `${__dirname}/../../src/${location}/modules/${module}`;
+
+  if (fs.existsSync(modulePath)) {
+    // create new module directory
+    shell.rm('-rf', modulePath);
+
+    // change to destination directory
+    shell.cd(`${__dirname}/../../src/${location}/modules/`);
+
+    // add module to Feature function
+    //let ok = shell.sed('-i', `import ${module} from '.\/${module}';`, '', 'index.js');
+
+    // get module input data
+    const path = `${__dirname}/../../src/${location}/modules/index.js`;
+    let data = fs.readFileSync(path);
+
+    // extract Feature modules
+    const re = /Feature\(([^()]+)\)/g;
+    const match = re.exec(data);
+
+    // remove import module line
+    const modules = match[1].split(',').filter(featureModule => featureModule !== module);
+    const lines = data.toString().split('\n').filter(line => line.match(`import ${module} from '.\/${module}';`) === null);
+    fs.writeFileSync(path, lines.join('\n'));
+
+    // remove module from Feature function
+    shell.sed('-i', re, `Feature(${modules.toString().trim()})`, 'index.js');
+
+    // continue only if directory does not jet exist
+    logger.info(`✔Module for ${location} successfully deleted!`);
+  }
+  else {
+    logger.info(`✔Module ${location} location for ${modulePath} wasn't found!`);
+  }
+}
+
+module.exports = (action, args, options, logger) => {
   const templatePath = `${__dirname}/../templates/module`;
 
   if (!fs.existsSync(templatePath)) {
@@ -75,11 +113,21 @@ module.exports = (args, options, logger) => {
 
   // client
   if (args.location === 'client' || args.location === 'both') {
-    copyFiles(logger, templatePath, args.module, 'client');
+    if (action === 'addmodule') {
+      copyFiles(logger, templatePath, args.module, 'client');
+    }
+    else if (action === 'deletemodule') {
+      deleteFiles(logger, templatePath, args.module, 'client');
+    }
   }
 
   // server
   if (args.location === 'server' || args.location === 'both') {
-    copyFiles(logger, templatePath, args.module, 'server');
+    if (action === 'addmodule') {
+      copyFiles(logger, templatePath, args.module, 'server');
+    }
+    else if (action === 'deletemodule') {
+      deleteFiles(logger, templatePath, args.module, 'server');
+    }
   }
 };

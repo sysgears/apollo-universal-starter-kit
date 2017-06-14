@@ -128,8 +128,7 @@ function startClientWebpack({config, dll, platform}) {
             entry.unshift('react-hot-loader/patch');
           }
           entry.unshift(
-            `webpack-hot-middleware/client?http://localhost:${config.devServer.port}/`,
-            'webpack/hot/dev-server');
+            `webpack-hot-middleware/client`);
         });
         config.plugins.push(new webpack.HotModuleReplacementPlugin());
       }
@@ -361,6 +360,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     }
   });
   serverInstance.timeout = 0;
+  serverInstance.keepAliveTimeout = 0;
 }
 
 function isDllValid(node) {
@@ -482,6 +482,14 @@ function startWebpack(node) {
     startClientWebpack(node);
   }
 }
+
+function validateConfig() {
+  if (settings.android && settings.ios) {
+    throw new Error("Unfortunately Expo doesn't support serving iOS and Android bundles at the same time");
+  }
+}
+
+validateConfig();
 
 const nodes = []
   .concat(!backend.config.url ? [backend] : [])

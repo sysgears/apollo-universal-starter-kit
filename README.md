@@ -11,7 +11,7 @@
 > and help you stay productive.
 
 ## Hot Code Reload demo
-![screencast](https://cloud.githubusercontent.com/assets/1259926/18871714/5d122a8a-84bf-11e6-8d7a-8c941e301fa8.gif)
+![screencast](https://user-images.githubusercontent.com/1259926/27050558-a06941e8-4fbb-11e7-9ad0-fb08666f9526.gif)
 
 ## Getting Started
 
@@ -50,7 +50,7 @@ This starter kit adds full [React Native] integration, with [Webpack] as a packa
 No native code compilation tools are needed in order to develop native mobile applications with this kit.
 You are able to run both web and mobile versions of your app at the same time connected to the same backend.
 
-For running Android or iOS you need to set in package.json `ios` or `android` field `true`. Currently we do not support
+For running Android or iOS you need to set in `app.json` `ios` or `android` field `true`. Currently we do not support
 running both at the same time, since Expo does not support this.
 
 #### Running on a device
@@ -72,7 +72,7 @@ To bring up the developer menu press ⌘+D.
 
 #### Writing the code
 This starter kit is designed so you can use it for just web, mobile or projects using both together. 
-In case you do not want to use mobile, just set both `ios` or `android` settings in package.json to `false`.
+In case you do not want to use mobile, just set both `ios` or `android` settings in `app.json` to `false`.
 
 We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
 is possible. In this case you can write your components with React Native's building blocks that are supported in
@@ -149,7 +149,7 @@ front end and back end at the same time, so React should not complain about diff
   On the initial web page request back end fully renders UI and hands off Apollo Redux Store state to front end. Frontend
 then starts off from there and updates itself on user interactions.
 
-  If you don't need Server Side Rendering, set package.json `ssr` field to `false`
+  If you don't need Server Side Rendering, set `app.json` `ssr` field to `false`
 
 - Optimistic UI updates
 
@@ -170,7 +170,7 @@ GraphQL requests are batched together automatically by [Apollo]
   [Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL].
 NoSQL storage or any other data source can be used the same way.
 
-  [Debug SQL] Prints out execuded queries, with respective times in development mode and can be set in package.json by `debugSQL` field `true`
+  [Debug SQL] Prints out execuded queries, with respective times in development mode and can be set in `app.json` by `debugSQL` field `true`
 
 - Powerful stylesheets with Hot Reloading
 
@@ -184,7 +184,7 @@ in `styles.scss` for global styling which is Hot Reloaded on change. React compo
 - [React Hot Loader v3] for the sake of completeness this project also supports `React Hot Loader v3`, but it is turned off.
 By default this starter kit uses pure `Webpack HMR` for all hot reloading purposes and we think it covers all
 practical needs during development and using `React Hot Loader v3` in addition to `Webpack HMR` makes hot reloading less
-predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` field of `package.json` to `true`. 
+predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` field of `app.json` to `true`. 
 
 - [PersistGraphQL Webpack Plugin] is a tool to gather static GraphQL queries for GraphQL projects and inject them into build.
 It will make front end and back end aware of static queries used in the project and will only allow these queries
@@ -285,7 +285,7 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
 
 ### Deploying to [Heroku]
 1. Add your app to Heroku
-1. Allow Heroku to install build time dependencies from the devDependencies in package.json:
+1. Allow Heroku to install build time dependencies from the devDependencies in `package.json`:
    `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
 1. Deploy your app on Heroku
 

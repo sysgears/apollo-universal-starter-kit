@@ -58,7 +58,6 @@
     "knex": "^0.13.0",
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
-    "npm-check-updates": "^2.11.3",
     "performance-now": "^2.1.0",
     "persistgraphql": "^0.3.2",
     "prop-types": "^15.5.10",

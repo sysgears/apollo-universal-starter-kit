@@ -44,6 +44,22 @@ function copyFiles(logger, templatePath, module, location) {
       }
     });
 
+    shell.cd('..');
+    // get module input data
+    const path = `${__dirname}/../../src/${location}/modules/index.js`;
+    let data = fs.readFileSync(path);
+
+    // extract Feature modules
+    const re = /Feature\(([^()]+)\)/g;
+    const match = re.exec(data);
+
+    // prepend import module
+    const prepend = `import ${module} from './${module}';\n`;
+    fs.writeFileSync(path, prepend + data);
+
+    // add module to Feature function
+    shell.sed('-i', re, `Feature(${module}, ${match[1]})`, 'index.js');
+
     logger.info(`✔Module for ${location} successfully created!`);
   }
 }

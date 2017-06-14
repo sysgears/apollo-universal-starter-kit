@@ -114,7 +114,6 @@ Run the following command to see the CLI help:
 ```
 yarn cli
 ```
-You still need to add the module into `/src/client/index.jsx` for client and `/src/server/modules/index.js` for server.
  
 ## Features
 - [Webpack] for back end

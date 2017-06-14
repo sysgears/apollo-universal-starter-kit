@@ -103,13 +103,23 @@ This starter kit encourages modular design of application features.
 Each feature should be designed as a decoupled module, deleting feature should ideally not break the remaining application.
 Basic feature module scaffolding is provided with the following command:
 ```
-yarn cli module <module-name>
+yarn cli addmodule <module-name>
 ```
 This will create all the necessary files to start developing on a new feature module. It creates `client` and `server` module.
 If you would like to only add one or the other, add a second parameter like:
 ```
-yarn cli module <module-name> [client|server]
+yarn cli addmodule <module-name> [client|server]
 ```
+If you wish to remove an existing module, do so with:
+```
+yarn cli deletemodule <module-name>
+```
+Again you can specify `client` or `server` as a second parameter, if you only wish to delete one or the other. 
+
+This way you can easily delete existing examples, like `counter` add `post`. Do keep in mind that you need at least one
+module linked on the server side. So deleting both, before creating any new ones first, will result in
+`TypeError: Cannot read property 'schema' of undefined` on the server side.
+
 Run the following command to see the CLI help:
 ```
 yarn cli

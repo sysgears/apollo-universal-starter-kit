@@ -218,7 +218,7 @@ const createClientPlugins = (platform) => {
     clientPersistPlugin
   ];
 
-  if (appConfigs.serverConfig.url) {
+  if (appConfigs.serverConfig.url && platform === 'web') {
     clientPlugins.push(new HtmlWebpackPlugin({
       template: 'tools/html-plugin-template.ejs',
       inject: 'body',

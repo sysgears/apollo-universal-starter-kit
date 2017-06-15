@@ -265,7 +265,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     compiler.plugin('after-compile', (compilation, callback) => {
       _.each(compilation.chunks, chunk => {
         _.each(chunk.files, file => {
-          if (!file.endsWith('.map')) {
+          if (file.endsWith('.bundle')) {
             let sourceListMap = new SourceListMap();
             sourceListMap.add(vendorSourceListMap);
             sourceListMap.add(fromStringWithSourceMap(compilation.assets[file].source(),

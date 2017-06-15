@@ -56,7 +56,7 @@ const __WINDOWS__ = /^win/.test(process.platform);
 
 let server;
 let startBackend = false;
-let backendFirstStart = !backend.config.url;
+let backendFirstStart = true;
 
 process.on('exit', () => {
   if (server) {
@@ -224,7 +224,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 
   config.plugins.push(frontendVirtualModules);
 
-  let vendorHashesJson, vendorSourceListMap;
+  let vendorHashesJson, vendorSourceListMap, vendorSource, vendorMap;
   if (settings.webpackDll && dll) {
     const name = `vendor_${platform}`;
     const jsonPath = path.join('..', settings.dllBuildDir, `${name}_dll.json`);
@@ -233,9 +233,11 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
     }));
     vendorHashesJson = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, `${name}_dll_hashes.json`)));
+    vendorSource = new RawSource(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name)).toString() + "\n");
+    vendorMap = new RawSource(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name + ".map")).toString());
     vendorSourceListMap = fromStringWithSourceMap(
-      fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name)).toString() + "\n",
-      JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name + ".map")).toString())
+      vendorSource.source(),
+      JSON.parse(vendorMap.source())
     );
   }
 
@@ -243,20 +245,29 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 
   compiler.plugin('after-emit', (compilation, callback) => {
     if (backendFirstStart) {
-      logger.debug("Webpack dev server is waiting for backend to start...");
-      waitOn({ resources: [`tcp:localhost:${settings.apiPort}`] }, err => {
-        if (err) {
-          logger.error(err);
-        } else {
-          logger.debug("Backend has been started, resuming webpack dev server...");
-          if (platform === 'web') {
-            try {
-              openurl.open(`http://localhost:${config.devServer.port}`);
-            } catch (e) { console.error(e.stack); }
+      if (!backend.config.url) {
+        logger.debug("Webpack dev server is waiting for backend to start...");
+        waitOn({ resources: [`tcp:localhost:${settings.apiPort}`] }, err => {
+          if (err) {
+            logger.error(err);
+          } else {
+            logger.debug("Backend has been started, resuming webpack dev server...");
+            if (platform === 'web') {
+              try {
+                openurl.open(`http://localhost:${config.devServer.port}`);
+              } catch (e) { console.error(e.stack); }
+            }
+            callback();
           }
-          callback();
+        });
+      } else {
+        if (platform === 'web') {
+          try {
+            openurl.open(`http://localhost:${config.devServer.port}`);
+          } catch (e) { console.error(e.stack); }
         }
-      });
+        callback();
+      }
     } else {
       callback();
     }
@@ -279,6 +290,20 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       callback();
     });
   }
+  if (settings.webpackDll && dll && platform === 'web' && __DEV__ && backend.config.url) {
+    compiler.plugin('after-compile', (compilation, callback) => {
+      compilation.assets[vendorHashesJson.name] = vendorSource;
+      compilation.assets[vendorHashesJson.name + '.map'] = vendorMap;
+      callback();
+    });
+    compiler.plugin('compilation', function(compilation) {
+      compilation.plugin('html-webpack-plugin-before-html-processing', function (htmlPluginData, callback) {
+        htmlPluginData.assets.js.unshift('/' + vendorHashesJson.name);
+        callback(null, htmlPluginData);
+      });
+    });
+  }
+
   compiler.plugin('done', stats => {
     const dir = configOutputPath;
     mkdirp.sync(dir);

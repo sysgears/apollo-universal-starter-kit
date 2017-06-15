@@ -1,0 +1,44 @@
+{
+  "name": "client-web",
+  "private": true,
+  "scripts": {
+    "watch": "wiq watch"
+  },
+  "dependencies": {
+    "apollo-client": "^1.4.2",
+    "apollo-logger": "^0.0.4",
+    "bootstrap": "^4.0.0-alpha.6",
+    "graphql": "^0.10.1",
+    "graphql-tag": "^2.2.2",
+    "history": "^4.6.1",
+    "immutability-helper": "^2.2.2",
+    "lodash": "^4.17.4",
+    "minilog": "^3.1.0",
+    "persistgraphql": "^0.3.2",
+    "prop-types": "^15.5.10",
+    "react": "~15.4.2",
+    "react-apollo": "^1.4.2",
+    "react-dom": "~15.4.2",
+    "react-ga": "^2.2.0",
+    "react-helmet": "^5.1.3",
+    "react-hot-loader": "^3.0.0-beta.7",
+    "react-redux": "^5.0.5",
+    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1",
+    "react-router-redux": "^5.0.0-alpha.6",
+    "react-transition-group": "^1.1.3",
+    "reactstrap": "^4.6.2",
+    "redux": "^3.6.0",
+    "redux-devtools-extension": "^2.13.2",
+    "redux-form": "^6.8.0",
+    "styled-components": "^2.0.1",
+    "subscriptions-transport-ws": "^0.7.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.1",
+    "wiq": "^0.0.1"
+  },
+  "wiq": {
+    "platform": "web"
+  }
+}

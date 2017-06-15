@@ -1,0 +1,12 @@
+{
+  "lerna": "2.0.0-rc.5",
+  "packages": [
+    "packages/wiq",
+    "packages/client/android",
+    "packages/client/ios",
+    "packages/client/web",
+    "packages/server/*"
+  ],
+  "npmClient": "yarn",
+  "version": "0.0.1"
+}

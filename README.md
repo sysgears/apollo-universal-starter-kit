@@ -25,7 +25,7 @@
 2. Install dependencies.
 
   ```
-  yarn
+  lerna bootstrap
   ```
 
 3. Seed sample database data.

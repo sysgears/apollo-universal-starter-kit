@@ -1,7 +1,7 @@
 .idea
 /.tmp
-/node_modules
-/build
+node_modules
+build
 npm-debug.*
 .expo/
 *.sqlite3

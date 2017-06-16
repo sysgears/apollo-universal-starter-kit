@@ -265,6 +265,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
           try {
             openurl.open(`http://localhost:${config.devServer.port}`);
           } catch (e) { console.error(e.stack); }
+          backendFirstStart = false;
         }
         callback();
       }

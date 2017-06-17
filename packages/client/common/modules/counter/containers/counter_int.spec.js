@@ -1,9 +1,9 @@
 import chai from 'chai';
 import { step } from 'mocha-steps';
 
-import Renderer from '../../../../client/test-helpers/apollo_renderer';
-import routes from '../../../../web/app/routes';
-import COUNT_SUBSCRIBE from '../graphql/count_subscribe.graphql';
+import Renderer from '../../common/test-helpers/apollo_renderer';
+import routes from '../src/app/routes';
+import COUNT_SUBSCRIBE from '../../common/modules/counter/graphql/count_subscribe.graphql';
 
 chai.should();
 

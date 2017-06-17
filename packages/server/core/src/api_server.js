@@ -5,10 +5,10 @@ import { invert, isArray } from 'lodash';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 
-import websiteMiddleware from './middleware/website';
-import graphiqlMiddleware from './middleware/graphiql';
-import graphqlMiddleware from './middleware/graphql';
-import addGraphQLSubscriptions from './api/subscriptions';
+import websiteMiddleware from './src/middleware/website';
+import graphiqlMiddleware from './src/middleware/graphiql';
+import graphqlMiddleware from './src/middleware/graphql';
+import addGraphQLSubscriptions from './src/api/subscriptions';
 import { app as settings } from './app.json';
 import log from '../../common/log';
 

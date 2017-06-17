@@ -1,0 +1,1 @@
+export * from 'wiq/webpack.config';

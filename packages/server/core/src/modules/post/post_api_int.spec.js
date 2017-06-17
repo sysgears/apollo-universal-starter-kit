@@ -2,12 +2,12 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 import { getApollo } from '../../test-helpers/integration_setup';
-import POSTS_GET from '../../../client/modules/post/graphql/posts_get.graphql';
-import POST_GET from '../../../client/modules/post/graphql/post_get.graphql';
-import POST_ADD from '../../../client/modules/post/graphql/post_add.graphql';
-import POST_EDIT from '../../../client/modules/post/graphql/post_edit.graphql';
-import POST_DELETE from '../../../client/modules/post/graphql/post_delete.graphql';
-import POSTS_SUBSCRIPTION from '../../../client/modules/post/graphql/posts_subscription.graphql';
+import POSTS_GET from '../../../../client/common/modules/post/graphql/posts_get.graphql';
+import POST_GET from '../../../../client/common/modules/post/graphql/post_get.graphql';
+import POST_ADD from '../../../../client/common/modules/post/graphql/post_add.graphql';
+import POST_EDIT from '../../../../client/common/modules/post/graphql/post_edit.graphql';
+import POST_DELETE from '../../../../client/common/modules/post/graphql/post_delete.graphql';
+import POSTS_SUBSCRIPTION from '../../../../client/common/modules/post/graphql/posts_subscription.graphql';
 
 describe('Post and comments example API works', () => {
   let apollo;

@@ -1,1 +1,1 @@
-export * from 'wiq/webpack.config';
+module.exports = require('wiq/webpack.config');

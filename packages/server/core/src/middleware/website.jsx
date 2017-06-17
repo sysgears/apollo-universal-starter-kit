@@ -10,12 +10,12 @@ import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
 
-import createApolloClient from '../../../common/apollo_client';
-import createReduxStore from '../../../common/redux_store';
+import createApolloClient from '../../../../common/apollo_client';
+import createReduxStore from '../../../../common/redux_store';
 import Html from './html';
-import routes from '../../../client/web/app/routes';
-import log from '../../../common/log';
-import { app as settings } from '../app.json';
+import routes from '../../../../client/web/src/app/routes';
+import log from '../../../../common/log';
+import { app as settings } from '../../app.json';
 
 const port = process.env.PORT || settings.apiPort;
 

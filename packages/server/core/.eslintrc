@@ -6,6 +6,13 @@
     "eslint:recommended",
     "plugin:react/recommended"
   ],
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "./webpack.config.js"
+      }
+    }
+  },
   "rules": {
     "no-use-before-define": 0,
     "arrow-body-style": 0,
@@ -13,13 +20,6 @@
     "no-console": 0,
     "react/jsx-key": 0,
     "semi": 2
-  },
-  "settings": {
-    "import/resolver": {
-      "webpack": {
-        "config": "./tools/webpack.entry.js"
-      }
-    }
   },
   "env": {
     "mocha": true

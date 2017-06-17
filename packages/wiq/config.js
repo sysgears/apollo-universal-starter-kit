@@ -66,7 +66,7 @@ const reactNativeRule = {
   loader: 'babel-loader',
   options: {
     cacheDirectory: __DEV__,
-    presets: ["react-native"],
+    presets: [require.resolve("react-native")],
     plugins: [
       require.resolve('haul/src/utils/fixRequireIssues')
     ]
@@ -279,14 +279,14 @@ const createDllConfig = platform => {
 };
 
 let config;
-if (platform === 'server') {
+if (IS_TEST || platform === 'server') {
   config = merge.smart(_.cloneDeep(createBaseConfig("server")), {
     name: 'backend',
     target: 'node',
     entry: {
       index: [
         require.resolve('babel-polyfill'),
-        './index.js'
+        './src/index.js'
       ]
     },
     node: {
@@ -331,7 +331,7 @@ if (platform === 'server') {
     entry: {
       bundle: [
         require.resolve('babel-polyfill'),
-        './index.jsx'
+        './src/index.jsx'
       ]
     },
     module: {
@@ -372,7 +372,7 @@ if (platform === 'server') {
     entry: {
       'index.android.bundle': [
         require.resolve('./react-native-polyfill.js'),
-        './index.js'
+        './src/index.js'
       ]
     },
     output: {
@@ -389,7 +389,7 @@ if (platform === 'server') {
     entry: {
       'index.ios.bundle': [
         require.resolve('./react-native-polyfill.js'),
-        './index.js'
+        './src/index.js'
       ]
     },
     output: {

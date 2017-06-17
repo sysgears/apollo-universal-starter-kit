@@ -22,7 +22,8 @@ import openurl from 'openurl';
 
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';
 // eslint-disable-next-line import/named
-import { platform, config, dll } from './webpack.config';
+
+const { platform, config, dll } = require(path.join(process.cwd(), 'wiq.config'));
 
 const settings = JSON.parse(fs.readFileSync('app.json').toString()).app;
 
@@ -68,7 +69,6 @@ process.on('exit', () => {
 function runServer(path) {
   if (startBackend) {
     startBackend = false;
-    backendFirstStart = false;
     logBack('Starting backend');
     server = spawn('node', [path], { stdio: [0, 1, 2] });
     server.on('exit', code => {
@@ -245,7 +245,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 
   compiler.plugin('after-emit', (compilation, callback) => {
     if (backendFirstStart) {
-      if (!backend.config.url) {
+      if (!settings.backendUrl) {
         logger.debug("Webpack dev server is waiting for backend to start...");
         waitOn({ resources: [`tcp:localhost:${settings.apiPort}`] }, err => {
           if (err) {
@@ -269,6 +269,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
         }
         callback();
       }
+      backendFirstStart = false;
     } else {
       callback();
     }
@@ -291,7 +292,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       callback();
     });
   }
-  if (settings.webpackDll && dll && platform === 'web' && __DEV__ && backend.config.url) {
+  if (settings.webpackDll && dll && platform === 'web' && __DEV__ && settings.backendUrl) {
     compiler.plugin('after-compile', (compilation, callback) => {
       compilation.assets[vendorHashesJson.name] = vendorSource;
       compilation.assets[vendorHashesJson.name + '.map'] = vendorMap;

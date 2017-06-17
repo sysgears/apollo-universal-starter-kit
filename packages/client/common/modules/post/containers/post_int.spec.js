@@ -2,11 +2,12 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 import _ from 'lodash';
 
-import Renderer from '../../common/test-helpers/apollo_renderer';
-import routes from '../src/app/routes';
-import POSTS_SUBSCRIPTION from '../../common/modules/post/graphql/posts_subscription.graphql';
-import POST_SUBSCRIPTION from '../../common/modules/post/graphql/post_subscription.graphql';
-import COMMENT_SUBSCRIPTION from '../../common/modules/post/graphql/post_comment_subscription.graphql';
+import Renderer from '../../../test-helpers/apollo_renderer';
+import schema from '../../../../../server/core/src/modules/post/schema.graphqls';
+import routes from '../../../../web/src/app/routes';
+import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
+import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql';
+import COMMENT_SUBSCRIPTION from '../graphql/post_comment_subscription.graphql';
 
 const createNode = (id) => ({
   id: `${id}`,
@@ -60,7 +61,7 @@ const mocks = {
 };
 
 describe('Posts and comments example UI works', () => {
-  const renderer = new Renderer(mocks, {});
+  const renderer = new Renderer([schema], mocks, {});
   let app;
   let content;
 

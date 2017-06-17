@@ -5,9 +5,9 @@ import { ApolloClient } from 'apollo-client';
 import { addApolloLogging } from 'apollo-logger';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
-import '../knexfile';
+import '../../knexfile';
 import knex from '../sql/connector';
-import { app as settings } from '../app.json';
+import { app as settings } from '../../app.json';
 
 chai.use(chaiHttp);
 chai.should();

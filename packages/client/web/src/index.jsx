@@ -5,8 +5,8 @@ import { render } from 'react-dom';
 import 'backend_reload';
 
 import Main from './app/main';
-import log from '../../common/log';
-import { app as settings } from './app.json';
+import log from '../../../common/log';
+import { app as settings } from '../app.json';
 
 const root = document.getElementById('content');
 

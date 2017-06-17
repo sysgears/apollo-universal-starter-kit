@@ -1,1 +1,1 @@
-export * from 'wiq/config';
+module.exports = require('wiq/config');

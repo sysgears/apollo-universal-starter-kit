@@ -1,9 +1,10 @@
 import chai from 'chai';
 import { step } from 'mocha-steps';
 
-import Renderer from '../../common/test-helpers/apollo_renderer';
-import routes from '../src/app/routes';
-import COUNT_SUBSCRIBE from '../../common/modules/counter/graphql/count_subscribe.graphql';
+import Renderer from '../../../test-helpers/apollo_renderer';
+import schema from '../../../../../server/core/src/modules/counter/schema.graphqls';
+import routes from '../../../../web/src/app/routes';
+import COUNT_SUBSCRIBE from '../graphql/count_subscribe.graphql';
 
 chai.should();
 
@@ -26,7 +27,7 @@ const mocks = {
 };
 
 describe('Counter example UI works', () => {
-  const renderer = new Renderer(mocks,
+  const renderer = new Renderer([schema], mocks,
     { counter: { reduxCount: REDUX_VALUE } });
   let app;
   let content;

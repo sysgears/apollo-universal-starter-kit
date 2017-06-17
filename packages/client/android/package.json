@@ -1,4 +1,7 @@
 {
   "name": "client-android",
-  "private": true
+  "private": true,
+  "scripts": {
+    "test": " "
+  }
 }

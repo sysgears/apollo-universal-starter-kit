@@ -1,8 +1,8 @@
 import now from 'performance-now';
-import { app as settings } from '../../app.json';
+import { app as settings } from '../../../app.json';
 
 import knex from '../../sql/connector';
-import log from '../../../../common/log';
+import log from '../../../../../common/log';
 
 // The map used to store the query times, where the query unique
 // identifier is the key.

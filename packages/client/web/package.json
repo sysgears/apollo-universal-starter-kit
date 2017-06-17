@@ -2,6 +2,10 @@
   "name": "client-web",
   "private": true,
   "scripts": {
+    "tests": "cross-env NODE_ENV=test PORT=7070 wiq test --include babel-polyfill --webpack-config webpack.config.js --full-trace -t 5000 --exit \"../common/**/*.spec.js\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 wiq test --include babel-polyfill --webpack-config webpack.config.js --full-trace -t 5000 --watch \"../common/**/*.spec.js\"",
+    "test": "npm run tests && npm run lint",
+    "lint": "cross-env NODE_ENV=test eslint --fix --ext js --ext jsx src",
     "watch": "wiq watch"
   },
   "dependencies": {
@@ -10,6 +14,7 @@
     "bootstrap": "^4.0.0-alpha.6",
     "graphql": "^0.10.1",
     "graphql-tag": "^2.2.2",
+    "graphql-tools": "^1.0.0",
     "history": "^4.6.1",
     "immutability-helper": "^2.2.2",
     "lodash": "^4.17.4",
@@ -31,11 +36,30 @@
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^6.8.0",
+    "source-map-support": "^0.4.15",
     "styled-components": "^2.0.1",
     "subscriptions-transport-ws": "^0.7.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.1",
+    "babel-eslint": "^7.2.3",
+    "babel-polyfill": "^6.23.0",
+    "chai": "^4.0.2",
+    "chai-http": "^3.0.0",
+    "cross-env": "^5.0.1",
+    "enzyme": "^2.8.2",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-import-resolver-webpack": "^0.8.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-mocha": "^4.10.0",
+    "eslint-plugin-react": "^7.0.1",
+    "jsdom": "^11.0.0",
+    "mocha": "^3.4.2",
+    "mocha-steps": "^1.0.2",
+    "react-addons-test-utils": "^15.5.1",
+    "react-test-renderer": "~15.4.2",
     "wiq": "^0.0.1"
   },
   "wiq": {

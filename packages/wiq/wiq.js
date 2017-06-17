@@ -1,16 +1,18 @@
 #!/usr/bin/env node
-const fs = require('fs');
-require('babel-register')({
-  presets: ['es2015', 'stage-0', 'flow'],
-  ignore: /node_modules(?!\/(haul|react-native))/,
-  retainLines: true,
-  sourceMaps: 'inline',
-});
-require('babel-polyfill');
-
-if (process.argv.indexOf('--webpack-config') >= 0 ||
-  process.argv.indexOf('--ext') >= 0) {
-  module.exports = require('./webpack.config');
+if (process.argv[2] === 'test') {
+  process.argv.shift();
+  require('.bin/mocha-webpack');
 } else {
+  require('babel-register')({
+    presets: [
+      require.resolve('babel-preset-es2015'),
+      require.resolve('babel-preset-stage-0'),
+      require.resolve('babel-preset-flow')],
+    ignore: /node_modules(?!\/(haul|react-native))/,
+    retainLines: true,
+    sourceMaps: 'inline',
+  });
+  require('babel-polyfill');
+
   require('./webpack.run');
 }

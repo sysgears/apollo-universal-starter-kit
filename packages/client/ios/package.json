@@ -1,4 +1,7 @@
 {
   "name": "client-ios",
-  "private": true
+  "private": true,
+  "scripts": {
+    "test": " "
+  }
 }

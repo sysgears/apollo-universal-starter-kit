@@ -10,10 +10,10 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
 
-import createApolloClient from '../../../common/apollo_client';
-import createReduxStore from '../../../common/redux_store';
+import createApolloClient from '../../../../common/apollo_client';
+import createReduxStore from '../../../../common/redux_store';
 import routes from './routes';
-import { app as settings } from '../../../server/core/app.json';
+import { app as settings } from '../../app.json';
 
 import '../styles/styles.scss';
 

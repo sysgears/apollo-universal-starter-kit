@@ -8,9 +8,8 @@ import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { graphql, print } from 'graphql';
 
-import rootSchema from "../../server/api/root_schema.graphqls";
-import serverModules from "../../server/modules";
-import { app as settings } from '../../../app.json';
+import rootSchema from "../../../server/core/src/api/root_schema.graphqls";
+import { app as settings } from '../../../server/core/app.json';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;
@@ -99,8 +98,8 @@ class MockNetworkInterface
 }
 
 export default class Renderer {
-  constructor(graphqlMocks, reduxState) {
-    const schema = makeExecutableSchema({ typeDefs: [rootSchema, ...serverModules.schemas] });
+  constructor(schemas, graphqlMocks, reduxState) {
+    const schema = makeExecutableSchema({ typeDefs: [rootSchema, ...schemas] });
     addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
 
     const mockNetworkInterface = new MockNetworkInterface(schema);

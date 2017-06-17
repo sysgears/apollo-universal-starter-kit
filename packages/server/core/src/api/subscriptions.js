@@ -2,7 +2,7 @@ import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe } from 'graphql';
 
 import schema from './schema';
-import log from '../../../common/log';
+import log from '../../../../common/log';
 import modules from '../modules';
 
 var subscriptionServer;

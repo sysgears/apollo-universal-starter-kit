@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Navbar, Nav, NavItem } from 'reactstrap';
 
-import modules from '../../common/modules';
+import modules from '../../../common/modules';
 
 const NavBar = () => (
   <Navbar color="faded" light>

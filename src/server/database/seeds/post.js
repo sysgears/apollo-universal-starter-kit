@@ -1,3 +1,21 @@
+/*
+For DB's other than SQLite you'll have to use raw queries for truncation if there is a foreign key constraint in your table.
+
+So instead of 
+await Promise.all([
+  knex('post').truncate(),
+  knex('comment').truncate()
+]);
+
+Use
+await Promise.all([
+  knex.raw('ALTER SEQUENCE post_id_seq RESTART WITH 1'),
+  knex.raw('ALTER SEQUENCE comment_id_seq RESTART WITH 1'),
+  knex.raw('TRUNCATE TABLE post CASCADE'),
+  knex.raw('TRUNCATE TABLE comment CASCADE'),
+]);
+*/
+
 export async function seed(knex, Promise) {
   await Promise.all([
     knex('post').truncate(),

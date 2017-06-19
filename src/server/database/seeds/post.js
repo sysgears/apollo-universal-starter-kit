@@ -1,7 +1,7 @@
 /*
 For DB's other than SQLite you'll have to use raw queries for truncation if there is a foreign key constraint in your table.
 
-So instead of 
+Instead of 
 await Promise.all([
   knex('post').truncate(),
   knex('comment').truncate()

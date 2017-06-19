@@ -7170,9 +7170,9 @@ react-native-vector-icons@4.1.1:
     prop-types "^15.5.8"
     yargs "^6.3.0"
 
-react-native-web@0.0.102:
-  version "0.0.102"
-  resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.0.102.tgz#d6f373e1c4a9a0405a898cd11a7e99e7a4b693e0"
+react-native-web@^0.0.103:
+  version "0.0.103"
+  resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.0.103.tgz#4855c028f0771b9ad974b546931b548df6e03f63"
   dependencies:
     animated "^0.2.0"
     array-find-index "^1.0.2"

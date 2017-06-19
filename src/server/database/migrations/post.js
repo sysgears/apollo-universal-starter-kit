@@ -2,13 +2,15 @@ exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.createTable('post', (table) => {
       table.increments();
-      table.timestamps();
+      table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
+      table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now());
       table.string('title');
       table.string('content');
     })
       .createTable('comment', (table) => {
         table.increments();
-        table.timestamps();
+        table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
+        table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now());
         table.string('content');
         table.integer('post_id').unsigned().references('id').inTable('post').onDelete('CASCADE');
       })

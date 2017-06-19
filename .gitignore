@@ -3,6 +3,7 @@
 node_modules
 build
 npm-debug.*
-.expo/
+.expo
+lerna-debug.log
 *.sqlite3
 .DS_Store

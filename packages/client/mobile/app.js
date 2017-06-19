@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import ApolloClient from 'apollo-client';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
-import modules from '../client/modules/counter';
-import Counter from '../client/modules/counter/containers/counter';
+import modules from '../common/modules/counter';
+import Counter from '../common/modules/counter/containers/counter';
 
 const networkInterface = new SubscriptionClient(__BACKEND_URL__.replace(/^http/, 'ws'), {
   reconnect: true
@@ -23,9 +22,7 @@ const store = createStore(
     ...modules.reducers
   }),
   {}, // initial state
-  composeWithDevTools(
-    applyMiddleware(client.middleware()),
-  ),
+  applyMiddleware(client.middleware())
 );
 
 export default class Main extends Component {

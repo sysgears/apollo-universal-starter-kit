@@ -430,7 +430,7 @@ function isDllValid(node) {
 }
 
 function buildDll(node) {
-  return new Promise(done => {
+  return new Promise((done, reject) => {
     const name = `vendor_${node.platform}`;
     const logger = minilog(`webpack-for-${node.dll.name}`);
     const reporter = (...args) => webpackReporter(node.dll.output.path, logger, ...args);
@@ -442,6 +442,9 @@ function buildDll(node) {
       const compiler = webpack(node.dll);
 
       compiler.plugin('done', stats => {
+        if (stats.compilation.errors && stats.compilation.errors.length) {
+          return reject("DLL build error");
+        }
         let json = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, `${name}_dll.json`)));
         const vendorKey = _.findKey(stats.compilation.assets,
           (v, key) => key.startsWith('vendor') && key.endsWith('_dll.js'));

@@ -66,7 +66,7 @@ const reactNativeRule = {
   loader: 'babel-loader',
   options: {
     cacheDirectory: __DEV__,
-    presets: [require.resolve("react-native")],
+    presets: [require.resolve("babel-preset-react-native")],
     plugins: [
       require.resolve('haul/src/utils/fixRequireIssues')
     ]
@@ -275,6 +275,7 @@ const createDllConfig = platform => {
       path: path.resolve(settings.dllBuildDir),
       library: name
     },
+    bail: true
   };
 };
 
@@ -383,7 +384,7 @@ if (IS_TEST || platform === 'server') {
       port: 3010
     })
   });
-} else if (platform === 'web') {
+} else if (platform === 'ios') {
   config = merge.smart(_.cloneDeep(createMobileConfig('ios')), {
     name: 'ios-frontend',
     entry: {

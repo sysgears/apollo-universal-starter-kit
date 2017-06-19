@@ -36,7 +36,6 @@
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^6.8.0",
-    "source-map-support": "^0.4.15",
     "styled-components": "^2.0.1",
     "subscriptions-transport-ws": "^0.7.2"
   },
@@ -60,6 +59,7 @@
     "mocha-steps": "^1.0.2",
     "react-addons-test-utils": "^15.5.1",
     "react-test-renderer": "~15.4.2",
+    "source-map-support": "^0.4.15",
     "wiq": "^0.0.1"
   },
   "wiq": {

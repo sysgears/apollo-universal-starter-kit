@@ -60,7 +60,12 @@ to start the app on your device.
 #### Running in a simulator
 
 ##### Android
-You can use [Genymotion]. After downloading and installing you might need to install VirtualBox unless you already have it.
+
+Download and install [Android Studio] and configure virtual phone via `Tools -> Android -> AVD Manager`. Choose Lollipop x86_64 API for your Phone, it is the lowest x86_64 API (because it is x86_64 emulator will work really fast). Make sure that you add `~/Android/Sdk/platform-tools` folder that has `adb` added into `PATH` environment variable, so that Expo inside this kit used `adb` instance from `Android SDK`.
+
+Then launch your virtual phone and launch starter kit after that via `yarn watch`. After starting, Expo app should start on it's own.
+
+You can also use [Genymotion]. After downloading and installing you might need to install VirtualBox unless you already have it.
 Create a new emulator and start it. After starting the server Expo app should start on it's own.
 To bring up the developer menu press ⌘+M.
 
@@ -348,4 +353,4 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Expo]: https://expo.io
 [Genymotion]: https://www.genymotion.com
 [Xcode]: https://developer.apple.com/xcode/
-[Watchman]: https://facebook.github.io/watchman/docs/install.html
+[Android Studio]: https://developer.android.com/studio/index.html

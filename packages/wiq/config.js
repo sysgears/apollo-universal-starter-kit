@@ -215,6 +215,22 @@ const baseDevServerConfig = {
   stats: { colors: true, chunkModules: false }
 };
 
+const getModuleDir = name => {
+  let dir = process.cwd(), nextDir;
+  while (true) {
+    const target = path.join(dir, 'node_modules/' + name);
+    if (fs.existsSync(target)) {
+      return target;
+    }
+    nextDir = path.join(dir, '..');
+    if (nextDir === dir) {
+      break;
+    } else {
+      dir = nextDir;
+    }
+  }
+};
+
 const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(platform)), {
   module: {
     rules: [
@@ -234,7 +250,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
   resolve: {
     plugins: [
       new HasteResolver({
-        directories: [path.resolve('node_modules/react-native')],
+        directories: [getModuleDir('react-native')],
       }),
       new AssetResolver({ platform }),
     ],

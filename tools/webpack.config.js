@@ -79,7 +79,7 @@ const createBaseConfig = platform => {
         {
           test: /\.jsx?$/,
           exclude: ['ios', 'android'].indexOf(platform) >= 0 ?
-            /node_modules\/(?!react-native|@expo|expo|lottie-react-native|haul|pretty-format)$/ :
+            /node_modules\/(?!react-native|@expo|expo|lottie-react-native|haul|pretty-format|react-navigation)$/ :
             /node_modules/,
           use: [
             ['ios', 'android'].indexOf(platform) >= 0 ?
@@ -127,7 +127,7 @@ const createBaseConfig = platform => {
     resolve: {
       extensions: platform === 'server' ?
         [`.web.js`, `.web.jsx`, '.js', '.jsx'] :
-        [`.${platform}.js`, `.${platform}.jsx`, '.js', '.jsx']
+        [`.${platform}.js`, `.${platform}.jsx`, '.native.js', '.native.jsx', '.js', '.jsx']
     },
     plugins: basePlugins,
     watchOptions: {

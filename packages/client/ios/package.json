@@ -11,7 +11,7 @@
   "dependencies": {
     "apollo-client": "^1.4.2",
     "apollo-logger": "^0.0.4",
-    "expo": "^15.1.0",
+    "expo": "^17.0.0",
     "graphql": "^0.10.1",
     "graphql-tag": "^2.2.2",
     "graphql-tools": "^1.0.0",
@@ -19,9 +19,9 @@
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
     "prop-types": "^15.5.10",
-    "react": "~15.4.2",
+    "react": "16.0.0-alpha.6",
     "react-apollo": "^1.4.2",
-    "react-native": "0.42.3",
+    "react-native": "^0.44.3",
     "react-router-dom": "^4.1.1",
     "redux": "^3.6.0",
     "subscriptions-transport-ws": "^0.7.2"
@@ -43,6 +43,7 @@
     "haul": "^1.0.0-beta.0",
     "mocha": "^3.4.2",
     "mocha-steps": "^1.0.2",
+    "prettier": "^1.4.4",
     "source-map-support": "^0.4.15",
     "wiq": "^0.0.1",
     "xdl": "^41.1.0"

@@ -1,0 +1,14 @@
+{
+  "app": {
+    "buildDir": "build",
+    "dllBuildDir": "build/dll",
+    "webFrontendDevPort": 3000,
+    "apiPort": 8080,
+    "ssr": true,
+    "webpackDll": true,
+    "frontendRefreshOnBackendChange": true,
+    "reactHotLoader": false,
+    "persistGraphQL": false,
+    "apolloLogging": false
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "name": "client-ios",
+  "private": true,
+  "scripts": {
+    "tests": "cross-env NODE_ENV=test PORT=7070 wiq test --include babel-polyfill --webpack-config webpack.config.js --full-trace -t 5000 --exit \"src/**/*.spec.js\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 wiq test --include babel-polyfill --webpack-config webpack.config.js --full-trace -t 5000 --watch \"src/common/**/*.spec.js\"",
+    "test": "npm run tests && npm run lint",
+    "lint": "cross-env NODE_ENV=test eslint --fix --ext js --ext jsx src",
+    "watch": "wiq watch"
+  },
+  "dependencies": {
+    "apollo-client": "^1.4.2",
+    "apollo-logger": "^0.0.4",
+    "expo": "^17.0.0",
+    "graphql": "^0.10.1",
+    "graphql-tag": "^2.2.2",
+    "graphql-tools": "^1.0.0",
+    "immutability-helper": "^2.2.2",
+    "lodash": "^4.17.4",
+    "minilog": "^3.1.0",
+    "prop-types": "^15.5.10",
+    "react": "16.0.0-alpha.6",
+    "react-apollo": "^1.4.2",
+    "react-native": "^0.44.3",
+    "react-router-dom": "^4.1.1",
+    "redux": "^3.6.0",
+    "subscriptions-transport-ws": "^0.7.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.1",
+    "babel-eslint": "^7.2.3",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "chai": "^4.0.2",
+    "cross-env": "^5.0.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-import-resolver-webpack": "^0.8.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
+    "eslint-plugin-mocha": "^4.10.0",
+    "eslint-plugin-react": "^7.0.1",
+    "haul": "^1.0.0-beta.0",
+    "mocha": "^3.4.2",
+    "mocha-steps": "^1.0.2",
+    "prettier": "^1.4.4",
+    "source-map-support": "^0.4.15",
+    "wiq": "^0.0.1"
+  },
+  "wiq": {
+    "platform": "ios"
+  }
+}

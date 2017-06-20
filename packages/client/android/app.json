@@ -1,0 +1,14 @@
+{
+  "app": {
+    "buildDir": "build",
+    "dllBuildDir": "build/dll",
+    "apiPort": 8080,
+    "webpackDll": true,
+    "frontendRefreshOnBackendChange": true,
+    "persistGraphQL": false,
+    "apolloLogging": false
+  },
+  "expo": {
+    "sdkVersion": "17.0.0"
+  }
+}

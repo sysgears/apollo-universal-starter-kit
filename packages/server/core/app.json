@@ -1,18 +1,14 @@
 {
   "app": {
-    "backendBuildDir": "build",
-    "frontendBuildDir": "../../client/web/build",
-    "dllBuildDir": "../../client/web/build/dll",
-    "webpackDevPort": 3000,
+    "buildDir": "build",
+    "webFrontendBuildDir": "../../client/web/build",
+    "webDllBuildDir": "../../client/web/build/dll",
     "apiPort": 8080,
     "ssr": true,
     "webpackDll": true,
     "frontendRefreshOnBackendChange": true,
-    "reactHotLoader": false,
     "debugSQL": false,
     "persistGraphQL": false,
-    "apolloLogging": false,
-    "android": false,
-    "ios": false
+    "apolloLogging": false
   }
 }

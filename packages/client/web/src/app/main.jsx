@@ -21,7 +21,7 @@ let networkInterface;
 if (__CLIENT__) {
   networkInterface = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws')
-    .replace(':' + settings.webpackDevPort, ':' + settings.apiPort), {
+    .replace(/:[0-9]+/, ':' + settings.apiPort), {
       reconnect: true
   });
 } else {

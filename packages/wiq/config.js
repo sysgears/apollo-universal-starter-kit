@@ -321,7 +321,7 @@ if (IS_TEST || platform === 'server') {
       devtoolFallbackModuleFilenameTemplate: __DEV__ ? '../../[resource-path];[hash]' : undefined,
       filename: '[name].js',
       sourceMapFilename: '[name].[chunkhash].js.map',
-      path: path.resolve(settings.backendBuildDir),
+      path: path.resolve(settings.buildDir),
       publicPath: '/'
     },
     plugins: serverPlugins
@@ -353,12 +353,12 @@ if (IS_TEST || platform === 'server') {
     },
     output: {
       filename: '[name].[hash].js',
-      path: path.resolve(settings.frontendBuildDir),
+      path: path.resolve(settings.buildDir),
       publicPath: '/'
     },
     plugins: createClientPlugins("web"),
     devServer: _.merge({}, baseDevServerConfig, {
-      port: settings.webpackDevPort,
+      port: settings.webFrontendDevPort,
       proxy: {
         '!/*.hot-update.{json,js}': {
           target: `http://localhost:${settings.apiPort}`,
@@ -377,7 +377,7 @@ if (IS_TEST || platform === 'server') {
       ]
     },
     output: {
-      path: path.resolve(path.join(settings.frontendBuildDir, 'android')),
+      path: path.resolve(settings.buildDir),
     },
     devServer: _.merge({}, baseDevServerConfig, {
       hot: false,
@@ -394,7 +394,7 @@ if (IS_TEST || platform === 'server') {
       ]
     },
     output: {
-      path: path.resolve(path.join(settings.frontendBuildDir, 'ios')),
+      path: path.resolve(settings.buildDir),
     },
     devServer: _.merge({}, baseDevServerConfig, {
       hot: false,

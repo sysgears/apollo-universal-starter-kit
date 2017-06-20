@@ -72,7 +72,7 @@ async function renderServerSide(req, res, queryMap) {
     res.end();
   } else {
     if (__DEV__ || !assetMap) {
-      assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
+      assetMap = JSON.parse(fs.readFileSync(path.join(settings.webFrontendBuildDir, 'assets.json')));
     }
 
     const apolloState = Object.assign({}, client.store.getState());
@@ -91,7 +91,7 @@ async function renderClientSide(req, res) {
   const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
   
   if (__DEV__ || !assetMap) {
-    assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'assets.json')));
+    assetMap = JSON.parse(fs.readFileSync(path.join(settings.webFrontendBuildDir, 'assets.json')));
   }
   const page = <Html state={({})} assetMap={assetMap} helmet={helmet}/>;
   res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);

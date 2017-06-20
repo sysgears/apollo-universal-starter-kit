@@ -6,7 +6,7 @@
     "postinstall": "lerna bootstrap",
     "seed": "lerna run seed",
     "watch": "lerna run watch --stream",
-    "test": "lerna run test"
+    "test": "lerna run test --stream"
   },
   "devDependencies": {
     "lerna": "^2.0.0-rc.5"

@@ -19,13 +19,14 @@ import { RawSource } from 'webpack-sources';
 import symbolicateMiddleware from 'haul/src/server/middleware/symbolicateMiddleware';
 import { fromStringWithSourceMap, SourceListMap } from 'source-list-map';
 import openurl from 'openurl';
+import connect from 'connect';
+import compression from 'compression';
 
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';
 // eslint-disable-next-line import/named
 import { backend, web, ios, android } from './webpack.config';
 import { app as settings } from '../app.json';
 
-const connect = require('connect');
 const InspectorProxy = require('react-native/local-cli/server/util/inspectorProxy.js');
 const copyToClipBoardMiddleware = require('react-native/local-cli/server/middleware/copyToClipBoardMiddleware');
 const cpuProfilerMiddleware = require('react-native/local-cli/server/middleware/cpuProfilerMiddleware');
@@ -341,7 +342,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
         req.path = req.url;
         next();
       })
-      .use(connect.compress())
+      .use(compression())
       .use(getDevToolsMiddleware(args, () => wsProxy && wsProxy.isChromeConnected()))
       .use(getDevToolsMiddleware(args, () => ms && ms.isChromeConnected()))
       .use(liveReloadMiddleware(compiler))

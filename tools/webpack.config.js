@@ -43,6 +43,7 @@ if (__DEV__) {
 } else {
   basePlugins.push(new webpack.optimize.UglifyJsPlugin({ minimize: true }));
   basePlugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
+  basePlugins.push(new webpack.optimize.ModuleConcatenationPlugin());
 }
 
 const babelRule = {

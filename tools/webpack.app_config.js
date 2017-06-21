@@ -63,7 +63,7 @@ const dependencyPlatforms = {
   "react-native-web": "web",
   "react-redux": "web",
   "react-router": "web",
-  "react-router-dom": "web",
+  "react-router-dom": ["web", "ios", "android"],
   "react-router-redux": "web",
   "react-transition-group": "web",
   "reactstrap": "web",

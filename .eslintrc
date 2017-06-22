@@ -17,7 +17,7 @@
   "settings": {
     "import/resolver": {
       "webpack": {
-        "config": "./tools/webpack.entry.js"
+        "config": "./tools/webpack.eslint.js"
       }
     }
   },

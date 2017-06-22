@@ -7,7 +7,7 @@ require('babel-register')({
 require('babel-polyfill');
 
 if (process.argv.indexOf('--webpack-config') >= 0 ||
-  process.argv.indexOf('--ext') >= 0) {
+  process.argv[1].indexOf('eslint') >= 0) {
   module.exports = require('./webpack.config');
 } else {
   require('./webpack.run');

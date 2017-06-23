@@ -12,6 +12,7 @@
     "debugSQL": false,
     "persistGraphQL": false,
     "apolloLogging": false,
+    "web": true,
     "android": false,
     "ios": false
   },

@@ -13,7 +13,7 @@ import _ from 'lodash';
 import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
-import { Android, Simulator, Config, Project, ProjectSettings, Exp, UrlUtils } from 'xdl';
+import { Android, Simulator, Config, Project, ProjectSettings, UrlUtils } from 'xdl';
 import qr from 'qrcode-terminal';
 import { RawSource } from 'webpack-sources';
 import symbolicateMiddleware from 'haul/src/server/middleware/symbolicateMiddleware';
@@ -462,14 +462,25 @@ function buildDll(node) {
   });
 }
 
+function setupExpoDir(dir, platform) {
+  const localCliDir = path.join(dir, 'node_modules', 'react-native', 'local-cli');
+  mkdirp.sync(localCliDir);
+  fs.writeFileSync(path.join(localCliDir, 'cli.js'), '');
+  const pkg = JSON.parse(fs.readFileSync('package.json').toString());
+  pkg.name = pkg.name + '-' + platform;
+  pkg.main = `index.${platform}`;
+  fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg));
+  fs.writeFileSync(path.join(dir, 'app.json'), fs.readFileSync('app.json'));
+}
+
 async function startExpoServer(config, platform) {
   try {
     Config.validation.reactNativeVersionWarnings = false;
     Config.developerTool = 'crna';
     Config.offline = true;
-    Exp.determineEntryPointAsync = () => `index.${platform}`;
 
-    const projectRoot = path.resolve('.');
+    const projectRoot = path.join(path.resolve('.'), '.expo', platform);
+    setupExpoDir(projectRoot, platform);
     await Project.startExpoServerAsync(projectRoot);
     await ProjectSettings.setPackagerInfoAsync(projectRoot, {
       packagerPort: config.devServer.port
@@ -510,17 +521,9 @@ function startWebpack(node) {
   }
 }
 
-function validateConfig() {
-  if (settings.android && settings.ios) {
-    throw new Error("Unfortunately Expo doesn't support serving iOS and Android bundles at the same time");
-  }
-}
-
-validateConfig();
-
 const nodes = []
   .concat(!backend.config.url ? [backend] : [])
-  .concat([web])
+  .concat(settings.web ? [web] : [])
   .concat(settings.android ? [android] : [])
   .concat(settings.ios ? [ios]: []);
 

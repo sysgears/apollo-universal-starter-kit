@@ -50,8 +50,7 @@ This starter kit adds full [React Native] integration, with [Webpack] as a packa
 No native code compilation tools are needed in order to develop native mobile applications with this kit.
 You are able to run both web and mobile versions of your app at the same time connected to the same backend.
 
-For running Android or iOS you need to set in `app.json` `ios` or `android` field `true`. Currently we do not support
-running both at the same time, since Expo does not support this.
+For running Android or iOS you need to set in `app.json` `ios` and/or `android` field `true`.
 
 #### Running on a device
 You need to install [Expo] app on your Android or iOS device and then you can scan the QR shown in the terminal, 

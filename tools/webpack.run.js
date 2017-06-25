@@ -219,6 +219,17 @@ function startServerWebpack() {
   }
 }
 
+function openFrontend(config, platform) {
+  if (platform === 'web') {
+    try {
+      openurl.open(`http://localhost:${config.devServer.port}`);
+    } catch (e) { console.error(e.stack); }
+    backendFirstStart = false;
+  } else if (['android', 'ios'].indexOf(platform) >= 0) {
+    startExpoServer(config, platform);
+  }
+}
+
 function startWebpackDevServer(config, dll, platform, reporter, logger) {
   const configOutputPath = config.output.path;
   config.output.path = '/';
@@ -253,21 +264,12 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
             logger.error(err);
           } else {
             logger.debug("Backend has been started, resuming webpack dev server...");
-            if (platform === 'web') {
-              try {
-                openurl.open(`http://localhost:${config.devServer.port}`);
-              } catch (e) { console.error(e.stack); }
-            }
+            openFrontend(config, platform);
             callback();
           }
         });
       } else {
-        if (platform === 'web') {
-          try {
-            openurl.open(`http://localhost:${config.devServer.port}`);
-          } catch (e) { console.error(e.stack); }
-          backendFirstStart = false;
-        }
+        openFrontend(config, platform);
         callback();
       }
     } else {
@@ -383,7 +385,6 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       ms = messageSocket.attachToServer(serverInstance, '/message');
       webSocketProxy.attachToServer(serverInstance, '/devtools');
       inspectorProxy.attachToServer(serverInstance, '/inspector');
-      startExpoServer(config, platform);
     }
   });
   serverInstance.timeout = 0;

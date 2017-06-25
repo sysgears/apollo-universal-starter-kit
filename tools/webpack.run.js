@@ -502,10 +502,10 @@ async function startExpoServer(config, platform) {
       const localAddress = await UrlUtils.constructManifestUrlAsync(projectRoot, {
         hostType: 'localhost',
       });
-      const { success, error } = await Simulator.openUrlInSimulatorSafeAsync(localAddress);
+      const { success, msg } = await Simulator.openUrlInSimulatorSafeAsync(localAddress);
 
       if (!success) {
-        console.error("Failed to start Simulator: ", error);
+        console.error("Failed to start Simulator: ", msg);
       }
     }
   } catch (e) {

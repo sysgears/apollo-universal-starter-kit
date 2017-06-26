@@ -471,10 +471,14 @@ function buildDll(node) {
 }
 
 function setupExpoDir(dir, platform) {
-  const localCliDir = path.join(dir, 'node_modules', 'react-native', 'local-cli');
-  mkdirp.sync(localCliDir);
-  fs.writeFileSync(path.join(localCliDir, 'cli.js'), '');
+  const reactNativeDir = path.join(dir, 'node_modules', 'react-native');
+  mkdirp.sync(path.join(reactNativeDir, 'local-cli'));
+  fs.writeFileSync(path.join(reactNativeDir, 'package.json'),
+    fs.readFileSync('node_modules/react-native/package.json'));
+  fs.writeFileSync(path.join(reactNativeDir, 'local-cli/cli.js'), '');
   const pkg = JSON.parse(fs.readFileSync('package.json').toString());
+  const origDeps = pkg.dependencies;
+  pkg.dependencies = {'react-native': origDeps['react-native']};
   pkg.name = pkg.name + '-' + platform;
   pkg.main = `index.${platform}`;
   fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg));

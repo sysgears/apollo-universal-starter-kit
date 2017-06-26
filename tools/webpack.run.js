@@ -255,20 +255,19 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 
   compiler.plugin('after-emit', (compilation, callback) => {
     if (backendFirstStart) {
-      backendFirstStart = false;
       if (!backend.config.url) {
         logger.debug("Webpack dev server is waiting for backend to start...");
         waitOn({ resources: [`tcp:localhost:${settings.apiPort}`] }, err => {
           if (err) {
             logger.error(err);
+            callback();
           } else {
             logger.debug("Backend has been started, resuming webpack dev server...");
-            openFrontend(config, platform);
+            backendFirstStart = false;
             callback();
           }
         });
       } else {
-        openFrontend(config, platform);
         callback();
       }
     } else {
@@ -307,6 +306,8 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     });
   }
 
+  let frontendFirstStart = true;
+
   compiler.plugin('done', stats => {
     const dir = configOutputPath;
     mkdirp.sync(dir);
@@ -323,6 +324,10 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
         assetsMap['vendor.js'] = vendorHashesJson.name;
       }
       fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
+    }
+    if (frontendFirstStart) {
+      frontendFirstStart = false;
+      openFrontend(config, platform);
     }
   });
 
@@ -487,7 +492,7 @@ async function startExpoServer(config, platform) {
     });
 
     const address = await UrlUtils.constructManifestUrlAsync(projectRoot);
-    console.log("Expo address:", address);
+    console.log(`Expo address for ${platform}:`, address);
     console.log("To open this app on your phone scan this QR code in Expo Client (if it doesn't get started automatically)");
     qr.generate(address, code => {
       console.log(code);

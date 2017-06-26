@@ -19,7 +19,7 @@ export default function App() {
   return (
     <div>
       <NavBar />
-      <Container id="content">
+      <Container>
         {Routes}
       </Container>
       <Footer>

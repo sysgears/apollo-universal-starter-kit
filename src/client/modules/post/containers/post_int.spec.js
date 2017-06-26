@@ -3,7 +3,7 @@ import { step } from 'mocha-steps';
 import _ from 'lodash';
 
 import Renderer from '../../../../client/test-helpers/apollo_renderer';
-import routes from '../../../../client/app/routes';
+import App from '../../../../client/app/app';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/post_comment_subscription.graphql';
@@ -70,7 +70,7 @@ describe('Posts and comments example UI works', () => {
   });
 
   step('Posts page renders without data', () => {
-    app = renderer.mount(routes);
+    app = renderer.mount(App);
     renderer.history.push('/posts');
     content = app.find('#content');
 

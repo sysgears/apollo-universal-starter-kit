@@ -2,7 +2,7 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 
 import Renderer from '../../../../client/test-helpers/apollo_renderer';
-import routes from '../../../../client/app/routes';
+import App from '../../../../client/app/app';
 import COUNT_SUBSCRIBE from '../graphql/count_subscribe.graphql';
 
 chai.should();
@@ -32,7 +32,7 @@ describe('Counter example UI works', () => {
   let content;
 
   step('Counter page renders without data', () => {
-    app = renderer.mount(routes);
+    app = renderer.mount(App);
     content = app.find('#content');
     content.text().should.equal('Loading...');
   });

@@ -4,7 +4,7 @@ import { Switch } from 'react-router-dom';
 import modules from '../modules';
 
 export default (
-  <div id="content">
+  <div>
     <Switch>
       {modules.routes}
     </Switch>

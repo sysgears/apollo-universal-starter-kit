@@ -68,7 +68,6 @@ process.on('exit', () => {
 function runServer(path) {
   if (startBackend) {
     startBackend = false;
-    backendFirstStart = false;
     logBack('Starting backend');
     server = spawn('node', [path], { stdio: [0, 1, 2] });
     server.on('exit', code => {
@@ -224,7 +223,6 @@ function openFrontend(config, platform) {
     try {
       openurl.open(`http://localhost:${config.devServer.port}`);
     } catch (e) { console.error(e.stack); }
-    backendFirstStart = false;
   } else if (['android', 'ios'].indexOf(platform) >= 0) {
     startExpoServer(config, platform);
   }
@@ -257,6 +255,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 
   compiler.plugin('after-emit', (compilation, callback) => {
     if (backendFirstStart) {
+      backendFirstStart = false;
       if (!backend.config.url) {
         logger.debug("Webpack dev server is waiting for backend to start...");
         waitOn({ resources: [`tcp:localhost:${settings.apiPort}`] }, err => {

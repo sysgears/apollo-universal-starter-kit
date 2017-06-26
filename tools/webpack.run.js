@@ -219,13 +219,13 @@ function startServerWebpack() {
 }
 
 function openFrontend(config, platform) {
-  if (platform === 'web') {
-    try {
-      openurl.open(`http://localhost:${config.devServer.port}`);
-    } catch (e) { console.error(e.stack); }
-  } else if (['android', 'ios'].indexOf(platform) >= 0) {
-    startExpoServer(config, platform);
-  }
+  try {
+    if (platform === 'web') {
+        openurl.open(`http://localhost:${config.devServer.port}`);
+    } else if (['android', 'ios'].indexOf(platform) >= 0) {
+      startExpoServer(config, platform);
+    }
+  } catch (e) { console.error(e.stack); }
 }
 
 function startWebpackDevServer(config, dll, platform, reporter, logger) {

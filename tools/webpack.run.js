@@ -13,6 +13,7 @@ import _ from 'lodash';
 import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
+import freeportAsync from 'freeport-async';
 import { Android, Simulator, Config, Project, ProjectSettings, UrlUtils } from 'xdl';
 import qr from 'qrcode-terminal';
 import { RawSource } from 'webpack-sources';
@@ -40,6 +41,8 @@ const statusPageMiddleware = require('react-native/local-cli/server/middleware/s
 const systraceProfileMiddleware = require('react-native/local-cli/server/middleware/systraceProfileMiddleware.js');
 const unless = require('react-native/local-cli/server/middleware/unless');
 const webSocketProxy = require('react-native/local-cli/server/util/webSocketProxy.js');
+
+const expoPorts = {};
 
 minilog.enable();
 
@@ -476,6 +479,7 @@ function setupExpoDir(dir, platform) {
   pkg.main = `index.${platform}`;
   fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg));
   fs.writeFileSync(path.join(dir, 'app.json'), fs.readFileSync('app.json'));
+  fs.writeFileSync(path.join(dir, '.exprc'), JSON.stringify({manifestPort: expoPorts[platform]}));
 }
 
 async function startExpoServer(config, platform) {
@@ -532,7 +536,22 @@ const nodes = []
   .concat(settings.android ? [android] : [])
   .concat(settings.ios ? [ios]: []);
 
-nodes.forEach(node =>
-  ((__DEV__ && settings.webpackDll && node.dll) ? buildDll(node) : Promise.resolve({}))
-    .then(() => startWebpack(node))
-);
+async function allocateExpoPorts() {
+  const expoPlatforms = []
+    .concat(settings.android ? ['android'] : [])
+    .concat(settings.ios ? ['ios']: []);
+
+  let startPort = 19000;
+  for (const platform of expoPlatforms) {
+    const expoPort = await freeportAsync(startPort);
+    expoPorts[platform] = expoPort;
+    startPort = expoPort + 1;
+  }
+}
+
+allocateExpoPorts().then(() => {
+  nodes.forEach(node =>
+    ((__DEV__ && settings.webpackDll && node.dll) ? buildDll(node) : Promise.resolve({}))
+      .then(() => startWebpack(node))
+  );
+});

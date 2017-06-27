@@ -13,6 +13,7 @@ import _ from 'lodash';
 import crypto from 'crypto';
 import VirtualModules from 'webpack-virtual-modules';
 import waitOn from 'wait-on';
+import freeportAsync from 'freeport-async';
 import { Android, Simulator, Config, Project, ProjectSettings, UrlUtils } from 'xdl';
 import qr from 'qrcode-terminal';
 import { RawSource } from 'webpack-sources';
@@ -40,6 +41,8 @@ const statusPageMiddleware = require('react-native/local-cli/server/middleware/s
 const systraceProfileMiddleware = require('react-native/local-cli/server/middleware/systraceProfileMiddleware.js');
 const unless = require('react-native/local-cli/server/middleware/unless');
 const webSocketProxy = require('react-native/local-cli/server/util/webSocketProxy.js');
+
+const expoPorts = {};
 
 minilog.enable();
 
@@ -219,13 +222,13 @@ function startServerWebpack() {
 }
 
 function openFrontend(config, platform) {
-  if (platform === 'web') {
-    try {
-      openurl.open(`http://localhost:${config.devServer.port}`);
-    } catch (e) { console.error(e.stack); }
-  } else if (['android', 'ios'].indexOf(platform) >= 0) {
-    startExpoServer(config, platform);
-  }
+  try {
+    if (platform === 'web') {
+        openurl.open(`http://localhost:${config.devServer.port}`);
+    } else if (['android', 'ios'].indexOf(platform) >= 0) {
+      startExpoServer(config, platform);
+    }
+  } catch (e) { console.error(e.stack); }
 }
 
 function startWebpackDevServer(config, dll, platform, reporter, logger) {
@@ -255,20 +258,19 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 
   compiler.plugin('after-emit', (compilation, callback) => {
     if (backendFirstStart) {
-      backendFirstStart = false;
       if (!backend.config.url) {
         logger.debug("Webpack dev server is waiting for backend to start...");
         waitOn({ resources: [`tcp:localhost:${settings.apiPort}`] }, err => {
           if (err) {
             logger.error(err);
+            callback();
           } else {
             logger.debug("Backend has been started, resuming webpack dev server...");
-            openFrontend(config, platform);
+            backendFirstStart = false;
             callback();
           }
         });
       } else {
-        openFrontend(config, platform);
         callback();
       }
     } else {
@@ -307,6 +309,8 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     });
   }
 
+  let frontendFirstStart = true;
+
   compiler.plugin('done', stats => {
     const dir = configOutputPath;
     mkdirp.sync(dir);
@@ -324,6 +328,10 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       }
       fs.writeFileSync(path.join(dir, 'assets.json'), JSON.stringify(assetsMap));
     }
+    if (frontendFirstStart) {
+      frontendFirstStart = false;
+      openFrontend(config, platform);
+    }
   });
 
   const app = connect();
@@ -340,7 +348,8 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     app
       .use(loadRawBodyMiddleware)
       .use(function(req, res, next) {
-        req.path = req.url;
+        req.path = req.url.split('?')[0];
+        // console.log("req:", req.path);
         next();
       })
       .use(compression())
@@ -355,10 +364,36 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       .use(heapCaptureMiddleware)
       .use(cpuProfilerMiddleware)
       .use(indexPageMiddleware)
-      .use(unless('/inspector', inspectorProxy.processRequest.bind(inspectorProxy)));
+      .use(unless('/inspector', inspectorProxy.processRequest.bind(inspectorProxy)))
+      .use(function(req, res, next) {
+        const platformPrefix = `/assets/${platform}/`;
+        if (req.path.indexOf(platformPrefix) === 0) {
+          const origPath = path.join(path.resolve('.'), req.path.substring(platformPrefix.length));
+          const extension = path.extname(origPath);
+          const basePath = path.join(path.dirname(origPath), path.basename(origPath, extension));
+          const files = [`.${platform}`, '.native', ''].map(suffix => basePath + suffix + extension);
+          let assetExists = false;
+
+          for (const filePath of files) {
+            if (fs.existsSync(filePath)) {
+              assetExists = true;
+              res.writeHead(200, {"Content-Type": mime.lookup(filePath)});
+              fs.createReadStream(filePath)
+                .pipe(res);
+            }
+          }
+
+          if (!assetExists) {
+            logger.warn("Asset not found:", origPath);
+            res.writeHead(404, {"Content-Type": "plain"});
+            res.end("Asset: " + origPath + " not found. Tried: " + JSON.stringify(files));
+          }
+        } else {
+          next();
+        }
+      });
   }
 
-  // app.use('/', express.static(path.resolve('.'), { maxAge: '180 days' }));
   app.use(webpackDevMiddleware(compiler, _.merge({}, config.devServer, {
     reporter({ state, stats }) {
       if (state) {
@@ -463,14 +498,19 @@ function buildDll(node) {
 }
 
 function setupExpoDir(dir, platform) {
-  const localCliDir = path.join(dir, 'node_modules', 'react-native', 'local-cli');
-  mkdirp.sync(localCliDir);
-  fs.writeFileSync(path.join(localCliDir, 'cli.js'), '');
+  const reactNativeDir = path.join(dir, 'node_modules', 'react-native');
+  mkdirp.sync(path.join(reactNativeDir, 'local-cli'));
+  fs.writeFileSync(path.join(reactNativeDir, 'package.json'),
+    fs.readFileSync('node_modules/react-native/package.json'));
+  fs.writeFileSync(path.join(reactNativeDir, 'local-cli/cli.js'), '');
   const pkg = JSON.parse(fs.readFileSync('package.json').toString());
+  const origDeps = pkg.dependencies;
+  pkg.dependencies = {'react-native': origDeps['react-native']};
   pkg.name = pkg.name + '-' + platform;
   pkg.main = `index.${platform}`;
   fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg));
   fs.writeFileSync(path.join(dir, 'app.json'), fs.readFileSync('app.json'));
+  fs.writeFileSync(path.join(dir, '.exprc'), JSON.stringify({manifestPort: expoPorts[platform]}));
 }
 
 async function startExpoServer(config, platform) {
@@ -487,7 +527,7 @@ async function startExpoServer(config, platform) {
     });
 
     const address = await UrlUtils.constructManifestUrlAsync(projectRoot);
-    console.log("Expo address:", address);
+    console.log(`Expo address for ${platform}:`, address);
     console.log("To open this app on your phone scan this QR code in Expo Client (if it doesn't get started automatically)");
     qr.generate(address, code => {
       console.log(code);
@@ -527,7 +567,22 @@ const nodes = []
   .concat(settings.android ? [android] : [])
   .concat(settings.ios ? [ios]: []);
 
-nodes.forEach(node =>
-  ((__DEV__ && settings.webpackDll && node.dll) ? buildDll(node) : Promise.resolve({}))
-    .then(() => startWebpack(node))
-);
+async function allocateExpoPorts() {
+  const expoPlatforms = []
+    .concat(settings.android ? ['android'] : [])
+    .concat(settings.ios ? ['ios']: []);
+
+  let startPort = 19000;
+  for (const platform of expoPlatforms) {
+    const expoPort = await freeportAsync(startPort);
+    expoPorts[platform] = expoPort;
+    startPort = expoPort + 1;
+  }
+}
+
+allocateExpoPorts().then(() => {
+  nodes.forEach(node =>
+    ((__DEV__ && settings.webpackDll && node.dll) ? buildDll(node) : Promise.resolve({}))
+      .then(() => startWebpack(node))
+  );
+});

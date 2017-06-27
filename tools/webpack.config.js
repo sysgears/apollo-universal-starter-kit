@@ -72,6 +72,8 @@ const reactNativeRule = {
   }
 };
 
+const mobileAssetTest = /\.(bmp|gif|jpg|jpeg|png|psd|svg|webp|m4v|aac|aiff|caf|m4a|mp3|wav|html|pdf|ttf)$/;
+
 const createBaseConfig = platform => {
   const baseConfig = {
     devtool: __DEV__ ? '#cheap-module-source-map' : '#source-map',
@@ -111,18 +113,6 @@ const createBaseConfig = platform => {
               ['persistgraphql-webpack-plugin/graphql-loader'] : []
           )
         },
-        {
-          test: /\.(png|ico|jpg|xml)$/,
-          use: 'url-loader?name=[hash].[ext]&limit=10000'
-        },
-        {
-          test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-          use: 'url-loader?name=./assets/[hash].[ext]&limit=10000'
-        },
-        {
-          test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-          use: 'file-loader?name=./assets/[hash].[ext]'
-        },
       ]
     },
     resolve: {
@@ -141,8 +131,31 @@ const createBaseConfig = platform => {
     baseConfig.resolve.alias = {
       'react-native': 'react-native-web'
     };
+    baseConfig.module.rules = baseConfig.module.rules.concat([
+      {
+        test: /\.(png|ico|jpg|xml)$/,
+        use: 'url-loader?name=[hash].[ext]&limit=10000'
+      },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: 'url-loader?name=./assets/[hash].[ext]&limit=10000'
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: 'file-loader?name=./assets/[hash].[ext]'
+      },
+    ]);
+  } else if (['android', 'ios'].indexOf(platform) >= 0) {
+    baseConfig.module.rules = baseConfig.module.rules.concat([
+      {
+        test: mobileAssetTest,
+        use: {
+          loader: require.resolve('./loaders/assetLoader'),
+          query: {platform, root: path.resolve('.'), bundle: false},
+        }
+      }
+    ]);
   }
-
   return baseConfig;
 };
 
@@ -285,17 +298,6 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
 }, appConfigs.webConfig);
 
 const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(platform)), {
-  module: {
-    rules: [
-      {
-        test: AssetResolver.test,
-        use: {
-          loader: require.resolve('haul/src/loaders/assetLoader'),
-          query: { platform, root: path.resolve('.'), bundle: false },
-        },
-      },
-    ]
-  },
   output: {
     filename: `index.${platform}.bundle`,
     publicPath: '/'
@@ -305,7 +307,7 @@ const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(
       new HasteResolver({
         directories: [path.resolve('node_modules/react-native')],
       }),
-      new AssetResolver({ platform }),
+      new AssetResolver({ platform, test: mobileAssetTest }),
     ],
     mainFields: ['react-native', 'browser', 'main']
   },

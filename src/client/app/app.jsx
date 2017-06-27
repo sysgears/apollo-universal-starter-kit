@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 
 import NavBar from './nav_bar';
+import Routes from './routes';
 
 const footerHeight = '40px';
 
@@ -15,12 +15,12 @@ const Footer = styled.footer`
   height: ${footerHeight};
 `;
 
-export default function App({ children }) {
+export default function App() {
   return (
     <div>
       <NavBar />
       <Container id="content">
-        {children}
+        {Routes}
       </Container>
       <Footer>
         <div className="text-center">
@@ -30,7 +30,3 @@ export default function App({ children }) {
     </div>
   );
 }
-
-App.propTypes = {
-  children: PropTypes.element,
-};

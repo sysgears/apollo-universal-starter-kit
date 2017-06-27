@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 import Renderer from '../../../../client/test-helpers/apollo_renderer';
-import routes from '../../../../client/app/routes';
+import App from '../../../../client/app/app';
 
 describe('Page not found example UI works', () => {
   const renderer = new Renderer({});
@@ -10,7 +10,7 @@ describe('Page not found example UI works', () => {
   let content;
 
   step('404 page renders with sample text', () => {
-    app = renderer.mount(routes);
+    app = renderer.mount(App);
     renderer.history.push('/non-existing-page');
     content = app.find('#content');
     expect(content.text()).to.include('Page not found - 404');

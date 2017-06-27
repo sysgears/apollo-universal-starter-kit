@@ -167,7 +167,8 @@
       "react",
       "react-dom",
       "react-native",
-      "react-test-renderer"
+      "react-test-renderer",
+      "xdl"
     ]
   }
 }

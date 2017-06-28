@@ -1,5 +1,5 @@
 {
-  "name": "apollo-fullstack-starter-kit",
+  "name": "apollo-universal-starter-kit",
   "private": true,
   "version": "1.0.0",
   "main": "src/server",
@@ -23,15 +23,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:sysgears/apollo-fullstack-starter-kit.git"
+    "url": "git@github.com:sysgears/apollo-universal-starter-kit.git"
   },
   "bugs": {
-    "url": "https://github.com/sysgears/apollo-fullstack-starter-kit/issues"
+    "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
-  "homepage": "https://github.com/sysgears/apollo-fullstack-starter-kit",
+  "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
   "keywords": [
     "apollo",
-    "fullstack",
+    "universal",
     "starter",
     "graphql",
     "react",

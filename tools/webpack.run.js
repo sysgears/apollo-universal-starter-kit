@@ -366,6 +366,14 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       .use(indexPageMiddleware)
       .use(unless('/inspector', inspectorProxy.processRequest.bind(inspectorProxy)))
       .use(function(req, res, next) {
+        if (['/debug', '/debug/bundles'].indexOf(req.path) >= 0) {
+          res.writeHead(200, {"Content-Type": "text/html"});
+          res.end('<!doctype html><div><a href="/debug/bundles">Cached Bundles</a></div>');
+        } else {
+          next();
+        }
+      })
+      .use(function(req, res, next) {
         const platformPrefix = `/assets/${platform}/`;
         if (req.path.indexOf(platformPrefix) === 0) {
           const origPath = path.join(path.resolve('.'), req.path.substring(platformPrefix.length));

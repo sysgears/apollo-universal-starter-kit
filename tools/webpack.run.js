@@ -237,7 +237,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 
   config.plugins.push(frontendVirtualModules);
 
-  let vendorHashesJson, vendorSourceListMap, vendorSource, vendorMap;
+  let vendorHashesJson, vendorAssets, vendorSourceListMap, vendorSource, vendorMap;
   if (settings.webpackDll && dll) {
     const name = `vendor_${platform}`;
     const jsonPath = path.join('..', settings.dllBuildDir, `${name}_dll.json`);
@@ -248,6 +248,9 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     vendorHashesJson = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, `${name}_dll_hashes.json`)));
     vendorSource = new RawSource(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name)).toString() + "\n");
     vendorMap = new RawSource(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name + ".map")).toString());
+    if (['android', 'ios'].indexOf(platform) >= 0) {
+      vendorAssets = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name + ".assets")).toString());
+    }
     vendorSourceListMap = fromStringWithSourceMap(
       vendorSource.source(),
       JSON.parse(vendorMap.source())
@@ -289,6 +292,13 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
             let sourceAndMap = sourceListMap.toStringWithSourceMap({ file });
             compilation.assets[file] = new RawSource(sourceAndMap.source);
             compilation.assets[file + ".map"] = new RawSource(JSON.stringify(sourceAndMap.map));
+            let assets = vendorAssets;
+            compilation.modules.forEach(function(module) {
+              if (module._asset) {
+                assets += module._asset;
+              }
+            });
+            compilation.assets[file.replace(".bundle", "") + ".assets"] = new RawSource(JSON.stringify(assets));
           }
         });
       });
@@ -342,9 +352,11 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 
   if (platform !== 'web') {
     mime.define({ 'application/javascript': ['bundle'] });
+    mime.define({ 'application/json': ['assets'] });
 
     inspectorProxy = new InspectorProxy();
-    const args = {port: config.devServer.port, projectRoots: [path.resolve('.')]};
+    const args = {port: config.
+      devServer.port, projectRoots: [path.resolve('.')]};
     app
       .use(loadRawBodyMiddleware)
       .use(function(req, res, next) {
@@ -488,6 +500,14 @@ function buildDll(node) {
         let json = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, `${name}_dll.json`)));
         const vendorKey = _.findKey(stats.compilation.assets,
           (v, key) => key.startsWith('vendor') && key.endsWith('_dll.js'));
+        let assets = [];
+        stats.compilation.modules.forEach(function(module) {
+          if (module._asset) {
+            assets.push(module._asset);
+          }
+        });
+        fs.writeFileSync(path.join(settings.dllBuildDir, `${vendorKey}.assets`), JSON.stringify(assets));
+
         const meta = { name: vendorKey, hashes: {}, modules: node.dll.entry.vendor };
         for (let filename of Object.keys(json.content)) {
           if (filename.indexOf(' ') < 0) {
@@ -517,7 +537,9 @@ function setupExpoDir(dir, platform) {
   pkg.name = pkg.name + '-' + platform;
   pkg.main = `index.${platform}`;
   fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg));
-  fs.writeFileSync(path.join(dir, 'app.json'), fs.readFileSync('app.json'));
+  const appJson = JSON.parse(fs.readFileSync('app.json').toString());
+  appJson.icon = path.join(path.resolve('.'), appJson.expo.icon);
+  fs.writeFileSync(path.join(dir, 'app.json'), JSON.stringify(appJson));
   fs.writeFileSync(path.join(dir, '.exprc'), JSON.stringify({manifestPort: expoPorts[platform]}));
 }
 

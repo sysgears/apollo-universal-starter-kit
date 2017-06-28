@@ -179,6 +179,8 @@ module.exports = async function assetLoader() {
     asset.fileSystemLocation = dirname
   }
   const finalAsset = await hashAssetFiles(asset);
+  this._module._asset = finalAsset;
+
   const assetStr = "{\n " + util.inspect(finalAsset).slice(1, -2) + `,\n  httpServerLocation: ${publicPath}` + "}";
 
   callback(

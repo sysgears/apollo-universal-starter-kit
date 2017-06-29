@@ -22,6 +22,7 @@ import { fromStringWithSourceMap, SourceListMap } from 'source-list-map';
 import openurl from 'openurl';
 import connect from 'connect';
 import compression from 'compression';
+import url from 'url';
 
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';
 // eslint-disable-next-line import/named
@@ -117,6 +118,33 @@ function webpackReporter(outputPath, log, err, stats) {
 
 let frontendVirtualModules = new VirtualModules({ 'node_modules/backend_reload.js': '' });
 
+class MobileAssetsPlugin {
+  constructor(vendorAssets) {
+    this.vendorAssets = vendorAssets || [];
+  }
+
+  apply(compiler) {
+    const self = this;
+    compiler.plugin('after-compile', (compilation, callback) => {
+      _.each(compilation.chunks, chunk => {
+        console.log("Chunk files:", chunk.files);
+        _.each(chunk.files, file => {
+          if (file.endsWith('.bundle')) {
+            let assets = self.vendorAssets;
+            compilation.modules.forEach(function(module) {
+              if (module._asset) {
+                assets.push(module._asset);
+              }
+            });
+            compilation.assets[file.replace(".bundle", "") + ".assets"] = new RawSource(JSON.stringify(assets));
+          }
+        });
+      });
+      callback();
+    });
+  }
+}
+
 function startClientWebpack({config, dll, platform}) {
   const logger = minilog(`webpack-for-${config.name}`);
   try {
@@ -138,6 +166,10 @@ function startClientWebpack({config, dll, platform}) {
       config.plugins.push(new webpack.NoEmitOnErrorsPlugin());
       startWebpackDevServer(config, dll, platform, reporter, logger);
     } else {
+      if (platform !== 'web') {
+        config.plugins.push(new MobileAssetsPlugin());
+      }
+
       const compiler = webpack(config);
 
       compiler.run(reporter);
@@ -237,7 +269,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 
   config.plugins.push(frontendVirtualModules);
 
-  let vendorHashesJson, vendorAssets, vendorSourceListMap, vendorSource, vendorMap;
+  let vendorHashesJson, vendorSourceListMap, vendorSource, vendorMap;
   if (settings.webpackDll && dll) {
     const name = `vendor_${platform}`;
     const jsonPath = path.join('..', settings.dllBuildDir, `${name}_dll.json`);
@@ -248,8 +280,9 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     vendorHashesJson = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, `${name}_dll_hashes.json`)));
     vendorSource = new RawSource(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name)).toString() + "\n");
     vendorMap = new RawSource(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name + ".map")).toString());
-    if (['android', 'ios'].indexOf(platform) >= 0) {
-      vendorAssets = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name + ".assets")).toString());
+    if (platform !== 'web') {
+      const vendorAssets = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name + ".assets")).toString());
+      config.plugins.push(new MobileAssetsPlugin(vendorAssets));
     }
     vendorSourceListMap = fromStringWithSourceMap(
       vendorSource.source(),
@@ -280,7 +313,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       callback();
     }
   });
-  if (settings.webpackDll && dll && platform !== 'web' && __DEV__) {
+  if (settings.webpackDll && dll && platform !== 'web') {
     compiler.plugin('after-compile', (compilation, callback) => {
       _.each(compilation.chunks, chunk => {
         _.each(chunk.files, file => {
@@ -292,20 +325,14 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
             let sourceAndMap = sourceListMap.toStringWithSourceMap({ file });
             compilation.assets[file] = new RawSource(sourceAndMap.source);
             compilation.assets[file + ".map"] = new RawSource(JSON.stringify(sourceAndMap.map));
-            let assets = vendorAssets;
-            compilation.modules.forEach(function(module) {
-              if (module._asset) {
-                assets += module._asset;
-              }
-            });
-            compilation.assets[file.replace(".bundle", "") + ".assets"] = new RawSource(JSON.stringify(assets));
           }
         });
       });
       callback();
     });
   }
-  if (settings.webpackDll && dll && platform === 'web' && __DEV__ && backend.config.url) {
+
+  if (settings.webpackDll && dll && platform === 'web' && backend.config.url) {
     compiler.plugin('after-compile', (compilation, callback) => {
       compilation.assets[vendorHashesJson.name] = vendorSource;
       compilation.assets[vendorHashesJson.name + '.map'] = vendorMap;
@@ -412,6 +439,14 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
           next();
         }
       });
+  }
+
+  if (platform != 'web') {
+    var filter = function (pathname, req) {
+      return [undefined, platform].indexOf(url.parse(req.url, true).query.platform) < 0;
+    };
+    const crossPorts = { android: ios.config.devServer.port, ios: android.config.devServer.port };
+    app.use(httpProxyMiddleware(filter, {target: `http://localhost:${crossPorts[platform]}`}));
   }
 
   app.use(webpackDevMiddleware(compiler, _.merge({}, config.devServer, {
@@ -535,7 +570,7 @@ function setupExpoDir(dir, platform) {
   const origDeps = pkg.dependencies;
   pkg.dependencies = {'react-native': origDeps['react-native']};
   pkg.name = pkg.name + '-' + platform;
-  pkg.main = `index.${platform}`;
+  pkg.main = `index.mobile`;
   fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg));
   const appJson = JSON.parse(fs.readFileSync('app.json').toString());
   appJson.icon = path.join(path.resolve('.'), appJson.expo.icon);

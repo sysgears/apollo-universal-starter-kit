@@ -232,23 +232,26 @@ const createClientPlugins = (platform) => {
     clientPersistPlugin
   ];
 
-  if (appConfigs.serverConfig.url && platform === 'web') {
-    clientPlugins.push(new HtmlWebpackPlugin({
-      template: 'tools/html-plugin-template.ejs',
-      inject: 'body',
-    }));
+  if (platform === 'web') {
+    if (appConfigs.serverConfig.url) {
+      clientPlugins.push(new HtmlWebpackPlugin({
+        template: 'tools/html-plugin-template.ejs',
+        inject: 'body',
+      }));
+    }
+
+    if (!__DEV__) {
+      clientPlugins.push(new ExtractTextPlugin({ filename: '[name].[contenthash].css', allChunks: true }));
+      clientPlugins.push(new webpack.optimize.CommonsChunkPlugin({
+        name: "vendor",
+        filename: "[name].[hash].js",
+        minChunks: function(module) {
+          return module.resource && module.resource.indexOf(path.resolve('./node_modules')) === 0;
+        }
+      }));
+    }
   }
 
-  if (!__DEV__) {
-    clientPlugins.push(new ExtractTextPlugin({ filename: '[name].[contenthash].css', allChunks: true }));
-    clientPlugins.push(new webpack.optimize.CommonsChunkPlugin({
-      name: "vendor",
-      filename: "[name].[hash].js",
-      minChunks: function(module) {
-        return module.resource && module.resource.indexOf(path.resolve('./node_modules')) === 0;
-      }
-    }));
-  }
   return clientPlugins;
 };
 
@@ -299,7 +302,7 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
 
 const createMobileConfig = platform => merge.smart(_.cloneDeep(createBaseConfig(platform)), {
   output: {
-    filename: `index.${platform}.bundle`,
+    filename: `index.mobile.bundle`,
     publicPath: '/'
   },
   resolve: {

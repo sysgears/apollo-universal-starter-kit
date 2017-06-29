@@ -23,7 +23,7 @@ const webConfig = {
 // App-specific Android React Native front-end Webpack config should be here
 const androidConfig = {
   entry: {
-    'index.android.bundle': [
+    index: [
       require.resolve('./react-native-polyfill.js'),
       './src/mobile/index.js'
     ]
@@ -33,7 +33,7 @@ const androidConfig = {
 // App-specific iOS React Native front-end Webpack config should be here
 const iOSConfig = {
   entry: {
-    'index.ios.bundle': [
+    index: [
       require.resolve('./react-native-polyfill.js'),
       './src/mobile/index.js'
     ]

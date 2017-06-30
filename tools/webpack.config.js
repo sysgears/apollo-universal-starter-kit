@@ -218,9 +218,6 @@ const serverConfig = merge.smart(_.cloneDeep(createBaseConfig("server")), {
 
 const createClientPlugins = (platform) => {
   let clientPlugins = [
-    new ManifestPlugin({
-      fileName: 'assets.json'
-    }),
     new webpack.DefinePlugin(Object.assign({
       __CLIENT__: true, __SERVER__: false, __SSR__: IS_SSR,
       __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`,
@@ -233,6 +230,9 @@ const createClientPlugins = (platform) => {
   ];
 
   if (platform === 'web') {
+    clientPlugins.push(new ManifestPlugin({
+      fileName: 'assets.json'
+    }));
     if (appConfigs.serverConfig.url) {
       clientPlugins.push(new HtmlWebpackPlugin({
         template: 'tools/html-plugin-template.ejs',
@@ -285,7 +285,7 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
   },
   output: {
     filename: '[name].[hash].js',
-    path: path.resolve(settings.frontendBuildDir),
+    path: path.resolve(path.join(settings.frontendBuildDir, 'web')),
     publicPath: '/'
   },
   plugins: createClientPlugins("web"),

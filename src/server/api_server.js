@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import path from 'path';
 import http from 'http';
 import { invert, isArray } from 'lodash';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
@@ -25,7 +26,7 @@ app.enable('trust proxy');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/', express.static(settings.frontendBuildDir, { maxAge: '180 days' }));
+app.use('/', express.static(path.join(settings.frontendBuildDir, 'web'), { maxAge: '180 days' }));
 
 if (__DEV__ && settings.webpackDll) {
   app.use('/', express.static(settings.dllBuildDir, { maxAge: '180 days' }));

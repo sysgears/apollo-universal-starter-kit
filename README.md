@@ -297,6 +297,12 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
   yarn start
   ```
 
+### Building standalone mobile apps for Play Store and App Store
+1. Compile project for production with `ios` and `android` set to `true` in `app.json`.
+2. Run `yarn exp ba` to launch building signed `.apk` or `yarn exp bi` for signed `.iap`.
+3. Run `yarn exp bs` to get status and links for signed standalone mobile applications when build finishes.
+For more details refer to [Expo Build standalone apps documentation], but use `yarn exp ..` instead of `exp ...` command.
+
 ### Deploying to [Heroku]
 1. Add your app to Heroku
 1. Allow Heroku to install build time dependencies from the devDependencies in `package.json`:
@@ -337,6 +343,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Glamor v3]: https://github.com/threepointone/glamor/tree/v3
 [Knex]: http://knexjs.org
 [Debug SQL]: https://spin.atomicobject.com/2017/03/27/timing-queries-knexjs-nodejs/
+[Expo Build standalone apps documentation]: https://docs.expo.io/versions/v18.0.0/guides/building-standalone-apps.html
 [Heroku]: https://heroku.com
 [ESLint]: http://eslint.org
 [SysGears INC]: http://sysgears.com

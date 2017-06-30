@@ -255,11 +255,20 @@ function startServerWebpack() {
 function openFrontend(config, platform) {
   try {
     if (platform === 'web') {
-        openurl.open(`http://localhost:${config.devServer.port}`);
+      openurl.open(`http://localhost:${config.devServer.port}`);
     } else if (['android', 'ios'].indexOf(platform) >= 0) {
-      startExpoServer(config, platform);
+      startExpoProject(config, platform);
     }
   } catch (e) { console.error(e.stack); }
+}
+
+function debugMiddleware(req, res, next) {
+  if (['/debug', '/debug/bundles'].indexOf(req.path) >= 0) {
+    res.writeHead(200, {"Content-Type": "text/html"});
+    res.end('<!doctype html><div><a href="/debug/bundles">Cached Bundles</a></div>');
+  } else {
+    next();
+  }
 }
 
 function startWebpackDevServer(config, dll, platform, reporter, logger) {
@@ -403,14 +412,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       .use(cpuProfilerMiddleware)
       .use(indexPageMiddleware)
       .use(unless('/inspector', inspectorProxy.processRequest.bind(inspectorProxy)))
-      .use(function(req, res, next) {
-        if (['/debug', '/debug/bundles'].indexOf(req.path) >= 0) {
-          res.writeHead(200, {"Content-Type": "text/html"});
-          res.end('<!doctype html><div><a href="/debug/bundles">Cached Bundles</a></div>');
-        } else {
-          next();
-        }
-      })
+      .use(debugMiddleware)
       .use(function(req, res, next) {
         const platformPrefix = `/assets/${platform}/`;
         if (req.path.indexOf(platformPrefix) === 0) {
@@ -568,7 +570,9 @@ function setupExpoDir(dir, platform) {
   const pkg = JSON.parse(fs.readFileSync('package.json').toString());
   const origDeps = pkg.dependencies;
   pkg.dependencies = {'react-native': origDeps['react-native']};
-  pkg.name = pkg.name + '-' + platform;
+  if (platform !== 'all') {
+    pkg.name = pkg.name + '-' + platform;
+  }
   pkg.main = `index.mobile`;
   fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg));
   const appJson = JSON.parse(fs.readFileSync('app.json').toString());
@@ -576,21 +580,27 @@ function setupExpoDir(dir, platform) {
     appJson.expo.icon = path.join(path.resolve('.'), appJson.expo.icon);
   }
   fs.writeFileSync(path.join(dir, 'app.json'), JSON.stringify(appJson));
-  fs.writeFileSync(path.join(dir, '.exprc'), JSON.stringify({manifestPort: expoPorts[platform]}));
+  if (platform !== 'all') {
+    fs.writeFileSync(path.join(dir, '.exprc'), JSON.stringify({manifestPort: expoPorts[platform]}));
+  }
 }
 
-async function startExpoServer(config, platform) {
-  try {
-    Config.validation.reactNativeVersionWarnings = false;
-    Config.developerTool = 'crna';
-    Config.offline = true;
+async function startExpoServer(projectRoot, packagerPort) {
+  Config.validation.reactNativeVersionWarnings = false;
+  Config.developerTool = 'crna';
+  Config.offline = true;
 
+  await Project.startExpoServerAsync(projectRoot);
+  await ProjectSettings.setPackagerInfoAsync(projectRoot, {
+    packagerPort
+  });
+}
+
+async function startExpoProject(config, platform) {
+  try {
     const projectRoot = path.join(path.resolve('.'), '.expo', platform);
     setupExpoDir(projectRoot, platform);
-    await Project.startExpoServerAsync(projectRoot);
-    await ProjectSettings.setPackagerInfoAsync(projectRoot, {
-      packagerPort: config.devServer.port
-    });
+    await startExpoServer(projectRoot, config.devServer.port);
 
     const address = await UrlUtils.constructManifestUrlAsync(projectRoot);
     console.log(`Expo address for ${platform}:`, address);
@@ -646,9 +656,68 @@ async function allocateExpoPorts() {
   }
 }
 
-allocateExpoPorts().then(() => {
-  nodes.forEach(node =>
-    ((__DEV__ && settings.webpackDll && node.dll) ? buildDll(node) : Promise.resolve({}))
-      .then(() => startWebpack(node))
-  );
-});
+async function startExpoProdServer() {
+  console.log(`Starting Expo prod server`);
+  const packagerPort = 3030;
+  const projectRoot = path.join(path.resolve('.'), '.expo', 'all');
+  startExpoServer(projectRoot, packagerPort);
+
+  const app = connect();
+  app
+    .use(function(req, res, next) {
+      req.path = req.url.split('?')[0];
+      console.log("req:", req.url);
+      next();
+    })
+    .use(compression())
+    .use(debugMiddleware)
+    .use(function(req, res, next) {
+      var platform = url.parse(req.url, true).query.platform;
+      if (platform) {
+        const filePath = path.join(settings.frontendBuildDir, platform, req.path);
+        if (fs.existsSync(filePath)) {
+          res.writeHead(200, {"Content-Type": mime.lookup(filePath)});
+          fs.createReadStream(filePath)
+            .pipe(res);
+        } else {
+          res.writeHead(404, {"Content-Type": "application/json"});
+          res.end(`{"message": "File not found: ${req.path}"}`);
+        }
+      } else {
+        next();
+      }
+    });
+
+  const serverInstance = http.createServer(app);
+
+  console.log(`Production mobile packager listening on http://localhost:${packagerPort}`);
+  serverInstance.listen(packagerPort);
+  serverInstance.timeout = 0;
+  serverInstance.keepAliveTimeout = 0;
+}
+
+async function startExp() {
+  const projectRoot = path.join(path.resolve('.'), '.expo', 'all');
+  setupExpoDir(projectRoot, 'all');
+  if (['ba', 'bi', 'build:android', 'build:ios'].indexOf(process.argv[3]) >= 0) {
+    await startExpoProdServer();
+  }
+  const exp = spawn(path.resolve('node_modules/.bin/exp'), process.argv.splice(3), {
+    cwd: projectRoot,
+    stdio: [0, 1, 2]
+  });
+  exp.on('exit', code => {
+    process.exit(code);
+  });
+}
+
+if (process.argv.length >= 3 && process.argv[2] === 'exp') {
+  startExp();
+} else {
+  allocateExpoPorts().then(() => {
+    nodes.forEach(node =>
+      ((__DEV__ && settings.webpackDll && node.dll) ? buildDll(node) : Promise.resolve({}))
+        .then(() => startWebpack(node))
+    );
+  });
+}

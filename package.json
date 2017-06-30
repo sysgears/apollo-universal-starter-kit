@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "node tools/webpack.entry",
+    "exp": "node tools/webpack.entry exp",
     "start": "node --harmony build/server",
     "tests": "cross-env NODE_ENV=test PORT=7070 mocha-webpack --include babel-polyfill --webpack-config tools/webpack.entry.js --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 mocha-webpack --include babel-polyfill --webpack-config tools/webpack.entry.js --full-trace --watch \"src/**/*.spec.js\"",
@@ -114,6 +115,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.0",
     "eslint-plugin-mocha": "^4.9.0",
     "eslint-plugin-react": "^7.1.0",
+    "exp": "42.1.0",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.11.2",
     "freeport-async": "^1.1.1",
@@ -159,7 +161,7 @@
     "webpack-sources": "^1.0.1",
     "webpack-virtual-modules": "^0.1.5",
     "ws": "^3.0.0",
-    "xdl": "^41.1.0"
+    "xdl": "^42.3.0"
   },
   "greenkeeper": {
     "ignore": [
@@ -167,8 +169,7 @@
       "react",
       "react-dom",
       "react-native",
-      "react-test-renderer",
-      "xdl"
+      "react-test-renderer"
     ]
   }
 }

@@ -176,7 +176,7 @@ module.exports = async function assetLoader() {
   };
   asset.files = scales.map(scale => path.join(dirname, map[`@${scale}x`].name));
   if (config.bundle) {
-    asset.fileSystemLocation = dirname
+    asset.fileSystemLocation = dirname;
   }
   const finalAsset = await hashAssetFiles(asset);
   this._module._asset = finalAsset;

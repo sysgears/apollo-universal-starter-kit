@@ -127,7 +127,6 @@ class MobileAssetsPlugin {
     const self = this;
     compiler.plugin('after-compile', (compilation, callback) => {
       _.each(compilation.chunks, chunk => {
-        console.log("Chunk files:", chunk.files);
         _.each(chunk.files, file => {
           if (file.endsWith('.bundle')) {
             let assets = self.vendorAssets;
@@ -573,7 +572,9 @@ function setupExpoDir(dir, platform) {
   pkg.main = `index.mobile`;
   fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify(pkg));
   const appJson = JSON.parse(fs.readFileSync('app.json').toString());
-  appJson.icon = path.join(path.resolve('.'), appJson.expo.icon);
+  if (appJson.expo.icon) {
+    appJson.expo.icon = path.join(path.resolve('.'), appJson.expo.icon);
+  }
   fs.writeFileSync(path.join(dir, 'app.json'), JSON.stringify(appJson));
   fs.writeFileSync(path.join(dir, '.exprc'), JSON.stringify({manifestPort: expoPorts[platform]}));
 }

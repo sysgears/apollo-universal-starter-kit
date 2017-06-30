@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Apollo Native Kit",
+    "version": "1.0.0",
+    "slug": "apollo-native-kit",
+    "sdkVersion": "15.0.0",
+    "ios": {
+      "bundleIdentifier": "com.sysgears.nativekit"
+    },
+    "android": {
+      "package": "com.sysgears.nativekit"
+    }
+  }
+}

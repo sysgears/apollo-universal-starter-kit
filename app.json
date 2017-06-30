@@ -18,7 +18,7 @@
   },
   "expo": {
     "name": "Apollo Universal Starter Kit",
-    "icon": "app.ico",
+    "icon": "app.png",
     "version": "1.0.0",
     "slug": "apollo-universal-starter-kit",
     "sdkVersion": "15.0.0",

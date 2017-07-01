@@ -442,14 +442,6 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       });
   }
 
-  if (platform != 'web') {
-    var filter = function (pathname, req) {
-      return [undefined, platform].indexOf(url.parse(req.url, true).query.platform) < 0;
-    };
-    const crossPorts = { android: ios.config.devServer.port, ios: android.config.devServer.port };
-    app.use(httpProxyMiddleware(filter, {target: `http://localhost:${crossPorts[platform]}`}));
-  }
-
   app.use(webpackDevMiddleware(compiler, _.merge({}, config.devServer, {
     reporter({ state, stats }) {
       if (state) {

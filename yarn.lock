@@ -129,12 +129,6 @@
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
 
-"@types/ws@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-3.0.0.tgz#4682a04d385484e73f7d8275cabc8b672d66143c"
-  dependencies:
-    "@types/node" "*"
-
 Base64@~0.1.3:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/Base64/-/Base64-0.1.4.tgz#e9f6c6bef567fd635ea4162ab14dd329e74aa6de"
@@ -2072,7 +2066,7 @@ clap@^1.0.9, clap@^1.1.3:
   dependencies:
     chalk "^1.1.3"
 
-classnames@^2.2.3:
+classnames@^2.2.3, classnames@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
@@ -4177,7 +4171,15 @@ graphql-subscriptions@^0.4.3:
     es6-promise "^4.0.5"
     iterall "^1.1.1"
 
-graphql-tag@^2.0.0, graphql-tag@^2.4.0:
+graphql-subscriptions@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-0.4.4.tgz#39cff32d08dd3c990113864bab77154403727e9b"
+  dependencies:
+    "@types/graphql" "^0.9.1"
+    es6-promise "^4.0.5"
+    iterall "^1.1.1"
+
+graphql-tag@^2.0.0, graphql-tag@^2.4.0, graphql-tag@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.4.2.tgz#6a63297d8522d03a2b72d26f1b239aab343840cd"
 
@@ -4403,6 +4405,10 @@ hoek@4.x.x:
 hoist-non-react-statics@^1.0.3, hoist-non-react-statics@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
+
+hoist-non-react-statics@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.0.0.tgz#843180515e0281952b08f41c620ca74870c7e354"
 
 home-dir@^1.0.0:
   version "1.0.0"
@@ -5070,14 +5076,14 @@ isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
 
-isomorphic-style-loader@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/isomorphic-style-loader/-/isomorphic-style-loader-2.0.0.tgz#d4d41a5f88a045dcdb3c5b61a464912bc6c0d3dc"
+isomorphic-style-loader@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/isomorphic-style-loader/-/isomorphic-style-loader-3.0.0.tgz#b7f68bf0682d42064e77ff6b65a9a07697c16653"
   dependencies:
     babel-runtime "^6.23.0"
-    hoist-non-react-statics "^1.2.0"
+    hoist-non-react-statics "^2.0.0"
     loader-utils "^1.1.0"
-    prop-types "^15.5.8"
+    prop-types "^15.5.10"
 
 isstream@0.1.x, isstream@~0.1.2:
   version "0.1.2"
@@ -7408,9 +7414,9 @@ react-native-vector-icons@4.1.1:
     prop-types "^15.5.8"
     yargs "^6.3.0"
 
-react-native-web@^0.0.108:
-  version "0.0.108"
-  resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.0.108.tgz#e35fcf410aafb012f9a381a2434d396ad97f3113"
+react-native-web@^0.0.109:
+  version "0.0.109"
+  resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.0.109.tgz#1c90168bb4cb24801c60842ea3e05b647bf297c7"
   dependencies:
     animated "^0.2.0"
     array-find-index "^1.0.2"
@@ -7584,14 +7590,15 @@ react-transform-hmr@^1.0.4:
     global "^4.3.0"
     react-proxy "^1.1.7"
 
-react-transition-group@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-1.2.0.tgz#b51fc921b0c3835a7ef7c571c79fc82c73e9204f"
+react-transition-group@^2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.0.2.tgz#894012704fd2d2dc57cf5e377f9d182f3c306402"
   dependencies:
     chain-function "^1.0.0"
+    classnames "^2.2.5"
     dom-helpers "^3.2.0"
     loose-envify "^1.3.1"
-    prop-types "^15.5.6"
+    prop-types "^15.5.8"
     warning "^3.0.0"
 
 react@~15.4.2:
@@ -8683,15 +8690,14 @@ stylis@^3.0.19:
   version "3.1.9"
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-3.1.9.tgz#638370451f980437f57c59e58d2e296be29fafb7"
 
-subscriptions-transport-ws@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.7.3.tgz#15858f03e013e1fc28f8c2d631014ec1548d38f0"
+subscriptions-transport-ws@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.8.0.tgz#d5cc394f61314e77053ec0831d37a8224b9d9f8f"
   dependencies:
-    "@types/ws" "^3.0.0"
     backo2 "^1.0.2"
     eventemitter3 "^2.0.3"
-    graphql-subscriptions "^0.4.3"
-    graphql-tag "^2.0.0"
+    graphql-subscriptions "^0.4.4"
+    graphql-tag "^2.4.2"
     iterall "^1.1.1"
     lodash.assign "^4.2.0"
     lodash.isobject "^3.0.2"

@@ -89,7 +89,7 @@ function deleteFiles(logger, templatePath, module, location) {
     const modules = match[1].split(',').filter(featureModule => featureModule.trim() !== module);
 
     // remove import module line
-    const lines = data.toString().split('\n').filter(line => line.match(`import ${module} from '.\/${module}';`) === null);
+    const lines = data.toString().split('\n').filter(line => line.match(`import ${module} from './${module}';`) === null);
     fs.writeFileSync(path, lines.join('\n'));
 
     // remove module from Feature function

@@ -224,7 +224,7 @@ const createClientPlugins = (platform) => {
       __PERSIST_GQL__: IS_PERSIST_GQL,
       __BACKEND_URL__: appConfigs.serverConfig.url ?
         `"${appConfigs.serverConfig.url}"`
-        : (platform !== 'web' ? `\"http://${ip.address()}:${settings.apiPort}/graphql\"` : false)
+        : (platform !== 'web' ? `"http://${ip.address()}:${settings.apiPort}/graphql"` : false)
     })),
     clientPersistPlugin
   ];

@@ -116,7 +116,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.0",
     "eslint-plugin-mocha": "^4.9.0",
     "eslint-plugin-react": "^7.1.0",
-    "exp": "42.1.0",
+    "exp": "42.2.0",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.11.2",
     "freeport-async": "^1.1.1",

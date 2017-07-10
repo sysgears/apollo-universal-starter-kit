@@ -26,9 +26,8 @@ let networkInterface = createBatchingNetworkInterface({
   uri: __BACKEND_URL__ || "/graphql",
 });
 if (__CLIENT__) {
-  const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
-    .replace(/^http/, 'ws')
-    .replace(':' + settings.webpackDevPort, ':' + settings.apiPort), {
+  const wsClient = new SubscriptionClient(__BACKEND_URL__
+    .replace(/^http/, 'ws'), {
       reconnect: true
   });
   networkInterface = addGraphQLSubscriptions(

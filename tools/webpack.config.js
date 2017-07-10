@@ -6,6 +6,7 @@ import merge from 'webpack-merge';
 import nodeExternals from 'webpack-node-externals';
 import path from 'path';
 import ip from 'ip';
+import url from 'url';
 import PersistGraphQLPlugin from 'persistgraphql-webpack-plugin';
 import _ from 'lodash';
 import AssetResolver from 'haul/src/resolvers/AssetResolver';
@@ -15,13 +16,13 @@ import pkg from '../package.json';
 import { app as settings } from '../app.json';
 
 const IS_TEST = process.argv[1].indexOf('mocha-webpack') >= 0 || process.argv[1].indexOf('eslint') >= 0;
-if (IS_TEST) {
-  delete appConfigs.serverConfig.url;
-}
-const IS_SSR = settings.ssr && !appConfigs.serverConfig.url && !IS_TEST;
-const IS_PERSIST_GQL = settings.persistGraphQL && !appConfigs.serverConfig.url && !IS_TEST;
+const IS_SSR = settings.ssr && settings.backend && !IS_TEST;
+const IS_PERSIST_GQL = settings.persistGraphQL && settings.backend && !IS_TEST;
 global.__DEV__ = process.argv.length >= 3 && (process.argv[2].indexOf('watch') >= 0 || IS_TEST);
 const buildNodeEnv = __DEV__ ? (IS_TEST ? 'test' : 'development') : 'production';
+const backendUrl = settings.backendUrl.replace('{ip}', ip.address());
+const { protocol, host } = url.parse(backendUrl);
+const backendBaseUrl = protocol + '//' + host;
 
 const moduleName = path.resolve('node_modules/persisted_queries.json');
 let clientPersistPlugin, serverPersistPlugin;
@@ -167,6 +168,7 @@ let serverPlugins = [
   new webpack.DefinePlugin(Object.assign({
     __CLIENT__: false, __SERVER__: true, __SSR__: IS_SSR,
     __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`,
+    __BACKEND_URL__: `"${backendUrl}"`,
     __PERSIST_GQL__: IS_PERSIST_GQL
   })),
   serverPersistPlugin
@@ -222,9 +224,7 @@ const createClientPlugins = (platform) => {
       __CLIENT__: true, __SERVER__: false, __SSR__: IS_SSR,
       __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`,
       __PERSIST_GQL__: IS_PERSIST_GQL,
-      __BACKEND_URL__: appConfigs.serverConfig.url ?
-        `"${appConfigs.serverConfig.url}"`
-        : (platform !== 'web' ? `"http://${ip.address()}:${settings.apiPort}/graphql"` : false)
+      __BACKEND_URL__: `"${backendUrl}"`,
     })),
     clientPersistPlugin
   ];
@@ -233,7 +233,7 @@ const createClientPlugins = (platform) => {
     clientPlugins.push(new ManifestPlugin({
       fileName: 'assets.json'
     }));
-    if (appConfigs.serverConfig.url) {
+    if (!settings.backend) {
       clientPlugins.push(new HtmlWebpackPlugin({
         template: 'tools/html-plugin-template.ejs',
         inject: 'body',
@@ -293,7 +293,7 @@ const webConfig = merge.smart(_.cloneDeep(createBaseConfig("web")), {
     port: settings.webpackDevPort,
     proxy: {
       '!/*.hot-update.{json,js}': {
-        target: `http://localhost:${settings.apiPort}`,
+        target: backendBaseUrl,
         logLevel: 'info'
       }
     }
@@ -407,5 +407,6 @@ module.exports =
         platform: 'ios',
         config: iOSConfig,
         dll: createDllConfig("ios")
-      }
+      },
+      backendUrl
     };

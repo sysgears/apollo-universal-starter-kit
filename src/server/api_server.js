@@ -1,8 +1,10 @@
 import express from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 import http from 'http';
 import { invert, isArray } from 'lodash';
+import url from 'url';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 
@@ -18,10 +20,12 @@ let server;
 
 const app = express();
 
-const port = process.env.PORT || settings.apiPort;
+const { port, pathname } = url.parse(__BACKEND_URL__);
 
 // Don't rate limit heroku
 app.enable('trust proxy');
+
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -57,7 +61,7 @@ if (__PERSIST_GQL__) {
   );
 }
 
-app.use('/graphql', (...args) => graphqlMiddleware(...args));
+app.use(pathname, (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));
 
@@ -65,7 +69,7 @@ server = http.createServer(app);
 
 addGraphQLSubscriptions(server);
 
-server.listen(port, () => {
+server.listen(process.env.PORT || port, () => {
   log.info(`API is now running on port ${port}`);
 });
 

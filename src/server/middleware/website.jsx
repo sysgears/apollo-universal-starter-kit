@@ -18,15 +18,11 @@ import App from '../../client/app/app';
 import log from '../../common/log';
 import { app as settings } from '../../../app.json';
 
-const port = process.env.PORT || settings.apiPort;
-
-const apiUrl = `http://localhost:${port}/graphql`;
-
 let assetMap;
 
 async function renderServerSide(req, res, queryMap) {
   let networkInterface = createBatchingNetworkInterface({
-    uri: apiUrl,
+    uri: __BACKEND_URL__,
     opts: {
       credentials: "same-origin",
       headers: req.headers,

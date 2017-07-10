@@ -4,7 +4,7 @@
     "frontendBuildDir": "build/client",
     "dllBuildDir": "build/dll",
     "webpackDevPort": 3000,
-    "apiPort": 8080,
+    "backendUrl": "http://{ip}:8080/graphql",
     "ssr": true,
     "webpackDll": true,
     "frontendRefreshOnBackendChange": true,
@@ -12,6 +12,7 @@
     "debugSQL": false,
     "persistGraphQL": false,
     "apolloLogging": false,
+    "backend": true,
     "web": true,
     "android": false,
     "ios": false

@@ -101,6 +101,34 @@ for both web and mobile.
 Currently we do not yet support persisted queries. This can be used in this starter kit currently only for web, but it is
 planed in the future.
 
+### Configuring starter kit
+This starter kit supplies boilerplate code for multiple platforms:
+- Node.js backend
+- Web frontend
+- Android frontend
+- iOS frontend
+If you don't need some of these platforms you can turn off building their code in `app.json` file as well as edit 
+other properties described below:
+
+|Option                    |Description|
+|--------------------------|-----------|
+|backendBuildDir|output directory for backend files|
+|frontendBuildDir|output directory for frontend files| 
+|dllBuildDir|output directory for Webpack DLL files used to speed up incremental builds|
+|webpackDevPort|the local port used for Webpack Dev Server process to host web frontend files|
+|backendUrl|URL to GraphQL backend endpoint|
+|ssr|Use server side rendering in backend| 
+|webpackDll|Utilize Webpack DLLs to speed up incremental builds|
+|frontendRefreshOnBackendChange|Trigger web frontend refresh when backend code changes|
+|reactHotLoader|Utilize React Hot Loader v3|
+|debugSQL|Print executed by backend SQL commands|
+|persistGraphQL|Generate and use persistent GraphQL queries|
+|apolloLogging|Log all Apollo GraphQL operations|
+|backend|Compile Node.JS backend|
+|web|Compile Web frontend|
+|android|Compile Android frontend|
+|ios|Compile iOS frontend|
+
 ### Feature Modules Scaffolding with CLI
 
 This starter kit encourages modular design of application features. 
@@ -134,8 +162,7 @@ yarn cli
 
   This starter kit is different from most of the starter kits out there, because it uses Webpack not only for front end,
 but for back-end code as well. This enables powerful Webpack features for back-end code, such as conditional compilation,
-embedding non-js files and CSS stylesheets into the code, hot code reload, etc. To use external backend set 
-`serverConfig.url` at `tools/webpack.app_config.js`
+embedding non-js files and CSS stylesheets into the code, hot code reload, etc. 
 
 - [Webpack] and [Expo] for mobile front-end
 

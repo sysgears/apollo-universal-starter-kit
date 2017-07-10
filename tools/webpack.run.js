@@ -22,6 +22,7 @@ import { fromStringWithSourceMap, SourceListMap } from 'source-list-map';
 import openurl from 'openurl';
 import connect from 'connect';
 import compression from 'compression';
+import ip from 'ip';
 import url from 'url';
 
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';
@@ -255,7 +256,7 @@ function startServerWebpack() {
 function openFrontend(config, platform) {
   try {
     if (platform === 'web') {
-      openurl.open(`http://localhost:${config.devServer.port}`);
+      openurl.open(`http://${ip.address()}:${config.devServer.port}`);
     } else if (['android', 'ios'].indexOf(platform) >= 0) {
       startExpoProject(config, platform);
     }
@@ -302,9 +303,10 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
 
   compiler.plugin('after-emit', (compilation, callback) => {
     if (backendFirstStart) {
-      if (!backend.config.url) {
+      if (settings.backend) {
         logger.debug("Webpack dev server is waiting for backend to start...");
-        waitOn({ resources: [`tcp:localhost:${settings.apiPort}`] }, err => {
+        const { host } = url.parse(settings.backendUrl.replace('{ip}', ip.address()));
+        waitOn({ resources: [`tcp:${host}`] }, err => {
           if (err) {
             logger.error(err);
             callback();
@@ -340,7 +342,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     });
   }
 
-  if (settings.webpackDll && dll && platform === 'web' && backend.config.url) {
+  if (settings.webpackDll && dll && platform === 'web' && !settings.backend) {
     compiler.plugin('after-compile', (compilation, callback) => {
       compilation.assets[vendorHashesJson.name] = vendorSource;
       compilation.assets[vendorHashesJson.name + '.map'] = vendorMap;
@@ -460,7 +462,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
     });
   }
 
-  logger(`Webpack ${config.name} dev server listening on http://localhost:${config.devServer.port}`);
+  logger(`Webpack ${config.name} dev server listening on http://${ip.address()}:${config.devServer.port}`);
   serverInstance.listen(config.devServer.port, function() {
     if (platform !== 'web') {
       wsProxy = webSocketProxy.attachToServer(serverInstance, '/debugger-proxy');
@@ -630,7 +632,7 @@ function startWebpack(node) {
 }
 
 const nodes = []
-  .concat(!backend.config.url ? [backend] : [])
+  .concat(settings.backend ? [backend] : [])
   .concat(settings.web ? [web] : [])
   .concat(settings.android ? [android] : [])
   .concat(settings.ios ? [ios]: []);
@@ -682,7 +684,7 @@ async function startExpoProdServer() {
 
   const serverInstance = http.createServer(app);
 
-  console.log(`Production mobile packager listening on http://localhost:${packagerPort}`);
+  console.log(`Production mobile packager listening on http://${ip.address()}:${packagerPort}`);
   serverInstance.listen(packagerPort);
   serverInstance.timeout = 0;
   serverInstance.keepAliveTimeout = 0;

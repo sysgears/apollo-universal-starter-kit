@@ -675,7 +675,7 @@ async function startExpoProdServer() {
             .pipe(res);
         } else {
           res.writeHead(404, {"Content-Type": "application/json"});
-          res.end(`{"message": "File not found: ${req.path}"}`);
+          res.end(`{"message": "File not found: ${filePath}"}`);
         }
       } else {
         next();

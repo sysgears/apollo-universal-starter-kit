@@ -102,16 +102,6 @@
       ]
     },
     {
-      "login": "yishaic",
-      "name": "Yishai Chernovitzky",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/13224812?v=3",
-      "profile": "https://github.com/yishaic",
-      "contributions": [
-        "code",
-        "tool"
-      ]
-    },
-    {
       "login": "zunder",
       "name": "Alex Weber",
       "avatar_url": "https://avatars1.githubusercontent.com/u/6862750?v=3",
@@ -120,6 +110,16 @@
         "code",
         "tool",
         "question"
+      ]
+    },
+    {
+      "login": "yishaic",
+      "name": "Yishai Chernovitzky",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/13224812?v=3",
+      "profile": "https://github.com/yishaic",
+      "contributions": [
+        "code",
+        "tool"
       ]
     }
   ]

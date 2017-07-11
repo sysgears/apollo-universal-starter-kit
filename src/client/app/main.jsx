@@ -54,13 +54,16 @@ if (window.__APOLLO_STATE__) {
 
 const history = createHistory();
 
-// Initialize Google Analytics and send events on each location change 
-ReactGA.initialize('UA-000000-01'); // Replace your Google tracking code here
-
-history.listen((location) => {
+const logPageView = location => {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);
-});
+};
+
+// Initialize Google Analytics and send events on each location change 
+ReactGA.initialize('UA-000000-01'); // Replace your Google tracking code here
+logPageView(window.location);
+
+history.listen(location => logPageView(location));
 
 const store = createReduxStore(initialState, client, routerMiddleware(history));
 

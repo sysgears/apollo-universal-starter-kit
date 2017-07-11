@@ -72,6 +72,17 @@
       ]
     },
     {
+      "login": "zirho",
+      "name": "Youngjae Ji",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1251296?v=3",
+      "profile": "http://zirho.github.io",
+      "contributions": [
+        "code",
+        "test",
+        "question"
+      ]
+    },
+    {
       "login": "GiladShoham",
       "name": "Gilad Shoham",
       "avatar_url": "https://avatars3.githubusercontent.com/u/3840769?v=3",
@@ -80,25 +91,6 @@
         "code",
         "tool",
         "question"
-      ]
-    },
-    {
-      "login": "alexandervetrov",
-      "name": "Alexander Vetrov",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/5399002?v=3",
-      "profile": "https://github.com/alexandervetrov",
-      "contributions": [
-        "code",
-        "test"
-      ]
-    },
-    {
-      "login": "NickPavlov",
-      "name": "Nikita Pavlov",
-      "avatar_url": "https://avatars0.githubusercontent.com/u/7948838?v=3",
-      "profile": "https://github.com/NickPavlov",
-      "contributions": [
-        "code"
       ]
     },
     {
@@ -123,14 +115,22 @@
       ]
     },
     {
-      "login": "zirho",
-      "name": "Youngjae Ji",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/1251296?v=3",
-      "profile": "http://zirho.github.io",
+      "login": "NickPavlov",
+      "name": "Nikita Pavlov",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7948838?v=3",
+      "profile": "https://github.com/NickPavlov",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "alexandervetrov",
+      "name": "Alexander Vetrov",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5399002?v=3",
+      "profile": "https://github.com/alexandervetrov",
       "contributions": [
         "code",
-        "test",
-        "question"
+        "test"
       ]
     }
   ]

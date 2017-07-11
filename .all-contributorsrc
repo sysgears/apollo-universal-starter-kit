@@ -121,6 +121,17 @@
         "code",
         "tool"
       ]
+    },
+    {
+      "login": "zirho",
+      "name": "Youngjae Ji",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1251296?v=3",
+      "profile": "http://zirho.github.io",
+      "contributions": [
+        "code",
+        "test",
+        "question"
+      ]
     }
   ]
 }

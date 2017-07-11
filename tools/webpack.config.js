@@ -11,6 +11,7 @@ import PersistGraphQLPlugin from 'persistgraphql-webpack-plugin';
 import _ from 'lodash';
 import AssetResolver from 'haul/src/resolvers/AssetResolver';
 import HasteResolver from 'haul/src/resolvers/HasteResolver';
+import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 import * as appConfigs from './webpack.app_config';
 import pkg from '../package.json';
 import { app as settings } from '../app.json';
@@ -375,7 +376,8 @@ const createDllConfig = platform => {
       new webpack.DllPlugin({
         name,
         path: path.join(settings.dllBuildDir, `${name}_dll.json`),
-      })
+      }),
+      webpackProgress(`Building ${name} DLL`)
     ],
     output: {
       filename: `${name}.[hash]_dll.js`,
@@ -384,6 +386,12 @@ const createDllConfig = platform => {
     },
   };
 };
+
+function webpackProgress(what = 'apollo-universal-starter-kit') {
+  return new ProgressBarPlugin({
+    format: `${what} [:bar] :percent (:elapsed seconds)`
+  });
+}
 
 module.exports =
   IS_TEST ?

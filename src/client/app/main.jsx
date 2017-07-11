@@ -13,7 +13,7 @@ import ReactGA from 'react-ga';
 
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
-import { app as settings } from '../../../app.json';
+import settings from '../../../settings';
 import App from '../app/app';
 
 import '../styles/styles.scss';
@@ -26,7 +26,7 @@ let networkInterface = createBatchingNetworkInterface({
   uri: __BACKEND_URL__ || "/graphql",
 });
 if (__CLIENT__) {
-  const wsClient = new SubscriptionClient(__BACKEND_URL__
+  const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws'), {
       reconnect: true
   });

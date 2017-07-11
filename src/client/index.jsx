@@ -6,7 +6,7 @@ import 'backend_reload';
 
 import Main from './app/main';
 import log from '../common/log';
-import { app as settings } from '../../app.json';
+import settings from '../../settings';
 
 const root = document.getElementById('content');
 

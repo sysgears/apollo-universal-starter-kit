@@ -15,7 +15,12 @@
     "backend": true,
     "web": true,
     "android": false,
-    "ios": false
+    "ios": false,
+    "env": {
+      "production": {
+        "backendUrl": "http://localhost:8080/graphql"
+      }
+    }
   },
   "expo": {
     "name": "Apollo Universal Starter Kit",

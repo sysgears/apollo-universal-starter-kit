@@ -28,7 +28,7 @@ import url from 'url';
 import liveReloadMiddleware from './middleware/liveReloadMiddleware';
 // eslint-disable-next-line import/named
 import { backend, web, ios, android } from './webpack.config';
-import { app as settings } from '../app.json';
+import settings from '../settings';
 
 const InspectorProxy = require('react-native/local-cli/server/util/inspectorProxy.js');
 const copyToClipBoardMiddleware = require('react-native/local-cli/server/middleware/copyToClipBoardMiddleware');

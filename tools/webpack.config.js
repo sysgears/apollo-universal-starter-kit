@@ -13,7 +13,7 @@ import AssetResolver from 'haul/src/resolvers/AssetResolver';
 import HasteResolver from 'haul/src/resolvers/HasteResolver';
 import * as appConfigs from './webpack.app_config';
 import pkg from '../package.json';
-import { app as settings } from '../app.json';
+import settings from '../settings';
 
 const IS_TEST = process.argv[1].indexOf('mocha-webpack') >= 0 || process.argv[1].indexOf('eslint') >= 0;
 const IS_SSR = settings.ssr && settings.backend && !IS_TEST;
@@ -224,7 +224,10 @@ const createClientPlugins = (platform) => {
       __CLIENT__: true, __SERVER__: false, __SSR__: IS_SSR,
       __DEV__: __DEV__, 'process.env.NODE_ENV': `"${buildNodeEnv}"`,
       __PERSIST_GQL__: IS_PERSIST_GQL,
-      __BACKEND_URL__: `"${backendUrl}"`,
+      __BACKEND_URL__: (
+        platform !== 'web' ||
+        url.parse(backendUrl).hostname !== 'localhost'
+      ) ? `"${backendUrl}"` : false,
     })),
     clientPersistPlugin
   ];

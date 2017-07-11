@@ -110,6 +110,17 @@
         "code",
         "tool"
       ]
+    },
+    {
+      "login": "zunder",
+      "name": "Alex Weber",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6862750?v=3",
+      "profile": "https://github.com/zunder",
+      "contributions": [
+        "code",
+        "tool",
+        "question"
+      ]
     }
   ]
 }

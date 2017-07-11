@@ -10,19 +10,23 @@ import { Route } from 'react-router-dom';
 import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
+import url from 'url';
 
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
 import Html from './html';
 import App from '../../client/app/app';
 import log from '../../common/log';
-import { app as settings } from '../../../app.json';
+import settings from '../../../settings';
 
 let assetMap;
 
+const { protocol, hostname, port, pathname } = url.parse(__BACKEND_URL__);
+const apiUrl = `${protocol}//${hostname}:${process.env.PORT || port}${pathname}`;
+
 async function renderServerSide(req, res, queryMap) {
   let networkInterface = createBatchingNetworkInterface({
-    uri: __BACKEND_URL__,
+    uri: apiUrl,
     opts: {
       credentials: "same-origin",
       headers: req.headers,

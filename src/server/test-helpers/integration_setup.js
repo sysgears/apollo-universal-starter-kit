@@ -7,7 +7,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import '../../../knexfile';
 import knex from '../sql/connector';
-import { app as settings } from '../../../app.json';
+import settings from '../../../settings';
 
 chai.use(chaiHttp);
 chai.should();

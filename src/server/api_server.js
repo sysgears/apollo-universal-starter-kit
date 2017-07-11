@@ -12,7 +12,7 @@ import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
 import addGraphQLSubscriptions from './api/subscriptions';
-import { app as settings } from '../../app.json';
+import settings from '../../settings';
 import log from '../common/log';
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -25,7 +25,9 @@ const { port, pathname } = url.parse(__BACKEND_URL__);
 // Don't rate limit heroku
 app.enable('trust proxy');
 
-app.use(cors());
+if (__DEV__) {
+  app.use(cors());
+}
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

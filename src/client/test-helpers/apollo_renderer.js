@@ -10,7 +10,7 @@ import { graphql, print } from 'graphql';
 
 import rootSchema from "../../server/api/root_schema.graphqls";
 import serverModules from "../../server/modules";
-import { app as settings } from '../../../app.json';
+import settings from '../../../settings';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;

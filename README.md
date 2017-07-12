@@ -354,6 +354,9 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
 
+## Stay In Touch
+For the latest announcements, follow on Twitter: [@sysgears](https://twitter.com/sysgears)
+
 ## License
 Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [MIT] license.
 

@@ -77,7 +77,7 @@ if (module.hot) {
   });
 }
 
-const Main = () => (
+const Main = (messages) => (
   <ApolloProvider store={store} client={client}>
     <LanguageProvider messages={messages}>
       <ConnectedRouter history={history}>

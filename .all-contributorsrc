@@ -72,6 +72,17 @@
       ]
     },
     {
+      "login": "zirho",
+      "name": "Youngjae Ji",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1251296?v=3",
+      "profile": "http://zirho.github.io",
+      "contributions": [
+        "code",
+        "test",
+        "question"
+      ]
+    },
+    {
       "login": "GiladShoham",
       "name": "Gilad Shoham",
       "avatar_url": "https://avatars3.githubusercontent.com/u/3840769?v=3",
@@ -83,13 +94,24 @@
       ]
     },
     {
-      "login": "alexandervetrov",
-      "name": "Alexander Vetrov",
-      "avatar_url": "https://avatars1.githubusercontent.com/u/5399002?v=3",
-      "profile": "https://github.com/alexandervetrov",
+      "login": "zunder",
+      "name": "Alex Weber",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6862750?v=3",
+      "profile": "https://github.com/zunder",
       "contributions": [
         "code",
-        "test"
+        "tool",
+        "question"
+      ]
+    },
+    {
+      "login": "yishaic",
+      "name": "Yishai Chernovitzky",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/13224812?v=3",
+      "profile": "https://github.com/yishaic",
+      "contributions": [
+        "code",
+        "tool"
       ]
     },
     {
@@ -102,13 +124,13 @@
       ]
     },
     {
-      "login": "yishaic",
-      "name": "Yishai Chernovitzky",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/13224812?v=3",
-      "profile": "https://github.com/yishaic",
+      "login": "alexandervetrov",
+      "name": "Alexander Vetrov",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5399002?v=3",
+      "profile": "https://github.com/alexandervetrov",
       "contributions": [
         "code",
-        "tool"
+        "test"
       ]
     }
   ]

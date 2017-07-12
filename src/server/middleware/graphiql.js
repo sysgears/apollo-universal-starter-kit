@@ -1,8 +1,6 @@
 import { graphiqlExpress } from 'graphql-server-express';
-import { app as settings } from '../../../app.json';
 
-const port = process.env.PORT || settings.apiPort;
-const subscriptionsUrl = `ws://localhost:${port}`;
+const subscriptionsUrl = __BACKEND_URL__.replace(/^http/, 'ws');
 
 export default graphiqlExpress({
   endpointURL: '/graphql',

@@ -6,33 +6,34 @@ import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import { Route } from 'react-router-dom';
 import { addPersistedQueries } from 'persistgraphql';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
 
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
-import { app as settings } from '../../../app.json';
+import settings from '../../../settings';
 import App from '../app/app';
 
 import '../styles/styles.scss';
 
-let networkInterface;
+let networkInterface = createBatchingNetworkInterface({
+  opts: {
+    credentials: "same-origin",
+  },
+  batchInterval: 20,
+  uri: __BACKEND_URL__ || "/graphql",
+});
 if (__CLIENT__) {
-  networkInterface = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
-    .replace(/^http/, 'ws')
-    .replace(':' + settings.webpackDevPort, ':' + settings.apiPort), {
+  const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
+    .replace(/^http/, 'ws'), {
       reconnect: true
   });
-} else {
-  networkInterface = createBatchingNetworkInterface({
-    opts: {
-      credentials: "same-origin",
-    },
-    batchInterval: 20,
-    uri: __BACKEND_URL__ || "/graphql",
-  });
+  networkInterface = addGraphQLSubscriptions(
+    networkInterface,
+    wsClient,
+  );
 }
 
 if (__PERSIST_GQL__) {
@@ -53,13 +54,16 @@ if (window.__APOLLO_STATE__) {
 
 const history = createHistory();
 
-// Initialize Google Analytics and send events on each location change 
-ReactGA.initialize('UA-000000-01'); // Replace your Google tracking code here
-
-history.listen((location) => {
+const logPageView = location => {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);
-});
+};
+
+// Initialize Google Analytics and send events on each location change 
+ReactGA.initialize('UA-000000-01'); // Replace your Google tracking code here
+logPageView(window.location);
+
+history.listen(location => logPageView(location));
 
 const store = createReduxStore(initialState, client, routerMiddleware(history));
 

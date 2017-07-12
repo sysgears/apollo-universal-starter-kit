@@ -1,5 +1,5 @@
 import now from 'performance-now';
-import { app as settings } from '../../../../app.json';
+import settings from '../../../../settings';
 
 import knex from '../../sql/connector';
 import log from '../../../common/log';

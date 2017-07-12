@@ -1,8 +1,10 @@
 import express from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 import http from 'http';
 import { invert, isArray } from 'lodash';
+import url from 'url';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 
@@ -10,7 +12,7 @@ import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
 import addGraphQLSubscriptions from './api/subscriptions';
-import { app as settings } from '../../app.json';
+import settings from '../../settings';
 import log from '../common/log';
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -18,10 +20,14 @@ let server;
 
 const app = express();
 
-const port = process.env.PORT || settings.apiPort;
+const { port, pathname } = url.parse(__BACKEND_URL__);
 
 // Don't rate limit heroku
 app.enable('trust proxy');
+
+if (__DEV__) {
+  app.use(cors());
+}
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -57,7 +63,7 @@ if (__PERSIST_GQL__) {
   );
 }
 
-app.use('/graphql', (...args) => graphqlMiddleware(...args));
+app.use(pathname, (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));
 
@@ -65,7 +71,7 @@ server = http.createServer(app);
 
 addGraphQLSubscriptions(server);
 
-server.listen(port, () => {
+server.listen(process.env.PORT || port, () => {
   log.info(`API is now running on port ${port}`);
 });
 

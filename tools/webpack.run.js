@@ -286,7 +286,7 @@ function startWebpackDevServer(config, dll, platform, reporter, logger) {
       context: process.cwd(),
       manifest: require(jsonPath) // eslint-disable-line import/no-dynamic-require
     }));
-    vendorHashesJson = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, `${name}_dll_hashes.json`)).toString());
+    vendorHashesJson = JSON.parse(fs.readFileSync(path.join(settings.dllBuildDir, `${name}_dll_hashes.json`)));
     vendorSource = new RawSource(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name)).toString() + "\n");
     vendorMap = new RawSource(fs.readFileSync(path.join(settings.dllBuildDir, vendorHashesJson.name + ".map")).toString());
     if (platform !== 'web') {

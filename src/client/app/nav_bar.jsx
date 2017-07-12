@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Container, Row, Navbar, Nav, NavItem } from 'reactstrap';
 
 import modules from '../modules';
+import { LocaleToggle } from '../modules/language/containers/locale-toggle';
 
 const NavBar = () => (
   <Navbar color="faded" light>
@@ -11,6 +12,7 @@ const NavBar = () => (
         <Link to="/" className="navbar-brand">Apollo Starter Kit</Link>
         <Nav>
           {modules.navItems}
+          <LocaleToggle />
         </Nav>
         {(!__PERSIST_GQL__ || __DEV__) && <Nav className="ml-auto" navbar>
           <NavItem>

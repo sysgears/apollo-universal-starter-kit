@@ -29,12 +29,10 @@ class PostAdd extends React.Component {
   render() {
     return (
       <Page>
-        <section>
-          {this.renderMetaData()}
-          <Link to="/posts">Back</Link>
-          <h2>Create Post</h2>
-          <PostForm onSubmit={this.onSubmit}/>
-        </section>
+        {this.renderMetaData()}
+        <Link to="/posts">Back</Link>
+        <h2>Create Post</h2>
+        <PostForm onSubmit={this.onSubmit}/>
       </Page>
     );
   }

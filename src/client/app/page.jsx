@@ -17,7 +17,7 @@ const Footer = styled.footer`
 
 const Page = ({children, navBar}) => {
   return (
-    <div>
+    <section>
       {navBar !== false && <NavBar />}
       <Container id="content">
         {children}
@@ -27,7 +27,7 @@ const Page = ({children, navBar}) => {
           &copy; 2017. Example Apollo App.
         </div>
       </Footer>
-    </div>
+    </section>
   );
 };
 

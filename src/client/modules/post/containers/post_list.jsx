@@ -147,32 +147,28 @@ class PostList extends React.Component {
     if (loading && !postsQuery) {
       return (
         <Page>
-          <section>
-            {this.renderMetaData()}
-            <div>
-              Loading...
-            </div>
-          </section>
+          {this.renderMetaData()}
+          <div>
+            Loading...
+          </div>
         </Page>
       );
     } else {
       return (
         <Page>
-          <section>
-            {this.renderMetaData()}
-            <h2>Posts</h2>
-            <Link to="/post/add">
-              <Button color="primary">Add</Button>
-            </Link>
-            <h1/>
-            <ListGroup>
-              {this.renderPosts()}
-            </ListGroup>
-            <div>
-              <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
-            </div>
-            {this.renderLoadMore()}
-          </section>
+          {this.renderMetaData()}
+          <h2>Posts</h2>
+          <Link to="/post/add">
+            <Button color="primary">Add</Button>
+          </Link>
+          <h1/>
+          <ListGroup>
+            {this.renderPosts()}
+          </ListGroup>
+          <div>
+            <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
+          </div>
+          {this.renderLoadMore()}
         </Page>
       );
     }

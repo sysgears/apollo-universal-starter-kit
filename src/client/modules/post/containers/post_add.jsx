@@ -4,6 +4,7 @@ import { graphql, compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
+import PageLayout from '../../../app/page_layout';
 import PostForm from '../components/post_form';
 import POST_ADD from '../graphql/post_add.graphql';
 
@@ -27,12 +28,12 @@ class PostAdd extends React.Component {
 
   render() {
     return (
-      <section>
+      <PageLayout>
         {this.renderMetaData()}
         <Link to="/posts">Back</Link>
         <h2>Create Post</h2>
         <PostForm onSubmit={this.onSubmit}/>
-      </section>
+      </PageLayout>
     );
   }
 }

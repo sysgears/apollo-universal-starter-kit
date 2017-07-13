@@ -4,7 +4,6 @@ import { addApolloLogging } from 'apollo-logger';
 import { ApolloProvider } from 'react-apollo';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-import { Route } from 'react-router-dom';
 import { addPersistedQueries } from 'persistgraphql';
 import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
@@ -14,7 +13,7 @@ import ReactGA from 'react-ga';
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
 import settings from '../../../settings';
-import App from '../app/app';
+import Routes from './routes';
 
 import '../styles/styles.scss';
 
@@ -77,7 +76,7 @@ if (module.hot) {
 const Main = () => (
   <ApolloProvider store={store} client={client}>
     <ConnectedRouter history={history}>
-      <Route path='/' component={App} />
+      {Routes}
     </ConnectedRouter>
   </ApolloProvider>
 );

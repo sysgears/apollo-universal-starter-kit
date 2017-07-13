@@ -6,6 +6,7 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
+import PageLayout from '../../../app/page_layout';
 import POSTS_QUERY from '../graphql/posts_get.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
 import POST_DELETE from '../graphql/post_delete.graphql';
@@ -145,16 +146,16 @@ class PostList extends React.Component {
 
     if (loading && !postsQuery) {
       return (
-        <section>
+        <PageLayout>
           {this.renderMetaData()}
           <div>
             Loading...
           </div>
-        </section>
+        </PageLayout>
       );
     } else {
       return (
-        <section>
+        <PageLayout>
           {this.renderMetaData()}
           <h2>Posts</h2>
           <Link to="/post/add">
@@ -168,7 +169,7 @@ class PostList extends React.Component {
             <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
           </div>
           {this.renderLoadMore()}
-        </section>
+        </PageLayout>
       );
     }
   }

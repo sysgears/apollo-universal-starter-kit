@@ -3,7 +3,6 @@ import { step } from 'mocha-steps';
 import _ from 'lodash';
 
 import Renderer from '../../../../client/test-helpers/apollo_renderer';
-import App from '../../../../client/app/app';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/post_comment_subscription.graphql';
@@ -67,12 +66,13 @@ describe('Posts and comments example UI works', () => {
   beforeEach(() => {
     // Reset spy mutations on each step
     Object.keys(mutations).forEach(key => delete mutations[key]);
+    content = app && app.find('#content');
   });
 
   step('Posts page renders without data', () => {
-    app = renderer.mount(App);
-    renderer.history.push('/posts');
+    app = renderer.mount();
     content = app.find('#content');
+    renderer.history.push('/posts');
 
     content.text().should.equal('Loading...');
   });
@@ -290,6 +290,7 @@ describe('Posts and comments example UI works', () => {
   step('Clicking back button takes to post list', () => {
     const backButton = content.find('#back-button');
     backButton.simulate('click', { button: 0 });
+    content = app.find('#content');
     expect(content.text()).to.include('Post title 33');
   });
 });

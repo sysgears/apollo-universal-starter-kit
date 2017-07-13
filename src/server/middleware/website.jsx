@@ -6,8 +6,7 @@ import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
 import { addApolloLogging } from 'apollo-logger';
 import { addPersistedQueries } from 'persistgraphql';
-import { Route } from 'react-router-dom';
-import fs from 'fs';
+ import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
 import url from 'url';
@@ -15,7 +14,7 @@ import url from 'url';
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
 import Html from './html';
-import App from '../../client/app/app';
+import Routes from '../../client/app/routes';
 import log from '../../common/log';
 import settings from '../../../settings';
 
@@ -54,7 +53,7 @@ async function renderServerSide(req, res, queryMap) {
         location={req.url}
         context={context}
       >
-        <Route path='/' component={App} />
+        {Routes}
       </StaticRouter>
     </ApolloProvider>
   );

@@ -4,6 +4,7 @@ import { graphql, compose } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
+import PageLayout from '../../../app/page_layout';
 import PostForm from '../components/post_form';
 import PostComments from './post_comments';
 import POST_QUERY from '../graphql/post_get.graphql';
@@ -68,23 +69,23 @@ class PostEdit extends React.Component {
 
     if (loading) {
       return (
-        <section>
+        <PageLayout>
           {this.renderMetaData()}
           <div>
             Loading...
           </div>
-        </section>
+        </PageLayout>
       );
     } else {
       return (
-        <section>
+        <PageLayout>
           {this.renderMetaData()}
           <Link id="back-button" to="/posts">Back</Link>
           <h2>Edit Post</h2>
           <PostForm onSubmit={this.onSubmit} initialValues={post}/>
           <br/>
           <PostComments postId={match.params.id} comments={post.comments} subscribeToMore={subscribeToMore}/>
-        </section>
+        </PageLayout>
       );
     }
   }

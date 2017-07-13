@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { Button } from 'reactstrap';
-import Page from '../../../app/page';
+import PageLayout from '../../../app/page_layout';
 
 const pageNotFound = () => (
-  <Page>
+  <PageLayout>
     <section className="text-center mt-4 mb-4">
       <Helmet
         title='Apollo Starter Kit - Page not found'
@@ -18,7 +18,7 @@ const pageNotFound = () => (
         <Button className='home-link' color="primary">Go to Homepage</Button>
       </Link>
     </section>
-  </Page>
+  </PageLayout>
 );
 
 export default pageNotFound;

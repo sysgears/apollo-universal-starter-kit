@@ -11,6 +11,9 @@ import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-trans
 import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
 
+// Import Language Provider
+import { LanguageProvider } from '../../client/modules/language/containers/language-provider';
+
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
 import settings from '../../../settings';
@@ -29,7 +32,7 @@ if (__CLIENT__) {
   const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws'), {
       reconnect: true
-  });
+    });
   networkInterface = addGraphQLSubscriptions(
     networkInterface,
     wsClient,
@@ -74,11 +77,13 @@ if (module.hot) {
   });
 }
 
-const Main = () => (
+const Main = (messages) => (
   <ApolloProvider store={store} client={client}>
-    <ConnectedRouter history={history}>
-      <Route path='/' component={App} />
-    </ConnectedRouter>
+    <LanguageProvider messages={messages}>
+      <ConnectedRouter history={history}>
+        <Route path='/' component={App} />
+      </ConnectedRouter>
+    </LanguageProvider>
   </ApolloProvider>
 );
 

@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "src/server",
   "engines": {
-    "node": "6.6.0",
+    "node": "6.11.1",
     "npm": "3.10.3"
   },
   "scripts": {

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 
+import Page from '../../../app/page';
 import AMOUNT_QUERY from '../graphql/count_get.graphql';
 import ADD_COUNT_MUTATION from '../graphql/count_add_mutation.graphql';
 import COUNT_SUBSCRIPTION from '../graphql/count_subscribe.graphql';
@@ -57,12 +58,16 @@ class Counter extends React.Component {
   render() {
     const { loading, count, addCount, reduxCount, onReduxIncrement } = this.props;
 
-    return <CounterShow
-      loading={loading}
-      count={count}
-      addCount={addCount}
-      reduxCount={reduxCount}
-      onReduxIncrement={onReduxIncrement} />;
+    return (
+      <Page>
+        <CounterShow
+          loading={loading}
+          count={count}
+          addCount={addCount}
+          reduxCount={reduxCount}
+          onReduxIncrement={onReduxIncrement} />
+      </Page>
+    );
   }
 }
 

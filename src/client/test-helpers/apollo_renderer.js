@@ -1,6 +1,6 @@
 import ApolloClient, { addTypenameToDocument } from 'apollo-client';
 import { addApolloLogging } from 'apollo-logger';
-import { Route, Router } from 'react-router-dom';
+import { Router, Switch } from 'react-router-dom';
 import createHistory from 'history/createMemoryHistory';
 import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
@@ -139,9 +139,11 @@ export default class Renderer {
     return this.networkInterface._getSubscriptions(query, variables);
   }
 
-  mount(component) {
+  mount() {
     return mount(this.withApollo(<Router history={this.history}>
-      <Route path="/" component={component} />
+      <Switch>
+        {clientModules.routes}
+      </Switch>
     </Router>));
   }
 }

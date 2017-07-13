@@ -6,6 +6,7 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
+import Page from '../../../app/page';
 import POSTS_QUERY from '../graphql/posts_get.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
 import POST_DELETE from '../graphql/post_delete.graphql';
@@ -145,30 +146,34 @@ class PostList extends React.Component {
 
     if (loading && !postsQuery) {
       return (
-        <section>
-          {this.renderMetaData()}
-          <div>
-            Loading...
-          </div>
-        </section>
+        <Page>
+          <section>
+            {this.renderMetaData()}
+            <div>
+              Loading...
+            </div>
+          </section>
+        </Page>
       );
     } else {
       return (
-        <section>
-          {this.renderMetaData()}
-          <h2>Posts</h2>
-          <Link to="/post/add">
-            <Button color="primary">Add</Button>
-          </Link>
-          <h1/>
-          <ListGroup>
-            {this.renderPosts()}
-          </ListGroup>
-          <div>
-            <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
-          </div>
-          {this.renderLoadMore()}
-        </section>
+        <Page>
+          <section>
+            {this.renderMetaData()}
+            <h2>Posts</h2>
+            <Link to="/post/add">
+              <Button color="primary">Add</Button>
+            </Link>
+            <h1/>
+            <ListGroup>
+              {this.renderPosts()}
+            </ListGroup>
+            <div>
+              <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
+            </div>
+            {this.renderLoadMore()}
+          </section>
+        </Page>
       );
     }
   }

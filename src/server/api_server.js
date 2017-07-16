@@ -20,8 +20,8 @@ let server;
 
 const app = express();
 
-const { urlPort, pathname } = url.parse(__BACKEND_URL__);
-const port = process.env.PORT || urlPort;
+const { port, pathname } = url.parse(__BACKEND_URL__);
+const serverPort = process.env.PORT || port;
 
 // Don't rate limit heroku
 app.enable('trust proxy');
@@ -72,8 +72,8 @@ server = http.createServer(app);
 
 addGraphQLSubscriptions(server);
 
-server.listen(port, () => {
-  log.info(`API is now running on port ${port}`);
+server.listen(serverPort, () => {
+  log.info(`API is now running on port ${serverPort}`);
 });
 
 server.on('close', () => {

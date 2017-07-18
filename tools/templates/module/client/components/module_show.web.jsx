@@ -5,6 +5,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import PageLayout from '../../../app/page_layout';
 
 const [Module]Show = () => {
 
@@ -18,14 +19,14 @@ const [Module]Show = () => {
   );
 
   return (
-    <div>
+    <PageLayout>
       {renderMetaData()}
       <div className="text-center mt-4 mb-4">
         <p>
           Hello [Module]!
         </p>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 

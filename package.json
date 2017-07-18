@@ -41,7 +41,7 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
-    "apollo-client": "^1.9.0",
+    "apollo-client": "^1.9.0-0",
     "apollo-logger": "0.0.5",
     "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-alpha.6",

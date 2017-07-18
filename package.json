@@ -41,7 +41,7 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
-    "apollo-client": "^1.8.0",
+    "apollo-client": "^1.9.0",
     "apollo-logger": "0.0.5",
     "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-alpha.6",
@@ -64,7 +64,7 @@
     "persistgraphql": "^0.3.2",
     "prop-types": "^15.5.10",
     "react": "~15.4.2",
-    "react-apollo": "^1.4.3",
+    "react-apollo": "^1.4.4",
     "react-dom": "~15.4.2",
     "react-ga": "^2.2.0",
     "react-helmet": "^5.1.3",
@@ -83,7 +83,7 @@
     "source-map-support": "^0.4.15",
     "sqlite3": "^3.1.8",
     "styled-components": "^2.1.1",
-    "subscriptions-transport-ws": "^0.8.0"
+    "subscriptions-transport-ws": "^0.8.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

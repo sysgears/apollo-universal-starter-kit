@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Button } from 'reactstrap';
 import styled from 'styled-components';
+import PageLayout from '../../../app/page_layout';
 
 const Section = styled.section`
   margin-bottom: 30px;
@@ -21,16 +22,16 @@ const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement })
 
   if (loading) {
     return (
-      <section>
+      <PageLayout>
         {renderMetaData()}
         <div className="text-center">
           Loading...
         </div>
-      </section>
+      </PageLayout>
     );
   } else {
     return (
-      <div>
+      <PageLayout>
         {renderMetaData()}
         <div className="text-center mt-4 mb-4">
           <Section>
@@ -51,7 +52,7 @@ const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement })
             </Button>
           </Section>
         </div>
-      </div>
+      </PageLayout>
     );
   }
 };

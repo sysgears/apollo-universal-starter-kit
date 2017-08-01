@@ -4,9 +4,12 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ApolloClient from 'apollo-client';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { TabNavigator } from 'react-navigation';
+import { Text } from 'react-native';
 
 import modules from '../client/modules/counter';
 import Counter from '../client/modules/counter/containers/counter';
+import PostList from '../client/modules/post/components/post_list';
 
 const networkInterface = new SubscriptionClient(__BACKEND_URL__.replace(/^http/, 'ws'), {
   reconnect: true
@@ -14,6 +17,17 @@ const networkInterface = new SubscriptionClient(__BACKEND_URL__.replace(/^http/,
 
 const client = new ApolloClient({
   networkInterface,
+});
+
+class AllContactsScreen extends React.Component {
+  render() {
+    return <Text>List of all contacts</Text>;
+  }
+}
+
+const MainScreenNavigator = TabNavigator({
+  Counter: { screen: Counter },
+  Post: { screen: PostList },
 });
 
 const store = createStore(
@@ -32,7 +46,7 @@ export default class Main extends Component {
   render() {
     return (
       <ApolloProvider store={store} client={client}>
-        <Counter/>
+        <MainScreenNavigator />
       </ApolloProvider>
     );
   }

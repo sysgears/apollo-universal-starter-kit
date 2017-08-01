@@ -4257,6 +4257,10 @@ graphql-anywhere@^3.0.0, graphql-anywhere@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-3.1.0.tgz#3ea0d8e8646b5cee68035016a9a7557c15c21e96"
 
+graphql-iso-date@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.2.0.tgz#21f9352d165e624599ec4ea249e806966197f1dc"
+
 graphql-server-express@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/graphql-server-express/-/graphql-server-express-1.0.4.tgz#09acd722c8be2a240262d40b43bcb2675ba1bad5"

@@ -73,6 +73,12 @@
   dependencies:
     react-native-vector-icons "4.1.1"
 
+"@expo/vector-icons@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@expo/vector-icons/-/vector-icons-5.0.0.tgz#380d578a58b736b693acdd1aa86f8b6576465ba4"
+  dependencies:
+    react-native-vector-icons "4.1.1"
+
 "@segment/loosely-validate-event@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@segment/loosely-validate-event/-/loosely-validate-event-1.1.2.tgz#d77840999e3f7e43e74b3b0d43391c1526f793b8"

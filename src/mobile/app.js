@@ -1,5 +1,6 @@
+/*eslint-disable react/display-name*/
+/*eslint-disable react/prop-types*/
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -24,10 +25,6 @@ const createTabBarIconWrapper = (
   TabBarIconComponent,
   defaultProps
 ) => props => <TabBarIconComponent {...defaultProps} color={props.tintColor} />;
-
-createTabBarIconWrapper.propTypes = {
-  tintColor: PropTypes.string
-};
 
 
 const PostNavigator = StackNavigator({

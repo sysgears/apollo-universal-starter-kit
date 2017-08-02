@@ -44,7 +44,7 @@ const CommentForm = (props) => {
           </Col>
           <Col xs="2">
             <Button color="primary" type="submit" className="float-right" disabled={submitting}>
-              Submit
+              Save
             </Button>
           </Col>
         </Row>

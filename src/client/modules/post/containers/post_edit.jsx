@@ -61,7 +61,7 @@ class PostEdit extends React.Component {
     else {
       addPost(values.title, values.content);
     }
-  }
+  };
 
   renderMetaData = () => (
     <Helmet
@@ -90,10 +90,10 @@ class PostEdit extends React.Component {
           {this.renderMetaData()}
           <Link id="back-button" to="/posts">Back</Link>
           <h2>{post ? 'Edit' : 'Create'} Post</h2>
-          <PostForm onSubmit={this.onSubmit} initialValues={post}/>
-          <br/>
-          { post &&
-            <PostComments postId={match.params.id} comments={post.comments} subscribeToMore={subscribeToMore}/>
+          <PostForm onSubmit={this.onSubmit} initialValues={post} />
+          <br />
+          {post &&
+          <PostComments postId={match.params.id} comments={post.comments} subscribeToMore={subscribeToMore} />
           }
         </PageLayout>
       );
@@ -124,7 +124,7 @@ export default compose(
   graphql(POST_ADD, {
     props: ({ ownProps: { history }, mutate }) => ({
       addPost: async (title, content) => {
-        await mutate({
+        const postData = await mutate({
           variables: { input: { title, content } },
           optimisticResponse: {
             addPost: {
@@ -141,7 +141,8 @@ export default compose(
           }
         });
 
-        return history.push('/posts');
+        //return history.push('/posts');
+        return history.push('/post/' + postData.data.addPost.id);
       }
     })
   }),
@@ -152,7 +153,7 @@ export default compose(
           variables: { input: { id, title, content } }
         });
 
-        return history.push('/posts');
+        //return history.push('/posts');
       }
     })
   })

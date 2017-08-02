@@ -37,7 +37,7 @@ const PostForm = (props) => {
       <Field name="title" component={renderField} type="text" label="Title" validate={required}/>
       <Field name="content" component={renderField} type="text" label="Content" validate={required}/>
       <Button color="primary" type="submit" disabled={submitting}>
-        Submit
+        Save
       </Button>
     </Form>
   );

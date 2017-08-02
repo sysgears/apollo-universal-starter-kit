@@ -1,6 +1,7 @@
 /*eslint-disable react/display-name*/
 /*eslint-disable react/prop-types*/
 import React, { Component } from 'react';
+import { Button } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -30,31 +31,32 @@ const createTabBarIconWrapper = (
 const PostNavigator = StackNavigator({
   Post: {
     screen: Post,
-    navigationOptions: () => ({
-      title: 'Post List',
-    })
+    navigationOptions: {
+      title: 'Post list',
+      headerRight: <Button title="Add" onPress={() => console.log('add')} />
+    }
   },
 });
 
 const MainScreenNavigator = TabNavigator({
   Counter: {
     screen: Counter,
-    navigationOptions: () => ({
+    navigationOptions: {
       tabBarIcon: createTabBarIconWrapper(Ionicons, {
         name: 'ios-home-outline',
         size: 30
       })
-    })
+    }
   },
   Post: {
     screen: PostNavigator,
-    navigationOptions: () => ({
+    navigationOptions: {
       title: 'Post',
       tabBarIcon: createTabBarIconWrapper(Ionicons, {
         name: 'ios-book-outline',
-        size: 30
+        size: 30,
       })
-    })
+    }
   },
 });
 

@@ -2,11 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
-import Helmet from 'react-helmet';
-import { Link } from 'react-router-dom';
-import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
-import PageLayout from '../../../app/page_layout';
+import PostList from '../components/post_list';
+
 import POSTS_QUERY from '../graphql/posts_get.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
 import POST_DELETE from '../graphql/post_delete.graphql';
@@ -55,7 +53,7 @@ function DeletePost(prev, id) {
   });
 }
 
-class PostList extends React.Component {
+class Post extends React.Component {
   constructor(props) {
     super(props);
 
@@ -107,75 +105,21 @@ class PostList extends React.Component {
     }
   }
 
-  renderPosts() {
-    const { postsQuery, deletePost } = this.props;
-
-    return postsQuery.edges.map(({ node: { id, title } }) => {
-      return (
-        <ListGroupItem className="justify-content-between" key={id}>
-          <span><Link className="post-link" to={`/post/${id}`}>{title}</Link></span>
-          <span className="badge badge-default badge-pill delete-button" onClick={deletePost(id)}>Delete</span>
-        </ListGroupItem>
-      );
-    });
-  }
-
-  renderLoadMore() {
-    const { postsQuery, loadMoreRows } = this.props;
-
-    if (postsQuery.pageInfo.hasNextPage) {
-      return (
-        <Button id="load-more" color="primary" onClick={loadMoreRows}>
-          Load more ...
-        </Button>
-      );
-    }
-  }
-
-  renderMetaData = () => (
-    <Helmet
-      title="Apollo Starter Kit - Posts list"
-      meta={[{
-        name: 'description',
-        content: 'List of all posts example page'
-      }]}/>
-  );
-
   render() {
-    const { loading, postsQuery } = this.props;
+    const { loading, postsQuery, deletePost, loadMoreRows } = this.props;
 
-    if (loading && !postsQuery) {
-      return (
-        <PageLayout>
-          {this.renderMetaData()}
-          <div>
-            Loading...
-          </div>
-        </PageLayout>
-      );
-    } else {
-      return (
-        <PageLayout>
-          {this.renderMetaData()}
-          <h2>Posts</h2>
-          <Link to="/post/add">
-            <Button color="primary">Add</Button>
-          </Link>
-          <h1/>
-          <ListGroup>
-            {this.renderPosts()}
-          </ListGroup>
-          <div>
-            <small>({postsQuery.edges.length} / {postsQuery.totalCount})</small>
-          </div>
-          {this.renderLoadMore()}
-        </PageLayout>
-      );
-    }
+    return (
+      <PostList
+        loading={loading}
+        postsQuery={postsQuery}
+        deletePost={deletePost}
+        loadMoreRows={loadMoreRows}
+      />
+    );
   }
 }
 
-PostList.propTypes = {
+Post.propTypes = {
   loading: PropTypes.bool.isRequired,
   postsQuery: PropTypes.object,
   deletePost: PropTypes.func.isRequired,
@@ -240,4 +184,4 @@ export default compose(
       },
     })
   })
-)(PostList);
+)(Post);

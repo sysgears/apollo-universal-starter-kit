@@ -8,7 +8,7 @@ import PageLayout from '../../../app/page_layout';
 import PostForm from '../components/post_form';
 import POST_ADD from '../graphql/post_add.graphql';
 
-import { AddPost } from './post_list';
+import { AddPost } from './post';
 
 class PostAdd extends React.Component {
   onSubmit = (values) => {

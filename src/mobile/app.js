@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import modules from '../client/modules/counter';
 import Counter from '../client/modules/counter/containers/counter';
-import PostList from '../client/modules/post/components/post_list';
+import Post from '../client/modules/post/containers/post';
 
 const networkInterface = new SubscriptionClient(__BACKEND_URL__.replace(/^http/, 'ws'), {
   reconnect: true
@@ -29,7 +29,7 @@ const createTabBarIconWrapper = (
 
 const PostNavigator = StackNavigator({
   Post: {
-    screen: PostList,
+    screen: Post,
     navigationOptions: () => ({
       title: 'Post List',
     })
@@ -40,11 +40,12 @@ const MainScreenNavigator = TabNavigator({
   Counter: {
     screen: Counter,
     navigationOptions: () => ({
-    tabBarIcon: createTabBarIconWrapper(Ionicons, {
-      name: 'ios-home-outline',
-      size: 30
+      tabBarIcon: createTabBarIconWrapper(Ionicons, {
+        name: 'ios-home-outline',
+        size: 30
+      })
     })
-  }) },
+  },
   Post: {
     screen: PostNavigator,
     navigationOptions: () => ({

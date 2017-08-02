@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 
+import CounterShow from '../components/counter_show';
+
 import AMOUNT_QUERY from '../graphql/count_get.graphql';
 import ADD_COUNT_MUTATION from '../graphql/count_add_mutation.graphql';
 import COUNT_SUBSCRIPTION from '../graphql/count_subscribe.graphql';
-
-import CounterShow from '../components/counter_show';
 
 class Counter extends React.Component {
   constructor(props) {

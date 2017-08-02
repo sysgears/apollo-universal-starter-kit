@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, ListView, ScrollView } from 'react-native';
+import PropTypes from 'prop-types';
+import { StyleSheet, Text, View, ListView, ScrollView, Button } from 'react-native';
 
 // Row comparison function
 const rowHasChanged = (r1, r2) => r1.id !== r2.id;
@@ -15,7 +16,17 @@ const renderRow = (rowData) => {
   );
 };
 
-const PostList = ({ loading, postsQuery }) => {
+function renderLoadMore(postsQuery, loadMoreRows) {
+  if (postsQuery.pageInfo.hasNextPage) {
+    return (
+      <View style={styles.row}>
+        <Button title="More" onPress={loadMoreRows} />
+      </View>
+    );
+  }
+}
+
+const PostList = ({ loading, postsQuery, loadMoreRows }) => {
 
     if (loading) {
       return (
@@ -41,9 +52,17 @@ const PostList = ({ loading, postsQuery }) => {
             renderRow={renderRow}
             removeClippedSubviews={false}
           />
+          {renderLoadMore(postsQuery, loadMoreRows)}
         </ScrollView>
       );
     }
+};
+
+PostList.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  postsQuery: PropTypes.object,
+  deletePost: PropTypes.func.isRequired,
+  loadMoreRows: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -62,6 +81,8 @@ const styles = StyleSheet.create({
   row: {
     padding: 15,
     marginBottom: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
 });
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import PageLayout from '../../../app/page_layout';
 import { Link } from 'react-router-dom';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
+
+import PageLayout from '../../../app/page_layout';
 
 function renderPosts(postsQuery, deletePost) {
   return postsQuery.edges.map(({ node: { id, title } }) => {

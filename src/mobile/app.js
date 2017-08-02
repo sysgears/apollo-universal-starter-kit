@@ -5,7 +5,6 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import ApolloClient from 'apollo-client';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { TabNavigator } from 'react-navigation';
-import { Text } from 'react-native';
 
 import modules from '../client/modules/counter';
 import Counter from '../client/modules/counter/containers/counter';
@@ -18,12 +17,6 @@ const networkInterface = new SubscriptionClient(__BACKEND_URL__.replace(/^http/,
 const client = new ApolloClient({
   networkInterface,
 });
-
-class AllContactsScreen extends React.Component {
-  render() {
-    return <Text>List of all contacts</Text>;
-  }
-}
 
 const MainScreenNavigator = TabNavigator({
   Counter: { screen: Counter },

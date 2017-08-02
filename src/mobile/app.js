@@ -4,7 +4,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ApolloClient from 'apollo-client';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { TabNavigator } from 'react-navigation';
+import { TabNavigator, StackNavigator } from 'react-navigation';
 
 import modules from '../client/modules/counter';
 import Counter from '../client/modules/counter/containers/counter';
@@ -18,9 +18,18 @@ const client = new ApolloClient({
   networkInterface,
 });
 
+const PostNavigator = StackNavigator({
+  Post: {
+    screen: PostList,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Post',
+    }),
+  },
+});
+
 const MainScreenNavigator = TabNavigator({
   Counter: { screen: Counter },
-  Post: { screen: PostList },
+  Post: { screen: PostNavigator },
 });
 
 const store = createStore(

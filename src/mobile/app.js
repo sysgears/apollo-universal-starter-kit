@@ -21,7 +21,7 @@ const client = new ApolloClient({
 const PostNavigator = StackNavigator({
   Post: {
     screen: PostList,
-    navigationOptions: ({ navigation }) => ({
+    navigationOptions: () => ({
       title: 'Post',
     }),
   },

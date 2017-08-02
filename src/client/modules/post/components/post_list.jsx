@@ -8,11 +8,14 @@ const rowHasChanged = (r1, r2) => r1.id !== r2.id;
 // DataSource template object
 const ds = new ListView.DataSource({ rowHasChanged });
 
-const renderRow = (rowData) => {
+const renderRow = (deletePost) => (rowData) => {
   return (
-    <Text style={styles.row}>
-      {rowData.title}
-    </Text>
+    <View style={styles.row}>
+      <Text>
+        {rowData.title}
+      </Text>
+      <Button title="Delete" onPress={deletePost(rowData.id)} />
+    </View>
   );
 };
 
@@ -26,36 +29,36 @@ function renderLoadMore(postsQuery, loadMoreRows) {
   }
 }
 
-const PostList = ({ loading, postsQuery, loadMoreRows }) => {
+const PostList = ({ loading, postsQuery, deletePost, loadMoreRows }) => {
 
-    if (loading) {
-      return (
-        <View style={styles.container}>
-          <Text>
-            Loading...
-          </Text>
-        </View>
-      );
-    } else {
-      const rows = postsQuery.edges.reduce((prev, { node }) => {
-        prev.push(node);
-        return prev;
-      }, []);
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    );
+  } else {
+    const rows = postsQuery.edges.reduce((prev, { node }) => {
+      prev.push(node);
+      return prev;
+    }, []);
 
-      const dataSource = ds.cloneWithRows(rows);
+    const dataSource = ds.cloneWithRows(rows);
 
-      return (
-        <ScrollView>
-          <ListView
-            style={styles.container}
-            dataSource={dataSource}
-            renderRow={renderRow}
-            removeClippedSubviews={false}
-          />
-          {renderLoadMore(postsQuery, loadMoreRows)}
-        </ScrollView>
-      );
-    }
+    return (
+      <ScrollView>
+        <ListView
+          style={styles.container}
+          dataSource={dataSource}
+          renderRow={renderRow(deletePost)}
+          removeClippedSubviews={false}
+        />
+        {renderLoadMore(postsQuery, loadMoreRows)}
+      </ScrollView>
+    );
+  }
 };
 
 PostList.propTypes = {
@@ -68,7 +71,6 @@ PostList.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   element: {
     paddingTop: 30
@@ -79,10 +81,14 @@ const styles = StyleSheet.create({
     marginRight: 15
   },
   row: {
-    padding: 15,
-    marginBottom: 5,
+    padding: 5,
     borderWidth: 1,
+    borderTopWidth: 0,
     borderColor: '#ddd',
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
 });
 

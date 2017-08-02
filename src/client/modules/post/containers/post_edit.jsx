@@ -7,7 +7,10 @@ import Helmet from 'react-helmet';
 import PageLayout from '../../../app/page_layout';
 import PostForm from '../components/post_form';
 import PostComments from './post_comments';
+import { AddPost } from './post';
+
 import POST_QUERY from '../graphql/post_get.graphql';
+import POST_ADD from '../graphql/post_add.graphql';
 import POST_EDIT from '../graphql/post_edit.graphql';
 import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql';
 
@@ -19,7 +22,7 @@ class PostEdit extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!nextProps.loading) {
+    if (!nextProps.loading && this.props.post) {
       // Check if props have changed and, if necessary, stop the subscription
       if (this.subscription && this.props.post.id !== nextProps.post.id) {
         this.subscription();
@@ -50,9 +53,14 @@ class PostEdit extends React.Component {
   }
 
   onSubmit = (values) => {
-    const { post, editPost } = this.props;
+    const { post, addPost, editPost } = this.props;
 
-    editPost(post.id, values.title, values.content);
+    if (post) {
+      editPost(post.id, values.title, values.content);
+    }
+    else {
+      addPost(values.title, values.content);
+    }
   }
 
   renderMetaData = () => (
@@ -81,10 +89,12 @@ class PostEdit extends React.Component {
         <PageLayout>
           {this.renderMetaData()}
           <Link id="back-button" to="/posts">Back</Link>
-          <h2>Edit Post</h2>
+          <h2>{post ? 'Edit' : 'Create'} Post</h2>
           <PostForm onSubmit={this.onSubmit} initialValues={post}/>
           <br/>
-          <PostComments postId={match.params.id} comments={post.comments} subscribeToMore={subscribeToMore}/>
+          { post &&
+            <PostComments postId={match.params.id} comments={post.comments} subscribeToMore={subscribeToMore}/>
+          }
         </PageLayout>
       );
     }
@@ -94,6 +104,7 @@ class PostEdit extends React.Component {
 PostEdit.propTypes = {
   loading: PropTypes.bool.isRequired,
   post: PropTypes.object,
+  addPost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
   subscribeToMore: PropTypes.func.isRequired,
@@ -109,6 +120,30 @@ export default compose(
     props({ data: { loading, post, subscribeToMore } }) {
       return { loading, post, subscribeToMore };
     }
+  }),
+  graphql(POST_ADD, {
+    props: ({ ownProps: { history }, mutate }) => ({
+      addPost: async (title, content) => {
+        await mutate({
+          variables: { input: { title, content } },
+          optimisticResponse: {
+            addPost: {
+              id: -1,
+              title: title,
+              content: content,
+              __typename: 'Post',
+            },
+          },
+          updateQueries: {
+            getPosts: (prev, { mutationResult: { data: { addPost } } }) => {
+              return AddPost(prev, addPost);
+            }
+          }
+        });
+
+        return history.push('/posts');
+      }
+    })
   }),
   graphql(POST_EDIT, {
     props: ({ ownProps: { history }, mutate }) => ({

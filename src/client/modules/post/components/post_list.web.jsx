@@ -52,7 +52,7 @@ const PostList = ({ loading, postsQuery, deletePost, loadMoreRows }) => {
       <PageLayout>
         {renderMetaData()}
         <h2>Posts</h2>
-        <Link to="/post/add">
+        <Link to="/post/0">
           <Button color="primary">Add</Button>
         </Link>
         <h1/>

@@ -106,16 +106,7 @@ class Post extends React.Component {
   }
 
   render() {
-    const { loading, postsQuery, deletePost, loadMoreRows } = this.props;
-
-    return (
-      <PostList
-        loading={loading}
-        postsQuery={postsQuery}
-        deletePost={deletePost}
-        loadMoreRows={loadMoreRows}
-      />
-    );
+    return <PostList {...this.props} />;
   }
 }
 

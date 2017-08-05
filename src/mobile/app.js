@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import modules from '../client/modules/counter';
 import Counter from '../client/modules/counter/containers/counter';
 import Post from '../client/modules/post/containers/post';
+import PostEdit from '../client/modules/post/containers/post_edit';
 
 const networkInterface = new SubscriptionClient(__BACKEND_URL__.replace(/^http/, 'ws'), {
   reconnect: true
@@ -29,13 +30,13 @@ const createTabBarIconWrapper = (
 
 
 const PostNavigator = StackNavigator({
-  Post: {
+  PostList: {
     screen: Post,
     navigationOptions: {
-      title: 'Post list',
       headerRight: <Button title="Add" onPress={() => console.log('add')} />
     }
   },
+  PostEdit: { screen: PostEdit },
 });
 
 const MainScreenNavigator = TabNavigator({

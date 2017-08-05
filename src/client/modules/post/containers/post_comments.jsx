@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 import { reset } from 'redux-form';
-import { ListGroup, ListGroupItem } from 'reactstrap';
 
-import CommentForm from '../components/post_comment_form';
+import PostCommentsShow from '../components/post_comments_show';
 
 import COMMENT_ADD from '../graphql/post_comment_add.graphql';
 import COMMENT_EDIT from '../graphql/post_comment_edit.graphql';
@@ -94,58 +93,8 @@ class PostComments extends React.Component {
     }
   }
 
-  renderComments() {
-    const { comments, onCommentSelect } = this.props;
-
-    return comments.map(({ id, content }) => {
-      return (
-        <ListGroupItem className="justify-content-between" key={id}>
-          {content}
-          <div>
-            <span className="badge badge-default badge-pill edit-comment"
-                  onClick={() => onCommentSelect({ id, content })}>Edit</span>
-            <span className="badge badge-default badge-pill delete-comment" onClick={() => this.onCommentDelete(id)}>Delete</span>
-          </div>
-        </ListGroupItem>
-      );
-    });
-  }
-
-  onCommentDelete(id) {
-    const { comment, deleteComment, onCommentSelect } = this.props;
-
-    if (comment.id === id) {
-      onCommentSelect({ id: null, content: '' });
-    }
-
-    deleteComment(id);
-  }
-
-  onSubmit = (values) => {
-    const { addComment, editComment, postId, comment, onCommentSelect, onFormSubmitted } = this.props;
-
-    if (comment.id === null) {
-      addComment(values.content, postId);
-    }
-    else {
-      editComment(comment.id, values.content);
-    }
-
-    onCommentSelect({ id: null, content: '' });
-    onFormSubmitted();
-  }
-
   render() {
-    const { postId, comment } = this.props;
-
-    return (
-      <div>
-        <h3>Comments</h3>
-        <CommentForm postId={postId} onSubmit={this.onSubmit} initialValues={comment}/>
-        <h1/>
-        <ListGroup>{this.renderComments()}</ListGroup>
-      </div>
-    );
+    return <PostCommentsShow {...this.props} />;
   }
 }
 

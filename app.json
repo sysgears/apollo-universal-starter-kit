@@ -3,24 +3,8 @@
     "backendBuildDir": "build/server",
     "frontendBuildDir": "build/client",
     "dllBuildDir": "build/dll",
-    "webpackDevPort": 3000,
-    "backendUrl": "http://{ip}:8080/graphql",
-    "ssr": true,
-    "webpackDll": true,
-    "frontendRefreshOnBackendChange": true,
-    "reactHotLoader": false,
     "debugSQL": false,
-    "persistGraphQL": false,
-    "apolloLogging": false,
-    "backend": true,
-    "web": true,
-    "android": false,
-    "ios": false,
-    "env": {
-      "production": {
-        "backendUrl": "http://localhost:8080/graphql"
-      }
-    }
+    "apolloLogging": false
   },
   "expo": {
     "name": "Apollo Universal Starter Kit",

@@ -17,7 +17,7 @@
   "settings": {
     "import/resolver": {
       "webpack": {
-        "config": "./tools/webpack.entry.js"
+        "config": "node_modules/spinjs/webpack.config.js"
       }
     }
   },

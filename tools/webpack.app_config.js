@@ -1,41 +1,41 @@
 // App-specific back-end Webpack config should be here
-const serverConfig = {
-  entry: {
-    index: [
-      'babel-polyfill',
-      './src/server/index.js'
-    ]
-  }
+const server = {
+//  entry: {
+//    index: [
+//      'babel-polyfill',
+//      './src/server/index.js'
+//    ]
+//  }
 };
 
 // App-specific web front-end Webpack config should be here
-const webConfig = {
-  entry: {
-    bundle: [
-      'babel-polyfill',
-      './src/client/index.jsx'
-    ]
-  }
+const web = {
+//  entry: {
+//    index: [
+//      'babel-polyfill',
+//      './src/client/index.jsx'
+//    ]
+//  }
 };
 
 // App-specific Android React Native front-end Webpack config should be here
-const androidConfig = {
-  entry: {
-    index: [
-      require.resolve('./react-native-polyfill.js'),
-      './src/mobile/index.js'
-    ]
-  }
+const android = {
+//  entry: {
+//    'index.mobile.bundle': [
+//      require.resolve('./react-native-polyfill.js'),
+//      './src/mobile/index.js'
+//    ]
+//  }
 };
 
 // App-specific iOS React Native front-end Webpack config should be here
-const iOSConfig = {
-  entry: {
-    index: [
-      require.resolve('./react-native-polyfill.js'),
-      './src/mobile/index.js'
-    ]
-  }
+const ios = {
+//  entry: {
+//    'index.mobile.bundle': [
+//      require.resolve('./react-native-polyfill.js'),
+//      './src/mobile/index.js'
+//    ]
+//  }
 };
 
 const dependencyPlatforms = {
@@ -61,7 +61,7 @@ const dependencyPlatforms = {
   "react-native-web": "web",
   "react-redux": "web",
   "react-router": "web",
-  "react-router-dom": ["web", "ios", "android"],
+  "react-router-dom": "web",
   "react-router-redux": "web",
   "react-transition-group": "web",
   "reactstrap": "web",
@@ -74,4 +74,4 @@ const dependencyPlatforms = {
   "subscriptions-transport-ws": ["ios", "android", "web"]
 };
 
-export { webConfig, serverConfig, androidConfig, iOSConfig, dependencyPlatforms };
+module.exports = { server, web, android, ios, dependencyPlatforms };

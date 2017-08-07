@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(path.join(settings.frontendBuildDir, 'web'), { maxAge: '180 days' }));
 
-if (__DEV__ && settings.webpackDll) {
+if (__DEV__) {
   app.use('/', express.static(settings.dllBuildDir, { maxAge: '180 days' }));
 }
 

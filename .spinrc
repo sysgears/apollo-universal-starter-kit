@@ -1,0 +1,22 @@
+{
+  "nodes": {
+    "server": "server",
+    "web": "web",
+    "android": "android",
+    "ios": "ios",
+    "test": {
+      "features": "server",
+      "roles": ["test"]
+    }
+  },
+  "options": {
+    "overridesConfig": "tools/webpack.app_config.js",
+    "features": ["apollo", "react", "es6"],
+    "backendUrl": "http://{ip}:8080/graphql",
+    "ssr": true,
+    "webpackDll": true,
+    "reactHotLoader": false,
+    "persistGraphQL": false,
+    "frontendRefreshOnBackendChange": true
+  }
+}

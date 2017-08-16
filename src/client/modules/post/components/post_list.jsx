@@ -9,12 +9,15 @@ const rowHasChanged = (r1, r2) => r1.id !== r2.id;
 // DataSource template object
 const ds = new ListView.DataSource({ rowHasChanged });
 
-const renderRow = (deletePost) => (rowData) => {
+const renderRow = (deletePost, navigation) => (rowData) => {
   return (
     <View style={styles.row}>
       <Text>
         {rowData.title}
       </Text>
+      <Button title="Edit" onPress={() => navigation.navigate('PostEdit', {
+        id: rowData.id
+      })} />
       <Button title="Delete" onPress={deletePost(rowData.id)} />
     </View>
   );
@@ -30,7 +33,7 @@ function renderLoadMore(postsQuery, loadMoreRows) {
   }
 }
 
-const PostList = ({ loading, postsQuery, deletePost, loadMoreRows }) => {
+const PostList = ({ loading, postsQuery, deletePost, loadMoreRows, navigation }) => {
 
   if (loading) {
     return (
@@ -53,7 +56,7 @@ const PostList = ({ loading, postsQuery, deletePost, loadMoreRows }) => {
         <ListView
           style={styles.container}
           dataSource={dataSource}
-          renderRow={renderRow(deletePost)}
+          renderRow={renderRow(deletePost, navigation)}
           removeClippedSubviews={false}
         />
         {renderLoadMore(postsQuery, loadMoreRows)}
@@ -65,6 +68,7 @@ const PostList = ({ loading, postsQuery, deletePost, loadMoreRows }) => {
 PostList.propTypes = {
   loading: PropTypes.bool.isRequired,
   postsQuery: PropTypes.object,
+  navigation: PropTypes.object,
   deletePost: PropTypes.func.isRequired,
   loadMoreRows: PropTypes.func.isRequired,
 };

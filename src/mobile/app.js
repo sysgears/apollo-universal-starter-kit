@@ -1,9 +1,10 @@
 /*eslint-disable react/display-name*/
 /*eslint-disable react/prop-types*/
 import React, { Component } from 'react';
-import { Button } from 'react-native';
+import { Button, View, Text } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { reducer as formReducer } from 'redux-form';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import ApolloClient from 'apollo-client';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
@@ -29,13 +30,20 @@ const createTabBarIconWrapper = (
 ) => props => <TabBarIconComponent {...defaultProps} color={props.tintColor} />;
 
 
+
+class PostScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Post list',
+    headerRight: ( <Button title="Add" onPress={() => navigation.navigate('PostEdit', { id: 0 })} /> )
+  });
+  render() {
+    const { navigation } = this.props;
+    return <Post navigation={navigation} />;
+  }
+}
+
 const PostNavigator = StackNavigator({
-  PostList: {
-    screen: Post,
-    navigationOptions: {
-      headerRight: <Button title="Add" onPress={() => console.log('add')} />
-    }
-  },
+  PostList: { screen: PostScreen },
   PostEdit: { screen: PostEdit },
 });
 
@@ -64,6 +72,7 @@ const MainScreenNavigator = TabNavigator({
 const store = createStore(
   combineReducers({
     apollo: client.reducer(),
+    form: formReducer,
 
     ...modules.reducers
   }),

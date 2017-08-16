@@ -26,9 +26,7 @@ renderField.propTypes = {
   meta: PropTypes.object
 };
 
-const CommentForm = (props) => {
-  const { handleSubmit, submitting, initialValues, onSubmit } = props;
-
+const CommentForm = ({ handleSubmit, submitting, initialValues, onSubmit }) => {
   let operation = 'Add';
   if (initialValues.id !== null) {
     operation = 'Edit';

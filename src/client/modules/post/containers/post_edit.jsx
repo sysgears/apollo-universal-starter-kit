@@ -58,15 +58,23 @@ PostEdit.propTypes = {
   post: PropTypes.object,
   addPost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
-  match: PropTypes.object.isRequired,
   subscribeToMore: PropTypes.func.isRequired,
 };
 
 export default compose(
   graphql(POST_QUERY, {
     options: (props) => {
+
+      let id = 0;
+      if (props.match) {
+        id = props.match.params.id;
+      }
+      else if (props.navigation) {
+        id = props.navigation.state.params.id;
+      }
+
       return {
-        variables: { id: props.match.params.id }
+        variables: { id }
       };
     },
     props({ data: { loading, post, subscribeToMore } }) {
@@ -74,7 +82,7 @@ export default compose(
     }
   }),
   graphql(POST_ADD, {
-    props: ({ ownProps: { history }, mutate }) => ({
+    props: ({ ownProps: { history, navigation }, mutate }) => ({
       addPost: async (title, content) => {
         await mutate({
           variables: { input: { title, content } },
@@ -93,19 +101,29 @@ export default compose(
           }
         });
 
-        return history.push('/posts');
-        //return history.push('/post/' + postData.data.addPost.id);
+        if (history) {
+          return history.push('/posts');
+          //return history.push('/post/' + postData.data.addPost.id);
+        }
+        else if (navigation) {
+          return navigation.navigate('PostList');
+        }
       }
     })
   }),
   graphql(POST_EDIT, {
-    props: ({ ownProps: { history }, mutate }) => ({
+    props: ({ ownProps: { history, navigation }, mutate }) => ({
       editPost: async (id, title, content) => {
         await mutate({
           variables: { input: { id, title, content } }
         });
 
-        return history.push('/posts');
+        if (history) {
+          return history.push('/posts');
+        }
+        else if (navigation) {
+          return navigation.navigate('PostList');
+        }
       }
     })
   })

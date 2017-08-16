@@ -51,7 +51,7 @@ const PostCommentsShow = ({ postId, comment, addComment, editComment, comments, 
 };
 
 PostCommentsShow.propTypes = {
-  postId: PropTypes.string.isRequired,
+  postId: PropTypes.number.isRequired,
   comments: PropTypes.array.isRequired,
   comment: PropTypes.object.isRequired,
   addComment: PropTypes.func.isRequired,

@@ -99,7 +99,7 @@ class PostComments extends React.Component {
 }
 
 PostComments.propTypes = {
-  postId: PropTypes.string.isRequired,
+  postId: PropTypes.number.isRequired,
   comments: PropTypes.array.isRequired,
   comment: PropTypes.object.isRequired,
   addComment: PropTypes.func.isRequired,

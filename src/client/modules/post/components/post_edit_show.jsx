@@ -14,7 +14,7 @@ const onSubmit = (post, addPost, editPost) => (values) => {
   }
 };
 
-const PostEditShow = ({ loading, post, match, subscribeToMore, addPost, editPost }) => {
+const PostEditShow = ({ loading, post, navigation, subscribeToMore, addPost, editPost }) => {
   if (loading) {
     return (
       <View style={styles.container}>
@@ -30,6 +30,9 @@ const PostEditShow = ({ loading, post, match, subscribeToMore, addPost, editPost
           {post ? 'Edit' : 'Create'} Post
         </Text>
         <PostForm onSubmit={onSubmit(post, addPost, editPost)} initialValues={post} />
+        {post &&
+        <PostComments postId={navigation.state.params.id} comments={post.comments} subscribeToMore={subscribeToMore} />
+        }
       </View>
     );
   }
@@ -40,7 +43,7 @@ PostEditShow.propTypes = {
   post: PropTypes.object,
   addPost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
-  //match: PropTypes.object.isRequired,
+  navigation: PropTypes.object.isRequired,
   subscribeToMore: PropTypes.func.isRequired,
 };
 

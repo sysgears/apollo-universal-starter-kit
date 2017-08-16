@@ -11,7 +11,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
-import modules from '../client/modules/counter';
+import modules from '../client/modules';
 import Counter from '../client/modules/counter/containers/counter';
 import Post from '../client/modules/post/containers/post';
 import PostEdit from '../client/modules/post/containers/post_edit';

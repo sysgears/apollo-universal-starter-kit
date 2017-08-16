@@ -45,7 +45,7 @@ const PostEditShow = ({ loading, post, match, subscribeToMore, addPost, editPost
         <PostForm onSubmit={onSubmit(post, addPost, editPost)} initialValues={post} />
         <br />
         {post &&
-        <PostComments postId={match.params.id} comments={post.comments} subscribeToMore={subscribeToMore} />
+        <PostComments postId={Number(match.params.id)} comments={post.comments} subscribeToMore={subscribeToMore} />
         }
       </PageLayout>
     );

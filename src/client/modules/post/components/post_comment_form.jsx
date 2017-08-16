@@ -1,21 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Row, Col, Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
+import { ScrollView, View, Text } from 'react-native';
+import { Button, InputField } from '../../common/components';
 
 const required = value => value ? undefined : 'Required';
 
-const renderField = ({ input, label, type, meta: { touched, error } }) => {
-  let color = 'normal';
+const renderField = ({ input, meta: { touched, error }, ...inputProps }) => {
+  /*let color = 'normal';
   if (touched && error) {
     color = 'danger';
-  }
+  }*/
 
   return (
-    <FormGroup color={color}>
-      <Input {...input} placeholder={label} type={type}/>
-      {touched && ((error && <FormFeedback>{error}</FormFeedback>))}
-    </FormGroup>
+    <View>
+      <InputField onChangeText={input.onChange} onBlur={input.onBlur} onFocus={input.onFocus} value={input.value} {...inputProps} />
+      {touched && ((error && <Text>{error}</Text>))}
+    </View>
   );
 };
 
@@ -26,28 +27,17 @@ renderField.propTypes = {
   meta: PropTypes.object
 };
 
-const CommentForm = ({ handleSubmit, submitting, initialValues, onSubmit }) => {
-  let operation = 'Add';
+const CommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
+  /*let operation = 'Add';
   if (initialValues.id !== null) {
     operation = 'Edit';
-  }
+  }*/
 
   return (
-    <Form name="comment" onSubmit={handleSubmit(onSubmit)}>
-      <FormGroup>
-        <Row>
-          <Col xs="2"><Label>{operation} comment</Label></Col>
-          <Col xs="8">
-            <Field name="content" component={renderField} type="text" label="Content" validate={required}/>
-          </Col>
-          <Col xs="2">
-            <Button color="primary" type="submit" className="float-right" disabled={submitting}>
-              Save
-            </Button>
-          </Col>
-        </Row>
-      </FormGroup>
-    </Form>
+    <ScrollView keyboardShouldPersistTaps={'handled'}>
+      <Field name="content" component={renderField} type="text" label="Content" validate={required}/>
+      <Button onPress={handleSubmit(onSubmit)} disabled={valid}>Save</Button>
+    </ScrollView>
   );
 };
 

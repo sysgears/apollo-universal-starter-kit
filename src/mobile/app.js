@@ -31,7 +31,7 @@ const createTabBarIconWrapper = (
 
 
 
-class PostScreen extends React.Component {
+class PostListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Post list',
     headerRight: ( <Button title="Add" onPress={() => navigation.navigate('PostEdit', { id: 0 })} /> )
@@ -42,9 +42,19 @@ class PostScreen extends React.Component {
   }
 }
 
+class PostEditScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.id === 0 ? 'Creacte' : 'Edit'} post`,
+  });
+  render() {
+    const { navigation } = this.props;
+    return <PostEdit navigation={navigation} />;
+  }
+}
+
 const PostNavigator = StackNavigator({
-  PostList: { screen: PostScreen },
-  PostEdit: { screen: PostEdit },
+  PostList: { screen: PostListScreen },
+  PostEdit: { screen: PostEditScreen },
 });
 
 const MainScreenNavigator = TabNavigator({

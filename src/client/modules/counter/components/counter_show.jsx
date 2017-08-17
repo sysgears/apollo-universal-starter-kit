@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
   box: {
     textAlign: 'center',
     marginLeft: 15,
-    marginRight: 15
+    marginRight: 15,
+    marginBottom: 5,
   }
 });
 

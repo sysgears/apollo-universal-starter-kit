@@ -15,10 +15,7 @@ const ds = new ListView.DataSource({ rowHasChanged });
 const renderRow = (onCommentSelect, comment, deleteComment) => ({ id, content }) => {
   return (
     <View style={styles.row}>
-      <Text>
-        {content}
-      </Text>
-      <Button title="Edit" onPress={() => onCommentSelect({ id, content })} />
+      <Button title={content} onPress={() => onCommentSelect({ id, content })} />
       <Button title="Delete" onPress={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)} />
     </View>
   );
@@ -47,16 +44,18 @@ const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onF
 const PostCommentsShow = ({ postId, comment, addComment, editComment, comments, onCommentSelect, deleteComment, onFormSubmitted }) => {
   const dataSource = ds.cloneWithRows(comments);
   return (
-    <ScrollView>
-      <Text>Comments</Text>
+    <View>
+      <Text style={styles.title}>Comments</Text>
       {<CommentForm postId={postId} onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)} initialValues={comment} />}
-      <ListView
-        style={styles.container}
-        dataSource={dataSource}
-        renderRow={renderRow(onCommentSelect, comment, deleteComment)}
-        removeClippedSubviews={false}
-      />
+      <ScrollView>
+        <ListView
+          style={styles.container}
+          dataSource={dataSource}
+          renderRow={renderRow(onCommentSelect, comment, deleteComment)}
+          removeClippedSubviews={false}
+        />
     </ScrollView>
+    </View>
   );
 };
 
@@ -75,6 +74,12 @@ PostCommentsShow.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '600',
+    textAlign: 'center',
+    margin: 10,
   },
   element: {
     paddingTop: 30

@@ -12,10 +12,7 @@ const ds = new ListView.DataSource({ rowHasChanged });
 const renderRow = (deletePost, navigation) => (rowData) => {
   return (
     <View style={styles.row}>
-      <Text>
-        {rowData.title}
-      </Text>
-      <Button title="Edit" onPress={() => navigation.navigate('PostEdit', {
+      <Button title={rowData.title} onPress={() => navigation.navigate('PostEdit', {
         id: rowData.id
       })} />
       <Button title="Delete" onPress={deletePost(rowData.id)} />
@@ -27,7 +24,8 @@ function renderLoadMore(postsQuery, loadMoreRows) {
   if (postsQuery.pageInfo.hasNextPage) {
     return (
       <View style={styles.row}>
-        <Button title="More" onPress={loadMoreRows} />
+        <Text>({postsQuery.edges.length} / {postsQuery.totalCount})</Text>
+        <Button title="Load More ..." onPress={loadMoreRows} />
       </View>
     );
   }

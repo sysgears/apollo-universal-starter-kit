@@ -26,9 +26,6 @@ const PostEditShow = ({ loading, post, navigation, subscribeToMore, addPost, edi
   } else {
     return (
       <View style={styles.container}>
-        <Text>
-          {post ? 'Edit' : 'Create'} Post
-        </Text>
         <PostForm onSubmit={onSubmit(post, addPost, editPost)} initialValues={post} />
         {post &&
         <PostComments postId={navigation.state.params.id} comments={post.comments} subscribeToMore={subscribeToMore} />
@@ -49,7 +46,8 @@ PostEditShow.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    margin: 5,
+    flexDirection: 'column',
   },
   element: {
     paddingTop: 30

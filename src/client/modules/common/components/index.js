@@ -1,3 +1,3 @@
 // eslint-disable-next-line import/prefer-default-export
 export { default as Button } from './button';
-export { default as InputField } from './input_field';
+export { default as RenderField } from './render_field';

@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 
 const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
-  const { container, input, text, error } = styles;
+  const { container, inputText, text, errorField } = styles;
 
   return (
     <View style={container}>
       <Text style={text}>{label}</Text>
       <TextInput
-        style={[input, touched && error && error]}
+        style={[inputText, touched && error && errorField]}
         onChangeText={input.onChange}
         value={input.value}
         {...inputProps}
@@ -19,7 +19,7 @@ const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) 
 };
 
 const styles = StyleSheet.create({
-  input: {
+  inputText: {
     backgroundColor: '#FFF',
     color: '#000',
     borderRadius: 5,
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     flex: 1
   },
-  error: {
+  errorField: {
     borderColor: 'red',
     borderWidth: StyleSheet.hairlineWidth,
   },

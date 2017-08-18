@@ -1,7 +1,7 @@
 /*eslint-disable react/display-name*/
 /*eslint-disable react/prop-types*/
 import React, { Component } from 'react';
-import { Button, View, Text } from 'react-native';
+import { Button } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { reducer as formReducer } from 'redux-form';

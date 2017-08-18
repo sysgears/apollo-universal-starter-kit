@@ -20,11 +20,11 @@ const rowHasChanged = (r1, r2) => r1.id !== r2.id;
 // DataSource template object
 const ds = new ListView.DataSource({ rowHasChanged });
 
-const renderRow = (onCommentSelect, comment, deleteComment) => ({ id, content }) => {
+const renderRow = (onCommentSelect, comment, deleteComment) => (rowData) => {
   return (
     <View style={styles.row}>
-      <Button title={content} onPress={() => onCommentSelect({ id, content })} />
-      <Button title="Delete" onPress={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)} />
+      <Button title={rowData.content} onPress={() => onCommentSelect({ id: rowData.id, content: rowData.content })} />
+      <Button title="Delete" onPress={() => onCommentDelete(comment, deleteComment, onCommentSelect, rowData.id)} />
     </View>
   );
 };

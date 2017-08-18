@@ -1,4 +1,4 @@
-import { graphqlExpress } from 'graphql-server-express';
+import { graphqlExpress } from 'apollo-server-express';
 import 'isomorphic-fetch';
 
 import log from '../../common/log';

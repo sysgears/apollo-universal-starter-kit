@@ -13,7 +13,11 @@ const CommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
   }
 
   return (
-    <ScrollView style={styles.scrollStyle} keyboardShouldPersistTaps={'handled'}>
+    <ScrollView
+      style={styles.scroll}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="on-drag"
+    >
       <Field name="content" component={RenderField} type="text" label="Content" validate={required}/>
       <Button onPress={handleSubmit(onSubmit)} disabled={valid}>{operation}</Button>
     </ScrollView>
@@ -28,7 +32,7 @@ CommentForm.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  scrollStyle: {
+  scroll: {
     marginBottom: 5,
   },
 });

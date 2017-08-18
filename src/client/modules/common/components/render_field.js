@@ -3,16 +3,14 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 
 const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
-  const { containerStyle, inputStyle, textStyle, errorStyle } = styles;
+  const { container, input, text, error } = styles;
 
   return (
-    <View style={containerStyle}>
-      <Text style={textStyle}>{label}</Text>
+    <View style={container}>
+      <Text style={text}>{label}</Text>
       <TextInput
-        style={[inputStyle, touched && error && errorStyle]}
+        style={[input, touched && error && error]}
         onChangeText={input.onChange}
-        onBlur={input.onBlur}
-        onFocus={input.onFocus}
         value={input.value}
         {...inputProps}
       />
@@ -21,7 +19,7 @@ const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) 
 };
 
 const styles = StyleSheet.create({
-  inputStyle: {
+  input: {
     backgroundColor: '#FFF',
     color: '#000',
     borderRadius: 5,
@@ -31,18 +29,18 @@ const styles = StyleSheet.create({
     flex: 3,
     marginBottom: 5,
   },
-  textStyle: {
+  text: {
     alignSelf: 'center',
     fontSize: 16,
     paddingTop: 10,
     paddingBottom: 10,
     flex: 1
   },
-  errorStyle: {
+  error: {
     borderColor: 'red',
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
   },
-  containerStyle: {
+  container: {
     height: 40,
     flex: 1,
     flexDirection: 'row',

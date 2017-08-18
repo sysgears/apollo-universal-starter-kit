@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, ListView, ScrollView, Button } from 'react-native';
+import { StyleSheet, Text, View, ListView, ScrollView, Button, Keyboard } from 'react-native';
 
 import CommentForm from './post_comment_form';
 
@@ -39,6 +39,7 @@ const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onF
 
   onCommentSelect({ id: null, content: '' });
   onFormSubmitted();
+  Keyboard.dismiss();
 };
 
 const PostCommentsShow = ({ postId, comment, addComment, editComment, comments, onCommentSelect, deleteComment, onFormSubmitted }) => {

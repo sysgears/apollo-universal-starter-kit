@@ -84,6 +84,8 @@ class PostComments extends React.Component {
   };
 
   componentWillUnmount() {
+    this.props.onCommentSelect({ id: null, content: '' });
+
     if (this.subscription) {
       // unsubscribe
       this.subscription();

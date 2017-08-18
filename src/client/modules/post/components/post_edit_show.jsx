@@ -26,7 +26,7 @@ const PostEditShow = ({ loading, post, navigation, subscribeToMore, addPost, edi
   } else {
     return (
       <View style={styles.container}>
-        <PostForm onSubmit={onSubmit(post, addPost, editPost)} initialValues={post} />
+        <PostForm onSubmit={onSubmit(post, addPost, editPost)} initialValues={post ? post : {} } />
         {post &&
         <PostComments postId={navigation.state.params.id} comments={post.comments} subscribeToMore={subscribeToMore} />
         }

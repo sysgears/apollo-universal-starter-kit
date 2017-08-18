@@ -19,7 +19,7 @@ const PostForm = ({ handleSubmit, valid, onSubmit }) => {
 PostForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
-  valid: PropTypes.bool
+  valid: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({

@@ -6,6 +6,14 @@ import { StyleSheet, Text, View, ListView, ScrollView, Button } from 'react-nati
 
 import CommentForm from './post_comment_form';
 
+function onCommentDelete(comment, deleteComment, onCommentSelect, id) {
+  if (comment.id === id) {
+    onCommentSelect({ id: null, content: '' });
+  }
+
+  deleteComment(id);
+}
+
 // Row comparison function
 const rowHasChanged = (r1, r2) => r1.id !== r2.id;
 
@@ -21,14 +29,6 @@ const renderRow = (onCommentSelect, comment, deleteComment) => ({ id, content })
   );
 };
 
-function onCommentDelete(comment, deleteComment, onCommentSelect, id) {
-  if (comment.id === id) {
-    onCommentSelect({ id: null, content: '' });
-  }
-
-  deleteComment(id);
-}
-
 const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted) => (values) => {
   if (comment.id === null) {
     addComment(values.content, postId);
@@ -42,19 +42,21 @@ const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onF
 };
 
 const PostCommentsShow = ({ postId, comment, addComment, editComment, comments, onCommentSelect, deleteComment, onFormSubmitted }) => {
-  const dataSource = ds.cloneWithRows(comments);
+  const dataSource = (comments.length > 0) ? ds.cloneWithRows(comments) : null;
   return (
     <View>
       <Text style={styles.title}>Comments</Text>
-      {<CommentForm postId={postId} onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)} initialValues={comment} />}
-      <ScrollView>
-        <ListView
-          style={styles.container}
-          dataSource={dataSource}
-          renderRow={renderRow(onCommentSelect, comment, deleteComment)}
-          removeClippedSubviews={false}
-        />
-    </ScrollView>
+      <CommentForm postId={postId} onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)} initialValues={comment} />
+      { comments.length > 0 &&
+        <ScrollView keyboardDismissMode="on-drag">
+          <ListView
+            style={styles.container}
+            dataSource={dataSource}
+            renderRow={renderRow(onCommentSelect, comment, deleteComment)}
+            removeClippedSubviews={false}
+          />
+        </ScrollView>
+      }
     </View>
   );
 };

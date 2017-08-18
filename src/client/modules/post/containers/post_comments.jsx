@@ -47,9 +47,6 @@ function DeleteComment(prev, id) {
 class PostComments extends React.Component {
   constructor(props) {
     super(props);
-
-    props.onCommentSelect({ id: null, content: '' });
-
     this.subscription = null;
   }
 
@@ -124,7 +121,9 @@ const PostCommentsWithApollo = compose(
         },
         updateQueries: {
           getPost: (prev, { mutationResult: { data: { addComment } } }) => {
-            return AddComment(prev, addComment);
+            if (prev.post) {
+              return AddComment(prev, addComment);
+            }
           }
         },
       })
@@ -158,7 +157,9 @@ const PostCommentsWithApollo = compose(
         },
         updateQueries: {
           getPost: (prev, { mutationResult: { data: { deleteComment } } }) => {
-            return DeleteComment(prev, deleteComment.id);
+            if (prev.post) {
+              return DeleteComment(prev, deleteComment.id);
+            }
           }
         }
       }),

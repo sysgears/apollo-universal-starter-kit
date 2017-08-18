@@ -44,7 +44,7 @@ const dependencyPlatforms = {
   "dataloader": "server",
   "expo": ["ios", "android"],
   "express": "server",
-  "graphql-server-express": "server",
+  "apollo-server-express": "server",
   "graphql-subscriptions": "server",
   "graphql-tools": "server",
   "history": "web",

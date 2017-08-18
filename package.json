@@ -163,7 +163,7 @@
     "webpack-sources": "^1.0.1",
     "webpack-virtual-modules": "^0.1.7",
     "ws": "^3.0.0",
-    "xdl": "^43.0.0"
+    "xdl": "^44.0.0"
   },
   "greenkeeper": {
     "ignore": [

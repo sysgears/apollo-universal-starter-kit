@@ -106,7 +106,7 @@ export default compose(
           //return history.push('/post/' + postData.data.addPost.id);
         }
         else if (navigation) {
-          return navigation.navigate('PostList');
+          return navigation.goBack();
         }
       }
     })
@@ -122,7 +122,7 @@ export default compose(
           return history.push('/posts');
         }
         else if (navigation) {
-          return navigation.navigate('PostList');
+          return navigation.goBack();
         }
       }
     })

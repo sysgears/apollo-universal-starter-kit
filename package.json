@@ -62,7 +62,7 @@
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
     "performance-now": "^2.1.0",
-    "persistgraphql": "^0.3.2",
+    "persistgraphql": "^0.4.0",
     "prop-types": "^15.5.10",
     "react": "~15.4.2",
     "react-apollo": "^1.4.14",

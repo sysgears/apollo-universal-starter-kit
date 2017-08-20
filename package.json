@@ -62,7 +62,7 @@
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
     "performance-now": "^2.1.0",
-    "persistgraphql": "^0.3.2",
+    "persistgraphql": "^0.4.0",
     "prop-types": "^15.5.10",
     "react": "~15.4.2",
     "react-apollo": "^1.4.14",
@@ -117,7 +117,7 @@
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-react": "^7.2.1",
-    "exp": "43.0.0",
+    "exp": "44.0.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
     "freeport-async": "^1.1.1",
@@ -138,7 +138,7 @@
     "mocha-webpack": "^0.7.0",
     "node-sass": "^4.5.3",
     "openurl": "^1.1.1",
-    "persistgraphql-webpack-plugin": "^0.3.2",
+    "persistgraphql-webpack-plugin": "^0.3.3",
     "postcss-loader": "^2.0.6",
     "prettier": "^1.5.3",
     "qrcode-terminal": "^0.11.0",
@@ -163,7 +163,7 @@
     "webpack-sources": "^1.0.1",
     "webpack-virtual-modules": "^0.1.7",
     "ws": "^3.0.0",
-    "xdl": "^43.0.0"
+    "xdl": "^44.0.0"
   },
   "greenkeeper": {
     "ignore": [

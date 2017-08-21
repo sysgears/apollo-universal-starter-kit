@@ -1,6 +1,5 @@
-/*eslint-disable react/display-name*/
-/*eslint-disable react/prop-types*/
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
@@ -27,9 +26,15 @@ const client = new ApolloClient({
 const createTabBarIconWrapper = (
   TabBarIconComponent,
   defaultProps
-) => props => <TabBarIconComponent {...defaultProps} color={props.tintColor} />;
+) => props => {
+  const TabBarIconComponent = <TabBarIconComponent {...defaultProps} color={props.tintColor} />;
 
+  TabBarIconComponent.propTypes = {
+    tintColor: PropTypes.string,
+  };
 
+  return TabBarIconComponent;
+};
 
 class PostListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -37,20 +42,26 @@ class PostListScreen extends React.Component {
     headerRight: ( <Button title="Add" onPress={() => navigation.navigate('PostEdit', { id: 0 })} /> )
   });
   render() {
-    const { navigation } = this.props;
-    return <Post navigation={navigation} />;
+    return <Post navigation={this.props.navigation} />;
   }
 }
+
+PostListScreen.propTypes = {
+  navigation: PropTypes.func,
+};
 
 class PostEditScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: `${navigation.state.params.id === 0 ? 'Creacte' : 'Edit'} post`,
   });
   render() {
-    const { navigation } = this.props;
-    return <PostEdit navigation={navigation} />;
+    return <PostEdit navigation={this.props.navigation} />;
   }
 }
+
+PostEditScreen.propTypes = {
+  navigation: PropTypes.func,
+};
 
 const PostNavigator = StackNavigator({
   PostList: { screen: PostListScreen },

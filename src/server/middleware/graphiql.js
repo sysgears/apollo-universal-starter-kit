@@ -1,4 +1,4 @@
-import { graphiqlExpress } from 'graphql-server-express';
+import { graphiqlExpress } from 'apollo-server-express';
 
 const subscriptionsUrl = __BACKEND_URL__.replace(/^http/, 'ws');
 

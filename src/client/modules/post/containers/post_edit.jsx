@@ -20,7 +20,7 @@ class PostEdit extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
       // Check if props have changed and, if necessary, stop the subscription
-      if (this.subscription && (!this.props.post || this.props.post.id !== nextProps.post.id)) {
+      if (this.subscription && this.props.post.id !== nextProps.post.id) {
         this.subscription();
         this.subscription = null;
       }

@@ -26,7 +26,7 @@ class PostEdit extends React.Component {
       }
 
       // Subscribe or re-subscribe
-      if (!this.subscription) {
+      if (!this.subscription && nextProps.post) {
         this.subscribeToPostEdit(nextProps.post.id);
       }
     }

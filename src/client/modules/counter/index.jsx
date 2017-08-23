@@ -1,12 +1,22 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
+import { Ionicons } from '@expo/vector-icons';
 
+import { createTabBarIconWrapper } from '../common/components';
 import Counter from './containers/counter';
 import reducers from './reducers';
 
 import Feature from '../connector';
 
 export default new Feature({
-  route: <Route exact path="/" component={Counter}/>,
+  tabItem: {
+    Counter: {
+      screen: Counter,
+      navigationOptions: {
+        tabBarIcon: createTabBarIconWrapper(Ionicons, {
+          name: 'ios-home-outline',
+          size: 30
+        })
+      }
+    }
+  },
   reducer: { counter: reducers }
 });

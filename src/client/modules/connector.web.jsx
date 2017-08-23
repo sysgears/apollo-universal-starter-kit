@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { merge, map, union, without, castArray } from 'lodash';
 
 const combine = (features, extractor) =>
@@ -6,12 +8,21 @@ const combine = (features, extractor) =>
 export default class {
   // eslint-disable-next-line no-unused-vars
   constructor({route, navItem, reducer}, ...features) {
-    this.tabItem = combine(arguments, arg => arg.tabItem);
+    this.route = combine(arguments, arg => arg.route);
+    this.navItem = combine(arguments, arg => arg.navItem);
     this.reducer = combine(arguments, arg => arg.reducer);
   }
 
-  get tabItems() {
-    return merge(...this.tabItem);
+  get routes() {
+    return this.route.map((component, idx) =>
+      React.cloneElement(component, { key: idx + this.route.length })
+    );
+  }
+
+  get navItems() {
+    return this.navItem.map((component, idx) =>
+      React.cloneElement(component, { key: idx + this.navItem.length })
+    );
   }
 
   get reducers() {

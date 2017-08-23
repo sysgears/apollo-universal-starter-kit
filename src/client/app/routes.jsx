@@ -1,10 +1,9 @@
-import React from 'react';
-import { Switch } from 'react-router-dom';
+import { TabNavigator } from 'react-navigation';
 
 import modules from '../modules';
 
-export default (
-  <Switch>
-    {modules.routes}
-  </Switch>
-);
+const MainScreenNavigator = TabNavigator({
+  ...modules.tabItems
+});
+
+export default MainScreenNavigator;

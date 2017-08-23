@@ -1,53 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
+import { StyleSheet, ScrollView } from 'react-native';
+import { Button, RenderField } from '../../common/components';
 
 const required = value => value ? undefined : 'Required';
 
-const renderField = ({ input, label, type, meta: { touched, error } }) => {
-  let color = 'normal';
-  if (touched && error) {
-    color = 'danger';
-  }
-
+const PostForm = ({ handleSubmit, valid, onSubmit }) => {
   return (
-    <FormGroup color={color}>
-      <Label>{label}</Label>
-      <div>
-        <Input {...input} placeholder={label} type={type}/>
-        {touched && ((error && <FormFeedback>{error}</FormFeedback>))}
-      </div>
-    </FormGroup>
-  );
-};
-
-renderField.propTypes = {
-  input: PropTypes.object,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  meta: PropTypes.object
-};
-
-const PostForm = (props) => {
-  const { handleSubmit, submitting, onSubmit } = props;
-
-  return (
-    <Form name="post" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="title" component={renderField} type="text" label="Title" validate={required}/>
-      <Field name="content" component={renderField} type="text" label="Content" validate={required}/>
-      <Button color="primary" type="submit" disabled={submitting}>
-        Submit
-      </Button>
-    </Form>
+    <ScrollView
+      style={styles.scroll}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="on-drag"
+    >
+      <Field name="title" component={RenderField} type="text" label="Title" validate={required}/>
+      <Field name="content" component={RenderField} type="text" label="Content" validate={required}/>
+      <Button onPress={handleSubmit(onSubmit)} disabled={valid}>Save</Button>
+    </ScrollView>
   );
 };
 
 PostForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
-  submitting: PropTypes.bool
+  valid: PropTypes.bool,
 };
+
+const styles = StyleSheet.create({
+  scroll: {
+    marginBottom: 5,
+  },
+});
 
 export default reduxForm({
   form: 'post',

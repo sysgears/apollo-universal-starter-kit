@@ -1,21 +1,24 @@
-// React
-import React from 'react';
-import { Route, Link } from 'react-router-dom';
-
-// Web UI
-import { NavItem } from 'reactstrap';
+// Ionicons
+import { Ionicons } from '@expo/vector-icons';
 
 // Component and helpers
+import { createTabBarIconWrapper } from '../common/components';
 import [Module] from './containers/[module]';
 import reducers from './reducers';
 
 import Feature from '../connector';
 
 export default new Feature({
-  route: <Route exact path="/[module]" component={[Module]}/>,
-  navItem:
-    <NavItem>
-      <Link to="/[module]" className="nav-link">[Module]</Link>
-    </NavItem>,
+  tabItem: {
+    [Module]: {
+      screen: [Module],
+      navigationOptions: {
+        tabBarIcon: createTabBarIconWrapper(Ionicons, {
+          name: 'ios-browsers-outline',
+          size: 30
+        })
+      }
+    }
+  },
   reducer: { [module]: reducers }
 });

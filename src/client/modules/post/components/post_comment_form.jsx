@@ -1,55 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Row, Col, Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
+import { StyleSheet, ScrollView } from 'react-native';
+import { Button, RenderField } from '../../common/components';
 
 const required = value => value ? undefined : 'Required';
 
-const renderField = ({ input, label, type, meta: { touched, error } }) => {
-  let color = 'normal';
-  if (touched && error) {
-    color = 'danger';
-  }
-
-  return (
-    <FormGroup color={color}>
-      <Input {...input} placeholder={label} type={type}/>
-      {touched && ((error && <FormFeedback>{error}</FormFeedback>))}
-    </FormGroup>
-  );
-};
-
-renderField.propTypes = {
-  input: PropTypes.object,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  meta: PropTypes.object
-};
-
-const CommentForm = (props) => {
-  const { handleSubmit, submitting, initialValues, onSubmit } = props;
-
+const CommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
   let operation = 'Add';
   if (initialValues.id !== null) {
     operation = 'Edit';
   }
 
   return (
-    <Form name="comment" onSubmit={handleSubmit(onSubmit)}>
-      <FormGroup>
-        <Row>
-          <Col xs="2"><Label>{operation} comment</Label></Col>
-          <Col xs="8">
-            <Field name="content" component={renderField} type="text" label="Content" validate={required}/>
-          </Col>
-          <Col xs="2">
-            <Button color="primary" type="submit" className="float-right" disabled={submitting}>
-              Submit
-            </Button>
-          </Col>
-        </Row>
-      </FormGroup>
-    </Form>
+    <ScrollView
+      style={styles.scroll}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="on-drag"
+    >
+      <Field name="content" component={RenderField} type="text" label="Content" validate={required}/>
+      <Button onPress={handleSubmit(onSubmit)} disabled={valid}>{operation}</Button>
+    </ScrollView>
   );
 };
 
@@ -57,8 +28,14 @@ CommentForm.propTypes = {
   handleSubmit: PropTypes.func,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
-  submitting: PropTypes.bool
+  valid: PropTypes.bool
 };
+
+const styles = StyleSheet.create({
+  scroll: {
+    marginBottom: 5,
+  },
+});
 
 export default reduxForm({
   form: 'comment',

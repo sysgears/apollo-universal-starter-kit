@@ -1,9 +1,18 @@
 {
   "builders": {
     "server": "server",
-    "web": "web",
-    "android": ["react-native", "android"],
-    "ios": ["react-native", "ios"],
+    "web": {
+      "stack": "web",
+      "openBrowser": true
+    },
+    "android": {
+      "stack": ["react-native", "android"],
+      "enabled": false
+    },
+    "ios": {
+      "stack": ["react-native", "ios"],
+      "enabled": false
+    },
     "test": {
       "stack": "server",
       "roles": ["test"]

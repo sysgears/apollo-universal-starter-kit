@@ -29,7 +29,7 @@ PostListScreen.propTypes = {
 
 class PostEditScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.id === 0 ? 'Creacte' : 'Edit'} post`,
+    title: `${navigation.state.params.id === 0 ? 'Create' : 'Edit'} post`,
   });
   render() {
     return <PostEdit navigation={this.props.navigation} />;

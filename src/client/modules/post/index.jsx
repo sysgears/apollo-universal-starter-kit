@@ -51,7 +51,7 @@ export default new Feature({
       screen: PostNavigator,
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(Ionicons, {
-          name: 'ios-home-outline',
+          name: 'ios-book-outline',
           size: 30
         })
       }

@@ -16,7 +16,13 @@ const onSubmit = (post, addPost, editPost) => (values) => {
   }
 };
 
-const PostEditShow = ({ loading, post, match, subscribeToMore, addPost, editPost }) => {
+const PostEditShow = ({ loading, post, match, location, subscribeToMore, addPost, editPost }) => {
+  let postObj = post;
+
+  // if new post was just added read it from router
+  if (!postObj && location.state) {
+    postObj = location.state.post;
+  }
 
   const renderMetaData = () => (
     <Helmet
@@ -27,7 +33,7 @@ const PostEditShow = ({ loading, post, match, subscribeToMore, addPost, editPost
       }]} />
   );
 
-  if (loading) {
+  if (loading && !postObj) {
     return (
       <PageLayout>
         {renderMetaData()}
@@ -42,10 +48,10 @@ const PostEditShow = ({ loading, post, match, subscribeToMore, addPost, editPost
         {renderMetaData()}
         <Link id="back-button" to="/posts">Back</Link>
         <h2>{post ? 'Edit' : 'Create'} Post</h2>
-        <PostForm onSubmit={onSubmit(post, addPost, editPost)} initialValues={post} />
+        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} initialValues={postObj} />
         <br />
-        {post &&
-        <PostComments postId={Number(match.params.id)} comments={post.comments} subscribeToMore={subscribeToMore} />
+        {postObj &&
+        <PostComments postId={Number(match.params.id)} comments={postObj.comments} subscribeToMore={subscribeToMore} />
         }
       </PageLayout>
     );
@@ -58,6 +64,7 @@ PostEditShow.propTypes = {
   addPost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
   subscribeToMore: PropTypes.func.isRequired,
 };
 

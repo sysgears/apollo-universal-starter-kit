@@ -15,7 +15,14 @@ const onSubmit = (post, addPost, editPost) => (values) => {
 };
 
 const PostEditShow = ({ loading, post, navigation, subscribeToMore, addPost, editPost }) => {
-  if (loading) {
+  let postObj = post;
+
+  // if new post was just added read it from router
+  if (!postObj && navigation.state) {
+    postObj = navigation.state.params.post;
+  }
+
+  if (loading && !postObj) {
     return (
       <View style={styles.container}>
         <Text>
@@ -26,9 +33,9 @@ const PostEditShow = ({ loading, post, navigation, subscribeToMore, addPost, edi
   } else {
     return (
       <View style={styles.container}>
-        <PostForm onSubmit={onSubmit(post, addPost, editPost)} initialValues={post ? post : {} } />
-        {post &&
-        <PostComments postId={navigation.state.params.id} comments={post.comments} subscribeToMore={subscribeToMore} />
+        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} initialValues={postObj ? postObj : {} } />
+        {postObj &&
+        <PostComments postId={navigation.state.params.id} comments={postObj.comments} subscribeToMore={subscribeToMore} />
         }
       </View>
     );

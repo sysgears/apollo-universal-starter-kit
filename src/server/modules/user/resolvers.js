@@ -1,4 +1,6 @@
 /*eslint-disable no-unused-vars*/
+import bcrypt from 'bcryptjs';
+
 export default pubsub => ({
   Query: {
     users(obj, args, context) {
@@ -10,10 +12,9 @@ export default pubsub => ({
   },
   Mutation: {
     async register(obj, { input }, context) {
+      input.password = await bcrypt.hash(input.password, 12);
       const [ id ] = await context.User.register(input);
       const user = await context.User.getUser(id);
-
-      console.log(user);
 
       return user;
     }

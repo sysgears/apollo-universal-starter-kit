@@ -12,10 +12,16 @@ extend type Query {
 
 extend type Mutation {
     register(input: RegisterUserInput!): User!
+    login(input: LoginUserInput!): String!
 }
 
 input RegisterUserInput {
     username: String!
+    email: String!
+    password: String!
+}
+
+input LoginUserInput {
     email: String!
     password: String!
 }

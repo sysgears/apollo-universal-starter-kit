@@ -7,12 +7,17 @@ import modules from '../../server/modules';
 
 var subscriptionServer;
 
-const addSubscriptions = httpServer => {
+const addSubscriptions = (httpServer, SECRET) => {
   subscriptionServer = SubscriptionServer.create({
     schema,
     execute,
     subscribe,
-    onConnect: () => modules.createContext()
+    onConnect: () => {
+      return {
+        ...modules.createContext(),
+        SECRET
+      };
+    }
   },
   {
     server: httpServer,

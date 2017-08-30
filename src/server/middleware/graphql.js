@@ -5,11 +5,15 @@ import log from '../../common/log';
 import schema from '../api/schema';
 import modules from '../modules';
 
-export default graphqlExpress(() => {
+export default (SECRET) => graphqlExpress(() => {
   try {
     return {
       schema,
-      context: modules.createContext()
+      context:
+        {
+          ...modules.createContext(),
+          SECRET
+        }
     };
   } catch (e) {
     log(e.stack);

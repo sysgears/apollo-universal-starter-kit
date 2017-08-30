@@ -15,6 +15,8 @@ import addGraphQLSubscriptions from './api/subscriptions';
 import settings from '../../settings';
 import log from '../common/log';
 
+const SECRET = 'sectet';
+
 // eslint-disable-next-line import/no-mutable-exports
 let server;
 
@@ -64,13 +66,13 @@ if (__PERSIST_GQL__) {
   );
 }
 
-app.use(pathname, (...args) => graphqlMiddleware(...args));
+app.use(pathname, (...args) => graphqlMiddleware(SECRET)(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));
 
 server = http.createServer(app);
 
-addGraphQLSubscriptions(server);
+addGraphQLSubscriptions(server, SECRET);
 
 server.listen(serverPort, () => {
   log.info(`API is now running on port ${serverPort}`);

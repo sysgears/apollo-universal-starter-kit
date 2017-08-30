@@ -1,4 +1,11 @@
+type User {
+    id: Int!
+    username: String!
+}
+
 extend type Query {
+    users: [User]
+    currentUser(id: Int!): User
 }
 
 extend type Mutation {

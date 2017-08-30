@@ -1,6 +1,8 @@
 type User {
     id: Int!
     username: String!
+    email: String!
+    password: String!
 }
 
 extend type Query {
@@ -9,6 +11,13 @@ extend type Query {
 }
 
 extend type Mutation {
+    register(input: RegisterUserInput!): User!
+}
+
+input RegisterUserInput {
+    username: String!
+    email: String!
+    password: String!
 }
 
 extend type Subscription {

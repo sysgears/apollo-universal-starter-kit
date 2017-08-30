@@ -10,4 +10,8 @@ export default class User {
   getUser(id) {
     return knex.select('*').from('user').where({ id }).first();
   }
+
+  register({ username, email, password }) {
+    return knex('user').insert({ username, email, password }).returning('id');
+  }
 }

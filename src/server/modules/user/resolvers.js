@@ -9,6 +9,14 @@ export default pubsub => ({
     },
   },
   Mutation: {
+    async register(obj, { input }, context) {
+      const [ id ] = await context.User.register(input);
+      const user = await context.User.getUser(id);
+
+      console.log(user);
+
+      return user;
+    }
   },
   Subscription: {
   }

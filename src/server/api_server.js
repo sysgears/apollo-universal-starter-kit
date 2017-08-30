@@ -5,6 +5,7 @@ import path from 'path';
 import http from 'http';
 import { invert, isArray } from 'lodash';
 import url from 'url';
+import jwt from 'jsonwebtoken';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 
@@ -21,6 +22,21 @@ const SECRET = 'sectet';
 let server;
 
 const app = express();
+
+const addUser = async (req, res, next) => {
+  const token = req.headers.authorization;
+  try {
+    const user = await jwt.verify(token, SECRET);
+    if (user) {
+      req.user = user;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  next();
+};
+
+app.use(addUser);
 
 const { port, pathname } = url.parse(__BACKEND_URL__);
 const serverPort = process.env.PORT || port;

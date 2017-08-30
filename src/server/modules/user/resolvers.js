@@ -8,8 +8,11 @@ export default pubsub => ({
     users(obj, args, context) {
       return context.User.getUsers();
     },
-    currentUser(obj, { id }, context) {
+    user(obj, { id }, context) {
       return context.User.getUser(id);
+    },
+    currentUser(obj, args, context) {
+      return context.User.getUser(context.user.id);
     },
   },
   Mutation: {

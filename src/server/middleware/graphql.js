@@ -5,13 +5,18 @@ import log from '../../common/log';
 import schema from '../api/schema';
 import modules from '../modules';
 
-export default (SECRET) => graphqlExpress(() => {
+export default (SECRET) => graphqlExpress((req) => {
   try {
+
+    console.log('graphqlExpress');
+    console.log(req.user);
+
     return {
       schema,
       context:
         {
           ...modules.createContext(),
+          ...req.user,
           SECRET
         }
     };

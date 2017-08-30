@@ -13,8 +13,11 @@ const addSubscriptions = (httpServer, SECRET) => {
     execute,
     subscribe,
     onConnect: () => {
+      const user = null;
+
       return {
         ...modules.createContext(),
+        user,
         SECRET
       };
     }

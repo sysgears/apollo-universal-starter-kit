@@ -6,7 +6,8 @@ type User {
 
 extend type Query {
     users: [User]
-    currentUser(id: Int!): User
+    user(id: Int!): User
+    currentUser: User
 }
 
 extend type Mutation {

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React from 'react';
 import { createBatchingNetworkInterface } from 'apollo-client';
 import { addApolloLogging } from 'apollo-logger';
@@ -25,6 +26,19 @@ let networkInterface = createBatchingNetworkInterface({
   uri: __BACKEND_URL__ || "/graphql",
 });
 if (__CLIENT__) {
+
+  networkInterface.use([{
+    applyBatchMiddleware(req, next) {
+      if (!req.options.headers) {
+        req.options.headers = {};
+      }
+
+      req.options.headers['x-token'] = localStorage.getItem('token');
+      req.options.headers['x-refresh-token'] = localStorage.getItem('refreshToken');
+      next();
+    }
+  }]);
+
   const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws'), {
       reconnect: true

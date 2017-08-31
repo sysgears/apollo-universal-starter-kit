@@ -1,7 +1,7 @@
+/* eslint-disable no-undef */
 // React
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 // Apollo
 import { graphql, compose } from 'react-apollo';
@@ -30,7 +30,9 @@ const UserWithApollo = compose(
           variables: { input: { email, password } },
         });
 
-        console.log(loginData);
+        const { token, refreshToken } = loginData.data.login;
+        localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', refreshToken);
 
         /*if (history) {
           return history.push('/posts');
@@ -44,7 +46,4 @@ const UserWithApollo = compose(
   }),
 )(User);
 
-export default connect(
-  (state) => ({}),
-  (dispatch) => ({}),
-)(UserWithApollo);
+export default UserWithApollo;

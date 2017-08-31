@@ -1,0 +1,7 @@
+#import "./user.graphql"
+
+mutation register($input: RegisterUserInput!) {
+    register(input: $input) {
+        ... UserInfo
+    }
+}

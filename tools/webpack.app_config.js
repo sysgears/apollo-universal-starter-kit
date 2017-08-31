@@ -48,6 +48,7 @@ const dependencyPlatforms = {
   "graphql-subscriptions": "server",
   "graphql-tools": "server",
   "history": "web",
+  "humps": "server",
   "immutability-helper": ["ios", "android", "web"],
   "isomorphic-fetch": "server",
   "knex": "server",

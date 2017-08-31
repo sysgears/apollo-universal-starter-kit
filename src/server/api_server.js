@@ -24,14 +24,16 @@ let server;
 const app = express();
 
 const addUser = async (req, res, next) => {
-  const token = req.headers.authorization;
-  try {
-    const user = await jwt.verify(token, SECRET);
-    if (user) {
-      req.user = user;
+  if ( req.headers.authorization) {
+    const token = req.headers.authorization;
+    try {
+      const user = await jwt.verify(token, SECRET);
+      if (user) {
+        req.user = user;
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
   next();
 };

@@ -55,7 +55,11 @@ if (__CLIENT__) {
 
   const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws'), {
-      reconnect: true
+      reconnect: true,
+      connectionParams: {
+        token: localStorage.getItem('token'),
+        refreshToken: localStorage.getItem('refreshToken')
+      }
   });
   networkInterface = addGraphQLSubscriptions(
     networkInterface,

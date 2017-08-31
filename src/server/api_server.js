@@ -126,7 +126,7 @@ if (module.hot) {
   module.hot.accept(['./middleware/website', './middleware/graphql']);
   module.hot.accept(['./api/subscriptions'], () => {
     try {
-      addGraphQLSubscriptions(server);
+      addGraphQLSubscriptions(server, SECRET);
     } catch (error) {
       log(error.stack);
     }

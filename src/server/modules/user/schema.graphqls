@@ -5,6 +5,11 @@ type User {
     isAdmin: Boolean
 }
 
+type AuthPayload {
+    token: String!
+    refreshToken: String!
+}
+
 extend type Query {
     users: [User]
     user(id: Int!): User
@@ -13,7 +18,7 @@ extend type Query {
 
 extend type Mutation {
     register(input: RegisterUserInput!): User!
-    login(input: LoginUserInput!): String!
+    login(input: LoginUserInput!): AuthPayload!
 }
 
 input RegisterUserInput {

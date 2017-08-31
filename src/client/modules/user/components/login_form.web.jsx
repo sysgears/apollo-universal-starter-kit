@@ -29,26 +29,24 @@ renderField.propTypes = {
   meta: PropTypes.object
 };
 
-const RegisterForm = ({ handleSubmit, submitting, onSubmit }) => {
+const LoginForm = ({ handleSubmit, submitting, onSubmit }) => {
   return (
-    <Form name="register" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="username" component={renderField} type="text" label="Username" validate={required}/>
+    <Form name="login" onSubmit={handleSubmit(onSubmit)}>
       <Field name="email" component={renderField} type="text" label="Email" validate={required}/>
       <Field name="password" component={renderField} type="password" label="Password" validate={required}/>
-      <Field name="isAdmin" component={renderField} type="checkbox" label="is Admin"/>
       <Button color="primary" type="submit" disabled={submitting}>
-        Register
+        Login
       </Button>
     </Form>
   );
 };
 
-RegisterForm.propTypes = {
+LoginForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool
 };
 
 export default reduxForm({
-  form: 'register'
-})(RegisterForm);
+  form: 'login'
+})(LoginForm);

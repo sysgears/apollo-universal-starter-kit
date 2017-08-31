@@ -1,6 +1,5 @@
 // Web only component
 
-/*eslint-disable no-unused-vars*/
 // React
 import React from 'react';
 import PropTypes from 'prop-types';

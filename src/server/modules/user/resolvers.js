@@ -41,7 +41,12 @@ export default pubsub => ({
         context.SECRET,
         { expiresIn: '1y' });
 
-      return token;
+      const refreshToken = jwt.sign(
+        { user: pick(user, 'id') },
+        context.SECRET,
+        { expiresIn: '1y' });
+
+      return {token, refreshToken};
     }
   },
   Subscription: {

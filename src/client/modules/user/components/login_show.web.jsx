@@ -19,16 +19,14 @@ const UserShow = ({ login }) => {
       meta={[{
         name: 'description',
         content: 'Login page'
-      }]}/>
+      }]} />
   );
 
   return (
     <PageLayout>
       {renderMetaData()}
-      <div className="text-center mt-4 mb-4">
-        <h1>Login page!</h1>
-        <LoginForm onSubmit={onSubmit(login)} />
-      </div>
+      <h1>Login page!</h1>
+      <LoginForm onSubmit={onSubmit(login)} />
     </PageLayout>
   );
 };

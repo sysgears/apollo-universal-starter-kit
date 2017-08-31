@@ -34,13 +34,12 @@ const UserWithApollo = compose(
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
 
-        /*if (history) {
-          return history.push('/posts');
-          //return history.push('/post/' + postData.data.addPost.id);
+        if (history) {
+          return history.push('/user');
         }
         else if (navigation) {
           return navigation.goBack();
-        }*/
+        }
       }
     })
   }),

@@ -19,16 +19,14 @@ const UserShow = ({ register }) => {
       meta={[{
         name: 'description',
         content: 'Register page'
-      }]}/>
+      }]} />
   );
 
   return (
     <PageLayout>
       {renderMetaData()}
-      <div className="text-center mt-4 mb-4">
-        <h1>Register page!</h1>
-        <RegisterForm onSubmit={onSubmit(register)} />
-      </div>
+      <h1>Register page!</h1>
+      <RegisterForm onSubmit={onSubmit(register)} />
     </PageLayout>
   );
 };

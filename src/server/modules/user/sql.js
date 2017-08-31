@@ -12,15 +12,23 @@ export default class User {
     return camelizeKeys(await knex.select('*').from('user').where({ id }).first());
   }
 
-  async getUserByEmail(email) {
-    return camelizeKeys(await knex.select('*').from('user').where({ email }).first());
-  }
-
-  register({ username, email, password, isAdmin }) {
+  register({ username, isAdmin }) {
     if(!isAdmin) {
       isAdmin = false;
     }
 
-    return knex('user').insert({ username, email, password, is_admin: isAdmin }).returning('id');
+    return knex('user').insert({ username, is_admin: isAdmin }).returning('id');
+  }
+
+  createLocalOuth({ email, password, userId }) {
+    return knex('local_auth').insert({ email, password, user_id: userId }).returning('id');
+  }
+
+  async getLocalOuth(id) {
+    return camelizeKeys(await knex.select('*').from('local_auth').where({ id }).first());
+  }
+
+  async getLocalOuthByEmail(email) {
+    return camelizeKeys(await knex.select('*').from('local_auth').where({ email }).first());
   }
 }

@@ -1,7 +1,6 @@
 type User {
     id: Int!
     username: String!
-    email: String!
     isAdmin: Boolean
 }
 
@@ -19,6 +18,7 @@ extend type Query {
 extend type Mutation {
     register(input: RegisterUserInput!): User!
     login(input: LoginUserInput!): AuthPayload!
+    refreshTokens(token: String!, refreshToken: String!): AuthPayload!
 }
 
 input RegisterUserInput {

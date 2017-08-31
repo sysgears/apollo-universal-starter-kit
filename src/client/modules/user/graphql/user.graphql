@@ -1,6 +1,5 @@
 fragment UserInfo on User {
     id
     username
-    email
-    isAdmim
+    isAdmin
 }

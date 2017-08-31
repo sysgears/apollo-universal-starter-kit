@@ -39,6 +39,7 @@ const iOSConfig = {
 };
 
 const dependencyPlatforms = {
+  "bcryptjs": "server",
   "body-parser": "server",
   "bootstrap": "web",
   "dataloader": "server",
@@ -51,6 +52,7 @@ const dependencyPlatforms = {
   "humps": "server",
   "immutability-helper": ["ios", "android", "web"],
   "isomorphic-fetch": "server",
+  "jsonwebtoken": "server",
   "knex": "server",
   "persistgraphql": ["server", "web"],
   "performance-now": "server",

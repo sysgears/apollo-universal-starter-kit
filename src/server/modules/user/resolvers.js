@@ -1,7 +1,7 @@
 /*eslint-disable no-unused-vars*/
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
+import { refreshTokens, tryLogin } from '../../api/auth';
 
 export default pubsub => ({
   Query: {
@@ -17,36 +17,31 @@ export default pubsub => ({
   },
   Mutation: {
     async register(obj, { input }, context) {
-      input.password = await bcrypt.hash(input.password, 12);
-      const [ id ] = await context.User.register(input);
-      const user = await context.User.getUser(id);
+
+      console.log(input);
+
+      const localAuth = pick(input, ['email', 'password']);
+      const passwordPromise = bcrypt.hash(localAuth.password, 12);
+      const createUserPromise = context.User.register(input);
+
+      const [password, [createdUserId] ] = await Promise.all([passwordPromise, createUserPromise]);
+
+      localAuth.password = password;
+
+      const [ id ] = await context.User.createLocalOuth({
+        ...localAuth,
+        userId: createdUserId,
+      });
+
+      const user = await context.User.getUser(createdUserId);
 
       return user;
     },
     async login(obj, { input: { email, password } }, context) {
-      const user = await context.User.getUserByEmail(email);
-
-      if (!user) {
-        throw Error('No user with this email!');
-      }
-
-      const valid = await bcrypt.compare(password, user.password);
-
-      if (!valid) {
-        throw Error('Incorrect password!');
-      }
-
-      const token = jwt.sign(
-        { user: pick(user, 'id', 'username') },
-        context.SECRET,
-        { expiresIn: '1y' });
-
-      const refreshToken = jwt.sign(
-        { user: pick(user, 'id') },
-        context.SECRET,
-        { expiresIn: '1y' });
-
-      return {token, refreshToken};
+      return tryLogin(email, password, context.User, context.SECRET);
+    },
+    refreshTokens(obj, { token, refreshToken }, context) {
+      return refreshTokens(token, refreshToken, context.User, context.SECRET);
     }
   },
   Subscription: {

@@ -39,6 +39,20 @@ if (__CLIENT__) {
     }
   }]);
 
+  networkInterface.useAfter([{
+    applyBatchAfterware({ response: { headers } }, next) {
+      const token = headers.get('x-token');
+      const refreshToken = headers.get('x-refresh-token');
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
+      next();
+    }
+  }]);
+
   const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws'), {
       reconnect: true

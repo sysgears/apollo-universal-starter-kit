@@ -39,10 +39,10 @@ if (__CLIENT__) {
     }
   }]);
 
-  /*networkInterface.useAfter([{
-    applyBatchAfterware({ response: { headers } }, next) {
-      const token = headers.get('x-token');
-      const refreshToken = headers.get('x-refresh-token');
+  networkInterface.useAfter([{
+    applyBatchAfterware(res, next) {
+      const token = res.options.headers['x-token'];
+      const refreshToken = res.options.headers['x-refresh-token'];
       if (token) {
         localStorage.setItem('token', token);
       }
@@ -51,7 +51,7 @@ if (__CLIENT__) {
       }
       next();
     }
-  }]);*/
+  }]);
 
   const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws'), {

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import RegisterShow from '../components/register_show.web';
+import RegisterShow from '../components/register_show';
 
 import USER_REGISTER from '../graphql/user_register.graphql';
 

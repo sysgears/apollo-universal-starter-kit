@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo, graphql } from 'react-apollo';
@@ -35,7 +36,7 @@ class AuthNav extends React.Component {
     if (currentUser) {
       return (
         <NavItem onClick={this.logout}><Link to="/">Logout</Link></NavItem>
-      )
+      );
     } else {
       return (
           <NavItem><Link to="/login">Login</Link></NavItem>

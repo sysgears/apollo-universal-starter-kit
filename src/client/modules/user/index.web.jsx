@@ -11,7 +11,6 @@ import { NavItem } from 'reactstrap';
 // Component and helpers
 import User from './containers/user';
 import Users from './containers/users';
-import AuthNav from './containers/auth_nav';
 import Register from './containers/register';
 import Login from './containers/login';
 import reducers from './reducers';

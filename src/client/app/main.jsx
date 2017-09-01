@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React from 'react';
 import { createBatchingNetworkInterface } from 'apollo-client';
 import { addApolloLogging } from 'apollo-logger';
@@ -33,8 +32,8 @@ if (__CLIENT__) {
         req.options.headers = {};
       }
 
-      req.options.headers['x-token'] = localStorage.getItem('token');
-      req.options.headers['x-refresh-token'] = localStorage.getItem('refreshToken');
+      req.options.headers['x-token'] = window.localStorage.getItem('token');
+      req.options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
       next();
     }
   }]);
@@ -44,10 +43,10 @@ if (__CLIENT__) {
       const token = res.options.headers['x-token'];
       const refreshToken = res.options.headers['x-refresh-token'];
       if (token) {
-        localStorage.setItem('token', token);
+        window.localStorage.setItem('token', token);
       }
       if (refreshToken) {
-        localStorage.setItem('refreshToken', refreshToken);
+        window.localStorage.setItem('refreshToken', refreshToken);
       }
       next();
     }
@@ -57,8 +56,8 @@ if (__CLIENT__) {
     .replace(/^http/, 'ws'), {
       reconnect: true,
       connectionParams: {
-        token: localStorage.getItem('token'),
-        refreshToken: localStorage.getItem('refreshToken')
+        token: window.localStorage.getItem('token'),
+        refreshToken: window.localStorage.getItem('refreshToken')
       }
   });
   networkInterface = addGraphQLSubscriptions(

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 // React
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -23,8 +22,8 @@ const checkAuth = () => {
   let refreshToken = null;
 
   if (__CLIENT__) {
-    token = localStorage.getItem('token');
-    refreshToken = localStorage.getItem('refreshToken');
+    token = window.localStorage.getItem('token');
+    refreshToken = window.localStorage.getItem('refreshToken');
   }
 
   if (!token || !refreshToken) {

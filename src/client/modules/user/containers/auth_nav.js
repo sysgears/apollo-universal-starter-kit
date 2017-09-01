@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo, graphql } from 'react-apollo';
@@ -11,8 +10,8 @@ import CURRENT_USER from '../graphql/current_user.graphql';
 
 const logoutHelper = () => {
   if (__CLIENT__) {
-    localStorage.setItem('token', null);
-    localStorage.setItem('refreshToken', null);
+    window.localStorage.setItem('token', null);
+    window.localStorage.setItem('refreshToken', null);
   }
 };
 

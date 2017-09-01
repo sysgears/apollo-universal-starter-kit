@@ -53,6 +53,7 @@ const dependencyPlatforms = {
   "immutability-helper": ["ios", "android", "web"],
   "isomorphic-fetch": "server",
   "jsonwebtoken": "server",
+  "jwt-decode": "web",
   "knex": "server",
   "persistgraphql": ["server", "web"],
   "performance-now": "server",

@@ -13,7 +13,11 @@ export default pubsub => ({
       return context.User.getUser(id);
     },
     currentUser(obj, args, context) {
-      return context.User.getUser(context.user.id);
+      if(context.user) {
+        return context.User.getUser(context.user.id);
+      } else {
+        return null;
+      }
     },
   },
   Mutation: {

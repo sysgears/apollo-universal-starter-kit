@@ -11,6 +11,7 @@ import { NavItem } from 'reactstrap';
 // Component and helpers
 import User from './containers/user';
 import Users from './containers/users';
+import AuthNav from './containers/auth_nav';
 import Register from './containers/register';
 import Login from './containers/login';
 import reducers from './reducers';
@@ -59,6 +60,11 @@ AuthRoute.propTypes = {
   component: PropTypes.func,
 };
 
+let navItems = [];
+
+if (checkAuth()) {
+  navItems.push(<NavItem><Link to="/users" className="nav-link">Users</Link></NavItem>);
+}
 
 export default new Feature({
   route: [
@@ -67,20 +73,6 @@ export default new Feature({
     <Route exact path="/register" component={Register} />,
     <Route exact path="/login" component={Login} />
   ],
-  navItem: [
-      <NavItem>
-        <Link to="/user" className="nav-link">User</Link>
-      </NavItem>,
-      <NavItem>
-        {checkAuth() ? (
-          <Link to="/users" className="nav-link">Users</Link>
-        ) : (
-          <Link to="/login" className="nav-link">Login</Link>
-        )}
-      </NavItem>,
-      <NavItem>
-        <Link to="/register" className="nav-link">Register</Link>
-      </NavItem>
-    ],
+  navItem: navItems,
   reducer: { user: reducers }
 });

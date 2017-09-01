@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Container, Row, Navbar, Nav, NavItem } from 'reactstrap';
 
 import modules from '../modules';
+import AuthNav from '../modules/user/containers/auth_nav';
 
 const NavBar = () => (
   <Navbar color="faded" light>
@@ -12,11 +13,16 @@ const NavBar = () => (
         <Nav>
           {modules.navItems}
         </Nav>
-        {(!__PERSIST_GQL__ || __DEV__) && <Nav className="ml-auto" navbar>
+
+        <Nav className="ml-auto">
+          <AuthNav />
+          <NavItem>&nbsp;&nbsp;</NavItem>
+        {(!__PERSIST_GQL__ || __DEV__) &&
           <NavItem>
             <a href="/graphiql">GraphiQL</a>
           </NavItem>
-        </Nav>}
+        }
+      </Nav>
       </Row>
     </Container>
   </Navbar>

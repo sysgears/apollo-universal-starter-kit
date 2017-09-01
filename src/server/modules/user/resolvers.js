@@ -2,12 +2,13 @@
 import bcrypt from 'bcryptjs';
 import { pick } from 'lodash';
 import { refreshTokens, tryLogin } from '../../api/auth';
+import { requiresAuth, requiresAdmin } from '../../api/permissions';
 
 export default pubsub => ({
   Query: {
-    users(obj, args, context) {
+    users: requiresAuth.createResolver((obj, args, context) => {
       return context.User.getUsers();
-    },
+    }),
     user(obj, { id }, context) {
       return context.User.getUser(id);
     },
@@ -24,11 +25,11 @@ export default pubsub => ({
       const passwordPromise = bcrypt.hash(localAuth.password, 12);
       const createUserPromise = context.User.register(input);
 
-      const [password, [createdUserId] ] = await Promise.all([passwordPromise, createUserPromise]);
+      const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
 
       localAuth.password = password;
 
-      const [ id ] = await context.User.createLocalOuth({
+      const [id] = await context.User.createLocalOuth({
         ...localAuth,
         userId: createdUserId,
       });
@@ -44,6 +45,5 @@ export default pubsub => ({
       return refreshTokens(token, refreshToken, context.User, context.SECRET);
     }
   },
-  Subscription: {
-  }
+  Subscription: {}
 });

@@ -16,7 +16,7 @@ export default (SECRET) => graphqlExpress((req) => {
       context:
         {
           ...modules.createContext(),
-          ...req.user,
+          user: req.user,
           SECRET
         }
     };

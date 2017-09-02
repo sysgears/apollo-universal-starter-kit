@@ -19,13 +19,12 @@ import '../styles/styles.scss';
 
 let networkInterface = createBatchingNetworkInterface({
   opts: {
-    credentials: "same-origin",
+    credentials: "include",
   },
   batchInterval: 20,
   uri: __BACKEND_URL__ || "/graphql",
 });
 if (__CLIENT__) {
-
   networkInterface.use([{
     applyBatchMiddleware(req, next) {
       if (!req.options.headers) {

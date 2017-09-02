@@ -9,10 +9,10 @@ import { NavItem } from 'reactstrap';
 import CURRENT_USER from '../graphql/current_user.graphql';
 
 const logoutHelper = () => {
-  if (__CLIENT__) {
-    window.localStorage.setItem('token', null);
-    window.localStorage.setItem('refreshToken', null);
-  }
+  document.cookie = 'x-token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  document.cookie = 'x-refresh-token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  window.localStorage.setItem('token', null);
+  window.localStorage.setItem('refreshToken', null);
 };
 
 class AuthNav extends React.Component {
@@ -26,7 +26,7 @@ class AuthNav extends React.Component {
 
     this.props.client.resetStore();
 
-    this.props.data.refetch();
+    //this.props.data.refetch();
   };
 
   render() {

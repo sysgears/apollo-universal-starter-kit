@@ -5,62 +5,39 @@ import path from 'path';
 import http from 'http';
 import { invert, isArray } from 'lodash';
 import url from 'url';
-import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
+import tokenMiddleware from './middleware/token';
 import addGraphQLSubscriptions from './api/subscriptions';
 import settings from '../../settings';
 import log from '../common/log';
-import modules from './modules';
-import { refreshTokens } from './api/auth';
 
-const SECRET = 'sectet';
+const SECRET = 'secret, change for production';
 
 // eslint-disable-next-line import/no-mutable-exports
 let server;
 
 const app = express();
 
-const addUser = async (req, res, next) => {
-  const token = req.headers['x-token'];
-  console.log(token);
-  if (token) {
-    try {
-      const { user } = jwt.verify(token, SECRET);
-      req.user = user;
-    } catch (err) {
-      const refreshToken = req.headers['x-refresh-token'];
-      const newTokens = await refreshTokens(
-        token,
-        refreshToken,
-        ...modules.createContext().User,
-        SECRET,
-      );
-      if (newTokens.token && newTokens.refreshToken) {
-        res.set('Access-Control-Expose-Headers', 'x-token, x-refresh-token');
-        res.set('x-token', newTokens.token);
-        res.set('x-refresh-token', newTokens.refreshToken);
-      }
-      req.user = newTokens.user;
-    }
-  }
-  next();
-};
+app.use(cookieParser());
 
-app.use(addUser);
-
-const { port, pathname } = url.parse(__BACKEND_URL__);
+const { port, pathname, hostname } = url.parse(__BACKEND_URL__);
 const serverPort = process.env.PORT || port;
 
 // Don't rate limit heroku
 app.enable('trust proxy');
 
 if (__DEV__) {
-  app.use(cors());
+  let corsOptions = {
+    origin: `http://${hostname}:${settings.webpackDevPort}`,
+    credentials: true
+  };
+  app.use(cors(corsOptions));
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -96,7 +73,7 @@ if (__PERSIST_GQL__) {
     },
   );
 }
-
+app.use((...args) => tokenMiddleware(SECRET)(...args));
 app.use(pathname, (...args) => graphqlMiddleware(SECRET)(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));

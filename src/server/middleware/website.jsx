@@ -27,7 +27,7 @@ async function renderServerSide(req, res, queryMap) {
   let networkInterface = createBatchingNetworkInterface({
     uri: apiUrl,
     opts: {
-      credentials: "same-origin",
+      credentials: "include",
       headers: req.headers,
     },
     batchInterval: 20,

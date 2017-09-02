@@ -48,6 +48,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
     "bootstrap": "4.0.0-alpha.6",
+    "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "dataloader": "^1.3.0",
     "expo": "^15.1.0",

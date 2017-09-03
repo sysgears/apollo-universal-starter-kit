@@ -35,7 +35,7 @@ const UserWithApollo = compose(
         localStorage.setItem('refreshToken', refreshToken);
 
         if (history) {
-          return history.push('/users');
+          return history.push('/profile');
         }
         else if (navigation) {
           return navigation.goBack();

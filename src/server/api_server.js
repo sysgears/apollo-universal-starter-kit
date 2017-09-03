@@ -6,6 +6,7 @@ import http from 'http';
 import { invert, isArray } from 'lodash';
 import url from 'url';
 import cookieParser from 'cookie-parser';
+import cookiesMiddleware from 'universal-cookie-express';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 
@@ -25,15 +26,16 @@ let server;
 const app = express();
 
 app.use(cookieParser());
+app.use(cookiesMiddleware());
 
-const { port, pathname, hostname } = url.parse(__BACKEND_URL__);
+const { protocol, port, pathname, hostname } = url.parse(__BACKEND_URL__);
 const serverPort = process.env.PORT || port;
 
 // Don't rate limit heroku
 app.enable('trust proxy');
 
 if (__DEV__) {
-  const whitelist = [`http://localhost:${settings.webpackDevPort}`, `http://${hostname}:${settings.webpackDevPort}`];
+  const whitelist = [`${protocol}://localhost:${settings.webpackDevPort}`, `${protocol}//${hostname}:${settings.webpackDevPort}`];
 
   let corsOptions = {
     origin: whitelist,

@@ -9,6 +9,7 @@ import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-trans
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
+import { CookiesProvider } from 'react-cookie';
 
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
@@ -104,11 +105,13 @@ if (module.hot) {
 }
 
 const Main = () => (
-  <ApolloProvider store={store} client={client}>
-    <ConnectedRouter history={history}>
-      {Routes}
-    </ConnectedRouter>
-  </ApolloProvider>
+  <CookiesProvider>
+    <ApolloProvider store={store} client={client}>
+        <ConnectedRouter history={history}>
+          {Routes}
+        </ConnectedRouter>
+    </ApolloProvider>
+  </CookiesProvider>
 );
 
 export default Main;

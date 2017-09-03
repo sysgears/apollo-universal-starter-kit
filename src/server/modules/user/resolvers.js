@@ -9,9 +9,9 @@ export default pubsub => ({
     users: requiresAuth.createResolver((obj, args, context) => {
       return context.User.getUsers();
     }),
-    user(obj, { id }, context) {
+    user: requiresAuth.createResolver((obj, { id }, context) => {
       return context.User.getUser(id);
-    },
+    }),
     currentUser(obj, args, context) {
       if(context.user) {
         return context.User.getUser(context.user.id);

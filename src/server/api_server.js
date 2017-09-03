@@ -33,8 +33,10 @@ const serverPort = process.env.PORT || port;
 app.enable('trust proxy');
 
 if (__DEV__) {
+  const whitelist = [`http://localhost:${settings.webpackDevPort}`, `http://${hostname}:${settings.webpackDevPort}`];
+
   let corsOptions = {
-    origin: `http://${hostname}:${settings.webpackDevPort}`,
+    origin: whitelist,
     credentials: true
   };
   app.use(cors(corsOptions));

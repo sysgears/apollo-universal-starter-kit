@@ -5,16 +5,16 @@ import { withCookies, Cookies } from 'react-cookie';
 import { NavItem } from 'reactstrap';
 import decode from 'jwt-decode';
 
-const checkAuth = (cookies) => {
+const checkAuth = (cookies, role) => {
   let token = null;
   let refreshToken = null;
 
-  if (cookies) {
+  if (cookies && cookies.get('x-token')) {
     token = cookies.get('x-token');
     refreshToken = cookies.get('x-refresh-token');
   }
 
-  if (__CLIENT__) {
+  if (__CLIENT__ && window.localStorage.getItem('token')) {
     token = window.localStorage.getItem('token');
     refreshToken = window.localStorage.getItem('refreshToken');
   }
@@ -30,6 +30,14 @@ const checkAuth = (cookies) => {
       return false;
     }
 
+    if (role === 'admin') {
+      const { user: { isAdmin } } = decode(token);
+
+      if (isAdmin === 0) {
+        return false;
+      }
+    }
+
   } catch (e) {
     return false;
   }
@@ -37,8 +45,8 @@ const checkAuth = (cookies) => {
   return true;
 };
 
-const AuthNav = withCookies(({ children, cookies }) => {
-  return checkAuth(cookies) ? <NavItem>{children}</NavItem> : null;
+const AuthNav = withCookies(({ children, cookies, role }) => {
+  return checkAuth(cookies, role) ? <NavItem>{children}</NavItem> : null;
 });
 
 AuthNav.propTypes = {
@@ -46,10 +54,10 @@ AuthNav.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthRoute = withCookies(({ component: Component, cookies, ...rest }) => {
+const AuthRoute = withCookies(({ component: Component, cookies, role, ...rest }) => {
   return (
     <Route {...rest} render={props => (
-      checkAuth(cookies) ? (
+      checkAuth(cookies, role) ? (
         <Component {...props} />
       ) : (
         <Redirect to={{ pathname: '/login' }} />

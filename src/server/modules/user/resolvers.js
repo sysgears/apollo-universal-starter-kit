@@ -6,7 +6,7 @@ import { requiresAuth, requiresAdmin } from '../../api/permissions';
 
 export default pubsub => ({
   Query: {
-    users: requiresAuth.createResolver((obj, args, context) => {
+    users: requiresAdmin.createResolver((obj, args, context) => {
       return context.User.getUsers();
     }),
     user: requiresAuth.createResolver((obj, { id }, context) => {

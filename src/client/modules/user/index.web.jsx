@@ -15,16 +15,16 @@ import Feature from '../connector';
 
 export default new Feature({
   route: [
-    <AuthRoute exact path="/profile" component={User} />,
-    <AuthRoute exact path="/users" component={Users} />,
+    <AuthRoute exact path="/profile" role="user" component={User} />,
+    <AuthRoute exact path="/users" role="admin" component={Users} />,
     <Route exact path="/register" component={Register} />,
     <Route exact path="/login" component={Login} />
   ],
   navItem: [
-    <AuthNav>
+    <AuthNav role="user" >
       <Link to="/profile" className="nav-link">Profile</Link>
     </AuthNav>,
-    <AuthNav>
+    <AuthNav role="admin" >
       <Link to="/users" className="nav-link">Users</Link>
     </AuthNav>
   ],

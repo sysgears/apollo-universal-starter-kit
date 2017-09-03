@@ -6,8 +6,13 @@ import { NavItem } from 'reactstrap';
 import decode from 'jwt-decode';
 
 const checkAuth = (cookies) => {
-  let token = cookies.get('x-token');
-  let refreshToken = cookies.get('x-refresh-token');
+  let token = null;
+  let refreshToken = null;
+
+  if (cookies) {
+    token = cookies.get('x-token');
+    refreshToken = cookies.get('x-refresh-token');
+  }
 
   if (__CLIENT__) {
     token = window.localStorage.getItem('token');
@@ -32,7 +37,7 @@ const checkAuth = (cookies) => {
   return true;
 };
 
-export const AuthNav = withCookies(({ children, cookies }) => {
+const AuthNav = withCookies(({ children, cookies }) => {
   return checkAuth(cookies) ? <NavItem>{children}</NavItem> : null;
 });
 
@@ -41,7 +46,7 @@ AuthNav.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-export const AuthRoute = withCookies(({ component: Component, cookies, ...rest }) => {
+const AuthRoute = withCookies(({ component: Component, cookies, ...rest }) => {
   return (
     <Route {...rest} render={props => (
       checkAuth(cookies) ? (
@@ -57,3 +62,6 @@ AuthRoute.propTypes = {
   component: PropTypes.func,
   cookies: PropTypes.instanceOf(Cookies)
 };
+
+export { AuthNav };
+export { AuthRoute };

@@ -7,32 +7,48 @@ import Helmet from 'react-helmet';
 import PageLayout from '../../../app/page_layout';
 import LoginForm from '../components/login_form';
 
-const onSubmit = (login) => (values) => {
-  login(values);
-};
+class UserShow extends React.PureComponent {
+  state = {
+    errors: [],
+  };
+  
+  onSubmit = (login) => async (values) => {
+    const result = await login(values);
 
-const UserShow = ({ login }) => {
+    if (result.errors) {
+      this.setState({ errors: result.errors });
+    }
+  };
 
-  const renderMetaData = () => (
-    <Helmet
-      title="Login"
-      meta={[{
-        name: 'description',
-        content: 'Login page'
-      }]} />
-  );
+  render() {
 
-  return (
-    <PageLayout>
-      {renderMetaData()}
-      <h1>Login page!</h1>
-      <LoginForm onSubmit={onSubmit(login)} />
-    </PageLayout>
-  );
+    const { login } = this.props;
+
+    const renderMetaData = () => (
+      <Helmet
+        title="Login"
+        meta={[{
+          name: 'description',
+          content: 'Login page'
+        }]} />
+    );
+
+    return (
+      <PageLayout>
+        {renderMetaData()}
+        <h1>Login page!</h1>
+        <LoginForm onSubmit={this.onSubmit(login)} />
+        {this.state.errors.map(error => (
+          <li key={error.path[0]}>{error.message}</li>
+        ))}
+      </PageLayout>
+    );
+  }
 };
 
 UserShow.propTypes = {
   login: PropTypes.func.isRequired,
+  error: PropTypes.string,
 };
 
 export default UserShow;

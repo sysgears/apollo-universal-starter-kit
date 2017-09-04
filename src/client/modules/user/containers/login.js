@@ -12,34 +12,38 @@ import LoginShow from '../components/login_show.web';
 import USER_LOGIN from '../graphql/user_login.graphql';
 
 class User extends React.Component {
-
   render() {
-    return <LoginShow  {...this.props}/>;
+    return <LoginShow {...this.props} />;
   }
 }
 
 User.propTypes = {
   login: PropTypes.func.isRequired,
+  data: PropTypes.object,
 };
 
 const UserWithApollo = compose(
   graphql(USER_LOGIN, {
-    props: ({ ownProps: { history, navigation }, mutate }) => ({
+    props: ({ ownProps: { history, navigation }, data, mutate }) => ({
       login: async ({ email, password }) => {
-        const loginData = await mutate({
-          variables: { input: { email, password } },
-        });
+        try {
+          const loginData = await mutate({
+            variables: { input: { email, password } },
+          });
 
-        const { token, refreshToken } = loginData.data.login;
-        localStorage.setItem('token', token);
-        localStorage.setItem('refreshToken', refreshToken);
+          const { token, refreshToken } = loginData.data.login;
+          localStorage.setItem('token', token);
+          localStorage.setItem('refreshToken', refreshToken);
 
-        if (history) {
-          return history.push('/profile');
-        }
-        else if (navigation) {
-          return navigation.goBack();
-        }
+          if (history) {
+            return history.push('/profile');
+          }
+          else if (navigation) {
+            return navigation.goBack();
+          }
+        } catch (e) {
+          return { errors: e.graphQLErrors };
+         }
       }
     })
   }),

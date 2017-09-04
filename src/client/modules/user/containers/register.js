@@ -25,28 +25,12 @@ const UserWithApollo = compose(
   graphql(USER_REGISTER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       register: async ({ username, email, password }) => {
-        const userData = await mutate({
+        await mutate({
           variables: { input: { username, email, password } },
-          //optimisticResponse: {
-          //  register: {
-          //    id: -1,
-          //    username: username,
-          //    email: email,
-          //    isAdmin: isAdmin,
-          //    __typename: 'User',
-          //  },
-          //},
-          //updateQueries: {
-          //  getPosts: (prev, { mutationResult: { data: { addPost } } }) => {
-          //    return AddPost(prev, addPost);
-          //  }
-          //}
         });
 
-        console.log(userData);
-
         if (history) {
-          return history.push('/user');
+          return history.push('/profile');
         }
         else if (navigation) {
           return navigation.goBack();

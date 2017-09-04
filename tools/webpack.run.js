@@ -609,10 +609,7 @@ async function startExpoProject(config, platform) {
         console.error(error.message);
       }
     } else if (platform === 'ios') {
-      const localAddress = await UrlUtils.constructManifestUrlAsync(projectRoot, {
-        hostType: 'localhost',
-      });
-      const { success, msg } = await Simulator.openUrlInSimulatorSafeAsync(localAddress);
+      const { success, msg } = await Simulator.openUrlInSimulatorSafeAsync(address);
 
       if (!success) {
         console.error("Failed to start Simulator: ", msg);

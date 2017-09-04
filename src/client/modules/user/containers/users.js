@@ -14,7 +14,6 @@ import USERS_QUERY from '../graphql/users_get.graphql';
 class Users extends React.Component {
 
   render() {
-    console.log(this.props.users);
     return <UsersShow {...this.props} />;
   }
 }

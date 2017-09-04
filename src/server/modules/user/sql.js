@@ -5,11 +5,21 @@ import knex from '../../../server/sql/connector';
 // Actual query fetching and transformation in DB
 export default class User {
   async getUsers() {
-    return camelizeKeys(await knex.select('*').from('user'));
+    return camelizeKeys(await knex
+      .select('u.id', 'u.username', 'u.is_admin', 'la.email')
+      .from('user AS u')
+      .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
+    );
   }
 
   async getUser(id) {
-    return camelizeKeys(await knex.select('*').from('user').where({ id }).first());
+    return camelizeKeys(await knex
+      .select('u.id', 'u.username', 'u.is_admin', 'la.email')
+      .from('user AS u')
+      .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
+      .where('u.id', '=', id)
+      .first()
+    );
   }
 
   register({ username }) {

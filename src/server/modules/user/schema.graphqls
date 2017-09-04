@@ -2,6 +2,7 @@ type User {
     id: Int!
     username: String!
     isAdmin: Boolean
+    email: String!
 }
 
 type AuthPayload {

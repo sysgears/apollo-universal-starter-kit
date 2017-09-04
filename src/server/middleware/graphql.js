@@ -7,10 +7,6 @@ import modules from '../modules';
 
 export default (SECRET) => graphqlExpress((req) => {
   try {
-
-    console.log('graphqlExpress');
-    console.log(req.user);
-
     return {
       schema,
       context:

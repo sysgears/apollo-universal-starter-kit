@@ -5,9 +5,8 @@ import { refreshTokens } from '../api/auth';
 
 export default (SECRET) => (async (req, res, next) => {
   const token = req.headers['x-token'] || req.universalCookies.get('x-token');
-
-  console.log(token);
-  if (token) {
+  //console.log(token);
+  if (token && token !== 'null') {
     if (req.headers['x-token']) {
       req.universalCookies.set('x-token', req.headers['x-token'], {maxAge : 1000*60*20, httpOnly: false});
       req.universalCookies.set('x-refresh-token', req.headers['x-refresh-token'], {maxAge : 1000*60*60*24*7, httpOnly: false});

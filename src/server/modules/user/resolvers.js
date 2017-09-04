@@ -22,9 +22,6 @@ export default pubsub => ({
   },
   Mutation: {
     async register(obj, { input }, context) {
-
-      console.log(input);
-
       const localAuth = pick(input, ['email', 'password']);
       const passwordPromise = bcrypt.hash(localAuth.password, 12);
       const createUserPromise = context.User.register(input);

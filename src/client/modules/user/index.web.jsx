@@ -9,7 +9,7 @@ import Register from './containers/register';
 import Login from './containers/login';
 import reducers from './reducers';
 
-import { AuthRoute, AuthNav, AuthLogin } from '../../app/auth';
+import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from '../../app/auth';
 
 import Feature from '../connector';
 
@@ -21,16 +21,15 @@ export default new Feature({
     <Route exact path="/login" component={Login} />
   ],
   navItem: [
-    <AuthNav role="user">
-      <Link to="/profile" className="nav-link">Profile</Link>
-    </AuthNav>,
     <AuthNav role="admin">
       <Link to="/users" className="nav-link">Users</Link>
     </AuthNav>
   ],
-  navItemRight:
+  navItemRight: [
+    <AuthProfile />,
     <AuthLogin>
-      <Link to="/login" className="nav-link">Login</Link>
-    </AuthLogin>,
+      <span className="nav-link"><Link to="/login" >Login</Link> / <Link to="/register" >Register</Link></span>
+    </AuthLogin>
+  ],
   reducer: { user: reducers }
 });

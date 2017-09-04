@@ -12,12 +12,8 @@ export default class User {
     return camelizeKeys(await knex.select('*').from('user').where({ id }).first());
   }
 
-  register({ username, isAdmin }) {
-    if(!isAdmin) {
-      isAdmin = false;
-    }
-
-    return knex('user').insert({ username, is_admin: isAdmin }).returning('id');
+  register({ username }) {
+    return knex('user').insert({ username }).returning('id');
   }
 
   createLocalOuth({ email, password, userId }) {

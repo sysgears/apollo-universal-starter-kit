@@ -2,7 +2,6 @@
 // React
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 // Apollo
 import { graphql, compose } from 'react-apollo';
@@ -20,9 +19,4 @@ class User extends React.Component {
 User.propTypes = {
 };
 
-const UserWithApollo = compose()(User);
-
-export default connect(
-  (state) => ({}),
-  (dispatch) => ({}),
-)(UserWithApollo);
+export default compose()(User);

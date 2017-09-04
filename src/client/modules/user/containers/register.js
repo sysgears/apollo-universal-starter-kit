@@ -24,9 +24,9 @@ User.propTypes = {
 const UserWithApollo = compose(
   graphql(USER_REGISTER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
-      register: async ({ username, email, password, isAdmin }) => {
+      register: async ({ username, email, password }) => {
         const userData = await mutate({
-          variables: { input: { username, email, password, isAdmin } },
+          variables: { input: { username, email, password } },
           //optimisticResponse: {
           //  register: {
           //    id: -1,

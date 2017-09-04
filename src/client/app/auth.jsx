@@ -49,6 +49,29 @@ const checkAuth = (cookies, role) => {
   return true;
 };
 
+const profileName = (cookies) => {
+  let token = null;
+
+  if (cookies && cookies.get('x-token')) {
+    token = cookies.get('x-token');
+  }
+
+  if (__CLIENT__ && window.localStorage.getItem('token')) {
+    token = window.localStorage.getItem('token');
+  }
+
+  if (!token) {
+    return "";
+  }
+
+  try {
+    const { user: { username } } = decode(token);
+    return username;
+  } catch (e) {
+    return "";
+  }
+};
+
 const logoutHelper = (cookies) => {
   if (cookies && cookies.get('x-token')) {
     cookies.remove('x-token');
@@ -84,6 +107,14 @@ AuthLogin.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
+const AuthProfile = withCookies(({ cookies }) => {
+  return checkAuth(cookies, "") ? <NavItem><Link to="/profile" className="nav-link">{profileName(cookies)}</Link></NavItem> : null;
+});
+
+AuthProfile.propTypes = {
+  cookies: PropTypes.instanceOf(Cookies)
+};
+
 const AuthLoginWithApollo = withApollo(withCookies(graphql(CURRENT_USER, {
   options: { fetchPolicy: 'network-only' },
   props: ({ data: { currentUser } }) => ({
@@ -109,5 +140,6 @@ AuthRoute.propTypes = {
 };
 
 export { AuthNav };
+export { AuthProfile };
 export { AuthLoginWithApollo as AuthLogin };
 export { AuthRoute };

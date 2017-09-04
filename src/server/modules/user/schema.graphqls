@@ -25,7 +25,6 @@ input RegisterUserInput {
     username: String!
     email: String!
     password: String!
-    isAdmin: Boolean
 }
 
 input LoginUserInput {

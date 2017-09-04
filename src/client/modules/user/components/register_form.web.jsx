@@ -35,7 +35,6 @@ const RegisterForm = ({ handleSubmit, submitting, onSubmit }) => {
       <Field name="username" component={renderField} type="text" label="Username" validate={required}/>
       <Field name="email" component={renderField} type="text" label="Email" validate={required}/>
       <Field name="password" component={renderField} type="password" label="Password" validate={required}/>
-      <Field name="isAdmin" component={renderField} type="checkbox" label="is Admin"/>
       <Button color="primary" type="submit" disabled={submitting}>
         Register
       </Button>

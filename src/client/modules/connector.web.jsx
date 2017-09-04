@@ -10,6 +10,7 @@ export default class {
   constructor({route, navItem, reducer}, ...features) {
     this.route = combine(arguments, arg => arg.route);
     this.navItem = combine(arguments, arg => arg.navItem);
+    this.navItemRight = combine(arguments, arg => arg.navItemRight);
     this.reducer = combine(arguments, arg => arg.reducer);
   }
 
@@ -22,6 +23,12 @@ export default class {
   get navItems() {
     return this.navItem.map((component, idx) =>
       React.cloneElement(component, { key: idx + this.navItem.length })
+    );
+  }
+
+  get navItemsRight() {
+    return this.navItemRight.map((component, idx) =>
+      React.cloneElement(component, { key: idx + this.navItemRight.length })
     );
   }
 

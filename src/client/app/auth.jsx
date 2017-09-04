@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Redirect } from 'react-router-dom';
+import { withApollo, graphql } from 'react-apollo';
+import ApolloClient from 'apollo-client';
+import { Route, Redirect, Link } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { NavItem } from 'reactstrap';
 import decode from 'jwt-decode';
+
+import CURRENT_USER from '../modules/user/graphql/current_user.graphql';
 
 const checkAuth = (cookies, role) => {
   let token = null;
@@ -45,6 +49,22 @@ const checkAuth = (cookies, role) => {
   return true;
 };
 
+const logoutHelper = (cookies) => {
+  if (cookies && cookies.get('x-token')) {
+    cookies.remove('x-token');
+    cookies.remove('x-refresh-token');
+  }
+  if (__CLIENT__ && window.localStorage.getItem('token')) {
+    window.localStorage.setItem('token', null);
+    window.localStorage.setItem('refreshToken', null);
+  }
+};
+
+const logout = async (cookies, client) => {
+  await logoutHelper(cookies);
+  client.resetStore();
+};
+
 const AuthNav = withCookies(({ children, cookies, role }) => {
   return checkAuth(cookies, role) ? <NavItem>{children}</NavItem> : null;
 });
@@ -53,6 +73,23 @@ AuthNav.propTypes = {
   children: PropTypes.object,
   cookies: PropTypes.instanceOf(Cookies)
 };
+
+const AuthLogin = withCookies(({ children, cookies, client }) => {
+  return checkAuth(cookies, "") ? <NavItem onClick={() => logout(cookies, client)}><Link to="/" className="nav-link">Logout</Link></NavItem> : <NavItem>{children}</NavItem>;
+});
+
+AuthLogin.propTypes = {
+  client: PropTypes.instanceOf(ApolloClient),
+  children: PropTypes.object,
+  cookies: PropTypes.instanceOf(Cookies)
+};
+
+const AuthLoginWithApollo = withApollo(withCookies(graphql(CURRENT_USER, {
+  options: { fetchPolicy: 'network-only' },
+  props: ({ data: { currentUser } }) => ({
+    currentUser,
+  }),
+})(AuthLogin)));
 
 const AuthRoute = withCookies(({ component: Component, cookies, role, ...rest }) => {
   return (
@@ -72,4 +109,5 @@ AuthRoute.propTypes = {
 };
 
 export { AuthNav };
+export { AuthLoginWithApollo as AuthLogin };
 export { AuthRoute };

@@ -9,7 +9,7 @@ import Register from './containers/register';
 import Login from './containers/login';
 import reducers from './reducers';
 
-import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from '../../app/auth';
+import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from './containers/auth';
 
 import Feature from '../connector';
 

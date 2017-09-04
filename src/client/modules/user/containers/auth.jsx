@@ -7,7 +7,7 @@ import { withCookies, Cookies } from 'react-cookie';
 import { NavItem } from 'reactstrap';
 import decode from 'jwt-decode';
 
-import CURRENT_USER from '../modules/user/graphql/current_user.graphql';
+import CURRENT_USER from '../graphql/current_user.graphql';
 
 const checkAuth = (cookies, role) => {
   let token = null;

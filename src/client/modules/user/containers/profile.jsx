@@ -7,16 +7,16 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import UserShow from '../components/user_show';
+import ProfileShow from '../components/profile_show';
 
-class User extends React.Component {
+class Profile extends React.Component {
 
   render() {
-    return <UserShow/>;
+    return <ProfileShow/>;
   }
 }
 
-User.propTypes = {
+Profile.propTypes = {
 };
 
-export default compose()(User);
+export default compose()(Profile);

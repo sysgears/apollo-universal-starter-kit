@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // React native UI
 import { StyleSheet, Text, View } from 'react-native';
 
-const UserShow = () => {
+const ProfileShow = () => {
 
   return (
     <View style={styles.container}>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   }
 });
 
-UserShow.propTypes = {
+ProfileShow.propTypes = {
 };
 
-export default UserShow;
+export default ProfileShow;

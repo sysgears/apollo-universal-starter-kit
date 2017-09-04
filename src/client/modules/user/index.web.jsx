@@ -3,7 +3,7 @@ import React from 'react';
 import { Route, Link } from 'react-router-dom';
 
 // Component and helpers
-import User from './containers/user';
+import Profile from './containers/profile';
 import Users from './containers/users';
 import Register from './containers/register';
 import Login from './containers/login';
@@ -15,7 +15,7 @@ import Feature from '../connector';
 
 export default new Feature({
   route: [
-    <AuthRoute exact path="/profile" role="user" component={User} />,
+    <AuthRoute exact path="/profile" role="user" component={Profile} />,
     <AuthRoute exact path="/users" role="admin" component={Users} />,
     <Route exact path="/register" component={Register} />,
     <Route exact path="/login" component={Login} />

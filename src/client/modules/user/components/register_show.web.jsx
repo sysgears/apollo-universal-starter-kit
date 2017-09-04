@@ -11,7 +11,7 @@ const onSubmit = (register) => (values) => {
   register(values);
 };
 
-const UserShow = ({ register }) => {
+const RegisterShow = ({ register }) => {
 
   const renderMetaData = () => (
     <Helmet
@@ -31,8 +31,8 @@ const UserShow = ({ register }) => {
   );
 };
 
-UserShow.propTypes = {
+RegisterShow.propTypes = {
   register: PropTypes.func.isRequired,
 };
 
-export default UserShow;
+export default RegisterShow;

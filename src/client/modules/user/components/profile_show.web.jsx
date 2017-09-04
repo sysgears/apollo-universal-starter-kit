@@ -7,14 +7,14 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import PageLayout from '../../../app/page_layout';
 
-const UserShow = () => {
+const ProfileShow = () => {
 
   const renderMetaData = () => (
     <Helmet
-      title="User"
+      title="Profile"
       meta={[{
         name: 'description',
-        content: 'User page'
+        content: 'Profile page'
       }]}/>
   );
 
@@ -30,7 +30,7 @@ const UserShow = () => {
   );
 };
 
-UserShow.propTypes = {
+ProfileShow.propTypes = {
 };
 
-export default UserShow;
+export default ProfileShow;

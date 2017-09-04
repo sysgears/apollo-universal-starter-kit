@@ -8,8 +8,8 @@ export default (SECRET) => (async (req, res, next) => {
   //console.log(token);
   if (token && token !== 'null') {
     if (req.headers['x-token']) {
-      req.universalCookies.set('x-token', req.headers['x-token'], {maxAge : 1000*60*20, httpOnly: false});
-      req.universalCookies.set('x-refresh-token', req.headers['x-refresh-token'], {maxAge : 1000*60*60*24*7, httpOnly: false});
+      req.universalCookies.set('x-token', req.headers['x-token'], {maxAge : 60 * 20, httpOnly: false});
+      req.universalCookies.set('x-refresh-token', req.headers['x-refresh-token'], {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
     }
     try {
       const { user } = jwt.verify(token, SECRET);
@@ -28,8 +28,8 @@ export default (SECRET) => (async (req, res, next) => {
         res.set('x-token', newTokens.token);
         res.set('x-refresh-token', newTokens.refreshToken);
 
-        req.universalCookies.set('x-token', newTokens.token, {maxAge : 1000*60*20, httpOnly: false});
-        req.universalCookies.set('x-refresh-token', newTokens.refreshToken, {maxAge : 1000*60*60*24*7, httpOnly: false});
+        req.universalCookies.set('x-token', newTokens.token, {maxAge : 60 * 20, httpOnly: false});
+        req.universalCookies.set('x-refresh-token', newTokens.refreshToken, {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
       }
       req.user = newTokens.user;
     }

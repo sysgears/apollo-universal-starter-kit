@@ -4,12 +4,30 @@ import modules from '../modules';
 import { refreshTokens } from '../api/auth';
 
 export default (SECRET) => (async (req, res, next) => {
-  const token = req.headers['x-token'] || req.universalCookies.get('x-token');
+  let token = req.headers['x-token'] || req.universalCookies.get('x-token');
+
+  // check if cookie was changed client side
+  if ((req.universalCookies.get('x-token') !== req.universalCookies.get('r-token')) || (req.universalCookies.get('x-refresh-token') !== req.universalCookies.get('r-refresh-token')))
+  {
+    // revoke token
+    token = undefined;
+
+    // if cookie was cleared do to logout clear tokens
+    if (req.universalCookies.get('x-token') === undefined) {
+      req.universalCookies.remove('x-token');
+      req.universalCookies.remove('r-token');
+      req.universalCookies.remove('x-refresh-token');
+      req.universalCookies.remove('r-refresh-token');
+    }
+  }
+
   //console.log(token);
   if (token && token !== 'null') {
     if (req.headers['x-token']) {
       req.universalCookies.set('x-token', req.headers['x-token'], {maxAge : 60 * 20, httpOnly: false});
+      req.universalCookies.set('r-token', req.headers['x-token'], {maxAge : 60 * 20, httpOnly: true});
       req.universalCookies.set('x-refresh-token', req.headers['x-refresh-token'], {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
+      req.universalCookies.set('r-refresh-token', req.headers['x-refresh-token'], {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
     }
     try {
       const { user } = jwt.verify(token, SECRET);
@@ -29,7 +47,9 @@ export default (SECRET) => (async (req, res, next) => {
         res.set('x-refresh-token', newTokens.refreshToken);
 
         req.universalCookies.set('x-token', newTokens.token, {maxAge : 60 * 20, httpOnly: false});
+        req.universalCookies.set('r-token', newTokens.token, {maxAge : 60 * 20, httpOnly: true});
         req.universalCookies.set('x-refresh-token', newTokens.refreshToken, {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
+        req.universalCookies.set('r-refresh-token', newTokens.refreshToken, {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
       }
       req.user = newTokens.user;
     }

@@ -97,8 +97,8 @@ AuthNav.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthLogin = withCookies(({ children, cookies, client }) => {
-  return checkAuth(cookies, "") ? <NavItem onClick={() => logout(cookies, client)}><Link to="/" className="nav-link">Logout</Link></NavItem> : <NavItem>{children}</NavItem>;
+const AuthLogin = withCookies(({ children, cookies, client, data }) => {
+  return checkAuth(cookies, "") ? <NavItem onClick={() => logout(cookies, client, data)}><Link to="/" className="nav-link">Logout</Link></NavItem> : <NavItem>{children}</NavItem>;
 });
 
 AuthLogin.propTypes = {
@@ -107,6 +107,10 @@ AuthLogin.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
+const AuthLoginWithApollo = withApollo(graphql(CURRENT_USER, {
+  options: { fetchPolicy: 'network-only' },
+})(AuthLogin));
+
 const AuthProfile = withCookies(({ cookies }) => {
   return checkAuth(cookies, "") ? <NavItem><Link to="/profile" className="nav-link">{profileName(cookies)}</Link></NavItem> : null;
 });
@@ -114,13 +118,6 @@ const AuthProfile = withCookies(({ cookies }) => {
 AuthProfile.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
-
-const AuthLoginWithApollo = withApollo(withCookies(graphql(CURRENT_USER, {
-  options: { fetchPolicy: 'network-only' },
-  props: ({ data: { currentUser } }) => ({
-    currentUser,
-  }),
-})(AuthLogin)));
 
 const AuthRoute = withCookies(({ component: Component, cookies, role, ...rest }) => {
   return (

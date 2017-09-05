@@ -84,13 +84,14 @@ export default compose(
   graphql(POST_ADD, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       addPost: async (title, content) => {
-        await mutate({
+        let postData = await mutate({
           variables: { input: { title, content } },
           optimisticResponse: {
             addPost: {
               id: -1,
               title: title,
               content: content,
+              comments: [],
               __typename: 'Post',
             },
           },
@@ -102,11 +103,10 @@ export default compose(
         });
 
         if (history) {
-          return history.push('/posts');
-          //return history.push('/post/' + postData.data.addPost.id);
+          return history.push('/post/' + postData.data.addPost.id, { post: postData.data.addPost });
         }
         else if (navigation) {
-          return navigation.goBack();
+          return navigation.setParams({ id: postData.data.addPost.id, post: postData.data.addPost });
         }
       }
     })

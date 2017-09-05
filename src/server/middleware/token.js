@@ -19,7 +19,7 @@ export default (SECRET) => (async (req, res, next) => {
       const newTokens = await refreshTokens(
         token,
         refreshToken,
-        ...modules.createContext().User,
+        modules.createContext().User,
         SECRET,
       );
       if (newTokens.token && newTokens.refreshToken) {

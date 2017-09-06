@@ -130,6 +130,7 @@ other build properties described below:
 |persistGraphQL|Generate and use persistent GraphQL queries|
 
 There are also application config options available in `app.json` to aid with debugging GraphQL and SQL:
+
 |Option                    |Description|
 |--------------------------|-----------|
 |debugSQL|Print executed by backend SQL commands|

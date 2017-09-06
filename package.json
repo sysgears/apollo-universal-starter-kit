@@ -42,7 +42,7 @@
   "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^5.0.0",
-    "apollo-client": "^1.9.1",
+    "apollo-client": "1.8.1",
     "apollo-logger": "0.0.5",
     "apollo-server-express": "^1.1.0",
     "bcryptjs": "^2.4.3",
@@ -70,7 +70,7 @@
     "persistgraphql": "^0.4.0",
     "prop-types": "^15.5.10",
     "react": "~15.4.2",
-    "react-apollo": "^1.4.14",
+    "react-apollo": "^1.4.15",
     "react-cookie": "^2.0.8",
     "react-dom": "~15.4.2",
     "react-ga": "^2.2.0",

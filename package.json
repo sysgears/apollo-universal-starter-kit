@@ -5,7 +5,8 @@
   "main": "src/server",
   "engines": {
     "node": "6.11.1",
-    "npm": "3.10.3"
+    "npm": "3.10.3",
+    "yarn": "0.27.5"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production node tools/webpack.entry",

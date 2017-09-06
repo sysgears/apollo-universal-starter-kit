@@ -1,8 +1,5 @@
 {
   "app": {
-    "backendBuildDir": "build/server",
-    "frontendBuildDir": "build/client",
-    "dllBuildDir": "build/dll",
     "debugSQL": false,
     "apolloLogging": false
   },

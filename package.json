@@ -153,7 +153,7 @@
     "sass-loader": "^6.0.6",
     "shelljs": "^0.7.8",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.1.10",
+    "spinjs": "^0.1.11",
     "style-loader": "^0.18.2",
     "url-loader": "^0.5.9",
     "wait-on": "^2.0.2",
@@ -165,7 +165,7 @@
     "webpack-merge": "^4.1.0",
     "webpack-node-externals": "^1.6.0",
     "webpack-sources": "^1.0.1",
-    "webpack-virtual-modules": "^0.1.7",
+    "webpack-virtual-modules": "^0.1.8",
     "ws": "^3.1.0",
     "xdl": "^44.0.0"
   },

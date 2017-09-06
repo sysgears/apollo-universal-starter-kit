@@ -1,13 +1,17 @@
 {
   "builders": {
-    "server": "server",
+    "server": {
+      "stack": ["server", "react-native-web"],
+      "enabled": true
+    },
     "web": {
       "stack": "web",
-      "openBrowser": true
+      "openBrowser": true,
+      "enabled": true
     },
     "android": {
       "stack": ["react-native", "android"],
-      "enabled": false
+      "enabled": true
     },
     "ios": {
       "stack": ["react-native", "ios"],
@@ -20,12 +24,12 @@
   },
   "options": {
     "overridesConfig": "tools/webpack.app_config.js",
-    "stack": ["apollo", "react", "es6", "sass"],
+    "stack": ["apollo", "react", "styled-components", "sass", "es6", "webpack"],
     "backendUrl": "http://{ip}:8080/graphql",
     "ssr": true,
     "webpackDll": true,
     "reactHotLoader": false,
-    "persistGraphQL": false,
+    "persistGraphQL": true,
     "frontendRefreshOnBackendChange": true
   }
 }

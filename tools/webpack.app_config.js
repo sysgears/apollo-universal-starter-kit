@@ -59,6 +59,7 @@ const dependencyPlatforms = {
   "react-hot-loader": "web",
   "react-native": ["ios", "android"],
   "react-native-web": "web",
+  "react-navigation": ["ios", "android"],
   "react-redux": "web",
   "react-router": "web",
   "react-router-dom": "web",

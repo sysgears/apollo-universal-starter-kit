@@ -19,11 +19,6 @@ class Counter extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
-      if (this.subscription) {
-        this.subscription();
-        this.subscription = null;
-      }
-
       // Subscribe or re-subscribe
       if (!this.subscription) {
         this.subscribeToCount();

@@ -42,7 +42,7 @@
   "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^5.0.0",
-    "apollo-client": "1.8.1",
+    "apollo-client": "^1.9.2",
     "apollo-logger": "0.0.5",
     "apollo-server-express": "^1.1.0",
     "bcryptjs": "^2.4.3",

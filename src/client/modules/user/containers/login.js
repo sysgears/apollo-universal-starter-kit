@@ -24,7 +24,7 @@ User.propTypes = {
 
 const UserWithApollo = compose(
   graphql(USER_LOGIN, {
-    props: ({ ownProps: { history, navigation }, data, mutate }) => ({
+    props: ({ ownProps: { history, navigation }, mutate }) => ({
       login: async ({ email, password }) => {
         try {
           const loginData = await mutate({

@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 // Component and helpers
 import { createTabBarIconWrapper } from '../common/components';
-import User from './containers/user';
+import Profile from './containers/profile';
 import reducers from './reducers';
 
 import Feature from '../connector';
@@ -11,7 +11,7 @@ import Feature from '../connector';
 export default new Feature({
   tabItem: {
     User: {
-      screen: User,
+      screen: Profile,
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(Ionicons, {
           name: 'ios-browsers-outline',

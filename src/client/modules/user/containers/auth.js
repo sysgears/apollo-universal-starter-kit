@@ -86,7 +86,7 @@ const logoutHelper = (cookies) => {
 const logout = async (cookies, client, history) => {
   await client.resetStore();
   logoutHelper(cookies);
-  return history.push('/');
+  history.push('/');
 };
 
 const AuthNav = withCookies(({ children, cookies, role }) => {
@@ -98,19 +98,18 @@ AuthNav.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthLogin = withCookies(({ children, cookies, client, history }) => {
+const AuthLogin = ({ children, cookies, client, history }) => {
   return checkAuth(cookies, "") ? <NavItem onClick={() => logout(cookies, client, history)}><a href="#" className="nav-link">Logout</a></NavItem> : <NavItem>{children}</NavItem>;
-});
+};
 
 AuthLogin.propTypes = {
   client: PropTypes.instanceOf(ApolloClient),
   children: PropTypes.object,
-  cookies: PropTypes.instanceOf(Cookies)
+  cookies: PropTypes.instanceOf(Cookies),
+  history: PropTypes.object.isRequired
 };
 
-const AuthLoginWithApollo = withRouter(withApollo(graphql(CURRENT_USER, {
-  options: { fetchPolicy: 'network-only' },
-})(AuthLogin)));
+const AuthLoginWithApollo = withCookies(withRouter(withApollo(graphql(CURRENT_USER)(AuthLogin))));
 
 const AuthProfile = withCookies(({ cookies }) => {
   return checkAuth(cookies, "") ? <NavItem><Link to="/profile" className="nav-link">{profileName(cookies)}</Link></NavItem> : null;

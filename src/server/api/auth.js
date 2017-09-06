@@ -9,15 +9,15 @@ export const createTokens = async (user, secret) => {
     },
     secret,
     {
-      expiresIn: '20m',
+      expiresIn: '1m',
     },
   );
 
   const createRefreshToken = jwt.sign(
     {
-      user: pick(user, 'id'),
+      user: user.id,
     },
-    secret,
+    secret + user,
     {
       expiresIn: '7d',
     },
@@ -35,7 +35,7 @@ export const refreshTokens = async (token, refreshToken, User, SECRET) => {
     return {};
   }
 
-  const user = await User.getUser(userId);
+  const user = await User.getUserWithPassword(userId);
 
   const [newToken, newRefreshToken] = await createTokens(user, SECRET);
   return {

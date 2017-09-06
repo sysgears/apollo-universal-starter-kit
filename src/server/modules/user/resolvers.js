@@ -42,6 +42,15 @@ export default pubsub => ({
     async login(obj, { input: { email, password } }, context) {
       return tryLogin(email, password, context.User, context.SECRET);
     },
+    async updatePassword(obj, { id, newPassword }, context) {
+      try {
+        const password = await bcrypt.hash(newPassword, 12);
+        await context.User.UpdatePassword(id, password);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
     refreshTokens(obj, { token, refreshToken }, context) {
       return refreshTokens(token, refreshToken, context.User, context.SECRET);
     }

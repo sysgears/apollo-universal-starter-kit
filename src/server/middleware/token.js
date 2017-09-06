@@ -24,8 +24,8 @@ export default (SECRET) => (async (req, res, next) => {
   //console.log(token);
   if (token && token !== 'null') {
     if (req.headers['x-token']) {
-      req.universalCookies.set('x-token', req.headers['x-token'], {maxAge : 60 * 20, httpOnly: false});
-      req.universalCookies.set('r-token', req.headers['x-token'], {maxAge : 60 * 20, httpOnly: true});
+      req.universalCookies.set('x-token', req.headers['x-token'], {maxAge : 60, httpOnly: false});
+      req.universalCookies.set('r-token', req.headers['x-token'], {maxAge : 60, httpOnly: true});
       req.universalCookies.set('x-refresh-token', req.headers['x-refresh-token'], {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
       req.universalCookies.set('r-refresh-token', req.headers['x-refresh-token'], {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
     }
@@ -46,8 +46,8 @@ export default (SECRET) => (async (req, res, next) => {
         res.set('x-token', newTokens.token);
         res.set('x-refresh-token', newTokens.refreshToken);
 
-        req.universalCookies.set('x-token', newTokens.token, {maxAge : 60 * 20, httpOnly: false});
-        req.universalCookies.set('r-token', newTokens.token, {maxAge : 60 * 20, httpOnly: true});
+        req.universalCookies.set('x-token', newTokens.token, {maxAge : 60, httpOnly: false});
+        req.universalCookies.set('r-token', newTokens.token, {maxAge : 60, httpOnly: true});
         req.universalCookies.set('x-refresh-token', newTokens.refreshToken, {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
         req.universalCookies.set('r-refresh-token', newTokens.refreshToken, {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
       }

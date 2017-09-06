@@ -22,12 +22,26 @@ export default class User {
     );
   }
 
+  async getUserWithPassword(id) {
+    return camelizeKeys(await knex
+      .select('u.id', 'u.username', 'u.is_admin', 'la.password')
+      .from('user AS u')
+      .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
+      .where('u.id', '=', id)
+      .first()
+    );
+  }
+
   register({ username }) {
     return knex('user').insert({ username }).returning('id');
   }
 
   createLocalOuth({ email, password, userId }) {
     return knex('local_auth').insert({ email, password, user_id: userId }).returning('id');
+  }
+
+  UpdatePassword(id, password) {
+    return knex('local_auth').update({ password }).where({ user_id: id });
   }
 
   async getLocalOuth(id) {

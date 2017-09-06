@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo, graphql } from 'react-apollo';
 import ApolloClient from 'apollo-client';
-import { Route, Redirect, Link } from 'react-router-dom';
+import { Route, Redirect, Link, withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { NavItem } from 'reactstrap';
 import decode from 'jwt-decode';
@@ -83,9 +83,10 @@ const logoutHelper = (cookies) => {
   }
 };
 
-const logout = async (cookies, client) => {
-  await logoutHelper(cookies);
-  client.resetStore();
+const logout = async (cookies, client, history) => {
+  await client.resetStore();
+  logoutHelper(cookies);
+  return history.push('/');
 };
 
 const AuthNav = withCookies(({ children, cookies, role }) => {
@@ -97,8 +98,8 @@ AuthNav.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthLogin = withCookies(({ children, cookies, client, data }) => {
-  return checkAuth(cookies, "") ? <NavItem onClick={() => logout(cookies, client, data)}><Link to="/" className="nav-link">Logout</Link></NavItem> : <NavItem>{children}</NavItem>;
+const AuthLogin = withCookies(({ children, cookies, client, history }) => {
+  return checkAuth(cookies, "") ? <NavItem onClick={() => logout(cookies, client, history)}><a href="#" className="nav-link">Logout</a></NavItem> : <NavItem>{children}</NavItem>;
 });
 
 AuthLogin.propTypes = {
@@ -107,9 +108,9 @@ AuthLogin.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthLoginWithApollo = withApollo(graphql(CURRENT_USER, {
+const AuthLoginWithApollo = withRouter(withApollo(graphql(CURRENT_USER, {
   options: { fetchPolicy: 'network-only' },
-})(AuthLogin));
+})(AuthLogin)));
 
 const AuthProfile = withCookies(({ cookies }) => {
   return checkAuth(cookies, "") ? <NavItem><Link to="/profile" className="nav-link">{profileName(cookies)}</Link></NavItem> : null;

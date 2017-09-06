@@ -12,7 +12,7 @@ import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
 import addGraphQLSubscriptions from './api/subscriptions';
-import settings from '../../settings';
+import { options as spinConfig } from '../../.spinrc.json';
 import log from '../common/log';
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -33,10 +33,10 @@ if (__DEV__) {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/', express.static(path.join(settings.frontendBuildDir, 'web'), { maxAge: '180 days' }));
+app.use('/', express.static(path.join(spinConfig.frontendBuildDir, 'web'), { maxAge: '180 days' }));
 
-if (__DEV__ && settings.webpackDll) {
-  app.use('/', express.static(settings.dllBuildDir, { maxAge: '180 days' }));
+if (__DEV__) {
+  app.use('/', express.static(spinConfig.dllBuildDir, { maxAge: '180 days' }));
 }
 
 if (__PERSIST_GQL__) {

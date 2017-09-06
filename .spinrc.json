@@ -1,0 +1,38 @@
+{
+  "builders": {
+    "server": {
+      "stack": ["server", "react-native-web"],
+      "enabled": true
+    },
+    "web": {
+      "stack": "web",
+      "openBrowser": true,
+      "enabled": true
+    },
+    "android": {
+      "stack": ["react-native", "android"],
+      "enabled": false
+    },
+    "ios": {
+      "stack": ["react-native", "ios"],
+      "enabled": false
+    },
+    "test": {
+      "stack": "server",
+      "roles": ["test"]
+    }
+  },
+  "options": {
+    "backendBuildDir": "build/server",
+    "frontendBuildDir": "build/client",
+    "dllBuildDir": "build/dll",
+    "overridesConfig": "tools/webpack.app_config.js",
+    "stack": ["apollo", "react", "styled-components", "sass", "es6", "webpack"],
+    "backendUrl": "http://{ip}:8080/graphql",
+    "ssr": true,
+    "webpackDll": true,
+    "reactHotLoader": false,
+    "persistGraphQL": true,
+    "frontendRefreshOnBackendChange": true
+  }
+}

@@ -19,7 +19,7 @@ function renderUsers(users) {
   });
 }
 
-const UsersShow = ({ loading, users }) => {
+const UsersShow = ({ loading, users, errors }) => {
 
   const renderMetaData = () => (
     <Helmet
@@ -37,6 +37,17 @@ const UsersShow = ({ loading, users }) => {
         <div className="text-center">
           Loading...
         </div>
+      </PageLayout>
+    );
+  } else if (errors) {
+    return (
+      <PageLayout>
+        {renderMetaData()}
+        <h2>Users</h2>
+        <h1/>
+        {errors.map(error => (
+          <li key={error.path[0]}>{error.message}</li>
+        ))}
       </PageLayout>
     );
   } else {
@@ -61,6 +72,7 @@ const UsersShow = ({ loading, users }) => {
 UsersShow.propTypes = {
   loading: PropTypes.bool.isRequired,
   users: PropTypes.array,
+  errors: PropTypes.array
 };
 
 export default UsersShow;

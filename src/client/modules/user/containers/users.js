@@ -21,12 +21,13 @@ class Users extends React.Component {
 Users.propTypes = {
   loading: PropTypes.bool.isRequired,
   users: PropTypes.array,
+  errors: PropTypes.array,
 };
 
 const UserWithApollo = compose(
   graphql(USERS_QUERY, {
-    props({ data: { loading, users } }) {
-      return { loading, users };
+    props({ data: { loading, users, error } }) {
+      return { loading, users, errors: error ? error.graphQLErrors : null };
     }
   }),
 )(Users);

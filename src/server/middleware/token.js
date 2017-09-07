@@ -18,7 +18,7 @@ export default (SECRET) => (async (req, res, next) => {
     }
 
     // if x-token is not empty and not the same as r-token revoke authentication
-    next();
+    token = undefined;
   }
 
   //console.log(token);

@@ -17,6 +17,7 @@ import createReduxStore from '../../common/redux_store';
 import Html from './html';
 import Routes from '../../client/app/routes';
 import log from '../../common/log';
+import { options as spinConfig } from '../../../.spinrc.json';
 import settings from '../../../settings';
 
 let assetMap;
@@ -75,7 +76,7 @@ async function renderServerSide(req, res, queryMap) {
     res.end();
   } else {
     if (__DEV__ || !assetMap) {
-      assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'web', 'assets.json')));
+      assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
     }
 
     const apolloState = Object.assign({}, client.store.getState());
@@ -94,7 +95,7 @@ async function renderClientSide(req, res) {
   const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
   
   if (__DEV__ || !assetMap) {
-    assetMap = JSON.parse(fs.readFileSync(path.join(settings.frontendBuildDir, 'web', 'assets.json')));
+    assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
   }
   const page = <Html state={({})} assetMap={assetMap} helmet={helmet}/>;
   res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);

@@ -14,7 +14,7 @@ import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
 import tokenMiddleware from './modules/user/token';
 import addGraphQLSubscriptions from './api/subscriptions';
-import settings from '../../settings';
+import { options as spinConfig } from '../../.spinrc.json';
 import log from '../common/log';
 
 const SECRET = 'secret, change for production';
@@ -34,7 +34,7 @@ app.enable('trust proxy');
 
 if (__DEV__) {
   const corsOptions = {
-    origin: `${protocol}//${hostname}:${settings.webpackDevPort}`,
+    origin: `${protocol}//${hostname}:3000`,
     credentials: true
   };
   app.use(cors(corsOptions));
@@ -43,10 +43,10 @@ if (__DEV__) {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/', express.static(path.join(settings.frontendBuildDir, 'web'), { maxAge: '180 days' }));
+app.use('/', express.static(path.join(spinConfig.frontendBuildDir, 'web'), { maxAge: '180 days' }));
 
-if (__DEV__ && settings.webpackDll) {
-  app.use('/', express.static(settings.dllBuildDir, { maxAge: '180 days' }));
+if (__DEV__) {
+  app.use('/', express.static(spinConfig.dllBuildDir, { maxAge: '180 days' }));
 }
 
 if (__PERSIST_GQL__) {

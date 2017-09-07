@@ -6,7 +6,6 @@ import 'backend_reload';
 
 import Main from './app/main';
 import log from '../common/log';
-import settings from '../../settings';
 
 const root = document.getElementById('content');
 
@@ -20,12 +19,10 @@ if (__DEV__) {
   if (module.hot) {
     module.hot.accept();
 
-    if (settings.frontendRefreshOnBackendChange) {
-      module.hot.accept('backend_reload', () => {
-        log.debug("Reloading front-end");
-        window.location.reload();
-      });
-    }
+    module.hot.accept('backend_reload', () => {
+      log.debug("Reloading front-end");
+      window.location.reload();
+    });
 
     module.hot.accept('./app/main', () => {
       try {

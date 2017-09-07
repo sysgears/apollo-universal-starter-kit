@@ -53,7 +53,8 @@ This starter kit adds full [React Native] integration, with [Webpack] as a packa
 No native code compilation tools are needed in order to develop native mobile applications with this kit.
 You are able to run both web and mobile versions of your app at the same time connected to the same backend.
 
-For running Android or iOS you need to set in `app.json` `ios` and/or `android` field `true`.
+For running Android or iOS you need to set in `.spinrc` `builders.ios.enabled` and/or `builders.android.enabled` field
+ `true`.
 
 #### Running on a device
 You need to install [Expo] app on your Android or iOS device and then you can scan the QR shown in the terminal, 
@@ -79,7 +80,8 @@ To bring up the developer menu press ⌘+D.
 
 #### Writing the code
 This starter kit is designed so you can use it for just web, mobile or projects using both together. 
-In case you do not want to use mobile, just set both `ios` or `android` settings in `app.json` to `false`.
+In case you do not want to use mobile, just set both `builders.ios.enabled` or `builders.android.enabled` 
+settings in `.spinrc` to `false`.
 
 We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
 is possible. In this case you can write your components with React Native's building blocks that are supported in
@@ -110,8 +112,9 @@ This starter kit supplies boilerplate code for multiple platforms:
 - Web frontend
 - Android frontend
 - iOS frontend
-If you don't need some of these platforms you can turn off building their code in `app.json` file as well as edit 
-other properties described below:
+
+If you don't need some of these platforms you can turn off building their code in `.spinrc` file as well as edit 
+other build properties described below:
 
 |Option                    |Description|
 |--------------------------|-----------|
@@ -124,13 +127,14 @@ other properties described below:
 |webpackDll|Utilize Webpack DLLs to speed up incremental builds|
 |frontendRefreshOnBackendChange|Trigger web frontend refresh when backend code changes|
 |reactHotLoader|Utilize React Hot Loader v3|
-|debugSQL|Print executed by backend SQL commands|
 |persistGraphQL|Generate and use persistent GraphQL queries|
+
+There are also application config options available in `app.json` to aid with debugging GraphQL and SQL:
+
+|Option                    |Description|
+|--------------------------|-----------|
+|debugSQL|Print executed by backend SQL commands|
 |apolloLogging|Log all Apollo GraphQL operations|
-|backend|Compile Node.JS backend|
-|web|Compile Web frontend|
-|android|Compile Android frontend|
-|ios|Compile iOS frontend|
 
 ### Feature Modules Scaffolding with CLI
 

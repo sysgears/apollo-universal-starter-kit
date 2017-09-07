@@ -4,6 +4,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { Card, CardBlock, CardTitle, CardText } from 'reactstrap';
+
 import PageLayout from '../../../app/page_layout';
 import LoginForm from '../components/login_form';
 
@@ -37,10 +39,15 @@ class UserShow extends React.PureComponent {
       <PageLayout>
         {renderMetaData()}
         <h1>Login page!</h1>
-        <LoginForm onSubmit={this.onSubmit(login)} />
-        {this.state.errors.map(error => (
-          <li key={error.path[0]}>{error.message}</li>
-        ))}
+        <LoginForm onSubmit={this.onSubmit(login)} errors={this.state.errors} />
+        <hr />
+        <Card>
+          <CardBlock>
+            <CardTitle>Available logins:</CardTitle>
+            <CardText>admin@example.com:admin</CardText>
+            <CardText>user@example.com:user</CardText>
+          </CardBlock>
+        </Card>
       </PageLayout>
     );
   }

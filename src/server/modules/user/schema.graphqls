@@ -5,7 +5,17 @@ type User {
     email: String!
 }
 
+type FieldError {
+    field: String!
+    message: String!
+}
+
 type AuthPayload {
+    tokens: Tokens
+    errors: [FieldError!]
+}
+
+type Tokens {
     token: String!
     refreshToken: String!
 }

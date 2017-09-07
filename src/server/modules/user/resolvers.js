@@ -40,7 +40,12 @@ export default pubsub => ({
       return user;
     },
     async login(obj, { input: { email, password } }, context) {
-      return tryLogin(email, password, context.User, context.SECRET);
+      try {
+        const tokens  = await tryLogin(email, password, context.User, context.SECRET);
+        return { tokens };
+      } catch (e) {
+        return { errors: e };
+      }
     },
     async updatePassword(obj, { id, newPassword }, context) {
       try {

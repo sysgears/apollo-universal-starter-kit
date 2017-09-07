@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 import bcrypt from 'bcryptjs';
 
+import FieldError from '../../../common/error';
+
 export const createTokens = async (user, secret) => {
   const createToken = jwt.sign(
     {
@@ -46,18 +48,21 @@ export const refreshTokens = async (token, refreshToken, User, SECRET) => {
 };
 
 export const tryLogin = async (email, password, User, SECRET) => {
+  const e = new FieldError();
   const localAuth = await User.getLocalOuthByEmail(email);
 
   if (!localAuth) {
     // user with provided email not found
-    throw new Error('Invalid login');
+    e.setError('email', 'Please enter a valid e-mail.');
   }
 
   const valid = await bcrypt.compare(password, localAuth.password);
   if (!valid) {
     // bad password
-    throw new Error('Invalid login');
+    e.setError('password', 'Please enter a valid password.');
   }
+
+  e.throwIf();
 
   const user = await User.getUser(localAuth.userId);
 

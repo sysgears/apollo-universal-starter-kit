@@ -27,11 +27,15 @@ const UserWithApollo = compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       login: async ({ email, password }) => {
         try {
-          const loginData = await mutate({
+          const { data: { login } } = await mutate({
             variables: { input: { email, password } },
           });
 
-          const { token, refreshToken } = loginData.data.login;
+          if (login.errors) {
+            return { errors: login.errors };
+          }
+
+          const { token, refreshToken } = login.tokens;
           localStorage.setItem('token', token);
           localStorage.setItem('refreshToken', refreshToken);
 
@@ -42,8 +46,8 @@ const UserWithApollo = compose(
             return navigation.goBack();
           }
         } catch (e) {
-          return { errors: e.graphQLErrors };
-         }
+          console.log(e.graphQLErrors);
+        }
       }
     })
   }),

@@ -1,43 +1,18 @@
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe } from 'graphql';
-import jwt from 'jsonwebtoken';
 
 import schema from './schema';
 import log from '../../common/log';
 import modules from '../../server/modules';
-import { refreshTokens } from '../modules/user/auth';
 
-var subscriptionServer;
+let subscriptionServer;
 
-const addSubscriptions = (httpServer, SECRET) => {
+const addSubscriptions = (httpServer) => {
   subscriptionServer = SubscriptionServer.create({
     schema,
     execute,
     subscribe,
-    onConnect: async (connectionParams) => {
-      let tokenUser = null;
-
-      if (connectionParams && connectionParams.token) {
-        try {
-          const { user } = jwt.verify(connectionParams.token, SECRET);
-          tokenUser = user;
-        } catch (err) {
-          const newTokens = await refreshTokens(
-            connectionParams.token,
-            connectionParams.refreshToken,
-            modules.createContext().User,
-            SECRET,
-          );
-          tokenUser = newTokens.user;
-        }
-      }
-
-      return {
-        ...modules.createContext(),
-        user: tokenUser,
-        SECRET
-      };
-    }
+    onConnect: connectionParams => modules.createContext(null, connectionParams)
   },
   {
     server: httpServer,
@@ -45,17 +20,17 @@ const addSubscriptions = (httpServer, SECRET) => {
   });
 };
 
-const addGraphQLSubscriptions = (httpServer, SECRET) => {
+const addGraphQLSubscriptions = (httpServer) => {
   if (module.hot && module.hot.data) {
     const prevServer = module.hot.data.subscriptionServer;
     if (prevServer && prevServer.wsServer) {
       log.debug('Reloading the subscription server.');
       prevServer.wsServer.close(() => {
-        addSubscriptions(httpServer, SECRET);
+        addSubscriptions(httpServer);
       });
     }
   } else {
-    addSubscriptions(httpServer, SECRET);
+    addSubscriptions(httpServer);
   }
 };
 

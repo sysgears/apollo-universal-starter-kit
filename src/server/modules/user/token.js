@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-import modules from '../index';
 import { refreshTokens } from './auth';
 
-export default (SECRET) => (async (req, res, next) => {
+export default (SECRET, User) => (async (req, res, next) => {
   let token = req.headers['x-token'] || req.universalCookies.get('x-token');
 
   // check if cookie was changed client side
@@ -37,7 +36,7 @@ export default (SECRET) => (async (req, res, next) => {
       const newTokens = await refreshTokens(
         token,
         refreshToken,
-        modules.createContext().User,
+        User,
         SECRET,
       );
       if (newTokens.token && newTokens.refreshToken) {

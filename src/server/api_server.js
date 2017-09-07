@@ -8,16 +8,14 @@ import url from 'url';
 import cookiesMiddleware from 'universal-cookie-express';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
+import modules from './modules';
 
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
-import tokenMiddleware from './modules/user/token';
 import addGraphQLSubscriptions from './api/subscriptions';
 import { options as spinConfig } from '../../.spinrc.json';
 import log from '../common/log';
-
-const SECRET = 'secret, change for production';
 
 // eslint-disable-next-line import/no-mutable-exports
 let server;
@@ -73,14 +71,17 @@ if (__PERSIST_GQL__) {
     },
   );
 }
-app.use((...args) => tokenMiddleware(SECRET)(...args));
-app.use(pathname, (...args) => graphqlMiddleware(SECRET)(...args));
+
+for (const middleware of modules.middlewares) {
+  app.use(middleware);
+}
+app.use(pathname, (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));
 
 server = http.createServer(app);
 
-addGraphQLSubscriptions(server, SECRET);
+addGraphQLSubscriptions(server);
 
 server.listen(serverPort, () => {
   log.info(`API is now running on port ${serverPort}`);
@@ -103,7 +104,7 @@ if (module.hot) {
   module.hot.accept(['./middleware/website', './middleware/graphql']);
   module.hot.accept(['./api/subscriptions'], () => {
     try {
-      addGraphQLSubscriptions(server, SECRET);
+      addGraphQLSubscriptions(server);
     } catch (error) {
       log(error.stack);
     }

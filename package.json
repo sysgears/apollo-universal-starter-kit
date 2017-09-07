@@ -148,7 +148,7 @@
     "qrcode-terminal": "^0.11.0",
     "raw-loader": "^0.5.1",
     "react-addons-test-utils": "^15.6.0",
-    "react-native-web": "^0.0.120",
+    "react-native-web": "^0.0.121",
     "react-test-renderer": "~15.4.2",
     "resolve-url-loader": "^2.1.0",
     "sass-loader": "^6.0.6",

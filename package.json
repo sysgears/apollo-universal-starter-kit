@@ -154,7 +154,7 @@
     "sass-loader": "^6.0.6",
     "shelljs": "^0.7.8",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.1.15",
+    "spinjs": "^0.1.16",
     "style-loader": "^0.18.2",
     "url-loader": "^0.5.9",
     "wait-on": "^2.0.2",

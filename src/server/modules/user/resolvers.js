@@ -1,8 +1,8 @@
 /*eslint-disable no-unused-vars*/
 import bcrypt from 'bcryptjs';
 import { pick } from 'lodash';
-import { refreshTokens, tryLogin } from '../../api/auth';
-import { requiresAuth, requiresAdmin } from '../../api/permissions';
+import { refreshTokens, tryLogin } from './auth';
+import { requiresAuth, requiresAdmin } from './permissions';
 
 export default pubsub => ({
   Query: {

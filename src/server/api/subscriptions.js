@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import schema from './schema';
 import log from '../../common/log';
 import modules from '../../server/modules';
-import { refreshTokens } from '../api/auth';
+import { refreshTokens } from '../modules/user/auth';
 
 var subscriptionServer;
 

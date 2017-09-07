@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
-import modules from '../modules';
-import { refreshTokens } from '../api/auth';
+import modules from '../index';
+import { refreshTokens } from './auth';
 
 export default (SECRET) => (async (req, res, next) => {
   let token = req.headers['x-token'] || req.universalCookies.get('x-token');

@@ -12,7 +12,7 @@ import queryMap from 'persisted_queries.json';
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
-import tokenMiddleware from './middleware/token';
+import tokenMiddleware from './modules/user/token';
 import addGraphQLSubscriptions from './api/subscriptions';
 import settings from '../../settings';
 import log from '../common/log';

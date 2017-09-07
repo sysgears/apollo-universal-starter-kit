@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { refreshTokens } from './auth';
 
 export default (SECRET, User) => (async (req, res, next) => {
-  let token = req.headers['x-token'] || req.universalCookies.get('x-token');
+  let token = req.universalCookies.get('x-token') || req.headers['x-token'];
 
   // check if cookie was changed client side
   if ((req.universalCookies.get('x-token') !== req.universalCookies.get('r-token')) || (req.universalCookies.get('x-refresh-token') !== req.universalCookies.get('r-refresh-token')))
@@ -26,7 +26,7 @@ export default (SECRET, User) => (async (req, res, next) => {
       const { user } = jwt.verify(token, SECRET);
       req.user = user;
     } catch (err) {
-      const refreshToken = req.headers['x-refresh-token'] || req.universalCookies.get('x-refresh-token');
+      const refreshToken = req.universalCookies.get('x-refresh-token') || req.headers['x-refresh-token'];
       const newTokens = await refreshTokens(
         token,
         refreshToken,

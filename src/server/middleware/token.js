@@ -9,9 +9,6 @@ export default (SECRET) => (async (req, res, next) => {
   // check if cookie was changed client side
   if ((req.universalCookies.get('x-token') !== req.universalCookies.get('r-token')) || (req.universalCookies.get('x-refresh-token') !== req.universalCookies.get('r-refresh-token')))
   {
-    // revoke token
-    token = undefined;
-
     // if cookie was cleared do to logout clear tokens
     if (req.universalCookies.get('x-token') === undefined) {
       req.universalCookies.remove('x-token');
@@ -19,6 +16,9 @@ export default (SECRET) => (async (req, res, next) => {
       req.universalCookies.remove('x-refresh-token');
       req.universalCookies.remove('r-refresh-token');
     }
+
+    // if x-token is not empty and not the same as r-token revoke authentication
+    next();
   }
 
   //console.log(token);

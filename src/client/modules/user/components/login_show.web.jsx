@@ -44,7 +44,7 @@ class UserShow extends React.PureComponent {
       </PageLayout>
     );
   }
-};
+}
 
 UserShow.propTypes = {
   login: PropTypes.func.isRequired,

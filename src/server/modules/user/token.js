@@ -22,12 +22,6 @@ export default (SECRET, User) => (async (req, res, next) => {
 
   //console.log(token);
   if (token && token !== 'null') {
-    if (req.headers['x-token']) {
-      req.universalCookies.set('x-token', req.headers['x-token'], {maxAge : 60, httpOnly: false});
-      req.universalCookies.set('r-token', req.headers['x-token'], {maxAge : 60, httpOnly: true});
-      req.universalCookies.set('x-refresh-token', req.headers['x-refresh-token'], {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
-      req.universalCookies.set('r-refresh-token', req.headers['x-refresh-token'], {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
-    }
     try {
       const { user } = jwt.verify(token, SECRET);
       req.user = user;

@@ -39,7 +39,8 @@ export default new Feature({
     return {
       User,
       user: tokenUser,
-      SECRET
+      SECRET,
+      req
     };
   },
   middleware: tokenMiddleware(SECRET, User)

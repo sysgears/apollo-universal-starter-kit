@@ -40,7 +40,7 @@ class RegisterShow extends React.PureComponent {
       </PageLayout>
     );
   }
-};
+}
 
 RegisterShow.propTypes = {
   register: PropTypes.func.isRequired,

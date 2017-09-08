@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withApollo, graphql } from 'react-apollo';
+import { withApollo, graphql, compose } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import { Route, Redirect, Link, withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
@@ -8,6 +8,7 @@ import { NavItem } from 'reactstrap';
 import decode from 'jwt-decode';
 
 import CURRENT_USER from '../graphql/current_user.graphql';
+import USER_LOGOUT from '../graphql/user_logout.graphql';
 
 const checkAuth = (cookies, role) => {
   let token = null;
@@ -72,23 +73,6 @@ const profileName = (cookies) => {
   }
 };
 
-const logoutHelper = (cookies) => {
-  if (cookies && cookies.get('x-token')) {
-    cookies.remove('x-token');
-    cookies.remove('x-refresh-token');
-  }
-  if (__CLIENT__ && window.localStorage.getItem('token')) {
-    window.localStorage.setItem('token', null);
-    window.localStorage.setItem('refreshToken', null);
-  }
-};
-
-const logout = async (cookies, client, history) => {
-  await client.resetStore();
-  logoutHelper(cookies);
-  history.push('/');
-};
-
 const AuthNav = withCookies(({ children, cookies, role }) => {
   return checkAuth(cookies, role) ? <NavItem>{children}</NavItem> : null;
 });
@@ -98,18 +82,48 @@ AuthNav.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthLogin = ({ children, cookies, client, history }) => {
-  return checkAuth(cookies, "") ? <NavItem onClick={() => logout(cookies, client, history)}><a href="#" className="nav-link">Logout</a></NavItem> : <NavItem>{children}</NavItem>;
+const AuthLogin = ({ children, cookies, logout }) => {
+  return checkAuth(cookies, "") ? <NavItem onClick={() => logout()}><a href="#" className="nav-link">Logout</a></NavItem> : <NavItem>{children}</NavItem>;
 };
 
 AuthLogin.propTypes = {
   client: PropTypes.instanceOf(ApolloClient),
   children: PropTypes.object,
   cookies: PropTypes.instanceOf(Cookies),
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
-const AuthLoginWithApollo = withCookies(withRouter(withApollo(graphql(CURRENT_USER)(AuthLogin))));
+const AuthLoginWithApollo = withCookies(withRouter(withApollo(compose(
+  graphql(CURRENT_USER),
+  graphql(USER_LOGOUT, {
+    props: ({ ownProps: { client, history, navigation }, mutate }) => ({
+      logout: async () => {
+        try {
+          const { data: { logout } } = await mutate();
+
+          if (logout.errors) {
+            return { errors: logout.errors };
+          }
+
+          await client.resetStore();
+
+          window.localStorage.setItem('token', null);
+          window.localStorage.setItem('refreshToken', null);
+
+          if (history) {
+            return history.push('/');
+          }
+          else if (navigation) {
+            return navigation.goBack();
+          }
+        } catch (e) {
+          console.log(e.graphQLErrors);
+        }
+      }
+    })
+  }),
+)(AuthLogin))));
 
 const AuthProfile = withCookies(({ cookies }) => {
   return checkAuth(cookies, "") ? <NavItem><Link to="/profile" className="nav-link">{profileName(cookies)}</Link></NavItem> : null;

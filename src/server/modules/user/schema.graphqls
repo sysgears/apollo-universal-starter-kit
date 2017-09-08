@@ -34,6 +34,7 @@ extend type Query {
 extend type Mutation {
     register(input: RegisterUserInput!): RegisterPayload!
     login(input: LoginUserInput!): AuthPayload!
+    logout: Boolean!
     updatePassword(id: Int!, newPassword: String!): Boolean!
     refreshTokens(token: String!, refreshToken: String!): AuthPayload!
 }

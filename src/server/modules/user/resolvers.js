@@ -33,12 +33,8 @@ export default pubsub => ({
           e.throwIf();
         }
 
-
-
         const passwordPromise = bcrypt.hash(localAuth.password, 12);
-
         const createUserPromise = context.User.register(input);
-
         const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
 
         localAuth.password = password;
@@ -68,6 +64,16 @@ export default pubsub => ({
       } catch (e) {
         return { errors: e };
       }
+    },
+    async logout(obj, args, context) {
+      if (context.req) {
+        context.req.universalCookies.remove('x-token');
+        context.req.universalCookies.remove('r-token');
+        context.req.universalCookies.remove('x-refresh-token');
+        context.req.universalCookies.remove('r-refresh-token');
+      }
+
+      return true;
     },
     async updatePassword(obj, { id, newPassword }, context) {
       try {

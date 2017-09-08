@@ -19,7 +19,7 @@ export const createTokens = async (user, secret) => {
     {
       user: user.id,
     },
-    secret + user,
+    secret + user.password,
     {
       expiresIn: '7d',
     },

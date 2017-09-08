@@ -7,6 +7,7 @@ import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { graphql, print } from 'graphql';
+import { CookiesProvider } from 'react-cookie';
 
 import rootSchema from "../../server/api/root_schema.graphqls";
 import serverModules from "../../server/modules";
@@ -132,7 +133,9 @@ export default class Renderer {
   withApollo(component) {
     const { store, client } = this;
 
-    return <ApolloProvider store={store} client={client}>{component}</ApolloProvider>;
+    return <CookiesProvider>
+      <ApolloProvider store={store} client={client}>{component}</ApolloProvider>
+    </CookiesProvider>;
   }
 
   getSubscriptions(query, variables) {

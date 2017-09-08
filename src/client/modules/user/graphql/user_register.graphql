@@ -2,6 +2,12 @@
 
 mutation register($input: RegisterUserInput!) {
     register(input: $input) {
-        ... UserInfo
+        user {
+            ... UserInfo
+        }
+        errors {
+            field
+            message
+        }
     }
 }

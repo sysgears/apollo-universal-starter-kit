@@ -7,28 +7,39 @@ import Helmet from 'react-helmet';
 import PageLayout from '../../../app/page_layout';
 import RegisterForm from '../components/register_form';
 
-const onSubmit = (register) => (values) => {
-  register(values);
-};
+class RegisterShow extends React.PureComponent {
+  state = {
+    errors: [],
+  };
 
-const RegisterShow = ({ register }) => {
+  onSubmit = (register) => async (values) => {
+    const result = await register(values);
 
-  const renderMetaData = () => (
-    <Helmet
-      title="Register"
-      meta={[{
-        name: 'description',
-        content: 'Register page'
-      }]} />
-  );
+    if (result.errors) {
+      this.setState({ errors: result.errors });
+    }
+  };
 
-  return (
-    <PageLayout>
-      {renderMetaData()}
-      <h1>Register page!</h1>
-      <RegisterForm onSubmit={onSubmit(register)} />
-    </PageLayout>
-  );
+  render() {
+    const { register } = this.props;
+
+    const renderMetaData = () => (
+      <Helmet
+        title="Register"
+        meta={[{
+          name: 'description',
+          content: 'Register page'
+        }]} />
+    );
+
+    return (
+      <PageLayout>
+        {renderMetaData()}
+        <h1>Register page!</h1>
+        <RegisterForm onSubmit={this.onSubmit(register)} errors={this.state.errors} />
+      </PageLayout>
+    );
+  }
 };
 
 RegisterShow.propTypes = {

@@ -10,6 +10,11 @@ type FieldError {
     message: String!
 }
 
+type RegisterPayload {
+    user: User
+    errors: [FieldError!]
+}
+
 type AuthPayload {
     tokens: Tokens
     errors: [FieldError!]
@@ -27,7 +32,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    register(input: RegisterUserInput!): User!
+    register(input: RegisterUserInput!): RegisterPayload!
     login(input: LoginUserInput!): AuthPayload!
     updatePassword(id: Int!, newPassword: String!): Boolean!
     refreshTokens(token: String!, refreshToken: String!): AuthPayload!

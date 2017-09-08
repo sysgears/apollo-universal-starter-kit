@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { pick } from 'lodash';
 import { refreshTokens, tryLogin } from './auth';
 import { requiresAuth, requiresAdmin } from './permissions';
+import FieldError from '../../../common/error';
 
 export default pubsub => ({
   Query: {
@@ -22,22 +23,37 @@ export default pubsub => ({
   },
   Mutation: {
     async register(obj, { input }, context) {
-      const localAuth = pick(input, ['email', 'password']);
-      const passwordPromise = bcrypt.hash(localAuth.password, 12);
-      const createUserPromise = context.User.register(input);
+      try {
+        const e = new FieldError();
+        const localAuth = pick(input, ['email', 'password']);
+        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
 
-      const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
+        if(emailExists) {
+          e.setError('email', 'E-mail already exists.');
+          e.throwIf();
+        }
 
-      localAuth.password = password;
 
-      const [id] = await context.User.createLocalOuth({
-        ...localAuth,
-        userId: createdUserId,
-      });
 
-      const user = await context.User.getUser(createdUserId);
+        const passwordPromise = bcrypt.hash(localAuth.password, 12);
 
-      return user;
+        const createUserPromise = context.User.register(input);
+
+        const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
+
+        localAuth.password = password;
+
+        const [id] = await context.User.createLocalOuth({
+          ...localAuth,
+          userId: createdUserId,
+        });
+
+        const user = await context.User.getUser(createdUserId);
+
+        return { user };
+      } catch (e) {
+        return { errors: e };
+      }
     },
     async login(obj, { input: { email, password } }, context) {
       try {

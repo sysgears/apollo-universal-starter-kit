@@ -12,7 +12,12 @@
     "dot-notation": 0,
     "no-console": 0,
     "react/jsx-key": 0,
-    "semi": 2
+    "semi": 2,
+    "prettier/prettier": ["error", {
+      "printWidth": 80,
+      "singleQuote": true,
+      "parser": "babylon"
+    }]
   },
   "settings": {
     "import/resolver": {
@@ -35,7 +40,5 @@
     "__PERSIST_GQL__": true,
     "__BACKEND_URL__": true
   },
-  "plugins": [
-    "react"
-  ]
+  "plugins": ["react", "prettier"]
 }

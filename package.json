@@ -23,6 +23,9 @@
     "heroku-postbuild": "rm -rf build && npm run build && npm run seed",
     "cli": "node tools/cli"
   },
+  "lint-staged": {
+    "*.{js,jsx,json,scss,css}": ["prettier --write", "git add"]
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:sysgears/apollo-universal-starter-kit.git"
@@ -126,6 +129,7 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-prettier": "^2.2.0",
     "eslint-plugin-react": "^7.3.0",
     "exp": "44.0.0",
     "extract-text-webpack-plugin": "^3.0.0",
@@ -135,12 +139,14 @@
     "haul": "1.0.0-beta.5",
     "html-webpack-plugin": "^2.30.1",
     "http-proxy-middleware": "^0.17.4",
+    "husky": "^0.14.3",
     "ignore-loader": "^0.1.2",
     "image-size": "^0.6.1",
     "ip": "^1.1.5",
     "isomorphic-style-loader": "^4.0.0",
     "jsdom": "^11.2.0",
     "json-loader": "^0.5.7",
+    "lint-staged": "^4.1.3",
     "mime": "^1.4.0",
     "mkdirp": "^0.5.1",
     "mocha": "^3.5.0",
@@ -150,6 +156,7 @@
     "openurl": "^1.1.1",
     "persistgraphql-webpack-plugin": "^0.4.2",
     "postcss-loader": "^2.0.6",
+    "prettier": "^1.6.1",
     "qrcode-terminal": "^0.11.0",
     "raw-loader": "^0.5.1",
     "react-addons-test-utils": "^15.6.0",

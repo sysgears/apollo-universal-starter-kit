@@ -14,7 +14,7 @@ export default class {
     this.reducer = combine(arguments, arg => arg.reducer);
     this.middleware = combine(arguments, arg => arg.middleware);
     this.afterware = combine(arguments, arg => arg.afterware);
-    //this.connectionParams = combine(arguments, arg => arg.connectionParams);
+    this.connectionParam = combine(arguments, arg => arg.connectionParam);
   }
 
   get routes() {
@@ -46,8 +46,8 @@ export default class {
   get afterwares() {
     return this.afterware;
   }
-  /*
-    get connectionParams() {
-      return this.middleware;
-    }*/
+
+  get connectionParams() {
+    return this.connectionParam;
+  }
 }

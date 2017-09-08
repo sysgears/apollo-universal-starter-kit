@@ -29,6 +29,13 @@ function tokenAfterware(res) {
   }
 }
 
+function connectionParam() {
+  return {
+    token: window.localStorage.getItem('token'),
+    refreshToken: window.localStorage.getItem('refreshToken')
+  };
+}
+
 export default new Feature({
   route: [
     <AuthRoute exact path="/profile" role="user" component={Profile} />,
@@ -49,5 +56,6 @@ export default new Feature({
   ],
   reducer: { user: reducers },
   middleware: tokenMiddleware,
-  afterware: tokenAfterware
+  afterware: tokenAfterware,
+  connectionParam: connectionParam
 });

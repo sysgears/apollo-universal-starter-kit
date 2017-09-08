@@ -52,13 +52,15 @@ if (__CLIENT__) {
     }
   }]);
 
+  let connectionParams = {};
+  for (const connectionParam of modules.connectionParams) {
+    Object.assign(connectionParams, connectionParam());
+  }
+
   const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws'), {
       reconnect: true,
-      connectionParams: {
-        token: window.localStorage.getItem('token'),
-        refreshToken: window.localStorage.getItem('refreshToken')
-      }
+      connectionParams: connectionParams
   });
   networkInterface = addGraphQLSubscriptions(
     networkInterface,

@@ -14,12 +14,10 @@ const checkAuth = (cookies, role) => {
   let token = null;
   let refreshToken = null;
 
-  if (cookies && cookies.get('x-token')) {
-    token = cookies.get('x-token');
-    refreshToken = cookies.get('x-refresh-token');
-  }
-
-  if (__CLIENT__ && window.localStorage.getItem('token')) {
+  if (cookies && cookies.get('r-token')) {
+    token = cookies.get('r-token');
+    refreshToken = cookies.get('r-refresh-token');
+  } else if (__CLIENT__ && window.localStorage.getItem('token')) {
     token = window.localStorage.getItem('token');
     refreshToken = window.localStorage.getItem('refreshToken');
   }
@@ -97,6 +95,7 @@ AuthLogin.propTypes = {
 const AuthLoginWithApollo = withCookies(withRouter(withApollo(compose(
   graphql(CURRENT_USER),
   graphql(USER_LOGOUT, {
+    // eslint-disable-next-line
     props: ({ ownProps: { client, history, navigation }, mutate }) => ({
       logout: async () => {
         try {
@@ -106,7 +105,8 @@ const AuthLoginWithApollo = withCookies(withRouter(withApollo(compose(
             return { errors: logout.errors };
           }
 
-          await client.resetStore();
+          // comment out until https://github.com/apollographql/apollo-client/issues/1186 is fixed
+          //await client.resetStore();
 
           window.localStorage.setItem('token', null);
           window.localStorage.setItem('refreshToken', null);

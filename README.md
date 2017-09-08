@@ -155,7 +155,7 @@ yarn cli deletemodule <module-name>
 ```
 Again you can specify `client` or `server` as a second parameter, if you only wish to delete one or the other. 
 
-This way you can easily delete existing examples, like `counter` add `post`. Do keep in mind that you need at least one
+This way you can easily delete existing examples, like `counter`, `post` or `user`. Do keep in mind that you need at least one
 module linked on the server side. So deleting both, before creating any new ones first, will result in
 `TypeError: Cannot read property 'schema' of undefined` on the server side.
 
@@ -247,6 +247,8 @@ for better security and less bandwidth.
 - Google Analytics integration using [React GA]
 
 - Full CRUD funcionality with Subscriptions in post example, with [ReduxForm]
+
+- Full LOGIN funcionality in user example with [JWT] tokens stored in `localStorage` and `cookies`
 
 ## Project Structure
 
@@ -394,3 +396,4 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Genymotion]: https://www.genymotion.com
 [Xcode]: https://developer.apple.com/xcode/
 [Android Studio]: https://developer.android.com/studio/index.html
+[JWT]: https://jwt.io

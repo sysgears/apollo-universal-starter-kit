@@ -40,5 +40,5 @@
     "__PERSIST_GQL__": true,
     "__BACKEND_URL__": true
   },
-  "plugins": ["react", "prettier"]
+  "plugins": ["react", "json", "prettier"]
 }

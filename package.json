@@ -15,7 +15,7 @@
     "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "npm run tests && npm run lint",
-    "lint": "eslint --fix --ext js --ext jsx --ext json --ext scss --ext css src tests tools",
+    "lint": "eslint --fix --ext js --ext jsx --ext json src tests tools",
     "seed": "npm run migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
@@ -24,7 +24,7 @@
     "cli": "node tools/cli"
   },
   "lint-staged": {
-    "*.{js,jsx,json,scss,css}": ["prettier --write", "git add"]
+    "*.{js,jsx,json}": ["prettier --write", "git add"]
   },
   "repository": {
     "type": "git",
@@ -127,6 +127,7 @@
     "eslint-config-airbnb": "^15.1.0",
     "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-prettier": "^2.2.0",

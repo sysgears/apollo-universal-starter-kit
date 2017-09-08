@@ -32,7 +32,9 @@ const ProfileShow = ({ loading, currentUser }) => {
         <h2>Profile</h2>
         <p>username: {currentUser.username}</p>
         <p>email: {currentUser.email}</p>
-        <p>is admin: {currentUser.isAdmin.toString()}</p>
+        { currentUser.isAdmin &&
+          <p>is admin: {currentUser.isAdmin.toString()}</p>
+        }
       </PageLayout>
     );
   }

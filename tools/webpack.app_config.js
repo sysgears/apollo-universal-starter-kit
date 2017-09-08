@@ -39,6 +39,7 @@ const ios = {
 };
 
 const dependencyPlatforms = {
+  "bcryptjs": "server",
   "body-parser": "server",
   "bootstrap": "web",
   "dataloader": "server",
@@ -48,11 +49,15 @@ const dependencyPlatforms = {
   "graphql-subscriptions": "server",
   "graphql-tools": "server",
   "history": "web",
+  "humps": "server",
   "immutability-helper": ["ios", "android", "web"],
   "isomorphic-fetch": "server",
+  "jsonwebtoken": "server",
+  "jwt-decode": "web",
   "knex": "server",
   "persistgraphql": ["server", "web"],
   "performance-now": "server",
+  "react-cookie": ["server", "web"],
   "react-dom": "web",
   "react-ga": "web",
   "react-helmet": "web",
@@ -73,6 +78,7 @@ const dependencyPlatforms = {
   "sqlite3": "server",
   "styled-components": ["server", "web"],
   "subscriptions-transport-ws": ["ios", "android", "web"],
+  "universal-cookie-express": "server",
   "@expo/vector-icons": ["ios", "android"]
 };
 

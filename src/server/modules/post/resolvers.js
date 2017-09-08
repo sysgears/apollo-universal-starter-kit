@@ -21,9 +21,9 @@ export default pubsub => ({
         });
       });
 
-      let endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
+      const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
 
-      let values = await Promise.all([context.Post.getTotal(), context.Post.getNextPageFlag(endCursor)]);
+      const values = await Promise.all([context.Post.getTotal(), context.Post.getNextPageFlag(endCursor)]);
 
       return {
         totalCount: values[0].count,
@@ -45,8 +45,8 @@ export default pubsub => ({
   },
   Mutation: {
     async addPost(obj, { input }, context) {
-      let [ id ] = await context.Post.addPost(input);
-      let post = await context.Post.getPost(id);
+      const [ id ] = await context.Post.addPost(input);
+      const post = await context.Post.getPost(id);
       // publish for post list
       pubsub.publish(POSTS_UPDATED_TOPIC, {
         postsUpdated: {
@@ -58,8 +58,8 @@ export default pubsub => ({
       return post;
     },
     async deletePost(obj, { id }, context) {
-      let post = await context.Post.getPost(id);
-      let isDeleted = await context.Post.deletePost(id);
+      const post = await context.Post.getPost(id);
+      const isDeleted = await context.Post.deletePost(id);
       if (isDeleted) {
         // publish for post list
         pubsub.publish(POSTS_UPDATED_TOPIC, {
@@ -76,7 +76,7 @@ export default pubsub => ({
     },
     async editPost(obj, { input }, context) {
       await context.Post.editPost(input);
-      let post = await context.Post.getPost(input.id);
+      const post = await context.Post.getPost(input.id);
       // publish for post list
       pubsub.publish(POSTS_UPDATED_TOPIC, {
         postsUpdated: {
@@ -90,8 +90,8 @@ export default pubsub => ({
       return post;
     },
     async addComment(obj, { input }, context) {
-      let [ id ] = await context.Post.addComment(input);
-      let comment = await context.Post.getComment(id);
+      const [ id ] = await context.Post.addComment(input);
+      const comment = await context.Post.getComment(id);
       // publish for edit post page
       pubsub.publish(COMMENT_UPDATED_TOPIC, {
         commentUpdated: {
@@ -118,7 +118,7 @@ export default pubsub => ({
     },
     async editComment(obj, { input }, context) {
       await context.Post.editComment(input);
-      let comment = await context.Post.getComment(input.id);
+      const comment = await context.Post.getComment(input.id);
       // publish for edit post page
       pubsub.publish(COMMENT_UPDATED_TOPIC, {
         commentUpdated: {

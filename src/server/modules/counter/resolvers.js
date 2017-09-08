@@ -9,7 +9,7 @@ export default pubsub => ({
   Mutation: {
     async addCount(obj, { amount }, context) {
       await context.Count.addCount(amount);
-      let count = await context.Count.getCount();
+      const count = await context.Count.getCount();
 
       pubsub.publish(COUNT_UPDATED_TOPIC, { countUpdated: { amount: count.amount } });
 

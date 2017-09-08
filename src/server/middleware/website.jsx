@@ -6,10 +6,11 @@ import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
 import { addApolloLogging } from 'apollo-logger';
 import { addPersistedQueries } from 'persistgraphql';
- import fs from 'fs';
+import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
 import url from 'url';
+import { CookiesProvider } from 'react-cookie';
 
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
@@ -28,7 +29,7 @@ async function renderServerSide(req, res, queryMap) {
   let networkInterface = createBatchingNetworkInterface({
     uri: apiUrl,
     opts: {
-      credentials: "same-origin",
+      credentials: "include",
       headers: req.headers,
     },
     batchInterval: 20,
@@ -49,14 +50,16 @@ async function renderServerSide(req, res, queryMap) {
 
   const context = {};
   const component = (
-    <ApolloProvider store={store} client={client}>
-      <StaticRouter
-        location={req.url}
-        context={context}
-      >
-        {Routes}
-      </StaticRouter>
-    </ApolloProvider>
+    <CookiesProvider cookies={req.universalCookies}>
+      <ApolloProvider store={store} client={client}>
+          <StaticRouter
+            location={req.url}
+            context={context}
+          >
+            {Routes}
+          </StaticRouter>
+      </ApolloProvider>
+    </CookiesProvider>
   );
 
   await getDataFromTree(component);

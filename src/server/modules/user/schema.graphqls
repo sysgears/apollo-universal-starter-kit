@@ -1,0 +1,54 @@
+type User {
+    id: Int!
+    username: String!
+    isAdmin: Boolean
+    email: String!
+}
+
+type FieldError {
+    field: String!
+    message: String!
+}
+
+type RegisterPayload {
+    user: User
+    errors: [FieldError!]
+}
+
+type AuthPayload {
+    tokens: Tokens
+    errors: [FieldError!]
+}
+
+type Tokens {
+    token: String!
+    refreshToken: String!
+}
+
+extend type Query {
+    users: [User]
+    user(id: Int!): User
+    currentUser: User
+}
+
+extend type Mutation {
+    register(input: RegisterUserInput!): RegisterPayload!
+    login(input: LoginUserInput!): AuthPayload!
+    logout: Boolean!
+    updatePassword(id: Int!, newPassword: String!): Boolean!
+    refreshTokens(token: String!, refreshToken: String!): AuthPayload!
+}
+
+input RegisterUserInput {
+    username: String!
+    email: String!
+    password: String!
+}
+
+input LoginUserInput {
+    email: String!
+    password: String!
+}
+
+extend type Subscription {
+}

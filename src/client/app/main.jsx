@@ -9,6 +9,7 @@ import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-trans
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
+import { CookiesProvider } from 'react-cookie';
 
 import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
@@ -19,15 +20,45 @@ import '../styles/styles.scss';
 
 let networkInterface = createBatchingNetworkInterface({
   opts: {
-    credentials: "same-origin",
+    credentials: "include",
   },
   batchInterval: 20,
   uri: __BACKEND_URL__ || "/graphql",
 });
 if (__CLIENT__) {
+  networkInterface.use([{
+    applyBatchMiddleware(req, next) {
+      if (!req.options.headers) {
+        req.options.headers = {};
+      }
+
+      req.options.headers['x-token'] = window.localStorage.getItem('token');
+      req.options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
+      next();
+    }
+  }]);
+
+  networkInterface.useAfter([{
+    applyBatchAfterware(res, next) {
+      const token = res.options.headers['x-token'];
+      const refreshToken = res.options.headers['x-refresh-token'];
+      if (token) {
+        window.localStorage.setItem('token', token);
+      }
+      if (refreshToken) {
+        window.localStorage.setItem('refreshToken', refreshToken);
+      }
+      next();
+    }
+  }]);
+
   const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws'), {
-      reconnect: true
+      reconnect: true,
+      connectionParams: {
+        token: window.localStorage.getItem('token'),
+        refreshToken: window.localStorage.getItem('refreshToken')
+      }
   });
   networkInterface = addGraphQLSubscriptions(
     networkInterface,
@@ -74,11 +105,13 @@ if (module.hot) {
 }
 
 const Main = () => (
-  <ApolloProvider store={store} client={client}>
-    <ConnectedRouter history={history}>
-      {Routes}
-    </ConnectedRouter>
-  </ApolloProvider>
+  <CookiesProvider>
+    <ApolloProvider store={store} client={client}>
+        <ConnectedRouter history={history}>
+          {Routes}
+        </ConnectedRouter>
+    </ApolloProvider>
+  </CookiesProvider>
 );
 
 export default Main;

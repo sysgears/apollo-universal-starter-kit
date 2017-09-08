@@ -5,8 +5,10 @@ import path from 'path';
 import http from 'http';
 import { invert, isArray } from 'lodash';
 import url from 'url';
+import cookiesMiddleware from 'universal-cookie-express';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
+import modules from './modules';
 
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
@@ -20,14 +22,20 @@ let server;
 
 const app = express();
 
-const { port, pathname } = url.parse(__BACKEND_URL__);
+app.use(cookiesMiddleware());
+
+const { protocol, port, pathname, hostname } = url.parse(__BACKEND_URL__);
 const serverPort = process.env.PORT || port;
 
 // Don't rate limit heroku
 app.enable('trust proxy');
 
 if (__DEV__) {
-  app.use(cors());
+  const corsOptions = {
+    origin: `${protocol}//${hostname}:3000`,
+    credentials: true
+  };
+  app.use(cors(corsOptions));
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -64,6 +72,9 @@ if (__PERSIST_GQL__) {
   );
 }
 
+for (const middleware of modules.middlewares) {
+  app.use(middleware);
+}
 app.use(pathname, (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));

@@ -13,7 +13,7 @@ import [Module]Show from '../components/[module]_show';
 class [Module] extends React.Component {
 
   render() {
-    return <[Module]Show/>;
+    return <[Module]Show {...this.props} />;
   }
 }
 

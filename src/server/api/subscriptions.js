@@ -5,14 +5,14 @@ import schema from './schema';
 import log from '../../common/log';
 import modules from '../../server/modules';
 
-var subscriptionServer;
+let subscriptionServer;
 
-const addSubscriptions = httpServer => {
+const addSubscriptions = (httpServer) => {
   subscriptionServer = SubscriptionServer.create({
     schema,
     execute,
     subscribe,
-    onConnect: () => modules.createContext()
+    onConnect: connectionParams => modules.createContext(null, connectionParams)
   },
   {
     server: httpServer,
@@ -20,7 +20,7 @@ const addSubscriptions = httpServer => {
   });
 };
 
-const addGraphQLSubscriptions = httpServer => {
+const addGraphQLSubscriptions = (httpServer) => {
   if (module.hot && module.hot.data) {
     const prevServer = module.hot.data.subscriptionServer;
     if (prevServer && prevServer.wsServer) {

@@ -6,7 +6,7 @@ import { step } from 'mocha-steps';
 // Helpers
 import { getServer, getApollo } from '../../test-helpers/integration_setup';
 
-describe('[Module] API works', () => {
+describe('$Module$ API works', () => {
   let server, apollo;
 
   before(() => {

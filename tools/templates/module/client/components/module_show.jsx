@@ -8,13 +8,13 @@ import PropTypes from 'prop-types';
 // React native UI
 import { StyleSheet, Text, View } from 'react-native';
 
-const [Module]Show = () => {
+const $Module$Show = () => {
 
   return (
     <View style={styles.container}>
       <View style={styles.element}>
         <Text style={styles.box}>
-          Hello [Module]!
+          Hello $Module$!
         </Text>
       </View>
     </View>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   }
 });
 
-[Module]Show.propTypes = {
+$Module$Show.propTypes = {
 };
 
-export default [Module]Show;
+export default $Module$Show;

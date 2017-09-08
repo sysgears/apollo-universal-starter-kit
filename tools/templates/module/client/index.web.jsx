@@ -6,16 +6,16 @@ import { Route, Link } from 'react-router-dom';
 import { NavItem } from 'reactstrap';
 
 // Component and helpers
-import [Module] from './containers/[module]';
+import $Module$ from './containers/$Module$';
 import reducers from './reducers';
 
 import Feature from '../connector';
 
 export default new Feature({
-  route: <Route exact path="/[module]" component={[Module]}/>,
+  route: <Route exact path="/$Module$" component={$Module$}/>,
   navItem:
     <NavItem>
-      <Link to="/[module]" className="nav-link">[Module]</Link>
+      <Link to="/$Module$" className="nav-link">$Module$</Link>
     </NavItem>,
-  reducer: { [module]: reducers }
+  reducer: { $Module$: reducers }
 });

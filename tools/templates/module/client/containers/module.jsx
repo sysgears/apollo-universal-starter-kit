@@ -8,21 +8,21 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import [Module]Show from '../components/[module]_show';
+import $Module$Show from '../components/$module$_show';
 
-class [Module] extends React.Component {
+class $Module$ extends React.Component {
 
   render() {
-    return <[Module]Show {...this.props} />;
+    return <$Module$Show {...this.props} />;
   }
 }
 
-[Module].propTypes = {
+$Module$.propTypes = {
 };
 
-const [Module]WithApollo = compose()([Module]);
+const $Module$WithApollo = compose()($Module$);
 
 export default connect(
   (state) => ({}),
   (dispatch) => ({}),
-)([Module]WithApollo);
+)($Module$WithApollo);

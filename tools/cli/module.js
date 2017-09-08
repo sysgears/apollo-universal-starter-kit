@@ -39,8 +39,8 @@ function copyFiles(logger, templatePath, module, location) {
     // replace module names
     shell.ls('-Rl', '.').forEach(entry => {
       if (entry.isFile()) {
-        shell.sed('-i', /\[module\]/g, module, entry.name);
-        shell.sed('-i', /\[Module\]/g, module.toCamelCase().capitalize(), entry.name);
+        shell.sed('-i', /\$module\$/g, module, entry.name);
+        shell.sed('-i', /\$Module\$/g, module.toCamelCase().capitalize(), entry.name);
       }
     });
 
@@ -60,7 +60,7 @@ function copyFiles(logger, templatePath, module, location) {
     // add module to Feature function
     shell.sed('-i', re, `Feature(${module}, ${match[1]})`, 'index.js');
 
-    logger.info(`✔Module for ${location} successfully created!`);
+    logger.info(`✔ Module for ${location} successfully created!`);
   }
 }
 
@@ -96,10 +96,10 @@ function deleteFiles(logger, templatePath, module, location) {
     shell.sed('-i', re, `Feature(${modules.toString().trim()})`, 'index.js');
 
     // continue only if directory does not jet exist
-    logger.info(`✔Module for ${location} successfully deleted!`);
+    logger.info(`✔ Module for ${location} successfully deleted!`);
   }
   else {
-    logger.info(`✔Module ${location} location for ${modulePath} wasn't found!`);
+    logger.info(`✔ Module ${location} location for ${modulePath} wasn't found!`);
   }
 }
 

@@ -9,12 +9,15 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import modules from '../client/modules';
 import MainScreenNavigator from '../client/app/routes';
 
-const networkInterface = new SubscriptionClient(__BACKEND_URL__.replace(/^http/, 'ws'), {
-  reconnect: true
-});
+const networkInterface = new SubscriptionClient(
+  __BACKEND_URL__.replace(/^http/, 'ws'),
+  {
+    reconnect: true
+  }
+);
 
 const client = new ApolloClient({
-  networkInterface,
+  networkInterface
 });
 
 const store = createStore(
@@ -25,9 +28,7 @@ const store = createStore(
     ...modules.reducers
   }),
   {}, // initial state
-  composeWithDevTools(
-    applyMiddleware(client.middleware()),
-  ),
+  composeWithDevTools(applyMiddleware(client.middleware()))
 );
 
 export default class Main extends Component {

@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 
-const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
+const RenderField = ({
+  input,
+  label,
+  meta: { touched, error },
+  ...inputProps
+}) => {
   const { container, inputText, text, errorField } = styles;
 
   return (
@@ -27,7 +32,7 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     lineHeight: 20,
     flex: 3,
-    marginBottom: 5,
+    marginBottom: 5
   },
   text: {
     alignSelf: 'center',
@@ -38,21 +43,21 @@ const styles = StyleSheet.create({
   },
   errorField: {
     borderColor: 'red',
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: StyleSheet.hairlineWidth
   },
   container: {
     height: 40,
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }
 });
 
 RenderField.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
   type: PropTypes.string,
-  meta: PropTypes.object,
+  meta: PropTypes.object
 };
 
 export default RenderField;

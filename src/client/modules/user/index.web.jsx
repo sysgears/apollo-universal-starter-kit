@@ -15,7 +15,9 @@ import Feature from '../connector';
 
 function tokenMiddleware(req) {
   req.options.headers['x-token'] = window.localStorage.getItem('token');
-  req.options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
+  req.options.headers['x-refresh-token'] = window.localStorage.getItem(
+    'refreshToken'
+  );
 }
 
 function tokenAfterware(res) {
@@ -45,13 +47,17 @@ export default new Feature({
   ],
   navItem: [
     <AuthNav role="admin">
-      <Link to="/users" className="nav-link">Users</Link>
+      <Link to="/users" className="nav-link">
+        Users
+      </Link>
     </AuthNav>
   ],
   navItemRight: [
     <AuthProfile />,
     <AuthLogin>
-      <span className="nav-link"><Link to="/login" >Login</Link> / <Link to="/register" >Register</Link></span>
+      <span className="nav-link">
+        <Link to="/login">Login</Link> / <Link to="/register">Register</Link>
+      </span>
     </AuthLogin>
   ],
   reducer: { user: reducers },

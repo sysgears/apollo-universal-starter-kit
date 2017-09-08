@@ -19,7 +19,7 @@ class User extends React.Component {
 
 User.propTypes = {
   login: PropTypes.func.isRequired,
-  data: PropTypes.object,
+  data: PropTypes.object
 };
 
 const UserWithApollo = compose(
@@ -28,7 +28,7 @@ const UserWithApollo = compose(
       login: async ({ email, password }) => {
         try {
           const { data: { login } } = await mutate({
-            variables: { input: { email, password } },
+            variables: { input: { email, password } }
           });
 
           if (login.errors) {
@@ -50,7 +50,7 @@ const UserWithApollo = compose(
         }
       }
     })
-  }),
+  })
 )(User);
 
 export default UserWithApollo;

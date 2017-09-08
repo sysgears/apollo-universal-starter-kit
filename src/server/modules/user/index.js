@@ -19,7 +19,11 @@ export default new Feature({
   createContextFunc: async (req, connectionParams) => {
     let tokenUser = null;
 
-    if (connectionParams && connectionParams.token && connectionParams.token !== 'null') {
+    if (
+      connectionParams &&
+      connectionParams.token &&
+      connectionParams.token !== 'null'
+    ) {
       try {
         const { user } = jwt.verify(connectionParams.token, SECRET);
         tokenUser = user;
@@ -28,7 +32,7 @@ export default new Feature({
           connectionParams.token,
           connectionParams.refreshToken,
           User,
-          SECRET,
+          SECRET
         );
         tokenUser = newTokens.user;
       }

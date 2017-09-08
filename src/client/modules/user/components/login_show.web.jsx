@@ -11,10 +11,10 @@ import LoginForm from '../components/login_form';
 
 class UserShow extends React.PureComponent {
   state = {
-    errors: [],
+    errors: []
   };
-  
-  onSubmit = (login) => async (values) => {
+
+  onSubmit = login => async values => {
     const result = await login(values);
 
     if (result.errors) {
@@ -23,16 +23,18 @@ class UserShow extends React.PureComponent {
   };
 
   render() {
-
     const { login } = this.props;
 
     const renderMetaData = () => (
       <Helmet
         title="Login"
-        meta={[{
-          name: 'description',
-          content: 'Login page'
-        }]} />
+        meta={[
+          {
+            name: 'description',
+            content: 'Login page'
+          }
+        ]}
+      />
     );
 
     return (
@@ -55,7 +57,7 @@ class UserShow extends React.PureComponent {
 
 UserShow.propTypes = {
   login: PropTypes.func.isRequired,
-  error: PropTypes.string,
+  error: PropTypes.string
 };
 
 export default UserShow;

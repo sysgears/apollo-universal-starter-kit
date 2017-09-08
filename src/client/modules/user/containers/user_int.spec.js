@@ -18,5 +18,3 @@ describe('User UI works', () => {
     expect(content).to.not.be.empty;
   });
 });
-
-

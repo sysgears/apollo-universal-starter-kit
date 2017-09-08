@@ -11,7 +11,10 @@ import POST_DELETE from '../graphql/post_delete.graphql';
 
 export function AddPost(prev, node) {
   // ignore if duplicate
-  if (node.id !== null && prev.postsQuery.edges.some(post => node.id === post.cursor)) {
+  if (
+    node.id !== null &&
+    prev.postsQuery.edges.some(post => node.id === post.cursor)
+  ) {
     return prev;
   }
 
@@ -27,7 +30,7 @@ export function AddPost(prev, node) {
         $set: prev.postsQuery.totalCount + 1
       },
       edges: {
-        $unshift: [edge],
+        $unshift: [edge]
       }
     }
   });
@@ -47,7 +50,7 @@ function DeletePost(prev, id) {
         $set: prev.postsQuery.totalCount - 1
       },
       edges: {
-        $splice: [[index, 1]],
+        $splice: [[index, 1]]
       }
     }
   });
@@ -62,7 +65,9 @@ class Post extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
-      const endCursor = this.props.postsQuery ? this.props.postsQuery.pageInfo.endCursor : 0;
+      const endCursor = this.props.postsQuery
+        ? this.props.postsQuery.pageInfo.endCursor
+        : 0;
       const nextEndCursor = nextProps.postsQuery.pageInfo.endCursor;
 
       // Check if props have changed and, if necessary, stop the subscription
@@ -84,7 +89,10 @@ class Post extends React.Component {
     this.subscription = subscribeToMore({
       document: POSTS_SUBSCRIPTION,
       variables: { endCursor },
-      updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, node } } } }) => {
+      updateQuery: (
+        prev,
+        { subscriptionData: { data: { postsUpdated: { mutation, node } } } }
+      ) => {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
@@ -115,14 +123,14 @@ Post.propTypes = {
   postsQuery: PropTypes.object,
   deletePost: PropTypes.func.isRequired,
   loadMoreRows: PropTypes.func.isRequired,
-  subscribeToMore: PropTypes.func.isRequired,
+  subscribeToMore: PropTypes.func.isRequired
 };
 
 export default compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
-        variables: { limit: 10, after: 0 },
+        variables: { limit: 10, after: 0 }
       };
     },
     props: ({ data }) => {
@@ -130,7 +138,7 @@ export default compose(
       const loadMoreRows = () => {
         return fetchMore({
           variables: {
-            after: postsQuery.pageInfo.endCursor,
+            after: postsQuery.pageInfo.endCursor
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             const totalCount = fetchMoreResult.postsQuery.totalCount;
@@ -144,7 +152,7 @@ export default compose(
                 totalCount,
                 edges: [...previousResult.postsQuery.edges, ...newEdges],
                 pageInfo,
-                __typename: "PostsQuery"
+                __typename: 'PostsQuery'
               }
             };
           }
@@ -157,22 +165,26 @@ export default compose(
   graphql(POST_DELETE, {
     props: ({ mutate }) => ({
       deletePost(id) {
-        return () => mutate({
-          variables: { id },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            deletePost: {
-              id: id,
-              __typename: 'Post',
+        return () =>
+          mutate({
+            variables: { id },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              deletePost: {
+                id: id,
+                __typename: 'Post'
+              }
             },
-          },
-          updateQueries: {
-            getPosts: (prev, { mutationResult: { data: { deletePost } } }) => {
-              return DeletePost(prev, deletePost.id);
+            updateQueries: {
+              getPosts: (
+                prev,
+                { mutationResult: { data: { deletePost } } }
+              ) => {
+                return DeletePost(prev, deletePost.id);
+              }
             }
-          }
-        });
-      },
+          });
+      }
     })
   })
 )(Post);

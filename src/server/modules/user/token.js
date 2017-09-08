@@ -2,14 +2,17 @@ import jwt from 'jsonwebtoken';
 
 import { refreshTokens } from './auth';
 
-export default (SECRET, User) => (async (req, res, next) => {
+export default (SECRET, User) => async (req, res, next) => {
   let token = req.universalCookies.get('x-token') || req.headers['x-token'];
 
   // if header available
   if (req.headers['x-token']) {
     // check if header token matches cookie token
-    if ((req.headers['x-token'] !== req.universalCookies.get('x-token')) || (req.headers['x-refresh-token'] !== req.universalCookies.get('x-refresh-token')))
-    {
+    if (
+      req.headers['x-token'] !== req.universalCookies.get('x-token') ||
+      req.headers['x-refresh-token'] !==
+        req.universalCookies.get('x-refresh-token')
+    ) {
       // if x-token is not empty and not the same as cookie x-token revoke authentication
       token = undefined;
     }
@@ -18,8 +21,12 @@ export default (SECRET, User) => (async (req, res, next) => {
   // if cookie available
   if (req.universalCookies.get('x--token')) {
     // check if header token matches cookie token
-    if ((req.universalCookies.get('x-token') !== req.universalCookies.get('r-token')) || (req.universalCookies.get('x-refresh-token') !== req.universalCookies.get('r-refresh-token')))
-    {
+    if (
+      req.universalCookies.get('x-token') !==
+        req.universalCookies.get('r-token') ||
+      req.universalCookies.get('x-refresh-token') !==
+        req.universalCookies.get('r-refresh-token')
+    ) {
       // if x-token is not empty and not the same as cookie x-token revoke authentication
       token = undefined;
     }
@@ -30,13 +37,10 @@ export default (SECRET, User) => (async (req, res, next) => {
       const { user } = jwt.verify(token, SECRET);
       req.user = user;
     } catch (err) {
-      const refreshToken = req.universalCookies.get('x-refresh-token') || req.headers['x-refresh-token'];
-      const newTokens = await refreshTokens(
-        token,
-        refreshToken,
-        User,
-        SECRET,
-      );
+      const refreshToken =
+        req.universalCookies.get('x-refresh-token') ||
+        req.headers['x-refresh-token'];
+      const newTokens = await refreshTokens(token, refreshToken, User, SECRET);
 
       if (newTokens.token && newTokens.refreshToken) {
         res.set('Access-Control-Allow-Origin', 'true');
@@ -44,15 +48,27 @@ export default (SECRET, User) => (async (req, res, next) => {
         res.set('x-token', newTokens.token);
         res.set('x-refresh-token', newTokens.refreshToken);
 
-        req.universalCookies.set('x-token', newTokens.token, {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
-        req.universalCookies.set('x-refresh-token', newTokens.refreshToken, {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
+        req.universalCookies.set('x-token', newTokens.token, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: true
+        });
+        req.universalCookies.set('x-refresh-token', newTokens.refreshToken, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: true
+        });
 
-        req.universalCookies.set('r-token', newTokens.token, {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
-        req.universalCookies.set('r-refresh-token', newTokens.refreshToken, {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
+        req.universalCookies.set('r-token', newTokens.token, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: false
+        });
+        req.universalCookies.set('r-refresh-token', newTokens.refreshToken, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: false
+        });
       }
       req.user = newTokens.user;
     }
   }
 
   next();
-});
+};

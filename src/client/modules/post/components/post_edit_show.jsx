@@ -5,16 +5,22 @@ import { StyleSheet, Text, View } from 'react-native';
 import PostForm from './post_form';
 import PostComments from '../containers/post_comments';
 
-const onSubmit = (post, addPost, editPost) => (values) => {
+const onSubmit = (post, addPost, editPost) => values => {
   if (post) {
     editPost(post.id, values.title, values.content);
-  }
-  else {
+  } else {
     addPost(values.title, values.content);
   }
 };
 
-const PostEditShow = ({ loading, post, navigation, subscribeToMore, addPost, editPost }) => {
+const PostEditShow = ({
+  loading,
+  post,
+  navigation,
+  subscribeToMore,
+  addPost,
+  editPost
+}) => {
   let postObj = post;
 
   // if new post was just added read it from router
@@ -25,18 +31,23 @@ const PostEditShow = ({ loading, post, navigation, subscribeToMore, addPost, edi
   if (loading && !postObj) {
     return (
       <View style={styles.container}>
-        <Text>
-          Loading...
-        </Text>
+        <Text>Loading...</Text>
       </View>
     );
   } else {
     return (
       <View style={styles.container}>
-        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} initialValues={postObj ? postObj : {} } />
-        {postObj &&
-        <PostComments postId={navigation.state.params.id} comments={postObj.comments} subscribeToMore={subscribeToMore} />
-        }
+        <PostForm
+          onSubmit={onSubmit(postObj, addPost, editPost)}
+          initialValues={postObj ? postObj : {}}
+        />
+        {postObj && (
+          <PostComments
+            postId={navigation.state.params.id}
+            comments={postObj.comments}
+            subscribeToMore={subscribeToMore}
+          />
+        )}
       </View>
     );
   }
@@ -48,13 +59,13 @@ PostEditShow.propTypes = {
   addPost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
-  subscribeToMore: PropTypes.func.isRequired,
+  subscribeToMore: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({
   container: {
     margin: 5,
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   element: {
     paddingTop: 30
@@ -63,7 +74,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: 15,
     marginRight: 15
-  },
+  }
 });
 
 export default PostEditShow;

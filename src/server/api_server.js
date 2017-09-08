@@ -41,7 +41,12 @@ if (__DEV__) {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/', express.static(path.join(spinConfig.frontendBuildDir, 'web'), { maxAge: '180 days' }));
+app.use(
+  '/',
+  express.static(path.join(spinConfig.frontendBuildDir, 'web'), {
+    maxAge: '180 days'
+  })
+);
 
 if (__DEV__) {
   app.use('/', express.static(spinConfig.dllBuildDir, { maxAge: '180 days' }));
@@ -50,26 +55,25 @@ if (__DEV__) {
 if (__PERSIST_GQL__) {
   const invertedMap = invert(queryMap);
 
-  app.use(
-    '/graphql',
-    (req, resp, next) => {
-      if (isArray(req.body)) {
-        req.body = req.body.map(body => {
-          return {
-            query: invertedMap[body.id],
-            ...body
-          };
-        });
-        next();
+  app.use('/graphql', (req, resp, next) => {
+    if (isArray(req.body)) {
+      req.body = req.body.map(body => {
+        return {
+          query: invertedMap[body.id],
+          ...body
+        };
+      });
+      next();
+    } else {
+      if (!__DEV__ || (req.get('Referer') || '').indexOf('/graphiql') < 0) {
+        resp
+          .status(500)
+          .send('Unknown GraphQL query has been received, rejecting...');
       } else {
-        if (!__DEV__ || (req.get('Referer') || '').indexOf('/graphiql') < 0) {
-          resp.status(500).send("Unknown GraphQL query has been received, rejecting...");
-        } else {
-          next();
-        }
+        next();
       }
-    },
-  );
+    }
+  });
 }
 
 for (const middleware of modules.middlewares) {

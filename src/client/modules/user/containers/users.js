@@ -12,7 +12,6 @@ import UsersShow from '../components/users_show';
 import USERS_QUERY from '../graphql/users_get.graphql';
 
 class Users extends React.Component {
-
   render() {
     return <UsersShow {...this.props} />;
   }
@@ -21,7 +20,7 @@ class Users extends React.Component {
 Users.propTypes = {
   loading: PropTypes.bool.isRequired,
   users: PropTypes.array,
-  errors: PropTypes.array,
+  errors: PropTypes.array
 };
 
 const UserWithApollo = compose(
@@ -29,7 +28,7 @@ const UserWithApollo = compose(
     props({ data: { loading, users, error } }) {
       return { loading, users, errors: error ? error.graphQLErrors : null };
     }
-  }),
+  })
 )(Users);
 
 export default UserWithApollo;

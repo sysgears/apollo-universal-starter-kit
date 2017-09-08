@@ -12,7 +12,6 @@ import ProfileShow from '../components/profile_show';
 import CURRENT_USER from '../graphql/current_user.graphql';
 
 class Profile extends React.Component {
-
   render() {
     return <ProfileShow {...this.props} />;
   }
@@ -20,7 +19,7 @@ class Profile extends React.Component {
 
 Profile.propTypes = {
   loading: PropTypes.bool.isRequired,
-  currentUser: PropTypes.object,
+  currentUser: PropTypes.object
 };
 
 export default compose(
@@ -29,5 +28,5 @@ export default compose(
     props({ data: { loading, currentUser } }) {
       return { loading, currentUser };
     }
-  }),
+  })
 )(Profile);

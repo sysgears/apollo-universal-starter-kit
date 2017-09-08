@@ -6,7 +6,6 @@ export default class Count {
   }
 
   addCount(amount) {
-    return knex('count')
-      .increment('amount', amount);
+    return knex('count').increment('amount', amount);
   }
 }

@@ -15,17 +15,13 @@ const Footer = styled.footer`
   height: ${footerHeight};
 `;
 
-const Page = ({children, navBar}) => {
+const Page = ({ children, navBar }) => {
   return (
     <section>
       {navBar !== false && <NavBar />}
-      <Container id="content">
-        {children}
-      </Container>
+      <Container id="content">{children}</Container>
       <Footer>
-        <div className="text-center">
-          &copy; 2017. Example Apollo App.
-        </div>
+        <div className="text-center">&copy; 2017. Example Apollo App.</div>
       </Footer>
     </section>
   );

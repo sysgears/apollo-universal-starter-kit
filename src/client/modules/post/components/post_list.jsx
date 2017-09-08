@@ -1,7 +1,14 @@
 /*eslint-disable react/display-name*/
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, ListView, ScrollView, Button } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ListView,
+  ScrollView,
+  Button
+} from 'react-native';
 
 // Row comparison function
 const rowHasChanged = (r1, r2) => r1.id !== r2.id;
@@ -9,12 +16,16 @@ const rowHasChanged = (r1, r2) => r1.id !== r2.id;
 // DataSource template object
 const ds = new ListView.DataSource({ rowHasChanged });
 
-const renderRow = (deletePost, navigation) => (rowData) => {
+const renderRow = (deletePost, navigation) => rowData => {
   return (
     <View style={styles.row}>
-      <Button title={rowData.title} onPress={() => navigation.navigate('PostEdit', {
-        id: rowData.id
-      })} />
+      <Button
+        title={rowData.title}
+        onPress={() =>
+          navigation.navigate('PostEdit', {
+            id: rowData.id
+          })}
+      />
       <Button title="Delete" onPress={deletePost(rowData.id)} />
     </View>
   );
@@ -24,21 +35,26 @@ function renderLoadMore(postsQuery, loadMoreRows) {
   if (postsQuery.pageInfo.hasNextPage) {
     return (
       <View style={styles.row}>
-        <Text>({postsQuery.edges.length} / {postsQuery.totalCount})</Text>
+        <Text>
+          ({postsQuery.edges.length} / {postsQuery.totalCount})
+        </Text>
         <Button title="Load More ..." onPress={loadMoreRows} />
       </View>
     );
   }
 }
 
-const PostList = ({ loading, postsQuery, deletePost, loadMoreRows, navigation }) => {
-
+const PostList = ({
+  loading,
+  postsQuery,
+  deletePost,
+  loadMoreRows,
+  navigation
+}) => {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text>
-          Loading...
-        </Text>
+        <Text>Loading...</Text>
       </View>
     );
   } else {
@@ -68,12 +84,12 @@ PostList.propTypes = {
   postsQuery: PropTypes.object,
   navigation: PropTypes.object,
   deletePost: PropTypes.func.isRequired,
-  loadMoreRows: PropTypes.func.isRequired,
+  loadMoreRows: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   element: {
     paddingTop: 30
@@ -92,7 +108,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
-  },
+  }
 });
 
 export default PostList;

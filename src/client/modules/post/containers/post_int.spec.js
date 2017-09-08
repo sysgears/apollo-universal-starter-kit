@@ -7,15 +7,15 @@ import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/post_subscription.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/post_comment_subscription.graphql';
 
-const createNode = (id) => ({
+const createNode = id => ({
   id: `${id}`,
   title: `Post title ${id}`,
   content: `Post content ${id}`,
   comments: [
-    {id: id * 1000 + 1, content: "Post comment 1", __typename: "Comment"},
-    {id: id * 1000 + 2, content: "Post comment 2", __typename: "Comment"},
+    { id: id * 1000 + 1, content: 'Post comment 1', __typename: 'Comment' },
+    { id: id * 1000 + 2, content: 'Post comment 2', __typename: 'Comment' }
   ],
-  __typename: "Post"
+  __typename: 'Post'
 });
 
 const mutations = {
@@ -33,7 +33,7 @@ const mocks = {
         edges.push({
           cursor: i,
           node: createNode(i),
-          __typename: "PostEdges"
+          __typename: 'PostEdges'
         });
       }
       return {
@@ -42,18 +42,18 @@ const mocks = {
         pageInfo: {
           endCursor: edges[edges.length - 1].cursor,
           hasNextPage: true,
-          __typename: "PostPageInfo"
+          __typename: 'PostPageInfo'
         },
-        __typename: "PostsQuery"
+        __typename: 'PostsQuery'
       };
     },
     post(obj, { id }) {
       return createNode(id);
-    },
+    }
   }),
   Mutation: () => ({
     deletePost: (obj, { id }) => createNode(id),
-    deleteComment: (obj, {input}) => input,
+    deleteComment: (obj, { input }) => input,
     ...mutations
   })
 };
@@ -85,7 +85,7 @@ describe('Posts and comments example UI works', () => {
 
   step('Clicking load more works', () => {
     const loadMoreButton = content.find('#load-more');
-    loadMoreButton.simulate("click");
+    loadMoreButton.simulate('click');
   });
 
   step('Clicking load more loads more posts', () => {
@@ -102,7 +102,9 @@ describe('Posts and comments example UI works', () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
     subscription(null, {
       postsUpdated: {
-        mutation: 'DELETED', node: createNode(2), __typename: 'UpdatePostPayload'
+        mutation: 'DELETED',
+        node: createNode(2),
+        __typename: 'UpdatePostPayload'
       }
     });
 
@@ -112,11 +114,16 @@ describe('Posts and comments example UI works', () => {
 
   step('Updates post list on post create from subscription', () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
-    subscription(null, _.cloneDeep({
-      postsUpdated: {
-        mutation: 'CREATED', node: createNode(2),  __typename: 'UpdatePostPayload'
-      }
-    }));
+    subscription(
+      null,
+      _.cloneDeep({
+        postsUpdated: {
+          mutation: 'CREATED',
+          node: createNode(2),
+          __typename: 'UpdatePostPayload'
+        }
+      })
+    );
 
     expect(content.text()).to.include('Post title 2');
     expect(content.text()).to.include('4 / 4');
@@ -129,7 +136,7 @@ describe('Posts and comments example UI works', () => {
 
     const deleteButtons = content.find('.delete-button');
     expect(deleteButtons).has.lengthOf(4);
-    deleteButtons.last().simulate("click");
+    deleteButtons.last().simulate('click');
 
     expect(content.text()).to.not.include('Post title 4');
     expect(content.text()).to.include('3 / 3');
@@ -143,7 +150,7 @@ describe('Posts and comments example UI works', () => {
 
   step('Clicking on post works', () => {
     const postLinks = content.find('.post-link');
-    postLinks.last().simulate("click", { button: 0 });
+    postLinks.last().simulate('click', { button: 0 });
   });
 
   step('Clicking on post opens post form', () => {
@@ -151,7 +158,9 @@ describe('Posts and comments example UI works', () => {
 
     expect(content.text()).to.include('Edit Post');
     expect(postForm.find('[name="title"]').node.value).to.equal('Post title 3');
-    expect(postForm.find('[name="content"]').node.value).to.equal('Post content 3');
+    expect(postForm.find('[name="content"]').node.value).to.equal(
+      'Post content 3'
+    );
   });
 
   step('Check subscribed to post updates', () => {
@@ -162,20 +171,24 @@ describe('Posts and comments example UI works', () => {
     const subscription = renderer.getSubscriptions(POST_SUBSCRIPTION)[0];
     subscription(null, {
       postUpdated: {
-        id: "3",
-        title: "Post title 203",
-        content: "Post content 204",
-        __typename: "Post"
+        id: '3',
+        title: 'Post title 203',
+        content: 'Post content 204',
+        __typename: 'Post'
       }
     });
     const postForm = content.find('form[name="post"]');
 
-    expect(postForm.find('[name="title"]').node.value).to.equal('Post title 203');
-    expect(postForm.find('[name="content"]').node.value).to.equal('Post content 204');
+    expect(postForm.find('[name="title"]').node.value).to.equal(
+      'Post title 203'
+    );
+    expect(postForm.find('[name="content"]').node.value).to.equal(
+      'Post content 204'
+    );
   });
 
   step('Post editing form works', done => {
-    mutations.editPost = (obj, { input })  => {
+    mutations.editPost = (obj, { input }) => {
       expect(input.id).to.equal(3);
       expect(input.title).to.equal('Post title 33');
       expect(input.content).to.equal('Post content 33');
@@ -184,8 +197,12 @@ describe('Posts and comments example UI works', () => {
     };
 
     const postForm = content.find('form[name="post"]');
-    postForm.find('[name="title"]').simulate('change', { target: { value: 'Post title 33' } });
-    postForm.find('[name="content"]').simulate('change', { target: { value: 'Post content 33' } });
+    postForm
+      .find('[name="title"]')
+      .simulate('change', { target: { value: 'Post title 33' } });
+    postForm
+      .find('[name="content"]')
+      .simulate('change', { target: { value: 'Post content 33' } });
     postForm.simulate('submit');
   });
 
@@ -197,13 +214,17 @@ describe('Posts and comments example UI works', () => {
     const postForm = content.find('form[name="post"]');
 
     expect(content.text()).to.include('Edit Post');
-    expect(postForm.find('[name="title"]').node.value).to.equal('Post title 33');
-    expect(postForm.find('[name="content"]').node.value).to.equal('Post content 33');
+    expect(postForm.find('[name="title"]').node.value).to.equal(
+      'Post title 33'
+    );
+    expect(postForm.find('[name="content"]').node.value).to.equal(
+      'Post content 33'
+    );
     expect(content.text()).to.include('Edit Post');
   });
 
   step('Comment adding works', done => {
-    mutations.addComment = (obj, { input })  => {
+    mutations.addComment = (obj, { input }) => {
       expect(input.postId).to.equal(3);
       expect(input.content).to.equal('Post comment 24');
       done();
@@ -211,7 +232,9 @@ describe('Posts and comments example UI works', () => {
     };
 
     const commentForm = content.find('form[name="comment"]');
-    commentForm.find('[name="content"]').simulate('change', { target: { value: 'Post comment 24' } });
+    commentForm
+      .find('[name="content"]')
+      .simulate('change', { target: { value: 'Post comment 24' } });
     commentForm.simulate('submit');
     expect(content.text()).to.include('Post comment 24');
   });
@@ -220,43 +243,43 @@ describe('Posts and comments example UI works', () => {
     const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
     subscription(null, {
       commentUpdated: {
-        mutation: "CREATED",
+        mutation: 'CREATED',
         id: 3003,
         postId: 3,
         node: {
           id: 3003,
-          content: "Post comment 3",
-          __typename: "Comment"
+          content: 'Post comment 3',
+          __typename: 'Comment'
         },
-        __typename: "UpdateCommentPayload"
+        __typename: 'UpdateCommentPayload'
       }
     });
 
-    expect(content.text()).to.include("Post comment 3");
+    expect(content.text()).to.include('Post comment 3');
   });
 
   step('Updates comment form on comment deleted got from subscription', () => {
     const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
     subscription(null, {
       commentUpdated: {
-        mutation: "DELETED",
+        mutation: 'DELETED',
         id: 3003,
         postId: 3,
         node: {
           id: 3003,
-          content: "Post comment 3",
-          __typename: "Comment"
+          content: 'Post comment 3',
+          __typename: 'Comment'
         },
-        __typename: "UpdateCommentPayload"
+        __typename: 'UpdateCommentPayload'
       }
     });
-    expect(content.text()).to.not.include("Post comment 3");
+    expect(content.text()).to.not.include('Post comment 3');
   });
 
   step('Comment deleting optimistically removes comment', () => {
     const deleteButtons = content.find('.delete-comment');
     expect(deleteButtons).has.lengthOf(3);
-    deleteButtons.last().simulate("click");
+    deleteButtons.last().simulate('click');
 
     expect(content.text()).to.not.include('Post comment 24');
     expect(content.find('.delete-comment')).has.lengthOf(2);
@@ -268,7 +291,7 @@ describe('Posts and comments example UI works', () => {
   });
 
   step('Comment editing works', done => {
-    mutations.editComment = (obj, { input })  => {
+    mutations.editComment = (obj, { input }) => {
       expect(input.postId).to.equal(3);
       expect(input.content).to.equal('Edited comment 2');
       done();
@@ -277,11 +300,15 @@ describe('Posts and comments example UI works', () => {
 
     const editButtons = content.find('.edit-comment');
     expect(editButtons).has.lengthOf(2);
-    editButtons.last().simulate("click");
+    editButtons.last().simulate('click');
 
     const commentForm = content.find('form[name="comment"]');
-    expect(commentForm.find('[name="content"]').node.value).to.equal('Post comment 2');
-    commentForm.find('[name="content"]').simulate('change', { target: { value: 'Edited comment 2' } });
+    expect(commentForm.find('[name="content"]').node.value).to.equal(
+      'Post comment 2'
+    );
+    commentForm
+      .find('[name="content"]')
+      .simulate('change', { target: { value: 'Edited comment 2' } });
     commentForm.simulate('submit');
 
     expect(content.text()).to.include('Edited comment 2');

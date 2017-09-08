@@ -2,7 +2,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, ListView, ScrollView, Button, Keyboard } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ListView,
+  ScrollView,
+  Button,
+  Keyboard
+} from 'react-native';
 
 import CommentForm from './post_comment_form';
 
@@ -20,20 +28,34 @@ const rowHasChanged = (r1, r2) => r1.id !== r2.id;
 // DataSource template object
 const ds = new ListView.DataSource({ rowHasChanged });
 
-const renderRow = (onCommentSelect, comment, deleteComment) => (rowData) => {
+const renderRow = (onCommentSelect, comment, deleteComment) => rowData => {
   return (
     <View style={styles.row}>
-      <Button title={rowData.content} onPress={() => onCommentSelect({ id: rowData.id, content: rowData.content })} />
-      <Button title="Delete" onPress={() => onCommentDelete(comment, deleteComment, onCommentSelect, rowData.id)} />
+      <Button
+        title={rowData.content}
+        onPress={() =>
+          onCommentSelect({ id: rowData.id, content: rowData.content })}
+      />
+      <Button
+        title="Delete"
+        onPress={() =>
+          onCommentDelete(comment, deleteComment, onCommentSelect, rowData.id)}
+      />
     </View>
   );
 };
 
-const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted) => (values) => {
+const onSubmit = (
+  comment,
+  postId,
+  addComment,
+  editComment,
+  onCommentSelect,
+  onFormSubmitted
+) => values => {
   if (comment.id === null) {
     addComment(values.content, postId);
-  }
-  else {
+  } else {
     editComment(comment.id, values.content);
   }
 
@@ -42,13 +64,33 @@ const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onF
   Keyboard.dismiss();
 };
 
-const PostCommentsShow = ({ postId, comment, addComment, editComment, comments, onCommentSelect, deleteComment, onFormSubmitted }) => {
-  const dataSource = (comments.length > 0) ? ds.cloneWithRows(comments) : null;
+const PostCommentsShow = ({
+  postId,
+  comment,
+  addComment,
+  editComment,
+  comments,
+  onCommentSelect,
+  deleteComment,
+  onFormSubmitted
+}) => {
+  const dataSource = comments.length > 0 ? ds.cloneWithRows(comments) : null;
   return (
     <View>
       <Text style={styles.title}>Comments</Text>
-      <CommentForm postId={postId} onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)} initialValues={comment} />
-      { comments.length > 0 &&
+      <CommentForm
+        postId={postId}
+        onSubmit={onSubmit(
+          comment,
+          postId,
+          addComment,
+          editComment,
+          onCommentSelect,
+          onFormSubmitted
+        )}
+        initialValues={comment}
+      />
+      {comments.length > 0 && (
         <ScrollView keyboardDismissMode="on-drag">
           <ListView
             style={styles.container}
@@ -57,7 +99,7 @@ const PostCommentsShow = ({ postId, comment, addComment, editComment, comments, 
             removeClippedSubviews={false}
           />
         </ScrollView>
-      }
+      )}
     </View>
   );
 };
@@ -71,18 +113,18 @@ PostCommentsShow.propTypes = {
   deleteComment: PropTypes.func.isRequired,
   onCommentSelect: PropTypes.func.isRequired,
   onFormSubmitted: PropTypes.func.isRequired,
-  subscribeToMore: PropTypes.func.isRequired,
+  subscribeToMore: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   title: {
     fontSize: 20,
     fontWeight: '600',
     textAlign: 'center',
-    margin: 10,
+    margin: 10
   },
   element: {
     paddingTop: 30
@@ -101,7 +143,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
-  },
+  }
 });
 
 export default PostCommentsShow;

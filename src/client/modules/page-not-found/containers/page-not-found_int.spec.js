@@ -17,7 +17,7 @@ describe('Page not found example UI works', () => {
 
   step('Clicking on home link works', () => {
     const homeLink = content.find('.home-link');
-    homeLink.last().simulate("click", { button: 0 });
+    homeLink.last().simulate('click', { button: 0 });
     content = app.find('#content');
     expect(content.text()).to.not.include('Page not found - 404');
   });

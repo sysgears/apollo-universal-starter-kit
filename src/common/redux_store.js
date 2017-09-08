@@ -15,7 +15,10 @@ const createReduxStore = (initialState, client, routerMiddleware) => {
       ...modules.reducers
     }),
     initialState, // initial state
-    routerMiddleware ? composeWithDevTools(applyMiddleware(client.middleware(), routerMiddleware))
+    routerMiddleware
+      ? composeWithDevTools(
+          applyMiddleware(client.middleware(), routerMiddleware)
+        )
       : applyMiddleware(client.middleware())
   );
 

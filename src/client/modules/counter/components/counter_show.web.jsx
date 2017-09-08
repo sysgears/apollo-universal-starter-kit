@@ -5,28 +5,32 @@ import { Button } from 'reactstrap';
 import styled from 'styled-components';
 import PageLayout from '../../../app/page_layout';
 
-const Section = styled.section`
-  margin-bottom: 30px;
-`;
+const Section = styled.section`margin-bottom: 30px;`;
 
-const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement }) => {
-
+const CounterShow = ({
+  loading,
+  count,
+  addCount,
+  reduxCount,
+  onReduxIncrement
+}) => {
   const renderMetaData = () => (
     <Helmet
       title="Apollo Starter Kit - Counter"
-      meta={[{
-        name: 'description',
-        content: 'Apollo Fullstack Starter Kit - Counter example page'
-      }]}/>
+      meta={[
+        {
+          name: 'description',
+          content: 'Apollo Fullstack Starter Kit - Counter example page'
+        }
+      ]}
+    />
   );
 
   if (loading) {
     return (
       <PageLayout>
         {renderMetaData()}
-        <div className="text-center">
-          Loading...
-        </div>
+        <div className="text-center">Loading...</div>
       </PageLayout>
     );
   } else {
@@ -36,8 +40,9 @@ const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement })
         <div className="text-center mt-4 mb-4">
           <Section>
             <p>
-              Current count, is {count.amount}. This is being stored server-side in the database and using Apollo
-              subscription for real-time updates.
+              Current count, is {count.amount}. This is being stored server-side
+              in the database and using Apollo subscription for real-time
+              updates.
             </p>
             <Button id="graphql-button" color="primary" onClick={addCount(1)}>
               Click to increase count
@@ -45,9 +50,14 @@ const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement })
           </Section>
           <Section>
             <p>
-              Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.
+              Current reduxCount, is {reduxCount}. This is being stored
+              client-side with Redux.
             </p>
-            <Button id="redux-button" color="primary" onClick={onReduxIncrement(1)}>
+            <Button
+              id="redux-button"
+              color="primary"
+              onClick={onReduxIncrement(1)}
+            >
               Click to increase reduxCount
             </Button>
           </Section>
@@ -62,7 +72,7 @@ CounterShow.propTypes = {
   count: PropTypes.object,
   addCount: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired,
-  onReduxIncrement: PropTypes.func.isRequired,
+  onReduxIncrement: PropTypes.func.isRequired
 };
 
 export default CounterShow;

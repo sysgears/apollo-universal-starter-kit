@@ -1,9 +1,9 @@
 export async function up(knex) {
   return knex.schema.createTable('count', table => {
-      table.increments();
-      table.integer('amount').notNull();
-      table.timestamps(false, true);
-    });
+    table.increments();
+    table.integer('amount').notNull();
+    table.timestamps(false, true);
+  });
 }
 
 export async function down(knex) {

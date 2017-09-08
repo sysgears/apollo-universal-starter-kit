@@ -5,9 +5,15 @@ const combine = (features, extractor) =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 export default class {
-  constructor({schema, createResolversFunc, createContextFunc, middleware}, ...features) {
+  constructor(
+    { schema, createResolversFunc, createContextFunc, middleware },
+    ...features
+  ) {
     this.schema = combine(arguments, arg => arg.schema);
-    this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
+    this.createResolversFunc = combine(
+      arguments,
+      arg => arg.createResolversFunc
+    );
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.middleware = combine(arguments, arg => arg.middleware);
   }
@@ -17,12 +23,21 @@ export default class {
   }
 
   async createContext(req, connectionParams) {
-    const results = await Promise.all(this.createContextFunc.map(createContext => createContext(req, connectionParams)));
+    const results = await Promise.all(
+      this.createContextFunc.map(createContext =>
+        createContext(req, connectionParams)
+      )
+    );
     return merge({}, ...results);
   }
 
-  createResolvers(pubsub)  {
-    return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
+  createResolvers(pubsub) {
+    return merge(
+      {},
+      ...this.createResolversFunc.map(createResolvers =>
+        createResolvers(pubsub)
+      )
+    );
   }
 
   get middlewares() {

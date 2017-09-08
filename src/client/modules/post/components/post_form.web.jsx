@@ -1,9 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
+import {
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  FormFeedback,
+  Button
+} from 'reactstrap';
 
-const required = value => value ? undefined : 'Required';
+const required = value => (value ? undefined : 'Required');
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => {
   let color = 'normal';
@@ -15,8 +22,8 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
     <FormGroup color={color}>
       <Label>{label}</Label>
       <div>
-        <Input {...input} placeholder={label} type={type}/>
-        {touched && ((error && <FormFeedback>{error}</FormFeedback>))}
+        <Input {...input} placeholder={label} type={type} />
+        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
       </div>
     </FormGroup>
   );
@@ -32,8 +39,20 @@ renderField.propTypes = {
 const PostForm = ({ handleSubmit, submitting, onSubmit }) => {
   return (
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="title" component={renderField} type="text" label="Title" validate={required}/>
-      <Field name="content" component={renderField} type="text" label="Content" validate={required}/>
+      <Field
+        name="title"
+        component={renderField}
+        type="text"
+        label="Title"
+        validate={required}
+      />
+      <Field
+        name="content"
+        component={renderField}
+        type="text"
+        label="Content"
+        validate={required}
+      />
       <Button color="primary" type="submit" disabled={submitting}>
         Save
       </Button>

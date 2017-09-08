@@ -1,6 +1,6 @@
-const createResolver = (resolver) => {
+const createResolver = resolver => {
   const baseResolver = resolver;
-  baseResolver.createResolver = (childResolver) => {
+  baseResolver.createResolver = childResolver => {
     const newResolver = async (parent, args, context) => {
       await resolver(parent, args, context);
       return childResolver(parent, args, context);
@@ -21,5 +21,5 @@ export const requiresAdmin = requiresAuth.createResolver(
     if (!context.user.isAdmin) {
       throw new Error('Requires admin access');
     }
-  },
+  }
 );

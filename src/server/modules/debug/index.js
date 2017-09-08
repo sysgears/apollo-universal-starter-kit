@@ -10,13 +10,17 @@ const times = {};
 // Used for keeping track of the order queries are executed.
 let count = 0;
 
-const printQueryWithTime = (uid) => {
+const printQueryWithTime = uid => {
   const { startTime, endTime, query } = times[uid];
   const elapsedTime = endTime - startTime;
 
   // I print the sql generated for a given query, as well as
   // the bindings for the queries.
-  log.info(query.sql, ',', `[${query.bindings ? query.bindings.join(',') : ''}]`);
+  log.info(
+    query.sql,
+    ',',
+    `[${query.bindings ? query.bindings.join(',') : ''}]`
+  );
   log.info(`Time: ${elapsedTime.toFixed(3)} ms\n`);
 
   // After I print out the query, I have no more use to it,
@@ -24,11 +28,13 @@ const printQueryWithTime = (uid) => {
   delete times[uid];
 };
 
-const printIfPossible = (uid) => {
+const printIfPossible = uid => {
   const { position } = times[uid];
 
   // Look of a query with a position one less than the current query
-  const previousTimeUid = Object.keys(times).find(key => times[key].position === position - 1);
+  const previousTimeUid = Object.keys(times).find(
+    key => times[key].position === position - 1
+  );
 
   // If we didn't find it, it must have been printed already and we can safely print ourselves.
   if (!previousTimeUid) {
@@ -36,9 +42,11 @@ const printIfPossible = (uid) => {
   }
 };
 
-const printQueriesAfterGivenPosition = (position) => {
+const printQueriesAfterGivenPosition = position => {
   // Look for the next query in the queue
-  const nextTimeUid = Object.keys(times).find(key => times[key].position === position + 1);
+  const nextTimeUid = Object.keys(times).find(
+    key => times[key].position === position + 1
+  );
 
   // If we find one and it is marked as finished, we can go ahead and print it
   if (nextTimeUid && times[nextTimeUid].finished) {
@@ -51,18 +59,19 @@ const printQueriesAfterGivenPosition = (position) => {
 };
 
 if (__DEV__ && settings.debugSQL) {
-  knex.on('query', (query) => {
-    const uid = query.__knexQueryUid;
-    times[uid] = {
-      position: count,
-      query,
-      startTime: now(),
-      // I keep track of when a query is finished with a boolean instead of
-      // presence of an end time. It makes the logic easier to read.
-      finished: false,
-    };
-    count = count + 1;
-  })
+  knex
+    .on('query', query => {
+      const uid = query.__knexQueryUid;
+      times[uid] = {
+        position: count,
+        query,
+        startTime: now(),
+        // I keep track of when a query is finished with a boolean instead of
+        // presence of an end time. It makes the logic easier to read.
+        finished: false
+      };
+      count = count + 1;
+    })
     .on('query-response', (response, query) => {
       const uid = query.__knexQueryUid;
       times[uid].endTime = now();

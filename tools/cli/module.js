@@ -16,10 +16,12 @@ function copyFiles(logger, templatePath, module, location) {
   logger.info(`Copying ${location} files…`);
 
   // create new module directory
-  const mkdir = shell.mkdir(`${__dirname}/../../src/${location}/modules/${module}`);
+  const mkdir = shell.mkdir(
+    `${__dirname}/../../src/${location}/modules/${module}`
+  );
 
   // continue only if directory does not jet exist
-  if(mkdir.code === 0) {
+  if (mkdir.code === 0) {
     const destinationPath = `${__dirname}/../../src/${location}/modules/${module}`;
     shell.cp('-R', `${templatePath}/${location}/*`, destinationPath);
 
@@ -40,7 +42,12 @@ function copyFiles(logger, templatePath, module, location) {
     shell.ls('-Rl', '.').forEach(entry => {
       if (entry.isFile()) {
         shell.sed('-i', /\$module\$/g, module, entry.name);
-        shell.sed('-i', /\$Module\$/g, module.toCamelCase().capitalize(), entry.name);
+        shell.sed(
+          '-i',
+          /\$Module\$/g,
+          module.toCamelCase().capitalize(),
+          entry.name
+        );
       }
     });
 
@@ -86,10 +93,17 @@ function deleteFiles(logger, templatePath, module, location) {
     // extract Feature modules
     const re = /Feature\(([^()]+)\)/g;
     const match = re.exec(data);
-    const modules = match[1].split(',').filter(featureModule => featureModule.trim() !== module);
+    const modules = match[1]
+      .split(',')
+      .filter(featureModule => featureModule.trim() !== module);
 
     // remove import module line
-    const lines = data.toString().split('\n').filter(line => line.match(`import ${module} from './${module}';`) === null);
+    const lines = data
+      .toString()
+      .split('\n')
+      .filter(
+        line => line.match(`import ${module} from './${module}';`) === null
+      );
     fs.writeFileSync(path, lines.join('\n'));
 
     // remove module from Feature function
@@ -97,9 +111,10 @@ function deleteFiles(logger, templatePath, module, location) {
 
     // continue only if directory does not jet exist
     logger.info(`✔ Module for ${location} successfully deleted!`);
-  }
-  else {
-    logger.info(`✔ Module ${location} location for ${modulePath} wasn't found!`);
+  } else {
+    logger.info(
+      `✔ Module ${location} location for ${modulePath} wasn't found!`
+    );
   }
 }
 
@@ -115,8 +130,7 @@ module.exports = (action, args, options, logger) => {
   if (args.location === 'client' || args.location === 'both') {
     if (action === 'addmodule') {
       copyFiles(logger, templatePath, args.module, 'client');
-    }
-    else if (action === 'deletemodule') {
+    } else if (action === 'deletemodule') {
       deleteFiles(logger, templatePath, args.module, 'client');
     }
   }
@@ -125,8 +139,7 @@ module.exports = (action, args, options, logger) => {
   if (args.location === 'server' || args.location === 'both') {
     if (action === 'addmodule') {
       copyFiles(logger, templatePath, args.module, 'server');
-    }
-    else if (action === 'deletemodule') {
+    } else if (action === 'deletemodule') {
       deleteFiles(logger, templatePath, args.module, 'server');
     }
   }

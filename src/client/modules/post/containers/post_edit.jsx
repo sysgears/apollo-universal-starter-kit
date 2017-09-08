@@ -58,18 +58,16 @@ PostEdit.propTypes = {
   post: PropTypes.object,
   addPost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
-  subscribeToMore: PropTypes.func.isRequired,
+  subscribeToMore: PropTypes.func.isRequired
 };
 
 export default compose(
   graphql(POST_QUERY, {
-    options: (props) => {
-
+    options: props => {
       let id = 0;
       if (props.match) {
         id = props.match.params.id;
-      }
-      else if (props.navigation) {
+      } else if (props.navigation) {
         id = props.navigation.state.params.id;
       }
 
@@ -92,8 +90,8 @@ export default compose(
               title: title,
               content: content,
               comments: [],
-              __typename: 'Post',
-            },
+              __typename: 'Post'
+            }
           },
           updateQueries: {
             getPosts: (prev, { mutationResult: { data: { addPost } } }) => {
@@ -103,10 +101,14 @@ export default compose(
         });
 
         if (history) {
-          return history.push('/post/' + postData.data.addPost.id, { post: postData.data.addPost });
-        }
-        else if (navigation) {
-          return navigation.setParams({ id: postData.data.addPost.id, post: postData.data.addPost });
+          return history.push('/post/' + postData.data.addPost.id, {
+            post: postData.data.addPost
+          });
+        } else if (navigation) {
+          return navigation.setParams({
+            id: postData.data.addPost.id,
+            post: postData.data.addPost
+          });
         }
       }
     })

@@ -10,9 +10,19 @@ function renderComments(comments, onCommentSelect, comment, deleteComment) {
       <ListGroupItem className="justify-content-between" key={id}>
         {content}
         <div>
-            <span className="badge badge-default badge-pill edit-comment"
-                  onClick={() => onCommentSelect({ id, content })}>Edit</span>
-          <span className="badge badge-default badge-pill delete-comment" onClick={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}>Delete</span>
+          <span
+            className="badge badge-default badge-pill edit-comment"
+            onClick={() => onCommentSelect({ id, content })}
+          >
+            Edit
+          </span>
+          <span
+            className="badge badge-default badge-pill delete-comment"
+            onClick={() =>
+              onCommentDelete(comment, deleteComment, onCommentSelect, id)}
+          >
+            Delete
+          </span>
         </div>
       </ListGroupItem>
     );
@@ -27,11 +37,17 @@ function onCommentDelete(comment, deleteComment, onCommentSelect, id) {
   deleteComment(id);
 }
 
-const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted) => (values) => {
+const onSubmit = (
+  comment,
+  postId,
+  addComment,
+  editComment,
+  onCommentSelect,
+  onFormSubmitted
+) => values => {
   if (comment.id === null) {
     addComment(values.content, postId);
-  }
-  else {
+  } else {
     editComment(comment.id, values.content);
   }
 
@@ -39,13 +55,35 @@ const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onF
   onFormSubmitted();
 };
 
-const PostCommentsShow = ({ postId, comment, addComment, editComment, comments, onCommentSelect, deleteComment, onFormSubmitted }) => {
+const PostCommentsShow = ({
+  postId,
+  comment,
+  addComment,
+  editComment,
+  comments,
+  onCommentSelect,
+  deleteComment,
+  onFormSubmitted
+}) => {
   return (
     <div>
       <h3>Comments</h3>
-      <CommentForm postId={postId} onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)} initialValues={comment} />
+      <CommentForm
+        postId={postId}
+        onSubmit={onSubmit(
+          comment,
+          postId,
+          addComment,
+          editComment,
+          onCommentSelect,
+          onFormSubmitted
+        )}
+        initialValues={comment}
+      />
       <h1 />
-      <ListGroup>{renderComments(comments, onCommentSelect, comment, deleteComment )}</ListGroup>
+      <ListGroup>
+        {renderComments(comments, onCommentSelect, comment, deleteComment)}
+      </ListGroup>
     </div>
   );
 };
@@ -59,7 +97,7 @@ PostCommentsShow.propTypes = {
   deleteComment: PropTypes.func.isRequired,
   onCommentSelect: PropTypes.func.isRequired,
   onFormSubmitted: PropTypes.func.isRequired,
-  subscribeToMore: PropTypes.func.isRequired,
+  subscribeToMore: PropTypes.func.isRequired
 };
 
 export default PostCommentsShow;

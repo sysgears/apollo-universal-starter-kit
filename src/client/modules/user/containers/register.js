@@ -11,14 +11,13 @@ import RegisterShow from '../components/register_show';
 import USER_REGISTER from '../graphql/user_register.graphql';
 
 class User extends React.Component {
-
   render() {
-    return <RegisterShow {...this.props}/>;
+    return <RegisterShow {...this.props} />;
   }
 }
 
 User.propTypes = {
-  register: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired
 };
 
 const UserWithApollo = compose(
@@ -27,7 +26,7 @@ const UserWithApollo = compose(
       register: async ({ username, email, password }) => {
         try {
           const { data: { register } } = await mutate({
-            variables: { input: { username, email, password } },
+            variables: { input: { username, email, password } }
           });
 
           if (register.errors) {
@@ -44,7 +43,7 @@ const UserWithApollo = compose(
         }
       }
     })
-  }),
+  })
 )(User);
 
 export default UserWithApollo;

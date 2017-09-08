@@ -5,7 +5,10 @@ import { ApolloProvider } from 'react-apollo';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import { addPersistedQueries } from 'persistgraphql';
-import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
+import {
+  SubscriptionClient,
+  addGraphQLSubscriptions
+} from 'subscriptions-transport-ws';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
@@ -21,51 +24,54 @@ import '../styles/styles.scss';
 
 let networkInterface = createBatchingNetworkInterface({
   opts: {
-    credentials: "include",
+    credentials: 'include'
   },
   batchInterval: 20,
-  uri: __BACKEND_URL__ || "/graphql",
+  uri: __BACKEND_URL__ || '/graphql'
 });
 if (__CLIENT__) {
-  networkInterface.use([{
-    applyBatchMiddleware(req, next) {
-      if (!req.options.headers) {
-        req.options.headers = {};
-      }
+  networkInterface.use([
+    {
+      applyBatchMiddleware(req, next) {
+        if (!req.options.headers) {
+          req.options.headers = {};
+        }
 
-      for (const middleware of modules.middlewares) {
-        middleware(req);
-      }
+        for (const middleware of modules.middlewares) {
+          middleware(req);
+        }
 
-      next();
+        next();
+      }
     }
-  }]);
+  ]);
 
-  networkInterface.useAfter([{
-    applyBatchAfterware(res, next) {
+  networkInterface.useAfter([
+    {
+      applyBatchAfterware(res, next) {
+        for (const afterware of modules.afterwares) {
+          afterware(res);
+        }
 
-      for (const afterware of modules.afterwares) {
-        afterware(res);
+        next();
       }
-
-      next();
     }
-  }]);
+  ]);
 
   let connectionParams = {};
   for (const connectionParam of modules.connectionParams) {
     Object.assign(connectionParams, connectionParam());
   }
 
-  const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
-    .replace(/^http/, 'ws'), {
+  const wsClient = new SubscriptionClient(
+    (__BACKEND_URL__ || window.location.origin + '/graphql')
+      .replace(/^http/, 'ws'),
+    {
       reconnect: true,
       connectionParams: connectionParams
-  });
-  networkInterface = addGraphQLSubscriptions(
-    networkInterface,
-    wsClient,
+    }
   );
+  networkInterface = addGraphQLSubscriptions(networkInterface, wsClient);
 }
 
 if (__PERSIST_GQL__) {
@@ -91,7 +97,7 @@ const logPageView = location => {
   ReactGA.pageview(location.pathname);
 };
 
-// Initialize Google Analytics and send events on each location change 
+// Initialize Google Analytics and send events on each location change
 ReactGA.initialize('UA-000000-01'); // Replace your Google tracking code here
 logPageView(window.location);
 
@@ -109,9 +115,7 @@ if (module.hot) {
 const Main = () => (
   <CookiesProvider>
     <ApolloProvider store={store} client={client}>
-        <ConnectedRouter history={history}>
-          {Routes}
-        </ConnectedRouter>
+      <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
     </ApolloProvider>
   </CookiesProvider>
 );

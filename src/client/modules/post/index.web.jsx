@@ -11,12 +11,15 @@ import Feature from '../connector';
 
 export default new Feature({
   route: [
-    <Route exact path="/posts" component={Post}/>,
-    <Route exact path="/post/:id" component={PostEdit}/>
+    <Route exact path="/posts" component={Post} />,
+    <Route exact path="/post/:id" component={PostEdit} />
   ],
-  navItem:
+  navItem: (
     <NavItem>
-      <Link to="/posts" className="nav-link">Posts</Link>
-    </NavItem>,
+      <Link to="/posts" className="nav-link">
+        Posts
+      </Link>
+    </NavItem>
+  ),
   reducer: { post: reducers }
 });

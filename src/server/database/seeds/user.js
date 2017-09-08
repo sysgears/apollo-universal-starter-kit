@@ -17,14 +17,27 @@ await Promise.all([
 */
 
 export async function seed(knex, Promise) {
-  await Promise.all([
-    knex('user').truncate(),
-    knex('local_auth').truncate()
-  ]);
+  await Promise.all([knex('user').truncate(), knex('local_auth').truncate()]);
 
-  const [ adminId ] = await knex('user').returning('id').insert({ username: 'admin', is_admin: true });
-  await knex('local_auth').returning('id').insert({ email: 'admin@example.com', password: await bcrypt.hash('admin', 12), user_id: adminId });
+  const [adminId] = await knex('user')
+    .returning('id')
+    .insert({ username: 'admin', is_admin: true });
+  await knex('local_auth')
+    .returning('id')
+    .insert({
+      email: 'admin@example.com',
+      password: await bcrypt.hash('admin', 12),
+      user_id: adminId
+    });
 
-  const [ userId ] = await knex('user').returning('id').insert({ username: 'user', is_admin: false });
-  await knex('local_auth').returning('id').insert({ email: 'user@example.com', password: await bcrypt.hash('user', 12), user_id: userId });
+  const [userId] = await knex('user')
+    .returning('id')
+    .insert({ username: 'user', is_admin: false });
+  await knex('local_auth')
+    .returning('id')
+    .insert({
+      email: 'user@example.com',
+      password: await bcrypt.hash('user', 12),
+      user_id: userId
+    });
 }

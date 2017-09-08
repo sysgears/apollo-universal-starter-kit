@@ -25,8 +25,9 @@ const mocks = {
 };
 
 describe('Counter example UI works', () => {
-  const renderer = new Renderer(mocks,
-    { counter: { reduxCount: REDUX_VALUE } });
+  const renderer = new Renderer(mocks, {
+    counter: { reduxCount: REDUX_VALUE }
+  });
   let app;
   let content;
 
@@ -44,17 +45,19 @@ describe('Counter example UI works', () => {
 
   step('Clicking on increase count button shows optimistic response', () => {
     const graphQLButton = content.find('#graphql-button');
-    graphQLButton.simulate("click");
+    graphQLButton.simulate('click');
     content.text().should.has.string(`Current count, is ${COUNTER_VALUE + 1}.`);
   });
 
   step('Page shows GraphQL response when it arrives after button click', () => {
-    content.text().should.has.string(`Current count, is ${INC_COUNTER_VALUE + 1}.`);
+    content
+      .text()
+      .should.has.string(`Current count, is ${INC_COUNTER_VALUE + 1}.`);
   });
 
   step('Increase Redux count button works', () => {
     const reduxButton = content.find('#redux-button');
-    reduxButton.simulate("click");
+    reduxButton.simulate('click');
     content.text().should.has.string(`reduxCount, is ${REDUX_VALUE + 1}.`);
   });
 
@@ -64,8 +67,12 @@ describe('Counter example UI works', () => {
 
   step('Updates counter on data from subscription', () => {
     const subscription = renderer.getSubscriptions(COUNT_SUBSCRIBE)[0];
-    subscription(null, { countUpdated: { amount: SUBSCRIPTION_VALUE, __typename: 'Count' } });
-    content.text().should.has.string(`Current count, is ${SUBSCRIPTION_VALUE}.`);
+    subscription(null, {
+      countUpdated: { amount: SUBSCRIPTION_VALUE, __typename: 'Count' }
+    });
+    content
+      .text()
+      .should.has.string(`Current count, is ${SUBSCRIPTION_VALUE}.`);
   });
 
   step('Unmount page and check unsubscription', () => {

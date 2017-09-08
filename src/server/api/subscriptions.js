@@ -7,20 +7,23 @@ import modules from '../../server/modules';
 
 let subscriptionServer;
 
-const addSubscriptions = (httpServer) => {
-  subscriptionServer = SubscriptionServer.create({
-    schema,
-    execute,
-    subscribe,
-    onConnect: connectionParams => modules.createContext(null, connectionParams)
-  },
-  {
-    server: httpServer,
-    path: '/graphql',
-  });
+const addSubscriptions = httpServer => {
+  subscriptionServer = SubscriptionServer.create(
+    {
+      schema,
+      execute,
+      subscribe,
+      onConnect: connectionParams =>
+        modules.createContext(null, connectionParams)
+    },
+    {
+      server: httpServer,
+      path: '/graphql'
+    }
+  );
 };
 
-const addGraphQLSubscriptions = (httpServer) => {
+const addGraphQLSubscriptions = httpServer => {
   if (module.hot && module.hot.data) {
     const prevServer = module.hot.data.subscriptionServer;
     if (prevServer && prevServer.wsServer) {

@@ -15,9 +15,12 @@ describe('User API works', () => {
   });
 
   step('Has GraphiQL endpoint', () => {
-    return chai.request(server).get('/graphiql').end((err, res) => {
-      res.status.should.be(200);
-      res.body.should.be('{}');
-    });
+    return chai
+      .request(server)
+      .get('/graphiql')
+      .end((err, res) => {
+        res.status.should.be(200);
+        res.body.should.be('{}');
+      });
   });
 });

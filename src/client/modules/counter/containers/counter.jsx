@@ -37,12 +37,15 @@ class Counter extends React.Component {
     this.subscription = subscribeToMore({
       document: COUNT_SUBSCRIPTION,
       variables: {},
-      updateQuery: (prev, { subscriptionData: { data: { countUpdated: { amount } } } }) => {
+      updateQuery: (
+        prev,
+        { subscriptionData: { data: { countUpdated: { amount } } } }
+      ) => {
         return update(prev, {
           count: {
             amount: {
-              $set: amount,
-            },
+              $set: amount
+            }
           }
         });
       }
@@ -61,7 +64,7 @@ Counter.propTypes = {
   onReduxIncrement: PropTypes.func,
   addCount: PropTypes.func.isRequired,
   subscribeToMore: PropTypes.func.isRequired,
-  reduxCount: PropTypes.number.isRequired,
+  reduxCount: PropTypes.number.isRequired
 };
 
 const CounterWithApollo = compose(
@@ -73,41 +76,43 @@ const CounterWithApollo = compose(
   graphql(ADD_COUNT_MUTATION, {
     props: ({ ownProps, mutate }) => ({
       addCount(amount) {
-        return () => mutate({
-          variables: { amount },
-          updateQueries: {
-            getCount: (prev, { mutationResult }) => {
-              const newAmount = mutationResult.data.addCount.amount;
-              return update(prev, {
-                count: {
-                  amount: {
-                    $set: newAmount,
-                  },
-                },
-              });
+        return () =>
+          mutate({
+            variables: { amount },
+            updateQueries: {
+              getCount: (prev, { mutationResult }) => {
+                const newAmount = mutationResult.data.addCount.amount;
+                return update(prev, {
+                  count: {
+                    amount: {
+                      $set: newAmount
+                    }
+                  }
+                });
+              }
             },
-          },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            addCount: {
-              __typename: 'Count',
-              amount: ownProps.count.amount + 1,
-            },
-          },
-        });
-      },
-    }),
+            optimisticResponse: {
+              __typename: 'Mutation',
+              addCount: {
+                __typename: 'Count',
+                amount: ownProps.count.amount + 1
+              }
+            }
+          });
+      }
+    })
   })
 )(Counter);
 
 export default connect(
-  (state) => ({ reduxCount: state.counter.reduxCount }),
-  (dispatch) => ({
+  state => ({ reduxCount: state.counter.reduxCount }),
+  dispatch => ({
     onReduxIncrement(value) {
-      return () => dispatch({
-        type: 'COUNTER_INCREMENT',
-        value: Number(value)
-      });
+      return () =>
+        dispatch({
+          type: 'COUNTER_INCREMENT',
+          value: Number(value)
+        });
     }
-  }),
+  })
 )(CounterWithApollo);

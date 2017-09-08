@@ -1,9 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Row, Col, Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
+import {
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  FormFeedback,
+  Button
+} from 'reactstrap';
 
-const required = value => value ? undefined : 'Required';
+const required = value => (value ? undefined : 'Required');
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => {
   let color = 'normal';
@@ -13,8 +22,8 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => {
 
   return (
     <FormGroup color={color}>
-      <Input {...input} placeholder={label} type={type}/>
-      {touched && ((error && <FormFeedback>{error}</FormFeedback>))}
+      <Input {...input} placeholder={label} type={type} />
+      {touched && (error && <FormFeedback>{error}</FormFeedback>)}
     </FormGroup>
   );
 };
@@ -36,12 +45,25 @@ const CommentForm = ({ handleSubmit, submitting, initialValues, onSubmit }) => {
     <Form name="comment" onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
         <Row>
-          <Col xs="2"><Label>{operation} comment</Label></Col>
+          <Col xs="2">
+            <Label>{operation} comment</Label>
+          </Col>
           <Col xs="8">
-            <Field name="content" component={renderField} type="text" label="Content" validate={required}/>
+            <Field
+              name="content"
+              component={renderField}
+              type="text"
+              label="Content"
+              validate={required}
+            />
           </Col>
           <Col xs="2">
-            <Button color="primary" type="submit" className="float-right" disabled={submitting}>
+            <Button
+              color="primary"
+              type="submit"
+              className="float-right"
+              disabled={submitting}
+            >
               Save
             </Button>
           </Col>

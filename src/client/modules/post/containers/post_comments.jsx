@@ -14,14 +14,17 @@ import COMMENT_SUBSCRIPTION from '../graphql/post_comment_subscription.graphql';
 
 function AddComment(prev, node) {
   // ignore if duplicate
-  if (node.id !== null && prev.post.comments.some(comment => node.id === comment.id)) {
+  if (
+    node.id !== null &&
+    prev.post.comments.some(comment => node.id === comment.id)
+  ) {
     return prev;
   }
 
   return update(prev, {
     post: {
       comments: {
-        $push: [node],
+        $push: [node]
       }
     }
   });
@@ -38,7 +41,7 @@ function DeleteComment(prev, id) {
   return update(prev, {
     post: {
       comments: {
-        $splice: [[index, 1]],
+        $splice: [[index, 1]]
       }
     }
   });
@@ -68,8 +71,12 @@ class PostComments extends React.Component {
     this.subscription = subscribeToMore({
       document: COMMENT_SUBSCRIPTION,
       variables: { postId },
-      updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
-
+      updateQuery: (
+        prev,
+        {
+          subscriptionData: { data: { commentUpdated: { mutation, id, node } } }
+        }
+      ) => {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
@@ -106,72 +113,78 @@ PostComments.propTypes = {
   deleteComment: PropTypes.func.isRequired,
   onCommentSelect: PropTypes.func.isRequired,
   onFormSubmitted: PropTypes.func.isRequired,
-  subscribeToMore: PropTypes.func.isRequired,
+  subscribeToMore: PropTypes.func.isRequired
 };
 
 const PostCommentsWithApollo = compose(
   graphql(COMMENT_ADD, {
     props: ({ mutate }) => ({
-      addComment: (content, postId) => mutate({
-        variables: { input: { content, postId } },
-        optimisticResponse: {
-          addComment: {
-            id: -1,
-            content: content,
-            __typename: 'Comment',
+      addComment: (content, postId) =>
+        mutate({
+          variables: { input: { content, postId } },
+          optimisticResponse: {
+            addComment: {
+              id: -1,
+              content: content,
+              __typename: 'Comment'
+            }
           },
-        },
-        updateQueries: {
-          getPost: (prev, { mutationResult: { data: { addComment } } }) => {
-            if (prev.post) {
-              return AddComment(prev, addComment);
+          updateQueries: {
+            getPost: (prev, { mutationResult: { data: { addComment } } }) => {
+              if (prev.post) {
+                return AddComment(prev, addComment);
+              }
             }
           }
-        },
-      })
+        })
     })
   }),
   graphql(COMMENT_EDIT, {
     props: ({ ownProps: { postId }, mutate }) => ({
-      editComment: (id, content) => mutate({
-        variables: { input: { id, postId, content } },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          editComment: {
-            id: id,
-            content: content,
-            __typename: 'Comment',
-          },
-        }
-      }),
+      editComment: (id, content) =>
+        mutate({
+          variables: { input: { id, postId, content } },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            editComment: {
+              id: id,
+              content: content,
+              __typename: 'Comment'
+            }
+          }
+        })
     })
   }),
   graphql(COMMENT_DELETE, {
     props: ({ ownProps: { postId }, mutate }) => ({
-      deleteComment: (id) => mutate({
-        variables: { input: { id, postId } },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          deleteComment: {
-            id: id,
-            __typename: 'Comment',
+      deleteComment: id =>
+        mutate({
+          variables: { input: { id, postId } },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            deleteComment: {
+              id: id,
+              __typename: 'Comment'
+            }
           },
-        },
-        updateQueries: {
-          getPost: (prev, { mutationResult: { data: { deleteComment } } }) => {
-            if (prev.post) {
-              return DeleteComment(prev, deleteComment.id);
+          updateQueries: {
+            getPost: (
+              prev,
+              { mutationResult: { data: { deleteComment } } }
+            ) => {
+              if (prev.post) {
+                return DeleteComment(prev, deleteComment.id);
+              }
             }
           }
-        }
-      }),
+        })
     })
   })
 )(PostComments);
 
 export default connect(
-  (state) => ({ comment: state.post.comment }),
-  (dispatch) => ({
+  state => ({ comment: state.post.comment }),
+  dispatch => ({
     onCommentSelect(comment) {
       dispatch({
         type: 'COMMENT_SELECT',
@@ -181,5 +194,5 @@ export default connect(
     onFormSubmitted() {
       dispatch(reset('comment'));
     }
-  }),
+  })
 )(PostCommentsWithApollo);

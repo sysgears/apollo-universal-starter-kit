@@ -23,16 +23,17 @@ import settings from '../../../settings';
 let assetMap;
 
 const { protocol, hostname, port, pathname } = url.parse(__BACKEND_URL__);
-const apiUrl = `${protocol}//${hostname}:${process.env.PORT || port}${pathname}`;
+const apiUrl = `${protocol}//${hostname}:${process.env.PORT ||
+  port}${pathname}`;
 
 async function renderServerSide(req, res, queryMap) {
   let networkInterface = createBatchingNetworkInterface({
     uri: apiUrl,
     opts: {
-      credentials: "include",
-      headers: req.headers,
+      credentials: 'include',
+      headers: req.headers
     },
-    batchInterval: 20,
+    batchInterval: 20
   });
 
   if (__PERSIST_GQL__) {
@@ -52,12 +53,9 @@ async function renderServerSide(req, res, queryMap) {
   const component = (
     <CookiesProvider cookies={req.universalCookies}>
       <ApolloProvider store={store} client={client}>
-          <StaticRouter
-            location={req.url}
-            context={context}
-          >
-            {Routes}
-          </StaticRouter>
+        <StaticRouter location={req.url} context={context}>
+          {Routes}
+        </StaticRouter>
       </ApolloProvider>
     </CookiesProvider>
   );
@@ -76,7 +74,11 @@ async function renderServerSide(req, res, queryMap) {
     res.end();
   } else {
     if (__DEV__ || !assetMap) {
-      assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
+      assetMap = JSON.parse(
+        fs.readFileSync(
+          path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')
+        )
+      );
     }
 
     const apolloState = Object.assign({}, client.store.getState());
@@ -85,10 +87,24 @@ async function renderServerSide(req, res, queryMap) {
     delete apolloState.apollo.queries;
     delete apolloState.apollo.mutations;
 
-    const token = req.universalCookies.get('x-token') ? req.universalCookies.get('x-token') : null;
-    const refreshToken = req.universalCookies.get('x-refresh-token') ? req.universalCookies.get('x-refresh-token') : null;
+    const token = req.universalCookies.get('x-token')
+      ? req.universalCookies.get('x-token')
+      : null;
+    const refreshToken = req.universalCookies.get('x-refresh-token')
+      ? req.universalCookies.get('x-refresh-token')
+      : null;
 
-    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} helmet={helmet} token={token} refreshToken={refreshToken} />;
+    const page = (
+      <Html
+        content={html}
+        state={apolloState}
+        assetMap={assetMap}
+        css={css}
+        helmet={helmet}
+        token={token}
+        refreshToken={refreshToken}
+      />
+    );
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
     res.end();
   }
@@ -96,11 +112,15 @@ async function renderServerSide(req, res, queryMap) {
 
 async function renderClientSide(req, res) {
   const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
-  
+
   if (__DEV__ || !assetMap) {
-    assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
+    assetMap = JSON.parse(
+      fs.readFileSync(
+        path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')
+      )
+    );
   }
-  const page = <Html state={({})} assetMap={assetMap} helmet={helmet}/>;
+  const page = <Html state={{}} assetMap={assetMap} helmet={helmet} />;
   res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
   res.end();
 }
@@ -116,5 +136,7 @@ export default queryMap => async (req, res, next) => {
     } else {
       return next();
     }
-  } catch (e) { log.error('RENDERING ERROR:', e); }
+  } catch (e) {
+    log.error('RENDERING ERROR:', e);
+  }
 };

@@ -5,7 +5,7 @@ const combine = (features, extractor) =>
 
 export default class {
   // eslint-disable-next-line no-unused-vars
-  constructor({route, navItem, reducer}, ...features) {
+  constructor({ route, navItem, reducer }, ...features) {
     this.tabItem = combine(arguments, arg => arg.tabItem);
     this.reducer = combine(arguments, arg => arg.reducer);
   }

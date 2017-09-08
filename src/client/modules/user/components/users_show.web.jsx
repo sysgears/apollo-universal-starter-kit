@@ -20,23 +20,23 @@ function renderUsers(users) {
 }
 
 const UsersShow = ({ loading, users, errors }) => {
-
   const renderMetaData = () => (
     <Helmet
       title="User"
-      meta={[{
-        name: 'description',
-        content: 'User page'
-      }]}/>
+      meta={[
+        {
+          name: 'description',
+          content: 'User page'
+        }
+      ]}
+    />
   );
 
   if (loading) {
     return (
       <PageLayout>
         {renderMetaData()}
-        <div className="text-center">
-          Loading...
-        </div>
+        <div className="text-center">Loading...</div>
       </PageLayout>
     );
   } else if (errors) {
@@ -44,10 +44,8 @@ const UsersShow = ({ loading, users, errors }) => {
       <PageLayout>
         {renderMetaData()}
         <h2>Users</h2>
-        <h1/>
-        {errors.map(error => (
-          <li key={error.path[0]}>{error.message}</li>
-        ))}
+        <h1 />
+        {errors.map(error => <li key={error.path[0]}>{error.message}</li>)}
       </PageLayout>
     );
   } else {
@@ -55,7 +53,7 @@ const UsersShow = ({ loading, users, errors }) => {
       <PageLayout>
         {renderMetaData()}
         <h2>Users</h2>
-        <h1/>
+        <h1 />
         <ListGroup>
           <ListGroupItem className="justify-content-between">
             <span>Username:</span>

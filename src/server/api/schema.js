@@ -7,13 +7,15 @@ import modules from '../modules';
 import log from '../../common/log';
 import settings from '../../../settings';
 
-export const pubsub = settings.apolloLogging ? addApolloLogging(new PubSub()) : new PubSub();
+export const pubsub = settings.apolloLogging
+  ? addApolloLogging(new PubSub())
+  : new PubSub();
 
 const executableSchema = makeExecutableSchema({
   typeDefs: [rootSchemaDef].concat(modules.schemas),
-  resolvers: modules.createResolvers(pubsub),
+  resolvers: modules.createResolvers(pubsub)
 });
 
-addErrorLoggingToSchema(executableSchema, { log: (e) => log.error(e) });
+addErrorLoggingToSchema(executableSchema, { log: e => log.error(e) });
 
 export default executableSchema;

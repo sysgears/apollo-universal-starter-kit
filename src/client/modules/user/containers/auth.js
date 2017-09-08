@@ -40,7 +40,6 @@ const checkAuth = (cookies, role) => {
         return false;
       }
     }
-
   } catch (e) {
     return false;
   }
@@ -48,7 +47,7 @@ const checkAuth = (cookies, role) => {
   return true;
 };
 
-const profileName = (cookies) => {
+const profileName = cookies => {
   let token = null;
 
   if (cookies && cookies.get('x-token')) {
@@ -60,14 +59,14 @@ const profileName = (cookies) => {
   }
 
   if (!token) {
-    return "";
+    return '';
   }
 
   try {
     const { user: { username } } = decode(token);
     return username;
   } catch (e) {
-    return "";
+    return '';
   }
 };
 
@@ -81,7 +80,15 @@ AuthNav.propTypes = {
 };
 
 const AuthLogin = ({ children, cookies, logout }) => {
-  return checkAuth(cookies, "") ? <NavItem onClick={() => logout()}><a href="#" className="nav-link">Logout</a></NavItem> : <NavItem>{children}</NavItem>;
+  return checkAuth(cookies, '') ? (
+    <NavItem onClick={() => logout()}>
+      <a href="#" className="nav-link">
+        Logout
+      </a>
+    </NavItem>
+  ) : (
+    <NavItem>{children}</NavItem>
+  );
 };
 
 AuthLogin.propTypes = {
@@ -92,58 +99,74 @@ AuthLogin.propTypes = {
   logout: PropTypes.func.isRequired
 };
 
-const AuthLoginWithApollo = withCookies(withRouter(withApollo(compose(
-  graphql(CURRENT_USER),
-  graphql(USER_LOGOUT, {
-    // eslint-disable-next-line
+const AuthLoginWithApollo = withCookies(
+  withRouter(
+    withApollo(
+      compose(
+        graphql(CURRENT_USER),
+        graphql(USER_LOGOUT, {
+          // eslint-disable-next-line
     props: ({ ownProps: { client, history, navigation }, mutate }) => ({
-      logout: async () => {
-        try {
-          const { data: { logout } } = await mutate();
+            logout: async () => {
+              try {
+                const { data: { logout } } = await mutate();
 
-          if (logout.errors) {
-            return { errors: logout.errors };
-          }
+                if (logout.errors) {
+                  return { errors: logout.errors };
+                }
 
-          // comment out until https://github.com/apollographql/apollo-client/issues/1186 is fixed
-          //await client.resetStore();
+                // comment out until https://github.com/apollographql/apollo-client/issues/1186 is fixed
+                //await client.resetStore();
 
-          window.localStorage.setItem('token', null);
-          window.localStorage.setItem('refreshToken', null);
+                window.localStorage.setItem('token', null);
+                window.localStorage.setItem('refreshToken', null);
 
-          if (history) {
-            return history.push('/');
-          }
-          if (navigation) {
-            return navigation.goBack();
-          }
-        } catch (e) {
-          console.log(e.graphQLErrors);
-        }
-      }
-    })
-  }),
-)(AuthLogin))));
+                if (history) {
+                  return history.push('/');
+                }
+                if (navigation) {
+                  return navigation.goBack();
+                }
+              } catch (e) {
+                console.log(e.graphQLErrors);
+              }
+            }
+          })
+        })
+      )(AuthLogin)
+    )
+  )
+);
 
 const AuthProfile = withCookies(({ cookies }) => {
-  return checkAuth(cookies, "") ? <NavItem><Link to="/profile" className="nav-link">{profileName(cookies)}</Link></NavItem> : null;
+  return checkAuth(cookies, '') ? (
+    <NavItem>
+      <Link to="/profile" className="nav-link">
+        {profileName(cookies)}
+      </Link>
+    </NavItem>
+  ) : null;
 });
 
 AuthProfile.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthRoute = withCookies(({ component: Component, cookies, role, ...rest }) => {
-  return (
-    <Route {...rest} render={props => (
-      checkAuth(cookies, role) ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: '/login' }} />
-      )
-    )} />
-  );
-});
+const AuthRoute = withCookies(
+  ({ component: Component, cookies, role, ...rest }) => {
+    return (
+      <Route
+        {...rest}
+        render={props =>
+          checkAuth(cookies, role) ? (
+            <Component {...props} />
+          ) : (
+            <Redirect to={{ pathname: '/login' }} />
+          )}
+      />
+    );
+  }
+);
 
 AuthRoute.propTypes = {
   component: PropTypes.func,

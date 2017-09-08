@@ -1,8 +1,8 @@
 import { withFilter } from 'graphql-subscriptions';
 
-const POST_UPDATED_TOPIC = "post_updated";
-const POSTS_UPDATED_TOPIC = "posts_updated";
-const COMMENT_UPDATED_TOPIC = "comment_updated";
+const POST_UPDATED_TOPIC = 'post_updated';
+const POSTS_UPDATED_TOPIC = 'posts_updated';
+const COMMENT_UPDATED_TOPIC = 'comment_updated';
 
 export default pubsub => ({
   Query: {
@@ -16,14 +16,18 @@ export default pubsub => ({
           node: {
             id: post.id,
             title: post.title,
-            content: post.content,
+            content: post.content
           }
         });
       });
 
-      const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
+      const endCursor =
+        edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
 
-      const values = await Promise.all([context.Post.getTotal(), context.Post.getNextPageFlag(endCursor)]);
+      const values = await Promise.all([
+        context.Post.getTotal(),
+        context.Post.getNextPageFlag(endCursor)
+      ]);
 
       return {
         totalCount: values[0].count,
@@ -36,16 +40,16 @@ export default pubsub => ({
     },
     post(obj, { id }, context) {
       return context.Post.getPost(id);
-    },
+    }
   },
   Post: {
     comments({ id }, args, context) {
       return context.loaders.getCommentsForPostIds.load(id);
-    },
+    }
   },
   Mutation: {
     async addPost(obj, { input }, context) {
-      const [ id ] = await context.Post.addPost(input);
+      const [id] = await context.Post.addPost(input);
       const post = await context.Post.getPost(id);
       // publish for post list
       pubsub.publish(POSTS_UPDATED_TOPIC, {
@@ -90,7 +94,7 @@ export default pubsub => ({
       return post;
     },
     async addComment(obj, { input }, context) {
-      const [ id ] = await context.Post.addComment(input);
+      const [id] = await context.Post.addComment(input);
       const comment = await context.Post.getComment(id);
       // publish for edit post page
       pubsub.publish(COMMENT_UPDATED_TOPIC, {
@@ -129,23 +133,32 @@ export default pubsub => ({
         }
       });
       return comment;
-    },
+    }
   },
   Subscription: {
     postUpdated: {
-      subscribe: withFilter(() => pubsub.asyncIterator(POST_UPDATED_TOPIC), (payload, variables) => {
-        return payload.postUpdated.id === variables.id;
-      }),
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(POST_UPDATED_TOPIC),
+        (payload, variables) => {
+          return payload.postUpdated.id === variables.id;
+        }
+      )
     },
     postsUpdated: {
-      subscribe: withFilter(() => pubsub.asyncIterator(POSTS_UPDATED_TOPIC), (payload, variables) => {
-        return variables.endCursor <= payload.postsUpdated.id;
-      }),
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(POSTS_UPDATED_TOPIC),
+        (payload, variables) => {
+          return variables.endCursor <= payload.postsUpdated.id;
+        }
+      )
     },
     commentUpdated: {
-      subscribe: withFilter(() => pubsub.asyncIterator(COMMENT_UPDATED_TOPIC), (payload, variables) => {
-        return payload.commentUpdated.postId === variables.postId;
-      }),
-    },
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(COMMENT_UPDATED_TOPIC),
+        (payload, variables) => {
+          return payload.commentUpdated.postId === variables.postId;
+        }
+      )
+    }
   }
 });

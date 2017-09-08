@@ -1,7 +1,7 @@
 import log from '../common/log';
 import './api_server';
 
-process.on('uncaughtException', (ex) => {
+process.on('uncaughtException', ex => {
   log.error(ex);
   process.exit(1);
 });

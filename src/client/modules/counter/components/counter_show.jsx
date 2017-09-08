@@ -4,14 +4,17 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '../../common/components';
 
-const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement }) => {
-
+const CounterShow = ({
+  loading,
+  count,
+  addCount,
+  reduxCount,
+  onReduxIncrement
+}) => {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text>
-          Loading...
-        </Text>
+        <Text>Loading...</Text>
       </View>
     );
   } else {
@@ -19,17 +22,20 @@ const CounterShow = ({ loading, count, addCount, reduxCount, onReduxIncrement })
       <View style={styles.container}>
         <View style={styles.element}>
           <Text style={styles.box}>
-            Current count, is {count.amount}. This is being stored server-side in the database and using Apollo
-            subscription for real-time updates.
+            Current count, is {count.amount}. This is being stored server-side
+            in the database and using Apollo subscription for real-time updates.
           </Text>
         </View>
         <Button onPress={addCount(1)}>Click to increase count</Button>
         <View style={styles.element}>
           <Text style={styles.box}>
-            Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.
+            Current reduxCount, is {reduxCount}. This is being stored
+            client-side with Redux.
           </Text>
         </View>
-        <Button onPress={onReduxIncrement(1)}>Click to increase reduxCount</Button>
+        <Button onPress={onReduxIncrement(1)}>
+          Click to increase reduxCount
+        </Button>
       </View>
     );
   }
@@ -49,7 +55,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: 15,
     marginRight: 15,
-    marginBottom: 5,
+    marginBottom: 5
   }
 });
 
@@ -58,7 +64,7 @@ CounterShow.propTypes = {
   count: PropTypes.object,
   addCount: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired,
-  onReduxIncrement: PropTypes.func.isRequired,
+  onReduxIncrement: PropTypes.func.isRequired
 };
 
 export default CounterShow;

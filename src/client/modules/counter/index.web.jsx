@@ -7,6 +7,6 @@ import reducers from './reducers';
 import Feature from '../connector';
 
 export default new Feature({
-  route: <Route exact path="/" component={Counter}/>,
+  route: <Route exact path="/" component={Counter} />,
   reducer: { counter: reducers }
 });

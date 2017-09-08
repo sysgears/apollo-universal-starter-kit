@@ -57,6 +57,9 @@ export default pubsub => ({
         if (context.req) {
           context.req.universalCookies.set('x-token', tokens.token, {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
           context.req.universalCookies.set('x-refresh-token', tokens.refreshToken, {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
+
+          context.req.universalCookies.set('r-token', tokens.token, {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
+          context.req.universalCookies.set('r-refresh-token', tokens.refreshToken, {maxAge : 60 * 60 * 24 * 7, httpOnly: false});
         }
         return { tokens };
       } catch (e) {
@@ -67,6 +70,9 @@ export default pubsub => ({
       if (context.req) {
         context.req.universalCookies.remove('x-token');
         context.req.universalCookies.remove('x-refresh-token');
+
+        context.req.universalCookies.remove('r-token');
+        context.req.universalCookies.remove('r-refresh-token');
       }
 
       return true;

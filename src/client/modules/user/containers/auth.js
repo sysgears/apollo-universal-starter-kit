@@ -14,12 +14,10 @@ const checkAuth = (cookies, role) => {
   let token = null;
   let refreshToken = null;
 
-  if (cookies && cookies.get('x-token')) {
-    token = cookies.get('x-token');
-    refreshToken = cookies.get('x-refresh-token');
-  }
-
-  if (__CLIENT__ && window.localStorage.getItem('token')) {
+  if (cookies && cookies.get('r-token')) {
+    token = cookies.get('r-token');
+    refreshToken = cookies.get('r-refresh-token');
+  } else if (__CLIENT__ && window.localStorage.getItem('token')) {
     token = window.localStorage.getItem('token');
     refreshToken = window.localStorage.getItem('refreshToken');
   }

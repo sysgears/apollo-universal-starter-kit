@@ -55,7 +55,7 @@ export default pubsub => ({
       try {
         const tokens  = await tryLogin(email, password, context.User, context.SECRET);
         if (context.req) {
-          context.req.universalCookies.set('x-token', tokens.token, {maxAge : 60, httpOnly: true});
+          context.req.universalCookies.set('x-token', tokens.token, {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
           context.req.universalCookies.set('x-refresh-token', tokens.refreshToken, {maxAge : 60 * 60 * 24 * 7, httpOnly: true});
         }
         return { tokens };

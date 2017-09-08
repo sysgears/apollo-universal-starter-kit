@@ -19,7 +19,7 @@ export const createTokens = async (user, secret) => {
     {
       user: user.id,
     },
-    secret + user.password,
+    secret,
     {
       expiresIn: '7d',
     },
@@ -31,13 +31,13 @@ export const createTokens = async (user, secret) => {
 export const refreshTokens = async (token, refreshToken, User, SECRET) => {
   let userId = -1;
   try {
-    const { user: { id } } = jwt.verify(refreshToken, SECRET);
-    userId = id;
+    const { user } = jwt.verify(refreshToken, SECRET);
+    userId = user;
   } catch (err) {
     return {};
   }
 
-  const user = await User.getUserWithPassword(userId);
+  const user = await User.getUser(userId);
 
   const [newToken, newRefreshToken] = await createTokens(user, SECRET);
   return {

@@ -115,7 +115,7 @@ const AuthLoginWithApollo = withCookies(withRouter(withApollo(compose(
           if (history) {
             return history.push('/');
           }
-          else if (navigation) {
+          if (navigation) {
             return navigation.goBack();
           }
         } catch (e) {

@@ -97,6 +97,7 @@ AuthLogin.propTypes = {
 const AuthLoginWithApollo = withCookies(withRouter(withApollo(compose(
   graphql(CURRENT_USER),
   graphql(USER_LOGOUT, {
+    // eslint-disable-next-line
     props: ({ ownProps: { client, history, navigation }, mutate }) => ({
       logout: async () => {
         try {

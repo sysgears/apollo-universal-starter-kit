@@ -15,6 +15,7 @@ import createApolloClient from '../../common/apollo_client';
 import createReduxStore from '../../common/redux_store';
 import settings from '../../../settings';
 import Routes from './routes';
+import modules from '../modules';
 
 import '../styles/styles.scss';
 
@@ -32,33 +33,34 @@ if (__CLIENT__) {
         req.options.headers = {};
       }
 
-      req.options.headers['x-token'] = window.localStorage.getItem('token');
-      req.options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
+      for (const middleware of modules.middlewares) {
+        middleware(req);
+      }
+
       next();
     }
   }]);
 
   networkInterface.useAfter([{
     applyBatchAfterware(res, next) {
-      const token = res.options.headers['x-token'];
-      const refreshToken = res.options.headers['x-refresh-token'];
-      if (token) {
-        window.localStorage.setItem('token', token);
+
+      for (const afterware of modules.afterwares) {
+        afterware(res);
       }
-      if (refreshToken) {
-        window.localStorage.setItem('refreshToken', refreshToken);
-      }
+
       next();
     }
   }]);
 
+  let connectionParams = {};
+  for (const connectionParam of modules.connectionParams) {
+    Object.assign(connectionParams, connectionParam());
+  }
+
   const wsClient = new SubscriptionClient((__BACKEND_URL__ || (window.location.origin + '/graphql'))
     .replace(/^http/, 'ws'), {
       reconnect: true,
-      connectionParams: {
-        token: window.localStorage.getItem('token'),
-        refreshToken: window.localStorage.getItem('refreshToken')
-      }
+      connectionParams: connectionParams
   });
   networkInterface = addGraphQLSubscriptions(
     networkInterface,

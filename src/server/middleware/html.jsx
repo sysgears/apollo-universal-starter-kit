@@ -4,7 +4,7 @@ import serialize from 'serialize-javascript';
 
 import styles from '../../client/styles/styles.scss';
 
-const Html = ({ content, state, assetMap, css, helmet }) => {
+const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent(); // react-helmet html document tags
   const bodyAttrs = helmet.bodyAttributes.toComponent(); // react-helmet body document tags
 
@@ -35,7 +35,7 @@ const Html = ({ content, state, assetMap, css, helmet }) => {
       <body {...bodyAttrs}>
         <div id="content" dangerouslySetInnerHTML={{ __html: content || "" }}/>
         <script
-          dangerouslySetInnerHTML={{ __html: `window.__APOLLO_STATE__=${serialize(state, { isJSON: true })};` }}
+          dangerouslySetInnerHTML={{ __html: `window.__APOLLO_STATE__=${serialize(state, { isJSON: true })};window.localStorage.setItem('token','${token}');window.localStorage.setItem('refreshToken','${refreshToken}');` }}
           charSet="UTF-8"
         />
         {assetMap["vendor.js"] && <script src={`/${assetMap["vendor.js"]}`} charSet="utf-8"/>}
@@ -50,7 +50,9 @@ Html.propTypes = {
   state: PropTypes.object.isRequired,
   assetMap: PropTypes.object.isRequired,
   css: PropTypes.array,
-  helmet: PropTypes.object
+  helmet: PropTypes.object,
+  token: PropTypes.string,
+  refreshToken:  PropTypes.string
 };
 
 export default Html;

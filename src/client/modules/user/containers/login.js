@@ -42,7 +42,7 @@ const UserWithApollo = compose(
           if (history) {
             return history.push('/profile');
           }
-          else if (navigation) {
+          if (navigation) {
             return navigation.goBack();
           }
         } catch (e) {

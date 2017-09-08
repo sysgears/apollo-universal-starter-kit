@@ -33,11 +33,10 @@ const UserWithApollo = compose(
           if (register.errors) {
             return { errors: register.errors };
           }
-
           if (history) {
             return history.push('/profile');
           }
-          else if (navigation) {
+          if (navigation) {
             return navigation.goBack();
           }
         } catch (e) {

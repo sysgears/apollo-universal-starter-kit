@@ -121,7 +121,7 @@ export default compose(
         if (history) {
           return history.push('/posts');
         }
-        else if (navigation) {
+        if (navigation) {
           return navigation.goBack();
         }
       }

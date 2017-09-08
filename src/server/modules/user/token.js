@@ -5,10 +5,20 @@ import { refreshTokens } from './auth';
 export default (SECRET, User) => (async (req, res, next) => {
   let token = req.universalCookies.get('x-token') || req.headers['x-token'];
 
-  // if cookie available
-  if (req.universalCookies.get('x-refresh-token')) {
+  // if header available
+  if (req.headers['x-token']) {
     // check if header token matches cookie token
-    if (req.universalCookies.get('x-refresh-token') !== req.universalCookies.get('r-refresh-token'))
+    if ((req.headers['x-token'] !== req.universalCookies.get('x-token')) || (req.headers['x-refresh-token'] !== req.universalCookies.get('x-refresh-token')))
+    {
+      // if x-token is not empty and not the same as cookie x-token revoke authentication
+      token = undefined;
+    }
+  }
+
+  // if cookie available
+  if (req.universalCookies.get('x--token')) {
+    // check if header token matches cookie token
+    if ((req.universalCookies.get('x-token') !== req.universalCookies.get('r-token')) || (req.universalCookies.get('x-refresh-token') !== req.universalCookies.get('r-refresh-token')))
     {
       // if x-token is not empty and not the same as cookie x-token revoke authentication
       token = undefined;

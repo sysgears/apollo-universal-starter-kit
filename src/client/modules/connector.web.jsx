@@ -12,6 +12,9 @@ export default class {
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);
     this.reducer = combine(arguments, arg => arg.reducer);
+    this.middleware = combine(arguments, arg => arg.middleware);
+    this.afterware = combine(arguments, arg => arg.afterware);
+    //this.connectionParams = combine(arguments, arg => arg.connectionParams);
   }
 
   get routes() {
@@ -35,4 +38,16 @@ export default class {
   get reducers() {
     return merge(...this.reducer);
   }
+
+  get middlewares() {
+    return this.middleware;
+  }
+
+  get afterwares() {
+    return this.afterware;
+  }
+  /*
+    get connectionParams() {
+      return this.middleware;
+    }*/
 }

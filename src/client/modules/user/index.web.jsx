@@ -13,6 +13,22 @@ import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from './containers/auth';
 
 import Feature from '../connector';
 
+function tokenMiddleware(req) {
+  req.options.headers['x-token'] = window.localStorage.getItem('token');
+  req.options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
+}
+
+function tokenAfterware(res) {
+  const token = res.options.headers['x-token'];
+  const refreshToken = res.options.headers['x-refresh-token'];
+  if (token) {
+    window.localStorage.setItem('token', token);
+  }
+  if (refreshToken) {
+    window.localStorage.setItem('refreshToken', refreshToken);
+  }
+}
+
 export default new Feature({
   route: [
     <AuthRoute exact path="/profile" role="user" component={Profile} />,
@@ -31,5 +47,7 @@ export default new Feature({
       <span className="nav-link"><Link to="/login" >Login</Link> / <Link to="/register" >Register</Link></span>
     </AuthLogin>
   ],
-  reducer: { user: reducers }
+  reducer: { user: reducers },
+  middleware: tokenMiddleware,
+  afterware: tokenAfterware
 });

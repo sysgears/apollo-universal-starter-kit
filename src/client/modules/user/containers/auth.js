@@ -106,7 +106,8 @@ const AuthLoginWithApollo = withCookies(withRouter(withApollo(compose(
             return { errors: logout.errors };
           }
 
-          await client.resetStore();
+          // comment out until https://github.com/apollographql/apollo-client/issues/1186 is fixed
+          //await client.resetStore();
 
           window.localStorage.setItem('token', null);
           window.localStorage.setItem('refreshToken', null);
@@ -114,7 +115,7 @@ const AuthLoginWithApollo = withCookies(withRouter(withApollo(compose(
           if (history) {
             return history.push('/');
           }
-          if (navigation) {
+          else if (navigation) {
             return navigation.goBack();
           }
         } catch (e) {

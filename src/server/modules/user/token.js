@@ -19,7 +19,7 @@ export default (SECRET, User) => async (req, res, next) => {
   }
 
   // if cookie available
-  if (req.universalCookies.get('x--token')) {
+  if (req.universalCookies.get('x-token')) {
     // check if header token matches cookie token
     if (
       req.universalCookies.get('x-token') !==

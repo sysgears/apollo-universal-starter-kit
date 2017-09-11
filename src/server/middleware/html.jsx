@@ -57,7 +57,7 @@ const Html = ({
           <link
             rel="stylesheet"
             type="text/css"
-            href={`/${assetMap['bundle.css']}`}
+            href={`/${assetMap['index.css']}`}
           />
         )}
         {!!__DEV__ && (

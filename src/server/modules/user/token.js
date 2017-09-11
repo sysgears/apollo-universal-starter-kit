@@ -43,7 +43,6 @@ export default (SECRET, User) => async (req, res, next) => {
       const newTokens = await refreshTokens(token, refreshToken, User, SECRET);
 
       if (newTokens.token && newTokens.refreshToken) {
-        res.set('Access-Control-Allow-Origin', 'true');
         res.set('Access-Control-Expose-Headers', 'x-token, x-refresh-token');
         res.set('x-token', newTokens.token);
         res.set('x-refresh-token', newTokens.refreshToken);

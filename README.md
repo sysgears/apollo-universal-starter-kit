@@ -164,7 +164,27 @@ Run the following command to see the CLI help:
 yarn cli
 ```
  
-## Features
+## Features and examples included 
+
+- Full LOGIN funcionality in user example with [JWT] tokens stored in `localStorage` and `cookies`
+
+- [GraphQL] API
+
+  GraphQL is used as very flexible and much faster API in terms of bandwidth and round-trips, compared to REST.
+GraphQL requests are batched together automatically by [Apollo]
+
+- [GraphQL] subscriptions example
+
+  Full CRUD functionality with Counter updating and Subscriptions in Posts and Comments example, with [ReduxForm]
+
+- [GraphQL Cursor Pagination] Example of  [Relay-style cursor pagination]
+
+- [Dataloader] for loading comments in post example
+
+- Declarative/dynamic `head` section, using [React Helmet]
+
+- Google Analytics integration using [React GA]
+
 - [Webpack] for back end
 
   This starter kit is different from most of the starter kits out there, because it uses Webpack not only for front end,
@@ -204,15 +224,6 @@ then starts off from there and updates itself on user interactions.
   This example application uses Apollo optimistic UI updates, that result in immediate UI update on user interaction and then,
 after data arrives from the server, UI state is finalized.
 
-- [GraphQL] API
-
-  GraphQL is used as very flexible and much faster API in terms of bandwidth and round-trips, compared to REST.
-GraphQL requests are batched together automatically by [Apollo]
-
-- [GraphQL] subscription example
-
-  GraphQL subscription is utilized to make counter updating in real-time.
-
 - SQL and arbitrary data sources support
 
   [Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL].
@@ -223,7 +234,7 @@ NoSQL storage or any other data source can be used the same way.
 - Powerful stylesheets with Hot Reloading
 
   [Twitter Bootstrap] in form of SASS stylesheets is used for styling demo application. Application has stylesheet
-in `styles.scss` for global styling which is Hot Reloaded on change. React components styling is done by [Glamor v3].
+in `styles.scss` for global styling which is Hot Reloaded on change. React components styling is done by [Styled Components].
 
 - [Babel] for ES2017 transpiling
 
@@ -237,18 +248,6 @@ predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` fi
 - [PersistGraphQL Webpack Plugin] is a tool to gather static GraphQL queries for GraphQL projects and inject them into build.
 It will make front end and back end aware of static queries used in the project and will only allow these queries
 for better security and less bandwidth. 
-
-- [Dataloader] for loading comments in post example
-
-- [GraphQL Cursor Pagination] Example of  [Relay-style cursor pagination]
-
-- Declarative/dynamic `head` section, using [React Helmet]
-
-- Google Analytics integration using [React GA]
-
-- Full CRUD funcionality with Subscriptions in post example, with [ReduxForm]
-
-- Full LOGIN funcionality in user example with [JWT] tokens stored in `localStorage` and `cookies`
 
 ## Project Structure
 
@@ -376,7 +375,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Twitter Bootstrap]: http://getbootstrap.com
 [Webpack]: http://webpack.github.io
 [Babel]: http://babeljs.io
-[Glamor v3]: https://github.com/threepointone/glamor/tree/v3
+[Styled Components]: https://www.styled-components.com
 [Knex]: http://knexjs.org
 [Debug SQL]: https://spin.atomicobject.com/2017/03/27/timing-queries-knexjs-nodejs/
 [Expo Build standalone apps documentation]: https://docs.expo.io/versions/v18.0.0/guides/building-standalone-apps.html

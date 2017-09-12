@@ -39,6 +39,9 @@ export const refreshTokens = async (token, refreshToken, User, SECRET) => {
   }
 
   const user = await User.getUserWithPassword(userId);
+  if (!user) {
+    return {};
+  }
   const refreshSecret = SECRET + user.password;
 
   try {

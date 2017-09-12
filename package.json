@@ -58,7 +58,7 @@
     "express": "^4.15.4",
     "graphql": "^0.10.5",
     "graphql-iso-date": "^3.3.0",
-    "graphql-subscriptions": "^0.4.4",
+    "graphql-subscriptions": "^0.5.0",
     "graphql-tag": "^2.4.2",
     "graphql-tools": "^1.2.2",
     "history": "^4.7.2",

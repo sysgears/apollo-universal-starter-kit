@@ -1,7 +1,7 @@
 {
   "builders": {
     "server": {
-      "stack": ["server", "react-native-web"],
+      "stack": ["server"],
       "enabled": true
     },
     "web": {
@@ -27,11 +27,10 @@
     "frontendBuildDir": "build/client",
     "dllBuildDir": "build/dll",
     "overridesConfig": "tools/webpack.app_config.js",
-    "stack": ["apollo", "react", "styled-components", "sass", "es6", "webpack"],
+    "stack": ["apollo", "angular", "styled-components", "sass", "ts", "webpack"],
     "backendUrl": "http://{ip}:8080/graphql",
     "ssr": true,
     "webpackDll": true,
-    "reactHotLoader": false,
     "persistGraphQL": true,
     "frontendRefreshOnBackendChange": true
   }

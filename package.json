@@ -9,22 +9,25 @@
     "yarn": ">= 0.19.0"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production spin build",
+    "build": "cross-env NODE_ENV=production spin -v build",
     "exp": "spin exp",
     "start": "node --harmony build/server",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin -v test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src tests tools",
     "seed": "npm run migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
-    "watch": "spin watch",
+    "watch": "spin -v watch",
     "heroku-postbuild": "rm -rf build && npm run build && npm run seed",
     "cli": "node tools/cli"
   },
   "lint-staged": {
-    "*.{js,jsx,json}": ["prettier --write", "git add"]
+    "*.{js,jsx,json}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -99,6 +102,8 @@
     "universal-cookie-express": "^2.1.0"
   },
   "devDependencies": {
+    "@types/node": "^8.0.28",
+    "awesome-typescript-loader": "^3.2.3",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.0",
@@ -169,6 +174,7 @@
     "source-list-map": "^2.0.0",
     "spinjs": "^0.2.2",
     "style-loader": "^0.18.2",
+    "typescript": "^2.5.2",
     "url-loader": "^0.5.9",
     "wait-on": "^2.0.2",
     "webpack": "^3.5.6",

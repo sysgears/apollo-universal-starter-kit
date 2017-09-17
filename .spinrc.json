@@ -10,11 +10,11 @@
       "enabled": true
     },
     "android": {
-      "stack": ["react-native", "android"],
+      "stack": ["android"],
       "enabled": false
     },
     "ios": {
-      "stack": ["react-native", "ios"],
+      "stack": ["ios"],
       "enabled": false
     },
     "test": {
@@ -27,7 +27,7 @@
     "frontendBuildDir": "build/client",
     "dllBuildDir": "build/dll",
     "overridesConfig": "tools/webpack.app_config.js",
-    "stack": ["apollo", "angular", "styled-components", "sass", "ts", "webpack"],
+    "stack": ["apollo", "angular", "sass", "ts", "webpack"],
     "backendUrl": "http://{ip}:8080/graphql",
     "ssr": true,
     "webpackDll": true,

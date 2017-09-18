@@ -14,10 +14,10 @@ import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
 import { CookiesProvider } from 'react-cookie';
 
-import createApolloClient from '../../common/apollo_client';
-import createReduxStore from '../../common/redux_store';
+import createApolloClient from '../../common/createApolloClient';
+import createReduxStore from '../../common/createReduxStore';
 import settings from '../../../settings';
-import Routes from './routes';
+import Routes from './Routes';
 import modules from '../modules';
 
 import '../styles/styles.scss';

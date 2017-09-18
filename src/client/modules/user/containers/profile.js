@@ -7,13 +7,13 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import ProfileShow from '../components/profile_show';
+import ProfileView from '../components/ProfileView.jsx';
 
-import CURRENT_USER from '../graphql/current_user.graphql';
+import CURRENT_USER from '../graphql/currentUser.graphql';
 
 class Profile extends React.Component {
   render() {
-    return <ProfileShow {...this.props} />;
+    return <ProfileView {...this.props} />;
   }
 }
 

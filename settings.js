@@ -1,5 +1,5 @@
-import { app as settings } from './app.json';
 import _ from 'lodash';
+import { app as settings } from './app.json';
 
 const envSettings = Object.assign(
   {},

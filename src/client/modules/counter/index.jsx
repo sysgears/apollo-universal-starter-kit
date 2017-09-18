@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 
 import { createTabBarIconWrapper } from '../common/components';
-import Counter from './containers/counter';
+import Counter from './containers/Counter';
 import reducers from './reducers';
 
 import Feature from '../connector';

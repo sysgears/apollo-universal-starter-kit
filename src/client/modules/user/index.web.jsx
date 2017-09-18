@@ -3,13 +3,13 @@ import React from 'react';
 import { Route, Link } from 'react-router-dom';
 
 // Component and helpers
-import Profile from './containers/profile';
-import Users from './containers/users';
+import Profile from './containers/Profile';
+import Users from './containers/Users';
 import Register from './containers/register';
-import Login from './containers/login';
+import Login from './containers/Login';
 import reducers from './reducers';
 
-import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from './containers/auth';
+import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
 
 import Feature from '../connector';
 

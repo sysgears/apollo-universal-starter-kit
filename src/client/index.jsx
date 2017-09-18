@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import 'backend_reload';
 
-import Main from './app/main';
+import Main from './app/Main';
 import log from '../common/log';
 
 const root = document.getElementById('content');
@@ -22,7 +22,7 @@ if (__DEV__) {
       window.location.reload();
     });
 
-    module.hot.accept('./app/main', () => {
+    module.hot.accept('./app/Main', () => {
       try {
         log.debug('Updating front-end');
         frontendReloadCount = (frontendReloadCount || 0) + 1;

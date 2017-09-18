@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 
-import PostList from '../components/post_list';
+import PostList from '../components/PostList';
 
-import POSTS_QUERY from '../graphql/posts_get.graphql';
-import POSTS_SUBSCRIPTION from '../graphql/posts_subscription.graphql';
-import POST_DELETE from '../graphql/post_delete.graphql';
+import POSTS_QUERY from '../graphql/getPosts.graphql';
+import POSTS_SUBSCRIPTION from '../graphql/postsUpdated.graphql';
+import POST_DELETE from '../graphql/deletePost.graphql';
 
 export function AddPost(prev, node) {
   // ignore if duplicate

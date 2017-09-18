@@ -12,10 +12,10 @@ import Helmet from 'react-helmet';
 import url from 'url';
 import { CookiesProvider } from 'react-cookie';
 
-import createApolloClient from '../../common/apollo_client';
-import createReduxStore from '../../common/redux_store';
+import createApolloClient from '../../common/createApolloClient';
+import createReduxStore from '../../common/createReduxStore';
 import Html from './html';
-import Routes from '../../client/app/routes';
+import Routes from '../../client/app/Routes';
 import log from '../../common/log';
 import { options as spinConfig } from '../../../.spinrc.json';
 import settings from '../../../settings';

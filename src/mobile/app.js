@@ -7,7 +7,7 @@ import ApolloClient from 'apollo-client';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import modules from '../client/modules';
-import MainScreenNavigator from '../client/app/routes';
+import MainScreenNavigator from '../client/app/Routes';
 
 const networkInterface = new SubscriptionClient(
   __BACKEND_URL__.replace(/^http/, 'ws'),

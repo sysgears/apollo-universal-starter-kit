@@ -7,22 +7,22 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import LoginShow from '../components/login_show.web';
+import LoginView from '../components/LoginView';
 
-import USER_LOGIN from '../graphql/user_login.graphql';
+import USER_LOGIN from '../graphql/login.graphql';
 
-class User extends React.Component {
+class Login extends React.Component {
   render() {
-    return <LoginShow {...this.props} />;
+    return <LoginView {...this.props} />;
   }
 }
 
-User.propTypes = {
+Login.propTypes = {
   login: PropTypes.func.isRequired,
   data: PropTypes.object
 };
 
-const UserWithApollo = compose(
+const LoginWithApollo = compose(
   graphql(USER_LOGIN, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       login: async ({ email, password }) => {
@@ -51,6 +51,6 @@ const UserWithApollo = compose(
       }
     })
   })
-)(User);
+)(Login);
 
-export default UserWithApollo;
+export default LoginWithApollo;

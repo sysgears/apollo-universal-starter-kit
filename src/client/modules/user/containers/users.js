@@ -7,13 +7,13 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import UsersShow from '../components/users_show';
+import UsersView from '../components/UsersView';
 
-import USERS_QUERY from '../graphql/users_get.graphql';
+import USERS_QUERY from '../graphql/users.graphql';
 
 class Users extends React.Component {
   render() {
-    return <UsersShow {...this.props} />;
+    return <UsersView {...this.props} />;
   }
 }
 

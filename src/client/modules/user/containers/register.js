@@ -6,21 +6,21 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import RegisterShow from '../components/register_show';
+import RegisterView from '../components/RegisterView';
 
-import USER_REGISTER from '../graphql/user_register.graphql';
+import USER_REGISTER from '../graphql/register.graphql';
 
-class User extends React.Component {
+class Register extends React.Component {
   render() {
-    return <RegisterShow {...this.props} />;
+    return <RegisterView {...this.props} />;
   }
 }
 
-User.propTypes = {
+Register.propTypes = {
   register: PropTypes.func.isRequired
 };
 
-const UserWithApollo = compose(
+const RegisterWithApollo = compose(
   graphql(USER_REGISTER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       register: async ({ username, email, password }) => {
@@ -44,6 +44,6 @@ const UserWithApollo = compose(
       }
     })
   })
-)(User);
+)(Register);
 
-export default UserWithApollo;
+export default RegisterWithApollo;

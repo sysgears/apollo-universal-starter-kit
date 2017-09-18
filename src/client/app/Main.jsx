@@ -1,33 +1,33 @@
-import React from 'react';
-import { createBatchingNetworkInterface } from 'apollo-client';
-import { addApolloLogging } from 'apollo-logger';
-import { ApolloProvider } from 'react-apollo';
-import createHistory from 'history/createBrowserHistory';
-import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-import { addPersistedQueries } from 'persistgraphql';
+import React from "react";
+import { createBatchingNetworkInterface } from "apollo-client";
+import { addApolloLogging } from "apollo-logger";
+import { ApolloProvider } from "react-apollo";
+import createHistory from "history/createBrowserHistory";
+import { ConnectedRouter, routerMiddleware } from "react-router-redux";
+import { addPersistedQueries } from "persistgraphql";
 import {
   SubscriptionClient,
   addGraphQLSubscriptions
-} from 'subscriptions-transport-ws';
+} from "subscriptions-transport-ws";
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
-import queryMap from 'persisted_queries.json';
-import ReactGA from 'react-ga';
-import { CookiesProvider } from 'react-cookie';
+import queryMap from "persisted_queries.json";
+import ReactGA from "react-ga";
+import { CookiesProvider } from "react-cookie";
 
-import createApolloClient from '../../common/createApolloClient';
-import createReduxStore from '../../common/createReduxStore';
-import settings from '../../../settings';
-import Routes from './Routes';
-import modules from '../modules';
+import createApolloClient from "../../common/createApolloClient";
+import createReduxStore from "../../common/createReduxStore";
+import settings from "../../../settings";
+import Routes from "./Routes";
+import modules from "../modules";
 
-import '../styles/styles.scss';
+import "../styles/styles.scss";
 
 let networkInterface = createBatchingNetworkInterface({
   opts: {
-    credentials: 'include'
+    credentials: "include"
   },
   batchInterval: 20,
-  uri: __BACKEND_URL__ || '/graphql'
+  uri: __BACKEND_URL__ || "/graphql"
 });
 if (__CLIENT__) {
   networkInterface.use([
@@ -64,9 +64,9 @@ if (__CLIENT__) {
   }
 
   const wsClient = new SubscriptionClient(
-    (__BACKEND_URL__ || window.location.origin + '/graphql').replace(
+    (__BACKEND_URL__ || window.location.origin + "/graphql").replace(
       /^http/,
-      'ws'
+      "ws"
     ),
     {
       reconnect: true,
@@ -100,7 +100,7 @@ const logPageView = location => {
 };
 
 // Initialize Google Analytics and send events on each location change
-ReactGA.initialize('UA-000000-01'); // Replace your Google tracking code here
+ReactGA.initialize("UA-000000-01"); // Replace your Google tracking code here
 logPageView(window.location);
 
 history.listen(location => logPageView(location));

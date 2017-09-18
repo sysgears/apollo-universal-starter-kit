@@ -42,7 +42,7 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
       <Field
         name="email"
         component={renderField}
-        type="text"
+        type="email"
         label="Email"
         validate={required}
       />

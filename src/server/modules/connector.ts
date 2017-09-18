@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { merge, map, union, without, castArray } from 'lodash';
 import { GraphQLSchema } from "graphql";
-import { RequestHandlerParams } from "express-serve-static-core";
+import { RequestHandler } from "express";
 import { PubSub } from "graphql-subscriptions";
 
 const combine = (features: IArguments, extractor: (x: Feature) => any): Array<any> =>
@@ -11,14 +11,14 @@ type FeatureParams = {
   schema: GraphQLSchema;
   createResolversFunc: Function;
   createContextFunc: Function;
-  middleware?: RequestHandlerParams;
+  middleware?: RequestHandler;
 };
 
 class Feature {
   schema: GraphQLSchema[];
   createResolversFunc: Function[];
   createContextFunc: Function[];
-  middleware: RequestHandlerParams[];
+  middleware: RequestHandler[];
 
   constructor(
     ...features: (Feature | FeatureParams)[]

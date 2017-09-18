@@ -1,4 +1,5 @@
 import * as express from 'express';
+import { Request, Response, NextFunction } from 'express';
 import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
@@ -11,7 +12,7 @@ import * as url from 'url';
 import modules from './modules';
 
 // import websiteMiddleware from './middleware/website';
-// import graphiqlMiddleware from './middleware/graphiql';
+import graphiqlMiddleware from './middleware/graphiql';
 // import graphqlMiddleware from './middleware/graphql';
 // import addGraphQLSubscriptions from './api/subscriptions';
 import log from '../common/log';
@@ -81,7 +82,7 @@ for (const middleware of modules.middlewares) {
   app.use(middleware);
 }
 // app.use(pathname, (...args) => graphqlMiddleware(...args));
-// app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
+app.all('/graphiql', (req: Request, res: Response, next: NextFunction) => graphiqlMiddleware(req, res, next));
 // app.use((...args) => websiteMiddleware(queryMap)(...args));
 
 server = http.createServer(app);

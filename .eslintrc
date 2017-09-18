@@ -4,8 +4,9 @@
     "airbnb/base",
     "plugin:import/errors",
     "eslint:recommended",
-    "plugin:react/recommended"
-  ],
+    "plugin:react/recommended",
+    "plugin:flowtype/recommended"
+ ],
   "rules": {
     "no-use-before-define": 0,
     "arrow-body-style": 0,
@@ -40,5 +41,5 @@
     "__PERSIST_GQL__": true,
     "__BACKEND_URL__": true
   },
-  "plugins": ["react", "json", "prettier"]
+  "plugins": ["react", "json", "prettier", "flowtype"]
 }

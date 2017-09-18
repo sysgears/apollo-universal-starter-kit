@@ -3,5 +3,4 @@
 import knex from '../../../server/sql/connector';
 
 // Actual query fetching and transformation in DB
-export default class $Module$ {
-}
+export default class $Module$ {}

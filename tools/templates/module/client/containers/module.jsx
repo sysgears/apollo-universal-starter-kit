@@ -11,18 +11,13 @@ import { graphql, compose } from 'react-apollo';
 import $Module$Show from '../components/$module$_show';
 
 class $Module$ extends React.Component {
-
   render() {
     return <$Module$Show {...this.props} />;
   }
 }
 
-$Module$.propTypes = {
-};
+$Module$.propTypes = {};
 
 const $Module$WithApollo = compose()($Module$);
 
-export default connect(
-  (state) => ({}),
-  (dispatch) => ({}),
-)($Module$WithApollo);
+export default connect(state => ({}), dispatch => ({}))($Module$WithApollo);

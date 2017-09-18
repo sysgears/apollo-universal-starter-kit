@@ -5,3 +5,10 @@ declare var __CLIENT__: boolean;
 declare var __SSR__: boolean;
 declare var __PERSIST_GQL__: boolean;
 declare var __BACKEND_URL__: string;
+
+declare module "*.graphqls" {
+    import { GraphQLSchema } from "graphql";
+
+    const value: GraphQLSchema;
+    export default value;
+}

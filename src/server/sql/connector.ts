@@ -1,4 +1,4 @@
-import knex from 'knex';
+import * as knex from 'knex';
 import * as environments from '../../../knexdata';
 
 // eslint-disable-next-line import/namespace

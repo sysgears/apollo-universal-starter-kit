@@ -21,7 +21,8 @@
     "rollback": "knex migrate:rollback",
     "watch": "spin watch",
     "heroku-postbuild": "rm -rf build && npm run build && npm run seed",
-    "cli": "node tools/cli"
+    "cli": "node tools/cli",
+    "postinstall": "rm -rf node_modules/@types/async"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [
@@ -97,8 +98,10 @@
     "@types/body-parser": "^1.16.5",
     "@types/cors": "^2.8.1",
     "@types/express": "^4.0.33",
+    "@types/graphql": "^0.11.3",
     "@types/jasmine": "^2.6.0",
     "@types/knex": "0.0.35",
+    "@types/lodash": "^4.14.74",
     "@types/minilog": "^2.0.28",
     "@types/node": "^6.0.45",
     "@types/redux": "^3.6.31",

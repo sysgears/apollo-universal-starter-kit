@@ -5,7 +5,7 @@ export default class Count {
     return knex('count').first();
   }
 
-  addCount(amount) {
+  addCount(amount: number) {
     return knex('count').increment('amount', amount);
   }
 }

@@ -1,13 +1,27 @@
 /* eslint-disable no-unused-vars */
 import { merge, map, union, without, castArray } from 'lodash';
+import { GraphQLSchema } from "graphql";
+import { RequestHandlerParams } from "express-serve-static-core";
+import { PubSub } from "graphql-subscriptions";
 
-const combine = (features, extractor) =>
+const combine = (features: IArguments, extractor: (x: Feature) => any): Array<any> =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
-export default class {
+type FeatureParams = {
+  schema: GraphQLSchema;
+  createResolversFunc: Function;
+  createContextFunc: Function;
+  middleware?: RequestHandlerParams;
+};
+
+class Feature {
+  schema: GraphQLSchema[];
+  createResolversFunc: Function[];
+  createContextFunc: Function[];
+  middleware: RequestHandlerParams[];
+
   constructor(
-    { schema, createResolversFunc, createContextFunc, middleware },
-    ...features
+    ...features: (Feature | FeatureParams)[]
   ) {
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(
@@ -22,7 +36,7 @@ export default class {
     return this.schema;
   }
 
-  async createContext(req, connectionParams) {
+  async createContext(req: Request, connectionParams: Object | Function) {
     const results = await Promise.all(
       this.createContextFunc.map(createContext =>
         createContext(req, connectionParams)
@@ -31,7 +45,7 @@ export default class {
     return merge({}, ...results);
   }
 
-  createResolvers(pubsub) {
+  createResolvers(pubsub: PubSub) {
     return merge(
       {},
       ...this.createResolversFunc.map(createResolvers =>
@@ -44,3 +58,5 @@ export default class {
     return this.middleware;
   }
 }
+
+export default Feature;

@@ -8,7 +8,7 @@ import * as url from 'url';
 // import * as cookiesMiddleware from 'universal-cookie-express';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 // import queryMap from 'persisted_queries.json';
-// import modules from './modules';
+import modules from './modules';
 
 // import websiteMiddleware from './middleware/website';
 // import graphiqlMiddleware from './middleware/graphiql';
@@ -77,9 +77,9 @@ if (__DEV__) {
 //   });
 // }
 
-// for (const middleware of modules.middlewares) {
-//   app.use(middleware);
-// }
+for (const middleware of modules.middlewares) {
+  app.use(middleware);
+}
 // app.use(pathname, (...args) => graphqlMiddleware(...args));
 // app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 // app.use((...args) => websiteMiddleware(queryMap)(...args));

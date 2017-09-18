@@ -1,4 +1,6 @@
-import bcrypt from 'bcryptjs';
+import * as Knex from "knex";
+import * as bcrypt from 'bcryptjs';
+
 /*
 For DB's other than SQLite you'll have to use raw queries for truncation if there is a foreign key constraint in your table.
 
@@ -16,7 +18,7 @@ await Promise.all([
 ]);
 */
 
-export async function seed(knex, Promise) {
+export async function seed(knex: Knex, Promise: any) {
   await Promise.all([knex('user').truncate(), knex('local_auth').truncate()]);
 
   const [adminId] = await knex('user')

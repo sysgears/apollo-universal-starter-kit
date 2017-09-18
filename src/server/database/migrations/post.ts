@@ -1,4 +1,6 @@
-exports.up = function(knex, Promise) {
+import * as Knex from "knex";
+
+exports.up = function(knex: Knex, Promise: any) {
   return Promise.all([
     knex.schema
       .createTable('post', table => {
@@ -21,7 +23,7 @@ exports.up = function(knex, Promise) {
   ]);
 };
 
-exports.down = function(knex, Promise) {
+exports.down = function(knex: Knex, Promise: any) {
   return Promise.all([
     knex.schema.dropTable('post'),
     knex.schema.dropTable('comment')

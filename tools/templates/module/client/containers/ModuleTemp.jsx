@@ -8,11 +8,11 @@ import { connect } from "react-redux";
 import { graphql, compose } from "react-apollo";
 
 // Components
-import $Module$Show from "../components/$module$_view";
+import $Module$View from "../components/$Module$View";
 
 class $Module$ extends React.Component {
   render() {
-    return <$Module$Show {...this.props} />;
+    return <$Module$View {...this.props} />;
   }
 }
 

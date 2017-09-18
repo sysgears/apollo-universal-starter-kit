@@ -5,9 +5,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
-import PageLayout from "../../../app/page_layout";
+import PageLayout from "../../../app/PageLayout";
 
-const $Module$Show = () => {
+const $Module$View = () => {
   const renderMetaData = () => (
     <Helmet
       title="$Module$"
@@ -30,6 +30,6 @@ const $Module$Show = () => {
   );
 };
 
-$Module$Show.propTypes = {};
+$Module$View.propTypes = {};
 
-export default $Module$Show;
+export default $Module$View;

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import $Module$Show from '../components/$module$_show';
+import $Module$Show from '../components/$module$_view';
 
 class $Module$ extends React.Component {
   render() {

@@ -1,8 +1,8 @@
-import minilog from 'minilog';
+import * as minilog from 'minilog';
 
 minilog.enable();
 
-const log =
+const log: any =
   typeof window !== 'undefined' ? minilog('frontend') : minilog('backend');
 
 if (__DEV__ && __SERVER__) {

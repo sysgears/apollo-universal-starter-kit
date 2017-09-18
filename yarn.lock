@@ -54,6 +54,36 @@
   version "2.0.42"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.42.tgz#51cd1cc76b9fe487f5759f3eadd6f74074b99b81"
 
+"@types/bluebird@*":
+  version "3.5.11"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.11.tgz#60482b3cddce9111dee3cafd08ab54fffee4b119"
+
+"@types/body-parser@^1.16.5":
+  version "1.16.5"
+  resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.16.5.tgz#d2b7daefab84e0afa9d3fae0935bc7355b6320af"
+  dependencies:
+    "@types/express" "*"
+    "@types/node" "*"
+
+"@types/cors@^2.8.1":
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/@types/cors/-/cors-2.8.1.tgz#54073caf3b7a741e67fb82483f83a6cadfba7501"
+  dependencies:
+    "@types/express" "*"
+
+"@types/express-serve-static-core@*":
+  version "4.0.52"
+  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.0.52.tgz#77ab67fffc402ff6e480c87c71d799ba79880223"
+  dependencies:
+    "@types/node" "*"
+
+"@types/express@*", "@types/express@^4.0.33":
+  version "4.0.37"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.0.37.tgz#625ac3765169676e01897ca47011c26375784971"
+  dependencies:
+    "@types/express-serve-static-core" "*"
+    "@types/serve-static" "*"
+
 "@types/graphql@0.10.2":
   version "0.10.2"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.10.2.tgz#d7c79acbaa17453b6681c80c34b38fcb10c4c08c"
@@ -74,13 +104,43 @@
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-2.6.0.tgz#997b41a27752b4850af2683bc4a8d8222c25bd02"
 
-"@types/node@^6.0.46":
+"@types/knex@0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.0.35.tgz#701189cf2893208315be27e3e7d942bfeccc53e5"
+  dependencies:
+    "@types/bluebird" "*"
+    "@types/node" "*"
+
+"@types/mime@*":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.1.tgz#2cf42972d0931c1060c7d5fa6627fce6bd876f2f"
+
+"@types/minilog@^2.0.28":
+  version "2.0.29"
+  resolved "https://registry.yarnpkg.com/@types/minilog/-/minilog-2.0.29.tgz#ab192157e4e19c03ad858481b73eb6224a3209db"
+
+"@types/node@*":
+  version "8.0.28"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.28.tgz#86206716f8d9251cf41692e384264cbd7058ad60"
+
+"@types/node@^6.0.45", "@types/node@^6.0.46":
   version "6.0.88"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.88.tgz#f618f11a944f6a18d92b5c472028728a3e3d4b66"
 
-"@types/node@^8.0.28":
-  version "8.0.28"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.28.tgz#86206716f8d9251cf41692e384264cbd7058ad60"
+"@types/redux@^3.6.31":
+  version "3.6.31"
+  resolved "https://registry.yarnpkg.com/@types/redux/-/redux-3.6.31.tgz#40eafa7575db36b912ce0059b85de98c205b0708"
+
+"@types/serve-static@*":
+  version "1.7.32"
+  resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.7.32.tgz#0f6732e4dab0813771dd8fc8fe14940f34728b4c"
+  dependencies:
+    "@types/express-serve-static-core" "*"
+    "@types/mime" "*"
+
+"@types/webpack-env@^1.13.1":
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.13.1.tgz#b45c222e24301bd006e3edfc762cc6b51bda236a"
 
 abab@^1.0.3:
   version "1.0.3"
@@ -7590,9 +7650,9 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.3.1.tgz#59ae3fbee3a059141d4d6481899bca665bc457a3"
+spinjs@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.3.2.tgz#472b799269337b43ff6a2bb9c7e9956275b2409e"
   dependencies:
     ip "^1.1.5"
     lodash "^4.17.4"

@@ -64,8 +64,10 @@ if (__CLIENT__) {
   }
 
   const wsClient = new SubscriptionClient(
-    (__BACKEND_URL__ || window.location.origin + '/graphql')
-      .replace(/^http/, 'ws'),
+    (__BACKEND_URL__ || window.location.origin + '/graphql').replace(
+      /^http/,
+      'ws'
+    ),
     {
       reconnect: true,
       connectionParams: connectionParams

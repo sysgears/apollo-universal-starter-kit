@@ -5,7 +5,7 @@ import { Route, Link } from 'react-router-dom';
 // Component and helpers
 import Profile from './containers/Profile';
 import Users from './containers/Users';
-import Register from './containers/register';
+import Register from './containers/Register';
 import Login from './containers/Login';
 import reducers from './reducers';
 

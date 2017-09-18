@@ -18,5 +18,3 @@ describe('$Module$ UI works', () => {
     expect(content).to.not.be.empty;
   });
 });
-
-

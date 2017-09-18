@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import ProfileView from '../components/ProfileView.jsx';
+import ProfileView from '../components/ProfileView';
 
 import CURRENT_USER from '../graphql/currentUser.graphql';
 

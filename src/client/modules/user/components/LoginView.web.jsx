@@ -7,7 +7,7 @@ import Helmet from 'react-helmet';
 import { Card, CardBlock, CardTitle, CardText } from 'reactstrap';
 
 import PageLayout from '../../../app/PageLayout';
-import LoginForm from '../components/LoginForm.web';
+import LoginForm from '../components/LoginForm';
 
 class LoginView extends React.PureComponent {
   state = {

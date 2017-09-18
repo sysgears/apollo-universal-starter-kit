@@ -5,7 +5,7 @@ import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 import { reset } from 'redux-form';
 
-import PostCommentsShow from '../components/PostCommentsView';
+import PostCommentsView from '../components/PostCommentsView';
 
 import COMMENT_ADD from '../graphql/addComment.graphql';
 import COMMENT_EDIT from '../graphql/editComment.graphql';
@@ -100,7 +100,7 @@ class PostComments extends React.Component {
   }
 
   render() {
-    return <PostCommentsShow {...this.props} />;
+    return <PostCommentsView {...this.props} />;
   }
 }
 

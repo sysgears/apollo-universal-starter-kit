@@ -1,6 +1,6 @@
 // React
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, NavLink } from 'react-router-dom';
 
 // Web UI
 import { NavItem } from 'reactstrap';
@@ -15,9 +15,9 @@ export default new Feature({
   route: <Route exact path="/$module$" component={$Module$} />,
   navItem: (
     <NavItem>
-      <Link to="/$module$" className="nav-link">
+      <NavLink to="/$module$" className="nav-link" activeClassName="active">
         $Module$
-      </Link>
+      </NavLink>
     </NavItem>
   ),
   reducer: { $Module$: reducers }

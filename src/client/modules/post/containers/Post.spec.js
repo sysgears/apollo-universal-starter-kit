@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 import _ from 'lodash';
 
-import ApolloRenderer from '../../../../client/testHelpers/ApolloRenderer';
+import Renderer from '../../../../client/testHelpers/Renderer';
 import POSTS_SUBSCRIPTION from '../graphql/postsUpdated.graphql';
 import POST_SUBSCRIPTION from '../graphql/postUpdated.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/commentUpdated.graphql';
@@ -59,7 +59,7 @@ const mocks = {
 };
 
 describe('Posts and comments example UI works', () => {
-  const renderer = new ApolloRenderer(mocks, {});
+  const renderer = new Renderer(mocks, {});
   let app;
   let content;
 

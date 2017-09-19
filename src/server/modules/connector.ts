@@ -1,21 +1,22 @@
 /* eslint-disable no-unused-vars */
 import { merge, map, union, without, castArray } from 'lodash';
-import { GraphQLSchema } from "graphql";
-import { RequestHandler } from "express";
+import { DocumentNode } from "graphql";
+import { RequestHandler, Request } from "express";
 import { PubSub } from "graphql-subscriptions";
+import { IResolvers } from "graphql-tools/dist/Interfaces";
 
 const combine = (features: IArguments, extractor: (x: Feature) => any): Array<any> =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 type FeatureParams = {
-  schema?: GraphQLSchema | GraphQLSchema[];
+  schema?: DocumentNode | DocumentNode[];
   createResolversFunc?: Function | Function[];
   createContextFunc?: Function | Function[];
   middleware?: RequestHandler | RequestHandler[];
 };
 
 class Feature {
-  schema: GraphQLSchema[];
+  schema: DocumentNode[];
   createResolversFunc: Function[];
   createContextFunc: Function[];
   middleware: RequestHandler[];
@@ -33,11 +34,11 @@ class Feature {
     this.middleware = combine(arguments, arg => arg.middleware);
   }
 
-  get schemas(): GraphQLSchema[] {
+  get schemas(): DocumentNode[] {
     return this.schema;
   }
 
-  async createContext(req: Request, connectionParams: Object | Function) {
+  async createContext(req: Request, connectionParams?: Object | Function) {
     const results = await Promise.all(
       this.createContextFunc.map(createContext =>
         createContext(req, connectionParams)
@@ -46,7 +47,7 @@ class Feature {
     return merge({}, ...results);
   }
 
-  createResolvers(pubsub: PubSub): Object {
+  createResolvers(pubsub: PubSub): IResolvers {
     return merge(
       {},
       ...this.createResolversFunc.map(createResolvers =>

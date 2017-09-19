@@ -1,7 +1,7 @@
 import * as dl from "dataloader";
 
 import Post from "./sql";
-import schema from "./schema.graphqls";
+import * as schema from "./schema.graphqls";
 import createResolvers from "./resolvers";
 
 import Feature from "../connector";

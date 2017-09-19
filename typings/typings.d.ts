@@ -7,8 +7,13 @@ declare var __PERSIST_GQL__: boolean;
 declare var __BACKEND_URL__: string;
 
 declare module "*.graphqls" {
-    import { GraphQLSchema } from "graphql";
+    import { DocumentNode } from "graphql";
 
-    const value: GraphQLSchema;
-    export default value;
+    const value: DocumentNode;
+    export = value;
+}
+
+declare module "*.json" {
+  const value: any;
+  export default value;
 }

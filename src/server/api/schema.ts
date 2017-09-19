@@ -2,7 +2,7 @@ import { makeExecutableSchema, addErrorLoggingToSchema } from "graphql-tools";
 import { addApolloLogging } from "apollo-logger";
 import { PubSub } from "graphql-subscriptions";
 
-import rootSchemaDef from "./rootSchema.graphqls";
+import * as rootSchemaDef from "./rootSchema.graphqls";
 import modules from "../modules";
 import log from "../../common/log";
 import settings from "../../../settings";

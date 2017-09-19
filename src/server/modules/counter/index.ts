@@ -1,6 +1,6 @@
 import Count from './sql';
 
-import schema from './schema.graphqls';
+import * as schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import Feature from '../connector';
 

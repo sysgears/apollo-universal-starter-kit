@@ -52,7 +52,7 @@
     "@angular/platform-browser-dynamic": "^4.4.1",
     "@angular/router": "^4.4.1",
     "apollo-client": "^1.9.2",
-    "apollo-logger": "0.0.5",
+    "apollo-logger": "0.0.6",
     "apollo-server-express": "^1.1.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.1",

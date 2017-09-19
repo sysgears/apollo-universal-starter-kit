@@ -324,9 +324,9 @@ apollo-link-core@^0.5.0:
     graphql-tag "^2.4.2"
     zen-observable-ts "^0.4.4"
 
-apollo-logger@0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/apollo-logger/-/apollo-logger-0.0.5.tgz#32cc17578d13931720fa4fd5e75163d4f0d77bd2"
+apollo-logger@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/apollo-logger/-/apollo-logger-0.0.6.tgz#f00ea4692c066733376dcbb015b155091547c8a1"
 
 apollo-server-core@^1.1.0:
   version "1.1.0"

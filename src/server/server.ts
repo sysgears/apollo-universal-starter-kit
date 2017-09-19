@@ -13,7 +13,7 @@ import modules from './modules';
 
 // import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
-// import graphqlMiddleware from './middleware/graphql';
+import graphqlMiddleware from './middleware/graphql';
 // import addGraphQLSubscriptions from './api/subscriptions';
 import log from '../common/log';
 
@@ -81,7 +81,7 @@ if (__DEV__) {
 for (const middleware of modules.middlewares) {
   app.use(middleware);
 }
-// app.use(pathname, (...args) => graphqlMiddleware(...args));
+app.use(pathname, (req: Request, res: Response, next: NextFunction) => graphqlMiddleware(req, res, next));
 app.all('/graphiql', (req: Request, res: Response, next: NextFunction) => graphiqlMiddleware(req, res, next));
 // app.use((...args) => websiteMiddleware(queryMap)(...args));
 

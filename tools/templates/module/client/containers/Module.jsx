@@ -14,8 +14,6 @@ class $Module$ extends React.Component {
   }
 }
 
-$Module$.propTypes = {};
-
 const $Module$WithApollo = compose()($Module$);
 
 export default $Module$WithApollo;

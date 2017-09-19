@@ -1,12 +1,10 @@
 // Common react native component - iOS + Android
 
-/*eslint-disable no-unused-vars*/
 // React
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
 
 // React native UI
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from 'react-native';
 
 const $Module$View = () => {
   return (
@@ -21,20 +19,18 @@ const $Module$View = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   element: {
     paddingTop: 30
   },
   box: {
-    textAlign: "center",
+    textAlign: 'center',
     marginLeft: 15,
     marginRight: 15
   }
 });
-
-$Module$View.propTypes = {};
 
 export default $Module$View;

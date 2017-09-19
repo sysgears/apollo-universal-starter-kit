@@ -1,14 +1,12 @@
 /*eslint-disable no-unused-vars*/
 // React
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import React from 'react';
 
 // Apollo
-import { graphql, compose } from "react-apollo";
+import { graphql, compose } from 'react-apollo';
 
 // Components
-import $Module$View from "../components/$Module$View";
+import $Module$View from '../components/$Module$View';
 
 class $Module$ extends React.Component {
   render() {
@@ -20,4 +18,4 @@ $Module$.propTypes = {};
 
 const $Module$WithApollo = compose()($Module$);
 
-export default connect(state => ({}), dispatch => ({}))($Module$WithApollo);
+export default $Module$WithApollo;

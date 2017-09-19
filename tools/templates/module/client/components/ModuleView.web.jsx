@@ -1,11 +1,9 @@
 // Web only component
 
-/*eslint-disable no-unused-vars*/
 // React
-import React from "react";
-import PropTypes from "prop-types";
-import Helmet from "react-helmet";
-import PageLayout from "../../../app/PageLayout";
+import React from 'react';
+import Helmet from 'react-helmet';
+import PageLayout from '../../../app/PageLayout';
 
 const $Module$View = () => {
   const renderMetaData = () => (
@@ -13,8 +11,8 @@ const $Module$View = () => {
       title="$Module$"
       meta={[
         {
-          name: "description",
-          content: "$Module$ page"
+          name: 'description',
+          content: '$Module$ page'
         }
       ]}
     />
@@ -29,7 +27,5 @@ const $Module$View = () => {
     </PageLayout>
   );
 };
-
-$Module$View.propTypes = {};
 
 export default $Module$View;

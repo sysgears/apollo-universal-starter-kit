@@ -27,7 +27,7 @@
     "cli": "node tools/cli"
   },
   "lint-staged": {
-    "*.{js,jsx,json}": ["prettier --write", "git add"]
+    "*.{js,jsx,json}": ["eslint --fix", "git add"]
   },
   "repository": {
     "type": "git",

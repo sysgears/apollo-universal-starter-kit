@@ -3,15 +3,16 @@ import { merge, map, union, without, castArray } from 'lodash';
 import { GraphQLSchema } from "graphql";
 import { RequestHandler } from "express";
 import { PubSub } from "graphql-subscriptions";
+import {Req} from "awesome-typescript-loader/dist/checker/protocol";
 
 const combine = (features: IArguments, extractor: (x: Feature) => any): Array<any> =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 type FeatureParams = {
-  schema: GraphQLSchema;
-  createResolversFunc: Function;
-  createContextFunc: Function;
-  middleware?: RequestHandler;
+  schema?: GraphQLSchema | GraphQLSchema[];
+  createResolversFunc?: Function | Function[];
+  createContextFunc?: Function | Function[];
+  middleware?: RequestHandler | RequestHandler[];
 };
 
 class Feature {
@@ -21,7 +22,8 @@ class Feature {
   middleware: RequestHandler[];
 
   constructor(
-    ...features: (Feature | FeatureParams)[]
+      feature?: FeatureParams,
+    ...features: Feature[]
   ) {
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(
@@ -32,7 +34,7 @@ class Feature {
     this.middleware = combine(arguments, arg => arg.middleware);
   }
 
-  get schemas() {
+  get schemas(): GraphQLSchema[] {
     return this.schema;
   }
 
@@ -45,7 +47,7 @@ class Feature {
     return merge({}, ...results);
   }
 
-  createResolvers(pubsub: PubSub) {
+  createResolvers(pubsub: PubSub): Object {
     return merge(
       {},
       ...this.createResolversFunc.map(createResolvers =>
@@ -54,7 +56,7 @@ class Feature {
     );
   }
 
-  get middlewares() {
+  get middlewares(): RequestHandler[] {
     return this.middleware;
   }
 }

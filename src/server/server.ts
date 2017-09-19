@@ -12,7 +12,7 @@ import * as url from 'url';
 import queryMap from 'persisted_queries.json';
 import modules from './modules';
 
-// import websiteMiddleware from './middleware/website';
+import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
 import addGraphQLSubscriptions from './api/subscriptions';
@@ -84,7 +84,7 @@ for (const middleware of modules.middlewares) {
 }
 app.use(pathname, (req: Request, res: Response, next: NextFunction) => graphqlMiddleware(req, res, next));
 app.all('/graphiql', (req: Request, res: Response, next: NextFunction) => graphiqlMiddleware(req, res, next));
-// app.use((...args) => websiteMiddleware(queryMap)(...args));
+app.use((req: Request, res: Response, next: NextFunction) => websiteMiddleware(queryMap)(req, res, next));
 
 server = http.createServer(app);
 
@@ -108,7 +108,7 @@ if (module.hot) {
       log(error.stack);
     }
   });
-  // module.hot.accept(['./middleware/website', './middleware/graphql']);
+  module.hot.accept(['./middleware/website', './middleware/graphql'], () => {});
   module.hot.accept(['./api/subscriptions'], () => {
     try {
       addGraphQLSubscriptions(server);

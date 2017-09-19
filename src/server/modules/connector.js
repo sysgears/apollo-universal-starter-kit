@@ -1,19 +1,19 @@
 // @flow
 /* eslint-disable no-unused-vars */
-import type { PubSub } from 'graphql-subscriptions';
-import type { DocumentNode } from 'graphql';
-import type { Middleware, $Request } from 'express';
+import type { PubSub } from "graphql-subscriptions";
+import type { DocumentNode } from "graphql";
+import type { Middleware, $Request } from "express";
 
-import { merge, map, union, without, castArray } from 'lodash';
+import { merge, map, union, without, castArray } from "lodash";
 
 const combine = (features, extractor): any =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 type FeatureParams = {
-  schema: DocumentNode | DocumentNode[];
-  createResolversFunc: Function | Function[];
-  createContextFunc?: Function | Function[];
-  middleware?: Middleware | Middleware[];
+  schema: DocumentNode | DocumentNode[],
+  createResolversFunc: Function | Function[],
+  createContextFunc?: Function | Function[],
+  middleware?: Middleware | Middleware[]
 };
 
 class Feature {
@@ -22,10 +22,7 @@ class Feature {
   createContextFunc: Function[];
   middleware: Middleware[];
 
-  constructor(
-    feature?: FeatureParams,
-    ...features: Feature[]
-  ) {
+  constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(

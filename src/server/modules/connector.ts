@@ -3,7 +3,6 @@ import { merge, map, union, without, castArray } from 'lodash';
 import { GraphQLSchema } from "graphql";
 import { RequestHandler } from "express";
 import { PubSub } from "graphql-subscriptions";
-import {Req} from "awesome-typescript-loader/dist/checker/protocol";
 
 const combine = (features: IArguments, extractor: (x: Feature) => any): Array<any> =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);

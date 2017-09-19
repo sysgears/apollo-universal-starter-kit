@@ -27,7 +27,7 @@
     "frontendBuildDir": "build/client",
     "dllBuildDir": "build/dll",
     "overridesConfig": "tools/WebpackAppConfig.js",
-    "stack": ["apollo", "react", "styled-components", "sass", "es6", "webpack"],
+    "stack": ["apollo", "react", "styled-components", "sass", "es6", "tcomb", "webpack"],
     "backendUrl": "http://{ip}:8080/graphql",
     "ssr": true,
     "webpackDll": true,

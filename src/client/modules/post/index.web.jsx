@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Link } from "react-router-dom";
+import { Route, NavLink } from "react-router-dom";
 import { NavItem } from "reactstrap";
 
 import Post from "./containers/Post";
@@ -16,9 +16,9 @@ export default new Feature({
   ],
   navItem: (
     <NavItem>
-      <Link to="/posts" className="nav-link">
+      <NavLink to="/posts" className="nav-link" activeClassName="active">
         Posts
-      </Link>
+      </NavLink>
     </NavItem>
   ),
   reducer: { post: reducers }

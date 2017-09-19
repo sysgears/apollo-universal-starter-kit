@@ -1,15 +1,15 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 // Components
-import UserDAO from './sql';
+import UserDAO from "./sql";
 
-import schema from './schema.graphqls';
-import createResolvers from './resolvers';
-import { refreshTokens } from './auth';
-import tokenMiddleware from './token';
-import Feature from '../connector';
+import schema from "./schema.graphqls";
+import createResolvers from "./resolvers";
+import { refreshTokens } from "./auth";
+import tokenMiddleware from "./token";
+import Feature from "../connector";
 
-const SECRET = 'secret, change for production';
+const SECRET = "secret, change for production";
 
 const User = new UserDAO();
 
@@ -22,7 +22,8 @@ export default new Feature({
     if (
       connectionParams &&
       connectionParams.token &&
-      connectionParams.token !== 'null'
+      connectionParams.token !== "null" &&
+      connectionParams.token !== "undefined"
     ) {
       try {
         const { user } = jwt.verify(connectionParams.token, SECRET);

@@ -1,6 +1,6 @@
 // React
 import React from "react";
-import { Route, Link } from "react-router-dom";
+import { Route, NavLink } from "react-router-dom";
 
 // Component and helpers
 import Profile from "./containers/Profile";
@@ -47,16 +47,22 @@ export default new Feature({
   ],
   navItem: [
     <AuthNav role="admin">
-      <Link to="/users" className="nav-link">
+      <NavLink to="/users" className="nav-link" activeClassName="active">
         Users
-      </Link>
+      </NavLink>
     </AuthNav>
   ],
   navItemRight: [
     <AuthProfile />,
     <AuthLogin>
       <span className="nav-link">
-        <Link to="/login">Login</Link> / <Link to="/register">Register</Link>
+        <NavLink to="/login" activeClassName="active">
+          Login
+        </NavLink>{" "}
+        /{" "}
+        <NavLink to="/register" activeClassName="active">
+          Register
+        </NavLink>
       </span>
     </AuthLogin>
   ],

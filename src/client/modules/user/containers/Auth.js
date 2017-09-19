@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withApollo, graphql, compose } from "react-apollo";
 import ApolloClient from "apollo-client";
-import { Route, Redirect, Link, withRouter } from "react-router-dom";
+import { Route, Redirect, NavLink, withRouter } from "react-router-dom";
 import { withCookies, Cookies } from "react-cookie";
 import { NavItem } from "reactstrap";
 import decode from "jwt-decode";
@@ -142,9 +142,9 @@ const AuthLoginWithApollo = withCookies(
 const AuthProfile = withCookies(({ cookies }) => {
   return checkAuth(cookies, "") ? (
     <NavItem>
-      <Link to="/profile" className="nav-link">
+      <NavLink to="/profile" className="nav-link" activeClassName="active">
         {profileName(cookies)}
-      </Link>
+      </NavLink>
     </NavItem>
   ) : null;
 });

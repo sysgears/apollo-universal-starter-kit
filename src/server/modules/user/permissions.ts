@@ -1,7 +1,7 @@
-const createResolver = resolver => {
+const createResolver: any = (resolver: any) => {
   const baseResolver = resolver;
-  baseResolver.createResolver = childResolver => {
-    const newResolver = async (parent, args, context) => {
+  baseResolver.createResolver = (childResolver: any) => {
+    const newResolver = async (parent: any, args: any, context: any) => {
       await resolver(parent, args, context);
       return childResolver(parent, args, context);
     };
@@ -10,14 +10,14 @@ const createResolver = resolver => {
   return baseResolver;
 };
 
-export const requiresAuth = createResolver((parent, args, context) => {
+export const requiresAuth: any = createResolver((parent: any, args: any, context: any) => {
   if (!context.user || !context.user.id) {
     throw new Error('Not authenticated');
   }
 });
 
 export const requiresAdmin = requiresAuth.createResolver(
-  (parent, args, context) => {
+  (parent: any, args: any, context: any) => {
     if (!context.user.isAdmin) {
       throw new Error('Requires admin access');
     }

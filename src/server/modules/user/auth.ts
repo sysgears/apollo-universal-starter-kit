@@ -1,18 +1,15 @@
-import jwt from "jsonwebtoken";
-import { pick } from "lodash";
-import bcrypt from "bcryptjs";
+import _ = require("lodash");
+import * as bcrypt from "bcryptjs";
 
 import FieldError from "../../../common/FieldError";
 
-export const createTokens = async (user, secret, refreshSecret) => {
+const jwt = require("jsonwebtoken");
+
+export const createTokens = async (user: any, secret: any, refreshSecret: any) => {
   const createToken = jwt.sign(
-    {
-      user: pick(user, ["id", "username", "isAdmin"])
-    },
+    { user: _.pick(user, ["id", "username", "isAdmin"]) },
     secret,
-    {
-      expiresIn: "1m"
-    }
+    { expiresIn: "1m" }
   );
 
   const createRefreshToken = jwt.sign(
@@ -28,7 +25,7 @@ export const createTokens = async (user, secret, refreshSecret) => {
   return Promise.all([createToken, createRefreshToken]);
 };
 
-export const refreshTokens = async (token, refreshToken, User, SECRET) => {
+export const refreshTokens = async (token: any, refreshToken: any, User: any, SECRET: any) => {
   let userId = -1;
   try {
     const { user } = jwt.decode(refreshToken);
@@ -59,11 +56,11 @@ export const refreshTokens = async (token, refreshToken, User, SECRET) => {
   return {
     token: newToken,
     refreshToken: newRefreshToken,
-    user: pick(user, ["id", "username", "isAdmin"])
+    user: _.pick(user, ["id", "username", "isAdmin"])
   };
 };
 
-export const tryLogin = async (email, password, User, SECRET) => {
+export const tryLogin = async (email: string, password: string, User: any, SECRET: any) => {
   const e = new FieldError();
   const localAuth = await User.getLocalOuthByEmail(email);
 

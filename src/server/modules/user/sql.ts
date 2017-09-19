@@ -1,21 +1,22 @@
 // Helpers
-import { camelizeKeys } from 'humps';
-import knex from '../../../server/sql/connector';
+import db from "../../sql/connector";
+
+const camelizeKeys = require("humps");
 
 // Actual query fetching and transformation in DB
 export default class User {
   async getUsers() {
     return camelizeKeys(
-      await knex
+      await db
         .select('u.id', 'u.username', 'u.is_admin', 'la.email')
         .from('user AS u')
         .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
     );
   }
 
-  async getUser(id) {
+  async getUser(id: number) {
     return camelizeKeys(
-      await knex
+      await db
         .select('u.id', 'u.username', 'u.is_admin', 'la.email')
         .from('user AS u')
         .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
@@ -24,9 +25,9 @@ export default class User {
     );
   }
 
-  async getUserWithPassword(id) {
+  async getUserWithPassword(id: number) {
     return camelizeKeys(
-      await knex
+      await db
         .select('u.id', 'u.username', 'u.is_admin', 'la.password')
         .from('user AS u')
         .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
@@ -35,27 +36,27 @@ export default class User {
     );
   }
 
-  register({ username }) {
-    return knex('user')
-      .insert({ username })
+  register(user: any) {
+    return db('user')
+      .insert(user)
       .returning('id');
   }
 
-  createLocalOuth({ email, password, userId }) {
-    return knex('local_auth')
-      .insert({ email, password, user_id: userId })
+  createLocalAuth(localAuth: any) {
+    return db('local_auth')
+      .insert({ email: localAuth.email, password: localAuth.password, user_id: localAuth.userId })
       .returning('id');
   }
 
-  UpdatePassword(id, password) {
-    return knex('local_auth')
+  UpdatePassword(id: number, password: string) {
+    return db('local_auth')
       .update({ password })
       .where({ user_id: id });
   }
 
-  async getLocalOuth(id) {
+  async getLocalAuth(id: number) {
     return camelizeKeys(
-      await knex
+      await db
         .select('*')
         .from('local_auth')
         .where({ id })
@@ -63,9 +64,9 @@ export default class User {
     );
   }
 
-  async getLocalOuthByEmail(email) {
+  async getLocalAuthByEmail(email: string) {
     return camelizeKeys(
-      await knex
+      await db
         .select('*')
         .from('local_auth')
         .where({ email })

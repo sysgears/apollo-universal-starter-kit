@@ -1,8 +1,14 @@
 import { withFilter, PubSub } from "graphql-subscriptions";
+import {PostInput} from "./sql";
 
 const POST_UPDATED_TOPIC = "post_updated";
 const POSTS_UPDATED_TOPIC = "posts_updated";
 const COMMENT_UPDATED_TOPIC = "comment_updated";
+
+export interface PostParams {
+  id?:    number;
+  input?: PostInput
+}
 
 export default (pubsub: PubSub) => ({
   Query: {
@@ -38,17 +44,17 @@ export default (pubsub: PubSub) => ({
         }
       };
     },
-    post(obj: any, args: any, context: any) {
+    post(obj: any, args: PostParams, context: any) {
       return context.Post.getPost(args.id);
     }
   },
   Post: {
-    comments(obj: any, args: any, context: any) {
+    comments(obj: any, args: PostParams, context: any) {
       return context.loaders.getCommentsForPostIds.load(obj.id);
     }
   },
   Mutation: {
-    async addPost(obj: any, args: any, context: any) {
+    async addPost(obj: any, args: PostParams, context: any) {
       const [id] = await context.Post.addPost(args.input);
       const post = await context.Post.getPost(id);
       // publish for post list
@@ -61,7 +67,7 @@ export default (pubsub: PubSub) => ({
       });
       return post;
     },
-    async deletePost(obj: any, args: any, context: any) {
+    async deletePost(obj: any, args: PostParams, context: any) {
       const post = await context.Post.getPost(args.id);
       const isDeleted = await context.Post.deletePost(args.id);
       if (isDeleted) {
@@ -78,7 +84,7 @@ export default (pubsub: PubSub) => ({
         return { id: null };
       }
     },
-    async editPost(obj: any, args: any, context: any) {
+    async editPost(obj: any, args: PostParams, context: any) {
       await context.Post.editPost(args.input);
       const post = await context.Post.getPost(args.input.id);
       // publish for post list
@@ -93,7 +99,7 @@ export default (pubsub: PubSub) => ({
       pubsub.publish(POST_UPDATED_TOPIC, { postUpdated: post });
       return post;
     },
-    async addComment(obj: any, args: any, context: any) {
+    async addComment(obj: any, args: PostParams, context: any) {
       const [id] = await context.Post.addComment(args.input);
       const comment = await context.Post.getComment(id);
       // publish for edit post page
@@ -107,7 +113,7 @@ export default (pubsub: PubSub) => ({
       });
       return comment;
     },
-    async deleteComment(obj: any, args: any, context: any) {
+    async deleteComment(obj: any, args: PostParams, context: any) {
       await context.Post.deleteComment(args.input.id);
       // publish for edit post page
       pubsub.publish(COMMENT_UPDATED_TOPIC, {
@@ -120,7 +126,7 @@ export default (pubsub: PubSub) => ({
       });
       return { id: args.input.id };
     },
-    async editComment(obj: any, args: any, context: any) {
+    async editComment(obj: any, args: PostParams, context: any) {
       await context.Post.editComment(args.input);
       const comment = await context.Post.getComment(args.input.id);
       // publish for edit post page

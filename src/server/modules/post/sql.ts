@@ -14,9 +14,6 @@ const orderedFor = (rows: knex.Raw[], collection: any[], field: string, singleOb
   });
 };
 
-// Not sure about this approach.
-// Probably, it would be better to use `args: any`
-// as a parameter at this moment.
 export interface PostInput {
   id?: number;
   title?: string;

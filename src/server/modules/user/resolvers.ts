@@ -1,19 +1,33 @@
 /*eslint-disable no-unused-vars*/
-import bcrypt from "bcryptjs";
-import { pick } from "lodash";
+import { PubSub } from "graphql-subscriptions";
+import * as bcrypt from "bcryptjs";
+import _ = require("lodash");
 import { refreshTokens, tryLogin } from "./auth";
 import { requiresAuth, requiresAdmin } from "./permissions";
 import FieldError from "../../../common/FieldError";
 
-export default pubsub => ({
+export interface AuthInput {
+  email?:     string;
+  password?:  string;
+}
+
+export interface UserParams {
+  id?:            number;
+  newPassword?:   string;
+  token?:         string;
+  refreshToken?:  string;
+  input?:         AuthInput;
+}
+
+export default (pubsub: PubSub) => ({
   Query: {
-    users: requiresAdmin.createResolver((obj, args, context) => {
+    users: requiresAdmin.createResolver((obj: any, args: UserParams, context: any) => {
       return context.User.getUsers();
     }),
-    user: requiresAuth.createResolver((obj, { id }, context) => {
-      return context.User.getUser(id);
+    user: requiresAuth.createResolver((obj: any, args: UserParams, context: any) => {
+      return context.User.getUser(args.id);
     }),
-    currentUser(obj, args, context) {
+    currentUser(obj: any, args: UserParams, context: any) {
       if (context.user) {
         return context.User.getUser(context.user.id);
       } else {
@@ -22,11 +36,11 @@ export default pubsub => ({
     }
   },
   Mutation: {
-    async register(obj, { input }, context) {
+    async register(obj: any, args: UserParams, context: any) {
       try {
         const e = new FieldError();
-        const localAuth = pick(input, ["email", "password"]);
-        const emailExists = await context.User.getLocalOuthByEmail(
+        var localAuth = { email: args.input.email, password: args.input.password };
+        const emailExists = await context.User.getLocalAuthByEmail(
           localAuth.email
         );
 
@@ -36,7 +50,7 @@ export default pubsub => ({
         }
 
         const passwordPromise = bcrypt.hash(localAuth.password, 12);
-        const createUserPromise = context.User.register(input);
+        const createUserPromise = context.User.register(args.input);
         const [password, [createdUserId]] = await Promise.all([
           passwordPromise,
           createUserPromise
@@ -44,7 +58,7 @@ export default pubsub => ({
 
         localAuth.password = password;
 
-        const [id] = await context.User.createLocalOuth({
+        const [id] = await context.User.createLocalAuth({
           ...localAuth,
           userId: createdUserId
         });
@@ -56,11 +70,11 @@ export default pubsub => ({
         return { errors: e };
       }
     },
-    async login(obj, { input: { email, password } }, context) {
+    async login(obj: any, args: UserParams, context: any) {
       try {
         const tokens = await tryLogin(
-          email,
-          password,
+          args.input.email,
+          args.input.password,
           context.User,
           context.SECRET
         );
@@ -90,7 +104,7 @@ export default pubsub => ({
         return { errors: e };
       }
     },
-    async logout(obj, args, context) {
+    async logout(obj: any, args: UserParams, context: any) {
       if (context.req) {
         context.req.universalCookies.remove("x-token");
         context.req.universalCookies.remove("x-refresh-token");
@@ -101,17 +115,17 @@ export default pubsub => ({
 
       return true;
     },
-    async updatePassword(obj, { id, newPassword }, context) {
+    async updatePassword(obj: any, args: UserParams, context: any) {
       try {
-        const password = await bcrypt.hash(newPassword, 12);
-        await context.User.UpdatePassword(id, password);
+        const password = await bcrypt.hash(args.newPassword, 12);
+        await context.User.UpdatePassword(args.id, password);
         return true;
       } catch (e) {
         return false;
       }
     },
-    refreshTokens(obj, { token, refreshToken }, context) {
-      return refreshTokens(token, refreshToken, context.User, context.SECRET);
+    refreshTokens(obj: any, args: UserParams, context: any) {
+      return refreshTokens(args.token, args.refreshToken, context.User, context.SECRET);
     }
   },
   Subscription: {}

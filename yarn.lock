@@ -183,7 +183,7 @@ agent-base@2, agent-base@^2.1.1:
     extend "~3.0.0"
     semver "~5.0.1"
 
-agent-base@^4.0.1:
+agent-base@^4.1.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/agent-base/-/agent-base-4.1.1.tgz#92d8a4fc2524a3b09b3666a33b6c97960f23d6a4"
   dependencies:
@@ -3592,8 +3592,8 @@ eslint-plugin-mocha@^4.11.0:
     ramda "^0.24.1"
 
 eslint-plugin-prettier@^2.2.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-2.3.0.tgz#520a6e57c178c608ed04b75c79a4e7960a91bd2f"
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-2.3.1.tgz#e7a746c67e716f335274b88295a9ead9f544e44d"
   dependencies:
     fast-diff "^1.1.1"
     jest-docblock "^21.0.0"
@@ -3619,8 +3619,8 @@ eslint-scope@^3.7.1:
     estraverse "^4.1.1"
 
 eslint@^4.6.1:
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.7.0.tgz#d35fc07c472520be3de85b3da11e99c576afd515"
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.7.1.tgz#849804136953ebe366782f9f8611e2cbd1b54681"
   dependencies:
     ajv "^5.2.0"
     babel-code-frame "^6.22.0"
@@ -8291,7 +8291,7 @@ react-native-web@^0.0.124:
 
 "react-native@https://github.com/exponent/react-native/archive/sdk-15.0.0.tar.gz":
   version "0.42.0"
-  resolved "https://github.com/exponent/react-native/archive/sdk-15.0.0.tar.gz#4a808c2a5bf29e9658e819bab9053701b2984e06"
+  resolved "https://github.com/exponent/react-native/archive/sdk-15.0.0.tar.gz#d5c7ec9c5aff6ee63fd8fe00dba7442da5425111"
   dependencies:
     absolute-path "^0.0.0"
     art "^0.10.0"
@@ -9315,10 +9315,10 @@ socks-proxy-agent@2:
     socks "~1.1.5"
 
 socks-proxy-agent@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/socks-proxy-agent/-/socks-proxy-agent-3.0.0.tgz#ea23085cd2bde94d084a62448f31139ca7ed6245"
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/socks-proxy-agent/-/socks-proxy-agent-3.0.1.tgz#2eae7cf8e2a82d34565761539a7f9718c5617659"
   dependencies:
-    agent-base "^4.0.1"
+    agent-base "^4.1.0"
     socks "^1.1.10"
 
 socks@^1.1.10, socks@~1.1.5:
@@ -9436,8 +9436,8 @@ spdy@^3.4.1:
     spdy-transport "^2.0.18"
 
 spinjs@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.2.3.tgz#36c891de0aacb7a0d6bdad91031920f6f997d267"
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.2.4.tgz#1e6738d6c8b27a5d018b3dc9beb61aebb80cacfb"
   dependencies:
     ip "^1.1.5"
     lodash "^4.17.4"

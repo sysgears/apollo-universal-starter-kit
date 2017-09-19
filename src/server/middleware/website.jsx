@@ -110,29 +110,10 @@ async function renderServerSide(req, res, queryMap) {
   }
 }
 
-async function renderClientSide(req, res) {
-  const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
-
-  if (__DEV__ || !assetMap) {
-    assetMap = JSON.parse(
-      fs.readFileSync(
-        path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')
-      )
-    );
-  }
-  const page = <Html state={{}} assetMap={assetMap} helmet={helmet} />;
-  res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
-  res.end();
-}
-
 export default queryMap => async (req, res, next) => {
   try {
-    if (req.url.indexOf('.') < 0) {
-      if (__SSR__) {
-        return renderServerSide(req, res, queryMap);
-      } else {
-        return renderClientSide(req, res);
-      }
+    if (req.url.indexOf('.') < 0 && __SSR__) {
+      return renderServerSide(req, res, queryMap);
     } else {
       return next();
     }

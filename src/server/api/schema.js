@@ -1,11 +1,11 @@
-import { makeExecutableSchema, addErrorLoggingToSchema } from 'graphql-tools';
-import { addApolloLogging } from 'apollo-logger';
-import { PubSub } from 'graphql-subscriptions';
+import { makeExecutableSchema, addErrorLoggingToSchema } from "graphql-tools";
+import { addApolloLogging } from "apollo-logger";
+import { PubSub } from "graphql-subscriptions";
 
-import rootSchemaDef from './root_schema.graphqls';
-import modules from '../modules';
-import log from '../../common/log';
-import settings from '../../../settings';
+import rootSchemaDef from "./rootSchema.graphqls";
+import modules from "../modules";
+import log from "../../common/log";
+import settings from "../../../settings";
 
 export const pubsub = settings.apolloLogging
   ? addApolloLogging(new PubSub())

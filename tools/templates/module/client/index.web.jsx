@@ -12,10 +12,10 @@ import reducers from "./reducers";
 import Feature from "../connector";
 
 export default new Feature({
-  route: <Route exact path="/$Module$" component={$Module$} />,
+  route: <Route exact path="/$module$" component={$Module$} />,
   navItem: (
     <NavItem>
-      <Link to="/$Module$" className="nav-link">
+      <Link to="/$module$" className="nav-link">
         $Module$
       </Link>
     </NavItem>

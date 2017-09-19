@@ -1,9 +1,9 @@
 /*eslint-disable no-unused-vars*/
-import bcrypt from 'bcryptjs';
-import { pick } from 'lodash';
-import { refreshTokens, tryLogin } from './auth';
-import { requiresAuth, requiresAdmin } from './permissions';
-import FieldError from '../../../common/error';
+import bcrypt from "bcryptjs";
+import { pick } from "lodash";
+import { refreshTokens, tryLogin } from "./auth";
+import { requiresAuth, requiresAdmin } from "./permissions";
+import FieldError from "../../../common/FieldError";
 
 export default pubsub => ({
   Query: {
@@ -25,13 +25,13 @@ export default pubsub => ({
     async register(obj, { input }, context) {
       try {
         const e = new FieldError();
-        const localAuth = pick(input, ['email', 'password']);
+        const localAuth = pick(input, ["email", "password"]);
         const emailExists = await context.User.getLocalOuthByEmail(
           localAuth.email
         );
 
         if (emailExists) {
-          e.setError('email', 'E-mail already exists.');
+          e.setError("email", "E-mail already exists.");
           e.throwIf();
         }
 
@@ -65,22 +65,22 @@ export default pubsub => ({
           context.SECRET
         );
         if (context.req) {
-          context.req.universalCookies.set('x-token', tokens.token, {
+          context.req.universalCookies.set("x-token", tokens.token, {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: true
           });
           context.req.universalCookies.set(
-            'x-refresh-token',
+            "x-refresh-token",
             tokens.refreshToken,
             { maxAge: 60 * 60 * 24 * 7, httpOnly: true }
           );
 
-          context.req.universalCookies.set('r-token', tokens.token, {
+          context.req.universalCookies.set("r-token", tokens.token, {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: false
           });
           context.req.universalCookies.set(
-            'r-refresh-token',
+            "r-refresh-token",
             tokens.refreshToken,
             { maxAge: 60 * 60 * 24 * 7, httpOnly: false }
           );
@@ -92,11 +92,11 @@ export default pubsub => ({
     },
     async logout(obj, args, context) {
       if (context.req) {
-        context.req.universalCookies.remove('x-token');
-        context.req.universalCookies.remove('x-refresh-token');
+        context.req.universalCookies.remove("x-token");
+        context.req.universalCookies.remove("x-refresh-token");
 
-        context.req.universalCookies.remove('r-token');
-        context.req.universalCookies.remove('r-refresh-token');
+        context.req.universalCookies.remove("r-token");
+        context.req.universalCookies.remove("r-refresh-token");
       }
 
       return true;

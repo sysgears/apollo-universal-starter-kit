@@ -1,24 +1,24 @@
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import { createBatchingNetworkInterface } from 'apollo-client';
-import { ApolloProvider, getDataFromTree } from 'react-apollo';
-import { StaticRouter } from 'react-router';
-import { ServerStyleSheet } from 'styled-components';
-import { addApolloLogging } from 'apollo-logger';
-import { addPersistedQueries } from 'persistgraphql';
-import fs from 'fs';
-import path from 'path';
-import Helmet from 'react-helmet';
-import url from 'url';
-import { CookiesProvider } from 'react-cookie';
+import React from "react";
+import ReactDOMServer from "react-dom/server";
+import { createBatchingNetworkInterface } from "apollo-client";
+import { ApolloProvider, getDataFromTree } from "react-apollo";
+import { StaticRouter } from "react-router";
+import { ServerStyleSheet } from "styled-components";
+import { addApolloLogging } from "apollo-logger";
+import { addPersistedQueries } from "persistgraphql";
+import fs from "fs";
+import path from "path";
+import Helmet from "react-helmet";
+import url from "url";
+import { CookiesProvider } from "react-cookie";
 
-import createApolloClient from '../../common/apollo_client';
-import createReduxStore from '../../common/redux_store';
-import Html from './html';
-import Routes from '../../client/app/routes';
-import log from '../../common/log';
-import { options as spinConfig } from '../../../.spinrc.json';
-import settings from '../../../settings';
+import createApolloClient from "../../common/createApolloClient";
+import createReduxStore from "../../common/createReduxStore";
+import Html from "./html";
+import Routes from "../../client/app/Routes";
+import log from "../../common/log";
+import { options as spinConfig } from "../../../.spinrc.json";
+import settings from "../../../settings";
 
 let assetMap;
 
@@ -30,7 +30,7 @@ async function renderServerSide(req, res, queryMap) {
   let networkInterface = createBatchingNetworkInterface({
     uri: apiUrl,
     opts: {
-      credentials: 'include',
+      credentials: "include",
       headers: req.headers
     },
     batchInterval: 20
@@ -76,7 +76,7 @@ async function renderServerSide(req, res, queryMap) {
     if (__DEV__ || !assetMap) {
       assetMap = JSON.parse(
         fs.readFileSync(
-          path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')
+          path.join(spinConfig.frontendBuildDir, "web", "assets.json")
         )
       );
     }
@@ -87,11 +87,11 @@ async function renderServerSide(req, res, queryMap) {
     delete apolloState.apollo.queries;
     delete apolloState.apollo.mutations;
 
-    const token = req.universalCookies.get('x-token')
-      ? req.universalCookies.get('x-token')
+    const token = req.universalCookies.get("x-token")
+      ? req.universalCookies.get("x-token")
       : null;
-    const refreshToken = req.universalCookies.get('x-refresh-token')
-      ? req.universalCookies.get('x-refresh-token')
+    const refreshToken = req.universalCookies.get("x-refresh-token")
+      ? req.universalCookies.get("x-refresh-token")
       : null;
 
     const page = (
@@ -116,7 +116,7 @@ async function renderClientSide(req, res) {
   if (__DEV__ || !assetMap) {
     assetMap = JSON.parse(
       fs.readFileSync(
-        path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')
+        path.join(spinConfig.frontendBuildDir, "web", "assets.json")
       )
     );
   }
@@ -127,7 +127,7 @@ async function renderClientSide(req, res) {
 
 export default queryMap => async (req, res, next) => {
   try {
-    if (req.url.indexOf('.') < 0) {
+    if (req.url.indexOf(".") < 0) {
       if (__SSR__) {
         return renderServerSide(req, res, queryMap);
       } else {
@@ -137,6 +137,6 @@ export default queryMap => async (req, res, next) => {
       return next();
     }
   } catch (e) {
-    log.error('RENDERING ERROR:', e);
+    log.error("RENDERING ERROR:", e);
   }
 };

@@ -1,17 +1,17 @@
-import jwt from 'jsonwebtoken';
-import { pick } from 'lodash';
-import bcrypt from 'bcryptjs';
+import jwt from "jsonwebtoken";
+import { pick } from "lodash";
+import bcrypt from "bcryptjs";
 
-import FieldError from '../../../common/error';
+import FieldError from "../../../common/FieldError";
 
 export const createTokens = async (user, secret, refreshSecret) => {
   const createToken = jwt.sign(
     {
-      user: pick(user, ['id', 'username', 'isAdmin'])
+      user: pick(user, ["id", "username", "isAdmin"])
     },
     secret,
     {
-      expiresIn: '1m'
+      expiresIn: "1m"
     }
   );
 
@@ -21,7 +21,7 @@ export const createTokens = async (user, secret, refreshSecret) => {
     },
     refreshSecret,
     {
-      expiresIn: '7d'
+      expiresIn: "7d"
     }
   );
 
@@ -59,7 +59,7 @@ export const refreshTokens = async (token, refreshToken, User, SECRET) => {
   return {
     token: newToken,
     refreshToken: newRefreshToken,
-    user: pick(user, ['id', 'username', 'isAdmin'])
+    user: pick(user, ["id", "username", "isAdmin"])
   };
 };
 
@@ -69,13 +69,13 @@ export const tryLogin = async (email, password, User, SECRET) => {
 
   if (!localAuth) {
     // user with provided email not found
-    e.setError('email', 'Please enter a valid e-mail.');
+    e.setError("email", "Please enter a valid e-mail.");
   }
 
   const valid = await bcrypt.compare(password, localAuth.password);
   if (!valid) {
     // bad password
-    e.setError('password', 'Please enter a valid password.');
+    e.setError("password", "Please enter a valid password.");
   }
 
   e.throwIf();

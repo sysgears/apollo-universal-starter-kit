@@ -1,40 +1,40 @@
 // React
-import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import React from "react";
+import { Route, Link } from "react-router-dom";
 
 // Component and helpers
-import Profile from './containers/profile';
-import Users from './containers/users';
-import Register from './containers/register';
-import Login from './containers/login';
-import reducers from './reducers';
+import Profile from "./containers/Profile";
+import Users from "./containers/Users";
+import Register from "./containers/Register";
+import Login from "./containers/Login";
+import reducers from "./reducers";
 
-import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from './containers/auth';
+import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from "./containers/Auth";
 
-import Feature from '../connector';
+import Feature from "../connector";
 
 function tokenMiddleware(req) {
-  req.options.headers['x-token'] = window.localStorage.getItem('token');
-  req.options.headers['x-refresh-token'] = window.localStorage.getItem(
-    'refreshToken'
+  req.options.headers["x-token"] = window.localStorage.getItem("token");
+  req.options.headers["x-refresh-token"] = window.localStorage.getItem(
+    "refreshToken"
   );
 }
 
 function tokenAfterware(res) {
-  const token = res.options.headers['x-token'];
-  const refreshToken = res.options.headers['x-refresh-token'];
+  const token = res.options.headers["x-token"];
+  const refreshToken = res.options.headers["x-refresh-token"];
   if (token) {
-    window.localStorage.setItem('token', token);
+    window.localStorage.setItem("token", token);
   }
   if (refreshToken) {
-    window.localStorage.setItem('refreshToken', refreshToken);
+    window.localStorage.setItem("refreshToken", refreshToken);
   }
 }
 
 function connectionParam() {
   return {
-    token: window.localStorage.getItem('token'),
-    refreshToken: window.localStorage.getItem('refreshToken')
+    token: window.localStorage.getItem("token"),
+    refreshToken: window.localStorage.getItem("refreshToken")
   };
 }
 

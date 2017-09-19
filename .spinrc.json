@@ -1,7 +1,7 @@
 {
   "builders": {
     "server": {
-      "stack": ["server"],
+      "stack": ["server", "react-native-web"],
       "enabled": true
     },
     "web": {
@@ -10,11 +10,11 @@
       "enabled": true
     },
     "android": {
-      "stack": ["android"],
+      "stack": ["react-native", "android"],
       "enabled": false
     },
     "ios": {
-      "stack": ["ios"],
+      "stack": ["react-native", "ios"],
       "enabled": false
     },
     "test": {
@@ -26,7 +26,7 @@
     "backendBuildDir": "build/server",
     "frontendBuildDir": "build/client",
     "dllBuildDir": "build/dll",
-    "overridesConfig": "tools/webpack.app_config.js",
+    "overridesConfig": "tools/WebpackAppConfig.js",
     "stack": ["apollo", "angular", "sass", "ts", "webpack"],
     "backendUrl": "http://{ip}:8080/graphql",
     "ssr": true,

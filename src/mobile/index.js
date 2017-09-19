@@ -1,8 +1,8 @@
-import Expo from 'expo';
-import React from 'react';
-import { View } from 'react-native';
+import Expo from "expo";
+import React from "react";
+import { View } from "react-native";
 
-import App from './app';
+import App from "./App";
 
 // we don't want this to require transformation
 class AwakeInDevApp extends React.Component {
@@ -16,7 +16,7 @@ class AwakeInDevApp extends React.Component {
       },
       React.createElement(App),
       React.createElement(
-        process.env.NODE_ENV === 'development' ? Expo.KeepAwake : View
+        process.env.NODE_ENV === "development" ? Expo.KeepAwake : View
       )
     );
   }

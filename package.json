@@ -160,7 +160,7 @@
     "sass-loader": "^6.0.6",
     "shelljs": "^0.7.8",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.3.2",
+    "spinjs": "^0.3.3",
     "style-loader": "^0.18.2",
     "ts-node": "^3.3.0",
     "tslint": "^5.7.0",

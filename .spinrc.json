@@ -29,7 +29,7 @@
     "overridesConfig": "tools/WebpackAppConfig.js",
     "stack": ["apollo", "angular", "sass", "ts", "webpack"],
     "backendUrl": "http://{ip}:8080/graphql",
-    "ssr": true,
+    "ssr": false,
     "webpackDll": true,
     "persistGraphQL": true,
     "frontendRefreshOnBackendChange": true

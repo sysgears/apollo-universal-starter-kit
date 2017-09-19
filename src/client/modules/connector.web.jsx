@@ -25,13 +25,17 @@ export default class {
 
   get navItems() {
     return this.navItem.map((component, idx) =>
-      React.cloneElement(component, { key: idx + this.navItem.length })
+      React.cloneElement(component, {
+        key: component.key ? component.key : idx + this.navItem.length
+      })
     );
   }
 
   get navItemsRight() {
     return this.navItemRight.map((component, idx) =>
-      React.cloneElement(component, { key: idx + this.navItemRight.length })
+      React.cloneElement(component, {
+        key: component.key ? component.key : idx + this.navItem.length
+      })
     );
   }
 

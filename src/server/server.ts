@@ -4,23 +4,24 @@ import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
 import * as http from 'http';
-// import { invert, isArray } from 'lodash';
+import { Server } from "http";
+import { invert, isArray } from 'lodash';
 import * as url from 'url';
 // import * as cookiesMiddleware from 'universal-cookie-express';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
-// import queryMap from 'persisted_queries.json';
+import queryMap from 'persisted_queries.json';
 import modules from './modules';
 
 // import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
-// import addGraphQLSubscriptions from './api/subscriptions';
+import addGraphQLSubscriptions from './api/subscriptions';
 import log from '../common/log';
 
 const spinConfig = require('../../.spinrc.json').options;
 
 // eslint-disable-next-line import/no-mutable-exports
-let server: any;
+let server: Server;
 
 const app = express();
 
@@ -54,29 +55,29 @@ if (__DEV__) {
   app.use('/', express.static(spinConfig.dllBuildDir, { maxAge: '180 days' }));
 }
 
-// if (__PERSIST_GQL__) {
-//   const invertedMap = invert(queryMap);
-//
-//   app.use('/graphql', (req, resp, next) => {
-//     if (isArray(req.body)) {
-//       req.body = req.body.map(body => {
-//         return {
-//           query: invertedMap[body.id],
-//           ...body
-//         };
-//       });
-//       next();
-//     } else {
-//       if (!__DEV__ || (req.get('Referer') || '').indexOf('/graphiql') < 0) {
-//         resp
-//           .status(500)
-//           .send('Unknown GraphQL query has been received, rejecting...');
-//       } else {
-//         next();
-//       }
-//     }
-//   });
-// }
+if (__PERSIST_GQL__) {
+  const invertedMap = invert(queryMap);
+
+  app.use('/graphql', (req, resp, next) => {
+    if (isArray(req.body)) {
+      req.body = req.body.map(body => {
+        return {
+          query: invertedMap[body.id],
+          ...body
+        };
+      });
+      next();
+    } else {
+      if (!__DEV__ || (req.get('Referer') || '').indexOf('/graphiql') < 0) {
+        resp
+          .status(500)
+          .send('Unknown GraphQL query has been received, rejecting...');
+      } else {
+        next();
+      }
+    }
+  });
+}
 
 for (const middleware of modules.middlewares) {
   app.use(middleware);
@@ -87,7 +88,7 @@ app.all('/graphiql', (req: Request, res: Response, next: NextFunction) => graphi
 
 server = http.createServer(app);
 
-// addGraphQLSubscriptions(server);
+addGraphQLSubscriptions(server);
 
 server.listen(serverPort, () => {
   log.info(`API is now running on port ${serverPort}`);
@@ -108,13 +109,13 @@ if (module.hot) {
     }
   });
   // module.hot.accept(['./middleware/website', './middleware/graphql']);
-  // module.hot.accept(['./api/subscriptions'], () => {
-  //   try {
-  //     // addGraphQLSubscriptions(server);
-  //   } catch (error) {
-  //     log(error.stack);
-  //   }
-  // });
+  module.hot.accept(['./api/subscriptions'], () => {
+    try {
+      addGraphQLSubscriptions(server);
+    } catch (error) {
+      log(error.stack);
+    }
+  });
 
   module.hot.accept();
 }

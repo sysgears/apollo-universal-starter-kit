@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { Button } from 'reactstrap';
 import PageLayout from '../../../app/PageLayout';
 
-const pageNotFound = () => (
+const PageNotFound = () => (
   <PageLayout>
     <section className="text-center mt-4 mb-4">
       <Helmet
@@ -26,4 +26,4 @@ const pageNotFound = () => (
   </PageLayout>
 );
 
-export default pageNotFound;
+export default PageNotFound;

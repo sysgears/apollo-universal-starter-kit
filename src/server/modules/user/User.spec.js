@@ -4,7 +4,7 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 
 // Helpers
-import { getServer, getApollo } from '../../testHelper/integrationSetup';
+import { getServer, getApollo } from '../../testHelpers/integrationSetup';
 
 describe('User API works', () => {
   let server, apollo;

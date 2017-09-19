@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
-import Renderer from '../../../../client/testHelpers/ApolloRenderer';
+import ApolloRenderer from '../../../../client/testHelpers/ApolloRenderer';
 
 describe('Page not found example UI works', () => {
-  const renderer = new Renderer({});
+  const renderer = new ApolloRenderer({});
   let app;
   let content;
 

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
-import { getApollo } from '../../testHelper/integrationSetup';
+import { getApollo } from '../../testHelpers/integrationSetup';
 import POSTS_GET from '../../../client/modules/post/graphql/getPosts.graphql';
 import POST_GET from '../../../client/modules/post/graphql/getPost.graphql';
 import POST_ADD from '../../../client/modules/post/graphql/addPost.graphql';

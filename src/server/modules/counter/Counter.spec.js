@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { step } from 'mocha-steps';
 
-import { getServer, getApollo } from '../../testHelper/integrationSetup';
+import { getServer, getApollo } from '../../testHelpers/integrationSetup';
 
 import COUNT_GET_QUERY from '../../../client/modules/counter/graphql/getCount.graphql';
 import COUNT_ADD_MUTATION from '../../../client/modules/counter/graphql/addCount.graphql';

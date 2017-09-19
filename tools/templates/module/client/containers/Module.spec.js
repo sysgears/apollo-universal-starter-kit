@@ -3,11 +3,11 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 // Components and helpers
-import Renderer from '../../../../client/test-helpers/apollo_renderer';
-import routes from '../../../../client/app/routes';
+import ApolloRenderer from '../../../../client/testHelpers/ApolloRenderer';
+import routes from '../../../../client/app/Routes';
 
 describe('$Module$ UI works', () => {
-  const renderer = new Renderer({});
+  const renderer = new ApolloRenderer({});
   let app;
   let content;
 
@@ -18,5 +18,3 @@ describe('$Module$ UI works', () => {
     expect(content).to.not.be.empty;
   });
 });
-
-

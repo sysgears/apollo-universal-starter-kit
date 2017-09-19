@@ -12,8 +12,10 @@
     "build": "cross-env NODE_ENV=production spin build",
     "exp": "spin exp",
     "start": "node --harmony build/server",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
-    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
+    "tests":
+      "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
+    "tests:watch":
+      "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src tests tools",
     "seed": "npm run migrate && knex seed:run",
@@ -21,10 +23,11 @@
     "rollback": "knex migrate:rollback",
     "watch": "spin watch",
     "heroku-postbuild": "rm -rf build && npm run build && npm run seed",
+    "precommit": "lint-staged",
     "cli": "node tools/cli"
   },
   "lint-staged": {
-    "*.{js,jsx,json}": ["prettier --write", "git add"]
+    "*.{js,jsx,json}": ["eslint --fix", "git add"]
   },
   "repository": {
     "type": "git",
@@ -34,14 +37,7 @@
     "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
-  "keywords": [
-    "apollo",
-    "universal",
-    "starter",
-    "graphql",
-    "react",
-    "redux"
-  ],
+  "keywords": ["apollo", "universal", "starter", "graphql", "react", "redux"],
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
@@ -80,7 +76,8 @@
     "react-ga": "^2.2.0",
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^3.0.0-beta.7",
-    "react-native": "https://github.com/exponent/react-native/archive/sdk-15.0.0.tar.gz",
+    "react-native":
+      "https://github.com/exponent/react-native/archive/sdk-15.0.0.tar.gz",
     "react-navigation": "^1.0.0-beta.11",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",

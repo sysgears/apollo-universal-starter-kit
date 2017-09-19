@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { step } from 'mocha-steps';
 
-import Renderer from '../../../../client/testHelpers/ApolloRenderer';
+import ApolloRenderer from '../../../../client/testHelpers/ApolloRenderer';
 import COUNT_SUBSCRIBE from '../graphql/countUpdated.graphql';
 
 chai.should();
@@ -25,7 +25,7 @@ const mocks = {
 };
 
 describe('Counter example UI works', () => {
-  const renderer = new Renderer(mocks, {
+  const renderer = new ApolloRenderer(mocks, {
     counter: { reduxCount: REDUX_VALUE }
   });
   let app;

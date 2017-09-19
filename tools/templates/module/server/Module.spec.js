@@ -4,7 +4,7 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 
 // Helpers
-import { getServer, getApollo } from '../../test-helpers/integration_setup';
+import { getServer, getApollo } from '../../testHelpers/integrationSetup';
 
 describe('$Module$ API works', () => {
   let server, apollo;
@@ -15,9 +15,12 @@ describe('$Module$ API works', () => {
   });
 
   step('Has GraphiQL endpoint', () => {
-    return chai.request(server).get('/graphiql').end((err, res) => {
-      res.status.should.be(200);
-      res.body.should.be('{}');
-    });
+    return chai
+      .request(server)
+      .get('/graphiql')
+      .end((err, res) => {
+        res.status.should.be(200);
+        res.body.should.be('{}');
+      });
   });
 });

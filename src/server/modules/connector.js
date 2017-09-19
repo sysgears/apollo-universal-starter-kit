@@ -1,10 +1,10 @@
 // @flow
 /* eslint-disable no-unused-vars */
-import type { PubSub } from "graphql-subscriptions";
-import type { DocumentNode } from "graphql";
-import type { Middleware, $Request } from "express";
+import type { PubSub } from 'graphql-subscriptions';
+import type { DocumentNode } from 'graphql';
+import type { Middleware, $Request } from 'express';
 
-import { merge, map, union, without, castArray } from "lodash";
+import { merge, map, union, without, castArray } from 'lodash';
 
 const combine = (features, extractor): any =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);

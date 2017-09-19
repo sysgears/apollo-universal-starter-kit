@@ -8,7 +8,7 @@ declare module 'react-router-dom' {
       forceRefresh?: boolean,
       getUserConfirmation?: GetUserConfirmation,
       keyLength?: number,
-      children?: React$Element<*>,
+      children?: React$Element<*>
     }
   }
 
@@ -17,7 +17,7 @@ declare module 'react-router-dom' {
       basename?: string,
       getUserConfirmation?: GetUserConfirmation,
       hashType?: 'slash' | 'noslash' | 'hashbang',
-      children?: React$Element<*>,
+      children?: React$Element<*>
     }
   }
 
@@ -25,7 +25,7 @@ declare module 'react-router-dom' {
     props: {
       to: string | LocationShape,
       replace?: boolean,
-      children?: React$Element<*>,
+      children?: React$Element<*>
     }
   }
 
@@ -38,8 +38,8 @@ declare module 'react-router-dom' {
       style?: Object,
       isActive?: (match: Match, location: Location) => boolean,
       children?: React$Element<*>,
-      exact?: bool,
-      strict?: bool,
+      exact?: boolean,
+      strict?: boolean
     }
   }
 
@@ -50,61 +50,67 @@ declare module 'react-router-dom' {
     search: string,
     hash: string,
     state?: any,
-    key?: string,
-  }
+    key?: string
+  };
 
   declare export type LocationShape = {
     pathname?: string,
     search?: string,
     hash?: string,
-    state?: any,
-  }
+    state?: any
+  };
 
-  declare export type HistoryAction = 'PUSH' | 'REPLACE' | 'POP'
+  declare export type HistoryAction = 'PUSH' | 'REPLACE' | 'POP';
 
   declare export type RouterHistory = {
     length: number,
     location: Location,
     action: HistoryAction,
-    listen(callback: (location: Location, action: HistoryAction) => void): () => void,
+    listen(
+      callback: (location: Location, action: HistoryAction) => void
+    ): () => void,
     push(path: string | LocationShape, state?: any): void,
     replace(path: string | LocationShape, state?: any): void,
     go(n: number): void,
     goBack(): void,
     goForward(): void,
-    canGo?: (n: number) => bool,
-    block(callback: (location: Location, action: HistoryAction) => boolean): void,
+    canGo?: (n: number) => boolean,
+    block(
+      callback: (location: Location, action: HistoryAction) => boolean
+    ): void,
     // createMemoryHistory
     index?: number,
-    entries?: Array<Location>,
-  }
+    entries?: Array<Location>
+  };
 
   declare export type Match = {
     params: { [key: string]: ?string },
     isExact: boolean,
     path: string,
-    url: string,
-  }
+    url: string
+  };
 
   declare export type ContextRouter = {
     history: RouterHistory,
     location: Location,
-    match: Match,
-  }
+    match: Match
+  };
 
-  declare export type GetUserConfirmation =
-    (message: string, callback: (confirmed: boolean) => void) => void
+  declare export type GetUserConfirmation = (
+    message: string,
+    callback: (confirmed: boolean) => void
+  ) => void;
 
   declare type StaticRouterContext = {
-    url?: string,
-  }
+    url?: string
+  };
 
   declare export class StaticRouter extends React$Component {
     props: {
       basename?: string,
       location?: string | Location,
       context: StaticRouterContext,
-      children?: React$Element<*>,
+      children?: React$Element<*>
     }
   }
 
@@ -114,28 +120,28 @@ declare module 'react-router-dom' {
       initialIndex?: number,
       getUserConfirmation?: GetUserConfirmation,
       keyLength?: number,
-      children?: React$Element<*>,
+      children?: React$Element<*>
     }
   }
 
   declare export class Router extends React$Component {
     props: {
       history: RouterHistory,
-      children?: React$Element<*>,
+      children?: React$Element<*>
     }
   }
 
   declare export class Prompt extends React$Component {
     props: {
-      message: string | (location: Location) => string | true,
-      when?: boolean,
+      message: string | ((location: Location) => string | true),
+      when?: boolean
     }
   }
 
   declare export class Redirect extends React$Component {
     props: {
       to: string | LocationShape,
-      push?: boolean,
+      push?: boolean
     }
   }
 
@@ -145,20 +151,22 @@ declare module 'react-router-dom' {
       render?: (router: ContextRouter) => React$Element<*>,
       children?: (router: ContextRouter) => React$Element<*>,
       path?: string,
-      exact?: bool,
-      strict?: bool,
+      exact?: boolean,
+      strict?: boolean
     }
   }
 
   declare export class Switch extends React$Component {
     props: {
-      children?: Array<React$Element<*>>,
+      children?: Array<React$Element<*>>
     }
   }
 
   declare type FunctionComponent<P> = (props: P) => ?React$Element<any>;
   declare type ClassComponent<D, P, S> = Class<React$Component<D, P, S>>;
-  declare export function withRouter<P, S>(Component: ClassComponent<void, P, S> | FunctionComponent<P>): ClassComponent<void, $Diff<P, ContextRouter>, S>;
+  declare export function withRouter<P, S>(
+    Component: ClassComponent<void, P, S> | FunctionComponent<P>
+  ): ClassComponent<void, $Diff<P, ContextRouter>, S>;
 
   declare type MatchPathOptions = {
     path: ?string,
@@ -167,5 +175,8 @@ declare module 'react-router-dom' {
     sensitive?: boolean
   };
 
-  declare export function matchPath(pathname: string, options?: MatchPathOptions | string): null | Match
+  declare export function matchPath(
+    pathname: string,
+    options?: MatchPathOptions | string
+  ): null | Match;
 }

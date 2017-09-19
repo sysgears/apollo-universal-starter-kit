@@ -23,7 +23,6 @@ declare module 'serialize-javascript' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'serialize-javascript/index' {
   declare module.exports: $Exports<'serialize-javascript'>;

@@ -23,7 +23,6 @@ declare module 'ignore-loader' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'ignore-loader/index' {
   declare module.exports: $Exports<'ignore-loader'>;

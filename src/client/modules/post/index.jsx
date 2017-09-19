@@ -6,8 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { createTabBarIconWrapper } from '../common/components';
 
-import Post from './containers/post';
-import PostEdit from './containers/post_edit';
+import Post from './containers/Post';
+import PostEdit from './containers/PostEdit';
 
 import reducers from './reducers';
 

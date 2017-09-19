@@ -23,7 +23,6 @@ declare module 'webpack-node-externals' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'webpack-node-externals/index' {
   declare module.exports: $Exports<'webpack-node-externals'>;

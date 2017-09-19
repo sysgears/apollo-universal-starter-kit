@@ -1,7 +1,7 @@
 // flow-typed signature: 83935520f5ff73d31271b162a330d97e
 // flow-typed version: 3b064385b7/lodash_v4.x.x/flow_>=v0.47.x
 
-declare module "lodash" {
+declare module 'lodash' {
   declare type TemplateSettings = {
     escape?: RegExp,
     evaluate?: RegExp,
@@ -419,12 +419,12 @@ declare module "lodash" {
     orderBy<T>(
       array: ?Array<T>,
       iteratees?: Array<Iteratee<T>> | string,
-      orders?: Array<"asc" | "desc"> | string
+      orders?: Array<'asc' | 'desc'> | string
     ): Array<T>,
     orderBy<V, T: Object>(
       object: T,
       iteratees?: Array<OIteratee<*>> | string,
-      orders?: Array<"asc" | "desc"> | string
+      orders?: Array<'asc' | 'desc'> | string
     ): Array<V>,
     partition<T>(array: ?Array<T>, predicate?: Predicate<T>): NestedArray<T>,
     partition<V, A, T: { [id: string]: A }>(
@@ -1031,7 +1031,7 @@ declare module "lodash" {
     stubArray(): Array<*>,
     stubFalse(): false,
     stubObject(): {},
-    stubString(): "",
+    stubString(): '',
     stubTrue(): true,
     times(n: number, ...rest: Array<void>): Array<number>,
     times<T>(n: number, iteratee: (i: number) => T): Array<T>,

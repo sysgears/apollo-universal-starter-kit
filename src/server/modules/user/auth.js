@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 import bcrypt from 'bcryptjs';
 
-import FieldError from '../../../common/error';
+import FieldError from '../../../common/FieldError';
 
 export const createTokens = async (user, secret, refreshSecret) => {
   const createToken = jwt.sign(

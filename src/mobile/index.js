@@ -2,7 +2,7 @@ import Expo from 'expo';
 import React from 'react';
 import { View } from 'react-native';
 
-import App from './app';
+import App from './App';
 
 // we don't want this to require transformation
 class AwakeInDevApp extends React.Component {

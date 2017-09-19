@@ -33,7 +33,7 @@ function copyFiles(logger, templatePath, module, location) {
     // rename files
     shell.ls('-Rl', '.').forEach(entry => {
       if (entry.isFile()) {
-        const moduleFile = entry.name.replace('module', module);
+        const moduleFile = entry.name.replace('Module', module.capitalize());
         shell.mv(entry.name, moduleFile);
       }
     });

@@ -23,7 +23,6 @@ declare module 'compression' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'compression/index' {
   declare module.exports: $Exports<'compression'>;

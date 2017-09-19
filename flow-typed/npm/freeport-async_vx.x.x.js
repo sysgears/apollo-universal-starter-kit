@@ -23,7 +23,6 @@ declare module 'freeport-async' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'freeport-async/index' {
   declare module.exports: $Exports<'freeport-async'>;

@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { pick } from 'lodash';
 import { refreshTokens, tryLogin } from './auth';
 import { requiresAuth, requiresAdmin } from './permissions';
-import FieldError from '../../../common/error';
+import FieldError from '../../../common/FieldError';
 
 export default pubsub => ({
   Query: {

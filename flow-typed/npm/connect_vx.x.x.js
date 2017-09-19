@@ -23,7 +23,6 @@ declare module 'connect' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'connect/index' {
   declare module.exports: $Exports<'connect'>;

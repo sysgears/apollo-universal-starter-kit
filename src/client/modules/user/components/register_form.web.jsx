@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import React from "react";
+import PropTypes from "prop-types";
+import { Field, reduxForm } from "redux-form";
 import {
   Form,
   FormGroup,
@@ -8,14 +8,14 @@ import {
   Input,
   FormFeedback,
   Button
-} from 'reactstrap';
+} from "reactstrap";
 
-const required = value => (value ? undefined : 'Required');
+const required = value => (value ? undefined : "Required");
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => {
-  let color = 'normal';
+  let color = "normal";
   if (touched && error) {
-    color = 'danger';
+    color = "danger";
   }
 
   return (
@@ -49,7 +49,7 @@ const RegisterForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
       <Field
         name="email"
         component={renderField}
-        type="text"
+        type="email"
         label="Email"
         validate={required}
       />
@@ -84,5 +84,5 @@ RegisterForm.propTypes = {
 };
 
 export default reduxForm({
-  form: 'register'
+  form: "register"
 })(RegisterForm);

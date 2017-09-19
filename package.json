@@ -12,23 +12,24 @@
     "build": "cross-env NODE_ENV=production spin build",
     "exp": "spin exp",
     "start": "node --harmony build/server",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.ts\"",
-    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.ts\"",
+    "tests":
+      "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.ts\"",
+    "tests:watch":
+      "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.ts\"",
     "test": "npm run tests && npm run lint",
-    "lint": "tslint --fix 'src/*.ts*' -p tsconfig.json --type-check && tslint --fix 'tools/*.ts*' -p tsconfig.json --type-check",
+    "lint":
+      "tslint --fix 'src/*.ts*' -p tsconfig.json --type-check && tslint --fix 'tools/*.ts*' -p tsconfig.json --type-check",
     "seed": "npm run migrate && node_modules/.bin/knex seed:run",
     "migrate": "ts-node node_modules/.bin/knex migrate:latest",
     "rollback": "ts-node node_modules/.bin/knex migrate:rollback",
     "watch": "spin watch",
     "heroku-postbuild": "rm -rf build && npm run build && npm run seed",
     "cli": "node tools/cli",
+    "precommit": "lint-staged",
     "postinstall": "rm -rf node_modules/@types/async"
   },
   "lint-staged": {
-    "*.{js,jsx,json}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.{js,jsx,json}": ["prettier --write", "git add"]
   },
   "repository": {
     "type": "git",
@@ -38,14 +39,7 @@
     "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
-  "keywords": [
-    "apollo",
-    "universal",
-    "starter",
-    "graphql",
-    "react",
-    "redux"
-  ],
+  "keywords": ["apollo", "universal", "starter", "graphql", "react", "redux"],
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {

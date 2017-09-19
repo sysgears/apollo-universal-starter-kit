@@ -3,11 +3,11 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 // Components and helpers
-import ApolloRenderer from '../../../../client/testHelpers/ApolloRenderer';
+import Renderer from '../../../../client/testHelpers/Renderer';
 import routes from '../../../../client/app/Routes';
 
 describe('$Module$ UI works', () => {
-  const renderer = new ApolloRenderer({});
+  const renderer = new Renderer({});
   let app;
   let content;
 

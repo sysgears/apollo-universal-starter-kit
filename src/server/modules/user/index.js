@@ -22,7 +22,8 @@ export default new Feature({
     if (
       connectionParams &&
       connectionParams.token &&
-      connectionParams.token !== 'null'
+      connectionParams.token !== 'null' &&
+      connectionParams.token !== 'undefined'
     ) {
       try {
         const { user } = jwt.verify(connectionParams.token, SECRET);

@@ -1,4 +1,4 @@
-#import "./comment.graphql"
+#import "./Comment.graphql"
 
 mutation editComment($input: EditCommentInput!) {
     editComment(input: $input) {

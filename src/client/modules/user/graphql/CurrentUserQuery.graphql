@@ -1,4 +1,4 @@
-#import "./user.graphql"
+#import "./User.graphql"
 
 query currentUser {
     currentUser {

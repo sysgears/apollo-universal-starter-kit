@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '../../common/components';
 
-const CounterView = ({ loading, count, addCount, reduxCount, onReduxIncrement }) => {
+const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement }) => {
   if (loading) {
     return (
       <View style={styles.container}>
@@ -16,11 +16,11 @@ const CounterView = ({ loading, count, addCount, reduxCount, onReduxIncrement })
       <View style={styles.container}>
         <View style={styles.element}>
           <Text style={styles.box}>
-            Current count, is {count.amount}. This is being stored server-side in the database and using Apollo
+            Current counter, is {counter.amount}. This is being stored server-side in the database and using Apollo
             subscription for real-time updates.
           </Text>
         </View>
-        <Button onPress={addCount(1)}>Click to increase count</Button>
+        <Button onPress={addCounter(1)}>Click to increase counter</Button>
         <View style={styles.element}>
           <Text style={styles.box}>
             Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.
@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
 
 CounterView.propTypes = {
   loading: PropTypes.bool.isRequired,
-  count: PropTypes.object,
-  addCount: PropTypes.func.isRequired,
+  counter: PropTypes.object,
+  addCounter: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired,
   onReduxIncrement: PropTypes.func.isRequired
 };

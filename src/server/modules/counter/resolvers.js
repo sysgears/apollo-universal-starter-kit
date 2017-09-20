@@ -1,26 +1,26 @@
-const COUNT_UPDATED_TOPIC = 'count_updated';
+const COUNTER_SUBSCRIPTION = 'counter_subscription';
 
 export default pubsub => ({
   Query: {
-    count(obj, args, context) {
-      return context.Count.getCount();
+    counter(obj, args, context) {
+      return context.Counter.counterQuery();
     }
   },
   Mutation: {
-    async addCount(obj, { amount }, context) {
-      await context.Count.addCount(amount);
-      const count = await context.Count.getCount();
+    async addCounter(obj, { amount }, context) {
+      await context.Counter.addCounter(amount);
+      const counter = await context.Counter.counterQuery();
 
-      pubsub.publish(COUNT_UPDATED_TOPIC, {
-        countUpdated: { amount: count.amount }
+      pubsub.publish(COUNTER_SUBSCRIPTION, {
+        counterUpdated: { amount: counter.amount }
       });
 
-      return count;
+      return counter;
     }
   },
   Subscription: {
-    countUpdated: {
-      subscribe: () => pubsub.asyncIterator(COUNT_UPDATED_TOPIC)
+    counterUpdated: {
+      subscribe: () => pubsub.asyncIterator(COUNTER_SUBSCRIPTION)
     }
   }
 });

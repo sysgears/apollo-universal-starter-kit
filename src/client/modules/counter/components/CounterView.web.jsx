@@ -7,7 +7,7 @@ import PageLayout from '../../../app/PageLayout';
 
 const Section = styled.section`margin-bottom: 30px;`;
 
-const CounterView = ({ loading, count, addCount, reduxCount, onReduxIncrement }) => {
+const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement }) => {
   const renderMetaData = () => (
     <Helmet
       title="Apollo Starter Kit - Counter"
@@ -34,11 +34,11 @@ const CounterView = ({ loading, count, addCount, reduxCount, onReduxIncrement })
         <div className="text-center mt-4 mb-4">
           <Section>
             <p>
-              Current count, is {count.amount}. This is being stored server-side in the database and using Apollo
+              Current counter, is {counter.amount}. This is being stored server-side in the database and using Apollo
               subscription for real-time updates.
             </p>
-            <Button id="graphql-button" color="primary" onClick={addCount(1)}>
-              Click to increase count
+            <Button id="graphql-button" color="primary" onClick={addCounter(1)}>
+              Click to increase counter
             </Button>
           </Section>
           <Section>
@@ -55,8 +55,8 @@ const CounterView = ({ loading, count, addCount, reduxCount, onReduxIncrement })
 
 CounterView.propTypes = {
   loading: PropTypes.bool.isRequired,
-  count: PropTypes.object,
-  addCount: PropTypes.func.isRequired,
+  counter: PropTypes.object,
+  addCounter: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired,
   onReduxIncrement: PropTypes.func.isRequired
 };

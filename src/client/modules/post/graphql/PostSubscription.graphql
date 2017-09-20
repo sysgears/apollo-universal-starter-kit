@@ -1,4 +1,4 @@
-#import "./post.graphql"
+#import "./Post.graphql"
 
 subscription onPostUpdated($id: Int!) {
     postUpdated(id: $id) {

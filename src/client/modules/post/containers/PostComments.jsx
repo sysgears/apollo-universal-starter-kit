@@ -7,10 +7,10 @@ import { reset } from 'redux-form';
 
 import PostCommentsView from '../components/PostCommentsView';
 
-import COMMENT_ADD from '../graphql/addComment.graphql';
-import COMMENT_EDIT from '../graphql/editComment.graphql';
-import COMMENT_DELETE from '../graphql/deleteComment.graphql';
-import COMMENT_SUBSCRIPTION from '../graphql/commentUpdated.graphql';
+import ADD_COMMENT from '../graphql/AddComment.graphql';
+import EDIT_COMMENT from '../graphql/EditComment.graphql';
+import DELETE_COMMENT from '../graphql/DeleteComment.graphql';
+import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
 
 function AddComment(prev, node) {
   // ignore if duplicate
@@ -109,7 +109,7 @@ PostComments.propTypes = {
 };
 
 const PostCommentsWithApollo = compose(
-  graphql(COMMENT_ADD, {
+  graphql(ADD_COMMENT, {
     props: ({ mutate }) => ({
       addComment: (content, postId) =>
         mutate({
@@ -122,7 +122,7 @@ const PostCommentsWithApollo = compose(
             }
           },
           updateQueries: {
-            getPost: (prev, { mutationResult: { data: { addComment } } }) => {
+            post: (prev, { mutationResult: { data: { addComment } } }) => {
               if (prev.post) {
                 return AddComment(prev, addComment);
               }
@@ -131,7 +131,7 @@ const PostCommentsWithApollo = compose(
         })
     })
   }),
-  graphql(COMMENT_EDIT, {
+  graphql(EDIT_COMMENT, {
     props: ({ ownProps: { postId }, mutate }) => ({
       editComment: (id, content) =>
         mutate({
@@ -147,7 +147,7 @@ const PostCommentsWithApollo = compose(
         })
     })
   }),
-  graphql(COMMENT_DELETE, {
+  graphql(DELETE_COMMENT, {
     props: ({ ownProps: { postId }, mutate }) => ({
       deleteComment: id =>
         mutate({
@@ -160,7 +160,7 @@ const PostCommentsWithApollo = compose(
             }
           },
           updateQueries: {
-            getPost: (prev, { mutationResult: { data: { deleteComment } } }) => {
+            post: (prev, { mutationResult: { data: { deleteComment } } }) => {
               if (prev.post) {
                 return DeleteComment(prev, deleteComment.id);
               }

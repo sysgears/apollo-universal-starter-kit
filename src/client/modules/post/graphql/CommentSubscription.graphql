@@ -1,4 +1,4 @@
-#import "./comment.graphql"
+#import "./Comment.graphql"
 
 subscription onCommentUpdated($postId: Int!) {
     commentUpdated(postId: $postId) {

@@ -1,23 +1,23 @@
 # Database counter
-type Count {
+type Counter {
   # Current amount
   amount: Int!
 }
 
 extend type Query {
   # Counter
-  count: Count
+  counter: Counter
 }
 
 extend type Mutation {
   # Increase counter value, returns current counter amount
-  addCount(
+  addCounter(
     # Amount to add to counter
     amount: Int!
-  ): Count
+  ): Counter
 }
 
 extend type Subscription {
   # Subscription fired when anyone increases counter
-  countUpdated: Count
+  counterUpdated: Counter
 }

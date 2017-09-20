@@ -7,8 +7,8 @@ import { withCookies, Cookies } from 'react-cookie';
 import { NavItem } from 'reactstrap';
 import decode from 'jwt-decode';
 
-import CURRENT_USER from '../graphql/currentUser.graphql';
-import USER_LOGOUT from '../graphql/logout.graphql';
+import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
+import LOGOUT from '../graphql/Logout.graphql';
 
 const checkAuth = (cookies, role) => {
   let token = null;
@@ -104,8 +104,8 @@ const AuthLoginWithApollo = withCookies(
   withRouter(
     withApollo(
       compose(
-        graphql(CURRENT_USER),
-        graphql(USER_LOGOUT, {
+        graphql(CURRENT_USER_QUERY),
+        graphql(LOGOUT, {
           // eslint-disable-next-line
     props: ({ ownProps: { client, history, navigation }, mutate }) => ({
             logout: async () => {

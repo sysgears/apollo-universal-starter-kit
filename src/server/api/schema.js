@@ -7,9 +7,7 @@ import modules from '../modules';
 import log from '../../common/log';
 import settings from '../../../settings';
 
-export const pubsub = settings.apolloLogging
-  ? addApolloLogging(new PubSub())
-  : new PubSub();
+export const pubsub = settings.apolloLogging ? addApolloLogging(new PubSub()) : new PubSub();
 
 const executableSchema = makeExecutableSchema({
   typeDefs: [rootSchemaDef].concat(modules.schemas),

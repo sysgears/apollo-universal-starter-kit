@@ -10,8 +10,7 @@ export default (SECRET, User) => async (req, res, next) => {
     // check if header token matches cookie token
     if (
       req.headers['x-token'] !== req.universalCookies.get('x-token') ||
-      req.headers['x-refresh-token'] !==
-        req.universalCookies.get('x-refresh-token')
+      req.headers['x-refresh-token'] !== req.universalCookies.get('x-refresh-token')
     ) {
       // if x-token is not empty and not the same as cookie x-token revoke authentication
       token = undefined;
@@ -22,10 +21,8 @@ export default (SECRET, User) => async (req, res, next) => {
   if (req.universalCookies.get('x-token')) {
     // check if header token matches cookie token
     if (
-      req.universalCookies.get('x-token') !==
-        req.universalCookies.get('r-token') ||
-      req.universalCookies.get('x-refresh-token') !==
-        req.universalCookies.get('r-refresh-token')
+      req.universalCookies.get('x-token') !== req.universalCookies.get('r-token') ||
+      req.universalCookies.get('x-refresh-token') !== req.universalCookies.get('r-refresh-token')
     ) {
       // if x-token is not empty and not the same as cookie x-token revoke authentication
       token = undefined;
@@ -37,9 +34,7 @@ export default (SECRET, User) => async (req, res, next) => {
       const { user } = jwt.verify(token, SECRET);
       req.user = user;
     } catch (err) {
-      const refreshToken =
-        req.universalCookies.get('x-refresh-token') ||
-        req.headers['x-refresh-token'];
+      const refreshToken = req.universalCookies.get('x-refresh-token') || req.headers['x-refresh-token'];
       const newTokens = await refreshTokens(token, refreshToken, User, SECRET);
 
       if (newTokens.token && newTokens.refreshToken) {

@@ -50,9 +50,7 @@ describe('Counter example UI works', () => {
   });
 
   step('Page shows GraphQL response when it arrives after button click', () => {
-    content
-      .text()
-      .should.has.string(`Current count, is ${INC_COUNTER_VALUE + 1}.`);
+    content.text().should.has.string(`Current count, is ${INC_COUNTER_VALUE + 1}.`);
   });
 
   step('Increase Redux count button works', () => {
@@ -70,9 +68,7 @@ describe('Counter example UI works', () => {
     subscription(null, {
       countUpdated: { amount: SUBSCRIPTION_VALUE, __typename: 'Count' }
     });
-    content
-      .text()
-      .should.has.string(`Current count, is ${SUBSCRIPTION_VALUE}.`);
+    content.text().should.has.string(`Current count, is ${SUBSCRIPTION_VALUE}.`);
   });
 
   step('Unmount page and check unsubscription', () => {

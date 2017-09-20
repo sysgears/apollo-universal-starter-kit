@@ -13,8 +13,7 @@ const addSubscriptions = httpServer => {
       schema,
       execute,
       subscribe,
-      onConnect: connectionParams =>
-        modules.createContext(null, connectionParams)
+      onConnect: connectionParams => modules.createContext(null, connectionParams)
     },
     {
       server: httpServer,

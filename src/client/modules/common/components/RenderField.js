@@ -2,12 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 
-const RenderField = ({
-  input,
-  label,
-  meta: { touched, error },
-  ...inputProps
-}) => {
+const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
   const { container, inputText, text, errorField } = styles;
 
   return (

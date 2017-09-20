@@ -16,9 +16,7 @@ function copyFiles(logger, templatePath, module, location) {
   logger.info(`Copying ${location} files…`);
 
   // create new module directory
-  const mkdir = shell.mkdir(
-    `${__dirname}/../../src/${location}/modules/${module}`
-  );
+  const mkdir = shell.mkdir(`${__dirname}/../../src/${location}/modules/${module}`);
 
   // continue only if directory does not jet exist
   if (mkdir.code === 0) {
@@ -42,12 +40,7 @@ function copyFiles(logger, templatePath, module, location) {
     shell.ls('-Rl', '.').forEach(entry => {
       if (entry.isFile()) {
         shell.sed('-i', /\$module\$/g, module, entry.name);
-        shell.sed(
-          '-i',
-          /\$Module\$/g,
-          module.toCamelCase().capitalize(),
-          entry.name
-        );
+        shell.sed('-i', /\$Module\$/g, module.toCamelCase().capitalize(), entry.name);
       }
     });
 
@@ -93,17 +86,13 @@ function deleteFiles(logger, templatePath, module, location) {
     // extract Feature modules
     const re = /Feature\(([^()]+)\)/g;
     const match = re.exec(data);
-    const modules = match[1]
-      .split(',')
-      .filter(featureModule => featureModule.trim() !== module);
+    const modules = match[1].split(',').filter(featureModule => featureModule.trim() !== module);
 
     // remove import module line
     const lines = data
       .toString()
       .split('\n')
-      .filter(
-        line => line.match(`import ${module} from './${module}';`) === null
-      );
+      .filter(line => line.match(`import ${module} from './${module}';`) === null);
     fs.writeFileSync(path, lines.join('\n'));
 
     // remove module from Feature function
@@ -112,9 +101,7 @@ function deleteFiles(logger, templatePath, module, location) {
     // continue only if directory does not jet exist
     logger.info(`✔ Module for ${location} successfully deleted!`);
   } else {
-    logger.info(
-      `✔ Module ${location} location for ${modulePath} wasn't found!`
-    );
+    logger.info(`✔ Module ${location} location for ${modulePath} wasn't found!`);
   }
 }
 

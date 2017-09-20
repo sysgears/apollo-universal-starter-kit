@@ -16,12 +16,7 @@ import Feature from '../connector';
 class PostListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Post list',
-    headerRight: (
-      <Button
-        title="Add"
-        onPress={() => navigation.navigate('PostEdit', { id: 0 })}
-      />
-    )
+    headerRight: <Button title="Add" onPress={() => navigation.navigate('PostEdit', { id: 0 })} />
   });
   render() {
     return <Post navigation={this.props.navigation} />;

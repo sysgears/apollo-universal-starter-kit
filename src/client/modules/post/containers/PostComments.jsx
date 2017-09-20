@@ -14,10 +14,7 @@ import COMMENT_SUBSCRIPTION from '../graphql/commentUpdated.graphql';
 
 function AddComment(prev, node) {
   // ignore if duplicate
-  if (
-    node.id !== null &&
-    prev.post.comments.some(comment => node.id === comment.id)
-  ) {
+  if (node.id !== null && prev.post.comments.some(comment => node.id === comment.id)) {
     return prev;
   }
 
@@ -71,12 +68,7 @@ class PostComments extends React.Component {
     this.subscription = subscribeToMore({
       document: COMMENT_SUBSCRIPTION,
       variables: { postId },
-      updateQuery: (
-        prev,
-        {
-          subscriptionData: { data: { commentUpdated: { mutation, id, node } } }
-        }
-      ) => {
+      updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
@@ -168,10 +160,7 @@ const PostCommentsWithApollo = compose(
             }
           },
           updateQueries: {
-            getPost: (
-              prev,
-              { mutationResult: { data: { deleteComment } } }
-            ) => {
+            getPost: (prev, { mutationResult: { data: { deleteComment } } }) => {
               if (prev.post) {
                 return DeleteComment(prev, deleteComment.id);
               }

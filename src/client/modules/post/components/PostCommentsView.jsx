@@ -2,15 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ListView,
-  ScrollView,
-  Button,
-  Keyboard
-} from 'react-native';
+import { StyleSheet, Text, View, ListView, ScrollView, Button, Keyboard } from 'react-native';
 
 import PostCommentForm from './PostCommentForm';
 
@@ -31,28 +23,13 @@ const ds = new ListView.DataSource({ rowHasChanged });
 const renderRow = (onCommentSelect, comment, deleteComment) => rowData => {
   return (
     <View style={styles.row}>
-      <Button
-        title={rowData.content}
-        onPress={() =>
-          onCommentSelect({ id: rowData.id, content: rowData.content })}
-      />
-      <Button
-        title="Delete"
-        onPress={() =>
-          onCommentDelete(comment, deleteComment, onCommentSelect, rowData.id)}
-      />
+      <Button title={rowData.content} onPress={() => onCommentSelect({ id: rowData.id, content: rowData.content })} />
+      <Button title="Delete" onPress={() => onCommentDelete(comment, deleteComment, onCommentSelect, rowData.id)} />
     </View>
   );
 };
 
-const onSubmit = (
-  comment,
-  postId,
-  addComment,
-  editComment,
-  onCommentSelect,
-  onFormSubmitted
-) => values => {
+const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted) => values => {
   if (comment.id === null) {
     addComment(values.content, postId);
   } else {
@@ -80,14 +57,7 @@ const PostCommentsView = ({
       <Text style={styles.title}>Comments</Text>
       <PostCommentForm
         postId={postId}
-        onSubmit={onSubmit(
-          comment,
-          postId,
-          addComment,
-          editComment,
-          onCommentSelect,
-          onFormSubmitted
-        )}
+        onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)}
         initialValues={comment}
       />
       {comments.length > 0 && (

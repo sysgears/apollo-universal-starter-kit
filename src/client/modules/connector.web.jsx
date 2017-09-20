@@ -2,8 +2,7 @@ import React from 'react';
 
 import { merge, map, union, without, castArray } from 'lodash';
 
-const combine = (features, extractor) =>
-  without(union(...map(features, res => castArray(extractor(res)))), undefined);
+const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 export default class {
   // eslint-disable-next-line no-unused-vars
@@ -18,9 +17,7 @@ export default class {
   }
 
   get routes() {
-    return this.route.map((component, idx) =>
-      React.cloneElement(component, { key: idx + this.route.length })
-    );
+    return this.route.map((component, idx) => React.cloneElement(component, { key: idx + this.route.length }));
   }
 
   get navItems() {

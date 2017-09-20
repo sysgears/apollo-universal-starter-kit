@@ -15,15 +15,7 @@ const onSubmit = (post, addPost, editPost) => values => {
   }
 };
 
-const PostEditView = ({
-  loading,
-  post,
-  match,
-  location,
-  subscribeToMore,
-  addPost,
-  editPost
-}) => {
+const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost }) => {
   let postObj = post;
 
   // if new post was just added read it from router
@@ -58,10 +50,7 @@ const PostEditView = ({
           Back
         </Link>
         <h2>{post ? 'Edit' : 'Create'} Post</h2>
-        <PostForm
-          onSubmit={onSubmit(postObj, addPost, editPost)}
-          initialValues={postObj}
-        />
+        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} initialValues={postObj} />
         <br />
         {postObj && (
           <PostComments

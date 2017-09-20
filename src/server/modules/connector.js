@@ -25,10 +25,7 @@ class Feature {
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
     this.schema = combine(arguments, arg => arg.schema);
-    this.createResolversFunc = combine(
-      arguments,
-      arg => arg.createResolversFunc
-    );
+    this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.middleware = combine(arguments, arg => arg.middleware);
   }
@@ -39,20 +36,13 @@ class Feature {
 
   async createContext(req: $Request, connectionParams: any) {
     const results = await Promise.all(
-      this.createContextFunc.map(createContext =>
-        createContext(req, connectionParams)
-      )
+      this.createContextFunc.map(createContext => createContext(req, connectionParams))
     );
     return merge({}, ...results);
   }
 
   createResolvers(pubsub: PubSub) {
-    return merge(
-      {},
-      ...this.createResolversFunc.map(createResolvers =>
-        createResolvers(pubsub)
-      )
-    );
+    return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
   }
 
   get middlewares(): Middleware[] {

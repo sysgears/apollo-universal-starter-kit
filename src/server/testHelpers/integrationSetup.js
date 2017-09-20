@@ -20,16 +20,10 @@ before(async () => {
   await knex.seed.run();
 
   server = require('../server').default;
-  const networkInterface = new SubscriptionClient(
-    `ws://localhost:${process.env['PORT']}/graphql`,
-    {},
-    WebSocket
-  );
+  const networkInterface = new SubscriptionClient(`ws://localhost:${process.env['PORT']}/graphql`, {}, WebSocket);
 
   apollo = new ApolloClient({
-    networkInterface: settings.apolloLogging
-      ? addApolloLogging(networkInterface)
-      : networkInterface
+    networkInterface: settings.apolloLogging ? addApolloLogging(networkInterface) : networkInterface
   });
 });
 

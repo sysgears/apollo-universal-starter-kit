@@ -22,8 +22,5 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return Promise.all([
-    knex.schema.dropTable('user'),
-    knex.schema.dropTable('local_auth')
-  ]);
+  return Promise.all([knex.schema.dropTable('user'), knex.schema.dropTable('local_auth')]);
 };

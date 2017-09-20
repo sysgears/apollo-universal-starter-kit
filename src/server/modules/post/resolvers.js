@@ -21,13 +21,9 @@ export default pubsub => ({
         });
       });
 
-      const endCursor =
-        edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
+      const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
 
-      const values = await Promise.all([
-        context.Post.getTotal(),
-        context.Post.getNextPageFlag(endCursor)
-      ]);
+      const values = await Promise.all([context.Post.getTotal(), context.Post.getNextPageFlag(endCursor)]);
 
       return {
         totalCount: values[0].count,

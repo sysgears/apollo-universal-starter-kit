@@ -8,25 +8,9 @@ const required = value => (value ? undefined : 'Required');
 
 const PostForm = ({ handleSubmit, valid, onSubmit }) => {
   return (
-    <ScrollView
-      style={styles.scroll}
-      keyboardShouldPersistTaps="handled"
-      keyboardDismissMode="on-drag"
-    >
-      <Field
-        name="title"
-        component={RenderField}
-        type="text"
-        label="Title"
-        validate={required}
-      />
-      <Field
-        name="content"
-        component={RenderField}
-        type="text"
-        label="Content"
-        validate={required}
-      />
+    <ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
+      <Field name="title" component={RenderField} type="text" label="Title" validate={required} />
+      <Field name="content" component={RenderField} type="text" label="Content" validate={required} />
       <Button onPress={handleSubmit(onSubmit)} disabled={valid}>
         Save
       </Button>

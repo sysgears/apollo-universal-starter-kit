@@ -23,8 +23,7 @@ import settings from '../../../settings';
 let assetMap;
 
 const { protocol, hostname, port, pathname } = url.parse(__BACKEND_URL__);
-const apiUrl = `${protocol}//${hostname}:${process.env.PORT ||
-  port}${pathname}`;
+const apiUrl = `${protocol}//${hostname}:${process.env.PORT || port}${pathname}`;
 
 async function renderServerSide(req, res, queryMap) {
   let networkInterface = createBatchingNetworkInterface({
@@ -74,11 +73,7 @@ async function renderServerSide(req, res, queryMap) {
     res.end();
   } else {
     if (__DEV__ || !assetMap) {
-      assetMap = JSON.parse(
-        fs.readFileSync(
-          path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')
-        )
-      );
+      assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
     }
 
     const apolloState = Object.assign({}, client.store.getState());
@@ -87,9 +82,7 @@ async function renderServerSide(req, res, queryMap) {
     delete apolloState.apollo.queries;
     delete apolloState.apollo.mutations;
 
-    const token = req.universalCookies.get('x-token')
-      ? req.universalCookies.get('x-token')
-      : null;
+    const token = req.universalCookies.get('x-token') ? req.universalCookies.get('x-token') : null;
     const refreshToken = req.universalCookies.get('x-refresh-token')
       ? req.universalCookies.get('x-refresh-token')
       : null;

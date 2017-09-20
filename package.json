@@ -21,6 +21,7 @@
     "rollback": "knex migrate:rollback",
     "watch": "spin watch",
     "heroku-postbuild": "rm -rf build && npm run build && npm run seed",
+    "precommit": "lint-staged",
     "cli": "node tools/cli"
   },
   "lint-staged": {

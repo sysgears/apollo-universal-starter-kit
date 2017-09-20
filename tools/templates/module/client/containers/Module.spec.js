@@ -13,7 +13,7 @@ describe('$Module$ UI works', () => {
 
   step('$Module$ page renders on mount', () => {
     app = renderer.mount(routes);
-    renderer.history.push('/$Module$');
+    renderer.history.push('/$module$');
     content = app.find('#content');
     expect(content).to.not.be.empty;
   });

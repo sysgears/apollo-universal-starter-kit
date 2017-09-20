@@ -5,10 +5,10 @@ import { graphql, compose } from 'react-apollo';
 import PostEditView from '../components/PostEditView';
 import { AddPost } from './Post';
 
-import POST_QUERY from '../graphql/getPost.graphql';
-import POST_ADD from '../graphql/addPost.graphql';
-import POST_EDIT from '../graphql/editPost.graphql';
-import POST_SUBSCRIPTION from '../graphql/postUpdated.graphql';
+import POST_QUERY from '../graphql/PostQuery.graphql';
+import ADD_POST from '../graphql/AddPost.graphql';
+import EDIT_POST from '../graphql/EditPost.graphql';
+import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
 
 class PostEdit extends React.Component {
   constructor(props) {
@@ -79,7 +79,7 @@ export default compose(
       return { loading, post, subscribeToMore };
     }
   }),
-  graphql(POST_ADD, {
+  graphql(ADD_POST, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       addPost: async (title, content) => {
         let postData = await mutate({
@@ -94,7 +94,7 @@ export default compose(
             }
           },
           updateQueries: {
-            getPosts: (prev, { mutationResult: { data: { addPost } } }) => {
+            posts: (prev, { mutationResult: { data: { addPost } } }) => {
               return AddPost(prev, addPost);
             }
           }
@@ -113,7 +113,7 @@ export default compose(
       }
     })
   }),
-  graphql(POST_EDIT, {
+  graphql(EDIT_POST, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       editPost: async (id, title, content) => {
         await mutate({

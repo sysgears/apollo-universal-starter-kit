@@ -9,7 +9,7 @@ import { graphql, compose } from 'react-apollo';
 // Components
 import UsersView from '../components/UsersView';
 
-import USERS_QUERY from '../graphql/users.graphql';
+import USERS_QUERY from '../graphql/UsersQuery.graphql';
 
 class Users extends React.Component {
   render() {

@@ -1,14 +1,14 @@
 import { withFilter } from 'graphql-subscriptions';
 
-const POST_UPDATED_TOPIC = 'post_updated';
-const POSTS_UPDATED_TOPIC = 'posts_updated';
-const COMMENT_UPDATED_TOPIC = 'comment_updated';
+const POST_SUBSCRIPTION = 'post_subscription';
+const POSTS_SUBSCRIPTION = 'posts_subscription';
+const COMMENT_SUBSCRIPTION = 'comment_subscription';
 
 export default pubsub => ({
   Query: {
-    async postsQuery(obj, { limit, after }, context) {
+    async posts(obj, { limit, after }, context) {
       let edgesArray = [];
-      let posts = await context.Post.getPostsPagination(limit, after);
+      let posts = await context.Post.postsPagination(limit, after);
 
       posts.map(post => {
         edgesArray.push({
@@ -35,7 +35,7 @@ export default pubsub => ({
       };
     },
     post(obj, { id }, context) {
-      return context.Post.getPost(id);
+      return context.Post.post(id);
     }
   },
   Post: {
@@ -46,9 +46,9 @@ export default pubsub => ({
   Mutation: {
     async addPost(obj, { input }, context) {
       const [id] = await context.Post.addPost(input);
-      const post = await context.Post.getPost(id);
+      const post = await context.Post.post(id);
       // publish for post list
-      pubsub.publish(POSTS_UPDATED_TOPIC, {
+      pubsub.publish(POSTS_SUBSCRIPTION, {
         postsUpdated: {
           mutation: 'CREATED',
           id,
@@ -58,11 +58,11 @@ export default pubsub => ({
       return post;
     },
     async deletePost(obj, { id }, context) {
-      const post = await context.Post.getPost(id);
+      const post = await context.Post.post(id);
       const isDeleted = await context.Post.deletePost(id);
       if (isDeleted) {
         // publish for post list
-        pubsub.publish(POSTS_UPDATED_TOPIC, {
+        pubsub.publish(POSTS_SUBSCRIPTION, {
           postsUpdated: {
             mutation: 'DELETED',
             id,
@@ -76,9 +76,9 @@ export default pubsub => ({
     },
     async editPost(obj, { input }, context) {
       await context.Post.editPost(input);
-      const post = await context.Post.getPost(input.id);
+      const post = await context.Post.post(input.id);
       // publish for post list
-      pubsub.publish(POSTS_UPDATED_TOPIC, {
+      pubsub.publish(POSTS_SUBSCRIPTION, {
         postsUpdated: {
           mutation: 'UPDATED',
           id: post.id,
@@ -86,14 +86,14 @@ export default pubsub => ({
         }
       });
       // publish for edit post page
-      pubsub.publish(POST_UPDATED_TOPIC, { postUpdated: post });
+      pubsub.publish(POST_SUBSCRIPTION, { postUpdated: post });
       return post;
     },
     async addComment(obj, { input }, context) {
       const [id] = await context.Post.addComment(input);
       const comment = await context.Post.getComment(id);
       // publish for edit post page
-      pubsub.publish(COMMENT_UPDATED_TOPIC, {
+      pubsub.publish(COMMENT_SUBSCRIPTION, {
         commentUpdated: {
           mutation: 'CREATED',
           id: comment.id,
@@ -106,7 +106,7 @@ export default pubsub => ({
     async deleteComment(obj, { input: { id, postId } }, context) {
       await context.Post.deleteComment(id);
       // publish for edit post page
-      pubsub.publish(COMMENT_UPDATED_TOPIC, {
+      pubsub.publish(COMMENT_SUBSCRIPTION, {
         commentUpdated: {
           mutation: 'DELETED',
           id,
@@ -120,7 +120,7 @@ export default pubsub => ({
       await context.Post.editComment(input);
       const comment = await context.Post.getComment(input.id);
       // publish for edit post page
-      pubsub.publish(COMMENT_UPDATED_TOPIC, {
+      pubsub.publish(COMMENT_SUBSCRIPTION, {
         commentUpdated: {
           mutation: 'UPDATED',
           id: input.id,
@@ -134,7 +134,7 @@ export default pubsub => ({
   Subscription: {
     postUpdated: {
       subscribe: withFilter(
-        () => pubsub.asyncIterator(POST_UPDATED_TOPIC),
+        () => pubsub.asyncIterator(POST_SUBSCRIPTION),
         (payload, variables) => {
           return payload.postUpdated.id === variables.id;
         }
@@ -142,7 +142,7 @@ export default pubsub => ({
     },
     postsUpdated: {
       subscribe: withFilter(
-        () => pubsub.asyncIterator(POSTS_UPDATED_TOPIC),
+        () => pubsub.asyncIterator(POSTS_SUBSCRIPTION),
         (payload, variables) => {
           return variables.endCursor <= payload.postsUpdated.id;
         }
@@ -150,7 +150,7 @@ export default pubsub => ({
     },
     commentUpdated: {
       subscribe: withFilter(
-        () => pubsub.asyncIterator(COMMENT_UPDATED_TOPIC),
+        () => pubsub.asyncIterator(COMMENT_SUBSCRIPTION),
         (payload, variables) => {
           return payload.commentUpdated.postId === variables.postId;
         }

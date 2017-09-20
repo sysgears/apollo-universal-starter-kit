@@ -1,9 +1,9 @@
 const initialAmount = 5;
 
 export async function seed(knex) {
-  await knex('count').truncate();
+  await knex('counter').truncate();
 
-  return knex('count')
+  return knex('counter')
     .returning('id')
     .insert({ amount: initialAmount });
 }

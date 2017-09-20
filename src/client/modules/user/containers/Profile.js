@@ -9,7 +9,7 @@ import { graphql, compose } from 'react-apollo';
 // Components
 import ProfileView from '../components/ProfileView';
 
-import CURRENT_USER from '../graphql/currentUser.graphql';
+import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 class Profile extends React.Component {
   render() {
@@ -23,7 +23,7 @@ Profile.propTypes = {
 };
 
 export default compose(
-  graphql(CURRENT_USER, {
+  graphql(CURRENT_USER_QUERY, {
     options: { fetchPolicy: 'network-only' },
     props({ data: { loading, currentUser } }) {
       return { loading, currentUser };

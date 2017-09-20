@@ -12,20 +12,20 @@ type Comment {
   content: String!
 }
 
-# Edges for PostsQuery
+# Edges for Posts
 type PostEdges {
   node: Post
   cursor: Int
 }
 
-# PageInfo for PostsQuery
+# PageInfo for Posts
 type PostPageInfo {
   endCursor: Int
   hasNextPage: Boolean
 }
 
 # Posts relay-style pagination query
-type PostsQuery {
+type Posts {
   totalCount: Int
   edges: [PostEdges]
   pageInfo: PostPageInfo
@@ -33,7 +33,7 @@ type PostsQuery {
 
 extend type Query {
   # Posts pagination query
-  postsQuery(limit: Int, after: Int): PostsQuery
+  posts(limit: Int, after: Int): Posts
   # Post
   post(id: Int!): Post
 }

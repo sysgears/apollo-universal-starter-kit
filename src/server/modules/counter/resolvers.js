@@ -12,14 +12,14 @@ export default pubsub => ({
       const count = await context.Count.getCount();
 
       pubsub.publish(COUNT_UPDATED_TOPIC, {
-        countUpdated: { amount: count.amount }
+        updateCount: { amount: count.amount }
       });
 
       return count;
     }
   },
   Subscription: {
-    countUpdated: {
+    updateCount: {
       subscribe: () => pubsub.asyncIterator(COUNT_UPDATED_TOPIC)
     }
   }

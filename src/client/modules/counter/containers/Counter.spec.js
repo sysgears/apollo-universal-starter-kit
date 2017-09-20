@@ -2,7 +2,7 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 
 import Renderer from '../../../../client/testHelpers/Renderer';
-import COUNT_SUBSCRIBE from '../graphql/countUpdated.graphql';
+import COUNT_SUBSCRIBE from '../graphql/updateCount.graphql';
 
 chai.should();
 
@@ -68,7 +68,7 @@ describe('Counter example UI works', () => {
   step('Updates counter on data from subscription', () => {
     const subscription = renderer.getSubscriptions(COUNT_SUBSCRIBE)[0];
     subscription(null, {
-      countUpdated: { amount: SUBSCRIPTION_VALUE, __typename: 'Count' }
+      updateCount: { amount: SUBSCRIPTION_VALUE, __typename: 'Count' }
     });
     content
       .text()

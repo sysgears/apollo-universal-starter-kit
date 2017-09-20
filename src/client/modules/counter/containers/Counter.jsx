@@ -8,7 +8,7 @@ import CounterView from '../components/CounterView';
 
 import AMOUNT_QUERY from '../graphql/getCount.graphql';
 import ADD_COUNT_MUTATION from '../graphql/addCount.graphql';
-import COUNT_SUBSCRIPTION from '../graphql/countUpdated.graphql';
+import COUNT_SUBSCRIPTION from '../graphql/updateCount.graphql';
 
 class Counter extends React.Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class Counter extends React.Component {
       variables: {},
       updateQuery: (
         prev,
-        { subscriptionData: { data: { countUpdated: { amount } } } }
+        { subscriptionData: { data: { updateCount: { amount } } } }
       ) => {
         return update(prev, {
           count: {

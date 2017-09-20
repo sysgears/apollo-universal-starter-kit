@@ -5,7 +5,7 @@ import { getServer, getApollo } from '../../testHelpers/integrationSetup';
 
 import COUNT_GET_QUERY from '../../../client/modules/counter/graphql/getCount.graphql';
 import COUNT_ADD_MUTATION from '../../../client/modules/counter/graphql/addCount.graphql';
-import COUNT_SUBSCRIPTION from '../../../client/modules/counter/graphql/countUpdated.graphql';
+import COUNT_SUBSCRIPTION from '../../../client/modules/counter/graphql/updateCount.graphql';
 
 describe('Counter example API works', () => {
   let server, apollo;
@@ -55,7 +55,7 @@ describe('Counter example API works', () => {
       .subscribe({
         next(data) {
           data.should.deep.equal({
-            countUpdated: { amount: 8, __typename: 'Count' }
+            updateCount: { amount: 8, __typename: 'Count' }
           });
           done();
         }

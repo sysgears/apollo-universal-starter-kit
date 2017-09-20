@@ -26,9 +26,7 @@ export default pubsub => ({
       try {
         const e = new FieldError();
         const localAuth = pick(input, ['email', 'password']);
-        const emailExists = await context.User.getLocalOuthByEmail(
-          localAuth.email
-        );
+        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
 
         if (emailExists) {
           e.setError('email', 'E-mail already exists.');
@@ -37,10 +35,7 @@ export default pubsub => ({
 
         const passwordPromise = bcrypt.hash(localAuth.password, 12);
         const createUserPromise = context.User.register(input);
-        const [password, [createdUserId]] = await Promise.all([
-          passwordPromise,
-          createUserPromise
-        ]);
+        const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
 
         localAuth.password = password;
 
@@ -58,32 +53,25 @@ export default pubsub => ({
     },
     async login(obj, { input: { email, password } }, context) {
       try {
-        const tokens = await tryLogin(
-          email,
-          password,
-          context.User,
-          context.SECRET
-        );
+        const tokens = await tryLogin(email, password, context.User, context.SECRET);
         if (context.req) {
           context.req.universalCookies.set('x-token', tokens.token, {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: true
           });
-          context.req.universalCookies.set(
-            'x-refresh-token',
-            tokens.refreshToken,
-            { maxAge: 60 * 60 * 24 * 7, httpOnly: true }
-          );
+          context.req.universalCookies.set('x-refresh-token', tokens.refreshToken, {
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: true
+          });
 
           context.req.universalCookies.set('r-token', tokens.token, {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: false
           });
-          context.req.universalCookies.set(
-            'r-refresh-token',
-            tokens.refreshToken,
-            { maxAge: 60 * 60 * 24 * 7, httpOnly: false }
-          );
+          context.req.universalCookies.set('r-refresh-token', tokens.refreshToken, {
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: false
+          });
         }
         return { tokens };
       } catch (e) {

@@ -1,14 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import {
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormFeedback,
-  Button
-} from 'reactstrap';
+import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
 
 const required = value => (value ? undefined : 'Required');
 
@@ -39,26 +32,12 @@ renderField.propTypes = {
 const LoginForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
   return (
     <Form name="login" onSubmit={handleSubmit(onSubmit)}>
-      <Field
-        name="email"
-        component={renderField}
-        type="email"
-        label="Email"
-        validate={required}
-      />
-      <Field
-        name="password"
-        component={renderField}
-        type="password"
-        label="Password"
-        validate={required}
-      />
+      <Field name="email" component={renderField} type="email" label="Email" validate={required} />
+      <Field name="password" component={renderField} type="password" label="Password" validate={required} />
       {errors && (
         <FormGroup color="danger">
           <FormFeedback>
-            <lu>
-              {errors.map(error => <li key={error.field}>{error.message}</li>)}
-            </lu>
+            <lu>{errors.map(error => <li key={error.field}>{error.message}</li>)}</lu>
           </FormFeedback>
         </FormGroup>
       )}

@@ -15,10 +15,7 @@ function renderPosts(postsQuery, deletePost) {
             {title}
           </Link>
         </span>
-        <span
-          className="badge badge-default badge-pill delete-button"
-          onClick={deletePost(id)}
-        >
+        <span className="badge badge-default badge-pill delete-button" onClick={deletePost(id)}>
           Delete
         </span>
       </ListGroupItem>
@@ -43,8 +40,7 @@ const PostList = ({ loading, postsQuery, deletePost, loadMoreRows }) => {
       meta={[
         {
           name: 'description',
-          content:
-            'Apollo Fullstack Starter Kit - List of all posts example page'
+          content: 'Apollo Fullstack Starter Kit - List of all posts example page'
         }
       ]}
     />

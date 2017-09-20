@@ -39,10 +39,7 @@ class RegisterView extends React.PureComponent {
       <PageLayout>
         {renderMetaData()}
         <h1>Register page!</h1>
-        <RegisterForm
-          onSubmit={this.onSubmit(register)}
-          errors={this.state.errors}
-        />
+        <RegisterForm onSubmit={this.onSubmit(register)} errors={this.state.errors} />
       </PageLayout>
     );
   }

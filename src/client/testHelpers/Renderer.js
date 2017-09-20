@@ -13,9 +13,7 @@ import rootSchema from '../../server/api/rootSchema.graphqls';
 import serverModules from '../../server/modules';
 import settings from '../../../settings';
 
-const dom = new JSDOM(
-  '<!doctype html><html><body><div id="root"><div></body></html>'
-);
+const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;
 global.window = dom.window;
 global.navigator = dom.window.navigator;
@@ -41,14 +39,7 @@ class MockNetworkInterface {
 
   query(request) {
     const { schema } = this;
-    return graphql(
-      schema,
-      print(request.query),
-      {},
-      {},
-      request.variables,
-      request.operationName
-    );
+    return graphql(schema, print(request.query), {}, {}, request.variables, request.operationName);
   }
 
   _getSubscriptions(query, variables) {
@@ -61,10 +52,7 @@ class MockNetworkInterface {
       query: queryStr,
       variables: variables || {}
     });
-    const subscriptions =
-      (!variables
-        ? this.subscriptionQueries[queryStr]
-        : this.subscriptions[key]) || [];
+    const subscriptions = (!variables ? this.subscriptionQueries[queryStr] : this.subscriptions[key]) || [];
 
     return subscriptions.map(subId => {
       const res = function() {
@@ -91,8 +79,7 @@ class MockNetworkInterface {
       };
       this.subscriptions[key] = this.subscriptions[key] || [];
       this.subscriptions[key].push(subId);
-      this.subscriptionQueries[queryStr] =
-        this.subscriptionQueries[queryStr] || [];
+      this.subscriptionQueries[queryStr] = this.subscriptionQueries[queryStr] || [];
       this.subscriptionQueries[queryStr].push(subId);
       return subId;
     } catch (e) {
@@ -102,10 +89,7 @@ class MockNetworkInterface {
 
   unsubscribe(subId) {
     if (!this.handlers[subId]) {
-      throw new Error(
-        'Attempt to unsubscribe from non-existent subscription id:',
-        subId
-      );
+      throw new Error('Attempt to unsubscribe from non-existent subscription id:', subId);
     }
 
     try {
@@ -114,10 +98,7 @@ class MockNetworkInterface {
       if (!this.subscriptions[key].length) {
         delete this.subscriptions[key];
       }
-      this.subscriptionQueries[query].splice(
-        this.subscriptionQueries[query].indexOf(subId),
-        1
-      );
+      this.subscriptionQueries[query].splice(this.subscriptionQueries[query].indexOf(subId), 1);
       if (!this.subscriptionQueries[query].length) {
         delete this.subscriptionQueries[query];
       }
@@ -138,9 +119,7 @@ export default class Renderer {
     const mockNetworkInterface = new MockNetworkInterface(schema);
 
     const client = new ApolloClient({
-      networkInterface: settings.apolloLogging
-        ? addApolloLogging(mockNetworkInterface)
-        : mockNetworkInterface
+      networkInterface: settings.apolloLogging ? addApolloLogging(mockNetworkInterface) : mockNetworkInterface
     });
 
     const store = createStore(

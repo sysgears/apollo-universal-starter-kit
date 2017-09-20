@@ -16,11 +16,7 @@ const printQueryWithTime = uid => {
 
   // I print the sql generated for a given query, as well as
   // the bindings for the queries.
-  log.info(
-    query.sql,
-    ',',
-    `[${query.bindings ? query.bindings.join(',') : ''}]`
-  );
+  log.info(query.sql, ',', `[${query.bindings ? query.bindings.join(',') : ''}]`);
   log.info(`Time: ${elapsedTime.toFixed(3)} ms\n`);
 
   // After I print out the query, I have no more use to it,
@@ -32,9 +28,7 @@ const printIfPossible = uid => {
   const { position } = times[uid];
 
   // Look of a query with a position one less than the current query
-  const previousTimeUid = Object.keys(times).find(
-    key => times[key].position === position - 1
-  );
+  const previousTimeUid = Object.keys(times).find(key => times[key].position === position - 1);
 
   // If we didn't find it, it must have been printed already and we can safely print ourselves.
   if (!previousTimeUid) {
@@ -44,9 +38,7 @@ const printIfPossible = uid => {
 
 const printQueriesAfterGivenPosition = position => {
   // Look for the next query in the queue
-  const nextTimeUid = Object.keys(times).find(
-    key => times[key].position === position + 1
-  );
+  const nextTimeUid = Object.keys(times).find(key => times[key].position === position + 1);
 
   // If we find one and it is marked as finished, we can go ahead and print it
   if (nextTimeUid && times[nextTimeUid].finished) {

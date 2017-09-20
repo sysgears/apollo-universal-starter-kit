@@ -5,10 +5,7 @@ import { ApolloProvider } from 'react-apollo';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import { addPersistedQueries } from 'persistgraphql';
-import {
-  SubscriptionClient,
-  addGraphQLSubscriptions
-} from 'subscriptions-transport-ws';
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
@@ -64,10 +61,7 @@ if (__CLIENT__) {
   }
 
   const wsClient = new SubscriptionClient(
-    (__BACKEND_URL__ || window.location.origin + '/graphql').replace(
-      /^http/,
-      'ws'
-    ),
+    (__BACKEND_URL__ || window.location.origin + '/graphql').replace(/^http/, 'ws'),
     {
       reconnect: true,
       connectionParams: connectionParams

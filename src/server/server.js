@@ -66,9 +66,7 @@ if (__PERSIST_GQL__) {
       next();
     } else {
       if (!__DEV__ || (req.get('Referer') || '').indexOf('/graphiql') < 0) {
-        resp
-          .status(500)
-          .send('Unknown GraphQL query has been received, rejecting...');
+        resp.status(500).send('Unknown GraphQL query has been received, rejecting...');
       } else {
         next();
       }

@@ -13,18 +13,8 @@ const PostCommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
   }
 
   return (
-    <ScrollView
-      style={styles.scroll}
-      keyboardShouldPersistTaps="handled"
-      keyboardDismissMode="on-drag"
-    >
-      <Field
-        name="content"
-        component={RenderField}
-        type="text"
-        label="Content"
-        validate={required}
-      />
+    <ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
+      <Field name="content" component={RenderField} type="text" label="Content" validate={required} />
       <Button onPress={handleSubmit(onSubmit)} disabled={valid}>
         {operation}
       </Button>

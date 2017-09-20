@@ -15,9 +15,7 @@ import Feature from '../connector';
 
 function tokenMiddleware(req) {
   req.options.headers['x-token'] = window.localStorage.getItem('token');
-  req.options.headers['x-refresh-token'] = window.localStorage.getItem(
-    'refreshToken'
-  );
+  req.options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
 }
 
 function tokenAfterware(res) {

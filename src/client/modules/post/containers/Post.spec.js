@@ -158,9 +158,7 @@ describe('Posts and comments example UI works', () => {
 
     expect(content.text()).to.include('Edit Post');
     expect(postForm.find('[name="title"]').node.value).to.equal('Post title 3');
-    expect(postForm.find('[name="content"]').node.value).to.equal(
-      'Post content 3'
-    );
+    expect(postForm.find('[name="content"]').node.value).to.equal('Post content 3');
   });
 
   step('Check subscribed to post updates', () => {
@@ -179,12 +177,8 @@ describe('Posts and comments example UI works', () => {
     });
     const postForm = content.find('form[name="post"]');
 
-    expect(postForm.find('[name="title"]').node.value).to.equal(
-      'Post title 203'
-    );
-    expect(postForm.find('[name="content"]').node.value).to.equal(
-      'Post content 204'
-    );
+    expect(postForm.find('[name="title"]').node.value).to.equal('Post title 203');
+    expect(postForm.find('[name="content"]').node.value).to.equal('Post content 204');
   });
 
   step('Post editing form works', done => {
@@ -197,12 +191,8 @@ describe('Posts and comments example UI works', () => {
     };
 
     const postForm = content.find('form[name="post"]');
-    postForm
-      .find('[name="title"]')
-      .simulate('change', { target: { value: 'Post title 33' } });
-    postForm
-      .find('[name="content"]')
-      .simulate('change', { target: { value: 'Post content 33' } });
+    postForm.find('[name="title"]').simulate('change', { target: { value: 'Post title 33' } });
+    postForm.find('[name="content"]').simulate('change', { target: { value: 'Post content 33' } });
     postForm.simulate('submit');
   });
 
@@ -214,12 +204,8 @@ describe('Posts and comments example UI works', () => {
     const postForm = content.find('form[name="post"]');
 
     expect(content.text()).to.include('Edit Post');
-    expect(postForm.find('[name="title"]').node.value).to.equal(
-      'Post title 33'
-    );
-    expect(postForm.find('[name="content"]').node.value).to.equal(
-      'Post content 33'
-    );
+    expect(postForm.find('[name="title"]').node.value).to.equal('Post title 33');
+    expect(postForm.find('[name="content"]').node.value).to.equal('Post content 33');
     expect(content.text()).to.include('Edit Post');
   });
 
@@ -232,9 +218,7 @@ describe('Posts and comments example UI works', () => {
     };
 
     const commentForm = content.find('form[name="comment"]');
-    commentForm
-      .find('[name="content"]')
-      .simulate('change', { target: { value: 'Post comment 24' } });
+    commentForm.find('[name="content"]').simulate('change', { target: { value: 'Post comment 24' } });
     commentForm.simulate('submit');
     expect(content.text()).to.include('Post comment 24');
   });
@@ -303,12 +287,8 @@ describe('Posts and comments example UI works', () => {
     editButtons.last().simulate('click');
 
     const commentForm = content.find('form[name="comment"]');
-    expect(commentForm.find('[name="content"]').node.value).to.equal(
-      'Post comment 2'
-    );
-    commentForm
-      .find('[name="content"]')
-      .simulate('change', { target: { value: 'Edited comment 2' } });
+    expect(commentForm.find('[name="content"]').node.value).to.equal('Post comment 2');
+    commentForm.find('[name="content"]').simulate('change', { target: { value: 'Edited comment 2' } });
     commentForm.simulate('submit');
 
     expect(content.text()).to.include('Edited comment 2');

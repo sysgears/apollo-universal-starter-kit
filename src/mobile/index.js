@@ -15,9 +15,7 @@ class AwakeInDevApp extends React.Component {
         }
       },
       React.createElement(App),
-      React.createElement(
-        process.env.NODE_ENV === 'development' ? Expo.KeepAwake : View
-      )
+      React.createElement(process.env.NODE_ENV === 'development' ? Expo.KeepAwake : View)
     );
   }
 }

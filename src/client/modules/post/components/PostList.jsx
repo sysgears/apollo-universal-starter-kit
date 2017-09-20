@@ -1,14 +1,7 @@
 /*eslint-disable react/display-name*/
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ListView,
-  ScrollView,
-  Button
-} from 'react-native';
+import { StyleSheet, Text, View, ListView, ScrollView, Button } from 'react-native';
 
 // Row comparison function
 const rowHasChanged = (r1, r2) => r1.id !== r2.id;
@@ -44,13 +37,7 @@ function renderLoadMore(postsQuery, loadMoreRows) {
   }
 }
 
-const PostList = ({
-  loading,
-  postsQuery,
-  deletePost,
-  loadMoreRows,
-  navigation
-}) => {
+const PostList = ({ loading, postsQuery, deletePost, loadMoreRows, navigation }) => {
   if (loading) {
     return (
       <View style={styles.container}>

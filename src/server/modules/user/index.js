@@ -29,12 +29,7 @@ export default new Feature({
         const { user } = jwt.verify(connectionParams.token, SECRET);
         tokenUser = user;
       } catch (err) {
-        const newTokens = await refreshTokens(
-          connectionParams.token,
-          connectionParams.refreshToken,
-          User,
-          SECRET
-        );
+        const newTokens = await refreshTokens(connectionParams.token, connectionParams.refreshToken, User, SECRET);
         tokenUser = newTokens.user;
       }
     } else if (req) {

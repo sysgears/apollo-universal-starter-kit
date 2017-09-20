@@ -1,16 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import {
-  Row,
-  Col,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormFeedback,
-  Button
-} from 'reactstrap';
+import { Row, Col, Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
 
 const required = value => (value ? undefined : 'Required');
 
@@ -35,12 +26,7 @@ renderField.propTypes = {
   meta: PropTypes.object
 };
 
-const PostCommentForm = ({
-  handleSubmit,
-  submitting,
-  initialValues,
-  onSubmit
-}) => {
+const PostCommentForm = ({ handleSubmit, submitting, initialValues, onSubmit }) => {
   let operation = 'Add';
   if (initialValues.id !== null) {
     operation = 'Edit';
@@ -54,21 +40,10 @@ const PostCommentForm = ({
             <Label>{operation} comment</Label>
           </Col>
           <Col xs="8">
-            <Field
-              name="content"
-              component={renderField}
-              type="text"
-              label="Content"
-              validate={required}
-            />
+            <Field name="content" component={renderField} type="text" label="Content" validate={required} />
           </Col>
           <Col xs="2">
-            <Button
-              color="primary"
-              type="submit"
-              className="float-right"
-              disabled={submitting}
-            >
+            <Button color="primary" type="submit" className="float-right" disabled={submitting}>
               Save
             </Button>
           </Col>

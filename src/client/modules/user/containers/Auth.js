@@ -153,21 +153,14 @@ AuthProfile.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthRoute = withCookies(
-  ({ component: Component, cookies, role, ...rest }) => {
-    return (
-      <Route
-        {...rest}
-        render={props =>
-          checkAuth(cookies, role) ? (
-            <Component {...props} />
-          ) : (
-            <Redirect to={{ pathname: '/login' }} />
-          )}
-      />
-    );
-  }
-);
+const AuthRoute = withCookies(({ component: Component, cookies, role, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={props => (checkAuth(cookies, role) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />)}
+    />
+  );
+});
 
 AuthRoute.propTypes = {
   component: PropTypes.func,

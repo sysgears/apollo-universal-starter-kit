@@ -11,10 +11,7 @@ import POST_DELETE from '../graphql/deletePost.graphql';
 
 export function AddPost(prev, node) {
   // ignore if duplicate
-  if (
-    node.id !== null &&
-    prev.postsQuery.edges.some(post => node.id === post.cursor)
-  ) {
+  if (node.id !== null && prev.postsQuery.edges.some(post => node.id === post.cursor)) {
     return prev;
   }
 
@@ -65,9 +62,7 @@ class Post extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
-      const endCursor = this.props.postsQuery
-        ? this.props.postsQuery.pageInfo.endCursor
-        : 0;
+      const endCursor = this.props.postsQuery ? this.props.postsQuery.pageInfo.endCursor : 0;
       const nextEndCursor = nextProps.postsQuery.pageInfo.endCursor;
 
       // Check if props have changed and, if necessary, stop the subscription
@@ -89,10 +84,7 @@ class Post extends React.Component {
     this.subscription = subscribeToMore({
       document: POSTS_SUBSCRIPTION,
       variables: { endCursor },
-      updateQuery: (
-        prev,
-        { subscriptionData: { data: { postsUpdated: { mutation, node } } } }
-      ) => {
+      updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, node } } } }) => {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
@@ -176,10 +168,7 @@ export default compose(
               }
             },
             updateQueries: {
-              getPosts: (
-                prev,
-                { mutationResult: { data: { deletePost } } }
-              ) => {
+              getPosts: (prev, { mutationResult: { data: { deletePost } } }) => {
                 return DeletePost(prev, deletePost.id);
               }
             }

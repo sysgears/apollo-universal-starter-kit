@@ -11,9 +11,7 @@ prog
     ['both', 'server', 'client'],
     'both'
   )
-  .action((args, options, logger) =>
-    moduleCmd('addmodule', args, options, logger)
-  )
+  .action((args, options, logger) => moduleCmd('addmodule', args, options, logger))
   .command('deletemodule', 'Delete a Module')
   .argument('<module>', 'Module name')
   .argument(
@@ -22,8 +20,6 @@ prog
     ['both', 'server', 'client'],
     'both'
   )
-  .action((args, options, logger) =>
-    moduleCmd('deletemodule', args, options, logger)
-  );
+  .action((args, options, logger) => moduleCmd('deletemodule', args, options, logger));
 
 prog.parse(process.argv);

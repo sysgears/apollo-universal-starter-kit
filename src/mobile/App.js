@@ -9,12 +9,9 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import modules from '../client/modules';
 import MainScreenNavigator from '../client/app/Routes';
 
-const networkInterface = new SubscriptionClient(
-  __BACKEND_URL__.replace(/^http/, 'ws'),
-  {
-    reconnect: true
-  }
-);
+const networkInterface = new SubscriptionClient(__BACKEND_URL__.replace(/^http/, 'ws'), {
+  reconnect: true
+});
 
 const client = new ApolloClient({
   networkInterface

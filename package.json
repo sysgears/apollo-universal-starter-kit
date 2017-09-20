@@ -43,6 +43,7 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
+    "@angularclass/hmr": "^2.1.3",
     "@angular/common": "^4.4.1",
     "@angular/compiler": "^4.4.1",
     "@angular/core": "^4.4.1",

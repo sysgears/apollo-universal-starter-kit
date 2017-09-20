@@ -12,10 +12,8 @@
     "build": "cross-env NODE_ENV=production spin build",
     "exp": "spin exp",
     "start": "node --harmony build/server",
-    "tests":
-      "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
-    "tests:watch":
-      "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src tests tools",
     "seed": "npm run migrate && knex seed:run",

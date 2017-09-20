@@ -3,9 +3,9 @@ import { step } from 'mocha-steps';
 import _ from 'lodash';
 
 import Renderer from '../../../../client/testHelpers/Renderer';
-import POSTS_SUBSCRIPTION from '../graphql/postsUpdated.graphql';
-import POST_SUBSCRIPTION from '../graphql/postUpdated.graphql';
-import COMMENT_SUBSCRIPTION from '../graphql/commentUpdated.graphql';
+import POSTS_SUBSCRIPTION from '../graphql/updatePosts.graphql';
+import POST_SUBSCRIPTION from '../graphql/updatePost.graphql';
+import COMMENT_SUBSCRIPTION from '../graphql/updateComment.graphql';
 
 const createNode = id => ({
   id: `${id}`,
@@ -101,7 +101,7 @@ describe('Posts and comments example UI works', () => {
   step('Updates post list on post delete from subscription', () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
     subscription(null, {
-      postsUpdated: {
+      updatePosts: {
         mutation: 'DELETED',
         node: createNode(2),
         __typename: 'UpdatePostPayload'
@@ -117,7 +117,7 @@ describe('Posts and comments example UI works', () => {
     subscription(
       null,
       _.cloneDeep({
-        postsUpdated: {
+        updatePosts: {
           mutation: 'CREATED',
           node: createNode(2),
           __typename: 'UpdatePostPayload'
@@ -170,7 +170,7 @@ describe('Posts and comments example UI works', () => {
   step('Updates post form on post updated from subscription', () => {
     const subscription = renderer.getSubscriptions(POST_SUBSCRIPTION)[0];
     subscription(null, {
-      postUpdated: {
+      updatePost: {
         id: '3',
         title: 'Post title 203',
         content: 'Post content 204',
@@ -242,7 +242,7 @@ describe('Posts and comments example UI works', () => {
   step('Updates comment form on comment added got from subscription', () => {
     const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
     subscription(null, {
-      commentUpdated: {
+      updateComment: {
         mutation: 'CREATED',
         id: 3003,
         postId: 3,
@@ -261,7 +261,7 @@ describe('Posts and comments example UI works', () => {
   step('Updates comment form on comment deleted got from subscription', () => {
     const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
     subscription(null, {
-      commentUpdated: {
+      updateComment: {
         mutation: 'DELETED',
         id: 3003,
         postId: 3,

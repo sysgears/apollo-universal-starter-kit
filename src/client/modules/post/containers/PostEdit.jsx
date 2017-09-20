@@ -8,7 +8,7 @@ import { AddPost } from './Post';
 import POST_QUERY from '../graphql/getPost.graphql';
 import POST_ADD from '../graphql/addPost.graphql';
 import POST_EDIT from '../graphql/editPost.graphql';
-import POST_SUBSCRIPTION from '../graphql/postUpdated.graphql';
+import POST_SUBSCRIPTION from '../graphql/updatePost.graphql';
 
 class PostEdit extends React.Component {
   constructor(props) {

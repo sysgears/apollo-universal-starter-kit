@@ -6,7 +6,7 @@ import update from 'immutability-helper';
 import PostList from '../components/PostList';
 
 import POSTS_QUERY from '../graphql/getPosts.graphql';
-import POSTS_SUBSCRIPTION from '../graphql/postsUpdated.graphql';
+import POSTS_SUBSCRIPTION from '../graphql/updatePosts.graphql';
 import POST_DELETE from '../graphql/deletePost.graphql';
 
 export function AddPost(prev, node) {
@@ -91,7 +91,7 @@ class Post extends React.Component {
       variables: { endCursor },
       updateQuery: (
         prev,
-        { subscriptionData: { data: { postsUpdated: { mutation, node } } } }
+        { subscriptionData: { data: { updatePosts: { mutation, node } } } }
       ) => {
         let newResult = prev;
 

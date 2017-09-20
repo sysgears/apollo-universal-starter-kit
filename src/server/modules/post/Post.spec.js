@@ -7,7 +7,7 @@ import POST_GET from '../../../client/modules/post/graphql/getPost.graphql';
 import POST_ADD from '../../../client/modules/post/graphql/addPost.graphql';
 import POST_EDIT from '../../../client/modules/post/graphql/editPost.graphql';
 import POST_DELETE from '../../../client/modules/post/graphql/deletePost.graphql';
-import POSTS_SUBSCRIPTION from '../../../client/modules/post/graphql/postsUpdated.graphql';
+import POSTS_SUBSCRIPTION from '../../../client/modules/post/graphql/updatePosts.graphql';
 
 describe('Post and comments example API works', () => {
   let apollo;
@@ -93,7 +93,7 @@ describe('Post and comments example API works', () => {
       .subscribe({
         next(data) {
           expect(data).to.deep.equal({
-            postsUpdated: {
+            updatePosts: {
               mutation: 'CREATED',
               node: {
                 id: 21,
@@ -149,7 +149,7 @@ describe('Post and comments example API works', () => {
       .subscribe({
         next(data) {
           expect(data).to.deep.equal({
-            postsUpdated: {
+            updatePosts: {
               mutation: 'UPDATED',
               node: {
                 id: 21,
@@ -199,7 +199,7 @@ describe('Post and comments example API works', () => {
       .subscribe({
         next(data) {
           expect(data).to.deep.equal({
-            postsUpdated: {
+            updatePosts: {
               mutation: 'DELETED',
               node: {
                 id: 21,

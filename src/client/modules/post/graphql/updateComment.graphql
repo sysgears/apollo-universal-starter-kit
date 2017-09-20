@@ -1,7 +1,7 @@
 #import "./comment.graphql"
 
-subscription onCommentUpdated($postId: Int!) {
-    commentUpdated(postId: $postId) {
+subscription onUpdateComment($postId: Int!) {
+    updateComment(postId: $postId) {
         mutation
         id
         postId

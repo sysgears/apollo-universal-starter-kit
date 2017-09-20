@@ -10,7 +10,7 @@ import PostCommentsView from '../components/PostCommentsView';
 import COMMENT_ADD from '../graphql/addComment.graphql';
 import COMMENT_EDIT from '../graphql/editComment.graphql';
 import COMMENT_DELETE from '../graphql/deleteComment.graphql';
-import COMMENT_SUBSCRIPTION from '../graphql/commentUpdated.graphql';
+import COMMENT_SUBSCRIPTION from '../graphql/updateComment.graphql';
 
 function AddComment(prev, node) {
   // ignore if duplicate
@@ -74,7 +74,7 @@ class PostComments extends React.Component {
       updateQuery: (
         prev,
         {
-          subscriptionData: { data: { commentUpdated: { mutation, id, node } } }
+          subscriptionData: { data: { updateComment: { mutation, id, node } } }
         }
       ) => {
         let newResult = prev;

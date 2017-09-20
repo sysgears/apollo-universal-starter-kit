@@ -14,7 +14,7 @@ const orderedFor = (rows, collection, field, singleObject) => {
 };
 
 export default class Post {
-  getPostsPagination(limit, after) {
+  postsPagination(limit, after) {
     let where = '';
     if (after > 0) {
       where = `id < ${after}`;
@@ -50,7 +50,7 @@ export default class Post {
       .first();
   }
 
-  getPost(id) {
+  post(id) {
     return knex
       .select('id', 'title', 'content')
       .from('post')

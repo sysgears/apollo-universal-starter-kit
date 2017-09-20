@@ -2,12 +2,12 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 import { getApollo } from '../../testHelpers/integrationSetup';
-import POSTS_GET from '../../../client/modules/post/graphql/getPosts.graphql';
-import POST_GET from '../../../client/modules/post/graphql/getPost.graphql';
-import POST_ADD from '../../../client/modules/post/graphql/addPost.graphql';
-import POST_EDIT from '../../../client/modules/post/graphql/editPost.graphql';
-import POST_DELETE from '../../../client/modules/post/graphql/deletePost.graphql';
-import POSTS_SUBSCRIPTION from '../../../client/modules/post/graphql/postsUpdated.graphql';
+import POSTS_QUERY from '../../../client/modules/post/graphql/PostsQuery.graphql';
+import POST_QUERY from '../../../client/modules/post/graphql/PostQuery.graphql';
+import ADD_POST from '../../../client/modules/post/graphql/AddPost.graphql';
+import EDIT_POST from '../../../client/modules/post/graphql/EditPost.graphql';
+import DELETE_POST from '../../../client/modules/post/graphql/DeletePost.graphql';
+import POSTS_SUBSCRIPTION from '../../../client/modules/post/graphql/PostsSubscription.graphql';
 
 describe('Post and comments example API works', () => {
   let apollo;
@@ -18,12 +18,12 @@ describe('Post and comments example API works', () => {
 
   step('Query post list works', async () => {
     let result = await apollo.query({
-      query: POSTS_GET,
+      query: POSTS_QUERY,
       variables: { limit: 1, after: 0 }
     });
 
     expect(result.data).to.deep.equal({
-      postsQuery: {
+      posts: {
         totalCount: 20,
         edges: [
           {
@@ -42,13 +42,13 @@ describe('Post and comments example API works', () => {
           hasNextPage: true,
           __typename: 'PostPageInfo'
         },
-        __typename: 'PostsQuery'
+        __typename: 'Posts'
       }
     });
   });
 
   step('Query single post with comments works', async () => {
-    let result = await apollo.query({ query: POST_GET, variables: { id: 1 } });
+    let result = await apollo.query({ query: POST_QUERY, variables: { id: 1 } });
 
     expect(result.data).to.deep.equal({
       post: {
@@ -74,7 +74,7 @@ describe('Post and comments example API works', () => {
 
   step('Publishes post on add', done => {
     apollo.mutate({
-      mutation: POST_ADD,
+      mutation: ADD_POST,
       variables: {
         input: {
           title: 'New post 1',
@@ -114,18 +114,18 @@ describe('Post and comments example API works', () => {
 
   step('Adding post works', async () => {
     let result = await apollo.query({
-      query: POSTS_GET,
+      query: POSTS_QUERY,
       variables: { limit: 1, after: 0 },
       fetchPolicy: 'network-only'
     });
-    expect(result.data.postsQuery).to.have.property('totalCount', 21);
-    expect(result.data.postsQuery).to.have.nested.property('edges[0].node.title', 'New post 1');
-    expect(result.data.postsQuery).to.have.nested.property('edges[0].node.content', 'New post content 1');
+    expect(result.data.posts).to.have.property('totalCount', 21);
+    expect(result.data.posts).to.have.nested.property('edges[0].node.title', 'New post 1');
+    expect(result.data.posts).to.have.nested.property('edges[0].node.content', 'New post content 1');
   });
 
   step('Publishes post on update', done => {
     apollo.mutate({
-      mutation: POST_EDIT,
+      mutation: EDIT_POST,
       variables: {
         input: {
           id: 21,
@@ -166,18 +166,18 @@ describe('Post and comments example API works', () => {
 
   step('Updating post works', async () => {
     let result = await apollo.query({
-      query: POSTS_GET,
+      query: POSTS_QUERY,
       variables: { limit: 1, after: 0 },
       fetchPolicy: 'network-only'
     });
-    expect(result.data.postsQuery).to.have.property('totalCount', 21);
-    expect(result.data.postsQuery).to.have.nested.property('edges[0].node.title', 'New post 2');
-    expect(result.data.postsQuery).to.have.nested.property('edges[0].node.content', 'New post content 2');
+    expect(result.data.posts).to.have.property('totalCount', 21);
+    expect(result.data.posts).to.have.nested.property('edges[0].node.title', 'New post 2');
+    expect(result.data.posts).to.have.nested.property('edges[0].node.content', 'New post content 2');
   });
 
   step('Publishes post on removal', done => {
     apollo.mutate({
-      mutation: POST_DELETE,
+      mutation: DELETE_POST,
       variables: { id: '21' }
     });
 
@@ -212,12 +212,12 @@ describe('Post and comments example API works', () => {
 
   step('Deleting post works', async () => {
     let result = await apollo.query({
-      query: POSTS_GET,
+      query: POSTS_QUERY,
       variables: { limit: 2, after: 0 },
       fetchPolicy: 'network-only'
     });
-    expect(result.data.postsQuery).to.have.property('totalCount', 20);
-    expect(result.data.postsQuery).to.have.nested.property('edges[0].node.title', 'Post title 20');
-    expect(result.data.postsQuery).to.have.nested.property('edges[0].node.content', 'Post content 20');
+    expect(result.data.posts).to.have.property('totalCount', 20);
+    expect(result.data.posts).to.have.nested.property('edges[0].node.title', 'Post title 20');
+    expect(result.data.posts).to.have.nested.property('edges[0].node.content', 'Post content 20');
   });
 });

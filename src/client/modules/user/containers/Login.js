@@ -9,7 +9,7 @@ import { graphql, compose } from 'react-apollo';
 // Components
 import LoginView from '../components/LoginView';
 
-import USER_LOGIN from '../graphql/login.graphql';
+import LOGIN from '../graphql/Login.graphql';
 
 class Login extends React.Component {
   render() {
@@ -23,7 +23,7 @@ Login.propTypes = {
 };
 
 const LoginWithApollo = compose(
-  graphql(USER_LOGIN, {
+  graphql(LOGIN, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       login: async ({ email, password }) => {
         try {

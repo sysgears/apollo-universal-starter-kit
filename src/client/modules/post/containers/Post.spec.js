@@ -3,9 +3,9 @@ import { step } from 'mocha-steps';
 import _ from 'lodash';
 
 import Renderer from '../../../../client/testHelpers/Renderer';
-import POSTS_SUBSCRIPTION from '../graphql/postsUpdated.graphql';
-import POST_SUBSCRIPTION from '../graphql/postUpdated.graphql';
-import COMMENT_SUBSCRIPTION from '../graphql/commentUpdated.graphql';
+import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
+import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
+import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
 
 const createNode = id => ({
   id: `${id}`,
@@ -26,7 +26,7 @@ const mutations = {
 
 const mocks = {
   Query: () => ({
-    postsQuery(ignored, { after }) {
+    posts(ignored, { after }) {
       const totalCount = 4;
       const edges = [];
       for (let i = +after + 1; i <= +after + 2; i++) {
@@ -44,7 +44,7 @@ const mocks = {
           hasNextPage: true,
           __typename: 'PostPageInfo'
         },
-        __typename: 'PostsQuery'
+        __typename: 'Posts'
       };
     },
     post(obj, { id }) {

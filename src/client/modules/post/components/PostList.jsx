@@ -24,12 +24,12 @@ const renderRow = (deletePost, navigation) => rowData => {
   );
 };
 
-function renderLoadMore(postsQuery, loadMoreRows) {
-  if (postsQuery.pageInfo.hasNextPage) {
+function renderLoadMore(posts, loadMoreRows) {
+  if (posts.pageInfo.hasNextPage) {
     return (
       <View style={styles.row}>
         <Text>
-          ({postsQuery.edges.length} / {postsQuery.totalCount})
+          ({posts.edges.length} / {posts.totalCount})
         </Text>
         <Button title="Load More ..." onPress={loadMoreRows} />
       </View>
@@ -37,7 +37,7 @@ function renderLoadMore(postsQuery, loadMoreRows) {
   }
 }
 
-const PostList = ({ loading, postsQuery, deletePost, loadMoreRows, navigation }) => {
+const PostList = ({ loading, posts, deletePost, loadMoreRows, navigation }) => {
   if (loading) {
     return (
       <View style={styles.container}>
@@ -45,7 +45,7 @@ const PostList = ({ loading, postsQuery, deletePost, loadMoreRows, navigation })
       </View>
     );
   } else {
-    const rows = postsQuery.edges.reduce((prev, { node }) => {
+    const rows = posts.edges.reduce((prev, { node }) => {
       prev.push(node);
       return prev;
     }, []);
@@ -60,7 +60,7 @@ const PostList = ({ loading, postsQuery, deletePost, loadMoreRows, navigation })
           renderRow={renderRow(deletePost, navigation)}
           removeClippedSubviews={false}
         />
-        {renderLoadMore(postsQuery, loadMoreRows)}
+        {renderLoadMore(posts, loadMoreRows)}
       </ScrollView>
     );
   }
@@ -68,7 +68,7 @@ const PostList = ({ loading, postsQuery, deletePost, loadMoreRows, navigation })
 
 PostList.propTypes = {
   loading: PropTypes.bool.isRequired,
-  postsQuery: PropTypes.object,
+  posts: PropTypes.object,
   navigation: PropTypes.object,
   deletePost: PropTypes.func.isRequired,
   loadMoreRows: PropTypes.func.isRequired

@@ -8,7 +8,7 @@ import { graphql, compose } from 'react-apollo';
 // Components
 import RegisterView from '../components/RegisterView';
 
-import USER_REGISTER from '../graphql/register.graphql';
+import REGISTER from '../graphql/Register.graphql';
 
 class Register extends React.Component {
   render() {
@@ -21,7 +21,7 @@ Register.propTypes = {
 };
 
 const RegisterWithApollo = compose(
-  graphql(USER_REGISTER, {
+  graphql(REGISTER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       register: async ({ username, email, password }) => {
         try {

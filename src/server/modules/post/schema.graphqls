@@ -69,14 +69,14 @@ input EditPostInput {
 # Input for addComment Mutation
 input AddCommentInput {
   content: String!
-  # Needed for commentUpdated Subscription filter
+  # Needed for updateComment Subscription filter
   postId: Int!
 }
 
 # Input for editComment Mutation
 input DeleteCommentInput {
   id: Int!
-  # Needed for commentUpdated Subscription filter
+  # Needed for updateComment Subscription filter
   postId: Int!
 }
 
@@ -84,27 +84,27 @@ input DeleteCommentInput {
 input EditCommentInput {
   id: Int!
   content: String!
-  # Needed for commentUpdated Subscription filter
+  # Needed for updateComment Subscription filter
   postId: Int!
 }
 
 extend type Subscription {
   # Subscription for when editing a post
-  postUpdated(id: Int!): Post
+  updatePost(id: Int!): Post
   # Subscription for post list
-  postsUpdated(endCursor: Int!): UpdatePostPayload
+  updatePosts(endCursor: Int!): UpdatePostPayload
   # Subscription for comments
-  commentUpdated(postId: Int!): UpdateCommentPayload
+  updateComment(postId: Int!): UpdateCommentPayload
 }
 
-# Payload for postsUpdated Subscription
+# Payload for updatePosts Subscription
 type UpdatePostPayload {
   mutation: String!
   id: Int!
   node: Post
 }
 
-# Payload for commentUpdated Subscription
+# Payload for updateComment Subscription
 type UpdateCommentPayload {
   mutation: String!
   id: Int

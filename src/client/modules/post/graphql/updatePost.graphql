@@ -1,0 +1,7 @@
+#import "./post.graphql"
+
+subscription onUpdatePost($id: Int!) {
+    updatePost(id: $id) {
+        ... PostInfo
+    }
+}

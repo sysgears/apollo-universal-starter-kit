@@ -4,7 +4,7 @@ import { Router, Switch } from 'react-router-dom';
 import createHistory from 'history/createMemoryHistory';
 import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
-import { combineReducers, createStore, applyMiddleware } from 'redux';
+import { combineReducers, createStore } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { graphql, print } from 'graphql';
 import { CookiesProvider } from 'react-cookie';
@@ -124,12 +124,10 @@ export default class Renderer {
 
     const store = createStore(
       combineReducers({
-        apollo: client.reducer(),
         form: formReducer,
         ...clientModules.reducers
       }),
-      reduxState,
-      applyMiddleware(client.middleware())
+      reduxState
     );
 
     const history = createHistory();

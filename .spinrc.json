@@ -30,9 +30,9 @@
     "stack": ["apollo", "react", "styled-components", "sass", "es6", "tcomb", "webpack"],
     "backendUrl": "http://{ip}:8080/graphql",
     "ssr": true,
-    "webpackDll": true,
+    "webpackDll": false,
     "reactHotLoader": false,
-    "persistGraphQL": true,
+    "persistGraphQL": false,
     "frontendRefreshOnBackendChange": true
   }
 }

@@ -12,7 +12,7 @@
     "build": "cross-env NODE_ENV=production spin build",
     "exp": "spin exp",
     "start": "node --harmony build/server",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/server/**/*.spec.js\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src tests tools",
@@ -38,12 +38,24 @@
     "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
-  "keywords": ["apollo", "universal", "starter", "graphql", "react", "redux"],
+  "keywords": [
+    "apollo",
+    "universal",
+    "starter",
+    "graphql",
+    "react",
+    "redux"
+  ],
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^5.2.0",
-    "apollo-client": "^1.9.2",
+    "apollo-cache-inmemory": "^0.2.0-beta.0",
+    "apollo-client": "^2.0.0-beta.0",
+    "apollo-fetch": "^0.6.0",
+    "apollo-link": "^0.6.1-beta.1",
+    "apollo-link-http": "^0.6.1-beta.1",
+    "apollo-link-ws": "^0.3.4",
     "apollo-logger": "0.0.6",
     "apollo-server-express": "^1.1.2",
     "bcryptjs": "^2.4.3",
@@ -77,8 +89,7 @@
     "react-ga": "^2.2.0",
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^3.0.0-beta.7",
-    "react-native":
-      "https://github.com/exponent/react-native/archive/sdk-15.0.0.tar.gz",
+    "react-native": "https://github.com/exponent/react-native/archive/sdk-15.0.0.tar.gz",
     "react-navigation": "^1.0.0-beta.11",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
@@ -93,7 +104,7 @@
     "source-map-support": "^0.4.18",
     "sqlite3": "^3.1.11",
     "styled-components": "^2.1.2",
-    "subscriptions-transport-ws": "^0.8.3",
+    "subscriptions-transport-ws": "^0.9.0",
     "universal-cookie-express": "^2.1.0"
   },
   "devDependencies": {

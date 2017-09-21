@@ -4,7 +4,7 @@ import { step } from 'mocha-steps';
 
 // Components and helpers
 import Renderer from '../../../../client/testHelpers/Renderer';
-import routes from '../../../../client/app/Routes';
+import Routes from '../../../../client/app/Routes';
 
 describe('$Module$ UI works', () => {
   const renderer = new Renderer({});
@@ -12,7 +12,7 @@ describe('$Module$ UI works', () => {
   let content;
 
   step('$Module$ page renders on mount', () => {
-    app = renderer.mount(routes);
+    app = renderer.mount(Routes);
     renderer.history.push('/$module$');
     content = app.find('#content');
     expect(content).to.not.be.empty;

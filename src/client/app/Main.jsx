@@ -105,7 +105,7 @@ const logPageView = location => {
 };
 
 // Initialize Google Analytics and send events on each location change
-ReactGA.initialize('UA-000000-01'); // Replace your Google tracking code here
+ReactGA.initialize(settings.googleAnalytics); // Replace your Google tracking code here
 logPageView(window.location);
 
 history.listen(location => logPageView(location));

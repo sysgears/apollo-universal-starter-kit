@@ -20,5 +20,5 @@ export default new Feature({
       }
     }
   },
-  reducer: { $Module$: reducers }
+  reducer: { $module$: reducers }
 });

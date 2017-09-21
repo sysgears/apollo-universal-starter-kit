@@ -1,6 +1,7 @@
 // React
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
+import { NavItem } from 'reactstrap';
 
 // Component and helpers
 import Profile from './containers/Profile';
@@ -44,25 +45,31 @@ export default new Feature({
     <Route exact path="/login" component={Login} />
   ],
   navItem: [
-    <AuthNav role="admin">
-      <NavLink to="/users" className="nav-link" activeClassName="active">
-        Users
-      </NavLink>
-    </AuthNav>
+    <NavItem>
+      <AuthNav role="admin">
+        <NavLink to="/users" className="nav-link" activeClassName="active">
+          Users
+        </NavLink>
+      </AuthNav>
+    </NavItem>
   ],
   navItemRight: [
-    <AuthProfile />,
-    <AuthLogin>
-      <span className="nav-link">
-        <NavLink to="/login" activeClassName="active">
-          Login
-        </NavLink>{' '}
-        /{' '}
-        <NavLink to="/register" activeClassName="active">
-          Register
-        </NavLink>
-      </span>
-    </AuthLogin>
+    <NavItem>
+      <AuthProfile />
+    </NavItem>,
+    <NavItem>
+      <AuthLogin>
+        <span className="nav-link">
+          <NavLink to="/login" activeClassName="active">
+            Login
+          </NavLink>{' '}
+          /{' '}
+          <NavLink to="/register" activeClassName="active">
+            Register
+          </NavLink>
+        </span>
+      </AuthLogin>
+    </NavItem>
   ],
   reducer: { user: reducers },
   middleware: tokenMiddleware,

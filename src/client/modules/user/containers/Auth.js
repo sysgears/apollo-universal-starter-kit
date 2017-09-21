@@ -4,7 +4,6 @@ import { withApollo, graphql, compose } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import { Route, Redirect, NavLink, withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
-import { NavItem } from 'reactstrap';
 import decode from 'jwt-decode';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
@@ -72,7 +71,7 @@ const profileName = cookies => {
 };
 
 const AuthNav = withCookies(({ children, cookies, role }) => {
-  return checkAuth(cookies, role) ? <NavItem>{children}</NavItem> : null;
+  return checkAuth(cookies, role) ? children : null;
 });
 
 AuthNav.propTypes = {
@@ -82,13 +81,11 @@ AuthNav.propTypes = {
 
 const AuthLogin = ({ children, cookies, logout }) => {
   return checkAuth(cookies, '') ? (
-    <NavItem onClick={() => logout()}>
-      <a href="#" className="nav-link">
-        Logout
-      </a>
-    </NavItem>
+    <a href="#" onClick={() => logout()} className="nav-link">
+      Logout
+    </a>
   ) : (
-    <NavItem>{children}</NavItem>
+    children
   );
 };
 
@@ -107,7 +104,7 @@ const AuthLoginWithApollo = withCookies(
         graphql(CURRENT_USER_QUERY),
         graphql(LOGOUT, {
           // eslint-disable-next-line
-    props: ({ ownProps: { client, history, navigation }, mutate }) => ({
+          props: ({ ownProps: { client, history, navigation }, mutate }) => ({
             logout: async () => {
               try {
                 const { data: { logout } } = await mutate();
@@ -141,11 +138,9 @@ const AuthLoginWithApollo = withCookies(
 
 const AuthProfile = withCookies(({ cookies }) => {
   return checkAuth(cookies, '') ? (
-    <NavItem>
-      <NavLink to="/profile" className="nav-link" activeClassName="active">
-        {profileName(cookies)}
-      </NavLink>
-    </NavItem>
+    <NavLink to="/profile" className="nav-link" activeClassName="active">
+      {profileName(cookies)}
+    </NavLink>
   ) : null;
 });
 

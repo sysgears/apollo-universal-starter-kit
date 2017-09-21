@@ -34,9 +34,9 @@ class Feature {
     return this.schema;
   }
 
-  async createContext(req: $Request, connectionParams: any) {
+  async createContext(req: $Request, connectionParams: any, webSocket: any) {
     const results = await Promise.all(
-      this.createContextFunc.map(createContext => createContext(req, connectionParams))
+      this.createContextFunc.map(createContext => createContext(req, connectionParams, webSocket))
     );
     return merge({}, ...results);
   }

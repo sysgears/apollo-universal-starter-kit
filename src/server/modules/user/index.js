@@ -8,15 +8,16 @@ import createResolvers from './resolvers';
 import { refreshTokens } from './auth';
 import tokenMiddleware from './token';
 import Feature from '../connector';
+import settings from '../../../../settings';
 
-const SECRET = 'secret, change for production';
+const SECRET = settings.secret;
 
 const User = new UserDAO();
 
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
-  createContextFunc: async (req, connectionParams) => {
+  createContextFunc: async (req, connectionParams, webSocket) => {
     let tokenUser = null;
 
     if (
@@ -34,6 +35,9 @@ export default new Feature({
       }
     } else if (req) {
       tokenUser = req.user;
+    } else if (webSocket) {
+      // in case you need to access req headers
+      //console.log(webSocket.upgradeReq.headers);
     }
 
     return {

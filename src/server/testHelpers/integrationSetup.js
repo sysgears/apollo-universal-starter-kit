@@ -11,7 +11,6 @@ import { ApolloClient } from 'apollo-client';
 import WebSocket from 'ws';
 
 // import { addApolloLogging } from 'apollo-logger';
-// import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import '../../../knexfile';
 import knex from '../sql/connector';
@@ -28,7 +27,6 @@ before(async () => {
   await knex.seed.run();
 
   server = require('../server').default;
-  // const networkInterface = new SubscriptionClient(`ws://localhost:${process.env['PORT']}/graphql`, {}, WebSocket);
 
   const fetch = createApolloFetch({ uri: `http://localhost:${process.env['PORT']}/graphql` });
   const cache = new InMemoryCache();

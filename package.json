@@ -12,7 +12,7 @@
     "build": "cross-env NODE_ENV=production spin build",
     "exp": "spin exp",
     "start": "node --harmony build/server",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/server/**/*.spec.js\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src tests tools",
@@ -50,7 +50,7 @@
   "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^5.2.0",
-    "apollo-cache-inmemory": "^0.2.0-beta.0",
+    "apollo-cache-inmemory": "https://github.com/vlasenko/apollo-client/raw/master/packages/apollo-cache-inmemory/apollo-cache-inmemory-0.2.0-beta.1.tar",
     "apollo-client": "^2.0.0-beta.0",
     "apollo-fetch": "^0.6.0",
     "apollo-link": "^0.6.1-beta.1",
@@ -108,6 +108,7 @@
     "universal-cookie-express": "^2.1.0"
   },
   "devDependencies": {
+    "apollo-utilities": "^0.2.0-beta.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.0",

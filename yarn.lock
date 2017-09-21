@@ -299,9 +299,9 @@ anymatch@^1.3.0:
     micromatch "^2.1.5"
     normalize-path "^2.0.0"
 
-apollo-cache-inmemory@^0.2.0-beta.0:
-  version "0.2.0-beta.0"
-  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-0.2.0-beta.0.tgz#5222423962b20739acc73de45e7fd879a79160a4"
+"apollo-cache-inmemory@https://github.com/vlasenko/apollo-client/raw/master/packages/apollo-cache-inmemory/apollo-cache-inmemory-0.2.0-beta.1.tar":
+  version "0.2.0-beta.1"
+  resolved "https://github.com/vlasenko/apollo-client/raw/master/packages/apollo-cache-inmemory/apollo-cache-inmemory-0.2.0-beta.1.tar#246b1733322b4dc05d7cfa1aff8ebd1bf9f23a20"
   dependencies:
     apollo-cache "^0.2.0-beta.0"
     apollo-utilities "^0.2.0-beta.0"

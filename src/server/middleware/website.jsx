@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { createApolloFetch } from 'apollo-fetch';
-import HttpLink from 'apollo-link-http';
+import BatchHttpLink from 'apollo-link-batch-http';
 import InMemoryCache from 'apollo-cache-inmemory';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { StaticRouter } from 'react-router';
@@ -40,7 +40,7 @@ async function renderServerSide(req, res) {
   const cache = new InMemoryCache();
 
   const client = createApolloClient({
-    link: new HttpLink({ fetch }),
+    link: new BatchHttpLink({ fetch }),
     cache
   });
 

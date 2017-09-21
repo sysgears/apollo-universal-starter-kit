@@ -361,6 +361,18 @@ apollo-fetch@^0.6.0:
   dependencies:
     isomorphic-fetch "^2.2.1"
 
+apollo-link-batch-http@^0.2.1-beta.4:
+  version "0.2.1-beta.4"
+  resolved "https://registry.yarnpkg.com/apollo-link-batch-http/-/apollo-link-batch-http-0.2.1-beta.4.tgz#5898394a998378e61282db6aae59b99f6de05825"
+  dependencies:
+    apollo-fetch "^0.6.0"
+    apollo-link-batch "^0.2.1-beta.4"
+    graphql "^0.10.5"
+
+apollo-link-batch@^0.2.1-beta.4:
+  version "0.2.1-beta.4"
+  resolved "https://registry.yarnpkg.com/apollo-link-batch/-/apollo-link-batch-0.2.1-beta.4.tgz#e341337a06727dede5f27b55e89a616df52251f0"
+
 apollo-link-core@^0.5.0, apollo-link-core@^0.5.4:
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/apollo-link-core/-/apollo-link-core-0.5.4.tgz#8efd4cd747959872a32f313f0ccfc2a76b396668"
@@ -372,13 +384,6 @@ apollo-link-core@^0.5.0, apollo-link-core@^0.5.4:
 apollo-link-dedup@0.4.1-beta.0:
   version "0.4.1-beta.0"
   resolved "https://registry.yarnpkg.com/apollo-link-dedup/-/apollo-link-dedup-0.4.1-beta.0.tgz#8bcb4ca3e5ea8490ff9711570ee95f1a04dffd03"
-  dependencies:
-    apollo-fetch "^0.6.0"
-    graphql "^0.10.5"
-
-apollo-link-http@^0.6.1-beta.1:
-  version "0.6.1-beta.1"
-  resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-0.6.1-beta.1.tgz#3bd85eb56c8e2c4a88ae22eb6e0099134c1d7ff7"
   dependencies:
     apollo-fetch "^0.6.0"
     graphql "^0.10.5"
@@ -398,13 +403,12 @@ apollo-link@0.6.1-beta.0:
     graphql-tag "^2.4.2"
     zen-observable-ts "^0.4.2"
 
-apollo-link@^0.6.1-beta.1:
-  version "0.6.1-beta.1"
-  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-0.6.1-beta.1.tgz#cfa6547070c1949eaa3837c16d095ab0ef73d1e3"
+apollo-link@^0.6.1-beta.4:
+  version "0.6.1-beta.4"
+  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-0.6.1-beta.4.tgz#9a6c0ae4ce883a52e3091aeff28df9a2d51cff0f"
   dependencies:
-    graphql "^0.10.3"
-    graphql-tag "^2.4.2"
-    zen-observable-ts "^0.4.3-beta.0"
+    apollo-utilities "^0.2.0-beta.0"
+    zen-observable-ts "^0.4.3-beta.3"
 
 apollo-logger@0.0.6:
   version "0.0.6"
@@ -11012,6 +11016,6 @@ yesno@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/yesno/-/yesno-0.0.1.tgz#ffbc04ff3d6f99dad24f7463134e9b92ae41bef6"
 
-zen-observable-ts@^0.4.2, zen-observable-ts@^0.4.3-beta.0, zen-observable-ts@^0.4.4:
+zen-observable-ts@^0.4.2, zen-observable-ts@^0.4.3-beta.3, zen-observable-ts@^0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.4.4.tgz#c244c71eaebef79a985ccf9895bc90307a6e9712"

@@ -2,14 +2,14 @@ import React from 'react';
 // import { addApolloLogging } from 'apollo-logger';
 import { getOperationAST } from 'graphql';
 import { createApolloFetch } from 'apollo-fetch';
-import HttpLink from 'apollo-link-http';
+import BatchHttpLink from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
 import WebSocketLink from 'apollo-link-ws';
 import InMemoryCache from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-// import { addPersistedQueries } from 'persistgraphql';
+// import { addP1ersistedQueries } from 'persistgraphql';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 // import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
@@ -74,10 +74,10 @@ if (__CLIENT__) {
         connectionParams: connectionParams
       }
     }),
-    new HttpLink({ fetch })
+    new BatchHttpLink({ fetch })
   );
 } else {
-  link = new HttpLink({ fetch });
+  link = new BatchHttpLink({ fetch });
 }
 
 // if (__PERSIST_GQL__) {

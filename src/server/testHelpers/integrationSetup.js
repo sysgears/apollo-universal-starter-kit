@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 
 import { getOperationAST } from 'graphql';
 import { createApolloFetch } from 'apollo-fetch';
-import HttpLink from 'apollo-link-http';
+import BatchHttpLink from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
 import WebSocketLink from 'apollo-link-ws';
 import InMemoryCache from 'apollo-cache-inmemory';
@@ -39,7 +39,7 @@ before(async () => {
       uri: `ws://localhost:${process.env['PORT']}/graphql`,
       webSocketImpl: WebSocket
     }),
-    new HttpLink({ fetch })
+    new BatchHttpLink({ fetch })
   );
 
   apollo = new ApolloClient({

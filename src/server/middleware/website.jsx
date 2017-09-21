@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { createBatchingNetworkInterface } from 'apollo-client';
+import { createApolloFetch } from 'apollo-fetch';
+import BatchHttpLink from 'apollo-link-batch-http';
+import InMemoryCache from 'apollo-cache-inmemory';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
-import { addApolloLogging } from 'apollo-logger';
-import { addPersistedQueries } from 'persistgraphql';
+// import { addApolloLogging } from 'apollo-logger';
+// import { addPersistedQueries } from 'persistgraphql';
 import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
@@ -18,32 +20,29 @@ import Html from './html';
 import Routes from '../../client/app/Routes';
 import log from '../../common/log';
 import { options as spinConfig } from '../../../.spinrc.json';
-import settings from '../../../settings';
+// import settings from '../../../settings';
 
 let assetMap;
 
 const { protocol, hostname, port, pathname } = url.parse(__BACKEND_URL__);
 const apiUrl = `${protocol}//${hostname}:${process.env.PORT || port}${pathname}`;
 
-async function renderServerSide(req, res, queryMap) {
-  let networkInterface = createBatchingNetworkInterface({
-    uri: apiUrl,
-    opts: {
-      credentials: 'include',
-      headers: req.headers
-    },
-    batchInterval: 20
+async function renderServerSide(req, res) {
+  // if (__PERSIST_GQL__) {
+  //   networkInterface = addPersistedQueries(networkInterface, queryMap);
+  // }
+  //
+  // if (settings.apolloLogging) {
+  //   networkInterface = addApolloLogging(networkInterface);
+  // }
+
+  const fetch = createApolloFetch({ uri: apiUrl });
+  const cache = new InMemoryCache();
+
+  const client = createApolloClient({
+    link: new BatchHttpLink({ fetch }),
+    cache
   });
-
-  if (__PERSIST_GQL__) {
-    networkInterface = addPersistedQueries(networkInterface, queryMap);
-  }
-
-  if (settings.apolloLogging) {
-    networkInterface = addApolloLogging(networkInterface);
-  }
-
-  const client = createApolloClient(networkInterface);
 
   let initialState = {};
   const store = createReduxStore(initialState, client);
@@ -76,11 +75,7 @@ async function renderServerSide(req, res, queryMap) {
       assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
     }
 
-    const apolloState = Object.assign({}, client.store.getState());
-
-    // Temporary workaround for bug in AC@0.5.0: https://github.com/apollostack/apollo-client/issues/845
-    delete apolloState.apollo.queries;
-    delete apolloState.apollo.mutations;
+    const apolloState = Object.assign({}, cache.extract());
 
     const token = req.universalCookies.get('x-token') ? req.universalCookies.get('x-token') : null;
     const refreshToken = req.universalCookies.get('x-refresh-token')

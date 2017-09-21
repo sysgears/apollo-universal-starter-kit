@@ -100,11 +100,13 @@ describe('Posts and comments example UI works', () => {
 
   step('Updates post list on post delete from subscription', () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
-    subscription(null, {
-      postsUpdated: {
-        mutation: 'DELETED',
-        node: createNode(2),
-        __typename: 'UpdatePostPayload'
+    subscription.next({
+      data: {
+        postsUpdated: {
+          mutation: 'DELETED',
+          node: createNode(2),
+          __typename: 'UpdatePostPayload'
+        }
       }
     });
 
@@ -114,13 +116,14 @@ describe('Posts and comments example UI works', () => {
 
   step('Updates post list on post create from subscription', () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
-    subscription(
-      null,
+    subscription.next(
       _.cloneDeep({
-        postsUpdated: {
-          mutation: 'CREATED',
-          node: createNode(2),
-          __typename: 'UpdatePostPayload'
+        data: {
+          postsUpdated: {
+            mutation: 'CREATED',
+            node: createNode(2),
+            __typename: 'UpdatePostPayload'
+          }
         }
       })
     );
@@ -167,12 +170,14 @@ describe('Posts and comments example UI works', () => {
 
   step('Updates post form on post updated from subscription', () => {
     const subscription = renderer.getSubscriptions(POST_SUBSCRIPTION)[0];
-    subscription(null, {
-      postUpdated: {
-        id: '3',
-        title: 'Post title 203',
-        content: 'Post content 204',
-        __typename: 'Post'
+    subscription.next({
+      data: {
+        postUpdated: {
+          id: '3',
+          title: 'Post title 203',
+          content: 'Post content 204',
+          __typename: 'Post'
+        }
       }
     });
     const postForm = content.find('form[name="post"]');
@@ -225,17 +230,19 @@ describe('Posts and comments example UI works', () => {
 
   step('Updates comment form on comment added got from subscription', () => {
     const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
-    subscription(null, {
-      commentUpdated: {
-        mutation: 'CREATED',
-        id: 3003,
-        postId: 3,
-        node: {
+    subscription.next({
+      data: {
+        commentUpdated: {
+          mutation: 'CREATED',
           id: 3003,
-          content: 'Post comment 3',
-          __typename: 'Comment'
-        },
-        __typename: 'UpdateCommentPayload'
+          postId: 3,
+          node: {
+            id: 3003,
+            content: 'Post comment 3',
+            __typename: 'Comment'
+          },
+          __typename: 'UpdateCommentPayload'
+        }
       }
     });
 
@@ -244,17 +251,19 @@ describe('Posts and comments example UI works', () => {
 
   step('Updates comment form on comment deleted got from subscription', () => {
     const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
-    subscription(null, {
-      commentUpdated: {
-        mutation: 'DELETED',
-        id: 3003,
-        postId: 3,
-        node: {
+    subscription.next({
+      data: {
+        commentUpdated: {
+          mutation: 'DELETED',
           id: 3003,
-          content: 'Post comment 3',
-          __typename: 'Comment'
-        },
-        __typename: 'UpdateCommentPayload'
+          postId: 3,
+          node: {
+            id: 3003,
+            content: 'Post comment 3',
+            __typename: 'Comment'
+          },
+          __typename: 'UpdateCommentPayload'
+        }
       }
     });
     expect(content.text()).to.not.include('Post comment 3');

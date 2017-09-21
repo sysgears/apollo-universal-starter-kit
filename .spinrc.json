@@ -32,7 +32,7 @@
     "ssr": true,
     "webpackDll": true,
     "reactHotLoader": false,
-    "persistGraphQL": true,
+    "persistGraphQL": false,
     "frontendRefreshOnBackendChange": true
   }
 }

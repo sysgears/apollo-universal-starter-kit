@@ -37,6 +37,16 @@ async function renderServerSide(req, res) {
   // }
 
   const fetch = createApolloFetch({ uri: apiUrl });
+  fetch.batchUse(({ options }, next) => {
+    try {
+      options.credentials = 'include';
+      options.headers = req.headers;
+    } catch (e) {
+      console.error(e);
+    }
+
+    next();
+  });
   const cache = new InMemoryCache();
 
   const client = createApolloClient({

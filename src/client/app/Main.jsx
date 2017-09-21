@@ -17,7 +17,7 @@ import { CookiesProvider } from 'react-cookie';
 
 import createApolloClient from '../../common/createApolloClient';
 import createReduxStore from '../../common/createReduxStore';
-// import settings from '../../../settings';
+import settings from '../../../settings';
 import Routes from './Routes';
 import modules from '../modules';
 
@@ -26,59 +26,53 @@ import '../styles/styles.scss';
 const fetch = createApolloFetch({ uri: __BACKEND_URL__ || '/graphql' });
 const cache = new InMemoryCache();
 
-let link;
-if (__CLIENT__) {
-  // networkInterface.use([
-  //   {
-  //     applyBatchMiddleware(req, next) {
-  //       if (!req.options.headers) {
-  //         req.options.headers = {};
-  //       }
-  //
-  //       for (const middleware of modules.middlewares) {
-  //         middleware(req);
-  //       }
-  //
-  //       next();
-  //     }
-  //   }
-  // ]);
-  //
-  // networkInterface.useAfter([
-  //   {
-  //     applyBatchAfterware(res, next) {
-  //       for (const afterware of modules.afterwares) {
-  //         afterware(res);
-  //       }
-  //
-  //       next();
-  //     }
-  //   }
-  // ]);
-
-  let connectionParams = {};
-  for (const connectionParam of modules.connectionParams) {
-    Object.assign(connectionParams, connectionParam());
+fetch.batchUse(({ requests, options }, next) => {
+  try {
+    options.credentials = 'include';
+    options.headers = options.headers || {};
+    for (const middleware of modules.middlewares) {
+      for (const req of requests) {
+        middleware(req, options);
+      }
+    }
+  } catch (e) {
+    console.error(e);
   }
 
-  const wsUri = (__BACKEND_URL__ || window.location.origin + '/graphql').replace(/^http/, 'ws');
-  link = ApolloLink.split(
-    operation => {
-      const operationAST = getOperationAST(operation.query, operation.operationName);
-      return !!operationAST && operationAST.operation === 'subscription';
-    },
-    new WebSocketLink({
-      uri: wsUri,
-      options: {
-        reconnect: true,
-        connectionParams: connectionParams
-      }
-    }),
-    new BatchHttpLink({ fetch })
-  );
-} else {
-  link = new BatchHttpLink({ fetch });
+  next();
+});
+
+fetch.batchUseAfter(({ response, options }, next) => {
+  try {
+    for (const afterware of modules.afterwares) {
+      afterware(response, options);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  next();
+});
+
+let connectionParams = {};
+for (const connectionParam of modules.connectionParams) {
+  Object.assign(connectionParams, connectionParam());
 }
+
+const wsUri = (__BACKEND_URL__ || window.location.origin + '/graphql').replace(/^http/, 'ws');
+const link = ApolloLink.split(
+  operation => {
+    const operationAST = getOperationAST(operation.query, operation.operationName);
+    return !!operationAST && operationAST.operation === 'subscription';
+  },
+  new WebSocketLink({
+    uri: wsUri,
+    options: {
+      reconnect: true,
+      connectionParams: connectionParams
+    }
+  }),
+  new BatchHttpLink({ fetch })
+);
 
 // if (__PERSIST_GQL__) {
 //   networkInterface = addPersistedQueries(networkInterface, queryMap);

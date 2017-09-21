@@ -45,11 +45,13 @@ export default new Feature({
     <Route exact path="/login" component={Login} />
   ],
   navItem: [
-    <AuthNav role="admin">
-      <NavLink to="/users" className="nav-link" activeClassName="active">
-        Users
-      </NavLink>
-    </AuthNav>
+    <NavItem>
+      <AuthNav role="admin">
+        <NavLink to="/users" className="nav-link" activeClassName="active">
+          Users
+        </NavLink>
+      </AuthNav>
+    </NavItem>
   ],
   navItemRight: [
     <NavItem>

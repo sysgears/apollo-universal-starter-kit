@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import settings from '../../../../settings';
 
-import { refreshTokens } from './auth';
+import { refreshTokens, tryLoginSerial } from './auth';
 
 export default (SECRET, User) => async (req, res, next) => {
   let token = req.universalCookies.get('x-token') || req.headers['x-token'];
@@ -62,6 +63,36 @@ export default (SECRET, User) => async (req, res, next) => {
       }
       req.user = newTokens.user;
     }
+  } else if (settings.user.certAuth) {
+    // cert auth
+    let serial = '';
+    if (__DEV__) {
+      // for local testing without client certificates
+      serial = '00';
+    }
+    // if header available
+    if (req.headers['x-serial']) {
+      serial = req.headers['x-serial'];
+    }
+    const result = await tryLoginSerial(serial, User, SECRET);
+
+    req.universalCookies.set('x-token', result.token, {
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: true
+    });
+    req.universalCookies.set('x-refresh-token', result.refreshToken, {
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: true
+    });
+
+    req.universalCookies.set('r-token', result.token, {
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: false
+    });
+    req.universalCookies.set('r-refresh-token', result.refreshToken, {
+      maxAge: 60 * 60 * 24 * 7,
+      httpOnly: false
+    });
   }
 
   next();

@@ -24,13 +24,23 @@ export default class User {
     );
   }
 
-  async getUserWithPassword(id) {
+  async getUserWithSecret(id) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'la.password')
+        .select('u.id', 'u.username', 'u.is_admin', 'u.secret')
         .from('user AS u')
-        .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
         .where('u.id', '=', id)
+        .first()
+    );
+  }
+
+  async getUserWithSerial(serial) {
+    return camelizeKeys(
+      await knex
+        .select('u.id', 'u.username', 'u.is_admin')
+        .from('user AS u')
+        .leftJoin('cert_auth AS ca', 'ca.user_id', 'u.id')
+        .where('ca.serial', '=', serial)
         .first()
     );
   }

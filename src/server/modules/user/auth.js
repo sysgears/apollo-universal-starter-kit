@@ -38,11 +38,11 @@ export const refreshTokens = async (token, refreshToken, User, SECRET) => {
     return {};
   }
 
-  const user = await User.getUserWithPassword(userId);
+  const user = await User.getUserWithSecret(userId);
   if (!user) {
     return {};
   }
-  const refreshSecret = SECRET + user.password;
+  const refreshSecret = SECRET + user.secret;
 
   try {
     jwt.verify(refreshToken, refreshSecret);
@@ -76,8 +76,8 @@ export const tryLogin = async (email, password, User, SECRET) => {
 
   e.throwIf();
 
-  const user = await User.getUserWithPassword(localAuth.userId);
-  const refreshSecret = SECRET + user.password;
+  const user = await User.getUserWithSecret(localAuth.userId);
+  const refreshSecret = SECRET + user.secret;
 
   const [token, refreshToken] = await createTokens(user, SECRET, refreshSecret);
 
@@ -85,4 +85,24 @@ export const tryLogin = async (email, password, User, SECRET) => {
     token,
     refreshToken
   };
+};
+
+export const tryLoginSerial = async (serial, User, SECRET) => {
+  try {
+    const certAuth = await User.getUserWithSerial(serial);
+
+    const user = await User.getUserWithSecret(certAuth.id);
+
+    const refreshSecret = SECRET + user.serial;
+    const [token, refreshToken] = await createTokens(user, SECRET, refreshSecret);
+
+    return {
+      user,
+      token,
+      refreshToken
+    };
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
 };

@@ -9,12 +9,11 @@ import WebSocketLink from 'apollo-link-ws';
 import InMemoryCache from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import WebSocket from 'ws';
-
-// import { addApolloLogging } from 'apollo-logger';
+import { LoggingLink } from 'apollo-logger';
 
 import '../../../knexfile';
 import knex from '../sql/connector';
-// import settings from '../../../settings';
+import settings from '../../../settings';
 
 chai.use(chaiHttp);
 chai.should();
@@ -30,7 +29,7 @@ before(async () => {
 
   const fetch = createApolloFetch({ uri: `http://localhost:${process.env['PORT']}/graphql` });
   const cache = new InMemoryCache();
-  const link = ApolloLink.split(
+  let link = ApolloLink.split(
     operation => {
       const operationAST = getOperationAST(operation.query, operation.operationName);
       return !!operationAST && operationAST.operation === 'subscription';
@@ -43,13 +42,9 @@ before(async () => {
   );
 
   apollo = new ApolloClient({
-    link,
+    link: ApolloLink.from((settings.apolloLogging ? [new LoggingLink()] : []).concat([link])),
     cache
   });
-
-  // apollo = new ApolloClient({
-  //   networkInterface: settings.apolloLogging ? addApolloLogging(networkInterface) : networkInterface
-  // });
 });
 
 after(() => {

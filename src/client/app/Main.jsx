@@ -1,15 +1,15 @@
 import React from 'react';
-// import { addApolloLogging } from 'apollo-logger';
 import { getOperationAST } from 'graphql';
 import { createApolloFetch } from 'apollo-fetch';
 import BatchHttpLink from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
 import WebSocketLink from 'apollo-link-ws';
 import InMemoryCache from 'apollo-cache-inmemory';
+import { LoggingLink } from 'apollo-logger';
 import { ApolloProvider } from 'react-apollo';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-// import { addP1ersistedQueries } from 'persistgraphql';
+// import { addPersistedQueries } from 'persistgraphql';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 // import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
@@ -59,7 +59,7 @@ for (const connectionParam of modules.connectionParams) {
 }
 
 const wsUri = (__BACKEND_URL__ || window.location.origin + '/graphql').replace(/^http/, 'ws');
-const link = ApolloLink.split(
+let link = ApolloLink.split(
   operation => {
     const operationAST = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';
@@ -78,12 +78,8 @@ const link = ApolloLink.split(
 //   networkInterface = addPersistedQueries(networkInterface, queryMap);
 // }
 
-// if (settings.apolloLogging) {
-//   networkInterface = addApolloLogging(networkInterface);
-// }
-
 const client = createApolloClient({
-  link,
+  link: ApolloLink.from((settings.apolloLogging ? [new LoggingLink()] : []).concat([link])),
   cache
 });
 

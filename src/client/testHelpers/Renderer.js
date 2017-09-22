@@ -2,7 +2,7 @@ import ApolloClient from 'apollo-client';
 import { ApolloLink, Observable } from 'apollo-link';
 import InMemoryCache from 'apollo-cache-inmemory';
 import { addTypenameToDocument } from 'apollo-utilities';
-// import { addApolloLogging } from 'apollo-logger';
+import { LoggingLink } from 'apollo-logger';
 import { Router, Switch } from 'react-router-dom';
 import createHistory from 'history/createMemoryHistory';
 import { JSDOM } from 'jsdom';
@@ -15,7 +15,7 @@ import { CookiesProvider } from 'react-cookie';
 
 import rootSchema from '../../server/api/rootSchema.graphqls';
 import serverModules from '../../server/modules';
-// import settings from '../../../settings';
+import settings from '../../../settings';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;
@@ -142,16 +142,12 @@ export default class Renderer {
     addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
 
     const cache = new InMemoryCache();
-    const link = new MockLink(schema);
+    let link = new MockLink(schema);
 
     const client = new ApolloClient({
-      link,
+      link: ApolloLink.from((settings.apolloLogging ? [new LoggingLink()] : []).concat([link])),
       cache
     });
-
-    // const client = new ApolloClient({
-    //   networkInterface: settings.apolloLogging ? addApolloLogging(mockNetworkInterface) : mockNetworkInterface
-    // });
 
     const store = createStore(
       combineReducers({

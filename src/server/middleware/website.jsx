@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { createApolloFetch } from 'apollo-fetch';
+import { ApolloLink } from 'apollo-link';
 import BatchHttpLink from 'apollo-link-batch-http';
 import InMemoryCache from 'apollo-cache-inmemory';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
-// import { addApolloLogging } from 'apollo-logger';
+import { LoggingLink } from 'apollo-logger';
 // import { addPersistedQueries } from 'persistgraphql';
 import fs from 'fs';
 import path from 'path';
@@ -20,7 +21,7 @@ import Html from './html';
 import Routes from '../../client/app/Routes';
 import log from '../../common/log';
 import { options as spinConfig } from '../../../.spinrc.json';
-// import settings from '../../../settings';
+import settings from '../../../settings';
 
 let assetMap;
 
@@ -32,9 +33,6 @@ async function renderServerSide(req, res) {
   //   networkInterface = addPersistedQueries(networkInterface, queryMap);
   // }
   //
-  // if (settings.apolloLogging) {
-  //   networkInterface = addApolloLogging(networkInterface);
-  // }
 
   const fetch = createApolloFetch({ uri: apiUrl });
   fetch.batchUse(({ options }, next) => {
@@ -49,8 +47,10 @@ async function renderServerSide(req, res) {
   });
   const cache = new InMemoryCache();
 
+  let link = new BatchHttpLink({ fetch });
+
   const client = createApolloClient({
-    link: new BatchHttpLink({ fetch }),
+    link: ApolloLink.from((settings.apolloLogging ? [new LoggingLink()] : []).concat([link])),
     cache
   });
 

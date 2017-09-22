@@ -24,11 +24,12 @@ export default class User {
     );
   }
 
-  async getUserWithSecret(id) {
+  async getUserWithPassword(id) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'u.secret')
+        .select('u.id', 'u.username', 'u.is_admin', 'la.password')
         .from('user AS u')
+        .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );

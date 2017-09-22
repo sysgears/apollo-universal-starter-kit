@@ -35,6 +35,17 @@ export default class User {
     );
   }
 
+  async getUserWithSerial(serial) {
+    return camelizeKeys(
+      await knex
+        .select('u.id', 'u.username', 'u.is_admin')
+        .from('user AS u')
+        .leftJoin('cert_auth AS ca', 'ca.user_id', 'u.id')
+        .where('ca.serial', '=', serial)
+        .first()
+    );
+  }
+
   register({ username }) {
     return knex('user')
       .insert({ username })

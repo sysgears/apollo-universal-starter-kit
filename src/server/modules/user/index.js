@@ -10,7 +10,7 @@ import tokenMiddleware from './token';
 import Feature from '../connector';
 import settings from '../../../../settings';
 
-const SECRET = settings.secret;
+const SECRET = settings.user.secret;
 
 const User = new UserDAO();
 
@@ -19,6 +19,11 @@ export default new Feature({
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
     let tokenUser = null;
+    let serial = '';
+    if (__DEV__) {
+      // for local testing without client certificates
+      serial = '00';
+    }
 
     if (
       connectionParams &&
@@ -34,10 +39,26 @@ export default new Feature({
         tokenUser = newTokens.user;
       }
     } else if (req) {
-      tokenUser = req.user;
+      if (req.user) {
+        tokenUser = req.user;
+      } else if (settings.user.certAuth) {
+        const user = await User.getUserWithSerial(serial);
+        if (user) {
+          tokenUser = user;
+        }
+      }
     } else if (webSocket) {
-      // in case you need to access req headers
-      //console.log(webSocket.upgradeReq.headers);
+      if (settings.user.certAuth) {
+        // in case you need to access req headers
+        if (webSocket.upgradeReq.headers['x-serial']) {
+          serial = webSocket.upgradeReq.headers['x-serial'];
+        }
+
+        const user = await User.getUserWithSerial(serial);
+        if (user) {
+          tokenUser = user;
+        }
+      }
     }
 
     return {

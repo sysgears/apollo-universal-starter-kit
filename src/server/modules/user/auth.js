@@ -86,3 +86,23 @@ export const tryLogin = async (email, password, User, SECRET) => {
     refreshToken
   };
 };
+
+export const tryLoginSerial = async (serial, User, SECRET) => {
+  try {
+    const certAuth = await User.getUserWithSerial(serial);
+
+    const user = await User.getUserWithPassword(certAuth.id);
+
+    const refreshSecret = SECRET + user.password;
+    const [token, refreshToken] = await createTokens(user, SECRET, refreshSecret);
+
+    return {
+      user,
+      token,
+      refreshToken
+    };
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+};

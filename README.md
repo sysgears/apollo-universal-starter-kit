@@ -1,6 +1,6 @@
 <p align="center"><a href="#"><img width="150" src="https://rawgit.com/sysgears/apollo-universal-starter-kit/master/logo.svg"></a></p>
 
-## Apollo v2 Web&Mobile Universal Starter Kit with Hot Code Reload
+## Apollo v2 Mobile&Web Universal Starter Kit with Hot Code Reload
 
 If you are using Apollo v1 please use [starter kit from `apollo1` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1)
 
@@ -10,10 +10,10 @@ If you are using Apollo v1 please use [starter kit from `apollo1` branch](https:
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-universal-starter-kit.svg)](https://greenkeeper.io/)
 [![Twitter Follow](https://img.shields.io/twitter/follow/sysgears.svg?style=social)](https://twitter.com/sysgears)
 
-> Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] web app development built on top of [Apollo],
-> [GraphQL], [React], [React Native], [Expo], [Redux], [Express] with SQL storage support and [Twitter Bootstrap] integration.
-> Hot Code Reload of back end & front end using [Webpack] and Hot Module Replacement to reflect your changes instantly
-> and help you stay productive.
+> Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] Mobile and Web app development 
+> built on top of [Apollo], [GraphQL], [React], [React Native], [Expo], [Redux], [Express] with SQL storage support
+> and [Twitter Bootstrap] integration. Hot Code Reload of back end & front end using [Webpack] and 
+> Hot Module Replacement to reflect your changes instantly and help you stay productive.
 
 ## Hot Code Reload demo
 ![screencast](https://user-images.githubusercontent.com/1259926/27387579-c6799ada-56a1-11e7-93fc-d08e9970640d.gif)

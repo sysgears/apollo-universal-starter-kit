@@ -1,6 +1,5 @@
 // @flow
 /* eslint-disable no-unused-vars */
-import type { PubSub } from 'graphql-subscriptions';
 import type { DocumentNode } from 'graphql';
 import type { Middleware, $Request } from 'express';
 
@@ -41,7 +40,7 @@ class Feature {
     return merge({}, ...results);
   }
 
-  createResolvers(pubsub: PubSub) {
+  createResolvers(pubsub: any) {
     return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
   }
 

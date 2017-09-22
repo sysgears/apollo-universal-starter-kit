@@ -14,14 +14,14 @@ import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
 
 import Feature from '../connector';
 
-function tokenMiddleware(req) {
-  req.options.headers['x-token'] = window.localStorage.getItem('token');
-  req.options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
+function tokenMiddleware(req, options) {
+  options.headers['x-token'] = window.localStorage.getItem('token');
+  options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
 }
 
-function tokenAfterware(res) {
-  const token = res.options.headers['x-token'];
-  const refreshToken = res.options.headers['x-refresh-token'];
+function tokenAfterware(res, options) {
+  const token = options.headers['x-token'];
+  const refreshToken = options.headers['x-refresh-token'];
   if (token) {
     window.localStorage.setItem('token', token);
   }

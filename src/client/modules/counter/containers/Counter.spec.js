@@ -65,8 +65,10 @@ describe('Counter example UI works', () => {
 
   step('Updates counter on data from subscription', () => {
     const subscription = renderer.getSubscriptions(COUNTER_SUBSCRIPTION)[0];
-    subscription(null, {
-      counterUpdated: { amount: COUNTER_SUBSCRIPTION_VALUE, __typename: 'Counter' }
+    subscription.next({
+      data: {
+        counterUpdated: { amount: COUNTER_SUBSCRIPTION_VALUE, __typename: 'Counter' }
+      }
     });
     content.text().should.has.string(`Current counter, is ${COUNTER_SUBSCRIPTION_VALUE}.`);
   });

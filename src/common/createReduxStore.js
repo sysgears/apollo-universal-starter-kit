@@ -8,16 +8,13 @@ import modules from '../client/modules';
 const createReduxStore = (initialState, client, routerMiddleware) => {
   const store = createStore(
     combineReducers({
-      apollo: client.reducer(),
       router: routerReducer,
       form: formReducer,
 
       ...modules.reducers
     }),
     initialState, // initial state
-    routerMiddleware
-      ? composeWithDevTools(applyMiddleware(client.middleware(), routerMiddleware))
-      : applyMiddleware(client.middleware())
+    routerMiddleware ? composeWithDevTools(applyMiddleware(routerMiddleware)) : undefined
   );
 
   return store;

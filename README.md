@@ -15,6 +15,12 @@ If you are using Apollo v1 please use [starter kit from `apollo1` branch](https:
 > and [Twitter Bootstrap] integration. Hot Code Reload of back end & front end using [Webpack] and 
 > Hot Module Replacement to reflect your changes instantly and help you stay productive.
 
+## Commercial support
+
+SysGears team provides advanced support for commercial partners. A commercial partner will have a premium access to our
+team whether this is to help you with your code based on this starter kit or related technologies used in the kit. Contact
+us using [Skype](http://hatscripts.com/addskype?sysgears) or via email: [info@sysgears.com](mailto:info@sysgears.com)
+
 ## Hot Code Reload demo
 ![screencast](https://user-images.githubusercontent.com/1259926/27387579-c6799ada-56a1-11e7-93fc-d08e9970640d.gif)
 

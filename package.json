@@ -44,7 +44,7 @@
   "dependencies": {
     "@expo/vector-icons": "^5.2.0",
     "apollo-client": "^1.9.2",
-    "apollo-logger": "0.0.6",
+    "apollo-logger": "0.1.0",
     "apollo-server-express": "^1.1.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.1",

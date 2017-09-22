@@ -1,6 +1,8 @@
 <p align="center"><a href="#"><img width="150" src="https://rawgit.com/sysgears/apollo-universal-starter-kit/master/logo.svg"></a></p>
 
-## Apollo Web&Mobile Universal Starter Kit with Hot Code Reload
+## Apollo v2 Web&Mobile Universal Starter Kit with Hot Code Reload
+
+If you are using Apollo v1 please use [starter kit from `apollo1` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1)
 
 [![Join the chat at https://gitter.im/sysgears/apollo-fullstack-starter-kit](https://badges.gitter.im/sysgears/apollo-fullstack-starter-kit.svg)](https://gitter.im/sysgears/apollo-fullstack-starter-kit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors)

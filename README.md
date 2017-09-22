@@ -21,7 +21,7 @@
 1. Clone starter kit locally.
 
   ```
-  git clone https://github.com/sysgears/apollo-universal-starter-kit.git
+  git clone -b apollo1 https://github.com/sysgears/apollo-universal-starter-kit.git
   cd apollo-universal-starter-kit
   ```
 
@@ -305,7 +305,7 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
 1. Clone starter kit locally.
 
   ```
-  git clone https://github.com/sysgears/apollo-universal-starter-kit.git
+  git clone -b apollo1 https://github.com/sysgears/apollo-universal-starter-kit.git
   cd apollo-universal-starter-kit
   ```
 

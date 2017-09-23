@@ -11,13 +11,13 @@ function renderComments(comments, onCommentSelect, comment, deleteComment) {
         {content}
         <div>
           <span
-            className="badge badge-default badge-pill edit-comment"
+            className="badge badge-secondary badge-pill edit-comment"
             onClick={() => onCommentSelect({ id, content })}
           >
             Edit
           </span>
           <span
-            className="badge badge-default badge-pill delete-comment"
+            className="badge badge-secondary badge-pill delete-comment"
             onClick={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
           >
             Delete

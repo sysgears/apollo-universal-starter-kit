@@ -15,7 +15,7 @@ function renderPosts(posts, deletePost) {
             {title}
           </Link>
         </span>
-        <span className="badge badge-default badge-pill delete-button" onClick={deletePost(id)}>
+        <span className="badge badge-secondary badge-pill delete-button" onClick={deletePost(id)}>
           Delete
         </span>
       </ListGroupItem>

@@ -284,9 +284,9 @@ The project structure presented in this boilerplate is **fractal**, where functi
 │   │   │                    # (schema definition, resolvers, sql queries)
 │   │   └── sql              # Knex connector
 │   │   └── testHelpers      # Test helper for back-end integration tests
-│   │   └── api_server.js    # GraphQL api server set up
+│   │   └── server.js        # GraphQL api server set up
 │   │   └── index.js         # Entry point to back-end wtih hot code reload
-└── tools                    # All build related files (Webpack)
+└── tools                    # All build and cli related files
 ```
 
 ## Additional scripts

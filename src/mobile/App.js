@@ -3,7 +3,6 @@ import { getOperationAST } from 'graphql';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { createApolloFetch } from 'apollo-fetch';
 import BatchHttpLink from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
@@ -45,8 +44,7 @@ const store = createStore(
 
     ...modules.reducers
   }),
-  {}, // initial state
-  composeWithDevTools()
+  {} // initial state
 );
 
 export default class Main extends Component {

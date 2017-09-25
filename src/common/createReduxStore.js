@@ -15,7 +15,7 @@ const createReduxStore = (initialState, client, routerMiddleware) => {
   return createStore(
     storeReducer,
     initialState, // initial state
-    routerMiddleware ? composeWithDevTools({ shouldHotReload: false })(applyMiddleware(routerMiddleware)) : undefined
+    routerMiddleware ? composeWithDevTools(applyMiddleware(routerMiddleware)) : undefined
   );
 };
 

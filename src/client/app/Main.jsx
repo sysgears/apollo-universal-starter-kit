@@ -16,7 +16,7 @@ import ReactGA from 'react-ga';
 import { CookiesProvider } from 'react-cookie';
 
 import createApolloClient from '../../common/createApolloClient';
-import createReduxStore from '../../common/createReduxStore';
+import createReduxStore, { storeReducer } from '../../common/createReduxStore';
 import settings from '../../../settings';
 import Routes from './Routes';
 import modules from '../modules';
@@ -100,10 +100,19 @@ logPageView(window.location);
 
 history.listen(location => logPageView(location));
 
-const store = createReduxStore({}, client, routerMiddleware(history));
+let store;
+if (module.hot && module.hot.data && module.hot.data.store) {
+  // console.log("Restoring Redux store:", JSON.stringify(module.hot.data.store.getState()));
+  store = module.hot.data.store;
+  store.replaceReducer(storeReducer);
+} else {
+  store = createReduxStore({}, client, routerMiddleware(history));
+}
 
 if (module.hot) {
-  module.hot.dispose(() => {
+  module.hot.dispose(data => {
+    // console.log("Saving Redux store:", JSON.stringify(store.getState()));
+    data.store = store;
     // Force Apollo to fetch the latest data from the server
     delete window.__APOLLO_STATE__;
   });

@@ -2,10 +2,6 @@
   "app": {
     "debugSQL": false,
     "apolloLogging": false,
-    "user": {
-      "secret": "secret, change for production",
-      "certAuth": false
-    },
     "googleAnalytics": "UA-000000-01"
   },
   "expo": {

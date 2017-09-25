@@ -1,0 +1,4 @@
+{
+  "secret": "secret, change for production",
+  "certAuth": false
+}

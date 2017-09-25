@@ -105,10 +105,11 @@ export default connect(
   state => ({ reduxCount: state.counter.reduxCount }),
   dispatch => ({
     onReduxIncrement(value) {
-      dispatch({
-        type: 'COUNTER_INCREMENT',
-        value: Number(value)
-      });
+      return () =>
+        dispatch({
+          type: 'COUNTER_INCREMENT',
+          value: Number(value)
+        });
     }
   })
 )(CounterWithApollo);

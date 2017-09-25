@@ -26,7 +26,7 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
             Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.
           </Text>
         </View>
-        <Button onPress={() => onReduxIncrement(1)}>Click to increase reduxCount</Button>
+        <Button onPress={onReduxIncrement(1)}>Click to increase reduxCount</Button>
       </View>
     );
   }

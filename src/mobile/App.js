@@ -1,31 +1,50 @@
 import React, { Component } from 'react';
+import { getOperationAST } from 'graphql';
 import { ApolloProvider } from 'react-apollo';
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { createApolloFetch } from 'apollo-fetch';
+import BatchHttpLink from 'apollo-link-batch-http';
+import { ApolloLink } from 'apollo-link';
+import WebSocketLink from 'apollo-link-ws';
+import { LoggingLink } from 'apollo-logger';
+import InMemoryCache from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import modules from '../client/modules';
 import MainScreenNavigator from '../client/app/Routes';
+import settings from '../../settings';
 
-const networkInterface = new SubscriptionClient(__BACKEND_URL__.replace(/^http/, 'ws'), {
-  reconnect: true
-});
+const fetch = createApolloFetch({ uri: __BACKEND_URL__ });
+const cache = new InMemoryCache();
+
+const wsUri = __BACKEND_URL__.replace(/^http/, 'ws');
+let link = ApolloLink.split(
+  operation => {
+    const operationAST = getOperationAST(operation.query, operation.operationName);
+    return !!operationAST && operationAST.operation === 'subscription';
+  },
+  new WebSocketLink({
+    uri: wsUri,
+    options: {
+      reconnect: true
+    }
+  }),
+  new BatchHttpLink({ fetch })
+);
 
 const client = new ApolloClient({
-  networkInterface
+  link: ApolloLink.from((settings.apolloLogging ? [new LoggingLink()] : []).concat([link])),
+  cache
 });
 
 const store = createStore(
   combineReducers({
-    apollo: client.reducer(),
     form: formReducer,
 
     ...modules.reducers
   }),
-  {}, // initial state
-  composeWithDevTools(applyMiddleware(client.middleware()))
+  {} // initial state
 );
 
 export default class Main extends Component {

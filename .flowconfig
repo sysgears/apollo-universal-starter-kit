@@ -2,7 +2,6 @@
 .*/node_modules/animated/.*
 .*/node_modules/babel-plugin-transform-react-remove-prop-types/.*
 .*/node_modules/bcryptjs/.*
-.*/node_modules/exp/.*
 .*/node_modules/expo/.*
 .*/node_modules/haul/.*
 .*/node_modules/react-native-fbads/.*

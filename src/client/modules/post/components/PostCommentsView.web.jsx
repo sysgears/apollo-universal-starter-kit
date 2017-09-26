@@ -7,17 +7,15 @@ import PostCommentForm from './PostCommentForm';
 function renderComments(comments, onCommentSelect, comment, deleteComment) {
   return comments.map(({ id, content }) => {
     return (
-      <ListGroupItem className="justify-content-between" key={id}>
+      <ListGroupItem className="d-flex justify-content-between" key={id}>
         {content}
         <div>
-          <span
-            className="badge badge-secondary badge-pill edit-comment"
-            onClick={() => onCommentSelect({ id, content })}
-          >
+          <span className="badge badge-secondary edit-comment" onClick={() => onCommentSelect({ id, content })}>
             Edit
           </span>
+          &nbsp;
           <span
-            className="badge badge-secondary badge-pill delete-comment"
+            className="badge badge-secondary delete-comment"
             onClick={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
           >
             Delete

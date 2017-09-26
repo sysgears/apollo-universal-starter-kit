@@ -303,6 +303,19 @@ apollo-cache@^0.2.0-beta.0, apollo-cache@^0.2.0-beta.1:
   dependencies:
     apollo-utilities "^0.2.0-beta.1"
 
+apollo-client@2.0.0-beta.1:
+  version "2.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.0.0-beta.1.tgz#d4038d43574c3797aa2a06c206a2b26eabb2f72c"
+  dependencies:
+    apollo-cache "^0.2.0-beta.1"
+    apollo-link "0.6.1-beta.4"
+    apollo-link-dedup "0.4.1-beta.4"
+    apollo-utilities "^0.2.0-beta.1"
+    graphql "^0.11.0"
+    symbol-observable "^1.0.2"
+  optionalDependencies:
+    "@types/async" "2.0.42"
+
 apollo-client@^1.1, apollo-client@^1.4.0:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-1.9.3.tgz#37000b3c801f4571b7b089739e696a158896aeab"
@@ -332,38 +345,25 @@ apollo-client@^1.1, apollo-client@^1.4.0:
     "@types/graphql" "^0.9.0"
     "@types/isomorphic-fetch" "0.0.34"
 
-apollo-client@^2.0.0-beta.0:
-  version "2.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.0.0-beta.1.tgz#d4038d43574c3797aa2a06c206a2b26eabb2f72c"
-  dependencies:
-    apollo-cache "^0.2.0-beta.1"
-    apollo-link "0.6.1-beta.4"
-    apollo-link-dedup "0.4.1-beta.4"
-    apollo-utilities "^0.2.0-beta.1"
-    graphql "^0.11.0"
-    symbol-observable "^1.0.2"
-  optionalDependencies:
-    "@types/async" "2.0.42"
-
 apollo-fetch@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/apollo-fetch/-/apollo-fetch-0.6.0.tgz#aae9b28c117af344b091ec8ba4d1a5aa0474dc5d"
   dependencies:
     isomorphic-fetch "^2.2.1"
 
-apollo-link-batch-http@^0.2.1-beta.4:
-  version "0.2.1-beta.5"
-  resolved "https://registry.yarnpkg.com/apollo-link-batch-http/-/apollo-link-batch-http-0.2.1-beta.5.tgz#45e7692532f1067526263658581effafc8aa7fef"
+apollo-link-batch-http@0.2.1-beta.4:
+  version "0.2.1-beta.4"
+  resolved "https://registry.yarnpkg.com/apollo-link-batch-http/-/apollo-link-batch-http-0.2.1-beta.4.tgz#5898394a998378e61282db6aae59b99f6de05825"
   dependencies:
     apollo-fetch "^0.6.0"
-    apollo-link-batch "^0.2.1-beta.5"
+    apollo-link-batch "^0.2.1-beta.4"
     graphql "^0.10.5"
 
-apollo-link-batch@^0.2.1-beta.5:
-  version "0.2.1-beta.5"
-  resolved "https://registry.yarnpkg.com/apollo-link-batch/-/apollo-link-batch-0.2.1-beta.5.tgz#6791a13a84b855061d9e401fb3b47f385d7aeb96"
+apollo-link-batch@^0.2.1-beta.4:
+  version "0.2.1-beta.4"
+  resolved "https://registry.yarnpkg.com/apollo-link-batch/-/apollo-link-batch-0.2.1-beta.4.tgz#e341337a06727dede5f27b55e89a616df52251f0"
 
-apollo-link-core@^0.5.0, apollo-link-core@^0.5.4:
+apollo-link-core@^0.5.0:
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/apollo-link-core/-/apollo-link-core-0.5.4.tgz#8efd4cd747959872a32f313f0ccfc2a76b396668"
   dependencies:
@@ -377,14 +377,13 @@ apollo-link-dedup@0.4.1-beta.4:
   dependencies:
     graphql "^0.10.5"
 
-apollo-link-ws@^0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/apollo-link-ws/-/apollo-link-ws-0.3.4.tgz#68860b8a9283df33d75a14c87e04a81d764244bd"
+apollo-link-ws@0.4.1-beta.4:
+  version "0.4.1-beta.4"
+  resolved "https://registry.yarnpkg.com/apollo-link-ws/-/apollo-link-ws-0.4.1-beta.4.tgz#edeaa8acb19060bf39483fec16d2d3c706b1189e"
   dependencies:
-    apollo-link-core "^0.5.4"
     subscriptions-transport-ws "^0.8.2"
 
-apollo-link@0.6.1-beta.4, apollo-link@^0.6.1-beta.4:
+apollo-link@0.6.1-beta.4:
   version "0.6.1-beta.4"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-0.6.1-beta.4.tgz#9a6c0ae4ce883a52e3091aeff28df9a2d51cff0f"
   dependencies:
@@ -3440,26 +3439,26 @@ envinfo@^3.0.0:
     which "^1.2.14"
 
 enzyme-adapter-react-16@^1.0.0-beta.6:
-  version "1.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.0.0-beta.7.tgz#66d03f871253dabeb678e8c1eba916f848edd4c8"
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.0.0.tgz#e7edd5536743818dcbef336d40d7da59b3a7db8e"
   dependencies:
-    enzyme-adapter-utils "^1.0.0-beta.7"
+    enzyme-adapter-utils "^1.0.0"
     lodash "^4.17.4"
     object.assign "^4.0.4"
     object.values "^1.0.4"
     prop-types "^15.5.10"
 
-enzyme-adapter-utils@^1.0.0-beta.7:
-  version "1.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/enzyme-adapter-utils/-/enzyme-adapter-utils-1.0.0-beta.7.tgz#a7848c16a03c1bcdb2710294fedc657c6f31188e"
+enzyme-adapter-utils@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/enzyme-adapter-utils/-/enzyme-adapter-utils-1.0.0.tgz#e94eee63da9a798d498adb1162a2102ed04fc638"
   dependencies:
     lodash "^4.17.4"
     object.assign "^4.0.4"
     prop-types "^15.5.10"
 
 enzyme@^3.0.0-beta.6:
-  version "3.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/enzyme/-/enzyme-3.0.0-beta.7.tgz#4931d3c790191d335013e25d49d08ae3ec9b31fd"
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/enzyme/-/enzyme-3.0.0.tgz#94ce364254dc654c4e619b25eecc644bf6481de7"
   dependencies:
     cheerio "^1.0.0-rc.2"
     function.prototype.name "^1.0.3"
@@ -3468,6 +3467,7 @@ enzyme@^3.0.0-beta.6:
     object-is "^1.0.1"
     object.assign "^4.0.4"
     object.entries "^1.0.4"
+    object.values "^1.0.4"
     raf "^3.3.2"
     rst-selector-parser "^2.2.1"
 
@@ -4707,7 +4707,7 @@ graphql-tools@^1.1.0, graphql-tools@^1.2.2:
   dependencies:
     iterall "^1.1.0"
 
-graphql@^0.11.0, graphql@^0.11.3:
+graphql@^0.11.0:
   version "0.11.3"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.3.tgz#9934e2df28f17d397a85f83cb39d1d179bffef47"
   dependencies:
@@ -11251,6 +11251,6 @@ yesno@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/yesno/-/yesno-0.0.1.tgz#ffbc04ff3d6f99dad24f7463134e9b92ae41bef6"
 
-zen-observable-ts@^0.4.3-beta.3, zen-observable-ts@^0.4.3-beta.4, zen-observable-ts@^0.4.4:
+zen-observable-ts@^0.4.3-beta.3, zen-observable-ts@^0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.4.4.tgz#c244c71eaebef79a985ccf9895bc90307a6e9712"

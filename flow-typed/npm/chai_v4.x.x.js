@@ -1,7 +1,7 @@
-// flow-typed signature: f4c38ee453c1a780b0ce642321a96131
-// flow-typed version: 147ab6243c/chai_v4.x.x/flow_>=v0.15.0
+// flow-typed signature: 361bd0345b0567d52419a64283294afc
+// flow-typed version: 6d442f5792/chai_v4.x.x/flow_>=v0.15.0
 
-declare module 'chai' {
+declare module "chai" {
   declare type ExpectChain<T> = {
     and: ExpectChain<T>,
     at: ExpectChain<T>,
@@ -41,6 +41,7 @@ declare module 'chai' {
     within: (start: T & number, finish: T & number) => ExpectChain<T>,
 
     instanceof: (constructor: mixed) => ExpectChain<T>,
+    nested: ExpectChain<T>,
     property: <P>(
       name: string,
       value?: P

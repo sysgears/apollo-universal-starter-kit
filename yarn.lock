@@ -8706,7 +8706,7 @@ react-transition-group@^1.1.2:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
-react@^16.0.0-alpha.12:
+react@^16.0.0-0:
   version "16.0.0-rc.3"
   resolved "https://registry.yarnpkg.com/react/-/react-16.0.0-rc.3.tgz#4a9df996326ba7185903d9fbed3149765e237e26"
   dependencies:

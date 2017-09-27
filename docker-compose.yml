@@ -1,0 +1,19 @@
+version: '3'
+services:
+  dev:
+    image: 'node:alpine'
+    tty: true
+    stdin_open: true
+    command: >
+      sh -c '
+      yarn &&
+      (test -f dev-db.sqlite3 || yarn seed) &&
+      yarn watch
+      '
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    working_dir: /usr/src/app
+    ports:
+      - '3000:3000'
+      - '8080:8080'

@@ -68,6 +68,8 @@ export const tryLogin = async (email, password, User, SECRET) => {
     e.setError('email', 'Please enter a valid e-mail.');
   }
 
+  e.throwIf();
+
   const valid = await bcrypt.compare(password, localAuth.password);
   if (!valid) {
     // bad password

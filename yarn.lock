@@ -289,32 +289,19 @@ anymatch@^1.3.0:
     micromatch "^2.1.5"
     normalize-path "^2.0.0"
 
-"apollo-cache-inmemory@https://github.com/vlasenko/apollo-client/raw/master/packages/apollo-cache-inmemory/apollo-cache-inmemory-0.2.0-beta.1.tar":
-  version "0.2.0-beta.1"
-  resolved "https://github.com/vlasenko/apollo-client/raw/master/packages/apollo-cache-inmemory/apollo-cache-inmemory-0.2.0-beta.1.tar#246b1733322b4dc05d7cfa1aff8ebd1bf9f23a20"
+apollo-cache-inmemory@^0.2.0-beta.2:
+  version "0.2.0-beta.2"
+  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-0.2.0-beta.2.tgz#f156a6aaa405c7bf728845a063fdf89db35d290e"
   dependencies:
-    apollo-cache "^0.2.0-beta.0"
-    apollo-utilities "^0.2.0-beta.0"
-    graphql-anywhere "^4.0.0-beta.0"
+    apollo-cache "^0.2.0-beta.2"
+    apollo-utilities "^0.2.0-beta.2"
+    graphql-anywhere "^4.0.0-beta.2"
 
-apollo-cache@^0.2.0-beta.0, apollo-cache@^0.2.0-beta.1:
-  version "0.2.0-beta.1"
-  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-0.2.0-beta.1.tgz#7ddde1f73a40a758403409d527ea513c4879c2e6"
+apollo-cache@^0.2.0-beta.2:
+  version "0.2.0-beta.2"
+  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-0.2.0-beta.2.tgz#d3e5668810d03a730db4e3e326a0a3050d2d813f"
   dependencies:
-    apollo-utilities "^0.2.0-beta.1"
-
-apollo-client@2.0.0-beta.1:
-  version "2.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.0.0-beta.1.tgz#d4038d43574c3797aa2a06c206a2b26eabb2f72c"
-  dependencies:
-    apollo-cache "^0.2.0-beta.1"
-    apollo-link "0.6.1-beta.4"
-    apollo-link-dedup "0.4.1-beta.4"
-    apollo-utilities "^0.2.0-beta.1"
-    graphql "^0.11.0"
-    symbol-observable "^1.0.2"
-  optionalDependencies:
-    "@types/async" "2.0.42"
+    apollo-utilities "^0.2.0-beta.2"
 
 apollo-client@^1.1, apollo-client@^1.4.0:
   version "1.9.3"
@@ -345,23 +332,36 @@ apollo-client@^1.1, apollo-client@^1.4.0:
     "@types/graphql" "^0.9.0"
     "@types/isomorphic-fetch" "0.0.34"
 
+apollo-client@^2.0.0-beta.2:
+  version "2.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.0.0-beta.2.tgz#86dc4181e7d5427ccae0428386bebd94949e0b56"
+  dependencies:
+    apollo-cache "^0.2.0-beta.2"
+    apollo-link "0.6.1-beta.5"
+    apollo-link-dedup "0.4.1-beta.5"
+    apollo-utilities "^0.2.0-beta.2"
+    graphql "^0.11.0"
+    symbol-observable "^1.0.2"
+  optionalDependencies:
+    "@types/async" "2.0.42"
+
 apollo-fetch@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/apollo-fetch/-/apollo-fetch-0.6.0.tgz#aae9b28c117af344b091ec8ba4d1a5aa0474dc5d"
   dependencies:
     isomorphic-fetch "^2.2.1"
 
-apollo-link-batch-http@0.2.1-beta.4:
-  version "0.2.1-beta.4"
-  resolved "https://registry.yarnpkg.com/apollo-link-batch-http/-/apollo-link-batch-http-0.2.1-beta.4.tgz#5898394a998378e61282db6aae59b99f6de05825"
+apollo-link-batch-http@^0.2.1-beta.5:
+  version "0.2.1-beta.5"
+  resolved "https://registry.yarnpkg.com/apollo-link-batch-http/-/apollo-link-batch-http-0.2.1-beta.5.tgz#45e7692532f1067526263658581effafc8aa7fef"
   dependencies:
     apollo-fetch "^0.6.0"
-    apollo-link-batch "^0.2.1-beta.4"
+    apollo-link-batch "^0.2.1-beta.5"
     graphql "^0.10.5"
 
-apollo-link-batch@^0.2.1-beta.4:
-  version "0.2.1-beta.4"
-  resolved "https://registry.yarnpkg.com/apollo-link-batch/-/apollo-link-batch-0.2.1-beta.4.tgz#e341337a06727dede5f27b55e89a616df52251f0"
+apollo-link-batch@^0.2.1-beta.5:
+  version "0.2.1-beta.5"
+  resolved "https://registry.yarnpkg.com/apollo-link-batch/-/apollo-link-batch-0.2.1-beta.5.tgz#6791a13a84b855061d9e401fb3b47f385d7aeb96"
 
 apollo-link-core@^0.5.0:
   version "0.5.4"
@@ -371,24 +371,25 @@ apollo-link-core@^0.5.0:
     graphql-tag "^2.4.2"
     zen-observable-ts "^0.4.4"
 
-apollo-link-dedup@0.4.1-beta.4:
-  version "0.4.1-beta.4"
-  resolved "https://registry.yarnpkg.com/apollo-link-dedup/-/apollo-link-dedup-0.4.1-beta.4.tgz#70f88a0975f20d5130b57bd01e4635e105992070"
+apollo-link-dedup@0.4.1-beta.5:
+  version "0.4.1-beta.5"
+  resolved "https://registry.yarnpkg.com/apollo-link-dedup/-/apollo-link-dedup-0.4.1-beta.5.tgz#ff21f33cfea4093822dff64d59deaf0a92dece52"
   dependencies:
     graphql "^0.10.5"
 
-apollo-link-ws@0.4.1-beta.4:
-  version "0.4.1-beta.4"
-  resolved "https://registry.yarnpkg.com/apollo-link-ws/-/apollo-link-ws-0.4.1-beta.4.tgz#edeaa8acb19060bf39483fec16d2d3c706b1189e"
+apollo-link-ws@^0.4.1-beta.5:
+  version "0.4.1-beta.5"
+  resolved "https://registry.yarnpkg.com/apollo-link-ws/-/apollo-link-ws-0.4.1-beta.5.tgz#30b23bab7a09b8e11710da7aa6cfa229725de7a4"
   dependencies:
     subscriptions-transport-ws "^0.8.2"
 
-apollo-link@0.6.1-beta.4:
-  version "0.6.1-beta.4"
-  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-0.6.1-beta.4.tgz#9a6c0ae4ce883a52e3091aeff28df9a2d51cff0f"
+apollo-link@0.6.1-beta.5, apollo-link@^0.6.1-beta.5:
+  version "0.6.1-beta.5"
+  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-0.6.1-beta.5.tgz#a95e6f98b055d189b1ab2a001531601c5e458c65"
   dependencies:
     apollo-utilities "^0.2.0-beta.0"
-    zen-observable-ts "^0.4.3-beta.3"
+    graphql "^0.11.3"
+    zen-observable-ts "^0.4.3-beta.4"
 
 apollo-logger@0.1.0:
   version "0.1.0"
@@ -419,9 +420,13 @@ apollo-tracing@^0.0.7:
   dependencies:
     graphql-tools "^1.1.0"
 
-apollo-utilities@^0.2.0-beta.0, apollo-utilities@^0.2.0-beta.1:
+apollo-utilities@^0.2.0-beta.0:
   version "0.2.0-beta.1"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-0.2.0-beta.1.tgz#242cd3d1580c31766f7e9437f5de72097e494ab9"
+
+apollo-utilities@^0.2.0-beta.2:
+  version "0.2.0-beta.2"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-0.2.0-beta.2.tgz#95b61e00fa0cb67f6af65921484bca33114d55e1"
 
 app-root-path@^2.0.0:
   version "2.0.1"
@@ -2759,7 +2764,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.5.2, create-react-class@^15.6.0:
+create-react-class@^15.5.2, create-react-class@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.2.tgz#cf1ed15f12aad7f14ef5f2dfe05e6c42f91ef02a"
   dependencies:
@@ -4138,7 +4143,7 @@ fbjs@0.8.12:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.9"
 
-fbjs@^0.8.14, fbjs@^0.8.16, fbjs@^0.8.4, fbjs@^0.8.5, fbjs@^0.8.9:
+fbjs@^0.8.16, fbjs@^0.8.4, fbjs@^0.8.5, fbjs@^0.8.9:
   version "0.8.16"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.16.tgz#5e67432f550dc41b572bf55847b8aca64e5337db"
   dependencies:
@@ -4662,11 +4667,11 @@ graphql-anywhere@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-3.1.0.tgz#3ea0d8e8646b5cee68035016a9a7557c15c21e96"
 
-graphql-anywhere@^4.0.0-beta.0:
-  version "4.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.0.0-beta.1.tgz#e7ec4a8056869232f92ecbdb626c6b0f1e524d41"
+graphql-anywhere@^4.0.0-beta.2:
+  version "4.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.0.0-beta.2.tgz#729edc9ea733015445a73f72535a5117b9049110"
   dependencies:
-    apollo-utilities "^0.2.0-beta.1"
+    apollo-utilities "^0.2.0-beta.2"
 
 graphql-iso-date@^3.3.0:
   version "3.3.0"
@@ -4712,6 +4717,12 @@ graphql@^0.11.0:
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.3.tgz#9934e2df28f17d397a85f83cb39d1d179bffef47"
   dependencies:
     iterall "^1.1.0"
+
+graphql@^0.11.3:
+  version "0.11.4"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.4.tgz#03e0f86f35a252a5cab79d921a1aaabc7eec621c"
+  dependencies:
+    iterall "1.1.2"
 
 growl@1.9.2:
   version "1.9.2"
@@ -5242,7 +5253,7 @@ ini@^1.3.4, ini@~1.3.0:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.4.tgz#0537cb79daf59b59a1a517dff706c86ec039162e"
 
-inline-style-prefixer@^3.0.7:
+inline-style-prefixer@^3.0.8:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/inline-style-prefixer/-/inline-style-prefixer-3.0.8.tgz#8551b8e5b4d573244e66a34b04f7d32076a2b534"
   dependencies:
@@ -5674,6 +5685,10 @@ isurl@^1.0.0-alpha5:
 items@2.x.x:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/items/-/items-2.1.1.tgz#8bd16d9c83b19529de5aea321acaada78364a198"
+
+iterall@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.2.tgz#413332b3cdb46f8f5ede57d6cd8e3ca8a9df8816"
 
 iterall@^1.1.0, iterall@^1.1.1:
   version "1.1.1"
@@ -8162,7 +8177,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.0.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.5.9:
+prop-types@^15.0.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
   dependencies:
@@ -8408,14 +8423,14 @@ react-devtools-core@^2.5.0:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
-react-dom@^16.0.0-rc.3:
-  version "16.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.0.0-rc.3.tgz#bd4e4d2abd464df5149a062b45fe796bbb804c2c"
+react-dom@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.0.0.tgz#9cc3079c3dcd70d4c6e01b84aab2a7e34c303f58"
   dependencies:
-    fbjs "^0.8.9"
+    fbjs "^0.8.16"
     loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.6"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
 
 react-ga@^2.2.0:
   version "2.3.3"
@@ -8500,21 +8515,21 @@ react-native-vector-icons@4.1.1:
     prop-types "^15.5.8"
     yargs "^6.3.0"
 
-react-native-web@^0.0.126:
-  version "0.0.126"
-  resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.0.126.tgz#d87c333a509a00447aa0e87e7121d9e62d29fe80"
+react-native-web@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.1.0.tgz#bbde8077a2ec2d8ab106e1756dcb28c1eee42e35"
   dependencies:
     animated "^0.2.0"
     array-find-index "^1.0.2"
     babel-runtime "^6.26.0"
-    create-react-class "^15.6.0"
+    create-react-class "^15.6.2"
     debounce "1.0.2"
     deep-assign "^2.0.0"
-    fbjs "^0.8.14"
+    fbjs "^0.8.16"
     hyphenate-style-name "^1.0.2"
-    inline-style-prefixer "^3.0.7"
+    inline-style-prefixer "^3.0.8"
     normalize-css-color "^1.0.2"
-    prop-types "^15.5.10"
+    prop-types "^15.6.0"
     react-timer-mixin "^0.13.3"
 
 "react-native@https://github.com/expo/react-native/archive/sdk-21.0.2.tar.gz":
@@ -8678,12 +8693,12 @@ react-side-effect@^1.1.0:
     exenv "^1.2.1"
     shallowequal "^1.0.1"
 
-react-test-renderer@^16.0.0-rc.3:
-  version "16.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.0.0-rc.3.tgz#1b9c8fa6743489602e27e5adae7d8c7468b01a45"
+react-test-renderer@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.0.0.tgz#9fe7b8308f2f71f29fc356d4102086f131c9cb15"
   dependencies:
-    fbjs "^0.8.9"
-    object-assign "^4.1.0"
+    fbjs "^0.8.16"
+    object-assign "^4.1.1"
 
 react-timer-mixin@^0.13.2, react-timer-mixin@^0.13.3:
   version "0.13.3"
@@ -8706,14 +8721,14 @@ react-transition-group@^1.1.2:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
-react@^16.0.0-0:
-  version "16.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.0.0-rc.3.tgz#4a9df996326ba7185903d9fbed3149765e237e26"
+react@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.0.0.tgz#ce7df8f1941b036f02b2cca9dbd0cb1f0e855e2d"
   dependencies:
-    fbjs "^0.8.9"
+    fbjs "^0.8.16"
     loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.6"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
 
 reactstrap-tether@1.3.4:
   version "1.3.4"
@@ -11251,6 +11266,6 @@ yesno@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/yesno/-/yesno-0.0.1.tgz#ffbc04ff3d6f99dad24f7463134e9b92ae41bef6"
 
-zen-observable-ts@^0.4.3-beta.3, zen-observable-ts@^0.4.4:
+zen-observable-ts@^0.4.3-beta.4, zen-observable-ts@^0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.4.4.tgz#c244c71eaebef79a985ccf9895bc90307a6e9712"

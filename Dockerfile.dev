@@ -1,7 +1,0 @@
-FROM node:alpine
-
-ARG APP_DIR
-
-RUN mkdir -p ${APP_DIR}/build && \
-    mkdir -p ${APP_DIR}/node_modules && \
-    chown node:node -R ${APP_DIR}

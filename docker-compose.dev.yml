@@ -6,7 +6,7 @@ services:
       args:
         APP_DIR: ${APP_DIR}
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
     container_name: apollo_universal_starter
     tty: true
     stdin_open: true
@@ -14,15 +14,14 @@ services:
       - ./:${APP_DIR}
       - ${APP_DIR}/build
       - ${APP_DIR}/node_modules
-      - /home/node/.cache/yarn
     working_dir: ${APP_DIR}
     user: node
     command: >
        sh -c '
-       NODE_ENV=development yarn &&
-       (test -f prod-db.sqlite3 || yarn seed) &&
-       yarn build &&
-       node build/server
+       yarn &&
+       (test -f dev-db.sqlite3 || yarn seed) &&
+       exec yarn watch
        '
     ports:
+      - 3000:3000
       - 8080:8080

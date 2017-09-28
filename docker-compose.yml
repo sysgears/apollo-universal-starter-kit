@@ -1,7 +1,13 @@
 version: '3'
 services:
-  dev:
-    image: 'node:alpine'
+  node:
+    user: node
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        APP_DIR: ${APP_DIR}
+    container_name: apollo_universal_starter
     tty: true
     stdin_open: true
     command: >
@@ -11,9 +17,10 @@ services:
       yarn watch
       '
     volumes:
-      - ./:/usr/src/app
-      - /usr/src/app/node_modules
-    working_dir: /usr/src/app
+      - ./:${APP_DIR}
+      - ${APP_DIR}/build
+      - ${APP_DIR}/node_modules
+    working_dir: ${APP_DIR}
     ports:
-      - '3000:3000'
-      - '8080:8080'
+      - 3000:3000
+      - 8080:8080

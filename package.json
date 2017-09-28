@@ -180,7 +180,7 @@
     "sass-loader": "^6.0.6",
     "shelljs": "^0.7.8",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.3.10",
+    "spinjs": "^0.3.11",
     "style-loader": "^0.18.2",
     "tcomb": "^3.2.23",
     "url-loader": "^0.5.9",

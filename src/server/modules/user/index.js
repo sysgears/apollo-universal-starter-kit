@@ -68,5 +68,22 @@ export default new Feature({
       req
     };
   },
-  middleware: tokenMiddleware(SECRET, User)
+  middlewareUse: tokenMiddleware(SECRET, User),
+  middlewareGet: [
+    {
+      path: '/confirmation/:token',
+      callback: async (req, res) => {
+        res.send('confirmation');
+
+        /*try {
+          const { user: { id } } = jwt.verify(req.params.token, SECRET);
+          await User.update({ confirmed: true }, { where: { id } });
+        } catch (e) {
+          res.send('error');
+        }
+
+        return res.redirect('http://localhost:3000/login');*/
+      }
+    }
+  ]
 });

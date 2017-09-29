@@ -12,21 +12,24 @@ type FeatureParams = {
   schema: DocumentNode | DocumentNode[],
   createResolversFunc?: Function | Function[],
   createContextFunc?: Function | Function[],
-  middleware?: Middleware | Middleware[]
+  middlewareUse?: Middleware | Middleware[],
+  middlewareGet?: Middleware | Middleware[]
 };
 
 class Feature {
   schema: DocumentNode[];
   createResolversFunc: Function[];
   createContextFunc: Function[];
-  middleware: Middleware[];
+  middlewareUse: Middleware[];
+  middlewareGet: Middleware[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
-    this.middleware = combine(arguments, arg => arg.middleware);
+    this.middlewareUse = combine(arguments, arg => arg.middlewareUse);
+    this.middlewareGet = combine(arguments, arg => arg.middlewareGet);
   }
 
   get schemas(): DocumentNode[] {
@@ -44,8 +47,12 @@ class Feature {
     return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
   }
 
-  get middlewares(): Middleware[] {
-    return this.middleware;
+  get middlewaresUse(): Middleware[] {
+    return this.middlewareUse;
+  }
+
+  get middlewaresGet(): Middleware[] {
+    return this.middlewareGet;
   }
 }
 

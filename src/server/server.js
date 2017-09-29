@@ -74,9 +74,17 @@ if (__PERSIST_GQL__) {
   });
 }
 
-for (const middleware of modules.middlewares) {
-  app.use(middleware);
+for (const middlewareUse of modules.middlewaresUse) {
+  app.use(middlewareUse);
 }
+for (const middlewareGet of modules.middlewaresGet) {
+  if (middlewareGet.callback2) {
+    app.get(middlewareGet.path, middlewareGet.callback, middlewareGet.callback2);
+  } else {
+    app.get(middlewareGet.path, middlewareGet.callback);
+  }
+}
+
 app.use(pathname, (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));

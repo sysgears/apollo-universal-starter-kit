@@ -11,7 +11,7 @@ If you are using Apollo v1 please use [starter kit from `apollo1` branch](https:
 [![Twitter Follow](https://img.shields.io/twitter/follow/sysgears.svg?style=social)](https://twitter.com/sysgears)
 
 > Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] Mobile and Web app development 
-> built on top of [Apollo], [GraphQL], [React], [React Native], [Expo], [Redux], [Express] with SQL storage support
+> built on top of [Apollo], [GraphQL], [React 16], [React Native], [Expo], [Redux], [Express] with SQL storage support
 > and [Twitter Bootstrap] integration. Hot Code Reload of back end & front end using [Webpack] and 
 > Hot Module Replacement to reflect your changes instantly and help you stay productive.
 
@@ -395,7 +395,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Universal]: https://medium.com/@mjackson/universal-javascript-4761051b7ae9
 [Apollo]: http://www.apollostack.com
 [GraphQL]: http://graphql.org
-[React]: https://facebook.github.io/react
+[React 16]: https://facebook.github.io/react
 [React Hot Loader v3]: https://github.com/gaearon/react-hot-loader
 [Redux]: http://redux.js.org
 [ReduxForm]: http://redux-form.com

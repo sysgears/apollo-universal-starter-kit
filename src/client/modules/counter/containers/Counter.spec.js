@@ -31,10 +31,17 @@ describe('Counter example UI works', () => {
   let app;
   let content;
 
+  beforeEach(() => {
+    if (app) {
+      app.update();
+      content = app.find('#content').at(0);
+    }
+  });
+
   step('Counter page renders without data', () => {
     app = renderer.mount();
     renderer.history.push('/');
-    content = app.find('#content');
+    content = app.find('#content').at(0);
     content.text().should.equal('Loading...');
   });
 
@@ -44,7 +51,7 @@ describe('Counter example UI works', () => {
   });
 
   step('Clicking on increase counter button shows optimistic response', () => {
-    const graphQLButton = content.find('#graphql-button');
+    const graphQLButton = app.find('#graphql-button').at(0);
     graphQLButton.simulate('click');
     content.text().should.has.string(`Current counter, is ${COUNTER_APOLLO_VALUE + 1}.`);
   });
@@ -54,7 +61,7 @@ describe('Counter example UI works', () => {
   });
 
   step('Increase Redux counter button works', () => {
-    const reduxButton = content.find('#redux-button');
+    const reduxButton = content.find('#redux-button').at(0);
     reduxButton.simulate('click');
     content.text().should.has.string(`reduxCount, is ${COUNTER_REDUX_VALUE + 1}.`);
   });

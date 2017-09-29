@@ -24,9 +24,14 @@ global.navigator = dom.window.navigator;
 
 // React imports MUST come after `global.document =` in order for enzyme `unmount` to work
 const React = require('react');
+const ReactEnzymeAdapter = require('enzyme-adapter-react-16');
 const { ApolloProvider } = require('react-apollo');
-const { mount } = require('enzyme');
+const Enzyme = require('enzyme');
 const clientModules = require('../modules').default;
+
+const mount = Enzyme.mount;
+
+Enzyme.configure({ adapter: new ReactEnzymeAdapter() });
 
 process.on('uncaughtException', ex => {
   console.error('Uncaught error', ex.stack);

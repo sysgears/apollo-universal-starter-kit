@@ -22,7 +22,7 @@ export async function seed(knex, Promise) {
 
   const [adminId] = await knex('user')
     .returning('id')
-    .insert({ username: 'admin', is_admin: true });
+    .insert({ username: 'admin', confirmed: true, is_admin: true });
   await knex('local_auth')
     .returning('id')
     .insert({
@@ -39,7 +39,7 @@ export async function seed(knex, Promise) {
 
   const [userId] = await knex('user')
     .returning('id')
-    .insert({ username: 'user', is_admin: false });
+    .insert({ username: 'user', confirmed: true, is_admin: false });
   await knex('local_auth')
     .returning('id')
     .insert({

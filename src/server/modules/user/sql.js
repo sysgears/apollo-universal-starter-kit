@@ -27,7 +27,7 @@ export default class User {
   async getUserWithPassword(id) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'la.password')
+        .select('u.id', 'u.username', 'u.is_admin', 'u.confirmed', 'la.password')
         .from('user AS u')
         .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
         .where('u.id', '=', id)
@@ -46,9 +46,9 @@ export default class User {
     );
   }
 
-  register({ username }) {
+  register({ username, confirmed }) {
     return knex('user')
-      .insert({ username })
+      .insert({ username, confirmed })
       .returning('id');
   }
 

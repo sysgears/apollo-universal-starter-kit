@@ -1,4 +1,9 @@
 {
   "secret": "secret, change for production",
-  "certAuth": false
+  "confirm": false,
+  "sendConfirmationEmail": false,
+  "auth": {
+    "password": true,
+    "certificate": false
+  }
 }

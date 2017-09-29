@@ -41,14 +41,14 @@ export default new Feature({
     } else if (req) {
       if (req.user) {
         tokenUser = req.user;
-      } else if (settings.user.certAuth) {
+      } else if (settings.user.auth.certificate) {
         const user = await User.getUserWithSerial(serial);
         if (user) {
           tokenUser = user;
         }
       }
     } else if (webSocket) {
-      if (settings.user.certAuth) {
+      if (settings.user.auth.certificate) {
         // in case you need to access req headers
         if (webSocket.upgradeReq.headers['x-serial']) {
           serial = webSocket.upgradeReq.headers['x-serial'];

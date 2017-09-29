@@ -63,7 +63,7 @@ export default (SECRET, User) => async (req, res, next) => {
       }
       req.user = newTokens.user;
     }
-  } else if (settings.user.certAuth) {
+  } else if (settings.user.auth.certificate) {
     // cert auth
     let serial = '';
     if (__DEV__) {

@@ -9,15 +9,17 @@ import PageLayout from '../../../app/PageLayout';
 function renderPosts(posts, deletePost) {
   return posts.edges.map(({ node: { id, title } }) => {
     return (
-      <ListGroupItem className="justify-content-between" key={id}>
-        <span>
+      <ListGroupItem className="d-flex justify-content-between" key={id}>
+        <div>
           <Link className="post-link" to={`/post/${id}`}>
             {title}
           </Link>
-        </span>
-        <span className="badge badge-secondary badge-pill delete-button" onClick={deletePost(id)}>
-          Delete
-        </span>
+        </div>
+        <div>
+          <span className="badge badge-secondary delete-button" onClick={deletePost(id)}>
+            Delete
+          </span>
+        </div>
       </ListGroupItem>
     );
   });

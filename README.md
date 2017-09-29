@@ -51,7 +51,8 @@ us using [Skype](http://hatscripts.com/addskype?sysgears) or via email: [info@sy
   yarn watch
   ```
 
-6. Point your browser to [http://localhost:3000](http://localhost:3000)
+6. You browser will open the web application automatically. If not please search 
+the URL in terminal `Webpack web dev server listening on ..url..` and open this URL in web browser.
 7. Change any app code and see the changes applied immediately!
 8. Open app in multiple tabs, try to increase counter or add a new post/comment in one tab and then switch to another tab. You will see that
 counter value and post/comment are updated there as well, because the application is live updated via subscriptions.
@@ -113,6 +114,25 @@ for both web and mobile.
 #### Known issues
 Currently we do not yet support persisted queries. This can be used in this starter kit currently only for web, but it is
 planed in the future.
+
+### Using with Docker
+Get latest Docker and Docker Compose:  
+https://www.docker.com/  
+https://docs.docker.com/compose/
+
+#### Starting Docker container for Development
+To run starter kit in development mode with hot code reload execute:
+  ```
+  docker-compose -f docker-compose.dev.yml up
+  ```
+, then search web app URL in terminal `Webpack web dev server listening on ..url..` and open this URL in web browser.  
+
+#### Starting Docker container for Production
+To run starter kit in production mode execute:
+  ```
+  docker-compose up
+  ```
+, then open URL `http://localhost:3000` in web browser.
 
 ### Configuring starter kit
 This starter kit supplies boilerplate code for multiple platforms:

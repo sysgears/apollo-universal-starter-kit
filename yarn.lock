@@ -7120,6 +7120,10 @@ node-uuid@1.4.7:
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/node-uuid/-/node-uuid-1.4.7.tgz#6da5a17668c4b3dd59623bda11cf7fa4c1f60a6f"
 
+nodemailer@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-4.1.1.tgz#e84a65b423e5ca2b65b81ff39bb9aee71c3dc718"
+
 "nopt@2 || 3", nopt@^3.0.1:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/nopt/-/nopt-3.0.6.tgz#c6465dbf08abcd4db359317f79ac68a646b28ff9"

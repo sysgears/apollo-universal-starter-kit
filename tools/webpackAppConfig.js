@@ -55,6 +55,7 @@ const dependencyPlatforms = {
   jsonwebtoken: 'server',
   'jwt-decode': 'web',
   knex: 'server',
+  nodemailer: 'server',
   persistgraphql: ['server', 'web'],
   'performance-now': 'server',
   'react-cookie': ['server', 'web'],

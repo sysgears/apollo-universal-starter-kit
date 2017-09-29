@@ -10,7 +10,7 @@ const combine = (features, extractor): any =>
 
 type FeatureParams = {
   schema: DocumentNode | DocumentNode[],
-  createResolversFunc: Function | Function[],
+  createResolversFunc?: Function | Function[],
   createContextFunc?: Function | Function[],
   middleware?: Middleware | Middleware[]
 };

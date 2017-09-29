@@ -303,7 +303,7 @@ apollo-cache@^0.2.0-beta.2:
   dependencies:
     apollo-utilities "^0.2.0-beta.2"
 
-apollo-client@^1.1, apollo-client@^1.4.0:
+apollo-client@^1.1:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-1.9.3.tgz#37000b3c801f4571b7b089739e696a158896aeab"
   dependencies:
@@ -386,6 +386,14 @@ apollo-link-ws@^0.4.1-beta.5:
 apollo-link@0.6.1-beta.5, apollo-link@^0.6.1-beta.5:
   version "0.6.1-beta.5"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-0.6.1-beta.5.tgz#a95e6f98b055d189b1ab2a001531601c5e458c65"
+  dependencies:
+    apollo-utilities "^0.2.0-beta.0"
+    graphql "^0.11.3"
+    zen-observable-ts "^0.4.3-beta.4"
+
+apollo-link@^0.6.1-beta.6:
+  version "0.6.1-beta.6"
+  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-0.6.1-beta.6.tgz#29c8e52c71ffea09f776413655d185e3b59f0f2e"
   dependencies:
     apollo-utilities "^0.2.0-beta.0"
     graphql "^0.11.3"
@@ -6325,6 +6333,10 @@ lodash.flattendeep@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz#fb030917f86a3134e5bc9bec0d69e0013ddfedb2"
 
+lodash.flowright@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.flowright/-/lodash.flowright-3.5.0.tgz#2b5fff399716d7e7dc5724fe9349f67065184d67"
+
 lodash.get@^3.7.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-3.7.0.tgz#3ce68ae2c91683b281cc5394128303cbf75e691f"
@@ -8384,16 +8396,15 @@ react-addons-test-utils@^16.0.0-alpha.3:
     fbjs "^0.8.9"
     object-assign "^4.1.0"
 
-react-apollo@^1.4.15:
-  version "1.4.15"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-1.4.15.tgz#3a213d11b847da7db03c4619ac640df734f9c4b5"
+react-apollo@^2.0.0-beta.0:
+  version "2.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.0.0-beta.0.tgz#fbf897b163b6e201ba9e812f112dc4fccff95975"
   dependencies:
-    apollo-client "^1.4.0"
-    graphql-tag "^2.0.0"
+    apollo-link "^0.6.1-beta.6"
     hoist-non-react-statics "^2.2.0"
     invariant "^2.2.1"
+    lodash.flowright "^3.5.0"
     lodash.pick "^4.4.0"
-    object-assign "^4.0.1"
     prop-types "^15.5.8"
 
 react-clone-referenced-element@^1.0.1:
@@ -11041,9 +11052,9 @@ xdl@44.0.0:
     xmldom "^0.1.27"
     yesno "^0.0.1"
 
-xdl@^44.0.2:
-  version "44.0.2"
-  resolved "https://registry.yarnpkg.com/xdl/-/xdl-44.0.2.tgz#cfbcb2d27df2337fd4103e6428bf6064a2cfa65b"
+xdl@^45.0.0:
+  version "45.0.0"
+  resolved "https://registry.yarnpkg.com/xdl/-/xdl-45.0.0.tgz#427b7f5e22151ed3124aba7b8e01989601fa43ee"
   dependencies:
     "@expo/bunyan" "^1.8.10"
     "@expo/json-file" "^5.3.0"
@@ -11068,7 +11079,6 @@ xdl@^44.0.2:
     home-dir "^1.0.0"
     indent-string "^3.1.0"
     instapromise "2.0.7-rc.1"
-    ip "^1.1.3"
     joi "^10.0.2"
     jsonfile "^2.3.1"
     jsonschema "^1.1.0"

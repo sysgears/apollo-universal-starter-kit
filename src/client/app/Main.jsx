@@ -7,6 +7,7 @@ import WebSocketLink from 'apollo-link-ws';
 import InMemoryCache from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
 import { ApolloProvider } from 'react-apollo';
+import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 // import { addPersistedQueries } from 'persistgraphql';
@@ -120,9 +121,11 @@ if (module.hot) {
 
 const Main = () => (
   <CookiesProvider>
-    <ApolloProvider store={store} client={client}>
-      <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
+      </ApolloProvider>
+    </Provider>
   </CookiesProvider>
 );
 

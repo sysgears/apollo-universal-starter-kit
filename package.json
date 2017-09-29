@@ -83,7 +83,7 @@
     "persistgraphql": "^0.4.0",
     "prop-types": "^15.5.10",
     "react": "^16.0.0",
-    "react-apollo": "^1.4.15",
+    "react-apollo": "^2.0.0-beta.0",
     "react-cookie": "^2.1.1",
     "react-dom": "^16.0.0",
     "react-ga": "^2.2.0",
@@ -196,9 +196,12 @@
     "webpack-sources": "^1.0.1",
     "webpack-virtual-modules": "^0.1.8",
     "ws": "^3.1.0",
-    "xdl": "^44.0.2"
+    "xdl": "^45.0.0"
   },
   "greenkeeper": {
-    "ignore": []
+    "ignore": [
+      "flow-bin",
+      "graphql"
+    ]
   }
 }

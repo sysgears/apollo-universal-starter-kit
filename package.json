@@ -63,7 +63,8 @@
     "bootstrap": "4.0.0-beta",
     "cors": "^2.8.4",
     "dataloader": "^1.3.0",
-    "expo": "^21.0.1",
+    "expo": "^21.0.2",
+    "expo-three": "^2.0.2",
     "express": "^4.15.4",
     "graphql": "^0.10.5",
     "graphql-iso-date": "^3.3.0",
@@ -106,6 +107,7 @@
     "sqlite3": "^3.1.11",
     "styled-components": "^2.1.2",
     "subscriptions-transport-ws": "^0.9.0",
+    "three": "^0.87.1",
     "universal-cookie-express": "^2.1.0"
   },
   "devDependencies": {
@@ -181,7 +183,7 @@
     "sass-loader": "^6.0.6",
     "shelljs": "^0.7.8",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.3.8",
+    "spinjs": "^0.3.12",
     "style-loader": "^0.18.2",
     "tcomb": "^3.2.23",
     "url-loader": "^0.5.9",

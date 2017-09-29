@@ -2646,6 +2646,10 @@ constants-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/constants-browserify/-/constants-browserify-1.0.0.tgz#c20b96d8c617748aaf1c16021760cd27fcb8cb75"
 
+containerized@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/containerized/-/containerized-1.0.2.tgz#dfed3149eab5042ef0b06e851c7d8f4dc6750d88"
+
 contains-path@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/contains-path/-/contains-path-0.1.0.tgz#fe8cf184ff6670b6baef01a9d4861a5cbec4120a"
@@ -3962,7 +3966,11 @@ expand-tilde@^1.2.2:
   dependencies:
     os-homedir "^1.0.1"
 
-expo@^21.0.1:
+expo-three@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/expo-three/-/expo-three-2.0.2.tgz#b081a07948309f9d43677d277cf509548eba655e"
+
+expo@^21.0.2:
   version "21.0.2"
   resolved "https://registry.yarnpkg.com/expo/-/expo-21.0.2.tgz#8420b9f4b95503c464575a31fd9c820363caef9d"
   dependencies:
@@ -9733,10 +9741,11 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.3.8:
-  version "0.3.8"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.3.8.tgz#b26baa2c71002ffebc7a581ff7196be1c2606591"
+spinjs@^0.3.12:
+  version "0.3.12"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.3.12.tgz#de3cc462f8e776d4badf00f7aebaffe6cb2d2d17"
   dependencies:
+    containerized "^1.0.2"
     ip "^1.1.5"
     lodash "^4.17.4"
     minilog "^3.1.0"
@@ -10164,6 +10173,10 @@ thenify-all@^1.0.0:
   resolved "https://registry.yarnpkg.com/thenify/-/thenify-3.3.0.tgz#e69e38a1babe969b0108207978b9f62b88604839"
   dependencies:
     any-promise "^1.0.0"
+
+three@^0.87.1:
+  version "0.87.1"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.87.1.tgz#466a34edc4543459ced9b9d7d276b65216fe2ba8"
 
 throat@^4.1.0:
   version "4.1.0"

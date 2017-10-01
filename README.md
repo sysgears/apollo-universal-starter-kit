@@ -15,12 +15,6 @@ If you are using Apollo v1 please use [starter kit from `apollo1` branch](https:
 > SQL storage support and [Twitter Bootstrap] integration. Hot Code Reload of back end & front end using [Webpack] and 
 > Hot Module Replacement to reflect your changes instantly and help you stay productive.
 
-## Commercial support
-
-SysGears team provides advanced support for commercial partners. A commercial partner will have a premium access to our
-team whether this is to help you with your code based on this starter kit or related technologies used in the kit. Contact
-us using [Skype](http://hatscripts.com/addskype?sysgears) or via email: [info@sysgears.com](mailto:info@sysgears.com)
-
 ## Hot Code Reload demo
 ![screencast](https://user-images.githubusercontent.com/1259926/27387579-c6799ada-56a1-11e7-93fc-d08e9970640d.gif)
 
@@ -86,6 +80,19 @@ You need to install [Xcode]. Then install Command Line Tools by running `xcode-s
 Next, open up Xcode, go to preferences and click the Components tab, install a simulator from the list.
 After the installation if you run the server, simulator should start on it's own and open the app in Expo.
 To bring up the developer menu press ⌘+D.
+
+## Support
+
+### Community support
+
+- [Gitter channel] - questions, answers, general discussions
+- [GitHub issues] - submit issues, send feature requests
+
+### Commercial support
+
+SysGears team provides advanced support for commercial partners. A commercial partner will have a premium access to our
+team whether this is to help you with your code based on this starter kit or related technologies used in the kit. Contact
+us using [Skype](http://hatscripts.com/addskype?sysgears) or via email: [info@sysgears.com](mailto:info@sysgears.com)
 
 #### Writing the code
 This starter kit is designed so you can use it for just web, mobile or projects using both together. 
@@ -424,3 +431,5 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [Xcode]: https://developer.apple.com/xcode/
 [Android Studio]: https://developer.android.com/studio/index.html
 [JWT]: https://jwt.io
+[Gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
+[GitHub issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues

@@ -81,7 +81,7 @@ export default new Feature({
         try {
           const { user: { id } } = jwt.verify(req.params.token, SECRET);
 
-          await User.updateConfirmed(id, true);
+          await User.updateActive(id, true);
         } catch (e) {
           res.send('error');
         }

@@ -44,12 +44,12 @@ export default pubsub => ({
 
         const passwordPromise = bcrypt.hash(localAuth.password, 12);
 
-        let confirmed = false;
+        let isActive = false;
         if (!settings.user.confirm) {
-          confirmed = true;
+          isActive = true;
         }
 
-        const createUserPromise = context.User.register({ ...input, confirmed });
+        const createUserPromise = context.User.register({ ...input, isActive });
         const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
 
         localAuth.password = password;

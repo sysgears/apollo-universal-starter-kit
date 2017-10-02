@@ -78,7 +78,7 @@ export const tryLogin = async (email, password, User, SECRET) => {
 
   const user = await User.getUserWithPassword(localAuth.userId);
 
-  if (settings.user.confirm && !user.confirmed) {
+  if (settings.user.confirm && !user.isActive) {
     e.setError('email', 'Please confirm your e-mail first.');
     e.throwIf();
   }

@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
       table.increments();
       table.string('username').unique();
       table.boolean('is_admin').defaultTo(false);
-      table.boolean('confirmed').defaultTo(false);
+      table.boolean('is_active').defaultTo(false);
       table.timestamps(false, true);
     }),
     knex.schema.createTable('local_auth', table => {

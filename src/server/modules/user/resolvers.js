@@ -61,10 +61,6 @@ export default pubsub => ({
           // async email
           jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
             const url = `${protocol}//${hostname}:3000/confirmation/${emailToken}`;
-
-            console.log(url);
-            console.log(localAuth.email);
-
             context.mailer.sendMail({
               to: localAuth.email,
               subject: 'Confirm Email',

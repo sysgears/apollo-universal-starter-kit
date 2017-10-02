@@ -1,14 +1,15 @@
 import jwt from 'jsonwebtoken';
+import url from 'url';
 
-// Components
 import UserDAO from './sql';
-
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import { refreshTokens } from './auth';
 import tokenMiddleware from './token';
 import Feature from '../connector';
 import settings from '../../../../settings';
+
+const { protocol, hostname } = url.parse(__BACKEND_URL__);
 
 const SECRET = settings.user.secret;
 
@@ -73,16 +74,15 @@ export default new Feature({
     {
       path: '/confirmation/:token',
       callback: async (req, res) => {
-        res.send('confirmation');
-
-        /*try {
+        try {
           const { user: { id } } = jwt.verify(req.params.token, SECRET);
-          await User.update({ confirmed: true }, { where: { id } });
+
+          await User.updateConfirmed(id, true);
         } catch (e) {
           res.send('error');
         }
 
-        return res.redirect('http://localhost:3000/login');*/
+        return res.redirect(`${protocol}//${hostname}:3000/login`);
       }
     }
   ]

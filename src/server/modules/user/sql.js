@@ -64,6 +64,12 @@ export default class User {
       .where({ user_id: id });
   }
 
+  updateConfirmed(id, confirmed) {
+    return knex('user')
+      .update({ confirmed })
+      .where({ id });
+  }
+
   async getLocalOuth(id) {
     return camelizeKeys(
       await knex

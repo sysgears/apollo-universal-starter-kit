@@ -8,7 +8,11 @@ import { requiresAuth, requiresAdmin } from './permissions';
 import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
 
-const { protocol, hostname } = url.parse(__BACKEND_URL__);
+const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
+let serverPort = process.env.PORT || port;
+if (__DEV__) {
+  serverPort = '3000';
+}
 
 export default pubsub => ({
   Query: {
@@ -60,7 +64,7 @@ export default pubsub => ({
         if (context.mailer && settings.user.sendConfirmationEmail) {
           // async email
           jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
-            const url = `${protocol}//${hostname}:3000/confirmation/${emailToken}`;
+            const url = `${protocol}//${hostname}:${serverPort}/confirmation/${emailToken}`;
             context.mailer.sendMail({
               to: localAuth.email,
               subject: 'Confirm Email',

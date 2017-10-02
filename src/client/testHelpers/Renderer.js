@@ -12,6 +12,7 @@ import { reducer as formReducer } from 'redux-form';
 import { graphql, print, getOperationAST } from 'graphql';
 
 import { CookiesProvider } from 'react-cookie';
+import { Provider } from 'react-redux';
 
 import rootSchema from '../../server/api/rootSchema.graphqls';
 import serverModules from '../../server/modules';
@@ -24,9 +25,14 @@ global.navigator = dom.window.navigator;
 
 // React imports MUST come after `global.document =` in order for enzyme `unmount` to work
 const React = require('react');
+const ReactEnzymeAdapter = require('enzyme-adapter-react-16');
 const { ApolloProvider } = require('react-apollo');
-const { mount } = require('enzyme');
+const Enzyme = require('enzyme');
 const clientModules = require('../modules').default;
+
+const mount = Enzyme.mount;
+
+Enzyme.configure({ adapter: new ReactEnzymeAdapter() });
 
 process.on('uncaughtException', ex => {
   console.error('Uncaught error', ex.stack);
@@ -171,9 +177,9 @@ export default class Renderer {
 
     return (
       <CookiesProvider>
-        <ApolloProvider store={store} client={client}>
-          {component}
-        </ApolloProvider>
+        <Provider store={store}>
+          <ApolloProvider client={client}>{component}</ApolloProvider>
+        </Provider>
       </CookiesProvider>
     );
   }

@@ -37,9 +37,7 @@ const RegisterForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
       <Field name="password" component={renderField} type="password" label="Password" validate={required} />
       {errors && (
         <FormGroup color="danger">
-          <FormFeedback>
-            <lu>{errors.map(error => <li key={error.field}>{error.message}</li>)}</lu>
-          </FormFeedback>
+          <FormFeedback>{errors.map(error => <li key={error.field}>{error.message}</li>)}</FormFeedback>
         </FormGroup>
       )}
       <Button color="primary" type="submit" disabled={submitting}>

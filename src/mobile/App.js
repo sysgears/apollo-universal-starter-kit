@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { getOperationAST } from 'graphql';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
 import { reducer as formReducer } from 'redux-form';
 import { createApolloFetch } from 'apollo-fetch';
 import BatchHttpLink from 'apollo-link-batch-http';
@@ -50,9 +51,11 @@ const store = createStore(
 export default class Main extends Component {
   render() {
     return (
-      <ApolloProvider store={store} client={client}>
-        <MainScreenNavigator />
-      </ApolloProvider>
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <MainScreenNavigator />
+        </ApolloProvider>
+      </Provider>
     );
   }
 }

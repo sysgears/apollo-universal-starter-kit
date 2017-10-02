@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { render as reactRender, hydrate } from 'react-dom';
 // Virtual module, see webpack-virtual-modules usage in webpack.run.js
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import 'backend_reload';
@@ -8,6 +8,8 @@ import Main from './app/Main';
 import log from '../common/log';
 
 const root = document.getElementById('content');
+
+const render = __SSR__ ? hydrate : reactRender;
 
 if (__DEV__) {
   let frontendReloadCount = 0;

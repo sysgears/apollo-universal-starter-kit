@@ -5,6 +5,7 @@ import { ApolloLink } from 'apollo-link';
 import BatchHttpLink from 'apollo-link-batch-http';
 import InMemoryCache from 'apollo-cache-inmemory';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
+import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
 import { LoggingLink } from 'apollo-logger';
@@ -60,11 +61,13 @@ async function renderServerSide(req, res) {
   const context = {};
   const component = (
     <CookiesProvider cookies={req.universalCookies}>
-      <ApolloProvider store={store} client={client}>
-        <StaticRouter location={req.url} context={context}>
-          {Routes}
-        </StaticRouter>
-      </ApolloProvider>
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <StaticRouter location={req.url} context={context}>
+            {Routes}
+          </StaticRouter>
+        </ApolloProvider>
+      </Provider>
     </CookiesProvider>
   );
 

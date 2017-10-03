@@ -55,7 +55,7 @@
     "apollo-fetch": "^0.6.0",
     "apollo-link": "^0.6.1-beta.5",
     "apollo-link-batch-http": "^0.2.1-beta.5",
-    "apollo-link-ws": "^0.4.1-beta.5",
+    "apollo-link-ws": "^0.5.0",
     "apollo-logger": "0.1.0",
     "apollo-server-express": "^1.1.2",
     "bcryptjs": "^2.4.3",

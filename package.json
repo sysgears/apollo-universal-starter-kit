@@ -103,7 +103,7 @@
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^7.0.4",
     "serialize-javascript": "^1.4.0",
-    "source-map-support": "^0.4.18",
+    "source-map-support": "^0.5.0",
     "sqlite3": "^3.1.11",
     "styled-components": "^2.1.2",
     "subscriptions-transport-ws": "^0.9.0",

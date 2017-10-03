@@ -54,7 +54,7 @@
     "apollo-client": "^2.0.0-beta.2",
     "apollo-fetch": "^0.6.0",
     "apollo-link": "^0.6.1-beta.5",
-    "apollo-link-batch-http": "^0.2.1-beta.5",
+    "apollo-link-batch-http": "^0.3.0",
     "apollo-link-ws": "^0.4.1-beta.5",
     "apollo-logger": "0.1.0",
     "apollo-server-express": "^1.1.2",

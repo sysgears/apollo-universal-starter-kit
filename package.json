@@ -182,7 +182,7 @@
     "shelljs": "^0.7.8",
     "source-list-map": "^2.0.0",
     "spinjs": "^0.3.12",
-    "style-loader": "^0.18.2",
+    "style-loader": "^0.19.0",
     "tcomb": "^3.2.23",
     "url-loader": "^0.5.9",
     "wait-on": "^2.0.2",

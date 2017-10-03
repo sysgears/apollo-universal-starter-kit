@@ -1,9 +1,8 @@
-import jwt from 'jsonwebtoken';
 import settings from '../../../../settings';
 
 import { refreshTokens, tryLoginSerial } from './auth';
 
-export default (SECRET, User) => async (req, res, next) => {
+export default (SECRET, User, jwt) => async (req, res, next) => {
   let token = req.universalCookies.get('x-token') || req.headers['x-token'];
 
   // if header available

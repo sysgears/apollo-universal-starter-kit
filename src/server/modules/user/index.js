@@ -1,19 +1,13 @@
 import jwt from 'jsonwebtoken';
-import url from 'url';
 
 import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import { refreshTokens } from './auth';
 import tokenMiddleware from './token';
+import confirmMiddleware from './confirm';
 import Feature from '../connector';
 import settings from '../../../../settings';
-
-const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
-let serverPort = process.env.PORT || port;
-if (__DEV__) {
-  serverPort = '3000';
-}
 
 const SECRET = settings.user.secret;
 
@@ -73,21 +67,6 @@ export default new Feature({
       req
     };
   },
-  middlewareUse: tokenMiddleware(SECRET, User),
-  middlewareGet: [
-    {
-      path: '/confirmation/:token',
-      callback: async (req, res) => {
-        try {
-          const { user: { id } } = jwt.verify(req.params.token, SECRET);
-
-          await User.updateActive(id, true);
-        } catch (e) {
-          res.send('error');
-        }
-
-        return res.redirect(`${protocol}//${hostname}:${serverPort}/login`);
-      }
-    }
-  ]
+  middlewareUse: tokenMiddleware(SECRET, User, jwt),
+  middlewareGet: { path: '/confirmation/:token', callback: confirmMiddleware(SECRET, User, jwt) }
 });

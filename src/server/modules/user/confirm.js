@@ -1,11 +1,6 @@
-import url from 'url';
-const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
-let serverPort = process.env.PORT || port;
-if (__DEV__) {
-  serverPort = '3000';
-}
 
-export default (SECRET, User, jwt) => async (req, res) => {
+
+export default (SECRET, User, jwt, addressUrl) => async (req, res) => {
   try {
     const { user: { id } } = jwt.verify(req.params.token, SECRET);
 
@@ -14,5 +9,5 @@ export default (SECRET, User, jwt) => async (req, res) => {
     res.send('error');
   }
 
-  return res.redirect(`${protocol}//${hostname}:${serverPort}/login`);
+  return res.redirect(`${addressUrl}/login`);
 };

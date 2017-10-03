@@ -1,9 +1,19 @@
 {
   "secret": "secret, change for production",
-  "confirm": false,
-  "sendConfirmationEmail": false,
   "auth": {
-    "password": true,
-    "certificate": false
+    "password": {
+      "confirm": false,
+      "sendConfirmationEmail": false,
+      "enabled": true
+    },
+    "certificate": {
+      "devSerial": "00",
+      "enabled": false
+    },
+    "facebook": {
+      "clientID": "FACEBOOK_CLIENTID",
+      "clientSecret": "FACEBOOK_CLIENTSECRET",
+      "enabled": false
+    }
   }
 }

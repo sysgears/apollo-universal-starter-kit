@@ -45,7 +45,7 @@ export default pubsub => ({
         const passwordPromise = bcrypt.hash(localAuth.password, 12);
 
         let isActive = false;
-        if (!settings.user.confirm) {
+        if (!settings.user.auth.password.confirm) {
           isActive = true;
         }
 
@@ -61,7 +61,7 @@ export default pubsub => ({
 
         const user = await context.User.getUser(createdUserId);
 
-        if (context.mailer && settings.user.sendConfirmationEmail) {
+        if (context.mailer && settings.user.auth.password.sendConfirmationEmail) {
           // async email
           jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
             const url = `${protocol}//${hostname}:${serverPort}/confirmation/${emailToken}`;

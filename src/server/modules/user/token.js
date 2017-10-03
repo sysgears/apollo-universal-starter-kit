@@ -62,12 +62,12 @@ export default (SECRET, User, jwt) => async (req, res, next) => {
       }
       req.user = newTokens.user;
     }
-  } else if (settings.user.auth.certificate) {
+  } else if (settings.user.auth.certificate.enabled) {
     // cert auth
     let serial = '';
     if (__DEV__) {
       // for local testing without client certificates
-      serial = '00';
+      serial = settings.user.auth.certificate.devSerial;
     }
     // if header available
     if (req.headers['x-serial']) {

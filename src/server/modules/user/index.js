@@ -1,12 +1,11 @@
 import jwt from 'jsonwebtoken';
 
-// Components
 import UserDAO from './sql';
-
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import { refreshTokens } from './auth';
 import tokenMiddleware from './token';
+import confirmMiddleware from './confirm';
 import Feature from '../connector';
 import settings from '../../../../settings';
 
@@ -41,14 +40,14 @@ export default new Feature({
     } else if (req) {
       if (req.user) {
         tokenUser = req.user;
-      } else if (settings.user.certAuth) {
+      } else if (settings.user.auth.certificate) {
         const user = await User.getUserWithSerial(serial);
         if (user) {
           tokenUser = user;
         }
       }
     } else if (webSocket) {
-      if (settings.user.certAuth) {
+      if (settings.user.auth.certificate) {
         // in case you need to access req headers
         if (webSocket.upgradeReq.headers['x-serial']) {
           serial = webSocket.upgradeReq.headers['x-serial'];
@@ -68,5 +67,6 @@ export default new Feature({
       req
     };
   },
-  middleware: tokenMiddleware(SECRET, User)
+  middlewareUse: tokenMiddleware(SECRET, User, jwt),
+  middlewareGet: { path: '/confirmation/:token', callback: confirmMiddleware(SECRET, User, jwt) }
 });

@@ -27,7 +27,7 @@ export default class User {
   async getUserWithPassword(id) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'la.password')
+        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'la.password')
         .from('user AS u')
         .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
         .where('u.id', '=', id)
@@ -46,9 +46,9 @@ export default class User {
     );
   }
 
-  register({ username }) {
+  register({ username, isActive }) {
     return knex('user')
-      .insert({ username })
+      .insert({ username, is_active: isActive })
       .returning('id');
   }
 
@@ -62,6 +62,12 @@ export default class User {
     return knex('local_auth')
       .update({ password })
       .where({ user_id: id });
+  }
+
+  updateActive(id, isActive) {
+    return knex('user')
+      .update({ is_active: isActive })
+      .where({ id });
   }
 
   async getLocalOuth(id) {

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 import bcrypt from 'bcryptjs';
-
+import settings from '../../../../settings';
 import FieldError from '../../../common/FieldError';
 
 export const createTokens = async (user, secret, refreshSecret) => {
@@ -66,19 +66,23 @@ export const tryLogin = async (email, password, User, SECRET) => {
   if (!localAuth) {
     // user with provided email not found
     e.setError('email', 'Please enter a valid e-mail.');
+    e.throwIf();
   }
-
-  e.throwIf();
 
   const valid = await bcrypt.compare(password, localAuth.password);
   if (!valid) {
     // bad password
     e.setError('password', 'Please enter a valid password.');
+    e.throwIf();
   }
 
-  e.throwIf();
-
   const user = await User.getUserWithPassword(localAuth.userId);
+
+  if (settings.user.confirm && !user.isActive) {
+    e.setError('email', 'Please confirm your e-mail first.');
+    e.throwIf();
+  }
+
   const refreshSecret = SECRET + user.password;
 
   const [token, refreshToken] = await createTokens(user, SECRET, refreshSecret);

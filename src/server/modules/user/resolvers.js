@@ -1,9 +1,18 @@
 /*eslint-disable no-unused-vars*/
 import bcrypt from 'bcryptjs';
 import { pick } from 'lodash';
+import jwt from 'jsonwebtoken';
+import url from 'url';
 import { refreshTokens, tryLogin } from './auth';
 import { requiresAuth, requiresAdmin } from './permissions';
 import FieldError from '../../../common/FieldError';
+import settings from '../../../../settings';
+
+const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
+let serverPort = process.env.PORT || port;
+if (__DEV__) {
+  serverPort = '3000';
+}
 
 export default pubsub => ({
   Query: {
@@ -34,7 +43,13 @@ export default pubsub => ({
         }
 
         const passwordPromise = bcrypt.hash(localAuth.password, 12);
-        const createUserPromise = context.User.register(input);
+
+        let isActive = false;
+        if (!settings.user.confirm) {
+          isActive = true;
+        }
+
+        const createUserPromise = context.User.register({ ...input, isActive });
         const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
 
         localAuth.password = password;
@@ -45,6 +60,18 @@ export default pubsub => ({
         });
 
         const user = await context.User.getUser(createdUserId);
+
+        if (context.mailer && settings.user.sendConfirmationEmail) {
+          // async email
+          jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
+            const url = `${protocol}//${hostname}:${serverPort}/confirmation/${emailToken}`;
+            context.mailer.sendMail({
+              to: localAuth.email,
+              subject: 'Confirm Email',
+              html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
+            });
+          });
+        }
 
         return { user };
       } catch (e) {

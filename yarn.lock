@@ -7172,6 +7172,10 @@ noop-fn@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/noop-fn/-/noop-fn-1.0.0.tgz#5f33d47f13d2150df93e0cb036699e982f78ffbf"
 
+nodemailer@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-4.1.1.tgz#e84a65b423e5ca2b65b81ff39bb9aee71c3dc718"
+
 "nopt@2 || 3", nopt@^3.0.1:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/nopt/-/nopt-3.0.6.tgz#c6465dbf08abcd4db359317f79ac68a646b28ff9"

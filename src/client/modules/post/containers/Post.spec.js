@@ -360,6 +360,6 @@ describe('Posts and comments example UI works', () => {
     backButton.last().simulate('click', { button: 0 });
     app.update();
     content = app.find('#content').last();
-    expect(content.text()).to.include('Post title 33');
+    expect(content.text()).to.include('Post title 3');
   });
 });

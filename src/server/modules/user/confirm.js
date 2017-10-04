@@ -1,5 +1,3 @@
-
-
 export default (SECRET, User, jwt, addressUrl) => async (req, res) => {
   try {
     const { user: { id } } = jwt.verify(req.params.token, SECRET);

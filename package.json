@@ -185,7 +185,7 @@
     "spinjs": "^0.4.1",
     "style-loader": "^0.18.2",
     "tcomb": "^3.2.23",
-    "url-loader": "^0.5.9",
+    "url-loader": "^0.6.1",
     "wait-on": "^2.0.2",
     "webpack": "^3.6.0",
     "webpack-dev-middleware": "^1.12.0",

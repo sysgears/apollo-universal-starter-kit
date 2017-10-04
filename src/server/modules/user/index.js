@@ -2,11 +2,13 @@ import jwt from 'jsonwebtoken';
 import url from 'url';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
+import bcrypt from 'bcryptjs';
+import { pick } from 'lodash';
 
 import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
-import { refreshTokens } from './auth';
+import { refreshTokens, createTokens } from './auth';
 import tokenMiddleware from './token';
 import confirmMiddleware from './confirm';
 import Feature from '../connector';
@@ -29,14 +31,46 @@ passport.use(
     {
       clientID: settings.user.auth.facebook.clientID,
       clientSecret: settings.user.auth.facebook.clientSecret,
-      callbackURL: `${addressUrl}/auth/facebook/callback`
+      callbackURL: `${addressUrl}/auth/facebook/callback`,
+      scope: ['email'],
+      profileFields: ['id', 'emails', 'displayName']
     },
-    function(accessToken, refreshToken, profile, cb) {
-      console.log(profile);
-      /*User.findOrCreate({ facebookId: profile.id }, function(err, user) {
-        return cb(err, user);
-      });*/
-      return cb(null, {});
+    async function(accessToken, refreshToken, profile, cb) {
+      const { id, username, displayName, emails: [{ value }] } = profile;
+      try {
+        let user = await User.getUserByFbIdOrEmail(id, value);
+
+        if (!user) {
+          const passwordPromise = bcrypt.hash(id, 12);
+          const isActive = true;
+          const createUserPromise = User.register({ username: username ? username : displayName, isActive });
+          const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
+
+          await User.createLocalOuth({
+            email: value,
+            password: password,
+            userId: createdUserId
+          });
+
+          await User.createFacebookOuth({
+            id,
+            displayName,
+            userId: createdUserId
+          });
+
+          user = await User.getUser(createdUserId);
+        } else if (!user.fbId) {
+          await User.createFacebookOuth({
+            id,
+            displayName,
+            userId: user.id
+          });
+        }
+
+        return cb(null, pick(user, ['id', 'username', 'isAdmin', 'email']));
+      } catch (err) {
+        return cb(err, {});
+      }
     }
   )
 );
@@ -102,7 +136,29 @@ export default new Feature({
     {
       path: '/auth/facebook/callback',
       callback: passport.authenticate('facebook', { session: false }),
-      callback2: function(req, res) {
+      callback2: async function(req, res) {
+        const user = await User.getUserWithPassword(req.user.id);
+        const refreshSecret = SECRET + user.password;
+        const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
+
+        req.universalCookies.set('x-token', token, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: true
+        });
+        req.universalCookies.set('x-refresh-token', refreshToken, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: true
+        });
+
+        req.universalCookies.set('r-token', token, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: false
+        });
+        req.universalCookies.set('r-refresh-token', refreshToken, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: false
+        });
+
         res.redirect(`${addressUrl}/profile`);
       }
     }

@@ -54,7 +54,7 @@ export default pubsub => ({
 
         localAuth.password = password;
 
-        const [id] = await context.User.createLocalOuth({
+        await context.User.createLocalOuth({
           ...localAuth,
           userId: createdUserId
         });

@@ -58,6 +58,14 @@ export default class User {
       .returning('id');
   }
 
+  createFacebookOuth({ id, displayName, userId }) {
+    console.log(userId);
+
+    return knex('auth_facebook')
+      .insert({ fb_id: id, display_name: displayName, user_id: userId })
+      .returning('id');
+  }
+
   UpdatePassword(id, password) {
     return knex('auth_local')
       .update({ password })
@@ -86,6 +94,19 @@ export default class User {
         .select('*')
         .from('auth_local')
         .where({ email })
+        .first()
+    );
+  }
+
+  async getUserByFbIdOrEmail(id, email) {
+    return camelizeKeys(
+      await knex
+        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'fa.fb_id', 'la.email', 'la.password')
+        .from('user AS u')
+        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
+        .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
+        .where('fa.fb_id', '=', id)
+        .orWhere('la.email', '=', email)
         .first()
     );
   }

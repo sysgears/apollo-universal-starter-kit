@@ -15,6 +15,7 @@ import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 // import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
 import { CookiesProvider } from 'react-cookie';
+import url from 'url';
 
 import createApolloClient from '../../common/createApolloClient';
 import createReduxStore, { storeReducer } from '../../common/createReduxStore';
@@ -24,7 +25,9 @@ import modules from '../modules';
 
 import '../styles/styles.scss';
 
-const fetch = createApolloFetch({ uri: __BACKEND_URL__ || '/graphql' });
+const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
+
+const fetch = createApolloFetch({ uri: hostname === 'localhost' ? '/graphql' : __BACKEND_URL__ });
 const cache = new InMemoryCache();
 
 fetch.batchUse(({ requests, options }, next) => {
@@ -59,7 +62,10 @@ for (const connectionParam of modules.connectionParams) {
   Object.assign(connectionParams, connectionParam());
 }
 
-const wsUri = (__BACKEND_URL__ || window.location.origin + '/graphql').replace(/^http/, 'ws');
+const wsUri = (hostname === 'localhost'
+  ? `${window.location.protocol}${window.location.hostname}:${port}${pathname}`
+  : __BACKEND_URL__
+).replace(/^http/, 'ws');
 let link = ApolloLink.split(
   operation => {
     const operationAST = getOperationAST(operation.query, operation.operationName);

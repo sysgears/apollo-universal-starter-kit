@@ -45,8 +45,7 @@ If you are using Apollo v1 please use [starter kit from `apollo1` branch](https:
   yarn watch
   ```
 
-6. You browser will open the web application automatically. If not please search 
-the URL in terminal `Webpack web dev server listening on ..url..` and open this URL in web browser.
+6. You browser will open the web application automatically with web app in a new tab.
 7. Change any app code and see the changes applied immediately!
 8. Open app in multiple tabs, try to increase counter or add a new post/comment in one tab and then switch to another tab. You will see that
 counter value and post/comment are updated there as well, because the application is live updated via subscriptions.
@@ -130,14 +129,15 @@ https://docs.docker.com/compose/
 #### Starting Docker container for Development
 To run starter kit in development mode with hot code reload execute:
   ```
-  docker-compose -f docker-compose.dev.yml up
+  docker-compose up
   ```
-, then search web app URL in terminal `Webpack web dev server listening on ..url..` and open this URL in web browser.  
+, then open URL `http://localhost:3000` in web browser 
+or open URL `exp://localhost:19001` in Expo Client Explore section (tap magnifier, enter URL, then tap it below).
 
 #### Starting Docker container for Production
 To run starter kit in production mode execute:
   ```
-  docker-compose up
+  docker-compose -f docker-compose.prod.yml up
   ```
 , then open URL `http://localhost:3000` in web browser.
 

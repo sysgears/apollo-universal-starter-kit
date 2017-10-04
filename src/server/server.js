@@ -24,7 +24,7 @@ const app = express();
 
 app.use(cookiesMiddleware());
 
-const { protocol, port, pathname, hostname } = url.parse(__BACKEND_URL__);
+const { port, pathname } = url.parse(__BACKEND_URL__);
 const serverPort = process.env.PORT || port;
 
 // Don't rate limit heroku
@@ -32,8 +32,10 @@ app.enable('trust proxy');
 
 if (__DEV__) {
   const corsOptions = {
-    origin: `${protocol}//${hostname}:3000`,
-    credentials: true
+    credentials: true,
+    origin: function(origin, callback) {
+      callback(null, true);
+    }
   };
   app.use(cors(corsOptions));
 }

@@ -5,7 +5,9 @@ import { Button } from 'reactstrap';
 import styled from 'styled-components';
 import PageLayout from '../../../app/PageLayout';
 
-const Section = styled.section`margin-bottom: 30px;`;
+const Section = styled.section`
+  margin-bottom: 30px;
+`;
 
 const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement }) => {
   const renderMetaData = () => (

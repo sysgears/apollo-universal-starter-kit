@@ -17,12 +17,12 @@ const NavBar = () => (
       <Nav className="ustify-content-end">
         {modules.navItemsRight}
         {(!__PERSIST_GQL__ || __DEV__) && (
-            <NavItem>
-              <a href="/graphiql" className="nav-link">
-                GraphiQL
-              </a>
-            </NavItem>
-          )}
+          <NavItem>
+            <a href="/graphiql" className="nav-link">
+              GraphiQL
+            </a>
+          </NavItem>
+        )}
       </Nav>
     </Container>
   </Navbar>

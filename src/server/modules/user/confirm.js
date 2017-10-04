@@ -1,4 +1,5 @@
 import url from 'url';
+
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
 if (__DEV__) {

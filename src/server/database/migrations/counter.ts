@@ -1,13 +1,13 @@
 import * as Knex from 'knex';
 
-export async function up(knex: Knex) {
+exports.up = async (knex: Knex) => {
   return knex.schema.createTable('count', table => {
     table.increments();
     table.integer('amount').notNullable();
     table.timestamps(false, true);
   });
-}
+};
 
-export async function down(knex: Knex) {
+exports.down = async (knex: Knex) => {
   return knex.schema.dropTable('count');
-}
+};

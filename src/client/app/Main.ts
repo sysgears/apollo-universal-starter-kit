@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import "../styles/styles.scss";
+import '../styles/styles.scss';
 
 @Component({
   selector: 'body div:first-child',
-  template:
-    `<section>
+  template: `<section>
       <nav-bar></nav-bar>
       <counter-view></counter-view>
     </section>`

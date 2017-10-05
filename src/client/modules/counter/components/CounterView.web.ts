@@ -1,25 +1,23 @@
-
-import {Component} from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
-  selector:     "counter-view",
-  templateUrl:  "./CounterView.html",
-  styles:       ["section { margin-bottom: 30px; }"]
+  selector: 'counter-view',
+  templateUrl: './CounterView.html',
+  styles: ['section { margin-bottom: 30px; }']
 })
 export default class {
-  count: number = 5;
-  reduxCount: number = 1;
+  public count: number = 5;
+  public reduxCount: number = 1;
 
   constructor() {}
 
-  addCount() {
+  public addCount() {
     this.count++;
   }
 
-  onReduxIncrement() {
+  public onReduxIncrement() {
     this.reduxCount++;
   }
-
 }
 
 // import React from "react";

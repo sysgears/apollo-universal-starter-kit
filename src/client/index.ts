@@ -31,10 +31,7 @@ import CounterView from './modules/counter/components/CounterView.web';
       useHash: true
     })
   ],
-  entryComponents: [
-    NavBar,
-    CounterView
-  ],
+  entryComponents: [NavBar, CounterView],
   providers: []
 })
 class MainModule {

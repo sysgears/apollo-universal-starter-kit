@@ -1,13 +1,11 @@
-import {Component} from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
-  selector:     "nav-bar",
-  templateUrl:  "./NavBar.html",
-  styles: ["ul.right-side { display: block; }", "ul.right-side li { float: right; }"]
+  selector: 'nav-bar',
+  templateUrl: './NavBar.html',
+  styles: ['ul.right-side { display: block; }', 'ul.right-side li { float: right; }']
 })
-export default class {
-
-}
+export default class {}
 
 // import React from "react";
 // import { NavLink } from "react-router-dom";

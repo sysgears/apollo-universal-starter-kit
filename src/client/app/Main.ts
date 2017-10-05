@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
+import "../styles/styles.scss";
 
 @Component({
   selector: 'body div:first-child',
-  template: "<h1>Hello, World!</h1><br/><a href='/graphiql'>GraphiQL</a>"
+  template:
+    `<section>
+      <nav-bar></nav-bar>
+      <counter-view></counter-view>
+    </section>`
 })
 export default class {}
 

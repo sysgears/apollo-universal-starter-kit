@@ -11,10 +11,18 @@ import 'backend_reload';
 
 import log from '../common/log';
 import Main from './app/Main';
+import NavBar from './app/NavBar';
+import CounterView from './modules/counter/components/CounterView.web';
 
 @NgModule({
   bootstrap: [Main],
-  declarations: [Main],
+  declarations: [
+    Main,
+
+    /* Components */
+    NavBar,
+    CounterView
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -22,6 +30,10 @@ import Main from './app/Main';
     RouterModule.forRoot([], {
       useHash: true
     })
+  ],
+  entryComponents: [
+    NavBar,
+    CounterView
   ],
   providers: []
 })

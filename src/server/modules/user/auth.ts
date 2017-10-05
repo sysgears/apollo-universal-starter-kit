@@ -1,16 +1,12 @@
-import _ = require("lodash");
-import * as bcrypt from "bcryptjs";
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
+import * as _ from 'lodash';
+import log from '../../../common/log';
 
-import FieldError from "../../../common/FieldError";
-
-const jwt = require("jsonwebtoken");
+import FieldError from '../../../common/FieldError';
 
 export const createTokens = async (user: any, secret: any, refreshSecret: any) => {
-  const createToken = jwt.sign(
-    { user: _.pick(user, ["id", "username", "isAdmin"]) },
-    secret,
-    { expiresIn: "1m" }
-  );
+  const createToken = jwt.sign({ user: _.pick(user, ['id', 'username', 'isAdmin']) }, secret, { expiresIn: '1m' });
 
   const createRefreshToken = jwt.sign(
     {
@@ -18,7 +14,7 @@ export const createTokens = async (user: any, secret: any, refreshSecret: any) =
     },
     refreshSecret,
     {
-      expiresIn: "7d"
+      expiresIn: '7d'
     }
   );
 
@@ -28,10 +24,9 @@ export const createTokens = async (user: any, secret: any, refreshSecret: any) =
 export const refreshTokens = async (token: any, refreshToken: any, User: any, SECRET: any) => {
   let userId = -1;
   try {
-    const { user } = jwt.decode(refreshToken);
-    userId = user;
+    userId = (jwt.decode(refreshToken) as any).user;
   } catch (err) {
-    console.log(err);
+    log.error(err);
     return {};
   }
 
@@ -47,16 +42,12 @@ export const refreshTokens = async (token: any, refreshToken: any, User: any, SE
     return {};
   }
 
-  const [newToken, newRefreshToken] = await createTokens(
-    user,
-    SECRET,
-    refreshSecret
-  );
+  const [newToken, newRefreshToken] = await createTokens(user, SECRET, refreshSecret);
 
   return {
     token: newToken,
     refreshToken: newRefreshToken,
-    user: _.pick(user, ["id", "username", "isAdmin"])
+    user: _.pick(user, ['id', 'username', 'isAdmin'])
   };
 };
 
@@ -66,13 +57,13 @@ export const tryLogin = async (email: string, password: string, User: any, SECRE
 
   if (!localAuth) {
     // user with provided email not found
-    e.setError("email", "Please enter a valid e-mail.");
+    e.setError('email', 'Please enter a valid e-mail.');
   }
 
   const valid = await bcrypt.compare(password, localAuth.password);
   if (!valid) {
     // bad password
-    e.setError("password", "Please enter a valid password.");
+    e.setError('password', 'Please enter a valid password.');
   }
 
   e.throwIf();

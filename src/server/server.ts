@@ -1,24 +1,24 @@
-import * as express from 'express';
-import { Request, Response, NextFunction } from 'express';
-import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
-import * as path from 'path';
-import * as http from 'http';
-import { Server } from "http";
+import * as cors from 'cors';
+import * as express from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { createServer, Server } from 'http';
 import { invert, isArray } from 'lodash';
-import * as url from 'url';
+import * as path from 'path';
 // import * as cookiesMiddleware from 'universal-cookie-express';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
-import queryMap from 'persisted_queries.json';
+import * as queryMap from 'persisted_queries.json';
+import * as url from 'url';
 import modules from './modules';
 
-import websiteMiddleware from './middleware/website';
+import * as spinRc from '../../.spinrc.json';
+import log from '../common/log';
+import addGraphQLSubscriptions from './api/subscriptions';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
-import addGraphQLSubscriptions from './api/subscriptions';
-import log from '../common/log';
+import websiteMiddleware from './middleware/website';
 
-const spinConfig = require('../../.spinrc.json').options;
+const spinConfig = spinRc.options;
 
 // eslint-disable-next-line import/no-mutable-exports
 let server: Server;
@@ -69,9 +69,7 @@ if (__PERSIST_GQL__) {
       next();
     } else {
       if (!__DEV__ || (req.get('Referer') || '').indexOf('/graphiql') < 0) {
-        resp
-          .status(500)
-          .send('Unknown GraphQL query has been received, rejecting...');
+        resp.status(500).send('Unknown GraphQL query has been received, rejecting...');
       } else {
         next();
       }
@@ -86,7 +84,7 @@ app.use(pathname, (req: Request, res: Response, next: NextFunction) => graphqlMi
 app.all('/graphiql', (req: Request, res: Response, next: NextFunction) => graphiqlMiddleware(req, res, next));
 app.use((req: Request, res: Response, next: NextFunction) => websiteMiddleware(queryMap)(req, res, next));
 
-server = http.createServer(app);
+server = createServer(app);
 
 addGraphQLSubscriptions(server);
 

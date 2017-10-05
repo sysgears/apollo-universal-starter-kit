@@ -1,9 +1,9 @@
-import * as Knex from "knex";
+import * as Knex from 'knex';
 
 /*
 For DB's other than SQLite you'll have to use raw queries for truncation if there is a foreign key constraint in your table.
 
-Instead of 
+Instead of
 await Promise.all([
   knex('post').truncate(),
   knex('comment').truncate()
@@ -18,7 +18,7 @@ await Promise.all([
 ]);
 */
 
-export async function seed(knex: Knex, Promise: any) {
+export const seed = async (knex: Knex, Promise: any) => {
   await Promise.all([knex('post').truncate(), knex('comment').truncate()]);
 
   await Promise.all(
@@ -42,4 +42,4 @@ export async function seed(knex: Knex, Promise: any) {
       );
     })
   );
-}
+};

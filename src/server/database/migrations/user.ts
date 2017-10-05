@@ -1,6 +1,6 @@
-import * as Knex from "knex";
+import * as Knex from 'knex';
 
-exports.up = function(knex: Knex, Promise: any) {
+exports.up = (knex: Knex, Promise: any) => {
   return Promise.all([
     knex.schema.createTable('user', table => {
       table.increments();
@@ -23,9 +23,6 @@ exports.up = function(knex: Knex, Promise: any) {
   ]);
 };
 
-exports.down = function(knex: Knex, Promise: any) {
-  return Promise.all([
-    knex.schema.dropTable('user'),
-    knex.schema.dropTable('local_auth')
-  ]);
+exports.down = (knex: Knex, Promise: any) => {
+  return Promise.all([knex.schema.dropTable('user'), knex.schema.dropTable('local_auth')]);
 };

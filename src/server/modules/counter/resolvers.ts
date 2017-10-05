@@ -1,4 +1,4 @@
-import { PubSub } from "graphql-subscriptions";
+import { PubSub } from 'graphql-subscriptions';
 
 const COUNT_UPDATED_TOPIC = 'count_updated';
 

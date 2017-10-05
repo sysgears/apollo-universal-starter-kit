@@ -1,35 +1,31 @@
 /* eslint-disable no-unused-vars */
-import { merge, map, union, without, castArray } from 'lodash';
-import { DocumentNode } from "graphql";
-import { RequestHandler, Request } from "express";
-import { PubSub } from "graphql-subscriptions";
-import { IResolvers } from "graphql-tools/dist/Interfaces";
+import { Request, RequestHandler } from 'express';
+import { DocumentNode } from 'graphql';
+import { PubSub } from 'graphql-subscriptions';
+import { castArray, map, merge, union, without } from 'lodash';
 
-const combine = (features: IArguments, extractor: (x: Feature) => any): Array<any> =>
+const combine = (features: IArguments, extractor: (x: Feature) => any): any[] =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
-type FeatureParams = {
+type CreateResolversFunc = (pubsub: PubSub) => any;
+type CreateContextFunc = (req: Request, connectionParams?: object | (() => object)) => object;
+
+interface FeatureParams {
   schema?: DocumentNode | DocumentNode[];
-  createResolversFunc?: Function | Function[];
-  createContextFunc?: Function | Function[];
+  createResolversFunc?: CreateResolversFunc | CreateResolversFunc[];
+  createContextFunc?: CreateContextFunc | CreateContextFunc[];
   middleware?: RequestHandler | RequestHandler[];
-};
+}
 
 class Feature {
-  schema: DocumentNode[];
-  createResolversFunc: Function[];
-  createContextFunc: Function[];
-  middleware: RequestHandler[];
+  public schema: DocumentNode[];
+  public createResolversFunc: CreateResolversFunc[];
+  public createContextFunc: CreateContextFunc[];
+  public middleware: RequestHandler[];
 
-  constructor(
-      feature?: FeatureParams,
-    ...features: Feature[]
-  ) {
+  constructor(feature?: FeatureParams, ...features: Feature[]) {
     this.schema = combine(arguments, arg => arg.schema);
-    this.createResolversFunc = combine(
-      arguments,
-      arg => arg.createResolversFunc
-    );
+    this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.middleware = combine(arguments, arg => arg.middleware);
   }
@@ -38,22 +34,15 @@ class Feature {
     return this.schema;
   }
 
-  async createContext(req: Request, connectionParams?: Object | Function) {
+  public async createContext(req: Request, connectionParams?: object | (() => object)) {
     const results = await Promise.all(
-      this.createContextFunc.map(createContext =>
-        createContext(req, connectionParams)
-      )
+      this.createContextFunc.map(createContext => createContext(req, connectionParams))
     );
     return merge({}, ...results);
   }
 
-  createResolvers(pubsub: PubSub): IResolvers {
-    return merge(
-      {},
-      ...this.createResolversFunc.map(createResolvers =>
-        createResolvers(pubsub)
-      )
-    );
+  public createResolvers(pubsub: PubSub): any {
+    return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
   }
 
   get middlewares(): RequestHandler[] {

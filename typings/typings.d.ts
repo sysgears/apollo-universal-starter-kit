@@ -6,14 +6,22 @@ declare var __SSR__: boolean;
 declare var __PERSIST_GQL__: boolean;
 declare var __BACKEND_URL__: string;
 
-declare module "*.graphqls" {
-    import { DocumentNode } from "graphql";
+declare module '*.graphqls' {
+  import { DocumentNode } from 'graphql';
 
-    const value: DocumentNode;
-    export = value;
+  const value: DocumentNode;
+  export = value;
 }
 
-declare module "*.json" {
+declare module '*.graphql' {
+  // tslint:disable-next-line
+    import { DocumentNode } from "graphql";
+
+  const value: DocumentNode;
+  export = value;
+}
+
+declare module '*.json' {
   const value: any;
-  export default value;
+  export = value;
 }

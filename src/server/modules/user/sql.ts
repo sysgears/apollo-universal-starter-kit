@@ -1,11 +1,10 @@
+import { camelizeKeys } from 'humps';
 // Helpers
-import db from "../../sql/connector";
-
-const camelizeKeys = require("humps");
+import db from '../../sql/connector';
 
 // Actual query fetching and transformation in DB
 export default class User {
-  async getUsers() {
+  public async getUsers() {
     return camelizeKeys(
       await db
         .select('u.id', 'u.username', 'u.is_admin', 'la.email')
@@ -14,7 +13,7 @@ export default class User {
     );
   }
 
-  async getUser(id: number) {
+  public async getUser(id: number) {
     return camelizeKeys(
       await db
         .select('u.id', 'u.username', 'u.is_admin', 'la.email')
@@ -25,7 +24,7 @@ export default class User {
     );
   }
 
-  async getUserWithPassword(id: number) {
+  public async getUserWithPassword(id: number) {
     return camelizeKeys(
       await db
         .select('u.id', 'u.username', 'u.is_admin', 'la.password')
@@ -36,25 +35,25 @@ export default class User {
     );
   }
 
-  register(user: any) {
+  public register(user: any) {
     return db('user')
       .insert(user)
       .returning('id');
   }
 
-  createLocalAuth(localAuth: any) {
+  public createLocalAuth(localAuth: any) {
     return db('local_auth')
       .insert({ email: localAuth.email, password: localAuth.password, user_id: localAuth.userId })
       .returning('id');
   }
 
-  UpdatePassword(id: number, password: string) {
+  public UpdatePassword(id: number, password: string) {
     return db('local_auth')
       .update({ password })
       .where({ user_id: id });
   }
 
-  async getLocalAuth(id: number) {
+  public async getLocalAuth(id: number) {
     return camelizeKeys(
       await db
         .select('*')
@@ -64,7 +63,7 @@ export default class User {
     );
   }
 
-  async getLocalAuthByEmail(email: string) {
+  public async getLocalAuthByEmail(email: string) {
     return camelizeKeys(
       await db
         .select('*')

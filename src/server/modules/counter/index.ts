@@ -1,8 +1,8 @@
 import Count from './sql';
 
-import * as schema from './schema.graphqls';
-import createResolvers from './resolvers';
 import Feature from '../connector';
+import createResolvers from './resolvers';
+import * as schema from './schema.graphqls';
 
 export default new Feature({
   schema,

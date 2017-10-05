@@ -1,5 +1,5 @@
-import * as Knex from "knex";
 import * as bcrypt from 'bcryptjs';
+import * as Knex from 'knex';
 
 /*
 For DB's other than SQLite you'll have to use raw queries for truncation if there is a foreign key constraint in your table.

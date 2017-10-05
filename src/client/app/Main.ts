@@ -1,11 +1,10 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
-  selector: "body div:first-child",
+  selector: 'body div:first-child',
   template: "<h1>Hello, World!</h1><br/><a href='/graphiql'>GraphiQL</a>"
 })
-export default class {
-}
+export default class {}
 
 // import React from "react";
 // import { createBatchingNetworkInterface } from "apollo-client";

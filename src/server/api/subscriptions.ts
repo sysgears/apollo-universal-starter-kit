@@ -1,12 +1,12 @@
-import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe } from 'graphql';
-import { Server } from "http";
+import { Server } from 'http';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 
-import schema from './schema';
 import log from '../../common/log';
 import modules from '../../server/modules';
+import schema from './schema';
 
-let subscriptionServer : SubscriptionServer;
+let subscriptionServer: SubscriptionServer;
 
 const addSubscriptions = (httpServer: Server) => {
   subscriptionServer = SubscriptionServer.create(
@@ -14,8 +14,7 @@ const addSubscriptions = (httpServer: Server) => {
       schema,
       execute,
       subscribe,
-      onConnect: (connectionParams: any) =>
-        modules.createContext(null, connectionParams)
+      onConnect: (connectionParams: any) => modules.createContext(null, connectionParams)
     },
     {
       server: httpServer,

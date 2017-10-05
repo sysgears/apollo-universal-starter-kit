@@ -1,10 +1,10 @@
-import * as dl from "dataloader";
+import * as dl from 'dataloader';
 
-import Post from "./sql";
-import * as schema from "./schema.graphqls";
-import createResolvers from "./resolvers";
+import createResolvers from './resolvers';
+import * as schema from './schema.graphqls';
+import Post from './sql';
 
-import Feature from "../connector";
+import Feature from '../connector';
 
 export default new Feature({
   schema,

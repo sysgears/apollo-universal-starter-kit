@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // import React from "react";
 // import ReactDOMServer from "react-dom/server";
@@ -18,7 +18,7 @@ import { Request, Response, NextFunction } from 'express';
 // import createReduxStore from "../../common/createReduxStore";
 // import Html from "./html";
 // import Routes from "../../client/app/Routes";
-import log from "../../common/log";
+import log from '../../common/log';
 
 // import { options as spinConfig } from "../../../.spinrc.json";
 // import settings from "../../../settings";
@@ -130,9 +130,9 @@ import log from "../../common/log";
 //
 export default (queryMap: any) => async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (req.url.indexOf(".") < 0) {
+    if (req.url.indexOf('.') < 0) {
       if (req.url === '/') {
-        res.redirect("/graphiql");
+        res.redirect('/graphiql');
       }
       return next();
       // if (__SSR__) {
@@ -144,6 +144,6 @@ export default (queryMap: any) => async (req: Request, res: Response, next: Next
       return next();
     }
   } catch (e) {
-    log.error("RENDERING ERROR:", e);
+    log.error('RENDERING ERROR:', e);
   }
 };

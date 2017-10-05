@@ -1,15 +1,16 @@
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
-const settings = require("./app.json").app;
+import * as appJson from './app.json';
 
-type ISettings = {
-  apolloLogging: boolean,
+const settings = appJson.app;
+
+interface AppSettings {
+  apolloLogging?: boolean;
 }
 
-const envSettings: ISettings = Object.assign(
-  {},
-  _.pickBy(settings, (v, k) => k !== "env"),
-  _.get(settings, "env." + process.env.NODE_ENV)
-) as ISettings;
+const envSettings: AppSettings = {
+  ..._.pickBy(settings, (v, k) => k !== 'env'),
+  ..._.get(settings, 'env.' + process.env.NODE_ENV)
+};
 
 export default envSettings;

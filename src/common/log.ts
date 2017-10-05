@@ -2,20 +2,15 @@ import * as minilog from 'minilog';
 
 minilog.enable();
 
-const log: any =
-  typeof window !== 'undefined' ? minilog('frontend') : minilog('backend');
+const log: any = typeof window !== 'undefined' ? minilog('frontend') : minilog('backend');
 
 if (__DEV__ && __SERVER__) {
-  let console_log = global.console.log;
-  global.console.log = function() {
-    if (
-      arguments.length == 1 &&
-      typeof arguments[0] === 'string' &&
-      arguments[0].match(/^\[(HMR|WDS)\]/)
-    ) {
-      console_log('backend ' + arguments[0]);
+  const consoleLog = global.console.log;
+  global.console.log = (...args: any[]) => {
+    if (args.length === 1 && typeof args[0] === 'string' && args[0].match(/^\[(HMR|WDS)\]/)) {
+      consoleLog('backend ' + args[0]);
     } else {
-      console_log.apply(console_log, arguments);
+      consoleLog.apply(consoleLog, args);
     }
   };
 }

@@ -1,20 +1,20 @@
-import { withFilter, PubSub } from "graphql-subscriptions";
-import {PostInput} from "./sql";
+import { PubSub, withFilter } from 'graphql-subscriptions';
+import { PostInput } from './sql';
 
-const POST_UPDATED_TOPIC = "post_updated";
-const POSTS_UPDATED_TOPIC = "posts_updated";
-const COMMENT_UPDATED_TOPIC = "comment_updated";
+const POST_UPDATED_TOPIC = 'post_updated';
+const POSTS_UPDATED_TOPIC = 'posts_updated';
+const COMMENT_UPDATED_TOPIC = 'comment_updated';
 
 export interface PostParams {
-  id?:    number;
-  input?: PostInput
+  id?: number;
+  input?: PostInput;
 }
 
 export default (pubsub: PubSub) => ({
   Query: {
     async postsQuery(obj: any, args: any, context: any) {
-      let edgesArray: any[] = [];
-      let posts = await context.Post.getPostsPagination(args.limit, args.after);
+      const edgesArray: any[] = [];
+      const posts = await context.Post.getPostsPagination(args.limit, args.after);
 
       posts.map((post: any) => {
         edgesArray.push({
@@ -27,19 +27,15 @@ export default (pubsub: PubSub) => ({
         });
       });
 
-      const endCursor =
-        edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
+      const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
 
-      const values = await Promise.all([
-        context.Post.getTotal(),
-        context.Post.getNextPageFlag(endCursor)
-      ]);
+      const values = await Promise.all([context.Post.getTotal(), context.Post.getNextPageFlag(endCursor)]);
 
       return {
         totalCount: values[0].count,
         edges: edgesArray,
         pageInfo: {
-          endCursor: endCursor,
+          endCursor,
           hasNextPage: values[1].count > 0
         }
       };

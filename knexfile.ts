@@ -1,3 +1,3 @@
-const config = require('./knexdata');
+import * as config from './knexdata';
 
 module.exports = config;

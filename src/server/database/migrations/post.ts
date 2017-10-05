@@ -1,6 +1,6 @@
-import * as Knex from "knex";
+import * as Knex from 'knex';
 
-exports.up = function(knex: Knex, Promise: any) {
+exports.up = (knex: Knex, Promise: any) => {
   return Promise.all([
     knex.schema
       .createTable('post', table => {
@@ -23,9 +23,6 @@ exports.up = function(knex: Knex, Promise: any) {
   ]);
 };
 
-exports.down = function(knex: Knex, Promise: any) {
-  return Promise.all([
-    knex.schema.dropTable('post'),
-    knex.schema.dropTable('comment')
-  ]);
+exports.down = (knex: Knex, Promise: any) => {
+  return Promise.all([knex.schema.dropTable('post'), knex.schema.dropTable('comment')]);
 };

@@ -15,7 +15,7 @@ export default {
     facebook: {
       clientID: FACEBOOK_CLIENTID,
       clientSecret: FACEBOOK_CLIENTSECRET,
-      enabled: true
+      enabled: false
     }
   }
 };

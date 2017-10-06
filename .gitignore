@@ -6,3 +6,4 @@ npm-debug.*
 .expo/
 *.sqlite3
 .DS_Store
+jsconfig.json

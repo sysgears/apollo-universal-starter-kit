@@ -3,7 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 import http from 'http';
-import { invert, isArray, isEmpty } from 'lodash';
+import { invert, isArray } from 'lodash';
 import url from 'url';
 import cookiesMiddleware from 'universal-cookie-express';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions

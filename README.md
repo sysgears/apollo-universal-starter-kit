@@ -133,6 +133,8 @@ To run starter kit in development mode with hot code reload execute:
   ```
 , then open URL `http://localhost:3000` in web browser 
 or open URL `exp://localhost:19001` in Expo Client Explore section (tap magnifier, enter URL, then tap it below).
+In case if you want to open the app on the phone use LAN IP of your development machine instead of `localhost` 
+in Expo Client (QR code scanning will not work, because QR code will have address of Docker container).
 
 #### Starting Docker container for Production
 To run starter kit in production mode execute:

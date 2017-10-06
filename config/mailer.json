@@ -1,7 +1,0 @@
-{
-  "service": "Gmail",
-  "auth": {
-    "user": "EMAIL_USERNAME",
-    "pass": "EMAIL_PASSWORD"
-  }
-}

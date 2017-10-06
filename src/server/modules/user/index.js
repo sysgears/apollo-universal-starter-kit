@@ -129,13 +129,14 @@ export default new Feature({
   },
   middleware: app => {
     app.use(tokenMiddleware(SECRET, User, jwt));
-    app.use(passport.initialize());
 
     if (settings.user.auth.password.sendConfirmationEmail) {
       app.get('/confirmation/:token', confirmMiddleware(SECRET, User, jwt, addressUrl));
     }
 
     if (settings.user.auth.facebook.enabled) {
+      app.use(passport.initialize());
+
       app.get('/auth/facebook', passport.authenticate('facebook'));
 
       app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(

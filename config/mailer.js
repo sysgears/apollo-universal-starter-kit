@@ -1,8 +1,10 @@
+import { EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASSWORD } from './secrets';
+
 export default {
-  host: `${process.env.EMAIL_HOST}`,
-  port: `${process.env.EMAIL_PORT}`,
+  host: EMAIL_HOST,
+  port: EMAIL_PORT,
   auth: {
-    user: `${process.env.EMAIL_USER}`,
-    pass: `${process.env.EMAIL_PASSWORD}`
+    user: EMAIL_USER,
+    pass: EMAIL_PASSWORD
   }
 };

@@ -1,5 +1,7 @@
+import { AUTH_SECRET } from './secrets';
+
 export default {
-  secret: `${process.env.AUTH_SECRET}`,
+  secret: AUTH_SECRET,
   confirm: true,
   sendConfirmationEmail: true,
   auth: {

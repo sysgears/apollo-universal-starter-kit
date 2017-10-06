@@ -20,6 +20,7 @@ import url from 'url';
 import createApolloClient from '../../common/createApolloClient';
 import createReduxStore, { storeReducer } from '../../common/createReduxStore';
 import settings from '../../../settings';
+import { GOOGLE_TRACKING_ID } from '../../../config/secrets';
 import Routes from './Routes';
 import modules from '../modules';
 
@@ -102,7 +103,7 @@ const logPageView = location => {
 };
 
 // Initialize Google Analytics and send events on each location change
-ReactGA.initialize(`${process.env.GOOGLE_TRACKING_ID}`); // Replace your Google tracking code here
+ReactGA.initialize(GOOGLE_TRACKING_ID);
 logPageView(window.location);
 
 history.listen(location => logPageView(location));

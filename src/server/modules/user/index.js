@@ -127,42 +127,45 @@ export default new Feature({
       req
     };
   },
-  middlewareUse: [tokenMiddleware(SECRET, User, jwt), passport.initialize()],
-  middlewareGet: [
-    settings.user.auth.password.sendConfirmationEmail
-      ? { path: '/confirmation/:token', callback: confirmMiddleware(SECRET, User, jwt, addressUrl) }
-      : {},
-    settings.user.auth.facebook.enabled ? { path: '/auth/facebook', callback: passport.authenticate('facebook') } : {},
-    settings.user.auth.facebook.enabled
-      ? {
-          path: '/auth/facebook/callback',
-          callback: passport.authenticate('facebook', { session: false }),
-          callback2: async function(req, res) {
-            const user = await User.getUserWithPassword(req.user.id);
-            const refreshSecret = SECRET + user.password;
-            const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
+  middleware: app => {
+    app.use(tokenMiddleware(SECRET, User, jwt));
+    app.use(passport.initialize());
 
-            req.universalCookies.set('x-token', token, {
-              maxAge: 60 * 60 * 24 * 7,
-              httpOnly: true
-            });
-            req.universalCookies.set('x-refresh-token', refreshToken, {
-              maxAge: 60 * 60 * 24 * 7,
-              httpOnly: true
-            });
+    if (settings.user.auth.password.sendConfirmationEmail) {
+      app.get('/confirmation/:token', confirmMiddleware(SECRET, User, jwt, addressUrl));
+    }
 
-            req.universalCookies.set('r-token', token, {
-              maxAge: 60 * 60 * 24 * 7,
-              httpOnly: false
-            });
-            req.universalCookies.set('r-refresh-token', refreshToken, {
-              maxAge: 60 * 60 * 24 * 7,
-              httpOnly: false
-            });
+    if (settings.user.auth.facebook.enabled) {
+      app.get('/auth/facebook', passport.authenticate('facebook'));
 
-            res.redirect(`${addressUrl}/profile`);
-          }
-        }
-      : {}
-  ]
+      app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(
+        req,
+        res
+      ) {
+        const user = await User.getUserWithPassword(req.user.id);
+        const refreshSecret = SECRET + user.password;
+        const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
+
+        req.universalCookies.set('x-token', token, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: true
+        });
+        req.universalCookies.set('x-refresh-token', refreshToken, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: true
+        });
+
+        req.universalCookies.set('r-token', token, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: false
+        });
+        req.universalCookies.set('r-refresh-token', refreshToken, {
+          maxAge: 60 * 60 * 24 * 7,
+          httpOnly: false
+        });
+
+        res.redirect(`${addressUrl}/profile`);
+      });
+    }
+  }
 });

@@ -1,9 +1,7 @@
-import config from './secrets';
-
 export default {
-  secret: config.auth.authSecret,
-  confirm: false,
-  sendConfirmationEmail: false,
+  secret: process.env.AUTH_SECRET,
+  confirm: true,
+  sendConfirmationEmail: true,
   auth: {
     password: true,
     certificate: false

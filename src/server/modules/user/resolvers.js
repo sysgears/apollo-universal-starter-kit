@@ -66,6 +66,7 @@ export default pubsub => ({
           jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
             const url = `${protocol}//${hostname}:${serverPort}/confirmation/${emailToken}`;
             context.mailer.sendMail({
+              from: 'Apollo universal starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
               to: localAuth.email,
               subject: 'Confirm Email',
               html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`

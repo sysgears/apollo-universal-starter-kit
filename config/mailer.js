@@ -1,9 +1,8 @@
-import config from './secrets';
-
 export default {
-  service: config.mailer.emailService,
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
   auth: {
-    user: config.mailer.emailUser,
-    pass: config.mailer.emailPassword
+    user: process.env.EMAILUSER,
+    pass: process.env.EMAILPASSWORD
   }
 };

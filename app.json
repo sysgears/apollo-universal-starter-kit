@@ -1,8 +1,7 @@
 {
   "app": {
     "debugSQL": false,
-    "apolloLogging": false,
-    "googleAnalytics": "UA-000000-01"
+    "apolloLogging": false
   },
   "expo": {
     "name": "Apollo Universal Starter Kit",

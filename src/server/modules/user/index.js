@@ -26,54 +26,56 @@ const SECRET = settings.user.secret;
 
 const User = new UserDAO();
 
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: settings.user.auth.facebook.clientID,
-      clientSecret: settings.user.auth.facebook.clientSecret,
-      callbackURL: `${addressUrl}/auth/facebook/callback`,
-      scope: ['email'],
-      profileFields: ['id', 'emails', 'displayName']
-    },
-    async function(accessToken, refreshToken, profile, cb) {
-      const { id, username, displayName, emails: [{ value }] } = profile;
-      try {
-        let user = await User.getUserByFbIdOrEmail(id, value);
+if (settings.user.auth.facebook.enabled) {
+  passport.use(
+    new FacebookStrategy(
+      {
+        clientID: settings.user.auth.facebook.clientID,
+        clientSecret: settings.user.auth.facebook.clientSecret,
+        callbackURL: `${addressUrl}/auth/facebook/callback`,
+        scope: ['email'],
+        profileFields: ['id', 'emails', 'displayName']
+      },
+      async function(accessToken, refreshToken, profile, cb) {
+        const { id, username, displayName, emails: [{ value }] } = profile;
+        try {
+          let user = await User.getUserByFbIdOrEmail(id, value);
 
-        if (!user) {
-          const passwordPromise = bcrypt.hash(id, 12);
-          const isActive = true;
-          const createUserPromise = User.register({ username: username ? username : displayName, isActive });
-          const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
+          if (!user) {
+            const passwordPromise = bcrypt.hash(id, 12);
+            const isActive = true;
+            const createUserPromise = User.register({ username: username ? username : displayName, isActive });
+            const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
 
-          await User.createLocalOuth({
-            email: value,
-            password: password,
-            userId: createdUserId
-          });
+            await User.createLocalOuth({
+              email: value,
+              password: password,
+              userId: createdUserId
+            });
 
-          await User.createFacebookOuth({
-            id,
-            displayName,
-            userId: createdUserId
-          });
+            await User.createFacebookOuth({
+              id,
+              displayName,
+              userId: createdUserId
+            });
 
-          user = await User.getUser(createdUserId);
-        } else if (!user.fbId) {
-          await User.createFacebookOuth({
-            id,
-            displayName,
-            userId: user.id
-          });
+            user = await User.getUser(createdUserId);
+          } else if (!user.fbId) {
+            await User.createFacebookOuth({
+              id,
+              displayName,
+              userId: user.id
+            });
+          }
+
+          return cb(null, pick(user, ['id', 'username', 'isAdmin', 'email']));
+        } catch (err) {
+          return cb(err, {});
         }
-
-        return cb(null, pick(user, ['id', 'username', 'isAdmin', 'email']));
-      } catch (err) {
-        return cb(err, {});
       }
-    }
-  )
-);
+    )
+  );
+}
 
 export default new Feature({
   schema,
@@ -131,36 +133,40 @@ export default new Feature({
   },
   middlewareUse: [tokenMiddleware(SECRET, User, jwt), passport.initialize()],
   middlewareGet: [
-    { path: '/confirmation/:token', callback: confirmMiddleware(SECRET, User, jwt, addressUrl) },
-    { path: '/auth/facebook', callback: passport.authenticate('facebook') },
-    {
-      path: '/auth/facebook/callback',
-      callback: passport.authenticate('facebook', { session: false }),
-      callback2: async function(req, res) {
-        const user = await User.getUserWithPassword(req.user.id);
-        const refreshSecret = SECRET + user.password;
-        const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
+    settings.user.auth.password.sendConfirmationEmail
+      ? { path: '/confirmation/:token', callback: confirmMiddleware(SECRET, User, jwt, addressUrl) }
+      : {},
+    settings.user.auth.facebook.enabled ? { path: '/auth/facebook', callback: passport.authenticate('facebook') } : {},
+    settings.user.auth.facebook.enabled
+      ? {
+          path: '/auth/facebook/callback',
+          callback: passport.authenticate('facebook', { session: false }),
+          callback2: async function(req, res) {
+            const user = await User.getUserWithPassword(req.user.id);
+            const refreshSecret = SECRET + user.password;
+            const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
 
-        req.universalCookies.set('x-token', token, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true
-        });
-        req.universalCookies.set('x-refresh-token', refreshToken, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true
-        });
+            req.universalCookies.set('x-token', token, {
+              maxAge: 60 * 60 * 24 * 7,
+              httpOnly: true
+            });
+            req.universalCookies.set('x-refresh-token', refreshToken, {
+              maxAge: 60 * 60 * 24 * 7,
+              httpOnly: true
+            });
 
-        req.universalCookies.set('r-token', token, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: false
-        });
-        req.universalCookies.set('r-refresh-token', refreshToken, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: false
-        });
+            req.universalCookies.set('r-token', token, {
+              maxAge: 60 * 60 * 24 * 7,
+              httpOnly: false
+            });
+            req.universalCookies.set('r-refresh-token', refreshToken, {
+              maxAge: 60 * 60 * 24 * 7,
+              httpOnly: false
+            });
 
-        res.redirect(`${addressUrl}/profile`);
-      }
-    }
+            res.redirect(`${addressUrl}/profile`);
+          }
+        }
+      : {}
   ]
 });

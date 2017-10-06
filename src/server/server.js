@@ -3,7 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 import http from 'http';
-import { invert, isArray } from 'lodash';
+import { invert, isArray, isEmpty } from 'lodash';
 import url from 'url';
 import cookiesMiddleware from 'universal-cookie-express';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
@@ -80,10 +80,12 @@ for (const middlewareUse of modules.middlewaresUse) {
   app.use(middlewareUse);
 }
 for (const middlewareGet of modules.middlewaresGet) {
-  if (middlewareGet.callback2) {
-    app.get(middlewareGet.path, middlewareGet.callback, middlewareGet.callback2);
-  } else {
-    app.get(middlewareGet.path, middlewareGet.callback);
+  if (!isEmpty(middlewareGet)) {
+    if (middlewareGet.callback2) {
+      app.get(middlewareGet.path, middlewareGet.callback, middlewareGet.callback2);
+    } else {
+      app.get(middlewareGet.path, middlewareGet.callback);
+    }
   }
 }
 

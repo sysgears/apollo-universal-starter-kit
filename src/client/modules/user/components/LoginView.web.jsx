@@ -1,13 +1,13 @@
 // Web only component
 
 // React
-import React from 'react';
-import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
-import { Card, CardBlock, CardTitle, CardText } from 'reactstrap';
+import React from "react";
+import PropTypes from "prop-types";
+import Helmet from "react-helmet";
+import { Card, CardBlock, CardTitle, CardText } from "reactstrap";
 
-import PageLayout from '../../../app/PageLayout';
-import LoginForm from '../components/LoginForm';
+import PageLayout from "../../../app/PageLayout";
+import LoginForm from "../components/LoginForm";
 
 class LoginView extends React.PureComponent {
   state = {
@@ -30,8 +30,8 @@ class LoginView extends React.PureComponent {
         title="Login"
         meta={[
           {
-            name: 'description',
-            content: 'Login page'
+            name: "description",
+            content: "Login page"
           }
         ]}
       />

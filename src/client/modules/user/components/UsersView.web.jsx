@@ -1,11 +1,11 @@
 // Web only component
 // React
-import React from 'react';
-import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
-import { ListGroup, ListGroupItem } from 'reactstrap';
+import React from "react";
+import PropTypes from "prop-types";
+import Helmet from "react-helmet";
+import { ListGroup, ListGroupItem } from "reactstrap";
 
-import PageLayout from '../../../app/PageLayout';
+import PageLayout from "../../../app/PageLayout";
 
 function renderUsers(users) {
   return users.map(({ id, username, email, isAdmin }) => {
@@ -25,8 +25,8 @@ const UsersView = ({ loading, users, errors }) => {
       title="User"
       meta={[
         {
-          name: 'description',
-          content: 'User page'
+          name: "description",
+          content: "User page"
         }
       ]}
     />

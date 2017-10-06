@@ -1,9 +1,9 @@
 // Web only component
 // React
-import React from 'react';
-import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
-import PageLayout from '../../../app/PageLayout';
+import React from "react";
+import PropTypes from "prop-types";
+import Helmet from "react-helmet";
+import PageLayout from "../../../app/PageLayout";
 
 const ProfileView = ({ loading, currentUser }) => {
   const renderMetaData = () => (
@@ -11,8 +11,8 @@ const ProfileView = ({ loading, currentUser }) => {
       title="Profile"
       meta={[
         {
-          name: 'description',
-          content: 'Profile page'
+          name: "description",
+          content: "Profile page"
         }
       ]}
     />

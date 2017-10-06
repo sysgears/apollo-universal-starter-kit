@@ -1,10 +1,10 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 
-import { createTabBarIconWrapper } from '../common/components';
-import Counter from './containers/Counter';
-import reducers from './reducers';
+import { createTabBarIconWrapper } from "../common/components";
+import Counter from "./containers/Counter";
+import reducers from "./reducers";
 
-import Feature from '../connector';
+import Feature from "../connector";
 
 export default new Feature({
   tabItem: {
@@ -12,7 +12,7 @@ export default new Feature({
       screen: Counter,
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(Ionicons, {
-          name: 'ios-home-outline',
+          name: "ios-home-outline",
           size: 30
         })
       }

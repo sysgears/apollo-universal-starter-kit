@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import React from "react";
+import PropTypes from "prop-types";
+import { StyleSheet, View, Text, TextInput } from "react-native";
 
 const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
   const { container, inputText, text, errorField } = styles;
@@ -20,8 +20,8 @@ const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) 
 
 const styles = StyleSheet.create({
   inputText: {
-    backgroundColor: '#FFF',
-    color: '#000',
+    backgroundColor: "#FFF",
+    color: "#000",
     borderRadius: 5,
     paddingLeft: 5,
     paddingRight: 5,
@@ -30,21 +30,21 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   text: {
-    alignSelf: 'center',
+    alignSelf: "center",
     fontSize: 16,
     paddingTop: 10,
     paddingBottom: 10,
     flex: 1
   },
   errorField: {
-    borderColor: 'red',
+    borderColor: "red",
     borderWidth: StyleSheet.hairlineWidth
   },
   container: {
     height: 40,
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center"
   }
 });
 

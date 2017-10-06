@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { ListGroup, ListGroupItem } from 'reactstrap';
+import React from "react";
+import PropTypes from "prop-types";
+import { ListGroup, ListGroupItem } from "reactstrap";
 
-import PostCommentForm from './PostCommentForm';
+import PostCommentForm from "./PostCommentForm";
 
 function renderComments(comments, onCommentSelect, comment, deleteComment) {
   return comments.map(({ id, content }) => {
@@ -28,7 +28,7 @@ function renderComments(comments, onCommentSelect, comment, deleteComment) {
 
 function onCommentDelete(comment, deleteComment, onCommentSelect, id) {
   if (comment.id === id) {
-    onCommentSelect({ id: null, content: '' });
+    onCommentSelect({ id: null, content: "" });
   }
 
   deleteComment(id);
@@ -41,7 +41,7 @@ const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onF
     editComment(comment.id, values.content);
   }
 
-  onCommentSelect({ id: null, content: '' });
+  onCommentSelect({ id: null, content: "" });
   onFormSubmitted();
 };
 

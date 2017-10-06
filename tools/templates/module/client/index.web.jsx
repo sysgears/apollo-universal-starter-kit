@@ -1,15 +1,15 @@
 // React
-import React from 'react';
-import { Route, NavLink } from 'react-router-dom';
+import React from "react";
+import { Route, NavLink } from "react-router-dom";
 
 // Web UI
-import { NavItem } from 'reactstrap';
+import { NavItem } from "reactstrap";
 
 // Component and helpers
-import $Module$ from './containers/$Module$';
-import reducers from './reducers';
+import $Module$ from "./containers/$Module$";
+import reducers from "./reducers";
 
-import Feature from '../connector';
+import Feature from "../connector";
 
 export default new Feature({
   route: <Route exact path="/$module$" component={$Module$} />,

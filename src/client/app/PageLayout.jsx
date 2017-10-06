@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Container } from 'reactstrap';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
+import { Container } from "reactstrap";
 
-import NavBar from './NavBar';
+import NavBar from "./NavBar";
 
-const footerHeight = '40px';
+const footerHeight = "40px";
 
 const Footer = styled.footer`
   position: absolute;

@@ -1,11 +1,11 @@
 // Web only component
 
 // React
-import React from 'react';
-import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
-import PageLayout from '../../../app/PageLayout';
-import RegisterForm from '../components/RegisterForm';
+import React from "react";
+import PropTypes from "prop-types";
+import Helmet from "react-helmet";
+import PageLayout from "../../../app/PageLayout";
+import RegisterForm from "../components/RegisterForm";
 
 class RegisterView extends React.PureComponent {
   state = {
@@ -28,8 +28,8 @@ class RegisterView extends React.PureComponent {
         title="Register"
         meta={[
           {
-            name: 'description',
-            content: 'Register page'
+            name: "description",
+            content: "Register page"
           }
         ]}
       />

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Helmet from 'react-helmet';
-import { Button } from 'reactstrap';
-import PageLayout from '../../../app/PageLayout';
+import React from "react";
+import { Link } from "react-router-dom";
+import Helmet from "react-helmet";
+import { Button } from "reactstrap";
+import PageLayout from "../../../app/PageLayout";
 
 const PageNotFound = () => (
   <PageLayout>
@@ -11,8 +11,8 @@ const PageNotFound = () => (
         title="Apollo Starter Kit - Page not found"
         meta={[
           {
-            name: 'description',
-            content: 'Apollo Starter Kit - Page not found'
+            name: "description",
+            content: "Apollo Starter Kit - Page not found"
           }
         ]}
       />

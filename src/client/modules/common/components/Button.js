@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React from "react";
+import PropTypes from "prop-types";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 const Button = ({ children, onPress, disabled }) => {
   const { buttonStyle, textStyle } = styles;
@@ -14,16 +14,16 @@ const Button = ({ children, onPress, disabled }) => {
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    backgroundColor: '#0275d8',
+    backgroundColor: "#0275d8",
     borderRadius: 5,
     paddingLeft: 10,
     paddingRight: 10
   },
   textStyle: {
-    alignSelf: 'center',
-    color: '#FFF',
+    alignSelf: "center",
+    color: "#FFF",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     paddingTop: 10,
     paddingBottom: 10
   }

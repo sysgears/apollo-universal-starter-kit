@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import PropTypes from "prop-types";
+import { StyleSheet, Text, View } from "react-native";
 
-import { Button } from '../../common/components';
+import { Button } from "../../common/components";
 
 const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement }) => {
   if (loading) {
@@ -35,15 +35,15 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
   },
   element: {
     paddingTop: 30
   },
   box: {
-    textAlign: 'center',
+    textAlign: "center",
     marginLeft: 15,
     marginRight: 15,
     marginBottom: 5

@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React from 'react';
+import React from "react";
 
 const createTabBarIconWrapper = (
   TabBarIconComponent,

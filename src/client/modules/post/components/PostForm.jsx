@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
-import { StyleSheet, ScrollView } from 'react-native';
-import { Button, RenderField } from '../../common/components';
+import React from "react";
+import PropTypes from "prop-types";
+import { Field, reduxForm } from "redux-form";
+import { StyleSheet, ScrollView } from "react-native";
+import { Button, RenderField } from "../../common/components";
 
-const required = value => (value ? undefined : 'Required');
+const required = value => (value ? undefined : "Required");
 
 const PostForm = ({ handleSubmit, valid, onSubmit }) => {
   return (
@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
 });
 
 export default reduxForm({
-  form: 'post',
+  form: "post",
   enableReinitialize: true
 })(PostForm);

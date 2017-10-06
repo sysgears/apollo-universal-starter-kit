@@ -2,11 +2,11 @@
 
 /*eslint-disable no-unused-vars*/
 // React
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 // React native UI
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from "react-native";
 
 const ProfileView = () => {
   return (
@@ -21,15 +21,15 @@ const ProfileView = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
   },
   element: {
     paddingTop: 30
   },
   box: {
-    textAlign: 'center',
+    textAlign: "center",
     marginLeft: 15,
     marginRight: 15
   }

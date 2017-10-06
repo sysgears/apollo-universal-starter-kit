@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { merge, map, union, without, castArray } from 'lodash';
+import { merge, map, union, without, castArray } from "lodash";
 
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 

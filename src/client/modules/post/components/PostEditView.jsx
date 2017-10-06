@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import PropTypes from "prop-types";
+import { StyleSheet, Text, View } from "react-native";
 
-import PostForm from './PostForm';
-import PostComments from '../containers/PostComments';
+import PostForm from "./PostForm";
+import PostComments from "../containers/PostComments";
 
 const onSubmit = (post, addPost, editPost) => values => {
   if (post) {
@@ -55,13 +55,13 @@ PostEditView.propTypes = {
 const styles = StyleSheet.create({
   container: {
     margin: 5,
-    flexDirection: 'column'
+    flexDirection: "column"
   },
   element: {
     paddingTop: 30
   },
   box: {
-    textAlign: 'center',
+    textAlign: "center",
     marginLeft: 15,
     marginRight: 15
   }

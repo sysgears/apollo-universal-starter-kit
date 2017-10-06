@@ -80,6 +80,8 @@
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
     "nodemailer": "^4.1.2",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
     "performance-now": "^2.1.0",
     "persistgraphql": "^0.4.0",
     "prop-types": "^15.6.0",

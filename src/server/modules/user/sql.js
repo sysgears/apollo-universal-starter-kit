@@ -66,7 +66,7 @@ export default class User {
       .returning('id');
   }
 
-  UpdatePassword(id, password) {
+  updatePassword(id, password) {
     return knex('auth_local')
       .update({ password })
       .where({ user_id: id });

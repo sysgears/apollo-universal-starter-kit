@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import url from 'url';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
-import bcrypt from 'bcryptjs';
 import { pick } from 'lodash';
 
 import UserDAO from './sql';
@@ -42,14 +41,11 @@ if (settings.user.auth.facebook.enabled) {
           let user = await User.getUserByFbIdOrEmail(id, value);
 
           if (!user) {
-            const passwordPromise = bcrypt.hash(id, 12);
             const isActive = true;
-            const createUserPromise = User.register({ username: username ? username : displayName, isActive });
-            const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
+            const [createdUserId] = await User.register({ username: username ? username : displayName, isActive });
 
             await User.createLocalOuth({
               email: value,
-              password: password,
               userId: createdUserId
             });
 

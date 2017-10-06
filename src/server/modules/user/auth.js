@@ -63,7 +63,8 @@ export const tryLogin = async (email, password, User, SECRET) => {
   const e = new FieldError();
   const localAuth = await User.getLocalOuthByEmail(email);
 
-  if (!localAuth) {
+  // check if email and password exist in db
+  if (!localAuth || localAuth.password == null) {
     // user with provided email not found
     e.setError('email', 'Please enter a valid e-mail.');
     e.throwIf();

@@ -2,10 +2,11 @@
 import 'dotenv/config';
 
 // Google
-export const GOOGLE_TRACKING_ID = process.env.GOOGLE_TRACKING_ID;
+export const GOOGLE_TRACKING_ID = 'UA-000000-01'; // Replace with your GA tracking id here
 
 // Auth
 export const AUTH_SECRET = process.env.AUTH_SECRET;
+export const AUTH_DEVSERIAL = '00';
 export const FACEBOOK_CLIENTID = process.env.FACEBOOK_CLIENTID;
 export const FACEBOOK_CLIENTSECRET = process.env.FACEBOOK_CLIENTSECRET;
 // Email

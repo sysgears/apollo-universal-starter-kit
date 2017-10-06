@@ -1,4 +1,4 @@
-import { AUTH_SECRET, AUTH_DEVSERIAL, FACEBOOK_CLIENTID, FACEBOOK_CLIENTSECRET } from './secrets';
+import { AUTH_SECRET, CERTIFICATE_DEVSERIAL, FACEBOOK_CLIENTID, FACEBOOK_CLIENTSECRET } from './secrets';
 
 export default {
   secret: AUTH_SECRET,
@@ -9,7 +9,7 @@ export default {
       enabled: true
     },
     certificate: {
-      devSerial: AUTH_DEVSERIAL,
+      devSerial: CERTIFICATE_DEVSERIAL,
       enabled: false
     },
     facebook: {

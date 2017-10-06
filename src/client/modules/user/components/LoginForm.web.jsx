@@ -55,7 +55,7 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
         Login
       </Button>
       {settings.user.auth.facebook.enabled && (
-        <Button color="primary" type="button" onClick={facebookLogin}>
+        <Button color="primary" type="button" onClick={facebookLogin} style={{ marginLeft: 10 }}>
           Login with Facebook
         </Button>
       )}

@@ -1,11 +1,16 @@
-import Expo from "expo";
-import React from "react";
-import { View } from "react-native";
+import Expo from 'expo';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View } from 'react-native';
 
-import App from "./App";
+import App from './App';
 
 // we don't want this to require transformation
 class AwakeInDevApp extends React.Component {
+  static propTypes = {
+    exp: PropTypes.object
+  };
+
   render() {
     return React.createElement(
       View,
@@ -14,10 +19,8 @@ class AwakeInDevApp extends React.Component {
           flex: 1
         }
       },
-      React.createElement(App),
-      React.createElement(
-        process.env.NODE_ENV === "development" ? Expo.KeepAwake : View
-      )
+      React.createElement(App, { expUri: this.props.exp ? this.props.exp.initialUri : null }),
+      React.createElement(process.env.NODE_ENV === 'development' ? Expo.KeepAwake : View)
     );
   }
 }

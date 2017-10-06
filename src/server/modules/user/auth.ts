@@ -1,12 +1,20 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import * as _ from 'lodash';
+import { pick } from 'lodash';
+import settings from '../../../../settings';
+import FieldError from '../../../common/FieldError';
 import log from '../../../common/log';
 
-import FieldError from '../../../common/FieldError';
-
 export const createTokens = async (user: any, secret: any, refreshSecret: any) => {
-  const createToken = jwt.sign({ user: _.pick(user, ['id', 'username', 'isAdmin']) }, secret, { expiresIn: '1m' });
+  const createToken = jwt.sign(
+    {
+      user: pick(user, ['id', 'username', 'isAdmin'])
+    },
+    secret,
+    {
+      expiresIn: '1m'
+    }
+  );
 
   const createRefreshToken = jwt.sign(
     {
@@ -47,7 +55,7 @@ export const refreshTokens = async (token: any, refreshToken: any, User: any, SE
   return {
     token: newToken,
     refreshToken: newRefreshToken,
-    user: _.pick(user, ['id', 'username', 'isAdmin'])
+    user: pick(user, ['id', 'username', 'isAdmin'])
   };
 };
 
@@ -58,17 +66,23 @@ export const tryLogin = async (email: string, password: string, User: any, SECRE
   if (!localAuth) {
     // user with provided email not found
     e.setError('email', 'Please enter a valid e-mail.');
+    e.throwIf();
   }
 
   const valid = await bcrypt.compare(password, localAuth.password);
   if (!valid) {
     // bad password
     e.setError('password', 'Please enter a valid password.');
+    e.throwIf();
   }
 
-  e.throwIf();
-
   const user = await User.getUserWithPassword(localAuth.userId);
+
+  if (settings.user.confirm && !user.isActive) {
+    e.setError('email', 'Please confirm your e-mail first.');
+    e.throwIf();
+  }
+
   const refreshSecret = SECRET + user.password;
 
   const [token, refreshToken] = await createTokens(user, SECRET, refreshSecret);
@@ -77,4 +91,24 @@ export const tryLogin = async (email: string, password: string, User: any, SECRE
     token,
     refreshToken
   };
+};
+
+export const tryLoginSerial = async (serial: any, User: any, SECRET: any) => {
+  try {
+    const certAuth = await User.getUserWithSerial(serial);
+
+    const user = await User.getUserWithPassword(certAuth.id);
+
+    const refreshSecret = SECRET + user.password;
+    const [token, refreshToken] = await createTokens(user, SECRET, refreshSecret);
+
+    return {
+      user,
+      token,
+      refreshToken
+    };
+  } catch (err) {
+    log.error(err.stack);
+    return {};
+  }
 };

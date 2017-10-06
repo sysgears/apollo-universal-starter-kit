@@ -1,0 +1,31 @@
+version: '3'
+services:
+  node:
+    build:
+      context: .
+      args:
+        APP_DIR: ${APP_DIR}
+    environment:
+      - NODE_ENV=development
+    container_name: apollo_universal_starter
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./:${APP_DIR}
+      - ${APP_DIR}/build
+      - ${APP_DIR}/node_modules
+    working_dir: ${APP_DIR}
+    user: node
+    command: >
+       sh -c '
+       yarn &&
+       (test -f dev-db.sqlite3 || yarn seed) &&
+       exec yarn watch
+       '
+    ports:
+      - 3000:3000
+      - 3010:3010
+      - 3020:3020
+      - 8080:8080
+      - 19000:19000
+      - 19001:19001

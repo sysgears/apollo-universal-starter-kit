@@ -2,10 +2,10 @@ import * as Knex from 'knex';
 
 const initialAmount = 5;
 
-export async function seed(knex: Knex) {
-  await knex('count').truncate();
+export const seed = async (knex: Knex) => {
+  await knex('counter').truncate();
 
-  return knex('count')
+  return knex('counter')
     .returning('id')
     .insert({ amount: initialAmount });
-}
+};

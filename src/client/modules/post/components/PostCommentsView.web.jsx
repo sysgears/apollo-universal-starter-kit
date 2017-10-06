@@ -7,19 +7,16 @@ import PostCommentForm from "./PostCommentForm";
 function renderComments(comments, onCommentSelect, comment, deleteComment) {
   return comments.map(({ id, content }) => {
     return (
-      <ListGroupItem className="justify-content-between" key={id}>
+      <ListGroupItem className="d-flex justify-content-between" key={id}>
         {content}
         <div>
-          <span
-            className="badge badge-default badge-pill edit-comment"
-            onClick={() => onCommentSelect({ id, content })}
-          >
+          <span className="badge badge-secondary edit-comment" onClick={() => onCommentSelect({ id, content })}>
             Edit
           </span>
+          &nbsp;
           <span
-            className="badge badge-default badge-pill delete-comment"
-            onClick={() =>
-              onCommentDelete(comment, deleteComment, onCommentSelect, id)}
+            className="badge badge-secondary delete-comment"
+            onClick={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
           >
             Delete
           </span>
@@ -37,14 +34,7 @@ function onCommentDelete(comment, deleteComment, onCommentSelect, id) {
   deleteComment(id);
 }
 
-const onSubmit = (
-  comment,
-  postId,
-  addComment,
-  editComment,
-  onCommentSelect,
-  onFormSubmitted
-) => values => {
+const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted) => values => {
   if (comment.id === null) {
     addComment(values.content, postId);
   } else {
@@ -70,20 +60,11 @@ const PostCommentsView = ({
       <h3>Comments</h3>
       <PostCommentForm
         postId={postId}
-        onSubmit={onSubmit(
-          comment,
-          postId,
-          addComment,
-          editComment,
-          onCommentSelect,
-          onFormSubmitted
-        )}
+        onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)}
         initialValues={comment}
       />
       <h1 />
-      <ListGroup>
-        {renderComments(comments, onCommentSelect, comment, deleteComment)}
-      </ListGroup>
+      <ListGroup>{renderComments(comments, onCommentSelect, comment, deleteComment)}</ListGroup>
     </div>
   );
 };

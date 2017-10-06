@@ -1,13 +1,13 @@
-import chai from "chai";
-import { step } from "mocha-steps";
+import chai from 'chai';
+import { step } from 'mocha-steps';
 
-import { getServer, getApollo } from "../../testHelpers/integrationSetup";
+import { getServer, getApollo } from '../../testHelpers/integrationSetup';
 
-import COUNT_GET_QUERY from "../../../client/modules/counter/graphql/getCount.graphql";
-import COUNT_ADD_MUTATION from "../../../client/modules/counter/graphql/addCount.graphql";
-import COUNT_SUBSCRIPTION from "../../../client/modules/counter/graphql/countUpdated.graphql";
+import COUNTER_QUERY from '../../../client/modules/counter/graphql/CounterQuery.graphql';
+import ADD_COUNTER from '../../../client/modules/counter/graphql/AddCounter.graphql';
+import COUNTER_SUBSCRIPTION from '../../../client/modules/counter/graphql/CounterSubscription.graphql';
 
-describe("Counter example API works", () => {
+describe('Counter example API works', () => {
   let server, apollo;
 
   before(() => {
@@ -15,47 +15,49 @@ describe("Counter example API works", () => {
     apollo = getApollo();
   });
 
-  step("Has GraphiQL endpoint", () => {
+  step('Has GraphiQL endpoint', () => {
     return chai
       .request(server)
-      .get("/graphiql")
+      .get('/graphiql')
       .end((err, res) => {
         res.status.should.be(200);
-        res.body.should.be("{}");
+        res.body.should.be('{}');
       });
   });
 
-  step("Responds to counter get GraphQL query", async () => {
-    let result = await apollo.query({ query: COUNT_GET_QUERY });
+  step('Responds to counter get GraphQL query', async () => {
+    let result = await apollo.query({ query: COUNTER_QUERY });
 
     result.data.should.deep.equal({
-      count: { amount: 5, __typename: "Count" }
+      counter: { amount: 5, __typename: 'Counter' }
     });
   });
 
-  step("Increments counter on GraphQL mutation", async () => {
+  step('Increments counter on GraphQL mutation', async () => {
     let result = await apollo.mutate({
-      mutation: COUNT_ADD_MUTATION,
+      mutation: ADD_COUNTER,
       variables: { amount: 2 }
     });
 
     result.data.should.deep.equal({
-      addCount: { amount: 7, __typename: "Count" }
+      addCounter: { amount: 7, __typename: 'Counter' }
     });
   });
 
-  step("Triggers subscription on GraphQL mutation", done => {
-    apollo.mutate({ mutation: COUNT_ADD_MUTATION, variables: { amount: 1 } });
+  step('Triggers subscription on GraphQL mutation', done => {
+    apollo.mutate({ mutation: ADD_COUNTER, variables: { amount: 1 } });
 
     apollo
       .subscribe({
-        query: COUNT_SUBSCRIPTION,
+        query: COUNTER_SUBSCRIPTION,
         variables: {}
       })
       .subscribe({
         next(data) {
           data.should.deep.equal({
-            countUpdated: { amount: 8, __typename: "Count" }
+            data: {
+              counterUpdated: { amount: 8, __typename: 'Counter' }
+            }
           });
           done();
         }

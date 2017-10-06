@@ -1,8 +1,8 @@
-import * as knex from 'knex';
-import _ = require('lodash');
-import db from '../../sql/connector';
+import { Raw } from 'knex';
+import * as _ from 'lodash';
+import knex from '../../sql/connector';
 
-const orderedFor = (rows: knex.Raw[], collection: any[], field: string, singleObject: boolean) => {
+const orderedFor = (rows: Raw[], collection: any[], field: string, singleObject: boolean) => {
   // return the rows ordered for the collection
   const inGroupsOfField = _.groupBy(rows, field);
   return collection.map((element: any) => {
@@ -22,13 +22,13 @@ export interface PostInput {
 }
 
 export default class Post {
-  public getPostsPagination(limit: number, after: number) {
+  public postsPagination(limit: number, after: number) {
     let where = '';
     if (after > 0) {
       where = `id < ${after}`;
     }
 
-    return db
+    return knex
       .select('id', 'title', 'content')
       .from('post')
       .whereRaw(where)
@@ -37,7 +37,7 @@ export default class Post {
   }
 
   public async getCommentsForPostIds(postIds: number[]) {
-    const res = await db
+    const res = await knex
       .select('id', 'content', 'post_id AS postId')
       .from('comment')
       .whereIn('post_id', postIds);
@@ -46,20 +46,20 @@ export default class Post {
   }
 
   public getTotal() {
-    return db('post')
+    return knex('post')
       .count('id as count')
       .first();
   }
 
   public getNextPageFlag(id: number) {
-    return db('post')
+    return knex('post')
       .count('id as count')
       .where('id', '<', id)
       .first();
   }
 
-  public getPost(id: number) {
-    return db
+  public post(id: number) {
+    return knex
       .select('id', 'title', 'content')
       .from('post')
       .where('id', '=', id)
@@ -67,19 +67,19 @@ export default class Post {
   }
 
   public addPost(input: PostInput) {
-    return db('post')
+    return knex('post')
       .insert(input)
       .returning('id');
   }
 
   public deletePost(id: number) {
-    return db('post')
+    return knex('post')
       .where('id', '=', id)
       .del();
   }
 
   public editPost(input: PostInput) {
-    return db('post')
+    return knex('post')
       .where('id', '=', input.id)
       .update({
         title: input.title,
@@ -88,13 +88,13 @@ export default class Post {
   }
 
   public addComment(input: PostInput) {
-    return db('comment')
+    return knex('comment')
       .insert({ content: input.content, post_id: input.postId })
       .returning('id');
   }
 
   public getComment(id: number) {
-    return db
+    return knex
       .select('id', 'content')
       .from('comment')
       .where('id', '=', id)
@@ -102,13 +102,13 @@ export default class Post {
   }
 
   public deleteComment(id: number) {
-    return db('comment')
+    return knex('comment')
       .where('id', '=', id)
       .del();
   }
 
   public editComment(input: PostInput) {
-    return db('comment')
+    return knex('comment')
       .where('id', '=', input.id)
       .update({
         content: input.content

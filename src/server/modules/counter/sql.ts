@@ -1,11 +1,11 @@
 import knex from '../../../server/sql/connector';
 
-export default class Count {
-  public getCount() {
-    return knex('count').first();
+export default class Counter {
+  public counterQuery() {
+    return knex('counter').first();
   }
 
-  public addCount(amount: number) {
-    return knex('count').increment('amount', amount);
+  public addCounter(amount: number) {
+    return knex('counter').increment('amount', amount);
   }
 }

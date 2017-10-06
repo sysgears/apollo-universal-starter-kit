@@ -1,15 +1,15 @@
 /*eslint-disable no-unused-vars*/
 // React
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 // Apollo
-import { graphql, compose } from "react-apollo";
+import { graphql, compose } from 'react-apollo';
 
 // Components
-import ProfileView from "../components/ProfileView";
+import ProfileView from '../components/ProfileView';
 
-import CURRENT_USER from "../graphql/currentUser.graphql";
+import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 class Profile extends React.Component {
   render() {
@@ -23,8 +23,8 @@ Profile.propTypes = {
 };
 
 export default compose(
-  graphql(CURRENT_USER, {
-    options: { fetchPolicy: "network-only" },
+  graphql(CURRENT_USER_QUERY, {
+    options: { fetchPolicy: 'network-only' },
     props({ data: { loading, currentUser } }) {
       return { loading, currentUser };
     }

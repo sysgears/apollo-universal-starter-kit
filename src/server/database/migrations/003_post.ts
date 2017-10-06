@@ -1,6 +1,6 @@
 import * as Knex from 'knex';
 
-exports.up = (knex: Knex, Promise: any) => {
+export const up = async (knex: Knex, Promise: any) => {
   return Promise.all([
     knex.schema
       .createTable('post', table => {
@@ -23,6 +23,6 @@ exports.up = (knex: Knex, Promise: any) => {
   ]);
 };
 
-exports.down = (knex: Knex, Promise: any) => {
+export const down = async (knex: Knex, Promise: any) => {
   return Promise.all([knex.schema.dropTable('post'), knex.schema.dropTable('comment')]);
 };

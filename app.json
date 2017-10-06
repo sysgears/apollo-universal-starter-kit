@@ -1,14 +1,15 @@
 {
   "app": {
     "debugSQL": false,
-    "apolloLogging": false
+    "apolloLogging": false,
+    "googleAnalytics": "UA-000000-01"
   },
   "expo": {
     "name": "Apollo Universal Starter Kit",
     "icon": "app.png",
     "version": "1.0.0",
     "slug": "apollo-universal-starter-kit",
-    "sdkVersion": "15.0.0",
+    "sdkVersion": "21.0.0",
     "ios": {
       "bundleIdentifier": "com.sysgears.apollokit"
     },

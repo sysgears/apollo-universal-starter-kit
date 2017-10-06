@@ -5,24 +5,18 @@ import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
 
 import modules from "../client/modules";
 
+export const storeReducer = combineReducers({
+  router: routerReducer,
+  form: formReducer,
+  ...modules.reducers
+});
+
 const createReduxStore = (initialState, client, routerMiddleware) => {
-  const store = createStore(
-    combineReducers({
-      apollo: client.reducer(),
-      router: routerReducer,
-      form: formReducer,
-
-      ...modules.reducers
-    }),
+  return createStore(
+    storeReducer,
     initialState, // initial state
-    routerMiddleware
-      ? composeWithDevTools(
-          applyMiddleware(client.middleware(), routerMiddleware)
-        )
-      : applyMiddleware(client.middleware())
+    routerMiddleware ? composeWithDevTools(applyMiddleware(routerMiddleware)) : undefined
   );
-
-  return store;
 };
 
 export default createReduxStore;

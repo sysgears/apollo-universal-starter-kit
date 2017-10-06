@@ -25,16 +25,21 @@ const ProfileView = ({ loading, currentUser }) => {
         <div className="text-center">Loading...</div>
       </PageLayout>
     );
-  } else {
+  } else if (currentUser) {
     return (
       <PageLayout>
         {renderMetaData()}
         <h2>Profile</h2>
         <p>username: {currentUser.username}</p>
         <p>email: {currentUser.email}</p>
-        {currentUser.isAdmin && (
-          <p>is admin: {currentUser.isAdmin.toString()}</p>
-        )}
+        {currentUser.isAdmin && <p>is admin: {currentUser.isAdmin.toString()}</p>}
+      </PageLayout>
+    );
+  } else {
+    return (
+      <PageLayout>
+        {renderMetaData()}
+        <h2>No current user logged in</h2>
       </PageLayout>
     );
   }

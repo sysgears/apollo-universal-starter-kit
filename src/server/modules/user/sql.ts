@@ -1,12 +1,12 @@
-import { camelizeKeys } from 'humps';
 // Helpers
-import db from '../../sql/connector';
+import { camelizeKeys } from 'humps';
+import knex from '../../../server/sql/connector';
 
 // Actual query fetching and transformation in DB
 export default class User {
   public async getUsers() {
     return camelizeKeys(
-      await db
+      await knex
         .select('u.id', 'u.username', 'u.is_admin', 'la.email')
         .from('user AS u')
         .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
@@ -15,7 +15,7 @@ export default class User {
 
   public async getUser(id: number) {
     return camelizeKeys(
-      await db
+      await knex
         .select('u.id', 'u.username', 'u.is_admin', 'la.email')
         .from('user AS u')
         .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
@@ -26,8 +26,8 @@ export default class User {
 
   public async getUserWithPassword(id: number) {
     return camelizeKeys(
-      await db
-        .select('u.id', 'u.username', 'u.is_admin', 'la.password')
+      await knex
+        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'la.password')
         .from('user AS u')
         .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
         .where('u.id', '=', id)
@@ -35,27 +35,44 @@ export default class User {
     );
   }
 
-  public register(user: any) {
-    return db('user')
-      .insert(user)
+  public async getUserWithSerial(serial: any) {
+    return camelizeKeys(
+      await knex
+        .select('u.id', 'u.username', 'u.is_admin')
+        .from('user AS u')
+        .leftJoin('cert_auth AS ca', 'ca.user_id', 'u.id')
+        .where('ca.serial', '=', serial)
+        .first()
+    );
+  }
+
+  public register({ username, isActive }: { username: string; isActive: boolean }) {
+    return knex('user')
+      .insert({ username, is_active: isActive })
       .returning('id');
   }
 
-  public createLocalAuth(localAuth: any) {
-    return db('local_auth')
-      .insert({ email: localAuth.email, password: localAuth.password, user_id: localAuth.userId })
+  public createLocalOuth({ email, password, userId }: any) {
+    return knex('local_auth')
+      .insert({ email, password, user_id: userId })
       .returning('id');
   }
 
   public UpdatePassword(id: number, password: string) {
-    return db('local_auth')
+    return knex('local_auth')
       .update({ password })
       .where({ user_id: id });
   }
 
-  public async getLocalAuth(id: number) {
+  public updateActive(id: number, isActive: boolean) {
+    return knex('user')
+      .update({ is_active: isActive })
+      .where({ id });
+  }
+
+  public async getLocalOuth(id: number) {
     return camelizeKeys(
-      await db
+      await knex
         .select('*')
         .from('local_auth')
         .where({ id })
@@ -63,9 +80,9 @@ export default class User {
     );
   }
 
-  public async getLocalAuthByEmail(email: string) {
+  public async getLocalOuthByEmail(email: string) {
     return camelizeKeys(
-      await db
+      await knex
         .select('*')
         .from('local_auth')
         .where({ email })

@@ -1,28 +1,28 @@
 import { PubSub } from 'graphql-subscriptions';
 
-const COUNT_UPDATED_TOPIC = 'count_updated';
+const COUNTER_SUBSCRIPTION = 'counter_subscription';
 
 export default (pubsub: PubSub) => ({
   Query: {
-    count(obj: any, args: any, context: any) {
-      return context.Count.getCount();
+    counter(obj: any, args: any, context: any) {
+      return context.Counter.counterQuery();
     }
   },
   Mutation: {
-    async addCount(obj: any, { amount }: { amount: number }, context: any) {
-      await context.Count.addCount(amount);
-      const count = await context.Count.getCount();
+    async addCounter(obj: any, { amount }: { amount: number }, context: any) {
+      await context.Counter.addCounter(amount);
+      const counter = await context.Counter.counterQuery();
 
-      pubsub.publish(COUNT_UPDATED_TOPIC, {
-        countUpdated: { amount: count.amount }
+      pubsub.publish(COUNTER_SUBSCRIPTION, {
+        counterUpdated: { amount: counter.amount }
       });
 
-      return count;
+      return counter;
     }
   },
   Subscription: {
-    countUpdated: {
-      subscribe: () => pubsub.asyncIterator(COUNT_UPDATED_TOPIC)
+    counterUpdated: {
+      subscribe: () => pubsub.asyncIterator(COUNTER_SUBSCRIPTION)
     }
   }
 });

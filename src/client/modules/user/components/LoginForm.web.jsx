@@ -1,21 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Field, reduxForm } from "redux-form";
-import {
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormFeedback,
-  Button
-} from "reactstrap";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Field, reduxForm } from 'redux-form';
+import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap';
 
-const required = value => (value ? undefined : "Required");
+const required = value => (value ? undefined : 'Required');
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => {
-  let color = "normal";
+  let color = 'normal';
   if (touched && error) {
-    color = "danger";
+    color = 'danger';
   }
 
   return (
@@ -39,27 +32,11 @@ renderField.propTypes = {
 const LoginForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
   return (
     <Form name="login" onSubmit={handleSubmit(onSubmit)}>
-      <Field
-        name="email"
-        component={renderField}
-        type="email"
-        label="Email"
-        validate={required}
-      />
-      <Field
-        name="password"
-        component={renderField}
-        type="password"
-        label="Password"
-        validate={required}
-      />
+      <Field name="email" component={renderField} type="email" label="Email" validate={required} />
+      <Field name="password" component={renderField} type="password" label="Password" validate={required} />
       {errors && (
         <FormGroup color="danger">
-          <FormFeedback>
-            <lu>
-              {errors.map(error => <li key={error.field}>{error.message}</li>)}
-            </lu>
-          </FormFeedback>
+          <FormFeedback>{errors.map(error => <li key={error.field}>{error.message}</li>)}</FormFeedback>
         </FormGroup>
       )}
       <Button color="primary" type="submit" disabled={submitting}>
@@ -77,5 +54,5 @@ LoginForm.propTypes = {
 };
 
 export default reduxForm({
-  form: "login"
+  form: 'login'
 })(LoginForm);

@@ -1,33 +1,32 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Helmet from "react-helmet";
-import { Link } from "react-router-dom";
-import { ListGroup, ListGroupItem, Button } from "reactstrap";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Helmet from 'react-helmet';
+import { Link } from 'react-router-dom';
+import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
-import PageLayout from "../../../app/PageLayout";
+import PageLayout from '../../../app/PageLayout';
 
-function renderPosts(postsQuery, deletePost) {
-  return postsQuery.edges.map(({ node: { id, title } }) => {
+function renderPosts(posts, deletePost) {
+  return posts.edges.map(({ node: { id, title } }) => {
     return (
-      <ListGroupItem className="justify-content-between" key={id}>
-        <span>
+      <ListGroupItem className="d-flex justify-content-between" key={id}>
+        <div>
           <Link className="post-link" to={`/post/${id}`}>
             {title}
           </Link>
-        </span>
-        <span
-          className="badge badge-default badge-pill delete-button"
-          onClick={deletePost(id)}
-        >
-          Delete
-        </span>
+        </div>
+        <div>
+          <span className="badge badge-secondary delete-button" onClick={deletePost(id)}>
+            Delete
+          </span>
+        </div>
       </ListGroupItem>
     );
   });
 }
 
-function renderLoadMore(postsQuery, loadMoreRows) {
-  if (postsQuery.pageInfo.hasNextPage) {
+function renderLoadMore(posts, loadMoreRows) {
+  if (posts.pageInfo.hasNextPage) {
     return (
       <Button id="load-more" color="primary" onClick={loadMoreRows}>
         Load more ...
@@ -36,15 +35,14 @@ function renderLoadMore(postsQuery, loadMoreRows) {
   }
 }
 
-const PostList = ({ loading, postsQuery, deletePost, loadMoreRows }) => {
+const PostList = ({ loading, posts, deletePost, loadMoreRows }) => {
   const renderMetaData = () => (
     <Helmet
       title="Apollo Starter Kit - Posts list"
       meta={[
         {
-          name: "description",
-          content:
-            "Apollo Fullstack Starter Kit - List of all posts example page"
+          name: 'description',
+          content: 'Apollo Fullstack Starter Kit - List of all posts example page'
         }
       ]}
     />
@@ -66,13 +64,13 @@ const PostList = ({ loading, postsQuery, deletePost, loadMoreRows }) => {
           <Button color="primary">Add</Button>
         </Link>
         <h1 />
-        <ListGroup>{renderPosts(postsQuery, deletePost)}</ListGroup>
+        <ListGroup>{renderPosts(posts, deletePost)}</ListGroup>
         <div>
           <small>
-            ({postsQuery.edges.length} / {postsQuery.totalCount})
+            ({posts.edges.length} / {posts.totalCount})
           </small>
         </div>
-        {renderLoadMore(postsQuery, loadMoreRows)}
+        {renderLoadMore(posts, loadMoreRows)}
       </PageLayout>
     );
   }
@@ -80,7 +78,7 @@ const PostList = ({ loading, postsQuery, deletePost, loadMoreRows }) => {
 
 PostList.propTypes = {
   loading: PropTypes.bool.isRequired,
-  postsQuery: PropTypes.object,
+  posts: PropTypes.object,
   deletePost: PropTypes.func.isRequired,
   loadMoreRows: PropTypes.func.isRequired
 };

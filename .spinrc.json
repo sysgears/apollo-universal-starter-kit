@@ -26,12 +26,13 @@
     "backendBuildDir": "build/server",
     "frontendBuildDir": "build/client",
     "dllBuildDir": "build/dll",
-    "overridesConfig": "tools/WebpackAppConfig.js",
+    "overridesConfig": "tools/webpackAppConfig.js",
     "stack": ["apollo", "angular", "sass", "ts", "webpack"],
     "backendUrl": "http://{ip}:8080/graphql",
     "ssr": false,
     "webpackDll": true,
-    "persistGraphQL": true,
+    "reactHotLoader": false,
+    "persistGraphQL": false,
     "frontendRefreshOnBackendChange": true
   }
 }

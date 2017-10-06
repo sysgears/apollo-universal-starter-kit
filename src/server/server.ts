@@ -3,10 +3,10 @@ import * as cors from 'cors';
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import { createServer, Server } from 'http';
+import * as http from 'http';
 import { invert, isArray } from 'lodash';
 import * as path from 'path';
 // import * as cookiesMiddleware from 'universal-cookie-express';
-// eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import * as queryMap from 'persisted_queries.json';
 import * as url from 'url';
 import modules from './modules';
@@ -20,14 +20,13 @@ import websiteMiddleware from './middleware/website';
 
 const spinConfig = spinRc.options;
 
-// eslint-disable-next-line import/no-mutable-exports
 let server: Server;
 
 const app = express();
 
 // app.use(cookiesMiddleware());
 
-const { protocol, port, pathname, hostname } = url.parse(__BACKEND_URL__);
+const { port, pathname } = url.parse(__BACKEND_URL__);
 const serverPort = process.env.PORT || port;
 
 // Don't rate limit heroku
@@ -35,8 +34,10 @@ app.enable('trust proxy');
 
 if (__DEV__) {
   const corsOptions = {
-    origin: `${protocol}//${hostname}:3000`,
-    credentials: true
+    credentials: true,
+    origin: (origin: any, callback: any) => {
+      callback(null, true);
+    }
   };
   app.use(cors(corsOptions));
 }
@@ -77,14 +78,22 @@ if (__PERSIST_GQL__) {
   });
 }
 
-for (const middleware of modules.middlewares) {
-  app.use(middleware);
+for (const middlewareUse of modules.middlewaresUse) {
+  app.use(middlewareUse);
 }
+for (const middlewareGet of modules.middlewaresGet) {
+  if (middlewareGet.callback2) {
+    app.get(middlewareGet.path, middlewareGet.callback, middlewareGet.callback2);
+  } else {
+    app.get(middlewareGet.path, middlewareGet.callback);
+  }
+}
+
 app.use(pathname, (req: Request, res: Response, next: NextFunction) => graphqlMiddleware(req, res, next));
-app.all('/graphiql', (req: Request, res: Response, next: NextFunction) => graphiqlMiddleware(req, res, next));
+app.use('/graphiql', (req: Request, res: Response, next: NextFunction) => graphiqlMiddleware(req, res, next));
 app.use((req: Request, res: Response, next: NextFunction) => websiteMiddleware(queryMap)(req, res, next));
 
-server = createServer(app);
+server = http.createServer(app);
 
 addGraphQLSubscriptions(server);
 

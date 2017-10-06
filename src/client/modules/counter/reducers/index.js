@@ -7,7 +7,7 @@ export default function(state = defaultState, action) {
     case 'COUNTER_INCREMENT':
       return {
         ...state,
-        reduxCount: (state.reduxCount += action.value)
+        reduxCount: state.reduxCount + action.value
       };
 
     default:

@@ -1,14 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { graphql, compose } from "react-apollo";
-import update from "immutability-helper";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
+import update from 'immutability-helper';
 
-import CounterView from "../components/CounterView";
+import CounterView from '../components/CounterView';
 
-import AMOUNT_QUERY from "../graphql/getCount.graphql";
-import ADD_COUNT_MUTATION from "../graphql/addCount.graphql";
-import COUNT_SUBSCRIPTION from "../graphql/countUpdated.graphql";
+import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
+import ADD_COUNTER from '../graphql/AddCounter.graphql';
+import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
 class Counter extends React.Component {
   constructor(props) {
@@ -35,14 +35,11 @@ class Counter extends React.Component {
   subscribeToCount() {
     const { subscribeToMore } = this.props;
     this.subscription = subscribeToMore({
-      document: COUNT_SUBSCRIPTION,
+      document: COUNTER_SUBSCRIPTION,
       variables: {},
-      updateQuery: (
-        prev,
-        { subscriptionData: { data: { countUpdated: { amount } } } }
-      ) => {
+      updateQuery: (prev, { subscriptionData: { data: { counterUpdated: { amount } } } }) => {
         return update(prev, {
-          count: {
+          counter: {
             amount: {
               $set: amount
             }
@@ -59,31 +56,31 @@ class Counter extends React.Component {
 
 Counter.propTypes = {
   loading: PropTypes.bool.isRequired,
-  count: PropTypes.object,
+  counter: PropTypes.object,
   updateCountQuery: PropTypes.func,
   onReduxIncrement: PropTypes.func,
-  addCount: PropTypes.func.isRequired,
+  addCounter: PropTypes.func.isRequired,
   subscribeToMore: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired
 };
 
 const CounterWithApollo = compose(
-  graphql(AMOUNT_QUERY, {
-    props({ data: { loading, count, subscribeToMore } }) {
-      return { loading, count, subscribeToMore };
+  graphql(COUNTER_QUERY, {
+    props({ data: { loading, counter, subscribeToMore } }) {
+      return { loading, counter, subscribeToMore };
     }
   }),
-  graphql(ADD_COUNT_MUTATION, {
+  graphql(ADD_COUNTER, {
     props: ({ ownProps, mutate }) => ({
-      addCount(amount) {
+      addCounter(amount) {
         return () =>
           mutate({
             variables: { amount },
             updateQueries: {
-              getCount: (prev, { mutationResult }) => {
-                const newAmount = mutationResult.data.addCount.amount;
+              counterQuery: (prev, { mutationResult }) => {
+                const newAmount = mutationResult.data.addCounter.amount;
                 return update(prev, {
-                  count: {
+                  counter: {
                     amount: {
                       $set: newAmount
                     }
@@ -92,10 +89,10 @@ const CounterWithApollo = compose(
               }
             },
             optimisticResponse: {
-              __typename: "Mutation",
-              addCount: {
-                __typename: "Count",
-                amount: ownProps.count.amount + 1
+              __typename: 'Mutation',
+              addCounter: {
+                __typename: 'Counter',
+                amount: ownProps.counter.amount + 1
               }
             }
           });
@@ -110,7 +107,7 @@ export default connect(
     onReduxIncrement(value) {
       return () =>
         dispatch({
-          type: "COUNTER_INCREMENT",
+          type: 'COUNTER_INCREMENT',
           value: Number(value)
         });
     }

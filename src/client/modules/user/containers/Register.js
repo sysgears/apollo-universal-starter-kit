@@ -1,14 +1,14 @@
 // React
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 // Apollo
-import { graphql, compose } from "react-apollo";
+import { graphql, compose } from 'react-apollo';
 
 // Components
-import RegisterView from "../components/RegisterView";
+import RegisterView from '../components/RegisterView';
 
-import USER_REGISTER from "../graphql/register.graphql";
+import REGISTER from '../graphql/Register.graphql';
 
 class Register extends React.Component {
   render() {
@@ -21,7 +21,7 @@ Register.propTypes = {
 };
 
 const RegisterWithApollo = compose(
-  graphql(USER_REGISTER, {
+  graphql(REGISTER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       register: async ({ username, email, password }) => {
         try {
@@ -33,7 +33,7 @@ const RegisterWithApollo = compose(
             return { errors: register.errors };
           }
           if (history) {
-            return history.push("/profile");
+            return history.push('/profile');
           }
           if (navigation) {
             return navigation.goBack();

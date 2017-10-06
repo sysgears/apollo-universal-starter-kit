@@ -1,15 +1,15 @@
 /* eslint-disable no-undef */
 // React
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 // Apollo
-import { graphql, compose } from "react-apollo";
+import { graphql, compose } from 'react-apollo';
 
 // Components
-import LoginView from "../components/LoginView";
+import LoginView from '../components/LoginView';
 
-import USER_LOGIN from "../graphql/login.graphql";
+import LOGIN from '../graphql/Login.graphql';
 
 class Login extends React.Component {
   render() {
@@ -23,7 +23,7 @@ Login.propTypes = {
 };
 
 const LoginWithApollo = compose(
-  graphql(USER_LOGIN, {
+  graphql(LOGIN, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       login: async ({ email, password }) => {
         try {
@@ -36,11 +36,11 @@ const LoginWithApollo = compose(
           }
 
           const { token, refreshToken } = login.tokens;
-          localStorage.setItem("token", token);
-          localStorage.setItem("refreshToken", refreshToken);
+          localStorage.setItem('token', token);
+          localStorage.setItem('refreshToken', refreshToken);
 
           if (history) {
-            return history.push("/profile");
+            return history.push('/profile');
           }
           if (navigation) {
             return navigation.goBack();

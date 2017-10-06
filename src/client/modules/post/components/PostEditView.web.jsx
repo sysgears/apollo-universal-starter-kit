@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Helmet from "react-helmet";
-import { Link } from "react-router-dom";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Helmet from 'react-helmet';
+import { Link } from 'react-router-dom';
 
-import PageLayout from "../../../app/PageLayout";
-import PostForm from "./PostForm";
-import PostComments from "../containers/PostComments";
+import PageLayout from '../../../app/PageLayout';
+import PostForm from './PostForm';
+import PostComments from '../containers/PostComments';
 
 const onSubmit = (post, addPost, editPost) => values => {
   if (post) {
@@ -15,15 +15,7 @@ const onSubmit = (post, addPost, editPost) => values => {
   }
 };
 
-const PostEditView = ({
-  loading,
-  post,
-  match,
-  location,
-  subscribeToMore,
-  addPost,
-  editPost
-}) => {
+const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost }) => {
   let postObj = post;
 
   // if new post was just added read it from router
@@ -36,8 +28,8 @@ const PostEditView = ({
       title="Apollo Starter Kit - Edit post"
       meta={[
         {
-          name: "description",
-          content: "Edit post example page"
+          name: 'description',
+          content: 'Edit post example page'
         }
       ]}
     />
@@ -57,11 +49,8 @@ const PostEditView = ({
         <Link id="back-button" to="/posts">
           Back
         </Link>
-        <h2>{post ? "Edit" : "Create"} Post</h2>
-        <PostForm
-          onSubmit={onSubmit(postObj, addPost, editPost)}
-          initialValues={postObj}
-        />
+        <h2>{post ? 'Edit' : 'Create'} Post</h2>
+        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} initialValues={postObj} />
         <br />
         {postObj && (
           <PostComments

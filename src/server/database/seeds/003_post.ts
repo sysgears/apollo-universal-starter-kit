@@ -31,7 +31,7 @@ export const seed = async (knex: Knex, Promise: any) => {
         });
 
       await Promise.all(
-        Array.from(Array(2).keys()).map(async jj => {
+        Array.from(new Array(2).keys()).map(async jj => {
           return knex('comment')
             .returning('id')
             .insert({

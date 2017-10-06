@@ -1,15 +1,15 @@
 /*eslint-disable no-unused-vars*/
 // React
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 // Apollo
-import { graphql, compose } from "react-apollo";
+import { graphql, compose } from 'react-apollo';
 
 // Components
-import UsersView from "../components/UsersView";
+import UsersView from '../components/UsersView';
 
-import USERS_QUERY from "../graphql/users.graphql";
+import USERS_QUERY from '../graphql/UsersQuery.graphql';
 
 class Users extends React.Component {
   render() {

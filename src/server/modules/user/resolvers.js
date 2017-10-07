@@ -37,31 +37,41 @@ export default pubsub => ({
         const localAuth = pick(input, ['email', 'password']);
         const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
 
-        if (emailExists) {
+        if (emailExists && emailExists.password) {
           e.setError('email', 'E-mail already exists.');
           e.throwIf();
         }
 
-        const passwordPromise = bcrypt.hash(localAuth.password, 12);
+        let userId = 0;
+        if (!emailExists) {
+          const passwordPromise = bcrypt.hash(localAuth.password, 12);
 
-        let isActive = false;
-        if (!settings.user.confirm) {
-          isActive = true;
+          let isActive = false;
+          if (!settings.user.auth.password.confirm) {
+            isActive = true;
+          }
+
+          const createUserPromise = context.User.register({ ...input, isActive });
+          const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
+
+          localAuth.password = password;
+
+          await context.User.createLocalOuth({
+            ...localAuth,
+            userId: createdUserId
+          });
+          userId = createdUserId;
+
+          // if user has previously logged with facebook auth
+        } else {
+          const password = await bcrypt.hash(localAuth.password, 12);
+          await context.User.updatePassword(emailExists.userId, password);
+          userId = emailExists.userId;
         }
 
-        const createUserPromise = context.User.register({ ...input, isActive });
-        const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
+        const user = await context.User.getUser(userId);
 
-        localAuth.password = password;
-
-        const [id] = await context.User.createLocalOuth({
-          ...localAuth,
-          userId: createdUserId
-        });
-
-        const user = await context.User.getUser(createdUserId);
-
-        if (context.mailer && settings.user.sendConfirmationEmail) {
+        if (context.mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists) {
           // async email
           jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
             const url = `${protocol}//${hostname}:${serverPort}/confirmation/${emailToken}`;
@@ -120,7 +130,7 @@ export default pubsub => ({
     async updatePassword(obj, { id, newPassword }, context) {
       try {
         const password = await bcrypt.hash(newPassword, 12);
-        await context.User.UpdatePassword(id, password);
+        await context.User.updatePassword(id, password);
         return true;
       } catch (e) {
         return false;

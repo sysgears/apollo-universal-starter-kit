@@ -1,11 +1,21 @@
-import { AUTH_SECRET } from './secrets';
+import { AUTH_SECRET, CERTIFICATE_DEVSERIAL, FACEBOOK_CLIENTID, FACEBOOK_CLIENTSECRET } from './secrets';
 
 export default {
   secret: AUTH_SECRET,
-  confirm: true,
-  sendConfirmationEmail: true,
   auth: {
-    password: true,
-    certificate: false
+    password: {
+      confirm: false,
+      sendConfirmationEmail: false,
+      enabled: true
+    },
+    certificate: {
+      devSerial: CERTIFICATE_DEVSERIAL,
+      enabled: false
+    },
+    facebook: {
+      clientID: FACEBOOK_CLIENTID,
+      clientSecret: FACEBOOK_CLIENTSECRET,
+      enabled: false
+    }
   }
 };

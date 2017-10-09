@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { COUNTER } from '../reducers/actionTypes';
+import { counterStore } from '../reducers/index';
 
 @Component({
   selector: 'counter-view',
@@ -7,16 +9,28 @@ import { Component } from '@angular/core';
 })
 export default class {
   public count: number = 5;
-  public reduxCount: number = 1;
+  public reduxCount: number;
 
-  constructor() {}
+  constructor() {
+    this.setReduxCount();
+  }
 
   public addCount() {
     this.count++;
   }
 
   public onReduxIncrement() {
-    this.reduxCount++;
+    counterStore.dispatch({ type: COUNTER.INCREMENT });
+    this.setReduxCount();
+  }
+
+  public onReduxIncrease(value: number) {
+    counterStore.dispatch({ type: COUNTER.INCREASE, value });
+    this.setReduxCount();
+  }
+
+  private setReduxCount() {
+    this.reduxCount = counterStore.getState().reduxCount || 1;
   }
 }
 

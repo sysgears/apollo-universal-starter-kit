@@ -2,17 +2,10 @@
 import bcrypt from 'bcryptjs';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
-import url from 'url';
 import { refreshTokens, tryLogin } from './auth';
 import { requiresAuth, requiresAdmin } from './permissions';
 import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
-
-const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
-let serverPort = process.env.PORT || port;
-if (__DEV__) {
-  serverPort = '3000';
-}
 
 export default pubsub => ({
   Query: {
@@ -71,10 +64,10 @@ export default pubsub => ({
 
         const user = await context.User.getUser(userId);
 
-        if (context.mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists) {
+        if (context.mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && context.req) {
           // async email
           jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
-            const url = `${protocol}//${hostname}:${serverPort}/confirmation/${emailToken}`;
+            const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${emailToken}`;
             context.mailer.sendMail({
               from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
               to: localAuth.email,

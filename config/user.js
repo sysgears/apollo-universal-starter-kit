@@ -4,8 +4,8 @@ export default {
   secret: AUTH_SECRET,
   auth: {
     password: {
-      confirm: false,
-      sendConfirmationEmail: false,
+      confirm: true,
+      sendConfirmationEmail: true,
       enabled: true
     },
     certificate: {

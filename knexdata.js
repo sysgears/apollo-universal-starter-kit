@@ -1,8 +1,8 @@
+import settings from './settings';
+
 export const development = {
-  client: 'sqlite3',
-  connection: {
-    filename: './dev-db.sqlite3'
-  },
+  client: settings.db.client,
+  connection: settings.db.connection.development,
   seeds: {
     directory: './src/server/database/seeds'
   },
@@ -13,10 +13,8 @@ export const development = {
 };
 
 export const production = {
-  client: 'sqlite3',
-  connection: {
-    filename: './prod-db.sqlite3'
-  },
+  client: settings.db.client,
+  connection: settings.db.connection.production,
   seeds: {
     directory: './src/server/database/seeds'
   },
@@ -27,10 +25,8 @@ export const production = {
 };
 
 export const test = {
-  client: 'sqlite3',
-  connection: {
-    filename: ':memory:'
-  },
+  client: settings.db.client,
+  connection: settings.db.connection.test,
   seeds: {
     directory: './src/server/database/seeds'
   },

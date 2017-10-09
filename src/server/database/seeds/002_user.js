@@ -1,32 +1,8 @@
 import bcrypt from 'bcryptjs';
-/*
-For DB's other than SQLite you'll have to use raw queries for truncation if there is a foreign key constraint in your table.
-
-Instead of
-await Promise.all([
-  knex('user').truncate(),
-  knex('auth_local').truncate(),
-  knex('auth_certificate').truncate(),
-  knex('auth_facebook').truncate()
-]);
-
-Use
-await Promise.all([
-  knex.raw('ALTER SEQUENCE user_id_seq RESTART WITH 1'),
-  knex.raw('TRUNCATE TABLE user CASCADE')
-  knex.raw('TRUNCATE TABLE auth_local CASCADE')
-  knex.raw('TRUNCATE TABLE auth_certificate CASCADE')
-  knex.raw('TRUNCATE TABLE auth_facebook CASCADE')
-]);
-*/
+import truncateTables from '../../../common/db';
 
 export async function seed(knex, Promise) {
-  await Promise.all([
-    knex('user').truncate(),
-    knex('auth_local').truncate(),
-    knex('auth_certificate').truncate(),
-    knex('auth_facebook').truncate()
-  ]);
+  await truncateTables(knex, Promise, ['user', 'auth_local', 'auth_certificate', 'auth_facebook']);
 
   const [adminId] = await knex('user')
     .returning('id')

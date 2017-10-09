@@ -5,12 +5,7 @@ type User {
     email: String!
 }
 
-type FieldError {
-    field: String!
-    message: String!
-}
-
-type RegisterPayload {
+type UserPayload {
     user: User
     errors: [FieldError!]
 }
@@ -26,17 +21,46 @@ type Tokens {
 }
 
 extend type Query {
-    users: [User]
+    # Get all users ordered by: OrderByUserInput add filtered by: FilterUserInput
+    users(orderBy: OrderByUserInput, filter: FilterUserInput): [User]
+    # Get user by id
     user(id: Int!): User
+    # Get current user
     currentUser: User
 }
 
 extend type Mutation {
-    register(input: RegisterUserInput!): RegisterPayload!
+    # Register user
+    register(input: RegisterUserInput!): UserPayload!
+    # Login user
     login(input: LoginUserInput!): AuthPayload!
+    # Logout user
     logout: Boolean!
-    updatePassword(id: Int!, newPassword: String!): Boolean!
+    # Refreash user tokens
     refreshTokens(token: String!, refreshToken: String!): AuthPayload!
+    # Create new user
+    addUser(input: AddUserInput!): UserPayload!
+    # Delete a user
+    deleteUser(id: Int!): UserPayload!
+    # Edit a user
+    editUser(input: EditUserInput!): UserPayload!
+    # Update user password
+    updatePassword(id: Int!, newPassword: String!): Boolean!
+}
+
+# Input for ordering users
+input OrderByUserInput {
+    # id | username | isAdmin | email
+    column: String
+    # asc | desc
+    order: String
+}
+
+# Input for filtering users
+input FilterUserInput {
+    username: String
+    email: String
+    isAdmin: Boolean
 }
 
 input RegisterUserInput {
@@ -48,6 +72,23 @@ input RegisterUserInput {
 input LoginUserInput {
     email: String!
     password: String!
+}
+
+# Input for addUser Mutation
+input AddUserInput {
+    username: String!
+    email: String!
+    password: String!
+    isAdmin: Boolean
+}
+
+# Input for editUser Mutation
+input EditUserInput {
+    id: Int!
+    username: String!
+    email: String!
+    password: String!
+    isAdmin: Boolean
 }
 
 extend type Subscription {

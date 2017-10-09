@@ -4,12 +4,30 @@ import knex from '../../../server/sql/connector';
 
 // Actual query fetching and transformation in DB
 export default class User {
-  async getUsers() {
+  async getUsers(orderBy /*, filter*/) {
+    let where = {};
+    /*if (filter['id']) {
+      where['id'] = filter['id'];
+    }*/
+
+    // filter by orderBy
+    // provide default filtering
+    let column = 'id';
+    let order = 'asc';
+    if (orderBy && orderBy.column) {
+      column = orderBy.column;
+      if (orderBy.order) {
+        order = orderBy.order;
+      }
+    }
+
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'la.email')
+        .select('u.id as id', 'u.username', 'u.is_admin', 'la.email')
         .from('user AS u')
         .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
+        .where(where)
+        .orderBy(column, order)
     );
   }
 

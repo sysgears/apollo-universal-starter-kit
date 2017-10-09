@@ -9,8 +9,8 @@ import settings from '../../../../settings';
 
 export default pubsub => ({
   Query: {
-    users: requiresAdmin.createResolver((obj, args, context) => {
-      return context.User.getUsers();
+    users: requiresAdmin.createResolver((obj, { orderBy, filter }, context) => {
+      return context.User.getUsers(orderBy, filter);
     }),
     user: requiresAuth.createResolver((obj, { id }, context) => {
       return context.User.getUser(id);
@@ -120,6 +120,21 @@ export default pubsub => ({
 
       return true;
     },
+    refreshTokens(obj, { token, refreshToken }, context) {
+      return refreshTokens(token, refreshToken, context.User, context.SECRET);
+    },
+    addUser: requiresAuth.createResolver((obj, { input }, context) => {
+      console.log(input);
+      return { user: { id: 2 } };
+    }),
+    editUser: requiresAuth.createResolver((obj, { input }, context) => {
+      console.log(input);
+      return { user: { id: 2 } };
+    }),
+    deleteUser: requiresAuth.createResolver((obj, { id }, context) => {
+      console.log(id);
+      return { user: { id: 2 } };
+    }),
     async updatePassword(obj, { id, newPassword }, context) {
       try {
         const password = await bcrypt.hash(newPassword, 12);
@@ -128,9 +143,6 @@ export default pubsub => ({
       } catch (e) {
         return false;
       }
-    },
-    refreshTokens(obj, { token, refreshToken }, context) {
-      return refreshTokens(token, refreshToken, context.User, context.SECRET);
     }
   },
   Subscription: {}

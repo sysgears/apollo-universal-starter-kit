@@ -1,7 +1,7 @@
-import { AUTH_SECRET, CERTIFICATE_DEVSERIAL, FACEBOOK_CLIENTID, FACEBOOK_CLIENTSECRET } from './secrets';
+const CERTIFICATE_DEVSERIAL = '00';
 
 export default {
-  secret: AUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
   auth: {
     password: {
       confirm: true,
@@ -13,8 +13,8 @@ export default {
       enabled: false
     },
     facebook: {
-      clientID: FACEBOOK_CLIENTID,
-      clientSecret: FACEBOOK_CLIENTSECRET,
+      clientID: process.env.FACEBOOK_CLIENTID,
+      clientSecret: process.env.FACEBOOK_CLIENTSECRET,
       enabled: false
     }
   }

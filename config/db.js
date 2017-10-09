@@ -1,10 +1,9 @@
-import { DB_TYPE, DB_USER, DB_PASSWORD, DB_DATABASE } from './secrets';
-
+let DB_TYPE = 'sqlite';
 let client = '';
 let connectionDevelopment = {
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_DATABASE,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
   multipleStatements: true,
   charset: 'utf8'
 };

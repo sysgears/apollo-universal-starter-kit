@@ -51,7 +51,7 @@ async function renderServerSide(req, res) {
   let link = new BatchHttpLink({ fetch });
 
   const client = createApolloClient({
-    link: ApolloLink.from((settings.apolloLogging ? [new LoggingLink()] : []).concat([link])),
+    link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link])),
     cache
   });
 

@@ -11,11 +11,11 @@
     },
     "android": {
       "stack": ["react-native", "android"],
-      "enabled": true
+      "enabled": false
     },
     "ios": {
       "stack": ["react-native", "ios"],
-      "enabled": true
+      "enabled": false
     },
     "test": {
       "stack": "server",

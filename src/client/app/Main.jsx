@@ -20,7 +20,6 @@ import url from 'url';
 import createApolloClient from '../../common/createApolloClient';
 import createReduxStore, { storeReducer } from '../../common/createReduxStore';
 import settings from '../../../settings';
-import { GOOGLE_TRACKING_ID } from '../../../config/secrets';
 import Routes from './Routes';
 import modules from '../modules';
 
@@ -87,7 +86,7 @@ let link = ApolloLink.split(
 // }
 
 const client = createApolloClient({
-  link: ApolloLink.from((settings.apolloLogging ? [new LoggingLink()] : []).concat([link])),
+  link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link])),
   cache
 });
 
@@ -103,7 +102,7 @@ const logPageView = location => {
 };
 
 // Initialize Google Analytics and send events on each location change
-ReactGA.initialize(GOOGLE_TRACKING_ID);
+ReactGA.initialize(settings.analytics.ga.trackingId);
 logPageView(window.location);
 
 history.listen(location => logPageView(location));

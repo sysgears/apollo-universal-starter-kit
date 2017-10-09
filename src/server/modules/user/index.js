@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import url from 'url';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import { pick } from 'lodash';
@@ -13,14 +12,6 @@ import confirmMiddleware from './confirm';
 import Feature from '../connector';
 import settings from '../../../../settings';
 
-const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
-let serverPort = process.env.PORT || port;
-if (__DEV__) {
-  serverPort = '3000';
-}
-
-const addressUrl = `${protocol}//${hostname}:${serverPort}`;
-
 const SECRET = settings.user.secret;
 
 const User = new UserDAO();
@@ -31,7 +22,7 @@ if (settings.user.auth.facebook.enabled) {
       {
         clientID: settings.user.auth.facebook.clientID,
         clientSecret: settings.user.auth.facebook.clientSecret,
-        callbackURL: `${addressUrl}/auth/facebook/callback`,
+        callbackURL: '/auth/facebook/callback',
         scope: ['email'],
         profileFields: ['id', 'emails', 'displayName']
       },
@@ -131,7 +122,7 @@ export default new Feature({
     app.use(tokenMiddleware(SECRET, User, jwt));
 
     if (settings.user.auth.password.sendConfirmationEmail) {
-      app.get('/confirmation/:token', confirmMiddleware(SECRET, User, jwt, addressUrl));
+      app.get('/confirmation/:token', confirmMiddleware(SECRET, User, jwt));
     }
 
     if (settings.user.auth.facebook.enabled) {
@@ -165,7 +156,7 @@ export default new Feature({
           httpOnly: false
         });
 
-        res.redirect(`${addressUrl}/profile`);
+        res.redirect('/profile');
       });
     }
   }

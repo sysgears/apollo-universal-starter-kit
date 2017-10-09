@@ -1,4 +1,4 @@
-export default (SECRET, User, jwt, addressUrl) => async (req, res) => {
+export default (SECRET, User, jwt) => async (req, res) => {
   try {
     const { user: { id } } = jwt.verify(req.params.token, SECRET);
 
@@ -7,5 +7,5 @@ export default (SECRET, User, jwt, addressUrl) => async (req, res) => {
     res.send('error');
   }
 
-  return res.redirect(`${addressUrl}/login`);
+  return res.redirect('/login');
 };

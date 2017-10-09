@@ -10,16 +10,17 @@ function renderComments(comments, onCommentSelect, comment, deleteComment) {
       <ListGroupItem className="d-flex justify-content-between" key={id}>
         {content}
         <div>
-          <span className="badge badge-secondary edit-comment" onClick={() => onCommentSelect({ id, content })}>
+          <a className="badge badge-secondary edit-comment" onClick={() => onCommentSelect({ id, content })} href="#">
             Edit
-          </span>
+          </a>
           &nbsp;
-          <span
+          <a
             className="badge badge-secondary delete-comment"
             onClick={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
+            href="#"
           >
             Delete
-          </span>
+          </a>
         </div>
       </ListGroupItem>
     );

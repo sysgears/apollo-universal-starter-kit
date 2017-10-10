@@ -23,13 +23,13 @@ export default class User {
 
     // add filter conditions
     if (filter) {
-      if (has(filter, 'isAdmin')) {
+      if (has(filter, 'isAdmin') && filter.isAdmin !== null) {
         queryBuilder.where(function() {
           this.where('is_admin', filter.isAdmin);
         });
       }
 
-      if (has(filter, 'searchText')) {
+      if (has(filter, 'searchText') && filter.searchText !== '') {
         queryBuilder.where(function() {
           this.where('username', 'like', `%${filter.searchText}%`).orWhere('email', 'like', `%${filter.searchText}%`);
         });

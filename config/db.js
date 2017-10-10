@@ -8,9 +8,6 @@ let connectionDevelopment = {
   charset: 'utf8'
 };
 let connectionProduction = connectionDevelopment;
-let connectionTest = {
-  filename: ':memory:'
-};
 
 if (DB_TYPE === 'mysql') {
   // mysql
@@ -34,7 +31,6 @@ export default {
   client: client,
   connection: {
     development: connectionDevelopment,
-    production: connectionProduction,
-    test: connectionTest
+    production: connectionProduction
   }
 };

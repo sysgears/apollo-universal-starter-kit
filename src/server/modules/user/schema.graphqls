@@ -58,8 +58,9 @@ input OrderByUserInput {
 
 # Input for filtering users
 input FilterUserInput {
-    username: String
-    email: String
+    # search by username or email
+    searchText: String
+    # filter by isAdmin
     isAdmin: Boolean
 }
 

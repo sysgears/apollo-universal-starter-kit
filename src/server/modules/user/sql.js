@@ -1,34 +1,42 @@
 // Helpers
 import { camelizeKeys } from 'humps';
+import { has } from 'lodash';
 import knex from '../../../server/sql/connector';
 
 // Actual query fetching and transformation in DB
 export default class User {
-  async getUsers(orderBy /*, filter*/) {
-    let where = {};
-    /*if (filter['id']) {
-      where['id'] = filter['id'];
-    }*/
+  async getUsers(orderBy, filter) {
+    const queryBuilder = knex
+      .select('u.id as id', 'u.username', 'u.is_admin', 'la.email')
+      .from('user AS u')
+      .leftJoin('auth_local AS la', 'la.user_id', 'u.id');
 
-    // filter by orderBy
-    // provide default filtering
-    let column = 'id';
-    let order = 'asc';
+    // add order by
     if (orderBy && orderBy.column) {
-      column = orderBy.column;
+      let column = orderBy.column;
+      let order = 'asc';
       if (orderBy.order) {
         order = orderBy.order;
       }
+      queryBuilder.orderBy(column, order);
     }
 
-    return camelizeKeys(
-      await knex
-        .select('u.id as id', 'u.username', 'u.is_admin', 'la.email')
-        .from('user AS u')
-        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
-        .where(where)
-        .orderBy(column, order)
-    );
+    // add filter conditions
+    if (filter) {
+      if (has(filter, 'isAdmin')) {
+        queryBuilder.where(function() {
+          this.where('is_admin', filter.isAdmin);
+        });
+      }
+
+      if (has(filter, 'searchText')) {
+        queryBuilder.where(function() {
+          this.where('username', 'like', `%${filter.searchText}%`).orWhere('email', 'like', `%${filter.searchText}%`);
+        });
+      }
+    }
+
+    return camelizeKeys(await queryBuilder);
   }
 
   async getUser(id) {

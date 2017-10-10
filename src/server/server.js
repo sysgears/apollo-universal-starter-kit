@@ -6,8 +6,6 @@ import http from 'http';
 import { invert, isArray } from 'lodash';
 import url from 'url';
 import cookiesMiddleware from 'universal-cookie-express';
-/* eslint-disable import/no-extraneous-dependencies */
-import 'dotenv/config';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 import modules from './modules';

@@ -1,7 +1,7 @@
 import settings from '../../settings';
 
 const truncateTables = async (knex, Promise, tables) => {
-  if (settings.db.dbType === 'sqlite') {
+  if (settings.db.dbType === 'sqlite' || process.env.NODE_ENV === 'test') {
     return Promise.all(tables.map(table => knex(table).truncate()));
   } else if (settings.db.dbType === 'mysql') {
     return knex.transaction(async function(trx) {
@@ -11,8 +11,6 @@ const truncateTables = async (knex, Promise, tables) => {
       await knex.raw('SET FOREIGN_KEY_CHECKS=1').transacting(trx);
     });
   } else if (settings.db.dbType === 'pg') {
-    tables.map(table => console.log(`TRUNCATE ${table} RESTART IDENTITY CASCADE`));
-
     return Promise.all(tables.map(table => knex.raw(`TRUNCATE "${table}" RESTART IDENTITY CASCADE`)));
   }
 };

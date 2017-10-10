@@ -13,7 +13,7 @@ export default function(state = defaultState, action) {
         searchText: action.value
       };
 
-    case 'USER_FILTER_IS_ADMIN':
+    case 'USER_FILTER_IS_ADMIN': {
       let isAdmin = null;
       if (action.value === true) {
         isAdmin = true;
@@ -23,6 +23,7 @@ export default function(state = defaultState, action) {
         ...state,
         isAdmin
       };
+    }
 
     case 'USER_ORDER_BY':
       return {

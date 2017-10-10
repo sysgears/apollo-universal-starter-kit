@@ -1,5 +1,5 @@
 // Helpers
-import { camelizeKeys } from 'humps';
+import { camelizeKeys, decamelize } from 'humps';
 import { has } from 'lodash';
 import knex from '../../../server/sql/connector';
 
@@ -18,7 +18,8 @@ export default class User {
       if (orderBy.order) {
         order = orderBy.order;
       }
-      queryBuilder.orderBy(column, order);
+
+      queryBuilder.orderBy(decamelize(column), order);
     }
 
     // add filter conditions

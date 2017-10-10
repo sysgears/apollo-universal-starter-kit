@@ -5,7 +5,7 @@ import { NavItem } from 'reactstrap';
 
 // Component and helpers
 import Profile from './containers/Profile';
-import Users from './containers/Users';
+import Users from './components/Users';
 import Register from './containers/Register';
 import Login from './containers/Login';
 import reducers from './reducers';

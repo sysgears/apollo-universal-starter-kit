@@ -14,9 +14,14 @@ export default function(state = defaultState, action) {
       };
 
     case 'USER_FILTER_IS_ADMIN':
+      let isAdmin = null;
+      if (action.value === true) {
+        isAdmin = true;
+      }
+
       return {
         ...state,
-        isAdmin: action.value
+        isAdmin
       };
 
     case 'USER_ORDER_BY':

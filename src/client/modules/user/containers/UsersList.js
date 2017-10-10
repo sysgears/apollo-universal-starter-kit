@@ -8,23 +8,23 @@ import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import UsersView from '../components/UsersView';
+import UsersListView from '../components/UsersListView';
 
 import USERS_QUERY from '../graphql/UsersQuery.graphql';
 
-class Users extends React.Component {
+class UsersList extends React.Component {
   render() {
-    return <UsersView {...this.props} />;
+    return <UsersListView {...this.props} />;
   }
 }
 
-Users.propTypes = {
+UsersList.propTypes = {
   loading: PropTypes.bool.isRequired,
   users: PropTypes.array,
   errors: PropTypes.array
 };
 
-const UserWithApollo = compose(
+const UsersListWithApollo = compose(
   graphql(USERS_QUERY, {
     options: props => {
       return {
@@ -39,7 +39,7 @@ const UserWithApollo = compose(
       return { loading, users, errors: error ? error.graphQLErrors : null };
     }
   })
-)(Users);
+)(UsersList);
 
 export default connect(
   state => ({
@@ -48,18 +48,6 @@ export default connect(
     orderBy: state.user.orderBy
   }),
   dispatch => ({
-    onSearchTextChange(searchText) {
-      dispatch({
-        type: 'USER_FILTER_SEARCH_TEXT',
-        value: searchText
-      });
-    },
-    onIsAdminChange(isAdmin) {
-      dispatch({
-        type: 'USER_FILTER_IS_ADMIN',
-        value: isAdmin
-      });
-    },
     onOrderBy(orderBy) {
       dispatch({
         type: 'USER_ORDER_BY',
@@ -67,4 +55,4 @@ export default connect(
       });
     }
   })
-)(UserWithApollo);
+)(UsersListWithApollo);

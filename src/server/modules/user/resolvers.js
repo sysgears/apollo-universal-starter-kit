@@ -131,9 +131,18 @@ export default pubsub => ({
       console.log(input);
       return { user: { id: 2 } };
     }),
-    deleteUser: requiresAuth.createResolver((obj, { id }, context) => {
-      console.log(id);
-      return { user: { id: 2 } };
+    deleteUser: requiresAuth.createResolver(async (obj, { id }, context) => {
+      try {
+        const user = await context.User.getUser(id);
+        const isDeleted = await context.User.deleteUser(id);
+        if (isDeleted) {
+          return { user };
+        } else {
+          return { user: {} };
+        }
+      } catch (e) {
+        return { errors: e };
+      }
     }),
     async updatePassword(obj, { id, newPassword }, context) {
       try {

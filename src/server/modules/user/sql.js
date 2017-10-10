@@ -91,6 +91,13 @@ export default class User {
       .returning('id');
   }
 
+  deleteUser(id) {
+    console.log(id);
+    return knex('user')
+      .where('id', '=', id)
+      .del();
+  }
+
   updatePassword(id, password) {
     return knex('auth_local')
       .update({ password })

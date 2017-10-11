@@ -57,6 +57,7 @@ const dependencyPlatforms = {
   knex: 'server',
   mysql2: 'server',
   nodemailer: 'server',
+  'optics-agent': 'server',
   persistgraphql: ['server', 'web'],
   'performance-now': 'server',
   pg: 'server',

@@ -1,5 +1,4 @@
 /*eslint-disable no-unused-vars*/
-import bcrypt from 'bcryptjs';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import { refreshTokens, tryLogin } from './auth';
@@ -37,17 +36,12 @@ export default pubsub => ({
 
         let userId = 0;
         if (!emailExists) {
-          const passwordPromise = bcrypt.hash(localAuth.password, 12);
-
           let isActive = false;
           if (!settings.user.auth.password.confirm) {
             isActive = true;
           }
 
-          const createUserPromise = context.User.register({ ...input, isActive });
-          const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
-
-          localAuth.password = password;
+          const [createdUserId] = await context.User.register({ ...input, isActive });
 
           await context.User.createLocalOuth({
             ...localAuth,
@@ -57,8 +51,7 @@ export default pubsub => ({
 
           // if user has previously logged with facebook auth
         } else {
-          const password = await bcrypt.hash(localAuth.password, 12);
-          await context.User.updatePassword(emailExists.userId, password);
+          await context.User.updatePassword(emailExists.userId, localAuth.password);
           userId = emailExists.userId;
         }
 
@@ -123,13 +116,18 @@ export default pubsub => ({
     refreshTokens(obj, { token, refreshToken }, context) {
       return refreshTokens(token, refreshToken, context.User, context.SECRET);
     },
-    addUser: requiresAdmin.createResolver((obj, { input }, context) => {
+    addUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
       console.log(input);
       return { user: { id: 2 } };
     }),
-    editUser: requiresAdmin.createResolver((obj, { input }, context) => {
+    editUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
       console.log(input);
-      return { user: { id: 2 } };
+      await context.User.editUser(input);
+      const user = await context.User.getUser(input.id);
+
+      console.log(user);
+
+      return { user };
     }),
     deleteUser: requiresAdmin.createResolver(async (obj, { id }, context) => {
       const e = new FieldError();
@@ -158,9 +156,7 @@ export default pubsub => ({
     }),
     async updatePassword(obj, { id, newPassword }, context) {
       try {
-        const password = await bcrypt.hash(newPassword, 12);
-        await context.User.updatePassword(id, password);
-        return true;
+        return context.User.updatePassword(id, newPassword);
       } catch (e) {
         return false;
       }

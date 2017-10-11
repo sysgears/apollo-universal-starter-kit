@@ -15,8 +15,13 @@ class UsersFilterView extends React.PureComponent {
     onIsAdminChange(!isAdmin);
   };
 
+  handleIsActive = () => {
+    const { onIsActiveChange, isActive } = this.props;
+    onIsActiveChange(!isActive);
+  };
+
   render() {
-    const { isAdmin } = this.props;
+    const { isAdmin, isActive } = this.props;
     return (
       <form className="form-inline">
         <label className="mr-sm-2">Filter: </label>
@@ -38,6 +43,18 @@ class UsersFilterView extends React.PureComponent {
             Is Admin
           </label>
         </div>
+
+        <div className="form-check mb-2 mr-sm-2 mb-sm-0">
+          <label className="form-check-label">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              defaultChecked={isActive}
+              onChange={this.handleIsActive}
+            />{' '}
+            Is Active
+          </label>
+        </div>
       </form>
     );
   }
@@ -46,8 +63,10 @@ class UsersFilterView extends React.PureComponent {
 UsersFilterView.propTypes = {
   searchText: PropTypes.string,
   isAdmin: PropTypes.bool,
+  isActive: PropTypes.bool,
   onSearchTextChange: PropTypes.func.isRequired,
-  onIsAdminChange: PropTypes.func.isRequired
+  onIsAdminChange: PropTypes.func.isRequired,
+  onIsActiveChange: PropTypes.func.isRequired
 };
 
 export default UsersFilterView;

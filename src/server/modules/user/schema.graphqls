@@ -2,6 +2,7 @@ type User {
     id: Int!
     username: String!
     isAdmin: Boolean
+    isActive: Boolean
     email: String!
 }
 
@@ -40,17 +41,17 @@ extend type Mutation {
     refreshTokens(token: String!, refreshToken: String!): AuthPayload!
     # Create new user
     addUser(input: AddUserInput!): UserPayload!
-    # Delete a user
-    deleteUser(id: Int!): UserPayload!
     # Edit a user
     editUser(input: EditUserInput!): UserPayload!
+    # Delete a user
+    deleteUser(id: Int!): UserPayload!
     # Update user password
     updatePassword(id: Int!, newPassword: String!): Boolean!
 }
 
 # Input for ordering users
 input OrderByUserInput {
-    # id | username | isAdmin | email
+    # id | username | isAdmin | isAdmin | email
     column: String
     # asc | desc
     order: String
@@ -62,6 +63,8 @@ input FilterUserInput {
     searchText: String
     # filter by isAdmin
     isAdmin: Boolean
+    # filter by isActive
+    isActive: Boolean
 }
 
 input RegisterUserInput {
@@ -87,9 +90,10 @@ input AddUserInput {
 input EditUserInput {
     id: Int!
     username: String!
+    isAdmin: Boolean!
+    isActive: Boolean!
     email: String!
-    password: String!
-    isAdmin: Boolean
+    password: String
 }
 
 extend type Subscription {

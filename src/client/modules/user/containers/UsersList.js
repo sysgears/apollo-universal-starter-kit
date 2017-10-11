@@ -27,12 +27,12 @@ UsersList.propTypes = {
 
 const UsersListWithApollo = compose(
   graphql(USERS_QUERY, {
-    options: ({ orderBy, searchText, isAdmin }) => {
+    options: ({ orderBy, searchText, isAdmin, isActive }) => {
       return {
         fetchPolicy: 'cache-and-network',
         variables: {
           orderBy: orderBy,
-          filter: { searchText, isAdmin }
+          filter: { searchText, isAdmin, isActive }
         }
       };
     },
@@ -71,6 +71,7 @@ export default connect(
   state => ({
     searchText: state.user.searchText,
     isAdmin: state.user.isAdmin,
+    isActive: state.user.isActive,
     orderBy: state.user.orderBy
   }),
   dispatch => ({

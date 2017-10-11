@@ -1,13 +1,14 @@
 // Helpers
 import { camelizeKeys, decamelize } from 'humps';
 import { has } from 'lodash';
+import bcrypt from 'bcryptjs';
 import knex from '../../../server/sql/connector';
 
 // Actual query fetching and transformation in DB
 export default class User {
   async getUsers(orderBy, filter) {
     const queryBuilder = knex
-      .select('u.id as id', 'u.username', 'u.is_admin', 'la.email')
+      .select('u.id as id', 'u.username', 'u.is_admin', 'u.is_active', 'la.email')
       .from('user AS u')
       .leftJoin('auth_local AS la', 'la.user_id', 'u.id');
 
@@ -30,6 +31,12 @@ export default class User {
         });
       }
 
+      if (has(filter, 'isActive') && filter.isActive !== null) {
+        queryBuilder.where(function() {
+          this.where('is_active', filter.isActive);
+        });
+      }
+
       if (has(filter, 'searchText') && filter.searchText !== '') {
         queryBuilder.where(function() {
           this.where('username', 'like', `%${filter.searchText}%`).orWhere('email', 'like', `%${filter.searchText}%`);
@@ -43,7 +50,7 @@ export default class User {
   async getUser(id) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'la.email')
+        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'la.email')
         .from('user AS u')
         .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
         .where('u.id', '=', id)
@@ -79,9 +86,11 @@ export default class User {
       .returning('id');
   }
 
-  createLocalOuth({ email, password, userId }) {
+  async createLocalOuth({ email, password, userId }) {
+    const passwordHashed = await bcrypt.hash(password, 12);
+
     return knex('auth_local')
-      .insert({ email, password, user_id: userId })
+      .insert({ email, password: passwordHashed, user_id: userId })
       .returning('id');
   }
 
@@ -91,13 +100,37 @@ export default class User {
       .returning('id');
   }
 
+  async editUser({ id, username, email, isAdmin, isActive, password }) {
+    const userPromise = knex('user')
+      .update({
+        username: username,
+        is_admin: isAdmin,
+        is_active: isActive
+      })
+      .where({ id });
+
+    let localAuthInput = { email };
+    if (password) {
+      const passwordHashed = await bcrypt.hash(password, 12);
+      localAuthInput = { email, password: passwordHashed };
+    }
+
+    const localAuth = knex('auth_local')
+      .update({ ...localAuthInput })
+      .where({ user_id: id });
+
+    return Promise.all([userPromise, localAuth]);
+  }
+
   deleteUser(id) {
     return knex('user')
       .where('id', '=', id)
       .del();
   }
 
-  updatePassword(id, password) {
+  async updatePassword(id, newPassword) {
+    const password = await bcrypt.hash(newPassword, 12);
+
     return knex('auth_local')
       .update({ password })
       .where({ user_id: id });

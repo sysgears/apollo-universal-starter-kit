@@ -1,0 +1,7 @@
+#import "./User.graphql"
+
+mutation addUser($input: AddUserInput!) {
+    addUser(input: $input) {
+        ... UserInfo
+    }
+}

@@ -15,7 +15,8 @@ class UsersFilter extends React.Component {
 export default connect(
   state => ({
     searchText: state.user.searchText,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin,
+    isActive: state.user.isActive
   }),
   dispatch => ({
     onSearchTextChange(searchText) {
@@ -28,6 +29,12 @@ export default connect(
       dispatch({
         type: 'USER_FILTER_IS_ADMIN',
         value: isAdmin
+      });
+    },
+    onIsActiveChange(isActive) {
+      dispatch({
+        type: 'USER_FILTER_IS_ACTIVE',
+        value: isActive
       });
     }
   })

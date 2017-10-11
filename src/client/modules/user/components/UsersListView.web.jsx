@@ -19,12 +19,13 @@ class UsersView extends React.PureComponent {
   };
 
   renderUsers = users => {
-    return users.map(({ id, username, email, isAdmin }) => {
+    return users.map(({ id, username, email, isAdmin, isActive }) => {
       return (
         <tr key={id}>
           <td>{username}</td>
           <td>{email}</td>
           <td>{isAdmin.toString()}</td>
+          <td>{isActive.toString()}</td>
           <td>
             <button
               type="button"
@@ -101,6 +102,11 @@ class UsersView extends React.PureComponent {
                 <th>
                   <a onClick={e => this.orderBy(e, 'isAdmin')} href="#">
                     Is Admin {this.renderOrderByArrow('isAdmin')}
+                  </a>
+                </th>
+                <th>
+                  <a onClick={e => this.orderBy(e, 'isActive')} href="#">
+                    Is Active {this.renderOrderByArrow('isActive')}
                   </a>
                 </th>
                 <th>Actions</th>

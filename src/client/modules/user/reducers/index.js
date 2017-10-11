@@ -2,6 +2,7 @@
 const defaultState = {
   searchText: '',
   isAdmin: null,
+  isActive: null,
   orderBy: {}
 };
 
@@ -22,6 +23,18 @@ export default function(state = defaultState, action) {
       return {
         ...state,
         isAdmin
+      };
+    }
+
+    case 'USER_FILTER_IS_ACTIVE': {
+      let isActive = null;
+      if (action.value === true) {
+        isActive = true;
+      }
+
+      return {
+        ...state,
+        isActive
       };
     }
 

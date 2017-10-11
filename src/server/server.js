@@ -6,6 +6,7 @@ import http from 'http';
 import { invert, isArray } from 'lodash';
 import url from 'url';
 import cookiesMiddleware from 'universal-cookie-express';
+import OpticsAgent from 'optics-agent';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 import modules from './modules';
@@ -79,6 +80,8 @@ if (__PERSIST_GQL__) {
 for (const middleware of modules.middlewares) {
   middleware(app);
 }
+
+app.use('/graphql', OpticsAgent.middleware());
 
 app.use(pathname, (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));

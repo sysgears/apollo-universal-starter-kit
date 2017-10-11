@@ -1,4 +1,5 @@
 import { makeExecutableSchema, addErrorLoggingToSchema } from 'graphql-tools';
+import OpticsAgent from 'optics-agent';
 
 import rootSchemaDef from './rootSchema.graphqls';
 import modules from '../modules';
@@ -11,5 +12,6 @@ const executableSchema = makeExecutableSchema({
 });
 
 addErrorLoggingToSchema(executableSchema, { log: e => log.error(e) });
+OpticsAgent.instrumentSchema(executableSchema);
 
 export default executableSchema;

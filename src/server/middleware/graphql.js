@@ -10,7 +10,7 @@ export default graphqlExpress(async req => {
   try {
     return {
       schema,
-      context: Object.assign({ opticsContext: OpticsAgent.context(req) }, await modules.createContext(req))
+      context: Object.assign(await modules.createContext(req), { opticsContext: OpticsAgent.context(req) })
     };
   } catch (e) {
     log(e.stack);

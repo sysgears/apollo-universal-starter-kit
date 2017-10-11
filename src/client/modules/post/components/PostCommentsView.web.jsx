@@ -10,12 +10,12 @@ function renderComments(comments, onCommentSelect, comment, deleteComment) {
       <ListGroupItem className="d-flex justify-content-between" key={id}>
         {content}
         <div>
-          <button type="button" className="btn btn-primary btn-sm" onClick={() => onCommentSelect({ id, content })}>
+          <button type="button" className="btn btn-primary btn-sm edit-comment" onClick={() => onCommentSelect({ id, content })}>
             Edit
           </button>{' '}
           <button
             type="button"
-            className="btn btn-primary btn-sm"
+            className="btn btn-primary btn-sm delete-comment"
             onClick={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
           >
             Delete

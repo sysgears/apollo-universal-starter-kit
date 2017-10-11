@@ -16,7 +16,7 @@ function renderPosts(posts, deletePost) {
           </Link>
         </div>
         <div>
-          <button type="button" className="btn btn-primary btn-sm" onClick={deletePost(id)}>
+          <button type="button" className="btn btn-primary btn-sm delete-button" onClick={deletePost(id)}>
             Delete
           </button>
         </div>

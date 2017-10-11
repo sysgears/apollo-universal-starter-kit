@@ -2,22 +2,12 @@
 // React
 import React from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash';
+import { DebounceInput } from 'react-debounce-input';
 
-class UsersFilterView extends React.Component {
-  state = {
-    searchText: this.props.searchText
-  };
-
-  doSearch = debounce(() => {
+class UsersFilterView extends React.PureComponent {
+  handleSearch = e => {
     const { onSearchTextChange } = this.props;
-    onSearchTextChange(this.state.searchText);
-  }, 300);
-
-  handleSearch = event => {
-    this.setState({ searchText: event.target.value }, () => {
-      this.doSearch();
-    });
+    onSearchTextChange(e.target.value);
   };
 
   handleIsAdmin = () => {
@@ -30,12 +20,11 @@ class UsersFilterView extends React.Component {
     return (
       <form className="form-inline">
         <label className="mr-sm-2">Filter: </label>
-        <input
-          type="text"
+        <DebounceInput
+          minLength={2}
+          debounceTimeout={300}
           className="form-control mb-2 mr-sm-2 mb-sm-0"
-          value={this.state.searchText}
           onChange={this.handleSearch}
-          placeholder="Search"
         />
 
         <div className="form-check mb-2 mr-sm-2 mb-sm-0">

@@ -30,8 +30,10 @@ class UsersView extends React.Component {
     }
   };
 
-  orderBy = name => {
+  orderBy = (e, name) => {
     const { onOrderBy, orderBy } = this.props;
+
+    e.preventDefault();
 
     let order = 'asc';
     if (orderBy && orderBy.column === name) {
@@ -57,17 +59,17 @@ class UsersView extends React.Component {
           <thead>
             <tr>
               <th>
-                <a onClick={() => this.orderBy('username')} href="#">
+                <a onClick={e => this.orderBy(e, 'username')} href="#">
                   Username {this.renderOrderByArrow('username')}
                 </a>
               </th>
               <th>
-                <a onClick={() => this.orderBy('email')} href="#">
+                <a onClick={e => this.orderBy(e, 'email')} href="#">
                   Email {this.renderOrderByArrow('email')}
                 </a>
               </th>
               <th>
-                <a onClick={() => this.orderBy('isAdmin')} href="#">
+                <a onClick={e => this.orderBy(e, 'isAdmin')} href="#">
                   Is Admin {this.renderOrderByArrow('isAdmin')}
                 </a>
               </th>

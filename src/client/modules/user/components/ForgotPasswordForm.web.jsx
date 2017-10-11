@@ -29,9 +29,9 @@ renderField.propTypes = {
   meta: PropTypes.object
 };
 
-const ResetPasswordForm = ({ handleSubmit, submitting, onSubmit, errors, sent }) => {
+const ForgotPasswordForm = ({ handleSubmit, submitting, onSubmit, errors, sent }) => {
   return (
-    <Form name="resetPassword" onSubmit={handleSubmit(onSubmit)}>
+    <Form name="forgotPassword" onSubmit={handleSubmit(onSubmit)}>
       {sent && <Alert color="success">Reset password instructions have been emailed to you.</Alert>}
       <Field name="email" component={renderField} type="email" label="Email" validate={required} />
       {errors && (
@@ -40,13 +40,13 @@ const ResetPasswordForm = ({ handleSubmit, submitting, onSubmit, errors, sent })
         </FormGroup>
       )}
       <Button color="primary" type="submit" disabled={submitting}>
-        Reset Password
+        Send Reset Instructions
       </Button>
     </Form>
   );
 };
 
-ResetPasswordForm.propTypes = {
+ForgotPasswordForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
@@ -55,5 +55,5 @@ ResetPasswordForm.propTypes = {
 };
 
 export default reduxForm({
-  form: 'resetPassword'
-})(ResetPasswordForm);
+  form: 'forgotPassword'
+})(ForgotPasswordForm);

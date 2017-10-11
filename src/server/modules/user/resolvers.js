@@ -132,7 +132,7 @@ export default pubsub => ({
     refreshTokens(obj, { token, refreshToken }, context) {
       return refreshTokens(token, refreshToken, context.User, context.SECRET);
     },
-    resetPassword(obj, { email }, context) {
+    forgotPassword(obj, { email }, context) {
       // TODO
       return true;
     }

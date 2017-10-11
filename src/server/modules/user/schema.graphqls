@@ -37,7 +37,7 @@ extend type Mutation {
     logout: Boolean!
     updatePassword(id: Int!, newPassword: String!): Boolean!
     refreshTokens(token: String!, refreshToken: String!): AuthPayload!
-    resetPassword(input: ResetPasswordInput!): Boolean!
+    forgotPassword(input: ForgotPasswordInput!): Boolean!
 }
 
 input RegisterUserInput {
@@ -51,7 +51,7 @@ input LoginUserInput {
     password: String!
 }
 
-input ResetPasswordInput {
+input ForgotPasswordInput {
     email: String!
 }
 

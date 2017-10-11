@@ -5,16 +5,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import PageLayout from '../../../app/PageLayout';
-import ResetPasswordForm from '../components/ResetPasswordForm';
+import ForgotPasswordForm from '../components/ForgotPasswordForm';
 
-class ResetPasswordView extends React.Component {
+class ForgotPasswordView extends React.Component {
   state = {
     errors: [],
     sent: false
   };
 
-  onSubmit = ({ resetPassword, onFormSubmitted }) => async values => {
-    const result = await resetPassword(values);
+  onSubmit = ({ forgotPassword, onFormSubmitted }) => async values => {
+    const result = await forgotPassword(values);
 
     if (result.errors) {
       this.setState({ errors: result.errors });
@@ -26,15 +26,15 @@ class ResetPasswordView extends React.Component {
   };
 
   render() {
-    const { resetPassword, onFormSubmitted } = this.props;
+    const { forgotPassword, onFormSubmitted } = this.props;
 
     const renderMetaData = () => (
       <Helmet
-        title="Reset Password"
+        title="Forgot Password"
         meta={[
           {
             name: 'description',
-            content: 'Reset password page'
+            content: 'Forgot password page'
           }
         ]}
       />
@@ -43,9 +43,9 @@ class ResetPasswordView extends React.Component {
     return (
       <PageLayout>
         {renderMetaData()}
-        <h1>Reset password!</h1>
-        <ResetPasswordForm
-          onSubmit={this.onSubmit({ resetPassword, onFormSubmitted })}
+        <h1>Forgot password!</h1>
+        <ForgotPasswordForm
+          onSubmit={this.onSubmit({ forgotPassword, onFormSubmitted })}
           errors={this.state.errors}
           sent={this.state.sent}
         />
@@ -54,9 +54,9 @@ class ResetPasswordView extends React.Component {
   }
 }
 
-ResetPasswordView.propTypes = {
-  resetPassword: PropTypes.func.isRequired,
+ForgotPasswordView.propTypes = {
+  forgotPassword: PropTypes.func.isRequired,
   onFormSubmitted: PropTypes.func.isRequired
 };
 
-export default ResetPasswordView;
+export default ForgotPasswordView;

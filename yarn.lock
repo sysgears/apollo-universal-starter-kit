@@ -363,6 +363,29 @@ apollo-client@^2.0.0-beta.2:
   optionalDependencies:
     "@types/async" "2.0.43"
 
+apollo-engine-binary-darwin@^0.2017.10-19-gdc8304d2:
+  version "0.2017.10-19-gdc8304d2"
+  resolved "https://registry.yarnpkg.com/apollo-engine-binary-darwin/-/apollo-engine-binary-darwin-0.2017.10-19-gdc8304d2.tgz#06471be1296d82264575212d98012e92a4f82d1a"
+
+apollo-engine-binary-linux@^0.2017.10-19-gdc8304d2:
+  version "0.2017.10-19-gdc8304d2"
+  resolved "https://registry.yarnpkg.com/apollo-engine-binary-linux/-/apollo-engine-binary-linux-0.2017.10-19-gdc8304d2.tgz#a6033c43f067b320190f43d823cae1972562638a"
+
+apollo-engine-binary-windows@^0.2017.10-19-gdc8304d2:
+  version "0.2017.10-19-gdc8304d2"
+  resolved "https://registry.yarnpkg.com/apollo-engine-binary-windows/-/apollo-engine-binary-windows-0.2017.10-19-gdc8304d2.tgz#c3785e2fffc05e3bff66ef81061a75e983a8338f"
+
+apollo-engine@^0.4.7:
+  version "0.4.7"
+  resolved "https://registry.yarnpkg.com/apollo-engine/-/apollo-engine-0.4.7.tgz#4ad04a423cf7481e755b540452cb8bfdd16d9e69"
+  dependencies:
+    request "^2.81.0"
+    stream-line-wrapper "^0.1.1"
+  optionalDependencies:
+    apollo-engine-binary-darwin "^0.2017.10-19-gdc8304d2"
+    apollo-engine-binary-linux "^0.2017.10-19-gdc8304d2"
+    apollo-engine-binary-windows "^0.2017.10-19-gdc8304d2"
+
 apollo-fetch@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/apollo-fetch/-/apollo-fetch-0.6.0.tgz#aae9b28c117af344b091ec8ba4d1a5aa0474dc5d"
@@ -628,7 +651,7 @@ async@^2.1.2, async@^2.1.5, async@^2.4.0, async@^2.4.1:
   dependencies:
     lodash "^4.14.0"
 
-async@~0.2.6:
+async@~0.2.10, async@~0.2.6:
   version "0.2.10"
   resolved "https://registry.yarnpkg.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
 
@@ -10085,6 +10108,12 @@ stream-http@^2.3.1:
     readable-stream "^2.2.6"
     to-arraybuffer "^1.0.0"
     xtend "^4.0.0"
+
+stream-line-wrapper@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/stream-line-wrapper/-/stream-line-wrapper-0.1.1.tgz#3e2be1d368c6356f90aeef64786683f3eee3eea7"
+  dependencies:
+    async "~0.2.10"
 
 stream-parser@~0.3.1:
   version "0.3.1"

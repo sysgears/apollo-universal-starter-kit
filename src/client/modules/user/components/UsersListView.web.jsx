@@ -4,9 +4,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class UsersView extends React.PureComponent {
-  renderUsers = users => {
-    const { deleteUser } = this.props;
+  state = {
+    errors: []
+  };
 
+  hendleDeleteUser = async id => {
+    const { deleteUser } = this.props;
+    const result = await deleteUser(id);
+    if (result && result.errors) {
+      this.setState({ errors: result.errors });
+    } else {
+      this.setState({ errors: [] });
+    }
+  };
+
+  renderUsers = users => {
     return users.map(({ id, username, email, isAdmin }) => {
       return (
         <tr key={id}>
@@ -14,7 +26,12 @@ class UsersView extends React.PureComponent {
           <td>{email}</td>
           <td>{isAdmin.toString()}</td>
           <td>
-            <button type="button" className="btn btn-primary btn-sm" onClick={deleteUser(id)}>
+            <button
+              type="button"
+              className="btn btn-primary btn-sm"
+              onClick={() => this.hendleDeleteUser(id)}
+              title="Tooltip on top"
+            >
               Delete
             </button>
           </td>
@@ -55,36 +72,43 @@ class UsersView extends React.PureComponent {
   };
 
   render() {
-    const { loading, users, errors } = this.props;
+    const { loading, users } = this.props;
+    const { errors } = this.state;
     if (loading && !users) {
       return <div className="text-center">Loading...</div>;
-    } else if (errors) {
-      return errors.map(error => <li key={error.path[0]}>{error.message}</li>);
     } else {
       return (
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th>
-                <a onClick={e => this.orderBy(e, 'username')} href="#">
-                  Username {this.renderOrderByArrow('username')}
-                </a>
-              </th>
-              <th>
-                <a onClick={e => this.orderBy(e, 'email')} href="#">
-                  Email {this.renderOrderByArrow('email')}
-                </a>
-              </th>
-              <th>
-                <a onClick={e => this.orderBy(e, 'isAdmin')} href="#">
-                  Is Admin {this.renderOrderByArrow('isAdmin')}
-                </a>
-              </th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>{this.renderUsers(users)}</tbody>
-        </table>
+        <div>
+          {errors &&
+            errors.map(error => (
+              <div className="alert alert-danger" role="alert" key={error.field}>
+                {error.message}
+              </div>
+            ))}
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>
+                  <a onClick={e => this.orderBy(e, 'username')} href="#">
+                    Username {this.renderOrderByArrow('username')}
+                  </a>
+                </th>
+                <th>
+                  <a onClick={e => this.orderBy(e, 'email')} href="#">
+                    Email {this.renderOrderByArrow('email')}
+                  </a>
+                </th>
+                <th>
+                  <a onClick={e => this.orderBy(e, 'isAdmin')} href="#">
+                    Is Admin {this.renderOrderByArrow('isAdmin')}
+                  </a>
+                </th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>{this.renderUsers(users)}</tbody>
+          </table>
+        </div>
       );
     }
   }
@@ -93,7 +117,6 @@ class UsersView extends React.PureComponent {
 UsersView.propTypes = {
   loading: PropTypes.bool.isRequired,
   users: PropTypes.array,
-  errors: PropTypes.array,
   orderBy: PropTypes.object,
   onOrderBy: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired

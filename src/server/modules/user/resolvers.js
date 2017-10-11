@@ -132,13 +132,25 @@ export default pubsub => ({
       return { user: { id: 2 } };
     }),
     deleteUser: requiresAdmin.createResolver(async (obj, { id }, context) => {
+      const e = new FieldError();
       try {
         const user = await context.User.getUser(id);
+        if (!user) {
+          e.setError('delete', 'User does not exist.');
+          e.throwIf();
+        }
+
+        if (user.id === context.user.id) {
+          e.setError('delete', 'You can not delete your self.');
+          e.throwIf();
+        }
+
         const isDeleted = await context.User.deleteUser(id);
         if (isDeleted) {
           return { user };
         } else {
-          return { user: {} };
+          e.setError('delete', 'Could not delete user. Please try again later.');
+          e.throwIf();
         }
       } catch (e) {
         return { errors: e };

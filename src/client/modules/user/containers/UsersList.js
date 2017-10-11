@@ -42,9 +42,9 @@ const UsersListWithApollo = compose(
   }),
   graphql(DELETE_USER, {
     props: ({ ownProps: { orderBy, searchText, isAdmin }, mutate }) => ({
-      deleteUser(id) {
-        return () =>
-          mutate({
+      deleteUser: async id => {
+        try {
+          const { data: { deleteUser } } = await mutate({
             variables: { id },
             refetchQueries: [
               {
@@ -56,6 +56,12 @@ const UsersListWithApollo = compose(
               }
             ]
           });
+          if (deleteUser.errors) {
+            return { errors: deleteUser.errors };
+          }
+        } catch (e) {
+          console.log(e.graphQLErrors);
+        }
       }
     })
   })

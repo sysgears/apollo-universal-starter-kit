@@ -3,5 +3,9 @@ mutation deleteUser($id: Int!) {
         user {
             id
         }
+        errors {
+            field
+            message
+        }
     }
 }

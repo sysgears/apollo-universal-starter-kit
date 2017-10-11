@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { createApolloFetch } from 'apollo-fetch';
+import { createApolloFetchUpload } from 'apollo-fetch-upload';
 import { ApolloLink } from 'apollo-link';
 import BatchHttpLink from 'apollo-link-batch-http';
 import InMemoryCache from 'apollo-cache-inmemory';
@@ -35,7 +35,7 @@ async function renderServerSide(req, res) {
   // }
   //
 
-  const fetch = createApolloFetch({ uri: apiUrl });
+  const fetch = createApolloFetchUpload({ uri: apiUrl });
   fetch.batchUse(({ options }, next) => {
     try {
       options.credentials = 'include';

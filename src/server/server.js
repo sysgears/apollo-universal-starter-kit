@@ -6,6 +6,7 @@ import http from 'http';
 import { invert, isArray } from 'lodash';
 import url from 'url';
 import cookiesMiddleware from 'universal-cookie-express';
+import { apolloUploadExpress } from 'apollo-upload-server';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
 import modules from './modules';
@@ -80,7 +81,7 @@ for (const middleware of modules.middlewares) {
   middleware(app);
 }
 
-app.use(pathname, (...args) => graphqlMiddleware(...args));
+app.use(pathname, apolloUploadExpress({ uploadDir: './upload' }), (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));
 

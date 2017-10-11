@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { createApolloFetchUpload } from 'apollo-fetch-upload';
+import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
 import BatchHttpLink from 'apollo-link-batch-http';
 import InMemoryCache from 'apollo-cache-inmemory';
@@ -21,6 +21,7 @@ import createReduxStore from '../../common/createReduxStore';
 import Html from './html';
 import Routes from '../../client/app/Routes';
 import log from '../../common/log';
+import modules from '../modules';
 import { options as spinConfig } from '../../../.spinrc.json';
 import settings from '../../../settings';
 
@@ -35,7 +36,7 @@ async function renderServerSide(req, res) {
   // }
   //
 
-  const fetch = createApolloFetchUpload({ uri: apiUrl });
+  const fetch = createApolloFetch({ uri: apiUrl, constructOptions: modules.constructFetchOptions });
   fetch.batchUse(({ options }, next) => {
     try {
       options.credentials = 'include';

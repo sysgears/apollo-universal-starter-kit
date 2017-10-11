@@ -5,7 +5,7 @@ import { ApolloLink } from 'apollo-link';
 import WebSocketLink from 'apollo-link-ws';
 import InMemoryCache from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
-import { createApolloFetchUpload } from 'apollo-fetch-upload';
+import { createApolloFetch } from 'apollo-fetch';
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
@@ -27,7 +27,10 @@ import '../styles/styles.scss';
 
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
-const fetch = createApolloFetchUpload({ uri: hostname === 'localhost' ? '/graphql' : __BACKEND_URL__ });
+const fetch = createApolloFetch({
+  uri: hostname === 'localhost' ? '/graphql' : __BACKEND_URL__,
+  constructOptions: modules.constructFetchOptions
+});
 const cache = new InMemoryCache();
 
 fetch.batchUse(({ requests, options }, next) => {

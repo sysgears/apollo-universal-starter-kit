@@ -1,5 +1,5 @@
-// Components
 import { apolloUploadExpress } from 'apollo-upload-server';
+import { constructUploadOptions } from 'apollo-fetch-upload';
 import Upload from './sql';
 
 import schema from './schema.graphqls';
@@ -12,5 +12,6 @@ export default new Feature({
   createContextFunc: () => ({ Upload: new Upload() }),
   middleware: app => {
     app.use('/graphql', apolloUploadExpress({ uploadDir: './upload' }));
-  }
+  },
+  createFetchOptions: constructUploadOptions
 });

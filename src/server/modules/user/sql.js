@@ -92,7 +92,6 @@ export default class User {
   }
 
   deleteUser(id) {
-    console.log(id);
     return knex('user')
       .where('id', '=', id)
       .del();

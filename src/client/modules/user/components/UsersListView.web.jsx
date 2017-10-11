@@ -3,14 +3,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class UsersView extends React.Component {
+class UsersView extends React.PureComponent {
   renderUsers = users => {
+    const { deleteUser } = this.props;
+
     return users.map(({ id, username, email, isAdmin }) => {
       return (
         <tr key={id}>
           <td>{username}</td>
           <td>{email}</td>
           <td>{isAdmin.toString()}</td>
+          <td>
+            <button type="button" className="btn btn-primary btn-sm" onClick={deleteUser(id)}>
+              Delete
+            </button>
+          </td>
         </tr>
       );
     });
@@ -73,6 +80,7 @@ class UsersView extends React.Component {
                   Is Admin {this.renderOrderByArrow('isAdmin')}
                 </a>
               </th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>{this.renderUsers(users)}</tbody>
@@ -87,7 +95,8 @@ UsersView.propTypes = {
   users: PropTypes.array,
   errors: PropTypes.array,
   orderBy: PropTypes.object,
-  onOrderBy: PropTypes.func.isRequired
+  onOrderBy: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired
 };
 
 export default UsersView;

@@ -11,6 +11,7 @@ import { graphql, compose } from 'react-apollo';
 import UsersListView from '../components/UsersListView';
 
 import USERS_QUERY from '../graphql/UsersQuery.graphql';
+import DELETE_USER from '../graphql/DeleteUser.graphql';
 
 class UsersList extends React.Component {
   render() {
@@ -26,18 +27,37 @@ UsersList.propTypes = {
 
 const UsersListWithApollo = compose(
   graphql(USERS_QUERY, {
-    options: props => {
+    options: ({ orderBy, searchText, isAdmin }) => {
       return {
         fetchPolicy: 'cache-and-network',
         variables: {
-          orderBy: props.orderBy,
-          filter: { searchText: props.searchText, isAdmin: props.isAdmin }
+          orderBy: orderBy,
+          filter: { searchText, isAdmin }
         }
       };
     },
     props({ data: { loading, users, error } }) {
       return { loading, users, errors: error ? error.graphQLErrors : null };
     }
+  }),
+  graphql(DELETE_USER, {
+    props: ({ ownProps: { orderBy, searchText, isAdmin }, mutate }) => ({
+      deleteUser(id) {
+        return () =>
+          mutate({
+            variables: { id },
+            refetchQueries: [
+              {
+                query: USERS_QUERY,
+                variables: {
+                  orderBy: orderBy,
+                  filter: { searchText, isAdmin }
+                }
+              }
+            ]
+          });
+      }
+    })
   })
 )(UsersList);
 

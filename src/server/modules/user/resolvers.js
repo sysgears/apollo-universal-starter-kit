@@ -123,15 +123,15 @@ export default pubsub => ({
     refreshTokens(obj, { token, refreshToken }, context) {
       return refreshTokens(token, refreshToken, context.User, context.SECRET);
     },
-    addUser: requiresAuth.createResolver((obj, { input }, context) => {
+    addUser: requiresAdmin.createResolver((obj, { input }, context) => {
       console.log(input);
       return { user: { id: 2 } };
     }),
-    editUser: requiresAuth.createResolver((obj, { input }, context) => {
+    editUser: requiresAdmin.createResolver((obj, { input }, context) => {
       console.log(input);
       return { user: { id: 2 } };
     }),
-    deleteUser: requiresAuth.createResolver(async (obj, { id }, context) => {
+    deleteUser: requiresAdmin.createResolver(async (obj, { id }, context) => {
       try {
         const user = await context.User.getUser(id);
         const isDeleted = await context.User.deleteUser(id);

@@ -3,8 +3,9 @@ import post from './post';
 import user from './user';
 import mailer from './mailer';
 import graphqlTypes from './graphqlTypes';
+import optics from './optics';
 import './debug';
 
 import Feature from './connector';
 
-export default new Feature(counter, post, user, mailer, graphqlTypes);
+export default new Feature(counter, post, user, mailer, graphqlTypes, optics);

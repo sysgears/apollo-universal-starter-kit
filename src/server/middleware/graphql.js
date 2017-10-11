@@ -6,6 +6,8 @@ import log from '../../common/log';
 import schema from '../api/schema';
 import modules from '../modules';
 
+OpticsAgent.instrumentSchema(schema);
+
 export default graphqlExpress(async req => {
   try {
     return {

@@ -121,13 +121,13 @@ export default pubsub => ({
       return { user: { id: 2 } };
     }),
     editUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
-      console.log(input);
-      await context.User.editUser(input);
-      const user = await context.User.getUser(input.id);
-
-      console.log(user);
-
-      return { user };
+      try {
+        await context.User.editUser(input);
+        const user = await context.User.getUser(input.id);
+        return { user };
+      } catch (e) {
+        return { errors: e };
+      }
     }),
     deleteUser: requiresAdmin.createResolver(async (obj, { id }, context) => {
       const e = new FieldError();

@@ -6,6 +6,7 @@ import { NavItem } from 'reactstrap';
 // Component and helpers
 import Profile from './containers/Profile';
 import Users from './components/Users';
+import UserEdit from './containers/UserEdit';
 import Register from './containers/Register';
 import Login from './containers/Login';
 import reducers from './reducers';
@@ -41,6 +42,7 @@ export default new Feature({
   route: [
     <AuthRoute exact path="/profile" role="user" component={Profile} />,
     <AuthRoute exact path="/users" role="admin" component={Users} />,
+    <Route exact path="/users/:id" component={UserEdit} />,
     <Route exact path="/register" component={Register} />,
     <Route exact path="/login" component={Login} />
   ],

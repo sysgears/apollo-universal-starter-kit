@@ -2,6 +2,7 @@
 // React
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 class UsersView extends React.PureComponent {
   state = {
@@ -22,7 +23,11 @@ class UsersView extends React.PureComponent {
     return users.map(({ id, username, email, isAdmin, isActive }) => {
       return (
         <tr key={id}>
-          <td>{username}</td>
+          <td>
+            <Link className="userdocker -link" to={`/users/${id}`}>
+              {username}
+            </Link>
+          </td>
           <td>{email}</td>
           <td>{isAdmin.toString()}</td>
           <td>{isActive.toString()}</td>

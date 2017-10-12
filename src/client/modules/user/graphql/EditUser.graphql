@@ -2,6 +2,12 @@
 
 mutation editUser($input: EditUserInput!) {
     editUser(input: $input) {
-        ... UserInfo
+        user {
+            ... UserInfo
+        }
+        errors {
+            field
+            message
+        }
     }
 }

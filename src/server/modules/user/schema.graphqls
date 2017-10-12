@@ -83,7 +83,8 @@ input AddUserInput {
     username: String!
     email: String!
     password: String!
-    isAdmin: Boolean
+    isAdmin: Boolean!
+    isActive: Boolean!
 }
 
 # Input for editUser Mutation

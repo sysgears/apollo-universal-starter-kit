@@ -33,9 +33,10 @@ const UserForm = ({ handleSubmit, submitting, onSubmit }) => {
   return (
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
       <Field name="username" component={renderField} type="text" label="Username" validate={required} />
-      <Field name="email" component={renderField} type="text" label="Email" validate={required} />
+      <Field name="email" component={renderField} type="email" label="Email" validate={required} />
       <Field name="isAdmin" component={renderField} type="checkbox" label="Is Admin" />
       <Field name="isActive" component={renderField} type="checkbox" label="Is Active" />
+      <Field name="password" component={renderField} type="password" label="Password" />
       <Button color="primary" type="submit" disabled={submitting}>
         Save
       </Button>

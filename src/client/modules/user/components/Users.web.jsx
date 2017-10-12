@@ -1,8 +1,7 @@
-// Web only component
-
-// React
 import React from 'react';
 import Helmet from 'react-helmet';
+import { Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
 import PageLayout from '../../../app/PageLayout';
 
 import UsersFilter from '../containers/UsersFilter';
@@ -26,6 +25,10 @@ const Users = () => {
       {renderMetaData()}
       <h2>Users</h2>
       <UsersFilter />
+      <hr />
+      <Link to="/users/0">
+        <Button color="primary">Add</Button>
+      </Link>
       <hr />
       <UsersList />
     </PageLayout>

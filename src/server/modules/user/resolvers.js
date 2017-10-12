@@ -117,8 +117,21 @@ export default pubsub => ({
       return refreshTokens(token, refreshToken, context.User, context.SECRET);
     },
     addUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
-      console.log(input);
-      return { user: { id: 2 } };
+      try {
+        const localAuth = pick(input, ['email', 'password']);
+        const [createdUserId] = await context.User.register({ ...input });
+
+        await context.User.createLocalOuth({
+          ...localAuth,
+          userId: createdUserId
+        });
+
+        const user = await context.User.getUser(createdUserId);
+
+        return { user };
+      } catch (e) {
+        return { errors: e };
+      }
     }),
     editUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
       try {

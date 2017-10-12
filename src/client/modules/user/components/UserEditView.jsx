@@ -8,9 +8,9 @@ import UserForm from './UserForm';
 
 const onSubmit = (user, addUser, editUser) => values => {
   if (user) {
-    editUser(user.id, values.username, values.email, values.isAdmin, values.isActive);
+    editUser(user.id, values.username, values.email, values.isAdmin, values.isActive, values.password);
   } else {
-    addUser(values.username, values.email, values.isAdmin, values.isActive);
+    addUser(values.username, values.email, values.isAdmin, values.isActive, values.password);
   }
 };
 

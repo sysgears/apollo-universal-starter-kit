@@ -82,7 +82,7 @@ export default class User {
 
   register({ username, isActive }) {
     return knex('user')
-      .insert({ username, is_active: isActive })
+      .insert({ username, is_active: !!isActive })
       .returning('id');
   }
 

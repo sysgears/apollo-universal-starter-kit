@@ -132,9 +132,28 @@ export default pubsub => ({
     refreshTokens(obj, { token, refreshToken }, context) {
       return refreshTokens(token, refreshToken, context.User, context.SECRET);
     },
-    forgotPassword(obj, { email }, context) {
-      // TODO
-      return true;
+    async forgotPassword(obj, { input }, context) {
+      try {
+        const localAuth = pick(input, ['email']);
+        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
+
+        if (emailExists && context.mailer) {
+          // async email
+          jwt.sign({ email: localAuth.email }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
+            const url = `${context.req.protocol}://${context.req.get('host')}/reset-password/${emailToken}`;
+            context.mailer.sendMail({
+              from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
+              to: localAuth.email,
+              subject: 'Reset Password',
+              html: `Please click this link to reset your password: <a href="${url}">${url}</a>`
+            });
+          });
+        }
+        return true;
+      } catch (e) {
+        // always return true so you can't discover users this way
+        return true;
+      }
     }
   },
   Subscription: {}

@@ -23,7 +23,7 @@ const wsUri = (hostname === 'localhost'
   : __BACKEND_URL__
 ).replace(/^http/, 'ws');
 
-const link = ApolloLink.split(
+const link: any = ApolloLink.split(
   operation => {
     const operationAST = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';
@@ -37,7 +37,11 @@ const link = ApolloLink.split(
   new BatchHttpLink({ fetch })
 );
 
-const cache = new Cache().restore(window.__APOLLO_STATE__);
+const cache: any = new Cache();
+
+if (window.__APOLLO_STATE__) {
+  cache.restore(window.__APOLLO_STATE__);
+}
 
 // The connection has been established according to the official docs
 // (https://github.com/apollographql/apollo-client/blob/master/Upgrade.md)

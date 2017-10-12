@@ -38,6 +38,7 @@ extend type Mutation {
     updatePassword(id: Int!, newPassword: String!): Boolean!
     refreshTokens(token: String!, refreshToken: String!): AuthPayload!
     forgotPassword(input: ForgotPasswordInput!): Boolean!
+    resetPassword(input: ResetPasswordInput!): Boolean!
 }
 
 input RegisterUserInput {
@@ -53,6 +54,12 @@ input LoginUserInput {
 
 input ForgotPasswordInput {
     email: String!
+}
+
+input ResetPasswordInput {
+    token: String!
+    password: String!
+    passwordConfirmation: String!
 }
 
 extend type Subscription {

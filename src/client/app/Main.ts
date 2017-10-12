@@ -3,7 +3,7 @@ import '../styles/styles.scss';
 
 /* ApolloClient initialization */
 
-import Cache, { NormalizedCache } from 'apollo-cache-inmemory';
+import Cache from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';

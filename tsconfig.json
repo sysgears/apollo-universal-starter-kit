@@ -11,5 +11,9 @@
     "suppressImplicitAnyIndexErrors": true,
     "pretty": true,
     "removeComments": true
-  }
+  },
+  "include": [
+    "./typings/*.d.ts",
+    "**/*.ts"
+  ]
 }

@@ -15,7 +15,7 @@ declare module '*.graphqls' {
 
 declare module '*.graphql' {
   // tslint:disable-next-line
-    import { DocumentNode } from "graphql";
+  import { DocumentNode } from "graphql";
 
   const value: DocumentNode;
   export = value;
@@ -24,4 +24,8 @@ declare module '*.graphql' {
 declare module '*.json' {
   const value: any;
   export = value;
+}
+
+interface Window {
+  __APOLLO_STATE__?: any;
 }

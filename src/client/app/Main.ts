@@ -3,7 +3,7 @@ import '../styles/styles.scss';
 
 /* ApolloClient initialization */
 
-import Cache from 'apollo-cache-inmemory';
+import Cache, { NormalizedCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
@@ -23,7 +23,7 @@ const wsUri = (hostname === 'localhost'
   : __BACKEND_URL__
 ).replace(/^http/, 'ws');
 
-const link = ApolloLink.split(
+const link: ApolloCache<NormalizedCache> = ApolloLink.split(
   operation => {
     const operationAST = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';

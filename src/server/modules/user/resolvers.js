@@ -136,7 +136,6 @@ export default pubsub => ({
       try {
         const localAuth = pick(input, 'email');
         const user = await context.User.getLocalOuthByEmail(localAuth.email);
-        console.log(user);
 
         if (user && context.mailer) {
           // async email

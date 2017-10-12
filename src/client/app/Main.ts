@@ -23,7 +23,7 @@ const wsUri = (hostname === 'localhost'
   : __BACKEND_URL__
 ).replace(/^http/, 'ws');
 
-const link: any = ApolloLink.split(
+const link = ApolloLink.split(
   operation => {
     const operationAST = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';
@@ -37,7 +37,7 @@ const link: any = ApolloLink.split(
   new BatchHttpLink({ fetch })
 );
 
-const cache: any = new Cache();
+const cache = new Cache();
 
 if (window.__APOLLO_STATE__) {
   cache.restore(window.__APOLLO_STATE__);

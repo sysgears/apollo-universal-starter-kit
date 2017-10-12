@@ -14,6 +14,10 @@ import Main from './app/Main';
 import NavBar from './app/NavBar';
 import CounterView from './modules/counter/components/CounterView.web';
 
+// Apollo imports
+import { ApolloModule } from 'apollo-angular';
+import { clientProvider } from './provider';
+
 @NgModule({
   bootstrap: [Main],
   declarations: [
@@ -27,6 +31,7 @@ import CounterView from './modules/counter/components/CounterView.web';
     BrowserModule,
     FormsModule,
     HttpModule,
+    ApolloModule.withClient(clientProvider),
     RouterModule.forRoot([], {
       useHash: true
     })

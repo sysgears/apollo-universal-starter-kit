@@ -299,19 +299,35 @@ anymatch@^1.3.0:
     micromatch "^2.1.5"
     normalize-path "^2.0.0"
 
-"apollo-cache-inmemory@https://github.com/vlasenko/apollo-client/raw/master/packages/apollo-cache-inmemory/apollo-cache-inmemory-0.2.0-beta.1.tar":
-  version "0.2.0-beta.1"
-  resolved "https://github.com/vlasenko/apollo-client/raw/master/packages/apollo-cache-inmemory/apollo-cache-inmemory-0.2.0-beta.1.tar#246b1733322b4dc05d7cfa1aff8ebd1bf9f23a20"
+apollo-angular@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/apollo-angular/-/apollo-angular-0.13.2.tgz#ad9e40749164c02f229b2b539b70c202580e4028"
   dependencies:
-    apollo-cache "^0.2.0-beta.0"
-    apollo-utilities "^0.2.0-beta.0"
-    graphql-anywhere "^4.0.0-beta.0"
+    apollo-client-rxjs "^0.6.0-rc.1"
 
-apollo-cache@^0.2.0-beta.0, apollo-cache@^0.2.0-beta.2:
+apollo-cache-inmemory@^0.2.0-beta.6:
+  version "0.2.0-beta.6"
+  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-0.2.0-beta.6.tgz#fdaf5abac045f2412936650720ead7c059c0d390"
+  dependencies:
+    apollo-cache "^0.2.0-beta.4"
+    apollo-utilities "^0.2.0-beta.4"
+    graphql-anywhere "^4.0.0-beta.5"
+
+apollo-cache@^0.2.0-beta.2:
   version "0.2.0-beta.2"
   resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-0.2.0-beta.2.tgz#d3e5668810d03a730db4e3e326a0a3050d2d813f"
   dependencies:
     apollo-utilities "^0.2.0-beta.2"
+
+apollo-cache@^0.2.0-beta.4:
+  version "0.2.0-rc.0"
+  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-0.2.0-rc.0.tgz#94e5a010f0ddfcd48a53266de3d813935b108164"
+  dependencies:
+    apollo-utilities "^0.2.0-rc.0"
+
+apollo-client-rxjs@^0.6.0-rc.1:
+  version "0.6.0-rc.2"
+  resolved "https://registry.yarnpkg.com/apollo-client-rxjs/-/apollo-client-rxjs-0.6.0-rc.2.tgz#f391ee69381ae5ec8f74f476fbb6b0490b6f5923"
 
 apollo-client@^1.1:
   version "1.9.3"
@@ -387,6 +403,13 @@ apollo-link-dedup@0.5.0:
   dependencies:
     graphql "^0.11.0"
 
+apollo-link-http@^0.6.1-beta.6:
+  version "0.6.1-beta.6"
+  resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-0.6.1-beta.6.tgz#957403de25d489128f85dea2bc69bacea1d3cb60"
+  dependencies:
+    apollo-fetch "^0.6.0"
+    graphql "^0.10.5"
+
 apollo-link-ws@^0.4.1-beta.5:
   version "0.4.1-beta.6"
   resolved "https://registry.yarnpkg.com/apollo-link-ws/-/apollo-link-ws-0.4.1-beta.6.tgz#b6127ed0bf90b5591eb612f0595b92d7d0a612cb"
@@ -441,6 +464,10 @@ apollo-tracing@^0.0.7:
 apollo-utilities@^0.2.0-beta.0, apollo-utilities@^0.2.0-beta.2:
   version "0.2.0-beta.2"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-0.2.0-beta.2.tgz#95b61e00fa0cb67f6af65921484bca33114d55e1"
+
+apollo-utilities@^0.2.0-beta.4, apollo-utilities@^0.2.0-rc.0:
+  version "0.2.0-rc.0"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-0.2.0-rc.0.tgz#5ac93a839c5688e8f655dc7d5789a5d878f4351f"
 
 app-root-path@^2.0.0:
   version "2.0.1"
@@ -3410,11 +3437,11 @@ graphql-anywhere@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-3.1.0.tgz#3ea0d8e8646b5cee68035016a9a7557c15c21e96"
 
-graphql-anywhere@^4.0.0-beta.0:
-  version "4.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.0.0-beta.3.tgz#8ea8211e7de2ae1a81cebe261735e1defbeb4824"
+graphql-anywhere@^4.0.0-beta.5:
+  version "4.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.0.0-rc.0.tgz#5c062585f254767e77616ba1064dda44a535dd0e"
   dependencies:
-    apollo-utilities "^0.2.0-beta.2"
+    apollo-utilities "^0.2.0-rc.0"
 
 graphql-iso-date@^3.3.0:
   version "3.3.0"

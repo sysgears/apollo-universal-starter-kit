@@ -16,7 +16,7 @@ import CounterView from './modules/counter/components/CounterView.web';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
-import { clientProvider } from './provider';
+import { clientProvider } from './app/Main';
 
 @NgModule({
   bootstrap: [Main],

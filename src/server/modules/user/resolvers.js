@@ -140,7 +140,9 @@ export default pubsub => ({
         if (emailExists && context.mailer) {
           // async email
           jwt.sign({ email: localAuth.email }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
-            const url = `${context.req.protocol}://${context.req.get('host')}/reset-password/${emailToken}`;
+            // encoded token since react router does not match dots in params
+            const encodedToken = Buffer.from(emailToken).toString('base64');
+            const url = `${context.req.protocol}://${context.req.get('host')}/reset-password/${encodedToken}`;
             context.mailer.sendMail({
               from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
               to: localAuth.email,

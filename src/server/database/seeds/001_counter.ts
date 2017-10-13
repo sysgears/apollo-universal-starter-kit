@@ -1,9 +1,10 @@
 import * as Knex from 'knex';
+import truncateTables from '../../../common/db';
 
 const initialAmount = 5;
 
 export const seed = async (knex: Knex) => {
-  await knex('counter').truncate();
+  await truncateTables(knex, ['counter']);
 
   return knex('counter')
     .returning('id')

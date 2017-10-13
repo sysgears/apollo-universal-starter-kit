@@ -1,4 +1,7 @@
-import * as mailer from './mailer.json';
-import * as user from './user.json';
+import 'dotenv/config';
 
-export { user, mailer };
+export { default as analytics } from './analytics';
+export { default as app } from './app';
+export { default as db } from './db';
+export { default as mailer } from './mailer';
+export { default as user } from './user';

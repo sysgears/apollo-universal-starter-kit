@@ -27,7 +27,10 @@ import '../styles/styles.scss';
 
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
-const fetch = createApolloFetch({ uri: hostname === 'localhost' ? '/graphql' : __BACKEND_URL__ });
+const fetch = createApolloFetch({
+  uri: hostname === 'localhost' ? '/graphql' : __BACKEND_URL__,
+  constructOptions: modules.constructFetchOptions
+});
 const cache = new InMemoryCache();
 
 fetch.batchUse(({ requests, options }, next) => {
@@ -86,7 +89,7 @@ let link = ApolloLink.split(
 // }
 
 const client = createApolloClient({
-  link: ApolloLink.from((settings.apolloLogging ? [new LoggingLink()] : []).concat([link])),
+  link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link])),
   cache
 });
 
@@ -102,7 +105,7 @@ const logPageView = location => {
 };
 
 // Initialize Google Analytics and send events on each location change
-ReactGA.initialize(settings.googleAnalytics); // Replace your Google tracking code here
+ReactGA.initialize(settings.analytics.ga.trackingId);
 logPageView(window.location);
 
 history.listen(location => logPageView(location));

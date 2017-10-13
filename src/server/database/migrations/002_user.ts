@@ -9,7 +9,7 @@ export const up = async (knex: Knex, Promise: any) => {
       table.boolean('is_active').defaultTo(false);
       table.timestamps(false, true);
     }),
-    knex.schema.createTable('local_auth', table => {
+    knex.schema.createTable('auth_local', table => {
       table.increments();
       table.string('email').unique();
       table.string('password');
@@ -21,9 +21,21 @@ export const up = async (knex: Knex, Promise: any) => {
         .onDelete('CASCADE');
       table.timestamps(false, true);
     }),
-    knex.schema.createTable('cert_auth', table => {
+    knex.schema.createTable('auth_certificate', table => {
       table.increments();
       table.string('serial').unique();
+      table
+        .integer('user_id')
+        .unsigned()
+        .references('id')
+        .inTable('user')
+        .onDelete('CASCADE');
+      table.timestamps(false, true);
+    }),
+    knex.schema.createTable('auth_facebook', table => {
+      table.increments();
+      table.string('fb_id').unique();
+      table.string('display_name');
       table
         .integer('user_id')
         .unsigned()
@@ -38,7 +50,8 @@ export const up = async (knex: Knex, Promise: any) => {
 export const down = async (knex: Knex, Promise: any) => {
   return Promise.all([
     knex.schema.dropTable('user'),
-    knex.schema.dropTable('local_auth'),
-    knex.schema.dropTable('cert_auth')
+    knex.schema.dropTable('auth_local'),
+    knex.schema.dropTable('auth_certificate'),
+    knex.schema.dropTable('auth_facebook')
   ]);
 };

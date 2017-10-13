@@ -5,18 +5,6 @@ import { refreshTokens, tryLoginSerial } from './auth';
 export default (SECRET, User, jwt) => async (req, res, next) => {
   let token = req.universalCookies.get('x-token') || req.headers['x-token'];
 
-  // if header available
-  if (req.headers['x-token']) {
-    // check if header token matches cookie token
-    if (
-      req.headers['x-token'] !== req.universalCookies.get('x-token') ||
-      req.headers['x-refresh-token'] !== req.universalCookies.get('x-refresh-token')
-    ) {
-      // if x-token is not empty and not the same as cookie x-token revoke authentication
-      token = undefined;
-    }
-  }
-
   // if cookie available
   if (req.universalCookies.get('x-token')) {
     // check if header token matches cookie token
@@ -62,12 +50,12 @@ export default (SECRET, User, jwt) => async (req, res, next) => {
       }
       req.user = newTokens.user;
     }
-  } else if (settings.user.auth.certificate) {
+  } else if (settings.user.auth.certificate.enabled) {
     // cert auth
     let serial = '';
     if (__DEV__) {
       // for local testing without client certificates
-      serial = '00';
+      serial = settings.user.auth.certificate.devSerial;
     }
     // if header available
     if (req.headers['x-serial']) {

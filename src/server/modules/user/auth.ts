@@ -63,7 +63,8 @@ export const tryLogin = async (email: string, password: string, User: any, SECRE
   const e = new FieldError();
   const localAuth = await User.getLocalOuthByEmail(email);
 
-  if (!localAuth) {
+  // check if email and password exist in db
+  if (!localAuth || localAuth.password == null) {
     // user with provided email not found
     e.setError('email', 'Please enter a valid e-mail.');
     e.throwIf();
@@ -78,7 +79,7 @@ export const tryLogin = async (email: string, password: string, User: any, SECRE
 
   const user = await User.getUserWithPassword(localAuth.userId);
 
-  if (settings.user.confirm && !user.isActive) {
+  if (settings.user.auth.password.confirm && !user.isActive) {
     e.setError('email', 'Please confirm your e-mail first.');
     e.throwIf();
   }

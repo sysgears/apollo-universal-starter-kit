@@ -147,6 +147,7 @@ export default pubsub => ({
               // encoded token since react router does not match dots in params
               const encodedToken = Buffer.from(emailToken).toString('base64');
               const url = `${context.req.protocol}://${context.req.get('host')}/reset-password/${encodedToken}`;
+              console.log(url);
               context.mailer.sendMail({
                 from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
                 to: user.email,
@@ -164,19 +165,26 @@ export default pubsub => ({
     },
     async resetPassword(obj, { input }, context) {
       try {
+        const e = new FieldError();
         const reset = pick(input, ['password', 'passwordConfirmation', 'token']);
-        if (reset.password !== reset.passwordConfirmation) return { errors: 'Passwords do not match' };
+        if (reset.password !== reset.passwordConfirmation) {
+          e.setError('password', 'Passwords do not match');
+          e.throwIf();
+        }
 
         const token = Buffer.from(reset.token, 'base64');
         const { email, password } = jwt.decode(token);
         const user = await context.User.getLocalOuthByEmail(email);
-        if (user.password !== password) return { errors: 'Invalid token' };
+        if (user.password !== password) {
+          e.setError('token', 'Invalid token');
+          e.throwIf();
+        }
         const newPassword = await bcrypt.hash(reset.password, 12);
 
         if (user) {
           await context.User.updatePassword(user.id, newPassword);
         }
-        return false;
+        return { errors: null };
       } catch (e) {
         return { errors: e };
       }

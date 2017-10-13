@@ -20,6 +20,10 @@ type AuthPayload {
     errors: [FieldError!]
 }
 
+type ResetPayload {
+    errors: [FieldError!]
+}
+
 type Tokens {
     token: String!
     refreshToken: String!
@@ -38,7 +42,7 @@ extend type Mutation {
     updatePassword(id: Int!, newPassword: String!): Boolean!
     refreshTokens(token: String!, refreshToken: String!): AuthPayload!
     forgotPassword(input: ForgotPasswordInput!): Boolean!
-    resetPassword(input: ResetPasswordInput!): Boolean!
+    resetPassword(input: ResetPasswordInput!): ResetPayload!
 }
 
 input RegisterUserInput {

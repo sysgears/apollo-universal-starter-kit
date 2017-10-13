@@ -9,7 +9,7 @@ import { counterStore } from '../reducers/index';
   templateUrl: './CounterView.html',
   styles: ['section { margin-bottom: 30px; }']
 })
-export default class CounterView implements OnInit {
+export class CounterView implements OnInit {
   public count: number = 5;
   public reduxCount: number;
 

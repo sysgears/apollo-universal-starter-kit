@@ -2,7 +2,7 @@ import { ApplicationRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgStyles } from '@angularclass/hmr';
@@ -10,9 +10,19 @@ import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgSty
 import 'backend_reload';
 
 import log from '../common/log';
-import Main from './app/Main';
-import NavBar from './app/NavBar';
-import CounterView from './modules/counter/components/CounterView.web';
+import { Main } from './app/Main';
+import { NavBar } from './app/NavBar';
+import { CounterView } from './modules/counter/components/CounterView.web';
+import { PostList } from './modules/post/components/PostList.web';
+
+const ROUTES: Routes = [
+  { path: '', component: CounterView, data: { title: 'Apollo Fullstack Starter Kit - Counter example page' } },
+  {
+    path: 'posts',
+    component: PostList,
+    data: { title: 'Apollo Fullstack Starter Kit - List of all posts example page' }
+  }
+];
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
@@ -25,14 +35,15 @@ import { clientProvider } from './app/Main';
 
     /* Components */
     NavBar,
-    CounterView
+    CounterView,
+    PostList
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     ApolloModule.withClient(clientProvider),
-    RouterModule.forRoot([], {
+    RouterModule.forRoot(ROUTES, {
       useHash: true
     })
   ],

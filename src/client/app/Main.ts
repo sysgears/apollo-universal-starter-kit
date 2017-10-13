@@ -1,4 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+
 import '../styles/styles.scss';
 
 /* ApolloClient initialization */
@@ -55,7 +61,26 @@ export let clientProvider = () => {
   selector: 'body div:first-child',
   template: `<section>
       <nav-bar></nav-bar>
-      <counter-view></counter-view>
+      <router-outlet></router-outlet>
     </section>`
 })
-export default class {}
+export class Main implements OnInit {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private titleService: Title) {}
+
+  public ngOnInit(): void {
+    this.router.events
+      .filter(event => event instanceof NavigationEnd)
+      .map(() => this.activatedRoute)
+      .map(route => {
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+        return route;
+      })
+      .filter(route => route.outlet === 'primary')
+      .mergeMap(route => route.data)
+      .subscribe(event => {
+        this.titleService.setTitle(event.title);
+      });
+  }
+}

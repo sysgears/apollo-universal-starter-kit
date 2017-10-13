@@ -2,7 +2,7 @@ import { ApplicationRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgStyles } from '@angularclass/hmr';
@@ -12,6 +12,7 @@ import 'backend_reload';
 import log from '../common/log';
 import { Main } from './app/Main';
 import { NavBar } from './app/NavBar';
+import routes from './app/Routes.web';
 import { CounterView } from './modules/counter/components/CounterView.web';
 import { PostEditView } from './modules/post/components/PostEditView.web';
 import { PostList } from './modules/post/components/PostList.web';
@@ -19,17 +20,6 @@ import { PostList } from './modules/post/components/PostList.web';
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
 import { clientProvider } from './app/Main';
-
-const ROUTES: Routes = [
-  { path: '', component: CounterView, data: { title: 'Apollo Fullstack Starter Kit - Counter example page' } },
-  {
-    path: 'posts',
-    component: PostList,
-    data: { title: 'Apollo Fullstack Starter Kit - List of all posts example page' }
-  },
-  { path: 'post/0', component: PostEditView, data: { title: 'Apollo Starter Kit - Create post' } },
-  { path: 'post/:id', component: PostEditView, data: { title: 'Apollo Starter Kit - Edit post' } }
-];
 
 @NgModule({
   bootstrap: [Main],
@@ -47,7 +37,7 @@ const ROUTES: Routes = [
     FormsModule,
     HttpModule,
     ApolloModule.withClient(clientProvider),
-    RouterModule.forRoot(ROUTES, {
+    RouterModule.forRoot(routes, {
       useHash: true
     })
   ],

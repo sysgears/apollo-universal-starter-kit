@@ -50,7 +50,7 @@ const printQueriesAfterGivenPosition = position => {
   }
 };
 
-if (__DEV__ && settings.debugSQL) {
+if (__DEV__ && settings.app.logging.debugSQL) {
   knex
     .on('query', query => {
       const uid = query.__knexQueryUid;

@@ -2,11 +2,17 @@ import React from "react";
 
 import { merge, map, union, without, castArray } from "lodash";
 
+import log from '../../common/log';
+
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 export default class {
-  // eslint-disable-next-line no-unused-vars
-  constructor({ route, navItem, reducer }, ...features) {
+  /* eslint-disable no-unused-vars */
+  constructor(
+    { route, navItem, navItemRight, reducer, middleware, afterware, connectionParam, createFetchOptions },
+    ...features
+  ) {
+    /* eslint-enable no-unused-vars */
     this.route = combine(arguments, arg => arg.route);
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);
@@ -14,6 +20,7 @@ export default class {
     this.middleware = combine(arguments, arg => arg.middleware);
     this.afterware = combine(arguments, arg => arg.afterware);
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
+    this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
   }
 
   get routes() {
@@ -50,5 +57,21 @@ export default class {
 
   get connectionParams() {
     return this.connectionParam;
+  }
+
+  get constructFetchOptions() {
+    return this.createFetchOptions.length
+      ? (...args) => {
+          try {
+            let result = {};
+            for (let func of this.createFetchOptions) {
+              result = { ...result, ...func(...args) };
+            }
+            return result;
+          } catch (e) {
+            log.error(e.stack);
+          }
+        }
+      : null;
   }
 }

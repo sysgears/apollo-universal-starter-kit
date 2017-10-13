@@ -1,25 +1,9 @@
 import * as Knex from 'knex';
 
-/*
-For DB's other than SQLite you'll have to use raw queries for truncation if there is a foreign key constraint in your table.
-
-Instead of
-await Promise.all([
-  knex('post').truncate(),
-  knex('comment').truncate()
-]);
-
-Use
-await Promise.all([
-  knex.raw('ALTER SEQUENCE post_id_seq RESTART WITH 1'),
-  knex.raw('ALTER SEQUENCE comment_id_seq RESTART WITH 1'),
-  knex.raw('TRUNCATE TABLE post CASCADE'),
-  knex.raw('TRUNCATE TABLE comment CASCADE'),
-]);
-*/
+import truncateTables from '../../../common/db';
 
 export const seed = async (knex: Knex, Promise: any) => {
-  await Promise.all([knex('post').truncate(), knex('comment').truncate()]);
+  await truncateTables(knex, ['post', 'comment']);
 
   await Promise.all(
     Array.from(new Array(20).keys()).map(async ii => {

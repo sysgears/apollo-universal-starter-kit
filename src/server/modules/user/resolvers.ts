@@ -1,7 +1,9 @@
 /*eslint-disable no-unused-vars*/
 import * as bcrypt from 'bcryptjs';
 import { PubSub } from 'graphql-subscriptions';
-import _ = require('lodash');
+import * as jwt from 'jsonwebtoken';
+import { pick } from 'lodash';
+import settings from '../../../../settings';
 import FieldError from '../../../common/FieldError';
 import { refreshTokens, tryLogin } from './auth';
 import { requiresAdmin, requiresAuth } from './permissions';
@@ -40,25 +42,54 @@ export default (pubsub: PubSub) => ({
       try {
         const e = new FieldError();
         const localAuth = { email: args.input.email, password: args.input.password };
-        const emailExists = await context.User.getLocalAuthByEmail(localAuth.email);
+        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
 
-        if (emailExists) {
+        if (emailExists && emailExists.password) {
           e.setError('email', 'E-mail already exists.');
           e.throwIf();
         }
 
-        const passwordPromise = bcrypt.hash(localAuth.password, 12);
-        const createUserPromise = context.User.register(args.input);
-        const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
+        let userId = 0;
+        if (emailExists === null) {
+          const passwordPromise = bcrypt.hash(localAuth.password, 12);
 
-        localAuth.password = password;
+          let isActive = false;
+          if (!settings.user.auth.password.confirm) {
+            isActive = true;
+          }
 
-        const [id] = await context.User.createLocalAuth({
-          ...localAuth,
-          userId: createdUserId
-        });
+          const createUserPromise = context.User.register({ ...args.input, isActive });
+          const [password, [createdUserId]] = await Promise.all([passwordPromise, createUserPromise]);
 
-        const user = await context.User.getUser(createdUserId);
+          localAuth.password = password;
+
+          await context.User.createLocalOuth({
+            ...localAuth,
+            userId: createdUserId
+          });
+          userId = createdUserId;
+
+          // if user has previously logged with facebook auth
+        } else {
+          const password = await bcrypt.hash(localAuth.password, 12);
+          await context.User.updatePassword(emailExists.userId, password);
+          userId = emailExists.userId;
+        }
+
+        const user = await context.User.getUser(userId);
+
+        if (context.mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && context.req) {
+          // async email
+          jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
+            const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${emailToken}`;
+            context.mailer.sendMail({
+              from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
+              to: localAuth.email,
+              subject: 'Confirm Email',
+              html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
+            });
+          });
+        }
 
         return { user };
       } catch (e) {

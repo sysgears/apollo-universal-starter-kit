@@ -9,7 +9,7 @@ export default class User {
       await knex
         .select('u.id', 'u.username', 'u.is_admin', 'la.email')
         .from('user AS u')
-        .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
+        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
     );
   }
 
@@ -18,7 +18,7 @@ export default class User {
       await knex
         .select('u.id', 'u.username', 'u.is_admin', 'la.email')
         .from('user AS u')
-        .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
+        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );
@@ -29,7 +29,7 @@ export default class User {
       await knex
         .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'la.password')
         .from('user AS u')
-        .leftJoin('local_auth AS la', 'la.user_id', 'u.id')
+        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );
@@ -40,7 +40,7 @@ export default class User {
       await knex
         .select('u.id', 'u.username', 'u.is_admin')
         .from('user AS u')
-        .leftJoin('cert_auth AS ca', 'ca.user_id', 'u.id')
+        .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
         .where('ca.serial', '=', serial)
         .first()
     );
@@ -53,8 +53,14 @@ export default class User {
   }
 
   public createLocalOuth({ email, password, userId }: any) {
-    return knex('local_auth')
+    return knex('auth_local')
       .insert({ email, password, user_id: userId })
+      .returning('id');
+  }
+
+  public createFacebookOuth({ id, displayName, userId }: any) {
+    return knex('auth_facebook')
+      .insert({ fb_id: id, display_name: displayName, user_id: userId })
       .returning('id');
   }
 
@@ -74,7 +80,7 @@ export default class User {
     return camelizeKeys(
       await knex
         .select('*')
-        .from('local_auth')
+        .from('auth_local')
         .where({ id })
         .first()
     );
@@ -84,8 +90,21 @@ export default class User {
     return camelizeKeys(
       await knex
         .select('*')
-        .from('local_auth')
+        .from('auth_local')
         .where({ email })
+        .first()
+    );
+  }
+
+  public async getUserByFbIdOrEmail(id: number, email: string) {
+    return camelizeKeys(
+      await knex
+        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'fa.fb_id', 'la.email', 'la.password')
+        .from('user AS u')
+        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
+        .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
+        .where('fa.fb_id', '=', id)
+        .orWhere('la.email', '=', email)
         .first()
     );
   }

@@ -26,13 +26,19 @@ export default pubsub => ({
     async register(obj, { input }, context) {
       try {
         const e = new FieldError();
+
+        const userExists = await context.User.getUserByUsername(input.username);
+        if (userExists) {
+          e.setError('username', 'Username already exists.');
+        }
+
         const localAuth = pick(input, ['email', 'password']);
         const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
-
-        if (emailExists && emailExists.password) {
+        if (emailExists) {
           e.setError('email', 'E-mail already exists.');
-          e.throwIf();
         }
+
+        e.throwIf();
 
         let userId = 0;
         if (!emailExists) {

@@ -174,4 +174,14 @@ export default class User {
         .first()
     );
   }
+
+  async getUserByUsername(username) {
+    return camelizeKeys(
+      await knex
+        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active')
+        .from('user AS u')
+        .where('u.username', '=', username)
+        .first()
+    );
+  }
 }

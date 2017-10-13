@@ -147,7 +147,6 @@ export default pubsub => ({
               // encoded token since react router does not match dots in params
               const encodedToken = Buffer.from(emailToken).toString('base64');
               const url = `${context.req.protocol}://${context.req.get('host')}/reset-password/${encodedToken}`;
-              console.log(url);
               context.mailer.sendMail({
                 from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
                 to: user.email,

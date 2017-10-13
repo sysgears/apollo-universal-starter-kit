@@ -31,7 +31,6 @@ const ResetPasswordWithApollo = compose(
 
           history.push('/login');
         } catch (e) {
-          console.log(e);
           console.log(e.graphQLErrors);
         }
       }

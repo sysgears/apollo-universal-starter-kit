@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 
+import { ApolloExecutionResult } from 'apollo-client';
+import { Observable } from 'rxjs/Observable';
+
+import * as ADD_COUNTER from '../graphql/AddCounter.graphql';
 import * as COUNTER_QUERY from '../graphql/CounterQuery.graphql';
 
 @Injectable()
@@ -9,6 +13,10 @@ export class CounterService {
 
   public getCounter(): ApolloQueryObservable<any> {
     return this.apollo.watchQuery({ query: COUNTER_QUERY });
+  }
+
+  public addCounter(amount: number): Observable<ApolloExecutionResult<any>> {
+    return this.apollo.mutate({ mutation: ADD_COUNTER, variables: { amount } });
   }
 }
 

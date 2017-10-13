@@ -17,6 +17,7 @@ import CounterView from './modules/counter/components/CounterView.web';
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
 import { clientProvider } from './app/Main';
+import { CounterService } from './modules/counter/containers/Counter';
 
 @NgModule({
   bootstrap: [Main],
@@ -37,7 +38,7 @@ import { clientProvider } from './app/Main';
     })
   ],
   entryComponents: [NavBar, CounterView],
-  providers: []
+  providers: [CounterService]
 })
 class MainModule {
   constructor(public appRef: ApplicationRef) {}

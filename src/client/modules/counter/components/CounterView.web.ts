@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
+import { CounterService } from '../containers/Counter';
 import { COUNTER } from '../reducers/actionTypes';
 import { counterStore } from '../reducers/index';
 
@@ -10,28 +9,17 @@ import { counterStore } from '../reducers/index';
   styles: ['section { margin-bottom: 30px; }']
 })
 export default class CounterView implements OnInit {
-  public count: number = 5;
+  public count: number;
   public reduxCount: number;
 
-  constructor(private apollo: Apollo) {
+  constructor(private counterService: CounterService) {
     this.setReduxCount();
   }
 
   public ngOnInit(): void {
-    // TODO: for debugging purposes only. Will be removed as soon as GraphQL connection is configured.
-    this.apollo
-      .watchQuery({
-        query: gql`
-          query CounterQuery {
-            counter {
-              amount
-            }
-          }
-        `
-      })
-      .subscribe(({ data }) => {
-        // console.log(data);
-      });
+    this.counterService.getCounter().subscribe(({ data }) => {
+      this.count = data.counter.amount;
+    });
   }
 
   public addCount() {

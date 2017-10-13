@@ -18,7 +18,7 @@ ResetPassword.propTypes = {
 
 const ResetPasswordWithApollo = compose(
   graphql(RESET_PASSWORD, {
-    props: ({ mutate }) => ({
+    props: ({ ownProps: { history }, mutate }) => ({
       resetPassword: async ({ password, passwordConfirmation, token }) => {
         try {
           const { data: { resetPassword } } = await mutate({
@@ -28,7 +28,10 @@ const ResetPasswordWithApollo = compose(
           if (resetPassword.errors) {
             return { errors: resetPassword.errors };
           }
+
+          history.push('/login');
         } catch (e) {
+          console.log(e);
           console.log(e.graphQLErrors);
         }
       }

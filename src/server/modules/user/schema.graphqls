@@ -87,16 +87,16 @@ input AddUserInput {
     username: String!
     email: String!
     password: String!
-    isAdmin: Boolean!
-    isActive: Boolean!
+    isAdmin: Boolean
+    isActive: Boolean
 }
 
 # Input for editUser Mutation
 input EditUserInput {
     id: Int!
     username: String!
-    isAdmin: Boolean!
-    isActive: Boolean!
+    isAdmin: Boolean
+    isActive: Boolean
     email: String!
     password: String
 }

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import _ from 'lodash';
 import * as modules from './config';
 

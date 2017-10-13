@@ -24,11 +24,11 @@ const Users = () => {
     <PageLayout>
       {renderMetaData()}
       <h2>Users</h2>
-      <UsersFilter />
-      <hr />
       <Link to="/users/0">
         <Button color="primary">Add</Button>
       </Link>
+      <hr />
+      <UsersFilter />
       <hr />
       <UsersList />
     </PageLayout>

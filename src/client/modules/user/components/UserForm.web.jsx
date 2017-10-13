@@ -5,6 +5,15 @@ import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap'
 
 const required = value => (value ? undefined : 'Required');
 
+const validate = values => {
+  const errors = {};
+
+  if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
+    errors.passwordConfirmation = 'Passwords do not match';
+  }
+  return errors;
+};
+
 const renderField = ({ input, label, type, meta: { touched, error } }) => {
   let color = 'normal';
   if (touched && error) {
@@ -37,6 +46,13 @@ const UserForm = ({ handleSubmit, submitting, onSubmit }) => {
       <Field name="isAdmin" component={renderField} type="checkbox" label="Is Admin" />
       <Field name="isActive" component={renderField} type="checkbox" label="Is Active" />
       <Field name="password" component={renderField} type="password" label="Password" />
+      <Field
+        name="passwordConfirmation"
+        component={renderField}
+        type="password"
+        label="Password Confirmation"
+        validate={required}
+      />
       <Button color="primary" type="submit" disabled={submitting}>
         Save
       </Button>
@@ -52,5 +68,5 @@ UserForm.propTypes = {
 
 export default reduxForm({
   form: 'user',
-  enableReinitialize: true
+  validate
 })(UserForm);

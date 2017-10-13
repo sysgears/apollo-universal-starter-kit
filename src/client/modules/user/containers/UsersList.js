@@ -22,7 +22,8 @@ class UsersList extends React.Component {
 UsersList.propTypes = {
   loading: PropTypes.bool.isRequired,
   users: PropTypes.array,
-  errors: PropTypes.array
+  errors: PropTypes.array,
+  refetch: PropTypes.func.isRequired
 };
 
 const UsersListWithApollo = compose(
@@ -36,26 +37,21 @@ const UsersListWithApollo = compose(
         }
       };
     },
-    props({ data: { loading, users, error } }) {
-      return { loading, users, errors: error ? error.graphQLErrors : null };
+    props({ data: { loading, users, refetch, error } }) {
+      return { loading, users, refetch, errors: error ? error.graphQLErrors : null };
     }
   }),
   graphql(DELETE_USER, {
-    props: ({ ownProps: { orderBy, searchText, isAdmin }, mutate }) => ({
+    props: ({ ownProps: { orderBy, searchText, isAdmin, refetch }, mutate }) => ({
       deleteUser: async id => {
         try {
           const { data: { deleteUser } } = await mutate({
-            variables: { id },
-            refetchQueries: [
-              {
-                query: USERS_QUERY,
-                variables: {
-                  orderBy: orderBy,
-                  filter: { searchText, isAdmin }
-                }
-              }
-            ]
+            variables: { id }
           });
+
+          // refeatch USERS_QUERY
+          refetch();
+
           if (deleteUser.errors) {
             return { errors: deleteUser.errors };
           }

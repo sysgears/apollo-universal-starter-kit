@@ -5,6 +5,15 @@ import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap'
 
 const required = value => (value ? undefined : 'Required');
 
+const validate = values => {
+  const errors = {};
+
+  if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
+    errors.passwordConfirmation = 'Passwords do not match';
+  }
+  return errors;
+};
+
 const renderField = ({ input, label, type, meta: { touched, error } }) => {
   let color = 'normal';
   if (touched && error) {
@@ -60,5 +69,6 @@ ResetPasswordForm.propTypes = {
 };
 
 export default reduxForm({
-  form: 'resetPassword'
+  form: 'resetPassword',
+  validate
 })(ResetPasswordForm);

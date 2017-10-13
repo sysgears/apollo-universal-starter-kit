@@ -5,6 +5,15 @@ import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap'
 
 const required = value => (value ? undefined : 'Required');
 
+const validate = values => {
+  const errors = {};
+
+  if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
+    errors.passwordConfirmation = 'Passwords do not match';
+  }
+  return errors;
+};
+
 const renderField = ({ input, label, type, meta: { touched, error } }) => {
   let color = 'normal';
   if (touched && error) {
@@ -35,6 +44,13 @@ const RegisterForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
       <Field name="username" component={renderField} type="text" label="Username" validate={required} />
       <Field name="email" component={renderField} type="email" label="Email" validate={required} />
       <Field name="password" component={renderField} type="password" label="Password" validate={required} />
+      <Field
+        name="passwordConfirmation"
+        component={renderField}
+        type="password"
+        label="Password Confirmation"
+        validate={required}
+      />
       {errors && (
         <FormGroup color="danger">
           <FormFeedback>{errors.map(error => <li key={error.field}>{error.message}</li>)}</FormFeedback>
@@ -55,5 +71,6 @@ RegisterForm.propTypes = {
 };
 
 export default reduxForm({
-  form: 'register'
+  form: 'register',
+  validate
 })(RegisterForm);

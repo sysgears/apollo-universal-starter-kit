@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CounterService } from '../containers/Counter';
+import { updateQuery } from '../containers/Counter';
 import { COUNTER } from '../reducers/actionTypes';
 import { counterStore } from '../reducers/index';
+
+import * as COUNTER_SUBSCRIPTION from '../graphql/CounterQuery.graphql';
 
 @Component({
   selector: 'counter-view',
@@ -10,7 +13,7 @@ import { counterStore } from '../reducers/index';
 })
 export default class CounterView implements OnInit {
   public loading: boolean = true;
-  public count: number;
+  public counter: object;
   public reduxCount: number;
 
   constructor(private counterService: CounterService) {
@@ -18,15 +21,23 @@ export default class CounterView implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.counterService.getCounter().subscribe(({ data, loading }) => {
-      this.count = data.counter.amount;
+    const res = this.counterService.getCounter();
+
+    res.subscribeToMore({
+      document: COUNTER_SUBSCRIPTION,
+      variables: {},
+      updateQuery
+    });
+
+    res.subscribe(({ data, loading }) => {
+      this.counter = data.counter;
       this.loading = loading;
     });
   }
 
   public addCount() {
-    this.counterService.addCounter(1).subscribe(({ data }) => {
-      this.count = data.addCounter.amount;
+    this.counterService.addCounter(1).subscribe(res => {
+      this.counter = res.data.addCounter;
     });
   }
 

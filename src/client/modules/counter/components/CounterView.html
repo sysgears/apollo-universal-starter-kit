@@ -2,7 +2,7 @@
 <div *ngIf="!loading" id="content" class="container">
   <div class="text-center mt-4 mb-4">
     <section>
-      <p>Current counter, is {{count}}. This is being stored server-side in the database and using Apollo subscription for real-time updates.</p>
+      <p>Current counter, is {{counter.amount}}. This is being stored server-side in the database and using Apollo subscription for real-time updates.</p>
       <button type="button" id="graphql-button" class="btn btn-primary" (click)="addCount()">Click to increase counter</button>
     </section>
     <section>

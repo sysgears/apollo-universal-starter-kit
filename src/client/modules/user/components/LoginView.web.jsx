@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Card, CardBlock, CardTitle, CardText } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 import PageLayout from '../../../app/PageLayout';
 import LoginForm from '../components/LoginForm';
@@ -42,6 +43,7 @@ class LoginView extends React.PureComponent {
         {renderMetaData()}
         <h1>Login page!</h1>
         <LoginForm onSubmit={this.onSubmit(login)} errors={this.state.errors} />
+        <Link to="/forgot-password">Forgot your password?</Link>
         <hr />
         <Card>
           <CardBlock>

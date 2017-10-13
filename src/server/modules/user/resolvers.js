@@ -167,11 +167,59 @@ export default pubsub => ({
         return { errors: e };
       }
     }),
-    async updatePassword(obj, { id, newPassword }, context) {
+    async forgotPassword(obj, { input }, context) {
       try {
-        return context.User.updatePassword(id, newPassword);
+        const localAuth = pick(input, 'email');
+        const user = await context.User.getLocalOuthByEmail(localAuth.email);
+
+        if (user && context.mailer) {
+          // async email
+          jwt.sign(
+            { email: user.email, password: user.password },
+            context.SECRET,
+            { expiresIn: '1d' },
+            (err, emailToken) => {
+              // encoded token since react router does not match dots in params
+              const encodedToken = Buffer.from(emailToken).toString('base64');
+              const url = `${context.req.protocol}://${context.req.get('host')}/reset-password/${encodedToken}`;
+              context.mailer.sendMail({
+                from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
+                to: user.email,
+                subject: 'Reset Password',
+                html: `Please click this link to reset your password: <a href="${url}">${url}</a>`
+              });
+            }
+          );
+        }
+        return true;
       } catch (e) {
-        return false;
+        // always return true so you can't discover users this way
+        return true;
+      }
+    },
+    async resetPassword(obj, { input }, context) {
+      try {
+        const e = new FieldError();
+        const reset = pick(input, ['password', 'passwordConfirmation', 'token']);
+        if (reset.password !== reset.passwordConfirmation) {
+          e.setError('password', 'Passwords do not match');
+          e.throwIf();
+        }
+
+        const token = Buffer.from(reset.token, 'base64');
+        const { email, password } = jwt.decode(token);
+        const user = await context.User.getLocalOuthByEmail(email);
+        if (user.password !== password) {
+          e.setError('token', 'Invalid token');
+          e.throwIf();
+        }
+
+        if (user) {
+          await context.User.updatePassword(user.id, reset.password);
+        }
+        return { errors: null };
+      } catch (e) {
+        return { errors: e };
       }
     }
   },

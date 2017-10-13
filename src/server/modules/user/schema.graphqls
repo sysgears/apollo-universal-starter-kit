@@ -16,6 +16,10 @@ type AuthPayload {
     errors: [FieldError!]
 }
 
+type ResetPayload {
+    errors: [FieldError!]
+}
+
 type Tokens {
     token: String!
     refreshToken: String!
@@ -45,8 +49,8 @@ extend type Mutation {
     editUser(input: EditUserInput!): UserPayload!
     # Delete a user
     deleteUser(id: Int!): UserPayload!
-    # Update user password
-    updatePassword(id: Int!, newPassword: String!): Boolean!
+    forgotPassword(input: ForgotPasswordInput!): Boolean!
+    resetPassword(input: ResetPasswordInput!): ResetPayload!
 }
 
 # Input for ordering users
@@ -95,6 +99,16 @@ input EditUserInput {
     isActive: Boolean!
     email: String!
     password: String
+}
+
+input ForgotPasswordInput {
+    email: String!
+}
+
+input ResetPasswordInput {
+    token: String!
+    password: String!
+    passwordConfirmation: String!
 }
 
 extend type Subscription {

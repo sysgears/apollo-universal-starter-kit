@@ -21,6 +21,7 @@ import createReduxStore from '../../common/createReduxStore';
 import Html from './html';
 import Routes from '../../client/app/Routes';
 import log from '../../common/log';
+import modules from '../modules';
 import { options as spinConfig } from '../../../.spinrc.json';
 import settings from '../../../settings';
 
@@ -35,7 +36,7 @@ async function renderServerSide(req, res) {
   // }
   //
 
-  const fetch = createApolloFetch({ uri: apiUrl });
+  const fetch = createApolloFetch({ uri: apiUrl, constructOptions: modules.constructFetchOptions });
   fetch.batchUse(({ options }, next) => {
     try {
       options.credentials = 'include';

@@ -5,6 +5,8 @@ import type { Middleware, $Request } from 'express';
 
 import { merge, map, union, without, castArray } from 'lodash';
 
+import log from '../../common/log';
+
 const combine = (features, extractor): any =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
@@ -12,13 +14,15 @@ type FeatureParams = {
   schema: DocumentNode | DocumentNode[],
   createResolversFunc?: Function | Function[],
   createContextFunc?: Function | Function[],
-  middleware?: Middleware | Middleware[]
+  middleware?: Middleware | Middleware[],
+  createFetchOptions?: Function | Function[]
 };
 
 class Feature {
   schema: DocumentNode[];
   createResolversFunc: Function[];
   createContextFunc: Function[];
+  createFetchOptions: Function[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
@@ -26,6 +30,7 @@ class Feature {
     this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.middleware = combine(arguments, arg => arg.middleware);
+    this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
   }
 
   get schemas(): DocumentNode[] {
@@ -45,6 +50,22 @@ class Feature {
 
   get middlewares(): Middleware[] {
     return this.middleware;
+  }
+
+  get constructFetchOptions() {
+    return this.createFetchOptions.length
+      ? (...args) => {
+          try {
+            let result = {};
+            for (let func of this.createFetchOptions) {
+              result = { ...result, ...func(...args) };
+            }
+            return result;
+          } catch (e) {
+            log.error(e.stack);
+          }
+        }
+      : null;
   }
 }
 

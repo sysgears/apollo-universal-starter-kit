@@ -35,7 +35,7 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       addUser: async (username, email, isAdmin, isActive, password) => {
         await mutate({
-          variables: { input: { username, email, isAdmin, isActive, password } },
+          variables: { input: { username, email, isAdmin, isActive, password } }
         });
 
         if (history) {

@@ -13,7 +13,12 @@ import log from '../common/log';
 import { Main } from './app/Main';
 import { NavBar } from './app/NavBar';
 import { CounterView } from './modules/counter/components/CounterView.web';
+import { PostEditView } from './modules/post/components/PostEditView.web';
 import { PostList } from './modules/post/components/PostList.web';
+
+// Apollo imports
+import { ApolloModule } from 'apollo-angular';
+import { clientProvider } from './app/Main';
 
 const ROUTES: Routes = [
   { path: '', component: CounterView, data: { title: 'Apollo Fullstack Starter Kit - Counter example page' } },
@@ -21,12 +26,10 @@ const ROUTES: Routes = [
     path: 'posts',
     component: PostList,
     data: { title: 'Apollo Fullstack Starter Kit - List of all posts example page' }
-  }
+  },
+  { path: 'post/0', component: PostEditView, data: { title: 'Apollo Starter Kit - Create post' } },
+  { path: 'post/:id', component: PostEditView, data: { title: 'Apollo Starter Kit - Edit post' } }
 ];
-
-// Apollo imports
-import { ApolloModule } from 'apollo-angular';
-import { clientProvider } from './app/Main';
 
 @NgModule({
   bootstrap: [Main],
@@ -36,7 +39,8 @@ import { clientProvider } from './app/Main';
     /* Components */
     NavBar,
     CounterView,
-    PostList
+    PostList,
+    PostEditView
   ],
   imports: [
     BrowserModule,

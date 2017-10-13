@@ -1,33 +1,76 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'posts-view',
   template: `
-      <div id="content" class="container">
-        <h2>Posts</h2>
-        <a href="/post/0">
-          <button class="btn btn-primary">Add</button>
-        </a>
-        <h1></h1>
-        <ul class="list-group">
-          <li class="d-flex justify-content-between list-group-item" *ngFor="let post of posts">
-              <div>
-                  <a href="/post/{{ post }}" class="post-link">Post title {{ post }}</a>
-              </div>
-              <div>
-                  <a href="#" class="badge badge-secondary delete-button">Delete</a>
-              </div>
-          </li>
-        </ul>
-        <div>
-          <small>(10 / 20)</small>
-        </div>
-        <button type="button" id="load-more" class="btn btn-primary">Load more ...</button>
+      <div class="container">
+          <h2>Posts</h2>
+          <a [routerLink]="['/post/0']">
+              <button class="btn btn-primary">Add</button>
+          </a>
+          <h1></h1>
+          <ul class="list-group">
+              <li class="d-flex justify-content-between list-group-item" *ngFor="let post of loadedPosts">
+                  <div>
+                      <a [routerLink]="['/post', post.id]" class="post-link">{{ post.title }}</a>
+                  </div>
+                  <div>
+                      <a class="badge badge-secondary delete-button" style="cursor: pointer;" (click)="deletePost(post.id)">Delete</a>
+                  </div>
+              </li>
+          </ul>
+          <div>
+              <small>({{ loadedCount }} / {{ totalCount }})</small>
+          </div>
+          <button type="button" id="load-more" class="btn btn-primary" *ngIf="hasNextPage()" (click)="loadMoreRows()">Load more ...</button>
       </div>
-  `
+	`
 })
-export class PostList {
-  public posts = [20, 19, 18, 17, 16, 15, 14, 13, 12, 11];
+export class PostList implements OnInit {
+  // Only for test
+  public postIndexes = Array.from(new Array(20), (val, index) => index + 1);
+  public totalCount: number;
+  public posts: Array<{ id: number; title: string; content: string; postId: number }> = [];
+  public loadedCount = 10;
+  public loadedPosts: Array<{ id: number; title: string; content: string; postId: number }>;
+
+  constructor() {}
+
+  public ngOnInit() {
+    for (const index of this.postIndexes) {
+      this.posts.push({ id: index, title: `Post title ${index}`, content: 'test', postId: index });
+    }
+    this.loadedPosts = this.posts
+      .slice()
+      .reverse()
+      .slice(0, this.loadedCount);
+    this.totalCount = this.posts.length;
+  }
+
+  public loadMoreRows() {
+    const remainingCount = this.totalCount - (this.loadedCount + 10);
+    if (remainingCount > 0) {
+      this.loadedCount = this.loadedCount + 10;
+      this.loadedPosts = this.posts
+        .slice()
+        .reverse()
+        .slice(0, this.loadedCount);
+    } else {
+      this.loadedCount = this.totalCount;
+      this.loadedPosts = this.posts.slice().reverse();
+    }
+  }
+
+  public hasNextPage() {
+    return this.totalCount > this.loadedCount;
+  }
+
+  public deletePost(id: number) {
+    this.posts = this.posts.filter(post => post.id !== id);
+    this.loadedPosts = this.loadedPosts.filter(post => post.id !== id);
+    this.loadedCount--;
+    this.totalCount--;
+  }
 }
 
 // import React from 'react';

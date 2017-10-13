@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Request, RequestHandler } from 'express';
+import { Application } from 'express';
 import { DocumentNode } from 'graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { castArray, map, merge, union, without } from 'lodash';
@@ -9,33 +10,26 @@ const combine = (features: IArguments, extractor: (x: Feature) => any): any[] =>
 
 type CreateResolversFunc = (pubsub: any) => any;
 type CreateContextFunc = (req: Request, connectionParams?: object | (() => object), webSocket?: any) => object;
-interface MiddlewareGet {
-  path: string;
-  callback: RequestHandler;
-  callback2?: RequestHandler;
-}
+type MiddlewareFunc = (app: Application) => any;
 
 interface FeatureParams {
   schema?: DocumentNode | DocumentNode[];
   createResolversFunc?: CreateResolversFunc | CreateResolversFunc[];
   createContextFunc?: CreateContextFunc | CreateContextFunc[];
-  middlewareUse?: RequestHandler | RequestHandler[];
-  middlewareGet?: MiddlewareGet | MiddlewareGet[];
+  middleware?: MiddlewareFunc | MiddlewareFunc[];
 }
 
 class Feature {
   public schema: DocumentNode[];
   public createResolversFunc: CreateResolversFunc[];
   public createContextFunc: CreateContextFunc[];
-  public middlewareUse: RequestHandler[];
-  public middlewareGet: MiddlewareGet[];
+  public middleware: MiddlewareFunc[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
-    this.middlewareUse = combine(arguments, arg => arg.middlewareUse);
-    this.middlewareGet = combine(arguments, arg => arg.middlewareGet);
+    this.middleware = combine(arguments, arg => arg.middleware);
   }
 
   get schemas(): DocumentNode[] {
@@ -53,12 +47,8 @@ class Feature {
     return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
   }
 
-  get middlewaresUse(): RequestHandler[] {
-    return this.middlewareUse;
-  }
-
-  get middlewaresGet(): MiddlewareGet[] {
-    return this.middlewareGet;
+  get middlewares(): MiddlewareFunc[] {
+    return this.middleware;
   }
 }
 

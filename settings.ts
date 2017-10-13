@@ -1,23 +1,17 @@
 import * as _ from 'lodash';
 
-import * as appJson from './app.json';
-import * as modules from './config';
-
-const settings = appJson.app;
+import * as settings from './config';
 
 interface AppSettings {
+  app?: any;
   apolloLogging?: boolean;
   user?: any;
+  db?: any;
 }
 
-const allSettings = {
-  ...settings,
-  ...modules
-};
-
 const envSettings: AppSettings = {
-  ..._.pickBy(allSettings, (v, k) => k !== 'env'),
-  ..._.get(allSettings, 'env.' + process.env.NODE_ENV)
+  ..._.pickBy(settings, (v, k) => k !== 'env'),
+  ..._.get(settings, 'env.' + process.env.NODE_ENV)
 };
 
 export default envSettings;

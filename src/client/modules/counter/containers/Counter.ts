@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Apollo, ApolloQueryObservable } from 'apollo-angular';
-import { CounterQuery } from '../graphql/CounterQuery';
+
+import * as COUNTER_QUERY from '../graphql/CounterQuery.graphql';
 
 @Injectable()
 export class CounterService {
   constructor(private apollo: Apollo) {}
 
   public getCounter(): ApolloQueryObservable<any> {
-    return this.apollo.watchQuery({ query: CounterQuery });
+    return this.apollo.watchQuery({ query: COUNTER_QUERY });
   }
 }
 

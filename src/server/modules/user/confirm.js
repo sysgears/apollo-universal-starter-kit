@@ -1,10 +1,11 @@
 export default (SECRET, User, jwt) => async (req, res) => {
   try {
-    const { user: { id } } = jwt.verify(req.params.token, SECRET);
+    const token = Buffer.from(req.params.token, 'base64').toString('ascii');
+    const { user: { id } } = jwt.verify(token, SECRET);
 
     await User.updateActive(id, true);
   } catch (e) {
-    res.send('error');
+    return res.send('error');
   }
 
   return res.redirect('/login');

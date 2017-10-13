@@ -60,7 +60,8 @@ export default pubsub => ({
         if (context.mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && context.req) {
           // async email
           jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
-            const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${emailToken}`;
+            const encodedToken = Buffer.from(emailToken).toString('base64');
+            const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
             context.mailer.sendMail({
               from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
               to: localAuth.email,

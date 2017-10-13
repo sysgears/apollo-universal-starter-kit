@@ -1,4 +1,5 @@
-<div id="content" class="container">
+<div *ngIf="loading" class="text-center">Loading...</div>
+<div *ngIf="!loading" id="content" class="container">
   <div class="text-center mt-4 mb-4">
     <section>
       <p>Current counter, is {{count}}. This is being stored server-side in the database and using Apollo subscription for real-time updates.</p>

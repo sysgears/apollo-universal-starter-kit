@@ -9,6 +9,7 @@ import { counterStore } from '../reducers/index';
   styles: ['section { margin-bottom: 30px; }']
 })
 export default class CounterView implements OnInit {
+  public loading: boolean = true;
   public count: number;
   public reduxCount: number;
 
@@ -17,8 +18,9 @@ export default class CounterView implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.counterService.getCounter().subscribe(({ data }) => {
+    this.counterService.getCounter().subscribe(({ data, loading }) => {
       this.count = data.counter.amount;
+      this.loading = loading;
     });
   }
 

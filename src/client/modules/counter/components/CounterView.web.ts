@@ -10,7 +10,7 @@ import { counterStore } from '../reducers/index';
 })
 export default class CounterView implements OnInit {
   public loading: boolean = true;
-  public counter: object;
+  public counter: any;
   public reduxCount: number;
 
   constructor(private counterService: CounterService) {
@@ -42,16 +42,16 @@ export default class CounterView implements OnInit {
 
   /* Callbacks */
 
-  private subscribeCb = res => {
+  private subscribeCb = (res: any) => {
     this.counter = res.data.counterUpdated;
   };
 
-  private getCounterCb = ({ data, loading }) => {
-    this.counter = data.counter;
-    this.loading = loading;
+  private getCounterCb = (res: any) => {
+    this.counter = res.data.counter;
+    this.loading = res.loading;
   };
 
-  private addCounterCb = res => {
+  private addCounterCb = (res: any) => {
     this.counter = res.data.addCounter;
   };
 }

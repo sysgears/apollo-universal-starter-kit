@@ -26,12 +26,12 @@ export class CounterService {
       query: COUNTER_SUBSCRIPTION,
       variables: {}
     });
-    return this.performAndSubscribe(subscription, callback);
+    return this.subscribe(subscription, callback);
   }
 
   public getCounter(callback: (result: any) => any): ApolloQueryObservable<any> {
     const getCounter = this.apollo.watchQuery({ query: COUNTER_QUERY });
-    return this.performAndSubscribe(getCounter, callback);
+    return this.subscribe(getCounter, callback);
   }
 
   public addCounter(amount: number, callback: (result: any) => any): Observable<ApolloExecutionResult<any>> {
@@ -40,10 +40,10 @@ export class CounterService {
       variables: { amount },
       updateQueries: { updateQuery }
     });
-    return this.performAndSubscribe(addCounter, callback);
+    return this.subscribe(addCounter, callback);
   }
 
-  private performAndSubscribe(observable: Observable<any>, cb: (result: any) => any): Subscription {
+  private subscribe(observable: Observable<any>, cb: (result: any) => any): Subscription {
     const subscription = observable.subscribe({
       next: result => {
         try {

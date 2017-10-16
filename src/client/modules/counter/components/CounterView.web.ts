@@ -29,9 +29,13 @@ export default class CounterView implements OnInit {
   }
 
   public addCount() {
-    this.counterService.addCounter(1, res => {
-      this.counter = res.data.addCounter;
-    });
+    this.counterService.addCounter(
+      1,
+      res => {
+        this.counter = res.data.addCounter;
+      },
+      ++this.counter.amount
+    );
   }
 
   public onReduxIncrement() {

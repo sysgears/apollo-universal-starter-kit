@@ -33,11 +33,11 @@ export class CounterService {
     return this.subscribe(getCounter, callback);
   }
 
-  public addCounter(amount: number, callback: (result: any) => any) {
+  public addCounter(amount: number, callback: (result: any) => any, optimisticValue?: number) {
     const addCounter = this.apollo.mutate({
       mutation: ADD_COUNTER,
       variables: { amount },
-      optimisticResponse: { addCounter: { amount: ++amount, __typename: 'Counter' } },
+      optimisticResponse: { addCounter: { amount: optimisticValue, __typename: 'Counter' } },
       updateQueries: { updateQuery }
     });
     return this.subscribe(addCounter, callback);

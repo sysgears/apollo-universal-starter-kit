@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Apollo, ApolloQueryObservable } from 'apollo-angular';
+import { Apollo } from 'apollo-angular';
 
-import { ApolloExecutionResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -30,7 +29,7 @@ export class CounterService {
   }
 
   public getCounter(callback: (result: any) => any) {
-    const getCounter = this.apollo.watchQuery({ query: COUNTER_QUERY });
+    const getCounter = this.apollo.query({ query: COUNTER_QUERY });
     return this.subscribe(getCounter, callback);
   }
 
@@ -43,7 +42,7 @@ export class CounterService {
     return this.subscribe(addCounter, callback);
   }
 
-  private subscribe(observable: Observable<any>, cb: (result: any) => any): Subscription {
+  private subscribe(observable: Observable<any>, cb: (result: Observable<any>) => any): Subscription {
     const subscription = observable.subscribe({
       next: result => {
         try {

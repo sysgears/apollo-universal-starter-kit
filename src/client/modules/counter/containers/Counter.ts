@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import * as ADD_COUNTER from '../graphql/AddCounter.graphql';
 import * as COUNTER_QUERY from '../graphql/CounterQuery.graphql';
-import * as COUNTER_SUBSCRIPTION from '../graphql/CounterQuery.graphql';
+import * as COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
 export function updateQuery(prev: any, mutationResult: any) {
   const newCounter = mutationResult.subscriptionData.data.counter;
@@ -37,6 +37,7 @@ export class CounterService {
     const addCounter = this.apollo.mutate({
       mutation: ADD_COUNTER,
       variables: { amount },
+      optimisticResponse: { addCounter: { amount: ++amount, __typename: 'Counter' } },
       updateQueries: { updateQuery }
     });
     return this.subscribe(addCounter, callback);

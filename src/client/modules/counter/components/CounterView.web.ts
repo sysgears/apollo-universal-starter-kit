@@ -18,24 +18,12 @@ export default class CounterView implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.counterService.subscribeToCount(res => {
-      this.counter = res.data.counterUpdated;
-    });
-
-    this.counterService.getCounter(({ data, loading }) => {
-      this.counter = data.counter;
-      this.loading = loading;
-    });
+    this.counterService.subscribeToCount(this.subscribeCb);
+    this.counterService.getCounter(this.getCounterCb);
   }
 
   public addCount() {
-    this.counterService.addCounter(
-      1,
-      res => {
-        this.counter = res.data.addCounter;
-      },
-      ++this.counter.amount
-    );
+    this.counterService.addCounter(1, this.addCounterCb, this.counter.amount);
   }
 
   public onReduxIncrement() {
@@ -51,6 +39,21 @@ export default class CounterView implements OnInit {
   private setReduxCount() {
     this.reduxCount = counterStore.getState().reduxCount || 1;
   }
+
+  /* Callbacks */
+
+  private subscribeCb = res => {
+    this.counter = res.data.counterUpdated;
+  };
+
+  private getCounterCb = ({ data, loading }) => {
+    this.counter = data.counter;
+    this.loading = loading;
+  };
+
+  private addCounterCb = res => {
+    this.counter = res.data.addCounter;
+  };
 }
 
 // import React from "react";

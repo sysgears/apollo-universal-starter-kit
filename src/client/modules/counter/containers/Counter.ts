@@ -37,7 +37,7 @@ export class CounterService {
     const addCounter = this.apollo.mutate({
       mutation: ADD_COUNTER,
       variables: { amount },
-      optimisticResponse: { addCounter: { amount: optimisticValue, __typename: 'Counter' } },
+      optimisticResponse: { addCounter: { amount: optimisticValue + 1, __typename: 'Counter' } },
       updateQueries: { updateQuery }
     });
     return this.subscribe(addCounter, callback);

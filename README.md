@@ -89,7 +89,7 @@ To bring up the developer menu press ⌘+D.
 
 ### Commercial support
 
-SysGears team provides advanced support for commercial partners. A commercial partner will have a premium access to our
+[SysGears](https://sysgears.com) team provides advanced support for commercial partners. A commercial partner will have a premium access to our
 team whether this is to help you with your code based on this starter kit or related technologies used in the kit. Contact
 us using [Skype](http://hatscripts.com/addskype?sysgears) or via email: [info@sysgears.com](mailto:info@sysgears.com)
 

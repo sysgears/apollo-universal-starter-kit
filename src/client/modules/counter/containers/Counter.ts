@@ -29,7 +29,7 @@ export class CounterService {
   }
 
   public getCounter(callback: (result: any) => any) {
-    const getCounter = this.apollo.query({ query: COUNTER_QUERY });
+    const getCounter = this.apollo.subscribe({ query: COUNTER_QUERY });
     return this.subscribe(getCounter, callback);
   }
 

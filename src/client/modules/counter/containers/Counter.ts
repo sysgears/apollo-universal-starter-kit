@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 
 import * as ADD_COUNTER from '../graphql/AddCounter.graphql';
 import * as COUNTER_QUERY from '../graphql/CounterQuery.graphql';
+import * as COUNTER_SUBSCRIPTION from '../graphql/CounterQuery.graphql';
 
 export function updateQuery(prev: any, mutationResult: any) {
   const newCounter = mutationResult.subscriptionData.data.counter;
@@ -18,6 +19,13 @@ export function updateQuery(prev: any, mutationResult: any) {
 @Injectable()
 export class CounterService {
   constructor(private apollo: Apollo) {}
+
+  public subscribeToCount(): Observable<any> {
+    return this.apollo.subscribe({
+      query: COUNTER_SUBSCRIPTION,
+      variables: {}
+    });
+  }
 
   public getCounter(): ApolloQueryObservable<any> {
     return this.apollo.watchQuery({ query: COUNTER_QUERY });

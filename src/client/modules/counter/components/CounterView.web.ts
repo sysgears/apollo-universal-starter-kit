@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CounterService } from '../containers/Counter';
-import { updateQuery } from '../containers/Counter';
 import { COUNTER } from '../reducers/actionTypes';
 import { counterStore } from '../reducers/index';
-
-import * as COUNTER_SUBSCRIPTION from '../graphql/CounterQuery.graphql';
 
 @Component({
   selector: 'counter-view',
@@ -21,15 +18,11 @@ export default class CounterView implements OnInit {
   }
 
   public ngOnInit(): void {
-    const res = this.counterService.getCounter();
-
-    res.subscribeToMore({
-      document: COUNTER_SUBSCRIPTION,
-      variables: {},
-      updateQuery
+    this.counterService.subscribeToCount().subscribe(res => {
+      this.counter = res.data.counter;
     });
 
-    res.subscribe(({ data, loading }) => {
+    this.counterService.getCounter().subscribe(({ data, loading }) => {
       this.counter = data.counter;
       this.loading = loading;
     });

@@ -3,6 +3,7 @@ import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 
 import { ApolloExecutionResult } from 'apollo-client';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 import * as ADD_COUNTER from '../graphql/AddCounter.graphql';
 import * as COUNTER_QUERY from '../graphql/CounterQuery.graphql';
@@ -20,22 +21,39 @@ export function updateQuery(prev: any, mutationResult: any) {
 export class CounterService {
   constructor(private apollo: Apollo) {}
 
-  public subscribeToCount(): Observable<any> {
-    return this.apollo.subscribe({
+  public subscribeToCount(callback: (result: any) => any): Observable<any> {
+    const subscription = this.apollo.subscribe({
       query: COUNTER_SUBSCRIPTION,
       variables: {}
     });
+    return this.performAndSubscribe(subscription, callback);
   }
 
-  public getCounter(): ApolloQueryObservable<any> {
-    return this.apollo.watchQuery({ query: COUNTER_QUERY });
+  public getCounter(callback: (result: any) => any): ApolloQueryObservable<any> {
+    const getCounter = this.apollo.watchQuery({ query: COUNTER_QUERY });
+    return this.performAndSubscribe(getCounter, callback);
   }
 
-  public addCounter(amount: number): Observable<ApolloExecutionResult<any>> {
-    return this.apollo.mutate({
+  public addCounter(amount: number, callback: (result: any) => any): Observable<ApolloExecutionResult<any>> {
+    const addCounter = this.apollo.mutate({
       mutation: ADD_COUNTER,
       variables: { amount },
       updateQueries: { updateQuery }
+    });
+    return this.performAndSubscribe(addCounter, callback);
+  }
+
+  private performAndSubscribe(observable: Observable<any>, cb: (result: any) => any): Subscription {
+    const subscription = observable.subscribe({
+      next: result => {
+        try {
+          cb(result);
+        } catch (e) {
+          setImmediate(() => {
+            subscription.unsubscribe();
+          });
+        }
+      }
     });
   }
 }

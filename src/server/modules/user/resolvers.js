@@ -173,7 +173,7 @@ export default pubsub => ({
           e.setError('email', 'E-mail already exists.');
         }
 
-        if (input.password.length < 5) {
+        if (input.password && input.password.length < 5) {
           e.setError('password', `Password must be 5 characters or more.`);
         }
 

@@ -13,9 +13,7 @@ import log from '../common/log';
 import { Main } from './app/Main';
 import NavBar from './app/NavBar';
 import routes from './app/Routes.web';
-import { CounterView } from './modules/counter/components/CounterView.web';
-import { PostCommentForm } from './modules/post/components/PostCommentForm.web';
-import { PostCommentsView } from './modules/post/components/PostCommentsView.web';
+import CounterView from './modules/counter/components/CounterView.web';
 import { PostEditView } from './modules/post/components/PostEditView.web';
 import { PostForm } from './modules/post/components/PostForm.web';
 import { PostList } from './modules/post/components/PostList.web';
@@ -23,6 +21,7 @@ import { PostList } from './modules/post/components/PostList.web';
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
 import { clientProvider } from './app/Main';
+import { CounterService } from './modules/counter/containers/Counter';
 
 @NgModule({
   bootstrap: [Main],
@@ -48,7 +47,7 @@ import { clientProvider } from './app/Main';
     })
   ],
   entryComponents: [NavBar, CounterView],
-  providers: []
+  providers: [CounterService]
 })
 class MainModule {
   constructor(public appRef: ApplicationRef) {}

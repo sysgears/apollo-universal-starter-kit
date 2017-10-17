@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CounterService } from '../containers/Counter';
 import { COUNTER } from '../reducers/actionTypes';
 import { counterStore } from '../reducers/index';
 
@@ -9,33 +8,26 @@ import { counterStore } from '../reducers/index';
   templateUrl: './CounterView.html',
   styles: ['section { margin-bottom: 30px; }']
 })
-export class CounterView implements OnInit {
-  public count: number = 5;
+export default class CounterView implements OnInit, OnDestroy {
+  public loading: boolean = true;
+  public counter: any;
   public reduxCount: number;
 
-  constructor(private apollo: Apollo) {
+  constructor(private counterService: CounterService) {
     this.setReduxCount();
   }
 
   public ngOnInit(): void {
-    // TODO: for debugging purposes only. Will be removed as soon as GraphQL connection is configured.
-    this.apollo
-      .watchQuery({
-        query: gql`
-          query CounterQuery {
-            counter {
-              amount
-            }
-          }
-        `
-      })
-      .subscribe(({ data }) => {
-        // console.log(data);
-      });
+    this.counterService.subscribeToCount(this.subscribeCb);
+    this.counterService.getCounter(this.getCounterCb);
+  }
+
+  public ngOnDestroy(): void {
+    this.counterService.unsubscribe();
   }
 
   public addCount() {
-    this.count++;
+    this.counterService.addCounter(1, this.addCounterCb, this.counter.amount);
   }
 
   public onReduxIncrement() {
@@ -51,6 +43,21 @@ export class CounterView implements OnInit {
   private setReduxCount() {
     this.reduxCount = counterStore.getState().reduxCount || 1;
   }
+
+  /* Callbacks */
+
+  private subscribeCb = (res: any) => {
+    this.counter = res.data.counterUpdated;
+  };
+
+  private getCounterCb = (res: any) => {
+    this.counter = res.data.counter;
+    this.loading = res.loading;
+  };
+
+  private addCounterCb = (res: any) => {
+    this.counter = res.data.addCounter;
+  };
 }
 
 // import React from "react";

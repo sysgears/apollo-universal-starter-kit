@@ -10,9 +10,12 @@ import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgSty
 import 'backend_reload';
 
 import log from '../common/log';
-import Main from './app/Main';
+import { Main } from './app/Main';
 import NavBar from './app/NavBar';
-import CounterView from './modules/counter/components/CounterView.web';
+import routes from './app/Routes.web';
+import { CounterView } from './modules/counter/components/CounterView.web';
+import { PostEditView } from './modules/post/components/PostEditView.web';
+import { PostList } from './modules/post/components/PostList.web';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
@@ -25,14 +28,16 @@ import { clientProvider } from './app/Main';
 
     /* Components */
     NavBar,
-    CounterView
+    CounterView,
+    PostList,
+    PostEditView
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     ApolloModule.withClient(clientProvider),
-    RouterModule.forRoot([], {
+    RouterModule.forRoot(routes, {
       useHash: true
     })
   ],

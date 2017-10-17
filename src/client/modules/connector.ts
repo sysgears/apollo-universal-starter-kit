@@ -1,18 +1,32 @@
-import React from "react";
-
-import { merge, map, union, without, castArray } from "lodash";
+import { castArray, map, merge, union, without } from 'lodash';
 
 import log from '../../common/log';
 
-const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
+const combine = (features: IArguments, extractor: (x: Feature) => any): any[] =>
+  without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
-export default class {
-  /* eslint-disable no-unused-vars */
-  constructor(
-    { route, navItem, navItemRight, reducer, middleware, afterware, connectionParam, createFetchOptions },
-    ...features
-  ) {
-    /* eslint-enable no-unused-vars */
+interface FeatureParams {
+  route?: any;
+  navItem?: any;
+  navItemRight?: any;
+  reducer?: any;
+  middleware?: any;
+  afterware?: any;
+  connectionParam?: any;
+  createFetchOptions?: any;
+}
+
+class Feature {
+  public route: any[];
+  public navItem: any[];
+  public navItemRight: any[];
+  public reducer: any[];
+  public middleware: any[];
+  public afterware: any[];
+  public connectionParam: any[];
+  public createFetchOptions: any[];
+
+  constructor(feature?: FeatureParams, ...features: Feature[]) {
     this.route = combine(arguments, arg => arg.route);
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);
@@ -24,27 +38,19 @@ export default class {
   }
 
   get routes() {
-    return this.route.map((component, idx) => React.cloneElement(component, { key: idx + this.route.length }));
+    return this.route.map((component, idx) => component);
   }
 
   get navItems() {
-    return this.navItem.map((component, idx) =>
-      React.cloneElement(component, {
-        key: component.key ? component.key : idx + this.navItem.length
-      })
-    );
+    return this.navItem.map((component, idx) => component);
   }
 
   get navItemsRight() {
-    return this.navItemRight.map((component, idx) =>
-      React.cloneElement(component, {
-        key: component.key ? component.key : idx + this.navItem.length
-      })
-    );
+    return this.navItemRight.map((component, idx) => component);
   }
 
   get reducers() {
-    return merge(...this.reducer);
+    return { ...this.reducer };
   }
 
   get middlewares() {
@@ -61,10 +67,10 @@ export default class {
 
   get constructFetchOptions() {
     return this.createFetchOptions.length
-      ? (...args) => {
+      ? (...args: any[]) => {
           try {
             let result = {};
-            for (let func of this.createFetchOptions) {
+            for (const func of this.createFetchOptions) {
               result = { ...result, ...func(...args) };
             }
             return result;
@@ -75,3 +81,5 @@ export default class {
       : null;
   }
 }
+
+export default Feature;

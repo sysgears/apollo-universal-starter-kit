@@ -13,7 +13,7 @@ import log from '../common/log';
 import { Main } from './app/Main';
 import NavBar from './app/NavBar';
 import routes from './app/Routes.web';
-import { CounterView } from './modules/counter/components/CounterView.web';
+import CounterView from './modules/counter/components/CounterView.web';
 import { PostEditView } from './modules/post/components/PostEditView.web';
 import { PostList } from './modules/post/components/PostList.web';
 

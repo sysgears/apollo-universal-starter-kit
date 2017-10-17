@@ -1,6 +1,6 @@
 export default (SECRET, User, jwt) => async (req, res) => {
   try {
-    const token = Buffer.from(req.params.token, 'base64').toString('ascii');
+    const token = Buffer.from(req.params.token, 'base64').toString();
     const { user: { id } } = jwt.verify(token, SECRET);
 
     await User.updateActive(id, true);

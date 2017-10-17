@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
 
 class UsersView extends React.PureComponent {
   state = {
@@ -32,14 +33,9 @@ class UsersView extends React.PureComponent {
           <td>{isAdmin.toString()}</td>
           <td>{isActive.toString()}</td>
           <td>
-            <button
-              type="button"
-              className="btn btn-primary btn-sm"
-              onClick={() => this.hendleDeleteUser(id)}
-              title="Tooltip on top"
-            >
+            <Button color="primary" size="sm" onClick={() => this.hendleDeleteUser(id)} title="Tooltip on top">
               Delete
-            </button>
+            </Button>
           </td>
         </tr>
       );

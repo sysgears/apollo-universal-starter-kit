@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CounterService } from '../containers/Counter';
 import { COUNTER } from '../reducers/actionTypes';
 import { counterStore } from '../reducers/index';
@@ -8,7 +8,7 @@ import { counterStore } from '../reducers/index';
   templateUrl: './CounterView.html',
   styles: ['section { margin-bottom: 30px; }']
 })
-export default class CounterView implements OnInit {
+export default class CounterView implements OnInit, OnDestroy {
   public loading: boolean = true;
   public counter: any;
   public reduxCount: number;
@@ -20,6 +20,10 @@ export default class CounterView implements OnInit {
   public ngOnInit(): void {
     this.counterService.subscribeToCount(this.subscribeCb);
     this.counterService.getCounter(this.getCounterCb);
+  }
+
+  public ngOnDestroy(): void {
+    this.counterService.unsubscribe();
   }
 
   public addCount() {

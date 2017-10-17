@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './NavBar.html',
   styles: ['ul.right-side { display: block; }', 'ul.right-side li { float: right; }']
 })
-export class NavBar {}
+export default class {}
 
 // import React from "react";
 // import { NavLink } from "react-router-dom";

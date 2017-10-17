@@ -8,7 +8,7 @@ const required = value => (value ? undefined : 'Required');
 const validate = values => {
   const errors = {};
 
-  if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
+  if (values.password !== values.passwordConfirmation) {
     errors.passwordConfirmation = 'Passwords do not match';
   }
   return errors;
@@ -38,21 +38,43 @@ renderField.propTypes = {
   meta: PropTypes.object
 };
 
-const UserForm = ({ handleSubmit, submitting, onSubmit }) => {
+const renderCheckBox = ({ input, label, type, meta: { touched, error } }) => {
+  let color = 'normal';
+  if (touched && error) {
+    color = 'danger';
+  }
+
+  return (
+    <FormGroup color={color} check>
+      <Label check>
+        <Input {...input} placeholder={label} type={type} /> {label}
+        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
+      </Label>
+    </FormGroup>
+  );
+};
+
+renderCheckBox.propTypes = {
+  input: PropTypes.object,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  meta: PropTypes.object
+};
+
+const UserForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
   return (
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
       <Field name="username" component={renderField} type="text" label="Username" validate={required} />
       <Field name="email" component={renderField} type="email" label="Email" validate={required} />
-      <Field name="isAdmin" component={renderField} type="checkbox" label="Is Admin" />
-      <Field name="isActive" component={renderField} type="checkbox" label="Is Active" />
+      <Field name="isAdmin" component={renderCheckBox} type="checkbox" label="Is Admin" />
+      <Field name="isActive" component={renderCheckBox} type="checkbox" label="Is Active" />
       <Field name="password" component={renderField} type="password" label="Password" />
-      <Field
-        name="passwordConfirmation"
-        component={renderField}
-        type="password"
-        label="Password Confirmation"
-        validate={required}
-      />
+      <Field name="passwordConfirmation" component={renderField} type="password" label="Password Confirmation" />
+      {errors && (
+        <FormGroup color="danger">
+          <FormFeedback>{errors.map(error => <li key={error.field}>{error.message}</li>)}</FormFeedback>
+        </FormGroup>
+      )}
       <Button color="primary" type="submit" disabled={submitting}>
         Save
       </Button>
@@ -63,7 +85,8 @@ const UserForm = ({ handleSubmit, submitting, onSubmit }) => {
 UserForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
-  submitting: PropTypes.bool
+  submitting: PropTypes.bool,
+  errors: PropTypes.array
 };
 
 export default reduxForm({

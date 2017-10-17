@@ -125,7 +125,21 @@ export default pubsub => ({
     },
     addUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
       try {
+        const e = new FieldError();
+
+        const userExists = await context.User.getUserByUsername(input.username);
+        if (userExists) {
+          e.setError('username', 'Username already exists.');
+        }
+
         const localAuth = pick(input, ['email', 'password']);
+        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
+        if (emailExists) {
+          e.setError('email', 'E-mail already exists.');
+        }
+
+        e.throwIf();
+
         const [createdUserId] = await context.User.register({ ...input });
 
         await context.User.createLocalOuth({
@@ -142,6 +156,21 @@ export default pubsub => ({
     }),
     editUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
       try {
+        const e = new FieldError();
+
+        const userExists = await context.User.getUserByUsername(input.username);
+        if (userExists && userExists.id !== input.id) {
+          e.setError('username', 'Username already exists.');
+        }
+
+        const localAuth = pick(input, ['email', 'password']);
+        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
+        if (emailExists && emailExists.id !== input.id) {
+          e.setError('email', 'E-mail already exists.');
+        }
+
+        e.throwIf();
+
         await context.User.editUser(input);
         const user = await context.User.getUser(input.id);
         return { user };
@@ -150,8 +179,8 @@ export default pubsub => ({
       }
     }),
     deleteUser: requiresAdmin.createResolver(async (obj, { id }, context) => {
-      const e = new FieldError();
       try {
+        const e = new FieldError();
         const user = await context.User.getUser(id);
         if (!user) {
           e.setError('delete', 'User does not exist.');

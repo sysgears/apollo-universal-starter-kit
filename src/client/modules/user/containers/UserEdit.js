@@ -34,15 +34,23 @@ export default compose(
   graphql(ADD_USER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       addUser: async (username, email, isAdmin, isActive, password) => {
-        await mutate({
-          variables: { input: { username, email, isAdmin, isActive, password } }
-        });
+        try {
+          const { data: { addUser } } = await mutate({
+            variables: { input: { username, email, isAdmin, isActive, password } }
+          });
 
-        if (history) {
-          return history.push('/users');
-        }
-        if (navigation) {
-          return navigation.goBack();
+          if (addUser.errors) {
+            return { errors: addUser.errors };
+          }
+
+          if (history) {
+            return history.push('/users');
+          }
+          if (navigation) {
+            return navigation.goBack();
+          }
+        } catch (e) {
+          console.log(e.graphQLErrors);
         }
       }
     })
@@ -50,15 +58,23 @@ export default compose(
   graphql(EDIT_USER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       editUser: async (id, username, email, isAdmin, isActive, password) => {
-        await mutate({
-          variables: { input: { id, username, email, isAdmin, isActive, password } }
-        });
+        try {
+          const { data: { editUser } } = await mutate({
+            variables: { input: { id, username, email, isAdmin, isActive, password } }
+          });
 
-        if (history) {
-          return history.push('/users');
-        }
-        if (navigation) {
-          return navigation.goBack();
+          if (editUser.errors) {
+            return { errors: editUser.errors };
+          }
+
+          if (history) {
+            return history.push('/users');
+          }
+          if (navigation) {
+            return navigation.goBack();
+          }
+        } catch (e) {
+          console.log(e.graphQLErrors);
         }
       }
     })

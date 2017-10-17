@@ -1,5 +1,3 @@
-import 'dotenv/config';
-
 export { default as app } from './app';
 export { default as db } from './db';
 export { default as user } from './user';

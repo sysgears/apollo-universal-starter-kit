@@ -213,8 +213,8 @@ export default pubsub => ({
           e.throwIf();
         }
 
-        const token = Buffer.from(reset.token, 'base64');
-        const { email, password } = jwt.decode(token);
+        const token = Buffer.from(reset.token, 'base64').toString();
+        const { email, password } = jwt.verify(token, context.SECRET);
         const user = await context.User.getLocalOuthByEmail(email);
         if (user.password !== password) {
           e.setError('token', 'Invalid token');

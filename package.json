@@ -50,13 +50,13 @@
   "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^5.2.0",
-    "apollo-cache-inmemory": "^0.2.0-beta.2",
-    "apollo-client": "^2.0.0-beta.2",
+    "apollo-cache-inmemory": "^0.2.0-rc.1",
+    "apollo-client": "^2.0.0-rc.3",
     "apollo-fetch": "^0.6.0",
     "apollo-fetch-upload": "^1.1.0",
-    "apollo-link": "^0.7.0",
-    "apollo-link-batch-http": "^0.3.0",
-    "apollo-link-ws": "^0.5.0",
+    "apollo-link": "^0.8.0",
+    "apollo-link-batch-http": "^0.4.0",
+    "apollo-link-ws": "^0.6.0",
     "apollo-logger": "0.1.0",
     "apollo-server-express": "^1.1.6",
     "apollo-upload-server": "^2.0.4",
@@ -119,7 +119,7 @@
     "universal-cookie-express": "^2.1.0"
   },
   "devDependencies": {
-    "apollo-utilities": "^0.2.0-beta.0",
+    "apollo-utilities": "^0.2.0-beta.4",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",

@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-client';
 import { ApolloLink, Observable } from 'apollo-link';
-import InMemoryCache from 'apollo-cache-inmemory';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { addTypenameToDocument } from 'apollo-utilities';
 import { LoggingLink } from 'apollo-logger';
 import { Router, Switch } from 'react-router-dom';

@@ -8,12 +8,11 @@ const required = value => (value ? undefined : 'Required');
 export const minLength = min => value =>
   value && value.length < min ? `Must be ${min} characters or more` : undefined;
 export const minLength3 = minLength(3);
-export const minLength5 = minLength(5);
 
 const validate = values => {
   const errors = {};
 
-  if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
+  if (values.password !== values.passwordConfirmation) {
     errors.passwordConfirmation = 'Passwords do not match';
   }
   return errors;
@@ -43,38 +42,51 @@ renderField.propTypes = {
   meta: PropTypes.object
 };
 
-const RegisterForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
+const renderCheckBox = ({ input, label, type, meta: { touched, error } }) => {
+  let color = 'normal';
+  if (touched && error) {
+    color = 'danger';
+  }
+
   return (
-    <Form name="register" onSubmit={handleSubmit(onSubmit)}>
+    <FormGroup color={color} check>
+      <Label check>
+        <Input {...input} placeholder={label} type={type} /> {label}
+        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
+      </Label>
+    </FormGroup>
+  );
+};
+
+renderCheckBox.propTypes = {
+  input: PropTypes.object,
+  label: PropTypes.string,
+  type: PropTypes.string,
+  meta: PropTypes.object
+};
+
+const UserForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
+  return (
+    <Form name="post" onSubmit={handleSubmit(onSubmit)}>
       <Field name="username" component={renderField} type="text" label="Username" validate={[required, minLength3]} />
       <Field name="email" component={renderField} type="email" label="Email" validate={required} />
-      <Field
-        name="password"
-        component={renderField}
-        type="password"
-        label="Password"
-        validate={[required, minLength5]}
-      />
-      <Field
-        name="passwordConfirmation"
-        component={renderField}
-        type="password"
-        label="Password Confirmation"
-        validate={[required, minLength5]}
-      />
+      <Field name="isAdmin" component={renderCheckBox} type="checkbox" label="Is Admin" />
+      <Field name="isActive" component={renderCheckBox} type="checkbox" label="Is Active" />
+      <Field name="password" component={renderField} type="password" label="Password" />
+      <Field name="passwordConfirmation" component={renderField} type="password" label="Password Confirmation" />
       {errors && (
         <FormGroup color="danger">
           <FormFeedback>{errors.map(error => <li key={error.field}>{error.message}</li>)}</FormFeedback>
         </FormGroup>
       )}
       <Button color="primary" type="submit" disabled={submitting}>
-        Register
+        Save
       </Button>
     </Form>
   );
 };
 
-RegisterForm.propTypes = {
+UserForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
@@ -82,6 +94,6 @@ RegisterForm.propTypes = {
 };
 
 export default reduxForm({
-  form: 'register',
+  form: 'user',
   validate
-})(RegisterForm);
+})(UserForm);

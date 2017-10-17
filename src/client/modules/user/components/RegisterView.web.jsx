@@ -12,7 +12,8 @@ class RegisterView extends React.PureComponent {
     errors: []
   };
 
-  onSubmit = register => async values => {
+  onSubmit = async values => {
+    const { register } = this.props;
     const result = await register(values);
 
     if (result.errors) {
@@ -20,26 +21,24 @@ class RegisterView extends React.PureComponent {
     }
   };
 
+  renderMetaData = () => (
+    <Helmet
+      title="Register"
+      meta={[
+        {
+          name: 'description',
+          content: 'Register page'
+        }
+      ]}
+    />
+  );
+
   render() {
-    const { register } = this.props;
-
-    const renderMetaData = () => (
-      <Helmet
-        title="Register"
-        meta={[
-          {
-            name: 'description',
-            content: 'Register page'
-          }
-        ]}
-      />
-    );
-
     return (
       <PageLayout>
-        {renderMetaData()}
+        {this.renderMetaData()}
         <h1>Register page!</h1>
-        <RegisterForm onSubmit={this.onSubmit(register)} errors={this.state.errors} />
+        <RegisterForm onSubmit={this.onSubmit} errors={this.state.errors} />
       </PageLayout>
     );
   }

@@ -5,6 +5,11 @@ import { Form, FormGroup, Label, Input, FormFeedback, Button } from 'reactstrap'
 
 const required = value => (value ? undefined : 'Required');
 
+export const minLength = min => value =>
+  value && value.length < min ? `Must be ${min} characters or more` : undefined;
+export const minLength3 = minLength(3);
+export const minLength5 = minLength(5);
+
 const validate = values => {
   const errors = {};
 
@@ -41,15 +46,21 @@ renderField.propTypes = {
 const RegisterForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
   return (
     <Form name="register" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="username" component={renderField} type="text" label="Username" validate={required} />
+      <Field name="username" component={renderField} type="text" label="Username" validate={[required, minLength3]} />
       <Field name="email" component={renderField} type="email" label="Email" validate={required} />
-      <Field name="password" component={renderField} type="password" label="Password" validate={required} />
+      <Field
+        name="password"
+        component={renderField}
+        type="password"
+        label="Password"
+        validate={[required, minLength5]}
+      />
       <Field
         name="passwordConfirmation"
         component={renderField}
         type="password"
         label="Password Confirmation"
-        validate={required}
+        validate={[required, minLength5]}
       />
       {errors && (
         <FormGroup color="danger">

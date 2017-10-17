@@ -138,6 +138,10 @@ export default pubsub => ({
           e.setError('email', 'E-mail already exists.');
         }
 
+        if (input.password.length < 5) {
+          e.setError('password', `Password must be 5 characters or more.`);
+        }
+
         e.throwIf();
 
         const [createdUserId] = await context.User.register({ ...input });
@@ -167,6 +171,10 @@ export default pubsub => ({
         const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
         if (emailExists && emailExists.id !== input.id) {
           e.setError('email', 'E-mail already exists.');
+        }
+
+        if (input.password.length < 5) {
+          e.setError('password', `Password must be 5 characters or more.`);
         }
 
         e.throwIf();
@@ -238,9 +246,13 @@ export default pubsub => ({
         const e = new FieldError();
         const reset = pick(input, ['password', 'passwordConfirmation', 'token']);
         if (reset.password !== reset.passwordConfirmation) {
-          e.setError('password', 'Passwords do not match');
-          e.throwIf();
+          e.setError('password', 'Passwords do not match.');
         }
+
+        if (reset.password.length < 5) {
+          e.setError('password', `Password must be 5 characters or more.`);
+        }
+        e.throwIf();
 
         const token = Buffer.from(reset.token, 'base64').toString();
         const { email, password } = jwt.verify(token, context.SECRET);

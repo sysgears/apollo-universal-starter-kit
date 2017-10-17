@@ -1,9 +1,9 @@
 <nav class="navbar navbar-light bg-faded">
   <div class="container">
     <ul class="nav col-md-6 left-side">
-      <a class="navbar-brand active" aria-current="true" href="/">Apollo Starter Kit</a>
+      <a class="navbar-brand active" aria-current="true" routerLink="/">Apollo Starter Kit</a>
       <li class="nav-item">
-        <a class="nav-link" aria-current="false" href="/posts">Posts</a>
+        <a class="nav-link" [routerLinkActive]="['active']" aria-current="true" routerLink="/posts">Posts</a>
       </li>
     </ul>
     <ul class="nav col-md-6 right-side">

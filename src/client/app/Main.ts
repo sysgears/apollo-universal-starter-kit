@@ -15,14 +15,50 @@ import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
 import BatchHttpLink from 'apollo-link-batch-http';
 import WebSocketLink from 'apollo-link-ws';
+import { LoggingLink } from 'apollo-logger';
 import { getOperationAST } from 'graphql';
 import * as url from 'url';
+
+import settings from '../../../settings';
+import modules from '../modules';
 
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
 const fetch = createApolloFetch({
   uri: hostname === 'localhost' ? '/graphql' : __BACKEND_URL__
 });
+
+fetch.batchUse(({ requests, options }, next) => {
+  try {
+    options.credentials = 'include';
+    options.headers = options.headers || {};
+    for (const middleware of modules.middlewares) {
+      for (const req of requests) {
+        middleware(req, options);
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  next();
+});
+
+fetch.batchUseAfter(({ response, options }, next) => {
+  try {
+    for (const afterware of modules.afterwares) {
+      afterware(response, options);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+  next();
+});
+
+const connectionParams = {};
+for (const connectionParam of modules.connectionParams) {
+  Object.assign(connectionParams, connectionParam());
+}
 
 const wsUri = (hostname === 'localhost'
   ? `${window.location.protocol}${window.location.hostname}:${port}${pathname}`
@@ -51,11 +87,21 @@ if (window.__APOLLO_STATE__) {
 
 // The connection has been established according to the official docs
 // (https://github.com/apollographql/apollo-client/blob/master/Upgrade.md)
-const client = new ApolloClient({ link, cache });
+const client = new ApolloClient({
+  link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link])),
+  cache
+});
 
 export let clientProvider = () => {
   return client;
 };
+
+if (module.hot) {
+  module.hot.dispose(() => {
+    // Force Apollo to fetch the latest data from the server
+    delete window.__APOLLO_STATE__;
+  });
+}
 
 @Component({
   selector: 'body div:first-child',

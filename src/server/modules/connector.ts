@@ -2,7 +2,6 @@
 import { Request, RequestHandler } from 'express';
 import { Application } from 'express';
 import { DocumentNode } from 'graphql';
-import { PubSub } from 'graphql-subscriptions';
 import { castArray, map, merge, union, without } from 'lodash';
 
 const combine = (features: IArguments, extractor: (x: Feature) => any): any[] =>

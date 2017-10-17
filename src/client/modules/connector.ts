@@ -27,6 +27,7 @@ class Feature {
   public createFetchOptions: any[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
+    /* eslint-enable no-unused-vars */
     this.route = combine(arguments, arg => arg.route);
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);

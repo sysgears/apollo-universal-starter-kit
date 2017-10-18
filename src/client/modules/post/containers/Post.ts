@@ -32,41 +32,22 @@ export function AddPost(prev: any, node: any) {
   };
 }
 
-export function deletePost(prev: any, mutationResult: any) {
-  const id = mutationResult.data.deletePost.id;
-  const index = prev.posts.edges.findIndex((x: any) => x.node.id === id);
-
-  // ignore if not found
-  if (index < 0) {
-    return prev;
-  }
-
-  return {
-    posts: {
-      totalCount: {
-        $set: prev.posts.totalCount - 1
-      },
-      edges: {
-        $splice: [[index, 1]]
-      }
-    }
-  };
-}
-
 @Injectable()
 export class PostService {
   private subsOnUpdate: Subscription;
   private subsOnLoad: Subscription;
+  private subsOnDelete: Subscription;
   private getPostsQuery: ApolloQueryObservable<any>;
 
   constructor(private apollo: Apollo) {}
 
-  public subscribeToPostList(endCursor: any, callback: (result: any) => any) {
-    const updatePostList = this.apollo.subscribe({
-      query: POSTS_SUBSCRIPTION,
-      variables: { endCursor }
-    });
-    this.subsOnUpdate = this.subscribe(updatePostList, callback);
+  public subscribeToPostList(endCursor: any) {
+    this.subsOnUpdate = this.apollo
+      .subscribe({
+        query: POSTS_SUBSCRIPTION,
+        variables: { endCursor }
+      })
+      .subscribe();
   }
 
   public getPosts(callback: (result: any) => any) {
@@ -102,12 +83,36 @@ export class PostService {
   }
 
   public deletePost(id: number) {
-    this.apollo.mutate({
-      mutation: DELETE_POST,
-      variables: { id },
-      optimisticResponse: { __typename: 'Mutation', deletePost: { id, __typename: 'Post' } },
-      updateQueries: { deletePost }
-    });
+    this.subsOnDelete = this.apollo
+      .mutate({
+        mutation: DELETE_POST,
+        variables: { id },
+        optimisticResponse: { deletePost: { id, __typename: 'Post' } },
+        updateQueries: {
+          posts: (prev, { mutationResult: { data: { deletePost } } }) => {
+            const deletedEdge = prev.posts.edges.find((x: any) => x.node.id === deletePost.id);
+            // ignore if not found
+            if (!deletedEdge) {
+              return prev;
+            }
+
+            return {
+              posts: {
+                ...prev.posts,
+                totalCount: prev.posts.totalCount - 1,
+                edges: prev.posts.edges.filter((edge: any) => edge !== deletedEdge)
+              }
+            };
+          }
+        }
+      })
+      .subscribe();
+    this.subsOnDelete.unsubscribe();
+  }
+
+  public unsubscribe() {
+    this.subsOnUpdate.unsubscribe();
+    this.subsOnLoad.unsubscribe();
   }
 
   private subscribe(observable: Observable<any>, cb: (result: Observable<any>) => any): Subscription {

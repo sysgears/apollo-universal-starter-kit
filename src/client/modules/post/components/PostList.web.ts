@@ -1,15 +1,4 @@
-import {
-  AfterContentChecked,
-  AfterContentInit,
-  AfterViewChecked,
-  AfterViewInit,
-  Component,
-  DoCheck,
-  NgZone,
-  OnChanges,
-  OnInit,
-  SimpleChanges
-} from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { PostService } from '../containers/Post';
 
 @Component({
@@ -27,30 +16,32 @@ import { PostService } from '../containers/Post';
                       <a [routerLink]="['/post', post.id]" class="post-link">{{ post.title }}</a>
                   </div>
                   <div>
-                      <a class="badge badge-secondary delete-button" style="cursor: pointer;" (click)="deletePost(post.id)">Delete</a>
+                      <a class="badge badge-secondary delete-button" style="cursor: pointer;"
+                         (click)="deletePost(post.id)">Delete</a>
                   </div>
               </li>
           </ul>
           <div>
               <small>({{ posts.edges.length }} / {{ posts.totalCount }})</small>
           </div>
-          <button type="button" id="load-more" class="btn btn-primary" *ngIf="hasNextPage()" (click)="loadMoreRows()">Load more ...</button>
+          <button type="button" id="load-more" class="btn btn-primary" *ngIf="hasNextPage()" (click)="loadMoreRows()">
+              Load more ...
+          </button>
       </div>
       <ng-template #showLoading>
           <div class="text-center">Loading...</div>
       </ng-template>
-	`
+  `
 })
-export class PostList implements OnInit {
+export class PostList implements OnInit, OnDestroy {
   public loading: boolean = true;
   public posts: any;
-  public endCursor: number;
+  public endCursor = 0;
 
   constructor(private postService: PostService, private ngZone: NgZone) {}
 
   public ngOnInit() {
-    this.endCursor = this.posts ? this.posts.pageInfo.endCursor : 0;
-    this.postService.subscribeToPostList(this.endCursor, this.subscribeCb);
+    this.postService.subscribeToPostList(this.endCursor);
     this.postService.getPosts(this.getPostsCb);
   }
 
@@ -72,11 +63,11 @@ export class PostList implements OnInit {
     this.postService.deletePost(id);
   }
 
-  /* Callbacks */
+  public ngOnDestroy(): void {
+    this.postService.unsubscribe();
+  }
 
-  private subscribeCb = (res: any) => {
-    this.posts = res.data.postsUpdated;
-  };
+  /* Callbacks */
 
   private getPostsCb = (res: any) => {
     this.ngZone.run(() => {

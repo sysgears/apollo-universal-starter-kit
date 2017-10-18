@@ -1,9 +1,6 @@
-// React
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { NavItem } from 'reactstrap';
-
-// Component and helpers
+import { MenuItem } from '../../modules/common/components';
 import Profile from './containers/Profile';
 import Users from './components/Users';
 import UserEdit from './containers/UserEdit';
@@ -51,19 +48,19 @@ export default new Feature({
     <Route exact path="/reset-password/:token" component={ResetPassword} />
   ],
   navItem: [
-    <NavItem>
+    <MenuItem key="users">
       <AuthNav role="admin">
         <NavLink to="/users" className="nav-link" activeClassName="active">
           Users
         </NavLink>
       </AuthNav>
-    </NavItem>
+    </MenuItem>
   ],
   navItemRight: [
-    <NavItem>
+    <MenuItem key="profile">
       <AuthProfile />
-    </NavItem>,
-    <NavItem>
+    </MenuItem>,
+    <MenuItem key="login">
       <AuthLogin>
         <span className="nav-link">
           <NavLink to="/login" activeClassName="active">
@@ -75,7 +72,7 @@ export default new Feature({
           </NavLink>
         </span>
       </AuthLogin>
-    </NavItem>
+    </MenuItem>
   ],
   reducer: { user: reducers },
   middleware: tokenMiddleware,

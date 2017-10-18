@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 
-import NavBar from '../../../app/NavBar';
+import NavBar from './NavBar';
 
 const footerHeight = '40px';
 

@@ -5,7 +5,7 @@ import LocaleProvider from 'antd/lib/locale-provider';
 import enUS from 'antd/lib/locale-provider/en_US';
 import { Layout } from 'antd';
 
-import NavBar from '../../../app/NavBar';
+import NavBar from './NavBar';
 
 const { Header, Content, Footer } = Layout;
 

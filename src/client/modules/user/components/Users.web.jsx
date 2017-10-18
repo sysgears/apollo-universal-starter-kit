@@ -2,7 +2,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
-import PageLayout from '../../../app/PageLayout';
+import { PageLayout } from '../../common/components';
 
 import UsersFilter from '../containers/UsersFilter';
 import UsersList from '../containers/UsersList';

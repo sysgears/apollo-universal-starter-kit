@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button as RSButton } from 'reactstrap';
+import { Button as ADButton } from 'antd';
 
 const Button = ({ children, type, ...props }) => {
   return (
-    <RSButton color={type} {...props}>
+    <ADButton type={type} {...props}>
       {children}
-    </RSButton>
+    </ADButton>
   );
 };
 

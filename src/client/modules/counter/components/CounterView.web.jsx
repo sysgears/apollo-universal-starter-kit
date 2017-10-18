@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
-import PageLayout from '../../../app/PageLayout';
-
-import { Button } from '../../common/components';
+import { PageLayout, Button } from '../../common/components';
 
 const Section = styled.section`
   margin-bottom: 30px;

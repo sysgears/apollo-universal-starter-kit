@@ -173,7 +173,7 @@
     "isomorphic-style-loader": "^4.0.0",
     "jsdom": "^11.3.0",
     "json-loader": "^0.5.7",
-    "less": "^3.0.0-alpha.3",
+    "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "lint-staged": "^4.2.3",
     "mime": "^1.4.1",

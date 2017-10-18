@@ -7,7 +7,7 @@ import Helmet from 'react-helmet';
 import { Card, CardBlock, CardTitle, CardText } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-import PageLayout from '../../../app/PageLayout';
+import { PageLayout } from '../../common/components';
 import LoginForm from '../components/LoginForm';
 
 class LoginView extends React.PureComponent {

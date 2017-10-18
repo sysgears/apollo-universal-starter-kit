@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
-import { Button } from 'reactstrap';
-import PageLayout from '../../../app/PageLayout';
+import { PageLayout, Button } from '../../common/components';
 
 const PageNotFound = () => (
   <PageLayout>
@@ -18,7 +17,7 @@ const PageNotFound = () => (
       />
       <h2>Page not found - 404</h2>
       <Link to="/">
-        <Button className="home-link" color="primary">
+        <Button className="home-link" type="primary">
           Go to Homepage
         </Button>
       </Link>

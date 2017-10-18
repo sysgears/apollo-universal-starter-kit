@@ -4,7 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import PageLayout from '../../../app/PageLayout';
+import { PageLayout } from '../../common/components';
 import ResetPasswordForm from '../components/ResetPasswordForm';
 
 class ResetPasswordView extends React.Component {

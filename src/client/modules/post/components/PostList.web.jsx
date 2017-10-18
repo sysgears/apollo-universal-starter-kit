@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { ListGroup, ListGroupItem, Button } from 'reactstrap';
 
-import PageLayout from '../../../app/PageLayout';
+import { PageLayout } from '../../common/components';
 
 function renderPosts(posts, deletePost) {
   return posts.edges.map(({ node: { id, title } }) => {

@@ -1,16 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterContentInit,
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  DoCheck,
+  NgZone,
+  OnChanges,
+  OnInit,
+  SimpleChanges
+} from '@angular/core';
+import { PostService } from '../containers/Post';
 
 @Component({
   selector: 'posts-view',
   template: `
-      <div class="container">
+      <div *ngIf="!loading; else showLoading" class="container">
           <h2>Posts</h2>
           <a [routerLink]="['/post/0']">
               <button class="btn btn-primary">Add</button>
           </a>
           <h1></h1>
           <ul class="list-group">
-              <li class="d-flex justify-content-between list-group-item" *ngFor="let post of loadedPosts">
+              <li class="d-flex justify-content-between list-group-item" *ngFor="let post of renderPosts()">
                   <div>
                       <a [routerLink]="['/post', post.id]" class="post-link">{{ post.title }}</a>
                   </div>
@@ -20,57 +32,59 @@ import { Component, OnInit } from '@angular/core';
               </li>
           </ul>
           <div>
-              <small>({{ loadedCount }} / {{ totalCount }})</small>
+              <small>({{ posts.edges.length }} / {{ posts.totalCount }})</small>
           </div>
           <button type="button" id="load-more" class="btn btn-primary" *ngIf="hasNextPage()" (click)="loadMoreRows()">Load more ...</button>
       </div>
+      <ng-template #showLoading>
+          <div class="text-center">Loading...</div>
+      </ng-template>
 	`
 })
 export class PostList implements OnInit {
-  // Only for test
-  public postIndexes = Array.from(new Array(20), (val, index) => index + 1);
-  public totalCount: number;
-  public posts: Array<{ id: number; title: string; content: string; postId: number }> = [];
-  public loadedCount = 10;
-  public loadedPosts: Array<{ id: number; title: string; content: string; postId: number }>;
+  public loading: boolean = true;
+  public posts: any;
+  public endCursor: number;
 
-  constructor() {}
+  constructor(private postService: PostService, private ngZone: NgZone) {}
 
   public ngOnInit() {
-    for (const index of this.postIndexes) {
-      this.posts.push({ id: index, title: `Post title ${index}`, content: 'test', postId: index });
-    }
-    this.loadedPosts = this.posts
-      .slice()
-      .reverse()
-      .slice(0, this.loadedCount);
-    this.totalCount = this.posts.length;
+    this.endCursor = this.posts ? this.posts.pageInfo.endCursor : 0;
+    this.postService.subscribeToPostList(this.endCursor, this.subscribeCb);
+    this.postService.getPosts(this.getPostsCb);
+  }
+
+  public renderPosts() {
+    return this.posts.edges.map((edge: any): any => {
+      return { id: edge.node.id, title: edge.node.title };
+    });
   }
 
   public loadMoreRows() {
-    const remainingCount = this.totalCount - (this.loadedCount + 10);
-    if (remainingCount > 0) {
-      this.loadedCount = this.loadedCount + 10;
-      this.loadedPosts = this.posts
-        .slice()
-        .reverse()
-        .slice(0, this.loadedCount);
-    } else {
-      this.loadedCount = this.totalCount;
-      this.loadedPosts = this.posts.slice().reverse();
-    }
+    this.postService.loadMoreRows(this.posts.pageInfo.endCursor);
   }
 
   public hasNextPage() {
-    return this.totalCount > this.loadedCount;
+    return this.posts.pageInfo.hasNextPage;
   }
 
   public deletePost(id: number) {
-    this.posts = this.posts.filter(post => post.id !== id);
-    this.loadedPosts = this.loadedPosts.filter(post => post.id !== id);
-    this.loadedCount--;
-    this.totalCount--;
+    this.postService.deletePost(id);
   }
+
+  /* Callbacks */
+
+  private subscribeCb = (res: any) => {
+    this.posts = res.data.postsUpdated;
+  };
+
+  private getPostsCb = (res: any) => {
+    this.ngZone.run(() => {
+      this.posts = res.data.posts;
+      this.loading = res.loading;
+      this.endCursor = this.posts.pageInfo.endCursor;
+    });
+  };
 }
 
 // import React from 'react';

@@ -14,7 +14,7 @@ export interface PostParams {
 
 export default (pubsub: PubSub) => ({
   Query: {
-    async postsQuery(obj: any, args: PostParams, context: any) {
+    async posts(obj: any, args: PostParams, context: any) {
       const edgesArray: any[] = [];
       const posts = await context.Post.postsPagination(args.limit, args.after);
 

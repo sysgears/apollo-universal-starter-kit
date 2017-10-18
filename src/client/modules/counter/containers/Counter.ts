@@ -24,16 +24,20 @@ export class CounterService {
   constructor(private apollo: Apollo) {}
 
   public subscribeToCount(callback: (result: any) => any) {
-    const updateCounter = this.apollo.subscribe({
-      query: COUNTER_SUBSCRIPTION,
-      variables: {}
-    });
-    this.subsOnUpdate = this.subscribe(updateCounter, callback);
+    if (!this.subsOnUpdate) {
+      const updateCounter = this.apollo.subscribe({
+        query: COUNTER_SUBSCRIPTION,
+        variables: {}
+      });
+      this.subsOnUpdate = this.subscribe(updateCounter, callback);
+    }
   }
 
   public getCounter(callback: (result: any) => any) {
-    const getCounter = this.apollo.subscribe({ query: COUNTER_QUERY });
-    this.subsOnLoad = this.subscribe(getCounter, callback);
+    if (!this.subsOnLoad) {
+      const getCounter = this.apollo.subscribe({ query: COUNTER_QUERY });
+      this.subsOnLoad = this.subscribe(getCounter, callback);
+    }
   }
 
   public addCounter(amount: number, callback: (result: any) => any, optimisticValue?: number) {

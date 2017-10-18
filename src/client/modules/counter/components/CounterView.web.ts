@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { CounterService } from '../containers/Counter';
 import { COUNTER } from '../reducers/actionTypes';
 import { counterStore } from '../reducers/index';
@@ -13,7 +13,7 @@ export default class CounterView implements OnInit, OnDestroy {
   public counter: any;
   public reduxCount: number;
 
-  constructor(private counterService: CounterService) {
+  constructor(private counterService: CounterService, private ngZone: NgZone) {
     this.setReduxCount();
   }
 
@@ -51,8 +51,10 @@ export default class CounterView implements OnInit, OnDestroy {
   };
 
   private getCounterCb = (res: any) => {
-    this.counter = res.data.counter;
-    this.loading = res.loading;
+    this.ngZone.run(() => {
+      this.counter = res.data.counter;
+      this.loading = res.loading || false;
+    });
   };
 
   private addCounterCb = (res: any) => {

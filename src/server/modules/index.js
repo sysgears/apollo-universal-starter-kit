@@ -4,8 +4,9 @@ import upload from './upload';
 import user from './user';
 import mailer from './mailer';
 import graphqlTypes from './graphqlTypes';
+import uiBootstrap from './ui-bootstrap';
 import './debug';
 
 import Feature from './connector';
 
-export default new Feature(counter, post, upload, user, mailer, graphqlTypes);
+export default new Feature(counter, post, upload, user, mailer, graphqlTypes, uiBootstrap);

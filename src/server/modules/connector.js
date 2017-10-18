@@ -15,7 +15,8 @@ type FeatureParams = {
   createResolversFunc?: Function | Function[],
   createContextFunc?: Function | Function[],
   middleware?: Middleware | Middleware[],
-  createFetchOptions?: Function | Function[]
+  createFetchOptions?: Function | Function[],
+  stylesInsert?: any
 };
 
 class Feature {
@@ -23,6 +24,7 @@ class Feature {
   createResolversFunc: Function[];
   createContextFunc: Function[];
   createFetchOptions: Function[];
+  stylesInsert: String[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
@@ -31,6 +33,7 @@ class Feature {
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.middleware = combine(arguments, arg => arg.middleware);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
+    this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
   }
 
   get schemas(): DocumentNode[] {
@@ -66,6 +69,10 @@ class Feature {
           }
         }
       : null;
+  }
+
+  get stylesInserts(): any {
+    return this.stylesInsert.join('');
   }
 }
 

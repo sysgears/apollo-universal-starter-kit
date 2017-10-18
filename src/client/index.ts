@@ -12,6 +12,7 @@ import 'backend_reload';
 import log from '../common/log';
 import { Main } from './app/Main';
 import NavBar from './app/NavBar';
+import PageLayout from './app/PageLayout';
 import routes from './app/Routes.web';
 import CounterView from './modules/counter/components/CounterView.web';
 import { PostEditView } from './modules/post/components/PostEditView.web';
@@ -28,8 +29,12 @@ import { CounterService } from './modules/counter/containers/Counter';
     Main,
 
     /* Components */
+    // App
+    PageLayout,
     NavBar,
+    // Counter
     CounterView,
+    // Post
     PostList,
     PostEditView
   ],
@@ -42,7 +47,7 @@ import { CounterService } from './modules/counter/containers/Counter';
       useHash: true
     })
   ],
-  entryComponents: [NavBar, CounterView],
+  entryComponents: [PageLayout, CounterView],
   providers: [CounterService]
 })
 class MainModule {

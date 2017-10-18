@@ -105,10 +105,7 @@ if (module.hot) {
 
 @Component({
   selector: 'body div:first-child',
-  template: `<section>
-      <nav-bar></nav-bar>
-      <router-outlet></router-outlet>
-    </section>`
+  template: `<page-layout></page-layout>`
 })
 export class Main implements OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private titleService: Title) {}

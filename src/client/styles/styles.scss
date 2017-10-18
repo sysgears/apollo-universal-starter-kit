@@ -18,3 +18,11 @@ body {
 .active {
   color: #000;
 }
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  line-height: $footer-height;
+  height: $footer-height;
+}

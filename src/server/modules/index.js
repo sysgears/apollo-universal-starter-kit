@@ -5,6 +5,7 @@ import user from './user';
 import mailer from './mailer';
 import graphqlTypes from './graphqlTypes';
 import uiBootstrap from './ui-bootstrap';
+//import uiAntd from './ui-antd';
 import './debug';
 
 import Feature from './connector';

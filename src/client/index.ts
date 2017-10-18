@@ -15,6 +15,7 @@ import NavBar from './app/NavBar';
 import PageLayout from './app/PageLayout';
 import routes from './app/Routes.web';
 import CounterView from './modules/counter/components/CounterView.web';
+import PageNotFound from './modules/pageNotFound/containers/PageNotFound';
 import { PostEditView } from './modules/post/components/PostEditView.web';
 import { PostList } from './modules/post/components/PostList.web';
 
@@ -32,6 +33,7 @@ import { CounterService } from './modules/counter/containers/Counter';
     // App
     PageLayout,
     NavBar,
+    PageNotFound,
     // Counter
     CounterView,
     // Post

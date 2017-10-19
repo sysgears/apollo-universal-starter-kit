@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
-import { Form, RenderField, Button } from '../../common/components';
+import { FormGroup, FormFeedback } from 'reactstrap';
+import { Form, RenderField, RenderCheckBox, Button } from '../../common/components';
 
 const required = value => (value ? undefined : 'Required');
 
@@ -19,36 +19,13 @@ const validate = values => {
   return errors;
 };
 
-const renderCheckBox = ({ input, label, type, meta: { touched, error } }) => {
-  let color = 'normal';
-  if (touched && error) {
-    color = 'danger';
-  }
-
-  return (
-    <FormGroup color={color} check>
-      <Label check>
-        <Input {...input} placeholder={label} type={type} /> {label}
-        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
-      </Label>
-    </FormGroup>
-  );
-};
-
-renderCheckBox.propTypes = {
-  input: PropTypes.object,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  meta: PropTypes.object
-};
-
 const UserForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
   return (
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
       <Field name="username" component={RenderField} type="text" label="Username" validate={[required, minLength3]} />
       <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
-      <Field name="isAdmin" component={renderCheckBox} type="checkbox" label="Is Admin" />
-      <Field name="isActive" component={renderCheckBox} type="checkbox" label="Is Active" />
+      <Field name="isAdmin" component={RenderCheckBox} type="checkbox" label="Is Admin" />
+      <Field name="isActive" component={RenderCheckBox} type="checkbox" label="Is Active" />
       <Field name="password" component={RenderField} type="password" label="Password" />
       <Field name="passwordConfirmation" component={RenderField} type="password" label="Password Confirmation" />
       {errors && (

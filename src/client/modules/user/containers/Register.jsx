@@ -9,6 +9,8 @@ import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
 
+import settings from '../../../../../settings';
+
 class Register extends React.Component {
   render() {
     return <RegisterView {...this.props} />;
@@ -28,6 +30,9 @@ const RegisterWithApollo = compose(
             return { errors: register.errors };
           }
           if (history) {
+            if (settings.subscription.enabled) {
+              return history.push('/subscription');
+            }
             return history.push('/profile');
           }
           if (navigation) {

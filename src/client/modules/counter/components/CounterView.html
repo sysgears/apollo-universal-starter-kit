@@ -3,11 +3,11 @@
   <div class="text-center mt-4 mb-4">
     <section>
       <p>Current counter, is {{counter.amount}}. This is being stored server-side in the database and using Apollo subscription for real-time updates.</p>
-      <button type="button" id="graphql-button" class="btn btn-primary" (click)="addCount()">Click to increase counter</button>
+      <label id="graphql-button" class="btn-primary" (click)="addCount()" ngbButtonLabel>Click to increase counter</label>
     </section>
     <section>
       <p>Current reduxCount, is {{reduxCount}}. This is being stored client-side with Redux.</p>
-      <button type="button" id="redux-button" class="btn btn-primary" (click)="onReduxIncrement()">Click to increase reduxCount</button>
+      <label id="redux-button" class="btn-primary" (click)="onReduxIncrement()" ngbButtonLabel>Click to increase reduxCount</label>
     </section>
   </div>
 </div>

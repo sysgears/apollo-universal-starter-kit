@@ -47,8 +47,8 @@ export default (pubsub: PubSub) => ({
     }
   },
   Post: {
-    comments(obj: any, args: PostParams, context: any) {
-      return context.loaders.getCommentsForPostIds.load(args.id);
+    comments({ id }: any, args: PostParams, context: any) {
+      return context.loaders.getCommentsForPostIds.load(id);
     }
   },
   Mutation: {

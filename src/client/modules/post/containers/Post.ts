@@ -4,30 +4,6 @@ import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import * as DELETE_POST from '../graphql/DeletePost.graphql';
 import * as POSTS_QUERY from '../graphql/PostsQuery.graphql';
 
-export function AddPost(prev: any, node: any) {
-  // ignore if duplicate
-  if (node.id !== null && prev.posts.edges.some((post: any) => node.id === post.cursor)) {
-    return prev;
-  }
-
-  const edge = {
-    cursor: node.id,
-    node,
-    __typename: 'PostEdges'
-  };
-
-  return {
-    posts: {
-      totalCount: {
-        $set: prev.posts.totalCount + 1
-      },
-      edges: {
-        $unshift: [edge]
-      }
-    }
-  };
-}
-
 @Injectable()
 export class PostService {
   private getPostsQuery: ApolloQueryObservable<any>;

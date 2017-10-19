@@ -1,21 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit, Output } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { PostEditService } from '../containers/PostEdit';
 
 @Component({
   selector: 'post-edit-view',
   template: `
-        <div class="container">
-            <a id="back-button" [routerLink]="['/posts']">Back</a>
-            <h2>Create Post</h2>
-            <post-form></post-form>
-            <br/>
-            <post-comments-view></post-comments-view>
-        </div>
+      <div *ngIf="!loading; else showLoading" class="container">
+          <a id="back-button" [routerLink]="['/posts']">Back</a>
+          <h2>{{ title }} Post</h2>
+          <post-form [post]="post"></post-form>
+          <br/>
+          <post-comments-view *ngIf="post"></post-comments-view>
+      </div>
+      <ng-template #showLoading>
+          <div class="text-center">Loading...</div>
+      </ng-template>
   `
 })
 export default class PostEditView implements OnInit {
-  public post: { id: number; title: string; content: string; postId: number };
+  public loading: boolean = true;
+  public title: string;
+  @Output() public post: any;
 
-  constructor() {}
+  constructor(private postEditService: PostEditService, private route: ActivatedRoute, private ngZone: NgZone) {}
 
-  public ngOnInit() {}
+  public ngOnInit() {
+    this.route.params.subscribe((params: Params) => {
+      this.postEditService.getPost(+params.id).subscribe({
+        next: ({ data: { post }, loading }: any) => {
+          this.ngZone.run(() => {
+            this.post = post;
+            this.loading = loading;
+            this.title = !this.post ? 'Create' : 'Edit';
+          });
+        }
+      });
+    });
+  }
 }

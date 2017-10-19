@@ -24,6 +24,7 @@ import PostEditView from './modules/post/components/PostEditView.web';
 import PostForm from './modules/post/components/PostForm.web';
 import PostList from './modules/post/components/PostList.web';
 import { PostService } from './modules/post/containers/Post';
+import { PostEditService } from './modules/post/containers/PostEdit';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
@@ -59,7 +60,7 @@ import { clientProvider } from './app/Main';
     })
   ],
   entryComponents: [PageLayout, CounterView],
-  providers: [CounterService, PostService]
+  providers: [CounterService, PostService, PostEditService]
 })
 class MainModule {
   constructor(public appRef: ApplicationRef) {}

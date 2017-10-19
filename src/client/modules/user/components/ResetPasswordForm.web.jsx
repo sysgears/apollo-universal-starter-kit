@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
-import { Form, Button } from '../../common/components';
+import { FormGroup, FormFeedback } from 'reactstrap';
+import { Form, RenderField, Button } from '../../common/components';
 
 const required = value => (value ? undefined : 'Required');
 
@@ -19,43 +19,19 @@ const validate = values => {
   return errors;
 };
 
-const renderField = ({ input, label, type, meta: { touched, error } }) => {
-  let color = 'normal';
-  if (touched && error) {
-    color = 'danger';
-  }
-
-  return (
-    <FormGroup color={color}>
-      <Label>{label}</Label>
-      <div>
-        <Input {...input} placeholder={label} type={type} />
-        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
-      </div>
-    </FormGroup>
-  );
-};
-
-renderField.propTypes = {
-  input: PropTypes.object,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  meta: PropTypes.object
-};
-
 const ResetPasswordForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
   return (
     <Form name="resetPassword" onSubmit={handleSubmit(onSubmit)}>
       <Field
         name="password"
-        component={renderField}
+        component={RenderField}
         type="password"
         label="Password"
         validate={[required, minLength5]}
       />
       <Field
         name="passwordConfirmation"
-        component={renderField}
+        component={RenderField}
         type="password"
         label="Password Confirmation"
         validate={[required, minLength5]}

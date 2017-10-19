@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import url from 'url';
-import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
-import { Form, Button } from '../../common/components';
+import { FormGroup, FormFeedback } from 'reactstrap';
+import { Form, RenderField, Button } from '../../common/components';
 
 import settings from '../../../../../settings';
 
@@ -15,30 +15,6 @@ if (__DEV__) {
 
 const required = value => (value ? undefined : 'Required');
 
-const renderField = ({ input, label, type, meta: { touched, error } }) => {
-  let color = 'normal';
-  if (touched && error) {
-    color = 'danger';
-  }
-
-  return (
-    <FormGroup color={color}>
-      <Label>{label}</Label>
-      <div>
-        <Input {...input} placeholder={label} type={type} />
-        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
-      </div>
-    </FormGroup>
-  );
-};
-
-renderField.propTypes = {
-  input: PropTypes.object,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  meta: PropTypes.object
-};
-
 const facebookLogin = () => {
   window.location = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
 };
@@ -46,8 +22,8 @@ const facebookLogin = () => {
 const LoginForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
   return (
     <Form name="login" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="email" component={renderField} type="email" label="Email" validate={required} />
-      <Field name="password" component={renderField} type="password" label="Password" validate={required} />
+      <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
+      <Field name="password" component={RenderField} type="password" label="Password" validate={required} />
       {errors && (
         <FormGroup color="danger">
           <FormFeedback>{errors.map(error => <li key={error.field}>{error.message}</li>)}</FormFeedback>

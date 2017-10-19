@@ -18,26 +18,19 @@ export function updateQuery(prev: any, mutationResult: any) {
 
 @Injectable()
 export class CounterService {
-  private subsOnUpdate: Subscription;
-  private subsOnLoad: Subscription;
-
   constructor(private apollo: Apollo) {}
 
   public subscribeToCount(callback: (result: any) => any) {
-    if (!this.subsOnUpdate) {
-      const updateCounter = this.apollo.subscribe({
-        query: COUNTER_SUBSCRIPTION,
-        variables: {}
-      });
-      this.subsOnUpdate = this.subscribe(updateCounter, callback);
-    }
+    const updateCounter = this.apollo.subscribe({
+      query: COUNTER_SUBSCRIPTION,
+      variables: {}
+    });
+    return this.subscribe(updateCounter, callback);
   }
 
   public getCounter(callback: (result: any) => any) {
-    if (!this.subsOnLoad) {
-      const getCounter = this.apollo.subscribe({ query: COUNTER_QUERY });
-      this.subsOnLoad = this.subscribe(getCounter, callback);
-    }
+    const getCounter = this.apollo.subscribe({ query: COUNTER_QUERY });
+    return this.subscribe(getCounter, callback);
   }
 
   public addCounter(amount: number, callback: (result: any) => any, optimisticValue?: number) {
@@ -47,12 +40,7 @@ export class CounterService {
       optimisticResponse: { addCounter: { amount: optimisticValue + 1, __typename: 'Counter' } },
       updateQueries: { updateQuery }
     });
-    this.subscribe(addCounter, callback);
-  }
-
-  public unsubscribe(): void {
-    this.subsOnUpdate.unsubscribe();
-    this.subsOnLoad.unsubscribe();
+    this.subscribe(addCounter, callback).unsubscribe();
   }
 
   private subscribe(observable: Observable<any>, cb: (result: Observable<any>) => any): Subscription {

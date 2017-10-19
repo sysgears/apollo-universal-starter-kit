@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgStyles } from '@angularclass/hmr';
@@ -12,19 +13,21 @@ import 'backend_reload';
 import log from '../common/log';
 import { Main } from './app/Main';
 import NavBar from './app/NavBar';
+import PageLayout from './app/PageLayout';
 import routes from './app/Routes.web';
 import CounterView from './modules/counter/components/CounterView.web';
 import { CounterService } from './modules/counter/containers/Counter';
-import { PostCommentForm } from './modules/post/components/PostCommentForm.web';
-import { PostCommentsView } from './modules/post/components/PostCommentsView.web';
-import { PostEditView } from './modules/post/components/PostEditView.web';
-import { PostForm } from './modules/post/components/PostForm.web';
-import { PostList } from './modules/post/components/PostList.web';
+import PageNotFound from './modules/pageNotFound/containers/PageNotFound';
+import PostCommentForm from './modules/post/components/PostCommentForm.web';
+import PostCommentsView from './modules/post/components/PostCommentsView.web';
+import PostForm from './modules/post/components/PostForm.web';
 import { PostService } from './modules/post/containers/Post';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
 import { clientProvider } from './app/Main';
+import PostEditView from './modules/post/components/PostEditView.web';
+import PostList from './modules/post/components/PostList.web';
 
 @NgModule({
   bootstrap: [Main],
@@ -32,8 +35,13 @@ import { clientProvider } from './app/Main';
     Main,
 
     /* Components */
+    // App
+    PageLayout,
     NavBar,
+    PageNotFound,
+    // Counter
     CounterView,
+    // Post
     PostList,
     PostEditView,
     PostForm,
@@ -45,11 +53,12 @@ import { clientProvider } from './app/Main';
     FormsModule,
     HttpModule,
     ApolloModule.withClient(clientProvider),
+    NgbModule.forRoot(),
     RouterModule.forRoot(routes, {
       useHash: true
     })
   ],
-  entryComponents: [NavBar, CounterView],
+  entryComponents: [PageLayout, CounterView],
   providers: [CounterService, PostService]
 })
 class MainModule {

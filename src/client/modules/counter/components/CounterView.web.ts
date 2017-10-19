@@ -47,7 +47,9 @@ export default class CounterView implements OnInit, OnDestroy {
   /* Callbacks */
 
   private subscribeCb = (res: any) => {
-    this.counter = res.data.counterUpdated;
+    this.ngZone.run(() => {
+      this.counter = res.data.counterUpdated;
+    });
   };
 
   private getCounterCb = (res: any) => {

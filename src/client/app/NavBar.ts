@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
           <li class="nav-item"></li>
           <li class="nav-item">
       <span class="nav-link">
-        <a aria-current="false" href="/login">Login</a> / <a aria-current="false" href="/register">Register</a>
+        <a aria-current="false" routerLink="/login">Login</a> / <a aria-current="false" routerLink="/register">Register</a>
       </span>
           </li>
           <li class="nav-item">

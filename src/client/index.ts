@@ -19,6 +19,7 @@ import CounterView from './modules/counter/components/CounterView.web';
 import PageNotFound from './modules/pageNotFound/containers/PageNotFound';
 import { PostEditView } from './modules/post/components/PostEditView.web';
 import { PostList } from './modules/post/components/PostList.web';
+import LoginView from './modules/user/components/LoginView.web';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
@@ -39,7 +40,9 @@ import { CounterService } from './modules/counter/containers/Counter';
     CounterView,
     // Post
     PostList,
-    PostEditView
+    PostEditView,
+    // User
+    LoginView
   ],
   imports: [
     BrowserModule,

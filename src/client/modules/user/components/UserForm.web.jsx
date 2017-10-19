@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { FormGroup, FormFeedback } from 'reactstrap';
-import { Form, RenderField, RenderCheckBox, Button } from '../../common/components';
+import { Form, RenderField, RenderCheckBox, RenderErrors, Button } from '../../common/components';
 
 const required = value => (value ? undefined : 'Required');
 
@@ -28,11 +27,7 @@ const UserForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
       <Field name="isActive" component={RenderCheckBox} type="checkbox" label="Is Active" />
       <Field name="password" component={RenderField} type="password" label="Password" />
       <Field name="passwordConfirmation" component={RenderField} type="password" label="Password Confirmation" />
-      {errors && (
-        <FormGroup color="danger">
-          <FormFeedback>{errors.map(error => <li key={error.field}>{error.message}</li>)}</FormFeedback>
-        </FormGroup>
-      )}
+      <RenderErrors errors={errors} />
       <Button color="primary" type="submit" disabled={submitting}>
         Save
       </Button>

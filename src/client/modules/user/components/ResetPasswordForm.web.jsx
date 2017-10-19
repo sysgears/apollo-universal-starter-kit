@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { FormGroup, FormFeedback } from 'reactstrap';
-import { Form, RenderField, Button } from '../../common/components';
+import { Form, RenderField, RenderErrors, Button } from '../../common/components';
 
 const required = value => (value ? undefined : 'Required');
 
@@ -36,11 +35,7 @@ const ResetPasswordForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
         label="Password Confirmation"
         validate={[required, minLength5]}
       />
-      {errors && (
-        <FormGroup color="danger">
-          <FormFeedback>{errors.map(error => <li key={error.field}>{error.message}</li>)}</FormFeedback>
-        </FormGroup>
-      )}
+      <RenderErrors errors={errors} />
       <Button color="primary" type="submit" disabled={submitting}>
         Reset Password
       </Button>

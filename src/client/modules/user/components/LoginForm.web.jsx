@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import url from 'url';
-import { FormGroup, FormFeedback } from 'reactstrap';
-import { Form, RenderField, Button } from '../../common/components';
+import { Form, RenderField, RenderErrors, Button } from '../../common/components';
 
 import settings from '../../../../../settings';
 
@@ -24,11 +23,7 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
     <Form name="login" onSubmit={handleSubmit(onSubmit)}>
       <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
       <Field name="password" component={RenderField} type="password" label="Password" validate={required} />
-      {errors && (
-        <FormGroup color="danger">
-          <FormFeedback>{errors.map(error => <li key={error.field}>{error.message}</li>)}</FormFeedback>
-        </FormGroup>
-      )}
+      <RenderErrors errors={errors} />
       <Button color="primary" type="submit" disabled={submitting}>
         Login
       </Button>

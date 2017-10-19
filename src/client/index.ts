@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgStyles } from '@angularclass/hmr';
@@ -45,6 +46,7 @@ import { CounterService } from './modules/counter/containers/Counter';
     FormsModule,
     HttpModule,
     ApolloModule.withClient(clientProvider),
+    NgbModule.forRoot(),
     RouterModule.forRoot(routes, {
       useHash: true
     })

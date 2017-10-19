@@ -23,6 +23,7 @@ class Feature {
   createResolversFunc: Function[];
   createContextFunc: Function[];
   createFetchOptions: Function[];
+  middleware: Function[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
@@ -52,7 +53,7 @@ class Feature {
     return this.middleware;
   }
 
-  get constructFetchOptions() {
+  get constructFetchOptions(): any {
     return this.createFetchOptions.length
       ? (...args) => {
           try {

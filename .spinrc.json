@@ -11,7 +11,7 @@
     },
     "android": {
       "stack": ["react-native", "android"],
-      "enabled": false
+      "enabled": true
     },
     "ios": {
       "stack": ["react-native", "ios"],

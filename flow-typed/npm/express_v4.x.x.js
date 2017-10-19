@@ -1,5 +1,5 @@
-// flow-typed signature: 730b5b5f47f89c6e5871c0d9e9cd72d9
-// flow-typed version: 8d3bb346ba/express_v4.x.x/flow_>=v0.32.x
+// flow-typed signature: f0e399a136d6e8dc8b1fbdc078e2850c
+// flow-typed version: ed397013d1/express_v4.x.x/flow_>=v0.32.x
 
 import type { Server } from 'http';
 import type { Socket } from 'net';
@@ -61,6 +61,8 @@ declare type express$CookieOptions = {
   signed?: boolean
 };
 
+declare type express$Path = string | RegExp;
+
 declare type express$RenderCallback = (err: Error | null, html?: string) => mixed;
 
 declare type express$SendFileOptions = {
@@ -103,11 +105,11 @@ declare class express$Response extends http$ServerResponse mixins express$Reques
 declare type express$NextFunction = (err?: ?Error | 'route') => mixed;
 declare type express$Middleware =
   ((req: $Subtype<express$Request>, res: express$Response, next: express$NextFunction) => mixed) |
-  ((error: ?Error, req: $Subtype<express$Request>, res: express$Response, next: express$NextFunction) => mixed);
+  ((error: Error, req: $Subtype<express$Request>, res: express$Response, next: express$NextFunction) => mixed);
 declare interface express$RouteMethodType<T> {
   (middleware: express$Middleware): T;
   (...middleware: Array<express$Middleware>): T;
-  (path: string|RegExp|string[], ...middleware: Array<express$Middleware>): T;
+  (path: express$Path|express$Path[], ...middleware: Array<express$Middleware>): T;
 }
 declare class express$Route {
   all: express$RouteMethodType<this>;
@@ -147,9 +149,18 @@ declare class express$Router extends express$Route {
   static (options?: express$RouterOptions): express$Router;
   use(middleware: express$Middleware): this;
   use(...middleware: Array<express$Middleware>): this;
-  use(path: string|RegExp|string[], ...middleware: Array<express$Middleware>): this;
+  use(path: express$Path|express$Path[], ...middleware: Array<express$Middleware>): this;
   use(path: string, router: express$Router): this;
   handle(req: http$IncomingMessage, res: http$ServerResponse, next: express$NextFunction): void;
+  param(
+    param: string,
+    callback: (
+      req: $Subtype<express$Request>,
+      res: express$Response,
+      next: express$NextFunction,
+      id: string
+    ) => mixed
+  ): void;
 
   // Can't use regular callable signature syntax due to https://github.com/facebook/flow/issues/3084
   $call: (req: http$IncomingMessage, res: http$ServerResponse, next?: ?express$NextFunction) => void;

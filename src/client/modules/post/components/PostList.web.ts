@@ -34,7 +34,7 @@ import { PostService } from '../containers/Post';
       </ng-template>
   `
 })
-export class PostList implements OnInit, OnDestroy {
+export default class PostList implements OnInit, OnDestroy {
   public loading: boolean = true;
   public posts: any;
   public endCursor = 0;

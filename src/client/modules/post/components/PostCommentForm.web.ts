@@ -21,7 +21,7 @@ import { Component, OnInit } from '@angular/core';
         </form>
   `
 })
-export class PostCommentForm implements OnInit {
+export default class PostCommentForm implements OnInit {
   constructor() {}
 
   public ngOnInit() {}

@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
         </div>
   `
 })
-export class PostCommentsView implements OnInit {
+export default class PostCommentsView implements OnInit {
   constructor() {}
 
   public ngOnInit() {}

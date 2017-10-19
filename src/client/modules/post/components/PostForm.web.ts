@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
         </form>
   `
 })
-export class PostForm implements OnInit {
+export default class PostForm implements OnInit {
   public post: { id: number; title: string; content: string; postId: number };
 
   constructor() {}

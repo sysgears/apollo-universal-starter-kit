@@ -12,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
         </div>
   `
 })
-export class PostEditView implements OnInit {
+export default class PostEditView implements OnInit {
   public post: { id: number; title: string; content: string; postId: number };
 
   constructor() {}

@@ -20,14 +20,14 @@ import { CounterService } from './modules/counter/containers/Counter';
 import PageNotFound from './modules/pageNotFound/containers/PageNotFound';
 import PostCommentForm from './modules/post/components/PostCommentForm.web';
 import PostCommentsView from './modules/post/components/PostCommentsView.web';
+import PostEditView from './modules/post/components/PostEditView.web';
 import PostForm from './modules/post/components/PostForm.web';
+import PostList from './modules/post/components/PostList.web';
 import { PostService } from './modules/post/containers/Post';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
 import { clientProvider } from './app/Main';
-import PostEditView from './modules/post/components/PostEditView.web';
-import PostList from './modules/post/components/PostList.web';
 
 @NgModule({
   bootstrap: [Main],

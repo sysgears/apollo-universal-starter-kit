@@ -17,7 +17,7 @@ const PageNotFound = () => (
       />
       <h2>Page not found - 404</h2>
       <Link to="/">
-        <Button className="home-link" type="primary">
+        <Button className="home-link" color="primary">
           Go to Homepage
         </Button>
       </Link>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ListGroup, ListGroupItem, Button } from 'reactstrap';
-
+import { ListGroup, ListGroupItem } from 'reactstrap';
+import { Button } from '../../common/components';
 import PostCommentForm from './PostCommentForm';
 
 function renderComments(comments, onCommentSelect, comment, deleteComment) {

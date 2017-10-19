@@ -1,9 +1,7 @@
-// Web only component
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { Button } from '../../common/components';
 
 class UsersView extends React.PureComponent {
   state = {
@@ -33,7 +31,7 @@ class UsersView extends React.PureComponent {
           <td>{isAdmin.toString()}</td>
           <td>{isActive.toString()}</td>
           <td>
-            <Button color="primary" size="sm" onClick={() => this.hendleDeleteUser(id)} title="Tooltip on top">
+            <Button color="primary" size="sm" onClick={() => this.hendleDeleteUser(id)}>
               Delete
             </Button>
           </td>

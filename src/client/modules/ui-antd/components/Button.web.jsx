@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button as ADButton } from 'antd';
 
-const Button = ({ children, type, ...props }) => {
+const Button = ({ children, color, type, ...props }) => {
   return (
-    <ADButton type={type} {...props}>
+    <ADButton type={color} htmlType={type} {...props}>
       {children}
     </ADButton>
   );
@@ -12,6 +12,7 @@ const Button = ({ children, type, ...props }) => {
 
 Button.propTypes = {
   children: PropTypes.node,
+  color: PropTypes.string,
   type: PropTypes.string
 };
 

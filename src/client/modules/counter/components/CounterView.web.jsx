@@ -38,13 +38,13 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
               Current counter, is {counter.amount}. This is being stored server-side in the database and using Apollo
               subscription for real-time updates.
             </p>
-            <Button id="graphql-button" type="primary" onClick={addCounter(1)}>
+            <Button id="graphql-button" color="primary" onClick={addCounter(1)}>
               Click to increase counter
             </Button>
           </Section>
           <Section>
             <p>Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.</p>
-            <Button id="redux-button" type="primary" onClick={onReduxIncrement(1)}>
+            <Button id="redux-button" color="primary" onClick={onReduxIncrement(1)}>
               Click to increase reduxCount
             </Button>
           </Section>

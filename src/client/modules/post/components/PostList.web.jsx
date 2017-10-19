@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { ListGroup, ListGroupItem, Button } from 'reactstrap';
+import { ListGroup, ListGroupItem } from 'reactstrap';
 
-import { PageLayout } from '../../common/components';
+import { PageLayout, Button } from '../../common/components';
 
 function renderPosts(posts, deletePost) {
   return posts.edges.map(({ node: { id, title } }) => {

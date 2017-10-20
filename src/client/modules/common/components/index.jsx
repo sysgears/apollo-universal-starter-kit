@@ -6,4 +6,5 @@ export { default as Form } from './Form';
 export { default as RenderField } from './RenderField';
 export { default as RenderCheckBox } from './RenderCheckBox';
 export { default as RenderErrors } from './RenderErrors';
+export { default as Alert } from './Alert';
 export { default as createTabBarIconWrapper } from './createTabBarIconWrapper';

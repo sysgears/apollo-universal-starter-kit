@@ -7,8 +7,7 @@ const Button = ({ children, ...props }) => {
 };
 
 Button.propTypes = {
-  children: PropTypes.node,
-  type: PropTypes.string
+  children: PropTypes.node
 };
 
 export default Button;

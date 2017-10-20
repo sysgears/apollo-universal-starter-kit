@@ -14,7 +14,7 @@ const RenderErrors = ({ errors }) => {
 };
 
 RenderErrors.propTypes = {
-  errors: PropTypes.array,
+  errors: PropTypes.array
 };
 
 export default RenderErrors;

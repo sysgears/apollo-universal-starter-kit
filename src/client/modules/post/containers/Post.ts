@@ -4,27 +4,6 @@ import { Apollo, ApolloQueryObservable } from 'apollo-angular';
 import * as DELETE_POST from '../graphql/DeletePost.graphql';
 import * as POSTS_QUERY from '../graphql/PostsQuery.graphql';
 
-export const AddPost = (prev: any, { mutationResult: { data: { addPost } } }: any) => {
-  // ignore if duplicate
-  if (addPost.id !== null && prev.posts.edges.some((post: any) => addPost.id === post.cursor)) {
-    return prev;
-  }
-
-  const edge = {
-    cursor: addPost.id,
-    node: addPost,
-    __typename: 'PostEdges'
-  };
-
-  return {
-    posts: {
-      ...prev.posts,
-      totalCount: prev.posts.totalCount + 1,
-      edges: [edge, ...prev.posts.edges]
-    }
-  };
-};
-
 const DeletePost = (prev: any, { mutationResult: { data: { deletePost } } }: any) => {
   const deletedEdge = prev.posts.edges.find((x: any) => x.node.id === deletePost.id);
   // ignore if not found

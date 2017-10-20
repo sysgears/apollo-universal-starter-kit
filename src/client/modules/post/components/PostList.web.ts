@@ -2,6 +2,7 @@ import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import PostService from '../containers/Post';
+import PostEditService from '../containers/PostEdit';
 
 @Component({
   selector: 'posts-view',
@@ -40,8 +41,9 @@ export default class PostList implements OnInit, OnDestroy {
   public posts: any;
   public endCursor = 0;
   private subsOnLoad: Subscription;
+  private subsOnPostAdded: Subscription;
 
-  constructor(private postService: PostService, private ngZone: NgZone) {}
+  constructor(private postService: PostService, private postEditService: PostEditService, private ngZone: NgZone) {}
 
   public ngOnInit() {
     this.subsOnLoad = this.postService.getPosts().subscribe(({ data: { posts }, loading }: any) => {
@@ -50,6 +52,10 @@ export default class PostList implements OnInit, OnDestroy {
         this.loading = loading;
         this.endCursor = this.posts.pageInfo.endCursor;
       });
+    });
+
+    this.subsOnPostAdded = this.postEditService.postAdded.subscribe((post: any) => {
+      this.ngZone.run(() => {});
     });
   }
 

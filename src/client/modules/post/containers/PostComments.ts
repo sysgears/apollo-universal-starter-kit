@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
+import { Subject } from 'rxjs/Subject';
 
 import * as ADD_COMMENT from '../graphql/AddComment.graphql';
 import * as DELETE_COMMENT from '../graphql/DeleteComment.graphql';
@@ -40,6 +41,8 @@ const DeleteComment = (prev: any, { mutationResult: { data: { deleteComment: { i
 
 @Injectable()
 export default class PostCommentsService {
+  public startedEditing = new Subject<any>();
+
   constructor(private apollo: Apollo) {}
 
   public addComment(content: string, postId: number) {

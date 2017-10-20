@@ -12,7 +12,7 @@ import PostCommentsService from '../containers/PostComments';
                 <li class="d-flex justify-content-between list-group-item">
                     {{ comment.content }}
                     <div>
-                        <a class="badge badge-secondary edit-comment" (click)="onCommentEdit(comment)">Edit</a>
+                        <a class="badge badge-secondary edit-comment" (click)="onCommentSelect(comment)">Edit</a>
                         &nbsp;
                         <a class="badge badge-secondary delete-comment" (click)="onCommentDelete(comment.id)">Delete</a>
                     </div>
@@ -34,8 +34,8 @@ export default class PostCommentsView implements OnInit {
 
   public ngOnInit() {}
 
-  public onCommentEdit(comment: any) {
-    this.postCommentsService.editComment(comment.id, this.post.id, comment.content).subscribe((res: any) => {});
+  public onCommentSelect(comment: any) {
+    this.postCommentsService.startedEditing.next(comment);
   }
 
   public onCommentDelete(id: number) {

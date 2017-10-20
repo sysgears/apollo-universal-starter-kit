@@ -53,6 +53,7 @@ export default class PostForm implements OnInit, OnDestroy {
     } else {
       this.subscription = this.postEditService.addPost(title, content).subscribe(({ data: { addPost } }: any) => {
         // TODO: add an ability to refresh posts list after adding a new post w/o page reloading
+        // this.postEditService.postAdded.next(addPost);
         this.router.navigate(['/post', addPost.id]);
         this.submitting = false;
       });

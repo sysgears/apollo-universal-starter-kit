@@ -49,68 +49,65 @@ class UsersView extends React.PureComponent {
     return onOrderBy({ column: name, order });
   };
 
-  columns = [
-    {
-      title: 'Username',
-      dataIndex: 'username',
-      key: 'username',
-      render: (text, record) => (
-        <Link className="userdocker -link" to={`/users/${record.id}`}>
-          {text}
-        </Link>
-      ),
-      renderHeader: (text, dataIndex) => (
-        <a onClick={e => this.orderBy(e, dataIndex)} href="#">
-          {text} {this.renderOrderByArrow(dataIndex)}
-        </a>
-      )
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-      renderHeader: (text, dataIndex) => (
-        <a onClick={e => this.orderBy(e, dataIndex)} href="#">
-          {text} {this.renderOrderByArrow(dataIndex)}
-        </a>
-      )
-    },
-    {
-      title: 'Is Admin',
-      dataIndex: 'isAdmin',
-      key: 'isAdmin',
-      render: text => text.toString(),
-      renderHeader: (text, dataIndex) => (
-        <a onClick={e => this.orderBy(e, dataIndex)} href="#">
-          {text} {this.renderOrderByArrow(dataIndex)}
-        </a>
-      )
-    },
-    {
-      title: 'Is Active',
-      dataIndex: 'isActive',
-      key: 'isActive',
-      render: text => text.toString(),
-      renderHeader: (text, dataIndex) => (
-        <a onClick={e => this.orderBy(e, dataIndex)} href="#">
-          {text} {this.renderOrderByArrow(dataIndex)}
-        </a>
-      )
-    },
-    {
-      title: 'Actions',
-      key: 'actions',
-      render: (text, record) => (
-        <Button color="primary" size="sm" onClick={() => this.hendleDeleteUser(record.id)}>
-          Delete
-        </Button>
-      )
-    }
-  ];
-
   render() {
     const { loading, users } = this.props;
     const { errors } = this.state;
+
+    const columns = [
+      {
+        title: (
+          <a onClick={e => this.orderBy(e, 'username')} href="#">
+            Username {this.renderOrderByArrow('username')}
+          </a>
+        ),
+        dataIndex: 'username',
+        key: 'username',
+        render: (text, record) => (
+          <Link className="userdocker -link" to={`/users/${record.id}`}>
+            {text}
+          </Link>
+        )
+      },
+      {
+        title: (
+          <a onClick={e => this.orderBy(e, 'email')} href="#">
+            Email {this.renderOrderByArrow('email')}
+          </a>
+        ),
+        dataIndex: 'email',
+        key: 'email'
+      },
+      {
+        title: (
+          <a onClick={e => this.orderBy(e, 'isAdmin')} href="#">
+            Is Admin {this.renderOrderByArrow('isAdmin')}
+          </a>
+        ),
+        dataIndex: 'isAdmin',
+        key: 'isAdmin',
+        render: text => text.toString()
+      },
+      {
+        title: (
+          <a onClick={e => this.orderBy(e, 'isActive')} href="#">
+            Is Active {this.renderOrderByArrow('isActive')}
+          </a>
+        ),
+        dataIndex: 'isActive',
+        key: 'isActive',
+        render: text => text.toString()
+      },
+      {
+        title: 'Actions',
+        key: 'actions',
+        render: (text, record) => (
+          <Button color="primary" size="sm" onClick={() => this.hendleDeleteUser(record.id)}>
+            Delete
+          </Button>
+        )
+      }
+    ];
+
     if (loading && !users) {
       return <div className="text-center">Loading...</div>;
     } else {
@@ -122,7 +119,7 @@ class UsersView extends React.PureComponent {
                 {error.message}
               </div>
             ))}
-          <Table dataSource={users} columns={this.columns} />
+          <Table dataSource={users} columns={columns} />
         </div>
       );
     }

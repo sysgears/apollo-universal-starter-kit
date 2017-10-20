@@ -24,6 +24,7 @@ class Feature {
   createResolversFunc: Function[];
   createContextFunc: Function[];
   createFetchOptions: Function[];
+  middleware: Function[];
   stylesInsert: String[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
@@ -55,7 +56,7 @@ class Feature {
     return this.middleware;
   }
 
-  get constructFetchOptions() {
+  get constructFetchOptions(): any {
     return this.createFetchOptions.length
       ? (...args) => {
           try {

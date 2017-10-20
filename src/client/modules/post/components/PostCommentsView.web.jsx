@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ListGroup, ListGroupItem } from 'reactstrap';
-import { Button } from '../../common/components';
+import { ListGroup, ListItem, Button } from '../../common/components';
 import PostCommentForm from './PostCommentForm';
 
 function renderComments(comments, onCommentSelect, comment, deleteComment) {
   return comments.map(({ id, content }) => {
     return (
-      <ListGroupItem className="d-flex justify-content-between" key={id}>
+      <ListItem className="d-flex justify-content-between" key={id}>
         {content}
         <div>
           <Button color="primary" size="sm" className="edit-comment" onClick={() => onCommentSelect({ id, content })}>
@@ -22,7 +21,7 @@ function renderComments(comments, onCommentSelect, comment, deleteComment) {
             Delete
           </Button>
         </div>
-      </ListGroupItem>
+      </ListItem>
     );
   });
 }

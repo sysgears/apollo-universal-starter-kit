@@ -2,14 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { ListGroup, ListGroupItem } from 'reactstrap';
-
-import { PageLayout, Button } from '../../common/components';
+import { PageLayout, ListGroup, ListItem, Button } from '../../common/components';
 
 function renderPosts(posts, deletePost) {
   return posts.edges.map(({ node: { id, title } }) => {
     return (
-      <ListGroupItem className="d-flex justify-content-between" key={id}>
+      <ListItem className="d-flex justify-content-between" key={id}>
         <div>
           <Link className="post-link" to={`/post/${id}`}>
             {title}
@@ -20,7 +18,7 @@ function renderPosts(posts, deletePost) {
             Delete
           </Button>
         </div>
-      </ListGroupItem>
+      </ListItem>
     );
   });
 }

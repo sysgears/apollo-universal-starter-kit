@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Button } from '../../common/components';
+import { Button, Table } from '../../common/components';
 
 class UsersView extends React.PureComponent {
   state = {
@@ -71,6 +71,21 @@ class UsersView extends React.PureComponent {
     return onOrderBy({ column: name, order });
   };
 
+  columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name'
+    },
+    {
+      title: 'Age',
+      dataIndex: 'age'
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address'
+    }
+  ];
+
   render() {
     const { loading, users } = this.props;
     const { errors } = this.state;
@@ -85,7 +100,7 @@ class UsersView extends React.PureComponent {
                 {error.message}
               </div>
             ))}
-          <table className="table table-bordered">
+          <Table>
             <thead>
               <tr>
                 <th>
@@ -112,7 +127,7 @@ class UsersView extends React.PureComponent {
               </tr>
             </thead>
             <tbody>{this.renderUsers(users)}</tbody>
-          </table>
+          </Table>
         </div>
       );
     }

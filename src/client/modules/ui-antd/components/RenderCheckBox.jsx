@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormItem, Input } from 'antd';
+import { Form, Input } from 'antd';
+
+const FormItem = Form.Item;
 
 const RenderCheckBox = ({ input, label, type, meta: { touched, error } }) => {
   let validateStatus = '';

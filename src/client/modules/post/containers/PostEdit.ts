@@ -4,9 +4,10 @@ import { Apollo } from 'apollo-angular';
 import * as ADD_POST from '../graphql/AddPost.graphql';
 import * as EDIT_POST from '../graphql/EditPost.graphql';
 import * as POST_QUERY from '../graphql/PostQuery.graphql';
+import { AddPost } from './Post';
 
 @Injectable()
-export class PostEditService {
+export default class PostEditService {
   constructor(private apollo: Apollo) {}
 
   public getPost(id: number) {
@@ -30,26 +31,7 @@ export class PostEditService {
         }
       },
       updateQueries: {
-        posts: (prev, { mutationResult: { data: { addPost } } }) => {
-          // ignore if duplicate
-          if (addPost.id !== null && prev.posts.edges.some((post: any) => addPost.id === post.cursor)) {
-            return prev;
-          }
-
-          const edge = {
-            cursor: addPost.id,
-            node: addPost,
-            __typename: 'PostEdges'
-          };
-
-          return {
-            posts: {
-              ...prev.posts,
-              totalCount: prev.posts.totalCount + 1,
-              edges: [edge, ...prev.posts.edges]
-            }
-          };
-        }
+        posts: AddPost
       }
     });
   }

@@ -107,7 +107,7 @@ if (module.hot) {
   selector: 'body div:first-child',
   template: `<page-layout></page-layout>`
 })
-export class Main implements OnInit {
+export default class Main implements OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private titleService: Title) {}
 
   public ngOnInit(): void {

@@ -14,9 +14,9 @@ export interface PostParams {
 
 export default (pubsub: PubSub) => ({
   Query: {
-    async posts(obj: any, args: PostParams, context: any) {
+    async posts(obj: any, { limit, after }: any, context: any) {
       const edgesArray: any[] = [];
-      const posts = await context.Post.postsPagination(args.limit, args.after);
+      const posts = await context.Post.postsPagination(limit, after);
 
       posts.map((post: any) => {
         edgesArray.push({
@@ -42,18 +42,18 @@ export default (pubsub: PubSub) => ({
         }
       };
     },
-    post(obj: any, args: PostParams, context: any) {
-      return context.Post.post(args.id);
+    post(obj: any, { id }: any, context: any) {
+      return context.Post.post(id);
     }
   },
   Post: {
-    comments({ id }: any, args: PostParams, context: any) {
+    comments({ id }: any, args: any, context: any) {
       return context.loaders.getCommentsForPostIds.load(id);
     }
   },
   Mutation: {
-    async addPost(obj: any, args: PostParams, context: any) {
-      const [id] = await context.Post.addPost(args.input);
+    async addPost(obj: any, { input }: any, context: any) {
+      const [id] = await context.Post.addPost(input);
       const post = await context.Post.post(id);
       // publish for post list
       pubsub.publish(POSTS_SUBSCRIPTION, {
@@ -65,15 +65,15 @@ export default (pubsub: PubSub) => ({
       });
       return post;
     },
-    async deletePost(obj: any, args: PostParams, context: any) {
-      const post = await context.Post.post(args.id);
-      const isDeleted = await context.Post.deletePost(args.id);
+    async deletePost(obj: any, { id }: any, context: any) {
+      const post = await context.Post.post(id);
+      const isDeleted = await context.Post.deletePost(id);
       if (isDeleted) {
         // publish for post list
         pubsub.publish(POSTS_SUBSCRIPTION, {
           postsUpdated: {
             mutation: 'DELETED',
-            id: args.id,
+            id,
             node: post
           }
         });
@@ -82,9 +82,9 @@ export default (pubsub: PubSub) => ({
         return { id: null };
       }
     },
-    async editPost(obj: any, args: PostParams, context: any) {
-      await context.Post.editPost(args.input);
-      const post = await context.Post.post(args.input.id);
+    async editPost(obj: any, { input }: any, context: any) {
+      await context.Post.editPost(input);
+      const post = await context.Post.post(input.id);
       // publish for post list
       pubsub.publish(POSTS_SUBSCRIPTION, {
         postsUpdated: {
@@ -97,42 +97,42 @@ export default (pubsub: PubSub) => ({
       pubsub.publish(POST_SUBSCRIPTION, { postUpdated: post });
       return post;
     },
-    async addComment(obj: any, args: PostParams, context: any) {
-      const [id] = await context.Post.addComment(args.input);
+    async addComment(obj: any, { input }: any, context: any) {
+      const [id] = await context.Post.addComment(input);
       const comment = await context.Post.getComment(id);
       // publish for edit post page
       pubsub.publish(COMMENT_SUBSCRIPTION, {
         commentUpdated: {
           mutation: 'CREATED',
           id: comment.id,
-          postId: args.input.postId,
+          postId: input.postId,
           node: comment
         }
       });
       return comment;
     },
-    async deleteComment(obj: any, args: PostParams, context: any) {
-      await context.Post.deleteComment(args.id);
+    async deleteComment(obj: any, { input: { id, postId } }: any, context: any) {
+      await context.Post.deleteComment(id);
       // publish for edit post page
       pubsub.publish(COMMENT_SUBSCRIPTION, {
         commentUpdated: {
           mutation: 'DELETED',
-          id: args.input.id,
-          postId: args.input.postId,
+          id,
+          postId,
           node: null
         }
       });
-      return { id: args.input.id };
+      return { id };
     },
-    async editComment(obj: any, args: PostParams, context: any) {
-      await context.Post.editComment(args.input);
-      const comment = await context.Post.getComment(args.input.id);
+    async editComment(obj: any, { input }: any, context: any) {
+      await context.Post.editComment(input);
+      const comment = await context.Post.getComment(input.id);
       // publish for edit post page
       pubsub.publish(COMMENT_SUBSCRIPTION, {
         commentUpdated: {
           mutation: 'UPDATED',
-          id: args.input.id,
-          postId: args.input.postId,
+          id: input.id,
+          postId: input.postId,
           node: comment
         }
       });

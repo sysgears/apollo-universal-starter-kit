@@ -1,6 +1,6 @@
 import { Component, NgZone, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { PostEditService } from '../containers/PostEdit';
+import PostEditService from '../containers/PostEdit';
 
 @Component({
   selector: 'post-edit-view',
@@ -10,7 +10,7 @@ import { PostEditService } from '../containers/PostEdit';
           <h2>{{ title }} Post</h2>
           <post-form [post]="post"></post-form>
           <br/>
-          <post-comments-view *ngIf="post"></post-comments-view>
+          <post-comments-view *ngIf="post" [post]="post"></post-comments-view>
       </div>
       <ng-template #showLoading>
           <div class="text-center">Loading...</div>

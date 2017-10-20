@@ -1,6 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { PostService } from '../containers/Post';
+
+import PostService from '../containers/Post';
 
 @Component({
   selector: 'posts-view',
@@ -25,7 +26,7 @@ import { PostService } from '../containers/Post';
           <div>
               <small>({{ posts.edges.length }} / {{ posts.totalCount }})</small>
           </div>
-          <button type="button" id="load-more" class="btn btn-primary" *ngIf="hasNextPage()" (click)="loadMoreRows()">
+          <button type="button" id="load-more" class="btn btn-primary" *ngIf="posts.pageInfo.hasNextPage" (click)="loadMoreRows()">
               Load more ...
           </button>
       </div>
@@ -38,20 +39,22 @@ export default class PostList implements OnInit, OnDestroy {
   public loading: boolean = true;
   public posts: any;
   public endCursor = 0;
-  private subscription: Subscription = null;
+  private subsOnLoad: Subscription;
 
   constructor(private postService: PostService, private ngZone: NgZone) {}
 
   public ngOnInit() {
-    this.subscription = this.postService.getPosts().subscribe({
-      next: ({ data, loading }) => {
-        this.ngZone.run(() => {
-          this.posts = data.posts;
-          this.loading = loading;
-          this.endCursor = this.posts.pageInfo.endCursor;
-        });
-      }
+    this.subsOnLoad = this.postService.getPosts().subscribe(({ data: { posts }, loading }: any) => {
+      this.ngZone.run(() => {
+        this.posts = posts;
+        this.loading = loading;
+        this.endCursor = this.posts.pageInfo.endCursor;
+      });
     });
+  }
+
+  public ngOnDestroy(): void {
+    this.subsOnLoad.unsubscribe();
   }
 
   public renderPosts() {
@@ -64,15 +67,10 @@ export default class PostList implements OnInit, OnDestroy {
     this.postService.loadMoreRows(this.endCursor);
   }
 
-  public hasNextPage() {
-    return this.posts.pageInfo.hasNextPage;
-  }
-
   public deletePost(id: number) {
-    this.postService.deletePost(id);
-  }
-
-  public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.postService
+      .deletePost(id)
+      .subscribe()
+      .unsubscribe();
   }
 }

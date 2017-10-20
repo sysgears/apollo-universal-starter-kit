@@ -2,7 +2,8 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { PostEditService } from '../containers/PostEdit';
+
+import PostEditService from '../containers/PostEdit';
 
 @Component({
   selector: 'post-form',
@@ -36,36 +37,31 @@ export default class PostForm implements OnInit, OnDestroy {
   private submitting: boolean = false;
   @Input() public post: any;
   @ViewChild('postForm') public postForm: NgForm;
-  private subscription: Subscription = null;
+  private subscription: Subscription;
 
   constructor(private postEditService: PostEditService, private router: Router) {}
 
   public ngOnInit() {}
 
   public onSubmit() {
-    this.triggerSubmitting();
+    this.submitting = true;
     const { title, content } = this.postForm.value;
     if (this.post) {
-      this.subscription = this.postEditService.editPost(this.post.id, title, content).subscribe({
-        next: () => {
-          this.router.navigate(['/posts']);
-        }
+      this.subscription = this.postEditService.editPost(this.post.id, title, content).subscribe(() => {
+        this.router.navigate(['/posts']);
       });
     } else {
-      this.subscription = this.postEditService.addPost(title, content).subscribe({
-        next: ({ data: { addPost } }: any) => {
-          this.router.navigate(['/posts', addPost.id]);
-        }
+      this.subscription = this.postEditService.addPost(title, content).subscribe(({ data: { addPost } }: any) => {
+        // TODO: add an ability to refresh posts list after adding a new post w/o page reloading
+        this.router.navigate(['/post', addPost.id]);
+        this.submitting = false;
       });
     }
-    this.triggerSubmitting();
   }
 
   public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  private triggerSubmitting() {
-    this.submitting = !this.submitting;
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

@@ -141,7 +141,7 @@ describe('Posts and comments example UI works', () => {
     };
 
     const deleteButtons = content.find('.delete-button');
-    expect(deleteButtons).has.lengthOf(8);
+    expect(deleteButtons).has.lengthOf(12);
     deleteButtons.last().simulate('click');
 
     expect(content.text()).to.not.include('Post title 4');
@@ -313,18 +313,18 @@ describe('Posts and comments example UI works', () => {
 
   step('Comment deleting optimistically removes comment', () => {
     const deleteButtons = content.find('.delete-comment');
-    expect(deleteButtons).has.lengthOf(6);
+    expect(deleteButtons).has.lengthOf(9);
     deleteButtons.last().simulate('click');
 
     app.update();
     content = app.find('#content').last();
     expect(content.text()).to.not.include('Post comment 24');
-    expect(content.find('.delete-comment')).has.lengthOf(4);
+    expect(content.find('.delete-comment')).has.lengthOf(6);
   });
 
   step('Clicking comment delete removes the comment', () => {
     expect(content.text()).to.not.include('Post comment 24');
-    expect(content.find('.delete-comment')).has.lengthOf(4);
+    expect(content.find('.delete-comment')).has.lengthOf(6);
   });
 
   step('Comment editing works', done => {
@@ -336,7 +336,7 @@ describe('Posts and comments example UI works', () => {
     };
 
     const editButtons = content.find('.edit-comment');
-    expect(editButtons).has.lengthOf(4);
+    expect(editButtons).has.lengthOf(6);
     editButtons.last().simulate('click');
 
     const commentForm = content.find('form[name="comment"]');

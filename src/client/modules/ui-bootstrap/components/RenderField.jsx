@@ -10,7 +10,7 @@ const RenderField = ({ input, label, type, meta: { touched, error } }) => {
 
   return (
     <FormGroup color={color}>
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <div>
         <Input {...input} placeholder={label} type={type} />
         {touched && (error && <FormFeedback>{error}</FormFeedback>)}

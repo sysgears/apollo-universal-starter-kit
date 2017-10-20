@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Row, Col, FormGroup, Label } from 'reactstrap';
+import { Row, Col, Label } from 'reactstrap';
 import { Form, RenderField, Button } from '../../common/components';
 
 const required = value => (value ? undefined : 'Required');
@@ -14,21 +14,19 @@ const PostCommentForm = ({ handleSubmit, submitting, initialValues, onSubmit }) 
 
   return (
     <Form name="comment" onSubmit={handleSubmit(onSubmit)}>
-      <FormGroup>
-        <Row>
-          <Col xs="2">
-            <Label>{operation} comment</Label>
-          </Col>
-          <Col xs="8">
-            <Field name="content" component={RenderField} type="text" label="Content" validate={required} />
-          </Col>
-          <Col xs="2">
-            <Button color="primary" type="submit" className="float-right" disabled={submitting}>
-              Save
-            </Button>
-          </Col>
-        </Row>
-      </FormGroup>
+      <Row>
+        <Col xs="2">
+          <Label>{operation} comment</Label>
+        </Col>
+        <Col xs="8">
+          <Field name="content" component={RenderField} type="text" validate={required} />
+        </Col>
+        <Col xs="2">
+          <Button color="primary" type="submit" className="float-right" disabled={submitting}>
+            Save
+          </Button>
+        </Col>
+      </Row>
     </Form>
   );
 };

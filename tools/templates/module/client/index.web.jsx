@@ -3,7 +3,7 @@ import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 
 // Web UI
-import { NavItem } from 'reactstrap';
+import { MenuItem } from '../../modules/common/components';
 
 // Component and helpers
 import $Module$ from './containers/$Module$';
@@ -14,11 +14,11 @@ import Feature from '../connector';
 export default new Feature({
   route: <Route exact path="/$module$" component={$Module$} />,
   navItem: (
-    <NavItem>
+    <MenuItem>
       <NavLink to="/$module$" className="nav-link" activeClassName="active">
         $Module$
       </NavLink>
-    </NavItem>
+    </MenuItem>
   ),
   reducer: { $module$: reducers }
 });

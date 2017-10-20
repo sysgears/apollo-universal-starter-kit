@@ -4,10 +4,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { Card, CardBlock, CardTitle, CardText } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-import { PageLayout } from '../../common/components';
+import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components';
 import LoginForm from '../components/LoginForm';
 
 class LoginView extends React.PureComponent {
@@ -46,11 +45,11 @@ class LoginView extends React.PureComponent {
         <Link to="/forgot-password">Forgot your password?</Link>
         <hr />
         <Card>
-          <CardBlock>
+          <CardGroup>
             <CardTitle>Available logins:</CardTitle>
             <CardText>admin@example.com:admin</CardText>
             <CardText>user@example.com:user</CardText>
-          </CardBlock>
+          </CardGroup>
         </Card>
       </PageLayout>
     );

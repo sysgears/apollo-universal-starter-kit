@@ -3,7 +3,7 @@ import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 
 // Web UI
-import { MenuItem } from '../../modules/common/components';
+import { MenuItem } from '../../modules/common/components/web';
 
 // Component and helpers
 import $Module$ from './containers/$Module$';

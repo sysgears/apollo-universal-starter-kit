@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import { constructUploadOptions } from 'apollo-fetch-upload';
-import { MenuItem } from '../../modules/common/components';
+import { MenuItem } from '../../modules/common/components/web';
 
 // Component and helpers
 import Upload from './containers/Upload';

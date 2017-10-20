@@ -7,6 +7,8 @@ const Button = ({ children, color, type, size, ...props }) => {
 
   if (size === 'sm') {
     buttonSize = 'small';
+  } else if (size === 'lg') {
+    buttonSize = 'large';
   }
 
   return (

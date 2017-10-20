@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import url from 'url';
-import { Form, RenderField, RenderErrors, Button } from '../../common/components';
+import { Form, RenderField, RenderErrors, Button } from '../../common/components/web';
 
 import settings from '../../../../../settings';
 

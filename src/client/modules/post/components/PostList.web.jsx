@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { PageLayout, ListGroup, ListItem, Button } from '../../common/components';
+import { PageLayout, ListGroup, ListItem, Button } from '../../common/components/web';
 
 function renderPosts(posts, deletePost) {
   return posts.edges.map(({ node: { id, title } }) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
-import { PageLayout, Button } from '../../common/components';
+import { PageLayout, Button } from '../../common/components/web';
 
 const PageNotFound = () => (
   <PageLayout>

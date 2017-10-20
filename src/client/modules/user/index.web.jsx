@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { MenuItem } from '../../modules/common/components';
+import { MenuItem } from '../../modules/common/components/web';
 import Profile from './containers/Profile';
 import Users from './components/Users';
 import UserEdit from './containers/UserEdit';

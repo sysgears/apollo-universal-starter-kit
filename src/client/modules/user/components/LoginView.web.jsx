@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
-import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components';
+import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
 import LoginForm from '../components/LoginForm';
 
 class LoginView extends React.PureComponent {

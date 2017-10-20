@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ListGroup, ListItem, Button } from '../../common/components';
+import { ListGroup, ListItem, Button } from '../../common/components/web';
 import PostCommentForm from './PostCommentForm';
 
 function renderComments(comments, onCommentSelect, comment, deleteComment) {

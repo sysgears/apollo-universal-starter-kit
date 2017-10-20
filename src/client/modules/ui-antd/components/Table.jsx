@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Table as ADTable } from 'antd';
 
-const Table = ({ children, ...props }) => {
-  return <table {...props}>{children}</table>;
+const Table = ({ ...props }) => {
+  return <ADTable pagination={false} {...props} />;
 };
 
 Table.propTypes = {

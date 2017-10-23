@@ -1,0 +1,14 @@
+type UserSubscription {
+    active: Boolean!
+}
+
+extend type Query {
+    # get current user's subscription
+    subscription: UserSubscription
+}
+
+extend type Mutation {
+}
+
+extend type Subscription {
+}

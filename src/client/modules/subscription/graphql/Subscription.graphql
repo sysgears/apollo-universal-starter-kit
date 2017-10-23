@@ -1,1 +1,3 @@
-# GraphQL queries
+fragment SubscriptionInfo on Subscription {
+    active
+}

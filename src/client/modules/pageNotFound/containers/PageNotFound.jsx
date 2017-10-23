@@ -2,13 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
+import styled from 'styled-components';
 import { PageLayout, Button } from '../../common/components/web';
+
+const Section = styled.section`
+  text-align: center;
+`;
 
 const PageNotFound = ({ staticContext = {} }) => {
   staticContext.pageNotFound = true;
   return (
     <PageLayout>
-      <section className="text-center mt-4 mb-4">
+      <Section>
         <Helmet
           title="Apollo Starter Kit - Page not found"
           meta={[
@@ -24,7 +29,7 @@ const PageNotFound = ({ staticContext = {} }) => {
             Go to Homepage
           </Button>
         </Link>
-      </section>
+      </Section>
     </PageLayout>
   );
 };

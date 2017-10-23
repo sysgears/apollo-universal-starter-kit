@@ -50,6 +50,7 @@
   "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^5.2.0",
+    "antd": "^2.13.6",
     "apollo-cache-inmemory": "^0.2.0-rc.1",
     "apollo-client": "^2.0.0-rc.3",
     "apollo-fetch": "^0.6.0",
@@ -172,6 +173,8 @@
     "isomorphic-style-loader": "^4.0.0",
     "jsdom": "^11.3.0",
     "json-loader": "^0.5.7",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5",
     "lint-staged": "^4.3.0",
     "mime": "^1.4.1",
     "mkdirp": "^0.5.1",

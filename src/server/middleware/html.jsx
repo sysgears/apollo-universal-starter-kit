@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
-
-import styles from '../../client/styles/styles.scss';
+import modules from '../modules';
 
 const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent(); // react-helmet html document tags
@@ -28,7 +27,7 @@ const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) =>
         {!!__DEV__ && (
           <style
             dangerouslySetInnerHTML={{
-              __html: styles._getCss()
+              __html: modules.stylesInserts
             }}
           />
         )}

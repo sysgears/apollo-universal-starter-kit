@@ -1,9 +1,7 @@
-// Web only component
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { Table, Button } from '../../common/components/web';
 
 class UsersView extends React.PureComponent {
   state = {
@@ -18,28 +16,6 @@ class UsersView extends React.PureComponent {
     } else {
       this.setState({ errors: [] });
     }
-  };
-
-  renderUsers = users => {
-    return users.map(({ id, username, email, isAdmin, isActive }) => {
-      return (
-        <tr key={id}>
-          <td>
-            <Link className="userdocker -link" to={`/users/${id}`}>
-              {username}
-            </Link>
-          </td>
-          <td>{email}</td>
-          <td>{isAdmin.toString()}</td>
-          <td>{isActive.toString()}</td>
-          <td>
-            <Button color="primary" size="sm" onClick={() => this.hendleDeleteUser(id)} title="Tooltip on top">
-              Delete
-            </Button>
-          </td>
-        </tr>
-      );
-    });
   };
 
   renderOrderByArrow = name => {
@@ -76,6 +52,62 @@ class UsersView extends React.PureComponent {
   render() {
     const { loading, users } = this.props;
     const { errors } = this.state;
+
+    const columns = [
+      {
+        title: (
+          <a onClick={e => this.orderBy(e, 'username')} href="#">
+            Username {this.renderOrderByArrow('username')}
+          </a>
+        ),
+        dataIndex: 'username',
+        key: 'username',
+        render: (text, record) => (
+          <Link className="user-link" to={`/users/${record.id}`}>
+            {text}
+          </Link>
+        )
+      },
+      {
+        title: (
+          <a onClick={e => this.orderBy(e, 'email')} href="#">
+            Email {this.renderOrderByArrow('email')}
+          </a>
+        ),
+        dataIndex: 'email',
+        key: 'email'
+      },
+      {
+        title: (
+          <a onClick={e => this.orderBy(e, 'isAdmin')} href="#">
+            Is Admin {this.renderOrderByArrow('isAdmin')}
+          </a>
+        ),
+        dataIndex: 'isAdmin',
+        key: 'isAdmin',
+        render: text => text.toString()
+      },
+      {
+        title: (
+          <a onClick={e => this.orderBy(e, 'isActive')} href="#">
+            Is Active {this.renderOrderByArrow('isActive')}
+          </a>
+        ),
+        dataIndex: 'isActive',
+        key: 'isActive',
+        render: text => text.toString()
+      },
+      {
+        title: 'Actions',
+        key: 'actions',
+        render: (text, record) => (
+          <Button color="primary" size="sm" onClick={() => this.hendleDeleteUser(record.id)}>
+            Delete
+          </Button>
+        )
+      }
+    ];
+
     if (loading && !users) {
       return <div className="text-center">Loading...</div>;
     } else {
@@ -87,34 +119,7 @@ class UsersView extends React.PureComponent {
                 {error.message}
               </div>
             ))}
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>
-                  <a onClick={e => this.orderBy(e, 'username')} href="#">
-                    Username {this.renderOrderByArrow('username')}
-                  </a>
-                </th>
-                <th>
-                  <a onClick={e => this.orderBy(e, 'email')} href="#">
-                    Email {this.renderOrderByArrow('email')}
-                  </a>
-                </th>
-                <th>
-                  <a onClick={e => this.orderBy(e, 'isAdmin')} href="#">
-                    Is Admin {this.renderOrderByArrow('isAdmin')}
-                  </a>
-                </th>
-                <th>
-                  <a onClick={e => this.orderBy(e, 'isActive')} href="#">
-                    Is Active {this.renderOrderByArrow('isActive')}
-                  </a>
-                </th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>{this.renderUsers(users)}</tbody>
-          </table>
+          <Table dataSource={users} columns={columns} />
         </div>
       );
     }

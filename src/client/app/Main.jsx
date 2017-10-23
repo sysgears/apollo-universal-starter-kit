@@ -23,8 +23,6 @@ import settings from '../../../settings';
 import Routes from './Routes';
 import modules from '../modules';
 
-import '../styles/styles.scss';
-
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
 const fetch = createApolloFetch({

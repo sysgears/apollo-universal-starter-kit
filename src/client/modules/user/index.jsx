@@ -2,7 +2,7 @@
 import { Ionicons } from '@expo/vector-icons';
 
 // Component and helpers
-import { createTabBarIconWrapper } from '../common/components';
+import { createTabBarIconWrapper } from '../common/components/native';
 import Profile from './containers/Profile';
 import reducers from './reducers';
 

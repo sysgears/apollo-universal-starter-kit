@@ -1,8 +1,5 @@
-// General imports
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
-
-// Components and helpers
 import Renderer from '../../../../client/testHelpers/Renderer';
 import Routes from '../../../../client/app/Routes';
 

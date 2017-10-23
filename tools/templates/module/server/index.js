@@ -1,6 +1,4 @@
-// Components
 import $Module$ from './sql';
-
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import Feature from '../connector';

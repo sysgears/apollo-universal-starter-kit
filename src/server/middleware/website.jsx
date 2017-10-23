@@ -74,7 +74,11 @@ async function renderServerSide(req, res) {
 
   await getDataFromTree(component);
 
-  res.status(200);
+  if (context.pageNotFound === true) {
+    res.status(404);
+  } else {
+    res.status(200);
+  }
 
   const sheet = new ServerStyleSheet();
   const html = ReactDOMServer.renderToString(sheet.collectStyles(component));

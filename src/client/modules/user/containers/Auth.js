@@ -36,7 +36,7 @@ const checkAuth = (cookies, role) => {
     if (role === 'admin') {
       const { user: { isAdmin } } = decode(token);
 
-      if (isAdmin === 0) {
+      if (!isAdmin) {
         return false;
       }
     }

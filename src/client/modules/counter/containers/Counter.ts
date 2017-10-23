@@ -17,7 +17,7 @@ export function updateQuery(prev: any, mutationResult: any) {
 }
 
 @Injectable()
-export class CounterService {
+export default class CounterService {
   constructor(private apollo: Apollo) {}
 
   public subscribeToCount(callback: (result: any) => any) {

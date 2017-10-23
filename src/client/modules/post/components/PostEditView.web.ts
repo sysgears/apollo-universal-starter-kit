@@ -1,40 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import PostEditService from '../containers/PostEdit';
 
 @Component({
   selector: 'post-edit-view',
   template: `
-        <div class="container">
-            <a id="back-button" [routerLink]="['/posts']">Back</a>
-            <h2>Create Post</h2>
-            <form name="post" class="">
-                <div class="has-normal form-group">
-                    <label class="form-control-label">Title</label>
-                    <div>
-                        <input type="text" name="title" value="" placeholder="Title" class="form-control">
-                    </div>
-                </div>
-                <div class="has-normal form-group">
-                    <label class="form-control-label">Content</label>
-                    <div>
-                        <input type="text" name="content" value="" placeholder="Content" class="form-control">
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
-            <ul class="list-group" *ngIf="post">
-                <li class="d-flex justify-content-between list-group-item">
-                    <div>
-                        <a href="#" class="badge badge-secondary edit-comment">Edit</a>&nbsp;<a class="badge badge-secondary delete-comment" href="#">Delete</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-  `
+      <div *ngIf="!loading; else showLoading" class="container">
+          <a id="back-button" [routerLink]="['/posts']">Back</a>
+          <h2>{{ title }} Post</h2>
+          <post-form [post]="post"></post-form>
+          <br/>
+          <post-comments-view *ngIf="post" [post]="post"></post-comments-view>
+      </div>
+      <ng-template #showLoading>
+          <div class="text-center">Loading...</div>
+      </ng-template>`
 })
-export class PostEditView implements OnInit {
-  public post: { id: number; title: string; content: string; postId: number };
+export default class PostEditView implements OnInit {
+  public loading: boolean = true;
+  public title: string;
+  public post: any;
 
-  constructor() {}
+  constructor(private postEditService: PostEditService, private route: ActivatedRoute, private ngZone: NgZone) {}
 
-  public ngOnInit() {}
+  public ngOnInit() {
+    this.route.params.subscribe((params: Params) => {
+      this.postEditService.getPost(+params.id).subscribe({
+        next: ({ data: { post }, loading }: any) => {
+          this.ngZone.run(() => {
+            this.post = post;
+            this.loading = loading;
+            this.title = !this.post ? 'Create' : 'Edit';
+          });
+        }
+      });
+    });
+  }
 }

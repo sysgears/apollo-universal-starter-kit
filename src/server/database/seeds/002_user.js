@@ -23,4 +23,28 @@ export async function seed(knex, Promise) {
       role: 'user',
       is_active: true
     });
+
+  const [subscriberId] = await knex('user')
+    .returning('id')
+    .insert({ username: 'subscriber', is_active: true, is_admin: false });
+  await knex('auth_local')
+    .returning('id')
+    .insert({
+      email: 'subscriber@example.com',
+      password: await bcrypt.hash('subscriber', 12),
+      user_id: subscriberId
+    });
+  await knex('subscription')
+    .returning('id')
+    .insert({
+      stripe_id: 'test',
+      active: true,
+      user_id: subscriberId
+    });
+  await knex('auth_certificate')
+    .returning('id')
+    .insert({
+      serial: '02',
+      user_id: userId
+    });
 }

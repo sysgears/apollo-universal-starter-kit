@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, Output } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import PostEditService from '../containers/PostEdit';
 
@@ -14,13 +14,12 @@ import PostEditService from '../containers/PostEdit';
       </div>
       <ng-template #showLoading>
           <div class="text-center">Loading...</div>
-      </ng-template>
-  `
+      </ng-template>`
 })
 export default class PostEditView implements OnInit {
   public loading: boolean = true;
   public title: string;
-  @Output() public post: any;
+  public post: any;
 
   constructor(private postEditService: PostEditService, private route: ActivatedRoute, private ngZone: NgZone) {}
 

@@ -6,15 +6,15 @@ import PostCommentsService from '../containers/PostComments';
   template: `
         <div>
             <h3>Comments</h3>
-            <post-comment-form></post-comment-form>
+            <post-comment-form [postId]="post.id"></post-comment-form>
             <h1></h1>
             <ul class="list-group" *ngFor="let comment of post.comments">
                 <li class="d-flex justify-content-between list-group-item">
                     {{ comment.content }}
                     <div>
-                        <a class="badge badge-secondary edit-comment" (click)="onCommentSelect(comment)">Edit</a>
+                        <button class="edit-comment btn btn-primary btn-sm" (click)="onCommentSelect(comment)">Edit</button>
                         &nbsp;
-                        <a class="badge badge-secondary delete-comment" (click)="onCommentDelete(comment.id)">Delete</a>
+                        <button class="delete-comment  btn btn-primary btn-sm" (click)="onCommentDelete(comment.id)">Delete</button>
                     </div>
                 </li>
             </ul>
@@ -39,9 +39,6 @@ export default class PostCommentsView implements OnInit {
   }
 
   public onCommentDelete(id: number) {
-    this.postCommentsService
-      .deleteComment(id, this.post.id)
-      .subscribe()
-      .unsubscribe();
+    this.postCommentsService.deleteComment(id, this.post.id).subscribe();
   }
 }

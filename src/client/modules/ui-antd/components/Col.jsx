@@ -2,12 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Col as RSCol } from 'antd';
 
-const Col = ({ children, ...props }) => {
-  return <RSCol {...props}>{children}</RSCol>;
+const Col = ({ children, xs, ...props }) => {
+  return (
+    <RSCol span={xs} {...props}>
+      {children}
+    </RSCol>
+  );
 };
 
 Col.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  xs: PropTypes.string
 };
 
 export default Col;

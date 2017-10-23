@@ -156,23 +156,22 @@ export default compose(
   }),
   graphql(DELETE_POST, {
     props: ({ mutate }) => ({
-      deletePost(id) {
-        return () =>
-          mutate({
-            variables: { id },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              deletePost: {
-                id: id,
-                __typename: 'Post'
-              }
-            },
-            updateQueries: {
-              posts: (prev, { mutationResult: { data: { deletePost } } }) => {
-                return DeletePost(prev, deletePost.id);
-              }
+      deletePost: id => {
+        mutate({
+          variables: { id },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            deletePost: {
+              id: id,
+              __typename: 'Post'
             }
-          });
+          },
+          updateQueries: {
+            posts: (prev, { mutationResult: { data: { deletePost } } }) => {
+              return DeletePost(prev, deletePost.id);
+            }
+          }
+        });
       }
     })
   })

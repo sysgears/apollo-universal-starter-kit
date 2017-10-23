@@ -63,7 +63,7 @@ class UsersView extends React.PureComponent {
         dataIndex: 'username',
         key: 'username',
         render: (text, record) => (
-          <Link className="userdocker -link" to={`/users/${record.id}`}>
+          <Link className="user-link" to={`/users/${record.id}`}>
             {text}
           </Link>
         )

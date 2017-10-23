@@ -4,11 +4,11 @@ import { Table as RSTable } from 'reactstrap';
 
 const renderHead = columns => {
   return columns.map(({ title, dataIndex, renderHeader, key }) => {
-    if (renderHeader) {
-      return <td key={key}>{renderHeader(title, dataIndex)}</td>;
-    } else {
-      return <th key={key}>{title}</th>;
-    }
+    return (
+      <th key={key} className={`w-${columns.length === 2 ? 100 : 100 / columns.length}`}>
+        {renderHeader ? renderHeader(title, dataIndex) : title}
+      </th>
+    );
   });
 };
 
@@ -20,11 +20,7 @@ const renderBody = (columns, dataSource) => {
 
 const renderData = (columns, entry) => {
   return columns.map(({ dataIndex, render, key }) => {
-    if (render) {
-      return <td key={key}>{render(entry[dataIndex], entry)}</td>;
-    } else {
-      return <td key={key}>{entry[dataIndex]}</td>;
-    }
+    return <td key={key}>{render ? render(entry[dataIndex], entry) : entry[dataIndex]}</td>;
   });
 };
 

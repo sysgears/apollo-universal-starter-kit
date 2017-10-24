@@ -57,7 +57,7 @@
     "apollo-fetch-upload": "^1.1.0",
     "apollo-link": "^0.8.0",
     "apollo-link-batch-http": "^0.4.0",
-    "apollo-link-ws": "^0.6.0",
+    "apollo-link-ws": "^1.0.0",
     "apollo-logger": "0.1.0",
     "apollo-server-express": "^1.1.7",
     "apollo-upload-server": "^2.0.4",

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { Form, RenderField, RenderCheckBox, RenderErrors, Button } from '../../common/components/web';
+import settings from '../../../../../settings';
 
 const required = value => (value ? undefined : 'Required');
 
@@ -25,6 +26,11 @@ const UserForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
       <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
       <Field name="isAdmin" component={RenderCheckBox} type="checkbox" label="Is Admin" />
       <Field name="isActive" component={RenderCheckBox} type="checkbox" label="Is Active" />
+      <Field name="profile.firstName" component={RenderField} type="text" label="First Name" validate={required} />
+      <Field name="profile.lastName" component={RenderField} type="text" label="Last Name" validate={required} />
+      {settings.user.auth.certificate.enabled && (
+        <Field name="auth.certificate.serial" component={RenderField} type="text" label="Serial" validate={required} />
+      )}
       <Field name="password" component={RenderField} type="password" label="Password" />
       <Field name="passwordConfirmation" component={RenderField} type="password" label="Password Confirmation" />
       <RenderErrors errors={errors} />

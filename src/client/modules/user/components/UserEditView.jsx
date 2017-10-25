@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
+import { pick } from 'lodash';
 
 import { PageLayout } from '../../common/components/web';
 import UserForm from './UserForm';
+import settings from '../../../../../settings';
 
 class UserEditView extends React.PureComponent {
   state = {
@@ -15,10 +17,18 @@ class UserEditView extends React.PureComponent {
     const { user, addUser, editUser } = this.props;
     let result = null;
 
+    let insertValues = pick(values, ['username', 'email', 'isAdmin', 'isActive', 'password']);
+
+    insertValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
+
+    if (settings.user.auth.certificate.enabled) {
+      insertValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
+    }
+
     if (user) {
-      result = await editUser(user.id, values.username, values.email, values.isAdmin, values.isActive, values.password);
+      result = await editUser({ id: user.id, ...insertValues });
     } else {
-      result = await addUser(values.username, values.email, values.isAdmin, values.isActive, values.password);
+      result = await addUser(insertValues);
     }
 
     if (result.errors) {

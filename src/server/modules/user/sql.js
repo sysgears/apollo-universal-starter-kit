@@ -1,5 +1,5 @@
 // Helpers
-import { camelizeKeys, decamelize } from 'humps';
+import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has } from 'lodash';
 import bcrypt from 'bcryptjs';
 import knex from '../../../server/sql/connector';
@@ -8,9 +8,22 @@ import knex from '../../../server/sql/connector';
 export default class User {
   async getUsers(orderBy, filter) {
     const queryBuilder = knex
-      .select('u.id as id', 'u.username', 'u.is_admin', 'u.is_active', 'la.email')
+      .select(
+        'u.id as id',
+        'u.username',
+        'u.is_admin',
+        'u.is_active',
+        'u.email',
+        'up.first_name',
+        'up.last_name',
+        'ca.serial',
+        'fa.fb_id',
+        'fa.display_name'
+      )
       .from('user AS u')
-      .leftJoin('auth_local AS la', 'la.user_id', 'u.id');
+      .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+      .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
+      .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id');
 
     // add order by
     if (orderBy && orderBy.column) {
@@ -50,9 +63,22 @@ export default class User {
   async getUser(id) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'la.email')
+        .select(
+          'u.id',
+          'u.username',
+          'u.is_admin',
+          'u.is_active',
+          'u.email',
+          'up.first_name',
+          'up.last_name',
+          'ca.serial',
+          'fa.fb_id',
+          'fa.display_name'
+        )
         .from('user AS u')
-        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+        .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
+        .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );
@@ -61,9 +87,8 @@ export default class User {
   async getUserWithPassword(id) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'la.password')
+        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'u.password')
         .from('user AS u')
-        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );
@@ -72,7 +97,7 @@ export default class User {
   async getUserWithSerial(serial) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin')
+        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'ca.serial')
         .from('user AS u')
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
         .where('ca.serial', '=', serial)
@@ -80,17 +105,11 @@ export default class User {
     );
   }
 
-  register({ username, isActive }) {
-    return knex('user')
-      .insert({ username, is_active: !!isActive })
-      .returning('id');
-  }
-
-  async createLocalOuth({ email, password, userId }) {
+  async register({ username, email, password, isActive }) {
     const passwordHashed = await bcrypt.hash(password, 12);
 
-    return knex('auth_local')
-      .insert({ email, password: passwordHashed, user_id: userId })
+    return knex('user')
+      .insert({ username, email, password: passwordHashed, is_active: !!isActive })
       .returning('id');
   }
 
@@ -101,25 +120,56 @@ export default class User {
   }
 
   async editUser({ id, username, email, isAdmin, isActive, password }) {
-    const userPromise = knex('user')
-      .update({
-        username: username,
-        is_admin: isAdmin,
-        is_active: isActive
-      })
-      .where({ id });
-
     let localAuthInput = { email };
     if (password) {
       const passwordHashed = await bcrypt.hash(password, 12);
       localAuthInput = { email, password: passwordHashed };
     }
 
-    const localAuth = knex('auth_local')
-      .update({ ...localAuthInput })
-      .where({ user_id: id });
+    return knex('user')
+      .update({
+        username: username,
+        is_admin: isAdmin,
+        is_active: isActive,
+        ...localAuthInput
+      })
+      .where({ id });
+  }
 
-    return Promise.all([userPromise, localAuth]);
+  async editUserProfile({ id, profile }) {
+    const userProfile = await knex
+      .select('id')
+      .from('user_profile')
+      .where({ user_id: id })
+      .first();
+
+    if (userProfile) {
+      return knex('user_profile')
+        .update(decamelizeKeys(profile))
+        .where({ user_id: id });
+    } else {
+      return knex('user_profile')
+        .insert({ ...decamelizeKeys(profile), user_id: id })
+        .returning('id');
+    }
+  }
+
+  async editAuthCertificate({ id, auth: { certificate: { serial } } }) {
+    const userProfile = await knex
+      .select('id')
+      .from('auth_certificate')
+      .where({ user_id: id })
+      .first();
+
+    if (userProfile) {
+      return knex('auth_certificate')
+        .update({ serial })
+        .where({ user_id: id });
+    } else {
+      return knex('auth_certificate')
+        .insert({ serial, user_id: id })
+        .returning('id');
+    }
   }
 
   deleteUser(id) {
@@ -131,9 +181,9 @@ export default class User {
   async updatePassword(id, newPassword) {
     const password = await bcrypt.hash(newPassword, 12);
 
-    return knex('auth_local')
+    return knex('user')
       .update({ password })
-      .where({ user_id: id });
+      .where({ id });
   }
 
   updateActive(id, isActive) {
@@ -142,21 +192,11 @@ export default class User {
       .where({ id });
   }
 
-  async getLocalOuth(id) {
+  async getUserByEmail(email) {
     return camelizeKeys(
       await knex
         .select('*')
-        .from('auth_local')
-        .where({ id })
-        .first()
-    );
-  }
-
-  async getLocalOuthByEmail(email) {
-    return camelizeKeys(
-      await knex
-        .select('*')
-        .from('auth_local')
+        .from('user')
         .where({ email })
         .first()
     );
@@ -178,7 +218,7 @@ export default class User {
   async getUserByUsername(username) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active')
+        .select('*')
         .from('user AS u')
         .where('u.username', '=', username)
         .first()

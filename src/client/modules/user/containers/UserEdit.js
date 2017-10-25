@@ -33,10 +33,10 @@ export default compose(
   }),
   graphql(ADD_USER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
-      addUser: async (username, email, isAdmin, isActive, password) => {
+      addUser: async input => {
         try {
           const { data: { addUser } } = await mutate({
-            variables: { input: { username, email, isAdmin, isActive, password } }
+            variables: { input }
           });
 
           if (addUser.errors) {
@@ -57,10 +57,10 @@ export default compose(
   }),
   graphql(EDIT_USER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
-      editUser: async (id, username, email, isAdmin, isActive, password) => {
+      editUser: async input => {
         try {
           const { data: { editUser } } = await mutate({
-            variables: { input: { id, username, email, isAdmin, isActive, password } }
+            variables: { input }
           });
 
           if (editUser.errors) {

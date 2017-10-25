@@ -1,8 +1,8 @@
 import * as reducers from './reducers';
 
 import Feature from '../connector';
-import { PostEditView } from './components/PostEditView.web';
-import { PostList } from './components/PostList.web';
+import PostEditView from './components/PostEditView.web';
+import PostList from './components/PostList.web';
 
 export default new Feature({
   route: [

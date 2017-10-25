@@ -11,20 +11,25 @@ import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgSty
 import 'backend_reload';
 
 import log from '../common/log';
-import { Main } from './app/Main';
 import NavBar from './app/NavBar';
 import PageLayout from './app/PageLayout';
 import routes from './app/Routes.web';
 import CounterView from './modules/counter/components/CounterView.web';
+import CounterService from './modules/counter/containers/Counter';
 import PageNotFound from './modules/pageNotFound/containers/PageNotFound';
-import { PostEditView } from './modules/post/components/PostEditView.web';
-import { PostList } from './modules/post/components/PostList.web';
+import PostCommentForm from './modules/post/components/PostCommentForm.web';
+import PostCommentsView from './modules/post/components/PostCommentsView.web';
+import PostEditView from './modules/post/components/PostEditView.web';
+import PostForm from './modules/post/components/PostForm.web';
+import PostList from './modules/post/components/PostList.web';
+import PostService from './modules/post/containers/Post';
+import PostCommentsService from './modules/post/containers/PostComments';
+import PostEditService from './modules/post/containers/PostEdit';
 import LoginView from './modules/user/components/LoginView.web';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
-import { clientProvider } from './app/Main';
-import { CounterService } from './modules/counter/containers/Counter';
+import { clientProvider, default as Main } from './app/Main';
 
 @NgModule({
   bootstrap: [Main],
@@ -41,6 +46,10 @@ import { CounterService } from './modules/counter/containers/Counter';
     // Post
     PostList,
     PostEditView,
+    PostForm,
+    PostCommentsView,
+    PostCommentForm,
+    PostEditView,
     // User
     LoginView
   ],
@@ -55,7 +64,7 @@ import { CounterService } from './modules/counter/containers/Counter';
     })
   ],
   entryComponents: [PageLayout, CounterView],
-  providers: [CounterService]
+  providers: [CounterService, PostService, PostEditService, PostCommentsService]
 })
 class MainModule {
   constructor(public appRef: ApplicationRef) {}

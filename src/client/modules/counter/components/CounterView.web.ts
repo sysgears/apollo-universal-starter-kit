@@ -1,6 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { CounterService } from '../containers/Counter';
+
+import CounterService from '../containers/Counter';
 import { COUNTER } from '../reducers/actionTypes';
 import { counterStore } from '../reducers/index';
 

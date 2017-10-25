@@ -1,5 +1,5 @@
 // Helpers
-import { camelizeKeys, decamelize } from 'humps';
+import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has } from 'lodash';
 import bcrypt from 'bcryptjs';
 import knex from '../../../server/sql/connector';
@@ -136,7 +136,7 @@ export default class User {
       .where({ id });
   }
 
-  async editUserProfile({ id, profile: { firstName, lastName } }) {
+  async editUserProfile({ id, profile }) {
     const userProfile = await knex
       .select('id')
       .from('user_profile')
@@ -145,11 +145,11 @@ export default class User {
 
     if (userProfile) {
       return knex('user_profile')
-        .update({ first_name: firstName, last_name: lastName })
+        .update(decamelizeKeys(profile))
         .where({ user_id: id });
     } else {
       return knex('user_profile')
-        .insert({ first_name: firstName, last_name: lastName, user_id: id })
+        .insert({ ...decamelizeKeys(profile), user_id: id })
         .returning('id');
     }
   }

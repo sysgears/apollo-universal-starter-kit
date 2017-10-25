@@ -363,28 +363,28 @@ apollo-client@^2.0.0-beta.2:
   optionalDependencies:
     "@types/async" "2.0.43"
 
-apollo-engine-binary-darwin@^0.2017.10-19-gdc8304d2:
-  version "0.2017.10-19-gdc8304d2"
-  resolved "https://registry.yarnpkg.com/apollo-engine-binary-darwin/-/apollo-engine-binary-darwin-0.2017.10-19-gdc8304d2.tgz#06471be1296d82264575212d98012e92a4f82d1a"
+apollo-engine-binary-darwin@^0.2017.10-408-g497e1410:
+  version "0.2017.10-408-g497e1410"
+  resolved "https://registry.yarnpkg.com/apollo-engine-binary-darwin/-/apollo-engine-binary-darwin-0.2017.10-408-g497e1410.tgz#36807aa356cc5044ad35df1d996fd13547e26ac5"
 
-apollo-engine-binary-linux@^0.2017.10-19-gdc8304d2:
-  version "0.2017.10-19-gdc8304d2"
-  resolved "https://registry.yarnpkg.com/apollo-engine-binary-linux/-/apollo-engine-binary-linux-0.2017.10-19-gdc8304d2.tgz#a6033c43f067b320190f43d823cae1972562638a"
+apollo-engine-binary-linux@^0.2017.10-408-g497e1410:
+  version "0.2017.10-408-g497e1410"
+  resolved "https://registry.yarnpkg.com/apollo-engine-binary-linux/-/apollo-engine-binary-linux-0.2017.10-408-g497e1410.tgz#89fb78f59b6079e4f5a52b59f4c33e7c1803cbe7"
 
-apollo-engine-binary-windows@^0.2017.10-19-gdc8304d2:
-  version "0.2017.10-19-gdc8304d2"
-  resolved "https://registry.yarnpkg.com/apollo-engine-binary-windows/-/apollo-engine-binary-windows-0.2017.10-19-gdc8304d2.tgz#c3785e2fffc05e3bff66ef81061a75e983a8338f"
+apollo-engine-binary-windows@^0.2017.10-408-g497e1410:
+  version "0.2017.10-408-g497e1410"
+  resolved "https://registry.yarnpkg.com/apollo-engine-binary-windows/-/apollo-engine-binary-windows-0.2017.10-408-g497e1410.tgz#3d07ac99edc43baae6c77ff27254ebfaf90d773a"
 
-apollo-engine@^0.4.7:
-  version "0.4.7"
-  resolved "https://registry.yarnpkg.com/apollo-engine/-/apollo-engine-0.4.7.tgz#4ad04a423cf7481e755b540452cb8bfdd16d9e69"
+apollo-engine@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/apollo-engine/-/apollo-engine-0.5.0.tgz#cbafb32e763640f662b014e9588659c3aba20c4c"
   dependencies:
     request "^2.81.0"
     stream-line-wrapper "^0.1.1"
   optionalDependencies:
-    apollo-engine-binary-darwin "^0.2017.10-19-gdc8304d2"
-    apollo-engine-binary-linux "^0.2017.10-19-gdc8304d2"
-    apollo-engine-binary-windows "^0.2017.10-19-gdc8304d2"
+    apollo-engine-binary-darwin "^0.2017.10-408-g497e1410"
+    apollo-engine-binary-linux "^0.2017.10-408-g497e1410"
+    apollo-engine-binary-windows "^0.2017.10-408-g497e1410"
 
 apollo-fetch-upload@^1.1.0:
   version "1.1.0"

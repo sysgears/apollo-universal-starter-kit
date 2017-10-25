@@ -52,7 +52,7 @@
     "@expo/vector-icons": "^5.2.0",
     "apollo-cache-inmemory": "^0.2.0-beta.2",
     "apollo-client": "^2.0.0-beta.2",
-    "apollo-engine": "^0.4.7",
+    "apollo-engine": "^0.5.0",
     "apollo-fetch": "^0.6.0",
     "apollo-fetch-upload": "^1.1.0",
     "apollo-link": "^0.7.0",

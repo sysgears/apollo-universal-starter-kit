@@ -11,7 +11,8 @@ export default graphqlExpress(async req => {
     return {
       schema,
       context: await modules.createContext(req),
-      tracing: !!settings.analytics.apolloEngine.key
+      tracing: !!settings.analytics.apolloEngine.key,
+      cacheControl: !!settings.analytics.apolloEngine.key
     };
   } catch (e) {
     log(e.stack);

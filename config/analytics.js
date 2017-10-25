@@ -3,6 +3,6 @@ export default {
     trackingId: 'UA-000000-01'
   },
   apolloEngine: {
-    key: null // Set your Apollo Engine key here
+    key: '' // Set your Apollo Engine key here
   }
 };

@@ -4,4 +4,18 @@ fragment UserInfo on User {
     isAdmin
     isActive
     email
+    profile {
+        firstName
+        lastName
+        fullName
+    }
+    auth {
+        certificate {
+            serial
+        }
+        facebook {
+            fbId
+            displayName
+        }
+    }
 }

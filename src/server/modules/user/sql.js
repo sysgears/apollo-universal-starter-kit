@@ -8,9 +8,22 @@ import knex from '../../../server/sql/connector';
 export default class User {
   async getUsers(orderBy, filter) {
     const queryBuilder = knex
-      .select('u.id as id', 'u.username', 'u.is_admin', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
+      .select(
+        'u.id as id',
+        'u.username',
+        'u.is_admin',
+        'u.is_active',
+        'u.email',
+        'up.first_name',
+        'up.last_name',
+        'ca.serial',
+        'fa.fb_id',
+        'fa.display_name'
+      )
       .from('user AS u')
-      .leftJoin('user_profile AS up', 'up.user_id', 'u.id');
+      .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+      .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
+      .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id');
 
     // add order by
     if (orderBy && orderBy.column) {
@@ -121,6 +134,42 @@ export default class User {
         ...localAuthInput
       })
       .where({ id });
+  }
+
+  async editUserProfile({ id, profile: { firstName, lastName } }) {
+    const userProfile = await knex
+      .select('id')
+      .from('user_profile')
+      .where({ user_id: id })
+      .first();
+
+    if (userProfile) {
+      return knex('user_profile')
+        .update({ first_name: firstName, last_name: lastName })
+        .where({ user_id: id });
+    } else {
+      return knex('user_profile')
+        .insert({ first_name: firstName, last_name: lastName, user_id: id })
+        .returning('id');
+    }
+  }
+
+  async editAuthCertificate({ id, auth: { certificate: { serial } } }) {
+    const userProfile = await knex
+      .select('id')
+      .from('auth_certificate')
+      .where({ user_id: id })
+      .first();
+
+    if (userProfile) {
+      return knex('auth_certificate')
+        .update({ serial })
+        .where({ user_id: id });
+    } else {
+      return knex('auth_certificate')
+        .insert({ serial, user_id: id })
+        .returning('id');
+    }
   }
 
   deleteUser(id) {

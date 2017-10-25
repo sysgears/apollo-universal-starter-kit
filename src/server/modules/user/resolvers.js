@@ -22,6 +22,46 @@ export default pubsub => ({
       }
     }
   },
+  User: {
+    profile(obj) {
+      return obj;
+    },
+    auth(obj) {
+      return obj;
+    }
+  },
+  UserProfile: {
+    firstName(obj) {
+      return obj.firstName;
+    },
+    lastName(obj) {
+      return obj.lastName;
+    },
+    fullName(obj) {
+      return `${obj.firstName} ${obj.lastName}`;
+    }
+  },
+  UserAuth: {
+    certificate(obj) {
+      return obj;
+    },
+    facebook(obj) {
+      return obj;
+    }
+  },
+  CertificateAuth: {
+    serial(obj) {
+      return obj.serial;
+    }
+  },
+  FacebookAuth: {
+    fbId(obj) {
+      return obj.fbId;
+    },
+    displayName(obj) {
+      return obj.displayName;
+    }
+  },
   Mutation: {
     async register(obj, { input }, context) {
       try {
@@ -137,6 +177,11 @@ export default pubsub => ({
         e.throwIf();
 
         const [createdUserId] = await context.User.register({ ...input });
+        await context.User.editUserProfile({ id: createdUserId, ...input });
+
+        if (settings.user.auth.certificate.enabled) {
+          await context.User.editAuthCertificate({ id: createdUserId, ...input });
+        }
 
         const user = await context.User.getUser(createdUserId);
 
@@ -166,7 +211,14 @@ export default pubsub => ({
         e.throwIf();
 
         await context.User.editUser(input);
+        await context.User.editUserProfile(input);
+
+        if (settings.user.auth.certificate.enabled) {
+          await context.User.editAuthCertificate(input);
+        }
+
         const user = await context.User.getUser(input.id);
+
         return { user };
       } catch (e) {
         return { errors: e };

@@ -35,7 +35,6 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       addUser: async input => {
         try {
-          delete input.__typename;
           const { data: { addUser } } = await mutate({
             variables: { input }
           });
@@ -60,7 +59,6 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       editUser: async input => {
         try {
-          delete input.__typename;
           const { data: { editUser } } = await mutate({
             variables: { input }
           });

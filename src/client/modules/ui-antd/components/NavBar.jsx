@@ -4,6 +4,7 @@ import { withRouter, NavLink } from 'react-router-dom';
 import { Menu, Row, Col } from 'antd';
 
 import modules from '../../../modules';
+import settings from '../../../../../settings';
 
 class NavBar extends React.Component {
   state = {
@@ -29,7 +30,7 @@ class NavBar extends React.Component {
           >
             <Menu.Item key="/">
               <NavLink to="/" className="nav-link">
-                Apollo Starter Kit
+                {settings.app.name}
               </NavLink>
             </Menu.Item>
             {modules.navItems}

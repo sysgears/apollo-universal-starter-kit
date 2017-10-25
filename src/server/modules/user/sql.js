@@ -52,7 +52,10 @@ export default class User {
 
       if (has(filter, 'searchText') && filter.searchText !== '') {
         queryBuilder.where(function() {
-          this.where('username', 'like', `%${filter.searchText}%`).orWhere('email', 'like', `%${filter.searchText}%`);
+          this.where('username', 'like', `%${filter.searchText}%`)
+            .orWhere('email', 'like', `%${filter.searchText}%`)
+            .orWhere('first_name', 'like', `%${filter.searchText}%`)
+            .orWhere('last_name', 'like', `%${filter.searchText}%`);
         });
       }
     }

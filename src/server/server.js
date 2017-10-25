@@ -32,10 +32,7 @@ app.enable('trust proxy');
 
 if (__DEV__) {
   const corsOptions = {
-    credentials: true,
-    origin: function(origin, callback) {
-      callback(null, true);
-    }
+    credentials: true
   };
   app.use(cors(corsOptions));
 }

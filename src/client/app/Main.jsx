@@ -33,7 +33,7 @@ const cache = new InMemoryCache();
 
 fetch.batchUse(({ requests, options }, next) => {
   try {
-    options.credentials = 'include';
+    options.credentials = 'same-origin';
     options.headers = options.headers || {};
     for (const middleware of modules.middlewares) {
       for (const req of requests) {

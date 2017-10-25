@@ -16,9 +16,9 @@ class UserEditView extends React.PureComponent {
     let result = null;
 
     if (user) {
-      result = await editUser(user.id, values.username, values.email, values.isAdmin, values.isActive, values.password);
+      result = await editUser({ id: user.id, ...values });
     } else {
-      result = await addUser(values.username, values.email, values.isAdmin, values.isActive, values.password);
+      result = await addUser(values);
     }
 
     if (result.errors) {

@@ -4,6 +4,27 @@ type User {
     isAdmin: Boolean
     isActive: Boolean
     email: String!
+    profile: UserProfile
+    auth: UserAuth
+}
+
+type UserProfile {
+    first_name: String
+    last_name: String
+}
+
+type UserAuth {
+    certificate: CertificateAuth
+    facebook: FacebookAuth
+}
+
+type CertificateAuth {
+    serial: String!
+}
+
+type FacebookAuth {
+    fbId: String!
+    display_name: String!
 }
 
 type UserPayload {

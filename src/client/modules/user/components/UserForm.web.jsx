@@ -25,6 +25,7 @@ const UserForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
       <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
       <Field name="isAdmin" component={RenderCheckBox} type="checkbox" label="Is Admin" />
       <Field name="isActive" component={RenderCheckBox} type="checkbox" label="Is Active" />
+      {/*<Field name="serial" component={RenderField} type="text" label="Serial" validate={required} />*/}
       <Field name="password" component={RenderField} type="password" label="Password" />
       <Field name="passwordConfirmation" component={RenderField} type="password" label="Password Confirmation" />
       <RenderErrors errors={errors} />

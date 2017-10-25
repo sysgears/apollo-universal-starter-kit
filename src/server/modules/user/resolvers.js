@@ -32,8 +32,7 @@ export default pubsub => ({
           e.setError('username', 'Username already exists.');
         }
 
-        const localAuth = pick(input, ['email', 'password']);
-        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
+        const emailExists = await context.User.getUserByEmail(input.email);
         if (emailExists) {
           e.setError('email', 'E-mail already exists.');
         }
@@ -47,17 +46,11 @@ export default pubsub => ({
             isActive = true;
           }
 
-          const [createdUserId] = await context.User.register({ ...input, isActive });
-
-          await context.User.createLocalOuth({
-            ...localAuth,
-            userId: createdUserId
-          });
-          userId = createdUserId;
+          [userId] = await context.User.register({ ...input, isActive });
 
           // if user has previously logged with facebook auth
         } else {
-          await context.User.updatePassword(emailExists.userId, localAuth.password);
+          await context.User.updatePassword(emailExists.userId, input.password);
           userId = emailExists.userId;
         }
 
@@ -70,7 +63,7 @@ export default pubsub => ({
             const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
             context.mailer.sendMail({
               from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
-              to: localAuth.email,
+              to: user.email,
               subject: 'Confirm Email',
               html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
             });
@@ -132,8 +125,7 @@ export default pubsub => ({
           e.setError('username', 'Username already exists.');
         }
 
-        const localAuth = pick(input, ['email', 'password']);
-        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
+        const emailExists = await context.User.getUserByEmail(input.email);
         if (emailExists) {
           e.setError('email', 'E-mail already exists.');
         }
@@ -145,11 +137,6 @@ export default pubsub => ({
         e.throwIf();
 
         const [createdUserId] = await context.User.register({ ...input });
-
-        await context.User.createLocalOuth({
-          ...localAuth,
-          userId: createdUserId
-        });
 
         const user = await context.User.getUser(createdUserId);
 
@@ -167,8 +154,7 @@ export default pubsub => ({
           e.setError('username', 'Username already exists.');
         }
 
-        const localAuth = pick(input, ['email', 'password']);
-        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
+        const emailExists = await context.User.getUserByEmail(input.email);
         if (emailExists && emailExists.id !== input.id) {
           e.setError('email', 'E-mail already exists.');
         }
@@ -214,7 +200,7 @@ export default pubsub => ({
     async forgotPassword(obj, { input }, context) {
       try {
         const localAuth = pick(input, 'email');
-        const user = await context.User.getLocalOuthByEmail(localAuth.email);
+        const user = await context.User.getUserByEmail(localAuth.email);
 
         if (user && context.mailer) {
           // async email
@@ -256,7 +242,7 @@ export default pubsub => ({
 
         const token = Buffer.from(reset.token, 'base64').toString();
         const { email, password } = jwt.verify(token, context.SECRET);
-        const user = await context.User.getLocalOuthByEmail(email);
+        const user = await context.User.getUserByEmail(email);
         if (user.password !== password) {
           e.setError('token', 'Invalid token');
           e.throwIf();

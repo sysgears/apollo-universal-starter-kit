@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input } from 'antd';
+import { Form, Checkbox } from 'antd';
 
 const FormItem = Form.Item;
 
-const RenderCheckBox = ({ input, label, type, meta: { touched, error } }) => {
+const RenderCheckBox = ({ input, label, meta: { touched, error } }) => {
   let validateStatus = '';
   if (touched && error) {
     validateStatus = 'error';
@@ -13,7 +13,7 @@ const RenderCheckBox = ({ input, label, type, meta: { touched, error } }) => {
   return (
     <FormItem label={label} validateStatus={validateStatus} help={error}>
       <div>
-        <Input {...input} placeholder={label} type={type} />
+        <Checkbox {...input}>{label}</Checkbox>
       </div>
     </FormItem>
   );

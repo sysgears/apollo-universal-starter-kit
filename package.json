@@ -49,7 +49,7 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
-    "@expo/vector-icons": "^5.2.0",
+    "@expo/vector-icons": "^6.1.0",
     "antd": "^2.13.7",
     "apollo-cache-inmemory": "^1.0.0",
     "apollo-client": "^2.0.1",
@@ -151,7 +151,7 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-plugin-flowtype": "^2.39.1",
-    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-jsx-a11y": "6.0.2",
     "eslint-plugin-mocha": "^4.11.0",

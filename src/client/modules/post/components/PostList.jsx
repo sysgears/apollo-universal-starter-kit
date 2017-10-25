@@ -19,7 +19,7 @@ const renderRow = (deletePost, navigation) => rowData => {
             id: rowData.id
           })}
       />
-      <Button title="Delete" onPress={deletePost(rowData.id)} />
+      <Button title="Delete" onPress={() => deletePost(rowData.id)} />
     </View>
   );
 };

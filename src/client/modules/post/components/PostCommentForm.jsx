@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { StyleSheet, ScrollView } from 'react-native';
-import { Button, RenderField } from '../../common/components/web';
+import { Button } from '../../common/components';
+import { RenderField } from '../../common/components/native';
 
 const required = value => (value ? undefined : 'Required');
 

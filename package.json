@@ -106,7 +106,7 @@
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-router-redux": "^5.0.0-alpha.6",
+    "react-router-redux": "^5.0.0-alpha.8",
     "react-transition-group": "^1.2.0",
     "reactstrap": "^4.8.0",
     "redux": "^3.7.2",

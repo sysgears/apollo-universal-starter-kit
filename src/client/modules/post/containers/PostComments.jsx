@@ -115,10 +115,11 @@ const PostCommentsWithApollo = compose(
         mutate({
           variables: { input: { content, postId } },
           optimisticResponse: {
+            __typename: 'Mutation',
             addComment: {
-              id: -1,
-              content: content,
-              __typename: 'Comment'
+              __typename: 'Comment',
+              id: null,
+              content: content
             }
           },
           updateQueries: {
@@ -139,9 +140,9 @@ const PostCommentsWithApollo = compose(
           optimisticResponse: {
             __typename: 'Mutation',
             editComment: {
+              __typename: 'Comment',
               id: id,
-              content: content,
-              __typename: 'Comment'
+              content: content
             }
           }
         })
@@ -155,8 +156,8 @@ const PostCommentsWithApollo = compose(
           optimisticResponse: {
             __typename: 'Mutation',
             deleteComment: {
-              id: id,
-              __typename: 'Comment'
+              __typename: 'Comment',
+              id: id
             }
           },
           updateQueries: {

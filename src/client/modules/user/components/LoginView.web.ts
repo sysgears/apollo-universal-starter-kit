@@ -2,9 +2,19 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'login-view',
-  template: `<div>init</div>`
+  template: `
+    <div id="content" class="container">
+      <h1>Login page!</h1>
+      <login-form [onSubmit]="onSubmit"></login-form>
+      <a routerLink="/forgot-password">Forgot your password?</a>
+    </div>
+  `
 })
-export default class LoginView {}
+export default class LoginView {
+  public onSubmit = () => {
+    // console.log('submitted');
+  };
+}
 
 // // Web only component
 //

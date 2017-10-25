@@ -25,6 +25,7 @@ import PostList from './modules/post/components/PostList.web';
 import PostService from './modules/post/containers/Post';
 import PostCommentsService from './modules/post/containers/PostComments';
 import PostEditService from './modules/post/containers/PostEdit';
+import LoginForm from './modules/user/components/LoginForm.web';
 import LoginView from './modules/user/components/LoginView.web';
 
 // Apollo imports
@@ -51,7 +52,8 @@ import { clientProvider, default as Main } from './app/Main';
     PostCommentForm,
     PostEditView,
     // User
-    LoginView
+    LoginView,
+    LoginForm
   ],
   imports: [
     BrowserModule,

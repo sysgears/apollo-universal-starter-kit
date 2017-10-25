@@ -40,16 +40,14 @@ export default class PostService {
         after: endCursor
       },
       updateQuery: (previousResult: any, { fetchMoreResult: { posts } }: any) => {
-        const totalCount = posts.totalCount;
-        const newEdges = posts.edges;
-        const pageInfo = posts.pageInfo;
+        const { totalCount, edges, pageInfo } = posts;
 
         return {
           // By returning `cursor` here, we update the `fetchMore` function
           // to the new cursor.
           posts: {
             totalCount,
-            edges: [...previousResult.posts.edges, ...newEdges],
+            edges: [...previousResult.posts.edges, ...edges],
             pageInfo,
             __typename: 'Posts'
           }

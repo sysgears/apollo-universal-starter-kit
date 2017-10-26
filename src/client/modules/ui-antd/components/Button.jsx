@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button as ADButton } from 'antd';
+import ADButton from 'antd/lib/button';
 
 const Button = ({ children, color, type, size, ...props }) => {
   let buttonSize = 'default';

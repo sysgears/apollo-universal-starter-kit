@@ -12,7 +12,7 @@ If you are using Apollo v1 please use [starter kit from `apollo1` branch](https:
 
 > Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] Mobile and Web app development 
 > built on top of [Apollo], [GraphQL], [React 16], [React Native], [Expo], [Redux], [Express] with
-> SQL storage support and [Twitter Bootstrap] integration. Hot Code Reload of back end & front end using [Webpack] and 
+> SQL storage support [Twitter Bootstrap] and [Ant Design] integration. Hot Code Reload of back end & front end using [Webpack] and 
 > Hot Module Replacement to reflect your changes instantly and help you stay productive.
 
 ## Hot Code Reload demo
@@ -273,6 +273,10 @@ NoSQL storage or any other data source can be used the same way.
   [Twitter Bootstrap] in form of SASS stylesheets is used for styling demo application. Application has stylesheet
 in `styles.scss` for global styling which is Hot Reloaded on change. React components styling is done by [Styled Components].
 
+  If you would like to use a different styling than [Twitter Bootstrap], UI components are structured in a way to make it easy to
+  use something else. We already prepared [Ant Design] integation. To switch the UI all you need to do is change the module import in 
+  `src/client/modules/index.js` and rename the import in `src/client/modules/common/components/web/index.jsx`.
+
 - [Babel] for ES2017 transpiling
 
 - [ESLint] to enforce proper code style
@@ -410,6 +414,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [ReduxForm]: http://redux-form.com
 [Express]: http://expressjs.com
 [Twitter Bootstrap]: http://getbootstrap.com
+[Ant Design]: https://ant.design
 [Webpack]: http://webpack.github.io
 [Babel]: http://babeljs.io
 [Styled Components]: https://www.styled-components.com

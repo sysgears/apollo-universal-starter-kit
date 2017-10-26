@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table as ADTable } from 'antd';
+import ADTable from 'antd/lib/table';
 
 const Table = ({ ...props }) => {
   return <ADTable pagination={false} {...props} rowKey="id" />;

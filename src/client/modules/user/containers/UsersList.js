@@ -28,12 +28,12 @@ UsersList.propTypes = {
 
 const UsersListWithApollo = compose(
   graphql(USERS_QUERY, {
-    options: ({ orderBy, searchText, isAdmin, isActive }) => {
+    options: ({ orderBy, searchText, role, isActive }) => {
       return {
         fetchPolicy: 'cache-and-network',
         variables: {
           orderBy: orderBy,
-          filter: { searchText, isAdmin, isActive }
+          filter: { searchText, role, isActive }
         }
       };
     },
@@ -42,7 +42,7 @@ const UsersListWithApollo = compose(
     }
   }),
   graphql(DELETE_USER, {
-    props: ({ ownProps: { orderBy, searchText, isAdmin, refetch }, mutate }) => ({
+    props: ({ ownProps: { orderBy, searchText, role, refetch }, mutate }) => ({
       deleteUser: async id => {
         try {
           const { data: { deleteUser } } = await mutate({
@@ -66,7 +66,7 @@ const UsersListWithApollo = compose(
 export default connect(
   state => ({
     searchText: state.user.searchText,
-    isAdmin: state.user.isAdmin,
+    role: state.user.role,
     isActive: state.user.isActive,
     orderBy: state.user.orderBy
   }),

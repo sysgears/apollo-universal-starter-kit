@@ -17,7 +17,7 @@ class UserEditView extends React.PureComponent {
     const { user, addUser, editUser } = this.props;
     let result = null;
 
-    let insertValues = pick(values, ['username', 'email', 'isAdmin', 'isActive', 'password']);
+    let insertValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
     insertValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
 

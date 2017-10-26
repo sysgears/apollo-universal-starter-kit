@@ -10,9 +10,9 @@ class UsersFilterView extends React.PureComponent {
     onSearchTextChange(e.target.value);
   };
 
-  handleIsAdmin = () => {
-    const { onIsAdminChange, isAdmin } = this.props;
-    onIsAdminChange(!isAdmin);
+  handleRole = e => {
+    const { onRoleChange } = this.props;
+    onRoleChange(e.target.value);
   };
 
   handleIsActive = () => {
@@ -21,7 +21,7 @@ class UsersFilterView extends React.PureComponent {
   };
 
   render() {
-    const { isAdmin, isActive } = this.props;
+    const { role, isActive } = this.props;
     return (
       <form className="form-inline">
         <label className="mr-sm-2">Filter: </label>
@@ -34,13 +34,7 @@ class UsersFilterView extends React.PureComponent {
 
         <div className="form-check mb-2 mr-sm-2 mb-sm-0">
           <label className="form-check-label">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              defaultChecked={isAdmin}
-              onChange={this.handleIsAdmin}
-            />{' '}
-            Is Admin
+            Role: <input className="form-check-input" type="text" value={role} onChange={this.onRoleChange} />
           </label>
         </div>
 
@@ -62,10 +56,10 @@ class UsersFilterView extends React.PureComponent {
 
 UsersFilterView.propTypes = {
   searchText: PropTypes.string,
-  isAdmin: PropTypes.bool,
+  role: PropTypes.string,
   isActive: PropTypes.bool,
   onSearchTextChange: PropTypes.func.isRequired,
-  onIsAdminChange: PropTypes.func.isRequired,
+  onRoleChange: PropTypes.func.isRequired,
   onIsActiveChange: PropTypes.func.isRequired
 };
 

@@ -1,7 +1,7 @@
 // Redux reducer to manage client side state
 const defaultState = {
   searchText: '',
-  isAdmin: null,
+  role: '',
   isActive: null,
   orderBy: {}
 };
@@ -14,17 +14,11 @@ export default function(state = defaultState, action) {
         searchText: action.value
       };
 
-    case 'USER_FILTER_IS_ADMIN': {
-      let isAdmin = null;
-      if (action.value === true) {
-        isAdmin = true;
-      }
-
+    case 'USER_FILTER_ROLE':
       return {
         ...state,
-        isAdmin
+        role: action.value
       };
-    }
 
     case 'USER_FILTER_IS_ACTIVE': {
       let isActive = null;

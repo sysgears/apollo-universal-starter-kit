@@ -2,19 +2,7 @@ import bcrypt from 'bcryptjs';
 import truncateTables from '../../../common/db';
 
 export async function seed(knex, Promise) {
-  await truncateTables(knex, Promise, ['user_role', 'user', 'user_profile', 'auth_certificate', 'auth_facebook']);
-
-  const [roleAdmin] = await knex('user_role')
-    .returning('id')
-    .insert({ role: 'admin' });
-
-  const [roleUser] = await knex('user_role')
-    .returning('id')
-    .insert({ role: 'user' });
-
-  await knex('user_role')
-    .returning('id')
-    .insert({ role: 'guest' });
+  await truncateTables(knex, Promise, ['user', 'user_profile', 'auth_certificate', 'auth_facebook']);
 
   await knex('user')
     .returning('id')
@@ -22,8 +10,8 @@ export async function seed(knex, Promise) {
       username: 'admin',
       email: 'admin@example.com',
       password: await bcrypt.hash('admin', 12),
-      is_active: true,
-      role_id: roleAdmin
+      role: 'admin',
+      is_active: true
     });
 
   await knex('user')
@@ -32,7 +20,7 @@ export async function seed(knex, Promise) {
       username: 'user',
       email: 'user@example.com',
       password: await bcrypt.hash('user', 12),
-      is_active: true,
-      role_id: roleUser
+      role: 'user',
+      is_active: true
     });
 }

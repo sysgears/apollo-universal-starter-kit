@@ -8,17 +8,12 @@ import settings from '../../../../settings';
 
 export default pubsub => ({
   Query: {
-    users: withAuth(['users:view:all'], (obj, { orderBy, filter }, context) => {
+    users: withAuth((obj, { orderBy, filter }, context) => {
       return context.User.getUsers(orderBy, filter);
     }),
-    user: withAuth(
-      (obj, args, context) => {
-        return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
-      },
-      (obj, { id }, context) => {
-        return context.User.getUser(id);
-      }
-    ),
+    user: withAuth((obj, { id }, context) => {
+      return context.User.getUser(id);
+    }),
     currentUser(obj, args, context) {
       if (context.user) {
         return context.User.getUser(context.user.id);
@@ -161,7 +156,7 @@ export default pubsub => ({
     refreshTokens(obj, { token, refreshToken }, context) {
       return refreshTokens(token, refreshToken, context.User, context.SECRET);
     },
-    addUser: withAuth(['user:create'], async (obj, { input }, context) => {
+    addUser: withAuth(async (obj, { input }, context) => {
       try {
         const e = new FieldError();
 
@@ -195,10 +190,10 @@ export default pubsub => ({
         return { errors: e };
       }
     }),
-    editUser: withAuth(['user:update'], async (obj, { input }, context) => {
+    editUser: withAuth(async (obj, { input }, context) => {
       try {
         const e = new FieldError();
-
+        console.log(input);
         const userExists = await context.User.getUserByUsername(input.username);
         if (userExists && userExists.id !== input.id) {
           e.setError('username', 'Username already exists.');
@@ -229,7 +224,7 @@ export default pubsub => ({
         return { errors: e };
       }
     }),
-    deleteUser: withAuth(['user:delete'], async (obj, { id }, context) => {
+    deleteUser: withAuth(async (obj, { id }, context) => {
       try {
         const e = new FieldError();
         const user = await context.User.getUser(id);

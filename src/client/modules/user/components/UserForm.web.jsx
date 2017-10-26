@@ -24,7 +24,15 @@ const UserForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
       <Field name="username" component={RenderField} type="text" label="Username" validate={[required, minLength3]} />
       <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
-      <Field name="isAdmin" component={RenderCheckBox} type="checkbox" label="Is Admin" />
+      <div>
+        <label>Role</label>
+        <div>
+          <Field name="role" component="select">
+            <option value="admin">admin</option>
+            <option value="user">user</option>
+          </Field>
+        </div>
+      </div>
       <Field name="isActive" component={RenderCheckBox} type="checkbox" label="Is Active" />
       <Field name="profile.firstName" component={RenderField} type="text" label="First Name" validate={required} />
       <Field name="profile.lastName" component={RenderField} type="text" label="Last Name" validate={required} />

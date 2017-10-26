@@ -1,23 +1,13 @@
 exports.up = function(knex, Promise) {
   return Promise.all([
-    knex.schema.createTable('user_role', table => {
-      table.increments();
-      table.string('role').unique();
-    }),
     knex.schema.createTable('user', table => {
       table.increments();
       table.string('username').unique();
       table.string('email').unique();
       table.string('password');
-      table.boolean('is_admin').defaultTo(false);
+      table.boolean('role').defaultTo('user');
       table.boolean('is_active').defaultTo(false);
       table.timestamps(false, true);
-      table
-        .integer('role_id')
-        .unsigned()
-        .references('id')
-        .inTable('user_role')
-        .onDelete('CASCADE');
     }),
     knex.schema.createTable('user_profile', table => {
       table.increments();
@@ -62,7 +52,6 @@ exports.down = function(knex, Promise) {
     knex.schema.dropTable('auth_certificate'),
     knex.schema.dropTable('auth_facebook'),
     knex.schema.dropTable('user_profile'),
-    knex.schema.dropTable('user'),
-    knex.schema.dropTable('user_role')
+    knex.schema.dropTable('user')
   ]);
 };

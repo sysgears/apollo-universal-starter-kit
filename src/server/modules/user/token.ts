@@ -21,7 +21,8 @@ export default (SECRET: any, User: any, jwt: any) => async (req: any, res: any, 
       const { user } = jwt.verify(token, SECRET);
       req.user = user;
     } catch (err) {
-      const refreshToken: any = req.universalCookies.get('x-refresh-token') || req.headers['x-refresh-token'];
+      const refreshToken: any =
+        (req.universalCookies ? req.universalCookies.get('x-refresh-token') : null) || req.headers['x-refresh-token'];
       const newTokens: any = await refreshTokens(token, refreshToken, User, SECRET);
 
       if (newTokens.token && newTokens.refreshToken) {
@@ -29,23 +30,9 @@ export default (SECRET: any, User: any, jwt: any) => async (req: any, res: any, 
         res.set('x-token', newTokens.token);
         res.set('x-refresh-token', newTokens.refreshToken);
 
-        req.universalCookies.set('x-token', newTokens.token, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true
-        });
-        req.universalCookies.set('x-refresh-token', newTokens.refreshToken, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true
-        });
-
-        req.universalCookies.set('r-token', newTokens.token, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: false
-        });
-        req.universalCookies.set('r-refresh-token', newTokens.refreshToken, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: false
-        });
+        if (req.universalCookies) {
+          setTokenToCookies(req.universalCookies, newTokens.token, newTokens.refreshToken);
+        }
       }
       req.user = newTokens.user;
     }
@@ -62,24 +49,23 @@ export default (SECRET: any, User: any, jwt: any) => async (req: any, res: any, 
     }
     const result: any = await tryLoginSerial(serial, User, SECRET);
 
-    req.universalCookies.set('x-token', result.token, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: true
-    });
-    req.universalCookies.set('x-refresh-token', result.refreshToken, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: true
-    });
-
-    req.universalCookies.set('r-token', result.token, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: false
-    });
-    req.universalCookies.set('r-refresh-token', result.refreshToken, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: false
-    });
+    if (req.universalCookies) {
+      setTokenToCookies(req.universalCookies, result.token, result.refreshToken);
+    }
   }
 
   next();
+};
+
+const setTokenToCookies = (universalCookies: any, token: string, refreshToken: string) => {
+  const maxAgeObj = {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: true
+  };
+
+  universalCookies.set('x-token', token, maxAgeObj);
+  universalCookies.set('x-refresh-token', refreshToken, maxAgeObj);
+
+  universalCookies.set('r-token', token, maxAgeObj);
+  universalCookies.set('r-refresh-token', refreshToken, maxAgeObj);
 };

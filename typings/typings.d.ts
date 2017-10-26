@@ -26,6 +26,23 @@ declare module '*.json' {
   export = value;
 }
 
+declare module 'passport-facebook-ext' {
+  import { StrategyOption } from 'passport-facebook';
+
+  // Since there is no 'scope' variable in the StrategyOption interface
+  // we create the extension
+  export interface StrategyOptionWithScope extends StrategyOption {
+    clientID: string;
+    clientSecret: string;
+    callbackURL: string;
+    scope: string[];
+
+    scopeSeparator?: string;
+    enableProof?: boolean;
+    profileFields?: string[];
+  }
+}
+
 interface Window {
   __APOLLO_STATE__?: any;
 }

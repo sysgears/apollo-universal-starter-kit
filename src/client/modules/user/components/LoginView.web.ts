@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import LoginService from '../containers/Login';
 
+import { Router } from '@angular/router';
 import log from '../../../../common/log';
 
 @Component({
@@ -22,26 +23,19 @@ import log from '../../../../common/log';
   `
 })
 export default class LoginView {
-  constructor(private loginService: LoginService) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
-  public onSubmit = (login: any) => {
-    this.loginService.login(login.email, login.password, (res: any) => {
-      if (res.data.login.errors) {
+  public onSubmit = (loginInputs: any) => {
+    this.loginService.login(loginInputs.email, loginInputs.password, ({ data: { login } }: any) => {
+      if (login.errors) {
         return { errors: login.errors };
       }
 
-      const { token, refreshToken } = res.data.login.tokens;
+      const { token, refreshToken } = login.tokens;
       localStorage.setItem('token', token);
       localStorage.setItem('refreshToken', refreshToken);
-      log.debug(localStorage);
 
-      // window.location.href = '/profile';
-      // if (history) {
-      //   return history.push('/profile');
-      // }
-      // if (navigation) {
-      //   return navigation.goBack();
-      // }
+      this.router.navigateByUrl('profile');
     });
   };
 }

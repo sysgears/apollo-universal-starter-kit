@@ -1,19 +1,24 @@
 /*eslint-disable no-unused-vars*/
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
+import withAuth from 'graphql-auth';
 import { refreshTokens, tryLogin } from './auth';
-import { requiresAuth, requiresAdmin } from './permissions';
 import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
 
 export default pubsub => ({
   Query: {
-    users: requiresAdmin.createResolver((obj, { orderBy, filter }, context) => {
+    users: withAuth(['users:view:all'], (obj, { orderBy, filter }, context) => {
       return context.User.getUsers(orderBy, filter);
     }),
-    user: requiresAuth.createResolver((obj, { id }, context) => {
-      return context.User.getUser(id);
-    }),
+    user: withAuth(
+      (obj, args, context) => {
+        return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
+      },
+      (obj, { id }, context) => {
+        return context.User.getUser(id);
+      }
+    ),
     currentUser(obj, args, context) {
       if (context.user) {
         return context.User.getUser(context.user.id);
@@ -156,7 +161,7 @@ export default pubsub => ({
     refreshTokens(obj, { token, refreshToken }, context) {
       return refreshTokens(token, refreshToken, context.User, context.SECRET);
     },
-    addUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
+    addUser: withAuth(['user:create'], async (obj, { input }, context) => {
       try {
         const e = new FieldError();
 
@@ -190,7 +195,7 @@ export default pubsub => ({
         return { errors: e };
       }
     }),
-    editUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
+    editUser: withAuth(['user:update'], async (obj, { input }, context) => {
       try {
         const e = new FieldError();
 
@@ -224,7 +229,7 @@ export default pubsub => ({
         return { errors: e };
       }
     }),
-    deleteUser: requiresAdmin.createResolver(async (obj, { id }, context) => {
+    deleteUser: withAuth(['user:delete'], async (obj, { id }, context) => {
       try {
         const e = new FieldError();
         const user = await context.User.getUser(id);

@@ -1,6 +1,6 @@
-import settings from '../../../../settings';
+import settings from '../../../../../settings';
 
-import { refreshTokens, tryLoginSerial } from './auth';
+import { refreshTokens, tryLoginSerial } from './index';
 
 export default (SECRET, User, jwt) => async (req, res, next) => {
   let token = req.universalCookies.get('x-token') || req.headers['x-token'];

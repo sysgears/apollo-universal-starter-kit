@@ -39,8 +39,8 @@ function connectionParam() {
 
 export default new Feature({
   route: [
-    <AuthRoute exact path="/profile" role="user" component={Profile} />,
-    <AuthRoute exact path="/users" role="admin" component={Users} />,
+    <AuthRoute exact path="/profile" scope="user" component={Profile} />,
+    <AuthRoute exact path="/users" scope="admin" component={Users} />,
     <Route exact path="/users/:id" component={UserEdit} />,
     <Route exact path="/register" component={Register} />,
     <Route exact path="/login" component={Login} />,

@@ -7,9 +7,10 @@ import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import { refreshTokens, createTokens } from './auth';
-import tokenMiddleware from './token';
+import tokenMiddleware from './auth/token';
 import confirmMiddleware from './confirm';
 import Feature from '../connector';
+import scopes from './auth/scopes';
 import settings from '../../../../settings';
 
 const SECRET = settings.user.secret;
@@ -55,7 +56,7 @@ if (settings.user.auth.facebook.enabled) {
             });
           }
 
-          return cb(null, pick(user, ['id', 'username', 'isAdmin', 'email']));
+          return cb(null, pick(user, ['id', 'username', 'role', 'email']));
         } catch (err) {
           return cb(err, {});
         }
@@ -69,6 +70,7 @@ export default new Feature({
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
     let tokenUser = null;
+    let auth = { isAuthenticated: false, scope: null };
     let serial = '';
     if (__DEV__) {
       // for local testing without client certificates
@@ -111,9 +113,17 @@ export default new Feature({
       }
     }
 
+    if (tokenUser) {
+      auth = {
+        isAuthenticated: true,
+        scope: scopes[tokenUser.role]
+      };
+    }
+
     return {
       User,
       user: tokenUser,
+      auth,
       SECRET,
       req
     };

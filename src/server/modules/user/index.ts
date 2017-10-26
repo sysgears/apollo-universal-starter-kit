@@ -1,35 +1,43 @@
-import jwt from 'jsonwebtoken';
-import passport from 'passport';
-import FacebookStrategy from 'passport-facebook';
+import * as jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
+import * as passport from 'passport';
+import { Strategy as FacebookStrategy } from 'passport-facebook';
+import { StrategyOptionWithScope } from 'passport-facebook-ext';
 
-import UserDAO from './sql';
-import schema from './schema.graphqls';
-import createResolvers from './resolvers';
-import { refreshTokens, createTokens } from './auth';
-import tokenMiddleware from './token';
-import confirmMiddleware from './confirm';
-import Feature from '../connector';
 import settings from '../../../../settings';
+import Feature from '../connector';
+import { createTokens, refreshTokens } from './auth';
+import confirmMiddleware from './confirm';
+import createResolvers from './resolvers';
+import * as schema from './schema.graphqls';
+import UserDAO from './sql';
+import tokenMiddleware from './token';
 
 const SECRET = settings.user.secret;
 
 const User = new UserDAO();
 
+const strategyOption: StrategyOptionWithScope = {
+  clientID: settings.user.auth.facebook.clientID,
+  clientSecret: settings.user.auth.facebook.clientSecret,
+  callbackURL: '/auth/facebook/callback',
+  scope: ['email'],
+  profileFields: ['id', 'emails', 'displayName']
+};
+
 if (settings.user.auth.facebook.enabled) {
   passport.use(
     new FacebookStrategy(
-      {
-        clientID: settings.user.auth.facebook.clientID,
-        clientSecret: settings.user.auth.facebook.clientSecret,
-        callbackURL: '/auth/facebook/callback',
-        scope: ['email'],
-        profileFields: ['id', 'emails', 'displayName']
-      },
-      async function(accessToken, refreshToken, profile, cb) {
+      strategyOption,
+      async (
+        accessToken: string,
+        refreshToken: string,
+        profile: any,
+        cb: (error: any, user?: any, info?: any) => void
+      ) => {
         const { id, username, displayName, emails: [{ value }] } = profile;
         try {
-          let user = await User.getUserByFbIdOrEmail(id, value);
+          let user: any = await User.getUserByFbIdOrEmail(id, value);
 
           if (!user) {
             const isActive = true;
@@ -67,7 +75,7 @@ if (settings.user.auth.facebook.enabled) {
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
-  createContextFunc: async (req, connectionParams, webSocket) => {
+  createContextFunc: async (req: any, connectionParams: any, webSocket: any) => {
     let tokenUser = null;
     let serial = '';
     if (__DEV__) {
@@ -82,10 +90,10 @@ export default new Feature({
       connectionParams.token !== 'undefined'
     ) {
       try {
-        const { user } = jwt.verify(connectionParams.token, SECRET);
+        const { user } = jwt.verify(connectionParams.token, SECRET) as any;
         tokenUser = user;
       } catch (err) {
-        const newTokens = await refreshTokens(connectionParams.token, connectionParams.refreshToken, User, SECRET);
+        const newTokens: any = await refreshTokens(connectionParams.token, connectionParams.refreshToken, User, SECRET);
         tokenUser = newTokens.user;
       }
     } else if (req) {
@@ -130,34 +138,35 @@ export default new Feature({
 
       app.get('/auth/facebook', passport.authenticate('facebook'));
 
-      app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(
-        req,
-        res
-      ) {
-        const user = await User.getUserWithPassword(req.user.id);
-        const refreshSecret = SECRET + user.password;
-        const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
+      app.get(
+        '/auth/facebook/callback',
+        passport.authenticate('facebook', { session: false }),
+        async (req: any, res: any) => {
+          const user: any = await User.getUserWithPassword(req.user.id);
+          const refreshSecret = SECRET + user.password;
+          const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
 
-        req.universalCookies.set('x-token', token, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true
-        });
-        req.universalCookies.set('x-refresh-token', refreshToken, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true
-        });
+          req.universalCookies.set('x-token', token, {
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: true
+          });
+          req.universalCookies.set('x-refresh-token', refreshToken, {
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: true
+          });
 
-        req.universalCookies.set('r-token', token, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: false
-        });
-        req.universalCookies.set('r-refresh-token', refreshToken, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: false
-        });
+          req.universalCookies.set('r-token', token, {
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: false
+          });
+          req.universalCookies.set('r-refresh-token', refreshToken, {
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: false
+          });
 
-        res.redirect('/profile');
-      });
+          res.redirect('/profile');
+        }
+      );
     }
   }
 });

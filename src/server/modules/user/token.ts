@@ -2,11 +2,11 @@ import settings from '../../../../settings';
 
 import { refreshTokens, tryLoginSerial } from './auth';
 
-export default (SECRET, User, jwt) => async (req, res, next) => {
-  let token = req.universalCookies.get('x-token') || req.headers['x-token'];
+export default (SECRET: any, User: any, jwt: any) => async (req: any, res: any, next: any) => {
+  let token = (req.universalCookies ? req.universalCookies.get('x-token') : null) || req.headers['x-token'];
 
   // if cookie available
-  if (req.universalCookies.get('x-token')) {
+  if (req.universalCookies && req.universalCookies.get('x-token')) {
     // check if header token matches cookie token
     if (
       req.universalCookies.get('x-token') !== req.universalCookies.get('r-token') ||
@@ -16,14 +16,13 @@ export default (SECRET, User, jwt) => async (req, res, next) => {
       token = undefined;
     }
   }
-  //console.log(token);
   if (token && token !== 'null') {
     try {
       const { user } = jwt.verify(token, SECRET);
       req.user = user;
     } catch (err) {
-      const refreshToken = req.universalCookies.get('x-refresh-token') || req.headers['x-refresh-token'];
-      const newTokens = await refreshTokens(token, refreshToken, User, SECRET);
+      const refreshToken: any = req.universalCookies.get('x-refresh-token') || req.headers['x-refresh-token'];
+      const newTokens: any = await refreshTokens(token, refreshToken, User, SECRET);
 
       if (newTokens.token && newTokens.refreshToken) {
         res.set('Access-Control-Expose-Headers', 'x-token, x-refresh-token');
@@ -61,7 +60,7 @@ export default (SECRET, User, jwt) => async (req, res, next) => {
     if (req.headers['x-serial']) {
       serial = req.headers['x-serial'];
     }
-    const result = await tryLoginSerial(serial, User, SECRET);
+    const result: any = await tryLoginSerial(serial, User, SECRET);
 
     req.universalCookies.set('x-token', result.token, {
       maxAge: 60 * 60 * 24 * 7,

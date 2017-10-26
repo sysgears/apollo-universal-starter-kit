@@ -1,4 +1,4 @@
-export default (SECRET, User, jwt) => async (req, res) => {
+export default (SECRET: any, User: any, jwt: any) => async (req: any, res: any) => {
   try {
     const { user: { id } } = jwt.verify(req.params.token, SECRET);
 

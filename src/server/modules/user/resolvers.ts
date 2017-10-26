@@ -99,7 +99,7 @@ export default (pubsub: PubSub) => ({
     async login(obj: any, args: UserParams, context: any) {
       try {
         const tokens = await tryLogin(args.input.email, args.input.password, context.User, context.SECRET);
-        if (context.req) {
+        if (context.req && context.req.universalCookies) {
           context.req.universalCookies.set('x-token', tokens.token, {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: true

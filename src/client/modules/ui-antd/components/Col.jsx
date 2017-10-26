@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Col as RSCol } from 'antd';
+import RSCol from 'antd/lib/col';
 
 const Col = ({ children, xs, ...props }) => {
   return (

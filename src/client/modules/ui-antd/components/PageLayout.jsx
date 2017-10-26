@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import LocaleProvider from 'antd/lib/locale-provider';
 import enUS from 'antd/lib/locale-provider/en_US';
-import { Layout } from 'antd';
+import Layout from 'antd/lib/layout';
 
 import NavBar from './NavBar';
 

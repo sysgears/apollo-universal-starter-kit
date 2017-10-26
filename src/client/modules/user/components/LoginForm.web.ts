@@ -5,6 +5,7 @@ import settings from '../../../../../settings';
 interface FormInput {
   id: string;
   name: string;
+  value: string;
   type: string;
   placeholder: string;
 }
@@ -12,10 +13,10 @@ interface FormInput {
 @Component({
   selector: 'login-form',
   template: `
-    <form name="login" (ngSubmit)="onSubmit()">
+    <form name="login" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.form.value)">
       <div class="form-group" *ngFor="let fi of formInputs">
-        <label for="{{fi.id}}">{{fi.name}}</label>
-        <input id="{{fi.id}}" type="{{fi.type}}" class="form-control" placeholder="{{fi.placeholder}}" required />
+        <label for="{{fi.id}}">{{fi.value}}</label>
+        <input id="{{fi.id}}" type="{{fi.type}}" class="form-control" placeholder="{{fi.value}}" name="{{fi.name}}" [(ngModel)]="login[fi.name]" #name="ngModel" required />
       </div>
       <button type="submit" id="login-submit-btn" class="btn btn-primary">Login</button>
       <button id="fb-login-btn" *ngIf="settings.user.auth.facebook.enabled" class="btn btn-primary" (click)="facebookLogin()" )>
@@ -31,6 +32,7 @@ export default class LoginForm {
   public facebookLogin: any;
   public settings: any;
   public formInputs: FormInput[];
+  public login: any = {};
 
   constructor() {
     this.settings = settings;
@@ -46,8 +48,8 @@ export default class LoginForm {
 
   private getForm = (): FormInput[] => {
     return [
-      { id: 'email-input', name: 'Email', type: 'email', placeholder: 'Email' },
-      { id: 'password-input', name: 'Password', type: 'password', placeholder: 'Password' }
+      { id: 'email-input', name: 'email', value: 'Email', type: 'email', placeholder: 'Email' },
+      { id: 'password-input', name: 'password', value: 'Password', type: 'password', placeholder: 'Password' }
     ];
   };
 }

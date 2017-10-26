@@ -27,6 +27,7 @@ import PostCommentsService from './modules/post/containers/PostComments';
 import PostEditService from './modules/post/containers/PostEdit';
 import LoginForm from './modules/user/components/LoginForm.web';
 import LoginView from './modules/user/components/LoginView.web';
+import LoginService from './modules/user/containers/Login';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
@@ -66,7 +67,7 @@ import { clientProvider, default as Main } from './app/Main';
     })
   ],
   entryComponents: [PageLayout, CounterView],
-  providers: [CounterService, PostService, PostEditService, PostCommentsService]
+  providers: [CounterService, PostService, PostEditService, PostCommentsService, LoginService]
 })
 class MainModule {
   constructor(public appRef: ApplicationRef) {}

@@ -1,9 +1,9 @@
 import counter from './counter/index.web';
+import './favicon';
 import pageNotFound from './pageNotFound';
 import post from './post/index.web';
 // import upload from './upload';
 import user from './user/index.web';
-// import './favicon';
 
 import Feature from './connector';
 

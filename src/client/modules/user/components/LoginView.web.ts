@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import LoginService from '../containers/Login';
+
+import log from '../../../../common/log';
 
 @Component({
   selector: 'login-view',
@@ -7,12 +10,39 @@ import { Component } from '@angular/core';
       <h1>Login page!</h1>
       <login-form [onSubmit]="onSubmit"></login-form>
       <a routerLink="/forgot-password">Forgot your password?</a>
+      <hr/>
+      <div class="card">
+        <div class="card-block">
+          <h4 class="card-title">Available logins:</h4>
+          <p class="card-text">admin@example.com:admin</p>
+          <p class="card-text">user@example.com:user</p>
+        </div>
+      </div>
     </div>
   `
 })
 export default class LoginView {
-  public onSubmit = () => {
-    // console.log('submitted');
+  constructor(private loginService: LoginService) {}
+
+  public onSubmit = (login: any) => {
+    this.loginService.login(login.email, login.password, (res: any) => {
+      if (res.data.login.errors) {
+        return { errors: login.errors };
+      }
+
+      const { token, refreshToken } = res.data.login.tokens;
+      localStorage.setItem('token', token);
+      localStorage.setItem('refreshToken', refreshToken);
+      log.debug(localStorage);
+
+      // window.location.href = '/profile';
+      // if (history) {
+      //   return history.push('/profile');
+      // }
+      // if (navigation) {
+      //   return navigation.goBack();
+      // }
+    });
   };
 }
 

@@ -34,7 +34,12 @@ class UsersFilterView extends React.PureComponent {
 
         <div className="form-check mb-2 mr-sm-2 mb-sm-0">
           <label className="form-check-label">
-            Role: <input className="form-check-input" type="text" value={role} onChange={this.onRoleChange} />
+            Role:
+            <select name="role" defaultValue={role} onChange={this.handleRole}>
+              <option />
+              <option value="user">user</option>
+              <option value="admin">admin</option>
+            </select>
           </label>
         </div>
 

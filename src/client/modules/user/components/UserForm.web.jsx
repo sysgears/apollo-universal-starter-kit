@@ -28,8 +28,8 @@ const UserForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
         <label>Role</label>
         <div>
           <Field name="role" component="select">
-            <option value="admin">admin</option>
             <option value="user">user</option>
+            <option value="admin">admin</option>
           </Field>
         </div>
       </div>

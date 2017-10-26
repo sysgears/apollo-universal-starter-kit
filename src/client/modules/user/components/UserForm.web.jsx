@@ -1,7 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Form, RenderField, RenderCheckBox, RenderErrors, Button } from '../../common/components/web';
+import {
+  Form,
+  RenderField,
+  RenderSelect,
+  RenderCheckBox,
+  RenderErrors,
+  Option,
+  Button
+} from '../../common/components/web';
 import settings from '../../../../../settings';
 
 const required = value => (value ? undefined : 'Required');
@@ -24,15 +32,10 @@ const UserForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
       <Field name="username" component={RenderField} type="text" label="Username" validate={[required, minLength3]} />
       <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
-      <div>
-        <label>Role</label>
-        <div>
-          <Field name="role" component="select">
-            <option value="user">user</option>
-            <option value="admin">admin</option>
-          </Field>
-        </div>
-      </div>
+      <Field name="role" component={RenderSelect} type="select" label="Role">
+        <Option value="user">user</Option>
+        <Option value="admin">admin</Option>
+      </Field>
       <Field name="isActive" component={RenderCheckBox} type="checkbox" label="Is Active" />
       <Field name="profile.firstName" component={RenderField} type="text" label="First Name" validate={required} />
       <Field name="profile.lastName" component={RenderField} type="text" label="Last Name" validate={required} />

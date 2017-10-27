@@ -10,7 +10,6 @@ export { default as Option } from './Option';
 export { default as RenderField } from './RenderField';
 export { default as RenderSelect } from './RenderSelect';
 export { default as RenderCheckBox } from './RenderCheckBox';
-export { default as RenderErrors } from './RenderErrors';
 export { default as Alert } from './Alert';
 export { default as Row } from './Row';
 export { default as Col } from './Col';

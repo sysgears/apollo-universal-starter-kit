@@ -108,11 +108,15 @@ export default class User {
     );
   }
 
-  async register({ username, email, password, isActive }) {
+  async register({ username, email, password, role, isActive }) {
     const passwordHashed = await bcrypt.hash(password, 12);
 
+    if (role === undefined) {
+      role = 'user';
+    }
+
     return knex('user')
-      .insert({ username, email, password: passwordHashed, is_active: !!isActive })
+      .insert({ username, email, role, password: passwordHashed, is_active: !!isActive })
       .returning('id');
   }
 

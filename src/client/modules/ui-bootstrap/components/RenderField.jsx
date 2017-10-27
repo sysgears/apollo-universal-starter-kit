@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 
 const RenderField = ({ input, label, type, meta: { touched, error } }) => {
-  let color = 'normal';
+  let valid = null;
   if (touched && error) {
-    color = 'danger';
+    valid = false;
   }
 
   return (
-    <FormGroup color={color}>
+    <FormGroup>
       {label && <Label>{label}</Label>}
       <div>
-        <Input {...input} placeholder={label} type={type} />
+        <Input {...input} placeholder={label} type={type} valid={valid} />
         {touched && (error && <FormFeedback>{error}</FormFeedback>)}
       </div>
     </FormGroup>

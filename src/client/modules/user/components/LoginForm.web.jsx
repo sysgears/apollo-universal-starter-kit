@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import url from 'url';
-import { Form, RenderField, RenderErrors, Button } from '../../common/components/web';
+import { Form, RenderField, Alert, Button } from '../../common/components/web';
 
 import settings from '../../../../../settings';
 
@@ -18,12 +18,12 @@ const facebookLogin = () => {
   window.location = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
 };
 
-const LoginForm = ({ handleSubmit, submitting, onSubmit, errors }) => {
+const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
   return (
     <Form name="login" onSubmit={handleSubmit(onSubmit)}>
       <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
       <Field name="password" component={RenderField} type="password" label="Password" validate={required} />
-      <RenderErrors errors={errors} />
+      {error && <Alert color="error">{error}</Alert>}
       <Button color="primary" type="submit" disabled={submitting}>
         Login
       </Button>
@@ -40,7 +40,7 @@ LoginForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  errors: PropTypes.array
+  error: PropTypes.string
 };
 
 export default reduxForm({

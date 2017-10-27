@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
+import { SubmissionError } from 'redux-form';
 import { pick } from 'lodash';
 
 import { PageLayout } from '../../common/components/web';
@@ -9,10 +10,6 @@ import UserForm from './UserForm';
 import settings from '../../../../../settings';
 
 class UserEditView extends React.PureComponent {
-  state = {
-    errors: []
-  };
-
   onSubmit = async values => {
     const { user, addUser, editUser } = this.props;
     let result = null;
@@ -32,13 +29,17 @@ class UserEditView extends React.PureComponent {
     }
 
     if (result.errors) {
-      this.setState({ errors: result.errors });
+      let submitError = {
+        _error: 'Edit user failed!'
+      };
+      result.errors.map(error => (submitError[error.field] = error.message));
+      throw new SubmissionError(submitError);
     }
   };
 
   renderMetaData = () => (
     <Helmet
-      title="Apollo Starter Kit - Edit User"
+      title="Edit User"
       meta={[
         {
           name: 'description',
@@ -66,7 +67,7 @@ class UserEditView extends React.PureComponent {
             Back
           </Link>
           <h2>{user ? 'Edit' : 'Create'} User</h2>
-          <UserForm onSubmit={this.onSubmit} initialValues={user} errors={this.state.errors} />
+          <UserForm onSubmit={this.onSubmit} initialValues={user} />
         </PageLayout>
       );
     }

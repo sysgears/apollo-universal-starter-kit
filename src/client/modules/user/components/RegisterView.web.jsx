@@ -4,20 +4,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { SubmissionError } from 'redux-form';
 import { PageLayout } from '../../common/components/web';
 import RegisterForm from '../components/RegisterForm';
 
 class RegisterView extends React.PureComponent {
-  state = {
-    errors: []
-  };
-
   onSubmit = async values => {
     const { register } = this.props;
     const result = await register(values);
 
     if (result.errors) {
-      this.setState({ errors: result.errors });
+      let submitError = {
+        _error: 'Registration failed!'
+      };
+      result.errors.map(error => (submitError[error.field] = error.message));
+      throw new SubmissionError(submitError);
     }
   };
 
@@ -38,7 +39,7 @@ class RegisterView extends React.PureComponent {
       <PageLayout>
         {this.renderMetaData()}
         <h1>Register page!</h1>
-        <RegisterForm onSubmit={this.onSubmit} errors={this.state.errors} />
+        <RegisterForm onSubmit={this.onSubmit} />
       </PageLayout>
     );
   }

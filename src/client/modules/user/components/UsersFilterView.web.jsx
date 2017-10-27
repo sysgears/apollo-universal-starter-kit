@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
-import { Select, Option } from '../../common/components/web';
+import { Form, FormItem, Select, Option, Label, Input } from '../../common/components/web';
 
 class UsersFilterView extends React.PureComponent {
   handleSearch = e => {
@@ -22,38 +22,37 @@ class UsersFilterView extends React.PureComponent {
   render() {
     const { role, isActive } = this.props;
     return (
-      <form className="form-inline">
-        <label className="mr-sm-2">Filter: </label>
-        <DebounceInput
-          minLength={2}
-          debounceTimeout={300}
-          className="form-control mb-2 mr-sm-2 mb-sm-0"
-          onChange={this.handleSearch}
-        />
-
-        <div className="form-check mb-2 mr-sm-2 mb-sm-0">
-          <label className="form-check-label">
-            Role:
-            <Select name="role" defaultValue={role} onChange={this.handleRole}>
-              <Option />
-              <Option value="user">user</Option>
-              <Option value="admin">admin</Option>
-            </Select>
-          </label>
-        </div>
-
-        <div className="form-check mb-2 mr-sm-2 mb-sm-0">
-          <label className="form-check-label">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              defaultChecked={isActive}
-              onChange={this.handleIsActive}
-            />{' '}
-            Is Active
-          </label>
-        </div>
-      </form>
+      <Form layout="inline">
+        <FormItem label="Filter">
+          <DebounceInput
+            minLength={2}
+            debounceTimeout={300}
+            placeholder="Search ..."
+            element={Input}
+            onChange={this.handleSearch}
+          />
+        </FormItem>
+        &nbsp;
+        <FormItem label="Role">
+          <Select name="role" defaultValue={role} onChange={this.handleRole}>
+            <Option key={1} value="">
+              Select ...
+            </Option>
+            <Option key={2} value="user">
+              user
+            </Option>
+            <Option key={3} value="admin">
+              admin
+            </Option>
+          </Select>
+        </FormItem>
+        &nbsp;
+        <FormItem>
+          <Label>
+            <Input type="checkbox" defaultChecked={isActive} onChange={this.handleIsActive} /> Is Active
+          </Label>
+        </FormItem>
+      </Form>
     );
   }
 }

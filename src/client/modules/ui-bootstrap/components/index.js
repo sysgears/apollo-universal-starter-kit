@@ -3,6 +3,8 @@ export { default as PageLayout } from './PageLayout';
 export { default as Button } from './Button';
 export { default as MenuItem } from './MenuItem';
 export { default as Form } from './Form';
+export { default as FormItem } from './FormItem';
+export { default as Input } from './Input';
 export { default as Select } from './Select';
 export { default as Option } from './Option';
 export { default as RenderField } from './RenderField';

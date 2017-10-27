@@ -455,9 +455,9 @@ apollo-link@1.0.0, apollo-link@^1.0.0:
     apollo-utilities "^0.2.0-beta.0"
     zen-observable "^0.6.0"
 
-apollo-logger@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/apollo-logger/-/apollo-logger-0.1.0.tgz#fd2dd6faa8210f1150d03ed5602efbccfd05fc25"
+apollo-logger@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/apollo-logger/-/apollo-logger-0.1.1.tgz#bda4245cd69dda2a04648e37b4b32e47b6112555"
   dependencies:
     debug "^3.0.1"
 

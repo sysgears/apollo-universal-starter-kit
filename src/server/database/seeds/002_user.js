@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import truncateTables from '../../../common/db';
 
 export async function seed(knex, Promise) {
-  await truncateTables(knex, Promise, ['user', 'user_profile', 'auth_certificate', 'auth_facebook']);
+  await truncateTables(knex, Promise, ['user', 'user_profile', 'auth_certificate', 'auth_facebook', 'subscription']);
 
   await knex('user')
     .returning('id')
@@ -26,13 +26,12 @@ export async function seed(knex, Promise) {
 
   const [subscriberId] = await knex('user')
     .returning('id')
-    .insert({ username: 'subscriber', is_active: true, is_admin: false });
-  await knex('auth_local')
-    .returning('id')
     .insert({
+      username: 'subscriber',
       email: 'subscriber@example.com',
       password: await bcrypt.hash('subscriber', 12),
-      user_id: subscriberId
+      role: 'user',
+      is_active: true
     });
   await knex('subscription')
     .returning('id')
@@ -40,11 +39,5 @@ export async function seed(knex, Promise) {
       stripe_id: 'test',
       active: true,
       user_id: subscriberId
-    });
-  await knex('auth_certificate')
-    .returning('id')
-    .insert({
-      serial: '02',
-      user_id: userId
     });
 }

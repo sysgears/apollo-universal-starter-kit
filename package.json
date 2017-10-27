@@ -58,7 +58,7 @@
     "apollo-link": "^1.0.0",
     "apollo-link-batch-http": "^1.0.0",
     "apollo-link-ws": "^1.0.0",
-    "apollo-logger": "0.1.0",
+    "apollo-logger": "0.1.1",
     "apollo-server-express": "^1.2.0",
     "apollo-upload-server": "^2.0.4",
     "bcryptjs": "^2.4.3",

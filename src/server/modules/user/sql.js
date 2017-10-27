@@ -216,7 +216,7 @@ export default class User {
         .from('user AS u')
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .where('fa.fb_id', '=', id)
-        .orWhere('la.email', '=', email)
+        .orWhere('u.email', '=', email)
         .first()
     );
   }

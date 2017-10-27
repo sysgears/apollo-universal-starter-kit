@@ -7,5 +7,5 @@ npm-debug.*
 *.sqlite3
 .DS_Store
 jsconfig.json
-
+upload
 # .env 

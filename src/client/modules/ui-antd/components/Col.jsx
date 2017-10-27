@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RSCol from 'antd/lib/col';
+import ADCol from 'antd/lib/col';
 
 const Col = ({ children, xs, ...props }) => {
   return (
-    <RSCol span={xs} {...props}>
+    <ADCol span={xs} {...props}>
       {children}
-    </RSCol>
+    </ADCol>
   );
 };
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RSRow from 'antd/lib/row';
+import ADRow from 'antd/lib/row';
 
 const Row = ({ children, ...props }) => {
-  return <RSRow {...props}>{children}</RSRow>;
+  return <ADRow {...props}>{children}</ADRow>;
 };
 
 Row.propTypes = {

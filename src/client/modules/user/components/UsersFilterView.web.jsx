@@ -1,8 +1,7 @@
-// Web only component
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
+import { Select, Option } from '../../common/components/web';
 
 class UsersFilterView extends React.PureComponent {
   handleSearch = e => {
@@ -35,11 +34,11 @@ class UsersFilterView extends React.PureComponent {
         <div className="form-check mb-2 mr-sm-2 mb-sm-0">
           <label className="form-check-label">
             Role:
-            <select name="role" defaultValue={role} onChange={this.handleRole}>
-              <option />
-              <option value="user">user</option>
-              <option value="admin">admin</option>
-            </select>
+            <Select name="role" defaultValue={role} onChange={this.handleRole}>
+              <Option />
+              <Option value="user">user</Option>
+              <Option value="admin">admin</Option>
+            </Select>
           </label>
         </div>
 

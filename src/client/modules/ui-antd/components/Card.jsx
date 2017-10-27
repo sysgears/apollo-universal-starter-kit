@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RSCard from 'antd/lib/card';
+import ADCard from 'antd/lib/card';
 
 const Card = ({ children, ...props }) => {
-  return <RSCard {...props}>{children}</RSCard>;
+  return <ADCard {...props}>{children}</ADCard>;
 };
 
 Card.propTypes = {

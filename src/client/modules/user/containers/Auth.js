@@ -33,10 +33,9 @@ const checkAuth = (cookies, scope) => {
       return false;
     }
 
-    if (scope) {
+    if (scope === 'admin') {
       const { user: { role } } = decode(token);
-
-      if (scope === role) {
+      if (scope !== role) {
         return false;
       }
     }
@@ -148,11 +147,12 @@ AuthProfile.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthRoute = withCookies(({ component: Component, cookies, role, ...rest }) => {
+const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props => (checkAuth(cookies, role) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />)}
+      render={props =>
+        checkAuth(cookies, scope) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />}
     />
   );
 });

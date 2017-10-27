@@ -49,7 +49,7 @@ export default new Feature({
   ],
   navItem: [
     <MenuItem key="users">
-      <AuthNav role="admin">
+      <AuthNav scope="admin">
         <NavLink to="/users" className="nav-link" activeClassName="active">
           Users
         </NavLink>

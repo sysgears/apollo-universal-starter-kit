@@ -11,7 +11,7 @@ export default class User {
       .select(
         'u.id as id',
         'u.username',
-        'u.is_admin',
+        'u.role',
         'u.is_active',
         'u.email',
         'up.first_name',
@@ -38,9 +38,9 @@ export default class User {
 
     // add filter conditions
     if (filter) {
-      if (has(filter, 'isAdmin') && filter.isAdmin !== null) {
+      if (has(filter, 'role') && filter.role !== '') {
         queryBuilder.where(function() {
-          this.where('is_admin', filter.isAdmin);
+          this.where('role', filter.role);
         });
       }
 
@@ -69,7 +69,7 @@ export default class User {
         .select(
           'u.id',
           'u.username',
-          'u.is_admin',
+          'u.role',
           'u.is_active',
           'u.email',
           'up.first_name',
@@ -90,7 +90,7 @@ export default class User {
   async getUserWithPassword(id) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'u.password')
+        .select('*')
         .from('user AS u')
         .where('u.id', '=', id)
         .first()
@@ -100,7 +100,7 @@ export default class User {
   async getUserWithSerial(serial) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'ca.serial')
+        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.role', 'ca.serial')
         .from('user AS u')
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
         .where('ca.serial', '=', serial)
@@ -108,11 +108,15 @@ export default class User {
     );
   }
 
-  async register({ username, email, password, isActive }) {
+  async register({ username, email, password, role, isActive }) {
     const passwordHashed = await bcrypt.hash(password, 12);
 
+    if (role === undefined) {
+      role = 'user';
+    }
+
     return knex('user')
-      .insert({ username, email, password: passwordHashed, is_active: !!isActive })
+      .insert({ username, email, role, password: passwordHashed, is_active: !!isActive })
       .returning('id');
   }
 
@@ -122,7 +126,7 @@ export default class User {
       .returning('id');
   }
 
-  async editUser({ id, username, email, isAdmin, isActive, password }) {
+  async editUser({ id, username, email, role, isActive, password }) {
     let localAuthInput = { email };
     if (password) {
       const passwordHashed = await bcrypt.hash(password, 12);
@@ -131,8 +135,8 @@ export default class User {
 
     return knex('user')
       .update({
-        username: username,
-        is_admin: isAdmin,
+        username,
+        role,
         is_active: isActive,
         ...localAuthInput
       })
@@ -199,7 +203,7 @@ export default class User {
     return camelizeKeys(
       await knex
         .select('*')
-        .from('user')
+        .from('user AS u')
         .where({ email })
         .first()
     );
@@ -208,12 +212,11 @@ export default class User {
   async getUserByFbIdOrEmail(id, email) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'fa.fb_id', 'la.email', 'la.password')
+        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'fa.fb_id', 'u.email', 'u.password')
         .from('user AS u')
-        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .where('fa.fb_id', '=', id)
-        .orWhere('la.email', '=', email)
+        .orWhere('u.email', '=', email)
         .first()
     );
   }

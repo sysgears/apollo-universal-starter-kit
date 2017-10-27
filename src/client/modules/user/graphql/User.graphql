@@ -3,7 +3,7 @@
 fragment UserInfo on User {
     id
     username
-    isAdmin
+    role
     isActive
     email
     profile {

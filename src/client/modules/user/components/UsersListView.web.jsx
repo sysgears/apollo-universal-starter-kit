@@ -79,13 +79,12 @@ class UsersView extends React.PureComponent {
       },
       {
         title: (
-          <a onClick={e => this.orderBy(e, 'isAdmin')} href="#">
-            Is Admin {this.renderOrderByArrow('isAdmin')}
+          <a onClick={e => this.orderBy(e, 'role')} href="#">
+            Role {this.renderOrderByArrow('role')}
           </a>
         ),
-        dataIndex: 'isAdmin',
-        key: 'isAdmin',
-        render: text => text.toString()
+        dataIndex: 'role',
+        key: 'role'
       },
       {
         title: (

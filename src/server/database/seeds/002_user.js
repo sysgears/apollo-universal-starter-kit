@@ -10,8 +10,8 @@ export async function seed(knex, Promise) {
       username: 'admin',
       email: 'admin@example.com',
       password: await bcrypt.hash('admin', 12),
-      is_active: true,
-      is_admin: true
+      role: 'admin',
+      is_active: true
     });
 
   await knex('user')
@@ -20,7 +20,7 @@ export async function seed(knex, Promise) {
       username: 'user',
       email: 'user@example.com',
       password: await bcrypt.hash('user', 12),
-      is_active: true,
-      is_admin: false
+      role: 'user',
+      is_active: true
     });
 }

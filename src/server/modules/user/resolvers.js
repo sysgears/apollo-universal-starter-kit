@@ -1,19 +1,24 @@
 /*eslint-disable no-unused-vars*/
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
+import withAuth from 'graphql-auth';
 import { refreshTokens, tryLogin } from './auth';
-import { requiresAuth, requiresAdmin } from './permissions';
 import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
 
 export default pubsub => ({
   Query: {
-    users: requiresAdmin.createResolver((obj, { orderBy, filter }, context) => {
+    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, context) => {
       return context.User.getUsers(orderBy, filter);
     }),
-    user: requiresAuth.createResolver((obj, { id }, context) => {
-      return context.User.getUser(id);
-    }),
+    user: withAuth(
+      (obj, args, context) => {
+        return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
+      },
+      (obj, { id }, context) => {
+        return context.User.getUser(id);
+      }
+    ),
     currentUser(obj, args, context) {
       if (context.user) {
         return context.User.getUser(context.user.id);
@@ -156,99 +161,113 @@ export default pubsub => ({
     refreshTokens(obj, { token, refreshToken }, context) {
       return refreshTokens(token, refreshToken, context.User, context.SECRET);
     },
-    addUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
-      try {
-        const e = new FieldError();
+    addUser: withAuth(
+      (obj, args, context) => {
+        return context.user.id !== args.id ? ['user:create'] : ['user:create:self'];
+      },
+      async (obj, { input }, context) => {
+        try {
+          const e = new FieldError();
 
-        const userExists = await context.User.getUserByUsername(input.username);
-        if (userExists) {
-          e.setError('username', 'Username already exists.');
-        }
+          const userExists = await context.User.getUserByUsername(input.username);
+          if (userExists) {
+            e.setError('username', 'Username already exists.');
+          }
 
-        const emailExists = await context.User.getUserByEmail(input.email);
-        if (emailExists) {
-          e.setError('email', 'E-mail already exists.');
-        }
+          const emailExists = await context.User.getUserByEmail(input.email);
+          if (emailExists) {
+            e.setError('email', 'E-mail already exists.');
+          }
 
-        if (input.password.length < 5) {
-          e.setError('password', `Password must be 5 characters or more.`);
-        }
+          if (input.password.length < 5) {
+            e.setError('password', `Password must be 5 characters or more.`);
+          }
 
-        e.throwIf();
-
-        const [createdUserId] = await context.User.register({ ...input });
-        await context.User.editUserProfile({ id: createdUserId, ...input });
-
-        if (settings.user.auth.certificate.enabled) {
-          await context.User.editAuthCertificate({ id: createdUserId, ...input });
-        }
-
-        const user = await context.User.getUser(createdUserId);
-
-        return { user };
-      } catch (e) {
-        return { errors: e };
-      }
-    }),
-    editUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
-      try {
-        const e = new FieldError();
-
-        const userExists = await context.User.getUserByUsername(input.username);
-        if (userExists && userExists.id !== input.id) {
-          e.setError('username', 'Username already exists.');
-        }
-
-        const emailExists = await context.User.getUserByEmail(input.email);
-        if (emailExists && emailExists.id !== input.id) {
-          e.setError('email', 'E-mail already exists.');
-        }
-
-        if (input.password && input.password.length < 5) {
-          e.setError('password', `Password must be 5 characters or more.`);
-        }
-
-        e.throwIf();
-
-        await context.User.editUser(input);
-        await context.User.editUserProfile(input);
-
-        if (settings.user.auth.certificate.enabled) {
-          await context.User.editAuthCertificate(input);
-        }
-
-        const user = await context.User.getUser(input.id);
-
-        return { user };
-      } catch (e) {
-        return { errors: e };
-      }
-    }),
-    deleteUser: requiresAdmin.createResolver(async (obj, { id }, context) => {
-      try {
-        const e = new FieldError();
-        const user = await context.User.getUser(id);
-        if (!user) {
-          e.setError('delete', 'User does not exist.');
           e.throwIf();
-        }
 
-        if (user.id === context.user.id) {
-          e.setError('delete', 'You can not delete your self.');
-          e.throwIf();
-        }
+          const [createdUserId] = await context.User.register({ ...input });
+          await context.User.editUserProfile({ id: createdUserId, ...input });
 
-        const isDeleted = await context.User.deleteUser(id);
-        if (isDeleted) {
+          if (settings.user.auth.certificate.enabled) {
+            await context.User.editAuthCertificate({ id: createdUserId, ...input });
+          }
+
+          const user = await context.User.getUser(createdUserId);
+
           return { user };
-        } else {
-          e.setError('delete', 'Could not delete user. Please try again later.');
-          e.throwIf();
+        } catch (e) {
+          return { errors: e };
         }
-      } catch (e) {
-        return { errors: e };
       }
-    }),
+    ),
+    editUser: withAuth(
+      (obj, args, context) => {
+        return context.user.id !== args.id ? ['user:update'] : ['user:update:self'];
+      },
+      async (obj, { input }, context) => {
+        try {
+          const e = new FieldError();
+          const userExists = await context.User.getUserByUsername(input.username);
+          if (userExists && userExists.id !== input.id) {
+            e.setError('username', 'Username already exists.');
+          }
+
+          const emailExists = await context.User.getUserByEmail(input.email);
+          if (emailExists && emailExists.id !== input.id) {
+            e.setError('email', 'E-mail already exists.');
+          }
+
+          if (input.password && input.password.length < 5) {
+            e.setError('password', `Password must be 5 characters or more.`);
+          }
+
+          e.throwIf();
+
+          await context.User.editUser(input);
+          await context.User.editUserProfile(input);
+
+          if (settings.user.auth.certificate.enabled) {
+            await context.User.editAuthCertificate(input);
+          }
+
+          const user = await context.User.getUser(input.id);
+
+          return { user };
+        } catch (e) {
+          return { errors: e };
+        }
+      }
+    ),
+    deleteUser: withAuth(
+      (obj, args, context) => {
+        return context.user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
+      },
+      async (obj, { id }, context) => {
+        try {
+          const e = new FieldError();
+          const user = await context.User.getUser(id);
+          if (!user) {
+            e.setError('delete', 'User does not exist.');
+            e.throwIf();
+          }
+
+          if (user.id === context.user.id) {
+            e.setError('delete', 'You can not delete your self.');
+            e.throwIf();
+          }
+
+          const isDeleted = await context.User.deleteUser(id);
+          if (isDeleted) {
+            return { user };
+          } else {
+            e.setError('delete', 'Could not delete user. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { errors: e };
+        }
+      }
+    ),
     async forgotPassword(obj, { input }, context) {
       try {
         const localAuth = pick(input, 'email');

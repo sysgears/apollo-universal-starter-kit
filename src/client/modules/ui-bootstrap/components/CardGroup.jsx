@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CardBlock } from 'reactstrap';
+import { CardBody } from 'reactstrap';
 
 const CardGroup = ({ children, ...props }) => {
-  return <CardBlock {...props}>{children}</CardBlock>;
+  return <CardBody {...props}>{children}</CardBody>;
 };
 
 CardGroup.propTypes = {

@@ -4,7 +4,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import { PageLayout } from '../../common/components/web';
-import Progress from './Progress';
 
 class SubscriptionView extends React.Component {
   state = {
@@ -31,7 +30,6 @@ class SubscriptionView extends React.Component {
     return (
       <PageLayout>
         {renderMetaData()}
-        <Progress step={1} />
         <h1>Subscription!</h1>
       </PageLayout>
     );

@@ -7,13 +7,17 @@ import { NavItem } from 'reactstrap';
 
 // Component and helpers
 import Subscription from './containers/Subscription';
-import SubscriberNav from './containers/Auth';
+import SubscribersOnly from './containers/SubscribersOnly';
+import { SubscriberNav, SubscriberRoute } from './containers/Auth';
 import reducers from './reducers';
 
 import Feature from '../connector';
 
 export default new Feature({
-  route: <Route exact path="/subscription" component={Subscription} />,
+  route: [
+    <Route exact path="/subscription" component={Subscription} />,
+    <SubscriberRoute exact path="/subscribers-only" component={SubscribersOnly} />
+  ],
   navItem: [
     <NavItem>
       <NavLink to="/subscription" className="nav-link" activeClassName="active">

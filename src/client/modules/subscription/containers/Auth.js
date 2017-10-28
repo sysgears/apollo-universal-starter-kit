@@ -33,8 +33,12 @@ const SubscriberRoute = ({ loading, active, component, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
-        !loading && active ? <AuthRoute component={component} {...props} /> : <Redirect to={{ pathname: '/login' }} />}
+      render={props => {
+        if (loading) {
+          return <p>Loading...</p>;
+        }
+        return active ? <AuthRoute component={component} {...props} /> : <Redirect to={{ pathname: '/login' }} />;
+      }}
     />
   );
 };

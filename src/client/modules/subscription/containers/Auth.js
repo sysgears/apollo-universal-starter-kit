@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
-import { Route, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 
 import { AuthNav, AuthRoute } from '../../user/containers/Auth';
 
 const SubscriberNav = ({ loading, active, children, ...rest }) => {
-  return !loading && active ? <AuthNav {...rest}>{children}</AuthNav> : null;
+  return <AuthNav {...rest}>{loading || !active ? null : children}</AuthNav>;
 };
 
 SubscriberNav.propTypes = {
@@ -29,18 +29,10 @@ const SubscriberNavWithApollo = compose(
   })
 )(SubscriberNav);
 
+const SubscribeRedirect = () => <Redirect to="/subscription" />;
+
 const SubscriberRoute = ({ loading, active, component, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={props => {
-        if (loading) {
-          return <p>Loading...</p>;
-        }
-        return active ? <AuthRoute component={component} {...props} /> : <Redirect to={{ pathname: '/login' }} />;
-      }}
-    />
-  );
+  return <AuthRoute component={!loading && active ? component : SubscribeRedirect} {...rest} />;
 };
 
 SubscriberRoute.propTypes = {

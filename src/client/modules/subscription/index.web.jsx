@@ -16,7 +16,7 @@ import Feature from '../connector';
 export default new Feature({
   route: [
     <Route exact path="/subscription" component={Subscription} />,
-    <SubscriberRoute exact path="/subscribers-only" component={SubscribersOnly} />
+    <SubscriberRoute exact scope="user" path="/subscribers-only" component={SubscribersOnly} />
   ],
   navItem: [
     <NavItem>

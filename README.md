@@ -328,7 +328,7 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
 
 |`npm run or yarn <script>`|Description|
 |--------------------------|-----------|
-|`watch`|Run your app in develooment mode and watch your changes. Hot code reload will be enabled in development.|
+|`watch`|Run your app in development mode and watch your changes. Hot code reload will be enabled in development.|
 |`start`|Run your app in production mode.|
 |`build`|Compiles the application to the build folder.|
 |`tests`|Runs unit tests with Mocha.|

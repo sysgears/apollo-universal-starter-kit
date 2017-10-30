@@ -2,19 +2,29 @@
 
 // React
 import React from 'react';
+import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { SubmissionError } from 'redux-form';
+
 import { PageLayout } from '../../common/components/web';
+import SubscriptionForm from './SubscriptionForm';
 
 class SubscriptionView extends React.Component {
-  state = {
-    errors: []
-  };
+  onSubmit = subscribe => async values => {
+    const result = await subscribe(values);
 
-  onSubmit = () => async values => {
-    console.log(values);
+    if (result.errors) {
+      let submitError = {
+        _error: 'Transaction failed!'
+      };
+      result.errors.map(error => (submitError[error.field] = error.message));
+      throw new SubmissionError(submitError);
+    }
   };
 
   render() {
+    const { subscribe } = this.props;
+
     const renderMetaData = () => (
       <Helmet
         title="Subscription"
@@ -31,9 +41,14 @@ class SubscriptionView extends React.Component {
       <PageLayout>
         {renderMetaData()}
         <h1>Subscription!</h1>
+        <SubscriptionForm onSubmit={this.onSubmit(subscribe)} />
       </PageLayout>
     );
   }
 }
+
+SubscriptionView.propTypes = {
+  subscribe: PropTypes.func.isRequired
+};
 
 export default SubscriptionView;

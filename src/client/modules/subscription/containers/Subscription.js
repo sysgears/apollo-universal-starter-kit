@@ -1,12 +1,10 @@
-/*eslint-disable no-unused-vars*/
-// React
 import React from 'react';
-
-// Apollo
+import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
-// Components
 import SubscriptionView from '../components/SubscriptionView';
+
+import SUBSCRIBE from '../graphql/Subscribe.graphql';
 
 class Subscription extends React.Component {
   render() {
@@ -14,6 +12,30 @@ class Subscription extends React.Component {
   }
 }
 
-const SubscriptionViewWithApollo = compose()(Subscription);
+Subscription.propTypes = {
+  subscribe: PropTypes.func.isRequired
+};
+
+const SubscriptionViewWithApollo = compose(
+  graphql(SUBSCRIBE, {
+    props: ({ mutate }) => ({
+      subscribe: async ({ nameOnCard, cardNumber, cvv }) => {
+        try {
+          const { data: { subscribe } } = await mutate({
+            variables: { input: { nameOnCard, cardNumber, cvv } }
+          });
+
+          if (subscribe.errors) {
+            return { errors: subscribe.errors };
+          }
+
+          return subscribe;
+        } catch (e) {
+          console.log(e.graphQLErrors);
+        }
+      }
+    })
+  })
+)(Subscription);
 
 export default SubscriptionViewWithApollo;

@@ -1,0 +1,3 @@
+mutation subscribe($input: SubscribeInput!) {
+    subscribe(input: $input)
+}

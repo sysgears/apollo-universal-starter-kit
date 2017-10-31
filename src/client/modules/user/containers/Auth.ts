@@ -1,9 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CookieService } from 'angular2-cookie/core';
-
-import { Apollo } from 'apollo-angular';
-import * as decode from 'jwt-decode';
-import * as LOGOUT from '../graphql/Logout.graphql';
 import LoginService from './Login';
 
 @Component({
@@ -27,70 +22,56 @@ class AuthLogin implements OnInit {
   public isAuth: boolean = false;
   public logout: any = this.logoutFn;
 
-  constructor(private cookieService: CookieService, private apollo: Apollo, private loginService: LoginService) {}
+  constructor(private loginService: LoginService) {}
 
   public ngOnInit(): void {
     this.setAuth();
     this.loginService.setLoginEventCb(this.setAuth);
+    this.loginService.setLogoutEventCb(this.setAuth);
   }
 
   private setAuth = () => {
-    this.isAuth = this.checkAuth();
-  };
-
-  private checkAuth = () => {
-    let token = null;
-    let refreshToken = null;
-
-    const rToken = this.cookieService.get('r-token');
-    if (rToken) {
-      token = rToken;
-      refreshToken = this.cookieService.get('r-refresh-token');
-    }
-    if (__CLIENT__ && window.localStorage.getItem('token')) {
-      token = window.localStorage.getItem('token');
-      refreshToken = window.localStorage.getItem('refreshToken');
-    }
-
-    if (!token || !refreshToken) {
-      return false;
-    }
-
-    try {
-      const { exp } = decode(refreshToken);
-
-      if (exp < new Date().getTime() / 1000) {
-        return false;
-      }
-
-      if (this.role === 'admin') {
-        const { user: { isAdmin } } = decode(token);
-
-        if (isAdmin === 0) {
-          return false;
-        }
-      }
-    } catch (e) {
-      return false;
-    }
-
-    return true;
+    this.isAuth = this.loginService.checkAuth(this.role);
   };
 
   private logoutFn() {
-    this.apollo
-      .mutate({
-        mutation: LOGOUT
-      })
-      .subscribe(() => {
-        window.localStorage.setItem('token', null);
-        window.localStorage.setItem('refreshToken', null);
-        this.setAuth();
-      });
+    this.loginService.logout(() => {
+      window.localStorage.setItem('token', null);
+      window.localStorage.setItem('refreshToken', null);
+    });
   }
 }
 
+/* tslint:disable */
+@Component({
+  selector: 'auth-nav',
+  template: `
+    <li *ngIf="isAuth" class="nav-item">
+      <span class="nav-link">
+        <a href="#" routerLink="users">Users</a>
+      </span>
+    </li>
+  `
+})
+class AuthNav implements OnInit {
+  @Input() public role: string;
+  public isAuth: boolean = false;
+
+  constructor(private loginService: LoginService) {}
+
+  public ngOnInit(): void {
+    this.setAuth();
+    this.loginService.setLoginEventCb(this.setAuth);
+    this.loginService.setLogoutEventCb(this.setAuth);
+  }
+
+  private setAuth = () => {
+    this.isAuth = this.loginService.checkAuth(this.role);
+  };
+}
+
 export { AuthLogin };
+export { AuthNav };
 
 // import React from 'react';
 // import PropTypes from 'prop-types';

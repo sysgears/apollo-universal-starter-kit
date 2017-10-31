@@ -29,7 +29,7 @@ import PostEditService from './modules/post/containers/PostEdit';
 import LoginForm from './modules/user/components/LoginForm.web';
 import LoginView from './modules/user/components/LoginView.web';
 import ProfileView from './modules/user/components/ProfileView.web';
-import { AuthLogin } from './modules/user/containers/Auth';
+import { AuthLogin, AuthNav } from './modules/user/containers/Auth';
 import LoginService from './modules/user/containers/Login';
 import ProfileService from './modules/user/containers/Profile';
 
@@ -60,7 +60,8 @@ import { clientProvider, default as Main } from './app/Main';
     LoginView,
     LoginForm,
     ProfileView,
-    AuthLogin
+    AuthLogin,
+    AuthNav
   ],
   imports: [
     BrowserModule,

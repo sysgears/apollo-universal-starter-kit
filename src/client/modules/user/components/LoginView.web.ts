@@ -35,7 +35,6 @@ export default class LoginView {
       localStorage.setItem('refreshToken', refreshToken);
 
       this.router.navigateByUrl('profile');
-      this.loginService.loginEvent();
     });
   };
 }

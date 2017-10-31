@@ -124,7 +124,7 @@ export default (pubsub: PubSub) => ({
       }
     },
     async logout(obj: any, args: UserParams, context: any) {
-      if (context.req) {
+      if (context.req && context.req.universalCookies) {
         context.req.universalCookies.remove('x-token');
         context.req.universalCookies.remove('x-refresh-token');
 

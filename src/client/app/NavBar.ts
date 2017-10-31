@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import modules from '../modules';
+
 @Component({
   selector: 'nav-bar',
   template: `
@@ -12,19 +14,14 @@ import { Component } from '@angular/core';
           </li>
         </ul>
         <ul class="nav col-md-6 right-side">
-          <li class="nav-item"></li>
-          <li class="nav-item">
-      <span class="nav-link">
-        <a aria-current="false" routerLink="/login">Login</a> / <a aria-current="false" routerLink="/register">Register</a>
-      </span>
-          </li>
+          ${modules.navItemsRight}
           <li class="nav-item">
             <a href="/graphiql" class="nav-link">GraphiQL</a>
           </li>
         </ul>
       </div>
     </nav>`,
-  styles: ['ul.right-side { display: block; }', 'ul.right-side li { float: right; }']
+  styles: ['ul.right-side { display: block; }', 'ul.right-side li { float: right; display: inline-block; }']
 })
 export default class {}
 

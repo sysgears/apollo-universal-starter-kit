@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgStyles } from '@angularclass/hmr';
@@ -28,6 +29,7 @@ import PostEditService from './modules/post/containers/PostEdit';
 import LoginForm from './modules/user/components/LoginForm.web';
 import LoginView from './modules/user/components/LoginView.web';
 import ProfileView from './modules/user/components/ProfileView.web';
+import { AuthLogin } from './modules/user/containers/Auth';
 import LoginService from './modules/user/containers/Login';
 import ProfileService from './modules/user/containers/Profile';
 
@@ -57,7 +59,8 @@ import { clientProvider, default as Main } from './app/Main';
     // User
     LoginView,
     LoginForm,
-    ProfileView
+    ProfileView,
+    AuthLogin
   ],
   imports: [
     BrowserModule,
@@ -70,7 +73,15 @@ import { clientProvider, default as Main } from './app/Main';
     })
   ],
   entryComponents: [PageLayout, CounterView],
-  providers: [CounterService, PostService, PostEditService, PostCommentsService, LoginService, ProfileService]
+  providers: [
+    CounterService,
+    PostService,
+    PostEditService,
+    PostCommentsService,
+    LoginService,
+    ProfileService,
+    CookieService
+  ]
 })
 class MainModule {
   constructor(public appRef: ApplicationRef) {}

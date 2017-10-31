@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import LoginService from '../containers/Login';
 
 import { Router } from '@angular/router';
-import log from '../../../../common/log';
 
 @Component({
   selector: 'login-view',
@@ -36,6 +35,7 @@ export default class LoginView {
       localStorage.setItem('refreshToken', refreshToken);
 
       this.router.navigateByUrl('profile');
+      this.loginService.loginEvent();
     });
   };
 }

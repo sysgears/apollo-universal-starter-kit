@@ -7,6 +7,8 @@ import * as LOGIN from '../graphql/Login.graphql';
 
 @Injectable()
 export default class LoginService {
+  private loginEventCb: any;
+
   constructor(private apollo: Apollo) {}
 
   public login(email: string, password: string, callback: (result: any) => any) {
@@ -15,6 +17,16 @@ export default class LoginService {
       variables: { input: { email, password } }
     });
     this.subscribe(login, callback);
+  }
+
+  public setLoginEventCb(cb: any) {
+    this.loginEventCb = cb;
+  }
+
+  public loginEvent() {
+    if (this.loginEventCb) {
+      this.loginEventCb();
+    }
   }
 
   private subscribe(observable: Observable<any>, cb: (result: Observable<any>) => any): Subscription {

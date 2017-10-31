@@ -29,6 +29,8 @@ const connectionParam = () => {
 
 export default new Feature({
   route: [{ path: 'login', component: LoginView }, { path: 'profile', component: ProfileView }],
+  navItem: [],
+  navItemRight: [`<auth-login [role]="'admin'"></auth-login>`],
   reducer: { user: reducers },
   middleware: tokenMiddleware,
   afterware: tokenAfterware,
@@ -47,7 +49,7 @@ export default new Feature({
 // import Login from './containers/Login';
 // import reducers from './reducers';
 //
-// import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
+// import { AuthRoute, AuthLogin, AuthLogin, AuthProfile } from './containers/Auth';
 //
 // import Feature from '../connector';
 //
@@ -83,11 +85,11 @@ export default new Feature({
 //   ],
 //   navItem: [
 //     <NavItem>
-//       <AuthNav role="admin">
+//       <AuthLogin role="admin">
 //         <NavLink to="/users" className="nav-link" activeClassName="active">
 //           Users
 //         </NavLink>
-//       </AuthNav>
+//       </AuthLogin>
 //     </NavItem>
 //   ],
 //   navItemRight: [

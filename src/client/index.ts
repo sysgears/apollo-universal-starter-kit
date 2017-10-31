@@ -60,7 +60,7 @@ import { clientProvider, default as Main } from './app/Main';
     })
   ],
   entryComponents: [PageLayout, CounterView],
-  providers: [CounterService, PostService, PostEditService, PostCommentsService]
+  providers: [PostService, PostEditService, PostCommentsService]
 })
 class MainModule {
   constructor(public appRef: ApplicationRef) {}

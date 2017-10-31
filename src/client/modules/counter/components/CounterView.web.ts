@@ -21,7 +21,8 @@ import { counterStore } from '../reducers/index';
         </section>
       </div>
     </div>`,
-  styles: ['section { margin-bottom: 30px; }']
+  styles: ['section { margin-bottom: 30px; }'],
+  providers: [CounterService]
 })
 export default class CounterView implements OnInit, OnDestroy {
   public loading: boolean = true;
@@ -29,14 +30,25 @@ export default class CounterView implements OnInit, OnDestroy {
   public reduxCount: number;
   private subsOnUpdate: Subscription;
   private subsOnLoad: Subscription;
+  private subsOnAdd: Subscription;
 
   constructor(private counterService: CounterService, private ngZone: NgZone) {
     this.setReduxCount();
   }
 
   public ngOnInit(): void {
-    this.subsOnUpdate = this.counterService.subscribeToCount(this.subscribeCb);
-    this.subsOnLoad = this.counterService.getCounter(this.getCounterCb);
+    this.subsOnUpdate = this.counterService.subscribeToCount().subscribe(({ data: { counterUpdated } }: any) => {
+      this.ngZone.run(() => {
+        this.counter = counterUpdated;
+      });
+    });
+
+    this.subsOnLoad = this.counterService.getCounter().subscribe(({ data: { counter }, loading }: any) => {
+      this.ngZone.run(() => {
+        this.counter = counter;
+        this.loading = loading || false;
+      });
+    });
   }
 
   public ngOnDestroy(): void {
@@ -45,7 +57,11 @@ export default class CounterView implements OnInit, OnDestroy {
   }
 
   public addCount() {
-    this.counterService.addCounter(1, this.addCounterCb, this.counter.amount);
+    if (this.subsOnAdd) {
+      this.subsOnAdd.unsubscribe();
+      this.subsOnAdd = null;
+    }
+    this.subsOnAdd = this.counterService.addCounter(1, this.counter.amount).subscribe();
   }
 
   public onReduxIncrement() {
@@ -61,25 +77,6 @@ export default class CounterView implements OnInit, OnDestroy {
   private setReduxCount() {
     this.reduxCount = counterStore.getState().reduxCount || 1;
   }
-
-  /* Callbacks */
-
-  private subscribeCb = (res: any) => {
-    this.ngZone.run(() => {
-      this.counter = res.data.counterUpdated;
-    });
-  };
-
-  private getCounterCb = (res: any) => {
-    this.ngZone.run(() => {
-      this.counter = res.data.counter;
-      this.loading = res.loading || false;
-    });
-  };
-
-  private addCounterCb = (res: any) => {
-    this.counter = res.data.addCounter;
-  };
 }
 
 // import React from "react";

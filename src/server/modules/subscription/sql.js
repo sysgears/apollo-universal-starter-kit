@@ -10,4 +10,10 @@ export default class Subscription {
       .where('s.user_id', '=', userId)
       .first();
   }
+
+  async createSubscription(userId) {
+    return await knex('subscription')
+      .insert({ user_id: userId, stripe_id: userId, active: true })
+      .returning('id');
+  }
 }

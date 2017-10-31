@@ -1,3 +1,11 @@
+#import "./Subscription.graphql"
+
 mutation subscribe($input: SubscribeInput!) {
-    subscribe(input: $input)
+    subscribe(input: $input) {
+        ...SubscriptionInfo
+        errors {
+            field
+            message
+        }
+    }
 }

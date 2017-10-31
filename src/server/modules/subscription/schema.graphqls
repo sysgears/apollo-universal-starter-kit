@@ -1,13 +1,22 @@
 type UserSubscription {
     active: Boolean!
+    errors: [FieldError!]
 }
 
 extend type Query {
-    # get current user's subscription
+    # Get current user's subscription
     subscription: UserSubscription
 }
 
 extend type Mutation {
+    # Subscribe a user
+    subscribe(input: SubscribeInput!): UserSubscription!
+}
+
+input SubscribeInput {
+    nameOnCard: String!
+    cardNumber: String!
+    cvv: String!
 }
 
 extend type Subscription {

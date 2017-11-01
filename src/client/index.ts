@@ -29,9 +29,12 @@ import PostEditService from './modules/post/containers/PostEdit';
 import LoginForm from './modules/user/components/LoginForm.web';
 import LoginView from './modules/user/components/LoginView.web';
 import ProfileView from './modules/user/components/ProfileView.web';
+import RegisterForm from './modules/user/components/RegisterForm.web';
+import RegisterView from './modules/user/components/RegisterView.web';
 import { AuthLogin, AuthNav } from './modules/user/containers/Auth';
 import LoginService from './modules/user/containers/Login';
 import ProfileService from './modules/user/containers/Profile';
+import RegisterService from './modules/user/containers/Register';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
@@ -59,6 +62,8 @@ import { clientProvider, default as Main } from './app/Main';
     // User
     LoginView,
     LoginForm,
+    RegisterView,
+    RegisterForm,
     ProfileView,
     AuthLogin,
     AuthNav
@@ -81,7 +86,8 @@ import { clientProvider, default as Main } from './app/Main';
     PostCommentsService,
     LoginService,
     ProfileService,
-    CookieService
+    CookieService,
+    RegisterService
   ]
 })
 class MainModule {

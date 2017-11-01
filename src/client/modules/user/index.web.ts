@@ -3,6 +3,7 @@ import * as reducers from './reducers';
 import Feature from '../connector';
 import LoginView from './components/LoginView.web';
 import ProfileView from './components/ProfileView.web';
+import RegisterView from './components/RegisterView.web';
 
 const tokenMiddleware = (req: any, options: any) => {
   options.headers['x-token'] = window.localStorage.getItem('token');
@@ -28,7 +29,11 @@ const connectionParam = () => {
 };
 
 export default new Feature({
-  route: [{ path: 'login', component: LoginView }, { path: 'profile', component: ProfileView }],
+  route: [
+    { path: 'login', component: LoginView },
+    { path: 'profile', component: ProfileView },
+    { path: 'register', component: RegisterView }
+  ],
   navItem: [`<auth-nav [role]="'admin'"></auth-nav>`],
   navItemRight: [`<auth-login></auth-login>`],
   reducer: { user: reducers },

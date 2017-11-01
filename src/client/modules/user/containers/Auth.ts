@@ -14,12 +14,17 @@ import LoginService from './Login';
         <a href="#" (click)="logout()">Logout</a>
       </span>
     </li>
+    <li *ngIf="isAuth" class="nav-item">
+      <span class="nav-link">
+        <a href="#" routerLink="/profile" routerLinkActive="active">{{profileName}}</a>
+      </span>
+    </li>
   `,
   styles: ['li { float: right; display: inline-block; }']
 })
 class AuthLogin implements OnInit {
-  @Input() public role: string;
   public isAuth: boolean = false;
+  public profileName: string;
   public logout: any = this.logoutFn;
 
   constructor(private loginService: LoginService) {}
@@ -31,7 +36,8 @@ class AuthLogin implements OnInit {
   }
 
   private setAuth = () => {
-    this.isAuth = this.loginService.checkAuth(this.role);
+    this.isAuth = this.loginService.checkAuth();
+    this.profileName = this.loginService.profileName();
   };
 
   private logoutFn() {

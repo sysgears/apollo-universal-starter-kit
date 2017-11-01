@@ -55,7 +55,7 @@ export default class LoginService {
     });
   }
 
-  public checkAuth = (role: string) => {
+  public checkAuth = (role?: string) => {
     let token = null;
     let refreshToken = null;
 
@@ -80,7 +80,7 @@ export default class LoginService {
         return false;
       }
 
-      if (role === 'admin') {
+      if (role && role === 'admin') {
         const { user: { isAdmin } } = decode(token);
 
         if (isAdmin === 0) {
@@ -93,6 +93,24 @@ export default class LoginService {
 
     return true;
   };
+
+  public profileName() {
+    const lsToken = window.localStorage.getItem('token');
+    const xToken = this.cookieService.get('x-token');
+
+    const token = __CLIENT__ && lsToken ? lsToken : xToken;
+
+    if (!token) {
+      return '';
+    }
+
+    try {
+      const { user: { username } } = decode(token);
+      return username;
+    } catch (e) {
+      return '';
+    }
+  }
 
   private subscribe(observable: Observable<any>, cb: (result: Observable<any>) => any, event: string): Subscription {
     const subscription = observable.subscribe({

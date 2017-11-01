@@ -30,7 +30,7 @@ const connectionParam = () => {
 export default new Feature({
   route: [{ path: 'login', component: LoginView }, { path: 'profile', component: ProfileView }],
   navItem: [`<auth-nav [role]="'admin'"></auth-nav>`],
-  navItemRight: [`<auth-login [role]="'admin'"></auth-login>`],
+  navItemRight: [`<auth-login></auth-login>`],
   reducer: { user: reducers },
   middleware: tokenMiddleware,
   afterware: tokenAfterware,

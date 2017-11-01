@@ -15,10 +15,10 @@ import modules from '../modules';
           ${modules.navItems}
         </ul>
         <ul class="nav col-md-6 right-side">
-          ${modules.navItemsRight}
           <li class="nav-item">
             <a href="/graphiql" class="nav-link">GraphiQL</a>
           </li>
+          ${modules.navItemsRight}
         </ul>
       </div>
     </nav>`,

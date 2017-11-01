@@ -30,6 +30,7 @@ import UploadView from './modules/upload/components/UploadView.web';
 import UploadService from './modules/upload/containers/Upload';
 
 // Apollo imports
+import { HttpClientModule } from '@angular/common/http';
 import { ApolloModule } from 'apollo-angular';
 import { clientProvider, default as Main } from './app/Main';
 
@@ -58,6 +59,7 @@ import { clientProvider, default as Main } from './app/Main';
     BrowserModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     ApolloModule.withClient(clientProvider),
     NgbModule.forRoot(),
     RouterModule.forRoot(routes, {

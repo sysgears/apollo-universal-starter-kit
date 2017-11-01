@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter } from '@angular/core';
 import { UploadInput, UploadOutput } from 'ngx-uploader/src/ngx-uploader/classes/interfaces';
 import UploadService from '../containers/Upload';
@@ -45,20 +46,12 @@ export default class UploadView {
   public uploadInput: EventEmitter<UploadInput>;
   public dragOver: boolean;
 
-  constructor(private uploadService: UploadService) {
+  constructor(private uploadService: UploadService, private httpClient: HttpClient) {
     this.uploadInput = new EventEmitter<UploadInput>();
   }
 
   public onUploadOutput(output: UploadOutput): void {
-    if (output.type === 'allAddedToQueue') {
-      const event: UploadInput = {
-        type: 'uploadAll',
-        url: '/graphql',
-        method: 'POST'
-      };
-
-      this.uploadInput.emit(event);
-    } else if (output.type === 'done') {
+    if (output.type === 'addedToQueue') {
       const outputFile = output.file;
       const file = {
         name: outputFile.name,
@@ -66,10 +59,8 @@ export default class UploadView {
         size: outputFile.size,
         path: ''
       };
-      this.uploadService
-        .uploadFile(file)
-        .subscribe()
-        .unsubscribe();
+      this.uploadService.uploadFile(file).subscribe();
+      this.httpClient.post('/graphql', outputFile.form).subscribe();
     } else if (output.type === 'dragOver') {
       this.dragOver = true;
     } else if (output.type === 'dragOut') {

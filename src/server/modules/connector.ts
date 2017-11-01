@@ -12,14 +12,13 @@ const combine = (features: IArguments, extractor: (x: Feature) => any): any[] =>
 type CreateResolversFunc = (pubsub: any) => any;
 type CreateContextFunc = (req: Request, connectionParams?: object | (() => object), webSocket?: any) => object;
 type MiddlewareFunc = (app: Application) => any;
-type CreateFetchOptionsFunc = (request: GraphQLRequest | GraphQLRequest[], options: RequestInit) => RequestInit;
 
 interface FeatureParams {
   schema?: DocumentNode | DocumentNode[];
   createResolversFunc?: CreateResolversFunc | CreateResolversFunc[];
   createContextFunc?: CreateContextFunc | CreateContextFunc[];
   middleware?: MiddlewareFunc | MiddlewareFunc[];
-  createFetchOptions?: CreateFetchOptionsFunc | CreateFetchOptionsFunc[];
+  createFetchOptions?: any;
 }
 
 class Feature {
@@ -27,7 +26,7 @@ class Feature {
   public createResolversFunc: CreateResolversFunc[];
   public createContextFunc: CreateContextFunc[];
   public middleware: MiddlewareFunc[];
-  public createFetchOptions: CreateFetchOptionsFunc[];
+  public createFetchOptions: any[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     this.schema = combine(arguments, arg => arg.schema);

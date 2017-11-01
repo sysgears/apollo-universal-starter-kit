@@ -50,7 +50,7 @@ export default (pubsub: PubSub) => ({
         }
 
         let userId = 0;
-        if (emailExists === null) {
+        if (emailExists === null || emailExists === undefined) {
           const passwordPromise = bcrypt.hash(localAuth.password, 12);
 
           let isActive = false;

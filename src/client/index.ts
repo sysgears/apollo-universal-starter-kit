@@ -1,5 +1,6 @@
 import { ApplicationRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -72,6 +73,7 @@ import { clientProvider, default as Main } from './app/Main';
     BrowserModule,
     FormsModule,
     HttpModule,
+    ReactiveFormsModule,
     ApolloModule.withClient(clientProvider),
     NgbModule.forRoot(),
     RouterModule.forRoot(routes, {

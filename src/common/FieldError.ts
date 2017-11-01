@@ -15,7 +15,12 @@ export default class FieldError {
   }
 
   public setError(field: string, message: string) {
-    this.errors.find((e: Error) => e.field === field).message = message;
+    const error = this.errors.find((e: Error) => e.field === field);
+    if (error) {
+      error.message = message;
+    } else {
+      this.errors.push({ field, message });
+    }
   }
 
   public getErrors() {

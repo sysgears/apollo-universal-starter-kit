@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import RegisterService from '../containers/Register';
 
 @Component({
@@ -11,10 +12,17 @@ import RegisterService from '../containers/Register';
   `
 })
 export default class RegisterView {
-  constructor(private registerService: RegisterService) {}
+  constructor(private registerService: RegisterService, private router: Router) {}
 
   public onSubmit = (regInputs: any) => {
-    // console.log(regInputs);
+    const { username, email, password } = regInputs;
+    this.registerService.register(username, email, password, ({ data: { register } }: any) => {
+      if (register.errors) {
+        return { errors: register.errors };
+      }
+
+      this.router.navigateByUrl('login');
+    });
   };
 }
 

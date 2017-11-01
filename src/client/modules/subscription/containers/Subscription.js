@@ -20,10 +20,10 @@ Subscription.propTypes = {
 const SubscriptionViewWithApollo = compose(
   graphql(SUBSCRIBE, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
-      subscribe: async ({ nameOnCard, cardNumber, cvv }) => {
+      subscribe: async ({ nameOnCard, cardNumber, cvv, expiryMonth, expiryYear }) => {
         try {
           const { data: { subscribe } } = await mutate({
-            variables: { input: { nameOnCard, cardNumber, cvv } },
+            variables: { input: { nameOnCard, cardNumber, cvv, expiryMonth, expiryYear } },
             update: (store, { data: { subscribe } }) => {
               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
               data.subscription = subscribe;

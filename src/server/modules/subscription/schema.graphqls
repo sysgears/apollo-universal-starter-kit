@@ -17,6 +17,8 @@ input SubscribeInput {
     nameOnCard: String!
     cardNumber: String!
     cvv: String!
+    expiryMonth: String!
+    expiryYear: String!
 }
 
 extend type Subscription {

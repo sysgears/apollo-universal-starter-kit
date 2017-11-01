@@ -16,7 +16,7 @@ export default pubsub => ({
     async subscribe(obj, { input }, context) {
       try {
         const e = new FieldError();
-        const data = pick(input, ['nameOnCard', 'cardNumber', 'cvv']);
+        const data = pick(input, ['nameOnCard', 'cardNumber', 'cvv', 'expiryMonth', 'expiryYear']);
         const { user } = context;
 
         if (data.nameOnCard.length === 0) {
@@ -29,6 +29,14 @@ export default pubsub => ({
 
         if (data.cvv.length === 0) {
           e.setError('cvv', 'CVV cannot be blank.');
+        }
+
+        if (data.expiryMonth.length === 0) {
+          e.setError('expiryMonth', 'Expiration month cannot be blank.');
+        }
+
+        if (data.expiryYear.length === 0) {
+          e.setError('expiryYear', 'Expiration year cannot be blank.');
         }
         e.throwIf();
 

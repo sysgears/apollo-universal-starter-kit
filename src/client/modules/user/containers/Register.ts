@@ -7,7 +7,7 @@ import * as REGISTER from '../graphql/Register.graphql';
 
 @Injectable()
 export default class RegisterService {
-  constructor(private apollo: Apollo);
+  constructor(private apollo: Apollo) {}
 
   public register(username: string, email: string, password: string) {
     const reg = this.apollo.mutate({

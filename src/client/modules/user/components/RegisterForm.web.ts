@@ -36,8 +36,8 @@ export default class RegisterForm {
       { id: 'email-input', name: 'email', value: 'Email', type: 'email', placeholder: 'Email' },
       { id: 'password-input', name: 'password', value: 'Password', type: 'password', placeholder: 'Password' },
       {
-        id: 're-password-input',
-        name: 're-password',
+        id: 'passwordConfirmation-input',
+        name: 'passwordConfirmation',
         value: 'Password Confirmation',
         type: 'password',
         placeholder: 'Password Confirmation'

@@ -9,7 +9,7 @@ import * as REGISTER from '../graphql/Register.graphql';
 export default class RegisterService {
   constructor(private apollo: Apollo) {}
 
-  public register(username: string, email: string, password: string) {
+  public register(username: string, email: string, password: string, callback: (result: any) => any) {
     const reg = this.apollo.mutate({
       mutation: REGISTER,
       variables: { input: { username, email, password } }

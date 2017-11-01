@@ -13,7 +13,9 @@ import RegisterService from '../containers/Register';
 export default class RegisterView {
   constructor(private registerService: RegisterService) {}
 
-  public onSubmit = () => {};
+  public onSubmit = (regInputs: any) => {
+    // console.log(regInputs);
+  };
 }
 
 // // Web only component

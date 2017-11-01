@@ -27,14 +27,6 @@ export default pubsub => ({
       }
     }
   },
-  User: {
-    profile(obj) {
-      return obj;
-    },
-    auth(obj) {
-      return obj;
-    }
-  },
   UserProfile: {
     firstName(obj) {
       return obj.firstName;
@@ -44,27 +36,6 @@ export default pubsub => ({
     },
     fullName(obj) {
       return `${obj.firstName} ${obj.lastName}`;
-    }
-  },
-  UserAuth: {
-    certificate(obj) {
-      return obj;
-    },
-    facebook(obj) {
-      return obj;
-    }
-  },
-  CertificateAuth: {
-    serial(obj) {
-      return obj.serial;
-    }
-  },
-  FacebookAuth: {
-    fbId(obj) {
-      return obj.fbId;
-    },
-    displayName(obj) {
-      return obj.displayName;
     }
   },
   Mutation: {

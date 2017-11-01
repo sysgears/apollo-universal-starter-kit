@@ -3,6 +3,8 @@ import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import { pick } from 'lodash';
 
+import { User as UserSchema } from './schema';
+import GraphQLGenerator from '../../../common/DomainGraphQL';
 import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
@@ -66,7 +68,7 @@ if (settings.user.auth.facebook.enabled) {
 }
 
 export default new Feature({
-  schema,
+  schema: [schema, new GraphQLGenerator().generateTypes(UserSchema)],
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
     let tokenUser = null;

@@ -1,7 +1,8 @@
 class DomainSchema {}
 
 export class SchemaTypes {
-  static Integer = 'Types.Integer';
+  static Integer = class Integer {};
+  static ID = class ID {};
 
   static _isConstructable(f) {
     try {

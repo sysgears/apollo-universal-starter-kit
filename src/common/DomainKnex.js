@@ -1,6 +1,9 @@
 import changeCase from 'change-case';
 
 import { SchemaTypes } from './DomainSchema';
+import log from './log';
+
+const DEBUG = false;
 
 export default class {
   constructor(knex) {
@@ -36,6 +39,10 @@ export default class {
   }
 
   async _createTables(parentTableName, domainSchema) {
+    const schema = SchemaTypes.getSchemaInstance(domainSchema);
+    if (!schema) {
+      throw new Error(`Expected instance of DomainSchema, but got: ${domainSchema}`);
+    }
     const tableName = changeCase.snakeCase(domainSchema.name);
     return await this.knex.schema.createTable(tableName, table => {
       if (parentTableName) {
@@ -45,7 +52,9 @@ export default class {
           .references('id')
           .inTable(parentTableName)
           .onDelete('CASCADE');
-        // console.log(`Foreign key ${tableName} -> ${parentTableName}.${parentTableName}_id`)
+        if (DEBUG) {
+          log.debug(`Foreign key ${tableName} -> ${parentTableName}.${parentTableName}_id`);
+        }
       }
 
       table.increments('id');
@@ -53,21 +62,24 @@ export default class {
 
       let promises = [];
 
-      const schema = SchemaTypes.getSchemaInstance(domainSchema);
       for (let key of Object.keys(schema)) {
         if (key === '__') continue;
-        // let column = changeCase.snakeCase(key);
-        // let type = typeof value === 'function' ? value.name : value.type.name;
+        const column = changeCase.snakeCase(key);
         let value = schema[key];
-        const subSchema = SchemaTypes.getSchemaInstance(value);
+        const fieldType = typeof value === 'function' ? value : value.type;
+        const subSchema = SchemaTypes.getSchemaInstance(fieldType);
         if (subSchema) {
           const hostTableName = schema.__ && schema.__.transient ? parentTableName : tableName;
-          const newPromises = this._createTables(hostTableName, value);
+          const newPromises = this._createTables(hostTableName, fieldType);
           promises = promises.concat(newPromises.length ? newPromises : [newPromises]);
-          // console.log(`${subSchema ? 'Schema' : 'Scalar'} key: ${tableName}.${column} -> ${type}`);
-        } else if (!value.transient) {
+          if (DEBUG) {
+            log.debug(`${subSchema ? 'Schema' : 'Scalar'} key: ${tableName}.${column} -> ${fieldType.name}`);
+          }
+        } else if (!value.transient && key !== 'id') {
           this._addColumn(tableName, table, key, value);
-          // console.log(`${subSchema ? 'Schema' : 'Scalar'} key: ${tableName}.${column} -> ${type}`);
+          if (DEBUG) {
+            log.debug(`${subSchema ? 'Schema' : 'Scalar'} key: ${tableName}.${column} -> ${fieldType.name}`);
+          }
         }
       }
 
@@ -76,19 +88,22 @@ export default class {
   }
 
   _getTableNames(domainSchema) {
+    const schema = SchemaTypes.getSchemaInstance(domainSchema);
+    if (!schema) {
+      throw new Error(`Expected instance of DomainSchema, but got: ${domainSchema}`);
+    }
     const tableName = changeCase.snakeCase(domainSchema.name);
     let tableNames = [];
 
-    const schema = SchemaTypes.getSchemaInstance(domainSchema);
     if (!(schema.__ && schema.__.transient)) {
       tableNames.push(tableName);
     }
     for (let key of Object.keys(schema)) {
       if (key === '__') continue;
       let value = schema[key];
-      const subSchema = SchemaTypes.getSchemaInstance(value);
-      if (subSchema) {
-        tableNames = tableNames.concat(this._getTableNames(value));
+      const fieldType = typeof value === 'function' ? value : value.type;
+      if (SchemaTypes.getSchemaInstance(fieldType)) {
+        tableNames = tableNames.concat(this._getTableNames(fieldType));
       }
     }
 
@@ -106,12 +121,10 @@ export default class {
   }
 
   dropTables(domainSchema) {
-    const schema = SchemaTypes.getSchemaInstance(domainSchema);
-    if (!schema) {
-      throw new Error(`Expected instance of DomainSchema, but got: ${domainSchema}`);
-    }
     const tableNames = this._getTableNames(domainSchema);
-    // console.log('Dropping tables:', tableNames);
+    if (DEBUG) {
+      log.debug('Dropping tables:', tableNames);
+    }
     return Promise.all(tableNames.map(name => this.knex.schema.dropTable(name)));
   }
 }

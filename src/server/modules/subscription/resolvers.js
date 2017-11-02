@@ -5,11 +5,7 @@ import FieldError from '../../../common/FieldError';
 export default pubsub => ({
   Query: {
     subscription(obj, args, context) {
-      if (context.user) {
-        return context.Subscription.getSubscription(context.user.id);
-      } else {
-        return null;
-      }
+      return context.subscription;
     }
   },
   Mutation: {

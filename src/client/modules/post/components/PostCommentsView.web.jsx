@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { ListGroup, ListGroupItem } from "reactstrap";
+import { ListGroup, ListGroupItem, Button } from "reactstrap";
 
 import PostCommentForm from "./PostCommentForm";
 
@@ -10,17 +10,18 @@ function renderComments(comments, onCommentSelect, comment, deleteComment) {
       <ListGroupItem className="d-flex justify-content-between" key={id}>
         {content}
         <div>
-          <a className="badge badge-secondary edit-comment" onClick={() => onCommentSelect({ id, content })} href="#">
+          <Button color="primary" size="sm" className="badge badge-secondary edit-comment" onClick={() => onCommentSelect({ id, content })} href="#">
             Edit
-          </a>
-          &nbsp;
-          <a
+          </Button>{' '}
+          <Button
+            color="primary"
+            size="sm"
             className="badge badge-secondary delete-comment"
             onClick={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
             href="#"
           >
             Delete
-          </a>
+          </Button>
         </div>
       </ListGroupItem>
     );

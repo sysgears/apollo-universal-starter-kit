@@ -6,6 +6,7 @@ interface FormInput {
   value: string;
   type: string;
   placeholder: string;
+  minLength?: number;
 }
 
 @Component({

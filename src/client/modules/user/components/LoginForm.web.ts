@@ -16,15 +16,33 @@ interface FormInput {
     <form name="login" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.form.value)">
       <div class="form-group" *ngFor="let fi of formInputs">
         <label for="{{fi.id}}">{{fi.value}}</label>
-        <input id="{{fi.id}}" type="{{fi.type}}" class="form-control" placeholder="{{fi.value}}" name="{{fi.name}}" [(ngModel)]="login[fi.name]" #name="ngModel" required />
+        <input id="{{fi.id}}"
+               type="{{fi.type}}"
+               class="form-control"
+               placeholder="{{fi.value}}"
+               name="{{fi.name}}"
+               [(ngModel)]="login[fi.name]"
+               #name="ngModel"
+               pattern="{{(fi.name === 'email' ? emailPattern : null)}}"
+               required />
+
+        <div *ngIf="name.invalid && (name.dirty || name.touched)">
+          <small [hidden]="!name.errors.required">
+            {{fi.value}} is required.
+          </small>
+          <small *ngIf="name.errors.pattern">
+            Email should be like john@doe.com
+          </small>
+        </div>
+
       </div>
-      <button type="submit" id="login-submit-btn" class="btn btn-primary">Login</button>
+      <button type="submit" id="login-submit-btn" class="btn btn-primary" [disabled]="!loginForm.form.valid">Login</button>
       <button id="fb-login-btn" *ngIf="settings.user.auth.facebook.enabled" class="btn btn-primary" (click)="facebookLogin()" )>
         Login with Facebook
       </button>
     </form>
   `,
-  styles: ['button#fb-login-btn {margin-left: 10px}']
+  styles: ['button#fb-login-btn {margin-left: 10px}', 'small {color: brown}']
 })
 export default class LoginForm {
   @Input() public onSubmit: any;
@@ -33,6 +51,7 @@ export default class LoginForm {
   public settings: any;
   public formInputs: FormInput[];
   public login: any = {};
+  public emailPattern: any = '^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\\.[a-zA-Z0–9.]+$';
 
   constructor() {
     this.settings = settings;

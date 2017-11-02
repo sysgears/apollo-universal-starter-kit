@@ -1,0 +1,5 @@
+fragment ProfileInfo on UserProfile {
+    firstName
+    lastName
+    fullName
+}

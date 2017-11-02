@@ -1,6 +1,11 @@
 import { createStore, Reducer, Store } from 'redux';
 
-const defaultState = {
+const defaultState: {
+  searchText: string;
+  isAdmin: boolean;
+  isActive: boolean;
+  orderBy: any;
+} = {
   searchText: '',
   isAdmin: null,
   isActive: null,

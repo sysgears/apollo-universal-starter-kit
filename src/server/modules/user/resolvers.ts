@@ -22,7 +22,7 @@ export interface UserParams {
 
 export default (pubsub: PubSub) => ({
   Query: {
-    users: requiresAdmin.createResolver((obj: any, { orderBy, filter }, context: any) => {
+    users: requiresAdmin.createResolver((obj: any, { orderBy, filter }: any, context: any) => {
       return context.User.getUsers(orderBy, filter);
     }),
     user: requiresAuth.createResolver((obj: any, args: UserParams, context: any) => {
@@ -36,8 +36,48 @@ export default (pubsub: PubSub) => ({
       }
     }
   },
+  User: {
+    profile(obj: any) {
+      return obj;
+    },
+    auth(obj: any) {
+      return obj;
+    }
+  },
+  UserProfile: {
+    firstName(obj: any) {
+      return obj.firstName;
+    },
+    lastName(obj: any) {
+      return obj.lastName;
+    },
+    fullName(obj: any) {
+      return `${obj.firstName} ${obj.lastName}`;
+    }
+  },
+  UserAuth: {
+    certificate(obj: any) {
+      return obj;
+    },
+    facebook(obj: any) {
+      return obj;
+    }
+  },
+  CertificateAuth: {
+    serial(obj: any) {
+      return obj.serial;
+    }
+  },
+  FacebookAuth: {
+    fbId(obj: any) {
+      return obj.fbId;
+    },
+    displayName(obj: any) {
+      return obj.displayName;
+    }
+  },
   Mutation: {
-    async register(obj: any, { input }, context: any) {
+    async register(obj: any, { input }: any, context: any) {
       try {
         const e = new FieldError();
 
@@ -46,8 +86,7 @@ export default (pubsub: PubSub) => ({
           e.setError('username', 'Username already exists.');
         }
 
-        const localAuth: any = pick(input, ['email', 'password']);
-        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
+        const emailExists = await context.User.getUserByEmail(input.email);
 
         if (emailExists) {
           e.setError('email', 'E-mail already exists.');
@@ -62,17 +101,11 @@ export default (pubsub: PubSub) => ({
             isActive = true;
           }
 
-          const [createdUserId] = await context.User.register({ ...input, isActive });
-
-          await context.User.createLocalOuth({
-            ...localAuth,
-            userId: createdUserId
-          });
-          userId = createdUserId;
+          [userId] = await context.User.register({ ...input, isActive });
 
           // if user has previously logged with facebook auth
         } else {
-          await context.User.updatePassword(emailExists.userId, localAuth.password);
+          await context.User.updatePassword(emailExists.userId, input.password);
           userId = emailExists.userId;
         }
 
@@ -85,7 +118,7 @@ export default (pubsub: PubSub) => ({
             const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
             context.mailer.sendMail({
               from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
-              to: localAuth.email,
+              to: user.email,
               subject: 'Confirm Email',
               html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
             });
@@ -138,7 +171,7 @@ export default (pubsub: PubSub) => ({
     refreshTokens(obj: any, args: UserParams, context: any) {
       return refreshTokens(args.token, args.refreshToken, context.User, context.SECRET);
     },
-    addUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
+    addUser: requiresAdmin.createResolver(async (obj: any, { input }: any, context: any) => {
       try {
         const e = new FieldError();
 
@@ -147,8 +180,7 @@ export default (pubsub: PubSub) => ({
           e.setError('username', 'Username already exists.');
         }
 
-        const localAuth: any = pick(input, ['email', 'password']);
-        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
+        const emailExists = await context.User.getUserByEmail(input.email);
         if (emailExists) {
           e.setError('email', 'E-mail already exists.');
         }
@@ -160,11 +192,11 @@ export default (pubsub: PubSub) => ({
         e.throwIf();
 
         const [createdUserId] = await context.User.register({ ...input });
+        await context.User.editUserProfile({ id: createdUserId, ...input });
 
-        await context.User.createLocalOuth({
-          ...localAuth,
-          userId: createdUserId
-        });
+        if (settings.user.auth.certificate.enabled) {
+          await context.User.editAuthCertificate({ id: createdUserId, ...input });
+        }
 
         const user = await context.User.getUser(createdUserId);
 
@@ -173,7 +205,7 @@ export default (pubsub: PubSub) => ({
         return { errors: e };
       }
     }),
-    editUser: requiresAdmin.createResolver(async (obj, { input }, context) => {
+    editUser: requiresAdmin.createResolver(async (obj: any, { input }: any, context: any) => {
       try {
         const e = new FieldError();
 
@@ -182,8 +214,7 @@ export default (pubsub: PubSub) => ({
           e.setError('username', 'Username already exists.');
         }
 
-        const localAuth: any = pick(input, ['email', 'password']);
-        const emailExists = await context.User.getLocalOuthByEmail(localAuth.email);
+        const emailExists = await context.User.getUserByEmail(input.email);
         if (emailExists && emailExists.id !== input.id) {
           e.setError('email', 'E-mail already exists.');
         }
@@ -195,13 +226,20 @@ export default (pubsub: PubSub) => ({
         e.throwIf();
 
         await context.User.editUser(input);
+        await context.User.editUserProfile(input);
+
+        if (settings.user.auth.certificate.enabled) {
+          await context.User.editAuthCertificate(input);
+        }
+
         const user = await context.User.getUser(input.id);
+
         return { user };
       } catch (e) {
         return { errors: e };
       }
     }),
-    deleteUser: requiresAdmin.createResolver(async (obj, { id }, context) => {
+    deleteUser: requiresAdmin.createResolver(async (obj: any, { id }: any, context: any) => {
       try {
         const e = new FieldError();
         const user = await context.User.getUser(id);
@@ -226,10 +264,10 @@ export default (pubsub: PubSub) => ({
         return { errors: e };
       }
     }),
-    async forgotPassword(obj, { input }, context) {
+    async forgotPassword(obj: any, { input }: any, context: any) {
       try {
         const localAuth: any = pick(input, 'email');
-        const user = await context.User.getLocalOuthByEmail(localAuth.email);
+        const user = await context.User.getUserByEmail(localAuth.email);
 
         if (user && context.mailer) {
           // async email
@@ -256,7 +294,7 @@ export default (pubsub: PubSub) => ({
         return true;
       }
     },
-    async resetPassword(obj, { input }, context) {
+    async resetPassword(obj: any, { input }: any, context: any) {
       try {
         const e = new FieldError();
         const reset: any = pick(input, ['password', 'passwordConfirmation', 'token']);
@@ -270,8 +308,8 @@ export default (pubsub: PubSub) => ({
         e.throwIf();
 
         const token = Buffer.from(reset.token, 'base64').toString();
-        const { email, password } = jwt.verify(token, context.SECRET);
-        const user = await context.User.getLocalOuthByEmail(email);
+        const { email, password }: any = jwt.verify(token, context.SECRET);
+        const user = await context.User.getUserByEmail(email);
         if (user.password !== password) {
           e.setError('token', 'Invalid token');
           e.throwIf();

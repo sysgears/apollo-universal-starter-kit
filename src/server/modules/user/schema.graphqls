@@ -4,6 +4,28 @@ type User {
     isAdmin: Boolean
     isActive: Boolean
     email: String!
+    profile: UserProfile
+    auth: UserAuth
+}
+
+type UserProfile {
+    firstName: String
+    lastName: String
+    fullName: String
+}
+
+type UserAuth {
+    certificate: CertificateAuth
+    facebook: FacebookAuth
+}
+
+type CertificateAuth {
+    serial: String
+}
+
+type FacebookAuth {
+    fbId: String
+    displayName: String
 }
 
 type UserPayload {
@@ -13,10 +35,6 @@ type UserPayload {
 
 type AuthPayload {
     tokens: Tokens
-    errors: [FieldError!]
-}
-
-type ResetPayload {
     errors: [FieldError!]
 }
 
@@ -93,6 +111,8 @@ input AddUserInput {
     password: String!
     isAdmin: Boolean
     isActive: Boolean
+    profile: ProfileInput
+    auth: AuthInput
 }
 
 # Input for editUser Mutation
@@ -103,6 +123,27 @@ input EditUserInput {
     isActive: Boolean
     email: String!
     password: String
+    profile: ProfileInput
+    auth: AuthInput
+}
+
+input ProfileInput {
+    firstName: String
+    lastName: String
+}
+
+input AuthInput {
+    certificate: AuthCertificateInput
+    facebook: AuthFacebookInput
+}
+
+input AuthCertificateInput {
+    serial: String
+}
+
+input AuthFacebookInput {
+    fbId: String
+    displayName: String
 }
 
 input ForgotPasswordInput {

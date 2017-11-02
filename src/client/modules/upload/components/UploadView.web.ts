@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter } from '@angular/core';
-import { UploadInput, UploadOutput } from 'ngx-uploader/src/ngx-uploader/classes/interfaces';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { UploadOutput } from 'ngx-uploader/src/ngx-uploader/classes/interfaces';
+import { Subscription } from 'rxjs/Subscription';
 import UploadService from '../containers/Upload';
 
 @Component({
@@ -11,7 +11,7 @@ import UploadService from '../containers/Upload';
               <label class="upload-button">
                   <div class="drop-container" ngFileDrop (uploadOutput)="onUploadOutput($event)"
                        [uploadInput]="uploadInput" [ngClass]="{ 'dragOver': dragOver }">
-                      <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)"
+                      <input #fileInput type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)"
                              [uploadInput]="uploadInput" multiple style="display: none">
                       Try dropping some files here, or click to select files to upload.
                   </div>
@@ -42,25 +42,26 @@ import UploadService from '../containers/Upload';
     `
   ]
 })
-export default class UploadView {
-  public uploadInput: EventEmitter<UploadInput>;
+export default class UploadView implements OnDestroy {
+  private subsOnUpload: Subscription;
   public dragOver: boolean;
+  @ViewChild('fileInput') public fileInput: ElementRef;
 
-  constructor(private uploadService: UploadService, private httpClient: HttpClient) {
-    this.uploadInput = new EventEmitter<UploadInput>();
+  constructor(private uploadService: UploadService) {}
+
+  public ngOnDestroy(): void {
+    this.subsOnUpload.unsubscribe();
   }
 
   public onUploadOutput(output: UploadOutput): void {
     if (output.type === 'addedToQueue') {
-      const outputFile = output.file;
-      const file = {
-        name: outputFile.name,
-        type: outputFile.type,
-        size: outputFile.size,
-        path: ''
-      };
-      this.uploadService.uploadFile(file).subscribe();
-      this.httpClient.post('/graphql', outputFile.form).subscribe();
+      if (this.subsOnUpload) {
+        this.subsOnUpload.unsubscribe();
+      }
+      this.subsOnUpload = this.uploadService.uploadFile(output.file.nativeFile).subscribe((result: any) => {
+        this.fileInput.nativeElement.value = '';
+        // console.log(result);
+      });
     } else if (output.type === 'dragOver') {
       this.dragOver = true;
     } else if (output.type === 'dragOut') {

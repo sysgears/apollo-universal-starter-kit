@@ -25,7 +25,7 @@ if (DB_TYPE === 'mysql') {
     filename: './prod-db.sqlite3'
   };
   pool = {
-    afterCreate: (conn, cb) => {
+    afterCreate: (conn: any, cb: () => any) => {
       conn.run('PRAGMA foreign_keys = ON', cb);
     }
   };

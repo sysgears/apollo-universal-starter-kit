@@ -112,7 +112,7 @@ export default class LoginService {
     }
   }
 
-  private subscribe(observable: Observable<any>, cb: (result: Observable<any>) => any, event: string): Subscription {
+  private subscribe(observable: Observable<any>, cb: (result: Observable<any>) => any, event: Events): Subscription {
     const subscription = observable.subscribe({
       next: result => {
         try {

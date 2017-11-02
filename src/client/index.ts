@@ -32,10 +32,12 @@ import LoginView from './modules/user/components/LoginView.web';
 import ProfileView from './modules/user/components/ProfileView.web';
 import RegisterForm from './modules/user/components/RegisterForm.web';
 import RegisterView from './modules/user/components/RegisterView.web';
+import UsersView from './modules/user/components/UsersView.web';
 import { AuthLogin, AuthNav } from './modules/user/containers/Auth';
 import LoginService from './modules/user/containers/Login';
 import ProfileService from './modules/user/containers/Profile';
 import RegisterService from './modules/user/containers/Register';
+import UsersService from './modules/user/containers/Users';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
@@ -67,7 +69,8 @@ import { clientProvider, default as Main } from './app/Main';
     RegisterForm,
     ProfileView,
     AuthLogin,
-    AuthNav
+    AuthNav,
+    UsersView
   ],
   imports: [
     BrowserModule,
@@ -89,7 +92,8 @@ import { clientProvider, default as Main } from './app/Main';
     LoginService,
     ProfileService,
     CookieService,
-    RegisterService
+    RegisterService,
+    UsersService
   ]
 })
 class MainModule {

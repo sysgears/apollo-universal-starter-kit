@@ -54,7 +54,7 @@ class AuthLogin implements OnInit {
   template: `
     <li *ngIf="isAuth" class="nav-item">
       <span class="nav-link">
-        <a href="#" routerLink="users">Users</a>
+        <a aria-current="false" routerLink="/users" [routerLinkActive]="['active']">Users</a>
       </span>
     </li>
   `

@@ -4,6 +4,7 @@ import Feature from '../connector';
 import LoginView from './components/LoginView.web';
 import ProfileView from './components/ProfileView.web';
 import RegisterView from './components/RegisterView.web';
+import UsersView from './components/UsersView.web';
 
 const tokenMiddleware = (req: any, options: any) => {
   options.headers['x-token'] = window.localStorage.getItem('token');
@@ -32,7 +33,8 @@ export default new Feature({
   route: [
     { path: 'login', component: LoginView },
     { path: 'profile', component: ProfileView },
-    { path: 'register', component: RegisterView }
+    { path: 'register', component: RegisterView },
+    { path: 'users', component: UsersView, data: { title: 'Users' } }
   ],
   navItem: [`<auth-nav [role]="'admin'"></auth-nav>`],
   navItemRight: [`<auth-login></auth-login>`],

@@ -25,7 +25,8 @@ import modules from '../modules';
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
 const fetch = createApolloFetch({
-  uri: hostname === 'localhost' ? '/graphql' : __BACKEND_URL__
+  uri: hostname === 'localhost' ? '/graphql' : __BACKEND_URL__,
+  constructOptions: modules.constructFetchOptions
 });
 
 fetch.batchUse(({ requests, options }, next) => {

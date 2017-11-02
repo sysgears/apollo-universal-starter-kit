@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgStyles } from '@angularclass/hmr';
@@ -25,6 +26,8 @@ import PostList from './modules/post/components/PostList.web';
 import PostService from './modules/post/containers/Post';
 import PostCommentsService from './modules/post/containers/PostComments';
 import PostEditService from './modules/post/containers/PostEdit';
+import UploadView from './modules/upload/components/UploadView.web';
+import UploadService from './modules/upload/containers/Upload';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
@@ -47,7 +50,9 @@ import { clientProvider, default as Main } from './app/Main';
     PostEditView,
     PostForm,
     PostCommentsView,
-    PostCommentForm
+    PostCommentForm,
+    // Upload
+    UploadView
   ],
   imports: [
     BrowserModule,
@@ -55,12 +60,12 @@ import { clientProvider, default as Main } from './app/Main';
     HttpModule,
     ApolloModule.withClient(clientProvider),
     NgbModule.forRoot(),
+    NgUploaderModule,
     RouterModule.forRoot(routes, {
       useHash: true
     })
   ],
-  entryComponents: [PageLayout, CounterView],
-  providers: [PostService, PostEditService, PostCommentsService]
+  providers: [CounterService, PostService, PostEditService, PostCommentsService, UploadService]
 })
 class MainModule {
   constructor(public appRef: ApplicationRef) {}

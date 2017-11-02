@@ -60,10 +60,10 @@ import { clientProvider, default as Main } from './app/Main';
     HttpModule,
     ApolloModule.withClient(clientProvider),
     NgbModule.forRoot(),
+    NgUploaderModule,
     RouterModule.forRoot(routes, {
       useHash: true
-    }),
-    NgUploaderModule
+    })
   ],
   providers: [CounterService, PostService, PostEditService, PostCommentsService, UploadService]
 })

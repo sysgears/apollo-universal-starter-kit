@@ -2,60 +2,46 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-
 import * as ADD_COUNTER from '../graphql/AddCounter.graphql';
 import * as COUNTER_QUERY from '../graphql/CounterQuery.graphql';
 import * as COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
-export function updateQuery(prev: any, mutationResult: any) {
-  const newCounter = mutationResult.subscriptionData.data.counter;
-  return {
-    ...prev,
-    counter: newCounter
-  };
-}
-
 @Injectable()
 export default class CounterService {
+  public subscription: Observable<any>;
   constructor(private apollo: Apollo) {}
 
-  public subscribeToCount(callback: (result: any) => any) {
-    const updateCounter = this.apollo.subscribe({
-      query: COUNTER_SUBSCRIPTION,
-      variables: {}
-    });
-    return this.subscribe(updateCounter, callback);
+  public subscribeToCount() {
+    if (!this.subscription) {
+      this.subscription = this.apollo.subscribe({
+        query: COUNTER_SUBSCRIPTION,
+        variables: {}
+      });
+    }
+    return this.subscription;
   }
 
-  public getCounter(callback: (result: any) => any) {
-    const getCounter = this.apollo.subscribe({ query: COUNTER_QUERY });
-    return this.subscribe(getCounter, callback);
+  public getCounter() {
+    return this.apollo.watchQuery({ query: COUNTER_QUERY });
   }
 
-  public addCounter(amount: number, callback: (result: any) => any, optimisticValue?: number) {
-    const addCounter = this.apollo.mutate({
+  public addCounter(amount: number, optimisticValue?: number) {
+    return this.apollo.mutate({
       mutation: ADD_COUNTER,
       variables: { amount },
       optimisticResponse: { addCounter: { amount: optimisticValue + 1, __typename: 'Counter' } },
-      updateQueries: { updateQuery }
-    });
-    this.subscribe(addCounter, callback).unsubscribe();
-  }
-
-  private subscribe(observable: Observable<any>, cb: (result: Observable<any>) => any): Subscription {
-    const subscription = observable.subscribe({
-      next: result => {
-        try {
-          cb(result);
-        } catch (e) {
-          setImmediate(() => {
-            subscription.unsubscribe();
-          });
+      updateQueries: {
+        counterQuery: (prev, { mutationResult }) => {
+          const newAmount = mutationResult.data.addCounter.amount;
+          return {
+            counter: {
+              ...prev.counter,
+              amount: newAmount
+            }
+          };
         }
       }
     });
-    return subscription;
   }
 }
 

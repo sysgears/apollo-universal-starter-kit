@@ -290,6 +290,10 @@ predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` fi
 It will make front end and back end aware of static queries used in the project and will only allow these queries
 for better security and less bandwidth. 
 
+- [TypeScript] support. Though the kit itself uses ES6 and [Flow] you can add source files written in TypeScript. 
+In order to do that add `'ts'` into the `.spinrc.json -> options -> stack`,
+install TypeScript devDependencies: `yarn add -D awesome-typescript-loader typescript` and put `tsconfig.json` into the root folder.
+
 ## Project Structure
 
 The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by feature rather than file type. This structure is only meant to serve as a guide, it is by no means prescriptive. That said, it aims to represent generally accepted guidelines and patterns for building scalable applications.
@@ -440,3 +444,5 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [JWT]: https://jwt.io
 [Gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [GitHub issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
+[Flow]: https://flow.org
+[TypeScript]: https://www.typescriptlang.org

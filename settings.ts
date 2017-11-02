@@ -7,6 +7,7 @@ interface AppSettings {
   apolloLogging?: boolean;
   user?: any;
   db?: any;
+  mailer?: any;
 }
 
 const envSettings: AppSettings = {

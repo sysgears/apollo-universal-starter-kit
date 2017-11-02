@@ -129,6 +129,7 @@
     "@types/lodash": "^4.14.74",
     "@types/minilog": "^2.0.28",
     "@types/node": "^6.0.45",
+    "@types/nodemailer": "^3.1.5",
     "@types/passport": "^0.3.4",
     "@types/passport-facebook": "^2.1.6",
     "@types/redux": "^3.6.31",

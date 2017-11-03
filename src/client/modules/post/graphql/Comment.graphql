@@ -1,4 +1,4 @@
 fragment CommentInfo on Comment {
-    id
-    content
+  id
+  content
 }

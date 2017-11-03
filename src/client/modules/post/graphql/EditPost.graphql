@@ -1,7 +1,7 @@
 #import "./Post.graphql"
 
 mutation editPost($input: EditPostInput!) {
-    editPost(input: $input) {
-        ... PostInfo
-    }
+  editPost(input: $input) {
+    ... PostInfo
+  }
 }

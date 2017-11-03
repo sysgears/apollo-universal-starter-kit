@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
-import BatchHttpLink from 'apollo-link-batch-http';
-import InMemoryCache from 'apollo-cache-inmemory';
+import { BatchHttpLink } from 'apollo-link-batch-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
@@ -74,7 +74,11 @@ async function renderServerSide(req, res) {
 
   await getDataFromTree(component);
 
-  res.status(200);
+  if (context.pageNotFound === true) {
+    res.status(404);
+  } else {
+    res.status(200);
+  }
 
   const sheet = new ServerStyleSheet();
   const html = ReactDOMServer.renderToString(sheet.collectStyles(component));

@@ -1,18 +1,18 @@
 <p align="center"><a href="#"><img width="150" src="https://rawgit.com/sysgears/apollo-universal-starter-kit/master/logo.svg"></a></p>
 
-## Apollo v2 Mobile&Web Universal Starter Kit with Hot Code Reload
+## Apollo v2 GraphQL app Starter Kit for Mobile, Web and Server with Webpack used for every platform to enable max code reuse
 
 If you are using Apollo v1 please use [starter kit from `apollo1` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1)
 
 [![Join the chat at https://gitter.im/sysgears/apollo-fullstack-starter-kit](https://badges.gitter.im/sysgears/apollo-fullstack-starter-kit.svg)](https://gitter.im/sysgears/apollo-fullstack-starter-kit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors)
 [![Build Status](https://travis-ci.org/sysgears/apollo-universal-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-universal-starter-kit)
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-universal-starter-kit.svg)](https://greenkeeper.io/)
 [![Twitter Follow](https://img.shields.io/twitter/follow/sysgears.svg?style=social)](https://twitter.com/sysgears)
 
 > Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] Mobile and Web app development 
 > built on top of [Apollo], [GraphQL], [React 16], [React Native], [Expo], [Redux], [Express] with
-> SQL storage support and [Twitter Bootstrap] integration. Hot Code Reload of back end & front end using [Webpack] and 
+> SQL storage support [Twitter Bootstrap] and [Ant Design] integration. Hot Code Reload of back end & front end using [Webpack] and 
 > Hot Module Replacement to reflect your changes instantly and help you stay productive.
 
 ## Hot Code Reload demo
@@ -89,7 +89,7 @@ To bring up the developer menu press ⌘+D.
 
 ### Commercial support
 
-SysGears team provides advanced support for commercial partners. A commercial partner will have a premium access to our
+[SysGears](https://sysgears.com) team provides advanced support for commercial partners. A commercial partner will have a premium access to our
 team whether this is to help you with your code based on this starter kit or related technologies used in the kit. Contact
 us using [Skype](http://hatscripts.com/addskype?sysgears) or via email: [info@sysgears.com](mailto:info@sysgears.com)
 
@@ -273,6 +273,10 @@ NoSQL storage or any other data source can be used the same way.
   [Twitter Bootstrap] in form of SASS stylesheets is used for styling demo application. Application has stylesheet
 in `styles.scss` for global styling which is Hot Reloaded on change. React components styling is done by [Styled Components].
 
+  If you would like to use a different styling than [Twitter Bootstrap], UI components are structured in a way to make it easy to
+  use something else. We already prepared [Ant Design] integation. To switch the UI all you need to do is change the module import in 
+  `src/client/modules/index.js` and rename the import in `src/client/modules/common/components/web/index.jsx`.
+
 - [Babel] for ES2017 transpiling
 
 - [ESLint] to enforce proper code style
@@ -285,6 +289,10 @@ predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` fi
 - [PersistGraphQL Webpack Plugin] is a tool to gather static GraphQL queries for GraphQL projects and inject them into build.
 It will make front end and back end aware of static queries used in the project and will only allow these queries
 for better security and less bandwidth. 
+
+- [TypeScript] support. Though the kit itself uses ES6 and [Flow] you can add source files written in TypeScript. 
+In order to do that add `'ts'` into the `.spinrc.json -> options -> stack`,
+install TypeScript devDependencies: `yarn add -D awesome-typescript-loader typescript` and put `tsconfig.json` into the root folder.
 
 ## Project Structure
 
@@ -324,7 +332,7 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
 
 |`npm run or yarn <script>`|Description|
 |--------------------------|-----------|
-|`watch`|Run your app in develooment mode and watch your changes. Hot code reload will be enabled in development.|
+|`watch`|Run your app in development mode and watch your changes. Hot code reload will be enabled in development.|
 |`start`|Run your app in production mode.|
 |`build`|Compiles the application to the build folder.|
 |`tests`|Runs unit tests with Mocha.|
@@ -390,9 +398,9 @@ You can see latest version of this app deployed to Heroku here:
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-| [<img src="https://avatars1.githubusercontent.com/u/1259926?v=3" width="100px;"/><br /><sub>Victor Vlasenko</sub>](https://ua.linkedin.com/in/victorvlasenko)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Code") [🔧](#tool-vlasenko "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Documentation") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Tests") [💬](#question-vlasenko "Answering Questions") [👀](#review-vlasenko "Reviewed Pull Requests") | [<img src="https://avatars3.githubusercontent.com/u/26156?v=3" width="100px;"/><br /><sub>mitjade</sub>](http://www.internetne-storitve.si)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade "Code") [🔧](#tool-mitjade "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade "Documentation") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade "Tests") [💬](#question-mitjade "Answering Questions") [👀](#review-mitjade "Reviewed Pull Requests") | [<img src="https://avatars0.githubusercontent.com/u/4072250?v=3" width="100px;"/><br /><sub>Ujjwal</sub>](https://github.com/mairh)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Code") [🔧](#tool-mairh "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Documentation") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Tests") [💬](#question-mairh "Answering Questions") [👀](#review-mairh "Reviewed Pull Requests") | [<img src="https://avatars2.githubusercontent.com/u/1845914?v=3" width="100px;"/><br /><sub>Dmitry Pavlenko</sub>](https://github.com/dmitriypdv)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=dmitriypdv "Code") [🔧](#tool-dmitriypdv "Tools") | [<img src="https://avatars0.githubusercontent.com/u/1349077?v=3" width="100px;"/><br /><sub>Joe</sub>](http://j0ey.co)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=josephdburdick "Code") [🔧](#tool-josephdburdick "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=josephdburdick "Documentation") [💬](#question-josephdburdick "Answering Questions") | [<img src="https://avatars1.githubusercontent.com/u/1251296?v=3" width="100px;"/><br /><sub>Youngjae Ji</sub>](http://zirho.github.io)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=zirho "Code") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=zirho "Tests") [💬](#question-zirho "Answering Questions") | [<img src="https://avatars3.githubusercontent.com/u/3840769?v=3" width="100px;"/><br /><sub>Gilad Shoham</sub>](http://shohamgilad.wordpress.com/)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=GiladShoham "Code") [🔧](#tool-GiladShoham "Tools") [💬](#question-GiladShoham "Answering Questions") |
+| [<img src="https://avatars1.githubusercontent.com/u/1259926?v=3" width="100px;"/><br /><sub>Victor Vlasenko</sub>](https://ua.linkedin.com/in/victorvlasenko)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Code") [🔧](#tool-vlasenko "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Documentation") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Tests") [💬](#question-vlasenko "Answering Questions") [👀](#review-vlasenko "Reviewed Pull Requests") | [<img src="https://avatars3.githubusercontent.com/u/26156?v=3" width="100px;"/><br /><sub>mitjade</sub>](http://www.internetne-storitve.si)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade "Code") [🔧](#tool-mitjade "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade "Documentation") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade "Tests") [💬](#question-mitjade "Answering Questions") [👀](#review-mitjade "Reviewed Pull Requests") | [<img src="https://avatars0.githubusercontent.com/u/4072250?v=3" width="100px;"/><br /><sub>Ujjwal</sub>](https://github.com/mairh)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Code") [🔧](#tool-mairh "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Documentation") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Tests") [💬](#question-mairh "Answering Questions") [👀](#review-mairh "Reviewed Pull Requests") | [<img src="https://avatars1.githubusercontent.com/u/816517?v=4" width="100px;"/><br /><sub>John Pinkerton</sub>](http://johnpinkerton.me)<br />[🐛](https://github.com/sysgears/apollo-fullstack-starter-kit/issues?q=author%3Ajohnthepink "Bug reports") [💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=johnthepink "Code") | [<img src="https://avatars2.githubusercontent.com/u/1845914?v=3" width="100px;"/><br /><sub>Dmitry Pavlenko</sub>](https://github.com/dmitriypdv)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=dmitriypdv "Code") [🔧](#tool-dmitriypdv "Tools") | [<img src="https://avatars0.githubusercontent.com/u/1349077?v=3" width="100px;"/><br /><sub>Joe</sub>](http://j0ey.co)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=josephdburdick "Code") [🔧](#tool-josephdburdick "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=josephdburdick "Documentation") [💬](#question-josephdburdick "Answering Questions") | [<img src="https://avatars1.githubusercontent.com/u/1251296?v=3" width="100px;"/><br /><sub>Youngjae Ji</sub>](http://zirho.github.io)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=zirho "Code") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=zirho "Tests") [💬](#question-zirho "Answering Questions") |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [<img src="https://avatars1.githubusercontent.com/u/6862750?v=3" width="100px;"/><br /><sub>Alex Weber</sub>](https://github.com/zunder)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=zunder "Code") [🔧](#tool-zunder "Tools") [💬](#question-zunder "Answering Questions") | [<img src="https://avatars2.githubusercontent.com/u/13224812?v=3" width="100px;"/><br /><sub>Yishai Chernovitzky</sub>](https://github.com/yishaic)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=yishaic "Code") [🔧](#tool-yishaic "Tools") | [<img src="https://avatars0.githubusercontent.com/u/7948838?v=3" width="100px;"/><br /><sub>Nikita Pavlov</sub>](https://github.com/NickPavlov)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=NickPavlov "Code") | [<img src="https://avatars1.githubusercontent.com/u/5399002?v=3" width="100px;"/><br /><sub>Alexander Vetrov</sub>](https://github.com/alexandervetrov)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=alexandervetrov "Code") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=alexandervetrov "Tests") |
+| [<img src="https://avatars3.githubusercontent.com/u/3840769?v=3" width="100px;"/><br /><sub>Gilad Shoham</sub>](http://shohamgilad.wordpress.com/)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=GiladShoham "Code") [🔧](#tool-GiladShoham "Tools") [💬](#question-GiladShoham "Answering Questions") | [<img src="https://avatars1.githubusercontent.com/u/6862750?v=3" width="100px;"/><br /><sub>Alex Weber</sub>](https://github.com/zunder)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=zunder "Code") [🔧](#tool-zunder "Tools") [💬](#question-zunder "Answering Questions") | [<img src="https://avatars2.githubusercontent.com/u/13224812?v=3" width="100px;"/><br /><sub>Yishai Chernovitzky</sub>](https://github.com/yishaic)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=yishaic "Code") [🔧](#tool-yishaic "Tools") | [<img src="https://avatars0.githubusercontent.com/u/7948838?v=3" width="100px;"/><br /><sub>Nikita Pavlov</sub>](https://github.com/NickPavlov)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=NickPavlov "Code") | [<img src="https://avatars1.githubusercontent.com/u/5399002?v=3" width="100px;"/><br /><sub>Alexander Vetrov</sub>](https://github.com/alexandervetrov)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=alexandervetrov "Code") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=alexandervetrov "Tests") |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
@@ -410,6 +418,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [ReduxForm]: http://redux-form.com
 [Express]: http://expressjs.com
 [Twitter Bootstrap]: http://getbootstrap.com
+[Ant Design]: https://ant.design
 [Webpack]: http://webpack.github.io
 [Babel]: http://babeljs.io
 [Styled Components]: https://www.styled-components.com
@@ -435,3 +444,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [JWT]: https://jwt.io
 [Gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [GitHub issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
+[Flow]: https://flow.org
+[TypeScript]: https://www.typescriptlang.org
+[Flow]: https://flow.org
+[TypeScript]: https://www.typescriptlang.org

@@ -1,10 +1,10 @@
 import React from 'react';
 import { getOperationAST } from 'graphql';
 import { createApolloFetch } from 'apollo-fetch';
-import BatchHttpLink from 'apollo-link-batch-http';
+import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
-import WebSocketLink from 'apollo-link-ws';
-import InMemoryCache from 'apollo-cache-inmemory';
+import { WebSocketLink } from 'apollo-link-ws';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
@@ -23,8 +23,6 @@ import settings from '../../../settings';
 import Routes from './Routes';
 import modules from '../modules';
 
-import '../styles/styles.scss';
-
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
 const fetch = createApolloFetch({
@@ -35,7 +33,7 @@ const cache = new InMemoryCache();
 
 fetch.batchUse(({ requests, options }, next) => {
   try {
-    options.credentials = 'include';
+    options.credentials = 'same-origin';
     options.headers = options.headers || {};
     for (const middleware of modules.middlewares) {
       for (const req of requests) {

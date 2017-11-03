@@ -1,11 +1,8 @@
-// Web only component
-
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
-import PageLayout from '../../../app/PageLayout';
+import { PageLayout } from '../../common/components/web';
 
 const onDrop = uploadFile => async ([file]) => {
   const result = await uploadFile(file);

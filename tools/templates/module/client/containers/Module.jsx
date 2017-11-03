@@ -1,12 +1,8 @@
 /*eslint-disable no-unused-vars*/
-// React
-import React from "react";
+import React from 'react';
+import { graphql, compose } from 'react-apollo';
 
-// Apollo
-import { graphql, compose } from "react-apollo";
-
-// Components
-import $Module$View from "../components/$Module$View";
+import $Module$View from '../components/$Module$View';
 
 class $Module$ extends React.Component {
   render() {

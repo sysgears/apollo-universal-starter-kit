@@ -85,12 +85,13 @@ export default compose(
         let postData = await mutate({
           variables: { input: { title, content } },
           optimisticResponse: {
+            __typename: 'Mutation',
             addPost: {
-              id: -1,
+              __typename: 'Post',
+              id: null,
               title: title,
               content: content,
-              comments: [],
-              __typename: 'Post'
+              comments: []
             }
           },
           updateQueries: {

@@ -9,12 +9,12 @@ import '../styles/styles.scss';
 
 /* ApolloClient initialization */
 
-import Cache from 'apollo-cache-inmemory';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
-import BatchHttpLink from 'apollo-link-batch-http';
-import WebSocketLink from 'apollo-link-ws';
+import { BatchHttpLink } from 'apollo-link-batch-http';
+import { WebSocketLink } from 'apollo-link-ws';
 import { LoggingLink } from 'apollo-logger';
 import { getOperationAST } from 'graphql';
 import * as url from 'url';
@@ -80,7 +80,7 @@ const link = ApolloLink.split(
   new BatchHttpLink({ fetch })
 );
 
-const cache = new Cache();
+const cache = new InMemoryCache();
 
 if (window.__APOLLO_STATE__) {
   cache.restore(window.__APOLLO_STATE__);

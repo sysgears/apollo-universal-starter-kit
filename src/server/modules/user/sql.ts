@@ -1,24 +1,87 @@
 // Helpers
-import { camelizeKeys } from 'humps';
+import * as bcrypt from 'bcryptjs';
+import { camelizeKeys, decamelize, decamelizeKeys } from 'humps';
+import { has } from 'lodash';
 import knex from '../../../server/sql/connector';
 
 // Actual query fetching and transformation in DB
 export default class User {
-  public async getUsers() {
-    return camelizeKeys(
-      await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'la.email')
-        .from('user AS u')
-        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
-    );
+  public async getUsers(orderBy: any, filter: any) {
+    const queryBuilder = knex
+      .select(
+        'u.id as id',
+        'u.username',
+        'u.role',
+        'u.is_active',
+        'u.email',
+        'up.first_name',
+        'up.last_name',
+        'ca.serial',
+        'fa.fb_id',
+        'fa.display_name'
+      )
+      .from('user AS u')
+      .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+      .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
+      .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id');
+
+    // add order by
+    if (orderBy && orderBy.column) {
+      const column = orderBy.column;
+      let order = 'asc';
+      if (orderBy.order) {
+        order = orderBy.order;
+      }
+
+      queryBuilder.orderBy(decamelize(column), order);
+    }
+
+    // add filter conditions
+    if (filter) {
+      if (has(filter, 'role') && filter.role !== '') {
+        queryBuilder.where(function() {
+          this.where('role', filter.role);
+        });
+      }
+
+      if (has(filter, 'isActive') && filter.isActive !== null) {
+        queryBuilder.where(function() {
+          this.where('is_active', filter.isActive);
+        });
+      }
+
+      if (has(filter, 'searchText') && filter.searchText !== '') {
+        queryBuilder.where(function() {
+          this.where('username', 'like', `%${filter.searchText}%`)
+            .orWhere('email', 'like', `%${filter.searchText}%`)
+            .orWhere('first_name', 'like', `%${filter.searchText}%`)
+            .orWhere('last_name', 'like', `%${filter.searchText}%`);
+        });
+      }
+    }
+
+    return camelizeKeys(await queryBuilder);
   }
 
   public async getUser(id: number) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'la.email')
+        .select(
+          'u.id',
+          'u.username',
+          'u.role',
+          'u.is_active',
+          'u.email',
+          'up.first_name',
+          'up.last_name',
+          'ca.serial',
+          'fa.fb_id',
+          'fa.display_name'
+        )
         .from('user AS u')
-        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+        .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
+        .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );
@@ -27,9 +90,8 @@ export default class User {
   public async getUserWithPassword(id: number) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'la.password')
+        .select('*')
         .from('user AS u')
-        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );
@@ -38,7 +100,7 @@ export default class User {
   public async getUserWithSerial(serial: any) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin')
+        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.role', 'ca.serial')
         .from('user AS u')
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
         .where('ca.serial', '=', serial)
@@ -46,15 +108,15 @@ export default class User {
     );
   }
 
-  public register({ username, isActive }: { username: string; isActive: boolean }) {
-    return knex('user')
-      .insert({ username, is_active: isActive })
-      .returning('id');
-  }
+  public async register({ username, email, password, role, isActive }: any) {
+    const passwordHashed = await bcrypt.hash(password, 12);
 
-  public createLocalOuth({ email, password, userId }: any) {
-    return knex('auth_local')
-      .insert({ email, password, user_id: userId })
+    if (role === undefined) {
+      role = 'user';
+    }
+
+    return knex('user')
+      .insert({ username, email, role, password: passwordHashed, is_active: !!isActive })
       .returning('id');
   }
 
@@ -64,10 +126,71 @@ export default class User {
       .returning('id');
   }
 
-  public UpdatePassword(id: number, password: string) {
-    return knex('local_auth')
+  public async editUser({ id, username, email, role, isActive, password }: any) {
+    let localAuthInput: any = { email };
+    if (password) {
+      const passwordHashed = await bcrypt.hash(password, 12);
+      localAuthInput = { email, password: passwordHashed };
+    }
+
+    return knex('user')
+      .update({
+        username,
+        role,
+        is_active: isActive,
+        ...localAuthInput
+      })
+      .where({ id });
+  }
+
+  public async editUserProfile({ id, profile }: any) {
+    const userProfile = await knex
+      .select('id')
+      .from('user_profile')
+      .where({ user_id: id })
+      .first();
+
+    if (userProfile) {
+      return knex('user_profile')
+        .update(decamelizeKeys(profile))
+        .where({ user_id: id });
+    } else {
+      return knex('user_profile')
+        .insert({ ...decamelizeKeys(profile), user_id: id })
+        .returning('id');
+    }
+  }
+
+  public async editAuthCertificate({ id, auth: { certificate: { serial } } }: any) {
+    const userProfile = await knex
+      .select('id')
+      .from('auth_certificate')
+      .where({ user_id: id })
+      .first();
+
+    if (userProfile) {
+      return knex('auth_certificate')
+        .update({ serial })
+        .where({ user_id: id });
+    } else {
+      return knex('auth_certificate')
+        .insert({ serial, user_id: id })
+        .returning('id');
+    }
+  }
+
+  public deleteUser(id: number) {
+    return knex('user')
+      .where('id', '=', id)
+      .del();
+  }
+
+  public async updatePassword(id: number, newPassword: string) {
+    const password = await bcrypt.hash(newPassword, 12);
+
+    return knex('user')
       .update({ password })
-      .where({ user_id: id });
+      .where({ id });
   }
 
   public updateActive(id: number, isActive: boolean) {
@@ -76,21 +199,11 @@ export default class User {
       .where({ id });
   }
 
-  public async getLocalOuth(id: number) {
+  public async getUserByEmail(email: string) {
     return camelizeKeys(
       await knex
         .select('*')
-        .from('auth_local')
-        .where({ id })
-        .first()
-    );
-  }
-
-  public async getLocalOuthByEmail(email: string) {
-    return camelizeKeys(
-      await knex
-        .select('*')
-        .from('auth_local')
+        .from('user AS u')
         .where({ email })
         .first()
     );
@@ -99,12 +212,21 @@ export default class User {
   public async getUserByFbIdOrEmail(id: number, email: string) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.is_admin', 'u.is_active', 'fa.fb_id', 'la.email', 'la.password')
+        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'fa.fb_id', 'u.email', 'u.password')
         .from('user AS u')
-        .leftJoin('auth_local AS la', 'la.user_id', 'u.id')
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .where('fa.fb_id', '=', id)
-        .orWhere('la.email', '=', email)
+        .orWhere('u.email', '=', email)
+        .first()
+    );
+  }
+
+  public async getUserByUsername(username: string) {
+    return camelizeKeys(
+      await knex
+        .select('*')
+        .from('user AS u')
+        .where('u.username', '=', username)
         .first()
     );
   }

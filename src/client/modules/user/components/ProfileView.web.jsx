@@ -1,9 +1,9 @@
 // Web only component
 // React
-import React from "react";
-import PropTypes from "prop-types";
-import Helmet from "react-helmet";
-import PageLayout from "../../../app/PageLayout";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Helmet from 'react-helmet';
+import { PageLayout } from '../../common/components/web';
 
 const ProfileView = ({ loading, currentUser }) => {
   const renderMetaData = () => (
@@ -11,8 +11,8 @@ const ProfileView = ({ loading, currentUser }) => {
       title="Profile"
       meta={[
         {
-          name: "description",
-          content: "Profile page"
+          name: 'description',
+          content: 'Profile page'
         }
       ]}
     />
@@ -32,7 +32,7 @@ const ProfileView = ({ loading, currentUser }) => {
         <h2>Profile</h2>
         <p>username: {currentUser.username}</p>
         <p>email: {currentUser.email}</p>
-        {currentUser.isAdmin && <p>is admin: {currentUser.isAdmin.toString()}</p>}
+        <p>role: {currentUser.role}</p>
       </PageLayout>
     );
   } else {

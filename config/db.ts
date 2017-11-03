@@ -8,7 +8,7 @@ let connectionDevelopment: any = {
   charset: 'utf8'
 };
 let connectionProduction = connectionDevelopment;
-
+let pool = {};
 if (DB_TYPE === 'mysql') {
   // mysql
   client = 'mysql2';
@@ -24,6 +24,11 @@ if (DB_TYPE === 'mysql') {
   connectionProduction = {
     filename: './prod-db.sqlite3'
   };
+  pool = {
+    afterCreate: (conn: any, cb: () => any) => {
+      conn.run('PRAGMA foreign_keys = ON', cb);
+    }
+  };
 }
 
 export default {
@@ -32,5 +37,6 @@ export default {
   connection: {
     development: connectionDevelopment,
     production: connectionProduction
-  }
+  },
+  pool
 };

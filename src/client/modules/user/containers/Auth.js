@@ -9,7 +9,7 @@ import decode from 'jwt-decode';
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
 
-const checkAuth = (cookies, role) => {
+const checkAuth = (cookies, scope) => {
   let token = null;
   let refreshToken = null;
 
@@ -33,10 +33,9 @@ const checkAuth = (cookies, role) => {
       return false;
     }
 
-    if (role === 'admin') {
-      const { user: { isAdmin } } = decode(token);
-
-      if (isAdmin === 0) {
+    if (scope === 'admin') {
+      const { user: { role } } = decode(token);
+      if (scope !== role) {
         return false;
       }
     }
@@ -70,8 +69,8 @@ const profileName = cookies => {
   }
 };
 
-const AuthNav = withCookies(({ children, cookies, role }) => {
-  return checkAuth(cookies, role) ? children : null;
+const AuthNav = withCookies(({ children, cookies, scope }) => {
+  return checkAuth(cookies, scope) ? children : null;
 });
 
 AuthNav.propTypes = {
@@ -80,7 +79,7 @@ AuthNav.propTypes = {
 };
 
 const AuthLogin = ({ children, cookies, logout }) => {
-  return checkAuth(cookies, '') ? (
+  return checkAuth(cookies) ? (
     <a href="#" onClick={() => logout()} className="nav-link">
       Logout
     </a>
@@ -137,7 +136,7 @@ const AuthLoginWithApollo = withCookies(
 );
 
 const AuthProfile = withCookies(({ cookies }) => {
-  return checkAuth(cookies, '') ? (
+  return checkAuth(cookies) ? (
     <NavLink to="/profile" className="nav-link" activeClassName="active">
       {profileName(cookies)}
     </NavLink>
@@ -148,11 +147,12 @@ AuthProfile.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthRoute = withCookies(({ component: Component, cookies, role, ...rest }) => {
+const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props => (checkAuth(cookies, role) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />)}
+      render={props =>
+        checkAuth(cookies, scope) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />}
     />
   );
 });

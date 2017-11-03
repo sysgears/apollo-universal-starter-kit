@@ -50,14 +50,12 @@ export default class UploadView implements OnDestroy {
   constructor(private uploadService: UploadService) {}
 
   public ngOnDestroy(): void {
-    this.subsOnUpload.unsubscribe();
+    this.unsubscribe();
   }
 
   public onUploadOutput(output: UploadOutput): void {
     if (output.type === 'addedToQueue') {
-      if (this.subsOnUpload) {
-        this.subsOnUpload.unsubscribe();
-      }
+      this.unsubscribe();
       this.subsOnUpload = this.uploadService.uploadFile(output.file.nativeFile).subscribe((result: any) => {
         this.fileInput.nativeElement.value = '';
         // console.log(result);
@@ -68,6 +66,12 @@ export default class UploadView implements OnDestroy {
       this.dragOver = false;
     } else if (output.type === 'drop') {
       this.dragOver = false;
+    }
+  }
+
+  private unsubscribe() {
+    if (this.subsOnUpload) {
+      this.subsOnUpload.unsubscribe();
     }
   }
 }

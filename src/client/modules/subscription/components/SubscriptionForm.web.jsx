@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'react-apollo';
 import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 
 const required = value => (value ? undefined : 'Required');
@@ -34,6 +36,14 @@ SubscriptionForm.propTypes = {
   error: PropTypes.string
 };
 
-export default reduxForm({
-  form: 'subscription'
-})(SubscriptionForm);
+export default compose(
+  connect(() => ({
+    initialValues: {
+      expiryMonth: 1,
+      expiryYear: new Date().getFullYear()
+    }
+  })),
+  reduxForm({
+    form: 'subscription'
+  })
+)(SubscriptionForm);

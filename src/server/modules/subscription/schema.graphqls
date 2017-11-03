@@ -3,9 +3,15 @@ type UserSubscription {
     errors: [FieldError!]
 }
 
+type SubscriberNumber {
+    number: Int
+}
+
 extend type Query {
     # Get current user's subscription
     subscription: UserSubscription
+    # Get magic number only available to subscribers
+    subscribersOnlyNumber: SubscriberNumber
 }
 
 extend type Mutation {

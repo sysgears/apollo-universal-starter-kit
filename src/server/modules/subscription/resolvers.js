@@ -6,6 +6,11 @@ export default pubsub => ({
   Query: {
     subscription(obj, args, context) {
       return context.subscription;
+    },
+    subscribersOnlyNumber(obj, args, context) {
+      if (!context.subscription.active) return;
+      const number = Math.floor(Math.random() * 10);
+      return { number };
     }
   },
   Mutation: {

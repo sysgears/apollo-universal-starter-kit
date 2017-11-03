@@ -1,6 +1,6 @@
 import changeCase from 'change-case';
 
-import { SchemaTypes } from './DomainSchema';
+import DomainSchema from './DomainSchema';
 import log from './log';
 
 const DEBUG = false;
@@ -39,7 +39,7 @@ export default class {
   }
 
   async _createTables(parentTableName, domainSchema) {
-    const schema = SchemaTypes.getSchemaInstance(domainSchema);
+    const schema = DomainSchema.getSchemaInstance(domainSchema);
     if (!schema) {
       throw new Error(`Expected instance of DomainSchema, but got: ${domainSchema}`);
     }
@@ -67,7 +67,7 @@ export default class {
         const column = changeCase.snakeCase(key);
         let value = schema[key];
         const fieldType = typeof value === 'function' ? value : value.type;
-        const subSchema = SchemaTypes.getSchemaInstance(fieldType);
+        const subSchema = DomainSchema.getSchemaInstance(fieldType);
         if (subSchema) {
           const hostTableName = schema.__ && schema.__.transient ? parentTableName : tableName;
           const newPromises = this._createTables(hostTableName, fieldType);
@@ -88,7 +88,7 @@ export default class {
   }
 
   _getTableNames(domainSchema) {
-    const schema = SchemaTypes.getSchemaInstance(domainSchema);
+    const schema = DomainSchema.getSchemaInstance(domainSchema);
     if (!schema) {
       throw new Error(`Expected instance of DomainSchema, but got: ${domainSchema}`);
     }
@@ -102,7 +102,7 @@ export default class {
       if (key === '__') continue;
       let value = schema[key];
       const fieldType = typeof value === 'function' ? value : value.type;
-      if (SchemaTypes.getSchemaInstance(fieldType)) {
+      if (DomainSchema.getSchemaInstance(fieldType)) {
         tableNames = tableNames.concat(this._getTableNames(fieldType));
       }
     }
@@ -111,7 +111,7 @@ export default class {
   }
 
   createTables(domainSchema) {
-    const schema = SchemaTypes.getSchemaInstance(domainSchema);
+    const schema = DomainSchema.getSchemaInstance(domainSchema);
     if (!schema) {
       throw new Error(`Expected instance of DomainSchema, but got: ${domainSchema}`);
     } else if (schema.__ && schema.__.transient) {

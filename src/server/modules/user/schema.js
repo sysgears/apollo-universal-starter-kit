@@ -1,15 +1,15 @@
-import DomainSchema, { SchemaTypes } from '../../../common/DomainSchema';
+import DomainSchema, { Schema } from '../../../common/DomainSchema';
 
 /* eslint import/prefer-default-export: 0 */
 
-class AuthCertificate extends DomainSchema {
+class AuthCertificate extends Schema {
   serial = {
     type: String,
     unique: true
   };
 }
 
-class AuthFacebook extends DomainSchema {
+class AuthFacebook extends Schema {
   fbId = {
     type: String,
     unique: true
@@ -20,7 +20,7 @@ class AuthFacebook extends DomainSchema {
   };
 }
 
-class UserProfile extends DomainSchema {
+class UserProfile extends Schema {
   firstName = {
     type: String,
     optional: true
@@ -36,7 +36,7 @@ class UserProfile extends DomainSchema {
   };
 }
 
-class UserAuth extends DomainSchema {
+class UserAuth extends Schema {
   __ = { transient: true };
   certificate = {
     type: AuthCertificate,
@@ -48,8 +48,8 @@ class UserAuth extends DomainSchema {
   };
 }
 
-export class User extends DomainSchema {
-  id = SchemaTypes.Integer;
+export class User extends Schema {
+  id = DomainSchema.Integer;
   username = {
     type: String,
     unique: true

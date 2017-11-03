@@ -1,8 +1,17 @@
-class DomainSchema {}
+export class Schema {}
 
-export class SchemaTypes {
+class DomainSchema {
   static Integer = class Integer {};
   static ID = class ID {};
+
+  constructor(SchemaClass) {
+    this._schemaClass = SchemaClass;
+    this._schema = new SchemaClass();
+  }
+
+  get schema() {
+    return this._schema;
+  }
 
   static _isConstructable(f) {
     try {
@@ -14,11 +23,13 @@ export class SchemaTypes {
   }
 
   static getSchemaInstance(f) {
-    if (!SchemaTypes._isConstructable(f)) {
+    if (f instanceof DomainSchema) {
+      return f.schema;
+    } else if (!DomainSchema._isConstructable(f)) {
       return undefined;
     } else {
       const schema = new f();
-      return schema instanceof DomainSchema ? schema : undefined;
+      return schema instanceof Schema ? schema : undefined;
     }
   }
 }

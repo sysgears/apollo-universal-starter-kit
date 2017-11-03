@@ -11,20 +11,19 @@ export default class {
 
   _addColumn(tableName, table, key, value) {
     let columnName = decamelize(key);
-    let fieldType = typeof value === 'function' ? value.name : value.type.name;
     let column;
-    switch (fieldType) {
+    switch (value.type.name) {
       case 'Boolean':
         column = table.boolean(columnName);
         break;
-      case 'SimpleSchema.Integer':
+      case 'Integer':
         column = table.integer(columnName);
         break;
       case 'String':
         column = table.string(columnName, value.max || undefined);
         break;
       default:
-        throw new Error(`Don't know how to handle type ${fieldType} of ${tableName}.${columnName}`);
+        throw new Error(`Don't know how to handle type ${value.type.name} of ${tableName}.${columnName}`);
     }
     if (value.unique) {
       column.unique();
@@ -59,22 +58,19 @@ export default class {
       let promises = [];
 
       for (let key of domainSchema.keys()) {
-        if (key === '__') continue;
         const column = decamelize(key);
-        let value = domainSchema.schema[key];
-        const fieldType = typeof value === 'function' ? value : value.type;
-        if (DomainSchema.isSchema(fieldType)) {
-          const hostTableName =
-            domainSchema.schema.__ && domainSchema.schema.__.transient ? parentTableName : tableName;
-          const newPromises = this._createTables(hostTableName, fieldType);
+        const value = domainSchema.values[key];
+        if (value.isSchema) {
+          const hostTableName = domainSchema.__.transient ? parentTableName : tableName;
+          const newPromises = this._createTables(hostTableName, value.type);
           promises = promises.concat(newPromises.length ? newPromises : [newPromises]);
           if (DEBUG) {
-            log.debug(`Schema key: ${tableName}.${column} -> ${fieldType.name}`);
+            log.debug(`Schema key: ${tableName}.${column} -> ${value.type.name}`);
           }
         } else if (!value.transient && key !== 'id') {
           this._addColumn(tableName, table, key, value);
           if (DEBUG) {
-            log.debug(`Scalar key: ${tableName}.${column} -> ${fieldType.name}`);
+            log.debug(`Scalar key: ${tableName}.${column} -> ${value.type.name}`);
           }
         }
       }
@@ -88,15 +84,13 @@ export default class {
     const tableName = decamelize(domainSchema.name);
     let tableNames = [];
 
-    if (!(domainSchema.schema.__ && domainSchema.schema.__.transient)) {
+    if (domainSchema.__.transient) {
       tableNames.push(tableName);
     }
     for (let key of domainSchema.keys()) {
-      if (key === '__') continue;
-      let value = domainSchema.schema[key];
-      const fieldType = typeof value === 'function' ? value : value.type;
-      if (DomainSchema.isSchema(fieldType)) {
-        tableNames = tableNames.concat(this._getTableNames(fieldType));
+      const value = domainSchema.values[key];
+      if (value.isSchema) {
+        tableNames = tableNames.concat(this._getTableNames(value.type));
       }
     }
 
@@ -105,7 +99,7 @@ export default class {
 
   createTables(schema) {
     const domainSchema = new DomainSchema(schema);
-    if (domainSchema.schema.__ && domainSchema.schema.__.transient) {
+    if (domainSchema.__.transient) {
       throw new Error(`Unable to create tables for transient schema: ${domainSchema.name}`);
     }
     return this._createTables(null, domainSchema);

@@ -8,8 +8,7 @@ export default class {
 
   _generateField(typeName, key, value) {
     let result = `    ${key}: `;
-    const fieldType = typeof value === 'function' ? value : value.type;
-    switch (fieldType.name) {
+    switch (value.type.name) {
       case 'Boolean':
         result += 'Boolean';
         break;
@@ -23,10 +22,10 @@ export default class {
         result += 'String';
         break;
       default:
-        if (DomainSchema.isSchema(fieldType)) {
-          result += fieldType.name;
+        if (value.isSchema) {
+          result += value.type.name;
         } else {
-          throw new Error(`Don't know how to handle type ${fieldType.name} of ${typeName}.${key}`);
+          throw new Error(`Don't know how to handle type ${value.type.name} of ${typeName}.${key}`);
         }
     }
 
@@ -43,13 +42,11 @@ export default class {
     let results = [];
     let result = `type ${domainSchema.name} {\n`;
     for (let key of domainSchema.keys()) {
-      if (key === '__') continue;
-      let value = domainSchema.schema[key];
-      const fieldType = typeof value === 'function' ? value : value.type;
+      let value = domainSchema.values[key];
       if (!value.private) {
         result += this._generateField(domainSchema.name, key, value) + '\n';
-        if (DomainSchema.isSchema(fieldType)) {
-          results.push(this.generateTypes(fieldType));
+        if (value.isSchema) {
+          results.push(this.generateTypes(value.type));
         }
       }
     }

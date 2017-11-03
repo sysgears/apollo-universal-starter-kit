@@ -1,21 +1,21 @@
 #import "./Profile.graphql"
 
 fragment UserInfo on User {
-    id
-    username
-    role
-    isActive
-    email
-    profile {
-        ... ProfileInfo
+  id
+  username
+  role
+  isActive
+  email
+  profile {
+    ... ProfileInfo
+  }
+  auth {
+    certificate {
+      serial
     }
-    auth {
-        certificate {
-            serial
-        }
-        facebook {
-            fbId
-            displayName
-        }
+    facebook {
+      fbId
+      displayName
     }
+  }
 }

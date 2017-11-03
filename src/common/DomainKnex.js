@@ -1,5 +1,4 @@
-import changeCase from 'change-case';
-
+import { decamelize } from 'humps';
 import DomainSchema from './DomainSchema';
 import log from './log';
 
@@ -11,7 +10,7 @@ export default class {
   }
 
   _addColumn(tableName, table, key, value) {
-    let columnName = changeCase.snakeCase(key);
+    let columnName = decamelize(key);
     let fieldType = typeof value === 'function' ? value.name : value.type.name;
     let column;
     switch (fieldType) {
@@ -40,7 +39,7 @@ export default class {
 
   async _createTables(parentTableName, schema) {
     const domainSchema = new DomainSchema(schema);
-    const tableName = changeCase.snakeCase(domainSchema.name);
+    const tableName = decamelize(domainSchema.name);
     return await this.knex.schema.createTable(tableName, table => {
       if (parentTableName) {
         table
@@ -61,7 +60,7 @@ export default class {
 
       for (let key of domainSchema.keys()) {
         if (key === '__') continue;
-        const column = changeCase.snakeCase(key);
+        const column = decamelize(key);
         let value = domainSchema.schema[key];
         const fieldType = typeof value === 'function' ? value : value.type;
         if (DomainSchema.isSchema(fieldType)) {
@@ -86,7 +85,7 @@ export default class {
 
   _getTableNames(schema) {
     const domainSchema = new DomainSchema(schema);
-    const tableName = changeCase.snakeCase(domainSchema.name);
+    const tableName = decamelize(domainSchema.name);
     let tableNames = [];
 
     if (!(domainSchema.schema.__ && domainSchema.schema.__.transient)) {

@@ -4,7 +4,7 @@ class DomainSchema extends Schema {
   static Integer = class Integer {};
   static ID = class ID {};
 
-  _wrongSchema(SchemaClass) {
+  static _throwWrongSchema(SchemaClass) {
     throw new Error(`Schema ${SchemaClass ? SchemaClass.name : SchemaClass} must be an instance of Schema`);
   }
 
@@ -14,12 +14,12 @@ class DomainSchema extends Schema {
       this._schemaClass = SchemaClass._schemaClass;
       this._schema = SchemaClass._schema;
     } else if (!DomainSchema._isConstructable(SchemaClass)) {
-      this._wrongSchema(SchemaClass);
+      DomainSchema._throwWrongSchema(SchemaClass);
     } else {
       this._schemaClass = SchemaClass;
       this._schema = new SchemaClass();
       if (!(this._schema instanceof Schema)) {
-        this._wrongSchema(SchemaClass);
+        DomainSchema._throwWrongSchema(SchemaClass);
       }
     }
   }

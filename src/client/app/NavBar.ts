@@ -12,6 +12,9 @@ import modules from '../modules';
           <li class="nav-item">
             <a class="nav-link" [routerLinkActive]="['active']" aria-current="true" routerLink="/posts">Posts</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLinkActive]="['active']" aria-current="true" routerLink="/upload">Upload</a>
+          </li>
           ${modules.navItems}
         </ul>
         <ul class="nav col-md-6 right-side">

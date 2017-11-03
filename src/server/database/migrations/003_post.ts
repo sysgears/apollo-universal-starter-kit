@@ -23,6 +23,6 @@ export const up = async (knex: Knex, Promise: any) => {
   ]);
 };
 
-export const down = async (knex: Knex, Promise: any) => {
-  return Promise.all([knex.schema.dropTable('post'), knex.schema.dropTable('comment')]);
+exports.down = (knex: Knex, Promise: any) => {
+  return Promise.all([knex.schema.dropTable('comment'), knex.schema.dropTable('post')]);
 };

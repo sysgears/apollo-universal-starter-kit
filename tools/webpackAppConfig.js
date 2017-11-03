@@ -39,6 +39,7 @@ const ios = {
 };
 
 const dependencyPlatforms = {
+  antd: 'web',
   bcryptjs: 'server',
   'body-parser': 'server',
   bootstrap: 'web',

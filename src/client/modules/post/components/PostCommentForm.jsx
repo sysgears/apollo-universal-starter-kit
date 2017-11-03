@@ -1,15 +1,16 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Field, reduxForm } from "redux-form";
-import { StyleSheet, ScrollView } from "react-native";
-import { Button, RenderField } from "../../common/components";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Field, reduxForm } from 'redux-form';
+import { StyleSheet, ScrollView } from 'react-native';
+import { Button } from '../../common/components';
+import { RenderField } from '../../common/components/native';
 
-const required = value => (value ? undefined : "Required");
+const required = value => (value ? undefined : 'Required');
 
 const PostCommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
-  let operation = "Add";
+  let operation = 'Add';
   if (initialValues.id !== null) {
-    operation = "Edit";
+    operation = 'Edit';
   }
 
   return (
@@ -36,6 +37,6 @@ const styles = StyleSheet.create({
 });
 
 export default reduxForm({
-  form: "comment",
+  form: 'comment',
   enableReinitialize: true
 })(PostCommentForm);

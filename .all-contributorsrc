@@ -50,6 +50,16 @@
       ]
     },
     {
+      "login": "johnthepink",
+      "name": "John Pinkerton",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/816517?v=4",
+      "profile": "http://johnpinkerton.me",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
       "login": "dmitriypdv",
       "name": "Dmitry Pavlenko",
       "avatar_url": "https://avatars2.githubusercontent.com/u/1845914?v=3",

@@ -1,7 +1,7 @@
 type User {
     id: Int!
     username: String!
-    isAdmin: Boolean
+    role: String!
     isActive: Boolean
     email: String!
     profile: UserProfile
@@ -35,6 +35,10 @@ type UserPayload {
 
 type AuthPayload {
     tokens: Tokens
+    errors: [FieldError!]
+}
+
+type ResetPayload {
     errors: [FieldError!]
 }
 
@@ -77,7 +81,7 @@ extend type Mutation {
 
 # Input for ordering users
 input OrderByUserInput {
-    # id | username | isAdmin | isAdmin | email
+    # id | username | role | isActive | email
     column: String
     # asc | desc
     order: String
@@ -87,8 +91,8 @@ input OrderByUserInput {
 input FilterUserInput {
     # search by username or email
     searchText: String
-    # filter by isAdmin
-    isAdmin: Boolean
+    # filter by role
+    role: String
     # filter by isActive
     isActive: Boolean
 }
@@ -109,7 +113,7 @@ input AddUserInput {
     username: String!
     email: String!
     password: String!
-    isAdmin: Boolean
+    role: String!
     isActive: Boolean
     profile: ProfileInput
     auth: AuthInput
@@ -119,7 +123,61 @@ input AddUserInput {
 input EditUserInput {
     id: Int!
     username: String!
-    isAdmin: Boolean
+    role: String!
+    isActive: Boolean
+    email: String!
+    password: String
+    profile: ProfileInput
+    auth: AuthInput
+}
+
+input ProfileInput {
+    firstName: String
+    lastName: String
+}
+
+input AuthInput {
+    certificate: AuthCertificateInput
+    facebook: AuthFacebookInput
+}
+
+input AuthCertificateInput {
+    serial: String
+}
+
+input AuthFacebookInput {
+    fbId: String
+    displayName: String
+}
+
+input ForgotPasswordInput {
+    email: String!
+    profile: UserProfile
+    auth: UserAuth
+}
+
+input ResetPasswordInput {
+    token: String!
+    password: String!
+    passwordConfirmation: String!
+}
+
+# Input for addUser Mutation
+input AddUserInput {
+    username: String!
+    email: String!
+    password: String!
+    role: String!
+    isActive: Boolean
+    profile: ProfileInput
+    auth: AuthInput
+}
+
+# Input for editUser Mutation
+input EditUserInput {
+    id: Int!
+    username: String!
+    role: String!
     isActive: Boolean
     email: String!
     password: String

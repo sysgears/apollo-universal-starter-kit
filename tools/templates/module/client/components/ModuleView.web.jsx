@@ -1,9 +1,6 @@
-// Web only component
-
-// React
-import React from "react";
-import Helmet from "react-helmet";
-import PageLayout from "../../../app/PageLayout";
+import React from 'react';
+import Helmet from 'react-helmet';
+import { PageLayout } from '../../common/components/web';
 
 const $Module$View = () => {
   const renderMetaData = () => (
@@ -11,8 +8,8 @@ const $Module$View = () => {
       title="$Module$"
       meta={[
         {
-          name: "description",
-          content: "$Module$ page"
+          name: 'description',
+          content: '$Module$ page'
         }
       ]}
     />

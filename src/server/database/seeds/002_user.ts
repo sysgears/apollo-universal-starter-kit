@@ -1,10 +1,9 @@
 import * as bcrypt from 'bcryptjs';
-import * as Knex from 'knex';
 
 import truncateTables from '../../../common/db';
 
-export const seed = async (knex: Knex, Promise: any) => {
-  await truncateTables(knex, Promise, ['user', 'user_profile', 'auth_certificate', 'auth_facebook']);
+export const seed = async (knex: any, Promise: any) => {
+  await truncateTables(knex, ['user', 'user_profile', 'auth_certificate', 'auth_facebook']);
 
   await knex('user')
     .returning('id')
@@ -12,8 +11,8 @@ export const seed = async (knex: Knex, Promise: any) => {
       username: 'admin',
       email: 'admin@example.com',
       password: await bcrypt.hash('admin', 12),
-      is_active: true,
-      is_admin: true
+      role: 'admin',
+      is_active: true
     });
 
   await knex('user')
@@ -22,7 +21,7 @@ export const seed = async (knex: Knex, Promise: any) => {
       username: 'user',
       email: 'user@example.com',
       password: await bcrypt.hash('user', 12),
-      is_active: true,
-      is_admin: false
+      role: 'user',
+      is_active: true
     });
 };

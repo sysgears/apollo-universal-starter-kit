@@ -93,17 +93,15 @@ describe('Post and comments example API works', () => {
       .subscribe({
         next(data) {
           expect(data).to.deep.equal({
-            data: {
-              postsUpdated: {
-                mutation: 'CREATED',
-                node: {
-                  id: 21,
-                  title: 'New post 1',
-                  content: 'New post content 1',
-                  __typename: 'Post'
-                },
-                __typename: 'UpdatePostPayload'
-              }
+            postsUpdated: {
+              mutation: 'CREATED',
+              node: {
+                id: 21,
+                title: 'New post 1',
+                content: 'New post content 1',
+                __typename: 'Post'
+              },
+              __typename: 'UpdatePostPayload'
             }
           });
           subscription.unsubscribe();
@@ -145,17 +143,15 @@ describe('Post and comments example API works', () => {
       .subscribe({
         next(data) {
           expect(data).to.deep.equal({
-            data: {
-              postsUpdated: {
-                mutation: 'UPDATED',
-                node: {
-                  id: 21,
-                  title: 'New post 2',
-                  content: 'New post content 2',
-                  __typename: 'Post'
-                },
-                __typename: 'UpdatePostPayload'
-              }
+            postsUpdated: {
+              mutation: 'UPDATED',
+              node: {
+                id: 21,
+                title: 'New post 2',
+                content: 'New post content 2',
+                __typename: 'Post'
+              },
+              __typename: 'UpdatePostPayload'
             }
           });
           subscription.unsubscribe();
@@ -191,17 +187,15 @@ describe('Post and comments example API works', () => {
       .subscribe({
         next(data) {
           expect(data).to.deep.equal({
-            data: {
-              postsUpdated: {
-                mutation: 'DELETED',
-                node: {
-                  id: 21,
-                  title: 'New post 2',
-                  content: 'New post content 2',
-                  __typename: 'Post'
-                },
-                __typename: 'UpdatePostPayload'
-              }
+            postsUpdated: {
+              mutation: 'DELETED',
+              node: {
+                id: 21,
+                title: 'New post 2',
+                content: 'New post content 2',
+                __typename: 'Post'
+              },
+              __typename: 'UpdatePostPayload'
             }
           });
           subscription.unsubscribe();

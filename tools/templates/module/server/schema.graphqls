@@ -1,8 +1,5 @@
-extend type Query {
-}
+extend type Query {}
 
-extend type Mutation {
-}
+extend type Mutation {}
 
-extend type Subscription {
-}
+extend type Subscription {}

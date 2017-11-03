@@ -1,11 +1,11 @@
 import { ApplicationRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgStyles } from '@angularclass/hmr';
@@ -27,6 +27,8 @@ import PostList from './modules/post/components/PostList.web';
 import PostService from './modules/post/containers/Post';
 import PostCommentsService from './modules/post/containers/PostComments';
 import PostEditService from './modules/post/containers/PostEdit';
+import UploadView from './modules/upload/components/UploadView.web';
+import UploadService from './modules/upload/containers/Upload';
 import LoginForm from './modules/user/components/LoginForm.web';
 import LoginView from './modules/user/components/LoginView.web';
 import ProfileView from './modules/user/components/ProfileView.web';
@@ -62,6 +64,8 @@ import { clientProvider, default as Main } from './app/Main';
     PostCommentsView,
     PostCommentForm,
     PostEditView,
+    // Upload
+    UploadView,
     // User
     LoginView,
     LoginForm,
@@ -76,14 +80,13 @@ import { clientProvider, default as Main } from './app/Main';
     BrowserModule,
     FormsModule,
     HttpModule,
-    ReactiveFormsModule,
     ApolloModule.withClient(clientProvider),
     NgbModule.forRoot(),
+    NgUploaderModule,
     RouterModule.forRoot(routes, {
       useHash: true
     })
   ],
-  entryComponents: [PageLayout, CounterView],
   providers: [
     CounterService,
     PostService,
@@ -93,7 +96,8 @@ import { clientProvider, default as Main } from './app/Main';
     ProfileService,
     CookieService,
     RegisterService,
-    UsersService
+    UsersService,
+    UploadService
   ]
 })
 class MainModule {

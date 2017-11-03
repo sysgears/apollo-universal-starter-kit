@@ -1,11 +1,11 @@
 /*eslint-disable no-unused-vars*/
+import { withAuth } from 'graphql-auth';
 import { PubSub } from 'graphql-subscriptions';
 import * as jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 import settings from '../../../../settings';
 import FieldError from '../../../common/FieldError';
-import { refreshTokens, tryLogin } from './auth';
-import { requiresAdmin, requiresAuth } from './permissions';
+import { refreshTokens, tryLogin } from './auth/index';
 
 export interface AuthInput {
   email?: string;
@@ -22,13 +22,18 @@ export interface UserParams {
 
 export default (pubsub: PubSub) => ({
   Query: {
-    users: requiresAdmin.createResolver((obj: any, { orderBy, filter }: any, context: any) => {
-      return context.User.getUsers(orderBy, filter);
+    users: withAuth(['user:view:all'], (obj: any, query: any, context: any) => {
+      return context.User.getUsers(query.orderBy, query.filter);
     }),
-    user: requiresAuth.createResolver((obj: any, args: UserParams, context: any) => {
-      return context.User.getUser(args.id);
-    }),
-    currentUser(obj: any, args: UserParams, context: any) {
+    user: withAuth(
+      (obj: any, args: UserParams, context: any) => {
+        return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
+      },
+      (obj: any, args: UserParams, context: any) => {
+        return context.User.getUser(args.id);
+      }
+    ),
+    currentUser: (obj: any, args: any, context: any) => {
       if (context.user) {
         return context.User.getUser(context.user.id);
       } else {
@@ -37,57 +42,56 @@ export default (pubsub: PubSub) => ({
     }
   },
   User: {
-    profile(obj: any) {
+    profile: (obj: any) => {
       return obj;
     },
-    auth(obj: any) {
+    auth: (obj: any) => {
       return obj;
     }
   },
   UserProfile: {
-    firstName(obj: any) {
+    firstName: (obj: any) => {
       return obj.firstName;
     },
-    lastName(obj: any) {
+    lastName: (obj: any) => {
       return obj.lastName;
     },
-    fullName(obj: any) {
+    fullName: (obj: any) => {
       return `${obj.firstName} ${obj.lastName}`;
     }
   },
   UserAuth: {
-    certificate(obj: any) {
+    certificate: (obj: any) => {
       return obj;
     },
-    facebook(obj: any) {
+    facebook: (obj: any) => {
       return obj;
     }
   },
   CertificateAuth: {
-    serial(obj: any) {
+    serial: (obj: any) => {
       return obj.serial;
     }
   },
   FacebookAuth: {
-    fbId(obj: any) {
+    fbId: (obj: any) => {
       return obj.fbId;
     },
-    displayName(obj: any) {
+    displayName: (obj: any) => {
       return obj.displayName;
     }
   },
   Mutation: {
-    async register(obj: any, { input }: any, context: any) {
+    register: async (obj: any, args: any, context: any) => {
       try {
         const e = new FieldError();
 
-        const userExists = await context.User.getUserByUsername(input.username);
+        const userExists = await context.User.getUserByUsername(args.input.username);
         if (userExists) {
           e.setError('username', 'Username already exists.');
         }
 
-        const emailExists = await context.User.getUserByEmail(input.email);
-
+        const emailExists = await context.User.getUserByEmail(args.input.email);
         if (emailExists) {
           e.setError('email', 'E-mail already exists.');
         }
@@ -95,17 +99,17 @@ export default (pubsub: PubSub) => ({
         e.throwIf();
 
         let userId = 0;
-        if (emailExists === null || emailExists === undefined) {
+        if (!emailExists) {
           let isActive = false;
           if (!settings.user.auth.password.confirm) {
             isActive = true;
           }
 
-          [userId] = await context.User.register({ ...input, isActive });
+          [userId] = await context.User.register({ ...args.input, isActive });
 
           // if user has previously logged with facebook auth
         } else {
-          await context.User.updatePassword(emailExists.userId, input.password);
+          await context.User.updatePassword(emailExists.userId, args.input.password);
           userId = emailExists.userId;
         }
 
@@ -113,7 +117,7 @@ export default (pubsub: PubSub) => ({
 
         if (context.mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && context.req) {
           // async email
-          jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
+          jwt.sign({ user: pick(user, 'id') } as any, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
             const encodedToken = Buffer.from(emailToken).toString('base64');
             const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
             context.mailer.sendMail({
@@ -130,10 +134,10 @@ export default (pubsub: PubSub) => ({
         return { errors: e };
       }
     },
-    async login(obj: any, args: UserParams, context: any) {
+    login: async (obj: any, args: UserParams, context: any) => {
       try {
         const tokens = await tryLogin(args.input.email, args.input.password, context.User, context.SECRET);
-        if (context.req && context.req.universalCookies) {
+        if (context.req) {
           context.req.universalCookies.set('x-token', tokens.token, {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: true
@@ -157,8 +161,8 @@ export default (pubsub: PubSub) => ({
         return { errors: e };
       }
     },
-    async logout(obj: any, args: UserParams, context: any) {
-      if (context.req && context.req.universalCookies) {
+    logout: async (obj: any, args: any, context: any) => {
+      if (context.req) {
         context.req.universalCookies.remove('x-token');
         context.req.universalCookies.remove('x-refresh-token');
 
@@ -168,111 +172,125 @@ export default (pubsub: PubSub) => ({
 
       return true;
     },
-    refreshTokens(obj: any, args: UserParams, context: any) {
+    refreshTokens: (obj: any, args: any, context: any) => {
       return refreshTokens(args.token, args.refreshToken, context.User, context.SECRET);
     },
-    addUser: requiresAdmin.createResolver(async (obj: any, { input }: any, context: any) => {
-      try {
-        const e = new FieldError();
+    addUser: withAuth(
+      (obj: any, args: any, context: any) => {
+        return context.user.id !== args.id ? ['user:create'] : ['user:create:self'];
+      },
+      async (obj: any, args: any, context: any) => {
+        try {
+          const e = new FieldError();
 
-        const userExists = await context.User.getUserByUsername(input.username);
-        if (userExists) {
-          e.setError('username', 'Username already exists.');
-        }
+          const userExists = await context.User.getUserByUsername(args.input.username);
+          if (userExists) {
+            e.setError('username', 'Username already exists.');
+          }
 
-        const emailExists = await context.User.getUserByEmail(input.email);
-        if (emailExists) {
-          e.setError('email', 'E-mail already exists.');
-        }
+          const emailExists = await context.User.getUserByEmail(args.input.email);
+          if (emailExists) {
+            e.setError('email', 'E-mail already exists.');
+          }
 
-        if (input.password.length < 5) {
-          e.setError('password', `Password must be 5 characters or more.`);
-        }
+          if (args.input.password.length < 5) {
+            e.setError('password', `Password must be 5 characters or more.`);
+          }
 
-        e.throwIf();
-
-        const [createdUserId] = await context.User.register({ ...input });
-        await context.User.editUserProfile({ id: createdUserId, ...input });
-
-        if (settings.user.auth.certificate.enabled) {
-          await context.User.editAuthCertificate({ id: createdUserId, ...input });
-        }
-
-        const user = await context.User.getUser(createdUserId);
-
-        return { user };
-      } catch (e) {
-        return { errors: e };
-      }
-    }),
-    editUser: requiresAdmin.createResolver(async (obj: any, { input }: any, context: any) => {
-      try {
-        const e = new FieldError();
-
-        const userExists = await context.User.getUserByUsername(input.username);
-        if (userExists && userExists.id !== input.id) {
-          e.setError('username', 'Username already exists.');
-        }
-
-        const emailExists = await context.User.getUserByEmail(input.email);
-        if (emailExists && emailExists.id !== input.id) {
-          e.setError('email', 'E-mail already exists.');
-        }
-
-        if (input.password && input.password.length < 5) {
-          e.setError('password', `Password must be 5 characters or more.`);
-        }
-
-        e.throwIf();
-
-        await context.User.editUser(input);
-        await context.User.editUserProfile(input);
-
-        if (settings.user.auth.certificate.enabled) {
-          await context.User.editAuthCertificate(input);
-        }
-
-        const user = await context.User.getUser(input.id);
-
-        return { user };
-      } catch (e) {
-        return { errors: e };
-      }
-    }),
-    deleteUser: requiresAdmin.createResolver(async (obj: any, { id }: any, context: any) => {
-      try {
-        const e = new FieldError();
-        const user = await context.User.getUser(id);
-        if (!user) {
-          e.setError('delete', 'User does not exist.');
           e.throwIf();
-        }
 
-        if (user.id === context.user.id) {
-          e.setError('delete', 'You can not delete your self.');
-          e.throwIf();
-        }
+          const [createdUserId] = await context.User.register({ ...args.input });
+          await context.User.editUserProfile({ id: createdUserId, ...args.input });
 
-        const isDeleted = await context.User.deleteUser(id);
-        if (isDeleted) {
+          if (settings.user.auth.certificate.enabled) {
+            await context.User.editAuthCertificate({ id: createdUserId, ...args.input });
+          }
+
+          const user = await context.User.getUser(createdUserId);
+
           return { user };
-        } else {
-          e.setError('delete', 'Could not delete user. Please try again later.');
-          e.throwIf();
+        } catch (e) {
+          return { errors: e };
         }
-      } catch (e) {
-        return { errors: e };
       }
-    }),
-    async forgotPassword(obj: any, { input }: any, context: any) {
+    ),
+    editUser: withAuth(
+      (obj: any, args: UserParams, context: any) => {
+        return context.user.id !== args.id ? ['user:update'] : ['user:update:self'];
+      },
+      async (obj: any, args: any, context: any) => {
+        try {
+          const e = new FieldError();
+          const userExists = await context.User.getUserByUsername(args.input.username);
+          if (userExists && userExists.id !== args.input.id) {
+            e.setError('username', 'Username already exists.');
+          }
+
+          const emailExists = await context.User.getUserByEmail(args.input.email);
+          if (emailExists && emailExists.id !== args.input.id) {
+            e.setError('email', 'E-mail already exists.');
+          }
+
+          if (args.input.password && args.input.password.length < 5) {
+            e.setError('password', `Password must be 5 characters or more.`);
+          }
+
+          e.throwIf();
+
+          await context.User.editUser(args.input);
+          await context.User.editUserProfile(args.input);
+
+          if (settings.user.auth.certificate.enabled) {
+            await context.User.editAuthCertificate(args.input);
+          }
+
+          const user = await context.User.getUser(args.input.id);
+
+          return { user };
+        } catch (e) {
+          return { errors: e };
+        }
+      }
+    ),
+    deleteUser: withAuth(
+      (obj: any, args: UserParams, context: any) => {
+        return context.user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
+      },
+      async (obj: any, args: UserParams, context: any) => {
+        try {
+          const e = new FieldError();
+          const user = await context.User.getUser(args.id);
+          if (!user) {
+            e.setError('delete', 'User does not exist.');
+            e.throwIf();
+          }
+
+          if (user.id === context.user.id) {
+            e.setError('delete', 'You can not delete your self.');
+            e.throwIf();
+          }
+
+          const isDeleted = await context.User.deleteUser(args.id);
+          if (isDeleted) {
+            return { user };
+          } else {
+            e.setError('delete', 'Could not delete user. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { errors: e };
+        }
+      }
+    ),
+    forgotPassword: async (obj: any, args: UserParams, context: any) => {
       try {
-        const localAuth: any = pick(input, 'email');
-        const user = await context.User.getUserByEmail(localAuth.email);
+        const localAuth: any = pick(args.input, 'email');
+        const user: any = await context.User.getUserByEmail(localAuth.email);
 
         if (user && context.mailer) {
           // async email
           jwt.sign(
-            { email: user.email, password: user.password },
+            { email: user.email, password: user.password } as any,
             context.SECRET,
             { expiresIn: '1d' },
             (err, emailToken) => {
@@ -294,10 +312,10 @@ export default (pubsub: PubSub) => ({
         return true;
       }
     },
-    async resetPassword(obj: any, { input }: any, context: any) {
+    resetPassword: async (obj: any, args: UserParams, context: any) => {
       try {
         const e = new FieldError();
-        const reset: any = pick(input, ['password', 'passwordConfirmation', 'token']);
+        const reset: any = pick(args.input, ['password', 'passwordConfirmation', 'token']);
         if (reset.password !== reset.passwordConfirmation) {
           e.setError('password', 'Passwords do not match.');
         }
@@ -308,7 +326,7 @@ export default (pubsub: PubSub) => ({
         e.throwIf();
 
         const token = Buffer.from(reset.token, 'base64').toString();
-        const { email, password }: any = jwt.verify(token, context.SECRET);
+        const { email, password } = jwt.verify(token, context.SECRET) as any;
         const user = await context.User.getUserByEmail(email);
         if (user.password !== password) {
           e.setError('token', 'Invalid token');

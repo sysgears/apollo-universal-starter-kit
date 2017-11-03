@@ -84,7 +84,7 @@ class Post extends React.Component {
     this.subscription = subscribeToMore({
       document: POSTS_SUBSCRIPTION,
       variables: { endCursor },
-      updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, node } } } }) => {
+      updateQuery: (prev, { subscriptionData: { postsUpdated: { mutation, node } } }) => {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
@@ -156,23 +156,22 @@ export default compose(
   }),
   graphql(DELETE_POST, {
     props: ({ mutate }) => ({
-      deletePost(id) {
-        return () =>
-          mutate({
-            variables: { id },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              deletePost: {
-                id: id,
-                __typename: 'Post'
-              }
-            },
-            updateQueries: {
-              posts: (prev, { mutationResult: { data: { deletePost } } }) => {
-                return DeletePost(prev, deletePost.id);
-              }
+      deletePost: id => {
+        mutate({
+          variables: { id },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            deletePost: {
+              id: id,
+              __typename: 'Post'
             }
-          });
+          },
+          updateQueries: {
+            posts: (prev, { mutationResult: { data: { deletePost } } }) => {
+              return DeletePost(prev, deletePost.id);
+            }
+          }
+        });
       }
     })
   })

@@ -1,40 +1,23 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
-import settings from '../../../../settings';
-import FieldError from '../../../common/FieldError';
-import log from '../../../common/log';
+import settings from '../../../../../settings';
+import FieldError from '../../../../common/FieldError';
+import log from '../../../../common/log';
 
-export const createTokens = async (user: any, secret: any, refreshSecret: any) => {
-  const createToken = jwt.sign(
-    {
-      user: pick(user, ['id', 'username', 'isAdmin'])
-    },
-    secret,
-    {
-      expiresIn: '1m'
-    }
-  );
+export const createTokens = async (user: any, secret: string, refreshSecret: string) => {
+  const createToken = jwt.sign({ user: pick(user, ['id', 'username', 'role']) } as any, secret, { expiresIn: '1m' });
 
-  const createRefreshToken = jwt.sign(
-    {
-      user: user.id
-    },
-    refreshSecret,
-    {
-      expiresIn: '7d'
-    }
-  );
+  const createRefreshToken = jwt.sign({ user: user.id } as any, refreshSecret, { expiresIn: '7d' });
 
   return Promise.all([createToken, createRefreshToken]);
 };
 
-export const refreshTokens = async (token: any, refreshToken: any, User: any, SECRET: any) => {
+export const refreshTokens = async (token: string, refreshToken: string, User: any, SECRET: string) => {
   let userId = -1;
   try {
     userId = (jwt.decode(refreshToken) as any).user;
   } catch (err) {
-    log.error(err);
     return {};
   }
 
@@ -55,11 +38,11 @@ export const refreshTokens = async (token: any, refreshToken: any, User: any, SE
   return {
     token: newToken,
     refreshToken: newRefreshToken,
-    user: pick(user, ['id', 'username', 'isAdmin'])
+    user: pick(user, ['id', 'username', 'role'])
   };
 };
 
-export const tryLogin = async (email: string, password: string, User: any, SECRET: any) => {
+export const tryLogin = async (email: string, password: string, User: any, SECRET: string) => {
   const e = new FieldError();
   const user = await User.getUserByEmail(email);
 
@@ -92,7 +75,7 @@ export const tryLogin = async (email: string, password: string, User: any, SECRE
   };
 };
 
-export const tryLoginSerial = async (serial: any, User: any, SECRET: any) => {
+export const tryLoginSerial = async (serial: string, User: any, SECRET: string) => {
   try {
     const certAuth = await User.getUserWithSerial(serial);
 

@@ -7,7 +7,7 @@ export const up = async (knex: Knex, Promise: any) => {
       table.string('username').unique();
       table.string('email').unique();
       table.string('password');
-      table.boolean('is_admin').defaultTo(false);
+      table.string('role').defaultTo('user');
       table.boolean('is_active').defaultTo(false);
       table.timestamps(false, true);
     }),

@@ -1,3 +1,4 @@
 import modules from '../modules';
 
-export default modules.routes;
+const routes = modules.routes;
+export default routes;

@@ -23,7 +23,7 @@ export default class {
         result += 'String';
         break;
       default:
-        if (DomainSchema.getSchemaInstance(fieldType)) {
+        if (DomainSchema.isSchema(fieldType)) {
           result += fieldType.name;
         } else {
           throw new Error(`Don't know how to handle type ${fieldType.name} of ${typeName}.${key}`);
@@ -37,21 +37,18 @@ export default class {
     return result;
   }
 
-  generateTypes(domainSchema) {
-    const schema = DomainSchema.getSchemaInstance(domainSchema);
-    if (!schema) {
-      throw new Error(`Expected instance of DomainSchema, but got: ${domainSchema}`);
-    }
+  generateTypes(schema) {
+    const domainSchema = new DomainSchema(schema);
 
     let results = [];
     let result = `type ${domainSchema.name} {\n`;
-    for (let key of Object.keys(schema)) {
+    for (let key of domainSchema.keys()) {
       if (key === '__') continue;
-      let value = schema[key];
+      let value = domainSchema.schema[key];
       const fieldType = typeof value === 'function' ? value : value.type;
       if (!value.private) {
         result += this._generateField(domainSchema.name, key, value) + '\n';
-        if (DomainSchema.getSchemaInstance(fieldType)) {
+        if (DomainSchema.isSchema(fieldType)) {
           results.push(this.generateTypes(fieldType));
         }
       }

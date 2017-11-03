@@ -48,35 +48,37 @@ class UserAuth extends Schema {
   };
 }
 
-export class User extends Schema {
-  id = DomainSchema.Integer;
-  username = {
-    type: String,
-    unique: true
-  };
-  email = {
-    type: String,
-    unique: true
-  };
-  password = {
-    type: String,
-    private: true
-  };
-  role = {
-    type: String,
-    default: 'user'
-  };
-  isActive = {
-    type: Boolean,
-    default: false,
-    optional: true
-  };
-  auth = {
-    type: UserAuth,
-    optional: true
-  };
-  profile = {
-    type: UserProfile,
-    optional: true
-  };
-}
+export const User = new DomainSchema(
+  class User extends Schema {
+    id = DomainSchema.Integer;
+    username = {
+      type: String,
+      unique: true
+    };
+    email = {
+      type: String,
+      unique: true
+    };
+    password = {
+      type: String,
+      private: true
+    };
+    role = {
+      type: String,
+      default: 'user'
+    };
+    isActive = {
+      type: Boolean,
+      default: false,
+      optional: true
+    };
+    auth = {
+      type: UserAuth,
+      optional: true
+    };
+    profile = {
+      type: UserProfile,
+      optional: true
+    };
+  }
+);

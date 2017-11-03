@@ -38,11 +38,8 @@ export default class {
     }
   }
 
-  async _createTables(parentTableName, domainSchema) {
-    const schema = DomainSchema.getSchemaInstance(domainSchema);
-    if (!schema) {
-      throw new Error(`Expected instance of DomainSchema, but got: ${domainSchema}`);
-    }
+  async _createTables(parentTableName, schema) {
+    const domainSchema = new DomainSchema(schema);
     const tableName = changeCase.snakeCase(domainSchema.name);
     return await this.knex.schema.createTable(tableName, table => {
       if (parentTableName) {
@@ -62,23 +59,23 @@ export default class {
 
       let promises = [];
 
-      for (let key of Object.keys(schema)) {
+      for (let key of domainSchema.keys()) {
         if (key === '__') continue;
         const column = changeCase.snakeCase(key);
-        let value = schema[key];
+        let value = domainSchema.schema[key];
         const fieldType = typeof value === 'function' ? value : value.type;
-        const subSchema = DomainSchema.getSchemaInstance(fieldType);
-        if (subSchema) {
-          const hostTableName = schema.__ && schema.__.transient ? parentTableName : tableName;
+        if (DomainSchema.isSchema(fieldType)) {
+          const hostTableName =
+            domainSchema.schema.__ && domainSchema.schema.__.transient ? parentTableName : tableName;
           const newPromises = this._createTables(hostTableName, fieldType);
           promises = promises.concat(newPromises.length ? newPromises : [newPromises]);
           if (DEBUG) {
-            log.debug(`${subSchema ? 'Schema' : 'Scalar'} key: ${tableName}.${column} -> ${fieldType.name}`);
+            log.debug(`Schema key: ${tableName}.${column} -> ${fieldType.name}`);
           }
         } else if (!value.transient && key !== 'id') {
           this._addColumn(tableName, table, key, value);
           if (DEBUG) {
-            log.debug(`${subSchema ? 'Schema' : 'Scalar'} key: ${tableName}.${column} -> ${fieldType.name}`);
+            log.debug(`Scalar key: ${tableName}.${column} -> ${fieldType.name}`);
           }
         }
       }
@@ -87,22 +84,19 @@ export default class {
     });
   }
 
-  _getTableNames(domainSchema) {
-    const schema = DomainSchema.getSchemaInstance(domainSchema);
-    if (!schema) {
-      throw new Error(`Expected instance of DomainSchema, but got: ${domainSchema}`);
-    }
+  _getTableNames(schema) {
+    const domainSchema = new DomainSchema(schema);
     const tableName = changeCase.snakeCase(domainSchema.name);
     let tableNames = [];
 
-    if (!(schema.__ && schema.__.transient)) {
+    if (!(domainSchema.schema.__ && domainSchema.schema.__.transient)) {
       tableNames.push(tableName);
     }
-    for (let key of Object.keys(schema)) {
+    for (let key of domainSchema.keys()) {
       if (key === '__') continue;
-      let value = schema[key];
+      let value = domainSchema.schema[key];
       const fieldType = typeof value === 'function' ? value : value.type;
-      if (DomainSchema.getSchemaInstance(fieldType)) {
+      if (DomainSchema.isSchema(fieldType)) {
         tableNames = tableNames.concat(this._getTableNames(fieldType));
       }
     }
@@ -110,12 +104,10 @@ export default class {
     return tableNames;
   }
 
-  createTables(domainSchema) {
-    const schema = DomainSchema.getSchemaInstance(domainSchema);
-    if (!schema) {
-      throw new Error(`Expected instance of DomainSchema, but got: ${domainSchema}`);
-    } else if (schema.__ && schema.__.transient) {
-      throw new Error(`Unable to create tables for transient schema: ${domainSchema}`);
+  createTables(schema) {
+    const domainSchema = new DomainSchema(schema);
+    if (domainSchema.schema.__ && domainSchema.schema.__.transient) {
+      throw new Error(`Unable to create tables for transient schema: ${domainSchema.name}`);
     }
     return this._createTables(null, domainSchema);
   }

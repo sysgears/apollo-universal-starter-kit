@@ -1,6 +1,10 @@
 /*eslint-disable no-unused-vars*/
 import { pick } from 'lodash';
+import Stripe from 'stripe';
 import FieldError from '../../../common/FieldError';
+import settings from '../../../../settings';
+
+const stripe = Stripe(settings.subscription.stripeSecretKey);
 
 export default pubsub => ({
   Query: {
@@ -17,35 +21,30 @@ export default pubsub => ({
     async subscribe(obj, { input }, context) {
       try {
         const e = new FieldError();
-        const data = pick(input, ['nameOnCard', 'cardNumber', 'cvv', 'expiryMonth', 'expiryYear']);
-        const { user } = context;
+        const data = pick(input, ['token', 'expiryMonth', 'expiryYear', 'last4', 'brand']);
+        const user = await context.User.getUserByUsername(context.user.username);
 
-        if (data.nameOnCard.length === 0) {
-          e.setError('nameOnCard', 'Name cannot be blank.');
-        }
+        const customer = await stripe.customers.create({ email: user.email, source: data.token });
 
-        if (data.cardNumber.length === 0) {
-          e.setError('cardNumber', 'Card number cannot be blank.');
-        }
+        await context.Subscription.createSubscription({
+          userId: user.id,
+          stripeCustomerId: customer.id,
+          expiryMonth: data.expiryMonth,
+          expiryYear: data.expiryYear,
+          last4: data.last4,
+          brand: data.brand
+        });
 
-        if (data.cvv.length === 0) {
-          e.setError('cvv', 'CVV cannot be blank.');
-        }
+        const subscription = await stripe.subscriptions.create({
+          customer: customer.id,
+          items: [
+            {
+              plan: 'basic'
+            }
+          ]
+        });
 
-        if (data.expiryMonth.length === 0) {
-          e.setError('expiryMonth', 'Expiration month cannot be blank.');
-        }
-
-        if (data.expiryYear.length === 0) {
-          e.setError('expiryYear', 'Expiration year cannot be blank.');
-        }
-        e.throwIf();
-
-        // TODO payment processor logic
-
-        if (user) {
-          await context.Subscription.createSubscription(user.id);
-        }
+        await context.Subscription.toggleSubscription({ userId: user.id, active: true });
 
         return { active: true, errors: null };
       } catch (e) {

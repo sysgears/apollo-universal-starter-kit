@@ -11,9 +11,23 @@ export default class Subscription {
       .first();
   }
 
-  async createSubscription(userId) {
+  async createSubscription({ userId, stripeCustomerId, expiryMonth, expiryYear, last4, brand }) {
     return await knex('subscription')
-      .insert({ user_id: userId, stripe_id: userId, active: true })
+      .insert({
+        user_id: userId,
+        stripe_customer_id: stripeCustomerId,
+        expiry_month: expiryMonth,
+        expiry_year: expiryYear,
+        last4,
+        brand,
+        active: false
+      })
       .returning('id');
+  }
+
+  async toggleSubscription({ userId, active }) {
+    return await knex('subscription')
+      .update({ active })
+      .where({ user_id: userId });
   }
 }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
 import modules from '../../client/modules';
 import { styles } from '../../client/modules/common/components/web';
+import settings from '../../../settings';
 
 const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent(); // react-helmet html document tags
@@ -33,6 +34,7 @@ const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) =>
           />
         )}
         {!!css && css}
+        {settings.subscription.enabled && <script src="https://js.stripe.com/v3/" />}
       </head>
       <body {...bodyAttrs}>
         <div id="content" dangerouslySetInnerHTML={{ __html: content || '' }} />

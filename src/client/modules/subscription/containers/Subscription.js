@@ -1,15 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
+import { StripeProvider } from 'react-stripe-elements';
 
 import SubscriptionView from '../components/SubscriptionView';
 
 import SUBSCRIBE from '../graphql/Subscribe.graphql';
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 
+import settings from '../../../../../settings';
+
+// react-stripe-elements will not render on the server.
 class Subscription extends React.Component {
   render() {
-    return <SubscriptionView {...this.props} />;
+    return (
+      <div>
+        {__CLIENT__ ? (
+          <StripeProvider apiKey={settings.subscription.stripePublishableKey}>
+            <SubscriptionView {...this.props} />
+          </StripeProvider>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+    );
   }
 }
 
@@ -20,10 +34,10 @@ Subscription.propTypes = {
 const SubscriptionViewWithApollo = compose(
   graphql(SUBSCRIBE, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
-      subscribe: async ({ nameOnCard, cardNumber, cvv, expiryMonth, expiryYear }) => {
+      subscribe: async ({ token, expiryMonth, expiryYear, last4, brand }) => {
         try {
           const { data: { subscribe } } = await mutate({
-            variables: { input: { nameOnCard, cardNumber, cvv, expiryMonth, expiryYear } },
+            variables: { input: { token, expiryMonth, expiryYear, last4, brand } },
             update: (store, { data: { subscribe } }) => {
               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
               data.subscription = subscribe;

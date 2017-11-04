@@ -20,11 +20,11 @@ extend type Mutation {
 }
 
 input SubscribeInput {
-    nameOnCard: String!
-    cardNumber: String!
-    cvv: String!
-    expiryMonth: String!
-    expiryYear: String!
+    token: String!
+    expiryMonth: Int!
+    expiryYear: Int!
+    last4: String!
+    brand: String!
 }
 
 extend type Subscription {

@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
+import { Elements } from 'react-stripe-elements';
 
 import { PageLayout } from '../../common/components/web';
 import SubscriptionForm from './SubscriptionForm';
@@ -41,7 +42,9 @@ class SubscriptionView extends React.Component {
       <PageLayout>
         {renderMetaData()}
         <h1>Subscription!</h1>
-        <SubscriptionForm onSubmit={this.onSubmit(subscribe)} />
+        <Elements>
+          <SubscriptionForm onSubmit={this.onSubmit(subscribe)} />
+        </Elements>
       </PageLayout>
     );
   }

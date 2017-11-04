@@ -1,33 +1,48 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'react-apollo';
 import { Field, reduxForm } from 'redux-form';
-import { connect } from 'react-redux';
+import { CardElement, injectStripe } from 'react-stripe-elements';
+import { FormGroup, Label } from 'reactstrap';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 
 const required = value => (value ? undefined : 'Required');
 
-const SubscriptionForm = ({ handleSubmit, submitting, onSubmit, error }) => {
-  const currentYear = new Date().getFullYear();
+class SubscriptionForm extends React.Component {
+  onSubmit = async ({ name }) => {
+    const { stripe } = this.props;
+    const { token, error } = await stripe.createToken({ name });
+    if (error) return;
 
-  return (
-    <Form name="subscription" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="nameOnCard" component={RenderField} type="text" label="Name On Card" validate={required} />
-      <Field name="cardNumber" component={RenderField} type="text" label="Card Number" validate={required} />
-      <Field name="cvv" component={RenderField} type="password" label="CVV" validate={required} />
-      <Field name="expiryMonth" component={RenderField} type="select" label="Expiration Month" validate={required}>
-        {[...Array(12).keys()].map(i => <option value={i + 1}>{i + 1}</option>)}
-      </Field>
-      <Field name="expiryYear" component={RenderField} type="select" label="Expiration Year" validate={required}>
-        {[...Array(20).keys()].map(i => <option value={i + currentYear}>{i + currentYear}</option>)}
-      </Field>
-      {error && <Alert color="error">{error}</Alert>}
-      <Button color="primary" type="submit" disabled={submitting}>
-        Subscribe
-      </Button>
-    </Form>
-  );
-};
+    const { id, card: { exp_month, exp_year, last4, brand } } = token;
+
+    this.props.onSubmit({
+      token: id,
+      expiryMonth: exp_month,
+      expiryYear: exp_year,
+      last4,
+      brand
+    });
+  };
+
+  render() {
+    const { handleSubmit, submitting, error } = this.props;
+    return (
+      <Form name="subscription" onSubmit={handleSubmit(this.onSubmit)}>
+        <Field name="name" component={RenderField} type="text" label="Name On Card" validate={required} />
+        <FormGroup>
+          <Label>Payment Info</Label>
+          <div>
+            <CardElement className="form-control" style={{ base: { lineHeight: '30px' } }} />
+          </div>
+        </FormGroup>
+        {error && <Alert color="error">{error}</Alert>}
+        <Button color="primary" type="submit" disabled={submitting}>
+          Subscribe
+        </Button>
+      </Form>
+    );
+  }
+}
 
 SubscriptionForm.propTypes = {
   handleSubmit: PropTypes.func,
@@ -36,14 +51,8 @@ SubscriptionForm.propTypes = {
   error: PropTypes.string
 };
 
-export default compose(
-  connect(() => ({
-    initialValues: {
-      expiryMonth: 1,
-      expiryYear: new Date().getFullYear()
-    }
-  })),
+export default injectStripe(
   reduxForm({
     form: 'subscription'
-  })
-)(SubscriptionForm);
+  })(SubscriptionForm)
+);

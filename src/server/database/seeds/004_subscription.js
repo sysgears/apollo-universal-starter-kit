@@ -16,8 +16,12 @@ export async function seed(knex, Promise) {
   await knex('subscription')
     .returning('id')
     .insert({
-      stripe_id: 'test',
+      stripe_customer_id: 'test',
       active: true,
+      expiry_month: 12,
+      expiry_year: 2022,
+      last4: '1111',
+      brand: 'Visa',
       user_id: subscriberId
     });
 }

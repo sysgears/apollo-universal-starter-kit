@@ -2,8 +2,12 @@ exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.createTable('subscription', table => {
       table.increments();
-      table.string('stripe_id').unique();
+      table.string('stripe_customer_id').unique();
       table.boolean('active').defaultTo(false);
+      table.integer('expiry_month');
+      table.integer('expiry_year');
+      table.string('last4');
+      table.string('brand');
       table
         .integer('user_id')
         .unsigned()

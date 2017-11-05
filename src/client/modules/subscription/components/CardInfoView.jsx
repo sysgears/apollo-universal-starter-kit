@@ -4,17 +4,21 @@ import PropTypes from 'prop-types';
 const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand }) => {
   return (
     <div>
-      <h4>Card Info</h4>
-      {!loading && (
-        <div>
-          <p>
-            card: {brand} ************{last4}
-          </p>
-          <p>
-            expires: {expiryMonth}/{expiryYear}
-          </p>
-        </div>
-      )}
+      {!loading &&
+        expiryMonth &&
+        expiryYear &&
+        last4 &&
+        brand && (
+          <div>
+            <h4>Card Info</h4>
+            <p>
+              card: {brand} ************{last4}
+            </p>
+            <p>
+              expires: {expiryMonth}/{expiryYear}
+            </p>
+          </div>
+        )}
     </div>
   );
 };

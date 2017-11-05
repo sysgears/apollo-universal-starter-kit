@@ -26,7 +26,7 @@ RenderField.propTypes = {
   label: PropTypes.string,
   type: PropTypes.string,
   meta: PropTypes.object,
-  children: PropTypes.func
+  children: PropTypes.array
 };
 
 export default RenderField;

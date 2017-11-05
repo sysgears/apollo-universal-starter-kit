@@ -15,6 +15,10 @@ export default pubsub => ({
       if (!context.subscription.active) return;
       const number = Math.floor(Math.random() * 10);
       return { number };
+    },
+    async subscriptionCardInfo(obj, args, context) {
+      const { user } = context;
+      return context.Subscription.getCardInfo(user.id);
     }
   },
   Mutation: {

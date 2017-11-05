@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { LayoutCenter } from '../../common/components';
 import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
+import CardInfo from '../../subscription/containers/CardInfo';
 
 import settings from '../../../../../settings';
 
@@ -52,6 +53,7 @@ const ProfileView = ({ loading, currentUser }) => {
                   <CardText>{currentUser.profile.fullName}</CardText>
                 </CardGroup>
               )}
+            {settings.subscription.enabled && <CardInfo />}
           </Card>
         </LayoutCenter>
       </PageLayout>

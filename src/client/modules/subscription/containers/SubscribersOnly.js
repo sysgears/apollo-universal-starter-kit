@@ -10,7 +10,7 @@ const SubscribersOnly = ({ loading, number }) => <SubscribersOnlyView loading={l
 
 SubscribersOnly.propTypes = {
   loading: PropTypes.bool.isRequired,
-  number: PropTypes.number.isRequired
+  number: PropTypes.number
 };
 
 const SubscribersOnlyWithApollo = compose(

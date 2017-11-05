@@ -13,7 +13,7 @@ const SubscribersOnlyView = ({ loading, number }) => {
 
 SubscribersOnlyView.propTypes = {
   loading: PropTypes.bool.isRequired,
-  number: PropTypes.number.isRequired
+  number: PropTypes.number
 };
 
 export default SubscribersOnlyView;

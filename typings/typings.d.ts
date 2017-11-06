@@ -21,11 +21,6 @@ declare module '*.graphql' {
   export = value;
 }
 
-declare module 'graphql-auth' {
-  const withAuth: (scope: any, callback: any) => any;
-  export { withAuth };
-}
-
 declare module '*.json' {
   const value: any;
   export = value;

@@ -16,7 +16,7 @@ import UserDAO from './sql';
 
 const SECRET = settings.user.secret;
 
-const User = new UserDAO();
+const User: any = new UserDAO();
 
 const strategyOption: StrategyOptionWithScope = {
   clientID: settings.user.auth.facebook.clientID,
@@ -77,9 +77,9 @@ export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: async (req: any, connectionParams: any, webSocket: any) => {
-    let tokenUser = null;
-    let auth = { isAuthenticated: false, scope: null };
-    let serial = '';
+    let tokenUser: any = null;
+    let auth: any = { isAuthenticated: false, scope: null };
+    let serial: string = '';
     if (__DEV__) {
       // for local testing without client certificates
       serial = settings.user.auth.certificate.enabled;

@@ -9,20 +9,20 @@
     "yarn": ">= 0.19.0"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production spin build",
+    "build": "spin build",
     "exp": "spin exp",
     "start": "node --harmony build/server",
     "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.ts\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.ts\"",
     "test": "npm run tests && npm run lint",
     "lint": "tslint -e 'node_modules/**/*.*' '**/*.ts*'  --fix -p tsconfig.json --type-check",
-    "seed": "npm run migrate && node_modules/.bin/knex seed:run",
-    "migrate": "ts-node node_modules/.bin/knex migrate:latest",
-    "rollback": "ts-node node_modules/.bin/knex migrate:rollback",
+    "seed": "npm run migrate && knex seed:run",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback",
     "watch": "spin watch",
     "heroku-postbuild": "rm -rf build && npm run build && npm run seed",
-    "cli": "node tools/cli",
     "precommit": "lint-staged",
+    "cli": "node tools/cli",
     "postinstall": "rm -rf node_modules/@types/async"
   },
   "lint-staged": {

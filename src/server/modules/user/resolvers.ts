@@ -1,5 +1,5 @@
 /*eslint-disable no-unused-vars*/
-import { withAuth } from 'graphql-auth';
+import withAuth from 'graphql-auth';
 import { PubSub } from 'graphql-subscriptions';
 import * as jwt from 'jsonwebtoken';
 import { pick } from 'lodash';

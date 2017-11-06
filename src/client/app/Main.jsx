@@ -27,7 +27,7 @@ const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
 const apiUri =
   hostname === 'localhost'
-    ? `${window.location.protocol}//${window.location.hostname}:${port}${pathname}`
+    ? `${window.location.protocol}//${window.location.hostname}:${__DEV__ ? port : window.location.port}${pathname}`
     : __BACKEND_URL__;
 
 const fetch = createApolloFetch({

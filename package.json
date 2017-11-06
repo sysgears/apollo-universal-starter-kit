@@ -22,7 +22,8 @@
     "watch": "spin watch",
     "heroku-postbuild": "rm -rf build && npm run build && npm run seed",
     "precommit": "lint-staged",
-    "cli": "node tools/cli"
+    "cli": "node tools/cli",
+    "postinstall": "opencollective postinstall"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [
@@ -86,6 +87,7 @@
     "minilog": "^3.1.0",
     "mysql2": "^1.4.2",
     "nodemailer": "^4.3.1",
+    "opencollective": "^1.0.3",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "performance-now": "^2.1.0",
@@ -215,5 +217,10 @@
   },
   "greenkeeper": {
     "ignore": []
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/apollo-universal-starter-kit",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
   }
 }

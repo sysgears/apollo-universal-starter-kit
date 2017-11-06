@@ -63,7 +63,7 @@ export const tryLogin = async (email, password, User, SECRET) => {
   const user = await User.getUserByEmail(email);
 
   // check if email and password exist in db
-  if (!user || user.password == null) {
+  if (!user || user.password === null) {
     // user with provided email not found
     e.setError('email', 'Please enter a valid e-mail.');
     e.throwIf();

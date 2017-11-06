@@ -25,14 +25,12 @@ export default class PostEditView implements OnInit {
 
   public ngOnInit() {
     this.route.params.subscribe((params: Params) => {
-      this.postEditService.getPost(+params.id).subscribe({
-        next: ({ data: { post }, loading }: any) => {
-          this.ngZone.run(() => {
-            this.post = post;
-            this.loading = loading;
-            this.title = !this.post ? 'Create' : 'Edit';
-          });
-        }
+      this.postEditService.getPost(+params.id).subscribe(({ data: { post }, loading }: any) => {
+        this.ngZone.run(() => {
+          this.post = post;
+          this.loading = loading;
+          this.title = !this.post ? 'Create' : 'Edit';
+        });
       });
     });
   }

@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
+import PostService from '../containers/Post';
 import PostEditService from '../containers/PostEdit';
 
 @Component({
@@ -13,14 +14,14 @@ import PostEditService from '../containers/PostEdit';
               <label class="form-control-label">Title</label>
               <div>
                   <input [ngModel]="post ? post.title : ''" #title="ngModel" name="title" type="text" placeholder="Title" class="form-control" required>
-                  <div *ngIf="!title.valid && title.touched" class="form-control-feedback">Required</div>
+                  <div *ngIf="!title.valid && title.touched" class="form-control-feedback" style="color: red;">Required</div>
               </div>
           </div>
           <div class="has-normal form-group">
               <label class="form-control-label">Content</label>
               <div>
                   <input [ngModel]="post ? post.content : ''" #content="ngModel" name="content" type="text" placeholder="Content" class="form-control" required>
-                  <div *ngIf="!content.valid && content.touched" class="form-control-feedback">Required</div>
+                  <div *ngIf="!content.valid && content.touched" class="form-control-feedback" style="color: red;">Required</div>
               </div>
           </div>
           <button type="submit" class="btn btn-primary" [disabled]="submitting">Save</button>
@@ -28,7 +29,7 @@ import PostEditService from '../containers/PostEdit';
   styles: [
     `
     input.ng-invalid.ng-touched {
-        color: red;
+        border: 1px solid red;
     }
   `
   ]
@@ -39,7 +40,7 @@ export default class PostForm implements OnInit, OnDestroy {
   @ViewChild('postForm') public postForm: NgForm;
   private subscription: Subscription;
 
-  constructor(private postEditService: PostEditService, private router: Router) {}
+  constructor(private postService: PostService, private postEditService: PostEditService, private router: Router) {}
 
   public ngOnInit() {}
 
@@ -52,8 +53,6 @@ export default class PostForm implements OnInit, OnDestroy {
       });
     } else {
       this.subscription = this.postEditService.addPost(title, content).subscribe(({ data: { addPost } }: any) => {
-        // TODO: add an ability to refresh posts list after adding a new post w/o page reloading
-        // this.postEditService.postAdded.next(addPost);
         this.router.navigate(['/post', addPost.id]);
         this.submitting = false;
       });

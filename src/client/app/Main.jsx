@@ -25,8 +25,13 @@ import modules from '../modules';
 
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
+const apiUri =
+  hostname === 'localhost'
+    ? `${window.location.protocol}//${window.location.hostname}:${port}${pathname}`
+    : __BACKEND_URL__;
+
 const fetch = createApolloFetch({
-  uri: hostname === 'localhost' ? '/graphql' : __BACKEND_URL__,
+  uri: apiUri,
   constructOptions: modules.constructFetchOptions
 });
 const cache = new InMemoryCache();
@@ -63,10 +68,7 @@ for (const connectionParam of modules.connectionParams) {
   Object.assign(connectionParams, connectionParam());
 }
 
-const wsUri = (hostname === 'localhost'
-  ? `${window.location.protocol}${window.location.hostname}:${port}${pathname}`
-  : __BACKEND_URL__
-).replace(/^http/, 'ws');
+const wsUri = apiUri.replace(/^http/, 'ws');
 let link = ApolloLink.split(
   operation => {
     const operationAST = getOperationAST(operation.query, operation.operationName);

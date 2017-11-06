@@ -1,6 +1,7 @@
 import * as reducers from './reducers';
 
 import Feature from '../connector';
+import ForgotPasswordView from './components/ForgotPasswordView.web';
 import LoginView from './components/LoginView.web';
 import ProfileView from './components/ProfileView.web';
 import RegisterView from './components/RegisterView.web';
@@ -34,7 +35,8 @@ export default new Feature({
     { path: 'login', component: LoginView },
     { path: 'profile', component: ProfileView },
     { path: 'register', component: RegisterView },
-    { path: 'users', component: UsersView, data: { title: 'Users' } }
+    { path: 'users', component: UsersView, data: { title: 'Users' } },
+    { path: 'forgot-password', component: ForgotPasswordView }
   ],
   navItem: [`<auth-nav [role]="'admin'"></auth-nav>`],
   navItemRight: [`<auth-login></auth-login>`],

@@ -29,6 +29,8 @@ import PostCommentsService from './modules/post/containers/PostComments';
 import PostEditService from './modules/post/containers/PostEdit';
 import UploadView from './modules/upload/components/UploadView.web';
 import UploadService from './modules/upload/containers/Upload';
+import ForgotPasswordForm from './modules/user/components/ForgotPasswordForm.web';
+import ForgotPasswordView from './modules/user/components/ForgotPasswordView.web';
 import LoginForm from './modules/user/components/LoginForm.web';
 import LoginView from './modules/user/components/LoginView.web';
 import ProfileView from './modules/user/components/ProfileView.web';
@@ -36,6 +38,7 @@ import RegisterForm from './modules/user/components/RegisterForm.web';
 import RegisterView from './modules/user/components/RegisterView.web';
 import UsersView from './modules/user/components/UsersView.web';
 import { AuthLogin, AuthNav } from './modules/user/containers/Auth';
+import ForgotPasswordService from './modules/user/containers/ForgotPassword';
 import LoginService from './modules/user/containers/Login';
 import ProfileService from './modules/user/containers/Profile';
 import RegisterService from './modules/user/containers/Register';
@@ -74,7 +77,9 @@ import { clientProvider, default as Main } from './app/Main';
     ProfileView,
     AuthLogin,
     AuthNav,
-    UsersView
+    UsersView,
+    ForgotPasswordForm,
+    ForgotPasswordView
   ],
   imports: [
     BrowserModule,
@@ -97,7 +102,8 @@ import { clientProvider, default as Main } from './app/Main';
     CookieService,
     RegisterService,
     UsersService,
-    UploadService
+    UploadService,
+    ForgotPasswordService
   ]
 })
 class MainModule {

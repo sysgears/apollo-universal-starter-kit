@@ -36,7 +36,10 @@ import LoginView from './modules/user/components/LoginView.web';
 import ProfileView from './modules/user/components/ProfileView.web';
 import RegisterForm from './modules/user/components/RegisterForm.web';
 import RegisterView from './modules/user/components/RegisterView.web';
-import UsersView from './modules/user/components/UsersView.web';
+import UsersEditView from './modules/user/components/UserEditView';
+import Users from './modules/user/components/Users.web';
+import UsersFilterView from './modules/user/components/UsersFilterView.web';
+import UsersListView from './modules/user/components/UsersListView.web';
 import { AuthLogin, AuthNav } from './modules/user/containers/Auth';
 import ForgotPasswordService from './modules/user/containers/ForgotPassword';
 import LoginService from './modules/user/containers/Login';
@@ -49,7 +52,6 @@ import { ApolloModule } from 'apollo-angular';
 import { clientProvider, default as Main } from './app/Main';
 
 @NgModule({
-  bootstrap: [Main],
   declarations: [
     Main,
 
@@ -77,10 +79,14 @@ import { clientProvider, default as Main } from './app/Main';
     ProfileView,
     AuthLogin,
     AuthNav,
-    UsersView,
+    Users,
+    UsersListView,
+    UsersFilterView,
+    UsersEditView,
     ForgotPasswordForm,
     ForgotPasswordView
   ],
+  bootstrap: [Main],
   imports: [
     BrowserModule,
     FormsModule,

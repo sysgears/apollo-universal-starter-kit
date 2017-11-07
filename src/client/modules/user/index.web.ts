@@ -5,7 +5,8 @@ import ForgotPasswordView from './components/ForgotPasswordView.web';
 import LoginView from './components/LoginView.web';
 import ProfileView from './components/ProfileView.web';
 import RegisterView from './components/RegisterView.web';
-import UsersView from './components/UsersView.web';
+import UsersEditView from './components/UserEditView';
+import Users from './components/Users.web';
 
 const tokenMiddleware = (req: any, options: any) => {
   options.headers['x-token'] = window.localStorage.getItem('token');
@@ -35,7 +36,8 @@ export default new Feature({
     { path: 'login', component: LoginView },
     { path: 'profile', component: ProfileView },
     { path: 'register', component: RegisterView },
-    { path: 'users', component: UsersView, data: { title: 'Users' } },
+    { path: 'users', component: Users, data: { title: 'Users' } },
+    { path: 'users/:id', component: UsersEditView, data: { title: 'Edit User' } },
     { path: 'forgot-password', component: ForgotPasswordView }
   ],
   navItem: [`<auth-nav [role]="'admin'"></auth-nav>`],

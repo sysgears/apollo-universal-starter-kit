@@ -4,6 +4,5 @@ export default {
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD
-  },
-  adminAddress: 'nxau5pr4uc2jtb6u@ethereal.email'
+  }
 };

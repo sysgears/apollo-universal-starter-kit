@@ -13,12 +13,18 @@ const CancelSubscription = ({ loading, active, cancel }) => {
 
 CancelSubscription.propTypes = {
   cancel: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   active: PropTypes.bool
 };
 
 const CancelSubscriptionWithApollo = compose(
   graphql(SUBSCRIPTION_QUERY, {
+    // i'm not sure why but this query causes SSR to hang. it seems to have
+    // to do with the fact that this query exists in other places in the tree.
+    // possibly having to do with the query name, as if you duplicate the query
+    // file and change the query name to `SubscriptionDataTwo`, then it works.
+    // skipping for now on server.
+    skip: __SERVER__,
     props({ data: { loading, subscription } }) {
       return {
         loading,

@@ -42,7 +42,7 @@ class CancelSubscriptionView extends React.Component {
 
 CancelSubscriptionView.propTypes = {
   cancel: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   active: PropTypes.bool
 };
 

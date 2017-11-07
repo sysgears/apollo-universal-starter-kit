@@ -36,6 +36,8 @@ import LoginView from './modules/user/components/LoginView.web';
 import ProfileView from './modules/user/components/ProfileView.web';
 import RegisterForm from './modules/user/components/RegisterForm.web';
 import RegisterView from './modules/user/components/RegisterView.web';
+import ResetPasswordForm from './modules/user/components/ResetPasswordForm.web';
+import ResetPasswordView from './modules/user/components/ResetPasswordView.web';
 import UsersEditView from './modules/user/components/UserEditView';
 import Users from './modules/user/components/Users.web';
 import UsersFilterView from './modules/user/components/UsersFilterView.web';
@@ -45,6 +47,7 @@ import ForgotPasswordService from './modules/user/containers/ForgotPassword';
 import LoginService from './modules/user/containers/Login';
 import ProfileService from './modules/user/containers/Profile';
 import RegisterService from './modules/user/containers/Register';
+import ResetPasswordService from './modules/user/containers/ResetPassword';
 import UsersService from './modules/user/containers/Users';
 
 // Apollo imports
@@ -84,7 +87,9 @@ import { clientProvider, default as Main } from './app/Main';
     UsersFilterView,
     UsersEditView,
     ForgotPasswordForm,
-    ForgotPasswordView
+    ForgotPasswordView,
+    ResetPasswordForm,
+    ResetPasswordView
   ],
   bootstrap: [Main],
   imports: [
@@ -109,7 +114,8 @@ import { clientProvider, default as Main } from './app/Main';
     RegisterService,
     UsersService,
     UploadService,
-    ForgotPasswordService
+    ForgotPasswordService,
+    ResetPasswordService
   ]
 })
 class MainModule {

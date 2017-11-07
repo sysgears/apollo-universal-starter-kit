@@ -5,6 +5,7 @@ import ForgotPasswordView from './components/ForgotPasswordView.web';
 import LoginView from './components/LoginView.web';
 import ProfileView from './components/ProfileView.web';
 import RegisterView from './components/RegisterView.web';
+import ResetPasswordView from './components/ResetPasswordView.web';
 import UsersEditView from './components/UserEditView';
 import Users from './components/Users.web';
 
@@ -38,7 +39,8 @@ export default new Feature({
     { path: 'register', component: RegisterView },
     { path: 'users', component: Users, data: { title: 'Users' } },
     { path: 'users/:id', component: UsersEditView, data: { title: 'Edit User' } },
-    { path: 'forgot-password', component: ForgotPasswordView }
+    { path: 'forgot-password', component: ForgotPasswordView },
+    { path: 'reset-password/:token', component: ResetPasswordView }
   ],
   navItem: [`<auth-nav [role]="'admin'"></auth-nav>`],
   navItemRight: [`<auth-login></auth-login>`],

@@ -16,15 +16,15 @@ import { Component, Input } from '@angular/core';
                placeholder="Email"
                name="Email"
                [(ngModel)]="form.email"
-               #name="ngModel"
+               #email="ngModel"
                pattern="{{emailPattern}}"
                required />
 
-        <div *ngIf="name.invalid && (name.dirty || name.touched)">
-          <small [hidden]="!name.errors.required">
+        <div *ngIf="email.invalid && (email.dirty || email.touched)">
+          <small [hidden]="!email.errors.required">
             Email is required.
           </small>
-          <small *ngIf="name.errors.pattern">
+          <small *ngIf="email.errors.pattern">
             Email should be like john@doe.com
           </small>
         </div>
@@ -34,7 +34,8 @@ import { Component, Input } from '@angular/core';
         Send Reset Instructions
       </button>
     </form>
-  `
+  `,
+  styles: ['small {color: brown}']
 })
 export default class ForgotPasswordForm {
   @Input() public onSubmit: any;

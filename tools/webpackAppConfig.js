@@ -59,6 +59,7 @@ const dependencyPlatforms = {
   knex: 'server',
   mysql2: 'server',
   nodemailer: 'server',
+  opencollective: 'server',
   persistgraphql: ['server', 'web'],
   'performance-now': 'server',
   pg: 'server',

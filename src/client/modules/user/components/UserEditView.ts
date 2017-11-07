@@ -1,19 +1,35 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import UserEditService from '../containers/UserEdit';
 
 @Component({
   selector: 'users-edit-view',
   template: `
     <div id="content" class="container">
       <a id="back-button" routerLink="/users">Back</a>
-      <h1>Create User</h1>
-      <user-form [onSubmit]="onSubmit"></user-form>
+      <h1>{{title}}</h1>
+      <user-form [onSubmit]="onSubmit" [user]="user" [loading]="loading"></user-form>
     </div>
   `
 })
 export default class UsersEditView implements OnInit, OnDestroy {
-  constructor() {}
+  public user: any = {};
+  public loading: boolean = true;
+  public title: string;
 
-  public ngOnInit(): void {}
+  constructor(private route: ActivatedRoute, private userEditService: UserEditService, private ngZone: NgZone) {}
+
+  public ngOnInit(): void {
+    this.route.params.subscribe((p: any) => {
+      this.userEditService.user(p.id, ({ data: { user }, loading }: any) => {
+        this.ngZone.run(() => {
+          this.user = user || {};
+          this.loading = loading;
+          this.title = user ? 'Edit User' : 'Create User';
+        });
+      });
+    });
+  }
 
   public ngOnDestroy(): void {}
 

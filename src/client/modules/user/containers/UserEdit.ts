@@ -1,9 +1,38 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+
+import * as ADD_USER from '../graphql/AddUser.graphql';
+import * as EDIT_USER from '../graphql/EditUser.graphql';
+import * as USER_QUERY from '../graphql/UserQuery.graphql';
 
 @Injectable()
 export default class UserEditService {
   constructor(private apollo: Apollo) {}
+
+  public user(id: number | string, callback: (result: any) => any) {
+    const user = this.apollo.watchQuery({
+      query: USER_QUERY,
+      variables: { id }
+    });
+    this.subscribe(user, callback);
+  }
+
+  private subscribe(observable: Observable<any>, cb: (result: Observable<any>) => any): Subscription {
+    const subscription = observable.subscribe({
+      next: result => {
+        try {
+          cb(result);
+        } catch (e) {
+          setImmediate(() => {
+            subscription.unsubscribe();
+          });
+        }
+      }
+    });
+    return subscription;
+  }
 }
 
 // import React from 'react';

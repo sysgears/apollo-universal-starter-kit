@@ -50,6 +50,7 @@ import LoginService from './modules/user/containers/Login';
 import ProfileService from './modules/user/containers/Profile';
 import RegisterService from './modules/user/containers/Register';
 import ResetPasswordService from './modules/user/containers/ResetPassword';
+import UserEditService from './modules/user/containers/UserEdit';
 import UsersListService from './modules/user/containers/UsersList';
 import { reducer as usersReducer } from './modules/user/reducers';
 
@@ -118,6 +119,7 @@ import { clientProvider, default as Main } from './app/Main';
     CookieService,
     RegisterService,
     UsersListService,
+    UserEditService,
     UploadService,
     ForgotPasswordService,
     ResetPasswordService

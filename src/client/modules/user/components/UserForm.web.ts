@@ -21,7 +21,8 @@ interface FormInput {
 @Component({
   selector: 'user-form',
   template: `
-    <form name="userForm" #userForm="ngForm" (ngSubmit)="onSubmit(userForm.form.value)">
+    <div *ngIf="loading">Loading...</div>
+    <form *ngIf="!loading && user" name="userForm" #userForm="ngForm" (ngSubmit)="onSubmit(userForm.form.value)">
       <div [ngClass]="{'form-group': fi.inputType !== 2, 'form-check': fi.inputType === 2}" *ngFor="let fi of formInputs">
 
         <span *ngIf="fi.inputType === 0">
@@ -31,7 +32,7 @@ interface FormInput {
                  class="form-control"
                  placeholder="{{fi.value}}"
                  name="{{fi.name}}"
-                 [(ngModel)]="edit[fi.name]"
+                 [(ngModel)]="user[fi.name]"
                  #name="ngModel"
                  minlength="{{fi.minLength}}"
                  pattern="{{pattern(fi.name)}}"
@@ -60,7 +61,7 @@ interface FormInput {
 
         <span *ngIf="fi.inputType === 2">
           <label for="{{fi.id}}" class="form-check-label">
-            <input type="checkbox" id="{{fi.id}}" name="{{fi.name}}" class="form-check-input" [(ngModel)]="edit[fi.name]" />
+            <input type="checkbox" id="{{fi.id}}" name="{{fi.name}}" class="form-check-input" [(ngModel)]="user[fi.name]" />
             {{fi.value}}
           </label>
         </span>
@@ -73,9 +74,10 @@ interface FormInput {
 })
 export default class UserForm implements OnInit, OnDestroy {
   @Input() public onSubmit: any;
+  @Input() public loading: boolean;
+  @Input() public user: any;
 
   public formInputs: FormInput[];
-  public edit: any = {};
   public pattern: any;
   public patternMsg: any;
 
@@ -97,7 +99,7 @@ export default class UserForm implements OnInit, OnDestroy {
     }
 
     if (fieldName === 'passwordConfirmation') {
-      pat = this.edit.password || null;
+      pat = this.user.password || null;
     }
 
     return pat;

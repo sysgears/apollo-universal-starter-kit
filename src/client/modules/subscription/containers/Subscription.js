@@ -50,11 +50,13 @@ const SubscriptionViewWithApollo = compose(
           }
 
           if (history) {
-            return history.push('/subscribers-only');
+            history.push('/subscribers-only');
           }
           if (navigation) {
-            return navigation.goBack();
+            navigation.goBack();
           }
+
+          return subscribe;
         } catch (e) {
           console.log(e.graphQLErrors);
         }

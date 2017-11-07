@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import ForgotPasswordService from '../containers/ForgotPassword';
 
 @Component({
-  selector: 'Forgot-password-view',
+  selector: 'forgot-password-view',
   template: `
     <div id="content" class="container">
       <h1>Forgot password!</h1>

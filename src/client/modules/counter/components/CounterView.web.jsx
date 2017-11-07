@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import { PageLayout, Button } from '../../common/components/web';
+import settings from '../../../../../settings';
 
 const Section = styled.section`
   margin-bottom: 30px;
@@ -12,11 +13,11 @@ const Section = styled.section`
 const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement }) => {
   const renderMetaData = () => (
     <Helmet
-      title="Apollo Starter Kit - Counter"
+      title={`${settings.app.name} - Counter`}
       meta={[
         {
           name: 'description',
-          content: 'Apollo Fullstack Starter Kit - Counter example page'
+          content: `${settings.app.name} - Counter example page`
         }
       ]}
     />

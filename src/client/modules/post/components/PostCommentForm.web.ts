@@ -7,7 +7,7 @@ import PostCommentsService from '../containers/PostComments';
 @Component({
   selector: 'post-comment-form',
   template: `
-        <form (ngSubmit)="onSubmit()" #commentForm="ngForm" name="comment">
+        <form (ngSubmit)="onFormSubmitted()" #commentForm="ngForm" name="comment">
             <div class="form-group">
                 <div class="row">
                     <div class="col-2">
@@ -16,7 +16,7 @@ import PostCommentsService from '../containers/PostComments';
                     <div class="col-8">
                         <div class="has-normal form-group">
                             <input ngModel name="content" #content="ngModel" type="text" placeholder="Content" class="form-control" required>
-                            <div *ngIf="!content.valid && content.touched" class="form-control-feedback">Required</div>
+                            <div ngClass="content.to" *ngIf="!content.valid && content.touched" class="form-control-feedback" style="color: red;">Required</div>
                         </div>
                     </div>
                     <div class="col-2">
@@ -28,9 +28,10 @@ import PostCommentsService from '../containers/PostComments';
   styles: [
     `
       input.ng-invalid.ng-touched {
-          color: red;
+        border: 1px solid red;
       }
-  `
+
+    `
   ]
 })
 export default class PostCommentForm implements OnInit, OnDestroy {
@@ -62,12 +63,13 @@ export default class PostCommentForm implements OnInit, OnDestroy {
     return this.editMode ? 'Edit' : 'Add';
   }
 
-  public onSubmit() {
+  public onFormSubmitted() {
     this.submitting = true;
     const { content } = this.commentForm.value;
     if (this.comment) {
       this.subscription = this.postCommentsService.editComment(this.comment.id, this.postId, content).subscribe();
       this.editMode = false;
+      this.comment = null;
     } else {
       this.subscription = this.postCommentsService.addComment(content, this.postId).subscribe();
     }

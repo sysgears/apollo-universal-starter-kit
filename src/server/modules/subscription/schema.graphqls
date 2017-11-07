@@ -26,6 +26,8 @@ extend type Query {
 extend type Mutation {
     # Subscribe a user
     subscribe(input: SubscribeInput!): UserSubscription!
+    # Cancel a user's subscription
+    cancel: UserSubscription!
 }
 
 input SubscribeInput {

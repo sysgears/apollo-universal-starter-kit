@@ -48,11 +48,31 @@ export default pubsub => ({
           ]
         });
 
-        await context.Subscription.toggleSubscription({ userId: user.id, active: true });
+        await context.Subscription.updateSubscription({
+          userId: user.id,
+          active: true,
+          stripeSubscriptionId: subscription.id
+        });
 
         return { active: true, errors: null };
       } catch (e) {
         return { active: false, errors: e };
+      }
+    },
+    async cancel(obj, args, context) {
+      try {
+        const { id } = await context.User.getUserByUsername(context.user.username);
+        const { stripeSubscriptionId } = context.subscription;
+
+        const confirmation = await stripe.subscriptions.del(stripeSubscriptionId);
+
+        if (confirmation) {
+          await context.Subscription.deleteSubscription({ userId: id });
+        }
+
+        return { active: false, errors: null };
+      } catch (e) {
+        return { active: true, errors: e };
       }
     }
   },

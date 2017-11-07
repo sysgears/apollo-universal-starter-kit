@@ -4,12 +4,14 @@ import knex from '../../../server/sql/connector';
 
 // Actual query fetching and transformation in DB
 export default class Subscription {
-  getSubscription(userId) {
-    return knex('subscription')
-      .select('s.active')
-      .from('subscription as s')
-      .where('s.user_id', '=', userId)
-      .first();
+  async getSubscription(userId) {
+    return camelizeKeys(
+      await knex('subscription')
+        .select('s.*')
+        .from('subscription as s')
+        .where('s.user_id', '=', userId)
+        .first()
+    );
   }
 
   async createSubscription({ userId, stripeCustomerId, expiryMonth, expiryYear, last4, brand }) {
@@ -26,10 +28,20 @@ export default class Subscription {
       .returning('id');
   }
 
-  async toggleSubscription({ userId, active }) {
+  async deleteSubscription({ userId }) {
     return await knex('subscription')
-      .update({ active })
-      .where({ user_id: userId });
+      .where({ user_id: userId })
+      .del();
+  }
+
+  async updateSubscription({ userId, active, stripeSubscriptionId }) {
+    return await knex('subscription')
+      .update({
+        active,
+        stripe_subscription_id: stripeSubscriptionId
+      })
+      .where({ user_id: userId })
+      .returning('active');
   }
 
   async getCardInfo(userId) {

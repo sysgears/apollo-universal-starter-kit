@@ -39,6 +39,7 @@ import RegisterView from './modules/user/components/RegisterView.web';
 import ResetPasswordForm from './modules/user/components/ResetPasswordForm.web';
 import ResetPasswordView from './modules/user/components/ResetPasswordView.web';
 import UsersEditView from './modules/user/components/UserEditView';
+import UserForm from './modules/user/components/UserForm.web';
 import Users from './modules/user/components/Users.web';
 import UsersFilterView from './modules/user/components/UsersFilterView.web';
 import UsersListView from './modules/user/components/UsersListView.web';
@@ -86,6 +87,7 @@ import { clientProvider, default as Main } from './app/Main';
     UsersListView,
     UsersFilterView,
     UsersEditView,
+    UserForm,
     ForgotPasswordForm,
     ForgotPasswordView,
     ResetPasswordForm,

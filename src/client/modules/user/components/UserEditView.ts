@@ -3,6 +3,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 @Component({
   selector: 'users-edit-view',
   template: `
+    <div id="content" class="container">
+      <a id="back-button" routerLink="/users">Back</a>
+      <h1>Create User</h1>
+      <user-form [onSubmit]="onSubmit"></user-form>
+    </div>
   `
 })
 export default class UsersEditView implements OnInit, OnDestroy {
@@ -11,6 +16,8 @@ export default class UsersEditView implements OnInit, OnDestroy {
   public ngOnInit(): void {}
 
   public ngOnDestroy(): void {}
+
+  public onSubmit(form: any) {}
 }
 
 // import React from 'react';

@@ -90,17 +90,7 @@ export default class User {
   async getUserWithPassword(id) {
     return camelizeKeys(
       await knex
-        .select(
-          'u.id',
-          'u.username',
-          'u.password',
-          'u.role',
-          'u.is_active',
-          'u.role',
-          'u.email',
-          'up.first_name',
-          'up.last_name'
-        )
+        .select('u.id', 'u.username', 'u.password', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
         .from('user AS u')
         .where('u.id', '=', id)
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
@@ -111,7 +101,7 @@ export default class User {
   async getUserWithSerial(serial) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.role', 'ca.serial', 'up.first_name', 'up.last_name')
+        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'ca.serial', 'up.first_name', 'up.last_name')
         .from('user AS u')
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
@@ -214,17 +204,7 @@ export default class User {
   async getUserByEmail(email) {
     return camelizeKeys(
       await knex
-        .select(
-          'u.id',
-          'u.username',
-          'u.password',
-          'u.role',
-          'u.is_active',
-          'u.role',
-          'u.email',
-          'up.first_name',
-          'up.last_name'
-        )
+        .select('u.id', 'u.username', 'u.password', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
         .from('user AS u')
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where({ email })
@@ -258,7 +238,7 @@ export default class User {
   async getUserByUsername(username) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.role', 'u.email', 'up.first_name', 'up.last_name')
+        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
         .from('user AS u')
         .where('u.username', '=', username)
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')

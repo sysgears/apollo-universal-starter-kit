@@ -377,6 +377,12 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
   yarn start
   ```
 
+### Publishing mobile apps
+1. Compile project for production with `ios` and `android` set to `true` in `app.json` via `yarn build`.
+2. Run `yarn exp publish` to publish, the URL like:
+[``https://exp.host/@vlasenko/apollo-universal-starter-kit``](https://exp.host/@vlasenko/apollo-universal-starter-kit)
+where your users can access mobile app from Expo Client will be printed in terminal.
+
 ### Building standalone mobile apps for Play Store and App Store
 1. Compile project for production with `ios` and `android` set to `true` in `app.json` via `yarn build`.
 2. Run `yarn exp ba` to launch building signed `.apk` or `yarn exp bi` for signed `.iap`.

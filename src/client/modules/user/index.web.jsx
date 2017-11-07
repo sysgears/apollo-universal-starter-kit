@@ -48,7 +48,7 @@ export default new Feature({
     <Route exact path="/reset-password/:token" component={ResetPassword} />
   ],
   navItem: [
-    <MenuItem key="users">
+    <MenuItem key="/users">
       <AuthNav scope="admin">
         <NavLink to="/users" className="nav-link" activeClassName="active">
           Users
@@ -57,7 +57,7 @@ export default new Feature({
     </MenuItem>
   ],
   navItemRight: [
-    <MenuItem key="profile">
+    <MenuItem key="/profile">
       <AuthProfile />
     </MenuItem>,
     <MenuItem key="login">

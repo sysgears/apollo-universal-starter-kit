@@ -43,7 +43,11 @@ export default pubsub => ({
       return obj.lastName;
     },
     fullName(obj) {
-      return `${obj.firstName} ${obj.lastName}`;
+      if (obj.firstName && obj.lastName) {
+        return `${obj.firstName} ${obj.lastName}`;
+      } else {
+        return null;
+      }
     }
   },
   UserAuth: {

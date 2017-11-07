@@ -90,7 +90,17 @@ export default class User {
   async getUserWithPassword(id) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.role', 'u.email', 'up.first_name', 'up.last_name')
+        .select(
+          'u.id',
+          'u.username',
+          'u.password',
+          'u.role',
+          'u.is_active',
+          'u.role',
+          'u.email',
+          'up.first_name',
+          'up.last_name'
+        )
         .from('user AS u')
         .where('u.id', '=', id)
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')

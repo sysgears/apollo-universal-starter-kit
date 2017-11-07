@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { PageLayout } from '../../common/components/web';
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
+import settings from '../../../../../settings';
 
 const onSubmit = (post, addPost, editPost) => values => {
   if (post) {
@@ -25,7 +26,7 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
 
   const renderMetaData = () => (
     <Helmet
-      title="Apollo Starter Kit - Edit post"
+      title={`${settings.app.name} - Edit post`}
       meta={[
         {
           name: 'description',

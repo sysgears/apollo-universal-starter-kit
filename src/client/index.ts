@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { StoreModule } from '@ngrx/store';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
 
@@ -49,7 +50,8 @@ import LoginService from './modules/user/containers/Login';
 import ProfileService from './modules/user/containers/Profile';
 import RegisterService from './modules/user/containers/Register';
 import ResetPasswordService from './modules/user/containers/ResetPassword';
-import UsersService from './modules/user/containers/Users';
+import UsersListService from './modules/user/containers/UsersList';
+import { reducer as usersReducer } from './modules/user/reducers';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
@@ -101,6 +103,7 @@ import { clientProvider, default as Main } from './app/Main';
     ApolloModule.withClient(clientProvider),
     NgbModule.forRoot(),
     NgUploaderModule,
+    StoreModule.forRoot({ userStore: usersReducer }),
     RouterModule.forRoot(routes, {
       useHash: true
     })
@@ -114,7 +117,7 @@ import { clientProvider, default as Main } from './app/Main';
     ProfileService,
     CookieService,
     RegisterService,
-    UsersService,
+    UsersListService,
     UploadService,
     ForgotPasswordService,
     ResetPasswordService

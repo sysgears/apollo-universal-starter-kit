@@ -1,50 +1,140 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs/Subscription';
+
+import UsersListService from '../containers/UsersList';
+import { UserOrderBy } from '../reducers';
 
 @Component({
   selector: 'users-list-view',
   template: `
-      <div>
+      <div *ngIf="!loading; else showLoading">
+          <div *ngIf="errors">
+              <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+                  {{error.message}}
+              </div>
+          </div>
           <table class="table">
               <thead>
               <tr>
-                  <th class="w-20">
-                      <a href="#">Username <span class="badge badge-secondary">⇅</span></a>
+                  <th>
+                      <a (click)="orderByColumn($event, 'username')">Username <span
+                              [innerHTML]="renderOrderByArrow('username')"></span></a>
                   </th>
-                  <th class="w-20">
-                      <a href="#">Email <span class="badge badge-secondary">⇅</span></a>
+                  <th>
+                      <a (click)="orderByColumn($event, 'email')">Email <span
+                              [innerHTML]="renderOrderByArrow('email')"></span></a>
                   </th>
-                  <th class="w-20">
-                      <a href="#">Role <span class="badge badge-secondary">⇅</span></a>
+                  <th>
+                      <a (click)="orderByColumn($event, 'role')">Role <span
+                              [innerHTML]="renderOrderByArrow('role')"></span></a>
                   </th>
-                  <th class="w-20">
-                      <a href="#">Is Active <span class="badge badge-secondary">⇅</span></a>
+                  <th>
+                      <a (click)="orderByColumn($event, 'isActive')">Is Active <span
+                              [innerHTML]="renderOrderByArrow('isActive')"></span></a>
                   </th>
-                  <th class="w-20">Actions</th>
+                  <th>Actions</th>
               </tr>
               </thead>
               <tbody>
-              <tr>
+              <tr *ngFor="let user of users">
                   <td>
-                      <a class="user-link" href="/users/1">admin</a>
+                      <a class="user-link" [routerLink]="['/users', user.id]">{{ user.username }}</a>
                   </td>
-                  <td>admin@example.com</td>
-                  <td>admin</td>
-                  <td>true</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.role }}</td>
+                  <td>{{ user.isActive }}</td>
                   <td>
-                      <button type="button" class="btn btn-primary btn-sm">Delete</button>
+                      <button type="button" class="btn btn-primary btn-sm" (click)="handleDeleteUser(user.id)">Delete
+                      </button>
                   </td>
               </tr>
               </tbody>
           </table>
       </div>
+      <ng-template #showLoading>
+          <div class="text-center">Loading...</div>
+      </ng-template>
   `
 })
 export default class UsersListView implements OnInit, OnDestroy {
-  constructor() {}
+  public subscription: Subscription;
+  public subsOnLoad: Subscription;
+  public subsOnDelete: Subscription;
+  public searchText: string;
+  public role: string;
+  public isActive: boolean;
+  public orderBy: any;
+  public loading: boolean = true;
+  public errors: any = [];
+  public users: any = [];
 
-  public ngOnInit(): void {}
+  constructor(private store: Store<any>, private usersListService: UsersListService) {}
 
-  public ngOnDestroy(): void {}
+  public ngOnInit(): void {
+    this.subscription = this.store.select('userStore').subscribe(({ searchText, role, isActive, orderBy }) => {
+      this.searchText = searchText;
+      this.role = role;
+      this.isActive = isActive;
+      this.orderBy = orderBy;
+      this.fetchUsers(orderBy, searchText, role, isActive);
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.unsubscribe(this.subsOnLoad);
+    this.unsubscribe(this.subsOnDelete);
+  }
+
+  public fetchUsers(orderBy: any, searchText: string, role: string, isActive: boolean) {
+    this.unsubscribe(this.subsOnLoad);
+    this.subsOnLoad = this.usersListService
+      .getUsers(orderBy, searchText, role, isActive)
+      .subscribe(({ data, loading }: any) => {
+        this.users = data ? data.users : [];
+        this.loading = loading;
+      });
+  }
+
+  public handleDeleteUser = async (id: number) => {
+    this.unsubscribe(this.subsOnDelete);
+    this.subsOnDelete = this.usersListService.deleteUser(id).subscribe((result: any) => {
+      this.errors = result && result.errors ? result.errors : [];
+    });
+  };
+
+  public renderOrderByArrow = (name: string) => {
+    if (this.orderBy && this.orderBy.column === name) {
+      if (this.orderBy.order === 'desc') {
+        return `<span className="badge badge-primary">&#8595;</span>`;
+      } else {
+        return `<span className="badge badge-primary">&#8593;</span>`;
+      }
+    } else {
+      return `<span className="badge badge-secondary">&#8645;</span>`;
+    }
+  };
+
+  public orderByColumn = (e: any, name: string) => {
+    e.preventDefault();
+    let order = 'asc';
+    if (this.orderBy && this.orderBy.column === name) {
+      if (this.orderBy.order === 'asc') {
+        order = 'desc';
+      } else if (this.orderBy.order === 'desc') {
+        return this.store.dispatch(new UserOrderBy({}));
+      }
+    }
+
+    return this.store.dispatch(new UserOrderBy({ column: name, order }));
+  };
+
+  private unsubscribe(subscription: Subscription) {
+    if (subscription) {
+      subscription.unsubscribe();
+    }
+  }
 }
 
 // import React from 'react';

@@ -89,11 +89,11 @@ wsClient.use([
 ]);
 
 wsClient.onDisconnected(() => {
-  console.log('onDisconnected');
+  //console.log('onDisconnected');
 });
 
 wsClient.onReconnected(() => {
-  console.log('onReconnected');
+  //console.log('onReconnected');
 });
 
 let link = ApolloLink.split(

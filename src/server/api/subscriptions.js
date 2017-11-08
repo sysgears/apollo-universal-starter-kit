@@ -1,6 +1,5 @@
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe } from 'graphql';
-import { pick } from 'lodash';
 
 import schema from './schema';
 import log from '../../common/log';
@@ -16,9 +15,7 @@ const addSubscriptions = httpServer => {
       subscribe,
       onConnect: (connectionParams, webSocket) => modules.createContext(null, connectionParams, webSocket),
       onOperation: async (message, params, webSocket) => {
-        console.log(pick(message.payload, ['token', 'refreshToken']));
-        params.context = await modules.createContext(null, pick(message.payload, ['token', 'refreshToken']), webSocket);
-        console.log(params);
+        params.context = await modules.createContext(null, message.payload, webSocket);
         return params;
       }
     },

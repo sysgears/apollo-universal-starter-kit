@@ -104,6 +104,7 @@ import { clientProvider, default as Main } from './app/Main';
     ApolloModule.withClient(clientProvider),
     NgbModule.forRoot(),
     NgUploaderModule,
+    // TODO: Implement @ngrx/store for the whole project
     StoreModule.forRoot({ userStore: usersReducer }),
     RouterModule.forRoot(routes, {
       useHash: true

@@ -7,6 +7,13 @@ import ResetPasswordService from '../containers/ResetPassword';
   template: `
     <div id="content" class="container">
       <h1>Reset password!</h1>
+
+      <div *ngIf="errors">
+        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+          {{error.message}}
+        </div>
+      </div>
+
       <reset-password-form [onSubmit]="onSubmit" [sent]="sent" [submitting]="submitting"></reset-password-form>
     </div>
   `
@@ -14,6 +21,7 @@ import ResetPasswordService from '../containers/ResetPassword';
 export default class ResetPasswordView implements OnInit {
   public sent: boolean = false;
   public submitting: boolean = false;
+  public errors: any[];
   private token: string;
 
   constructor(private route: ActivatedRoute, private resetPasswordService: ResetPasswordService) {}
@@ -36,10 +44,9 @@ export default class ResetPasswordView implements OnInit {
           this.submitting = false;
 
           if (resetPassword.errors) {
-            return { errors: resetPassword.errors };
+            this.errors = resetPassword.errors;
+            return;
           }
-
-          return resetPassword;
         }
       );
     }

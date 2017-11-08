@@ -17,21 +17,9 @@ import { UserOrderBy } from '../reducers';
           <table class="table">
               <thead>
               <tr>
-                  <th>
-                      <a (click)="orderByColumn($event, 'username')">Username <span
-                              [innerHTML]="renderOrderByArrow('username')"></span></a>
-                  </th>
-                  <th>
-                      <a (click)="orderByColumn($event, 'email')">Email <span
-                              [innerHTML]="renderOrderByArrow('email')"></span></a>
-                  </th>
-                  <th>
-                      <a (click)="orderByColumn($event, 'role')">Role <span
-                              [innerHTML]="renderOrderByArrow('role')"></span></a>
-                  </th>
-                  <th>
-                      <a (click)="orderByColumn($event, 'isActive')">Is Active <span
-                              [innerHTML]="renderOrderByArrow('isActive')"></span></a>
+                  <th *ngFor="let header of renderHeaders()">
+                      <a (click)="orderByColumn($event, header.value)">{{ header.name }} <span
+                              [innerHTML]="renderOrderByArrow(header.value)"></span></a>
                   </th>
                   <th>Actions</th>
               </tr>
@@ -55,7 +43,14 @@ import { UserOrderBy } from '../reducers';
       <ng-template #showLoading>
           <div class="text-center">Loading...</div>
       </ng-template>
+  `,
+  styles: [
+    `
+      th > a {
+          cursor: pointer;
+      }
   `
+  ]
 })
 export default class UsersListView implements OnInit, OnDestroy {
   public subscription: Subscription;
@@ -129,6 +124,27 @@ export default class UsersListView implements OnInit, OnDestroy {
 
     return this.store.dispatch(new UserOrderBy({ column: name, order }));
   };
+
+  public renderHeaders() {
+    return [
+      {
+        name: 'Username',
+        value: 'username'
+      },
+      {
+        name: 'Email',
+        value: 'email'
+      },
+      {
+        name: 'Role',
+        value: 'role'
+      },
+      {
+        name: 'Is Active',
+        value: 'isActive'
+      }
+    ];
+  }
 
   private unsubscribe(subscription: Subscription) {
     if (subscription) {

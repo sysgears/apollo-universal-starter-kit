@@ -80,6 +80,8 @@ Next, open up Xcode, go to preferences and click the Components tab, install a s
 After the installation if you run the server, simulator should start on it's own and open the app in Expo.
 To bring up the developer menu press ⌘+D.
 
+Note: If iOS simulator fail to start expo client or the app: Try to reset the simulator in `Hardware -> Erase all content and settings` and restart the application.
+
 ## Support
 
 ### Community support

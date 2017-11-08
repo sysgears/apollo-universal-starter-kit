@@ -1,4 +1,4 @@
-import DomainSchema, { Schema } from '../../../common/DomainSchema';
+import DomainSchema, { Schema } from 'domain-schema';
 
 /* eslint import/prefer-default-export: 0 */
 

@@ -2,9 +2,9 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import { pick } from 'lodash';
+import GraphQLGenerator from 'domain-graphql';
 
 import { User as UserSchema } from './schema';
-import GraphQLGenerator from '../../../common/DomainGraphQL';
 import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';

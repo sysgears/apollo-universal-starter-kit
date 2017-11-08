@@ -77,8 +77,12 @@ const wsClient = new SubscriptionClient(wsUri, {
 wsClient.use([
   {
     applyMiddleware(operationOptions, next) {
-      console.log(operationOptions);
-      Object.assign(operationOptions, connectionParams);
+      let params = {};
+      for (const param of modules.connectionParams) {
+        Object.assign(params, param());
+      }
+
+      Object.assign(operationOptions, params);
       next();
     }
   }

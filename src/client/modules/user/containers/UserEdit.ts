@@ -27,6 +27,14 @@ export default class UserEditService {
     this.subscribe(addUser, callback);
   }
 
+  public editUser(input: any, callback: (result: any) => any) {
+    const editUser = this.apollo.mutate({
+      mutation: EDIT_USER,
+      variables: { input }
+    });
+    this.subscribe(editUser, callback);
+  }
+
   private subscribe(observable: Observable<any>, cb: (result: Observable<any>) => any): Subscription {
     const subscription = observable.subscribe({
       next: result => {

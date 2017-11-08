@@ -10,7 +10,7 @@ import UserEditService from '../containers/UserEdit';
     <div id="content" class="container">
       <a id="back-button" routerLink="/users">Back</a>
       <h1>{{title}}</h1>
-      <user-form [onSubmit]="onSubmit" [user]="user" [loading]="loading"></user-form>
+      <user-form [onSubmit]="onSubmit" [user]="user" [loading]="loading" [errors]="errors"></user-form>
     </div>
   `
 })
@@ -18,6 +18,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
   public user: any = {};
   public loading: boolean = true;
   public title: string;
+  public errors: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -48,11 +49,20 @@ export default class UsersEditView implements OnInit, OnDestroy {
       insertValues.auth = { certificate: pick(form.auth.certificate, 'serial') };
     }
 
-    this.userEditService.addUser(insertValues, ({ data: { addUser: { errors, user } } }: any) => {
-      if (errors) {
-      }
-      this.router.navigateByUrl('users');
-    });
+    if (this.user.id) {
+      this.userEditService.editUser(
+        { id: this.user.id, ...insertValues },
+        ({ data: { editUser: { errors, user } } }: any) => {
+          this.errors = errors;
+          this.router.navigateByUrl('users');
+        }
+      );
+    } else {
+      this.userEditService.addUser(insertValues, ({ data: { addUser: { errors, user } } }: any) => {
+        this.errors = errors;
+        this.router.navigateByUrl('users');
+      });
+    }
   };
 }
 

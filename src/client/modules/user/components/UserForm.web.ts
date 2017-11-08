@@ -22,6 +22,13 @@ interface FormInput {
   selector: 'user-form',
   template: `
     <div *ngIf="loading">Loading...</div>
+
+    <div *ngIf="errors">
+      <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+        {{error.message}}
+      </div>
+    </div>
+
     <form *ngIf="!loading && user" name="userForm" #userForm="ngForm" (ngSubmit)="onSubmit(user)">
       <div [ngClass]="{'form-group': fi.inputType !== 2, 'form-check': fi.inputType === 2}" *ngFor="let fi of formInputs">
 
@@ -76,6 +83,7 @@ export default class UserForm implements OnInit, OnDestroy {
   @Input() public onSubmit: any;
   @Input() public loading: boolean;
   @Input() public user: any;
+  @Input() public errors: any[];
 
   public formInputs: FormInput[];
   public pattern: any;

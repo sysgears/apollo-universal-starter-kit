@@ -97,9 +97,7 @@ export default class UsersListView implements OnInit, OnDestroy {
     this.subsOnDelete = this.usersListService
       .deleteUser(id)
       .subscribe(({ data: { deleteUser: { errors, user } } }: any) => {
-        if (errors) {
-          this.errors = errors;
-        }
+        this.errors = errors;
       });
   };
 

@@ -41,7 +41,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
   public ngOnDestroy(): void {}
 
   public onSubmit = (form: any) => {
-    const insertValues = pick(form, ['username', 'email', 'role', 'isActive', 'password']);
+    const insertValues: any = pick(form, ['username', 'email', 'role', 'isActive', 'password']);
     insertValues.profile = pick(form, ['firstName', 'lastName']);
 
     if (settings.user.auth.certificate.enabled) {

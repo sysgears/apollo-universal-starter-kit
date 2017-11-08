@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -8,41 +8,41 @@ import { UserOrderBy } from '../reducers';
 @Component({
   selector: 'users-list-view',
   template: `
-      <div *ngIf="!loading; else showLoading">
-          <div *ngIf="errors">
-              <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
-                  {{error.message}}
-              </div>
-          </div>
-          <table class="table">
-              <thead>
-              <tr>
-                  <th *ngFor="let header of renderHeaders()">
-                      <a (click)="orderByColumn($event, header.value)">{{ header.name }} <span
-                              [innerHTML]="renderOrderByArrow(header.value)"></span></a>
-                  </th>
-                  <th>Actions</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let user of users">
-                  <td>
-                      <a class="user-link" [routerLink]="['/users', user.id]">{{ user.username }}</a>
-                  </td>
-                  <td>{{ user.email }}</td>
-                  <td>{{ user.role }}</td>
-                  <td>{{ user.isActive }}</td>
-                  <td>
-                      <button type="button" class="btn btn-primary btn-sm" (click)="handleDeleteUser(user.id)">Delete
-                      </button>
-                  </td>
-              </tr>
-              </tbody>
-          </table>
+    <div *ngIf="!loading; else showLoading">
+      <div *ngIf="errors">
+        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+          {{error.message}}
+        </div>
       </div>
-      <ng-template #showLoading>
-          <div class="text-center">Loading...</div>
-      </ng-template>
+      <table class="table">
+        <thead>
+        <tr>
+          <th *ngFor="let header of renderHeaders()">
+            <a (click)="orderByColumn($event, header.value)">{{ header.name }} <span [innerHTML]="renderOrderByArrow(header.value)"></span>
+            </a>
+          </th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users">
+          <td>
+            <a class="user-link" [routerLink]="['/users', user.id]">{{ user.username }}</a>
+          </td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ user.isActive }}</td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm" (click)="handleDeleteUser(user.id)">Delete
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #showLoading>
+      <div class="text-center">Loading...</div>
+    </ng-template>
   `,
   styles: [
     `
@@ -64,7 +64,7 @@ export default class UsersListView implements OnInit, OnDestroy {
   public errors: any = [];
   public users: any = [];
 
-  constructor(private store: Store<any>, private usersListService: UsersListService) {}
+  constructor(private store: Store<any>, private usersListService: UsersListService, private ngZone: NgZone) {}
 
   public ngOnInit(): void {
     this.subscription = this.store.select('userStore').subscribe(({ searchText, role, isActive, orderBy }) => {
@@ -77,9 +77,7 @@ export default class UsersListView implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-    this.unsubscribe(this.subsOnLoad);
-    this.unsubscribe(this.subsOnDelete);
+    this.unsubscribe(this.subscription, this.subsOnLoad, this.subsOnDelete);
   }
 
   public fetchUsers(orderBy: any, searchText: string, role: string, isActive: boolean) {
@@ -87,28 +85,28 @@ export default class UsersListView implements OnInit, OnDestroy {
     this.subsOnLoad = this.usersListService
       .getUsers(orderBy, searchText, role, isActive)
       .subscribe(({ data, loading }: any) => {
-        this.users = data ? data.users : [];
-        this.loading = loading;
+        this.ngZone.run(() => {
+          this.users = data ? data.users : [];
+          this.loading = loading;
+        });
       });
   }
 
   public handleDeleteUser = async (id: number) => {
     this.unsubscribe(this.subsOnDelete);
-    this.subsOnDelete = this.usersListService.deleteUser(id).subscribe((result: any) => {
-      this.errors = result && result.errors ? result.errors : [];
-    });
+    this.subsOnDelete = this.usersListService
+      .deleteUser(id)
+      .subscribe(({ data: { deleteUser: { errors, user } } }: any) => {
+        if (errors) {
+          this.errors = errors;
+        }
+      });
   };
 
   public renderOrderByArrow = (name: string) => {
-    if (this.orderBy && this.orderBy.column === name) {
-      if (this.orderBy.order === 'desc') {
-        return `<span className="badge badge-primary">&#8595;</span>`;
-      } else {
-        return `<span className="badge badge-primary">&#8593;</span>`;
-      }
-    } else {
-      return `<span className="badge badge-secondary">&#8645;</span>`;
-    }
+    return this.orderBy && this.orderBy.column === name
+      ? `<span className="badge badge-primary">${this.orderBy.order === 'desc' ? '&#8595;' : '&#8593;'}</span>`
+      : `<span className="badge badge-secondary">&#8645;</span>`;
   };
 
   public orderByColumn = (e: any, name: string) => {
@@ -125,7 +123,7 @@ export default class UsersListView implements OnInit, OnDestroy {
     return this.store.dispatch(new UserOrderBy({ column: name, order }));
   };
 
-  public renderHeaders() {
+  public renderHeaders = () => {
     return [
       {
         name: 'Username',
@@ -144,13 +142,15 @@ export default class UsersListView implements OnInit, OnDestroy {
         value: 'isActive'
       }
     ];
-  }
+  };
 
-  private unsubscribe(subscription: Subscription) {
-    if (subscription) {
-      subscription.unsubscribe();
-    }
-  }
+  private unsubscribe = (...subscriptions: Subscription[]) => {
+    subscriptions.forEach((subscription: Subscription) => {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    });
+  };
 }
 
 // import React from 'react';

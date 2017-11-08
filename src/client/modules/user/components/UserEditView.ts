@@ -1,5 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { assign, pick } from 'lodash';
+import settings from '../../../../../settings';
 import UserEditService from '../containers/UserEdit';
 
 @Component({
@@ -17,13 +19,18 @@ export default class UsersEditView implements OnInit, OnDestroy {
   public loading: boolean = true;
   public title: string;
 
-  constructor(private route: ActivatedRoute, private userEditService: UserEditService, private ngZone: NgZone) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private userEditService: UserEditService,
+    private ngZone: NgZone
+  ) {}
 
   public ngOnInit(): void {
     this.route.params.subscribe((p: any) => {
       this.userEditService.user(p.id, ({ data: { user }, loading }: any) => {
         this.ngZone.run(() => {
-          this.user = user || {};
+          this.user = user ? assign({}, user, user.profile) : {};
           this.loading = loading;
           this.title = user ? 'Edit User' : 'Create User';
         });
@@ -33,7 +40,20 @@ export default class UsersEditView implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {}
 
-  public onSubmit(form: any) {}
+  public onSubmit = (form: any) => {
+    const insertValues = pick(form, ['username', 'email', 'role', 'isActive', 'password']);
+    insertValues.profile = pick(form, ['firstName', 'lastName']);
+
+    if (settings.user.auth.certificate.enabled) {
+      insertValues.auth = { certificate: pick(form.auth.certificate, 'serial') };
+    }
+
+    this.userEditService.addUser(insertValues, ({ data: { addUser: { errors, user } } }: any) => {
+      if (errors) {
+      }
+      this.router.navigateByUrl('users');
+    });
+  };
 }
 
 // import React from 'react';

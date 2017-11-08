@@ -22,7 +22,7 @@ interface FormInput {
   selector: 'user-form',
   template: `
     <div *ngIf="loading">Loading...</div>
-    <form *ngIf="!loading && user" name="userForm" #userForm="ngForm" (ngSubmit)="onSubmit(userForm.form.value)">
+    <form *ngIf="!loading && user" name="userForm" #userForm="ngForm" (ngSubmit)="onSubmit(user)">
       <div [ngClass]="{'form-group': fi.inputType !== 2, 'form-check': fi.inputType === 2}" *ngFor="let fi of formInputs">
 
         <span *ngIf="fi.inputType === 0">
@@ -54,7 +54,7 @@ interface FormInput {
 
         <span *ngIf="fi.inputType === 1">
           <label for="{{fi.id}}">{{fi.value}}</label>
-          <select id="fi.id" name="{{fi.name}}" class="form-control" [(ngModel)]="value" required>
+          <select id="fi.id" name="{{fi.name}}" class="form-control" [(ngModel)]="user[fi.name]" required>
             <option *ngFor="let o of fi.options">{{o}}</option>
           </select>
         </span>

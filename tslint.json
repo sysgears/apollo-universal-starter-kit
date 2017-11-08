@@ -16,6 +16,7 @@
     "interface-name": [true, "never-prefix"],
     "jsdoc-format": true,
     "label-position": true,
+    "max-classes-per-file": [false],
     "member-access": true,
     "member-ordering": [
       true,

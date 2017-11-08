@@ -4,6 +4,8 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { StoreModule } from '@ngrx/store';
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -28,13 +30,35 @@ import PostCommentsService from './modules/post/containers/PostComments';
 import PostEditService from './modules/post/containers/PostEdit';
 import UploadView from './modules/upload/components/UploadView.web';
 import UploadService from './modules/upload/containers/Upload';
+import ForgotPasswordForm from './modules/user/components/ForgotPasswordForm.web';
+import ForgotPasswordView from './modules/user/components/ForgotPasswordView.web';
+import LoginForm from './modules/user/components/LoginForm.web';
+import LoginView from './modules/user/components/LoginView.web';
+import ProfileView from './modules/user/components/ProfileView.web';
+import RegisterForm from './modules/user/components/RegisterForm.web';
+import RegisterView from './modules/user/components/RegisterView.web';
+import ResetPasswordForm from './modules/user/components/ResetPasswordForm.web';
+import ResetPasswordView from './modules/user/components/ResetPasswordView.web';
+import UsersEditView from './modules/user/components/UserEditView';
+import UserForm from './modules/user/components/UserForm.web';
+import Users from './modules/user/components/Users.web';
+import UsersFilterView from './modules/user/components/UsersFilterView.web';
+import UsersListView from './modules/user/components/UsersListView.web';
+import { AuthLogin, AuthNav } from './modules/user/containers/Auth';
+import ForgotPasswordService from './modules/user/containers/ForgotPassword';
+import LoginService from './modules/user/containers/Login';
+import ProfileService from './modules/user/containers/Profile';
+import RegisterService from './modules/user/containers/Register';
+import ResetPasswordService from './modules/user/containers/ResetPassword';
+import UserEditService from './modules/user/containers/UserEdit';
+import UsersListService from './modules/user/containers/UsersList';
+import { reducer as usersReducer } from './modules/user/reducers';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
 import { clientProvider, default as Main } from './app/Main';
 
 @NgModule({
-  bootstrap: [Main],
   declarations: [
     Main,
 
@@ -51,9 +75,28 @@ import { clientProvider, default as Main } from './app/Main';
     PostForm,
     PostCommentsView,
     PostCommentForm,
+    PostEditView,
     // Upload
-    UploadView
+    UploadView,
+    // User
+    LoginView,
+    LoginForm,
+    RegisterView,
+    RegisterForm,
+    ProfileView,
+    AuthLogin,
+    AuthNav,
+    Users,
+    UsersListView,
+    UsersFilterView,
+    UsersEditView,
+    UserForm,
+    ForgotPasswordForm,
+    ForgotPasswordView,
+    ResetPasswordForm,
+    ResetPasswordView
   ],
+  bootstrap: [Main],
   imports: [
     BrowserModule,
     FormsModule,
@@ -61,11 +104,27 @@ import { clientProvider, default as Main } from './app/Main';
     ApolloModule.withClient(clientProvider),
     NgbModule.forRoot(),
     NgUploaderModule,
+    // TODO: Implement @ngrx/store for the whole project
+    StoreModule.forRoot({ userStore: usersReducer }),
     RouterModule.forRoot(routes, {
       useHash: true
     })
   ],
-  providers: [CounterService, PostService, PostEditService, PostCommentsService, UploadService]
+  providers: [
+    CounterService,
+    PostService,
+    PostEditService,
+    PostCommentsService,
+    LoginService,
+    ProfileService,
+    CookieService,
+    RegisterService,
+    UsersListService,
+    UserEditService,
+    UploadService,
+    ForgotPasswordService,
+    ResetPasswordService
+  ]
 })
 class MainModule {
   constructor(public appRef: ApplicationRef) {}

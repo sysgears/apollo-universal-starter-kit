@@ -3,7 +3,7 @@ import * as Knex from 'knex';
 import truncateTables from '../../../common/db';
 
 export const seed = async (knex: Knex, Promise: any) => {
-  await truncateTables(knex, ['post', 'comment']);
+  await truncateTables(knex, Promise, ['post', 'comment']);
 
   await Promise.all(
     Array.from(new Array(20).keys()).map(async ii => {

@@ -58,6 +58,10 @@
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-1.0.0-beta.5.tgz#da2b9066b3701a284cac5a16168a77def947b4ab"
 
+"@ngrx/store@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-4.1.0.tgz#8c074cbc6197e259cd9492e85a76c3c67dbea173"
+
 "@types/async@2.0.44", "@types/async@^2.0.31":
   version "2.0.44"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.44.tgz#e846150fd1f5a3243cec7c1f5bb49f58241092ee"
@@ -122,6 +126,10 @@
   dependencies:
     "@types/node" "*"
 
+"@types/jwt-decode@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@types/jwt-decode/-/jwt-decode-2.2.1.tgz#afdf5c527fcfccbd4009b5fd02d1e18241f2d2f2"
+
 "@types/knex@^0.0.61":
   version "0.0.61"
   resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.0.61.tgz#3825ec6fe0886237dbce02d1398ae8dfdc19f4b3"
@@ -144,6 +152,49 @@
 "@types/node@*", "@types/node@^6.0.45", "@types/node@^6.0.46":
   version "6.0.89"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.89.tgz#154be0e6a823760cd6083aa8c48f952e2e63e0b0"
+
+"@types/nodemailer-direct-transport@*":
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer-direct-transport/-/nodemailer-direct-transport-1.0.31.tgz#3ade05e35d69171bebe5cba32ffdab1c01bb99ce"
+  dependencies:
+    "@types/nodemailer" "^3"
+
+"@types/nodemailer-ses-transport@*":
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer-ses-transport/-/nodemailer-ses-transport-3.1.4.tgz#cefccd9c8ef260743284a019911d73407e252618"
+  dependencies:
+    "@types/nodemailer" "^3"
+    aws-sdk "^2.37.0"
+
+"@types/nodemailer-smtp-transport@*":
+  version "2.7.4"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer-smtp-transport/-/nodemailer-smtp-transport-2.7.4.tgz#163d9d3b4cd6ec8f44da445043c4fab56b0871d1"
+  dependencies:
+    "@types/node" "*"
+    "@types/nodemailer" "^3"
+
+"@types/nodemailer@^3", "@types/nodemailer@^3.1.5":
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-3.1.5.tgz#fca70985f741354034e750967ab183e99562a9ee"
+  dependencies:
+    "@types/node" "*"
+    "@types/nodemailer-direct-transport" "*"
+    "@types/nodemailer-ses-transport" "*"
+    "@types/nodemailer-smtp-transport" "*"
+    aws-sdk "^2.37.0"
+
+"@types/passport-facebook@^2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@types/passport-facebook/-/passport-facebook-2.1.6.tgz#73f52cbaf03a584bdb21bad314d073c9063d499b"
+  dependencies:
+    "@types/express" "*"
+    "@types/passport" "*"
+
+"@types/passport@*", "@types/passport@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-0.3.4.tgz#82929c7427091ba73273fcb963fdef8056bddbe7"
+  dependencies:
+    "@types/express" "*"
 
 "@types/redux@^3.6.31":
   version "3.6.31"
@@ -263,6 +314,10 @@ alphanum-sort@^1.0.1, alphanum-sort@^1.0.2:
 amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
+
+angular2-cookie@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/angular2-cookie/-/angular2-cookie-1.2.6.tgz#8fa845531e777adb042fe2f339c0040f6ddbf09d"
 
 angular2-template-loader@^0.6.2:
   version "0.6.2"
@@ -678,6 +733,21 @@ awesome-typescript-loader@^3.2.3:
     mkdirp "^0.5.1"
     object-assign "^4.1.1"
     source-map-support "^0.4.15"
+
+aws-sdk@^2.37.0:
+  version "2.142.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.142.0.tgz#efdf69d2be3132aa51d4e7abb2c28fe42771e3ec"
+  dependencies:
+    buffer "4.9.1"
+    crypto-browserify "1.0.9"
+    events "^1.1.1"
+    jmespath "0.15.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    uuid "3.1.0"
+    xml2js "0.4.17"
+    xmlbuilder "4.2.1"
 
 aws-sign2@~0.6.0:
   version "0.6.0"
@@ -1610,7 +1680,7 @@ buffer-xor@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/buffer-xor/-/buffer-xor-1.0.3.tgz#26e61ed1422fb70dd42e6e36729ed51d855fe8d9"
 
-buffer@^4.3.0:
+buffer@4.9.1, buffer@^4.3.0:
   version "4.9.1"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-4.9.1.tgz#6d1bb601b07a4efced97094132093027c95bc298"
   dependencies:
@@ -2181,6 +2251,10 @@ cryptiles@3.x.x:
   resolved "https://registry.yarnpkg.com/cryptiles/-/cryptiles-3.1.2.tgz#a89fbb220f5ce25ec56e8c4aa8a4fd7b5b0d29fe"
   dependencies:
     boom "5.x.x"
+
+crypto-browserify@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/crypto-browserify/-/crypto-browserify-1.0.9.tgz#cc5449685dfb85eb11c9828acc7cb87ab5bbfcc0"
 
 crypto-browserify@^3.11.0:
   version "3.11.1"
@@ -2865,7 +2939,7 @@ eventemitter3@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-2.0.3.tgz#b5e1079b59fb5e1ba2771c0a993be060a58c99ba"
 
-events@^1.0.0:
+events@^1.0.0, events@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
 
@@ -4316,6 +4390,10 @@ jest-validate@^21.1.0:
     leven "^2.1.0"
     pretty-format "^21.2.1"
 
+jmespath@0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/jmespath/-/jmespath-0.15.0.tgz#a3f222a9aae9f966f5d27c796510e28091764217"
+
 joi@^9.2.0:
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/joi/-/joi-9.2.0.tgz#3385ac790192130cbe230e802ec02c9215bbfeda"
@@ -5322,8 +5400,8 @@ negotiator@0.6.1:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
 ngx-uploader@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/ngx-uploader/-/ngx-uploader-4.0.2.tgz#9d0815fdbfbef1283c762815e8bce2afd237a26b"
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/ngx-uploader/-/ngx-uploader-4.1.0.tgz#0b02e0c0d5b3fbed7b8ebad6e1f8769b34f1ac5c"
 
 no-case@^2.2.0:
   version "2.3.2"
@@ -6965,7 +7043,11 @@ sass-loader@^6.0.6:
     lodash.tail "^4.1.1"
     pify "^3.0.0"
 
-sax@^1.2.1, sax@~1.2.1:
+sax@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.1.tgz#7b8e656190b228e81a66aea748480d828cd2d37a"
+
+sax@>=0.6.0, sax@^1.2.1, sax@~1.2.1:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
@@ -7363,8 +7445,8 @@ spdy@^3.4.1:
     spdy-transport "^2.0.18"
 
 spinjs@^0.4.25:
-  version "0.4.25"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.25.tgz#dae4475ba14cc01fdc2679b21c3ca46fc890d72d"
+  version "0.4.26"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.26.tgz#cb30fd0bd28e95fd0e8fb5f55f0bd9ac8b2a9e32"
   dependencies:
     containerized "^1.0.2"
     inquirer "^3.3.0"
@@ -8001,6 +8083,13 @@ url-parse@^1.1.8:
     querystringify "~1.0.0"
     requires-port "1.0.x"
 
+url@0.10.3:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/url/-/url-0.10.3.tgz#021e4d9c7705f21bbf37d03ceb58767402774c64"
+  dependencies:
+    punycode "1.3.2"
+    querystring "0.2.0"
+
 url@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/url/-/url-0.11.0.tgz#3838e97cfc60521eb73c525a8e55bfdd9e2e28f1"
@@ -8049,13 +8138,13 @@ utils-merge@1.0.1, utils-merge@1.x.x:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
 
+uuid@3.1.0, uuid@^3.0.0, uuid@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
+
 uuid@^2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
-
-uuid@^3.0.0, uuid@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
 
 v8flags@^2.0.2, v8flags@^2.1.1:
   version "2.1.1"
@@ -8382,6 +8471,19 @@ xml-char-classes@^1.0.0:
 xml-name-validator@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-2.0.1.tgz#4d8b8f1eccd3419aa362061becef515e1e559635"
+
+xml2js@0.4.17:
+  version "0.4.17"
+  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.17.tgz#17be93eaae3f3b779359c795b419705a8817e868"
+  dependencies:
+    sax ">=0.6.0"
+    xmlbuilder "^4.1.0"
+
+xmlbuilder@4.2.1, xmlbuilder@^4.1.0:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-4.2.1.tgz#aa58a3041a066f90eaa16c2f5389ff19f3f461a5"
+  dependencies:
+    lodash "^4.0.0"
 
 xmlhttprequest-ssl@1.5.3:
   version "1.5.3"

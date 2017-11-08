@@ -42,10 +42,6 @@ type ResetPayload {
     errors: [FieldError!]
 }
 
-type ResetPayload {
-    errors: [FieldError!]
-}
-
 type Tokens {
     token: String!
     refreshToken: String!
@@ -106,60 +102,6 @@ input RegisterUserInput {
 input LoginUserInput {
     email: String!
     password: String!
-}
-
-# Input for addUser Mutation
-input AddUserInput {
-    username: String!
-    email: String!
-    password: String!
-    role: String!
-    isActive: Boolean
-    profile: ProfileInput
-    auth: AuthInput
-}
-
-# Input for editUser Mutation
-input EditUserInput {
-    id: Int!
-    username: String!
-    role: String!
-    isActive: Boolean
-    email: String!
-    password: String
-    profile: ProfileInput
-    auth: AuthInput
-}
-
-input ProfileInput {
-    firstName: String
-    lastName: String
-}
-
-input AuthInput {
-    certificate: AuthCertificateInput
-    facebook: AuthFacebookInput
-}
-
-input AuthCertificateInput {
-    serial: String
-}
-
-input AuthFacebookInput {
-    fbId: String
-    displayName: String
-}
-
-input ForgotPasswordInput {
-    email: String!
-    profile: UserProfile
-    auth: UserAuth
-}
-
-input ResetPasswordInput {
-    token: String!
-    password: String!
-    passwordConfirmation: String!
 }
 
 # Input for addUser Mutation

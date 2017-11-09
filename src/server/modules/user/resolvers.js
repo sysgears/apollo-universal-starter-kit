@@ -27,6 +27,14 @@ export default pubsub => ({
       }
     }
   },
+  User: {
+    profile(obj) {
+      return obj;
+    },
+    auth(obj) {
+      return obj;
+    }
+  },
   UserProfile: {
     firstName(obj) {
       return obj.firstName;

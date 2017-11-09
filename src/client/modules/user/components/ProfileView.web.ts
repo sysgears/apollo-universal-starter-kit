@@ -6,11 +6,15 @@ import ProfileService from '../containers/Profile';
   selector: 'profile-view',
   template: `
     <div *ngIf="loading" class="text-center">Loading...</div>
-    <div id="content" *ngIf="!loading" class="container">
+    <div id="content" *ngIf="!loading && currentUser" class="container">
       <h2>Profile</h2>
       <p>username: {{currentUser.username}}</p>
       <p>email: {{currentUser.email}}</p>
-      <p>is admin: {{currentUser.isAdmin}}</p>
+      <p>role: {{currentUser.role}}</p>
+      <p *ngIf="currentUser.profile">name: {{currentUser.profile.fullName}}</p>
+    </div>
+    <div *ngIf="!loading && !currentUser" class="container">
+      <h2>No current user logged in</h2>
     </div>
   `
 })

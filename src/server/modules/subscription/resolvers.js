@@ -27,20 +27,37 @@ export default pubsub => ({
         const e = new FieldError();
         const data = pick(input, ['token', 'expiryMonth', 'expiryYear', 'last4', 'brand']);
         const user = await context.User.getUserByUsername(context.user.username);
+        const { subscription } = context;
 
-        const customer = await stripe.customers.create({ email: user.email, source: data.token });
+        let customerId, stripeSourceId;
 
-        await context.Subscription.createSubscription({
+        // use existing stripe customer if user has subscribed before
+        if (subscription && subscription.stripeCustomerId) {
+          customerId = subscription.stripeCustomerId;
+          const source = await stripe.customers.createSource(customerId, {
+            source: data.token
+          });
+          stripeSourceId = source.stripeSourceId;
+        } else {
+          const customer = await stripe.customers.create({ email: user.email, source: data.token });
+          customerId = customer.id;
+          stripeSourceId = customer.default_source;
+        }
+
+        await context.Subscription.editSubscription({
           userId: user.id,
-          stripeCustomerId: customer.id,
-          expiryMonth: data.expiryMonth,
-          expiryYear: data.expiryYear,
-          last4: data.last4,
-          brand: data.brand
+          subscription: {
+            stripeCustomerId: customerId,
+            stripeSourceId,
+            expiryMonth: data.expiryMonth,
+            expiryYear: data.expiryYear,
+            last4: data.last4,
+            brand: data.brand
+          }
         });
 
-        const subscription = await stripe.subscriptions.create({
-          customer: customer.id,
+        const newSubscription = await stripe.subscriptions.create({
+          customer: customerId,
           items: [
             {
               plan: 'basic'
@@ -48,10 +65,12 @@ export default pubsub => ({
           ]
         });
 
-        await context.Subscription.updateSubscription({
+        await context.Subscription.editSubscription({
           userId: user.id,
-          active: true,
-          stripeSubscriptionId: subscription.id
+          subscription: {
+            active: true,
+            stripeSubscriptionId: newSubscription.id
+          }
         });
 
         return { active: true, errors: null };
@@ -62,13 +81,28 @@ export default pubsub => ({
     async cancel(obj, args, context) {
       try {
         const { id } = await context.User.getUserByUsername(context.user.username);
-        const { stripeSubscriptionId } = context.subscription;
+        const { stripeSubscriptionId, stripeCustomerId, stripeSourceId } = context.subscription;
 
-        const confirmation = await stripe.subscriptions.del(stripeSubscriptionId);
-
-        if (confirmation) {
-          await context.Subscription.deleteSubscription({ userId: id });
+        try {
+          await stripe.subscriptions.del(stripeSubscriptionId);
+          await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
+        } catch (e) {
+          const e = new FieldError();
+          e.setError('subscription', 'Error cancelling subscription.');
+          e.throwIf();
         }
+
+        await context.Subscription.editSubscription({
+          userId: id,
+          subscription: {
+            active: false,
+            stripeSubscriptionId: null,
+            expiryMonth: null,
+            expiryYear: null,
+            last4: null,
+            brand: null
+          }
+        });
 
         return { active: false, errors: null };
       } catch (e) {

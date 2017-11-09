@@ -45,7 +45,7 @@ const CancelSubscriptionWithApollo = compose(
           });
 
           if (cancel.errors) {
-            return { errors: cancel.errors };
+            return { errors: cancel.errors.map(e => e.message).join('\n') };
           }
 
           return true;

@@ -1,5 +1,5 @@
 // Helpers
-import { camelizeKeys } from 'humps';
+import { camelizeKeys, decamelizeKeys } from 'humps';
 import knex from '../../../server/sql/connector';
 
 // Actual query fetching and transformation in DB
@@ -14,34 +14,22 @@ export default class Subscription {
     );
   }
 
-  async createSubscription({ userId, stripeCustomerId, expiryMonth, expiryYear, last4, brand }) {
-    return await knex('subscription')
-      .insert({
-        user_id: userId,
-        stripe_customer_id: stripeCustomerId,
-        expiry_month: expiryMonth,
-        expiry_year: expiryYear,
-        last4,
-        brand,
-        active: false
-      })
-      .returning('id');
-  }
-
-  async deleteSubscription({ userId }) {
-    return await knex('subscription')
+  async editSubscription({ userId, subscription }) {
+    const userSubscription = await knex('subscription')
+      .select('id')
       .where({ user_id: userId })
-      .del();
-  }
+      .first();
 
-  async updateSubscription({ userId, active, stripeSubscriptionId }) {
-    return await knex('subscription')
-      .update({
-        active,
-        stripe_subscription_id: stripeSubscriptionId
-      })
-      .where({ user_id: userId })
-      .returning('active');
+    if (userSubscription) {
+      return await knex('subscription')
+        .update(decamelizeKeys(subscription))
+        .where({ user_id: userId })
+        .returning('id');
+    } else {
+      return await knex('subscription')
+        .insert({ ...decamelizeKeys(subscription), user_id: userId })
+        .returning('id');
+    }
   }
 
   async getCardInfo(userId) {

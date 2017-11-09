@@ -28,6 +28,8 @@ extend type Mutation {
     subscribe(input: SubscribeInput!): UserSubscription!
     # Cancel a user's subscription
     cancel: UserSubscription!
+    # Update a user's card information
+    updateCard(input: SubscribeInput!): Boolean!
 }
 
 input SubscribeInput {

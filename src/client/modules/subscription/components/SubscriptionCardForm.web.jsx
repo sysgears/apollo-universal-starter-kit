@@ -7,7 +7,7 @@ import { Form, RenderField, Button, Alert } from '../../common/components/web';
 
 const required = value => (value ? undefined : 'Required');
 
-class SubscriptionForm extends React.Component {
+class SubscriptionCardForm extends React.Component {
   onSubmit = async ({ name }) => {
     const { stripe } = this.props;
     const { token, error } = await stripe.createToken({ name });
@@ -25,7 +25,7 @@ class SubscriptionForm extends React.Component {
   };
 
   render() {
-    const { handleSubmit, submitting, error } = this.props;
+    const { handleSubmit, submitting, action, error } = this.props;
     return (
       <Form name="subscription" onSubmit={handleSubmit(this.onSubmit)}>
         <Field name="name" component={RenderField} type="text" label="Name On Card" validate={required} />
@@ -37,22 +37,23 @@ class SubscriptionForm extends React.Component {
         </FormGroup>
         {error && <Alert color="error">{error}</Alert>}
         <Button color="primary" type="submit" disabled={submitting}>
-          Subscribe
+          {action}
         </Button>
       </Form>
     );
   }
 }
 
-SubscriptionForm.propTypes = {
+SubscriptionCardForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
+  action: PropTypes.string.isRequired,
   error: PropTypes.string
 };
 
 export default injectStripe(
   reduxForm({
     form: 'subscription'
-  })(SubscriptionForm)
+  })(SubscriptionCardForm)
 );

@@ -78,6 +78,34 @@ export default pubsub => ({
         return { active: false, errors: e };
       }
     },
+    async updateCard(obj, { input }, context) {
+      try {
+        const data = pick(input, ['token', 'expiryMonth', 'expiryYear', 'last4', 'brand']);
+        const user = await context.User.getUserByUsername(context.user.username);
+        const { subscription: { stripeCustomerId, stripeSourceId } } = context;
+
+        await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
+        const source = await stripe.customers.createSource(stripeCustomerId, {
+          source: data.token
+        });
+
+        await context.Subscription.editSubscription({
+          userId: user.id,
+          subscription: {
+            stripeSourceId: source.id,
+            expiryMonth: data.expiryMonth,
+            expiryYear: data.expiryYear,
+            last4: data.last4,
+            brand: data.brand
+          }
+        });
+
+        return true;
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    },
     async cancel(obj, args, context) {
       try {
         const { id } = await context.User.getUserByUsername(context.user.username);
@@ -96,6 +124,7 @@ export default pubsub => ({
           userId: id,
           subscription: {
             active: false,
+            stripeSourceId: null,
             stripeSubscriptionId: null,
             expiryMonth: null,
             expiryYear: null,

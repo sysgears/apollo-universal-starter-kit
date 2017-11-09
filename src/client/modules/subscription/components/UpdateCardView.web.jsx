@@ -10,13 +10,13 @@ import { Elements } from 'react-stripe-elements';
 import { PageLayout } from '../../common/components/web';
 import SubscriptionCardForm from './SubscriptionCardForm';
 
-class SubscriptionView extends React.Component {
-  onSubmit = subscribe => async values => {
-    const result = await subscribe(values);
+class UpdateCardView extends React.Component {
+  onSubmit = updateCard => async values => {
+    const result = await updateCard(values);
 
     if (result.errors) {
       let submitError = {
-        _error: 'Transaction failed!'
+        _error: 'Update failed!'
       };
       result.errors.map(error => (submitError[error.field] = error.message));
       throw new SubmissionError(submitError);
@@ -24,15 +24,15 @@ class SubscriptionView extends React.Component {
   };
 
   render() {
-    const { subscribe } = this.props;
+    const { updateCard } = this.props;
 
     const renderMetaData = () => (
       <Helmet
-        title="Subscription"
+        title="Update Card"
         meta={[
           {
             name: 'description',
-            content: 'Subscription page'
+            content: 'Update card page'
           }
         ]}
       />
@@ -41,17 +41,17 @@ class SubscriptionView extends React.Component {
     return (
       <PageLayout>
         {renderMetaData()}
-        <h1>Subscription!</h1>
+        <h1>Update card!</h1>
         <Elements>
-          <SubscriptionCardForm onSubmit={this.onSubmit(subscribe)} action="Subscribe" />
+          <SubscriptionCardForm onSubmit={this.onSubmit(updateCard)} action="Update Card" />
         </Elements>
       </PageLayout>
     );
   }
 }
 
-SubscriptionView.propTypes = {
-  subscribe: PropTypes.func.isRequired
+UpdateCardView.propTypes = {
+  updateCard: PropTypes.func.isRequired
 };
 
-export default SubscriptionView;
+export default UpdateCardView;

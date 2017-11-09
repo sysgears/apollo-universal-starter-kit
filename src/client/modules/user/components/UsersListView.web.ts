@@ -103,8 +103,8 @@ export default class UsersListView implements OnInit, OnDestroy {
 
   public renderOrderByArrow = (name: string) => {
     return this.orderBy && this.orderBy.column === name
-      ? `<span className="badge badge-primary">${this.orderBy.order === 'desc' ? '&#8595;' : '&#8593;'}</span>`
-      : `<span className="badge badge-secondary">&#8645;</span>`;
+      ? `<span class="badge badge-primary">${this.orderBy.order === 'desc' ? '&#8595;' : '&#8593;'}</span>`
+      : `<span class="badge badge-secondary">&#8645;</span>`;
   };
 
   public orderByColumn = (e: any, name: string) => {

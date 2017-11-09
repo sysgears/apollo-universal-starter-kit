@@ -22,7 +22,8 @@
     "watch": "spin watch",
     "heroku-postbuild": "rm -rf build && npm run build && npm run seed",
     "precommit": "lint-staged",
-    "cli": "node tools/cli"
+    "cli": "node tools/cli",
+    "postinstall": "opencollective postinstall"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [
@@ -50,9 +51,9 @@
   "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^6.1.0",
-    "antd": "^3.0.0-alpha.19",
-    "apollo-cache-inmemory": "^1.0.0",
-    "apollo-client": "^2.0.1",
+    "antd": "^3.0.0-beta.6",
+    "apollo-cache-inmemory": "^1.1.0",
+    "apollo-client": "^2.0.2",
     "apollo-fetch": "^0.6.0",
     "apollo-fetch-upload": "^1.1.0",
     "apollo-link": "^1.0.0",
@@ -90,6 +91,7 @@
     "minilog": "^3.1.0",
     "mysql2": "^1.4.2",
     "nodemailer": "^4.3.1",
+    "opencollective": "^1.0.3",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "performance-now": "^2.1.0",
@@ -125,7 +127,7 @@
     "universal-cookie-express": "^2.1.0"
   },
   "devDependencies": {
-    "apollo-utilities": "^1.0.0",
+    "apollo-utilities": "^1.0.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
@@ -162,7 +164,7 @@
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-react": "^7.4.0",
-    "exp": "45.0.2",
+    "exp": "45.1.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "flow-bin": "^0.57.3",
@@ -197,7 +199,7 @@
     "sass-loader": "^6.0.6",
     "shelljs": "^0.7.8",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.4.25",
+    "spinjs": "^0.4.31",
     "style-loader": "^0.19.0",
     "tcomb": "^3.2.24",
     "url-loader": "^0.6.2",
@@ -219,5 +221,10 @@
   },
   "greenkeeper": {
     "ignore": []
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/apollo-universal-starter-kit",
+    "logo": "https://opencollective.com/opencollective/logo.txt"
   }
 }

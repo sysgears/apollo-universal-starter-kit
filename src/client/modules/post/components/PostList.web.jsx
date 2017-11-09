@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { PageLayout, Table, Button } from '../../common/components/web';
+import settings from '../../../../../settings';
 
 class PostList extends React.PureComponent {
   hendleDeletePost = id => {
@@ -22,11 +23,11 @@ class PostList extends React.PureComponent {
 
   renderMetaData = () => (
     <Helmet
-      title="Apollo Starter Kit - Posts list"
+      title={`${settings.app.name} - Posts list`}
       meta={[
         {
           name: 'description',
-          content: 'Apollo Fullstack Starter Kit - List of all posts example page'
+          content: `${settings.app.name} - List of all posts example page`
         }
       ]}
     />

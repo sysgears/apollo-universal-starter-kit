@@ -35,7 +35,11 @@ export default pubsub => ({
       return obj.lastName;
     },
     fullName(obj) {
-      return `${obj.firstName} ${obj.lastName}`;
+      if (obj.firstName && obj.lastName) {
+        return `${obj.firstName} ${obj.lastName}`;
+      } else {
+        return null;
+      }
     }
   },
   Mutation: {
@@ -78,7 +82,7 @@ export default pubsub => ({
             const encodedToken = Buffer.from(emailToken).toString('base64');
             const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
             context.mailer.sendMail({
-              from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
+              from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
               to: user.email,
               subject: 'Confirm Email',
               html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
@@ -255,7 +259,7 @@ export default pubsub => ({
               const encodedToken = Buffer.from(emailToken).toString('base64');
               const url = `${context.req.protocol}://${context.req.get('host')}/reset-password/${encodedToken}`;
               context.mailer.sendMail({
-                from: 'Apollo Universal Starter Kit <nxau5pr4uc2jtb6u@ethereal.email>',
+                from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
                 to: user.email,
                 subject: 'Reset Password',
                 html: `Please click this link to reset your password: <a href="${url}">${url}</a>`

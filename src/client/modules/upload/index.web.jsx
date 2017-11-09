@@ -12,7 +12,7 @@ import Feature from '../connector';
 export default new Feature({
   route: <Route exact path="/upload" component={Upload} />,
   navItem: (
-    <MenuItem key="upload">
+    <MenuItem key="/upload">
       <NavLink to="/upload" className="nav-link" activeClassName="active">
         Upload
       </NavLink>

@@ -10,6 +10,7 @@ import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 // import { addPersistedQueries } from 'persistgraphql';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 // import queryMap from 'persisted_queries.json';
@@ -67,18 +68,40 @@ const wsUri = (hostname === 'localhost'
   ? `${window.location.protocol}${window.location.hostname}:${port}${pathname}`
   : __BACKEND_URL__
 ).replace(/^http/, 'ws');
+
+const wsClient = new SubscriptionClient(wsUri, {
+  reconnect: true,
+  connectionParams: connectionParams
+});
+
+wsClient.use([
+  {
+    applyMiddleware(operationOptions, next) {
+      let params = {};
+      for (const param of modules.connectionParams) {
+        Object.assign(params, param());
+      }
+
+      Object.assign(operationOptions, params);
+      next();
+    }
+  }
+]);
+
+wsClient.onDisconnected(() => {
+  //console.log('onDisconnected');
+});
+
+wsClient.onReconnected(() => {
+  //console.log('onReconnected');
+});
+
 let link = ApolloLink.split(
   operation => {
     const operationAST = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';
   },
-  new WebSocketLink({
-    uri: wsUri,
-    options: {
-      reconnect: true,
-      connectionParams: connectionParams
-    }
-  }),
+  new WebSocketLink(wsClient),
   new BatchHttpLink({ fetch })
 );
 

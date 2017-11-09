@@ -4,7 +4,7 @@
 
 If you are using Apollo v1 please use [starter kit from `apollo1` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1)
 
-[![Join the chat at https://gitter.im/sysgears/apollo-fullstack-starter-kit](https://badges.gitter.im/sysgears/apollo-fullstack-starter-kit.svg)](https://gitter.im/sysgears/apollo-fullstack-starter-kit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Backers on Open Collective](https://opencollective.com/apollo-universal-starter-kit/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/apollo-universal-starter-kit/sponsors/badge.svg)](#sponsors) [![Join the chat at https://gitter.im/sysgears/apollo-fullstack-starter-kit](https://badges.gitter.im/sysgears/apollo-fullstack-starter-kit.svg)](https://gitter.im/sysgears/apollo-fullstack-starter-kit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors)
 [![Build Status](https://travis-ci.org/sysgears/apollo-universal-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-universal-starter-kit)
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-universal-starter-kit.svg)](https://greenkeeper.io/)
@@ -79,6 +79,8 @@ You need to install [Xcode]. Then install Command Line Tools by running `xcode-s
 Next, open up Xcode, go to preferences and click the Components tab, install a simulator from the list.
 After the installation if you run the server, simulator should start on it's own and open the app in Expo.
 To bring up the developer menu press ⌘+D.
+
+Note: If iOS simulator fail to start expo client or the app: Try to reset the simulator in `Hardware -> Erase all content and settings` and restart the application.
 
 ## Support
 
@@ -377,6 +379,12 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
   yarn start
   ```
 
+### Publishing mobile apps
+1. Compile project for production with `ios` and `android` set to `true` in `app.json` via `yarn build`.
+2. Run `yarn exp publish` to publish, the URL like:
+[``https://exp.host/@vlasenko/apollo-universal-starter-kit``](https://exp.host/@vlasenko/apollo-universal-starter-kit)
+where your users can access mobile app from Expo Client will be printed in terminal.
+
 ### Building standalone mobile apps for Play Store and App Store
 1. Compile project for production with `ios` and `android` set to `true` in `app.json` via `yarn build`.
 2. Run `yarn exp ba` to launch building signed `.apk` or `yarn exp bi` for signed `.iap`.
@@ -395,15 +403,33 @@ You can see latest version of this app deployed to Heroku here:
 
 ## Contributors
 
-Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+Thanks goes to all the wonderful people who already contributed to Apollo Universal Starter Kit!
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-| [<img src="https://avatars1.githubusercontent.com/u/1259926?v=3" width="100px;"/><br /><sub>Victor Vlasenko</sub>](https://ua.linkedin.com/in/victorvlasenko)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Code") [🔧](#tool-vlasenko "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Documentation") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=vlasenko "Tests") [💬](#question-vlasenko "Answering Questions") [👀](#review-vlasenko "Reviewed Pull Requests") | [<img src="https://avatars3.githubusercontent.com/u/26156?v=3" width="100px;"/><br /><sub>mitjade</sub>](http://www.internetne-storitve.si)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade "Code") [🔧](#tool-mitjade "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade "Documentation") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mitjade "Tests") [💬](#question-mitjade "Answering Questions") [👀](#review-mitjade "Reviewed Pull Requests") | [<img src="https://avatars0.githubusercontent.com/u/4072250?v=3" width="100px;"/><br /><sub>Ujjwal</sub>](https://github.com/mairh)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Code") [🔧](#tool-mairh "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Documentation") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=mairh "Tests") [💬](#question-mairh "Answering Questions") [👀](#review-mairh "Reviewed Pull Requests") | [<img src="https://avatars1.githubusercontent.com/u/816517?v=4" width="100px;"/><br /><sub>John Pinkerton</sub>](http://johnpinkerton.me)<br />[🐛](https://github.com/sysgears/apollo-fullstack-starter-kit/issues?q=author%3Ajohnthepink "Bug reports") [💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=johnthepink "Code") | [<img src="https://avatars2.githubusercontent.com/u/1845914?v=3" width="100px;"/><br /><sub>Dmitry Pavlenko</sub>](https://github.com/dmitriypdv)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=dmitriypdv "Code") [🔧](#tool-dmitriypdv "Tools") | [<img src="https://avatars0.githubusercontent.com/u/1349077?v=3" width="100px;"/><br /><sub>Joe</sub>](http://j0ey.co)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=josephdburdick "Code") [🔧](#tool-josephdburdick "Tools") [📖](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=josephdburdick "Documentation") [💬](#question-josephdburdick "Answering Questions") | [<img src="https://avatars1.githubusercontent.com/u/1251296?v=3" width="100px;"/><br /><sub>Youngjae Ji</sub>](http://zirho.github.io)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=zirho "Code") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=zirho "Tests") [💬](#question-zirho "Answering Questions") |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [<img src="https://avatars3.githubusercontent.com/u/3840769?v=3" width="100px;"/><br /><sub>Gilad Shoham</sub>](http://shohamgilad.wordpress.com/)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=GiladShoham "Code") [🔧](#tool-GiladShoham "Tools") [💬](#question-GiladShoham "Answering Questions") | [<img src="https://avatars1.githubusercontent.com/u/6862750?v=3" width="100px;"/><br /><sub>Alex Weber</sub>](https://github.com/zunder)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=zunder "Code") [🔧](#tool-zunder "Tools") [💬](#question-zunder "Answering Questions") | [<img src="https://avatars2.githubusercontent.com/u/13224812?v=3" width="100px;"/><br /><sub>Yishai Chernovitzky</sub>](https://github.com/yishaic)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=yishaic "Code") [🔧](#tool-yishaic "Tools") | [<img src="https://avatars0.githubusercontent.com/u/7948838?v=3" width="100px;"/><br /><sub>Nikita Pavlov</sub>](https://github.com/NickPavlov)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=NickPavlov "Code") | [<img src="https://avatars1.githubusercontent.com/u/5399002?v=3" width="100px;"/><br /><sub>Alexander Vetrov</sub>](https://github.com/alexandervetrov)<br />[💻](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=alexandervetrov "Code") [⚠️](https://github.com/sysgears/apollo-fullstack-starter-kit/commits?author=alexandervetrov "Tests") |
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+<a href="https://github.com/sysgears/apollo-universal-starter-kit/graphs/contributors"><img src="https://opencollective.com/apollo-universal-starter-kit/contributors.svg?width=890" /></a>
 
-This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/apollo-universal-starter-kit#backer)]
+
+<a href="https://opencollective.com/apollo-universal-starter-kit#backers" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/apollo-universal-starter-kit#sponsor)]
+
+<a href="https://opencollective.com/apollo-universal-starter-kit/sponsor/0/website" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/apollo-universal-starter-kit/sponsor/1/website" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/apollo-universal-starter-kit/sponsor/2/website" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/apollo-universal-starter-kit/sponsor/3/website" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/apollo-universal-starter-kit/sponsor/4/website" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/apollo-universal-starter-kit/sponsor/5/website" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/apollo-universal-starter-kit/sponsor/6/website" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/apollo-universal-starter-kit/sponsor/7/website" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/apollo-universal-starter-kit/sponsor/8/website" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/apollo-universal-starter-kit/sponsor/9/website" target="_blank"><img src="https://opencollective.com/apollo-universal-starter-kit/sponsor/9/avatar.svg"></a>
+
+
 
 ## License
 Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [MIT] license.

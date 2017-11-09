@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import { PageLayout, Button } from '../../common/components/web';
+import settings from '../../../../../settings';
 
 const Section = styled.section`
   text-align: center;
@@ -15,11 +16,11 @@ const PageNotFound = ({ staticContext = {} }) => {
     <PageLayout>
       <Section>
         <Helmet
-          title="Apollo Starter Kit - Page not found"
+          title={`${settings.app.name} - Page not found`}
           meta={[
             {
               name: 'description',
-              content: 'Apollo Starter Kit - Page not found'
+              content: `${settings.app.name} - Page not found`
             }
           ]}
         />

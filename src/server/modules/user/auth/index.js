@@ -5,9 +5,12 @@ import settings from '../../../../../settings';
 import FieldError from '../../../../common/FieldError';
 
 export const createTokens = async (user, secret, refreshSecret) => {
+  let tokenUser = pick(user, ['id', 'username', 'role']);
+  tokenUser.fullName = user.firstName ? `${user.firstName} ${user.lastName}` : null;
+
   const createToken = jwt.sign(
     {
-      user: pick(user, ['id', 'username', 'role'])
+      user: tokenUser
     },
     secret,
     {
@@ -63,7 +66,7 @@ export const tryLogin = async (email, password, User, SECRET) => {
   const user = await User.getUserByEmail(email);
 
   // check if email and password exist in db
-  if (!user || user.password == null) {
+  if (!user || user.password === null) {
     // user with provided email not found
     e.setError('email', 'Please enter a valid e-mail.');
     e.throwIf();

@@ -40,22 +40,22 @@ export default class User {
     if (filter) {
       if (has(filter, 'role') && filter.role !== '') {
         queryBuilder.where(function() {
-          this.where('role', filter.role);
+          this.where('u.role', filter.role);
         });
       }
 
       if (has(filter, 'isActive') && filter.isActive !== null) {
         queryBuilder.where(function() {
-          this.where('is_active', filter.isActive);
+          this.where('u.is_active', filter.isActive);
         });
       }
 
       if (has(filter, 'searchText') && filter.searchText !== '') {
         queryBuilder.where(function() {
-          this.where('username', 'like', `%${filter.searchText}%`)
-            .orWhere('email', 'like', `%${filter.searchText}%`)
-            .orWhere('first_name', 'like', `%${filter.searchText}%`)
-            .orWhere('last_name', 'like', `%${filter.searchText}%`);
+          this.where('u.username', 'like', `%${filter.searchText}%`)
+            .orWhere('u.email', 'like', `%${filter.searchText}%`)
+            .orWhere('up.first_name', 'like', `%${filter.searchText}%`)
+            .orWhere('up.last_name', 'like', `%${filter.searchText}%`);
         });
       }
     }
@@ -90,9 +90,10 @@ export default class User {
   async getUserWithPassword(id) {
     return camelizeKeys(
       await knex
-        .select('*')
+        .select('u.id', 'u.username', 'u.password', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
         .from('user AS u')
         .where('u.id', '=', id)
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .first()
     );
   }
@@ -100,9 +101,10 @@ export default class User {
   async getUserWithSerial(serial) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.role', 'ca.serial')
+        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'ca.serial', 'up.first_name', 'up.last_name')
         .from('user AS u')
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where('ca.serial', '=', serial)
         .first()
     );
@@ -202,8 +204,9 @@ export default class User {
   async getUserByEmail(email) {
     return camelizeKeys(
       await knex
-        .select('*')
+        .select('u.id', 'u.username', 'u.password', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
         .from('user AS u')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where({ email })
         .first()
     );
@@ -212,9 +215,20 @@ export default class User {
   async getUserByFbIdOrEmail(id, email) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'fa.fb_id', 'u.email', 'u.password')
+        .select(
+          'u.id',
+          'u.username',
+          'u.role',
+          'u.is_active',
+          'fa.fb_id',
+          'u.email',
+          'u.password',
+          'up.first_name',
+          'up.last_name'
+        )
         .from('user AS u')
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where('fa.fb_id', '=', id)
         .orWhere('u.email', '=', email)
         .first()
@@ -224,9 +238,10 @@ export default class User {
   async getUserByUsername(username) {
     return camelizeKeys(
       await knex
-        .select('*')
+        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
         .from('user AS u')
         .where('u.username', '=', username)
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .first()
     );
   }

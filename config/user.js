@@ -6,6 +6,7 @@ export default {
     password: {
       confirm: true,
       sendConfirmationEmail: true,
+      sendAddNewUserEmail: true,
       enabled: true
     },
     certificate: {

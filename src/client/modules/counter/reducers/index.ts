@@ -1,27 +1,27 @@
-import { Action, createStore, Reducer, Store } from 'redux';
-import { COUNTER } from './actionTypes';
+import { Action } from '@ngrx/store';
+
+export const COUNTER_INCREMENT = 'COUNTER_INCREMENT';
+
+export class CounterIncrement implements Action {
+  public readonly type = COUNTER_INCREMENT;
+}
+
+export type CounterActions = CounterIncrement;
 
 export interface CounterState {
   reduxCount: number;
-}
-
-export interface CounterAction extends Action {
-  value?: number;
 }
 
 const defaultState: CounterState = {
   reduxCount: 1
 };
 
-const reducer: Reducer<CounterState> = (state: CounterState, action: CounterAction) => {
+export function reducer(state = defaultState, action: CounterActions) {
   switch (action.type) {
-    case COUNTER.INCREMENT:
+    case COUNTER_INCREMENT:
       return { reduxCount: ++state.reduxCount };
-    case COUNTER.INCREASE:
-      return { reduxCount: state.reduxCount + action.value };
+
     default:
       return state;
   }
-};
-
-export let counterStore: Store<CounterState> = createStore(reducer, defaultState);
+}

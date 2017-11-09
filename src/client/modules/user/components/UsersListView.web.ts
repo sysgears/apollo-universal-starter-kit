@@ -67,7 +67,7 @@ export default class UsersListView implements OnInit, OnDestroy {
   constructor(private store: Store<any>, private usersListService: UsersListService, private ngZone: NgZone) {}
 
   public ngOnInit(): void {
-    this.subscription = this.store.select('userStore').subscribe(({ searchText, role, isActive, orderBy }) => {
+    this.subscription = this.store.select('user').subscribe(({ searchText, role, isActive, orderBy }) => {
       this.searchText = searchText;
       this.role = role;
       this.isActive = isActive;

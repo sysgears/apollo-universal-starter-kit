@@ -1,4 +1,4 @@
-import { castArray, map, merge, union, without } from 'lodash';
+import { assign, castArray, map, merge, union, without } from 'lodash';
 
 import log from '../../common/log';
 
@@ -54,7 +54,9 @@ class Feature {
   }
 
   get reducers() {
-    return { ...this.reducer };
+    return Object.keys(this.reducer).reduce((acc: any, k: any) => {
+      return assign({}, acc, this.reducer[k]);
+    }, {});
   }
 
   get middlewares() {

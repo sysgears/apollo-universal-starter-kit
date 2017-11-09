@@ -13,6 +13,7 @@ import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgSty
 // Virtual module that changes when any change to backend is detected
 import 'backend_reload';
 
+import { reducers } from '../common/createReduxStore';
 import log from '../common/log';
 import NavBar from './app/NavBar';
 import PageLayout from './app/PageLayout';
@@ -52,7 +53,6 @@ import RegisterService from './modules/user/containers/Register';
 import ResetPasswordService from './modules/user/containers/ResetPassword';
 import UserEditService from './modules/user/containers/UserEdit';
 import UsersListService from './modules/user/containers/UsersList';
-import { reducer as usersReducer } from './modules/user/reducers';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
@@ -104,8 +104,7 @@ import { clientProvider, default as Main } from './app/Main';
     ApolloModule.withClient(clientProvider),
     NgbModule.forRoot(),
     NgUploaderModule,
-    // TODO: Implement @ngrx/store for the whole project
-    StoreModule.forRoot({ userStore: usersReducer }),
+    StoreModule.forRoot(reducers),
     RouterModule.forRoot(routes, {
       useHash: true
     })

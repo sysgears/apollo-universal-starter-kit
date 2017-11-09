@@ -1,6 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import PostCommentsService, { AddComment, DeleteComment, UpdateComment } from '../containers/PostComments';
+import { CommentSelect } from '../reducers/index';
 
 @Component({
   selector: 'post-comments-view',
@@ -31,10 +33,11 @@ import PostCommentsService, { AddComment, DeleteComment, UpdateComment } from '.
         </div>`
 })
 export default class PostCommentsView implements OnInit, OnDestroy {
-  public subsOnUpdate: Subscription;
+  private subsOnUpdate: Subscription;
+  private subsOnDelete: Subscription;
   @Input() public post: any;
 
-  constructor(private postCommentsService: PostCommentsService) {}
+  constructor(private postCommentsService: PostCommentsService, private store: Store<any>) {}
 
   public ngOnInit() {
     this.subsOnUpdate = this.postCommentsService
@@ -51,16 +54,27 @@ export default class PostCommentsView implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subsOnUpdate.unsubscribe();
+    this.unsubscribe(this.subsOnUpdate, this.subsOnDelete);
   }
 
   public onCommentSelect(comment: any) {
-    this.postCommentsService.startedEditing.next(comment);
+    this.store.dispatch(new CommentSelect({ id: comment.id, content: comment.content }));
   }
 
   public onCommentDelete(id: number) {
-    this.postCommentsService.deleteComment(id, this.post.id).subscribe();
+    this.unsubscribe(this.subsOnDelete);
+    this.subsOnDelete = this.postCommentsService.deleteComment(id, this.post.id).subscribe((result: any) => {
+      this.store.dispatch(new CommentSelect({ id: null, content: '' }));
+    });
   }
+
+  private unsubscribe = (...subscriptions: Subscription[]) => {
+    subscriptions.forEach((subscription: Subscription) => {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    });
+  };
 }
 
 // import React from "react";

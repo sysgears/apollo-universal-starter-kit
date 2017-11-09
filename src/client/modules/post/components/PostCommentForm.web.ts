@@ -1,8 +1,10 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
 import PostCommentsService from '../containers/PostComments';
+import { CommentSelect } from '../reducers/index';
 
 @Component({
   selector: 'post-comment-form',
@@ -43,20 +45,22 @@ export default class PostCommentForm implements OnInit, OnDestroy {
   public comment: any;
   public submitting = false;
 
-  constructor(private postCommentsService: PostCommentsService) {}
+  constructor(private postCommentsService: PostCommentsService, private store: Store<any>) {}
 
   public ngOnInit(): void {
-    this.subsOnEdit = this.postCommentsService.startedEditing.subscribe((comment: any) => {
+    this.subsOnEdit = this.store.select('post').subscribe(({ comment }: any) => {
       this.comment = comment;
-      this.editMode = true;
-      this.commentForm.setValue({
-        content: this.comment.content
-      });
+      this.editMode = comment.id !== null;
+      if (Object.keys(this.commentForm.controls).length) {
+        this.commentForm.setValue({
+          content: this.comment.content
+        });
+      }
     });
   }
 
   public ngOnDestroy(): void {
-    this.subsOnEdit.unsubscribe();
+    this.unsubscribe(this.subscription);
   }
 
   public getOperation() {
@@ -65,18 +69,26 @@ export default class PostCommentForm implements OnInit, OnDestroy {
 
   public onFormSubmitted() {
     this.submitting = true;
+    this.unsubscribe(this.subscription);
     const { content } = this.commentForm.value;
-    if (this.comment) {
+    if (this.comment.id !== null) {
       this.subscription = this.postCommentsService.editComment(this.comment.id, this.postId, content).subscribe();
       this.editMode = false;
-      this.comment = null;
     } else {
       this.subscription = this.postCommentsService.addComment(content, this.postId).subscribe();
     }
+    this.store.dispatch(new CommentSelect({ id: null, content: '' }));
     this.commentForm.reset();
-    this.subscription.unsubscribe();
     this.submitting = false;
   }
+
+  private unsubscribe = (...subscriptions: Subscription[]) => {
+    subscriptions.forEach((subscription: Subscription) => {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    });
+  };
 }
 
 // import React from 'react';

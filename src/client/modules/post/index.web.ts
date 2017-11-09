@@ -1,4 +1,4 @@
-import * as reducers from './reducers';
+import { reducer } from './reducers';
 
 import Feature from '../connector';
 import PostEditView from './components/PostEditView.web';
@@ -13,7 +13,7 @@ export default new Feature({
     },
     { path: 'post/:id', component: PostEditView, data: { title: 'Apollo Starter Kit - Edit post' } }
   ],
-  reducer: { post: reducers }
+  reducer: { post: reducer }
 });
 
 /*import React from "react";

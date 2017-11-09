@@ -1,25 +1,29 @@
-import { Action, createStore, Reducer, Store } from 'redux';
+import { Action } from '@ngrx/store';
+
+export const COMMENT_SELECT = 'COMMENT_SELECT';
+
+export class CommentSelect implements Action {
+  public readonly type = COMMENT_SELECT;
+
+  constructor(public value: { id: number; content: string }) {}
+}
 
 export interface PostState {
-  comment: { id: any; content: string };
+  comment: { id: null; content: string };
 }
 
-export interface PostAction extends Action {
-  value?: { id: any; content: string };
-}
+export type PostActions = CommentSelect;
 
 const defaultState: PostState = {
-  comment: { id: 0, content: '' }
+  comment: { id: null, content: '' }
 };
 
-const reducer: Reducer<PostState> = (state: PostState, action: PostAction) => {
+export function reducer(state = defaultState, action: PostActions) {
   switch (action.type) {
-    case 'COMMENT_SELECT':
+    case COMMENT_SELECT:
       return { ...state, comment: action.value };
 
     default:
       return state;
   }
-};
-
-export let postStore: Store<PostState> = createStore(reducer, defaultState);
+}

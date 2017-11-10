@@ -24,6 +24,7 @@ class Feature {
   createResolversFunc: Function[];
   createContextFunc: Function[];
   createFetchOptions: Function[];
+  beforeware: Function[];
   middleware: Function[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {

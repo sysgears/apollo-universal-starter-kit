@@ -8,20 +8,20 @@ import settings from '../../../../settings';
 
 export default pubsub => ({
   Query: {
-    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, context) => {
-      return context.User.getUsers(orderBy, filter);
+    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, context, info) => {
+      return context.User.getUsers(orderBy, filter, info);
     }),
     user: withAuth(
-      (obj, args, context) => {
+      (obj, args, context, info) => {
         return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
       },
-      (obj, { id }, context) => {
-        return context.User.getUser(id);
+      (obj, { id }, context, info) => {
+        return context.User.getUser(id, info);
       }
     ),
-    currentUser(obj, args, context) {
+    currentUser(obj, args, context, info) {
       if (context.user) {
-        return context.User.getUser(context.user.id);
+        return context.User.getUser(context.user.id, info);
       } else {
         return null;
       }

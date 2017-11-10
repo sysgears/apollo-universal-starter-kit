@@ -2,28 +2,30 @@
 import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has } from 'lodash';
 import bcrypt from 'bcryptjs';
+import KnexGenerator from 'domain-knex';
+import parseFields from 'graphql-parse-fields';
+import { User as UserSchema } from './schema';
 import knex from '../../../server/sql/connector';
+
+// from table name
+const tableName = decamelize(UserSchema.name);
+
+const fields = {
+  id: true,
+  username: true,
+  password: true,
+  email: true,
+  role: true,
+  isActive: true,
+  profile: { firstName: true, lastName: true }
+};
 
 // Actual query fetching and transformation in DB
 export default class User {
-  async getUsers(orderBy, filter) {
-    const queryBuilder = knex
-      .select(
-        'u.id as id',
-        'u.username',
-        'u.role',
-        'u.is_active',
-        'u.email',
-        'up.first_name',
-        'up.last_name',
-        'ca.serial',
-        'fa.fb_id',
-        'fa.display_name'
-      )
-      .from('user AS u')
-      .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
-      .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
-      .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id');
+  async getUsers(orderBy, filter, info) {
+    const baseQuery = knex(tableName);
+    const selectBy = new KnexGenerator(knex).selectBy(UserSchema, parseFields(info));
+    const queryBuilder = selectBy(baseQuery);
 
     // add order by
     if (orderBy && orderBy.column) {
@@ -40,22 +42,22 @@ export default class User {
     if (filter) {
       if (has(filter, 'role') && filter.role !== '') {
         queryBuilder.where(function() {
-          this.where('u.role', filter.role);
+          this.where('user.role', filter.role);
         });
       }
 
       if (has(filter, 'isActive') && filter.isActive !== null) {
         queryBuilder.where(function() {
-          this.where('u.is_active', filter.isActive);
+          this.where('user.is_active', filter.isActive);
         });
       }
 
       if (has(filter, 'searchText') && filter.searchText !== '') {
         queryBuilder.where(function() {
-          this.where('u.username', 'like', `%${filter.searchText}%`)
-            .orWhere('u.email', 'like', `%${filter.searchText}%`)
-            .orWhere('up.first_name', 'like', `%${filter.searchText}%`)
-            .orWhere('up.last_name', 'like', `%${filter.searchText}%`);
+          this.where('user.username', 'like', `%${filter.searchText}%`)
+            .orWhere('user.email', 'like', `%${filter.searchText}%`)
+            .orWhere('user_profile.first_name', 'like', `%${filter.searchText}%`)
+            .orWhere('user_profile.last_name', 'like', `%${filter.searchText}%`);
         });
       }
     }
@@ -63,49 +65,87 @@ export default class User {
     return camelizeKeys(await queryBuilder);
   }
 
-  async getUser(id) {
+  async getUser(id, info = null) {
+    let parsedFields = fields;
+    if (info !== null) {
+      parsedFields = parseFields(info);
+    }
+
+    const baseQuery = knex(tableName);
+    const selectBy = new KnexGenerator(knex).selectBy(UserSchema, parsedFields);
+
     return camelizeKeys(
-      await knex
-        .select(
-          'u.id',
-          'u.username',
-          'u.role',
-          'u.is_active',
-          'u.email',
-          'up.first_name',
-          'up.last_name',
-          'ca.serial',
-          'fa.fb_id',
-          'fa.display_name'
-        )
-        .from('user AS u')
-        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
-        .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
-        .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
-        .where('u.id', '=', id)
+      await selectBy(baseQuery)
+        .where(`${tableName}.id`, '=', id)
         .first()
     );
   }
 
   async getUserWithPassword(id) {
+    const baseQuery = knex(tableName);
+    const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
+
     return camelizeKeys(
-      await knex
-        .select('u.id', 'u.username', 'u.password', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
-        .from('user AS u')
-        .where('u.id', '=', id)
-        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+      await selectBy(baseQuery)
+        .where(`${tableName}.id`, '=', id)
         .first()
     );
   }
 
   async getUserWithSerial(serial) {
+    fields.auth = {
+      certificate: {
+        serial: true
+      }
+    };
+
+    const baseQuery = knex(tableName);
+    const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
+
     return camelizeKeys(
-      await knex
-        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'ca.serial', 'up.first_name', 'up.last_name')
-        .from('user AS u')
-        .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
-        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
-        .where('ca.serial', '=', serial)
+      await selectBy(baseQuery)
+        .where(`auth_certificate.serial`, '=', serial)
+        .first()
+    );
+  }
+
+  async getUserByEmail(email) {
+    const baseQuery = knex(tableName);
+    const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
+
+    return camelizeKeys(
+      await selectBy(baseQuery)
+        .where(`${tableName}.email`, '=', email)
+        .first()
+    );
+  }
+
+  async getUserByFbIdOrEmail(id, email) {
+    fields.auth = {
+      facebook: {
+        fbId: true,
+        displayName: true
+      }
+    };
+
+    const baseQuery = knex(tableName);
+    const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
+
+    return camelizeKeys(
+      await selectBy(baseQuery)
+        .where('auth_facebook.fb_id', '=', id)
+        .orWhere('user.email', '=', email)
+        .first()
+    );
+  }
+
+  async getUserByUsername(username) {
+    const baseQuery = knex(tableName);
+    const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
+
+    return camelizeKeys(
+      await selectBy(baseQuery)
+        .where('user.username', '=', username)
         .first()
     );
   }
@@ -199,50 +239,5 @@ export default class User {
     return knex('user')
       .update({ is_active: isActive })
       .where({ id });
-  }
-
-  async getUserByEmail(email) {
-    return camelizeKeys(
-      await knex
-        .select('u.id', 'u.username', 'u.password', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
-        .from('user AS u')
-        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
-        .where({ email })
-        .first()
-    );
-  }
-
-  async getUserByFbIdOrEmail(id, email) {
-    return camelizeKeys(
-      await knex
-        .select(
-          'u.id',
-          'u.username',
-          'u.role',
-          'u.is_active',
-          'fa.fb_id',
-          'u.email',
-          'u.password',
-          'up.first_name',
-          'up.last_name'
-        )
-        .from('user AS u')
-        .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
-        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
-        .where('fa.fb_id', '=', id)
-        .orWhere('u.email', '=', email)
-        .first()
-    );
-  }
-
-  async getUserByUsername(username) {
-    return camelizeKeys(
-      await knex
-        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
-        .from('user AS u')
-        .where('u.username', '=', username)
-        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
-        .first()
-    );
   }
 }

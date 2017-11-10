@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-client';
 import { ApolloLink, Observable } from 'apollo-link';
-import InMemoryCache from 'apollo-cache-inmemory';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { addTypenameToDocument } from 'apollo-utilities';
 import { LoggingLink } from 'apollo-logger';
 import { Router, Switch } from 'react-router-dom';
@@ -53,48 +53,45 @@ class MockLink extends ApolloLink {
     const { schema } = self;
     const operationAST = getOperationAST(request.query, request.operationName);
     if (!!operationAST && operationAST.operation === 'subscription') {
-      return {
-        subscribe(handler) {
-          try {
-            const subId = self.subId++;
-            const queryStr = print(request.query);
-            const key = JSON.stringify({
-              query: queryStr,
-              variables: request.variables
-            });
-            self.handlers[subId] = {
-              handler,
-              key: key,
-              query: queryStr,
-              variables: request.variables
-            };
-            self.subscriptions[key] = self.subscriptions[key] || [];
-            self.subscriptions[key].push(subId);
-            self.subscriptionQueries[queryStr] = self.subscriptionQueries[queryStr] || [];
-            self.subscriptionQueries[queryStr].push(subId);
-            return {
-              unsubscribe() {
-                try {
-                  const { key, query } = self.handlers[subId];
-                  self.subscriptions[key].splice(self.subscriptions[key].indexOf(subId), 1);
-                  if (!self.subscriptions[key].length) {
-                    delete self.subscriptions[key];
-                  }
-                  self.subscriptionQueries[query].splice(self.subscriptionQueries[query].indexOf(subId), 1);
-                  if (!self.subscriptionQueries[query].length) {
-                    delete self.subscriptionQueries[query];
-                  }
-                  delete self.handlers[subId];
-                } catch (e) {
-                  console.error(e);
-                }
+      return new Observable(observer => {
+        try {
+          const subId = self.subId++;
+          const queryStr = print(request.query);
+          const key = JSON.stringify({
+            query: queryStr,
+            variables: request.variables
+          });
+          self.handlers[subId] = {
+            handler: observer,
+            key: key,
+            query: queryStr,
+            variables: request.variables
+          };
+          self.subscriptions[key] = self.subscriptions[key] || [];
+          self.subscriptions[key].push(subId);
+          self.subscriptionQueries[queryStr] = self.subscriptionQueries[queryStr] || [];
+          self.subscriptionQueries[queryStr].push(subId);
+
+          return () => {
+            try {
+              const { key, query } = self.handlers[subId];
+              self.subscriptions[key].splice(self.subscriptions[key].indexOf(subId), 1);
+              if (!self.subscriptions[key].length) {
+                delete self.subscriptions[key];
               }
-            };
-          } catch (e) {
-            console.error(e);
-          }
+              self.subscriptionQueries[query].splice(self.subscriptionQueries[query].indexOf(subId), 1);
+              if (!self.subscriptionQueries[query].length) {
+                delete self.subscriptionQueries[query];
+              }
+              delete self.handlers[subId];
+            } catch (e) {
+              console.error(e);
+            }
+          };
+        } catch (e) {
+          console.error(e);
         }
-      };
+      });
     } else {
       return new Observable(observer => {
         graphql(schema, print(request.query), {}, {}, request.variables, request.operationName)
@@ -127,11 +124,11 @@ class MockLink extends ApolloLink {
 
     return subscriptions.map(subId => {
       const res = {
-        next() {
-          return self.handlers[subId].handler.next.apply(self, arguments);
+        next(value) {
+          return self.handlers[subId].handler.next(value);
         },
-        error() {
-          return self.handlers[subId].handler.error.apply(self, arguments);
+        error(errorValue) {
+          return self.handlers[subId].handler.error(errorValue);
         }
       };
       res.variables = self.handlers[subId].variables;

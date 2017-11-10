@@ -4,21 +4,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { Card, CardBlock, CardTitle, CardText } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { SubmissionError } from 'redux-form';
 
-import PageLayout from '../../../app/PageLayout';
+import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
 import LoginForm from '../components/LoginForm';
 
 class LoginView extends React.PureComponent {
-  state = {
-    errors: []
-  };
-
   onSubmit = login => async values => {
     const result = await login(values);
 
     if (result.errors) {
-      this.setState({ errors: result.errors });
+      let submitError = {
+        _error: 'Login failed!'
+      };
+      result.errors.map(error => (submitError[error.field] = error.message));
+      throw new SubmissionError(submitError);
     }
   };
 
@@ -41,14 +42,15 @@ class LoginView extends React.PureComponent {
       <PageLayout>
         {renderMetaData()}
         <h1>Login page!</h1>
-        <LoginForm onSubmit={this.onSubmit(login)} errors={this.state.errors} />
+        <LoginForm onSubmit={this.onSubmit(login)} />
+        <Link to="/forgot-password">Forgot your password?</Link>
         <hr />
         <Card>
-          <CardBlock>
+          <CardGroup>
             <CardTitle>Available logins:</CardTitle>
             <CardText>admin@example.com:admin</CardText>
             <CardText>user@example.com:user</CardText>
-          </CardBlock>
+          </CardGroup>
         </Card>
       </PageLayout>
     );

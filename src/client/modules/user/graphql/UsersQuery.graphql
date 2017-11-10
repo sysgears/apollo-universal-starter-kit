@@ -1,7 +1,7 @@
 #import "./User.graphql"
 
-query users {
-    users {
-        ... UserInfo
-    }
+query users($orderBy: OrderByUserInput, $filter: FilterUserInput) {
+  users(orderBy: $orderBy, filter: $filter) {
+    ... UserInfo
+  }
 }

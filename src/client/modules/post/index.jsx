@@ -4,7 +4,7 @@ import { Button } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 
-import { createTabBarIconWrapper } from '../common/components';
+import { createTabBarIconWrapper } from '../common/components/native';
 
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';

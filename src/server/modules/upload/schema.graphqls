@@ -1,15 +1,15 @@
 input Upload {
-    name: String!
-    type: String!
-    size: Int!
-    path: String!
+  name: String!
+  type: String!
+  size: Int!
+  path: String!
 }
 
 extend type Query {
 }
 
 extend type Mutation {
-    uploadFile(file: Upload!): Boolean!
+  uploadFile(file: Upload!): Boolean!
 }
 
 extend type Subscription {

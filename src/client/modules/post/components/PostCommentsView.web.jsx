@@ -1,74 +1,83 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ListGroup, ListGroupItem } from 'reactstrap';
-
+import { Table, Button } from '../../common/components/web';
 import PostCommentForm from './PostCommentForm';
 
-function renderComments(comments, onCommentSelect, comment, deleteComment) {
-  return comments.map(({ id, content }) => {
-    return (
-      <ListGroupItem className="d-flex justify-content-between" key={id}>
-        {content}
-        <div>
-          <a className="badge badge-secondary edit-comment" onClick={() => onCommentSelect({ id, content })} href="#">
-            Edit
-          </a>
-          &nbsp;
-          <a
-            className="badge badge-secondary delete-comment"
-            onClick={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
-            href="#"
-          >
-            Delete
-          </a>
-        </div>
-      </ListGroupItem>
-    );
-  });
-}
+class PostCommentsView extends React.PureComponent {
+  hendleEditComment = (id, content) => {
+    const { onCommentSelect } = this.props;
+    onCommentSelect({ id, content });
+  };
 
-function onCommentDelete(comment, deleteComment, onCommentSelect, id) {
-  if (comment.id === id) {
+  hendleDeleteComment = id => {
+    const { comment, onCommentSelect, deleteComment } = this.props;
+
+    if (comment.id === id) {
+      onCommentSelect({ id: null, content: '' });
+    }
+
+    deleteComment(id);
+  };
+
+  onSubmit = () => values => {
+    const { comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted } = this.props;
+
+    if (comment.id === null) {
+      addComment(values.content, postId);
+    } else {
+      editComment(comment.id, values.content);
+    }
+
     onCommentSelect({ id: null, content: '' });
-  }
+    onFormSubmitted();
+  };
 
-  deleteComment(id);
+  render() {
+    const { postId, comment, comments } = this.props;
+
+    const columns = [
+      {
+        title: 'Content',
+        dataIndex: 'content',
+        key: 'content'
+      },
+      {
+        title: 'Actions',
+        key: 'actions',
+        width: 120,
+        render: (text, record) => (
+          <div style={{ width: 120 }}>
+            <Button
+              color="primary"
+              size="sm"
+              className="edit-comment"
+              onClick={() => this.hendleEditComment(record.id, record.content)}
+            >
+              Edit
+            </Button>{' '}
+            <Button
+              color="primary"
+              size="sm"
+              className="delete-comment"
+              onClick={() => this.hendleDeleteComment(record.id)}
+            >
+              Delete
+            </Button>
+          </div>
+        )
+      }
+    ];
+
+    return (
+      <div>
+        <h3>Comments</h3>
+        <PostCommentForm postId={postId} onSubmit={this.onSubmit()} initialValues={comment} />
+        <h1 />
+        <Table dataSource={comments} columns={columns} />
+      </div>
+    );
+  }
 }
-
-const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted) => values => {
-  if (comment.id === null) {
-    addComment(values.content, postId);
-  } else {
-    editComment(comment.id, values.content);
-  }
-
-  onCommentSelect({ id: null, content: '' });
-  onFormSubmitted();
-};
-
-const PostCommentsView = ({
-  postId,
-  comment,
-  addComment,
-  editComment,
-  comments,
-  onCommentSelect,
-  deleteComment,
-  onFormSubmitted
-}) => {
-  return (
-    <div>
-      <h3>Comments</h3>
-      <PostCommentForm
-        postId={postId}
-        onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)}
-        initialValues={comment}
-      />
-      <h1 />
-      <ListGroup>{renderComments(comments, onCommentSelect, comment, deleteComment)}</ListGroup>
-    </div>
-  );
-};
 
 PostCommentsView.propTypes = {
   postId: PropTypes.number.isRequired,

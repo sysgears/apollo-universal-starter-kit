@@ -3,6 +3,7 @@ import settings from './settings';
 export const development = {
   client: settings.db.client,
   connection: settings.db.connection.development,
+  pool: settings.db.pool,
   seeds: {
     directory: './src/server/database/seeds'
   },
@@ -15,6 +16,7 @@ export const development = {
 export const production = {
   client: settings.db.client,
   connection: settings.db.connection.production,
+  pool: settings.db.pool,
   seeds: {
     directory: './src/server/database/seeds'
   },

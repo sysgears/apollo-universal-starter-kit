@@ -2,10 +2,10 @@
 #import "./Comment.graphql"
 
 mutation addPost($input: AddPostInput!) {
-    addPost(input: $input) {
-        ... PostInfo
-        comments {
-            ... CommentInfo
-        }
+  addPost(input: $input) {
+    ... PostInfo
+    comments {
+      ... CommentInfo
     }
+  }
 }

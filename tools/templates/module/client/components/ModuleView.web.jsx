@@ -1,9 +1,6 @@
-// Web only component
-
-// React
 import React from 'react';
 import Helmet from 'react-helmet';
-import PageLayout from '../../../app/PageLayout';
+import { PageLayout } from '../../common/components/web';
 
 const $Module$View = () => {
   const renderMetaData = () => (

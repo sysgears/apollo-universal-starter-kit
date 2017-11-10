@@ -17,9 +17,10 @@ const renderRow = (deletePost, navigation) => rowData => {
         onPress={() =>
           navigation.navigate('PostEdit', {
             id: rowData.id
-          })}
+          })
+        }
       />
-      <Button title="Delete" onPress={deletePost(rowData.id)} />
+      <Button title="Delete" onPress={() => deletePost(rowData.id)} />
     </View>
   );
 };

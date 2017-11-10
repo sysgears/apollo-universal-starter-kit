@@ -2,39 +2,25 @@ import bcrypt from 'bcryptjs';
 import truncateTables from '../../../common/db';
 
 export async function seed(knex, Promise) {
-  await truncateTables(knex, Promise, ['user', 'auth_local', 'auth_certificate', 'auth_facebook']);
+  await truncateTables(knex, Promise, ['user', 'user_profile', 'auth_certificate', 'auth_facebook']);
 
-  const [adminId] = await knex('user')
-    .returning('id')
-    .insert({ username: 'admin', is_active: true, is_admin: true });
-  await knex('auth_local')
+  await knex('user')
     .returning('id')
     .insert({
+      username: 'admin',
       email: 'admin@example.com',
       password: await bcrypt.hash('admin', 12),
-      user_id: adminId
-    });
-  await knex('auth_certificate')
-    .returning('id')
-    .insert({
-      serial: '00',
-      user_id: adminId
+      role: 'admin',
+      is_active: true
     });
 
-  const [userId] = await knex('user')
-    .returning('id')
-    .insert({ username: 'user', is_active: true, is_admin: false });
-  await knex('auth_local')
+  await knex('user')
     .returning('id')
     .insert({
+      username: 'user',
       email: 'user@example.com',
       password: await bcrypt.hash('user', 12),
-      user_id: userId
-    });
-  await knex('auth_certificate')
-    .returning('id')
-    .insert({
-      serial: '01',
-      user_id: userId
+      role: 'user',
+      is_active: true
     });
 }

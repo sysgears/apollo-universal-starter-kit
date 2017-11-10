@@ -3,14 +3,16 @@ exports.up = function(knex, Promise) {
     knex.schema.createTable('user', table => {
       table.increments();
       table.string('username').unique();
-      table.boolean('is_admin').defaultTo(false);
+      table.string('email').unique();
+      table.string('password');
+      table.string('role').defaultTo('user');
       table.boolean('is_active').defaultTo(false);
       table.timestamps(false, true);
     }),
-    knex.schema.createTable('auth_local', table => {
+    knex.schema.createTable('user_profile', table => {
       table.increments();
-      table.string('email').unique();
-      table.string('password');
+      table.string('first_name');
+      table.string('last_name');
       table
         .integer('user_id')
         .unsigned()
@@ -47,9 +49,9 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return Promise.all([
-    knex.schema.dropTable('user'),
-    knex.schema.dropTable('auth_local'),
     knex.schema.dropTable('auth_certificate'),
-    knex.schema.dropTable('auth_facebook')
+    knex.schema.dropTable('auth_facebook'),
+    knex.schema.dropTable('user_profile'),
+    knex.schema.dropTable('user')
   ]);
 };

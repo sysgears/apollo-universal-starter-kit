@@ -5,6 +5,7 @@
 .*/node_modules/expo/.*
 .*/node_modules/haul/.*
 .*/node_modules/metro-bundler/.*
+.*/node_modules/persistgraphql/.*
 .*/node_modules/react-native-fbads/.*
 .*/node_modules/react-native-tab-view/.*
 .*/node_modules/react-navigation/.*

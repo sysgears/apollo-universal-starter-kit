@@ -6,20 +6,23 @@ import settings from '../../../../settings';
 
 let engine;
 
-if (settings.analytics.apolloEngine.key) {
-  const { port, pathname } = url.parse(__BACKEND_URL__);
+if (settings.engine.engineConfig.apiKey) {
+  const { protocol, hostname, port, pathname } = url.parse(__BACKEND_URL__);
+  const apiUrl = `${protocol}//${hostname}:${process.env.PORT || port}${pathname}`;
   const serverPort = process.env.PORT || port;
 
   engine = new Engine({
-    engineConfig: {
-      apiKey: settings.analytics.apolloEngine.key,
-      logging: {
-        level: 'DEBUG' // Engine Proxy logging level. DEBUG, INFO, WARN or ERROR
+    ...settings.engine,
+    origins: [
+      {
+        backend: {
+          url: apiUrl,
+          supportsBatch: true
+        }
       }
-    },
+    ],
     graphqlPort: serverPort, // GraphQL port
-    endpoint: pathname, // GraphQL endpoint suffix - '/graphql' by default
-    dumpTraffic: true // Debug configuration that logs traffic between Proxy and GraphQL server
+    endpoint: pathname // GraphQL endpoint suffix - '/graphql' by default
   });
 
   engine.start();
@@ -27,7 +30,7 @@ if (settings.analytics.apolloEngine.key) {
 
 export default new Feature({
   beforeware: app => {
-    if (settings.analytics.apolloEngine.key) {
+    if (settings.engine.engineConfig.apiKey) {
       app.use(engine.expressMiddleware());
     }
   }

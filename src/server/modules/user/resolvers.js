@@ -93,7 +93,12 @@ export default pubsub => ({
               from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
               to: user.email,
               subject: 'Confirm Email',
-              html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`
+              html: `<p>Hi, ${user.username}!</p>
+              <p>Welcome to ${settings.app.name}. Please click the following link to confirm your email:</p>
+              <p><a href="${url}">${url}</a></p>
+              <p>Below are your login information</p>
+              <p>Your email is: ${user.email}</p>
+              <p>Your password is: ${input.password}</p>`
             });
           });
         }
@@ -176,6 +181,25 @@ export default pubsub => ({
           }
 
           const user = await context.User.getUser(createdUserId);
+
+          if (context.mailer && settings.user.auth.password.sendAddNewUserEmail && !emailExists && context.req) {
+            // async email
+            jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
+              const encodedToken = Buffer.from(emailToken).toString('base64');
+              const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
+              context.mailer.sendMail({
+                from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+                to: user.email,
+                subject: 'Your account has been created',
+                html: `<p>Hi, ${user.username}!</p>
+                <p>Welcome to ${settings.app.name}. Please click the following link to confirm your email:</p>
+                <p><a href="${url}">${url}</a></p>
+                <p>Below are your login information</p>
+                <p>Your email is: ${user.email}</p>
+                <p>Your password is: ${input.password}</p>`
+              });
+            });
+          }
 
           return { user };
         } catch (e) {

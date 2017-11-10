@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StoreModule } from '@ngrx/store';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
+import { NgrxFormsModule } from 'ngrx-forms';
 import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -104,6 +105,8 @@ import { clientProvider, default as Main } from './app/Main';
     ApolloModule.withClient(clientProvider),
     NgbModule.forRoot(),
     NgUploaderModule,
+    NgrxFormsModule,
+    // TODO: Implement @ngrx/store for the whole project
     StoreModule.forRoot(reducers),
     RouterModule.forRoot(routes, {
       useHash: true

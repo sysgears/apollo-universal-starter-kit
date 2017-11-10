@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+import { AbstractControlState, createFormGroupState, FormGroupState, groupUpdateReducer, validate } from 'ngrx-forms';
 
 export const USER_FILTER_SEARCH_TEXT = 'USER_FILTER_SEARCH_TEXT';
 export const USER_FILTER_ROLE = 'USER_FILTER_ROLE';
@@ -78,6 +79,102 @@ export function reducer(state = defaultState, action: UserActions) {
         orderBy: action.value
       };
     }
+
+    default:
+      return state;
+  }
+}
+
+/* FORM REDUCERS */
+
+const LOGIN_FORM = 'login_form';
+
+const RESET_FORM = 'reset_form_action';
+const FILL_FORM = 'fill_form_action';
+
+function required(value: any) {
+  return value && value.toString().length ? {} : { required: 'Field is required' };
+}
+
+function emailPattern(value: string) {
+  return value && value.length && /^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\.[a-zA-Z0–9.]+$/.test(value)
+    ? {}
+    : { email: 'Email should be like john@doe.com' };
+}
+
+// Login Form
+
+export interface LoginFormData {
+  email: string;
+  password: string;
+}
+
+const initLoginFormState = createFormGroupState<LoginFormData>(LOGIN_FORM, {
+  email: '',
+  password: ''
+});
+
+const updateLoginFormData = groupUpdateReducer<LoginFormData>(
+  {
+    email: validate(required),
+    password: validate(required)
+  },
+  {
+    email: validate(emailPattern)
+  }
+  // {
+  //   email: (email: AbstractControlState<string>, form: FormGroupState<LoginFormData>) => {
+  //     if (!form.value.email.length) {
+  //     } else if (!/^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\.[a-zA-Z0–9.]+$/.test(form.value.email)) {
+  //     }
+  //     console.log(form.controls.email.errors);
+  //     return email;
+  //   }
+  // }
+);
+
+export interface FormState {
+  loginForm: FormGroupState<LoginFormData>;
+}
+
+const initState: FormState = {
+  loginForm: initLoginFormState
+};
+
+export interface FormAction extends Action {
+  formData?: LoginFormData;
+}
+
+export class ResetFormAction implements FormAction {
+  public readonly type = RESET_FORM;
+}
+
+export class FillFormAction implements FormAction {
+  public readonly type = FILL_FORM;
+  public formData: LoginFormData;
+
+  constructor(fd: LoginFormData) {
+    this.formData = fd;
+  }
+}
+
+export function loginFormReducer(state = initState, action: Action) {
+  const loginForm = updateLoginFormData(state.loginForm, action);
+
+  if (loginForm !== state.loginForm) {
+    state = { ...state, loginForm } as any;
+  }
+
+  switch (action.type) {
+    case RESET_FORM:
+      return {
+        ...state,
+        loginForm: initLoginFormState
+      };
+    case FILL_FORM:
+      return {
+        loginForm: createFormGroupState<LoginFormData>(LOGIN_FORM, (action as FormAction).formData)
+      };
 
     default:
       return state;

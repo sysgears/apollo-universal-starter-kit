@@ -8,6 +8,7 @@ import RegisterView from './components/RegisterView.web';
 import ResetPasswordView from './components/ResetPasswordView.web';
 import UsersEditView from './components/UserEditView';
 import Users from './components/Users.web';
+import { loginFormReducer } from './reducers';
 
 const tokenMiddleware = (req: any, options: any) => {
   options.headers['x-token'] = window.localStorage.getItem('token');
@@ -44,7 +45,10 @@ export default new Feature({
   ],
   navItem: [`<auth-nav [role]="'admin'"></auth-nav>`],
   navItemRight: [`<auth-login></auth-login>`],
-  reducer: { user: reducer },
+  reducer: {
+    user: reducer,
+    loginForm: loginFormReducer
+  },
   middleware: tokenMiddleware,
   afterware: tokenAfterware,
   connectionParam

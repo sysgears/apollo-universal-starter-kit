@@ -54,7 +54,7 @@
     "antd": "^3.0.0-beta.6",
     "apollo-cache-inmemory": "^1.1.0",
     "apollo-client": "^2.0.2",
-    "apollo-engine": "^0.5.2",
+    "apollo-engine": "^0.5.4",
     "apollo-fetch": "^0.6.0",
     "apollo-fetch-upload": "^1.1.0",
     "apollo-link": "^1.0.0",

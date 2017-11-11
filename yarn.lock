@@ -457,28 +457,28 @@ apollo-client@^2.0.2:
   optionalDependencies:
     "@types/async" "2.0.45"
 
-apollo-engine-binary-darwin@^0.2017.10-431-gdc135a5d:
-  version "0.2017.10-431-gdc135a5d"
-  resolved "https://registry.yarnpkg.com/apollo-engine-binary-darwin/-/apollo-engine-binary-darwin-0.2017.10-431-gdc135a5d.tgz#5763ab9b34d5a63ac271b26ca7da01eefad00e99"
+apollo-engine-binary-darwin@^0.2017.11-40-g9585bfc6:
+  version "0.2017.11-40-g9585bfc6"
+  resolved "https://registry.yarnpkg.com/apollo-engine-binary-darwin/-/apollo-engine-binary-darwin-0.2017.11-40-g9585bfc6.tgz#ab52f0bd35ab0635e9f5ecbbe9d605db3fab3da6"
 
-apollo-engine-binary-linux@^0.2017.10-431-gdc135a5d:
-  version "0.2017.10-431-gdc135a5d"
-  resolved "https://registry.yarnpkg.com/apollo-engine-binary-linux/-/apollo-engine-binary-linux-0.2017.10-431-gdc135a5d.tgz#aa88ec3f27b346f93b3d0da2bff1190a80bb63a6"
+apollo-engine-binary-linux@^0.2017.11-40-g9585bfc6:
+  version "0.2017.11-40-g9585bfc6"
+  resolved "https://registry.yarnpkg.com/apollo-engine-binary-linux/-/apollo-engine-binary-linux-0.2017.11-40-g9585bfc6.tgz#3ce39418a30ae8ae8d4d10e359e605ad0efdddae"
 
-apollo-engine-binary-windows@^0.2017.10-431-gdc135a5d:
-  version "0.2017.10-431-gdc135a5d"
-  resolved "https://registry.yarnpkg.com/apollo-engine-binary-windows/-/apollo-engine-binary-windows-0.2017.10-431-gdc135a5d.tgz#c2ca81fcbb322a58843baecb89cf116681e11214"
+apollo-engine-binary-windows@^0.2017.11-40-g9585bfc6:
+  version "0.2017.11-40-g9585bfc6"
+  resolved "https://registry.yarnpkg.com/apollo-engine-binary-windows/-/apollo-engine-binary-windows-0.2017.11-40-g9585bfc6.tgz#26f1dfd90c90b230d97282c04cdc2fbee4b941ae"
 
-apollo-engine@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/apollo-engine/-/apollo-engine-0.5.2.tgz#915231d308cc9ac2b31174afa7e5b27792be812e"
+apollo-engine@^0.5.4:
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/apollo-engine/-/apollo-engine-0.5.4.tgz#0679d3e802389f1dd5808540f09b6543e9aabe23"
   dependencies:
     request "^2.81.0"
     stream-line-wrapper "^0.1.1"
   optionalDependencies:
-    apollo-engine-binary-darwin "^0.2017.10-431-gdc135a5d"
-    apollo-engine-binary-linux "^0.2017.10-431-gdc135a5d"
-    apollo-engine-binary-windows "^0.2017.10-431-gdc135a5d"
+    apollo-engine-binary-darwin "^0.2017.11-40-g9585bfc6"
+    apollo-engine-binary-linux "^0.2017.11-40-g9585bfc6"
+    apollo-engine-binary-windows "^0.2017.11-40-g9585bfc6"
 
 apollo-fetch-upload@^1.1.0:
   version "1.1.0"

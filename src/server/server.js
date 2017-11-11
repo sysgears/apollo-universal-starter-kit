@@ -22,6 +22,10 @@ let server;
 
 const app = express();
 
+for (const applyBeforeware of modules.beforewares) {
+  applyBeforeware(app);
+}
+
 app.use(cookiesMiddleware());
 
 const { port, pathname } = url.parse(__BACKEND_URL__);
@@ -54,7 +58,7 @@ if (__DEV__) {
 if (__PERSIST_GQL__) {
   const invertedMap = invert(queryMap);
 
-  app.use('/graphql', (req, resp, next) => {
+  app.use(pathname, (req, resp, next) => {
     if (isArray(req.body)) {
       req.body = req.body.map(body => {
         return {
@@ -73,8 +77,8 @@ if (__PERSIST_GQL__) {
   });
 }
 
-for (const middleware of modules.middlewares) {
-  middleware(app);
+for (const applyMiddleware of modules.middlewares) {
+  applyMiddleware(app);
 }
 
 app.use(pathname, (...args) => graphqlMiddleware(...args));

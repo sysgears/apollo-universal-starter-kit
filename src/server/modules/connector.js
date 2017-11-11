@@ -14,6 +14,7 @@ type FeatureParams = {
   schema: DocumentNode | DocumentNode[],
   createResolversFunc?: Function | Function[],
   createContextFunc?: Function | Function[],
+  beforeware?: Middleware | Middleware[],
   middleware?: Middleware | Middleware[],
   createFetchOptions?: Function | Function[]
 };
@@ -23,6 +24,7 @@ class Feature {
   createResolversFunc: Function[];
   createContextFunc: Function[];
   createFetchOptions: Function[];
+  beforeware: Function[];
   middleware: Function[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
@@ -30,6 +32,7 @@ class Feature {
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
+    this.beforeware = combine(arguments, arg => arg.beforeware);
     this.middleware = combine(arguments, arg => arg.middleware);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
   }
@@ -47,6 +50,10 @@ class Feature {
 
   createResolvers(pubsub: any) {
     return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
+  }
+
+  get beforewares(): Middleware[] {
+    return this.beforeware;
   }
 
   get middlewares(): Middleware[] {

@@ -40,6 +40,7 @@ const ios = {
 
 const dependencyPlatforms = {
   antd: 'web',
+  'apollo-engine': 'server',
   bcryptjs: 'server',
   'body-parser': 'server',
   bootstrap: 'web',

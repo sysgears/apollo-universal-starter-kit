@@ -14,12 +14,13 @@ import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
 
 import Feature from '../connector';
 
-function tokenMiddleware(req, options) {
+function tokenMiddleware(req, options, next) {
   options.headers['x-token'] = window.localStorage.getItem('token');
   options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
+  next();
 }
 
-function tokenAfterware(res, options) {
+function tokenAfterware(res, options, next) {
   const token = options.headers['x-token'];
   const refreshToken = options.headers['x-refresh-token'];
   if (token) {
@@ -28,6 +29,7 @@ function tokenAfterware(res, options) {
   if (refreshToken) {
     window.localStorage.setItem('refreshToken', refreshToken);
   }
+  next();
 }
 
 function connectionParam() {

@@ -4,6 +4,7 @@ import { has } from 'lodash';
 import bcrypt from 'bcryptjs';
 import KnexGenerator from 'domain-knex';
 import parseFields from 'graphql-parse-fields';
+import knexnest from 'knexnest';
 import { User as UserSchema } from './schema';
 import knex from '../../../server/sql/connector';
 
@@ -74,8 +75,8 @@ export default class User {
     const baseQuery = knex(tableName);
     const selectBy = new KnexGenerator(knex).selectBy(UserSchema, parsedFields);
 
-    return camelizeKeys(
-      await selectBy(baseQuery)
+    return knexnest(
+      selectBy(baseQuery)
         .where(`${tableName}.id`, '=', id)
         .first()
     );
@@ -85,8 +86,8 @@ export default class User {
     const baseQuery = knex(tableName);
     const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
 
-    return camelizeKeys(
-      await selectBy(baseQuery)
+    return knexnest(
+      selectBy(baseQuery)
         .where(`${tableName}.id`, '=', id)
         .first()
     );
@@ -102,8 +103,8 @@ export default class User {
     const baseQuery = knex(tableName);
     const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
 
-    return camelizeKeys(
-      await selectBy(baseQuery)
+    return knexnest(
+      selectBy(baseQuery)
         .where(`auth_certificate.serial`, '=', serial)
         .first()
     );
@@ -113,8 +114,8 @@ export default class User {
     const baseQuery = knex(tableName);
     const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
 
-    return camelizeKeys(
-      await selectBy(baseQuery)
+    return knexnest(
+      selectBy(baseQuery)
         .where(`${tableName}.email`, '=', email)
         .first()
     );
@@ -131,8 +132,8 @@ export default class User {
     const baseQuery = knex(tableName);
     const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
 
-    return camelizeKeys(
-      await selectBy(baseQuery)
+    return knexnest(
+      selectBy(baseQuery)
         .where('auth_facebook.fb_id', '=', id)
         .orWhere('user.email', '=', email)
         .first()
@@ -143,8 +144,8 @@ export default class User {
     const baseQuery = knex(tableName);
     const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
 
-    return camelizeKeys(
-      await selectBy(baseQuery)
+    return knexnest(
+      selectBy(baseQuery)
         .where('user.username', '=', username)
         .first()
     );

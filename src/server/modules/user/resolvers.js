@@ -27,21 +27,7 @@ export default pubsub => ({
       }
     }
   },
-  User: {
-    profile(obj) {
-      return obj;
-    },
-    auth(obj) {
-      return obj;
-    }
-  },
   UserProfile: {
-    firstName(obj) {
-      return obj.firstName;
-    },
-    lastName(obj) {
-      return obj.lastName;
-    },
     fullName(obj) {
       if (obj.firstName && obj.lastName) {
         return `${obj.firstName} ${obj.lastName}`;

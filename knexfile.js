@@ -1,4 +1,5 @@
-require('babel-register')({presets: ['es2015', 'stage-0']}) ;
+/* eslint import/no-extraneous-dependencies: 0 */
+require('babel-register')({ presets: ['env'] });
 require('babel-polyfill');
 const config = require('./knexdata');
 

@@ -31,32 +31,30 @@ const fetch = createApolloFetch({
 });
 const cache = new InMemoryCache();
 
-fetch.batchUse(({ requests, options }, next) => {
-  try {
+for (const middleware of modules.middlewares) {
+  fetch.batchUse(({ requests, options }, next) => {
     options.credentials = 'same-origin';
     options.headers = options.headers || {};
-    for (const middleware of modules.middlewares) {
-      for (const req of requests) {
-        middleware(req, options);
+    const reqs = [...requests];
+    const innerNext = () => {
+      if (reqs.length > 0) {
+        const req = reqs.shift();
+        if (req) {
+          middleware(req, options, innerNext);
+        }
+      } else {
+        next();
       }
-    }
-  } catch (e) {
-    console.error(e);
-  }
+    };
+    innerNext();
+  });
+}
 
-  next();
-});
-
-fetch.batchUseAfter(({ response, options }, next) => {
-  try {
-    for (const afterware of modules.afterwares) {
-      afterware(response, options);
-    }
-  } catch (e) {
-    console.error(e);
-  }
-  next();
-});
+for (const afterware of modules.afterwares) {
+  fetch.batchUseAfter(({ response, options }, next) => {
+    afterware(response, options, next);
+  });
+}
 
 let connectionParams = {};
 for (const connectionParam of modules.connectionParams) {

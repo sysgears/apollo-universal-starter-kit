@@ -8,6 +8,7 @@ import decode from 'jwt-decode';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
+import log from '../../../../common/log';
 
 const checkAuth = (cookies, scope) => {
   let token = null;
@@ -125,7 +126,7 @@ const AuthLoginWithApollo = withCookies(
                   return navigation.goBack();
                 }
               } catch (e) {
-                console.log(e.graphQLErrors);
+                log.error(e.stack);
               }
             }
           })

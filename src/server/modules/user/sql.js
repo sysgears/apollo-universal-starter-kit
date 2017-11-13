@@ -14,8 +14,8 @@ const tableName = decamelize(UserSchema.name);
 const fields = {
   id: true,
   username: true,
-  password: true,
   email: true,
+  password: true,
   role: true,
   isActive: true,
   profile: { firstName: true, lastName: true }
@@ -82,17 +82,6 @@ export default class User {
     );
   }
 
-  async getUserWithPassword(id) {
-    const baseQuery = knex(tableName);
-    const selectBy = new KnexGenerator(knex).selectBy(UserSchema, fields);
-
-    return knexnest(
-      selectBy(baseQuery)
-        .where(`${tableName}.id`, '=', id)
-        .first()
-    );
-  }
-
   async getUserWithSerial(serial) {
     fields.auth = {
       certificate: {
@@ -135,7 +124,7 @@ export default class User {
     return knexnest(
       selectBy(baseQuery)
         .where('auth_facebook.fb_id', '=', id)
-        .orWhere('user.email', '=', email)
+        .orWhere(`${tableName}.email`, '=', email)
         .first()
     );
   }
@@ -146,7 +135,7 @@ export default class User {
 
     return knexnest(
       selectBy(baseQuery)
-        .where('user.username', '=', username)
+        .where(`${tableName}.username`, '=', username)
         .first()
     );
   }

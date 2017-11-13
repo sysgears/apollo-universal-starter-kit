@@ -146,7 +146,7 @@ export default new Feature({
         req,
         res
       ) {
-        const user = await User.getUserWithPassword(req.user.id);
+        const user = await User.getUser(req.user.id);
         const refreshSecret = SECRET + user.password;
         const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
 

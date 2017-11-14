@@ -89,8 +89,8 @@ export function reducer(state = defaultState, action: UserActions) {
 
 const LOGIN_FORM = 'login_form';
 
-const RESET_FORM = 'reset_form_action';
-const FILL_FORM = 'fill_form_action';
+const RESET_FORM_ACTION = 'reset_form_action';
+const FILL_FORM_ACTION = 'fill_form_action';
 
 function required(value: any) {
   return value && value.toString().length ? {} : { required: 'Field is required' };
@@ -146,11 +146,11 @@ export interface FormAction extends Action {
 }
 
 export class ResetFormAction implements FormAction {
-  public readonly type = RESET_FORM;
+  public readonly type = RESET_FORM_ACTION;
 }
 
 export class FillFormAction implements FormAction {
-  public readonly type = FILL_FORM;
+  public readonly type = FILL_FORM_ACTION;
   public formData: LoginFormData;
 
   constructor(fd: LoginFormData) {
@@ -166,12 +166,12 @@ export function loginFormReducer(state = initState, action: Action) {
   }
 
   switch (action.type) {
-    case RESET_FORM:
+    case RESET_FORM_ACTION:
       return {
         ...state,
         loginForm: initLoginFormState
       };
-    case FILL_FORM:
+    case FILL_FORM_ACTION:
       return {
         loginForm: createFormGroupState<LoginFormData>(LOGIN_FORM, (action as FormAction).formData)
       };

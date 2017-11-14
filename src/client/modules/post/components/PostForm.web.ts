@@ -1,9 +1,8 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import PostService from '../containers/Post';
 import PostEditService from '../containers/PostEdit';
 
 @Component({
@@ -26,33 +25,26 @@ import PostEditService from '../containers/PostEdit';
           </div>
           <button type="submit" class="btn btn-primary" [disabled]="submitting">Save</button>
       </form>`,
-  styles: [
-    `
-    input.ng-invalid.ng-touched {
-        border: 1px solid red;
-    }
-  `
-  ]
+  styles: [`input.ng-invalid.ng-touched {border: 1px solid red;}`]
 })
-export default class PostForm implements OnInit, OnDestroy {
-  private submitting: boolean = false;
+export default class PostForm implements OnDestroy {
   @Input() public post: any;
   @ViewChild('postForm') public postForm: NgForm;
+  private submitting: boolean = false;
   private subscription: Subscription;
 
-  constructor(private postService: PostService, private postEditService: PostEditService, private router: Router) {}
-
-  public ngOnInit() {}
+  constructor(private postEditService: PostEditService, private router: Router) {}
 
   public onSubmit() {
     this.submitting = true;
+    this.unsubscribe(this.subscription);
     const { title, content } = this.postForm.value;
     if (this.post) {
-      this.subscription = this.postEditService.editPost(this.post.id, title, content).subscribe(() => {
+      this.subscription = this.postEditService.editPost(this.post.id, title, content, () => {
         this.router.navigate(['/posts']);
       });
     } else {
-      this.subscription = this.postEditService.addPost(title, content).subscribe(({ data: { addPost } }: any) => {
+      this.subscription = this.postEditService.addPost(title, content, ({ data: { addPost } }: any) => {
         this.router.navigate(['/post', addPost.id]);
         this.submitting = false;
       });
@@ -60,38 +52,15 @@ export default class PostForm implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.unsubscribe(this.subscription);
   }
-}
 
-// import React from 'react';
-// import PropTypes from 'prop-types';
-// import { Field, reduxForm } from 'redux-form';
-// import { Form, RenderField, Button } from '../../common/components/web';
-//
-// const required = value => (value ? undefined : 'Required');
-//
-// const PostForm = ({ handleSubmit, submitting, onSubmit }) => {
-//   return (
-//     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
-//   <Field name="title" component={RenderField} type="text" label="Title" validate={required} />
-//   <Field name="content" component={RenderField} type="text" label="Content" validate={required} />
-//   <Button color="primary" type="submit" disabled={submitting}>
-//     Save
-//     </Button>
-//     </Form>
-// );
-// };
-//
-// PostForm.propTypes = {
-//   handleSubmit: PropTypes.func,
-//   onSubmit: PropTypes.func,
-//   submitting: PropTypes.bool
-// };
-//
-// export default reduxForm({
-//   form: 'post',
-//   enableReinitialize: true
-// })(PostForm);
+  private unsubscribe = (...subscriptions: Subscription[]) => {
+    subscriptions.forEach((subscription: Subscription) => {
+      if (subscription) {
+        subscription.unsubscribe();
+        subscription = null;
+      }
+    });
+  };
+}

@@ -25,23 +25,16 @@ import PostCommentsService from '../containers/PostComments';
                 </div>
             </div>
         </form>`,
-  styles: [
-    `
-      input.ng-invalid.ng-touched {
-        border: 1px solid red;
-      }
-
-    `
-  ]
+  styles: [`input.ng-invalid.ng-touched {border: 1px solid red;}`]
 })
 export default class PostCommentForm implements OnInit, OnDestroy {
   @ViewChild('commentForm') public commentForm: NgForm;
   @Input() public postId: number;
-  private subsOnEdit: Subscription;
-  private subscription: Subscription;
-  private editMode = false;
   public comment: any;
   public submitting = false;
+  private editMode = false;
+  private subsOnEdit: Subscription;
+  private subscription: Subscription;
 
   constructor(private postCommentsService: PostCommentsService) {}
 
@@ -56,7 +49,7 @@ export default class PostCommentForm implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subsOnEdit.unsubscribe();
+    this.unsubscribe(this.subsOnEdit, this.subscription);
   }
 
   public getOperation() {
@@ -65,60 +58,26 @@ export default class PostCommentForm implements OnInit, OnDestroy {
 
   public onFormSubmitted() {
     this.submitting = true;
+    this.unsubscribe(this.subscription);
     const { content } = this.commentForm.value;
     if (this.comment) {
-      this.subscription = this.postCommentsService.editComment(this.comment.id, this.postId, content).subscribe();
+      this.subscription = this.postCommentsService.editComment(this.comment.id, this.postId, content);
       this.editMode = false;
       this.comment = null;
     } else {
-      this.subscription = this.postCommentsService.addComment(content, this.postId).subscribe();
+      this.subscription = this.postCommentsService.addComment(content, this.postId);
     }
     this.commentForm.reset();
     this.subscription.unsubscribe();
     this.submitting = false;
   }
-}
 
-// import React from 'react';
-// import PropTypes from 'prop-types';
-// import { Field, reduxForm } from 'redux-form';
-// import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
-//
-// const required = value => (value ? undefined : 'Required');
-//
-// const PostCommentForm = ({ handleSubmit, submitting, initialValues, onSubmit }) => {
-//   let operation = 'Add';
-//   if (initialValues.id !== null) {
-//     operation = 'Edit';
-//   }
-//
-//   return (
-//     <Form name="comment" onSubmit={handleSubmit(onSubmit)}>
-//   <Row>
-//     <Col xs="2">
-//     <Label>{operation} comment</Label>
-//   </Col>
-//   <Col xs="8">
-//   <Field name="content" component={RenderField} type="text" validate={required} />
-//   </Col>
-//   <Col xs="2">
-//   <Button color="primary" type="submit" className="float-right" disabled={submitting}>
-//     Save
-//     </Button>
-//     </Col>
-//     </Row>
-//     </Form>
-// );
-// };
-//
-// PostCommentForm.propTypes = {
-//   handleSubmit: PropTypes.func,
-//   initialValues: PropTypes.object,
-//   onSubmit: PropTypes.func,
-//   submitting: PropTypes.bool
-// };
-//
-// export default reduxForm({
-//   form: 'comment',
-//   enableReinitialize: true
-// })(PostCommentForm);
+  private unsubscribe = (...subscriptions: Subscription[]) => {
+    subscriptions.forEach((subscription: Subscription) => {
+      if (subscription) {
+        subscription.unsubscribe();
+        subscription = null;
+      }
+    });
+  };
+}

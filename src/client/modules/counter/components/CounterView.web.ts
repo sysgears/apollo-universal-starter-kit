@@ -37,13 +37,13 @@ export default class CounterView implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.subsOnUpdate = this.counterService.subscribeToCount().subscribe(({ counterUpdated }: any) => {
+    this.subsOnUpdate = this.counterService.subscribeToCount(({ counterUpdated }: any) => {
       this.ngZone.run(() => {
         this.counter = counterUpdated;
       });
     });
 
-    this.subsOnLoad = this.counterService.getCounter().subscribe(({ data: { counter }, loading }: any) => {
+    this.subsOnLoad = this.counterService.getCounter(({ data: { counter }, loading }: any) => {
       this.ngZone.run(() => {
         this.counter = counter;
         this.loading = loading || false;
@@ -56,11 +56,8 @@ export default class CounterView implements OnInit, OnDestroy {
   }
 
   public addCount() {
-    if (this.subsOnAdd) {
-      this.unsubscribe(this.subsOnAdd);
-      this.subsOnAdd = null;
-    }
-    this.subsOnAdd = this.counterService.addCounter(1, this.counter.amount).subscribe();
+    this.unsubscribe(this.subsOnAdd);
+    this.subsOnAdd = this.counterService.addCounter(1, this.counter.amount);
   }
 
   public onReduxIncrement() {
@@ -81,6 +78,7 @@ export default class CounterView implements OnInit, OnDestroy {
     subscriptions.forEach((subscription: Subscription) => {
       if (subscription) {
         subscription.unsubscribe();
+        subscription = null;
       }
     });
   };

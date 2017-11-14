@@ -41,9 +41,9 @@ import { UserFilterIsActive, UserFilterRole, UserFilterSearchText } from '../red
   `
 })
 export default class UsersFilterView implements OnInit, OnDestroy {
-  public subscription: Subscription;
   public roleOptions: any;
   private searchTextChanged = new Subject<string>();
+  private subscription: Subscription;
 
   constructor(private store: Store<any>) {
     this.roleOptions = this.getRoleOptions();
@@ -59,7 +59,7 @@ export default class UsersFilterView implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.unsubscribe(this.subscription);
   }
 
   public onSearchTextChange(searchText: string) {
@@ -74,7 +74,25 @@ export default class UsersFilterView implements OnInit, OnDestroy {
     return this.store.dispatch(new UserFilterIsActive(isActive));
   }
 
-  private getRoleOptions() {
-    return [{ name: 'admin', value: 'admin' }, { name: 'user', value: 'user' }];
-  }
+  private getRoleOptions = () => {
+    return [
+      {
+        name: 'admin',
+        value: 'admin'
+      },
+      {
+        name: 'user',
+        value: 'user'
+      }
+    ];
+  };
+
+  private unsubscribe = (...subscriptions: Subscription[]) => {
+    subscriptions.forEach((subscription: Subscription) => {
+      if (subscription) {
+        subscription.unsubscribe();
+        subscription = null;
+      }
+    });
+  };
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
+import { Container, Row, Col } from 'reactstrap';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 
 const required = value => (value ? undefined : 'Required');
@@ -38,10 +39,18 @@ const RegisterForm = ({ handleSubmit, submitting, onSubmit, error }) => {
         label="Password Confirmation"
         validate={[required, minLength5]}
       />
-      {error && <Alert color="error">{error}</Alert>}
-      <Button color="primary" type="submit" disabled={submitting}>
-        Register
-      </Button>
+      <Container>
+        <Row>
+          <Col xs={{ size: 6, offset: 3 }}>
+            <div className="text-center">
+              {error && <Alert color="error">{error}</Alert>}
+              <Button color="primary" type="submit" disabled={submitting}>
+                Register
+              </Button>
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </Form>
   );
 };

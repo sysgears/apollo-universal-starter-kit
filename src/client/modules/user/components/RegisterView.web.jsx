@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
+import { Container, Row, Col } from 'reactstrap';
 import { PageLayout } from '../../common/components/web';
 import RegisterForm from '../components/RegisterForm';
 
@@ -38,8 +39,18 @@ class RegisterView extends React.PureComponent {
     return (
       <PageLayout>
         {this.renderMetaData()}
-        <h1>Register page!</h1>
-        <RegisterForm onSubmit={this.onSubmit} />
+        <Container>
+          <Row>
+            <Col xs={{ size: 6, offset: 3 }}>
+              <Row>
+                <Col>
+                  <h1 className="text-center">Sign Up</h1>
+                  <RegisterForm onSubmit={this.onSubmit} />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       </PageLayout>
     );
   }

@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
+import { Container, Row, Col } from 'reactstrap';
 import { PageLayout } from '../../common/components/web';
 import ForgotPasswordForm from '../components/ForgotPasswordForm';
 
@@ -46,8 +47,21 @@ class ForgotPasswordView extends React.Component {
     return (
       <PageLayout>
         {renderMetaData()}
-        <h1>Forgot password!</h1>
-        <ForgotPasswordForm onSubmit={this.onSubmit({ forgotPassword, onFormSubmitted })} sent={this.state.sent} />
+        <Container>
+          <Row>
+            <Col xs={{ size: 6, offset: 3 }}>
+              <Row>
+                <Col>
+                  <h1 className="text-center">Password Reset</h1>
+                  <ForgotPasswordForm
+                    onSubmit={this.onSubmit({ forgotPassword, onFormSubmitted })}
+                    sent={this.state.sent}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       </PageLayout>
     );
   }

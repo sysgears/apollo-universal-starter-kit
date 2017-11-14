@@ -10,10 +10,12 @@ const ForgotPasswordForm = ({ handleSubmit, submitting, onSubmit, error, sent })
     <Form name="forgotPassword" onSubmit={handleSubmit(onSubmit)}>
       {sent && <Alert color="success">Reset password instructions have been emailed to you.</Alert>}
       <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
-      {error && <Alert color="error">{error}</Alert>}
-      <Button color="primary" type="submit" disabled={submitting}>
-        Send Reset Instructions
-      </Button>
+      <div className="text-center">
+        {error && <Alert color="error">{error}</Alert>}
+        <Button color="primary" type="submit" disabled={submitting}>
+          Send Reset Instructions
+        </Button>
+      </div>
     </Form>
   );
 };

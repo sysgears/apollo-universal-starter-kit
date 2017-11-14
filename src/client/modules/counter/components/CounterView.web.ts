@@ -60,7 +60,7 @@ export default class CounterView implements OnInit, OnDestroy {
 
   public addCount() {
     this.unsubscribe(this.subsOnAdd);
-    this.subsOnAdd = this.counterService.addCounter(1, this.counter.amount).subscribe();
+    this.subsOnAdd = this.counterService.addCounter(1, this.counter.amount);
   }
 
   public onReduxIncrement() {

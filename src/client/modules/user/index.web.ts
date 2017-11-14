@@ -1,4 +1,4 @@
-import { reducer } from './reducers';
+import { forgotPasswordFormReducer, reducer } from './reducers';
 
 import Feature from '../connector';
 import ForgotPasswordView from './components/ForgotPasswordView.web';
@@ -47,7 +47,8 @@ export default new Feature({
   navItemRight: [`<auth-login></auth-login>`],
   reducer: {
     user: reducer,
-    loginForm: loginFormReducer
+    loginForm: loginFormReducer,
+    forgotPasswordForm: forgotPasswordFormReducer
   },
   middleware: tokenMiddleware,
   afterware: tokenAfterware,

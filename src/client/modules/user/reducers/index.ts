@@ -109,7 +109,7 @@ export interface LoginFormData {
   password: string;
 }
 
-const initLoginFormState = createFormGroupState<LoginFormData>(LOGIN_FORM, {
+const initLoginForm = createFormGroupState<LoginFormData>(LOGIN_FORM, {
   email: '',
   password: ''
 });
@@ -133,23 +133,23 @@ const updateLoginFormData = groupUpdateReducer<LoginFormData>(
   // }
 );
 
-export interface FormState {
+export interface LoginFormState {
   loginForm: FormGroupState<LoginFormData>;
 }
 
-const initState: FormState = {
-  loginForm: initLoginFormState
+const initLoginFormState: LoginFormState = {
+  loginForm: initLoginForm
 };
 
-export interface FormAction extends Action {
+export interface LoginFormAction extends Action {
   formData?: LoginFormData;
 }
 
-export class ResetFormAction implements FormAction {
+export class ResetLoginFormAction implements LoginFormAction {
   public readonly type = RESET_FORM_ACTION;
 }
 
-export class FillFormAction implements FormAction {
+export class FillLoginFormAction implements LoginFormAction {
   public readonly type = FILL_FORM_ACTION;
   public formData: LoginFormData;
 
@@ -158,7 +158,7 @@ export class FillFormAction implements FormAction {
   }
 }
 
-export function loginFormReducer(state = initState, action: Action) {
+export function loginFormReducer(state = initLoginFormState, action: Action) {
   const loginForm = updateLoginFormData(state.loginForm, action);
 
   if (loginForm !== state.loginForm) {
@@ -169,11 +169,83 @@ export function loginFormReducer(state = initState, action: Action) {
     case RESET_FORM_ACTION:
       return {
         ...state,
-        loginForm: initLoginFormState
+        loginForm: initLoginForm
       };
     case FILL_FORM_ACTION:
       return {
-        loginForm: createFormGroupState<LoginFormData>(LOGIN_FORM, (action as FormAction).formData)
+        loginForm: createFormGroupState<LoginFormData>(LOGIN_FORM, (action as LoginFormAction).formData)
+      };
+
+    default:
+      return state;
+  }
+}
+
+const FORGOT_PASSWORD_FORM = 'forgot_password_form';
+
+// Login Form
+
+export interface ForgotPasswordFormData {
+  email: string;
+}
+
+const initForgotPasswordForm = createFormGroupState<ForgotPasswordFormData>(FORGOT_PASSWORD_FORM, {
+  email: ''
+});
+
+const updateForgotPasswordFormData = groupUpdateReducer<ForgotPasswordFormData>(
+  {
+    email: validate(required)
+  },
+  {
+    email: validate(emailPattern)
+  }
+);
+
+export interface ForgotPasswordFormState {
+  forgotPasswordForm: FormGroupState<ForgotPasswordFormData>;
+}
+
+const initForgotPasswordState: ForgotPasswordFormState = {
+  forgotPasswordForm: initForgotPasswordForm
+};
+
+export interface ForgotPasswordFormAction extends Action {
+  formData?: ForgotPasswordFormData;
+}
+
+export class ResetForgotPasswordFormAction implements ForgotPasswordFormAction {
+  public readonly type = RESET_FORM_ACTION;
+}
+
+export class FillForgotPasswordFormAction implements ForgotPasswordFormAction {
+  public readonly type = FILL_FORM_ACTION;
+  public formData: ForgotPasswordFormData;
+
+  constructor(fd: ForgotPasswordFormData) {
+    this.formData = fd;
+  }
+}
+
+export function forgotPasswordFormReducer(state = initForgotPasswordState, action: Action) {
+  const forgotPasswordForm = updateForgotPasswordFormData(state.forgotPasswordForm, action);
+
+  if (forgotPasswordForm !== state.forgotPasswordForm) {
+    state = { ...state, forgotPasswordForm } as any;
+  }
+
+  switch (action.type) {
+    case RESET_FORM_ACTION:
+      return {
+        ...state,
+        forgotPasswordForm: initForgotPasswordForm
+      };
+    case FILL_FORM_ACTION:
+      return {
+        forgotPasswordForm: createFormGroupState<ForgotPasswordFormData>(
+          FORGOT_PASSWORD_FORM,
+          (action as ForgotPasswordFormAction).formData
+        )
       };
 
     default:

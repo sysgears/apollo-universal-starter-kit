@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
-import { FormState, LoginFormData, ResetFormAction } from '../reducers';
+import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers';
 import { FormInput, InputType } from './UserEditView';
 
 @Component({
@@ -38,7 +38,7 @@ export default class LoginView {
   public formState: FormGroupState<LoginFormData>;
   public form: FormInput[];
 
-  constructor(private loginService: LoginService, private router: Router, private store: Store<FormState>) {
+  constructor(private loginService: LoginService, private router: Router, private store: Store<LoginFormState>) {
     this.form = this.createForm();
     store.select(s => s.loginForm).subscribe((res: any) => {
       this.formState = res;
@@ -57,7 +57,7 @@ export default class LoginView {
       localStorage.setItem('token', token);
       localStorage.setItem('refreshToken', refreshToken);
 
-      this.store.dispatch(new ResetFormAction());
+      this.store.dispatch(new ResetLoginFormAction());
       this.router.navigateByUrl('profile');
     });
   };

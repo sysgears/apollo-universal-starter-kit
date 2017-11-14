@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { Container, Row, Col, Table } from 'reactstrap';
 import { PageLayout } from '../../common/components/web';
 
 const renderMetaData = () => (
@@ -27,11 +28,40 @@ const ProfileView = ({ loading, currentUser }) => {
     return (
       <PageLayout>
         {renderMetaData()}
-        <h2>Profile</h2>
-        <p>username: {currentUser.username}</p>
-        <p>email: {currentUser.email}</p>
-        <p>role: {currentUser.role}</p>
-        {currentUser.profile && currentUser.profile.fullName && <p>name: {currentUser.profile.fullName}</p>}
+        <Container>
+          <Row>
+            <Col xs={{ size: 6, offset: 3 }}>
+              <Row>
+                <Col>
+                  <h1 className="text-center">Profile</h1>
+                  <Table bordered style={{ marginTop: 16 }}>
+                    <tbody>
+                      <tr>
+                        <td>User Name:</td>
+                        <td>{currentUser.username}</td>
+                      </tr>
+                      <tr>
+                        <td>Email:</td>
+                        <td>{currentUser.email}</td>
+                      </tr>
+                      <tr>
+                        <td>Role:</td>
+                        <td>{currentUser.role}</td>
+                      </tr>
+                      {currentUser.profile &&
+                        currentUser.profile.fullName && (
+                          <tr>
+                            <td>Full Name:</td>
+                            <td>{currentUser.profile.fullName}</td>
+                          </tr>
+                        )}
+                    </tbody>
+                  </Table>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       </PageLayout>
     );
   } else {

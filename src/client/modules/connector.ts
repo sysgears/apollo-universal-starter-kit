@@ -46,11 +46,11 @@ class Feature {
   }
 
   get navItems() {
-    return this.navItem.map((component, idx) => component);
+    return this.navItem.map((component, idx) => component).join('');
   }
 
   get navItemsRight() {
-    return this.navItemRight.map((component, idx) => component);
+    return this.navItemRight.map((component, idx) => component).join('');
   }
 
   get reducers() {

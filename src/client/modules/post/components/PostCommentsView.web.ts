@@ -1,8 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
+
 import PostCommentsService, { AddComment, DeleteComment, UpdateComment } from '../containers/PostComments';
-import { CommentSelect } from '../reducers/index';
 
 @Component({
   selector: 'post-comments-view',
@@ -33,16 +32,16 @@ import { CommentSelect } from '../reducers/index';
         </div>`
 })
 export default class PostCommentsView implements OnInit, OnDestroy {
+  @Input() public post: any;
   private subsOnUpdate: Subscription;
   private subsOnDelete: Subscription;
-  @Input() public post: any;
 
-  constructor(private postCommentsService: PostCommentsService, private store: Store<any>) {}
+  constructor(private postCommentsService: PostCommentsService) {}
 
   public ngOnInit() {
-    this.subsOnUpdate = this.postCommentsService
-      .subscribeToCommentList(this.post.id)
-      .subscribe(({ commentUpdated: { mutation, node, id } }: any) => {
+    this.subsOnUpdate = this.postCommentsService.subscribeToCommentList(
+      this.post.id,
+      ({ commentUpdated: { mutation, node, id } }: any) => {
         if (mutation === 'CREATED') {
           this.post = AddComment(this.post, node);
         } else if (mutation === 'UPDATED') {
@@ -50,7 +49,8 @@ export default class PostCommentsView implements OnInit, OnDestroy {
         } else if (mutation === 'DELETED') {
           this.post = DeleteComment(this.post, id);
         }
-      });
+      }
+    );
   }
 
   public ngOnDestroy(): void {
@@ -58,108 +58,20 @@ export default class PostCommentsView implements OnInit, OnDestroy {
   }
 
   public onCommentSelect(comment: any) {
-    this.store.dispatch(new CommentSelect({ id: comment.id, content: comment.content }));
+    this.postCommentsService.startedEditing.next(comment);
   }
 
   public onCommentDelete(id: number) {
     this.unsubscribe(this.subsOnDelete);
-    this.subsOnDelete = this.postCommentsService.deleteComment(id, this.post.id).subscribe((result: any) => {
-      this.store.dispatch(new CommentSelect({ id: null, content: '' }));
-    });
+    this.subsOnDelete = this.postCommentsService.deleteComment(id, this.post.id);
   }
 
   private unsubscribe = (...subscriptions: Subscription[]) => {
     subscriptions.forEach((subscription: Subscription) => {
       if (subscription) {
         subscription.unsubscribe();
+        subscription = null;
       }
     });
   };
 }
-
-// import React from "react";
-// import PropTypes from "prop-types";
-// import { ListGroup, ListGroupItem, Button } from "reactstrap";
-//
-// import PostCommentForm from "./PostCommentForm";
-//
-// function renderComments(comments, onCommentSelect, comment, deleteComment) {
-//   return comments.map(({ id, content }) => {
-//     return (
-//       <ListGroupItem className="d-flex justify-content-between" key={id}>
-//     {content}
-//     <div>
-//     <Button color="primary" size="sm" className="badge badge-secondary edit-comment" onClick={() => onCommentSelect({ id, content })} href="#">
-//       Edit
-//       </Button>{' '}
-//       <Button
-//     color="primary"
-//     size="sm"
-//     className="badge badge-secondary delete-comment"
-//     onClick={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
-//     href="#"
-//       >
-//       Delete
-//       </Button>
-//       </div>
-//       </ListGroupItem>
-//   );
-//   });
-// }
-//
-// function onCommentDelete(comment, deleteComment, onCommentSelect, id) {
-//   if (comment.id === id) {
-//     onCommentSelect({ id: null, content: "" });
-//   }
-//
-//   deleteComment(id);
-// }
-//
-// const onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted) => values => {
-//   if (comment.id === null) {
-//     addComment(values.content, postId);
-//   } else {
-//     editComment(comment.id, values.content);
-//   }
-//
-//   onCommentSelect({ id: null, content: "" });
-//   onFormSubmitted();
-// };
-//
-// const PostCommentsView = ({
-//                             postId,
-//                             comment,
-//                             addComment,
-//                             editComment,
-//                             comments,
-//                             onCommentSelect,
-//                             deleteComment,
-//                             onFormSubmitted
-//                           }) => {
-//   return (
-//     <div>
-//       <h3>Comments</h3>
-//     <PostCommentForm
-//   postId={postId}
-//   onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)}
-//   initialValues={comment}
-//   />
-//   <h1 />
-//   <ListGroup>{renderComments(comments, onCommentSelect, comment, deleteComment)}</ListGroup>
-//   </div>
-// );
-// };
-//
-// PostCommentsView.propTypes = {
-//   postId: PropTypes.number.isRequired,
-//   comments: PropTypes.array.isRequired,
-//   comment: PropTypes.object.isRequired,
-//   addComment: PropTypes.func.isRequired,
-//   editComment: PropTypes.func.isRequired,
-//   deleteComment: PropTypes.func.isRequired,
-//   onCommentSelect: PropTypes.func.isRequired,
-//   onFormSubmitted: PropTypes.func.isRequired,
-//   subscribeToMore: PropTypes.func.isRequired
-// };
-//
-// export default PostCommentsView;

@@ -1,4 +1,10 @@
-import { forgotPasswordFormReducer, loginFormReducer, reducer, registerFormReducer } from './reducers';
+import {
+  forgotPasswordFormReducer,
+  loginFormReducer,
+  reducer,
+  registerFormReducer,
+  resetPasswordFormReducer
+} from './reducers';
 
 import Feature from '../connector';
 import ForgotPasswordView from './components/ForgotPasswordView.web';
@@ -48,7 +54,8 @@ export default new Feature({
     user: reducer,
     loginForm: loginFormReducer,
     forgotPasswordForm: forgotPasswordFormReducer,
-    registerForm: registerFormReducer
+    registerForm: registerFormReducer,
+    resetPasswordForm: resetPasswordFormReducer
   },
   middleware: tokenMiddleware,
   afterware: tokenAfterware,

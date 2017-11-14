@@ -333,9 +333,76 @@ export function registerFormReducer(state = initRegisterState, action: Action) {
       };
     case FILL_FORM_ACTION:
       return {
-        registerForm: createFormGroupState<RegisterFormData>(
-          FORGOT_PASSWORD_FORM,
-          (action as RegisterFormAction).formData
+        registerForm: createFormGroupState<RegisterFormData>(REGISTER_FORM, (action as RegisterFormAction).formData)
+      };
+
+    default:
+      return state;
+  }
+}
+
+/* Reset Password Form */
+
+const RESET_PASSWORD_FORM = 'reset_password_form';
+
+export interface ResetPasswordFormData {
+  password: string;
+  passwordConfirmation: string;
+}
+
+const initResetPasswordForm = createFormGroupState<ResetPasswordFormData>(RESET_PASSWORD_FORM, {
+  password: '',
+  passwordConfirmation: ''
+});
+
+const updateResetPasswordFormData = groupUpdateReducer<ResetPasswordFormData>({
+  password: validate(required),
+  passwordConfirmation: passwordConfirmationValidation
+});
+
+export interface ResetPasswordFormState {
+  resetPasswordForm: FormGroupState<ResetPasswordFormData>;
+}
+
+const initResetPasswordState: ResetPasswordFormState = {
+  resetPasswordForm: initResetPasswordForm
+};
+
+export interface ResetPasswordFormAction extends Action {
+  formData?: ResetPasswordFormData;
+}
+
+export class ResetResetPasswordFormAction implements ResetPasswordFormAction {
+  public readonly type = RESET_FORM_ACTION;
+}
+
+export class FillResetPasswordFormAction implements ResetPasswordFormAction {
+  public readonly type = FILL_FORM_ACTION;
+  public formData: ResetPasswordFormData;
+
+  constructor(fd: ResetPasswordFormData) {
+    this.formData = fd;
+  }
+}
+
+export function resetPasswordFormReducer(state = initResetPasswordState, action: Action) {
+  const resetPasswordForm = updateResetPasswordFormData(state.resetPasswordForm, action);
+
+  if (resetPasswordForm !== state.resetPasswordForm) {
+    state = { ...state, resetPasswordForm } as any;
+  }
+
+  switch (action.type) {
+    case RESET_FORM_ACTION:
+      return {
+        ...state,
+        forgotPasswordForm: initResetPasswordForm
+      };
+    case FILL_FORM_ACTION:
+      return {
+        forgotPasswordForm: createFormGroupState<ResetPasswordFormData>(
+          RESET_PASSWORD_FORM,
+          (action as ResetPasswordFormAction).formData
         )
       };
 

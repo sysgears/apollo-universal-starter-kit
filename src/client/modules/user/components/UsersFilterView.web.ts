@@ -10,34 +10,34 @@ import { UserFilterIsActive, UserFilterRole, UserFilterSearchText } from '../red
 @Component({
   selector: 'users-filter-view',
   template: `
-      <form class="form-inline">
-          <div class="form-group">
-              <label class="col-form-label-md form-control-label">Filter:&nbsp;</label>
-              <input #searchInput
-                     (keyup)="onSearchTextChange(searchInput.value)"
-                     type="text"
-                     placeholder="Search ..."
-                     class="form-control">
-          </div>&nbsp;
-          <div class="form-group">
-              <label class="col-form-label-md form-control-label">Role:&nbsp;</label>
-              <select #roleInput
-                      class="form-control"
-                      (change)="onRoleChange(roleInput.value)">
-                  <option selected value="">Select ...</option>
-                  <option *ngFor="let roleOption of roleOptions" [value]="roleOption.value">{{ roleOption.name }}</option>
-              </select>
-          </div>&nbsp;
-          <div class="form-group">
-              <label class=" form-control-label">
-                <input #isActiveInput
-                       type="checkbox"
-                       class="form-check-input"
-                       (change)="onIsActiveChange(isActiveInput.checked)">
-                  Is Active
-              </label>
-          </div>
-      </form>
+    <form class="form-inline">
+      <div class="form-group">
+        <label class="col-form-label-md form-control-label">Filter:&nbsp;</label>
+        <input #searchInput
+               (keyup)="onSearchTextChange(searchInput.value)"
+               type="text"
+               placeholder="Search ..."
+               class="form-control">
+      </div>&nbsp;
+      <div class="form-group">
+        <label class="col-form-label-md form-control-label">Role:&nbsp;</label>
+        <select #roleInput
+                class="form-control"
+                (change)="onRoleChange(roleInput.value)">
+          <option selected value="">Select ...</option>
+          <option *ngFor="let roleOption of roleOptions" [value]="roleOption.value">{{ roleOption.name }}</option>
+        </select>
+      </div>&nbsp;
+      <div class="form-group">
+        <label class=" form-control-label">
+          <input #isActiveInput
+                 type="checkbox"
+                 class="form-check-input"
+                 (change)="onIsActiveChange(isActiveInput.checked)">
+          Is Active
+        </label>
+      </div>
+    </form>
   `
 })
 export default class UsersFilterView implements OnInit, OnDestroy {

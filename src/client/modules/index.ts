@@ -7,4 +7,4 @@ import user from './user/index.web';
 
 import Feature from './connector';
 
-export default new Feature(counter, post, user, upload, pageNotFound);
+export default new Feature(counter, post, upload, user, pageNotFound);

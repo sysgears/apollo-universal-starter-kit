@@ -13,5 +13,12 @@ export default new Feature({
     },
     { path: 'post/:id', component: PostEditView, data: { title: 'Apollo Starter Kit - Edit post' } }
   ],
+  navItem: [
+    `
+      <li class="nav-item">
+        <a class="nav-link" [routerLinkActive]="['active']" aria-current="true" routerLink="/posts">Posts</a>
+      </li>
+    `
+  ],
   reducer: { post: reducers }
 });

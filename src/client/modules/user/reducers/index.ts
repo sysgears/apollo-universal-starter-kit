@@ -1,5 +1,12 @@
 import { Action } from '@ngrx/store';
-import { AbstractControlState, createFormGroupState, FormGroupState, groupUpdateReducer, validate } from 'ngrx-forms';
+import {
+  AbstractControlState,
+  createFormGroupState,
+  FormGroupState,
+  groupUpdateReducer,
+  setValue,
+  validate
+} from 'ngrx-forms';
 
 export const USER_FILTER_SEARCH_TEXT = 'USER_FILTER_SEARCH_TEXT';
 export const USER_FILTER_ROLE = 'USER_FILTER_ROLE';
@@ -87,8 +94,6 @@ export function reducer(state = defaultState, action: UserActions) {
 
 /* FORM REDUCERS */
 
-const LOGIN_FORM = 'login_form';
-
 const RESET_FORM_ACTION = 'reset_form_action';
 const FILL_FORM_ACTION = 'fill_form_action';
 
@@ -96,13 +101,42 @@ function required(value: any) {
   return value && value.toString().length ? {} : { required: 'Field is required' };
 }
 
-function emailPattern(value: string) {
-  return value && value.length && /^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\.[a-zA-Z0–9.]+$/.test(value)
-    ? {}
-    : { email: 'Email should be like john@doe.com' };
-}
+const emailValidation = (email: AbstractControlState<string>) => {
+  if (!email.value || !email.value.length) {
+    return validate(() => ({ required: 'Email is required' }), setValue(email.value, email));
+  }
 
-// Login Form
+  if (!/^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\.[a-zA-Z0–9.]+$/.test(email.value)) {
+    return validate(() => ({ email: 'Email should be like john@doe.com' }), setValue(email.value, email));
+  }
+
+  return validate(() => ({}), setValue(email.value, email));
+};
+
+const passwordConfirmationValidation = (
+  passwordConfirmation: AbstractControlState<string>,
+  form: FormGroupState<RegisterFormData>
+) => {
+  if (!passwordConfirmation.value || !passwordConfirmation.value.length) {
+    return validate(
+      () => ({ required: 'Password Confirmation is required' }),
+      setValue(passwordConfirmation.value, passwordConfirmation)
+    );
+  }
+
+  if (form.controls.password.value !== passwordConfirmation.value) {
+    return validate(
+      () => ({ passwordConfirmation: 'Should match to password' }),
+      setValue(passwordConfirmation.value, passwordConfirmation)
+    );
+  }
+
+  return validate(() => ({}), setValue(passwordConfirmation.value, passwordConfirmation));
+};
+
+/* Forgot Password Form */
+
+const LOGIN_FORM = 'login_form';
 
 export interface LoginFormData {
   email: string;
@@ -114,24 +148,10 @@ const initLoginForm = createFormGroupState<LoginFormData>(LOGIN_FORM, {
   password: ''
 });
 
-const updateLoginFormData = groupUpdateReducer<LoginFormData>(
-  {
-    email: validate(required),
-    password: validate(required)
-  },
-  {
-    email: validate(emailPattern)
-  }
-  // {
-  //   email: (email: AbstractControlState<string>, form: FormGroupState<LoginFormData>) => {
-  //     if (!form.value.email.length) {
-  //     } else if (!/^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\.[a-zA-Z0–9.]+$/.test(form.value.email)) {
-  //     }
-  //     console.log(form.controls.email.errors);
-  //     return email;
-  //   }
-  // }
-);
+const updateLoginFormData = groupUpdateReducer<LoginFormData>({
+  email: emailValidation,
+  password: validate(required)
+});
 
 export interface LoginFormState {
   loginForm: FormGroupState<LoginFormData>;
@@ -181,9 +201,9 @@ export function loginFormReducer(state = initLoginFormState, action: Action) {
   }
 }
 
-const FORGOT_PASSWORD_FORM = 'forgot_password_form';
+/* Forgot Password Form */
 
-// Login Form
+const FORGOT_PASSWORD_FORM = 'forgot_password_form';
 
 export interface ForgotPasswordFormData {
   email: string;
@@ -193,14 +213,9 @@ const initForgotPasswordForm = createFormGroupState<ForgotPasswordFormData>(FORG
   email: ''
 });
 
-const updateForgotPasswordFormData = groupUpdateReducer<ForgotPasswordFormData>(
-  {
-    email: validate(required)
-  },
-  {
-    email: validate(emailPattern)
-  }
-);
+const updateForgotPasswordFormData = groupUpdateReducer<ForgotPasswordFormData>({
+  email: emailValidation
+});
 
 export interface ForgotPasswordFormState {
   forgotPasswordForm: FormGroupState<ForgotPasswordFormData>;
@@ -245,6 +260,82 @@ export function forgotPasswordFormReducer(state = initForgotPasswordState, actio
         forgotPasswordForm: createFormGroupState<ForgotPasswordFormData>(
           FORGOT_PASSWORD_FORM,
           (action as ForgotPasswordFormAction).formData
+        )
+      };
+
+    default:
+      return state;
+  }
+}
+
+/* Register Form */
+
+const REGISTER_FORM = 'register_form';
+
+export interface RegisterFormData {
+  username: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+}
+
+const initRegisterForm = createFormGroupState<RegisterFormData>(REGISTER_FORM, {
+  username: '',
+  email: '',
+  password: '',
+  passwordConfirmation: ''
+});
+
+const updateRegisterFormData = groupUpdateReducer<RegisterFormData>({
+  username: validate(required),
+  email: emailValidation,
+  password: validate(required),
+  passwordConfirmation: passwordConfirmationValidation
+});
+
+export interface RegisterFormState {
+  registerForm: FormGroupState<RegisterFormData>;
+}
+
+const initRegisterState: RegisterFormState = {
+  registerForm: initRegisterForm
+};
+
+export interface RegisterFormAction extends Action {
+  formData?: RegisterFormData;
+}
+
+export class ResetRegisterFormAction implements RegisterFormAction {
+  public readonly type = RESET_FORM_ACTION;
+}
+
+export class FillRegisterFormAction implements RegisterFormAction {
+  public readonly type = FILL_FORM_ACTION;
+  public formData: RegisterFormData;
+
+  constructor(fd: RegisterFormData) {
+    this.formData = fd;
+  }
+}
+
+export function registerFormReducer(state = initRegisterState, action: Action) {
+  const registerForm = updateRegisterFormData(state.registerForm, action);
+
+  if (registerForm !== state.registerForm) {
+    state = { ...state, registerForm } as any;
+  }
+
+  switch (action.type) {
+    case RESET_FORM_ACTION:
+      return {
+        ...state,
+        registerForm: initRegisterForm
+      };
+    case FILL_FORM_ACTION:
+      return {
+        registerForm: createFormGroupState<RegisterFormData>(
+          FORGOT_PASSWORD_FORM,
+          (action as RegisterFormAction).formData
         )
       };
 

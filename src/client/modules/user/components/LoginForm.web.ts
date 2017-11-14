@@ -44,8 +44,6 @@ export default class LoginForm {
 
   public facebookLogin: any;
   public settings: any;
-  public login: any = {};
-  public emailPattern: any = '^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\\.[a-zA-Z0–9.]+$';
 
   constructor() {
     this.settings = settings;

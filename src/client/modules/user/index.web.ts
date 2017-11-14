@@ -1,4 +1,4 @@
-import { forgotPasswordFormReducer, reducer } from './reducers';
+import { forgotPasswordFormReducer, loginFormReducer, reducer, registerFormReducer } from './reducers';
 
 import Feature from '../connector';
 import ForgotPasswordView from './components/ForgotPasswordView.web';
@@ -8,7 +8,6 @@ import RegisterView from './components/RegisterView.web';
 import ResetPasswordView from './components/ResetPasswordView.web';
 import UsersEditView from './components/UserEditView';
 import Users from './components/Users.web';
-import { loginFormReducer } from './reducers';
 
 const tokenMiddleware = (req: any, options: any) => {
   options.headers['x-token'] = window.localStorage.getItem('token');
@@ -48,7 +47,8 @@ export default new Feature({
   reducer: {
     user: reducer,
     loginForm: loginFormReducer,
-    forgotPasswordForm: forgotPasswordFormReducer
+    forgotPasswordForm: forgotPasswordFormReducer,
+    registerForm: registerFormReducer
   },
   middleware: tokenMiddleware,
   afterware: tokenAfterware,

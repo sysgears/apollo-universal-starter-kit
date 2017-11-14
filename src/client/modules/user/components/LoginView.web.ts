@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
 import { FormState, LoginFormData, ResetFormAction } from '../reducers';
+import { FormInput, InputType } from './UserEditView';
 
 @Component({
   selector: 'login-view',
@@ -19,7 +20,7 @@ import { FormState, LoginFormData, ResetFormAction } from '../reducers';
         </div>
       </div>
 
-      <login-form [onSubmit]="onSubmit" [formState]="formState"></login-form>
+      <login-form [onSubmit]="onSubmit" [formState]="formState" [form]="form"></login-form>
       <a routerLink="/forgot-password">Forgot your password?</a>
       <hr/>
       <div class="card">
@@ -35,8 +36,10 @@ import { FormState, LoginFormData, ResetFormAction } from '../reducers';
 export default class LoginView {
   public errors: any[];
   public formState: FormGroupState<LoginFormData>;
+  public form: FormInput[];
 
   constructor(private loginService: LoginService, private router: Router, private store: Store<FormState>) {
+    this.form = this.createForm();
     store.select(s => s.loginForm).subscribe((res: any) => {
       this.formState = res;
     });
@@ -57,5 +60,26 @@ export default class LoginView {
       this.store.dispatch(new ResetFormAction());
       this.router.navigateByUrl('profile');
     });
+  };
+
+  private createForm = (): FormInput[] => {
+    return [
+      {
+        id: 'email-input',
+        name: 'email',
+        value: 'Email',
+        type: 'email',
+        placeholder: 'Email',
+        inputType: InputType.INPUT
+      },
+      {
+        id: 'password-input',
+        name: 'password',
+        value: 'Password',
+        type: 'password',
+        placeholder: 'Password',
+        inputType: InputType.INPUT
+      }
+    ];
   };
 }

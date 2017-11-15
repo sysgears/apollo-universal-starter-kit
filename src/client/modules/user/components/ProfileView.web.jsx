@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { Container, Row, Col, Table } from 'reactstrap';
-import { PageLayout } from '../../common/components/web';
+import { Table } from 'reactstrap';
+import { Container, Row, Col, PageLayout } from '../../common/components/web';
 
 const renderMetaData = () => (
   <Helmet

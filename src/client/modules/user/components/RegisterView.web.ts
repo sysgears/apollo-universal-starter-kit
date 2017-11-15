@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { FormGroupState } from 'ngrx-forms';
 import RegisterService from '../containers/Register';
+import { RegisterFormData, RegisterFormState } from '../reducers/index';
+import { FormInput, InputType } from './UserEditView';
 
 @Component({
   selector: 'register-view',
@@ -14,14 +18,25 @@ import RegisterService from '../containers/Register';
         </div>
       </div>
 
-      <register-form [onSubmit]="onSubmit"></register-form>
+      <register-form [onSubmit]="onSubmit" [formState]="formState" [form]="form"></register-form>
     </div>
   `
 })
 export default class RegisterView {
   public errors: any[];
+  public formState: FormGroupState<RegisterFormData>;
+  public form: FormInput[];
 
-  constructor(private registerService: RegisterService, private router: Router) {}
+  constructor(
+    private registerService: RegisterService,
+    private router: Router,
+    private store: Store<RegisterFormState>
+  ) {
+    this.form = this.createForm();
+    store.select(s => s.registerForm).subscribe((res: any) => {
+      this.formState = res;
+    });
+  }
 
   public onSubmit = (regInputs: any) => {
     const { username, email, password } = regInputs;
@@ -33,5 +48,46 @@ export default class RegisterView {
 
       this.router.navigateByUrl('login');
     });
+  };
+
+  private createForm = (): FormInput[] => {
+    return [
+      {
+        id: 'username-input',
+        name: 'username',
+        value: 'Username',
+        type: 'text',
+        placeholder: 'Username',
+        inputType: InputType.INPUT,
+        minLength: 3
+      },
+      {
+        id: 'email-input',
+        name: 'email',
+        value: 'Email',
+        type: 'email',
+        placeholder: 'Email',
+        inputType: InputType.INPUT,
+        minLength: 1
+      },
+      {
+        id: 'password-input',
+        name: 'password',
+        value: 'Password',
+        type: 'password',
+        placeholder: 'Password',
+        inputType: InputType.INPUT,
+        minLength: 5
+      },
+      {
+        id: 'passwordConfirmation-input',
+        name: 'passwordConfirmation',
+        value: 'Password Confirmation',
+        type: 'password',
+        placeholder: 'Password Confirmation',
+        inputType: InputType.INPUT,
+        minLength: 5
+      }
+    ];
   };
 }

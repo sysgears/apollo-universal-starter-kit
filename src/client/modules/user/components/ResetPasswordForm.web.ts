@@ -1,50 +1,33 @@
 import { Component, Input } from '@angular/core';
+import { FormGroupState } from 'ngrx-forms';
+import { LoginFormData } from '../reducers/index';
+import { FormInput } from './UserEditView';
 
 @Component({
   selector: 'reset-password-form',
   template: `
-    <form name="resetPasswordForm" #resetPasswordForm="ngForm" (ngSubmit)="onSubmit(resetPasswordForm.form.value)">
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input id="password"
-               type="password"
+    <form name="resetPasswordForm" (ngSubmit)="onSubmit(formState.resetPasswordForm.value)" [ngrxFormState]="formState">
+      <div class="form-group" *ngFor="let fi of form">
+        <label for="{{fi.id}}">{{fi.value}}</label>
+        <input id="{{fi.id}}"
+               [ngrxFormControlState]="formState.resetPasswordForm.controls[fi.name]"
+               type="{{fi.type}}"
                class="form-control"
-               placeholder="Password"
-               name="password"
-               [(ngModel)]="form.password"
-               #pwd="ngModel"
-               minlength="5"
-               required />
+               placeholder="{{fi.placeholder}}"
+               name="{{fi.name}}"
+               [(ngModel)]="formState.resetPasswordForm.value[fi.name]" />
 
-        <div *ngIf="pwd.invalid && (pwd.dirty || pwd.touched)">
-          <small *ngIf="pwd.errors.minlength">
-            Min length should be 5.
+        <div *ngIf="formState.resetPasswordForm.controls[fi.name].isInvalid && (formState.resetPasswordForm.controls[fi.name].isDirty || formState.resetPasswordForm.controls[fi.name].isTouched)">
+          <small [hidden]="!formState.resetPasswordForm.controls[fi.name].errors[fi.name]">
+            {{formState.resetPasswordForm.controls[fi.name].errors[fi.name]}}
+          </small>
+          <small [hidden]="!formState.resetPasswordForm.controls[fi.name].errors.required">
+            {{fi.value}} is required
           </small>
         </div>
+
       </div>
-
-      <div class="form-group">
-        <label for="passwordConfirmation">Password Confirmation</label>
-        <input id="passwordConfirmation"
-               type="password"
-               class="form-control"
-               placeholder="Password Confirmation"
-               name="passwordConfirmation"
-               [(ngModel)]="form.passwordConfirmation"
-               #pwdCfrm="ngModel"
-               pattern="{{form.password}}"
-               required />
-
-        <div *ngIf="pwdCfrm.invalid && (pwdCfrm.dirty || pwdCfrm.touched)">
-          <small *ngIf="pwdCfrm.errors.pattern">
-            Should match to password.
-          </small>
-        </div>
-      </div>
-
-      <button type="submit" id="login-submit-btn" class="btn btn-primary" [disabled]="!resetPasswordForm.form.valid || submitting">
-        Reset Password
-      </button>
+      <button type="submit" id="register-submit-btn" class="btn btn-primary" [disabled]="formState.resetPasswordForm.isInvalid">Reset Password</button>
     </form>
   `,
   styles: ['small {color: brown}']
@@ -53,7 +36,8 @@ export default class ResetPasswordForm {
   @Input() public onSubmit: any;
   @Input() public sent: boolean;
   @Input() public submitting: boolean;
-  public form: any = {};
+  @Input() public formState: FormGroupState<LoginFormData>;
+  @Input() public form: FormInput[];
 
   constructor() {}
 }

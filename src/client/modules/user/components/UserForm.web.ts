@@ -1,104 +1,91 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { FormGroupState } from 'ngrx-forms';
+import { UserFormData } from '../reducers/index';
 import { FormInput } from './UserEditView';
 
 @Component({
   selector: 'user-form',
   template: `
     <div *ngIf="loading">Loading...</div>
-    <form *ngIf="!loading && user" name="userForm" #userForm="ngForm" (ngSubmit)="onSubmit(user)">
+    <form *ngIf="!loading" name="userForm" (ngSubmit)="onSubmit(formState.userForm.value)" [ngrxFormState]="formState">
       <div [ngClass]="{'form-group': fi.inputType !== 2, 'form-check': fi.inputType === 2}" *ngFor="let fi of form">
 
         <span *ngIf="fi.inputType === 0">
           <label for="{{fi.id}}">{{fi.value}}</label>
           <input id="{{fi.id}}"
+                 [ngrxFormControlState]="formState.userForm.controls[fi.name]"
+                 [ngrxEnableFocusTracking]="true"
                  type="{{fi.type}}"
                  class="form-control"
-                 placeholder="{{fi.value}}"
+                 placeholder="{{fi.placeholder}}"
                  name="{{fi.name}}"
-                 [(ngModel)]="user[fi.name]"
-                 #name="ngModel"
-                 minlength="{{fi.minLength}}"
-                 pattern="{{pattern(fi.name)}}"
-                 [required]="fi.required" />
+                 [(ngModel)]="formState.userForm.value[fi.name]" />
 
-          <div *ngIf="name.invalid && (name.dirty || name.touched)">
-            <small [hidden]="!name.errors.required">
-              {{fi.value}} is required.
+          <div *ngIf="formState.userForm.controls[fi.name].isInvalid && (formState.userForm.controls[fi.name].isDirty || formState.userForm.controls[fi.name].isTouched)">
+            <small [hidden]="!formState.userForm.controls[fi.name].errors[fi.name]">
+              {{formState.userForm.controls[fi.name].errors[fi.name]}}
             </small>
-            <small *ngIf="name.errors.minlength">
-              Min length of the {{fi.value}} should be {{fi.minLength}}.
+            <small [hidden]="!formState.userForm.controls[fi.name].errors.required">
+              {{fi.value}} is required
             </small>
-            <small *ngIf="name.errors.pattern">
-              {{patternMsg(fi.name)}}
+          </div>
+        </span>
+
+        <span *ngIf="fi.inputType === 1">
+          <label for="{{fi.id}}">{{fi.value}}</label>
+          <select id="{{fi.id}}"
+                  [ngrxFormControlState]="formState.userForm.controls[fi.name]"
+                  [ngrxEnableFocusTracking]="true"
+                  name="{{fi.name}}"
+                  class="form-control"
+                  [(ngModel)]="formState.userForm.value[fi.name]">
+            <option *ngFor="let o of fi.options">{{o}}</option>
+          </select>
+
+          <div *ngIf="formState.userForm.controls[fi.name].isInvalid && (formState.userForm.controls[fi.name].isDirty || formState.userForm.controls[fi.name].isTouched)">
+            <small [hidden]="!formState.userForm.controls[fi.name].errors[fi.name]">
+              {{formState.userForm.controls[fi.name].errors[fi.name]}}
+            </small>
+            <small [hidden]="!formState.userForm.controls[fi.name].errors.required">
+              {{fi.value}} is required
             </small>
           </div>
 
         </span>
 
-        <span *ngIf="fi.inputType === 1">
-          <label for="{{fi.id}}">{{fi.value}}</label>
-          <select id="fi.id" name="{{fi.name}}" class="form-control" [(ngModel)]="user[fi.name]" required>
-            <option *ngFor="let o of fi.options">{{o}}</option>
-          </select>
-        </span>
-
         <span *ngIf="fi.inputType === 2">
           <label for="{{fi.id}}" class="form-check-label">
-            <input type="checkbox" id="{{fi.id}}" name="{{fi.name}}" class="form-check-input" [(ngModel)]="user[fi.name]" />
+            <input type="checkbox"
+                   id="{{fi.id}}"
+                   [ngrxFormControlState]="formState.userForm.controls[fi.name]"
+                   [ngrxEnableFocusTracking]="true"
+                   name="{{fi.name}}"
+                   class="form-check-input"
+                   [(ngModel)]="formState.userForm.value[fi.name]" />
             {{fi.value}}
           </label>
+
+          <div *ngIf="formState.userForm.controls[fi.name].isInvalid && (formState.userForm.controls[fi.name].isDirty || formState.userForm.controls[fi.name].isTouched)">
+            <small [hidden]="!formState.userForm.controls[fi.name].errors[fi.name]">
+              {{formState.userForm.controls[fi.name].errors[fi.name]}}
+            </small>
+            <small [hidden]="!formState.userForm.controls[fi.name].errors.required">
+              {{fi.value}} is required
+            </small>
+          </div>
         </span>
 
       </div>
-      <button type="submit" id="register-submit-btn" class="btn btn-primary" [disabled]="userForm.form.invalid">Save</button>
+      <button type="submit" id="register-submit-btn" class="btn btn-primary" [disabled]="formState.userForm.isInvalid">Save</button>
     </form>
   `,
   styles: ['small {color: brown}']
 })
-export default class UserForm implements OnInit, OnDestroy {
+export default class UserForm {
   @Input() public onSubmit: any;
   @Input() public loading: boolean;
-  @Input() public user: any;
+  @Input() public formState: FormGroupState<UserFormData>;
   @Input() public form: FormInput[];
 
-  public pattern: any;
-  public patternMsg: any;
-
-  constructor() {
-    this.pattern = this.getPattern;
-    this.patternMsg = this.getPatternMsg;
-  }
-
-  public ngOnInit(): void {}
-
-  public ngOnDestroy(): void {}
-
-  // Some of the form patterns must be generalized and taken out of a form component
-  private getPattern = (fieldName: string) => {
-    let pat: any = null;
-
-    if (fieldName === 'email') {
-      pat = '^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\\.[a-zA-Z0–9.]+$';
-    }
-
-    if (fieldName === 'passwordConfirmation') {
-      pat = this.user.password || null;
-    }
-
-    return pat;
-  };
-
-  private getPatternMsg = (fieldName: string) => {
-    let patMsg: string = null;
-
-    if (fieldName === 'email') {
-      patMsg = 'Email should be like john@doe.com';
-    }
-
-    if (fieldName === 'passwordConfirmation') {
-      patMsg = 'Password confirmation should match to password';
-    }
-
-    return patMsg;
-  };
+  constructor() {}
 }

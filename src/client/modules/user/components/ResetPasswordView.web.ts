@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { FormGroupState } from 'ngrx-forms';
 import ResetPasswordService from '../containers/ResetPassword';
+import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
+import { FormInput, InputType } from './UserEditView';
 
 @Component({
   selector: 'reset-password-view',
@@ -14,7 +18,7 @@ import ResetPasswordService from '../containers/ResetPassword';
         </div>
       </div>
 
-      <reset-password-form [onSubmit]="onSubmit" [sent]="sent" [submitting]="submitting"></reset-password-form>
+      <reset-password-form [onSubmit]="onSubmit" [sent]="sent" [submitting]="submitting" [formState]="formState" [form]="form"></reset-password-form>
     </div>
   `
 })
@@ -23,8 +27,19 @@ export default class ResetPasswordView implements OnInit {
   public submitting: boolean = false;
   public errors: any[];
   private token: string;
+  public formState: FormGroupState<RegisterFormData>;
+  public form: FormInput[];
 
-  constructor(private route: ActivatedRoute, private resetPasswordService: ResetPasswordService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private resetPasswordService: ResetPasswordService,
+    private store: Store<ResetPasswordFormState>
+  ) {
+    this.form = this.createForm();
+    store.select(s => s.resetPasswordForm).subscribe((res: any) => {
+      this.formState = res;
+    });
+  }
 
   public ngOnInit(): void {
     this.route.params.subscribe((p: any) => {
@@ -50,5 +65,28 @@ export default class ResetPasswordView implements OnInit {
         }
       );
     }
+  };
+
+  private createForm = (): FormInput[] => {
+    return [
+      {
+        id: 'password-input',
+        name: 'password',
+        value: 'Password',
+        type: 'password',
+        placeholder: 'Password',
+        inputType: InputType.INPUT,
+        minLength: 5
+      },
+      {
+        id: 'passwordConfirmation-input',
+        name: 'passwordConfirmation',
+        value: 'Password Confirmation',
+        type: 'password',
+        placeholder: 'Password Confirmation',
+        inputType: InputType.INPUT,
+        minLength: 5
+      }
+    ];
   };
 }

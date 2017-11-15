@@ -1,8 +1,10 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
 import PostCommentsService from '../containers/PostComments';
+import { CommentSelect } from '../reducers/index';
 
 @Component({
   selector: 'post-comment-form',
@@ -36,15 +38,17 @@ export default class PostCommentForm implements OnInit, OnDestroy {
   private subsOnEdit: Subscription;
   private subscription: Subscription;
 
-  constructor(private postCommentsService: PostCommentsService) {}
+  constructor(private postCommentsService: PostCommentsService, private store: Store<any>) {}
 
   public ngOnInit(): void {
-    this.subsOnEdit = this.postCommentsService.startedEditing.subscribe((comment: any) => {
+    this.subsOnEdit = this.store.select('post').subscribe(({ comment }: any) => {
       this.comment = comment;
-      this.editMode = true;
-      this.commentForm.setValue({
-        content: this.comment.content
-      });
+      this.editMode = comment.id !== null;
+      if (Object.keys(this.commentForm.controls).length) {
+        this.commentForm.setValue({
+          content: this.comment.content
+        });
+      }
     });
   }
 

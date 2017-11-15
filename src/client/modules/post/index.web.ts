@@ -1,4 +1,4 @@
-import * as reducers from './reducers';
+import { reducer } from './reducers';
 
 import Feature from '../connector';
 import PostEditView from './components/PostEditView.web';
@@ -20,5 +20,5 @@ export default new Feature({
       </li>
     `
   ],
-  reducer: { post: reducers }
+  reducer: { post: reducer }
 });

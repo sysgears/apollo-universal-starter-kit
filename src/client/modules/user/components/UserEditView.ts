@@ -1,8 +1,11 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { assign, pick } from 'lodash';
+import { FormGroupState } from 'ngrx-forms';
 import settings from '../../../../../settings';
 import UserEditService from '../containers/UserEdit';
+import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } from '../reducers/index';
 
 export enum InputType {
   INPUT = 0,
@@ -35,23 +38,29 @@ export interface FormInput {
         </div>
       </div>
 
-      <user-form [onSubmit]="onSubmit" [user]="user" [loading]="loading" [form]="form"></user-form>
+      <user-form [onSubmit]="onSubmit" [formState]="formState" [loading]="loading" [form]="form"></user-form>
     </div>
   `
 })
 export default class UsersEditView implements OnInit, OnDestroy {
   public user: any = {};
-  public form: FormInput[];
   public loading: boolean = true;
   public title: string;
   public errors: any[] = [];
+  public formState: FormGroupState<UserFormData>;
+  public form: FormInput[];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private userEditService: UserEditService,
-    private ngZone: NgZone
-  ) {}
+    private ngZone: NgZone,
+    private store: Store<UserFormState>
+  ) {
+    store.select(s => s.userForm).subscribe((res: any) => {
+      this.formState = res;
+    });
+  }
 
   public ngOnInit(): void {
     this.route.params.subscribe((p: any) => {
@@ -61,6 +70,17 @@ export default class UsersEditView implements OnInit, OnDestroy {
           this.form = this.createForm(Number(p.id) === 0);
           this.loading = loading;
           this.title = user ? 'Edit User' : 'Create User';
+          const action = user
+            ? new FillUserFormAction(
+                assign(
+                  {},
+                  pick(user, ['username', 'email', 'role', 'isActive']),
+                  pick(user.profile, ['firstName', 'lastName']),
+                  { password: '', passwordConfirmation: '' } as any
+                )
+              )
+            : new ResetUserFormAction();
+          this.store.dispatch(action);
         });
       });
     });

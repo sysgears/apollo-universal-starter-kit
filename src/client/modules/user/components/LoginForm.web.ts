@@ -1,42 +1,35 @@
 import { Component, Input } from '@angular/core';
+import { FormGroupState } from 'ngrx-forms';
 import * as url from 'url';
 import settings from '../../../../../settings';
-
-interface FormInput {
-  id: string;
-  name: string;
-  value: string;
-  type: string;
-  placeholder: string;
-}
+import { LoginFormData } from '../reducers';
+import { FormInput } from './UserEditView';
 
 @Component({
   selector: 'login-form',
   template: `
-    <form name="login" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.form.value)">
-      <div class="form-group" *ngFor="let fi of formInputs">
+    <form novalidate name="login" (ngSubmit)="onSubmit(formState.loginForm.value)" [ngrxFormState]="formState">
+      <div class="form-group" *ngFor="let fi of form">
         <label for="{{fi.id}}">{{fi.value}}</label>
         <input id="{{fi.id}}"
+               [ngrxFormControlState]="formState.loginForm.controls[fi.name]"
                type="{{fi.type}}"
                class="form-control"
-               placeholder="{{fi.value}}"
+               placeholder="{{fi.placeholder}}"
                name="{{fi.name}}"
-               [(ngModel)]="login[fi.name]"
-               #name="ngModel"
-               pattern="{{(fi.name === 'email' ? emailPattern : null)}}"
-               required />
+               [(ngModel)]="formState.loginForm.value[fi.name]" />
 
-        <div *ngIf="name.invalid && (name.dirty || name.touched)">
-          <small [hidden]="!name.errors.required">
-            {{fi.value}} is required.
+        <div *ngIf="formState.loginForm.controls[fi.name].isInvalid && (formState.loginForm.controls[fi.name].isDirty || formState.loginForm.controls[fi.name].isTouched)">
+          <small [hidden]="!formState.loginForm.controls[fi.name].errors[fi.name]">
+            {{formState.loginForm.controls[fi.name].errors[fi.name]}}
           </small>
-          <small *ngIf="name.errors.pattern">
-            Email should be like john@doe.com
+          <small [hidden]="!formState.loginForm.controls[fi.name].errors.required">
+            {{fi.value}} is required
           </small>
         </div>
 
       </div>
-      <button type="submit" id="login-submit-btn" class="btn btn-primary" [disabled]="!loginForm.form.valid">Login</button>
+      <button type="submit" id="login-submit-btn" class="btn btn-primary" [disabled]="formState.loginForm.isInvalid">Login</button>
       <button id="fb-login-btn" *ngIf="settings.user.auth.facebook.enabled" class="btn btn-primary" (click)="facebookLogin()" )>
         Login with Facebook
       </button>
@@ -46,29 +39,20 @@ interface FormInput {
 })
 export default class LoginForm {
   @Input() public onSubmit: any;
+  @Input() public formState: FormGroupState<LoginFormData>;
+  @Input() public form: FormInput[];
 
   public facebookLogin: any;
   public settings: any;
-  public formInputs: FormInput[];
-  public login: any = {};
-  public emailPattern: any = '^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\\.[a-zA-Z0–9.]+$';
 
   constructor() {
     this.settings = settings;
     this.facebookLogin = this.facebookLoginFn;
-    this.formInputs = this.getForm();
   }
 
   private facebookLoginFn = () => {
     const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
     const serverPort = __DEV__ ? '3000' : process.env.PORT || port;
     window.location.href = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
-  };
-
-  private getForm = (): FormInput[] => {
-    return [
-      { id: 'email-input', name: 'email', value: 'Email', type: 'email', placeholder: 'Email' },
-      { id: 'password-input', name: 'password', value: 'Password', type: 'password', placeholder: 'Password' }
-    ];
   };
 }

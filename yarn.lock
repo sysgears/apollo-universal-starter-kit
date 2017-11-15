@@ -5399,6 +5399,10 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
+ngrx-forms@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ngrx-forms/-/ngrx-forms-1.1.1.tgz#6cd9c5f1159ab2544aa421086f3dba3889db98a8"
+
 ngx-uploader@^4.0.2:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/ngx-uploader/-/ngx-uploader-4.1.0.tgz#0b02e0c0d5b3fbed7b8ebad6e1f8769b34f1ac5c"

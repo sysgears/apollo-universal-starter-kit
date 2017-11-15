@@ -3,7 +3,8 @@ import {
   loginFormReducer,
   reducer,
   registerFormReducer,
-  resetPasswordFormReducer
+  resetPasswordFormReducer,
+  userFormReducer
 } from './reducers';
 
 import Feature from '../connector';
@@ -55,7 +56,8 @@ export default new Feature({
     loginForm: loginFormReducer,
     forgotPasswordForm: forgotPasswordFormReducer,
     registerForm: registerFormReducer,
-    resetPasswordForm: resetPasswordFormReducer
+    resetPasswordForm: resetPasswordFormReducer,
+    userForm: userFormReducer
   },
   middleware: tokenMiddleware,
   afterware: tokenAfterware,

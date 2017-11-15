@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
 import RegisterService from '../containers/Register';
-import { LoginFormData, RegisterFormState } from '../reducers/index';
+import { RegisterFormData, RegisterFormState } from '../reducers/index';
 import { FormInput, InputType } from './UserEditView';
 
 @Component({
@@ -24,7 +24,7 @@ import { FormInput, InputType } from './UserEditView';
 })
 export default class RegisterView {
   public errors: any[];
-  public formState: FormGroupState<LoginFormData>;
+  public formState: FormGroupState<RegisterFormData>;
   public form: FormInput[];
 
   constructor(

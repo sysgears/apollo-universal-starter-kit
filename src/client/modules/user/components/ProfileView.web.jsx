@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { Container, Row, Col, Table } from 'reactstrap';
-import { PageLayout } from '../../common/components/web';
+import { Container, Row, Col, Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
 
 const renderMetaData = () => (
   <Helmet
@@ -34,29 +33,27 @@ const ProfileView = ({ loading, currentUser }) => {
               <Row>
                 <Col>
                   <h1 className="text-center">Profile</h1>
-                  <Table bordered style={{ marginTop: 16 }}>
-                    <tbody>
-                      <tr>
-                        <td>User Name:</td>
-                        <td>{currentUser.username}</td>
-                      </tr>
-                      <tr>
-                        <td>Email:</td>
-                        <td>{currentUser.email}</td>
-                      </tr>
-                      <tr>
-                        <td>Role:</td>
-                        <td>{currentUser.role}</td>
-                      </tr>
-                      {currentUser.profile &&
-                        currentUser.profile.fullName && (
-                          <tr>
-                            <td>Full Name:</td>
-                            <td>{currentUser.profile.fullName}</td>
-                          </tr>
-                        )}
-                    </tbody>
-                  </Table>
+                  <Card>
+                    <CardGroup>
+                      <CardTitle>User Name:</CardTitle>
+                      <CardText>{currentUser.username}</CardText>
+                    </CardGroup>
+                    <CardGroup>
+                      <CardTitle>Email:</CardTitle>
+                      <CardText>{currentUser.email}</CardText>
+                    </CardGroup>
+                    <CardGroup>
+                      <CardTitle>Role:</CardTitle>
+                      <CardText>{currentUser.role}</CardText>
+                    </CardGroup>
+                    {currentUser.profile &&
+                      currentUser.profile.fullName && (
+                        <CardGroup>
+                          <CardTitle>Full Name:</CardTitle>
+                          <CardText>{currentUser.profile.fullName}</CardText>
+                        </CardGroup>
+                      )}
+                  </Card>
                 </Col>
               </Row>
             </Col>

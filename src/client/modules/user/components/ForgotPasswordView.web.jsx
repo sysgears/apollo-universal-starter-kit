@@ -1,12 +1,8 @@
-// Web only component
-
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
-import { Container, Row, Col } from 'reactstrap';
-import { PageLayout } from '../../common/components/web';
+import { Container, Row, Col, PageLayout } from '../../common/components/web';
 import ForgotPasswordForm from '../components/ForgotPasswordForm';
 
 class ForgotPasswordView extends React.Component {

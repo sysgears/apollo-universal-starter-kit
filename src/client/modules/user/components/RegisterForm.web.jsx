@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Container, Row, Col } from 'reactstrap';
-import { Form, RenderField, Button, Alert } from '../../common/components/web';
+import { Container, Row, Col, Form, RenderField, Button, Alert } from '../../common/components/web';
 
 const required = value => (value ? undefined : 'Required');
 

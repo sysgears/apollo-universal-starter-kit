@@ -1,5 +1,3 @@
-// Common react native component - iOS + Android
-
 /*eslint-disable no-unused-vars*/
 // React
 import React from 'react';

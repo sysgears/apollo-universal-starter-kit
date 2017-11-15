@@ -1,13 +1,9 @@
-// Web only component
-
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
-import { Container, Row, Col } from 'reactstrap';
 
-import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
+import { PageLayout, Container, Row, Col, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
 import LoginForm from '../components/LoginForm';
 
 class LoginView extends React.PureComponent {

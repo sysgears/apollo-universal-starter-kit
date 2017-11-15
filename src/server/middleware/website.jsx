@@ -15,6 +15,7 @@ import path from 'path';
 import Helmet from 'react-helmet';
 import url from 'url';
 import { CookiesProvider } from 'react-cookie';
+import { AppRegistry } from 'react-native';
 
 import createApolloClient from '../../common/createApolloClient';
 import createReduxStore from '../../common/createReduxStore';
@@ -60,7 +61,7 @@ async function renderServerSide(req, res) {
   const store = createReduxStore(initialState, client);
 
   const context = {};
-  const component = (
+  const App = () => (
     <CookiesProvider cookies={req.universalCookies}>
       <Provider store={store}>
         <ApolloProvider client={client}>
@@ -72,7 +73,10 @@ async function renderServerSide(req, res) {
     </CookiesProvider>
   );
 
-  await getDataFromTree(component);
+  AppRegistry.registerComponent('App', () => App);
+  const { element, stylesheets } = AppRegistry.getApplication('App', {});
+
+  await getDataFromTree(element);
 
   if (context.pageNotFound === true) {
     res.status(404);
@@ -81,8 +85,11 @@ async function renderServerSide(req, res) {
   }
 
   const sheet = new ServerStyleSheet();
-  const html = ReactDOMServer.renderToString(sheet.collectStyles(component));
-  const css = sheet.getStyleElement();
+  const html = ReactDOMServer.renderToString(sheet.collectStyles(element));
+  const css = sheet
+    .getStyleElement()
+    .concat(stylesheets)
+    .map((el, idx) => React.cloneElement(el, { key: idx }));
   const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
 
   if (context.url) {

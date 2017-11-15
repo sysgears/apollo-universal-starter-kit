@@ -5,6 +5,7 @@ import { SubmissionError } from 'redux-form';
 
 import { PageLayout, Container, Row, Col, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
 import LoginForm from '../components/LoginForm';
+import settings from '../../../../../settings';
 
 class LoginView extends React.PureComponent {
   onSubmit = login => async values => {
@@ -24,11 +25,11 @@ class LoginView extends React.PureComponent {
 
     const renderMetaData = () => (
       <Helmet
-        title="Login"
+        title={`${settings.app.name} - Login`}
         meta={[
           {
             name: 'description',
-            content: 'Login page'
+            content: `${settings.app.name} - Login page`
           }
         ]}
       />

@@ -4,6 +4,7 @@ import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
 import { Container, Row, Col, PageLayout } from '../../common/components/web';
 import ForgotPasswordForm from '../components/ForgotPasswordForm';
+import settings from '../../../../../settings';
 
 class ForgotPasswordView extends React.Component {
   state = {
@@ -30,11 +31,11 @@ class ForgotPasswordView extends React.Component {
 
     const renderMetaData = () => (
       <Helmet
-        title="Forgot Password"
+        title={`${settings.app.name} - Forgot Password`}
         meta={[
           {
             name: 'description',
-            content: 'Forgot password page'
+            content: `${settings.app.name} - Forgot password page`
           }
         ]}
       />

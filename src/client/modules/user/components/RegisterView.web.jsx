@@ -4,6 +4,7 @@ import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
 import { Container, Row, Col, PageLayout } from '../../common/components/web';
 import RegisterForm from '../components/RegisterForm';
+import settings from '../../../../../settings';
 
 class RegisterView extends React.PureComponent {
   onSubmit = async values => {
@@ -21,11 +22,11 @@ class RegisterView extends React.PureComponent {
 
   renderMetaData = () => (
     <Helmet
-      title="Register"
+      title={`${settings.app.name} - Register`}
       meta={[
         {
           name: 'description',
-          content: 'Register page'
+          content: `${settings.app.name} - Register page`
         }
       ]}
     />

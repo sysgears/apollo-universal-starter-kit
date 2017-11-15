@@ -39,11 +39,11 @@ class UserEditView extends React.PureComponent {
 
   renderMetaData = () => (
     <Helmet
-      title="Edit User"
+      title={`${settings.app.name} - Edit User`}
       meta={[
         {
           name: 'description',
-          content: 'Edit user example page'
+          content: `${settings.app.name} - Edit user example page`
         }
       ]}
     />

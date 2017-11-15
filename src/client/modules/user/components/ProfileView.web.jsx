@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Container, Row, Col, Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
+import settings from '../../../../../settings';
 
 const renderMetaData = () => (
   <Helmet
-    title="Profile"
+    title={`${settings.app.name} - Profile`}
     meta={[
       {
         name: 'description',
-        content: 'Profile page'
+        content: `${settings.app.name} - Profile page`
       }
     ]}
   />

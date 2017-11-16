@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const Button = ({ children, onPress, disabled }) => {
+const Button = ({ children, onPress, disabled, style }) => {
   const { buttonStyle, textStyle } = styles;
 
   return (
-    <TouchableOpacity onPress={onPress} style={buttonStyle} activeOpacity={disabled ? 1 : 0.5}>
+    <TouchableOpacity onPress={onPress} style={[buttonStyle].concat(style || [])} activeOpacity={disabled ? 1 : 0.5}>
       <Text style={textStyle}>{children}</Text>
     </TouchableOpacity>
   );
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
 Button.propTypes = {
   children: PropTypes.node,
   onPress: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  style: PropTypes.any
 };
 
 export default Button;

@@ -2,6 +2,7 @@
 // React
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Platform } from 'react-native';
 
 // Apollo
 import { graphql, compose } from 'react-apollo';
@@ -31,13 +32,20 @@ const LoginWithApollo = compose(
             variables: { input: { email, password } }
           });
 
+          console.log('email:', email, 'pwd:', password, 'result:', login);
+
           if (login.errors) {
             return { errors: login.errors };
           }
 
           const { token, refreshToken } = login.tokens;
-          localStorage.setItem('token', token);
-          localStorage.setItem('refreshToken', refreshToken);
+          if (Platform.OS === 'web') {
+            localStorage.setItem('token', token);
+            localStorage.setItem('refreshToken', refreshToken);
+          } else {
+            await Expo.SecureStore.setItemAsync('token', token);
+            await Expo.SecureStore.setItemAsync('refreshToken', refreshToken);
+          }
 
           if (history) {
             return history.push('/profile');
@@ -46,7 +54,7 @@ const LoginWithApollo = compose(
             return navigation.goBack();
           }
         } catch (e) {
-          console.log(e.graphQLErrors);
+          console.log(e.stack);
         }
       }
     })

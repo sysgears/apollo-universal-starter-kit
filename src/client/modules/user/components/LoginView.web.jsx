@@ -1,14 +1,12 @@
-// Web only component
-
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
-import { Container, Row, Col } from 'reactstrap';
-
+import { LayoutCenter } from '../../common/components';
 import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
+
 import LoginForm from '../components/LoginForm';
+import settings from '../../../../../settings';
 
 class LoginView extends React.PureComponent {
   onSubmit = login => async values => {
@@ -28,11 +26,11 @@ class LoginView extends React.PureComponent {
 
     const renderMetaData = () => (
       <Helmet
-        title="Login"
+        title={`${settings.app.name} - Login`}
         meta={[
           {
             name: 'description',
-            content: 'Login page'
+            content: `${settings.app.name} - Login page`
           }
         ]}
       />
@@ -41,29 +39,18 @@ class LoginView extends React.PureComponent {
     return (
       <PageLayout>
         {renderMetaData()}
-        <Container>
-          <Row>
-            <Col xs={{ size: 6, offset: 3 }}>
-              <Row>
-                <Col>
-                  <h1 className="text-center">Sign In</h1>
-                  <LoginForm onSubmit={this.onSubmit(login)} />
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <Card>
-                    <CardGroup>
-                      <CardTitle>Available logins:</CardTitle>
-                      <CardText>admin@example.com:admin</CardText>
-                      <CardText>user@example.com:user</CardText>
-                    </CardGroup>
-                  </Card>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+        <LayoutCenter>
+          <h1 className="text-center">Sign In</h1>
+          <LoginForm onSubmit={this.onSubmit(login)} />
+          <hr />
+          <Card>
+            <CardGroup>
+              <CardTitle>Available logins:</CardTitle>
+              <CardText>admin@example.com:admin</CardText>
+              <CardText>user@example.com:user</CardText>
+            </CardGroup>
+          </Card>
+        </LayoutCenter>
       </PageLayout>
     );
   }

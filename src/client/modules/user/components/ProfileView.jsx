@@ -1,11 +1,6 @@
-// Common react native component - iOS + Android
-
 /*eslint-disable no-unused-vars*/
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
-
-// React native UI
 import { StyleSheet, Text, View } from 'react-native';
 
 const ProfileView = () => {

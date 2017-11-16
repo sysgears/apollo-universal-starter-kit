@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
 import { PageLayout } from '../../common/components/web';
+import settings from '../../../../../settings';
 
 const onDrop = uploadFile => async ([file]) => {
   const result = await uploadFile(file);
@@ -12,11 +13,11 @@ const onDrop = uploadFile => async ([file]) => {
 const UploadView = ({ uploadFile }) => {
   const renderMetaData = () => (
     <Helmet
-      title="Upload"
+      title={`${settings.app.name} - Upload`}
       meta={[
         {
           name: 'description',
-          content: 'Upload page'
+          content: `${settings.app.name} - Upload page`
         }
       ]}
     />

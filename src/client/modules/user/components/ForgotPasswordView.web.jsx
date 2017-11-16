@@ -1,13 +1,12 @@
-// Web only component
-
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
-import { Container, Row, Col } from 'reactstrap';
+import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
+
 import ForgotPasswordForm from '../components/ForgotPasswordForm';
+import settings from '../../../../../settings';
 
 class ForgotPasswordView extends React.Component {
   state = {
@@ -34,11 +33,11 @@ class ForgotPasswordView extends React.Component {
 
     const renderMetaData = () => (
       <Helmet
-        title="Forgot Password"
+        title={`${settings.app.name} - Forgot Password`}
         meta={[
           {
             name: 'description',
-            content: 'Forgot password page'
+            content: `${settings.app.name} - Forgot password page`
           }
         ]}
       />
@@ -47,21 +46,10 @@ class ForgotPasswordView extends React.Component {
     return (
       <PageLayout>
         {renderMetaData()}
-        <Container>
-          <Row>
-            <Col xs={{ size: 6, offset: 3 }}>
-              <Row>
-                <Col>
-                  <h1 className="text-center">Password Reset</h1>
-                  <ForgotPasswordForm
-                    onSubmit={this.onSubmit({ forgotPassword, onFormSubmitted })}
-                    sent={this.state.sent}
-                  />
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+        <LayoutCenter>
+          <h1 className="text-center">Password Reset</h1>
+          <ForgotPasswordForm onSubmit={this.onSubmit({ forgotPassword, onFormSubmitted })} sent={this.state.sent} />
+        </LayoutCenter>
       </PageLayout>
     );
   }

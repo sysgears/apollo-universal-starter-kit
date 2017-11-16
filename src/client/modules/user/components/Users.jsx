@@ -1,9 +1,4 @@
-// Common react native component - iOS + Android
-
-// React
 import React from 'react';
-
-// React native UI
 import { StyleSheet, Text, View } from 'react-native';
 
 const Users = () => {

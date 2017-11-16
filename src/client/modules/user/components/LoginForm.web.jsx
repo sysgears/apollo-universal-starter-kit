@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import url from 'url';
 import { NavLink, Link } from 'react-router-dom';
-import { Container, Row, Col } from 'reactstrap';
-import { Form, RenderField, Alert, Button } from '../../common/components/web';
+import { Container, Row, Col, Form, RenderField, Alert, Button } from '../../common/components/web';
 
 import settings from '../../../../../settings';
 

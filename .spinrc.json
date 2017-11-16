@@ -18,7 +18,7 @@
       "enabled": false
     },
     "test": {
-      "stack": "server",
+      "stack": ["react-native-web", "server"],
       "roles": ["test"]
     }
   },

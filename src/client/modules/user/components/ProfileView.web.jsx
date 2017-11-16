@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { Container, Row, Col, Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
+import { LayoutCenter } from '../../common/components';
+import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
+
 import settings from '../../../../../settings';
 
 const renderMetaData = () => (
@@ -28,38 +30,30 @@ const ProfileView = ({ loading, currentUser }) => {
     return (
       <PageLayout>
         {renderMetaData()}
-        <Container>
-          <Row>
-            <Col xs={{ size: 6, offset: 3 }}>
-              <Row>
-                <Col>
-                  <h1 className="text-center">Profile</h1>
-                  <Card>
-                    <CardGroup>
-                      <CardTitle>User Name:</CardTitle>
-                      <CardText>{currentUser.username}</CardText>
-                    </CardGroup>
-                    <CardGroup>
-                      <CardTitle>Email:</CardTitle>
-                      <CardText>{currentUser.email}</CardText>
-                    </CardGroup>
-                    <CardGroup>
-                      <CardTitle>Role:</CardTitle>
-                      <CardText>{currentUser.role}</CardText>
-                    </CardGroup>
-                    {currentUser.profile &&
-                      currentUser.profile.fullName && (
-                        <CardGroup>
-                          <CardTitle>Full Name:</CardTitle>
-                          <CardText>{currentUser.profile.fullName}</CardText>
-                        </CardGroup>
-                      )}
-                  </Card>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+        <LayoutCenter>
+          <h1 className="text-center">Profile</h1>
+          <Card>
+            <CardGroup>
+              <CardTitle>User Name:</CardTitle>
+              <CardText>{currentUser.username}</CardText>
+            </CardGroup>
+            <CardGroup>
+              <CardTitle>Email:</CardTitle>
+              <CardText>{currentUser.email}</CardText>
+            </CardGroup>
+            <CardGroup>
+              <CardTitle>Role:</CardTitle>
+              <CardText>{currentUser.role}</CardText>
+            </CardGroup>
+            {currentUser.profile &&
+              currentUser.profile.fullName && (
+                <CardGroup>
+                  <CardTitle>Full Name:</CardTitle>
+                  <CardText>{currentUser.profile.fullName}</CardText>
+                </CardGroup>
+              )}
+          </Card>
+        </LayoutCenter>
       </PageLayout>
     );
   } else {

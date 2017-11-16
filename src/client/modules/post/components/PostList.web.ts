@@ -60,7 +60,7 @@ export default class PostList implements OnInit, OnDestroy {
       });
     });
 
-    this.subsOnUpdate = this.postService.subscribeToPosts(({ postsUpdated: { mutation, node } }: any) => {
+    this.subsOnUpdate = this.postService.subscribeToPosts(({ data: { postsUpdated: { mutation, node } } }: any) => {
       if (mutation === 'CREATED') {
         this.posts = AddPost(this.posts, node);
         this.postService.updateEndCursor(this.postService.getEndCursor() + 1);

@@ -40,22 +40,22 @@ export default class User {
     if (filter) {
       if (has(filter, 'role') && filter.role !== '') {
         queryBuilder.where(function() {
-          this.where('role', filter.role);
+          this.where('u.role', filter.role);
         });
       }
 
       if (has(filter, 'isActive') && filter.isActive !== null) {
         queryBuilder.where(function() {
-          this.where('is_active', filter.isActive);
+          this.where('u.is_active', filter.isActive);
         });
       }
 
       if (has(filter, 'searchText') && filter.searchText !== '') {
         queryBuilder.where(function() {
-          this.where('username', 'like', `%${filter.searchText}%`)
-            .orWhere('email', 'like', `%${filter.searchText}%`)
-            .orWhere('first_name', 'like', `%${filter.searchText}%`)
-            .orWhere('last_name', 'like', `%${filter.searchText}%`);
+          this.where('u.username', 'like', `%${filter.searchText}%`)
+            .orWhere('u.email', 'like', `%${filter.searchText}%`)
+            .orWhere('up.first_name', 'like', `%${filter.searchText}%`)
+            .orWhere('up.last_name', 'like', `%${filter.searchText}%`);
         });
       }
     }

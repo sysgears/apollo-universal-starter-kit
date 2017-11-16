@@ -39,7 +39,9 @@ const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) =>
           dangerouslySetInnerHTML={{
             __html: `window.__APOLLO_STATE__=${serialize(state, {
               isJSON: true
-            })};window.localStorage.setItem('token','${token}');window.localStorage.setItem('refreshToken','${refreshToken}');`
+            })};window.localStorage.setItem('token','${token}');window.localStorage.setItem('refreshToken','${
+              refreshToken
+            }');`
           }}
           charSet="UTF-8"
         />

@@ -42,11 +42,11 @@ if (settings.user.auth.facebook.enabled) {
 
           if (!user) {
             const isActive = true;
-            const [createdUserId] = await User.register({ username: username ? username : displayName, isActive });
-
-            await User.createLocalOuth({
+            const [createdUserId] = await User.register({
+              username: username ? username : displayName,
               email: value,
-              userId: createdUserId
+              password: id,
+              isActive
             });
 
             await User.createFacebookOuth({

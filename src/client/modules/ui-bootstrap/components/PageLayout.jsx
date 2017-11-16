@@ -1,11 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Container } from "reactstrap";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { Container } from 'reactstrap';
 
-import NavBar from "./NavBar";
+import NavBar from './NavBar';
+import settings from '../../../../../settings';
 
-const footerHeight = "40px";
+const footerHeight = '40px';
 
 const Footer = styled.footer`
   position: absolute;
@@ -21,7 +22,7 @@ const PageLayout = ({ children, navBar }) => {
       {navBar !== false && <NavBar />}
       <Container id="content">{children}</Container>
       <Footer>
-        <div className="text-center">&copy; 2017. Example Apollo App.</div>
+        <div className="text-center">&copy; 2017. {settings.app.name}.</div>
       </Footer>
     </section>
   );

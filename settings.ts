@@ -1,5 +1,5 @@
+import 'dotenv/config';
 import * as _ from 'lodash';
-
 import * as settings from './config';
 
 interface AppSettings {
@@ -8,6 +8,8 @@ interface AppSettings {
   user?: any;
   db?: any;
   mailer?: any;
+  engine?: any;
+  analytics?: any;
 }
 
 const envSettings: AppSettings = {

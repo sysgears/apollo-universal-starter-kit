@@ -2,10 +2,10 @@
 #import "./Comment.graphql"
 
 query post($id: Int!) {
-    post(id: $id) {
-        ... PostInfo
-        comments {
-            ... CommentInfo
-        }
+  post(id: $id) {
+    ... PostInfo
+    comments {
+      ... CommentInfo
     }
+  }
 }

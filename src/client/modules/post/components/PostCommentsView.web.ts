@@ -41,7 +41,7 @@ export default class PostCommentsView implements OnInit, OnDestroy {
   public ngOnInit() {
     this.subsOnUpdate = this.postCommentsService.subscribeToCommentList(
       this.post.id,
-      ({ commentUpdated: { mutation, node, id } }: any) => {
+      ({ data: { commentUpdated: { mutation, node, id } } }: any) => {
         if (mutation === 'CREATED') {
           this.post = AddComment(this.post, node);
         } else if (mutation === 'UPDATED') {

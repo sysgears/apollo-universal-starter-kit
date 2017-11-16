@@ -5,7 +5,7 @@
       "enabled": true
     },
     "web": {
-      "stack": "web",
+      "stack": ["web", "react-native-web"],
       "openBrowser": true,
       "enabled": true
     },
@@ -31,6 +31,7 @@
     "backendUrl": "http://{ip}:8080/graphql",
     "ssr": false,
     "webpackDll": true,
+    "devProxy": true,
     "reactHotLoader": false,
     "persistGraphQL": false,
     "frontendRefreshOnBackendChange": true

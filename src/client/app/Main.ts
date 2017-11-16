@@ -5,7 +5,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
-import '../styles/styles.scss';
+import '../modules/ui-bootstrap/styles/styles.scss';
 
 /* ApolloClient initialization */
 

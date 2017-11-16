@@ -1,8 +1,6 @@
-import * as Knex from 'knex';
-
-export const up = async (knex: Knex, Promise: any) => {
+export const up = async (knex: any, Promise: any) => {
   return Promise.all([
-    knex.schema.createTable('user', table => {
+    knex.schema.createTable('user', (table: any) => {
       table.increments();
       table.string('username').unique();
       table.string('email').unique();
@@ -11,7 +9,7 @@ export const up = async (knex: Knex, Promise: any) => {
       table.boolean('is_active').defaultTo(false);
       table.timestamps(false, true);
     }),
-    knex.schema.createTable('user_profile', table => {
+    knex.schema.createTable('user_profile', (table: any) => {
       table.increments();
       table.string('first_name');
       table.string('last_name');
@@ -23,7 +21,7 @@ export const up = async (knex: Knex, Promise: any) => {
         .onDelete('CASCADE');
       table.timestamps(false, true);
     }),
-    knex.schema.createTable('auth_certificate', table => {
+    knex.schema.createTable('auth_certificate', (table: any) => {
       table.increments();
       table.string('serial').unique();
       table
@@ -34,7 +32,7 @@ export const up = async (knex: Knex, Promise: any) => {
         .onDelete('CASCADE');
       table.timestamps(false, true);
     }),
-    knex.schema.createTable('auth_facebook', table => {
+    knex.schema.createTable('auth_facebook', (table: any) => {
       table.increments();
       table.string('fb_id').unique();
       table.string('display_name');
@@ -49,7 +47,7 @@ export const up = async (knex: Knex, Promise: any) => {
   ]);
 };
 
-export const down = async (knex: Knex, Promise: any) => {
+export const down = async (knex: any, Promise: any) => {
   return Promise.all([
     knex.schema.dropTable('auth_certificate'),
     knex.schema.dropTable('auth_facebook'),

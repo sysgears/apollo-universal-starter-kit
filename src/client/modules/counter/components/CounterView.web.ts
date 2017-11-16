@@ -36,7 +36,7 @@ export default class CounterView implements OnInit, OnDestroy {
   constructor(private counterService: CounterService, private store: Store<any>, private ngZone: NgZone) {}
 
   public ngOnInit(): void {
-    this.subsOnUpdate = this.counterService.subscribeToCount(({ counterUpdated }: any) => {
+    this.subsOnUpdate = this.counterService.subscribeToCount(({ data: { counterUpdated } }: any) => {
       this.ngZone.run(() => {
         this.counter = counterUpdated;
       });

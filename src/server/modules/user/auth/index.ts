@@ -6,7 +6,10 @@ import FieldError from '../../../../common/FieldError';
 import log from '../../../../common/log';
 
 export const createTokens = async (user: any, secret: string, refreshSecret: string) => {
-  const createToken = jwt.sign({ user: pick(user, ['id', 'username', 'role']) } as any, secret, { expiresIn: '1m' });
+  const tokenUser: any = pick(user, ['id', 'username', 'role']);
+  tokenUser.fullName = user.firstName ? `${user.firstName} ${user.lastName}` : null;
+
+  const createToken = jwt.sign({ user: tokenUser }, secret, { expiresIn: '1m' });
 
   const createRefreshToken = jwt.sign({ user: user.id } as any, refreshSecret, { expiresIn: '7d' });
 

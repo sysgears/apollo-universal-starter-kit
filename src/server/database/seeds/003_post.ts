@@ -1,8 +1,6 @@
-import * as Knex from 'knex';
-
 import truncateTables from '../../../common/db';
 
-export const seed = async (knex: Knex, Promise: any) => {
+export const seed = async (knex: any, Promise: any) => {
   await truncateTables(knex, Promise, ['post', 'comment']);
 
   await Promise.all(

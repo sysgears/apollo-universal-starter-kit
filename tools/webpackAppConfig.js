@@ -40,6 +40,7 @@ const ios = {
 
 const dependencyPlatforms = {
   antd: 'web',
+  'apollo-engine': 'server',
   bcryptjs: 'server',
   'body-parser': 'server',
   bootstrap: 'web',
@@ -59,6 +60,7 @@ const dependencyPlatforms = {
   knex: 'server',
   mysql2: 'server',
   nodemailer: 'server',
+  opencollective: 'server',
   persistgraphql: ['server', 'web'],
   'performance-now': 'server',
   pg: 'server',

@@ -1,5 +1,5 @@
 /*eslint-disable no-unused-vars*/
-export default pubsub => ({
+export default (pubsub: any) => ({
   Query: {},
   Mutation: {},
   Subscription: {}

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
 import { PageLayout } from '../../common/components/web';
+
 import ResetPasswordForm from '../components/ResetPasswordForm';
 import settings from '../../../../../settings';
 

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
-
 import { LayoutCenter } from '../../common/components';
 import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
+
 import LoginForm from '../components/LoginForm';
 import settings from '../../../../../settings';
 

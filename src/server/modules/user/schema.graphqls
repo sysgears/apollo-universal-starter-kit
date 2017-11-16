@@ -157,4 +157,11 @@ input ResetPasswordInput {
 }
 
 extend type Subscription {
+  usersUpdated: UpdateUserPayload
+}
+
+type UpdateUserPayload {
+  mutation: String!
+  id: Int!
+  node: User,
 }

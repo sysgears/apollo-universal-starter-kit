@@ -7,6 +7,8 @@ import settings from '../../../../settings';
 import FieldError from '../../../common/FieldError';
 import { refreshTokens, tryLogin } from './auth/index';
 
+const USERS_SUBSCRIPTION = 'users_subscription';
+
 export interface AuthInput {
   email?: string;
   password?: string;
@@ -232,6 +234,13 @@ export default (pubsub: PubSub) => ({
             });
           }
 
+          pubsub.publish(USERS_SUBSCRIPTION, {
+            usersUpdated: {
+              mutation: 'CREATED',
+              node: user
+            }
+          });
+
           return { user };
         } catch (e) {
           return { errors: e };
@@ -270,6 +279,13 @@ export default (pubsub: PubSub) => ({
 
           const user = await context.User.getUser(args.input.id);
 
+          pubsub.publish(USERS_SUBSCRIPTION, {
+            usersUpdated: {
+              mutation: 'UPDATED',
+              node: user
+            }
+          });
+
           return { user };
         } catch (e) {
           return { errors: e };
@@ -296,6 +312,13 @@ export default (pubsub: PubSub) => ({
 
           const isDeleted = await context.User.deleteUser(args.id);
           if (isDeleted) {
+            pubsub.publish(USERS_SUBSCRIPTION, {
+              usersUpdated: {
+                mutation: 'DELETED',
+                node: user
+              }
+            });
+
             return { user };
           } else {
             e.setError('delete', 'Could not delete user. Please try again later.');
@@ -366,5 +389,9 @@ export default (pubsub: PubSub) => ({
       }
     }
   },
-  Subscription: {}
+  Subscription: {
+    usersUpdated: {
+      subscribe: () => pubsub.asyncIterator(USERS_SUBSCRIPTION)
+    }
+  }
 });

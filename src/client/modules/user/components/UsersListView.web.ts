@@ -2,7 +2,7 @@ import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
-import UsersListService from '../containers/UsersList';
+import UsersListService, { AddUser, DeleteUser, UpdateUser } from '../containers/UsersList';
 import { UserOrderBy } from '../reducers';
 
 @Component({
@@ -56,6 +56,7 @@ export default class UsersListView implements OnInit, OnDestroy {
   public users: any = [];
   private subsOnStore: Subscription;
   private subsOnLoad: Subscription;
+  private subsOnUpdate: Subscription;
   private subsOnDelete: Subscription;
 
   constructor(private store: Store<any>, private usersListService: UsersListService, private ngZone: NgZone) {}
@@ -68,6 +69,20 @@ export default class UsersListView implements OnInit, OnDestroy {
       this.orderBy = orderBy;
       this.fetchUsers(orderBy, searchText, role, isActive);
     });
+
+    this.subsOnUpdate = this.usersListService.subscribeToUsers(
+      ({ data: { usersUpdated: { mutation, node } } }: any) => {
+        if (mutation === 'CREATED') {
+          this.users = AddUser(this.users, node);
+        } else if (mutation === 'UPDATED') {
+          this.users = UpdateUser(this.users, node);
+        } else if (mutation === 'DELETED') {
+          this.users = DeleteUser(this.users, node.id);
+        }
+      }
+    );
+
+    this.usersListService.updateSubscription(this.subsOnUpdate);
   }
 
   public ngOnDestroy(): void {

@@ -1,0 +1,10 @@
+#import "./User.graphql"
+
+subscription onUserUpdated {
+    usersUpdated {
+        mutation
+        node {
+            ... UserInfo
+        }
+    }
+}

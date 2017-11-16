@@ -37,7 +37,7 @@ class Counter extends React.Component {
     this.subscription = subscribeToMore({
       document: COUNTER_SUBSCRIPTION,
       variables: {},
-      updateQuery: (prev, { subscriptionData: { counterUpdated: { amount } } }) => {
+      updateQuery: (prev, { subscriptionData: { data: { counterUpdated: { amount } } } }) => {
         return update(prev, {
           counter: {
             amount: {

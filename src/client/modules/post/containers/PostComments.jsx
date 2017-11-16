@@ -68,7 +68,7 @@ class PostComments extends React.Component {
     this.subscription = subscribeToMore({
       document: COMMENT_SUBSCRIPTION,
       variables: { postId },
-      updateQuery: (prev, { subscriptionData: { commentUpdated: { mutation, id, node } } }) => {
+      updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
         let newResult = prev;
 
         if (mutation === 'CREATED') {

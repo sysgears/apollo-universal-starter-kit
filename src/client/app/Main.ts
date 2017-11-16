@@ -32,7 +32,7 @@ const fetch = createApolloFetch({
 fetch.batchUse(({ requests, options }, next) => {
   try {
     options.credentials = 'include';
-    options.headers = options.headers || {};
+    options.headers = options.headers || new Headers();
     for (const middleware of modules.middlewares) {
       for (const req of requests) {
         middleware(req, options);

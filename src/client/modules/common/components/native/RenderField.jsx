@@ -4,11 +4,10 @@ import { StyleSheet, TextInput } from 'react-native';
 
 const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
   const { inputText, errorField } = styles;
+  console.log('inputProps:', inputProps);
 
   return (
     <TextInput
-      autoCapitalize="none"
-      autoCorrect={false}
       selectionColor="#ff5722"
       underlineColorAndroid="#888"
       onChangeText={input.onChange}

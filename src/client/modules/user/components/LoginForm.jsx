@@ -11,8 +11,26 @@ const LoginForm = ({ handleSubmit, valid, onSubmit }) => {
   return (
     <View style={styles.form}>
       <Text style={styles.title}>Sign In</Text>
-      <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
-      <Field name="password" component={RenderField} type="password" label="Password" validate={required} />
+      <Field
+        autoCapitalize="none"
+        autoCorrect={false}
+        name="email"
+        component={RenderField}
+        type="email"
+        keyboardType="email-address"
+        label="Email"
+        validate={required}
+      />
+      <Field
+        autoCapitalize="none"
+        autoCorrect={false}
+        name="password"
+        component={RenderField}
+        type="password"
+        secureTextEntry={true}
+        label="Password"
+        validate={required}
+      />
       <Button style={styles.submit} onPress={handleSubmit(onSubmit)} disabled={valid}>
         Sign In
       </Button>

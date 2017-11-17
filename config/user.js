@@ -16,7 +16,7 @@ export default {
     facebook: {
       clientID: process.env.FACEBOOK_CLIENTID,
       clientSecret: process.env.FACEBOOK_CLIENTSECRET,
-      enabled: false
+      enabled: true
     }
   }
 };

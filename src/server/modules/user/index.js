@@ -17,7 +17,7 @@ const SECRET = settings.user.secret;
 
 const User = new UserDAO();
 
-if (settings.user.auth.facebook.enabled) {
+if (settings.user.auth.facebook.enabled && settings.user.auth.facebook.clientID) {
   passport.use(
     new FacebookStrategy(
       {
@@ -135,7 +135,7 @@ export default new Feature({
       app.get('/confirmation/:token', confirmMiddleware(SECRET, User, jwt));
     }
 
-    if (settings.user.auth.facebook.enabled) {
+    if (settings.user.auth.facebook.enabled && settings.user.auth.facebook.clientID) {
       app.use(passport.initialize());
 
       app.get('/auth/facebook', passport.authenticate('facebook'));

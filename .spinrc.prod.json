@@ -2,7 +2,7 @@
   "builders": {
     "server": {
       "stack": ["server", "react-native-web"],
-      "enabled": false
+      "enabled": true
     },
     "web": {
       "stack": ["web", "react-native-web"],
@@ -11,7 +11,7 @@
     },
     "android": {
       "stack": ["react-native", "android"],
-      "enabled": false
+      "enabled": true
     },
     "ios": {
       "stack": ["react-native", "ios"],
@@ -29,7 +29,7 @@
     "overridesConfig": "tools/webpackAppConfig.js",
     "stack": ["apollo", "react", "styled-components", "sass", "less", "es6", "tcomb", "webpack"],
     "backendUrl": "https://apollo-universal-starter-kit.herokuapp.com/graphql",
-    "ssr": false,
+    "ssr": true,
     "webpackDll": true,
     "devProxy": true,
     "reactHotLoader": false,

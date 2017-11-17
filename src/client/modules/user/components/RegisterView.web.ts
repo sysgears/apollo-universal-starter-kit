@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import { FormInput, InputType } from '../../ui-bootstrap/components/Form';
 import RegisterService from '../containers/Register';
 import { RegisterFormData, RegisterFormState } from '../reducers/index';
-import { FormInput, InputType } from './UserEditView';
 
 @Component({
   selector: 'register-view',
@@ -18,7 +18,12 @@ import { FormInput, InputType } from './UserEditView';
         </div>
       </div>
 
-      <register-form [onSubmit]="onSubmit" [formState]="formState" [form]="form"></register-form>
+      <ausk-form [onSubmit]="onSubmit"
+                 [formName]="'registerForm'"
+                 [formState]="formState"
+                 [form]="form"
+                 [btnName]="'Register'">
+      </ausk-form>
     </div>
   `
 })

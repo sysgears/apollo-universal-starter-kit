@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import { FormInput, InputType } from '../../ui-bootstrap/components/Form';
 import ForgotPasswordService from '../containers/ForgotPassword';
 import { ForgotPasswordFormData, ForgotPasswordFormState, ResetForgotPasswordFormAction } from '../reducers/index';
-import { FormInput, InputType } from './UserEditView';
 
 @Component({
   selector: 'forgot-password-view',
@@ -11,13 +11,23 @@ import { FormInput, InputType } from './UserEditView';
     <div id="content" class="container">
       <h1>Forgot password!</h1>
 
+      <div *ngIf="sent" class="alert alert-success">
+        <div>Reset password instructions have been emailed to you.</div>
+      </div>
+
       <div *ngIf="errors">
         <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
           {{error.message}}
         </div>
       </div>
 
-      <forgot-password-form [onSubmit]="onSubmit" [sent]="sent" [submitting]="submitting" [form]="form" [formState]="formState"></forgot-password-form>
+      <ausk-form [onSubmit]="onSubmit"
+                 [submitting]="submitting"
+                 [formName]="'forgotPasswordForm'"
+                 [form]="form"
+                 [formState]="formState"
+                 [btnName]="'Send Reset Instructions'">
+      </ausk-form>
     </div>
   `
 })

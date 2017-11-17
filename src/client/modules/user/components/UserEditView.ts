@@ -4,26 +4,9 @@ import { Store } from '@ngrx/store';
 import { assign, pick } from 'lodash';
 import { FormGroupState } from 'ngrx-forms';
 import settings from '../../../../../settings';
+import { FormInput, InputType } from '../../ui-bootstrap/components/Form';
 import UserEditService from '../containers/UserEdit';
 import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } from '../reducers/index';
-
-export enum InputType {
-  INPUT = 0,
-  SELECTOR = 1,
-  RADIO_BUTTON = 2
-}
-
-export interface FormInput {
-  id: string;
-  name: string;
-  value: string;
-  type?: string;
-  placeholder?: string;
-  inputType: InputType;
-  options?: any[];
-  minLength?: number;
-  required?: boolean;
-}
 
 @Component({
   selector: 'users-edit-view',
@@ -38,7 +21,13 @@ export interface FormInput {
         </div>
       </div>
 
-      <user-form [onSubmit]="onSubmit" [formState]="formState" [loading]="loading" [form]="form"></user-form>
+      <ausk-form [onSubmit]="onSubmit"
+                 [formName]="'userForm'"
+                 [formState]="formState"
+                 [loading]="loading"
+                 [form]="form"
+                 [btnName]="'Save'">
+      </ausk-form>
     </div>
   `
 })

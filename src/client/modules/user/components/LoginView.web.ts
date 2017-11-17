@@ -5,8 +5,10 @@ import { Router } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import * as url from 'url';
+import settings from '../../../../../settings';
+import { FormInput, InputType } from '../../ui-bootstrap/components/Form';
 import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers';
-import { FormInput, InputType } from './UserEditView';
 
 @Component({
   selector: 'login-view',
@@ -20,7 +22,17 @@ import { FormInput, InputType } from './UserEditView';
         </div>
       </div>
 
-      <login-form [onSubmit]="onSubmit" [formState]="formState" [form]="form"></login-form>
+      <ausk-form [onSubmit]="onSubmit"
+                 [formName]="'loginForm'"
+                 [formState]="formState"
+                 [form]="form"
+                 [btnName]="'Login'">
+      </ausk-form>
+
+      <button id="fb-login-btn" *ngIf="settings.user.auth.facebook.enabled" class="btn btn-primary" (click)="facebookLogin()" )>
+        Login with Facebook
+      </button>
+
       <a routerLink="/forgot-password">Forgot your password?</a>
       <hr/>
       <div class="card">
@@ -37,12 +49,16 @@ export default class LoginView {
   public errors: any[];
   public formState: FormGroupState<LoginFormData>;
   public form: FormInput[];
+  public facebookLogin: any;
+  public settings: any;
 
   constructor(private loginService: LoginService, private router: Router, private store: Store<LoginFormState>) {
     this.form = this.createForm();
     store.select(s => s.loginForm).subscribe((res: any) => {
       this.formState = res;
     });
+    this.settings = settings;
+    this.facebookLogin = this.facebookLoginFn;
   }
 
   public onSubmit = (loginInputs: any) => {
@@ -60,6 +76,12 @@ export default class LoginView {
       this.store.dispatch(new ResetLoginFormAction());
       this.router.navigateByUrl('profile');
     });
+  };
+
+  private facebookLoginFn = () => {
+    const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
+    const serverPort = __DEV__ ? '3000' : process.env.PORT || port;
+    window.location.href = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
   };
 
   private createForm = (): FormInput[] => {

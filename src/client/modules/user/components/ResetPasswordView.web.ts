@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import { FormInput, InputType } from '../../ui-bootstrap/components/Form';
 import ResetPasswordService from '../containers/ResetPassword';
 import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
-import { FormInput, InputType } from './UserEditView';
 
 @Component({
   selector: 'reset-password-view',
@@ -18,7 +18,13 @@ import { FormInput, InputType } from './UserEditView';
         </div>
       </div>
 
-      <reset-password-form [onSubmit]="onSubmit" [sent]="sent" [submitting]="submitting" [formState]="formState" [form]="form"></reset-password-form>
+      <ausk-form [onSubmit]="onSubmit"
+                 [submitting]="submitting"
+                 [formName]="'resetPasswordForm'"
+                 [formState]="formState"
+                 [form]="form"
+                 [btnName]="'Reset Password'">
+      </ausk-form>
     </div>
   `
 })

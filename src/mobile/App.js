@@ -29,10 +29,12 @@ const store = createStore(
   {} // initial state
 );
 
-const { protocol, pathname, port } = url.parse(__BACKEND_URL__);
+const { protocol, hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
 const getApiUri = expUri =>
-  expUri ? `${protocol}//${url.parse(expUri).hostname}:${port}${pathname}` : __BACKEND_URL__;
+  expUri && hostname === 'localhost'
+    ? `${protocol}//${url.parse(expUri).hostname}:${port}${pathname}`
+    : __BACKEND_URL__;
 
 const createApolloClientAsync = async expUri => {
   const uri = getApiUri(expUri);

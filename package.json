@@ -29,6 +29,10 @@
     "*.{js,jsx,json}": [
       "eslint --fix",
       "git add"
+    ],
+    "*.graphql": [
+      "prettier --parser graphql --write",
+      "git add"
     ]
   },
   "repository": {

@@ -18,6 +18,9 @@ If you are using Apollo v1 please use [starter kit from `apollo1` branch](https:
 ## Hot Code Reload demo
 ![screencast](https://user-images.githubusercontent.com/1259926/27387579-c6799ada-56a1-11e7-93fc-d08e9970640d.gif)
 
+## Mobile app demo
+Checkout our [Mobile App Demo](https://expo.io/@sysgears/apollo-universal-starter-kit)
+
 ## Getting Started
 
 1. Clone starter kit locally.
@@ -395,6 +398,8 @@ For more details refer to [Expo Build standalone apps documentation], but use `y
 1. Add your app to Heroku
 1. Allow Heroku to install build time dependencies from the devDependencies in `package.json`:
    `Settings -> Config Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
+1. Add `EXP_USERNAME` and `EXP_PASSWORD` config variables there as well. They will be used to publish
+mobile Expo Client applications
 1. Deploy your app on Heroku
 
 ### Heroku Demo

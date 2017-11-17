@@ -1,25 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput, Text, View } from 'react-native';
 
 const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
-  const { inputText, errorField } = styles;
-  console.log('inputProps:', inputProps);
+  const { text, inputText, errorField } = styles;
 
   return (
-    <TextInput
-      selectionColor="#ff5722"
-      underlineColorAndroid="#888"
-      onChangeText={input.onChange}
-      value={input.value}
-      placeholder={label}
-      style={[inputText, touched && error && errorField]}
-      {...inputProps}
-    />
+    <View>
+      <Text style={text}>{label}</Text>
+      <TextInput
+        selectionColor="#ff5722"
+        underlineColorAndroid="#888"
+        onChangeText={input.onChange}
+        value={input.value}
+        placeholder={label}
+        style={[inputText, touched && error && errorField]}
+        {...inputProps}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  text: {
+    fontSize: 16,
+    paddingTop: 10
+  },
   inputText: {
     backgroundColor: '#FFF',
     color: '#000',

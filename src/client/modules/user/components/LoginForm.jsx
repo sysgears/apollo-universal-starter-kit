@@ -19,6 +19,7 @@ const LoginForm = ({ handleSubmit, valid, onSubmit }) => {
         type="email"
         keyboardType="email-address"
         label="Email"
+        placeholder="Type Your Email"
         validate={required}
       />
       <Field
@@ -29,6 +30,7 @@ const LoginForm = ({ handleSubmit, valid, onSubmit }) => {
         type="password"
         secureTextEntry={true}
         label="Password"
+        placeholder="Type Your Password"
         validate={required}
       />
       <Button style={styles.submit} onPress={handleSubmit(onSubmit)} disabled={valid}>

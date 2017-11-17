@@ -26,6 +26,11 @@ declare module '*.json' {
   export = value;
 }
 
+declare module '*.scss' {
+  const value: any;
+  export = value;
+}
+
 declare module 'passport-facebook-ext' {
   import { StrategyOption } from 'passport-facebook';
 

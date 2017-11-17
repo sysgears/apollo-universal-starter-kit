@@ -1,5 +1,5 @@
-import React from 'react';
-import { render as reactRender, hydrate } from 'react-dom';
+import { AppRegistry } from 'react-native';
+
 // Virtual module, see webpack-virtual-modules usage in webpack.run.js
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import 'backend_reload';
@@ -9,13 +9,15 @@ import log from '../common/log';
 
 const root = document.getElementById('content');
 
-const render = __SSR__ ? hydrate : reactRender;
+AppRegistry.registerComponent('App', () => Main);
+
+let frontendReloadCount = 0;
+AppRegistry.runApplication('App', {
+  initialProps: { key: frontendReloadCount },
+  rootTag: root
+});
 
 if (__DEV__) {
-  let frontendReloadCount = 0;
-
-  render(<Main key={frontendReloadCount} />, root);
-
   if (module.hot) {
     module.hot.accept();
 
@@ -29,12 +31,13 @@ if (__DEV__) {
         log.debug('Updating front-end');
         frontendReloadCount = (frontendReloadCount || 0) + 1;
 
-        render(<Main key={frontendReloadCount} />, root);
+        AppRegistry.runApplication('App', {
+          initialProps: { key: frontendReloadCount },
+          rootTag: root
+        });
       } catch (err) {
         log(err.stack);
       }
     });
   }
-} else {
-  render(<Main />, root);
 }

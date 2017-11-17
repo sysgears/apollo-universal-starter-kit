@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { PageLayout } from '../../common/components/web';
+import { LayoutCenter } from '../../common/components';
+import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
+
+import settings from '../../../../../settings';
 
 const renderMetaData = () => (
   <Helmet
-    title="Profile"
+    title={`${settings.app.name} - Profile`}
     meta={[
       {
         name: 'description',
-        content: 'Profile page'
+        content: `${settings.app.name} - Profile page`
       }
     ]}
   />
@@ -27,11 +30,30 @@ const ProfileView = ({ loading, currentUser }) => {
     return (
       <PageLayout>
         {renderMetaData()}
-        <h2>Profile</h2>
-        <p>username: {currentUser.username}</p>
-        <p>email: {currentUser.email}</p>
-        <p>role: {currentUser.role}</p>
-        {currentUser.profile && currentUser.profile.fullName && <p>name: {currentUser.profile.fullName}</p>}
+        <LayoutCenter>
+          <h1 className="text-center">Profile</h1>
+          <Card>
+            <CardGroup>
+              <CardTitle>User Name:</CardTitle>
+              <CardText>{currentUser.username}</CardText>
+            </CardGroup>
+            <CardGroup>
+              <CardTitle>Email:</CardTitle>
+              <CardText>{currentUser.email}</CardText>
+            </CardGroup>
+            <CardGroup>
+              <CardTitle>Role:</CardTitle>
+              <CardText>{currentUser.role}</CardText>
+            </CardGroup>
+            {currentUser.profile &&
+              currentUser.profile.fullName && (
+                <CardGroup>
+                  <CardTitle>Full Name:</CardTitle>
+                  <CardText>{currentUser.profile.fullName}</CardText>
+                </CardGroup>
+              )}
+          </Card>
+        </LayoutCenter>
       </PageLayout>
     );
   } else {

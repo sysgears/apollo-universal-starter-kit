@@ -1,12 +1,12 @@
-// Web only component
-
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
+import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
+
 import RegisterForm from '../components/RegisterForm';
+import settings from '../../../../../settings';
 
 class RegisterView extends React.PureComponent {
   onSubmit = async values => {
@@ -24,11 +24,11 @@ class RegisterView extends React.PureComponent {
 
   renderMetaData = () => (
     <Helmet
-      title="Register"
+      title={`${settings.app.name} - Register`}
       meta={[
         {
           name: 'description',
-          content: 'Register page'
+          content: `${settings.app.name} - Register page`
         }
       ]}
     />
@@ -38,8 +38,10 @@ class RegisterView extends React.PureComponent {
     return (
       <PageLayout>
         {this.renderMetaData()}
-        <h1>Register page!</h1>
-        <RegisterForm onSubmit={this.onSubmit} />
+        <LayoutCenter>
+          <h1 className="text-center">Sign Up</h1>
+          <RegisterForm onSubmit={this.onSubmit} />
+        </LayoutCenter>
       </PageLayout>
     );
   }

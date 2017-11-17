@@ -66,11 +66,7 @@ export default new Feature({
       <AuthLogin>
         <span className="nav-link">
           <NavLink to="/login" activeClassName="active">
-            Login
-          </NavLink>{' '}
-          /{' '}
-          <NavLink to="/register" activeClassName="active">
-            Register
+            Sign In
           </NavLink>
         </span>
       </AuthLogin>

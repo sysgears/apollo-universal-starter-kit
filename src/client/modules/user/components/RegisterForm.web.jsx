@@ -38,10 +38,12 @@ const RegisterForm = ({ handleSubmit, submitting, onSubmit, error }) => {
         label="Password Confirmation"
         validate={[required, minLength5]}
       />
-      {error && <Alert color="error">{error}</Alert>}
-      <Button color="primary" type="submit" disabled={submitting}>
-        Register
-      </Button>
+      <div className="text-center">
+        {error && <Alert color="error">{error}</Alert>}
+        <Button color="primary" type="submit" disabled={submitting}>
+          Register
+        </Button>
+      </div>
     </Form>
   );
 };

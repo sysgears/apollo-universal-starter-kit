@@ -5,15 +5,16 @@ import { PageLayout, Button } from '../../common/components/web';
 
 import UsersFilter from '../containers/UsersFilter';
 import UsersList from '../containers/UsersList';
+import settings from '../../../../../settings';
 
 const Users = () => {
   const renderMetaData = () => (
     <Helmet
-      title="Users"
+      title={`${settings.app.name} - Users`}
       meta={[
         {
           name: 'description',
-          content: 'Users page'
+          content: `${settings.app.name} - Users page`
         }
       ]}
     />

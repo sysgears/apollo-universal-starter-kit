@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
 import { PageLayout } from '../../common/components/web';
+
 import ResetPasswordForm from '../components/ResetPasswordForm';
+import settings from '../../../../../settings';
 
 class ResetPasswordView extends React.Component {
   onSubmit = resetPassword => async values => {
@@ -26,11 +28,11 @@ class ResetPasswordView extends React.Component {
 
     const renderMetaData = () => (
       <Helmet
-        title="Reset Password"
+        title={`${settings.app.name} - Reset Password`}
         meta={[
           {
             name: 'description',
-            content: 'Reset password page'
+            content: `${settings.app.name} - Reset password page`
           }
         ]}
       />

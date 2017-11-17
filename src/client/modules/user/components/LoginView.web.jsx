@@ -1,14 +1,12 @@
-// Web only component
-
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { Link } from 'react-router-dom';
 import { SubmissionError } from 'redux-form';
-
+import { LayoutCenter } from '../../common/components';
 import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
+
 import LoginForm from '../components/LoginForm';
+import settings from '../../../../../settings';
 
 class LoginView extends React.PureComponent {
   onSubmit = login => async values => {
@@ -28,11 +26,11 @@ class LoginView extends React.PureComponent {
 
     const renderMetaData = () => (
       <Helmet
-        title="Login"
+        title={`${settings.app.name} - Login`}
         meta={[
           {
             name: 'description',
-            content: 'Login page'
+            content: `${settings.app.name} - Login page`
           }
         ]}
       />
@@ -41,17 +39,18 @@ class LoginView extends React.PureComponent {
     return (
       <PageLayout>
         {renderMetaData()}
-        <h1>Login page!</h1>
-        <LoginForm onSubmit={this.onSubmit(login)} />
-        <Link to="/forgot-password">Forgot your password?</Link>
-        <hr />
-        <Card>
-          <CardGroup>
-            <CardTitle>Available logins:</CardTitle>
-            <CardText>admin@example.com:admin</CardText>
-            <CardText>user@example.com:user</CardText>
-          </CardGroup>
-        </Card>
+        <LayoutCenter>
+          <h1 className="text-center">Sign In</h1>
+          <LoginForm onSubmit={this.onSubmit(login)} />
+          <hr />
+          <Card>
+            <CardGroup>
+              <CardTitle>Available logins:</CardTitle>
+              <CardText>admin@example.com:admin</CardText>
+              <CardText>user@example.com:user</CardText>
+            </CardGroup>
+          </Card>
+        </LayoutCenter>
       </PageLayout>
     );
   }

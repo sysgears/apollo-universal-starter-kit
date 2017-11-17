@@ -55,7 +55,7 @@ describe('Counter example API works', () => {
       .subscribe({
         next(data) {
           data.should.deep.equal({
-            counterUpdated: { amount: 8, __typename: 'Counter' }
+            data: { counterUpdated: { amount: 8, __typename: 'Counter' } }
           });
           done();
         }

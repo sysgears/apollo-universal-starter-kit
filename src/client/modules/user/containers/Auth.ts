@@ -4,23 +4,24 @@ import LoginService from './Login';
 @Component({
   selector: 'auth-login',
   template: `
-    <li *ngIf="!isAuth" class="nav-item">
+    <menu-item *ngIf="!isAuth" class="nav-item">
       <span class="nav-link">
-        <a aria-current="false" routerLink="/login">Login</a> / <a aria-current="false" routerLink="/register">Register</a>
+        <nav-link [name]="'Login'" [className]="''" [to]="'/login'"></nav-link> /
+        <nav-link [name]="'Register'" [className]="''" [to]="'/register'"></nav-link>
       </span>
-    </li>
-    <li *ngIf="isAuth" class="nav-item">
-      <span class="nav-link">
-        <a href="#" (click)="logout()">Logout</a>
-      </span>
-    </li>
-    <li *ngIf="isAuth" class="nav-item">
-      <span class="nav-link">
+    </menu-item>
+    <menu-item *ngIf="isAuth">
+        <span class="nav-link">
+          <a href="#" (click)="logout()">Logout</a>
+        </span>
+    </menu-item>
+    <menu-item *ngIf="isAuth">
+      <nav-link [name]="profileName" [to]="'/profile'">
         <a href="#" routerLink="/profile" routerLinkActive="active">{{profileName}}</a>
-      </span>
-    </li>
+      </nav-link>
+    </menu-item>
   `,
-  styles: ['li { float: right; display: inline-block; }']
+  styles: ['menu-item { float: right; display: inline-block; }']
 })
 class AuthLogin implements OnInit {
   public isAuth: boolean = false;
@@ -52,11 +53,9 @@ class AuthLogin implements OnInit {
 @Component({
   selector: 'auth-nav',
   template: `
-    <li *ngIf="isAuth" class="nav-item">
-      <span class="nav-link">
-        <a aria-current="false" routerLink="/users" [routerLinkActive]="['active']">Users</a>
-      </span>
-    </li>
+    <menu-item *ngIf="isAuth">
+      <nav-link [name]="'Users'" [to]="'/users'" [className]="'nav-link'"></nav-link>
+    </menu-item>
   `
 })
 class AuthNav implements OnInit {

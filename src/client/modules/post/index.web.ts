@@ -15,9 +15,9 @@ export default new Feature({
   ],
   navItem: [
     `
-      <li class="nav-item">
-        <a class="nav-link" [routerLinkActive]="['active']" aria-current="true" routerLink="/posts">Posts</a>
-      </li>
+      <menu-item>
+        <nav-link [name]="'Posts'" [to]="'/posts'"></nav-link>
+      </menu-item>
     `
   ],
   reducer: { post: reducer }

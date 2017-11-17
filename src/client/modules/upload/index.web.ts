@@ -8,9 +8,9 @@ export default new Feature({
   reducer: { upload: reducer },
   navItem: [
     `
-      <li class="nav-item">
-        <a class="nav-link" [routerLinkActive]="['active']" aria-current="true" routerLink="/upload">Upload</a>
-      </li>
+      <menu-item>
+        <nav-link [name]="'Upload'" [to]="'/upload'"></nav-link>
+      </menu-item>
     `
   ],
   createFetchOptions: constructUploadOptions

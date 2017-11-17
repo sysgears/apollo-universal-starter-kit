@@ -1,4 +1,5 @@
 // eslint-disable-next-line import/prefer-default-export
+// export { default as PageLayout } from './PageLayout';
 // export { default as Button } from './Button';
 // export { default as MenuItem } from './MenuItem';
 // export { default as Form } from './Form';
@@ -21,9 +22,4 @@
 // export { default as Table } from './Table';
 // export { default as ListGroup } from './ListGroup';
 // export { default as ListItem } from './ListItem';
-import MenuItem from './MenuItem';
-import NavBar from './NavBar';
-import NavLink from './NavLink';
-import PageLayout from './PageLayout';
-
-export const BOOTSTRAP_COMPONENTS: any = [PageLayout, MenuItem, NavLink, NavBar];
+export const ANTD_COMPONENTS: any = [];

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
-import modules from '../modules';
+import settings from '../../../../../settings';
+import modules from '../../../modules';
 
 @Component({
   selector: 'nav-bar',
@@ -8,7 +9,9 @@ import modules from '../modules';
     <nav class="navbar navbar-light bg-faded">
       <div class="container">
         <ul class="nav col-md-6 left-side">
-          <a class="navbar-brand active" aria-current="true" routerLink="/">Apollo Starter Kit</a>
+          <menu-item>
+            <nav-link [name]="'${settings.app.name}'" [to]="'/'" [className]="'navbar-brand active'"></nav-link>
+          </menu-item>
           ${modules.navItems}
         </ul>
         <ul class="nav col-md-6 right-side">

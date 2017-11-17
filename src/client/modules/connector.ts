@@ -15,6 +15,7 @@ interface FeatureParams {
   connectionParam?: any;
   createFetchOptions?: any;
   stylesInsert?: any;
+  stylesProvider?: any;
 }
 
 class Feature {
@@ -27,6 +28,7 @@ class Feature {
   public connectionParam: any[];
   public createFetchOptions: any[];
   public stylesInsert: any[];
+  public stylesProvider: any;
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     /* eslint-enable no-unused-vars */
@@ -39,6 +41,7 @@ class Feature {
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
+    this.stylesProvider = combine(arguments, arg => arg.stylesProvider);
   }
 
   get routes() {
@@ -89,6 +92,10 @@ class Feature {
 
   get stylesInserts() {
     return this.stylesInsert;
+  }
+
+  get stylesProviders() {
+    return this.stylesProvider;
   }
 }
 

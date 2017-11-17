@@ -15,9 +15,8 @@ import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgSty
 import 'backend_reload';
 
 import { reducers } from '../common/createReduxStore';
+import uiComponents from '../common/createUiComponents';
 import log from '../common/log';
-import NavBar from './app/NavBar';
-import PageLayout from './app/PageLayout';
 import routes from './app/Routes.web';
 import CounterView from './modules/counter/components/CounterView.web';
 import CounterService from './modules/counter/containers/Counter';
@@ -65,9 +64,8 @@ import { clientProvider, default as Main } from './app/Main';
 
     /* Components */
     // App
-    PageLayout,
-    NavBar,
     PageNotFound,
+    uiComponents(),
     // Counter
     CounterView,
     // Post
@@ -106,7 +104,6 @@ import { clientProvider, default as Main } from './app/Main';
     NgbModule.forRoot(),
     NgUploaderModule,
     NgrxFormsModule,
-    // TODO: Implement @ngrx/store for the whole project
     StoreModule.forRoot(reducers),
     RouterModule.forRoot(routes, {
       useHash: true

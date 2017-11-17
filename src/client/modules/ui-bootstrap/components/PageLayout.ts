@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import '../modules/ui-bootstrap/styles/styles.scss';
+import '../styles/styles.scss';
 
 @Component({
   selector: 'page-layout',

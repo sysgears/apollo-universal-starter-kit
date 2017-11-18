@@ -6,11 +6,12 @@ import { Route, Redirect, NavLink, withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import decode from 'jwt-decode';
 
+import LocalStorage from '../helpers/LocalStorage';
 import log from '../../../../common/log';
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
 
-const checkAuth = (cookies, scope) => {
+const checkAuth = async (cookies, scope) => {
   let token = null;
   let refreshToken = null;
 
@@ -18,9 +19,9 @@ const checkAuth = (cookies, scope) => {
     token = cookies.get('r-token');
     refreshToken = cookies.get('r-refresh-token');
   }
-  if (__CLIENT__ && window.localStorage.getItem('token')) {
-    token = window.localStorage.getItem('token');
-    refreshToken = window.localStorage.getItem('refreshToken');
+  if (__CLIENT__ && (await LocalStorage.getItem('token'))) {
+    token = await LocalStorage.getItem('token');
+    refreshToken = await LocalStorage.getItem('refreshToken');
   }
 
   if (!token || !refreshToken) {
@@ -47,15 +48,15 @@ const checkAuth = (cookies, scope) => {
   return true;
 };
 
-const profileName = cookies => {
+const profileName = async cookies => {
   let token = null;
 
   if (cookies && cookies.get('x-token')) {
     token = cookies.get('x-token');
   }
 
-  if (__CLIENT__ && window.localStorage.getItem('token')) {
-    token = window.localStorage.getItem('token');
+  if (__CLIENT__ && (await LocalStorage.getItem('token'))) {
+    token = await LocalStorage.getItem('token');
   }
 
   if (!token) {
@@ -70,24 +71,65 @@ const profileName = cookies => {
   }
 };
 
-const AuthNav = withCookies(({ children, cookies, scope }) => {
-  return checkAuth(cookies, scope) ? children : null;
-});
+class ProfileName extends React.Component {
+  async componentDidMount() {
+    const { cookies } = this.props;
+    this.setState({ fullName: await profileName(cookies) });
+  }
+
+  render() {
+    return (this.state && this.state.fullName) || '';
+  }
+}
+
+ProfileName.propTypes = {
+  cookies: PropTypes.instanceOf(Cookies)
+};
+
+class CheckAuth extends React.Component {
+  async componentDidMount() {
+    const { cookies, scope } = this.props;
+    this.setState({ auth: await checkAuth(cookies, scope) });
+  }
+
+  render() {
+    const { authorized, nonAuthorized } = this.props;
+
+    if (!this.state) {
+      return null;
+    } else {
+      return this.state.auth ? authorized : nonAuthorized || null;
+    }
+  }
+}
+
+CheckAuth.propTypes = {
+  cookies: PropTypes.instanceOf(Cookies),
+  scope: PropTypes.string,
+  authorized: PropTypes.node,
+  nonAuthorized: PropTypes.node
+};
+
+const AuthNav = withCookies(({ children, cookies, scope }) => (
+  <CheckAuth cookies={cookies} scope={scope} authorized={children} />
+));
 
 AuthNav.propTypes = {
   children: PropTypes.object,
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthLogin = ({ children, cookies, logout }) => {
-  return checkAuth(cookies) ? (
-    <a href="#" onClick={() => logout()} className="nav-link">
-      Logout
-    </a>
-  ) : (
-    children
-  );
-};
+const AuthLogin = ({ children, cookies, logout }) => (
+  <CheckAuth
+    cookies={cookies}
+    authorized={
+      <a href="#" onClick={() => logout()} className="nav-link">
+        Logout
+      </a>
+    }
+    nonAuthorized={children}
+  />
+);
 
 AuthLogin.propTypes = {
   client: PropTypes.instanceOf(ApolloClient),
@@ -116,8 +158,8 @@ const AuthLoginWithApollo = withCookies(
                 // comment out until https://github.com/apollographql/apollo-client/issues/1186 is fixed
                 //await client.resetStore();
 
-                window.localStorage.setItem('token', null);
-                window.localStorage.setItem('refreshToken', null);
+                await LocalStorage.setItem('token', null);
+                await LocalStorage.setItem('refreshToken', null);
 
                 if (history) {
                   return history.push('/');
@@ -136,32 +178,39 @@ const AuthLoginWithApollo = withCookies(
   )
 );
 
-const AuthProfile = withCookies(({ cookies }) => {
-  return checkAuth(cookies) ? (
-    <NavLink to="/profile" className="nav-link" activeClassName="active">
-      {profileName(cookies)}
-    </NavLink>
-  ) : null;
-});
+const AuthProfile = withCookies(({ cookies }) => (
+  <CheckAuth
+    cookies={cookies}
+    authorized={
+      <NavLink to="/profile" className="nav-link" activeClassName="active">
+        <ProfileName cookies={cookies} />
+      </NavLink>
+    }
+  />
+));
 
 AuthProfile.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        checkAuth(cookies, scope) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
-      }
-    />
-  );
-});
+const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }) => (
+  <Route
+    {...rest}
+    render={props => (
+      <CheckAuth
+        cookies={cookies}
+        scope={scope}
+        authorized={<Component {...props} />}
+        nonAuthorized={<Redirect to={{ pathname: '/login' }} />}
+      />
+    )}
+  />
+));
 
 AuthRoute.propTypes = {
   component: PropTypes.func,
-  cookies: PropTypes.instanceOf(Cookies)
+  cookies: PropTypes.instanceOf(Cookies),
+  scope: PropTypes.string
 };
 
 export { AuthNav };

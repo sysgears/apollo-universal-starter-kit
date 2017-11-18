@@ -1,16 +1,11 @@
 /* eslint-disable no-undef */
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Platform } from 'react-native';
-
-// Apollo
 import { graphql, compose } from 'react-apollo';
 
-// Components
 import LoginView from '../components/LoginView';
-
 import LOGIN from '../graphql/Login.graphql';
+import LocalStorage from '../helpers/LocalStorage';
 
 class Login extends React.Component {
   render() {
@@ -39,13 +34,8 @@ const LoginWithApollo = compose(
           }
 
           const { token, refreshToken } = login.tokens;
-          if (Platform.OS === 'web') {
-            localStorage.setItem('token', token);
-            localStorage.setItem('refreshToken', refreshToken);
-          } else {
-            await Expo.SecureStore.setItemAsync('token', token);
-            await Expo.SecureStore.setItemAsync('refreshToken', refreshToken);
-          }
+          await LocalStorage.setItem('token', token);
+          await LocalStorage.setItem('refreshToken', refreshToken);
 
           if (history) {
             return history.push('/profile');

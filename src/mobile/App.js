@@ -13,6 +13,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { LoggingLink } from 'apollo-logger';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { CookiesProvider } from 'react-cookie';
 import ApolloClient from 'apollo-client';
 import url from 'url';
 
@@ -104,11 +105,13 @@ export default class Main extends Component {
   render() {
     if (this.state && this.state.client) {
       return (
-        <Provider store={store}>
-          <ApolloProvider client={this.state.client}>
-            <MainScreenNavigator />
-          </ApolloProvider>
-        </Provider>
+        <CookiesProvider>
+          <Provider store={store}>
+            <ApolloProvider client={this.state.client}>
+              <MainScreenNavigator />
+            </ApolloProvider>
+          </Provider>
+        </CookiesProvider>
       );
     } else {
       return <View />;

@@ -28,8 +28,8 @@ import settings from '../../../settings';
 
 let assetMap;
 
-const { protocol, hostname, port, pathname } = url.parse(__BACKEND_URL__);
-const apiUrl = `${protocol}//${hostname}:${process.env.PORT || port}${pathname}`;
+const { port, pathname } = url.parse(__BACKEND_URL__);
+const apiUrl = `http://localhost:${process.env.PORT || port}${pathname}`;
 
 async function renderServerSide(req, res) {
   // if (__PERSIST_GQL__) {

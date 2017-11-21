@@ -1,1 +1,3 @@
-# GraphQL queries
+fragment $Module$Info on $Module$ {
+  id
+}

@@ -1,3 +1,7 @@
+/* eslint-disable import/no-dynamic-require */
+require('babel-register')({ presets: ['env'], plugins: ['transform-class-properties'] });
+require('babel-polyfill');
+
 const shell = require('shelljs');
 const fs = require('fs');
 
@@ -105,6 +109,36 @@ function deleteFiles(logger, templatePath, module, location) {
   }
 }
 
+function updateSchema(logger, module) {
+  logger.info(`Updating ${module} Schema…`);
+
+  // get fragment file
+  const path = `${__dirname}/../../src/client/modules/${module}/graphql/`;
+  const file = `${module.toCamelCase().capitalize()}.graphql`;
+  const re = /\{([^()]+)\}/g;
+
+  // get module schema
+  const schema = require(`../../src/server/modules/${module}/schema`);
+
+  // regenerate graphql fragment
+  let graphql = '{\n';
+  for (const key of Object.keys(schema[module.toCamelCase().capitalize()].values)) {
+    graphql += `  ${key}\n`;
+  }
+  graphql += '}';
+
+  // override graphql fragment file
+  shell.cd(path);
+  // remove all new lines
+  shell.exec(`tr -d '\n' < ${file} > ${file}.tmp`);
+  // replace content
+  shell.sed('-i', re, graphql, `${file}.tmp`);
+  // remove old file
+  shell.rm(file);
+  // rename tmp file
+  shell.mv(`${file}.tmp`, file);
+}
+
 module.exports = (action, args, options, logger) => {
   const templatePath = `${__dirname}/../templates/module`;
 
@@ -129,5 +163,10 @@ module.exports = (action, args, options, logger) => {
     } else if (action === 'deletemodule') {
       deleteFiles(logger, templatePath, args.module, 'server');
     }
+  }
+
+  // update schema
+  if (action === 'updateschema') {
+    updateSchema(logger, args.module);
   }
 };

@@ -20,6 +20,9 @@ prog
     ['both', 'server', 'client'],
     'both'
   )
-  .action((args, options, logger) => moduleCmd('deletemodule', args, options, logger));
+  .action((args, options, logger) => moduleCmd('deletemodule', args, options, logger))
+  .command('updateschema', 'Update Module Schema')
+  .argument('<module>', 'Module name')
+  .action((args, options, logger) => moduleCmd('updateschema', args, options, logger));
 
 prog.parse(process.argv);

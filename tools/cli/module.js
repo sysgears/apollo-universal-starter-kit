@@ -16,7 +16,7 @@ String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-function copyFiles(logger, templatePath, module, location) {
+function copyFiles(logger, templatePath, module, action, location) {
   logger.info(`Copying ${location} files…`);
 
   // create new module directory
@@ -64,11 +64,15 @@ function copyFiles(logger, templatePath, module, location) {
     // add module to Feature function
     shell.sed('-i', re, `Feature(${module}, ${match[1]})`, 'index.js');
 
+    if (action === 'addcrud' && location === 'server') {
+      console.log('copy database files');
+    }
+
     logger.info(`✔ Module for ${location} successfully created!`);
   }
 }
 
-function deleteFiles(logger, templatePath, module, location) {
+function deleteFiles(logger, templatePath, module, action, location) {
   logger.info(`Deleting ${location} files…`);
 
   const modulePath = `${__dirname}/../../src/${location}/modules/${module}`;
@@ -79,9 +83,6 @@ function deleteFiles(logger, templatePath, module, location) {
 
     // change to destination directory
     shell.cd(`${__dirname}/../../src/${location}/modules/`);
-
-    // add module to Feature function
-    //let ok = shell.sed('-i', `import ${module} from '.\/${module}';`, '', 'index.js');
 
     // get module input data
     const path = `${__dirname}/../../src/${location}/modules/index.js`;
@@ -159,18 +160,18 @@ module.exports = (action, args, options, logger) => {
   // client
   if (location === 'client' || location === 'both') {
     if (action === 'addmodule' || action === 'addcrud') {
-      copyFiles(logger, templatePath, module, 'client');
+      copyFiles(logger, templatePath, module, action, 'client');
     } else if (action === 'deletemodule') {
-      deleteFiles(logger, templatePath, module, 'client');
+      deleteFiles(logger, templatePath, module, action, 'client');
     }
   }
 
   // server
   if (location === 'server' || location === 'both') {
     if (action === 'addmodule' || action === 'addcrud') {
-      copyFiles(logger, templatePath, module, 'server');
+      copyFiles(logger, templatePath, module, action, 'server');
     } else if (action === 'deletemodule') {
-      deleteFiles(logger, templatePath, module, 'server');
+      deleteFiles(logger, templatePath, module, action, 'server');
     }
   }
 

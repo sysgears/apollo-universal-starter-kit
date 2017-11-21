@@ -2,6 +2,7 @@
   "builders": {
     "server": {
       "stack": ["server", "react-native-web"],
+      "backendUrl": "http://localhost:8080/graphql",
       "enabled": true
     },
     "web": {

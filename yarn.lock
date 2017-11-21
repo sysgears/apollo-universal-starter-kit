@@ -10607,9 +10607,9 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.40:
-  version "0.4.40"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.40.tgz#5c7e009df483f454c210e64e1b0e9d80de5f7b13"
+spinjs@^0.4.41:
+  version "0.4.41"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.41.tgz#24401ffc241383a52b78ac3c36e95b73526bfe32"
   dependencies:
     containerized "^1.0.2"
     inquirer "^3.3.0"

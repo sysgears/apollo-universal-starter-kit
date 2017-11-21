@@ -6,19 +6,15 @@ import LoginService from './Login';
   template: `
     <menu-item *ngIf="!isAuth" class="nav-item">
       <span class="nav-link">
-        <nav-link [name]="'Login'" [className]="''" [to]="'/login'"></nav-link> /
-        <nav-link [name]="'Register'" [className]="''" [to]="'/register'"></nav-link>
+        <nav-link [name]="'Login'" [to]="'/login'" [type]="'routerGroup'"></nav-link> /
+        <nav-link [name]="'Register'" [to]="'/register'" [type]="'routerGroup'"></nav-link>
       </span>
     </menu-item>
     <menu-item *ngIf="isAuth">
-        <span class="nav-link">
-          <a href="#" (click)="logout()">Logout</a>
-        </span>
+      <nav-link [name]="'Logout'" [type]="'clickable'" [onClick]="logout"></nav-link>
     </menu-item>
     <menu-item *ngIf="isAuth">
-      <nav-link [name]="profileName" [to]="'/profile'">
-        <a href="#" routerLink="/profile" routerLinkActive="active">{{profileName}}</a>
-      </nav-link>
+      <nav-link [name]="profileName" [to]="'/profile'" [type]="'router'"></nav-link>
     </menu-item>
   `,
   styles: ['menu-item { float: right; display: inline-block; }']
@@ -26,7 +22,7 @@ import LoginService from './Login';
 class AuthLogin implements OnInit {
   public isAuth: boolean = false;
   public profileName: string;
-  public logout: any = this.logoutFn;
+  public logout: any = this.logoutFn.bind(this);
 
   constructor(private loginService: LoginService) {}
 
@@ -54,7 +50,7 @@ class AuthLogin implements OnInit {
   selector: 'auth-nav',
   template: `
     <menu-item *ngIf="isAuth">
-      <nav-link [name]="'Users'" [to]="'/users'" [className]="'nav-link'"></nav-link>
+      <nav-link [name]="'Users'" [to]="'/users'" [type]="'router'"></nav-link>
     </menu-item>
   `
 })

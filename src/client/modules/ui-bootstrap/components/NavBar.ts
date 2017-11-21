@@ -10,18 +10,18 @@ import modules from '../../../modules';
       <div class="container">
         <ul class="nav col-md-6 left-side">
           <menu-item>
-            <nav-link [name]="'${settings.app.name}'" [to]="'/'" [className]="'navbar-brand active'"></nav-link>
+            <nav-link [name]="'${settings.app.name}'" [to]="'/'" [type]="'brand'"></nav-link>
           </menu-item>
           ${modules.navItems}
         </ul>
         <ul class="nav col-md-6 right-side">
-          <li class="nav-item">
-            <a href="/graphiql" class="nav-link">GraphiQL</a>
-          </li>
+          <menu-item>
+            <nav-link [name]="'GraphiQL'" [to]="'/graphiql'" [type]="'href'"></nav-link>
+          </menu-item>
           ${modules.navItemsRight}
         </ul>
       </div>
     </nav>`,
-  styles: ['ul.right-side { display: block; }', 'ul.right-side li { float: right; display: inline-block; }']
+  styles: ['ul.right-side { display: block; }', 'ul.right-side menu-item { float: right; display: inline-block; }']
 })
 export default class {}

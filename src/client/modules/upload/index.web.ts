@@ -9,7 +9,7 @@ export default new Feature({
   navItem: [
     `
       <menu-item>
-        <nav-link [name]="'Upload'" [to]="'/upload'"></nav-link>
+        <nav-link [name]="'Upload'" [to]="'/upload'" [type]="'router'"></nav-link>
       </menu-item>
     `
   ],

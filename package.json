@@ -92,6 +92,7 @@
     "minilog": "^3.1.0",
     "mysql2": "^1.5.0",
     "nodemailer": "^4.4.0",
+    "oauth2-server": "^3.0.0",
     "opencollective": "^1.0.3",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",

@@ -61,6 +61,7 @@ const dependencyPlatforms = {
   mysql2: 'server',
   nodemailer: 'server',
   opencollective: 'server',
+  'oauth2-server': 'server',
   persistgraphql: ['server', 'web'],
   'performance-now': 'server',
   pg: 'server',

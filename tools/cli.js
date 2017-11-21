@@ -12,6 +12,9 @@ prog
     'both'
   )
   .action((args, options, logger) => moduleCmd('addmodule', args, options, logger))
+  .command('addcrud', 'Create a new Module with CRUD')
+  .argument('<module>', 'Module name')
+  .action((args, options, logger) => moduleCmd('addcrud', args, options, logger))
   .command('deletemodule', 'Delete a Module')
   .argument('<module>', 'Module name')
   .argument(

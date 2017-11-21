@@ -140,33 +140,42 @@ function updateSchema(logger, module) {
 }
 
 module.exports = (action, args, options, logger) => {
-  const templatePath = `${__dirname}/../templates/module`;
+  const module = args.module;
+  let location = 'both';
+  if (args.location) {
+    location = args.location;
+  }
+
+  let templatePath = `${__dirname}/../templates/module`;
+  if (action === 'addcrud') {
+    templatePath = `${__dirname}/../templates/crud`;
+  }
 
   if (!fs.existsSync(templatePath)) {
-    logger.error(`The requested location for ${args.location} wasn't found.`);
+    logger.error(`The requested location for ${location} wasn't found.`);
     process.exit(1);
   }
 
   // client
-  if (args.location === 'client' || args.location === 'both') {
-    if (action === 'addmodule') {
-      copyFiles(logger, templatePath, args.module, 'client');
+  if (location === 'client' || location === 'both') {
+    if (action === 'addmodule' || action === 'addcrud') {
+      copyFiles(logger, templatePath, module, 'client');
     } else if (action === 'deletemodule') {
-      deleteFiles(logger, templatePath, args.module, 'client');
+      deleteFiles(logger, templatePath, module, 'client');
     }
   }
 
   // server
-  if (args.location === 'server' || args.location === 'both') {
-    if (action === 'addmodule') {
-      copyFiles(logger, templatePath, args.module, 'server');
+  if (location === 'server' || location === 'both') {
+    if (action === 'addmodule' || action === 'addcrud') {
+      copyFiles(logger, templatePath, module, 'server');
     } else if (action === 'deletemodule') {
-      deleteFiles(logger, templatePath, args.module, 'server');
+      deleteFiles(logger, templatePath, module, 'server');
     }
   }
 
   // update schema
   if (action === 'updateschema') {
-    updateSchema(logger, args.module);
+    updateSchema(logger, module);
   }
 };

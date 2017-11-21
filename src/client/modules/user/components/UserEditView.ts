@@ -4,7 +4,8 @@ import { Store } from '@ngrx/store';
 import { assign, pick } from 'lodash';
 import { FormGroupState } from 'ngrx-forms';
 import settings from '../../../../../settings';
-import { FormInput, InputType } from '../../ui-bootstrap/components/Form';
+import { FormInput } from '../../ui-bootstrap/components/Form';
+import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import UserEditService from '../containers/UserEdit';
 import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } from '../reducers/index';
 
@@ -115,7 +116,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         value: 'Username',
         type: 'text',
         placeholder: 'Username',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 1,
         required: true
       },
@@ -125,7 +126,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         value: 'Email',
         type: 'email',
         placeholder: 'Email',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 3,
         required: true
       },
@@ -133,7 +134,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         id: 'role-selector',
         name: 'role',
         value: 'Role',
-        inputType: InputType.SELECTOR,
+        inputType: ItemType.SELECTOR,
         options: ['user', 'admin'],
         required: true
       },
@@ -141,7 +142,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         id: 'active-radio',
         name: 'isActive',
         value: 'Is Active',
-        inputType: InputType.RADIO_BUTTON,
+        inputType: ItemType.RADIO_BUTTON,
         required: true
       },
       {
@@ -150,7 +151,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         value: 'First Name',
         type: 'text',
         placeholder: 'First Name',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         required: true
       },
       {
@@ -159,7 +160,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         value: 'Last Name',
         type: 'text',
         placeholder: 'Last Name',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         required: true
       },
       {
@@ -168,7 +169,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         value: 'Password',
         type: 'password',
         placeholder: 'Password',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5,
         required: withPassword
       },
@@ -178,7 +179,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         value: 'Password Confirmation',
         type: 'password',
         placeholder: 'Password Confirmation',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5,
         required: withPassword
       }

@@ -7,7 +7,8 @@ import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
 import * as url from 'url';
 import settings from '../../../../../settings';
-import { FormInput, InputType } from '../../ui-bootstrap/components/Form';
+import { FormInput } from '../../ui-bootstrap/components/Form';
+import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers';
 
 @Component({
@@ -92,7 +93,7 @@ export default class LoginView {
         value: 'Email',
         type: 'email',
         placeholder: 'Email',
-        inputType: InputType.INPUT
+        inputType: ItemType.INPUT
       },
       {
         id: 'password-input',
@@ -100,7 +101,7 @@ export default class LoginView {
         value: 'Password',
         type: 'password',
         placeholder: 'Password',
-        inputType: InputType.INPUT
+        inputType: ItemType.INPUT
       }
     ];
   };

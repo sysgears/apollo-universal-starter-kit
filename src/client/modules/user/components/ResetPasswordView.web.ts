@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
-import { FormInput, InputType } from '../../ui-bootstrap/components/Form';
+import { FormInput } from '../../ui-bootstrap/components/Form';
+import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import ResetPasswordService from '../containers/ResetPassword';
 import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
 
@@ -81,7 +82,7 @@ export default class ResetPasswordView implements OnInit {
         value: 'Password',
         type: 'password',
         placeholder: 'Password',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5
       },
       {
@@ -90,7 +91,7 @@ export default class ResetPasswordView implements OnInit {
         value: 'Password Confirmation',
         type: 'password',
         placeholder: 'Password Confirmation',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5
       }
     ];

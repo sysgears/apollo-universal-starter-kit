@@ -21,9 +21,10 @@
 // export { default as ListGroup } from './ListGroup';
 // export { default as ListItem } from './ListItem';
 import Form from './Form';
+import FormItem from './FormItem';
 import MenuItem from './MenuItem';
 import NavBar from './NavBar';
 import NavLink from './NavLink';
 import PageLayout from './PageLayout';
 
-export const BOOTSTRAP_COMPONENTS: any = [PageLayout, MenuItem, NavLink, NavBar, Form];
+export const BOOTSTRAP_COMPONENTS: any = [PageLayout, MenuItem, NavLink, NavBar, Form, FormItem];

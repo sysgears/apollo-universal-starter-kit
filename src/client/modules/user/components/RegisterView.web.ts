@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
-import { FormInput, InputType } from '../../ui-bootstrap/components/Form';
+import { FormInput } from '../../ui-bootstrap/components/Form';
+import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import RegisterService from '../containers/Register';
 import { RegisterFormData, RegisterFormState } from '../reducers/index';
 
@@ -63,7 +64,7 @@ export default class RegisterView {
         value: 'Username',
         type: 'text',
         placeholder: 'Username',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 3
       },
       {
@@ -72,7 +73,7 @@ export default class RegisterView {
         value: 'Email',
         type: 'email',
         placeholder: 'Email',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 1
       },
       {
@@ -81,7 +82,7 @@ export default class RegisterView {
         value: 'Password',
         type: 'password',
         placeholder: 'Password',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5
       },
       {
@@ -90,7 +91,7 @@ export default class RegisterView {
         value: 'Password Confirmation',
         type: 'password',
         placeholder: 'Password Confirmation',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5
       }
     ];

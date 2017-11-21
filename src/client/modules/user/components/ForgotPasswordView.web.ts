@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
-import { FormInput, InputType } from '../../ui-bootstrap/components/Form';
+import { FormInput } from '../../ui-bootstrap/components/Form';
+import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import ForgotPasswordService from '../containers/ForgotPassword';
 import { ForgotPasswordFormData, ForgotPasswordFormState, ResetForgotPasswordFormAction } from '../reducers/index';
 
@@ -66,7 +67,7 @@ export default class ForgotPasswordView {
         value: 'Email',
         type: 'email',
         placeholder: 'Email',
-        inputType: InputType.INPUT
+        inputType: ItemType.INPUT
       }
     ];
   };

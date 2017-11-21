@@ -16,6 +16,29 @@ String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
+function renameFiles(destinationPath, templatePath, module, location) {
+  shell.cp('-R', `${templatePath}/${location}/*`, destinationPath);
+
+  // change to destination directory
+  shell.cd(destinationPath);
+
+  // rename files
+  shell.ls('-Rl', '.').forEach(entry => {
+    if (entry.isFile()) {
+      const moduleFile = entry.name.replace('Module', module.capitalize());
+      shell.mv(entry.name, moduleFile);
+    }
+  });
+
+  // replace module names
+  shell.ls('-Rl', '.').forEach(entry => {
+    if (entry.isFile()) {
+      shell.sed('-i', /\$module\$/g, module, entry.name);
+      shell.sed('-i', /\$Module\$/g, module.toCamelCase().capitalize(), entry.name);
+    }
+  });
+}
+
 function copyFiles(logger, templatePath, module, action, location) {
   logger.info(`Copying ${location} files…`);
 
@@ -25,28 +48,9 @@ function copyFiles(logger, templatePath, module, action, location) {
   // continue only if directory does not jet exist
   if (mkdir.code === 0) {
     const destinationPath = `${__dirname}/../../src/${location}/modules/${module}`;
-    shell.cp('-R', `${templatePath}/${location}/*`, destinationPath);
+    renameFiles(destinationPath, templatePath, module, location);
 
     logger.info(`✔ The ${location} files have been copied!`);
-
-    // change to destination directory
-    shell.cd(destinationPath);
-
-    // rename files
-    shell.ls('-Rl', '.').forEach(entry => {
-      if (entry.isFile()) {
-        const moduleFile = entry.name.replace('Module', module.capitalize());
-        shell.mv(entry.name, moduleFile);
-      }
-    });
-
-    // replace module names
-    shell.ls('-Rl', '.').forEach(entry => {
-      if (entry.isFile()) {
-        shell.sed('-i', /\$module\$/g, module, entry.name);
-        shell.sed('-i', /\$Module\$/g, module.toCamelCase().capitalize(), entry.name);
-      }
-    });
 
     shell.cd('..');
     // get module input data
@@ -66,6 +70,16 @@ function copyFiles(logger, templatePath, module, action, location) {
 
     if (action === 'addcrud' && location === 'server') {
       console.log('copy database files');
+      const destinationPath = `${__dirname}/../../src/${location}/database`;
+      renameFiles(destinationPath, templatePath, module, 'database');
+
+      const timestamp = new Date().getTime();
+      shell.cd(`${__dirname}/../../src/${location}/database/migrations`);
+      shell.mv(`_${module.toCamelCase().capitalize()}.js`, `${timestamp}_${module.toCamelCase().capitalize()}.js`);
+      shell.cd(`${__dirname}/../../src/${location}/database/seeds`);
+      shell.mv(`_${module.toCamelCase().capitalize()}.js`, `${timestamp}_${module.toCamelCase().capitalize()}.js`);
+
+      logger.info(`✔ The database files have been copied!`);
     }
 
     logger.info(`✔ Module for ${location} successfully created!`);
@@ -102,6 +116,16 @@ function deleteFiles(logger, templatePath, module, action, location) {
 
     // remove module from Feature function
     shell.sed('-i', re, `Feature(${modules.toString().trim()})`, 'index.js');
+
+    if (action === 'addcrud' && location === 'server') {
+      // change to destination directory
+      shell.cd(`${__dirname}/../../src/${location}/database/migrations`);
+      // TODO: remove database files
+      /*const aa = shell.find('.').filter(function(file) {
+        return file.match(/\.js$/);
+      });
+      console.log(aa);*/
+    }
 
     // continue only if directory does not jet exist
     logger.info(`✔ Module for ${location} successfully deleted!`);

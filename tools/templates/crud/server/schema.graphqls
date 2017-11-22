@@ -1,4 +1,6 @@
-extend type Query {}
+extend type Query {
+  $module$s: [$Module$]
+}
 
 extend type Mutation {}
 

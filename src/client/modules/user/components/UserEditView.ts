@@ -113,6 +113,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'username',
         value: 'Username',
         type: 'text',
+        label: 'Username',
         placeholder: 'Username',
         inputType: ItemType.INPUT,
         minLength: 1,
@@ -123,6 +124,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'email',
         value: 'Email',
         type: 'email',
+        label: 'Email',
         placeholder: 'Email',
         inputType: ItemType.INPUT,
         minLength: 3,
@@ -132,6 +134,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         id: 'role-selector',
         name: 'role',
         value: 'Role',
+        label: 'Role',
         inputType: ItemType.SELECTOR,
         options: ['user', 'admin'],
         required: true
@@ -140,6 +143,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         id: 'active-radio',
         name: 'isActive',
         value: 'Is Active',
+        label: 'Is Active',
         inputType: ItemType.RADIO_BUTTON,
         required: true
       },
@@ -148,6 +152,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'firstName',
         value: 'First Name',
         type: 'text',
+        label: 'First Name',
         placeholder: 'First Name',
         inputType: ItemType.INPUT,
         required: true
@@ -157,6 +162,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'lastName',
         value: 'Last Name',
         type: 'text',
+        label: 'Last Name',
         placeholder: 'Last Name',
         inputType: ItemType.INPUT,
         required: true
@@ -166,6 +172,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'password',
         value: 'Password',
         type: 'password',
+        label: 'Password',
         placeholder: 'Password',
         inputType: ItemType.INPUT,
         minLength: 5,
@@ -176,6 +183,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'passwordConfirmation',
         value: 'Password Confirmation',
         type: 'password',
+        label: 'Password Confirmation',
         placeholder: 'Password Confirmation',
         inputType: ItemType.INPUT,
         minLength: 5,

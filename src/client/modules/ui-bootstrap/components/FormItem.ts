@@ -32,49 +32,11 @@ export enum ItemType {
     </span>
 
     <span *ngIf="itemType === 1">
-      <label for="{{formInput.id}}">{{formInput.value}}</label>
-      <select id="{{formInput.id}}"
-              [ngrxFormControlState]="form.controls[formInput.name]"
-              [ngrxEnableFocusTracking]="true"
-              name="{{formInput.name}}"
-              class="form-control"
-              (change)="onModelChanged.emit({ name: formInput.name, value: currValue})"
-              [(ngModel)]="form.value[formInput.name]">
-        <option *ngFor="let o of formInput.options">{{o}}</option>
-      </select>
-
-      <div *ngIf="form.controls[formInput.name].isInvalid && (form.controls[formInput.name].isDirty || form.controls[formInput.name].isTouched)">
-        <small [hidden]="!form.controls[formInput.name].errors[formInput.name]">
-          {{form.controls[formInput.name].errors[formInput.name]}}
-        </small>
-        <small [hidden]="!control.errors.required">
-          {{formInput.value}} is required
-        </small>
-      </div>
-
+      <render-select [input]="formInput" [reduxForm]="form"></render-select>
     </span>
 
     <span *ngIf="itemType === 2">
-      <label for="{{formInput.id}}" class="form-check-label">
-        <input type="checkbox"
-               id="{{formInput.id}}"
-               [ngrxFormControlState]="form.controls[formInput.name]"
-               [ngrxEnableFocusTracking]="true"
-               name="{{formInput.name}}"
-               (change)="onModelChanged.emit({ name: formInput.name, value: currValue})"
-               class="form-check-input"
-               [(ngModel)]="form.value[formInput.name]" />
-        {{formInput.value}}
-      </label>
-
-      <div *ngIf="form.controls[formInput.name].isInvalid && (form.controls[formInput.name].isDirty || form.controls[formInput.name].isTouched)">
-        <small [hidden]="!form.controls[formInput.name].errors[formInput.name]">
-          {{form.controls[formInput.name].errors[formInput.name]}}
-        </small>
-        <small [hidden]="!control.errors.required">
-          {{formInput.value}} is required
-        </small>
-      </div>
+      <render-checkbox [input]="formInput" [reduxForm]="form"></render-checkbox>
     </span>
   `,
   styles: ['small {color: brown}']
@@ -83,7 +45,7 @@ export default class {
   @Input() public itemType: ItemType;
   @Input() public formInput: FormInput;
   @Input() public name: string;
-  @Input() public form: string;
+  @Input() public form: any;
 
   @Output() public onModelChanged: EventEmitter<any> = new EventEmitter<any>();
 

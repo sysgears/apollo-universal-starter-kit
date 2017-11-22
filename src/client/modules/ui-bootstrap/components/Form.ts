@@ -7,6 +7,7 @@ export interface FormInput {
   name: string;
   value: string;
   type?: string;
+  label?: string;
   placeholder?: string;
   inputType: ItemType;
   options?: any[];

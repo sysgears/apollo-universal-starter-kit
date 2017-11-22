@@ -1,0 +1,8 @@
+#import "./$Module$.graphql"
+
+query $module$ {
+  $module$ {
+    ...$Module$Info
+  }
+}
+

@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './components/web';
 
-const createTableColumns = (schema, hendleDelete) => {
+const createTableColumns = (schema, path, hendleDelete) => {
   let columns = [];
 
   for (const key of Object.keys(schema.values)) {
@@ -13,7 +13,7 @@ const createTableColumns = (schema, hendleDelete) => {
         dataIndex: 'id',
         key: 'id',
         render: (text, record) => (
-          <Link className="$module$-link" to={`/$module$/${record.id}`}>
+          <Link className="$module$-link" to={`/${path}/${record.id}`}>
             {text}
           </Link>
         )

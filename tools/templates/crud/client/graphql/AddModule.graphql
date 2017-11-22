@@ -1,0 +1,13 @@
+#import "./$Module$.graphql"
+
+mutation add$Module$($input: $Module$Input!) {
+  add$Module$(input: $input) {
+    $module$ {
+      ...$Module$Info
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

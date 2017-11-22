@@ -8,6 +8,33 @@ export default pubsub => ({
     }
   },
   Mutation: {
+    add$Module$: async (obj, { input }, { $Module$ }) => {
+      try {
+        const e = new FieldError();
+        e.throwIf();
+
+        const [id] = await $Module$.add$Module$(input);
+        const $module$ = await $Module$.get$Module$(id);
+
+        return { $module$ };
+      } catch (e) {
+        return { errors: e };
+      }
+    },
+    edit$Module$: async (obj, { input }, { $Module$ }) => {
+      try {
+        const e = new FieldError();
+        e.throwIf();
+
+        await $Module$.edit$Module$(input);
+
+        const $module$ = await $Module$.get$Module$(input.id);
+
+        return { $module$ };
+      } catch (e) {
+        return { errors: e };
+      }
+    },
     delete$Module$: async (obj, { id }, { $Module$ }) => {
       try {
         const e = new FieldError();

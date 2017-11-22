@@ -4,6 +4,7 @@ require('babel-polyfill');
 
 const shell = require('shelljs');
 const fs = require('fs');
+const chalk = require('chalk');
 
 String.prototype.toCamelCase = function() {
   return this.replace(/^([A-Z])|\s(\w)/g, function(match, p1, p2) {
@@ -50,7 +51,7 @@ function copyFiles(logger, templatePath, module, action, location) {
     const destinationPath = `${__dirname}/../../src/${location}/modules/${module}`;
     renameFiles(destinationPath, templatePath, module, location);
 
-    logger.info(`✔ The ${location} files have been copied!`);
+    logger.info(chalk.green(`✔ The ${location} files have been copied!`));
 
     shell.cd('..');
     // get module input data
@@ -79,14 +80,14 @@ function copyFiles(logger, templatePath, module, action, location) {
       shell.cd(`${__dirname}/../../src/${location}/database/seeds`);
       shell.mv(`_${module.toCamelCase().capitalize()}.js`, `${timestamp}_${module.toCamelCase().capitalize()}.js`);
 
-      logger.info(`✔ The database files have been copied!`);
+      logger.info(chalk.green(`✔ The database files have been copied!`));
     }
 
-    logger.info(`✔ Module for ${location} successfully created!`);
+    logger.info(chalk.green(`✔ Module for ${location} successfully created!`));
   }
 }
 
-function deleteFiles(logger, templatePath, module, action, location) {
+function deleteFiles(logger, templatePath, module, location) {
   logger.info(`Deleting ${location} files…`);
 
   const modulePath = `${__dirname}/../../src/${location}/modules/${module}`;
@@ -117,20 +118,32 @@ function deleteFiles(logger, templatePath, module, action, location) {
     // remove module from Feature function
     shell.sed('-i', re, `Feature(${modules.toString().trim()})`, 'index.js');
 
-    if (action === 'addcrud' && location === 'server') {
-      // change to destination directory
+    if (location === 'server') {
+      // change to database migrations directory
       shell.cd(`${__dirname}/../../src/${location}/database/migrations`);
-      // TODO: remove database files
-      /*const aa = shell.find('.').filter(function(file) {
-        return file.match(/\.js$/);
-      });
-      console.log(aa);*/
+      // check if any migrations files for this module exist
+      if (shell.find('.').filter(file => file.search(`_${module.toCamelCase().capitalize()}.js`) > -1).length > 0) {
+        let okMigrations = shell.rm(`*_${module.toCamelCase().capitalize()}.js`);
+        if (okMigrations) {
+          logger.info(chalk.green(`✔ Database migrations files successfully deleted!`));
+        }
+      }
+
+      // change to database seeds directory
+      shell.cd(`${__dirname}/../../src/${location}/database/seeds`);
+      // check if any seed files for this module exist
+      if (shell.find('.').filter(file => file.search(`_${module.toCamelCase().capitalize()}.js`) > -1).length > 0) {
+        let okSeeds = shell.rm(`*_${module.toCamelCase().capitalize()}.js`);
+        if (okSeeds) {
+          logger.info(chalk.green(`✔ Database seed files successfully deleted!`));
+        }
+      }
     }
 
     // continue only if directory does not jet exist
-    logger.info(`✔ Module for ${location} successfully deleted!`);
+    logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));
   } else {
-    logger.info(`✔ Module ${location} location for ${modulePath} wasn't found!`);
+    logger.info(chalk.red(`✘ Module ${location} location for ${modulePath} not found!`));
   }
 }
 
@@ -139,29 +152,35 @@ function updateSchema(logger, module) {
 
   // get fragment file
   const path = `${__dirname}/../../src/client/modules/${module}/graphql/`;
-  const file = `${module.toCamelCase().capitalize()}.graphql`;
-  const re = /\{([^()]+)\}/g;
+  if (fs.existsSync(path)) {
+    const file = `${module.toCamelCase().capitalize()}.graphql`;
+    const re = /\{([^()]+)\}/g;
 
-  // get module schema
-  const schema = require(`../../src/server/modules/${module}/schema`);
+    // get module schema
+    const schema = require(`../../src/server/modules/${module}/schema`);
 
-  // regenerate graphql fragment
-  let graphql = '{\n';
-  for (const key of Object.keys(schema[module.toCamelCase().capitalize()].values)) {
-    graphql += `  ${key}\n`;
+    // regenerate graphql fragment
+    let graphql = '{\n';
+    for (const key of Object.keys(schema[module.toCamelCase().capitalize()].values)) {
+      graphql += `  ${key}\n`;
+    }
+    graphql += '}';
+
+    // override graphql fragment file
+    shell.cd(path);
+    // remove all new lines
+    shell.exec(`tr -d '\n' < ${file} > ${file}.tmp`);
+    // replace content
+    shell.sed('-i', re, graphql, `${file}.tmp`);
+    // remove old file
+    shell.rm(file);
+    // rename tmp file
+    shell.mv(`${file}.tmp`, file);
+
+    logger.info(chalk.green(`✔ Fragment in ${path}${file} successfully updated!`));
+  } else {
+    logger.error(chalk.red(`✘ Path ${path} not found!`));
   }
-  graphql += '}';
-
-  // override graphql fragment file
-  shell.cd(path);
-  // remove all new lines
-  shell.exec(`tr -d '\n' < ${file} > ${file}.tmp`);
-  // replace content
-  shell.sed('-i', re, graphql, `${file}.tmp`);
-  // remove old file
-  shell.rm(file);
-  // rename tmp file
-  shell.mv(`${file}.tmp`, file);
 }
 
 module.exports = (action, args, options, logger) => {
@@ -177,7 +196,7 @@ module.exports = (action, args, options, logger) => {
   }
 
   if (!fs.existsSync(templatePath)) {
-    logger.error(`The requested location for ${location} wasn't found.`);
+    logger.error(chalk.red(`The requested location for ${location} not found.`));
     process.exit(1);
   }
 
@@ -186,7 +205,7 @@ module.exports = (action, args, options, logger) => {
     if (action === 'addmodule' || action === 'addcrud') {
       copyFiles(logger, templatePath, module, action, 'client');
     } else if (action === 'deletemodule') {
-      deleteFiles(logger, templatePath, module, action, 'client');
+      deleteFiles(logger, templatePath, module, 'client');
     }
   }
 
@@ -195,7 +214,7 @@ module.exports = (action, args, options, logger) => {
     if (action === 'addmodule' || action === 'addcrud') {
       copyFiles(logger, templatePath, module, action, 'server');
     } else if (action === 'deletemodule') {
-      deleteFiles(logger, templatePath, module, action, 'server');
+      deleteFiles(logger, templatePath, module, 'server');
     }
   }
 

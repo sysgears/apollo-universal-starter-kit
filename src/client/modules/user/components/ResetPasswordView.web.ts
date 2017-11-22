@@ -10,23 +10,21 @@ import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
 @Component({
   selector: 'reset-password-view',
   template: `
-    <div id="content" class="container">
-      <h1>Reset password!</h1>
+    <h1>Reset password!</h1>
 
-      <div *ngIf="errors">
-        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
-          {{error.message}}
-        </div>
+    <div *ngIf="errors">
+      <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+        {{error.message}}
       </div>
-
-      <ausk-form [onSubmit]="onSubmit"
-                 [submitting]="submitting"
-                 [formName]="'resetPasswordForm'"
-                 [formState]="formState"
-                 [form]="form"
-                 [btnName]="'Reset Password'">
-      </ausk-form>
     </div>
+
+    <ausk-form [onSubmit]="onSubmit"
+               [submitting]="submitting"
+               [formName]="'resetPasswordForm'"
+               [formState]="formState"
+               [form]="form"
+               [btnName]="'Reset Password'">
+    </ausk-form>
   `
 })
 export default class ResetPasswordView implements OnInit {

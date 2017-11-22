@@ -10,22 +10,20 @@ import { RegisterFormData, RegisterFormState } from '../reducers/index';
 @Component({
   selector: 'register-view',
   template: `
-    <div id="content" class="container">
-      <h1>Register page!</h1>
+    <h1>Register page!</h1>
 
-      <div *ngIf="errors">
-        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
-          {{error.message}}
-        </div>
+    <div *ngIf="errors">
+      <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+        {{error.message}}
       </div>
-
-      <ausk-form [onSubmit]="onSubmit"
-                 [formName]="'registerForm'"
-                 [formState]="formState"
-                 [form]="form"
-                 [btnName]="'Register'">
-      </ausk-form>
     </div>
+
+    <ausk-form [onSubmit]="onSubmit"
+               [formName]="'registerForm'"
+               [formState]="formState"
+               [form]="form"
+               [btnName]="'Register'">
+    </ausk-form>
   `
 })
 export default class RegisterView {

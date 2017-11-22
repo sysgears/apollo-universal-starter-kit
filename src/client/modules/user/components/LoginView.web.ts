@@ -14,34 +14,33 @@ import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers
 @Component({
   selector: 'login-view',
   template: `
-    <div id="content" class="container">
-      <h1>Login page!</h1>
+    <h1>Login page!</h1>
 
-      <div *ngIf="errors">
-        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
-          {{error.message}}
-        </div>
+    <div *ngIf="errors">
+      <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+        {{error.message}}
       </div>
+    </div>
 
-      <ausk-form [onSubmit]="onSubmit"
-                 [formName]="'loginForm'"
-                 [formState]="formState"
-                 [form]="form"
-                 [btnName]="'Login'">
-      </ausk-form>
+    <ausk-form [onSubmit]="onSubmit"
+               [formName]="'loginForm'"
+               [formState]="formState"
+               [form]="form"
+               [btnName]="'Login'">
+    </ausk-form>
 
-      <button id="fb-login-btn" *ngIf="settings.user.auth.facebook.enabled" class="btn btn-primary" (click)="facebookLogin()" )>
-        Login with Facebook
-      </button>
+    <button id="fb-login-btn" *ngIf="settings.user.auth.facebook.enabled" class="btn btn-primary"
+            (click)="facebookLogin()" )>
+      Login with Facebook
+    </button>
 
-      <a routerLink="/forgot-password">Forgot your password?</a>
-      <hr/>
-      <div class="card">
-        <div class="card-block">
-          <h4 class="card-title">Available logins:</h4>
-          <p class="card-text">admin@example.com:admin</p>
-          <p class="card-text">user@example.com:user</p>
-        </div>
+    <a routerLink="/forgot-password">Forgot your password?</a>
+    <hr/>
+    <div class="card">
+      <div class="card-block">
+        <h4 class="card-title">Available logins:</h4>
+        <p class="card-text">admin@example.com:admin</p>
+        <p class="card-text">user@example.com:user</p>
       </div>
     </div>
   `

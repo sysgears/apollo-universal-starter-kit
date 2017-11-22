@@ -9,27 +9,25 @@ import { ForgotPasswordFormData, ForgotPasswordFormState, ResetForgotPasswordFor
 @Component({
   selector: 'forgot-password-view',
   template: `
-    <div id="content" class="container">
-      <h1>Forgot password!</h1>
+    <h1>Forgot password!</h1>
 
-      <div *ngIf="sent" class="alert alert-success">
-        <div>Reset password instructions have been emailed to you.</div>
-      </div>
-
-      <div *ngIf="errors">
-        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
-          {{error.message}}
-        </div>
-      </div>
-
-      <ausk-form [onSubmit]="onSubmit"
-                 [submitting]="submitting"
-                 [formName]="'forgotPasswordForm'"
-                 [form]="form"
-                 [formState]="formState"
-                 [btnName]="'Send Reset Instructions'">
-      </ausk-form>
+    <div *ngIf="sent" class="alert alert-success">
+      <div>Reset password instructions have been emailed to you.</div>
     </div>
+
+    <div *ngIf="errors">
+      <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+        {{error.message}}
+      </div>
+    </div>
+
+    <ausk-form [onSubmit]="onSubmit"
+               [submitting]="submitting"
+               [formName]="'forgotPasswordForm'"
+               [form]="form"
+               [formState]="formState"
+               [btnName]="'Send Reset Instructions'">
+    </ausk-form>
   `
 })
 export default class ForgotPasswordView {

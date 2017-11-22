@@ -12,7 +12,7 @@ import { UserFilterIsActive, UserFilterRole, UserFilterSearchText } from '../red
   template: `
     <form class="form-inline">
       <div class="form-group">
-        <label class="col-form-label-md form-control-label">Filter:&nbsp;</label>
+        <label class="form-control-label">Filter:&nbsp;</label>
         <input #searchInput
                (keyup)="onSearchTextChange(searchInput.value)"
                type="text"
@@ -20,7 +20,7 @@ import { UserFilterIsActive, UserFilterRole, UserFilterSearchText } from '../red
                class="form-control">
       </div>&nbsp;
       <div class="form-group">
-        <label class="col-form-label-md form-control-label">Role:&nbsp;</label>
+        <label class="form-control-label">Role:&nbsp;</label>
         <select #roleInput
                 class="form-control"
                 (change)="onRoleChange(roleInput.value)">

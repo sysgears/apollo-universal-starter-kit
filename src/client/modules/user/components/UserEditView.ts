@@ -12,24 +12,22 @@ import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } 
 @Component({
   selector: 'users-edit-view',
   template: `
-    <div id="content" class="container">
-      <a id="back-button" routerLink="/users">Back</a>
-      <h1>{{title}}</h1>
+    <a id="back-button" routerLink="/users">Back</a>
+    <h1>{{title}}</h1>
 
-      <div *ngIf="errors">
-        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
-          {{error.message}}
-        </div>
+    <div *ngIf="errors">
+      <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+        {{error.message}}
       </div>
-
-      <ausk-form [onSubmit]="onSubmit"
-                 [formName]="'userForm'"
-                 [formState]="formState"
-                 [loading]="loading"
-                 [form]="form"
-                 [btnName]="'Save'">
-      </ausk-form>
     </div>
+
+    <ausk-form [onSubmit]="onSubmit"
+               [formName]="'userForm'"
+               [formState]="formState"
+               [loading]="loading"
+               [form]="form"
+               [btnName]="'Save'">
+    </ausk-form>
   `
 })
 export default class UsersEditView implements OnInit, OnDestroy {

@@ -11,20 +11,20 @@ import { CommentSelect } from '../reducers/index';
   template: `
         <form (ngSubmit)="onFormSubmitted()" #commentForm="ngForm" name="comment">
             <div class="form-group">
-                <div class="row">
-                    <div class="col-2">
+                <row>
+                    <column [xs]="2">
                         <label class=" form-control-label">{{ getOperation() }} comment</label>
-                    </div>
-                    <div class="col-8">
+                    </column>
+                    <column [xs]="8">
                         <div class="has-normal form-group">
                             <input ngModel name="content" #content="ngModel" type="text" placeholder="Content" class="form-control" required>
                             <div ngClass="content.to" *ngIf="!content.valid && content.touched" class="form-control-feedback" style="color: red;">Required</div>
                         </div>
-                    </div>
-                    <div class="col-2">
+                    </column>
+                    <column [xs]="2">
                         <button type="submit" class="float-right btn btn-primary" [disabled]="submitting">Save</button>
-                    </div>
-                </div>
+                    </column>
+                </row>
             </div>
         </form>`,
   styles: [`input.ng-invalid.ng-touched {border: 1px solid red;}`]

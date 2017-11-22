@@ -5,7 +5,9 @@ import '../styles/styles.scss';
   selector: 'page-layout',
   template: `<section>
     <nav-bar></nav-bar>
-    <router-outlet></router-outlet>
+    <container>
+        <router-outlet></router-outlet>
+    </container>
     <footer class="footer"><div class="text-center">&copy; 2017. Example Apollo App.</div></footer>
   </section>`
 })

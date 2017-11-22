@@ -4,6 +4,6 @@ import knex from '../../../server/sql/connector';
 
 export default class $Module$ {
   async get$Module$s() {
-    return camelizeKeys(await knex.select('id').from('$module$'));
+    return camelizeKeys(await knex.select('*').from('$module$'));
   }
 }

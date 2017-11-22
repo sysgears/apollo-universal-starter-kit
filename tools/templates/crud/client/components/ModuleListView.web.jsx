@@ -4,6 +4,8 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
 import { PageLayout, Table, Button } from '../../common/components/web';
+import createTableColumns from '../../common/util';
+import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
 
 class $Module$ListView extends React.PureComponent {
   renderMetaData = () => (
@@ -29,35 +31,18 @@ class $Module$ListView extends React.PureComponent {
     }*/
   };
 
-  columns = [
-    {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
-      render: (text, record) => (
-        <Link className="$module$-link" to={`/$module$/${record.id}`}>
-          {text}
-        </Link>
-      )
-    },
-    {
-      title: 'Actions',
-      key: 'actions',
-      render: (text, record) => (
-        <Button color="primary" size="sm" onClick={() => this.hendleDelete$Module$(record.id)}>
-          Delete
-        </Button>
-      )
-    }
-  ];
-
   render() {
     const { loading, $module$s } = this.props;
 
     return (
       <PageLayout>
         {this.renderMetaData()}
-        <Table dataSource={$module$s} columns={this.columns} pagination={false} loading={loading && !$module$s} />
+        <Table
+          dataSource={$module$s}
+          columns={createTableColumns($Module$Schema)}
+          pagination={false}
+          loading={loading && !$module$s}
+        />
       </PageLayout>
     );
   }

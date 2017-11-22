@@ -155,28 +155,19 @@ function updateSchema(logger, module) {
   const path = `${__dirname}/../../src/client/modules/${module}/graphql/`;
   if (fs.existsSync(path)) {
     const file = `${module.toCamelCase().capitalize()}.graphql`;
-    const re = /\{([^()]+)\}/g;
 
     // get module schema
     const schema = require(`../../src/server/modules/${module}/schema`);
 
     // regenerate graphql fragment
-    let graphql = '{\n';
+    let graphql = '';
     for (const key of Object.keys(schema[module.toCamelCase().capitalize()].values)) {
       graphql += `  ${key}\n`;
     }
-    graphql += '}';
 
-    // override graphql fragment file
     shell.cd(path);
-    // remove all new lines
-    shell.exec(`tr -d '\n' < ${file} > ${file}.tmp`);
-    // replace content
-    shell.sed('-i', re, graphql, `${file}.tmp`);
-    // remove old file
-    shell.rm(file);
-    // rename tmp file
-    shell.mv(`${file}.tmp`, file);
+    // override graphql fragment file
+    shell.ShellString(shell.cat(file).replace(/Crud {(.|\n)*\n}/, `Crud {\n${graphql}}`)).to(file);
 
     logger.info(chalk.green(`✔ Fragment in ${path}${file} successfully updated!`));
   } else {

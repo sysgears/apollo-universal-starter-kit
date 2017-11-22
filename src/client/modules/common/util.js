@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from './components/web';
 
-const createTableColumns = schema => {
+const createTableColumns = (schema, hendleDelete) => {
   let columns = [];
 
   for (const key of Object.keys(schema.values)) {
@@ -31,7 +31,7 @@ const createTableColumns = schema => {
     title: 'Actions',
     key: 'actions',
     render: (text, record) => (
-      <Button color="primary" size="sm" onClick={() => this.hendleDeleteCrud(record.id)}>
+      <Button color="primary" size="sm" onClick={() => hendleDelete(record.id)}>
         Delete
       </Button>
     )

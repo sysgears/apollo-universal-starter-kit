@@ -1,7 +1,14 @@
+type $Module$Payload {
+  $module$: $Module$
+  errors: [FieldError!]
+}
+
 extend type Query {
   $module$s: [$Module$]
 }
 
-extend type Mutation {}
+extend type Mutation {
+  delete$Module$(id: Int!): $Module$Payload!
+}
 
 extend type Subscription {}

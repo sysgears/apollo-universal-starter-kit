@@ -36,6 +36,7 @@ function renameFiles(destinationPath, templatePath, module, location) {
     if (entry.isFile()) {
       shell.sed('-i', /\$module\$/g, module, entry.name);
       shell.sed('-i', /\$Module\$/g, module.toCamelCase().capitalize(), entry.name);
+      shell.sed('-i', /\$MODULE\$/g, module.toUpperCase(), entry.name);
     }
   });
 }

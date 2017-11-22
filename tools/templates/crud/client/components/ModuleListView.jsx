@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const $Module$View = () => {
+const $Module$ListView = () => {
   return (
     <View style={styles.container}>
       <View style={styles.element}>
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default $Module$View;
+export default $Module$ListView;

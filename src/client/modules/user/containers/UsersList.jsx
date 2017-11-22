@@ -1,15 +1,10 @@
 /*eslint-disable no-unused-vars*/
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
-// Apollo
 import { graphql, compose } from 'react-apollo';
 
-// Components
 import UsersListView from '../components/UsersListView';
-
 import USERS_QUERY from '../graphql/UsersQuery.graphql';
 import DELETE_USER from '../graphql/DeleteUser.graphql';
 

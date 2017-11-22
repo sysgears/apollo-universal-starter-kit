@@ -18,7 +18,7 @@ const $Module$View = () => {
   return (
     <PageLayout>
       {renderMetaData()}
-      <div className="text-center mt-4 mb-4">
+      <div className="text-center">
         <p>Hello $Module$!</p>
       </div>
     </PageLayout>

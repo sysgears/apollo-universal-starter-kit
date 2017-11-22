@@ -15,7 +15,6 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 // import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
-import { CookiesProvider } from 'react-cookie';
 import url from 'url';
 
 import createApolloClient from '../../common/createApolloClient';
@@ -148,13 +147,11 @@ if (module.hot) {
 }
 
 const Main = () => (
-  <CookiesProvider>
-    <Provider store={store}>
-      <ApolloProvider client={client}>
-        <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
-      </ApolloProvider>
-    </Provider>
-  </CookiesProvider>
+  <Provider store={store}>
+    <ApolloProvider client={client}>
+      <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
+    </ApolloProvider>
+  </Provider>
 );
 
-export default Main;
+export default modules.getWrappedRoot(Main);

@@ -14,7 +14,6 @@ import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
 import url from 'url';
-import { CookiesProvider } from 'react-cookie';
 import { AppRegistry } from 'react-native';
 
 import createApolloClient from '../../common/createApolloClient';
@@ -61,17 +60,16 @@ async function renderServerSide(req, res) {
   const store = createReduxStore(initialState, client);
 
   const context = {};
-  const App = () => (
-    <CookiesProvider cookies={req.universalCookies}>
-      <Provider store={store}>
-        <ApolloProvider client={client}>
-          <StaticRouter location={req.url} context={context}>
-            {Routes}
-          </StaticRouter>
-        </ApolloProvider>
-      </Provider>
-    </CookiesProvider>
-  );
+  const clientModules = require('../../client/modules').default;
+  const App = clientModules.getWrappedRoot(() => (
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <StaticRouter location={req.url} context={context}>
+          {Routes}
+        </StaticRouter>
+      </ApolloProvider>
+    </Provider>
+  ));
 
   AppRegistry.registerComponent('App', () => App);
   const { element, stylesheets } = AppRegistry.getApplication('App', {});

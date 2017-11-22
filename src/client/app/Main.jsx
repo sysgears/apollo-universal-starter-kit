@@ -1,4 +1,5 @@
 import React from 'react';
+import RedBox from 'redbox-react';
 import { getOperationAST } from 'graphql';
 import { createApolloFetch } from 'apollo-fetch';
 import { BatchHttpLink } from 'apollo-link-batch-http';
@@ -146,12 +147,29 @@ if (module.hot) {
   });
 }
 
-const Main = () => (
-  <Provider store={store}>
-    <ApolloProvider client={client}>
-      <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
-    </ApolloProvider>
-  </Provider>
-);
+class Main extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-export default modules.getWrappedRoot(Main);
+  componentDidCatch(error, info) {
+    this.setState({ error, info });
+  }
+
+  render() {
+    return this.state.error ? (
+      <RedBox error={this.state.error} />
+    ) : (
+      modules.getWrappedRoot(
+        <Provider store={store}>
+          <ApolloProvider client={client}>
+            <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
+          </ApolloProvider>
+        </Provider>
+      )
+    );
+  }
+}
+
+export default Main;

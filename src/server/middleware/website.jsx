@@ -61,15 +61,16 @@ async function renderServerSide(req, res) {
 
   const context = {};
   const clientModules = require('../../client/modules').default;
-  const App = clientModules.getWrappedRoot(() => (
-    <Provider store={store}>
-      <ApolloProvider client={client}>
-        <StaticRouter location={req.url} context={context}>
-          {Routes}
-        </StaticRouter>
-      </ApolloProvider>
-    </Provider>
-  ));
+  const App = () =>
+    clientModules.getWrappedRoot(
+      <Provider store={store}>
+        <ApolloProvider client={client}>
+          <StaticRouter location={req.url} context={context}>
+            {Routes}
+          </StaticRouter>
+        </ApolloProvider>
+      </Provider>
+    );
 
   AppRegistry.registerComponent('App', () => App);
   const { element, stylesheets } = AppRegistry.getApplication('App', {});
@@ -124,7 +125,7 @@ async function renderServerSide(req, res) {
 export default queryMap => async (req, res, next) => {
   try {
     if (req.url.indexOf('.') < 0 && __SSR__) {
-      return renderServerSide(req, res, queryMap);
+      return await renderServerSide(req, res, queryMap);
     } else {
       return next();
     }

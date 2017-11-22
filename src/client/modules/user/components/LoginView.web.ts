@@ -36,13 +36,13 @@ import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers
 
     <a routerLink="/forgot-password">Forgot your password?</a>
     <hr/>
-    <div class="card">
-      <div class="card-block">
-        <h4 class="card-title">Available logins:</h4>
-        <p class="card-text">admin@example.com:admin</p>
-        <p class="card-text">user@example.com:user</p>
-      </div>
-    </div>
+    <ausk-card>
+      <card-group>
+        <card-title>Available logins:</card-title>
+        <card-text>admin@example.com:admin</card-text>
+        <card-text>user@example.com:user</card-text>
+      </card-group>
+    </ausk-card>
   `
 })
 export default class LoginView {

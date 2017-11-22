@@ -5,20 +5,15 @@
 // export { default as Select } from './Select';
 // export { default as Option } from './Option';
 // export { default as RenderField } from './RenderField';
-// export { default as RenderSelect } from './RenderSelect';
-// export { default as RenderCheckBox } from './RenderCheckBox';
 // export { default as Alert } from './Alert';
-// export { default as Container } from './Container';
-// export { default as Row } from './Row';
-// export { default as Col } from './Col';
 // export { default as Label } from './Label';
-// export { default as Card } from './Card';
-// export { default as CardGroup } from './CardGroup';
-// export { default as CardTitle } from './CardTitle';
-// export { default as CardText } from './CardText';
 // export { default as Table } from './Table';
 // export { default as ListGroup } from './ListGroup';
 // export { default as ListItem } from './ListItem';
+import Card from './Card';
+import CardGroup from './CardGroup';
+import CardText from './CardText';
+import CardTitle from './CardTitle';
 import Col from './Col';
 import Container from './Container';
 import Form from './Form';
@@ -32,15 +27,19 @@ import RenderSelect from './RenderSelect';
 import Row from './Row';
 
 export const BOOTSTRAP_COMPONENTS: any = [
-  PageLayout,
-  MenuItem,
-  NavLink,
-  NavBar,
+  Card,
+  CardGroup,
+  CardText,
+  CardTitle,
+  Col,
+  Container,
   Form,
   FormItem,
-  Container,
-  Row,
-  Col,
+  MenuItem,
+  NavBar,
+  NavLink,
+  PageLayout,
   RenderSelect,
-  RenderCheckBox
+  RenderCheckBox,
+  Row
 ];

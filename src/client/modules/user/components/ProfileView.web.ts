@@ -7,11 +7,25 @@ import ProfileService from '../containers/Profile';
   template: `
     <div *ngIf="loading" class="text-center">Loading...</div>
     <div *ngIf="!loading && currentUser">
-      <h2>Profile</h2>
-      <p>username: {{currentUser.username}}</p>
-      <p>email: {{currentUser.email}}</p>
-      <p>role: {{currentUser.role}}</p>
-      <p *ngIf="currentUser.profile">name: {{currentUser.profile.fullName}}</p>
+      <h1 class="text-center">Profile</h1>
+      <ausk-card>
+        <card-group>
+          <card-title>User Name:</card-title>
+          <card-text>{{currentUser.username}}</card-text>
+        </card-group>
+        <card-group>
+          <card-title>Email:</card-title>
+          <card-text>{{currentUser.email}}</card-text>
+        </card-group>
+        <card-group>
+          <card-title>Role:</card-title>
+          <card-text>{{currentUser.role}}</card-text>
+        </card-group>
+        <card-group *ngIf="currentUser.profile && currentUser.profile.firstName">
+          <card-title>Full Name:</card-title>
+          <card-text>{{currentUser.profile.fullName}}</card-text>
+        </card-group>
+      </ausk-card>
     </div>
     <div *ngIf="!loading && !currentUser">
       <h2>No current user logged in</h2>

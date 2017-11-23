@@ -1,4 +1,5 @@
 import React from 'react';
+import RedBox from 'redbox-react';
 import { getOperationAST } from 'graphql';
 import { createApolloFetch } from 'apollo-fetch';
 import { BatchHttpLink } from 'apollo-link-batch-http';
@@ -15,7 +16,6 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 // import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
-import { CookiesProvider } from 'react-cookie';
 import url from 'url';
 
 import createApolloClient from '../../common/createApolloClient';
@@ -147,14 +147,29 @@ if (module.hot) {
   });
 }
 
-const Main = () => (
-  <CookiesProvider>
-    <Provider store={store}>
-      <ApolloProvider client={client}>
-        <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
-      </ApolloProvider>
-    </Provider>
-  </CookiesProvider>
-);
+class Main extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidCatch(error, info) {
+    this.setState({ error, info });
+  }
+
+  render() {
+    return this.state.error ? (
+      <RedBox error={this.state.error} />
+    ) : (
+      modules.getWrappedRoot(
+        <Provider store={store}>
+          <ApolloProvider client={client}>
+            <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
+          </ApolloProvider>
+        </Provider>
+      )
+    );
+  }
+}
 
 export default Main;

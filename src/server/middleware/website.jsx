@@ -14,7 +14,6 @@ import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
 import url from 'url';
-import { CookiesProvider } from 'react-cookie';
 import { AppRegistry } from 'react-native';
 
 import createApolloClient from '../../common/createApolloClient';
@@ -61,8 +60,9 @@ async function renderServerSide(req, res) {
   const store = createReduxStore(initialState, client);
 
   const context = {};
-  const App = () => (
-    <CookiesProvider cookies={req.universalCookies}>
+  const clientModules = require('../../client/modules').default;
+  const App = () =>
+    clientModules.getWrappedRoot(
       <Provider store={store}>
         <ApolloProvider client={client}>
           <StaticRouter location={req.url} context={context}>
@@ -70,8 +70,7 @@ async function renderServerSide(req, res) {
           </StaticRouter>
         </ApolloProvider>
       </Provider>
-    </CookiesProvider>
-  );
+    );
 
   AppRegistry.registerComponent('App', () => App);
   const { element, stylesheets } = AppRegistry.getApplication('App', {});
@@ -126,7 +125,7 @@ async function renderServerSide(req, res) {
 export default queryMap => async (req, res, next) => {
   try {
     if (req.url.indexOf('.') < 0 && __SSR__) {
-      return renderServerSide(req, res, queryMap);
+      return await renderServerSide(req, res, queryMap);
     } else {
       return next();
     }

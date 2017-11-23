@@ -9,7 +9,18 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 export default class {
   /* eslint-disable no-unused-vars */
   constructor(
-    { route, navItem, navItemRight, reducer, middleware, afterware, connectionParam, createFetchOptions, stylesInsert },
+    {
+      route,
+      navItem,
+      navItemRight,
+      reducer,
+      middleware,
+      afterware,
+      connectionParam,
+      createFetchOptions,
+      stylesInsert,
+      rootComponent
+    },
     ...features
   ) {
     /* eslint-enable no-unused-vars */
@@ -22,6 +33,7 @@ export default class {
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
+    this.rootComponent = combine(arguments, arg => arg.rootComponent);
   }
 
   get routes() {
@@ -78,5 +90,13 @@ export default class {
 
   get stylesInserts() {
     return this.stylesInsert;
+  }
+
+  getWrappedRoot(root) {
+    let nestedRoot = root;
+    for (const Component of this.rootComponent) {
+      nestedRoot = React.cloneElement(Component, {}, nestedRoot);
+    }
+    return nestedRoot;
   }
 }

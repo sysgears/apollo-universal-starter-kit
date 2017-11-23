@@ -49,8 +49,14 @@ export const createFormFields = schema => {
 
   for (const key of schema.keys()) {
     if (key !== 'id') {
+      const value = schema.values[key];
+      let validate = [];
+      if (!value.optional) {
+        validate.push(required);
+      }
+
       fields.push(
-        <Field name={key} key={key} component={RenderField} type="text" label={capitalize(key)} validate={[required]} />
+        <Field name={key} key={key} component={RenderField} type="text" label={capitalize(key)} validate={validate} />
       );
     }
   }

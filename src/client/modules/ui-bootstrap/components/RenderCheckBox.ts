@@ -34,7 +34,7 @@ export default class {
 
   constructor() {}
 
-  public changed = e => {
+  public changed = (e: any) => {
     this.onChange.emit(e);
   };
 }

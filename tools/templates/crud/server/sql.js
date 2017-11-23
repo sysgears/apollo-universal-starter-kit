@@ -7,8 +7,8 @@ export default class $Module$ {
     return camelizeKeys(await knex.select('*').from('$module$'));
   }
 
-  async get$Module$() {
-    return camelizeKeys(await knex.select('*').from('$module$').first());
+  async get$Module$(id) {
+    return camelizeKeys(await knex.select('*').from('$module$').where({ id }).first());
   }
 
   add$Module$(input) {

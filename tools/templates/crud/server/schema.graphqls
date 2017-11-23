@@ -9,7 +9,7 @@ input $Module$Input {
 
 extend type Query {
   $module$s: [$Module$]
-  $module$: $Module$
+  $module$(id: Int!): $Module$
 }
 
 extend type Mutation {

@@ -5,6 +5,9 @@ export default pubsub => ({
   Query: {
     $module$s: (obj, args, { $Module$ }) => {
       return $Module$.get$Module$s();
+    },
+    $module$: (obj, { id }, { $Module$ }) => {
+      return $Module$.get$Module$(id);
     }
   },
   Mutation: {

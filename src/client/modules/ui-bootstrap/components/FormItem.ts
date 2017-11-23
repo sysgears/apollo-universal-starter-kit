@@ -11,24 +11,7 @@ export enum ItemType {
   selector: 'form-item',
   template: `
     <span *ngIf="itemType === 0">
-      <label for="{{formInput.id}}">{{formInput.value}}</label>
-      <input id="{{formInput.id}}"
-             [ngrxFormControlState]="form.controls[formInput.name]"
-             [ngrxEnableFocusTracking]="true"
-             type="{{formInput.type}}"
-             class="form-control"
-             placeholder="{{formInput.placeholder}}"
-             name="{{formInput.name}}"
-             [(ngModel)]="form.value[formInput.name]" />
-
-      <div *ngIf="form.controls[formInput.name].isInvalid && (form.controls[formInput.name].isDirty || form.controls[formInput.name].isTouched)">
-        <small [hidden]="!form.controls[formInput.name].errors[formInput.name]">
-          {{form.controls[formInput.name].errors[formInput.name]}}
-        </small>
-        <small [hidden]="!form.controls[formInput.name].errors.required">
-          {{formInput.value}} is required
-        </small>
-      </div>
+      <render-field [input]="formInput" [reduxForm]="form"></render-field>
     </span>
 
     <span *ngIf="itemType === 1">

@@ -61,6 +61,7 @@ export default class RegisterView {
         name: 'username',
         value: 'Username',
         type: 'text',
+        label: 'Username',
         placeholder: 'Username',
         inputType: ItemType.INPUT,
         minLength: 3
@@ -70,6 +71,7 @@ export default class RegisterView {
         name: 'email',
         value: 'Email',
         type: 'email',
+        label: 'Email',
         placeholder: 'Email',
         inputType: ItemType.INPUT,
         minLength: 1
@@ -79,6 +81,7 @@ export default class RegisterView {
         name: 'password',
         value: 'Password',
         type: 'password',
+        label: 'Password',
         placeholder: 'Password',
         inputType: ItemType.INPUT,
         minLength: 5
@@ -88,6 +91,7 @@ export default class RegisterView {
         name: 'passwordConfirmation',
         value: 'Password Confirmation',
         type: 'password',
+        label: 'Password Confirmation',
         placeholder: 'Password Confirmation',
         inputType: ItemType.INPUT,
         minLength: 5

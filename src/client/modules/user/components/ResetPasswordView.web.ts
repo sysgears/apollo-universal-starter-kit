@@ -79,6 +79,7 @@ export default class ResetPasswordView implements OnInit {
         name: 'password',
         value: 'Password',
         type: 'password',
+        label: 'Password',
         placeholder: 'Password',
         inputType: ItemType.INPUT,
         minLength: 5
@@ -88,6 +89,7 @@ export default class ResetPasswordView implements OnInit {
         name: 'passwordConfirmation',
         value: 'Password Confirmation',
         type: 'password',
+        label: 'Password Confirmation',
         placeholder: 'Password Confirmation',
         inputType: ItemType.INPUT,
         minLength: 5

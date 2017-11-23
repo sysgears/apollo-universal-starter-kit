@@ -2,17 +2,17 @@ import { Component, Input } from '@angular/core';
 import { FormInput } from './Form';
 
 @Component({
-  selector: 'render-select',
+  selector: 'render-field',
   template: `
     <label *ngIf="input.label" for="{{input.id}}">{{input.label}}</label>
-    <select id="{{input.id}}"
-            [ngrxFormControlState]="reduxForm.controls[input.name]"
-            [ngrxEnableFocusTracking]="true"
-            name="{{input.name}}"
-            class="form-control"
-            [(ngModel)]="reduxForm.value[input.name]">
-      <option *ngFor="let o of input.options">{{o}}</option>
-    </select>
+    <input id="{{input.id}}"
+           type="{{input.type}}"
+           [ngrxFormControlState]="reduxForm.controls[input.name]"
+           [ngrxEnableFocusTracking]="true"
+           name="{{input.name}}"
+           class="form-control"
+           placeholder="{{input.placeholder}}"
+           [(ngModel)]="reduxForm.value[input.name]"/>
 
     <div *ngIf="reduxForm.controls[input.name].isInvalid && (reduxForm.controls[input.name].isDirty || reduxForm.controls[input.name].isTouched)">
       <small [hidden]="!reduxForm.controls[input.name].errors[input.name]">

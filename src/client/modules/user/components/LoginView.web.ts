@@ -91,6 +91,7 @@ export default class LoginView {
         name: 'email',
         value: 'Email',
         type: 'email',
+        label: 'Email',
         placeholder: 'Email',
         inputType: ItemType.INPUT
       },
@@ -99,6 +100,7 @@ export default class LoginView {
         name: 'password',
         value: 'Password',
         type: 'password',
+        label: 'Password',
         placeholder: 'Password',
         inputType: ItemType.INPUT
       }

@@ -64,6 +64,7 @@ export default class ForgotPasswordView {
         name: 'email',
         value: 'Email',
         type: 'email',
+        label: 'Email',
         placeholder: 'Email',
         inputType: ItemType.INPUT
       }

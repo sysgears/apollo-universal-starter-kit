@@ -24,6 +24,7 @@ import NavBar from './NavBar';
 import NavLink from './NavLink';
 import PageLayout from './PageLayout';
 import RenderCheckBox from './RenderCheckBox';
+import RenderField from './RenderField';
 import RenderSelect from './RenderSelect';
 import Row from './Row';
 
@@ -43,5 +44,6 @@ export const BOOTSTRAP_COMPONENTS: any = [
   PageLayout,
   RenderSelect,
   RenderCheckBox,
+  RenderField,
   Row
 ];

@@ -1,10 +1,10 @@
 /* eslint-disable import/no-dynamic-require */
-require('babel-register')({ presets: ['env'], plugins: ['transform-class-properties'] });
-require('babel-polyfill');
 
-const shell = require('shelljs');
-const fs = require('fs');
-const chalk = require('chalk');
+import shell from 'shelljs';
+import fs from 'fs';
+import chalk from 'chalk';
+import GraphQLGenerator from 'domain-graphql';
+import { pascalize } from 'humps';
 
 String.prototype.toCamelCase = function() {
   return this.replace(/^([A-Z])|\s(\w)/g, function(match, p1, p2) {
@@ -13,11 +13,10 @@ String.prototype.toCamelCase = function() {
   });
 };
 
-String.prototype.capitalize = function() {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-};
-
 function renameFiles(destinationPath, templatePath, module, location) {
+  // pascalize
+  const Module = pascalize(module);
+
   shell.cp('-R', `${templatePath}/${location}/*`, destinationPath);
 
   // change to destination directory
@@ -26,7 +25,7 @@ function renameFiles(destinationPath, templatePath, module, location) {
   // rename files
   shell.ls('-Rl', '.').forEach(entry => {
     if (entry.isFile()) {
-      const moduleFile = entry.name.replace('Module', module.capitalize());
+      const moduleFile = entry.name.replace('Module', Module);
       shell.mv(entry.name, moduleFile);
     }
   });
@@ -35,7 +34,7 @@ function renameFiles(destinationPath, templatePath, module, location) {
   shell.ls('-Rl', '.').forEach(entry => {
     if (entry.isFile()) {
       shell.sed('-i', /\$module\$/g, module, entry.name);
-      shell.sed('-i', /\$Module\$/g, module.toCamelCase().capitalize(), entry.name);
+      shell.sed('-i', /\$Module\$/g, Module, entry.name);
       shell.sed('-i', /\$MODULE\$/g, module.toUpperCase(), entry.name);
     }
   });
@@ -43,6 +42,9 @@ function renameFiles(destinationPath, templatePath, module, location) {
 
 function copyFiles(logger, templatePath, module, action, location) {
   logger.info(`Copying ${location} files…`);
+
+  // pascalize
+  const Module = pascalize(module);
 
   // create new module directory
   const mkdir = shell.mkdir(`${__dirname}/../../src/${location}/modules/${module}`);
@@ -77,9 +79,9 @@ function copyFiles(logger, templatePath, module, action, location) {
 
       const timestamp = new Date().getTime();
       shell.cd(`${__dirname}/../../src/${location}/database/migrations`);
-      shell.mv(`_${module.toCamelCase().capitalize()}.js`, `${timestamp}_${module.toCamelCase().capitalize()}.js`);
+      shell.mv(`_${Module}.js`, `${timestamp}_${Module}.js`);
       shell.cd(`${__dirname}/../../src/${location}/database/seeds`);
-      shell.mv(`_${module.toCamelCase().capitalize()}.js`, `${timestamp}_${module.toCamelCase().capitalize()}.js`);
+      shell.mv(`_${Module}.js`, `${timestamp}_${Module}.js`);
 
       logger.info(chalk.green(`✔ The database files have been copied!`));
     }
@@ -90,6 +92,9 @@ function copyFiles(logger, templatePath, module, action, location) {
 
 function deleteFiles(logger, templatePath, module, location) {
   logger.info(`Deleting ${location} files…`);
+
+  // pascalize
+  const Module = pascalize(module);
 
   const modulePath = `${__dirname}/../../src/${location}/modules/${module}`;
 
@@ -123,8 +128,8 @@ function deleteFiles(logger, templatePath, module, location) {
       // change to database migrations directory
       shell.cd(`${__dirname}/../../src/${location}/database/migrations`);
       // check if any migrations files for this module exist
-      if (shell.find('.').filter(file => file.search(`_${module.toCamelCase().capitalize()}.js`) > -1).length > 0) {
-        let okMigrations = shell.rm(`*_${module.toCamelCase().capitalize()}.js`);
+      if (shell.find('.').filter(file => file.search(`_${Module}.js`) > -1).length > 0) {
+        let okMigrations = shell.rm(`*_${Module}.js`);
         if (okMigrations) {
           logger.info(chalk.green(`✔ Database migrations files successfully deleted!`));
         }
@@ -133,8 +138,8 @@ function deleteFiles(logger, templatePath, module, location) {
       // change to database seeds directory
       shell.cd(`${__dirname}/../../src/${location}/database/seeds`);
       // check if any seed files for this module exist
-      if (shell.find('.').filter(file => file.search(`_${module.toCamelCase().capitalize()}.js`) > -1).length > 0) {
-        let okSeeds = shell.rm(`*_${module.toCamelCase().capitalize()}.js`);
+      if (shell.find('.').filter(file => file.search(`_${Module}.js`) > -1).length > 0) {
+        let okSeeds = shell.rm(`*_${Module}.js`);
         if (okSeeds) {
           logger.info(chalk.green(`✔ Database seed files successfully deleted!`));
         }
@@ -151,27 +156,69 @@ function deleteFiles(logger, templatePath, module, location) {
 function updateSchema(logger, module) {
   logger.info(`Updating ${module} Schema…`);
 
-  // get fragment file
-  const path = `${__dirname}/../../src/client/modules/${module}/graphql/`;
-  if (fs.existsSync(path)) {
-    const file = `${module.toCamelCase().capitalize()}.graphql`;
+  // pascalize
+  const Module = pascalize(module);
 
+  const modulePath = `${__dirname}/../../src/server/modules/${module}`;
+
+  if (fs.existsSync(modulePath)) {
     // get module schema
-    const schema = require(`../../src/server/modules/${module}/schema`);
+    const schema = require(`${modulePath}/schema`)[Module];
 
-    // regenerate graphql fragment
-    let graphql = '';
-    for (const key of Object.keys(schema[module.toCamelCase().capitalize()].values)) {
-      graphql += `  ${key}\n`;
+    // get schema file
+    const pathSchema = `${__dirname}/../../src/server/modules/${module}/`;
+    if (fs.existsSync(pathSchema)) {
+      const file = `schema.graphqls`;
+
+      // regenerate input fields
+      let inputAdd = '';
+      let inputEdit = '';
+      for (const key of schema.keys()) {
+        const value = schema.values[key];
+        if (key !== 'id') {
+          inputAdd += new GraphQLGenerator()._generateField(schema.name, key, value) + '\n';
+        }
+        inputEdit += new GraphQLGenerator()._generateField(schema.name, key, value) + '\n';
+      }
+
+      shell.cd(pathSchema);
+
+      // override AddCrudInput in schema.graphqls file
+      const replaceAdd = `Add${Module}Input {([^}])*\\n}`;
+      shell.ShellString(shell.cat(file).replace(RegExp(replaceAdd, 'g'), `Add${Module}Input {\n${inputAdd}}`)).to(file);
+
+      // override EditCrudInput in schema.graphqls file
+      const replaceEdit = `Edit${Module}Input {([^}])*\\n}`;
+      shell
+        .ShellString(shell.cat(file).replace(RegExp(replaceEdit, 'g'), `Edit${Module}Input {\n${inputEdit}}`))
+        .to(file);
+
+      logger.info(chalk.green(`✔ Schema in ${pathSchema}${file} successfully updated!`));
+    } else {
+      logger.error(chalk.red(`✘ Schema path ${pathSchema} not found!`));
     }
 
-    shell.cd(path);
-    // override graphql fragment file
-    shell.ShellString(shell.cat(file).replace(/Crud {(.|\n)*\n}/, `Crud {\n${graphql}}`)).to(file);
+    // get fragment file
+    const pathFragment = `${__dirname}/../../src/client/modules/${module}/graphql/`;
+    if (fs.existsSync(pathFragment)) {
+      const file = `${Module}.graphql`;
 
-    logger.info(chalk.green(`✔ Fragment in ${path}${file} successfully updated!`));
+      // regenerate graphql fragment
+      let graphql = '';
+      for (const key of schema.keys()) {
+        graphql += `  ${key}\n`;
+      }
+
+      shell.cd(pathFragment);
+      // override graphql fragment file
+      shell.ShellString(shell.cat(file).replace(/Crud {(.|\n)*\n}/, `Crud {\n${graphql}}`)).to(file);
+
+      logger.info(chalk.green(`✔ Fragment in ${pathFragment}${file} successfully updated!`));
+    } else {
+      logger.error(chalk.red(`✘ Fragment path ${pathFragment} not found!`));
+    }
   } else {
-    logger.error(chalk.red(`✘ Path ${path} not found!`));
+    logger.info(chalk.red(`✘ Module ${module} in path ${modulePath} not found!`));
   }
 }
 

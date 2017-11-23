@@ -8,7 +8,7 @@ import { RenderField, Button } from './components/web';
 export const createTableColumns = (schema, path, hendleDelete) => {
   let columns = [];
 
-  for (const key of Object.keys(schema.values)) {
+  for (const key of schema.keys()) {
     if (key === 'id') {
       columns.push({
         title: 'Id',
@@ -47,10 +47,10 @@ const required = value => (value ? undefined : 'Required');
 export const createFormFields = schema => {
   let fields = [];
 
-  for (const key of Object.keys(schema.values)) {
+  for (const key of schema.keys()) {
     if (key !== 'id') {
       fields.push(
-        <Field name={key} component={RenderField} type="text" label={capitalize(key)} validate={[required]} />
+        <Field name={key} key={key} component={RenderField} type="text" label={capitalize(key)} validate={[required]} />
       );
     }
   }
@@ -59,5 +59,5 @@ export const createFormFields = schema => {
 };
 
 export const pickInputFields = (schema, values) => {
-  return pick(values, Object.keys(schema.values));
+  return pick(values, schema.keys());
 };

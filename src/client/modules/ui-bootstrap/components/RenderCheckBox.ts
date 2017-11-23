@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormInput } from './Form';
 
 @Component({
@@ -11,7 +11,8 @@ import { FormInput } from './Form';
              [ngrxEnableFocusTracking]="true"
              name="{{input.name}}"
              class="form-check-input"
-             [(ngModel)]="reduxForm.value[input.name]" />
+             (ngModelChange)="changed({ id: input.id, value: $event })"
+             [(ngModel)]="reduxForm?.value[input.name]" />
       {{input.label}}
     </label>
 
@@ -29,6 +30,11 @@ import { FormInput } from './Form';
 export default class {
   @Input() private input: FormInput;
   @Input() private reduxForm: any;
+  @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() {}
+
+  public changed = e => {
+    this.onChange.emit(e);
+  };
 }

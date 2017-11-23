@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormInput } from './Form';
 
 @Component({
@@ -12,7 +12,8 @@ import { FormInput } from './Form';
            name="{{input.name}}"
            class="form-control"
            placeholder="{{input.placeholder}}"
-           [(ngModel)]="reduxForm.value[input.name]"/>
+           (ngModelChange)="changed({ id: input.id, value: $event })"
+           [(ngModel)]="reduxForm?.value[input.name]"/>
 
     <div *ngIf="reduxForm.controls[input.name].isInvalid && (reduxForm.controls[input.name].isDirty || reduxForm.controls[input.name].isTouched)">
       <small [hidden]="!reduxForm.controls[input.name].errors[input.name]">
@@ -26,8 +27,13 @@ import { FormInput } from './Form';
   styles: ['small {color: brown}']
 })
 export default class {
-  @Input() private input: FormInput;
-  @Input() private reduxForm: any;
+  @Input() public input: FormInput;
+  @Input() public reduxForm: any;
+  @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() {}
+
+  public changed = e => {
+    this.onChange.emit(e);
+  };
 }

@@ -1,9 +1,10 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { pick } from 'lodash';
 import { Button } from './components/web';
 
-const createTableColumns = (schema, path, hendleDelete) => {
+export const createTableColumns = (schema, path, hendleDelete) => {
   let columns = [];
 
   for (const key of Object.keys(schema.values)) {
@@ -40,4 +41,6 @@ const createTableColumns = (schema, path, hendleDelete) => {
   return columns;
 };
 
-export default createTableColumns;
+export const pickInputFields = (schema, values) => {
+  return pick(values, Object.keys(schema.values));
+};

@@ -3,9 +3,13 @@ type $Module$Payload {
   errors: [FieldError!]
 }
 
-input $Module$Input {
+input Add$Module$Input {
+  name: String!
+}
+
+input Edit$Module$Input {
   id: Int!
-  namme: String!
+  name: String!
 }
 
 extend type Query {
@@ -14,8 +18,8 @@ extend type Query {
 }
 
 extend type Mutation {
-  add$Module$(input: $Module$Input!): $Module$Payload!
-  edit$Module$(input: $Module$Input!): $Module$Payload!
+  add$Module$(input: Add$Module$Input!): $Module$Payload!
+  edit$Module$(input: Edit$Module$Input!): $Module$Payload!
   delete$Module$(id: Int!): $Module$Payload!
 }
 

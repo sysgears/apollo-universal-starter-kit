@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { SubmissionError } from 'redux-form';
-import { pick } from 'lodash';
-import { PageLayout } from '../../common/components/web';
 
+import { pickInputFields } from '../../common/util';
+import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
+import { PageLayout } from '../../common/components/web';
 import $Module$Form from './$Module$Form';
 import settings from '../../../../../settings';
 
@@ -14,10 +15,10 @@ class $Module$EditView extends React.PureComponent {
     const { $module$, add$Module$, edit$Module$ } = this.props;
     let result = null;
 
-    let insertValues = pick(values, ['name']);
+    const insertValues = pickInputFields($Module$Schema, values);
 
     if ($module$) {
-      result = await edit$Module$({ id: $module$.id, ...insertValues });
+      result = await edit$Module$(insertValues);
     } else {
       result = await add$Module$(insertValues);
     }

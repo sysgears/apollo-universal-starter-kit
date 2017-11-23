@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
 import { PageLayout, Table, Button } from '../../common/components/web';
-import createTableColumns from '../../common/util';
+import { createTableColumns } from '../../common/util';
 import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
 
 class $Module$ListView extends React.PureComponent {

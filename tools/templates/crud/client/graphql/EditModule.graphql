@@ -1,6 +1,6 @@
 #import "./$Module$.graphql"
 
-mutation edit$Module$($input: $Module$Input!) {
+mutation edit$Module$($input: Edit$Module$Input!) {
   edit$Module$(input: $input) {
     $module$ {
       ...$Module$Info

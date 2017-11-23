@@ -19,7 +19,7 @@ export default class {
       connectionParam,
       createFetchOptions,
       stylesInsert,
-      rootComponent
+      rootComponentFactoryFactory
     },
     ...features
   ) {
@@ -33,7 +33,7 @@ export default class {
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
-    this.rootComponent = combine(arguments, arg => arg.rootComponent);
+    this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
   }
 
   get routes() {
@@ -92,10 +92,10 @@ export default class {
     return this.stylesInsert;
   }
 
-  getWrappedRoot(root) {
+  getWrappedRoot(root, req) {
     let nestedRoot = root;
-    for (const Component of this.rootComponent) {
-      nestedRoot = React.cloneElement(Component, {}, nestedRoot);
+    for (const componentFactory of this.rootComponentFactory) {
+      nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
     }
     return nestedRoot;
   }

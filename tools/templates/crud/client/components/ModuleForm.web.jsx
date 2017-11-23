@@ -17,7 +17,7 @@ const validate = values => {
 const $Module$Form = ({ handleSubmit, submitting, onSubmit, error }) => {
   return (
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="id" component={RenderField} type="text" label="Id" validate={[required]} />
+      <Field name="name" component={RenderField} type="text" label="Name" validate={[required]} />
       {error && <Alert color="error">{error}</Alert>}
       <Button color="primary" type="submit" disabled={submitting}>
         Save

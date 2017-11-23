@@ -4,7 +4,8 @@ type $Module$Payload {
 }
 
 input $Module$Input {
-  id: String
+  id: Int!
+  namme: String!
 }
 
 extend type Query {

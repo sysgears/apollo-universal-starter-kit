@@ -5,5 +5,5 @@ export async function seed(knex, Promise) {
 
   await knex('$module$')
     .returning('id')
-    .insert({});
+    .insert({ name: 'test' });
 }

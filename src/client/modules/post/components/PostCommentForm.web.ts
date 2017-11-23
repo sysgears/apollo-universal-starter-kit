@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
 import PostCommentsService from '../containers/PostComments';
-import { CommentSelect } from '../reducers/index';
 
 @Component({
   selector: 'post-comment-form',

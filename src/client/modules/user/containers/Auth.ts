@@ -11,10 +11,10 @@ import LoginService from './Login';
       </span>
     </menu-item>
     <menu-item *ngIf="isAuth">
-      <nav-link [name]="'Logout'" [type]="'clickable'" [onClick]="logout"></nav-link>
+      <nav-link [name]="'Logout'" [type]="'clickable'" (click)="logout()"></nav-link>
     </menu-item>
     <menu-item *ngIf="isAuth">
-      <nav-link [name]="profileName" [to]="'/profile'" [type]="'router'"></nav-link>
+      <nav-link [name]="profileName" [to]="'/profile'"></nav-link>
     </menu-item>
   `,
   styles: ['menu-item { float: right; display: inline-block; }']
@@ -22,7 +22,7 @@ import LoginService from './Login';
 class AuthLogin implements OnInit {
   public isAuth: boolean = false;
   public profileName: string;
-  public logout: any = this.logoutFn.bind(this);
+  public logout: any = this.logoutFn;
 
   constructor(private loginService: LoginService) {}
 
@@ -50,7 +50,7 @@ class AuthLogin implements OnInit {
   selector: 'auth-nav',
   template: `
     <menu-item *ngIf="isAuth">
-      <nav-link [name]="'Users'" [to]="'/users'" [type]="'router'"></nav-link>
+      <nav-link [name]="'Users'" [to]="'/users'"></nav-link>
     </menu-item>
   `
 })

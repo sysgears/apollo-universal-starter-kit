@@ -8,7 +8,7 @@ import PostEditService from '../containers/PostEdit';
   selector: 'post-edit-view',
   template: `
       <div *ngIf="!loading; else showLoading">
-          <a id="back-button" [routerLink]="['/posts']">Back</a>
+          <ausk-link [id]="'back-button'" [to]="'/posts'">Back</ausk-link>
           <h2>{{ title }} Post</h2>
           <post-form [post]="post"></post-form>
           <br/>

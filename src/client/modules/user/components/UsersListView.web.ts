@@ -17,8 +17,9 @@ import { UserOrderBy } from '../reducers';
       <table class="table">
         <thead>
         <tr>
-          <th *ngFor="let header of renderHeaders()">
-            <a (click)="orderByColumn($event, header.value)">{{ header.name }} <span [innerHTML]="renderOrderByArrow(header.value)"></span>
+          <th *ngFor="let header of headers">
+            <a (click)="orderByColumn($event, header.value)">
+              {{ header.name }} <span [innerHTML]="renderOrderByArrow(header.value)"></span>
             </a>
           </th>
           <th>Actions</th>
@@ -27,14 +28,13 @@ import { UserOrderBy } from '../reducers';
         <tbody>
         <tr *ngFor="let user of users">
           <td>
-            <a class="user-link" [routerLink]="['/users', user.id]">{{ user.username }}</a>
+            <ausk-link [className]="'user-link'" [to]="'/users/' + user.id">{{ user.username }}</ausk-link>
           </td>
           <td>{{ user.email }}</td>
           <td>{{ user.role }}</td>
           <td>{{ user.isActive }}</td>
           <td>
-            <button type="button" class="btn btn-primary btn-sm" (click)="handleDeleteUser(user.id)">Delete
-            </button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="handleDeleteUser(user.id)">Delete</button>
           </td>
         </tr>
         </tbody>
@@ -54,6 +54,12 @@ export default class UsersListView implements OnInit, OnDestroy {
   public loading: boolean = true;
   public errors: any = [];
   public users: any = [];
+  public headers = [
+    { name: 'Username', value: 'username' },
+    { name: 'Email', value: 'email' },
+    { name: 'Role', value: 'role' },
+    { name: 'Is Active', value: 'isActive' }
+  ];
   private subsOnStore: Subscription;
   private subsOnLoad: Subscription;
   private subsOnUpdate: Subscription;
@@ -123,27 +129,6 @@ export default class UsersListView implements OnInit, OnDestroy {
       }
     }
     return this.store.dispatch(new UserOrderBy({ column: name, order }));
-  };
-
-  public renderHeaders = () => {
-    return [
-      {
-        name: 'Username',
-        value: 'username'
-      },
-      {
-        name: 'Email',
-        value: 'email'
-      },
-      {
-        name: 'Role',
-        value: 'role'
-      },
-      {
-        name: 'Is Active',
-        value: 'isActive'
-      }
-    ];
   };
 
   private unsubscribe = (...subscriptions: Subscription[]) => {

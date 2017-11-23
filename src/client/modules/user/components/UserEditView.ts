@@ -12,7 +12,7 @@ import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } 
 @Component({
   selector: 'users-edit-view',
   template: `
-    <a id="back-button" routerLink="/users">Back</a>
+    <ausk-link [id]="back-button" [to]="'/users'" [type]>Back</ausk-link>
     <h1>{{title}}</h1>
 
     <div *ngIf="errors">

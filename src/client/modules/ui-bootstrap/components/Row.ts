@@ -1,12 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'row',
   template: `
-     <div class="{{ classes.join(' ') }}">
-         <ng-content></ng-content>
-     </div>
-	`
+    <ng-content></ng-content>
+	`,
+  encapsulation: ViewEncapsulation.None
 })
 export default class Row implements OnInit {
   @Input() private noGutters: boolean;
@@ -23,16 +22,18 @@ export default class Row implements OnInit {
     { justifyContentLg: 'justify-content-lg' },
     { justifyContentXl: 'justify-content-xl' }
   ];
-  public classes: string[] = ['row'];
+
+  constructor(private element: ElementRef, private renderer: Renderer2) {}
 
   public ngOnInit(): void {
+    this.addClassToElement('row');
     this.setGutters();
     this.generateUiClasses(this.justifies);
   }
 
   private setGutters() {
     if (this.noGutters) {
-      this.classes.push('no-gutters');
+      this.addClassToElement('no-gutters');
     }
   }
 
@@ -41,12 +42,13 @@ export default class Row implements OnInit {
       const key = this[Object.keys(item)[0]];
       const value = item[Object.keys(item)[0]];
       if (key) {
-        this.classes.push(this.generateClass(value, key));
+        this.addClassToElement(value, key);
       }
     });
   }
 
-  private generateClass(className: string, value: string) {
-    return `${className}-${value}`;
+  private addClassToElement(className: string, value?: string) {
+    const colClass = value ? `${className}-${value}` : className;
+    this.renderer.addClass(this.element.nativeElement, colClass);
   }
 }

@@ -6,7 +6,8 @@ import '../../../modules/ui-bootstrap/styles/styles.scss';
   template: `
     <section class="text-center mt-4 mb-4">
     <h2>Page not found - 404</h2>
-    <a href="/" class="btn-primary" ngbButtonLabel>Go to Homepage</a>
+    <ausk-link [to]="'/'">
+      <button class="btn btn-primary">Go to Homepage</button></ausk-link>
   </section>
   `
 })

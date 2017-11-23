@@ -4,9 +4,9 @@ import { Component } from '@angular/core';
   selector: 'users',
   template: `
     <h2>Users</h2>
-    <a [routerLink]="['/users/0']">
+    <ausk-link [to]="'/users/0'">
       <button class="btn btn-primary">Add</button>
-    </a>
+    </ausk-link>
     <hr>
     <users-filter-view></users-filter-view>
     <hr>

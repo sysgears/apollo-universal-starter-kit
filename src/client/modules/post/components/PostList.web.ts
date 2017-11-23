@@ -8,9 +8,9 @@ import PostService, { AddPost, DeletePost } from '../containers/Post';
   template: `
       <div *ngIf="!loading; else showLoading" class="container">
           <h2>Posts</h2>
-          <a [routerLink]="['/post/0']">
+          <ausk-link [to]="'/post/0'">
               <button class="btn btn-primary">Add</button>
-          </a>
+          </ausk-link>
           <h1></h1>
           <table class="table">
               <thead>
@@ -20,12 +20,12 @@ import PostService, { AddPost, DeletePost } from '../containers/Post';
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let post of renderPosts()">
+              <tr *ngFor="let post of posts.edges">
                   <td>
-                      <a [routerLink]="['/post', post.id]" class="post-link">{{ post.title }}</a>
+                    <ausk-link [className]="'post-link'" [to]="'/post/' + post.node.id">{{ post.node.title }}</ausk-link>
                   </td>
                   <td>
-                      <button type="button" class="delete-button btn btn-primary btn-sm" (click)="deletePost(post.id)">Delete</button>
+                      <button type="button" class="delete-button btn btn-primary btn-sm" (click)="deletePost(post.node.id)">Delete</button>
                   </td>
               </tr>
               </tbody>
@@ -75,15 +75,6 @@ export default class PostList implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.unsubscribe(this.subsOnLoad, this.subsOnDelete);
-  }
-
-  public renderPosts() {
-    if (this.posts.edges.length === 0) {
-      return [];
-    }
-    return this.posts.edges.map((edge: any): any => {
-      return { id: edge.node.id, title: edge.node.title };
-    });
   }
 
   public loadMoreRows() {

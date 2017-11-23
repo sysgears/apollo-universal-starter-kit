@@ -16,7 +16,7 @@ export default new Feature({
   navItem: [
     `
       <menu-item>
-        <nav-link [name]="'Posts'" [to]="'/posts'" [type]="'router'"></nav-link>
+        <nav-link [name]="'Posts'" [to]="'/posts'"></nav-link>
       </menu-item>
     `
   ],

@@ -34,7 +34,7 @@ import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers
       Login with Facebook
     </button>
 
-    <a routerLink="/forgot-password">Forgot your password?</a>
+    <ausk-link [to]="'/forgot-password'">Forgot your password?</ausk-link>
     <hr/>
     <ausk-card>
       <card-group>

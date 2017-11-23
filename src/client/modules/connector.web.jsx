@@ -19,7 +19,7 @@ export default class {
       connectionParam,
       createFetchOptions,
       stylesInsert,
-      rootComponentFactoryFactory
+      rootComponentFactory
     },
     ...features
   ) {

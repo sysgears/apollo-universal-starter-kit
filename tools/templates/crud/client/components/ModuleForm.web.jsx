@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
-import { Form, RenderField, Button, Alert } from '../../common/components/web';
+import { reduxForm } from 'redux-form';
 
-const required = value => (value ? undefined : 'Required');
+import { createFormFields } from '../../common/util';
+import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
+import { Form, Button, Alert } from '../../common/components/web';
 
 const validate = values => {
   const errors = {};
@@ -17,7 +18,7 @@ const validate = values => {
 const $Module$Form = ({ handleSubmit, submitting, onSubmit, error }) => {
   return (
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="name" component={RenderField} type="text" label="Name" validate={[required]} />
+      {createFormFields($Module$Schema)}
       {error && <Alert color="error">{error}</Alert>}
       <Button color="primary" type="submit" disabled={submitting}>
         Save

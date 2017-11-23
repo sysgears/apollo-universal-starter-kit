@@ -1,8 +1,9 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { pick } from 'lodash';
-import { Button } from './components/web';
+import { pick, capitalize } from 'lodash';
+import { Field } from 'redux-form';
+import { RenderField, Button } from './components/web';
 
 export const createTableColumns = (schema, path, hendleDelete) => {
   let columns = [];
@@ -39,6 +40,22 @@ export const createTableColumns = (schema, path, hendleDelete) => {
   });
 
   return columns;
+};
+
+const required = value => (value ? undefined : 'Required');
+
+export const createFormFields = schema => {
+  let fields = [];
+
+  for (const key of Object.keys(schema.values)) {
+    if (key !== 'id') {
+      fields.push(
+        <Field name={key} component={RenderField} type="text" label={capitalize(key)} validate={[required]} />
+      );
+    }
+  }
+
+  return fields;
 };
 
 export const pickInputFields = (schema, values) => {

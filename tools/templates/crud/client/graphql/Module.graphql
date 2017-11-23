@@ -1,3 +1,4 @@
 fragment $Module$Info on $Module$ {
   id
+  name
 }

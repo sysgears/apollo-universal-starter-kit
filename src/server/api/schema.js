@@ -1,4 +1,5 @@
 import { makeExecutableSchema, addErrorLoggingToSchema } from 'graphql-tools';
+import joinMonsterAdapt from 'join-monster-graphql-tools-adapter';
 
 import rootSchemaDef from './rootSchema.graphqls';
 import modules from '../modules';
@@ -11,5 +12,6 @@ const executableSchema = makeExecutableSchema({
 });
 
 addErrorLoggingToSchema(executableSchema, { log: e => log.error(e) });
+joinMonsterAdapt(executableSchema, modules.createMetadata());
 
 export default executableSchema;

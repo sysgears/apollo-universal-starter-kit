@@ -27,7 +27,7 @@ class $Module$EditView extends React.PureComponent {
       let submitError = {
         _error: 'Edit $module$ failed!'
       };
-      result.errors.map(error => (submitError[error.field] = error.message));
+      Object.keys(result.errors).map(key => (submitError[result.errors[key].field] = result.errors[key].message));
       throw new SubmissionError(submitError);
     }
   };

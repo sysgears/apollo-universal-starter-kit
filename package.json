@@ -29,10 +29,6 @@
     "*.{js,jsx,json}": [
       "eslint --fix",
       "git add"
-    ],
-    "*.graphql": [
-      "prettier --parser graphql --write",
-      "git add"
     ]
   },
   "repository": {
@@ -59,6 +55,7 @@
     "apollo-cache-inmemory": "^1.1.1",
     "apollo-client": "^2.0.3",
     "apollo-engine": "^0.5.4",
+    "apollo-errors": "^1.5.1",
     "apollo-fetch": "^0.6.0",
     "apollo-fetch-upload": "^1.1.0",
     "apollo-link": "^1.0.3",
@@ -89,6 +86,8 @@
     "humps": "^2.0.1",
     "immutability-helper": "^2.5.0",
     "isomorphic-fetch": "^2.2.1",
+    "join-monster": "^2.0.15",
+    "join-monster-graphql-tools-adapter": "^0.0.2",
     "jsonwebtoken": "^8.1.0",
     "jwt-decode": "^2.2.0",
     "knex": "^0.14.0",

@@ -12,6 +12,7 @@ const combine = (features, extractor): any =>
 
 type FeatureParams = {
   schema: DocumentNode | DocumentNode[],
+  createMetadataFunc?: Function | Function[],
   createResolversFunc?: Function | Function[],
   createContextFunc?: Function | Function[],
   beforeware?: Middleware | Middleware[],
@@ -21,6 +22,7 @@ type FeatureParams = {
 
 class Feature {
   schema: DocumentNode[];
+  createMetadataFunc: Function[];
   createResolversFunc: Function[];
   createContextFunc: Function[];
   createFetchOptions: Function[];
@@ -30,6 +32,7 @@ class Feature {
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
     this.schema = combine(arguments, arg => arg.schema);
+    this.createMetadataFunc = combine(arguments, arg => arg.createMetadataFunc);
     this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.beforeware = combine(arguments, arg => arg.beforeware);
@@ -41,15 +44,19 @@ class Feature {
     return this.schema;
   }
 
+  createMetadata() {
+    return merge({}, ...this.createMetadataFunc.map(createMetadata => createMetadata()));
+  }
+
+  createResolvers(pubsub: any) {
+    return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
+  }
+
   async createContext(req: $Request, connectionParams: any, webSocket: any) {
     const results = await Promise.all(
       this.createContextFunc.map(createContext => createContext(req, connectionParams, webSocket))
     );
     return merge({}, ...results);
-  }
-
-  createResolvers(pubsub: any) {
-    return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
   }
 
   get beforewares(): Middleware[] {

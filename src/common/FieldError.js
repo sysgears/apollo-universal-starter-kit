@@ -1,3 +1,9 @@
+import { createError } from 'apollo-errors';
+
+const BaseError = createError('BaseError', {
+  message: 'A error has occurred'
+});
+
 export default class FieldError {
   constructor() {
     this.errors = {};
@@ -20,7 +26,7 @@ export default class FieldError {
 
   throwIf() {
     if (this.hasAny()) {
-      throw this.getErrors();
+      throw new BaseError({ data: this.getErrors() });
     }
   }
 }

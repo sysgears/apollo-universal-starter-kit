@@ -9,11 +9,8 @@ import { UserOrderBy } from '../reducers';
   selector: 'users-list-view',
   template: `
     <div *ngIf="!loading; else showLoading">
-      <div *ngIf="errors">
-        <alert *ngFor="let error of errors" [type]="'error'" (close)="onErrorClosed(error)" [id]="error.field">
-          {{error.message}}
-        </alert>
-      </div>
+
+      <alert [data]="alerts"></alert>
 
       <table class="table">
         <thead>
@@ -41,6 +38,7 @@ import { UserOrderBy } from '../reducers';
         </tbody>
       </table>
     </div>
+
     <ng-template #showLoading>
       <div class="text-center">Loading...</div>
     </ng-template>
@@ -53,7 +51,7 @@ export default class UsersListView implements OnInit, OnDestroy {
   public isActive: boolean;
   public orderBy: any;
   public loading: boolean = true;
-  public errors: any = [];
+  public alerts: any = [];
   public users: any = [];
   public headers = [
     { name: 'Username', value: 'username' },
@@ -109,7 +107,11 @@ export default class UsersListView implements OnInit, OnDestroy {
   public handleDeleteUser = async (id: number) => {
     this.unsubscribe(this.subsOnDelete);
     this.subsOnDelete = this.usersListService.deleteUser(id, ({ data: { deleteUser: { errors } } }: any) => {
-      this.errors = errors;
+      for (const error of errors) {
+        if (!this.alerts.indexOf(error)) {
+          this.alerts.push(error);
+        }
+      }
     });
   };
 
@@ -131,11 +133,6 @@ export default class UsersListView implements OnInit, OnDestroy {
     }
     return this.store.dispatch(new UserOrderBy({ column: name, order }));
   };
-
-  public onErrorClosed(error: any) {
-    const index = this.errors.indexOf(error);
-    this.errors.splice(index, 1);
-  }
 
   private unsubscribe = (...subscriptions: Subscription[]) => {
     subscriptions.forEach((subscription: Subscription) => {

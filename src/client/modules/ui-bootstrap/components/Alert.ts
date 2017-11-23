@@ -1,27 +1,31 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+interface AlertItem {
+  id: string;
+  message: string;
+  type: string;
+}
 
 @Component({
   selector: 'alert',
   template: `
-    <div [id]="id || ''" class="alert alert-dismissible fade show {{ className }}" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="onClose()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <ng-content></ng-content>
+    <div *ngIf="data">
+      <div *ngFor="let alert of data" id="{{ alert.id }}"
+           class="alert alert-dismissible fade show alert-{{ alert.type || 'danger' }}"
+           role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="onClose(alert)">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {{ alert.message }}
+      </div>
     </div>
 	`
 })
-export default class Alert implements OnInit {
-  @Input() public id: string;
-  @Input() public type: string;
-  @Output() public close = new EventEmitter<boolean>();
-  public className: string;
+export default class Alert {
+  @Input() public data: AlertItem[];
 
-  public ngOnInit(): void {
-    this.className = `alert-${this.type === 'error' ? 'danger' : this.type}`;
-  }
-
-  public onClose() {
-    this.close.emit(true);
+  public onClose(alert: AlertItem) {
+    const index = this.data.indexOf(alert);
+    this.data.splice(index, 1);
   }
 }

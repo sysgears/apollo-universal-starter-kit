@@ -15,11 +15,7 @@ import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } 
     <ausk-link [id]="back-button" [to]="'/users'" [type]>Back</ausk-link>
     <h1>{{title}}</h1>
 
-    <div *ngIf="errors">
-      <alert *ngFor="let error of errors" [type]="'error'" (close)="onErrorClosed(error)" [id]="error.field">
-        {{error.message}}
-      </alert>
-    </div>
+    <alert [data]="alerts"></alert>
 
     <ausk-form [onSubmit]="onSubmit"
                [formName]="'userForm'"
@@ -34,7 +30,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
   public user: any = {};
   public loading: boolean = true;
   public title: string;
-  public errors: any[] = [];
+  public alerts: any[] = [];
   public formState: FormGroupState<UserFormData>;
   public form: FormInput[];
 
@@ -89,7 +85,11 @@ export default class UsersEditView implements OnInit, OnDestroy {
         { id: this.user.id, ...insertValues },
         ({ data: { editUser: { errors, user } } }: any) => {
           if (errors) {
-            this.errors = errors;
+            for (const error of errors) {
+              if (!this.alerts.indexOf(error)) {
+                this.alerts.push(error);
+              }
+            }
             return;
           }
           this.router.navigateByUrl('users');
@@ -98,18 +98,17 @@ export default class UsersEditView implements OnInit, OnDestroy {
     } else {
       this.userEditService.addUser(insertValues, ({ data: { addUser: { errors, user } } }: any) => {
         if (errors) {
-          this.errors = errors;
+          for (const error of errors) {
+            if (!this.alerts.indexOf(error)) {
+              this.alerts.push(error);
+            }
+          }
           return;
         }
         this.router.navigateByUrl('users');
       });
     }
   };
-
-  public onErrorClosed(error: any) {
-    const index = this.errors.indexOf(error);
-    this.errors.splice(index, 1);
-  }
 
   private createForm = (withPassword: boolean) => {
     return [

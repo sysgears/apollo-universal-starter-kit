@@ -6,17 +6,18 @@ import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import ForgotPasswordService from '../containers/ForgotPassword';
 import { ForgotPasswordFormData, ForgotPasswordFormState, ResetForgotPasswordFormAction } from '../reducers/index';
 
+const sentAlert = {
+  field: 'sentSuccess',
+  message: 'Reset password instructions have been emailed to you.',
+  type: 'success'
+};
+
 @Component({
   selector: 'forgot-password-view',
   template: `
     <h1>Forgot password!</h1>
 
-    <alert *ngIf="sent" [type]="'success'" (close)="sent=false">Reset password instructions have been emailed to you.</alert>
-    <div *ngIf="errors">
-      <alert *ngFor="let error of errors" [type]="'error'" (close)="onErrorClosed(error)" [id]="error.field">
-        {{error.message}}
-      </alert>
-    </div>
+    <alert [data]="alerts"></alert>
 
     <ausk-form [onSubmit]="onSubmit"
                [submitting]="submitting"
@@ -31,7 +32,7 @@ export default class ForgotPasswordView {
   public form: FormInput[];
   public sent: boolean = false;
   public submitting: boolean = false;
-  public errors: any[] = [];
+  public alerts: any[] = [];
   public formState: FormGroupState<ForgotPasswordFormData>;
 
   constructor(private forgotPasswordService: ForgotPasswordService, private store: Store<ForgotPasswordFormState>) {
@@ -45,19 +46,21 @@ export default class ForgotPasswordView {
     this.submitting = true;
     this.forgotPasswordService.forgotPassword(email, ({ data: { forgotPassword } }: any) => {
       this.sent = true;
+      if (!this.alerts.indexOf(sentAlert)) {
+        this.alerts.push(sentAlert);
+      }
       this.submitting = false;
       if (forgotPassword.errors) {
-        this.errors = forgotPassword.errors;
+        for (const error of forgotPassword.errors) {
+          if (!this.alerts.indexOf(error)) {
+            this.alerts.push(error);
+          }
+        }
         return;
       }
       this.store.dispatch(new ResetForgotPasswordFormAction());
     });
   };
-
-  public onErrorClosed(error: any) {
-    const index = this.errors.indexOf(error);
-    this.errors.splice(index, 1);
-  }
 
   private createForm = (): FormInput[] => {
     return [

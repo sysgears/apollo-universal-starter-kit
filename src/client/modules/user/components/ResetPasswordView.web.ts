@@ -12,11 +12,7 @@ import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
   template: `
     <h1>Reset password!</h1>
 
-    <div *ngIf="errors">
-      <alert *ngFor="let error of errors" [type]="'error'" (close)="onErrorClosed(error)" [id]="error.field">
-        {{error.message}}
-      </alert>
-    </div>
+    <alert [data]="alerts"></alert>
 
     <ausk-form [onSubmit]="onSubmit"
                [submitting]="submitting"
@@ -30,7 +26,7 @@ import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
 export default class ResetPasswordView implements OnInit {
   public sent: boolean = false;
   public submitting: boolean = false;
-  public errors: any[];
+  public alerts: any[];
   private token: string;
   public formState: FormGroupState<RegisterFormData>;
   public form: FormInput[];
@@ -64,18 +60,17 @@ export default class ResetPasswordView implements OnInit {
           this.submitting = false;
 
           if (resetPassword.errors) {
-            this.errors = resetPassword.errors;
+            for (const error of resetPassword.errors) {
+              if (!this.alerts.indexOf(error)) {
+                this.alerts.push(error);
+              }
+            }
             return;
           }
         }
       );
     }
   };
-
-  public onErrorClosed(error: any) {
-    const index = this.errors.indexOf(error);
-    this.errors.splice(index, 1);
-  }
 
   private createForm = (): FormInput[] => {
     return [

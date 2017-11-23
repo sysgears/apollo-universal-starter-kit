@@ -10,10 +10,11 @@ import { UserOrderBy } from '../reducers';
   template: `
     <div *ngIf="!loading; else showLoading">
       <div *ngIf="errors">
-        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+        <alert *ngFor="let error of errors" [type]="'error'" (close)="onErrorClosed(error)" [id]="error.field">
           {{error.message}}
-        </div>
+        </alert>
       </div>
+
       <table class="table">
         <thead>
         <tr>
@@ -130,6 +131,11 @@ export default class UsersListView implements OnInit, OnDestroy {
     }
     return this.store.dispatch(new UserOrderBy({ column: name, order }));
   };
+
+  public onErrorClosed(error: any) {
+    const index = this.errors.indexOf(error);
+    this.errors.splice(index, 1);
+  }
 
   private unsubscribe = (...subscriptions: Subscription[]) => {
     subscriptions.forEach((subscription: Subscription) => {

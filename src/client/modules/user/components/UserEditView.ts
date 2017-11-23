@@ -16,9 +16,9 @@ import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } 
     <h1>{{title}}</h1>
 
     <div *ngIf="errors">
-      <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+      <alert *ngFor="let error of errors" [type]="'error'" (close)="onErrorClosed(error)" [id]="error.field">
         {{error.message}}
-      </div>
+      </alert>
     </div>
 
     <ausk-form [onSubmit]="onSubmit"
@@ -105,6 +105,11 @@ export default class UsersEditView implements OnInit, OnDestroy {
       });
     }
   };
+
+  public onErrorClosed(error: any) {
+    const index = this.errors.indexOf(error);
+    this.errors.splice(index, 1);
+  }
 
   private createForm = (withPassword: boolean) => {
     return [

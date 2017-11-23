@@ -11,14 +11,11 @@ import { ForgotPasswordFormData, ForgotPasswordFormState, ResetForgotPasswordFor
   template: `
     <h1>Forgot password!</h1>
 
-    <div *ngIf="sent" class="alert alert-success">
-      <div>Reset password instructions have been emailed to you.</div>
-    </div>
-
+    <alert *ngIf="sent" [type]="'success'" (close)="sent=false">Reset password instructions have been emailed to you.</alert>
     <div *ngIf="errors">
-      <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+      <alert *ngFor="let error of errors" [type]="'error'" (close)="onErrorClosed(error)" [id]="error.field">
         {{error.message}}
-      </div>
+      </alert>
     </div>
 
     <ausk-form [onSubmit]="onSubmit"
@@ -56,6 +53,11 @@ export default class ForgotPasswordView {
       this.store.dispatch(new ResetForgotPasswordFormAction());
     });
   };
+
+  public onErrorClosed(error: any) {
+    const index = this.errors.indexOf(error);
+    this.errors.splice(index, 1);
+  }
 
   private createForm = (): FormInput[] => {
     return [

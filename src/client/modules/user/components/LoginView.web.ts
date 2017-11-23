@@ -17,9 +17,9 @@ import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers
     <h1>Login page!</h1>
 
     <div *ngIf="errors">
-      <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+      <alert *ngFor="let error of errors" [type]="'error'" (close)="onErrorClosed(error)" [id]="error.field">
         {{error.message}}
-      </div>
+      </alert>
     </div>
 
     <ausk-form [onSubmit]="onSubmit"
@@ -77,6 +77,11 @@ export default class LoginView {
       this.router.navigateByUrl('profile');
     });
   };
+
+  public onErrorClosed(error: any) {
+    const index = this.errors.indexOf(error);
+    this.errors.splice(index, 1);
+  }
 
   private facebookLoginFn = () => {
     const { protocol, hostname, port } = url.parse(__BACKEND_URL__);

@@ -13,9 +13,9 @@ import { RegisterFormData, RegisterFormState } from '../reducers/index';
     <h1>Register page!</h1>
 
     <div *ngIf="errors">
-      <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
+      <alert *ngFor="let error of errors" [type]="'error'" (close)="onErrorClosed(error)" [id]="error.field">
         {{error.message}}
-      </div>
+      </alert>
     </div>
 
     <ausk-form [onSubmit]="onSubmit"
@@ -53,6 +53,11 @@ export default class RegisterView {
       this.router.navigateByUrl('login');
     });
   };
+
+  public onErrorClosed(error: any) {
+    const index = this.errors.indexOf(error);
+    this.errors.splice(index, 1);
+  }
 
   private createForm = (): FormInput[] => {
     return [

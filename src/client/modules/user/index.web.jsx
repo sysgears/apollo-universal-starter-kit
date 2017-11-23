@@ -1,4 +1,5 @@
 import React from 'react';
+import { CookiesProvider } from 'react-cookie';
 import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
 import Profile from './containers/Profile';
@@ -75,5 +76,7 @@ export default new Feature({
   reducer: { user: reducers },
   middleware: tokenMiddleware,
   afterware: tokenAfterware,
-  connectionParam: connectionParam
+  connectionParam: connectionParam,
+  // eslint-disable-next-line react/display-name
+  rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
 });

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
+import { capitalize } from 'lodash';
 
 import { PageLayout, Table, Button } from '../../common/components/web';
 import { createTableColumns } from '../../common/util';
@@ -20,13 +21,85 @@ class $Module$ListView extends React.PureComponent {
     />
   );
 
+  renderOrderByArrow = name => {
+    const { orderBy } = this.props;
+
+    if (orderBy && orderBy.column === name) {
+      if (orderBy.order === 'desc') {
+        return <span className="badge badge-primary">&#8595;</span>;
+      } else {
+        return <span className="badge badge-primary">&#8593;</span>;
+      }
+    } else {
+      return <span className="badge badge-secondary">&#8645;</span>;
+    }
+  };
+
   hendleDelete$Module$ = id => {
     const { delete$Module$ } = this.props;
     delete$Module$(id);
   };
 
+  orderBy = (e, name) => {
+    const { onOrderBy, orderBy } = this.props;
+
+    e.preventDefault();
+
+    let order = 'asc';
+    if (orderBy && orderBy.column === name) {
+      if (orderBy.order === 'asc') {
+        order = 'desc';
+      } else if (orderBy.order === 'desc') {
+        return onOrderBy({});
+      }
+    }
+
+    return onOrderBy({ column: name, order });
+  };
+
   render() {
     const { loading, $module$s } = this.props;
+
+    let columns = [];
+
+    for (const key of CrudSchema.keys()) {
+      if (key === 'id') {
+        columns.push({
+          title: (
+            <a onClick={e => this.orderBy(e, key)} href="#">
+              {capitalize(key)} {this.renderOrderByArrow(key)}
+            </a>
+          ),
+          dataIndex: 'id',
+          key: 'id',
+          render: (text, record) => (
+            <Link className="$module$-link" to={`/$module$/${record.id}`}>
+              {text}
+            </Link>
+          )
+        });
+      } else {
+        columns.push({
+          title: (
+            <a onClick={e => this.orderBy(e, key)} href="#">
+              {capitalize(key)} {this.renderOrderByArrow(key)}
+            </a>
+          ),
+          dataIndex: key,
+          key: key
+        });
+      }
+    }
+
+    columns.push({
+      title: 'Actions',
+      key: 'actions',
+      render: (text, record) => (
+        <Button color="primary" size="sm" onClick={() => hendleDelete(record.id)}>
+          Delete
+        </Button>
+      )
+    });
 
     return (
       <PageLayout>
@@ -38,7 +111,7 @@ class $Module$ListView extends React.PureComponent {
         <hr />
         <Table
           dataSource={$module$s}
-          columns={createTableColumns($Module$Schema, '$module$', this.hendleDelete$Module$)}
+          columns={columns}
           pagination={false}
           loading={loading && !$module$s}
         />
@@ -50,6 +123,8 @@ class $Module$ListView extends React.PureComponent {
 $Module$ListView.propTypes = {
   loading: PropTypes.bool.isRequired,
   $module$s: PropTypes.array,
+  orderBy: PropTypes.object,
+  onOrderBy: PropTypes.func.isRequired,
   delete$Module$: PropTypes.func.isRequired
 };
 

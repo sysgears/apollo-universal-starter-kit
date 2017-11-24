@@ -4,10 +4,10 @@ import FieldError from '../../../common/FieldError';
 export default pubsub => ({
   Query: {
     $module$s: (obj, args, { $Module$ }) => {
-      return $Module$.get$Module$s();
+      return $Module$.get$Module$s(args);
     },
-    $module$: (obj, { id }, { $Module$ }) => {
-      return $Module$.get$Module$(id);
+    $module$: (obj, args, { $Module$ }) => {
+      return $Module$.get$Module$(args);
     }
   },
   Mutation: {

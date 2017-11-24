@@ -1,13 +1,34 @@
-import { camelizeKeys } from 'humps';
+import { camelizeKeys, decamelize } from 'humps';
+import { has } from 'lodash';
 
 import knex from '../../../server/sql/connector';
 
 export default class $Module$ {
-  async get$Module$s() {
-    return camelizeKeys(await knex.select('*').from('$module$'));
+  async get$Module$s({ orderBy, filter }) {
+    const queryBuilder = knex.select('*').from('$module$');
+
+    if (orderBy && orderBy.column) {
+      let column = orderBy.column;
+      let order = 'asc';
+      if (orderBy.order) {
+        order = orderBy.order;
+      }
+
+      queryBuilder.orderBy(decamelize(column), order);
+    }
+
+    if (filter) {
+      if (has(filter, 'searchText') && filter.searchText !== '') {
+        queryBuilder.where(function() {
+          this.where('name', 'like', `%${filter.searchText}%`);
+        });
+      }
+    }
+
+    return camelizeKeys(await queryBuilder);
   }
 
-  async get$Module$(id) {
+  async get$Module$({ id }) {
     return camelizeKeys(await knex.select('*').from('$module$').where({ id }).first());
   }
 

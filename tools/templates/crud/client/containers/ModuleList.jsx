@@ -1,5 +1,6 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
+import { connect } from 'react-redux';
 
 import $Module$ListView from '../components/$Module$ListView';
 import $MODULE$S_QUERY from '../graphql/$Module$sQuery.graphql';
@@ -13,9 +14,13 @@ class $Module$ extends React.Component {
 
 const $Module$WithApollo = compose(
   graphql($MODULE$S_QUERY, {
-    options: () => {
+    options: ({ orderBy, searchText }) => {
       return {
-        fetchPolicy: 'cache-and-network'
+        fetchPolicy: 'cache-and-network',
+        variables: {
+          orderBy: orderBy,
+          filter: { searchText }
+        }
       };
     },
     props({ data: { loading, $module$s, refetch, error } }) {
@@ -43,4 +48,17 @@ const $Module$WithApollo = compose(
   })
 )($Module$);
 
-export default $Module$WithApollo;
+export default connect(
+  state => ({
+    searchText: state.$module$.searchText,
+    orderBy: state.$module$.orderBy
+  }),
+  dispatch => ({
+    onOrderBy(orderBy) {
+      dispatch({
+        type: '$MODULE$_ORDER_BY',
+        value: orderBy
+      });
+    }
+  })
+)($Module$WithApollo);

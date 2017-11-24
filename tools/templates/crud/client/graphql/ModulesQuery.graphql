@@ -1,7 +1,7 @@
 #import "./$Module$.graphql"
 
-query $module$s {
-  $module$s {
+query $module$s($orderBy: OrderBy$Module$Input, $filter: Filter$Module$Input) {
+  $module$s(orderBy: $orderBy, filter: $filter) {
     ...$Module$Info
   }
 }

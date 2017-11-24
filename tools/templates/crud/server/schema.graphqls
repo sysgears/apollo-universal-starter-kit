@@ -3,6 +3,15 @@ type $Module$Payload {
   errors: [FieldError!]
 }
 
+input OrderBy$Module$Input {
+  column: String
+  order: String
+}
+
+input Filter$Module$Input {
+  searchText: String
+}
+
 input Add$Module$Input {
   name: String!
 }
@@ -13,7 +22,7 @@ input Edit$Module$Input {
 }
 
 extend type Query {
-  $module$s: [$Module$]
+  $module$s(orderBy: OrderBy$Module$Input, filter: Filter$Module$Input): [$Module$]
   $module$(id: Int!): $Module$
 }
 

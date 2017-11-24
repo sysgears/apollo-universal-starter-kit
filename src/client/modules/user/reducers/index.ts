@@ -103,7 +103,11 @@ const emailValidation = (email: AbstractControlState<string>) => {
     return validate(() => ({ required: 'Email is required' }), setValue(email.value, email));
   }
 
-  if (!/^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\.[a-zA-Z0–9.]+$/.test(email.value)) {
+  if (
+    !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+      email.value
+    )
+  ) {
     return validate(() => ({ email: 'Email should be like john@doe.com' }), setValue(email.value, email));
   }
 

@@ -8,12 +8,13 @@ import { Component, ElementRef, Input, OnInit, Renderer2, ViewEncapsulation } fr
   encapsulation: ViewEncapsulation.None
 })
 export default class Row implements OnInit {
-  @Input() private noGutters: boolean;
-  @Input() private justifyContent: string;
-  @Input() private justifyContentSm: string;
-  @Input() private justifyContentMd: string;
-  @Input() private justifyContentLg: string;
-  @Input() private justifyContentXs: string;
+  @Input() public noGutters: boolean;
+  @Input() public justifyContent: string;
+  @Input() public justifyContentSm: string;
+  @Input() public justifyContentMd: string;
+  @Input() public justifyContentLg: string;
+  @Input() public justifyContentXs: string;
+  @Input() public classNames: string;
 
   private justifies: any[] = [
     { justifyContent: 'justify-content' },
@@ -29,6 +30,7 @@ export default class Row implements OnInit {
     this.addClassToElement('row');
     this.setGutters();
     this.generateUiClasses(this.justifies);
+    this.classNames.split(' ').forEach((className: string) => this.addClassToElement(className));
   }
 
   private setGutters() {

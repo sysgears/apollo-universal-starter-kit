@@ -9,7 +9,7 @@ import { Component, Input, OnInit } from '@angular/core';
 	`
 })
 export default class Container implements OnInit {
-  @Input() private fluid: boolean;
+  @Input() public fluid: boolean;
   public className: string;
 
   public ngOnInit(): void {

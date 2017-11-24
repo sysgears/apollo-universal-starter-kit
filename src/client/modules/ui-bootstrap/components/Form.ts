@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroupState } from 'ngrx-forms';
 import { ItemType } from './FormItem';
 
@@ -28,12 +28,15 @@ export interface FormInput {
         </form-item>
 
       </div>
-      <button type="submit" id="register-submit-btn" class="btn btn-primary" [disabled]="formState[formName].isInvalid || submitting">{{btnName}}</button>
+      <div class="{{ btnAlign }}">
+        <button type="submit" id="register-submit-btn" class="btn btn-primary" [disabled]="formState[formName].isInvalid || submitting">{{btnName}}</button>
+      </div>
     </form>
   `
 })
-export default class {
+export default class Form implements OnInit {
   @Input() public btnName: string;
+  @Input() public btnAlign: string;
   @Input() public onSubmit: any;
   @Input() public loading: boolean;
   @Input() public submitting: boolean;
@@ -43,5 +46,7 @@ export default class {
 
   constructor() {}
 
-  public setChanges(data: any) {}
+  public ngOnInit(): void {
+    this.btnAlign = this.btnAlign && this.btnAlign.match(/(left|center|right)/) ? `text-${this.btnAlign}` : 'text-left';
+  }
 }

@@ -5,10 +5,7 @@ import LoginService from './Login';
   selector: 'auth-login',
   template: `
     <menu-item *ngIf="!isAuth" class="nav-item">
-      <span class="nav-link">
-        <nav-link [name]="'Login'" [to]="'/login'" [type]="'routerGroup'"></nav-link> /
-        <nav-link [name]="'Register'" [to]="'/register'" [type]="'routerGroup'"></nav-link>
-      </span>
+      <nav-link [name]="'Sign In'" [to]="'/login'"></nav-link>
     </menu-item>
     <menu-item *ngIf="isAuth">
       <nav-link [name]="'Logout'" [type]="'clickable'" (click)="logout()"></nav-link>

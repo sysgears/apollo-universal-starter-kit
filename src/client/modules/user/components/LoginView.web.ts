@@ -14,31 +14,42 @@ import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers
 @Component({
   selector: 'login-view',
   template: `
-    <h1>Login page!</h1>
+    <layout-center>
+      <h1 class="text-center">Sign In</h1>
 
-    <alert [data]="alerts"></alert>
+      <alert [data]="alerts"></alert>
 
-    <ausk-form [onSubmit]="onSubmit"
-               [formName]="'loginForm'"
-               [formState]="formState"
-               [form]="form"
-               [btnName]="'Login'">
-    </ausk-form>
+      <ausk-form [onSubmit]="onSubmit"
+                 [formName]="'loginForm'"
+                 [formState]="formState"
+                 [form]="form"
+                 [btnName]="'Login'"
+                 [btnAlign]="'center'">
+      </ausk-form>
 
-    <button id="fb-login-btn" *ngIf="settings.user.auth.facebook.enabled" class="btn btn-primary"
-            (click)="facebookLogin()" )>
-      Login with Facebook
-    </button>
+      <div class="text-center">
+        <button id="fb-login-btn" *ngIf="settings.user.auth.facebook.enabled" class="btn btn-primary"
+                (click)="facebookLogin()">
+          Login with Facebook
+        </button>
+      </div>
 
-    <ausk-link [to]="'/forgot-password'">Forgot your password?</ausk-link>
-    <hr/>
-    <ausk-card>
-      <card-group>
-        <card-title>Available logins:</card-title>
-        <card-text>admin@example.com:admin</card-text>
-        <card-text>user@example.com:user</card-text>
-      </card-group>
-    </ausk-card>
+      <ausk-link [to]="'/forgot-password'">Forgot your password?</ausk-link>
+      <hr/>
+      <div style="margin-bottom: 16px">
+        <span style="line-height: 58px">Not registered yet?</span>
+        <ausk-link [to]="'/register'" style="margin: 10px">
+          <button class="btn btn-primary">Sign Up</button>
+        </ausk-link>
+      </div>
+      <ausk-card>
+        <card-group>
+          <card-title>Available logins:</card-title>
+          <card-text>admin@example.com:admin</card-text>
+          <card-text>user@example.com:user</card-text>
+        </card-group>
+      </ausk-card>
+    </layout-center>
   `
 })
 export default class LoginView {

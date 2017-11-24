@@ -15,17 +15,20 @@ const sentAlert = {
 @Component({
   selector: 'forgot-password-view',
   template: `
-    <h1>Forgot password!</h1>
+    <layout-center>
+      <h1 class="text-center">Password Reset</h1>
 
-    <alert [data]="alerts"></alert>
+      <alert [data]="alerts"></alert>
 
-    <ausk-form [onSubmit]="onSubmit"
-               [submitting]="submitting"
-               [formName]="'forgotPasswordForm'"
-               [form]="form"
-               [formState]="formState"
-               [btnName]="'Send Reset Instructions'">
-    </ausk-form>
+      <ausk-form [onSubmit]="onSubmit"
+                 [submitting]="submitting"
+                 [formName]="'forgotPasswordForm'"
+                 [form]="form"
+                 [formState]="formState"
+                 [btnName]="'Send Reset Instructions'"
+                 [btnAlign]="'center'">
+      </ausk-form>
+    </layout-center>
   `
 })
 export default class ForgotPasswordView {

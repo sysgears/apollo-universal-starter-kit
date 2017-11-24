@@ -10,16 +10,19 @@ import { RegisterFormData, RegisterFormState } from '../reducers/index';
 @Component({
   selector: 'register-view',
   template: `
-    <h1>Register page!</h1>
+    <layout-center>
+      <h1 class="text-center">Sign Up</h1>
 
-    <alert [data]="alerts"></alert>
+      <alert [data]="alerts"></alert>
 
-    <ausk-form [onSubmit]="onSubmit"
-               [formName]="'registerForm'"
-               [formState]="formState"
-               [form]="form"
-               [btnName]="'Register'">
-    </ausk-form>
+      <ausk-form [onSubmit]="onSubmit"
+                 [formName]="'registerForm'"
+                 [formState]="formState"
+                 [form]="form"
+                 [btnName]="'Register'"
+                 [btnAlign]="'center'">
+      </ausk-form>
+    </layout-center>
   `
 })
 export default class RegisterView {

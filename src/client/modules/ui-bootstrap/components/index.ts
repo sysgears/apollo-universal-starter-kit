@@ -10,6 +10,7 @@ import Col from './Col';
 import Container from './Container';
 import Form from './Form';
 import FormItem from './FormItem';
+import LayoutCenter from './LayoutCenter';
 import Link from './Link';
 import MenuItem from './MenuItem';
 import NavBar from './NavBar';
@@ -30,6 +31,7 @@ export const BOOTSTRAP_COMPONENTS: any = [
   Container,
   Form,
   FormItem,
+  LayoutCenter,
   Link,
   MenuItem,
   NavBar,

@@ -64,11 +64,10 @@ export default class Col implements OnInit {
 
   private addClasses(values: any[], defaultValue?: string) {
     const needDefault = values.reduce((allZero, item) => {
-      const key = this[Object.keys(item)[0]];
-      const value = item[Object.keys(item)[0]];
-      if (key) {
+      const key = Object.keys(item)[0];
+      if (this[key]) {
         allZero = false;
-        this.addClassToElement(value, key);
+        this.addClassToElement(item[key], this[key]);
       }
       return allZero;
     }, true);

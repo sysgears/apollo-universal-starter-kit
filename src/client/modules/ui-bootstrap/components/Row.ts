@@ -30,7 +30,9 @@ export default class Row implements OnInit {
     this.addClassToElement('row');
     this.setGutters();
     this.generateUiClasses(this.justifies);
-    this.classNames.split(' ').forEach((className: string) => this.addClassToElement(className));
+    if (this.classNames) {
+      this.classNames.split(' ').forEach((className: string) => this.addClassToElement(className));
+    }
   }
 
   private setGutters() {
@@ -41,10 +43,9 @@ export default class Row implements OnInit {
 
   private generateUiClasses(values: any[]) {
     values.forEach(item => {
-      const key = this[Object.keys(item)[0]];
-      const value = item[Object.keys(item)[0]];
-      if (key) {
-        this.addClassToElement(value, key);
+      const key = Object.keys(item)[0];
+      if (this[key]) {
+        this.addClassToElement(item[key], this[key]);
       }
     });
   }

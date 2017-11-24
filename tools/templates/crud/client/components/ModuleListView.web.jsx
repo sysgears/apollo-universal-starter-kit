@@ -35,7 +35,7 @@ class $Module$ListView extends React.PureComponent {
     }
   };
 
-  hendleDelete$Module$ = id => {
+  hendleDelete = id => {
     const { delete$Module$ } = this.props;
     delete$Module$(id);
   };
@@ -95,7 +95,7 @@ class $Module$ListView extends React.PureComponent {
       title: 'Actions',
       key: 'actions',
       render: (text, record) => (
-        <Button color="primary" size="sm" onClick={() => hendleDelete(record.id)}>
+        <Button color="primary" size="sm" onClick={() => this.hendleDelete(record.id)}>
           Delete
         </Button>
       )

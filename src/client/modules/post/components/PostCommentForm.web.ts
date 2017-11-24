@@ -63,7 +63,7 @@ export default class PostCommentForm implements OnInit, OnDestroy {
     this.submitting = true;
     this.unsubscribe(this.subscription);
     const { content } = this.commentForm.value;
-    if (this.comment) {
+    if (this.comment && this.comment.id) {
       this.subscription = this.postCommentsService.editComment(this.comment.id, this.postId, content);
       this.editMode = false;
       this.comment = null;

@@ -1,6 +1,7 @@
 import { camelizeKeys, decamelize } from 'humps';
 import { has } from 'lodash';
 
+import { $Module$ as $Module$Schema } from './schema';
 import knex from '../../../server/sql/connector';
 
 export default class $Module$ {
@@ -20,7 +21,12 @@ export default class $Module$ {
     if (filter) {
       if (has(filter, 'searchText') && filter.searchText !== '') {
         queryBuilder.where(function() {
-          this.where('name', 'like', `%${filter.searchText}%`);
+          for (const key of CrudSchema.keys()) {
+            const value = CrudSchema.values[key];
+            if (value.searchText) {
+              this.orWhere(key, 'like', `%${filter.searchText}%`);
+            }
+          }
         });
       }
     }

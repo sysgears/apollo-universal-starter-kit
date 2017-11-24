@@ -6,7 +6,8 @@ export const $Module$ = new DomainSchema(
   class $Module$ extends Schema {
     id = DomainSchema.Integer;
     name = {
-      type: String
+      type: String,
+      searchText: true
     };
   }
 );

@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import React from 'react';
 import { pick, capitalize } from 'lodash';
 import { Field } from 'redux-form';

@@ -17,7 +17,7 @@ export default pubsub => ({
         e.throwIf();
 
         const [id] = await $Module$.add$Module$(input);
-        const $module$ = await $Module$.get$Module$(id);
+        const $module$ = await $Module$.get$Module$({ id });
 
         return { $module$ };
       } catch (e) {
@@ -31,7 +31,7 @@ export default pubsub => ({
 
         await $Module$.edit$Module$(input);
 
-        const $module$ = await $Module$.get$Module$(input.id);
+        const $module$ = await $Module$.get$Module$({ id: input.id});
 
         return { $module$ };
       } catch (e) {
@@ -41,7 +41,7 @@ export default pubsub => ({
     delete$Module$: async (obj, { id }, { $Module$ }) => {
       try {
         const e = new FieldError();
-        const $module$ = await $Module$.get$Module$(id);
+        const $module$ = await $Module$.get$Module$({ id });
         if (!$module$) {
           e.setError('delete', '$Module$ does not exist.');
           e.throwIf();

@@ -1,5 +1,4 @@
 import { graphqlExpress } from 'apollo-server-express';
-import { formatError } from 'apollo-errors';
 import 'isomorphic-fetch';
 
 import log from '../../common/log';
@@ -11,7 +10,6 @@ export default graphqlExpress(async req => {
   try {
     return {
       schema,
-      formatError,
       context: await modules.createContext(req),
       tracing: !!settings.analytics.apolloEngine.key,
       cacheControl: !!settings.analytics.apolloEngine.key

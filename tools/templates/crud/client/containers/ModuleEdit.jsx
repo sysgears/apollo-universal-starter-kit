@@ -35,9 +35,13 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       add$Module$: async input => {
         try {
-          await mutate({
+          const { data: { add$Module$ } } = await mutate({
             variables: { input }
           });
+
+          if (add$Module$.errors) {
+            return { errors: add$Module$.errors };
+          }
 
           if (history) {
             return history.push('/$module$');
@@ -46,7 +50,7 @@ export default compose(
             return navigation.goBack();
           }
         } catch (e) {
-          return { errors: e.graphQLErrors[0].data };
+          console.log(e.graphQLErrors);
         }
       }
     })
@@ -55,9 +59,13 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       edit$Module$: async input => {
         try {
-          await mutate({
+          const { data: { edit$Module$ } } = await mutate({
             variables: { input }
           });
+
+          if (edit$Module$.errors) {
+            return { errors: edit$Module$.errors };
+          }
 
           if (history) {
             return history.push('/$module$');
@@ -66,7 +74,7 @@ export default compose(
             return navigation.goBack();
           }
         } catch (e) {
-          return { errors: e.graphQLErrors[0].data };
+          console.log(e.graphQLErrors);
         }
       }
     })

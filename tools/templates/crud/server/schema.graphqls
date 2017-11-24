@@ -1,3 +1,8 @@
+type $Module$Payload {
+  $module$: $Module$
+  errors: [FieldError!]
+}
+
 input Add$Module$Input {
   name: String!
 }
@@ -13,9 +18,9 @@ extend type Query {
 }
 
 extend type Mutation {
-  add$Module$(input: Add$Module$Input!): $Module$
-  edit$Module$(input: Edit$Module$Input!): $Module$
-  delete$Module$(id: Int!): $Module$
+  add$Module$(input: Add$Module$Input!): $Module$Payload!
+  edit$Module$(input: Edit$Module$Input!): $Module$Payload!
+  delete$Module$(id: Int!): $Module$Payload!
 }
 
 extend type Subscription {}

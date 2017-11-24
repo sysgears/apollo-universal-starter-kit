@@ -2,6 +2,12 @@
 
 mutation add$Module$($input: Add$Module$Input!) {
   add$Module$(input: $input) {
-    ...$Module$Info
+    $module$ {
+      ...$Module$Info
+    }
+    errors {
+      field
+      message
+    }
   }
 }

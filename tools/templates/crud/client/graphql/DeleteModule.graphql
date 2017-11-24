@@ -1,5 +1,11 @@
 mutation delete$Module$($id: Int!) {
   delete$Module$(id: $id) {
-    id
+    $module$ {
+      id
+    }
+    errors {
+      field
+      message
+    }
   }
 }

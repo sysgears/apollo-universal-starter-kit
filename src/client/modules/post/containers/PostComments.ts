@@ -53,8 +53,6 @@ export const DeleteComment = (prev: any, id: any) => {
 
 @Injectable()
 export default class PostCommentsService {
-  public startedEditing = new Subject<any>();
-
   constructor(private apollo: Apollo) {}
 
   public subscribeToCommentList(postId: number, callback: (result: any) => any) {

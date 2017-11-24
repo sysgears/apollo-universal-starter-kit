@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
 import PostCommentsService, { AddComment, DeleteComment, UpdateComment } from '../containers/PostComments';
+import { CommentSelect } from '../reducers/index';
 
 @Component({
   selector: 'post-comments-view',
@@ -36,7 +38,7 @@ export default class PostCommentsView implements OnInit, OnDestroy {
   private subsOnUpdate: Subscription;
   private subsOnDelete: Subscription;
 
-  constructor(private postCommentsService: PostCommentsService) {}
+  constructor(private postCommentsService: PostCommentsService, private store: Store<any>) {}
 
   public ngOnInit() {
     this.subsOnUpdate = this.postCommentsService.subscribeToCommentList(
@@ -58,7 +60,7 @@ export default class PostCommentsView implements OnInit, OnDestroy {
   }
 
   public onCommentSelect(comment: any) {
-    this.postCommentsService.startedEditing.next(comment);
+    this.store.dispatch(new CommentSelect(comment));
   }
 
   public onCommentDelete(id: number) {

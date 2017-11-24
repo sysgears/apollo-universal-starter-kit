@@ -29,9 +29,9 @@ export default pubsub => ({
 
       return joinMonster(info, { id: input.id }, sql => knex.raw(sql));
     },
-    delete$Module$: async (obj, { id }, { $Module$ }, info) => {
+    delete$Module$: async (obj, { id }, { $Module$ }) => {
       const e = new FieldError();
-      const $module$ = await joinMonster(info, { id }, sql => knex.raw(sql));
+      const $module$ = await $Module$.get$Module$(id);
       if (!$module$) {
         e.setError('delete', '$Module$ does not exist.');
         e.throwIf();

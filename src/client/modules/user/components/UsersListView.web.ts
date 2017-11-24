@@ -1,7 +1,9 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
+import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import UsersListService, { AddUser, DeleteUser, UpdateUser } from '../containers/UsersList';
 import { UserOrderBy } from '../reducers';
 
@@ -10,7 +12,7 @@ import { UserOrderBy } from '../reducers';
   template: `
     <div *ngIf="!loading; else showLoading">
 
-      <alert [data]="alerts"></alert>
+      <alert [subject]="alertSubject"></alert>
 
       <table class="table">
         <thead>
@@ -51,7 +53,7 @@ export default class UsersListView implements OnInit, OnDestroy {
   public isActive: boolean;
   public orderBy: any;
   public loading: boolean = true;
-  public alerts: any = [];
+  public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   public users: any = [];
   public headers = [
     { name: 'Username', value: 'username' },
@@ -107,11 +109,7 @@ export default class UsersListView implements OnInit, OnDestroy {
   public handleDeleteUser = async (id: number) => {
     this.unsubscribe(this.subsOnDelete);
     this.subsOnDelete = this.usersListService.deleteUser(id, ({ data: { deleteUser: { errors } } }: any) => {
-      for (const error of errors) {
-        if (this.alerts.indexOf(error) < 0) {
-          this.alerts.push(error);
-        }
-      }
+      errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
     });
   };
 

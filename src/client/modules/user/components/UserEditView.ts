@@ -3,7 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { assign, pick } from 'lodash';
 import { FormGroupState } from 'ngrx-forms';
+import { Subject } from 'rxjs/Subject';
+
 import settings from '../../../../../settings';
+import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import UserEditService from '../containers/UserEdit';
@@ -15,7 +18,7 @@ import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } 
     <ausk-link [id]="back-button" [to]="'/users'" [type]>Back</ausk-link>
     <h1>{{title}}</h1>
 
-    <alert [data]="alerts"></alert>
+    <alert [subject]="alertSubject"></alert>
 
     <ausk-form [onSubmit]="onSubmit"
                [formName]="'userForm'"
@@ -30,7 +33,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
   public user: any = {};
   public loading: boolean = true;
   public title: string;
-  public alerts: any[] = [];
+  public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   public formState: FormGroupState<UserFormData>;
   public form: FormInput[];
 
@@ -85,11 +88,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         { id: this.user.id, ...insertValues },
         ({ data: { editUser: { errors, user } } }: any) => {
           if (errors) {
-            for (const error of errors) {
-              if (this.alerts.indexOf(error) < 0) {
-                this.alerts.push(error);
-              }
-            }
+            errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
             return;
           }
           this.router.navigateByUrl('users');
@@ -98,11 +97,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
     } else {
       this.userEditService.addUser(insertValues, ({ data: { addUser: { errors, user } } }: any) => {
         if (errors) {
-          for (const error of errors) {
-            if (this.alerts.indexOf(error) < 0) {
-              this.alerts.push(error);
-            }
-          }
+          errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
           return;
         }
         this.router.navigateByUrl('users');

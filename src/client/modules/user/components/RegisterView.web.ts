@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import { Subject } from 'rxjs/Subject';
+
+import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import RegisterService from '../containers/Register';
@@ -13,7 +16,7 @@ import { RegisterFormData, RegisterFormState } from '../reducers/index';
     <layout-center>
       <h1 class="text-center">Sign Up</h1>
 
-      <alert [data]="alerts"></alert>
+      <alert [subject]="alertSubject"></alert>
 
       <ausk-form [onSubmit]="onSubmit"
                  [formName]="'registerForm'"
@@ -26,7 +29,7 @@ import { RegisterFormData, RegisterFormState } from '../reducers/index';
   `
 })
 export default class RegisterView {
-  public alerts: any[];
+  public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   public formState: FormGroupState<RegisterFormData>;
   public form: FormInput[];
 
@@ -45,11 +48,7 @@ export default class RegisterView {
     const { username, email, password } = regInputs;
     this.registerService.register(username, email, password, ({ data: { register } }: any) => {
       if (register.errors) {
-        for (const error of register.errors) {
-          if (this.alerts.indexOf(error) < 0) {
-            this.alerts.push(error);
-          }
-        }
+        register.errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
         return;
       }
       this.router.navigateByUrl('login');

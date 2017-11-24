@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import LoginService from '../containers/Login';
-
 import { Router } from '@angular/router';
-
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import { Subject } from 'rxjs/Subject';
+
 import * as url from 'url';
 import settings from '../../../../../settings';
+import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
+import LoginService from '../containers/Login';
 import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers';
 
 @Component({
@@ -17,7 +18,7 @@ import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers
     <layout-center>
       <h1 class="text-center">Sign In</h1>
 
-      <alert [data]="alerts"></alert>
+      <alert [subject]="alertSubject"></alert>
 
       <ausk-form [onSubmit]="onSubmit"
                  [formName]="'loginForm'"
@@ -53,7 +54,7 @@ import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers
   `
 })
 export default class LoginView {
-  public alerts: any[];
+  public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   public formState: FormGroupState<LoginFormData>;
   public form: FormInput[];
   public facebookLogin: any;
@@ -72,11 +73,7 @@ export default class LoginView {
     const { email, password } = loginInputs;
     this.loginService.login(email, password, ({ data: { login: { errors, tokens } } }: any) => {
       if (errors) {
-        for (const error of errors) {
-          if (this.alerts.indexOf(error) < 0) {
-            this.alerts.push(error);
-          }
-        }
+        errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
         return;
       }
 

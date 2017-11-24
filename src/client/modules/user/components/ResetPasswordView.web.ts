@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import { Subject } from 'rxjs/Subject';
+
+import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import ResetPasswordService from '../containers/ResetPassword';
@@ -12,7 +15,7 @@ import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
   template: `
     <h1>Reset password!</h1>
 
-    <alert [data]="alerts"></alert>
+    <alert [subject]="alertSubject"></alert>
 
     <ausk-form [onSubmit]="onSubmit"
                [submitting]="submitting"
@@ -26,7 +29,7 @@ import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
 export default class ResetPasswordView implements OnInit {
   public sent: boolean = false;
   public submitting: boolean = false;
-  public alerts: any[];
+  public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   private token: string;
   public formState: FormGroupState<RegisterFormData>;
   public form: FormInput[];
@@ -60,11 +63,7 @@ export default class ResetPasswordView implements OnInit {
           this.submitting = false;
 
           if (resetPassword.errors) {
-            for (const error of resetPassword.errors) {
-              if (this.alerts.indexOf(error) < 0) {
-                this.alerts.push(error);
-              }
-            }
+            resetPassword.errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
             return;
           }
         }

@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import { Subject } from 'rxjs/Subject';
+
+import { AlertItem, createErrorAlert, createSuccessAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import ForgotPasswordService from '../containers/ForgotPassword';
 import { ForgotPasswordFormData, ForgotPasswordFormState, ResetForgotPasswordFormAction } from '../reducers/index';
-
-const sentAlert = {
-  field: 'sentSuccess',
-  message: 'Reset password instructions have been emailed to you.',
-  type: 'success'
-};
 
 @Component({
   selector: 'forgot-password-view',
@@ -18,7 +15,7 @@ const sentAlert = {
     <layout-center>
       <h1 class="text-center">Password Reset</h1>
 
-      <alert [data]="alerts"></alert>
+      <alert [subject]="alertSubject"></alert>
 
       <ausk-form [onSubmit]="onSubmit"
                  [submitting]="submitting"
@@ -35,8 +32,8 @@ export default class ForgotPasswordView {
   public form: FormInput[];
   public sent: boolean = false;
   public submitting: boolean = false;
-  public alerts: any[] = [];
   public formState: FormGroupState<ForgotPasswordFormData>;
+  public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
 
   constructor(private forgotPasswordService: ForgotPasswordService, private store: Store<ForgotPasswordFormState>) {
     this.form = this.createForm();
@@ -49,16 +46,10 @@ export default class ForgotPasswordView {
     this.submitting = true;
     this.forgotPasswordService.forgotPassword(email, ({ data: { forgotPassword } }: any) => {
       this.sent = true;
-      if (this.alerts.indexOf(sentAlert) === -1) {
-        this.alerts.push(sentAlert);
-      }
+      this.alertSubject.next(createSuccessAlert('Reset password instructions have been emailed to you.'));
       this.submitting = false;
       if (forgotPassword.errors) {
-        for (const error of forgotPassword.errors) {
-          if (this.alerts.indexOf(error) < 0) {
-            this.alerts.push(error);
-          }
-        }
+        forgotPassword.errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
         return;
       }
       this.store.dispatch(new ResetForgotPasswordFormAction());

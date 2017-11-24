@@ -61,7 +61,7 @@ export default class ResetPasswordView implements OnInit {
 
           if (resetPassword.errors) {
             for (const error of resetPassword.errors) {
-              if (!this.alerts.indexOf(error)) {
+              if (this.alerts.indexOf(error) < 0) {
                 this.alerts.push(error);
               }
             }

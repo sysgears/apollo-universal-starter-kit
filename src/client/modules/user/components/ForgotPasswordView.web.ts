@@ -46,13 +46,13 @@ export default class ForgotPasswordView {
     this.submitting = true;
     this.forgotPasswordService.forgotPassword(email, ({ data: { forgotPassword } }: any) => {
       this.sent = true;
-      if (!this.alerts.indexOf(sentAlert)) {
+      if (this.alerts.indexOf(sentAlert) === -1) {
         this.alerts.push(sentAlert);
       }
       this.submitting = false;
       if (forgotPassword.errors) {
         for (const error of forgotPassword.errors) {
-          if (!this.alerts.indexOf(error)) {
+          if (this.alerts.indexOf(error) < 0) {
             this.alerts.push(error);
           }
         }

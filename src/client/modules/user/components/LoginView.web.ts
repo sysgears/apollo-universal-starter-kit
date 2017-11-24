@@ -62,7 +62,7 @@ export default class LoginView {
     this.loginService.login(email, password, ({ data: { login: { errors, tokens } } }: any) => {
       if (errors) {
         for (const error of errors) {
-          if (!this.alerts.indexOf(error)) {
+          if (this.alerts.indexOf(error) < 0) {
             this.alerts.push(error);
           }
         }

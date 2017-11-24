@@ -43,7 +43,7 @@ export default class RegisterView {
     this.registerService.register(username, email, password, ({ data: { register } }: any) => {
       if (register.errors) {
         for (const error of register.errors) {
-          if (!this.alerts.indexOf(error)) {
+          if (this.alerts.indexOf(error) < 0) {
             this.alerts.push(error);
           }
         }

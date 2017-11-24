@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 interface AlertItem {
   id: string;
   message: string;
-  type: string;
+  type?: string;
 }
 
 @Component({

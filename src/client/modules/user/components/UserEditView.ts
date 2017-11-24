@@ -86,7 +86,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         ({ data: { editUser: { errors, user } } }: any) => {
           if (errors) {
             for (const error of errors) {
-              if (!this.alerts.indexOf(error)) {
+              if (this.alerts.indexOf(error) < 0) {
                 this.alerts.push(error);
               }
             }
@@ -99,7 +99,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
       this.userEditService.addUser(insertValues, ({ data: { addUser: { errors, user } } }: any) => {
         if (errors) {
           for (const error of errors) {
-            if (!this.alerts.indexOf(error)) {
+            if (this.alerts.indexOf(error) < 0) {
               this.alerts.push(error);
             }
           }

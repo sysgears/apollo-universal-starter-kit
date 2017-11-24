@@ -102,20 +102,12 @@ class $Module$ListView extends React.PureComponent {
     });
 
     return (
-      <PageLayout>
-        {this.renderMetaData()}
-        <h2>$Module$s</h2>
-        <Link to="/$module$/0">
-          <Button color="primary">Add</Button>
-        </Link>
-        <hr />
-        <Table
-          dataSource={$module$s}
-          columns={columns}
-          pagination={false}
-          loading={loading && !$module$s}
-        />
-      </PageLayout>
+      <Table
+        dataSource={$module$s}
+        columns={columns}
+        pagination={false}
+        loading={loading && !$module$s}
+      />
     );
   }
 }

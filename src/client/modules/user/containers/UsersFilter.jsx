@@ -1,9 +1,5 @@
-/*eslint-disable no-unused-vars*/
-// React
 import React from 'react';
 import { connect } from 'react-redux';
-
-// Components
 import UsersFilterView from '../components/UsersFilterView';
 
 class UsersFilter extends React.Component {

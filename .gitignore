@@ -1,5 +1,6 @@
 .idea
 /.tmp
+/.vscode
 /node_modules
 /build
 npm-debug.*

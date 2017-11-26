@@ -2,12 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Menu from 'antd/lib/menu';
 
-const MenuItem = ({ children, ...props }) => {
-  return <Menu.Item {...props}>{children}</Menu.Item>;
-};
+class MenuItem extends React.Component {
+  static propTypes = {
+    children: PropTypes.node
+  };
 
-MenuItem.propTypes = {
-  children: PropTypes.node
-};
+  render() {
+    const { children, ...props } = this.props;
+
+    return <Menu.Item {...props}>{children}</Menu.Item>;
+  }
+}
 
 export default MenuItem;

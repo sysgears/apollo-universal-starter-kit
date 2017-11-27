@@ -3,14 +3,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
-const ProfileView = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.element}>
-        <Text style={styles.box}>Hello User!</Text>
+const ProfileView = ({ loading, currentUser }) => {
+  if (loading && !currentUser) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.element}>
+          <Text style={styles.box}>Loading...</Text>
+        </View>
       </View>
-    </View>
-  );
+    );
+  } else if (currentUser) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.element}>
+          <Text style={styles.box}>Hello {currentUser.username}!</Text>
+        </View>
+      </View>
+    );
+  }
+};
+
+ProfileView.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  currentUser: PropTypes.object
 };
 
 const styles = StyleSheet.create({

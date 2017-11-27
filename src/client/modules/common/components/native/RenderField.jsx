@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, TextInput, Text, View } from 'react-native';
 
 const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
-  const { container, inputText, text, errorField } = styles;
+  const { text, inputText, errorField } = styles;
 
   return (
-    <View style={container}>
+    <View>
       <Text style={text}>{label}</Text>
       <TextInput
-        style={[inputText, touched && error && errorField]}
+        selectionColor="#ff5722"
+        underlineColorAndroid="#888"
         onChangeText={input.onChange}
         value={input.value}
+        placeholder={label}
+        style={[inputText, touched && error && errorField]}
         {...inputProps}
       />
     </View>
@@ -19,6 +22,10 @@ const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) 
 };
 
 const styles = StyleSheet.create({
+  text: {
+    fontSize: 16,
+    paddingTop: 10
+  },
   inputText: {
     backgroundColor: '#FFF',
     color: '#000',
@@ -26,25 +33,12 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     lineHeight: 20,
-    flex: 3,
+    marginTop: 5,
     marginBottom: 5
-  },
-  text: {
-    alignSelf: 'center',
-    fontSize: 16,
-    paddingTop: 10,
-    paddingBottom: 10,
-    flex: 1
   },
   errorField: {
     borderColor: 'red',
     borderWidth: StyleSheet.hairlineWidth
-  },
-  container: {
-    height: 40,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
   }
 });
 

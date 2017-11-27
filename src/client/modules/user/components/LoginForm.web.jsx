@@ -29,11 +29,12 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
         <Button color="primary" type="submit" disabled={submitting}>
           Login
         </Button>
-        {settings.user.auth.facebook.enabled && (
-          <Button color="primary" type="button" onClick={facebookLogin} style={{ margin: 10 }}>
-            Login with Facebook
-          </Button>
-        )}
+        {settings.user.auth.facebook.enabled &&
+          settings.user.auth.facebook.clientID && (
+            <Button color="primary" type="button" onClick={facebookLogin} style={{ margin: 10 }}>
+              Login with Facebook
+            </Button>
+          )}
       </div>
       <Link className="text-center" to="/forgot-password">
         Forgot your password?

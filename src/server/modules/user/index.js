@@ -2,11 +2,12 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import { pick } from 'lodash';
+import cookiesMiddleware from 'universal-cookie-express';
 
 import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
-import { refreshTokens, createTokens } from './auth';
+import { refreshTokens, createTokens, establishSession, getSession } from './auth';
 import tokenMiddleware from './auth/token';
 import confirmMiddleware from './confirm';
 import Feature from '../connector';
@@ -41,7 +42,7 @@ if (settings.user.auth.facebook.enabled) {
               isActive
             });
 
-            await User.createFacebookOuth({
+            await User.createFacebookAuth({
               id,
               displayName,
               userId: createdUserId
@@ -49,7 +50,7 @@ if (settings.user.auth.facebook.enabled) {
 
             user = await User.getUser(createdUserId);
           } else if (!user.fbId) {
-            await User.createFacebookOuth({
+            await User.createFacebookAuth({
               id,
               displayName,
               userId: user.id
@@ -68,8 +69,9 @@ if (settings.user.auth.facebook.enabled) {
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
-  createContextFunc: async (req, connectionParams, webSocket) => {
+  createContextFunc: async (req, res, connectionParams, webSocket) => {
     let tokenUser = null;
+    let session;
     let auth = { isAuthenticated: false, scope: null };
     let serial = '';
     if (__DEV__) {
@@ -91,6 +93,7 @@ export default new Feature({
         tokenUser = newTokens.user;
       }
     } else if (req) {
+      session = getSession(req);
       if (req.user) {
         tokenUser = req.user;
       } else if (settings.user.auth.certificate.enabled) {
@@ -123,12 +126,24 @@ export default new Feature({
     return {
       User,
       user: tokenUser,
+      session,
       auth,
       SECRET,
-      req
+      req,
+      res
     };
   },
   middleware: app => {
+    app.use(cookiesMiddleware());
+
+    app.use(async (req, res, next) => {
+      try {
+        await establishSession(req);
+        next();
+      } catch (e) {
+        next(e);
+      }
+    });
     app.use(tokenMiddleware(SECRET, User, jwt));
 
     if (settings.user.auth.password.sendConfirmationEmail) {

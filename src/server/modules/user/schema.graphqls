@@ -34,7 +34,7 @@ type UserPayload {
 }
 
 type AuthPayload {
-  tokens: Tokens
+  session: String
   errors: [FieldError!]
 }
 

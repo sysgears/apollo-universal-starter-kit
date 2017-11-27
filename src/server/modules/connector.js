@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-unused-vars */
 import type { DocumentNode } from 'graphql';
-import type { Middleware, $Request } from 'express';
+import type { Middleware, $Request, $Response } from 'express';
 
 import { merge, map, union, without, castArray } from 'lodash';
 
@@ -41,9 +41,9 @@ class Feature {
     return this.schema;
   }
 
-  async createContext(req: $Request, connectionParams: any, webSocket: any) {
+  async createContext(req: $Request, res: $Response, connectionParams: any, webSocket: any) {
     const results = await Promise.all(
-      this.createContextFunc.map(createContext => createContext(req, connectionParams, webSocket))
+      this.createContextFunc.map(createContext => createContext(req, res, connectionParams, webSocket))
     );
     return merge({}, ...results);
   }

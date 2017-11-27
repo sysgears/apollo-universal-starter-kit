@@ -2,7 +2,7 @@
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
-import { refreshTokens, tryLogin } from './auth';
+import { refreshTokens, tryLogin, updateSession } from './auth';
 import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
 
@@ -131,27 +131,10 @@ export default pubsub => ({
     },
     async login(obj, { input: { email, password } }, context) {
       try {
-        const tokens = await tryLogin(email, password, context.User, context.SECRET);
-        if (context.req) {
-          context.req.universalCookies.set('x-token', tokens.token, {
-            maxAge: 60 * 60 * 24 * 7,
-            httpOnly: true
-          });
-          context.req.universalCookies.set('x-refresh-token', tokens.refreshToken, {
-            maxAge: 60 * 60 * 24 * 7,
-            httpOnly: true
-          });
-
-          context.req.universalCookies.set('r-token', tokens.token, {
-            maxAge: 60 * 60 * 24 * 7,
-            httpOnly: false
-          });
-          context.req.universalCookies.set('r-refresh-token', tokens.refreshToken, {
-            maxAge: 60 * 60 * 24 * 7,
-            httpOnly: false
-          });
-        }
-        return { tokens };
+        const user = await tryLogin(email, password, context.User, context.SECRET);
+        const session = { ...context.session, userId: user.id, forClient: false };
+        updateSession(context.res, session);
+        return { ...session, forClient: true };
       } catch (e) {
         return { errors: e };
       }

@@ -1,8 +1,45 @@
 import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import settings from '../../../../../settings';
 import FieldError from '../../../../common/FieldError';
+
+export const establishSession = async (req, macKey) => {
+  let session = getSession(req, macKey);
+  if (!session) {
+    crypto.randomBytes(16, (err, buf) => {
+      if (err) throw err;
+      const sessionID = buf.toString('hex');
+      session = { sessionID };
+      updateSession(req, macKey, session);
+    });
+  }
+  return session;
+};
+
+const hmac = (val, macKey) =>
+  crypto
+    .createHmac('sha256', macKey)
+    .update(val)
+    .digest('base64');
+
+export const getSession = (req, macKey) => {
+  const value = req.universalCookies.get('session', { doNotParse: true });
+  const str = value.slice(0, value.lastIndexOf('.'));
+  const valMac = value.slice(value.lastIndexOf('.'));
+  const mac = hmac(str, macKey);
+  const result = valMac !== mac ? undefined : JSON.parse(str);
+
+  console.log('getSession', result);
+  return result;
+};
+
+export const updateSession = (req, macKey, value) => {
+  console.log('updateSession', value);
+  const str = JSON.stringify(value);
+  req.universalCookies.set('session', str + '.' + hmac(str, macKey), { httpOnly: true, secure: !__DEV__ });
+};
 
 export const createTokens = async (user, secret, refreshSecret) => {
   let tokenUser = pick(user, ['id', 'username', 'role']);
@@ -61,7 +98,7 @@ export const refreshTokens = async (token, refreshToken, User, SECRET) => {
   };
 };
 
-export const tryLogin = async (email, password, User, SECRET) => {
+export const tryLogin = async (email, password, User) => {
   const e = new FieldError();
   const user = await User.getUserByEmail(email);
 
@@ -84,14 +121,7 @@ export const tryLogin = async (email, password, User, SECRET) => {
     e.throwIf();
   }
 
-  const refreshSecret = SECRET + user.password;
-
-  const [token, refreshToken] = await createTokens(user, SECRET, refreshSecret);
-
-  return {
-    token,
-    refreshToken
-  };
+  return user;
 };
 
 export const tryLoginSerial = async (serial, User, SECRET) => {

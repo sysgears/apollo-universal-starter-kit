@@ -68,7 +68,8 @@ const renderServerSide = async (req, res) => {
             {Routes}
           </StaticRouter>
         </ApolloProvider>
-      </Provider>
+      </Provider>,
+      req
     );
 
   AppRegistry.registerComponent('App', () => App);

@@ -77,5 +77,6 @@ export default new Feature({
   middleware: tokenMiddleware,
   afterware: tokenAfterware,
   connectionParam: connectionParam,
-  rootComponent: <CookiesProvider />
+  // eslint-disable-next-line react/display-name
+  rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
 });

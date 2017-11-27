@@ -1,5 +1,4 @@
 import React from 'react';
-import RedBox from 'redbox-react';
 import { getOperationAST } from 'graphql';
 import { createApolloFetch } from 'apollo-fetch';
 import { BatchHttpLink } from 'apollo-link-batch-http';
@@ -18,6 +17,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import ReactGA from 'react-ga';
 import url from 'url';
 
+import RedBox from './RedBox';
 import createApolloClient from '../../common/createApolloClient';
 import createReduxStore, { storeReducer } from '../../common/createReduxStore';
 import settings from '../../../settings';
@@ -147,10 +147,25 @@ if (module.hot) {
   });
 }
 
+class ServerError extends Error {
+  constructor(error) {
+    super();
+    for (const key of Object.getOwnPropertyNames(error)) {
+      this[key] = error[key];
+    }
+    this.name = 'ServerError';
+  }
+}
+
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    const serverError = window.__SERVER_ERROR__;
+    if (serverError) {
+      this.state = { error: new ServerError(serverError) };
+    } else {
+      this.state = {};
+    }
   }
 
   componentDidCatch(error, info) {

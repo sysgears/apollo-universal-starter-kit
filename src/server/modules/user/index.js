@@ -93,7 +93,7 @@ export default new Feature({
         tokenUser = newTokens.user;
       }
     } else if (req) {
-      session = getSession(req);
+      session = getSession(req, SECRET);
       if (req.user) {
         tokenUser = req.user;
       } else if (settings.user.auth.certificate.enabled) {
@@ -138,7 +138,7 @@ export default new Feature({
 
     app.use(async (req, res, next) => {
       try {
-        await establishSession(req);
+        await establishSession(req, SECRET);
         next();
       } catch (e) {
         next(e);

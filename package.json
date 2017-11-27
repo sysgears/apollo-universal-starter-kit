@@ -120,7 +120,6 @@
     "react-router-redux": "^5.0.0-alpha.8",
     "react-transition-group": "^2.3.0-beta.0",
     "reactstrap": "^5.0.0-alpha.3",
-    "redbox-react": "^1.5.0",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^7.1.2",

@@ -18,25 +18,29 @@ export const establishSession = async (req, macKey) => {
   return session;
 };
 
-const hmac = (val, macKey) =>
-  crypto
-    .createHmac('sha256', macKey)
+const hmac = (val, macKey) => {
+  return crypto
+    .createHmac('sha256', Buffer.from(macKey, 'utf-8'))
     .update(val)
     .digest('base64');
+};
 
 export const getSession = (req, macKey) => {
   const value = req.universalCookies.get('session', { doNotParse: true });
-  const str = value.slice(0, value.lastIndexOf('.'));
-  const valMac = value.slice(value.lastIndexOf('.'));
-  const mac = hmac(str, macKey);
-  const result = valMac !== mac ? undefined : JSON.parse(str);
+  let result;
+  if (value) {
+    const str = value.slice(0, value.lastIndexOf('.'));
+    const valMac = value.slice(value.lastIndexOf('.') + 1);
+    const mac = hmac(str, macKey);
+    result = valMac !== mac ? undefined : JSON.parse(str);
+  }
 
-  console.log('getSession', result);
+  // console.log('getSession', result);
   return result;
 };
 
 export const updateSession = (req, macKey, value) => {
-  console.log('updateSession', value);
+  // console.log('updateSession', value);
   const str = JSON.stringify(value);
   req.universalCookies.set('session', str + '.' + hmac(str, macKey), { httpOnly: true, secure: !__DEV__ });
 };

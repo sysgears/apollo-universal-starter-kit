@@ -13,6 +13,7 @@ import modules from './modules';
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
+import errorMiddleware from './middleware/error';
 import addGraphQLSubscriptions from './api/subscriptions';
 import { options as spinConfig } from '../../.spinrc.json';
 import log from '../common/log';
@@ -82,6 +83,9 @@ for (const applyMiddleware of modules.middlewares) {
 app.use(pathname, (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));
+if (__DEV__) {
+  app.use(errorMiddleware);
+}
 
 server = http.createServer(app);
 

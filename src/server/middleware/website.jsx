@@ -20,7 +20,6 @@ import createApolloClient from '../../common/createApolloClient';
 import createReduxStore from '../../common/createReduxStore';
 import Html from './html';
 import Routes from '../../client/app/Routes';
-import log from '../../common/log';
 import modules from '../modules';
 import { options as spinConfig } from '../../../.spinrc.json';
 import settings from '../../../settings';
@@ -30,7 +29,7 @@ let assetMap;
 const { protocol, hostname, port, pathname } = url.parse(__BACKEND_URL__);
 const apiUrl = `${protocol}//${hostname}:${process.env.PORT || port}${pathname}`;
 
-async function renderServerSide(req, res) {
+const renderServerSide = async (req, res) => {
   // if (__PERSIST_GQL__) {
   //   networkInterface = addPersistedQueries(networkInterface, queryMap);
   // }
@@ -121,16 +120,16 @@ async function renderServerSide(req, res) {
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
     res.end();
   }
-}
+};
 
 export default queryMap => async (req, res, next) => {
   try {
     if (req.url.indexOf('.') < 0 && __SSR__) {
       return await renderServerSide(req, res, queryMap);
     } else {
-      return next();
+      next();
     }
   } catch (e) {
-    log.error('RENDERING ERROR:', e);
+    next(e);
   }
 };

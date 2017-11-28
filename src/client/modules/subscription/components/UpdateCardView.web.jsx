@@ -1,14 +1,13 @@
-// Web only component
-
-// React
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
 import { Elements } from 'react-stripe-elements';
-
+import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
+
 import SubscriptionCardForm from './SubscriptionCardForm';
+import settings from '../../../../../settings';
 
 class UpdateCardView extends React.Component {
   onSubmit = updateCard => async values => {
@@ -28,11 +27,11 @@ class UpdateCardView extends React.Component {
 
     const renderMetaData = () => (
       <Helmet
-        title="Update Card"
+        title={`${settings.app.name} - Update Card`}
         meta={[
           {
             name: 'description',
-            content: 'Update card page'
+            content: `${settings.app.name} - Update card page`
           }
         ]}
       />
@@ -41,10 +40,12 @@ class UpdateCardView extends React.Component {
     return (
       <PageLayout>
         {renderMetaData()}
-        <h1>Update card!</h1>
-        <Elements>
-          <SubscriptionCardForm onSubmit={this.onSubmit(updateCard)} action="Update Card" />
-        </Elements>
+        <LayoutCenter>
+          <h1 className="text-center">Update card!</h1>
+          <Elements>
+            <SubscriptionCardForm onSubmit={this.onSubmit(updateCard)} action="Update Card" />
+          </Elements>
+        </LayoutCenter>
       </PageLayout>
     );
   }

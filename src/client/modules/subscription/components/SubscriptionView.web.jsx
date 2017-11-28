@@ -6,9 +6,11 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
 import { Elements } from 'react-stripe-elements';
-
+import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
+
 import SubscriptionCardForm from './SubscriptionCardForm';
+import settings from '../../../../../settings';
 
 class SubscriptionView extends React.Component {
   onSubmit = subscribe => async values => {
@@ -28,11 +30,11 @@ class SubscriptionView extends React.Component {
 
     const renderMetaData = () => (
       <Helmet
-        title="Subscription"
+        title={`${settings.app.name} - Subscription`}
         meta={[
           {
             name: 'description',
-            content: 'Subscription page'
+            content: `${settings.app.name} - Subscription page`
           }
         ]}
       />
@@ -41,10 +43,12 @@ class SubscriptionView extends React.Component {
     return (
       <PageLayout>
         {renderMetaData()}
-        <h1>Subscription!</h1>
-        <Elements>
-          <SubscriptionCardForm onSubmit={this.onSubmit(subscribe)} action="Subscribe" />
-        </Elements>
+        <LayoutCenter>
+          <h1 className="text-center">Subscription!</h1>
+          <Elements>
+            <SubscriptionCardForm onSubmit={this.onSubmit(subscribe)} action="Subscribe" />
+          </Elements>
+        </LayoutCenter>
       </PageLayout>
     );
   }

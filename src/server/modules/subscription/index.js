@@ -5,6 +5,8 @@ import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import Feature from '../connector';
 
+import webhookMiddleware from './webhook';
+
 import { parseUser } from '../user';
 
 const Subscription = new SubscriptionDAO();
@@ -20,5 +22,8 @@ export default new Feature({
       Subscription,
       subscription
     };
+  },
+  middleware: app => {
+    app.post('/stripe/webhook', webhookMiddleware);
   }
 });

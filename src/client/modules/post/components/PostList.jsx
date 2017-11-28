@@ -1,18 +1,32 @@
 /*eslint-disable react/display-name*/
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, FlatList, Text, View, Button } from 'react-native';
+import { StyleSheet, FlatList, Text, View } from 'react-native';
+import { SwipeAction, List } from 'antd-mobile';
 
 class PostList extends React.PureComponent {
+  onEndReachedCalledDuringMomentum = false;
+
   keyExtractor = item => item.node.id;
 
   renderItem = ({ item: { node: { id, title } } }) => {
     const { deletePost, navigation } = this.props;
     return (
-      <View style={styles.row}>
-        <Button title={title} onPress={() => navigation.navigate('PostEdit', { id })} />
-        <Button title="Delete" onPress={() => deletePost(id)} />
-      </View>
+      <SwipeAction
+        style={{ backgroundColor: 'gray' }}
+        autoClose
+        right={[
+          {
+            text: 'Delete',
+            onPress: () => deletePost(id),
+            style: { backgroundColor: '#F4333C', color: 'white' }
+          }
+        ]}
+      >
+        <List.Item arrow="horizontal" onClick={() => navigation.navigate('PostEdit', { id })}>
+          {title}
+        </List.Item>
+      </SwipeAction>
     );
   };
 
@@ -31,9 +45,16 @@ class PostList extends React.PureComponent {
           data={posts.edges}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
+          onEndReachedThreshold={0.5}
+          onMomentumScrollBegin={() => {
+            this.onEndReachedCalledDuringMomentum = false;
+          }}
           onEndReached={() => {
-            if (posts.pageInfo.hasNextPage) {
-              return loadMoreRows();
+            if (!this.onEndReachedCalledDuringMomentum) {
+              if (posts.pageInfo.hasNextPage) {
+                this.onEndReachedCalledDuringMomentum = true;
+                return loadMoreRows();
+              }
             }
           }}
         />

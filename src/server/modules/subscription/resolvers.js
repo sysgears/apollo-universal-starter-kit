@@ -3,6 +3,7 @@ import { pick } from 'lodash';
 import Stripe from 'stripe';
 import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
+import log from '../../../common/log';
 
 const stripe = Stripe(settings.subscription.stripeSecretKey);
 
@@ -37,7 +38,7 @@ export default pubsub => ({
           const source = await stripe.customers.createSource(customerId, {
             source: data.token
           });
-          stripeSourceId = source.stripeSourceId;
+          stripeSourceId = source.id;
         } else {
           const customer = await stripe.customers.create({ email: user.email, source: data.token });
           customerId = customer.id;

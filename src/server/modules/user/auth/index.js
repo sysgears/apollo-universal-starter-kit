@@ -27,22 +27,31 @@ const hmac = (val, macKey) => {
 
 export const getSession = (req, macKey) => {
   const value = req.universalCookies.get('session', { doNotParse: true });
+  const result = decodeSession(value, macKey);
+  console.log('getSession', result);
+  return result;
+};
+
+export const decodeSession = (session, macKey) => {
   let result;
-  if (value) {
-    const str = value.slice(0, value.lastIndexOf('.'));
-    const valMac = value.slice(value.lastIndexOf('.') + 1);
+  if (session) {
+    const str = session.slice(0, session.lastIndexOf('.'));
+    const valMac = session.slice(session.lastIndexOf('.') + 1);
     const mac = hmac(str, macKey);
     result = valMac !== mac ? undefined : JSON.parse(str);
   }
 
-  // console.log('getSession', result);
   return result;
 };
 
+export const encodeSession = (session, macKey) => {
+  const str = JSON.stringify(session);
+  return str + '.' + hmac(str, macKey);
+};
+
 export const updateSession = (req, macKey, value) => {
-  // console.log('updateSession', value);
-  const str = JSON.stringify(value);
-  req.universalCookies.set('session', str + '.' + hmac(str, macKey), { httpOnly: true, secure: !__DEV__ });
+  console.log('updateSession', value);
+  req.universalCookies.set('session', encodeSession(value, macKey), { httpOnly: true, secure: !__DEV__ });
 };
 
 export const createTokens = async (user, secret, refreshSecret) => {
@@ -102,9 +111,9 @@ export const refreshTokens = async (token, refreshToken, User, SECRET) => {
   };
 };
 
-export const tryLogin = async (email, password, User) => {
+export const tryLogin = async (email, password, context) => {
   const e = new FieldError();
-  const user = await User.getUserByEmail(email);
+  const user = await context.User.getUserByEmail(email);
 
   // check if email and password exist in db
   if (!user || user.password === null) {
@@ -125,7 +134,18 @@ export const tryLogin = async (email, password, User) => {
     e.throwIf();
   }
 
-  return user;
+  const refreshSecret = context.SECRET + user.password;
+
+  const [token, refreshToken] = await createTokens(user, context.SECRET, refreshSecret);
+
+  const session = { ...context.session, userId: user.id, forClient: false };
+  updateSession(context.req, context.SECRET, session);
+
+  return {
+    session: encodeSession({ ...session, forClient: true }, context.SECRET),
+    tokens: { token, refreshToken },
+    refreshToken
+  };
 };
 
 export const tryLoginSerial = async (serial, User, SECRET) => {

@@ -2,7 +2,7 @@
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
-import { refreshTokens, tryLogin, updateSession } from './auth';
+import { refreshTokens, tryLogin } from './auth';
 import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
 
@@ -131,10 +131,7 @@ export default pubsub => ({
     },
     async login(obj, { input: { email, password } }, context) {
       try {
-        const user = await tryLogin(email, password, context.User, context.SECRET);
-        const session = { ...context.session, userId: user.id, forClient: false };
-        updateSession(context.res, session);
-        return { ...session, forClient: true };
+        return await tryLogin(email, password, context);
       } catch (e) {
         return { errors: e };
       }

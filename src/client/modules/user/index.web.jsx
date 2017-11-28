@@ -2,7 +2,8 @@ import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
-import Profile from './containers/Profile';
+import ProfileView from './components/ProfileView';
+// import Profile from './containers/Profile';
 import Users from './components/Users';
 import UserEdit from './containers/UserEdit';
 import Register from './containers/Register';
@@ -11,7 +12,7 @@ import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 import reducers from './reducers';
 
-import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
+import { AuthRoute, AuthNav, AuthLogin, AuthProfile, withCurrentUser } from './containers/Auth';
 
 import Feature from '../connector';
 
@@ -42,7 +43,7 @@ function connectionParam() {
 
 export default new Feature({
   route: [
-    <AuthRoute exact path="/profile" scope="user" component={Profile} />,
+    <AuthRoute exact path="/profile" scope="user" component={withCurrentUser(ProfileView)} />,
     <AuthRoute exact path="/users" scope="admin" component={Users} />,
     <Route exact path="/users/:id" component={UserEdit} />,
     <Route exact path="/register" component={Register} />,

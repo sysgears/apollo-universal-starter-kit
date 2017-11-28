@@ -10,6 +10,15 @@ import log from '../../../../common/log';
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
 
+export const withCurrentUser = Component =>
+  withApollo(
+    graphql(CURRENT_USER_QUERY, {
+      props({ data: { loading, currentUser } }) {
+        return { currentUserLoading: loading, currentUser };
+      }
+    })(props => <Component {...props} />)
+  );
+
 const checkAuth = (cookies, scope) => {
   let token = null;
   let refreshToken = null;
@@ -45,29 +54,6 @@ const checkAuth = (cookies, scope) => {
   }
 
   return true;
-};
-
-const profileName = cookies => {
-  let token = null;
-
-  if (cookies && cookies.get('x-token')) {
-    token = cookies.get('x-token');
-  }
-
-  if (__CLIENT__ && window.localStorage.getItem('token')) {
-    token = window.localStorage.getItem('token');
-  }
-
-  if (!token) {
-    return '';
-  }
-
-  try {
-    const { user: { username, fullName } } = decode(token);
-    return fullName ? fullName : username;
-  } catch (e) {
-    return '';
-  }
 };
 
 const AuthNav = withCookies(({ children, cookies, scope }) => {
@@ -136,10 +122,15 @@ const AuthLoginWithApollo = withCookies(
   )
 );
 
+const ProfileName = withCurrentUser(
+  props =>
+    props.currentUserLoading || !props.currentUser ? '' : props.currentUser.fullName || props.currentUser.username
+);
+
 const AuthProfile = withCookies(({ cookies }) => {
   return checkAuth(cookies) ? (
     <NavLink to="/profile" className="nav-link" activeClassName="active">
-      {profileName(cookies)}
+      <ProfileName />
     </NavLink>
   ) : null;
 });

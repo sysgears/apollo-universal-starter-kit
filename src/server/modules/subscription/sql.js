@@ -14,6 +14,16 @@ export default class Subscription {
     );
   }
 
+  async getSubscriptionByStripeSubscriptionId(stripeSubscriptionId) {
+    return camelizeKeys(
+      await knex('subscription')
+        .select('s.*')
+        .from('subscription as s')
+        .where('s.stripe_subscription_id', '=', stripeSubscriptionId)
+        .first()
+    );
+  }
+
   async editSubscription({ userId, subscription }) {
     const userSubscription = await knex('subscription')
       .select('id')

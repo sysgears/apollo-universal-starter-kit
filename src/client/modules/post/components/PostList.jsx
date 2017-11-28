@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, FlatList, Text, View } from 'react-native';
-import { SwipeAction, List } from 'antd-mobile';
+import { SwipeAction, ListItem } from '../../common/components/native';
 
 class PostList extends React.PureComponent {
   onEndReachedCalledDuringMomentum = false;
@@ -23,9 +23,9 @@ class PostList extends React.PureComponent {
           }
         ]}
       >
-        <List.Item arrow="horizontal" onClick={() => navigation.navigate('PostEdit', { id })}>
+        <ListItem arrow="horizontal" onClick={() => navigation.navigate('PostEdit', { id })}>
           {title}
-        </List.Item>
+        </ListItem>
       </SwipeAction>
     );
   };

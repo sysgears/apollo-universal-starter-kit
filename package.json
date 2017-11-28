@@ -129,6 +129,7 @@
     "sourcemapped-stacktrace": "^1.1.7",
     "sqlite3": "^3.1.13",
     "stripe": "^5.3.0",
+    "stripe-local": "^0.1.1",
     "styled-components": "^2.2.3",
     "subscriptions-transport-ws": "^0.9.1",
     "universal-cookie-express": "^2.1.0"

@@ -20,20 +20,15 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "watch": "spin watch",
-    "heroku-postbuild": "rm -rf build && spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && spin -c .spinrc.prod.json build && spin exp p --non-interactive && npm run seed",
+    "heroku-postbuild":
+      "rm -rf build && spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && spin -c .spinrc.prod.json build && spin exp p --non-interactive && npm run seed",
     "precommit": "lint-staged",
     "cli": "node tools/cli",
     "postinstall": "opencollective postinstall"
   },
   "lint-staged": {
-    "*.{js,jsx,json}": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.graphql": [
-      "prettier --parser graphql --write",
-      "git add"
-    ]
+    "*.{js,jsx,json}": ["eslint --fix", "git add"],
+    "*.graphql": ["prettier --parser graphql --write", "git add"]
   },
   "repository": {
     "type": "git",
@@ -43,19 +38,13 @@
     "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
-  "keywords": [
-    "apollo",
-    "universal",
-    "starter",
-    "graphql",
-    "react",
-    "redux"
-  ],
+  "keywords": ["apollo", "universal", "starter", "graphql", "react", "redux"],
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^6.2.0",
     "antd": "^2.13.10",
+    "antd-mobile": "^2.0.3",
     "apollo-cache-inmemory": "^1.1.1",
     "apollo-client": "^2.0.3",
     "apollo-engine": "^0.5.4",

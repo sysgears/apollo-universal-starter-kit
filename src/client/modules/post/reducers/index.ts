@@ -102,3 +102,72 @@ export function postFormReducer(state = initPostFormState, action: PostFormActio
       return state;
   }
 }
+
+/* Comment Form */
+
+const COMMENT_FORM = 'comment_form';
+const COMMENT_FORM_RESET = 'comment_form_reset';
+const COMMENT_FORM_FILL = 'comment_form_fill';
+
+export interface CommentFormData {
+  content: string;
+}
+
+const initCommentForm = createFormGroupState<CommentFormData>(COMMENT_FORM, {
+  content: ''
+});
+
+const updateCommentFormData = groupUpdateReducer<CommentFormData>({
+  content: validate(required)
+});
+
+export interface CommentFormState {
+  commentForm: FormGroupState<CommentFormData>;
+}
+
+const initCommentFormState: CommentFormState = {
+  commentForm: initCommentForm
+};
+
+export interface CommentFormAction extends Action {
+  formData?: CommentFormData;
+}
+
+export class ResetCommentFormAction implements CommentFormAction {
+  public readonly type = COMMENT_FORM_RESET;
+}
+
+export class FillCommentFormAction implements CommentFormAction {
+  public readonly type = COMMENT_FORM_FILL;
+  public formData: CommentFormData;
+
+  constructor(fd: CommentFormData) {
+    this.formData = fd;
+  }
+}
+
+export function commentFormReducer(state = initCommentFormState, action: CommentFormAction) {
+  const commentForm = updateCommentFormData(state.commentForm, action);
+
+  if (commentForm !== state.commentForm) {
+    state = { ...state, commentForm } as any;
+  }
+
+  switch (action.type) {
+    case COMMENT_FORM_RESET:
+      return {
+        ...state,
+        commentForm: initCommentForm
+      };
+    case COMMENT_FORM_FILL:
+      return {
+        ...state,
+        commentForm: updateCommentFormData(createFormGroupState<CommentFormData>(COMMENT_FORM, action.formData), {
+          type: ''
+        })
+      };
+
+    default:
+      return state;
+  }
+}

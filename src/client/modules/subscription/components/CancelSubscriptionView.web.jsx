@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Alert } from '../../common/components/web';
+import { Button, Alert, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
 class CancelSubscriptionView extends React.Component {
   state = {
@@ -26,16 +26,18 @@ class CancelSubscriptionView extends React.Component {
     if (loading) return <p>Loading...</p>;
 
     return (
-      <div>
-        <h3>Subscription</h3>
-        {active && (
-          <Button color="danger" onClick={this.onClick} disabled={this.state.cancelling}>
-            Cancel Subscription
-          </Button>
-        )}
-        {!active && <p>You do not have a subscription.</p>}
-        {errors && <Alert color="error">{errors}</Alert>}
-      </div>
+      <CardGroup>
+        <CardTitle>Subscription</CardTitle>
+        <CardText>
+          {active && (
+            <Button color="danger" onClick={this.onClick} disabled={this.state.cancelling}>
+              Cancel Subscription
+            </Button>
+          )}
+          {!active && <p>You do not have a subscription.</p>}
+          {errors && <Alert color="error">{errors}</Alert>}
+        </CardText>
+      </CardGroup>
     );
   }
 }

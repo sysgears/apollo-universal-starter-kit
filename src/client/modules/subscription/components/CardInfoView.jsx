@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Button } from '../../common/components/web';
+import { Button, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
 const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand }) => {
   return (
@@ -11,18 +11,20 @@ const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand }) => {
         expiryYear &&
         last4 &&
         brand && (
-          <div>
-            <h4>Card Info</h4>
-            <p>
+          <CardGroup>
+            <CardTitle>Card Info</CardTitle>
+            <CardText>
               card: {brand} ************{last4}
-            </p>
-            <p>
+            </CardText>
+            <CardText>
               expires: {expiryMonth}/{expiryYear}
-            </p>
-            <Link to="/update-card">
-              <Button color="primary">Update Card</Button>
-            </Link>
-          </div>
+            </CardText>
+            <CardText>
+              <Link to="/update-card">
+                <Button color="primary">Update Card</Button>
+              </Link>
+            </CardText>
+          </CardGroup>
         )}
     </div>
   );

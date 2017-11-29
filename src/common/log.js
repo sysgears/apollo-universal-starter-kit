@@ -13,12 +13,6 @@ if (__DEV__ && __SERVER__) {
       console_log.apply(global.console, arguments);
     }
   };
-
-  // let console_err = global.console.error;
-  // global.console.error = function() {
-  //   arguments[0] = 'ce ' + new Error().stack + '\n\n\n' + arguments[0];
-  //   console_err.apply(global.console, arguments);
-  // };
 }
 
 export default log;

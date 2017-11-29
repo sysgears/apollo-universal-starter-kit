@@ -56,8 +56,6 @@ class PostEdit extends React.Component {
 PostEdit.propTypes = {
   loading: PropTypes.bool.isRequired,
   post: PropTypes.object,
-  addPost: PropTypes.func.isRequired,
-  editPost: PropTypes.func.isRequired,
   subscribeToMore: PropTypes.func.isRequired
 };
 
@@ -75,7 +73,8 @@ export default compose(
         variables: { id }
       };
     },
-    props({ data: { loading, post, subscribeToMore } }) {
+    props({ data: { loading, error, post, subscribeToMore } }) {
+      if (error) throw new Error(error);
       return { loading, post, subscribeToMore };
     }
   }),

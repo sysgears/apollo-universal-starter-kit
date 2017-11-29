@@ -1,7 +1,5 @@
-/*eslint-disable no-unused-vars*/
 // React
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // Apollo
@@ -19,13 +17,6 @@ class UsersList extends React.Component {
   }
 }
 
-UsersList.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  users: PropTypes.array,
-  errors: PropTypes.array,
-  refetch: PropTypes.func.isRequired
-};
-
 const UsersListWithApollo = compose(
   graphql(USERS_QUERY, {
     options: ({ orderBy, searchText, role, isActive }) => {
@@ -42,7 +33,7 @@ const UsersListWithApollo = compose(
     }
   }),
   graphql(DELETE_USER, {
-    props: ({ ownProps: { orderBy, searchText, role, refetch }, mutate }) => ({
+    props: ({ ownProps: { refetch }, mutate }) => ({
       deleteUser: async id => {
         try {
           const { data: { deleteUser } } = await mutate({

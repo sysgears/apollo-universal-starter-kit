@@ -15,7 +15,7 @@ If you are using Apollo v1 please use
 
 > Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] Mobile and Web app development built on top
 > of [Apollo], [GraphQL], [React 16], [React Native], [Expo], [Redux], [Express] with SQL storage support, for styling
-> [Twitter Bootstrap], [Native Base] and [Ant Design] integration. Hot Code Reload of back end & front end using
+> [Twitter Bootstrap], [NativeBase] and [Ant Design] integration. Hot Code Reload of back end & front end using
 > [Webpack] and Hot Module Replacement to reflect your changes instantly and help you stay productive.
 
 ## Hot Code Reload demo
@@ -315,7 +315,7 @@ yarn cli
   change the module import in `src/client/modules/index.js` and rename the import in
   `src/client/modules/common/components/web/index.jsx`.
 
-  [Native Base] for mobile styling, with an option to use [Ant Design Mobile]. To switch, just change the export in
+  [NativeBase] for mobile styling, with an option to use [Ant Design Mobile]. To switch, just change the export in
   `src/client/modules/common/components/native/index.jsx`.
 
 * [Babel] for ES2017 transpiling

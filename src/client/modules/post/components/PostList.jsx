@@ -68,24 +68,6 @@ PostList.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  },
-  element: {
-    paddingTop: 30
-  },
-  box: {
-    textAlign: 'center',
-    marginLeft: 15,
-    marginRight: 15
-  },
-  row: {
-    padding: 5,
-    borderWidth: 1,
-    borderTopWidth: 0,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
   }
 });
 

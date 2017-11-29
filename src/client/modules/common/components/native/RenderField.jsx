@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { InputItem } from './';
 
-const RenderField = ({ input, label, meta: { active, error }, ...inputProps }) => {
+const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
   let hasError = false;
-  if (active && error) {
+  if (touched && error) {
     hasError = true;
   }
 

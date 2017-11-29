@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, FlatList, Text, View } from 'react-native';
-import { SwipeAction, ListItem } from '../../common/components/native';
+import { SwipeAction } from '../../common/components/native';
 
 class PostList extends React.PureComponent {
   onEndReachedCalledDuringMomentum = false;
@@ -13,19 +13,13 @@ class PostList extends React.PureComponent {
     const { deletePost, navigation } = this.props;
     return (
       <SwipeAction
-        style={{ backgroundColor: 'gray' }}
-        autoClose
-        right={[
-          {
-            text: 'Delete',
-            onPress: () => deletePost(id),
-            style: { backgroundColor: '#F4333C', color: 'white' }
-          }
-        ]}
+        onPress={() => navigation.navigate('PostEdit', { id })}
+        right={{
+          text: 'Delete',
+          onPress: () => deletePost(id)
+        }}
       >
-        <ListItem arrow="horizontal" onClick={() => navigation.navigate('PostEdit', { id })}>
-          {title}
-        </ListItem>
+        {title}
       </SwipeAction>
     );
   };

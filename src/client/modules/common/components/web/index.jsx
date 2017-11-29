@@ -1,1 +1,1 @@
-export * from '../../../ui-bootstrap/components';
+export * from './ui-bootstrap/components';

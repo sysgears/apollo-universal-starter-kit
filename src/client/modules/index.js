@@ -4,8 +4,8 @@ import upload from './upload';
 import user from './user';
 import pageNotFound from './pageNotFound';
 import './favicon';
-import ui from './ui-bootstrap';
-//import ui from './ui-antd';
+import ui from './common/components/web/ui-bootstrap';
+//import ui from './common/components/web/ui-antd';
 
 import Feature from './connector';
 

@@ -5,7 +5,7 @@ import enUS from 'antd/lib/locale-provider/en_US';
 import Layout from 'antd/lib/layout';
 
 import NavBar from './NavBar';
-import settings from '../../../../../settings';
+import settings from '../../../../../../../../settings';
 
 const { Header, Content, Footer } = Layout;
 

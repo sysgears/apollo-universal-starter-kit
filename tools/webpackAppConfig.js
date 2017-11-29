@@ -92,6 +92,7 @@ const dependencyPlatforms = {
   'redux-form': 'web',
   'serialize-javascript': 'server',
   'source-map-support': 'server',
+  'sourcemapped-stacktrace': ['server', 'web'],
   sqlite3: 'server',
   'styled-components': ['server', 'web'],
   'subscriptions-transport-ws': ['ios', 'android', 'web'],

@@ -1,14 +1,47 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import PropTypes from 'prop-types';
+import { StyleSheet, FlatList, Text, View } from 'react-native';
+import { SwipeAction } from '../../common/components/native';
 
-const $Module$ListView = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.element}>
-        <Text style={styles.box}>Hello $Module$!</Text>
-      </View>
-    </View>
-  );
+class $Module$ListView extends React.PureComponent {
+  keyExtractor = item => item.id;
+
+  renderItem = ({ item: { id, name } }) => {
+    const { delete$Module$, navigation } = this.props;
+    return (
+      <SwipeAction
+        onPress={() => navigation.navigate('$Module$Edit', { id })}
+        right={{
+          text: 'Delete',
+          onPress: () => delete$Module$(id)
+        }}
+      >
+        {name}
+      </SwipeAction>
+    );
+  };
+
+  render() {
+    const { loading, $module$s, loadMoreRows } = this.props;
+
+    if (loading && !$module$s) {
+      return (
+        <View style={styles.container}>
+          <Text>Loading...</Text>
+        </View>
+      );
+    } else {
+      return <FlatList data={$module$s} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />;
+    }
+  }
+}
+
+$Module$ListView.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  $module$s: PropTypes.array,
+  orderBy: PropTypes.object,
+  onOrderBy: PropTypes.func.isRequired,
+  delete$Module$: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

@@ -1,9 +1,12 @@
 import Stripe from 'stripe';
 
 import SubscriptionDAO from './sql';
+import mailer from '../mailer/mailer';
+import UserDAO from '../user/sql';
 import settings from '../../../../settings';
 
 const Subscription = new SubscriptionDAO();
+const User = new UserDAO();
 const stripe = Stripe(settings.subscription.stripeSecretKey);
 
 export default async (req, res) => {
@@ -23,6 +26,7 @@ export default async (req, res) => {
       const subscription = await Subscription.getSubscriptionByStripeSubscriptionId(response.id);
       if (subscription) {
         const { userId, stripeCustomerId, stripeSourceId } = subscription;
+        const user = await User.getUser(userId);
 
         await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
         await Subscription.editSubscription({
@@ -36,6 +40,15 @@ export default async (req, res) => {
             last4: null,
             brand: null
           }
+        });
+
+        const url = `${req.protocol}://${req.get('host')}/subscription`;
+
+        mailer.sendMail({
+          from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+          to: user.email,
+          subject: 'Subscription Canceled',
+          html: `Your subscription has been canceled. To resubscribe click here: <a href="${url}">${url}</a>`
         });
       }
     }

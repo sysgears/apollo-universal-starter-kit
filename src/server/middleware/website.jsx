@@ -37,12 +37,8 @@ const renderServerSide = async (req, res) => {
 
   const fetch = createApolloFetch({ uri: apiUrl, constructOptions: modules.constructFetchOptions });
   fetch.batchUse(({ options }, next) => {
-    try {
-      options.credentials = 'include';
-      options.headers = req.headers;
-    } catch (e) {
-      console.error(e);
-    }
+    options.credentials = 'include';
+    options.headers = req.headers;
 
     next();
   });

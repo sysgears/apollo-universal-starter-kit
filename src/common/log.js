@@ -10,9 +10,15 @@ if (__DEV__ && __SERVER__) {
     if (arguments.length == 1 && typeof arguments[0] === 'string' && arguments[0].match(/^\[(HMR|WDS)\]/)) {
       console_log('backend ' + arguments[0]);
     } else {
-      console_log.apply(console_log, arguments);
+      console_log.apply(global.console, arguments);
     }
   };
+
+  // let console_err = global.console.error;
+  // global.console.error = function() {
+  //   arguments[0] = 'ce ' + new Error().stack + '\n\n\n' + arguments[0];
+  //   console_err.apply(global.console, arguments);
+  // };
 }
 
 export default log;

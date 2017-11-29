@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 // React
 import React from 'react';
-import PropTypes from 'prop-types';
 
 // Apollo
 import { graphql, compose } from 'react-apollo';
@@ -16,11 +15,6 @@ class Login extends React.Component {
     return <LoginView {...this.props} />;
   }
 }
-
-Login.propTypes = {
-  login: PropTypes.func.isRequired,
-  data: PropTypes.object
-};
 
 const LoginWithApollo = compose(
   graphql(LOGIN, {

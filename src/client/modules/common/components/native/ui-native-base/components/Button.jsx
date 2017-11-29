@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text } from 'react-native';
-import { Button as NBButton } from 'native-base';
+import { NBButton } from 'native-base';
 
 const Button = ({ children, ...props }) => {
   return (

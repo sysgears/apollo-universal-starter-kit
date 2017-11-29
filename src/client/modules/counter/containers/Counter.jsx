@@ -66,7 +66,8 @@ Counter.propTypes = {
 
 const CounterWithApollo = compose(
   graphql(COUNTER_QUERY, {
-    props({ data: { loading, counter, subscribeToMore } }) {
+    props({ data: { loading, error, counter, subscribeToMore } }) {
+      if (error) throw new Error(error);
       return { loading, counter, subscribeToMore };
     }
   }),

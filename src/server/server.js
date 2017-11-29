@@ -84,6 +84,9 @@ app.use(pathname, (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));
 if (__DEV__) {
+  app.use('/servdir', (req, res) => {
+    res.send(process.cwd() + path.sep);
+  });
   app.use(errorMiddleware);
 }
 

@@ -31,6 +31,7 @@
     "mocha": true
   },
   "globals": {
+    "fetch": true,
     "window": true,
     "document": true,
     "__DEV__": true,

@@ -11,7 +11,7 @@ const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) 
   return (
     <InputItem
       value={input.value}
-      placeholder="controled input"
+      placeholder={label}
       onChange={input.onChange}
       onBlur={input.onBlur}
       onFocus={input.onFocus}

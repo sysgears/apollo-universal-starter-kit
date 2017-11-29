@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import { reset } from 'redux-form';
@@ -13,10 +12,6 @@ class ForgotPassword extends React.Component {
     return <ForgotPasswordView {...this.props} />;
   }
 }
-
-ForgotPassword.propTypes = {
-  forgotPassword: PropTypes.func.isRequired
-};
 
 const ForgotPasswordWithApollo = compose(
   graphql(FORGOT_PASSWORD, {

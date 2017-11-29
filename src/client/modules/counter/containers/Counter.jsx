@@ -56,12 +56,7 @@ class Counter extends React.Component {
 
 Counter.propTypes = {
   loading: PropTypes.bool.isRequired,
-  counter: PropTypes.object,
-  updateCountQuery: PropTypes.func,
-  onReduxIncrement: PropTypes.func,
-  addCounter: PropTypes.func.isRequired,
-  subscribeToMore: PropTypes.func.isRequired,
-  reduxCount: PropTypes.number.isRequired
+  subscribeToMore: PropTypes.func.isRequired
 };
 
 const CounterWithApollo = compose(

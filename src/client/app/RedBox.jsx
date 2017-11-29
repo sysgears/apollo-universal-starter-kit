@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import ErrorStackParser from 'error-stack-parser';
+import { mapStackTrace } from 'sourcemapped-stacktrace';
 import React from 'react';
 import settings from '../../../settings';
 
@@ -11,8 +12,28 @@ class RedBox extends React.Component {
     error: PropTypes.instanceOf(Error).isRequired
   };
 
+  state = {
+    mapped: false
+  };
+
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    if (!this.state.mapped) {
+      mapStackTrace(this.props.error.stack, mappedStack => {
+        const processStack = __DEV__
+          ? fetch('/servdir')
+              .then(res => res.text())
+              .then(servDir => mappedStack.map(frame => frame.replace('webpack:///', servDir)))
+          : Promise.resolve(mappedStack);
+        processStack.then(stack => {
+          this.props.error.stack = stack.join('\n');
+          this.setState({ mapped: true });
+        });
+      });
+    }
   }
 
   renderFrames(frames) {

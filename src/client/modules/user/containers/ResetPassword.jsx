@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 import ResetPasswordView from '../components/ResetPasswordView';
@@ -11,10 +10,6 @@ class ResetPassword extends React.Component {
     return <ResetPasswordView {...this.props} />;
   }
 }
-
-ResetPassword.propTypes = {
-  resetPassword: PropTypes.func.isRequired
-};
 
 const ResetPasswordWithApollo = compose(
   graphql(RESET_PASSWORD, {

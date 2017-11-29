@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo, graphql, compose } from 'react-apollo';
-import ApolloClient from 'apollo-client';
 import { Route, Redirect, NavLink, withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import decode from 'jwt-decode';
@@ -76,10 +75,8 @@ const AuthLogin = ({ children, cookies, logout }) => {
 };
 
 AuthLogin.propTypes = {
-  client: PropTypes.instanceOf(ApolloClient),
   children: PropTypes.object,
   cookies: PropTypes.instanceOf(Cookies),
-  history: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired
 };
 

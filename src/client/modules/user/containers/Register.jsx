@@ -1,6 +1,5 @@
 // React
 import React from 'react';
-import PropTypes from 'prop-types';
 
 // Apollo
 import { graphql, compose } from 'react-apollo';
@@ -15,10 +14,6 @@ class Register extends React.Component {
     return <RegisterView {...this.props} />;
   }
 }
-
-Register.propTypes = {
-  register: PropTypes.func.isRequired
-};
 
 const RegisterWithApollo = compose(
   graphql(REGISTER, {

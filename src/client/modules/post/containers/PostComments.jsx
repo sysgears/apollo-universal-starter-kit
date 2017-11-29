@@ -100,11 +100,7 @@ PostComments.propTypes = {
   postId: PropTypes.number.isRequired,
   comments: PropTypes.array.isRequired,
   comment: PropTypes.object.isRequired,
-  addComment: PropTypes.func.isRequired,
-  editComment: PropTypes.func.isRequired,
-  deleteComment: PropTypes.func.isRequired,
   onCommentSelect: PropTypes.func.isRequired,
-  onFormSubmitted: PropTypes.func.isRequired,
   subscribeToMore: PropTypes.func.isRequired
 };
 

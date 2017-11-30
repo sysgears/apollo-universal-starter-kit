@@ -53,6 +53,26 @@ export default async (req, res) => {
       }
     }
 
+    if (event.type === 'invoice.payment_failed') {
+      const response = event.data.object;
+      const subscription = await Subscription.getSubscriptionByStripeCustomerId(response.customer);
+      if (subscription) {
+        const { userId } = subscription;
+        const user = await User.getUser(userId);
+
+        const url = `${req.protocol}://${req.get('host')}/profile`;
+
+        mailer.sendMail({
+          from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+          to: user.email,
+          subject: 'Charge Failed',
+          html: `We are having trouble charing your card. Please update your card details here: <a href="${url}">${
+            url
+          }</a>`
+        });
+      }
+    }
+
     res.json({ success: true });
   } catch (e) {
     res.status(500).json({ error: e.message });

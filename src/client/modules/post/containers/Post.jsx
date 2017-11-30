@@ -113,8 +113,6 @@ class Post extends React.Component {
 Post.propTypes = {
   loading: PropTypes.bool.isRequired,
   posts: PropTypes.object,
-  deletePost: PropTypes.func.isRequired,
-  loadMoreRows: PropTypes.func.isRequired,
   subscribeToMore: PropTypes.func.isRequired
 };
 
@@ -126,7 +124,7 @@ export default compose(
       };
     },
     props: ({ data }) => {
-      const { loading, posts, fetchMore, subscribeToMore } = data;
+      const { loading, error, posts, fetchMore, subscribeToMore } = data;
       const loadMoreRows = () => {
         return fetchMore({
           variables: {
@@ -150,7 +148,7 @@ export default compose(
           }
         });
       };
-
+      if (error) throw new Error(error);
       return { loading, posts, subscribeToMore, loadMoreRows };
     }
   }),

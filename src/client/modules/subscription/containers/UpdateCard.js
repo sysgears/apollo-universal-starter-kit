@@ -6,6 +6,7 @@ import { StripeProvider } from 'react-stripe-elements';
 import UpdateCardView from '../components/UpdateCardView';
 
 import UPDATE_CARD from '../graphql/UpdateCard.graphql';
+import CARD_INFO from '../graphql/CardInfoQuery.graphql';
 
 import settings from '../../../../../settings';
 
@@ -36,7 +37,8 @@ const UpdateCardWithApollo = compose(
       updateCard: async ({ token, expiryMonth, expiryYear, last4, brand }) => {
         try {
           const { data: { updateCard } } = await mutate({
-            variables: { input: { token, expiryMonth, expiryYear, last4, brand } }
+            variables: { input: { token, expiryMonth, expiryYear, last4, brand } },
+            refetchQueries: [{ query: CARD_INFO }]
           });
 
           if (!updateCard) {

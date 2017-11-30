@@ -1,9 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { CookiesProvider } from 'react-cookie';
-import { Route, NavLink } from 'react-router-dom';
+import { Route, NavLink, Redirect, withRouter } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
 import ProfileView from './components/ProfileView';
-// import Profile from './containers/Profile';
 import Users from './components/Users';
 import UserEdit from './containers/UserEdit';
 import Register from './containers/Register';
@@ -12,39 +12,36 @@ import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 import reducers from './reducers';
 
-import { AuthRoute, AuthNav, AuthLogin, AuthProfile, withCurrentUser } from './containers/Auth';
+import { withUser, withLoadedUser, withLogout, IfLoggedIn, IfNotLoggedIn } from './containers/Auth';
 
 import Feature from '../connector';
 
-function tokenMiddleware(req, options, next) {
-  options.headers['x-token'] = window.localStorage.getItem('token');
-  options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
-  next();
-}
+const ProfileName = withLoadedUser(
+  ({ currentUser }) => (currentUser ? currentUser.fullName || currentUser.username : null)
+);
 
-function tokenAfterware(res, options, next) {
-  const token = options.headers['x-token'];
-  const refreshToken = options.headers['x-refresh-token'];
-  if (token) {
-    window.localStorage.setItem('token', token);
-  }
-  if (refreshToken) {
-    window.localStorage.setItem('refreshToken', refreshToken);
-  }
-  next();
-}
+const LogoutLink = withRouter(
+  withLogout(({ logout, history }) => (
+    <a href="#" onClick={() => logout(() => history.push('/'))} className="nav-link">
+      Logout
+    </a>
+  ))
+);
 
-function connectionParam() {
-  return {
-    token: window.localStorage.getItem('token'),
-    refreshToken: window.localStorage.getItem('refreshToken')
-  };
-}
+const AuthRoute = ({ role, ...props }) => (
+  <IfLoggedIn role={role} elseComponent={<Redirect to={{ pathname: '/login' }} />}>
+    <Route {...props} />
+  </IfLoggedIn>
+);
+
+AuthRoute.propTypes = {
+  role: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string])
+};
 
 export default new Feature({
   route: [
-    <AuthRoute exact path="/profile" scope="user" component={withCurrentUser(ProfileView)} />,
-    <AuthRoute exact path="/users" scope="admin" component={Users} />,
+    <AuthRoute exact path="/profile" role={['user', 'admin']} component={withUser(ProfileView)} />,
+    <AuthRoute exact path="/users" role="admin" component={Users} />,
     <Route exact path="/users/:id" component={UserEdit} />,
     <Route exact path="/register" component={Register} />,
     <Route exact path="/login" component={Login} />,
@@ -53,31 +50,31 @@ export default new Feature({
   ],
   navItem: [
     <MenuItem key="/users">
-      <AuthNav scope="admin">
+      <IfLoggedIn role="admin">
         <NavLink to="/users" className="nav-link" activeClassName="active">
           Users
         </NavLink>
-      </AuthNav>
+      </IfLoggedIn>
     </MenuItem>
   ],
   navItemRight: [
-    <MenuItem key="/profile">
-      <AuthProfile />
-    </MenuItem>,
-    <MenuItem key="login">
-      <AuthLogin>
-        <span className="nav-link">
-          <NavLink to="/login" activeClassName="active">
-            Sign In
-          </NavLink>
-        </span>
-      </AuthLogin>
-    </MenuItem>
+    <IfLoggedIn>
+      <MenuItem key="/profile">
+        <NavLink to="/profile" className="nav-link" activeClassName="active">
+          <ProfileName />
+        </NavLink>
+      </MenuItem>
+      <LogoutLink />
+    </IfLoggedIn>,
+    <IfNotLoggedIn>
+      <span className="nav-link">
+        <NavLink to="/login" activeClassName="active">
+          Sign In
+        </NavLink>
+      </span>
+    </IfNotLoggedIn>
   ],
   reducer: { user: reducers },
-  middleware: tokenMiddleware,
-  afterware: tokenAfterware,
-  connectionParam: connectionParam,
   // eslint-disable-next-line react/display-name
   rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
 });

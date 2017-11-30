@@ -2,7 +2,7 @@
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
-import { refreshTokens, tryLogin } from './auth';
+import { tryLogin, updateSession } from './auth';
 import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
 
@@ -145,10 +145,11 @@ export default pubsub => ({
         context.req.universalCookies.remove('r-refresh-token');
       }
 
+      const session = { ...context.session };
+      delete session.userId;
+      updateSession(context.req, context.SECRET, session);
+
       return true;
-    },
-    refreshTokens(obj, { token, refreshToken }, context) {
-      return refreshTokens(token, refreshToken, context.User, context.SECRET);
     },
     addUser: withAuth(
       (obj, args, context) => {

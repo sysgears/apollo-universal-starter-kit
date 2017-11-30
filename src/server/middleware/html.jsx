@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
 import modules from '../../client/modules';
 
-const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) => {
+const Html = ({ content, state, assetMap, css, helmet }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent(); // react-helmet html document tags
   const bodyAttrs = helmet.bodyAttributes.toComponent(); // react-helmet body document tags
 
@@ -39,9 +39,7 @@ const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) =>
           dangerouslySetInnerHTML={{
             __html: `window.__APOLLO_STATE__=${serialize(state, {
               isJSON: true
-            })};window.localStorage.setItem('token','${token}');window.localStorage.setItem('refreshToken','${
-              refreshToken
-            }');`
+            })};`
           }}
           charSet="UTF-8"
         />

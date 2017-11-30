@@ -7,8 +7,8 @@ import cookiesMiddleware from 'universal-cookie-express';
 import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
-import { refreshTokens, createTokens, establishSession, getSession } from './auth';
-import tokenMiddleware from './auth/token';
+import { establishSession } from './auth';
+import authMiddleware from './auth/authMiddleware';
 import confirmMiddleware from './confirm';
 import Feature from '../connector';
 import scopes from './auth/scopes';
@@ -70,8 +70,7 @@ export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: async (req, res, connectionParams, webSocket) => {
-    let tokenUser = null;
-    let session;
+    let loggedInUser = null;
     let auth = { isAuthenticated: false, scope: null };
     let serial = '';
     if (__DEV__) {
@@ -79,27 +78,13 @@ export default new Feature({
       serial = settings.user.auth.certificate.enabled;
     }
 
-    if (
-      connectionParams &&
-      connectionParams.token &&
-      connectionParams.token !== 'null' &&
-      connectionParams.token !== 'undefined'
-    ) {
-      try {
-        const { user } = jwt.verify(connectionParams.token, SECRET);
-        tokenUser = user;
-      } catch (err) {
-        const newTokens = await refreshTokens(connectionParams.token, connectionParams.refreshToken, User, SECRET);
-        tokenUser = newTokens.user;
-      }
-    } else if (req) {
-      session = getSession(req, SECRET);
+    if (req) {
       if (req.user) {
-        tokenUser = req.user;
+        loggedInUser = req.user;
       } else if (settings.user.auth.certificate.enabled) {
         const user = await User.getUserWithSerial(serial);
         if (user) {
-          tokenUser = user;
+          loggedInUser = user;
         }
       }
     } else if (webSocket) {
@@ -111,22 +96,21 @@ export default new Feature({
 
         const user = await User.getUserWithSerial(serial);
         if (user) {
-          tokenUser = user;
+          loggedInUser = user;
         }
       }
     }
 
-    if (tokenUser) {
+    if (loggedInUser) {
       auth = {
         isAuthenticated: true,
-        scope: scopes[tokenUser.role]
+        scope: scopes[loggedInUser.role]
       };
     }
 
     return {
       User,
-      user: tokenUser,
-      session,
+      user: loggedInUser,
       auth,
       SECRET,
       req,
@@ -144,7 +128,7 @@ export default new Feature({
         next(e);
       }
     });
-    app.use(tokenMiddleware(SECRET, User, jwt));
+    app.use(authMiddleware(SECRET, User, jwt));
 
     if (settings.user.auth.password.sendConfirmationEmail) {
       app.get('/confirmation/:token', confirmMiddleware(SECRET, User, jwt));
@@ -159,28 +143,6 @@ export default new Feature({
         req,
         res
       ) {
-        const user = await User.getUserWithPassword(req.user.id);
-        const refreshSecret = SECRET + user.password;
-        const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
-
-        req.universalCookies.set('x-token', token, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true
-        });
-        req.universalCookies.set('x-refresh-token', refreshToken, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true
-        });
-
-        req.universalCookies.set('r-token', token, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: false
-        });
-        req.universalCookies.set('r-refresh-token', refreshToken, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: false
-        });
-
         res.redirect('/profile');
       });
     }

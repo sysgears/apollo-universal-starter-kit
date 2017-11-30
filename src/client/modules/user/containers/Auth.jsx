@@ -1,158 +1,84 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withApollo, graphql, compose } from 'react-apollo';
-import { Route, Redirect, NavLink, withRouter } from 'react-router-dom';
-import { withCookies, Cookies } from 'react-cookie';
-import decode from 'jwt-decode';
+import { withApollo, graphql } from 'react-apollo';
 
 import log from '../../../../common/log';
+
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
 
-export const withCurrentUser = Component =>
+const withUser = Component => {
+  const WithUser = ({ ...props }) => <Component {...props} />;
+
+  WithUser.propTypes = {
+    currentUser: PropTypes.object,
+    currentUserLoading: PropTypes.bool.isRequired
+  };
+
+  return graphql(CURRENT_USER_QUERY, {
+    props({ data: { loading, currentUser } }) {
+      return { currentUserLoading: loading, currentUser };
+    }
+  })(WithUser);
+};
+
+const withLoadedUser = Component => {
+  const WithLoadedUser = ({ currentUserLoading, ...props }) => (currentUserLoading ? null : <Component {...props} />);
+
+  WithLoadedUser.propTypes = {
+    currentUser: PropTypes.object,
+    currentUserLoading: PropTypes.bool.isRequired
+  };
+
+  return withUser(Component);
+};
+
+const IfLoggedInComponent = ({ currentUser, role, children, elseComponent }) =>
+  currentUser && (!role || (Array.isArray(role) ? role : [role]).indexOf(currentUser.role) >= 0)
+    ? children
+    : elseComponent || null;
+IfLoggedInComponent.propTypes = {
+  currentUser: PropTypes.object,
+  role: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
+  elseComponent: PropTypes.node,
+  children: PropTypes.node
+};
+
+const IfLoggedIn = withLoadedUser(IfLoggedInComponent);
+
+const IfNotLoggedInComponent = ({ currentUser, children }) => (!currentUser ? children : null);
+IfNotLoggedInComponent.propTypes = {
+  currentUser: PropTypes.object,
+  children: PropTypes.node
+};
+
+const IfNotLoggedIn = withLoadedUser(IfNotLoggedInComponent);
+
+const withLogout = Component =>
   withApollo(
-    graphql(CURRENT_USER_QUERY, {
-      props({ data: { loading, currentUser } }) {
-        return { currentUserLoading: loading, currentUser };
-      }
-    })(props => <Component {...props} />)
-  );
+    graphql(LOGOUT, {
+      props: ({ ownProps: { client }, mutate }) => ({
+        logout: async onLogout => {
+          try {
+            const { data: { logout } } = await mutate();
 
-const checkAuth = (cookies, scope) => {
-  let token = null;
-  let refreshToken = null;
-
-  if (cookies && cookies.get('r-token')) {
-    token = cookies.get('r-token');
-    refreshToken = cookies.get('r-refresh-token');
-  }
-  if (__CLIENT__ && window.localStorage.getItem('token')) {
-    token = window.localStorage.getItem('token');
-    refreshToken = window.localStorage.getItem('refreshToken');
-  }
-
-  if (!token || !refreshToken) {
-    return false;
-  }
-
-  try {
-    const { exp } = decode(refreshToken);
-
-    if (exp < new Date().getTime() / 1000) {
-      return false;
-    }
-
-    if (scope === 'admin') {
-      const { user: { role } } = decode(token);
-      if (scope !== role) {
-        return false;
-      }
-    }
-  } catch (e) {
-    return false;
-  }
-
-  return true;
-};
-
-const AuthNav = withCookies(({ children, cookies, scope }) => {
-  return checkAuth(cookies, scope) ? children : null;
-});
-
-AuthNav.propTypes = {
-  children: PropTypes.object,
-  cookies: PropTypes.instanceOf(Cookies)
-};
-
-const AuthLogin = ({ children, cookies, logout }) => {
-  return checkAuth(cookies) ? (
-    <a href="#" onClick={() => logout()} className="nav-link">
-      Logout
-    </a>
-  ) : (
-    children
-  );
-};
-
-AuthLogin.propTypes = {
-  children: PropTypes.object,
-  cookies: PropTypes.instanceOf(Cookies),
-  logout: PropTypes.func.isRequired
-};
-
-const AuthLoginWithApollo = withCookies(
-  withRouter(
-    withApollo(
-      compose(
-        graphql(CURRENT_USER_QUERY),
-        graphql(LOGOUT, {
-          // eslint-disable-next-line
-          props: ({ ownProps: { client, history, navigation }, mutate }) => ({
-            logout: async () => {
-              try {
-                const { data: { logout } } = await mutate();
-
-                if (logout.errors) {
-                  return { errors: logout.errors };
-                }
-
-                // comment out until https://github.com/apollographql/apollo-client/issues/1186 is fixed
-                //await client.resetStore();
-
-                window.localStorage.setItem('token', null);
-                window.localStorage.setItem('refreshToken', null);
-
-                if (history) {
-                  return history.push('/');
-                }
-                if (navigation) {
-                  return navigation.goBack();
-                }
-              } catch (e) {
-                log.error(e.stack);
-              }
+            if (logout.errors) {
+              return { errors: logout.errors };
             }
-          })
-        })
-      )(AuthLogin)
-    )
-  )
-);
 
-const ProfileName = withCurrentUser(
-  props =>
-    props.currentUserLoading || !props.currentUser ? '' : props.currentUser.fullName || props.currentUser.username
-);
+            await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
 
-const AuthProfile = withCookies(({ cookies }) => {
-  return checkAuth(cookies) ? (
-    <NavLink to="/profile" className="nav-link" activeClassName="active">
-      <ProfileName />
-    </NavLink>
-  ) : null;
-});
-
-AuthProfile.propTypes = {
-  cookies: PropTypes.instanceOf(Cookies)
-};
-
-const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        checkAuth(cookies, scope) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
-      }
-    />
+            onLogout();
+          } catch (e) {
+            log.error(e);
+          }
+        }
+      })
+    })(Component)
   );
-});
 
-AuthRoute.propTypes = {
-  component: PropTypes.func,
-  cookies: PropTypes.instanceOf(Cookies)
-};
-
-export { AuthNav };
-export { AuthProfile };
-export { AuthLoginWithApollo as AuthLogin };
-export { AuthRoute };
+export { withUser };
+export { withLoadedUser };
+export { IfLoggedIn };
+export { IfNotLoggedIn };
+export { withLogout };

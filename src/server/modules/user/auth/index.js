@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken';
-import { pick } from 'lodash';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import settings from '../../../../../settings';
@@ -28,7 +26,7 @@ const hmac = (val, macKey) => {
 export const getSession = (req, macKey) => {
   const value = req.universalCookies.get('session', { doNotParse: true });
   const result = decodeSession(value, macKey);
-  console.log('getSession', result);
+  // console.log('getSession', result);
   return result;
 };
 
@@ -50,65 +48,12 @@ export const encodeSession = (session, macKey) => {
 };
 
 export const updateSession = (req, macKey, value) => {
-  console.log('updateSession', value);
-  req.universalCookies.set('session', encodeSession(value, macKey), { httpOnly: true, secure: !__DEV__ });
-};
-
-export const createTokens = async (user, secret, refreshSecret) => {
-  let tokenUser = pick(user, ['id', 'username', 'role']);
-  tokenUser.fullName = user.firstName ? `${user.firstName} ${user.lastName}` : null;
-
-  const createToken = jwt.sign(
-    {
-      user: tokenUser
-    },
-    secret,
-    {
-      expiresIn: '1m'
-    }
-  );
-
-  const createRefreshToken = jwt.sign(
-    {
-      user: user.id
-    },
-    refreshSecret,
-    {
-      expiresIn: '7d'
-    }
-  );
-
-  return Promise.all([createToken, createRefreshToken]);
-};
-
-export const refreshTokens = async (token, refreshToken, User, SECRET) => {
-  let userId = -1;
-  try {
-    const { user } = jwt.decode(refreshToken);
-    userId = user;
-  } catch (err) {
-    return {};
-  }
-
-  const user = await User.getUserWithPassword(userId);
-  if (!user) {
-    return {};
-  }
-  const refreshSecret = SECRET + user.password;
-
-  try {
-    jwt.verify(refreshToken, refreshSecret);
-  } catch (err) {
-    return {};
-  }
-
-  const [newToken, newRefreshToken] = await createTokens(user, SECRET, refreshSecret);
-
-  return {
-    token: newToken,
-    refreshToken: newRefreshToken,
-    user: pick(user, ['id', 'username', 'role'])
-  };
+  // console.log('updateSession', value);
+  req.universalCookies.set('session', encodeSession(value, macKey), {
+    httpOnly: true,
+    secure: !__DEV__,
+    maxAge: 7 * 24 * 3600
+  });
 };
 
 export const tryLogin = async (email, password, context) => {
@@ -134,33 +79,24 @@ export const tryLogin = async (email, password, context) => {
     e.throwIf();
   }
 
-  const refreshSecret = context.SECRET + user.password;
-
-  const [token, refreshToken] = await createTokens(user, context.SECRET, refreshSecret);
-
   const session = { ...context.session, userId: user.id, forClient: false };
   updateSession(context.req, context.SECRET, session);
+  context.session = session;
 
   return {
     session: encodeSession({ ...session, forClient: true }, context.SECRET),
-    tokens: { token, refreshToken },
-    refreshToken
+    user
   };
 };
 
-export const tryLoginSerial = async (serial, User, SECRET) => {
+export const tryLoginSerial = async (serial, User) => {
   try {
     const certAuth = await User.getUserWithSerial(serial);
 
     const user = await User.getUserWithPassword(certAuth.id);
 
-    const refreshSecret = SECRET + user.password;
-    const [token, refreshToken] = await createTokens(user, SECRET, refreshSecret);
-
     return {
-      user,
-      token,
-      refreshToken
+      user
     };
   } catch (err) {
     console.log(err);

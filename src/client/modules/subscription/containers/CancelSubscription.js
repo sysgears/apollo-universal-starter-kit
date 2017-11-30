@@ -5,6 +5,7 @@ import { graphql, compose } from 'react-apollo';
 import CancelSubscriptionView from '../components/CancelSubscriptionView';
 
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
+import CARD_INFO from '../graphql/CardInfoQuery.graphql';
 import CANCEL from '../graphql/CancelSubscription.graphql';
 
 const CancelSubscription = ({ loading, active, cancel }) => {
@@ -41,7 +42,8 @@ const CancelSubscriptionWithApollo = compose(
               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
               data.subscription = cancel;
               store.writeQuery({ query: SUBSCRIPTION_QUERY, data });
-            }
+            },
+            refetchQueries: [{ query: CARD_INFO }]
           });
 
           if (cancel.errors) {

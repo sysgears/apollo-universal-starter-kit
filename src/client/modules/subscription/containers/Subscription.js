@@ -7,6 +7,7 @@ import SubscriptionView from '../components/SubscriptionView';
 
 import SUBSCRIBE from '../graphql/Subscribe.graphql';
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
+import CARD_INFO from '../graphql/CardInfoQuery.graphql';
 
 import settings from '../../../../../settings';
 
@@ -42,7 +43,8 @@ const SubscriptionViewWithApollo = compose(
               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
               data.subscription = subscribe;
               store.writeQuery({ query: SUBSCRIPTION_QUERY, data });
-            }
+            },
+            refetchQueries: [{ query: CARD_INFO }]
           });
 
           if (subscribe.errors) {

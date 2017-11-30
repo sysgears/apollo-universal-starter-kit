@@ -15,7 +15,7 @@ class SubscriptionCardForm extends React.Component {
 
     const { id, card: { exp_month, exp_year, last4, brand } } = token;
 
-    this.props.onSubmit({
+    await this.props.onSubmit({
       token: id,
       expiryMonth: exp_month,
       expiryYear: exp_year,

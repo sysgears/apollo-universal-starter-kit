@@ -6,15 +6,6 @@ import { createFormFields } from '../../common/util';
 import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
 import { Form, Button, Alert } from '../../common/components/web';
 
-const validate = values => {
-  const errors = {};
-
-  if (values.password !== values.passwordConfirmation) {
-    errors.passwordConfirmation = 'Passwords do not match';
-  }
-  return errors;
-};
-
 const $Module$Form = ({ handleSubmit, submitting, onSubmit, error }) => {
   return (
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
@@ -35,6 +26,5 @@ $Module$Form.propTypes = {
 };
 
 export default reduxForm({
-  form: '$module$',
-  validate
+  form: '$module$'
 })($Module$Form);

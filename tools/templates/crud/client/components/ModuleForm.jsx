@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { FormView, RenderField, FormButton } from '../../common/components/native';
 
-const required = value => (value ? undefined : 'Required');
+import { createFormFields } from '../../common/util';
+import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
+import { FormView, RenderField, FormButton } from '../../common/components/native';
 
 const $Module$Form = ({ handleSubmit, valid, onSubmit }) => {
   return (
     <FormView>
-      <Field name="name" component={RenderField} type="text" label="Name" validate={required} />
+      {createFormFields($Module$Schema)}
       <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
         Save
       </FormButton>

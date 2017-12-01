@@ -131,7 +131,15 @@ export default pubsub => ({
     },
     async login(obj, { input: { email, password } }, context) {
       try {
-        return await tryLogin(email, password, context);
+        const data = await tryLogin(email, password, context);
+
+        const session = {
+          ...context.req.session,
+          userId: data.user.id
+        };
+        context.req.session = updateSession(context.req, session);
+
+        return data;
       } catch (e) {
         return { errors: e };
       }
@@ -145,9 +153,9 @@ export default pubsub => ({
         context.req.universalCookies.remove('r-refresh-token');
       }
 
-      const session = { ...context.session };
+      const session = { ...context.req.session };
       delete session.userId;
-      updateSession(context.req, context.SECRET, session);
+      context.req.session = updateSession(context.req, session);
 
       return true;
     },

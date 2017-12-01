@@ -2,58 +2,29 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import settings from '../../../../../settings';
 import FieldError from '../../../../common/FieldError';
+import { decryptSession, encryptSession } from './crypto';
 
-export const establishSession = async (req, macKey) => {
-  let session = getSession(req, macKey);
-  if (!session) {
-    crypto.randomBytes(16, (err, buf) => {
-      if (err) throw err;
-      const sessionID = buf.toString('hex');
-      session = { sessionID };
-      updateSession(req, macKey, session);
-    });
-  }
+export const createSession = req => {
+  const session = updateSession(req, { sessionID: crypto.randomBytes(16).toString('hex') });
+  // console.log(`createSession: ${JSON.stringify(session)}`);
   return session;
 };
 
-const hmac = (val, macKey) => {
-  return crypto
-    .createHmac('sha256', Buffer.from(macKey, 'utf-8'))
-    .update(val)
-    .digest('base64');
+export const readSession = req => {
+  const session = decryptSession(req.universalCookies.get('session', { doNotParse: true }));
+  // console.log(`readSession: ${JSON.stringify(session)}`);
+  return session;
 };
 
-export const getSession = (req, macKey) => {
-  const value = req.universalCookies.get('session', { doNotParse: true });
-  const result = decodeSession(value, macKey);
-  // console.log('getSession', result);
-  return result;
-};
-
-export const decodeSession = (session, macKey) => {
-  let result;
-  if (session) {
-    const str = session.slice(0, session.lastIndexOf('.'));
-    const valMac = session.slice(session.lastIndexOf('.') + 1);
-    const mac = hmac(str, macKey);
-    result = valMac !== mac ? undefined : JSON.parse(str);
-  }
-
-  return result;
-};
-
-export const encodeSession = (session, macKey) => {
-  const str = JSON.stringify(session);
-  return str + '.' + hmac(str, macKey);
-};
-
-export const updateSession = (req, macKey, value) => {
-  // console.log('updateSession', value);
-  req.universalCookies.set('session', encodeSession(value, macKey), {
+export const updateSession = (req, session) => {
+  req.universalCookies.set('session', encryptSession(session), {
     httpOnly: true,
     secure: !__DEV__,
     maxAge: 7 * 24 * 3600
   });
+
+  // console.log(`updateSession: ${JSON.stringify(session)}`);
+  return session;
 };
 
 export const tryLogin = async (email, password, context) => {
@@ -79,12 +50,7 @@ export const tryLogin = async (email, password, context) => {
     e.throwIf();
   }
 
-  const session = { ...context.session, userId: user.id, forClient: false };
-  updateSession(context.req, context.SECRET, session);
-  context.session = session;
-
   return {
-    session: encodeSession({ ...session, forClient: true }, context.SECRET),
     user
   };
 };

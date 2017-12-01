@@ -7,7 +7,7 @@ import cookiesMiddleware from 'universal-cookie-express';
 import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
-import { establishSession } from './auth';
+import { readSession, createSession } from './auth';
 import authMiddleware from './auth/authMiddleware';
 import confirmMiddleware from './confirm';
 import Feature from '../connector';
@@ -117,17 +117,21 @@ export default new Feature({
       res
     };
   },
-  middleware: app => {
+  beforeware: app => {
     app.use(cookiesMiddleware());
-
     app.use(async (req, res, next) => {
       try {
-        await establishSession(req, SECRET);
+        req.session = readSession(req);
+        if (!req.session || !req.session.sessionID) {
+          req.session = createSession(req);
+        }
         next();
       } catch (e) {
         next(e);
       }
     });
+  },
+  middleware: app => {
     app.use(authMiddleware(SECRET, User, jwt));
 
     if (settings.user.auth.password.sendConfirmationEmail) {

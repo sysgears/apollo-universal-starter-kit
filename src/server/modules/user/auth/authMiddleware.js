@@ -1,11 +1,10 @@
 import settings from '../../../../../settings';
 
-import { tryLoginSerial, getSession } from './index';
+import { tryLoginSerial } from './index';
 
 export default (SECRET, User) => async (req, res, next) => {
-  const session = getSession(req, SECRET);
-  if (session && session.userId) {
-    req.user = { id: session.userId };
+  if (req.session.userId) {
+    req.user = { id: req.session.userId };
   } else if (settings.user.auth.certificate.enabled) {
     // cert auth
     let serial = '';

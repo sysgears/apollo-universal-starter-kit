@@ -2,7 +2,6 @@
 
 mutation login($input: LoginUserInput!) {
   login(input: $input) {
-    session
     user {
       ...UserInfo
     }

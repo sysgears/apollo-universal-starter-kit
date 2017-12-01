@@ -312,8 +312,7 @@ yarn cli
 
   If you would like to use a different styling than [Twitter Bootstrap], UI components are structured in a way to make
   it easy to use something else. We already prepared [Ant Design] integation. To switch the UI all you need to do is
-  change the module import in `src/client/modules/index.js` and rename the import in
-  `src/client/modules/common/components/web/index.jsx`.
+  rename the import in `src/client/modules/common/components/web/index.jsx`.
 
   [NativeBase] for mobile styling, with an option to use [Ant Design Mobile]. To switch, just change the export in
   `src/client/modules/common/components/native/index.jsx`.

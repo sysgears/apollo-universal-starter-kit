@@ -1,17 +1,47 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
+import { SubmissionError } from 'redux-form';
 
+import { pickInputFields } from '../../common/util';
+import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
 import $Module$EditView from '../components/$Module$EditView';
-
 import $MODULE$_QUERY from '../graphql/$Module$Query.graphql';
 import ADD_$MODULE$ from '../graphql/Add$Module$.graphql';
 import EDIT_$MODULE$ from '../graphql/Edit$Module$.graphql';
 
 class $Module$Edit extends React.Component {
+  onSubmit = async values => {
+    const { $module$, add$Module$, edit$Module$ } = this.props;
+    let result = null;
+
+    const insertValues = pickInputFields($Module$Schema, values);
+
+    if ($module$) {
+      result = await edit$Module$(insertValues);
+    } else {
+      result = await add$Module$(insertValues);
+    }
+
+    if (result.errors) {
+      let submitError = {
+        _error: 'Edit $module$ failed!'
+      };
+      result.errors.map(error => (submitError[error.field] = error.message));
+      throw new SubmissionError(submitError);
+    }
+  };
+
   render() {
-    return <$Module$EditView {...this.props} />;
+    return <$Module$EditView {...this.props} onSubmit={this.onSubmit} />;
   }
 }
+
+$Module$Edit.propTypes = {
+  crud: PropTypes.object,
+  add$Module$: PropTypes.func.isRequired,
+  edit$Module$: PropTypes.func.isRequired
+};
 
 export default compose(
   graphql($MODULE$_QUERY, {
@@ -24,6 +54,7 @@ export default compose(
       }
 
       return {
+        fetchPolicy: 'cache-and-network',
         variables: { id }
       };
     },

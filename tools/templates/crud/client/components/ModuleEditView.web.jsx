@@ -2,36 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { SubmissionError } from 'redux-form';
 
-import { pickInputFields } from '../../common/util';
-import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
 import { PageLayout } from '../../common/components/web';
 import $Module$Form from './$Module$Form';
 import settings from '../../../../../settings';
 
 class $Module$EditView extends React.PureComponent {
-  onSubmit = async values => {
-    const { $module$, add$Module$, edit$Module$ } = this.props;
-    let result = null;
-
-    const insertValues = pickInputFields($Module$Schema, values);
-
-    if ($module$) {
-      result = await edit$Module$(insertValues);
-    } else {
-      result = await add$Module$(insertValues);
-    }
-
-    if (result.errors) {
-      let submitError = {
-        _error: 'Edit $module$ failed!'
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw new SubmissionError(submitError);
-    }
-  };
-
   renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Edit $Module$`}
@@ -45,7 +21,7 @@ class $Module$EditView extends React.PureComponent {
   );
 
   render() {
-    const { loading, $module$ } = this.props;
+    const { loading, $module$, onSubmit } = this.props;
 
     if (loading && !$module$) {
       return (
@@ -62,7 +38,7 @@ class $Module$EditView extends React.PureComponent {
             Back
           </Link>
           <h2>{$module$ ? 'Edit' : 'Create'} $Module$</h2>
-          <$Module$Form onSubmit={this.onSubmit} initialValues={$module$} />
+          <$Module$Form onSubmit={onSubmit} initialValues={$module$} />
         </PageLayout>
       );
     }
@@ -72,8 +48,7 @@ class $Module$EditView extends React.PureComponent {
 $Module$EditView.propTypes = {
   loading: PropTypes.bool.isRequired,
   $module$: PropTypes.object,
-  add$Module$: PropTypes.func.isRequired,
-  edit$Module$: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired
 };
 
 export default $Module$EditView;

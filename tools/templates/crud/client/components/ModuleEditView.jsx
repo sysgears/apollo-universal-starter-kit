@@ -4,15 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import $Module$Form from './$Module$Form';
 
-const onSubmit = ($module$, add$Module$, edit$Module$) => values => {
-  if ($module$) {
-    edit$Module$($module$.id, values.title, values.content);
-  } else {
-    add$Module$(values.title, values.content);
-  }
-};
-
-const $Module$EditView = ({ loading, $module$, navigation, add$Module$, edit$Module$ }) => {
+const $Module$EditView = ({ loading, $module$, navigation, onSubmit }) => {
   let $module$Obj = $module$;
 
   if (!$module$Obj && navigation.state) {
@@ -26,20 +18,14 @@ const $Module$EditView = ({ loading, $module$, navigation, add$Module$, edit$Mod
       </View>
     );
   } else {
-    return (
-      <$Module$Form
-        onSubmit={onSubmit($module$Obj, add$Module$, edit$Module$)}
-        initialValues={$module$Obj ? $module$Obj : {}}
-      />
-    );
+    return <$Module$Form onSubmit={onSubmit} initialValues={$module$Obj ? $module$Obj : {}} />;
   }
 };
 
 $Module$EditView.propTypes = {
   loading: PropTypes.bool.isRequired,
   $module$: PropTypes.object,
-  add$Module$: PropTypes.func.isRequired,
-  edit$Module$: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired
 };
 

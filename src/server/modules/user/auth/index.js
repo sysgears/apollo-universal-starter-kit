@@ -6,7 +6,7 @@ import FieldError from '../../../../common/FieldError';
 
 export const createTokens = async (user, secret, refreshSecret) => {
   let tokenUser = pick(user, ['id', 'username', 'role']);
-  tokenUser.fullName = user.firstName ? `${user.firstName} ${user.lastName}` : null;
+  tokenUser.fullName = user.profile.firstName ? `${user.profile.firstName} ${user.profile.lastName}` : null;
 
   const createToken = jwt.sign(
     {
@@ -40,7 +40,7 @@ export const refreshTokens = async (token, refreshToken, User, SECRET) => {
     return {};
   }
 
-  const user = await User.getUserWithPassword(userId);
+  const user = await User.getUser(userId);
   if (!user) {
     return {};
   }
@@ -98,7 +98,7 @@ export const tryLoginSerial = async (serial, User, SECRET) => {
   try {
     const certAuth = await User.getUserWithSerial(serial);
 
-    const user = await User.getUserWithPassword(certAuth.id);
+    const user = await User.getUser(certAuth.id);
 
     const refreshSecret = SECRET + user.password;
     const [token, refreshToken] = await createTokens(user, SECRET, refreshSecret);

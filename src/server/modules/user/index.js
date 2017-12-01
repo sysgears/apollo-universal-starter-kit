@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import { pick } from 'lodash';
+import GraphQLGenerator from 'domain-graphql';
 
+import { User as UserSchema } from './schema';
 import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
@@ -66,7 +68,7 @@ if (settings.user.auth.facebook.enabled) {
 }
 
 export default new Feature({
-  schema,
+  schema: [schema, new GraphQLGenerator().generateTypes(UserSchema)],
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
     let tokenUser = null;
@@ -144,7 +146,7 @@ export default new Feature({
         req,
         res
       ) {
-        const user = await User.getUserWithPassword(req.user.id);
+        const user = await User.getUser(req.user.id);
         const refreshSecret = SECRET + user.password;
         const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
 

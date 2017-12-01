@@ -1,33 +1,3 @@
-type User {
-  id: Int!
-  username: String!
-  role: String!
-  isActive: Boolean
-  email: String!
-  profile: UserProfile
-  auth: UserAuth
-}
-
-type UserProfile {
-  firstName: String
-  lastName: String
-  fullName: String
-}
-
-type UserAuth {
-  certificate: CertificateAuth
-  facebook: FacebookAuth
-}
-
-type CertificateAuth {
-  serial: String
-}
-
-type FacebookAuth {
-  fbId: String
-  displayName: String
-}
-
 type UserPayload {
   user: User
   errors: [FieldError!]

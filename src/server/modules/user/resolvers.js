@@ -8,67 +8,32 @@ import settings from '../../../../settings';
 
 export default pubsub => ({
   Query: {
-    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, context) => {
-      return context.User.getUsers(orderBy, filter);
+    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, context, info) => {
+      return context.User.getUsers(orderBy, filter, info);
     }),
     user: withAuth(
-      (obj, args, context) => {
+      (obj, args, context, info) => {
         return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
       },
-      (obj, { id }, context) => {
-        return context.User.getUser(id);
+      (obj, { id }, context, info) => {
+        return context.User.getUser(id, info);
       }
     ),
-    currentUser(obj, args, context) {
+    currentUser(obj, args, context, info) {
       if (context.user) {
-        return context.User.getUser(context.user.id);
+        return context.User.getUser(context.user.id, info);
       } else {
         return null;
       }
     }
   },
-  User: {
-    profile(obj) {
-      return obj;
-    },
-    auth(obj) {
-      return obj;
-    }
-  },
   UserProfile: {
-    firstName(obj) {
-      return obj.firstName;
-    },
-    lastName(obj) {
-      return obj.lastName;
-    },
     fullName(obj) {
       if (obj.firstName && obj.lastName) {
         return `${obj.firstName} ${obj.lastName}`;
       } else {
         return null;
       }
-    }
-  },
-  UserAuth: {
-    certificate(obj) {
-      return obj;
-    },
-    facebook(obj) {
-      return obj;
-    }
-  },
-  CertificateAuth: {
-    serial(obj) {
-      return obj.serial;
-    }
-  },
-  FacebookAuth: {
-    fbId(obj) {
-      return obj.fbId;
-    },
-    displayName(obj) {
-      return obj.displayName;
     }
   },
   Mutation: {

@@ -1,21 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { StyleSheet, ScrollView } from 'react-native';
-import { Button } from '../../common/components';
-import { RenderField } from '../../common/components/native';
+import { FormView, RenderField, FormButton } from '../../common/components/native';
 
 const required = value => (value ? undefined : 'Required');
 
 const PostForm = ({ handleSubmit, valid, onSubmit }) => {
   return (
-    <ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
+    <FormView>
       <Field name="title" component={RenderField} type="text" label="Title" validate={required} />
       <Field name="content" component={RenderField} type="text" label="Content" validate={required} />
-      <Button onPress={handleSubmit(onSubmit)} disabled={valid}>
+      <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
         Save
-      </Button>
-    </ScrollView>
+      </FormButton>
+    </FormView>
   );
 };
 
@@ -24,12 +22,6 @@ PostForm.propTypes = {
   onSubmit: PropTypes.func,
   valid: PropTypes.bool
 };
-
-const styles = StyleSheet.create({
-  scroll: {
-    marginBottom: 5
-  }
-});
 
 export default reduxForm({
   form: 'post',

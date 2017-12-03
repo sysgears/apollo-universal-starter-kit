@@ -54,16 +54,7 @@ PostEditView.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 5,
     flexDirection: 'column'
-  },
-  element: {
-    paddingTop: 30
-  },
-  box: {
-    textAlign: 'center',
-    marginLeft: 15,
-    marginRight: 15
   }
 });
 

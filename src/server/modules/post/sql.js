@@ -39,13 +39,13 @@ export default class Post {
 
   getTotal() {
     return knex('post')
-      .count('id as count')
+      .countDistinct('id as count')
       .first();
   }
 
   getNextPageFlag(id) {
     return knex('post')
-      .count('id as count')
+      .countDistinct('id as count')
       .where('id', '<', id)
       .first();
   }

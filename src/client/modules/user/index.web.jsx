@@ -51,7 +51,13 @@ export default new Feature({
     <AuthRoute exact path="/users" redirect="/login" role="admin" component={Users} />,
     <Route exact path="/users/:id" component={UserEdit} />,
     <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
-    <AuthRoute exact path="/login" redirectOnLoggedIn redirect="/profile" component={Login} />,
+    <AuthRoute
+      exact
+      path="/login"
+      redirectOnLoggedIn
+      redirect="/profile"
+      component={withRouter(({ history }) => <Login onLogin={() => history.push('/profile')} />)}
+    />,
     <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,
     <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />
   ],

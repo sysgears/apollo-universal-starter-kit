@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 // React
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 
 // Apollo
 import { graphql, withApollo, compose } from 'react-apollo';
@@ -21,9 +20,8 @@ class Login extends React.Component {
 
 const LoginWithApollo = compose(
   withApollo,
-  withRouter,
   graphql(LOGIN, {
-    props: ({ ownProps: { history, client, navigation }, mutate }) => ({
+    props: ({ ownProps: { client, onLogin }, mutate }) => ({
       login: async ({ email, password }) => {
         try {
           const { data: { login } } = await mutate({
@@ -36,12 +34,7 @@ const LoginWithApollo = compose(
 
           await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
 
-          if (history) {
-            return history.push('/profile');
-          }
-          if (navigation) {
-            return navigation.goBack();
-          }
+          onLogin();
         } catch (e) {
           log.error(e);
         }

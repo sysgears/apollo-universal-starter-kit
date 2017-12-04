@@ -1,4 +1,9 @@
 /*eslint-disable no-unused-vars*/
+import shell from 'shelljs';
+import fs from 'fs';
+
+import FieldError from '../../../common/FieldError';
+
 export default pubsub => ({
   Query: {
     files(obj, args, { Upload }) {
@@ -7,8 +12,26 @@ export default pubsub => ({
   },
   Mutation: {
     uploadFile: async (obj, { file }, { Upload }) => {
-      const ok = await Upload.saveFile(file);
-      console.log(file);
+      return await Upload.saveFile(file);
+    },
+    removeFile: async (obj, { id }, { Upload }) => {
+      const e = new FieldError();
+
+      const file = await Upload.file(id);
+      if (!file) {
+        e.setError('file', 'File not found.');
+        e.throwIf();
+      }
+
+      const ok = await Upload.deleteFile(id);
+      if (ok) {
+        const filePath = `${file.path}`;
+        const res = shell.rm(filePath);
+        if (res.code > 0) {
+          e.setError('file', 'Unable to delete file.');
+          e.throwIf();
+        }
+      }
       return ok;
     }
   },

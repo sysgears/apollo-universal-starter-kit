@@ -6,7 +6,20 @@ export default class Upload {
     return knex('upload').select('*');
   }
 
+  file(id) {
+    return knex('upload')
+      .select('*')
+      .where({ id })
+      .first();
+  }
+
   saveFile(file) {
     return knex('upload').insert(file);
+  }
+
+  deleteFile(id) {
+    return knex('upload')
+      .where({ id })
+      .del();
   }
 }

@@ -19,6 +19,7 @@ extend type Query {
 
 extend type Mutation {
   uploadFile(file: Upload!): Boolean!
+  removeFile(id: Int!): Boolean!
 }
 
 extend type Subscription {

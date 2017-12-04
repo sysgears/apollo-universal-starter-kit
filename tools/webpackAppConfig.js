@@ -91,6 +91,7 @@ const dependencyPlatforms = {
   'redux-devtools-extension': 'web',
   'redux-form': 'web',
   'serialize-javascript': 'server',
+  shelljs: 'server',
   'source-map-support': 'server',
   'sourcemapped-stacktrace': ['server', 'web'],
   sqlite3: 'server',

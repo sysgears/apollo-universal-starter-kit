@@ -3,27 +3,11 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
 import filesize from 'filesize';
-
-import { PageLayout } from '../../common/components/web';
+import { PageLayout, Button } from '../../common/components/web';
 import settings from '../../../../../settings';
 
-const onDrop = uploadFile => async ([file]) => {
-  const result = await uploadFile(file);
-  console.log(result);
-};
-
-const renderFiles = files => {
-  return files.map(file => (
-    <div key={file.id}>
-      <a href={file.path} download={file.name}>
-        {file.name} ({filesize(file.size)})
-      </a>
-    </div>
-  ));
-};
-
-const UploadView = ({ loading, files, uploadFile }) => {
-  const renderMetaData = () => (
+class UploadView extends React.PureComponent {
+  renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Upload`}
       meta={[
@@ -35,23 +19,46 @@ const UploadView = ({ loading, files, uploadFile }) => {
     />
   );
 
-  return (
-    <PageLayout>
-      {renderMetaData()}
-      <div className="text-center">
-        <Dropzone onDrop={onDrop(uploadFile)}>
-          <p>Try dropping some files here, or click to select files to upload.</p>
-        </Dropzone>
-        {!loading && files && renderFiles(files)}
+  onDrop = uploadFile => async ([file]) => {
+    const result = await uploadFile(file);
+    console.log(result);
+  };
+
+  renderFiles = () => {
+    const { files, removeFile } = this.props;
+    return files.map(file => (
+      <div key={file.id}>
+        <a href={file.path} download={file.name}>
+          {file.name} ({filesize(file.size)})
+        </a>
+        <Button id="graphql-button" color="primary" onClick={() => removeFile(file.id)}>
+          Remove
+        </Button>
       </div>
-    </PageLayout>
-  );
-};
+    ));
+  };
+
+  render() {
+    const { loading, files, uploadFile } = this.props;
+    return (
+      <PageLayout>
+        {this.renderMetaData()}
+        <div className="text-center">
+          <Dropzone onDrop={this.onDrop(uploadFile)}>
+            <p>Try dropping some files here, or click to select files to upload.</p>
+          </Dropzone>
+          {!loading && files && this.renderFiles()}
+        </div>
+      </PageLayout>
+    );
+  }
+}
 
 UploadView.propTypes = {
   loading: PropTypes.bool.isRequired,
   files: PropTypes.array,
-  uploadFile: PropTypes.func.isRequired
+  uploadFile: PropTypes.func.isRequired,
+  removeFile: PropTypes.func.isRequired
 };
 
 export default UploadView;

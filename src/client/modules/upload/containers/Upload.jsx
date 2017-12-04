@@ -4,6 +4,7 @@ import { graphql, compose } from 'react-apollo';
 import UploadView from '../components/UploadView';
 import FILES_QUERY from '../graphql/FilesQuery.graphql';
 import UPLOAD_FILE from '../graphql/UploadFile.graphql';
+import REMOVE_FILE from '../graphql/RemoveFile.graphql';
 
 class Upload extends React.Component {
   render() {
@@ -23,6 +24,15 @@ const UploadWithApollo = compose(
       uploadFile: async file => {
         return await mutate({
           variables: { file }
+        });
+      }
+    })
+  }),
+  graphql(REMOVE_FILE, {
+    props: ({ mutate }) => ({
+      removeFile: async id => {
+        return await mutate({
+          variables: { id }
         });
       }
     })

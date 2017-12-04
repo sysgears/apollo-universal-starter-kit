@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
 import clientModules from '../../client/modules';
 import serverModules from '../../server/modules';
+import { styles } from '../../client/modules/common/components/web';
 
 const Html = ({ content, state, assetMap, css, helmet, req }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent(); // react-helmet html document tags
@@ -29,7 +30,7 @@ const Html = ({ content, state, assetMap, css, helmet, req }) => {
         {!!__DEV__ && (
           <style
             dangerouslySetInnerHTML={{
-              __html: clientModules.stylesInserts.map(style => style._getCss()).join('')
+              __html: styles._getCss() + clientModules.stylesInserts.map(style => style._getCss()).join('')
             }}
           />
         )}

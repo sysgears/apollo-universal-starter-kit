@@ -28,25 +28,32 @@ const LogoutLink = withRouter(
   ))
 );
 
-const AuthRoute = ({ role, ...props }) => (
-  <IfLoggedIn role={role} elseComponent={<Redirect to={{ pathname: '/login' }} />}>
-    <Route {...props} />
-  </IfLoggedIn>
-);
+const AuthRoute = ({ role, redirect, redirectOnLoggedIn, ...props }) =>
+  redirectOnLoggedIn ? (
+    <IfNotLoggedIn role={role} elseComponent={<Redirect to={{ pathname: redirect }} />}>
+      <Route {...props} />
+    </IfNotLoggedIn>
+  ) : (
+    <IfLoggedIn role={role} elseComponent={<Redirect to={{ pathname: redirect }} />}>
+      <Route {...props} />
+    </IfLoggedIn>
+  );
 
 AuthRoute.propTypes = {
-  role: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string])
+  role: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
+  redirect: PropTypes.string.isRequired,
+  redirectOnLoggedIn: PropTypes.bool
 };
 
 export default new Feature({
   route: [
-    <AuthRoute exact path="/profile" role={['user', 'admin']} component={withUser(ProfileView)} />,
-    <AuthRoute exact path="/users" role="admin" component={Users} />,
+    <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={withUser(ProfileView)} />,
+    <AuthRoute exact path="/users" redirect="/login" role="admin" component={Users} />,
     <Route exact path="/users/:id" component={UserEdit} />,
-    <Route exact path="/register" component={Register} />,
-    <Route exact path="/login" component={Login} />,
-    <Route exact path="/forgot-password" component={ForgotPassword} />,
-    <Route exact path="/reset-password/:token" component={ResetPassword} />
+    <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
+    <AuthRoute exact path="/login" redirectOnLoggedIn redirect="/profile" component={Login} />,
+    <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,
+    <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />
   ],
   navItem: [
     <MenuItem key="/users">

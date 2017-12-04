@@ -40,6 +40,7 @@ const ios = {
 
 const dependencyPlatforms = {
   antd: 'web',
+  'antd-mobile': ['ios', 'android'],
   'apollo-engine': 'server',
   bcryptjs: 'server',
   'body-parser': 'server',
@@ -63,6 +64,7 @@ const dependencyPlatforms = {
   'jwt-decode': 'web',
   knex: 'server',
   mysql2: 'server',
+  'native-base': ['ios', 'android'],
   nodemailer: 'server',
   opencollective: 'server',
   passport: 'server',

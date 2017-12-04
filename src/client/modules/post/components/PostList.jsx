@@ -1,71 +1,61 @@
 /*eslint-disable react/display-name*/
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, ListView, ScrollView, Button } from 'react-native';
+import { StyleSheet, FlatList, Text, View } from 'react-native';
+import { SwipeAction } from '../../common/components/native';
 
-// Row comparison function
-const rowHasChanged = (r1, r2) => r1.id !== r2.id;
+class PostList extends React.PureComponent {
+  onEndReachedCalledDuringMomentum = false;
 
-// DataSource template object
-const ds = new ListView.DataSource({ rowHasChanged });
+  keyExtractor = item => item.node.id;
 
-const renderRow = (deletePost, navigation) => rowData => {
-  return (
-    <View style={styles.row}>
-      <Button
-        title={rowData.title}
-        onPress={() =>
-          navigation.navigate('PostEdit', {
-            id: rowData.id
-          })
-        }
-      />
-      <Button title="Delete" onPress={() => deletePost(rowData.id)} />
-    </View>
-  );
-};
-
-function renderLoadMore(posts, loadMoreRows) {
-  if (posts.pageInfo.hasNextPage) {
+  renderItem = ({ item: { node: { id, title } } }) => {
+    const { deletePost, navigation } = this.props;
     return (
-      <View style={styles.row}>
-        <Text>
-          ({posts.edges.length} / {posts.totalCount})
-        </Text>
-        <Button title="Load More ..." onPress={loadMoreRows} />
-      </View>
+      <SwipeAction
+        onPress={() => navigation.navigate('PostEdit', { id })}
+        right={{
+          text: 'Delete',
+          onPress: () => deletePost(id)
+        }}
+      >
+        {title}
+      </SwipeAction>
     );
+  };
+
+  render() {
+    const { loading, posts, loadMoreRows } = this.props;
+
+    if (loading) {
+      return (
+        <View style={styles.container}>
+          <Text>Loading...</Text>
+        </View>
+      );
+    } else {
+      return (
+        <FlatList
+          data={posts.edges}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.renderItem}
+          onEndReachedThreshold={0.5}
+          onMomentumScrollBegin={() => {
+            this.onEndReachedCalledDuringMomentum = false;
+          }}
+          onEndReached={() => {
+            if (!this.onEndReachedCalledDuringMomentum) {
+              if (posts.pageInfo.hasNextPage) {
+                this.onEndReachedCalledDuringMomentum = true;
+                return loadMoreRows();
+              }
+            }
+          }}
+        />
+      );
+    }
   }
 }
-
-const PostList = ({ loading, posts, deletePost, loadMoreRows, navigation }) => {
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  } else {
-    const rows = posts.edges.reduce((prev, { node }) => {
-      prev.push(node);
-      return prev;
-    }, []);
-
-    const dataSource = ds.cloneWithRows(rows);
-
-    return (
-      <ScrollView>
-        <ListView
-          style={styles.container}
-          dataSource={dataSource}
-          renderRow={renderRow(deletePost, navigation)}
-          removeClippedSubviews={false}
-        />
-        {renderLoadMore(posts, loadMoreRows)}
-      </ScrollView>
-    );
-  }
-};
 
 PostList.propTypes = {
   loading: PropTypes.bool.isRequired,
@@ -78,24 +68,6 @@ PostList.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  },
-  element: {
-    paddingTop: 30
-  },
-  box: {
-    textAlign: 'center',
-    marginLeft: 15,
-    marginRight: 15
-  },
-  row: {
-    padding: 5,
-    borderWidth: 1,
-    borderTopWidth: 0,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
   }
 });
 

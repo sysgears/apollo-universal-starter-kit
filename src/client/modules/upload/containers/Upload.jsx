@@ -1,12 +1,8 @@
-// React
 import React from 'react';
-
-// Apollo
 import { graphql, compose } from 'react-apollo';
 
-// Components
 import UploadView from '../components/UploadView';
-
+import FILES_QUERY from '../graphql/FilesQuery.graphql';
 import UPLOAD_FILE from '../graphql/UploadFile.graphql';
 
 class Upload extends React.Component {
@@ -16,6 +12,12 @@ class Upload extends React.Component {
 }
 
 const UploadWithApollo = compose(
+  graphql(FILES_QUERY, {
+    props({ data: { loading, error, files } }) {
+      if (error) throw new Error(error);
+      return { loading, files };
+    }
+  }),
   graphql(UPLOAD_FILE, {
     props: ({ mutate }) => ({
       uploadFile: async file => {

@@ -77,6 +77,7 @@
     "error-stack-parser": "^2.0.1",
     "expo": "^23.0.0",
     "express": "^4.16.2",
+    "filesize": "^3.5.11",
     "graphql": "^0.11.7",
     "graphql-auth": "^0.2.0",
     "graphql-iso-date": "^3.3.0",

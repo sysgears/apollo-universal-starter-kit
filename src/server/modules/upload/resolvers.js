@@ -1,10 +1,15 @@
 /*eslint-disable no-unused-vars*/
 export default pubsub => ({
-  Query: {},
+  Query: {
+    files(obj, args, { Upload }) {
+      return Upload.files();
+    }
+  },
   Mutation: {
-    uploadFile: (obj, { file }, context) => {
+    uploadFile: async (obj, { file }, { Upload }) => {
+      const ok = await Upload.saveFile(file);
       console.log(file);
-      return true;
+      return ok;
     }
   },
   Subscription: {}

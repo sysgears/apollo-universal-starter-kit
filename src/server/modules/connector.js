@@ -1,5 +1,6 @@
 // @flow
 /* eslint-disable no-unused-vars */
+import React from 'react';
 import type { DocumentNode } from 'graphql';
 import type { Middleware, $Request, $Response } from 'express';
 
@@ -16,7 +17,8 @@ type FeatureParams = {
   createContextFunc?: Function | Function[],
   beforeware?: Middleware | Middleware[],
   middleware?: Middleware | Middleware[],
-  createFetchOptions?: Function | Function[]
+  createFetchOptions?: Function | Function[],
+  htmlHeadComponents?: any
 };
 
 class Feature {
@@ -26,6 +28,7 @@ class Feature {
   createFetchOptions: Function[];
   beforeware: Function[];
   middleware: Function[];
+  htmlHeadComponent: any;
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
@@ -35,6 +38,7 @@ class Feature {
     this.beforeware = combine(arguments, arg => arg.beforeware);
     this.middleware = combine(arguments, arg => arg.middleware);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
+    this.htmlHeadComponent = combine(arguments, arg => arg.htmlHeadComponent);
   }
 
   get schemas(): DocumentNode[] {
@@ -74,6 +78,12 @@ class Feature {
           }
         }
       : null;
+  }
+
+  createHtmlHeadComponents(req: $Request): any {
+    return React.Children.map(this.htmlHeadComponent, (child, idx) =>
+      React.cloneElement(child, { key: idx, req: req })
+    );
   }
 }
 

@@ -15,9 +15,9 @@ const hmac = (val, macKey) => {
 };
 
 // This MAC is used to automatically invalidate all existing user sessions when they change password
-export const computeSessionIDMAC = (sessionID, userPassword, salt) => {
+export const computePwdBasedMAC = (value, userPassword, salt) => {
   return hmac(
-    sessionID,
+    value,
     crypto
       .createHash('sha-256')
       .update(userPassword)

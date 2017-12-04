@@ -1,10 +1,12 @@
 import path from 'path';
 import fs from 'fs';
-import serialize from 'serialize-javascript';
+import url from 'url';
 import log from '../../common/log';
 import { options as spinConfig } from '../../../.spinrc.json';
 
 let assetMap;
+
+const { pathname } = url.parse(__BACKEND_URL__);
 
 const stripCircular = (from, seen) => {
   const to = Array.isArray(from) ? [] : {};
@@ -27,19 +29,27 @@ const stripCircular = (from, seen) => {
 // eslint-disable-next-line no-unused-vars
 function errorMiddleware(e, req, res, next) {
   log.error(e);
-  if (__DEV__ || !assetMap) {
-    assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
+  if (req.path === pathname) {
+    res.status(500).send(`[{"errors": [{"message": "${e.message}"}]}]`);
+  } else if (__DEV__) {
+    if (!assetMap) {
+      assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
+    }
+
+    const serverErrorScript = `<script charset="UTF-8">window.__SERVER_ERROR__=${JSON.stringify(
+      stripCircular(e)
+    )};</script>`;
+    const vendorScript = assetMap['vendor.js']
+      ? `<script src="/${assetMap['vendor.js']}" charSet="utf-8"></script>`
+      : '';
+
+    res.status(200).send(
+      `<html>${serverErrorScript}<body><div id="content"></div>
+      ${vendorScript}
+          <script src="/${assetMap['index.js']}" charSet="utf-8"></script>
+          </body></html>`
+    );
   }
-
-  const serverErrorScript = `<script charset="UTF-8">window.__SERVER_ERROR__=${serialize(stripCircular(e))};</script>`;
-  const vendorScript = assetMap['vendor.js'] ? `<script src="/${assetMap['vendor.js']}" charSet="utf-8"></script>` : '';
-
-  res.status(200).send(
-    `<html>${serverErrorScript}<body><div id="content"></div>
-    ${vendorScript}
-        <script src="/${assetMap['index.js']}" charSet="utf-8"></script>
-        </body></html>`
-  );
 }
 
 export default errorMiddleware;

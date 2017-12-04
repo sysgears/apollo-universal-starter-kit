@@ -19,7 +19,11 @@ class UsersList extends React.Component {
 
 const UsersListWithApollo = compose(
   graphql(USERS_QUERY, {
-    options: ({ orderBy, searchText, role, isActive }) => {
+    options: ({ orderBy, error, searchText, role, isActive }) => {
+      console.log();
+      if (error) {
+        throw new Error(error);
+      }
       return {
         fetchPolicy: 'cache-and-network',
         variables: {

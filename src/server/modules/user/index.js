@@ -1,14 +1,16 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import { pick } from 'lodash';
+import url from 'url';
 import cookiesMiddleware from 'universal-cookie-express';
 
 import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import { readSession, createSession } from './auth';
-import authMiddleware from './auth/authMiddleware';
 import confirmMiddleware from './confirm';
 import Feature from '../connector';
 import scopes from './auth/scopes';
@@ -17,6 +19,8 @@ import settings from '../../../../settings';
 const SECRET = settings.user.secret;
 
 const User = new UserDAO();
+
+const { pathname } = url.parse(__BACKEND_URL__);
 
 if (settings.user.auth.facebook.enabled) {
   passport.use(
@@ -66,39 +70,31 @@ if (settings.user.auth.facebook.enabled) {
   );
 }
 
+const CSRFComponent = ({ req }) => (
+  <script
+    dangerouslySetInnerHTML={{
+      __html: `window.__CSRF_TOKEN__="${req.session.csrfToken}";`
+    }}
+    charSet="UTF-8"
+  />
+);
+CSRFComponent.propTypes = {
+  req: PropTypes.object
+};
+
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: async (req, res, connectionParams, webSocket) => {
     let loggedInUser = null;
     let auth = { isAuthenticated: false, scope: null };
-    let serial = '';
-    if (__DEV__) {
-      // for local testing without client certificates
-      serial = settings.user.auth.certificate.enabled;
-    }
 
     if (req) {
-      if (req.user) {
-        loggedInUser = req.user;
-      } else if (settings.user.auth.certificate.enabled) {
-        const user = await User.getUserWithSerial(serial);
-        if (user) {
-          loggedInUser = user;
-        }
+      if (req.session.userId) {
+        loggedInUser = await User.getUser(req.session.userId);
       }
     } else if (webSocket) {
-      if (settings.user.auth.certificate.enabled) {
-        // in case you need to access req headers
-        if (webSocket.upgradeReq.headers['x-serial']) {
-          serial = webSocket.upgradeReq.headers['x-serial'];
-        }
-
-        const user = await User.getUserWithSerial(serial);
-        if (user) {
-          loggedInUser = user;
-        }
-      }
+      // Add implementation here
     }
 
     if (loggedInUser) {
@@ -112,9 +108,7 @@ export default new Feature({
       User,
       user: loggedInUser,
       auth,
-      SECRET,
-      req,
-      res
+      req
     };
   },
   beforeware: app => {
@@ -122,8 +116,16 @@ export default new Feature({
     app.use(async (req, res, next) => {
       try {
         req.session = readSession(req);
-        if (!req.session || !req.session.sessionID) {
+        if (!req.session || !req.session.csrfToken) {
           req.session = createSession(req);
+        }
+        if (__SSR__ || __TEST__) {
+          req.headers['x-token'] = req.session.csrfToken;
+        }
+        if (req.path === pathname) {
+          if (req && req.session.userId && req.session.csrfToken !== req.headers['x-token']) {
+            throw new Error('CSRF token validation failed');
+          }
         }
         next();
       } catch (e) {
@@ -132,8 +134,6 @@ export default new Feature({
     });
   },
   middleware: app => {
-    app.use(authMiddleware(SECRET, User, jwt));
-
     if (settings.user.auth.password.sendConfirmationEmail) {
       app.get('/confirmation/:token', confirmMiddleware(SECRET, User, jwt));
     }
@@ -150,5 +150,6 @@ export default new Feature({
         res.redirect('/profile');
       });
     }
-  }
+  },
+  htmlHeadComponent: <CSRFComponent />
 });

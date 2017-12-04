@@ -75,6 +75,12 @@ export default new Feature({
     </IfNotLoggedIn>
   ],
   reducer: { user: reducers },
+  middleware: (req, options, next) => {
+    if (__CLIENT__) {
+      options.headers = { 'X-Token': window.__CSRF_TOKEN__ };
+    }
+    next();
+  },
   // eslint-disable-next-line react/display-name
   rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
 });

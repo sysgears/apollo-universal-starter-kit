@@ -5,7 +5,7 @@ import FieldError from '../../../../common/FieldError';
 import { decryptSession, encryptSession } from './crypto';
 
 export const createSession = req => {
-  const session = updateSession(req, { sessionID: crypto.randomBytes(16).toString('hex') });
+  const session = updateSession(req, { csrfToken: crypto.randomBytes(16).toString('hex') });
   // console.log(`createSession: ${JSON.stringify(session)}`);
   return session;
 };

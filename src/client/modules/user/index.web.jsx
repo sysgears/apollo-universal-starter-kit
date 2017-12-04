@@ -11,7 +11,7 @@ import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 import reducers from './reducers';
 
-import { AuthRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
+import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
 
 import Feature from '../connector';
 
@@ -45,10 +45,10 @@ export default new Feature({
     <AuthRoute exact path="/profile" scope="user" component={Profile} />,
     <AuthRoute exact path="/users" scope="admin" component={Users} />,
     <Route exact path="/users/:id" component={UserEdit} />,
-    <Route exact path="/register" component={Register} />,
-    <Route exact path="/login" component={Login} />,
-    <Route exact path="/forgot-password" component={ForgotPassword} />,
-    <Route exact path="/reset-password/:token" component={ResetPassword} />
+    <AuthLoggedInRoute exact path="/register" redirect="/profile" component={Register} />,
+    <AuthLoggedInRoute exact path="/login" redirect="/profile" component={Login} />,
+    <AuthLoggedInRoute exact path="/forgot-password" redirect="/profile" component={ForgotPassword} />,
+    <AuthLoggedInRoute exact path="/reset-password/:token" redirect="/profile" component={ResetPassword} />
   ],
   navItem: [
     <MenuItem key="/users">

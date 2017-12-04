@@ -15,7 +15,7 @@ const onDrop = uploadFile => async ([file]) => {
 const renderFiles = files => {
   return files.map(file => (
     <div key={file.id}>
-      <a href={file.path} download={file.name} alt={file.name} target="blank">
+      <a href={file.path} download={file.name}>
         {file.name} ({filesize(file.size)})
       </a>
     </div>

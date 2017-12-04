@@ -61,7 +61,7 @@ export default class PostEditView implements OnInit, OnDestroy {
           this.post = post || {};
           this.form = this.createForm();
           this.loading = loading;
-          this.title = post ? 'Create Post' : 'Edit Post';
+          this.title = post ? 'Edit Post' : 'Create Post';
           const action = post
             ? new FillPostFormAction(assign({}, pick(post, ['title', 'content'])))
             : new ResetPostFormAction();

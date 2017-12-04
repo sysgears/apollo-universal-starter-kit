@@ -19,7 +19,8 @@ export interface FormInput {
   selector: 'ausk-form',
   template: `
     <div *ngIf="loading">Loading...</div>
-    <form *ngIf="!loading" name="{{formName}}" (ngSubmit)="onSubmit(formState[formName].value)" [ngrxFormState]="formState">
+    <form *ngIf="!loading" name="{{formName}}" (ngSubmit)="onSubmit(formState[formName].value)"
+          [ngrxFormState]="formState">
       <div [ngClass]="{'form-group': fi.inputType !== 2, 'form-check': fi.inputType === 2}" *ngFor="let fi of form">
 
         <form-item [itemType]="fi.inputType"
@@ -29,7 +30,9 @@ export interface FormInput {
 
       </div>
       <div class="{{ btnAlign }}">
-        <button type="submit" id="register-submit-btn" class="btn btn-primary" [disabled]="formState[formName].isInvalid || submitting">{{btnName}}</button>
+        <ausk-button type="submit" [disabled]="formState[formName].isInvalid || submitting">
+          {{btnName}}
+        </ausk-button>
       </div>
     </form>
   `

@@ -2,6 +2,7 @@
 // export { default as Button } from './Button';
 // export { default as Table } from './Table';
 import Alert from './Alert';
+import Button from './Button';
 import Card from './Card';
 import CardGroup from './CardGroup';
 import CardText from './CardText';
@@ -20,9 +21,11 @@ import RenderCheckBox from './RenderCheckBox';
 import RenderField from './RenderField';
 import RenderSelect from './RenderSelect';
 import Row from './Row';
+import Table from './Table';
 
 export const BOOTSTRAP_COMPONENTS: any = [
   Alert,
+  Button,
   Card,
   CardGroup,
   CardText,
@@ -40,5 +43,6 @@ export const BOOTSTRAP_COMPONENTS: any = [
   RenderSelect,
   RenderCheckBox,
   RenderField,
-  Row
+  Row,
+  Table
 ];

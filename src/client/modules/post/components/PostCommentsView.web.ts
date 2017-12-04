@@ -6,43 +6,29 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroupState } from 'ngrx-forms';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
+import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
 import PostCommentsService, { AddComment, DeleteComment, UpdateComment } from '../containers/PostComments';
 import { CommentFormData, CommentSelect, FillCommentFormAction, ResetCommentFormAction } from '../reducers/index';
 
 @Component({
   selector: 'post-comments-view',
   template: `
-        <div>
-          <h3>Comments</h3>
-          <ausk-form [onSubmit]="onSubmit"
-                     [formName]="'commentForm'"
-                     [formState]="formState"
-                     [loading]="loading"
-                     [form]="form"
-                     [btnName]="'Save'">
-          </ausk-form>
+    <div>
+      <h3>Comments</h3>
+      <ausk-form [onSubmit]="onSubmit"
+                 [formName]="'commentForm'"
+                 [formState]="formState"
+                 [loading]="loading"
+                 [form]="form"
+                 [btnName]="'Save'">
+      </ausk-form>
 
-          <h1></h1>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th class="w-100">Content</th>
-                    <th class="w-100">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let comment of post.comments">
-                    <td>{{ comment.content }}</td>
-                    <td>
-                        <div style="width: 120px;">
-                            <button type="button" class="edit-comment btn btn-primary btn-sm" (click)="onCommentSelect(comment)">Edit</button>
-                            <button type="button" class="delete-comment btn btn-primary btn-sm" (click)="onCommentDelete(comment.id)">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>`
+      <h1></h1>
+      <ausk-table
+          [columns]="columns"
+          [rows]="rows">
+      </ausk-table>
+    </div>`
 })
 export default class PostCommentsView implements OnInit, OnDestroy {
   @Input() public post: any;
@@ -57,6 +43,9 @@ export default class PostCommentsView implements OnInit, OnDestroy {
   private subsOnDelete: Subscription;
   private subsOnEdit: Subscription;
 
+  private columns: ColumnData[] = [{ title: 'Content' }, { title: 'Actions', width: 50, columnSpan: 2 }];
+  private rows: CellData[];
+
   constructor(private postCommentsService: PostCommentsService, private ngZone: NgZone, private store: Store<any>) {
     store.select(s => s.commentForm).subscribe((res: any) => {
       this.formState = res;
@@ -65,6 +54,8 @@ export default class PostCommentsView implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.subsOnEdit = this.store.select('post').subscribe(({ comment }: any) => {
+      this.rows = this.createRows(this.post);
+
       this.ngZone.run(() => {
         this.updateForm(comment);
       });
@@ -80,6 +71,7 @@ export default class PostCommentsView implements OnInit, OnDestroy {
         } else if (mutation === 'DELETED') {
           this.post = DeleteComment(this.post, id);
         }
+        this.rows = this.createRows(this.post);
       }
     );
   }
@@ -88,14 +80,14 @@ export default class PostCommentsView implements OnInit, OnDestroy {
     this.unsubscribe(this.subsOnUpdate, this.subsOnDelete);
   }
 
-  public onCommentSelect(comment: any) {
+  public onCommentSelect = (comment: any) => {
     this.store.dispatch(new CommentSelect(comment));
-  }
+  };
 
-  public onCommentDelete(id: number) {
+  public onCommentDelete = (id: number) => {
     this.unsubscribe(this.subsOnDelete);
     this.subsOnDelete = this.postCommentsService.deleteComment(id, this.post.id);
-  }
+  };
 
   public onSubmit = (commentForm: any) => {
     this.submitting = true;
@@ -111,6 +103,26 @@ export default class PostCommentsView implements OnInit, OnDestroy {
     this.unsubscribe(this.subsOnEdit);
     this.submitting = false;
   };
+
+  private createRows = (post: any) =>
+    post.comments.map((comment: any) => {
+      return [
+        {
+          type: ElemType.Text,
+          text: comment.content
+        },
+        {
+          type: ElemType.Button,
+          text: 'Edit',
+          callback: () => this.onCommentSelect(comment)
+        },
+        {
+          type: ElemType.Button,
+          text: 'Delete',
+          callback: () => this.onCommentDelete(comment.id)
+        }
+      ];
+    });
 
   private updateForm = (comment: any) => {
     this.comment = comment;

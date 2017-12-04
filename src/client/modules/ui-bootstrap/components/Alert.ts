@@ -30,9 +30,9 @@ const alertClasses = [
       <div *ngFor="let alert of alerts" [id]="alert.alertId"
            class="alert alert-dismissible fade show {{ alert.type || '' }}"
            role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="onClose(alert)">
+        <ausk-button className="close" (click)="onClose(alert)">
           <span aria-hidden="true">&times;</span>
-        </button>
+        </ausk-button>
         {{ alert.message }}
       </div>
     </div>

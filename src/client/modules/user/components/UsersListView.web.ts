@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
+import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
 import UsersListService, { AddUser, DeleteUser, UpdateUser } from '../containers/UsersList';
 import { UserOrderBy } from '../reducers';
 
@@ -14,38 +15,22 @@ import { UserOrderBy } from '../reducers';
 
       <alert [subject]="alertSubject"></alert>
 
-      <table class="table">
-        <thead>
-        <tr>
-          <th *ngFor="let header of headers">
-            <a (click)="orderByColumn($event, header.value)">
-              {{ header.name }} <span [innerHTML]="renderOrderByArrow(header.value)"></span>
-            </a>
-          </th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let user of users">
-          <td>
-            <ausk-link [className]="'user-link'" [to]="'/users/' + user.id">{{ user.username }}</ausk-link>
-          </td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.role }}</td>
-          <td>{{ user.isActive }}</td>
-          <td>
-            <button type="button" class="btn btn-primary btn-sm" (click)="handleDeleteUser(user.id)">Delete</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <ausk-table
+          [columns]="columns"
+          [rows]="rows">
+      </ausk-table>
+
     </div>
 
     <ng-template #showLoading>
       <div class="text-center">Loading...</div>
     </ng-template>
   `,
-  styles: [`th > a {cursor: pointer;}`]
+  styles: [
+    `th > a {
+      cursor: pointer;
+  }`
+  ]
 })
 export default class UsersListView implements OnInit, OnDestroy {
   public searchText: string;
@@ -55,16 +40,42 @@ export default class UsersListView implements OnInit, OnDestroy {
   public loading: boolean = true;
   public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   public users: any = [];
-  public headers = [
-    { name: 'Username', value: 'username' },
-    { name: 'Email', value: 'email' },
-    { name: 'Role', value: 'role' },
-    { name: 'Is Active', value: 'isActive' }
-  ];
+
   private subsOnStore: Subscription;
   private subsOnLoad: Subscription;
   private subsOnUpdate: Subscription;
   private subsOnDelete: Subscription;
+
+  private rows: CellData[];
+  public columns: ColumnData[] = [
+    {
+      title: 'Username',
+      value: 'username',
+      sorting: (e: any, name: string) => this.orderByColumn(e, name),
+      iconRender: (name: string) => this.renderOrderByArrow(name)
+    },
+    {
+      title: 'Email',
+      value: 'email',
+      sorting: (e: any, name: string) => this.orderByColumn(e, name),
+      iconRender: (name: string) => this.renderOrderByArrow(name)
+    },
+    {
+      title: 'Role',
+      value: 'role',
+      sorting: (e: any, name: string) => this.orderByColumn(e, name),
+      iconRender: (name: string) => this.renderOrderByArrow(name)
+    },
+    {
+      title: 'Is Active',
+      value: 'isActive',
+      sorting: (e: any, name: string) => this.orderByColumn(e, name),
+      iconRender: (name: string) => this.renderOrderByArrow(name)
+    },
+    {
+      title: 'Actions'
+    }
+  ];
 
   constructor(private store: Store<any>, private usersListService: UsersListService, private ngZone: NgZone) {}
 
@@ -102,6 +113,33 @@ export default class UsersListView implements OnInit, OnDestroy {
       this.ngZone.run(() => {
         this.users = data ? data.users : [];
         this.loading = loading;
+
+        this.rows = this.users.map((user: any) => {
+          return [
+            {
+              type: ElemType.Link,
+              text: user.username,
+              link: `/users/${user.id}`
+            },
+            {
+              type: ElemType.Text,
+              text: user.email
+            },
+            {
+              type: ElemType.Text,
+              text: user.role
+            },
+            {
+              type: ElemType.Text,
+              text: user.isActive
+            },
+            {
+              type: ElemType.Button,
+              text: 'Delete',
+              callback: () => this.handleDeleteUser(user.id)
+            }
+          ];
+        });
       });
     });
   }

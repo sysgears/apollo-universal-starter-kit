@@ -29,10 +29,9 @@ import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers
       </ausk-form>
 
       <div class="text-center">
-        <button id="fb-login-btn" *ngIf="settings.user.auth.facebook.enabled" class="btn btn-primary"
-                (click)="facebookLogin()">
+        <ausk-button *ngIf="settings.user.auth.facebook.enabled" (click)="facebookLogin()">
           Login with Facebook
-        </button>
+        </ausk-button>
       </div>
 
       <ausk-link [to]="'/forgot-password'">Forgot your password?</ausk-link>
@@ -40,7 +39,7 @@ import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers
       <div style="margin-bottom: 16px">
         <span style="line-height: 58px">Not registered yet?</span>
         <ausk-link [to]="'/register'" style="margin: 10px">
-          <button class="btn btn-primary">Sign Up</button>
+          <ausk-button>Sign Up</ausk-button>
         </ausk-link>
       </div>
       <ausk-card>

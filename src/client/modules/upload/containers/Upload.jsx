@@ -3,7 +3,7 @@ import { graphql, compose } from 'react-apollo';
 
 import UploadView from '../components/UploadView';
 import FILES_QUERY from '../graphql/FilesQuery.graphql';
-import UPLOAD_FILE from '../graphql/UploadFile.graphql';
+import UPLOAD_FILES from '../graphql/UploadFiles.graphql';
 import REMOVE_FILE from '../graphql/RemoveFile.graphql';
 
 class Upload extends React.Component {
@@ -19,21 +19,21 @@ const UploadWithApollo = compose(
       return { loading, files, refetch };
     }
   }),
-  graphql(UPLOAD_FILE, {
+  graphql(UPLOAD_FILES, {
     props: ({ ownProps: { refetch }, mutate }) => ({
-      uploadFile: async file => {
+      uploadFiles: async files => {
         try {
-          const { data: { uploadFile } } = await mutate({
-            variables: { file }
+          const { data: { uploadFiles } } = await mutate({
+            variables: { files }
           });
 
           refetch();
 
-          if (uploadFile.errors) {
-            return { errors: uploadFile.errors };
+          if (uploadFiles.errors) {
+            return { errors: uploadFiles.errors };
           }
 
-          return uploadFile;
+          return uploadFiles;
         } catch (e) {
           console.log(e.graphQLErrors);
         }

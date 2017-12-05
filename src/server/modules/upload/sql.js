@@ -13,8 +13,8 @@ export default class Upload {
       .first();
   }
 
-  saveFile(file) {
-    return knex('upload').insert(file);
+  saveFiles(files) {
+    return knex('upload').insert(files);
   }
 
   deleteFile(id) {

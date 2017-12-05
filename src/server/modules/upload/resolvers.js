@@ -11,8 +11,8 @@ export default pubsub => ({
     }
   },
   Mutation: {
-    uploadFile: async (obj, { file }, { Upload }) => {
-      return await Upload.saveFile(file);
+    uploadFiles: async (obj, { files }, { Upload }) => {
+      return await Upload.saveFiles(files);
     },
     removeFile: async (obj, { id }, { Upload }) => {
       const e = new FieldError();

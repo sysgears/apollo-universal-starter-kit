@@ -18,7 +18,7 @@ extend type Query {
 }
 
 extend type Mutation {
-  uploadFile(file: Upload!): Boolean!
+  uploadFiles(files: [Upload!]!): Boolean!
   removeFile(id: Int!): Boolean!
 }
 

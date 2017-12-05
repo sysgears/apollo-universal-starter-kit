@@ -13,7 +13,7 @@ export default new Feature({
   createContextFunc: () => ({ Upload: new Upload() }),
   middleware: app => {
     app.use('/graphql', apolloUploadExpress({ uploadDir: './public' }));
-    app.use(express.static('public'));
+    app.use('/public', express.static('public'));
   },
   createFetchOptions: constructUploadOptions
 });

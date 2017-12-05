@@ -19,8 +19,8 @@ class UploadView extends React.PureComponent {
     />
   );
 
-  onDrop = uploadFile => async ([file]) => {
-    const result = await uploadFile(file);
+  onDrop = uploadFiles => async files => {
+    const result = await uploadFiles(files);
     console.log(result);
   };
 
@@ -39,12 +39,12 @@ class UploadView extends React.PureComponent {
   };
 
   render() {
-    const { loading, files, uploadFile } = this.props;
+    const { loading, files, uploadFiles } = this.props;
     return (
       <PageLayout>
         {this.renderMetaData()}
         <div className="text-center">
-          <Dropzone onDrop={this.onDrop(uploadFile)}>
+          <Dropzone onDrop={this.onDrop(uploadFiles)}>
             <p>Try dropping some files here, or click to select files to upload.</p>
           </Dropzone>
           {!loading && files && this.renderFiles()}
@@ -57,7 +57,7 @@ class UploadView extends React.PureComponent {
 UploadView.propTypes = {
   loading: PropTypes.bool.isRequired,
   files: PropTypes.array,
-  uploadFile: PropTypes.func.isRequired,
+  uploadFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired
 };
 

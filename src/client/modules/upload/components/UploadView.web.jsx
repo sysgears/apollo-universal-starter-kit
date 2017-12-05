@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
 import filesize from 'filesize';
-import { PageLayout, Row, Col, Table, Button } from '../../common/components/web';
+import { PageLayout, Row, Col, Table, Button, Alert } from '../../common/components/web';
 import settings from '../../../../../settings';
 
 class UploadView extends React.PureComponent {
+  state = {
+    error: null
+  };
+
   renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Upload`}
@@ -21,16 +25,26 @@ class UploadView extends React.PureComponent {
 
   onDrop = uploadFiles => async files => {
     const result = await uploadFiles(files);
-    console.log(result);
+    if (result && result.error) {
+      this.setState({ error: result.error });
+    } else {
+      this.setState({ error: null });
+    }
   };
 
-  hendleRemoveFile = id => {
+  hendleRemoveFile = async id => {
     const { removeFile } = this.props;
-    removeFile(id);
+    const result = await removeFile(id);
+    if (result && result.error) {
+      this.setState({ error: result.error });
+    } else {
+      this.setState({ error: null });
+    }
   };
 
   render() {
-    const { loading, files, uploadFiles } = this.props;
+    const { files, uploadFiles } = this.props;
+    const { error } = this.state;
 
     const columns = [
       {
@@ -65,7 +79,10 @@ class UploadView extends React.PureComponent {
                 <p>Try dropping some files here, or click to select files to upload.</p>
               </Dropzone>
             </Col>
-            <Col xs={8}>{!loading && files && <Table dataSource={files} columns={columns} />}</Col>
+            <Col xs={8}>
+              {error && <Alert color="error">{error}</Alert>}
+              {files && <Table dataSource={files} columns={columns} />}
+            </Col>
           </Row>
         </div>
       </PageLayout>
@@ -74,7 +91,6 @@ class UploadView extends React.PureComponent {
 }
 
 UploadView.propTypes = {
-  loading: PropTypes.bool.isRequired,
   files: PropTypes.array,
   uploadFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired

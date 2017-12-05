@@ -14,6 +14,11 @@ class Upload extends React.Component {
 
 const UploadWithApollo = compose(
   graphql(FILES_QUERY, {
+    options: () => {
+      return {
+        fetchPolicy: 'cache-and-network'
+      };
+    },
     props({ data: { loading, error, files, refetch } }) {
       if (error) throw new Error(error);
       return { loading, files, refetch };
@@ -26,16 +31,10 @@ const UploadWithApollo = compose(
           const { data: { uploadFiles } } = await mutate({
             variables: { files }
           });
-
           refetch();
-
-          if (uploadFiles.errors) {
-            return { errors: uploadFiles.errors };
-          }
-
           return uploadFiles;
         } catch (e) {
-          throw new Error(e);
+          return { error: e.graphQLErrors[0].message };
         }
       }
     })
@@ -47,16 +46,10 @@ const UploadWithApollo = compose(
           const { data: { removeFile } } = await mutate({
             variables: { id }
           });
-
           refetch();
-
-          if (removeFile.errors) {
-            return { errors: removeFile.errors };
-          }
-
           return removeFile;
         } catch (e) {
-          throw new Error(e);
+          return { error: e.graphQLErrors[0].message };
         }
       }
     })

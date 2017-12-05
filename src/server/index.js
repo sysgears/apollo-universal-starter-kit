@@ -1,5 +1,4 @@
 import log from '../common/log';
-import settings from '../../settings';
 import './server';
 
 process.on('uncaughtException', ex => {
@@ -21,12 +20,4 @@ if (module.hot) {
   });
 
   module.hot.accept();
-}
-
-if (__DEV__ && settings.subscription.enabled) {
-  log('Starting stripe local proxy');
-  require('stripe-local')({
-    secretKey: settings.subscription.stripeSecretKey,
-    webhookUrl: 'http://localhost:3000/stripe/webhook'
-  });
 }

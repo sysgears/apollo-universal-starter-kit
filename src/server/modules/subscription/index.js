@@ -5,6 +5,7 @@ import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import Feature from '../connector';
 
+import stripeLocalMiddleware from './stripeLocal';
 import webhookMiddleware from './webhook';
 
 import { parseUser } from '../user';
@@ -24,6 +25,7 @@ export default new Feature({
     };
   },
   middleware: app => {
+    app.use(stripeLocalMiddleware());
     app.post('/stripe/webhook', webhookMiddleware);
   }
 });

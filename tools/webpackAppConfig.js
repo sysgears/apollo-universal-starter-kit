@@ -94,6 +94,8 @@ const dependencyPlatforms = {
   'source-map-support': 'server',
   'sourcemapped-stacktrace': ['server', 'web'],
   sqlite3: 'server',
+  stripe: 'server',
+  'stripe-local': 'server',
   'styled-components': ['server', 'web'],
   'subscriptions-transport-ws': ['ios', 'android', 'web'],
   'universal-cookie-express': 'server',

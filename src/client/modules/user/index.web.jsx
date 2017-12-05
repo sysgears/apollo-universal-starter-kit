@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { CookiesProvider } from 'react-cookie';
-import { Route, NavLink, Redirect, withRouter } from 'react-router-dom';
+import { Route, NavLink, withRouter } from 'react-router-dom';
+
 import { MenuItem } from '../../modules/common/components/web';
 import ProfileView from './components/ProfileView';
 import Users from './components/Users';
@@ -12,7 +12,7 @@ import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 import reducers from './reducers';
 
-import { withUser, withLoadedUser, withLogout, IfLoggedIn, IfNotLoggedIn } from './containers/Auth';
+import { withUser, withLoadedUser, withLogout, IfLoggedIn, IfNotLoggedIn, AuthRoute } from './containers/Auth';
 
 import Feature from '../connector';
 
@@ -27,23 +27,6 @@ const LogoutLink = withRouter(
     </a>
   ))
 );
-
-const AuthRoute = ({ role, redirect, redirectOnLoggedIn, ...props }) =>
-  redirectOnLoggedIn ? (
-    <IfNotLoggedIn role={role} elseComponent={<Redirect to={{ pathname: redirect }} />}>
-      <Route {...props} />
-    </IfNotLoggedIn>
-  ) : (
-    <IfLoggedIn role={role} elseComponent={<Redirect to={{ pathname: redirect }} />}>
-      <Route {...props} />
-    </IfLoggedIn>
-  );
-
-AuthRoute.propTypes = {
-  role: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
-  redirect: PropTypes.string.isRequired,
-  redirectOnLoggedIn: PropTypes.bool
-};
 
 export default new Feature({
   route: [
@@ -80,11 +63,9 @@ export default new Feature({
       <LogoutLink />
     </IfLoggedIn>,
     <IfNotLoggedIn>
-      <span className="nav-link">
-        <NavLink to="/login" activeClassName="active">
-          Sign In
-        </NavLink>
-      </span>
+      <NavLink to="/login" className="nav-link" activeClassName="active">
+        Sign In
+      </NavLink>
     </IfNotLoggedIn>
   ],
   reducer: { user: reducers },

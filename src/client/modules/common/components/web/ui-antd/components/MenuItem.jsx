@@ -1,16 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Item } from 'rc-menu';
 import Menu from 'antd/lib/menu';
 
 class MenuItem extends React.Component {
-  static propTypes = {
-    children: PropTypes.node
+  static isMenuItem = 1;
+
+  saveMenuItem = menuItem => {
+    this.menuItem = menuItem;
   };
-
   render() {
-    const { children, ...props } = this.props;
-
-    return <Menu.Item {...props}>{children}</Menu.Item>;
+    const props = this.props;
+    // Work around SSR bug in AntD 3.x. rc-menu item wrapping with rc-tooltip not being SSR-friendly.
+    if (__SERVER__) {
+      return <Item {...props} ref={this.saveMenuItem} />;
+    } else {
+      return <Menu.Item {...props} />;
+    }
   }
 }
 

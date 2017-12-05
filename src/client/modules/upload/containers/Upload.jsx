@@ -1,13 +1,10 @@
-// React
 import React from 'react';
-
-// Apollo
 import { graphql, compose } from 'react-apollo';
 
-// Components
 import UploadView from '../components/UploadView';
-
-import UPLOAD_FILE from '../graphql/UploadFile.graphql';
+import FILES_QUERY from '../graphql/FilesQuery.graphql';
+import UPLOAD_FILES from '../graphql/UploadFiles.graphql';
+import REMOVE_FILE from '../graphql/RemoveFile.graphql';
 
 class Upload extends React.Component {
   render() {
@@ -16,12 +13,44 @@ class Upload extends React.Component {
 }
 
 const UploadWithApollo = compose(
-  graphql(UPLOAD_FILE, {
-    props: ({ mutate }) => ({
-      uploadFile: async file => {
-        return await mutate({
-          variables: { file }
-        });
+  graphql(FILES_QUERY, {
+    options: () => {
+      return {
+        fetchPolicy: 'cache-and-network'
+      };
+    },
+    props({ data: { loading, error, files, refetch } }) {
+      if (error) throw new Error(error);
+      return { loading, files, refetch };
+    }
+  }),
+  graphql(UPLOAD_FILES, {
+    props: ({ ownProps: { refetch }, mutate }) => ({
+      uploadFiles: async files => {
+        try {
+          const { data: { uploadFiles } } = await mutate({
+            variables: { files }
+          });
+          refetch();
+          return uploadFiles;
+        } catch (e) {
+          return { error: e.graphQLErrors[0].message };
+        }
+      }
+    })
+  }),
+  graphql(REMOVE_FILE, {
+    props: ({ ownProps: { refetch }, mutate }) => ({
+      removeFile: async id => {
+        try {
+          const { data: { removeFile } } = await mutate({
+            variables: { id }
+          });
+          refetch();
+          return removeFile;
+        } catch (e) {
+          return { error: e.graphQLErrors[0].message };
+        }
       }
     })
   })

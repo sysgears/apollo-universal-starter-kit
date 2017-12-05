@@ -4,7 +4,7 @@ import ADCol from 'antd/lib/col';
 
 const Col = ({ children, xs, ...props }) => {
   return (
-    <ADCol span={xs} {...props}>
+    <ADCol span={(xs * 2).toString()} {...props}>
       {children}
     </ADCol>
   );
@@ -12,7 +12,7 @@ const Col = ({ children, xs, ...props }) => {
 
 Col.propTypes = {
   children: PropTypes.node,
-  xs: PropTypes.string
+  xs: PropTypes.number
 };
 
 export default Col;

@@ -35,6 +35,11 @@ const Html = ({ content, state, assetMap, css, helmet, req }) => {
           />
         )}
         {!!css && css}
+        {clientModules.scriptsInserts.map((script, i) => {
+          if (script) {
+            return <script key={i} src={script} />;
+          }
+        })}
       </head>
       <body {...bodyAttrs}>
         <div id="content" dangerouslySetInnerHTML={{ __html: content || '' }} />

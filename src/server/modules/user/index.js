@@ -82,31 +82,60 @@ CSRFComponent.propTypes = {
   req: PropTypes.object
 };
 
+export const parseUser = async ({ req, connectionParams, webSocket }) => {
+  let serial = '';
+  if (__DEV__) {
+    // for local testing without client certificates
+    serial = settings.user.auth.certificate.enabled;
+  }
+
+  if (
+    connectionParams &&
+    connectionParams.token &&
+    connectionParams.token !== 'null' &&
+    connectionParams.token !== 'undefined'
+  ) {
+    const { user } = jwt.verify(connectionParams.token, SECRET);
+    return user;
+  } else if (req) {
+    if (req.session.userId) {
+      return await User.getUser(req.session.userId);
+    } else if (req.user) {
+      return req.user;
+    } else if (settings.user.auth.certificate.enabled) {
+      const user = await User.getUserWithSerial(serial);
+      if (user) {
+        return user;
+      }
+    }
+  } else if (webSocket) {
+    if (settings.user.auth.certificate.enabled) {
+      // in case you need to access req headers
+      if (webSocket.upgradeReq.headers['x-serial']) {
+        serial = webSocket.upgradeReq.headers['x-serial'];
+      }
+
+      const user = await User.getUserWithSerial(serial);
+      if (user) {
+        return user;
+      }
+    }
+  }
+};
+
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
-  createContextFunc: async (req, res, connectionParams, webSocket) => {
-    let loggedInUser = null;
-    let auth = { isAuthenticated: false, scope: null };
-
-    if (req) {
-      if (req.session.userId) {
-        loggedInUser = await User.getUser(req.session.userId);
-      }
-    } else if (webSocket) {
-      // Add implementation here
-    }
-
-    if (loggedInUser) {
-      auth = {
-        isAuthenticated: true,
-        scope: scopes[loggedInUser.role]
-      };
-    }
+  createContextFunc: async (req, connectionParams, webSocket) => {
+    const currentUser = await parseUser({ req, connectionParams, webSocket });
+    const auth = {
+      isAuthenticated: currentUser ? true : false,
+      scope: currentUser ? scopes[currentUser.role] : null
+    };
 
     return {
       User,
-      user: loggedInUser,
+      user: currentUser,
       auth,
       req
     };

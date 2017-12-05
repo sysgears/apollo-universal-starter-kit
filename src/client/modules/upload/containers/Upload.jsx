@@ -14,26 +14,50 @@ class Upload extends React.Component {
 
 const UploadWithApollo = compose(
   graphql(FILES_QUERY, {
-    props({ data: { loading, error, files } }) {
+    props({ data: { loading, error, files, refetch } }) {
       if (error) throw new Error(error);
-      return { loading, files };
+      return { loading, files, refetch };
     }
   }),
   graphql(UPLOAD_FILE, {
-    props: ({ mutate }) => ({
+    props: ({ ownProps: { refetch }, mutate }) => ({
       uploadFile: async file => {
-        return await mutate({
-          variables: { file }
-        });
+        try {
+          const { data: { uploadFile } } = await mutate({
+            variables: { file }
+          });
+
+          refetch();
+
+          if (uploadFile.errors) {
+            return { errors: uploadFile.errors };
+          }
+
+          return uploadFile;
+        } catch (e) {
+          console.log(e.graphQLErrors);
+        }
       }
     })
   }),
   graphql(REMOVE_FILE, {
-    props: ({ mutate }) => ({
+    props: ({ ownProps: { refetch }, mutate }) => ({
       removeFile: async id => {
-        return await mutate({
-          variables: { id }
-        });
+        try {
+          const { data: { removeFile } } = await mutate({
+            variables: { id }
+          });
+
+          refetch();
+
+          if (removeFile.errors) {
+            return { errors: removeFile.errors };
+          }
+
+          return removeFile;
+        } catch (e) {
+          console.log(e.graphQLErrors);
+        }
       }
     })
   })

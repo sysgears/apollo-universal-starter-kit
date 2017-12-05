@@ -31,13 +31,11 @@ class NavBar extends React.Component {
             theme="dark"
             style={{ lineHeight: '64px' }}
           >
-            {
-              <MenuItem key="/">
-                <NavLink to="/" className="nav-link">
-                  {settings.app.name}
-                </NavLink>
-              </MenuItem>
-            }
+            <MenuItem key="/">
+              <NavLink to="/" className="nav-link">
+                {settings.app.name}
+              </NavLink>
+            </MenuItem>
             {modules.navItems}
           </Menu>
         </Col>

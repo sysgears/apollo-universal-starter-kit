@@ -35,7 +35,7 @@ const UploadWithApollo = compose(
 
           return uploadFiles;
         } catch (e) {
-          console.log(e.graphQLErrors);
+          throw new Error(e);
         }
       }
     })
@@ -56,7 +56,7 @@ const UploadWithApollo = compose(
 
           return removeFile;
         } catch (e) {
-          console.log(e.graphQLErrors);
+          throw new Error(e);
         }
       }
     })

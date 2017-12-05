@@ -15,12 +15,9 @@ export default pubsub => ({
       return await Upload.saveFiles(files);
     },
     removeFile: async (obj, { id }, { Upload }) => {
-      const e = new FieldError();
-
       const file = await Upload.file(id);
       if (!file) {
-        e.setError('file', 'File not found.');
-        e.throwIf();
+        throw new Error('File not found.');
       }
 
       const ok = await Upload.deleteFile(id);
@@ -28,8 +25,7 @@ export default pubsub => ({
         const filePath = `${file.path}`;
         const res = shell.rm(filePath);
         if (res.code > 0) {
-          e.setError('file', 'Unable to delete file.');
-          e.throwIf();
+          throw new Error('Unable to delete file.');
         }
       }
       return ok;

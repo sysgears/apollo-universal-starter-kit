@@ -14,13 +14,13 @@ const PostCommentForm = ({ handleSubmit, submitting, initialValues, onSubmit }) 
   return (
     <Form name="comment" onSubmit={handleSubmit(onSubmit)}>
       <Row>
-        <Col xs="2">
+        <Col xs={2}>
           <Label>{operation} comment</Label>
         </Col>
-        <Col xs="8">
+        <Col xs={8}>
           <Field name="content" component={RenderField} type="text" validate={required} />
         </Col>
-        <Col xs="2">
+        <Col xs={2}>
           <Button color="primary" type="submit" className="float-right" disabled={submitting}>
             Save
           </Button>

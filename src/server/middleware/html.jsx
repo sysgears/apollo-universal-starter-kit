@@ -33,9 +33,9 @@ const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) =>
           />
         )}
         {!!css && css}
-        {modules.scriptsInserts.map(script => {
+        {modules.scriptsInserts.map((script, i) => {
           if (script) {
-            return <script src={script} />;
+            return <script key={i} src={script} />;
           }
         })}
       </head>

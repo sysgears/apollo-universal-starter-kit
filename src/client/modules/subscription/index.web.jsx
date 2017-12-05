@@ -27,5 +27,6 @@ export default new Feature({
       </NavLink>
     </NavItem>
   ],
-  reducer: { subscription: reducers }
+  reducer: { subscription: reducers },
+  scriptsInsert: 'https://js.stripe.com/v3/'
 });

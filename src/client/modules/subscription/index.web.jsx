@@ -1,11 +1,7 @@
-// React
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 
-// Web UI
-import { NavItem } from 'reactstrap';
-
-// Component and helpers
+import { MenuItem } from '../../modules/common/components/web';
 import Subscription from './containers/Subscription';
 import SubscribersOnly from './containers/SubscribersOnly';
 import UpdateCard from './containers/UpdateCard';
@@ -21,11 +17,11 @@ export default new Feature({
     <SubscriberRoute exact scope="user" path="/update-card" component={UpdateCard} />
   ],
   navItem: [
-    <NavItem>
+    <MenuItem key="/subscribers-only">
       <NavLink to="/subscribers-only" className="nav-link" activeClassName="active">
         Subscribers Only
       </NavLink>
-    </NavItem>
+    </MenuItem>
   ],
   reducer: { subscription: reducers },
   scriptsInsert: 'https://js.stripe.com/v3/'

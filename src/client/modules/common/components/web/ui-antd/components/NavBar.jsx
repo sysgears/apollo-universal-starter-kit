@@ -4,6 +4,7 @@ import { withRouter, NavLink } from 'react-router-dom';
 import Menu from 'antd/lib/menu';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
+import MenuItem from './MenuItem';
 
 import modules from '../../../../../../modules';
 import settings from '../../../../../../../../settings';
@@ -30,11 +31,13 @@ class NavBar extends React.Component {
             theme="dark"
             style={{ lineHeight: '64px' }}
           >
-            <Menu.Item key="/">
-              <NavLink to="/" className="nav-link">
-                {settings.app.name}
-              </NavLink>
-            </Menu.Item>
+            {
+              <MenuItem key="/">
+                <NavLink to="/" className="nav-link">
+                  {settings.app.name}
+                </NavLink>
+              </MenuItem>
+            }
             {modules.navItems}
           </Menu>
         </Col>
@@ -48,9 +51,9 @@ class NavBar extends React.Component {
           >
             {modules.navItemsRight}
             {__DEV__ && (
-              <Menu.Item>
+              <MenuItem>
                 <a href="/graphiql">GraphiQL</a>
-              </Menu.Item>
+              </MenuItem>
             )}
           </Menu>
         </Col>

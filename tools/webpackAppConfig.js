@@ -72,6 +72,7 @@ const dependencyPlatforms = {
   persistgraphql: ['server', 'web'],
   'performance-now': 'server',
   pg: 'server',
+  'rc-menu': ['server', 'web'],
   'redbox-react': ['server', 'web'],
   'react-cookie': ['server', 'web'],
   'react-dom': 'web',

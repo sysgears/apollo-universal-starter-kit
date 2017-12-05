@@ -48,6 +48,7 @@ class LoginView extends React.PureComponent {
               <CardTitle>Available logins:</CardTitle>
               <CardText>admin@example.com:admin</CardText>
               <CardText>user@example.com:user</CardText>
+              {settings.subscription.enabled && <CardText>subscriber@example.com:subscriber</CardText>}
             </CardGroup>
           </Card>
         </LayoutCenter>

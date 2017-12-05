@@ -23,7 +23,8 @@
     "heroku-postbuild": "rm -rf build && spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && spin -c .spinrc.prod.json build && spin exp p --non-interactive && npm run seed",
     "precommit": "lint-staged",
     "cli": "node tools/cli",
-    "postinstall": "opencollective postinstall"
+    "postinstall": "opencollective postinstall",
+    "stripe:setup": "node tools/stripeSetup"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [
@@ -118,6 +119,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.8",
+    "react-stripe-elements": "^1.2.0",
     "react-transition-group": "^2.3.0-beta.0",
     "reactstrap": "^5.0.0-alpha.3",
     "redux": "^3.7.2",
@@ -127,6 +129,8 @@
     "source-map-support": "^0.5.0",
     "sourcemapped-stacktrace": "^1.1.7",
     "sqlite3": "^3.1.13",
+    "stripe": "^5.3.0",
+    "stripe-local": "^0.1.1",
     "styled-components": "^2.2.3",
     "subscriptions-transport-ws": "^0.9.1",
     "universal-cookie-express": "^2.1.0"

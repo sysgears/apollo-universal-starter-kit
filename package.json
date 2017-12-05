@@ -24,7 +24,7 @@
     "precommit": "lint-staged",
     "cli": "node tools/cli",
     "postinstall": "opencollective postinstall",
-    "stripe:setup": "node tools/stripeSetup"
+    "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [

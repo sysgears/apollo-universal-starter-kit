@@ -239,6 +239,9 @@ yarn cli
 
 * Full LOGIN funcionality in user example with [JWT] tokens stored in `localStorage` and `cookies`
 
+* [Stripe] Payment Processor integration as a starting point for apps that use user subscriptions. 
+Check [subscription module documentation](src/client/modules/subscription/README.md) for details.
+
 * [GraphQL] API
 
   GraphQL is used as very flexible and much faster API in terms of bandwidth and round-trips, compared to REST. GraphQL
@@ -521,3 +524,4 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
 [flow]: https://flow.org
 [typescript]: https://www.typescriptlang.org
+[Stripe]: https://stripe.com

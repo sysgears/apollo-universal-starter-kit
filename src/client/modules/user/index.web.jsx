@@ -63,13 +63,11 @@ export default new Feature({
     <MenuItem key="/profile">
       <AuthProfile />
     </MenuItem>,
-    <MenuItem key="login">
+    <MenuItem key="/login">
       <AuthLogin>
-        <span className="nav-link">
-          <NavLink to="/login" activeClassName="active">
-            Sign In
-          </NavLink>
-        </span>
+        <NavLink to="/login" className="nav-link" activeClassName="active">
+          Sign In
+        </NavLink>
       </AuthLogin>
     </MenuItem>
   ],

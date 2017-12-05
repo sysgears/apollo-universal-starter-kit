@@ -195,7 +195,7 @@
     "mkdirp": "^0.5.1",
     "mocha": "^4.0.1",
     "mocha-steps": "^1.1.0",
-    "mocha-webpack": "^1.0.1",
+    "mocha-webpack": "^0.7.0",
     "node-sass": "^4.7.2",
     "openurl": "^1.1.1",
     "persistgraphql-webpack-plugin": "^0.4.4",

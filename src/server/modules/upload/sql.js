@@ -1,6 +1,25 @@
 /*eslint-disable no-unused-vars*/
-// Helpers
 import knex from '../../../server/sql/connector';
 
-// Actual query fetching and transformation in DB
-export default class Upload {}
+export default class Upload {
+  files() {
+    return knex('upload').select('*');
+  }
+
+  file(id) {
+    return knex('upload')
+      .select('*')
+      .where({ id })
+      .first();
+  }
+
+  saveFiles(files) {
+    return knex('upload').insert(files);
+  }
+
+  deleteFile(id) {
+    return knex('upload')
+      .where({ id })
+      .del();
+  }
+}

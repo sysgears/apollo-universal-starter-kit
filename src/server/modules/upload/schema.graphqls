@@ -1,3 +1,11 @@
+type File {
+  id: Int!
+  name: String!
+  type: String!
+  size: Int!
+  path: String!
+}
+
 input Upload {
   name: String!
   type: String!
@@ -6,10 +14,12 @@ input Upload {
 }
 
 extend type Query {
+  files: [File]
 }
 
 extend type Mutation {
-  uploadFile(file: Upload!): Boolean!
+  uploadFiles(files: [Upload!]!): Boolean!
+  removeFile(id: Int!): Boolean!
 }
 
 extend type Subscription {

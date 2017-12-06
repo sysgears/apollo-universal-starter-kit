@@ -61,7 +61,7 @@
     "apollo-cache-inmemory": "^1.1.2",
     "apollo-client": "^2.1.0",
     "apollo-engine": "^0.6.0",
-    "apollo-fetch": "^0.6.0",
+    "apollo-fetch": "^0.7.0",
     "apollo-fetch-upload": "^1.1.0",
     "apollo-link": "^1.0.5",
     "apollo-link-batch-http": "^1.0.2",

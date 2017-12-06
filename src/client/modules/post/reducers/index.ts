@@ -44,10 +44,11 @@ export interface PostFormData {
   content: string;
 }
 
-const initPostForm = createFormGroupState<PostFormData>(POST_FORM, {
-  title: '',
-  content: ''
-});
+const initPostForm = () =>
+  createFormGroupState<PostFormData>(POST_FORM, {
+    title: '',
+    content: ''
+  });
 
 const updatePostFormData = groupUpdateReducer<PostFormData>({
   title: validate(required),
@@ -59,7 +60,7 @@ export interface PostFormState {
 }
 
 const initPostFormState: PostFormState = {
-  postForm: initPostForm
+  postForm: initPostForm()
 };
 
 export interface PostFormAction extends Action {
@@ -90,7 +91,7 @@ export function postFormReducer(state = initPostFormState, action: PostFormActio
     case POST_FORM_RESET:
       return {
         ...state,
-        postForm: initPostForm
+        postForm: initPostForm()
       };
     case POST_FORM_FILL:
       return {
@@ -113,9 +114,10 @@ export interface CommentFormData {
   content: string;
 }
 
-const initCommentForm = createFormGroupState<CommentFormData>(COMMENT_FORM, {
-  content: ''
-});
+const initCommentForm = () =>
+  createFormGroupState<CommentFormData>(COMMENT_FORM, {
+    content: ''
+  });
 
 const updateCommentFormData = groupUpdateReducer<CommentFormData>({
   content: validate(required)
@@ -126,7 +128,7 @@ export interface CommentFormState {
 }
 
 const initCommentFormState: CommentFormState = {
-  commentForm: initCommentForm
+  commentForm: initCommentForm()
 };
 
 export interface CommentFormAction extends Action {
@@ -157,7 +159,7 @@ export function commentFormReducer(state = initCommentFormState, action: Comment
     case COMMENT_FORM_RESET:
       return {
         ...state,
-        commentForm: initCommentForm
+        commentForm: initCommentForm()
       };
     case COMMENT_FORM_FILL:
       return {

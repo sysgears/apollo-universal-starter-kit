@@ -1,6 +1,7 @@
-let DB_TYPE = 'sqlite';
+let DB_TYPE = process.env.DB_TYPE || 'sqlite';
 let client = '';
 let connectionDevelopment = {
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,

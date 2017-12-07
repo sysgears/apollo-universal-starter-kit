@@ -66,9 +66,7 @@ export default async (req, res) => {
           from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
           to: user.email,
           subject: 'Charge Failed',
-          html: `We are having trouble charing your card. Please update your card details here: <a href="${url}">${
-            url
-          }</a>`
+          html: `We are having trouble charing your card. Please update your card details here: <a href="${url}">${url}</a>`
         });
       }
     }

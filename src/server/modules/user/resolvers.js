@@ -56,6 +56,9 @@ export default pubsub => ({
     },
     facebook(obj) {
       return obj;
+    },
+    google(obj) {
+      return obj;
     }
   },
   CertificateAuth: {
@@ -66,6 +69,14 @@ export default pubsub => ({
   FacebookAuth: {
     fbId(obj) {
       return obj.fbId;
+    },
+    displayName(obj) {
+      return obj.displayName;
+    }
+  },
+  GoogleAuth: {
+    googleId(obj) {
+      return obj.googleId;
     },
     displayName(obj) {
       return obj.displayName;

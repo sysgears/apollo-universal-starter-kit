@@ -17,6 +17,11 @@ export default {
       clientID: process.env.FACEBOOK_CLIENTID,
       clientSecret: process.env.FACEBOOK_CLIENTSECRET,
       enabled: false
+    },
+    google: {
+      clientID: process.env.GOOGLE_CLIENTID,
+      clientSecret: process.env.GOOGLE_CLIENTSECRET,
+      enabled: true
     }
   }
 };

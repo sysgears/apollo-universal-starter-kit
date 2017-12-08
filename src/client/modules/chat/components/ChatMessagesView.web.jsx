@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Button } from '../../common/components/web';
+import { Container, Row, Col, Button } from '../../common/components/web';
 import ChatMessageForm from './ChatMessageForm';
 
 class ChatMessagesView extends React.PureComponent {
-  hendleEditMessage = (id, content) => {
+  handleEditMessage = (id, content) => {
     const { onMessageSelect } = this.props;
     onMessageSelect({ id, content });
   };
 
-  hendleDeleteMessage = id => {
+  handleDeleteMessage = id => {
     const { message, onMessageSelect, deleteMessage } = this.props;
 
     if (message.id === id) {
@@ -32,48 +32,56 @@ class ChatMessagesView extends React.PureComponent {
     onFormSubmitted();
   };
 
-  render() {
-    const { chatId, message, messages } = this.props;
-
-    const columns = [
-      {
-        title: 'Content',
-        dataIndex: 'content',
-        key: 'content'
-      },
-      {
-        title: 'Actions',
-        key: 'actions',
-        width: 120,
-        render: (text, record) => (
+  renderMessage = message => {
+    return (
+      <Row key={message.id}>
+        <Col xs={1}>
+          <b>{message.id}</b>
+        </Col>
+        <Col xs={10}>{message.content}</Col>
+        <Col xs={1}>
           <div style={{ width: 120 }}>
             <Button
               color="primary"
               size="sm"
-              className="edit-message"
-              onClick={() => this.hendleEditMessage(record.id, record.content)}
+              className="edit-comment"
+              onClick={() => this.handleEditMessage(message.id, message.content)}
             >
               Edit
             </Button>{' '}
             <Button
               color="primary"
               size="sm"
-              className="delete-message"
-              onClick={() => this.hendleDeleteMessage(record.id)}
+              className="delete-comment"
+              onClick={() => this.handleDeleteMessage(message.id)}
             >
               Delete
             </Button>
           </div>
-        )
-      }
-    ];
+        </Col>
+      </Row>
+    );
+  };
+
+  renderMessages = messages => {
+    return messages.map(message => {
+      return this.renderMessage(message);
+    });
+  };
+
+  render() {
+    const { chatId, message, messages } = this.props;
 
     return (
       <div>
         <h3>Messages</h3>
         <ChatMessageForm chatId={chatId} onSubmit={this.onSubmit()} initialValues={message} />
         <h1 />
-        <Table dataSource={messages} columns={columns} />
+        <hr />
+        <hr />
+        <Container>{this.renderMessages(messages)}</Container>
+        <hr />
+        <hr />
       </div>
     );
   }

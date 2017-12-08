@@ -35,16 +35,12 @@ class ChatMessagesView extends React.PureComponent {
   renderMessage = message => {
     return (
       <Row key={message.id}>
-        <Col xs={1}>
+        <Col xs={2}>
           <div style={{ width: 120 }}>
-            <b>
-              {message.userId}/{message.id}
-            </b>
+            <b>{message.username}</b>:
           </div>
         </Col>
-        <Col xs={10}>
-          {message.username}: {message.content}
-        </Col>
+        <Col xs={9}>{message.content}</Col>
         <Col xs={1}>
           <div style={{ width: 120 }}>
             <Button

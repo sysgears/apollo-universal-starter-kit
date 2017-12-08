@@ -7,6 +7,8 @@ import { reset } from 'redux-form';
 
 import ChatMessagesView from '../components/ChatMessagesView';
 
+import CURRENT_USER_QUERY from '../../user/graphql/CurrentUserQuery.graphql';
+
 import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
@@ -105,6 +107,13 @@ ChatMessages.propTypes = {
 };
 
 const ChatMessagesWithApollo = compose(
+  graphql(CURRENT_USER_QUERY, {
+    options: { fetchPolicy: 'network-only' },
+    props({ data: { loading, error, currentUser } }) {
+      if (error) throw new Error(error);
+      return { loading, currentUser };
+    }
+  }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
       addMessage: (content, chatId) =>

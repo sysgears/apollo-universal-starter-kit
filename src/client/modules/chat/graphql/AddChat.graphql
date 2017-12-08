@@ -5,7 +5,7 @@ mutation addChat($input: AddChatInput!) {
   addChat(input: $input) {
     ...ChatInfo
     messages {
-      ...MessageInfo
+      ...MessageDetails
     }
   }
 }

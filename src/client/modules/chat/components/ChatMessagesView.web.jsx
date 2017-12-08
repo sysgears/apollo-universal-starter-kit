@@ -36,9 +36,15 @@ class ChatMessagesView extends React.PureComponent {
     return (
       <Row key={message.id}>
         <Col xs={1}>
-          <b>{message.id}</b>
+          <div style={{ width: 120 }}>
+            <b>
+              {message.userId}/{message.id}
+            </b>
+          </div>
         </Col>
-        <Col xs={10}>{message.content}</Col>
+        <Col xs={10}>
+          {message.username}: {message.content}
+        </Col>
         <Col xs={1}>
           <div style={{ width: 120 }}>
             <Button
@@ -91,6 +97,7 @@ ChatMessagesView.propTypes = {
   chatId: PropTypes.number.isRequired,
   messages: PropTypes.array.isRequired,
   message: PropTypes.object.isRequired,
+
   addMessage: PropTypes.func.isRequired,
   editMessage: PropTypes.func.isRequired,
   deleteMessage: PropTypes.func.isRequired,

@@ -5,6 +5,8 @@ import update from 'immutability-helper';
 
 import ChatList from '../components/ChatList';
 
+import CURRENT_USER_QUERY from '../../user/graphql/CurrentUserQuery.graphql';
+
 import CHATS_QUERY from '../graphql/ChatsQuery.graphql';
 import CHATS_SUBSCRIPTION from '../graphql/ChatsSubscription.graphql';
 import DELETE_CHAT from '../graphql/DeleteChat.graphql';
@@ -117,6 +119,13 @@ Chat.propTypes = {
 };
 
 export default compose(
+  graphql(CURRENT_USER_QUERY, {
+    options: { fetchPolicy: 'network-only' },
+    props({ data: { loading, error, currentUser } }) {
+      if (error) throw new Error(error);
+      return { loading, currentUser };
+    }
+  }),
   graphql(CHATS_QUERY, {
     options: () => {
       return {

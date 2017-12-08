@@ -6,7 +6,7 @@ import { PageLayout, Table, Button } from '../../common/components/web';
 import settings from '../../../../../settings';
 
 class ChatList extends React.PureComponent {
-  hendleDeleteChat = id => {
+  handleDeleteChat = id => {
     const { deleteChat } = this.props;
     deleteChat(id);
   };
@@ -63,7 +63,7 @@ class ChatList extends React.PureComponent {
               color="primary"
               size="sm"
               className="delete-button"
-              onClick={() => this.hendleDeleteChat(record.id)}
+              onClick={() => this.handleDeleteChat(record.id)}
             >
               Delete
             </Button>

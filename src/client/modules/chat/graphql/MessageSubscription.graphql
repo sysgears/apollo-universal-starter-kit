@@ -1,10 +1,10 @@
 #import "./Message.graphql"
 
-subscription onMessageUpdated($threadId: Int!) {
-  messageUpdated(threadId: $threadId) {
+subscription onMessageUpdated($chatId: Int!) {
+  messageUpdated(chatId: $chatId) {
     mutation
     id
-    threadId
+    chatId
     node {
       ...MessageInfo
     }

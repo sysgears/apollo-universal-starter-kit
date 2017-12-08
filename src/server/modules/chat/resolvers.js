@@ -90,6 +90,7 @@ export default pubsub => ({
       return chat;
     },
     async addMessage(obj, { input }, context) {
+      input.userId = context.user.id;
       const [id] = await context.Chat.addMessage(input);
       const message = await context.Chat.getMessage(id);
       // publish for edit chat page

@@ -6,7 +6,7 @@ subscription onMessageUpdated($chatId: Int!) {
     id
     chatId
     node {
-      ...MessageInfo
+      ...MessageDetails
     }
   }
 }

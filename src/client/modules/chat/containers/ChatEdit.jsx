@@ -20,7 +20,8 @@ class ChatEdit extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
       // Check if props have changed and, if necessary, stop the subscription
-      if (this.subscription && this.props.chat.id !== nextProps.chat.id) {
+      console.log(this.props.chat, nextProps.chat);
+      if (this.subscription && nextProps.chat && this.props.chat && this.props.chat.id !== nextProps.chat.id) {
         this.subscription();
         this.subscription = null;
       }

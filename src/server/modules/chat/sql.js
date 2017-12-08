@@ -30,9 +30,16 @@ export default class Chat {
 
   async getMessagesForChatIds(chatIds) {
     let res = await knex
-      .select('id', 'content', 'chat_id AS chatId')
-      .from('message')
-      .whereIn('chat_id', chatIds);
+      .select(
+        'msg.id AS id',
+        'msg.content AS content',
+        'msg.chat_id AS chatId',
+        'msg.user_id AS userId',
+        'u.username AS username'
+      )
+      .from('message AS msg')
+      .whereIn('msg.chat_id', chatIds)
+      .leftJoin('user AS u', 'u.id', 'msg.user_id');
 
     return orderedFor(res, chatIds, 'chatId', false);
   }
@@ -79,17 +86,24 @@ export default class Chat {
       });
   }
 
-  addMessage({ content, chatId }) {
+  addMessage({ content, chatId, userId }) {
     return knex('message')
-      .insert({ content, chat_id: chatId })
+      .insert({ content, chat_id: chatId, user_id: userId })
       .returning('id');
   }
 
   getMessage(id) {
     return knex
-      .select('id', 'content')
-      .from('message')
-      .where('id', '=', id)
+      .select(
+        'msg.id AS id',
+        'msg.content AS content',
+        'msg.chat_id AS chatId',
+        'msg.user_id AS userId',
+        'u.username AS username'
+      )
+      .from('message AS msg')
+      .where('msg.id', '=', id)
+      .leftJoin('user AS u', 'u.id', 'msg.user_id')
       .first();
   }
 

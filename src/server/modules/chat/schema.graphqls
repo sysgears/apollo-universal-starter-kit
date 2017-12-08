@@ -10,6 +10,8 @@ type Chat {
 type Message {
   id: Int!
   content: String!
+  userId: Int
+  username: String
 }
 
 # Edges for Chats

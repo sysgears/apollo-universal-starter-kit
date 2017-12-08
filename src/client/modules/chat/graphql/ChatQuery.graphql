@@ -5,7 +5,7 @@ query chat($id: Int!) {
   chat(id: $id) {
     ...ChatInfo
     messages {
-      ...MessageInfo
+      ...MessageDetails
     }
   }
 }

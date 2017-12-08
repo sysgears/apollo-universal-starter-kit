@@ -2,6 +2,6 @@
 
 mutation addMessage($input: AddMessageInput!) {
   addMessage(input: $input) {
-    ...MessageInfo
+    ...MessageDetails
   }
 }

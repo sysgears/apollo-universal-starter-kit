@@ -1,3 +1,4 @@
+import chat from './chat';
 import counter from './counter';
 import post from './post';
 import upload from './upload';
@@ -10,4 +11,4 @@ import './debug';
 
 import Feature from './connector';
 
-export default new Feature(counter, post, upload, user, subscription, mailer, graphqlTypes, apolloEngine);
+export default new Feature(chat, counter, post, upload, user, subscription, mailer, graphqlTypes, apolloEngine);

@@ -1,0 +1,10 @@
+#import "./Chat.graphql"
+
+subscription onChatsUpdated($endCursor: Int!) {
+  chatsUpdated(endCursor: $endCursor) {
+    mutation
+    node {
+      ...ChatInfo
+    }
+  }
+}

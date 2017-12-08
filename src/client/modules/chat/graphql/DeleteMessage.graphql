@@ -1,0 +1,5 @@
+mutation deleteMessage($input: DeleteMessageInput!) {
+  deleteMessage(input: $input) {
+    id
+  }
+}

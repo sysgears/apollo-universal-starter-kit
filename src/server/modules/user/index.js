@@ -1,13 +1,16 @@
+import React from 'react';
+import PropTypes from 'prop-types';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import { pick } from 'lodash';
+import url from 'url';
+import cookiesMiddleware from 'universal-cookie-express';
 
 import UserDAO from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
-import { refreshTokens, createTokens } from './auth';
-import tokenMiddleware from './auth/token';
+import { readSession, createSession } from './auth';
 import confirmMiddleware from './confirm';
 import Feature from '../connector';
 import scopes from './auth/scopes';
@@ -16,6 +19,8 @@ import settings from '../../../../settings';
 const SECRET = settings.user.secret;
 
 const User = new UserDAO();
+
+const { pathname } = url.parse(__BACKEND_URL__);
 
 if (settings.user.auth.facebook.enabled) {
   passport.use(
@@ -41,7 +46,7 @@ if (settings.user.auth.facebook.enabled) {
               isActive
             });
 
-            await User.createFacebookOuth({
+            await User.createFacebookAuth({
               id,
               displayName,
               userId: createdUserId
@@ -49,7 +54,7 @@ if (settings.user.auth.facebook.enabled) {
 
             user = await User.getUser(createdUserId);
           } else if (!user.fbId) {
-            await User.createFacebookOuth({
+            await User.createFacebookAuth({
               id,
               displayName,
               userId: user.id
@@ -65,6 +70,18 @@ if (settings.user.auth.facebook.enabled) {
   );
 }
 
+const CSRFComponent = ({ req }) => (
+  <script
+    dangerouslySetInnerHTML={{
+      __html: `window.__CSRF_TOKEN__="${req.session.csrfToken}";`
+    }}
+    charSet="UTF-8"
+  />
+);
+CSRFComponent.propTypes = {
+  req: PropTypes.object
+};
+
 export const parseUser = async ({ req, connectionParams, webSocket }) => {
   let serial = '';
   if (__DEV__) {
@@ -78,15 +95,12 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
     connectionParams.token !== 'null' &&
     connectionParams.token !== 'undefined'
   ) {
-    try {
-      const { user } = jwt.verify(connectionParams.token, SECRET);
-      return user;
-    } catch (err) {
-      const newTokens = await refreshTokens(connectionParams.token, connectionParams.refreshToken, User, SECRET);
-      return newTokens.user;
-    }
+    const { user } = jwt.verify(connectionParams.token, SECRET);
+    return user;
   } else if (req) {
-    if (req.user) {
+    if (req.session.userId) {
+      return await User.getUser(req.session.userId);
+    } else if (req.user) {
       return req.user;
     } else if (settings.user.auth.certificate.enabled) {
       const user = await User.getUserWithSerial(serial);
@@ -113,23 +127,42 @@ export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
-    const tokenUser = await parseUser({ req, connectionParams, webSocket });
+    const currentUser = await parseUser({ req, connectionParams, webSocket });
     const auth = {
-      isAuthenticated: tokenUser ? true : false,
-      scope: tokenUser ? scopes[tokenUser.role] : null
+      isAuthenticated: currentUser ? true : false,
+      scope: currentUser ? scopes[currentUser.role] : null
     };
 
     return {
       User,
-      user: tokenUser,
+      user: currentUser,
       auth,
-      SECRET,
       req
     };
   },
+  beforeware: app => {
+    app.use(cookiesMiddleware());
+    app.use(async (req, res, next) => {
+      try {
+        req.session = readSession(req);
+        if (!req.session || !req.session.csrfToken) {
+          req.session = createSession(req);
+        }
+        if (__SSR__ || __TEST__) {
+          req.headers['x-token'] = req.session.csrfToken;
+        }
+        if (req.path === pathname) {
+          if (req && req.session.userId && req.session.csrfToken !== req.headers['x-token']) {
+            throw new Error('CSRF token validation failed');
+          }
+        }
+        next();
+      } catch (e) {
+        next(e);
+      }
+    });
+  },
   middleware: app => {
-    app.use(tokenMiddleware(SECRET, User, jwt));
-
     if (settings.user.auth.password.sendConfirmationEmail) {
       app.get('/confirmation/:token', confirmMiddleware(SECRET, User, jwt));
     }
@@ -143,30 +176,9 @@ export default new Feature({
         req,
         res
       ) {
-        const user = await User.getUserWithPassword(req.user.id);
-        const refreshSecret = SECRET + user.password;
-        const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
-
-        req.universalCookies.set('x-token', token, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true
-        });
-        req.universalCookies.set('x-refresh-token', refreshToken, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: true
-        });
-
-        req.universalCookies.set('r-token', token, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: false
-        });
-        req.universalCookies.set('r-refresh-token', refreshToken, {
-          maxAge: 60 * 60 * 24 * 7,
-          httpOnly: false
-        });
-
         res.redirect('/profile');
       });
     }
-  }
+  },
+  htmlHeadComponent: <CSRFComponent />
 });

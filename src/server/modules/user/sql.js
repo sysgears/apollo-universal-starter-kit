@@ -122,7 +122,7 @@ export default class User {
       .returning('id');
   }
 
-  createFacebookOuth({ id, displayName, userId }) {
+  createFacebookAuth({ id, displayName, userId }) {
     return knex('auth_facebook')
       .insert({ fb_id: id, display_name: displayName, user_id: userId })
       .returning('id');

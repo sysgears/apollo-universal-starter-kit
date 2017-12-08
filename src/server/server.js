@@ -88,9 +88,7 @@ if (__DEV__) {
 app.use(pathname, (...args) => graphqlMiddleware(...args));
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));
-if (__DEV__) {
-  app.use(errorMiddleware);
-}
+app.use(errorMiddleware);
 
 server = http.createServer(app);
 

@@ -3,11 +3,13 @@
 import React from 'react';
 
 // Apollo
-import { graphql, compose } from 'react-apollo';
+import { graphql, withApollo, compose } from 'react-apollo';
 
 // Components
 import LoginView from '../components/LoginView';
+import log from '../../../../common/log';
 
+import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
 
 class Login extends React.Component {
@@ -17,8 +19,9 @@ class Login extends React.Component {
 }
 
 const LoginWithApollo = compose(
+  withApollo,
   graphql(LOGIN, {
-    props: ({ ownProps: { history, navigation }, mutate }) => ({
+    props: ({ ownProps: { client, onLogin }, mutate }) => ({
       login: async ({ email, password }) => {
         try {
           const { data: { login } } = await mutate({
@@ -29,18 +32,11 @@ const LoginWithApollo = compose(
             return { errors: login.errors };
           }
 
-          const { token, refreshToken } = login.tokens;
-          localStorage.setItem('token', token);
-          localStorage.setItem('refreshToken', refreshToken);
+          await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
 
-          if (history) {
-            return history.push('/profile');
-          }
-          if (navigation) {
-            return navigation.goBack();
-          }
+          onLogin();
         } catch (e) {
-          console.log(e.graphQLErrors);
+          log.error(e);
         }
       }
     })

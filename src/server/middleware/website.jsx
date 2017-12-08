@@ -42,6 +42,7 @@ const renderServerSide = async (req, res) => {
 
     next();
   });
+  const clientModules = require('../../client/modules').default;
   const cache = new InMemoryCache();
 
   let link = new BatchHttpLink({ fetch });
@@ -55,7 +56,6 @@ const renderServerSide = async (req, res) => {
   const store = createReduxStore(initialState, client);
 
   const context = {};
-  const clientModules = require('../../client/modules').default;
   const App = () =>
     clientModules.getWrappedRoot(
       <Provider store={store}>
@@ -97,22 +97,7 @@ const renderServerSide = async (req, res) => {
 
     const apolloState = Object.assign({}, cache.extract());
 
-    const token = req.universalCookies.get('x-token') ? req.universalCookies.get('x-token') : null;
-    const refreshToken = req.universalCookies.get('x-refresh-token')
-      ? req.universalCookies.get('x-refresh-token')
-      : null;
-
-    const page = (
-      <Html
-        content={html}
-        state={apolloState}
-        assetMap={assetMap}
-        css={css}
-        helmet={helmet}
-        token={token}
-        refreshToken={refreshToken}
-      />
-    );
+    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} helmet={helmet} req={req} />;
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
     res.end();
   }

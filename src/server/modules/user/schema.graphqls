@@ -34,17 +34,12 @@ type UserPayload {
 }
 
 type AuthPayload {
-  tokens: Tokens
+  user: User
   errors: [FieldError!]
 }
 
 type ResetPayload {
   errors: [FieldError!]
-}
-
-type Tokens {
-  token: String!
-  refreshToken: String!
 }
 
 extend type Query {
@@ -63,8 +58,6 @@ extend type Mutation {
   login(input: LoginUserInput!): AuthPayload!
   # Logout user
   logout: Boolean!
-  # Refreash user tokens
-  refreshTokens(token: String!, refreshToken: String!): AuthPayload!
   # Create new user
   addUser(input: AddUserInput!): UserPayload!
   # Edit a user

@@ -32,10 +32,14 @@ const fetch = createApolloFetch({
 });
 const cache = new InMemoryCache();
 
+fetch.batchUse(({ options }, next) => {
+  options.credentials = 'same-origin';
+  options.headers = options.headers || {};
+  next();
+});
+
 for (const middleware of modules.middlewares) {
   fetch.batchUse(({ requests, options }, next) => {
-    options.credentials = 'same-origin';
-    options.headers = options.headers || {};
     const reqs = [...requests];
     const innerNext = () => {
       if (reqs.length > 0) {

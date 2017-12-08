@@ -100,6 +100,7 @@
     "opencollective": "^1.0.3",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
+    "passport-local": "^1.0.0",
     "performance-now": "^2.1.0",
     "persistgraphql": "^0.4.0",
     "pg": "^7.4.0",

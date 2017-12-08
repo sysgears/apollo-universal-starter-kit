@@ -22,9 +22,9 @@ const styles = StyleSheet.create({
     marginRight: 15
   },
   textStyle: {
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '500'
+    //color: '#FFF',
+    //fontSize: 16,
+    //fontWeight: '500'
   }
 });
 

@@ -25,8 +25,8 @@ if (settings.user.auth.facebook.enabled) {
         clientID: settings.user.auth.facebook.clientID,
         clientSecret: settings.user.auth.facebook.clientSecret,
         callbackURL: '/auth/facebook/callback',
-        scope: ['email'],
-        profileFields: ['id', 'emails', 'displayName']
+        scope: settings.user.auth.facebook.scope,
+        profileFields: settings.user.auth.facebook.profileFields
       },
       async function(accessToken, refreshToken, profile, cb) {
         const { id, username, displayName, emails: [{ value }] } = profile;
@@ -73,9 +73,6 @@ if (settings.user.auth.google.enabled) {
         clientID: settings.user.auth.google.clientID,
         clientSecret: settings.user.auth.google.clientSecret,
         callbackURL: '/auth/google/callback'
-
-        // scope: ['email', 'profile'],
-        // profileFields: ['id', 'emails', 'displayName']
       },
       async function(accessToken, refreshToken, profile, cb) {
         const { id, username, displayName, emails: [{ value }] } = profile;
@@ -85,7 +82,7 @@ if (settings.user.auth.google.enabled) {
           if (!user) {
             const isActive = true;
             const [createdUserId] = await User.register({
-              username: username ? username : displayName,
+              username: username ? username : value,
               email: value,
               password: id,
               isActive
@@ -95,6 +92,14 @@ if (settings.user.auth.google.enabled) {
               id,
               displayName,
               userId: createdUserId
+            });
+
+            await User.editUserProfile({
+              id: createdUserId,
+              profile: {
+                firstName: profile.name.givenName,
+                lastName: profile.name.familyName
+              }
             });
 
             user = await User.getUser(createdUserId);
@@ -227,15 +232,7 @@ export default new Feature({
       app.get(
         '/auth/google',
         passport.authenticate('google', {
-          scope: [
-            'https://www.googleapis.com/auth/userinfo.email',
-            'https://www.googleapis.com/auth/userinfo.profile',
-            'https://www.google.com/m8/feeds/',
-            'https://mail.google.com/',
-            'https://www.googleapis.com/auth/calendar',
-            'https://www.googleapis.com/auth/drive',
-            'https://www.googleapis.com/auth/tasks'
-          ]
+          scope: settings.user.auth.google.scope
         })
       );
 

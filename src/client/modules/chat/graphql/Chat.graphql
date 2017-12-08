@@ -1,0 +1,5 @@
+fragment ChatInfo on Chat {
+  id
+  title
+  content
+}

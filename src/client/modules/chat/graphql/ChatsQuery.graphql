@@ -1,0 +1,17 @@
+#import "./Chat.graphql"
+
+query chats($limit: Int!, $after: Int) {
+  chats(limit: $limit, after: $after) {
+    totalCount
+    edges {
+      cursor
+      node {
+        ...ChatInfo
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

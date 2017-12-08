@@ -1,0 +1,11 @@
+#import "./Chat.graphql"
+#import "./Message.graphql"
+
+query chat($id: Int!) {
+  chat(id: $id) {
+    ...ChatInfo
+    messages {
+      ...MessageInfo
+    }
+  }
+}

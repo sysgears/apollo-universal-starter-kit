@@ -1,0 +1,4 @@
+fragment MessageInfo on Message {
+  id
+  content
+}

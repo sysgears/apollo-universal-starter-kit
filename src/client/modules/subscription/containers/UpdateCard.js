@@ -20,7 +20,7 @@ class UpdateCard extends React.Component {
             <UpdateCardView {...this.props} />
           </StripeProvider>
         ) : (
-          <p>Loading...</p>
+          <UpdateCardView {...this.props} />
         )}
       </div>
     );

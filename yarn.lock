@@ -11079,11 +11079,12 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.48:
-  version "0.4.48"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.48.tgz#7ae7eb705af6397ad03b42ff6c41a275782c3fac"
+spinjs@^0.4.53:
+  version "0.4.53"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.53.tgz#fe49d06c2ac6936423fd5c4b783a9a1ce70e07d8"
   dependencies:
     containerized "^1.0.2"
+    debug "^3.1.0"
     inquirer "^3.3.0"
     ip "^1.1.5"
     lodash "^4.17.4"

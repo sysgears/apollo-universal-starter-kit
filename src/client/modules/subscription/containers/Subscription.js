@@ -21,7 +21,7 @@ class Subscription extends React.Component {
             <SubscriptionView {...this.props} />
           </StripeProvider>
         ) : (
-          <p>Loading...</p>
+          <SubscriptionView {...this.props} />
         )}
       </div>
     );

@@ -1,4 +1,7 @@
-import { AppRegistry } from 'react-native';
+import React from 'react';
+import { render, hydrate } from 'react-native';
+// Work around warning about React.hydrate during SSR
+import AppContainer from 'react-native-web/dist/apis/AppRegistry/AppContainer';
 
 // Virtual module, see webpack-virtual-modules usage in webpack.run.js
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
@@ -7,15 +10,20 @@ import 'backend_reload';
 import Main from './app/Main';
 import log from '../common/log';
 
+const renderFunc = __SSR__ ? hydrate : render;
 const root = document.getElementById('content');
 
-AppRegistry.registerComponent('App', () => Main);
-
 let frontendReloadCount = 0;
-AppRegistry.runApplication('App', {
-  initialProps: { key: frontendReloadCount },
-  rootTag: root
-});
+
+const renderApp = props =>
+  renderFunc(
+    <AppContainer rootTag={root}>
+      <Main {...props} />
+    </AppContainer>,
+    root
+  );
+
+renderApp({ key: frontendReloadCount });
 
 if (__DEV__) {
   if (module.hot) {
@@ -31,10 +39,7 @@ if (__DEV__) {
         log.debug('Updating front-end');
         frontendReloadCount = (frontendReloadCount || 0) + 1;
 
-        AppRegistry.runApplication('App', {
-          initialProps: { key: frontendReloadCount },
-          rootTag: root
-        });
+        renderApp({ key: frontendReloadCount });
       } catch (err) {
         log(err.stack);
       }

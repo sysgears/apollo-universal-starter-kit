@@ -34,7 +34,7 @@ class CancelSubscriptionView extends React.Component {
               Cancel Subscription
             </Button>
           )}
-          {!active && <p>You do not have a subscription.</p>}
+          {!active && <span>You do not have a subscription.</span>}
           {errors && <Alert color="error">{errors}</Alert>}
         </CardText>
       </CardGroup>

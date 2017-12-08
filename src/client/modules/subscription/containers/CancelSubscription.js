@@ -9,7 +9,7 @@ import CARD_INFO from '../graphql/CardInfoQuery.graphql';
 import CANCEL from '../graphql/CancelSubscription.graphql';
 
 const CancelSubscription = ({ loading, active, cancel }) => {
-  return <CancelSubscriptionView loading={loading} active={active} cancel={cancel} />;
+  return <CancelSubscriptionView loading={__SERVER__ ? true : loading} active={active} cancel={cancel} />;
 };
 
 CancelSubscription.propTypes = {

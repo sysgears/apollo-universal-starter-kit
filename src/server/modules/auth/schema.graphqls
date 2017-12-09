@@ -1,0 +1,77 @@
+extend type Query {}
+
+extend type Mutation {
+  # Register user
+  register(input: RegisterUserInput!): UserPayload!
+  # Login user
+  login(input: LoginUserInput!): AuthPayload!
+  # Logout user
+  logout: Boolean!
+  # Refreash user tokens
+  refreshTokens(token: String!, refreshToken: String!): AuthPayload!
+
+  # Password management
+  forgotPassword(input: ForgotPasswordInput!): Boolean!
+  resetPassword(input: ResetPasswordInput!): ResetPayload!
+}
+
+extend type Subscription {}
+
+
+
+type ServiceAccountAuth {
+  certificate: CertificateAuth
+}
+
+type UserAuth {
+  password: String
+  certificates: [CertificateAuth]
+  oauths: [UserOAuth]
+}
+
+type CertificateAuth {
+  serial: String
+}
+
+type UserOAuth {
+  provider: String
+  oauthId: String
+}
+
+type AuthPayload {
+  tokens: Tokens
+  errors: [FieldError!]
+}
+
+type ResetPayload {
+  errors: [FieldError!]
+}
+
+type Tokens {
+  token: String!
+  refreshToken: String!
+}
+
+input AuthInput {
+  certificate: AuthCertificateInput
+  oauth: OAuthInput
+}
+
+input AuthCertificateInput {
+  serial: String
+}
+
+input OAuthInput {
+  provider: String
+  oauthId: String
+}
+
+input ForgotPasswordInput {
+  email: String!
+}
+
+input ResetPasswordInput {
+  token: String!
+  password: String!
+  passwordConfirmation: String!
+}

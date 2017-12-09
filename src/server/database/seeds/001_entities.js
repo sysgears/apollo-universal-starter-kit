@@ -5,6 +5,7 @@ import truncateTables from '../../../common/db';
 import settings from '../../../../settings';
 
 let entitiesConfig = settings.entities;
+
 export async function seed(knex, Promise) {
   await truncateTables(knex, Promise, ['serviceaccounts', 'users', 'groups', 'orgs']);
 
@@ -21,12 +22,11 @@ export async function seed(knex, Promise) {
           is_active: true
         });
 
-      // map over org groups
+      // loop over org groups
       for (let group of org.groups) {
         let groupSeed = _.find(entitiesConfig.groups.seeds, g => {
           return g.name === group.name;
         });
-        console.log('GROUP', group, groupSeed);
 
         // save group
         const [gid] = await knex('groups')
@@ -48,7 +48,6 @@ export async function seed(knex, Promise) {
           let userSeed = _.find(entitiesConfig.users.seeds, u => {
             return u.email == user;
           });
-          console.log('USER', user, userSeed);
 
           // rewrite domain name in email
           let parts = userSeed.email.split('@');
@@ -74,8 +73,52 @@ export async function seed(knex, Promise) {
             group_id: gid,
             user_id: uid
           });
-        }
-      }
-    }
-  }
+        } // end loop over users
+      } // end loop over groups
+    } // end loop over orgs
+  } else {
+    // END if orgs enabled
+
+    // loop over groups
+    for (let group of entitiesConfig.groups.seeds) {
+      console.log('GROUP', group);
+
+      // save group
+      const [gid] = await knex('groups')
+        .returning('id')
+        .insert({
+          uuid: uuidv4(),
+          name: group.name,
+          is_active: true
+        });
+
+      // create users
+      for (let user of group.users) {
+        let userSeed = _.find(entitiesConfig.users.seeds, u => {
+          return u.email == user;
+        });
+
+        // save user
+        const [uid] = await knex('users')
+          .returning('id')
+          .insert({
+            uuid: uuidv4(),
+            email: userSeed.email,
+            is_active: true
+          });
+
+        // save user password
+        await knex('user_password').insert({
+          user_id: uid,
+          password: await bcrypt.hash(userSeed.password, 12)
+        });
+
+        // save group-user membership
+        await knex('groups_users').insert({
+          group_id: gid,
+          user_id: uid
+        });
+      } // end loop over users
+    } // end loop over groups
+  } // END else (orgs disabled)
 }

@@ -101,7 +101,7 @@ type Org {
 
   groups [Group]
   users  [User]
-  svcaccts [ServiceAccount]
+  serviceaccounts [ServiceAccount]
 }
 
 type OrgProfile {
@@ -147,7 +147,7 @@ type Group {
 
   orgs   [Org]
   users  [User]
-  svcaccts [ServiceAccount]
+  serviceaccounts [ServiceAccount]
 }
 
 type GroupProfile {
@@ -233,7 +233,7 @@ input ProfileInput {
 #
 
 type ServiceAccountPayload {
-  user: ServiceAccount
+  serviceaccount: ServiceAccount
   errors: [FieldError!]
 }
 

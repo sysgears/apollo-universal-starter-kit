@@ -70,6 +70,7 @@
     "apollo-server-express": "^1.2.0",
     "apollo-upload-server": "^4.0.0-alpha.1",
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "bootstrap": "4.0.0-beta.2",
     "cors": "^2.8.4",
@@ -136,7 +137,8 @@
     "stripe-local": "^0.1.1",
     "styled-components": "^2.2.4",
     "subscriptions-transport-ws": "^0.9.4",
-    "universal-cookie-express": "^2.1.2"
+    "universal-cookie-express": "^2.1.2",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "apollo-utilities": "^1.0.3",

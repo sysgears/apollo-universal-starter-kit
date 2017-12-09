@@ -19,6 +19,10 @@ const facebookLogin = () => {
   window.location = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
 };
 
+const googleLogin = () => {
+  window.location = `${protocol}//${hostname}:${serverPort}/auth/google`;
+};
+
 const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
   return (
     <Form name="login" onSubmit={handleSubmit(onSubmit)}>
@@ -32,6 +36,11 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
         {settings.user.auth.facebook.enabled && (
           <Button color="primary" type="button" onClick={facebookLogin} style={{ margin: 10 }}>
             Login with Facebook
+          </Button>
+        )}
+        {settings.user.auth.google.enabled && (
+          <Button color="primary" type="button" onClick={googleLogin} style={{ margin: 10 }}>
+            Login with Google
           </Button>
         )}
       </div>

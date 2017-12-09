@@ -18,12 +18,15 @@ export default class User {
         'up.last_name',
         'ca.serial',
         'fa.fb_id',
-        'fa.display_name'
+        'fa.display_name',
+        'ga.google_id',
+        'ga.display_name'
       )
       .from('user AS u')
       .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
       .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
-      .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id');
+      .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
+      .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id');
 
     // add order by
     if (orderBy && orderBy.column) {
@@ -76,12 +79,15 @@ export default class User {
           'up.last_name',
           'ca.serial',
           'fa.fb_id',
-          'fa.display_name'
+          'fa.display_name',
+          'ga.google_id',
+          'ga.display_name'
         )
         .from('user AS u')
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
+        .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );
@@ -125,6 +131,12 @@ export default class User {
   createFacebookOuth({ id, displayName, userId }) {
     return knex('auth_facebook')
       .insert({ fb_id: id, display_name: displayName, user_id: userId })
+      .returning('id');
+  }
+
+  createGoogleOuth({ id, displayName, userId }) {
+    return knex('auth_google')
+      .insert({ google_id: id, display_name: displayName, user_id: userId })
       .returning('id');
   }
 
@@ -230,6 +242,29 @@ export default class User {
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where('fa.fb_id', '=', id)
+        .orWhere('u.email', '=', email)
+        .first()
+    );
+  }
+
+  async getUserByGoogleIdOrEmail(id, email) {
+    return camelizeKeys(
+      await knex
+        .select(
+          'u.id',
+          'u.username',
+          'u.role',
+          'u.is_active',
+          'ga.google_id',
+          'u.email',
+          'u.password',
+          'up.first_name',
+          'up.last_name'
+        )
+        .from('user AS u')
+        .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+        .where('ga.google_id', '=', id)
         .orWhere('u.email', '=', email)
         .first()
     );

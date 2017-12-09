@@ -17,6 +17,7 @@ type UserProfile {
 type UserAuth {
   certificate: CertificateAuth
   facebook: FacebookAuth
+  google: GoogleAuth
 }
 
 type CertificateAuth {
@@ -25,6 +26,11 @@ type CertificateAuth {
 
 type FacebookAuth {
   fbId: String
+  displayName: String
+}
+
+type GoogleAuth {
+  googleId: String
   displayName: String
 }
 

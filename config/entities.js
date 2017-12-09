@@ -10,12 +10,12 @@ export default {
       {
         name: 'app-users',
         domain: 'example.com',
-        groups: [{ name: 'admins' }, { name: 'editors' }, { name: 'users' }]
+        groups: [{ name: 'admins' }, { name: 'editors' }, { name: 'subscribers' }, { name: 'users' }]
       },
       {
         name: 'test-org-1',
         domain: 'org-1.com',
-        groups: [{ name: 'admins' }, { name: 'users' }]
+        groups: [{ name: 'admins' }, { name: 'subscribers' }, { name: 'users' }]
       },
       {
         name: 'test-org-2',
@@ -52,6 +52,10 @@ export default {
         users: ['editor@example.com']
       },
       {
+        name: 'subscribers',
+        users: ['subscriber1@example.com', 'subscriber2@example.com', 'subscriber3@example.com']
+      },
+      {
         name: 'users',
         users: ['user1@example.com', 'user2@example.com', 'user3@example.com']
       }
@@ -83,6 +87,18 @@ export default {
       {
         email: 'editor@example.com',
         password: 'editor'
+      },
+      {
+        email: 'subscriber1@example.com',
+        password: 'subscriber'
+      },
+      {
+        email: 'subscriber2@example.com',
+        password: 'subscriber'
+      },
+      {
+        email: 'subscriber3@example.com',
+        password: 'subscriber'
       },
       {
         email: 'user1@example.com',

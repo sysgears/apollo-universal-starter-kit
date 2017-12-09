@@ -6,11 +6,12 @@ exports.up = function(knex, Promise) {
       table
         .integer('org_id')
         .unsigned()
+        .unique()
         .references('id')
         .inTable('orgs')
         .onDelete('CASCADE');
 
-      table.string('displayName');
+      table.string('display_name');
       table.string('description');
     }),
 
@@ -20,11 +21,12 @@ exports.up = function(knex, Promise) {
       table
         .integer('group_id')
         .unsigned()
+        .unique()
         .references('id')
         .inTable('groups')
         .onDelete('CASCADE');
 
-      table.string('displayName');
+      table.string('display_name');
       table.string('description');
     }),
 
@@ -34,11 +36,12 @@ exports.up = function(knex, Promise) {
       table
         .integer('user_id')
         .unsigned()
+        .unique()
         .references('id')
         .inTable('user')
         .onDelete('CASCADE');
 
-      table.string('username').unique();
+      table.string('display_name');
       table.string('first_name');
       table.string('last_name');
     }),
@@ -49,11 +52,12 @@ exports.up = function(knex, Promise) {
       table
         .integer('serviceaccount_id')
         .unsigned()
+        .unique()
         .references('id')
         .inTable('user')
         .onDelete('CASCADE');
 
-      table.string('displayName');
+      table.string('display_name');
       table.string('description');
     })
   ]);

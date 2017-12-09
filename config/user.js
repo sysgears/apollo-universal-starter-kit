@@ -21,7 +21,7 @@ export default {
       profileFields: ['id', 'emails', 'displayName']
     },
     google: {
-      enabled: true,
+      enabled: false,
       clientID: process.env.GOOGLE_CLIENTID,
       clientSecret: process.env.GOOGLE_CLIENTSECRET,
       scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']

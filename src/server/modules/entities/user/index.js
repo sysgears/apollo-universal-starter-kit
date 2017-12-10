@@ -7,8 +7,23 @@ import knex from '../../../../server/sql/connector';
 export default class User {
   async getUsers(orderBy, filter) {
     const queryBuilder = knex
-      .select('u.uuid as id', 'u.created_at', 'u.updated_at', 'u.is_active', 'u.email')
-      .from('users AS u');
+      .select(
+        'u.uuid as id',
+        'u.created_at',
+        'u.updated_at',
+        'u.is_active',
+        'u.email',
+        'p.display_name',
+        'p.first_name',
+        'p.middle_name',
+        'p.last_name',
+        'p.title',
+        'p.suffix',
+        'p.locale',
+        'p.language'
+      )
+      .from('users AS u')
+      .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
 
     if (has(filter, 'isActive') && filter.isActive !== null) {
       queryBuilder.where(function() {

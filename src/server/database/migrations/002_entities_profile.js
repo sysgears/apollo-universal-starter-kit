@@ -38,12 +38,17 @@ exports.up = function(knex, Promise) {
         .unsigned()
         .unique()
         .references('id')
-        .inTable('user')
+        .inTable('users')
         .onDelete('CASCADE');
 
       table.string('display_name');
       table.string('first_name');
+      table.string('middle_name');
       table.string('last_name');
+      table.string('title');
+      table.string('suffix');
+      table.string('locale');
+      table.string('language');
     }),
 
     knex.schema.createTable('serviceaccount_profile', table => {
@@ -54,7 +59,7 @@ exports.up = function(knex, Promise) {
         .unsigned()
         .unique()
         .references('id')
-        .inTable('user')
+        .inTable('serviceaccounts')
         .onDelete('CASCADE');
 
       table.string('display_name');

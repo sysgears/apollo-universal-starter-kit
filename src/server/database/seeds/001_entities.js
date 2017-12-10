@@ -22,6 +22,14 @@ export async function seed(knex, Promise) {
           is_active: true
         });
 
+      if (org.profile !== null) {
+        await knex('org_profile').insert({
+          org_id: oid,
+          display_name: org.profile.displayName,
+          description: org.profile.description
+        });
+      }
+
       // loop over org groups
       for (let group of org.groups) {
         let groupSeed = _.find(entitiesConfig.groups.seeds, g => {
@@ -36,6 +44,15 @@ export async function seed(knex, Promise) {
             name: groupSeed.name,
             is_active: true
           });
+
+        // save group profile
+        if (groupSeed.profile !== null) {
+          await knex('group_profile').insert({
+            group_id: gid,
+            display_name: groupSeed.profile.displayName,
+            description: groupSeed.profile.description
+          });
+        }
 
         // create org-group membership
         await knex('orgs_groups').insert({
@@ -68,6 +85,20 @@ export async function seed(knex, Promise) {
             password: await bcrypt.hash(userSeed.password, 12)
           });
 
+          // save user profile
+          if (userSeed.profile !== null) {
+            await knex('user_profile').insert({
+              user_id: uid,
+              display_name: userSeed.profile.displayName,
+              first_name: userSeed.profile.firstName,
+              middle_name: userSeed.profile.middleName,
+              last_name: userSeed.profile.lastName,
+              suffix: userSeed.profile.suffix,
+              locale: userSeed.profile.locale,
+              language: userSeed.profile.language
+            });
+          }
+
           // save group-user membership
           await knex('groups_users').insert({
             group_id: gid,
@@ -92,6 +123,15 @@ export async function seed(knex, Promise) {
           is_active: true
         });
 
+      // save group profile
+      if (group.profile !== null) {
+        await knex('group_profile').insert({
+          group_id: gid,
+          display_name: group.profile.displayName,
+          description: group.profile.description
+        });
+      }
+
       // create users
       for (let user of group.users) {
         let userSeed = _.find(entitiesConfig.users.seeds, u => {
@@ -112,6 +152,20 @@ export async function seed(knex, Promise) {
           user_id: uid,
           password: await bcrypt.hash(userSeed.password, 12)
         });
+
+        // save user profile
+        if (userSeed.profile !== null) {
+          await knex('user_profile').insert({
+            user_id: uid,
+            display_name: userSeed.profile.displayName,
+            first_name: userSeed.profile.firstName,
+            middle_name: userSeed.profile.middleName,
+            last_name: userSeed.profile.lastName,
+            suffix: userSeed.profile.suffix,
+            locale: userSeed.profile.locale,
+            language: userSeed.profile.language
+          });
+        }
 
         // save group-user membership
         await knex('groups_users').insert({

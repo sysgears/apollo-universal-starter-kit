@@ -13,6 +13,7 @@ exports.up = function(knex, Promise) {
       table.string('domain').notNullable();
       table.unique(['name', 'domain']);
     }),
+
     knex.schema.createTable('groups', table => {
       table.timestamps(true, true);
       table.increments();
@@ -21,6 +22,7 @@ exports.up = function(knex, Promise) {
 
       table.string('name').notNullable();
     }),
+
     knex.schema.createTable('users', table => {
       table.timestamps(true, true);
       table.increments();

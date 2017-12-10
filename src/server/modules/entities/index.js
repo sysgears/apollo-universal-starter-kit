@@ -1,4 +1,4 @@
-import Entities from './sql';
+import User from './user';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import Feature from '../connector';
@@ -6,5 +6,5 @@ import Feature from '../connector';
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
-  createContextFunc: () => ({ Entities: new Entities() })
+  createContextFunc: () => ({ User: new User() })
 });

@@ -99,9 +99,9 @@ type Org {
 
   profile: OrgProfile
 
-  groups [Group]
-  users  [User]
-  serviceaccounts [ServiceAccount]
+  groups: [Group]
+  users:  [User]
+  serviceaccounts: [ServiceAccount]
 }
 
 type OrgProfile {
@@ -145,9 +145,9 @@ type Group {
 
   profile: GroupProfile
 
-  orgs   [Org]
-  users  [User]
-  serviceaccounts [ServiceAccount]
+  orgs:   [Org]
+  users:  [User]
+  serviceaccounts: [ServiceAccount]
 }
 
 type GroupProfile {
@@ -192,8 +192,8 @@ type User {
   auth: UserAuth
   profile: UserProfile
 
-  orgs   [Org]
-  groups [Group]
+  orgs:   [Org]
+  groups: [Group]
 }
 
 type UserProfile {
@@ -207,7 +207,7 @@ type UserProfile {
 input AddUserInput {
   email: String!
   profile: ProfileInput
-  auth: AuthInput
+  auth: UserAuthInput
 }
 
 input EditUserInput {
@@ -216,7 +216,7 @@ input EditUserInput {
   email: String!
 
   profile: ProfileInput
-  auth: AuthInput
+  auth: UserAuthInput
 }
 
 input ProfileInput {
@@ -244,8 +244,8 @@ type ServiceAccount {
   auth: ServiceAccountAuth
   profile: ServiceAccountProfile
 
-  orgs   [Org]
-  groups [Group]
+  orgs:   [Org]
+  groups: [Group]
 }
 
 type ServiceAccountProfile {

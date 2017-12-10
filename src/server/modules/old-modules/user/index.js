@@ -14,111 +14,9 @@ import Feature from '../connector';
 import scopes from './auth/scopes';
 import settings from '../../../../settings';
 
-const SECRET = settings.user.secret;
+const SECRET = settings.auth.secret;
 
 const User = new UserDAO();
-
-if (settings.user.auth.facebook.enabled) {
-  passport.use(
-    new FacebookStrategy(
-      {
-        clientID: settings.user.auth.facebook.clientID,
-        clientSecret: settings.user.auth.facebook.clientSecret,
-        callbackURL: '/auth/facebook/callback',
-        scope: settings.user.auth.facebook.scope,
-        profileFields: settings.user.auth.facebook.profileFields
-      },
-      async function(accessToken, refreshToken, profile, cb) {
-        const { id, username, displayName, emails: [{ value }] } = profile;
-        try {
-          let user = await User.getUserByFbIdOrEmail(id, value);
-
-          if (!user) {
-            const isActive = true;
-            const [createdUserId] = await User.register({
-              username: username ? username : displayName,
-              email: value,
-              password: id,
-              isActive
-            });
-
-            await User.createFacebookOuth({
-              id,
-              displayName,
-              userId: createdUserId
-            });
-
-            user = await User.getUser(createdUserId);
-          } else if (!user.fbId) {
-            await User.createFacebookOuth({
-              id,
-              displayName,
-              userId: user.id
-            });
-          }
-
-          return cb(null, pick(user, ['id', 'username', 'role', 'email']));
-        } catch (err) {
-          return cb(err, {});
-        }
-      }
-    )
-  );
-}
-
-if (settings.user.auth.google.enabled) {
-  passport.use(
-    new GoogleStrategy(
-      {
-        clientID: settings.user.auth.google.clientID,
-        clientSecret: settings.user.auth.google.clientSecret,
-        callbackURL: '/auth/google/callback'
-      },
-      async function(accessToken, refreshToken, profile, cb) {
-        const { id, username, displayName, emails: [{ value }] } = profile;
-        try {
-          let user = await User.getUserByGoogleIdOrEmail(id, value);
-
-          if (!user) {
-            const isActive = true;
-            const [createdUserId] = await User.register({
-              username: username ? username : value,
-              email: value,
-              password: id,
-              isActive
-            });
-
-            await User.createGoogleOuth({
-              id,
-              displayName,
-              userId: createdUserId
-            });
-
-            await User.editUserProfile({
-              id: createdUserId,
-              profile: {
-                firstName: profile.name.givenName,
-                lastName: profile.name.familyName
-              }
-            });
-
-            user = await User.getUser(createdUserId);
-          } else if (!user.googleId) {
-            await User.createGoogleOuth({
-              id,
-              displayName,
-              userId: user.id
-            });
-          }
-
-          return cb(null, pick(user, ['id', 'username', 'role', 'email']));
-        } catch (err) {
-          return cb(err, {});
-        }
-      }
-    )
-  );
-}
 
 export const parseUser = async ({ req, connectionParams, webSocket }) => {
   let serial = '';
@@ -169,9 +67,14 @@ export default new Feature({
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
+
+    // scope: tokenUser ? scopes[tokenUser.role] : null
+    // need to look up in database eventually
+    const scopes = "*"
+
     const auth = {
       isAuthenticated: tokenUser ? true : false,
-      scope: tokenUser ? scopes[tokenUser.role] : null
+      scopes,
     };
 
     return {

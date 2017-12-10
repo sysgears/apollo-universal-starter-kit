@@ -8,7 +8,7 @@ extend type Mutation {
   # Logout user
   logout: Boolean!
   # Refreash user tokens
-  refreshTokens(token: String!, refreshToken: String!): AuthPayload!
+  refreshToken(token: String!, refreshToken: String!): AuthPayload!
 
   # Password management
   forgotPassword(input: ForgotPasswordInput!): Boolean!
@@ -52,7 +52,12 @@ type Tokens {
   refreshToken: String!
 }
 
-input AuthInput {
+
+input ServiceAccountAuthInput {
+  certificate: AuthCertificateInput
+}
+
+input UserAuthInput {
   certificate: AuthCertificateInput
   oauth: OAuthInput
 }
@@ -64,6 +69,22 @@ input AuthCertificateInput {
 input OAuthInput {
   provider: String
   oauthId: String
+}
+
+
+#
+# Account State Flow types
+#
+
+input RegisterUserInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
 }
 
 input ForgotPasswordInput {

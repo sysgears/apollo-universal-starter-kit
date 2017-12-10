@@ -15,7 +15,7 @@ export default class Org {
         'o.created_at',
         'o.updated_at',
         'o.name',
-        'o.domain',
+        'p.domain',
         'p.display_name',
         'p.description'
       )
@@ -34,7 +34,7 @@ export default class Org {
         if (has(filter, 'searchText') && filter.searchText !== '') {
           queryBuilder.where(function() {
             this.where('o.name', 'like', `%${filter.searchText}%`)
-              .orWhere('o.domain', 'like', `%${filter.searchText}%`)
+              .orWhere('p.domain', 'like', `%${filter.searchText}%`)
               .orWhere('p.display_name', 'like', `%${filter.searchText}%`)
               .orWhere('p.description', 'like', `%${filter.searchText}%`);
           });
@@ -76,7 +76,7 @@ export default class Org {
           'o.created_at',
           'o.updated_at',
           'o.name',
-          'o.domain',
+          'p.domain',
           'p.display_name',
           'p.description'
         )
@@ -103,6 +103,28 @@ export default class Org {
       .select('u.uuid AS id', 'u.email', 'o.uuid AS orgId')
       .whereIn('o.uuid', orgId)
       .from('orgs AS o')
+      .leftJoin('orgs_users AS ou', 'ou.org_id', 'o.id')
+      .leftJoin('users AS u', 'u.id', 'ou.user_id');
+
+    return orderedFor(res, orgId, 'orgId', false);
+  }
+
+  async getServiceAccountsForOrgId(orgId) {
+    let res = await knex
+      .select('sa.uuid AS id', 'sa.email', 'o.uuid AS orgId')
+      .whereIn('o.uuid', orgId)
+      .from('orgs AS o')
+      .leftJoin('orgs_serviceaccounts AS os', 'os.org_id', 'o.id')
+      .leftJoin('serviceaccounts AS sa', 'sa.id', 'os.serviceaccount_id');
+
+    return orderedFor(res, orgId, 'orgId', false);
+  }
+
+  async getUsersForOrgIdViaGroups(orgId) {
+    let res = await knex
+      .select('u.uuid AS id', 'u.email', 'o.uuid AS orgId')
+      .whereIn('o.uuid', orgId)
+      .from('orgs AS o')
       .leftJoin('orgs_groups AS og', 'og.group_id', 'o.id')
       .leftJoin('groups_users AS gu', 'gu.group_id', 'og.group_id')
       .leftJoin('users AS u', 'u.id', 'gu.user_id');
@@ -110,7 +132,7 @@ export default class Org {
     return orderedFor(res, orgId, 'orgId', false);
   }
 
-  async getServiceAccountsForOrgId(orgId) {
+  async getServiceAccountsForOrgIdViaGroups(orgId) {
     let res = await knex
       .select('sa.uuid AS id', 'sa.email', 'o.uuid AS orgId')
       .whereIn('o.uuid', orgId)

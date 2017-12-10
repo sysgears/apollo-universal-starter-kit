@@ -89,7 +89,7 @@ export default class Group {
       .whereIn('g.uuid', groupId)
       .from('groups AS g')
       .leftJoin('orgs_groups AS og', 'og.group_id', 'g.id')
-      .leftJoin('orgs AS o', 'o.id', 'og.group_id');
+      .leftJoin('orgs AS o', 'o.id', 'og.org_id');
 
     return orderedFor(res, groupId, 'groupId', false);
   }

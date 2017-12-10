@@ -2,6 +2,17 @@
 import { pick } from 'lodash';
 import FieldError from '../../../common/FieldError';
 
+const mergeLoaders = res => {
+  let ret = [];
+  for (let r of res) {
+    if (r === null || (r.length === 1 && r[0].id === null)) {
+      continue;
+    }
+    return ret.concat(r);
+  }
+  return ret;
+};
+
 export default pubsub => ({
   Query: {
     orgs: (obj, args, context) => {
@@ -48,14 +59,23 @@ export default pubsub => ({
       return context.loaders.getGroupsForOrgId.load(obj.id);
     },
     users(obj, args, context) {
-      return context.loaders.getUsersForOrgId.load(obj.id);
+      return Promise.all([
+        context.loaders.getUsersForOrgId.load(obj.id),
+        context.loaders.getUsersForOrgIdViaGroups.load(obj.id)
+      ]).then(mergeLoaders);
     },
     serviceaccounts(obj, args, context) {
-      return context.loaders.getServiceAccountsForOrgId.load(obj.id);
+      return Promise.all([
+        context.loaders.getServiceAccountsForOrgId.load(obj.id),
+        context.loaders.getServiceAccountsForOrgIdViaGroups.load(obj.id)
+      ]).then(mergeLoaders);
     }
   },
 
   OrgProfile: {
+    domain(obj) {
+      return obj.domain;
+    },
     displayName(obj) {
       return obj.displayName;
     },
@@ -98,7 +118,10 @@ export default pubsub => ({
     },
     */
     orgs(obj, args, context) {
-      return context.loaders.getOrgsForUserId.load(obj.id);
+      return Promise.all([
+        context.loaders.getOrgsForUserId.load(obj.id),
+        context.loaders.getOrgsForUserIdViaGroups.load(obj.id)
+      ]).then(mergeLoaders);
     },
     groups(obj, args, context) {
       return context.loaders.getGroupsForUserId.load(obj.id);
@@ -145,7 +168,10 @@ export default pubsub => ({
     },
     */
     orgs(obj, args, context) {
-      return context.loaders.getOrgsForServiceAccountId.load(obj.id);
+      return Promise.all([
+        context.loaders.getOrgsForServiceAccountId.load(obj.id),
+        context.loaders.getOrgsForServiceAccountIdViaGroups.load(obj.id)
+      ]).then(mergeLoaders);
     },
     groups(obj, args, context) {
       return context.loaders.getGroupsForServiceAccountId.load(obj.id);

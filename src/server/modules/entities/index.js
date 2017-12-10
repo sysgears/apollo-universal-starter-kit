@@ -28,6 +28,8 @@ export default new Feature({
         getGroupsForOrgId: new DataLoader(org.getGroupsForOrgId),
         getUsersForOrgId: new DataLoader(org.getUsersForOrgId),
         getServiceAccountsForOrgId: new DataLoader(org.getServiceAccountsForOrgId),
+        getUsersForOrgIdViaGroups: new DataLoader(org.getUsersForOrgIdViaGroups),
+        getServiceAccountsForOrgIdViaGroups: new DataLoader(org.getServiceAccountsForOrgIdViaGroups),
 
         getOrgsForGroupId: new DataLoader(group.getOrgsForGroupId),
         getUsersForGroupId: new DataLoader(group.getUsersForGroupId),
@@ -35,9 +37,11 @@ export default new Feature({
 
         getOrgsForUserId: new DataLoader(user.getOrgsForUserId),
         getGroupsForUserId: new DataLoader(user.getGroupsForUserId),
+        getOrgsForUserIdViaGroups: new DataLoader(user.getOrgsForUserIdViaGroups),
 
         getOrgsForServiceAccountId: new DataLoader(sa.getOrgsForServiceAccountId),
-        getGroupsForServiceAccountId: new DataLoader(sa.getGroupsForServiceAccountId)
+        getGroupsForServiceAccountId: new DataLoader(sa.getGroupsForServiceAccountId),
+        getOrgsForServiceAccountIdViaGroups: new DataLoader(sa.getOrgsForServiceAccountIdViaGroups)
       }
     };
   }

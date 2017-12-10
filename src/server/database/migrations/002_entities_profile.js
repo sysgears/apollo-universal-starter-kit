@@ -11,6 +11,7 @@ exports.up = function(knex, Promise) {
         .inTable('orgs')
         .onDelete('CASCADE');
 
+      table.string('domain');
       table.string('display_name');
       table.string('description');
     }),

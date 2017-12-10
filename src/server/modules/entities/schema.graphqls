@@ -95,7 +95,6 @@ type OrgPayload {
 type Org {
   id: String!
   name: String!
-  domain: String!
 
   profile: OrgProfile
 
@@ -105,13 +104,13 @@ type Org {
 }
 
 type OrgProfile {
+  domain: String
   displayName: String
   description: String
 }
 
 input AddOrgInput {
   name: String!
-  domain: String!
 
   profile: OrgProfileInput
 }
@@ -125,6 +124,7 @@ input EditOrgInput {
 }
 
 input OrgProfileInput {
+  domain: String
   displayName: String
   description: String
 }

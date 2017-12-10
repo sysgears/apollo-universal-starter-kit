@@ -102,6 +102,17 @@ export default class User {
       .select('o.uuid AS id', 'o.name', 'u.uuid AS userId')
       .whereIn('u.uuid', userId)
       .from('users AS u')
+      .leftJoin('orgs_users AS ou', 'ou.user_id', 'u.id')
+      .leftJoin('orgs AS o', 'o.id', 'ou.org_id');
+
+    return orderedFor(res, userId, 'userId', false);
+  }
+
+  async getOrgsForUserIdViaGroups(userId) {
+    let res = await knex
+      .select('o.uuid AS id', 'o.name', 'u.uuid AS userId')
+      .whereIn('u.uuid', userId)
+      .from('users AS u')
       .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
       .leftJoin('orgs_groups AS og', 'og.group_id', 'gu.group_id')
       .leftJoin('orgs AS o', 'o.id', 'og.group_id');

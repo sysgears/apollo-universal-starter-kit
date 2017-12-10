@@ -26,7 +26,7 @@ exports.up = function(knex, Promise) {
       table.string('provider');
       table.string('oauth_id');
     }),
-    knex.schema.createTable('user_certificate', table => {
+    knex.schema.createTable('user_certificates', table => {
       table.timestamps(true, true);
       table.increments();
       table
@@ -39,7 +39,7 @@ exports.up = function(knex, Promise) {
       table.string('serial').unique();
     }),
 
-    knex.schema.createTable('serviceaccount_certificate', table => {
+    knex.schema.createTable('serviceaccount_certificates', table => {
       table.timestamps(true, true);
       table.increments();
       table

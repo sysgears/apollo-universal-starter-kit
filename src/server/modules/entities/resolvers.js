@@ -92,9 +92,11 @@ export default pubsub => ({
     profile(obj) {
       return obj;
     },
+    /*
     auth(obj) {
       return obj;
     },
+    */
     orgs(obj) {
       return obj;
     },
@@ -122,9 +124,11 @@ export default pubsub => ({
     profile(obj) {
       return obj;
     },
+    /*
     auth(obj) {
       return obj;
     },
+    */
     orgs(obj) {
       return obj;
     },

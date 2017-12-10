@@ -186,10 +186,12 @@ type UserPayload {
 }
 
 type User {
+  createdAt: String
+  updatedAt: String 
   id: String!
   email: String!
 
-  auth: UserAuth
+  # auth: UserAuth
   profile: UserProfile
 
   orgs:   [Org]
@@ -207,7 +209,7 @@ type UserProfile {
 input AddUserInput {
   email: String!
   profile: ProfileInput
-  auth: UserAuthInput
+  # auth: UserAuthInput
 }
 
 input EditUserInput {
@@ -216,7 +218,7 @@ input EditUserInput {
   email: String!
 
   profile: ProfileInput
-  auth: UserAuthInput
+  # auth: UserAuthInput
 }
 
 input ProfileInput {
@@ -241,7 +243,7 @@ type ServiceAccount {
   id: String!
   email: String!
 
-  auth: ServiceAccountAuth
+  # auth: ServiceAccountAuth
   profile: ServiceAccountProfile
 
   orgs:   [Org]
@@ -256,7 +258,7 @@ type ServiceAccountProfile {
 input AddServiceAccountInput {
   email: String!
   profile: ServiceAccountProfileInput
-  auth: ServiceAccountAuthInput
+  # auth: ServiceAccountAuthInput
 }
 
 input EditServiceAccountInput {
@@ -265,7 +267,7 @@ input EditServiceAccountInput {
   email: String!
 
   profile: ServiceAccountProfileInput
-  auth: ServiceAccountAuthInput
+  # auth: ServiceAccountAuthInput
 }
 
 input ServiceAccountProfileInput {

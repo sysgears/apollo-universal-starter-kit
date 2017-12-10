@@ -6,8 +6,8 @@ import { orderedFor } from '../../../../server/sql/helpers';
 
 export default class User {
   async list(args) {
-    console.log('User.list - args:', args);
     let { filters, orderBys, offset, limit } = args;
+
     const queryBuilder = knex
       .select(
         'u.uuid as id',
@@ -29,7 +29,6 @@ export default class User {
 
     // add filter conditions
     if (filters) {
-      console.log('USER - filters');
       for (let filter of filters) {
         if (has(filter, 'isActive') && filter.isActive !== null) {
           queryBuilder.where(function() {
@@ -49,18 +48,15 @@ export default class User {
     }
 
     if (offset) {
-      console.log('USER - offset');
       queryBuilder.offset(offset);
     }
 
     if (limit) {
-      console.log('USER - limit');
       queryBuilder.limit(limit);
     }
 
     // add order by
     if (orderBys) {
-      console.log('USER - orderBys');
       for (let orderBy of orderBys) {
         if (orderBy && orderBy.column) {
           let column = orderBy.column;
@@ -68,7 +64,6 @@ export default class User {
           if (orderBy.order) {
             order = orderBy.order;
           }
-
           queryBuilder.orderBy(decamelize(column), order);
         }
       }

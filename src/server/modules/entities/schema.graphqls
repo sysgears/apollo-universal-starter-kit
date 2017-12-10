@@ -1,12 +1,12 @@
 extend type Query {
 
   # Get all orgs, possibly filtered and ordered 
-  orgs(filters: [FilterInput], orderBy: [OrderByInput]): [Org]
+  orgs(filters: [FilterInput], orderBys: [OrderByInput], offset: Int, limit: Int): [Org]
   # Get org by id
   org(id: String!): Org
 
   # Get all groups, possibly filtered and ordered 
-  groups(filters: [FilterInput], orderBy: [OrderByInput]): [Group]
+  groups(filters: [FilterInput], orderBys: [OrderByInput], offset: Int, limit: Int): [Group]
   # Get group by id
   group(id: String!): Group
 
@@ -18,7 +18,7 @@ extend type Query {
   currentUser: User
 
   # Get all serviceaccounts, possibly filtered and ordered 
-  serviceaccounts(filters: [FilterInput], orderBy: [OrderByInput]): [ServiceAccount]
+  serviceaccounts(filters: [FilterInput], orderBys: [OrderByInput], offset: Int, limit: Int): [ServiceAccount]
   # Get serviceaccount by id
   serviceaccount(id: String!): ServiceAccount
 

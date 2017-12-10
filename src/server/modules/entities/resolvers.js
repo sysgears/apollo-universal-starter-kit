@@ -4,18 +4,18 @@ import FieldError from '../../../common/FieldError';
 
 export default pubsub => ({
   Query: {
-    orgs: (obj, { orderBy, filter }, context) => {
-      return context.Org.getOrgs(orderBy, filter);
+    orgs: (obj, args, context) => {
+      return context.Org.list(args);
     },
     org: (obj, { id }, context) => {
-      return context.Org.getOrg(id);
+      return context.Org.get(id);
     },
 
-    groups: (obj, { orderBy, filter }, context) => {
-      return context.Group.getGroups(orderBy, filter);
+    groups: (obj, args, context) => {
+      return context.Group.list(args);
     },
     group: (obj, { id }, context) => {
-      return context.Group.getGroup(id);
+      return context.Group.get(id);
     },
 
     users: (obj, args, context) => {
@@ -32,11 +32,11 @@ export default pubsub => ({
       }
     },
 
-    serviceaccounts: (obj, { orderBy, filter }, context) => {
-      return context.ServiceAccount.getServiceAccounts(orderBy, filter);
+    serviceaccounts: (obj, args, context) => {
+      return context.ServiceAccount.list(args);
     },
     serviceaccount: (obj, { id }, context) => {
-      return context.ServiceAccount.getServiceAccount(id);
+      return context.ServiceAccount.get(id);
     }
   },
 

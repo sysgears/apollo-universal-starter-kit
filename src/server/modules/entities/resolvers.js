@@ -44,14 +44,14 @@ export default pubsub => ({
     profile(obj) {
       return obj;
     },
-    groups(obj) {
-      return obj;
+    groups(obj, args, context) {
+      return context.loaders.getGroupsForOrgId.load(obj.id);
     },
-    users(obj) {
-      return obj;
+    users(obj, args, context) {
+      return context.loaders.getUsersForOrgId.load(obj.id);
     },
-    serviceaccounts(obj) {
-      return obj;
+    serviceaccounts(obj, args, context) {
+      return context.loaders.getServiceAccountsForOrgId.load(obj.id);
     }
   },
 
@@ -68,14 +68,14 @@ export default pubsub => ({
     profile(obj) {
       return obj;
     },
-    orgs(obj) {
-      return obj;
+    orgs(obj, args, context) {
+      return context.loaders.getOrgsForGroupId.load(obj.id);
     },
-    users(obj) {
-      return obj;
+    users(obj, args, context) {
+      return context.loaders.getUsersForGroupId.load(obj.id);
     },
-    serviceaccounts(obj) {
-      return obj;
+    serviceaccounts(obj, args, context) {
+      return context.loaders.getServiceAccountsForGroupId.load(obj.id);
     }
   },
 
@@ -97,11 +97,11 @@ export default pubsub => ({
       return obj;
     },
     */
-    orgs(obj) {
-      return obj;
+    orgs(obj, args, context) {
+      return context.loaders.getOrgsForUserId.load(obj.id);
     },
-    groups(obj) {
-      return obj;
+    groups(obj, args, context) {
+      return context.loaders.getGroupsForUserId.load(obj.id);
     }
   },
 
@@ -112,8 +112,23 @@ export default pubsub => ({
     firstName(obj) {
       return obj.firstName;
     },
+    middleName(obj) {
+      return obj.firstName;
+    },
     lastName(obj) {
       return obj.lastName;
+    },
+    title(obj) {
+      return obj.title;
+    },
+    suffix(obj) {
+      return obj.suffix;
+    },
+    language(obj) {
+      return obj.language;
+    },
+    locale(obj) {
+      return obj.locale;
     },
     emails(obj) {
       return obj.emails;
@@ -129,11 +144,11 @@ export default pubsub => ({
       return obj;
     },
     */
-    orgs(obj) {
-      return obj;
+    orgs(obj, args, context) {
+      return context.loaders.getOrgsForServiceAccountId.load(obj.id);
     },
-    groups(obj) {
-      return obj;
+    groups(obj, args, context) {
+      return context.loaders.getGroupsForServiceAccountId.load(obj.id);
     }
   },
 

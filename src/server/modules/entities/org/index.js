@@ -2,6 +2,7 @@ import { camelizeKeys, decamelize } from 'humps';
 import { has } from 'lodash';
 
 import knex from '../../../../server/sql/connector';
+import { orderedFor } from '../../../../server/sql/helpers';
 
 export default class Org {
   async list(args) {
@@ -84,5 +85,40 @@ export default class Org {
         .leftJoin('org_profile AS p', 'p.org_id', 'o.id')
         .first()
     );
+  }
+
+  async getGroupsForOrgId(orgId) {
+    let res = await knex
+      .select('g.uuid AS id', 'g.name', 'o.uuid AS orgId')
+      .whereIn('o.uuid', orgId)
+      .from('orgs AS o')
+      .leftJoin('orgs_groups AS og', 'og.org_id', 'o.id')
+      .leftJoin('groups AS g', 'og.group_id', 'g.id');
+
+    return orderedFor(res, orgId, 'orgId', false);
+  }
+
+  async getUsersForOrgId(orgId) {
+    let res = await knex
+      .select('u.uuid AS id', 'u.email', 'o.uuid AS orgId')
+      .whereIn('o.uuid', orgId)
+      .from('orgs AS o')
+      .leftJoin('orgs_groups AS og', 'og.group_id', 'o.id')
+      .leftJoin('groups_users AS gu', 'gu.group_id', 'og.group_id')
+      .leftJoin('users AS u', 'u.id', 'gu.user_id');
+
+    return orderedFor(res, orgId, 'orgId', false);
+  }
+
+  async getServiceAccountsForOrgId(orgId) {
+    let res = await knex
+      .select('sa.uuid AS id', 'sa.email', 'o.uuid AS orgId')
+      .whereIn('o.uuid', orgId)
+      .from('orgs AS o')
+      .leftJoin('orgs_groups AS og', 'og.group_id', 'o.id')
+      .leftJoin('groups_serviceaccounts AS gu', 'gu.group_id', 'og.group_id')
+      .leftJoin('serviceaccounts AS sa', 'sa.id', 'gu.serviceaccount_id');
+
+    return orderedFor(res, orgId, 'orgId', false);
   }
 }

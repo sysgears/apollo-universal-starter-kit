@@ -201,7 +201,12 @@ type User {
 type UserProfile {
   displayName: String
   firstName: String
+  middleName: String
   lastName: String
+  title: String
+  suffix: String
+  language: String
+  locale: String
 
   emails: [String]
 }
@@ -224,7 +229,12 @@ input EditUserInput {
 input ProfileInput {
   displayName: String
   firstName: String
+  middleName: String
   lastName: String
+  title: String
+  suffix: String
+  language: String
+  locale: String
 
   emails: [String]
 }

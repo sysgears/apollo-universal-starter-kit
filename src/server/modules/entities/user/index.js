@@ -72,29 +72,6 @@ export default class User {
     return camelizeKeys(await queryBuilder);
   }
 
-  async getGroupsForUserIds(userIds) {
-    let res = await knex
-      .select('g.uuid AS id', 'g.name', 'u.uuid AS userId')
-      .whereIn('u.uuid', userIds)
-      .from('users AS u')
-      .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
-      .leftJoin('groups AS g', 'gu.group_id', 'g.id');
-
-    return orderedFor(res, userIds, 'userId', false);
-  }
-
-  async getOrgsForUserIds(userIds) {
-    let res = await knex
-      .select('o.uuid AS id', 'o.name', 'u.uuid AS userId')
-      .whereIn('u.uuid', userIds)
-      .from('users AS u')
-      .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
-      .leftJoin('orgs_groups AS og', 'og.group_id', 'gu.group_id')
-      .leftJoin('orgs AS o', 'o.id', 'og.group_id');
-
-    return orderedFor(res, userIds, 'userId', false);
-  }
-
   async get(id) {
     return camelizeKeys(
       await knex
@@ -118,5 +95,28 @@ export default class User {
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
         .first()
     );
+  }
+
+  async getOrgsForUserId(userId) {
+    let res = await knex
+      .select('o.uuid AS id', 'o.name', 'u.uuid AS userId')
+      .whereIn('u.uuid', userId)
+      .from('users AS u')
+      .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
+      .leftJoin('orgs_groups AS og', 'og.group_id', 'gu.group_id')
+      .leftJoin('orgs AS o', 'o.id', 'og.group_id');
+
+    return orderedFor(res, userId, 'userId', false);
+  }
+
+  async getGroupsForUserId(userId) {
+    let res = await knex
+      .select('g.uuid AS id', 'g.name', 'u.uuid AS userId')
+      .whereIn('u.uuid', userId)
+      .from('users AS u')
+      .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
+      .leftJoin('groups AS g', 'gu.group_id', 'g.id');
+
+    return orderedFor(res, userId, 'userId', false);
   }
 }

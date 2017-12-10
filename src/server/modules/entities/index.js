@@ -1,3 +1,5 @@
+import DataLoader from 'dataloader';
+
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import Feature from '../connector';
@@ -15,26 +17,28 @@ const sa = new ServiceAccount();
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
-  /*
-  createContextFunc: () => ({
-    Org: new Org(),
-    Group: new Group(),
-    User: new User(),
-    ServiceAccount: new ServiceAccount()
-  })
-  */
   createContextFunc: () => {
     return {
       Org: org,
       Group: group,
       User: user,
-      ServiceAccount: sa
+      ServiceAccount: sa,
 
-      /*
       loaders: {
-        getGroupsForUserIds: new DataLoader(user.getGroupsForUserIds)
+        getGroupsForOrgId: new DataLoader(org.getGroupsForOrgId),
+        getUsersForOrgId: new DataLoader(org.getUsersForOrgId),
+        getServiceAccountsForOrgId: new DataLoader(org.getServiceAccountsForOrgId),
+
+        getOrgsForGroupId: new DataLoader(group.getOrgsForGroupId),
+        getUsersForGroupId: new DataLoader(group.getUsersForGroupId),
+        getServiceAccountsForGroupId: new DataLoader(group.getServiceAccountsForGroupId),
+
+        getOrgsForUserId: new DataLoader(user.getOrgsForUserId),
+        getGroupsForUserId: new DataLoader(user.getGroupsForUserId),
+
+        getOrgsForServiceAccountId: new DataLoader(sa.getOrgsForServiceAccountId),
+        getGroupsForServiceAccountId: new DataLoader(sa.getGroupsForServiceAccountId)
       }
-      */
     };
   }
 });

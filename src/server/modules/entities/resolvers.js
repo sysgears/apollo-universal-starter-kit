@@ -18,15 +18,15 @@ export default pubsub => ({
       return context.Group.getGroup(id);
     },
 
-    users: (obj, { orderBy, filter }, context) => {
-      return context.User.getUsers(orderBy, filter);
+    users: (obj, args, context) => {
+      return context.User.list(args);
     },
     user: (obj, { id }, context) => {
-      return context.User.getUser(id);
+      return context.User.get(id);
     },
     currentUser: (obj, args, context) => {
       if (context.user) {
-        return context.User.getUser(context.user.id);
+        return context.User.get(context.user.id);
       } else {
         return null;
       }

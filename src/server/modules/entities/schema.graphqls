@@ -11,7 +11,7 @@ extend type Query {
   group(id: String!): Group
 
   # Get all users, possibly filtered and ordered 
-  users(filters: [FilterInput], orderBy: [OrderByInput]): [User]
+  users(filters: [FilterInput], orderBys: [OrderByInput], offset: Int, limit: Int): [User]
   # Get user by id
   user(id: String!): User
   # Get current user

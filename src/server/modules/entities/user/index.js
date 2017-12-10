@@ -1,11 +1,13 @@
-// import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
-import { camelizeKeys } from 'humps';
+import { camelizeKeys, decamelize } from 'humps';
 import { has } from 'lodash';
 
 import knex from '../../../../server/sql/connector';
+import { orderedFor } from '../../../../server/sql/helpers';
 
 export default class User {
-  async getUsers(orderBy, filter) {
+  async list(args) {
+    console.log('User.list - args:', args);
+    let { filters, orderBys, offset, limit } = args;
     const queryBuilder = knex
       .select(
         'u.uuid as id',
@@ -25,70 +27,101 @@ export default class User {
       .from('users AS u')
       .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
 
-    if (has(filter, 'isActive') && filter.isActive !== null) {
-      queryBuilder.where(function() {
-        this.where('u.is_active', filter.isActive);
-      });
+    // add filter conditions
+    if (filters) {
+      console.log('USER - filters');
+      for (let filter of filters) {
+        if (has(filter, 'isActive') && filter.isActive !== null) {
+          queryBuilder.where(function() {
+            this.where('u.is_active', filter.isActive);
+          });
+        }
+
+        if (has(filter, 'searchText') && filter.searchText !== '') {
+          queryBuilder.where(function() {
+            this.where('u.email', 'like', `%${filter.searchText}%`)
+              .orWhere('p.display_name', 'like', `%${filter.searchText}%`)
+              .orWhere('p.first_name', 'like', `%${filter.searchText}%`)
+              .orWhere('p.last_name', 'like', `%${filter.searchText}%`);
+          });
+        }
+      }
     }
 
-    /*
-      .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
-      .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
-      .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
-      .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id');
+    if (offset) {
+      console.log('USER - offset');
+      queryBuilder.offset(offset);
+    }
+
+    if (limit) {
+      console.log('USER - limit');
+      queryBuilder.limit(limit);
+    }
 
     // add order by
-    if (orderBy && orderBy.column) {
-      let column = orderBy.column;
-      let order = 'asc';
-      if (orderBy.order) {
-        order = orderBy.order;
-      }
+    if (orderBys) {
+      console.log('USER - orderBys');
+      for (let orderBy of orderBys) {
+        if (orderBy && orderBy.column) {
+          let column = orderBy.column;
+          let order = 'asc';
+          if (orderBy.order) {
+            order = orderBy.order;
+          }
 
-      queryBuilder.orderBy(decamelize(column), order);
-    }
-
-    // add filter conditions
-    if (filter) {
-      if (has(filter, 'role') && filter.role !== '') {
-        queryBuilder.where(function() {
-          this.where('u.role', filter.role);
-        });
-      }
-
-      if (has(filter, 'isActive') && filter.isActive !== null) {
-        queryBuilder.where(function() {
-          this.where('u.is_active', filter.isActive);
-        });
-      }
-
-      if (has(filter, 'searchText') && filter.searchText !== '') {
-        queryBuilder.where(function() {
-          this.where('u.username', 'like', `%${filter.searchText}%`)
-            .orWhere('u.email', 'like', `%${filter.searchText}%`)
-            .orWhere('up.first_name', 'like', `%${filter.searchText}%`)
-            .orWhere('up.last_name', 'like', `%${filter.searchText}%`);
-        });
+          queryBuilder.orderBy(decamelize(column), order);
+        }
       }
     }
-    */
 
     return camelizeKeys(await queryBuilder);
   }
 
-  async getUser(id) {
+  async getGroupsForUserIds(userIds) {
+    let res = await knex
+      .select('g.uuid AS id', 'g.name', 'u.uuid AS userId')
+      .whereIn('u.uuid', userIds)
+      .from('users AS u')
+      .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
+      .leftJoin('groups AS g', 'gu.group_id', 'g.id');
+
+    return orderedFor(res, userIds, 'userId', false);
+  }
+
+  async getOrgsForUserIds(userIds) {
+    let res = await knex
+      .select('o.uuid AS id', 'o.name', 'u.uuid AS userId')
+      .whereIn('u.uuid', userIds)
+      .from('users AS u')
+      .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
+      .leftJoin('orgs_groups AS og', 'og.group_id', 'gu.group_id')
+      .leftJoin('orgs AS o', 'o.id', 'og.group_id');
+
+    return orderedFor(res, userIds, 'userId', false);
+  }
+
+  async get(id) {
     return camelizeKeys(
       await knex
-        .select('u.uuid as id', 'u.created_at', 'u.updated_at', 'u.is_active', 'u.email')
+        .select(
+          'u.uuid as id',
+          'u.created_at',
+          'u.updated_at',
+          'u.is_active',
+          'u.email',
+          'p.display_name',
+          'p.first_name',
+          'p.middle_name',
+          'p.last_name',
+          'p.title',
+          'p.suffix',
+          'p.locale',
+          'p.language'
+        )
         .from('users AS u')
         .where('u.uuid', '=', id)
+        .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
         .first()
-      /*
-        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
-        .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
-        .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
-        .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id')
-        */
     );
   }
 }

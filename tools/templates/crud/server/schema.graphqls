@@ -1,3 +1,8 @@
+type $Module$ {
+  id: Int!
+  name: String!
+}
+
 type $Module$Payload {
   $module$: $Module$
   errors: [FieldError!]

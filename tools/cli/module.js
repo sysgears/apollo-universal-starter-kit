@@ -183,14 +183,20 @@ function updateSchema(logger, module) {
 
       shell.cd(pathSchema);
 
-      // override AddCrudInput in schema.graphqls file
-      const replaceAdd = `Add${Module}Input {([^}])*\\n}`;
-      shell.ShellString(shell.cat(file).replace(RegExp(replaceAdd, 'g'), `Add${Module}Input {\n${inputAdd}}`)).to(file);
+      // override Module type in schema.graphqls file
+      const replaceType = `type ${Module} {([^}])*\\n}`;
+      shell.ShellString(shell.cat(file).replace(RegExp(replaceType, 'g'), `type ${Module} {\n${inputEdit}}`)).to(file);
 
-      // override EditCrudInput in schema.graphqls file
-      const replaceEdit = `Edit${Module}Input {([^}])*\\n}`;
+      // override AddModuleInput in schema.graphqls file
+      const replaceAdd = `input Add${Module}Input {([^}])*\\n}`;
       shell
-        .ShellString(shell.cat(file).replace(RegExp(replaceEdit, 'g'), `Edit${Module}Input {\n${inputEdit}}`))
+        .ShellString(shell.cat(file).replace(RegExp(replaceAdd, 'g'), `input Add${Module}Input {\n${inputAdd}}`))
+        .to(file);
+
+      // override EditmoduleInput in schema.graphqls file
+      const replaceEdit = `input Edit${Module}Input {([^}])*\\n}`;
+      shell
+        .ShellString(shell.cat(file).replace(RegExp(replaceEdit, 'g'), `input Edit${Module}Input {\n${inputEdit}}`))
         .to(file);
 
       logger.info(chalk.green(`✔ Schema in ${pathSchema}${file} successfully updated!`));

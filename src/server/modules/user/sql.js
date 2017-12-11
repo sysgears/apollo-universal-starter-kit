@@ -18,7 +18,7 @@ export default class User {
         'up.last_name',
         'ca.serial',
         'fa.fb_id',
-        'fa.display_name AS fbdisplayName',
+        'fa.display_name AS fbDisplayName',
         'ga.google_id',
         'ga.display_name AS googleDiaplayName'
       )

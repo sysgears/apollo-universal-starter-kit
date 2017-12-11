@@ -217,7 +217,8 @@ function updateSchema(logger, module) {
 
       shell.cd(pathFragment);
       // override graphql fragment file
-      shell.ShellString(shell.cat(file).replace(/Crud {(.|\n)*\n}/, `Crud {\n${graphql}}`)).to(file);
+      const replaceFragment = `${Module} {(.|\n)*\n}`;
+      shell.ShellString(shell.cat(file).replace(RegExp(replaceFragment, 'g'), `${Module} {\n${graphql}}`)).to(file);
 
       logger.info(chalk.green(`✔ Fragment in ${pathFragment}${file} successfully updated!`));
     } else {

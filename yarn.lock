@@ -3471,23 +3471,30 @@ domain-browser@^1.1.1:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.1.7.tgz#867aa4b093faa05f1de08c06f4d7b21fdf8698bc"
 
-domain-graphql@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/domain-graphql/-/domain-graphql-0.0.7.tgz#c7e2d8f9a4025dad859a7f9805306faf0054fb9e"
-
-domain-knex@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/domain-knex/-/domain-knex-0.0.7.tgz#134ae39221f523fbed5d717f200a8b3aaa1758d9"
+domain-graphql@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/domain-graphql/-/domain-graphql-0.0.8.tgz#d61130dad9b342631619d22beac4a7905fea7e5f"
   dependencies:
+    debug "^3.1.0"
+
+domain-knex@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/domain-knex/-/domain-knex-0.0.8.tgz#02bcb1e70fe31297eec0161bae25b560292b3470"
+  dependencies:
+    debug "^3.1.0"
     humps "^2.0.1"
 
-domain-react-forms@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/domain-react-forms/-/domain-react-forms-0.0.7.tgz#8d3979a36e451568d9d0b3e1f09c1fae23448427"
+domain-react-forms@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/domain-react-forms/-/domain-react-forms-0.0.8.tgz#038c08e48766549f0bed5ee49c2dd0b67be2118a"
+  dependencies:
+    debug "^3.1.0"
 
-domain-schema@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/domain-schema/-/domain-schema-0.0.7.tgz#14daf81202438b02206036cd7723f21110f6e51b"
+domain-schema@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/domain-schema/-/domain-schema-0.0.8.tgz#ef1dfac128e8d028e0486e58aed22b0d06c8be4b"
+  dependencies:
+    debug "^3.1.0"
 
 domelementtype@1, domelementtype@^1.3.0:
   version "1.3.0"

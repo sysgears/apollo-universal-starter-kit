@@ -2,7 +2,7 @@ FROM node:8.9-alpine
 
 MAINTAINER Victor Vlasenko <victor.vlasenko@sysgears.com>
 
-RUN apk add --no-cache tini
+RUN apk add --no-cache tini git
 
 ARG APP_DIR
 

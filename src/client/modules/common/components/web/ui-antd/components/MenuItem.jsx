@@ -9,7 +9,6 @@ class MenuItem extends React.Component {
 
   render() {
     const { children, ...props } = this.props;
-
     return <Menu.Item {...props}>{children}</Menu.Item>;
   }
 }

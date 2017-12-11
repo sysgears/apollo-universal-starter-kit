@@ -19,6 +19,7 @@ export default class {
       connectionParam,
       createFetchOptions,
       stylesInsert,
+      scriptsInsert,
       rootComponentFactory
     },
     ...features
@@ -33,6 +34,7 @@ export default class {
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
+    this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
     this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
   }
 
@@ -90,6 +92,10 @@ export default class {
 
   get stylesInserts() {
     return this.stylesInsert;
+  }
+
+  get scriptsInserts() {
+    return this.scriptsInsert;
   }
 
   getWrappedRoot(root, req) {

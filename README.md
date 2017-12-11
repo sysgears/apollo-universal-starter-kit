@@ -8,7 +8,6 @@ If you are using Apollo v1 please use
 [![Backers on Open Collective](https://opencollective.com/apollo-universal-starter-kit/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/apollo-universal-starter-kit/sponsors/badge.svg)](#sponsors)
 [![Join the chat at https://gitter.im/sysgears/apollo-fullstack-starter-kit](https://badges.gitter.im/sysgears/apollo-fullstack-starter-kit.svg)](https://gitter.im/sysgears/apollo-fullstack-starter-kit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors)
 [![Build Status](https://travis-ci.org/sysgears/apollo-universal-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-universal-starter-kit)
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-universal-starter-kit.svg)](https://greenkeeper.io/)
 [![Twitter Follow](https://img.shields.io/twitter/follow/sysgears.svg?style=social)](https://twitter.com/sysgears)
@@ -238,6 +237,9 @@ yarn cli
 ## Features and examples included
 
 * Full LOGIN funcionality in user example with [JWT] tokens stored in `localStorage` and `cookies`
+
+* [Stripe] Payment Processor integration as a starting point for apps that use user subscriptions. 
+Check [subscription module documentation](src/client/modules/subscription/README.md) for details.
 
 * [GraphQL] API
 
@@ -522,3 +524,4 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
 [flow]: https://flow.org
 [typescript]: https://www.typescriptlang.org
+[Stripe]: https://stripe.com

@@ -13,7 +13,11 @@ const PageLayout = ({ children, navBar }) => {
   return (
     <LocaleProvider locale={enUS}>
       <Layout>
-        <Header>{navBar !== false && <NavBar />}</Header>
+        {navBar !== false && (
+          <Header>
+            <NavBar />
+          </Header>
+        )}
         <Content id="content" style={{ background: '#fff', padding: 24, minHeight: 280 }}>
           {children}
         </Content>

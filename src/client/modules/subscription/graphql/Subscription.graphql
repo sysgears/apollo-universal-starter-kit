@@ -1,0 +1,3 @@
+fragment SubscriptionInfo on UserSubscription {
+  active
+}

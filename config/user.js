@@ -14,9 +14,17 @@ export default {
       enabled: false
     },
     facebook: {
+      enabled: false,
       clientID: process.env.FACEBOOK_CLIENTID,
       clientSecret: process.env.FACEBOOK_CLIENTSECRET,
-      enabled: false
+      scope: ['email'],
+      profileFields: ['id', 'emails', 'displayName']
+    },
+    google: {
+      enabled: false,
+      clientID: process.env.GOOGLE_CLIENTID,
+      clientSecret: process.env.GOOGLE_CLIENTSECRET,
+      scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
     }
   }
 };

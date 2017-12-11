@@ -7,7 +7,7 @@ fragment UserInfo on User {
   isActive
   email
   profile {
-    ... UserProfileInfo
+    ...UserProfileInfo
   }
   auth {
     certificate {
@@ -15,6 +15,10 @@ fragment UserInfo on User {
     }
     facebook {
       fbId
+      displayName
+    }
+    google {
+      googleId
       displayName
     }
   }

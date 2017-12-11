@@ -43,6 +43,18 @@ exports.up = function(knex, Promise) {
         .inTable('user')
         .onDelete('CASCADE');
       table.timestamps(false, true);
+    }),
+    knex.schema.createTable('auth_google', table => {
+      table.increments();
+      table.string('google_id').unique();
+      table.string('display_name');
+      table
+        .integer('user_id')
+        .unsigned()
+        .references('id')
+        .inTable('user')
+        .onDelete('CASCADE');
+      table.timestamps(false, true);
     })
   ]);
 };
@@ -51,6 +63,7 @@ exports.down = function(knex, Promise) {
   return Promise.all([
     knex.schema.dropTable('auth_certificate'),
     knex.schema.dropTable('auth_facebook'),
+    knex.schema.dropTable('auth_google'),
     knex.schema.dropTable('user_profile'),
     knex.schema.dropTable('user')
   ]);

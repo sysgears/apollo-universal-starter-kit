@@ -1,0 +1,11 @@
+#import "./Subscription.graphql"
+
+mutation cancel {
+  cancel {
+    ...SubscriptionInfo
+    errors {
+      field
+      message
+    }
+  }
+}

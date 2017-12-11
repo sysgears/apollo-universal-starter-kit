@@ -145,6 +145,21 @@ AuthProfile.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
+const AuthLoggedIn = withCookies(({ cookies, label, to, ...rest }) => {
+  return checkAuth(cookies) ? (
+    <NavLink to={to} {...rest}>
+      {label}
+    </NavLink>
+  ) : null;
+});
+
+AuthLoggedIn.propTypes = {
+  component: PropTypes.func,
+  cookies: PropTypes.instanceOf(Cookies),
+  label: PropTypes.string,
+  to: PropTypes.string
+};
+
 const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }) => {
   return (
     <Route
@@ -161,7 +176,27 @@ AuthRoute.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
+const AuthLoggedInRoute = withCookies(({ component: Component, cookies, redirect, scope, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        checkAuth(cookies, scope) ? <Redirect to={{ pathname: redirect }} /> : <Component {...props} />
+      }
+    />
+  );
+});
+
+AuthLoggedInRoute.propTypes = {
+  component: PropTypes.func,
+  cookies: PropTypes.instanceOf(Cookies),
+  redirect: PropTypes.string,
+  scope: PropTypes.string
+};
+
 export { AuthNav };
-export { AuthProfile };
+export { AuthLoggedIn };
 export { AuthLoginWithApollo as AuthLogin };
+export { AuthProfile };
 export { AuthRoute };
+export { AuthLoggedInRoute };

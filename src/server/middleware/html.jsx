@@ -33,6 +33,11 @@ const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) =>
           />
         )}
         {!!css && css}
+        {modules.scriptsInserts.map((script, i) => {
+          if (script) {
+            return <script key={i} src={script} />;
+          }
+        })}
       </head>
       <body {...bodyAttrs}>
         <div id="content" dangerouslySetInnerHTML={{ __html: content || '' }} />
@@ -40,9 +45,7 @@ const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) =>
           dangerouslySetInnerHTML={{
             __html: `window.__APOLLO_STATE__=${serialize(state, {
               isJSON: true
-            })};window.localStorage.setItem('token','${token}');window.localStorage.setItem('refreshToken','${
-              refreshToken
-            }');`
+            })};window.localStorage.setItem('token','${token}');window.localStorage.setItem('refreshToken','${refreshToken}');`
           }}
           charSet="UTF-8"
         />

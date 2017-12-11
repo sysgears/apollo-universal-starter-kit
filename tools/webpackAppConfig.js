@@ -69,6 +69,7 @@ const dependencyPlatforms = {
   passport: 'server',
   'passport-local': 'server',
   'passport-facebook': 'server',
+  'passport-google-oauth': 'server',
   persistgraphql: ['server', 'web'],
   'performance-now': 'server',
   pg: 'server',

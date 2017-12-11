@@ -21,8 +21,8 @@ export default class $Module$ {
     if (filter) {
       if (has(filter, 'searchText') && filter.searchText !== '') {
         queryBuilder.where(function() {
-          for (const key of CrudSchema.keys()) {
-            const value = CrudSchema.values[key];
+          for (const key of $Module$Schema.keys()) {
+            const value = $Module$Schema.values[key];
             if (value.searchText) {
               this.orWhere(key, 'like', `%${filter.searchText}%`);
             }
@@ -35,7 +35,13 @@ export default class $Module$ {
   }
 
   async get$Module$({ id }) {
-    return camelizeKeys(await knex.select('*').from('$module$').where({ id }).first());
+    return camelizeKeys(
+      await knex
+        .select('*')
+        .from('$module$')
+        .where({ id })
+        .first()
+    );
   }
 
   add$Module$(input) {
@@ -44,7 +50,7 @@ export default class $Module$ {
       .returning('id');
   }
 
-  edit$Module$({ id, ...input}) {
+  edit$Module$({ id, ...input }) {
     return knex('$module$')
       .update(input)
       .where({ id });

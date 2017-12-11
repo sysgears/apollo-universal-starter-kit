@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 
 import { createFormFields } from '../../common/util';
 import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
-import { FormView, RenderField, FormButton } from '../../common/components/native';
+import { FormView, FormButton } from '../../common/components/native';
 
 const $Module$Form = ({ handleSubmit, valid, onSubmit }) => {
   return (

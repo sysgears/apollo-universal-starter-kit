@@ -22,7 +22,7 @@ class $Module$ListView extends React.PureComponent {
   };
 
   render() {
-    const { loading, $module$s, loadMoreRows } = this.props;
+    const { loading, $module$s } = this.props;
 
     if (loading && !$module$s) {
       return (
@@ -41,7 +41,8 @@ $Module$ListView.propTypes = {
   $module$s: PropTypes.array,
   orderBy: PropTypes.object,
   onOrderBy: PropTypes.func.isRequired,
-  delete$Module$: PropTypes.func.isRequired
+  delete$Module$: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired
 };
 
 const styles = StyleSheet.create({

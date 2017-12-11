@@ -31,7 +31,7 @@ export default pubsub => ({
 
         await $Module$.edit$Module$(input);
 
-        const $module$ = await $Module$.get$Module$({ id: input.id});
+        const $module$ = await $Module$.get$Module$({ id: input.id });
 
         return { $module$ };
       } catch (e) {

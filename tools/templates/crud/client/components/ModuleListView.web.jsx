@@ -5,8 +5,7 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { capitalize } from 'lodash';
 
-import { PageLayout, Table, Button } from '../../common/components/web';
-import { createTableColumns } from '../../common/util';
+import { Table, Button } from '../../common/components/web';
 import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
 
 class $Module$ListView extends React.PureComponent {
@@ -63,7 +62,7 @@ class $Module$ListView extends React.PureComponent {
 
     let columns = [];
 
-    for (const key of CrudSchema.keys()) {
+    for (const key of $Module$Schema.keys()) {
       if (key === 'id') {
         columns.push({
           title: (
@@ -102,14 +101,7 @@ class $Module$ListView extends React.PureComponent {
       )
     });
 
-    return (
-      <Table
-        dataSource={$module$s}
-        columns={columns}
-        pagination={false}
-        loading={loading && !$module$s}
-      />
-    );
+    return <Table dataSource={$module$s} columns={columns} pagination={false} loading={loading && !$module$s} />;
   }
 }
 

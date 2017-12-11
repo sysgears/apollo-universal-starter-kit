@@ -110,8 +110,8 @@ export default class Group {
       .select('sa.uuid AS id', 'sa.email', 'g.uuid AS groupId')
       .whereIn('g.uuid', groupId)
       .from('groups AS g')
-      .leftJoin('groups_serviceaccounts AS gu', 'gu.group_id', 'g.id')
-      .leftJoin('serviceaccounts AS sa', 'sa.id', 'gu.serviceaccount_id');
+      .leftJoin('groups_serviceaccounts AS gs', 'gs.group_id', 'g.id')
+      .leftJoin('serviceaccounts AS sa', 'sa.id', 'gs.serviceaccount_id');
 
     return orderedFor(res, groupId, 'groupId', false);
   }

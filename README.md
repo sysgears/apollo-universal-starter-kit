@@ -11,6 +11,7 @@ If you are using Apollo v1 please use
 [![Build Status](https://travis-ci.org/sysgears/apollo-universal-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-universal-starter-kit)
 [![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-universal-starter-kit.svg)](https://greenkeeper.io/)
 [![Twitter Follow](https://img.shields.io/twitter/follow/sysgears.svg?style=social)](https://twitter.com/sysgears)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 > Apollo Universal Starter Kit is a SEO friendly boilerplate for [Universal] Mobile and Web app development built on top
 > of [Apollo], [GraphQL], [React 16], [React Native], [Expo], [Redux], [Express] with SQL storage support, for styling
@@ -238,7 +239,7 @@ yarn cli
 
 * Full LOGIN funcionality in user example with [JWT] tokens stored in `localStorage` and `cookies`
 
-* [Stripe] Payment Processor integration as a starting point for apps that use user subscriptions. 
+* [Stripe] Payment Processor integration as a starting point for apps that use user subscriptions.
 Check [subscription module documentation](src/client/modules/subscription/README.md) for details.
 
 * [GraphQL] API

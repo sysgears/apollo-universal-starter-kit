@@ -5,7 +5,7 @@ import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { pick } from 'lodash';
 
 import UserDAO from './sql';
-import schema from './schema.graphqls';
+import schema from './schema.graphql';
 import createResolvers from './resolvers';
 import { refreshTokens, createTokens } from './auth';
 import tokenMiddleware from './auth/token';

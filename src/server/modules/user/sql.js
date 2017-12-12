@@ -17,9 +17,9 @@ export default class User {
         'up.last_name',
         'ca.serial',
         'fa.fb_id',
-        'fa.display_name AS fbdisplayName',
+        'fa.display_name AS fbDisplayName',
         'ga.google_id',
-        'ga.display_name AS googleDiaplayName'
+        'ga.display_name AS googleDisplayName'
       )
       .from('user AS u')
       .leftJoin('user_profile AS up', 'up.user_id', 'u.id')

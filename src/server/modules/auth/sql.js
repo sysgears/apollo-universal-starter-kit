@@ -17,7 +17,7 @@ export default class Auth {
 
   async getUserWithPassword(uuid) {
     return knex
-      .select('u.uuid', 'a.is_active', 'u.email', 'p.password')
+      .select('u.uuid', 'u.is_active', 'u.email', 'a.password')
       .from('users AS u')
       .whereIn('u.uuid', uuid)
       .leftJoin('user_password AS a', 'a.user_id', 'u.id')
@@ -58,49 +58,51 @@ export default class Auth {
   }
 
   async getUserPasswordFromEmail(email) {
-    let rows = await knex
-      .select('u.uuid', 'a.is_active', 'u.email', 'p.password')
+    let row = await knex
+      .select('u.uuid', 'u.is_active', 'u.email', 'a.password')
       .from('users AS u')
       .whereIn('u.email', email)
       .leftJoin('user_password AS a', 'a.user_id', 'u.id')
       .first();
+
+    return camelizeKeys(row);
   }
 
   async getUserFromApiKey(apikey) {
-    return camelizeKeys(
-      await knex
-        .select('u.uuid', 'u.id', 'u.is_active', 'u.email', 'a.name')
-        .from('users AS u')
-        .leftJoin('user_apikeys AS a', 'a.user_id', 'u.id')
-        .where('a.key', '=', apikey)
-        .first()
-    );
+    let row = await knex
+      .select('u.uuid', 'u.id', 'u.is_active', 'u.email', 'a.name')
+      .from('users AS u')
+      .leftJoin('user_apikeys AS a', 'a.user_id', 'u.id')
+      .where('a.key', '=', apikey)
+      .first();
+
+    return camelizeKeys(row);
   }
 
   async getUserFromOAuth(provider, oauth_id) {
-    return camelizeKeys(
-      await knex
-        .select('u.uuid', 'u.id', 'u.is_active', 'u.email')
-        .from('users AS u')
-        .leftJoin('user_oauths AS a', 'a.user_id', 'u.id')
-        .where({
-          provider,
-          oauth_id
-        })
-        .first()
-    );
+    let row = await knex
+      .select('u.uuid', 'u.id', 'u.is_active', 'u.email')
+      .from('users AS u')
+      .leftJoin('user_oauths AS a', 'a.user_id', 'u.id')
+      .where({
+        provider,
+        oauth_id
+      })
+      .first();
+
+    return camelizeKeys(row);
   }
 
   async getUserFromSerial(serial) {
     // ???
-    return camelizeKeys(
-      await knex
-        .select('u.uuid', 'u.id', 'u.is_active', 'u.email', 'a.name')
-        .from('users AS u')
-        .leftJoin('user_certificates AS a', 'a.user_id', 'u.id')
-        .where('a.serial', '=', serial)
-        .first()
-    );
+    let row = await knex
+      .select('u.uuid', 'u.id', 'u.is_active', 'u.email', 'a.name')
+      .from('users AS u')
+      .leftJoin('user_certificates AS a', 'a.user_id', 'u.id')
+      .where('a.serial', '=', serial)
+      .first();
+
+    return camelizeKeys(row);
   }
 
   async createUserOAuth(provider, id, userUUID) {

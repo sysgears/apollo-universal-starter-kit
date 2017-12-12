@@ -2,15 +2,14 @@ import bcrypt from 'bcryptjs';
 import settings from '../../../../../settings';
 import FieldError from '../../../../common/FieldError';
 
-import Auth from '../../auth/sql';
-
 import { createToken } from './token';
 
 const SECRET = settings.auth.secret;
 
-export const tryLogin = async (email, password) => {
+export const tryLogin = async (email, password, Auth) => {
   const e = new FieldError();
   const user = await Auth.getUserPasswordFromEmail(email);
+  console.log(user);
 
   // check if email and password exist in db
   if (!user || user.password === null) {
@@ -26,7 +25,7 @@ export const tryLogin = async (email, password) => {
     e.throwIf();
   }
 
-  if (settings.user.auth.password.confirm && !user.isActive) {
+  if (settings.auth.password.confirm && !user.isActive) {
     e.setError('email', 'Please confirm your e-mail first.');
     e.throwIf();
   }
@@ -41,7 +40,7 @@ export const tryLogin = async (email, password) => {
   };
 };
 
-export const tryLoginSerial = async serial => {
+export const tryLoginSerial = async (serial, Auth) => {
   try {
     const certAuth = await Auth.getUserFromSerial(serial);
 

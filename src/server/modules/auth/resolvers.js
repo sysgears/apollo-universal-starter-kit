@@ -47,13 +47,15 @@ export default pubsub => ({
     },
     async login(obj, { input: { email, password } }, context) {
       try {
-        const tokens = await tryLogin(email, password, context.User, context.SECRET);
+        console.log(email, password);
+        const tokens = await tryLogin(email, password, context.Auth);
+        console.log(tokens);
         if (context.req) {
           setTokenHeaders(context.req, tokens);
         }
-        return { tokens };
+        return { tokens, errors: null };
       } catch (e) {
-        return { errors: e };
+        return { tokens: null, errors: e };
       }
     },
     async logout(obj, args, context) {

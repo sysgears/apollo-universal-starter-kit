@@ -112,11 +112,9 @@ export default pubsub => ({
     profile(obj) {
       return obj;
     },
-    /*
     auth(obj) {
       return obj;
     },
-    */
     orgs(obj, args, context) {
       return Promise.all([
         context.loaders.getOrgsForUserId.load(obj.id),
@@ -162,11 +160,9 @@ export default pubsub => ({
     profile(obj) {
       return obj;
     },
-    /*
     auth(obj) {
       return obj;
     },
-    */
     orgs(obj, args, context) {
       return Promise.all([
         context.loaders.getOrgsForServiceAccountId.load(obj.id),
@@ -250,7 +246,7 @@ export default pubsub => ({
       }
     },
 
-    addUser: async (obj, { input }, context) => {
+    addUser: async (obj, args, context) => {
       try {
         const e = new FieldError();
         let user;

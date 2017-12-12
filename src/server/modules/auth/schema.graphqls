@@ -20,22 +20,28 @@ extend type Subscription {}
 
 
 type ServiceAccountAuth {
+  apikey: ApiKeyAuth
   certificate: CertificateAuth
 }
 
 type UserAuth {
-  password: String
   certificates: [CertificateAuth]
+  apikeys: [ApiKeyAuth]
   oauths: [UserOAuth]
 }
 
 type CertificateAuth {
+  name: String
   serial: String
+}
+
+type ApiKeyAuth {
+  name: String
+  key: String
 }
 
 type UserOAuth {
   provider: String
-  oauthId: String
 }
 
 type AuthPayload {
@@ -59,11 +65,16 @@ input ServiceAccountAuthInput {
 
 input UserAuthInput {
   certificate: AuthCertificateInput
+  apikey: ApiKeyInput
   oauth: OAuthInput
 }
 
 input AuthCertificateInput {
   serial: String
+}
+
+input ApiKeyInput {
+  name: String
 }
 
 input OAuthInput {

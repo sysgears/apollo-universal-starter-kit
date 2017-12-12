@@ -6,7 +6,7 @@ import modules from '../modules';
 import settings from '../../../settings';
 import log from '../../common/log';
 
-export default graphqlExpress(async (req, res, next) => {
+export default graphqlExpress(async (req, res) => {
   try {
     return {
       schema,
@@ -16,10 +16,11 @@ export default graphqlExpress(async (req, res, next) => {
         log.error('GraphQL execution error:', error);
         return error;
       },
+      // logFunction: logger,
       tracing: !!settings.engine.engineConfig.apiKey,
       cacheControl: !!settings.engine.engineConfig.apiKey
     };
   } catch (e) {
-    next(e);
+    throw e;
   }
 });

@@ -3,8 +3,9 @@ import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 
 import User from '../../../entities/user';
+import Auth from '../../sql';
 
-import { createToken } from '../../flow';
+import { setTokenHeaders, createToken } from '../../flow';
 
 import settings from '../../../../../../settings';
 
@@ -62,27 +63,11 @@ const AddRoutes = app => {
   app.get('/auth/facebook', passport.authenticate('facebook'));
 
   app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
-    const user = await User.getUserWithPassword(req.user.id);
+    const user = await Auth.getUserWithPassword(req.user.id);
     const refreshSecret = SECRET + user.password;
     const [token, refreshToken] = await createToken(req.user, SECRET, refreshSecret);
 
-    req.universalCookies.set('x-token', token, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: true
-    });
-    req.universalCookies.set('x-refresh-token', refreshToken, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: true
-    });
-
-    req.universalCookies.set('r-token', token, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: false
-    });
-    req.universalCookies.set('r-refresh-token', refreshToken, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: false
-    });
+    setTokenHeaders(req, { token, refreshToken });
 
     res.redirect('/profile');
   });

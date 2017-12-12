@@ -1,5 +1,6 @@
-import { camelizeKeys, decamelize } from 'humps';
-import { has } from 'lodash';
+import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
+import { has, _ } from 'lodash';
+import uuidv4 from 'uuid';
 
 import knex from '../../../../server/sql/connector';
 import { orderedFor } from '../../../../server/sql/helpers';
@@ -99,29 +100,31 @@ export default class Org {
   }
 
   async getUsersForOrgId(orgId) {
-    let res = await knex
+    let rows = await knex
       .select('u.uuid AS id', 'u.email', 'o.uuid AS orgId')
       .whereIn('o.uuid', orgId)
       .from('orgs AS o')
       .leftJoin('orgs_users AS ou', 'ou.org_id', 'o.id')
       .leftJoin('users AS u', 'u.id', 'ou.user_id');
 
+    let res = _.filter(rows, row => row.id !== null);
     return orderedFor(res, orgId, 'orgId', false);
   }
 
   async getServiceAccountsForOrgId(orgId) {
-    let res = await knex
+    let rows = await knex
       .select('sa.uuid AS id', 'sa.email', 'o.uuid AS orgId')
       .whereIn('o.uuid', orgId)
       .from('orgs AS o')
       .leftJoin('orgs_serviceaccounts AS os', 'os.org_id', 'o.id')
       .leftJoin('serviceaccounts AS sa', 'sa.id', 'os.serviceaccount_id');
 
+    let res = _.filter(rows, row => row.id !== null);
     return orderedFor(res, orgId, 'orgId', false);
   }
 
   async getUsersForOrgIdViaGroups(orgId) {
-    let res = await knex
+    let rows = await knex
       .select('u.uuid AS id', 'u.email', 'o.uuid AS orgId')
       .whereIn('o.uuid', orgId)
       .from('orgs AS o')
@@ -129,11 +132,12 @@ export default class Org {
       .leftJoin('groups_users AS gu', 'gu.group_id', 'og.group_id')
       .leftJoin('users AS u', 'u.id', 'gu.user_id');
 
+    let res = _.filter(rows, row => row.id !== null);
     return orderedFor(res, orgId, 'orgId', false);
   }
 
   async getServiceAccountsForOrgIdViaGroups(orgId) {
-    let res = await knex
+    let rows = await knex
       .select('sa.uuid AS id', 'sa.email', 'o.uuid AS orgId')
       .whereIn('o.uuid', orgId)
       .from('orgs AS o')
@@ -141,6 +145,64 @@ export default class Org {
       .leftJoin('groups_serviceaccounts AS gu', 'gu.group_id', 'og.group_id')
       .leftJoin('serviceaccounts AS sa', 'sa.id', 'gu.serviceaccount_id');
 
+    let res = _.filter(rows, row => row.id !== null);
     return orderedFor(res, orgId, 'orgId', false);
+  }
+
+  async create(values) {
+    values.uuid = uuidv4();
+    const [uid] = await knex('orgs')
+      .returning('uuid')
+      .insert(decamelizeKeys(values));
+    return uid;
+  }
+
+  async getInternalIdFromUUID(uuid) {
+    return knex
+      .select('id')
+      .from('orgs')
+      .where('uuid', '=', uuid)
+      .first();
+  }
+
+  async update(uuid, values) {
+    return knex('orgs')
+      .where('uuid', '=', uuid)
+      .update(decamelizeKeys(values));
+  }
+
+  async delete(uuid) {
+    return knex('orgs')
+      .where('uuid', '=', uuid)
+      .delete();
+  }
+
+  async getProfile(uuid) {
+    return knex
+      .select('p')
+      .join('orgs AS q')
+      .where('q.uuid', '=', uuid)
+      .leftJoin('org_profile AS p', 'p.org_id', 'q.id')
+      .first();
+  }
+
+  async createProfile(uuid, values) {
+    let orgId = await this.getInternalIdFromUUID(uuid);
+    values.orgId = orgId;
+    return knex('org_profile').insert(decamelizeKeys(values));
+  }
+
+  async updateProfile(uuid, values) {
+    let orgId = await this.getInternalIdFromUUID(uuid);
+    return knex('org_profile')
+      .where('org_id', '=', orgId)
+      .update(decamelizeKeys(values));
+  }
+
+  async deleteProfile(uuid) {
+    let orgId = await this.getInternalIdFromUUID(uuid);
+    return knex('org_profile')
+      .where('org_id', '=', orgId)
+      .delete();
   }
 }

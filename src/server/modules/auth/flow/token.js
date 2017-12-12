@@ -1,6 +1,34 @@
 import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 
+export const setTokenHeaders = (req, tokens) => {
+  req.universalCookies.set('x-token', tokens.token, {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: true
+  });
+  req.universalCookies.set('x-refresh-token', tokens.refreshToken, {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: true
+  });
+
+  req.universalCookies.set('r-token', tokens.token, {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: false
+  });
+  req.universalCookies.set('r-refresh-token', tokens.refreshToken, {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: false
+  });
+};
+
+export const removeTokenHeaders = req => {
+  req.universalCookies.remove('x-token');
+  req.universalCookies.remove('x-refresh-token');
+
+  req.universalCookies.remove('r-token');
+  req.universalCookies.remove('r-refresh-token');
+};
+
 export const createToken = async (user, secret, refreshSecret) => {
   let tokenUser = pick(user, ['id', 'username', 'role']);
   tokenUser.fullName = user.firstName ? `${user.firstName} ${user.lastName}` : null;
@@ -11,7 +39,7 @@ export const createToken = async (user, secret, refreshSecret) => {
     },
     secret,
     {
-      expiresIn: '1m'
+      expiresIn: '30m'
     }
   );
 
@@ -21,7 +49,7 @@ export const createToken = async (user, secret, refreshSecret) => {
     },
     refreshSecret,
     {
-      expiresIn: '7d'
+      expiresIn: '30d'
     }
   );
 

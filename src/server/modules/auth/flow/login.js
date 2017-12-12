@@ -2,11 +2,15 @@ import bcrypt from 'bcryptjs';
 import settings from '../../../../../settings';
 import FieldError from '../../../../common/FieldError';
 
+import Auth from '../../auth/sql';
+
 import { createToken } from './token';
 
-export const tryLogin = async (email, password, User, SECRET) => {
+const SECRET = settings.auth.secret;
+
+export const tryLogin = async (email, password) => {
   const e = new FieldError();
-  const user = await User.getUserByEmail(email);
+  const user = await Auth.getUserPasswordFromEmail(email);
 
   // check if email and password exist in db
   if (!user || user.password === null) {
@@ -37,11 +41,11 @@ export const tryLogin = async (email, password, User, SECRET) => {
   };
 };
 
-export const tryLoginSerial = async (serial, User, SECRET) => {
+export const tryLoginSerial = async serial => {
   try {
-    const certAuth = await User.getUserWithSerial(serial);
+    const certAuth = await Auth.getUserFromSerial(serial);
 
-    const user = await User.getUserWithPassword(certAuth.id);
+    const user = await Auth.getUserWithPassword(certAuth.uuid);
 
     const refreshSecret = SECRET + user.password;
     const [token, refreshToken] = await createToken(user, SECRET, refreshSecret);

@@ -1,4 +1,4 @@
-import { createToken, refreshToken } from './token';
+import { setTokenHeaders, removeTokenHeaders, createToken, refreshToken } from './token';
 import { tryLogin, tryLoginSerial } from './login';
 
-export { createToken, refreshToken, tryLogin, tryLoginSerial };
+export { setTokenHeaders, removeTokenHeaders, createToken, refreshToken, tryLogin, tryLoginSerial };

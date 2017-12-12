@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import LocaleProvider from 'antd/lib/locale-provider';
-import enUS from 'antd/lib/locale-provider/en_US';
 import Layout from 'antd/lib/layout';
 
 import NavBar from './NavBar';
@@ -11,7 +9,7 @@ const { Header, Content, Footer } = Layout;
 
 const PageLayout = ({ children, navBar }) => {
   return (
-    <LocaleProvider locale={enUS}>
+    <div>
       <Layout>
         {navBar !== false && (
           <Header>
@@ -23,7 +21,7 @@ const PageLayout = ({ children, navBar }) => {
         </Content>
         <Footer style={{ textAlign: 'center' }}>&copy; 2017. {settings.app.name}.</Footer>
       </Layout>
-    </LocaleProvider>
+    </div>
   );
 };
 

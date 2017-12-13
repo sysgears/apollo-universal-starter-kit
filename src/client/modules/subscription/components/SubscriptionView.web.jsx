@@ -14,6 +14,10 @@ class SubscriptionView extends React.Component {
     client: !__SSR__ && !__TEST__
   };
 
+  componentDidMount() {
+    this.setState({ client: __CLIENT__ });
+  }
+
   onSubmit = subscribe => async values => {
     const result = await subscribe(values);
 
@@ -25,10 +29,6 @@ class SubscriptionView extends React.Component {
       throw new SubmissionError(submitError);
     }
   };
-
-  componentDidMount() {
-    this.setState({ client: __CLIENT__ });
-  }
 
   render() {
     const { subscribe } = this.props;

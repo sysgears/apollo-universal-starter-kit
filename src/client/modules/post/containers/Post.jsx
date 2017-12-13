@@ -78,6 +78,13 @@ class Post extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.subscription) {
+      // unsubscribe
+      this.subscription();
+    }
+  }
+
   subscribeToPostList = endCursor => {
     const { subscribeToMore } = this.props;
 
@@ -97,13 +104,6 @@ class Post extends React.Component {
       }
     });
   };
-
-  componentWillUnmount() {
-    if (this.subscription) {
-      // unsubscribe
-      this.subscription();
-    }
-  }
 
   render() {
     return <PostList {...this.props} />;

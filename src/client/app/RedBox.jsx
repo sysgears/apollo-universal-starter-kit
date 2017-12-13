@@ -12,13 +12,13 @@ class RedBox extends React.Component {
     error: PropTypes.instanceOf(Error).isRequired
   };
 
-  state = {
-    mapped: false
-  };
-
   constructor(props) {
     super(props);
   }
+
+  state = {
+    mapped: false
+  };
 
   componentDidMount() {
     if (!this.state.mapped) {

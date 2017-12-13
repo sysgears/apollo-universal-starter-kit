@@ -32,6 +32,13 @@ class PostEdit extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.subscription) {
+      // unsubscribe
+      this.subscription();
+    }
+  }
+
   subscribeToPostEdit = postId => {
     const { subscribeToMore } = this.props;
 
@@ -40,13 +47,6 @@ class PostEdit extends React.Component {
       variables: { id: postId }
     });
   };
-
-  componentWillUnmount() {
-    if (this.subscription) {
-      // unsubscribe
-      this.subscription();
-    }
-  }
 
   render() {
     return <PostEditView {...this.props} />;

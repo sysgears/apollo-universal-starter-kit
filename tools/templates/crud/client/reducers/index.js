@@ -1,10 +1,17 @@
 const defaultState = {
+  limit: 50,
   searchText: '',
   orderBy: {}
 };
 
 export default function(state = defaultState, action) {
   switch (action.type) {
+    case '$MODULE$_LIMIT':
+      return {
+        ...state,
+        limit: action.value
+      };
+
     case '$MODULE$_FILTER_SEARCH_TEXT':
       return {
         ...state,

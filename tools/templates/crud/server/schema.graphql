@@ -3,6 +3,16 @@ type $Module$ {
   name: String!
 }
 
+type PageInfo {
+  totalCount: Int
+  hasNextPage: Boolean
+}
+
+type $Module$s {
+  pageInfo: PageInfo
+  edges: [$Module$]
+}
+
 type $Module$Payload {
   $module$: $Module$
   errors: [FieldError!]
@@ -27,7 +37,7 @@ input Edit$Module$Input {
 }
 
 extend type Query {
-  $module$s(orderBy: OrderBy$Module$Input, filter: Filter$Module$Input): [$Module$]
+  $module$s(limit: Int, offset: Int, orderBy: OrderBy$Module$Input, filter: Filter$Module$Input): $Module$s
   $module$(id: Int!): $Module$
 }
 

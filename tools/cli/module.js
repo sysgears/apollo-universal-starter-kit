@@ -168,7 +168,7 @@ function updateSchema(logger, module) {
     // get schema file
     const pathSchema = `${__dirname}/../../src/server/modules/${module}/`;
     if (fs.existsSync(pathSchema)) {
-      const file = `schema.graphqls`;
+      const file = `schema.graphql`;
 
       // regenerate input fields
       let inputAdd = '';
@@ -183,17 +183,17 @@ function updateSchema(logger, module) {
 
       shell.cd(pathSchema);
 
-      // override Module type in schema.graphqls file
+      // override Module type in schema.graphql file
       const replaceType = `type ${Module} {([^}])*\\n}`;
       shell.ShellString(shell.cat(file).replace(RegExp(replaceType, 'g'), `type ${Module} {\n${inputEdit}}`)).to(file);
 
-      // override AddModuleInput in schema.graphqls file
+      // override AddModuleInput in schema.graphql file
       const replaceAdd = `input Add${Module}Input {([^}])*\\n}`;
       shell
         .ShellString(shell.cat(file).replace(RegExp(replaceAdd, 'g'), `input Add${Module}Input {\n${inputAdd}}`))
         .to(file);
 
-      // override EditmoduleInput in schema.graphqls file
+      // override EditmoduleInput in schema.graphql file
       const replaceEdit = `input Edit${Module}Input {([^}])*\\n}`;
       shell
         .ShellString(shell.cat(file).replace(RegExp(replaceEdit, 'g'), `input Edit${Module}Input {\n${inputEdit}}`))

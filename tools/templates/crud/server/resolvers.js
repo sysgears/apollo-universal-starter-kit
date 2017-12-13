@@ -3,8 +3,17 @@ import FieldError from '../../../common/FieldError';
 
 export default pubsub => ({
   Query: {
-    $module$s: (obj, args, { $Module$ }) => {
-      return $Module$.get$Module$s(args);
+    $module$s: async (obj, args, { $Module$ }) => {
+      const $module$s = await $Module$.get$Module$s(args);
+      const { count } = await $Module$.getTotal();
+
+      return {
+        edges: $module$s,
+        pageInfo: {
+          totalCount: count,
+          hasNextPage: $module$s.length === args.limit
+        }
+      };
     },
     $module$: (obj, args, { $Module$ }) => {
       return $Module$.get$Module$(args);

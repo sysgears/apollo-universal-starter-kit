@@ -14,17 +14,38 @@ class $Module$ extends React.Component {
 
 const $Module$WithApollo = compose(
   graphql($MODULE$S_QUERY, {
-    options: ({ orderBy, searchText }) => {
+    options: ({ limit, orderBy, searchText }) => {
       return {
         fetchPolicy: 'cache-and-network',
         variables: {
+          limit: limit,
           orderBy: orderBy,
           filter: { searchText }
         }
       };
     },
-    props({ data: { loading, $module$s, refetch, error } }) {
-      return { loading, $module$s, refetch, errors: error ? error.graphQLErrors : null };
+    props: ({ ownProps: { limit }, data: { loading, $module$s, refetch, error, fetchMore } }) => {
+      const loadMoreRows = () => {
+        return fetchMore({
+          variables: {
+            offset: $module$s.edges.length + limit
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            const newEdges = fetchMoreResult.$module$s.edges;
+            const pageInfo = fetchMoreResult.$module$s.pageInfo;
+
+            return {
+              $module$s: {
+                edges: [...previousResult.$module$s.edges, ...newEdges],
+                pageInfo,
+                __typename: '$Module$s'
+              }
+            };
+          }
+        });
+      };
+      if (error) throw new Error(error);
+      return { loading, $module$s, loadMoreRows, refetch, errors: error ? error.graphQLErrors : null };
     }
   }),
   graphql(DELETE_$MODULE$, {
@@ -50,6 +71,7 @@ const $Module$WithApollo = compose(
 
 export default connect(
   state => ({
+    limit: state.$module$.limit,
     searchText: state.$module$.searchText,
     orderBy: state.$module$.orderBy
   }),

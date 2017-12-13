@@ -9,6 +9,15 @@ import { Table, Button } from '../../common/components/web';
 import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
 
 class $Module$ListView extends React.PureComponent {
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    $module$s: PropTypes.object,
+    orderBy: PropTypes.object,
+    onOrderBy: PropTypes.func.isRequired,
+    delete$Module$: PropTypes.func.isRequired,
+    loadMoreRows: PropTypes.func.isRequired
+  };
+
   renderMetaData = () => (
     <Helmet
       title="$Module$"
@@ -20,6 +29,16 @@ class $Module$ListView extends React.PureComponent {
       ]}
     />
   );
+
+  renderLoadMore = ($module$s, loadMoreRows) => {
+    if ($module$s.pageInfo.hasNextPage) {
+      return (
+        <Button id="load-more" color="primary" onClick={loadMoreRows}>
+          Load more ...
+        </Button>
+      );
+    }
+  };
 
   renderOrderByArrow = name => {
     const { orderBy } = this.props;
@@ -58,7 +77,7 @@ class $Module$ListView extends React.PureComponent {
   };
 
   render() {
-    const { loading, $module$s } = this.props;
+    const { loading, $module$s, loadMoreRows } = this.props;
 
     let columns = [];
 
@@ -101,16 +120,25 @@ class $Module$ListView extends React.PureComponent {
       )
     });
 
-    return <Table dataSource={$module$s} columns={columns} pagination={false} loading={loading && !$module$s} />;
+    return (
+      <div>
+        <Table
+          dataSource={$module$s ? $module$s.edges : null}
+          columns={columns}
+          pagination={false}
+          loading={loading && !$module$s}
+        />
+        {$module$s && (
+          <div>
+            <small>
+              ({$module$s.edges.length} / {$module$s.pageInfo.totalCount})
+            </small>
+          </div>
+        )}
+        {$module$s && this.renderLoadMore($module$s, loadMoreRows)}
+      </div>
+    );
   }
 }
-
-$Module$ListView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  $module$s: PropTypes.array,
-  orderBy: PropTypes.object,
-  onOrderBy: PropTypes.func.isRequired,
-  delete$Module$: PropTypes.func.isRequired
-};
 
 export default $Module$ListView;

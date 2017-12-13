@@ -5,8 +5,16 @@ import { $Module$ as $Module$Schema } from './schema';
 import knex from '../../../server/sql/connector';
 
 export default class $Module$ {
-  async get$Module$s({ orderBy, filter }) {
+  async get$Module$s({ limit, offset, orderBy, filter }) {
     const queryBuilder = knex.select('*').from('$module$');
+
+    if (limit) {
+      queryBuilder.limit(limit);
+    }
+
+    if (offset) {
+      queryBuilder.offset(offset);
+    }
 
     if (orderBy && orderBy.column) {
       let column = orderBy.column;
@@ -32,6 +40,12 @@ export default class $Module$ {
     }
 
     return camelizeKeys(await queryBuilder);
+  }
+
+  getTotal() {
+    return knex('$module$')
+      .countDistinct('id as count')
+      .first();
   }
 
   async get$Module$({ id }) {

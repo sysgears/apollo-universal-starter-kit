@@ -1,7 +1,13 @@
 #import "./$Module$.graphql"
 
-query $module$s($orderBy: OrderBy$Module$Input, $filter: Filter$Module$Input) {
-  $module$s(orderBy: $orderBy, filter: $filter) {
-    ...$Module$Info
+query $module$s($limit: Int, $offset: Int, $orderBy: OrderBy$Module$Input, $filter: Filter$Module$Input) {
+  $module$s(limit: $limit, offset: $offset, orderBy: $orderBy, filter: $filter) {
+    pageInfo {
+      totalCount
+      hasNextPage
+    }
+    edges {
+      ...$Module$Info
+    }
   }
 }

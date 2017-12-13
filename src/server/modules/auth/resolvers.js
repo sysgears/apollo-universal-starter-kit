@@ -20,6 +20,14 @@ export default pubsub => ({
       return context.loaders.getUserWithOAuths.load(obj.id);
     }
   },
+  ServiceAccountAuth: {
+    apikey(obj, args, context) {
+      return context.loaders.getUserWithApiKeys.load(obj.id);
+    },
+    certificate(obj, args, context) {
+      return context.loaders.getUserWithSerials.load(obj.id);
+    }
+  },
   CertificateAuth: {
     name(obj) {
       return obj.name;
@@ -47,10 +55,11 @@ export default pubsub => ({
     },
     async login(obj, { input: { email, password } }, context) {
       try {
-        console.log(email, password);
+        console.log('Login:', email, password);
         const tokens = await tryLogin(email, password, context.Auth);
-        console.log(tokens);
+        console.log('Tokens:', tokens);
         if (context.req) {
+          console.log('Setting headers');
           setTokenHeaders(context.req, tokens);
         }
         return { tokens, errors: null };

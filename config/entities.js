@@ -1,14 +1,19 @@
 export default {
   orgs: {
-    enabled: true
+    enabled: false
   },
   groups: {
-    enabled: true
+    enabled: false,
+    multipleOrgs: true
   },
   users: {
-    enabled: true
+    enabled: true,
+    multipleOrgs: true,
+    multipleGroups: true
   },
   serviceaccounts: {
-    enable: true
+    enabled: false,
+    multipleOrgs: true,
+    multipleGroups: true
   }
 };

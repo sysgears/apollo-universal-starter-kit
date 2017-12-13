@@ -48,11 +48,11 @@ export default new Feature({
     };
   },
   middleware: app => {
-    if (settings.auth.password.sendConfirmationEmail) {
+    if (settings.auth.authentication.password.sendConfirmationEmail) {
       app.get('/confirmation/:token', createConfirmHandler(SECRET, User, jwt));
     }
 
-    if (settings.auth.oauth.enabled === true) {
+    if (settings.auth.authentication.oauth.enabled === true) {
       // OAuth.Enable(app);
     }
   }
@@ -81,7 +81,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
   } else if (req) {
     if (req.user) {
       return req.user;
-    } else if (settings.auth.apikey.enabled) {
+    } else if (settings.auth.authentication.apikey.enabled) {
       let apikey = '';
       // in case you need to access req headers
       if (req.headers['apikey']) {
@@ -94,7 +94,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
           return user;
         }
       }
-    } else if (settings.auth.certificate.enabled) {
+    } else if (settings.auth.authentication.certificate.enabled) {
       let serial = '';
       // in case you need to access req headers
       if (req.headers['x-serial']) {
@@ -109,7 +109,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
       }
     }
   } else if (webSocket) {
-    if (settings.auth.apikey.enabled) {
+    if (settings.auth.authentication.apikey.enabled) {
       let apikey = '';
       // in case you need to access req headers
       if (webSocket.upgradeReq.headers['apikey']) {
@@ -122,7 +122,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
           return user;
         }
       }
-    } else if (settings.auth.certificate.enabled) {
+    } else if (settings.auth.authentication.certificate.enabled) {
       let serial = '';
       // in case you need to access req headers
       if (webSocket.upgradeReq.headers['x-serial']) {

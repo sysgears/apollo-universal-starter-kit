@@ -1,6 +1,12 @@
+import settings from '../../../../settings';
+
+let config = settings.entities;
+
 exports.up = function(knex, Promise) {
-  return Promise.all([
-    knex.schema.createTable('org_profile', table => {
+  let migs = [];
+
+  if (config.orgs.enabled === true) {
+    let fn = knex.schema.createTable('org_profile', table => {
       table.timestamps(true, true);
       table.increments();
       table
@@ -14,9 +20,13 @@ exports.up = function(knex, Promise) {
       table.string('domain');
       table.string('display_name');
       table.string('description');
-    }),
+    });
 
-    knex.schema.createTable('group_profile', table => {
+    migs.push(fn);
+  }
+
+  if (config.groups.enabled === true) {
+    let fn = knex.schema.createTable('group_profile', table => {
       table.timestamps(true, true);
       table.increments();
       table
@@ -29,9 +39,13 @@ exports.up = function(knex, Promise) {
 
       table.string('display_name');
       table.string('description');
-    }),
+    });
 
-    knex.schema.createTable('user_profile', table => {
+    migs.push(fn);
+  }
+
+  if (config.users.enabled === true) {
+    let fn = knex.schema.createTable('user_profile', table => {
       table.timestamps(true, true);
       table.increments();
       table
@@ -50,9 +64,13 @@ exports.up = function(knex, Promise) {
       table.string('suffix');
       table.string('locale');
       table.string('language');
-    }),
+    });
 
-    knex.schema.createTable('serviceaccount_profile', table => {
+    migs.push(fn);
+  }
+
+  if (config.serviceaccounts.enabled === true) {
+    let fn = knex.schema.createTable('serviceaccount_profile', table => {
       table.timestamps(true, true);
       table.increments();
       table
@@ -65,8 +83,12 @@ exports.up = function(knex, Promise) {
 
       table.string('display_name');
       table.string('description');
-    })
-  ]);
+    });
+
+    migs.push(fn);
+  }
+
+  return Promise.all(migs);
 };
 
 exports.down = function(knex, Promise) {

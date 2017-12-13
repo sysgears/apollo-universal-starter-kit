@@ -5,9 +5,11 @@ import FieldError from '../../../../common/FieldError';
 import { createToken } from './token';
 
 const SECRET = settings.auth.secret;
+const authn = settings.auth.authentication;
 
 export const tryLogin = async (email, password, Auth) => {
   const e = new FieldError();
+
   const user = await Auth.getUserPasswordFromEmail(email);
   console.log(user);
 
@@ -25,7 +27,7 @@ export const tryLogin = async (email, password, Auth) => {
     e.throwIf();
   }
 
-  if (settings.auth.password.confirm && !user.isActive) {
+  if (authn.password.enabled && authn.password.confirm && !user.isActive) {
     e.setError('email', 'Please confirm your e-mail first.');
     e.throwIf();
   }

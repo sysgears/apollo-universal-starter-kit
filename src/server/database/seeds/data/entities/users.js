@@ -1,6 +1,7 @@
 export default [
   {
     short: 'owner',
+    role: 'owner',
     profile: {
       displayName: 'Big Boss Man',
       firstName: 'Ray',
@@ -12,6 +13,7 @@ export default [
   },
   {
     short: 'admin',
+    role: 'admin',
     profile: {
       displayName: 'daAdmin',
       firstName: 'Sponge',
@@ -21,6 +23,7 @@ export default [
   },
   {
     short: 'auditor',
+    role: 'admin',
     profile: {
       displayName: 'auditing...',
       firstName: 'Hermes',
@@ -30,6 +33,7 @@ export default [
   },
   {
     short: 'support',
+    role: 'admin',
     profile: {
       displayName: 'daAdmin',
       firstName: 'Sponge',
@@ -39,15 +43,17 @@ export default [
   },
   {
     short: 'developer',
+    role: 'admin',
     profile: {
-      displayName: 'daAdmin',
-      firstName: 'Sponge',
-      lastName: 'Bob'
+      displayName: 'hackerz_rule',
+      firstName: 'B',
+      lastName: 'Mo'
     },
     password: 'developer'
   },
   {
     short: 'editor',
+    role: 'admin',
     profile: {
       displayName: 'daAdmin',
       firstName: 'Sponge',
@@ -56,7 +62,18 @@ export default [
     password: 'editor'
   },
   {
+    short: 'subscriber',
+    role: 'subscriber',
+    profile: {
+      displayName: 'daAdmin',
+      firstName: 'Sponge',
+      lastName: 'Bob'
+    },
+    password: 'subscriber'
+  },
+  {
     short: 'subscriber1',
+    role: 'subscriber',
     profile: {
       displayName: 'daAdmin',
       firstName: 'Sponge',
@@ -66,6 +83,7 @@ export default [
   },
   {
     short: 'subscriber2',
+    role: 'subscriber',
     profile: {
       displayName: 'daAdmin',
       firstName: 'Sponge',
@@ -75,6 +93,7 @@ export default [
   },
   {
     short: 'subscriber3',
+    role: 'subscriber',
     profile: {
       displayName: 'daAdmin',
       firstName: 'Sponge',
@@ -83,7 +102,18 @@ export default [
     password: 'subscriber'
   },
   {
+    short: 'user',
+    role: 'user',
+    profile: {
+      displayName: 'user',
+      firstName: 'Alice',
+      lastName: 'Bob'
+    },
+    password: 'user'
+  },
+  {
     short: 'user1',
+    role: 'user',
     profile: {
       displayName: 'daAdmin',
       firstName: 'Sponge',
@@ -93,6 +123,7 @@ export default [
   },
   {
     short: 'user2',
+    role: 'user',
     profile: {
       displayName: 'daAdmin',
       firstName: 'Sponge',
@@ -102,6 +133,7 @@ export default [
   },
   {
     short: 'user3',
+    role: 'user',
     profile: {
       displayName: 'daAdmin',
       firstName: 'Sponge',

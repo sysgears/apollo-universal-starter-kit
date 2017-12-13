@@ -9,15 +9,26 @@ import groups from './data/entities/groups';
 import users from './data/entities/users';
 import sa from './data/entities/sa';
 
-let entitiesConfig = settings.entities;
+let config = settings.entities;
+let auth = settings.auth;
 
 export async function seed(knex, Promise) {
   // this should empty the other tables from cascading deletes
-  await truncateTables(knex, Promise, ['serviceaccounts', 'users', 'groups', 'orgs']);
 
-  if (entitiesConfig.orgs.enabled === true) {
+  if (config.orgs.enabled === true) {
+    await truncateTables(knex, Promise, ['serviceaccounts', 'users', 'groups', 'orgs']);
+
     let createRels = true;
     await createOrgs(knex, orgs, createRels);
+  } else if (config.groups.enabled === true) {
+    await truncateTables(knex, Promise, ['serviceaccounts', 'users', 'groups']);
+  } else if (config.users.enabled === true) {
+    await truncateTables(knex, Promise, ['users']);
+
+    let domain = 'example.com';
+    let shorts = ['owner', 'admin', 'developer', 'subscriber', 'user'];
+
+    await createUsers(knex, shorts, domain);
   }
 }
 
@@ -47,20 +58,37 @@ async function createOrgs(knex, orgs, createRels) {
     }
 
     // create org groups
-    await createGroups(knex, org.groups, org.name);
+    if (config.groups.enabled) {
+      await createGroups(knex, org.groups, org.name);
+    }
 
     // create org users
-    await createUsers(knex, org.users, org.profile.domain);
+    if (config.users.enabled) {
+      await createUsers(knex, org.users, org.profile.domain);
+    }
 
     // create org service accounts
-    await createServiceAccounts(knex, org.serviceaccounts, org.profile.domain);
+    if (config.serviceaccounts.enabled) {
+      await createServiceAccounts(knex, org.serviceaccounts, org.profile.domain);
+    }
 
     // create org -> group -> user / service account relationshiprs
     if (createRels) {
-      await createOrgGroupRels(knex, org, org.groups);
-      await createOrgUserRels(knex, org, org.users);
-      await createOrgServiceAccountRels(knex, org, org.serviceaccounts);
-      await createOrgGroupUserSARels(knex, org);
+      if (config.groups.enabled) {
+        await createOrgGroupRels(knex, org, org.groups);
+      }
+
+      if (config.users.enabled) {
+        await createOrgUserRels(knex, org, org.users);
+      }
+
+      if (config.serviceaccounts.enabled) {
+        await createOrgServiceAccountRels(knex, org, org.serviceaccounts);
+      }
+
+      if (config.serviceaccounts.enabled) {
+        await createOrgGroupUserSARels(knex, org);
+      }
     }
   }
 }
@@ -82,7 +110,7 @@ async function createGroups(knex, shorts, namePrefix) {
       });
 
     // save group profile
-    if (groupSeed.profile !== null) {
+    if (groupSeed.profile) {
       await knex('group_profile').insert({
         group_id: gid,
         display_name: groupSeed.profile.displayName,
@@ -109,13 +137,15 @@ async function createUsers(knex, shorts, domain) {
       });
 
     // save user password
-    await knex('user_password').insert({
-      user_id: uid,
-      password: await bcrypt.hash(userSeed.password, 12)
-    });
+    if (auth.authentication.password.enabled === true && userSeed.password) {
+      await knex('user_password').insert({
+        user_id: uid,
+        password: await bcrypt.hash(userSeed.password, 12)
+      });
+    }
 
     // save user profile
-    if (userSeed.profile !== null) {
+    if (userSeed.profile) {
       await knex('user_profile').insert({
         user_id: uid,
         display_name: userSeed.profile.displayName,
@@ -227,28 +257,32 @@ async function createOrgGroupUserSARels(knex, org) {
       .from('groups')
       .where('name', '=', org.name + ':' + G.name);
 
-    for (let short of G.users) {
-      const [uid] = await knex
-        .select('id')
-        .from('users')
-        .where('email', '=', short + '@' + org.profile.domain);
+    if (G.users) {
+      for (let short of G.users) {
+        const [uid] = await knex
+          .select('id')
+          .from('users')
+          .where('email', '=', short + '@' + org.profile.domain);
 
-      await knex('groups_users').insert({
-        group_id: gid.id,
-        user_id: uid.id
-      });
+        await knex('groups_users').insert({
+          group_id: gid.id,
+          user_id: uid.id
+        });
+      }
     }
 
-    for (let short of G.serviceaccounts) {
-      const [sid] = await knex
-        .select('id')
-        .from('serviceaccounts')
-        .where('email', '=', short + '@' + org.profile.domain);
+    if (G.serviceaccounts) {
+      for (let short of G.serviceaccounts) {
+        const [sid] = await knex
+          .select('id')
+          .from('serviceaccounts')
+          .where('email', '=', short + '@' + org.profile.domain);
 
-      await knex('groups_serviceaccounts').insert({
-        group_id: gid.id,
-        serviceaccount_id: sid.id
-      });
+        await knex('groups_serviceaccounts').insert({
+          group_id: gid.id,
+          serviceaccount_id: sid.id
+        });
+      }
     }
   } // end loop over groupRels
 }

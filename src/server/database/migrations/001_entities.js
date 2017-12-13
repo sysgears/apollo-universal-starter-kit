@@ -1,9 +1,12 @@
+import settings from '../../../../settings';
+
+let config = settings.entities;
+
 exports.up = function(knex, Promise) {
-  return Promise.all([
-    /*
-     * Entities
-     */
-    knex.schema.createTable('orgs', table => {
+  let migs = [];
+
+  if (config.orgs.enabled === true) {
+    let fn = knex.schema.createTable('orgs', table => {
       table.timestamps(true, true);
       table.increments();
       table
@@ -16,9 +19,13 @@ exports.up = function(knex, Promise) {
         .string('name')
         .notNullable()
         .unique();
-    }),
+    });
 
-    knex.schema.createTable('groups', table => {
+    migs.push(fn);
+  }
+
+  if (config.groups.enabled === true) {
+    let fn = knex.schema.createTable('groups', table => {
       table.timestamps(true, true);
       table.increments();
       table
@@ -31,9 +38,13 @@ exports.up = function(knex, Promise) {
         .string('name')
         .notNullable()
         .unique();
-    }),
+    });
 
-    knex.schema.createTable('users', table => {
+    migs.push(fn);
+  }
+
+  if (config.users.enabled === true) {
+    let fn = knex.schema.createTable('users', table => {
       table.timestamps(true, true);
       table.increments();
       table
@@ -46,9 +57,13 @@ exports.up = function(knex, Promise) {
         .string('email')
         .notNullable()
         .unique();
-    }),
+    });
 
-    knex.schema.createTable('serviceaccounts', table => {
+    migs.push(fn);
+  }
+
+  if (config.serviceaccounts.enabled === true) {
+    let fn = knex.schema.createTable('serviceaccounts', table => {
       table.timestamps(true, true);
       table.increments();
       table
@@ -61,12 +76,16 @@ exports.up = function(knex, Promise) {
         .string('email')
         .notNullable()
         .unique();
-    }),
+    });
 
-    /*
+    migs.push(fn);
+  }
+
+  /*
      * Many-to-many Memberships
      */
-    knex.schema.createTable('orgs_groups', table => {
+  if (config.orgs.enabled === true && config.groups.enabled && config.groups.multipleOrgs === true) {
+    let fn = knex.schema.createTable('orgs_groups', table => {
       table.timestamps(true, true);
 
       table
@@ -85,9 +104,12 @@ exports.up = function(knex, Promise) {
         .onDelete('CASCADE');
 
       table.unique(['org_id', 'group_id']);
-    }),
+    });
+    migs.push(fn);
+  }
 
-    knex.schema.createTable('orgs_users', table => {
+  if (config.orgs.enabled === true && config.users.enabled && config.users.multipleOrgs === true) {
+    let fn = knex.schema.createTable('orgs_users', table => {
       table.timestamps(true, true);
 
       table
@@ -106,9 +128,16 @@ exports.up = function(knex, Promise) {
         .onDelete('CASCADE');
 
       table.unique(['org_id', 'user_id']);
-    }),
+    });
+    migs.push(fn);
+  }
 
-    knex.schema.createTable('orgs_serviceaccounts', table => {
+  if (
+    config.orgs.enabled === true &&
+    config.serviceaccounts.enabled === true &&
+    config.serviceaccounts.multipleOrgs === true
+  ) {
+    let fn = knex.schema.createTable('orgs_serviceaccounts', table => {
       table.timestamps(true, true);
 
       table
@@ -127,9 +156,13 @@ exports.up = function(knex, Promise) {
         .onDelete('CASCADE');
 
       table.unique(['org_id', 'serviceaccount_id']);
-    }),
+    });
 
-    knex.schema.createTable('groups_users', table => {
+    migs.push(fn);
+  }
+
+  if (config.groups.enabled === true && config.users.enabled && config.users.multipleGroups === true) {
+    let fn = knex.schema.createTable('groups_users', table => {
       table.timestamps(true, true);
 
       table
@@ -148,9 +181,17 @@ exports.up = function(knex, Promise) {
         .onDelete('CASCADE');
 
       table.unique(['group_id', 'user_id']);
-    }),
+    });
 
-    knex.schema.createTable('groups_serviceaccounts', table => {
+    migs.push(fn);
+  }
+
+  if (
+    config.groups.enabled === true &&
+    config.serviceaccounts.enabled &&
+    config.serviceaccounts.multipleGroups === true
+  ) {
+    let fn = knex.schema.createTable('groups_serviceaccounts', table => {
       table.timestamps(true, true);
 
       table
@@ -169,11 +210,16 @@ exports.up = function(knex, Promise) {
         .onDelete('CASCADE');
 
       table.unique(['group_id', 'serviceaccount_id']);
-    })
-  ]);
+    });
+
+    migs.push(fn);
+  }
+
+  return Promise.all(migs);
 };
 
 exports.down = function(knex, Promise) {
+  // probably need migs and the same checks here too
   return Promise.all([
     knex.schema.dropTable('groups_serviceaccounts'),
     knex.schema.dropTable('groups_users'),

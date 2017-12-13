@@ -21,6 +21,7 @@ export default graphqlExpress(async (req, res) => {
       cacheControl: !!settings.engine.engineConfig.apiKey
     };
   } catch (e) {
+    log.error(e);
     throw e;
   }
 });

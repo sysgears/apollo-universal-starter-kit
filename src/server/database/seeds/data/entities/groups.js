@@ -35,6 +35,13 @@ export default [
     }
   },
   {
+    name: 'devops',
+    profile: {
+      displayName: 'DevOps',
+      description: 'Developers and svc accts who can do deploys'
+    }
+  },
+  {
     name: 'editors',
     profile: {
       displayName: 'Editors',
@@ -54,5 +61,14 @@ export default [
       displayName: 'Users',
       description: 'Users users'
     }
-  }
+  },
+  { name: 'group-1-owners' },
+  { name: 'group-1-admins' },
+  { name: 'group-1-members' },
+  { name: 'group-2-owners' },
+  { name: 'group-2-admins' },
+  { name: 'group-2-members' },
+  { name: 'group-3-owners' },
+  { name: 'group-3-admins' },
+  { name: 'group-3-members' }
 ];

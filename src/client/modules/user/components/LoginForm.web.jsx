@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import url from 'url';
 import { NavLink, Link } from 'react-router-dom';
+
+import { pascalize } from 'humps';
+
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
 
 import settings from '../../../../../settings';
@@ -13,17 +16,35 @@ if (__DEV__) {
   serverPort = '3000';
 }
 
+const authn = settings.auth.authentication;
+
 const required = value => (value ? undefined : 'Required');
 
-const facebookLogin = () => {
-  window.location = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
-};
-
-const googleLogin = () => {
-  window.location = `${protocol}//${hostname}:${serverPort}/auth/google`;
-};
-
 const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
+  // setup an array of oauth provider params for display
+  let oauths = [];
+  if (authn.oauth.enabled === true) {
+    for (let P in authn.oauth.providers) {
+      let provider = authn.oauth.providers[P];
+
+      if (provider.enabled !== true) {
+        continue;
+      }
+
+      let onClick = () => {
+        window.location = `${protocol}//${hostname}:${serverPort}/auth/${P}`;
+      };
+
+      let oauth = (
+        <Button color="primary" type="button" onClick={onClick} style={{ margin: 10 }}>
+          Login with {pascalize(P)}
+        </Button>
+      );
+
+      oauths.push(oauth);
+    }
+  }
+
   return (
     <Form name="login" onSubmit={handleSubmit(onSubmit)}>
       <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
@@ -33,16 +54,7 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
         <Button color="primary" type="submit" disabled={submitting}>
           Login
         </Button>
-        {settings.user.auth.facebook.enabled && (
-          <Button color="primary" type="button" onClick={facebookLogin} style={{ margin: 10 }}>
-            Login with Facebook
-          </Button>
-        )}
-        {settings.user.auth.google.enabled && (
-          <Button color="primary" type="button" onClick={googleLogin} style={{ margin: 10 }}>
-            Login with Google
-          </Button>
-        )}
+        {oauths}
       </div>
       <Link className="text-center" to="/forgot-password">
         Forgot your password?

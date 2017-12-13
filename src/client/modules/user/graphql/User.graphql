@@ -2,24 +2,12 @@
 
 fragment UserInfo on User {
   id
-  username
-  role
-  isActive
   email
+  isActive
+  createdAt
+  updatedAt
+  role
   profile {
     ...UserProfileInfo
-  }
-  auth {
-    certificate {
-      serial
-    }
-    facebook {
-      fbId
-      displayName
-    }
-    google {
-      googleId
-      displayName
-    }
   }
 }

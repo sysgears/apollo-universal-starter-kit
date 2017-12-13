@@ -16,20 +16,23 @@ export default class Auth {
   async searchUserByOAuthIdOrEmail(provider, id, email) {}
 
   async getUserWithPassword(uuid) {
+    console.log('UUID', uuid);
     return knex
-      .select('u.uuid', 'u.is_active', 'u.email', 'a.password')
+      .select('u.uuid As userId', 'u.is_active', 'u.email', 'a.password', 'r.role')
       .from('users AS u')
       .whereIn('u.uuid', uuid)
       .leftJoin('user_password AS a', 'a.user_id', 'u.id')
+      .leftJoin('user_roles AS r', 'r.user_id', 'a.user_id')
       .first();
   }
 
   async getUserWithApiKeys(uuid) {
     let rows = await knex
-      .select('u.uuid AS userId', 'u.is_active', 'u.email', 'a.name', 'a.key')
+      .select('u.uuid AS userId', 'u.is_active', 'u.email', 'a.name', 'a.key', 'r.role')
       .from('users AS u')
       .whereIn('u.uuid', uuid)
-      .leftJoin('user_apikeys AS a', 'a.user_id', 'u.id');
+      .leftJoin('user_apikeys AS a', 'a.user_id', 'u.id')
+      .leftJoin('user_roles AS r', 'r.user_id', 'u.id');
 
     let res = _.filter(rows, row => row.name !== null);
     return orderedFor(res, uuid, 'userId', false);
@@ -37,10 +40,11 @@ export default class Auth {
 
   async getUserWithSerials(uuid) {
     let rows = await knex
-      .select('u.uuid AS userId', 'u.is_active', 'u.email', 'a.name', 'a.serial')
+      .select('u.uuid AS userId', 'u.is_active', 'u.email', 'a.name', 'a.serial', 'r.role')
       .from('users AS u')
       .whereIn('u.uuid', uuid)
-      .leftJoin('user_certificates AS a', 'a.user_id', 'u.id');
+      .leftJoin('user_certificates AS a', 'a.user_id', 'u.id')
+      .leftJoin('user_roles AS r', 'r.user_id', 'u.id');
 
     let res = _.filter(rows, row => row.serial !== null);
     return orderedFor(res, uuid, 'userId', false);
@@ -48,21 +52,24 @@ export default class Auth {
 
   async getUserWithOAuths(uuid) {
     let rows = await knex
-      .select('u.uuid AS userId', 'u.is_active', 'u.email', 'a.provider', 'a.oauth_id AS oauth_id')
+      .select('u.uuid AS userId', 'u.is_active', 'u.email', 'a.provider', 'a.oauth_id AS oauth_id', 'r.role')
       .from('users AS u')
       .whereIn('u.uuid', uuid)
-      .leftJoin('user_oauths AS a', 'a.user_id', 'u.id');
+      .leftJoin('user_oauths AS a', 'a.user_id', 'u.id')
+      .leftJoin('user_roles AS r', 'r.user_id', 'u.id');
 
     let res = _.filter(rows, row => row.provider !== null);
     return orderedFor(res, uuid, 'userId', false);
   }
 
   async getUserPasswordFromEmail(email) {
+    console.log('Get User From Email');
     let row = await knex
-      .select('u.uuid', 'u.is_active', 'u.email', 'a.password')
+      .select('u.uuid As userId', 'u.is_active', 'u.email', 'a.password', 'r.role')
       .from('users AS u')
       .whereIn('u.email', email)
       .leftJoin('user_password AS a', 'a.user_id', 'u.id')
+      .leftJoin('user_roles AS r', 'r.user_id', 'u.id')
       .first();
 
     return camelizeKeys(row);

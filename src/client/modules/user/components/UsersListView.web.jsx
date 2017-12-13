@@ -55,15 +55,11 @@ class UsersView extends React.PureComponent {
 
     const columns = [
       {
-        title: (
-          <a onClick={e => this.orderBy(e, 'username')} href="#">
-            Username {this.renderOrderByArrow('username')}
-          </a>
-        ),
-        dataIndex: 'username',
-        key: 'username',
+        title: 'ID',
+        dataIndex: 'userId',
+        key: 'userId',
         render: (text, record) => (
-          <Link className="user-link" to={`/users/${record.id}`}>
+          <Link className="user-link" to={`/users/${record.userId}`}>
             {text}
           </Link>
         )
@@ -107,8 +103,12 @@ class UsersView extends React.PureComponent {
       }
     ];
 
-    if (loading && !users) {
+    console.log('RENDER - Users', loading, users);
+
+    if (loading) {
       return <div className="text-center">Loading...</div>;
+    } else if (!users) {
+      return <div className="text-center">No Users</div>;
     } else {
       return (
         <div>

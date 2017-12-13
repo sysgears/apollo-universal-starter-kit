@@ -11,7 +11,7 @@ export const tryLogin = async (email, password, Auth) => {
   const e = new FieldError();
 
   const user = await Auth.getUserPasswordFromEmail(email);
-  console.log(user);
+  console.log('tryLogin:', user);
 
   // check if email and password exist in db
   if (!user || user.password === null) {

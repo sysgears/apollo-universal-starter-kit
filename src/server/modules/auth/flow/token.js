@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 
+// export const setTokenHeaders = (res, req, tokens) => {
 export const setTokenHeaders = (req, tokens) => {
   req.universalCookies.set('x-token', tokens.token, {
     maxAge: 60 * 60 * 24 * 7,
@@ -30,8 +31,8 @@ export const removeTokenHeaders = req => {
 };
 
 export const createToken = async (user, secret, refreshSecret) => {
-  let tokenUser = pick(user, ['id', 'username', 'role']);
-  tokenUser.fullName = user.firstName ? `${user.firstName} ${user.lastName}` : null;
+  console.log('CREATE TOKEN', user);
+  let tokenUser = pick(user, ['userId', 'email', 'role']);
 
   const createToken = jwt.sign(
     {
@@ -45,7 +46,7 @@ export const createToken = async (user, secret, refreshSecret) => {
 
   const createRefreshToken = jwt.sign(
     {
-      user: user.id
+      user: user.userId
     },
     refreshSecret,
     {
@@ -57,14 +58,17 @@ export const createToken = async (user, secret, refreshSecret) => {
 };
 
 export const refreshToken = async (token, refreshToken, User, SECRET) => {
+  console.log('Token - Refresh');
   let userId = -1;
   try {
     const { user } = jwt.decode(refreshToken);
+    console.log(' - decode user', user);
     userId = user;
   } catch (err) {
     return {};
   }
 
+  console.log('userId', userId);
   const user = await User.getUserWithPassword(userId);
   if (!user) {
     return {};

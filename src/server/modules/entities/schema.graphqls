@@ -95,6 +95,7 @@ type OrgPayload {
 type Org {
   id: String!
   name: String!
+  isActive: Boolean
 
   profile: OrgProfile
 
@@ -142,6 +143,7 @@ type GroupPayload {
 type Group {
   id: String!
   name: String!
+  isActive: Boolean
 
   profile: GroupProfile
 
@@ -190,8 +192,10 @@ type User {
   updatedAt: String 
   id: String!
   email: String!
+  isActive: Boolean
 
   auth: UserAuth
+  role: String
   profile: UserProfile
 
   orgs:   [Org]
@@ -252,6 +256,7 @@ type ServiceAccountPayload {
 type ServiceAccount {
   id: String!
   email: String!
+  isActive: Boolean
 
   auth: ServiceAccountAuth
   profile: ServiceAccountProfile

@@ -13,16 +13,18 @@
 
 import settings from '../../../../settings';
 
-let config = settings.auth;
+let config = settings.auth.authorization;
 
 exports.up = function(knex, Promise) {
   let migs = [];
 
-  if (config.authorization.enabled !== true) {
+  if (config.enabled !== true) {
+    console.log('GOT HERE - No Authorization');
     return Promise.all(migs);
   }
 
   if (config.method === 'basic' && config.basic.provider === 'embedded') {
+    console.log('GOT HERE - Basic Authorizations');
     let basic = config.basic;
 
     {
@@ -92,6 +94,7 @@ exports.up = function(knex, Promise) {
     }
 
     if (basic.subjects.users === true) {
+      console.log('GOT HERE - Basic Users');
       let fn = knex.schema.createTable('user_roles', table => {
         table.timestamps(true, true);
         table.increments();

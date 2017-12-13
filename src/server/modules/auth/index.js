@@ -9,6 +9,7 @@ import createResolvers from './resolvers';
 import Feature from '../connector';
 
 import createConfirmHandler from './flow/confirm';
+import authTokenMiddleware from './middleware/token';
 
 // import OAuth from './oauth';
 import { refreshToken } from './flow';
@@ -24,10 +25,10 @@ export default new Feature({
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
-    //
+    console.log('tokenUser', tokenUser);
     // scope: tokenUser ? scopes[tokenUser.role] : null
     // need to look up in database eventually
-    const scopes = '*';
+    const scopes = 'admin';
 
     const auth = {
       isAuthenticated: tokenUser ? true : false,
@@ -48,6 +49,7 @@ export default new Feature({
     };
   },
   middleware: app => {
+    app.use(authTokenMiddleware(localAuth));
     if (settings.auth.authentication.password.sendConfirmationEmail) {
       app.get('/confirmation/:token', createConfirmHandler(SECRET, User, jwt));
     }
@@ -65,23 +67,30 @@ export default new Feature({
  *  - certificate
  */
 export const parseUser = async ({ req, connectionParams, webSocket }) => {
+  console.log('parseUser');
   if (
     connectionParams &&
     connectionParams.token &&
     connectionParams.token !== 'null' &&
     connectionParams.token !== 'undefined'
   ) {
+    console.log('JWT');
     try {
       const { user } = jwt.verify(connectionParams.token, SECRET);
+      console.log('has user', user);
       return user;
     } catch (err) {
       const newToken = await refreshToken(connectionParams.token, connectionParams.refreshToken, User, SECRET);
       return newToken.user;
     }
   } else if (req) {
+    console.log('REQ', req.headers);
     if (req.user) {
+      console.log('has user', req.user);
       return req.user;
-    } else if (settings.auth.authentication.apikey.enabled) {
+    }
+    if (settings.auth.authentication.apikey.enabled) {
+      console.log('apikey?');
       let apikey = '';
       // in case you need to access req headers
       if (req.headers['apikey']) {
@@ -94,7 +103,10 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
           return user;
         }
       }
-    } else if (settings.auth.authentication.certificate.enabled) {
+    }
+
+    if (settings.auth.authentication.certificate.enabled) {
+      console.log('serial?');
       let serial = '';
       // in case you need to access req headers
       if (req.headers['x-serial']) {
@@ -109,7 +121,9 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
       }
     }
   } else if (webSocket) {
+    console.log('WS');
     if (settings.auth.authentication.apikey.enabled) {
+      console.log('apikey?');
       let apikey = '';
       // in case you need to access req headers
       if (webSocket.upgradeReq.headers['apikey']) {
@@ -123,6 +137,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
         }
       }
     } else if (settings.auth.authentication.certificate.enabled) {
+      console.log('serial?');
       let serial = '';
       // in case you need to access req headers
       if (webSocket.upgradeReq.headers['x-serial']) {

@@ -62,8 +62,8 @@ const profileName = cookies => {
   }
 
   try {
-    const { user: { username, fullName } } = decode(token);
-    return fullName ? fullName : username;
+    const { user: { email } } = decode(token);
+    return email;
   } catch (e) {
     return '';
   }

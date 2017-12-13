@@ -29,15 +29,19 @@ export default pubsub => ({
       return context.Group.get(id);
     },
 
-    users: (obj, args, context) => {
-      return context.User.list(args);
+    users: async (obj, args, context) => {
+      console.log('QUERY - users', args);
+      let ret = await context.User.list(args);
+      console.log('USERS', ret);
+      return ret;
     },
     user: (obj, { id }, context) => {
       return context.User.get(id);
     },
     currentUser: (obj, args, context) => {
+      console.log('current user:', context.user);
       if (context.user) {
-        return context.User.get(context.user.id);
+        return context.User.get(context.user.userId);
       } else {
         return null;
       }

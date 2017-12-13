@@ -10,6 +10,7 @@ const stripe = Stripe(settings.subscription.stripeSecretKey);
 export default pubsub => ({
   Query: {
     subscription(obj, args, context) {
+      console.log('QUERY - subscription', context.subscription);
       return context.subscription;
     },
     subscribersOnlyNumber(obj, args, context) {
@@ -19,7 +20,8 @@ export default pubsub => ({
     },
     async subscriptionCardInfo(obj, args, context) {
       const { user } = context;
-      return context.Subscription.getCardInfo(user.id);
+      console.log('CARD-INFO', user);
+      return context.Subscription.getCardInfo(user.userId);
     }
   },
   Mutation: {
@@ -46,7 +48,7 @@ export default pubsub => ({
         }
 
         await context.Subscription.editSubscription({
-          userId: user.id,
+          userId: user.userId,
           subscription: {
             stripeCustomerId: customerId,
             stripeSourceId,
@@ -67,7 +69,7 @@ export default pubsub => ({
         });
 
         await context.Subscription.editSubscription({
-          userId: user.id,
+          userId: user.userId,
           subscription: {
             active: true,
             stripeSubscriptionId: newSubscription.id
@@ -91,7 +93,7 @@ export default pubsub => ({
         });
 
         await context.Subscription.editSubscription({
-          userId: user.id,
+          userId: user.userId,
           subscription: {
             stripeSourceId: source.id,
             expiryMonth: data.expiryMonth,

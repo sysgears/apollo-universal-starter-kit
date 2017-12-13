@@ -58,7 +58,7 @@ export default {
 
       roles: ['owner', 'admin', 'subscriber', 'user'],
       subjects: {
-        users: true
+        user: true
       },
       verbs: ['create', 'update', 'delete', 'view', 'view:all']
     },

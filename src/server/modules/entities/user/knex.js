@@ -10,23 +10,10 @@ export default class User {
     let { filters, orderBys, offset, limit } = args;
 
     const queryBuilder = knex
-      .select(
-        'u.uuid as id',
-        'u.created_at',
-        'u.updated_at',
-        'u.is_active',
-        'u.email',
-        'p.display_name',
-        'p.first_name',
-        'p.middle_name',
-        'p.last_name',
-        'p.title',
-        'p.suffix',
-        'p.locale',
-        'p.language'
-      )
+      .select('u.uuid as id', 'u.created_at', 'u.updated_at', 'u.is_active', 'u.email', 'p.*', 'r.role')
       .from('users AS u')
-      .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
+      .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
+      .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id');
 
     // add filter conditions
     if (filters) {
@@ -76,24 +63,23 @@ export default class User {
   async get(id) {
     return camelizeKeys(
       await knex
-        .select(
-          'u.uuid as id',
-          'u.created_at',
-          'u.updated_at',
-          'u.is_active',
-          'u.email',
-          'p.display_name',
-          'p.first_name',
-          'p.middle_name',
-          'p.last_name',
-          'p.title',
-          'p.suffix',
-          'p.locale',
-          'p.language'
-        )
+        .select('u.uuid as id', 'u.created_at', 'u.updated_at', 'u.is_active', 'u.email', 'p.*', 'r.role')
         .from('users AS u')
         .where('u.uuid', '=', id)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
+        .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
+        .first()
+    );
+  }
+
+  async getById(id) {
+    return camelizeKeys(
+      await knex
+        .select('u.uuid as id', 'u.created_at', 'u.updated_at', 'u.is_active', 'u.email', 'p.*', 'r.role')
+        .from('users AS u')
+        .where('u.uuid', '=', id)
+        .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
+        .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
         .first()
     );
   }

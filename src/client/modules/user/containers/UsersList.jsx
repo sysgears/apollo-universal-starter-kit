@@ -29,6 +29,7 @@ const UsersListWithApollo = compose(
       };
     },
     props({ data: { loading, users, refetch, error } }) {
+      console.log('PROPS: ', loading, users);
       return { loading, users, refetch, errors: error ? error.graphQLErrors : null };
     }
   }),

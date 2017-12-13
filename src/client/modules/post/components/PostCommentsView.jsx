@@ -5,7 +5,31 @@ import { SwipeAction } from '../../common/components/native';
 
 import PostCommentForm from './PostCommentForm';
 
-class PostCommentsView extends React.PureComponent {
+export default class PostCommentsView extends React.PureComponent {
+  static defaultProps = {
+    postId: null,
+    comments: [],
+    comment: {},
+    addComment: () => {},
+    editComment: () => {},
+    deleteComment: () => {},
+    onCommentSelect: () => {},
+    onFormSubmitted: () => {},
+    subscribeToMore: () => {}
+  };
+
+  static propTypes = {
+    postId: PropTypes.number.isRequired,
+    comments: PropTypes.array.isRequired,
+    comment: PropTypes.object,
+    addComment: PropTypes.func.isRequired,
+    editComment: PropTypes.func.isRequired,
+    deleteComment: PropTypes.func.isRequired,
+    onCommentSelect: PropTypes.func.isRequired,
+    onFormSubmitted: PropTypes.func.isRequired,
+    subscribeToMore: PropTypes.func.isRequired
+  };
+
   keyExtractor = item => item.id;
 
   renderItem = ({ item: { id, content } }) => {
@@ -64,18 +88,6 @@ class PostCommentsView extends React.PureComponent {
   }
 }
 
-PostCommentsView.propTypes = {
-  postId: PropTypes.number.isRequired,
-  comments: PropTypes.array.isRequired,
-  comment: PropTypes.object,
-  addComment: PropTypes.func.isRequired,
-  editComment: PropTypes.func.isRequired,
-  deleteComment: PropTypes.func.isRequired,
-  onCommentSelect: PropTypes.func.isRequired,
-  onFormSubmitted: PropTypes.func.isRequired,
-  subscribeToMore: PropTypes.func.isRequired
-};
-
 const styles = StyleSheet.create({
   title: {
     fontSize: 20,
@@ -87,5 +99,3 @@ const styles = StyleSheet.create({
     paddingTop: 10
   }
 });
-
-export default PostCommentsView;

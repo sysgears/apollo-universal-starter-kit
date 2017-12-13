@@ -11,6 +11,16 @@ import ADD_COUNTER from '../graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
 class Counter extends React.Component {
+  static defaultProps = {
+    loading: false,
+    subscribeToMore: () => {}
+  };
+
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    subscribeToMore: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
 
@@ -53,11 +63,6 @@ class Counter extends React.Component {
     return <CounterView {...this.props} />;
   }
 }
-
-Counter.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  subscribeToMore: PropTypes.func.isRequired
-};
 
 const CounterWithApollo = compose(
   graphql(COUNTER_QUERY, {

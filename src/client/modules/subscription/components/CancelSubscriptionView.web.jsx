@@ -2,7 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Alert, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
-class CancelSubscriptionView extends React.Component {
+export default class CancelSubscriptionView extends React.Component {
+  static defaultProps = {
+    loading: false,
+    active: false,
+    cancel: () => {}
+  };
+
+  static propTypes = {
+    loading: PropTypes.bool,
+    active: PropTypes.bool,
+    cancel: PropTypes.func.isRequired
+  };
+
   state = {
     cancelling: false,
     errors: null
@@ -41,11 +53,3 @@ class CancelSubscriptionView extends React.Component {
     );
   }
 }
-
-CancelSubscriptionView.propTypes = {
-  cancel: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
-  active: PropTypes.bool
-};
-
-export default CancelSubscriptionView;

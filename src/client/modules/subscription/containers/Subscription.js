@@ -13,6 +13,14 @@ import settings from '../../../../../settings';
 
 // react-stripe-elements will not render on the server.
 class Subscription extends React.Component {
+  static defaultProps = {
+    subscribe: () => {}
+  };
+
+  static propTypes = {
+    subscribe: PropTypes.func.isRequired
+  };
+
   render() {
     return (
       <div>
@@ -27,10 +35,6 @@ class Subscription extends React.Component {
     );
   }
 }
-
-Subscription.propTypes = {
-  subscribe: PropTypes.func.isRequired
-};
 
 const SubscriptionViewWithApollo = compose(
   graphql(SUBSCRIBE, {

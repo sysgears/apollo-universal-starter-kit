@@ -5,7 +5,21 @@ import { Link } from 'react-router-dom';
 import { PageLayout, Table, Button } from '../../common/components/web';
 import settings from '../../../../../settings';
 
-class PostList extends React.PureComponent {
+export default class PostList extends React.PureComponent {
+  static defaultProps = {
+    loading: false,
+    posts: {},
+    deletePost: () => {},
+    loadMoreRows: () => {}
+  };
+
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    posts: PropTypes.object,
+    deletePost: PropTypes.func.isRequired,
+    loadMoreRows: PropTypes.func.isRequired
+  };
+
   hendleDeletePost = id => {
     const { deletePost } = this.props;
     deletePost(id);
@@ -90,12 +104,3 @@ class PostList extends React.PureComponent {
     }
   }
 }
-
-PostList.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  posts: PropTypes.object,
-  deletePost: PropTypes.func.isRequired,
-  loadMoreRows: PropTypes.func.isRequired
-};
-
-export default PostList;

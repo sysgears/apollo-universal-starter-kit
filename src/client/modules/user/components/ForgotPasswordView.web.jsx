@@ -8,7 +8,17 @@ import { PageLayout } from '../../common/components/web';
 import ForgotPasswordForm from '../components/ForgotPasswordForm';
 import settings from '../../../../../settings';
 
-class ForgotPasswordView extends React.Component {
+export default class ForgotPasswordView extends React.Component {
+  static defaultProps = {
+    forgotPassword: () => {},
+    onFormSubmitted: () => {}
+  };
+
+  static propTypes = {
+    forgotPassword: PropTypes.func.isRequired,
+    onFormSubmitted: PropTypes.func.isRequired
+  };
+
   state = {
     sent: false
   };
@@ -54,10 +64,3 @@ class ForgotPasswordView extends React.Component {
     );
   }
 }
-
-ForgotPasswordView.propTypes = {
-  forgotPassword: PropTypes.func.isRequired,
-  onFormSubmitted: PropTypes.func.isRequired
-};
-
-export default ForgotPasswordView;

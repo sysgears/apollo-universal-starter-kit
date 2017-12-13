@@ -12,6 +12,14 @@ import settings from '../../../../../settings';
 
 // react-stripe-elements will not render on the server.
 class UpdateCard extends React.Component {
+  static defaultProps = {
+    updateCard: () => {}
+  };
+
+  static propTypes = {
+    updateCard: PropTypes.func.isRequired
+  };
+
   render() {
     return (
       <div>
@@ -26,10 +34,6 @@ class UpdateCard extends React.Component {
     );
   }
 }
-
-UpdateCard.propTypes = {
-  updateCard: PropTypes.func.isRequired
-};
 
 const UpdateCardWithApollo = compose(
   graphql(UPDATE_CARD, {

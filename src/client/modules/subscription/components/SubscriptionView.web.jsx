@@ -9,7 +9,15 @@ import { PageLayout } from '../../common/components/web';
 import SubscriptionCardForm from './SubscriptionCardForm';
 import settings from '../../../../../settings';
 
-class SubscriptionView extends React.Component {
+export default class SubscriptionView extends React.Component {
+  static defaultProps = {
+    subscribe: () => {}
+  };
+
+  static propTypes = {
+    subscribe: PropTypes.func.isRequired
+  };
+
   state = {
     client: !__SSR__ && !__TEST__
   };
@@ -60,9 +68,3 @@ class SubscriptionView extends React.Component {
     );
   }
 }
-
-SubscriptionView.propTypes = {
-  subscribe: PropTypes.func.isRequired
-};
-
-export default SubscriptionView;

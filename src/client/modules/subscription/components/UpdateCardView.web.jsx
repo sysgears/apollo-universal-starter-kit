@@ -9,7 +9,15 @@ import { PageLayout } from '../../common/components/web';
 import SubscriptionCardForm from './SubscriptionCardForm';
 import settings from '../../../../../settings';
 
-class UpdateCardView extends React.Component {
+export default class UpdateCardView extends React.Component {
+  static defaultProps = {
+    updateCard: () => {}
+  };
+
+  static propTypes = {
+    updateCard: PropTypes.func.isRequired
+  };
+
   onSubmit = updateCard => async values => {
     const result = await updateCard(values);
 
@@ -50,9 +58,3 @@ class UpdateCardView extends React.Component {
     );
   }
 }
-
-UpdateCardView.propTypes = {
-  updateCard: PropTypes.func.isRequired
-};
-
-export default UpdateCardView;

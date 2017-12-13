@@ -8,7 +8,15 @@ import { PageLayout } from '../../common/components/web';
 import RegisterForm from '../components/RegisterForm';
 import settings from '../../../../../settings';
 
-class RegisterView extends React.PureComponent {
+export default class RegisterView extends React.PureComponent {
+  static defaultProps = {
+    register: () => {}
+  };
+
+  static propTypes = {
+    register: PropTypes.func.isRequired
+  };
+
   onSubmit = async values => {
     const { register } = this.props;
     const result = await register(values);
@@ -46,9 +54,3 @@ class RegisterView extends React.PureComponent {
     );
   }
 }
-
-RegisterView.propTypes = {
-  register: PropTypes.func.isRequired
-};
-
-export default RegisterView;

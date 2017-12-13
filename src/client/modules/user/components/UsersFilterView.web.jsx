@@ -3,7 +3,25 @@ import PropTypes from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
 import { Form, FormItem, Select, Option, Label, Input } from '../../common/components/web';
 
-class UsersFilterView extends React.PureComponent {
+export default class UsersFilterView extends React.PureComponent {
+  static defaultProps = {
+    searchText: '',
+    role: '',
+    isActive: false,
+    onSearchTextChange: () => {},
+    onRoleChange: () => {},
+    onIsActiveChange: () => {}
+  };
+
+  static propTypes = {
+    searchText: PropTypes.string,
+    role: PropTypes.string,
+    isActive: PropTypes.bool,
+    onSearchTextChange: PropTypes.func.isRequired,
+    onRoleChange: PropTypes.func.isRequired,
+    onIsActiveChange: PropTypes.func.isRequired
+  };
+
   handleSearch = e => {
     const { onSearchTextChange } = this.props;
     onSearchTextChange(e.target.value);
@@ -56,14 +74,3 @@ class UsersFilterView extends React.PureComponent {
     );
   }
 }
-
-UsersFilterView.propTypes = {
-  searchText: PropTypes.string,
-  role: PropTypes.string,
-  isActive: PropTypes.bool,
-  onSearchTextChange: PropTypes.func.isRequired,
-  onRoleChange: PropTypes.func.isRequired,
-  onIsActiveChange: PropTypes.func.isRequired
-};
-
-export default UsersFilterView;

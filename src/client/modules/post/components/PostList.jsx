@@ -4,7 +4,23 @@ import PropTypes from 'prop-types';
 import { StyleSheet, FlatList, Text, View } from 'react-native';
 import { SwipeAction } from '../../common/components/native';
 
-class PostList extends React.PureComponent {
+export default class PostList extends React.PureComponent {
+  static defaultProps = {
+    loading: false,
+    posts: {},
+    navigation: {},
+    deletePost: () => {},
+    loadMoreRows: () => {}
+  };
+
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    posts: PropTypes.object,
+    navigation: PropTypes.object,
+    deletePost: PropTypes.func.isRequired,
+    loadMoreRows: PropTypes.func.isRequired
+  };
+
   onEndReachedCalledDuringMomentum = false;
 
   keyExtractor = item => item.node.id;
@@ -57,18 +73,8 @@ class PostList extends React.PureComponent {
   }
 }
 
-PostList.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  posts: PropTypes.object,
-  navigation: PropTypes.object,
-  deletePost: PropTypes.func.isRequired,
-  loadMoreRows: PropTypes.func.isRequired
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1
   }
 });
-
-export default PostList;

@@ -9,10 +9,6 @@ import RegisterForm from '../components/RegisterForm';
 import settings from '../../../../../settings';
 
 export default class RegisterView extends React.PureComponent {
-  static defaultProps = {
-    register: () => {}
-  };
-
   static propTypes = {
     register: PropTypes.func.isRequired
   };

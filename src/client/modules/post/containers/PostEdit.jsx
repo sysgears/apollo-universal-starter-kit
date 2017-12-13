@@ -11,9 +11,14 @@ import EDIT_POST from '../graphql/EditPost.graphql';
 import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
 
 class PostEdit extends React.Component {
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    post: PropTypes.object,
+    subscribeToMore: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
-
     this.subscription = null;
   }
 
@@ -52,12 +57,6 @@ class PostEdit extends React.Component {
     return <PostEditView {...this.props} />;
   }
 }
-
-PostEdit.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  post: PropTypes.object,
-  subscribeToMore: PropTypes.func.isRequired
-};
 
 export default compose(
   graphql(POST_QUERY, {

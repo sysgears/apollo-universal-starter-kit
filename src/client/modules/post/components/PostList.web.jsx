@@ -6,13 +6,6 @@ import { PageLayout, Table, Button } from '../../common/components/web';
 import settings from '../../../../../settings';
 
 export default class PostList extends React.PureComponent {
-  static defaultProps = {
-    loading: false,
-    posts: {},
-    deletePost: () => {},
-    loadMoreRows: () => {}
-  };
-
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posts: PropTypes.object,

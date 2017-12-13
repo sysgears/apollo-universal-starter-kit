@@ -8,10 +8,6 @@ import ResetPasswordForm from '../components/ResetPasswordForm';
 import settings from '../../../../../settings';
 
 export default class ResetPasswordView extends React.Component {
-  static defaultProps = {
-    resetPassword: () => {}
-  };
-
   static propTypes = {
     resetPassword: PropTypes.func.isRequired,
     match: PropTypes.shape({

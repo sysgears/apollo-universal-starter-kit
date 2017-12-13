@@ -9,11 +9,6 @@ import ForgotPasswordForm from '../components/ForgotPasswordForm';
 import settings from '../../../../../settings';
 
 export default class ForgotPasswordView extends React.Component {
-  static defaultProps = {
-    forgotPassword: () => {},
-    onFormSubmitted: () => {}
-  };
-
   static propTypes = {
     forgotPassword: PropTypes.func.isRequired,
     onFormSubmitted: PropTypes.func.isRequired

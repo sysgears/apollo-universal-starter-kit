@@ -5,14 +5,6 @@ import { StyleSheet, FlatList, Text, View } from 'react-native';
 import { SwipeAction } from '../../common/components/native';
 
 export default class PostList extends React.PureComponent {
-  static defaultProps = {
-    loading: false,
-    posts: {},
-    navigation: {},
-    deletePost: () => {},
-    loadMoreRows: () => {}
-  };
-
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posts: PropTypes.object,

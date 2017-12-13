@@ -8,14 +8,6 @@ import { Form, RenderField, Button, Alert } from '../../common/components/web';
 const required = value => (value ? undefined : 'Required');
 
 class SubscriptionCardForm extends React.Component {
-  static defaultProps = {
-    submitting: false,
-    action: '',
-    error: '',
-    handleSubmit: () => {},
-    onSubmit: () => {}
-  };
-
   static propTypes = {
     submitting: PropTypes.bool,
     action: PropTypes.string.isRequired,

@@ -7,12 +7,6 @@ import { PageLayout, Row, Col, Table, Button, Alert } from '../../common/compone
 import settings from '../../../../../settings';
 
 export default class UploadView extends React.PureComponent {
-  static defaultProps = {
-    files: [],
-    uploadFiles: () => {},
-    removeFile: () => {}
-  };
-
   static propTypes = {
     files: PropTypes.array,
     uploadFiles: PropTypes.func.isRequired,

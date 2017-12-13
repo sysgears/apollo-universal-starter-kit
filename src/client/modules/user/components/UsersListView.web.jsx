@@ -4,14 +4,6 @@ import { Link } from 'react-router-dom';
 import { Table, Button } from '../../common/components/web';
 
 export default class UsersView extends React.PureComponent {
-  static defaultProps = {
-    loading: false,
-    users: [],
-    orderBy: {},
-    onOrderBy: () => {},
-    deleteUser: () => {}
-  };
-
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     users: PropTypes.array,

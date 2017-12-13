@@ -45,6 +45,14 @@ function DeleteComment(prev, id) {
 }
 
 class PostComments extends React.Component {
+  static propTypes = {
+    postId: PropTypes.number.isRequired,
+    comments: PropTypes.array.isRequired,
+    comment: PropTypes.object.isRequired,
+    onCommentSelect: PropTypes.func.isRequired,
+    subscribeToMore: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.subscription = null;
@@ -95,14 +103,6 @@ class PostComments extends React.Component {
     return <PostCommentsView {...this.props} />;
   }
 }
-
-PostComments.propTypes = {
-  postId: PropTypes.number.isRequired,
-  comments: PropTypes.array.isRequired,
-  comment: PropTypes.object.isRequired,
-  onCommentSelect: PropTypes.func.isRequired,
-  subscribeToMore: PropTypes.func.isRequired
-};
 
 const PostCommentsWithApollo = compose(
   graphql(ADD_COMMENT, {

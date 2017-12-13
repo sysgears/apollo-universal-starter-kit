@@ -10,10 +10,6 @@ import SubscriptionCardForm from './SubscriptionCardForm';
 import settings from '../../../../../settings';
 
 export default class UpdateCardView extends React.Component {
-  static defaultProps = {
-    updateCard: () => {}
-  };
-
   static propTypes = {
     updateCard: PropTypes.func.isRequired
   };

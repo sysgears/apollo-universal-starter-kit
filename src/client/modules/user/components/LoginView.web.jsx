@@ -9,11 +9,6 @@ import LoginForm from '../components/LoginForm';
 import settings from '../../../../../settings';
 
 export default class LoginView extends React.PureComponent {
-  static defaultProps = {
-    error: '',
-    login: () => {}
-  };
-
   static propTypes = {
     error: PropTypes.string,
     login: PropTypes.func.isRequired

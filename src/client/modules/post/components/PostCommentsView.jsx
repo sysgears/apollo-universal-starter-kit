@@ -6,18 +6,6 @@ import { SwipeAction } from '../../common/components/native';
 import PostCommentForm from './PostCommentForm';
 
 export default class PostCommentsView extends React.PureComponent {
-  static defaultProps = {
-    postId: null,
-    comments: [],
-    comment: {},
-    addComment: () => {},
-    editComment: () => {},
-    deleteComment: () => {},
-    onCommentSelect: () => {},
-    onFormSubmitted: () => {},
-    subscribeToMore: () => {}
-  };
-
   static propTypes = {
     postId: PropTypes.number.isRequired,
     comments: PropTypes.array.isRequired,

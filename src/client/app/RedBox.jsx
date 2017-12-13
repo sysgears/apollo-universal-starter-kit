@@ -7,7 +7,7 @@ import settings from '../../../settings';
 const format = (fmt, ...args) =>
   fmt.replace(/{(\d+)}/g, (match, number) => (typeof args[number] != 'undefined' ? args[number] : match));
 
-class RedBox extends React.Component {
+export default class RedBox extends React.Component {
   static propTypes = {
     error: PropTypes.instanceOf(Error).isRequired
   };
@@ -127,5 +127,3 @@ const styles = {
     color: 'rgba(255, 255, 255, 0.7)'
   }
 };
-
-export default RedBox;

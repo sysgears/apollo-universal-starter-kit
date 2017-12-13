@@ -4,15 +4,6 @@ import { DebounceInput } from 'react-debounce-input';
 import { Form, FormItem, Select, Option, Label, Input } from '../../common/components/web';
 
 export default class UsersFilterView extends React.PureComponent {
-  static defaultProps = {
-    searchText: '',
-    role: '',
-    isActive: false,
-    onSearchTextChange: () => {},
-    onRoleChange: () => {},
-    onIsActiveChange: () => {}
-  };
-
   static propTypes = {
     searchText: PropTypes.string,
     role: PropTypes.string,

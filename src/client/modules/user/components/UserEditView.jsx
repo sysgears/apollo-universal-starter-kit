@@ -10,13 +10,6 @@ import UserForm from './UserForm';
 import settings from '../../../../../settings';
 
 export default class UserEditView extends React.PureComponent {
-  static defaultProps = {
-    loading: false,
-    user: {},
-    addUser: () => {},
-    editUser: () => {}
-  };
-
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,

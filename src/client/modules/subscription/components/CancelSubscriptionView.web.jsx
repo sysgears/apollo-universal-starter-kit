@@ -3,12 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, Alert, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
 export default class CancelSubscriptionView extends React.Component {
-  static defaultProps = {
-    loading: false,
-    active: false,
-    cancel: () => {}
-  };
-
   static propTypes = {
     loading: PropTypes.bool,
     active: PropTypes.bool,

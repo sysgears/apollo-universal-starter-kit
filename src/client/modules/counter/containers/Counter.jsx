@@ -11,11 +11,6 @@ import ADD_COUNTER from '../graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
 class Counter extends React.Component {
-  static defaultProps = {
-    loading: false,
-    subscribeToMore: () => {}
-  };
-
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     subscribeToMore: PropTypes.func.isRequired
@@ -23,7 +18,6 @@ class Counter extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.subscription = null;
   }
 

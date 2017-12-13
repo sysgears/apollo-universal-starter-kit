@@ -157,7 +157,7 @@ class ServerError extends Error {
   }
 }
 
-class Main extends React.Component {
+export default class Main extends React.Component {
   constructor(props) {
     super(props);
     const serverError = window.__SERVER_ERROR__;
@@ -186,5 +186,3 @@ class Main extends React.Component {
     );
   }
 }
-
-export default Main;

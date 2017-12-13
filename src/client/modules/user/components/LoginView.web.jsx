@@ -8,7 +8,12 @@ import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/c
 import LoginForm from '../components/LoginForm';
 import settings from '../../../../../settings';
 
-class LoginView extends React.PureComponent {
+export default class LoginView extends React.PureComponent {
+  static propTypes = {
+    error: PropTypes.string,
+    login: PropTypes.func.isRequired
+  };
+
   onSubmit = login => async values => {
     const result = await login(values);
 
@@ -56,10 +61,3 @@ class LoginView extends React.PureComponent {
     );
   }
 }
-
-LoginView.propTypes = {
-  login: PropTypes.func.isRequired,
-  error: PropTypes.string
-};
-
-export default LoginView;

@@ -3,6 +3,7 @@
 /.tmp
 /.vscode
 /node_modules
+*/**/node_modules/
 /build
 npm-debug.*
 .gqlconfig
@@ -12,3 +13,5 @@ npm-debug.*
 jsconfig.json
 /public
 # .env
+apollo-universal-starter-kit.iml
+lerna-debug.log

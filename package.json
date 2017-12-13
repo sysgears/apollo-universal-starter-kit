@@ -189,6 +189,7 @@
     "ip": "^1.1.5",
     "isomorphic-style-loader": "^4.0.0",
     "jsdom": "^11.5.1",
+    "lerna": "^2.5.1",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "lint-staged": "^6.0.0",
@@ -225,6 +226,9 @@
     "ws": "^3.3.2",
     "xdl": "^47.0.6"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "resolutions": {
     "graphql": "^0.11.7"
   },

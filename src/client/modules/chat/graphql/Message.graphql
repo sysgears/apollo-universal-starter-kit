@@ -1,0 +1,6 @@
+fragment MessageDetails on Message {
+  id
+  content
+  userId
+  username
+}

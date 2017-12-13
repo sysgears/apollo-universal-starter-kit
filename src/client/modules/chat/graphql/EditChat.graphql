@@ -1,0 +1,7 @@
+#import "./Chat.graphql"
+
+mutation editChat($input: EditChatInput!) {
+  editChat(input: $input) {
+    ...ChatInfo
+  }
+}

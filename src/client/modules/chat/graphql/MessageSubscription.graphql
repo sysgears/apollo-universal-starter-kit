@@ -1,0 +1,12 @@
+#import "./Message.graphql"
+
+subscription onMessageUpdated($chatId: Int!) {
+  messageUpdated(chatId: $chatId) {
+    mutation
+    id
+    chatId
+    node {
+      ...MessageDetails
+    }
+  }
+}

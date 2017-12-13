@@ -1,0 +1,11 @@
+#import "./Chat.graphql"
+#import "./Message.graphql"
+
+mutation addChat($input: AddChatInput!) {
+  addChat(input: $input) {
+    ...ChatInfo
+    messages {
+      ...MessageDetails
+    }
+  }
+}

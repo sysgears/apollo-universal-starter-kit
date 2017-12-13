@@ -1,0 +1,7 @@
+#import "./Chat.graphql"
+
+subscription onChatUpdated($id: Int!) {
+  chatUpdated(id: $id) {
+    ...ChatInfo
+  }
+}

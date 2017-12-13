@@ -1,0 +1,115 @@
+# Chat
+type Chat {
+  id: Int!
+  title: String!
+  content: String!
+  messages: [Message]
+}
+
+# Message
+type Message {
+  id: Int!
+  content: String!
+  userId: Int
+  username: String
+}
+
+# Edges for Chats
+type ChatEdges {
+  node: Chat
+  cursor: Int
+}
+
+# PageInfo for Chats
+type ChatPageInfo {
+  endCursor: Int
+  hasNextPage: Boolean
+}
+
+# Chats relay-style pagination query
+type Chats {
+  totalCount: Int
+  edges: [ChatEdges]
+  pageInfo: ChatPageInfo
+}
+
+extend type Query {
+  # Chats pagination query
+  chats(limit: Int, after: Int): Chats
+  # Chat
+  chat(id: Int!): Chat
+}
+
+extend type Mutation {
+  # Create new chat
+  addChat(input: AddChatInput!): Chat
+  # Delete a chat
+  deleteChat(id: Int!): Chat
+  # Edit a chat
+  editChat(input: EditChatInput!): Chat
+  # Add message to chat
+  addMessage(input: AddMessageInput!): Message
+  # Delete a message
+  deleteMessage(input: DeleteMessageInput!): Message
+  # Edit a message
+  editMessage(input: EditMessageInput!): Message
+}
+
+# Input for addChat Mutation
+input AddChatInput {
+  title: String!
+  content: String!
+}
+
+# Input for editChat Mutation
+input EditChatInput {
+  id: Int!
+  title: String!
+  content: String!
+}
+
+# Input for addMessage Mutation
+input AddMessageInput {
+  content: String!
+  # Needed for messageUpdated Subscription filter
+  chatId: Int!
+}
+
+# Input for editMessage Mutation
+input DeleteMessageInput {
+  id: Int!
+  # Needed for messageUpdated Subscription filter
+  chatId: Int!
+}
+
+# Input for deleteMessage Mutation
+input EditMessageInput {
+  id: Int!
+  content: String!
+  # Needed for messageUpdated Subscription filter
+  chatId: Int!
+}
+
+extend type Subscription {
+  # Subscription for when editing a chat
+  chatUpdated(id: Int!): Chat
+  # Subscription for chat list
+  chatsUpdated(endCursor: Int!): UpdateChatPayload
+  # Subscription for messages
+  messageUpdated(chatId: Int!): UpdateMessagePayload
+}
+
+# Payload for chatsUpdated Subscription
+type UpdateChatPayload {
+  mutation: String!
+  id: Int!
+  node: Chat
+}
+
+# Payload for messageUpdated Subscription
+type UpdateMessagePayload {
+  mutation: String!
+  id: Int
+  chatId: Int!
+  node: Message
+}

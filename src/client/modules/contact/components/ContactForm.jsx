@@ -10,7 +10,7 @@ const ContactForm = ({ handleSubmit, valid, onSubmit }) => {
     <FormView>
       <Field name="name" component={RenderField} type="text" label="Name" validate={required} />
       <Field name="email" component={RenderField} type="text" label="Email" validate={required} />
-      <Field name="content" component={RenderField} type="text" label="Content" validate={required} />
+      <Field name="content" component={RenderField} type="textarea" label="Content" validate={required} />
       <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
         Send
       </FormButton>

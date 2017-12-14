@@ -94,9 +94,6 @@ export function reducer(state = defaultState, action: UserActions) {
 
 /* FORM REDUCERS */
 
-const RESET_FORM_ACTION = 'reset_form_action';
-const FILL_FORM_ACTION = 'fill_form_action';
-
 function required(value: any) {
   return value && value.toString().length ? {} : { required: 'Field is required' };
 }
@@ -106,7 +103,11 @@ const emailValidation = (email: AbstractControlState<string>) => {
     return validate(() => ({ required: 'Email is required' }), setValue(email.value, email));
   }
 
-  if (!/^[a-zA-Z0–9_.+-]+@[a-zA-Z0–9-]+\.[a-zA-Z0–9.]+$/.test(email.value)) {
+  if (
+    !/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+      email.value
+    )
+  ) {
     return validate(() => ({ email: 'Email should be like john@doe.com' }), setValue(email.value, email));
   }
 
@@ -134,19 +135,22 @@ const passwordConfirmationValidation = (
   return validate(() => ({}), setValue(passwordConfirmation.value, passwordConfirmation));
 };
 
-/* Forgot Password Form */
+/* Login Form */
 
 const LOGIN_FORM = 'login_form';
+const LOGIN_FORM_RESET = 'login_form_reset';
+const LOGIN_FORM_FILL = 'login_form_fill';
 
 export interface LoginFormData {
   email: string;
   password: string;
 }
 
-const initLoginForm = createFormGroupState<LoginFormData>(LOGIN_FORM, {
-  email: '',
-  password: ''
-});
+const initLoginForm = () =>
+  createFormGroupState<LoginFormData>(LOGIN_FORM, {
+    email: '',
+    password: ''
+  });
 
 const updateLoginFormData = groupUpdateReducer<LoginFormData>({
   email: emailValidation,
@@ -158,7 +162,7 @@ export interface LoginFormState {
 }
 
 const initLoginFormState: LoginFormState = {
-  loginForm: initLoginForm
+  loginForm: initLoginForm()
 };
 
 export interface LoginFormAction extends Action {
@@ -166,11 +170,11 @@ export interface LoginFormAction extends Action {
 }
 
 export class ResetLoginFormAction implements LoginFormAction {
-  public readonly type = RESET_FORM_ACTION;
+  public readonly type = LOGIN_FORM_RESET;
 }
 
 export class FillLoginFormAction implements LoginFormAction {
-  public readonly type = FILL_FORM_ACTION;
+  public readonly type = LOGIN_FORM_FILL;
   public formData: LoginFormData;
 
   constructor(fd: LoginFormData) {
@@ -186,12 +190,12 @@ export function loginFormReducer(state = initLoginFormState, action: LoginFormAc
   }
 
   switch (action.type) {
-    case RESET_FORM_ACTION:
+    case LOGIN_FORM_RESET:
       return {
         ...state,
-        loginForm: initLoginForm
+        loginForm: initLoginForm()
       };
-    case FILL_FORM_ACTION:
+    case LOGIN_FORM_FILL:
       return {
         ...state,
         loginForm: updateLoginFormData(createFormGroupState<LoginFormData>(LOGIN_FORM, action.formData), { type: '' })
@@ -205,14 +209,17 @@ export function loginFormReducer(state = initLoginFormState, action: LoginFormAc
 /* Forgot Password Form */
 
 const FORGOT_PASSWORD_FORM = 'forgot_password_form';
+const FORGOT_PASSWORD_FORM_RESET = 'forgot_password_form_reset';
+const FORGOT_PASSWORD_FORM_FILL = 'forgot_password_form_fill';
 
 export interface ForgotPasswordFormData {
   email: string;
 }
 
-const initForgotPasswordForm = createFormGroupState<ForgotPasswordFormData>(FORGOT_PASSWORD_FORM, {
-  email: ''
-});
+const initForgotPasswordForm = () =>
+  createFormGroupState<ForgotPasswordFormData>(FORGOT_PASSWORD_FORM, {
+    email: ''
+  });
 
 const updateForgotPasswordFormData = groupUpdateReducer<ForgotPasswordFormData>({
   email: emailValidation
@@ -223,7 +230,7 @@ export interface ForgotPasswordFormState {
 }
 
 const initForgotPasswordState: ForgotPasswordFormState = {
-  forgotPasswordForm: initForgotPasswordForm
+  forgotPasswordForm: initForgotPasswordForm()
 };
 
 export interface ForgotPasswordFormAction extends Action {
@@ -231,11 +238,11 @@ export interface ForgotPasswordFormAction extends Action {
 }
 
 export class ResetForgotPasswordFormAction implements ForgotPasswordFormAction {
-  public readonly type = RESET_FORM_ACTION;
+  public readonly type = FORGOT_PASSWORD_FORM_RESET;
 }
 
 export class FillForgotPasswordFormAction implements ForgotPasswordFormAction {
-  public readonly type = FILL_FORM_ACTION;
+  public readonly type = FORGOT_PASSWORD_FORM_FILL;
   public formData: ForgotPasswordFormData;
 
   constructor(fd: ForgotPasswordFormData) {
@@ -251,12 +258,12 @@ export function forgotPasswordFormReducer(state = initForgotPasswordState, actio
   }
 
   switch (action.type) {
-    case RESET_FORM_ACTION:
+    case FORGOT_PASSWORD_FORM_RESET:
       return {
         ...state,
-        forgotPasswordForm: initForgotPasswordForm
+        forgotPasswordForm: initForgotPasswordForm()
       };
-    case FILL_FORM_ACTION:
+    case FORGOT_PASSWORD_FORM_FILL:
       return {
         ...state,
         forgotPasswordForm: updateForgotPasswordFormData(
@@ -273,6 +280,8 @@ export function forgotPasswordFormReducer(state = initForgotPasswordState, actio
 /* Register Form */
 
 const REGISTER_FORM = 'register_form';
+const REGISTER_FORM_RESET = 'register_form_reset';
+const REGISTER_FORM_FILL = 'register_form_fill';
 
 export interface RegisterFormData {
   username: string;
@@ -281,12 +290,13 @@ export interface RegisterFormData {
   passwordConfirmation: string;
 }
 
-const initRegisterForm = createFormGroupState<RegisterFormData>(REGISTER_FORM, {
-  username: '',
-  email: '',
-  password: '',
-  passwordConfirmation: ''
-});
+const initRegisterForm = () =>
+  createFormGroupState<RegisterFormData>(REGISTER_FORM, {
+    username: '',
+    email: '',
+    password: '',
+    passwordConfirmation: ''
+  });
 
 const updateRegisterFormData = groupUpdateReducer<RegisterFormData>({
   username: validate(required),
@@ -300,7 +310,7 @@ export interface RegisterFormState {
 }
 
 const initRegisterState: RegisterFormState = {
-  registerForm: initRegisterForm
+  registerForm: initRegisterForm()
 };
 
 export interface RegisterFormAction extends Action {
@@ -308,11 +318,11 @@ export interface RegisterFormAction extends Action {
 }
 
 export class ResetRegisterFormAction implements RegisterFormAction {
-  public readonly type = RESET_FORM_ACTION;
+  public readonly type = REGISTER_FORM_RESET;
 }
 
 export class FillRegisterFormAction implements RegisterFormAction {
-  public readonly type = FILL_FORM_ACTION;
+  public readonly type = REGISTER_FORM_FILL;
   public formData: RegisterFormData;
 
   constructor(fd: RegisterFormData) {
@@ -328,12 +338,12 @@ export function registerFormReducer(state = initRegisterState, action: RegisterF
   }
 
   switch (action.type) {
-    case RESET_FORM_ACTION:
+    case REGISTER_FORM_RESET:
       return {
         ...state,
-        registerForm: initRegisterForm
+        registerForm: initRegisterForm()
       };
-    case FILL_FORM_ACTION:
+    case REGISTER_FORM_FILL:
       return {
         ...state,
         registerForm: updateRegisterFormData(createFormGroupState<RegisterFormData>(REGISTER_FORM, action.formData), {
@@ -349,16 +359,19 @@ export function registerFormReducer(state = initRegisterState, action: RegisterF
 /* Reset Password Form */
 
 const RESET_PASSWORD_FORM = 'reset_password_form';
+const RESET_PASSWORD_FORM_RESET = 'reset_password_form_reset';
+const RESET_PASSWORD_FORM_FILL = 'reset_password_form_fill';
 
 export interface ResetPasswordFormData {
   password: string;
   passwordConfirmation: string;
 }
 
-const initResetPasswordForm = createFormGroupState<ResetPasswordFormData>(RESET_PASSWORD_FORM, {
-  password: '',
-  passwordConfirmation: ''
-});
+const initResetPasswordForm = () =>
+  createFormGroupState<ResetPasswordFormData>(RESET_PASSWORD_FORM, {
+    password: '',
+    passwordConfirmation: ''
+  });
 
 const updateResetPasswordFormData = groupUpdateReducer<ResetPasswordFormData>({
   password: validate(required),
@@ -370,7 +383,7 @@ export interface ResetPasswordFormState {
 }
 
 const initResetPasswordState: ResetPasswordFormState = {
-  resetPasswordForm: initResetPasswordForm
+  resetPasswordForm: initResetPasswordForm()
 };
 
 export interface ResetPasswordFormAction extends Action {
@@ -378,11 +391,11 @@ export interface ResetPasswordFormAction extends Action {
 }
 
 export class ResetResetPasswordFormAction implements ResetPasswordFormAction {
-  public readonly type = RESET_FORM_ACTION;
+  public readonly type = RESET_PASSWORD_FORM_RESET;
 }
 
 export class FillResetPasswordFormAction implements ResetPasswordFormAction {
-  public readonly type = FILL_FORM_ACTION;
+  public readonly type = RESET_PASSWORD_FORM_FILL;
   public formData: ResetPasswordFormData;
 
   constructor(fd: ResetPasswordFormData) {
@@ -398,12 +411,12 @@ export function resetPasswordFormReducer(state = initResetPasswordState, action:
   }
 
   switch (action.type) {
-    case RESET_FORM_ACTION:
+    case RESET_PASSWORD_FORM_RESET:
       return {
         ...state,
-        forgotPasswordForm: initResetPasswordForm
+        forgotPasswordForm: initResetPasswordForm()
       };
-    case FILL_FORM_ACTION:
+    case RESET_PASSWORD_FORM_FILL:
       return {
         ...state,
         forgotPasswordForm: updateResetPasswordFormData(
@@ -420,6 +433,8 @@ export function resetPasswordFormReducer(state = initResetPasswordState, action:
 /* User Form */
 
 const USER_FORM = 'user_form';
+const USER_FORM_RESET = 'user_form_reset';
+const USER_FORM_FILL = 'user_form_fill';
 
 export interface UserFormData {
   username: string;
@@ -432,16 +447,17 @@ export interface UserFormData {
   passwordConfirmation: string;
 }
 
-const initUserForm = createFormGroupState<UserFormData>(USER_FORM, {
-  username: '',
-  email: '',
-  role: '',
-  isActive: false,
-  firstName: '',
-  lastName: '',
-  password: '',
-  passwordConfirmation: ''
-});
+const initUserForm = () =>
+  createFormGroupState<UserFormData>(USER_FORM, {
+    username: '',
+    email: '',
+    role: '',
+    isActive: false,
+    firstName: '',
+    lastName: '',
+    password: '',
+    passwordConfirmation: ''
+  });
 
 const updateUserFormData = groupUpdateReducer<UserFormData>({
   username: validate(required),
@@ -458,7 +474,7 @@ export interface UserFormState {
 }
 
 const initUserState: UserFormState = {
-  userForm: initUserForm
+  userForm: initUserForm()
 };
 
 export interface UserFormAction extends Action {
@@ -466,11 +482,11 @@ export interface UserFormAction extends Action {
 }
 
 export class ResetUserFormAction implements UserFormAction {
-  public readonly type = RESET_FORM_ACTION;
+  public readonly type = USER_FORM_RESET;
 }
 
 export class FillUserFormAction implements UserFormAction {
-  public readonly type = FILL_FORM_ACTION;
+  public readonly type = USER_FORM_FILL;
   public formData: UserFormData;
 
   constructor(fd: UserFormData) {
@@ -486,12 +502,12 @@ export function userFormReducer(state = initUserState, action: UserFormAction) {
   }
 
   switch (action.type) {
-    case RESET_FORM_ACTION:
+    case USER_FORM_RESET:
       return {
         ...state,
-        userForm: initUserForm
+        userForm: initUserForm()
       };
-    case FILL_FORM_ACTION:
+    case USER_FORM_FILL:
       return {
         ...state,
         userForm: updateUserFormData(createFormGroupState<UserFormData>(USER_FORM, action.formData), action)

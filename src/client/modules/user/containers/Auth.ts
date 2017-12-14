@@ -5,20 +5,13 @@ import LoginService from './Login';
   selector: 'auth-login',
   template: `
     <menu-item *ngIf="!isAuth" class="nav-item">
-      <span class="nav-link">
-        <nav-link [name]="'Login'" [className]="''" [to]="'/login'"></nav-link> /
-        <nav-link [name]="'Register'" [className]="''" [to]="'/register'"></nav-link>
-      </span>
+      <nav-link [name]="'Sign In'" [to]="'/login'"></nav-link>
     </menu-item>
     <menu-item *ngIf="isAuth">
-        <span class="nav-link">
-          <a href="#" (click)="logout()">Logout</a>
-        </span>
+      <nav-link [name]="'Logout'" [type]="'clickable'" (click)="logout()"></nav-link>
     </menu-item>
     <menu-item *ngIf="isAuth">
-      <nav-link [name]="profileName" [to]="'/profile'">
-        <a href="#" routerLink="/profile" routerLinkActive="active">{{profileName}}</a>
-      </nav-link>
+      <nav-link [name]="profileName" [to]="'/profile'"></nav-link>
     </menu-item>
   `,
   styles: ['menu-item { float: right; display: inline-block; }']
@@ -54,7 +47,7 @@ class AuthLogin implements OnInit {
   selector: 'auth-nav',
   template: `
     <menu-item *ngIf="isAuth">
-      <nav-link [name]="'Users'" [to]="'/users'" [className]="'nav-link'"></nav-link>
+      <nav-link [name]="'Users'" [to]="'/users'"></nav-link>
     </menu-item>
   `
 })

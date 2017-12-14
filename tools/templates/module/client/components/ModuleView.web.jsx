@@ -2,19 +2,19 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { PageLayout } from '../../common/components/web';
 
-const $Module$View = () => {
-  const renderMetaData = () => (
-    <Helmet
-      title="$Module$"
-      meta={[
-        {
-          name: 'description',
-          content: '$Module$ page'
-        }
-      ]}
-    />
-  );
+const renderMetaData = () => (
+  <Helmet
+    title="$Module$"
+    meta={[
+      {
+        name: 'description',
+        content: '$Module$ page'
+      }
+    ]}
+  />
+);
 
+const $Module$View = () => {
   return (
     <PageLayout>
       {renderMetaData()}

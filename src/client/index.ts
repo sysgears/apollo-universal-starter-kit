@@ -21,27 +21,20 @@ import routes from './app/Routes.web';
 import CounterView from './modules/counter/components/CounterView.web';
 import CounterService from './modules/counter/containers/Counter';
 import PageNotFound from './modules/pageNotFound/containers/PageNotFound';
-import PostCommentForm from './modules/post/components/PostCommentForm.web';
 import PostCommentsView from './modules/post/components/PostCommentsView.web';
 import PostEditView from './modules/post/components/PostEditView.web';
-import PostForm from './modules/post/components/PostForm.web';
 import PostList from './modules/post/components/PostList.web';
 import PostService from './modules/post/containers/Post';
 import PostCommentsService from './modules/post/containers/PostComments';
 import PostEditService from './modules/post/containers/PostEdit';
 import UploadView from './modules/upload/components/UploadView.web';
 import UploadService from './modules/upload/containers/Upload';
-import ForgotPasswordForm from './modules/user/components/ForgotPasswordForm.web';
 import ForgotPasswordView from './modules/user/components/ForgotPasswordView.web';
-import LoginForm from './modules/user/components/LoginForm.web';
 import LoginView from './modules/user/components/LoginView.web';
 import ProfileView from './modules/user/components/ProfileView.web';
-import RegisterForm from './modules/user/components/RegisterForm.web';
 import RegisterView from './modules/user/components/RegisterView.web';
-import ResetPasswordForm from './modules/user/components/ResetPasswordForm.web';
 import ResetPasswordView from './modules/user/components/ResetPasswordView.web';
 import UsersEditView from './modules/user/components/UserEditView';
-import UserForm from './modules/user/components/UserForm.web';
 import Users from './modules/user/components/Users.web';
 import UsersFilterView from './modules/user/components/UsersFilterView.web';
 import UsersListView from './modules/user/components/UsersListView.web';
@@ -71,17 +64,13 @@ import { clientProvider, default as Main } from './app/Main';
     // Post
     PostList,
     PostEditView,
-    PostForm,
     PostCommentsView,
-    PostCommentForm,
     PostEditView,
     // Upload
     UploadView,
     // User
     LoginView,
-    LoginForm,
     RegisterView,
-    RegisterForm,
     ProfileView,
     AuthLogin,
     AuthNav,
@@ -89,10 +78,7 @@ import { clientProvider, default as Main } from './app/Main';
     UsersListView,
     UsersFilterView,
     UsersEditView,
-    UserForm,
-    ForgotPasswordForm,
     ForgotPasswordView,
-    ResetPasswordForm,
     ResetPasswordView
   ],
   bootstrap: [Main],

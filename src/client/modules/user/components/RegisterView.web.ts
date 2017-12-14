@@ -2,28 +2,34 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import { Subject } from 'rxjs/Subject';
+
+import { AlertItem, createErrorAlert } from '../../common/components/Alert';
+import { FormInput } from '../../ui-bootstrap/components/Form';
+import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import RegisterService from '../containers/Register';
 import { RegisterFormData, RegisterFormState } from '../reducers/index';
-import { FormInput, InputType } from './UserEditView';
 
 @Component({
   selector: 'register-view',
   template: `
-    <div id="content" class="container">
-      <h1>Register page!</h1>
+    <layout-center>
+      <h1 class="text-center">Sign Up</h1>
 
-      <div *ngIf="errors">
-        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
-          {{error.message}}
-        </div>
-      </div>
+      <alert [subject]="alertSubject"></alert>
 
-      <register-form [onSubmit]="onSubmit" [formState]="formState" [form]="form"></register-form>
-    </div>
+      <ausk-form [onSubmit]="onSubmit"
+                 [formName]="'registerForm'"
+                 [formState]="formState"
+                 [form]="form"
+                 [btnName]="'Register'"
+                 [btnAlign]="'center'">
+      </ausk-form>
+    </layout-center>
   `
 })
 export default class RegisterView {
-  public errors: any[];
+  public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   public formState: FormGroupState<RegisterFormData>;
   public form: FormInput[];
 
@@ -42,10 +48,9 @@ export default class RegisterView {
     const { username, email, password } = regInputs;
     this.registerService.register(username, email, password, ({ data: { register } }: any) => {
       if (register.errors) {
-        this.errors = register.errors;
+        register.errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
         return;
       }
-
       this.router.navigateByUrl('login');
     });
   };
@@ -57,8 +62,9 @@ export default class RegisterView {
         name: 'username',
         value: 'Username',
         type: 'text',
+        label: 'Username',
         placeholder: 'Username',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 3
       },
       {
@@ -66,8 +72,9 @@ export default class RegisterView {
         name: 'email',
         value: 'Email',
         type: 'email',
+        label: 'Email',
         placeholder: 'Email',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 1
       },
       {
@@ -75,8 +82,9 @@ export default class RegisterView {
         name: 'password',
         value: 'Password',
         type: 'password',
+        label: 'Password',
         placeholder: 'Password',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5
       },
       {
@@ -84,8 +92,9 @@ export default class RegisterView {
         name: 'passwordConfirmation',
         value: 'Password Confirmation',
         type: 'password',
+        label: 'Password Confirmation',
         placeholder: 'Password Confirmation',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5
       }
     ];

@@ -3,12 +3,12 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'nav-link',
   template: `
-      <a class="{{ className }}" routerLinkActive="{{ linkActiveClass }}" routerLink="{{ to }}">{{ name }}</a>
+    <ausk-link [to]="to" [type]="type" [navLink]="true">{{ name }}</ausk-link>
 	`
 })
 export default class NavLink {
   @Input() public name: string;
   @Input() public to: string;
-  @Input() public className: string = 'nav-link';
-  @Input() public linkActiveClass: string = 'active';
+  @Input() public type: string = 'router';
+  public className: string;
 }

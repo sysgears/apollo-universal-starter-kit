@@ -53,8 +53,6 @@ export const DeleteComment = (prev: any, id: any) => {
 
 @Injectable()
 export default class PostCommentsService {
-  public startedEditing = new Subject<any>();
-
   constructor(private apollo: Apollo) {}
 
   public subscribeToCommentList(postId: number, callback: (result: any) => any) {
@@ -76,23 +74,6 @@ export default class PostCommentsService {
           id: -1,
           content,
           __typename: 'Comment'
-        }
-      },
-      updateQueries: {
-        post: (prev: any, { mutationResult: { data: { addComment } } }: any) => {
-          if (prev.post) {
-            // ignore if duplicate
-            if (addComment.id !== null && prev.post.comments.some((comment: any) => addComment.id === comment.id)) {
-              return prev;
-            }
-
-            return {
-              post: {
-                ...prev.post,
-                comments: [...prev.post.comments, addComment]
-              }
-            };
-          }
         }
       }
     });
@@ -128,24 +109,6 @@ export default class PostCommentsService {
         deleteComment: {
           id,
           __typename: 'Comment'
-        }
-      },
-      updateQueries: {
-        post: (prev: any, { mutationResult: { data: { deleteComment } } }: any) => {
-          if (prev.post) {
-            const index = prev.post.comments.findIndex((x: any) => x.id === deleteComment.id);
-            // ignore if not found
-            if (index < 0) {
-              return prev;
-            }
-
-            return {
-              post: {
-                ...prev.post,
-                comments: prev.post.comments.filter((comment: any) => comment.id !== deleteComment.id)
-              }
-            };
-          }
         }
       }
     });

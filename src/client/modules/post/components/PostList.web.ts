@@ -1,45 +1,34 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
+import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
 import PostService, { AddPost, DeletePost } from '../containers/Post';
 
 @Component({
   selector: 'posts-view',
   template: `
-      <div *ngIf="!loading; else showLoading" class="container">
-          <h2>Posts</h2>
-          <a [routerLink]="['/post/0']">
-              <button class="btn btn-primary">Add</button>
-          </a>
-          <h1></h1>
-          <table class="table">
-              <thead>
-              <tr>
-                  <th class="w-100">Title</th>
-                  <th class="w-100">Actions</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let post of renderPosts()">
-                  <td>
-                      <a [routerLink]="['/post', post.id]" class="post-link">{{ post.title }}</a>
-                  </td>
-                  <td>
-                      <button type="button" class="delete-button btn btn-primary btn-sm" (click)="deletePost(post.id)">Delete</button>
-                  </td>
-              </tr>
-              </tbody>
-          </table>
-          <div>
-              <small>({{ posts.edges.length }} / {{ posts.totalCount }})</small>
-          </div>
-          <button type="button" id="load-more" class="btn btn-primary" *ngIf="posts.pageInfo.hasNextPage" (click)="loadMoreRows()">
-              Load more ...
-          </button>
+    <div *ngIf="!loading; else showLoading" class="container">
+      <h2>Posts</h2>
+      <ausk-link [to]="'/post/0'">
+        <ausk-button>Add</ausk-button>
+      </ausk-link>
+      <h1></h1>
+
+      <ausk-table
+          [columns]="columns"
+          [rows]="rows">
+      </ausk-table>
+
+      <div>
+        <small>({{ posts.edges.length }} / {{ posts.totalCount }})</small>
       </div>
-      <ng-template #showLoading>
-          <div class="text-center">Loading...</div>
-      </ng-template>
+      <ausk-button *ngIf="posts.pageInfo.hasNextPage" (click)="loadMoreRows()">
+        Load more ...
+      </ausk-button>
+    </div>
+    <ng-template #showLoading>
+      <div class="text-center">Loading...</div>
+    </ng-template>
   `
 })
 export default class PostList implements OnInit, OnDestroy {
@@ -48,6 +37,8 @@ export default class PostList implements OnInit, OnDestroy {
   private subsOnLoad: Subscription;
   private subsOnUpdate: Subscription;
   private subsOnDelete: Subscription;
+  private columns: ColumnData[] = [{ title: 'Title' }, { title: 'Actions', width: 50 }];
+  private rows: CellData[];
 
   constructor(private postService: PostService, private ngZone: NgZone) {}
 
@@ -57,6 +48,20 @@ export default class PostList implements OnInit, OnDestroy {
         this.loading = loading;
         this.posts = posts;
         this.postService.updateEndCursor(posts.pageInfo.endCursor);
+        this.rows = this.posts.edges.map((item: any) => {
+          return [
+            {
+              type: ElemType.Link,
+              text: item.node.title,
+              link: `/post/${item.node.id}`
+            },
+            {
+              type: ElemType.Button,
+              text: 'Delete',
+              callback: () => this.deletePost(item.node.id)
+            }
+          ];
+        });
       });
     });
 
@@ -75,15 +80,6 @@ export default class PostList implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.unsubscribe(this.subsOnLoad, this.subsOnDelete);
-  }
-
-  public renderPosts() {
-    if (this.posts.edges.length === 0) {
-      return [];
-    }
-    return this.posts.edges.map((edge: any): any => {
-      return { id: edge.node.id, title: edge.node.title };
-    });
   }
 
   public loadMoreRows() {

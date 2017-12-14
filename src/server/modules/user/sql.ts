@@ -90,9 +90,10 @@ export default class User {
   public async getUserWithPassword(id: number) {
     return camelizeKeys(
       await knex
-        .select('*')
+        .select('u.id', 'u.username', 'u.password', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
         .from('user AS u')
         .where('u.id', '=', id)
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .first()
     );
   }
@@ -100,9 +101,10 @@ export default class User {
   public async getUserWithSerial(serial: any) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.role', 'ca.serial')
+        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'ca.serial', 'up.first_name', 'up.last_name')
         .from('user AS u')
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where('ca.serial', '=', serial)
         .first()
     );
@@ -202,8 +204,9 @@ export default class User {
   public async getUserByEmail(email: string) {
     return camelizeKeys(
       await knex
-        .select('*')
+        .select('u.id', 'u.username', 'u.password', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
         .from('user AS u')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where({ email })
         .first()
     );
@@ -212,9 +215,20 @@ export default class User {
   public async getUserByFbIdOrEmail(id: number, email: string) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'fa.fb_id', 'u.email', 'u.password')
+        .select(
+          'u.id',
+          'u.username',
+          'u.role',
+          'u.is_active',
+          'fa.fb_id',
+          'u.email',
+          'u.password',
+          'up.first_name',
+          'up.last_name'
+        )
         .from('user AS u')
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where('fa.fb_id', '=', id)
         .orWhere('u.email', '=', email)
         .first()
@@ -224,9 +238,10 @@ export default class User {
   public async getUserByUsername(username: string) {
     return camelizeKeys(
       await knex
-        .select('*')
+        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
         .from('user AS u')
         .where('u.username', '=', username)
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .first()
     );
   }

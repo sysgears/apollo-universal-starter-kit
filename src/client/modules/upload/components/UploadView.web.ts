@@ -7,18 +7,16 @@ import UploadService from '../containers/Upload';
 @Component({
   selector: 'upload-view',
   template: `
-      <div id="content" class="container">
-          <div class="text-center mt-4 mb-4">
-              <label class="upload-button">
-                  <div class="drop-container" ngFileDrop (uploadOutput)="onUploadOutput($event)"
-                       [uploadInput]="uploadInput" [ngClass]="{ 'dragOver': dragOver }">
-                      <input #fileInput type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)"
-                             [uploadInput]="uploadInput" multiple style="display: none">
-                      Try dropping some files here, or click to select files to upload.
-                  </div>
-              </label>
-          </div>
-      </div>
+    <div class="text-center mt-4 mb-4">
+      <label class="upload-button">
+        <div class="drop-container" ngFileDrop (uploadOutput)="onUploadOutput($event)"
+             [uploadInput]="uploadInput" [ngClass]="{ 'dragOver': dragOver }">
+          <input #fileInput type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)"
+                 [uploadInput]="uploadInput" multiple style="display: none">
+          Try dropping some files here, or click to select files to upload.
+        </div>
+      </label>
+    </div>
   `,
   styles: [
     `

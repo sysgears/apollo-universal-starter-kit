@@ -1,4 +1,4 @@
-import { reducer } from './reducers';
+import { commentFormReducer, postFormReducer, reducer } from './reducers';
 
 import Feature from '../connector';
 import PostEditView from './components/PostEditView.web';
@@ -20,5 +20,9 @@ export default new Feature({
       </menu-item>
     `
   ],
-  reducer: { post: reducer }
+  reducer: {
+    post: reducer,
+    postForm: postFormReducer,
+    commentForm: commentFormReducer
+  }
 });

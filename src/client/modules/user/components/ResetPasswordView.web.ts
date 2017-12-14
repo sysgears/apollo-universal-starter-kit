@@ -2,30 +2,34 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import { Subject } from 'rxjs/Subject';
+
+import { AlertItem, createErrorAlert } from '../../common/components/Alert';
+import { FormInput } from '../../ui-bootstrap/components/Form';
+import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import ResetPasswordService from '../containers/ResetPassword';
 import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
-import { FormInput, InputType } from './UserEditView';
 
 @Component({
   selector: 'reset-password-view',
   template: `
-    <div id="content" class="container">
-      <h1>Reset password!</h1>
+    <h1>Reset password!</h1>
 
-      <div *ngIf="errors">
-        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
-          {{error.message}}
-        </div>
-      </div>
+    <alert [subject]="alertSubject"></alert>
 
-      <reset-password-form [onSubmit]="onSubmit" [sent]="sent" [submitting]="submitting" [formState]="formState" [form]="form"></reset-password-form>
-    </div>
+    <ausk-form [onSubmit]="onSubmit"
+               [submitting]="submitting"
+               [formName]="'resetPasswordForm'"
+               [formState]="formState"
+               [form]="form"
+               [btnName]="'Reset Password'">
+    </ausk-form>
   `
 })
 export default class ResetPasswordView implements OnInit {
   public sent: boolean = false;
   public submitting: boolean = false;
-  public errors: any[];
+  public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   private token: string;
   public formState: FormGroupState<RegisterFormData>;
   public form: FormInput[];
@@ -59,7 +63,7 @@ export default class ResetPasswordView implements OnInit {
           this.submitting = false;
 
           if (resetPassword.errors) {
-            this.errors = resetPassword.errors;
+            resetPassword.errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
             return;
           }
         }
@@ -74,8 +78,9 @@ export default class ResetPasswordView implements OnInit {
         name: 'password',
         value: 'Password',
         type: 'password',
+        label: 'Password',
         placeholder: 'Password',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5
       },
       {
@@ -83,8 +88,9 @@ export default class ResetPasswordView implements OnInit {
         name: 'passwordConfirmation',
         value: 'Password Confirmation',
         type: 'password',
+        label: 'Password Confirmation',
         placeholder: 'Password Confirmation',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5
       }
     ];

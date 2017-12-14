@@ -3,50 +3,37 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { assign, pick } from 'lodash';
 import { FormGroupState } from 'ngrx-forms';
+import { Subject } from 'rxjs/Subject';
+
 import settings from '../../../../../settings';
+import { AlertItem, createErrorAlert } from '../../common/components/Alert';
+import { FormInput } from '../../ui-bootstrap/components/Form';
+import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import UserEditService from '../containers/UserEdit';
 import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } from '../reducers/index';
-
-export enum InputType {
-  INPUT = 0,
-  SELECTOR = 1,
-  RADIO_BUTTON = 2
-}
-
-export interface FormInput {
-  id: string;
-  name: string;
-  value: string;
-  type?: string;
-  placeholder?: string;
-  inputType: InputType;
-  options?: any[];
-  minLength?: number;
-  required?: boolean;
-}
 
 @Component({
   selector: 'users-edit-view',
   template: `
-    <div id="content" class="container">
-      <a id="back-button" routerLink="/users">Back</a>
-      <h1>{{title}}</h1>
+    <ausk-link [id]="back-button" [to]="'/users'" [type]>Back</ausk-link>
+    <h1>{{title}}</h1>
 
-      <div *ngIf="errors">
-        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
-          {{error.message}}
-        </div>
-      </div>
+    <alert [subject]="alertSubject"></alert>
 
-      <user-form [onSubmit]="onSubmit" [formState]="formState" [loading]="loading" [form]="form"></user-form>
-    </div>
+    <ausk-form [onSubmit]="onSubmit"
+               [formName]="'userForm'"
+               [formState]="formState"
+               [loading]="loading"
+               [form]="form"
+               [btnName]="'Save'">
+    </ausk-form>
   `
 })
 export default class UsersEditView implements OnInit, OnDestroy {
   public user: any = {};
   public loading: boolean = true;
   public title: string;
-  public errors: any[] = [];
+  public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   public formState: FormGroupState<UserFormData>;
   public form: FormInput[];
 
@@ -101,7 +88,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
         { id: this.user.id, ...insertValues },
         ({ data: { editUser: { errors, user } } }: any) => {
           if (errors) {
-            this.errors = errors;
+            errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
             return;
           }
           this.router.navigateByUrl('users');
@@ -110,7 +97,7 @@ export default class UsersEditView implements OnInit, OnDestroy {
     } else {
       this.userEditService.addUser(insertValues, ({ data: { addUser: { errors, user } } }: any) => {
         if (errors) {
-          this.errors = errors;
+          errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
           return;
         }
         this.router.navigateByUrl('users');
@@ -125,8 +112,9 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'username',
         value: 'Username',
         type: 'text',
+        label: 'Username',
         placeholder: 'Username',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 1,
         required: true
       },
@@ -135,8 +123,9 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'email',
         value: 'Email',
         type: 'email',
+        label: 'Email',
         placeholder: 'Email',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 3,
         required: true
       },
@@ -144,7 +133,8 @@ export default class UsersEditView implements OnInit, OnDestroy {
         id: 'role-selector',
         name: 'role',
         value: 'Role',
-        inputType: InputType.SELECTOR,
+        label: 'Role',
+        inputType: ItemType.SELECTOR,
         options: ['user', 'admin'],
         required: true
       },
@@ -152,7 +142,8 @@ export default class UsersEditView implements OnInit, OnDestroy {
         id: 'active-radio',
         name: 'isActive',
         value: 'Is Active',
-        inputType: InputType.RADIO_BUTTON,
+        label: 'Is Active',
+        inputType: ItemType.RADIO_BUTTON,
         required: true
       },
       {
@@ -160,8 +151,9 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'firstName',
         value: 'First Name',
         type: 'text',
+        label: 'First Name',
         placeholder: 'First Name',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         required: true
       },
       {
@@ -169,8 +161,9 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'lastName',
         value: 'Last Name',
         type: 'text',
+        label: 'Last Name',
         placeholder: 'Last Name',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         required: true
       },
       {
@@ -178,8 +171,9 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'password',
         value: 'Password',
         type: 'password',
+        label: 'Password',
         placeholder: 'Password',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5,
         required: withPassword
       },
@@ -188,8 +182,9 @@ export default class UsersEditView implements OnInit, OnDestroy {
         name: 'passwordConfirmation',
         value: 'Password Confirmation',
         type: 'password',
+        label: 'Password Confirmation',
         placeholder: 'Password Confirmation',
-        inputType: InputType.INPUT,
+        inputType: ItemType.INPUT,
         minLength: 5,
         required: withPassword
       }

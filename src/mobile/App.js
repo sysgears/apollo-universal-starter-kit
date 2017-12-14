@@ -35,9 +35,11 @@ export default class Main extends Component {
   };
 
   render() {
-    const uri = this.props.expUri
-      ? `${protocol}//${url.parse(this.props.expUri).hostname}:${port}${pathname}`
-      : __BACKEND_URL__;
+    const { hostname } = url.parse(__BACKEND_URL__);
+    const uri =
+      this.props.expUri && hostname === 'localhost'
+        ? `${protocol}//${url.parse(this.props.expUri).hostname}:${port}${pathname}`
+        : __BACKEND_URL__;
     const fetch = createApolloFetch({ uri });
     const cache = new InMemoryCache();
 

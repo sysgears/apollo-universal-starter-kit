@@ -31,7 +31,7 @@ for (const applyBeforeware of modules.beforewares) {
 // app.use(cookiesMiddleware());
 
 const { port, pathname } = url.parse(__BACKEND_URL__);
-const serverPort = process.env.PORT || port;
+const serverPort = process.env.PORT || port || 8080;
 
 // Don't rate limit heroku
 app.enable('trust proxy');

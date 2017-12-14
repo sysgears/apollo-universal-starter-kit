@@ -1,32 +1,39 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
+import { Subject } from 'rxjs/Subject';
+
+import { AlertItem, createErrorAlert, createSuccessAlert } from '../../common/components/Alert';
+import { FormInput } from '../../ui-bootstrap/components/Form';
+import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import ForgotPasswordService from '../containers/ForgotPassword';
 import { ForgotPasswordFormData, ForgotPasswordFormState, ResetForgotPasswordFormAction } from '../reducers/index';
-import { FormInput, InputType } from './UserEditView';
 
 @Component({
   selector: 'forgot-password-view',
   template: `
-    <div id="content" class="container">
-      <h1>Forgot password!</h1>
+    <layout-center>
+      <h1 class="text-center">Password Reset</h1>
 
-      <div *ngIf="errors">
-        <div *ngFor="let error of errors" class="alert alert-danger" role="alert" [id]="error.field">
-          {{error.message}}
-        </div>
-      </div>
+      <alert [subject]="alertSubject"></alert>
 
-      <forgot-password-form [onSubmit]="onSubmit" [sent]="sent" [submitting]="submitting" [form]="form" [formState]="formState"></forgot-password-form>
-    </div>
+      <ausk-form [onSubmit]="onSubmit"
+                 [submitting]="submitting"
+                 [formName]="'forgotPasswordForm'"
+                 [form]="form"
+                 [formState]="formState"
+                 [btnName]="'Send Reset Instructions'"
+                 [btnAlign]="'center'">
+      </ausk-form>
+    </layout-center>
   `
 })
 export default class ForgotPasswordView {
   public form: FormInput[];
   public sent: boolean = false;
   public submitting: boolean = false;
-  public errors: any[] = [];
   public formState: FormGroupState<ForgotPasswordFormData>;
+  public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
 
   constructor(private forgotPasswordService: ForgotPasswordService, private store: Store<ForgotPasswordFormState>) {
     this.form = this.createForm();
@@ -39,9 +46,10 @@ export default class ForgotPasswordView {
     this.submitting = true;
     this.forgotPasswordService.forgotPassword(email, ({ data: { forgotPassword } }: any) => {
       this.sent = true;
+      this.alertSubject.next(createSuccessAlert('Reset password instructions have been emailed to you.'));
       this.submitting = false;
       if (forgotPassword.errors) {
-        this.errors = forgotPassword.errors;
+        forgotPassword.errors.forEach((error: any) => this.alertSubject.next(createErrorAlert(error.message)));
         return;
       }
       this.store.dispatch(new ResetForgotPasswordFormAction());
@@ -55,8 +63,9 @@ export default class ForgotPasswordView {
         name: 'email',
         value: 'Email',
         type: 'email',
+        label: 'Email',
         placeholder: 'Email',
-        inputType: InputType.INPUT
+        inputType: ItemType.INPUT
       }
     ];
   };

@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 
 import ContactForm from './ContactForm';
 
-const onSubmit = ({ contact, onFormSubmitted }) => async values => {
+const onSubmit = (contact, onFormSubmitted) => async values => {
   const result = await contact(values);
 
   if (result.errors) {
@@ -21,7 +21,7 @@ const onSubmit = ({ contact, onFormSubmitted }) => async values => {
 const ContactView = ({ contact, onFormSubmitted }) => {
   return (
     <View style={styles.container}>
-      <ContactForm onSubmit={onSubmit({ contact, onFormSubmitted })} />
+      <ContactForm onSubmit={onSubmit(contact, onFormSubmitted)} />
     </View>
   );
 };

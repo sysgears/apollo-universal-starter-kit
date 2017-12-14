@@ -49,6 +49,7 @@ import UsersListService from './modules/user/containers/UsersList';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { clientProvider, default as Main } from './app/Main';
 
 @NgModule({
@@ -93,7 +94,8 @@ import { clientProvider, default as Main } from './app/Main';
     StoreModule.forRoot(reducers),
     RouterModule.forRoot(routes, {
       useHash: true
-    })
+    }),
+    NgZorroAntdModule.forRoot()
   ],
   providers: [
     CounterService,

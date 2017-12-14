@@ -9,11 +9,8 @@ let User = new UserDAO();
 // Actual query fetching and transformation in DB
 export default class Subscription {
   async getSubscription(userId) {
-    if (userId === undefined) {
-      console.log('UNDEFd userId in getSubscription');
+    if (!userId) {
       return null;
-    } else {
-      console.log('getSUB', userId);
     }
     let ret = camelizeKeys(
       await knex
@@ -77,9 +74,10 @@ export default class Subscription {
   }
 
   async getCardInfo(userUUID) {
-    console.log('getCardInfo', userUUID);
+    if (!userUUID) {
+      return null;
+    }
     let userId = await User.getInternalIdFromUUID(userUUID);
-    console.log('getCardInfo', userId);
     let ret = camelizeKeys(
       await knex('user_subscriptions')
         .select('s.expiry_month', 's.expiry_year', 's.last4', 's.brand')

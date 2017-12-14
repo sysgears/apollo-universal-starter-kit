@@ -5,6 +5,8 @@ export default {
 
   authentication: {
     enabled: true,
+    loginSuccessRedirect: '/profile',
+
     // [embedded, dex]
     provider: 'embedded',
 
@@ -35,14 +37,17 @@ export default {
       enabled: true,
       providers: {
         facebook: {
-          enable: false,
+          enabled: false,
           clientID: process.env.FACEBOOK_CLIENTID,
-          clientSecret: process.env.FACEBOOK_CLIENTSECRET
+          clientSecret: process.env.FACEBOOK_CLIENTSECRET,
+          scope: ['email'],
+          profileFields: ['id', 'emails', 'displayName']
         },
         google: {
-          enable: true,
+          enabled: true,
           clientID: process.env.GOOGLE_CLIENTID,
-          clientSecret: process.env.GOOGLE_CLIENTSECRET
+          clientSecret: process.env.GOOGLE_CLIENTSECRET,
+          scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
         }
       }
     }
@@ -58,7 +63,7 @@ export default {
 
       roles: ['owner', 'admin', 'subscriber', 'user'],
       subjects: {
-        user: true
+        users: true
       },
       verbs: ['create', 'update', 'delete', 'view', 'view:all']
     },

@@ -8,26 +8,19 @@ const OAuthMap = {
   google: Google
 };
 
+const oauth = settings.auth.authentication.oauth;
+
 const Enable = app => {
-  for (let provider in settings.auth.oauth.providers) {
-    if (provider.enabled === true) {
-      let P = OAuthMap[provider];
+  for (let provider in oauth.providers) {
+    let prvdr = oauth.providers[provider];
+    let P = OAuthMap[provider];
+    if (prvdr.enabled) {
       P.Enable();
       P.AddRoutes(app);
     }
   }
 };
 
-const AddRoutes = app => {
-  for (let provider in settings.auth.oauth.providers) {
-    if (provider.enabled === true) {
-      let P = OAuthMap[provider];
-      P.AddRoutes(app);
-    }
-  }
-};
-
 export default {
-  Enable,
-  AddRoutes
+  Enable
 };

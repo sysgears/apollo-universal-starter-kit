@@ -5,6 +5,19 @@ import uuidv4 from 'uuid';
 import knex from '../../../sql/connector';
 import { orderedFor } from '../../../sql/helpers';
 
+const userFields = ['u.uuid AS id', 'u.email', 'u.created_at', 'u.updated_at', 'u.is_active'];
+
+const profileFields = [
+  'p.display_name',
+  'p.title',
+  'p.first_name',
+  'p.middle_name',
+  'p.last_name',
+  'p.suffix',
+  'p.locale',
+  'p.language'
+];
+
 export default class User {
   async list(args) {
     let { filters, orderBys, offset, limit } = args;
@@ -60,16 +73,16 @@ export default class User {
     return camelizeKeys(await queryBuilder);
   }
 
-  async get(id) {
-    return camelizeKeys(
-      await knex
-        .select('u.uuid as id', 'u.created_at', 'u.updated_at', 'u.is_active', 'u.email', 'p.*', 'r.role')
-        .from('users AS u')
-        .where('u.uuid', '=', id)
-        .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-        .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
-        .first()
-    );
+  async get(uuid) {
+    let ret = await knex
+      .select(...userFields, ...profileFields, 'r.role')
+      .from('users AS u')
+      .where('u.uuid', '=', uuid)
+      .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
+      .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
+      .first();
+    console.log('User.get', uuid, ret);
+    return camelizeKeys(ret);
   }
 
   async getById(id) {
@@ -123,18 +136,20 @@ export default class User {
 
   async create(values) {
     values.uuid = uuidv4();
-    const [uid] = await knex('users')
-      .returning('uuid')
-      .insert(decamelizeKeys(values));
-    return uid;
+    await knex('users').insert(decamelizeKeys(values));
+    return values.uuid;
   }
 
   async getInternalIdFromUUID(uuid) {
-    return knex
+    let ret = await knex
       .select('id')
       .from('users')
       .where('uuid', '=', uuid)
       .first();
+    if (ret && ret.id) {
+      return ret.id;
+    }
+    return ret;
   }
 
   async update(uuid, values) {
@@ -160,6 +175,7 @@ export default class User {
 
   async createProfile(uuid, values) {
     let userId = await this.getInternalIdFromUUID(uuid);
+    console.log('User.createProfile', userId, uuid, values);
     values.userId = userId;
     return knex('user_profile').insert(decamelizeKeys(values));
   }

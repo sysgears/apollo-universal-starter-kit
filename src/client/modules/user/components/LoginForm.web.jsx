@@ -6,7 +6,7 @@ import { NavLink, Link } from 'react-router-dom';
 
 import { pascalize } from 'humps';
 
-import { Form, RenderField, Alert, Button } from '../../common/components/web';
+import { Container, Row, Col, Form, RenderField, Alert, Button } from '../../common/components/web';
 
 import settings from '../../../../../settings';
 
@@ -36,9 +36,13 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
       };
 
       let oauth = (
-        <Button color="primary" type="button" onClick={onClick} style={{ margin: 10 }}>
-          Login with {pascalize(P)}
-        </Button>
+        <Row>
+          <Col xs={12}>
+            <Button color="primary" type="button" onClick={onClick} style={{ margin: 10 }}>
+              Login with {pascalize(P)}
+            </Button>
+          </Col>
+        </Row>
       );
 
       oauths.push(oauth);
@@ -51,14 +55,22 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
       <Field name="password" component={RenderField} type="password" label="Password" validate={required} />
       <div className="text-center">{error && <Alert color="error">{error}</Alert>}</div>
       <div className="text-center">
-        <Button color="primary" type="submit" disabled={submitting}>
-          Login
-        </Button>
-        {oauths}
+        <Container>
+          <Row>
+            <Col xs={4}>
+              <Button color="primary" type="submit" disabled={submitting}>
+                Login
+              </Button>
+            </Col>
+            <Col xs={6}>
+              <Link className="text-center" to="/forgot-password">
+                Forgot your password?
+              </Link>
+            </Col>
+          </Row>
+          {oauths}
+        </Container>
       </div>
-      <Link className="text-center" to="/forgot-password">
-        Forgot your password?
-      </Link>
       <hr />
       <div style={{ marginBottom: 16 }}>
         <span style={{ lineHeight: '58px' }}>Not registered yet?</span>

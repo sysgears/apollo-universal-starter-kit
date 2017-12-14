@@ -19,12 +19,10 @@ exports.up = function(knex, Promise) {
   let migs = [];
 
   if (config.enabled !== true) {
-    console.log('GOT HERE - No Authorization');
     return Promise.all(migs);
   }
 
   if (config.method === 'basic' && config.basic.provider === 'embedded') {
-    console.log('GOT HERE - Basic Authorizations');
     let basic = config.basic;
 
     {
@@ -51,7 +49,7 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (basic.subjects.orgs === true) {
+    if (basic.subjects.orgs) {
       let fn = knex.schema.createTable('org_roles', table => {
         table.timestamps(true, true);
         table.increments();
@@ -72,7 +70,7 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (basic.subjects.groups === true) {
+    if (basic.subjects.groups) {
       let fn = knex.schema.createTable('group_roles', table => {
         table.timestamps(true, true);
         table.increments();
@@ -93,8 +91,7 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (basic.subjects.users === true) {
-      console.log('GOT HERE - Basic Users');
+    if (basic.subjects.users) {
       let fn = knex.schema.createTable('user_roles', table => {
         table.timestamps(true, true);
         table.increments();
@@ -115,7 +112,7 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (basic.subjects.serviceaccounts === true) {
+    if (basic.subjects.serviceaccounts) {
       let fn = knex.schema.createTable('serviceaccount_roles', table => {
         table.timestamps(true, true);
         table.increments();

@@ -30,18 +30,16 @@ export default pubsub => ({
     },
 
     users: async (obj, args, context) => {
-      console.log('QUERY - users', args);
       let ret = await context.User.list(args);
-      console.log('USERS', ret);
       return ret;
     },
-    user: (obj, { id }, context) => {
+    user: (obj, args, context) => {
+      let { id } = args;
       return context.User.get(id);
     },
     currentUser: (obj, args, context) => {
-      console.log('current user:', context.user);
       if (context.user) {
-        return context.User.get(context.user.userId);
+        return context.User.get(context.user.id);
       } else {
         return null;
       }
@@ -138,7 +136,7 @@ export default pubsub => ({
       return obj.firstName;
     },
     middleName(obj) {
-      return obj.firstName;
+      return obj.middleName;
     },
     lastName(obj) {
       return obj.lastName;

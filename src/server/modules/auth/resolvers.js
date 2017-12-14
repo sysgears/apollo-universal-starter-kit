@@ -5,7 +5,8 @@ import withAuth from 'graphql-auth';
 import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
 
-import { setTokenHeaders, removeTokenHeaders, refreshToken, tryLogin } from './flow';
+import { setTokenHeaders, removeTokenHeaders, refreshToken } from './flow/token';
+import { tryLogin } from './flow/login';
 
 export default pubsub => ({
   Query: {},
@@ -59,7 +60,6 @@ export default pubsub => ({
         const tokens = await tryLogin(email, password, context.Auth);
         console.log('Tokens:', tokens);
         if (context.req) {
-          console.log('Setting headers');
           setTokenHeaders(context.req, tokens);
         }
         return { tokens, errors: null };

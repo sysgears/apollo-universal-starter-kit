@@ -1,59 +1,51 @@
-import { pick } from 'lodash';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 
-import User from '../../../entities/user';
-import Auth from '../../sql';
-
-import { setTokenHeaders, createToken } from '../../flow';
+import { oauthCallback, oauthLogin } from '../../flow/oauth';
 
 import settings from '../../../../../../settings';
 
-const SECRET = settings.auth.secret;
+const config = settings.auth.authentication.oauth.providers.facebook;
 
 const Enable = () => {
   passport.use(
     new FacebookStrategy(
       {
-        clientID: settings.auth.oauth.providers.facebook.clientID,
-        clientSecret: settings.auth.oauth.providers.facebook.clientSecret,
+        clientID: config.clientID,
+        clientSecret: config.clientSecret,
         callbackURL: '/auth/facebook/callback',
-        scope: settings.auth.oauth.providers.facebook.scope,
-        profileFields: settings.auth.oauth.providers.facebook.profileFields
+        scope: config.scope,
+        profileFields: config.profileFields
       },
       async function(accessToken, refreshToken, profile, cb) {
-        const { id, username, displayName, emails: [{ value }] } = profile;
-        try {
-          let user = await User.getUserByFbIdOrEmail(id, value);
+        // Here, we need to extract the data we want from the OAuth scopes
+        //   and reshape it to the internal data structures and storage formats
+        // This is where the OAuth particulars come into play
+        //   and we normalize to our internal representations
+        const { id, displayName, emails: [{ value }] } = profile;
 
-          if (!user) {
-            const isActive = true;
-            const [createdUserId] = await User.register({
-              username: username ? username : displayName,
-              email: value,
-              password: id,
-              isActive
-            });
+        console.log('FACEBOOK', profile);
 
-            await User.createFacebookOuth({
-              id,
-              displayName,
-              userId: createdUserId
-            });
+        /*
+         * Should we be saving the provider oauth and refresh so that
+         *    we can maintain our access to the scopes the granted us ?
+         */
 
-            user = await User.getUser(createdUserId);
-          } else if (!user.fbId) {
-            await User.createFacebookOuth({
-              id,
-              displayName,
-              userId: user.id
-            });
+        let oauthUser = {
+          isActive: true, // don't need to confirm with oauth
+          email: value,
+          oauth: {
+            provider: 'google',
+            oauthId: id
+          },
+          profile: {
+            displayName: displayName,
+            firstName: profile.givenName,
+            lastName: profile.familyName
           }
+        };
 
-          return cb(null, pick(user, ['id', 'username', 'role', 'email']));
-        } catch (err) {
-          return cb(err, {});
-        }
+        return oauthLogin(oauthUser, cb);
       }
     )
   );
@@ -63,13 +55,7 @@ const AddRoutes = app => {
   app.get('/auth/facebook', passport.authenticate('facebook'));
 
   app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
-    const user = await Auth.getUserWithPassword(req.user.id);
-    const refreshSecret = SECRET + user.password;
-    const [token, refreshToken] = await createToken(req.user, SECRET, refreshSecret);
-
-    setTokenHeaders(req, { token, refreshToken });
-
-    res.redirect('/profile');
+    oauthCallback(req, res);
   });
 };
 

@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
 import settings from '../../../../../settings';
 
-import { setTokenHeaders, refreshToken, tryLoginSerial } from '../flow';
+import { setTokenHeaders, refreshToken } from '../flow/token';
+import { tryLoginSerial } from '../flow/login';
 
 const SECRET = settings.auth.secret;
 
 export default User => async (req, res, next) => {
   let token = req.universalCookies.get('x-token') || req.headers['x-token'];
-  console.log('TOKEN!!!', token);
 
   // if cookie available
   if (req.universalCookies.get('x-token')) {
@@ -22,17 +22,15 @@ export default User => async (req, res, next) => {
   }
   //console.log(token);
   if (token && token !== 'null') {
-    console.log('Do Token');
+    console.log('Middleware - has token');
     try {
       const { user } = jwt.verify(token, SECRET);
-      console.log('user:', user);
+      console.log('Middleware - has user', user);
       req.user = user;
     } catch (err) {
-      console.log('Catch!');
+      console.log('Middleware - token refresh');
       const currRefreshToken = req.universalCookies.get('x-refresh-token') || req.headers['x-refresh-token'];
       const newToken = await refreshToken(token, currRefreshToken, User, SECRET);
-
-      console.log('new Token', newToken);
 
       if (newToken.token && newToken.refreshToken) {
         res.set('Access-Control-Expose-Headers', 'x-token, x-refresh-token');
@@ -42,9 +40,10 @@ export default User => async (req, res, next) => {
         setTokenHeaders(req, newToken);
       }
       req.user = newToken.user;
+
+      console.log('newToken', newToken);
     }
   } else if (settings.auth.authentication.certificate.enabled) {
-    console.log('Try serial');
     // cert auth
     let serial = '';
     if (__DEV__) {

@@ -18,8 +18,8 @@ export default new Feature({
   createContextFunc: async (req, connectionParams, webSocket) => {
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
     const subscription = tokenUser ? await Subscription.getSubscription(tokenUser.userId) : null;
-    console.log('SUBSCRIPTION', tokenUser.userId, subscription);
 
+    console.log('SUBSCRIPTION', tokenUser, subscription);
     return {
       Subscription,
       subscription

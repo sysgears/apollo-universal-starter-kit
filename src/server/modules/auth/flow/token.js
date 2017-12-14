@@ -31,8 +31,7 @@ export const removeTokenHeaders = req => {
 };
 
 export const createToken = async (user, secret, refreshSecret) => {
-  console.log('CREATE TOKEN', user);
-  let tokenUser = pick(user, ['userId', 'email', 'role']);
+  let tokenUser = pick(user, ['id', 'email', 'role']);
 
   const createToken = jwt.sign(
     {
@@ -46,7 +45,7 @@ export const createToken = async (user, secret, refreshSecret) => {
 
   const createRefreshToken = jwt.sign(
     {
-      user: user.userId
+      user: user.id
     },
     refreshSecret,
     {
@@ -58,18 +57,15 @@ export const createToken = async (user, secret, refreshSecret) => {
 };
 
 export const refreshToken = async (token, refreshToken, User, SECRET) => {
-  console.log('Token - Refresh');
-  let userId = -1;
+  let id = -1;
   try {
     const { user } = jwt.decode(refreshToken);
-    console.log(' - decode user', user);
-    userId = user;
+    id = user;
   } catch (err) {
     return {};
   }
 
-  console.log('userId', userId);
-  const user = await User.getUserWithPassword(userId);
+  const user = await User.getUserWithPassword(id);
   if (!user) {
     return {};
   }
@@ -86,6 +82,6 @@ export const refreshToken = async (token, refreshToken, User, SECRET) => {
   return {
     token: newToken,
     refreshToken: newRefreshToken,
-    user: pick(user, ['id', 'username', 'role'])
+    user: pick(user, ['id', 'email', 'role'])
   };
 };

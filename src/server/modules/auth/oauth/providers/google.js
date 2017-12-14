@@ -1,61 +1,50 @@
-import { pick } from 'lodash';
 import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
 import settings from '../../../../../../settings';
 
-import { setTokenHeaders, createToken } from '../../flow';
+import { oauthCallback, oauthLogin } from '../../flow/oauth';
 
-import User from '../../../entities/user';
-import Auth from '../../sql';
-
-const SECRET = settings.auth.secret;
+const config = settings.auth.authentication.oauth.providers.google;
 
 const Enable = () => {
   passport.use(
     new GoogleStrategy(
       {
-        clientID: settings.user.auth.oauth.providers.google.clientID,
-        clientSecret: settings.user.auth.oauth.providers.google.clientSecret,
+        clientID: config.clientID,
+        clientSecret: config.clientSecret,
         callbackURL: '/auth/google/callback'
       },
       async function(accessToken, refreshToken, profile, cb) {
-        const { id, displayName, emails: [{ value }] } = profile;
-        try {
-          let user = await Auth.searchUserByOAuthIdOrEmail('google', id, value);
+        // Here, we need to extract the data we want from the OAuth scopes
+        //   and reshape it to the internal data structures and storage formats
+        // This is where the OAuth particulars come into play
+        //   and we normalize to our internal representations
+        const { id, emails: [{ value }] } = profile;
 
-          if (!user) {
-            const [createdUserId] = await User.register({
-              email: value,
-              password: id,
-              isActive: true
-            });
+        console.log('GOOGLE', profile);
 
-            await User.createGoogleOuth({
-              id,
-              displayName,
-              userId: createdUserId
-            });
+        /*
+         * Should we be saving the provider oauth and refresh so that
+         *    we can maintain our access to the scopes the granted us ?
+         */
 
-            await User.editUserProfile({
-              id: createdUserId,
-              profile: {
-                firstName: profile.name.givenName,
-                lastName: profile.name.familyName
-              }
-            });
-
-            user = await User.getUser(createdUserId);
-          } else if (!user.googleId) {
-            // User has registered another way and the email matches here
-            // Add an entry for the
-            await Auth.createUserOAuth('google', id, user.id);
+        let oauthUser = {
+          isActive: true, // don't need to confirm with oauth
+          email: value,
+          oauth: {
+            provider: 'google',
+            oauthId: id
+          },
+          profile: {
+            displayName: profile.displayName,
+            firstName: profile.name.givenName,
+            lastName: profile.name.familyName,
+            language: profile._json.language
           }
+        };
 
-          return cb(null, pick(user, ['id', 'username', 'role', 'email']));
-        } catch (err) {
-          return cb(err, {});
-        }
+        return oauthLogin(oauthUser, cb);
       }
     )
   );
@@ -65,19 +54,12 @@ const AddRoutes = app => {
   app.get(
     '/auth/google',
     passport.authenticate('google', {
-      scope: settings.auth.oauth.providers.google.scope
+      scope: config.scope
     })
   );
 
   app.get('/auth/google/callback', passport.authenticate('google', { session: false }), async function(req, res) {
-    const user = await Auth.getUserWithPassword(req.user.id);
-
-    const refreshSecret = SECRET + user.password;
-    const [token, refreshToken] = await createToken(req.user, SECRET, refreshSecret);
-
-    setTokenHeaders(req, { token, refreshToken });
-
-    res.redirect('/profile');
+    oauthCallback(req, res);
   });
 };
 

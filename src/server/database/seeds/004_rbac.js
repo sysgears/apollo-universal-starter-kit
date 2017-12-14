@@ -16,13 +16,15 @@ let authz = auth.authorization;
 
 export async function seed(knex, Promise) {
   if (authz.method === 'basic' && authz.basic.provider === 'embedded') {
-    if (authz.basic.subjects.group) {
+    console.log('AUTHZ - basic');
+    if (authz.basic.subjects.groups) {
       await truncateTables(knex, Promise, ['group_roles']);
       for (let group of groups) {
         createGroupBasicRoles(knex, group);
       }
     }
-    if (authz.basic.subjects.user) {
+    if (authz.basic.subjects.users) {
+      console.log('AUTHZ - basic - users');
       await truncateTables(knex, Promise, ['user_roles']);
       for (let user of users) {
         if (user.role) {
@@ -30,7 +32,7 @@ export async function seed(knex, Promise) {
         }
       }
     }
-    if (authz.basic.subjects.serviceaccount) {
+    if (authz.basic.subjects.serviceaccounts) {
       await truncateTables(knex, Promise, ['serviceaccount_roles']);
       for (let acct of serviceaccounts) {
         createServiceAccountBasicRoles(knex, acct, 'example.com');
@@ -70,6 +72,7 @@ async function createUserBasicRoles(knex, user, domain) {
     .from('users')
     .where('email', '=', user.short + '@' + domain);
 
+  console.log('creating user role', uid, user);
   if (uid === undefined) {
     return;
   }

@@ -19,7 +19,6 @@ export default new Feature({
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
     const subscription = tokenUser ? await Subscription.getSubscription(tokenUser.userId) : null;
 
-    console.log('SUBSCRIPTION', tokenUser, subscription);
     return {
       Subscription,
       subscription

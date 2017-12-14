@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { refreshTokens, tryLogin } from './auth';
 import FieldError from '../../../common/FieldError';
+
 import settings from '../../../../settings';
 
 export default pubsub => ({
@@ -102,7 +103,7 @@ export default pubsub => ({
         let userId = 0;
         if (!emailExists) {
           let isActive = false;
-          if (!settings.user.auth.password.confirm) {
+          if (!settings.auth.password.confirm) {
             isActive = true;
           }
 

@@ -20,7 +20,6 @@ export default compose(
     options: { fetchPolicy: 'network-only' },
     props({ data: { loading, error, currentUser } }) {
       if (error) throw new Error(error);
-      console.log('Current User:', currentUser);
       return { loading, currentUser };
     }
   })

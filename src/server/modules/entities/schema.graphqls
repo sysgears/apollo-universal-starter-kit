@@ -184,6 +184,7 @@ input GroupProfileInput {
 
 type UserPayload {
   user: User
+  tokens: Tokens
   errors: [FieldError!]
 }
 

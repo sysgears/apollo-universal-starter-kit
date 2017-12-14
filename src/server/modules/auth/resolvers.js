@@ -6,7 +6,10 @@ import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
 
 import { setTokenHeaders, removeTokenHeaders, refreshToken } from './flow/token';
-import { tryLogin } from './flow/login';
+import { passwordRegister, passwordLogin } from './flow/password';
+import { sendConfirmAccountEmail } from './flow/confirm';
+
+const authn = settings.auth.authentication;
 
 export default pubsub => ({
   Query: {},
@@ -52,13 +55,30 @@ export default pubsub => ({
   },
   Mutation: {
     async register(obj, { input }, context) {
-      return true;
-    },
-    async login(obj, { input: { email, password } }, context) {
       try {
-        console.log('Login:', email, password);
-        const tokens = await tryLogin(email, password, context.Auth);
-        console.log('Tokens:', tokens);
+        let tokens = null;
+        let user = await passwordRegister(input);
+
+        if (authn.confirm) {
+          if (context.mailer && authn.password.sendConfirmationEmail && context.req) {
+            // async email sending
+            sendConfirmAccountEmail(context.mailer, user);
+          }
+        } else {
+          tokens = await passwordLogin(input);
+          if (context.req) {
+            setTokenHeaders(context.req, tokens);
+          }
+        }
+
+        return { user, tokens, errors: null };
+      } catch (e) {
+        return { user: null, tokens: null, errors: e };
+      }
+    },
+    async login(obj, { input }, context) {
+      try {
+        const tokens = await passwordLogin(input);
         if (context.req) {
           setTokenHeaders(context.req, tokens);
         }
@@ -66,6 +86,29 @@ export default pubsub => ({
       } catch (e) {
         return { tokens: null, errors: e };
       }
+    },
+    async registerPassword(obj, { input }, context) {
+      return true;
+    },
+    async loginPassword(obj, { input }, context) {
+      try {
+        const tokens = await passwordLogin(input);
+        if (context.req) {
+          setTokenHeaders(context.req, tokens);
+        }
+        return { tokens, errors: null };
+      } catch (e) {
+        return { tokens: null, errors: e };
+      }
+    },
+    async forgotPassword(obj, { input }, context) {
+      return true;
+    },
+    async resetPassword(obj, { input }, context) {
+      return true;
+    },
+    async loginPasswordless(obj, { input: { email } }, context) {
+      return true;
     },
     async logout(obj, args, context) {
       if (context.req) {
@@ -75,12 +118,6 @@ export default pubsub => ({
       return true;
     },
     refreshToken(obj, { token, refreshToken }, context) {
-      return true;
-    },
-    async forgotPassword(obj, { input }, context) {
-      return true;
-    },
-    async resetPassword(obj, { input }, context) {
       return true;
     }
   },

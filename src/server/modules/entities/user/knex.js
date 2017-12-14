@@ -5,6 +5,7 @@ import uuidv4 from 'uuid';
 import knex from '../../../sql/connector';
 import { orderedFor } from '../../../sql/helpers';
 
+/*
 const userFields = ['u.uuid AS id', 'u.email', 'u.created_at', 'u.updated_at', 'u.is_active'];
 
 const profileFields = [
@@ -17,13 +18,31 @@ const profileFields = [
   'p.locale',
   'p.language'
 ];
+*/
+
+const selectFields = [
+  'u.uuid AS id',
+  'u.email',
+  'u.created_at',
+  'u.updated_at',
+  'u.is_active',
+  'p.display_name',
+  'p.title',
+  'p.first_name',
+  'p.middle_name',
+  'p.last_name',
+  'p.suffix',
+  'p.locale',
+  'p.language',
+  'r.role'
+];
 
 export default class User {
   async list(args) {
     let { filters, orderBys, offset, limit } = args;
 
     const queryBuilder = knex
-      .select('u.uuid as id', 'u.created_at', 'u.updated_at', 'u.is_active', 'u.email', 'p.*', 'r.role')
+      .select(...selectFields)
       .from('users AS u')
       .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
       .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id');
@@ -74,21 +93,22 @@ export default class User {
   }
 
   async get(uuid) {
+    console.log('User.get', ...selectFields);
     let ret = await knex
-      .select(...userFields, ...profileFields, 'r.role')
+      .select(...selectFields)
       .from('users AS u')
-      .where('u.uuid', '=', uuid)
       .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-      .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
+      .leftJoin('user_roles AS r', 'r.user_id', 'p.user_id')
+      .where('u.uuid', '=', uuid)
       .first();
-    console.log('User.get', uuid, ret);
+    console.log('User.get', ret);
     return camelizeKeys(ret);
   }
 
   async getById(id) {
     return camelizeKeys(
       await knex
-        .select('u.uuid as id', 'u.created_at', 'u.updated_at', 'u.is_active', 'u.email', 'p.*', 'r.role')
+        .select(...selectFields)
         .from('users AS u')
         .where('u.uuid', '=', id)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')

@@ -22,13 +22,10 @@ export default User => async (req, res, next) => {
   }
   //console.log(token);
   if (token && token !== 'null') {
-    console.log('Middleware - has token');
     try {
       const { user } = jwt.verify(token, SECRET);
-      console.log('Middleware - has user', user);
       req.user = user;
     } catch (err) {
-      console.log('Middleware - token refresh');
       const currRefreshToken = req.universalCookies.get('x-refresh-token') || req.headers['x-refresh-token'];
       const newToken = await refreshToken(token, currRefreshToken, User, SECRET);
 
@@ -40,8 +37,6 @@ export default User => async (req, res, next) => {
         setTokenHeaders(req, newToken);
       }
       req.user = newToken.user;
-
-      console.log('newToken', newToken);
     }
   } else if (settings.auth.authentication.certificate.enabled) {
     // cert auth

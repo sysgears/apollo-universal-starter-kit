@@ -8,7 +8,7 @@ import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import Feature from '../connector';
 
-import createConfirmHandler from './flow/confirm';
+import { confirmAccountHandler } from './flow/confirm';
 import authTokenMiddleware from './middleware/token';
 
 import OAuth from './oauth';
@@ -30,13 +30,12 @@ export default new Feature({
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
 
     // need to look up in database eventually
-    console.log('AUTH CONTEXT', tokenUser, scopes);
-    let scope = tokenUser ? scopes[tokenUser.role] : null;
-    console.log('tokenUser', tokenUser, scope);
+    let userScopes = tokenUser ? scopes[tokenUser.role] : null;
+    // console.log('UserAuth', tokenUser, userScopes);
 
     const auth = {
       isAuthenticated: tokenUser ? true : false,
-      scopes
+      scopes: userScopes
     };
 
     return {
@@ -55,7 +54,7 @@ export default new Feature({
   middleware: app => {
     app.use(authTokenMiddleware(localAuth));
     if (authn.password.sendConfirmationEmail) {
-      app.get('/confirmation/:token', createConfirmHandler(SECRET, User, jwt));
+      app.get('/confirmation/:token', confirmAccountHandler);
     }
 
     if (authn.oauth.enabled === true) {

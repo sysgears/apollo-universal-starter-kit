@@ -35,8 +35,8 @@ const ProfileView = ({ loading, currentUser }) => {
           <h1 className="text-center">Profile</h1>
           <Card>
             <CardGroup>
-              <CardTitle>User Name:</CardTitle>
-              <CardText>{currentUser.username}</CardText>
+              <CardTitle>Display Name:</CardTitle>
+              <CardText>{currentUser.profile.displayName}</CardText>
             </CardGroup>
             <CardGroup>
               <CardTitle>Email:</CardTitle>

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // React
 import React from 'react';
 
@@ -26,9 +27,17 @@ const RegisterWithApollo = compose(
             variables: { input: { username, email, password } }
           });
 
+          console.log(register);
           if (register.errors) {
             return { errors: register.errors };
           }
+
+          if (register.tokens) {
+            const { token, refreshToken } = register.tokens;
+            localStorage.setItem('token', token);
+            localStorage.setItem('refreshToken', refreshToken);
+          }
+
           if (history) {
             if (settings.subscription.enabled) {
               return history.push('/subscription');

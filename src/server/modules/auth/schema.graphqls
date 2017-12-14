@@ -5,14 +5,24 @@ extend type Mutation {
   register(input: RegisterUserInput!): UserPayload!
   # Login user
   login(input: LoginUserInput!): AuthPayload!
-  # Logout user
-  logout: Boolean!
-  # Refreash user tokens
-  refreshToken(token: String!, refreshToken: String!): AuthPayload!
 
+  # Register user
+  registerPassword(input: RegisterUserInput!): UserPayload!
+  # Login user
+  loginPassword(input: LoginUserInput!): AuthPayload!
   # Password management
   forgotPassword(input: ForgotPasswordInput!): Boolean!
   resetPassword(input: ResetPasswordInput!): ResetPayload!
+
+  # Login user (no need to register, just create first time seen)
+  loginPasswordless(input: LoginUserInput!): AuthPayload!
+
+  # Logout user
+  logout: Boolean!
+
+  # Refresh user tokens
+  refreshToken(token: String!, refreshToken: String!): AuthPayload!
+
 }
 
 extend type Subscription {}

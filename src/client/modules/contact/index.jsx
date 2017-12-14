@@ -1,18 +1,13 @@
-// Ionicons
 import { Ionicons } from '@expo/vector-icons';
-
-// Component and helpers
 import { createTabBarIconWrapper } from '../common/components/native';
-import Upload from './containers/Upload';
-import reducers from './reducers';
+import Contact from './containers/Contact';
 
 import Feature from '../connector';
 
 export default new Feature({
-  catalogInfo: { upload: true },
   tabItem: {
-    Upload: {
-      screen: Upload,
+    Contact: {
+      screen: Contact,
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(Ionicons, {
           name: 'ios-browsers-outline',
@@ -20,6 +15,5 @@ export default new Feature({
         })
       }
     }
-  },
-  reducer: { upload: reducers }
+  }
 });

@@ -1,0 +1,3 @@
+mutation contact($input: ContactInput!) {
+  contact(input: $input)
+}

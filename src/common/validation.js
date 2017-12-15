@@ -5,7 +5,7 @@ export const required = value => (value ? undefined : 'Required');
 
 // Max length validation
 export const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined; // Usage const maxLength15 = maxLength(15)
+  value && value.length > max ? `Must be ${max} characters or less` : undefined; // Usage: const maxLength15 = maxLength(15)
 
 // Min length validation
 export const minLength = min => value =>

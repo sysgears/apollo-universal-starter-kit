@@ -63,5 +63,9 @@
     "type": "opencollective",
     "url": "https://opencollective.com/apollo-universal-starter-kit",
     "logo": "https://opencollective.com/opencollective/logo.txt"
+  },
+  "devDependencies": {
+    "lerna": "^2.5.1",
+    "spinjs": "^0.4.55"
   }
 }

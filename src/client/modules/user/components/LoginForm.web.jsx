@@ -7,6 +7,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { pascalize } from 'humps';
 
 import { Container, Row, Col, Form, RenderField, Alert, Button } from '../../common/components/web';
+import { required, email, minLength } from '../../../../common/validation';
 
 import settings from '../../../../../settings';
 
@@ -17,8 +18,6 @@ if (__DEV__) {
 }
 
 const authn = settings.auth.authentication;
-
-const required = value => (value ? undefined : 'Required');
 
 const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
   // setup an array of oauth provider params for display
@@ -51,9 +50,18 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
 
   return (
     <Form name="login" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
-      <Field name="password" component={RenderField} type="password" label="Password" validate={required} />
+      <Field name="email" component={RenderField} type="email" label="Email" validate={[required, email]} />
+
+      <Field
+        name="password"
+        component={RenderField}
+        type="password"
+        label="Password"
+        validate={[required, minLength(5)]}
+      />
+
       <div className="text-center">{error && <Alert color="error">{error}</Alert>}</div>
+
       <div className="text-center">
         <Container>
           <Row>
@@ -71,7 +79,9 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
           {oauths}
         </Container>
       </div>
+
       <hr />
+
       <div style={{ marginBottom: 16 }}>
         <span style={{ lineHeight: '58px' }}>Not registered yet?</span>
         <NavLink className="btn btn-primary" to="/register" activeClassName="active" style={{ margin: 10 }}>

@@ -13,30 +13,23 @@ const User = new UserDAO();
 
 export default class Auth {
   async registerNewUser(newUser) {
-    // really NEED a SQL transaction here
-    console.log('Register - input', newUser);
+    // really NEED a SQL transaction here ( Or at the level above? they shouldn't have to care though )
 
     let id = await User.create({
       email: newUser.email,
       isActive: newUser.isActive
     });
-    console.log('Register - id', id);
 
     if (newUser.profile) {
-      console.log('Register - profile');
       await User.createProfile(id, newUser.profile);
     }
 
-    console.log('Register - password');
     await this.createPassword(id, newUser.password);
 
     let ret = await this.initUserRole(id, 'user');
-    console.log('Register - role', ret);
 
-    console.log('Register - user');
     const user = await User.get(id);
 
-    console.log('Register - return', user);
     return user;
   }
 

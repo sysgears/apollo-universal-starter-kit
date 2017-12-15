@@ -11,7 +11,7 @@ import { ApolloClient } from 'apollo-client';
 import WebSocket from 'ws';
 import { LoggingLink } from 'apollo-logger';
 
-import '../../../knexfile';
+import '../../knexfile';
 import knex from '../sql/connector';
 import settings from '../../../../../../settings';
 

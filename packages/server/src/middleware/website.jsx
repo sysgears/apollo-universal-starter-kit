@@ -14,6 +14,7 @@ import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
 import url from 'url';
+// eslint-disable-next-line
 import { AppRegistry } from 'react-native';
 
 import createApolloClient from '../../../common/createApolloClient';

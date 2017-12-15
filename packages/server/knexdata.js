@@ -32,10 +32,10 @@ export const test = {
     filename: ':memory:'
   },
   seeds: {
-    directory: './src/server/database/seeds'
+    directory: './src/database/seeds'
   },
   migrations: {
-    directory: './src/server/database/migrations'
+    directory: './src/database/migrations'
   },
   useNullAsDefault: true
 };

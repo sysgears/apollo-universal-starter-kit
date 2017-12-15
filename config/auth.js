@@ -65,6 +65,12 @@ export default {
       subjects: {
         users: true
       },
+      scopes: {
+        owner: ['user:*'],
+        admin: ['user:*'],
+        subscriber: ['user:view:self', 'user:update:self'],
+        user: ['user:view:self', 'user:update:self']
+      },
       verbs: ['create', 'update', 'delete', 'view', 'view:all']
     },
     rbac: {

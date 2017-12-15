@@ -1,7 +1,6 @@
+/.vscode
 .idea
-/.vscode
-/.tmp
-/.vscode
+.tmp
 /node_modules
 */**/node_modules/
 */**/build/

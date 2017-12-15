@@ -175,7 +175,6 @@
     "resolve-url-loader": "^2.2.0",
     "sass-loader": "^6.0.6",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.4.53",
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2",
     "wait-on": "^2.0.2",

@@ -5,10 +5,10 @@ export const development = {
   connection: settings.db.connection.development,
   pool: settings.db.pool,
   seeds: {
-    directory: './src/server/database/seeds'
+    directory: './src/database/seeds'
   },
   migrations: {
-    directory: './src/server/database/migrations'
+    directory: './src/database/migrations'
   },
   useNullAsDefault: true
 };
@@ -18,10 +18,10 @@ export const production = {
   connection: settings.db.connection.production,
   pool: settings.db.pool,
   seeds: {
-    directory: './src/server/database/seeds'
+    directory: './src/database/seeds'
   },
   migrations: {
-    directory: './src/server/database/migrations'
+    directory: './src/database/migrations'
   },
   useNullAsDefault: true
 };

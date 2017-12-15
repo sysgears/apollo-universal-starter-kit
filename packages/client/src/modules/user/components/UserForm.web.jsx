@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
 import { required, email, minLength } from '../../../../../common/validation';
 
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 const validate = values => {
   const errors = {};

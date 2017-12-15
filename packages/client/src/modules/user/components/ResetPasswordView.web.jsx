@@ -5,7 +5,7 @@ import { SubmissionError } from 'redux-form';
 import { PageLayout } from '../../common/components/web';
 
 import ResetPasswordForm from '../components/ResetPasswordForm';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 export default class ResetPasswordView extends React.Component {
   static propTypes = {

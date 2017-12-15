@@ -7,7 +7,7 @@ import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 
 import SubscriptionCardForm from './SubscriptionCardForm';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 export default class UpdateCardView extends React.Component {
   static propTypes = {

@@ -6,7 +6,7 @@ import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 
 import ForgotPasswordForm from '../components/ForgotPasswordForm';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 export default class ForgotPasswordView extends React.Component {
   static propTypes = {

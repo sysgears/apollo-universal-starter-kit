@@ -2,7 +2,7 @@
 import { pick } from 'lodash';
 import Stripe from 'stripe';
 import FieldError from '../../../../common/FieldError';
-import settings from '../../../settings';
+import settings from '../../../../../settings';
 import log from '../../../../common/log';
 
 const stripe = Stripe(settings.subscription.stripeSecretKey);

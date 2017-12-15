@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import ErrorStackParser from 'error-stack-parser';
 import { mapStackTrace } from 'sourcemapped-stacktrace';
 import React from 'react';
-import settings from '../../settings';
+import settings from '../../../../settings';
 
 const format = (fmt, ...args) =>
   fmt.replace(/{(\d+)}/g, (match, number) => (typeof args[number] != 'undefined' ? args[number] : match));

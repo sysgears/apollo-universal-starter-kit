@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
 import filesize from 'filesize';
 import { PageLayout, Row, Col, Table, Button, Alert } from '../../common/components/web';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 export default class UploadView extends React.PureComponent {
   static propTypes = {

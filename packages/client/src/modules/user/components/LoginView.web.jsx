@@ -6,7 +6,7 @@ import { LayoutCenter } from '../../common/components';
 import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
 import LoginForm from '../components/LoginForm';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 export default class LoginView extends React.PureComponent {
   static propTypes = {

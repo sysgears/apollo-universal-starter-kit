@@ -15,7 +15,7 @@ import { Provider } from 'react-redux';
 
 import rootSchema from '../../../server/api/rootSchema.graphql';
 import serverModules from '../../../server/modules';
-import settings from '../../settings';
+import settings from '../../../../settings';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;

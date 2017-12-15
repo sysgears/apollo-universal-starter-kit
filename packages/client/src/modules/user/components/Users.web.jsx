@@ -5,7 +5,7 @@ import { PageLayout, Button } from '../../common/components/web';
 
 import UsersFilter from '../containers/UsersFilter';
 import UsersList from '../containers/UsersList';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 const Users = () => {
   const renderMetaData = () => (

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Container } from 'reactstrap';
 
 import NavBar from './NavBar';
-import settings from '../../../../../../../settings';
+import settings from '../../../../../../../../../settings';
 
 const footerHeight = '40px';
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import { PageLayout, Button } from '../../common/components/web';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 const Section = styled.section`
   margin-bottom: 30px;

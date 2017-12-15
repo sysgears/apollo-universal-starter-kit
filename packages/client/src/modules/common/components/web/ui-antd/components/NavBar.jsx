@@ -7,7 +7,7 @@ import Col from 'antd/lib/col';
 import MenuItem from './MenuItem';
 
 import modules from '../../../../../../modules';
-import settings from '../../../../../../../settings';
+import settings from '../../../../../../../../../settings';
 
 class NavBar extends React.Component {
   state = {

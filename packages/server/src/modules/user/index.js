@@ -12,7 +12,7 @@ import tokenMiddleware from './auth/token';
 import confirmMiddleware from './confirm';
 import Feature from '../connector';
 import scopes from './auth/scopes';
-import settings from '../../../settings';
+import settings from '../../../../../settings';
 
 const SECRET = settings.user.secret;
 

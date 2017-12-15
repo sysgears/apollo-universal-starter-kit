@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { PageLayout, Table, Button } from '../../common/components/web';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 export default class PostList extends React.PureComponent {
   static propTypes = {

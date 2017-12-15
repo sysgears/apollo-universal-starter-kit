@@ -13,7 +13,7 @@ import { LoggingLink } from 'apollo-logger';
 
 import '../../../knexfile';
 import knex from '../sql/connector';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 chai.use(chaiHttp);
 chai.should();

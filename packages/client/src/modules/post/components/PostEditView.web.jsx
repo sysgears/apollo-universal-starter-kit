@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { PageLayout } from '../../common/components/web';
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 const onSubmit = (post, addPost, editPost) => values => {
   if (post) {

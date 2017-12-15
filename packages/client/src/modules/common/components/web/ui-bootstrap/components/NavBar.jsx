@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { Container, Navbar, Nav, NavItem } from 'reactstrap';
 
 import modules from '../../../../../../modules';
-import settings from '../../../../../../../settings';
+import settings from '../../../../../../../../../settings';
 
 const NavBar = () => (
   <Navbar color="faded" light>

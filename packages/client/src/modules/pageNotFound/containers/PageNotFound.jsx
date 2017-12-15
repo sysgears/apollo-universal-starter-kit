@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import { PageLayout, Button } from '../../common/components/web';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 const Section = styled.section`
   text-align: center;

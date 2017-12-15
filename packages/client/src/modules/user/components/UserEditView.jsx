@@ -7,7 +7,7 @@ import { pick } from 'lodash';
 import { PageLayout } from '../../common/components/web';
 
 import UserForm from './UserForm';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 export default class UserEditView extends React.PureComponent {
   static propTypes = {

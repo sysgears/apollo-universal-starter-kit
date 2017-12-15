@@ -6,7 +6,7 @@ import { NavLink, Link } from 'react-router-dom';
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
 import { required, email, minLength } from '../../../../../common/validation';
 
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;

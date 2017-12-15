@@ -1,5 +1,5 @@
 import now from 'performance-now';
-import settings from '../../../settings';
+import settings from '../../../../../settings';
 
 import knex from '../../sql/connector';
 import log from '../../../../common/log';

@@ -20,7 +20,7 @@ import url from 'url';
 import RedBox from './RedBox';
 import createApolloClient from '../../../common/createApolloClient';
 import createReduxStore, { storeReducer } from '../../../common/createReduxStore';
-import settings from '../../settings';
+import settings from '../../../../settings';
 import Routes from './Routes';
 import modules from '../modules';
 

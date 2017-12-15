@@ -3,8 +3,8 @@ import FieldError from '../../../common/FieldError';
 
 export default pubsub => ({
   Query: {
-    $module$s: async (obj, args, { $Module$ }) => {
-      const $module$s = await $Module$.get$Module$s(args);
+    $module$s: async (obj, args, { $Module$ }, info) => {
+      const $module$s = await $Module$.get$Module$s(args, info);
       const { count } = await $Module$.getTotal();
 
       return {
@@ -15,8 +15,8 @@ export default pubsub => ({
         }
       };
     },
-    $module$: (obj, args, { $Module$ }) => {
-      return $Module$.get$Module$(args);
+    $module$: (obj, args, { $Module$ }, info) => {
+      return $Module$.get$Module$(args, info);
     }
   },
   Mutation: {

@@ -40,7 +40,7 @@ function renameFiles(destinationPath, templatePath, module, location) {
   });
 }
 
-function copyFiles(logger, templatePath, module, action, location) {
+function copyFiles(logger, templatePath, module, action, tablePrefix, location) {
   logger.info(`Copying ${location} files…`);
 
   // pascalize
@@ -70,7 +70,7 @@ function copyFiles(logger, templatePath, module, action, location) {
     fs.writeFileSync(path, prepend + data);
 
     // add module to Feature function
-    shell.sed('-i', re, `Feature(${module}, ${match[1]})`, 'index.js');
+    shell.ShellString(shell.cat('index.js').replace(RegExp(re, 'g'), `Feature(${module}, ${match[1]})`)).to('index.js');
 
     if (action === 'addcrud' && location === 'server') {
       console.log('copy database files');
@@ -84,6 +84,13 @@ function copyFiles(logger, templatePath, module, action, location) {
       shell.mv(`_${Module}.js`, `${timestamp}_${Module}.js`);
 
       logger.info(chalk.green(`✔ The database files have been copied!`));
+
+      if (tablePrefix !== '') {
+        shell.cd(`${__dirname}/../../src/${location}/modules/${module}`);
+        shell.sed('-i', /const prefix = '';/g, `const prefix = '${tablePrefix}';`, 'sql.js');
+
+        logger.info(chalk.green(`✔ Inserted db table prefix!`));
+      }
     }
 
     logger.info(chalk.green(`✔ Module for ${location} successfully created!`));
@@ -99,7 +106,7 @@ function deleteFiles(logger, templatePath, module, location) {
   const modulePath = `${__dirname}/../../src/${location}/modules/${module}`;
 
   if (fs.existsSync(modulePath)) {
-    // create new module directory
+    // remove module directory
     shell.rm('-rf', modulePath);
 
     // change to destination directory
@@ -122,7 +129,10 @@ function deleteFiles(logger, templatePath, module, location) {
     fs.writeFileSync(path, lines.join('\n'));
 
     // remove module from Feature function
-    shell.sed('-i', re, `Feature(${modules.toString().trim()})`, 'index.js');
+    //shell.sed('-i', re, `Feature(${modules.toString().trim()})`, 'index.js');
+    shell
+      .ShellString(shell.cat('index.js').replace(RegExp(re, 'g'), `Feature(${modules.toString().trim()})`))
+      .to('index.js');
 
     if (location === 'server') {
       // change to database migrations directory
@@ -175,17 +185,29 @@ function updateSchema(logger, module) {
       let inputEdit = '';
       for (const key of schema.keys()) {
         const value = schema.values[key];
-        if (key !== 'id') {
-          inputAdd += new GraphQLGenerator()._generateField(schema.name, key, value) + '\n';
+        if (!value.type.isSchema && value.type.constructor !== Array) {
+          if (key !== 'id') {
+            inputAdd += `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name, value, key) + '\n';
+          }
+          inputEdit += `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name + '.' + key, value, []) + '\n';
         }
-        inputEdit += new GraphQLGenerator()._generateField(schema.name, key, value) + '\n';
       }
 
       shell.cd(pathSchema);
-
       // override Module type in schema.graphql file
-      const replaceType = `type ${Module} {([^}])*\\n}`;
-      shell.ShellString(shell.cat(file).replace(RegExp(replaceType, 'g'), `type ${Module} {\n${inputEdit}}`)).to(file);
+      const replaceType = `### schema type definitions([^()]+)### end schema type definitions`;
+      shell
+        .ShellString(
+          shell
+            .cat(file)
+            .replace(
+              RegExp(replaceType, 'g'),
+              `### schema type definitions\n${new GraphQLGenerator().generateTypes(
+                schema
+              )}\n\n### end schema type definitions`
+            )
+        )
+        .to(file);
 
       // override AddModuleInput in schema.graphql file
       const replaceAdd = `input Add${Module}Input {([^}])*\\n}`;
@@ -212,7 +234,10 @@ function updateSchema(logger, module) {
       // regenerate graphql fragment
       let graphql = '';
       for (const key of schema.keys()) {
-        graphql += `  ${key}\n`;
+        const value = schema.values[key];
+        if (!value.type.isSchema && value.type.constructor !== Array) {
+          graphql += `  ${key}\n`;
+        }
       }
 
       shell.cd(pathFragment);
@@ -235,6 +260,10 @@ module.exports = (action, args, options, logger) => {
   if (args.location) {
     location = args.location;
   }
+  let tablePrefix = '';
+  if (args.tablePrefix) {
+    tablePrefix = args.tablePrefix;
+  }
 
   let templatePath = `${__dirname}/../templates/module`;
   if (action === 'addcrud') {
@@ -249,7 +278,7 @@ module.exports = (action, args, options, logger) => {
   // client
   if (location === 'client' || location === 'both') {
     if (action === 'addmodule' || action === 'addcrud') {
-      copyFiles(logger, templatePath, module, action, 'client');
+      copyFiles(logger, templatePath, module, action, tablePrefix, 'client');
     } else if (action === 'deletemodule') {
       deleteFiles(logger, templatePath, module, 'client');
     }
@@ -258,7 +287,7 @@ module.exports = (action, args, options, logger) => {
   // server
   if (location === 'server' || location === 'both') {
     if (action === 'addmodule' || action === 'addcrud') {
-      copyFiles(logger, templatePath, module, action, 'server');
+      copyFiles(logger, templatePath, module, action, tablePrefix, 'server');
     } else if (action === 'deletemodule') {
       deleteFiles(logger, templatePath, module, 'server');
     }

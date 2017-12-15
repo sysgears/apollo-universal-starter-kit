@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import truncateTables from '../../../common/db';
+import { truncateTables } from '../../../common/db';
 
 export async function seed(knex, Promise) {
   await truncateTables(knex, Promise, ['user', 'user_profile', 'auth_certificate', 'auth_facebook']);

@@ -1,12 +1,20 @@
-import { camelizeKeys, decamelize } from 'humps';
+import { decamelize } from 'humps';
 import { has } from 'lodash';
 
+import parseFields from 'graphql-parse-fields';
+import knexnest from 'knexnest';
 import { $Module$ as $Module$Schema } from './schema';
+import { selectBy } from '../../../common/db';
 import knex from '../../../server/sql/connector';
 
+const prefix = '';
+const tableName = decamelize($Module$Schema.name);
+
 export default class $Module$ {
-  async get$Module$s({ limit, offset, orderBy, filter }) {
-    const queryBuilder = knex.select('*').from('$module$');
+  get$Module$s({ limit, offset, orderBy, filter }, info) {
+    const baseQuery = knex(`${prefix}${tableName} as ${tableName}`);
+    const select = selectBy($Module$Schema, parseFields(info).edges, false, prefix);
+    const queryBuilder = select(baseQuery);
 
     if (limit) {
       queryBuilder.limit(limit);
@@ -24,6 +32,8 @@ export default class $Module$ {
       }
 
       queryBuilder.orderBy(decamelize(column), order);
+    } else {
+      queryBuilder.orderBy(`${tableName}.id`);
     }
 
     if (filter) {
@@ -39,40 +49,36 @@ export default class $Module$ {
       }
     }
 
-    return camelizeKeys(await queryBuilder);
+    return knexnest(queryBuilder);
   }
 
   getTotal() {
-    return knex('$module$')
+    return knex(`${prefix}${tableName}`)
       .countDistinct('id as count')
       .first();
   }
 
-  async get$Module$({ id }) {
-    return camelizeKeys(
-      await knex
-        .select('*')
-        .from('$module$')
-        .where({ id })
-        .first()
-    );
+  get$Module$({ id }, info) {
+    const baseQuery = knex(`${prefix}${tableName} as ${tableName}`);
+    const select = selectBy($Module$Schema, parseFields(info), true, prefix);
+    return knexnest(select(baseQuery).where(`${tableName}.id`, '=', id));
   }
 
   add$Module$(input) {
-    return knex('$module$')
+    return knex(`${prefix}${tableName}`)
       .insert(input)
       .returning('id');
   }
 
   edit$Module$({ id, ...input }) {
-    return knex('$module$')
+    return knex(`${prefix}${tableName}`)
       .update(input)
       .where({ id });
   }
 
   delete$Module$(id) {
-    return knex('$module$')
-      .where('id', '=', id)
+    return knex(`${prefix}${tableName}`)
+      .where({ id })
       .del();
   }
 }

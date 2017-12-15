@@ -1,7 +1,9 @@
+### schema type definitions
 type $Module$ {
   id: Int!
   name: String!
 }
+### end schema type definitions
 
 type $Module$s {
   pageInfo: PageInfo
@@ -42,4 +44,5 @@ extend type Mutation {
   delete$Module$(id: Int!): $Module$Payload!
 }
 
-extend type Subscription {}
+extend type Subscription {
+}

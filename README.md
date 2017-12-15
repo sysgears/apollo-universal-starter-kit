@@ -442,7 +442,7 @@ yarn start
 
 1. Add your app to Heroku
 1. Allow Heroku to install build time dependencies from the devDependencies in `package.json`: `Settings -> Config
-   Variables -> Add`, KEY: `NPM_CONFIG_PRODUCTION`, VALUE: `false`.
+   Variables -> Add`, KEY: `YARN_PRODUCTION`, VALUE: `false`.
 1. Add `EXP_USERNAME` and `EXP_PASSWORD` config variables there as well. They will be used to publish mobile Expo Client
    applications
 1. Deploy your app on Heroku

@@ -41,6 +41,7 @@ export default class User {
   async list(args) {
     let { filters, orderBys, offset, limit } = args;
 
+    console.log('User.list', args);
     const queryBuilder = knex
       .select(...selectFields)
       .from('users AS u')
@@ -111,6 +112,18 @@ export default class User {
         .select(...selectFields)
         .from('users AS u')
         .where('u.uuid', '=', id)
+        .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
+        .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
+        .first()
+    );
+  }
+
+  async getByEmail(email) {
+    return camelizeKeys(
+      await knex
+        .select(...selectFields)
+        .from('users AS u')
+        .where('u.email', '=', email)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
         .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
         .first()

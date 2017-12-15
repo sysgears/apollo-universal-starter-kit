@@ -14,12 +14,11 @@ import authTokenMiddleware from './middleware/token';
 import OAuth from './oauth';
 import { refreshToken } from './flow/token';
 
-import scopes from './scopes';
-
 import settings from '../../../../settings';
 
 const SECRET = settings.auth.secret;
 const authn = settings.auth.authentication;
+const authz = settings.auth.authorization;
 
 const localAuth = new Auth();
 
@@ -29,14 +28,24 @@ export default new Feature({
   createContextFunc: async (req, connectionParams, webSocket) => {
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
 
-    // need to look up in database eventually
-    let userScopes = tokenUser ? scopes[tokenUser.role] : null;
-    // console.log('UserAuth', tokenUser, userScopes);
+    let userAuth = {};
+    if (authz.method === 'basic') {
+      const scopes = authz.basic.scopes;
+      const userScopes = tokenUser ? scopes[tokenUser.role] : null;
 
-    const auth = {
-      isAuthenticated: tokenUser ? true : false,
-      scopes: userScopes
-    };
+      userAuth = {
+        isAuthenticated: tokenUser ? true : false,
+        scope: userScopes
+      };
+    } else if (authz.method === 'rbac') {
+      // TODO
+      userAuth = {
+        isAuthenticated: tokenUser ? true : false,
+        scope: null
+      };
+    }
+
+    const auth = userAuth;
 
     return {
       Auth: localAuth,

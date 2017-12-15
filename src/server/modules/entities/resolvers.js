@@ -1,4 +1,5 @@
 /*eslint-disable no-unused-vars*/
+import withAuth from 'graphql-auth';
 import { pick } from 'lodash';
 import FieldError from '../../../common/FieldError';
 
@@ -29,14 +30,18 @@ export default pubsub => ({
       return context.Group.get(id);
     },
 
-    users: async (obj, args, context) => {
-      let ret = await context.User.list(args);
-      return ret;
-    },
-    user: (obj, args, context) => {
-      let { id } = args;
-      return context.User.get(id);
-    },
+    users: withAuth(['user:view:all'], (obj, args, context) => {
+      return context.User.list(args);
+    }),
+    user: withAuth(
+      (obj, args, context) => {
+        return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
+      },
+      (obj, args, context) => {
+        let { id } = args;
+        return context.User.get(id);
+      }
+    ),
     currentUser: (obj, args, context) => {
       if (context.user) {
         return context.User.get(context.user.id);
@@ -253,31 +258,69 @@ export default pubsub => ({
         const e = new FieldError();
         let user;
 
-        return { user };
+        return { user, errors: null };
       } catch (e) {
-        return { errors: e };
+        return { user: null, errors: e };
       }
     },
-    editUser: async (obj, { input }, context) => {
-      try {
-        const e = new FieldError();
-        let user;
+    editUser: withAuth(
+      (obj, args, context) => {
+        let s = context.user.id !== args.input.id ? ['user:update'] : ['user:update:self'];
+        console.log('editUser', context.user.id, context.auth.scope, s, args);
+        return s;
+      },
+      async (obj, { input }, context) => {
+        try {
+          const e = new FieldError();
+          if (input.email) {
+            console.log('updating user email');
+            const emailExists = await context.User.getUserByEmail(input.email);
+            if (emailExists && emailExists.id !== input.id) {
+              e.setError('email', 'E-mail already exists.');
+              e.throwIf();
+            }
+            await context.User.update(input.id, { email: input.email });
+          }
 
-        return { user };
-      } catch (e) {
-        return { errors: e };
-      }
-    },
-    deleteUser: async (obj, { id }, context) => {
-      try {
-        const e = new FieldError();
-        let user;
+          if (input.profile) {
+            console.log('updating user profile', input.profile);
+            await context.User.updateProfile(input.id, input.profile);
+          }
 
-        return { user };
-      } catch (e) {
-        return { errors: e };
+          const user = await context.User.get(input.id);
+          console.log('return user', user);
+          return { user, errors: null };
+        } catch (e) {
+          return { user: null, errors: e };
+        }
       }
-    },
+    ),
+    deleteUser: withAuth(
+      (obj, args, context) => {
+        return context.user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
+      },
+      async (obj, { id }, context) => {
+        try {
+          const e = new FieldError();
+
+          const user = await context.User.get(id);
+          if (!user) {
+            e.setError('delete', 'User does not exist.');
+            e.throwIf();
+          }
+
+          const isDeleted = await context.User.delete(id);
+          if (isDeleted) {
+            return { user, errors: null };
+          } else {
+            e.setError('delete', 'Could not delete user. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { user: null, errors: e };
+        }
+      }
+    ),
 
     addServiceAccount: async (obj, { input }, context) => {
       try {

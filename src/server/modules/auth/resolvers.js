@@ -59,12 +59,16 @@ export default pubsub => ({
         let tokens = null;
         let user = await passwordRegister(input);
 
-        if (authn.confirm) {
-          if (context.mailer && authn.password.sendConfirmationEmail && context.req) {
+        if (authn.password.confirm) {
+          console.log('Requiring Confirmation');
+          if (context.mailer && authn.password.sendConfirmationEmail) {
             // async email sending
             sendConfirmAccountEmail(context.mailer, user);
+          } else {
+            console.log('Ugh Oh');
           }
         } else {
+          console.log('Not Requiring Confirmation');
           tokens = await passwordLogin(input);
           if (context.req) {
             setTokenHeaders(context.req, tokens);

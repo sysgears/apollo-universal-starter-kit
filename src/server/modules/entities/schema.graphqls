@@ -224,11 +224,8 @@ input AddUserInput {
 
 input EditUserInput {
   id: String!
-  isActive: Boolean
-  email: String!
-
+  email: String
   profile: ProfileInput
-  auth: UserAuthInput
 }
 
 input ProfileInput {

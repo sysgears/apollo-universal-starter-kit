@@ -22,6 +22,30 @@ export const setTokenHeaders = (req, tokens) => {
   });
 };
 
+export const setResponseTokenHeaders = (res, tokens) => {
+  res.set('x-token', tokens.token);
+  res.set('x-refresh-token', tokens.token);
+  res.set('r-token', tokens.token);
+  res.set('r-refresh-token', tokens.token);
+  res.cookie('x-token', tokens.token, {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: true
+  });
+  res.cookie('x-refresh-token', tokens.refreshToken, {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: true
+  });
+
+  res.cookie('r-token', tokens.token, {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: false
+  });
+  res.cookie('r-refresh-token', tokens.refreshToken, {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: false
+  });
+};
+
 export const removeTokenHeaders = req => {
   req.universalCookies.remove('x-token');
   req.universalCookies.remove('x-refresh-token');

@@ -27,7 +27,6 @@ const RegisterWithApollo = compose(
             variables: { input: { username, email, password } }
           });
 
-          console.log(register);
           if (register.errors) {
             return { errors: register.errors };
           }

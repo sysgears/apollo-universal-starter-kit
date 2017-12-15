@@ -6,7 +6,7 @@ import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 
 import ContactForm from './ContactForm';
-import settings from '../../../../../settings';
+import settings from '../../../../settings';
 
 export default class ContactView extends React.Component {
   static propTypes = {

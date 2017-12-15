@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import { Form, RenderField, Button, Alert, Label } from '../../common/components/web';
 
-import { required } from '../../../../common/validation';
+import { required } from '../../../../../common/validation';
 
 class SubscriptionCardForm extends React.Component {
   static propTypes = {

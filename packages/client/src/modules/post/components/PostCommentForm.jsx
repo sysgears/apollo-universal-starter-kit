@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
-import { required, minLength } from '../../../../common/validation';
+import { required, minLength } from '../../../../../common/validation';
 
 const PostCommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
   let operation = 'Add';

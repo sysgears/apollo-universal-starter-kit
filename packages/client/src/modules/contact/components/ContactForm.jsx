@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
-import { required, email, minLength } from '../../../../common/validation';
+import { required, email, minLength } from '../../../../../common/validation';
 
 const ContactForm = ({ handleSubmit, valid, onSubmit }) => {
   return (

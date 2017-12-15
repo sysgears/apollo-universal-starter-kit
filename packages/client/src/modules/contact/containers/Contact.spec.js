@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
-import Renderer from '../../../../client/testHelpers/Renderer';
-import Routes from '../../../../client/app/Routes';
+import Renderer from '../../../../src/testHelpers/Renderer';
+import Routes from '../../../../src/app/Routes';
 
 describe('Contact UI works', () => {
   const renderer = new Renderer({});

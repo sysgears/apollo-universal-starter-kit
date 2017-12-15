@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import url from 'url';
 import { NavLink, Link } from 'react-router-dom';
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
-import { required, email, minLength } from '../../../../common/validation';
+import { required, email, minLength } from '../../../../../common/validation';
 
 import settings from '../../../../settings';
 

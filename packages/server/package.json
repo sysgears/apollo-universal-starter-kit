@@ -15,13 +15,12 @@
     "tests": "cross-env PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "flow && npm run tests && npm run lint",
-    "lint": "eslint --fix --ext js --ext jsx --ext json src tests tools config",
+    "lint": "eslint --fix --ext js --ext jsx --ext json src config",
     "seed": "npm run migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "watch": "spin watch",
     "heroku-postbuild": "rm -rf build && spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && spin -c .spinrc.prod.json build && spin exp p --non-interactive && npm run seed",
-    "precommit": "lint-staged",
     "cli": "node tools/cli",
     "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"
   },
@@ -125,6 +124,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
+    "babel-preset-minify": "^0.2.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-react-native": "^4.0.0",
     "babel-preset-stage-0": "^6.24.1",
@@ -183,6 +183,7 @@
     "resolve-url-loader": "^2.2.0",
     "sass-loader": "^6.0.6",
     "source-list-map": "^2.0.0",
+    "spinjs": "^0.4.53",
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2",
     "wait-on": "^2.0.2",
@@ -198,9 +199,6 @@
     "ws": "^3.3.2",
     "xdl": "^47.0.6"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "resolutions": {
     "graphql": "^0.11.7"
   },

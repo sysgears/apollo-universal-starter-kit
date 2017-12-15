@@ -4,6 +4,7 @@
 /.vscode
 /node_modules
 */**/node_modules/
+*/**/build/
 /build
 npm-debug.*
 .gqlconfig

@@ -5,7 +5,7 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 import { FormGroup, Label } from 'reactstrap';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 
-const required = value => (value ? undefined : 'Required');
+import { required } from '../../../../common/validation';
 
 class SubscriptionCardForm extends React.Component {
   static propTypes = {

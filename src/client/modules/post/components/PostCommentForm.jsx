@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
-
-const required = value => (value ? undefined : 'Required');
+import { required, minLength } from '../../../../common/validation';
 
 const PostCommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
   let operation = 'Add';
@@ -13,7 +12,7 @@ const PostCommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
 
   return (
     <FormView>
-      <Field name="content" component={RenderField} type="text" label="Content" validate={required} />
+      <Field name="content" component={RenderField} type="text" label="Content" validate={[required, minLength(1)]} />
       <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
         {operation}
       </FormButton>

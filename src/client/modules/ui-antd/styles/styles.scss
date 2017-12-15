@@ -1,0 +1,22 @@
+$footer-height: 40px;
+
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+body {
+  margin-bottom: $footer-height;
+}
+
+.active {
+  color: #000;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  line-height: $footer-height;
+  height: $footer-height;
+}

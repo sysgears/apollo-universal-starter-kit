@@ -14,7 +14,7 @@ const stylesProviders = [
 ];
 
 const uiComponents = () => {
-  return stylesProviders.find((provider: any) => provider.name === modules.stylesProviders[0]).components;
+  return stylesProviders.find((provider: any) => provider.name === modules.stylesProviders[1]).components;
 };
 
 export default uiComponents;

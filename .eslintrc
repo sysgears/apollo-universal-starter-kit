@@ -6,7 +6,7 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:flowtype/recommended"
- ],
+  ],
   "rules": {
     "no-use-before-define": 0,
     "arrow-body-style": 0,
@@ -14,11 +14,15 @@
     "no-console": 0,
     "react/jsx-key": 0,
     "semi": 2,
-    "prettier/prettier": ["error", {
-      "printWidth": 120,
-      "singleQuote": true,
-      "parser": "babylon"
-    }]
+    "react/sort-comp": 1,
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 120,
+        "singleQuote": true,
+        "parser": "babylon"
+      }
+    ]
   },
   "settings": {
     "import/resolver": {
@@ -42,5 +46,10 @@
     "__PERSIST_GQL__": true,
     "__BACKEND_URL__": true
   },
-  "plugins": ["react", "json", "prettier", "flowtype"]
+  "plugins": [
+    "react",
+    "json",
+    "prettier",
+    "flowtype"
+  ]
 }

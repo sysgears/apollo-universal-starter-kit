@@ -10,6 +10,7 @@ import reducers from './reducers';
 import Feature from '../connector';
 
 export default new Feature({
+  catalogInfo: { upload: true },
   route: <Route exact path="/upload" component={Upload} />,
   navItem: (
     <MenuItem key="/upload">

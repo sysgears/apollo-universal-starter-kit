@@ -120,7 +120,11 @@ export default pubsub => ({
           // async email
           jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
             const encodedToken = Buffer.from(emailToken).toString('base64');
-            const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
+            let url;
+            if (__DEV__) {
+              url = `${context.req.protocol}://localhost:3000/confirmation/${encodedToken}`;
+            }
+            url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
             context.mailer.sendMail({
               from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
               to: user.email,
@@ -218,7 +222,11 @@ export default pubsub => ({
             // async email
             jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
               const encodedToken = Buffer.from(emailToken).toString('base64');
-              const url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
+              let url;
+              if (__DEV__) {
+                url = `${context.req.protocol}://localhost:3000/confirmation/${encodedToken}`;
+              }
+              url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
               context.mailer.sendMail({
                 from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
                 to: user.email,
@@ -321,7 +329,11 @@ export default pubsub => ({
             (err, emailToken) => {
               // encoded token since react router does not match dots in params
               const encodedToken = Buffer.from(emailToken).toString('base64');
-              const url = `${context.req.protocol}://${context.req.get('host')}/reset-password/${encodedToken}`;
+              let url;
+              if (__DEV__) {
+                url = `${context.req.protocol}://localhost:3000/reset-password/${encodedToken}`;
+              }
+              url = `${context.req.protocol}://${context.req.get('host')}/reset-password/${encodedToken}`;
               context.mailer.sendMail({
                 from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
                 to: user.email,

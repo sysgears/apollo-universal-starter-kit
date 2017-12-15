@@ -7,7 +7,16 @@ import { PageLayout } from '../../common/components/web';
 import ResetPasswordForm from '../components/ResetPasswordForm';
 import settings from '../../../../settings';
 
-class ResetPasswordView extends React.Component {
+export default class ResetPasswordView extends React.Component {
+  static propTypes = {
+    resetPassword: PropTypes.func.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        token: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired
+  };
+
   onSubmit = resetPassword => async values => {
     const result = await resetPassword({
       ...values,
@@ -47,14 +56,3 @@ class ResetPasswordView extends React.Component {
     );
   }
 }
-
-ResetPasswordView.propTypes = {
-  resetPassword: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      token: PropTypes.string.isRequired
-    }).isRequired
-  }).isRequired
-};
-
-export default ResetPasswordView;

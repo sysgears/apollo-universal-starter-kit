@@ -6,7 +6,13 @@ import filesize from 'filesize';
 import { PageLayout, Row, Col, Table, Button, Alert } from '../../common/components/web';
 import settings from '../../../../settings';
 
-class UploadView extends React.PureComponent {
+export default class UploadView extends React.PureComponent {
+  static propTypes = {
+    files: PropTypes.array,
+    uploadFiles: PropTypes.func.isRequired,
+    removeFile: PropTypes.func.isRequired
+  };
+
   state = {
     error: null
   };
@@ -89,11 +95,3 @@ class UploadView extends React.PureComponent {
     );
   }
 }
-
-UploadView.propTypes = {
-  files: PropTypes.array,
-  uploadFiles: PropTypes.func.isRequired,
-  removeFile: PropTypes.func.isRequired
-};
-
-export default UploadView;

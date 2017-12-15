@@ -54,9 +54,14 @@ function DeletePost(prev, id) {
 }
 
 class Post extends React.Component {
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    posts: PropTypes.object,
+    subscribeToMore: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
-
     this.subscription = null;
   }
 
@@ -75,6 +80,13 @@ class Post extends React.Component {
       if (!this.subscription) {
         this.subscribeToPostList(nextEndCursor);
       }
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.subscription) {
+      // unsubscribe
+      this.subscription();
     }
   }
 
@@ -98,23 +110,10 @@ class Post extends React.Component {
     });
   };
 
-  componentWillUnmount() {
-    if (this.subscription) {
-      // unsubscribe
-      this.subscription();
-    }
-  }
-
   render() {
     return <PostList {...this.props} />;
   }
 }
-
-Post.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  posts: PropTypes.object,
-  subscribeToMore: PropTypes.func.isRequired
-};
 
 export default compose(
   graphql(POSTS_QUERY, {

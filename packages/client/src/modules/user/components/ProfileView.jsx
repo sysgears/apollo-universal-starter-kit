@@ -1,6 +1,5 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
 const ProfileView = () => {
@@ -29,7 +28,5 @@ const styles = StyleSheet.create({
     marginRight: 15
   }
 });
-
-ProfileView.propTypes = {};
 
 export default ProfileView;

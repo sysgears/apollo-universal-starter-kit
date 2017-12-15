@@ -9,10 +9,18 @@ import { PageLayout } from '../../common/components/web';
 import SubscriptionCardForm from './SubscriptionCardForm';
 import settings from '../../../../settings';
 
-class SubscriptionView extends React.Component {
+export default class SubscriptionView extends React.Component {
+  static propTypes = {
+    subscribe: PropTypes.func.isRequired
+  };
+
   state = {
     client: !__SSR__ && !__TEST__
   };
+
+  componentDidMount() {
+    this.setState({ client: __CLIENT__ });
+  }
 
   onSubmit = subscribe => async values => {
     const result = await subscribe(values);
@@ -25,10 +33,6 @@ class SubscriptionView extends React.Component {
       throw new SubmissionError(submitError);
     }
   };
-
-  componentDidMount() {
-    this.setState({ client: __CLIENT__ });
-  }
 
   render() {
     const { subscribe } = this.props;
@@ -60,9 +64,3 @@ class SubscriptionView extends React.Component {
     );
   }
 }
-
-SubscriptionView.propTypes = {
-  subscribe: PropTypes.func.isRequired
-};
-
-export default SubscriptionView;

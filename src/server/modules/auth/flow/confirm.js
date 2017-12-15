@@ -56,11 +56,9 @@ export const confirmAccountHandler = async (req, res) => {
 };
 
 export const sendConfirmAccountEmail = async (mailer, user) => {
-  console.log('sending confirmation email', user);
   jwt.sign({ user: pick(user, 'id') }, SECRET, { expiresIn: '1d' }, (err, emailToken) => {
     const encodedToken = Buffer.from(emailToken).toString('base64');
     const url = `${protocol}//${hostname}:${serverPort}/confirmation/${encodedToken}`;
-    console.log('Sending NOW!');
     mailer.sendMail(
       {
         from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
@@ -70,11 +68,10 @@ export const sendConfirmAccountEmail = async (mailer, user) => {
       <p>Welcome to ${settings.app.name}. Please click the following link to confirm your account:</p>
       <p><a href="${url}">${url}</a></p>`
       },
-      (error, info) => {
+      error => {
         if (error) {
-          return console.log(error);
+          return console.log('error', error);
         }
-        console.log('Message sent: ' + info.response);
       }
     );
   });

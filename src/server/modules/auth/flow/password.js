@@ -1,17 +1,27 @@
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import url from 'url';
 
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
 
 import AuthDAO from '../sql';
+import UserDAO from '../../entities/user';
 
 import { createToken } from './token';
 
 const SECRET = settings.auth.secret;
 
 const Auth = new AuthDAO();
+const User = new UserDAO();
 
 const authn = settings.auth.authentication;
+
+const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
+let serverPort = process.env.PORT || port;
+if (__DEV__) {
+  serverPort = '3000';
+}
 
 export const passwordRegister = async inputUser => {
   const e = new FieldError();
@@ -85,4 +95,69 @@ export const passwordLogin = async inputUser => {
     token,
     refreshToken
   };
+};
+
+export const sendPasswordResetEmail = async (mailer, inputUser) => {
+  console.log('Password Forget', inputUser);
+
+  const user = await User.getByEmail(inputUser.email);
+
+  if (user) {
+    // async email
+    jwt.sign({ email: user.email }, SECRET, { expiresIn: '1d' }, (err, emailToken) => {
+      // encoded token since react router does not match dots in params
+      const encodedToken = Buffer.from(emailToken).toString('base64');
+      const url = `${protocol}//${hostname}:${serverPort}/reset-password/${encodedToken}`;
+      mailer.sendMail(
+        {
+          from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+          to: user.email,
+          subject: 'Reset Password',
+          html: `Please click this link to reset your password: <a href="${url}">${url}</a>`
+        },
+        error => {
+          if (error) {
+            return console.log('error', error);
+          }
+        }
+      );
+    });
+  } else {
+    console.log('unknown user', inputUser.email);
+  }
+};
+
+export const passwordReset = async inputUser => {
+  console.log('passwordReset', inputUser);
+
+  const e = new FieldError();
+  const reset = {
+    token: inputUser.token,
+    password: inputUser.password,
+    passwordConfirmation: inputUser.passwordConfirmation
+  };
+  console.log('passwordReset', reset);
+  if (reset.password !== reset.passwordConfirmation) {
+    e.setError('password', 'Passwords do not match.');
+  }
+
+  if (reset.password.length < 5) {
+    e.setError('password', `Password must be 5 characters or more.`);
+  }
+  e.throwIf();
+
+  const token = Buffer.from(reset.token, 'base64').toString();
+  const { email } = jwt.verify(token, SECRET);
+  console.log('passwordReset', email);
+  const user = await User.getByEmail(email);
+  if (user.email !== email) {
+    e.setError('token', 'Invalid token');
+    e.throwIf();
+  }
+
+  console.log('passwordReset', user);
+  if (user) {
+    let ret = await Auth.updatePassword(user.id, reset.password);
+    console.log('passwordReset', ret);
+  }
 };

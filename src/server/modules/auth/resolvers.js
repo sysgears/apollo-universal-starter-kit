@@ -6,7 +6,7 @@ import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
 
 import { setTokenHeaders, removeTokenHeaders, refreshToken } from './flow/token';
-import { passwordRegister, passwordLogin } from './flow/password';
+import { passwordRegister, passwordLogin, sendPasswordResetEmail, passwordReset } from './flow/password';
 import { sendConfirmAccountEmail } from './flow/confirm';
 
 const authn = settings.auth.authentication;
@@ -92,7 +92,30 @@ export default pubsub => ({
       }
     },
     async registerPassword(obj, { input }, context) {
-      return true;
+      try {
+        let tokens = null;
+        let user = await passwordRegister(input);
+
+        if (authn.password.confirm) {
+          console.log('Requiring Confirmation');
+          if (context.mailer && authn.password.sendConfirmationEmail) {
+            // async email sending
+            sendConfirmAccountEmail(context.mailer, user);
+          } else {
+            console.log('Ugh Oh');
+          }
+        } else {
+          console.log('Not Requiring Confirmation');
+          tokens = await passwordLogin(input);
+          if (context.req) {
+            setTokenHeaders(context.req, tokens);
+          }
+        }
+
+        return { user, tokens, errors: null };
+      } catch (e) {
+        return { user: null, tokens: null, errors: e };
+      }
     },
     async loginPassword(obj, { input }, context) {
       try {
@@ -105,11 +128,27 @@ export default pubsub => ({
         return { tokens: null, errors: e };
       }
     },
-    async forgotPassword(obj, { input }, context) {
-      return true;
+    async forgotPassword(obj, args, context) {
+      console.log('forgotPassword', args);
+      const { input } = args;
+      try {
+        if (context.mailer) {
+          await sendPasswordResetEmail(context.mailer, input);
+        }
+        return true;
+      } catch (e) {
+        console.log('error', e);
+        // always return true so you can't discover users this way
+        return true;
+      }
     },
     async resetPassword(obj, { input }, context) {
-      return true;
+      try {
+        await passwordReset(input);
+        return { errors: null };
+      } catch (e) {
+        return { errors: e };
+      }
     },
     async loginPasswordless(obj, { input: { email } }, context) {
       return true;
@@ -122,7 +161,7 @@ export default pubsub => ({
       return true;
     },
     refreshToken(obj, { token, refreshToken }, context) {
-      return true;
+      return refreshToken(token, refreshToken, context.User, context.SECRET);
     }
   },
   Subscription: {}

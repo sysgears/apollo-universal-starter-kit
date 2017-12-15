@@ -1,6 +1,11 @@
+import settings from '../../../../settings';
+
+let config = settings.subscription;
+
 exports.up = function(knex, Promise) {
-  return Promise.all([
-    knex.schema.createTable('user_subscriptions', table => {
+  let migs = [];
+  if (config.enabled === true) {
+    let fn = knex.schema.createTable('user_subscriptions', table => {
       table.increments();
       table.string('stripe_customer_id').unique();
       table.string('stripe_source_id').unique();
@@ -11,15 +16,16 @@ exports.up = function(knex, Promise) {
       table.string('last4');
       table.string('brand');
       table
-        .integer('user_id')
-        .unsigned()
+        .uuid('user_id')
         .references('id')
         .inTable('users')
         .onDelete('CASCADE');
       table.timestamps(false, true);
-    }),
+    });
 
-    knex.schema.createTable('org_subscriptions', table => {
+    migs.push(fn);
+
+    fn = knex.schema.createTable('org_subscriptions', table => {
       table.increments();
       table.string('stripe_customer_id').unique();
       table.string('stripe_source_id').unique();
@@ -30,16 +36,21 @@ exports.up = function(knex, Promise) {
       table.string('last4');
       table.string('brand');
       table
-        .integer('org_id')
-        .unsigned()
+        .uuid('org_id')
         .references('id')
         .inTable('orgs')
         .onDelete('CASCADE');
       table.timestamps(false, true);
-    })
-  ]);
+    });
+
+    migs.push(fn);
+  }
+
+  return Promise.all(migs);
 };
 
 exports.down = function(knex, Promise) {
-  return Promise.all([knex.schema.dropTable('user_subscriptions'), knex.schema.dropTable('org_subscriptions')]);
+  if (config.enabled === true) {
+    return Promise.all([knex.schema.dropTable('user_subscriptions'), knex.schema.dropTable('org_subscriptions')]);
+  }
 };

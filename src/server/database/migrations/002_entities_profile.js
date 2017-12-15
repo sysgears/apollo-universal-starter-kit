@@ -8,10 +8,8 @@ exports.up = function(knex, Promise) {
   if (config.orgs.enabled === true) {
     let fn = knex.schema.createTable('org_profile', table => {
       table.timestamps(true, true);
-      table.increments();
       table
-        .integer('org_id')
-        .unsigned()
+        .uuid('org_id')
         .unique()
         .references('id')
         .inTable('orgs')
@@ -28,10 +26,8 @@ exports.up = function(knex, Promise) {
   if (config.groups.enabled === true) {
     let fn = knex.schema.createTable('group_profile', table => {
       table.timestamps(true, true);
-      table.increments();
       table
-        .integer('group_id')
-        .unsigned()
+        .uuid('group_id')
         .unique()
         .references('id')
         .inTable('groups')
@@ -47,10 +43,8 @@ exports.up = function(knex, Promise) {
   if (config.users.enabled === true) {
     let fn = knex.schema.createTable('user_profile', table => {
       table.timestamps(true, true);
-      table.increments();
       table
-        .integer('user_id')
-        .unsigned()
+        .uuid('user_id')
         .unique()
         .references('id')
         .inTable('users')
@@ -72,10 +66,8 @@ exports.up = function(knex, Promise) {
   if (config.serviceaccounts.enabled === true) {
     let fn = knex.schema.createTable('serviceaccount_profile', table => {
       table.timestamps(true, true);
-      table.increments();
       table
-        .integer('serviceaccount_id')
-        .unsigned()
+        .uuid('serviceaccount_id')
         .unique()
         .references('id')
         .inTable('serviceaccounts')

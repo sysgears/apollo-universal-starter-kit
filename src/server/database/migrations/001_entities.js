@@ -8,9 +8,8 @@ exports.up = function(knex, Promise) {
   if (config.orgs.enabled === true) {
     let fn = knex.schema.createTable('orgs', table => {
       table.timestamps(true, true);
-      table.increments();
       table
-        .uuid('uuid')
+        .uuid('id')
         .notNullable()
         .unique();
       table.boolean('is_active').defaultTo(false);
@@ -27,9 +26,8 @@ exports.up = function(knex, Promise) {
   if (config.groups.enabled === true) {
     let fn = knex.schema.createTable('groups', table => {
       table.timestamps(true, true);
-      table.increments();
       table
-        .uuid('uuid')
+        .uuid('id')
         .notNullable()
         .unique();
       table.boolean('is_active').defaultTo(false);
@@ -46,9 +44,8 @@ exports.up = function(knex, Promise) {
   if (config.users.enabled === true) {
     let fn = knex.schema.createTable('users', table => {
       table.timestamps(true, true);
-      table.increments();
       table
-        .uuid('uuid')
+        .uuid('id')
         .notNullable()
         .unique();
       table.boolean('is_active').defaultTo(false);
@@ -65,9 +62,8 @@ exports.up = function(knex, Promise) {
   if (config.serviceaccounts.enabled === true) {
     let fn = knex.schema.createTable('serviceaccounts', table => {
       table.timestamps(true, true);
-      table.increments();
       table
-        .uuid('uuid')
+        .uuid('id')
         .notNullable()
         .unique();
       table.boolean('is_active').defaultTo(false);
@@ -89,15 +85,13 @@ exports.up = function(knex, Promise) {
       table.timestamps(true, true);
 
       table
-        .integer('org_id')
-        .unsigned()
+        .uuid('org_id')
         .notNullable()
         .references('id')
         .inTable('orgs')
         .onDelete('CASCADE');
       table
-        .integer('group_id')
-        .unsigned()
+        .uuid('group_id')
         .notNullable()
         .references('id')
         .inTable('groups')
@@ -113,15 +107,13 @@ exports.up = function(knex, Promise) {
       table.timestamps(true, true);
 
       table
-        .integer('org_id')
-        .unsigned()
+        .uuid('org_id')
         .notNullable()
         .references('id')
         .inTable('orgs')
         .onDelete('CASCADE');
       table
-        .integer('user_id')
-        .unsigned()
+        .uuid('user_id')
         .notNullable()
         .references('id')
         .inTable('users')
@@ -141,15 +133,13 @@ exports.up = function(knex, Promise) {
       table.timestamps(true, true);
 
       table
-        .integer('org_id')
-        .unsigned()
+        .uuid('org_id')
         .notNullable()
         .references('id')
         .inTable('orgs')
         .onDelete('CASCADE');
       table
-        .integer('serviceaccount_id')
-        .unsigned()
+        .uuid('serviceaccount_id')
         .notNullable()
         .references('id')
         .inTable('serviceaccounts')
@@ -166,15 +156,13 @@ exports.up = function(knex, Promise) {
       table.timestamps(true, true);
 
       table
-        .integer('group_id')
-        .unsigned()
+        .uuid('group_id')
         .notNullable()
         .references('id')
         .inTable('groups')
         .onDelete('CASCADE');
       table
-        .integer('user_id')
-        .unsigned()
+        .uuid('user_id')
         .notNullable()
         .references('id')
         .inTable('users')
@@ -195,15 +183,13 @@ exports.up = function(knex, Promise) {
       table.timestamps(true, true);
 
       table
-        .integer('group_id')
-        .unsigned()
+        .uuid('group_id')
         .notNullable()
         .references('id')
         .inTable('groups')
         .onDelete('CASCADE');
       table
-        .integer('serviceaccount_id')
-        .unsigned()
+        .uuid('serviceaccount_id')
         .notNullable()
         .references('id')
         .inTable('serviceaccounts')

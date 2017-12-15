@@ -10,15 +10,7 @@ export default class ServiceAccount {
     let { filters, orderBys, offset, limit } = args;
 
     const queryBuilder = knex
-      .select(
-        's.uuid as id',
-        's.created_at',
-        's.updated_at',
-        's.is_active',
-        's.email',
-        'p.display_name',
-        'p.description'
-      )
+      .select('s.id as id', 's.created_at', 's.updated_at', 's.is_active', 's.email', 'p.display_name', 'p.description')
       .from('serviceaccounts AS s')
       .leftJoin('serviceaccount_profile AS p', 'p.serviceaccount_id', 's.id');
 
@@ -69,17 +61,9 @@ export default class ServiceAccount {
   async get(id) {
     return camelizeKeys(
       await knex
-        .select(
-          's.uuid as id',
-          's.created_at',
-          's.updated_at',
-          's.is_active',
-          's.email',
-          'p.display_name',
-          'p.description'
-        )
+        .select('s.id', 's.created_at', 's.updated_at', 's.is_active', 's.email', 'p.display_name', 'p.description')
         .from('serviceaccounts AS s')
-        .where('s.uuid', '=', id)
+        .where('s.id', '=', id)
         .leftJoin('serviceaccount_profile AS p', 'p.serviceaccount_id', 's.id')
         .first()
     );
@@ -87,8 +71,8 @@ export default class ServiceAccount {
 
   async getOrgsForServiceAccountId(saId) {
     let rows = await knex
-      .select('o.uuid AS id', 'o.name', 'sa.uuid AS saId')
-      .whereIn('sa.uuid', saId)
+      .select('o.id AS id', 'o.name', 'sa.id AS saId')
+      .whereIn('sa.id', saId)
       .from('serviceaccounts AS sa')
       .leftJoin('orgs_serviceaccounts AS os', 'os.serviceaccount_id', 'sa.id')
       .leftJoin('orgs AS o', 'o.id', 'os.org_id');
@@ -98,8 +82,8 @@ export default class ServiceAccount {
   }
   async getOrgsForServiceAccountIdViaGroups(saId) {
     let rows = await knex
-      .select('o.uuid AS id', 'o.name', 'sa.uuid AS saId')
-      .whereIn('sa.uuid', saId)
+      .select('o.id AS id', 'o.name', 'sa.id AS saId')
+      .whereIn('sa.id', saId)
       .from('serviceaccounts AS sa')
       .leftJoin('groups_serviceaccounts AS gu', 'gu.serviceaccount_id', 'sa.id')
       .leftJoin('orgs_groups AS og', 'og.group_id', 'gu.group_id')
@@ -110,8 +94,8 @@ export default class ServiceAccount {
   }
   async getGroupsForServiceAccountId(saId) {
     let rows = await knex
-      .select('g.uuid AS id', 'g.name', 'sa.uuid AS saId')
-      .whereIn('sa.uuid', saId)
+      .select('g.id AS id', 'g.name', 'sa.id AS saId')
+      .whereIn('sa.id', saId)
       .from('serviceaccounts AS sa')
       .leftJoin('groups_serviceaccounts AS gu', 'gu.serviceaccount_id', 'sa.id')
       .leftJoin('groups AS g', 'gu.group_id', 'g.id');
@@ -121,59 +105,45 @@ export default class ServiceAccount {
   }
 
   async create(values) {
-    values.uuid = uuidv4();
-    const [uid] = await knex('serviceaccounts')
-      .returning('uuid')
-      .insert(decamelizeKeys(values));
-    return uid;
+    values.id = uuidv4();
+    await knex('serviceaccounts').insert(decamelizeKeys(values));
+    return values.id;
   }
 
-  async getInternalIdFromUUID(uuid) {
-    return knex
-      .select('id')
-      .from('serviceaccounts')
-      .where('uuid', '=', uuid)
-      .first();
-  }
-
-  async update(uuid, values) {
+  async update(id, values) {
     return knex('serviceaccounts')
-      .where('uuid', '=', uuid)
+      .where('id', '=', id)
       .update(decamelizeKeys(values));
   }
 
-  async delete(uuid) {
+  async delete(id) {
     return knex('serviceaccounts')
-      .where('uuid', '=', uuid)
+      .where('id', '=', id)
       .delete();
   }
 
-  async getProfile(uuid) {
+  async getProfile(id) {
     return knex
       .select('p')
-      .join('serviceaccounts AS q')
-      .where('q.uuid', '=', uuid)
-      .leftJoin('serviceaccount_profile AS p', 'p.serviceaccount_id', 'q.id')
+      .from('serviceaccount_profile AS p')
+      .where('p.id', '=', id)
       .first();
   }
 
-  async createProfile(uuid, values) {
-    let serviceaccountId = await this.getInternalIdFromUUID(uuid);
-    values.serviceaccountId = serviceaccountId;
+  async createProfile(id, values) {
+    values.serviceaccountId = id;
     return knex('serviceaccount_profile').insert(decamelizeKeys(values));
   }
 
-  async updateProfile(uuid, values) {
-    let serviceaccountId = await this.getInternalIdFromUUID(uuid);
+  async updateProfile(id, values) {
     return knex('serviceaccount_profile')
-      .where('serviceaccount_id', '=', serviceaccountId)
+      .where('serviceaccount_id', '=', id)
       .update(decamelizeKeys(values));
   }
 
-  async deleteProfile(uuid) {
-    let serviceaccountId = await this.getInternalIdFromUUID(uuid);
+  async deleteProfile(id) {
     return knex('serviceaccount_profile')
-      .where('serviceaccount_id', '=', serviceaccountId)
+      .where('serviceaccount_id', '=', id)
       .delete();
   }
 }

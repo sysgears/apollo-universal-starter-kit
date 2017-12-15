@@ -21,7 +21,7 @@ const profileFields = [
 */
 
 const selectFields = [
-  'u.uuid AS id',
+  'u.id',
   'u.email',
   'u.created_at',
   'u.updated_at',
@@ -93,14 +93,14 @@ export default class User {
     return camelizeKeys(await queryBuilder);
   }
 
-  async get(uuid) {
+  async get(id) {
     console.log('User.get', ...selectFields);
     let ret = await knex
       .select(...selectFields)
       .from('users AS u')
       .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
       .leftJoin('user_roles AS r', 'r.user_id', 'p.user_id')
-      .where('u.uuid', '=', uuid)
+      .where('u.id', '=', id)
       .first();
     console.log('User.get', ret);
     return camelizeKeys(ret);
@@ -111,7 +111,7 @@ export default class User {
       await knex
         .select(...selectFields)
         .from('users AS u')
-        .where('u.uuid', '=', id)
+        .where('u.id', '=', id)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
         .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
         .first()
@@ -132,8 +132,8 @@ export default class User {
 
   async getOrgsForUserId(userId) {
     let rows = await knex
-      .select('o.uuid AS id', 'o.name', 'u.uuid AS userId')
-      .whereIn('u.uuid', userId)
+      .select('o.id AS id', 'o.name', 'u.id AS userId')
+      .whereIn('u.id', userId)
       .from('users AS u')
       .leftJoin('orgs_users AS ou', 'ou.user_id', 'u.id')
       .leftJoin('orgs AS o', 'o.id', 'ou.org_id');
@@ -144,8 +144,8 @@ export default class User {
 
   async getOrgsForUserIdViaGroups(userId) {
     let rows = await knex
-      .select('o.uuid AS id', 'o.name', 'u.uuid AS userId')
-      .whereIn('u.uuid', userId)
+      .select('o.id AS id', 'o.name', 'u.id AS userId')
+      .whereIn('u.id', userId)
       .from('users AS u')
       .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
       .leftJoin('orgs_groups AS og', 'og.group_id', 'gu.group_id')
@@ -157,8 +157,8 @@ export default class User {
 
   async getGroupsForUserId(userId) {
     let rows = await knex
-      .select('g.uuid AS id', 'g.name', 'u.uuid AS userId')
-      .whereIn('u.uuid', userId)
+      .select('g.id AS id', 'g.name', 'u.id AS userId')
+      .whereIn('u.id', userId)
       .from('users AS u')
       .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
       .leftJoin('groups AS g', 'gu.group_id', 'g.id');
@@ -168,62 +168,45 @@ export default class User {
   }
 
   async create(values) {
-    values.uuid = uuidv4();
+    values.id = uuidv4();
     await knex('users').insert(decamelizeKeys(values));
-    return values.uuid;
+    return values.id;
   }
 
-  async getInternalIdFromUUID(uuid) {
-    let ret = await knex
-      .select('id')
-      .from('users')
-      .where('uuid', '=', uuid)
-      .first();
-    if (ret && ret.id) {
-      return ret.id;
-    }
-    return ret;
-  }
-
-  async update(uuid, values) {
+  async update(id, values) {
     return knex('users')
-      .where('uuid', '=', uuid)
+      .where('id', '=', id)
       .update(decamelizeKeys(values));
   }
 
-  async delete(uuid) {
+  async delete(id) {
     return knex('users')
-      .where('uuid', '=', uuid)
+      .where('id', '=', id)
       .delete();
   }
 
-  async getProfile(uuid) {
+  async getProfile(id) {
     return knex
       .select('p')
-      .join('users AS q')
-      .where('q.uuid', '=', uuid)
-      .leftJoin('user_profile AS p', 'p.user_id', 'q.id')
+      .leftJoin('user_profile AS p')
+      .where('p.id', '=', id)
       .first();
   }
 
-  async createProfile(uuid, values) {
-    let userId = await this.getInternalIdFromUUID(uuid);
-    console.log('User.createProfile', userId, uuid, values);
-    values.userId = userId;
+  async createProfile(id, values) {
+    values.userId = id;
     return knex('user_profile').insert(decamelizeKeys(values));
   }
 
-  async updateProfile(uuid, values) {
-    let userId = await this.getInternalIdFromUUID(uuid);
+  async updateProfile(id, values) {
     return knex('user_profile')
-      .where('user_id', '=', userId)
+      .where('user_id', '=', id)
       .update(decamelizeKeys(values));
   }
 
-  async deleteProfile(uuid) {
-    let userId = await this.getInternalIdFromUUID(uuid);
+  async deleteProfile(id) {
     return knex('user_profile')
-      .where('user_id', '=', userId)
+      .where('user_id', '=', id)
       .delete();
   }
 }

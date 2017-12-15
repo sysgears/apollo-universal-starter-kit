@@ -10,15 +10,7 @@ export default class Group {
     let { filters, orderBys, offset, limit } = args;
 
     const queryBuilder = knex
-      .select(
-        'g.uuid as id',
-        'g.created_at',
-        'g.updated_at',
-        'g.is_active',
-        'g.name',
-        'p.display_name',
-        'p.description'
-      )
+      .select('g.id', 'g.created_at', 'g.updated_at', 'g.is_active', 'g.name', 'p.display_name', 'p.description')
       .from('groups AS g')
       .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
 
@@ -69,25 +61,17 @@ export default class Group {
   async get(id) {
     return camelizeKeys(
       await knex
-        .select(
-          'g.uuid as id',
-          'g.created_at',
-          'g.updated_at',
-          'g.is_active',
-          'g.name',
-          'p.display_name',
-          'p.description'
-        )
+        .select('g.id', 'g.created_at', 'g.updated_at', 'g.is_active', 'g.name', 'p.display_name', 'p.description')
         .from('groups AS g')
-        .where('g.uuid', '=', id)
+        .where('g.id', '=', id)
         .first()
     );
   }
 
   async getOrgsForGroupId(groupId) {
     let rows = await knex
-      .select('o.uuid AS id', 'o.name', 'g.uuid AS groupId')
-      .whereIn('g.uuid', groupId)
+      .select('o.id AS id', 'o.name', 'g.id AS groupId')
+      .whereIn('g.id', groupId)
       .from('groups AS g')
       .leftJoin('orgs_groups AS og', 'og.group_id', 'g.id')
       .leftJoin('orgs AS o', 'o.id', 'og.org_id');
@@ -98,8 +82,8 @@ export default class Group {
 
   async getUsersForGroupId(groupId) {
     let rows = await knex
-      .select('u.uuid AS id', 'u.email', 'g.uuid AS groupId')
-      .whereIn('g.uuid', groupId)
+      .select('u.id AS id', 'u.email', 'g.id AS groupId')
+      .whereIn('g.id', groupId)
       .from('groups AS g')
       .leftJoin('groups_users AS gu', 'gu.group_id', 'g.id')
       .leftJoin('users AS u', 'u.id', 'gu.user_id');
@@ -110,8 +94,8 @@ export default class Group {
 
   async getServiceAccountsForGroupId(groupId) {
     let rows = await knex
-      .select('sa.uuid AS id', 'sa.email', 'g.uuid AS groupId')
-      .whereIn('g.uuid', groupId)
+      .select('sa.id AS id', 'sa.email', 'g.id AS groupId')
+      .whereIn('g.id', groupId)
       .from('groups AS g')
       .leftJoin('groups_serviceaccounts AS gs', 'gs.group_id', 'g.id')
       .leftJoin('serviceaccounts AS sa', 'sa.id', 'gs.serviceaccount_id');
@@ -121,59 +105,45 @@ export default class Group {
   }
 
   async create(values) {
-    values.uuid = uuidv4();
-    const [uid] = await knex('groups')
-      .returning('uuid')
-      .insert(decamelizeKeys(values));
-    return uid;
+    values.id = uuidv4();
+    await knex('groups').insert(decamelizeKeys(values));
+    return values.id;
   }
 
-  async getInternalIdFromUUID(uuid) {
-    return knex
-      .select('id')
-      .from('groups')
-      .where('uuid', '=', uuid)
-      .first();
-  }
-
-  async update(uuid, values) {
+  async update(id, values) {
     return knex('groups')
-      .where('uuid', '=', uuid)
+      .where('id', '=', id)
       .update(decamelizeKeys(values));
   }
 
-  async delete(uuid) {
+  async delete(id) {
     return knex('groups')
-      .where('uuid', '=', uuid)
+      .where('id', '=', id)
       .delete();
   }
 
-  async getProfile(uuid) {
+  async getProfile(id) {
     return knex
       .select('p')
-      .join('groups AS q')
-      .where('q.uuid', '=', uuid)
-      .leftJoin('group_profile AS p', 'p.group_id', 'q.id')
+      .leftJoin('group_profile AS p')
+      .where('p.id', '=', id)
       .first();
   }
 
-  async createProfile(uuid, values) {
-    let groupId = await this.getInternalIdFromUUID(uuid);
-    values.groupId = groupId;
+  async createProfile(id, values) {
+    values.groupId = id;
     return knex('group_profile').insert(decamelizeKeys(values));
   }
 
-  async updateProfile(uuid, values) {
-    let groupId = await this.getInternalIdFromUUID(uuid);
+  async updateProfile(id, values) {
     return knex('group_profile')
-      .where('group_id', '=', groupId)
+      .where('group_id', '=', id)
       .update(decamelizeKeys(values));
   }
 
-  async deleteProfile(uuid) {
-    let groupId = await this.getInternalIdFromUUID(uuid);
+  async deleteProfile(id) {
     return knex('group_profile')
-      .where('group_id', '=', groupId)
+      .where('group_id', '=', id)
       .delete();
   }
 }

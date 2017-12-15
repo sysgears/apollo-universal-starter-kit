@@ -25,13 +25,12 @@ exports.up = function(knex, Promise) {
   if (config.method === 'basic' && config.basic.provider === 'embedded') {
     let basic = config.basic;
 
-    {
+    /*
       let fn = knex.schema.createTable('role_permissions', table => {
         table.timestamps(true, true);
 
         table
-          .integer('role_id')
-          .unsigned()
+          .uuid('role_id')
           .notNullable()
           .references('id')
           .inTable('roles')
@@ -47,24 +46,21 @@ exports.up = function(knex, Promise) {
       });
 
       migs.push(fn);
-    }
+    */
 
     if (basic.subjects.orgs) {
       let fn = knex.schema.createTable('org_roles', table => {
         table.timestamps(true, true);
-        table.increments();
 
         table.enu('role', basic.roles).notNullable();
 
         table
-          .integer('org_id')
-          .unsigned()
+          .uuid('org_id')
           .notNullable()
+          .unique()
           .references('id')
           .inTable('orgs')
           .onDelete('CASCADE');
-
-        table.unique(['role', 'org_id']);
       });
 
       migs.push(fn);
@@ -73,19 +69,16 @@ exports.up = function(knex, Promise) {
     if (basic.subjects.groups) {
       let fn = knex.schema.createTable('group_roles', table => {
         table.timestamps(true, true);
-        table.increments();
 
         table.enu('role', basic.roles).notNullable();
 
         table
-          .integer('group_id')
-          .unsigned()
+          .uuid('group_id')
           .notNullable()
+          .unique()
           .references('id')
           .inTable('groups')
           .onDelete('CASCADE');
-
-        table.unique(['role', 'group_id']);
       });
 
       migs.push(fn);
@@ -94,19 +87,16 @@ exports.up = function(knex, Promise) {
     if (basic.subjects.users) {
       let fn = knex.schema.createTable('user_roles', table => {
         table.timestamps(true, true);
-        table.increments();
 
         table.enu('role', basic.roles).notNullable();
 
         table
-          .integer('user_id')
-          .unsigned()
+          .uuid('user_id')
           .notNullable()
+          .unique()
           .references('id')
           .inTable('users')
           .onDelete('CASCADE');
-
-        table.unique(['role', 'user_id']);
       });
 
       migs.push(fn);
@@ -115,19 +105,16 @@ exports.up = function(knex, Promise) {
     if (basic.subjects.serviceaccounts) {
       let fn = knex.schema.createTable('serviceaccount_roles', table => {
         table.timestamps(true, true);
-        table.increments();
 
         table.enu('role', basic.roles).notNullable();
 
         table
-          .integer('serviceaccount_id')
-          .unsigned()
+          .uuid('serviceaccount_id')
           .notNullable()
+          .unique()
           .references('id')
           .inTable('serviceaccounts')
           .onDelete('CASCADE');
-
-        table.unique(['role', 'serviceaccount_id']);
       });
 
       migs.push(fn);

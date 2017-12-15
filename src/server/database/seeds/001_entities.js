@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import uuidv4 from 'uuid/v4';
+import uuidv4 from 'uuid';
 import bcrypt from 'bcryptjs';
 import truncateTables from '../../../common/db';
 import settings from '../../../../settings';
@@ -13,8 +13,6 @@ let config = settings.entities;
 let auth = settings.auth;
 
 export async function seed(knex, Promise) {
-  // this should empty the other tables from cascading deletes
-
   if (config.orgs.enabled === true) {
     await truncateTables(knex, Promise, ['serviceaccounts', 'users', 'groups', 'orgs']);
 
@@ -36,14 +34,13 @@ async function createOrgs(knex, orgs, createRels) {
   for (let org of orgs) {
     console.log('Creating org:', org.name);
 
+    const oid = uuidv4();
     // create org
-    const [oid] = await knex('orgs')
-      .returning('id')
-      .insert({
-        uuid: uuidv4(),
-        name: org.name,
-        is_active: true
-      });
+    await knex('orgs').insert({
+      id: oid,
+      name: org.name,
+      is_active: true
+    });
 
     org.id = oid;
 
@@ -100,14 +97,13 @@ async function createGroups(knex, shorts, namePrefix) {
       return g.name === group;
     });
 
+    const gid = uuidv4();
     // save group
-    const [gid] = await knex('groups')
-      .returning('id')
-      .insert({
-        uuid: uuidv4(),
-        name: (namePrefix ? namePrefix + ':' : '') + groupSeed.name,
-        is_active: true
-      });
+    await knex('groups').insert({
+      id: gid,
+      name: (namePrefix ? namePrefix + ':' : '') + groupSeed.name,
+      is_active: true
+    });
 
     // save group profile
     if (groupSeed.profile) {
@@ -126,15 +122,13 @@ async function createUsers(knex, shorts, domain) {
     let userSeed = _.find(users, u => {
       return u.short == user;
     });
-
+    const uid = uuidv4();
     // save user
-    const [uid] = await knex('users')
-      .returning('id')
-      .insert({
-        uuid: uuidv4(),
-        email: userSeed.short + '@' + domain,
-        is_active: true
-      });
+    await knex('users').insert({
+      id: uid,
+      email: userSeed.short + '@' + domain,
+      is_active: true
+    });
 
     // save user password
     if (auth.authentication.password.enabled === true && userSeed.password) {
@@ -167,14 +161,13 @@ async function createServiceAccounts(knex, shorts, domain) {
       return a.short == acct;
     });
 
+    const aid = uuidv4();
     // save service account
-    const [aid] = await knex('serviceaccounts')
-      .returning('id')
-      .insert({
-        uuid: uuidv4(),
-        email: acctSeed.short + '@' + domain,
-        is_active: true
-      });
+    await knex('serviceaccounts').insert({
+      id: aid,
+      email: acctSeed.short + '@' + domain,
+      is_active: true
+    });
 
     // save sa serial
     await knex('serviceaccount_certificates').insert({

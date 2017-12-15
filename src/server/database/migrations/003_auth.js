@@ -16,8 +16,7 @@ exports.up = function(knex, Promise) {
       let fn = knex.schema.createTable('user_password', table => {
         table.timestamps(true, true);
         table
-          .integer('user_id')
-          .unsigned()
+          .uuid('user_id')
           .unique()
           .references('id')
           .inTable('users')
@@ -33,8 +32,7 @@ exports.up = function(knex, Promise) {
       let fn = knex.schema.createTable('user_oauths', table => {
         table.timestamps(true, true);
         table
-          .integer('user_id')
-          .unsigned()
+          .uuid('user_id')
           .references('id')
           .inTable('users')
           .onDelete('CASCADE');
@@ -51,8 +49,7 @@ exports.up = function(knex, Promise) {
       let fn = knex.schema.createTable('user_apikeys', table => {
         table.timestamps(true, true);
         table
-          .integer('user_id')
-          .unsigned()
+          .uuid('user_id')
           .unique()
           .references('id')
           .inTable('users')
@@ -70,8 +67,7 @@ exports.up = function(knex, Promise) {
       let fn = knex.schema.createTable('user_certificates', table => {
         table.timestamps(true, true);
         table
-          .integer('user_id')
-          .unsigned()
+          .uuid('user_id')
           .references('id')
           .inTable('users')
           .onDelete('CASCADE');
@@ -92,8 +88,7 @@ exports.up = function(knex, Promise) {
       let fn = knex.schema.createTable('serviceaccount_apikeys', table => {
         table.timestamps(true, true);
         table
-          .integer('serviceaccount_id')
-          .unsigned()
+          .uuid('serviceaccount_id')
           .unique()
           .references('id')
           .inTable('serviceaccounts')
@@ -109,8 +104,7 @@ exports.up = function(knex, Promise) {
       let fn = knex.schema.createTable('serviceaccount_certificates', table => {
         table.timestamps(true, true);
         table
-          .integer('serviceaccount_id')
-          .unsigned()
+          .uuid('serviceaccount_id')
           .unique()
           .references('id')
           .inTable('serviceaccounts')

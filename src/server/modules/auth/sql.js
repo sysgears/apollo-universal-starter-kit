@@ -16,25 +16,25 @@ export default class Auth {
     // really NEED a SQL transaction here
     console.log('Register - input', newUser);
 
-    let uuid = await User.create({
+    let id = await User.create({
       email: newUser.email,
       isActive: newUser.isActive
     });
-    console.log('Register - uuid', uuid);
+    console.log('Register - id', id);
 
     if (newUser.profile) {
       console.log('Register - profile');
-      await User.createProfile(uuid, newUser.profile);
+      await User.createProfile(id, newUser.profile);
     }
 
     console.log('Register - password');
-    await this.createPassword(uuid, newUser.password);
+    await this.createPassword(id, newUser.password);
 
-    let ret = await this.initUserRole(uuid, 'user');
+    let ret = await this.initUserRole(id, 'user');
     console.log('Register - role', ret);
 
     console.log('Register - user');
-    const user = await User.get(uuid);
+    const user = await User.get(id);
 
     console.log('Register - return', user);
     return user;
@@ -42,7 +42,7 @@ export default class Auth {
 
   async searchUserByEmail(email) {
     let row = await knex
-      .select('u.uuid AS id', 'u.is_active', 'u.email')
+      .select('u.id', 'u.is_active', 'u.email')
       .from('users AS u')
       .whereIn('u.email', email)
       .first();
@@ -52,7 +52,7 @@ export default class Auth {
 
   async searchUserByOAuthIdOrEmail(provider, id, email) {
     let row = await knex
-      .select('u.uuid AS id', 'u.is_active', 'u.email', 'o.provider')
+      .select('u.id', 'u.is_active', 'u.email', 'o.provider')
       .from('users AS u')
       .whereIn('u.email', email)
       .orWhere('provider', '=', provider)
@@ -62,56 +62,56 @@ export default class Auth {
     return camelizeKeys(row);
   }
 
-  async getUserWithPassword(uuid) {
+  async getUserWithPassword(id) {
     return knex
-      .select('u.uuid As id', 'u.is_active', 'u.email', 'a.password', 'r.role')
+      .select('u.id', 'u.is_active', 'u.email', 'a.password', 'r.role')
       .from('users AS u')
-      .whereIn('u.uuid', uuid)
+      .whereIn('u.id', id)
       .leftJoin('user_password AS a', 'a.user_id', 'u.id')
       .leftJoin('user_roles AS r', 'r.user_id', 'a.user_id')
       .first();
   }
 
-  async getUserWithApiKeys(uuid) {
+  async getUserWithApiKeys(id) {
     let rows = await knex
-      .select('u.uuid AS id', 'u.is_active', 'u.email', 'a.name', 'a.key', 'r.role')
+      .select('u.id', 'u.is_active', 'u.email', 'a.name', 'a.key', 'r.role')
       .from('users AS u')
-      .whereIn('u.uuid', uuid)
+      .whereIn('u.id', id)
       .leftJoin('user_apikeys AS a', 'a.user_id', 'u.id')
       .leftJoin('user_roles AS r', 'r.user_id', 'a.user_id');
 
     let res = _.filter(rows, row => row.name !== null);
-    return orderedFor(res, uuid, 'id', false);
+    return orderedFor(res, id, 'id', false);
   }
 
-  async getUserWithSerials(uuid) {
+  async getUserWithSerials(id) {
     let rows = await knex
-      .select('u.uuid AS id', 'u.is_active', 'u.email', 'a.name', 'a.serial', 'r.role')
+      .select('u.id', 'u.is_active', 'u.email', 'a.name', 'a.serial', 'r.role')
       .from('users AS u')
-      .whereIn('u.uuid', uuid)
+      .whereIn('u.id', id)
       .leftJoin('user_certificates AS a', 'a.user_id', 'u.id')
       .leftJoin('user_roles AS r', 'r.user_id', 'a.user_id');
 
     let res = _.filter(rows, row => row.serial !== null);
-    return orderedFor(res, uuid, 'id', false);
+    return orderedFor(res, id, 'id', false);
   }
 
-  async getUserWithOAuths(uuid) {
+  async getUserWithOAuths(id) {
     let rows = await knex
-      .select('u.uuid AS id', 'u.is_active', 'u.email', 'a.provider', 'a.oauth_id AS oauth_id', 'r.role')
+      .select('u.id', 'u.is_active', 'u.email', 'a.provider', 'a.oauth_id AS oauth_id', 'r.role')
       .from('users AS u')
-      .whereIn('u.uuid', uuid)
+      .whereIn('u.id', id)
       .leftJoin('user_oauths AS a', 'a.user_id', 'u.id')
       .leftJoin('user_roles AS r', 'r.user_id', 'a.user_id');
 
     let res = _.filter(rows, row => row.provider !== null);
-    return orderedFor(res, uuid, 'id', false);
+    return orderedFor(res, id, 'id', false);
   }
 
   async getUserPasswordFromEmail(email) {
     console.log('Auth.getUserPasswordFromEmail', email);
     let row = await knex
-      .select('u.uuid AS id', 'u.is_active', 'u.email', 'a.password', 'r.role')
+      .select('u.id', 'u.is_active', 'u.email', 'a.password', 'r.role')
       .from('users AS u')
       .leftJoin('user_password AS a', 'a.user_id', 'u.id')
       .leftJoin('user_roles AS r', 'r.user_id', 'a.user_id')
@@ -124,7 +124,7 @@ export default class Auth {
 
   async getUserFromApiKey(apikey) {
     let row = await knex
-      .select('u.uuid AS id', 'u.is_active', 'u.email', 'a.name')
+      .select('u.id', 'u.is_active', 'u.email', 'a.name')
       .from('users AS u')
       .leftJoin('user_apikeys AS a', 'a.user_id', 'u.id')
       .where('a.key', '=', apikey)
@@ -135,7 +135,7 @@ export default class Auth {
 
   async getUserFromOAuth(provider, oauth_id) {
     let row = await knex
-      .select('u.uuid AS id', 'u.is_active', 'u.email')
+      .select('u.id', 'u.is_active', 'u.email')
       .from('users AS u')
       .leftJoin('user_oauths AS a', 'a.user_id', 'u.id')
       .where({
@@ -150,7 +150,7 @@ export default class Auth {
   async getUserFromSerial(serial) {
     // ???
     let row = await knex
-      .select('u.uuid AS id', 'u.is_active', 'u.email', 'a.name')
+      .select('u.id', 'u.is_active', 'u.email', 'a.name')
       .from('users AS u')
       .leftJoin('user_certificates AS a', 'a.user_id', 'u.id')
       .where('a.serial', '=', serial)
@@ -159,19 +159,16 @@ export default class Auth {
     return camelizeKeys(row);
   }
 
-  async createPassword(uuid, plaintextPassword) {
-    const userId = await User.getInternalIdFromUUID(uuid);
+  async createPassword(id, plaintextPassword) {
     const password = await bcrypt.hash(plaintextPassword, 12);
-    console.log('INIT PASS', userId, uuid);
 
     return knex('user_password').insert({
-      user_id: userId,
+      user_id: id,
       password: password
     });
   }
 
-  async updatePassword(uuid, plaintextPassword) {
-    const userId = await User.getInternalIdFromUUID(uuid);
+  async updatePassword(id, plaintextPassword) {
     const password = await bcrypt.hash(plaintextPassword, 12);
 
     return knex('user_password')
@@ -179,70 +176,62 @@ export default class Auth {
         password: password
       })
       .where({
-        user_id: userId
+        user_id: id
       });
   }
 
-  async createUserOAuth(provider, id, userUUID) {
-    let userId = await User.getInternalIdFromUUID(userUUID);
+  async createUserOAuth(provider, oauthId, userId) {
     return knex('user_oauths').insert({
       provider: provider,
-      oauth_id: id,
+      oauth_id: oauthId,
       user_id: userId
     });
   }
 
-  async deleteUserOAuth(provider, id, userUUID) {
-    let userId = await User.getInternalIdFromUUID(userUUID);
+  async deleteUserOAuth(provider, oauthId, userId) {
     return knex('user_oauths')
       .where({
         provider: provider,
-        oauth_id: id,
+        oauth_id: oauthId,
         user_id: userId
       })
       .delete();
   }
 
-  async createUserApiKey(userUUID, name) {
-    let userId = await User.getInternalIdFromUUID(userUUID);
+  async createUserApiKey(id, name) {
     let key = uuidv4();
     return knex('user_apikeys')
       .returning('key')
       .insert({
         name: name,
         key: key,
-        user_id: userId
+        user_id: id
       });
   }
 
-  async deleteUserApiKey(userUUID, name) {
-    let userId = await User.getInternalIdFromUUID(userUUID);
+  async deleteUserApiKey(id, name) {
     return knex('user_oauths')
       .where({
         name: name,
-        user_id: userId
+        user_id: id
       })
       .delete();
   }
 
-  async initUserRole(uuid, role) {
-    const userId = await User.getInternalIdFromUUID(uuid);
-    console.log('INIT ROLE', userId, uuid, role);
+  async initUserRole(id, role) {
     return knex('user_roles').insert({
       role: role,
-      user_id: userId
+      user_id: id
     });
   }
 
-  async setUserRole(uuid, role) {
-    const userId = await User.getInternalIdFromUUID(uuid);
-
+  async setUserRole(id, role) {
     return knex('user_roles')
       .update({
         role
       })
       .where({
-        user_id: userId
+        user_id: id
       });
   }
 }

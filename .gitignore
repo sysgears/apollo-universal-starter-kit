@@ -5,6 +5,7 @@
 /node_modules
 /build
 npm-debug.*
+.gqlconfig
 .expo/
 *.sqlite3
 .DS_Store

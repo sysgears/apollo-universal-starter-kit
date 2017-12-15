@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
@@ -26,10 +25,6 @@ class UpdateCard extends React.Component {
     );
   }
 }
-
-UpdateCard.propTypes = {
-  updateCard: PropTypes.func.isRequired
-};
 
 const UpdateCardWithApollo = compose(
   graphql(UPDATE_CARD, {

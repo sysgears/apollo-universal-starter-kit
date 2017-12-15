@@ -13,7 +13,7 @@ import { graphql, print, getOperationAST } from 'graphql';
 
 import { Provider } from 'react-redux';
 
-import rootSchema from '../../server/api/rootSchema.graphqls';
+import rootSchema from '../../server/api/rootSchema.graphql';
 import serverModules from '../../server/modules';
 import settings from '../../../settings';
 

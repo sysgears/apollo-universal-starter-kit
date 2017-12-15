@@ -6,6 +6,8 @@ import log from '../../common/log';
 
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
+export const featureCatalog = {};
+
 export default class {
   /* eslint-disable no-unused-vars */
   constructor(
@@ -20,11 +22,15 @@ export default class {
       createFetchOptions,
       stylesInsert,
       scriptsInsert,
-      rootComponentFactory
+      rootComponentFactory,
+      catalogInfo
     },
     ...features
   ) {
     /* eslint-enable no-unused-vars */
+    combine(arguments, arg => arg.catalogInfo).forEach(info =>
+      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
+    );
     this.route = combine(arguments, arg => arg.route);
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);

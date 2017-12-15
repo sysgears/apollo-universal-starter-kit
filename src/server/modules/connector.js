@@ -7,6 +7,8 @@ import { merge, map, union, without, castArray } from 'lodash';
 
 import log from '../../common/log';
 
+export const featureCatalog: any = {};
+
 const combine = (features, extractor): any =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
@@ -16,7 +18,8 @@ type FeatureParams = {
   createContextFunc?: Function | Function[],
   beforeware?: Middleware | Middleware[],
   middleware?: Middleware | Middleware[],
-  createFetchOptions?: Function | Function[]
+  createFetchOptions?: Function | Function[],
+  catalogInfo: any | any[]
 };
 
 class Feature {
@@ -29,6 +32,9 @@ class Feature {
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
+    combine(arguments, arg => arg.catalogInfo).forEach(info =>
+      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
+    );
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);

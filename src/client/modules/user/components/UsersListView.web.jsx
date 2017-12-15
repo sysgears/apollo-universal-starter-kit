@@ -3,7 +3,15 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Table, Button } from '../../common/components/web';
 
-class UsersView extends React.PureComponent {
+export default class UsersView extends React.PureComponent {
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    users: PropTypes.array,
+    orderBy: PropTypes.object,
+    onOrderBy: PropTypes.func.isRequired,
+    deleteUser: PropTypes.func.isRequired
+  };
+
   state = {
     errors: []
   };
@@ -124,13 +132,3 @@ class UsersView extends React.PureComponent {
     }
   }
 }
-
-UsersView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  users: PropTypes.array,
-  orderBy: PropTypes.object,
-  onOrderBy: PropTypes.func.isRequired,
-  deleteUser: PropTypes.func.isRequired
-};
-
-export default UsersView;

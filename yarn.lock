@@ -385,9 +385,9 @@ antd-mobile@^2.1.0:
     rmc-tooltip "~1.0.0"
     rn-topview "^0.1.6"
 
-antd@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-3.0.0.tgz#53e16832b787ca59ba97a3627bbb1b1e2df3bb2e"
+antd@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-3.0.1.tgz#46d3e05a28e8c19d1298034cab0e03b71e479a2e"
   dependencies:
     array-tree-filter "~1.0.0"
     babel-runtime "6.x"
@@ -620,11 +620,12 @@ apollo-tracing@^0.1.0:
   dependencies:
     graphql-extensions "^0.0.x"
 
-apollo-upload-server@^4.0.0-alpha.1:
-  version "4.0.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/apollo-upload-server/-/apollo-upload-server-4.0.0-alpha.1.tgz#9f680ad31578d51305c5641cdc5e0014db866f85"
+apollo-upload-server@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/apollo-upload-server/-/apollo-upload-server-3.0.0.tgz#131f5f1fe5b5139216e7f07f2a0106b290fb5ab4"
   dependencies:
-    busboy "^0.2.14"
+    formidable "^1.1.1"
+    mkdirp "^0.5.1"
     object-path "^0.11.4"
 
 apollo-utilities@^1.0.0, apollo-utilities@^1.0.1, apollo-utilities@^1.0.3:
@@ -2169,13 +2170,6 @@ builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
 
-busboy@^0.2.14:
-  version "0.2.14"
-  resolved "https://registry.yarnpkg.com/busboy/-/busboy-0.2.14.tgz#6c2a622efcf47c57bbbe1e2a9c37ad36c7925453"
-  dependencies:
-    dicer "0.2.5"
-    readable-stream "1.1.x"
-
 bytes@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-2.1.0.tgz#ac93c410e2ffc9cc7cf4b464b38289067f5e47b4"
@@ -3383,13 +3377,6 @@ detect-libc@^1.0.2:
 detect-node@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.3.tgz#a2033c09cc8e158d37748fbde7507832bd6ce127"
-
-dicer@0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/dicer/-/dicer-0.2.5.tgz#5996c086bb33218c812c090bddc09cd12facb70f"
-  dependencies:
-    readable-stream "1.1.x"
-    streamsearch "0.1.2"
 
 diff@3.3.1:
   version "3.3.1"
@@ -9213,7 +9200,7 @@ rc-input-number@~4.0.0:
     prop-types "^15.5.7"
     rmc-feedback "^1.0.0"
 
-rc-menu@^6.1.0, rc-menu@^6.2.3, rc-menu@~6.2.0:
+rc-menu@^6.1.0, rc-menu@~6.2.0:
   version "6.2.3"
   resolved "https://registry.yarnpkg.com/rc-menu/-/rc-menu-6.2.3.tgz#33d1e5faa9337358f54afc6ae10a7f6b582715d4"
   dependencies:
@@ -9438,9 +9425,9 @@ react-addons-test-utils@^16.0.0-alpha.3:
     fbjs "^0.8.9"
     object-assign "^4.1.0"
 
-react-apollo@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.0.1.tgz#43997db9f294d81bd229eb705944fb36d5164607"
+react-apollo@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.0.4.tgz#01dd32a8e388672f5d7385b21cdd0b94009ee9ee"
   dependencies:
     apollo-link "^1.0.0"
     hoist-non-react-statics "^2.2.0"
@@ -11254,10 +11241,6 @@ stream-to-observable@^0.2.0:
   resolved "https://registry.yarnpkg.com/stream-to-observable/-/stream-to-observable-0.2.0.tgz#59d6ea393d87c2c0ddac10aa0d561bc6ba6f0e10"
   dependencies:
     any-observable "^0.2.0"
-
-streamsearch@0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/streamsearch/-/streamsearch-0.1.2.tgz#808b9d0e56fc273d809ba57338e929919a1a9f1a"
 
 strict-uri-encode@^1.0.0:
   version "1.1.0"

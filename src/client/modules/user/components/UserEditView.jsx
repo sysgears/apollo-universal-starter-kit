@@ -9,7 +9,14 @@ import { PageLayout } from '../../common/components/web';
 import UserForm from './UserForm';
 import settings from '../../../../../settings';
 
-class UserEditView extends React.PureComponent {
+export default class UserEditView extends React.PureComponent {
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    user: PropTypes.object,
+    addUser: PropTypes.func.isRequired,
+    editUser: PropTypes.func.isRequired
+  };
+
   onSubmit = async values => {
     const { user, addUser, editUser } = this.props;
     let result = null;
@@ -73,12 +80,3 @@ class UserEditView extends React.PureComponent {
     }
   }
 }
-
-UserEditView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  user: PropTypes.object,
-  addUser: PropTypes.func.isRequired,
-  editUser: PropTypes.func.isRequired
-};
-
-export default UserEditView;

@@ -7,21 +7,15 @@ import settings from '../../../settings';
 import log from '../../common/log';
 
 export default graphqlExpress(async (req, res) => {
-  try {
-    return {
-      schema,
-      context: await modules.createContext(req, res),
-      debug: false,
-      formatError: error => {
-        log.error('GraphQL execution error:', error);
-        return error;
-      },
-      // logFunction: logger,
-      tracing: !!settings.engine.engineConfig.apiKey,
-      cacheControl: !!settings.engine.engineConfig.apiKey
-    };
-  } catch (e) {
-    log.error(e);
-    throw e;
-  }
+  return {
+    schema,
+    context: await modules.createContext(req, res),
+    debug: false,
+    formatError: error => {
+      log.error('GraphQL execution error:', error);
+      return error;
+    },
+    tracing: !!settings.engine.engineConfig.apiKey,
+    cacheControl: !!settings.engine.engineConfig.apiKey
+  };
 });

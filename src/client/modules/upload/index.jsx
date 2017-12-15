@@ -9,6 +9,7 @@ import reducers from './reducers';
 import Feature from '../connector';
 
 export default new Feature({
+  catalogInfo: { upload: true },
   tabItem: {
     Upload: {
       screen: Upload,

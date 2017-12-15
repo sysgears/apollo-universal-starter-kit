@@ -3,7 +3,19 @@ import PropTypes from 'prop-types';
 import { Table, Button } from '../../common/components/web';
 import PostCommentForm from './PostCommentForm';
 
-class PostCommentsView extends React.PureComponent {
+export default class PostCommentsView extends React.PureComponent {
+  static propTypes = {
+    postId: PropTypes.number.isRequired,
+    comments: PropTypes.array.isRequired,
+    comment: PropTypes.object,
+    addComment: PropTypes.func.isRequired,
+    editComment: PropTypes.func.isRequired,
+    deleteComment: PropTypes.func.isRequired,
+    onCommentSelect: PropTypes.func.isRequired,
+    onFormSubmitted: PropTypes.func.isRequired,
+    subscribeToMore: PropTypes.func.isRequired
+  };
+
   hendleEditComment = (id, content) => {
     const { onCommentSelect } = this.props;
     onCommentSelect({ id, content });
@@ -78,17 +90,3 @@ class PostCommentsView extends React.PureComponent {
     );
   }
 }
-
-PostCommentsView.propTypes = {
-  postId: PropTypes.number.isRequired,
-  comments: PropTypes.array.isRequired,
-  comment: PropTypes.object.isRequired,
-  addComment: PropTypes.func.isRequired,
-  editComment: PropTypes.func.isRequired,
-  deleteComment: PropTypes.func.isRequired,
-  onCommentSelect: PropTypes.func.isRequired,
-  onFormSubmitted: PropTypes.func.isRequired,
-  subscribeToMore: PropTypes.func.isRequired
-};
-
-export default PostCommentsView;

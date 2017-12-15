@@ -12,7 +12,7 @@ const RenderField = ({ input, label, type, meta: { touched, error } }) => {
   }
 
   return (
-    <FormItem label={label} validateStatus={validateStatus} help={error}>
+    <FormItem label={label} validateStatus={validateStatus} help={touched && error}>
       <div>
         <Input {...input} placeholder={label} type={type} />
       </div>

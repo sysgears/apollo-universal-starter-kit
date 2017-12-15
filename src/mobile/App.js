@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { getOperationAST } from 'graphql';
 import { ApolloProvider } from 'react-apollo';
@@ -29,7 +29,7 @@ const store = createStore(
 
 const { protocol, pathname, port } = url.parse(__BACKEND_URL__);
 
-export default class Main extends Component {
+export default class Main extends React.Component {
   static propTypes = {
     expUri: PropTypes.string
   };

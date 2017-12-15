@@ -8,6 +8,14 @@ import { Form, RenderField, Button, Alert } from '../../common/components/web';
 const required = value => (value ? undefined : 'Required');
 
 class SubscriptionCardForm extends React.Component {
+  static propTypes = {
+    submitting: PropTypes.bool,
+    action: PropTypes.string.isRequired,
+    error: PropTypes.string,
+    handleSubmit: PropTypes.func,
+    onSubmit: PropTypes.func
+  };
+
   onSubmit = async ({ name }) => {
     const { stripe } = this.props;
     const { token, error } = await stripe.createToken({ name });
@@ -43,14 +51,6 @@ class SubscriptionCardForm extends React.Component {
     );
   }
 }
-
-SubscriptionCardForm.propTypes = {
-  handleSubmit: PropTypes.func,
-  onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
-  action: PropTypes.string.isRequired,
-  error: PropTypes.string
-};
 
 export default injectStripe(
   reduxForm({

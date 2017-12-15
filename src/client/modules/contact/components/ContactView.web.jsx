@@ -2,40 +2,47 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
-import { Elements } from 'react-stripe-elements';
 import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 
-import SubscriptionCardForm from './SubscriptionCardForm';
+import ContactForm from './ContactForm';
 import settings from '../../../../../settings';
 
-export default class UpdateCardView extends React.Component {
+export default class ContactView extends React.Component {
   static propTypes = {
-    updateCard: PropTypes.func.isRequired
+    contact: PropTypes.func.isRequired,
+    onFormSubmitted: PropTypes.func.isRequired
   };
 
-  onSubmit = updateCard => async values => {
-    const result = await updateCard(values);
+  state = {
+    sent: false
+  };
+
+  onSubmit = ({ contact, onFormSubmitted }) => async values => {
+    const result = await contact(values);
 
     if (result.errors) {
       let submitError = {
-        _error: 'Update failed!'
+        _error: 'Contact request failed!'
       };
       result.errors.map(error => (submitError[error.field] = error.message));
       throw new SubmissionError(submitError);
     }
+
+    this.setState({ sent: result });
+    onFormSubmitted();
   };
 
   render() {
-    const { updateCard } = this.props;
+    const { contact, onFormSubmitted } = this.props;
 
     const renderMetaData = () => (
       <Helmet
-        title={`${settings.app.name} - Update Card`}
+        title={`${settings.app.name} - Contact Us`}
         meta={[
           {
             name: 'description',
-            content: `${settings.app.name} - Update card page`
+            content: `${settings.app.name} - Contact us example page`
           }
         ]}
       />
@@ -45,10 +52,8 @@ export default class UpdateCardView extends React.Component {
       <PageLayout>
         {renderMetaData()}
         <LayoutCenter>
-          <h1 className="text-center">Update card!</h1>
-          <Elements>
-            <SubscriptionCardForm onSubmit={this.onSubmit(updateCard)} action="Update Card" />
-          </Elements>
+          <h1 className="text-center">Contact Us</h1>
+          <ContactForm onSubmit={this.onSubmit({ contact, onFormSubmitted })} sent={this.state.sent} />
         </LayoutCenter>
       </PageLayout>
     );

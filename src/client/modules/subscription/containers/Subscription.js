@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
@@ -27,10 +26,6 @@ class Subscription extends React.Component {
     );
   }
 }
-
-Subscription.propTypes = {
-  subscribe: PropTypes.func.isRequired
-};
 
 const SubscriptionViewWithApollo = compose(
   graphql(SUBSCRIBE, {

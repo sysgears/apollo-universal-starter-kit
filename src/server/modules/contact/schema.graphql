@@ -1,0 +1,11 @@
+extend type Mutation {
+  # Send contact us info
+  contact(input: ContactInput!): Boolean!
+}
+
+# Input for addPost Mutation
+input ContactInput {
+  name: String!
+  email: String!
+  content: String!
+}

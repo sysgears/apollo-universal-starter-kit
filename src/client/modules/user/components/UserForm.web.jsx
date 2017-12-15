@@ -22,7 +22,7 @@ const validate = values => {
 
 const UserForm = ({ handleSubmit, submitting, onSubmit, error }) => {
   return (
-    <Form name="post" onSubmit={handleSubmit(onSubmit)}>
+    <Form name="user" onSubmit={handleSubmit(onSubmit)}>
       <Field name="username" component={RenderField} type="text" label="Username" validate={[required, minLength3]} />
       <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
       <Field name="role" component={RenderSelect} type="select" label="Role">

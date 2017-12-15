@@ -64,10 +64,10 @@ export default class UsersView extends React.PureComponent {
     const columns = [
       {
         title: 'ID',
-        dataIndex: 'userId',
-        key: 'userId',
+        dataIndex: 'id',
+        key: 'id',
         render: (text, record) => (
-          <Link className="user-link" to={`/users/${record.userId}`}>
+          <Link className="user-link" to={`/users/${record.id}`}>
             {text}
           </Link>
         )

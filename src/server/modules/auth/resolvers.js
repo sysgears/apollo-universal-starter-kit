@@ -1,7 +1,7 @@
 /*eslint-disable no-unused-vars*/
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
-import withAuth from 'graphql-auth';
+import { withAuth } from '../../../common/authValidation';
 import FieldError from '../../../common/FieldError';
 import settings from '../../../../settings';
 

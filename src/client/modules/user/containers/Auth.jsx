@@ -9,92 +9,7 @@ import log from '../../../../common/log';
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
 
-import settings from '../../../../../settings';
-
-const authz = settings.auth.authorization;
-
-/*
- * taken from 'graphql-auth' so that the front and back ends can use the same authorization semantics
- * https://github.com/kkemple/graphql-auth/blob/3c72d5939413d161c60cafaccd2d79d56704aba9/index.js#L17
- */
-function validateScope(required, provided) {
-  console.log('validateScope', required, provided);
-  let hasScope = false;
-
-  required.forEach(scope => {
-    provided.forEach(function(perm) {
-      // user:* -> user:create, user:view:self
-      var permRe = new RegExp('^' + perm.replace('*', '.*') + '$');
-      if (permRe.exec(scope)) hasScope = true;
-    });
-  });
-
-  return hasScope;
-}
-
-const checkAuth = (cookies, requiredScopes) => {
-  console.log('checkAuth', requiredScopes);
-
-  // first check token
-  let token = null;
-  let refreshToken = null;
-
-  // one or both of these is returning the string 'undefined' when there are no tokens... >:[
-  if (cookies && cookies.get('r-token')) {
-    token = cookies.get('r-token');
-    refreshToken = cookies.get('r-refresh-token');
-  }
-  if (__CLIENT__ && window.localStorage.getItem('token')) {
-    token = window.localStorage.getItem('token');
-    refreshToken = window.localStorage.getItem('refreshToken');
-  }
-
-  // If we have no token, return false
-  if (
-    !token ||
-    !refreshToken ||
-    token === undefined ||
-    refreshToken === undefined ||
-    token === 'undefined' ||
-    refreshToken === 'undefined'
-  ) {
-    return false;
-  }
-
-  // If there are no scopes, ALLOW
-  if (!requiredScopes || requiredScopes.length === 0) {
-    return true;
-  }
-
-  // Otherwise, decode token, grab scopes, and compare to required
-  try {
-    const { exp } = decode(refreshToken);
-
-    if (exp < new Date().getTime() / 1000) {
-      return false;
-    }
-    const { user: { id, email, role } } = decode(token);
-
-    console.log('decoded:', role, email, id);
-
-    let userScopes = null;
-
-    if (authz.method === 'basic') {
-      userScopes = authz.basic.scopes[role];
-    } else if (authz.method === 'rbac') {
-      // TODO
-    }
-
-    const yesTheyCan = validateScope(requiredScopes, userScopes);
-
-    console.log('Can they? ', yesTheyCan ? 'yes' : 'no');
-
-    return yesTheyCan;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
+import { checkAuth } from '../../../../common/authValidation';
 
 const profileName = cookies => {
   let token = null;
@@ -130,7 +45,6 @@ AuthNav.propTypes = {
 
 const AuthLogin = ({ children, cookies, logout }) => {
   let can = checkAuth(cookies);
-  console.log('AuthLogin', can);
   return can ? (
     <a href="#" onClick={() => logout()} className="nav-link">
       Logout
@@ -165,8 +79,8 @@ const AuthLoginWithApollo = withCookies(
                 // comment out until https://github.com/apollographql/apollo-client/issues/1186 is fixed
                 //await client.resetStore();
 
-                window.localStorage.setItem('token', null);
-                window.localStorage.setItem('refreshToken', null);
+                window.localStorage.removeItem('token');
+                window.localStorage.removeItem('refreshToken');
 
                 if (history) {
                   return history.push('/');

@@ -1,7 +1,8 @@
 /*eslint-disable no-unused-vars*/
-import withAuth from 'graphql-auth';
+// import withAuth from 'graphql-auth';
 import { pick } from 'lodash';
 import FieldError from '../../../common/FieldError';
+import { withAuth } from '../../../common/authValidation';
 
 const mergeLoaders = res => {
   let ret = [];

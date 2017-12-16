@@ -2,35 +2,17 @@
   "name": "apollo-universal-starter-kit",
   "private": true,
   "version": "1.0.0",
-  "engines": {
-    "node": ">= 6.11.1",
-    "npm": ">= 3.10.3",
-    "yarn": ">= 0.19.0"
-  },
   "scripts": {
     "build": "lerna run build --stream",
-    "exp": "spin exp",
     "start": "node --harmony build/server",
-    "tests": "cross-env PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.js\"",
-    "tests:watch": "cross-env PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
-    "test": "flow && npm run tests && npm run lint",
+    "test": "lerna run test",
     "lint": "lerna run lint",
     "seed": "lerna run seed --stream",
     "watch": "lerna run watch --stream",
     "heroku-postbuild": "rm -rf build && spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && spin -c .spinrc.prod.json build && spin exp p --non-interactive && npm run seed",
     "cli": "node tools/cli",
     "postinstall": "opencollective postinstall",
-    "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"
-  },
-  "lint-staged": {
-    "*.{js,jsx,json}": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.graphql": [
-      "prettier --parser graphql --write",
-      "git add"
-    ]
+    "stripe:setup": "node packages/server/src/modules/subscription/cli/stripeSetup"
   },
   "repository": {
     "type": "git",
@@ -65,7 +47,6 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "devDependencies": {
-    "lerna": "^2.5.1",
-    "spinjs": "^0.4.55"
+    "lerna": "^2.5.1"
   }
 }

@@ -1,7 +1,7 @@
 import DataLoader from 'dataloader';
 import jwt from 'jsonwebtoken';
 
-import Auth from './sql';
+import Auth from './lib';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import Feature from '../connector';

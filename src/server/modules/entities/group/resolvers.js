@@ -18,15 +18,17 @@ export default pubsub => ({
     profile(obj) {
       return obj;
     },
-    orgs(obj, args, context) {
-      return context.loaders.getOrgsForGroupId.load(obj.id);
-    },
     users(obj, args, context) {
       return context.loaders.getUsersForGroupId.load(obj.id);
+    }
+    /*
+    orgs(obj, args, context) {
+      return context.loaders.getOrgsForGroupId.load(obj.id);
     },
     serviceaccounts(obj, args, context) {
       return context.loaders.getServiceAccountsForGroupId.load(obj.id);
     }
+    */
   },
 
   GroupProfile: {

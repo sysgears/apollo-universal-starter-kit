@@ -38,9 +38,9 @@ type Group {
 
   profile: GroupProfile
 
-  orgs: [Org]
+  # orgs: [Org]
   users: [User]
-  serviceaccounts: [ServiceAccount]
+  # serviceaccounts: [ServiceAccount]
 }
 
 type GroupProfile {

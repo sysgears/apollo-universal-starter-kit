@@ -24,6 +24,22 @@ export default [
     serial: 'sa-test'
   },
   {
+    short: 'sa-subscriber',
+    profile: {
+      displayName: 'Subscriber Svc Acct - Testing',
+      description: 'Subscriber SA for testing'
+    },
+    serial: 'sa-subscriber'
+  },
+  {
+    short: 'sa-user',
+    profile: {
+      displayName: 'User Svc Acct - Testing',
+      description: 'User SA for testing'
+    },
+    serial: 'sa-user'
+  },
+  {
     short: 'sa-subscriber1',
     profile: {
       displayName: 'Subscriber Svc Acct - Testing',

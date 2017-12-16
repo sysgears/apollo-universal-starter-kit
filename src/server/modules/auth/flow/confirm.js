@@ -5,7 +5,7 @@ import { pick } from 'lodash';
 import settings from '../../../../../settings';
 
 import UserDAO from '../../entities/user/lib';
-import AuthDAO from '../sql';
+import AuthDAO from '../lib';
 
 import { createToken, setTokenHeaders, setResponseTokenHeaders } from './token';
 

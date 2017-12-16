@@ -4,21 +4,23 @@ import schema from './schema.graphql';
 import createResolvers from './resolvers';
 import Feature from '../../connector';
 
-import UserDAO from './lib';
+import OrgDAO from './lib';
 
-const User = new UserDAO();
+const Org = new OrgDAO();
 
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: () => {
     return {
-      User,
+      Org,
 
       loaders: {
-        getOrgsForUserId: new DataLoader(User.getOrgsForUserId),
-        getGroupsForUserId: new DataLoader(User.getGroupsForUserId),
-        getOrgsForUserIdViaGroups: new DataLoader(User.getOrgsForUserIdViaGroups)
+        getGroupsForOrgId: new DataLoader(Org.getGroupsForOrgId),
+        getUsersForOrgId: new DataLoader(Org.getUsersForOrgId),
+        getServiceAccountsForOrgId: new DataLoader(Org.getServiceAccountsForOrgId),
+        getUsersForOrgIdViaGroups: new DataLoader(Org.getUsersForOrgIdViaGroups),
+        getServiceAccountsForOrgIdViaGroups: new DataLoader(Org.getServiceAccountsForOrgIdViaGroups)
       }
     };
   }

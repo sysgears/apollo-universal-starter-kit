@@ -21,6 +21,22 @@ exports.up = function(knex, Promise) {
     });
 
     migs.push(fn);
+
+    fn = knex.schema.createTable('org_profile', table => {
+      table.timestamps(true, true);
+      table
+        .uuid('org_id')
+        .unique()
+        .references('id')
+        .inTable('orgs')
+        .onDelete('CASCADE');
+
+      table.string('domain');
+      table.string('display_name');
+      table.string('description');
+    });
+
+    migs.push(fn);
   }
 
   if (config.groups.enabled === true) {
@@ -36,6 +52,21 @@ exports.up = function(knex, Promise) {
         .string('name')
         .notNullable()
         .unique();
+    });
+
+    migs.push(fn);
+
+    fn = knex.schema.createTable('group_profile', table => {
+      table.timestamps(true, true);
+      table
+        .uuid('group_id')
+        .unique()
+        .references('id')
+        .inTable('groups')
+        .onDelete('CASCADE');
+
+      table.string('display_name');
+      table.string('description');
     });
 
     migs.push(fn);
@@ -57,6 +88,27 @@ exports.up = function(knex, Promise) {
     });
 
     migs.push(fn);
+
+    fn = knex.schema.createTable('user_profile', table => {
+      table.timestamps(true, true);
+      table
+        .uuid('user_id')
+        .unique()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE');
+
+      table.string('display_name');
+      table.string('first_name');
+      table.string('middle_name');
+      table.string('last_name');
+      table.string('title');
+      table.string('suffix');
+      table.string('locale');
+      table.string('language');
+    });
+
+    migs.push(fn);
   }
 
   if (config.serviceaccounts.enabled === true) {
@@ -75,127 +127,18 @@ exports.up = function(knex, Promise) {
     });
 
     migs.push(fn);
-  }
 
-  /*
-     * Many-to-many Memberships
-     */
-  if (config.orgs.enabled === true && config.groups.enabled && config.groups.multipleOrgs === true) {
-    let fn = knex.schema.createTable('orgs_groups', table => {
+    fn = knex.schema.createTable('serviceaccount_profile', table => {
       table.timestamps(true, true);
-
-      table
-        .uuid('org_id')
-        .notNullable()
-        .references('id')
-        .inTable('orgs')
-        .onDelete('CASCADE');
-      table
-        .uuid('group_id')
-        .notNullable()
-        .references('id')
-        .inTable('groups')
-        .onDelete('CASCADE');
-
-      table.unique(['org_id', 'group_id']);
-    });
-    migs.push(fn);
-  }
-
-  if (config.orgs.enabled === true && config.users.enabled && config.users.multipleOrgs === true) {
-    let fn = knex.schema.createTable('orgs_users', table => {
-      table.timestamps(true, true);
-
-      table
-        .uuid('org_id')
-        .notNullable()
-        .references('id')
-        .inTable('orgs')
-        .onDelete('CASCADE');
-      table
-        .uuid('user_id')
-        .notNullable()
-        .references('id')
-        .inTable('users')
-        .onDelete('CASCADE');
-
-      table.unique(['org_id', 'user_id']);
-    });
-    migs.push(fn);
-  }
-
-  if (
-    config.orgs.enabled === true &&
-    config.serviceaccounts.enabled === true &&
-    config.serviceaccounts.multipleOrgs === true
-  ) {
-    let fn = knex.schema.createTable('orgs_serviceaccounts', table => {
-      table.timestamps(true, true);
-
-      table
-        .uuid('org_id')
-        .notNullable()
-        .references('id')
-        .inTable('orgs')
-        .onDelete('CASCADE');
       table
         .uuid('serviceaccount_id')
-        .notNullable()
+        .unique()
         .references('id')
         .inTable('serviceaccounts')
         .onDelete('CASCADE');
 
-      table.unique(['org_id', 'serviceaccount_id']);
-    });
-
-    migs.push(fn);
-  }
-
-  if (config.groups.enabled === true && config.users.enabled && config.users.multipleGroups === true) {
-    let fn = knex.schema.createTable('groups_users', table => {
-      table.timestamps(true, true);
-
-      table
-        .uuid('group_id')
-        .notNullable()
-        .references('id')
-        .inTable('groups')
-        .onDelete('CASCADE');
-      table
-        .uuid('user_id')
-        .notNullable()
-        .references('id')
-        .inTable('users')
-        .onDelete('CASCADE');
-
-      table.unique(['group_id', 'user_id']);
-    });
-
-    migs.push(fn);
-  }
-
-  if (
-    config.groups.enabled === true &&
-    config.serviceaccounts.enabled &&
-    config.serviceaccounts.multipleGroups === true
-  ) {
-    let fn = knex.schema.createTable('groups_serviceaccounts', table => {
-      table.timestamps(true, true);
-
-      table
-        .uuid('group_id')
-        .notNullable()
-        .references('id')
-        .inTable('groups')
-        .onDelete('CASCADE');
-      table
-        .uuid('serviceaccount_id')
-        .notNullable()
-        .references('id')
-        .inTable('serviceaccounts')
-        .onDelete('CASCADE');
-
-      table.unique(['group_id', 'serviceaccount_id']);
+      table.string('display_name');
+      table.string('description');
     });
 
     migs.push(fn);
@@ -205,17 +148,28 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  // probably need migs and the same checks here too
-  return Promise.all([
-    knex.schema.dropTable('groups_serviceaccounts'),
-    knex.schema.dropTable('groups_users'),
-    knex.schema.dropTable('orgs_serviceaccounts'),
-    knex.schema.dropTable('orgs_users'),
-    knex.schema.dropTable('orgs_groups'),
+  let migs = [];
 
-    knex.schema.dropTable('serviceaccounts'),
-    knex.schema.dropTable('users'),
-    knex.schema.dropTable('groups'),
-    knex.schema.dropTable('orgs')
-  ]);
+  if (config.serviceaccounts.enabled === true) {
+    migs.push(knex.schema.dropTable('serviceaccount_profile'));
+    migs.push(knex.schema.dropTable('serviceaccounts'));
+  }
+
+  if (config.users.enabled === true) {
+    migs.push(knex.schema.dropTable('user_profile'));
+    migs.push(knex.schema.dropTable('users'));
+  }
+
+  if (config.groups.enabled === true) {
+    migs.push(knex.schema.dropTable('group_profile'));
+    migs.push(knex.schema.dropTable('groups'));
+  }
+
+  if (config.orgs.enabled === true) {
+    migs.push(knex.schema.dropTable('org_profile'));
+    migs.push(knex.schema.dropTable('orgs'));
+  }
+
+  // probably need migs and the same checks here too
+  return Promise.all(migs);
 };

@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 
-import UserDAO from '../../entities/user/lib';
+import AuthDAO from '../lib';
 
-const User = new UserDAO();
+const Auth = new AuthDAO();
 
 // export const setTokenHeaders = (res, req, tokens) => {
 export const setTokenHeaders = (req, tokens) => {
@@ -93,7 +93,7 @@ export const refreshToken = async (token, refreshToken, SECRET) => {
     return {};
   }
 
-  const user = await User.getUserWithPassword(id);
+  const user = await Auth.getUserWithPassword(id);
   if (!user) {
     return {};
   }

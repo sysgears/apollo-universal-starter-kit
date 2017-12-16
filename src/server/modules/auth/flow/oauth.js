@@ -3,7 +3,7 @@ import uuidv4 from 'uuid';
 import settings from '../../../../../settings';
 
 import UserDAO from '../../entities/user/lib';
-import AuthDAO from '../sql';
+import AuthDAO from '../lib';
 
 import { createToken, setTokenHeaders } from './token';
 

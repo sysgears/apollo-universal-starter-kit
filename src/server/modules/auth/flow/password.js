@@ -5,7 +5,7 @@ import url from 'url';
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
 
-import AuthDAO from '../sql';
+import AuthDAO from '../lib';
 import UserDAO from '../../entities/user/lib';
 
 import { createToken } from './token';

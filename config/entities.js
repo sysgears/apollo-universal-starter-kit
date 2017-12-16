@@ -4,7 +4,7 @@ export default {
     enabled: false
   },
   groups: {
-    enabled: false,
+    enabled: true,
     multipleOrgs: true
   },
   users: {

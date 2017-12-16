@@ -1,0 +1,7 @@
+# GraphQL queries
+query usersBasicQuery {
+  users {
+    id
+    email
+  }
+}

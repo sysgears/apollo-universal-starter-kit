@@ -1,7 +1,9 @@
+import entities from './entities';
+import user from './user';
+
 import counter from './counter';
 import post from './post';
 import upload from './upload';
-import user from './user';
 import subscription from './subscription';
 import contact from './contact';
 import pageNotFound from './pageNotFound';
@@ -17,6 +19,10 @@ let features = [counter, post, upload, user, contact];
 // Configurable features
 if (settings.subscription.enabled) {
   features.push(subscription);
+}
+
+if (settings.entities.enabled) {
+  features.push(entities);
 }
 
 // This should be last because of routing?

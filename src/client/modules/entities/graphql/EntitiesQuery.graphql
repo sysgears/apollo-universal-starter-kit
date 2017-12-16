@@ -1,0 +1,20 @@
+# GraphQL queries
+
+query getAllEntities {
+  orgs {
+    id
+    name
+  }
+  groups {
+    id
+    name
+  }
+  users {
+    id
+    email
+  }
+  serviceaccounts {
+    id
+    email
+  }
+}

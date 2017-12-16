@@ -1,0 +1,7 @@
+# GraphQL queries
+query orgsBasicQuery {
+  orgs {
+    id
+    name
+  }
+}

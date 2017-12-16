@@ -1,0 +1,7 @@
+# GraphQL queries
+query groupsBasicQuery {
+  groups {
+    id
+    name
+  }
+}

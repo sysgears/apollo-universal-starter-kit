@@ -1,3 +1,27 @@
 scalar Date
+
 scalar Time
+
 scalar DateTime
+
+#
+# Input types for filtering queries
+#   (likely to change for more flexible querying and search)
+#
+
+input FilterInput {
+  # search by username, email, or any column
+  searchField: String
+  searchText: String
+  # filter by role
+  role: String
+  # filter by isActive
+  isActive: Boolean
+}
+
+input OrderByInput {
+  # id | username | role | isActive | email
+  column: String
+  # asc | desc
+  order: String
+}

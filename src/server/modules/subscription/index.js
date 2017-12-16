@@ -8,7 +8,7 @@ import Feature from '../connector';
 import stripeLocalMiddleware from './stripeLocal';
 import webhookMiddleware from './webhook';
 
-import { parseUser } from '../user';
+import { parseUser } from '../auth';
 
 const Subscription = new SubscriptionDAO();
 
@@ -17,7 +17,7 @@ export default new Feature({
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
-    const subscription = tokenUser ? await Subscription.getSubscription(tokenUser.id) : null;
+    const subscription = tokenUser ? await Subscription.getSubscription(tokenUser.userId) : null;
 
     return {
       Subscription,

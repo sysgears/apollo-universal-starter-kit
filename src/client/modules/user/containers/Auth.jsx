@@ -9,42 +9,7 @@ import log from '../../../../common/log';
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
 
-const checkAuth = (cookies, scope) => {
-  let token = null;
-  let refreshToken = null;
-
-  if (cookies && cookies.get('r-token')) {
-    token = cookies.get('r-token');
-    refreshToken = cookies.get('r-refresh-token');
-  }
-  if (__CLIENT__ && window.localStorage.getItem('token')) {
-    token = window.localStorage.getItem('token');
-    refreshToken = window.localStorage.getItem('refreshToken');
-  }
-
-  if (!token || !refreshToken) {
-    return false;
-  }
-
-  try {
-    const { exp } = decode(refreshToken);
-
-    if (exp < new Date().getTime() / 1000) {
-      return false;
-    }
-
-    if (scope === 'admin') {
-      const { user: { role } } = decode(token);
-      if (scope !== role) {
-        return false;
-      }
-    }
-  } catch (e) {
-    return false;
-  }
-
-  return true;
-};
+import { checkAuth } from '../../../../common/authValidation';
 
 const profileName = cookies => {
   let token = null;
@@ -62,15 +27,15 @@ const profileName = cookies => {
   }
 
   try {
-    const { user: { username, fullName } } = decode(token);
-    return fullName ? fullName : username;
+    const { user: { email } } = decode(token);
+    return email;
   } catch (e) {
     return '';
   }
 };
 
-const AuthNav = withCookies(({ children, cookies, scope }) => {
-  return checkAuth(cookies, scope) ? children : null;
+const AuthNav = withCookies(({ children, cookies, scopes }) => {
+  return checkAuth(cookies, scopes) ? children : null;
 });
 
 AuthNav.propTypes = {
@@ -79,7 +44,8 @@ AuthNav.propTypes = {
 };
 
 const AuthLogin = ({ children, cookies, logout }) => {
-  return checkAuth(cookies) ? (
+  let can = checkAuth(cookies);
+  return can ? (
     <a href="#" onClick={() => logout()} className="nav-link">
       Logout
     </a>
@@ -113,8 +79,8 @@ const AuthLoginWithApollo = withCookies(
                 // comment out until https://github.com/apollographql/apollo-client/issues/1186 is fixed
                 //await client.resetStore();
 
-                window.localStorage.setItem('token', null);
-                window.localStorage.setItem('refreshToken', null);
+                window.localStorage.removeItem('token');
+                window.localStorage.removeItem('refreshToken');
 
                 if (history) {
                   return history.push('/');
@@ -148,7 +114,7 @@ AuthProfile.propTypes = {
 const AuthLoggedIn = withCookies(({ cookies, label, to, ...rest }) => {
   return checkAuth(cookies) ? (
     <NavLink to={to} {...rest}>
-      {label}
+      {label}?
     </NavLink>
   ) : null;
 });
@@ -160,12 +126,12 @@ AuthLoggedIn.propTypes = {
   to: PropTypes.string
 };
 
-const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }) => {
+const AuthRoute = withCookies(({ component: Component, cookies, scopes, ...rest }) => {
   return (
     <Route
       {...rest}
       render={props =>
-        checkAuth(cookies, scope) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
+        checkAuth(cookies, scopes) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
       }
     />
   );
@@ -176,12 +142,12 @@ AuthRoute.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthLoggedInRoute = withCookies(({ component: Component, cookies, redirect, scope, ...rest }) => {
+const AuthLoggedInRoute = withCookies(({ component: Component, cookies, redirect, scopes, ...rest }) => {
   return (
     <Route
       {...rest}
       render={props =>
-        checkAuth(cookies, scope) ? <Redirect to={{ pathname: redirect }} /> : <Component {...props} />
+        checkAuth(cookies, scopes) ? <Redirect to={{ pathname: redirect }} /> : <Component {...props} />
       }
     />
   );

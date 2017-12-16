@@ -20,8 +20,8 @@ const stripCircular = (from, seen) => {
   return to;
 };
 
-/* 
- * The code below MUST be declared as a function, not closure, 
+/*
+ * The code below MUST be declared as a function, not closure,
  * otherwise Express will fail to execute this handler
  */
 // eslint-disable-next-line no-unused-vars

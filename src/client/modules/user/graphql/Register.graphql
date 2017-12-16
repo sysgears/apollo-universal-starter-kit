@@ -3,7 +3,11 @@
 mutation register($input: RegisterUserInput!) {
   register(input: $input) {
     user {
-      ... UserInfo
+      ...UserInfo
+    }
+    tokens {
+      token
+      refreshToken
     }
     errors {
       field

@@ -1,4 +1,5 @@
 export default {
+  enabled: false,
   engineConfig: {
     apiKey: '', // Set your Engine API key here
     logging: {

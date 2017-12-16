@@ -1,0 +1,119 @@
+extend type Query {}
+
+extend type Mutation {
+  # Register user
+  register(input: RegisterUserInput!): UserPayload!
+  # Login user
+  login(input: LoginUserInput!): AuthPayload!
+
+  # Register user
+  registerPassword(input: RegisterUserInput!): UserPayload!
+  # Login user
+  loginPassword(input: LoginUserInput!): AuthPayload!
+  # Password management
+  forgotPassword(input: ForgotPasswordInput!): Boolean!
+  resetPassword(input: ResetPasswordInput!): ResetPayload!
+
+  # Login user (no need to register, just create first time seen)
+  loginPasswordless(input: LoginUserInput!): AuthPayload!
+
+  # Logout user
+  logout: Boolean!
+
+  # Refresh user tokens
+  refreshToken(token: String!, refreshToken: String!): AuthPayload!
+
+}
+
+extend type Subscription {}
+
+
+
+type ServiceAccountAuth {
+  apikey: ApiKeyAuth
+  certificate: CertificateAuth
+}
+
+type UserAuth {
+  certificates: [CertificateAuth]
+  apikeys: [ApiKeyAuth]
+  oauths: [UserOAuth]
+}
+
+type CertificateAuth {
+  name: String
+  serial: String
+}
+
+type ApiKeyAuth {
+  name: String
+  key: String
+}
+
+type UserOAuth {
+  provider: String
+}
+
+type AuthPayload {
+  tokens: Tokens
+  errors: [FieldError!]
+}
+
+type ResetPayload {
+  errors: [FieldError!]
+}
+
+type Tokens {
+  token: String!
+  refreshToken: String!
+}
+
+
+input ServiceAccountAuthInput {
+  certificate: AuthCertificateInput
+}
+
+input UserAuthInput {
+  certificate: AuthCertificateInput
+  apikey: ApiKeyInput
+  oauth: OAuthInput
+}
+
+input AuthCertificateInput {
+  serial: String
+}
+
+input ApiKeyInput {
+  name: String
+}
+
+input OAuthInput {
+  provider: String
+  oauthId: String
+}
+
+
+#
+# Account State Flow types
+#
+
+input RegisterUserInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+input ForgotPasswordInput {
+  email: String!
+}
+
+input ResetPasswordInput {
+  token: String!
+  password: String!
+  passwordConfirmation: String!
+}

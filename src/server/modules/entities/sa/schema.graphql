@@ -1,0 +1,69 @@
+extend type Query {
+  # Get all serviceaccounts, possibly filtered and ordered
+  serviceaccounts(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [ServiceAccount]
+  # Get serviceaccount by id
+  serviceaccount(id: String!): ServiceAccount
+}
+
+extend type Mutation {
+  # Create new service account
+  addServiceAccount(input: AddServiceAccountInput!): ServiceAccountPayload!
+  # Edit a service account
+  editServiceAccount(input: EditServiceAccountInput!): ServiceAccountPayload!
+  # Delete a service account
+  deleteServiceAccount(id: String!): ServiceAccountPayload!
+}
+
+extend type Subscription {
+}
+
+#
+# ServiceAccount Types
+#
+
+type ServiceAccountPayload {
+  serviceaccount: ServiceAccount
+  errors: [FieldError!]
+}
+
+type ServiceAccount {
+  id: String!
+  email: String!
+  isActive: Boolean
+
+  auth: ServiceAccountAuth
+  profile: ServiceAccountProfile
+
+  orgs: [Org]
+  groups: [Group]
+}
+
+type ServiceAccountProfile {
+  displayName: String
+  description: String
+}
+
+input AddServiceAccountInput {
+  email: String!
+  profile: ServiceAccountProfileInput
+  auth: ServiceAccountAuthInput
+}
+
+input EditServiceAccountInput {
+  id: String!
+  isActive: Boolean
+  email: String!
+
+  profile: ServiceAccountProfileInput
+  auth: ServiceAccountAuthInput
+}
+
+input ServiceAccountProfileInput {
+  displayName: String
+  description: String
+}

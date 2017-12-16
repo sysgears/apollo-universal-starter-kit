@@ -1,5 +1,10 @@
 fragment UserProfileInfo on UserProfile {
+  displayName
+  title
   firstName
+  middleName
   lastName
-  fullName
+  suffix
+  language
+  locale
 }

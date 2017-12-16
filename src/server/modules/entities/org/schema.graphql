@@ -1,0 +1,70 @@
+extend type Query {
+  # Get all orgs, possibly filtered and ordered
+  orgs(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [Org]
+  # Get org by id
+  org(id: String!): Org
+}
+
+extend type Mutation {
+  # Create new org
+  addOrg(input: AddOrgInput!): OrgPayload!
+  # Edit a org
+  editOrg(input: EditOrgInput!): OrgPayload!
+  # Delete a org
+  deleteOrg(id: String!): OrgPayload!
+}
+
+extend type Subscription {
+}
+
+#
+# Org Types
+#
+
+type OrgPayload {
+  org: Org
+  errors: [FieldError!]
+}
+
+type Org {
+  id: String!
+  name: String!
+  isActive: Boolean
+
+  profile: OrgProfile
+
+  groups: [Group]
+  users: [User]
+  serviceaccounts: [ServiceAccount]
+}
+
+type OrgProfile {
+  domain: String
+  displayName: String
+  description: String
+}
+
+input AddOrgInput {
+  name: String!
+
+  profile: OrgProfileInput
+}
+
+input EditOrgInput {
+  id: String!
+  name: String
+  isActive: Boolean
+
+  profile: OrgProfileInput
+}
+
+input OrgProfileInput {
+  domain: String
+  displayName: String
+  description: String
+}

@@ -19,7 +19,7 @@ export default pubsub => ({
     },
     async subscriptionCardInfo(obj, args, context) {
       const { user } = context;
-      return context.Subscription.getCardInfo(user.id);
+      return context.Subscription.getCardInfo(user.userId);
     }
   },
   Mutation: {
@@ -46,7 +46,7 @@ export default pubsub => ({
         }
 
         await context.Subscription.editSubscription({
-          userId: user.id,
+          userId: user.userId,
           subscription: {
             stripeCustomerId: customerId,
             stripeSourceId,
@@ -67,7 +67,7 @@ export default pubsub => ({
         });
 
         await context.Subscription.editSubscription({
-          userId: user.id,
+          userId: user.userId,
           subscription: {
             active: true,
             stripeSubscriptionId: newSubscription.id
@@ -91,7 +91,7 @@ export default pubsub => ({
         });
 
         await context.Subscription.editSubscription({
-          userId: user.id,
+          userId: user.userId,
           subscription: {
             stripeSourceId: source.id,
             expiryMonth: data.expiryMonth,

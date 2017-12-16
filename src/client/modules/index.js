@@ -9,4 +9,17 @@ import './favicon';
 
 import Feature from './connector';
 
-export default new Feature(counter, post, upload, user, subscription, contact, pageNotFound);
+import settings from '../../../settings';
+
+// On by default features
+let features = [counter, post, upload, user, contact];
+
+// Configurable features
+if (settings.subscription.enabled) {
+  features.push(subscription);
+}
+
+// This should be last because of routing?
+features.push(pageNotFound);
+
+export default new Feature(...features);

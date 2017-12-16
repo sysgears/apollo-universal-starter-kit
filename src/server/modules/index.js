@@ -14,15 +14,18 @@ import './debug';
 
 import Feature from './connector';
 
-export default new Feature(
-  entities,
-  auth,
-  subscription,
-  counter,
-  contact,
-  post,
-  upload,
-  mailer,
-  graphqlTypes,
-  apolloEngine
-);
+import settings from '../../../settings';
+
+// On by default features
+let features = [graphqlTypes, mailer, entities, auth, counter, contact, post, upload];
+
+// Configurable features
+if (settings.subscription.enabled) {
+  features.push(subscription);
+}
+
+if (settings.engine.enabled) {
+  features.push(apolloEngine);
+}
+
+export default new Feature(...features);

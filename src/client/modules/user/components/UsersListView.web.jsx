@@ -111,8 +111,6 @@ export default class UsersView extends React.PureComponent {
       }
     ];
 
-    console.log('RENDER - Users', loading, users);
-
     if (loading) {
       return <div className="text-center">Loading...</div>;
     } else if (!users) {

@@ -9,8 +9,6 @@ import settings from '../../../../../../../../settings';
 const footerHeight = '40px';
 
 const Footer = styled.footer`
-  position: absolute;
-  bottom: 0;
   width: 100%;
   line-height: ${footerHeight};
   height: ${footerHeight};

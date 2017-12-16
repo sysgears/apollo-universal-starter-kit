@@ -13,8 +13,8 @@ import Feature from '../connector';
 export default new Feature({
   route: [
     <Route exact path="/subscription" component={Subscription} />,
-    <SubscriberRoute exact scope="user" path="/subscribers-only" component={SubscribersOnly} />,
-    <SubscriberRoute exact scope="user" path="/update-card" component={UpdateCard} />
+    <SubscriberRoute exact scopes={['subscription:view:self']} path="/subscribers-only" component={SubscribersOnly} />,
+    <SubscriberRoute exact scopes={['subscription:update:self']} path="/update-card" component={UpdateCard} />
   ],
   navItem: [
     <MenuItem key="/subscribers-only">

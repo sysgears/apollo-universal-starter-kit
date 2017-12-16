@@ -42,9 +42,10 @@ function connectionParam() {
 
 export default new Feature({
   route: [
-    <AuthRoute exact path="/profile" scope="user" component={Profile} />,
-    <AuthRoute exact path="/users" scope="admin" component={Users} />,
-    <AuthRoute exact path="/users/:id" component={UserEdit} />,
+    <AuthRoute exact path="/profile" scopes={['user:view:self']} component={Profile} />,
+    //<AuthRoute exact path="/profile/edit" scopes={['user:update:self']}component={ProfileEdit} />,
+    <AuthRoute exact path="/users" scopes={['user:view:all']} component={Users} />,
+    <AuthRoute exact path="/users/:id" scopes={['user:view']} component={UserEdit} />,
     <AuthLoggedInRoute exact path="/register" redirect="/profile" component={Register} />,
     <AuthLoggedInRoute exact path="/login" redirect="/profile" component={Login} />,
     <AuthLoggedInRoute exact path="/forgot-password" redirect="/profile" component={ForgotPassword} />,
@@ -52,7 +53,7 @@ export default new Feature({
   ],
   navItem: [
     <MenuItem key="/users">
-      <AuthNav scope="admin">
+      <AuthNav scopes={['user:view:all']}>
         <NavLink to="/users" className="nav-link" activeClassName="active">
           Users
         </NavLink>

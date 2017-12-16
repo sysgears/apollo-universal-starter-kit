@@ -66,10 +66,30 @@ export default {
         users: true
       },
       scopes: {
-        owner: ['user:*'],
-        admin: ['user:*'],
-        subscriber: ['user:view:self', 'user:update:self'],
-        user: ['user:view:self', 'user:update:self']
+        owner: ['entities:*', 'org:*', 'group:*', 'user:*', 'serviceaccount:*', 'subscription:*', 'post:*'],
+        admin: ['group:*', 'user:*', 'serviceaccount:*', 'subscription:*', 'post:*'],
+        subscriber: [
+          'user:view:self',
+          'user:update:self',
+          'user:delete:self',
+          'subscription:create:self',
+          'subscription:view:self',
+          'subscription:update:self',
+          'subscription:delete:self',
+          'post:create:self',
+          'post:view:self',
+          'post:update:self',
+          'post:delete:self'
+        ],
+        user: [
+          'user:view:self',
+          'user:update:self',
+          'user:delete:self',
+          'post:create:self',
+          'post:view:self',
+          'post:update:self',
+          'post:delete:self'
+        ]
       },
       verbs: ['create', 'update', 'delete', 'view', 'view:all']
     },

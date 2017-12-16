@@ -7,7 +7,7 @@ import _ from 'lodash';
 import knex from '../../sql/connector';
 import { orderedFor } from '../../sql/helpers';
 
-import UserDAO from '../entities/user';
+import UserDAO from '../entities/user/lib';
 
 const User = new UserDAO();
 

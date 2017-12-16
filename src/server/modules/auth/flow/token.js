@@ -1,6 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 
+import UserDAO from '../../entities/user/lib';
+
+const User = new UserDAO();
+
 // export const setTokenHeaders = (res, req, tokens) => {
 export const setTokenHeaders = (req, tokens) => {
   req.universalCookies.set('x-token', tokens.token, {
@@ -80,7 +84,7 @@ export const createToken = async (user, secret, refreshSecret) => {
   return Promise.all([createToken, createRefreshToken]);
 };
 
-export const refreshToken = async (token, refreshToken, User, SECRET) => {
+export const refreshToken = async (token, refreshToken, SECRET) => {
   let id = -1;
   try {
     const { user } = jwt.decode(refreshToken);

@@ -6,7 +6,7 @@ import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
 
 import AuthDAO from '../sql';
-import UserDAO from '../../entities/user';
+import UserDAO from '../../entities/user/lib';
 
 import { createToken } from './token';
 

@@ -1,4 +1,5 @@
 export default {
+  enabled: true,
   orgs: {
     enabled: false
   },

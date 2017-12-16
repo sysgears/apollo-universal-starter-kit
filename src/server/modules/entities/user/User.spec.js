@@ -1,9 +1,9 @@
 /*eslint-disable no-unused-vars*/
 import chai from 'chai';
 import { step } from 'mocha-steps';
-import { getServer, getApollo } from '../../testHelpers/integrationSetup';
+import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
 
-describe('Entities API works', () => {
+describe('User API works', () => {
   let server, apollo;
 
   before(() => {

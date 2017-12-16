@@ -1,0 +1,88 @@
+extend type Query {
+  # Get all users, possibly filtered and ordered
+  users(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [User]
+  # Get user by id
+  user(id: String!): User
+  # Get current user
+  currentUser: User
+}
+
+extend type Mutation {
+  # Create new user
+  addUser(input: AddUserInput!): UserPayload!
+  # Edit a user
+  editUser(input: EditUserInput!): UserPayload!
+  # Delete a user
+  deleteUser(id: String!): UserPayload!
+}
+
+extend type Subscription {
+}
+
+#
+# User Types
+#
+
+type UserPayload {
+  user: User
+  tokens: Tokens
+  errors: [FieldError!]
+}
+
+type User {
+  createdAt: String
+  updatedAt: String
+  id: String!
+  email: String!
+  isActive: Boolean
+
+  auth: UserAuth
+  role: String
+  profile: UserProfile
+
+  # orgs:   [Org]
+  # groups: [Group]
+}
+
+type UserProfile {
+  displayName: String
+  firstName: String
+  middleName: String
+  lastName: String
+  title: String
+  suffix: String
+  language: String
+  locale: String
+
+  emails: [String]
+}
+
+input AddUserInput {
+  email: String!
+  profile: ProfileInput
+  auth: UserAuthInput
+}
+
+input EditUserInput {
+  id: String!
+  email: String
+  profile: ProfileInput
+}
+
+input ProfileInput {
+  displayName: String
+  firstName: String
+  middleName: String
+  lastName: String
+  title: String
+  suffix: String
+  language: String
+  locale: String
+
+  emails: [String]
+}

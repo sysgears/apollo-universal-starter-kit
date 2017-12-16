@@ -1,8 +1,6 @@
 import DataLoader from 'dataloader';
 import jwt from 'jsonwebtoken';
 
-import User from '../entities/user';
-
 import Auth from './sql';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
@@ -89,7 +87,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
       const { user } = jwt.verify(connectionParams.token, SECRET);
       return user;
     } catch (err) {
-      const newToken = await refreshToken(connectionParams.token, connectionParams.refreshToken, User, SECRET);
+      const newToken = await refreshToken(connectionParams.token, connectionParams.refreshToken, SECRET);
       return newToken.user;
     }
   } else if (req) {

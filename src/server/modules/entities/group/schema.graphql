@@ -1,0 +1,68 @@
+extend type Query {
+  # Get all groups, possibly filtered and ordered
+  groups(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [Group]
+  # Get group by id
+  group(id: String!): Group
+}
+
+extend type Mutation {
+  # Create new group
+  addGroup(input: AddGroupInput!): GroupPayload!
+  # Edit a group
+  editGroup(input: EditGroupInput!): GroupPayload!
+  # Delete a group
+  deleteGroup(id: String!): GroupPayload!
+}
+
+extend type Subscription {
+}
+
+#
+# Group Types
+#
+
+type GroupPayload {
+  group: Group
+  errors: [FieldError!]
+}
+
+type Group {
+  id: String!
+  name: String!
+  isActive: Boolean
+
+  profile: GroupProfile
+
+  orgs: [Org]
+  users: [User]
+  serviceaccounts: [ServiceAccount]
+}
+
+type GroupProfile {
+  displayName: String
+  description: String
+}
+
+input AddGroupInput {
+  name: String!
+
+  profile: GroupProfileInput
+}
+
+input EditGroupInput {
+  id: String!
+  name: String
+  isActive: Boolean
+
+  profile: GroupProfileInput
+}
+
+input GroupProfileInput {
+  displayName: String
+  description: String
+}

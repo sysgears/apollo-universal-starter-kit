@@ -1,19 +1,43 @@
-import DataLoader from 'dataloader';
-
-import schema from './schema.graphqls';
-import createResolvers from './resolvers';
 import Feature from '../connector';
 
-import Org from './org';
-import Group from './group';
-import User from './user';
-import ServiceAccount from './sa';
+import settings from '../../../../settings';
 
-const org = new Org();
-const group = new Group();
-const user = new User();
-const sa = new ServiceAccount();
+import org from './org';
+import group from './group';
+import user from './user';
+import sa from './sa';
 
+const config = settings.entities;
+
+let features = [];
+
+if (config.enabled) {
+  console.log('Features - adding - Entities');
+
+  if (config.orgs.enabled) {
+    console.log('Features - adding - Orgs');
+    features.push(org);
+  }
+
+  if (config.groups.enabled) {
+    console.log('Features - adding - Groups');
+    features.push(group);
+  }
+
+  if (config.users.enabled) {
+    console.log('Features - adding - Users');
+    features.push(user);
+  }
+
+  if (config.serviceaccounts.enabled) {
+    console.log('Features - adding - ServiceAccounts');
+    features.push(sa);
+  }
+}
+
+export default new Feature(...features);
+
+/*
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
@@ -46,3 +70,4 @@ export default new Feature({
     };
   }
 });
+*/

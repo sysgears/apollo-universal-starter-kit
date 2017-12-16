@@ -2,7 +2,7 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 import knex from '../../../server/sql/connector';
 
-import UserDAO from '../entities/user';
+import UserDAO from '../entities/user/lib';
 
 let User = new UserDAO();
 

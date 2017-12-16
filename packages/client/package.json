@@ -145,6 +145,7 @@
     "file-loader": "^1.1.5",
     "flow-bin": "^0.60.1",
     "freeport-async": "^1.1.1",
+    "graphql-tools": "^2.13.0",
     "haul": "1.0.0-beta.10",
     "html-webpack-plugin": "^2.30.1",
     "http-proxy-middleware": "^0.17.4",

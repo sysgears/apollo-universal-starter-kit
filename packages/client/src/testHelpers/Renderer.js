@@ -13,8 +13,8 @@ import { graphql, print, getOperationAST } from 'graphql';
 
 import { Provider } from 'react-redux';
 
-import rootSchema from '../../../server/api/rootSchema.graphql';
-import serverModules from '../../../server/modules';
+import rootSchema from '../../../server/src/api/rootSchema.graphql';
+import serverModules from '../../../server/src/modules';
 import settings from '../../../../settings';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');

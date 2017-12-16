@@ -5448,6 +5448,14 @@ graphql-tools@^2.11.0:
     deprecated-decorator "^0.1.6"
     uuid "^3.1.0"
 
+graphql-tools@^2.13.0:
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-2.13.0.tgz#3c7aad3bb1284a651dd80b385e06b3d13ac2a6f2"
+  dependencies:
+    apollo-utilities "^1.0.1"
+    deprecated-decorator "^0.1.6"
+    uuid "^3.1.0"
+
 "graphql@>=0.9.4 <0.11", graphql@^0.10.0, graphql@^0.10.3, graphql@^0.11.0, graphql@^0.11.7:
   version "0.11.7"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.7.tgz#e5abaa9cb7b7cccb84e9f0836bf4370d268750c6"

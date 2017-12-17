@@ -6,15 +6,38 @@ import { mergeLoaders } from '../../../../common/mergeLoaders';
 
 export default pubsub => ({
   Query: {
-    groups: (obj, args, context) => {
-      return context.Group.list(args);
+    groups: withAuth(['group/all/list'], async (obj, args, context) => {
+      console.log('groups:', args);
+      let ret = await context.Group.list(args);
+      console.log('groups:', ret);
+      return ret;
+    }),
+    myGroups: async (obj, args, context) => {
+      try {
+        args.memberId = context.user.id;
+        console.log(args);
+        let ret = await context.Group.list(args);
+        console.log(ret);
+        return { groups: ret, errors: null };
+      } catch (e) {
+        return { groups: null, errors: e };
+      }
     },
-    group: (obj, { id }, context) => {
-      return context.Group.get(id);
-    }
+    group: withAuth(
+      (obj, args, context) => {
+        return context.user.id !== args.id ? ['group/all/view'] : ['group/member/view'];
+      },
+      (obj, args, context) => {
+        let { id } = args;
+        return context.Group.get(id);
+      }
+    )
   },
 
   Group: {
+    role(obj) {
+      return 'none';
+    },
     profile(obj) {
       return obj;
     },

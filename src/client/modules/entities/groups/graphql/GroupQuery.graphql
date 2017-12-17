@@ -1,0 +1,7 @@
+#import "./Group.graphql"
+
+query group($id: String!) {
+  group(id: $id) {
+    ...GroupInfo
+  }
+}

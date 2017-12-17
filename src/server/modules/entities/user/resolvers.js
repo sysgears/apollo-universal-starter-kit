@@ -6,12 +6,12 @@ import { mergeLoaders } from '../../../../common/mergeLoaders';
 
 export default pubsub => ({
   Query: {
-    users: withAuth(['user:view:all'], (obj, args, context) => {
+    users: withAuth(['user/all/view'], async (obj, args, context) => {
       return context.User.list(args);
     }),
     user: withAuth(
       (obj, args, context) => {
-        return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
+        return context.user.id !== args.id ? ['user/all/view'] : ['user/self/view'];
       },
       (obj, args, context) => {
         let { id } = args;

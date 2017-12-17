@@ -19,7 +19,7 @@ const OrgsView = () => {
     <PageLayout>
       {renderMetaData()}
       <div className="text-center mt-4 mb-4">
-        <p>Hello Orgs!</p>
+        <h2>Orgs</h2>
       </div>
     </PageLayout>
   );

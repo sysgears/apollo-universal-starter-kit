@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 
 import { Container, Row, Col, PageLayout, Button } from '../../../common/components/web';
 
-import UsersFilter from '../containers/UsersFilter';
-import UsersList from '../containers/UsersList';
+import GroupsFilter from '../containers/GroupsFilter';
+import MyGroupsList from '../containers/MyGroupsList';
 
 import settings from '../../../../../../settings';
 
-const title = `${settings.app.name} - Users`;
-const content = `${settings.app.name} - Users page`;
+const title = `${settings.app.name} - My Groups`;
+const content = `${settings.app.name} - My Groups page`;
 
 const renderMetaData = () => (
   <Helmet
@@ -24,7 +24,7 @@ const renderMetaData = () => (
   />
 );
 
-const UsersView = () => {
+const MyGroupsView = () => {
   return (
     <PageLayout>
       {renderMetaData()}
@@ -36,18 +36,18 @@ const UsersView = () => {
               <h2>{title}</h2>
             </Col>
             <Col xs={2}>
-              <Link to="/users/add">
+              <Link to="/groups/add">
                 <Button color="primary">Add</Button>
               </Link>
             </Col>
           </Row>
         </Container>
         <hr />
-        <UsersFilter />
-        <UsersList />
+        <GroupsFilter />
+        <MyGroupsList />
       </div>
     </PageLayout>
   );
 };
 
-export default UsersView;
+export default MyGroupsView;

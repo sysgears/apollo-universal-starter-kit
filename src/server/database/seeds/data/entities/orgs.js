@@ -45,7 +45,7 @@ export default [
         name: 'support-staff',
         users: ['support', 'developer'],
         serviceaccounts: [],
-        roles: 'support'
+        roles: ['support']
       }
     ]
   },

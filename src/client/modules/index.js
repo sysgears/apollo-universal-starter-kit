@@ -1,5 +1,5 @@
 import entities from './entities';
-import user from './user';
+import auth from './auth';
 
 import counter from './counter';
 import post from './post';
@@ -14,15 +14,11 @@ import Feature from './connector';
 import settings from '../../../settings';
 
 // On by default features
-let features = [counter, post, upload, user, contact];
+let features = [entities, auth, counter, post, upload, contact];
 
 // Configurable features
 if (settings.subscription.enabled) {
   features.push(subscription);
-}
-
-if (settings.entities.enabled) {
-  features.push(entities);
 }
 
 // This should be last because of routing?

@@ -127,16 +127,39 @@ export default class User {
     );
   }
 
+  async getBriefForUserId(id) {
+    return camelizeKeys(
+      await knex
+        .select(...selectFields)
+        .from('users AS u')
+        .whereIn('u.id', '=', id)
+        .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
+        .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
+    );
+  }
+
   async getOrgsForUserId(userId) {
     let rows = await knex
       .select('o.id AS id', 'o.name', 'u.id AS userId')
-      .whereIn('u.id', userId)
+      .where('u.id', '=', userId)
       .from('users AS u')
       .leftJoin('orgs_users AS ou', 'ou.user_id', 'u.id')
       .leftJoin('orgs AS o', 'o.id', 'ou.org_id');
 
     let res = _.filter(rows, row => row.id !== null);
-    return orderedFor(res, userId, 'userId', false);
+    return res;
+  }
+
+  async getOrgsForUserIds(userIds) {
+    let rows = await knex
+      .select('o.id AS id', 'o.name', 'u.id AS userId')
+      .whereIn('u.id', userIds)
+      .from('users AS u')
+      .leftJoin('orgs_users AS ou', 'ou.user_id', 'u.id')
+      .leftJoin('orgs AS o', 'o.id', 'ou.org_id');
+
+    let res = _.filter(rows, row => row.id !== null);
+    return orderedFor(res, userIds, 'userId', false);
   }
 
   async getOrgsForUserIdViaGroups(userId) {
@@ -155,13 +178,25 @@ export default class User {
   async getGroupsForUserId(userId) {
     let rows = await knex
       .select('g.id AS id', 'g.name', 'u.id AS userId')
-      .whereIn('u.id', userId)
+      .where('u.id', '=', userId)
       .from('users AS u')
       .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
       .leftJoin('groups AS g', 'gu.group_id', 'g.id');
 
     let res = _.filter(rows, row => row.id !== null);
-    return orderedFor(res, userId, 'userId', false);
+    return res;
+  }
+
+  async getGroupsForUserIds(userIds) {
+    let rows = await knex
+      .select('g.id AS id', 'g.name', 'u.id AS userId')
+      .whereIn('u.id', userIds)
+      .from('users AS u')
+      .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
+      .leftJoin('groups AS g', 'gu.group_id', 'g.id');
+
+    let res = _.filter(rows, row => row.id !== null);
+    return orderedFor(res, userIds, 'userId', false);
   }
 
   async create(values) {

@@ -4,6 +4,7 @@ import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
 
 import Entities from './containers/Entities';
+import EntitiesMenuItem from './components/EntitiesMenuItem';
 import reducers from './reducers';
 
 import orgs from './orgs';
@@ -11,7 +12,7 @@ import groups from './groups';
 import users from './users';
 import serviceaccounts from './serviceaccounts';
 
-import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from '../../modules/user/containers/Auth';
+import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from '../../modules/auth/containers/Auth';
 
 import Feature from '../connector';
 
@@ -37,15 +38,22 @@ if (config.serviceaccounts.enabled) {
   subfeatures.push(serviceaccounts);
 }
 
+let entitiesScopes = [
+  'entities/view',
+  'org/all/view',
+  'org/member/view',
+  'group/all/view',
+  'group/member/view',
+  'user/all/view'
+];
+
 export default new Feature(
   {
-    route: [<AuthRoute exact path="/entities" scopes={['entities:view:all']} component={Entities} />],
+    route: [<AuthRoute exact path="/entities" scopes={entitiesScopes} component={Entities} />],
     navItem: (
       <MenuItem key="entities">
-        <AuthNav scopes={['entities:view:all']}>
-          <NavLink to="/entities" className="nav-link" activeClassName="active">
-            Entities
-          </NavLink>
+        <AuthNav scopes={entitiesScopes}>
+          <EntitiesMenuItem />
         </AuthNav>
       </MenuItem>
     ),

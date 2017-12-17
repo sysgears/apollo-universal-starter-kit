@@ -1,24 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Table, Button } from '../../common/components/web';
+import { Table, Button } from '../../../common/components/web';
 
-export default class UsersView extends React.PureComponent {
+export default class GroupsView extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    users: PropTypes.array,
+    groups: PropTypes.array,
     orderBy: PropTypes.object,
     onOrderBy: PropTypes.func.isRequired,
-    deleteUser: PropTypes.func.isRequired
+    deleteGroup: PropTypes.func.isRequired
   };
 
   state = {
     errors: []
   };
 
-  hendleDeleteUser = async id => {
-    const { deleteUser } = this.props;
-    const result = await deleteUser(id);
+  hendleDeleteGroup = async id => {
+    const { deleteGroup } = this.props;
+    const result = await deleteGroup(id);
     if (result && result.errors) {
       this.setState({ errors: result.errors });
     } else {
@@ -58,7 +58,7 @@ export default class UsersView extends React.PureComponent {
   };
 
   render() {
-    const { loading, users } = this.props;
+    const { loading, groups } = this.props;
     const { errors } = this.state;
 
     const columns = [
@@ -67,19 +67,19 @@ export default class UsersView extends React.PureComponent {
         dataIndex: 'id',
         key: 'id',
         render: (text, record) => (
-          <Link className="user-link" to={`/users/${record.id}`}>
+          <Link className="group-link" to={`/groups/${record.id}`}>
             {text}
           </Link>
         )
       },
       {
         title: (
-          <a onClick={e => this.orderBy(e, 'email')} href="#">
-            Email {this.renderOrderByArrow('email')}
+          <a onClick={e => this.orderBy(e, 'name')} href="#">
+            name {this.renderOrderByArrow('name')}
           </a>
         ),
-        dataIndex: 'email',
-        key: 'email'
+        dataIndex: 'name',
+        key: 'name'
       },
       {
         title: (
@@ -104,7 +104,7 @@ export default class UsersView extends React.PureComponent {
         title: 'Actions',
         key: 'actions',
         render: (text, record) => (
-          <Button color="primary" size="sm" onClick={() => this.hendleDeleteUser(record.id)}>
+          <Button color="primary" size="sm" onClick={() => this.hendleDeleteGroup(record.id)}>
             Delete
           </Button>
         )
@@ -113,8 +113,8 @@ export default class UsersView extends React.PureComponent {
 
     if (loading) {
       return <div className="text-center">Loading...</div>;
-    } else if (!users) {
-      return <div className="text-center">No Users</div>;
+    } else if (!groups) {
+      return <div className="text-center">No Groups</div>;
     } else {
       return (
         <div>
@@ -124,7 +124,7 @@ export default class UsersView extends React.PureComponent {
                 {error.message}
               </div>
             ))}
-          <Table dataSource={users} columns={columns} />
+          <Table dataSource={groups} columns={columns} />
         </div>
       );
     }

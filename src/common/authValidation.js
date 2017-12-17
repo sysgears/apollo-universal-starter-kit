@@ -132,7 +132,7 @@ export const checkAuth = (cookies, requiredScopes) => {
     let userScopes = null;
 
     if (authz.method === 'basic') {
-      userScopes = authz.basic.scopes[role];
+      userScopes = authz.basic.userScopes[role];
     } else if (authz.method === 'rbac') {
       // TODO
     }

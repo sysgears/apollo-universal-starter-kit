@@ -1,0 +1,13 @@
+#import "./Group.graphql"
+
+mutation addGroup($input: AddGroupInput!) {
+  addGroup(input: $input) {
+    group {
+      ...GroupInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

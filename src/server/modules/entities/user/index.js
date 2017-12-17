@@ -16,6 +16,7 @@ export default new Feature({
       User,
 
       loaders: {
+        getBriefForUserId: new DataLoader(User.getBriefForUserId),
         getOrgsForUserId: new DataLoader(User.getOrgsForUserId),
         getGroupsForUserId: new DataLoader(User.getGroupsForUserId),
         getOrgsForUserIdViaGroups: new DataLoader(User.getOrgsForUserIdViaGroups)

@@ -1,0 +1,4 @@
+fragment GroupProfileInfo on GroupProfile {
+  displayName
+  description
+}

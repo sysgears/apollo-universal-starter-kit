@@ -4,24 +4,21 @@ import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../../modules/common/components/web';
 
 import Users from './containers/Users';
+import UserEdit from './containers/UserEdit';
 import reducers from './reducers';
 
-import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from '../../../modules/user/containers/Auth';
+import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from '../../../modules/auth/containers/Auth';
 
 import Feature from '../../connector';
 
+const usersScopes = ['entities/all/list', 'user/all/list'];
+
+const userScopes = ['entities/all/view', 'user/all/view'];
+
 export default new Feature({
   route: [
-    <AuthRoute exact path="/entities/users" scope={['entities:view:all', 'entities.user:view.all']} component={Users} />
+    <AuthRoute exact path="/users" scope={usersScopes} component={Users} />,
+    <AuthRoute exact path="/users/:id" scopes={userScopes} component={UserEdit} />
   ],
-  navItem: (
-    <MenuItem key="entities-users">
-      <AuthNav scopes={['entities:view:all']}>
-        <NavLink to="/entities/users" className="nav-link" activeClassName="active">
-          Users
-        </NavLink>
-      </AuthNav>
-    </MenuItem>
-  ),
   reducer: { users: reducers }
 });

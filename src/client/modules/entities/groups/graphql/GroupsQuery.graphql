@@ -1,7 +1,7 @@
-# GraphQL queries
-query groupsBasicQuery {
-  groups {
-    id
-    name
+#import "./Group.graphql"
+
+query groups($orderBy: OrderByInput, $filter: FilterInput) {
+  groups(orderBys: [$orderBy], filters: [$filter]) {
+    ...GroupInfo
   }
 }

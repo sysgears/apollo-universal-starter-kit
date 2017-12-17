@@ -1,6 +1,13 @@
+/*eslint-disable no-unused-vars*/
 import React from 'react';
 import Helmet from 'react-helmet';
-import { PageLayout } from '../../common/components/web';
+import { Link } from 'react-router-dom';
+
+import { Container, Row, Col, PageLayout, Button } from '../../common/components/web';
+
+import settings from '../../../../../settings';
+
+const config = settings.entities;
 
 const renderMetaData = () => (
   <Helmet

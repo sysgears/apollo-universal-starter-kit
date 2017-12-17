@@ -12,9 +12,14 @@ import authTokenMiddleware from './middleware/token';
 import OAuth from './oauth';
 import { refreshToken } from './flow/token';
 
+import UserDAO from '../entities/user/lib';
+
 import settings from '../../../../settings';
 
+const User = new UserDAO();
+
 const SECRET = settings.auth.secret;
+const entities = settings.entities;
 const authn = settings.auth.authentication;
 const authz = settings.auth.authorization;
 
@@ -28,12 +33,27 @@ export default new Feature({
 
     let userAuth = {};
     if (authz.method === 'basic') {
-      const scopes = authz.basic.scopes;
-      const userScopes = tokenUser ? scopes[tokenUser.role] : null;
+      const scopes = authz.basic.userScopes;
+      let userScopes = null;
+      let userGroups = null;
+      let userOrgs = null;
+
+      if (tokenUser) {
+        userScopes = scopes[tokenUser.role];
+        if (entities.groups.enabled) {
+          userGroups = await User.getGroupsForUserId(tokenUser.id);
+        }
+
+        if (entities.orgs.enabled) {
+          userOrgs = await User.getOrgsForUserId(tokenUser.id);
+        }
+      }
 
       userAuth = {
         isAuthenticated: tokenUser ? true : false,
-        scope: userScopes
+        scope: userScopes,
+        userGroups,
+        userOrgs
       };
     } else if (authz.method === 'rbac') {
       // TODO

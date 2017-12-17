@@ -1,0 +1,13 @@
+#import "./Group.graphql"
+
+mutation editGroup($input: EditGroupInput!) {
+  editGroup(input: $input) {
+    group {
+      ...GroupInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

@@ -160,8 +160,13 @@ export default pubsub => ({
 
       return true;
     },
-    refreshToken(obj, { token, refreshToken }, context) {
-      return refreshToken(token, refreshToken, context.User, context.SECRET);
+    async refreshToken(obj, { token, refreshToken }, context) {
+      try {
+        const tokens = await refreshToken(token, refreshToken, context.SECRET);
+        return { tokens, errors: null };
+      } catch (e) {
+        return { tokens: null, errors: e };
+      }
     }
   },
   Subscription: {}

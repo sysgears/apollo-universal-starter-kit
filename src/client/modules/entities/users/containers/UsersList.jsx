@@ -56,10 +56,10 @@ const UsersListWithApollo = compose(
 
 export default connect(
   state => ({
-    searchText: state.user.searchText,
-    role: state.user.role,
-    isActive: state.user.isActive,
-    orderBy: state.user.orderBy
+    searchText: state.users.searchText,
+    role: state.users.role,
+    isActive: state.users.isActive,
+    orderBy: state.users.orderBy
   }),
   dispatch => ({
     onOrderBy(orderBy) {

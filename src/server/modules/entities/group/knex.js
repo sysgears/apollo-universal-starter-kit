@@ -14,6 +14,10 @@ export default class Group {
       .from('groups AS g')
       .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
 
+    if (args.memberId) {
+      queryBuilder.leftJoin('groups_users AS m', 'p.group_id', 'm.group_id').where('m.user_id', '=', args.memberId);
+    }
+
     // add filter conditions
     if (filters) {
       for (let filter of filters) {
@@ -64,6 +68,7 @@ export default class Group {
         .select('g.id', 'g.created_at', 'g.updated_at', 'g.is_active', 'g.name', 'p.display_name', 'p.description')
         .from('groups AS g')
         .where('g.id', '=', id)
+        .leftJoin('group_profile AS p', 'p.group_id', 'g.id')
         .first()
     );
   }
@@ -81,12 +86,25 @@ export default class Group {
   }
 
   async getUsersForGroupId(groupId) {
-    let rows = await knex
-      .select('u.id AS id', 'u.email', 'g.id AS groupId')
-      .whereIn('g.id', groupId)
-      .from('groups AS g')
-      .leftJoin('groups_users AS gu', 'gu.group_id', 'g.id')
-      .leftJoin('users AS u', 'u.id', 'gu.user_id');
+    let rows = camelizeKeys(
+      await knex
+        .select(
+          'u.id',
+          'u.email',
+          'u.is_active',
+          'r.role',
+          'p.display_name',
+          'p.language',
+          'p.locale',
+          'g.id AS groupId'
+        )
+        .whereIn('g.id', groupId)
+        .from('groups AS g')
+        .leftJoin('groups_users AS gu', 'gu.group_id', 'g.id')
+        .leftJoin('users AS u', 'u.id', 'gu.user_id')
+        .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
+        .leftJoin('user_roles AS r', 'r.user_id', 'p.user_id')
+    );
 
     let res = _.filter(rows, row => row.id !== null);
     return orderedFor(res, groupId, 'groupId', false);

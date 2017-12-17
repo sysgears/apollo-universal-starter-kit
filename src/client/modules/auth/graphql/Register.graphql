@@ -1,4 +1,4 @@
-#import "./User.graphql"
+#import "../../entities/users/graphql/User.graphql"
 
 mutation register($input: RegisterUserInput!) {
   register(input: $input) {

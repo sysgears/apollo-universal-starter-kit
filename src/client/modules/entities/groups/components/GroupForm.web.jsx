@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
-import { required, email, minLength } from '../../../../common/validation';
+import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../../common/components/web';
+import { required, email, minLength } from '../../../../../common/validation';
 
-import settings from '../../../../../settings';
+import settings from '../../../../../../settings';
 
 const authn = settings.auth.authentication;
 const authz = settings.auth.authorization;

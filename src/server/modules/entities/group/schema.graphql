@@ -6,6 +6,15 @@ extend type Query {
     offset: Int
     limit: Int
   ): [Group]
+
+  # Get all groups, possibly filtered and ordered
+  myGroups(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): MyGroupsPayload
+
   # Get group by id
   group(id: String!): Group
 }
@@ -13,8 +22,10 @@ extend type Query {
 extend type Mutation {
   # Create new group
   addGroup(input: AddGroupInput!): GroupPayload!
+
   # Edit a group
   editGroup(input: EditGroupInput!): GroupPayload!
+
   # Delete a group
   deleteGroup(id: String!): GroupPayload!
 }
@@ -26,16 +37,24 @@ extend type Subscription {
 # Group Types
 #
 
+type MyGroupsPayload {
+  groups: [Group]
+  errors: [FieldError!]
+}
+
 type GroupPayload {
   group: Group
   errors: [FieldError!]
 }
 
 type Group {
+  createdAt: String
+  updatedAt: String
   id: String!
   name: String!
   isActive: Boolean
 
+  role: String
   profile: GroupProfile
 
   # orgs: [Org]

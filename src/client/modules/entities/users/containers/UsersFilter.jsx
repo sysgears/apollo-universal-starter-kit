@@ -13,9 +13,9 @@ class UsersFilter extends React.Component {
 
 export default connect(
   state => ({
-    searchText: state.user.searchText,
-    role: state.user.role,
-    isActive: state.user.isActive
+    searchText: state.users.searchText,
+    role: state.users.role,
+    isActive: state.users.isActive
   }),
   dispatch => ({
     onSearchTextChange(searchText) {

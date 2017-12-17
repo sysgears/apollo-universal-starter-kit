@@ -1,0 +1,11 @@
+mutation deleteGroup($id: String!) {
+  deleteGroup(id: $id) {
+    group {
+      id
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

@@ -19,7 +19,7 @@ const ServiceAccountsView = () => {
     <PageLayout>
       {renderMetaData()}
       <div className="text-center mt-4 mb-4">
-        <p>Hello ServiceAccounts!</p>
+        <h2>ServiceAccounts</h2>
       </div>
     </PageLayout>
   );

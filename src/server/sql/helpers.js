@@ -1,6 +1,7 @@
-import settings from '../../settings';
+import { groupBy } from 'lodash';
+import settings from '../../../settings';
 
-const truncateTables = async (knex, Promise, tables) => {
+export const truncateTables = async (knex, Promise, tables) => {
   if (settings.db.dbType === 'sqlite' || process.env.NODE_ENV === 'test') {
     return Promise.all(tables.map(table => knex(table).truncate()));
   } else if (settings.db.dbType === 'mysql') {
@@ -15,4 +16,14 @@ const truncateTables = async (knex, Promise, tables) => {
   }
 };
 
-export default truncateTables;
+export const orderedFor = (rows, collection, field, singleObject) => {
+  // return the rows ordered for the collection
+  const inGroupsOfField = groupBy(rows, field);
+  return collection.map(element => {
+    const elementArray = inGroupsOfField[element];
+    if (elementArray) {
+      return singleObject ? elementArray[0] : elementArray;
+    }
+    return singleObject ? {} : [];
+  });
+};

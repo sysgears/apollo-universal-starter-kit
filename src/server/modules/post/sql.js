@@ -1,17 +1,5 @@
-import _ from 'lodash';
+import { orderedFor } from '../../sql/helpers';
 import knex from '../../sql/connector';
-
-const orderedFor = (rows, collection, field, singleObject) => {
-  // return the rows ordered for the collection
-  const inGroupsOfField = _.groupBy(rows, field);
-  return collection.map(element => {
-    const elementArray = inGroupsOfField[element];
-    if (elementArray) {
-      return singleObject ? elementArray[0] : elementArray;
-    }
-    return singleObject ? {} : [];
-  });
-};
 
 export default class Post {
   postsPagination(limit, after) {

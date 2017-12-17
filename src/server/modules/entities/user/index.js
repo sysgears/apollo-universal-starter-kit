@@ -16,10 +16,10 @@ export default new Feature({
       User,
 
       loaders: {
-        getBriefForUserId: new DataLoader(User.getBriefForUserId),
-        getOrgsForUserId: new DataLoader(User.getOrgsForUserId),
-        getGroupsForUserId: new DataLoader(User.getGroupsForUserId),
-        getOrgsForUserIdViaGroups: new DataLoader(User.getOrgsForUserIdViaGroups)
+        getBriefForUserIds: new DataLoader(User.getBriefForUserIds),
+        getOrgsForUserIds: new DataLoader(User.getOrgsForUserIds),
+        getGroupsForUserIds: new DataLoader(User.getGroupsForUserIds),
+        getOrgsForUserIdsViaGroups: new DataLoader(User.getOrgsForUserIdsViaGroups)
       }
     };
   }

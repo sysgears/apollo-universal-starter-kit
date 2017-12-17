@@ -1,0 +1,25 @@
+#import "./Profile.graphql"
+
+fragment UserInfo on User {
+  id
+  email
+  isActive
+  createdAt
+  updatedAt
+  role
+  profile {
+    ...UserProfileInfo
+  }
+}
+
+fragment UserBrief on User {
+  id
+  email
+  isActive
+  role
+  profile {
+    displayName
+    language
+    locale
+  }
+}

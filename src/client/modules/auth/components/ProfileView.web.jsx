@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { LayoutCenter } from '../../common/components';
@@ -55,6 +56,19 @@ const ProfileView = ({ loading, currentUser }) => {
               )}
             {settings.subscription.enabled && <SubscriptionProfile />}
           </Card>
+          {settings.entities.groups.enabled && (
+            <Card>
+              <CardGroup>
+                <CardTitle>Groups:</CardTitle>
+                {currentUser.groups &&
+                  currentUser.groups.map(g => (
+                    <CardText>
+                      <Link to={'/groups/' + g.id}>{g.profile.displayName}</Link> - {g.profile.description}
+                    </CardText>
+                  ))}
+              </CardGroup>
+            </Card>
+          )}
         </LayoutCenter>
       </PageLayout>
     );

@@ -34,6 +34,12 @@ export default pubsub => ({
     )
   },
 
+  User: {
+    groups: async (obj, args, context) => {
+      return context.loaders.getGroupsForUserIds.load(context.user.id);
+    }
+  },
+
   Group: {
     role(obj) {
       return 'none';
@@ -44,14 +50,6 @@ export default pubsub => ({
     users(obj, args, context) {
       return context.loaders.getUsersForGroupId.load(obj.id);
     }
-    /*
-    orgs(obj, args, context) {
-      return context.loaders.getOrgsForGroupId.load(obj.id);
-    },
-    serviceaccounts(obj, args, context) {
-      return context.loaders.getServiceAccountsForGroupId.load(obj.id);
-    }
-    */
   },
 
   GroupProfile: {

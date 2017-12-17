@@ -1,0 +1,9 @@
+fragment GroupBrief on Group {
+  id
+  name
+  isActive
+  profile {
+    displayName
+    description
+  }
+}

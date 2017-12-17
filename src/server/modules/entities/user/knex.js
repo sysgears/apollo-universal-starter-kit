@@ -127,12 +127,12 @@ export default class User {
     );
   }
 
-  async getBriefForUserId(id) {
+  async getBriefForUserIds(ids) {
     return camelizeKeys(
       await knex
         .select(...selectFields)
         .from('users AS u')
-        .whereIn('u.id', '=', id)
+        .whereIn('u.id', '=', ids)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
         .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
     );
@@ -162,40 +162,41 @@ export default class User {
     return orderedFor(res, userIds, 'userId', false);
   }
 
-  async getOrgsForUserIdViaGroups(userId) {
+  async getOrgsForUserIdsViaGroups(userIds) {
     let rows = await knex
       .select('o.id AS id', 'o.name', 'u.id AS userId')
-      .whereIn('u.id', userId)
+      .whereIn('u.id', userIds)
       .from('users AS u')
       .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
       .leftJoin('orgs_groups AS og', 'og.group_id', 'gu.group_id')
       .leftJoin('orgs AS o', 'o.id', 'og.group_id');
 
     let res = _.filter(rows, row => row.id !== null);
-    return orderedFor(res, userId, 'userId', false);
+    return orderedFor(res, userIds, 'userId', false);
   }
 
   async getGroupsForUserId(userId) {
     let rows = await knex
-      .select('g.id AS id', 'g.name', 'u.id AS userId')
-      .where('u.id', '=', userId)
-      .from('users AS u')
-      .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
-      .leftJoin('groups AS g', 'gu.group_id', 'g.id');
+      .select('g.id AS id', 'g.name', 'g.is_active', 'p.display_name', 'p.description')
+      .where('gu.user_id', '=', userId)
+      .from('groups_users AS gu')
+      .leftJoin('groups AS g', 'gu.group_id', 'g.id')
+      .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
 
     let res = _.filter(rows, row => row.id !== null);
-    return res;
+    return camelizeKeys(res);
   }
 
   async getGroupsForUserIds(userIds) {
     let rows = await knex
-      .select('g.id AS id', 'g.name', 'u.id AS userId')
-      .whereIn('u.id', userIds)
-      .from('users AS u')
-      .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
-      .leftJoin('groups AS g', 'gu.group_id', 'g.id');
+      .select('g.id AS id', 'g.name', 'g.is_active', 'p.display_name', 'p.description', 'gu.user_id AS userId')
+      .from('groups_users AS gu')
+      .whereIn('gu.user_id', userIds)
+      .leftJoin('groups AS g', 'gu.group_id', 'g.id')
+      .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
 
     let res = _.filter(rows, row => row.id !== null);
+    res = camelizeKeys(res);
     return orderedFor(res, userIds, 'userId', false);
   }
 

@@ -6,6 +6,7 @@ import Feature from '../../connector';
 import { AuthRoute, AuthLoggedInRoute } from '../../../modules/auth/containers/Auth';
 
 import Groups from './containers/Groups';
+import GroupView from './containers/GroupView';
 import GroupEdit from './containers/GroupEdit';
 
 import MyGroups from './containers/MyGroups';
@@ -23,7 +24,7 @@ export default new Feature({
     <AuthRoute exact path="/entities/groups" scope={groupListScopes} component={Groups} />,
     <AuthRoute exact path="/entities/groups/:id" scopes={groupViewScopes} component={GroupEdit} />,
     <AuthRoute exact path="/groups" scope={memberListScopes} component={MyGroups} />,
-    <AuthRoute exact path="/groups/:id" scopes={memberViewScopes} component={GroupEdit} />
+    <AuthRoute exact path="/groups/:id" scopes={memberViewScopes} component={GroupView} />
   ],
   reducer: { groups: reducers }
 });

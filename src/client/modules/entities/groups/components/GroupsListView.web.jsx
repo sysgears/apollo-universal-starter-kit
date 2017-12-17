@@ -68,7 +68,7 @@ export default class GroupsView extends React.PureComponent {
         key: 'id',
         render: (text, record) => (
           <Link className="group-link" to={`/groups/${record.id}`}>
-            {text}
+            {record.profile.displayName}
           </Link>
         )
       },

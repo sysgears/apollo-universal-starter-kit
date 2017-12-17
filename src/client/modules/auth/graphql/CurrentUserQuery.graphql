@@ -1,7 +1,23 @@
-#import "../../entities/users/graphql/User.graphql"
+#import "../../entities/groups/graphql/FragmentGroupBrief.graphql"
+#import "../../entities/users/graphql/Profile.graphql"
+
+fragment CurrentUserInfo on User {
+  id
+  email
+  isActive
+  createdAt
+  updatedAt
+  role
+  profile {
+    ...UserProfileInfo
+  }
+  groups {
+    ...GroupBrief
+  }
+}
 
 query currentUser {
   currentUser {
-    ...UserInfo
+    ...CurrentUserInfo
   }
 }

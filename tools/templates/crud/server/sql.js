@@ -4,7 +4,7 @@ import { has } from 'lodash';
 import parseFields from 'graphql-parse-fields';
 import knexnest from 'knexnest';
 import { $Module$ as $Module$Schema } from './schema';
-import { selectBy } from '../../../common/db';
+import { selectBy } from '../../../server/sql/helpers';
 import knex from '../../../server/sql/connector';
 
 const prefix = '';

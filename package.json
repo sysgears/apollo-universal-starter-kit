@@ -152,6 +152,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
+    "babel-preset-minify": "^0.2.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-react-native": "^4.0.0",
     "babel-preset-stage-0": "^6.24.1",
@@ -229,7 +230,9 @@
     "graphql": "^0.11.7"
   },
   "greenkeeper": {
-    "ignore": ["graphql"]
+    "ignore": [
+      "graphql"
+    ]
   },
   "collective": {
     "type": "opencollective",

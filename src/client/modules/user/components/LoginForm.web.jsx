@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import url from 'url';
 import { NavLink, Link } from 'react-router-dom';
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
+import { required, email, minLength } from '../../../../common/validation';
 
 import settings from '../../../../../settings';
 
@@ -12,8 +13,6 @@ let serverPort = process.env.PORT || port;
 if (__DEV__) {
   serverPort = '3000';
 }
-
-const required = value => (value ? undefined : 'Required');
 
 const facebookLogin = () => {
   window.location = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
@@ -26,8 +25,14 @@ const googleLogin = () => {
 const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
   return (
     <Form name="login" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="email" component={RenderField} type="email" label="Email" validate={required} />
-      <Field name="password" component={RenderField} type="password" label="Password" validate={required} />
+      <Field name="email" component={RenderField} type="email" label="Email" validate={[required, email]} />
+      <Field
+        name="password"
+        component={RenderField}
+        type="password"
+        label="Password"
+        validate={[required, minLength(5)]}
+      />
       <div className="text-center">{error && <Alert color="error">{error}</Alert>}</div>
       <div className="text-center">
         <Button color="primary" type="submit" disabled={submitting}>

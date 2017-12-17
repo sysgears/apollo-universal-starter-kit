@@ -131,11 +131,7 @@ export const checkAuth = (cookies, requiredScopes) => {
 
     let userScopes = null;
 
-    if (authz.method === 'basic') {
-      userScopes = authz.basic.userScopes[role];
-    } else if (authz.method === 'rbac') {
-      // TODO
-    }
+    userScopes = authz.userScopes[role];
 
     const yesTheyCan = validateScope(requiredScopes, userScopes);
 

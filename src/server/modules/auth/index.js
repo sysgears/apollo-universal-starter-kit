@@ -31,39 +31,28 @@ export default new Feature({
   createContextFunc: async (req, connectionParams, webSocket) => {
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
 
-    let userAuth = {};
-    if (authz.method === 'basic') {
-      const scopes = authz.basic.userScopes;
-      let userScopes = null;
-      let userGroups = null;
-      let userOrgs = null;
+    const scopes = authz.userScopes;
+    let userScopes = null;
+    let userGroups = null;
+    let userOrgs = null;
 
-      if (tokenUser) {
-        userScopes = scopes[tokenUser.role];
-        if (entities.groups.enabled) {
-          userGroups = await User.getGroupsForUserId(tokenUser.id);
-        }
-
-        if (entities.orgs.enabled) {
-          userOrgs = await User.getOrgsForUserId(tokenUser.id);
-        }
+    if (tokenUser) {
+      userScopes = scopes[tokenUser.role];
+      if (entities.groups.enabled) {
+        userGroups = await User.getGroupsForUserId(tokenUser.id);
       }
 
-      userAuth = {
-        isAuthenticated: tokenUser ? true : false,
-        scope: userScopes,
-        userGroups,
-        userOrgs
-      };
-    } else if (authz.method === 'rbac') {
-      // TODO
-      userAuth = {
-        isAuthenticated: tokenUser ? true : false,
-        scope: null
-      };
+      if (entities.orgs.enabled) {
+        userOrgs = await User.getOrgsForUserId(tokenUser.id);
+      }
     }
 
-    const auth = userAuth;
+    const auth = {
+      isAuthenticated: tokenUser ? true : false,
+      scope: userScopes,
+      userGroups,
+      userOrgs
+    };
 
     return {
       Auth: localAuth,

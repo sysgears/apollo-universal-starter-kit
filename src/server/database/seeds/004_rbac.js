@@ -1,3 +1,4 @@
+/*eslint-disable no-unused-vars*/
 import _ from 'lodash';
 
 import truncateTables from '../../../common/db';
@@ -15,46 +16,43 @@ let auth = settings.auth;
 let authz = auth.authorization;
 
 export async function seed(knex, Promise) {
-  if (authz.method === 'basic' && authz.basic.provider === 'embedded') {
-    if (authz.basic.subjects.groups) {
+  if (authz.provider === 'embedded') {
+    if (entities.orgs.enabled && authz.orgScopes) {
+      await truncateTables(knex, Promise, ['org_roles']);
+      // TODO Org related role stuff
+    }
+
+    if (entities.groups.enabled && authz.groupScopes) {
       await truncateTables(knex, Promise, ['group_roles']);
       for (let group of groups) {
-        createGroupBasicRoles(knex, group);
+        // TODO createGroupRoles(knex, group);
       }
     }
-    if (authz.basic.subjects.users) {
+
+    if (entities.users.enabled && authz.userScopes) {
       await truncateTables(knex, Promise, ['user_roles']);
       for (let user of users) {
         if (user.role) {
-          createUserBasicRoles(knex, user, 'example.com');
+          createUserRoles(knex, user, 'example.com');
         }
       }
     }
-    if (authz.basic.subjects.serviceaccounts) {
+
+    if (entities.serviceaccounts.enabled && authz.serviceaccountsScopes) {
       await truncateTables(knex, Promise, ['serviceaccount_roles']);
       for (let acct of serviceaccounts) {
-        createServiceAccountBasicRoles(knex, acct, 'example.com');
-      }
-    }
-  }
-
-  if (authz.method === 'rbac' && authz.rbac.provider === 'embedded') {
-    await truncateTables(knex, Promise, ['roles', 'role_memberships', 'role_permissions']);
-
-    if (entities.orgs.enabled === true) {
-      for (let org of orgs) {
-        await createOrgRoles(knex, org);
+        createServiceAccountRoles(knex, acct, 'example.com');
       }
     }
   }
 }
 
-async function createGroupBasicRoles(knex, group) {
+async function createGroupRoles(knex, group) {
   // basic roles are an enumerations
   const [gid] = await knex
     .select('id')
     .from('groups')
-    .where('email', '=', group.name);
+    .where('name', '=', group.name);
 
   await knex('group_roles').insert({
     group_id: gid,
@@ -62,7 +60,7 @@ async function createGroupBasicRoles(knex, group) {
   });
 }
 
-async function createUserBasicRoles(knex, user, domain) {
+async function createUserRoles(knex, user, domain) {
   // basic roles are an enumerations
   const [uid] = await knex
     .select('id')
@@ -79,7 +77,7 @@ async function createUserBasicRoles(knex, user, domain) {
   });
 }
 
-async function createServiceAccountBasicRoles(knex, acct, domain) {
+async function createServiceAccountRoles(knex, acct, domain) {
   // basic roles are an enumerations
   const [sid] = await knex
     .select('id')

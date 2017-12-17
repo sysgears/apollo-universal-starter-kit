@@ -13,18 +13,17 @@
 
 import settings from '../../../../settings';
 
-let config = settings.auth.authorization;
+let entities = settings.entities;
+let authz = settings.auth.authorization;
 
 exports.up = function(knex, Promise) {
   let migs = [];
 
-  if (config.enabled !== true) {
+  if (authz.enabled !== true) {
     return Promise.all(migs);
   }
 
-  if (config.method === 'basic' && config.basic.provider === 'embedded') {
-    let basic = config.basic;
-
+  if (authz.provider === 'embedded') {
     /*
       let fn = knex.schema.createTable('role_permissions', table => {
         table.timestamps(true, true);
@@ -48,11 +47,11 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     */
 
-    if (basic.subjects.orgs) {
+    if (entities.orgs.enabled && authz.orgRoles) {
       let fn = knex.schema.createTable('org_roles', table => {
         table.timestamps(true, true);
 
-        table.enu('role', basic.roles).notNullable();
+        table.enu('role', authz.orgRoles).notNullable();
 
         table
           .uuid('org_id')
@@ -66,11 +65,11 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (basic.subjects.groups) {
+    if (entities.groups.enabled && authz.groupRoles) {
       let fn = knex.schema.createTable('group_roles', table => {
         table.timestamps(true, true);
 
-        table.enu('role', basic.roles).notNullable();
+        table.enu('role', authz.groupRoles).notNullable();
 
         table
           .uuid('group_id')
@@ -84,11 +83,11 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (basic.subjects.users) {
+    if (entities.users.enabled && authz.userRoles) {
       let fn = knex.schema.createTable('user_roles', table => {
         table.timestamps(true, true);
 
-        table.enu('role', basic.roles).notNullable();
+        table.enu('role', authz.userRoles).notNullable();
 
         table
           .uuid('user_id')
@@ -102,11 +101,11 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (basic.subjects.serviceaccounts) {
+    if (entities.serviceaccounts.enabled && authz.serviceaccountRoles) {
       let fn = knex.schema.createTable('serviceaccount_roles', table => {
         table.timestamps(true, true);
 
-        table.enu('role', basic.roles).notNullable();
+        table.enu('role', authz.serviceaccountRoles).notNullable();
 
         table
           .uuid('serviceaccount_id')
@@ -121,6 +120,9 @@ exports.up = function(knex, Promise) {
     }
   }
 
+  return Promise.all(migs);
+
+  /*
   if (config.method === 'rbac' && config.rbac.provider === 'embedded') {
     // Roles table
     let fn1 = knex.schema.createTable('roles', table => {
@@ -188,8 +190,7 @@ exports.up = function(knex, Promise) {
     migs.push(fn2);
     migs.push(fn3);
   }
-
-  return Promise.all(migs);
+  */
 };
 
 exports.down = function(knex, Promise) {

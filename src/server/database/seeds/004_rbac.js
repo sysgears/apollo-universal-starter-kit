@@ -32,7 +32,7 @@ async function wipe(knex, Promise) {
   console.log('  - cleaning tables');
   if (entities.orgs.enabled && authz.orgRoles) {
     console.log('    - org tables');
-    await truncateTables(knex, Promise, ['org_roles', 'org_role_permissions', 'org_role_user_bindings']);
+    await truncateTables(knex, Promise, ['org_roles', 'org_role_permission_bindings', 'org_role_user_bindings']);
     if (entities.serviceaccounts.enabled) {
       await truncateTables(knex, Promise, ['org_role_serviceaccount_bindings']);
     }
@@ -40,7 +40,7 @@ async function wipe(knex, Promise) {
 
   if (entities.groups.enabled && authz.groupRoles) {
     console.log('    - group tables');
-    await truncateTables(knex, Promise, ['group_roles', 'group_role_permissions', 'group_role_user_bindings']);
+    await truncateTables(knex, Promise, ['group_roles', 'group_role_permission_bindings', 'group_role_user_bindings']);
     if (entities.serviceaccounts.enabled) {
       await truncateTables(knex, Promise, ['group_role_serviceaccount_bindings']);
     }
@@ -48,14 +48,14 @@ async function wipe(knex, Promise) {
 
   if (entities.users.enabled && authz.userRoles) {
     console.log('    - user tables');
-    await truncateTables(knex, Promise, ['user_roles', 'user_role_permissions', 'user_role_user_bindings']);
+    await truncateTables(knex, Promise, ['user_roles', 'user_role_permission_bindings', 'user_role_user_bindings']);
   }
 
   if (entities.serviceaccounts.enabled && authz.serviceaccountRoles) {
     console.log('    - svcacct tables');
     await truncateTables(knex, Promise, [
       'serviceaccount_roles',
-      'serviceaccount_role_permissions',
+      'serviceaccount_role_permission_bindings',
       'serviceaccount_role_serviceaccount_bindings'
     ]);
   }

@@ -5,7 +5,7 @@ import FieldError from '../../../common/FieldError';
 export default pubsub => ({
   Query: {
     $module$s: async (obj, args, { $Module$ }, info) => {
-      const $module$s = await $Module$.get$Module$s(args, parseFields(info).edges);
+      const $module$s = await $Module$.getPaginated(args, parseFields(info).edges);
       const { count } = await $Module$.getTotal();
 
       return {
@@ -17,7 +17,7 @@ export default pubsub => ({
       };
     },
     $module$: (obj, args, { $Module$ }, info) => {
-      return $Module$.get$Module$(args, parseFields(info));
+      return $Module$.get(args, parseFields(info));
     }
   },
   Mutation: {
@@ -26,10 +26,10 @@ export default pubsub => ({
         const e = new FieldError();
         e.throwIf();
 
-        const [id] = await $Module$.add$Module$(input);
-        const $module$ = await $Module$.get$Module$({ id }, parseFields(info).node);
+        const [id] = await $Module$.add(input);
+        const $module$ = await $Module$.get({ id }, parseFields(info).node);
 
-        return { $module$ };
+        return { node: $module$ };
       } catch (e) {
         return { errors: e };
       }
@@ -39,11 +39,11 @@ export default pubsub => ({
         const e = new FieldError();
         e.throwIf();
 
-        await $Module$.edit$Module$(input);
+        await $Module$.edit(input);
 
-        const $module$ = await $Module$.get$Module$({ id: input.id }, parseFields(info).node);
+        const $module$ = await $Module$.get({ id: input.id }, parseFields(info).node);
 
-        return { $module$ };
+        return { node: $module$ };
       } catch (e) {
         return { errors: e };
       }
@@ -51,15 +51,15 @@ export default pubsub => ({
     delete$Module$: async (obj, { id }, { $Module$ }, info) => {
       try {
         const e = new FieldError();
-        const $module$ = await $Module$.get$Module$({ id }, parseFields(info).node);
+        const $module$ = await $Module$.get({ id }, parseFields(info).node);
         if (!$module$) {
           e.setError('delete', '$Module$ does not exist.');
           e.throwIf();
         }
 
-        const isDeleted = await $Module$.delete$Module$(id);
+        const isDeleted = await $Module$.delete(id);
         if (isDeleted) {
-          return { $module$ };
+          return { node: $module$ };
         } else {
           e.setError('delete', 'Could not delete $module$. Please try again later.');
           e.throwIf();

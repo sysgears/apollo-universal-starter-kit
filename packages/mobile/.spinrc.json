@@ -11,10 +11,12 @@
     },
     "android": {
       "stack": ["react-native", "android"],
+      "entry": "./src/index.js",
       "enabled": true
     },
     "ios": {
       "stack": ["react-native", "ios"],
+      "entry": "./src/index.js",
       "enabled": false
     },
     "test": {

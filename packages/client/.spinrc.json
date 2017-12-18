@@ -6,6 +6,7 @@
     },
     "web": {
       "stack": ["react-native-web", "web"],
+      "entry": "./src/index.js",
       "openBrowser": true,
       "enabled": true
     },

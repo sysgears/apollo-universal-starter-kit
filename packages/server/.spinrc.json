@@ -2,6 +2,7 @@
   "builders": {
     "server": {
       "stack": ["react-native-web", "server"],
+      "entry": "./src/index.js",
       "enabled": true
     },
     "web": {

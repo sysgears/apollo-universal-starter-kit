@@ -39,7 +39,9 @@
     "graphql": "^0.11.7"
   },
   "greenkeeper": {
-    "ignore": []
+    "ignore": [
+      "graphql"
+    ]
   },
   "collective": {
     "type": "opencollective",

@@ -12,7 +12,7 @@
     "android": {
       "stack": ["react-native", "android"],
       "entry": "./src/index.js",
-      "enabled": true
+      "enabled": false
     },
     "ios": {
       "stack": ["react-native", "ios"],

@@ -2,8 +2,7 @@ import React from 'react';
 import { pick, capitalize } from 'lodash';
 import { Field } from 'redux-form';
 import { RenderField } from './components/native';
-
-const required = value => (value ? undefined : 'Required');
+import { required } from '../../../common/validation';
 
 export const createFormFields = schema => {
   let fields = [];

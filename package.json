@@ -5,7 +5,7 @@
   "scripts": {
     "build": "lerna run build --stream",
     "start": "node --harmony build/server",
-    "test": "lerna run test --parallel",
+    "test": "lerna run test --concurrency 1 --stream",
     "lint": "lerna run lint",
     "seed": "lerna run seed --stream",
     "watch": "lerna run watch --stream",

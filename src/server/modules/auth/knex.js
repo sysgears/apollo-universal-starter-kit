@@ -55,16 +55,27 @@ export default class Auth {
     return camelizeKeys(row);
   }
 
+  async getUserWithUserRoles(id) {
+    let rows = await knex
+      .select('b.user_id', 'r.id', 'r.name')
+      .from('user_role_user_bindings AS b')
+      .where('b.user_id', id)
+      .leftJoin('user_roles AS r', 'r.id', 'b.role_id');
+
+    let res = _.filter(rows, r => r.name !== null);
+    res = camelizeKeys(res);
+    return res;
+    // return orderedFor(res, [id], 'userId', false);
+  }
+
   async getUsersWithUserRoles(ids) {
     let rows = await knex
-      .select('b.user_id', 'r.id AS role_id', 'r.name', 'p.resource', 'p.relation', 'p.verb')
+      .select('b.user_id', 'r.id AS role_id', 'r.name')
       .from('user_role_user_bindings AS b')
       .whereIn('b.user_id', ids)
-      .leftJoin('user_roles AS r', 'r.id', 'b.role_id')
-      .leftJoin('user_role_permissions AS g', 'p.id', 'r.permission_id')
-      .leftJoin('permissions AS p', 'p.id', 'r.permission_id');
+      .leftJoin('user_roles AS r', 'r.id', 'b.role_id');
 
-    let res = _.filter(rows, row => row.name !== null);
+    let res = _.filter(rows, r => r.name !== null);
     res = camelizeKeys(res);
     return orderedFor(res, ids, 'userId', false);
   }
@@ -75,13 +86,13 @@ export default class Auth {
       .from('user_role_user_bindings AS b')
       .where('b.user_id', '=', id)
       .leftJoin('user_roles AS r', 'r.id', 'b.role_id')
-      .leftJoin('user_role_permissions AS g', 'g.role_id', 'r.id')
+      .leftJoin('user_role_permission_bindings AS g', 'g.role_id', 'r.id')
       .leftJoin('permissions AS p', 'p.id', 'g.permission_id');
     console.log('ROWS:', rows);
 
-    let res = _.filter(rows, row => row.role_id !== null);
+    let res = _.filter(rows, r => r.role_id !== null);
     res = camelizeKeys(res);
-    let ids = _.map(rows, row => row.roleId);
+    let ids = _.map(res, r => r.roleId);
     ids = _.uniq(ids);
     console.log('gUW-URP:', ids, res);
     return orderedFor(res, ids, 'roleId', false);
@@ -93,13 +104,13 @@ export default class Auth {
       .from('group_role_user_bindings AS b')
       .where('b.user_id', '=', id)
       .leftJoin('group_roles AS r', 'r.id', 'b.role_id')
-      .leftJoin('group_role_permissions AS g', 'g.role_id', 'r.id')
+      .leftJoin('group_role_permission_bindings AS g', 'g.role_id', 'r.id')
       .leftJoin('permissions AS p', 'p.id', 'g.permission_id');
     console.log('ROWS:', rows);
 
     let res = _.filter(rows, row => row.role_id !== null);
     res = camelizeKeys(res);
-    let ids = _.map(rows, row => row.roleId);
+    let ids = _.map(res, r => r.roleId);
     ids = _.uniq(ids);
     console.log('gUW-GRP:', ids, res);
     return orderedFor(res, ids, 'roleId', false);
@@ -111,7 +122,7 @@ export default class Auth {
       .from('org_role_user_bindings AS b')
       .where('b.user_id', '=', id)
       .leftJoin('org_roles AS r', 'r.id', 'b.role_id')
-      .leftJoin('org_role_permissions AS g', 'g.role_id', 'r.id')
+      .leftJoin('org_role_permission_bindings AS g', 'g.role_id', 'r.id')
       .leftJoin('permissions AS p', 'p.id', 'g.permission_id');
     console.log('ROWS:', rows);
 

@@ -40,7 +40,8 @@ function connectionParam() {
 
 export default new Feature({
   route: [
-    <AuthRoute exact path="/profile" scopes={['user/self/view']} component={Profile} />,
+    <AuthRoute exact path="/profile" scopes={[]} component={Profile} />,
+    // <AuthRoute exact path="/profile" scopes={['user/self/view']} component={Profile} />,
     //<AuthRoute exact path="/profile/edit" scopes={['user:update:self']}component={ProfileEdit} />,
     <AuthLoggedInRoute exact path="/register" redirect="/profile" component={Register} />,
     <AuthLoggedInRoute exact path="/login" redirect="/profile" component={Login} />,

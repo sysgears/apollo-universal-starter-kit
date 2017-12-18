@@ -29,6 +29,7 @@ const ProfileView = ({ loading, currentUser }) => {
       </PageLayout>
     );
   } else if (currentUser) {
+    console.log('currentUser', currentUser);
     return (
       <PageLayout>
         {renderMetaData()}
@@ -44,8 +45,19 @@ const ProfileView = ({ loading, currentUser }) => {
               <CardText>{currentUser.email}</CardText>
             </CardGroup>
             <CardGroup>
-              <CardTitle>Role:</CardTitle>
-              <CardText>{currentUser.role}</CardText>
+              <CardTitle>Roles:</CardTitle>
+              <CardText key="orgRoles">
+                <b>org:</b>
+                {JSON.stringify(currentUser.orgRoles)}
+              </CardText>
+              <CardText key="groupRoles">
+                <b>group:</b>
+                {JSON.stringify(currentUser.groupRoles)}
+              </CardText>
+              <CardText key="userRoles">
+                <b>user:</b>
+                {JSON.stringify(currentUser.userRoles)}
+              </CardText>
             </CardGroup>
             {currentUser.profile &&
               currentUser.profile.fullName && (
@@ -62,7 +74,7 @@ const ProfileView = ({ loading, currentUser }) => {
                 <CardTitle>Groups:</CardTitle>
                 {currentUser.groups &&
                   currentUser.groups.map(g => (
-                    <CardText>
+                    <CardText key={g.id}>
                       <Link to={'/groups/' + g.id}>{g.profile.displayName}</Link> - {g.profile.description}
                     </CardText>
                   ))}

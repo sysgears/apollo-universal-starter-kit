@@ -13,9 +13,4 @@ fragment CurrentUserAuth on User {
 fragment RoleInfo on RoleInfo {
   id
   name
-  permissions {
-    resource
-    relation
-    verb
-  }
 }

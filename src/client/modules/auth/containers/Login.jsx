@@ -42,7 +42,7 @@ const LoginWithApollo = compose(
             return navigation.goBack();
           }
         } catch (e) {
-          console.log(e.graphQLErrors);
+          console.log(e);
         }
       }
     })

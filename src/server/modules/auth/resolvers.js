@@ -13,6 +13,19 @@ const authn = settings.auth.authentication;
 
 export default pubsub => ({
   Query: {},
+  User: {
+    userRoles(obj, args, context) {
+      return context.Auth.getUserWithUserRoles(obj.id);
+    },
+    groupRoles(obj, args, context) {
+      return null;
+      // return context.loaders.getUserWithOAuths.load(obj.id);
+    },
+    orgRoles(obj, args, context) {
+      return null;
+      // return context.loaders.getUserWithOAuths.load(obj.id);
+    }
+  },
   UserAuth: {
     apikeys(obj, args, context) {
       return context.loaders.getUserWithApiKeys.load(obj.id);

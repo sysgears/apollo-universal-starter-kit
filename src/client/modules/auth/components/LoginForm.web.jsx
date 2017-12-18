@@ -35,7 +35,7 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
       };
 
       let oauth = (
-        <Row>
+        <Row key={P}>
           <Col xs={12}>
             <Button color="primary" type="button" onClick={onClick} style={{ margin: 10 }}>
               Login with {pascalize(P)}
@@ -64,7 +64,7 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
 
       <div className="text-center">
         <Container>
-          <Row>
+          <Row key="1">
             <Col xs={4}>
               <Button color="primary" type="submit" disabled={submitting}>
                 Login

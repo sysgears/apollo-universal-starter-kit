@@ -128,6 +128,8 @@ export const refreshToken = async (token, refreshToken, SECRET) => {
     orgRoles
   };
 
+  console.log('REFRESH TOKEN', user);
+
   const [newToken, newRefreshToken] = await createToken(user, SECRET, refreshSecret);
 
   return {

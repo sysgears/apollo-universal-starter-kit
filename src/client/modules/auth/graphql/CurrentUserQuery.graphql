@@ -1,6 +1,8 @@
 #import "../../entities/groups/graphql/FragmentGroupBrief.graphql"
 #import "../../entities/users/graphql/Profile.graphql"
 
+#import "./CurrentUserAuthQuery.graphql"
+
 fragment CurrentUserInfo on User {
   id
   email
@@ -18,5 +20,6 @@ fragment CurrentUserInfo on User {
 query currentUser {
   currentUser {
     ...CurrentUserInfo
+    ...CurrentUserAuth
   }
 }

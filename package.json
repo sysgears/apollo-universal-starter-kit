@@ -4,15 +4,14 @@
   "version": "1.0.0",
   "scripts": {
     "build": "lerna run build --stream",
-    "start": "node --harmony build/server",
+    "start": "node --harmony pacakges/server/build",
     "test": "lerna run test --concurrency 1 --stream",
     "lint": "lerna run lint",
     "seed": "lerna run seed --stream",
-    "watch": "lerna run watch --stream",
-    "heroku-postbuild": "rm -rf build && spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && spin -c .spinrc.prod.json build && spin exp p --non-interactive && npm run seed",
+    "watch": "lerna run watch --parallel --stream",
+    "heroku-postbuild": "lerna run heroku-postbuild --stream",
     "cli": "node tools/cli",
-    "postinstall": "opencollective postinstall",
-    "stripe:setup": "node packages/server/src/modules/subscription/cli/stripeSetup"
+    "postinstall": "opencollective postinstall"
   },
   "repository": {
     "type": "git",

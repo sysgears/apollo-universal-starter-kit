@@ -25,13 +25,6 @@
       }
     ]
   },
-  "settings": {
-    "import/resolver": {
-      "webpack": {
-        "config": "node_modules/spinjs/webpack.config.js"
-      }
-    }
-  },
   "env": {
     "mocha": true
   },

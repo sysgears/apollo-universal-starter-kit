@@ -1,22 +1,10 @@
 {
   "builders": {
-    "server": {
-      "stack": ["react-native-web", "server"],
-      "enabled": false
-    },
     "web": {
       "stack": ["react-native-web", "web"],
       "entry": "./src/index.js",
       "openBrowser": true,
       "enabled": true
-    },
-    "android": {
-      "stack": ["react-native", "android"],
-      "enabled": false
-    },
-    "ios": {
-      "stack": ["react-native", "ios"],
-      "enabled": false
     },
     "test": {
       "stack": ["react-native-web", "server"],
@@ -24,8 +12,8 @@
     }
   },
   "options": {
-    "backendBuildDir": "../server/build/server",
-    "frontendBuildDir": "build/client",
+    "backendBuildDir": "../server/build",
+    "frontendBuildDir": "build",
     "dllBuildDir": "build/dll",
     "overridesConfig": "./webpack.overrides.js",
     "stack": ["apollo", "react", "styled-components", "css", "sass", "less", "es6", "webpack"],
@@ -34,7 +22,6 @@
     "webpackDll": true,
     "devProxy": true,
     "reactHotLoader": false,
-    "persistGraphQL": false,
     "frontendRefreshOnBackendChange": true
   }
 }

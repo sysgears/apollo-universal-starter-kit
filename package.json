@@ -56,7 +56,7 @@
   "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^6.2.0",
-    "antd": "3.0.1",
+    "antd": "^3.0.2",
     "antd-mobile": "^2.1.0",
     "apollo-cache-inmemory": "^1.1.2",
     "apollo-client": "^2.1.0",
@@ -158,6 +158,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
+    "babel-preset-minify": "^0.2.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-react-native": "^4.0.0",
     "babel-preset-stage-0": "^6.24.1",
@@ -235,7 +236,9 @@
     "graphql": "^0.11.7"
   },
   "greenkeeper": {
-    "ignore": ["graphql"]
+    "ignore": [
+      "graphql"
+    ]
   },
   "collective": {
     "type": "opencollective",

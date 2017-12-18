@@ -5,23 +5,30 @@ import uuidv4 from 'uuid';
 import knex from '../../../../server/sql/connector';
 import { orderedFor } from '../../../../server/sql/helpers';
 
+const selectFields = [
+  'o.id',
+  'o.is_active',
+  'o.created_at',
+  'o.updated_at',
+  'o.name',
+  'p.domain',
+  'p.display_name',
+  'p.description'
+];
+
 export default class Org {
   async list(args) {
     let { filters, orderBys, offset, limit } = args;
 
     const queryBuilder = knex
-      .select(
-        'o.id',
-        'o.is_active',
-        'o.created_at',
-        'o.updated_at',
-        'o.name',
-        'p.domain',
-        'p.display_name',
-        'p.description'
-      )
+      .select(...selectFields)
       .from('orgs AS o')
       .leftJoin('org_profile AS p', 'p.org_id', 'o.id');
+
+    // Check if this should be filtered to a User's membership
+    if (args.memberId) {
+      queryBuilder.leftJoin('groups_users AS m', 'p.group_id', 'm.group_id').where('m.user_id', '=', args.memberId);
+    }
 
     // add filter conditions
     if (filters) {

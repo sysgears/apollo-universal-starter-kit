@@ -1,18 +1,19 @@
 import settings from '../../../../settings';
 
 let entities = settings.entities;
-let config = settings.auth.authentication;
+let authn = settings.auth.authentication;
 
 exports.up = function(knex, Promise) {
   let migs = [];
 
-  if (config.enabled !== true) {
+  // short-circuit
+  if (authn.enabled !== true) {
     return Promise.all(migs);
   }
 
   // User Auth tables
   if (entities.users.enabled === true) {
-    if (config.password.enabled === true) {
+    if (authn.password.enabled === true) {
       let fn = knex.schema.createTable('user_password', table => {
         table.timestamps(true, true);
         table
@@ -28,7 +29,7 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (config.oauth.enabled === true) {
+    if (authn.oauth.enabled === true) {
       let fn = knex.schema.createTable('user_oauths', table => {
         table.timestamps(true, true);
         table
@@ -45,7 +46,7 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (config.apikey.enabled === true) {
+    if (authn.apikey.enabled === true) {
       let fn = knex.schema.createTable('user_apikeys', table => {
         table.timestamps(true, true);
         table
@@ -63,7 +64,7 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (config.certificate.enabled === true) {
+    if (authn.certificate.enabled === true) {
       let fn = knex.schema.createTable('user_certificates', table => {
         table.timestamps(true, true);
         table
@@ -84,7 +85,7 @@ exports.up = function(knex, Promise) {
 
   // Service Account Auth tables
   if (entities.serviceaccounts.enabled === true) {
-    if (config.apikey.enabled === true) {
+    if (authn.apikey.enabled === true) {
       let fn = knex.schema.createTable('serviceaccount_apikeys', table => {
         table.timestamps(true, true);
         table
@@ -100,7 +101,7 @@ exports.up = function(knex, Promise) {
       migs.push(fn);
     }
 
-    if (config.certificate.enabled === true) {
+    if (authn.certificate.enabled === true) {
       let fn = knex.schema.createTable('serviceaccount_certificates', table => {
         table.timestamps(true, true);
         table
@@ -121,11 +122,47 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return Promise.all([
-    knex.schema.dropTable('serviceaccount_certificates'),
-    knex.schema.dropTable('user_certificates'),
-    knex.schema.dropTable('user_oauths'),
-    knex.schema.dropTable('user_apikeys'),
-    knex.schema.dropTable('user_password')
-  ]);
+  let migs = [];
+
+  // short-circuit
+  if (authn.enabled !== true) {
+    return Promise.all(migs);
+  }
+
+  if (entities.users.enabled === true) {
+    if (authn.password.enabled === true) {
+      let fn = knex.schema.dropTable('user_password');
+      migs.push(fn);
+    }
+
+    if (authn.oauth.enabled === true) {
+      let fn = knex.schema.dropTable('user_oauths');
+      migs.push(fn);
+    }
+
+    if (authn.apikey.enabled === true) {
+      let fn = knex.schema.dropTable('user_apikeys');
+      migs.push(fn);
+    }
+
+    if (authn.certificate.enabled === true) {
+      let fn = knex.schema.dropTable('user_certificates');
+      migs.push(fn);
+    }
+  }
+
+  // Service Account Auth tables
+  if (entities.serviceaccounts.enabled === true) {
+    if (authn.apikey.enabled === true) {
+      let fn = knex.schema.dropTable('serviceaccount_apikeys');
+      migs.push(fn);
+    }
+
+    if (authn.certificate.enabled === true) {
+      let fn = knex.schema.dropTable('serviceaccount_certificates');
+      migs.push(fn);
+    }
+  }
+
+  return Promise.all(migs);
 };

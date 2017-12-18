@@ -33,8 +33,7 @@ const selectFields = [
   'p.last_name',
   'p.suffix',
   'p.locale',
-  'p.language',
-  'r.role'
+  'p.language'
 ];
 
 export default class User {
@@ -44,8 +43,7 @@ export default class User {
     const queryBuilder = knex
       .select(...selectFields)
       .from('users AS u')
-      .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-      .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id');
+      .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
 
     // add filter conditions
     if (filters) {
@@ -96,9 +94,8 @@ export default class User {
     let ret = await knex
       .select(...selectFields)
       .from('users AS u')
-      .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-      .leftJoin('user_roles AS r', 'r.user_id', 'p.user_id')
       .where('u.id', '=', id)
+      .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
       .first();
     return camelizeKeys(ret);
   }
@@ -110,7 +107,6 @@ export default class User {
         .from('users AS u')
         .where('u.id', '=', id)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-        .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
         .first()
     );
   }
@@ -122,7 +118,6 @@ export default class User {
         .from('users AS u')
         .where('u.email', '=', email)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-        .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
         .first()
     );
   }
@@ -134,7 +129,6 @@ export default class User {
         .from('users AS u')
         .whereIn('u.id', '=', ids)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-        .leftJoin('user_roles AS r', 'p.user_id', 'r.user_id')
     );
   }
 

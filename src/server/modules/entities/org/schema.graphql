@@ -40,7 +40,7 @@ type Org {
 
   groups: [Group]
   users: [User]
-  serviceaccounts: [ServiceAccount]
+  # serviceaccounts: [ServiceAccount]
 }
 
 type OrgProfile {

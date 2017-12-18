@@ -1,7 +1,7 @@
 export default {
   enabled: true,
   orgs: {
-    enabled: false
+    enabled: true
   },
   groups: {
     enabled: true,

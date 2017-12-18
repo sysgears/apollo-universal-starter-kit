@@ -28,6 +28,29 @@ extend type Mutation {
 extend type Subscription {}
 
 
+#
+# Auth Extensions of Other Types
+#
+
+extend type User {
+  userRoles: [RoleInfo]
+  groupRoles: [RoleInfo]
+  orgRoles: [RoleInfo]
+}
+
+type RoleInfo {
+  id: ID!
+  name: String
+  permissions: [PermissionInfo]
+}
+
+type PermissionInfo {
+  resource: String!
+  relation: String!
+  verb: String!
+}
+
+
 
 type ServiceAccountAuth {
   apikey: ApiKeyAuth

@@ -1,10 +1,9 @@
 /*eslint-disable no-unused-vars*/
 import _ from 'lodash';
+import uuidv4 from 'uuid';
 
 import truncateTables from '../../../common/db';
 import settings from '../../../../settings';
-
-// import roles from './data/rbac/roles';
 
 import orgs from './data/entities/orgs';
 import groups from './data/entities/groups';
@@ -16,68 +15,365 @@ let auth = settings.auth;
 let authz = auth.authorization;
 
 export async function seed(knex, Promise) {
-  if (authz.provider === 'embedded') {
-    if (entities.orgs.enabled && authz.orgScopes) {
-      await truncateTables(knex, Promise, ['org_roles']);
-      // TODO Org related role stuff
-    }
+  // short-circuit
+  if (authz.enabled !== true || authz.provider !== 'embedded') {
+    return Promise.all([]);
+  }
 
-    if (entities.groups.enabled && authz.groupScopes) {
-      await truncateTables(knex, Promise, ['group_roles']);
-      for (let group of groups) {
-        // TODO createGroupRoles(knex, group);
+  console.log('Seeding Auth');
+  await wipe(knex, Promise);
+
+  await createPermissions(knex, authz.permissions);
+
+  await createAllRoles(knex);
+}
+
+async function wipe(knex, Promise) {
+  console.log('  - cleaning tables');
+  if (entities.orgs.enabled && authz.orgRoles) {
+    console.log('    - org tables');
+    await truncateTables(knex, Promise, ['org_roles', 'org_role_permissions', 'org_role_user_bindings']);
+    if (entities.serviceaccounts.enabled) {
+      await truncateTables(knex, Promise, ['org_role_serviceaccount_bindings']);
+    }
+  }
+
+  if (entities.groups.enabled && authz.groupRoles) {
+    console.log('    - group tables');
+    await truncateTables(knex, Promise, ['group_roles', 'group_role_permissions', 'group_role_user_bindings']);
+    if (entities.serviceaccounts.enabled) {
+      await truncateTables(knex, Promise, ['group_role_serviceaccount_bindings']);
+    }
+  }
+
+  if (entities.users.enabled && authz.userRoles) {
+    console.log('    - user tables');
+    await truncateTables(knex, Promise, ['user_roles', 'user_role_permissions', 'user_role_user_bindings']);
+  }
+
+  if (entities.serviceaccounts.enabled && authz.serviceaccountRoles) {
+    console.log('    - svcacct tables');
+    await truncateTables(knex, Promise, [
+      'serviceaccount_roles',
+      'serviceaccount_role_permissions',
+      'serviceaccount_role_serviceaccount_bindings'
+    ]);
+  }
+
+  await truncateTables(knex, Promise, ['permissions']);
+  console.log('  - tables cleaned');
+}
+
+async function createPermissions(knex, permissions) {
+  console.log('creating permissions');
+  for (let P of permissions) {
+    let rs = P.resource;
+    console.log('  -', rs);
+
+    let vs = P.verbs ? P.verbs : authz.verbs;
+
+    // Seed base resource first
+    for (let rel of P.relations) {
+      console.log('   ', `${rs}/${rel}/${vs}`);
+      for (let v of vs) {
+        let name = `${rs}/${rel}/${v}`;
+        await knex('permissions').insert({
+          id: uuidv4(),
+          resource: rs,
+          relation: rel,
+          verb: v,
+          name: name
+        });
       }
     }
 
-    if (entities.users.enabled && authz.userScopes) {
-      await truncateTables(knex, Promise, ['user_roles']);
-      for (let user of users) {
-        if (user.role) {
-          createUserRoles(knex, user, 'example.com');
+    if (!P.subresources) {
+      continue;
+    }
+    // Seed sub-resources
+    for (let sub of P.subresources) {
+      for (let rel of P.relations) {
+        console.log('   ', `${rs}:${sub}/${rel}/${vs}`);
+        for (let v of vs) {
+          let name = `${rs}:${sub}/${rel}/${v}`;
+          await knex('permissions').insert({
+            id: uuidv4(),
+            resource: `${rs}:${sub}`,
+            relation: rel,
+            verb: v,
+            name: name
+          });
         }
       }
     }
+  } // end loop over input permissions
+}
 
-    if (entities.serviceaccounts.enabled && authz.serviceaccountsScopes) {
-      await truncateTables(knex, Promise, ['serviceaccount_roles']);
-      for (let acct of serviceaccounts) {
-        createServiceAccountRoles(knex, acct, 'example.com');
+async function createAllRoles(knex) {
+  console.log('Creating all roles');
+
+  // start with users, cause if we made it this far, we have users
+  await createUserRoles(knex, authz.userRoles);
+
+  // then check if we are using groups
+  if (entities.orgs.enabled && authz.orgScopes) {
+    console.log('Creating roles for Orgs');
+    // TODO Org related role stuff
+    for (let org of orgs) {
+      if (org.name === 'root') {
+        console.log('  root:');
+        if (org.users) {
+          await createUserRoleUserBindings(knex, org.users, org.profile.domain);
+        }
+
+        if (entities.serviceaccounts.enabled && org.serviceaccounts) {
+          // TODO
+          // await createOrgRoleServiceAccountBindings(knex, org.serviceaccounts, org.profile.domain)
+        }
+
+        if (org.groups) {
+          for (let group of org.groups) {
+            console.log('  - group:', group.name);
+            await createGroupRoles(knex, org.name, group, group.customRoles || authz.groupRoles);
+          }
+        }
+        continue;
       }
+
+      console.log('  - org:', org.name);
+      await createOrgRoles(knex, org, org.roles || authz.orgRoles);
+      await createOrgRoleUserBindings(knex, org);
+      if (entities.serviceaccounts.enabled && org.serviceaccounts) {
+        // TODO
+        // await createOrgRoleServiceAccountBindings(knex, org.serviceaccounts, org.profile.domain)
+      }
+
+      for (let group of org.groups) {
+        console.log('  - group:', group.name);
+        await createGroupRoles(knex, org.name, group, group.customRoles || authz.groupRoles);
+      }
+      await createOrgGroupRoleUserBindings(knex, org);
+      if (entities.serviceaccounts.enabled && org.serviceaccounts) {
+        // TODO
+        // await createOrgGroupRoleServiceAccountBindings(knex, org)
+      }
+    }
+
+    // return here because we started from multi-orgs
+    return;
+  }
+
+  // otherwise, it's a little easier to build things
+
+  if (entities.groups.enabled && authz.groupScopes) {
+    // TODO
+  }
+
+  if (entities.users.enabled && authz.userScopes) {
+    // TODO
+  }
+
+  if (entities.serviceaccounts.enabled && authz.serviceaccountsScopes) {
+    // TODO
+  }
+}
+
+async function createOrgRoles(knex, org, roles) {
+  // basic roles are an enumerations
+  const oid = await knex
+    .select('id')
+    .from('orgs')
+    .where('name', '=', org.name)
+    .first();
+
+  for (let role of roles) {
+    console.log('    - ', role);
+    await knex('org_roles').insert({
+      id: uuidv4(),
+      org_id: oid.id,
+      name: role,
+      display_name: role,
+      description: role + ' role for org: ' + org.name
+    });
+  }
+}
+
+async function createOrgRoleUserBindings(knex, org) {
+  const oid = await knex
+    .select('id')
+    .from('orgs')
+    .where('name', '=', org.name)
+    .first();
+
+  for (let user of org.users) {
+    const uid = await knex
+      .select('id')
+      .from('users')
+      .where('email', '=', user.name + '@' + org.profile.domain)
+      .first();
+
+    for (let role of user.roles) {
+      console.log('    ~> ', user.name, role);
+      const rid = await knex
+        .select('id')
+        .from('org_roles')
+        .where({
+          name: role,
+          org_id: oid.id
+        })
+        .first();
+
+      await knex('org_role_user_bindings').insert({
+        role_id: rid.id,
+        user_id: uid.id
+      });
     }
   }
 }
 
-async function createGroupRoles(knex, group) {
+async function createOrgGroupRoleUserBindings(knex, org) {
+  for (let group of org.groups) {
+    const gid = await knex
+      .select('id')
+      .from('groups')
+      .where('name', '=', org.name + ':' + group.name)
+      .first();
+
+    for (let role of group.roles) {
+      const rid = await knex
+        .select('id')
+        .from('group_roles')
+        .where({
+          name: role.name,
+          group_id: gid.id
+        })
+        .first();
+
+      console.log('   ', org.name, group.name, gid);
+
+      for (let user of role.users) {
+        console.log('    ~> ', user, role.name, rid);
+        const uid = await knex
+          .select('id')
+          .from('users')
+          .where('email', '=', user + '@' + org.profile.domain)
+          .first();
+
+        await knex('group_role_user_bindings').insert({
+          role_id: rid.id,
+          user_id: uid.id
+        });
+      } // end of users loop
+    } // end of roles loop
+  } // end of groups loop
+}
+
+async function createOrgRoleServiceAccountBindings(knex, accts, domain) {
+  for (let acct of accts) {
+    const aid = await knex
+      .select('id')
+      .from('serviceaccounts')
+      .where('email', '=', acct.name + '@' + domain)
+      .first();
+
+    for (let role of acct.roles) {
+      console.log('    = ', acct.name, role);
+      const rid = await knex
+        .select('id')
+        .from('org_roles')
+        .where('name', '=', role)
+        .first();
+
+      await knex('org_role_user_bindings').insert({
+        role_id: rid.id,
+        serviceaccount_id: aid.id
+      });
+    }
+  }
+}
+
+async function createGroupRoles(knex, groupPrefix, group, roles) {
   // basic roles are an enumerations
-  const [gid] = await knex
+  const gid = await knex
     .select('id')
     .from('groups')
-    .where('name', '=', group.name);
+    .where('name', '=', groupPrefix + ':' + group.name)
+    .first();
 
-  await knex('group_roles').insert({
-    group_id: gid,
-    role: group.role
-  });
-}
-
-async function createUserRoles(knex, user, domain) {
-  // basic roles are an enumerations
-  const [uid] = await knex
-    .select('id')
-    .from('users')
-    .where('email', '=', user.short + '@' + domain);
-
-  if (uid === undefined) {
-    return;
+  for (let role of roles) {
+    console.log('    - ', role);
+    await knex('group_roles').insert({
+      id: uuidv4(),
+      group_id: gid.id,
+      name: role,
+      display_name: role,
+      description: role + ' role for group: ' + group.name
+    });
   }
-
-  await knex('user_roles').insert({
-    user_id: uid.id,
-    role: user.role
-  });
 }
 
-async function createServiceAccountRoles(knex, acct, domain) {
+async function createUserRoles(knex, roles) {
+  console.log('Creating roles for Users', roles);
+  for (let role of roles) {
+    console.log('  - ', role);
+    await knex('user_roles').insert({
+      id: uuidv4(),
+      name: role,
+      display_name: role,
+      description: role + ' role for all resources and applications'
+    });
+
+    // create
+
+    // lookup permissions
+
+    // create bindings
+    // (call next function)
+  }
+}
+
+async function createUserRolePermissionBindings(knex, permissions) {
+  console.log('Creating roles for Users');
+  for (let P of permissions) {
+    console.log('  - ', P);
+    /*
+    await knex('user_role_permission_bindings').insert({
+      name: role,
+      display_name: role,
+      description: role + " role for all resources and applications"
+    });
+    */
+  }
+}
+
+async function createUserRoleUserBindings(knex, users, domain) {
+  console.log('Creating user_roles bindings for Users');
+  for (let user of users) {
+    const uid = await knex
+      .select('id')
+      .from('users')
+      .where('email', '=', user.name + '@' + domain)
+      .first();
+
+    for (let role of user.roles) {
+      console.log('    ~> ', user.name, role);
+      const rid = await knex
+        .select('id')
+        .from('user_roles')
+        .where('name', '=', role)
+        .first();
+
+      await knex('user_role_user_bindings').insert({
+        role_id: rid.id,
+        user_id: uid.id
+      });
+    }
+  }
+}
+
+async function createServiceAccountRoles(knex) {
+  /*
+  console.log('Creating roles for SvcAcct', acct);
   // basic roles are an enumerations
   const [sid] = await knex
     .select('id')
@@ -88,46 +384,5 @@ async function createServiceAccountRoles(knex, acct, domain) {
     serviceaccount_id: sid,
     role: acct.role
   });
-}
-
-async function createOrgRoles(knex, org) {
-  const [oid] = await knex
-    .select('id')
-    .from('orgs')
-    .where('name', '=', org.name);
-
-  // for each group, grab the id
-  for (let group of org.groupRels) {
-    const [gid] = await knex
-      .select('id')
-      .from('groups')
-      .where('name', '=', org.name + ':' + group.name);
-    group.id = gid.id;
-  }
-
-  // create the roles for the Org
-  for (let role of org.roles) {
-    console.log('  ', role);
-    const [rid] = await knex('roles')
-      .returning('id')
-      .insert({
-        name: role,
-        org_id: oid.id
-      });
-
-    for (let group of org.groupRels) {
-      // does it have this role?
-      let found = _.find(group.roles, r => r === role);
-
-      if (found) {
-        console.log('   + ', group.name, rid);
-        await knex('role_memberships').insert({
-          role_id: rid,
-          group_id: group.id
-        });
-      } else {
-        console.log('     ', group.name, ' x');
-      }
-    }
-  }
+  */
 }

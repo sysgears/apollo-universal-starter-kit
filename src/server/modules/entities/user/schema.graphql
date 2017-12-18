@@ -42,7 +42,6 @@ type User {
   isActive: Boolean
 
   auth: UserAuth
-  role: String
   profile: UserProfile
 
   # orgs:   [Org]

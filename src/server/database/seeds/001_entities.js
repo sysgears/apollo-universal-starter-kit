@@ -37,6 +37,8 @@ export async function seed(knex, Promise) {
 
   if (config.orgs.enabled === true) {
     await createOrgs(knex, orgs);
+
+    return;
   }
 
   if (config.groups.enabled === true) {
@@ -59,6 +61,9 @@ export async function seed(knex, Promise) {
 
 async function createOrgs(knex, orgs) {
   for (let org of orgs) {
+    if (org.name === 'root') {
+      continue;
+    }
     console.log('Creating org:', org.name);
 
     const oid = uuidv4();
@@ -80,11 +85,24 @@ async function createOrgs(knex, orgs) {
         description: org.profile.description
       });
     }
+
+    // (enabled Org assumes Groups and Users enabled as well)
+    // create groups
+    await createGroups(knex, _.map(org.groups, g => g.name), org.name);
+
+    // create users
+    await createUsers(knex, _.map(org.users, u => u.name), org.profile.domain);
+
+    // create service accounts
+    if (config.serviceaccounts.enabled === true) {
+      await createServiceAccounts(knex, _.map(org.serviceaccounts, s => s.name), org.profile.domain);
+    }
   }
 }
 
 async function createGroups(knex, shorts, namePrefix) {
   for (let group of shorts) {
+    console.log('  - group: ', group);
     // get the seed object by name
     let groupSeed = _.find(groups, g => {
       return g.name === group;
@@ -111,6 +129,7 @@ async function createGroups(knex, shorts, namePrefix) {
 
 async function createUsers(knex, shorts, domain) {
   for (let user of shorts) {
+    console.log('  - user: ', user);
     // get the actual seed object by short
     let userSeed = _.find(users, u => {
       return u.short == user;
@@ -149,6 +168,7 @@ async function createUsers(knex, shorts, domain) {
 
 async function createServiceAccounts(knex, shorts, domain) {
   for (let acct of shorts) {
+    console.log('  - sa: ', acct);
     // get the actual seed object by short
     let acctSeed = _.find(sa, a => {
       return a.short == acct;

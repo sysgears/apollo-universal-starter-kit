@@ -16,187 +16,333 @@ import settings from '../../../../settings';
 let entities = settings.entities;
 let authz = settings.auth.authorization;
 
-exports.up = function(knex, Promise) {
+exports.up = async function(knex, Promise) {
   let migs = [];
 
-  if (authz.enabled !== true) {
+  // short-circuit
+  if (authz.enabled !== true || authz.provider !== 'embedded') {
+    console.log('NOT !! Creating Authz Tablesi... :[');
     return Promise.all(migs);
   }
 
-  if (authz.provider === 'embedded') {
-    /*
-      let fn = knex.schema.createTable('role_permissions', table => {
-        table.timestamps(true, true);
+  console.log('Creating Authz Tables');
 
-        table
-          .uuid('role_id')
-          .notNullable()
-          .references('id')
-          .inTable('roles')
-          .onDelete('CASCADE');
+  // All Known Permissions
+  await knex.schema.createTable('permissions', table => {
+    console.log('  - permissions table');
+    table.timestamps(true, true);
+    table
+      .uuid('id')
+      .notNullable()
+      .unique();
 
-        table.string('resource').notNullable();
-        table.enu('verb', basic.verbs).notNullable();
+    table.string('resource').notNullable();
+    table.string('relation').notNullable();
+    table.enu('verb', authz.verbs).notNullable();
 
-        table.unique(['role_id', 'resource', 'verb']);
+    table.unique(['resource', 'relation', 'verb']);
 
-        table.string('name');
-        table.string('description');
-      });
+    table
+      .string('name')
+      .notNullable()
+      .unique();
 
-      migs.push(fn);
-    */
+    table.string('display_name');
+    table.string('description');
+  });
 
-    if (entities.orgs.enabled && authz.orgRoles) {
-      let fn = knex.schema.createTable('org_roles', table => {
-        table.timestamps(true, true);
+  // Set up org authz
+  if (entities.orgs.enabled && authz.orgRoles) {
+    console.log('  - orgs authz tables');
 
-        table.enu('role', authz.orgRoles).notNullable();
-
-        table
-          .uuid('org_id')
-          .notNullable()
-          .unique()
-          .references('id')
-          .inTable('orgs')
-          .onDelete('CASCADE');
-      });
-
-      migs.push(fn);
-    }
-
-    if (entities.groups.enabled && authz.groupRoles) {
-      let fn = knex.schema.createTable('group_roles', table => {
-        table.timestamps(true, true);
-
-        table.enu('role', authz.groupRoles).notNullable();
-
-        table
-          .uuid('group_id')
-          .notNullable()
-          .unique()
-          .references('id')
-          .inTable('groups')
-          .onDelete('CASCADE');
-      });
-
-      migs.push(fn);
-    }
-
-    if (entities.users.enabled && authz.userRoles) {
-      let fn = knex.schema.createTable('user_roles', table => {
-        table.timestamps(true, true);
-
-        table.enu('role', authz.userRoles).notNullable();
-
-        table
-          .uuid('user_id')
-          .notNullable()
-          .unique()
-          .references('id')
-          .inTable('users')
-          .onDelete('CASCADE');
-      });
-
-      migs.push(fn);
-    }
-
-    if (entities.serviceaccounts.enabled && authz.serviceaccountRoles) {
-      let fn = knex.schema.createTable('serviceaccount_roles', table => {
-        table.timestamps(true, true);
-
-        table.enu('role', authz.serviceaccountRoles).notNullable();
-
-        table
-          .uuid('serviceaccount_id')
-          .notNullable()
-          .unique()
-          .references('id')
-          .inTable('serviceaccounts')
-          .onDelete('CASCADE');
-      });
-
-      migs.push(fn);
-    }
-  }
-
-  return Promise.all(migs);
-
-  /*
-  if (config.method === 'rbac' && config.rbac.provider === 'embedded') {
-    // Roles table
-    let fn1 = knex.schema.createTable('roles', table => {
+    await knex.schema.createTable('org_roles', table => {
       table.timestamps(true, true);
-      table.increments();
-
-      table.string('name').notNullable();
       table
-        .integer('org_id')
-        .unsigned()
+        .uuid('id')
+        .notNullable()
+        .unique();
+
+      table
+        .uuid('org_id')
         .notNullable()
         .references('id')
         .inTable('orgs')
         .onDelete('CASCADE');
+      table.string('name').notNullable();
+      table.unique(['org_id', 'name']);
 
-      table.unique(['name', 'org_id']);
-
-      table.string('displayName');
+      table.string('display_name');
       table.string('description');
     });
 
-    // Roles Membership table
-    let fn2 = knex.schema.createTable('role_memberships', table => {
+    let fn = knex.schema.createTable('org_role_permission_bindings', table => {
       table.timestamps(true, true);
 
       table
-        .integer('role_id')
-        .unsigned()
+        .uuid('role_id')
         .notNullable()
         .references('id')
-        .inTable('roles')
+        .inTable('org_roles')
         .onDelete('CASCADE');
       table
-        .integer('group_id')
-        .unsigned()
+        .uuid('permission_id')
+        .notNullable()
+        .references('id')
+        .inTable('permissions')
+        .onDelete('CASCADE');
+      table.boolean('allow').notNullable();
+
+      table.unique(['role_id', 'permission_id', 'allow']);
+    });
+
+    migs.push(fn);
+
+    fn = knex.schema.createTable('org_role_user_bindings', table => {
+      table.timestamps(true, true);
+      table
+        .uuid('role_id')
+        .notNullable()
+        .references('id')
+        .inTable('org_roles')
+        .onDelete('CASCADE');
+      table
+        .uuid('user_id')
+        .notNullable()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE');
+      table.unique(['role_id', 'user_id']);
+    });
+
+    migs.push(fn);
+
+    if (entities.serviceaccounts.enabled) {
+      fn = knex.schema.createTable('org_role_serviceaccount_bindings', table => {
+        table.timestamps(true, true);
+        table
+          .uuid('role_id')
+          .notNullable()
+          .references('id')
+          .inTable('org_roles')
+          .onDelete('CASCADE');
+        table
+          .uuid('serviceaccount_id')
+          .notNullable()
+          .references('id')
+          .inTable('serviceaccounts')
+          .onDelete('CASCADE');
+        table.unique(['role_id', 'serviceaccount_id']);
+      });
+
+      migs.push(fn);
+    }
+  }
+
+  // Set up group authz
+  if (entities.groups.enabled && authz.groupRoles) {
+    console.log('  - groups authz tables');
+    // have to wait on the first one
+    await knex.schema.createTable('group_roles', table => {
+      table.timestamps(true, true);
+      table
+        .uuid('id')
+        .notNullable()
+        .unique();
+
+      table
+        .uuid('group_id')
         .notNullable()
         .references('id')
         .inTable('groups')
         .onDelete('CASCADE');
+      table.string('name').notNullable();
+      table.unique(['group_id', 'name']);
 
-      table.unique(['role_id', 'group_id']);
-    });
-
-    // Role Grants table
-    let fn3 = knex.schema.createTable('role_permissions', table => {
-      table.timestamps(true, true);
-
-      table
-        .integer('role_id')
-        .unsigned()
-        .notNullable()
-        .references('id')
-        .inTable('roles')
-        .onDelete('CASCADE');
-      table.string('resource').notNullable();
-      table.enu('verb', config.rbac.verbs).notNullable();
-
-      table.unique(['role_id', 'resource', 'verb']);
-
-      table.string('name');
+      table.string('display_name');
       table.string('description');
     });
 
-    migs.push(fn1);
-    migs.push(fn2);
-    migs.push(fn3);
+    let fn = knex.schema.createTable('group_role_permission_bindings', table => {
+      table.timestamps(true, true);
+
+      table
+        .uuid('role_id')
+        .notNullable()
+        .references('id')
+        .inTable('group_roles')
+        .onDelete('CASCADE');
+      table
+        .uuid('permission_id')
+        .notNullable()
+        .references('id')
+        .inTable('permissions')
+        .onDelete('CASCADE');
+      table.boolean('allow').notNullable();
+
+      table.unique(['role_id', 'permission_id', 'allow']);
+    });
+
+    migs.push(fn);
+
+    fn = knex.schema.createTable('group_role_user_bindings', table => {
+      table.timestamps(true, true);
+      table
+        .uuid('role_id')
+        .notNullable()
+        .references('id')
+        .inTable('group_roles')
+        .onDelete('CASCADE');
+      table
+        .uuid('user_id')
+        .notNullable()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE');
+      table.unique(['role_id', 'user_id']);
+    });
+
+    migs.push(fn);
+
+    if (entities.serviceaccounts.enabled) {
+      fn = knex.schema.createTable('group_role_serviceaccount_bindings', table => {
+        table.timestamps(true, true);
+        table
+          .uuid('role_id')
+          .notNullable()
+          .references('id')
+          .inTable('group_roles')
+          .onDelete('CASCADE');
+        table
+          .uuid('serviceaccount_id')
+          .notNullable()
+          .references('id')
+          .inTable('serviceaccounts')
+          .onDelete('CASCADE');
+        table.unique(['role_id', 'serviceaccount_id']);
+      });
+
+      migs.push(fn);
+    }
   }
-  */
+
+  if (entities.users.enabled && authz.userRoles) {
+    console.log('  - users authz tables');
+    await knex.schema.createTable('user_roles', table => {
+      table.timestamps(true, true);
+      table
+        .uuid('id')
+        .notNullable()
+        .unique();
+      table.string('name').notNullable();
+      table.unique(['name']);
+
+      table.string('display_name');
+      table.string('description');
+    });
+
+    let fn = knex.schema.createTable('user_role_permission_bindings', table => {
+      table.timestamps(true, true);
+
+      table
+        .uuid('role_id')
+        .notNullable()
+        .references('id')
+        .inTable('user_roles')
+        .onDelete('CASCADE');
+      table
+        .uuid('permission_id')
+        .notNullable()
+        .references('id')
+        .inTable('permissions')
+        .onDelete('CASCADE');
+      table.boolean('allow').notNullable();
+
+      table.unique(['role_id', 'permission_id', 'allow']);
+    });
+
+    migs.push(fn);
+
+    fn = knex.schema.createTable('user_role_user_bindings', table => {
+      table.timestamps(true, true);
+      table
+        .uuid('role_id')
+        .notNullable()
+        .references('id')
+        .inTable('user_roles')
+        .onDelete('CASCADE');
+      table
+        .uuid('user_id')
+        .notNullable()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE');
+      table.unique(['role_id', 'user_id']);
+    });
+
+    migs.push(fn);
+  }
+
+  if (entities.serviceaccounts.enabled && authz.serviceaccountRoles) {
+    console.log('  - serviceaccounts authz tables');
+    let fn = knex.schema.createTable('serviceaccount_roles', table => {
+      table.timestamps(true, true);
+
+      table.enu('role', authz.serviceaccountRoles).notNullable();
+
+      table
+        .uuid('serviceaccount_id')
+        .notNullable()
+        .unique()
+        .references('id')
+        .inTable('serviceaccounts')
+        .onDelete('CASCADE');
+    });
+
+    migs.push(fn);
+  }
+
+  return Promise.all(migs);
 };
 
 exports.down = function(knex, Promise) {
-  return Promise.all([
-    knex.schema.dropTable('role_permissions'),
-    knex.schema.dropTable('role_memberships'),
-    knex.schema.dropTable('role')
-  ]);
+  let migs = [];
+
+  // short-circuit
+  if (authz.enabled !== true || authz.provider !== 'embedded') {
+    return Promise.all(migs);
+  }
+
+  if (entities.orgs.enabled && authz.orgRoles) {
+    migs.push(knex.schema.dropTable('org_roles'));
+    migs.push(knex.schema.dropTable('org_role_permission_bindings'));
+    migs.push(knex.schema.dropTable('org_role_user_bindings'));
+    if (entities.serviceaccounts.enabled) {
+      migs.push(knex.schema.dropTable('org_role_serviceaccount_bindings'));
+    }
+  }
+
+  if (entities.groups.enabled && authz.groupRoles) {
+    migs.push(knex.schema.dropTable('group_roles'));
+    migs.push(knex.schema.dropTable('group_role_permission_bindings'));
+    migs.push(knex.schema.dropTable('group_role_user_bindings'));
+    if (entities.serviceaccounts.enabled) {
+      migs.push(knex.schema.dropTable('group_role_serviceaccount_bindings'));
+    }
+  }
+
+  if (entities.users.enabled && authz.userRoles) {
+    migs.push(knex.schema.dropTable('user_roles'));
+    migs.push(knex.schema.dropTable('user_role_permission_bindings'));
+    migs.push(knex.schema.dropTable('user_role_user_bindings'));
+  }
+
+  if (entities.serviceaccounts.enabled && authz.serviceaccountRoles) {
+    migs.push(knex.schema.dropTable('serviceaccount_roles'));
+    migs.push(knex.schema.dropTable('serviceaccount_role_permission_bindings'));
+    migs.push(knex.schema.dropTable('serviceaccount_role_serviceaccount_bindings'));
+  }
+
+  migs.push(knex.schema.dropTable('permissions'));
+
+  return Promise.all(migs);
 };

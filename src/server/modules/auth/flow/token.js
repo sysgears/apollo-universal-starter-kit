@@ -1,9 +1,13 @@
 import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 
+import settings from '../../../../../settings';
+
 import AuthDAO from '../lib';
 
 const Auth = new AuthDAO();
+
+const entities = settings.entities;
 
 // export const setTokenHeaders = (res, req, tokens) => {
 export const setTokenHeaders = (req, tokens) => {
@@ -59,7 +63,8 @@ export const removeTokenHeaders = req => {
 };
 
 export const createToken = async (user, secret, refreshSecret) => {
-  let tokenUser = pick(user, ['id', 'email', 'role']);
+  console.log('CREATE TOKEN', user);
+  let tokenUser = pick(user, ['id', 'email', 'roles']);
 
   const createToken = jwt.sign(
     {
@@ -105,11 +110,29 @@ export const refreshToken = async (token, refreshToken, SECRET) => {
     return {};
   }
 
+  const userRoles = await Auth.getUserWithRolesPermissions(user.id);
+
+  let groupRoles = null;
+  if (entities.groups.enabled) {
+    groupRoles = Auth.getUserWithGroupRolesPermissions(user.id);
+  }
+
+  let orgRoles = null;
+  if (entities.orgs.enabled) {
+    orgRoles = Auth.getUserWithOrgRolesPermissions(user.id);
+  }
+
+  user.roles = {
+    userRoles,
+    groupRoles,
+    orgRoles
+  };
+
   const [newToken, newRefreshToken] = await createToken(user, SECRET, refreshSecret);
 
   return {
     token: newToken,
     refreshToken: newRefreshToken,
-    user: pick(user, ['id', 'email', 'role'])
+    user: pick(user, ['id', 'email', 'roles'])
   };
 };

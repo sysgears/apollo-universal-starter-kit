@@ -31,6 +31,8 @@ export default new Feature({
   createContextFunc: async (req, connectionParams, webSocket) => {
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
 
+    console.log('Got Here');
+
     const scopes = authz.userScopes;
     let userScopes = null;
     let userGroups = null;
@@ -53,6 +55,11 @@ export default new Feature({
       userGroups,
       userOrgs
     };
+    const loaders = {
+      getUsersWithApiKeys: new DataLoader(localAuth.getUsersWithApiKeys),
+      getUsersWithSerials: new DataLoader(localAuth.getUsersWithSerials),
+      getUsersWithOAuths: new DataLoader(localAuth.getUsersWithOAuths)
+    };
 
     return {
       Auth: localAuth,
@@ -60,11 +67,7 @@ export default new Feature({
       auth,
       SECRET,
       req,
-      loaders: {
-        getUserWithApiKeys: new DataLoader(localAuth.getUserWithApiKeys),
-        getUserWithSerials: new DataLoader(localAuth.getUserWithSerials),
-        getUserWithOAuths: new DataLoader(localAuth.getUserWithOAuths)
-      }
+      loaders
     };
   },
   middleware: app => {
@@ -126,7 +129,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
       }
 
       if (serial !== '') {
-        const user = await Auth.getUserWithSerial(serial);
+        const user = await Auth.getUserFromSerial(serial);
         if (user) {
           return user;
         }
@@ -154,7 +157,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
       }
 
       if (serial !== '') {
-        const user = await Auth.getUserWithSerial(serial);
+        const user = await Auth.getUserFromSerial(serial);
         if (user) {
           return user;
         }

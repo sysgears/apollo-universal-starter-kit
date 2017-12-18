@@ -60,15 +60,54 @@ export default {
     // [embedded, casbin, athenz]
     provider: 'embedded',
 
-    orgRoles: ['owner', 'admin', 'member', 'viewer'],
+    // If no verbs, it will get all of them
+    permissions: [
+      {
+        resource: 'org',
+        subresources: ['iam', 'profile', 'group', 'user', 'serviceaccount', 'post'],
+        relations: ['owner', 'admin', 'member', 'viewer']
+      },
+      {
+        resource: 'group',
+        subresources: ['iam', 'profile', 'user', 'serviceaccount', 'post'],
+        relations: ['owner', 'admin', 'member', 'viewer']
+      },
+      {
+        resource: 'user',
+        subresources: ['iam', 'profile', 'auth', 'serviceaccount', 'post', 'comment'],
+        relations: ['self', 'all', 'other']
+      },
+      {
+        resource: 'serviceaccount',
+        subresources: ['iam', 'profile', 'auth'],
+        relations: ['self', 'all', 'other', 'owner']
+      },
+      {
+        resource: 'subscriber',
+        subresources: ['billing', 'plans'],
+        relations: ['owner', 'admin', 'all', 'viewer']
+      },
+      {
+        resource: 'post',
+        subresources: ['comment'],
+        relations: ['owner', 'all', 'viewer']
+      },
+      {
+        resource: 'comment',
+        relations: ['owner', 'all', 'viewer']
+      }
+    ],
+
+    orgRoles: ['owner', 'admin', 'member', 'subscriber', 'user', 'viewer'],
     groupRoles: ['owner', 'admin', 'member', 'viewer'],
-    userRoles: ['owner', 'admin', 'subscriber', 'user'],
+    userRoles: ['superuser', 'admin', 'subscriber', 'user', 'visitor'],
+    saRoles: ['admin', 'subscriber', 'user', 'visitor'],
 
     // General format for scopes is:
     // resource:sub-resource:... / matching-object-relation / verb
     userScopes: {
-      owner: ['*/*/*'],
-      admin: ['iam*/*/view', 'org*/*/*', 'group*/*/*', 'user*/*/*', 'subscription*/*/*', 'post*/*/*'],
+      superuser: ['*/*/*'],
+      admin: ['*:iam/*/view', 'org*/*/*', 'group*/*/*', 'user*/*/*', 'subscription*/*/*', 'post*/*/*'],
       subscriber: ['subscription/owner/*'],
       user: [
         'user/self/*',
@@ -80,7 +119,8 @@ export default {
         'post:comment/owner/*',
         'post*/*/list',
         'post*/*/view'
-      ]
+      ],
+      visitor: ['org*/viewer/*', 'group*/viewer/*', 'post*/viewer/list', 'post*/*/view']
     },
 
     groupScopes: {

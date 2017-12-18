@@ -14,6 +14,7 @@ export default class Group {
       .from('groups AS g')
       .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
 
+    // Check if this should be filtered to a User's membership
     if (args.memberId) {
       queryBuilder.leftJoin('groups_users AS m', 'p.group_id', 'm.group_id').where('m.user_id', '=', args.memberId);
     }

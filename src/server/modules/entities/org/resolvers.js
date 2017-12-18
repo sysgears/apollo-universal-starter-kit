@@ -26,13 +26,15 @@ export default pubsub => ({
         context.loaders.getUsersForOrgId.load(obj.id),
         context.loaders.getUsersForOrgIdViaGroups.load(obj.id)
       ]).then(mergeLoaders);
-    },
+    }
+    /*
     serviceaccounts(obj, args, context) {
       return Promise.all([
         context.loaders.getServiceAccountsForOrgId.load(obj.id),
         context.loaders.getServiceAccountsForOrgIdViaGroups.load(obj.id)
       ]).then(mergeLoaders);
     }
+    */
   },
 
   OrgProfile: {

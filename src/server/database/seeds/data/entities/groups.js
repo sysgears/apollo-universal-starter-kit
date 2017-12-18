@@ -1,5 +1,15 @@
 export default [
   {
+    name: 'superusers',
+    profile: {
+      displayName: 'Superusers',
+      description: 'Group of limitless humans.'
+    },
+    users: ['owner'],
+    serviceaccounts: [],
+    roles: ['superuser']
+  },
+  {
     name: 'owners',
     profile: {
       displayName: 'Superusers',
@@ -7,7 +17,7 @@ export default [
     },
     users: ['owner'],
     serviceaccounts: [],
-    roles: ['owner']
+    roles: ['superuser']
   },
   {
     name: 'admins',
@@ -89,13 +99,15 @@ export default [
     serviceaccounts: ['sa-user'],
     roles: ['user']
   },
-  { name: 'group-1-owners' },
-  { name: 'group-1-admins' },
-  { name: 'group-1-members' },
-  { name: 'group-2-owners' },
-  { name: 'group-2-admins' },
-  { name: 'group-2-members' },
-  { name: 'group-3-owners' },
-  { name: 'group-3-admins' },
-  { name: 'group-3-members' }
+  {
+    name: 'everyone',
+    profile: {
+      displayName: 'EVERYONE!!',
+      description: 'All of the users, making sense?'
+    }
+  },
+  { name: 'org-2-peeps' },
+  { name: 'group-1' },
+  { name: 'group-2' },
+  { name: 'group-3' }
 ];

@@ -31,16 +31,21 @@ export function validateScope(required, provided) {
 
 function validateScope_v1(required, provided) {
   let hasScope = false;
+  if (!provided) {
+    return false;
+  }
 
-  required.forEach(scope => {
-    provided.forEach(function(perm) {
+  provided.forEach(function(perm) {
+    var permRe = new RegExp('^' + perm.replace('*', '.*') + '$');
+    required.forEach(scope => {
       // user:* -> user:create, user:view:self
-      var permRe = new RegExp('^' + perm.replace('*', '.*') + '$');
-      if (permRe.exec(scope)) hasScope = true;
+      if (permRe.exec(scope)) {
+        return scope;
+      }
     });
   });
 
-  return hasScope;
+  return false;
 }
 
 function validateScope_v2(required, provided) {
@@ -79,6 +84,7 @@ export const withAuth = (scope, callback) => {
   };
 };
 
+// Client Side Authorization check
 export const checkAuth = (cookies, requiredScopes) => {
   // first check token
   let token = null;
@@ -125,17 +131,15 @@ export const checkAuth = (cookies, requiredScopes) => {
     if (exp < new Date().getTime() / 1000) {
       return false;
     }
-    const { user: { id, email, role } } = decode(token);
+    const { user: { id, email, roles } } = decode(token);
 
     // console.log('decoded:', role, email, id);
 
-    let userScopes = null;
+    const yesTheyCan1 = validateScope(requiredScopes, roles.userScopes);
+    const yesTheyCan2 = validateScope(requiredScopes, roles.groupScopes);
+    const yesTheyCan3 = validateScope(requiredScopes, roles.orgScopes);
 
-    userScopes = authz.userScopes[role];
-
-    const yesTheyCan = validateScope(requiredScopes, userScopes);
-
-    return yesTheyCan;
+    return yesTheyCan1 || yesTheyCan2 || yesTheyCan3;
   } catch (e) {
     console.log(e);
     return false;

@@ -1,0 +1,21 @@
+fragment CurrentUserAuth on User {
+  userRoles {
+    ...RoleInfo
+  }
+  groupRoles {
+    ...RoleInfo
+  }
+  orgRoles {
+    ...RoleInfo
+  }
+}
+
+fragment RoleInfo on RoleInfo {
+  id
+  name
+  permissions {
+    resource
+    relation
+    verb
+  }
+}

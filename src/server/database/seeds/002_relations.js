@@ -9,6 +9,7 @@ let config = settings.entities;
 export async function seed(knex) {
   if (config.orgs.enabled === true) {
     await createOrgsRels(knex, orgs);
+    return;
   }
 
   if (config.groups.enabled === true) {
@@ -19,23 +20,20 @@ export async function seed(knex) {
 
 async function createOrgsRels(knex, orgs) {
   for (let org of orgs) {
+    if (org.name === 'root') {
+      continue;
+    }
     console.log('Creating Relations for org:', org.name);
 
     // create org -> group -> user / service account relationshiprs
-    if (config.groups.enabled) {
-      await createOrgGroupRels(knex, org, org.groups);
-    }
+    await createOrgGroupRels(knex, org, _.map(org.groups, g => g.name));
 
-    if (config.users.enabled) {
-      await createOrgUserRels(knex, org, org.users);
-    }
+    await createOrgUserRels(knex, org, _.map(org.users, u => u.name));
+    await createOrgGroupUserRels(knex, org);
 
     if (config.serviceaccounts.enabled) {
-      await createOrgServiceAccountRels(knex, org, org.serviceaccounts);
-    }
-
-    if (config.serviceaccounts.enabled) {
-      await createOrgGroupUserSARels(knex, org);
+      await createOrgServiceAccountRels(knex, org, _.map(org.serviceaccounts, s => s.name));
+      await createOrgGroupServiceAccountRels(knex, org);
     }
   }
 }
@@ -47,6 +45,7 @@ async function createOrgGroupRels(knex, org, groupShorts) {
     .where('name', '=', org.name);
 
   for (let short of groupShorts) {
+    console.log(' - org-group: ', org.name, short);
     const [gid] = await knex
       .select('id')
       .from('groups')
@@ -66,6 +65,7 @@ async function createOrgUserRels(knex, org, userShorts) {
     .where('name', '=', org.name);
 
   for (let short of userShorts) {
+    console.log(' - org-user: ', org.name, short);
     const [uid] = await knex
       .select('id')
       .from('users')
@@ -85,6 +85,7 @@ async function createOrgServiceAccountRels(knex, org, acctShorts) {
     .where('name', '=', org.name);
 
   for (let short of acctShorts) {
+    console.log(' - org-sa: ', org.name, short);
     const [sid] = await knex
       .select('id')
       .from('serviceaccounts')
@@ -97,41 +98,56 @@ async function createOrgServiceAccountRels(knex, org, acctShorts) {
   }
 }
 
-async function createOrgGroupUserSARels(knex, org) {
-  for (let G of org.groupRels) {
+async function createOrgGroupUserRels(knex, org) {
+  for (let G of org.groups) {
     const [gid] = await knex
       .select('id')
       .from('groups')
       .where('name', '=', org.name + ':' + G.name);
 
-    if (G.users) {
-      for (let short of G.users) {
-        const [uid] = await knex
-          .select('id')
-          .from('users')
-          .where('email', '=', short + '@' + org.profile.domain);
+    for (let R of G.roles) {
+      if (R.users) {
+        for (let short of R.users) {
+          console.log(' - org-group-user: ', org.name, short);
+          const [uid] = await knex
+            .select('id')
+            .from('users')
+            .where('email', '=', short + '@' + org.profile.domain);
 
-        await knex('groups_users').insert({
-          group_id: gid.id,
-          user_id: uid.id
-        });
+          await knex('groups_users').insert({
+            group_id: gid.id,
+            user_id: uid.id
+          });
+        }
       }
-    }
+    } // end loop over group-roles
+  } // end loop over groups
+}
 
-    if (G.serviceaccounts) {
-      for (let short of G.serviceaccounts) {
-        const [sid] = await knex
-          .select('id')
-          .from('serviceaccounts')
-          .where('email', '=', short + '@' + org.profile.domain);
+async function createOrgGroupServiceAccountRels(knex, org) {
+  for (let G of org.groups) {
+    const [gid] = await knex
+      .select('id')
+      .from('groups')
+      .where('name', '=', org.name + ':' + G.name);
 
-        await knex('groups_serviceaccounts').insert({
-          group_id: gid.id,
-          serviceaccount_id: sid.id
-        });
+    for (let R of G.roles) {
+      if (R.serviceaccounts) {
+        for (let short of R.serviceaccounts) {
+          console.log(' - org-group-sa: ', org.name, short);
+          const [sid] = await knex
+            .select('id')
+            .from('serviceaccounts')
+            .where('email', '=', short + '@' + org.profile.domain);
+
+          await knex('groups_serviceaccounts').insert({
+            group_id: gid.id,
+            serviceaccount_id: sid.id
+          });
+        }
       }
-    }
-  } // end loop over groupRels
+    } // end loop over group-roles
+  } // end loop over groups
 }
 
 async function createGroupsRels(knex, shorts) {

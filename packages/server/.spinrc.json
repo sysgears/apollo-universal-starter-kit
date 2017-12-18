@@ -27,7 +27,7 @@
     "backendBuildDir": "build/server",
     "frontendBuildDir": "../client/build/client",
     "dllBuildDir": "../client/build/dll",
-    "overridesConfig": "../../tools/webpackAppConfig.js",
+    "overridesConfig": "./webpack.overrides.js",
     "stack": ["apollo", "react", "styled-components", "css", "sass", "less", "es6", "webpack"],
     "backendUrl": "http://localhost:8080/graphql",
     "ssr": true,

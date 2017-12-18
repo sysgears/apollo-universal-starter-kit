@@ -2,7 +2,7 @@
 
 mutation add$Module$($input: Add$Module$Input!) {
   add$Module$(input: $input) {
-    $module$ {
+    node {
       ...$Module$Info
     }
     errors {

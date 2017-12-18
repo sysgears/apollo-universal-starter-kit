@@ -1,6 +1,6 @@
 mutation delete$Module$($id: Int!) {
   delete$Module$(id: $id) {
-    $module$ {
+    node {
       id
     }
     errors {

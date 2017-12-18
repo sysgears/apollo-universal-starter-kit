@@ -131,7 +131,7 @@ class $Module$ListView extends React.PureComponent {
         {$module$s && (
           <div>
             <small>
-              ({$module$s.edges.length} / {$module$s.pageInfo.totalCount})
+              ({$module$s.edges ? $module$s.edges.length : 0} / {$module$s.pageInfo.totalCount})
             </small>
           </div>
         )}

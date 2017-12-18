@@ -1,19 +1,19 @@
 import { decamelize } from 'humps';
 import { has } from 'lodash';
 
-import parseFields from 'graphql-parse-fields';
 import knexnest from 'knexnest';
 import { $Module$ as $Module$Schema } from './schema';
+import Crud from '../../../server/sql/crud';
 import { selectBy } from '../../../server/sql/helpers';
 import knex from '../../../server/sql/connector';
 
 const prefix = '';
 const tableName = decamelize($Module$Schema.name);
 
-export default class $Module$ {
+export default class $Module$ extends Crud {
   get$Module$s({ limit, offset, orderBy, filter }, info) {
     const baseQuery = knex(`${prefix}${tableName} as ${tableName}`);
-    const select = selectBy($Module$Schema, parseFields(info).edges, false, prefix);
+    const select = selectBy($Module$Schema, info, false, prefix);
     const queryBuilder = select(baseQuery);
 
     if (limit) {
@@ -60,7 +60,7 @@ export default class $Module$ {
 
   get$Module$({ id }, info) {
     const baseQuery = knex(`${prefix}${tableName} as ${tableName}`);
-    const select = selectBy($Module$Schema, parseFields(info), true, prefix);
+    const select = selectBy($Module$Schema, info, true, prefix);
     return knexnest(select(baseQuery).where(`${tableName}.id`, '=', id));
   }
 

@@ -16,10 +16,9 @@
     "tests:watch": "cross-env PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "flow && npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
-    "watch": "spin watch",
+    "watch": "DEBUG=spinjs spin watch",
     "heroku-postbuild": "rm -rf build && spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && spin -c .spinrc.prod.json build && spin exp p --non-interactive && npm run seed",
-    "cli": "node tools/cli",
-    "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"
+    "cli": "node tools/cli"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [
@@ -79,10 +78,6 @@
     "react-stripe-elements": "^1.2.1",
     "redux": "^3.7.2",
     "redux-form": "^7.2.0",
-    "sqlite3": "^3.1.13",
-    "stripe": "^5.4.0",
-    "stripe-local": "^0.1.1",
-    "styled-components": "^2.3.0",
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {

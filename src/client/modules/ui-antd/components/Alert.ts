@@ -3,40 +3,31 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AlertItem, AlertType } from '../../common/components/Alert';
-import { ButtonStyle } from '../../common/components/Button';
 
 const alertClasses = [
   {
     type: AlertType.SUCCESS,
-    className: 'alert-success'
+    className: 'success'
   },
   {
     type: AlertType.INFO,
-    className: 'alert-info'
+    className: 'info'
   },
   {
     type: AlertType.WARNING,
-    className: 'alert-warning'
+    className: 'warning'
   },
   {
     type: AlertType.ERROR,
-    className: 'alert-danger'
+    className: 'danger'
   }
 ];
 
 @Component({
   selector: 'alert',
   template: `
-    <div *ngIf="alerts">
-      <div *ngFor="let alert of alerts" [id]="alert.alertId"
-           class="alert alert-dismissible fade show {{ alert.type || '' }}"
-           role="alert">
-        <ausk-button [btnStyle]="buttonStyle()" (click)="onClose(alert)">
-          <span aria-hidden="true">&times;</span>
-        </ausk-button>
-        {{ alert.message }}
-      </div>
-    </div>
+    <nz-alert *ngFor="let alert of alerts" [nzType]="alert.type" [nzMessage]="alert.message"
+              (nzOnClose)="onClose(alert)" [nzCloseable]="true"></nz-alert>
   `
 })
 export default class Alert implements OnInit, OnDestroy {
@@ -59,10 +50,6 @@ export default class Alert implements OnInit, OnDestroy {
   public onClose(alert: AlertItem) {
     const index = this.alerts.indexOf(alert);
     this.alerts.splice(index, 1);
-  }
-
-  public buttonStyle() {
-    return ButtonStyle.Close;
   }
 
   private getClassByType(type: AlertType) {

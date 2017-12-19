@@ -27,17 +27,15 @@ const alertClasses = [
 @Component({
   selector: 'alert',
   template: `
-    <div *ngIf="alerts">
-      <div *ngFor="let alert of alerts" [id]="alert.alertId"
-           class="alert alert-dismissible fade show {{ alert.type || '' }}"
-           role="alert">
-        <ausk-button [btnStyle]="buttonStyle()" (click)="onClose(alert)">
-          <span aria-hidden="true">&times;</span>
-        </ausk-button>
-        {{ alert.message }}
-      </div>
+    <div *ngFor="let alert of alerts" [id]="alert.alertId"
+         class="alert alert-dismissible fade show {{ alert.type || '' }}"
+         role="alert">
+      <ausk-button [btnStyle]="buttonStyle()" (click)="onClose(alert)">
+        <span aria-hidden="true">&times;</span>
+      </ausk-button>
+      {{ alert.message }}
     </div>
-	`
+  `
 })
 export default class Alert implements OnInit, OnDestroy {
   @Input() public subject: Subject<AlertItem>;

@@ -3,7 +3,6 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AlertItem, AlertType } from '../../common/components/Alert';
-import { ButtonStyle } from '../../common/components/Button';
 
 const alertClasses = [
   {
@@ -31,7 +30,7 @@ const alertClasses = [
       <div *ngFor="let alert of alerts" [id]="alert.alertId"
            class="alert alert-dismissible fade show {{ alert.type || '' }}"
            role="alert">
-        <ausk-button [clazz]="buttonStyle()" (click)="onClose(alert)">
+        <ausk-button className="close" (click)="onClose(alert)">
           <span aria-hidden="true">&times;</span>
         </ausk-button>
         {{ alert.message }}
@@ -59,10 +58,6 @@ export default class Alert implements OnInit, OnDestroy {
   public onClose(alert: AlertItem) {
     const index = this.alerts.indexOf(alert);
     this.alerts.splice(index, 1);
-  }
-
-  public buttonStyle() {
-    return ButtonStyle.Close;
   }
 
   private getClassByType(type: AlertType) {

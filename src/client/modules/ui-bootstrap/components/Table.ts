@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { ButtonSize } from '../../common/components/Button';
 
 export interface CellData {
   type: ElemType;
@@ -49,13 +48,14 @@ export enum ElemType {
             {{cell.text}}
           </ausk-link>
 
-          <ausk-button *ngIf="cell.type === 1" [click]="cell.callback" [clazz]="cell.className" [size]="buttonSize()">
+          <ausk-button *ngIf="cell.type === 1" [click]="cell.callback"
+                       [className]="cell.className || 'btn btn-primary btn-sm'">
             {{cell.text}}
           </ausk-button>
 
           <span *ngIf="cell.type === 2">
-            {{cell.text}}
-          </span>
+                      {{cell.text}}
+                  </span>
         </td>
       </tr>
       </tbody>
@@ -66,8 +66,4 @@ export default class Table {
   @Input() public className: string;
   @Input() public columns: any;
   @Input() public rows: CellData[];
-
-  public buttonSize() {
-    return ButtonSize.Small;
-  }
 }

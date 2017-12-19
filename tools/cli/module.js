@@ -4,14 +4,7 @@ import shell from 'shelljs';
 import fs from 'fs';
 import chalk from 'chalk';
 import GraphQLGenerator from 'domain-graphql';
-import { pascalize } from 'humps';
-
-String.prototype.toCamelCase = function() {
-  return this.replace(/^([A-Z])|\s(\w)/g, function(match, p1, p2) {
-    if (p2) return p2.toUpperCase();
-    return p1.toLowerCase();
-  });
-};
+import { pascalize, decamelize } from 'humps';
 
 function renameFiles(destinationPath, templatePath, module, location) {
   // pascalize
@@ -222,6 +215,37 @@ function updateSchema(logger, module) {
         .to(file);
 
       logger.info(chalk.green(`✔ Schema in ${pathSchema}${file} successfully updated!`));
+
+      const resolverFile = `resolvers.js`;
+      let replace = '';
+      for (const key of schema.keys()) {
+        const value = schema.values[key];
+        if (value.type.constructor === Array) {
+          replace += `  ${schema.name}: {
+    ${key}: createBatchResolver((obj, args, { ${schema.name}, ${value.type[0].name} }, info) => {
+      return ${schema.name}.getByIds(obj.map(({ id }) => id), '${decamelize(schema.name)}', ${
+            value.type[0].name
+          }, parseFields(info));
+    })
+  },
+`;
+        }
+      }
+
+      // override batch resolvers in resolvers.js file
+      const replaceBatchResolvers = `// schema batch resolvers([^*]+)// end schema batch resolvers`;
+      shell
+        .ShellString(
+          shell
+            .cat(resolverFile)
+            .replace(
+              RegExp(replaceBatchResolvers, 'g'),
+              `// schema batch resolvers\n${replace}  // end schema batch resolvers`
+            )
+        )
+        .to(resolverFile);
+
+      logger.info(chalk.green(`✔ Resolver in ${pathSchema}${resolverFile} successfully updated!`));
     } else {
       logger.error(chalk.red(`✘ Schema path ${pathSchema} not found!`));
     }

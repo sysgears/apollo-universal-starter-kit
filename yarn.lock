@@ -5231,6 +5231,10 @@ graphql-parse-fields@^1.2.0:
   dependencies:
     cast-array "^1.0.1"
 
+graphql-resolve-batch@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/graphql-resolve-batch/-/graphql-resolve-batch-1.0.2.tgz#ab069df8ab3410a0188701ed9fa8e382bbb8d6a5"
+
 graphql-subscriptions@^0.5.5:
   version "0.5.5"
   resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-0.5.5.tgz#f8ad3e094a23128d5065725f9b60020d3293999d"

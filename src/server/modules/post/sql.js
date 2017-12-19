@@ -17,7 +17,7 @@ export default class Post {
   }
 
   async getCommentsForPostIds(postIds) {
-    let res = await knex
+    const res = await knex
       .select('id', 'content', 'post_id AS postId')
       .from('comment')
       .whereIn('post_id', postIds);

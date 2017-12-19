@@ -20,6 +20,8 @@ export default pubsub => ({
       return $Module$.get(args, parseFields(info));
     }
   },
+  // schema batch resolvers
+  // end schema batch resolvers
   Mutation: {
     add$Module$: async (obj, { input }, { $Module$ }, info) => {
       try {

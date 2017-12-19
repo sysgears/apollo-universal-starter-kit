@@ -2,10 +2,22 @@ import { has } from 'lodash';
 import { decamelize } from 'humps';
 import knexnest from 'knexnest';
 
-import { selectBy } from './helpers';
+import { selectBy, orderedFor } from './helpers';
 import knex from './connector';
 
 export default class Crud {
+  getPrefix() {
+    return this.prefix;
+  }
+
+  getTableName() {
+    return this.tableName;
+  }
+
+  getSchema() {
+    return this.schema;
+  }
+
   getPaginated({ limit, offset, orderBy, filter }, info) {
     const baseQuery = knex(`${this.prefix}${this.tableName} as ${this.tableName}`);
     const select = selectBy(this.schema, info, false, this.prefix);
@@ -76,5 +88,13 @@ export default class Crud {
     return knex(`${this.prefix}${this.tableName}`)
       .where({ id })
       .del();
+  }
+
+  async getByIds(ids, by, Obj, info) {
+    info[`${by}Id`] = true;
+    const baseQuery = knex(`${Obj.getPrefix()}${Obj.getTableName()} as ${Obj.getTableName()}`);
+    const select = selectBy(Obj.getSchema(), info, false, Obj.getPrefix());
+    const res = await knexnest(select(baseQuery).whereIn(`${Obj.getTableName()}.${by}_id`, ids));
+    return orderedFor(res, ids, `${by}Id`, false);
   }
 }

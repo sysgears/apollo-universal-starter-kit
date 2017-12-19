@@ -52,6 +52,7 @@ const dependencyPlatforms = {
   expo: ['ios', 'android'],
   express: 'server',
   'graphql-parse-fields': 'server',
+  'graphql-resolve-batch': 'server',
   'apollo-server-express': 'server',
   'apollo-upload-server': 'server',
   'graphql-subscriptions': 'server',

@@ -34,21 +34,29 @@ const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNam
     if (key !== '__typename') {
       const value = domainSchema.values[key];
       if (fields[key] === true) {
-        if (!value.transient) {
-          const as = parentPath.length > 0 ? `${parentPath.join('_')}_${key}` : key;
-          const arrayPrefix = single ? '' : '_';
-          selectItems.push(`${decamelize(domainSchema.name)}.${decamelize(key)} as ${arrayPrefix}${as}`);
+        if (value && value.transient) {
+          continue;
         }
+        const as = parentPath.length > 0 ? `${parentPath.join('_')}_${key}` : key;
+        const arrayPrefix = single ? '' : '_';
+        selectItems.push(`${decamelize(domainSchema.name)}.${decamelize(key)} as ${arrayPrefix}${as}`);
       } else {
-        if (!value.type.__.transient) {
-          joinNames.push({ key: decamelize(key), name: decamelize(value.type.name) });
+        if (value.type.constructor === Array) {
+          //console.log('Array');
+          //console.log(key);
+          //console.log(fields[key]);
+          //console.log(value.type[0].name);
+        } else {
+          if (!value.type.__.transient) {
+            joinNames.push({ key: decamelize(key), name: decamelize(value.type.name) });
+          }
+
+          parentPath.push(key);
+
+          _getSelectFields(fields[key], parentPath, value.type, selectItems, joinNames, single);
+
+          parentPath.pop();
         }
-
-        parentPath.push(key);
-
-        _getSelectFields(fields[key], parentPath, value.type, selectItems, joinNames, single);
-
-        parentPath.pop();
       }
     }
   }

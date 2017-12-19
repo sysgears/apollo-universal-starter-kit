@@ -222,8 +222,8 @@ function updateSchema(logger, module) {
         const value = schema.values[key];
         if (value.type.constructor === Array) {
           replace += `  ${schema.name}: {
-    ${key}: createBatchResolver((obj, args, { ${schema.name}, ${value.type[0].name} }, info) => {
-      return ${schema.name}.getByIds(obj.map(({ id }) => id), '${decamelize(schema.name)}', ${
+    ${key}: createBatchResolver((sources, args, { ${schema.name}, ${value.type[0].name} }, info) => {
+      return ${schema.name}.getByIds(sources.map(({ id }) => id), '${decamelize(schema.name)}', ${
             value.type[0].name
           }, parseFields(info));
     })

@@ -17,3 +17,12 @@ export enum ButtonStyle {
   Dashed = 8,
   Close = 9
 }
+
+export interface TypedValue {
+  type: ButtonSize | ButtonStyle;
+  value: string;
+}
+
+export const findVal: string = (source: TypedValue[], val: ButtonStyle | ButtonSize) => {
+  return source.find((item: any) => item.type === val).value;
+};

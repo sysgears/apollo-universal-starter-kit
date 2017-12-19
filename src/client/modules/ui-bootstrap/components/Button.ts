@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ButtonSize, ButtonStyle } from '../../common/components/Button';
+import { ButtonSize, ButtonStyle, findVal, TypedValue } from '../../common/components/Button';
 
-const buttonSizes = [
+const buttonSizes: TypedValue[] = [
   {
     type: ButtonSize.XS,
     value: 'btn btn-xs'
@@ -20,7 +20,7 @@ const buttonSizes = [
   }
 ];
 
-const buttonStyles = [
+const buttonStyles: TypedValue[] = [
   {
     type: ButtonStyle.Empty,
     value: ''
@@ -77,25 +77,18 @@ const buttonStyles = [
 })
 export default class Button implements OnInit {
   @Input() public type: string;
-  @Input() public classes: string;
+  @Input() public btnStyle: string;
   @Input() public click: any;
   @Input() public disabled: boolean;
-  @Input() public size: any;
+  @Input() public btnSize: any;
 
   public classNames: string;
 
   public ngOnInit(): void {
-    this.classNames = '';
-
-    if (this.classes) {
-      this.classNames += buttonStyles.find((buttonClass: any) => buttonClass.type === this.classes).value;
-    } else {
-      this.classNames += buttonStyles.find((buttonClass: any) => buttonClass.type === ButtonStyle.Primary).value;
-    }
-
-    if (this.size) {
-      this.classNames += ` ${buttonSizes.find((buttonClass: any) => buttonClass.type === this.size).value}`;
-    }
+    this.classNames = ''.concat(
+      findVal(buttonStyles, this.btnStyle || ButtonStyle.Primary),
+      ` ${findVal(buttonSizes, this.btnSize || ButtonSize.Default)}`
+    );
   }
 
   public onClick(): void {

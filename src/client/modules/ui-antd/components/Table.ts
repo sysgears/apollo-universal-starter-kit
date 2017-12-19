@@ -49,7 +49,7 @@ export enum ElemType {
             {{cell.text}}
           </ausk-link>
 
-          <ausk-button *ngIf="cell.type === 1" [click]="cell.callback" [classes]="cell.className" [size]="buttonSize()">
+          <ausk-button *ngIf="cell.type === 1" [click]="cell.callback" [btnStyle]="cell.className" [btnSize]="buttonSize()">
             {{cell.text}}
           </ausk-button>
 

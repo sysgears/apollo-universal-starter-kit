@@ -19,10 +19,10 @@ export enum ButtonStyle {
 }
 
 export interface TypedValue {
-  type: ButtonSize | ButtonStyle;
-  value: string;
+  type: any;
+  value: any;
 }
 
-export const findVal: string = (source: TypedValue[], val: ButtonStyle | ButtonSize) => {
+export const findVal: (source: TypedValue[], val: any) => string = (source: TypedValue[], val: any) => {
   return source.find((item: any) => item.type === val).value;
 };

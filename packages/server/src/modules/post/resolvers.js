@@ -1,4 +1,5 @@
 import { withFilter } from 'graphql-subscriptions';
+import { createBatchResolver } from 'graphql-resolve-batch';
 
 const POST_SUBSCRIPTION = 'post_subscription';
 const POSTS_SUBSCRIPTION = 'posts_subscription';
@@ -39,9 +40,9 @@ export default pubsub => ({
     }
   },
   Post: {
-    comments({ id }, args, context) {
-      return context.loaders.getCommentsForPostIds.load(id);
-    }
+    comments: createBatchResolver((sources, args, context) => {
+      return context.Post.getCommentsForPostIds(sources.map(({ id }) => id));
+    })
   },
   Mutation: {
     async addPost(obj, { input }, context) {

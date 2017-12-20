@@ -27,10 +27,10 @@ export enum ElemType {
 @Component({
   selector: 'ausk-table',
   template: `
-    <table class="{{className || 'table'}}">
-      <thead>
+    <nz-table #nzTable [nzIsPagination]="false" [nzDataSource]="rows">
+      <thead nz-thead>
       <tr>
-        <th *ngFor="let column of columns; index as i;"
+        <th nz-th *ngFor="let column of columns; index as i;"
             [class]="'w-' + (columns.length === 2 ? 100 : 100 / columns.length) +
                   (column.columnSpan > 1 ? ' text-center' : '')"
             [attr.width]="column.width"
@@ -42,9 +42,9 @@ export enum ElemType {
         </th>
       </tr>
       </thead>
-      <tbody>
-      <tr *ngFor="let row of rows">
-        <td *ngFor="let cell of row">
+      <tbody nz-tbody>
+      <tr nz-tbody-tr *ngFor="let row of rows">
+        <td nz-td *ngFor="let cell of row">
           <ausk-link *ngIf="cell.type === 0" [to]="cell.link">
             {{cell.text}}
           </ausk-link>
@@ -59,7 +59,7 @@ export enum ElemType {
         </td>
       </tr>
       </tbody>
-    </table>
+    </nz-table>
   `
 })
 export default class Table {

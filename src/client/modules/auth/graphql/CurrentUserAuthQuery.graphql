@@ -1,16 +1,41 @@
 fragment CurrentUserAuth on User {
   userRoles {
-    ...RoleInfo
+    ...UserRoleInfoFrag
   }
   groupRoles {
-    ...RoleInfo
+    ...GroupRoleInfoFrag
   }
   orgRoles {
-    ...RoleInfo
+    ...OrgRoleInfoFrag
   }
 }
 
-fragment RoleInfo on RoleInfo {
+fragment UserRoleInfoFrag on UserRoleInfo {
   id
   name
+  scopes
+}
+
+fragment GroupRoleInfoFrag on GroupRoleInfo {
+  groupId
+  groupName
+  scopes
+  roles {
+    ...RoleInfoFrag
+  }
+}
+
+fragment OrgRoleInfoFrag on OrgRoleInfo {
+  orgId
+  orgName
+  scopes
+  roles {
+    ...RoleInfoFrag
+  }
+}
+
+fragment RoleInfoFrag on RoleInfo {
+  id
+  name
+  scopes
 }

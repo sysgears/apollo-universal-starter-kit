@@ -1,5 +1,5 @@
 /*eslint-disable no-unused-vars*/
-import { pick } from 'lodash';
+import { _, pick } from 'lodash';
 import FieldError from '../../../../common/FieldError';
 import { withAuth } from '../../../../common/authValidation';
 import { mergeLoaders } from '../../../../common/mergeLoaders';
@@ -15,9 +15,7 @@ export default pubsub => ({
     myGroups: async (obj, args, context) => {
       try {
         args.memberId = context.user.id;
-        console.log(args);
         let ret = await context.Group.list(args);
-        console.log(ret);
         return { groups: ret, errors: null };
       } catch (e) {
         return { groups: null, errors: e };
@@ -47,8 +45,11 @@ export default pubsub => ({
     profile(obj) {
       return obj;
     },
-    users(obj, args, context) {
-      return context.loaders.getUsersForGroupId.load(obj.id);
+    users: async (obj, args, context) => {
+      let guids = await context.loaders.getUsersForGroupIds.load(obj.id);
+      let uids = _.map(guids, e => e.userId);
+      let ret = await context.loaders.getBriefForUserIds.loadMany(uids);
+      return ret;
     }
   },
 
@@ -67,9 +68,9 @@ export default pubsub => ({
         const e = new FieldError();
         let group;
 
-        return { group };
+        return { group, errors: null };
       } catch (e) {
-        return { errors: e };
+        return { group: null, errors: e };
       }
     },
     editGroup: async (obj, { input }, context) => {

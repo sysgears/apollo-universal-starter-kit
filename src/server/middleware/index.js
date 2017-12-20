@@ -21,8 +21,9 @@ import modules from '../modules';
 const { pathname } = url.parse(__BACKEND_URL__);
 
 const ApplyMiddleware = app => {
-  /* Apply any 'before' middlewares from the modules */
   // TODO is ordering important here?
+
+  /* Apply any 'before' middlewares from the modules */
   for (const applyBeforeware of modules.beforewares) {
     applyBeforeware(app);
   }

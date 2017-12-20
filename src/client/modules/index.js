@@ -14,7 +14,7 @@ import Feature from './connector';
 import settings from '../../../settings';
 
 // On by default features
-let features = [entities, auth, counter, post, upload, contact];
+let features = [auth, entities, counter, post, upload, contact];
 
 // Configurable features
 if (settings.subscription.enabled) {

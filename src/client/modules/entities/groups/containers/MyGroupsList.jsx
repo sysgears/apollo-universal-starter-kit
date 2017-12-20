@@ -29,9 +29,7 @@ const GroupsListWithApollo = compose(
       };
     },
     props({ data }) {
-      console.log('MyGroups - data', data);
       const { loading, myGroups, refetch, error } = data;
-      console.log('MyGroups', loading, myGroups, error);
       // check
       return {
         loading,

@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
-import serialize from 'serialize-javascript';
+// import serialize from 'serialize-javascript';
+
 import log from '../../common/log';
 import { options as spinConfig } from '../../../.spinrc.json';
 
@@ -27,11 +28,28 @@ const stripCircular = (from, seen) => {
 // eslint-disable-next-line no-unused-vars
 function errorMiddleware(e, req, res, next) {
   log.error(e);
+
   if (__DEV__ || !assetMap) {
     assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
   }
 
-  const serverErrorScript = `<script charset="UTF-8">window.__SERVER_ERROR__=${serialize(stripCircular(e))};</script>`;
+  const stripErr = stripCircular(e);
+  let returnedErr = stripErr;
+
+  // now do some introspection
+  if (__SSR__ && returnedErr.networkError) {
+    let val = e.networkError.response.raw;
+    console.log(val);
+
+    returnedErr.message = val;
+  }
+
+  // Causing issues for whatever reason
+  //const serializedErr = serialize(stripErr)
+  // Use json stringify instead
+  const serializedErr = JSON.stringify(returnedErr);
+
+  const serverErrorScript = `<script charset="UTF-8">window.__SERVER_ERROR__=${serializedErr};</script>`;
   const vendorScript = assetMap['vendor.js'] ? `<script src="/${assetMap['vendor.js']}" charSet="utf-8"></script>` : '';
 
   res.status(200).send(

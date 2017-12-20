@@ -15,15 +15,45 @@ export default pubsub => ({
   Query: {},
   User: {
     userRoles(obj, args, context) {
-      return context.Auth.getUserWithUserRoles(obj.id);
+      let ret = [];
+      let roles = context.auth.userRoles;
+      for (let key in roles) {
+        ret.push(roles[key]);
+      }
+      // console.log("userRoles", ret)
+      return ret;
     },
     groupRoles(obj, args, context) {
-      return null;
-      // return context.loaders.getUserWithOAuths.load(obj.id);
+      let ret = [];
+      let groups = context.auth.groupRoles;
+      // convert maps to arrays
+      for (let key in groups) {
+        let group = groups[key];
+        let roles = [];
+        for (let r in group.roles) {
+          roles.push(group.roles[r]);
+        }
+        group.roles = roles;
+        ret.push(group);
+      }
+      // console.log("groupRoles", ret)
+      return ret;
     },
     orgRoles(obj, args, context) {
-      return null;
-      // return context.loaders.getUserWithOAuths.load(obj.id);
+      let ret = [];
+      let orgs = context.auth.orgRoles;
+      // convert maps to arrays
+      for (let key in orgs) {
+        let org = orgs[key];
+        let roles = [];
+        for (let r in org.roles) {
+          roles.push(org.roles[r]);
+        }
+        org.roles = roles;
+        ret.push(org);
+      }
+      // console.log("orgRoles", ret)
+      return ret;
     }
   },
   UserAuth: {
@@ -73,7 +103,6 @@ export default pubsub => ({
         let user = await passwordRegister(input);
 
         if (authn.password.confirm) {
-          console.log('Requiring Confirmation');
           if (context.mailer && authn.password.sendConfirmationEmail) {
             // async email sending
             sendConfirmAccountEmail(context.mailer, user);
@@ -142,7 +171,6 @@ export default pubsub => ({
       }
     },
     async forgotPassword(obj, args, context) {
-      console.log('forgotPassword', args);
       const { input } = args;
       try {
         if (context.mailer) {

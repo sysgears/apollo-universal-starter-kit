@@ -1,15 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 
-import settings from '../../../../../settings';
-
 import AuthDAO from '../lib';
 
 const Auth = new AuthDAO();
 
-const entities = settings.entities;
-
-// export const setTokenHeaders = (res, req, tokens) => {
 export const setTokenHeaders = (req, tokens) => {
   req.universalCookies.set('x-token', tokens.token, {
     maxAge: 60 * 60 * 24 * 7,
@@ -63,8 +58,12 @@ export const removeTokenHeaders = req => {
 };
 
 export const createToken = async (user, secret, refreshSecret) => {
-  console.log('CREATE TOKEN', user);
-  let tokenUser = pick(user, ['id', 'email', 'roles']);
+  let tokenUser = pick(user, ['id', 'email']);
+
+  let roles = await Auth.getUserWithAllRoles(tokenUser.id);
+  tokenUser.roles = roles;
+
+  console.log('createToken', tokenUser);
 
   const createToken = jwt.sign(
     {
@@ -110,31 +109,13 @@ export const refreshToken = async (token, refreshToken, SECRET) => {
     return {};
   }
 
-  const userRoles = await Auth.getUserWithRolesPermissions(user.id);
-
-  let groupRoles = null;
-  if (entities.groups.enabled) {
-    groupRoles = Auth.getUserWithGroupRolesPermissions(user.id);
-  }
-
-  let orgRoles = null;
-  if (entities.orgs.enabled) {
-    orgRoles = Auth.getUserWithOrgRolesPermissions(user.id);
-  }
-
-  user.roles = {
-    userRoles,
-    groupRoles,
-    orgRoles
-  };
-
-  console.log('REFRESH TOKEN', user);
+  console.log('RefreshToken', user);
 
   const [newToken, newRefreshToken] = await createToken(user, SECRET, refreshSecret);
 
   return {
     token: newToken,
     refreshToken: newRefreshToken,
-    user: pick(user, ['id', 'email', 'roles'])
+    user: pick(user, ['id', 'email'])
   };
 };

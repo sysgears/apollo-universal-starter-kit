@@ -26,24 +26,25 @@ export class AuthorizationError extends Error {
 }
 
 export function validateScope(required, provided) {
+  // console.log("validateScope:", required, provided)
   return validateScope_v1(required, provided);
 }
 
 function validateScope_v1(required, provided) {
-  let hasScope = false;
   if (!provided) {
     return false;
   }
 
-  provided.forEach(function(perm) {
-    var permRe = new RegExp('^' + perm.replace('*', '.*') + '$');
-    required.forEach(scope => {
+  for (let perm of provided) {
+    let permReStr = '^' + perm.replace('*', '.*') + '$';
+    var permRe = new RegExp(permReStr);
+    for (let scope of required) {
       // user:* -> user:create, user:view:self
       if (permRe.exec(scope)) {
-        return scope;
+        return `${perm} >> ${scope} (${permReStr})`;
       }
-    });
-  });
+    }
+  }
 
   return false;
 }
@@ -85,7 +86,8 @@ export const withAuth = (scope, callback) => {
 };
 
 // Client Side Authorization check
-export const checkAuth = (cookies, requiredScopes) => {
+export const checkAuth = (cookies, requiredScopes, context, params) => {
+  // console.log("CHECK AUTH:", requiredScopes, context, params)
   // first check token
   let token = null;
   let refreshToken = null;
@@ -110,7 +112,6 @@ export const checkAuth = (cookies, requiredScopes) => {
     refreshToken === undefined ||
     token === 'undefined' ||
     refreshToken === 'undefined';
-  const isUnrestricted = !requiredScopes || requiredScopes.length === 0;
 
   // No Auth
   if (noAuth) {
@@ -119,7 +120,9 @@ export const checkAuth = (cookies, requiredScopes) => {
 
   // So we have a token for auth
   // Unrestricted Content ?
+  const isUnrestricted = !requiredScopes || requiredScopes.length === 0;
   if (isUnrestricted) {
+    // console.log("unrestricted")
     return true;
   }
 
@@ -133,13 +136,24 @@ export const checkAuth = (cookies, requiredScopes) => {
     }
     const { user: { id, email, roles } } = decode(token);
 
-    // console.log('decoded:', role, email, id);
+    // console.log('decoded:', roles, email, id);
+    if (!roles) {
+      return validateScope(requiredScopes, null);
+    }
 
-    const yesTheyCan1 = validateScope(requiredScopes, roles.userScopes);
+    for (let role of roles.userRoles) {
+      // console.log("checking", role)
+      let can = validateScope(requiredScopes, role.scopes);
+      // console.log("  can?", can)
+      if (can) {
+        // console.log("Can with role:", role)
+        return true;
+      }
+    }
+
     const yesTheyCan2 = validateScope(requiredScopes, roles.groupScopes);
     const yesTheyCan3 = validateScope(requiredScopes, roles.orgScopes);
-
-    return yesTheyCan1 || yesTheyCan2 || yesTheyCan3;
+    return yesTheyCan2 || yesTheyCan3;
   } catch (e) {
     console.log(e);
     return false;

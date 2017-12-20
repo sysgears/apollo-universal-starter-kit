@@ -33,8 +33,6 @@ const LoginWithApollo = compose(
           localStorage.setItem('token', token);
           localStorage.setItem('refreshToken', refreshToken);
 
-          console.log(localStorage);
-
           if (history) {
             return history.push('/profile');
           }

@@ -10,12 +10,12 @@ import webhookMiddleware from './webhook';
 
 import { parseUser } from '../auth';
 
-const Subscription = new SubscriptionDAO();
-
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
+    const Subscription = new SubscriptionDAO();
+
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
     const subscription = tokenUser ? await Subscription.getSubscription(tokenUser.userId) : null;
 

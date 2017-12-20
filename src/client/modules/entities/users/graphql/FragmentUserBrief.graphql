@@ -2,7 +2,6 @@ fragment UserBrief on User {
   id
   email
   isActive
-  role
   profile {
     displayName
     language

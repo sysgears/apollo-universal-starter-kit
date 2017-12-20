@@ -69,6 +69,7 @@ export default class GroupView extends React.PureComponent {
         </PageLayout>
       );
     } else {
+      console.log('Group', group);
       return (
         <PageLayout>
           {this.renderMetaData()}
@@ -108,6 +109,27 @@ export default class GroupView extends React.PureComponent {
                   <h4>Name:</h4>
                 </Col>
                 <Col xs={8}>{group.name}</Col>
+                <Col xs={2} />
+              </Row>
+            </Container>
+          </div>
+          <div>
+            <Container>
+              <hr />
+
+              <Row>
+                <Col xs={2}>
+                  <h4>Users:</h4>
+                </Col>
+                <Col xs={10}>
+                  {group.users &&
+                    group.users.map(u => (
+                      <div>
+                        <Link to={'/users/' + u.id}>{u.profile.displayName}</Link> -{' '}
+                        <a href={'mailto:' + u.email}>{u.email}</a>
+                      </div>
+                    ))}
+                </Col>
                 <Col xs={2} />
               </Row>
             </Container>

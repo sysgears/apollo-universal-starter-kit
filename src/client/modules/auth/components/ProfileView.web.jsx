@@ -8,55 +8,63 @@ import SubscriptionProfile from '../../subscription/containers/SubscriptionProfi
 
 import settings from '../../../../../settings';
 
-const renderMetaData = () => (
-  <Helmet
-    title={`${settings.app.name} - Profile`}
-    meta={[
-      {
-        name: 'description',
-        content: `${settings.app.name} - Profile page`
-      }
-    ]}
-  />
-);
+const renderMetaData = currentUser => {
+  let title = `${settings.app.name} - Profile`;
+  let content = `${settings.app.name} - Profile page`;
+  if (currentUser) {
+    title = `${currentUser.profile.displayName} - Profile`;
+    content = `${currentUser.profile.displayName} - Profile page`;
+  }
+
+  return (
+    <Helmet
+      title={title}
+      meta={[
+        {
+          name: 'description',
+          content
+        }
+      ]}
+    />
+  );
+};
 
 const ProfileView = ({ loading, currentUser }) => {
   if (loading && !currentUser) {
     return (
       <PageLayout>
-        {renderMetaData()}
+        {renderMetaData(null)}
         <div className="text-center">Loading...</div>
       </PageLayout>
     );
   } else if (currentUser) {
-    console.log('currentUser', currentUser);
+    // console.log('currentUser', currentUser);
     return (
       <PageLayout>
-        {renderMetaData()}
+        {renderMetaData(currentUser)}
         <LayoutCenter>
           <h1 className="text-center">Profile</h1>
           <Card>
             <CardGroup>
-              <CardTitle>Display Name:</CardTitle>
-              <CardText>{currentUser.profile.displayName}</CardText>
+              <CardText key="userId">User ID: {currentUser.id}</CardText>
+              <CardText key="displayName">Display Name: {currentUser.profile.displayName}</CardText>
             </CardGroup>
             <CardGroup>
-              <CardTitle>Email:</CardTitle>
-              <CardText>{currentUser.email}</CardText>
+              <CardText>Email: {currentUser.email}</CardText>
             </CardGroup>
             <CardGroup>
               <CardTitle>Roles:</CardTitle>
               <CardText key="orgRoles">
                 <b>org:</b>
-                {JSON.stringify(currentUser.orgRoles)}
+                {/*JSON.stringify(currentUser.orgRoles)*/}
               </CardText>
               <CardText key="groupRoles">
                 <b>group:</b>
-                {JSON.stringify(currentUser.groupRoles)}
+                {/*JSON.stringify(currentUser.groupRoles)*/}
               </CardText>
               <CardText key="userRoles">
                 <b>user:</b>
-                {JSON.stringify(currentUser.userRoles)}
+                {/*JSON.stringify(currentUser.userRoles)*/}
               </CardText>
             </CardGroup>
             {currentUser.profile &&

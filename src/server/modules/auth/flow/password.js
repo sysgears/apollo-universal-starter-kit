@@ -89,11 +89,6 @@ export const passwordLogin = async inputUser => {
 
   const refreshSecret = SECRET + user.password;
 
-  const roles = await Auth.getUserWithUserRolesPermissions(user.id);
-  user.roles = roles;
-
-  console.log('USER: ', user);
-
   const [token, refreshToken] = await createToken(user, SECRET, refreshSecret);
 
   return {

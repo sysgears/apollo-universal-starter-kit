@@ -6,20 +6,23 @@ import Feature from '../../connector';
 
 import GroupDAO from './lib';
 
-const Group = new GroupDAO();
-
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: () => {
+    const Group = new GroupDAO();
+
+    const loaders = {
+      getOrgsForGroupIds: new DataLoader(Group.getOrgsForGroupIds),
+      getUsersForGroupIds: new DataLoader(Group.getUsersForGroupIds),
+      getServiceAccountsForGroupIds: new DataLoader(Group.getServiceAccountsForGroupIds),
+
+      getGroupsForUserIds: new DataLoader(Group.getGroupsForUserIds)
+    };
+
     return {
       Group,
-
-      loaders: {
-        getOrgsForGroupId: new DataLoader(Group.getOrgsForGroupId),
-        getUsersForGroupId: new DataLoader(Group.getUsersForGroupId),
-        getServiceAccountsForGroupId: new DataLoader(Group.getServiceAccountsForGroupId)
-      }
+      loaders
     };
   }
 });

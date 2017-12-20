@@ -107,6 +107,7 @@ export default {
     // resource:sub-resource:... / matching-object-relation / verb
     userScopes: {
       superuser: ['*/*/*'],
+      owner: ['*/*/*'],
       admin: ['*:iam/*/view', 'org*/*/*', 'group*/*/*', 'user*/*/*', 'subscription*/*/*', 'post*/*/*'],
       subscriber: ['subscription/owner/*'],
       user: [

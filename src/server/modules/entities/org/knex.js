@@ -2,8 +2,9 @@ import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has, _ } from 'lodash';
 import uuidv4 from 'uuid';
 
-import knex from '../../../../server/sql/connector';
-import { orderedFor } from '../../../../server/sql/helpers';
+import log from '../../../../common/log';
+import knex from '../../../sql/connector';
+import { orderedFor } from '../../../sql/helpers';
 
 const selectFields = [
   'o.id',
@@ -197,5 +198,74 @@ export default class Org {
     return knex('org_profile')
       .where('org_id', '=', id)
       .delete();
+  }
+
+  async getOrgsForUserId(userId, trx) {
+    try {
+      let builder = knex
+        .select('o.id AS id', 'o.name', 'u.id AS userId')
+        .where('u.id', '=', userId)
+        .from('users AS u')
+        .leftJoin('orgs_users AS ou', 'ou.user_id', 'u.id')
+        .leftJoin('orgs AS o', 'o.id', 'ou.org_id');
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let rows = await builder;
+      let ret = _.filter(rows, row => row.id !== null);
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in User.getOrgsForUserId', e);
+      throw e;
+    }
+  }
+
+  async getOrgsForUserIds(userIds, trx) {
+    try {
+      let builder = knex
+        .select('o.id AS id', 'o.name', 'u.id AS userId')
+        .whereIn('u.id', userIds)
+        .from('users AS u')
+        .leftJoin('orgs_users AS ou', 'ou.user_id', 'u.id')
+        .leftJoin('orgs AS o', 'o.id', 'ou.org_id');
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let rows = await builder;
+      let ret = _.filter(rows, row => row.id !== null);
+      let res = camelizeKeys(ret);
+      return orderedFor(res, userIds, 'userId', false);
+    } catch (e) {
+      log.error('Error in User.getOrgsForUserIds', e);
+      throw e;
+    }
+  }
+
+  async getOrgsForUserIdsViaGroups(userIds, trx) {
+    try {
+      let builder = knex
+        .select('o.id AS id', 'o.name', 'u.id AS userId')
+        .whereIn('u.id', userIds)
+        .from('users AS u')
+        .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
+        .leftJoin('orgs_groups AS og', 'og.group_id', 'gu.group_id')
+        .leftJoin('orgs AS o', 'o.id', 'og.group_id');
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let rows = await builder;
+      let ret = _.filter(rows, row => row.id !== null);
+      let res = camelizeKeys(ret);
+      return orderedFor(res, userIds, 'userId', false);
+    } catch (e) {
+      log.error('Error in User.getOrgsForUserIdsViaGroups', e);
+      throw e;
+    }
   }
 }

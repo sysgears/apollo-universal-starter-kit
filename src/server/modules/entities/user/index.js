@@ -6,21 +6,20 @@ import Feature from '../../connector';
 
 import UserDAO from './lib';
 
-const User = new UserDAO();
-
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: () => {
+    const User = new UserDAO();
+
+    const loaders = {
+      getBriefForUserId: new DataLoader(User.getBriefForUserId),
+      getBriefForUserIds: new DataLoader(User.getBriefForUserIds)
+    };
+
     return {
       User,
-
-      loaders: {
-        getBriefForUserIds: new DataLoader(User.getBriefForUserIds),
-        getOrgsForUserIds: new DataLoader(User.getOrgsForUserIds),
-        getGroupsForUserIds: new DataLoader(User.getGroupsForUserIds),
-        getOrgsForUserIdsViaGroups: new DataLoader(User.getOrgsForUserIdsViaGroups)
-      }
+      loaders
     };
   }
 });

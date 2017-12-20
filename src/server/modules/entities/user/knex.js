@@ -2,8 +2,8 @@ import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has, _ } from 'lodash';
 import uuidv4 from 'uuid';
 
+import log from '../../../../common/log';
 import knex from '../../../sql/connector';
-import { orderedFor } from '../../../sql/helpers';
 
 /*
 const userFields = ['u.uuid AS id', 'u.email', 'u.created_at', 'u.updated_at', 'u.is_active'];
@@ -37,203 +37,303 @@ const selectFields = [
 ];
 
 export default class User {
-  async list(args) {
-    let { filters, orderBys, offset, limit } = args;
+  async list(args, trx) {
+    try {
+      let { filters, orderBys, offset, limit } = args;
 
-    const queryBuilder = knex
-      .select(...selectFields)
-      .from('users AS u')
-      .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
+      const queryBuilder = knex
+        .select(...selectFields)
+        .from('users AS u')
+        .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
 
-    // add filter conditions
-    if (filters) {
-      for (let filter of filters) {
-        if (has(filter, 'isActive') && filter.isActive !== null) {
-          queryBuilder.where(function() {
-            this.where('u.is_active', filter.isActive);
-          });
-        }
-
-        if (has(filter, 'searchText') && filter.searchText !== '') {
-          queryBuilder.where(function() {
-            this.where('u.email', 'like', `%${filter.searchText}%`)
-              .orWhere('p.display_name', 'like', `%${filter.searchText}%`)
-              .orWhere('p.first_name', 'like', `%${filter.searchText}%`)
-              .orWhere('p.last_name', 'like', `%${filter.searchText}%`);
-          });
-        }
-      }
-    }
-
-    if (offset) {
-      queryBuilder.offset(offset);
-    }
-
-    if (limit) {
-      queryBuilder.limit(limit);
-    }
-
-    // add order by
-    if (orderBys) {
-      for (let orderBy of orderBys) {
-        if (orderBy && orderBy.column) {
-          let column = orderBy.column;
-          let order = 'asc';
-          if (orderBy.order) {
-            order = orderBy.order;
+      // add filter conditions
+      if (filters) {
+        for (let filter of filters) {
+          if (has(filter, 'isActive') && filter.isActive !== null) {
+            queryBuilder.where(function() {
+              this.where('u.is_active', filter.isActive);
+            });
           }
-          queryBuilder.orderBy(decamelize(column), order);
+
+          if (has(filter, 'searchText') && filter.searchText !== '') {
+            queryBuilder.where(function() {
+              this.where('u.email', 'like', `%${filter.searchText}%`)
+                .orWhere('p.display_name', 'like', `%${filter.searchText}%`)
+                .orWhere('p.first_name', 'like', `%${filter.searchText}%`)
+                .orWhere('p.last_name', 'like', `%${filter.searchText}%`);
+            });
+          }
         }
       }
+
+      if (offset) {
+        queryBuilder.offset(offset);
+      }
+
+      if (limit) {
+        queryBuilder.limit(limit);
+      }
+
+      // add order by
+      if (orderBys) {
+        for (let orderBy of orderBys) {
+          if (orderBy && orderBy.column) {
+            let column = orderBy.column;
+            let order = 'asc';
+            if (orderBy.order) {
+              order = orderBy.order;
+            }
+            queryBuilder.orderBy(decamelize(column), order);
+          }
+        }
+      }
+
+      if (trx) {
+        queryBuilder.transacting(trx);
+      }
+
+      let rows = await queryBuilder;
+      return camelizeKeys(rows);
+    } catch (e) {
+      log.error('Error in User.list', e);
+      throw e;
     }
-
-    return camelizeKeys(await queryBuilder);
   }
 
-  async get(id) {
-    let ret = await knex
-      .select(...selectFields)
-      .from('users AS u')
-      .where('u.id', '=', id)
-      .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-      .first();
-    return camelizeKeys(ret);
-  }
-
-  async getById(id) {
-    return camelizeKeys(
-      await knex
+  async get(id, trx) {
+    try {
+      let builder = knex
         .select(...selectFields)
         .from('users AS u')
         .where('u.id', '=', id)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-        .first()
-    );
+        .first();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in User.get', e);
+      throw e;
+    }
   }
 
-  async getByEmail(email) {
-    return camelizeKeys(
-      await knex
+  async getById(id, trx) {
+    try {
+      let builder = knex
+        .select(...selectFields)
+        .from('users AS u')
+        .where('u.id', '=', id)
+        .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
+        .first();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in User.getById', e);
+      throw e;
+    }
+  }
+
+  async getByEmail(email, trx) {
+    try {
+      let builder = knex
         .select(...selectFields)
         .from('users AS u')
         .where('u.email', '=', email)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-        .first()
-    );
+        .first();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in User.getByEmail', e);
+      throw e;
+    }
   }
 
-  async getBriefForUserIds(ids) {
-    return camelizeKeys(
-      await knex
-        .select(...selectFields)
+  async getBriefForUserId(id, trx) {
+    const briefFields = ['u.id', 'u.email', 'u.is_active', 'p.display_name', 'p.locale', 'p.language'];
+
+    try {
+      let builder = knex
+        .select(...briefFields)
         .from('users AS u')
-        .whereIn('u.id', '=', ids)
-        .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-    );
+        .where('u.id', '=', id)
+        .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let rows = await builder;
+      let ret = _.filter(rows, row => row.id !== null);
+      ret = camelizeKeys(ret);
+      return ret;
+    } catch (e) {
+      log.error('Error in User.getBriefForUserIds', e);
+      throw e;
+    }
   }
 
-  async getOrgsForUserId(userId) {
-    let rows = await knex
-      .select('o.id AS id', 'o.name', 'u.id AS userId')
-      .where('u.id', '=', userId)
-      .from('users AS u')
-      .leftJoin('orgs_users AS ou', 'ou.user_id', 'u.id')
-      .leftJoin('orgs AS o', 'o.id', 'ou.org_id');
+  async getBriefForUserIds(ids, trx) {
+    const briefFields = ['u.id', 'u.email', 'u.is_active', 'p.display_name', 'p.locale', 'p.language'];
 
-    let res = _.filter(rows, row => row.id !== null);
-    return res;
+    try {
+      let builder = knex
+        .select(...briefFields)
+        .from('users AS u')
+        .whereIn('u.id', ids)
+        .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let rows = await builder;
+      let ret = _.filter(rows, row => row.id !== null);
+      ret = camelizeKeys(ret);
+      return ret;
+    } catch (e) {
+      log.error('Error in User.getBriefForUserIds', e);
+      throw e;
+    }
   }
 
-  async getOrgsForUserIds(userIds) {
-    let rows = await knex
-      .select('o.id AS id', 'o.name', 'u.id AS userId')
-      .whereIn('u.id', userIds)
-      .from('users AS u')
-      .leftJoin('orgs_users AS ou', 'ou.user_id', 'u.id')
-      .leftJoin('orgs AS o', 'o.id', 'ou.org_id');
+  async create(values, trx) {
+    try {
+      values.id = uuidv4();
 
-    let res = _.filter(rows, row => row.id !== null);
-    return orderedFor(res, userIds, 'userId', false);
+      let builder = knex('users').insert(decamelizeKeys(values));
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      await builder;
+      return values.id;
+    } catch (e) {
+      log.error('Error in User.create', e);
+      throw e;
+    }
   }
 
-  async getOrgsForUserIdsViaGroups(userIds) {
-    let rows = await knex
-      .select('o.id AS id', 'o.name', 'u.id AS userId')
-      .whereIn('u.id', userIds)
-      .from('users AS u')
-      .leftJoin('groups_users AS gu', 'gu.user_id', 'u.id')
-      .leftJoin('orgs_groups AS og', 'og.group_id', 'gu.group_id')
-      .leftJoin('orgs AS o', 'o.id', 'og.group_id');
+  async update(id, values, trx) {
+    try {
+      let builder = knex('users')
+        .where('id', '=', id)
+        .update(decamelizeKeys(values));
 
-    let res = _.filter(rows, row => row.id !== null);
-    return orderedFor(res, userIds, 'userId', false);
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return ret;
+    } catch (e) {
+      log.error('Error in User.update', e);
+      throw e;
+    }
   }
 
-  async getGroupsForUserId(userId) {
-    let rows = await knex
-      .select('g.id AS id', 'g.name', 'g.is_active', 'p.display_name', 'p.description')
-      .where('gu.user_id', '=', userId)
-      .from('groups_users AS gu')
-      .leftJoin('groups AS g', 'gu.group_id', 'g.id')
-      .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
+  async delete(id, trx) {
+    try {
+      let builder = knex('users')
+        .where('id', '=', id)
+        .delete();
 
-    let res = _.filter(rows, row => row.id !== null);
-    return camelizeKeys(res);
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return ret;
+    } catch (e) {
+      log.error('Error in User.delete', e);
+      throw e;
+    }
   }
 
-  async getGroupsForUserIds(userIds) {
-    let rows = await knex
-      .select('g.id AS id', 'g.name', 'g.is_active', 'p.display_name', 'p.description', 'gu.user_id AS userId')
-      .from('groups_users AS gu')
-      .whereIn('gu.user_id', userIds)
-      .leftJoin('groups AS g', 'gu.group_id', 'g.id')
-      .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
+  async getProfile(id, trx) {
+    try {
+      let builder = knex
+        .select('p')
+        .leftJoin('user_profile AS p')
+        .where('p.id', '=', id)
+        .first();
 
-    let res = _.filter(rows, row => row.id !== null);
-    res = camelizeKeys(res);
-    return orderedFor(res, userIds, 'userId', false);
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in User.getProfile', e);
+      throw e;
+    }
   }
 
-  async create(values) {
-    values.id = uuidv4();
-    await knex('users').insert(decamelizeKeys(values));
-    return values.id;
+  async createProfile(id, values, trx) {
+    try {
+      values.userId = id;
+
+      let builder = knex('user_profile').insert(decamelizeKeys(values));
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return ret;
+    } catch (e) {
+      log.error('Error in User.createProfile', e);
+      throw e;
+    }
   }
 
-  async update(id, values) {
-    return knex('users')
-      .where('id', '=', id)
-      .update(decamelizeKeys(values));
+  async updateProfile(id, values, trx) {
+    try {
+      let builder = knex('user_profile')
+        .where('user_id', '=', id)
+        .update(decamelizeKeys(values));
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return ret;
+    } catch (e) {
+      log.error('Error in User.udpateProfile', e);
+      throw e;
+    }
   }
 
-  async delete(id) {
-    return knex('users')
-      .where('id', '=', id)
-      .delete();
-  }
+  async deleteProfile(id, trx) {
+    try {
+      let builder = knex('user_profile')
+        .where('user_id', '=', id)
+        .delete();
 
-  async getProfile(id) {
-    return knex
-      .select('p')
-      .leftJoin('user_profile AS p')
-      .where('p.id', '=', id)
-      .first();
-  }
+      if (trx) {
+        builder.transacting(trx);
+      }
 
-  async createProfile(id, values) {
-    values.userId = id;
-    return knex('user_profile').insert(decamelizeKeys(values));
-  }
-
-  async updateProfile(id, values) {
-    return knex('user_profile')
-      .where('user_id', '=', id)
-      .update(decamelizeKeys(values));
-  }
-
-  async deleteProfile(id) {
-    return knex('user_profile')
-      .where('user_id', '=', id)
-      .delete();
+      let ret = await builder;
+      return ret;
+    } catch (e) {
+      log.error('Error in User.deleteProfile', e);
+      throw e;
+    }
   }
 }

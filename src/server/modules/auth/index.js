@@ -1,7 +1,6 @@
 import DataLoader from 'dataloader';
 import jwt from 'jsonwebtoken';
 
-import Auth from './lib';
 import schema from './schema.graphqls';
 import createResolvers from './resolvers';
 import Feature from '../connector';
@@ -12,66 +11,72 @@ import authTokenMiddleware from './middleware/token';
 import OAuth from './oauth';
 import { refreshToken } from './flow/token';
 
-import UserDAO from '../entities/user/lib';
-
 import settings from '../../../../settings';
+import log from '../../../common/log';
 
-const User = new UserDAO();
+import AuthDAO from './lib';
 
 const SECRET = settings.auth.secret;
 const entities = settings.entities;
 const authn = settings.auth.authentication;
-const authz = settings.auth.authorization;
-
-const localAuth = new Auth();
 
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
-    const tokenUser = await parseUser({ req, connectionParams, webSocket });
+    try {
+      const tokenUser = await parseUser({ req, connectionParams, webSocket });
 
-    console.log('Got Here');
+      let userScopes = [];
+      let allRoles = {};
 
-    const scopes = authz.userScopes;
-    let userScopes = null;
-    let userGroups = null;
-    let userOrgs = null;
+      const Auth = new AuthDAO();
 
-    if (tokenUser) {
-      userScopes = scopes[tokenUser.role];
-      if (entities.groups.enabled) {
-        userGroups = await User.getGroupsForUserId(tokenUser.id);
+      const loaders = {
+        getUsersWithApiKeys: new DataLoader(Auth.getUsersWithApiKeys),
+        getUsersWithSerials: new DataLoader(Auth.getUsersWithSerials),
+        getUsersWithOAuths: new DataLoader(Auth.getUsersWithOAuths)
+      };
+
+      if (tokenUser) {
+        // TODO replace the following with a call to replace static scope lookup with a dynamic one
+        // // ALSO, make this configurable, static or dynamic role/permission sets
+
+        if (entities.orgs.enabled) {
+          allRoles = await Auth.getUserWithAllRoles(tokenUser.id);
+
+          for (let role of allRoles.userRoles) {
+            userScopes = userScopes.concat(role.scopes);
+          }
+        }
       }
 
-      if (entities.orgs.enabled) {
-        userOrgs = await User.getOrgsForUserId(tokenUser.id);
-      }
+      const auth = {
+        isAuthenticated: tokenUser ? true : false,
+        scope: userScopes,
+        userScopes,
+        userRoles: allRoles.userRoles,
+        groupRoles: allRoles.groupRoles,
+        orgRoles: allRoles.orgRoles
+      };
+
+      // console.log("currentUserAuth - graphql context", auth)
+
+      return {
+        Auth: Auth,
+        user: tokenUser,
+        auth,
+        SECRET,
+        req,
+        loaders
+      };
+    } catch (e) {
+      log.error(e);
+      throw e;
     }
-
-    const auth = {
-      isAuthenticated: tokenUser ? true : false,
-      scope: userScopes,
-      userGroups,
-      userOrgs
-    };
-    const loaders = {
-      getUsersWithApiKeys: new DataLoader(localAuth.getUsersWithApiKeys),
-      getUsersWithSerials: new DataLoader(localAuth.getUsersWithSerials),
-      getUsersWithOAuths: new DataLoader(localAuth.getUsersWithOAuths)
-    };
-
-    return {
-      Auth: localAuth,
-      user: tokenUser,
-      auth,
-      SECRET,
-      req,
-      loaders
-    };
   },
   middleware: app => {
-    app.use(authTokenMiddleware(localAuth));
+    app.use(authTokenMiddleware(AuthDAO));
     if (authn.password.sendConfirmationEmail) {
       app.get('/confirmation/:token', confirmAccountHandler);
     }
@@ -114,6 +119,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
       }
 
       if (apikey !== '') {
+        const Auth = new AuthDAO();
         const user = await Auth.getUserFromApiKey(apikey);
         if (user) {
           return user;
@@ -129,6 +135,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
       }
 
       if (serial !== '') {
+        const Auth = new AuthDAO();
         const user = await Auth.getUserFromSerial(serial);
         if (user) {
           return user;
@@ -144,6 +151,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
       }
 
       if (apikey !== '') {
+        const Auth = new AuthDAO();
         const user = await Auth.getUserFromApiKey(apikey);
         if (user) {
           return user;
@@ -157,6 +165,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
       }
 
       if (serial !== '') {
+        const Auth = new AuthDAO();
         const user = await Auth.getUserFromSerial(serial);
         if (user) {
           return user;

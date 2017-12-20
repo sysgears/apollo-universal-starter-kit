@@ -32,7 +32,7 @@ const UserForm = ({ handleSubmit, submitting, onSubmit, error }) => {
       <Field name="email" component={RenderField} type="email" label="Email" validate={[required, email]} />
 
       <Field name="role" component={RenderSelect} type="select" label="Role">
-        {authz.method === 'basic' && authz.basic.roles.map(role => <Option value="{role}">{role}</Option>)}
+        {authz.userRoles.map(role => <Option value="{role}">{role}</Option>)}
       </Field>
 
       <Field name="isActive" component={RenderCheckBox} type="checkbox" label="Is Active" />

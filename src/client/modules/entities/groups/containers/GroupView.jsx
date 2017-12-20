@@ -17,9 +17,9 @@ export default compose(
     options: props => {
       let id = 0;
       if (props.match) {
-        id = props.match.params.id;
+        id = props.match.params.groupId;
       } else if (props.navigation) {
-        id = props.navigation.state.params.id;
+        id = props.navigation.state.params.groupId;
       }
 
       return {

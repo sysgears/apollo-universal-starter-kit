@@ -35,6 +35,7 @@ const profileName = cookies => {
 };
 
 const AuthNav = withCookies(({ children, cookies, scopes }) => {
+  // TODO add context and params here?
   return checkAuth(cookies, scopes) ? children : null;
 });
 
@@ -126,13 +127,24 @@ AuthLoggedIn.propTypes = {
   to: PropTypes.string
 };
 
-const AuthRoute = withCookies(({ component: Component, cookies, scopes, ...rest }) => {
+const AuthRoute = withCookies(({ component: Component, cookies, scopes, context, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
-        checkAuth(cookies, scopes) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
-      }
+      render={props => {
+        console.log('PROPS', props);
+        let params = {};
+        if (props.match) {
+          params = props.match.params;
+        } else if (props.navigation) {
+          params = props.navigation.state.params;
+        }
+        return checkAuth(cookies, scopes, context, params) ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to={{ pathname: '/login' }} />
+        );
+      }}
     />
   );
 });
@@ -142,13 +154,24 @@ AuthRoute.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthLoggedInRoute = withCookies(({ component: Component, cookies, redirect, scopes, ...rest }) => {
+const AuthLoggedInRoute = withCookies(({ component: Component, cookies, redirect, scopes, context, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
-        checkAuth(cookies, scopes) ? <Redirect to={{ pathname: redirect }} /> : <Component {...props} />
-      }
+      render={props => {
+        // console.log("PROPS", props)
+        let params = {};
+        if (props.match) {
+          params = props.match.params;
+        } else if (props.navigation) {
+          params = props.navigation.state.params;
+        }
+        return checkAuth(cookies, scopes, context, params) ? (
+          <Redirect to={{ pathname: redirect }} />
+        ) : (
+          <Component {...props} />
+        );
+      }}
     />
   );
 });

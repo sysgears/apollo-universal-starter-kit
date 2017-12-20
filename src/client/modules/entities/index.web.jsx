@@ -39,7 +39,7 @@ if (config.serviceaccounts.enabled) {
 }
 
 let entitiesScopes = [
-  'entities/view',
+  'entities/all/view',
   'org/all/view',
   'org/member/view',
   'group/all/view',

@@ -6,7 +6,6 @@ fragment UserInfo on User {
   isActive
   createdAt
   updatedAt
-  role
   profile {
     ...UserProfileInfo
   }

@@ -6,7 +6,6 @@ fragment UserInfo on User {
   isActive
   createdAt
   updatedAt
-  role
   profile {
     ...UserProfileInfo
   }
@@ -16,7 +15,6 @@ fragment UserBrief on User {
   id
   email
   isActive
-  role
   profile {
     displayName
     language

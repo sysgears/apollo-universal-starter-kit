@@ -43,9 +43,6 @@ type User {
 
   auth: UserAuth
   profile: UserProfile
-
-  # orgs:   [Org]
-  # groups: [Group]
 }
 
 type UserProfile {

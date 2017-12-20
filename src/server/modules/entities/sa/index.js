@@ -6,20 +6,21 @@ import Feature from '../../connector';
 
 import ServiceAccountDAO from './lib';
 
-const sa = new ServiceAccountDAO();
-
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: () => {
+    const sa = new ServiceAccountDAO();
+
+    const loaders = {
+      getOrgsForServiceAccountId: new DataLoader(sa.getOrgsForServiceAccountId),
+      getGroupsForServiceAccountId: new DataLoader(sa.getGroupsForServiceAccountId),
+      getOrgsForServiceAccountIdViaGroups: new DataLoader(sa.getOrgsForServiceAccountIdViaGroups)
+    };
+
     return {
       ServiceAccount: sa,
-
-      loaders: {
-        getOrgsForServiceAccountId: new DataLoader(sa.getOrgsForServiceAccountId),
-        getGroupsForServiceAccountId: new DataLoader(sa.getGroupsForServiceAccountId),
-        getOrgsForServiceAccountIdViaGroups: new DataLoader(sa.getOrgsForServiceAccountIdViaGroups)
-      }
+      loaders
     };
   }
 });

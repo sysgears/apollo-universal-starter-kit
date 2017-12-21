@@ -1,19 +1,33 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
     "sourceMap": true, 
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es2015", "dom", "esnext"],
+    "lib": ["es2017", "dom", "esnext"],
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
+    "importHelpers": true,
+    "baseUrl": ".",
     "pretty": true,
-    "removeComments": true
+    "removeComments": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+
   },
   "include": [
     "./typings/*.d.ts",
     "**/*.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "genDir": ".",
+    "skipMetadataEmit": true
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "usePrecompiledFiles": true,
+    "useWebpackText": true
+  }
 }

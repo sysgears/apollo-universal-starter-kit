@@ -75,23 +75,6 @@ export default class PostCommentsService {
           content,
           __typename: 'Comment'
         }
-      },
-      updateQueries: {
-        post: (prev: any, { mutationResult: { data: { addComment } } }: any) => {
-          if (prev.post) {
-            // ignore if duplicate
-            if (addComment.id !== null && prev.post.comments.some((comment: any) => addComment.id === comment.id)) {
-              return prev;
-            }
-
-            return {
-              post: {
-                ...prev.post,
-                comments: [...prev.post.comments, addComment]
-              }
-            };
-          }
-        }
       }
     });
     return this.subscribe(addCommentQuery);
@@ -126,24 +109,6 @@ export default class PostCommentsService {
         deleteComment: {
           id,
           __typename: 'Comment'
-        }
-      },
-      updateQueries: {
-        post: (prev: any, { mutationResult: { data: { deleteComment } } }: any) => {
-          if (prev.post) {
-            const index = prev.post.comments.findIndex((x: any) => x.id === deleteComment.id);
-            // ignore if not found
-            if (index < 0) {
-              return prev;
-            }
-
-            return {
-              post: {
-                ...prev.post,
-                comments: prev.post.comments.filter((comment: any) => comment.id !== deleteComment.id)
-              }
-            };
-          }
         }
       }
     });

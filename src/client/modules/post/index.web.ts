@@ -1,4 +1,4 @@
-import { postFormReducer, reducer } from './reducers';
+import { commentFormReducer, postFormReducer, reducer } from './reducers';
 
 import Feature from '../connector';
 import PostEditView from './components/PostEditView.web';
@@ -22,6 +22,7 @@ export default new Feature({
   ],
   reducer: {
     post: reducer,
-    postForm: postFormReducer
+    postForm: postFormReducer,
+    commentForm: commentFormReducer
   }
 });

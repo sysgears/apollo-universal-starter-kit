@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   template: `
     <h2>Users</h2>
     <ausk-link [to]="'/users/0'">
-      <button class="btn btn-primary">Add</button>
+      <ausk-button>Add</ausk-button>
     </ausk-link>
     <hr>
     <users-filter-view></users-filter-view>

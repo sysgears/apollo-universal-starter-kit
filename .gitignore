@@ -8,4 +8,5 @@ npm-debug.*
 .DS_Store
 jsconfig.json
 /upload
-# .env 
+*.iml
+# .env

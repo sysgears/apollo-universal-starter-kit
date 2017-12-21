@@ -236,7 +236,16 @@ module.exports = {
             }
           }
         ]
-      }
+      },
+      {
+        test: /\.graphqls/,
+        use: 'raw-loader'
+      },
+      {
+        test: /\.(graphql|gql)$/,
+        exclude: path.join(process.cwd(), "node_modules"),
+        use: ['graphql-tag']
+      },
     ]
   },
   /**
@@ -284,6 +293,13 @@ module.exports = {
      */
     // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
     new definePlugin({
+      '__CLIENT__': true,
+      '__SERVER__': false,
+      '__SSR__': true,
+      '__DEV__': false,
+      '__TEST__': false,
+      'process.env.NODE_ENV': '"development"',
+      '__BACKEND_URL__': '"http://192.168.0.122:8080/graphql"',
       'ENV': JSON.stringify(ENV),
       'process.env': {
         'ENV': JSON.stringify(ENV),

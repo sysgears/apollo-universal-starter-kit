@@ -1,13 +1,8 @@
 {
-  "rulesDirectory": [
-    "node_modules/codelyzer"
-  ],
   "extends": [
     "tslint:latest",
     "tslint-plugin-prettier",
-    "tslint-config-prettier",
-    "angular-tslint-rules"
-  ],
+    "tslint-config-prettier"],
   "rules": {
     "prettier": [true, {
       "printWidth": 120,

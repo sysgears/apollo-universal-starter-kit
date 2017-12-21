@@ -4,7 +4,9 @@ import { Component } from '@angular/core';
   selector: 'ausk-card',
   template: `
     <div class="ant-card ant-card-bordered">
-      <ng-content></ng-content>
+      <div class="ant-card-body">
+        <ng-content></ng-content>
+      </div>
     </div>
   `
 })

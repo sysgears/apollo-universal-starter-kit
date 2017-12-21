@@ -3,9 +3,9 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'card-text',
   template: `
-    <div class="ant-card-body">
+    <p>
       <ng-content></ng-content>
-    </div>
+    </p>
   `
 })
 export default class CardText {}

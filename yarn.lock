@@ -2,6 +2,12 @@
 # yarn lockfile v1
 
 
+"@angular/animations@^4.4.6":
+  version "4.4.6"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-4.4.6.tgz#fa661899a8a4e38cb7c583c7a5c97ce65d592a35"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/cdk@2.0.0-beta.12":
   version "2.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-2.0.0-beta.12.tgz#3a243cb62b93f4e039120ba70f900dc9e235622e"
@@ -5278,7 +5284,7 @@ ngrx-forms@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ngrx-forms/-/ngrx-forms-1.1.1.tgz#6cd9c5f1159ab2544aa421086f3dba3889db98a8"
 
-ngx-uploader@^4.0.2:
+ngx-uploader@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/ngx-uploader/-/ngx-uploader-4.2.1.tgz#bf5a46ebb438e89566485fcb750f00fd179d9f55"
 

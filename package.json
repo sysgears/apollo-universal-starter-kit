@@ -68,6 +68,7 @@
     "@ngrx/store": "^4.1.0",
     "@types/zen-observable": "^0.5.3",
     "angular2-cookie": "^1.2.6",
+    "antd": "^3.0.2",
     "apollo-angular": "^0.13.2",
     "apollo-cache-inmemory": "^1.1.1",
     "apollo-client": "^2.0.3",

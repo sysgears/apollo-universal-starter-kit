@@ -115,97 +115,6 @@ export default class Auth {
     }
   }
 
-  async getUserWithPassword(id, trx) {
-    try {
-      let builder = knex
-        .select('u.id', 'u.is_active', 'u.email', 'a.password')
-        .from('users AS u')
-        .where('u.id', '=', id)
-        .leftJoin('user_password AS a', 'a.user_id', 'u.id')
-        .first();
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let row = await builder;
-
-      return camelizeKeys(row);
-    } catch (e) {
-      log.error('Error in Auth.getUserWithPassword', e);
-      throw e;
-    }
-  }
-
-  async getUsersWithApiKeys(ids, trx) {
-    try {
-      let builder = knex
-        .select('u.id', 'u.is_active', 'u.email', 'a.name', 'a.key')
-        .from('users AS u')
-        .whereIn('u.id', ids)
-        .leftJoin('user_apikeys AS a', 'a.user_id', 'u.id');
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-
-      let res = _.filter(rows, row => row.name !== null);
-      res = camelizeKeys(res);
-      return orderedFor(res, ids, 'id', false);
-    } catch (e) {
-      log.error('Error in Auth.getUsersWithApiKeys', e);
-      throw e;
-    }
-  }
-
-  async getUsersWithSerials(ids, trx) {
-    try {
-      let builder = knex
-        .select('u.id', 'u.is_active', 'u.email', 'a.name', 'a.serial')
-        .from('users AS u')
-        .whereIn('u.id', ids)
-        .leftJoin('user_certificates AS a', 'a.user_id', 'u.id');
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-
-      let res = _.filter(rows, row => row.serial !== null);
-      res = camelizeKeys(res);
-      return orderedFor(res, ids, 'id', false);
-    } catch (e) {
-      log.error('Error in Auth.getUserWithSerials', e);
-      throw e;
-    }
-  }
-
-  async getUsersWithOAuths(ids, trx) {
-    try {
-      let builder = knex
-        .select('u.id', 'u.is_active', 'u.email', 'a.provider', 'a.oauth_id AS oauth_id')
-        .from('users AS u')
-        .whereIn('u.id', ids)
-        .leftJoin('user_oauths AS a', 'a.user_id', 'u.id');
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-
-      let res = _.filter(rows, row => row.provider !== null);
-      res = camelizeKeys(res);
-      return orderedFor(res, ids, 'id', false);
-    } catch (e) {
-      log.error('Error in Auth.getUserWithOAuths', e);
-      throw e;
-    }
-  }
-
   async getUserPasswordFromEmail(email, trx) {
     try {
       console.log('Auth.getUserPasswordFromEmail', email);
@@ -299,300 +208,6 @@ export default class Auth {
       log.error('Error in Auth.getUserFromSerial', e);
       throw e;
     }
-  }
-
-  async createPassword(id, plaintextPassword, trx) {
-    try {
-      const password = await bcrypt.hash(plaintextPassword, 12);
-
-      let builder = knex('user_password').insert({
-        user_id: id,
-        password: password
-      });
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let ret = await builder;
-      return ret;
-    } catch (e) {
-      log.error('Error in Auth.createPassword', e);
-      throw e;
-    }
-  }
-
-  async updatePassword(id, plaintextPassword, trx) {
-    try {
-      const password = await bcrypt.hash(plaintextPassword, 12);
-
-      let builder = knex('user_password')
-        .update({
-          password: password
-        })
-        .where({
-          user_id: id
-        });
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let ret = await builder;
-      return ret;
-    } catch (e) {
-      log.error('Error in Auth.updatePassword', e);
-      throw e;
-    }
-  }
-
-  async createUserOAuth(provider, oauthId, userId, trx) {
-    try {
-      let builder = knex('user_oauths').insert({
-        provider: provider,
-        oauth_id: oauthId,
-        user_id: userId
-      });
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let ret = await builder;
-      return ret;
-    } catch (e) {
-      log.error('Error in Auth.createUserOAuth', e);
-      throw e;
-    }
-  }
-
-  async deleteUserOAuth(provider, oauthId, userId, trx) {
-    try {
-      let builder = knex('user_oauths')
-        .where({
-          provider: provider,
-          oauth_id: oauthId,
-          user_id: userId
-        })
-        .delete();
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let ret = await builder;
-      return ret;
-    } catch (e) {
-      log.error('Error in Auth.deleteUserOAuth', e);
-      throw e;
-    }
-  }
-
-  async createUserApiKey(id, name, trx) {
-    try {
-      let key = uuidv4();
-      let builder = knex('user_apikeys')
-        .returning('key')
-        .insert({
-          name: name,
-          key: key,
-          user_id: id
-        });
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let ret = await builder;
-      return ret;
-    } catch (e) {
-      log.error('Error in Auth.createUserApiKey', e);
-      throw e;
-    }
-  }
-
-  async deleteUserApiKey(id, name, trx) {
-    try {
-      let builder = knex('user_apikeys')
-        .where({
-          name: name,
-          user_id: id
-        })
-        .delete();
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let ret = await builder;
-      return ret;
-    } catch (e) {
-      log.error('Error in Auth.deleteUserApiKey', e);
-      throw e;
-    }
-  }
-
-  async getUserWithUserRoles(id, trx) {
-    try {
-      let builder = await knex
-        .select('b.user_id', 'r.id', 'r.name')
-        .from('user_role_user_bindings AS b')
-        .where('b.user_id', id)
-        .leftJoin('user_roles AS r', 'r.id', 'b.role_id');
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-
-      let res = _.filter(rows, r => r.name !== null);
-      res = camelizeKeys(res);
-      return res;
-    } catch (e) {
-      log.error('Error in Auth.getUserWithUserRoles', e);
-      throw e;
-    }
-  }
-
-  async getUserWithGroupRoles(id, trx) {
-    try {
-      let builder = await knex
-        .select('b.role_id', 'r.group_id', 'r.name', 'g.name AS groupName')
-        .from('group_role_user_bindings AS b')
-        .where('b.user_id', id)
-        .leftJoin('group_roles AS r', 'r.id', 'b.role_id')
-        .leftJoin('groups as g', 'r.group_id', 'g.id');
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-
-      let res = _.filter(rows, r => r.name !== null);
-      res = camelizeKeys(res);
-
-      let ret = {};
-      for (let r of res) {
-        let cur = ret[r.groupId];
-        if (!cur) {
-          cur = {
-            groupId: r.groupId,
-            groupName: r.groupName,
-            roles: {}
-          };
-        }
-        cur.roles[r.name] = {
-          name: r.name,
-          id: r.roleId
-        };
-        ret[cur.groupId] = cur;
-      }
-
-      return ret;
-    } catch (e) {
-      log.error('Error in Auth.getUserWithGroupRoles', e);
-      throw e;
-    }
-  }
-
-  async getUserWithOrgRoles(id, trx) {
-    try {
-      let builder = await knex
-        .select('b.role_id', 'r.org_id', 'r.name', 'o.name AS orgName')
-        .from('org_role_user_bindings AS b')
-        .where('b.user_id', id)
-        .leftJoin('org_roles AS r', 'r.id', 'b.role_id')
-        .leftJoin('orgs AS o', 'r.org_id', 'o.id');
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-
-      let res = _.filter(rows, r => r.name !== null);
-      res = camelizeKeys(res);
-
-      let ret = {};
-      for (let r of res) {
-        let cur = ret[r.orgId];
-        if (!cur) {
-          cur = {
-            orgId: r.orgId,
-            orgName: r.orgName,
-            roles: {}
-          };
-        }
-        cur.roles[r.name] = {
-          name: r.name,
-          id: r.roleId
-        };
-        ret[cur.orgId] = cur;
-      }
-
-      return ret;
-    } catch (e) {
-      log.error('Error in Auth.getUserWithOrgRoles', e);
-      throw e;
-    }
-  }
-
-  async getUserWithAllRoles(id, trx) {
-    // TODO replace the following with a call to replace static scope lookup with a dynamic one
-    // // ALSO, make this configurable, static or dynamic role/permission sets
-
-    let groupRoles = null;
-    let orgRoles = null;
-
-    let userRoles = await this.getUserWithUserRoles(id, trx);
-    for (let role of userRoles) {
-      const scopes = staticUserScopes[role.name];
-      role.scopes = scopes;
-      userRoles[role.name] = role;
-    }
-
-    if (entities.groups.enabled) {
-      groupRoles = await this.getUserWithGroupRoles(id, trx);
-      for (let gid in groupRoles) {
-        let grp = groupRoles[gid];
-
-        let scopes = [];
-        for (let r in grp.roles) {
-          let role = grp.roles[r];
-          role.scopes = staticGroupScopes[role.name];
-          grp.roles[role.name] = role;
-          scopes = scopes.concat(role.scopes);
-        }
-        grp.scopes = scopes;
-
-        groupRoles[gid] = grp;
-      }
-    } // end of groups
-
-    if (entities.orgs.enabled) {
-      orgRoles = await this.getUserWithOrgRoles(id, trx);
-      for (let gid in orgRoles) {
-        let o = orgRoles[gid];
-
-        let scopes = [];
-        for (let r in o.roles) {
-          let role = o.roles[r];
-          role.scopes = staticOrgScopes[role.name];
-          o.roles[role.name] = role;
-          scopes = scopes.concat(role.scopes);
-        }
-        o.scopes = scopes;
-
-        orgRoles[gid] = o;
-      }
-    } // end of orgs
-    return {
-      userRoles,
-      groupRoles,
-      orgRoles
-    };
   }
 
   async getUserWithUserRolesPermissions(id, trx) {
@@ -700,6 +315,50 @@ export default class Auth {
       return orderedFor(res, ids, 'userId', false);
     } catch (e) {
       log.error('Error in Auth.getUsersWithUserRoles', e);
+      throw e;
+    }
+  }
+
+  async getRolesForGroups(ids, trx) {
+    try {
+      let builder = knex
+        .select('*')
+        .from('group_roles')
+        .whereIn('group_id', ids);
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let rows = await builder;
+
+      let res = _.filter(rows, r => r.name !== null);
+      res = camelizeKeys(res);
+      return orderedFor(res, ids, 'groupId', false);
+    } catch (e) {
+      log.error('Error in Auth.getRolesForGroups', e);
+      throw e;
+    }
+  }
+
+  async getRolesForOrgs(ids, trx) {
+    try {
+      let builder = knex
+        .select('*')
+        .from('org_roles')
+        .whereIn('org_id', ids);
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let rows = await builder;
+
+      let res = _.filter(rows, r => r.name !== null);
+      res = camelizeKeys(res);
+      return orderedFor(res, ids, 'orgId', false);
+    } catch (e) {
+      log.error('Error in Auth.getRolesForOrgs', e);
       throw e;
     }
   }

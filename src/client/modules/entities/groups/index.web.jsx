@@ -12,6 +12,7 @@ import GroupEdit from './containers/GroupEdit';
 import MyGroups from './containers/MyGroups';
 
 import reducers from './reducers';
+import groupMembersReducers from './reducers/groupMembers';
 
 const groupListScopes = ['entities/all/list', 'group/all/list'];
 const groupViewScopes = ['entities/all/view', 'group/all/view'];
@@ -29,5 +30,5 @@ export default new Feature({
     <AuthRoute exact path="/groups" scope={null} component={MyGroups} />,
     <AuthRoute exact path="/groups/:groupId" scopes={null} component={GroupView} />
   ],
-  reducer: { groups: reducers }
+  reducer: { groups: reducers, groupMembers: groupMembersReducers }
 });

@@ -2,9 +2,22 @@ import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has, _ } from 'lodash';
 import uuidv4 from 'uuid';
 
-import log from '../../../../common/log';
-import knex from '../../../sql/connector';
-import { orderedFor } from '../../../sql/helpers';
+import log from '../../../../../common/log';
+import knex from '../../../../sql/connector';
+import { orderedFor } from '../../../../sql/helpers';
+
+const selectFields = [
+  'g.id AS group_id',
+  'g.is_active',
+  'g.created_at',
+  'g.updated_at',
+  'g.name',
+
+  'p.created_at',
+  'p.updated_at',
+  'p.display_name',
+  'p.description'
+];
 
 export default class Group {
   async list(args, trx) {
@@ -12,7 +25,7 @@ export default class Group {
       let { filters, orderBys, offset, limit } = args;
 
       const queryBuilder = knex
-        .select('g.id', 'g.created_at', 'g.updated_at', 'g.is_active', 'g.name', 'p.display_name', 'p.description')
+        .select(...selectFields)
         .from('groups AS g')
         .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
 
@@ -77,11 +90,32 @@ export default class Group {
   async get(id, trx) {
     try {
       let builder = knex
-        .select('g.id', 'g.created_at', 'g.updated_at', 'g.is_active', 'g.name', 'p.display_name', 'p.description')
+        .select(...selectFields)
         .from('groups AS g')
         .where('g.id', '=', id)
         .leftJoin('group_profile AS p', 'p.group_id', 'g.id')
         .first();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in Group.get', e);
+      throw e;
+    }
+  }
+
+  async getMany(ids, trx) {
+    try {
+      let builder = knex
+        .select(...selectFields)
+        .from('groups AS g')
+        .whereIn('g.id', ids)
+        .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
+
       if (trx) {
         builder.transacting(trx);
       }
@@ -150,9 +184,9 @@ export default class Group {
   async getProfile(id, trx) {
     try {
       let builder = knex
-        .select('p')
-        .leftJoin('group_profile AS p')
-        .where('p.id', '=', id)
+        .select('*')
+        .from('group_profile')
+        .where('group_id', '=', id)
         .first();
 
       if (trx) {
@@ -163,6 +197,25 @@ export default class Group {
       return camelizeKeys(ret);
     } catch (e) {
       log.error('Error in Group.getProfile', e);
+      throw e;
+    }
+  }
+
+  async getProfileMany(ids, trx) {
+    try {
+      let builder = knex
+        .select('*')
+        .from('group_profile')
+        .whereIn('group_id', ids);
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in Group.getProfileMany', e);
       throw e;
     }
   }
@@ -226,117 +279,48 @@ export default class Group {
    *
    */
 
-  async getGroupsForUserId(userId, trx) {
+  async getGroupIdsForUserIds(ids, trx) {
     try {
       let builder = knex
-        .select('g.id AS id', 'g.name', 'g.is_active', 'p.display_name', 'p.description')
-        .where('gu.user_id', '=', userId)
-        .from('groups_users AS gu')
-        .leftJoin('groups AS g', 'gu.group_id', 'g.id')
-        .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
+        .select('*')
+        .from('groups_users')
+        .whereIn('user_id', ids);
 
       if (trx) {
         builder.transacting(trx);
       }
 
       let rows = await builder;
-      let ret = _.filter(rows, row => row.id !== null);
-      let res = camelizeKeys(ret);
-      return res;
+
+      let ret = _.filter(rows, row => row.groupId !== null);
+      ret = camelizeKeys(ret);
+      ret = orderedFor(ret, ids, 'userId', false);
+      return ret;
     } catch (e) {
-      log.error('Error in User.getGroupsForUserId', e);
+      log.error('Error in User.getGroupsIdsForUserId', e);
       throw e;
     }
   }
 
-  async getGroupsForUserIds(userIds, trx) {
+  async getUserIdsForGroupIds(ids, trx) {
     try {
       let builder = knex
-        .select('g.id AS id', 'g.name', 'g.is_active', 'p.display_name', 'p.description', 'gu.user_id AS userId')
-        .from('groups_users AS gu')
-        .whereIn('gu.user_id', userIds)
-        .leftJoin('groups AS g', 'gu.group_id', 'g.id')
-        .leftJoin('group_profile AS p', 'p.group_id', 'g.id');
+        .select('*')
+        .from('groups_users')
+        .whereIn('group_id', ids);
 
       if (trx) {
         builder.transacting(trx);
       }
 
       let rows = await builder;
-      let ret = _.filter(rows, row => row.id !== null);
-      let res = camelizeKeys(ret);
-      return orderedFor(res, userIds, 'userId', false);
+
+      let ret = _.filter(rows, row => row.userId !== null);
+      ret = camelizeKeys(ret);
+      ret = orderedFor(ret, ids, 'groupId', false);
+      return ret;
     } catch (e) {
-      log.error('Error in User.getGroupsForUserIds', e);
-      throw e;
-    }
-  }
-
-  async getOrgsForGroupIds(groupIds, trx) {
-    try {
-      let builder = await knex
-        .select('o.id AS id', 'o.name AS orgName', 'g.id AS groupId', 'g.name')
-        .whereIn('g.id', groupIds)
-        .from('groups AS g')
-        .leftJoin('orgs_groups AS og', 'og.group_id', 'g.id')
-        .leftJoin('orgs AS o', 'o.id', 'og.org_id');
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-      let ret = _.filter(rows, row => row.id !== null);
-      let res = camelizeKeys(ret);
-      return orderedFor(res, groupIds, 'groupId', false);
-    } catch (e) {
-      log.error('Error in Group.getOrgsForGroupIds', e);
-      throw e;
-    }
-  }
-
-  async getUsersForGroupIds(groupIds, trx) {
-    try {
-      let builder = knex
-        .select('gu.user_id AS userId', 'g.id AS groupId', 'g.name')
-        .whereIn('g.id', groupIds)
-        .from('groups AS g')
-        .leftJoin('groups_users AS gu', 'gu.group_id', 'g.id');
-      // left join bindings and group_roles to get role name/id per user
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-      let ret = _.filter(rows, row => row.id !== null);
-      let res = camelizeKeys(ret);
-      res = orderedFor(res, groupIds, 'groupId', false);
-      return res;
-    } catch (e) {
-      log.error('Error in Group.getUsersForGroupIds', e);
-      throw e;
-    }
-  }
-
-  async getServiceAccountsForGroupIds(groupIds, trx) {
-    try {
-      let builder = await knex
-        .select('gs.id AS id', 'g.id AS groupId', 'g.name')
-        .whereIn('g.id', groupIds)
-        .from('groups AS g')
-        .leftJoin('groups_serviceaccounts AS gs', 'gs.group_id', 'g.id');
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-      let ret = _.filter(rows, row => row.id !== null);
-      let res = camelizeKeys(ret);
-      return orderedFor(res, groupIds, 'groupId', false);
-    } catch (e) {
-      log.error('Error in Group.getServiceAccountsForGroupIds', e);
+      log.error('Error in Group.getUserIdsForGroupIds', e);
       throw e;
     }
   }

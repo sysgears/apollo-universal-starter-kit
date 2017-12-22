@@ -1,0 +1,14 @@
+type OrgRoleInfo {
+  orgId: ID!
+  orgName: String
+  scopes: [String]
+  roles: [RoleInfo]
+}
+
+extend type Org {
+  roles: [RoleInfo]
+}
+
+extend type User {
+  orgRoles: [OrgRoleInfo]
+}

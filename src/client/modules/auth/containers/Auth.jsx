@@ -132,7 +132,7 @@ const AuthRoute = withCookies(({ component: Component, cookies, scopes, context,
     <Route
       {...rest}
       render={props => {
-        console.log('PROPS', props);
+        // console.log('PROPS', props);
         let params = {};
         if (props.match) {
           params = props.match.params;

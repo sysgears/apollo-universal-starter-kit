@@ -37,15 +37,18 @@ type UserPayload {
 type User {
   createdAt: String
   updatedAt: String
+
   id: String!
   email: String!
   isActive: Boolean
 
-  auth: UserAuth
   profile: UserProfile
 }
 
 type UserProfile {
+  createdAt: String
+  updatedAt: String
+
   displayName: String
   firstName: String
   middleName: String

@@ -1,7 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-// import serialize from 'serialize-javascript';
-
+import url from 'url';
 import log from '../../common/log';
 import { options as spinConfig } from '../../../.spinrc.json';
 
@@ -21,43 +20,38 @@ const stripCircular = (from, seen) => {
   return to;
 };
 
+const { pathname } = url.parse(__BACKEND_URL__);
+
 /*
  * The code below MUST be declared as a function, not closure,
  * otherwise Express will fail to execute this handler
  */
 // eslint-disable-next-line no-unused-vars
 function errorMiddleware(e, req, res, next) {
-  log.error(e);
+  if (req.path === pathname) {
+    const stack = e.stack.toString().replace(/[\n]/g, '\\n');
+    res.status(200).send(`[{"data": {}, "errors":[{"message": "${stack}"}]}]`);
+  } else {
+    log.error(e);
 
-  if (__DEV__ || !assetMap) {
-    assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
+    if (__DEV__ || !assetMap) {
+      assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
+    }
+
+    const serverErrorScript = `<script charset="UTF-8">window.__SERVER_ERROR__=${JSON.stringify(
+      stripCircular(e)
+    )};</script>`;
+    const vendorScript = assetMap['vendor.js']
+      ? `<script src="/${assetMap['vendor.js']}" charSet="utf-8"></script>`
+      : '';
+
+    res.status(200).send(
+      `<html>${serverErrorScript}<body><div id="content"></div>
+      ${vendorScript}
+          <script src="/${assetMap['index.js']}" charSet="utf-8"></script>
+          </body></html>`
+    );
   }
-
-  const stripErr = stripCircular(e);
-  let returnedErr = stripErr;
-
-  // now do some introspection
-  if (__SSR__ && returnedErr.networkError) {
-    let val = e.networkError.response.raw;
-    console.log(val);
-
-    returnedErr.message = val;
-  }
-
-  // Causing issues for whatever reason
-  //const serializedErr = serialize(stripErr)
-  // Use json stringify instead
-  const serializedErr = JSON.stringify(returnedErr);
-
-  const serverErrorScript = `<script charset="UTF-8">window.__SERVER_ERROR__=${serializedErr};</script>`;
-  const vendorScript = assetMap['vendor.js'] ? `<script src="/${assetMap['vendor.js']}" charSet="utf-8"></script>` : '';
-
-  res.status(200).send(
-    `<html>${serverErrorScript}<body><div id="content"></div>
-    ${vendorScript}
-        <script src="/${assetMap['index.js']}" charSet="utf-8"></script>
-        </body></html>`
-  );
 }
 
 export default errorMiddleware;

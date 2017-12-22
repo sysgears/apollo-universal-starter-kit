@@ -1,3 +1,4 @@
+#import "../../entities/orgs/graphql/FragmentOrgBrief.graphql"
 #import "../../entities/groups/graphql/FragmentGroupBrief.graphql"
 #import "../../entities/users/graphql/Profile.graphql"
 
@@ -14,6 +15,9 @@ fragment CurrentUserInfo on User {
   }
   groups {
     ...GroupBrief
+  }
+  orgs {
+    ...OrgBrief
   }
 }
 

@@ -1,0 +1,9 @@
+type UserRoleInfo {
+  id: ID!
+  name: String
+  scopes: [String]
+}
+
+extend type User {
+  userRoles: [UserRoleInfo]
+}

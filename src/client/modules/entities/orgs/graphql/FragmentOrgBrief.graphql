@@ -1,0 +1,9 @@
+fragment OrgBrief on Org {
+  id
+  name
+  isActive
+  profile {
+    displayName
+    description
+  }
+}

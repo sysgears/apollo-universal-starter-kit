@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
-import { Container, Row, Col, PageLayout, Button } from '../../../common/components/web';
+import { PageLayout, Container, Row, Col, Button } from '../../../common/components/web';
+
+import GroupMembers from '../containers/GroupMembers';
 
 import settings from '../../../../../../settings';
 
@@ -19,7 +21,7 @@ export default class GroupView extends React.PureComponent {
 
   renderMetaData() {
     const { loading, group } = this.props;
-    let localTitle = loading ? title : group.profile.displayName;
+    let localTitle = loading ? title : group.name;
     let localDescription = loading ? description : group.profile.description;
 
     return (
@@ -78,15 +80,15 @@ export default class GroupView extends React.PureComponent {
               <Row>
                 <Col xs={2}>
                   <Link to={'/groups'}>
-                    <Button color="primary">Back</Button>
+                    <Button color="primary">All Groups</Button>
                   </Link>
                 </Col>
                 <Col xs={8}>
-                  <h2>Group - {group.profile.displayName}</h2>
+                  <h2>Group - {group.name}</h2>
                 </Col>
                 <Col xs={2}>
                   <Link to={'/groups/' + group.id + '/edit'}>
-                    <Button color="primary">Add</Button>
+                    <Button color="primary">Edit</Button>
                   </Link>
                 </Col>
               </Row>
@@ -98,39 +100,53 @@ export default class GroupView extends React.PureComponent {
 
               <Row>
                 <Col xs={2}>
-                  <h4>Id:</h4>
+                  <h4>Info:</h4>
                 </Col>
-                <Col xs={8}>{group.id}</Col>
-                <Col xs={2} />
+                <Col xs={10}>
+                  <Row>
+                    <Col xs={3}>
+                      <b>ID:</b>
+                    </Col>
+                    <Col xs={9}>{group.id}</Col>
+                    <Col xs={3}>
+                      <b>Name:</b>
+                    </Col>
+                    <Col xs={9}> {group.name}</Col>
+                    <Col xs={3}>
+                      <b>Display Name:</b>{' '}
+                    </Col>
+                    <Col xs={9}>{group.profile.displayName}</Col>
+                    <Col xs={3}>
+                      <b>Description:</b>{' '}
+                    </Col>
+                    <Col xs={9}>{group.profile.description}</Col>
+                    <Col xs={3}>
+                      <b>Roles:</b>{' '}
+                    </Col>
+                    <Col xs={9}>
+                      {group.roles &&
+                        group.roles.map(r => {
+                          return (
+                            <span>
+                              {' '}
+                              <Link to={'/roles/' + r.id}>{r.name}</Link>{' '}
+                            </span>
+                          );
+                        })}
+                    </Col>
+                  </Row>
+                </Col>
               </Row>
 
-              <Row>
-                <Col xs={2}>
-                  <h4>Name:</h4>
-                </Col>
-                <Col xs={8}>{group.name}</Col>
-                <Col xs={2} />
-              </Row>
-            </Container>
-          </div>
-          <div>
-            <Container>
               <hr />
 
               <Row>
                 <Col xs={2}>
-                  <h4>Users:</h4>
+                  <h4>Members:</h4>
                 </Col>
                 <Col xs={10}>
-                  {group.users &&
-                    group.users.map(u => (
-                      <div>
-                        <Link to={'/users/' + u.id}>{u.profile.displayName}</Link> -{' '}
-                        <a href={'mailto:' + u.email}>{u.email}</a>
-                      </div>
-                    ))}
+                  <GroupMembers id={group.id} roles={group.roles} groupMembers={group.users} />
                 </Col>
-                <Col xs={2} />
               </Row>
             </Container>
           </div>

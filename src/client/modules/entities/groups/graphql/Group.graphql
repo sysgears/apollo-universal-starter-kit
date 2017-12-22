@@ -13,4 +13,8 @@ fragment GroupInfo on Group {
   users {
     ...UserBrief
   }
+  roles {
+    id
+    name
+  }
 }

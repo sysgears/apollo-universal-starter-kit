@@ -2,8 +2,8 @@ import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has, _ } from 'lodash';
 import uuidv4 from 'uuid';
 
-import log from '../../../../common/log';
-import knex from '../../../sql/connector';
+import log from '../../../../../common/log';
+import knex from '../../../../sql/connector';
 
 /*
 const userFields = ['u.uuid AS id', 'u.email', 'u.created_at', 'u.updated_at', 'u.is_active'];
@@ -21,11 +21,14 @@ const profileFields = [
 */
 
 const selectFields = [
-  'u.id',
+  'u.id AS user_id',
   'u.email',
   'u.created_at',
   'u.updated_at',
   'u.is_active',
+
+  'p.created_at',
+  'p.updated_at',
   'p.display_name',
   'p.title',
   'p.first_name',
@@ -121,14 +124,13 @@ export default class User {
     }
   }
 
-  async getById(id, trx) {
+  async getMany(ids, trx) {
     try {
       let builder = knex
         .select(...selectFields)
         .from('users AS u')
-        .where('u.id', '=', id)
-        .leftJoin('user_profile AS p', 'p.user_id', 'u.id')
-        .first();
+        .whereIn('u.id', ids)
+        .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
 
       if (trx) {
         builder.transacting(trx);
@@ -137,7 +139,7 @@ export default class User {
       let ret = await builder;
       return camelizeKeys(ret);
     } catch (e) {
-      log.error('Error in User.getById', e);
+      log.error('Error in User.get', e);
       throw e;
     }
   }
@@ -267,9 +269,9 @@ export default class User {
   async getProfile(id, trx) {
     try {
       let builder = knex
-        .select('p')
-        .leftJoin('user_profile AS p')
-        .where('p.id', '=', id)
+        .select('*')
+        .from('user_profile')
+        .where('user_id', '=', id)
         .first();
 
       if (trx) {
@@ -280,6 +282,25 @@ export default class User {
       return camelizeKeys(ret);
     } catch (e) {
       log.error('Error in User.getProfile', e);
+      throw e;
+    }
+  }
+
+  async getProfileMany(ids, trx) {
+    try {
+      let builder = knex
+        .select('*')
+        .from('user_profile')
+        .whereIn('user_id', ids);
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in User.getProfileMany', e);
       throw e;
     }
   }

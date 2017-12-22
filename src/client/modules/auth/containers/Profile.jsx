@@ -19,7 +19,6 @@ export default compose(
   graphql(CURRENT_USER_QUERY, {
     options: { fetchPolicy: 'network-only' },
     props({ data: { loading, error, currentUser } }) {
-      // console.log("CURRENT_USER_QUERY", loading, error, currentUser)
       if (error) {
         throw new Error(error);
       }

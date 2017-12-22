@@ -32,18 +32,18 @@ type ServiceAccountPayload {
 }
 
 type ServiceAccount {
+  createdAt: String
+  updatedAt: String
+
   id: String!
   email: String!
   isActive: Boolean
-
-  auth: ServiceAccountAuth
-  profile: ServiceAccountProfile
-
-  orgs: [Org]
-  groups: [Group]
 }
 
 type ServiceAccountProfile {
+  createdAt: String
+  updatedAt: String
+
   displayName: String
   description: String
 }

@@ -75,6 +75,7 @@ exports.up = function(knex, Promise) {
 
         table.string('name');
         table.string('serial');
+        table.string('pubkey');
 
         table.unique(['user_id', 'name']);
       });
@@ -90,12 +91,13 @@ exports.up = function(knex, Promise) {
         table.timestamps(true, true);
         table
           .uuid('serviceaccount_id')
-          .unique()
           .references('id')
           .inTable('serviceaccounts')
           .onDelete('CASCADE');
 
+        table.string('name');
         table.string('key');
+        table.unique(['serviceaccount_id', 'name']);
       });
 
       migs.push(fn);
@@ -106,12 +108,15 @@ exports.up = function(knex, Promise) {
         table.timestamps(true, true);
         table
           .uuid('serviceaccount_id')
-          .unique()
           .references('id')
           .inTable('serviceaccounts')
           .onDelete('CASCADE');
 
-        table.string('serial').unique();
+        table.string('name');
+        table.string('serial');
+        table.string('pubkey');
+
+        table.unique(['serviceaccount_id', 'name']);
       });
 
       migs.push(fn);

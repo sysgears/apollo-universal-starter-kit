@@ -17,6 +17,15 @@ extend type Query {
 
   # Get group by id
   group(id: String!): Group
+
+  # Get group by id
+  groupMembers(
+    id: String!
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [User]
 }
 
 extend type Mutation {
@@ -58,6 +67,7 @@ type GroupPayload {
 type Group {
   createdAt: String
   updatedAt: String
+
   id: String!
   name: String!
   isActive: Boolean
@@ -71,6 +81,9 @@ type Group {
 }
 
 type GroupProfile {
+  createdAt: String
+  updatedAt: String
+
   displayName: String
   description: String
 }

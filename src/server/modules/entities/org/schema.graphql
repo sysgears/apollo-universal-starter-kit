@@ -6,6 +6,15 @@ extend type Query {
     offset: Int
     limit: Int
   ): [Org]
+
+  # Get all groups, possibly filtered and ordered
+  myOrgs(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): MyOrgsPayload
+
   # Get org by id
   org(id: String!): Org
 }
@@ -23,8 +32,25 @@ extend type Subscription {
 }
 
 #
+# Org Extensions of Other Types
+#
+
+extend type User {
+  orgs: [Org]
+}
+
+extend type Group {
+  orgs: [Org]
+}
+
+#
 # Org Types
 #
+
+type MyOrgsPayload {
+  org: [Org]
+  errors: [FieldError!]
+}
 
 type OrgPayload {
   org: Org
@@ -32,6 +58,9 @@ type OrgPayload {
 }
 
 type Org {
+  createdAt: String
+  updatedAt: String
+
   id: String!
   name: String!
   isActive: Boolean
@@ -44,6 +73,9 @@ type Org {
 }
 
 type OrgProfile {
+  createdAt: String
+  updatedAt: String
+
   domain: String
   displayName: String
   description: String

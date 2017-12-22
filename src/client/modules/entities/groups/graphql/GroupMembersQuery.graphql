@@ -1,0 +1,22 @@
+query groupMembers($id: String!, $orderBy: OrderByInput, $filter: FilterInput) {
+  groupMembers(id: $id, orderBys: [$orderBy], filters: [$filter]) {
+    id
+    email
+    isActive
+    profile {
+      displayName
+      language
+      locale
+    }
+    groupRoles {
+      groupId
+      groupName
+      scopes
+      roles {
+        id
+        name
+        scopes
+      }
+    }
+  }
+}

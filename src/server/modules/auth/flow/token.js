@@ -1,50 +1,50 @@
 import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 
-import AuthDAO from '../lib';
-
-const Auth = new AuthDAO();
+import AuthnDAO from '../authn/lib';
+import AuthzDAO from '../authz/lib';
 
 export const setTokenHeaders = (req, tokens) => {
   req.universalCookies.set('x-token', tokens.token, {
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 30,
     httpOnly: true
   });
   req.universalCookies.set('x-refresh-token', tokens.refreshToken, {
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 30,
     httpOnly: true
   });
 
   req.universalCookies.set('r-token', tokens.token, {
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 30,
     httpOnly: false
   });
   req.universalCookies.set('r-refresh-token', tokens.refreshToken, {
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 30,
     httpOnly: false
   });
 };
 
 export const setResponseTokenHeaders = (res, tokens) => {
+  res.set('Access-Control-Expose-Headers', 'x-token, x-refresh-token');
   res.set('x-token', tokens.token);
   res.set('x-refresh-token', tokens.token);
   res.set('r-token', tokens.token);
   res.set('r-refresh-token', tokens.token);
   res.cookie('x-token', tokens.token, {
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 30,
     httpOnly: true
   });
   res.cookie('x-refresh-token', tokens.refreshToken, {
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 30,
     httpOnly: true
   });
 
   res.cookie('r-token', tokens.token, {
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 30,
     httpOnly: false
   });
   res.cookie('r-refresh-token', tokens.refreshToken, {
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 30,
     httpOnly: false
   });
 };
@@ -60,10 +60,10 @@ export const removeTokenHeaders = req => {
 export const createToken = async (user, secret, refreshSecret) => {
   let tokenUser = pick(user, ['id', 'email']);
 
-  let roles = await Auth.getUserWithAllRoles(tokenUser.id);
-  tokenUser.roles = roles;
+  const Authz = new AuthzDAO();
 
-  console.log('createToken', tokenUser);
+  let roles = await Authz.getAllRolesForUser(tokenUser.id);
+  tokenUser.roles = roles;
 
   const createToken = jwt.sign(
     {
@@ -71,7 +71,7 @@ export const createToken = async (user, secret, refreshSecret) => {
     },
     secret,
     {
-      expiresIn: '30m'
+      expiresIn: '1m'
     }
   );
 
@@ -97,11 +97,12 @@ export const refreshToken = async (token, refreshToken, SECRET) => {
     return {};
   }
 
-  const user = await Auth.getUserWithPassword(id);
-  if (!user) {
+  const Authn = new AuthnDAO();
+  const userPass = await Authn.getUserWithPassword(id);
+  if (!userPass) {
     return {};
   }
-  const refreshSecret = SECRET + user.password;
+  const refreshSecret = SECRET + userPass.password;
 
   try {
     jwt.verify(refreshToken, refreshSecret);
@@ -109,13 +110,12 @@ export const refreshToken = async (token, refreshToken, SECRET) => {
     return {};
   }
 
-  console.log('RefreshToken', user);
-
-  const [newToken, newRefreshToken] = await createToken(user, SECRET, refreshSecret);
+  const [newToken, newRefreshToken] = await createToken(userPass, SECRET, refreshSecret);
+  const { user } = jwt.decode(newToken);
 
   return {
     token: newToken,
     refreshToken: newRefreshToken,
-    user: pick(user, ['id', 'email'])
+    user: pick(user, ['id', 'email', 'roles'])
   };
 };

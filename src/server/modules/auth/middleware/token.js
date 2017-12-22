@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import settings from '../../../../../settings';
 
-import { setTokenHeaders, refreshToken } from '../flow/token';
-import { tryLoginSerial } from '../flow/login';
+import { setTokenHeaders, setResponseTokenHeaders, refreshToken } from '../flow/token';
+import { tryLoginSerial } from '../flow/serial';
 
 const SECRET = settings.auth.secret;
 
@@ -20,24 +20,22 @@ export default User => async (req, res, next) => {
       token = undefined;
     }
   }
-  //console.log(token);
   if (token && token !== 'null') {
     try {
       const { user } = jwt.verify(token, SECRET);
       req.user = user;
     } catch (err) {
       const currRefreshToken = req.universalCookies.get('x-refresh-token') || req.headers['x-refresh-token'];
-      const newToken = await refreshToken(token, currRefreshToken, User, SECRET);
+      const newToken = await refreshToken(token, currRefreshToken, SECRET);
 
       if (newToken.token && newToken.refreshToken) {
-        res.set('Access-Control-Expose-Headers', 'x-token, x-refresh-token');
-        res.set('x-token', newToken.token);
-        res.set('x-refresh-token', newToken.refreshToken);
-
+        setResponseTokenHeaders(res, newToken);
         setTokenHeaders(req, newToken);
       }
       req.user = newToken.user;
     }
+
+    // Should add ApiKey here as well
   } else if (settings.auth.authentication.certificate.enabled) {
     // cert auth
     let serial = '';
@@ -51,8 +49,13 @@ export default User => async (req, res, next) => {
     }
     const newToken = await tryLoginSerial(serial, User, SECRET);
 
-    setTokenHeaders(req, newToken);
+    if (newToken.token && newToken.refreshToken) {
+      setResponseTokenHeaders(res, newToken);
+      setTokenHeaders(req, newToken);
+    }
+    req.user = newToken.user;
   }
 
+  console.log('Token Middleware - tokenUser', req.user);
   next();
 };

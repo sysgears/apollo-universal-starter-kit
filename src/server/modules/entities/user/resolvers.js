@@ -1,5 +1,7 @@
 /*eslint-disable no-unused-vars*/
-import { pick } from 'lodash';
+import { _ } from 'lodash';
+import { createBatchResolver } from 'graphql-resolve-batch';
+
 import FieldError from '../../../../common/FieldError';
 import { withAuth } from '../../../../common/authValidation';
 import { mergeLoaders } from '../../../../common/mergeLoaders';
@@ -28,53 +30,29 @@ export default pubsub => ({
   },
 
   User: {
-    profile(obj) {
-      return obj;
+    id(obj) {
+      return obj.userId;
     },
-    auth(obj) {
-      return obj;
-    }
-    /*
-    orgs(obj, args, context) {
-      return Promise.all([
-        context.loaders.getOrgsForUserId.load(obj.id),
-        context.loaders.getOrgsForUserIdViaGroups.load(obj.id)
-      ]).then(mergeLoaders);
-    },
-    groups(obj, args, context) {
-      return context.loaders.getGroupsForUserId.load(obj.id);
-    }
-    */
-  },
+    profile: createBatchResolver(async (source, args, context) => {
+      let uids = _.uniq(source.map(s => s.userId));
+      const profiles = await context.User.getProfileMany(uids);
 
-  UserProfile: {
-    displayName(obj) {
-      return obj.displayName;
-    },
-    firstName(obj) {
-      return obj.firstName;
-    },
-    middleName(obj) {
-      return obj.middleName;
-    },
-    lastName(obj) {
-      return obj.lastName;
-    },
-    title(obj) {
-      return obj.title;
-    },
-    suffix(obj) {
-      return obj.suffix;
-    },
-    language(obj) {
-      return obj.language;
-    },
-    locale(obj) {
-      return obj.locale;
-    },
-    emails(obj) {
-      return obj.emails;
-    }
+      if (source.length === profiles.length) {
+        return profiles;
+      }
+
+      // graphql-resolve-batch Part-II
+      let ret = [];
+      for (let s of source) {
+        const res = profiles.find(elem => elem.userId === s.userId);
+        if (res) {
+          ret.push(res);
+        } else {
+          ret.push(null);
+        }
+      }
+      return ret;
+    })
   },
 
   Mutation: {
@@ -90,7 +68,7 @@ export default pubsub => ({
     },
     editUser: withAuth(
       (obj, args, context) => {
-        let s = context.user.id !== args.input.id ? ['user:update'] : ['user:update:self'];
+        let s = context.user.id !== args.input.id ? ['user/all/update'] : ['user/self/update'];
         console.log('editUser', context.user.id, context.auth.scope, s, args);
         return s;
       },
@@ -122,7 +100,7 @@ export default pubsub => ({
     ),
     deleteUser: withAuth(
       (obj, args, context) => {
-        return context.user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
+        return context.user.id !== args.id ? ['user/all/delete'] : ['user/self/delete'];
       },
       async (obj, { id }, context) => {
         try {

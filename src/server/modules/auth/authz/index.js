@@ -1,19 +1,11 @@
-/*
-  const userRoles = await Auth.getUserWithRolesPermissions(user.id);
+import schema from './schema';
+import createResolvers from './resolvers';
+import Feature from '../../connector';
 
-  let groupRoles = null;
-  if (entities.groups.enabled) {
-    groupRoles = Auth.getUserWithGroupRolesPermissions(user.id);
-  }
+import Authz from './lib';
 
-  let orgRoles = null;
-  if (entities.orgs.enabled) {
-    orgRoles = Auth.getUserWithOrgRolesPermissions(user.id);
-  }
-
-  user.roles = {
-    userRoles,
-    groupRoles,
-    orgRoles
-  };
-*/
+export default new Feature({
+  schema,
+  createResolversFunc: createResolvers,
+  createContextFunc: () => ({ Authz: new Authz() })
+});

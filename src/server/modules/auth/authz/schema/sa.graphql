@@ -1,0 +1,9 @@
+type ServiceAccountRoleInfo {
+  id: ID!
+  name: String
+  scopes: [String]
+}
+
+extend type ServiceAccount {
+  serviceaccountRoles: [UserRoleInfo]
+}

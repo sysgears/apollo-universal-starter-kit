@@ -1,6 +1,7 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink } from 'react-router-dom';
+
 import { MenuItem } from '../../modules/common/components/web';
 import Profile from './containers/Profile';
 import Register from './containers/Register';

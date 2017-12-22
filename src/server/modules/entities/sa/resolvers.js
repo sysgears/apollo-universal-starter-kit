@@ -17,18 +17,6 @@ export default pubsub => ({
   ServiceAccount: {
     profile(obj) {
       return obj;
-    },
-    auth(obj) {
-      return obj;
-    },
-    orgs(obj, args, context) {
-      return Promise.all([
-        context.loaders.getOrgsForServiceAccountId.load(obj.id),
-        context.loaders.getOrgsForServiceAccountIdViaGroups.load(obj.id)
-      ]).then(mergeLoaders);
-    },
-    groups(obj, args, context) {
-      return context.loaders.getGroupsForServiceAccountId.load(obj.id);
     }
   },
 

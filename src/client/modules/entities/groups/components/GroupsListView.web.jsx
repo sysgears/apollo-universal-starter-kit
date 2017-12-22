@@ -83,12 +83,12 @@ export default class GroupsView extends React.PureComponent {
       },
       {
         title: (
-          <a onClick={e => this.orderBy(e, 'role')} href="#">
-            Role {this.renderOrderByArrow('role')}
+          <a onClick={e => this.orderBy(e, 'orgName')} href="#">
+            Org {this.renderOrderByArrow('orgName')}
           </a>
         ),
-        dataIndex: 'role',
-        key: 'role'
+        dataIndex: 'orgName',
+        key: 'orgName'
       },
       {
         title: (

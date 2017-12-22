@@ -93,7 +93,8 @@ export const passwordLogin = async inputUser => {
 
   return {
     token,
-    refreshToken
+    refreshToken,
+    user
   };
 };
 

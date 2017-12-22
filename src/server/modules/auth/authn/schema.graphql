@@ -1,0 +1,109 @@
+#
+# Type Extensions
+#
+
+extend type User {
+  auth: UserAuth
+}
+
+#
+# Authentication Types
+#
+
+type ServiceAccountAuth {
+  certificates: [CertificateAuth]
+  apikeys: [ApiKeyAuth]
+}
+
+type UserAuth {
+  certificates: [CertificateAuth]
+  apikeys: [ApiKeyAuth]
+  oauths: [UserOAuth]
+}
+
+type CertificateAuth {
+  createdAt: String
+  updatedAt: String
+
+  name: String
+  serial: String
+}
+
+type ApiKeyAuth {
+  createdAt: String
+  updatedAt: String
+
+  name: String
+  key: String
+}
+
+type UserOAuth {
+  createdAt: String
+  updatedAt: String
+
+  provider: String
+}
+
+type AuthPayload {
+  tokens: Tokens
+  errors: [FieldError!]
+}
+
+type ResetPayload {
+  errors: [FieldError!]
+}
+
+type Tokens {
+  token: String!
+  refreshToken: String!
+}
+
+input ServiceAccountAuthInput {
+  certificate: AuthCertificateInput
+  apikey: ApiKeyInput
+}
+
+input UserAuthInput {
+  certificate: AuthCertificateInput
+  apikey: ApiKeyInput
+  oauth: OAuthInput
+}
+
+input AuthCertificateInput {
+  serial: String
+  pubkey: String
+}
+
+input ApiKeyInput {
+  name: String
+}
+
+input OAuthInput {
+  provider: String
+  oauthId: String
+}
+
+#
+# Password Flow types
+#
+
+input RegisterUserInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+input ForgotPasswordInput {
+  email: String!
+}
+
+input ResetPasswordInput {
+  token: String!
+  password: String!
+  passwordConfirmation: String!
+}

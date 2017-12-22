@@ -1,3 +1,4 @@
+/*eslint-disable no-unused-vars*/
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -38,54 +39,109 @@ const ProfileView = ({ loading, currentUser }) => {
       </PageLayout>
     );
   } else if (currentUser) {
-    // console.log('currentUser', currentUser);
+    console.log('currentUser', currentUser);
+    const P = currentUser.profile;
     return (
       <PageLayout>
         {renderMetaData(currentUser)}
         <LayoutCenter>
-          <h1 className="text-center">Profile</h1>
-          <Card>
+          <h1 className="text-center">{P.displayName} - Profile</h1>
+          <Card key="user">
             <CardGroup>
+              <CardTitle>Info:</CardTitle>
               <CardText key="userId">User ID: {currentUser.id}</CardText>
-              <CardText key="displayName">Display Name: {currentUser.profile.displayName}</CardText>
-            </CardGroup>
-            <CardGroup>
               <CardText>Email: {currentUser.email}</CardText>
+              <CardText>
+                User Roles:{' '}
+                {currentUser.userRoles && (
+                  <span>
+                    {' '}
+                    [{' '}
+                    {currentUser.userRoles.map(r => {
+                      return (
+                        <Link to={'/roles/' + r.id}>
+                          {r.name}
+                          {r.id != currentUser.userRoles[0].id ? ',' : ''}{' '}
+                        </Link>
+                      );
+                    })}{' '}
+                    ]{' '}
+                  </span>
+                )}
+              </CardText>
             </CardGroup>
             <CardGroup>
-              <CardTitle>Roles:</CardTitle>
-              <CardText key="orgRoles">
-                <b>org:</b>
-                {/*JSON.stringify(currentUser.orgRoles)*/}
+              <CardTitle>Profile:</CardTitle>
+              <CardText key="displayName">Display Name: {P.displayName}</CardText>
+              <CardText key="fullName">
+                Full Name: {P.title} {P.firstName} {P.middleName} {P.lastName} {P.suffix}
               </CardText>
-              <CardText key="groupRoles">
-                <b>group:</b>
-                {/*JSON.stringify(currentUser.groupRoles)*/}
-              </CardText>
-              <CardText key="userRoles">
-                <b>user:</b>
-                {/*JSON.stringify(currentUser.userRoles)*/}
+              <CardText key="locale">
+                Locale: {P.locale} {P.language}
               </CardText>
             </CardGroup>
-            {currentUser.profile &&
-              currentUser.profile.fullName && (
-                <CardGroup>
-                  <CardTitle>Full Name:</CardTitle>
-                  <CardText>{currentUser.profile.fullName}</CardText>
-                </CardGroup>
-              )}
-            {settings.subscription.enabled && <SubscriptionProfile />}
           </Card>
+
+          {settings.entities.orgs.enabled && (
+            <Card key="orgs">
+              <CardGroup>
+                <CardTitle>Orgs:</CardTitle>
+                {currentUser.orgs &&
+                  currentUser.orgs.map(o => {
+                    let oa = currentUser.orgRoles.find(elem => elem.orgId == o.id);
+                    let roles = oa ? oa.roles : null;
+                    return (
+                      <CardText key={o.id}>
+                        <Link to={'/orgs/' + o.id}>{o.profile.displayName}</Link>
+                        {roles && (
+                          <span>
+                            {' '}
+                            [{' '}
+                            {roles.map(r => (
+                              <span>
+                                <Link to={'/roles/' + r.id}>{r.name}</Link>
+                                {r.id != roles[0].id ? ',' : ''}
+                              </span>
+                            ))}{' '}
+                            ]{' '}
+                          </span>
+                        )}
+                        - {o.profile.description}
+                      </CardText>
+                    );
+                  })}
+              </CardGroup>
+            </Card>
+          )}
+
           {settings.entities.groups.enabled && (
-            <Card>
+            <Card key="groups">
               <CardGroup>
                 <CardTitle>Groups:</CardTitle>
                 {currentUser.groups &&
-                  currentUser.groups.map(g => (
-                    <CardText key={g.id}>
-                      <Link to={'/groups/' + g.id}>{g.profile.displayName}</Link> - {g.profile.description}
-                    </CardText>
-                  ))}
+                  currentUser.groups.map(o => {
+                    let oa = currentUser.groupRoles.find(elem => elem.groupId == o.id);
+                    let roles = oa.roles;
+                    return (
+                      <CardText key={o.id}>
+                        <Link to={'/groups/' + o.id}>{o.profile.displayName}</Link>
+                        {roles && (
+                          <span>
+                            {' '}
+                            [{' '}
+                            {roles.map(r => (
+                              <span>
+                                <Link to={'/roles/' + r.id}>{r.name}</Link>
+                                {r.id != roles[0].id ? ',' : ''}
+                              </span>
+                            ))}{' '}
+                            ]{' '}
+                          </span>
+                        )}
+                        - {o.profile.description}
+                      </CardText>
+                    );
+                  })}
               </CardGroup>
             </Card>
           )}

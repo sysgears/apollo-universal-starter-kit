@@ -8,7 +8,7 @@ import Feature from '../connector';
 import stripeLocalMiddleware from './stripeLocal';
 import webhookMiddleware from './webhook';
 
-import { parseUser } from '../auth';
+import parseUser from '../auth/flow/parseUser';
 
 export default new Feature({
   schema,

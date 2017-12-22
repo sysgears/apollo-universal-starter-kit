@@ -2,8 +2,8 @@ import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has, _ } from 'lodash';
 import uuidv4 from 'uuid';
 
-import knex from '../../../../server/sql/connector';
-import { orderedFor } from '../../../../server/sql/helpers';
+import knex from '../../../sql/connector';
+import { orderedFor } from '../../../sql/helpers';
 
 export default class ServiceAccount {
   async list(args) {

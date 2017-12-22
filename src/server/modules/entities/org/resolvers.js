@@ -4,7 +4,7 @@ import { createBatchResolver } from 'graphql-resolve-batch';
 
 import FieldError from '../../../../common/FieldError';
 import { withAuth } from '../../../../common/authValidation';
-import { mergeLoaders } from '../../../../common/mergeLoaders';
+import { reconcileBatchOneToOne, reconcileBatchManyToMany } from '../../../sql/helpers';
 
 export default pubsub => ({
   Query: {
@@ -27,64 +27,30 @@ export default pubsub => ({
 
   User: {
     orgs: createBatchResolver(async (source, args, context) => {
-      // unique the incoming ids, graphql-resolve-batch is giving dpulicates, see Part-II
       const uids = _.uniq(source.map(s => s.userId));
-      // console.log("RESOLVER - User.orgs - uids", uids, source)
 
+      // TODO check that we probably need a call to getUserIdsForOrgIds
+      // and then to marge the results before later processing
+      // ... because a user could be in an org, but not in any groups
       const userOrgs = await context.Org.getOrgIdsForUserIdsViaGroups(uids);
-      // console.log("RESOLVER - User.orgs - userOrgs", userOrgs)
 
-      const oids = _.uniq(_.map(_.flatten(userOrgs), el => el.orgId));
-      // console.log("RESOLVER - User.orgs - oids", oids)
-
+      const oids = _.uniq(_.map(_.flatten(userOrgs), elem => elem.orgId));
       const orgs = await context.Org.getMany(oids);
-      // console.log("RESOLVER - User.orgs - orgs", orgs)
 
-      let ret = [];
-      for (let s of source) {
-        let user = _.find(userOrgs, u => u.length > 0 && u[0].userId === s.userId);
-        let os = _.uniqBy(user, 'orgId');
-        let ov = _.intersectionWith(orgs, os, (lhs, rhs) => lhs.orgId === rhs.orgId);
-        if (ov) {
-          ret.push(ov);
-        } else {
-          ret.push([]);
-        }
-      }
-
-      // console.log("RESOLVER - User.orgs - ret", ret)
+      let ret = reconcileBatchManyToMany(source, userOrgs, orgs, 'userId', 'orgId');
       return ret;
     })
   },
 
   Group: {
     orgs: createBatchResolver(async (source, args, context) => {
-      // unique the incoming ids, graphql-resolve-batch is giving dpulicates, see Part-II
       const gids = _.uniq(source.map(s => s.groupId));
-      // console.log("RESOLVER - Group.orgs - uids", uids, source)
-
       const groupOrgs = await context.Org.getOrgIdsForGroupIds(gids);
-      // console.log("RESOLVER - Group.orgs - userOrgs", userOrgs)
 
-      const oids = _.uniq(_.map(_.flatten(groupOrgs), el => el.orgId));
-      // console.log("RESOLVER - Group.orgs - oids", oids)
-
+      const oids = _.uniq(_.map(_.flatten(groupOrgs), elem => elem.orgId));
       const orgs = await context.Org.getMany(oids);
-      // console.log("RESOLVER - Org.users - orgs", orgs)
 
-      let ret = [];
-      for (let s of source) {
-        let group = _.find(groupOrgs, u => u.length > 0 && u[0].groupId === s.groupId);
-        let os = _.uniqBy(group, 'orgId');
-        let ov = _.intersectionWith(orgs, os, (lhs, rhs) => lhs.orgId === rhs.orgId);
-        if (ov) {
-          ret.push(ov);
-        } else {
-          ret.push([]);
-        }
-      }
-
-      // console.log("RESOLVER - Group.orgs - ret", ret)
+      let ret = reconcileBatchManyToMany(source, groupOrgs, orgs, 'groupId', 'orgId');
       return ret;
     })
   },
@@ -94,88 +60,35 @@ export default pubsub => ({
       return obj.orgId;
     },
     profile: createBatchResolver(async (source, args, context) => {
-      let oids = _.uniq(source.map(s => s.orgId));
-      const profiles = await context.Org.getProfileMany(oids);
-
-      if (source.length === profiles.length) {
-        return profiles;
-      }
-
-      // graphql-resolve-batch Part-II, fill in sources with 'null' which had no results
-      let ret = [];
-      for (let s of source) {
-        const res = profiles.find(elem => elem.orgId === s.orgId);
-        if (res) {
-          ret.push(res);
-        } else {
-          ret.push(null);
-        }
-      }
+      let ids = _.uniq(source.map(s => s.orgId));
+      const profiles = await context.Org.getProfileMany(ids);
+      const ret = reconcileBatchOneToOne(source, profiles, 'orgId');
       return ret;
     }),
 
     groups: createBatchResolver(async (source, args, context) => {
       const oids = _.uniq(source.map(s => s.orgId));
-      // console.log("RESOLVER - Org.groups - oids", oids, source)
-
       const orgGroups = await context.Org.getGroupIdsForOrgIds(oids);
-      // console.log("RESOLVER - Org.groups - orgGroups", orgGroups)
 
-      const uids = _.uniq(_.map(_.flatten(orgGroups), u => u.groupId));
-      // console.log("RESOLVER - Org.groups - uids", uids)
+      const gids = _.uniq(_.map(_.flatten(orgGroups), elem => elem.groupId));
+      const groups = await context.Group.getMany(gids);
 
-      const groups = await context.Group.getMany(uids);
-      // console.log("RESOLVER - Org.groups - groups", groups)
-
-      // graphql-resolve-batch Part-II
-      // need to return the same number of elements as input,
-      // but the lookup function returns per unique group id with array of orgs under it
-      let ret = [];
-      for (let s of source) {
-        let org = _.find(orgGroups, o => o.length > 0 && o[0].orgId === s.orgId);
-        let us = _.uniqBy(org, 'groupId');
-        let uv = _.intersectionWith(groups, us, (lhs, rhs) => lhs.groupId === rhs.groupId);
-        if (uv) {
-          ret.push(uv);
-        } else {
-          ret.push([]);
-        }
-      }
-
-      // console.log("RESOLVER - Org.groups - ret", ret)
+      let ret = reconcileBatchManyToMany(source, orgGroups, groups, 'orgId', 'groupId');
       return ret;
     }),
 
     users: createBatchResolver(async (source, args, context) => {
-      // unique the incoming ids, graphql-resolve-batch is giving dpulicates, see Part-II
       const oids = _.uniq(source.map(s => s.orgId));
-      // console.log("RESOLVER - Org.users - oids", oids, source)
 
+      // TODO check that we probably need a call to getUserIdsForOrgIds
+      // and then to marge the results before later processing
+      // ... because a user could be in an org, but not in any groups
       const orgUsers = await context.Org.getUserIdsForOrgIdsViaGroups(oids);
-      // console.log("RESOLVER - Org.users - orgUsers", orgUsers)
 
-      const uids = _.uniq(_.map(_.flatten(orgUsers), u => u.userId));
-      // console.log("RESOLVER - Org.users - uids", uids)
-
+      const uids = _.uniq(_.map(_.flatten(orgUsers), elem => elem.userId));
       const users = await context.User.getMany(uids);
-      // console.log("RESOLVER - Org.users - users", users)
 
-      // graphql-resolve-batch Part-II
-      // need to return the same number of elements as input,
-      // but the lookup function returns per unique group id with array of orgs under it
-      let ret = [];
-      for (let s of source) {
-        let org = _.find(orgUsers, o => o.length > 0 && o[0].orgId === s.orgId);
-        let us = _.uniqBy(org, 'userId');
-        let uv = _.intersectionWith(users, us, (lhs, rhs) => lhs.userId === rhs.userId);
-        if (uv) {
-          ret.push(uv);
-        } else {
-          ret.push([]);
-        }
-      }
-
-      // console.log("RESOLVER - Org.users - ret", ret)
+      let ret = reconcileBatchManyToMany(source, orgUsers, users, 'orgId', 'userId');
       return ret;
     })
 

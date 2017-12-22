@@ -4,7 +4,7 @@ import { createBatchResolver } from 'graphql-resolve-batch';
 
 import FieldError from '../../../../common/FieldError';
 import { withAuth } from '../../../../common/authValidation';
-import { mergeLoaders } from '../../../../common/mergeLoaders';
+import { reconcileBatchOneToOne } from '../../../sql/helpers';
 
 export default pubsub => ({
   Query: {
@@ -34,23 +34,9 @@ export default pubsub => ({
       return obj.userId;
     },
     profile: createBatchResolver(async (source, args, context) => {
-      let uids = _.uniq(source.map(s => s.userId));
-      const profiles = await context.User.getProfileMany(uids);
-
-      if (source.length === profiles.length) {
-        return profiles;
-      }
-
-      // graphql-resolve-batch Part-II
-      let ret = [];
-      for (let s of source) {
-        const res = profiles.find(elem => elem.userId === s.userId);
-        if (res) {
-          ret.push(res);
-        } else {
-          ret.push(null);
-        }
-      }
+      let ids = _.uniq(source.map(s => s.userId));
+      const profiles = await context.User.getProfileMany(ids);
+      const ret = reconcileBatchOneToOne(source, profiles, 'userId');
       return ret;
     })
   },

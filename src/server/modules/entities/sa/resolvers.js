@@ -1,8 +1,10 @@
 /*eslint-disable no-unused-vars*/
-import { pick } from 'lodash';
+import { _ } from 'lodash';
+import { createBatchResolver } from 'graphql-resolve-batch';
+
 import FieldError from '../../../../common/FieldError';
 import { withAuth } from '../../../../common/authValidation';
-import { mergeLoaders } from '../../../../common/mergeLoaders';
+import { reconcileBatchOneToOne } from '../../../sql/helpers';
 
 export default pubsub => ({
   Query: {
@@ -15,18 +17,12 @@ export default pubsub => ({
   },
 
   ServiceAccount: {
-    profile(obj) {
-      return obj;
-    }
-  },
-
-  ServiceAccountProfile: {
-    displayName(obj) {
-      return obj.displayName;
-    },
-    description(obj) {
-      return obj.description;
-    }
+    profile: createBatchResolver(async (source, args, context) => {
+      let ids = _.uniq(source.map(s => s.saId));
+      const profiles = await context.SvcAcct.getProfileMany(ids);
+      const ret = reconcileBatchOneToOne(source, profiles, 'saId');
+      return ret;
+    })
   },
 
   Mutation: {

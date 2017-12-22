@@ -60,6 +60,11 @@ export default pubsub => ({
       return obj.orgId;
     },
     profile: createBatchResolver(async (source, args, context) => {
+      // shortcut for other resolver paths which pull the profile with their call
+      if (source[0].displayName) {
+        return source;
+      }
+
       let ids = _.uniq(source.map(s => s.orgId));
       const profiles = await context.Org.getProfileMany(ids);
       const ret = reconcileBatchOneToOne(source, profiles, 'orgId');
@@ -100,6 +105,18 @@ export default pubsub => ({
       ]).then(mergeLoaders);
     }
     */
+  },
+
+  OrgProfile: {
+    domain(obj) {
+      return obj.domain;
+    },
+    displayName(obj) {
+      return obj.displayName;
+    },
+    description(obj) {
+      return obj.description;
+    }
   },
 
   Mutation: {

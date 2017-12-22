@@ -18,11 +18,24 @@ export default pubsub => ({
 
   ServiceAccount: {
     profile: createBatchResolver(async (source, args, context) => {
+      // shortcut for other resolver paths which pull the profile with their call
+      if (source[0].displayName) {
+        return source;
+      }
       let ids = _.uniq(source.map(s => s.saId));
       const profiles = await context.SvcAcct.getProfileMany(ids);
       const ret = reconcileBatchOneToOne(source, profiles, 'saId');
       return ret;
     })
+  },
+
+  ServiceAccountProfile: {
+    displayName(obj) {
+      return obj.displayName;
+    },
+    description(obj) {
+      return obj.description;
+    }
   },
 
   Mutation: {

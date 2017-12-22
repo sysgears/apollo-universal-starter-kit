@@ -58,6 +58,11 @@ export default pubsub => ({
       return obj.groupId;
     },
     profile: createBatchResolver(async (source, args, context) => {
+      // shortcut for other resolver paths which pull the profile with their call
+      if (source[0].displayName) {
+        return source;
+      }
+
       let ids = _.uniq(source.map(s => s.groupId));
       const profiles = await context.Group.getProfileMany(ids);
       const ret = reconcileBatchOneToOne(source, profiles, 'groupId');
@@ -73,6 +78,15 @@ export default pubsub => ({
       let ret = reconcileBatchManyToMany(source, groupUsers, users, 'groupId', 'userId');
       return ret;
     })
+  },
+
+  GroupProfile: {
+    displayName(obj) {
+      return obj.displayName;
+    },
+    description(obj) {
+      return obj.description;
+    }
   },
 
   Mutation: {

@@ -34,11 +34,45 @@ export default pubsub => ({
       return obj.userId;
     },
     profile: createBatchResolver(async (source, args, context) => {
+      // shortcut for other resolver paths which pull the profile with their call
+      if (source[0].displayName) {
+        return source;
+      }
       let ids = _.uniq(source.map(s => s.userId));
       const profiles = await context.User.getProfileMany(ids);
       const ret = reconcileBatchOneToOne(source, profiles, 'userId');
       return ret;
     })
+  },
+
+  UserProfile: {
+    displayName(obj) {
+      return obj.displayName;
+    },
+    firstName(obj) {
+      return obj.firstName;
+    },
+    middleName(obj) {
+      return obj.middleName;
+    },
+    lastName(obj) {
+      return obj.lastName;
+    },
+    title(obj) {
+      return obj.title;
+    },
+    suffix(obj) {
+      return obj.suffix;
+    },
+    language(obj) {
+      return obj.language;
+    },
+    locale(obj) {
+      return obj.locale;
+    },
+    emails(obj) {
+      return obj.emails;
+    }
   },
 
   Mutation: {

@@ -2,11 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { Link } from 'react-router-dom';
-import { capitalize } from 'lodash';
 
 import { Table, Button } from '../../common/components/web';
 import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
+import { createColumnFields } from '../../common/util';
 
 class $Module$ListView extends React.PureComponent {
   static propTypes = {
@@ -78,48 +77,7 @@ class $Module$ListView extends React.PureComponent {
 
   render() {
     const { loading, $module$s, loadMoreRows } = this.props;
-
-    let columns = [];
-
-    for (const key of $Module$Schema.keys()) {
-      if (key === 'id') {
-        columns.push({
-          title: (
-            <a onClick={e => this.orderBy(e, key)} href="#">
-              {capitalize(key)} {this.renderOrderByArrow(key)}
-            </a>
-          ),
-          dataIndex: 'id',
-          key: 'id',
-          render: (text, record) => (
-            <Link className="$module$-link" to={`/$module$/${record.id}`}>
-              {text}
-            </Link>
-          )
-        });
-      } else {
-        columns.push({
-          title: (
-            <a onClick={e => this.orderBy(e, key)} href="#">
-              {capitalize(key)} {this.renderOrderByArrow(key)}
-            </a>
-          ),
-          dataIndex: key,
-          key: key
-        });
-      }
-    }
-
-    columns.push({
-      title: 'Actions',
-      key: 'actions',
-      render: (text, record) => (
-        <Button color="primary" size="sm" onClick={() => this.hendleDelete(record.id)}>
-          Delete
-        </Button>
-      )
-    });
-
+    const columns = createColumnFields($Module$Schema, '$module$', this.orderBy, this.renderOrderByArrow);
     return (
       <div>
         <Table

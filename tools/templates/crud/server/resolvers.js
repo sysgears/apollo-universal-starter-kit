@@ -17,9 +17,14 @@ export default pubsub => ({
         }
       };
     },
-    $module$: (obj, args, { $Module$ }, info) => {
-      return $Module$.get(args, parseFields(info));
+    $module$: async (obj, args, { $Module$ }, info) => {
+      const $module$ = await $Module$.get(args, parseFields(info).node);
+      return { node: $module$ };
     }
+  },
+  $Module$Data: {
+    // order data
+    // end order data
   },
   // schema batch resolvers
   // end schema batch resolvers

@@ -2,7 +2,11 @@
 
 query $module$($id: Int!) {
   $module$(id: $id) {
-    ...$Module$Info
+    node {
+      ...$Module$Info
+    }
+    ### form data
+    ### end form data
   }
 }
 

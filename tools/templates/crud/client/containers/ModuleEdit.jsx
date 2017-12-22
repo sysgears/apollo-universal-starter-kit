@@ -12,12 +12,12 @@ import EDIT_$MODULE$ from '../graphql/Edit$Module$.graphql';
 
 class $Module$Edit extends React.Component {
   onSubmit = async values => {
-    const { $module$, add$Module$, edit$Module$ } = this.props;
+    const { $module$: { node }, add$Module$, edit$Module$ } = this.props;
     let result = null;
 
     const insertValues = pickInputFields($Module$Schema, values);
 
-    if ($module$) {
+    if (node) {
       result = await edit$Module$(insertValues);
     } else {
       result = await add$Module$(insertValues);
@@ -38,7 +38,7 @@ class $Module$Edit extends React.Component {
 }
 
 $Module$Edit.propTypes = {
-  crud: PropTypes.object,
+  $module$: PropTypes.object,
   add$Module$: PropTypes.func.isRequired,
   edit$Module$: PropTypes.func.isRequired
 };

@@ -10,6 +10,10 @@ type $Module$s {
   edges: [$Module$]
 }
 
+type $Module$Data {
+  node: $Module$
+}
+
 type $Module$Payload {
   node: $Module$
   errors: [FieldError!]
@@ -35,7 +39,7 @@ input Edit$Module$Input {
 
 extend type Query {
   $module$s(limit: Int, offset: Int, orderBy: OrderBy$Module$Input, filter: Filter$Module$Input): $Module$s
-  $module$(id: Int!): $Module$
+  $module$(id: Int!): $Module$Data
 }
 
 extend type Mutation {

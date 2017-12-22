@@ -8,6 +8,12 @@ import $Module$Form from './$Module$Form';
 import settings from '../../../../../settings';
 
 class $Module$EditView extends React.PureComponent {
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    $module$: PropTypes.object,
+    onSubmit: PropTypes.func.isRequired
+  };
+
   renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Edit $Module$`}
@@ -38,17 +44,11 @@ class $Module$EditView extends React.PureComponent {
             Back
           </Link>
           <h2>{$module$ ? 'Edit' : 'Create'} $Module$</h2>
-          <$Module$Form onSubmit={onSubmit} initialValues={$module$} />
+          <$Module$Form onSubmit={onSubmit} $module$={$module$} initialValues={$module$.node} />
         </PageLayout>
       );
     }
   }
 }
-
-$Module$EditView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  $module$: PropTypes.object,
-  onSubmit: PropTypes.func.isRequired
-};
 
 export default $Module$EditView;

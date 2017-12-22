@@ -80,7 +80,7 @@ function copyFiles(logger, templatePath, module, action, tablePrefix, location) 
 
       if (tablePrefix !== '') {
         shell.cd(`${__dirname}/../../src/${location}/modules/${module}`);
-        shell.sed('-i', /const prefix = '';/g, `const prefix = '${tablePrefix}';`, 'sql.js');
+        shell.sed('-i', /this.prefix = '';/g, `this.prefix = '${tablePrefix}';`, 'sql.js');
 
         logger.info(chalk.green(`✔ Inserted db table prefix!`));
       }
@@ -174,13 +174,20 @@ function updateSchema(logger, module) {
       const file = `schema.graphql`;
 
       // regenerate input fields
+      let moduleData = `  node: ${Module}\n`;
       let inputAdd = '';
       let inputEdit = '';
       for (const key of schema.keys()) {
         const value = schema.values[key];
-        if (!value.type.isSchema && value.type.constructor !== Array) {
+        if (value.type.isSchema) {
           if (key !== 'id') {
-            inputAdd += `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name, value, key) + '\n';
+            inputAdd += `  ${key}Id: Int!\n`;
+          }
+          inputEdit += `  ${key}Id: Int!\n`;
+          moduleData += `  ${key}s: [${value.type.name}]\n`;
+        } else if (value.type.constructor !== Array) {
+          if (key !== 'id') {
+            inputAdd += `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name + '.' + key, value, []) + '\n';
           }
           inputEdit += `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name + '.' + key, value, []) + '\n';
         }
@@ -202,6 +209,12 @@ function updateSchema(logger, module) {
         )
         .to(file);
 
+      // override ModuleData in schema.graphql file
+      let replaceModuleData = `type ${Module}Data {([^}])*\\n}`;
+      shell
+        .ShellString(shell.cat(file).replace(RegExp(replaceModuleData, 'g'), `type ${Module}Data {\n${moduleData}}`))
+        .to(file);
+
       // override AddModuleInput in schema.graphql file
       const replaceAdd = `input Add${Module}Input {([^}])*\\n}`;
       shell
@@ -218,9 +231,22 @@ function updateSchema(logger, module) {
 
       const resolverFile = `resolvers.js`;
       let replace = '';
+      moduleData = '';
       for (const key of schema.keys()) {
         const value = schema.values[key];
-        if (value.type.constructor === Array) {
+        if (value.type.isSchema) {
+          let column = 'name';
+          for (const remoteKey of value.type.keys()) {
+            const remoteValue = value.type.values[remoteKey];
+            if (remoteValue.sortBy) {
+              column = remoteKey;
+            }
+          }
+          moduleData += `    ${key}s(obj, args, { ${value.type.name} }) {
+      return ${value.type.name}.getPaginated(args, { id: true, ${column}: true });
+    },
+`;
+        } else if (value.type.constructor === Array) {
           replace += `  ${schema.name}: {
     ${key}: createBatchResolver((sources, args, { ${schema.name}, ${value.type[0].name} }, info) => {
       return ${schema.name}.getByIds(sources.map(({ id }) => id), '${decamelize(schema.name)}', ${
@@ -231,6 +257,19 @@ function updateSchema(logger, module) {
 `;
         }
       }
+
+      // override batch resolvers in resolvers.js file
+      replaceModuleData = `// order data([^*]+)// end order data`;
+      shell
+        .ShellString(
+          shell
+            .cat(resolverFile)
+            .replace(
+              RegExp(replaceModuleData, 'g'),
+              `// order data\n${moduleData.replace(/,\s*$/, '')}    // end order data`
+            )
+        )
+        .to(resolverFile);
 
       // override batch resolvers in resolvers.js file
       const replaceBatchResolvers = `// schema batch resolvers([^*]+)// end schema batch resolvers`;
@@ -259,7 +298,19 @@ function updateSchema(logger, module) {
       let graphql = '';
       for (const key of schema.keys()) {
         const value = schema.values[key];
-        if (!value.type.isSchema && value.type.constructor !== Array) {
+        if (value.type.isSchema) {
+          let column = 'name';
+          for (const remoteKey of value.type.keys()) {
+            const remoteValue = value.type.values[remoteKey];
+            if (remoteValue.sortBy) {
+              column = remoteKey;
+            }
+          }
+          graphql += `  ${key} {\n`;
+          graphql += `    id\n`;
+          graphql += `    ${column}\n`;
+          graphql += `  }\n`;
+        } else if (value.type.constructor !== Array) {
           graphql += `  ${key}\n`;
         }
       }
@@ -272,6 +323,44 @@ function updateSchema(logger, module) {
       logger.info(chalk.green(`✔ Fragment in ${pathFragment}${file} successfully updated!`));
     } else {
       logger.error(chalk.red(`✘ Fragment path ${pathFragment} not found!`));
+    }
+
+    // get module query file
+    const pathModuleQuery = `${__dirname}/../../src/client/modules/${module}/graphql/`;
+    if (fs.existsSync(pathModuleQuery)) {
+      const file = `${Module}Query.graphql`;
+
+      // regenerate graphql module query
+      let graphql = '';
+      for (const key of schema.keys()) {
+        const value = schema.values[key];
+        if (value.type.isSchema) {
+          let column = 'name';
+          for (const remoteKey of value.type.keys()) {
+            const remoteValue = value.type.values[remoteKey];
+            if (remoteValue.sortBy) {
+              column = remoteKey;
+            }
+          }
+          graphql += `    ${key}s {\n`;
+          graphql += `      id\n`;
+          graphql += `      ${column}\n`;
+          graphql += `    }\n`;
+        }
+      }
+
+      shell.cd(pathModuleQuery);
+      // override graphql module query file
+      const replaceFragment = `### form data([^()]+)### end form data`;
+      shell
+        .ShellString(
+          shell.cat(file).replace(RegExp(replaceFragment, 'g'), `### form data\n${graphql}    ### end form data`)
+        )
+        .to(file);
+
+      logger.info(chalk.green(`✔ Module query in ${pathModuleQuery}${file} successfully updated!`));
+    } else {
+      logger.error(chalk.red(`✘ Module query path ${pathModuleQuery} not found!`));
     }
   } else {
     logger.info(chalk.red(`✘ Module ${module} in path ${modulePath} not found!`));
@@ -288,7 +377,7 @@ module.exports = (action, args, options, logger) => {
   if (args.tablePrefix) {
     tablePrefix = args.tablePrefix;
   }
-
+  console.log(tablePrefix);
   let templatePath = `${__dirname}/../templates/module`;
   if (action === 'addcrud') {
     templatePath = `${__dirname}/../templates/crud`;

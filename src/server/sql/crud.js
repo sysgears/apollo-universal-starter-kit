@@ -1,5 +1,5 @@
 import { has } from 'lodash';
-import { decamelize } from 'humps';
+import { decamelize, decamelizeKeys } from 'humps';
 import knexnest from 'knexnest';
 
 import { selectBy, orderedFor } from './helpers';
@@ -38,7 +38,25 @@ export default class Crud {
         order = orderBy.order;
       }
 
-      queryBuilder.orderBy(decamelize(column), order);
+      for (const key of this.schema.keys()) {
+        if (column === key) {
+          const value = this.schema.values[key];
+          if (value.type.isSchema) {
+            let sortBy = 'name';
+            for (const remoteKey of value.type.keys()) {
+              const remoteValue = value.type.values[remoteKey];
+              if (remoteValue.sortBy) {
+                sortBy = remoteKey;
+              }
+            }
+            column = `${decamelize(value.type.name)}.${sortBy}`;
+          } else {
+            column = `${this.tableName}.${decamelize(column)}`;
+          }
+        }
+      }
+
+      queryBuilder.orderBy(column, order);
     } else {
       queryBuilder.orderBy(`${this.tableName}.id`);
     }
@@ -74,13 +92,13 @@ export default class Crud {
 
   add(input) {
     return knex(`${this.prefix}${this.tableName}`)
-      .insert(input)
+      .insert(decamelizeKeys(input))
       .returning('id');
   }
 
   edit({ id, ...input }) {
     return knex(`${this.prefix}${this.tableName}`)
-      .update(input)
+      .update(decamelizeKeys(input))
       .where({ id });
   }
 

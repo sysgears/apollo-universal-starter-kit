@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
      </div>
 	`
 })
-export default class Container implements OnInit {
+export class Container implements OnInit {
   @Input() public fluid: boolean;
   public className: string;
 

@@ -8,4 +8,4 @@ import { Component } from '@angular/core';
 		</li>
 	`
 })
-export default class MenuItem {}
+export class MenuItem {}

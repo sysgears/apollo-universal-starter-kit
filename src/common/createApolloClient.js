@@ -1,6 +1,6 @@
-import ApolloClient from "apollo-client";
+import { ApolloClient } from "apollo-client";
 
-const createApolloClient = clientParams => {
+export const createApolloClient = clientParams => {
   const params = { ...clientParams };
   if (__SSR__) {
     if (__CLIENT__) {
@@ -14,5 +14,3 @@ const createApolloClient = clientParams => {
   }
   return new ApolloClient(params);
 };
-
-export default createApolloClient;

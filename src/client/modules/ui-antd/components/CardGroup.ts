@@ -8,4 +8,4 @@ import { Component } from '@angular/core';
      </div>
 	`
 })
-export default class CardGroup {}
+export class CardGroup {}

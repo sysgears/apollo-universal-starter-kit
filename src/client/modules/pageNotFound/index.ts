@@ -1,6 +1,6 @@
-import Feature from '../connector';
-import PageNotFound from './containers/PageNotFound';
+import { Feature } from '../connector';
+import { PageNotFound } from './containers/PageNotFound';
 
-export default new Feature({
+export const pageNotFound = new Feature({
   route: [{ path: '**', component: PageNotFound }]
 });

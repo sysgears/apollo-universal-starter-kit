@@ -12,7 +12,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     </button>
   `
 })
-export default class Button {
+export class Button {
   @Input() public type: string;
   @Input() public className: string;
   @Input() public click: any;

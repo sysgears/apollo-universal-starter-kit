@@ -2,7 +2,7 @@ import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
-import PostService, { AddPost, DeletePost } from '../containers/Post';
+import { PostService, AddPost, DeletePost } from '../containers/Post';
 
 @Component({
   selector: 'posts-view',
@@ -31,7 +31,7 @@ import PostService, { AddPost, DeletePost } from '../containers/Post';
     </ng-template>
   `
 })
-export default class PostList implements OnInit, OnDestroy {
+export class PostList implements OnInit, OnDestroy {
   public loading: boolean = true;
   public posts: any = [];
   private subsOnLoad: Subscription;

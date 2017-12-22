@@ -7,7 +7,7 @@ import { Component, ElementRef, Input, OnInit, Renderer2, ViewEncapsulation } fr
 	`,
   encapsulation: ViewEncapsulation.None
 })
-export default class Row implements OnInit {
+export class Row implements OnInit {
   @Input() public noGutters: boolean;
   @Input() public justifyContent: string;
   @Input() public justifyContentSm: string;

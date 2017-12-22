@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as REGISTER from '../graphql/Register.graphql';
 
 @Injectable()
-export default class RegisterService {
+export class RegisterService {
   constructor(private apollo: Apollo) {}
 
   public register(username: string, email: string, password: string, callback: (result: any) => any) {

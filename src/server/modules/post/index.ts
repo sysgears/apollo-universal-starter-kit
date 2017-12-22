@@ -1,12 +1,12 @@
 import * as dl from 'dataloader';
 
-import createResolvers from './resolvers';
+import { createResolvers } from './resolvers';
 import * as schema from './schema.graphqls';
-import Post from './sql';
+import { Post } from './sql';
 
-import Feature from '../connector';
+import { Feature } from '../connector';
 
-export default new Feature({
+export const postModule = new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: () => {

@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
-import PostEditService from '../containers/PostEdit';
+import { PostEditService } from '../containers/PostEdit';
 import { FillPostFormAction, PostFormData, PostFormState, ResetPostFormAction } from '../reducers/index';
 
 @Component({
@@ -30,7 +30,7 @@ import { FillPostFormAction, PostFormData, PostFormState, ResetPostFormAction } 
           <div class="text-center">Loading...</div>
       </ng-template>`
 })
-export default class PostEditView implements OnInit, OnDestroy {
+export class PostEditView implements OnInit, OnDestroy {
   public loading: boolean = true;
   public submitting: boolean = false;
   public title: string;

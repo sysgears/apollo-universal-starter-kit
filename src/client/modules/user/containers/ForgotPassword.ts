@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as FORGOT_PASSWORD from '../graphql/ForgotPassword.graphql';
 
 @Injectable()
-export default class ForgotPasswordService {
+export class ForgotPasswordService {
   constructor(private apollo: Apollo) {}
 
   public forgotPassword(email: string, callback: (result: any) => any) {

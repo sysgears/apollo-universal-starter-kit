@@ -27,7 +27,7 @@ import { FormInput } from './Form';
   `,
   styles: ['small {color: brown}']
 })
-export default class {
+export class RenderCheckBox {
   @Input() public input: FormInput;
   @Input() public reduxForm: any;
   @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();

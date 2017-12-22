@@ -1,6 +1,6 @@
-import settings from '../../settings';
+import { settings } from '../../settings';
 
-const truncateTables = async (knex: any, Promise: any, tables: string[]) => {
+export const truncateTables = async (knex: any, Promise: any, tables: string[]) => {
   if (settings.db.dbType === 'sqlite' || process.env.NODE_ENV === 'test') {
     return Promise.all(tables.map(table => knex(table).truncate()));
   } else if (settings.db.dbType === 'mysql') {
@@ -14,5 +14,3 @@ const truncateTables = async (knex: any, Promise: any, tables: string[]) => {
     return Promise.all(tables.map(table => knex.raw(`TRUNCATE "${table}" RESTART IDENTITY CASCADE`)));
   }
 };
-
-export default truncateTables;

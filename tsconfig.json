@@ -6,7 +6,7 @@
     "sourceMap": true, 
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es2017", "dom", "esnext"],
+    "lib": ["es2015", "dom", "esnext"],
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "importHelpers": true,
@@ -16,12 +16,13 @@
     "typeRoots": [
       "node_modules/@types"
     ]
-
   },
   "include": [
     "./typings/*.d.ts",
+    "./src/client/custom-typings.d.ts",
     "**/*.ts"
   ],
+  "exclude": ["./src/client/modules/**/*.ts"],
   "angularCompilerOptions": {
     "genDir": ".",
     "skipMetadataEmit": true

@@ -1,6 +1,6 @@
 import { ActionReducerMap } from '@ngrx/store';
 
-import modules from '../client/modules';
+import { modules } from '../client/app/components';
 
 export const reducers: ActionReducerMap<any> = {
   ...modules.reducers

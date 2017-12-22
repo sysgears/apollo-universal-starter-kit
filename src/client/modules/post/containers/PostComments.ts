@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as ADD_COMMENT from '../graphql/AddComment.graphql';
@@ -52,7 +51,7 @@ export const DeleteComment = (prev: any, id: any) => {
 };
 
 @Injectable()
-export default class PostCommentsService {
+export class PostCommentsService {
   constructor(private apollo: Apollo) {}
 
   public subscribeToCommentList(postId: number, callback: (result: any) => any) {

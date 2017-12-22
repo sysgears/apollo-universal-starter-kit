@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import * as _ from 'lodash';
-import * as settings from './config';
+import * as Settings from './config';
 
 interface AppSettings {
   app?: any;
@@ -12,9 +12,9 @@ interface AppSettings {
   analytics?: any;
 }
 
-const envSettings: AppSettings = {
-  ..._.pickBy(settings, (v, k) => k !== 'env'),
-  ..._.get(settings, 'env.' + process.env.NODE_ENV)
+const settings: AppSettings = {
+  ..._.pickBy(Settings, (v, k) => k !== 'env'),
+  ..._.get(Settings, 'env.' + process.env.NODE_ENV)
 };
 
-export default envSettings;
+export { settings };

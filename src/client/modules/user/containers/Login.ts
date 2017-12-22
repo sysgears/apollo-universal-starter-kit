@@ -14,7 +14,7 @@ enum Events {
 }
 
 @Injectable()
-export default class LoginService {
+export class LoginService {
   private loginEventCbs: any[] = [];
   private logoutEventCbs: any[] = [];
 

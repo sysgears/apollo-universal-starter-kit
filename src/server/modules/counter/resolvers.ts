@@ -2,7 +2,7 @@ import { PubSub } from 'graphql-subscriptions';
 
 const COUNTER_SUBSCRIPTION = 'counter_subscription';
 
-export default (pubsub: PubSub) => ({
+export const createResolvers = (pubsub: PubSub) => ({
   Query: {
     counter(obj: any, args: any, context: any) {
       return context.Counter.counterQuery();

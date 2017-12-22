@@ -253,7 +253,16 @@ module.exports = {
             }
           }
         ]
-      }
+      },
+      {
+        test: /\.graphqls/,
+        use: 'raw-loader'
+      },
+      {
+        test: /\.(graphql|gql)$/,
+        exclude: path.join(process.cwd(), "node_modules"),
+        use: 'graphql-tag/loader'
+      },
     ]
   },
   /**
@@ -262,17 +271,6 @@ module.exports = {
    * See: http://webpack.github.io/docs/configuration.html#plugins
    */
   plugins: [
-    /**
-     * Plugin: AssetsPlugin
-     * Description: Emits a json file with assets paths.
-     *
-     * See: https://github.com/kossnocorp/assets-webpack-plugin
-     */
-    // new assetsPlugin({
-    //     path: root(settings.paths.public.assets.root),
-    //     filename: 'webpack-assets.json',
-    //     prettyPrint: true
-    // }),
     /**
      * Plugin: DLLBundlesPlugin
      * Description: Bundles group of packages as DLLs

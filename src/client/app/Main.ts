@@ -5,12 +5,12 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
-import '../modules/ui-bootstrap/styles/styles.scss';
+import './components/ui-bootstrap/styles/styles.scss';
 
 /* ApolloClient initialization */
 
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import ApolloClient from 'apollo-client';
+import { ApolloClient } from 'apollo-client';
 import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
 import { BatchHttpLink } from 'apollo-link-batch-http';
@@ -19,8 +19,8 @@ import { LoggingLink } from 'apollo-logger';
 import { getOperationAST } from 'graphql';
 import * as url from 'url';
 
-import settings from '../../../settings';
-import modules from '../modules';
+import { settings } from '../../../settings';
+import { modules } from './components';
 
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
@@ -93,22 +93,22 @@ const client = new ApolloClient({
   cache
 });
 
-export let clientProvider = () => {
+export function clientProvider() {
   return client;
-};
-
-if (module.hot) {
-  module.hot.dispose(() => {
-    // Force Apollo to fetch the latest data from the server
-    delete window.__APOLLO_STATE__;
-  });
 }
+
+// if (module.hot) {
+//   module.hot.dispose(() => {
+//     // Force Apollo to fetch the latest data from the server
+//     delete window.__APOLLO_STATE__;
+//   });
+// }
 
 @Component({
   selector: 'body div:first-child',
   template: `<page-layout></page-layout>`
 })
-export default class Main implements OnInit {
+export class Main implements OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private titleService: Title) {}
 
   public ngOnInit(): void {

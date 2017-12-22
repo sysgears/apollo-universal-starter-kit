@@ -3,7 +3,7 @@ interface Error {
   message: string;
 }
 
-export default class FieldError {
+export class FieldError {
   public errors: Error[];
 
   constructor() {

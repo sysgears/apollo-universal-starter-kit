@@ -4,7 +4,7 @@ import { Request, RequestHandler } from 'express';
 import { Application } from 'express';
 import { DocumentNode } from 'graphql';
 import { castArray, map, merge, union, without } from 'lodash';
-import log from '../../common/log';
+import { log } from '../../common/log';
 
 const combine = (features: IArguments, extractor: (x: Feature) => any): any[] =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);
@@ -87,4 +87,4 @@ class Feature {
   }
 }
 
-export default Feature;
+export { Feature };

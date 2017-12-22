@@ -43,7 +43,7 @@ const linkTypes = [
     </a>
   `
 })
-export default class Link implements OnInit {
+export class Link implements OnInit {
   @Input() public id: string;
   @Input() public className: string;
   @Input() public to: string;

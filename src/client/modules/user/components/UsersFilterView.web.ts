@@ -40,7 +40,7 @@ import { UserFilterIsActive, UserFilterRole, UserFilterSearchText } from '../red
     </form>
   `
 })
-export default class UsersFilterView implements OnInit, OnDestroy {
+export class UsersFilterView implements OnInit, OnDestroy {
   public roleOptions: any;
   private searchTextChanged = new Subject<string>();
   private subscription: Subscription;

@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
-import UsersListService, { AddUser, DeleteUser, UpdateUser } from '../containers/UsersList';
+import { UsersListService, AddUser, DeleteUser, UpdateUser } from '../containers/UsersList';
 import { UserOrderBy } from '../reducers';
 
 @Component({
@@ -32,7 +32,7 @@ import { UserOrderBy } from '../reducers';
   }`
   ]
 })
-export default class UsersListView implements OnInit, OnDestroy {
+export class UsersListView implements OnInit, OnDestroy {
   public searchText: string;
   public role: string;
   public isActive: boolean;

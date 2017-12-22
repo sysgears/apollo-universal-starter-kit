@@ -1,10 +1,10 @@
 import { commentFormReducer, postFormReducer, reducer } from './reducers';
 
-import Feature from '../connector';
-import PostEditView from './components/PostEditView.web';
-import PostList from './components/PostList.web';
+import { Feature } from '../connector';
+import { PostEditView } from './components/PostEditView.web';
+import { PostList } from './components/PostList.web';
 
-export default new Feature({
+export const post = new Feature({
   route: [
     {
       path: 'posts',

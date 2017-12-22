@@ -11,4 +11,4 @@ import '../styles/styles.scss';
     <footer class="footer"><div class="text-center">&copy; 2017. Example Apollo App.</div></footer>
   </section>`
 })
-export default class {}
+export class PageLayout {}

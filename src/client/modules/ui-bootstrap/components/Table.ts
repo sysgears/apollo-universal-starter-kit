@@ -62,7 +62,7 @@ export enum ElemType {
     </table>
   `
 })
-export default class Table {
+export class Table {
   @Input() public className: string;
   @Input() public columns: any;
   @Input() public rows: CellData[];

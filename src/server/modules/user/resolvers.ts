@@ -1,11 +1,11 @@
 /*eslint-disable no-unused-vars*/
-import withAuth from 'graphql-auth';
+import { withAuth } from 'graphql-auth';
 import { PubSub } from 'graphql-subscriptions';
 import * as jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
-import settings from '../../../../settings';
-import FieldError from '../../../common/FieldError';
-import { refreshTokens, tryLogin } from './auth/index';
+import { settings } from '../../../../settings';
+import { FieldError } from '../../../common/FieldError';
+import { refreshTokens, tryLogin } from './auth';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
 
@@ -22,7 +22,7 @@ export interface UserParams {
   input?: AuthInput;
 }
 
-export default (pubsub: PubSub) => ({
+export const createResolvers = (pubsub: PubSub) => ({
   Query: {
     users: withAuth(['user:view:all'], (obj: any, query: any, context: any) => {
       return context.User.getUsers(query.orderBy, query.filter);

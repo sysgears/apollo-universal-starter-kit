@@ -1,4 +1,4 @@
-import * as knex from 'knex';
+import * as Knex from 'knex';
 import * as environments from '../../../knexdata';
 
-export default knex(environments[process.env.NODE_ENV]);
+export const knex = Knex(environments[process.env.NODE_ENV]);

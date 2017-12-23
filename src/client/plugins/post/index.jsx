@@ -11,7 +11,7 @@ import PostEdit from './containers/PostEdit';
 
 import reducers from './reducers';
 
-import Feature from '../connector';
+import Plugin from '../plugin';
 
 class PostListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -45,7 +45,7 @@ const PostNavigator = StackNavigator({
   PostEdit: { screen: PostEditScreen }
 });
 
-export default new Feature({
+export default new Plugin({
   tabItem: {
     Post: {
       screen: PostNavigator,

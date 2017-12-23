@@ -1,6 +1,6 @@
 // Components
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
-import Feature from '../connector';
+import Plugin from '../plugin';
 
-export default new Feature({ schema, createResolversFunc: createResolvers });
+export default new Plugin({ schema, createResolversFunc: createResolvers });

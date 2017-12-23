@@ -2,13 +2,13 @@ import { graphqlExpress } from 'apollo-server-express';
 import 'isomorphic-fetch';
 
 import schema from '../api/schema';
-import modules from '../modules';
+import plugins from '../plugins';
 import settings from '../../../settings';
 import log from '../../common/log';
 
 export default async (req, res, next) => {
   try {
-    const context = await modules.createContext(req, res);
+    const context = await plugins.createContext(req, res);
 
     graphqlExpress(() => ({
       schema,

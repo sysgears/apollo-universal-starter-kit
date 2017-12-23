@@ -12,15 +12,15 @@ String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-function copyFiles(logger, templatePath, module, location) {
+function copyFiles(logger, templatePath, plugin, location) {
   logger.info(`Copying ${location} files…`);
 
-  // create new module directory
-  const mkdir = shell.mkdir(`${__dirname}/../../src/${location}/modules/${module}`);
+  // create new plugin directory
+  const mkdir = shell.mkdir(`${__dirname}/../../src/${location}/plugins/${plugin}`);
 
   // continue only if directory does not jet exist
   if (mkdir.code === 0) {
-    const destinationPath = `${__dirname}/../../src/${location}/modules/${module}`;
+    const destinationPath = `${__dirname}/../../src/${location}/plugins/${plugin}`;
     shell.cp('-R', `${templatePath}/${location}/*`, destinationPath);
 
     logger.info(`✔ The ${location} files have been copied!`);
@@ -31,82 +31,82 @@ function copyFiles(logger, templatePath, module, location) {
     // rename files
     shell.ls('-Rl', '.').forEach(entry => {
       if (entry.isFile()) {
-        const moduleFile = entry.name.replace('Module', module.capitalize());
-        shell.mv(entry.name, moduleFile);
+        const pluginFile = entry.name.replace('Module', plugin.capitalize());
+        shell.mv(entry.name, pluginFile);
       }
     });
 
-    // replace module names
+    // replace plugin names
     shell.ls('-Rl', '.').forEach(entry => {
       if (entry.isFile()) {
-        shell.sed('-i', /\$module\$/g, module, entry.name);
-        shell.sed('-i', /\$Module\$/g, module.toCamelCase().capitalize(), entry.name);
+        shell.sed('-i', /\$plugin\$/g, plugin, entry.name);
+        shell.sed('-i', /\$Module\$/g, plugin.toCamelCase().capitalize(), entry.name);
       }
     });
 
     shell.cd('..');
-    // get module input data
-    const path = `${__dirname}/../../src/${location}/modules/index.js`;
+    // get plugin input data
+    const path = `${__dirname}/../../src/${location}/plugins/index.js`;
     let data = fs.readFileSync(path);
 
-    // extract Feature modules
-    const re = /Feature\(([^()]+)\)/g;
+    // extract Plugin plugins
+    const re = /Plugin\(([^()]+)\)/g;
     const match = re.exec(data);
 
-    // prepend import module
-    const prepend = `import ${module} from './${module}';\n`;
+    // prepend import plugin
+    const prepend = `import ${plugin} from './${plugin}';\n`;
     fs.writeFileSync(path, prepend + data);
 
-    // add module to Feature function
-    shell.sed('-i', re, `Feature(${module}, ${match[1]})`, 'index.js');
+    // add plugin to Plugin function
+    shell.sed('-i', re, `Plugin(${plugin}, ${match[1]})`, 'index.js');
 
     logger.info(`✔ Module for ${location} successfully created!`);
   }
 }
 
-function deleteFiles(logger, templatePath, module, location) {
+function deleteFiles(logger, templatePath, plugin, location) {
   logger.info(`Deleting ${location} files…`);
 
-  const modulePath = `${__dirname}/../../src/${location}/modules/${module}`;
+  const pluginPath = `${__dirname}/../../src/${location}/plugins/${plugin}`;
 
-  if (fs.existsSync(modulePath)) {
-    // create new module directory
-    shell.rm('-rf', modulePath);
+  if (fs.existsSync(pluginPath)) {
+    // create new plugin directory
+    shell.rm('-rf', pluginPath);
 
     // change to destination directory
-    shell.cd(`${__dirname}/../../src/${location}/modules/`);
+    shell.cd(`${__dirname}/../../src/${location}/plugins/`);
 
-    // add module to Feature function
-    //let ok = shell.sed('-i', `import ${module} from '.\/${module}';`, '', 'index.js');
+    // add plugin to Plugin function
+    //let ok = shell.sed('-i', `import ${plugin} from '.\/${plugin}';`, '', 'index.js');
 
-    // get module input data
-    const path = `${__dirname}/../../src/${location}/modules/index.js`;
+    // get plugin input data
+    const path = `${__dirname}/../../src/${location}/plugins/index.js`;
     let data = fs.readFileSync(path);
 
-    // extract Feature modules
-    const re = /Feature\(([^()]+)\)/g;
+    // extract Plugin plugins
+    const re = /Plugin\(([^()]+)\)/g;
     const match = re.exec(data);
-    const modules = match[1].split(',').filter(featureModule => featureModule.trim() !== module);
+    const plugins = match[1].split(',').filter(pluginModule => pluginModule.trim() !== plugin);
 
-    // remove import module line
+    // remove import plugin line
     const lines = data
       .toString()
       .split('\n')
-      .filter(line => line.match(`import ${module} from './${module}';`) === null);
+      .filter(line => line.match(`import ${plugin} from './${plugin}';`) === null);
     fs.writeFileSync(path, lines.join('\n'));
 
-    // remove module from Feature function
-    shell.sed('-i', re, `Feature(${modules.toString().trim()})`, 'index.js');
+    // remove plugin from Plugin function
+    shell.sed('-i', re, `Plugin(${plugins.toString().trim()})`, 'index.js');
 
     // continue only if directory does not jet exist
-    logger.info(`✔ Module for ${location} successfully deleted!`);
+    logger.info(`✔ Plugin for ${location} successfully deleted!`);
   } else {
-    logger.info(`✔ Module ${location} location for ${modulePath} wasn't found!`);
+    logger.info(`✔ Plugin ${location} location for ${pluginPath} wasn't found!`);
   }
 }
 
 module.exports = (action, args, options, logger) => {
-  const templatePath = `${__dirname}/../templates/module`;
+  const templatePath = `${__dirname}/../templates/plugin`;
 
   if (!fs.existsSync(templatePath)) {
     logger.error(`The requested location for ${args.location} wasn't found.`);
@@ -115,19 +115,19 @@ module.exports = (action, args, options, logger) => {
 
   // client
   if (args.location === 'client' || args.location === 'both') {
-    if (action === 'addmodule') {
-      copyFiles(logger, templatePath, args.module, 'client');
-    } else if (action === 'deletemodule') {
-      deleteFiles(logger, templatePath, args.module, 'client');
+    if (action === 'addplugin') {
+      copyFiles(logger, templatePath, args.plugin, 'client');
+    } else if (action === 'deleteplugin') {
+      deleteFiles(logger, templatePath, args.plugin, 'client');
     }
   }
 
   // server
   if (args.location === 'server' || args.location === 'both') {
-    if (action === 'addmodule') {
-      copyFiles(logger, templatePath, args.module, 'server');
-    } else if (action === 'deletemodule') {
-      deleteFiles(logger, templatePath, args.module, 'server');
+    if (action === 'addplugin') {
+      copyFiles(logger, templatePath, args.plugin, 'server');
+    } else if (action === 'deleteplugin') {
+      deleteFiles(logger, templatePath, args.plugin, 'server');
     }
   }
 };

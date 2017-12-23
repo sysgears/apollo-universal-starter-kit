@@ -7,6 +7,6 @@ import contact from './contact';
 import pageNotFound from './pageNotFound';
 import './favicon';
 
-import Feature from './connector';
+import Plugin from './plugin';
 
-export default new Feature(counter, post, upload, user, subscription, contact, pageNotFound);
+export default new Plugin(counter, post, upload, user, subscription, contact, pageNotFound);

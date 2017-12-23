@@ -9,6 +9,6 @@ import graphqlTypes from './graphqlTypes';
 import apolloEngine from './apolloEngine';
 import './debug';
 
-import Feature from './connector';
+import Plugin from './plugin';
 
-export default new Feature(counter, post, upload, user, subscription, contact, mailer, graphqlTypes, apolloEngine);
+export default new Plugin(counter, post, upload, user, subscription, contact, mailer, graphqlTypes, apolloEngine);

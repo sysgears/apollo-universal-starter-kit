@@ -1,7 +1,7 @@
 import { Engine } from 'apollo-engine';
 import url from 'url';
 
-import Feature from '../connector';
+import Plugin from '../plugin';
 import settings from '../../../../settings';
 
 let engine;
@@ -28,7 +28,7 @@ if (settings.engine.engineConfig.apiKey) {
   engine.start();
 }
 
-export default new Feature({
+export default new Plugin({
   beforeware: app => {
     if (settings.engine.engineConfig.apiKey) {
       app.use(engine.expressMiddleware());

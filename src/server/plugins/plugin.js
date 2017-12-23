@@ -12,7 +12,7 @@ export const featureCatalog: any = {};
 const combine = (features, extractor): any =>
   without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
-type FeatureParams = {
+type PluginParams = {
   schema: DocumentNode | DocumentNode[],
   createResolversFunc?: Function | Function[],
   createContextFunc?: Function | Function[],
@@ -22,7 +22,7 @@ type FeatureParams = {
   catalogInfo: any | any[]
 };
 
-class Feature {
+class Plugin {
   schema: DocumentNode[];
   createResolversFunc: Function[];
   createContextFunc: Function[];
@@ -30,7 +30,7 @@ class Feature {
   beforeware: Function[];
   middleware: Function[];
 
-  constructor(feature?: FeatureParams, ...features: Feature[]) {
+  constructor(feature?: PluginParams, ...features: Plugin[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
@@ -83,4 +83,4 @@ class Feature {
   }
 }
 
-export default Feature;
+export default Plugin;

@@ -1,0 +1,13 @@
+#import "./User.graphql"
+
+mutation addUser($input: AddUserInput!) {
+  addUser(input: $input) {
+    user {
+      ...UserInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

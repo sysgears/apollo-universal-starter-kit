@@ -3,7 +3,7 @@ import { execute, subscribe } from 'graphql';
 
 import schema from './schema';
 import log from '../../common/log';
-import modules from '../../server/modules';
+import plugins from '../../server/plugins';
 
 let subscriptionServer;
 
@@ -13,9 +13,9 @@ const addSubscriptions = httpServer => {
       schema,
       execute,
       subscribe,
-      onConnect: (connectionParams, webSocket) => modules.createContext(null, connectionParams, webSocket),
+      onConnect: (connectionParams, webSocket) => plugins.createContext(null, connectionParams, webSocket),
       onOperation: async (message, params, webSocket) => {
-        params.context = await modules.createContext(null, message.payload, webSocket);
+        params.context = await plugins.createContext(null, message.payload, webSocket);
         return params;
       }
     },

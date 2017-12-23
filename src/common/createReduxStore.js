@@ -3,12 +3,12 @@ import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
-import modules from '../client/modules';
+import plugins from '../client/plugins';
 
 export const storeReducer = combineReducers({
   router: routerReducer,
   form: formReducer,
-  ...modules.reducers
+  ...plugins.reducers
 });
 
 const createReduxStore = (initialState, client, routerMiddleware) => {

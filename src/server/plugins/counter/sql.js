@@ -1,4 +1,4 @@
-import knex from '../../../server/sql/connector';
+import knex from '../../../server/sql/connection';
 
 export default class Counter {
   counterQuery() {

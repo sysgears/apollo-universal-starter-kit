@@ -10,7 +10,7 @@ import log from '../../../../../common/log';
 import knex from '../../../../sql/connector';
 import { orderedFor } from '../../../../sql/helpers';
 
-import User from '../../../entities/user/lib';
+import User from '../../../user/lib';
 
 const entities = settings.entities;
 const authn = settings.auth.authentication;

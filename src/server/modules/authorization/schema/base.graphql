@@ -8,8 +8,10 @@ extend type Subscription {
 }
 
 type RoleInfo {
-  id: ID!
+  id: ID
   name: String
+  roleId: ID
+  roleName: String
   displayName: String
   description: String
   scopes: [String]

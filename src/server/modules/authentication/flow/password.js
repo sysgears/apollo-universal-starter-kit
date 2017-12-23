@@ -6,7 +6,7 @@ import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
 
 import Auth from '../lib';
-import User from '../../entities/user/lib';
+import User from '../../user/lib';
 
 import { createToken } from './token';
 

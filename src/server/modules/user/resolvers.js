@@ -2,9 +2,9 @@
 import { _ } from 'lodash';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
-import FieldError from '../../../../common/FieldError';
-import { withAuth } from '../../../../common/authValidation';
-import { reconcileBatchOneToOne } from '../../../sql/helpers';
+import FieldError from '../../../common/FieldError';
+import { withAuth } from '../../../common/authValidation';
+import { reconcileBatchOneToOne } from '../../sql/helpers';
 
 export default pubsub => ({
   Query: {

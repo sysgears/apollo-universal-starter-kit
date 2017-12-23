@@ -2,8 +2,8 @@ import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has, _ } from 'lodash';
 import uuidv4 from 'uuid';
 
-import log from '../../../../../common/log';
-import knex from '../../../../sql/connector';
+import log from '../../../../common/log';
+import knex from '../../../sql/connector';
 
 /*
 const userFields = ['u.uuid AS id', 'u.email', 'u.created_at', 'u.updated_at', 'u.is_active'];

@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 
 import SubscriptionDAO from './sql';
 import mailer from '../mailer/mailer';
-import User from '../entities/user/lib';
+import User from '../user/lib';
 import settings from '../../../../settings';
 
 const Subscription = new SubscriptionDAO();

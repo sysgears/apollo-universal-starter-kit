@@ -1,6 +1,6 @@
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
-import Feature from '../../connector';
+import Feature from '../connector';
 
 import ServiceAccount from './lib';
 

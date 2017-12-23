@@ -1,11 +1,11 @@
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
-import Feature from '../../connector';
+import Feature from '../connector';
 
-import Group from './lib';
+import Org from './lib';
 
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
-  createContextFunc: () => ({ Group: new Group() })
+  createContextFunc: () => ({ Org: new Org() })
 });

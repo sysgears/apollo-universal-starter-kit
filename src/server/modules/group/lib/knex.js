@@ -2,9 +2,9 @@ import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has, _ } from 'lodash';
 import uuidv4 from 'uuid';
 
-import log from '../../../../../common/log';
-import knex from '../../../../sql/connector';
-import { orderedFor } from '../../../../sql/helpers';
+import log from '../../../../common/log';
+import knex from '../../../sql/connector';
+import { orderedFor } from '../../../sql/helpers';
 
 const selectFields = [
   'g.id AS group_id',

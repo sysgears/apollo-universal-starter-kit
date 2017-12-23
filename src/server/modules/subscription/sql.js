@@ -2,7 +2,7 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 import knex from '../../../server/sql/connector';
 
-import User from '../entities/user/lib';
+import User from '../user/lib';
 
 // Actual query fetching and transformation in DB
 export default class Subscription {

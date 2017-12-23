@@ -2,7 +2,7 @@ import uuidv4 from 'uuid';
 
 import settings from '../../../../../settings';
 
-import User from '../../entities/user/lib';
+import User from '../../user/lib';
 import Auth from '../lib';
 
 import { createToken, setTokenHeaders } from './token';

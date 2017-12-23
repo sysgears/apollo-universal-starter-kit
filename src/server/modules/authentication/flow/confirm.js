@@ -4,7 +4,7 @@ import { pick } from 'lodash';
 
 import settings from '../../../../../settings';
 
-import User from '../../entities/user/lib';
+import User from '../../user/lib';
 import Auth from '../lib';
 
 import { createToken, setTokenHeaders, setResponseTokenHeaders } from './token';

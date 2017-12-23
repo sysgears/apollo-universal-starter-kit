@@ -2,6 +2,6 @@
 
 query user($id: Int!) {
   user(id: $id) {
-    ... UserInfo
+    ...UserInfo
   }
 }

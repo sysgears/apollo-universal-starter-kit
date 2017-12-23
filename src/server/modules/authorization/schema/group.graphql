@@ -1,0 +1,23 @@
+extend type Query {
+}
+
+extend type Mutation {
+}
+
+extend type Subscription {
+}
+
+type GroupRoleInfo {
+  groupId: ID!
+  groupName: String
+  scopes: [String]
+  roles: [RoleInfo]
+}
+
+extend type Group {
+  roles: [RoleInfo]
+}
+
+extend type User {
+  groupRoles: [GroupRoleInfo]
+}

@@ -38,7 +38,34 @@ export const reconcileBatchOneToOne = (sources, results, matchField) => {
   return ret;
 };
 
-export const reconcileBatchOneToMany = (source, result, matchField, manyField) => {};
+export const reconcileBatchOneToMany = (sources, results, matchField) => {
+  let cache = {};
+  let ret = [];
+  for (let src of sources) {
+    // search cache
+    let r = cache[src[matchField]];
+    if (!r) {
+      // find the match
+      let match = _.find(results, elem => elem.length > 0 && elem[0][matchField] === src[matchField]);
+
+      // Make the matched entries unique
+      // let unique = _.uniqBy(match, matchField);
+
+      r = match;
+
+      cache[src[matchField]] = r;
+    }
+
+    // Push into ret
+    if (r) {
+      ret.push(r);
+    } else {
+      ret.push([]);
+    }
+  }
+
+  return ret;
+};
 
 export const reconcileBatchManyToMany = (sources, matches, results, sourcesField, resultsField) => {
   // because we have multiple copies of the same source, its how graphql-resolve-batch works

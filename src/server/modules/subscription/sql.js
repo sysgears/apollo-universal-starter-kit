@@ -2,9 +2,7 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 import knex from '../../../server/sql/connector';
 
-import UserDAO from '../entities/user/lib';
-
-let User = new UserDAO();
+import User from '../entities/user/lib';
 
 // Actual query fetching and transformation in DB
 export default class Subscription {

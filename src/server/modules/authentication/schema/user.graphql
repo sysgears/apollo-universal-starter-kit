@@ -1,0 +1,7 @@
+extend type User {
+  auth: UserAuth
+}
+
+type UserAuth {
+  dummy: Int
+}

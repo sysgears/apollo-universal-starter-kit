@@ -1,0 +1,15 @@
+extend type UserAuth {
+  oauths: [UserOAuth]
+}
+
+type UserOAuth {
+  createdAt: String
+  updatedAt: String
+
+  provider: String
+}
+
+input OAuthInput {
+  provider: String
+  oauthId: String
+}

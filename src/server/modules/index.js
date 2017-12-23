@@ -1,5 +1,6 @@
 import entities from './entities';
-import auth from './auth';
+import authentication from './authentication/';
+import authorization from './authorization/';
 import subscription from './subscription';
 
 import counter from './counter';
@@ -17,7 +18,7 @@ import Feature from './connector';
 import settings from '../../../settings';
 
 // On by default features
-let features = [graphqlTypes, mailer, auth, entities, counter, contact, post, upload];
+let features = [graphqlTypes, mailer, authentication, authorization, entities, counter, contact, post, upload];
 
 // Configurable features
 if (settings.subscription.enabled) {

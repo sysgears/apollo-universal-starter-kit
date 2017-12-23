@@ -1,0 +1,27 @@
+extend type Query {
+  # Refresh user tokens
+  refreshToken(token: String!, refreshToken: String!): AuthPayload!
+
+  # Logout user
+  logout: Boolean!
+}
+
+extend type Mutation {
+}
+
+extend type Subscription {
+}
+
+type AuthPayload {
+  tokens: Tokens
+  errors: [FieldError!]
+}
+
+type ResetPayload {
+  errors: [FieldError!]
+}
+
+type Tokens {
+  token: String!
+  refreshToken: String!
+}

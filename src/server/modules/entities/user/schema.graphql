@@ -64,7 +64,6 @@ type UserProfile {
 input AddUserInput {
   email: String!
   profile: ProfileInput
-  auth: UserAuthInput
 }
 
 input EditUserInput {

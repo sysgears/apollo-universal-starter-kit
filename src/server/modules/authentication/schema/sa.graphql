@@ -1,0 +1,7 @@
+extend type ServiceAccount {
+  auth: ServiceAccountAuth
+}
+
+type ServiceAccountAuth {
+  dummy: Int
+}

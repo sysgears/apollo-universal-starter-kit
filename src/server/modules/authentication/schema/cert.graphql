@@ -1,0 +1,12 @@
+type CertificateAuth {
+  createdAt: String
+  updatedAt: String
+
+  name: String
+  serial: String
+}
+
+input CreateCertificateInput {
+  serial: String
+  pubkey: String
+}

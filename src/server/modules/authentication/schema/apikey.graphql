@@ -1,0 +1,11 @@
+type ApiKeyAuth {
+  createdAt: String
+  updatedAt: String
+
+  name: String
+  key: String
+}
+
+input CreateApiKeyInput {
+  name: String
+}

@@ -8,8 +8,8 @@ import settings from '../../../../settings';
 
 export default pubsub => ({
   Query: {
-    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, context) => {
-      return context.User.getUsers(orderBy, filter);
+    users: withAuth(['user:view:all'], (obj, { orderBy, filter, limit, offset }, context) => {
+      return context.User.getUsers(orderBy, filter, limit, offset);
     }),
     user: withAuth(
       (obj, args, context) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 
-import modules from '../modules';
+import plugins from '../plugins';
 
-export default <Switch>{modules.routes}</Switch>;
+export default <Switch>{plugins.routes}</Switch>;

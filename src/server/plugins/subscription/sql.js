@@ -1,6 +1,6 @@
 // Helpers
 import { camelizeKeys, decamelizeKeys } from 'humps';
-import knex from '../../../server/sql/connector';
+import knex from '../../../server/sql/connection';
 
 // Actual query fetching and transformation in DB
 export default class Subscription {

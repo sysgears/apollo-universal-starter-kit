@@ -1,5 +1,5 @@
 import { orderedFor } from '../../sql/helpers';
-import knex from '../../sql/connector';
+import knex from '../../sql/connection';
 
 export default class Post {
   postsPagination(limit, after) {

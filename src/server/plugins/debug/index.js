@@ -1,7 +1,7 @@
 import now from 'performance-now';
 import settings from '../../../../settings';
 
-import knex from '../../sql/connector';
+import knex from '../../sql/connection';
 import log from '../../../common/log';
 
 // The map used to store the query times, where the query unique

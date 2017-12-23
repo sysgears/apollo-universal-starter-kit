@@ -1,4 +1,4 @@
 /*eslint-disable no-unused-vars*/
-import knex from '../../sql/connector';
+import knex from '../../sql/connection';
 
 export default class $Module$ {}

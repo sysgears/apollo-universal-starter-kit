@@ -9,8 +9,47 @@ scalar DateTime
 #   (likely to change for more flexible querying and search)
 #
 
-input FilterInput {
+input SearchInput {
   # search by username, email, or any column
+  # May or may not need the all fields here
+  # It is meant to be flexible to application needs
+
+  searchType: String
+  searchText: String
+  searchField: String
+}
+
+input FilterInput {
+  ### Whoa deja vue thinking about subfilters while looking at...
+  #
+  # http://knexjs.org/#Builder-where -- Grouped Chain
+  # and the "filterBuilder" I was working on
+
+  # This should happen first
+  prefilters: [FilterInput]
+
+  # search by username, email, or any column
+  type: String
+  bool: String
+  table: String
+  field: String
+  compare: String
+  value: String
+  values: [String]
+
+  timeValue: String
+  timeValues: [DateTime]
+  intValue: Int
+  intValues: [Int]
+  floatValue: Float
+  floatValues: [Float]
+  boolValue: Boolean
+  boolValues: [Boolean]
+
+  # This should happen last
+  postfilters: [FilterInput]
+
+  # Legacy stuff
   searchField: String
   searchText: String
   # filter by role

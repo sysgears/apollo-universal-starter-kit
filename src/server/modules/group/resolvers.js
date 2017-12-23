@@ -33,10 +33,11 @@ export default pubsub => ({
 
     groupMembers: async (obj, args, context) => {
       // console.log("GROUP MEMBERS - args", args)
-      let users = await context.loaders.getUserIdsForGroupIds.load(args.id);
-      let uids = _.map(users, e => e.userId);
-      let briefs = await context.loaders.getBriefForUserIds.loadMany(uids);
-      return briefs;
+      const groupUsers = await context.Group.getUserIdsForGroupIds([args.id]);
+
+      const uids = _.uniq(_.map(_.flatten(groupUsers), u => u.userId));
+      const users = await context.User.getMany(uids);
+      return users;
     }
   },
 

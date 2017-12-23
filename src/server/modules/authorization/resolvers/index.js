@@ -27,7 +27,7 @@ let obj = {
       return obj.description;
     },
     scopes(obj) {
-      return obj.scopes;
+      return obj.scopes ? obj.scopes : null;
     }
   },
 

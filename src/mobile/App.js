@@ -14,7 +14,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import url from 'url';
 
-import modules from '../client/modules';
+import plugins from '../client/plugins';
 import MainScreenNavigator from '../client/app/Routes';
 import settings from '../../settings';
 
@@ -22,7 +22,7 @@ const store = createStore(
   combineReducers({
     form: formReducer,
 
-    ...modules.reducers
+    ...plugins.reducers
   }),
   {} // initial state
 );

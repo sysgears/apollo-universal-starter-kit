@@ -202,33 +202,33 @@ There are also application config options available in `app.json` to aid with de
 | debugSQL      | Print executed by backend SQL commands |
 | apolloLogging | Log all Apollo GraphQL operations      |
 
-### Feature Modules Scaffolding with CLI
+### Plugin Scaffolding with CLI
 
 This starter kit encourages modular design of application features. Each feature should be designed as a decoupled
-module, deleting feature should ideally not break the remaining application. Basic feature module scaffolding is
+module called a plugin. Deleting a plugin should ideally not break the remaining application. Basic plugin scaffolding is
 provided with the following command:
 
 ```
-yarn cli addmodule <moduleName>
+yarn cli addplugin <pluginName>
 ```
 
-This will create all the necessary files to start developing on a new feature module. It creates `client` and `server`
-module. If you would like to only add one or the other, add a second parameter like:
+This will create all the necessary files to start developing on a new plugin. It creates `client` and `server`
+plugin. If you would like to only add one or the other, add a second parameter like:
 
 ```
-yarn cli addmodule <moduleName> [client|server]
+yarn cli addplugin <pluginName> [client|server]
 ```
 
-If you wish to remove an existing module, do so with:
+If you wish to remove an existing plugin, do so with:
 
 ```
-yarn cli deletemodule <moduleName>
+yarn cli deleteplugin <pluginName>
 ```
 
 Again you can specify `client` or `server` as a second parameter, if you only wish to delete one or the other.
 
 This way you can easily delete existing examples, like `counter`, `post` or `user`. Do keep in mind that you need at
-least one module linked on the server side. So deleting both, before creating any new ones first, will result in
+least one plugin linked on the server side. So deleting both, before creating any new ones first, will result in
 `TypeError: Cannot read property 'schema' of undefined` on the server side.
 
 Run the following command to see the CLI help:
@@ -237,12 +237,12 @@ Run the following command to see the CLI help:
 yarn cli
 ```
 
-## Features and examples included
+## Plugins and examples included
 
 * Full LOGIN funcionality in user example with [JWT] tokens stored in `localStorage` and `cookies`
 
 * [Stripe] Payment Processor integration as a starting point for apps that use user subscriptions.
-Check [subscription module documentation](src/client/modules/subscription/README.md) for details.
+Check [subscription plugin documentation](src/client/plugins/subscription/README.md) for details.
 
 * [GraphQL] API
 
@@ -264,7 +264,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
 * [Webpack] for back end
 
   This starter kit is different from most of the starter kits out there, because it uses Webpack not only for front end,
-  but for back-end code as well. This enables powerful Webpack features for back-end code, such as conditional
+  but for back-end code as well. This enables powerful Webpack plugins for back-end code, such as conditional
   compilation, embedding non-js files and CSS stylesheets into the code, hot code reload, etc.
 
 * [Webpack] and [Expo] for mobile front-end
@@ -317,10 +317,10 @@ Check [subscription module documentation](src/client/modules/subscription/README
 
   If you would like to use a different styling than [Twitter Bootstrap], UI components are structured in a way to make
   it easy to use something else. We already prepared [Ant Design] integation. To switch the UI all you need to do is
-  rename the import in `src/client/modules/common/components/web/index.jsx`.
+  rename the import in `src/client/plugins/common/components/web/index.jsx`.
 
   [NativeBase] for mobile styling, with an option to use [Ant Design Mobile]. To switch, just change the export in
-  `src/client/modules/common/components/native/index.jsx`.
+  `src/client/plugins/common/components/native/index.jsx`.
 
 * [Babel] for ES2017 transpiling
 
@@ -341,7 +341,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
 
 ## Project Structure
 
-The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by feature
+The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by plugin
 rather than file type. This structure is only meant to serve as a guide, it is by no means prescriptive. That said, it
 aims to represent generally accepted guidelines and patterns for building scalable applications.
 
@@ -350,7 +350,7 @@ aims to represent generally accepted guidelines and patterns for building scalab
 ├── src                      # Application source code
 │   ├── client               # Front-end source code
 │   │   ├── app              # Common front-end application code
-│   │   └── modules          # Front-end feature-modules, each module has:
+│   │   └── plugins          # Front-end plugins, each plugin has:
 │   │   │                    # (components, containers, GraphQL queries, redux reducers)
 │   │   └── styles           # Application-wide styles
 │   │   └── testHelpers      # Test helper for front-end integration tests
@@ -364,9 +364,9 @@ aims to represent generally accepted guidelines and patterns for building scalab
 │   │   │   └── migrations   # Database migration scripts using Knex
 │   │   │   └── seeds        # Database seed scripts using Knex
 │   │   └── middleware       # Graphiql, GraphQL express and SSR rendering
-│   │   └── modules          # Back-end server feature-modules, each module has:
+│   │   └── plugins          # Back-end server plugins, each plugin has:
 │   │   │                    # (schema definition, resolvers, sql queries)
-│   │   └── sql              # Knex connector
+│   │   └── sql              # Knex connection
 │   │   └── testHelpers      # Test helper for back-end integration tests
 │   │   └── server.js        # GraphQL api server set up
 │   │   └── index.js         # Entry point to back-end wtih hot code reload
@@ -389,7 +389,7 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
 | `seed`                     | Seed sample database using SQLite. Use `--prod` flag to run in "production" mode.                        |
 | `migrate`                  | Migrate the sample database                                                                              |
 | `rollback`                 | Rollback the sample database to previous state.                                                          |
-| `cli`                      | CLI tool, currently used for modules scaffolding only.                                                   |
+| `cli`                      | CLI tool, currently used for plugins scaffolding only.                                                   |
 
 ## Deployment to Production
 

@@ -14,7 +14,7 @@ import { graphql, print, getOperationAST } from 'graphql';
 import { Provider } from 'react-redux';
 
 import rootSchema from '../../server/api/rootSchema.graphql';
-import serverModules from '../../server/modules';
+import serverPlugins from '../../server/plugins';
 import settings from '../../../settings';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
@@ -27,7 +27,7 @@ const React = require('react');
 const ReactEnzymeAdapter = require('enzyme-adapter-react-16');
 const { ApolloProvider } = require('react-apollo');
 const Enzyme = require('enzyme');
-const clientModules = require('../modules').default;
+const clientPlugins = require('../plugins').default;
 
 const mount = Enzyme.mount;
 
@@ -139,7 +139,7 @@ class MockLink extends ApolloLink {
 export default class Renderer {
   constructor(graphqlMocks, reduxState) {
     const schema = makeExecutableSchema({
-      typeDefs: [rootSchema, ...serverModules.schemas]
+      typeDefs: [rootSchema, ...serverPlugins.schemas]
     });
     addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
 
@@ -154,7 +154,7 @@ export default class Renderer {
     const store = createStore(
       combineReducers({
         form: formReducer,
-        ...clientModules.reducers
+        ...clientPlugins.reducers
       }),
       reduxState
     );
@@ -171,7 +171,7 @@ export default class Renderer {
   withApollo(component) {
     const { store, client } = this;
 
-    return clientModules.getWrappedRoot(
+    return clientPlugins.getWrappedRoot(
       <Provider store={store}>
         <ApolloProvider client={client}>{component}</ApolloProvider>
       </Provider>
@@ -185,9 +185,9 @@ export default class Renderer {
   mount() {
     return mount(
       this.withApollo(
-        clientModules.getWrappedRoot(
+        clientPlugins.getWrappedRoot(
           <Router history={this.history}>
-            <Switch>{clientModules.routes}</Switch>
+            <Switch>{clientPlugins.routes}</Switch>
           </Router>
         )
       )

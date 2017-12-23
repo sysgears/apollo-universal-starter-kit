@@ -6,7 +6,7 @@ import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import MenuItem from './MenuItem';
 
-import modules from '../../../../../../modules';
+import plugins from '../../../../../../plugins';
 import settings from '../../../../../../../../settings';
 
 class NavBar extends React.Component {
@@ -36,7 +36,7 @@ class NavBar extends React.Component {
                 {settings.app.name}
               </NavLink>
             </MenuItem>
-            {modules.navItems}
+            {plugins.navItems}
           </Menu>
         </Col>
         <Col span={10}>
@@ -47,7 +47,7 @@ class NavBar extends React.Component {
             theme="dark"
             style={{ lineHeight: '64px', float: 'right' }}
           >
-            {modules.navItemsRight}
+            {plugins.navItemsRight}
             {__DEV__ && (
               <MenuItem>
                 <a href="/graphiql">GraphiQL</a>

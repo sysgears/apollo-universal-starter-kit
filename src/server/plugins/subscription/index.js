@@ -3,7 +3,7 @@ import SubscriptionDAO from './sql';
 
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
-import Plugin from '../connector';
+import Plugin from '../plugin';
 
 import stripeLocalMiddleware from './stripeLocal';
 import webhookMiddleware from './webhook';

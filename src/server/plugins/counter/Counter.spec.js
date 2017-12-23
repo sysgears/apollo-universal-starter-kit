@@ -3,9 +3,9 @@ import { step } from 'mocha-steps';
 
 import { getServer, getApollo } from '../../testHelpers/integrationSetup';
 
-import COUNTER_QUERY from '../../../client/modules/counter/graphql/CounterQuery.graphql';
-import ADD_COUNTER from '../../../client/modules/counter/graphql/AddCounter.graphql';
-import COUNTER_SUBSCRIPTION from '../../../client/modules/counter/graphql/CounterSubscription.graphql';
+import COUNTER_QUERY from '../../../client/plugins/counter/graphql/CounterQuery.graphql';
+import ADD_COUNTER from '../../../client/plugins/counter/graphql/AddCounter.graphql';
+import COUNTER_SUBSCRIPTION from '../../../client/plugins/counter/graphql/CounterSubscription.graphql';
 
 describe('Counter example API works', () => {
   let server, apollo;

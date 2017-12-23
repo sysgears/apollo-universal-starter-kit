@@ -2,12 +2,12 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 import { getApollo } from '../../testHelpers/integrationSetup';
-import POSTS_QUERY from '../../../client/modules/post/graphql/PostsQuery.graphql';
-import POST_QUERY from '../../../client/modules/post/graphql/PostQuery.graphql';
-import ADD_POST from '../../../client/modules/post/graphql/AddPost.graphql';
-import EDIT_POST from '../../../client/modules/post/graphql/EditPost.graphql';
-import DELETE_POST from '../../../client/modules/post/graphql/DeletePost.graphql';
-import POSTS_SUBSCRIPTION from '../../../client/modules/post/graphql/PostsSubscription.graphql';
+import POSTS_QUERY from '../../../client/plugins/post/graphql/PostsQuery.graphql';
+import POST_QUERY from '../../../client/plugins/post/graphql/PostQuery.graphql';
+import ADD_POST from '../../../client/plugins/post/graphql/AddPost.graphql';
+import EDIT_POST from '../../../client/plugins/post/graphql/EditPost.graphql';
+import DELETE_POST from '../../../client/plugins/post/graphql/DeletePost.graphql';
+import POSTS_SUBSCRIPTION from '../../../client/plugins/post/graphql/PostsSubscription.graphql';
 
 describe('Post and comments example API works', () => {
   let apollo;

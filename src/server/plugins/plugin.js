@@ -7,10 +7,10 @@ import { merge, map, union, without, castArray } from 'lodash';
 
 import log from '../../common/log';
 
-export const featureCatalog: any = {};
+export const pluginCatalog: any = {};
 
-const combine = (features, extractor): any =>
-  without(union(...map(features, res => castArray(extractor(res)))), undefined);
+const combine = (plugins, extractor): any =>
+  without(union(...map(plugins, res => castArray(extractor(res)))), undefined);
 
 type PluginParams = {
   schema: DocumentNode | DocumentNode[],
@@ -30,10 +30,10 @@ class Plugin {
   beforeware: Function[];
   middleware: Function[];
 
-  constructor(feature?: PluginParams, ...features: Plugin[]) {
-    // console.log(feature.schema[0] instanceof DocumentNode);
+  constructor(plugin?: PluginParams, ...plugins: Plugin[]) {
+    // console.log(plugin.schema[0] instanceof DocumentNode);
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
-      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
+      Object.keys(info).forEach(key => (pluginCatalog[key] = info[key]))
     );
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);

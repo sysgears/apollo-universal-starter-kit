@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 
-import { MenuItem } from '../../modules/common/components/web';
+import { MenuItem } from '../../plugins/common/components/web';
 import Subscription from './containers/Subscription';
 import SubscribersOnly from './containers/SubscribersOnly';
 import UpdateCard from './containers/UpdateCard';
 import { SubscriberRoute } from './containers/Auth';
 import reducers from './reducers';
 
-import Plugin from '../connector';
+import Plugin from '../plugin';
 
 export default new Plugin({
   route: [

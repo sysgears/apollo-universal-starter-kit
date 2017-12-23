@@ -1,6 +1,6 @@
-# Subscription Module
+# Subscription Plugin
 
-The purpose of this module is to provide a starting point for applications that wish to charge users a monthly subscription fee for access to certain features of the site. This is implemented using [Stripe](https://stripe.com).
+The purpose of this module is to provide a starting point for applications that wish to charge users a monthly subscription fee for access to certain plugins of the site. This is implemented using [Stripe](https://stripe.com).
 
 ### Plugins Supported
 

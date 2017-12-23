@@ -2,14 +2,14 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
-import $Module$View from '../components/$Module$View';
+import $Plugin$View from '../components/$Plugin$View';
 
-class $Module$ extends React.Component {
+class $Plugin$ extends React.Component {
   render() {
-    return <$Module$View {...this.props} />;
+    return <$Plugin$View {...this.props} />;
   }
 }
 
-const $Module$WithApollo = compose()($Module$);
+const $Plugin$WithApollo = compose()($Plugin$);
 
-export default $Module$WithApollo;
+export default $Plugin$WithApollo;

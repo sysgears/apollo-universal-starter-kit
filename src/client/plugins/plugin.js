@@ -1,15 +1,15 @@
 import { merge, map, union, without, castArray } from 'lodash';
 
-const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
+const combine = (plugins, extractor) => without(union(...map(plugins, res => castArray(extractor(res)))), undefined);
 
-export const featureCatalog = {};
+export const pluginCatalog = {};
 
 export default class {
   // eslint-disable-next-line no-unused-vars
-  constructor({ route, navItem, reducer, catalogInfo }, ...features) {
+  constructor({ route, navItem, reducer, catalogInfo }, ...plugins) {
     /* eslint-enable no-unused-vars */
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
-      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
+      Object.keys(info).forEach(key => (pluginCatalog[key] = info[key]))
     );
     this.tabItem = combine(arguments, arg => arg.tabItem);
     this.reducer = combine(arguments, arg => arg.reducer);

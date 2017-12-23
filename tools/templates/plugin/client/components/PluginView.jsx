@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const $Module$View = () => {
+const $Plugin$View = () => {
   return (
     <View style={styles.container}>
       <View style={styles.element}>
-        <Text style={styles.box}>Hello $Module$!</Text>
+        <Text style={styles.box}>Hello $Plugin$!</Text>
       </View>
     </View>
   );
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default $Module$View;
+export default $Plugin$View;

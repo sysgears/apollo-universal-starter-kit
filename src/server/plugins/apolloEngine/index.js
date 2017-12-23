@@ -1,7 +1,7 @@
 import { Engine } from 'apollo-engine';
 import url from 'url';
 
-import Plugin from '../connector';
+import Plugin from '../plugin';
 import settings from '../../../../settings';
 
 let engine;

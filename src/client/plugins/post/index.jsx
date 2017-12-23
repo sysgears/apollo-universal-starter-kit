@@ -11,7 +11,7 @@ import PostEdit from './containers/PostEdit';
 
 import reducers from './reducers';
 
-import Plugin from '../connector';
+import Plugin from '../plugin';
 
 class PostListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({

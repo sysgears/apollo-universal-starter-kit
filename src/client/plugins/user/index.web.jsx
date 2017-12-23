@@ -1,7 +1,7 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink } from 'react-router-dom';
-import { MenuItem } from '../../modules/common/components/web';
+import { MenuItem } from '../../plugins/common/components/web';
 import Profile from './containers/Profile';
 import Users from './components/Users';
 import UserEdit from './containers/UserEdit';
@@ -13,7 +13,7 @@ import reducers from './reducers';
 
 import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
 
-import Plugin from '../connector';
+import Plugin from '../plugin';
 
 function tokenMiddleware(req, options, next) {
   options.headers['x-token'] = window.localStorage.getItem('token');

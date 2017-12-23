@@ -20,7 +20,7 @@ import createApolloClient from '../../common/createApolloClient';
 import createReduxStore from '../../common/createReduxStore';
 import Html from './html';
 import Routes from '../../client/app/Routes';
-import modules from '../modules';
+import plugins from '../plugins';
 import { options as spinConfig } from '../../../.spinrc.json';
 import settings from '../../../settings';
 
@@ -35,7 +35,7 @@ const renderServerSide = async (req, res) => {
   // }
   //
 
-  const fetch = createApolloFetch({ uri: apiUrl, constructOptions: modules.constructFetchOptions });
+  const fetch = createApolloFetch({ uri: apiUrl, constructOptions: plugins.constructFetchOptions });
   fetch.batchUse(({ options }, next) => {
     options.credentials = 'include';
     options.headers = req.headers;
@@ -55,9 +55,9 @@ const renderServerSide = async (req, res) => {
   const store = createReduxStore(initialState, client);
 
   const context = {};
-  const clientModules = require('../../client/modules').default;
+  const clientPlugins = require('../../client/plugins').default;
   const App = () =>
-    clientModules.getWrappedRoot(
+    clientPlugins.getWrappedRoot(
       <Provider store={store}>
         <ApolloProvider client={client}>
           <StaticRouter location={req.url} context={context}>

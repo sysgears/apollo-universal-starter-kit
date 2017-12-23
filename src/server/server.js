@@ -8,7 +8,7 @@ import url from 'url';
 import cookiesMiddleware from 'universal-cookie-express';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
-import modules from './modules';
+import plugins from './plugins';
 
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
@@ -23,7 +23,7 @@ let server;
 
 const app = express();
 
-for (const applyBeforeware of modules.beforewares) {
+for (const applyBeforeware of plugins.beforewares) {
   applyBeforeware(app);
 }
 
@@ -76,7 +76,7 @@ if (__PERSIST_GQL__) {
   });
 }
 
-for (const applyMiddleware of modules.middlewares) {
+for (const applyMiddleware of plugins.middlewares) {
   applyMiddleware(app);
 }
 

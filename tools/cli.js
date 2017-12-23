@@ -1,25 +1,25 @@
 const prog = require('caporal');
-const moduleCmd = require('./cli/module');
+const pluginCmd = require('./cli/plugin');
 
 prog
   .version('1.0.0')
-  .command('addmodule', 'Create a new Module')
-  .argument('<module>', 'Module name')
+  .command('addplugin', 'Create a new Plugin')
+  .argument('<plugin>', 'Plugin name')
   .argument(
     '[location]',
-    'Where should new module be created. [both, server, client]',
+    'Where should new plugin be created. [both, server, client]',
     ['both', 'server', 'client'],
     'both'
   )
-  .action((args, options, logger) => moduleCmd('addmodule', args, options, logger))
-  .command('deletemodule', 'Delete a Module')
-  .argument('<module>', 'Module name')
+  .action((args, options, logger) => pluginCmd('addplugin', args, options, logger))
+  .command('deleteplugin', 'Delete a Plugin')
+  .argument('<plugin>', 'Plugin name')
   .argument(
     '[location]',
-    'Where should new module be created. [both, server, client]',
+    'Where should new plugin be created. [both, server, client]',
     ['both', 'server', 'client'],
     'both'
   )
-  .action((args, options, logger) => moduleCmd('deletemodule', args, options, logger));
+  .action((args, options, logger) => pluginCmd('deleteplugin', args, options, logger));
 
 prog.parse(process.argv);

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { MenuItem } from '../../modules/common/components/web';
+import { MenuItem } from '../../plugins/common/components/web';
 import Contact from './containers/Contact';
 
-import Plugin, { featureCatalog } from '../connector';
+import Plugin, { pluginCatalog } from '../plugin';
 
-console.log('catalog:', featureCatalog);
+console.log('catalog:', pluginCatalog);
 
 export default new Plugin({
   route: <Route exact path="/contact" component={Contact} />,

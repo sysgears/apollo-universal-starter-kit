@@ -10,7 +10,7 @@ import createResolvers from './resolvers';
 import { refreshTokens, createTokens } from './auth';
 import tokenMiddleware from './auth/token';
 import confirmMiddleware from './confirm';
-import Plugin from '../connector';
+import Plugin from '../plugin';
 import scopes from './auth/scopes';
 import settings from '../../../../settings';
 

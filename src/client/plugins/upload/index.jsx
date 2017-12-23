@@ -6,7 +6,7 @@ import { createTabBarIconWrapper } from '../common/components/native';
 import Upload from './containers/Upload';
 import reducers from './reducers';
 
-import Plugin from '../connector';
+import Plugin from '../plugin';
 
 export default new Plugin({
   catalogInfo: { upload: true },

@@ -3,7 +3,7 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 import { getServer, getApollo } from '../../testHelpers/integrationSetup';
 
-describe('$Module$ API works', () => {
+describe('$Plugin$ API works', () => {
   let server, apollo;
 
   before(() => {

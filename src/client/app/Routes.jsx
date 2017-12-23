@@ -1,9 +1,9 @@
 import { TabNavigator } from 'react-navigation';
 
-import modules from '../modules';
+import plugins from '../plugins';
 
 const MainScreenNavigator = TabNavigator({
-  ...modules.tabItems
+  ...plugins.tabItems
 });
 
 export default MainScreenNavigator;

@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Container, Navbar, Nav, NavItem } from 'reactstrap';
 
-import modules from '../../../../../../modules';
+import plugins from '../../../../../../plugins';
 import settings from '../../../../../../../../settings';
 
 const NavBar = () => (
@@ -12,11 +12,11 @@ const NavBar = () => (
         <NavLink to="/" className="navbar-brand">
           {settings.app.name}
         </NavLink>
-        {modules.navItems}
+        {plugins.navItems}
       </Nav>
 
       <Nav className="ustify-content-end">
-        {modules.navItemsRight}
+        {plugins.navItemsRight}
         {(!__PERSIST_GQL__ || __DEV__) && (
           <NavItem>
             <a href="/graphiql" className="nav-link">

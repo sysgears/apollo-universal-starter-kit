@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createTabBarIconWrapper } from '../common/components/native';
 import Contact from './containers/Contact';
 
-import Plugin from '../connector';
+import Plugin from '../plugin';
 
 export default new Plugin({
   tabItem: {

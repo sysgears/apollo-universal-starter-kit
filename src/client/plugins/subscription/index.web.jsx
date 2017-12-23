@@ -8,9 +8,9 @@ import UpdateCard from './containers/UpdateCard';
 import { SubscriberRoute } from './containers/Auth';
 import reducers from './reducers';
 
-import Feature from '../connector';
+import Plugin from '../connector';
 
-export default new Feature({
+export default new Plugin({
   route: [
     <Route exact path="/subscription" component={Subscription} />,
     <SubscriberRoute exact scope="user" path="/subscribers-only" component={SubscribersOnly} />,

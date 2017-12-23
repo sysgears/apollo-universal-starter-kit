@@ -49,16 +49,16 @@ function copyFiles(logger, templatePath, module, location) {
     const path = `${__dirname}/../../src/${location}/modules/index.js`;
     let data = fs.readFileSync(path);
 
-    // extract Feature modules
-    const re = /Feature\(([^()]+)\)/g;
+    // extract Plugin modules
+    const re = /Plugin\(([^()]+)\)/g;
     const match = re.exec(data);
 
     // prepend import module
     const prepend = `import ${module} from './${module}';\n`;
     fs.writeFileSync(path, prepend + data);
 
-    // add module to Feature function
-    shell.sed('-i', re, `Feature(${module}, ${match[1]})`, 'index.js');
+    // add module to Plugin function
+    shell.sed('-i', re, `Plugin(${module}, ${match[1]})`, 'index.js');
 
     logger.info(`✔ Module for ${location} successfully created!`);
   }
@@ -76,15 +76,15 @@ function deleteFiles(logger, templatePath, module, location) {
     // change to destination directory
     shell.cd(`${__dirname}/../../src/${location}/modules/`);
 
-    // add module to Feature function
+    // add module to Plugin function
     //let ok = shell.sed('-i', `import ${module} from '.\/${module}';`, '', 'index.js');
 
     // get module input data
     const path = `${__dirname}/../../src/${location}/modules/index.js`;
     let data = fs.readFileSync(path);
 
-    // extract Feature modules
-    const re = /Feature\(([^()]+)\)/g;
+    // extract Plugin modules
+    const re = /Plugin\(([^()]+)\)/g;
     const match = re.exec(data);
     const modules = match[1].split(',').filter(featureModule => featureModule.trim() !== module);
 
@@ -95,8 +95,8 @@ function deleteFiles(logger, templatePath, module, location) {
       .filter(line => line.match(`import ${module} from './${module}';`) === null);
     fs.writeFileSync(path, lines.join('\n'));
 
-    // remove module from Feature function
-    shell.sed('-i', re, `Feature(${modules.toString().trim()})`, 'index.js');
+    // remove module from Plugin function
+    shell.sed('-i', re, `Plugin(${modules.toString().trim()})`, 'index.js');
 
     // continue only if directory does not jet exist
     logger.info(`✔ Module for ${location} successfully deleted!`);

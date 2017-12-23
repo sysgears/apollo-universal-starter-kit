@@ -2,7 +2,7 @@
 
 The purpose of this module is to provide a starting point for applications that wish to charge users a monthly subscription fee for access to certain features of the site. This is implemented using [Stripe](https://stripe.com).
 
-### Features Supported
+### Plugins Supported
 
 - After registering an account, users will be redirected to the page for subscribing using a credit card.
 - Pages protected by `SubscriptionRoute` will be redirected to the subscribe page if no subscription is found.

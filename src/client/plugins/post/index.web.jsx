@@ -7,9 +7,9 @@ import PostEdit from './containers/PostEdit';
 
 import reducers from './reducers';
 
-import Feature from '../connector';
+import Plugin from '../connector';
 
-export default new Feature({
+export default new Plugin({
   route: [<Route exact path="/posts" component={Post} />, <Route exact path="/post/:id" component={PostEdit} />],
   navItem: (
     <MenuItem key="/posts">

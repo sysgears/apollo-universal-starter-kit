@@ -7,9 +7,9 @@ import { MenuItem } from '../../modules/common/components/web';
 import Upload from './containers/Upload';
 import reducers from './reducers';
 
-import Feature from '../connector';
+import Plugin from '../connector';
 
-export default new Feature({
+export default new Plugin({
   catalogInfo: { upload: true },
   route: <Route exact path="/upload" component={Upload} />,
   navItem: (

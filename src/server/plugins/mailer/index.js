@@ -1,6 +1,6 @@
 import mailer from './mailer';
-import Feature from '../connector';
+import Plugin from '../connector';
 
-export default new Feature({
+export default new Plugin({
   createContextFunc: () => ({ mailer })
 });

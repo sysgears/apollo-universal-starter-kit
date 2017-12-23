@@ -3,9 +3,9 @@ import { createTabBarIconWrapper } from '../common/components/native';
 import $Module$ from './containers/$Module$';
 import reducers from './reducers';
 
-import Feature from '../connector';
+import Plugin from '../connector';
 
-export default new Feature({
+export default new Plugin({
   tabItem: {
     $Module$: {
       screen: $Module$,

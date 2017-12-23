@@ -13,7 +13,7 @@ import reducers from './reducers';
 
 import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
 
-import Feature from '../connector';
+import Plugin from '../connector';
 
 function tokenMiddleware(req, options, next) {
   options.headers['x-token'] = window.localStorage.getItem('token');
@@ -40,7 +40,7 @@ function connectionParam() {
   };
 }
 
-export default new Feature({
+export default new Plugin({
   route: [
     <AuthRoute exact path="/profile" scope="user" component={Profile} />,
     <AuthRoute exact path="/users" scope="admin" component={Users} />,

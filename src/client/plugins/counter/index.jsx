@@ -4,9 +4,9 @@ import { createTabBarIconWrapper } from '../common/components/native';
 import Counter from './containers/Counter';
 import reducers from './reducers';
 
-import Feature from '../connector';
+import Plugin from '../connector';
 
-export default new Feature({
+export default new Plugin({
   tabItem: {
     Counter: {
       screen: Counter,

@@ -10,7 +10,7 @@ import createResolvers from './resolvers';
 import { refreshTokens, createTokens } from './auth';
 import tokenMiddleware from './auth/token';
 import confirmMiddleware from './confirm';
-import Feature from '../connector';
+import Plugin from '../connector';
 import scopes from './auth/scopes';
 import settings from '../../../../settings';
 
@@ -164,7 +164,7 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
   }
 };
 
-export default new Feature({
+export default new Plugin({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {

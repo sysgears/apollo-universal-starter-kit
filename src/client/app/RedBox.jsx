@@ -63,6 +63,13 @@ export default class RedBox extends React.Component {
     let frames;
     let parseError;
     try {
+      if (error.message.indexOf('\n    at ') >= 0) {
+        // We probably have stack in our error message
+        // a trick used by our errorMiddleware to pass error stack
+        // when GraphQL context creation failed, use that stack
+        error.stack = error.message;
+        error.message = error.stack.split('\n')[0];
+      }
       frames = ErrorStackParser.parse(error);
     } catch (e) {
       parseError = new Error('Failed to parse stack trace. Stack trace information unavailable.');

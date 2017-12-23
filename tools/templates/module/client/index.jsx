@@ -1,14 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { createTabBarIconWrapper } from '../common/components/native';
-import $Module$ from './containers/$Module$';
+import $Plugin$ from './containers/$Plugin$';
 import reducers from './reducers';
 
-import Feature from '../connector';
+import Plugin from '../plugin';
 
-export default new Feature({
+export default new Plugin({
   tabItem: {
-    $Module$: {
-      screen: $Module$,
+    $Plugin$: {
+      screen: $Plugin$,
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(Ionicons, {
           name: 'ios-browsers-outline',

@@ -14,7 +14,7 @@ import { graphql, print, getOperationAST } from 'graphql';
 import { Provider } from 'react-redux';
 
 import rootSchema from '../../server/api/rootSchema.graphql';
-import serverModules from '../../server/modules';
+import serverModules from '../../server/plugins';
 import settings from '../../../settings';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
@@ -27,7 +27,7 @@ const React = require('react');
 const ReactEnzymeAdapter = require('enzyme-adapter-react-16');
 const { ApolloProvider } = require('react-apollo');
 const Enzyme = require('enzyme');
-const clientModules = require('../modules').default;
+const clientModules = require('../plugins').default;
 
 const mount = Enzyme.mount;
 

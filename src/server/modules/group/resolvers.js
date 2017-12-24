@@ -60,7 +60,7 @@ export default pubsub => ({
 
   Group: {
     id(obj) {
-      return obj.groupId;
+      return obj.groupId ? obj.groupId : obj.id;
     },
     profile: createBatchResolver(async (source, args, context) => {
       // shortcut for other resolver paths which pull the profile with their call

@@ -3,6 +3,7 @@ extend type Query {
   users(
     filters: [FilterInput]
     orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
     offset: Int
     limit: Int
   ): [User]

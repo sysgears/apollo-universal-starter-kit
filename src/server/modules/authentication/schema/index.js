@@ -31,7 +31,6 @@ if (authn.certificate.enabled) {
 if (entities.users.enabled) {
   schema.push(userSchema);
 
-  console.log(schema);
   if (authn.password.enabled) {
     schema.push(userPasswordSchema);
   }
@@ -66,6 +65,5 @@ if (entities.serviceaccounts.enabled === true) {
 }
 
 const exportedSchema = schema;
-console.log(exportedSchema[0]);
 
 export default exportedSchema;

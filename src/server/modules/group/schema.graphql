@@ -1,4 +1,14 @@
 extend type Query {
+  # getFlex, should turn off in production
+  groupsFlex(
+    joinClauses: [JoinClauseInput]
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
+    offset: Int
+    limit: Int
+  ): [Group]
+
   # Get all groups, possibly filtered and ordered
   groups(
     filters: [FilterInput]
@@ -50,6 +60,7 @@ extend type User {
   groups(
     filters: [FilterInput]
     orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
     offset: Int
     limit: Int
   ): [Group]
@@ -83,6 +94,7 @@ type Group {
   users(
     filters: [FilterInput]
     orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
     offset: Int
     limit: Int
   ): [User]

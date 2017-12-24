@@ -3,6 +3,7 @@ extend type Query {
   orgs(
     filters: [FilterInput]
     orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
     offset: Int
     limit: Int
   ): [Org]
@@ -10,6 +11,7 @@ extend type Query {
   # Get all groups, possibly filtered and ordered
   myOrgs(
     filters: [FilterInput]
+    groupBys: [GroupByInput]
     orderBys: [OrderByInput]
     offset: Int
     limit: Int
@@ -43,6 +45,7 @@ extend type User {
   orgs(
     filters: [FilterInput]
     orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
     offset: Int
     limit: Int
   ): [Org]
@@ -52,6 +55,7 @@ extend type Group {
   orgs(
     filters: [FilterInput]
     orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
     offset: Int
     limit: Int
   ): [Org]
@@ -84,6 +88,7 @@ type Org {
   groups(
     filters: [FilterInput]
     orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
     offset: Int
     limit: Int
   ): [Group]
@@ -91,6 +96,7 @@ type Org {
   users(
     filters: [FilterInput]
     orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
     offset: Int
     limit: Int
   ): [User]

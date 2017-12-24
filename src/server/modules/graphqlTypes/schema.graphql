@@ -60,7 +60,21 @@ input FilterInput {
 
 input OrderByInput {
   # id | username | role | isActive | email
+  table: String
   column: String
   # asc | desc
   order: String
+}
+
+input GroupByInput {
+  # id | username | role | isActive | email
+  table: String
+  column: String
+}
+
+input JoinClauseInput {
+  # "join", "inner", "left", "leftOuter", "right", "rightOuter", "outer", "fullOuter"
+  type: String
+  table: String
+  args: [String]
 }

@@ -8,6 +8,7 @@ import knex from '../../../../sql/connector';
 import paging from '../../../../sql/paging';
 import ordering from '../../../../sql/ordering';
 import filterBuilder from '../../../../sql/filters';
+import joinBuilder from '../../../../sql/joins';
 import { orderedFor } from '../../../../sql/helpers';
 
 const selectFields = [
@@ -24,6 +25,32 @@ const selectFields = [
 ];
 
 export default class Group {
+  async getFlex(args, trx) {
+    try {
+      let builder = knex.select('*', 'g.id AS groupId').from('groups AS g');
+
+      // add filter conditions
+      builder = joinBuilder(builder, args);
+
+      // add filter conditions
+      builder = filterBuilder(builder, args);
+
+      // paging and ordering
+      builder = paging(builder, args);
+      builder = ordering(builder, args);
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in Group.getFlex', e);
+      throw e;
+    }
+  }
+
   async list(args, trx) {
     try {
       let builder = knex

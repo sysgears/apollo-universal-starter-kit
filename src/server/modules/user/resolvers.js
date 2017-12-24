@@ -39,7 +39,8 @@ export default pubsub => ({
         return source;
       }
       let ids = _.uniq(source.map(s => s.userId));
-      const profiles = await context.User.getProfileMany(ids);
+      args.ids = ids;
+      const profiles = await context.User.getProfileMany(args);
       const ret = reconcileBatchOneToOne(source, profiles, 'userId');
       return ret;
     })

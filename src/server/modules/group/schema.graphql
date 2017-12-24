@@ -47,7 +47,12 @@ extend type Subscription {
 #
 
 extend type User {
-  groups: [Group]
+  groups(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [Group]
 }
 
 #
@@ -75,9 +80,12 @@ type Group {
   role: String
   profile: GroupProfile
 
-  # orgs: [Org]
-  users: [User]
-  # serviceaccounts: [ServiceAccount]
+  users(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [User]
 }
 
 type GroupProfile {

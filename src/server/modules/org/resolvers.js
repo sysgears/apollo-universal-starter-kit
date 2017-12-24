@@ -37,7 +37,8 @@ export default pubsub => ({
       const userOrgs = await context.Org.getOrgIdsForUserIdsViaGroups(uids);
 
       const oids = _.uniq(_.map(_.flatten(userOrgs), elem => elem.orgId));
-      const orgs = await context.Org.getMany(oids);
+      args.ids = oids;
+      const orgs = await context.Org.getMany(args);
 
       let ret = reconcileBatchManyToMany(source, userOrgs, orgs, 'userId', 'orgId');
       return ret;
@@ -50,7 +51,8 @@ export default pubsub => ({
       const groupOrgs = await context.Org.getOrgIdsForGroupIds(gids);
 
       const oids = _.uniq(_.map(_.flatten(groupOrgs), elem => elem.orgId));
-      const orgs = await context.Org.getMany(oids);
+      args.ids = oids;
+      const orgs = await context.Org.getMany(args);
 
       let ret = reconcileBatchManyToMany(source, groupOrgs, orgs, 'groupId', 'orgId');
       return ret;
@@ -68,7 +70,8 @@ export default pubsub => ({
       }
 
       let ids = _.uniq(source.map(s => s.orgId));
-      const profiles = await context.Org.getProfileMany(ids);
+      args.ids = ids;
+      const profiles = await context.Org.getProfileMany(args);
       const ret = reconcileBatchOneToOne(source, profiles, 'orgId');
       return ret;
     }),
@@ -78,7 +81,8 @@ export default pubsub => ({
       const orgGroups = await context.Org.getGroupIdsForOrgIds(oids);
 
       const gids = _.uniq(_.map(_.flatten(orgGroups), elem => elem.groupId));
-      const groups = await context.Group.getMany(gids);
+      args.ids = gids;
+      const groups = await context.Group.getMany(args);
 
       let ret = reconcileBatchManyToMany(source, orgGroups, groups, 'orgId', 'groupId');
       return ret;
@@ -93,7 +97,8 @@ export default pubsub => ({
       const orgUsers = await context.Org.getUserIdsForOrgIdsViaGroups(oids);
 
       const uids = _.uniq(_.map(_.flatten(orgUsers), elem => elem.userId));
-      const users = await context.User.getMany(uids);
+      args.ids = uids;
+      const users = await context.User.getMany(args);
 
       let ret = reconcileBatchManyToMany(source, orgUsers, users, 'orgId', 'userId');
       return ret;

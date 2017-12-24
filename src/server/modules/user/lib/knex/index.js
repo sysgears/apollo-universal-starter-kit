@@ -1,27 +1,12 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
 import uuidv4 from 'uuid';
 
-import log from '../../../../common/log';
-import knex from '../../../sql/connector';
+import log from '../../../../../common/log';
+import knex from '../../../../sql/connector';
 
-import paging from '../../../sql/paging';
-import ordering from '../../../sql/ordering';
-import filterBuilder from '../../../sql/filters';
-
-/*
-const userFields = ['u.uuid AS id', 'u.email', 'u.created_at', 'u.updated_at', 'u.is_active'];
-
-const profileFields = [
-  'p.display_name',
-  'p.title',
-  'p.first_name',
-  'p.middle_name',
-  'p.last_name',
-  'p.suffix',
-  'p.locale',
-  'p.language'
-];
-*/
+import paging from '../../../../sql/paging';
+import ordering from '../../../../sql/ordering';
+import filterBuilder from '../../../../sql/filters';
 
 const selectFields = [
   'u.id AS user_id',
@@ -45,23 +30,23 @@ const selectFields = [
 export default class User {
   async list(args, trx) {
     try {
-      let queryBuilder = knex
+      let builder = knex
         .select(...selectFields)
         .from('users AS u')
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
 
       // add filter conditions
-      queryBuilder = filterBuilder(queryBuilder, args);
+      builder = filterBuilder(builder, args);
 
       // paging and ordering
-      queryBuilder = paging(queryBuilder, args);
-      queryBuilder = ordering(queryBuilder, args);
+      builder = paging(builder, args);
+      builder = ordering(builder, args);
 
       if (trx) {
-        queryBuilder.transacting(trx);
+        builder.transacting(trx);
       }
 
-      let rows = await queryBuilder;
+      let rows = await builder;
       return camelizeKeys(rows);
     } catch (e) {
       log.error('Error in User.list', e);
@@ -90,13 +75,20 @@ export default class User {
     }
   }
 
-  async getMany(ids, trx) {
+  async getMany(args, trx) {
     try {
       let builder = knex
         .select(...selectFields)
         .from('users AS u')
-        .whereIn('u.id', ids)
+        .whereIn('u.id', args.ids)
         .leftJoin('user_profile AS p', 'p.user_id', 'u.id');
+
+      // add filter conditions
+      builder = filterBuilder(builder, args);
+
+      // paging and ordering
+      builder = paging(builder, args);
+      builder = ordering(builder, args);
 
       if (trx) {
         builder.transacting(trx);
@@ -204,12 +196,19 @@ export default class User {
     }
   }
 
-  async getProfileMany(ids, trx) {
+  async getProfileMany(args, trx) {
     try {
       let builder = knex
         .select('*')
         .from('user_profile')
-        .whereIn('user_id', ids);
+        .whereIn('user_id', args.ids);
+
+      // add filter conditions
+      builder = filterBuilder(builder, args);
+
+      // paging and ordering
+      builder = paging(builder, args);
+      builder = ordering(builder, args);
 
       if (trx) {
         builder.transacting(trx);

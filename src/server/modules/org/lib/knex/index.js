@@ -1,10 +1,14 @@
-import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
-import { has, _ } from 'lodash';
+import { camelizeKeys, decamelizeKeys } from 'humps';
+import { _ } from 'lodash';
 import uuidv4 from 'uuid';
 
-import log from '../../../../common/log';
-import knex from '../../../sql/connector';
-import { orderedFor } from '../../../sql/helpers';
+import log from '../../../../../common/log';
+import knex from '../../../../sql/connector';
+
+import paging from '../../../../sql/paging';
+import ordering from '../../../../sql/ordering';
+import filterBuilder from '../../../../sql/filters';
+import { orderedFor } from '../../../../sql/helpers';
 
 const selectFields = [
   'o.id AS org_id',
@@ -23,65 +27,23 @@ const selectFields = [
 export default class Org {
   async list(args, trx) {
     try {
-      let { filters, orderBys, offset, limit } = args;
-
-      const queryBuilder = knex
+      let builder = knex
         .select(...selectFields)
         .from('orgs AS o')
         .leftJoin('org_profile AS p', 'p.org_id', 'o.id');
 
-      // Check if this should be filtered to a User's membership
-      if (args.memberId) {
-        queryBuilder.leftJoin('orgs_users AS m', 'p.org_id', 'm.org_id').where('m.user_id', '=', args.memberId);
-      }
-
       // add filter conditions
-      if (filters) {
-        for (let filter of filters) {
-          if (has(filter, 'isActive') && filter.isActive !== null) {
-            queryBuilder.where(function() {
-              this.where('o.is_active', filter.isActive);
-            });
-          }
+      builder = filterBuilder(builder, args);
 
-          if (has(filter, 'searchText') && filter.searchText !== '') {
-            queryBuilder.where(function() {
-              this.where('o.name', 'like', `%${filter.searchText}%`)
-                .orWhere('p.domain', 'like', `%${filter.searchText}%`)
-                .orWhere('p.display_name', 'like', `%${filter.searchText}%`)
-                .orWhere('p.description', 'like', `%${filter.searchText}%`);
-            });
-          }
-        }
-      }
-
-      if (offset) {
-        queryBuilder.offset(offset);
-      }
-
-      if (limit) {
-        queryBuilder.limit(limit);
-      }
-
-      // add order by
-      if (orderBys) {
-        for (let orderBy of orderBys) {
-          if (orderBy && orderBy.column) {
-            let column = orderBy.column;
-            let order = 'asc';
-            if (orderBy.order) {
-              order = orderBy.order;
-            }
-            queryBuilder.orderBy(decamelize(column), order);
-          }
-        }
-      }
+      // paging and ordering
+      builder = paging(builder, args);
+      builder = ordering(builder, args);
 
       if (trx) {
-        queryBuilder.transacting(trx);
+        builder.transacting(trx);
       }
 
-      let rows = await queryBuilder;
+      let rows = await builder;
       return camelizeKeys(rows);
     } catch (e) {
       log.error('Error in Org.list', e);
@@ -111,13 +73,20 @@ export default class Org {
     }
   }
 
-  async getMany(ids, trx) {
+  async getMany(args, trx) {
     try {
       let builder = knex
         .select(...selectFields)
         .from('orgs AS o')
-        .whereIn('o.id', ids)
+        .whereIn('o.id', args.ids)
         .leftJoin('org_profile AS p', 'p.org_id', 'o.id');
+
+      // add filter conditions
+      builder = filterBuilder(builder, args);
+
+      // paging and ordering
+      builder = paging(builder, args);
+      builder = ordering(builder, args);
 
       if (trx) {
         builder.transacting(trx);
@@ -206,12 +175,19 @@ export default class Org {
     }
   }
 
-  async getProfileMany(ids, trx) {
+  async getProfileMany(args, trx) {
     try {
       let builder = knex
         .select('*')
         .from('org_profile')
-        .whereIn('org_id', ids);
+        .whereIn('org_id', args.ids);
+
+      // add filter conditions
+      builder = filterBuilder(builder, args);
+
+      // paging and ordering
+      builder = paging(builder, args);
+      builder = ordering(builder, args);
 
       if (trx) {
         builder.transacting(trx);

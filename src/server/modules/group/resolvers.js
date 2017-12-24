@@ -38,7 +38,8 @@ export default pubsub => ({
       const groupUsers = await context.Group.getUserIdsForGroupIds([args.id]);
 
       const uids = _.uniq(_.map(_.flatten(groupUsers), u => u.userId));
-      const users = await context.User.getMany(uids);
+      args.ids = uids;
+      const users = await context.User.getMany(args);
       return users;
     }
   },
@@ -49,7 +50,8 @@ export default pubsub => ({
       const userGroups = await context.Group.getGroupIdsForUserIds(uids);
 
       const gids = _.uniq(_.map(_.flatten(userGroups), u => u.groupId));
-      const groups = await context.Group.getMany(gids);
+      args.ids = gids;
+      const groups = await context.Group.getMany(args);
 
       let ret = reconcileBatchManyToMany(source, userGroups, groups, 'userId', 'groupId');
       return ret;
@@ -67,7 +69,8 @@ export default pubsub => ({
       }
 
       let ids = _.uniq(source.map(s => s.groupId));
-      const profiles = await context.Group.getProfileMany(ids);
+      args.ids = ids;
+      const profiles = await context.Group.getProfileMany(args);
       const ret = reconcileBatchOneToOne(source, profiles, 'groupId');
       return ret;
     }),
@@ -76,7 +79,8 @@ export default pubsub => ({
       const groupUsers = await context.Group.getUserIdsForGroupIds(gids);
 
       const uids = _.uniq(_.map(_.flatten(groupUsers), u => u.userId));
-      const users = await context.User.getMany(uids);
+      args.ids = uids;
+      const users = await context.User.getMany(args);
 
       let ret = reconcileBatchManyToMany(source, groupUsers, users, 'groupId', 'userId');
       return ret;

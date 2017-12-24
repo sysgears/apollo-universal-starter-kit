@@ -40,11 +40,21 @@ extend type Subscription {
 #
 
 extend type User {
-  orgs: [Org]
+  orgs(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [Org]
 }
 
 extend type Group {
-  orgs: [Org]
+  orgs(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [Org]
 }
 
 #
@@ -71,9 +81,19 @@ type Org {
 
   profile: OrgProfile
 
-  groups: [Group]
-  users: [User]
-  # serviceaccounts: [ServiceAccount]
+  groups(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [Group]
+
+  users(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    offset: Int
+    limit: Int
+  ): [User]
 }
 
 type OrgProfile {

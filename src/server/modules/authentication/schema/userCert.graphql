@@ -1,3 +1,13 @@
+extend type Mutation {
+  createUserCertificate(
+    id: String!
+    name: String!
+    serial: String!
+    pubkey: String!
+  ): CertificatePayload!
+  deleteUserCertificate(id: String!, name: String!): CertificatePayload!
+}
+
 extend type UserAuth {
   certificates: [CertificateAuth]
 }

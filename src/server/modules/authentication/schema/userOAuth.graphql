@@ -1,3 +1,7 @@
+extend type Mutation {
+  deleteUserOAuth(id: String!, provider: String!): UserOAuthPayload!
+}
+
 extend type UserAuth {
   oauths: [UserOAuth]
 }
@@ -7,9 +11,10 @@ type UserOAuth {
   updatedAt: String
 
   provider: String
+  oauthId: String
 }
 
-input OAuthInput {
+type UserOAuthPayload {
   provider: String
-  oauthId: String
+  errors: [FieldError!]
 }

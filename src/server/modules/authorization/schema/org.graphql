@@ -1,17 +1,76 @@
 extend type Query {
+  orgRoles(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [OrgRoleInfo]
+
+  orgRole(id: ID!): OrgRoleInfo
 }
 
 extend type Mutation {
+  createOrgRole(orgId: ID!, input: OrgRoleInput!): OrgRolePayload!
+  updateOrgRole(id: ID!, input: OrgRoleInput!): OrgRolePayload!
+  deleteOrgRole(id: ID!): OrgRolePayload!
+
+  grantPermissionToOrgRole(
+    roleId: String!
+    permissionId: String!
+  ): OrgRolePermissionBindingPayload!
+  revokePermissionFromOrgRole(
+    roleId: String!
+    permissionId: String!
+  ): OrgRolePermissionBindingPayload!
+
+  grantOrgRoleToUser(
+    roleId: String!
+    userId: String!
+  ): OrgRoleUserBindingPayload!
+  revokeOrgRoleFromUser(
+    roleId: String!
+    userId: String!
+  ): OrgRoleUserBindingPayload!
 }
 
 extend type Subscription {
 }
 
 type OrgRoleInfo {
-  orgId: ID!
+  createdAt: DateTime
+  updatedAt: DateTime
+  id: ID
+  name: String
+  displayName: String
+  description: String
+
+  roleId: ID
+  roleName: String
+
+  org: Org
+  orgId: ID
   orgName: String
+
   scopes: [String]
-  roles: [RoleInfo]
+  permissions(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [PermissionInfo]
+
+  users(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [User]
 }
 
 extend type Org {
@@ -20,4 +79,47 @@ extend type Org {
 
 extend type User {
   orgRoles: [OrgRoleInfo]
+}
+
+extend type PermissionInfo {
+  orgs(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [User]
+
+  orgRoles(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [UserRoleInfo]
+}
+
+input OrgRoleInput {
+  name: String!
+  displayName: String
+  description: String
+}
+
+type OrgRolePayload {
+  role: OrgRoleInfo
+  errors: [FieldError!]
+}
+
+type OrgRolePermissionBindingPayload {
+  permission: PermissionInfo
+  role: OrgRoleInfo
+  errors: [FieldError!]
+}
+
+type OrgRoleUserBindingPayload {
+  user: User
+  role: OrgRoleInfo
+  errors: [FieldError!]
 }

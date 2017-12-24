@@ -35,7 +35,7 @@ export default pubsub => ({
 
     groupMembers: async (obj, args, context) => {
       // console.log("GROUP MEMBERS - args", args)
-      const groupUsers = await context.Group.getUserIdsForGroupIds([args.id]);
+      const groupUsers = await context.Group.getUserIdsForGroupIds({ ids: [args.id] });
 
       const uids = _.uniq(_.map(_.flatten(groupUsers), u => u.userId));
       args.ids = uids;
@@ -47,13 +47,18 @@ export default pubsub => ({
   User: {
     groups: createBatchResolver(async (source, args, context) => {
       const uids = _.uniq(source.map(s => s.userId));
-      const userGroups = await context.Group.getGroupIdsForUserIds(uids);
+      //console.log("RESOLVER - User.groups - uids", uids)
+      const userGroups = await context.Group.getGroupIdsForUserIds({ ids: uids });
+      //console.log("RESOLVER - User.groups - userGroups", userGroups)
 
       const gids = _.uniq(_.map(_.flatten(userGroups), u => u.groupId));
       args.ids = gids;
+      //console.log("RESOLVER - User.groups - args", args)
       const groups = await context.Group.getMany(args);
+      //console.log("RESOLVER - User.groups - groups", groups)
 
       let ret = reconcileBatchManyToMany(source, userGroups, groups, 'userId', 'groupId');
+      //console.log("RESOLVER - User.groups - ret", ret)
       return ret;
     })
   },
@@ -75,14 +80,20 @@ export default pubsub => ({
       return ret;
     }),
     users: createBatchResolver(async (source, args, context) => {
+      //console.log("RESOLVER - Group.users - source", source)
       const gids = _.uniq(source.map(s => s.groupId));
-      const groupUsers = await context.Group.getUserIdsForGroupIds(gids);
+      //console.log("RESOLVER - Group.users - gids", gids)
+      const groupUsers = await context.Group.getUserIdsForGroupIds({ ids: gids });
+      //console.log("RESOLVER - Group.users - groupUsers", groupUsers)
 
       const uids = _.uniq(_.map(_.flatten(groupUsers), u => u.userId));
       args.ids = uids;
+      //console.log("RESOLVER - Group.users - args", args)
       const users = await context.User.getMany(args);
+      //console.log("RESOLVER - Group.users - users", users)
 
       let ret = reconcileBatchManyToMany(source, groupUsers, users, 'groupId', 'userId');
+      //console.log("RESOLVER - Group.users - ret", ret)
       return ret;
     })
   },
@@ -225,7 +236,7 @@ export default pubsub => ({
             e.throwIf();
           }
 
-          const isAdded = await context.Group.addUserToGroup(groupId, userId);
+          const isAdded = await context.Group.addUserToGroup(userId, groupId);
           if (isAdded) {
             return { group, errors: null };
           } else {
@@ -258,16 +269,16 @@ export default pubsub => ({
             e.throwIf();
           }
 
-          const isRemoved = await context.Group.removeUserFromGroup(groupId, userId);
+          const isRemoved = await context.Group.removeUserFromGroup(userId, groupId);
           if (isRemoved) {
-            return { group, errors: null };
+            return { user, group, errors: null };
           } else {
-            log.error('Error removing user');
+            log.error('Error removing user', isRemoved);
             e.setError('remove', 'Could not remove user from group. Please try again later.');
             e.throwIf();
           }
         } catch (e) {
-          return { group: null, errors: e };
+          return { user: null, group: null, errors: e };
         }
       }
     )

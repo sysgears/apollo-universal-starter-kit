@@ -9,6 +9,15 @@ scalar DateTime
 #   (likely to change for more flexible querying and search)
 #
 
+input ListingAdapters {
+  # TODO cursor: CursorInfo
+  filters: [FilterInput!]
+  orderBys: [OrderByInput!]
+  groupBys: [GroupByInput!]
+  offset: Int
+  limit: Int
+}
+
 input SearchInput {
   # search by username, email, or any column
   # May or may not need the all fields here

@@ -6,6 +6,8 @@ import FieldError from '../../../../common/FieldError';
 import { withAuth } from '../../../../common/authValidation';
 import { reconcileBatchOneToOne } from '../../../sql/helpers';
 
+import apikeyResolvers from './apikey';
+
 import userBaseResolvers from './userBase';
 import userPasswordResolvers from './userPassword';
 import userPasswordlessResolvers from './userPasswordless';
@@ -51,6 +53,7 @@ if (authn.passwordless.enabled) {
 }
 
 if (authn.apikey.enabled) {
+  obj = apikeyResolvers(obj);
   obj = userApikeyResolvers(obj);
 }
 

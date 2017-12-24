@@ -1,13 +1,28 @@
 extend type Query {
+  permissions(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [PermissionInfo]
+
+  permission(id: ID!): PermissionInfo
 }
 
 extend type Mutation {
+  createPermission(input: PermissionInput!): PermissionPayload!
+  updatePermission(id: ID!, input: PermissionInput!): PermissionPayload!
+  deletePermission(id: ID!): PermissionPayload!
 }
 
 extend type Subscription {
 }
 
 type RoleInfo {
+  createdAt: DateTime
+  updatedAt: DateTime
   id: ID
   name: String
   roleId: ID
@@ -15,4 +30,34 @@ type RoleInfo {
   displayName: String
   description: String
   scopes: [String]
+}
+
+type PermissionInfo {
+  createdAt: DateTime
+  updatedAt: DateTime
+  id: ID
+  name: String
+
+  resource: String
+  relation: String
+  verb: String
+
+  displayName: String
+  description: String
+}
+
+input PermissionInput {
+  name: String!
+
+  resource: String!
+  relation: String!
+  verb: String!
+
+  displayName: String
+  description: String
+}
+
+type PermissionPayload {
+  permission: PermissionInfo
+  errors: [FieldError!]
 }

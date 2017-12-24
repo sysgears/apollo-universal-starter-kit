@@ -1,93 +1,25 @@
-import _ from 'lodash';
-import { camelizeKeys } from 'humps';
+import {
+  listAdapter,
+  findAdapter,
+  getAdapter,
+  createWithoutIdAdapter,
+  deleteMultiConditionAdapter,
+  getManyRelationAdapter
+} from '../../../../sql/crud';
 
-import knex from '../../../../sql/connector';
-import { orderedFor } from '../../../../sql/helpers';
+export const searchServiceAccountCertificate = findAdapter('serviceaccount_certificates');
 
-import log from '../../../../../common/log';
+export const getServiceAccountFromCertificate = getAdapter('serviceaccount_certificates', 'key');
+export const getCertificatesForServiceAccounts = getManyRelationAdapter('serviceaccount_certificates', {
+  idField: 'serviceaccountId',
+  elemField: 'name',
+  collectionField: 'serviceaccountId'
+});
 
-export async function getCertificatesForServiceAccounts(ids, trx) {
-  try {
-    let builder = knex
-      .select('*')
-      .from('serviceaccount_certificates')
-      .whereIn('serviceaccount_id', ids);
+export const listServiceAccountCertificate = listAdapter('serviceaccount_certificates');
+export const createServiceAccountCertificate = createWithoutIdAdapter('serviceaccount_certificates');
+export const deleteServiceAccountCertificate = deleteMultiConditionAdapter('serviceaccount_certificates');
 
-    if (trx) {
-      builder.transacting(trx);
-    }
-
-    let rows = await builder;
-
-    let res = _.filter(rows, row => row.serial !== null);
-    res = camelizeKeys(res);
-    return orderedFor(res, ids, 'serviceaccountId', false);
-  } catch (e) {
-    log.error('Error in Auth.getCertificatesForServiceAccounts', e);
-    throw e;
-  }
-}
-
-export async function getServiceAccountCertificates(ids, trx) {
-  try {
-    let builder = knex
-      .select('*')
-      .from('serviceaccount_certificates')
-      .whereIn('serial', ids);
-
-    if (trx) {
-      builder.transacting(trx);
-    }
-
-    let rows = await builder;
-
-    let res = _.filter(rows, row => row.serial !== null);
-    res = camelizeKeys(res);
-    return orderedFor(res, ids, 'serviceaccountId', false);
-  } catch (e) {
-    log.error('Error in Auth.getCertificatesForServiceAccounts', e);
-    throw e;
-  }
-}
-
-export async function createServiceAccountCertificate(id, name, serial, pubkey, trx) {
-  try {
-    let builder = knex('serviceaccount_certificates').insert({
-      name,
-      serial,
-      pubkey,
-      serviceaccount_id: id
-    });
-
-    if (trx) {
-      builder.transacting(trx);
-    }
-
-    let ret = await builder;
-    return ret;
-  } catch (e) {
-    log.error('Error in Auth.createServiceAccountCertificate', e);
-    throw e;
-  }
-}
-
-export async function deleteServiceAccountCertificate(id, name, trx) {
-  try {
-    let builder = knex('serviceaccount_certificate')
-      .where({
-        name: name,
-        serviceaccount_id: id
-      })
-      .delete();
-
-    if (trx) {
-      builder.transacting(trx);
-    }
-
-    let ret = await builder;
-    return ret;
-  } catch (e) {
-    log.error('Error in Auth.deleteServiceAccountCertificate', e);
-    throw e;
-  }
+export async function getServiceAccountFromSerial(serial, trx) {
+  return getServiceAccountFromCertificate(serial, trx);
 }

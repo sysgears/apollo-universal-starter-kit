@@ -2,7 +2,8 @@ import { decamelize } from 'humps';
 
 /*
  * input is queryBuild (knex object) and args object
- * with field groupBys: [{column, table}]
+ * with field groupBys: [{groupBy}, ...]
+ * where groupBy: {column, table}
  * (table is optional)
  */
 export default function grouping(queryBuilder, args) {

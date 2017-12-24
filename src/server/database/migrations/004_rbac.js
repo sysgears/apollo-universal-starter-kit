@@ -90,9 +90,8 @@ exports.up = async function(knex, Promise) {
         .references('id')
         .inTable('permissions')
         .onDelete('CASCADE');
-      table.boolean('allow').notNullable();
 
-      table.unique(['role_id', 'permission_id', 'allow']);
+      table.unique(['role_id', 'permission_id']);
     });
 
     migs.push(fn);
@@ -177,9 +176,8 @@ exports.up = async function(knex, Promise) {
         .references('id')
         .inTable('permissions')
         .onDelete('CASCADE');
-      table.boolean('allow').notNullable();
 
-      table.unique(['role_id', 'permission_id', 'allow']);
+      table.unique(['role_id', 'permission_id']);
     });
 
     migs.push(fn);
@@ -255,9 +253,8 @@ exports.up = async function(knex, Promise) {
         .references('id')
         .inTable('permissions')
         .onDelete('CASCADE');
-      table.boolean('allow').notNullable();
 
-      table.unique(['role_id', 'permission_id', 'allow']);
+      table.unique(['role_id', 'permission_id']);
     });
 
     migs.push(fn);

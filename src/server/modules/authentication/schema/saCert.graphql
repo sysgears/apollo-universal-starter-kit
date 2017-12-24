@@ -1,3 +1,16 @@
+extend type Mutation {
+  createServiceAccountCertificate(
+    id: String!
+    name: String!
+    serial: String!
+    pubkey: String!
+  ): CertificatePayload!
+  deleteServiceAccountCertificate(
+    id: String!
+    name: String!
+  ): CertificatePayload!
+}
+
 extend type ServiceAccountAuth {
   certificates: [CertificateAuth]
 }

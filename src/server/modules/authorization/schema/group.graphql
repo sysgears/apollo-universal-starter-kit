@@ -1,17 +1,76 @@
 extend type Query {
+  groupRoles(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [GroupRoleInfo]
+
+  groupRole(id: ID!): GroupRoleInfo
 }
 
 extend type Mutation {
+  createGroupRole(groupId: ID!, input: GroupRoleInput!): GroupRolePayload!
+  updateGroupRole(id: ID!, input: GroupRoleInput!): GroupRolePayload!
+  deleteGroupRole(id: ID!): GroupRolePayload!
+
+  grantPermissionToGroupRole(
+    roleId: String!
+    permissionId: String!
+  ): GroupRolePermissionBindingPayload!
+  revokePermissionFromGroupRole(
+    roleId: String!
+    permissionId: String!
+  ): GroupRolePermissionBindingPayload!
+
+  grantGroupRoleToUser(
+    roleId: String!
+    userId: String!
+  ): GroupRoleUserBindingPayload!
+  revokeGroupRoleFromUser(
+    roleId: String!
+    userId: String!
+  ): GroupRoleUserBindingPayload!
 }
 
 extend type Subscription {
 }
 
 type GroupRoleInfo {
-  groupId: ID!
+  createdAt: DateTime
+  updatedAt: DateTime
+  id: ID
+  name: String
+  displayName: String
+  description: String
+
+  roleId: ID
+  roleName: String
+
+  group: Group
+  groupId: ID
   groupName: String
+
   scopes: [String]
-  roles: [RoleInfo]
+  permissions(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [PermissionInfo]
+
+  users(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [User]
 }
 
 extend type Group {
@@ -20,4 +79,47 @@ extend type Group {
 
 extend type User {
   groupRoles: [GroupRoleInfo]
+}
+
+extend type PermissionInfo {
+  groups(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [Group]
+
+  groupRoles(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [GroupRoleInfo]
+}
+
+input GroupRoleInput {
+  name: String!
+  displayName: String
+  description: String
+}
+
+type GroupRolePayload {
+  role: GroupRoleInfo
+  errors: [FieldError!]
+}
+
+type GroupRolePermissionBindingPayload {
+  permission: PermissionInfo
+  role: GroupRoleInfo
+  errors: [FieldError!]
+}
+
+type GroupRoleUserBindingPayload {
+  user: User
+  role: GroupRoleInfo
+  errors: [FieldError!]
 }

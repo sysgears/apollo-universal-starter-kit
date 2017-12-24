@@ -6,6 +6,7 @@ type ApiKeyAuth {
   key: String
 }
 
-input CreateApiKeyInput {
-  name: String
+type ApiKeyPayload {
+  apikey: ApiKeyAuth
+  errors: [FieldError!]
 }

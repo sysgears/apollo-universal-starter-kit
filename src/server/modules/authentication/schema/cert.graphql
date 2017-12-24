@@ -6,7 +6,7 @@ type CertificateAuth {
   serial: String
 }
 
-input CreateCertificateInput {
-  serial: String
-  pubkey: String
+type CertificatePayload {
+  certificate: CertificateAuth
+  errors: [FieldError!]
 }

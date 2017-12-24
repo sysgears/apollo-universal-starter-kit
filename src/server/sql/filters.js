@@ -3,8 +3,6 @@ import { decamelize } from 'humps';
 export default function filterBuilder(queryBuilder, args) {
   let { filters } = args;
 
-  console.log('FILTERS', filters);
-
   // add filter conditions
   if (filters) {
     let first = true;

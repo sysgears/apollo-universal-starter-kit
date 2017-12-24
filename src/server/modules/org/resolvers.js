@@ -29,18 +29,20 @@ export default pubsub => ({
 
   User: {
     orgs: createBatchResolver(async (source, args, context) => {
+      // console.log("RESOLVER - User.orgs - source", source)
       const uids = _.uniq(source.map(s => s.userId));
-
-      // TODO check that we probably need a call to getUserIdsForOrgIds
-      // and then to marge the results before later processing
-      // ... because a user could be in an org, but not in any groups
+      // console.log("RESOLVER - User.orgs - uids", uids)
       const userOrgs = await context.Org.getOrgIdsForUserIdsViaGroups(uids);
+      // console.log("RESOLVER - User.orgs - userOrgs", userOrgs)
 
       const oids = _.uniq(_.map(_.flatten(userOrgs), elem => elem.orgId));
       args.ids = oids;
+      // console.log("RESOLVER - User.orgs - args", args)
       const orgs = await context.Org.getMany(args);
+      // console.log("RESOLVER - User.orgs - orgs", orgs)
 
       let ret = reconcileBatchManyToMany(source, userOrgs, orgs, 'userId', 'orgId');
+      // console.log("RESOLVER - User.orgs - ret", ret)
       return ret;
     })
   },
@@ -48,7 +50,7 @@ export default pubsub => ({
   Group: {
     orgs: createBatchResolver(async (source, args, context) => {
       const gids = _.uniq(source.map(s => s.groupId));
-      const groupOrgs = await context.Org.getOrgIdsForGroupIds(gids);
+      const groupOrgs = await context.Org.getOrgIdsForGroupIds({ ids: gids });
 
       const oids = _.uniq(_.map(_.flatten(groupOrgs), elem => elem.orgId));
       args.ids = oids;
@@ -61,7 +63,7 @@ export default pubsub => ({
 
   Org: {
     id(obj) {
-      return obj.orgId;
+      return obj.orgId ? obj.orgId : obj.id;
     },
     profile: createBatchResolver(async (source, args, context) => {
       // shortcut for other resolver paths which pull the profile with their call
@@ -78,7 +80,7 @@ export default pubsub => ({
 
     groups: createBatchResolver(async (source, args, context) => {
       const oids = _.uniq(source.map(s => s.orgId));
-      const orgGroups = await context.Org.getGroupIdsForOrgIds(oids);
+      const orgGroups = await context.Org.getGroupIdsForOrgIds({ ids: oids });
 
       const gids = _.uniq(_.map(_.flatten(orgGroups), elem => elem.groupId));
       args.ids = gids;
@@ -133,12 +135,12 @@ export default pubsub => ({
 
         /*
         let s = context.org.id !== args.input.id ? ['org/all/create'] : ['org/owner/create'];
-        console.log('addOrg', context.user.id, context.auth.scope, s, args);
+        // console.log('addOrg', context.user.id, context.auth.scope, s, args);
         return s;
         */
       },
       async (obj, { input }, context) => {
-        console.log('adding org:', input);
+        // console.log('adding org:', input);
         try {
           const e = new FieldError();
           let oid = null;
@@ -155,7 +157,7 @@ export default pubsub => ({
           }
 
           if (!oid) {
-            console.log('Error creating org', oid);
+            // console.log('Error creating org', oid);
             e.setError('error', 'Something went wrong when creating the org');
             e.throwIf();
           }
@@ -164,12 +166,12 @@ export default pubsub => ({
             if (!input.profile.displayName) {
               input.profile.displayName = input.name;
             }
-            console.log('creating org profile', input.profile);
+            // console.log('creating org profile', input.profile);
             await context.Org.createProfile(oid, input.profile);
           }
 
           const org = await context.Org.get(oid);
-          console.log('return org', org);
+          // console.log('return org', org);
           return { org, errors: null };
         } catch (e) {
           return { org: null, errors: e };
@@ -180,14 +182,14 @@ export default pubsub => ({
     editOrg: withAuth(
       (obj, args, context) => {
         let s = context.org.id !== args.input.id ? ['org/all/update'] : ['org/owner/update'];
-        console.log('editOrg', context.org.id, context.auth.scope, s, args);
+        // console.log('editOrg', context.org.id, context.auth.scope, s, args);
         return s;
       },
       async (obj, { input }, context) => {
         try {
           const e = new FieldError();
           if (input.name) {
-            console.log('updating org name');
+            // console.log('updating org name');
             const nameExists = await context.Org.getByName(input.name);
             if (nameExists && nameExists.id !== input.id) {
               e.setError('name', 'E-mail already exists.');
@@ -197,12 +199,12 @@ export default pubsub => ({
           }
 
           if (input.profile) {
-            console.log('updating org profile', input.profile);
+            // console.log('updating org profile', input.profile);
             await context.Org.updateProfile(input.id, input.profile);
           }
 
           const org = await context.Org.get(input.id);
-          console.log('return org', org);
+          // console.log('return org', org);
           return { org, errors: null };
         } catch (e) {
           return { org: null, errors: e };

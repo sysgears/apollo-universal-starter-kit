@@ -1,18 +1,115 @@
 extend type Query {
+  userRoles(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [UserRoleInfo]
+
+  userRole(id: ID!): UserRoleInfo
 }
 
 extend type Mutation {
+  createUserRole(input: UserRoleInput!): UserRolePayload!
+  updateUserRole(id: ID!, input: UserRoleInput!): UserRolePayload!
+  deleteUserRole(id: ID!): UserRolePayload!
+
+  grantPermissionToUserRole(
+    roleId: String!
+    permissionId: String!
+  ): UserRolePermissionBindingPayload!
+  revokePermissionFromUserRole(
+    roleId: String!
+    permissionId: String!
+  ): UserRolePermissionBindingPayload!
+  grantUserRoleToUser(
+    roleId: String!
+    userId: String!
+  ): UserRoleUserBindingPayload!
+  revokeUserRoleFromUser(
+    roleId: String!
+    userId: String!
+  ): UserRoleUserBindingPayload!
 }
 
 extend type Subscription {
 }
 
 type UserRoleInfo {
-  id: ID!
+  createdAt: DateTime
+  updatedAt: DateTime
+  id: ID
   name: String
+  displayName: String
+  description: String
+
+  roleId: ID
+  roleName: String
   scopes: [String]
+  permissions(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [PermissionInfo]
+
+  users(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [User]
 }
 
 extend type User {
   userRoles: [UserRoleInfo]
+}
+
+extend type PermissionInfo {
+  users(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [User]
+
+  userRoles(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [UserRoleInfo]
+}
+
+input UserRoleInput {
+  name: String!
+  displayName: String
+  description: String
+}
+
+type UserRolePayload {
+  role: UserRoleInfo
+  errors: [FieldError!]
+}
+
+type UserRolePermissionBindingPayload {
+  permission: PermissionInfo
+  role: UserRoleInfo
+  errors: [FieldError!]
+}
+
+type UserRoleUserBindingPayload {
+  user: User
+  role: UserRoleInfo
+  errors: [FieldError!]
 }

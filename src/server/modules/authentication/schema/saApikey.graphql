@@ -1,3 +1,8 @@
+extend type Mutation {
+  createServiceAccountApiKey(id: String!, name: String!): ApiKeyPayload!
+  deleteServiceAccountApiKey(id: String!, name: String!): ApiKeyPayload!
+}
+
 extend type ServiceAccountAuth {
   apikeys: [ApiKeyAuth]
 }

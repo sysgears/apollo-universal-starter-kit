@@ -22,6 +22,7 @@ export default pubsub => ({
     ),
     currentUser: (obj, args, context) => {
       if (context.user) {
+        console.log('Query.currentUser', obj, args, context.user);
         return context.User.get(context.user.id);
       } else {
         return null;
@@ -31,13 +32,9 @@ export default pubsub => ({
 
   User: {
     id(obj) {
-      return obj.userId;
+      return obj.userId ? obj.userId : obj.id;
     },
     profile: createBatchResolver(async (source, args, context) => {
-      // shortcut for other resolver paths which pull the profile with their call
-      if (source[0].displayName) {
-        return source;
-      }
       let ids = _.uniq(source.map(s => s.userId));
       args.ids = ids;
       const profiles = await context.User.getProfileMany(args);

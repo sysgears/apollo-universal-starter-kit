@@ -2,6 +2,7 @@ import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has, _ } from 'lodash';
 import uuidv4 from 'uuid';
 
+import log from '../../../common/log';
 import knex from '../../sql/connector';
 import { orderedFor } from '../../sql/helpers';
 
@@ -58,15 +59,67 @@ export default class ServiceAccount {
     return camelizeKeys(await queryBuilder);
   }
 
-  async get(id) {
-    return camelizeKeys(
-      await knex
+  async get(id, trx) {
+    try {
+      let builder = knex
         .select('s.id', 's.created_at', 's.updated_at', 's.is_active', 's.email', 'p.display_name', 'p.description')
         .from('serviceaccounts AS s')
         .where('s.id', '=', id)
         .leftJoin('serviceaccount_profile AS p', 'p.serviceaccount_id', 's.id')
-        .first()
-    );
+        .first();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in Group.get', e);
+      throw e;
+    }
+  }
+
+  async getByName(name, trx) {
+    try {
+      let builder = knex
+        .select('s.id', 's.created_at', 's.updated_at', 's.is_active', 's.email', 'p.display_name', 'p.description')
+        .from('serviceaccounts AS s')
+        .where('s.name', '=', name)
+        .leftJoin('serviceaccount_profile AS p', 'p.serviceaccount_id', 's.id')
+        .first();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in Group.get', e);
+      throw e;
+    }
+  }
+
+  async getMant(ids, trx) {
+    try {
+      let builder = knex
+        .select('s.id', 's.created_at', 's.updated_at', 's.is_active', 's.email', 'p.display_name', 'p.description')
+        .from('serviceaccounts AS s')
+        .where('s.id', 'in', ids)
+        .leftJoin('serviceaccount_profile AS p', 'p.serviceaccount_id', 's.id')
+        .first();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in Group.get', e);
+      throw e;
+    }
   }
 
   async getOrgsForServiceAccountId(saId) {

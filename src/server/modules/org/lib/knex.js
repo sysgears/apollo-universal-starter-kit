@@ -131,6 +131,28 @@ export default class Org {
     }
   }
 
+  async getByName(name, trx) {
+    // console.log("Org.get", id)
+    try {
+      let builder = knex
+        .select(...selectFields)
+        .from('orgs AS o')
+        .where('o.name', '=', name)
+        .leftJoin('org_profile AS p', 'p.org_id', 'o.id')
+        .first();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in Org.get', e);
+      throw e;
+    }
+  }
+
   async create(values) {
     try {
       values.id = uuidv4();

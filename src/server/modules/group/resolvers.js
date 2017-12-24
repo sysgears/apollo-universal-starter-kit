@@ -91,36 +91,113 @@ export default pubsub => ({
   },
 
   Mutation: {
-    addGroup: async (obj, { input }, context) => {
-      try {
-        const e = new FieldError();
-        let group;
+    addGroup: withAuth(
+      (obj, args, context) => {
+        return ['group/all/create', 'group/owner/create'];
 
-        return { group, errors: null };
-      } catch (e) {
-        return { group: null, errors: e };
-      }
-    },
-    editGroup: async (obj, { input }, context) => {
-      try {
-        const e = new FieldError();
-        let group;
+        /*
+        let s = context.group.id !== args.input.id ? ['group/all/create'] : ['group/owner/create'];
+        console.log('addGroup', context.user.id, context.auth.scope, s, args);
+        return s;
+        */
+      },
+      async (obj, { input }, context) => {
+        console.log('adding group:', input);
+        try {
+          const e = new FieldError();
+          let gid = null;
+          if (input.name) {
+            const nameExists = await context.Group.getByName(input.name);
+            if (nameExists) {
+              e.setError('name', 'Name already exists.');
+              e.throwIf();
+            }
+            gid = await context.Group.create({ name: input.name });
+          } else {
+            e.setError('name', 'Group name required.');
+            e.throwIf();
+          }
 
-        return { group };
-      } catch (e) {
-        return { errors: e };
-      }
-    },
-    deleteGroup: async (obj, { id }, context) => {
-      try {
-        const e = new FieldError();
-        let group;
+          if (!gid) {
+            console.log('Error creating group', gid);
+            e.setError('error', 'Something went wrong when creating the group');
+            e.throwIf();
+          }
 
-        return { group };
-      } catch (e) {
-        return { errors: e };
+          if (input.profile) {
+            if (!input.profile.displayName) {
+              input.profile.displayName = input.name;
+            }
+            console.log('creating group profile', input.profile);
+            await context.Group.createProfile(gid, input.profile);
+          }
+
+          const group = await context.Group.get(gid);
+          console.log('return group', group);
+          return { group, errors: null };
+        } catch (e) {
+          return { group: null, errors: e };
+        }
       }
-    }
+    ),
+    editGroup: withAuth(
+      (obj, args, context) => {
+        let s = context.group.id !== args.input.id ? ['group/all/update'] : ['group/owner/update'];
+        console.log('editGroup', context.group.id, context.auth.scope, s, args);
+        return s;
+      },
+      async (obj, { input }, context) => {
+        try {
+          const e = new FieldError();
+          if (input.name) {
+            console.log('updating group name');
+            const nameExists = await context.Group.getByName(input.name);
+            if (nameExists && nameExists.id !== input.id) {
+              e.setError('name', 'E-mail already exists.');
+              e.throwIf();
+            }
+            await context.Group.update(input.id, { name: input.name });
+          }
+
+          if (input.profile) {
+            console.log('updating group profile', input.profile);
+            await context.Group.updateProfile(input.id, input.profile);
+          }
+
+          const group = await context.Group.get(input.id);
+          console.log('return group', group);
+          return { group, errors: null };
+        } catch (e) {
+          return { group: null, errors: e };
+        }
+      }
+    ),
+    deleteGroup: withAuth(
+      (obj, args, context) => {
+        return context.group.id !== args.id ? ['group/all/delete'] : ['group/owner/delete'];
+      },
+      async (obj, { id }, context) => {
+        try {
+          const e = new FieldError();
+
+          const group = await context.Group.get(id);
+          if (!group) {
+            e.setError('delete', 'Group does not exist.');
+            e.throwIf();
+          }
+
+          const isDeleted = await context.Group.delete(id);
+          if (isDeleted) {
+            return { group, errors: null };
+          } else {
+            e.setError('delete', 'Could not delete group. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { group: null, errors: e };
+        }
+      }
+    )
   },
   Subscription: {}
 });

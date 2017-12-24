@@ -120,36 +120,116 @@ export default pubsub => ({
   },
 
   Mutation: {
-    addOrg: async (obj, { input }, context) => {
-      try {
-        const e = new FieldError();
-        let org;
+    addOrg: withAuth(
+      (obj, args, context) => {
+        return ['org/all/create', 'org/owner/create'];
 
-        return { org };
-      } catch (e) {
-        return { errors: e };
-      }
-    },
-    editOrg: async (obj, { input }, context) => {
-      try {
-        const e = new FieldError();
-        let org;
+        /*
+        let s = context.org.id !== args.input.id ? ['org/all/create'] : ['org/owner/create'];
+        console.log('addOrg', context.user.id, context.auth.scope, s, args);
+        return s;
+        */
+      },
+      async (obj, { input }, context) => {
+        console.log('adding org:', input);
+        try {
+          const e = new FieldError();
+          let oid = null;
+          if (input.name) {
+            const nameExists = await context.Org.getByName(input.name);
+            if (nameExists) {
+              e.setError('name', 'Name already exists.');
+              e.throwIf();
+            }
+            oid = await context.Org.create({ name: input.name });
+          } else {
+            e.setError('name', 'Org name required.');
+            e.throwIf();
+          }
 
-        return { org };
-      } catch (e) {
-        return { errors: e };
-      }
-    },
-    deleteOrg: async (obj, { id }, context) => {
-      try {
-        const e = new FieldError();
-        let org;
+          if (!oid) {
+            console.log('Error creating org', oid);
+            e.setError('error', 'Something went wrong when creating the org');
+            e.throwIf();
+          }
 
-        return { org };
-      } catch (e) {
-        return { errors: e };
+          if (input.profile) {
+            if (!input.profile.displayName) {
+              input.profile.displayName = input.name;
+            }
+            console.log('creating org profile', input.profile);
+            await context.Org.createProfile(oid, input.profile);
+          }
+
+          const org = await context.Org.get(oid);
+          console.log('return org', org);
+          return { org, errors: null };
+        } catch (e) {
+          return { org: null, errors: e };
+        }
       }
-    }
+    ),
+
+    editOrg: withAuth(
+      (obj, args, context) => {
+        let s = context.org.id !== args.input.id ? ['org/all/update'] : ['org/owner/update'];
+        console.log('editOrg', context.org.id, context.auth.scope, s, args);
+        return s;
+      },
+      async (obj, { input }, context) => {
+        try {
+          const e = new FieldError();
+          if (input.name) {
+            console.log('updating org name');
+            const nameExists = await context.Org.getByName(input.name);
+            if (nameExists && nameExists.id !== input.id) {
+              e.setError('name', 'E-mail already exists.');
+              e.throwIf();
+            }
+            await context.Org.update(input.id, { name: input.name });
+          }
+
+          if (input.profile) {
+            console.log('updating org profile', input.profile);
+            await context.Org.updateProfile(input.id, input.profile);
+          }
+
+          const org = await context.Org.get(input.id);
+          console.log('return org', org);
+          return { org, errors: null };
+        } catch (e) {
+          return { org: null, errors: e };
+        }
+      }
+    ),
+
+    deleteOrg: withAuth(
+      (obj, args, context) => {
+        return context.org.id !== args.id ? ['org/all/delete'] : ['org/owner/delete'];
+      },
+      async (obj, { id }, context) => {
+        try {
+          const e = new FieldError();
+
+          const org = await context.Org.get(id);
+          if (!org) {
+            e.setError('delete', 'Org does not exist.');
+            e.throwIf();
+          }
+
+          const isDeleted = await context.Org.delete(id);
+          if (isDeleted) {
+            return { org, errors: null };
+          } else {
+            e.setError('delete', 'Could not delete org. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { org: null, errors: e };
+        }
+      }
+    )
   },
+
   Subscription: {}
 });

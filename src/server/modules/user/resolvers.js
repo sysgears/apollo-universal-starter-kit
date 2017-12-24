@@ -76,16 +76,55 @@ export default pubsub => ({
   },
 
   Mutation: {
-    addUser: async (obj, args, context) => {
-      try {
-        const e = new FieldError();
-        let user;
+    addUser: withAuth(
+      (obj, args, context) => {
+        return ['user/all/create', 'user/self/create'];
+        /*
+        let s = context.user.id !== args.input.id ? ['user/all/create'] : ['user/self/create'];
+        console.log('addUser', context.user.id, context.auth.scope, s, args);
+        return s;
+        */
+      },
+      async (obj, { input }, context) => {
+        console.log('adding user:', input);
+        try {
+          const e = new FieldError();
+          let uid = null;
+          if (input.email) {
+            console.log('looking for user email', input.email);
+            const emailExists = await context.User.getByEmail(input.email);
+            if (emailExists) {
+              e.setError('email', 'E-mail already exists.');
+              e.throwIf();
+            }
+            uid = await context.User.create({ email: input.email });
+          } else {
+            e.setError('email', 'E-mail address required.');
+            e.throwIf();
+          }
 
-        return { user, errors: null };
-      } catch (e) {
-        return { user: null, errors: e };
+          if (!uid) {
+            console.log('Error creating user', uid);
+            e.setError('error', 'Something went wrong when creating the user');
+            e.throwIf();
+          }
+
+          if (input.profile) {
+            if (!input.profile.displayName) {
+              input.profile.displayName = input.email;
+            }
+            console.log('creating user profile', input.profile);
+            await context.User.createProfile(uid, input.profile);
+          }
+
+          const user = await context.User.get(uid);
+          console.log('return user', user);
+          return { user, errors: null };
+        } catch (e) {
+          return { user: null, errors: e };
+        }
       }
-    },
+    ),
     editUser: withAuth(
       (obj, args, context) => {
         let s = context.user.id !== args.input.id ? ['user/all/update'] : ['user/self/update'];
@@ -97,7 +136,7 @@ export default pubsub => ({
           const e = new FieldError();
           if (input.email) {
             console.log('updating user email');
-            const emailExists = await context.User.getUserByEmail(input.email);
+            const emailExists = await context.User.getByEmail(input.email);
             if (emailExists && emailExists.id !== input.id) {
               e.setError('email', 'E-mail already exists.');
               e.throwIf();

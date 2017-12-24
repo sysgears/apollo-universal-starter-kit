@@ -128,6 +128,27 @@ export default class Group {
     }
   }
 
+  async getByName(name, trx) {
+    try {
+      let builder = knex
+        .select(...selectFields)
+        .from('groups AS g')
+        .where('g.name', '=', name)
+        .leftJoin('group_profile AS p', 'p.group_id', 'g.id')
+        .first();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return camelizeKeys(ret);
+    } catch (e) {
+      log.error('Error in Group.get', e);
+      throw e;
+    }
+  }
+
   async create(values, trx) {
     try {
       values.id = uuidv4();

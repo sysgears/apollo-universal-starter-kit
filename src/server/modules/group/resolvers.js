@@ -2,6 +2,8 @@
 import { _ } from 'lodash';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
+import log from '../../../common/log';
+
 import FieldError from '../../../common/FieldError';
 import { withAuth } from '../../../common/authValidation';
 import { reconcileBatchOneToOne, reconcileBatchManyToMany } from '../../sql/helpers';
@@ -197,7 +199,75 @@ export default pubsub => ({
           return { group: null, errors: e };
         }
       }
+    ),
+
+    addUserToGroup: withAuth(
+      (obj, args, context) => {
+        return ['group.member/all/create', 'group.member/owner/create'];
+      },
+      async (obj, { groupId, userId }, context) => {
+        try {
+          const e = new FieldError();
+
+          const group = await context.Group.get(groupId);
+          if (!group) {
+            e.setError('add', 'Group does not exist.');
+            e.throwIf();
+          }
+
+          const user = await context.User.get(userId);
+          if (!user) {
+            e.setError('add', 'Group does not exist.');
+            e.throwIf();
+          }
+
+          const isAdded = await context.Group.addUserToGroup(groupId, userId);
+          if (isAdded) {
+            return { group, errors: null };
+          } else {
+            e.setError('add', 'Could not add user to group. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { group: null, errors: e };
+        }
+      }
+    ),
+
+    removeUserFromGroup: withAuth(
+      (obj, args, context) => {
+        return ['group.member/all/delete', 'group.member/owner/delete'];
+      },
+      async (obj, { groupId, userId }, context) => {
+        try {
+          const e = new FieldError();
+
+          const group = await context.Group.get(groupId);
+          if (!group) {
+            e.setError('remove', 'Group does not exist.');
+            e.throwIf();
+          }
+
+          const user = await context.User.get(userId);
+          if (!user) {
+            e.setError('remove', 'Group does not exist.');
+            e.throwIf();
+          }
+
+          const isRemoved = await context.Group.removeUserFromGroup(groupId, userId);
+          if (isRemoved) {
+            return { group, errors: null };
+          } else {
+            log.error('Error removing user');
+            e.setError('remove', 'Could not remove user from group. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { group: null, errors: e };
+        }
+      }
     )
   },
+
   Subscription: {}
 });

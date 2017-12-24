@@ -296,6 +296,49 @@ export default class Group {
 
   /*
    *
+   * Membership functions
+   *
+   */
+
+  async addUserToGroup(groupId, userId, trx) {
+    try {
+      let builder = knex('groups_users').insert({
+        group_id: groupId,
+        user_id: userId
+      });
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      return await builder;
+    } catch (e) {
+      log.error('Error in Group.create', e);
+      throw e;
+    }
+  }
+
+  async removeUserFromGroup(groupId, userId, trx) {
+    try {
+      let builder = knex('groups_users')
+        .where('group_id', '=', groupId)
+        .andWhere('user_id', '=', userId)
+        .delete();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return ret;
+    } catch (e) {
+      log.error('Error in Group.deleteProfile', e);
+      throw e;
+    }
+  }
+
+  /*
+   *
    *  Loaders
    *
    */

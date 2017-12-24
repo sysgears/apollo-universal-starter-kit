@@ -257,6 +257,92 @@ export default class Org {
     }
   }
 
+  /*
+   *
+   * Membership functions
+   *
+   */
+
+  async addUserToOrg(orgId, userId, trx) {
+    try {
+      let builder = knex('orgs_users').insert({
+        org_id: orgId,
+        user_id: userId
+      });
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      return await builder;
+    } catch (e) {
+      log.error('Error in Org.addUserToOrg', e);
+      throw e;
+    }
+  }
+
+  async removeUserFromOrg(orgId, userId, trx) {
+    try {
+      let builder = knex('orgs_users')
+        .where('org_id', '=', orgId)
+        .andWhere('user_id', '=', userId)
+        .delete();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return ret;
+    } catch (e) {
+      log.error('Error in Org.removeUserFromOrg', e);
+      throw e;
+    }
+  }
+
+  async addGroupToOrg(orgId, groupId, trx) {
+    try {
+      let builder = knex('orgs_groups').insert({
+        org_id: orgId,
+        group_id: groupId
+      });
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      return await builder;
+    } catch (e) {
+      log.error('Error in Org.addGroupToOrg', e);
+      throw e;
+    }
+  }
+
+  async removeGroupFromOrg(orgId, groupId, trx) {
+    try {
+      let builder = knex('orgs_groups')
+        .where('org_id', '=', orgId)
+        .andWhere('group_id', '=', groupId)
+        .delete();
+
+      if (trx) {
+        builder.transacting(trx);
+      }
+
+      let ret = await builder;
+      return ret;
+    } catch (e) {
+      log.error('Error in Org.removeGroupFromOrg', e);
+      throw e;
+    }
+  }
+
+  /*
+   *
+   * Loader functions
+   *
+   */
+
   async getUserIdsForOrgIds(ids, trx) {
     try {
       let builder = knex

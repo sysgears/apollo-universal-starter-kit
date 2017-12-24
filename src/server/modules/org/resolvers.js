@@ -2,6 +2,8 @@
 import { _ } from 'lodash';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
+import log from '../../../common/log';
+
 import FieldError from '../../../common/FieldError';
 import { withAuth } from '../../../common/authValidation';
 import { reconcileBatchOneToOne, reconcileBatchManyToMany } from '../../sql/helpers';
@@ -222,6 +224,140 @@ export default pubsub => ({
             return { org, errors: null };
           } else {
             e.setError('delete', 'Could not delete org. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { org: null, errors: e };
+        }
+      }
+    ),
+
+    addUserToOrg: withAuth(
+      (obj, args, context) => {
+        return ['org.member/all/create', 'org.member/owner/create'];
+      },
+      async (obj, { orgId, userId }, context) => {
+        try {
+          const e = new FieldError();
+
+          const org = await context.Org.get(orgId);
+          if (!org) {
+            e.setError('add', 'Org does not exist.');
+            e.throwIf();
+          }
+
+          const user = await context.User.get(userId);
+          if (!user) {
+            e.setError('add', 'Org does not exist.');
+            e.throwIf();
+          }
+
+          const isAdded = await context.Org.addUserToOrg(orgId, userId);
+          if (isAdded) {
+            return { org, errors: null };
+          } else {
+            e.setError('add', 'Could not add user to org. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { org: null, errors: e };
+        }
+      }
+    ),
+
+    removeUserFromOrg: withAuth(
+      (obj, args, context) => {
+        return ['org.member/all/delete', 'org.member/owner/delete'];
+      },
+      async (obj, { orgId, userId }, context) => {
+        try {
+          const e = new FieldError();
+
+          const org = await context.Org.get(orgId);
+          if (!org) {
+            e.setError('remove', 'Org does not exist.');
+            e.throwIf();
+          }
+
+          const user = await context.User.get(userId);
+          if (!user) {
+            e.setError('remove', 'Org does not exist.');
+            e.throwIf();
+          }
+
+          const isRemoved = await context.Org.removeUserFromOrg(orgId, userId);
+          if (isRemoved) {
+            return { org, errors: null };
+          } else {
+            log.error('Error removing user');
+            e.setError('remove', 'Could not remove user from org. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { org: null, errors: e };
+        }
+      }
+    ),
+
+    addGroupToOrg: withAuth(
+      (obj, args, context) => {
+        return ['org.member/all/create', 'org.member/owner/create'];
+      },
+      async (obj, { orgId, groupId }, context) => {
+        try {
+          const e = new FieldError();
+
+          const org = await context.Org.get(orgId);
+          if (!org) {
+            e.setError('add', 'Org does not exist.');
+            e.throwIf();
+          }
+
+          const group = await context.Group.get(groupId);
+          if (!group) {
+            e.setError('add', 'Org does not exist.');
+            e.throwIf();
+          }
+
+          const isAdded = await context.Org.addGroupToOrg(orgId, groupId);
+          if (isAdded) {
+            return { org, errors: null };
+          } else {
+            e.setError('add', 'Could not add group to org. Please try again later.');
+            e.throwIf();
+          }
+        } catch (e) {
+          return { org: null, errors: e };
+        }
+      }
+    ),
+
+    removeGroupFromOrg: withAuth(
+      (obj, args, context) => {
+        return ['org.member/all/delete', 'org.member/owner/delete'];
+      },
+      async (obj, { orgId, groupId }, context) => {
+        try {
+          const e = new FieldError();
+
+          const org = await context.Org.get(orgId);
+          if (!org) {
+            e.setError('remove', 'Org does not exist.');
+            e.throwIf();
+          }
+
+          const group = await context.Group.get(groupId);
+          if (!group) {
+            e.setError('remove', 'Org does not exist.');
+            e.throwIf();
+          }
+
+          const isRemoved = await context.Org.removeGroupFromOrg(orgId, groupId);
+          if (isRemoved) {
+            return { org, errors: null };
+          } else {
+            log.error('Error removing group');
+            e.setError('remove', 'Could not remove group from org. Please try again later.');
             e.throwIf();
           }
         } catch (e) {

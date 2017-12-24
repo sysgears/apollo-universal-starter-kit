@@ -29,14 +29,14 @@ extend type Query {
 }
 
 extend type Mutation {
-  # Create new group
+  # Basic Group mutations
   addGroup(input: AddGroupInput!): GroupPayload!
-
-  # Edit a group
   editGroup(input: EditGroupInput!): GroupPayload!
-
-  # Delete a group
   deleteGroup(id: String!): GroupPayload!
+
+  # Group membership
+  addUserToGroup(groupId: String!, userId: String!): GroupPayload!
+  removeUserFromGroup(groupId: String!, userId: String!): GroupPayload!
 }
 
 extend type Subscription {

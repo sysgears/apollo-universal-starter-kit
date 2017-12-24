@@ -20,12 +20,16 @@ extend type Query {
 }
 
 extend type Mutation {
-  # Create new org
+  # Basic Org mutations
   addOrg(input: AddOrgInput!): OrgPayload!
-  # Edit a org
   editOrg(input: EditOrgInput!): OrgPayload!
-  # Delete a org
   deleteOrg(id: String!): OrgPayload!
+
+  # Org membership
+  addUserToOrg(orgId: String!, userId: String!): OrgPayload!
+  removeUserFromOrg(orgId: String!, userId: String!): OrgPayload!
+  addGroupToOrg(orgId: String!, groupId: String!): OrgPayload!
+  removeGroupFromOrg(orgId: String!, groupId: String!): OrgPayload!
 }
 
 extend type Subscription {

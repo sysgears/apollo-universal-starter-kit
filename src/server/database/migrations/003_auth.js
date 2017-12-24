@@ -51,7 +51,6 @@ exports.up = function(knex, Promise) {
         table.timestamps(true, true);
         table
           .uuid('user_id')
-          .unique()
           .references('id')
           .inTable('users')
           .onDelete('CASCADE');

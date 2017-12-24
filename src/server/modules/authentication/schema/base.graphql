@@ -1,12 +1,12 @@
 extend type Query {
+}
+
+extend type Mutation {
   # Refresh user tokens
   refreshToken(token: String!, refreshToken: String!): AuthPayload!
 
   # Logout user
   logout: Boolean!
-}
-
-extend type Mutation {
 }
 
 extend type Subscription {

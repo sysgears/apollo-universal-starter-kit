@@ -4,10 +4,10 @@ import { createBatchResolver } from 'graphql-resolve-batch';
 import { reconcileBatchOneToMany } from '../../../sql/helpers';
 
 export default function addResolvers(obj) {
-  obj.UserAuth.oauths = createBatchResolver(async (source, args, context) => {
+  obj.UserAuth.certificates = createBatchResolver(async (source, args, context) => {
     let ids = _.uniq(source.map(s => s.userId));
-    const oauths = await context.Authn.getOAuthsForUsers(ids);
-    const ret = reconcileBatchOneToMany(source, oauths, 'userId');
+    const certs = await context.Authn.getCertificatesForUsers(ids);
+    const ret = reconcileBatchOneToMany(source, certs, 'userId');
     return ret;
   });
 

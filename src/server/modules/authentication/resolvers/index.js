@@ -6,8 +6,21 @@ import FieldError from '../../../../common/FieldError';
 import { withAuth } from '../../../../common/authValidation';
 import { reconcileBatchOneToOne } from '../../../sql/helpers';
 
+import userBaseResolvers from './userBase';
+import userPasswordResolvers from './userPassword';
+import userPasswordlessResolvers from './userPasswordless';
+import userApikeyResolvers from './userApikeys';
+import userCertResolvers from './userCert';
+import userOAuthResolvers from './userOAuth';
+
+import saApikeyResolvers from './saApikeys';
+import saCertResolvers from './saCert';
+
 import settings from '../../../../../settings';
 
+const authn = settings.auth.authentication;
+
+// Starting object, we assume users are enabled
 let obj = {
   Query: {},
 
@@ -17,30 +30,39 @@ let obj = {
     }
   },
 
-  UserAuth: {
-    apikeys: createBatchResolver(async (source, args, context) => {
-      let ids = _.uniq(source.map(s => s.userId));
-      const apikeys = await context.Authn.getApiKeysForUsers(ids);
-      const ret = reconcileBatchOneToOne(source, apikeys, 'userId');
-      return ret;
-    }),
-    certificates: createBatchResolver(async (source, args, context) => {
-      let ids = _.uniq(source.map(s => s.userId));
-      const certs = await context.Authn.getCertificatesForUsers(ids);
-      const ret = reconcileBatchOneToOne(source, certs, 'userId');
-      return ret;
-    }),
-    oauths: createBatchResolver(async (source, args, context) => {
-      let ids = _.uniq(source.map(s => s.userId));
-      const oauths = await context.Authn.getOAuthsForUsers(ids);
-      const ret = reconcileBatchOneToOne(source, oauths, 'userId');
-      return ret;
-    })
-  },
+  UserAuth: {},
 
   Mutation: {},
   Subscription: {}
 };
+
+obj = userBaseResolvers(obj);
+
+console.log('OBJ', obj);
+
+// Configurable User Authentication
+
+if (authn.password.enabled) {
+  obj = userPasswordResolvers(obj);
+}
+
+if (authn.passwordless.enabled) {
+  obj = userPasswordlessResolvers(obj);
+}
+
+if (authn.apikey.enabled) {
+  obj = userApikeyResolvers(obj);
+}
+
+if (authn.certificate.enabled) {
+  obj = userCertResolvers(obj);
+}
+
+if (authn.oauth.enabled) {
+  obj = userOAuthResolvers(obj);
+}
+
+// Service account setup
 
 if (settings.entities.serviceaccounts.enabled === true) {
   obj.ServiceAccount = {
@@ -49,20 +71,15 @@ if (settings.entities.serviceaccounts.enabled === true) {
     }
   };
 
-  obj.ServiceAccountAuth = {
-    apikeys: createBatchResolver(async (source, args, context) => {
-      let ids = _.uniq(source.map(s => s.serviceaccountId));
-      const apikeys = await context.Authn.getApiKeysForServiceAccounts(ids);
-      const ret = reconcileBatchOneToOne(source, apikeys, 'serviceaccountId');
-      return ret;
-    }),
-    certificates: createBatchResolver(async (source, args, context) => {
-      let ids = _.uniq(source.map(s => s.serviceaccountId));
-      const certs = await context.Authn.getCertificatesForServiceAccounts(ids);
-      const ret = reconcileBatchOneToOne(source, certs, 'serviceaccountId');
-      return ret;
-    })
-  };
+  obj.ServiceAccountAuth = {};
+
+  if (authn.apikeys.enabled) {
+    obj = saApikeyResolvers(obj);
+  }
+
+  if (authn.certificates.enabled) {
+    obj = saCertResolvers(obj);
+  }
 }
 
 export default pubsub => obj;

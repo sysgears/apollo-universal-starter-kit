@@ -6,6 +6,54 @@ import { orderedFor } from '../../../../sql/helpers';
 
 import log from '../../../../../common/log';
 
+export async function searchUserByOAuthIdOrEmail(provider, id, email, trx) {
+  try {
+    let builder = knex
+      .select('u.id', 'u.is_active', 'u.email', 'o.provider')
+      .from('users AS u')
+      .whereIn('u.email', email)
+      .orWhere('provider', '=', provider)
+      .leftJoin('user_oauths AS o', 'o.user_id', 'u.id')
+      .first();
+
+    if (trx) {
+      builder.transacting(trx);
+    }
+
+    let row = await builder;
+
+    return camelizeKeys(row);
+  } catch (e) {
+    log.error('Error in Auth.searchUserByOAuthIdOrEmail', e);
+    throw e;
+  }
+}
+
+export async function getUserFromOAuth(provider, oauth_id, trx) {
+  try {
+    let builder = knex
+      .select('u.id', 'u.is_active', 'u.email')
+      .from('users AS u')
+      .leftJoin('user_oauths AS a', 'a.user_id', 'u.id')
+      .where({
+        provider,
+        oauth_id
+      })
+      .first();
+
+    if (trx) {
+      builder.transacting(trx);
+    }
+
+    let row = await builder;
+
+    return camelizeKeys(row);
+  } catch (e) {
+    log.error('Error in Auth.getUserFromOAuth', e);
+    throw e;
+  }
+}
+
 export async function getOAuthsForUsers(ids, trx) {
   try {
     let builder = knex

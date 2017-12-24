@@ -53,7 +53,7 @@ export default new Feature({
         orgRoles: allRoles.orgRoles
       };
 
-      // console.log("currentUserAuth - graphql context", auth)
+      console.log('currentUserAuth - graphql context', auth);
 
       // console.log("Auth - Context - End")
       return {

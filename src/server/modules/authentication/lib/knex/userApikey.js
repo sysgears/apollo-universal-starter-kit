@@ -7,6 +7,28 @@ import { orderedFor } from '../../../../sql/helpers';
 
 import log from '../../../../../common/log';
 
+export async function getUserFromApiKey(apikey, trx) {
+  try {
+    let builder = knex
+      .select('u.id', 'u.is_active', 'u.email', 'a.name')
+      .from('users AS u')
+      .leftJoin('user_apikeys AS a', 'a.user_id', 'u.id')
+      .where('a.key', '=', apikey)
+      .first();
+
+    if (trx) {
+      builder.transacting(trx);
+    }
+
+    let row = await builder;
+
+    return camelizeKeys(row);
+  } catch (e) {
+    log.error('Error in Auth.getUserFromApiKey', e);
+    throw e;
+  }
+}
+
 export async function getApiKeysForUsers(ids, trx) {
   try {
     let builder = knex

@@ -109,6 +109,85 @@ async function createPermissions(knex, permissions) {
   } // end loop over input permissions
 }
 
+async function bindPermissions(knex, roleType, roleName, roleId) {
+  let roleScopes = null;
+  if (roleType === 'user') {
+    roleScopes = authz.userScopes[roleName];
+  }
+  if (roleType === 'group') {
+    roleScopes = authz.groupScopes[roleName];
+  }
+  if (roleType === 'org') {
+    roleScopes = authz.orgScopes[roleName];
+  }
+  if (roleScopes === null) {
+    return;
+  }
+  console.log(`Binding ${roleType} - ${roleName} with permissions ${roleScopes}] to role: [${roleId}]`);
+  for (let P of authz.permissions) {
+    let rs = P.resource;
+    console.log('  -', rs);
+
+    let vs = P.verbs ? P.verbs : authz.verbs;
+
+    // Seed base resource first
+    for (let rel of P.relations) {
+      for (let v of vs) {
+        let name = `${rs}/${rel}/${v}`;
+
+        for (let scope of roleScopes) {
+          let permRe = new RegExp('^' + scope.replace('*', '.*') + '$');
+          const hasScope = permRe.exec(name);
+
+          if (hasScope) {
+            console.log('   ', name);
+            const P = await knex('permissions')
+              .select('*')
+              .where({ name: name })
+              .first();
+            await knex(roleType + '_role_permission_bindings').insert({
+              role_id: roleId,
+              permission_id: P.id
+            });
+            break;
+          }
+        }
+      }
+    }
+
+    if (!P.subresources) {
+      continue;
+    }
+    // Seed sub-resources
+    for (let sub of P.subresources) {
+      for (let rel of P.relations) {
+        for (let v of vs) {
+          // FIVE loops deep!!
+          let name = `${rs}:${sub}/${rel}/${v}`;
+
+          for (let scope of roleScopes) {
+            let permRe = new RegExp('^' + scope.replace('*', '.*') + '$');
+            const hasScope = permRe.exec(name);
+
+            if (hasScope) {
+              console.log('   ', name);
+              const P = await knex('permissions')
+                .select('*')
+                .where({ name: name })
+                .first();
+              await knex(roleType + '_role_permission_bindings').insert({
+                role_id: roleId,
+                permission_id: P.id
+              });
+              break;
+            }
+          }
+        }
+      }
+    }
+  } // end loop over input permissions
+}
+
 async function createAllRoles(knex) {
   console.log('Creating all roles');
 
@@ -188,13 +267,18 @@ async function createOrgRoles(knex, org, roles) {
 
   for (let role of roles) {
     console.log('    - ', role);
+    // create role
+    const rid = uuidv4();
     await knex('org_roles').insert({
-      id: uuidv4(),
+      id: rid,
       org_id: oid.id,
       name: role,
       display_name: role,
       description: role + ' role for org: ' + org.name
     });
+
+    // bind default permissions
+    bindPermissions(knex, 'org', role, rid);
   }
 }
 
@@ -302,13 +386,17 @@ async function createGroupRoles(knex, groupPrefix, group, roles) {
 
   for (let role of roles) {
     console.log('    - ', role);
+    const rid = uuidv4();
     await knex('group_roles').insert({
-      id: uuidv4(),
+      id: rid,
       group_id: gid.id,
       name: role,
       display_name: role,
       description: role + ' role for group: ' + group.name
     });
+
+    // bind default permissions
+    bindPermissions(knex, 'group', role, rid);
   }
 }
 
@@ -316,33 +404,16 @@ async function createUserRoles(knex, roles) {
   console.log('Creating roles for Users', roles);
   for (let role of roles) {
     console.log('  - ', role);
+    const rid = uuidv4();
     await knex('user_roles').insert({
-      id: uuidv4(),
+      id: rid,
       name: role,
       display_name: role,
       description: role + ' role for all resources and applications'
     });
 
-    // create
-
-    // lookup permissions
-
-    // create bindings
-    // (call next function)
-  }
-}
-
-async function createUserRolePermissionBindings(knex, permissions) {
-  console.log('Creating roles for Users');
-  for (let P of permissions) {
-    console.log('  - ', P);
-    /*
-    await knex('user_role_permission_bindings').insert({
-      name: role,
-      display_name: role,
-      description: role + " role for all resources and applications"
-    });
-    */
+    // bind default permissions
+    bindPermissions(knex, 'user', role, rid);
   }
 }
 

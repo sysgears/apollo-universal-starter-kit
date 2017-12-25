@@ -105,11 +105,13 @@ export default {
 
     // General format for scopes is:
     // resource:sub-resource:... / matching-object-relation / verb
+    // This is to simplify the seeding and default permission specification
+    // We won't be using wild-cards in the actual code for much longer
     userScopes: {
       superuser: ['*/*/*'],
       owner: ['*/*/*'],
-      admin: ['*:iam/*/view', 'org*/*/*', 'group*/*/*', 'user*/*/*', 'subscription*/*/*', 'post*/*/*'],
-      subscriber: ['subscription/owner/*'],
+      admin: ['*:iam/*/view', 'org*/*/*', 'group*/*/*', 'user*/*/*', 'subscriber*/*/*', 'post*/*/*'],
+      subscriber: ['subscriber/owner/*'],
       user: [
         'user/self/*',
         'org/member/list',

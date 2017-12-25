@@ -61,6 +61,9 @@ export default class GroupsView extends React.PureComponent {
     const { loading, groups } = this.props;
     const { errors } = this.state;
 
+    console.log('GROUPS');
+    console.log(groups);
+
     const columns = [
       {
         title: 'ID',
@@ -68,7 +71,7 @@ export default class GroupsView extends React.PureComponent {
         key: 'id',
         render: (text, record) => (
           <Link className="group-link" to={`/groups/${record.id}`}>
-            {record.profile.displayName}
+            {record.profile ? record.profile.displayName : record.name}
           </Link>
         )
       },

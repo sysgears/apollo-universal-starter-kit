@@ -16,5 +16,9 @@ fragment GroupInfo on Group {
   roles {
     id
     name
+    permissions {
+      id
+      name
+    }
   }
 }

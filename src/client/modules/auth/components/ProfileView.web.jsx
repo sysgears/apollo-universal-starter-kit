@@ -88,8 +88,7 @@ const ProfileView = ({ loading, currentUser }) => {
                 <CardTitle>Orgs:</CardTitle>
                 {currentUser.orgs &&
                   currentUser.orgs.map(o => {
-                    let oa = currentUser.orgRoles.find(elem => elem.orgId == o.id);
-                    let roles = oa ? oa.roles : null;
+                    let roles = currentUser.orgRoles.filter(elem => elem.orgId == o.id);
                     return (
                       <CardText key={o.id}>
                         <Link to={'/orgs/' + o.id}>{o.profile.displayName}</Link>
@@ -120,8 +119,7 @@ const ProfileView = ({ loading, currentUser }) => {
                 <CardTitle>Groups:</CardTitle>
                 {currentUser.groups &&
                   currentUser.groups.map(o => {
-                    let oa = currentUser.groupRoles.find(elem => elem.groupId == o.id);
-                    let roles = oa.roles;
+                    let roles = currentUser.groupRoles.filter(elem => elem.groupId == o.id);
                     return (
                       <CardText key={o.id}>
                         <Link to={'/groups/' + o.id}>{o.profile.displayName}</Link>

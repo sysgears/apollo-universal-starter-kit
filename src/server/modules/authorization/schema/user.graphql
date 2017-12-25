@@ -69,7 +69,14 @@ type UserRoleInfo {
 }
 
 extend type User {
-  userRoles: [UserRoleInfo]
+  userRoles(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [UserRoleInfo]
 }
 
 extend type PermissionInfo {

@@ -74,11 +74,25 @@ type GroupRoleInfo {
 }
 
 extend type Group {
-  roles: [GroupRoleInfo]
+  roles(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [GroupRoleInfo]
 }
 
 extend type User {
-  groupRoles: [GroupRoleInfo]
+  groupRoles(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    offset: Int
+    limit: Int
+  ): [GroupRoleInfo]
 }
 
 extend type PermissionInfo {

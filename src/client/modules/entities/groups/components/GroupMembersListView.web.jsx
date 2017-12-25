@@ -100,12 +100,10 @@ export default class GroupMembersListView extends React.PureComponent {
       console.log('groupMembers', id, groupMembers);
       let members = [];
       for (let g of groupMembers) {
-        let roles = '';
-        for (let r of g.groupRoles) {
-          if (r.groupId === id) {
-            roles += r.roles.map(e => e.name).join();
-          }
-        }
+        let roles = g.groupRoles
+          .filter(e => e.groupId === id)
+          .map(e => e.name)
+          .join();
         let m = {
           id: g.id,
           email: g.email,

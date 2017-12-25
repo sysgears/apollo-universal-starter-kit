@@ -22,7 +22,7 @@ export default class GroupView extends React.PureComponent {
   renderMetaData() {
     const { loading, group } = this.props;
     let localTitle = loading ? title : group.name;
-    let localDescription = loading ? description : group.profile.description;
+    let localDescription = loading || !group.profile ? description : group.profile.description;
 
     return (
       <Helmet
@@ -115,11 +115,11 @@ export default class GroupView extends React.PureComponent {
                     <Col xs={3}>
                       <b>Display Name:</b>{' '}
                     </Col>
-                    <Col xs={9}>{group.profile.displayName}</Col>
+                    <Col xs={9}>{group.profile ? group.profile.displayName : 'no displayName set'}</Col>
                     <Col xs={3}>
                       <b>Description:</b>{' '}
                     </Col>
-                    <Col xs={9}>{group.profile.description}</Col>
+                    <Col xs={9}>{group.profile ? group.profile.description : 'no description'}</Col>
                     <Col xs={3}>
                       <b>Roles:</b>{' '}
                     </Col>

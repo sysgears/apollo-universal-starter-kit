@@ -9,13 +9,15 @@ query groupMembers($id: String!, $orderBy: OrderByInput, $filter: FilterInput) {
       locale
     }
     groupRoles {
+      id
+      name
+      roleId
+      roleName
       groupId
       groupName
-      scopes
-      roles {
+      permissions {
         id
         name
-        scopes
       }
     }
   }

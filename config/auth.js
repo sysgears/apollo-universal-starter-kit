@@ -64,27 +64,27 @@ export default {
     permissions: [
       {
         resource: 'org',
-        subresources: ['iam', 'profile', 'group', 'user', 'serviceaccount', 'post'],
+        subresources: ['iam', 'admin', 'profile', 'group', 'user', 'serviceaccount', 'post'],
         relations: ['owner', 'admin', 'member', 'viewer']
       },
       {
         resource: 'group',
-        subresources: ['iam', 'profile', 'user', 'serviceaccount', 'post'],
+        subresources: ['iam', 'admin', 'profile', 'user', 'serviceaccount', 'post'],
         relations: ['owner', 'admin', 'member', 'viewer']
       },
       {
         resource: 'user',
-        subresources: ['iam', 'profile', 'auth', 'serviceaccount', 'post', 'comment'],
+        subresources: ['iam', 'admin', 'profile', 'auth', 'serviceaccount', 'post', 'comment'],
         relations: ['self', 'all', 'other']
       },
       {
         resource: 'serviceaccount',
-        subresources: ['iam', 'profile', 'auth'],
+        subresources: ['iam', 'admin', 'profile', 'auth'],
         relations: ['self', 'all', 'other', 'owner']
       },
       {
         resource: 'subscriber',
-        subresources: ['billing', 'plans'],
+        subresources: ['iam', 'admin', 'billing', 'plans'],
         relations: ['owner', 'admin', 'all', 'viewer']
       },
       {
@@ -128,22 +128,16 @@ export default {
 
     groupScopes: {
       owner: ['group*/*/*'],
-      admin: [
-        'group:members/*/view*',
-        'group:admin/self/*',
-        'group:member/*/*',
-        'group:viewer/*/*',
-        'group:iam/*/view*'
-      ],
-      member: ['group:members/*/view*', 'group:member/self/*'],
-      viewer: ['group:members/*/view*', 'group:viewer/self/*']
+      admin: ['group:members/*/view', 'group:admin/self/*', 'group:member/*/*', 'group:viewer/*/*', 'group:iam/*/view'],
+      member: ['group:members/*/view', 'group:member/self/*'],
+      viewer: ['group:members/*/view', 'group:viewer/self/*']
     },
 
     orgScopes: {
       owner: ['org*/*/*'],
-      admin: ['org:group/*/*', 'org:admin/self/*', 'org:member/*/*', 'org:viewer/*/*', 'org:iam/*/view*', ''],
-      member: ['org:group/*/view*', 'org:member/self/*'],
-      viewer: ['org:group/*/view*', 'org:viewer/self/*']
+      admin: ['org:group/admin/*', 'org:admin/admin/*', 'org:member/*/*', 'org:viewer/*/*', 'org:iam/admin/view', ''],
+      member: ['org:group/*/view', 'org:member/self/*'],
+      viewer: ['org:group/*/view', 'org:viewer/self/*']
     },
 
     verbs: ['create', 'update', 'delete', 'view', 'list']

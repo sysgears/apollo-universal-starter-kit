@@ -284,7 +284,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
 
 * Webpack DLL vendor bundle generation and updating out of the box
 
-  For all the non-development dependencies of project `package.json` the [Webpack] vendor DLL bundle is generated and
+`  For all the non-development dependencies of project `packages/{module}/package.json` the [Webpack] vendor DLL bundle is generated and
   updated automatically, so that Webpack didn't process vendor libraries on each change to the project, but only when
   they are actually changed. This boosts speed of cold project start in development mode and speed of hot code reload
   even if the number of dependencies is huge.
@@ -317,10 +317,10 @@ Check [subscription module documentation](src/client/modules/subscription/README
 
   If you would like to use a different styling than [Twitter Bootstrap], UI components are structured in a way to make
   it easy to use something else. We already prepared [Ant Design] integation. To switch the UI all you need to do is
-  rename the import in `src/client/modules/common/components/web/index.jsx`.
+  rename the import in `packages/client/src/modules/common/components/web/index.jsx`.
 
   [NativeBase] for mobile styling, with an option to use [Ant Design Mobile]. To switch, just change the export in
-  `src/client/modules/common/components/native/index.jsx`.
+  `packages/client/src/modules/common/components/native/index.jsx`.
 
 * [Babel] for ES2017 transpiling
 
@@ -336,41 +336,44 @@ Check [subscription module documentation](src/client/modules/subscription/README
   queries for better security and less bandwidth.
 
 * [TypeScript] support. Though the kit itself uses ES6 and [Flow] you can add source files written in TypeScript. In
-  order to do that add `'ts'` into the `.spinrc.json -> options -> stack`, install TypeScript devDependencies: `yarn add
-  -D awesome-typescript-loader typescript` and put `tsconfig.json` into the root folder.
+  order to do that add `'ts'` into the `packages/{module}/.spinrc.json -> options -> stack`, install TypeScript devDependencies: `yarn add
+  -D awesome-typescript-loader typescript` within `packages/{module}` and put `tsconfig.json` into the root folder.
 
 ## Project Structure
 
-The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by feature
-rather than file type. This structure is only meant to serve as a guide, it is by no means prescriptive. That said, it
-aims to represent generally accepted guidelines and patterns for building scalable applications.
+The project has a default monorepo structure which presented in this boilerplate as **fractal**, where functionality
+is grouped primarily by feature rather than file type. This structure is only meant to serve as a guide, it is by
+no means prescriptive. That said, it aims to represent generally accepted guidelines and patterns for building
+scalable applications.
 
 ```
 .
-├── src                      # Application source code
-│   ├── client               # Front-end source code
-│   │   ├── app              # Common front-end application code
-│   │   └── modules          # Front-end feature-modules, each module has:
-│   │   │                    # (components, containers, GraphQL queries, redux reducers)
-│   │   └── styles           # Application-wide styles
-│   │   └── testHelpers      # Test helper for front-end integration tests
-│   │   └── index.jsx        # Entry point to web front-end wtih hot code reload
-│   ├── common               # Common code, redux store and logging
-│   ├── mobile               # Mobile front-end source code
-│   │   ├── index.js         # Entry point to mobile front-end wtih live code reload
-│   └── server               # Back-end server source code
-│   │   ├── api              # GraphQL API implementation
-│   │   └── database         # Database migrations and seeds
-│   │   │   └── migrations   # Database migration scripts using Knex
-│   │   │   └── seeds        # Database seed scripts using Knex
-│   │   └── middleware       # Graphiql, GraphQL express and SSR rendering
-│   │   └── modules          # Back-end server feature-modules, each module has:
-│   │   │                    # (schema definition, resolvers, sql queries)
-│   │   └── sql              # Knex connector
-│   │   └── testHelpers      # Test helper for back-end integration tests
-│   │   └── server.js        # GraphQL api server set up
-│   │   └── index.js         # Entry point to back-end wtih hot code reload
-└── tools                    # All build and cli related files
+├── packages                    # Application packages holder
+│   ├── client                  # Front-end package
+│   │   ├── src                 # Front-end source code
+│   │   │   ├── app             # Common front-end application code
+│   │   │   └── modules         # Front-end feature-modules, each module has:
+│   │   │   │                   # (components, containers, GraphQL queries, redux reducers)
+│   │   │   └── styles          # Application-wide styles
+│   │   │   └── testHelpers     # Test helper for front-end integration tests
+│   │   │   └── index.jsx       # Entry point to web front-end wtih hot code reload
+│   ├── common                  # Common code, redux store and logging
+│   ├── mobile                  # Mobile front-end source code
+│   │   ├── index.js            # Entry point to mobile front-end wtih live code reload
+│   └── server                  # Back-end package
+│   │   ├── src                 # Back-end source code
+│   │   │   ├── api             # GraphQL API implementation
+│   │   │   └── database        # Database migrations and seeds
+│   │   │   │   └── migrations  # Database migration scripts using Knex
+│   │   │   │   └── seeds       # Database seed scripts using Knex
+│   │   │   └── middleware      # Graphiql, GraphQL express and SSR rendering
+│   │   │   └── modules         # Back-end server feature-modules, each module has:
+│   │   │   │                   # (schema definition, resolvers, sql queries)
+│   │   │   └── sql             # Knex connector
+│   │   │   └── testHelpers     # Test helper for back-end integration tests
+│   │   │   └── server.js       # GraphQL api server set up
+│   │   │   └── index.js        # Entry point to back-end wtih hot code reload
+└── tools                       # All build and cli related files
 ```
 
 ## Additional scripts

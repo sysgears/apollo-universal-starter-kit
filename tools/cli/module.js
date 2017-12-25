@@ -16,11 +16,11 @@ function copyFiles(logger, templatePath, module, location) {
   logger.info(`Copying ${location} files…`);
 
   // create new module directory
-  const mkdir = shell.mkdir(`${__dirname}/../../src/${location}/modules/${module}`);
+  const mkdir = shell.mkdir(`${__dirname}/../../packages/${location}/src/modules/${module}`);
 
   // continue only if directory does not jet exist
   if (mkdir.code === 0) {
-    const destinationPath = `${__dirname}/../../src/${location}/modules/${module}`;
+    const destinationPath = `${__dirname}/../../packages/${location}/src/modules/${module}`;
     shell.cp('-R', `${templatePath}/${location}/*`, destinationPath);
 
     logger.info(`✔ The ${location} files have been copied!`);
@@ -46,7 +46,7 @@ function copyFiles(logger, templatePath, module, location) {
 
     shell.cd('..');
     // get module input data
-    const path = `${__dirname}/../../src/${location}/modules/index.js`;
+    const path = `${__dirname}/../../packages/${location}/src/modules/index.js`;
     let data = fs.readFileSync(path);
 
     // extract Feature modules
@@ -67,20 +67,20 @@ function copyFiles(logger, templatePath, module, location) {
 function deleteFiles(logger, templatePath, module, location) {
   logger.info(`Deleting ${location} files…`);
 
-  const modulePath = `${__dirname}/../../src/${location}/modules/${module}`;
+  const modulePath = `${__dirname}/../../packages/${location}/src/modules/${module}`;
 
   if (fs.existsSync(modulePath)) {
     // create new module directory
     shell.rm('-rf', modulePath);
 
     // change to destination directory
-    shell.cd(`${__dirname}/../../src/${location}/modules/`);
+    shell.cd(`${__dirname}/../../packages/${location}/src/modules/`);
 
     // add module to Feature function
     //let ok = shell.sed('-i', `import ${module} from '.\/${module}';`, '', 'index.js');
 
     // get module input data
-    const path = `${__dirname}/../../src/${location}/modules/index.js`;
+    const path = `${__dirname}/../../packages/${location}/src/modules/index.js`;
     let data = fs.readFileSync(path);
 
     // extract Feature modules

@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { camelizeKeys } from 'humps';
 
-import knex from '../../../sql/connector';
-import { orderedFor } from '../../../sql/helpers';
+import knex from '../../../stores/sql/knex/client';
+import { orderedFor } from '../../../stores/sql/knex/helpers/batching';
 
 import log from '../../../../common/log';
 
@@ -15,7 +15,7 @@ import {
   getManyRelationAdapter,
   createRelationAdapter,
   deleteRelationAdapter
-} from '../../../sql/crud';
+} from '../../../stores/sql/knex/helpers/crud';
 
 export default class Org {
   /*

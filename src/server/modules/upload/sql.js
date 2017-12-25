@@ -1,5 +1,5 @@
 /*eslint-disable no-unused-vars*/
-import knex from '../../../server/sql/connector';
+import knex from '../../stores/sql/knex/client';
 
 export default class Upload {
   files() {

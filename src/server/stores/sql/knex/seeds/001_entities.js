@@ -1,13 +1,14 @@
 import _ from 'lodash';
 import uuidv4 from 'uuid';
 import bcrypt from 'bcryptjs';
-import truncateTables from '../../../common/db';
-import settings from '../../../../settings';
 
-import orgs from './data/entities/orgs';
-import groups from './data/entities/groups';
-import users from './data/entities/users';
-import sa from './data/entities/sa';
+import truncateTables from '../helpers/tables';
+import settings from '../../../../../../settings';
+
+import orgs from '../../../seeds/data/entities/orgs';
+import groups from '../../../seeds/data/entities/groups';
+import users from '../../../seeds/data/entities/users';
+import sa from '../../../seeds/data/entities/sa';
 
 let config = settings.entities;
 let auth = settings.auth;

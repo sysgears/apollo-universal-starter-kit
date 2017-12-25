@@ -4,7 +4,11 @@ import { createBatchResolver } from 'graphql-resolve-batch';
 
 import FieldError from '../../../../common/FieldError';
 import { withAuth } from '../../../../common/authValidation';
-import { reconcileBatchOneToOne, reconcileBatchOneToMany, reconcileBatchManyToMany } from '../../../sql/helpers';
+import {
+  reconcileBatchOneToOne,
+  reconcileBatchOneToMany,
+  reconcileBatchManyToMany
+} from '../../../stores/sql/knex/helpers/batching';
 
 import settings from '../../../../../settings';
 

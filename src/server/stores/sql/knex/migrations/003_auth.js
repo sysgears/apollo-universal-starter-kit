@@ -1,4 +1,4 @@
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
 let entities = settings.entities;
 let authn = settings.auth.authentication;

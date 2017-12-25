@@ -9,9 +9,9 @@ import {
   getManyRelationAdapter,
   createRelationAdapter,
   deleteRelationAdapter
-} from '../../../../sql/crud';
+} from '../../../../stores/sql/knex/helpers/crud';
 
-import knex from '../../../../sql/connector';
+import knex from '../../../../stores/sql/knex/client';
 import log from '../../../../../common/log';
 
 export const getGroupRoles = listAdapter('group_roles', { selects: ['*', 'id AS roleId'] });

@@ -2,7 +2,7 @@ import { _ } from 'lodash';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
 // import { withAuth } from '../../../../common/authValidation';
-import { reconcileBatchOneToMany } from '../../../sql/helpers';
+import { reconcileBatchOneToMany } from '../../../stores/sql/knex/helpers/batching';
 
 export default function addResolvers(obj) {
   obj = addTypeResolvers(obj);

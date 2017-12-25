@@ -4,7 +4,7 @@ import { createBatchResolver } from 'graphql-resolve-batch';
 
 import FieldError from '../../../common/FieldError';
 import { withAuth } from '../../../common/authValidation';
-import { reconcileBatchOneToOne } from '../../sql/helpers';
+import { reconcileBatchOneToOne } from '../../stores/sql/knex/helpers/batching';
 
 export default pubsub => ({
   Query: {

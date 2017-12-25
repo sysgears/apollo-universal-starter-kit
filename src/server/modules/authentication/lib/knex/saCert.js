@@ -5,7 +5,7 @@ import {
   createWithoutIdAdapter,
   deleteMultiConditionAdapter,
   getManyRelationAdapter
-} from '../../../../sql/crud';
+} from '../../../../stores/sql/knex/helpers/crud';
 
 export const searchServiceAccountCertificate = findAdapter('serviceaccount_certificates');
 

@@ -1,4 +1,10 @@
-import { createAdapter, listAdapter, getAdapter, updateAdapter, deleteAdapter } from '../../../sql/crud';
+import {
+  createAdapter,
+  listAdapter,
+  getAdapter,
+  updateAdapter,
+  deleteAdapter
+} from '../../../stores/sql/knex/helpers/crud';
 
 export default class User {
   list = listAdapter('users', { selects: ['*', 'id AS userId'] });

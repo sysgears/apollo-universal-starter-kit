@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { camelizeKeys } from 'humps';
 
-import knex from '../../../../sql/connector';
+import knex from '../../../../stores/sql/knex/client';
 import log from '../../../../../common/log';
 
 export async function getUserWithPassword(id, trx) {

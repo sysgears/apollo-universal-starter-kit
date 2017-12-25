@@ -2,13 +2,13 @@
 import _ from 'lodash';
 import uuidv4 from 'uuid';
 
-import truncateTables from '../../../common/db';
-import settings from '../../../../settings';
+import truncateTables from '../helpers/tables';
+import settings from '../../../../../../settings';
 
-import orgs from './data/entities/orgs';
-import groups from './data/entities/groups';
-import users from './data/entities/users';
-import serviceaccounts from './data/entities/sa';
+import orgs from '../../../seeds/data/entities/orgs';
+import groups from '../../../seeds/data/entities/groups';
+import users from '../../../seeds/data/entities/users';
+import serviceaccounts from '../../../seeds/data/entities/sa';
 
 let entities = settings.entities;
 let auth = settings.auth;

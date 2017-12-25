@@ -24,6 +24,7 @@ extend type Mutation {
     roleId: String!
     permissionId: String!
   ): UserRolePermissionBindingPayload!
+
   grantUserRoleToUser(
     roleId: String!
     userId: String!

@@ -3,15 +3,15 @@ import _ from 'lodash';
 import uuidv4 from 'uuid';
 import { camelize, decamelize, decamelizeKeys, camelizeKeys } from 'humps';
 
-import knex from './connector';
+import knex from '../client';
 
 import paging from './paging';
 import ordering from './ordering';
 import joinBuilder from './joins';
 import filterBuilder from './filters';
-import { orderedFor } from './helpers';
+import { orderedFor } from './batching';
 
-import log from '../../common/log';
+import log from '../../../../../common/log';
 
 export function createAdapter(table, args) {
   let idGen = uuidv4;

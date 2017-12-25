@@ -3,8 +3,8 @@ import { has, _ } from 'lodash';
 import uuidv4 from 'uuid';
 
 import log from '../../../common/log';
-import knex from '../../sql/connector';
-import { orderedFor } from '../../sql/helpers';
+import knex from '../../stores/sql/knex/client';
+import { orderedFor } from '../../stores/sql/knex/helpers/batching';
 
 export default class ServiceAccount {
   async list(args) {

@@ -7,7 +7,7 @@ import {
   getManyRelationAdapter,
   createRelationAdapter,
   deleteRelationAdapter
-} from '../../../sql/crud';
+} from '../../../stores/sql/knex/helpers/crud';
 
 export default class Group {
   /*

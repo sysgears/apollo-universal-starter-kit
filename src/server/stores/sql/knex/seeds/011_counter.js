@@ -1,4 +1,4 @@
-import truncateTables from '../../../common/db';
+import truncateTables from '../helpers/tables';
 
 const initialAmount = 5;
 

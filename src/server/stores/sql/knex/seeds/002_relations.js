@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 
-import orgs from './data/entities/orgs';
-import groups from './data/entities/groups';
+import orgs from '../../../seeds/data/entities/orgs';
+import groups from '../../../seeds/data/entities/groups';
 
 let config = settings.entities;
 

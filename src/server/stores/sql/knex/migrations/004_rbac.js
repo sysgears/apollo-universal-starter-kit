@@ -1,3 +1,5 @@
+import settings from '../../../../../../settings';
+
 /*
  * Roles exist at the Org level
  * Roles are assigned to groups
@@ -10,8 +12,6 @@
  *
  *    org/groups/user may be omitted?
  */
-
-import settings from '../../../../settings';
 
 let entities = settings.entities;
 let authz = settings.auth.authorization;

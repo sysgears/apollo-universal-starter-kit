@@ -6,7 +6,7 @@ import log from '../../../common/log';
 
 import FieldError from '../../../common/FieldError';
 import { withAuth } from '../../../common/authValidation';
-import { reconcileBatchOneToOne, reconcileBatchManyToMany } from '../../sql/helpers';
+import { reconcileBatchOneToOne, reconcileBatchManyToMany } from '../../stores/sql/knex/helpers/batching';
 
 export default pubsub => ({
   Query: {

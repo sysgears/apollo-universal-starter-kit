@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import knex from '../../sql/connector';
+import knex from '../../stores/sql/knex/client';
 
 const orderedFor = (rows, collection, field, singleObject) => {
   // return the rows ordered for the collection

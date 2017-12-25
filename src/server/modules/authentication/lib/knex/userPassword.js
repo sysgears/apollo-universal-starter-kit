@@ -7,8 +7,8 @@ import _ from 'lodash';
 import settings from '../../../../../../settings';
 import log from '../../../../../common/log';
 
-import knex from '../../../../sql/connector';
-import { orderedFor } from '../../../../sql/helpers';
+import knex from '../../../../stores/sql/knex/client';
+import { orderedFor } from '../../../../stores/sql/knex/helpers/batching';
 
 import User from '../../../user/lib';
 

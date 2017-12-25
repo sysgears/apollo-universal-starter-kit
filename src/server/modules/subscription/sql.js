@@ -1,6 +1,6 @@
 // Helpers
 import { camelizeKeys, decamelizeKeys } from 'humps';
-import knex from '../../../server/sql/connector';
+import knex from '../../stores/sql/knex/client';
 
 import User from '../user/lib';
 

@@ -6,7 +6,7 @@ import log from '../../../common/log';
 
 import FieldError from '../../../common/FieldError';
 import { withAuth } from '../../../common/authValidation';
-import { reconcileBatchOneToOne, reconcileBatchManyToMany } from '../../sql/helpers';
+import { reconcileBatchOneToOne, reconcileBatchManyToMany } from '../../stores/sql/knex/helpers/batching';
 
 export default pubsub => ({
   Query: {
@@ -108,10 +108,6 @@ export default pubsub => ({
 
     /*
     serviceaccounts(obj, args, context) {
-      return Promise.all([
-        context.loaders.getServiceAccountsForOrgId.load(obj.id),
-        context.loaders.getServiceAccountsForOrgIdViaGroups.load(obj.id)
-      ]).then(mergeLoaders);
     }
     */
   },

@@ -74,7 +74,7 @@ type GroupRoleInfo {
 }
 
 extend type Group {
-  roles: [RoleInfo]
+  roles: [GroupRoleInfo]
 }
 
 extend type User {

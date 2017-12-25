@@ -109,49 +109,63 @@ async function createPermissions(knex, permissions) {
   } // end loop over input permissions
 }
 
+async function checkAndBind(knex, roleId, roleName, roleScopes, TABLE) {
+  try {
+    // console.log("checkAndBind", roleName, roleScopes, roleId)
+    for (let scope of roleScopes) {
+      // console.log("    ? ", scope)
+      let permRe = new RegExp('^' + scope.replace('*', '.*') + '$');
+      const hasScope = permRe.exec(roleName);
+      // console.log("    ???", !!hasScope)
+
+      if (hasScope) {
+        console.log('   + ', roleName);
+        let tmp = await knex('permissions')
+          .select('*')
+          .where('name', '=', roleName)
+          .first();
+        let ret = await knex(TABLE).insert({
+          role_id: roleId,
+          permission_id: tmp.id
+        });
+        return;
+      }
+    }
+  } catch (e) {
+    console.log('FUCKING EXCEIPTION!!!!', e);
+  }
+  console.log('   - ', roleName);
+}
+
 async function bindPermissions(knex, roleType, roleName, roleId) {
   let roleScopes = null;
+  let TABLE = null;
   if (roleType === 'user') {
     roleScopes = authz.userScopes[roleName];
+    TABLE = 'user_role_permission_bindings';
   }
   if (roleType === 'group') {
     roleScopes = authz.groupScopes[roleName];
+    TABLE = 'group_role_permission_bindings';
   }
   if (roleType === 'org') {
     roleScopes = authz.orgScopes[roleName];
+    TABLE = 'org_role_permission_bindings';
   }
   if (roleScopes === null) {
     return;
   }
-  console.log(`Binding ${roleType} - ${roleName} with permissions ${roleScopes}] to role: [${roleId}]`);
+  console.log(`Binding ${roleType} - ${roleName} with permissions [${roleScopes}] to role: [${roleId}]`);
   for (let P of authz.permissions) {
     let rs = P.resource;
-    console.log('  -', rs);
 
     let vs = P.verbs ? P.verbs : authz.verbs;
 
     // Seed base resource first
     for (let rel of P.relations) {
       for (let v of vs) {
-        let name = `${rs}/${rel}/${v}`;
-
-        for (let scope of roleScopes) {
-          let permRe = new RegExp('^' + scope.replace('*', '.*') + '$');
-          const hasScope = permRe.exec(name);
-
-          if (hasScope) {
-            console.log('   ', name);
-            const P = await knex('permissions')
-              .select('*')
-              .where({ name: name })
-              .first();
-            await knex(roleType + '_role_permission_bindings').insert({
-              role_id: roleId,
-              permission_id: P.id
-            });
-            break;
-          }
-        }
+        const name = `${rs}/${rel}/${v}`;
+        let ret = await checkAndBind(knex, roleId, name, roleScopes, TABLE);
       }
     }
 
@@ -162,30 +176,13 @@ async function bindPermissions(knex, roleType, roleName, roleId) {
     for (let sub of P.subresources) {
       for (let rel of P.relations) {
         for (let v of vs) {
-          // FIVE loops deep!!
-          let name = `${rs}:${sub}/${rel}/${v}`;
-
-          for (let scope of roleScopes) {
-            let permRe = new RegExp('^' + scope.replace('*', '.*') + '$');
-            const hasScope = permRe.exec(name);
-
-            if (hasScope) {
-              console.log('   ', name);
-              const P = await knex('permissions')
-                .select('*')
-                .where({ name: name })
-                .first();
-              await knex(roleType + '_role_permission_bindings').insert({
-                role_id: roleId,
-                permission_id: P.id
-              });
-              break;
-            }
-          }
+          const name = `${rs}:${sub}/${rel}/${v}`;
+          let ret = await checkAndBind(knex, roleId, name, roleScopes, TABLE);
         }
       }
     }
   } // end loop over input permissions
+  console.log('GOT HERE 2');
 }
 
 async function createAllRoles(knex) {
@@ -278,7 +275,7 @@ async function createOrgRoles(knex, org, roles) {
     });
 
     // bind default permissions
-    bindPermissions(knex, 'org', role, rid);
+    await bindPermissions(knex, 'org', role, rid);
   }
 }
 
@@ -297,7 +294,7 @@ async function createOrgRoleUserBindings(knex, org) {
       .first();
 
     for (let role of user.roles) {
-      console.log('    ~> ', user.name, role);
+      // console.log('    ~> ', user.name, role);
       const rid = await knex
         .select('id')
         .from('org_roles')
@@ -333,10 +330,10 @@ async function createOrgGroupRoleUserBindings(knex, org) {
         })
         .first();
 
-      console.log('   ', org.name, group.name, gid);
+      // console.log('   ', org.name, group.name, gid);
 
       for (let user of role.users) {
-        console.log('    ~> ', user, role.name, rid);
+        // console.log('    ~> ', user, role.name, rid);
         const uid = await knex
           .select('id')
           .from('users')
@@ -361,7 +358,7 @@ async function createOrgRoleServiceAccountBindings(knex, accts, domain) {
       .first();
 
     for (let role of acct.roles) {
-      console.log('    = ', acct.name, role);
+      // console.log('    = ', acct.name, role);
       const rid = await knex
         .select('id')
         .from('org_roles')
@@ -396,14 +393,14 @@ async function createGroupRoles(knex, groupPrefix, group, roles) {
     });
 
     // bind default permissions
-    bindPermissions(knex, 'group', role, rid);
+    await bindPermissions(knex, 'group', role, rid);
   }
 }
 
 async function createUserRoles(knex, roles) {
   console.log('Creating roles for Users', roles);
   for (let role of roles) {
-    console.log('  - ', role);
+    // console.log('  - ', role);
     const rid = uuidv4();
     await knex('user_roles').insert({
       id: rid,
@@ -413,7 +410,7 @@ async function createUserRoles(knex, roles) {
     });
 
     // bind default permissions
-    bindPermissions(knex, 'user', role, rid);
+    await bindPermissions(knex, 'user', role, rid);
   }
 }
 
@@ -427,7 +424,7 @@ async function createUserRoleUserBindings(knex, users, domain) {
       .first();
 
     for (let role of user.roles) {
-      console.log('    ~> ', user.name, role);
+      // console.log('    ~> ', user.name, role);
       const rid = await knex
         .select('id')
         .from('user_roles')

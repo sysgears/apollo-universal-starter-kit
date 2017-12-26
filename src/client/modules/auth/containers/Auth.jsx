@@ -103,7 +103,7 @@ const AuthLoginWithApollo = withCookies(
 
 const AuthProfile = withCookies(({ cookies }) => {
   return checkAuth(cookies) ? (
-    <NavLink to="/profile" className="nav-link" activeClassName="active">
+    <NavLink to="/account" className="nav-link" activeClassName="active">
       {profileName(cookies)}
     </NavLink>
   ) : null;

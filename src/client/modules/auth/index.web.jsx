@@ -46,13 +46,13 @@ function connectionParam() {
 export default new Feature(
   {
     route: [
-      <AuthLoggedInRoute exact path="/register" redirect="/profile" component={Register} />,
-      <AuthLoggedInRoute exact path="/login" redirect="/profile" component={Login} />,
-      <AuthLoggedInRoute exact path="/forgot-password" redirect="/profile" component={ForgotPassword} />,
-      <AuthLoggedInRoute exact path="/reset-password/:token" redirect="/profile" component={ResetPassword} />
+      <AuthLoggedInRoute exact path="/register" redirect="/account" component={Register} />,
+      <AuthLoggedInRoute exact path="/login" redirect="/account" component={Login} />,
+      <AuthLoggedInRoute exact path="/forgot-password" redirect="/account" component={ForgotPassword} />,
+      <AuthLoggedInRoute exact path="/reset-password/:token" redirect="/account" component={ResetPassword} />
     ],
     navItemRight: [
-      <MenuItem key="/profile">
+      <MenuItem key="/account">
         <AuthProfile />
       </MenuItem>,
       <MenuItem key="/login">

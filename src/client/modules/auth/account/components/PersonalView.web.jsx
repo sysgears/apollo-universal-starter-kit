@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import MdEdit from 'react-icons/lib/md/edit';
+import MdCancel from 'react-icons/lib/md/cancel';
 
 import { Card, CardGroup, CardTitle, CardText } from '../../../common/components/web';
+import ObjectView from '../../../common/components/hoc/editable/object/View';
 
 import PersonalForm from '../containers/Personal';
 
@@ -20,13 +22,23 @@ class UserPersonal extends React.Component {
     return (
       <Card key="profile-personal">
         <CardGroup className="clearfix">
-          <h3 className="float-right">{!editing && <MdEdit className="text-primary" onClick={onStartEdit()} />}</h3>
+          <h3 className="float-right">
+            {editing ? (
+              <MdCancel className="text-danger" onClick={onCancelEdit()} />
+            ) : (
+              <MdEdit className="text-primary" onClick={onStartEdit()} />
+            )}
+          </h3>
           <CardTitle>Personal Data:</CardTitle>
+          <br />
 
           {editing ? (
             <PersonalForm user={user} initialValues={user.profile} onCancel={onCancelEdit} />
           ) : (
-            <View user={user} />
+            <ObjectView
+              object={user.profile}
+              fields={['displayName', 'title', 'firstName', 'middleName', 'lastName', 'suffix', 'language', 'locale']}
+            />
           )}
         </CardGroup>
       </Card>
@@ -43,25 +55,6 @@ const NoView = () => {
       </CardGroup>
     </Card>
   );
-};
-
-const View = ({ user }) => {
-  const P = user.profile;
-
-  return (
-    <div>
-      <CardText key="displayName">Display Name: {P.displayName}</CardText>
-      <CardText key="fullName">
-        Full Name: {P.title} {P.firstName} {P.middleName} {P.lastName} {P.suffix}
-      </CardText>
-      <CardText key="locale">
-        Locale: {P.locale} {P.language}
-      </CardText>
-    </div>
-  );
-};
-View.propTypes = {
-  user: PropTypes.object
 };
 
 UserPersonal.propTypes = {

@@ -5,13 +5,13 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import ProfileView from '../components/ProfileView';
+import AccountView from '../components/AccountView';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
-class Profile extends React.Component {
+class Account extends React.Component {
   render() {
-    return <ProfileView {...this.props} />;
+    return <AccountView {...this.props} />;
   }
 }
 
@@ -25,4 +25,4 @@ export default compose(
       return { loading, currentUser };
     }
   })
-)(Profile);
+)(Account);

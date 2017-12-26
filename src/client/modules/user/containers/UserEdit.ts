@@ -8,7 +8,7 @@ import * as EDIT_USER from '../graphql/EditUser.graphql';
 import * as USER_QUERY from '../graphql/UserQuery.graphql';
 
 @Injectable()
-export default class UserEditService {
+export class UserEditService {
   constructor(private apollo: Apollo) {}
 
   public user(id: number | string, callback: (result: any) => any) {

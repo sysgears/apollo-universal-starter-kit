@@ -1,9 +1,9 @@
 import { constructUploadOptions } from 'apollo-fetch-upload';
-import Feature from '../connector';
-import UploadView from './components/UploadView.web';
-import reducer from './reducers';
+import { Feature } from '../connector';
+import { UploadView } from './components/UploadView.web';
+import { reducer } from './reducers';
 
-export default new Feature({
+export const upload = new Feature({
   route: [{ path: 'upload', component: UploadView, data: { title: 'Upload' } }],
   reducer: { upload: reducer },
   navItem: [

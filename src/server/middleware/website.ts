@@ -18,7 +18,7 @@ import { NextFunction, Request, Response } from 'express';
 // import createReduxStore from "../../common/createReduxStore";
 // import Html from "./html";
 // import Routes from "../../client/app/Routes";
-import log from '../../common/log';
+import { log } from '../../common/log';
 
 // import { options as spinConfig } from "../../../.spinrc.json";
 // import settings from "../../../settings";

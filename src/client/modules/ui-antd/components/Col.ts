@@ -7,7 +7,7 @@ import { Component, ElementRef, Input, OnInit, Renderer2, ViewEncapsulation } fr
 	`,
   encapsulation: ViewEncapsulation.None
 })
-export default class Col implements OnInit {
+export class Col implements OnInit {
   // Sizes
   @Input() public xs: number;
   @Input() public sm: number;

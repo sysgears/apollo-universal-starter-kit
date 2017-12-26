@@ -1,6 +1,6 @@
 import { Raw } from 'knex';
 import * as _ from 'lodash';
-import knex from '../../sql/connector';
+import { knex } from '../../sql/connector';
 
 const orderedFor = (rows: Raw[], collection: any[], field: string, singleObject: boolean) => {
   // return the rows ordered for the collection
@@ -21,7 +21,7 @@ export interface PostInput {
   postId?: number;
 }
 
-export default class Post {
+export class Post {
   public postsPagination(limit: number, after: number) {
     let where = '';
     if (after > 0) {

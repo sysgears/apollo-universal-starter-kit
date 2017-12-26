@@ -13,21 +13,21 @@ import { FormInput } from './Form';
              class="form-check-input"
              (ngModelChange)="changed({ id: input.id, value: $event })"
              [(ngModel)]="reduxForm?.value[input.name]" />
-      {{input.label}}
+      {{ input.label }}
     </label>
 
     <div *ngIf="reduxForm.controls[input.name].isInvalid && (reduxForm.controls[input.name].isDirty || reduxForm.controls[input.name].isTouched)">
       <small [hidden]="!reduxForm.controls[input.name].errors[input.name]">
-        {{reduxForm.controls[input.name].errors[input.name]}}
+        {{ reduxForm.controls[input.name].errors[input.name] }}
       </small>
       <small [hidden]="!control.errors.required">
-        {{input.value}} is required
+        {{ input.value }} is required
       </small>
     </div>
   `,
   styles: ['small {color: brown}']
 })
-export default class {
+export class RenderCheckBox {
   @Input() public input: FormInput;
   @Input() public reduxForm: any;
   @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();

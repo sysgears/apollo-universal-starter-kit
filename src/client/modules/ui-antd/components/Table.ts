@@ -34,7 +34,7 @@ export enum ElemType {
                   (column.columnSpan > 1 ? ' text-center' : '')"
             [attr.width]="column.width"
             [attr.colSpan]="column.columnSpan">
-          {{column.title}}
+          {{ column.title }}
           <ausk-link *ngIf="column.sorting" (click)="column.sorting($event, column.value)">
             <span [innerHTML]="column.iconRender(column.value)"></span>
           </ausk-link>
@@ -45,16 +45,16 @@ export enum ElemType {
       <tr *ngFor="let row of rows">
         <td *ngFor="let cell of row">
           <ausk-link *ngIf="cell.type === 0" [to]="cell.link">
-            {{cell.text}}
+            {{ cell.text }}
           </ausk-link>
 
           <ausk-button *ngIf="cell.type === 1" [click]="cell.callback"
                        [className]="cell.className || 'btn btn-primary btn-sm'">
-            {{cell.text}}
+            {{ cell.text }}
           </ausk-button>
 
           <span *ngIf="cell.type === 2">
-                      {{cell.text}}
+                      {{ cell.text }}
                   </span>
         </td>
       </tr>
@@ -62,7 +62,7 @@ export enum ElemType {
     </table>
   `
 })
-export default class Table {
+export class Table {
   @Input() public className: string;
   @Input() public columns: any;
   @Input() public rows: CellData[];

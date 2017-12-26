@@ -7,14 +7,14 @@ import {
   userFormReducer
 } from './reducers';
 
-import Feature from '../connector';
-import ForgotPasswordView from './components/ForgotPasswordView.web';
-import LoginView from './components/LoginView.web';
-import ProfileView from './components/ProfileView.web';
-import RegisterView from './components/RegisterView.web';
-import ResetPasswordView from './components/ResetPasswordView.web';
-import UsersEditView from './components/UserEditView';
-import Users from './components/Users.web';
+import { Feature } from '../connector';
+import { ForgotPasswordView } from './components/ForgotPasswordView.web';
+import { LoginView } from './components/LoginView.web';
+import { ProfileView } from './components/ProfileView.web';
+import { RegisterView } from './components/RegisterView.web';
+import { ResetPasswordView } from './components/ResetPasswordView.web';
+import { UsersEditView } from './components/UserEditView';
+import { Users } from './components/Users.web';
 
 const tokenMiddleware = (req: any, options: any) => {
   options.headers['x-token'] = window.localStorage.getItem('token');
@@ -39,7 +39,7 @@ const connectionParam = () => {
   };
 };
 
-export default new Feature({
+export const user = new Feature({
   route: [
     { path: 'login', component: LoginView, data: { title: 'Login' } },
     { path: 'profile', component: ProfileView, data: { title: 'Profile' } },

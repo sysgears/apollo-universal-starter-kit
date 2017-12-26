@@ -12,4 +12,4 @@ import '../../../modules/ui-bootstrap/styles/styles.scss';
   </section>
   `
 })
-export default class {}
+export class PageNotFound {}

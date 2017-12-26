@@ -1,7 +1,7 @@
 /*eslint-disable no-unused-vars*/
 import { PubSub } from 'graphql-subscriptions';
 
-export default (pubsub: PubSub) => ({
+export const createResolvers = (pubsub: PubSub) => ({
   Query: {},
   Mutation: {
     uploadFile: (obj: any, { file }: any, context: any) => {

@@ -6,8 +6,8 @@ import { Subject } from 'rxjs/Subject';
 import { AlertItem, createErrorAlert, createSuccessAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
-import ForgotPasswordService from '../containers/ForgotPassword';
-import { ForgotPasswordFormData, ForgotPasswordFormState, ResetForgotPasswordFormAction } from '../reducers/index';
+import { ForgotPasswordService } from '../containers/ForgotPassword';
+import { ForgotPasswordFormData, ForgotPasswordFormState, ResetForgotPasswordFormAction } from '../reducers';
 
 @Component({
   selector: 'forgot-password-view',
@@ -28,7 +28,7 @@ import { ForgotPasswordFormData, ForgotPasswordFormState, ResetForgotPasswordFor
     </layout-center>
   `
 })
-export default class ForgotPasswordView {
+export class ForgotPasswordView {
   public form: FormInput[];
   public sent: boolean = false;
   public submitting: boolean = false;

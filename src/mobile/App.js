@@ -11,12 +11,12 @@ import { ApolloLink } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { LoggingLink } from 'apollo-logger';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import ApolloClient from 'apollo-client';
+import { ApolloClient } from 'apollo-client';
 import url from 'url';
 
-import modules from '../client/modules';
+import { modules } from '../client/app/modules';
 import MainScreenNavigator from '../client/app/Routes';
-import settings from '../../settings';
+import { settings } from '../../settings';
 
 const store = createStore(
   combineReducers({

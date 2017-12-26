@@ -7,8 +7,8 @@ import { Subject } from 'rxjs/Subject';
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
-import RegisterService from '../containers/Register';
-import { RegisterFormData, RegisterFormState } from '../reducers/index';
+import { RegisterService } from '../containers/Register';
+import { RegisterFormData, RegisterFormState } from '../reducers';
 
 @Component({
   selector: 'register-view',
@@ -28,7 +28,7 @@ import { RegisterFormData, RegisterFormState } from '../reducers/index';
     </layout-center>
   `
 })
-export default class RegisterView {
+export class RegisterView {
   public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   public formState: FormGroupState<RegisterFormData>;
   public form: FormInput[];

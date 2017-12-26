@@ -5,11 +5,11 @@ import { FormGroupState } from 'ngrx-forms';
 import { Subject } from 'rxjs/Subject';
 
 import * as url from 'url';
-import settings from '../../../../../settings';
+import { settings } from '../../../../../settings';
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
-import LoginService from '../containers/Login';
+import { LoginService } from '../containers/Login';
 import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers';
 
 @Component({
@@ -52,7 +52,7 @@ import { LoginFormData, LoginFormState, ResetLoginFormAction } from '../reducers
     </layout-center>
   `
 })
-export default class LoginView {
+export class LoginView {
   public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   public formState: FormGroupState<LoginFormData>;
   public form: FormInput[];

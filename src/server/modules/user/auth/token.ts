@@ -1,8 +1,8 @@
-import settings from '../../../../../settings';
+import { settings } from '../../../../../settings';
 
 import { refreshTokens, tryLoginSerial } from './index';
 
-export default (SECRET: any, User: any, jwt: any) => async (req: any, res: any, next: any) => {
+export const tokenMiddleware = (SECRET: any, User: any, jwt: any) => async (req: any, res: any, next: any) => {
   let token = (req.universalCookies ? req.universalCookies.get('x-token') : null) || req.headers['x-token'];
 
   // if cookie available

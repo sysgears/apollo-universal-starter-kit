@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import settings from '../../../../../settings';
-import modules from '../../../modules';
+import { settings } from '../../../../../settings';
+import { modules } from '../../';
 
 @Component({
   selector: 'nav-bar',
@@ -24,4 +24,4 @@ import modules from '../../../modules';
     </nav>`,
   styles: ['ul.right-side { display: block; }', 'ul.right-side menu-item { float: right; display: inline-block; }']
 })
-export default class {}
+export class NavBar {}

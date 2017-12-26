@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
-import UsersListService, { AddUser, DeleteUser, UpdateUser } from '../containers/UsersList';
+import { UsersListService, AddUser, DeleteUser, UpdateUser } from '../containers/UsersList';
 import { UserOrderBy } from '../reducers';
 
 @Component({
@@ -32,7 +32,7 @@ import { UserOrderBy } from '../reducers';
   }`
   ]
 })
-export default class UsersListView implements OnInit, OnDestroy {
+export class UsersListView implements OnInit, OnDestroy {
   public searchText: string;
   public role: string;
   public isActive: boolean;
@@ -154,7 +154,7 @@ export default class UsersListView implements OnInit, OnDestroy {
   public renderOrderByArrow = (name: string) => {
     return this.orderBy && this.orderBy.column === name
       ? `<span class="badge badge-primary">${this.orderBy.order === 'desc' ? '&#8595;' : '&#8593;'}</span>`
-      : `<span class="badge badge-secondary">&#8645;</span>`;
+      : '<span class="badge badge-secondary">&#8645;</span>';
   };
 
   public orderByColumn = (e: any, name: string) => {

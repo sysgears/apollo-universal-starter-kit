@@ -1,12 +1,21 @@
-import apolloEngine from './apolloEngine';
-import counter from './counter';
+import { apolloEngineModule } from './apolloEngine';
+import { counterModule } from './counter';
 import './debug';
-import graphqlTypes from './graphqlTypes';
-import mailer from './mailer';
-import post from './post';
-import upload from './upload';
-import user from './user';
+import { graphqlTypesModule } from './graphqlTypes';
+import { mailerModule } from './mailer';
+import { postModule } from './post';
+import { uploadModule } from './upload';
+import { userModule } from './user';
 
-import Feature from './connector';
+import { Feature } from './connector';
 
-export default new Feature(counter, post, upload, user, mailer, graphqlTypes, apolloEngine);
+// export default new Feature(counter, post, upload, user, mailer, graphqlTypes, apolloEngine);
+export const modules = new Feature(
+  counterModule,
+  postModule,
+  uploadModule,
+  userModule,
+  mailerModule,
+  graphqlTypesModule,
+  apolloEngineModule
+);

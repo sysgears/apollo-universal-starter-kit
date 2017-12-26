@@ -2,9 +2,9 @@ import { execute, subscribe } from 'graphql';
 import { Server } from 'http';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 
-import log from '../../common/log';
-import modules from '../../server/modules';
-import schema from './schema';
+import { log } from '../../common/log';
+import { modules } from '../modules';
+import { schema } from './schema';
 
 let subscriptionServer: SubscriptionServer;
 
@@ -51,4 +51,4 @@ if (module.hot) {
   });
 }
 
-export default addGraphQLSubscriptions;
+export { addGraphQLSubscriptions };

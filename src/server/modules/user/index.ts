@@ -4,15 +4,15 @@ import * as passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { StrategyOptionWithScope } from 'passport-facebook-ext';
 
-import settings from '../../../../settings';
-import Feature from '../connector';
+import { settings } from '../../../../settings';
+import { Feature } from '../connector';
 import { createTokens, refreshTokens } from './auth';
-import scopes from './auth/scopes';
-import tokenMiddleware from './auth/token';
-import confirmMiddleware from './confirm';
-import createResolvers from './resolvers';
+import { scopes } from './auth/scopes';
+import { tokenMiddleware } from './auth/token';
+import { confirmMiddleware } from './confirm';
+import { createResolvers } from './resolvers';
 import * as schema from './schema.graphqls';
-import UserDAO from './sql';
+import { User as UserDAO } from './sql';
 
 const SECRET = settings.user.secret;
 
@@ -73,7 +73,7 @@ if (settings.user.auth.facebook.enabled) {
   );
 }
 
-export default new Feature({
+export const userModule = new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: async (req: any, connectionParams: any, webSocket: any) => {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import settings from '../../../../../settings';
-import modules from '../../../modules';
+import settings from '../../../../../../settings';
+import { modules } from '../../';
 
 @Component({
   selector: 'nav-bar',
@@ -12,7 +12,7 @@ import modules from '../../../modules';
           <menu-item>
             <nav-link [name]="'${settings.app.name}'" [to]="'/'" [type]="'brand'"></nav-link>
           </menu-item>
-          ${modules.navItems}
+          <!--${modules.navItems}-->
         </ul>
         <ul class="nav col-md-6 right-side">
           <menu-item>
@@ -24,4 +24,4 @@ import modules from '../../../modules';
     </nav>`,
   styles: ['ul.right-side { display: block; }', 'ul.right-side menu-item { float: right; display: inline-block; }']
 })
-export default class {}
+export class NavBar {}

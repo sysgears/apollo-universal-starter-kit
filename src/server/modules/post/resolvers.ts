@@ -12,7 +12,7 @@ export interface PostParams {
   input?: PostInput;
 }
 
-export default (pubsub: PubSub) => ({
+export const createResolvers = (pubsub: PubSub) => ({
   Query: {
     async posts(obj: any, { limit, after }: any, context: any) {
       const edgesArray: any[] = [];

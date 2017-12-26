@@ -1,4 +1,4 @@
 import * as nodemailer from 'nodemailer';
-import settings from '../../../../settings';
+import { settings } from '../../../../settings';
 
-export default nodemailer.createTransport(settings.mailer);
+export const mailer = nodemailer.createTransport(settings.mailer);

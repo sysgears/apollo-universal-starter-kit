@@ -42,7 +42,7 @@ export const DeletePost = (prev: any, node: any) => {
 };
 
 @Injectable()
-export default class PostService {
+export class PostService {
   public postsSubscription: Subscription;
   public endCursor: number;
   private getPostsQuery: ApolloQueryObservable<any>;

@@ -38,7 +38,7 @@ const alertClasses = [
     </div>
 	`
 })
-export default class Alert implements OnInit, OnDestroy {
+export class Alert implements OnInit, OnDestroy {
   @Input() public subject: Subject<AlertItem>;
   public alerts: AlertItem[] = [];
   private subscription: Subscription;

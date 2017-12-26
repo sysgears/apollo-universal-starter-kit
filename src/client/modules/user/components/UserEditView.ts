@@ -5,12 +5,12 @@ import { assign, pick } from 'lodash';
 import { FormGroupState } from 'ngrx-forms';
 import { Subject } from 'rxjs/Subject';
 
-import settings from '../../../../../settings';
+import { settings } from '../../../../../settings';
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
-import UserEditService from '../containers/UserEdit';
-import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } from '../reducers/index';
+import { UserEditService } from '../containers/UserEdit';
+import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } from '../reducers';
 
 @Component({
   selector: 'users-edit-view',
@@ -29,7 +29,7 @@ import { FillUserFormAction, ResetUserFormAction, UserFormData, UserFormState } 
     </ausk-form>
   `
 })
-export default class UsersEditView implements OnInit, OnDestroy {
+export class UsersEditView implements OnInit, OnDestroy {
   public user: any = {};
   public loading: boolean = true;
   public title: string;

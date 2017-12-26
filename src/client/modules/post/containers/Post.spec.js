@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
-import _ from 'lodash';
+import * as _ from 'lodash';
 
-import Renderer from '../../../../client/testHelpers/Renderer';
-import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
-import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
-import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
+import { Renderer } from '../../../../client/testHelpers/Renderer';
+import * as POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
+import * as POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
+import * as COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
 
 const createNode = id => ({
   id: `${id}`,

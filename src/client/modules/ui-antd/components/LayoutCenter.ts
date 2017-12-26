@@ -16,4 +16,4 @@ import { Component } from '@angular/core';
      </container>
 	`
 })
-export default class LayoutCenter {}
+export class LayoutCenter {}

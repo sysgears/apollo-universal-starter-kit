@@ -1,4 +1,7 @@
-import modules from '../modules';
+import { modules } from './components';
+import { CounterView } from './components/counter/components/CounterView.web';
 
-const routes = modules.routes;
-export default routes;
+// export const routes = modules.routes;
+export const routes = [
+  { path: '', component: CounterView, data: { title: 'Apollo Fullstack Starter Kit - Counter example page' } }
+];

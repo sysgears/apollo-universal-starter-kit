@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { UploadOutput } from 'ngx-uploader/src/ngx-uploader/classes/interfaces';
 import { Subscription } from 'rxjs/Subscription';
 
-import UploadService from '../containers/Upload';
+import { UploadService } from '../containers/Upload';
 
 @Component({
   selector: 'upload-view',
@@ -41,7 +41,7 @@ import UploadService from '../containers/Upload';
     `
   ]
 })
-export default class UploadView implements OnDestroy {
+export class UploadView implements OnDestroy {
   @ViewChild('fileInput') public fileInput: ElementRef;
   public dragOver: boolean;
   private subsOnUpload: Subscription;

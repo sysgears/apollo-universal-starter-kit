@@ -7,7 +7,7 @@ import { FormGroupState } from 'ngrx-forms';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
 import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
-import PostCommentsService, { AddComment, DeleteComment, UpdateComment } from '../containers/PostComments';
+import { PostCommentsService, AddComment, DeleteComment, UpdateComment } from '../containers/PostComments';
 import { CommentFormData, CommentSelect, FillCommentFormAction, ResetCommentFormAction } from '../reducers/index';
 
 @Component({
@@ -30,7 +30,7 @@ import { CommentFormData, CommentSelect, FillCommentFormAction, ResetCommentForm
       </ausk-table>
     </div>`
 })
-export default class PostCommentsView implements OnInit, OnDestroy {
+export class PostCommentsView implements OnInit, OnDestroy {
   @Input() public post: any;
 
   public comment: any;

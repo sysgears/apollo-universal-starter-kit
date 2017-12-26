@@ -7,8 +7,8 @@ import { Subject } from 'rxjs/Subject';
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
-import ResetPasswordService from '../containers/ResetPassword';
-import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
+import { ResetPasswordService } from '../containers/ResetPassword';
+import { RegisterFormData, ResetPasswordFormState } from '../reducers';
 
 @Component({
   selector: 'reset-password-view',
@@ -26,7 +26,7 @@ import { RegisterFormData, ResetPasswordFormState } from '../reducers/index';
     </ausk-form>
   `
 })
-export default class ResetPasswordView implements OnInit {
+export class ResetPasswordView implements OnInit {
   public sent: boolean = false;
   public submitting: boolean = false;
   public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();

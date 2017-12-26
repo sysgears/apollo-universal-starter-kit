@@ -43,7 +43,7 @@ export const DeleteUser = (prev: any, id: any) => {
 };
 
 @Injectable()
-export default class UsersListService {
+export class UsersListService {
   public usersSubscription: Subscription;
   constructor(private apollo: Apollo) {}
 

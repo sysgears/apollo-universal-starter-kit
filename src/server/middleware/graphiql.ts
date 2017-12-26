@@ -1,10 +1,10 @@
 import { graphiqlExpress } from 'apollo-server-express';
 import * as url from 'url';
-import log from '../../common/log';
+import { log } from '../../common/log';
 
 const { protocol, hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
-export default graphiqlExpress(req => {
+const graphiqlMiddleware = graphiqlExpress(req => {
   try {
     const subscriptionsUrl = (hostname === 'localhost'
       ? `${protocol}//${url.parse(req.get('Referer') || `${protocol}//${hostname}`).hostname}:${port}${pathname}`
@@ -20,3 +20,5 @@ export default graphiqlExpress(req => {
     log.error(e.stack);
   }
 });
+
+export { graphiqlMiddleware };

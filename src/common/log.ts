@@ -15,4 +15,4 @@ if (__DEV__ && __SERVER__) {
   };
 }
 
-export default log;
+export { log };

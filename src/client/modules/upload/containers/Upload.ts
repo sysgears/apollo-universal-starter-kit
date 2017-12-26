@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as UPLOAD_FILE from '../graphql/UploadFile.graphql';
 
 @Injectable()
-export default class UploadService {
+export class UploadService {
   constructor(private apollo: Apollo) {}
 
   public uploadFile(file: any, callback: (result: any) => any) {

@@ -31,13 +31,13 @@ export interface FormInput {
       </div>
       <div class="{{ btnAlign }}">
         <ausk-button type="submit" [disabled]="formState[formName].isInvalid || submitting">
-          {{btnName}}
+          {{ btnName }}
         </ausk-button>
       </div>
     </form>
   `
 })
-export default class Form implements OnInit {
+export class Form implements OnInit {
   @Input() public btnName: string;
   @Input() public btnAlign: string;
   @Input() public onSubmit: any;

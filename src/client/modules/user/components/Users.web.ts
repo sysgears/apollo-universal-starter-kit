@@ -13,4 +13,4 @@ import { Component } from '@angular/core';
     <users-list-view></users-list-view>
   `
 })
-export default class Users {}
+export class Users {}

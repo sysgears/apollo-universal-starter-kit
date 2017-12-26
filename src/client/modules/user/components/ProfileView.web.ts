@@ -1,6 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import ProfileService from '../containers/Profile';
+import { ProfileService } from '../containers/Profile';
 
 @Component({
   selector: 'profile-view',
@@ -34,7 +34,7 @@ import ProfileService from '../containers/Profile';
     </div>
   `
 })
-export default class ProfileView implements OnInit, OnDestroy {
+export class ProfileView implements OnInit, OnDestroy {
   public loading: boolean = true;
   public currentUser: any = {};
   private subsOnCurrentUser: Subscription;

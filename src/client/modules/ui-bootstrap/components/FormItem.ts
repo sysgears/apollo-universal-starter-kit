@@ -24,7 +24,7 @@ export enum ItemType {
   `,
   styles: ['small {color: brown}']
 })
-export default class {
+export class FormItem {
   @Input() public itemType: ItemType;
   @Input() public formInput: FormInput;
   @Input() public name: string;

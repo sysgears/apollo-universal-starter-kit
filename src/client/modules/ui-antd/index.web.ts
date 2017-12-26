@@ -1,8 +1,8 @@
 import * as styles from './styles/styles.scss';
 
-import Feature from '../connector';
+import { Feature } from '../connector';
 
-export default new Feature({
+export const uiAntd = new Feature({
   stylesInsert: styles,
   stylesProvider: 'antd'
 });

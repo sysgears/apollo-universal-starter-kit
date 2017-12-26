@@ -8,4 +8,4 @@ import { Component } from '@angular/core';
      </p>
 	`
 })
-export default class CardText {}
+export class CardText {}

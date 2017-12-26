@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
     <ausk-link [to]="to" [type]="type" [navLink]="true">{{ name }}</ausk-link>
 	`
 })
-export default class NavLink {
+export class NavLink {
   @Input() public name: string;
   @Input() public to: string;
   @Input() public type: string = 'router';

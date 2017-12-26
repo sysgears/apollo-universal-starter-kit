@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 @Injectable()
-export default class ProfileService {
+export class ProfileService {
   constructor(private apollo: Apollo) {}
 
   public getCurrentUser(cb: (result: Observable<any>) => any) {

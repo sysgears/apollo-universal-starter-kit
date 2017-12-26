@@ -9,11 +9,26 @@
     "lib": ["es2015", "dom", "esnext"],
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
+    "importHelpers": true,
+    "baseUrl": ".",
     "pretty": true,
-    "removeComments": true
+    "removeComments": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
   "include": [
     "./typings/*.d.ts",
+    "./src/client/custom-typings.d.ts",
     "**/*.ts"
-  ]
+  ],
+  "exclude": ["./src/client/modules/**/*.ts"],
+  "angularCompilerOptions": {
+    "genDir": ".",
+    "skipMetadataEmit": true
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "usePrecompiledFiles": true,
+    "useWebpackText": true
+  }
 }

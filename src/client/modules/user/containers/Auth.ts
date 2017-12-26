@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import LoginService from './Login';
+import { LoginService } from './Login';
 
 @Component({
   selector: 'auth-login',
@@ -68,5 +68,4 @@ class AuthNav implements OnInit {
   };
 }
 
-export { AuthLogin };
-export { AuthNav };
+export { AuthLogin, AuthNav };

@@ -1,9 +1,9 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
-import settings from '../../../../../settings';
-import FieldError from '../../../../common/FieldError';
-import log from '../../../../common/log';
+import { settings } from '../../../../../settings';
+import { FieldError } from '../../../../common/FieldError';
+import { log } from '../../../../common/log';
 
 export const createTokens = async (user: any, secret: string, refreshSecret: string) => {
   const tokenUser: any = pick(user, ['id', 'username', 'role']);

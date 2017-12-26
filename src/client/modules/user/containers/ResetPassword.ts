@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as RESET_PASSWORD from '../graphql/ResetPassword.graphql';
 
 @Injectable()
-export default class ResetPasswordService {
+export class ResetPasswordService {
   constructor(private apollo: Apollo) {}
 
   public resetPassword(password: string, passwordConfirmation: string, token: string, callback: (result: any) => any) {

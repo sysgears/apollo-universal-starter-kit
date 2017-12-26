@@ -1,0 +1,5 @@
+mutation addCounter($amount: Int!) {
+  addCounter(amount: $amount) {
+    amount
+  }
+}

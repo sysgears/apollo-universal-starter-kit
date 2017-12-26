@@ -1,4 +1,4 @@
-import ApolloClient from 'apollo-client';
+import { ApolloClient } from 'apollo-client';
 import { ApolloLink, Observable } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { addTypenameToDocument } from 'apollo-utilities';
@@ -13,9 +13,9 @@ import { graphql, print, getOperationAST } from 'graphql';
 
 import { Provider } from 'react-redux';
 
-import rootSchema from '../../server/api/rootSchema.graphqls';
-import serverModules from '../../server/modules';
-import settings from '../../../settings';
+import * as rootSchema from '../../server/api/rootSchema.graphqls';
+import { modules as serverModules } from '../../server/modules';
+import { settings } from '../../../settings';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;
@@ -136,7 +136,7 @@ class MockLink extends ApolloLink {
   }
 }
 
-export default class Renderer {
+export class Renderer {
   constructor(graphqlMocks, reduxState) {
     const schema = makeExecutableSchema({
       typeDefs: [rootSchema, ...serverModules.schemas]

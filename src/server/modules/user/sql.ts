@@ -2,10 +2,10 @@
 import * as bcrypt from 'bcryptjs';
 import { camelizeKeys, decamelize, decamelizeKeys } from 'humps';
 import { has } from 'lodash';
-import knex from '../../../server/sql/connector';
+import { knex } from '../../../server/sql/connector';
 
 // Actual query fetching and transformation in DB
-export default class User {
+export class User {
   public async getUsers(orderBy: any, filter: any) {
     const queryBuilder = knex
       .select(

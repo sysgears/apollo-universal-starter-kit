@@ -8,7 +8,7 @@ import * as EDIT_POST from '../graphql/EditPost.graphql';
 import * as POST_QUERY from '../graphql/PostQuery.graphql';
 
 @Injectable()
-export default class PostEditService {
+export class PostEditService {
   constructor(private apollo: Apollo) {}
 
   public getPost(id: number, callback: (result: any) => any) {

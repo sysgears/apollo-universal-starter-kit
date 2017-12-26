@@ -1,4 +1,4 @@
-import log from '../common/log';
+import { log } from '../common/log';
 import './server';
 
 process.on('uncaughtException', (ex: any) => {

@@ -26,6 +26,4 @@ declare module 'apollo-client' {
   class ApolloClient extends GenericApolloClient<any> {}
 
   export { ApolloClient };
-
-  export default ApolloClient;
 }

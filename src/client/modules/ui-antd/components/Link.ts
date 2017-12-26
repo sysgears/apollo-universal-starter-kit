@@ -15,7 +15,7 @@ const linkTypes = [
   },
   {
     type: LinkType.BRAND,
-    className: 'navbar-brand'
+    className: 'nav-link'
   },
   {
     type: LinkType.ROUTER,

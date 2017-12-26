@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "lerna run build --stream",
-    "start": "node --harmony pacakges/server/build",
+    "start": "node --harmony packages/server/build",
     "test": "lerna run test --concurrency 1 --stream",
     "lint": "lerna run lint",
     "seed": "lerna run seed --stream",

@@ -17,7 +17,7 @@
     "test": "flow && npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
     "watch": "spin watch",
-    "heroku-postbuild": "rm -rf build && spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && spin -c .spinrc.prod.json build && spin exp p --non-interactive && npm run seed",
+    "heroku-postbuild": "rm -rf build && spin -c .spinrc.prod.json build",
     "cli": "node tools/cli",
     "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"
   },

@@ -17,7 +17,7 @@
     "test": "flow && npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
     "watch": "DEBUG=spinjs spin watch",
-    "heroku-postbuild": "rm -rf build && spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && spin -c .spinrc.prod.json build && spin exp p --non-interactive && npm run seed",
+    "heroku-postbuild": "rm -rf build && spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && spin -c .spinrc.prod.json build && spin exp p --non-interactive",
     "cli": "node tools/cli"
   },
   "lint-staged": {
@@ -119,7 +119,7 @@
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-prettier": "^2.4.0",
     "eslint-plugin-react": "^7.5.1",
-    "exp": "47.1.1",
+    "exp": "47.1.4",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "flow-bin": "^0.61.0",

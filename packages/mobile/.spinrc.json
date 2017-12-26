@@ -3,12 +3,12 @@
     "android": {
       "stack": ["react-native", "android"],
       "entry": "./src/index.js",
-      "enabled": false
+      "enabled": true
     },
     "ios": {
       "stack": ["react-native", "ios"],
       "entry": "./src/index.js",
-      "enabled": false
+      "enabled": true
     },
     "test": {
       "stack": ["react-native-web", "server"],

@@ -2,11 +2,13 @@
   "builders": {
     "android": {
       "stack": ["react-native", "android"],
-      "enabled": false
+      "entry": "./src/index.js",
+      "enabled": true
     },
     "ios": {
       "stack": ["react-native", "ios"],
-      "enabled": false
+      "entry": "./src/index.js",
+      "enabled": true
     },
     "test": {
       "stack": ["react-native-web", "server"],

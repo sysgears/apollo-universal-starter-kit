@@ -2,7 +2,7 @@
   "name": "mobile",
   "private": true,
   "version": "1.0.0",
-  "main": "../../src/mobile",
+  "main": "src",
   "engines": {
     "node": ">= 6.11.1",
     "npm": ">= 3.10.3",
@@ -11,7 +11,6 @@
   "scripts": {
     "build": "spin build",
     "exp": "spin exp",
-    "start": "node --harmony build/server",
     "tests": "cross-env PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "flow && npm run tests && npm run lint",

@@ -16,7 +16,7 @@ class UserEdit extends React.Component {
 export default compose(
   graphql(USER_QUERY, {
     options: props => {
-      let id = 0;
+      let id = 'add';
       if (props.match) {
         id = props.match.params.id;
       } else if (props.navigation) {

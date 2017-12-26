@@ -1,0 +1,20 @@
+#import "../../../entities/orgs/graphql/FragmentOrgBrief.graphql"
+#import "../../../entities/groups/graphql/FragmentGroupBrief.graphql"
+#import "../../../entities/users/graphql/Profile.graphql"
+
+fragment CurrentUserInfo on User {
+  id
+  email
+  isActive
+  createdAt
+  updatedAt
+  profile {
+    ...UserProfileInfo
+  }
+  groups {
+    ...GroupBrief
+  }
+  orgs {
+    ...OrgBrief
+  }
+}

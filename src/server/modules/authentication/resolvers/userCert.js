@@ -13,7 +13,7 @@ export default function addResolvers(obj) {
 function addTypeResolvers(obj) {
   obj.UserAuth.certificates = createBatchResolver(async (source, args, context) => {
     let ids = _.uniq(source.map(s => s.userId));
-    const certs = await context.Authn.getCertificatesForUsers(ids);
+    const certs = await context.Authn.getCertificatesForUsers({ ids });
     const ret = reconcileBatchOneToMany(source, certs, 'userId');
     return ret;
   });

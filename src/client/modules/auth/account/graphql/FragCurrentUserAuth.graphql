@@ -1,0 +1,61 @@
+fragment CurrentUserAuth on User {
+  auth {
+    oauths {
+      provider
+    }
+    apikeys {
+      name
+      key
+    }
+    certificates {
+      name
+      serial
+    }
+  }
+  userRoles {
+    ...UserRoleInfoFrag
+  }
+  groupRoles {
+    ...GroupRolesInfoFrag
+  }
+  orgRoles {
+    ...OrgRolesInfoFrag
+  }
+}
+
+fragment UserRoleInfoFrag on UserRoleInfo {
+  id
+  name
+  roleId
+  roleName
+  permissions {
+    name
+    id
+  }
+}
+
+fragment GroupRolesInfoFrag on GroupRoleInfo {
+  groupId
+  groupName
+  id
+  name
+  roleId
+  roleName
+  permissions {
+    name
+    id
+  }
+}
+
+fragment OrgRolesInfoFrag on OrgRoleInfo {
+  orgId
+  orgName
+  id
+  name
+  roleId
+  roleName
+  permissions {
+    name
+    id
+  }
+}

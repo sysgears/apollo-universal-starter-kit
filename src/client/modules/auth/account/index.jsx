@@ -2,11 +2,10 @@
 import { Ionicons } from '@expo/vector-icons';
 
 // Component and helpers
-import { createTabBarIconWrapper } from '../common/components/native';
-import Profile from './account/containers/Profile';
-import reducers from './reducers';
+import { createTabBarIconWrapper } from '../../common/components/native';
+import Profile from './containers/Profile';
 
-import Feature from '../connector';
+import Feature from '../../connector';
 
 export default new Feature({
   tabItem: {
@@ -19,6 +18,6 @@ export default new Feature({
         })
       }
     }
-  },
-  reducer: { profile: reducers }
+  }
+  // reducer: { user: reducers }
 });

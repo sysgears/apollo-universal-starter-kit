@@ -6,7 +6,7 @@ import { reconcileBatchOneToMany } from '../../../stores/sql/knex/helpers/batchi
 export default function addResolvers(obj) {
   obj.ServiceAccountAuth.apikeys = createBatchResolver(async (source, args, context) => {
     let ids = _.uniq(source.map(s => s.serviceaccountId));
-    const apikeys = await context.Authn.getApiKeysForServiceAccounts(ids);
+    const apikeys = await context.Authn.getApiKeysForServiceAccounts({ ids });
     const ret = reconcileBatchOneToMany(source, apikeys, 'serviceaccountId');
     return ret;
   });

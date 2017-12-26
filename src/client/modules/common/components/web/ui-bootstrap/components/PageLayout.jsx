@@ -18,7 +18,7 @@ const PageLayout = ({ children, navBar }) => {
   return (
     <section>
       {navBar !== false && <NavBar />}
-      <Container id="content">{children}</Container>
+      <Container fluid={true}>{children}</Container>
       <Footer>
         <div className="text-center">&copy; 2017. {settings.app.name}.</div>
       </Footer>

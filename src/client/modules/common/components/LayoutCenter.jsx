@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   layout: {
-    flex: 1,
+    flex: 3,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
@@ -35,10 +35,10 @@ const styles = StyleSheet.create({
     alignItems: 'stretch'
   },
   content: {
-    flexGrow: 3
+    flexGrow: 1
   },
   offset: {
-    flexGrow: 3
+    flexGrow: 1
   }
 });
 

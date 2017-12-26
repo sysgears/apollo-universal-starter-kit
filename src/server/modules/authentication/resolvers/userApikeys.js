@@ -13,7 +13,7 @@ export default function addResolvers(obj) {
 function addTypeResolvers(obj) {
   obj.UserAuth.apikeys = createBatchResolver(async (source, args, context) => {
     let ids = _.uniq(source.map(s => s.userId));
-    const apikeys = await context.Authn.getApiKeysForUsers(ids);
+    const apikeys = await context.Authn.getApiKeysForUsers({ ids });
     const ret = reconcileBatchOneToMany(source, apikeys, 'userId');
     return ret;
   });

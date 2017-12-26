@@ -34,6 +34,7 @@ const profileName = cookies => {
   }
 };
 
+// Might want to break this out into a common component or HOC
 const AuthNav = withCookies(({ children, cookies, scopes }) => {
   // TODO add context and params here?
   return checkAuth(cookies, scopes) ? children : null;

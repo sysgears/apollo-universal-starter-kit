@@ -1,0 +1,9 @@
+#import "./FragCurrentUserInfo.graphql"
+#import "./FragCurrentUserAuth.graphql"
+
+query currentUser {
+  currentUser {
+    ...CurrentUserInfo
+    ...CurrentUserAuth
+  }
+}

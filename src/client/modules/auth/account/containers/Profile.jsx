@@ -5,7 +5,7 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import ProfileView from '../components/ProfileView';
+import ProfileView from '../components/View';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 

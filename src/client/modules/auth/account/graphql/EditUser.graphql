@@ -1,0 +1,13 @@
+#import "./FragCurrentUserInfo.graphql"
+
+mutation editUser($input: EditUserInput!) {
+  editUser(input: $input) {
+    user {
+      ...CurrentUserInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

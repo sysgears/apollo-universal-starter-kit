@@ -1,18 +1,21 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormInput } from './Form';
 
 @Component({
   selector: 'render-checkbox',
   template: `
-    <label for="{{input.id}}" class="form-check-label">
-      <input type="checkbox"
-             id="{{input.id}}"
-             [ngrxFormControlState]="reduxForm.controls[input.name]"
-             [ngrxEnableFocusTracking]="true"
-             name="{{input.name}}"
-             class="form-check-input"
-             (ngModelChange)="changed({ id: input.id, value: $event })"
-             [(ngModel)]="reduxForm?.value[input.name]" />
+    <label for="{{input.id}}" class="ant-checkbox-wrapper">
+        <span class="ant-checkbox" [ngClass]="{'ant-checkbox-checked': reduxForm?.value[input.name]}" >
+          <input type="checkbox"
+                 id="{{input.id}}"
+                 name="{{input.name}}"
+                 [ngrxFormControlState]="reduxForm.controls[input.name]"
+                 [ngrxEnableFocusTracking]="true"
+                 class="ant-checkbox-input"
+                 (ngModelChange)="changed({ id: input.id, value: $event })"
+                 [(ngModel)]="reduxForm?.value[input.name]"/>
+          <span class="ant-checkbox-inner"></span>
+        </span>
       {{input.label}}
     </label>
 

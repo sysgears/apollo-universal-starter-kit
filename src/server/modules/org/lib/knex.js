@@ -9,6 +9,7 @@ import log from '../../../../common/log';
 import {
   createAdapter,
   listAdapter,
+  pagingAdapter,
   getAdapter,
   updateAdapter,
   deleteAdapter,
@@ -23,6 +24,7 @@ export default class Org {
    */
 
   list = listAdapter('orgs', { selects: ['*', 'id AS orgId'] });
+  paging = pagingAdapter('orgs', { selects: ['*', 'id AS orgId'] });
   getMany = listAdapter('orgs', { selects: ['*', 'id AS orgId'] });
   get = getAdapter('orgs', { selects: ['*', 'id AS orgId'] });
   getByName = getAdapter('orgs', { idField: 'name', selects: ['*', 'id AS orgId'] });

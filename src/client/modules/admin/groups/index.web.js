@@ -1,8 +1,8 @@
 import Feature from '../connector';
 
-import GroupsList from './containers/List';
+import GroupsMain from './containers/Main';
 
 export default new Feature({
   sideNavItem: 'groups',
-  viewComponent: GroupsList
+  viewComponent: GroupsMain
 });

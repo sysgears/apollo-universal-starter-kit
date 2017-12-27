@@ -8,6 +8,14 @@ extend type Query {
     limit: Int
   ): [Org]
 
+  pagingOrgs(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
+    offset: Int
+    limit: Int
+  ): PagingOrgsResponse
+
   # Get all groups, possibly filtered and ordered
   myOrgs(
     filters: [FilterInput]
@@ -64,6 +72,12 @@ extend type Group {
 #
 # Org Types
 #
+
+type PagingOrgsResponse {
+  data: [Org]
+  total: Int
+  pages: Int
+}
 
 type MyOrgsPayload {
   org: [Org]

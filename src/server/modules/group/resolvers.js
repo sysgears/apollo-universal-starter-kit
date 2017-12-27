@@ -14,6 +14,16 @@ export default pubsub => ({
       let ret = await context.Group.list(args);
       return ret;
     }),
+    pagingGroups: withAuth(['group/all/view'], async (obj, args, context) => {
+      console.log('Query.pagingGroups - args', args);
+      const res = await context.Group.paging(args);
+      console.log('Query.pagingGroups - res', res);
+      return {
+        data: res.results,
+        total: res.count,
+        pages: Math.trunc(res.count / args.limit) + 1
+      };
+    }),
     myGroups: async (obj, args, context) => {
       try {
         args.memberId = context.user.id;

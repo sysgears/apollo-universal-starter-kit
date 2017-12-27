@@ -13,6 +13,16 @@ export default pubsub => ({
     orgs: withAuth(['org/all/list'], (obj, args, context) => {
       return context.Org.list(args);
     }),
+    pagingOrgs: withAuth(['org/all/view'], async (obj, args, context) => {
+      console.log('Query.pagingOrgs - args', args);
+      const res = await context.Org.paging(args);
+      console.log('Query.pagingOrgs - res', res);
+      return {
+        data: res.results,
+        total: res.count,
+        pages: Math.trunc(res.count / args.limit) + 1
+      };
+    }),
     myOrgs: async (obj, args, context) => {
       try {
         args.memberId = context.user.id;

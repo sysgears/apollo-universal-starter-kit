@@ -1,6 +1,7 @@
 import {
   createAdapter,
   listAdapter,
+  pagingAdapter,
   getAdapter,
   updateAdapter,
   deleteAdapter,
@@ -15,6 +16,7 @@ export default class Group {
    */
 
   list = listAdapter('groups', { selects: ['*', 'id AS groupId'] });
+  paging = pagingAdapter('groups', { selects: ['*', 'id AS groupId'] });
   getMany = listAdapter('groups', { selects: ['*', 'id AS groupId'] });
   get = getAdapter('groups', { selects: ['*', 'id AS groupId'] });
   getByName = getAdapter('groups', { idField: 'name', selects: ['*', 'id AS groupId'] });

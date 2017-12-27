@@ -1,0 +1,31 @@
+query orgs(
+  $offset: Int
+  $limit: Int
+  $orderBys: [OrderByInput]
+  $filters: [FilterInput]
+) {
+  pagingOrgs(
+    offset: $offset
+    limit: $limit
+    orderBys: $orderBys
+    filters: $filters
+  ) {
+    data {
+      createdAt
+      updatedAt
+      isActive
+      id
+      name
+      profile {
+        displayName
+        description
+      }
+      roles {
+        id
+        name
+      }
+    }
+    total
+    pages
+  }
+}

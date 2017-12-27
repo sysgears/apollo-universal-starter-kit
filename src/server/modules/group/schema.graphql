@@ -1,7 +1,6 @@
 extend type Query {
-  # getFlex, should turn off in production
-  groupsFlex(
-    joinClauses: [JoinClauseInput]
+  # Get all groups, possibly filtered and ordered
+  groups(
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
@@ -9,13 +8,13 @@ extend type Query {
     limit: Int
   ): [Group]
 
-  # Get all groups, possibly filtered and ordered
-  groups(
+  pagingGroups(
     filters: [FilterInput]
     orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
     offset: Int
     limit: Int
-  ): [Group]
+  ): PagingGroupsResponse
 
   # Get all groups, possibly filtered and ordered
   myGroups(
@@ -69,6 +68,12 @@ extend type User {
 #
 # Group Types
 #
+
+type PagingGroupsResponse {
+  data: [Group]
+  total: Int
+  pages: Int
+}
 
 type MyGroupsPayload {
   groups: [Group]

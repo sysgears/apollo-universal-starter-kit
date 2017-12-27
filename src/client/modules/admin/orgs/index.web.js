@@ -1,8 +1,8 @@
 import Feature from '../connector';
 
-import OrgsList from './containers/List';
+import OrgsMain from './containers/Main';
 
 export default new Feature({
   sideNavItem: 'organizations',
-  viewComponent: OrgsList
+  viewComponent: OrgsMain
 });

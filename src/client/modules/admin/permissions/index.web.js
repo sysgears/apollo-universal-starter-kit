@@ -1,8 +1,8 @@
 import Feature from '../connector';
 
-import PermissionsList from './containers/List';
+import PermissionsMain from './containers/Main';
 
 export default new Feature({
   sideNavItem: 'permissions',
-  viewComponent: PermissionsList
+  viewComponent: PermissionsMain
 });

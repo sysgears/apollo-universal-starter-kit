@@ -1,12 +1,21 @@
 extend type Query {
   permissions(
-    ids: [ID!]
-    filters: [FilterInput!]
-    orderBys: [OrderByInput!]
-    groupBys: [GroupByInput!]
+    ids: [ID]
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
     offset: Int
     limit: Int
   ): [PermissionInfo]
+
+  pagingPermissions(
+    ids: [ID]
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
+    offset: Int
+    limit: Int
+  ): PagingPermissionResponse
 
   permission(id: ID!): PermissionInfo
 }
@@ -20,9 +29,15 @@ extend type Mutation {
 extend type Subscription {
 }
 
+type PagingPermissionResponse {
+  data: [PermissionInfo]
+  total: Int
+  pages: Int
+}
+
 type RoleInfo {
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: String
+  updatedAt: String
   id: ID
   name: String
   roleId: ID
@@ -33,8 +48,8 @@ type RoleInfo {
 }
 
 type PermissionInfo {
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: String
+  updatedAt: String
   id: ID
   name: String
 
@@ -47,11 +62,11 @@ type PermissionInfo {
 }
 
 input PermissionInput {
-  name: String!
+  name: String
 
-  resource: String!
-  relation: String!
-  verb: String!
+  resource: String
+  relation: String
+  verb: String
 
   displayName: String
   description: String

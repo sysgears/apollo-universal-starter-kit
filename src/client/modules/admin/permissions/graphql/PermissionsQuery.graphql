@@ -1,0 +1,27 @@
+query permissionsQuery(
+  $offset: Int
+  $limit: Int
+  $orderBys: [OrderByInput]
+  $filters: [FilterInput]
+) {
+  pagingPermissions(
+    offset: $offset
+    limit: $limit
+    orderBys: $orderBys
+    filters: $filters
+  ) {
+    data {
+      createdAt
+      updatedAt
+      id
+      name
+      resource
+      relation
+      verb
+      displayName
+      description
+    }
+    total
+    pages
+  }
+}

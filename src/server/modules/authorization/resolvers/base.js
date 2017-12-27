@@ -70,6 +70,17 @@ function addQueries(obj) {
     return context.Authz.getPermissions(args);
   };
 
+  obj.Query.pagingPermissions = async (obj, args, context) => {
+    console.log('Query.pagingPermissions - args', args);
+    const res = await context.Authz.pagingPermissions(args);
+    console.log('Query.pagingPermissions - res', res);
+    return {
+      data: res.results,
+      total: res.count,
+      pages: Math.trunc(res.count / args.limit) + 1
+    };
+  };
+
   obj.Query.permission = (obj, args, context) => {
     return context.Authz.getPermissions({ ids: [args.id] });
   };

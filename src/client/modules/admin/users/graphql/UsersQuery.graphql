@@ -1,0 +1,21 @@
+#import "./User.graphql"
+
+query users(
+  $offset: Int
+  $limit: Int
+  $orderBys: [OrderByInput]
+  $filters: [FilterInput]
+) {
+  pagingUsers(
+    offset: $offset
+    limit: $limit
+    orderBys: $orderBys
+    filters: $filters
+  ) {
+    data {
+      ...UserInfo
+    }
+    total
+    pages
+  }
+}

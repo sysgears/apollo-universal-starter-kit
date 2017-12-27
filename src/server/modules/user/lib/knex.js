@@ -1,6 +1,7 @@
 import {
   createAdapter,
   listAdapter,
+  pagingAdapter,
   getAdapter,
   updateAdapter,
   deleteAdapter
@@ -8,7 +9,9 @@ import {
 
 export default class User {
   list = listAdapter('users', { selects: ['*', 'id AS userId'] });
+  paging = pagingAdapter('users', { selects: ['*', 'id AS userId'] });
   getMany = listAdapter('users', { selects: ['*', 'id AS userId'] });
+
   get = getAdapter('users', { selects: ['*', 'id AS userId'] });
   getByName = getAdapter('users', { idField: 'name', selects: ['*', 'id AS userId'] });
 

@@ -1,0 +1,10 @@
+fragment UserBrief on User {
+  id
+  email
+  isActive
+  profile {
+    displayName
+    language
+    locale
+  }
+}

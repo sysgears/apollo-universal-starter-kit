@@ -7,6 +7,9 @@ export default function filterBuilder(queryBuilder, args) {
   if (filters) {
     let first = true;
     for (let filter of filters) {
+      if (!filter) {
+        continue;
+      }
       // Pre Filters Recursion
       if (filter.prefilters) {
         if (first) {

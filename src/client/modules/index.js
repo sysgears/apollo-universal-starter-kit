@@ -1,6 +1,8 @@
 import entities from './entities';
 import auth from './auth';
 
+import admin from './admin';
+
 import counter from './counter';
 import post from './post';
 import upload from './upload';
@@ -20,6 +22,8 @@ let features = [auth, entities, counter, post, upload, contact];
 if (settings.subscription.enabled) {
   features.push(subscription);
 }
+
+features.push(admin);
 
 // This should be last because of routing?
 features.push(pageNotFound);

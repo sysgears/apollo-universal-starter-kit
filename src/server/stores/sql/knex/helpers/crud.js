@@ -187,6 +187,80 @@ export function listAdapter(table, args) {
   };
 }
 
+export function pagingAdapter(table, args) {
+  let idField = 'id';
+  let selects = ['*'];
+  let localFilters = null;
+  let localJoins = null;
+  if (args) {
+    if (args.idField) {
+      idField = decamelize(args.idField);
+    }
+    if (args.selects) {
+      selects = _.map(args.selects, elem => decamelize(elem).replace('_a_s', 'AS'));
+    }
+    if (args.joins) {
+      localJoins = args.joins;
+    }
+    if (args.filters) {
+      localFilters = args.filters;
+    }
+  }
+
+  const makeBuilder = function(args, trx) {
+    let builder = knex.select(...selects).from(table);
+
+    if (args.ids) {
+      builder.whereIn(idField, args.ids);
+    }
+
+    if (localJoins) {
+      args.joins = args.joins ? args.joins.concat(localJoins) : localJoins;
+    }
+    if (localFilters) {
+      args.filters = args.filters ? args.filters.concat(localFilters) : localFilters;
+    }
+
+    // add filter conditions
+    builder = filterBuilder(builder, args);
+
+    // add filter conditions
+    builder = filterBuilder(builder, args);
+
+    // paging and ordering
+    builder = ordering(builder, args);
+    // builder = paging(builder, args);
+
+    if (trx) {
+      builder.transacting(trx);
+    }
+
+    return builder;
+  };
+
+  return async function(args, trx) {
+    try {
+      // let countRes = await makeBuilder(args,trx).count(idField);
+      let countRes = await makeBuilder(args, trx).count(idField);
+      let count = countRes[0]['count(`' + idField + '`)'];
+
+      // let rows = await makeBuilder(args, trx)
+      let rows = await paging(makeBuilder(args, trx), args);
+
+      let res = _.filter(rows, r => r[idField] !== null);
+      res = camelizeKeys(res);
+      return {
+        count,
+        results: res
+      };
+      // return orderedFor(res, ids, 'roleId', false);
+    } catch (e) {
+      log.error(`Error in ${table}.list(${idField})`, e);
+      throw e;
+    }
+  };
+}
+
 export function getAdapter(table, args) {
   let idField = 'id';
   let selects = ['*'];

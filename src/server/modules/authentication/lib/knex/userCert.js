@@ -9,7 +9,7 @@ import {
 
 export const searchUserCertificate = findAdapter('user_certificates');
 
-export const getUserFromCertificate = getAdapter('user_certificates', 'key');
+export const getUserFromCertificate = getAdapter('user_certificates', { idField: 'serial' });
 export const getCertificatesForUsers = getManyRelationAdapter('user_certificates', {
   idField: 'userId',
   elemField: 'name',

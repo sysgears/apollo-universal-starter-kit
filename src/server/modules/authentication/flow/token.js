@@ -60,8 +60,6 @@ export const removeTokenHeaders = req => {
 export const createToken = async (user, secret, refreshSecret) => {
   let tokenUser = pick(user, ['id', 'email']);
 
-  console.log(Authz);
-
   let roles = await Authz.getAllRolesForUser(tokenUser.id);
   tokenUser.roles = roles;
 

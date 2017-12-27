@@ -7,8 +7,19 @@ extend type Query {
     offset: Int
     limit: Int
   ): [User]
+
+  # Get all users, possibly filtered and ordered
+  pagingUsers(
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
+    offset: Int
+    limit: Int
+  ): PagingUsersResponse
+
   # Get user by id
   user(id: String!): User
+
   # Get current user
   currentUser: User
 }
@@ -28,6 +39,12 @@ extend type Subscription {
 #
 # User Types
 #
+
+type PagingUsersResponse {
+  data: [User]
+  total: Int
+  pages: Int
+}
 
 type UserPayload {
   user: User

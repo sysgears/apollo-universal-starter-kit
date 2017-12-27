@@ -9,7 +9,18 @@ import { reconcileBatchOneToOne } from '../../stores/sql/knex/helpers/batching';
 export default pubsub => ({
   Query: {
     users: withAuth(['user/all/view'], async (obj, args, context) => {
+      console.log('Query.users', args);
       return context.User.list(args);
+    }),
+    pagingUsers: withAuth(['user/all/view'], async (obj, args, context) => {
+      console.log('Query.pagingUsers - args', args);
+      const res = await context.User.paging(args);
+      console.log('Query.pagingUsers - res', res);
+      return {
+        data: res.results,
+        total: res.count,
+        pages: Math.trunc(res.count / args.limit) + 1
+      };
     }),
     user: withAuth(
       (obj, args, context) => {

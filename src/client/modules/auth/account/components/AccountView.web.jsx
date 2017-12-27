@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
-import changeCase from 'change-case';
-
-import { PageLayout, Container, Row, Col, ListGroup, ListItem, Card, CardTitle } from '../../../common/components/web';
+import { PageLayout } from '../../../common/components/web';
+import TabLayout from '../../../common/components/hoc/layouts/sidenav-tab-browser';
 
 import SubscriptionProfile from '../../../subscription/containers/SubscriptionProfile';
 
@@ -36,61 +35,7 @@ const renderMetaData = currentUser => {
   );
 };
 
-const hashes = ['profile', 'security', 'billing', 'subscriptions', 'organizations', 'groups'];
-
 class AccountView extends React.Component {
-  renderMenu(active) {
-    return (
-      <ListGroup>
-        <ListItem active action tag="a" account="/account" style={{ color: 'white' }}>
-          Account
-        </ListItem>
-        {hashes.map(H => {
-          if (H === active) {
-            return <ListItem style={{ color: '#0B0' }}>{changeCase.titleCase(H)}</ListItem>;
-          } else {
-            return (
-              <ListItem action tag="a" href={'/account#' + H} style={{ color: '#007bff' }}>
-                {changeCase.titleCase(H)}
-              </ListItem>
-            );
-          }
-        })}
-      </ListGroup>
-    );
-  }
-
-  renderContent(active) {
-    let { currentUser } = this.props;
-    console.log('currentUser', currentUser);
-
-    return (
-      <div>
-        <h4>{changeCase.titleCase(active) || 'Account'}</h4>
-        <hr />
-        {active === 'profile' && (
-          <div>
-            <UserInfo user={currentUser} />
-            <br />
-            <UserPersonal user={currentUser} />
-          </div>
-        )}
-
-        {active === 'groups' && (
-          <div>
-            <UserGroupList user={currentUser} />
-          </div>
-        )}
-
-        {active === 'organizations' && (
-          <div>
-            <UserOrgList user={currentUser} />
-          </div>
-        )}
-      </div>
-    );
-  }
-
   render() {
     let { loading, currentUser, location } = this.props;
 
@@ -102,21 +47,34 @@ class AccountView extends React.Component {
         </PageLayout>
       );
     } else if (currentUser) {
-      let hash = location.hash.substr(1);
+      const { location } = this.props;
+      const hash = location.hash.substr(1);
+
+      const mainview = {
+        name: 'account',
+        component: UserInfo
+      };
+
+      let subviews = [
+        {
+          name: 'profile',
+          component: UserPersonal
+        },
+        {
+          name: 'organizations',
+          component: UserOrgList
+        },
+        {
+          name: 'groups',
+          component: UserGroupList
+        }
+      ];
 
       return (
         <PageLayout>
-          {renderMetaData(currentUser)}
-          <Container>
-            <Row>
-              <Col xs={12} md={3} style={{ marginBottom: '2rem;' }}>
-                {this.renderMenu(hash)}
-              </Col>
-              <Col xs={12} md={9}>
-                {this.renderContent(hash)}
-              </Col>
-            </Row>
-          </Container>
+          {renderMetaData(hash)}
+
+          <TabLayout user={currentUser} mainview={mainview} subviews={subviews} activeTab={hash} />
         </PageLayout>
       );
     } else {

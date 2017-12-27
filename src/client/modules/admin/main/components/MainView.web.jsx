@@ -50,8 +50,6 @@ class AdminMainView extends React.Component {
       });
     }
 
-    console.log('subviews', subviews);
-
     return (
       <PageLayout>
         {renderMetaData(hash)}

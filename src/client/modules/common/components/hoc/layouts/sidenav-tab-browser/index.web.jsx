@@ -53,14 +53,15 @@ class Layout extends React.Component {
   renderContent() {
     const { activeTab, mainview, subviews } = this.props;
     console.log('activeTab:', activeTab);
+    console.log('tab-browser props', this.props);
 
     if (activeTab === '') {
       let View = mainview.component;
-      return <View />;
+      return <View {...this.props} />;
     } else {
       let activeView = _.find(subviews, v => v.name === activeTab);
       let View = activeView.component;
-      return <View />;
+      return <View {...this.props} />;
     }
   }
 

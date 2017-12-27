@@ -10,28 +10,39 @@ class Layout extends React.Component {
   renderMenu() {
     const { activeTab, mainview, subviews } = this.props;
     return (
-      <ListGroup>
-        <ListItem active action tag="a" href={'/' + mainview.name + '#'} style={{ color: 'white' }} key={mainview.name}>
-          {changeCase.titleCase(mainview.name)}
-        </ListItem>
+      <ListGroup style={{ listStyle: 'none' }}>
+        <li>
+          <ListItem
+            active
+            action
+            tag="a"
+            href={'/' + mainview.name + '#'}
+            style={{ color: 'white' }}
+            key={mainview.name}
+          >
+            {changeCase.titleCase(mainview.name)}
+          </ListItem>
+        </li>
         {subviews.map(view => {
-          if (view.name === activeTab) {
+          const name = view.name;
+          const linkUrl = '/' + mainview.name + '#' + name;
+          const Name = changeCase.titleCase(name);
+          console.log('link', activeTab, name, linkUrl);
+          if (name === activeTab) {
             return (
-              <ListItem style={{ color: '#0B0' }} key={view.name}>
-                {changeCase.titleCase(view.name)}
-              </ListItem>
+              <li>
+                <ListItem style={{ color: '#0B0' }} key={name}>
+                  <span style={{ color: '#0B0' }}>{Name}</span>
+                </ListItem>
+              </li>
             );
           } else {
             return (
-              <ListItem
-                action
-                tag="a"
-                href={'/' + mainview.name + '#' + view.name}
-                style={{ color: '#007bff' }}
-                key={view.name}
-              >
-                {changeCase.titleCase(view.name)}
-              </ListItem>
+              <li>
+                <ListItem action tag="a" href={linkUrl} style={{ color: '#007bff' }} key={name}>
+                  <span style={{ color: '#007bff' }}>{Name}</span>
+                </ListItem>
+              </li>
             );
           }
         })}
@@ -41,6 +52,7 @@ class Layout extends React.Component {
 
   renderContent() {
     const { activeTab, mainview, subviews } = this.props;
+    console.log('activeTab:', activeTab);
 
     if (activeTab === '') {
       let View = mainview.component;
@@ -53,6 +65,7 @@ class Layout extends React.Component {
   }
 
   render() {
+    console.log('Layout.render()');
     return (
       <Container>
         <Row>

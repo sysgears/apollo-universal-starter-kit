@@ -41,7 +41,7 @@ const RegisterWithApollo = compose(
             if (settings.subscription.enabled) {
               return history.push('/subscription');
             }
-            return history.push('/profile');
+            return history.push('/account');
           }
           if (navigation) {
             return navigation.goBack();

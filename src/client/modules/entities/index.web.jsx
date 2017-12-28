@@ -50,13 +50,6 @@ let entitiesScopes = [
 export default new Feature(
   {
     route: [<AuthRoute exact path="/entities" scopes={entitiesScopes} component={Entities} />],
-    navItem: (
-      <MenuItem key="entities">
-        <AuthNav scopes={entitiesScopes}>
-          <EntitiesMenuItem />
-        </AuthNav>
-      </MenuItem>
-    ),
     reducer: { entities: reducers }
   },
   ...subfeatures

@@ -13,7 +13,7 @@ describe('User UI works', () => {
 
   step('User page renders on mount', () => {
     app = renderer.mount(Routes);
-    renderer.history.push('/profile');
+    renderer.history.push('/account');
     content = app.find('#content');
     expect(content).to.not.be.empty;
   });

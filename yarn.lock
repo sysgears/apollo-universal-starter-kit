@@ -4591,38 +4591,6 @@ exp@47.1.1:
     "@expo/traveling-fastlane-darwin" "^1.0.15"
     "@expo/traveling-fastlane-linux" "^1.0.15"
 
-exp@47.1.4:
-  version "47.1.4"
-  resolved "https://registry.yarnpkg.com/exp/-/exp-47.1.4.tgz#5c0f4424ba00f0d05d6d4bcfee280a04483d2629"
-  dependencies:
-    "@expo/bunyan" "^1.8.10"
-    "@expo/json-file" "^5.2.0"
-    "@expo/ngrok" "2.3.0"
-    "@expo/simple-spinner" "^1.0.2"
-    babel-runtime "^6.9.2"
-    chalk "^2.0.1"
-    cli-table "^0.3.1"
-    commander "^2.9.0"
-    delay-async "^1.0.0"
-    es6-error "^3.0.0"
-    fs-extra "^4.0.2"
-    glob "^7.0.3"
-    indent-string "^3.1.0"
-    inquirer "^2.0.0"
-    lodash "^4.17.4"
-    mz "^2.6.0"
-    progress "^2.0.0"
-    qrcode-terminal "^0.11.0"
-    semver "^5.0.1"
-    slash "^1.0.0"
-    source-map-support "^0.4.1"
-    tmp "^0.0.33"
-    untildify "^3.0.2"
-    xdl "47.1.4"
-  optionalDependencies:
-    "@expo/traveling-fastlane-darwin" "^1.0.15"
-    "@expo/traveling-fastlane-linux" "^1.0.15"
-
 expand-brackets@^0.1.4:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/expand-brackets/-/expand-brackets-0.1.5.tgz#df07284e342a807cd733ac5af72411e581d1177b"
@@ -11754,9 +11722,9 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.65:
-  version "0.4.65"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.65.tgz#348d48514f6362a07a459340e7c0649822713e07"
+spinjs@^0.4.67:
+  version "0.4.67"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.67.tgz#5883f35bd2f8c1d12283792042828a1751f89627"
   dependencies:
     containerized "^1.0.2"
     debug "^3.1.0"
@@ -13230,7 +13198,7 @@ xcode@^0.9.1:
     simple-plist "^0.2.1"
     uuid "3.0.1"
 
-xdl@47.1.1, xdl@^47.1.1:
+xdl@47.1.1:
   version "47.1.1"
   resolved "https://registry.yarnpkg.com/xdl/-/xdl-47.1.1.tgz#571a7c475d27ed8b027b742f3389e496912dc193"
   dependencies:
@@ -13304,7 +13272,7 @@ xdl@47.1.1, xdl@^47.1.1:
     xmldom "^0.1.27"
     yesno "^0.0.1"
 
-xdl@47.1.4:
+xdl@^47.0.6:
   version "47.1.4"
   resolved "https://registry.yarnpkg.com/xdl/-/xdl-47.1.4.tgz#dabe4ca6f9c61520a69c95d502d1a3544d305cfb"
   dependencies:

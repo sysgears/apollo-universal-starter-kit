@@ -4,11 +4,11 @@ import LoginService from './Login';
 @Component({
   selector: 'auth-login',
   template: `
-    <menu-item *ngIf="!isAuth" class="nav-item">
+    <menu-item *ngIf="!isAuth">
       <nav-link [name]="'Sign In'" [to]="'/login'"></nav-link>
     </menu-item>
     <menu-item *ngIf="isAuth">
-      <nav-link [name]="'Logout'" [type]="'clickable'" (click)="logout()"></nav-link>
+      <nav-link [name]="'Logout'" [to]="''" [type]="'clickable'" (click)="logout()"></nav-link>
     </menu-item>
     <menu-item *ngIf="isAuth">
       <nav-link [name]="profileName" [to]="'/profile'"></nav-link>
@@ -49,7 +49,8 @@ class AuthLogin implements OnInit {
     <menu-item *ngIf="isAuth">
       <nav-link [name]="'Users'" [to]="'/users'"></nav-link>
     </menu-item>
-  `
+  `,
+  host: {'class': 'ant-menu-item'}
 })
 class AuthNav implements OnInit {
   @Input() public role: string;

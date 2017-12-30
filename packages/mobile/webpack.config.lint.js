@@ -1,1 +1,1 @@
-module.exports = require('spinjs').createWebpackConfig(require.resolve('./.spinrc.json'), 'android');
+module.exports = require('spinjs').createWebpackConfig(__dirname, '.spinrc.json', 'android');

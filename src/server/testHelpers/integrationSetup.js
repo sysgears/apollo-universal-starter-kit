@@ -12,7 +12,7 @@ import WebSocket from 'ws';
 import { LoggingLink } from 'apollo-logger';
 
 import '../../../knexfile';
-import knex from '../sql/connector';
+import knex from '../sql/connection';
 import settings from '../../../settings';
 
 chai.use(chaiHttp);

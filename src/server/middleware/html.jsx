@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
-import modules from '../../client/modules';
-import { styles } from '../../client/modules/common/components/web';
+import plugins from '../../client/plugins';
+import { styles } from '../../client/plugins/common/components/web';
 
 const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent(); // react-helmet html document tags
@@ -28,12 +28,12 @@ const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) =>
         {!!__DEV__ && (
           <style
             dangerouslySetInnerHTML={{
-              __html: styles._getCss() + modules.stylesInserts.map(style => style._getCss()).join('')
+              __html: styles._getCss() + plugins.stylesInserts.map(style => style._getCss()).join('')
             }}
           />
         )}
         {!!css && css}
-        {modules.scriptsInserts.map((script, i) => {
+        {plugins.scriptsInserts.map((script, i) => {
           if (script) {
             return <script key={i} src={script} />;
           }

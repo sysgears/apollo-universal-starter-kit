@@ -16,7 +16,7 @@ class Layout extends React.Component {
             active
             action
             tag="a"
-            href={'/' + mainview.name + '#'}
+            href={(mainview.baseUrl ? mainview.baseUrl : '/' + mainview.name) + '#'}
             style={{ color: 'white' }}
             key={mainview.name}
           >
@@ -25,7 +25,7 @@ class Layout extends React.Component {
         </li>
         {subviews.map(view => {
           const name = view.name;
-          const linkUrl = '/' + mainview.name + '#' + name;
+          const linkUrl = (mainview.baseUrl ? mainview.baseUrl : '/' + mainview.name) + '#' + name;
           const Name = changeCase.titleCase(name);
           console.log('link', activeTab, name, linkUrl);
           if (name === activeTab) {

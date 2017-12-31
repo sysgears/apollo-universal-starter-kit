@@ -1,25 +1,48 @@
+/* eslint-disable no-unused-vars */
+import _ from 'lodash';
+import { camelizeKeys } from 'humps';
+
 import {
   listAdapter,
-  findAdapter,
   getAdapter,
   createWithoutIdAdapter,
   deleteMultiConditionAdapter,
   getManyRelationAdapter
 } from '../../../../stores/sql/knex/helpers/crud';
 
-export const searchUserCertificate = findAdapter('user_certificates');
+import selectAdapter from '../../../../stores/sql/knex/helpers/select';
 
-export const getUserFromCertificate = getAdapter('user_certificates', { idField: 'serial' });
-export const getCertificatesForUsers = getManyRelationAdapter('user_certificates', {
-  idField: 'userId',
+export const listUserCertificate = listAdapter({ table: 'user_certificates' });
+export const pageUserCertificate = listAdapter({ table: 'user_certificates' });
+export const createUserCertificate = createWithoutIdAdapter({ table: 'user_certificates' });
+export const deleteUserCertificate = deleteMultiConditionAdapter({ table: 'user_certificates' });
+
+export const getUserFromCertificate = getAdapter({ table: 'user_certificates', idField: 'serial' });
+
+export const getCertificatesForUserIds = getManyRelationAdapter({
+  table: 'user_certificates',
   elemField: 'name',
-  collectionField: 'userId'
+  collectionField: 'user_id'
 });
 
-export const listUserCertificate = listAdapter('user_certificates');
-export const createUserCertificate = createWithoutIdAdapter('user_certificates');
-export const deleteUserCertificate = deleteMultiConditionAdapter('user_certificates');
+export const searchUserCertificate = async (args, trx) => {
+  const rows = await searchUserCertificateSelector(args, trx);
+  return camelizeKeys(rows);
+};
 
-export async function getUserFromSerial(serial, trx) {
-  return getUserFromCertificate(serial, trx);
-}
+const searchUserCertificateSelector = selectAdapter({
+  table: 'user_certificates',
+  filters: [
+    {
+      field: 'user_id',
+      compare: '=',
+      valueExtractor: args => args.userId
+    },
+    {
+      bool: 'and',
+      field: 'name',
+      compare: '=',
+      valueExtractor: args => args.name
+    }
+  ]
+});

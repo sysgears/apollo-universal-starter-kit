@@ -1,11 +1,10 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
 import { Container, Row, Col, PageLayout, Button } from '../../../common/components/web';
-
-import GroupsFilter from '../containers/GroupsFilter';
-import GroupsList from '../containers/GroupsList';
 
 import settings from '../../../../../../settings';
 
@@ -43,8 +42,6 @@ const GroupsView = () => {
           </Row>
         </Container>
         <hr />
-        <GroupsFilter />
-        <GroupsList />
       </div>
     </PageLayout>
   );

@@ -9,7 +9,7 @@ import log from '../../../../common/log';
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
 
-import { checkAuth } from '../../../../common/authValidation';
+import { checkAuth } from '../../../../common/auth/client';
 
 const profileName = cookies => {
   let token = null;
@@ -128,7 +128,34 @@ AuthLoggedIn.propTypes = {
   to: PropTypes.string
 };
 
-const AuthRoute = withCookies(({ component: Component, cookies, scopes, context, ...rest }) => {
+const AuthMultiRoute = withCookies(({ cookies, context, scopeComponentMap, redirect, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={props => {
+        // console.log('PROPS', props);
+        let params = {};
+        if (props.match) {
+          params = props.match.params;
+        } else if (props.navigation) {
+          params = props.navigation.state.params;
+        }
+
+        for (let scoping of scopeComponentMap) {
+          let pass = checkAuth(cookies, scoping.scopes, context, params);
+          if (pass) {
+            let Component = scoping.component;
+            return <Component {...props} />;
+          }
+        }
+
+        return <Redirect to={{ pathname: redirect ? redirect : '/login' }} />;
+      }}
+    />
+  );
+});
+
+const AuthRoute = withCookies(({ component: Component, cookies, scopes, context, redirect, ...rest }) => {
   return (
     <Route
       {...rest}
@@ -143,7 +170,7 @@ const AuthRoute = withCookies(({ component: Component, cookies, scopes, context,
         return checkAuth(cookies, scopes, context, params) ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{ pathname: '/login' }} />
+          <Redirect to={{ pathname: redirect ? redirect : '/login' }} />
         );
       }}
     />
@@ -189,4 +216,5 @@ export { AuthLoggedIn };
 export { AuthLoginWithApollo as AuthLogin };
 export { AuthProfile };
 export { AuthRoute };
+export { AuthMultiRoute };
 export { AuthLoggedInRoute };

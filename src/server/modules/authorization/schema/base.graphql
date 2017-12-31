@@ -53,6 +53,9 @@ type PermissionInfo {
   id: ID
   name: String
 
+  permissionId: ID
+  permissionName: String
+
   resource: String
   relation: String
   verb: String

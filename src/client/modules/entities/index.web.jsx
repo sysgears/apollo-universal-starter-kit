@@ -1,20 +1,9 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
-import { Route, NavLink } from 'react-router-dom';
-import { MenuItem } from '../../modules/common/components/web';
-
-import Entities from './containers/Entities';
-import EntitiesMenuItem from './components/EntitiesMenuItem';
-import reducers from './reducers';
+import Feature from '../connector';
 
 import orgs from './orgs';
 import groups from './groups';
 import users from './users';
 import serviceaccounts from './serviceaccounts';
-
-import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from '../../modules/auth/containers/Auth';
-
-import Feature from '../connector';
 
 import settings from '../../../../settings';
 
@@ -38,19 +27,4 @@ if (config.serviceaccounts.enabled) {
   subfeatures.push(serviceaccounts);
 }
 
-let entitiesScopes = [
-  'entities/all/view',
-  'org/all/view',
-  'org/member/view',
-  'group/all/view',
-  'group/member/view',
-  'user/all/view'
-];
-
-export default new Feature(
-  {
-    route: [<AuthRoute exact path="/entities" scopes={entitiesScopes} component={Entities} />],
-    reducer: { entities: reducers }
-  },
-  ...subfeatures
-);
+export default new Feature(...subfeatures);

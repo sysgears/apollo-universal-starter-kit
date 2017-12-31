@@ -1,5 +1,3 @@
-import { decamelize } from 'humps';
-
 export default function filterBuilder(queryBuilder, args) {
   let { filters } = args;
 
@@ -10,6 +8,10 @@ export default function filterBuilder(queryBuilder, args) {
       if (!filter) {
         continue;
       }
+      if (filter.applyWhen && !filter.applyWhen(args)) {
+        continue;
+      }
+
       // Pre Filters Recursion
       if (filter.prefilters) {
         if (first) {
@@ -41,7 +43,6 @@ export default function filterBuilder(queryBuilder, args) {
         if (filter.table) {
           column = filter.table + '.' + column;
         }
-        column = decamelize(column);
 
         let compare = '=';
         if (filter.compare) {

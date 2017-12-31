@@ -56,6 +56,6 @@ export default User => async (req, res, next) => {
     req.user = newToken.user;
   }
 
-  console.log('Token Middleware - tokenUser', req.user);
+  // console.log('Token Middleware - tokenUser', req.user);
   next();
 };

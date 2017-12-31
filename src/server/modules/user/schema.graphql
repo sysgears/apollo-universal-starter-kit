@@ -8,7 +8,7 @@ extend type Query {
     limit: Int
   ): [User]
 
-  # Get all users, possibly filtered and ordered
+  # Get all users with paging, possibly filtered and ordered
   pagingUsers(
     filters: [FilterInput]
     orderBys: [OrderByInput]
@@ -22,6 +22,16 @@ extend type Query {
 
   # Get current user
   currentUser: User
+
+  # search for users, some limit on context may occur
+  searchUsers(
+    searchText: String!
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
+    offset: Int
+    limit: Int
+  ): SearchUsersResponse
 }
 
 extend type Mutation {
@@ -40,10 +50,18 @@ extend type Subscription {
 # User Types
 #
 
-type PagingUsersResponse {
-  data: [User]
-  total: Int
+type SearchUsersResponse {
+  results: [User]
+  count: Int
   pages: Int
+  errors: [FieldError!]
+}
+
+type PagingUsersResponse {
+  results: [User]
+  count: Int
+  pages: Int
+  errors: [FieldError!]
 }
 
 type UserPayload {
@@ -56,6 +74,7 @@ type User {
   createdAt: String
   updatedAt: String
 
+  userId: String!
   id: String!
   email: String!
   isActive: Boolean

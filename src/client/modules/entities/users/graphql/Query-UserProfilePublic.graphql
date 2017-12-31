@@ -1,0 +1,11 @@
+query userPublicProfile($id: String!) {
+  user(id: $id) {
+    id
+    email
+    profile {
+      displayName
+      locale
+      language
+    }
+  }
+}

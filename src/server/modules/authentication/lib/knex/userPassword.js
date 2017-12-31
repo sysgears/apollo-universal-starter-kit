@@ -62,7 +62,7 @@ export async function registerUser(newUser, trx) {
     // TODO set role, based on method enabled
     // let ret = await createUserRole(id, 'user');
 
-    const user = await User.get(id, trx);
+    const user = await User.get({ id }, trx);
 
     return user;
   } catch (e) {

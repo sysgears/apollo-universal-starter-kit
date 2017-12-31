@@ -1,0 +1,17 @@
+query userPrivateProfile($id: String!) {
+  user(id: $id) {
+    id
+    email
+    profile {
+      displayName
+      locale
+      language
+
+      title
+      firstName
+      middleName
+      lastName
+      suffix
+    }
+  }
+}

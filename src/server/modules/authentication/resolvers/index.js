@@ -1,13 +1,3 @@
-/*eslint-disable no-unused-vars*/
-import { _ } from 'lodash';
-import { createBatchResolver } from 'graphql-resolve-batch';
-
-import FieldError from '../../../../common/FieldError';
-import { withAuth } from '../../../../common/authValidation';
-import { reconcileBatchOneToOne } from '../../../stores/sql/knex/helpers/batching';
-
-import apikeyResolvers from './apikey';
-
 import userBaseResolvers from './userBase';
 import userPasswordResolvers from './userPassword';
 import userPasswordlessResolvers from './userPasswordless';
@@ -40,8 +30,6 @@ let obj = {
 
 obj = userBaseResolvers(obj);
 
-console.log('OBJ', obj);
-
 // Configurable User Authentication
 
 if (authn.password.enabled) {
@@ -53,7 +41,6 @@ if (authn.passwordless.enabled) {
 }
 
 if (authn.apikey.enabled) {
-  obj = apikeyResolvers(obj);
   obj = userApikeyResolvers(obj);
 }
 
@@ -85,4 +72,5 @@ if (settings.entities.serviceaccounts.enabled === true) {
   }
 }
 
+/* eslint-disable no-unused-vars */
 export default pubsub => obj;

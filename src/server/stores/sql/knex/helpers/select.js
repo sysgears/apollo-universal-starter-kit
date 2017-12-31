@@ -1,0 +1,119 @@
+import knex from '../client';
+import log from '../../../../../common/log';
+
+import paging from './paging';
+import ordering from './ordering';
+import grouping from './grouping';
+import joinBuilder from './joins';
+import filterBuilder from './filters';
+
+/*eslint-disable no-unused-vars*/
+
+export default function selectAdapter(options) {
+  // defaults and local options obj
+  const opts = {
+    name: options.name || options.table + ' - selectAdapter',
+    table: options.table,
+    selects: options.selects || ['*'],
+    idField: options.idField || 'id',
+    filters: options.filters,
+    joins: options.joins,
+    orderBys: options.orderBys,
+    groupBys: options.groupBys,
+    offset: options.offset ? options.offset : 0,
+    limit: options.limit ? options.limit : 0,
+    printSQL: options.printSQL,
+    count: options.count,
+    countDistinct: options.countDistinct,
+    onlyCount: options.onlyCount,
+    withCount: options.withCount
+  };
+
+  return async function(args, trx) {
+    try {
+      // process pre-set filters
+      for (let filter of opts.filters) {
+        if (filter.valueExtractor) {
+          filter.value = filter.valueExtractor(args);
+        }
+        if (filter.valuesExtractor) {
+          filter.values = filter.valuesExtractor(args);
+        }
+
+        // TODO add checks for other filter fields
+      }
+
+      // merge filters and joinClauses
+      args.filters = opts.filters ? opts.filters.concat(args.filters) : args.filters;
+      args.joins = opts.joins ? opts.joins.concat(args.joins) : args.joins;
+      args.orderBys = opts.orderBys ? opts.orderBys.concat(args.orderBys) : args.orderBys;
+      args.groupBys = opts.groupBys ? opts.groupBys.concat(args.groupBys) : args.groupBys;
+
+      // supply default paging options
+      args.offset = args.offset ? args.offset : opts.offset;
+      args.limit = args.limit ? args.limit : opts.limit;
+
+      // merge extra
+      args.printSQL = args.printSQL ? args.printSQL : opts.printSQL;
+      args.count = args.count ? args.count : opts.count;
+      args.countDistinct = args.countDistinct ? args.countDistinct : opts.countDistinct;
+      args.onlyCount = args.onlyCount ? args.onlyCount : opts.onlyCount;
+      args.withCount = args.withCount ? args.withCount : opts.withCount;
+
+      // local function
+      const makeBuilder = function(args, trx) {
+        let builder = knex.select(...(args.selectOverride || opts.selects)).from(opts.table);
+
+        // add join conditions
+        builder = joinBuilder(builder, args);
+
+        // add filter conditions
+        builder = filterBuilder(builder, args);
+
+        // paging, ordering, grouping
+        builder = paging(builder, args);
+        builder = ordering(builder, args);
+        builder = grouping(builder, args);
+
+        if (trx) {
+          builder.transacting(trx);
+        }
+
+        return builder;
+      };
+
+      if (args.printSQL) {
+        const sql = await makeBuilder(args, trx).toString();
+        console.log(`${opts.name} - SQL`, sql);
+      }
+
+      let count = null;
+      if (args.count) {
+        const countRes = await makeBuilder(args, trx).count(args.count);
+        const cnt = countRes[0]['count(`' + opts.idField + '`)'];
+        if (args.onlyCount) {
+          return cnt;
+        }
+        count = cnt;
+      }
+      if (args.countDistinct) {
+        const countRes = await makeBuilder(args, trx).countDistinct(args.countDistinct);
+        const cnt = countRes[0]['count(`' + opts.idField + '`)'];
+        if (args.onlyCount) {
+          return cnt;
+        }
+        count = cnt;
+      }
+
+      const rows = await makeBuilder(args, trx);
+
+      if (args.withCount) {
+        return { rows, count };
+      }
+      return rows;
+    } catch (e) {
+      log.error(`Error in ${opts.name}.selectAdapter()`, e);
+      throw e;
+    }
+  };
+}

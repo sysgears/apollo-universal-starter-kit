@@ -1,0 +1,13 @@
+#import "./Group.graphql"
+
+mutation removeGroupMember($groupId: String!, $userId: String!) {
+  removeUserFromGroup(groupId: $groupId, userId: $userId) {
+    group {
+      ...GroupInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

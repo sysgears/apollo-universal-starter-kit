@@ -3,7 +3,7 @@ import { _ } from 'lodash';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
 import FieldError from '../../../common/FieldError';
-import { withAuth } from '../../../common/authValidation';
+import { authSwitch } from '../../../common/auth/server';
 import { reconcileBatchOneToOne } from '../../stores/sql/knex/helpers/batching';
 
 export default pubsub => ({

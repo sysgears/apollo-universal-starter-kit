@@ -60,7 +60,7 @@ export const oauthLogin = async (inputUser, cb) => {
     }
 
     // return the usual User object
-    let retUser = await User.get(user.id);
+    let retUser = await User.get({ id: user.id });
     return cb(null, retUser);
   } catch (err) {
     return cb(err, {});

@@ -2,8 +2,9 @@
 import { _ } from 'lodash';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
+import { authSwitch } from '../../../../common/auth/server';
 import FieldError from '../../../../common/FieldError';
-import { withAuth } from '../../../../common/authValidation';
+
 import {
   reconcileBatchOneToOne,
   reconcileBatchOneToMany,
@@ -86,15 +87,64 @@ function addTypeResolvers(obj) {
     })
   };
 
-  obj.User.groupRoles = createBatchResolver(async (source, args, context) => {
+  obj.User.groupRoles = createBatchResolver(async (source, args, context, info) => {
+    // console.log("User.groupRoles - source", source)
+
+    // look at path to determine if we need to filter at all
+    let path = info.path;
+    let matchFilter = null;
+    let resultFilter = null;
+    let selectOverrides = null;
+    let joins = [];
+    let filters = [];
+    while (path) {
+      if (path.key === 'orgs' || path.key === 'org') {
+        let oids = _.uniq(source.map(s => s.orgId));
+
+        joins.push({
+          table: 'orgs_groups',
+          join: 'left',
+          args: ['orgs_groups.group_id', 'group_roles.group_id']
+        });
+        filters.push({
+          bool: 'and',
+          table: 'orgs_groups',
+          field: 'org_id',
+          compare: 'in',
+          values: oids
+        });
+
+        selectOverrides = ['group_roles.*', 'orgs_groups.group_id', 'orgs_groups.org_id', 'group_roles.id AS role_id'];
+
+        resultFilter = 'orgId';
+        break;
+      }
+      if (path.key === 'groups' || path.key === 'groups') {
+        resultFilter = 'groupId';
+        break;
+      }
+      path = path.prev;
+    }
+
     let ids = _.uniq(source.map(s => s.userId));
     const userRoles = await context.Authz.getGroupRolesForUsers({ ids });
+    // console.log("===".repeat(25))
+    // console.log("userRoles", userRoles)
+    // console.log("===".repeat(25))
     const rids = _.uniq(_.map(_.flatten(userRoles), elem => elem.roleId));
-
     args.ids = rids;
+    args.joins = args.joins ? args.joins.concat(joins) : joins;
+    args.filters = args.filters ? args.filters.concat(filters.slice(1)) : filters;
+    args.selectOverride = selectOverrides;
+    // console.log("args", args)
     const roles = await context.Authz.getGroupRoles(args);
 
-    const ret = reconcileBatchManyToMany(source, userRoles, roles, 'userId', 'roleId');
+    // console.log("roles", roles)
+    // console.log("===".repeat(25))
+
+    // console.log("FUCKING FILTERS", matchFilter, resultFilter)
+    const ret = reconcileBatchManyToMany(source, userRoles, roles, 'userId', 'roleId', matchFilter, resultFilter);
+    // console.log("User.groupRoles - ret", ret)
     return ret;
   });
 
@@ -102,106 +152,140 @@ function addTypeResolvers(obj) {
 }
 
 function addQueries(obj) {
-  // obj.Query.groupRoles = withAuth(['user:iam/all/view'], async function(obj, args, context) {
   obj.Query.groupRoles = async function(obj, args, context) {
     return context.Authz.getGroupRoles(args);
   };
 
   obj.Query.groupRole = async function(obj, args, context) {
-    return context.Authz.getGroupRoles({ ids: [args.id] });
+    return context.Authz.getGroupRole(args.id);
   };
 
   return obj;
 }
 
 function addMutations(obj) {
-  obj.Mutation.createGroupRole = withAuth(['user:iam/all/create'], async function(obj, args, context) {
-    return context.Authz.createGroupRole(args.input);
-  });
-
-  obj.Mutation.updateGroupRole = withAuth(['user:iam/all/update'], async function(obj, args, context) {
-    return context.Authz.updateGroupRole(args.id, args.input);
-  });
-
-  obj.Mutation.deleteGroupRole = withAuth(['user:iam/all/delete'], async function(obj, args, context) {
-    return context.Authz.deleteGroupRole(args.id);
-  });
-
-  obj.Mutation.grantPermissionToGroupRole = withAuth(['group:iam/all/update'], async function(obj, args, context) {
-    try {
-      let ret = await context.Authz.grantPermissionToGroupRole(args.permissionId, args.roleId);
-      if (!ret) {
-        return {
-          permission: null,
-          role: null,
-          errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
-        };
-      } else {
-        let role = await context.Authz.getGroupRoles([args.roleId]);
-        let permission = await context.Authz.getPermission(args.permissionId);
-        return { permission, role, errors: null };
+  obj.Mutation.createGroupRole = authSwitch([
+    {
+      requiredScopes: ['group:iam/superuser/create'],
+      callback: async function(obj, args, context) {
+        return context.Authz.createGroupRole(args.input);
       }
-    } catch (e) {
-      return { permission: null, role: null, errors: [e] };
     }
-  });
+  ]);
 
-  obj.Mutation.revokePermissionFromGroupRole = withAuth(['group:iam/all/update'], async function(obj, args, context) {
-    try {
-      let ret = await context.Authz.revokePermissionFromGroupRole(args.permissionId, args.roleId);
-      if (!ret) {
-        return {
-          permission: null,
-          role: null,
-          errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
-        };
-      } else {
-        let role = await context.Authz.getGroupRoles([args.roleId]);
-        let permission = await context.Authz.getPermission(args.permissionId);
-        return { permission, role, errors: null };
+  obj.Mutation.updateGroupRole = authSwitch([
+    {
+      requiredScopes: ['group:iam/superuser/update'],
+      callback: async function(obj, args, context) {
+        return context.Authz.updateGroupRole(args.id, args.input);
       }
-    } catch (e) {
-      return { permission: null, role: null, errors: [e] };
     }
-  });
+  ]);
 
-  obj.Mutation.grantGroupRoleToUser = withAuth(['group:iam/all/update'], async function(obj, args, context) {
-    try {
-      let ret = await context.Authz.grantGroupRoleToUser(args.roleId, args.groupId);
-      if (!ret) {
-        return {
-          group: null,
-          role: null,
-          errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
-        };
-      } else {
-        let role = await context.Authz.getGroupRoles([args.roleId]);
-        let group = await context.User.get(args.groupId);
-        return { group, role, errors: null };
+  obj.Mutation.deleteGroupRole = authSwitch([
+    {
+      requiredScopes: ['group:iam/superuser/delete'],
+      callback: async function(obj, args, context) {
+        return context.Authz.deleteGroupRole(args.id);
       }
-    } catch (e) {
-      return { group: null, role: null, errors: [e] };
     }
-  });
+  ]);
 
-  obj.Mutation.revokeGroupRoleFromUser = withAuth(['group:iam/all/update'], async function(obj, args, context) {
-    try {
-      let ret = await context.Authz.revokeGroupRoleFromUser(args.roleId, args.groupId);
-      if (!ret) {
-        return {
-          group: null,
-          role: null,
-          errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
-        };
-      } else {
-        let role = await context.Authz.getGroupRoles([args.roleId]);
-        let group = await context.User.get(args.groupId);
-        return { group, role, errors: null };
+  obj.Mutation.grantPermissionToGroupRole = authSwitch([
+    {
+      requiredScopes: ['group:iam/superuser/update'],
+      callback: async function(obj, args, context) {
+        try {
+          let ret = await context.Authz.grantPermissionToGroupRole(args.permissionId, args.roleId);
+          if (!ret) {
+            return {
+              permission: null,
+              role: null,
+              errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
+            };
+          } else {
+            let role = await context.Authz.getGroupRole({ id: args.roleId });
+            let permission = await context.Authz.getPermission({ id: args.permissionId });
+            return { permission, role, errors: null };
+          }
+        } catch (e) {
+          return { permission: null, role: null, errors: [e] };
+        }
       }
-    } catch (e) {
-      return { group: null, role: null, errors: [e] };
     }
-  });
+  ]);
+
+  obj.Mutation.revokePermissionFromGroupRole = authSwitch([
+    {
+      requiredScopes: ['group:iam/superuser/update'],
+      callback: async function(obj, args, context) {
+        try {
+          let ret = await context.Authz.revokePermissionFromGroupRole(args.permissionId, args.roleId);
+          if (!ret) {
+            return {
+              permission: null,
+              role: null,
+              errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
+            };
+          } else {
+            let role = await context.Authz.getGroupRole({ id: args.roleId });
+            let permission = await context.Authz.getPermission({ id: args.permissionId });
+            return { permission, role, errors: null };
+          }
+        } catch (e) {
+          return { permission: null, role: null, errors: [e] };
+        }
+      }
+    }
+  ]);
+
+  obj.Mutation.grantGroupRoleToUser = authSwitch([
+    {
+      requiredScopes: ['group:iam/superuser/update'],
+      callback: async function(obj, args, context) {
+        try {
+          let ret = await context.Authz.grantGroupRoleToUser(args.roleId, args.userId);
+          if (!ret) {
+            return {
+              user: null,
+              role: null,
+              errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
+            };
+          } else {
+            let role = await context.Authz.getGroupRole({ id: args.roleId });
+            let user = await context.User.get({ id: args.userId });
+            return { user, role, errors: null };
+          }
+        } catch (e) {
+          return { user: null, role: null, errors: [e] };
+        }
+      }
+    }
+  ]);
+
+  obj.Mutation.revokeGroupRoleFromUser = authSwitch([
+    {
+      requiredScopes: ['group:iam/superuser/update'],
+      callback: async function(obj, args, context) {
+        try {
+          let ret = await context.Authz.revokeGroupRoleFromUser(args.roleId, args.userId);
+          if (!ret) {
+            return {
+              user: null,
+              role: null,
+              errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
+            };
+          } else {
+            let role = await context.Authz.getGroupRole({ id: args.roleId });
+            let user = await context.User.get({ id: args.userId });
+            return { user, role, errors: null };
+          }
+        } catch (e) {
+          return { user: null, role: null, errors: [e] };
+        }
+      }
+    }
+  ]);
 
   return obj;
 }

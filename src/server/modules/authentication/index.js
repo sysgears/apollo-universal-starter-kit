@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import Feature from '../connector';
 
 import schema from './schema';
@@ -25,35 +27,42 @@ export default new Feature({
   createContextFunc: async (req, connectionParams, webSocket) => {
     try {
       let userScopes = [];
-      let allRoles = {};
+      let userRolesAndPermissions = [];
+      let groupRolesAndPermissions = [];
+      let orgRolesAndPermissions = [];
 
       const tokenUser = await parseUser({ req, connectionParams, webSocket });
-      console.log('Auth - Context - tokenUser', tokenUser);
+      // console.log('Auth - Context - tokenUser', tokenUser);
 
       if (tokenUser) {
         // TODO replace the following with a call to replace static scope lookup with a dynamic one
         // // ALSO, make this configurable, static or dynamic role/permission sets
 
         if (entities.orgs.enabled) {
-          allRoles = await Authz.getAllRolesForUser(tokenUser.id);
-          // console.log("Auth - Context - allRoles", allRoles)
+          userRolesAndPermissions = await Authz.getUserRolesAndPermissionsForUser({ id: tokenUser.id });
+          groupRolesAndPermissions = await Authz.getGroupRolesAndPermissionsForUser({ id: tokenUser.id });
+          orgRolesAndPermissions = await Authz.getOrgRolesAndPermissionsForUser({ id: tokenUser.id });
 
-          for (let role of allRoles.userRoles) {
-            userScopes = userScopes.concat(role.scopes);
-          }
+          // console.log(orgRolesAndPermissions[0].permissions)
+
+          userScopes = _.flatten(userRolesAndPermissions.map(elem => elem.permissions));
+          userScopes = userScopes.map(elem => elem.name);
+          // console.log("userScopes", userScopes)
         }
       }
 
       const auth = {
         isAuthenticated: tokenUser ? true : false,
+
         scope: userScopes,
-        userScopes,
-        userRoles: allRoles.userRoles,
-        groupRoles: allRoles.groupRoles,
-        orgRoles: allRoles.orgRoles
+        userScopes: userScopes,
+
+        userRolesAndPermissions,
+        groupRolesAndPermissions,
+        orgRolesAndPermissions
       };
 
-      console.log('currentUserAuth - graphql context', auth);
+      // console.log('currentUserAuth - graphql context', auth);
 
       // console.log("Auth - Context - End")
       return {

@@ -1,5 +1,3 @@
-import { decamelize } from 'humps';
-
 /*
  * input is queryBuild (knex object) and args object
  * with field joinClauses: [{joinClause}, ...]
@@ -9,42 +7,45 @@ import { decamelize } from 'humps';
  *  - args (required, variable) see knex docs
  */
 export default function joinBuilder(queryBuilder, args) {
-  let { joinClauses } = args;
+  let { joins } = args;
 
   // add group by
-  if (joinClauses) {
-    for (let clause of joinClauses) {
+  if (joins) {
+    for (let clause of joins) {
       if (clause) {
+        if (clause.applyWhen && !clause.applyWhen(args)) {
+          continue;
+        }
         let table = clause.table;
-        let args = decamelize(clause.args);
+        let joinArgs = clause.args;
         let join = clause.type;
         if (!join) {
           join = 'join';
         }
 
         if (join === 'join') {
-          queryBuilder.join(table, ...args);
+          queryBuilder.join(table, ...joinArgs);
         }
         if (join === 'inner') {
-          queryBuilder.innerJoin(table, ...args);
+          queryBuilder.innerJoin(table, ...joinArgs);
         }
         if (join === 'left') {
-          queryBuilder.leftJoin(table, ...args);
+          queryBuilder.leftJoin(table, ...joinArgs);
         }
         if (join === 'leftOuter') {
-          queryBuilder.leftOuterJoin(table, ...args);
+          queryBuilder.leftOuterJoin(table, ...joinArgs);
         }
         if (join === 'right') {
-          queryBuilder.rightJoin(table, ...args);
+          queryBuilder.rightJoin(table, ...joinArgs);
         }
         if (join === 'rightOuter') {
-          queryBuilder.rightOuterJoin(table, ...args);
+          queryBuilder.rightOuterJoin(table, ...joinArgs);
         }
         if (join === 'outer') {
-          queryBuilder.outerJoin(table, ...args);
+          queryBuilder.outerJoin(table, ...joinArgs);
         }
         if (join === 'fullOuter') {
-          queryBuilder.fullOuterJoin(table, ...args);
+          queryBuilder.fullOuterJoin(table, ...joinArgs);
         }
       }
     }

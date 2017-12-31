@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { _ } from 'lodash';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
-// import { withAuth } from '../../../../common/authValidation';
+import { authSwitch } from '../../../../common/auth/server';
+
 import { reconcileBatchOneToMany } from '../../../stores/sql/knex/helpers/batching';
 
 export default function addResolvers(obj) {
@@ -13,7 +15,7 @@ export default function addResolvers(obj) {
 function addTypeResolvers(obj) {
   obj.UserAuth.apikeys = createBatchResolver(async (source, args, context) => {
     let ids = _.uniq(source.map(s => s.userId));
-    const apikeys = await context.Authn.getApiKeysForUsers({ ids });
+    const apikeys = await context.Authn.getApiKeysForUserIds({ ids });
     const ret = reconcileBatchOneToMany(source, apikeys, 'userId');
     return ret;
   });

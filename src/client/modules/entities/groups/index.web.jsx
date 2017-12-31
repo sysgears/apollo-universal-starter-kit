@@ -3,13 +3,11 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import Feature from '../../connector';
-import { AuthRoute, AuthLoggedInRoute } from '../../../modules/auth/containers/Auth';
+import { AuthRoute } from '../../../modules/auth/containers/Auth';
 
 import Groups from './containers/Groups';
-import GroupView from './containers/GroupView';
+import GroupMain from './containers/GroupMain';
 import GroupEdit from './containers/GroupEdit';
-
-import MyGroups from './containers/MyGroups';
 
 import reducers from './reducers';
 import groupMembersReducers from './reducers/groupMembers';
@@ -22,13 +20,10 @@ const memberViewScopes = ['entities/all/view', 'group/all/view', 'group/member/v
 
 export default new Feature({
   route: [
-    <AuthRoute exact path="/entities/groups" scope={groupListScopes} component={Groups} />,
-    <AuthRoute exact path="/entities/groups/:groupId" scopes={groupViewScopes} component={GroupEdit} />,
-
-    // <AuthRoute exact path="/groups" scope={memberListScopes} component={MyGroups} />,
+    // <AuthRoute exact path="/groups" scope={memberListScopes} component={Groups} />,
     // <AuthRoute exact path="/groups/:id" scopes={memberViewScopes} component={GroupView} />
-    <AuthRoute exact path="/groups" scope={null} component={MyGroups} />,
-    <AuthRoute exact path="/groups/:groupId" scopes={null} component={GroupView} />
+    <AuthRoute exact path="/groups" scope={null} component={Groups} />,
+    <AuthRoute exact path="/groups/:groupId" scopes={null} component={GroupMain} />
   ],
   reducer: { groups: reducers, groupMembers: groupMembersReducers }
 });

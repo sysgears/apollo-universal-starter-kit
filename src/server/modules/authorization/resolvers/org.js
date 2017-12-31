@@ -2,8 +2,9 @@
 import { _ } from 'lodash';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
+import { authSwitch } from '../../../../common/auth/server';
 import FieldError from '../../../../common/FieldError';
-import { withAuth } from '../../../../common/authValidation';
+
 import {
   reconcileBatchOneToOne,
   reconcileBatchOneToMany,
@@ -86,7 +87,43 @@ function addTypeResolvers(obj) {
     })
   };
 
-  obj.User.orgRoles = createBatchResolver(async (source, args, context) => {
+  obj.User.orgRoles = createBatchResolver(async (source, args, context, info) => {
+    let path = info.path;
+    let matchFilter = null;
+    let resultFilter = null;
+    let selectOverrides = null;
+    let joins = [];
+    let filters = [];
+    while (path) {
+      /*
+      if (path.key === 'orgs') {
+        let oids = _.uniq(source.map(s => s.orgId));
+
+        joins.push({
+          table: 'orgs_groups',
+          join: 'left',
+          args: ['orgs_groups.group_id', 'group_roles.group_id']
+        })
+        filters.push({
+          bool: 'and',
+          table: 'orgs_groups',
+          field: 'org_id',
+          compare: 'in',
+          values: oids
+        })
+
+        selectOverrides = ['group_roles.*', 'orgs_groups.group_id', 'orgs_groups.org_id', 'group_roles.id AS role_id']
+
+        resultFilter = 'orgId'
+        break
+      }
+      */
+      if (path.key === 'orgs' || path.key === 'org') {
+        resultFilter = 'orgId';
+        break;
+      }
+      path = path.prev;
+    }
     let ids = _.uniq(source.map(s => s.userId));
     const userRoles = await context.Authz.getOrgRolesForUsers({ ids });
 
@@ -94,7 +131,7 @@ function addTypeResolvers(obj) {
     args.ids = rids;
     const roles = await context.Authz.getOrgRoles(args);
 
-    const ret = reconcileBatchManyToMany(source, userRoles, roles, 'userId', 'roleId');
+    const ret = reconcileBatchManyToMany(source, userRoles, roles, 'userId', 'roleId', matchFilter, resultFilter);
     return ret;
   });
 
@@ -107,100 +144,135 @@ function addQueries(obj) {
   };
 
   obj.Query.orgRole = async function(obj, args, context) {
-    return context.Authz.getOrgRoles({ ids: [args.id] });
+    return context.Authz.getOrgRole(args);
   };
 
   return obj;
 }
 
 function addMutations(obj) {
-  obj.Mutation.createOrgRole = withAuth(['org:iam/all/create'], async function(obj, args, context) {
-    return context.Authz.createOrgRole(args.input);
-  });
-
-  obj.Mutation.updateOrgRole = withAuth(['org:iam/all/update'], async function(obj, args, context) {
-    return context.Authz.updateOrgRole(args.id, args.input);
-  });
-
-  obj.Mutation.deleteOrgRole = withAuth(['org:iam/all/delete'], async function(obj, args, context) {
-    return context.Authz.deleteOrgRole(args.id);
-  });
-
-  obj.Mutation.grantPermissionToOrgRole = withAuth(['org:iam/all/update'], async function(obj, args, context) {
-    try {
-      let ret = await context.Authz.grantPermissionToOrgRole(args.permissionId, args.roleId);
-      if (!ret) {
-        return {
-          permission: null,
-          role: null,
-          errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
-        };
-      } else {
-        let role = await context.Authz.getOrgRoles([args.roleId]);
-        let permission = await context.Authz.getPermission(args.permissionId);
-        return { permission, role, errors: null };
+  obj.Mutation.createOrgRole = authSwitch([
+    {
+      requiredScopes: ['org:iam/superuser/create'],
+      callback: async function(obj, args, context) {
+        return context.Authz.createOrgRole(args.input);
       }
-    } catch (e) {
-      return { permission: null, role: null, errors: [e] };
     }
-  });
+  ]);
 
-  obj.Mutation.revokePermissionFromOrgRole = withAuth(['org:iam/all/update'], async function(obj, args, context) {
-    try {
-      let ret = await context.Authz.revokePermissionFromOrgRole(args.permissionId, args.roleId);
-      if (!ret) {
-        return {
-          permission: null,
-          role: null,
-          errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
-        };
-      } else {
-        let role = await context.Authz.getOrgRoles([args.roleId]);
-        let permission = await context.Authz.getPermission(args.permissionId);
-        return { permission, role, errors: null };
+  obj.Mutation.updateOrgRole = authSwitch([
+    {
+      requiredScopes: ['org:iam/superuser/update'],
+      callback: async function(obj, args, context) {
+        return context.authz.updateorgrole(args.id, args.input);
       }
-    } catch (e) {
-      return { permission: null, role: null, errors: [e] };
     }
-  });
+  ]);
 
-  obj.Mutation.grantOrgRoleToUser = withAuth(['org:iam/all/update'], async function(obj, args, context) {
-    try {
-      let ret = await context.Authz.grantOrgRoleToUser(args.roleId, args.orgId);
-      if (!ret) {
-        return {
-          org: null,
-          role: null,
-          errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
-        };
-      } else {
-        let role = await context.Authz.getOrgRoles([args.roleId]);
-        let org = await context.User.get(args.orgId);
-        return { org, role, errors: null };
+  obj.Mutation.deleteOrgRole = authSwitch([
+    {
+      requiredScopes: ['org:iam/superuser/delete'],
+      callback: async function(obj, args, context) {
+        return context.Authz.deleteOrgRole(args.id);
       }
-    } catch (e) {
-      return { org: null, role: null, errors: [e] };
     }
-  });
+  ]);
 
-  obj.Mutation.revokeOrgRoleFromUser = withAuth(['org:iam/all/update'], async function(obj, args, context) {
-    try {
-      let ret = await context.Authz.revokeOrgRoleFromUser(args.roleId, args.orgId);
-      if (!ret) {
-        return {
-          org: null,
-          role: null,
-          errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
-        };
-      } else {
-        let role = await context.Authz.getOrgRoles([args.roleId]);
-        let org = await context.User.get(args.orgId);
-        return { org, role, errors: null };
+  obj.Mutation.grantPermissionToOrgRole = authSwitch([
+    {
+      requiredScopes: ['org:iam/superuser/update'],
+      callback: async function(obj, args, context) {
+        try {
+          let ret = await context.Authz.grantPermissionToOrgRole(args.permissionId, args.roleId);
+          if (!ret) {
+            return {
+              permission: null,
+              role: null,
+              errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
+            };
+          } else {
+            let role = await context.Authz.getOrgRole({ id: args.roleId });
+            let permission = await context.Authz.getPermission({ id: args.permissionId });
+            return { permission, role, errors: null };
+          }
+        } catch (e) {
+          return { permission: null, role: null, errors: [e] };
+        }
       }
-    } catch (e) {
-      return { org: null, role: null, errors: [e] };
     }
-  });
+  ]);
+
+  obj.Mutation.revokePermissionFromOrgRole = authSwitch([
+    {
+      requiredScopes: ['org:iam/superuser/update'],
+      callback: async function(obj, args, context) {
+        try {
+          let ret = await context.Authz.revokePermissionFromOrgRole(args.permissionId, args.roleId);
+          if (!ret) {
+            return {
+              permission: null,
+              role: null,
+              errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
+            };
+          } else {
+            let role = await context.Authz.getOrgRole({ id: args.roleId });
+            let permission = await context.Authz.getPermission({ id: args.permissionId });
+            return { permission, role, errors: null };
+          }
+        } catch (e) {
+          return { permission: null, role: null, errors: [e] };
+        }
+      }
+    }
+  ]);
+
+  obj.Mutation.grantOrgRoleToUser = authSwitch([
+    {
+      requiredScopes: ['org:iam/superuser/update'],
+      callback: async function(obj, args, context) {
+        try {
+          let ret = await context.Authz.grantOrgRoleToUser(args.roleId, args.userId);
+          if (!ret) {
+            return {
+              user: null,
+              role: null,
+              errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
+            };
+          } else {
+            let role = await context.Authz.getOrgRole({ id: args.roleId });
+            let user = await context.User.get({ id: args.userId });
+            return { user, role, errors: null };
+          }
+        } catch (e) {
+          return { user: null, role: null, errors: [e] };
+        }
+      }
+    }
+  ]);
+
+  obj.Mutation.revokeOrgRoleFromUser = authSwitch([
+    {
+      requiredScopes: ['org:iam/superuser/update'],
+      callback: async function(obj, args, context) {
+        try {
+          let ret = await context.Authz.revokeOrgRoleFromUser(args.roleId, args.userId);
+          if (!ret) {
+            return {
+              user: null,
+              role: null,
+              errors: [{ field: 'general', message: 'something went wrong, please try again later' }]
+            };
+          } else {
+            let role = await context.Authz.getOrgRole({ id: args.roleId });
+            let user = await context.User.get({ id: args.userId });
+            return { user, role, errors: null };
+          }
+        } catch (e) {
+          return { user: null, role: null, errors: [e] };
+        }
+      }
+    }
+  ]);
 
   return obj;
 }

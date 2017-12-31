@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
-import _ from 'lodash';
-
 import { PageLayout } from '../../../common/components/web';
 import TabLayout from '../../../common/components/hoc/layouts/sidenav-tab-browser';
 

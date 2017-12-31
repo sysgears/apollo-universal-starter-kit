@@ -1,0 +1,13 @@
+#import "./Group.graphql"
+
+mutation addGroupMember($groupId: String!, $userId: String!) {
+  addUserToGroup(groupId: $groupId, userId: $userId) {
+    group {
+      ...GroupInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

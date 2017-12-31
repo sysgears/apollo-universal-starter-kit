@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { _ } from 'lodash';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
-// import { withAuth } from '../../../../common/authValidation';
+import { authSwitch } from '../../../../common/auth/server';
 import { reconcileBatchOneToMany } from '../../../stores/sql/knex/helpers/batching';
 
 export default function addResolvers(obj) {

@@ -2,8 +2,9 @@
 import { _ } from 'lodash';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
+import { authSwitch } from '../../../../common/auth/server';
 import FieldError from '../../../../common/FieldError';
-import { withAuth } from '../../../../common/authValidation';
+
 import {
   reconcileBatchOneToOne,
   reconcileBatchOneToMany,

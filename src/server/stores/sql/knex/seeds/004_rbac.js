@@ -68,7 +68,7 @@ async function createPermissions(knex, permissions) {
   console.log('creating permissions');
   for (let P of permissions) {
     let rs = P.resource;
-    console.log('  -', rs);
+    // console.log('  -', rs);
 
     let vs = P.verbs ? P.verbs : authz.verbs;
 
@@ -113,13 +113,14 @@ async function checkAndBind(knex, roleId, roleName, roleScopes, TABLE) {
   try {
     // console.log("checkAndBind", roleName, roleScopes, roleId)
     for (let scope of roleScopes) {
-      // console.log("    ? ", scope)
-      let permRe = new RegExp('^' + scope.replace('*', '.*') + '$');
+      let scopeRe = scope.replace(/\*/g, '.*');
+      // console.log("    ? ", scope, scopeRe)
+      let permRe = new RegExp('^' + scopeRe + '$');
       const hasScope = permRe.exec(roleName);
-      // console.log("    ???", !!hasScope)
+      // console.log("    ???", hasScope, !!hasScope)
 
       if (hasScope) {
-        console.log('   + ', roleName);
+        // console.log('   + ', roleName);
         let tmp = await knex('permissions')
           .select('*')
           .where('name', '=', roleName)
@@ -132,9 +133,9 @@ async function checkAndBind(knex, roleId, roleName, roleScopes, TABLE) {
       }
     }
   } catch (e) {
-    console.log('FUCKING EXCEIPTION!!!!', e);
+    // console.log('FUCKING EXCEIPTION!!!!', e);
   }
-  console.log('   - ', roleName);
+  // console.log('   - ', roleName);
 }
 
 async function bindPermissions(knex, roleType, roleName, roleId) {
@@ -182,7 +183,6 @@ async function bindPermissions(knex, roleType, roleName, roleId) {
       }
     }
   } // end loop over input permissions
-  console.log('GOT HERE 2');
 }
 
 async function createAllRoles(knex) {
@@ -294,7 +294,7 @@ async function createOrgRoleUserBindings(knex, org) {
       .first();
 
     for (let role of user.roles) {
-      // console.log('    ~> ', user.name, role);
+      console.log('    ~> ', user.name, role);
       const rid = await knex
         .select('id')
         .from('org_roles')
@@ -304,6 +304,7 @@ async function createOrgRoleUserBindings(knex, org) {
         })
         .first();
 
+      console.log('    ~> ', rid, uid);
       await knex('org_role_user_bindings').insert({
         role_id: rid.id,
         user_id: uid.id

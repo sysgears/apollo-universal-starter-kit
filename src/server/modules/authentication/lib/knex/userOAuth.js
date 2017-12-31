@@ -2,50 +2,90 @@ import { camelizeKeys } from 'humps';
 
 import {
   listAdapter,
-  findAdapter,
   createWithoutIdAdapter,
   updateMultiConditionAdapter,
   deleteMultiConditionAdapter,
   getManyRelationAdapter
 } from '../../../../stores/sql/knex/helpers/crud';
 
-import knex from '../../../../stores/sql/knex/client';
-import log from '../../../../../common/log';
+import selectAdapter from '../../../../stores/sql/knex/helpers/select';
 
-export async function searchUserByOAuthIdOrEmail(provider, id, email, trx) {
-  try {
-    let builder = knex
-      .select('u.id', 'u.is_active', 'u.email', 'o.provider')
-      .from('users AS u')
-      .whereIn('u.email', email)
-      .orWhere('provider', '=', provider)
-      .leftJoin('user_oauths AS o', 'o.user_id', 'u.id')
-      .first();
+export const listUserOAuth = listAdapter({ table: 'user_oauths' });
+export const createUserOAuth = createWithoutIdAdapter({ table: 'user_oauths' });
+export const updateUserOAuth = updateMultiConditionAdapter({ table: 'user_oauths' });
+export const deleteUserOAuth = deleteMultiConditionAdapter({ table: 'user_oauths' });
 
-    if (trx) {
-      builder.transacting(trx);
-    }
+export const getOAuthsForUserIds = getManyRelationAdapter({
+  table: 'user_oauths',
+  elemField: 'provider',
+  collectionField: 'user_id'
+});
 
-    let row = await builder;
+export const getUsersForOAuthProviders = getManyRelationAdapter({
+  table: 'user_oauths',
+  elemField: 'user_id',
+  collectionField: 'provider'
+});
 
-    return camelizeKeys(row);
-  } catch (e) {
-    log.error('Error in Auth.searchUserByOAuthIdOrEmail', e);
-    throw e;
-  }
+export async function searchUserByOAuthOrEmail(args, trx) {
+  const ret = await searchUserByOAuthOrEmailSelector(args, trx);
+  return camelizeKeys(ret);
 }
-
-export const searchUserOAuths = findAdapter('user_oauths');
-export const getOAuthsForUsers = getManyRelationAdapter('user_oauths', {
-  elemField: 'provider',
-  collectionField: 'userId'
+const searchUserByOAuthOrEmailSelector = selectAdapter({
+  name: 'searchUserOauths',
+  table: 'users',
+  joins: [
+    {
+      table: 'user_oauths',
+      join: 'left',
+      args: ['user_oauths.user_id', 'users.id']
+    }
+  ],
+  filters: [
+    {
+      applyWhen: args => args.provider,
+      table: 'user_oauths',
+      field: 'provider',
+      compare: '=',
+      valueExtractor: args => args.provider
+    },
+    {
+      applyWhen: args => args.email,
+      bool: 'or',
+      table: 'users',
+      field: 'email',
+      compare: '=',
+      valuesExtractor: args => args.email
+    }
+  ]
 });
-export const getUsersForOAuths = getManyRelationAdapter('user_oauths', {
-  elemField: 'provider',
-  collectionField: 'userId'
-});
 
-export const listUserOAuth = listAdapter('user_oauths');
-export const createUserOAuth = createWithoutIdAdapter('user_oauths');
-export const updateUserOAuth = updateMultiConditionAdapter('user_oauths');
-export const deleteUserOAuth = deleteMultiConditionAdapter('user_oauths');
+export async function searchUserOAuths(args, trx) {
+  const ret = await searchUserOAuthsSelector(args, trx);
+  return camelizeKeys(ret);
+}
+const searchUserOAuthsSelector = selectAdapter({
+  name: 'searchUserOauths',
+  table: 'user_oauths',
+  filters: [
+    {
+      field: 'user_id',
+      compare: '=',
+      valueExtractor: args => args.id
+    },
+    {
+      applyWhen: args => args.provider,
+      bool: 'and',
+      field: 'provider',
+      compare: '=',
+      valueExtractor: args => args.provider
+    },
+    {
+      applyWhen: args => args.providers,
+      bool: 'and',
+      field: 'provider',
+      compare: 'in',
+      valuesExtractor: args => args.providers
+    }
+  ]
+});

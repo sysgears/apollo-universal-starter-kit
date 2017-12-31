@@ -1,15 +1,15 @@
-/*eslint-disable no-unused-vars*/
-import { pick } from 'lodash';
-import jwt from 'jsonwebtoken';
-import { withAuth } from '../../../../common/authValidation';
-import FieldError from '../../../../common/FieldError';
-import settings from '../../../../../settings';
+// import { authSwitch } from '../../../../common/auth/server';
+// import FieldError from '../../../../common/FieldError';
 
-import { setTokenHeaders, removeTokenHeaders, refreshToken } from '../flow/token';
+import { setTokenHeaders } from '../flow/token';
 import { passwordRegister, passwordLogin, sendPasswordResetEmail, passwordReset } from '../flow/password';
 import { sendConfirmAccountEmail } from '../flow/confirm';
 
+import settings from '../../../../../settings';
+
 const authn = settings.auth.authentication;
+
+/*eslint-disable no-unused-vars*/
 
 export default function addResolvers(obj) {
   obj = addMutations(obj);

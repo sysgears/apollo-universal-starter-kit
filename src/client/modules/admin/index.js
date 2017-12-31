@@ -13,10 +13,10 @@ import AdminFeature from './connector';
 
 // On by default features
 let features = [Main, Permissions, Users, Groups, Orgs];
-console.log('FEATURES', features);
+// console.log('FEATURES', features);
 
 export const Admin = new AdminFeature(...features);
 
-console.log('POST', Admin.viewComponents);
+// console.log('POST', Admin.viewComponents);
 
 export default new ClientFeature(...features);

@@ -1,5 +1,3 @@
-import { decamelize } from 'humps';
-
 /*
  * input is queryBuild (knex object) and args object
  * with field groupBys: [{groupBy}, ...]
@@ -12,12 +10,17 @@ export default function grouping(queryBuilder, args) {
   // add group by
   if (groupBys) {
     for (let groupBy of groupBys) {
+      if (!groupBy) {
+        continue;
+      }
+      if (groupBy.applyWhen && !groupBy.applyWhen(args)) {
+        continue;
+      }
       if (groupBy && groupBy.column) {
         let column = groupBy.column;
         if (groupBy.table) {
           column = groupBy.table + '.' + column;
         }
-        column = decamelize(column);
 
         queryBuilder.groupBy(column);
       }

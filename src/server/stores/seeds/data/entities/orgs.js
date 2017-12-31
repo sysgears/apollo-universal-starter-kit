@@ -9,27 +9,27 @@ export default [
     users: [
       {
         name: 'owner',
-        roles: ['superuser']
+        roles: ['superuser', 'user']
       },
       {
         name: 'admin',
-        roles: ['admin']
+        roles: ['admin', 'user']
       },
       {
         name: 'auditor',
-        roles: ['admin']
+        roles: ['admin', 'user']
       },
       {
         name: 'developer',
-        roles: ['admin']
+        roles: ['admin', 'user']
       },
       {
         name: 'support',
-        roles: ['admin']
+        roles: ['admin', 'user']
       },
       {
         name: 'editor',
-        roles: ['admin']
+        roles: ['admin', 'user']
       },
       {
         name: 'subscriber',
@@ -200,40 +200,52 @@ export default [
     },
     users: [
       {
+        name: 'admin',
+        roles: ['admin']
+      },
+      {
+        name: 'developer',
+        roles: ['admin']
+      },
+      {
+        name: 'support',
+        roles: ['admin']
+      },
+      {
         name: 'editor',
         roles: ['admin']
       },
       {
         name: 'subscriber',
-        roles: ['subscriber', 'user']
+        roles: ['member']
       },
       {
         name: 'subscriber1',
-        roles: ['subscriber', 'user']
+        roles: ['member']
       },
       {
         name: 'subscriber2',
-        roles: ['subscriber', 'user']
+        roles: ['member']
       },
       {
         name: 'subscriber3',
-        roles: ['subscriber', 'user']
+        roles: ['member']
       },
       {
         name: 'user',
-        roles: ['user']
+        roles: ['member']
       },
       {
         name: 'user1',
-        roles: ['user']
+        roles: ['member']
       },
       {
         name: 'user2',
-        roles: ['user']
+        roles: ['viewer']
       },
       {
         name: 'user3',
-        roles: ['user']
+        roles: ['viewer']
       }
     ],
     serviceaccounts: [
@@ -243,7 +255,7 @@ export default [
       },
       {
         name: 'sa-subscriber1',
-        roles: ['subscriber', 'user']
+        roles: ['user']
       }
     ],
     groups: [
@@ -441,27 +453,27 @@ export default [
       },
       {
         name: 'subscriber1',
-        roles: ['subscriber', 'user']
+        roles: ['member']
       },
       {
         name: 'subscriber2',
-        roles: ['subscriber', 'user']
+        roles: ['member']
       },
       {
         name: 'subscriber3',
-        roles: ['subscriber', 'user']
+        roles: ['member']
       },
       {
         name: 'user1',
-        roles: ['user']
+        roles: ['member']
       },
       {
         name: 'user2',
-        roles: ['user']
+        roles: ['member']
       },
       {
         name: 'user3',
-        roles: ['user']
+        roles: ['viewer']
       }
     ],
     serviceaccounts: [
@@ -471,15 +483,15 @@ export default [
       },
       {
         name: 'sa-test',
-        roles: ['user']
+        roles: ['member']
       },
       {
         name: 'sa-subscriber1',
-        roles: ['subscriber', 'user']
+        roles: ['member']
       },
       {
         name: 'sa-user1',
-        roles: ['user']
+        roles: ['member']
       }
     ],
     groups: [

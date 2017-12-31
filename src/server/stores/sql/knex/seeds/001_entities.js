@@ -135,11 +135,23 @@ async function createUsers(knex, shorts, domain) {
     let userSeed = _.find(users, u => {
       return u.short == user;
     });
+    let email = userSeed.short + '@' + domain;
+
+    // check they aren't here yet
+    const r = await knex
+      .select('*')
+      .from('users')
+      .where('email', '=', email)
+      .first();
+    if (r && r.id) {
+      continue;
+    }
+
     const uid = uuidv4();
     // save user
     await knex('users').insert({
       id: uid,
-      email: userSeed.short + '@' + domain,
+      email: email,
       is_active: true
     });
 

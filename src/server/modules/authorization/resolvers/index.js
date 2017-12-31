@@ -1,16 +1,5 @@
-/*eslint-disable no-unused-vars*/
-import { _ } from 'lodash';
-import { createBatchResolver } from 'graphql-resolve-batch';
-
-import FieldError from '../../../../common/FieldError';
-import { withAuth } from '../../../../common/authValidation';
-import {
-  reconcileBatchOneToOne,
-  reconcileBatchOneToMany,
-  reconcileBatchManyToMany
-} from '../../../stores/sql/knex/helpers/batching';
-
 import baseResolvers from './base';
+import permissionResolvers from './permissions';
 
 import userResolvers from './user';
 import groupResolvers from './group';
@@ -23,12 +12,12 @@ const entities = settings.entities;
 
 let obj = {
   Query: {},
-
   Mutation: {},
   Subscription: {}
 };
 
 obj = baseResolvers(obj);
+obj = permissionResolvers(obj);
 
 if (entities.users.enabled === true) {
   obj = userResolvers(obj);
@@ -46,4 +35,5 @@ if (entities.serviceaccounts.enabled === true) {
   obj = saResolvers(obj);
 }
 
+/* eslint-disable no-unused-vars */
 export default pubsub => obj;

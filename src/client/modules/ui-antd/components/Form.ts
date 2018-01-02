@@ -19,16 +19,15 @@ export interface FormInput {
   selector: 'ausk-form',
   template: `
     <div *ngIf="loading">Loading...</div>
-    <form *ngIf="!loading" name="{{formName}}" (ngSubmit)="onSubmit(formState[formName].value)"
-          [ngrxFormState]="formState">
-      <div [ngClass]="{'form-group': fi.inputType !== 2, 'form-check': fi.inputType === 2}" *ngFor="let fi of form">
+    <form *ngIf="!loading" name="{{formName}}" class="ant-form ant-form-horizontal"
+          (ngSubmit)="onSubmit(formState[formName].value)" [ngrxFormState]="formState">
 
-        <form-item [itemType]="fi.inputType"
-                   [formInput]="fi"
-                   [form]="formState[formName]">
-        </form-item>
+      <form-item *ngFor="let fi of form"
+                 [itemType]="fi.inputType"
+                 [formInput]="fi"
+                 [form]="formState[formName]">
+      </form-item>
 
-      </div>
       <div class="{{ btnAlign }}">
         <ausk-button type="submit" [disabled]="formState[formName].isInvalid || submitting">
           {{btnName}}

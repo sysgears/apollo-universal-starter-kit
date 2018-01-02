@@ -3,6 +3,7 @@ import { camelizeKeys } from 'humps';
 
 import {
   createWithIdGenAdapter,
+  getAdapter,
   listAdapter,
   updateAdapter,
   deleteAdapter,
@@ -25,6 +26,7 @@ const staticUserScopes = authz.userScopes;
 const staticGroupScopes = authz.groupScopes;
 const staticOrgScopes = authz.orgScopes;
 
+export const getUserRole = getAdapter({ table: 'user_roles', selects: ['*', 'id AS role_id', 'name AS role_name'] });
 export const getUserRoles = listAdapter({ table: 'user_roles', selects: ['*', 'id AS role_id', 'name AS role_name'] });
 export const createUserRole = createWithIdGenAdapter({ table: 'user_roles' });
 export const updateUserRole = updateAdapter({ table: 'user_roles' });
@@ -211,15 +213,7 @@ export const getUserRolesAndPermissionsForUsersSelector = selectAdapter({
     },
     {
       table: 'P',
-      column: 'resource'
-    },
-    {
-      table: 'P',
-      column: 'relation'
-    },
-    {
-      table: 'P',
-      column: 'verb'
+      column: 'name'
     }
   ]
 });

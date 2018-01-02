@@ -143,7 +143,7 @@ export function listAdapter(options) {
   if (!options.filters) options.filters = [];
 
   options.filters.push({
-    applyWhen: args => args.ids,
+    applyWhen: args => args.ids && args.ids.length > 0,
     field: options.idField,
     compare: 'in',
     valueExtractor: args => args.ids
@@ -171,7 +171,7 @@ export function pagingAdapter(options) {
   if (!options.limit) options.limit = 10;
 
   options.filters.push({
-    applyWhen: args => args.ids,
+    applyWhen: args => args.ids && args.ids.length > 0,
     field: options.idField,
     compare: 'in',
     valueExtractor: args => args.ids
@@ -190,7 +190,7 @@ export function pagingAdapter(options) {
       return {
         results: ret.rows,
         count: ret.count,
-        pages: Math.trunc(ret.count / args.limit) + 1
+        pages: Math.trunc(ret.count / args.limit) + (ret.count % args.limit === 0 ? 0 : 1)
       };
     } catch (e) {
       log.error(`Error in ${options.name}`, e);

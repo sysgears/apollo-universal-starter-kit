@@ -31,20 +31,14 @@ export default function selectAdapter(options) {
 
   return async function(args, trx) {
     try {
-      // process pre-set filters
-      for (let filter of opts.filters) {
-        if (filter.valueExtractor) {
-          filter.value = filter.valueExtractor(args);
-        }
-        if (filter.valuesExtractor) {
-          filter.values = filter.valuesExtractor(args);
-        }
-
-        // TODO add checks for other filter fields
-      }
-
       // merge filters and joinClauses
-      args.filters = opts.filters ? opts.filters.concat(args.filters) : args.filters;
+      args.filters = [
+        {
+          prefilters: args.filters,
+          postfiltersBool: args.mergeBool || 'and',
+          postfilters: opts.filters
+        }
+      ];
       args.joins = opts.joins ? opts.joins.concat(args.joins) : args.joins;
       args.orderBys = opts.orderBys ? opts.orderBys.concat(args.orderBys) : args.orderBys;
       args.groupBys = opts.groupBys ? opts.groupBys.concat(args.groupBys) : args.groupBys;
@@ -62,34 +56,36 @@ export default function selectAdapter(options) {
 
       // local function
       const makeBuilder = function(args, trx) {
-        let builder = knex.select(...(args.selectOverride || opts.selects)).from(opts.table);
+        let localBuilder = knex.select(...(args.selectOverride || opts.selects)).from(opts.table);
 
         // add join conditions
-        builder = joinBuilder(builder, args);
+        localBuilder = joinBuilder(localBuilder, args);
 
         // add filter conditions
-        builder = filterBuilder(builder, args);
+        localBuilder = filterBuilder(localBuilder, args);
 
-        // paging, ordering, grouping
-        builder = paging(builder, args);
-        builder = ordering(builder, args);
-        builder = grouping(builder, args);
+        // grouping, ordering
+        localBuilder = grouping(localBuilder, args);
+        localBuilder = ordering(localBuilder, args);
 
         if (trx) {
-          builder.transacting(trx);
+          localBuilder.transacting(trx);
         }
 
-        return builder;
-      };
-
-      if (args.printSQL) {
-        const sql = await makeBuilder(args, trx).toString();
-        console.log(`${opts.name} - SQL`, sql);
-      }
+        return localBuilder;
+      }; // End of makcBuilder(...) def
 
       let count = null;
       if (args.count) {
-        const countRes = await makeBuilder(args, trx).count(args.count);
+        // are we printing SQL?
+        if (args.printSQL) {
+          const sql = await makeBuilder(args, trx).toString();
+          console.log(`${opts.name} - SQL`, sql);
+        }
+
+        let outerBuilderA = makeBuilder(args, trx).count(args.count);
+
+        const countRes = await outerBuilderA;
         const cnt = countRes[0]['count(`' + opts.idField + '`)'];
         if (args.onlyCount) {
           return cnt;
@@ -97,7 +93,15 @@ export default function selectAdapter(options) {
         count = cnt;
       }
       if (args.countDistinct) {
-        const countRes = await makeBuilder(args, trx).countDistinct(args.countDistinct);
+        // are we printing SQL?
+        if (args.printSQL) {
+          const sql = await makeBuilder(args, trx).toString();
+          console.log(`${opts.name} - SQL`, sql);
+        }
+
+        let outerBuilderB = makeBuilder(args, trx).countDistinct(args.countDistinct);
+
+        const countRes = await outerBuilderB;
         const cnt = countRes[0]['count(`' + opts.idField + '`)'];
         if (args.onlyCount) {
           return cnt;
@@ -105,8 +109,20 @@ export default function selectAdapter(options) {
         count = cnt;
       }
 
-      const rows = await makeBuilder(args, trx);
+      // are we printing SQL?
+      if (args.printSQL) {
+        let outerBuilderC = makeBuilder(args, trx);
+        // paging
+        outerBuilderC = paging(outerBuilderC, args);
+        const sql = await outerBuilderC.toString();
+        console.log(`${opts.name} - SQL`, sql);
+      }
 
+      let finalBuilder = makeBuilder(args, trx);
+      // paging
+      finalBuilder = paging(finalBuilder, args);
+
+      const rows = await finalBuilder;
       if (args.withCount) {
         return { rows, count };
       }

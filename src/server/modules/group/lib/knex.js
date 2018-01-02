@@ -1,4 +1,5 @@
-// import _ from 'lodash';
+/*eslint-disable no-unused-vars*/
+import _ from 'lodash';
 // import { camelizeKeys } from 'humps';
 
 import {
@@ -15,8 +16,6 @@ import {
 
 import selectAdapter from '../../../stores/sql/knex/helpers/select';
 // import { orderedFor } from '../../../stores/sql/knex/helpers/batching';
-
-/*eslint-disable no-unused-vars*/
 
 export default class Group {
   /*
@@ -43,6 +42,12 @@ export default class Group {
   updateProfile = updateAdapter({ table: 'group_profile', idField: 'group_id' });
   deleteProfile = deleteAdapter({ table: 'group_profile', idField: 'group_id' });
 
+  getSettings = getAdapter({ table: 'group_settings', idField: 'group_id' });
+  getSettingsMany = listAdapter({ table: 'group_settings', idField: 'group_id' });
+  createSettings = createWithIdAdapter({ table: 'group_settings', idField: 'group_id' });
+  updateSettings = updateAdapter({ table: 'group_settings', idField: 'group_id' });
+  deleteSettings = deleteAdapter({ table: 'group_settings', idField: 'group_id' });
+
   /*
    * Membership functions
    */
@@ -61,45 +66,50 @@ export default class Group {
     elemField: 'user_id',
     collectionField: 'group_id'
   });
+
+  search = async (args, trx) => {
+    const ret = await searchGroupsSelector(args, trx);
+    return ret;
+  };
 }
 
-const searchGroupsSelector = selectAdapter({
+const searchGroupsSelector = pagingAdapter({
   table: 'groups',
-  joins: [
-    {
-      table: 'group_profile',
-      join: 'left',
-      args: ['group_profile.group_id', 'groups..id']
-    }
-  ],
   filters: [
     {
       bool: 'or',
       table: 'groups',
       field: 'id',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     },
     {
       bool: 'or',
       table: 'groups',
       field: 'name',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     },
     {
       bool: 'or',
-      table: 'group_profile',
-      field: 'displayName',
+      table: 'groups',
+      field: 'url_name',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     },
     {
       bool: 'or',
-      table: 'group_profile',
-      field: 'description',
+      table: 'groups',
+      field: 'display_name',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
+    },
+    {
+      bool: 'or',
+      table: 'groups',
+      field: 'locale',
+      compare: 'like',
+      valueExtractor: args => `${args.searchText}`
     }
   ]
 });

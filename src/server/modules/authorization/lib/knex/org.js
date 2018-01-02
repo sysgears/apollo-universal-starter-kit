@@ -183,15 +183,7 @@ export const getOrgRolesAndPermissionsForUserSelector = selectAdapter({
     },
     {
       table: 'P',
-      column: 'resource'
-    },
-    {
-      table: 'P',
-      column: 'relation'
-    },
-    {
-      table: 'P',
-      column: 'verb'
+      column: 'name'
     }
   ]
 });

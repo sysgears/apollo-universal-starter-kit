@@ -4,6 +4,7 @@ extend type Query {
     filters: [FilterInput!]
     orderBys: [OrderByInput!]
     groupBys: [GroupByInput!]
+    page: Int
     offset: Int
     limit: Int
   ): [OrgRoleInfo]
@@ -59,6 +60,7 @@ type OrgRoleInfo {
     filters: [FilterInput!]
     orderBys: [OrderByInput!]
     groupBys: [GroupByInput!]
+    page: Int
     offset: Int
     limit: Int
   ): [PermissionInfo]
@@ -68,6 +70,7 @@ type OrgRoleInfo {
     filters: [FilterInput!]
     orderBys: [OrderByInput!]
     groupBys: [GroupByInput!]
+    page: Int
     offset: Int
     limit: Int
   ): [User]
@@ -75,6 +78,8 @@ type OrgRoleInfo {
 
 extend type Org {
   roles: [OrgRoleInfo]
+  myRoles: [OrgRoleInfo]
+  myPermissions: [PermissionInfo]
 }
 
 extend type User {
@@ -87,6 +92,7 @@ extend type PermissionInfo {
     filters: [FilterInput!]
     orderBys: [OrderByInput!]
     groupBys: [GroupByInput!]
+    page: Int
     offset: Int
     limit: Int
   ): [User]
@@ -96,6 +102,7 @@ extend type PermissionInfo {
     filters: [FilterInput!]
     orderBys: [OrderByInput!]
     groupBys: [GroupByInput!]
+    page: Int
     offset: Int
     limit: Int
   ): [UserRoleInfo]

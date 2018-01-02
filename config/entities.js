@@ -16,5 +16,18 @@ export default {
     enabled: false,
     multipleOrgs: true,
     multipleGroups: true
+  },
+
+  social: {
+    enabled: true,
+    users: {
+      enabled: true,
+      following: true,
+      friending: true
+    },
+    groups: {
+      enabled: true,
+      following: true
+    }
   }
 };

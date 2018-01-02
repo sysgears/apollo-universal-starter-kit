@@ -18,40 +18,44 @@ export default function addResolvers(obj) {
 function addMutations(obj) {
   obj.Mutation.addGroup = authSwitch([
     {
-      requiredScopes: ['group/superuser/create', 'group/owner/create'],
+      // if not in group, fallback to user scopes, what about org scopes?
+      // org scopes will be for groups that are part of orgs
+      // with seperate add/delete group functions
+      requiredScopes: ['group/create', 'admin:group/create'],
       callback: async (obj, args, context) => {
-        console.log('adding group:', args);
+        let { input } = args;
+        // console.log('adding group:', input);
         try {
           const e = new FieldError();
           let gid = null;
-          if (args.name) {
-            const nameExists = await context.Group.getByName(args.name);
+          if (input.name) {
+            const nameExists = await context.Group.getByName(input.name);
             if (nameExists) {
               e.setError('name', 'Name already exists.');
               e.throwIf();
             }
-            gid = await context.Group.create({ name: args.name });
+            gid = await context.Group.create({ name: input.name });
           } else {
             e.setError('name', 'Group name required.');
             e.throwIf();
           }
 
           if (!gid) {
-            console.log('Error creating group', gid);
+            // console.log('Error creating group', gid);
             e.setError('error', 'Something went wrong when creating the group');
             e.throwIf();
           }
 
-          if (args.profile) {
-            if (!args.profile.displayName) {
-              args.profile.displayName = args.name;
-            }
-            console.log('creating group profile', args.profile);
-            await context.Group.createProfile(gid, args.profile);
+          if (input.profile) {
+            await context.Group.createProfile(gid, input.profile);
+          }
+
+          if (input.settings) {
+            await context.Group.createSettings(gid, input.settings);
           }
 
           const group = await context.Group.get({ id: gid });
-          console.log('return group', group);
+          // console.log('return group', group);
           return { group, errors: null };
         } catch (e) {
           return { group: null, errors: e };
@@ -62,30 +66,51 @@ function addMutations(obj) {
 
   obj.Mutation.editGroup = authSwitch([
     {
-      requiredScopes: (obj, args, context) => {
-        let isMember = context.auth.groupRoles.map(elem => elem);
-        return isMember ? ['group/owner/update', 'group/admin/update'] : ['group/superuser/update'];
+      requiredScopes: ['group/update', 'admin:group/update'],
+      presentedScopes: (obj, args, context) => {
+        const groupId = args.input.id;
+        let group = context.auth.groupRolesAndPermissions.find(elem => elem.groupId === groupId);
+        if (group) {
+          const scopes = group.permissions.map(e => e.name);
+          return scopes;
+        }
+        // if not in group, fallback to user scopes, what about org scopes?
+        return context.auth.userScopes;
       },
       callback: async (obj, args, context) => {
+        let { input } = args;
         try {
           const e = new FieldError();
-          if (args.name) {
-            console.log('updating group name');
-            const nameExists = await context.Group.getByName(args.name);
-            if (nameExists && nameExists.id !== args.id) {
-              e.setError('name', 'E-mail already exists.');
+          if (input.name) {
+            const nameExists = await context.Group.getByName(input.name);
+            if (nameExists && nameExists.id !== input.id) {
+              e.setError('name', 'Group name already exists.');
               e.throwIf();
             }
-            await context.Group.update(args.id, { name: args.name });
           }
 
-          if (args.profile) {
-            console.log('updating group profile', args.profile);
-            await context.Group.updateProfile(args.id, args.profile);
+          /*
+          if (input.urlName) {
+            console.log('updating group urlName');
+          ?? const nameExists = await context.Group.getByName(input.name);
+            if (nameExists && nameExists.id !== input.id) {
+              e.setError('name', 'Group name already exists.');
+              e.throwIf();
+            }
+          }
+          */
+
+          await context.Group.update(input.id, _.pick(input, ['name', 'urlName', 'displayName', 'locale']));
+
+          if (input.profile) {
+            await context.Group.updateProfile(input.id, input.profile);
           }
 
-          const group = await context.Group.get(args.id);
-          console.log('return group', group);
+          if (input.settings) {
+            await context.Group.updateSettings(input.id, input.settings);
+          }
+
+          const group = await context.Group.get({ id: input.id });
           return { group, errors: null };
         } catch (e) {
           return { group: null, errors: e };
@@ -96,9 +121,16 @@ function addMutations(obj) {
 
   obj.Mutation.deleteGroup = authSwitch([
     {
-      requiredScopes: (obj, args, context) => {
-        let isMember = context.auth.groupRoles.map(elem => elem);
-        return isMember ? ['group/owner/delete'] : ['group/superuser/delete'];
+      requiredScopes: ['group/delete', 'admin:group/delete'],
+      presentedScopes: (obj, args, context) => {
+        const groupId = args.input.id;
+        let group = context.auth.groupRolesAndPermissions.find(elem => elem.groupId === groupId);
+        if (group) {
+          const scopes = group.permissions.map(e => e.name);
+          return scopes;
+        }
+        // if not in group, fallback to user scopes, what about org scopes?
+        return context.auth.userScopes;
       },
       callback: async (obj, args, context) => {
         try {
@@ -127,15 +159,29 @@ function addMutations(obj) {
   obj.Mutation.addUserToGroup = authSwitch([
     {
       requiredScopes: (obj, args, context) => {
-        let isMember = context.auth.groupRoles.map(elem => elem);
-        return isMember ? ['group/owner/delete'] : ['group/superuser/delete'];
+        // need to check group settings here too
+        // because this mutation could be used in a variety of contexts in the client.
+        if (args.userId == context.user.id) {
+          return ['group:members:self/create'];
+        }
+        return ['group:members/create', 'admin:group:members/create'];
+      },
+      presentedScopes: (obj, args, context) => {
+        const groupId = args.input.id;
+        let group = context.auth.groupRolesAndPermissions.find(elem => elem.groupId === groupId);
+        if (group) {
+          const scopes = group.permissions.map(e => e.name);
+          return scopes;
+        }
+        // if not in group, fallback to user scopes, what about org scopes?
+        return context.auth.userScopes;
       },
       callback: async (obj, args, context) => {
         try {
           let { userId, groupId } = args;
           const e = new FieldError();
 
-          const group = await context.Group.get(groupId);
+          const group = await context.Group.get({ id: groupId });
           if (!group) {
             e.setError('add', 'Group does not exist.');
             e.throwIf();
@@ -165,17 +211,26 @@ function addMutations(obj) {
     {
       requiredScopes: (obj, args, context) => {
         if (args.userId == context.user.id) {
-          return ['group:member/member/delete'];
+          return ['group:members:self/delete'];
         }
-        let isMember = context.auth.groupRoles.map(elem => elem);
-        return isMember ? ['group/owner/delete'] : ['group/superuser/delete'];
+        return ['group:members/delete', 'admin:group:members/delete'];
+      },
+      presentedScopes: (obj, args, context) => {
+        const groupId = args.input.id;
+        let group = context.auth.groupRolesAndPermissions.find(elem => elem.groupId === groupId);
+        if (group) {
+          const scopes = group.permissions.map(e => e.name);
+          return scopes;
+        }
+        // if not in group, fallback to user scopes, what about org scopes?
+        return context.auth.userScopes;
       },
       callback: async (obj, args, context) => {
         try {
           let { userId, groupId } = args;
           const e = new FieldError();
 
-          const group = await context.Group.get(groupId);
+          const group = await context.Group.get({ id: groupId });
           if (!group) {
             e.setError('remove', 'Group does not exist.');
             e.throwIf();

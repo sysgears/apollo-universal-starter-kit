@@ -1,7 +1,9 @@
 export default function paging(queryBuilder, args) {
-  const { offset, limit } = args;
+  const { offset, limit, page } = args;
 
-  if (offset) {
+  if (page) {
+    queryBuilder.offset((page - 1) * limit);
+  } else if (offset) {
     queryBuilder.offset(offset);
   }
 

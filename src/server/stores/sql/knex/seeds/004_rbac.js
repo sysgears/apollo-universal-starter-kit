@@ -2,6 +2,7 @@
 import _ from 'lodash';
 import uuidv4 from 'uuid';
 
+import expandBrackets from '../../../../../common/auth/brackets';
 import truncateTables from '../helpers/tables';
 import settings from '../../../../../../settings';
 
@@ -67,45 +68,76 @@ async function wipe(knex, Promise) {
 async function createPermissions(knex, permissions) {
   console.log('creating permissions');
   for (let P of permissions) {
-    let rs = P.resource;
-    // console.log('  -', rs);
+    let reeeesource = expandBrackets(P.resource);
 
-    let vs = P.verbs ? P.verbs : authz.verbs;
+    for (let rs of reeeesource) {
+      let vs = P.verbs ? P.verbs : authz.verbs;
 
-    // Seed base resource first
-    for (let rel of P.relations) {
-      console.log('   ', `${rs}/${rel}/${vs}`);
+      // Seed base resource first
+      // console.log('   ', `${rs}/${vs}`);
       for (let v of vs) {
-        let name = `${rs}/${rel}/${v}`;
+        let name = `${rs}/${v}`;
         await knex('permissions').insert({
           id: uuidv4(),
           resource: rs,
-          relation: rel,
           verb: v,
           name: name
         });
       }
-    }
 
-    if (!P.subresources) {
-      continue;
-    }
-    // Seed sub-resources
-    for (let sub of P.subresources) {
-      for (let rel of P.relations) {
-        console.log('   ', `${rs}:${sub}/${rel}/${vs}`);
-        for (let v of vs) {
-          let name = `${rs}:${sub}/${rel}/${v}`;
-          await knex('permissions').insert({
-            id: uuidv4(),
-            resource: `${rs}:${sub}`,
-            relation: rel,
-            verb: v,
-            name: name
-          });
-        }
+      if (!P.subresources) {
+        continue;
       }
-    }
+      // Seed sub-resources
+      for (let sub of P.subresources) {
+        if (typeof sub === 'string') {
+          let suuuuub = expandBrackets(sub);
+
+          for (let s of suuuuub) {
+            console.log('   ', `${rs}:${s}/${vs}`);
+            for (let v of vs) {
+              let name = `${rs}:${s}/${v}`;
+              await knex('permissions').insert({
+                id: uuidv4(),
+                resource: `${rs}:${s}`,
+                verb: v,
+                name: name
+              });
+            }
+          }
+        } else {
+          // assume another level via object with name and sub-resources
+          console.log('   ', `${rs}:(obj)/${vs}`, sub);
+
+          // create the level 2 sub-resource
+          for (let v of sub.verbs ? sub.verbs : vs) {
+            let name = `${rs}:${sub.name}/${v}`;
+            await knex('permissions').insert({
+              id: uuidv4(),
+              resource: `${rs}:${sub.name}`,
+              verb: v,
+              name: name
+            });
+          }
+
+          // create the level 3 sub-sub-resources
+          for (let sub2 of sub.subresources) {
+            let suuuuub = expandBrackets(sub);
+            for (let s of suuuuub) {
+              for (let v of vs) {
+                let name = `${rs}:${sub.name}:${s}/${v}`;
+                await knex('permissions').insert({
+                  id: uuidv4(),
+                  resource: `${rs}:${sub.name}:${s}`,
+                  verb: v,
+                  name: name
+                });
+              }
+            }
+          }
+        } // end of else, when sub-sub-resources exist
+      } // end of loop over subresources
+    } // end of loop over reeeesource
   } // end loop over input permissions
 }
 
@@ -120,7 +152,7 @@ async function checkAndBind(knex, roleId, roleName, roleScopes, TABLE) {
       // console.log("    ???", hasScope, !!hasScope)
 
       if (hasScope) {
-        // console.log('   + ', roleName);
+        console.log('   + ', roleName);
         let tmp = await knex('permissions')
           .select('*')
           .where('name', '=', roleName)
@@ -153,35 +185,76 @@ async function bindPermissions(knex, roleType, roleName, roleId) {
     roleScopes = authz.orgScopes[roleName];
     TABLE = 'org_role_permission_bindings';
   }
-  if (roleScopes === null) {
+  if (!roleScopes) {
     return;
   }
   console.log(`Binding ${roleType} - ${roleName} with permissions [${roleScopes}] to role: [${roleId}]`);
+
+  // let's expand some brackets
+
+  let expandedScopes = [];
+  for (let scope of roleScopes) {
+    const expansions = expandBrackets(scope);
+    // console.log("scope expanded = ", scope, expansions)
+    expandedScopes = expandedScopes.concat(expansions);
+  }
+  roleScopes = expandedScopes;
+  // console.log("Expanded roleScopes")
+  // console.log(roleScopes)
+
+  // let blah = roleScopes.bleepity.bloop.FAIL
+
   for (let P of authz.permissions) {
-    let rs = P.resource;
+    let reeeesource = expandBrackets(P.resource);
 
-    let vs = P.verbs ? P.verbs : authz.verbs;
+    for (let rs of reeeesource) {
+      let vs = P.verbs ? P.verbs : authz.verbs;
 
-    // Seed base resource first
-    for (let rel of P.relations) {
+      // Seed base resource first
       for (let v of vs) {
-        const name = `${rs}/${rel}/${v}`;
+        const name = `${rs}/${v}`;
         let ret = await checkAndBind(knex, roleId, name, roleScopes, TABLE);
       }
-    }
 
-    if (!P.subresources) {
-      continue;
-    }
-    // Seed sub-resources
-    for (let sub of P.subresources) {
-      for (let rel of P.relations) {
-        for (let v of vs) {
-          const name = `${rs}:${sub}/${rel}/${v}`;
-          let ret = await checkAndBind(knex, roleId, name, roleScopes, TABLE);
-        }
+      if (!P.subresources) {
+        continue;
       }
-    }
+
+      // Seed sub-resources
+      for (let sub of P.subresources) {
+        //console.log('   ', `${rs}:${sub}/${vs}`);
+        if (typeof sub === 'string') {
+          let suuuuub = expandBrackets(sub);
+
+          for (let s of suuuuub) {
+            // console.log('   ', `${rs}:${s}/${vs}`);
+            for (let v of vs) {
+              let name = `${rs}:${s}/${v}`;
+              await checkAndBind(knex, roleId, name, roleScopes, TABLE);
+            }
+          }
+        } else {
+          // assume another level via object with name and sub-resources
+
+          // create the level 2 sub-resource
+          for (let v of sub.verbs ? sub.verbs : vs) {
+            let name = `${rs}:${sub.name}/${v}`;
+            await checkAndBind(knex, roleId, name, roleScopes, TABLE);
+          }
+
+          // create the level 3 sub-sub-resources
+          for (let sub2 of sub.subresources) {
+            let suuuuub = expandBrackets(sub);
+            for (let s of suuuuub) {
+              for (let v of vs) {
+                let name = `${rs}:${sub.name}:${s}/${v}`;
+                await checkAndBind(knex, roleId, name, roleScopes, TABLE);
+              }
+            }
+          }
+        } // end of else, when sub-sub-resources exist
+      } // end of loop over subresources
+    } // end of loop over reeeesource
   } // end loop over input permissions
 }
 
@@ -294,7 +367,7 @@ async function createOrgRoleUserBindings(knex, org) {
       .first();
 
     for (let role of user.roles) {
-      console.log('    ~> ', user.name, role);
+      // console.log('    ~> ', user.name, role);
       const rid = await knex
         .select('id')
         .from('org_roles')
@@ -304,7 +377,7 @@ async function createOrgRoleUserBindings(knex, org) {
         })
         .first();
 
-      console.log('    ~> ', rid, uid);
+      // console.log('    ~> ', rid, uid);
       await knex('org_role_user_bindings').insert({
         role_id: rid.id,
         user_id: uid.id
@@ -407,7 +480,7 @@ async function createUserRoles(knex, roles) {
       id: rid,
       name: role,
       display_name: role,
-      description: role + ' role for all resources and applications'
+      description: role + ' user role for all resources and applications'
     });
 
     // bind default permissions

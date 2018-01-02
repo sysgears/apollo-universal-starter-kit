@@ -37,10 +37,9 @@ exports.up = async function(knex, Promise) {
       .unique();
 
     table.string('resource').notNullable();
-    table.string('relation').notNullable();
-    table.enu('verb', authz.verbs).notNullable();
+    table.string('verb').notNullable();
 
-    table.unique(['resource', 'relation', 'verb']);
+    table.unique(['resource', 'verb']);
 
     table
       .string('name')
@@ -88,8 +87,7 @@ exports.up = async function(knex, Promise) {
         .uuid('permission_id')
         .notNullable()
         .references('id')
-        .inTable('permissions')
-        .onDelete('CASCADE');
+        .inTable('permissions');
 
       table.unique(['role_id', 'permission_id']);
     });
@@ -174,8 +172,7 @@ exports.up = async function(knex, Promise) {
         .uuid('permission_id')
         .notNullable()
         .references('id')
-        .inTable('permissions')
-        .onDelete('CASCADE');
+        .inTable('permissions');
 
       table.unique(['role_id', 'permission_id']);
     });
@@ -251,8 +248,7 @@ exports.up = async function(knex, Promise) {
         .uuid('permission_id')
         .notNullable()
         .references('id')
-        .inTable('permissions')
-        .onDelete('CASCADE');
+        .inTable('permissions');
 
       table.unique(['role_id', 'permission_id']);
     });

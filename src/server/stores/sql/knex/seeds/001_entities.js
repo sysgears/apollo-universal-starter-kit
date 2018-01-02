@@ -65,6 +65,9 @@ async function createOrgs(knex, orgs) {
     if (org.name === 'root') {
       continue;
     }
+
+    if (!org.profile) org.profile = {};
+
     console.log('Creating org:', org.name);
 
     const oid = uuidv4();
@@ -72,20 +75,23 @@ async function createOrgs(knex, orgs) {
     await knex('orgs').insert({
       id: oid,
       name: org.name,
-      is_active: true
+      is_active: true,
+      is_public: !org.isPrivate,
+      display_name: org.profile.displayName || org.name,
+      locale: org.profile.locale || null
     });
 
     org.id = oid;
 
-    // create org profile
-    if (org.profile !== null) {
-      await knex('org_profile').insert({
-        org_id: oid,
-        domain: org.domain,
-        display_name: org.profile.displayName,
-        description: org.profile.description
-      });
-    }
+    // create org default settings
+    await knex('org_settings').insert({ org_id: oid });
+
+    await knex('org_profile').insert({
+      org_id: oid,
+      is_public: org.profile.isPublic || false,
+      domain: org.domain,
+      description: org.profile.description || 'org for ' + org.domain
+    });
 
     // (enabled Org assumes Groups and Users enabled as well)
     // create groups
@@ -109,22 +115,28 @@ async function createGroups(knex, shorts, namePrefix) {
       return g.name === group;
     });
 
+    if (!groupSeed.profile) groupSeed.profile = {};
+
     const gid = uuidv4();
     // save group
     await knex('groups').insert({
       id: gid,
       name: (namePrefix ? namePrefix + ':' : '') + groupSeed.name,
-      is_active: true
+      is_active: true,
+      is_public: !groupSeed.isPrivate,
+      display_name: groupSeed.profile.displayName || groupSeed.name,
+      locale: groupSeed.profile.locale || null
     });
 
-    // save group profile
-    if (groupSeed.profile) {
-      await knex('group_profile').insert({
-        group_id: gid,
-        display_name: groupSeed.profile.displayName,
-        description: groupSeed.profile.description
-      });
-    }
+    // create group default settings
+    await knex('group_settings').insert({ group_id: gid });
+
+    // create group profile
+    await knex('group_profile').insert({
+      group_id: gid,
+      is_public: groupSeed.profile.isPublic || false,
+      description: groupSeed.profile.description
+    });
   }
 }
 
@@ -135,6 +147,9 @@ async function createUsers(knex, shorts, domain) {
     let userSeed = _.find(users, u => {
       return u.short == user;
     });
+
+    if (!userSeed.profile) userSeed.profile = {};
+
     let email = userSeed.short + '@' + domain;
 
     // check they aren't here yet
@@ -152,7 +167,10 @@ async function createUsers(knex, shorts, domain) {
     await knex('users').insert({
       id: uid,
       email: email,
-      is_active: true
+      is_active: true,
+      is_public: !userSeed.isPrivate,
+      display_name: userSeed.profile.displayName || email,
+      locale: userSeed.profile.locale || null
     });
 
     // save user password
@@ -164,18 +182,15 @@ async function createUsers(knex, shorts, domain) {
     }
 
     // save user profile
-    if (userSeed.profile) {
-      await knex('user_profile').insert({
-        user_id: uid,
-        display_name: userSeed.profile.displayName,
-        first_name: userSeed.profile.firstName,
-        middle_name: userSeed.profile.middleName,
-        last_name: userSeed.profile.lastName,
-        suffix: userSeed.profile.suffix,
-        locale: userSeed.profile.locale,
-        language: userSeed.profile.language
-      });
-    }
+    await knex('user_profile').insert({
+      user_id: uid,
+      is_public: userSeed.profile.isPublic || false,
+      first_name: userSeed.profile.firstName,
+      middle_name: userSeed.profile.middleName,
+      last_name: userSeed.profile.lastName,
+      suffix: userSeed.profile.suffix,
+      language: userSeed.profile.language
+    });
   }
 }
 

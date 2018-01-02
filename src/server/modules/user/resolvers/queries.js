@@ -18,22 +18,29 @@ export default function addResolvers(obj) {
 function addQueries(obj) {
   obj.Query.users = authSwitch([
     {
-      requiredScopes: ['user/superuser/list', 'user/admin/list', 'user/editor/list'],
+      requiredScopes: ['admin:user/list'],
       callback: async (obj, args, context) => {
         let ret = await context.User.list(args);
         return ret;
       }
     },
     {
-      requiredScopes: ['user/viewer/list'],
-      callback: async (obj, args, context) => {
-        let ret = await context.User.list(args);
-        return ret;
-      }
-    },
-    {
-      requiredScopes: ['user/visitor/list'],
-      callback: async (obj, args, context) => {
+      requiredScopes: ['user/list'],
+      callback: async (sources, args, context) => {
+        // insert public filter, current filters become post filters
+        args.filters = [
+          {
+            bool: 'and',
+            table: 'users',
+            field: 'is_public',
+            boolValue: true,
+            postfiltersBool: 'and',
+            postfilters: args.filters
+          }
+        ];
+
+        args.printSQL = true;
+
         let ret = await context.User.list(args);
         return ret;
       }
@@ -42,76 +49,79 @@ function addQueries(obj) {
 
   obj.Query.pagingUsers = authSwitch([
     {
-      requiredScopes: ['user/superuser/list', 'user/admin/list', 'user/editor/list'],
+      requiredScopes: ['admin:user/list'],
       callback: async (obj, args, context) => {
         const ret = await context.User.paging(args);
         return ret;
       }
     },
     {
-      requiredScopes: ['user/viewer/list'],
+      requiredScopes: ['user/list'],
       callback: async (obj, args, context) => {
-        const ret = await context.User.paging(args);
-        return ret;
-      }
-    },
-    {
-      requiredScopes: ['user/visitor/list'],
-      callback: async (obj, args, context) => {
+        // insert public filter, current filters become post filters
+        args.filters = [
+          {
+            bool: 'and',
+            table: 'users',
+            field: 'is_public',
+            boolValue: true,
+            postfiltersBool: 'and',
+            postfilters: args.filters
+          }
+        ];
+
+        args.printSQL = true;
+
         const ret = await context.User.paging(args);
         return ret;
       }
     }
   ]);
 
+  // This one switches between search and searchPublic based on the auth
   obj.Query.searchUsers = authSwitch([
     {
-      requiredScopes: ['user/superuser/list', 'user/admin/list', 'user/editor/list'],
+      requiredScopes: ['admin:user/list'],
       callback: async (obj, args, context) => {
         const ret = await context.User.search(args);
         return ret;
       }
     },
     {
-      requiredScopes: ['user/viewer/list'],
+      requiredScopes: ['user/list'],
       callback: async (obj, args, context) => {
-        const ret = await context.User.searchPublic(args);
-        return ret;
-      }
-    },
-    {
-      requiredScopes: ['user/visitor/list'],
-      callback: async (obj, args, context) => {
-        const ret = await context.User.searchPublic(args);
+        // insert public filter, current filters become post filters
+        args.filters = [
+          {
+            bool: 'and',
+            table: 'users',
+            field: 'is_public',
+            boolValue: true,
+            postfiltersBool: 'and',
+            postfilters: args.filters
+          }
+        ];
+
+        const ret = await context.User.search(args);
         return ret;
       }
     }
   ]);
 
   obj.Query.user = authSwitch([
+    /// private view...
     {
-      requiredScopes: ['user/superuser/view', 'user/admin/view', 'user/editor/view'],
+      requiredScopes: (obj, args, context) => {
+        return args.id === context.user.id ? ['user:self/view'] : ['admin:user/view'];
+      },
       callback: async (obj, args, context) => {
         const ret = await context.User.get(args);
         return ret;
       }
     },
+    /// public view...
     {
-      requiredScopes: ['user/self/view'],
-      callback: async (obj, args, context) => {
-        const ret = await context.User.get(args);
-        return ret;
-      }
-    },
-    {
-      requiredScopes: ['user/viewer/view'],
-      callback: async (obj, args, context) => {
-        const ret = await context.User.get(args);
-        return ret;
-      }
-    },
-    {
-      requiredScopes: ['user/visitor/view'],
+      requiredScopes: ['user/view'],
       callback: async (obj, args, context) => {
         const ret = await context.User.get(args);
         return ret;

@@ -36,13 +36,17 @@ function addTypeResolvers(obj) {
       return obj.orgName ? obj.orgName : obj.name;
     },
     roleId(obj) {
-      return obj.id;
+      return obj.roleId ? obj.roleId : obj.id;
     },
     roleName(obj) {
-      return obj.name;
+      return obj.roleName ? obj.roleName : obj.name;
+    },
+
+    id(obj) {
+      return obj.roleId ? obj.roleId : obj.id;
     },
     name(obj) {
-      return obj.name;
+      return obj.roleName ? obj.roleName : obj.name;
     },
     displayName(obj) {
       return obj.displayName;
@@ -53,38 +57,107 @@ function addTypeResolvers(obj) {
     scopes(obj) {
       return obj.scopes ? obj.scopes : null;
     },
-    permissions: createBatchResolver(async (source, args, context) => {
-      let ids = _.uniq(source.map(s => s.id));
+    permissions: createBatchResolver(async (sources, args, context) => {
+      let ids = _.uniq(sources.map(s => s.id));
       const rolePerms = await context.Authz.getPermissionsForOrgRoles({ ids });
 
       const pids = _.uniq(_.map(_.flatten(rolePerms), elem => elem.permissionId));
       args.ids = pids;
       const perms = await context.Authz.getPermissions(args);
 
-      const ret = reconcileBatchManyToMany(source, rolePerms, perms, 'roleId', 'permissionId');
+      const ret = reconcileBatchManyToMany(sources, rolePerms, perms, 'roleId', 'permissionId');
       return ret;
     }),
-    users: createBatchResolver(async (source, args, context) => {
-      let ids = _.uniq(source.map(s => s.id));
+    users: createBatchResolver(async (sources, args, context) => {
+      let ids = _.uniq(sources.map(s => s.id));
       const roleUsers = await context.Authz.getUsersForOrgRoles({ ids });
 
       const uids = _.uniq(_.map(_.flatten(roleUsers), elem => elem.userId));
       args.ids = uids;
       const users = await context.User.getMany(args);
 
-      const ret = reconcileBatchManyToMany(source, roleUsers, users, 'roleId', 'userId');
+      const ret = reconcileBatchManyToMany(sources, roleUsers, users, 'roleId', 'userId');
       return ret;
     })
   };
 
   obj.Org = {
-    roles: createBatchResolver(async (source, args, context) => {
-      let ids = _.uniq(source.map(s => s.orgId));
+    roles: createBatchResolver(async (sources, args, context) => {
+      let ids = _.uniq(sources.map(s => s.orgId));
       args.ids = ids;
       const roles = await context.Authz.getOrgRolesForOrgs(args);
-      const ret = reconcileBatchOneToMany(source, roles, 'orgId');
+      const ret = reconcileBatchOneToMany(sources, roles, 'orgId');
+      return ret;
+    }),
+
+    myRoles: createBatchResolver(async (sources, args, context) => {
+      console.log('Org.myRoles - input', sources, args, context.user);
+      let ids = _.uniq(sources.map(s => s.orgId));
+
+      let orgRoles = context.auth.orgRolesAndPermissions.filter(elem => ids.includes(elem.orgId));
+      console.log('Org.myRoles - orgRoles 1', orgRoles);
+      orgRoles = orgRoles.map(elem => {
+        let ret = [];
+        for (let role of elem.roles) {
+          ret.push({
+            orgId: elem.orgId,
+            orgName: elem.orgName,
+            roleId: role.roleId,
+            roleName: role.roleName,
+            permissions: role.permissions
+          });
+        }
+        return ret;
+      });
+
+      console.log('Org.myRoles - orgRoles 2', orgRoles);
+
+      const ret = reconcileBatchOneToMany(sources, orgRoles, 'orgId');
+      return ret;
+    }),
+
+    myPermissions: createBatchResolver(async (sources, args, context) => {
+      console.log('Org.myPermissions - input', sources, args, context.user);
+      let ids = _.uniq(sources.map(s => s.orgId));
+
+      let orgRoles = context.auth.orgRolesAndPermissions.filter(elem => ids.includes(elem.orgId));
+      console.log('Org.myPermissions - orgRoles', orgRoles);
+      let orgPermissions = orgRoles.map(elem => elem.permissions);
+
+      console.log('Org.myPermissions - orgPermissions', orgPermissions);
+
+      const ret = reconcileBatchOneToMany(sources, orgPermissions, 'orgId');
       return ret;
     })
+  };
+
+  const currResolver = obj.User.roles;
+  obj.User.roles = async (sources, args, context, info) => {
+    console.log('User.roles - org handler');
+    let localObj = obj;
+    let path = [];
+    let ipath = info.path;
+    while (ipath) {
+      path.push(ipath.key);
+      ipath = ipath.prev;
+    }
+    console.log('Org.users.roles', path, args);
+    console.log(sources);
+
+    if (path.includes('org') || path.includes('orgs')) {
+      // check that org is the most recent from user
+      for (let p of path) {
+        if (p === 'group' || p === 'groups') {
+          break;
+        } // and fall through to the end of func
+        if (p === 'org' || p === 'orgs') {
+          return obj.User.orgRoles(sources, args, context, info);
+        }
+      }
+    }
+
+    // otherwise we don't apply, so move on down the resolver chain
+    return currResolver(sources, args, context, info);
   };
 
   obj.User.orgRoles = createBatchResolver(async (source, args, context, info) => {

@@ -4,6 +4,7 @@ extend type Query {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): [Org]
@@ -12,21 +13,24 @@ extend type Query {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): PagingOrgsResponse
 
-  # Get all groups, possibly filtered and ordered
-  myOrgs(
-    filters: [FilterInput]
-    groupBys: [GroupByInput]
-    orderBys: [OrderByInput]
-    offset: Int
-    limit: Int
-  ): MyOrgsPayload
-
   # Get org by id
   org(id: String!): Org
+
+  # search for users, some limit on context may occur
+  searchOrgs(
+    searchText: String!
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
+    page: Int
+    offset: Int
+    limit: Int
+  ): SearchOrgsResponse
 }
 
 extend type Mutation {
@@ -54,6 +58,7 @@ extend type User {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): [Org]
@@ -64,6 +69,7 @@ extend type Group {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): [Org]
@@ -73,36 +79,29 @@ extend type Group {
 # Org Types
 #
 
-type PagingOrgsResponse {
-  data: [Org]
-  total: Int
-  pages: Int
-}
-
-type MyOrgsPayload {
-  org: [Org]
-  errors: [FieldError!]
-}
-
-type OrgPayload {
-  org: Org
-  errors: [FieldError!]
-}
-
 type Org {
   createdAt: String
   updatedAt: String
 
   id: String!
   name: String!
+  orgId: String!
+  orgName: String!
   isActive: Boolean
+  isPublic: Boolean
+
+  urlName: String
+  displayName: String
+  locale: String
 
   profile: OrgProfile
+  settings: OrgSettings
 
   groups(
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): [Group]
@@ -111,6 +110,7 @@ type Org {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): [User]
@@ -119,10 +119,46 @@ type Org {
 type OrgProfile {
   createdAt: String
   updatedAt: String
+  isPublic: Boolean
 
   domain: String
   displayName: String
   description: String
+}
+
+type OrgSettings {
+  createdAt: String
+  updatedAt: String
+  isPublic: Boolean
+
+  membershipIsOpen: Boolean
+  membershipByRequest: Boolean
+  membershipByInvite: Boolean
+  membershipByDirect: Boolean
+
+  memberlistIsPublic: Boolean
+
+  grouplistIsPublic: Boolean
+  groupmemberlistIsPublic: Boolean
+}
+
+type PagingOrgsResponse {
+  results: [Org]
+  count: Int
+  pages: Int
+  errors: [FieldError!]
+}
+
+type SearchOrgsResponse {
+  results: [Org]
+  count: Int
+  pages: Int
+  errors: [FieldError!]
+}
+
+type OrgPayload {
+  org: Org
+  errors: [FieldError!]
 }
 
 input AddOrgInput {

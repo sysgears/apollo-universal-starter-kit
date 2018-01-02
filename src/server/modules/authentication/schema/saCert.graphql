@@ -12,5 +12,13 @@ extend type Mutation {
 }
 
 extend type ServiceAccountAuth {
-  certificates: [CertificateAuth]
+  certificates(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    page: Int
+    offset: Int
+    limit: Int
+  ): [CertificateAuth]
 }

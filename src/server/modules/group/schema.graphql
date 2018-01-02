@@ -4,6 +4,7 @@ extend type Query {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): [Group]
@@ -12,29 +13,24 @@ extend type Query {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): PagingGroupsResponse
 
-  # Get all groups, possibly filtered and ordered
-  myGroups(
-    filters: [FilterInput]
-    orderBys: [OrderByInput]
-    offset: Int
-    limit: Int
-  ): MyGroupsPayload
-
   # Get group by id
   group(id: String!): Group
 
-  # Get group by id
-  groupMembers(
-    id: String!
+  # search for users, some limit on context may occur
+  searchGroups(
+    searchText: String!
     filters: [FilterInput]
     orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
-  ): [User]
+  ): SearchGroupsResponse
 }
 
 extend type Mutation {
@@ -43,7 +39,7 @@ extend type Mutation {
   editGroup(input: EditGroupInput!): GroupPayload!
   deleteGroup(id: String!): GroupPayload!
 
-  # Group membership
+  #þR Group membership
   addUserToGroup(groupId: String!, userId: String!): GroupPayload!
   removeUserFromGroup(groupId: String!, userId: String!): GroupPayload!
 }
@@ -60,6 +56,7 @@ extend type User {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): [Group]
@@ -69,37 +66,29 @@ extend type User {
 # Group Types
 #
 
-type PagingGroupsResponse {
-  data: [Group]
-  total: Int
-  pages: Int
-}
-
-type MyGroupsPayload {
-  groups: [Group]
-  errors: [FieldError!]
-}
-
-type GroupPayload {
-  group: Group
-  errors: [FieldError!]
-}
-
 type Group {
   createdAt: String
   updatedAt: String
 
   id: String!
   name: String!
+  groupId: String!
+  groupName: String!
   isActive: Boolean
+  isPublic: Boolean
 
-  role: String
+  urlName: String
+  displayName: String
+  locale: String
+
   profile: GroupProfile
+  settings: GroupSettings
 
   users(
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): [User]
@@ -108,26 +97,77 @@ type Group {
 type GroupProfile {
   createdAt: String
   updatedAt: String
+  isPublic: Boolean
 
-  displayName: String
   description: String
+}
+
+type GroupSettings {
+  createdAt: String
+  updatedAt: String
+  isPublic: Boolean
+
+  membershipIsOpen: Boolean
+  membershipByRequest: Boolean
+  membershipByInvite: Boolean
+  membershipByDirect: Boolean
+
+  memberlistIsPublic: Boolean
+}
+
+type PagingGroupsResponse {
+  results: [Group]
+  count: Int
+  pages: Int
+  errors: [FieldError!]
+}
+
+type SearchGroupsResponse {
+  results: [User]
+  count: Int
+  pages: Int
+  errors: [FieldError!]
+}
+
+type GroupPayload {
+  group: Group
+  errors: [FieldError!]
 }
 
 input AddGroupInput {
   name: String!
+  isPublic: Boolean
+
+  urlName: String
+  displayName: String
+  locale: String
 
   profile: GroupProfileInput
+  settings: GroupSettingsInput
 }
 
 input EditGroupInput {
   id: String!
   name: String
-  isActive: Boolean
+  isPublic: Boolean
+
+  urlName: String
+  displayName: String
+  locale: String
 
   profile: GroupProfileInput
+  settings: GroupSettingsInput
 }
 
 input GroupProfileInput {
-  displayName: String
   description: String
+}
+
+input GroupSettingsInput {
+  membershipIsOpen: Boolean
+  membershipByRequest: Boolean
+  membershipByInvite: Boolean
+  membershipByDirect: Boolean
+
+  memberlistIsPublic: Boolean
 }

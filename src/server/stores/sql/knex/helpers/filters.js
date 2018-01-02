@@ -1,8 +1,11 @@
 export default function filterBuilder(queryBuilder, args) {
   let { filters } = args;
-
   // add filter conditions
   if (filters) {
+    if (args.debug && args.debug.filters) {
+      console.log('filterBuilder args', args);
+    }
+
     let first = true;
     for (let filter of filters) {
       if (!filter) {
@@ -12,26 +15,35 @@ export default function filterBuilder(queryBuilder, args) {
         continue;
       }
 
+      if (filter.valueExtractor) {
+        filter.value = filter.valueExtractor(args);
+      }
+      if (filter.valuesExtractor) {
+        filter.values = filter.valuesExtractor(args);
+      }
+
       // Pre Filters Recursion
       if (filter.prefilters) {
+        let argsClone = Object.assign({}, args);
+        argsClone.filters = filter.prefilters;
         if (first) {
           first = false;
           queryBuilder.where(function() {
-            filterBuilder(this, { filters: filter.prefilters });
+            filterBuilder(this, argsClone);
           });
         } else {
-          if (filter.filterBool === 'and') {
+          if (filter.prefiltersBool === 'and') {
             queryBuilder.andWhere(function() {
-              filterBuilder(this, { filters: filter.prefilters });
+              filterBuilder(this, argsClone);
             });
-          } else if (filter.filterBool === 'or') {
+          } else if (filter.prefilterBool === 'or') {
             queryBuilder.orWhere(function() {
-              filterBuilder(this, { filters: filter.prefilters });
+              filterBuilder(this, argsClone);
             });
           } else {
             // Default to OR
             queryBuilder.orWhere(function() {
-              filterBuilder(this, { filters: filter.prefilters });
+              filterBuilder(this, argsClone);
             });
           }
         }
@@ -80,24 +92,26 @@ export default function filterBuilder(queryBuilder, args) {
 
       // Post Filters Recursion
       if (filter.postfilters) {
+        let argsClone = Object.assign({}, args);
+        argsClone.filters = filter.postfilters;
         if (first) {
           first = false;
           queryBuilder.where(function() {
-            filterBuilder(this, { filters: filter.postfilters });
+            filterBuilder(this, argsClone);
           });
         } else {
-          if (filter.filterBool === 'and') {
+          if (filter.postfiltersBool === 'and') {
             queryBuilder.andWhere(function() {
-              filterBuilder(this, { filters: filter.postfilters });
+              filterBuilder(this, argsClone);
             });
-          } else if (filter.filterBool === 'or') {
+          } else if (filter.postfiltersBool === 'or') {
             queryBuilder.orWhere(function() {
-              filterBuilder(this, { filters: filter.postfilters });
+              filterBuilder(this, argsClone);
             });
           } else {
             // Default to OR
             queryBuilder.orWhere(function() {
-              filterBuilder(this, { filters: filter.postfilters });
+              filterBuilder(this, argsClone);
             });
           }
         }

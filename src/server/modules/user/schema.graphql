@@ -4,6 +4,7 @@ extend type Query {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): [User]
@@ -13,6 +14,7 @@ extend type Query {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): PagingUsersResponse
@@ -29,6 +31,7 @@ extend type Query {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): SearchUsersResponse
@@ -50,14 +53,46 @@ extend type Subscription {
 # User Types
 #
 
-type SearchUsersResponse {
+type User {
+  createdAt: String
+  updatedAt: String
+
+  userId: String!
+  id: String!
+  email: String!
+  isActive: Boolean
+  isPublic: Boolean
+
+  urlName: String
+  displayName: String
+  locale: String
+
+  profile: UserProfile
+}
+
+type UserProfile {
+  createdAt: String
+  updatedAt: String
+  isPublic: Boolean
+
+  firstName: String
+  middleName: String
+  lastName: String
+  title: String
+  suffix: String
+  language: String
+
+  emails: [String]
+}
+
+type PagingUsersResponse {
   results: [User]
   count: Int
   pages: Int
   errors: [FieldError!]
 }
 
-type PagingUsersResponse {
+type SearchUsersResponse {
   results: [User]
   count: Int
   pages: Int
@@ -70,22 +105,7 @@ type UserPayload {
   errors: [FieldError!]
 }
 
-type User {
-  createdAt: String
-  updatedAt: String
-
-  userId: String!
-  id: String!
-  email: String!
-  isActive: Boolean
-
-  profile: UserProfile
-}
-
-type UserProfile {
-  createdAt: String
-  updatedAt: String
-
+input ProfileInput {
   displayName: String
   firstName: String
   middleName: String
@@ -107,17 +127,4 @@ input EditUserInput {
   id: String!
   email: String
   profile: ProfileInput
-}
-
-input ProfileInput {
-  displayName: String
-  firstName: String
-  middleName: String
-  lastName: String
-  title: String
-  suffix: String
-  language: String
-  locale: String
-
-  emails: [String]
 }

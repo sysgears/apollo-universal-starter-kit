@@ -2,6 +2,7 @@ export default [
   {
     short: 'owner',
     role: 'owner',
+    isPrivate: true,
     profile: {
       displayName: 'Big Boss Man',
       firstName: 'Ray',
@@ -25,6 +26,7 @@ export default [
     short: 'auditor',
     role: 'admin',
     profile: {
+      isPublic: true,
       displayName: 'auditing...',
       firstName: 'Hermes',
       lastName: 'Conrad'
@@ -35,6 +37,7 @@ export default [
     short: 'support',
     role: 'admin',
     profile: {
+      isPublic: true,
       displayName: 'daAdmin',
       firstName: 'Sponge',
       lastName: 'Bob'
@@ -45,6 +48,7 @@ export default [
     short: 'developer',
     role: 'admin',
     profile: {
+      isPublic: true,
       displayName: 'hackerz_rule',
       firstName: 'B',
       lastName: 'Mo'
@@ -55,6 +59,7 @@ export default [
     short: 'editor',
     role: 'admin',
     profile: {
+      isPublic: true,
       displayName: 'daAdmin',
       firstName: 'Sponge',
       lastName: 'Bob'
@@ -75,6 +80,7 @@ export default [
     short: 'subscriber1',
     role: 'subscriber',
     profile: {
+      isPublic: true,
       displayName: 'daAdmin',
       firstName: 'Sponge',
       lastName: 'Bob'
@@ -85,6 +91,7 @@ export default [
     short: 'subscriber2',
     role: 'subscriber',
     profile: {
+      isPublic: true,
       displayName: 'daAdmin',
       firstName: 'Sponge',
       lastName: 'Bob'
@@ -105,6 +112,7 @@ export default [
     short: 'user',
     role: 'user',
     profile: {
+      isPublic: true,
       displayName: 'user',
       firstName: 'Alice',
       lastName: 'Bob'
@@ -115,6 +123,7 @@ export default [
     short: 'user1',
     role: 'user',
     profile: {
+      isPublic: true,
       displayName: 'daAdmin',
       firstName: 'Sponge',
       lastName: 'Bob'
@@ -125,6 +134,7 @@ export default [
     short: 'user2',
     role: 'user',
     profile: {
+      isPublic: true,
       displayName: 'daAdmin',
       firstName: 'Sponge',
       lastName: 'Bob'
@@ -135,6 +145,7 @@ export default [
     short: 'user3',
     role: 'user',
     profile: {
+      isPublic: true,
       displayName: 'daAdmin',
       firstName: 'Sponge',
       lastName: 'Bob'

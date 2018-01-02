@@ -40,10 +40,12 @@ export default class Org {
   updateProfile = updateAdapter({ table: 'org_profile', idField: 'org_id' });
   deleteProfile = deleteAdapter({ table: 'org_profile', idField: 'org_id' });
 
-  searchOrgs = async (args, trx) => {
-    const ret = await searchOrgsSelector(args, trx);
-    return camelizeKeys(ret);
-  };
+  getSettings = getAdapter({ table: 'org_settings', idField: 'org_id' });
+  getSettingsMany = listAdapter({ table: 'org_settings', idField: 'org_id' });
+  createSettings = createWithIdAdapter({ table: 'org_settings', idField: 'org_id' });
+  updateSettings = updateAdapter({ table: 'org_settings', idField: 'org_id' });
+  deleteSettings = deleteAdapter({ table: 'org_settings', idField: 'org_id' });
+
   /*
    * Membership functions
    */
@@ -112,52 +114,50 @@ export default class Org {
     ret = orderedFor(ret, args.ids, 'userId', false);
     return ret;
   };
+
+  search = async (args, trx) => {
+    const ret = await searchOrgsSelector(args, trx);
+    return ret;
+  };
 }
 
-const searchOrgsSelector = selectAdapter({
+const searchOrgsSelector = pagingAdapter({
   table: 'orgs',
-  joins: [
-    {
-      table: 'org_profile',
-      join: 'left',
-      args: ['org_profile.org_id', 'orgs.id']
-    }
-  ],
   filters: [
     {
       bool: 'or',
       table: 'orgs',
       field: 'id',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     },
     {
       bool: 'or',
       table: 'orgs',
       field: 'name',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     },
     {
       bool: 'or',
-      table: 'org_profile',
-      field: 'displayName',
+      table: 'orgs',
+      field: 'url_name',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     },
     {
       bool: 'or',
-      table: 'org_profile',
-      field: 'domain',
+      table: 'orgs',
+      field: 'display_name',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     },
     {
       bool: 'or',
-      table: 'org_profile',
-      field: 'description',
+      table: 'orgs',
+      field: 'locale',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     }
   ]
 });
@@ -225,75 +225,3 @@ const getUserIdsForOrgIdsViaGroupsSelector = selectAdapter({
     }
   ]
 });
-
-/*
-  async getUserIdsForOrgIdsViaGroups(ids, trx) {
-    try {
-      let builder1 = knex
-        .select('*')
-        .whereIn('og.org_id', ids)
-        .from('orgs_users AS og');
-
-      if (trx) {
-        builder1.transacting(trx);
-      }
-
-      let rows1 = await builder1;
-      let builder = knex
-        .select('ou.org_id', 'gu.group_id', 'ou.user_id')
-        .whereIn('ou.org_id', ids)
-        .from('orgs_users AS ou')
-        .leftJoin('groups_users AS gu', 'gu.user_id', 'ou.user_id');
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-      rows = rows.concat(rows1);
-
-      let ret = _.filter(rows, row => row.userId !== null);
-      ret = camelizeKeys(ret);
-      ret = orderedFor(ret, ids, 'orgId', false);
-      return ret;
-    } catch (e) {
-      log.error('Error in Org.getUserIdsForOrgIdsViaGroups', e);
-      throw e;
-    }
-  }
-
-  async getOrgIdsForUserIdsViaGroups(ids, trx) {
-    try {
-      let builder1 = knex
-        .select('*')
-        .whereIn('og.user_id', ids)
-        .from('orgs_users AS og');
-
-      if (trx) {
-        builder1.transacting(trx);
-      }
-
-      let rows1 = await builder1;
-
-      let builder = knex
-        .select('og.org_id', 'gu.group_id', 'gu.user_id')
-        .whereIn('gu.user_id', ids)
-        .from('groups_users AS gu')
-        .leftJoin('orgs_groups AS og', 'og.group_id', 'gu.group_id');
-
-      if (trx) {
-        builder.transacting(trx);
-      }
-
-      let rows = await builder;
-      rows = rows.concat(rows1);
-      let ret = _.filter(rows, row => row.orgId !== null);
-      let res = camelizeKeys(ret);
-      res = orderedFor(res, ids, 'userId', false);
-      return res;
-    } catch (e) {
-      log.error('Error in Org.getOrgIdsForUserIdsViaGroups', e);
-      throw e;
-    }
-  }
-  */

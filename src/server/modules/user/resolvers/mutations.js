@@ -18,41 +18,42 @@ export default function addResolvers(obj) {
 function addMutations(obj) {
   obj.Mutation.addUser = authSwitch([
     {
-      requiredScopes: ['user/superuser/create', 'user/admin/create', 'user/self/create'],
+      requiredScopes: ['user:self/create', 'admin:user/create'],
       callback: async (obj, args, context) => {
-        console.log('adding user:', args);
+        let { input } = args;
+        // console.log('adding user:', input);
         try {
           const e = new FieldError();
           let uid = null;
-          if (args.email) {
-            console.log('looking for user email', args.email);
-            const emailExists = await context.User.getByEmail(args.email);
+          if (input.email) {
+            // console.log('looking for user email', input.email);
+            const emailExists = await context.User.getByEmail(input.email);
             if (emailExists) {
               e.setError('email', 'E-mail already exists.');
               e.throwIf();
             }
-            uid = await context.User.create({ email: args.email });
+            uid = await context.User.create({ email: input.email });
           } else {
             e.setError('email', 'E-mail address required.');
             e.throwIf();
           }
 
           if (!uid) {
-            console.log('Error creating user', uid);
+            // console.log('Error creating user', uid);
             e.setError('error', 'Something went wrong when creating the user');
             e.throwIf();
           }
 
-          if (args.profile) {
-            if (!args.profile.displayName) {
-              args.profile.displayName = args.email;
+          if (input.profile) {
+            if (!input.profile.displayName) {
+              input.profile.displayName = input.email;
             }
-            console.log('creating user profile', args.profile);
-            await context.User.createProfile(uid, args.profile);
+            // console.log('creating user profile', input.profile);
+            await context.User.createProfile(uid, input.profile);
           }
 
           const user = await context.User.get({ id: uid });
-          console.log('return user', user);
+          // console.log('return user', user);
           return { user, errors: null };
         } catch (e) {
           return { user: null, errors: e };
@@ -63,31 +64,26 @@ function addMutations(obj) {
 
   obj.Mutation.editUser = authSwitch([
     {
-      requiredScopes: (obj, args, context) => {
-        return context.user.id !== args.id
-          ? ['user/superuser/update', 'user/admin/update', 'user/editor/update']
-          : ['user/self/update'];
-      },
+      requiredScopes: ['user:self/update', 'admin:user/update'],
       callback: async (obj, args, context) => {
+        let { input } = args;
         try {
           const e = new FieldError();
-          if (args.email) {
-            console.log('updating user email');
-            const emailExists = await context.User.getByEmail(args.email);
-            if (emailExists && emailExists.id !== args.id) {
+          if (input.email) {
+            const emailExists = await context.User.getByEmail(input.email);
+            if (emailExists && emailExists.id !== input.id) {
               e.setError('email', 'E-mail already exists.');
               e.throwIf();
             }
-            await context.User.update(args.id, { email: args.email });
+            await context.User.update(input.id, { email: input.email });
           }
 
-          if (args.profile) {
-            console.log('updating user profile', args.profile);
-            await context.User.updateProfile(args.id, args.profile);
+          if (input.profile) {
+            await context.User.updateProfile(input.id, input.profile);
           }
 
-          const user = await context.User.get({ id: args.id });
-          console.log('return user', user);
+          const user = await context.User.get({ id: input.id });
+          // console.log('return user', user);
           return { user, errors: null };
         } catch (e) {
           return { user: null, errors: e };
@@ -98,11 +94,7 @@ function addMutations(obj) {
 
   obj.Mutation.deleteUser = authSwitch([
     {
-      requiredScopes: (obj, args, context) => {
-        return context.user.id !== args.id
-          ? ['user/superuser/update', 'user/admin/update', 'user/editor/update']
-          : ['user/self/update'];
-      },
+      requiredScopes: ['user:self/delete', 'admin:user/delete'],
       callback: async (obj, args, context) => {
         try {
           const e = new FieldError();

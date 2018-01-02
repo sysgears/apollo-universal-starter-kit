@@ -28,11 +28,6 @@ export default class User {
 
   getProfile = getAdapter({ table: 'user_profile', idField: 'user_id' });
   getProfileMany = listAdapter({ table: 'user_profile', idField: 'user_id' });
-  getProfilePublicMany = listAdapter({
-    table: 'user_profile',
-    idField: 'user_id',
-    selects: ['user_id', 'display_name', 'language', 'locale']
-  });
   createProfile = createWithIdAdapter({ table: 'user_profile', idField: 'user_id' });
   updateProfile = updateAdapter({ table: 'user_profile', idField: 'user_id' });
   deleteProfile = deleteAdapter({ table: 'user_profile', idField: 'user_id' });
@@ -41,90 +36,45 @@ export default class User {
     const ret = await searchUsersSelector(args, trx);
     return ret;
   };
-  searchPublic = async (args, trx) => {
-    const ret = await searchUsersPublicSelector(args, trx);
-    return ret;
-  };
 }
 
 const searchUsersSelector = pagingAdapter({
-  table: 'users AS u',
-  joins: [
-    {
-      table: 'user_profile AS p',
-      join: 'left',
-      args: ['p.user_id', 'u.id']
-    }
-  ],
+  table: 'users',
   filters: [
     {
       bool: 'or',
-      table: 'u',
+      table: 'users',
       field: 'id',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     },
     {
       bool: 'or',
-      table: 'u',
+      table: 'users',
       field: 'email',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     },
     {
       bool: 'or',
-      table: 'p',
+      table: 'users',
+      field: 'url_name',
+      compare: 'like',
+      valueExtractor: args => `${args.searchText}`
+    },
+    {
+      bool: 'or',
+      table: 'users',
       field: 'display_name',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     },
     {
       bool: 'or',
-      table: 'p',
-      field: 'first_name',
+      table: 'users',
+      field: 'locale',
       compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
-    },
-    {
-      bool: 'or',
-      table: 'p',
-      field: 'last_name',
-      compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
-    }
-  ]
-});
-
-const searchUsersPublicSelector = pagingAdapter({
-  table: 'users AS u',
-  joins: [
-    {
-      table: 'user_profile AS p',
-      join: 'left',
-      args: ['p.user_id', 'u.id']
-    }
-  ],
-  filters: [
-    {
-      bool: 'or',
-      table: 'u',
-      field: 'id',
-      compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
-    },
-    {
-      bool: 'or',
-      table: 'u',
-      field: 'email',
-      compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
-    },
-    {
-      bool: 'or',
-      table: 'p',
-      field: 'display_name',
-      compare: 'like',
-      valueExtractor: args => `%${args.searchText}%`
+      valueExtractor: args => `${args.searchText}`
     }
   ]
 });

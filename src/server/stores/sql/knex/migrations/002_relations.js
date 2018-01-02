@@ -112,8 +112,55 @@ exports.up = function(knex, Promise) {
         table.unique(['user_id']);
       }
     });
-
     migs.push(fn);
+
+    if (config.social.groups.following === true) {
+      let fn = knex.schema.createTable('user_2_group_follows', table => {
+        table.timestamps(true, true);
+
+        table
+          .uuid('followed_id')
+          .notNullable()
+          .unique()
+          .references('id')
+          .inTable('groups')
+          .onDelete('CASCADE');
+
+        table
+          .uuid('follower_id')
+          .notNullable()
+          .unique()
+          .references('id')
+          .inTable('users')
+          .onDelete('CASCADE');
+
+        table.unique(['followed_id', 'follower_id']);
+      });
+      migs.push(fn);
+
+      fn = knex.schema.createTable('group_2_user_follows', table => {
+        table.timestamps(true, true);
+
+        table
+          .uuid('followed_id')
+          .notNullable()
+          .unique()
+          .references('id')
+          .inTable('users')
+          .onDelete('CASCADE');
+
+        table
+          .uuid('follower_id')
+          .notNullable()
+          .unique()
+          .references('id')
+          .inTable('groups')
+          .onDelete('CASCADE');
+
+        table.unique(['followed_id', 'follower_id']);
+      });
+      migs.push(fn);
+    }
   }
 
   if (config.groups.enabled === true && config.serviceaccounts.enabled) {
@@ -141,6 +188,65 @@ exports.up = function(knex, Promise) {
     });
 
     migs.push(fn);
+  }
+
+  if (config.social.enabled === true) {
+    if (config.social.users.following === true) {
+      let fn = knex.schema.createTable('user_follows', table => {
+        table.timestamps(true, true);
+
+        table
+          .uuid('followed_id')
+          .notNullable()
+          .unique()
+          .references('id')
+          .inTable('users')
+          .onDelete('CASCADE');
+
+        table
+          .uuid('follower_id')
+          .notNullable()
+          .unique()
+          .references('id')
+          .inTable('users')
+          .onDelete('CASCADE');
+
+        table.unique(['followed_id', 'follower_id']);
+      });
+      migs.push(fn);
+    }
+
+    if (config.social.users.friending === true) {
+      let fn = knex.schema.createTable('user_follows', table => {
+        table.timestamps(true, true);
+
+        // TODO not really
+        // WARNING, these should be inserted by an ordering
+        table
+          .uuid('friend1_id')
+          .notNullable()
+          .unique()
+          .references('id')
+          .inTable('users')
+          .onDelete('CASCADE');
+
+        table
+          .uuid('friend2_id')
+          .notNullable()
+          .unique()
+          .references('id')
+          .inTable('users')
+          .onDelete('CASCADE');
+
+        table
+          .string('status')
+          .notNullable()
+          .defaultsTo('requested');
+
+        table.unique(['friend1_id', 'friend2_id']);
+      });
+      migs.push(fn);
+    }
   }
 
   return Promise.all(migs);

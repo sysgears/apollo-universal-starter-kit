@@ -29,10 +29,10 @@ function addTypes(obj) {
       return obj.permissionName ? obj.permissionName : obj.name;
     },
     permissionId(obj) {
-      return obj.permissionId ? obj.permissionId : null;
+      return obj.permissionId ? obj.permissionId : obj.name;
     },
     permissionName(obj) {
-      return obj.permissionName ? obj.permissionName : null;
+      return obj.permissionName ? obj.permissionName : obj.name;
     },
     displayName(obj) {
       return obj.displayName;
@@ -42,9 +42,6 @@ function addTypes(obj) {
     },
     resource(obj) {
       return obj.resource;
-    },
-    relation(obj) {
-      return obj.relation;
     },
     verb(obj) {
       return obj.verb;
@@ -60,12 +57,13 @@ function addQueries(obj) {
   };
 
   obj.Query.pagingPermissions = async (obj, args, context) => {
-    const res = await context.Authz.pagingPermissions(args);
-    return {
-      data: res.results,
-      total: res.count,
-      pages: Math.trunc(res.count / args.limit) + 1
-    };
+    const ret = await context.Authz.pagingPermissions(args);
+    return ret;
+  };
+
+  obj.Query.searchPermissions = async (obj, args, context) => {
+    const ret = await context.Authz.searchPermissions(args);
+    return ret;
   };
 
   obj.Query.permission = (obj, args, context) => {

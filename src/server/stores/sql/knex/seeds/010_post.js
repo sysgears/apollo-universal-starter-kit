@@ -1,11 +1,15 @@
 import truncateTables from '../helpers/tables';
 
 export async function seed(knex, Promise) {
-  await truncateTables(knex, Promise, ['post', 'comment']);
+  await truncateTables(knex, Promise, ['posts', 'post_comments']);
 
+  // lets not make posts for now
+  return;
+
+  /*
   await Promise.all(
     [...Array(20).keys()].map(async ii => {
-      const post = await knex('post')
+      const post = await knex('posts')
         .returning('id')
         .insert({
           title: `Post title ${ii + 1}`,
@@ -14,7 +18,7 @@ export async function seed(knex, Promise) {
 
       await Promise.all(
         [...Array(2).keys()].map(async jj => {
-          return knex('comment')
+          return knex('post_comments')
             .returning('id')
             .insert({
               post_id: post[0],
@@ -24,4 +28,5 @@ export async function seed(knex, Promise) {
       );
     })
   );
+  */
 }

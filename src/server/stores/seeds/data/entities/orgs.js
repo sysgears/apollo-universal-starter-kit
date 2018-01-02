@@ -67,6 +67,7 @@ export default [
   },
   {
     name: 'app-owners',
+    isPrivate: true,
     profile: {
       domain: 'example.com',
       displayName: 'My App Owners',
@@ -241,11 +242,11 @@ export default [
       },
       {
         name: 'user2',
-        roles: ['viewer']
+        roles: ['member']
       },
       {
         name: 'user3',
-        roles: ['viewer']
+        roles: ['member']
       }
     ],
     serviceaccounts: [
@@ -473,7 +474,7 @@ export default [
       },
       {
         name: 'user3',
-        roles: ['viewer']
+        roles: ['member']
       }
     ],
     serviceaccounts: [

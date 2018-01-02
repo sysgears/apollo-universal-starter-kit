@@ -4,5 +4,13 @@ extend type Mutation {
 }
 
 extend type ServiceAccountAuth {
-  apikeys: [ApiKeyAuth]
+  apikeys(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    page: Int
+    offset: Int
+    limit: Int
+  ): [ApiKeyAuth]
 }

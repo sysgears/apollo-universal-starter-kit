@@ -13,11 +13,16 @@ exports.up = function(knex, Promise) {
         .notNullable()
         .unique();
       table.boolean('is_active').defaultTo(false);
+      table.boolean('is_public').defaultTo(true);
 
       table
         .string('name')
         .notNullable()
         .unique();
+
+      table.string('url_name').unique();
+      table.string('display_name');
+      table.string('locale'); // Let's go i18n !!
     });
 
     migs.push(fn);
@@ -31,9 +36,39 @@ exports.up = function(knex, Promise) {
         .inTable('orgs')
         .onDelete('CASCADE');
 
+      // maybe a json object would be useful here for development?
+      // one for public and one for private?
+      table.boolean('is_public').defaultTo(true);
       table.string('domain');
-      table.string('display_name');
       table.string('description');
+    });
+
+    migs.push(fn);
+
+    fn = knex.schema.createTable('org_settings', table => {
+      table.timestamps(true, true);
+      table
+        .uuid('org_id')
+        .unique()
+        .references('id')
+        .inTable('orgs')
+        .onDelete('CASCADE');
+      table.boolean('is_public').defaultTo(true);
+
+      table.boolean('membership_is_open').defaultTo(false);
+      table.boolean('membership_by_request').defaultTo(false);
+      table.boolean('membership_by_invite').defaultTo(true);
+      table.boolean('membership_by_direct').defaultTo(true);
+
+      table.boolean('memberlist_is_public').defaultTo(false);
+      // user can override when and how? ... how about groups?
+      // column creeeeeeep!!! maybe it's ok because they are all booleans?
+      // maybe a json object would be useful here for development?
+      // same with profiles?
+
+      // overrides or scopes group level permissions
+      table.boolean('grouplist_is_public').defaultTo(false);
+      table.boolean('groupmemberlist_is_public').defaultTo(false);
     });
 
     migs.push(fn);
@@ -47,11 +82,16 @@ exports.up = function(knex, Promise) {
         .notNullable()
         .unique();
       table.boolean('is_active').defaultTo(false);
+      table.boolean('is_public').defaultTo(true);
 
       table
         .string('name')
         .notNullable()
         .unique();
+
+      table.string('url_name').unique();
+      table.string('display_name');
+      table.string('locale'); // Let's go i18n !!
     });
 
     migs.push(fn);
@@ -65,8 +105,27 @@ exports.up = function(knex, Promise) {
         .inTable('groups')
         .onDelete('CASCADE');
 
-      table.string('display_name');
+      table.boolean('is_public').defaultTo(true);
       table.string('description');
+    });
+
+    migs.push(fn);
+
+    fn = knex.schema.createTable('group_settings', table => {
+      table.timestamps(true, true);
+      table
+        .uuid('group_id')
+        .unique()
+        .references('id')
+        .inTable('groups')
+        .onDelete('CASCADE');
+      table.boolean('is_public').defaultTo(true);
+
+      table.boolean('membership_is_open').defaultTo(false);
+      table.boolean('membership_by_request').defaultTo(true);
+      table.boolean('membership_by_invite').defaultTo(true);
+      table.boolean('membership_by_direct').defaultTo(true);
+      table.boolean('memberlist_is_public').defaultTo(false);
     });
 
     migs.push(fn);
@@ -80,11 +139,16 @@ exports.up = function(knex, Promise) {
         .notNullable()
         .unique();
       table.boolean('is_active').defaultTo(false);
+      table.boolean('is_public').defaultTo(true);
 
       table
         .string('email')
         .notNullable()
         .unique();
+
+      table.string('url_name').unique();
+      table.string('display_name');
+      table.string('locale'); // Let's go i18n !!
     });
 
     migs.push(fn);
@@ -98,13 +162,12 @@ exports.up = function(knex, Promise) {
         .inTable('users')
         .onDelete('CASCADE');
 
-      table.string('display_name');
+      table.boolean('is_public').defaultTo(false);
       table.string('first_name');
       table.string('middle_name');
       table.string('last_name');
       table.string('title');
       table.string('suffix');
-      table.string('locale');
       table.string('language');
     });
 

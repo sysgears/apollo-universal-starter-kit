@@ -3,7 +3,15 @@ extend type Mutation {
 }
 
 extend type UserAuth {
-  oauths: [UserOAuth]
+  oauths(
+    ids: [ID!]
+    filters: [FilterInput!]
+    orderBys: [OrderByInput!]
+    groupBys: [GroupByInput!]
+    page: Int
+    offset: Int
+    limit: Int
+  ): [UserOAuth]
 }
 
 type UserOAuth {

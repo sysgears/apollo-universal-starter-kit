@@ -84,53 +84,31 @@ function addTypeResolvers(obj) {
     }),
     */
 
-    permissions: authSwitch([
-      {
-        requiredScopes: (obj, args, context) => {
-          // console.log("User.profile - self")
-          return args.id === context.user.id ? ['user:profile/self/view'] : 'skip';
-        },
-        callback: async (sources, args, context, info) => {
-          console.log('UserRoleInfo.permissions - self', sources, args);
-          let ids = _.uniq(sources.map(s => s.id));
-          const rolePerms = await context.Authz.getPermissionsForUserRoles({ ids });
-
-          const pids = _.uniq(_.map(_.flatten(rolePerms), elem => elem.permissionId));
-          args.ids = pids;
-          const perms = await context.Authz.getPermissions(args);
-
-          const ret = reconcileBatchManyToMany(sources, rolePerms, perms, 'roleId', 'permissionId');
-          return ret;
-        }
-      },
-
-      {
-        requiredScopes: (obj, args, context) => {
-          // console.log("User.profile - self")
-          return args.id === context.user.id ? ['user:profile/self/'] : 'skip';
-        },
-        callback: createBatchResolver(async (source, args, context) => {
-          console.log(
-            'UserRoleInfo.permissions',
-            source.map(elem => {
-              return { roleId: elem.roleId, roleName: elem.roleName, count: elem.permissions.length };
-            })
-          );
-          if (source[0].permissions) {
-            return source.map(elem => elem.permissions);
-          }
-          let ids = _.uniq(source.map(s => s.id));
-          const rolePerms = await context.Authz.getPermissionsForUserRoles({ ids });
-
-          const pids = _.uniq(_.map(_.flatten(rolePerms), elem => elem.permissionId));
-          args.ids = pids;
-          const perms = await context.Authz.getPermissions(args);
-
-          const ret = reconcileBatchManyToMany(source, rolePerms, perms, 'roleId', 'permissionId');
-          return ret;
+    permissions: createBatchResolver(async (source, args, context, info) => {
+      console.log('UserRoleInfo.permissions - input', source, args);
+      /*
+      console.log(
+        'UserRoleInfo.permissions',
+        source.map(elem => {
+          return { roleId: elem.roleId, roleName: elem.roleName, count: elem.permissions.length };
         })
+      );
+      if (source[0].permissions) {
+        return source.map(elem => elem.permissions);
       }
-    ]),
+      */
+      let ids = _.uniq(source.map(s => s.roleId || s.id));
+      const rolePerms = await context.Authz.getPermissionsForUserRoles(ids);
+
+      const pids = _.uniq(_.map(_.flatten(rolePerms), elem => elem.permissionId));
+      console.log('UserRoleInfo.permissions - args', args);
+      const perms = await context.Authz.getPermissions(args);
+
+      console.log('UserRoleInfo.permissions - perms', perms);
+      const ret = reconcileBatchManyToMany(source, rolePerms, perms, 'roleId', 'permissionId');
+      console.log('UserRoleInfo.permissions - ret', ret);
+      return ret;
+    }),
 
     users: createBatchResolver(async (source, args, context) => {
       let ids = _.uniq(source.map(s => s.id));
@@ -146,57 +124,69 @@ function addTypeResolvers(obj) {
   };
 
   obj.User = {
-    userRoles: authSwitch([
-      {
-        requiredScopes: (sources, args, context, info) => {},
-        presentedScopes: (sources, args, context, info) => {},
-        callback: (sources, args, context, info) => {}
-      }
-    ])
-    /*
-      createBatchResolver(async (sources, args, context, info) => {
+    roles: async (sources, args, context, info) => {
+      console.log('User.roles - user handler');
+      let localObj = obj;
+      return obj.User.userRoles(sources, args, context, info);
+    },
+    userRoles: createBatchResolver(async (sources, args, context, info) => {
       // console.log("User.userRoles - source", source)
-
-      console.log("User.userRoles", sources.length)
-      let path = info.path
-      while(path){
-        console.log(path.key)
-        path = path.prev
+      let localObj = obj;
+      let path = [];
+      let ipath = info.path;
+      while (ipath) {
+        path.push(ipath.key);
+        ipath = ipath.prev;
       }
-      console.log()
+      console.log('User.userRoles', path, args);
+
+      console.log('User.userRoles', sources);
 
       let ids = _.uniq(sources.map(s => s.userId));
-      const userRoles = await context.Authz.getUserRolesForUsers({ ids });
-      // console.log("User.userRoles - userRoles", userRoles)
+      let userRoles = await context.Authz.getUserRolesAndPermissionsForUsers({ ids });
+      userRoles = userRoles.map(elem => {
+        let ret = [];
+        for (let role of elem.userRoles) {
+          ret.push({
+            userId: elem.userId,
+            roleId: role.roleId,
+            roleName: role.roleName,
+            permissions: role.permissions
+          });
+        }
+        return ret;
+      });
 
-      let ret = reconcileBatchOneToOne(sources, userRoles, 'userId')
+      console.log('User.userRoles - userRoles', userRoles);
+
+      let ret = reconcileBatchOneToMany(sources, userRoles, 'userId');
       // console.log("User.userRoles - ret", ret)
-      console.log("User.userRoles - ret", ret.length)
-      return ret
-
-      // let final = ret.map( elem => elem.userRoles )
-      // console.log("User.userRoles - final", final)
-
-      return final;
-    */
+      console.log('User.userRoles - ret', ret);
+      return ret;
+    })
   };
 
   return obj;
 }
 
 function addQueries(obj) {
-  obj.Query.userRoles = async function(obj, args, context) {
-    return context.Authz.getUserRoles(args);
-  };
-
-  obj.Query.userRole = async function(obj, args, context) {
-    let ret = await context.Authz.getUserRoles({ ids: [args.id] });
-    // don't return a single element array
-    if (ret && ret.length === 1) {
-      ret = ret[0];
+  obj.Query.userRoles = authSwitch([
+    {
+      requiredScopes: ['admin:app:user:iam/list'],
+      callback: async function(obj, args, context) {
+        return context.Authz.getUserRoles(args);
+      }
     }
-    return ret;
-  };
+  ]);
+
+  obj.Query.userRoles = authSwitch([
+    {
+      requiredScopes: ['admin:app:user:iam/view'],
+      callback: async function(obj, args, context) {
+        return context.Authz.getUserRoles(args);
+      }
+    }
+  ]);
 
   return obj;
 }
@@ -204,7 +194,7 @@ function addQueries(obj) {
 function addMutations(obj) {
   obj.Mutation.createUserRole = authSwitch([
     {
-      requiredScopes: ['user:iam/superuser/create'],
+      requiredScopes: ['admin:app:user:iam/create'],
       callback: async function(obj, args, context) {
         try {
           let rid = await context.Authz.createUserRole(args.input);
@@ -219,7 +209,7 @@ function addMutations(obj) {
 
   obj.Mutation.updateUserRole = authSwitch([
     {
-      requiredScopes: ['user:iam/superuser/update'],
+      requiredScopes: ['admin:app:user:iam/update'],
       callback: async function(obj, args, context) {
         try {
           await context.Authz.updateUserRole(args.id, args.input);
@@ -234,7 +224,7 @@ function addMutations(obj) {
 
   obj.Mutation.deleteUserRole = authSwitch([
     {
-      requiredScopes: ['user:iam/superuser/delete'],
+      requiredScopes: ['admin:app:user:iam/delete'],
       callback: async function(obj, args, context) {
         try {
           let ret = await context.Authz.deleteUserRole(args.id);
@@ -255,7 +245,7 @@ function addMutations(obj) {
 
   obj.Mutation.grantPermissionToUserRole = authSwitch([
     {
-      requiredScopes: ['user:iam/superuser/update'],
+      requiredScopes: ['admin:user:iam/update'],
       callback: async function(obj, args, context) {
         try {
           let ret = await context.Authz.grantPermissionToUserRole(args.permissionId, args.roleId);
@@ -279,7 +269,7 @@ function addMutations(obj) {
 
   obj.Mutation.revokePermissionFromUserRole = authSwitch([
     {
-      requiredScopes: ['user:iam/superuser/update'],
+      requiredScopes: ['admin:user:iam/update'],
       callback: async function(obj, args, context) {
         try {
           let ret = await context.Authz.revokePermissionFromUserRole(args.permissionId, args.roleId);
@@ -303,7 +293,7 @@ function addMutations(obj) {
 
   obj.Mutation.grantUserRoleToUser = authSwitch([
     {
-      requiredScopes: ['user:iam/superuser/update'],
+      requiredScopes: ['admin:user:iam/update'],
       callback: async function(obj, args, context) {
         try {
           let ret = await context.Authz.grantUserRoleToUser(args.roleId, args.userId);
@@ -327,7 +317,7 @@ function addMutations(obj) {
 
   obj.Mutation.revokeUserRoleFromUser = authSwitch([
     {
-      requiredScopes: ['user:iam/superuser/update'],
+      requiredScopes: ['admin:user:iam/update'],
       callback: async function(obj, args, context) {
         try {
           let ret = await context.Authz.revokeUserRoleFromUser(args.roleId, args.userId);

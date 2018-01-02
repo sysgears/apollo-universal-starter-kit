@@ -4,6 +4,7 @@ extend type Query {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): [PermissionInfo]
@@ -13,6 +14,17 @@ extend type Query {
     filters: [FilterInput]
     orderBys: [OrderByInput]
     groupBys: [GroupByInput]
+    page: Int
+    offset: Int
+    limit: Int
+  ): PagingPermissionResponse
+
+  searchPermissions(
+    searchText: String!
+    filters: [FilterInput]
+    orderBys: [OrderByInput]
+    groupBys: [GroupByInput]
+    page: Int
     offset: Int
     limit: Int
   ): PagingPermissionResponse
@@ -30,8 +42,8 @@ extend type Subscription {
 }
 
 type PagingPermissionResponse {
-  data: [PermissionInfo]
-  total: Int
+  results: [PermissionInfo]
+  count: Int
   pages: Int
 }
 
@@ -57,7 +69,6 @@ type PermissionInfo {
   permissionName: String
 
   resource: String
-  relation: String
   verb: String
 
   displayName: String

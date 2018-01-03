@@ -181,7 +181,7 @@
     "file-loader": "^1.1.5",
     "flow-bin": "^0.61.0",
     "freeport-async": "^1.1.1",
-    "haul": "1.0.0-beta.11",
+    "haul": "1.0.0-beta.12",
     "html-webpack-plugin": "^2.30.1",
     "http-proxy-middleware": "^0.17.4",
     "husky": "^0.14.3",

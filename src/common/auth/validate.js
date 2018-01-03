@@ -6,7 +6,7 @@ import settings from '../../../settings';
 const authz = settings.auth.authorization;
 
 export function validateScope(required, provided) {
-  console.log('validateScope', required, provided);
+  // console.log('validateScope', required, provided);
   if (!provided) {
     return false;
   }

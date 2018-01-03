@@ -110,8 +110,8 @@ export const authBatching = scopingList => {
     }
     context.auth.path = path;
 
-    console.log('authBatching - ultimate sources');
-    console.log(sources);
+    // console.log('authBatching - ultimate sources');
+    // console.log(sources);
 
     let finalResults = new Array(sources.length);
     finalResults.fill([]);
@@ -149,8 +149,8 @@ export const authBatching = scopingList => {
         continue;
       }
 
-      console.log('AuthBatching - requiredScopes', localRequiredScopes);
-      console.log('AuthBatching - presentedScopes', localPresentedScopes);
+      // console.log('AuthBatching - requiredScopes', localRequiredScopes);
+      // console.log('AuthBatching - presentedScopes', localPresentedScopes);
 
       // Now check validate the presented scopes against the required scopes
       //   returns false or a string. string can be deny, skip, or the successful scope matching
@@ -158,16 +158,16 @@ export const authBatching = scopingList => {
       let passedSources = new Array(sources.length);
       for (let sid in remainingSources) {
         let src = remainingSources[sid];
-        console.log(`[${sid}] ${src}`);
+        // console.log(`[${sid}] ${src}`);
         if (!src) {
-          console.log('  - skip:', src);
+          // console.log('  - skip:', src);
           skippedSources[sid] = null;
           passedSources[sid] = {};
           continue;
         }
 
         let pass = validateScope(localRequiredScopes, localPresentedScopes[sid]);
-        console.log('  ? ', pass);
+        // console.log('  ? ', pass);
         if (pass) {
           // Immediately send some bad news to the final results
           if (pass === 'deny') {
@@ -193,10 +193,11 @@ export const authBatching = scopingList => {
         }
       }
 
+      // TODO break out of scoping loop if no remaining sources
       remainingSources = skippedSources;
 
-      console.log('AuthBatching - passedSources', passedSources);
-      console.log('AuthBatching - remainingSources', remainingSources);
+      // console.log('AuthBatching - passedSources', passedSources);
+      // console.log('AuthBatching - remainingSources', remainingSources);
 
       let passedResults = await localCallback(passedSources, args, context, info);
 
@@ -205,7 +206,7 @@ export const authBatching = scopingList => {
           finalResults[sid] = passedResults[sid];
         }
       }
-      console.log('loop final', localRequiredScopes, finalResults);
+      // console.log('loop final', localRequiredScopes, finalResults);
     } // End scoping loop
 
     return finalResults;

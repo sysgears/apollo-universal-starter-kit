@@ -4,7 +4,7 @@ import * as passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { StrategyOptionWithScope } from 'passport-facebook-ext';
 
-import settings from '../../../settings';
+import settings from '../../../../../settings';
 import Feature from '../connector';
 import { createTokens, refreshTokens } from './auth';
 import scopes from './auth/scopes';

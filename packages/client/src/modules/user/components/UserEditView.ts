@@ -5,7 +5,7 @@ import { assign, pick } from 'lodash';
 import { FormGroupState } from 'ngrx-forms';
 import { Subject } from 'rxjs/Subject';
 
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';

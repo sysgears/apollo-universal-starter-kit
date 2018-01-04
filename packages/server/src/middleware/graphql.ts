@@ -3,7 +3,7 @@ import { graphqlExpress } from 'apollo-server-express';
 import { Request } from 'express';
 import 'isomorphic-fetch';
 
-import settings from '../../settings';
+import settings from '../../../../settings';
 import log from '../../../common/log';
 import schema from '../api/schema';
 import modules from '../modules';

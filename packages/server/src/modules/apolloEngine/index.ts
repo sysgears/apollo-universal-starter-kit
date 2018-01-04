@@ -1,7 +1,7 @@
 import { Engine } from 'apollo-engine';
 import * as url from 'url';
 
-import settings from '../../../settings';
+import settings from '../../../../../settings';
 import Feature from '../connector';
 
 let engine: any;

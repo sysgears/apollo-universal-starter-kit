@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
-import settings from '../../../../settings';
+import settings from '../../../../../../settings';
 import FieldError from '../../../../../common/FieldError';
 import log from '../../../../../common/log';
 

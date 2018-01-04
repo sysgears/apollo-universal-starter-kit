@@ -3,7 +3,7 @@ import withAuth from 'graphql-auth';
 import { PubSub } from 'graphql-subscriptions';
 import * as jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
-import settings from '../../../settings';
+import settings from '../../../../../settings';
 import FieldError from '../../../../common/FieldError';
 import { refreshTokens, tryLogin } from './auth/index';
 

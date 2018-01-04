@@ -19,7 +19,7 @@ import { LoggingLink } from 'apollo-logger';
 import { getOperationAST } from 'graphql';
 import * as url from 'url';
 
-import settings from '../../settings';
+import settings from '../../../../settings';
 import modules from '../modules';
 
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);

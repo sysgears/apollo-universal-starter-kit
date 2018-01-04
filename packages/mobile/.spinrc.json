@@ -1,21 +1,13 @@
 {
   "builders": {
-    "server": {
-      "stack": ["react-native-web", "server"],
-      "enabled": false
-    },
-    "web": {
-      "stack": ["react-native-web", "web"],
-      "entry": "./src/index.ts",
-      "openBrowser": true,
-      "enabled": true
-    },
     "android": {
       "stack": ["react-native", "android"],
+      "entry": "./src/index.js",
       "enabled": false
     },
     "ios": {
       "stack": ["react-native", "ios"],
+      "entry": "./src/index.js",
       "enabled": false
     },
     "test": {
@@ -24,8 +16,8 @@
     }
   },
   "options": {
-    "backendBuildDir": "../server/build/server",
-    "frontendBuildDir": "build/client",
+    "backendBuildDir": "../server/build",
+    "frontendBuildDir": "build",
     "dllBuildDir": "build/dll",
     "overridesConfig": "../../tools/webpackAppConfig.js",
     "stack": ["apollo", "angular", "sass", "ts", "webpack"],

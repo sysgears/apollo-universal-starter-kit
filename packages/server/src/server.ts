@@ -11,7 +11,7 @@ import * as queryMap from 'persisted_queries.json';
 import * as url from 'url';
 import modules from './modules';
 
-import * as spinRc from '../../.spinrc.json';
+import * as spinRc from '../.spinrc.json';
 import log from '../../common/log';
 import addGraphQLSubscriptions from './api/subscriptions';
 import graphiqlMiddleware from './middleware/graphiql';

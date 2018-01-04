@@ -14,9 +14,9 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import url from 'url';
 
-import modules from '../client/modules';
-import MainScreenNavigator from '../client/app/Routes';
-import settings from '../../settings';
+import modules from '../../client/src/modules';
+import MainScreenNavigator from '../../client/src/app/Routes.web';
+import settings from '../../../settings';
 
 const store = createStore(
   combineReducers({

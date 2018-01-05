@@ -15,7 +15,7 @@
     "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --exit \"src/**/*.spec.ts\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 5000 --full-trace --watch \"src/**/*.spec.ts\"",
     "test": "npm run tests && npm run lint",
-    "lint": "tslint -e 'node_modules/**/*.*' '**/*.ts*' --fix -p tsconfig.json",
+    "lint": "tslint -e 'node_modules/**/*.*' '**/*.ts*' --fix -p ../../tsconfig.json",
     "seed": "npm run migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",

@@ -223,7 +223,7 @@
     "webpack-node-externals": "^1.6.0",
     "webpack-sources": "^1.1.0",
     "webpack-virtual-modules": "^0.1.8",
-    "ws": "^3.3.2",
+    "ws": "^4.0.0",
     "xdl": "^47.0.6"
   },
   "resolutions": {

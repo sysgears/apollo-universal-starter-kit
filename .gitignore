@@ -1,7 +1,9 @@
 .idea
 /.tmp
 /node_modules
+*/**/node_modules/
 /build
+*/**/build/
 npm-debug.*
 .expo/
 *.sqlite3
@@ -10,3 +12,4 @@ jsconfig.json
 /upload
 *.iml
 # .env
+lerna-debug.log

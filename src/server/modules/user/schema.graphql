@@ -161,6 +161,3 @@ input ResetPasswordInput {
   password: String!
   passwordConfirmation: String!
 }
-
-extend type Subscription {
-}

@@ -21,6 +21,3 @@ extend type Mutation {
   uploadFiles(files: [Upload!]!): Boolean!
   removeFile(id: Int!): Boolean!
 }
-
-extend type Subscription {
-}

@@ -195,7 +195,7 @@ build properties described below:
 | reactHotLoader                 | Utilize React Hot Loader v3                                                   |
 | persistGraphQL                 | Generate and use persistent GraphQL queries                                   |
 
-There are also application config options available in `app.json` to aid with debugging GraphQL and SQL:
+There are also application config options available in `config/app.js` to aid with debugging GraphQL and SQL:
 
 | Option        | Description                            |
 | ------------- | -------------------------------------- |
@@ -294,7 +294,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
   On the initial web page request back end fully renders UI and hands off Apollo Redux Store state to front end.
   Frontend then starts off from there and updates itself on user interactions.
 
-  If you don't need Server Side Rendering, set `app.json` `ssr` field to `false`
+  If you don't need Server Side Rendering, set `.spinrc.json` `ssr` field to `false`
 
 * Optimistic UI updates
 
@@ -306,7 +306,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
   [Knex] code to access SQLite is included as an example of using arbitrary data source with [Apollo] and [GraphQL].
   NoSQL storage or any other data source can be used the same way.
 
-  [Debug SQL] Prints out execuded queries, with respective times in development mode and can be set in `app.json` by
+  [Debug SQL] Prints out execuded queries, with respective times in development mode and can be set in `config/app.js` by
   `debugSQL` field `true`
 
 * Powerful stylesheets with Hot Reloading
@@ -329,7 +329,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
 * [React Hot Loader v3] for the sake of completeness this project also supports `React Hot Loader v3`, but it is turned
   off. By default this starter kit uses pure `Webpack HMR` for all hot reloading purposes and we think it covers all
   practical needs during development and using `React Hot Loader v3` in addition to `Webpack HMR` makes hot reloading
-  less predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` field of `app.json` to `true`.
+  less predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` field of `.spinrc.json` to `true`.
 
 * [PersistGraphQL Webpack Plugin] is a tool to gather static GraphQL queries for GraphQL projects and inject them into
   build. It will make front end and back end aware of static queries used in the project and will only allow these
@@ -428,14 +428,14 @@ yarn start
 
 ### Publishing mobile apps
 
-1. Compile project for production with `ios` and `android` set to `true` in `app.json` via `yarn build`.
+1. Compile project for production with `ios` and `android` set to `true` in `.spinrc.json` via `yarn build`.
 2. Run `yarn exp publish` to publish, the URL like:
    [`https://exp.host/@vlasenko/apollo-universal-starter-kit`](https://exp.host/@vlasenko/apollo-universal-starter-kit)
    where your users can access mobile app from Expo Client will be printed in terminal.
 
 ### Building standalone mobile apps for Play Store and App Store
 
-1. Compile project for production with `ios` and `android` set to `true` in `app.json` via `yarn build`.
+1. Compile project for production with `ios` and `android` set to `true` in `.spinrc.json` via `yarn build`.
 2. Run `yarn exp ba` to launch building signed `.apk` or `yarn exp bi` for signed `.iap`.
 3. Run `yarn exp bs` to get status and links for signed standalone mobile applications when build finishes. For more
    details refer to [Expo Build standalone apps documentation], but use `yarn exp ..` instead of `exp ...` command.

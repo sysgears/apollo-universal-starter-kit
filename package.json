@@ -179,7 +179,7 @@
     "exp": "47.3.17",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
-    "flow-bin": "^0.62.0",
+    "flow-bin": "^0.63.0",
     "freeport-async": "^1.1.1",
     "haul": "1.0.0-beta.12",
     "html-webpack-plugin": "^2.30.1",

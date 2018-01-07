@@ -39,6 +39,3 @@ input SubscribeInput {
     last4: String!
     brand: String!
 }
-
-extend type Subscription {
-}

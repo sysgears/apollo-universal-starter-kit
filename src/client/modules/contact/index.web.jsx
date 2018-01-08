@@ -3,9 +3,7 @@ import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
 import Contact from './containers/Contact';
 
-import Feature, { featureCatalog } from '../connector';
-
-console.log('catalog:', featureCatalog);
+import Feature from '../connector';
 
 export default new Feature({
   route: <Route exact path="/contact" component={Contact} />,

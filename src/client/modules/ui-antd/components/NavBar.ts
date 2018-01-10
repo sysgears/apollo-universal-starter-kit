@@ -33,8 +33,7 @@ export default class {
 
   public ngAfterViewInit() {
     this.menuItems = this.element.nativeElement.querySelectorAll('menu-item');
-
-    this.menuItems.forEach((mItem: any) => {
+    Array.prototype.forEach.call(this.menuItems, (mItem: any) => {
       let url = window.location.href.replace(/^(?:\/\/|[^\/]+)*\/#?/, '');
       url = url === '' ? this.router.url : url;
       if (mItem.querySelector('nav-link').attributes['ng-reflect-to'].value === url) {

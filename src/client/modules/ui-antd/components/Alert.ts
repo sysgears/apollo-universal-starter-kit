@@ -19,7 +19,7 @@ const alertClasses = [
   },
   {
     type: AlertType.ERROR,
-    className: 'danger'
+    className: 'error'
   }
 ];
 

@@ -4,19 +4,19 @@ import { ButtonSize, ButtonStyle, findVal, TypedValue } from '../../common/compo
 const buttonSizes: TypedValue[] = [
   {
     type: ButtonSize.XS,
-    value: 'small'
+    value: 'ant-btn-sm'
   },
   {
     type: ButtonSize.Small,
-    value: 'small'
+    value: 'ant-btn-sm'
   },
   {
     type: ButtonSize.Default,
-    value: 'default'
+    value: ''
   },
   {
     type: ButtonSize.Large,
-    value: 'large'
+    value: 'ant-btn-lg'
   }
 ];
 
@@ -27,47 +27,48 @@ const buttonStyles: TypedValue[] = [
   },
   {
     type: ButtonStyle.Default,
-    value: 'default'
+    value: ''
   },
   {
     type: ButtonStyle.Primary,
-    value: 'primary'
+    value: 'ant-btn-primary'
   },
   {
     type: ButtonStyle.Success,
-    value: 'primary'
+    value: 'ant-btn-primary'
   },
   {
     type: ButtonStyle.Info,
-    value: 'primary'
+    value: 'ant-btn-primary'
   },
   {
     type: ButtonStyle.Warning,
-    value: 'primary'
+    value: 'ant-btn-primary'
   },
   {
     type: ButtonStyle.Danger,
-    value: 'danger'
+    value: 'ant-btn-danger'
   },
   {
     type: ButtonStyle.Link,
-    value: 'primary'
+    value: 'ant-btn-primary'
   },
   {
     type: ButtonStyle.Dashed,
-    value: 'dashed'
+    value: 'ant-btn-dashed'
   },
   {
     type: ButtonStyle.Close,
-    value: 'close'
+    value: 'ant-btn-primary'
   }
 ];
 
 @Component({
   selector: 'ausk-button',
   template: `
-    <button nz-button [nzType]="classNames" [nzSize]="buttonSize"
+    <button
         type="{{ type || 'button' }}"
+        [className]="classNames"
         [disabled]="disabled"
         (click)="onClick()">
       <ng-content></ng-content>
@@ -82,11 +83,12 @@ export default class Button implements OnInit {
   @Input() public btnSize: any;
 
   public classNames: string;
-  public buttonSize: string;
 
   public ngOnInit(): void {
-    this.classNames = findVal(buttonStyles, this.btnStyle || ButtonStyle.Primary);
-    this.buttonSize = findVal(buttonSizes, this.btnSize || ButtonSize.Default);
+    this.classNames = 'ant-btn '.concat(
+      findVal(buttonStyles, this.btnStyle || ButtonStyle.Primary),
+      ` ${findVal(buttonSizes, this.btnSize || ButtonSize.Default)}`
+    );
   }
 
   public onClick(): void {

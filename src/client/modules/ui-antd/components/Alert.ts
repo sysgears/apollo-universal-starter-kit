@@ -7,27 +7,32 @@ import { AlertItem, AlertType } from '../../common/components/Alert';
 const alertClasses = [
   {
     type: AlertType.SUCCESS,
-    className: 'success'
+    className: 'ant-alert-success'
   },
   {
     type: AlertType.INFO,
-    className: 'info'
+    className: 'ant-alert-info'
   },
   {
     type: AlertType.WARNING,
-    className: 'warning'
+    className: 'ant-alert-warning'
   },
   {
     type: AlertType.ERROR,
-    className: 'error'
+    className: 'ant-alert-error'
   }
 ];
 
 @Component({
   selector: 'alert',
   template: `
-    <nz-alert *ngFor="let alert of alerts" [nzType]="alert.type" [nzMessage]="alert.message"
-              (nzOnClose)="onClose(alert)" [nzCloseable]="true"></nz-alert>
+    <div *ngFor="let alert of alerts" data-show="true" class="{{'ant-alert ant-alert-no-icon ' + alert.type}}">
+      <span class="ant-alert-message">{{alert.message}}</span>
+      <span class="ant-alert-description"></span>
+      <a class="ant-alert-close-icon" (click)="onClose(alert)">
+        <i class="anticon anticon-cross"></i>
+      </a>
+    </div>
   `
 })
 export default class Alert implements OnInit, OnDestroy {

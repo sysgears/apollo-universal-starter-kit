@@ -13,8 +13,8 @@ import '../styles/styles.scss';
           <router-outlet></router-outlet>
         </container>
       </div>
-      <div class="ant-layout-footer">
-        <div class="text-center">&copy; 2017. Example Apollo App.</div>
+      <div class="ant-layout-footer" style="text-align:center">
+        &copy; 2017. Example Apollo App.
       </div>
     </div>
   `

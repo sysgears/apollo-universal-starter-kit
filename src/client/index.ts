@@ -4,7 +4,6 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StoreModule } from '@ngrx/store';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { NgrxFormsModule } from 'ngrx-forms';
@@ -90,7 +89,6 @@ import { clientProvider, default as Main } from './app/Main';
     FormsModule,
     HttpModule,
     ApolloModule.withClient(clientProvider),
-    NgbModule.forRoot(),
     NgUploaderModule,
     NgrxFormsModule,
     StoreModule.forRoot(reducers),

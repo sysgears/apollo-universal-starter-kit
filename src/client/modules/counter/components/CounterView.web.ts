@@ -12,11 +12,11 @@ import { CounterIncrement } from '../reducers/index';
       <div *ngIf="!loading" class="text-center mt-4 mb-4">
         <section>
           <p>Current counter, is {{counter.amount}}. This is being stored server-side in the database and using Apollo subscription for real-time updates.</p>
-          <label id="graphql-button" class="btn-primary" (click)="addCount()" ngbButtonLabel>Click to increase counter</label>
+          <ausk-button (click)="addCount()">Click to increase counter</ausk-button>
         </section>
         <section>
           <p>Current reduxCount, is {{reduxCount}}. This is being stored client-side with Redux.</p>
-          <label id="redux-button" class="btn-primary" (click)="onReduxIncrement()" ngbButtonLabel>Click to increase reduxCount</label>
+          <ausk-button (click)="onReduxIncrement()">Click to increase reduxCount</ausk-button>
         </section>
       </div>`,
   styles: ['section { margin-bottom: 30px; }'],

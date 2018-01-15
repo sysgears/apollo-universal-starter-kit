@@ -4,23 +4,17 @@ import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
 import { Elements } from 'react-stripe-elements';
 
-import { LayoutCenter } from '../../common/components';
+import { LayoutCenter, clientOnly } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 import SubscriptionCardForm from './SubscriptionCardForm';
 import settings from '../../../../../settings';
+
+const ElementsClientOnly = clientOnly(Elements);
 
 export default class SubscriptionView extends React.Component {
   static propTypes = {
     subscribe: PropTypes.func.isRequired
   };
-
-  state = {
-    client: !__SSR__ && !__TEST__
-  };
-
-  componentDidMount() {
-    this.setState({ client: __CLIENT__ });
-  }
 
   onSubmit = subscribe => async values => {
     const result = await subscribe(values);
@@ -54,11 +48,9 @@ export default class SubscriptionView extends React.Component {
         {renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">Subscription!</h1>
-          {this.state.client && (
-            <Elements>
-              <SubscriptionCardForm onSubmit={this.onSubmit(subscribe)} action="Subscribe" />
-            </Elements>
-          )}
+          <ElementsClientOnly>
+            <SubscriptionCardForm onSubmit={this.onSubmit(subscribe)} action="Subscribe" />
+          </ElementsClientOnly>
         </LayoutCenter>
       </PageLayout>
     );

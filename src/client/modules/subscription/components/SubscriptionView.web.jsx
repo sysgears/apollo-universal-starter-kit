@@ -4,12 +4,12 @@ import Helmet from 'react-helmet';
 import { SubmissionError } from 'redux-form';
 import { Elements } from 'react-stripe-elements';
 
-import { LayoutCenter, ClientOnly } from '../../common/components';
+import { LayoutCenter, clientOnly } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 import SubscriptionCardForm from './SubscriptionCardForm';
 import settings from '../../../../../settings';
 
-const ElementsClientOnly = ClientOnly(Elements);
+const ElementsClientOnly = clientOnly(Elements);
 
 export default class SubscriptionView extends React.Component {
   static propTypes = {

@@ -27,7 +27,7 @@
   "settings": {
     "import/resolver": {
       "webpack": {
-        "config": "node_modules/spinjs/webpack.config.js"
+        "config": "webpack.config.lint.js"
       }
     }
   },

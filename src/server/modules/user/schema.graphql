@@ -55,7 +55,12 @@ type Tokens {
 
 extend type Query {
   # Get all users ordered by: OrderByUserInput add filtered by: FilterUserInput
-  users(orderBy: OrderByUserInput, filter: FilterUserInput): [User]
+  users(
+    orderBy: OrderByUserInput
+    filter: FilterUserInput
+    limit: Int
+    offset: Int
+  ): [User]
   # Get user by id
   user(id: Int!): User
   # Get current user

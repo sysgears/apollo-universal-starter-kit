@@ -1,13 +1,16 @@
 // Helpers
-import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
-import { has } from 'lodash';
+import { camelizeKeys, decamelizeKeys } from 'humps';
 import bcrypt from 'bcryptjs';
 import knex from '../../../server/sql/connector';
 
+import { ordering } from '../../../server/sql/ordering';
+import paging from '../../../server/sql/paging';
+import { currentFilter } from '../../../server/sql/filters';
+
 // Actual query fetching and transformation in DB
 export default class User {
-  async getUsers(orderBy, filter) {
-    const queryBuilder = knex
+  async getUsers(orderBy, filter, limit, offset) {
+    let queryBuilder = knex
       .select(
         'u.id as id',
         'u.username',
@@ -28,40 +31,14 @@ export default class User {
       .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
       .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id');
 
-    // add order by
-    if (orderBy && orderBy.column) {
-      let column = orderBy.column;
-      let order = 'asc';
-      if (orderBy.order) {
-        order = orderBy.order;
-      }
+    // Add filters
+    queryBuilder = currentFilter(queryBuilder, filter);
 
-      queryBuilder.orderBy(decamelize(column), order);
-    }
+    // Add limit / offset
+    queryBuilder = paging(queryBuilder, { limit, offset });
 
-    // add filter conditions
-    if (filter) {
-      if (has(filter, 'role') && filter.role !== '') {
-        queryBuilder.where(function() {
-          this.where('u.role', filter.role);
-        });
-      }
-
-      if (has(filter, 'isActive') && filter.isActive !== null) {
-        queryBuilder.where(function() {
-          this.where('u.is_active', filter.isActive);
-        });
-      }
-
-      if (has(filter, 'searchText') && filter.searchText !== '') {
-        queryBuilder.where(function() {
-          this.where('u.username', 'like', `%${filter.searchText}%`)
-            .orWhere('u.email', 'like', `%${filter.searchText}%`)
-            .orWhere('up.first_name', 'like', `%${filter.searchText}%`)
-            .orWhere('up.last_name', 'like', `%${filter.searchText}%`);
-        });
-      }
-    }
+    // add result ordering
+    queryBuilder = ordering(queryBuilder, [orderBy]);
 
     return camelizeKeys(await queryBuilder);
   }

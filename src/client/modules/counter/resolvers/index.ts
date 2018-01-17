@@ -16,11 +16,14 @@ export default {
       updateCounterState: (some: any, { counter }: any, { cache }: any): any => {
         const id = `$ROOT_QUERY.${TYPE_NAME}`;
         /*
-                const fragment = gql`fragment incrementCounter on CounterState { counter }`;
-                data['counter']++;
-                let data = cache.readFragment({ fragment, id });
-                cache.writeFragment({ fragment, id, data });
-        */
+        // This is another approach in manipulating data in the apollo-link-state
+        // It can be useful in the case when you do not need to change the whole
+        // object or it can be costly
+        const fragment = gql`fragment incrementCounter on CounterState { counter }`;
+        data['counter']++;
+        let data = cache.readFragment({ fragment, id });
+        cache.writeFragment({ fragment, id, data });
+*/
         const query = gql`
           query GetCounter {
             counterState @client {

@@ -10,6 +10,7 @@ interface FeatureParams {
   navItem?: any;
   navItemRight?: any;
   reducer?: any;
+  resolver?: any;
   middleware?: any;
   afterware?: any;
   connectionParam?: any;
@@ -23,6 +24,7 @@ class Feature {
   public navItem: any[];
   public navItemRight: any[];
   public reducer: any[];
+  public resolver: any[];
   public middleware: any[];
   public afterware: any[];
   public connectionParam: any[];
@@ -36,6 +38,7 @@ class Feature {
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);
     this.reducer = combine(arguments, arg => arg.reducer);
+    this.resolver = combine(arguments, arg => arg.resolver);
     this.middleware = combine(arguments, arg => arg.middleware);
     this.afterware = combine(arguments, arg => arg.afterware);
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
@@ -59,6 +62,12 @@ class Feature {
   get reducers() {
     return Object.keys(this.reducer).reduce((acc: any, k: any) => {
       return assign({}, acc, this.reducer[k]);
+    }, {});
+  }
+
+  get resolvers() {
+    return Object.keys(this.resolver).reduce((acc: any, k: any) => {
+      return assign({}, acc, this.resolver[k]);
     }, {});
   }
 

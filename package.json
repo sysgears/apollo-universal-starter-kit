@@ -20,7 +20,7 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "watch": "spin watch",
-    "heroku-postbuild": "rm -rf build && npm exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && npm run build && npm exp p --non-interactive && npm run seed",
+    "heroku-postbuild": "rm -rf build && npm run exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive && npm run build && npm run exp p --non-interactive && npm run seed",
     "precommit": "lint-staged",
     "cli": "node tools/cli",
     "postinstall": "opencollective postinstall",

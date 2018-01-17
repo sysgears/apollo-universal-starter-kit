@@ -1,0 +1,5 @@
+query getCounterState {
+    counterState @client {
+        counter
+    }
+}

@@ -2,15 +2,11 @@ language: node_js
 node_js:
   - "node"
 dist: trusty
-sudo: required
 os:
   - linux
 script:
   - yarn seed
   - yarn test
-#before_install: yarn global add greenkeeper-lockfile@1
-#before_script: greenkeeper-lockfile-update
-#after_script: greenkeeper-lockfile-upload
 deploy:
   provider: heroku
   api_key:

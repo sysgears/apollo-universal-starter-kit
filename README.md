@@ -67,8 +67,7 @@ This starter kit adds full [React Native] integration, with [Webpack] as a packa
 compilation tools are needed in order to develop native mobile applications with this kit. You are able to run both web
 and mobile versions of your app at the same time connected to the same backend.
 
-For running Android or iOS you need to set in `.spinrc` `builders.ios.enabled` and/or `builders.android.enabled` field
-`true`.
+For running Android or iOS you need to set in `.spinrc.json` `builders.ios.enabled` and/or `builders.android.enabled` field `true`.
 
 #### Running on a device
 
@@ -117,7 +116,7 @@ technologies used in the kit. Contact us using [Skype](http://hatscripts.com/add
 #### Writing the code
 
 This starter kit is designed so you can use it for just web, mobile or projects using both together. In case you do not
-want to use mobile, just set both `builders.ios.enabled` or `builders.android.enabled` settings in `.spinrc` to `false`.
+want to use mobile, just set both `builders.ios.enabled` or `builders.android.enabled` settings in `.spinrc.json` to `false`.
 
 We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
 is possible. In this case you can write your components with React Native's building blocks that are supported in [React
@@ -179,7 +178,7 @@ This starter kit supplies boilerplate code for multiple platforms:
 * Android frontend
 * iOS frontend
 
-If you don't need some of these platforms you can turn off building their code in `.spinrc` file as well as edit other
+If you don't need some of these platforms you can turn off building their code in `.spinrc.json` and `.spinrc.prod.json` files as well as edit other
 build properties described below:
 
 | Option                         | Description                                                                   |
@@ -428,14 +427,14 @@ yarn start
 
 ### Publishing mobile apps
 
-1. Compile project for production with `ios` and `android` set to `true` in `.spinrc.json` via `yarn build`.
+1. Compile project for production with `ios` and `android` set to `true` in `.spinrc.prod.json` via `yarn build`.
 2. Run `yarn exp publish` to publish, the URL like:
    [`https://exp.host/@vlasenko/apollo-universal-starter-kit`](https://exp.host/@vlasenko/apollo-universal-starter-kit)
    where your users can access mobile app from Expo Client will be printed in terminal.
 
 ### Building standalone mobile apps for Play Store and App Store
 
-1. Compile project for production with `ios` and `android` set to `true` in `.spinrc.json` via `yarn build`.
+1. Compile project for production with `ios` and `android` set to `true` in `.spinrc.prod.json` via `yarn build`.
 2. Run `yarn exp ba` to launch building signed `.apk` or `yarn exp bi` for signed `.iap`.
 3. Run `yarn exp bs` to get status and links for signed standalone mobile applications when build finishes. For more
    details refer to [Expo Build standalone apps documentation], but use `yarn exp ..` instead of `exp ...` command.

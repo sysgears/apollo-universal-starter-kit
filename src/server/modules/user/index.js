@@ -166,18 +166,14 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
 
 export default new Feature({
   schema,
+  scopes,
   createResolversFunc: createResolvers,
   createContextFunc: async (req, connectionParams, webSocket) => {
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
-    const auth = {
-      isAuthenticated: tokenUser ? true : false,
-      scope: tokenUser ? scopes[tokenUser.role] : null
-    };
 
     return {
       User,
       user: tokenUser,
-      auth,
       SECRET,
       req
     };

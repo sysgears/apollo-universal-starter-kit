@@ -3,7 +3,7 @@
 import type { DocumentNode } from 'graphql';
 import type { Middleware, $Request } from 'express';
 
-import { merge, map, union, without, castArray } from 'lodash';
+import { merge, mergeWith, isArray, map, union, without, castArray } from 'lodash';
 
 import log from '../../common/log';
 
@@ -19,7 +19,8 @@ type FeatureParams = {
   beforeware?: Middleware | Middleware[],
   middleware?: Middleware | Middleware[],
   createFetchOptions?: Function | Function[],
-  catalogInfo: any | any[]
+  catalogInfo: any | any[],
+  scopes: Object
 };
 
 class Feature {
@@ -29,6 +30,7 @@ class Feature {
   createFetchOptions: Function[];
   beforeware: Function[];
   middleware: Function[];
+  scopes: Object[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
@@ -41,6 +43,7 @@ class Feature {
     this.beforeware = combine(arguments, arg => arg.beforeware);
     this.middleware = combine(arguments, arg => arg.middleware);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
+    this.scopes = combine(arguments, arg => arg.scopes);
   }
 
   get schemas(): DocumentNode[] {
@@ -56,6 +59,14 @@ class Feature {
 
   createResolvers(pubsub: any) {
     return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
+  }
+
+  createScopes() {
+    return mergeWith({}, ...this.scopes, (objValue: any, srcValue: any): any => {
+      if (isArray(objValue)) {
+        return objValue.concat(srcValue);
+      }
+    });
   }
 
   get beforewares(): Middleware[] {

@@ -9,10 +9,18 @@ import log from '../../common/log';
 export default async (req, res, next) => {
   try {
     const context = await modules.createContext(req, res);
+    const scopes = modules.createScopes();
+    const { user } = context;
 
     graphqlExpress(() => ({
       schema,
-      context,
+      context: {
+        ...context,
+        auth: {
+          isAuthenticated: user ? true : false,
+          scope: user ? scopes[user.role] : null
+        }
+      },
       debug: false,
       formatError: error => {
         log.error('GraphQL execution error:', error);

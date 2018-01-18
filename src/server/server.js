@@ -15,7 +15,6 @@ import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
 import errorMiddleware from './middleware/error';
 import addGraphQLSubscriptions from './api/subscriptions';
-import { options as spinConfig } from '../../.spinrc.json';
 import log from '../common/log';
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -45,13 +44,13 @@ app.use(bodyParser.json());
 
 app.use(
   '/',
-  express.static(path.join(spinConfig.frontendBuildDir, 'web'), {
+  express.static(__FRONTEND_BUILD_DIR__, {
     maxAge: '180 days'
   })
 );
 
 if (__DEV__) {
-  app.use('/', express.static(spinConfig.dllBuildDir, { maxAge: '180 days' }));
+  app.use('/', express.static(__DLL_BUILD_DIR__, { maxAge: '180 days' }));
 }
 
 if (__PERSIST_GQL__) {

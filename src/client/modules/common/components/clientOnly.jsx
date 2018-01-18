@@ -9,7 +9,7 @@ const clientOnly = Comp => {
       this.setState({ client: __CLIENT__ });
     }
     render() {
-      return this.state.client && <Comp />;
+      return this.state.client && <Comp {...this.props} />;
     }
   };
 };

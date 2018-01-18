@@ -105,6 +105,8 @@ content and settings` and restart the application.
 
 * [Gitter channel] - questions, answers, general discussions
 * [GitHub issues] - submit issues, send feature requests
+* [Wiki] - community driven effort to document all the usage scenarios of the starter kit, editable by anyone
+* [FAQ] - frequently asked questions wiki page
 
 ### Commercial support
 
@@ -526,3 +528,5 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [flow]: https://flow.org
 [typescript]: https://www.typescriptlang.org
 [Stripe]: https://stripe.com
+[Wiki]: https://github.com/sysgears/apollo-universal-starter-kit/wiki
+[FAQ]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Frequently-Asked-Questions

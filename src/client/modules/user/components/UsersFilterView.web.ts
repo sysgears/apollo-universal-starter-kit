@@ -4,6 +4,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
+import UserFilterService from '../containers/UserFilter';
 
 import { UserFilterIsActive, UserFilterRole, UserFilterSearchText } from '../reducers';
 
@@ -45,7 +46,7 @@ export default class UsersFilterView implements OnInit, OnDestroy {
   private searchTextChanged = new Subject<string>();
   private subscription: Subscription;
 
-  constructor(private store: Store<any>) {
+  constructor(private store: Store<any>, private userFilterService: UserFilterService) {
     this.roleOptions = this.getRoleOptions();
   }
 
@@ -54,7 +55,7 @@ export default class UsersFilterView implements OnInit, OnDestroy {
       .debounceTime(300)
       .distinctUntilChanged()
       .subscribe((searchText: string) => {
-        this.store.dispatch(new UserFilterSearchText(searchText));
+        this.userFilterService.filterChange({ searchText });
       });
   }
 
@@ -67,11 +68,11 @@ export default class UsersFilterView implements OnInit, OnDestroy {
   }
 
   public onRoleChange(role: string) {
-    return this.store.dispatch(new UserFilterRole(role));
+    this.unsubscribe(this.userFilterService.filterChange({ role }));
   }
 
   public onIsActiveChange(isActive: boolean) {
-    return this.store.dispatch(new UserFilterIsActive(isActive));
+    this.unsubscribe(this.userFilterService.filterChange({ isActive }));
   }
 
   private getRoleOptions = () => {

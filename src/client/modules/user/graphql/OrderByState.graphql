@@ -1,0 +1,5 @@
+query getOrderByState {
+    orderByState @client {
+        orderBy
+    }
+}

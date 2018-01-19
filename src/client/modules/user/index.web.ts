@@ -6,6 +6,7 @@ import {
   resetPasswordFormReducer,
   userFormReducer
 } from './reducers';
+import resolvers from './resolvers';
 
 import Feature from '../connector';
 import ForgotPasswordView from './components/ForgotPasswordView.web';
@@ -59,6 +60,7 @@ export default new Feature({
     resetPasswordForm: resetPasswordFormReducer,
     userForm: userFormReducer
   },
+  resolver: resolvers,
   middleware: tokenMiddleware,
   afterware: tokenAfterware,
   connectionParam

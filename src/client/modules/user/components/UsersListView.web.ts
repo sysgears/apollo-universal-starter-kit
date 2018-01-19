@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
 import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
+import UserFilterService from '../containers/UserFilter';
 import UsersListService, { AddUser, DeleteUser, UpdateUser } from '../containers/UsersList';
-import { UserOrderBy } from '../reducers';
 
 @Component({
   selector: 'users-list-view',
@@ -28,8 +28,8 @@ import { UserOrderBy } from '../reducers';
   `,
   styles: [
     `th > a {
-      cursor: pointer;
-  }`
+          cursor: pointer;
+      }`
   ]
 })
 export default class UsersListView implements OnInit, OnDestroy {
@@ -41,7 +41,8 @@ export default class UsersListView implements OnInit, OnDestroy {
   public alertSubject: Subject<AlertItem> = new Subject<AlertItem>();
   public users: any = [];
 
-  private subsOnStore: Subscription;
+  private subsOnState: Subscription;
+  private subsOnOrderBy: Subscription;
   private subsOnLoad: Subscription;
   private subsOnUpdate: Subscription;
   private subsOnDelete: Subscription;
@@ -77,16 +78,25 @@ export default class UsersListView implements OnInit, OnDestroy {
     }
   ];
 
-  constructor(private store: Store<any>, private usersListService: UsersListService, private ngZone: NgZone) {}
+  constructor(
+    private store: Store<any>,
+    private usersListService: UsersListService,
+    private userFilterService: UserFilterService,
+    private ngZone: NgZone
+  ) {}
 
   public ngOnInit(): void {
-    this.subsOnStore = this.store.select('user').subscribe(({ searchText, role, isActive, orderBy }) => {
-      this.searchText = searchText;
-      this.role = role;
-      this.isActive = isActive;
-      this.orderBy = orderBy;
-      this.fetchUsers(orderBy, searchText, role, isActive);
-    });
+    this.subsOnState = this.userFilterService.getFilterState(
+      ({ data: { filterState: { searchText, role, isActive, orderBy } }, loading }: any) => {
+        return this.ngZone.run(() => {
+          this.searchText = searchText;
+          this.role = role;
+          this.isActive = isActive ? isActive : null;
+          this.orderBy = orderBy;
+          this.fetchUsers(this.orderBy, this.searchText, this.role, this.isActive);
+        });
+      }
+    );
 
     this.subsOnUpdate = this.usersListService.subscribeToUsers(
       ({ data: { usersUpdated: { mutation, node } } }: any) => {
@@ -104,7 +114,7 @@ export default class UsersListView implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.unsubscribe(this.subsOnStore, this.subsOnLoad, this.subsOnDelete);
+    this.unsubscribe(this.subsOnState, this.subsOnLoad, this.subsOnDelete);
   }
 
   public fetchUsers(orderBy: any, searchText: string, role: string, isActive: boolean) {
@@ -158,16 +168,18 @@ export default class UsersListView implements OnInit, OnDestroy {
   };
 
   public orderByColumn = (e: any, name: string) => {
+    this.unsubscribe(this.subsOnOrderBy);
     e.preventDefault();
     let order = 'asc';
     if (this.orderBy && this.orderBy.column === name) {
       if (this.orderBy.order === 'asc') {
         order = 'desc';
       } else if (this.orderBy.order === 'desc') {
-        return this.store.dispatch(new UserOrderBy({}));
+        this.subsOnOrderBy = this.userFilterService.filterChange({ orderBy: {} });
+        return;
       }
     }
-    return this.store.dispatch(new UserOrderBy({ column: name, order }));
+    this.subsOnOrderBy = this.userFilterService.filterChange({ orderBy: { column: name, order } });
   };
 
   private unsubscribe = (...subscriptions: Subscription[]) => {

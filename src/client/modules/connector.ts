@@ -67,7 +67,7 @@ class Feature {
 
   get resolvers() {
     return Object.keys(this.resolver).reduce((acc: any, k: any) => {
-      return assign({}, acc, this.resolver[k]);
+      return merge({}, acc, this.resolver[k]);
     }, {});
   }
 

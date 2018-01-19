@@ -45,7 +45,6 @@ import { FormInput } from './Form';
                   class="ant-select-dropdown-menu-item"
                   [ngClass]="{'ant-select-dropdown-menu-item-selected': reduxForm?.value[input.name] === o}"
                   style="user-select: none;"
-                  [ngStyle]=""
                   (click)="onItemClick($event)">
                 {{o}}
               </li>

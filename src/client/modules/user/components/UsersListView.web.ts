@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
-import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
+import { CellData, ColumnData, ElemType } from '../../common/components/Table';
 import UsersListService, { AddUser, DeleteUser, UpdateUser } from '../containers/UsersList';
 import { UserOrderBy } from '../reducers';
 

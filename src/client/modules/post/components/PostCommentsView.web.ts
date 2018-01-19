@@ -4,9 +4,9 @@ import { assign, pick } from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
 
 import { FormGroupState } from 'ngrx-forms';
+import { CellData, ColumnData, ElemType } from '../../common/components/Table';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
-import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
 import PostCommentsService, { AddComment, DeleteComment, UpdateComment } from '../containers/PostComments';
 import { CommentFormData, CommentSelect, FillCommentFormAction, ResetCommentFormAction } from '../reducers/index';
 

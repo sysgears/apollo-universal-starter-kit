@@ -1,7 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
+import { CellData, ColumnData, ElemType } from '../../common/components/Table';
 import PostService, { AddPost, DeletePost } from '../containers/Post';
 
 @Component({

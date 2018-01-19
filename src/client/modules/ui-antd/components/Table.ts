@@ -1,28 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ButtonSize } from '../../common/components/Button';
-
-export interface CellData {
-  type: ElemType;
-  text: any;
-  link?: string;
-  className?: string;
-  callback?: any;
-}
-
-export interface ColumnData {
-  title: string;
-  value?: string;
-  width?: number;
-  iconRender?: any;
-  sorting?: any;
-  columnSpan?: number;
-}
-
-export enum ElemType {
-  Link = 0,
-  Button = 1,
-  Text = 2
-}
+import { AbstractTable, CellData } from '../../common/components/Table';
 
 @Component({
   selector: 'ausk-table',
@@ -74,12 +51,8 @@ export enum ElemType {
     </div>
   `
 })
-export default class Table {
+export default class Table extends AbstractTable {
   @Input() public className: string;
   @Input() public columns: any;
   @Input() public rows: CellData[];
-
-  public buttonSize() {
-    return ButtonSize.Small;
-  }
 }

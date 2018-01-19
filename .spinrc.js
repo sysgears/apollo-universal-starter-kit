@@ -67,6 +67,10 @@ if (process.env.NODE_ENV === 'production') {
   config.builders.android.enabled = true;
   config.builders.ios.enabled = true;
   config.options.defines.__BACKEND_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
+  // Generating source maps for production will slowdown compilation for roughly 25%
+  config.options.sourceMap = false;
+  // Enable Babel and other caching for production builds too. Might be dangerous!
+  config.options.cache = true;
 }
 
 const extraDefines = {

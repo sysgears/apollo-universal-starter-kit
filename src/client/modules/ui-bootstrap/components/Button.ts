@@ -1,5 +1,5 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ButtonSize, ButtonStyle, findVal, TypedValue } from '../../common/components/Button';
+import { OnInit } from '@angular/core';
+import { ButtonSize, ButtonStyle, default as AbstractButton, TypedValue } from '../../common/components/Button';
 
 const buttonSizes: TypedValue[] = [
   {
@@ -63,39 +63,8 @@ const buttonStyles: TypedValue[] = [
   }
 ];
 
-@Component({
-  selector: 'ausk-button',
-  template: `
-    <button #button
-            type="{{ type || 'button' }}"
-            [className]="classNames"
-            [disabled]="disabled"
-            (click)="onClick()">
-      <ng-content></ng-content>
-    </button>
-  `
-})
-export default class Button implements OnInit {
-  @Input() public type: string;
-  @Input() public btnStyle: string;
-  @Input() public btnSize: string;
-  @Input() public click: any;
-  @Input() public disabled: boolean;
-  @ViewChild('button') public button: ElementRef;
-
-  public classNames: string;
-
+export default class Button extends AbstractButton implements OnInit {
   public ngOnInit(): void {
-    this.classNames = ''.concat(
-      findVal(buttonStyles, this.btnStyle || ButtonStyle.Primary),
-      ` ${findVal(buttonSizes, this.btnSize || ButtonSize.Default)}`
-    );
-  }
-
-  public onClick(): void {
-    if (this.click) {
-      this.click();
-      this.button.nativeElement.blur();
-    }
+    this.setClassNames('', buttonStyles, buttonSizes);
   }
 }

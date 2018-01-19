@@ -51,6 +51,7 @@ const dependencyPlatforms = {
   'error-stack-parser': ['server', 'web'],
   expo: ['ios', 'android'],
   express: 'server',
+  'graphql-auth': 'server',
   'apollo-server-express': 'server',
   'apollo-upload-server': 'server',
   'graphql-subscriptions': 'server',

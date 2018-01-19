@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ButtonSize, ButtonStyle, findVal, TypedValue } from '../../common/components/Button';
 
 const buttonSizes: TypedValue[] = [
@@ -66,11 +66,11 @@ const buttonStyles: TypedValue[] = [
 @Component({
   selector: 'ausk-button',
   template: `
-    <button
-        type="{{ type || 'button' }}"
-        [className]="classNames"
-        [disabled]="disabled"
-        (click)="onClick()">
+    <button #button
+            type="{{ type || 'button' }}"
+            [className]="classNames"
+            [disabled]="disabled"
+            (click)="onClick()">
       <ng-content></ng-content>
     </button>
   `
@@ -78,9 +78,10 @@ const buttonStyles: TypedValue[] = [
 export default class Button implements OnInit {
   @Input() public type: string;
   @Input() public btnStyle: string;
+  @Input() public btnSize: string;
   @Input() public click: any;
   @Input() public disabled: boolean;
-  @Input() public btnSize: any;
+  @ViewChild('button') public button: ElementRef;
 
   public classNames: string;
 
@@ -94,6 +95,7 @@ export default class Button implements OnInit {
   public onClick(): void {
     if (this.click) {
       this.click();
+      this.button.nativeElement.blur();
     }
   }
 }

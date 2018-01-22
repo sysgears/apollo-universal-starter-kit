@@ -1,4 +1,15 @@
-import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  Directive,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Input,
+  Output,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormInput } from './Form';
 
 @Component({
@@ -69,7 +80,7 @@ import { FormInput } from './Form';
     '(window:resize)': 'setDropdownBounds()'
   }
 })
-export default class RenderSelect {
+export class RenderSelect {
   @Input() public input: FormInput;
   @Input() public reduxForm: any;
   @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
@@ -131,4 +142,22 @@ export default class RenderSelect {
     }
     return { top: y + height + 1, left: x, width };
   }
+}
+
+@Directive({
+  selector: 'div[ngrxFormControlState]',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => NgrxRenderSelectValueAccessor),
+      multi: true
+    }
+  ]
+})
+export class NgrxRenderSelectValueAccessor implements ControlValueAccessor {
+  public writeValue(obj: any): void {}
+
+  public registerOnChange(fn: any): void {}
+
+  public registerOnTouched(fn: any): void {}
 }

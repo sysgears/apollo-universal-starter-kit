@@ -2,7 +2,6 @@ import { ApplicationRef, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
@@ -50,7 +49,6 @@ import UsersListService from './modules/user/containers/UsersList';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { clientProvider, default as Main } from './app/Main';
 
 @NgModule({
@@ -87,7 +85,6 @@ import { clientProvider, default as Main } from './app/Main';
   bootstrap: [Main],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     FormsModule,
     HttpModule,
     ApolloModule.withClient(clientProvider),
@@ -96,8 +93,7 @@ import { clientProvider, default as Main } from './app/Main';
     StoreModule.forRoot(reducers),
     RouterModule.forRoot(routes, {
       useHash: true
-    }),
-    NgZorroAntdModule.forRoot()
+    })
   ],
   providers: [
     CounterService,

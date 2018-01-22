@@ -2,17 +2,18 @@ import { Input } from '@angular/core';
 import { ButtonSize } from './Button';
 
 export interface CellData {
-  type: ElemType;
-  text: any;
-  link?: string;
-  className?: string;
-  callback?: any;
+  type: ElemType[];
+  text: any[];
+  link?: string[];
+  className?: string[];
+  callback?: any[];
+  width?: string;
 }
 
 export interface ColumnData {
   title: string;
   value?: string;
-  width?: number;
+  width?: string;
   iconRender?: any;
   sorting?: any;
   columnSpan?: number;

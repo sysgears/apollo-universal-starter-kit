@@ -18,6 +18,7 @@ import { reducers } from '../common/createReduxStore';
 import uiComponents from '../common/createUiComponents';
 import log from '../common/log';
 import routes from './app/Routes.web';
+import { commonComponents } from './modules/common/components';
 import CounterView from './modules/counter/components/CounterView.web';
 import CounterService from './modules/counter/containers/Counter';
 import PageNotFound from './modules/pageNotFound/containers/PageNotFound';
@@ -60,6 +61,7 @@ import { clientProvider, default as Main } from './app/Main';
     // App
     PageNotFound,
     uiComponents(),
+    commonComponents,
     // Counter
     CounterView,
     // Post

@@ -37,7 +37,7 @@ export default class PostList implements OnInit, OnDestroy {
   private subsOnLoad: Subscription;
   private subsOnUpdate: Subscription;
   private subsOnDelete: Subscription;
-  private columns: ColumnData[] = [{ title: 'Title' }, { title: 'Actions', width: 50 }];
+  private columns: ColumnData[] = [{ title: 'Title' }, { title: 'Actions', width: '50px' }];
   private rows: CellData[];
 
   constructor(private postService: PostService, private ngZone: NgZone) {}
@@ -51,14 +51,14 @@ export default class PostList implements OnInit, OnDestroy {
         this.rows = this.posts.edges.map((item: any) => {
           return [
             {
-              type: ElemType.Link,
-              text: item.node.title,
-              link: `/post/${item.node.id}`
+              type: [ElemType.Link],
+              text: [item.node.title],
+              link: [`/post/${item.node.id}`]
             },
             {
-              type: ElemType.Button,
-              text: 'Delete',
-              callback: () => this.deletePost(item.node.id)
+              type: [ElemType.Button],
+              text: ['Delete'],
+              callback: [() => this.deletePost(item.node.id)]
             }
           ];
         });

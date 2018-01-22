@@ -117,26 +117,26 @@ export default class UsersListView implements OnInit, OnDestroy {
         this.rows = this.users.map((user: any) => {
           return [
             {
-              type: ElemType.Link,
-              text: user.username,
-              link: `/users/${user.id}`
+              type: [ElemType.Link],
+              text: [user.username],
+              link: [`/users/${user.id}`]
             },
             {
-              type: ElemType.Text,
-              text: user.email
+              type: [ElemType.Text],
+              text: [user.email]
             },
             {
-              type: ElemType.Text,
-              text: user.role
+              type: [ElemType.Text],
+              text: [user.role]
             },
             {
-              type: ElemType.Text,
-              text: user.isActive
+              type: [ElemType.Text],
+              text: [user.isActive]
             },
             {
-              type: ElemType.Button,
-              text: 'Delete',
-              callback: () => this.handleDeleteUser(user.id)
+              type: [ElemType.Button],
+              text: ['Delete'],
+              callback: [() => this.handleDeleteUser(user.id)]
             }
           ];
         });

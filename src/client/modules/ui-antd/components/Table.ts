@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { AbstractTable, CellData } from '../../common/components/Table';
+import { Component } from '@angular/core';
+import { AbstractTable } from '../../common/components/Table';
 
 @Component({
   selector: 'ausk-table',
@@ -38,7 +38,7 @@ import { AbstractTable, CellData } from '../../common/components/Table';
 
                       <span *ngIf="cell.type === 2">
                             {{cell.text}}
-                          </span>
+                      </span>
                     </td>
                   </tr>
                   </tbody>
@@ -51,8 +51,4 @@ import { AbstractTable, CellData } from '../../common/components/Table';
     </div>
   `
 })
-export default class Table extends AbstractTable {
-  @Input() public className: string;
-  @Input() public columns: any;
-  @Input() public rows: CellData[];
-}
+export default class Table extends AbstractTable {}

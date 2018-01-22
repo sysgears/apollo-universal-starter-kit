@@ -1,3 +1,4 @@
+import { Input } from '@angular/core';
 import { ButtonSize } from './Button';
 
 export interface CellData {
@@ -24,6 +25,9 @@ export enum ElemType {
 }
 
 export class AbstractTable {
+  @Input() public columns: any;
+  @Input() public rows: CellData[];
+
   public buttonSize() {
     return ButtonSize.Small;
   }

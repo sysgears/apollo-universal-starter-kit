@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { AbstractTable, CellData } from '../../common/components/Table';
+import { AbstractTable } from '../../common/components/Table';
 
 @Component({
   selector: 'ausk-table',
   template: `
-    <table class="{{className || 'table'}}">
+    <table class="table">
       <thead>
       <tr>
         <th *ngFor="let column of columns; index as i;"
@@ -39,8 +39,4 @@ import { AbstractTable, CellData } from '../../common/components/Table';
     </table>
   `
 })
-export default class Table extends AbstractTable {
-  @Input() public className: string;
-  @Input() public columns: any;
-  @Input() public rows: CellData[];
-}
+export default class Table extends AbstractTable {}

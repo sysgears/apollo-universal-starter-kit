@@ -441,6 +441,11 @@ yarn start
 
 ### Deploying to [Heroku]
 
+1. Add your app to Heroku
+2. Allow Heroku to install build time dependencies from the devDependencies in `package.json`: `Settings -> Config Variables -> Add`, KEY: `YARN_PRODUCTION`, VALUE: `false`.
+3. Add `EXP_USERNAME` and `EXP_PASSWORD` config variables there as well. They will be used to publish mobile Expo Client applications
+4. Deploy your app on Heroku
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ### Heroku Demo

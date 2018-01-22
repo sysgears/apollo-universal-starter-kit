@@ -8,18 +8,31 @@ import { CounterIncrement } from '../reducers/index';
 @Component({
   selector: 'counter-view',
   template: `
-    <div *ngIf="loading" class="text-center">Loading...</div>
-      <div *ngIf="!loading" class="text-center mt-4 mb-4">
-        <section>
-          <p>Current counter, is {{counter.amount}}. This is being stored server-side in the database and using Apollo subscription for real-time updates.</p>
-          <label id="graphql-button" class="btn-primary" (click)="addCount()" ngbButtonLabel>Click to increase counter</label>
-        </section>
-        <section>
-          <p>Current reduxCount, is {{reduxCount}}. This is being stored client-side with Redux.</p>
-          <label id="redux-button" class="btn-primary" (click)="onReduxIncrement()" ngbButtonLabel>Click to increase reduxCount</label>
-        </section>
-      </div>`,
-  styles: ['section { margin-bottom: 30px; }'],
+    <div *ngIf="loading" class="container">Loading...</div>
+    <div *ngIf="!loading" class="container">
+      <section>
+        <p>Current counter, is {{counter.amount}}. This is being stored server-side in the database and using Apollo
+          subscription for real-time updates.</p>
+        <ausk-button [click]="addCount">Click to increase counter</ausk-button>
+      </section>
+      <section>
+        <p>Current reduxCount, is {{reduxCount}}. This is being stored client-side with Redux.</p>
+        <ausk-button [click]="onReduxIncrement">Click to increase reduxCount</ausk-button>
+      </section>
+    </div>`,
+  styles: [
+    `
+      section {
+          margin-bottom: 30px;
+          text-align: center;
+      }
+
+      p {
+          margin-top: 0;
+          margin-bottom: 1em;
+      }
+  `
+  ],
   providers: [CounterService]
 })
 export default class CounterView implements OnInit, OnDestroy {
@@ -56,14 +69,14 @@ export default class CounterView implements OnInit, OnDestroy {
     this.unsubscribe(this.subsOnUpdate, this.subsOnLoad, this.subsOnAdd, this.subsOnStore);
   }
 
-  public addCount() {
+  public addCount = () => {
     this.unsubscribe(this.subsOnAdd);
     this.subsOnAdd = this.counterService.addCounter(1, this.counter.amount);
-  }
+  };
 
-  public onReduxIncrement() {
+  public onReduxIncrement = () => {
     this.store.dispatch(new CounterIncrement());
-  }
+  };
 
   private unsubscribe = (...subscriptions: Subscription[]) => {
     subscriptions.forEach((subscription: Subscription) => {

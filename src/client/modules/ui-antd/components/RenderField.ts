@@ -4,18 +4,29 @@ import { FormInput } from './Form';
 @Component({
   selector: 'render-field',
   template: `
-    <label *ngIf="input.label" for="{{input.id}}">{{input.label}}</label>
-    <input id="{{input.id}}"
-           type="{{input.type}}"
-           [ngrxFormControlState]="reduxForm.controls[input.name]"
-           [ngrxEnableFocusTracking]="true"
-           name="{{input.name}}"
-           class="form-control"
-           placeholder="{{input.placeholder}}"
-           (ngModelChange)="changed({ id: input.id, value: $event })"
-           [(ngModel)]="reduxForm?.value[input.name]"/>
+    <div class="ant-row ant-form-item">
+      <div class="ant-form-item-label">
+        <label *ngIf="input.label" for="{{input.id}}">{{input.label}}</label>
+      </div>
+      <div class="ant-form-item-control-wrapper">
+        <div class="ant-form-item-control ">
+          <div>
+            <input id="{{input.id}}"
+                   type="{{input.type}}"
+                   [ngrxFormControlState]="reduxForm.controls[input.name]"
+                   [ngrxEnableFocusTracking]="true"
+                   name="{{input.name}}"
+                   class="ant-input"
+                   placeholder="{{input.placeholder}}"
+                   (ngModelChange)="changed({ id: input.id, value: $event })"
+                   [(ngModel)]="reduxForm?.value[input.name]"/>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <div *ngIf="reduxForm.controls[input.name].isInvalid && (reduxForm.controls[input.name].isDirty || reduxForm.controls[input.name].isTouched)">
+    <div
+        *ngIf="reduxForm.controls[input.name].isInvalid && (reduxForm.controls[input.name].isDirty || reduxForm.controls[input.name].isTouched)">
       <small [hidden]="!reduxForm.controls[input.name].errors[input.name]">
         {{reduxForm.controls[input.name].errors[input.name]}}
       </small>

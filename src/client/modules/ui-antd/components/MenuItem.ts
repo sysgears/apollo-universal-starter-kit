@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'menu-item',
   template: `
-	  <li class="nav-item">
-				<ng-content></ng-content>
-		</li>
-	`
+    <li>
+      <ng-content></ng-content>
+    </li>
+  `,
+  host: { class: 'ant-menu-item' }
 })
 export default class MenuItem {}

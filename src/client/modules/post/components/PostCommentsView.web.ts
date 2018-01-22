@@ -4,9 +4,9 @@ import { assign, pick } from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
 
 import { FormGroupState } from 'ngrx-forms';
+import { CellData, ColumnData, ElemType } from '../../common/components/Table';
 import { FormInput } from '../../ui-bootstrap/components/Form';
 import { ItemType } from '../../ui-bootstrap/components/FormItem';
-import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
 import PostCommentsService, { AddComment, DeleteComment, UpdateComment } from '../containers/PostComments';
 import { CommentFormData, CommentSelect, FillCommentFormAction, ResetCommentFormAction } from '../reducers/index';
 
@@ -43,7 +43,7 @@ export default class PostCommentsView implements OnInit, OnDestroy {
   private subsOnDelete: Subscription;
   private subsOnEdit: Subscription;
 
-  private columns: ColumnData[] = [{ title: 'Content' }, { title: 'Actions', width: 50, columnSpan: 2 }];
+  private columns: ColumnData[] = [{ title: 'Content' }, { title: 'Actions', columnSpan: 2, width: '120px' }];
   private rows: CellData[];
 
   constructor(private postCommentsService: PostCommentsService, private ngZone: NgZone, private store: Store<any>) {
@@ -108,18 +108,14 @@ export default class PostCommentsView implements OnInit, OnDestroy {
     post.comments.map((comment: any) => {
       return [
         {
-          type: ElemType.Text,
-          text: comment.content
+          type: [ElemType.Text],
+          text: [comment.content]
         },
         {
-          type: ElemType.Button,
-          text: 'Edit',
-          callback: () => this.onCommentSelect(comment)
-        },
-        {
-          type: ElemType.Button,
-          text: 'Delete',
-          callback: () => this.onCommentDelete(comment.id)
+          type: [ElemType.Button, ElemType.Button],
+          text: ['Edit', 'Delete'],
+          callback: [() => this.onCommentSelect(comment), () => this.onCommentDelete(comment.id)],
+          width: '120px'
         }
       ];
     });

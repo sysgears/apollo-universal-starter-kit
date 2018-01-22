@@ -3,31 +3,38 @@ import { Component, ElementRef, Input, OnInit, Renderer2, ViewEncapsulation } fr
 @Component({
   selector: 'row',
   template: `
-    <ng-content></ng-content>
+    <div *ngIf="!noGutters;else withoutGutters" class="gutter-box">
+      <ng-content></ng-content>
+    </div>
+    <ng-template #withoutGutters>
+      <ng-content></ng-content>
+    </ng-template>
 	`,
   encapsulation: ViewEncapsulation.None
 })
 export default class Row implements OnInit {
   @Input() public noGutters: boolean;
   @Input() public justifyContent: string;
+  @Input() public justifyContentXs: string;
   @Input() public justifyContentSm: string;
   @Input() public justifyContentMd: string;
   @Input() public justifyContentLg: string;
-  @Input() public justifyContentXs: string;
+  @Input() public justifyContentXl: string;
   @Input() public classNames: string;
 
   private justifies: any[] = [
-    { justifyContent: 'justify-content' },
-    { justifyContentSm: 'justify-content-sm' },
-    { justifyContentMd: 'justify-content-md' },
-    { justifyContentLg: 'justify-content-lg' },
-    { justifyContentXl: 'justify-content-xl' }
+    { justifyContent: 'ant-row-flex' },
+    { justifyContentXs: 'ant-row-flex-xs' },
+    { justifyContentSm: 'ant-row-flex-sm' },
+    { justifyContentMd: 'ant-row-flex-md' },
+    { justifyContentLg: 'ant-row-flex-lg' },
+    { justifyContentXl: 'ant-row-flex-xl' }
   ];
 
   constructor(private element: ElementRef, private renderer: Renderer2) {}
 
   public ngOnInit(): void {
-    this.addClassToElement('row');
+    this.addClassToElement('ant-row-flex');
     this.setGutters();
     this.generateUiClasses(this.justifies);
     if (this.classNames) {
@@ -36,8 +43,8 @@ export default class Row implements OnInit {
   }
 
   private setGutters() {
-    if (this.noGutters) {
-      this.addClassToElement('no-gutters');
+    if (!this.noGutters) {
+      this.addClassToElement('gutter-row');
     }
   }
 

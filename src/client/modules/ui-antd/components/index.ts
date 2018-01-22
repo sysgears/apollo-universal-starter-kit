@@ -19,7 +19,7 @@ import NavLink from './NavLink';
 import PageLayout from './PageLayout';
 import RenderCheckBox from './RenderCheckBox';
 import RenderField from './RenderField';
-import RenderSelect from './RenderSelect';
+import { NgrxRenderSelectValueAccessor, RenderSelect } from './RenderSelect';
 import Row from './Row';
 import Table from './Table';
 
@@ -39,6 +39,7 @@ export const ANTD_COMPONENTS: any = [
   MenuItem,
   NavBar,
   NavLink,
+  NgrxRenderSelectValueAccessor,
   PageLayout,
   RenderSelect,
   RenderCheckBox,

@@ -1,26 +1,70 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { ButtonSize, ButtonStyle, default as AbstractButton, TypedValue } from '../../common/components/Button';
 
-@Component({
-  selector: 'ausk-button',
-  template: `
-    <button
-        type="{{type || 'button'}}"
-        class="{{className || 'btn btn-primary'}}"
-        [attr.disabled]="disabled || null"
-        (click)="onClick()">
-      <ng-content></ng-content>
-    </button>
-  `
-})
-export default class Button {
-  @Input() public type: string;
-  @Input() public className: string;
-  @Input() public click: any;
-  @Input() public disabled: boolean;
+const buttonSizes: TypedValue[] = [
+  {
+    type: ButtonSize.XS,
+    value: 'ant-btn-sm'
+  },
+  {
+    type: ButtonSize.Small,
+    value: 'ant-btn-sm'
+  },
+  {
+    type: ButtonSize.Default,
+    value: ''
+  },
+  {
+    type: ButtonSize.Large,
+    value: 'ant-btn-lg'
+  }
+];
 
-  public onClick() {
-    if (this.click) {
-      this.click();
-    }
+const buttonStyles: TypedValue[] = [
+  {
+    type: ButtonStyle.Empty,
+    value: ''
+  },
+  {
+    type: ButtonStyle.Default,
+    value: ''
+  },
+  {
+    type: ButtonStyle.Primary,
+    value: 'ant-btn-primary'
+  },
+  {
+    type: ButtonStyle.Success,
+    value: 'ant-btn-primary'
+  },
+  {
+    type: ButtonStyle.Info,
+    value: 'ant-btn-primary'
+  },
+  {
+    type: ButtonStyle.Warning,
+    value: 'ant-btn-primary'
+  },
+  {
+    type: ButtonStyle.Danger,
+    value: 'ant-btn-danger'
+  },
+  {
+    type: ButtonStyle.Link,
+    value: 'ant-btn-primary'
+  },
+  {
+    type: ButtonStyle.Dashed,
+    value: 'ant-btn-dashed'
+  },
+  {
+    type: ButtonStyle.Close,
+    value: 'ant-btn-primary'
+  }
+];
+
+export default class Button extends AbstractButton implements OnInit {
+  public ngOnInit(): void {
+    this.setClassNames('ant-btn ', buttonStyles, buttonSizes);
   }
 }

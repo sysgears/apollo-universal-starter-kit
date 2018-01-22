@@ -7,36 +7,33 @@ import { AlertItem, AlertType } from '../../common/components/Alert';
 const alertClasses = [
   {
     type: AlertType.SUCCESS,
-    className: 'alert-success'
+    className: 'ant-alert-success'
   },
   {
     type: AlertType.INFO,
-    className: 'alert-info'
+    className: 'ant-alert-info'
   },
   {
     type: AlertType.WARNING,
-    className: 'alert-warning'
+    className: 'ant-alert-warning'
   },
   {
     type: AlertType.ERROR,
-    className: 'alert-danger'
+    className: 'ant-alert-error'
   }
 ];
 
 @Component({
   selector: 'alert',
   template: `
-    <div *ngIf="alerts">
-      <div *ngFor="let alert of alerts" [id]="alert.alertId"
-           class="alert alert-dismissible fade show {{ alert.type || '' }}"
-           role="alert">
-        <ausk-button className="close" (click)="onClose(alert)">
-          <span aria-hidden="true">&times;</span>
-        </ausk-button>
-        {{ alert.message }}
-      </div>
+    <div *ngFor="let alert of alerts" data-show="true" class="{{'ant-alert ant-alert-no-icon ' + alert.type}}">
+      <span class="ant-alert-message">{{alert.message}}</span>
+      <span class="ant-alert-description"></span>
+      <a class="ant-alert-close-icon" (click)="onClose(alert)">
+        <i class="anticon anticon-cross"></i>
+      </a>
     </div>
-	`
+  `
 })
 export default class Alert implements OnInit, OnDestroy {
   @Input() public subject: Subject<AlertItem>;

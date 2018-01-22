@@ -1,18 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'container',
   template: `
-     <div class="{{ className }}">
-         <ng-content></ng-content>
-     </div>
-	`
+    <div>
+        <ng-content></ng-content>
+    </div>
+  `
 })
-export default class Container implements OnInit {
-  @Input() public fluid: boolean;
-  public className: string;
-
-  public ngOnInit(): void {
-    this.className = `container${this.fluid ? '-fluid' : ''}`;
-  }
+export default class Container {
+  @Input() public classN: string;
+  @Input() public styleN: string;
 }

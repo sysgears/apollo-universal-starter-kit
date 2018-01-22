@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import '../../../modules/ui-bootstrap/styles/styles.scss';
 
 @Component({
   selector: 'page-not-found',

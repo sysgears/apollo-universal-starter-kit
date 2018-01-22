@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AlertItem, createErrorAlert } from '../../common/components/Alert';
-import { CellData, ColumnData, ElemType } from '../../ui-bootstrap/components/Table';
+import { CellData, ColumnData, ElemType } from '../../common/components/Table';
 import UsersListService, { AddUser, DeleteUser, UpdateUser } from '../containers/UsersList';
 import { UserOrderBy } from '../reducers';
 
@@ -117,26 +117,26 @@ export default class UsersListView implements OnInit, OnDestroy {
         this.rows = this.users.map((user: any) => {
           return [
             {
-              type: ElemType.Link,
-              text: user.username,
-              link: `/users/${user.id}`
+              type: [ElemType.Link],
+              text: [user.username],
+              link: [`/users/${user.id}`]
             },
             {
-              type: ElemType.Text,
-              text: user.email
+              type: [ElemType.Text],
+              text: [user.email]
             },
             {
-              type: ElemType.Text,
-              text: user.role
+              type: [ElemType.Text],
+              text: [user.role]
             },
             {
-              type: ElemType.Text,
-              text: user.isActive
+              type: [ElemType.Text],
+              text: [user.isActive]
             },
             {
-              type: ElemType.Button,
-              text: 'Delete',
-              callback: () => this.handleDeleteUser(user.id)
+              type: [ElemType.Button],
+              text: ['Delete'],
+              callback: [() => this.handleDeleteUser(user.id)]
             }
           ];
         });

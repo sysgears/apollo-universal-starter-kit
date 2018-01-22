@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StoreModule } from '@ngrx/store';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import { NgrxFormsModule } from 'ngrx-forms';
@@ -18,6 +17,7 @@ import { reducers } from '../common/createReduxStore';
 import uiComponents from '../common/createUiComponents';
 import log from '../common/log';
 import routes from './app/Routes.web';
+import { commonComponents } from './modules/common/components';
 import CounterView from './modules/counter/components/CounterView.web';
 import CounterService from './modules/counter/containers/Counter';
 import PageNotFound from './modules/pageNotFound/containers/PageNotFound';
@@ -49,7 +49,6 @@ import UsersListService from './modules/user/containers/UsersList';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { clientProvider, default as Main } from './app/Main';
 
 @NgModule({
@@ -60,6 +59,7 @@ import { clientProvider, default as Main } from './app/Main';
     // App
     PageNotFound,
     uiComponents(),
+    commonComponents,
     // Counter
     CounterView,
     // Post
@@ -88,14 +88,12 @@ import { clientProvider, default as Main } from './app/Main';
     FormsModule,
     HttpModule,
     ApolloModule.withClient(clientProvider),
-    NgbModule.forRoot(),
     NgUploaderModule,
     NgrxFormsModule,
     StoreModule.forRoot(reducers),
     RouterModule.forRoot(routes, {
       useHash: true
-    }),
-    NgZorroAntdModule.forRoot()
+    })
   ],
   providers: [
     CounterService,

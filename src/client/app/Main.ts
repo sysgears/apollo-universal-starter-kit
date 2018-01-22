@@ -5,8 +5,6 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
-import '../modules/ui-bootstrap/styles/styles.scss';
-
 /* ApolloClient initialization */
 
 import { InMemoryCache } from 'apollo-cache-inmemory';

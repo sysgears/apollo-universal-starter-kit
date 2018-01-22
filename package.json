@@ -3,7 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "main": "src/server",
-  "cacheDirectories": [".cache"],
+  "cacheDirectories": [
+    ".unused"
+  ],
   "engines": {
     "node": ">= 6.11.1",
     "npm": ">= 3.10.3",
@@ -23,7 +25,7 @@
     "exp-login": "cross-env NODE_ENV=production spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive",
     "watch": "spin watch",
     "exp-publish": "npm run exp-login && npm run exp -- p --non-interactive",
-    "heroku-postbuild": "NODE_ENV=production npm run seed",
+    "heroku-postbuild": "npm run build && npm run exp-publish && npm run seed",
     "precommit": "lint-staged",
     "cli": "node tools/cli",
     "postinstall": "opencollective postinstall",

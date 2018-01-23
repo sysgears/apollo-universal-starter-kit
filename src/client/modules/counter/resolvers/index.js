@@ -1,4 +1,4 @@
-import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery_client.graphql';
+import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 
 const TYPE_NAME = 'CounterState';
 
@@ -12,6 +12,7 @@ const defaults = {
 const resolvers = {
   Query: {
     counterState: (_, args, { cache }) => {
+        console.log('32232423423')
       const { counterState: { counter } } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
       return {
         counter: counter,

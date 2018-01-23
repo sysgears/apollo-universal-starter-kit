@@ -10,6 +10,7 @@ import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';
 
 import reducers from './reducers';
+import resolvers from './resolvers';
 
 import Feature from '../connector';
 
@@ -57,5 +58,6 @@ export default new Feature({
       }
     }
   },
-  reducer: { post: reducers }
+  reducer: { post: reducers },
+  resolver: resolvers
 });

@@ -26,7 +26,7 @@ const CounterView = ({ loading, counter, addCounter, counterState, addCounterSta
             Current reduxCount, is {counterState}. This is being stored client-side with Redux.
           </Text>
         </View>
-        <Button onPress={addCounterState(1)}>Click to increase reduxCount</Button>
+        <Button onPress={addCounterState(1)}>Click to increase apolloLinkStateCount</Button>
       </View>
     );
   }
@@ -54,8 +54,8 @@ CounterView.propTypes = {
   loading: PropTypes.bool.isRequired,
   counter: PropTypes.object,
   addCounter: PropTypes.func.isRequired,
-  counterState: PropTypes.number.isRequired,
-  addCounterState: PropTypes.func.isRequired
+    counterState: PropTypes.number.isRequired,
+    addCounterState: PropTypes.func.isRequired
 };
 
 export default CounterView;

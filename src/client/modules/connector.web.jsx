@@ -16,6 +16,7 @@ export default class {
       navItem,
       navItemRight,
       reducer,
+      resolver,
       middleware,
       afterware,
       connectionParam,
@@ -35,6 +36,7 @@ export default class {
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);
     this.reducer = combine(arguments, arg => arg.reducer);
+    this.resolver = combine(arguments, arg => arg.resolver);
     this.middleware = combine(arguments, arg => arg.middleware);
     this.afterware = combine(arguments, arg => arg.afterware);
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
@@ -66,6 +68,11 @@ export default class {
 
   get reducers() {
     return merge(...this.reducer);
+  }
+
+  get resolvers() {
+    console.log('resolvers: ', merge(this.resolver)[0]);
+    return merge(this.resolver)[0];
   }
 
   get middlewares() {

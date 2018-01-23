@@ -7,7 +7,7 @@ import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 chai.should();
 
 const COUNTER_APOLLO_VALUE = 11;
-const COUNTER_REDUX_VALUE = 7;
+const COUNTER_REDUX_VALUE = 1;
 const INC_COUNTER_VALUE = COUNTER_APOLLO_VALUE + 5;
 const COUNTER_SUBSCRIPTION_VALUE = 17;
 
@@ -25,9 +25,7 @@ const mocks = {
 };
 
 describe('Counter example UI works', () => {
-  const renderer = new Renderer(mocks, {
-    counter: { reduxCount: COUNTER_REDUX_VALUE }
-  });
+  const renderer = new Renderer(mocks);
   let app;
   let content;
 
@@ -63,7 +61,9 @@ describe('Counter example UI works', () => {
   step('Increase Redux counter button works', () => {
     const reduxButton = content.find('#redux-button').last();
     reduxButton.simulate('click');
-    content.text().should.has.string(`reduxCount, is ${COUNTER_REDUX_VALUE + 1}.`);
+    setTimeout(() => {
+      content.text().should.has.string(`apolloLinkState, is ${COUNTER_REDUX_VALUE + 1}.`);
+    });
   });
 
   step('Check subscribed to counter updates', () => {

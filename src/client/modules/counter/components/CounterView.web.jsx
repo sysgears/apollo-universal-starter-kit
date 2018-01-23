@@ -10,7 +10,7 @@ const Section = styled.section`
   text-align: center;
 `;
 
-const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement }) => {
+const CounterView = ({ loading, counter, addCounter, counterState, addCounterState }) => {
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Counter`}
@@ -44,8 +44,8 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
           </Button>
         </Section>
         <Section>
-          <p>Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.</p>
-          <Button id="redux-button" color="primary" onClick={onReduxIncrement(1)}>
+          <p>Current reduxCount, is {counterState}. This is being stored client-side with Redux.</p>
+          <Button id="redux-button" color="primary" onClick={addCounterState(1)}>
             Click to increase reduxCount
           </Button>
         </Section>
@@ -58,8 +58,8 @@ CounterView.propTypes = {
   loading: PropTypes.bool.isRequired,
   counter: PropTypes.object,
   addCounter: PropTypes.func.isRequired,
-  reduxCount: PropTypes.number.isRequired,
-  onReduxIncrement: PropTypes.func.isRequired
+  counterState: PropTypes.number.isRequired,
+  addCounterState: PropTypes.func.isRequired
 };
 
 export default CounterView;

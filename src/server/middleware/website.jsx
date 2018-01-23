@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
+import { withClientState } from 'apollo-link-state';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
@@ -44,9 +45,11 @@ const renderServerSide = async (req, res) => {
   const cache = new InMemoryCache();
 
   let link = new BatchHttpLink({ fetch });
+  const clientModules = require('../../client/modules').default;
+  const linkState = withClientState({ ...clientModules.resolvers, cache });
 
   const client = createApolloClient({
-    link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link])),
+    link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
     cache
   });
 
@@ -54,7 +57,6 @@ const renderServerSide = async (req, res) => {
   const store = createReduxStore(initialState, client);
 
   const context = {};
-  const clientModules = require('../../client/modules').default;
   const App = () =>
     clientModules.getWrappedRoot(
       <Provider store={store}>

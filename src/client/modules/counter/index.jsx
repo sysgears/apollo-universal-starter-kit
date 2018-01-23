@@ -3,6 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createTabBarIconWrapper } from '../common/components/native';
 import Counter from './containers/Counter';
 import reducers from './reducers';
+import resolvers from './resolvers';
 
 import Feature from '../connector';
 
@@ -18,5 +19,5 @@ export default new Feature({
       }
     }
   },
-  reducer: { counter: reducers }
+  resolver: resolvers
 });

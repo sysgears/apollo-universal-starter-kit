@@ -1,4 +1,5 @@
 [ignore]
+.*.history/.*
 .*node_modules/@expo/.*
 .*node_modules/animated/.*
 .*node_modules/babel-plugin-transform-react-remove-prop-types/.*

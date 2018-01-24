@@ -1,9 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
-import { Form, FormItem, Input } from '../../common/components/web';
+import { Form, FormItem, Input } from '../web';
 
-class $Module$FilterView extends React.PureComponent {
+class FilterView extends React.PureComponent {
+  static propTypes = {
+    searchText: PropTypes.string,
+    onSearchTextChange: PropTypes.func.isRequired
+  };
+
   handleSearch = e => {
     const { onSearchTextChange } = this.props;
     onSearchTextChange(e.target.value);
@@ -26,9 +31,4 @@ class $Module$FilterView extends React.PureComponent {
   }
 }
 
-$Module$FilterView.propTypes = {
-  searchText: PropTypes.string,
-  onSearchTextChange: PropTypes.func.isRequired
-};
-
-export default $Module$FilterView;
+export default FilterView;

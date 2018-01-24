@@ -29,47 +29,77 @@ export default pubsub => ({
   // schema batch resolvers
   // end schema batch resolvers
   Mutation: {
-    add$Module$: async (obj, { input }, { $Module$ }, info) => {
+    create$Module$: async (obj, { data }, { $Module$ }, info) => {
       try {
         const e = new FieldError();
         e.throwIf();
 
-        const [id] = await $Module$.add(input);
-        const $module$ = await $Module$.get({ id }, parseFields(info).node);
+        const [id] = await $Module$.create(data);
+        const $module$ = await $Module$.get({ where: { id } }, parseFields(info).node);
 
         return { node: $module$ };
       } catch (e) {
         return { errors: e };
       }
     },
-    edit$Module$: async (obj, { input }, { $Module$ }, info) => {
+    update$Module$: async (obj, { data, where }, { $Module$ }, info) => {
       try {
         const e = new FieldError();
         e.throwIf();
 
-        await $Module$.edit(input);
-
-        const $module$ = await $Module$.get({ id: input.id }, parseFields(info).node);
-
+        await $Module$.update(data, where);
+        const $module$ = await $Module$.get({ where }, parseFields(info).node);
         return { node: $module$ };
       } catch (e) {
         return { errors: e };
       }
     },
-    delete$Module$: async (obj, { id }, { $Module$ }, info) => {
+    delete$Module$: async (obj, { where }, { $Module$ }, info) => {
       try {
         const e = new FieldError();
-        const $module$ = await $Module$.get({ id }, parseFields(info).node);
+
+        const $module$ = await $Module$.get({ where }, parseFields(info).node);
         if (!$module$) {
-          e.setError('delete', '$Module$ does not exist.');
+          e.setError('delete', '$MoDuLe$ does not exist.');
           e.throwIf();
         }
 
-        const isDeleted = await $Module$.delete(id);
+        const isDeleted = await $Module$.delete(where);
         if (isDeleted) {
           return { node: $module$ };
         } else {
-          e.setError('delete', 'Could not delete $module$. Please try again later.');
+          e.setError('delete', 'Could not delete $MoDuLe$. Please try again later.');
+          e.throwIf();
+        }
+      } catch (e) {
+        return { errors: e };
+      }
+    },
+    sort$Module$s: async (obj, { data }, { $Module$ }, info) => {
+      try {
+        const e = new FieldError();
+        e.throwIf();
+
+        const [sortCount] = await $Module$.sort(data);
+        if (sortCount.affectedRows > 0) {
+          return { count: sortCount.affectedRows };
+        } else {
+          e.setError('sort', 'Could not sort $MoDuLe$. Please try again later.');
+          e.throwIf();
+        }
+      } catch (e) {
+        return { errors: e };
+      }
+    },
+    deleteMany$Module$s: async (obj, { ids }, { $Module$ }) => {
+      try {
+        const e = new FieldError();
+
+        const deleteCount = await $Module$.deleteMany(ids);
+        if (deleteCount > 0) {
+          return { count: deleteCount };
+        } else {
+          e.setError('delete', 'Could not delete any of selected $MoDuLe$. Please try again later.');
           e.throwIf();
         }
       } catch (e) {

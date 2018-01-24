@@ -15,7 +15,7 @@ export default new Feature({
   navItem: (
     <MenuItem key="$module$">
       <NavLink to="/$module$" className="nav-link" activeClassName="active">
-        $Module$
+        $MoDuLe$
       </NavLink>
     </MenuItem>
   ),

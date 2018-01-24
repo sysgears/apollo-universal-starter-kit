@@ -4,7 +4,8 @@ import shell from 'shelljs';
 import fs from 'fs';
 import chalk from 'chalk';
 import GraphQLGenerator from 'domain-graphql';
-import { pascalize, decamelize } from 'humps';
+import { pascalize, camelize } from 'humps';
+import { startCase } from 'lodash';
 
 function renameFiles(destinationPath, templatePath, module, location) {
   // pascalize
@@ -28,6 +29,7 @@ function renameFiles(destinationPath, templatePath, module, location) {
     if (entry.isFile()) {
       shell.sed('-i', /\$module\$/g, module, entry.name);
       shell.sed('-i', /\$Module\$/g, Module, entry.name);
+      shell.sed('-i', /\$MoDuLe\$/g, startCase(Module), entry.name);
       shell.sed('-i', /\$MODULE\$/g, module.toUpperCase(), entry.name);
     }
   });
@@ -175,21 +177,21 @@ function updateSchema(logger, module) {
 
       // regenerate input fields
       let moduleData = `  node: ${Module}\n`;
-      let inputAdd = '';
-      let inputEdit = '';
+      let inputCreate = '';
+      let inputUpdate = '';
       for (const key of schema.keys()) {
         const value = schema.values[key];
         if (value.type.isSchema) {
-          if (key !== 'id') {
-            inputAdd += `  ${key}Id: Int!\n`;
-          }
-          inputEdit += `  ${key}Id: Int!\n`;
-          moduleData += `  ${key}s: [${value.type.name}]\n`;
+          inputCreate += `  ${key}Id: Int!\n`;
+          inputUpdate += `  ${key}Id: Int!\n`;
+          moduleData += `  ${key}s(limit: Int, orderBy: OrderByInput): [${value.type.name}]\n`;
         } else if (value.type.constructor !== Array) {
           if (key !== 'id') {
-            inputAdd += `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name + '.' + key, value, []) + '\n';
+            inputCreate +=
+              `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name + '.' + key, value, []) + '\n';
+            inputUpdate +=
+              `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name + '.' + key, value, []) + '\n';
           }
-          inputEdit += `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name + '.' + key, value, []) + '\n';
         }
       }
 
@@ -215,16 +217,20 @@ function updateSchema(logger, module) {
         .ShellString(shell.cat(file).replace(RegExp(replaceModuleData, 'g'), `type ${Module}Data {\n${moduleData}}`))
         .to(file);
 
-      // override AddModuleInput in schema.graphql file
-      const replaceAdd = `input Add${Module}Input {([^}])*\\n}`;
+      // override CreateModuleInput in schema.graphql file
+      const replaceCreate = `input ${Module}CreateInput {([^}])*\\n}`;
       shell
-        .ShellString(shell.cat(file).replace(RegExp(replaceAdd, 'g'), `input Add${Module}Input {\n${inputAdd}}`))
+        .ShellString(
+          shell.cat(file).replace(RegExp(replaceCreate, 'g'), `input ${Module}CreateInput {\n${inputCreate}}`)
+        )
         .to(file);
 
-      // override EditmoduleInput in schema.graphql file
-      const replaceEdit = `input Edit${Module}Input {([^}])*\\n}`;
+      // override UpdateModuleInput in schema.graphql file
+      const replaceUpdate = `input ${Module}UpdateInput {([^}])*\\n}`;
       shell
-        .ShellString(shell.cat(file).replace(RegExp(replaceEdit, 'g'), `input Edit${Module}Input {\n${inputEdit}}`))
+        .ShellString(
+          shell.cat(file).replace(RegExp(replaceUpdate, 'g'), `input ${Module}UpdateInput {\n${inputUpdate}}`)
+        )
         .to(file);
 
       logger.info(chalk.green(`✔ Schema in ${pathSchema}${file} successfully updated!`));
@@ -249,7 +255,7 @@ function updateSchema(logger, module) {
         } else if (value.type.constructor === Array) {
           replace += `  ${schema.name}: {
     ${key}: createBatchResolver((sources, args, { ${schema.name}, ${value.type[0].name} }, info) => {
-      return ${schema.name}.getByIds(sources.map(({ id }) => id), '${decamelize(schema.name)}', ${
+      return ${schema.name}.getByIds(sources.map(({ id }) => id), '${camelize(schema.name)}', ${
             value.type[0].name
           }, parseFields(info));
     })
@@ -258,16 +264,18 @@ function updateSchema(logger, module) {
         }
       }
 
+      if (moduleData !== '') {
+        moduleData = `${moduleData.replace(/,\s*$/, '')}
+`;
+      }
+
       // override batch resolvers in resolvers.js file
       replaceModuleData = `// order data([^*]+)// end order data`;
       shell
         .ShellString(
           shell
             .cat(resolverFile)
-            .replace(
-              RegExp(replaceModuleData, 'g'),
-              `// order data\n${moduleData.replace(/,\s*$/, '')}    // end order data`
-            )
+            .replace(RegExp(replaceModuleData, 'g'), `// order data\n${moduleData}    // end order data`)
         )
         .to(resolverFile);
 

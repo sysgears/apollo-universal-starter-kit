@@ -26,7 +26,7 @@ $Module$ListScreen.propTypes = {
 
 class $Module$EditScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.id === 0 ? 'Create' : 'Edit'} $module$`
+    title: `${navigation.state.params.id === 0 ? 'Create' : 'Edit'} $MoDuLe$`
   });
   render() {
     return <$Module$Edit navigation={this.props.navigation} />;

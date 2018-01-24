@@ -1,6 +1,6 @@
 #import "./$Module$.graphql"
 
-query $module$s($limit: Int, $offset: Int, $orderBy: OrderBy$Module$Input, $filter: Filter$Module$Input) {
+query $module$s($limit: Int, $offset: Int, $orderBy: OrderByInput, $filter: $Module$FilterInput) {
   $module$s(limit: $limit, offset: $offset, orderBy: $orderBy, filter: $filter) {
     pageInfo {
       totalCount

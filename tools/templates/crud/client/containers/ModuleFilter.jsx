@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import $Module$FilterView from '../components/$Module$FilterView';
+import { FilterView } from '../../common/components/crud';
 
 class $Module$Filter extends React.PureComponent {
   render() {
-    return <$Module$FilterView {...this.props} />;
+    return <FilterView {...this.props} />;
   }
 }
 

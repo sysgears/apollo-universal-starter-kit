@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 
-import { createFormFields } from '../../common/util';
-import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
-import { Form, Button, Alert } from '../../common/components/web';
+import { createFormFields } from '../../util';
+import { Form, Button, Alert } from '../web';
 
-const $Module$Form = ({ handleSubmit, submitting, onSubmit, $module$, error }) => {
+const FormView = ({ handleSubmit, submitting, onSubmit, data, error, schema }) => {
   return (
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
-      {createFormFields($Module$Schema, $module$)}
+      {createFormFields(schema, data)}
       {error && <Alert color="error">{error}</Alert>}
       <Button color="primary" type="submit" disabled={submitting}>
         Save
@@ -18,14 +17,15 @@ const $Module$Form = ({ handleSubmit, submitting, onSubmit, $module$, error }) =
   );
 };
 
-$Module$Form.propTypes = {
+FormView.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  $module$: PropTypes.object,
+  data: PropTypes.object,
+  schema: PropTypes.object,
   error: PropTypes.string
 };
 
 export default reduxForm({
-  form: '$module$'
-})($Module$Form);
+  form: 'form'
+})(FormView);

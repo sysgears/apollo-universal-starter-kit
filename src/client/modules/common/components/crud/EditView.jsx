@@ -2,29 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
-import $Module$Form from './$Module$Form';
+import FormView from './FormView';
 
-const $Module$EditView = ({ loading, $module$, navigation, onSubmit }) => {
-  let $module$Obj = $module$;
+const EditView = ({ loading, data, navigation, onSubmit }) => {
+  let dataObj = data;
 
-  if (!$module$Obj && navigation.state) {
-    $module$Obj = navigation.state.params.$module$;
+  if (!dataObj && navigation.state) {
+    dataObj = navigation.state.params.data;
   }
 
-  if (loading && !$module$Obj) {
+  if (loading && !dataObj) {
     return (
       <View style={styles.container}>
         <Text>Loading...</Text>
       </View>
     );
   } else {
-    return <$Module$Form onSubmit={onSubmit} initialValues={$module$Obj ? $module$Obj : {}} />;
+    return <FormView onSubmit={onSubmit} initialValues={dataObj ? dataObj : {}} />;
   }
 };
 
-$Module$EditView.propTypes = {
+EditView.propTypes = {
   loading: PropTypes.bool.isRequired,
-  $module$: PropTypes.object,
+  data: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired
 };
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default $Module$EditView;
+export default EditView;

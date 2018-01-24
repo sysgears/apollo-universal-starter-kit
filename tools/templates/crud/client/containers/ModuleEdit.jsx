@@ -1,31 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
+import { connect } from 'react-redux';
 import { SubmissionError } from 'redux-form';
 
+import { EditView } from '../../common/components/crud';
 import { pickInputFields } from '../../common/util';
 import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
-import $Module$EditView from '../components/$Module$EditView';
 import $MODULE$_QUERY from '../graphql/$Module$Query.graphql';
-import ADD_$MODULE$ from '../graphql/Add$Module$.graphql';
-import EDIT_$MODULE$ from '../graphql/Edit$Module$.graphql';
+import CREATE_$MODULE$ from '../graphql/Create$Module$.graphql';
+import UPDATE_$MODULE$ from '../graphql/Update$Module$.graphql';
 
 class $Module$Edit extends React.Component {
+  static propTypes = {
+    data: PropTypes.object,
+    createEntry: PropTypes.func.isRequired,
+    updateEntry: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired
+  };
+
   onSubmit = async values => {
-    const { $module$: { node }, add$Module$, edit$Module$ } = this.props;
+    const { data: { node }, createEntry, updateEntry, title } = this.props;
     let result = null;
 
     const insertValues = pickInputFields($Module$Schema, values);
 
     if (node) {
-      result = await edit$Module$(insertValues);
+      result = await updateEntry(insertValues, { id: node.id });
     } else {
-      result = await add$Module$(insertValues);
+      result = await createEntry(insertValues);
     }
 
     if (result.errors) {
       let submitError = {
-        _error: 'Edit $module$ failed!'
+        _error: `Edit ${title} failed!`
       };
       result.errors.map(error => (submitError[error.field] = error.message));
       throw new SubmissionError(submitError);
@@ -33,17 +41,11 @@ class $Module$Edit extends React.Component {
   };
 
   render() {
-    return <$Module$EditView {...this.props} onSubmit={this.onSubmit} />;
+    return <EditView {...this.props} onSubmit={this.onSubmit} schema={$Module$Schema} />;
   }
 }
 
-$Module$Edit.propTypes = {
-  $module$: PropTypes.object,
-  add$Module$: PropTypes.func.isRequired,
-  edit$Module$: PropTypes.func.isRequired
-};
-
-export default compose(
+const $Module$EditWithApollo = compose(
   graphql($MODULE$_QUERY, {
     options: props => {
       let id = 0;
@@ -55,23 +57,23 @@ export default compose(
 
       return {
         fetchPolicy: 'cache-and-network',
-        variables: { id }
+        variables: { where: { id } }
       };
     },
     props({ data: { loading, $module$ } }) {
-      return { loading, $module$ };
+      return { loading, data: $module$ };
     }
   }),
-  graphql(ADD_$MODULE$, {
+  graphql(CREATE_$MODULE$, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
-      add$Module$: async input => {
+      createEntry: async data => {
         try {
-          const { data: { add$Module$ } } = await mutate({
-            variables: { input }
+          const { data: { create$Module$ } } = await mutate({
+            variables: { data }
           });
 
-          if (add$Module$.errors) {
-            return { errors: add$Module$.errors };
+          if (create$Module$.errors) {
+            return { errors: create$Module$.errors };
           }
 
           if (history) {
@@ -86,16 +88,16 @@ export default compose(
       }
     })
   }),
-  graphql(EDIT_$MODULE$, {
+  graphql(UPDATE_$MODULE$, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
-      edit$Module$: async input => {
+      updateEntry: async (data, where) => {
         try {
-          const { data: { edit$Module$ } } = await mutate({
-            variables: { input }
+          const { data: { update$Module$ } } = await mutate({
+            variables: { data, where }
           });
 
-          if (edit$Module$.errors) {
-            return { errors: edit$Module$.errors };
+          if (update$Module$.errors) {
+            return { errors: update$Module$.errors };
           }
 
           if (history) {
@@ -111,3 +113,8 @@ export default compose(
     })
   })
 )($Module$Edit);
+
+export default connect(state => ({
+  title: state.$module$.title,
+  link: state.$module$.link
+}))($Module$EditWithApollo);

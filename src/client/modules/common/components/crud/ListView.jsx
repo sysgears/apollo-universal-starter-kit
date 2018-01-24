@@ -1,19 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, FlatList, Text, View } from 'react-native';
-import { SwipeAction } from '../../common/components/native';
+import { SwipeAction } from '../native';
 
-class $Module$ListView extends React.PureComponent {
+class ListView extends React.PureComponent {
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+    data: PropTypes.array,
+    orderBy: PropTypes.object,
+    onOrderBy: PropTypes.func.isRequired,
+    deleteEntry: PropTypes.func.isRequired,
+    navigation: PropTypes.object.isRequired,
+    nativeLink: PropTypes.string.isRequired
+  };
+
   keyExtractor = item => item.id;
 
   renderItem = ({ item: { id, name } }) => {
-    const { delete$Module$, navigation } = this.props;
+    const { deleteEntry, navigation, nativeLink } = this.props;
     return (
       <SwipeAction
-        onPress={() => navigation.navigate('$Module$Edit', { id })}
+        onPress={() => navigation.navigate(nativeLink, { id })}
         right={{
           text: 'Delete',
-          onPress: () => delete$Module$(id)
+          onPress: () => deleteEntry(id)
         }}
       >
         {name}
@@ -22,28 +32,19 @@ class $Module$ListView extends React.PureComponent {
   };
 
   render() {
-    const { loading, $module$s } = this.props;
+    const { loading, data } = this.props;
 
-    if (loading && !$module$s) {
+    if (loading && !data) {
       return (
         <View style={styles.container}>
           <Text>Loading...</Text>
         </View>
       );
     } else {
-      return <FlatList data={$module$s} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />;
+      return <FlatList data={data} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />;
     }
   }
 }
-
-$Module$ListView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  $module$s: PropTypes.array,
-  orderBy: PropTypes.object,
-  onOrderBy: PropTypes.func.isRequired,
-  delete$Module$: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -62,4 +63,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default $Module$ListView;
+export default ListView;

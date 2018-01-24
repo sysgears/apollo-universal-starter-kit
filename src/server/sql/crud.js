@@ -64,11 +64,12 @@ export default class Crud {
     if (filter) {
       if (has(filter, 'searchText') && filter.searchText !== '') {
         const schema = this.schema;
+        const tableName = this.tableName;
         queryBuilder.where(function() {
           for (const key of schema.keys()) {
             const value = schema.values[key];
             if (value.searchText) {
-              this.orWhere(key, 'like', `%${filter.searchText}%`);
+              this.orWhere(`${tableName}.${key}`, 'like', `%${filter.searchText}%`);
             }
           }
         });
@@ -84,35 +85,53 @@ export default class Crud {
       .first();
   }
 
-  get({ id }, info) {
+  get({ where }, info) {
+    const { id } = where;
     const baseQuery = knex(`${this.prefix}${this.tableName} as ${this.tableName}`);
     const select = selectBy(this.schema, info, true, this.prefix);
     return knexnest(select(baseQuery).where(`${this.tableName}.id`, '=', id));
   }
 
-  add(input) {
+  create(data) {
     return knex(`${this.prefix}${this.tableName}`)
-      .insert(decamelizeKeys(input))
+      .insert(decamelizeKeys(data))
       .returning('id');
   }
 
-  edit({ id, ...input }) {
+  update(data, where) {
     return knex(`${this.prefix}${this.tableName}`)
-      .update(decamelizeKeys(input))
-      .where({ id });
+      .update(decamelizeKeys(data))
+      .where(where);
   }
 
-  delete(id) {
+  delete(where) {
     return knex(`${this.prefix}${this.tableName}`)
-      .where({ id })
+      .where(where)
       .del();
+  }
+
+  deleteMany(ids) {
+    return knex(`${this.prefix}${this.tableName}`)
+      .whereIn('id', ids)
+      .del();
+  }
+
+  sort(data) {
+    return knex.raw(
+      `UPDATE ${this.prefix}${this.tableName} t1
+      JOIN ${this.prefix}${this.tableName} t2
+      ON t1.id = ? AND t2.id = ?
+      SET t1.rank = ?,
+      t2.rank = ?`,
+      data
+    );
   }
 
   async getByIds(ids, by, Obj, info) {
     info[`${by}Id`] = true;
     const baseQuery = knex(`${Obj.getPrefix()}${Obj.getTableName()} as ${Obj.getTableName()}`);
     const select = selectBy(Obj.getSchema(), info, false, Obj.getPrefix());
-    const res = await knexnest(select(baseQuery).whereIn(`${Obj.getTableName()}.${by}_id`, ids));
+    const res = await knexnest(select(baseQuery).whereIn(`${Obj.getTableName()}.${decamelize(by)}_id`, ids));
     return orderedFor(res, ids, `${by}Id`, false);
   }
 }

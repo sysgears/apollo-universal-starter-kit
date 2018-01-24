@@ -1,0 +1,9 @@
+mutation deleteMany$Module$s($ids: [Int!]) {
+  deleteMany$Module$s(ids: $ids) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

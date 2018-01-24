@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 
-import { createFormFields } from '../../common/util';
-import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
-import { FormView, FormButton } from '../../common/components/native';
+import { createFormFields } from '../../util';
+import { FormView, FormButton } from '../native';
 
-const $Module$Form = ({ handleSubmit, valid, onSubmit }) => {
+const Form = ({ handleSubmit, valid, onSubmit, schema }) => {
   return (
     <FormView>
-      {createFormFields($Module$Schema)}
+      {createFormFields(schema)}
       <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
         Save
       </FormButton>
@@ -17,13 +16,14 @@ const $Module$Form = ({ handleSubmit, valid, onSubmit }) => {
   );
 };
 
-$Module$Form.propTypes = {
+Form.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
+  schema: PropTypes.object,
   valid: PropTypes.bool
 };
 
 export default reduxForm({
-  form: '$module$',
+  form: 'form',
   enableReinitialize: true
-})($Module$Form);
+})(Form);

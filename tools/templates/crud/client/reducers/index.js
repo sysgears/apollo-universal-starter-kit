@@ -1,4 +1,7 @@
 const defaultState = {
+  title: '$MoDuLe$',
+  link: '$module$',
+  nativeLink: '$Module$Edit',
   limit: 50,
   searchText: '',
   orderBy: {}

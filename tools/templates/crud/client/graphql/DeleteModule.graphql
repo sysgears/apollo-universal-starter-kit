@@ -1,5 +1,5 @@
-mutation delete$Module$($id: Int!) {
-  delete$Module$(id: $id) {
+mutation delete$Module$($where: $Module$WhereUniqueInput!) {
+  delete$Module$(where: $where) {
     node {
       id
     }

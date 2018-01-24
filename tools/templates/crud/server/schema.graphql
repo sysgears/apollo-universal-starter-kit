@@ -19,34 +19,31 @@ type $Module$Payload {
   errors: [FieldError!]
 }
 
-input OrderBy$Module$Input {
-  column: String
-  order: String
-}
-
-input Filter$Module$Input {
+input $Module$FilterInput {
   searchText: String
 }
 
-input Add$Module$Input {
+input $Module$CreateInput {
   name: String!
 }
 
-input Edit$Module$Input {
-  id: Int!
+input $Module$UpdateInput {
   name: String!
+}
+
+input $Module$WhereUniqueInput {
+  id: Int
 }
 
 extend type Query {
-  $module$s(limit: Int, offset: Int, orderBy: OrderBy$Module$Input, filter: Filter$Module$Input): $Module$s
-  $module$(id: Int!): $Module$Data
+  $module$s(limit: Int, offset: Int, orderBy: OrderByInput, filter: $Module$FilterInput): $Module$s
+  $module$(where: $Module$WhereUniqueInput!): $Module$Data
 }
 
 extend type Mutation {
-  add$Module$(input: Add$Module$Input!): $Module$Payload!
-  edit$Module$(input: Edit$Module$Input!): $Module$Payload!
-  delete$Module$(id: Int!): $Module$Payload!
-}
-
-extend type Subscription {
+  create$Module$(data: $Module$CreateInput!): $Module$Payload!
+  update$Module$(data: $Module$UpdateInput!, where: $Module$WhereUniqueInput!): $Module$Payload!
+  delete$Module$(where: $Module$WhereUniqueInput!): $Module$Payload!
+  sort$Module$s(data: [Int!]): BatchManyPayload!
+  deleteMany$Module$s(ids: [Int!]): BatchManyPayload!
 }

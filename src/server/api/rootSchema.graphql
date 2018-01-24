@@ -8,6 +8,16 @@ type PageInfo {
   hasNextPage: Boolean
 }
 
+type BatchManyPayload {
+    count: Int
+    errors: [FieldError!]
+}
+
+input OrderByInput {
+    column: String
+    order: String
+}
+
 type Query {
   dummy: Int
 }

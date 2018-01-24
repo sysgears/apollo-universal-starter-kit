@@ -1,7 +1,7 @@
 #import "./$Module$.graphql"
 
-mutation add$Module$($input: Add$Module$Input!) {
-  add$Module$(input: $input) {
+mutation create$Module$($data: $Module$CreateInput!) {
+  create$Module$(data: $data) {
     node {
       ...$Module$Info
     }

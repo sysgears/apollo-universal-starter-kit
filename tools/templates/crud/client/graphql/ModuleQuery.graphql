@@ -1,7 +1,7 @@
 #import "./$Module$.graphql"
 
-query $module$($id: Int!) {
-  $module$(id: $id) {
+query $module$($where: $Module$WhereUniqueInput!) {
+  $module$(where: $where) {
     node {
       ...$Module$Info
     }

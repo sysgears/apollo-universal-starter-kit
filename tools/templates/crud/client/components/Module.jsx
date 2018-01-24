@@ -1,15 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { StyleSheet, Text, View } from 'react-native';
 
-const $Module$ = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.element}>
-        <Text style={styles.box}>Hello $Module$!</Text>
+class $Module$ extends React.PureComponent {
+  static propTypes = {
+    title: PropTypes.string.isRequired
+  };
+
+  render() {
+    const { title } = this.props;
+    return (
+      <View style={styles.container}>
+        <View style={styles.element}>
+          <Text style={styles.box}>Hello {title}!</Text>
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -28,4 +37,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default $Module$;
+export default connect(state => ({
+  title: state.$module$.title
+}))($Module$);

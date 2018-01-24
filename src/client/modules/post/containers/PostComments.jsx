@@ -184,17 +184,3 @@ const PostCommentsWithApollo = compose(
 )(PostComments);
 
 export default PostCommentsWithApollo;
-// connect(
-//   state => ({ comment: state.post.comment }),
-//   dispatch => ({
-//     onCommentSelect(comment) {
-//       dispatch({
-//         type: 'COMMENT_SELECT',
-//         value: comment
-//       });
-//     },
-//     onFormSubmitted() {
-//       dispatch(reset('comment'));
-//     }
-//   })
-// )(PostCommentsWithApollo);

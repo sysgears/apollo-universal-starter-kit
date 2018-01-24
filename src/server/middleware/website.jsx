@@ -23,6 +23,7 @@ import Html from './html';
 import Routes from '../../client/app/Routes';
 import modules from '../modules';
 import settings from '../../../settings';
+import clientModules from '../../client/modules';
 
 let assetMap;
 
@@ -45,7 +46,6 @@ const renderServerSide = async (req, res) => {
   const cache = new InMemoryCache();
 
   let link = new BatchHttpLink({ fetch });
-  const clientModules = require('../../client/modules').default;
   const linkState = withClientState({ ...clientModules.resolvers, cache });
 
   const client = createApolloClient({

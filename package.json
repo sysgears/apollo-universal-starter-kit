@@ -73,8 +73,7 @@
   "devDependencies": {
     "husky": "^0.14.3",
     "lerna": "^2.5.1",
-    "lint-staged": "^6.0.0",
-    "spinjs": "^0.4.82"
+    "lint-staged": "^6.0.0"
   },
   "optionalDependencies": {
     "dotenv": "^4.0.0",

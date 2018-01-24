@@ -143,7 +143,7 @@
     "resolve-url-loader": "^2.2.1",
     "sass-loader": "^6.0.6",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.4.82",
+    "spinjs": "^0.4.83",
     "style-loader": "^0.19.1",
     "url-loader": "^0.6.2",
     "wait-on": "^2.0.2",

@@ -10,7 +10,8 @@ const Section = styled.section`
   text-align: center;
 `;
 
-const CounterView = ({ loading, counter, addCounter, counterState, addCounterState }) => {
+const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement, counterState, addCounterState }) => {
+  console.log('reduxCount', reduxCount, 'counterState', counterState);
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Counter`}
@@ -44,9 +45,15 @@ const CounterView = ({ loading, counter, addCounter, counterState, addCounterSta
           </Button>
         </Section>
         <Section>
-          <p>Current reduxCount, is {counterState}. This is being stored client-side with Redux.</p>
-          <Button id="redux-button" color="primary" onClick={addCounterState(1)}>
+          <p>Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.</p>
+          <Button id="redux-button" color="primary" onClick={onReduxIncrement(1)}>
             Click to increase reduxCount
+          </Button>
+        </Section>
+        <Section>
+          <p>Current reduxCount, is {counterState}. This is being stored client-side with Apollo Link State.</p>
+          <Button id="redux-button" color="primary" onClick={addCounterState(1)}>
+            Click to increase apolloLinkState
           </Button>
         </Section>
       </PageLayout>
@@ -59,7 +66,9 @@ CounterView.propTypes = {
   counter: PropTypes.object,
   addCounter: PropTypes.func.isRequired,
   counterState: PropTypes.number.isRequired,
-  addCounterState: PropTypes.func.isRequired
+  addCounterState: PropTypes.func.isRequired,
+  reduxCount: PropTypes.number.isRequired,
+  onReduxIncrement: PropTypes.func.isRequired
 };
 
 export default CounterView;

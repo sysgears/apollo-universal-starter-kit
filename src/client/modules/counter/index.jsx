@@ -19,5 +19,6 @@ export default new Feature({
       }
     }
   },
-  resolver: resolvers
+  resolver: resolvers,
+  reducer: { counter: reducers }
 });

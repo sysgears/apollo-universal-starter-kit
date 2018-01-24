@@ -25,7 +25,9 @@ const mocks = {
 };
 
 describe('Counter example UI works', () => {
-  const renderer = new Renderer(mocks);
+  const renderer = new Renderer(mocks, {
+    counter: { reduxCount: COUNTER_REDUX_VALUE }
+  });
   let app;
   let content;
 

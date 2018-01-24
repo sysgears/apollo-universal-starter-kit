@@ -10,6 +10,7 @@ import ADD_COUNTER from '../graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
+import { connect } from 'react-redux';
 
 class Counter extends React.Component {
   static propTypes = {
@@ -114,4 +115,15 @@ const CounterWithApollo = compose(
   })
 )(Counter);
 
-export default CounterWithApollo;
+export default connect(
+  state => ({ reduxCount: state.counter.reduxCount }),
+  dispatch => ({
+    onReduxIncrement(value) {
+      return () =>
+        dispatch({
+          type: 'COUNTER_INCREMENT',
+          value: Number(value)
+        });
+    }
+  })
+)(CounterWithApollo);

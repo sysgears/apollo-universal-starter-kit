@@ -15,7 +15,6 @@ import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgSty
 import 'backend_reload';
 
 import { reducers } from '../common/createReduxStore';
-import uiComponents from '../common/createUiComponents';
 import log from '../common/log';
 import routes from './app/Routes.web';
 import CounterView from './modules/counter/components/CounterView.web';
@@ -27,6 +26,7 @@ import PostList from './modules/post/components/PostList.web';
 import PostService from './modules/post/containers/Post';
 import PostCommentsService from './modules/post/containers/PostComments';
 import PostEditService from './modules/post/containers/PostEdit';
+import { BOOTSTRAP_COMPONENTS } from './modules/ui-bootstrap/components';
 import UploadView from './modules/upload/components/UploadView.web';
 import UploadService from './modules/upload/containers/Upload';
 import ForgotPasswordView from './modules/user/components/ForgotPasswordView.web';
@@ -49,7 +49,6 @@ import UsersListService from './modules/user/containers/UsersList';
 
 // Apollo imports
 import { ApolloModule } from 'apollo-angular';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { clientProvider, default as Main } from './app/Main';
 
 @NgModule({
@@ -59,7 +58,7 @@ import { clientProvider, default as Main } from './app/Main';
     /* Components */
     // App
     PageNotFound,
-    uiComponents(),
+    BOOTSTRAP_COMPONENTS,
     // Counter
     CounterView,
     // Post
@@ -94,8 +93,7 @@ import { clientProvider, default as Main } from './app/Main';
     StoreModule.forRoot(reducers),
     RouterModule.forRoot(routes, {
       useHash: true
-    }),
-    NgZorroAntdModule.forRoot()
+    })
   ],
   providers: [
     CounterService,

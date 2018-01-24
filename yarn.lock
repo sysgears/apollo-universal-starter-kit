@@ -12228,29 +12228,9 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.82:
-  version "0.4.82"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.82.tgz#cc71184c8e92f23fcaa8c759936b708a7bfe06c4"
-  dependencies:
-    containerized "^1.0.2"
-    debug "^3.1.0"
-    detect-port "^1.2.2"
-    inquirer "^3.3.0"
-    ip "^1.1.5"
-    lodash "^4.17.4"
-    minilog "^3.1.0"
-    mkdirp "^0.5.1"
-    require-relative "^0.8.7"
-    serve-static "^1.13.1"
-    source-list-map "^2.0.0"
-    source-map-support "^0.4.15"
-    webpack-merge "^4.1.0"
-    webpack-sources "^1.0.1"
-    yargs "^8.0.2"
-
-spinjs@^0.4.83:
-  version "0.4.83"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.83.tgz#92113bafebedfd11742c01bb9425ac39f89399e1"
+spinjs@^0.4.84:
+  version "0.4.84"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.84.tgz#a858d02b959bc8ee79f55994265df9439260893e"
   dependencies:
     containerized "^1.0.2"
     debug "^3.1.0"

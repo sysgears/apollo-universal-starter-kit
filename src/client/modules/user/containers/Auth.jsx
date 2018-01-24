@@ -165,7 +165,7 @@ const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }
     <Route
       {...rest}
       render={props =>
-        checkAuth(cookies, scope) ? <Component {...props} {...rest} /> : <Redirect to={{ pathname: '/login' }} />
+        checkAuth(cookies, scope) ? <Component {...props} /> : <Redirect to={{ pathname: '/login' }} />
       }
     />
   );

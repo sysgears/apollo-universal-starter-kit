@@ -1,26 +1,23 @@
 type File {
-  id: Int!
-  name: String!
-  type: String!
-  size: Int!
-  path: String!
+    id: Int!
+    name: String!
+    type: String!
+    size: Int!
+    path: String!
 }
 
 input Upload {
-  name: String!
-  type: String!
-  size: Int!
-  path: String!
+    name: String!
+    type: String!
+    size: Int!
+    path: String!
 }
 
 extend type Query {
-  files: [File]
+    files: [File]
 }
 
 extend type Mutation {
-  uploadFiles(files: [Upload!]!): Boolean!
-  removeFile(id: Int!): Boolean!
-}
-
-extend type Subscription {
+    uploadFiles(files: [Upload!]!): Boolean!
+    removeFile(id: Int!): Boolean!
 }

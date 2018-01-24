@@ -1,1 +1,1 @@
-module.exports = require('spinjs').createWebpackConfig(__dirname, '.spinrc.json', 'server');
+module.exports = require('spinjs').createWebpackConfig(__dirname, '.spinrc.js', 'server');

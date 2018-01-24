@@ -2,7 +2,6 @@ import path from 'path';
 import fs from 'fs';
 import url from 'url';
 import log from '../../../common/log';
-import { options as spinConfig } from '../../.spinrc.json';
 
 let assetMap;
 
@@ -35,7 +34,7 @@ function errorMiddleware(e, req, res, next) {
     log.error(e);
 
     if (__DEV__ || !assetMap) {
-      assetMap = JSON.parse(fs.readFileSync(path.join(spinConfig.frontendBuildDir, 'web', 'assets.json')));
+      assetMap = JSON.parse(fs.readFileSync(path.join(__FRONTEND_BUILD_DIR__, 'assets.json')));
     }
 
     const serverErrorScript = `<script charset="UTF-8">window.__SERVER_ERROR__=${JSON.stringify(

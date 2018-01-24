@@ -2,16 +2,34 @@
   "name": "apollo-universal-starter-kit",
   "private": true,
   "version": "1.0.0",
+  "cacheDirectories": [
+    ".unused"
+  ],
   "scripts": {
     "build": "lerna run build --stream",
+    "exp": "lerna run --scope=mobile exp --stream",
     "start": "node --harmony packages/server/build",
-    "test": "lerna run test --concurrency 1 --stream",
-    "lint": "lerna run lint",
-    "seed": "lerna run seed --stream",
-    "watch": "lerna run watch --parallel --stream",
-    "heroku-postbuild": "lerna run heroku-postbuild --stream",
+    "flow": "flow",
+    "tests": "lerna run tests --stream",
+    "test": "npm run tests && npm run lint",
+    "lint": "eslint --fix --ext js --ext jsx --ext json .",
+    "seed": "lerna run --scope=server seed --stream",
+    "exp-publish": "lerna run --scope=mobile exp-publish --stream",
+    "watch": "spin watch",
+    "heroku-postbuild": "npm run build && lerna run heroku-postbuild --stream",
     "cli": "node tools/cli",
+    "precommit": "lint-staged",
     "postinstall": "opencollective postinstall"
+  },
+  "lint-staged": {
+    "*.{js,jsx,json}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.graphql": [
+      "prettier --parser graphql --tab-width 4 --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -48,6 +66,12 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "devDependencies": {
-    "lerna": "^2.5.1"
+    "husky": "^0.14.3",
+    "lerna": "^2.5.1",
+    "lint-staged": "^6.0.0"
+  },
+  "optionalDependencies": {
+    "dotenv": "^4.0.0",
+    "lodash": "^4.17.4"
   }
 }

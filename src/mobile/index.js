@@ -2,7 +2,7 @@
 try {
   require('./AwakeInDevApp');
 } catch (e) {
-  if (ErrorUtils !== 'undefined') {
+  if (typeof ErrorUtils !== 'undefined') {
     ErrorUtils.reportFatalError(e);
   } else {
     console.error(e);

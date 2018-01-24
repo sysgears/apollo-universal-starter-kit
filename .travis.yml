@@ -1,16 +1,16 @@
 language: node_js
 node_js:
   - "node"
+cache:
+  directories:
+    - $HOME/.cache/yarn
+    - .cache
 dist: trusty
-sudo: required
 os:
   - linux
 script:
-  - yarn seed
   - yarn test
-#before_install: yarn global add greenkeeper-lockfile@1
-#before_script: greenkeeper-lockfile-update
-#after_script: greenkeeper-lockfile-upload
+before_deploy: rm -rf node_modules
 deploy:
   provider: heroku
   api_key:

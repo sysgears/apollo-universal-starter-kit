@@ -67,8 +67,7 @@ This starter kit adds full [React Native] integration, with [Webpack] as a packa
 compilation tools are needed in order to develop native mobile applications with this kit. You are able to run both web
 and mobile versions of your app at the same time connected to the same backend.
 
-For running Android or iOS you need to set in `.spinrc` `builders.ios.enabled` and/or `builders.android.enabled` field
-`true`.
+For running Android or iOS you need to set in `.spinrc.js` `builders.ios.enabled` and/or `builders.android.enabled` field `true`.
 
 #### Running on a device
 
@@ -106,6 +105,8 @@ content and settings` and restart the application.
 
 * [Gitter channel] - questions, answers, general discussions
 * [GitHub issues] - submit issues, send feature requests
+* [Wiki] - community driven effort to document all the usage scenarios of the starter kit, editable by anyone
+* [FAQ] - frequently asked questions wiki page
 
 ### Commercial support
 
@@ -117,7 +118,7 @@ technologies used in the kit. Contact us using [Skype](http://hatscripts.com/add
 #### Writing the code
 
 This starter kit is designed so you can use it for just web, mobile or projects using both together. In case you do not
-want to use mobile, just set both `builders.ios.enabled` or `builders.android.enabled` settings in `.spinrc` to `false`.
+want to use mobile, just set both `builders.ios.enabled` or `builders.android.enabled` settings in `.spinrc.js` to `false`.
 
 We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
 is possible. In this case you can write your components with React Native's building blocks that are supported in [React
@@ -179,16 +180,14 @@ This starter kit supplies boilerplate code for multiple platforms:
 * Android frontend
 * iOS frontend
 
-If you don't need some of these platforms you can turn off building their code in `.spinrc` file as well as edit other
-build properties described below:
+If you don't need some of these platforms you can turn off building their code in `.spinrc.js` as well as edit other build properties described below:
 
 | Option                         | Description                                                                   |
 | ------------------------------ | ----------------------------------------------------------------------------- |
-| backendBuildDir                | output directory for backend files                                            |
-| frontendBuildDir               | output directory for frontend files                                           |
+| buildDir                | output directory for build files                                            |
 | dllBuildDir                    | output directory for Webpack DLL files used to speed up incremental builds    |
 | webpackDevPort                 | the local port used for Webpack Dev Server process to host web frontend files |
-| backendUrl                     | URL to GraphQL backend endpoint                                               |
+| \_\_BACKEND_URL__                     | URL to GraphQL backend endpoint                                               |
 | ssr                            | Use server side rendering in backend                                          |
 | webpackDll                     | Utilize Webpack DLLs to speed up incremental builds                           |
 | frontendRefreshOnBackendChange | Trigger web frontend refresh when backend code changes                        |
@@ -294,7 +293,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
   On the initial web page request back end fully renders UI and hands off Apollo Redux Store state to front end.
   Frontend then starts off from there and updates itself on user interactions.
 
-  If you don't need Server Side Rendering, set `.spinrc.json` `ssr` field to `false`
+  If you don't need Server Side Rendering, set `.spinrc.js` `ssr` field to `false`
 
 * Optimistic UI updates
 
@@ -330,14 +329,14 @@ Check [subscription module documentation](src/client/modules/subscription/README
 * [React Hot Loader v3] for the sake of completeness this project also supports `React Hot Loader v3`, but it is turned
   off. By default this starter kit uses pure `Webpack HMR` for all hot reloading purposes and we think it covers all
   practical needs during development and using `React Hot Loader v3` in addition to `Webpack HMR` makes hot reloading
-  less predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` field of `.spinrc.json` to `true`.
+  less predictable and buggy. To turn `React Hot Loader v3` on: set `reactHotLoader` field of `.spinrc.js` to `true`.
 
 * [PersistGraphQL Webpack Plugin] is a tool to gather static GraphQL queries for GraphQL projects and inject them into
   build. It will make front end and back end aware of static queries used in the project and will only allow these
   queries for better security and less bandwidth.
 
 * [TypeScript] support. Though the kit itself uses ES6 and [Flow] you can add source files written in TypeScript. In
-  order to do that add `'ts'` into the `.spinrc.json -> options -> stack`, install TypeScript devDependencies: `yarn add
+  order to do that add `'ts'` into the `.spinrc.js -> options -> stack`, install TypeScript devDependencies: `yarn add
   -D awesome-typescript-loader typescript` and put `tsconfig.json` into the root folder.
 
 ## Project Structure
@@ -429,14 +428,14 @@ yarn start
 
 ### Publishing mobile apps
 
-1. Compile project for production with `ios` and `android` set to `true` in `.spinrc.json` via `yarn build`.
+1. Compile project for production via `yarn build`
 2. Run `yarn exp publish` to publish, the URL like:
    [`https://exp.host/@vlasenko/apollo-universal-starter-kit`](https://exp.host/@vlasenko/apollo-universal-starter-kit)
    where your users can access mobile app from Expo Client will be printed in terminal.
 
 ### Building standalone mobile apps for Play Store and App Store
 
-1. Compile project for production with `ios` and `android` set to `true` in `.spinrc.json` via `yarn build`.
+1. Compile project for production via `yarn build`
 2. Run `yarn exp ba` to launch building signed `.apk` or `yarn exp bi` for signed `.iap`.
 3. Run `yarn exp bs` to get status and links for signed standalone mobile applications when build finishes. For more
    details refer to [Expo Build standalone apps documentation], but use `yarn exp ..` instead of `exp ...` command.
@@ -444,11 +443,11 @@ yarn start
 ### Deploying to [Heroku]
 
 1. Add your app to Heroku
-1. Allow Heroku to install build time dependencies from the devDependencies in `package.json`: `Settings -> Config
-   Variables -> Add`, KEY: `YARN_PRODUCTION`, VALUE: `false`.
-1. Add `EXP_USERNAME` and `EXP_PASSWORD` config variables there as well. They will be used to publish mobile Expo Client
-   applications
-1. Deploy your app on Heroku
+2. Allow Heroku to install build time dependencies from the devDependencies in `package.json`: `Settings -> Config Variables -> Add`, KEY: `YARN_PRODUCTION`, VALUE: `false`.
+3. Add `EXP_USERNAME` and `EXP_PASSWORD` config variables there as well. They will be used to publish mobile Expo Client applications
+4. Deploy your app on Heroku
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ### Heroku Demo
 
@@ -528,3 +527,5 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [flow]: https://flow.org
 [typescript]: https://www.typescriptlang.org
 [Stripe]: https://stripe.com
+[Wiki]: https://github.com/sysgears/apollo-universal-starter-kit/wiki
+[FAQ]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Frequently-Asked-Questions

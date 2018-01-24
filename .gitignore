@@ -1,4 +1,5 @@
 .idea
+/.cache
 /.history
 /.vscode
 /.tmp

@@ -18,7 +18,7 @@
     "test": "npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
     "watch": "spin watch",
-    "heroku-postbuild": "npm run exp-publish",
+    "heroku-postbuild": "npm run build && npm run exp-publish",
     "cli": "node ../../tools/cli"
   },
   "repository": {

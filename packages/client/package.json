@@ -15,7 +15,7 @@
     "test": "npm run tests && npm run lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
     "watch": "spin watch",
-    "heroku-postbuild": "rm -rf build && spin -c .spinrc.prod.json build",
+    "heroku-postbuild": "npm run build",
     "cli": "node ../../tools/cli"
   },
   "repository": {

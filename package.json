@@ -21,7 +21,7 @@
     "seed": "lerna run --scope=server seed --stream",
     "exp-publish": "lerna run --scope=mobile exp-publish --stream",
     "watch": "spin watch",
-    "heroku-postbuild": "npm run build && lerna run heroku-postbuild --stream",
+    "heroku-postbuild": "lerna run heroku-postbuild --stream",
     "cli": "node tools/cli",
     "precommit": "lint-staged",
     "postinstall": "opencollective postinstall"

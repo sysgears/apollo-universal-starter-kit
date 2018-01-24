@@ -12,7 +12,6 @@ const defaults = {
 const resolvers = {
   Query: {
     counterState: (_, args, { cache }) => {
-        console.log('32232423423')
       const { counterState: { counter } } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
       return {
         counter: counter,

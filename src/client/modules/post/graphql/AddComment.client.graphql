@@ -1,9 +1,9 @@
 #import "./Comment.graphql"
 
 mutation addCommentState($input: AddCommentInput!) {
-  addCommentState(input: $input) @client {
-      comments {
-          ... CommentInfo
-      }
-  }
+    addCommentState(input: $input) @client {
+        commentState {
+            ...CommentInfo
+        }
+    }
 }

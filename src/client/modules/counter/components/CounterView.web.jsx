@@ -11,7 +11,6 @@ const Section = styled.section`
 `;
 
 const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement, counterState, addCounterState }) => {
-  console.log('reduxCount', reduxCount, 'counterState', counterState);
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Counter`}

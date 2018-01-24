@@ -11,28 +11,30 @@ export default class PostCommentsView extends React.PureComponent {
     addComment: PropTypes.func.isRequired,
     editComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
-    addCommentClient: PropTypes.func.isRequired,
-    //  onFormSubmitted: PropTypes.func.isRequired,
-    subscribeToMore: PropTypes.func.isRequired
+    onCommentSelect: PropTypes.func.isRequired,
+    onFormSubmitted: PropTypes.func.isRequired,
+    subscribeToMore: PropTypes.func.isRequired,
+    addCommentClient: PropTypes.func.isRequired
   };
 
   hendleEditComment = (id, content) => {
-    const { addCommentClient } = this.props;
+    const { onCommentSelect, addCommentClient } = this.props;
+    onCommentSelect({ id, content });
     addCommentClient({ id, content });
   };
 
   hendleDeleteComment = id => {
-    const { comment, addCommentClient, deleteComment } = this.props;
+    const { comment, onCommentSelect, deleteComment } = this.props;
 
     if (comment.id === id) {
-      addCommentClient({ id: null, content: '' });
+      onCommentSelect({ id: null, content: '' });
     }
 
     deleteComment(id);
   };
 
   onSubmit = () => values => {
-    const { comment, postId, addComment, editComment, addCommentClient, onFormSubmitted } = this.props;
+    const { comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted } = this.props;
 
     if (comment.id === null) {
       addComment(values.content, postId);
@@ -40,13 +42,14 @@ export default class PostCommentsView extends React.PureComponent {
       editComment(comment.id, values.content);
     }
 
-    addCommentClient({ id: null, content: '' });
-    //onFormSubmitted();
+    onCommentSelect({ id: null, content: '' });
+    onFormSubmitted();
   };
 
   render() {
     const { postId, comment, comments } = this.props;
-    console.log('props', this.props);
+    console.log('pops', this.props);
+
     const columns = [
       {
         title: 'Content',

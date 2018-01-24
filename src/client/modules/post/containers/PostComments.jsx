@@ -11,11 +11,10 @@ import ADD_COMMENT from '../graphql/AddComment.graphql';
 import EDIT_COMMENT from '../graphql/EditComment.graphql';
 import DELETE_COMMENT from '../graphql/DeleteComment.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
-import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 import ADD_COMMENT_CLIENT from '../graphql/AddComment.client.graphql';
+import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 
 function AddComment(prev, node) {
-    console.log('node', node);
   // ignore if duplicate
   if (node.id !== null && prev.post.comments.some(comment => node.id === comment.id)) {
     return prev;
@@ -52,14 +51,13 @@ class PostComments extends React.Component {
     postId: PropTypes.number.isRequired,
     comments: PropTypes.array.isRequired,
     comment: PropTypes.object.isRequired,
-    addCommentClient: PropTypes.func.isRequired,
+    onCommentSelect: PropTypes.func.isRequired,
     subscribeToMore: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
     this.subscription = null;
-    console.log(props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -75,7 +73,7 @@ class PostComments extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.addCommentClient({ id: null, content: '' });
+    this.props.onCommentSelect({ id: null, content: '' });
 
     if (this.subscription) {
       // unsubscribe
@@ -172,36 +170,35 @@ const PostCommentsWithApollo = compose(
   }),
   graphql(ADD_COMMENT_CLIENT, {
     props: ({ mutate }) => ({
-      addCommentClient: comment => {
-        console.log('com', comment, this.props);
+      addCommentClient: commentState => {
         return () => {
-          const { value } = mutate({ variables: { comment } });
-          return {
-            comment: comment
-          };
+          const { value } = mutate({ variables: { commentState } });
+          console.log('value', value);
+          return value;
         };
       }
     })
   }),
   graphql(COMMENT_QUERY_CLIENT, {
-    props({ data: { commentState: { comment } } }) {
+    props({ data: { commentState } }) {
       return {
-        comment: { id: null, content: '' }
+        commentState: commentState
       };
     }
   })
 )(PostComments);
 
-export default PostCommentsWithApollo;
-// state => ({ comment: state.post.comment }),
-// dispatch => ({
-//   onCommentSelect(comment) {
-//     dispatch({
-//       type: 'COMMENT_SELECT',
-//       value: comment
-//     });
-//   },
-//   onFormSubmitted() {
-//     dispatch(reset('comment'));
-//   }
-// })
+export default connect(
+  state => ({ comment: state.post.comment }),
+  dispatch => ({
+    onCommentSelect(comment) {
+      dispatch({
+        type: 'COMMENT_SELECT',
+        value: comment
+      });
+    },
+    onFormSubmitted() {
+      dispatch(reset('comment'));
+    }
+  })
+)(PostCommentsWithApollo);

@@ -9,7 +9,7 @@ const config = {
       defines: {
         __CLIENT__: true
       },
-      enabled: true
+      enabled: false
     },
     ios: {
       entry: './src/index.js',

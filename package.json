@@ -13,7 +13,7 @@
   "scripts": {
     "build": "lerna run build --stream",
     "exp": "lerna run --scope=mobile exp --stream",
-    "start": "node packages/server/build",
+    "start": "lerna run --scope=server start --stream",
     "flow": "flow",
     "tests": "lerna run tests --stream",
     "test": "npm run tests && npm run lint",

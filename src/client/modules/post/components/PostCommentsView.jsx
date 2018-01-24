@@ -13,21 +13,20 @@ export default class PostCommentsView extends React.PureComponent {
     addComment: PropTypes.func.isRequired,
     editComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
-    onCommentSelect: PropTypes.func.isRequired,
-    onFormSubmitted: PropTypes.func.isRequired,
-    subscribeToMore: PropTypes.func.isRequired
+    subscribeToMore: PropTypes.func.isRequired,
+    addCommentClient: PropTypes.func.isRequired
   };
 
   keyExtractor = item => item.id;
 
   renderItem = ({ item: { id, content } }) => {
-    const { comment, deleteComment, onCommentSelect } = this.props;
+    const { comment, deleteComment, addCommentClient } = this.props;
     return (
       <SwipeAction
-        onPress={() => onCommentSelect({ id: id, content: content })}
+        onPress={() => addCommentClient({ id: id, content: content })}
         right={{
           text: 'Delete',
-          onPress: () => this.onCommentDelete(comment, deleteComment, onCommentSelect, id)
+          onPress: () => this.onCommentDelete(comment, deleteComment, addCommentClient, id)
         }}
       >
         {content}
@@ -35,35 +34,34 @@ export default class PostCommentsView extends React.PureComponent {
     );
   };
 
-  onCommentDelete = (comment, deleteComment, onCommentSelect, id) => {
+  onCommentDelete = (comment, deleteComment, addCommentClient, id) => {
     if (comment.id === id) {
-      onCommentSelect({ id: null, content: '' });
+      addCommentClient({ id: null, content: '' });
     }
 
     deleteComment(id);
   };
 
-  onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted) => values => {
+  onSubmit = (comment, postId, addComment, editComment, addCommentClient) => values => {
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {
       editComment(comment.id, values.content);
     }
 
-    onCommentSelect({ id: null, content: '' });
-    onFormSubmitted();
+    addCommentClient({ id: null, content: '' });
     Keyboard.dismiss();
   };
 
   render() {
-    const { postId, comment, addComment, editComment, comments, onCommentSelect, onFormSubmitted } = this.props;
+    const { postId, comment, addComment, editComment, comments } = this.props;
 
     return (
       <View>
         <Text style={styles.title}>Comments</Text>
         <PostCommentForm
           postId={postId}
-          onSubmit={this.onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)}
+          onSubmit={this.onSubmit(comment, postId, addComment, editComment)}
           initialValues={comment}
         />
         {comments.length > 0 && (

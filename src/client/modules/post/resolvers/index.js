@@ -3,9 +3,9 @@ import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 const TYPE_NAME = 'CommentState';
 
 const defaults = {
-  commentState: {
-    id: 2,
-    content: 'test',
+  comment: {
+    id: null,
+    content: '',
     __typename: TYPE_NAME
   }
 };
@@ -13,7 +13,7 @@ const defaults = {
 const resolvers = {
   Query: {
     commentState: (_, args, { cache }) => {
-      const { commentState: { comment } } = cache.readQuery({ query: COMMENT_QUERY_CLIENT });
+      const { comment: { comment } } = cache.readQuery({ query: COMMENT_QUERY_CLIENT });
       return {
         comment: comment,
         __typename: TYPE_NAME
@@ -21,11 +21,11 @@ const resolvers = {
     }
   },
   Mutation: {
-    addCommentClient: async (_, { commentState }, { cache }) => {
+    addCommentClient: async (_, { comment }, { cache }) => {
       await cache.writeData({
         data: {
-          commentState: {
-            ...commentState,
+          comment: {
+            ...comment,
             __typename: TYPE_NAME
           }
         }

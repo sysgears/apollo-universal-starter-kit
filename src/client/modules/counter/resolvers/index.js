@@ -22,7 +22,6 @@ const resolvers = {
   Mutation: {
     addCounterState: async (_, { amount }, { cache }) => {
       const { counterState: { counter } } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
-
       const newAmount = amount + counter;
 
       await cache.writeData({

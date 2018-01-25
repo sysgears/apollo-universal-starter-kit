@@ -50,7 +50,7 @@
     "apollo-link-batch-http": "^1.0.3",
     "apollo-link-ws": "^1.0.3",
     "apollo-logger": "0.1.1",
-    "expo": "^24.0.0",
+    "expo": "^25.0.0",
     "filesize": "^3.5.11",
     "graphql": "^0.12.3",
     "graphql-auth": "^0.2.0",
@@ -64,8 +64,8 @@
     "react": "^16.2.0",
     "react-apollo": "^2.0.4",
     "react-debounce-input": "^3.1.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-24.0.0.tar.gz",
-    "react-navigation": "^1.0.0-beta.21",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
+    "react-navigation": "^1.0.0-beta.27",
     "react-redux": "^5.0.6",
     "react-stripe-elements": "^1.2.1",
     "redux": "^3.7.2",
@@ -110,7 +110,7 @@
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-prettier": "^2.4.0",
     "eslint-plugin-react": "^7.5.1",
-    "exp": "47.1.1",
+    "exp": "48.0.4",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "flow-bin": "^0.62.0",
@@ -143,7 +143,7 @@
     "resolve-url-loader": "^2.2.1",
     "sass-loader": "^6.0.6",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.4.84",
+    "spinjs": "^0.4.86",
     "style-loader": "^0.19.1",
     "url-loader": "^0.6.2",
     "wait-on": "^2.0.2",
@@ -157,7 +157,7 @@
     "webpack-sources": "^1.1.0",
     "webpack-virtual-modules": "^0.1.8",
     "ws": "^3.3.3",
-    "xdl": "^47.0.6"
+    "xdl": "^48.0.1"
   },
   "resolutions": {
     "graphql": "^0.12.3"

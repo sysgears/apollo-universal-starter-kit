@@ -1,0 +1,51 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb/base",
+    "plugin:import/errors",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:flowtype/recommended"
+  ],
+  "rules": {
+    "import/no-extraneous-dependencies": ["error", {"optionalDependencies": true}],
+    "no-use-before-define": 0,
+    "arrow-body-style": 0,
+    "dot-notation": 0,
+    "no-console": 0,
+    "react/jsx-key": 0,
+    "semi": 2,
+    "react/sort-comp": 1,
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 120,
+        "singleQuote": true,
+        "parser": "babylon"
+      }
+    ]
+  },
+  "env": {
+    "mocha": true
+  },
+  "globals": {
+    "fetch": true,
+    "window": true,
+    "document": true,
+    "__DEV__": true,
+    "__TEST__": true,
+    "__CLIENT__": true,
+    "__SERVER__": true,
+    "__SSR__": true,
+    "__PERSIST_GQL__": true,
+    "__BACKEND_URL__": true,
+    "__FRONTEND_BUILD_DIR__": true,
+    "__DLL_BUILD_DIR__": true
+  },
+  "plugins": [
+    "react",
+    "json",
+    "prettier",
+    "flowtype"
+  ]
+}

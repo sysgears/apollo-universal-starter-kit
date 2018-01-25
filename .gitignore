@@ -1,16 +1,16 @@
-.idea
-/.cache
+/.idea
 /.history
 /.vscode
-/.tmp
-/.vscode
-/node_modules
-/build
-npm-debug.*
+/.cache
+.tmp
+node_modules
+build
 .gqlconfig
-.expo/
+.expo
+*.log
 *.sqlite3
 .DS_Store
 jsconfig.json
-/public
-# .env
+public
+.env
+*.iml

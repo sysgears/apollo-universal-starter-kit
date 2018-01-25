@@ -25,6 +25,9 @@
 
 Checkout our [Mobile App Demo](https://expo.io/@sysgears/apollo-universal-starter-kit)
 
+If you need single-package Apollo v2 version of this repo, plese use
+[starter kit from `single` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/single)
+
 If you are using Apollo v1 please use
 [starter kit from `apollo1` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1)
 

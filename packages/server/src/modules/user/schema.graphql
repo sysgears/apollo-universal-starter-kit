@@ -1,0 +1,163 @@
+type User {
+    id: Int!
+    username: String!
+    role: String!
+    isActive: Boolean
+    email: String!
+    profile: UserProfile
+    auth: UserAuth
+}
+
+type UserProfile {
+    firstName: String
+    lastName: String
+    fullName: String
+}
+
+type UserAuth {
+    certificate: CertificateAuth
+    facebook: FacebookAuth
+    google: GoogleAuth
+}
+
+type CertificateAuth {
+    serial: String
+}
+
+type FacebookAuth {
+    fbId: String
+    displayName: String
+}
+
+type GoogleAuth {
+    googleId: String
+    displayName: String
+}
+
+type UserPayload {
+    user: User
+    errors: [FieldError!]
+}
+
+type AuthPayload {
+    tokens: Tokens
+    errors: [FieldError!]
+}
+
+type ResetPayload {
+    errors: [FieldError!]
+}
+
+type Tokens {
+    token: String!
+    refreshToken: String!
+}
+
+extend type Query {
+    # Get all users ordered by: OrderByUserInput add filtered by: FilterUserInput
+    users(orderBy: OrderByUserInput, filter: FilterUserInput): [User]
+    # Get user by id
+    user(id: Int!): User
+    # Get current user
+    currentUser: User
+}
+
+extend type Mutation {
+    # Register user
+    register(input: RegisterUserInput!): UserPayload!
+    # Login user
+    login(input: LoginUserInput!): AuthPayload!
+    # Logout user
+    logout: Boolean!
+    # Refreash user tokens
+    refreshTokens(token: String!, refreshToken: String!): AuthPayload!
+    # Create new user
+    addUser(input: AddUserInput!): UserPayload!
+    # Edit a user
+    editUser(input: EditUserInput!): UserPayload!
+    # Delete a user
+    deleteUser(id: Int!): UserPayload!
+    forgotPassword(input: ForgotPasswordInput!): Boolean!
+    resetPassword(input: ResetPasswordInput!): ResetPayload!
+}
+
+# Input for ordering users
+input OrderByUserInput {
+    # id | username | role | isActive | email
+    column: String
+    # asc | desc
+    order: String
+}
+
+# Input for filtering users
+input FilterUserInput {
+    # search by username or email
+    searchText: String
+    # filter by role
+    role: String
+    # filter by isActive
+    isActive: Boolean
+}
+
+input RegisterUserInput {
+    username: String!
+    email: String!
+    password: String!
+}
+
+input LoginUserInput {
+    email: String!
+    password: String!
+}
+
+# Input for addUser Mutation
+input AddUserInput {
+    username: String!
+    email: String!
+    password: String!
+    role: String!
+    isActive: Boolean
+    profile: ProfileInput
+    auth: AuthInput
+}
+
+# Input for editUser Mutation
+input EditUserInput {
+    id: Int!
+    username: String!
+    role: String!
+    isActive: Boolean
+    email: String!
+    password: String
+    profile: ProfileInput
+    auth: AuthInput
+}
+
+input ProfileInput {
+    firstName: String
+    lastName: String
+}
+
+input AuthInput {
+    certificate: AuthCertificateInput
+    facebook: AuthFacebookInput
+}
+
+input AuthCertificateInput {
+    serial: String
+}
+
+input AuthFacebookInput {
+    fbId: String
+    displayName: String
+}
+
+input ForgotPasswordInput {
+    email: String!
+}
+
+input ResetPasswordInput {
+    token: String!
+    password: String!
+    passwordConfirmation: String!
+}

@@ -1,0 +1,8 @@
+query getFilterState {
+    filterState @client {
+        searchText
+        role
+        isActive
+        orderBy
+    }
+}

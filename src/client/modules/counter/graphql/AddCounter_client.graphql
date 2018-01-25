@@ -1,0 +1,3 @@
+mutation UpdateCounterState($counter: Int!) {
+    updateCounterState(counter: $counter) @client
+}

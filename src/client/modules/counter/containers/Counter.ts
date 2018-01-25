@@ -7,6 +7,9 @@ import * as ADD_COUNTER from '../graphql/AddCounter.graphql';
 import * as COUNTER_QUERY from '../graphql/CounterQuery.graphql';
 import * as COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
+import * as ADD_COUNTER_CLIENT from '../graphql/AddCounter_client.graphql';
+import * as COUNTER_QUERY_CLIENT from '../graphql/CounterQuery_client.graphql';
+
 @Injectable()
 export default class CounterService {
   constructor(private apollo: Apollo) {}
@@ -17,11 +20,6 @@ export default class CounterService {
       variables: {}
     });
     return this.subscribe(counterSubscriptionQuery, callback);
-  }
-
-  public getCounter(callback: (result: any) => any) {
-    const counterQuery = this.apollo.watchQuery({ query: COUNTER_QUERY });
-    return this.subscribe(counterQuery, callback);
   }
 
   public addCounter(amount: number, optimisticValue?: number) {
@@ -42,6 +40,27 @@ export default class CounterService {
       }
     });
     return this.subscribe(addCounterQuery);
+  }
+
+  public addCounterClient(amount: number) {
+    const addCounterQuery = this.apollo.mutate({
+      mutation: ADD_COUNTER_CLIENT,
+      variables: { counter: amount + 1 }
+    });
+    return this.subscribe(addCounterQuery);
+  }
+
+  public getCounter(callback: (result: any) => any) {
+    return this.getCounterCommon(COUNTER_QUERY, callback);
+  }
+
+  public getCounterClient(callback: (result: any) => any) {
+    return this.getCounterCommon(COUNTER_QUERY_CLIENT, callback);
+  }
+
+  private getCounterCommon(query: any, callback: (result: any) => any) {
+    const counterQuery = this.apollo.watchQuery({ query });
+    return this.subscribe(counterQuery, callback);
   }
 
   private subscribe(observable: Observable<any>, cb?: (result: Observable<any>) => any): Subscription {

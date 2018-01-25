@@ -45,6 +45,7 @@ import ProfileService from './modules/user/containers/Profile';
 import RegisterService from './modules/user/containers/Register';
 import ResetPasswordService from './modules/user/containers/ResetPassword';
 import UserEditService from './modules/user/containers/UserEdit';
+import UserFilterService from './modules/user/containers/UserFilter';
 import UsersListService from './modules/user/containers/UsersList';
 
 // Apollo imports
@@ -106,6 +107,7 @@ import { clientProvider, default as Main } from './app/Main';
     RegisterService,
     UsersListService,
     UserEditService,
+    UserFilterService,
     UploadService,
     ForgotPasswordService,
     ResetPasswordService

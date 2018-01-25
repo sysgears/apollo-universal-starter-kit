@@ -14,12 +14,14 @@ import ApolloClient from 'apollo-client';
 import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
 import { BatchHttpLink } from 'apollo-link-batch-http';
+import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { LoggingLink } from 'apollo-logger';
 import { getOperationAST } from 'graphql';
 import * as url from 'url';
 
 import settings from '../../../settings';
+import { resolvers } from '../../common/createApolloLinkState';
 import modules from '../modules';
 
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
@@ -86,10 +88,12 @@ if (window.__APOLLO_STATE__) {
   cache.restore(window.__APOLLO_STATE__);
 }
 
+const linkState = withClientState(resolvers);
+
 // The connection has been established according to the official docs
 // (https://github.com/apollographql/apollo-client/blob/master/Upgrade.md)
 const client = new ApolloClient({
-  link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link])),
+  link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
   cache
 });
 

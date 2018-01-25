@@ -1,11 +1,15 @@
-/* eslint-disable import/no-dynamic-require */
-
-import shell from 'shelljs';
-import fs from 'fs';
-import chalk from 'chalk';
-import GraphQLGenerator from 'domain-graphql';
-import { pascalize, camelize } from 'humps';
-import { startCase } from 'lodash';
+const shell = require('shelljs');
+const fs = require('fs');
+const chalk = require('chalk');
+const GraphQLGenerator = require('domain-graphql');
+const { pascalize, camelize } = require('humps');
+const { startCase } = require('lodash');
+//import shell from 'shelljs';
+//import fs from 'fs';
+//import chalk from 'chalk';
+//import GraphQLGenerator from 'domain-graphql';
+//import { pascalize, camelize } from 'humps';
+//import { startCase } from 'lodash';
 
 function renameFiles(destinationPath, templatePath, module, location) {
   // pascalize
@@ -42,18 +46,18 @@ function copyFiles(logger, templatePath, module, action, tablePrefix, location) 
   const Module = pascalize(module);
 
   // create new module directory
-  const mkdir = shell.mkdir(`${__dirname}/../../src/${location}/modules/${module}`);
+  const mkdir = shell.mkdir(`${__dirname}/../../packages/${location}/src/modules/${module}`);
 
   // continue only if directory does not jet exist
   if (mkdir.code === 0) {
-    const destinationPath = `${__dirname}/../../src/${location}/modules/${module}`;
+    const destinationPath = `${__dirname}/../../packages/${location}/src/modules/${module}`;
     renameFiles(destinationPath, templatePath, module, location);
 
     logger.info(chalk.green(`✔ The ${location} files have been copied!`));
 
     shell.cd('..');
     // get module input data
-    const path = `${__dirname}/../../src/${location}/modules/index.js`;
+    const path = `${__dirname}/../../packages/${location}/src/modules/index.js`;
     let data = fs.readFileSync(path);
 
     // extract Feature modules
@@ -69,19 +73,19 @@ function copyFiles(logger, templatePath, module, action, tablePrefix, location) 
 
     if (action === 'addcrud' && location === 'server') {
       console.log('copy database files');
-      const destinationPath = `${__dirname}/../../src/${location}/database`;
+      const destinationPath = `${__dirname}/../../packages/${location}/src/database`;
       renameFiles(destinationPath, templatePath, module, 'database');
 
       const timestamp = new Date().getTime();
-      shell.cd(`${__dirname}/../../src/${location}/database/migrations`);
+      shell.cd(`${__dirname}/../../packages/${location}/src/database/migrations`);
       shell.mv(`_${Module}.js`, `${timestamp}_${Module}.js`);
-      shell.cd(`${__dirname}/../../src/${location}/database/seeds`);
+      shell.cd(`${__dirname}/../../packages/${location}/src/database/seeds`);
       shell.mv(`_${Module}.js`, `${timestamp}_${Module}.js`);
 
       logger.info(chalk.green(`✔ The database files have been copied!`));
 
       if (tablePrefix !== '') {
-        shell.cd(`${__dirname}/../../src/${location}/modules/${module}`);
+        shell.cd(`${__dirname}/../../packages/${location}/src/modules/${module}`);
         shell.sed('-i', /this.prefix = '';/g, `this.prefix = '${tablePrefix}';`, 'sql.js');
 
         logger.info(chalk.green(`✔ Inserted db table prefix!`));
@@ -98,17 +102,17 @@ function deleteFiles(logger, templatePath, module, location) {
   // pascalize
   const Module = pascalize(module);
 
-  const modulePath = `${__dirname}/../../src/${location}/modules/${module}`;
+  const modulePath = `${__dirname}/../../packages/${location}/src/modules/${module}`;
 
   if (fs.existsSync(modulePath)) {
     // remove module directory
     shell.rm('-rf', modulePath);
 
     // change to destination directory
-    shell.cd(`${__dirname}/../../src/${location}/modules/`);
+    shell.cd(`${__dirname}/../../packages/${location}/src/modules/`);
 
     // get module input data
-    const path = `${__dirname}/../../src/${location}/modules/index.js`;
+    const path = `${__dirname}/../../packages/${location}/src/modules/index.js`;
     let data = fs.readFileSync(path);
 
     // extract Feature modules
@@ -131,7 +135,7 @@ function deleteFiles(logger, templatePath, module, location) {
 
     if (location === 'server') {
       // change to database migrations directory
-      shell.cd(`${__dirname}/../../src/${location}/database/migrations`);
+      shell.cd(`${__dirname}/../../packages/${location}/src/database/migrations`);
       // check if any migrations files for this module exist
       if (shell.find('.').filter(file => file.search(`_${Module}.js`) > -1).length > 0) {
         let okMigrations = shell.rm(`*_${Module}.js`);
@@ -141,7 +145,7 @@ function deleteFiles(logger, templatePath, module, location) {
       }
 
       // change to database seeds directory
-      shell.cd(`${__dirname}/../../src/${location}/database/seeds`);
+      shell.cd(`${__dirname}/../../packages/${location}/src/database/seeds`);
       // check if any seed files for this module exist
       if (shell.find('.').filter(file => file.search(`_${Module}.js`) > -1).length > 0) {
         let okSeeds = shell.rm(`*_${Module}.js`);
@@ -164,14 +168,15 @@ function updateSchema(logger, module) {
   // pascalize
   const Module = pascalize(module);
 
-  const modulePath = `${__dirname}/../../src/server/modules/${module}`;
+  const modulePath = `${__dirname}/../../packages/server/src/modules/${module}`;
 
   if (fs.existsSync(modulePath)) {
     // get module schema
+    // eslint-disable-next-line import/no-dynamic-require
     const schema = require(`${modulePath}/schema`)[Module];
 
     // get schema file
-    const pathSchema = `${__dirname}/../../src/server/modules/${module}/`;
+    const pathSchema = `${__dirname}/../../packages/server/src/modules/${module}/`;
     if (fs.existsSync(pathSchema)) {
       const file = `schema.graphql`;
 
@@ -298,7 +303,7 @@ function updateSchema(logger, module) {
     }
 
     // get fragment file
-    const pathFragment = `${__dirname}/../../src/client/modules/${module}/graphql/`;
+    const pathFragment = `${__dirname}/../../packages/client/src/modules/${module}/graphql/`;
     if (fs.existsSync(pathFragment)) {
       const file = `${Module}.graphql`;
 
@@ -334,7 +339,7 @@ function updateSchema(logger, module) {
     }
 
     // get module query file
-    const pathModuleQuery = `${__dirname}/../../src/client/modules/${module}/graphql/`;
+    const pathModuleQuery = `${__dirname}/../../packages/client/src/modules/${module}/graphql/`;
     if (fs.existsSync(pathModuleQuery)) {
       const file = `${Module}Query.graphql`;
 

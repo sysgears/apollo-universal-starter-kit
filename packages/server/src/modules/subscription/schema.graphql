@@ -1,0 +1,41 @@
+type UserSubscription {
+  active: Boolean!
+  errors: [FieldError!]
+}
+
+type UserSubscriptionCardInfo {
+  expiryMonth: Int
+  expiryYear: Int
+  last4: String
+  brand: String
+}
+
+type SubscriberNumber {
+  number: Int
+}
+
+extend type Query {
+  # Get current user's subscription
+  subscription: UserSubscription
+  # Get magic number only available to subscribers
+  subscribersOnlyNumber: SubscriberNumber
+  # Get payment information for current user's subscription
+  subscriptionCardInfo: UserSubscriptionCardInfo
+}
+
+extend type Mutation {
+  # Subscribe a user
+  subscribe(input: SubscribeInput!): UserSubscription!
+  # Cancel a user's subscription
+  cancel: UserSubscription!
+  # Update a user's card information
+  updateCard(input: SubscribeInput!): Boolean!
+}
+
+input SubscribeInput {
+  token: String!
+  expiryMonth: Int!
+  expiryYear: Int!
+  last4: String!
+  brand: String!
+}

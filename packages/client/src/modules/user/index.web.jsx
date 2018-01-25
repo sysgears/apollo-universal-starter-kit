@@ -9,7 +9,7 @@ import Register from './containers/Register';
 import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
-import reducers from './reducers';
+import resolvers from './resolvers';
 
 import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
 
@@ -71,7 +71,7 @@ export default new Feature({
       </AuthLogin>
     </MenuItem>
   ],
-  reducer: { user: reducers },
+  resolver: resolvers,
   middleware: tokenMiddleware,
   afterware: tokenAfterware,
   connectionParam: connectionParam,

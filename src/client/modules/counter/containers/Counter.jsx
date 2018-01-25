@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 
+import { connect } from 'react-redux';
 import CounterView from '../components/CounterView';
 
 import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
@@ -10,7 +11,6 @@ import ADD_COUNTER from '../graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
-import { connect } from 'react-redux';
 
 class Counter extends React.Component {
   static propTypes = {

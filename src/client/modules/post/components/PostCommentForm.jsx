@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset } from 'redux-form';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { required, minLength } from '../../../../common/validation';
 
@@ -27,7 +27,10 @@ PostCommentForm.propTypes = {
   valid: PropTypes.bool
 };
 
+const afterSubmit = (result, dispatch) => dispatch(reset('comment'));
+
 export default reduxForm({
   form: 'comment',
-  enableReinitialize: true
+  enableReinitialize: true,
+  onSubmitSuccess: afterSubmit
 })(PostCommentForm);

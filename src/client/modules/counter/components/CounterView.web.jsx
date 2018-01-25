@@ -50,7 +50,9 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
           </Button>
         </Section>
         <Section>
-          <p>Current apolloLinkStateCount, is {counterState}. This is being stored client-side with Apollo Link State.</p>
+          <p>
+            Current apolloLinkStateCount, is {counterState}. This is being stored client-side with Apollo Link State.
+          </p>
           <Button id="redux-button" color="primary" onClick={addCounterState(1)}>
             Click to increase apolloLinkState
           </Button>

@@ -32,7 +32,6 @@ export default class PostCommentsView extends React.PureComponent {
 
   onSubmit = () => values => {
     const { comment, postId, addComment, editComment, addCommentClient } = this.props;
-
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {

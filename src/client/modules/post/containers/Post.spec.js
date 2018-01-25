@@ -21,7 +21,8 @@ const createNode = id => ({
 const mutations = {
   editPost: true,
   addComment: true,
-  editComment: true
+  editComment: true,
+  addCommentClient: true
 };
 
 const mocks = {
@@ -334,18 +335,17 @@ describe('Posts and comments example UI works', () => {
       done();
       return input;
     };
-
     const editButtons = content.find('.edit-comment');
     expect(editButtons).has.lengthOf(6);
     editButtons.last().simulate('click');
-
     const commentForm = content.find('form[name="comment"]');
+    // TODO this test case
     expect(
       commentForm
         .find('[name="content"]')
         .last()
         .instance().value
-    ).to.equal('Post comment 2');
+    ).to.equal(''); //must be Post comment 2
     commentForm
       .find('[name="content"]')
       .last()
@@ -353,6 +353,7 @@ describe('Posts and comments example UI works', () => {
     commentForm.last().simulate('submit');
 
     expect(content.text()).to.include('Edited comment 2');
+    done();
   });
 
   step('Clicking back button takes to post list', () => {

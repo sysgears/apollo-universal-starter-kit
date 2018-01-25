@@ -1,7 +1,7 @@
 /*eslint-disable no-unused-vars*/
 import parseFields from 'graphql-parse-fields';
 import { createBatchResolver } from 'graphql-resolve-batch';
-import FieldError from '../../../common/FieldError';
+import FieldError from '../../../../common/FieldError';
 
 export default pubsub => ({
   Query: {

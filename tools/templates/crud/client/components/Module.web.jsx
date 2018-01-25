@@ -6,7 +6,7 @@ import { PageLayout } from '../../common/components/web';
 
 import $Module$Filter from '../containers/$Module$Filter';
 import $Module$List from '../containers/$Module$List';
-import settings from '../../../../../settings';
+import settings from '../../../../../../settings';
 
 class $Module$ extends React.PureComponent {
   static propTypes = {

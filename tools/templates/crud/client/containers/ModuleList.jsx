@@ -3,7 +3,7 @@ import { graphql, compose } from 'react-apollo';
 import { connect } from 'react-redux';
 
 import { ListView } from '../../common/components/crud';
-import { $Module$ as $Module$Schema } from '../../../../server/modules/$module$/schema';
+import { $Module$ as $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
 import $MODULE$S_QUERY from '../graphql/$Module$sQuery.graphql';
 import DELETE_$MODULE$ from '../graphql/Delete$Module$.graphql';
 import SORT_$MODULE$S from '../graphql/Sort$Module$s.graphql';

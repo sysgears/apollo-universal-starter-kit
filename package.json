@@ -8,11 +8,11 @@
     "yarn": ">= 1.0.0"
   },
   "cacheDirectories": [
-    ".unused"
+    ".cache"
   ],
   "scripts": {
     "build": "lerna run build --stream",
-    "exp": "lerna run --scope=mobile exp --stream",
+    "exp": "npm --prefix packages/mobile run exp",
     "start": "lerna run --scope=server start --stream",
     "flow": "flow",
     "tests": "lerna run tests --stream",
@@ -57,9 +57,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "resolutions": {
-    "graphql": "^0.11.7"
-  },
   "greenkeeper": {
     "ignore": [
       "graphql"
@@ -79,5 +76,9 @@
     "dotenv": "^4.0.0",
     "lodash": "^4.17.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "resolutions": {
+    "graphql": "^0.11.7",
+    "iterall": "^1.1.4"
+  }
 }

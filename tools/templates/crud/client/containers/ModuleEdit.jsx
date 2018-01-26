@@ -31,7 +31,7 @@ class $Module$Edit extends React.Component {
       result = await createEntry(insertValues);
     }
 
-    if (result.errors) {
+    if (result && result.errors) {
       let submitError = {
         _error: `Edit ${title} failed!`
       };

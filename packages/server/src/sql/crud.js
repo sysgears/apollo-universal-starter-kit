@@ -1,8 +1,10 @@
 import { has } from 'lodash';
 import { decamelize, decamelizeKeys } from 'humps';
 import knexnest from 'knexnest';
+import parseFields from 'graphql-parse-fields';
 
 import { selectBy, orderedFor } from './helpers';
+import FieldError from '../../../common/FieldError';
 import knex from './connector';
 
 export default class Crud {
@@ -18,9 +20,9 @@ export default class Crud {
     return this.schema;
   }
 
-  getPaginated({ limit, offset, orderBy, filter }, info) {
+  async getPaginated({ limit, offset, orderBy, filter }, info) {
     const baseQuery = knex(`${this.prefix}${this.tableName} as ${this.tableName}`);
-    const select = selectBy(this.schema, info, false, this.prefix);
+    const select = selectBy(this.schema, parseFields(info).edges, false, this.prefix);
     const queryBuilder = select(baseQuery);
 
     if (limit) {
@@ -76,7 +78,16 @@ export default class Crud {
       }
     }
 
-    return knexnest(queryBuilder);
+    const edges = await knexnest(queryBuilder);
+    const { count } = await this.getTotal();
+
+    return {
+      edges,
+      pageInfo: {
+        totalCount: count,
+        hasNextPage: edges && edges.length === limit
+      }
+    };
   }
 
   getTotal() {
@@ -85,46 +96,132 @@ export default class Crud {
       .first();
   }
 
-  get({ where }, info) {
+  async get({ where }, info) {
     const { id } = where;
+
     const baseQuery = knex(`${this.prefix}${this.tableName} as ${this.tableName}`);
-    const select = selectBy(this.schema, info, true, this.prefix);
-    return knexnest(select(baseQuery).where(`${this.tableName}.id`, '=', id));
+    const select = selectBy(this.schema, parseFields(info).node, true, this.prefix);
+    const node = await knexnest(select(baseQuery).where(`${this.tableName}.id`, '=', id));
+    return { node };
   }
 
-  create(data) {
-    return knex(`${this.prefix}${this.tableName}`)
-      .insert(decamelizeKeys(data))
-      .returning('id');
+  async create(data, info) {
+    try {
+      const e = new FieldError();
+      e.throwIf();
+
+      const [id] = await knex(`${this.prefix}${this.tableName}`)
+        .insert(decamelizeKeys(data))
+        .returning('id');
+      return await this.get({ where: { id } }, info);
+    } catch (e) {
+      return { errors: e };
+    }
   }
 
-  update(data, where) {
-    return knex(`${this.prefix}${this.tableName}`)
-      .update(decamelizeKeys(data))
-      .where(where);
+  async update(data, where, info) {
+    try {
+      const e = new FieldError();
+      e.throwIf();
+
+      await knex(`${this.prefix}${this.tableName}`)
+        .update(decamelizeKeys(data))
+        .where(where);
+
+      return await this.get({ where }, info);
+    } catch (e) {
+      return { errors: e };
+    }
   }
 
-  delete(where) {
-    return knex(`${this.prefix}${this.tableName}`)
-      .where(where)
-      .del();
+  async delete(where, info) {
+    try {
+      const e = new FieldError();
+
+      const node = await this.get({ where }, info);
+
+      if (!node) {
+        e.setError('delete', 'Node does not exist.');
+        e.throwIf();
+      }
+
+      const isDeleted = await knex(`${this.prefix}${this.tableName}`)
+        .where(where)
+        .del();
+
+      if (isDeleted) {
+        return node;
+      } else {
+        e.setError('delete', 'Could not delete Node. Please try again later.');
+        e.throwIf();
+      }
+    } catch (e) {
+      return { errors: e };
+    }
   }
 
-  deleteMany(ids) {
-    return knex(`${this.prefix}${this.tableName}`)
-      .whereIn('id', ids)
-      .del();
+  async sort(data) {
+    try {
+      const e = new FieldError();
+      e.throwIf();
+
+      const [sortCount] = await knex.raw(
+        `UPDATE ${this.prefix}${this.tableName} t1
+        JOIN ${this.prefix}${this.tableName} t2
+        ON t1.id = ? AND t2.id = ?
+        SET t1.rank = ?,
+        t2.rank = ?`,
+        data
+      );
+
+      if (sortCount.affectedRows > 0) {
+        return { count: sortCount.affectedRows };
+      } else {
+        e.setError('sort', 'Could not sort Node. Please try again later.');
+        e.throwIf();
+      }
+    } catch (e) {
+      return { errors: e };
+    }
   }
 
-  sort(data) {
-    return knex.raw(
-      `UPDATE ${this.prefix}${this.tableName} t1
-      JOIN ${this.prefix}${this.tableName} t2
-      ON t1.id = ? AND t2.id = ?
-      SET t1.rank = ?,
-      t2.rank = ?`,
-      data
-    );
+  async updateMany(data, { id_in }) {
+    try {
+      console.log('updateMany: ', id_in);
+      const e = new FieldError();
+      e.setError('update', 'Not yet implemented. Please try again later.');
+      /*const deleteCount = await knex(`${this.prefix}${this.tableName}`)
+        .whereIn('id', id_in)
+        .del();
+
+      if (deleteCount > 0) {
+        return { count: deleteCount };
+      } else {
+        e.setError('delete', 'Could not delete any of selected Node. Please try again later.');
+        e.throwIf();
+      }*/
+    } catch (e) {
+      return { errors: e };
+    }
+  }
+
+  async deleteMany({ id_in }) {
+    try {
+      const e = new FieldError();
+
+      const deleteCount = await knex(`${this.prefix}${this.tableName}`)
+        .whereIn('id', id_in)
+        .del();
+
+      if (deleteCount > 0) {
+        return { count: deleteCount };
+      } else {
+        e.setError('delete', 'Could not delete any of selected Node. Please try again later.');
+        e.throwIf();
+      }
+    } catch (e) {
+      return { errors: e };
+    }
   }
 
   async getByIds(ids, by, Obj, info) {

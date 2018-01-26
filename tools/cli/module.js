@@ -4,12 +4,6 @@ const chalk = require('chalk');
 const GraphQLGenerator = require('domain-graphql');
 const { pascalize, camelize } = require('humps');
 const { startCase } = require('lodash');
-//import shell from 'shelljs';
-//import fs from 'fs';
-//import chalk from 'chalk';
-//import GraphQLGenerator from 'domain-graphql';
-//import { pascalize, camelize } from 'humps';
-//import { startCase } from 'lodash';
 
 function renameFiles(destinationPath, templatePath, module, location) {
   // pascalize
@@ -275,12 +269,12 @@ function updateSchema(logger, module) {
       }
 
       // override batch resolvers in resolvers.js file
-      replaceModuleData = `// order data([^*]+)// end order data`;
+      replaceModuleData = `// related data([^*]+)// end related data`;
       shell
         .ShellString(
           shell
             .cat(resolverFile)
-            .replace(RegExp(replaceModuleData, 'g'), `// order data\n${moduleData}    // end order data`)
+            .replace(RegExp(replaceModuleData, 'g'), `// related data\n${moduleData}    // end related data`)
         )
         .to(resolverFile);
 

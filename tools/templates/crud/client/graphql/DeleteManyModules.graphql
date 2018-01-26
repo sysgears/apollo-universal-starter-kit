@@ -1,5 +1,5 @@
-mutation deleteMany$Module$s($ids: [Int!]) {
-  deleteMany$Module$s(ids: $ids) {
+mutation deleteMany$Module$s($where: $Module$WhereInput!) {
+  deleteMany$Module$s(where: $where) {
     count
     errors {
       field

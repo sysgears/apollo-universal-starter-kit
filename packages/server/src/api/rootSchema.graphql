@@ -8,7 +8,7 @@ type PageInfo {
   hasNextPage: Boolean
 }
 
-type BatchManyPayload {
+type BatchPayload {
   count: Int
   errors: [FieldError!]
 }

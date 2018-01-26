@@ -32,7 +32,11 @@ input $Module$UpdateInput {
 }
 
 input $Module$WhereUniqueInput {
-  id: Int
+  id: Int!
+}
+
+input $Module$WhereInput {
+  id_in: [Int!]
 }
 
 extend type Query {
@@ -44,6 +48,7 @@ extend type Mutation {
   create$Module$(data: $Module$CreateInput!): $Module$Payload!
   update$Module$(data: $Module$UpdateInput!, where: $Module$WhereUniqueInput!): $Module$Payload!
   delete$Module$(where: $Module$WhereUniqueInput!): $Module$Payload!
-  sort$Module$s(data: [Int!]): BatchManyPayload!
-  deleteMany$Module$s(ids: [Int!]): BatchManyPayload!
+  sort$Module$s(data: [Int!]): BatchPayload!
+  updateMany$Module$s(data: $Module$UpdateInput!, where: $Module$WhereInput!): BatchPayload!
+  deleteMany$Module$s(where: $Module$WhereInput!): BatchPayload!
 }

@@ -91,10 +91,10 @@ const $Module$WithApollo = compose(
   }),
   graphql(DELETEMANY_$MODULE$S, {
     props: ({ ownProps: { refetch }, mutate }) => ({
-      deleteManyEntries: async ids => {
+      deleteManyEntries: async id_in => {
         try {
           const { data: { deleteMany$Module$s } } = await mutate({
-            variables: { ids }
+            variables: { where: { id_in } }
           });
 
           if (deleteMany$Module$s.errors) {

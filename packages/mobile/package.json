@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production spin build",
+    "clean": "rimraf build .expo .tmp",
     "exp": "cross-env NODE_ENV=production spin exp",
     "exp-login": "cross-env NODE_ENV=production spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive",
     "exp-publish": "npm run exp-login && npm run exp -- p --non-interactive",
@@ -141,6 +142,7 @@
     "react-test-renderer": "^16.2.0",
     "request": "^2.83.0",
     "resolve-url-loader": "^2.2.1",
+    "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
     "source-list-map": "^2.0.0",
     "spinjs": "^0.4.87",

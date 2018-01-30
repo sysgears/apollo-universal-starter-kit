@@ -22,8 +22,7 @@ class $Module$Edit extends React.Component {
   onSubmit = async values => {
     const { data: { node }, createEntry, updateEntry, title } = this.props;
     let result = null;
-
-    const insertValues = pickInputFields($Module$Schema, values);
+    const insertValues = pickInputFields($Module$Schema, values, node);
 
     if (node) {
       result = await updateEntry(insertValues, { id: node.id });

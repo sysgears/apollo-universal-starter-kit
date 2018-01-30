@@ -1,7 +1,8 @@
 /* eslint-disable react/display-name */
 import React from 'react';
-import { startCase } from 'lodash';
-import { Field } from 'redux-form';
+import PropTypes from 'prop-types';
+import { startCase, isEqual } from 'lodash';
+import { Field, FieldArray } from 'redux-form';
 import { Link } from 'react-router-dom';
 
 import { RenderField, RenderSelect, RenderDate, RenderSwitch, Button, Popconfirm, Switch } from './components/web';
@@ -92,7 +93,33 @@ export const createColumnFields = (schema, link, orderBy, renderOrderByArrow, he
   return columns;
 };
 
-export const createFormFields = (schema, formdata) => {
+const RenderEntry = ({ fields, formdata, schema, meta: { error, submitFailed } }) => (
+  <ul>
+    <li>
+      <Button color="primary" size="sm" onClick={() => fields.push({})}>
+        Add Entry
+      </Button>
+      {submitFailed && error && <span>{error}</span>}
+    </li>
+    {fields.map((field, index) => (
+      <li key={index}>
+        <Button color="primary" size="sm" onClick={() => fields.remove(index)}>
+          Delete
+        </Button>
+        {createFormFields(schema, formdata, `${field}.`)}
+      </li>
+    ))}
+  </ul>
+);
+
+RenderEntry.propTypes = {
+  fields: PropTypes.object,
+  formdata: PropTypes.object,
+  schema: PropTypes.object,
+  meta: PropTypes.object
+};
+
+export const createFormFields = (schema, formdata, prefix = '') => {
   let fields = [];
 
   for (const key of schema.keys()) {
@@ -123,7 +150,7 @@ export const createFormFields = (schema, formdata) => {
 
       fields.push(
         <Field
-          name={key}
+          name={`${prefix}${key}`}
           key={key}
           component={component}
           data={data}
@@ -134,7 +161,9 @@ export const createFormFields = (schema, formdata) => {
       );
     } else {
       if (value.type.constructor === Array) {
-        //console.log('key: ', value.type);
+        fields.push(
+          <FieldArray name={key} key={key} component={RenderEntry} schema={value.type[0]} formdata={formdata} />
+        );
       }
     }
   }
@@ -142,16 +171,56 @@ export const createFormFields = (schema, formdata) => {
   return fields;
 };
 
-export const pickInputFields = (schema, values) => {
+export const pickInputFields = (schema, values, node = null) => {
   let inputValues = {};
 
   for (const key of schema.keys()) {
     if (key in values) {
       const value = schema.values[key];
       if (value.type.isSchema) {
-        inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
+        if (values[key]) {
+          inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
+        }
       } else if (key !== 'id' && value.type.constructor !== Array) {
         inputValues[key] = values[key];
+      } else if (value.type.constructor === Array) {
+        const keys1 = {};
+        const keys2 = {};
+
+        let create = [];
+        let update = [];
+        let deleted = [];
+
+        node[key].forEach(item => {
+          keys1[item.id] = item;
+        });
+
+        values[key].forEach(item => {
+          keys2[item.id] = item;
+        });
+
+        node[key].forEach(item => {
+          const obj = keys2[item.id];
+          if (!obj) {
+            deleted.push({ id: item.id });
+          } else {
+            if (!isEqual(obj, item)) {
+              update.push({ where: { id: obj.id }, data: pickInputFields(value.type[0], obj) });
+            }
+          }
+        });
+
+        values[key].forEach(item => {
+          if (!keys1[item.id]) {
+            create.push({ ...item });
+          }
+        });
+
+        //console.log('created: ', create);
+        //console.log('updated: ', update);
+        //console.log('deleted: ', deleted);
+
+        inputValues[key] = { create, update, delete: deleted };
       }
     }
   }

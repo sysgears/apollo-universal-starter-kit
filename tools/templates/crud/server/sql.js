@@ -1,7 +1,7 @@
 import { decamelize } from 'humps';
 
 import { $Module$ as $Module$Schema } from './schema';
-import Crud from '../../../src/sql/crud';
+import Crud from '../../sql/crud';
 
 export default class $Module$ extends Crud {
   constructor() {

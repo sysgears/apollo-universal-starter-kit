@@ -9,4 +9,3 @@ query $module$($where: $Module$WhereUniqueInput!) {
     ### end form data
   }
 }
-

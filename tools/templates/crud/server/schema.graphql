@@ -5,7 +5,7 @@ type $Module$ {
 }
 ### end schema type definitions
 
-type $Module$s {
+type $Module$Connection {
   pageInfo: PageInfo
   edges: [$Module$]
 }
@@ -40,7 +40,8 @@ input $Module$WhereInput {
 }
 
 extend type Query {
-  $module$s(limit: Int, offset: Int, orderBy: OrderByInput, filter: $Module$FilterInput): $Module$s
+  $module$s(limit: Int, offset: Int, orderBy: OrderByInput, filter: $Module$FilterInput): [$Module$]
+  $module$sConnection(limit: Int, offset: Int, orderBy: OrderByInput, filter: $Module$FilterInput): $Module$Connection!
   $module$(where: $Module$WhereUniqueInput!): $Module$Data
 }
 

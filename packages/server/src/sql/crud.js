@@ -1,5 +1,5 @@
 import { has } from 'lodash';
-import { decamelize, decamelizeKeys } from 'humps';
+import { decamelize, decamelizeKeys, camelize, pascalize } from 'humps';
 import knexnest from 'knexnest';
 import parseFields from 'graphql-parse-fields';
 
@@ -20,9 +20,9 @@ export default class Crud {
     return this.schema;
   }
 
-  async getPaginated({ limit, offset, orderBy, filter }, info) {
+  _getList({ limit, offset, orderBy, filter }, info) {
     const baseQuery = knex(`${this.prefix}${this.tableName} as ${this.tableName}`);
-    const select = selectBy(this.schema, parseFields(info).edges, false, this.prefix);
+    const select = selectBy(this.schema, info, false, this.prefix);
     const queryBuilder = select(baseQuery);
 
     if (limit) {
@@ -78,16 +78,24 @@ export default class Crud {
       }
     }
 
-    const edges = await knexnest(queryBuilder);
+    return knexnest(queryBuilder);
+  }
+
+  async getPaginated(args, info) {
+    const edges = await this._getList(args, parseFields(info).edges);
     const { count } = await this.getTotal();
 
     return {
       edges,
       pageInfo: {
         totalCount: count,
-        hasNextPage: edges && edges.length === limit
+        hasNextPage: edges && edges.length === args.limit
       }
     };
+  }
+
+  getList(args, info) {
+    return this._getList(args, parseFields(info));
   }
 
   getTotal() {
@@ -96,58 +104,129 @@ export default class Crud {
       .first();
   }
 
-  async get({ where }, info) {
+  _get({ where }, info) {
     const { id } = where;
 
     const baseQuery = knex(`${this.prefix}${this.tableName} as ${this.tableName}`);
-    const select = selectBy(this.schema, parseFields(info).node, true, this.prefix);
-    const node = await knexnest(select(baseQuery).where(`${this.tableName}.id`, '=', id));
+    const select = selectBy(this.schema, info, true, this.prefix);
+    return knexnest(select(baseQuery).where(`${this.tableName}.id`, '=', id));
+  }
+
+  async get(args, info) {
+    const node = await this._get(args, parseFields(info).node);
     return { node };
   }
 
-  async create(data, info) {
+  _create(data) {
+    return knex(`${this.prefix}${this.tableName}`)
+      .insert(decamelizeKeys(data))
+      .returning('id');
+  }
+
+  async create({ data }, ctx, info) {
     try {
       const e = new FieldError();
       e.throwIf();
 
-      const [id] = await knex(`${this.prefix}${this.tableName}`)
-        .insert(decamelizeKeys(data))
-        .returning('id');
+      // extract nested entries from data
+      let nestedEntries = [];
+      for (const key of this.schema.keys()) {
+        const value = this.schema.values[key];
+        if (value.type.constructor === Array && data[key]) {
+          nestedEntries.push({ key, data: data[key] });
+          delete data[key];
+        }
+      }
+
+      const [id] = await this._create(data);
+
+      // create nested entries
+      if (nestedEntries.length > 0) {
+        nestedEntries.map(nested => {
+          if (nested.data.create) {
+            nested.data.create.map(async create => {
+              create[`${camelize(this.schema.name)}Id`] = id;
+              await ctx[pascalize(nested.key)]._create(create);
+            });
+          }
+        });
+      }
+
       return await this.get({ where: { id } }, info);
     } catch (e) {
       return { errors: e };
     }
   }
 
-  async update(data, where, info) {
+  _update({ data, where }) {
+    return knex(`${this.prefix}${this.tableName}`)
+      .update(decamelizeKeys(data))
+      .where(where);
+  }
+
+  async update(args, ctx, info) {
     try {
       const e = new FieldError();
       e.throwIf();
 
-      await knex(`${this.prefix}${this.tableName}`)
-        .update(decamelizeKeys(data))
-        .where(where);
+      // extract nested entries from data
+      let nestedEntries = [];
+      for (const key of this.schema.keys()) {
+        const value = this.schema.values[key];
+        if (value.type.constructor === Array && args.data[key]) {
+          nestedEntries.push({ key, data: args.data[key] });
+          delete args.data[key];
+        }
+      }
 
-      return await this.get({ where }, info);
+      await this._update(args);
+
+      // create, update, delete nested entries
+      if (nestedEntries.length > 0) {
+        nestedEntries.map(nested => {
+          if (nested.data.create) {
+            nested.data.create.map(async create => {
+              create[`${camelize(this.schema.name)}Id`] = args.where.id;
+              await ctx[pascalize(nested.key)]._create(create);
+            });
+          }
+          if (nested.data.update) {
+            nested.data.update.map(async update => {
+              await ctx[pascalize(nested.key)]._update(update);
+            });
+          }
+          if (nested.data.delete) {
+            nested.data.delete.map(async where => {
+              await ctx[pascalize(nested.key)]._delete({ where });
+            });
+          }
+        });
+      }
+
+      return await this.get(args, info);
     } catch (e) {
       return { errors: e };
     }
   }
 
-  async delete(where, info) {
+  _delete({ where }) {
+    return knex(`${this.prefix}${this.tableName}`)
+      .where(where)
+      .del();
+  }
+
+  async delete(args, info) {
     try {
       const e = new FieldError();
 
-      const node = await this.get({ where }, info);
+      const node = await this.get(args, info);
 
       if (!node) {
         e.setError('delete', 'Node does not exist.');
         e.throwIf();
       }
 
-      const isDeleted = await knex(`${this.prefix}${this.tableName}`)
-        .where(where)
-        .del();
+      const isDeleted = await this._delete(args);
 
       if (isDeleted) {
         return node;
@@ -160,19 +239,23 @@ export default class Crud {
     }
   }
 
-  async sort(data) {
-    try {
-      const e = new FieldError();
-      e.throwIf();
-
-      const [sortCount] = await knex.raw(
-        `UPDATE ${this.prefix}${this.tableName} t1
+  _sort({ data }) {
+    return knex.raw(
+      `UPDATE ${this.prefix}${this.tableName} t1
         JOIN ${this.prefix}${this.tableName} t2
         ON t1.id = ? AND t2.id = ?
         SET t1.rank = ?,
         t2.rank = ?`,
-        data
-      );
+      data
+    );
+  }
+
+  async sort(args) {
+    try {
+      const e = new FieldError();
+      e.throwIf();
+
+      const [sortCount] = await this._sort(args);
 
       if (sortCount.affectedRows > 0) {
         return { count: sortCount.affectedRows };
@@ -185,14 +268,20 @@ export default class Crud {
     }
   }
 
-  async updateMany(data, { id_in }) {
+  _updateMany({ data, where: { id_in } }) {
+    console.log('_updateMany: data: ', data);
+    console.log('_updateMany: id_in: ', id_in);
+    //return knex(`${this.prefix}${this.tableName}`)
+    //  .whereIn('id', id_in)
+    //  .del();
+  }
+
+  async updateMany(args) {
     try {
-      console.log('updateMany: ', id_in);
+      console.log('updateMany: ', args);
       const e = new FieldError();
       e.setError('update', 'Not yet implemented. Please try again later.');
-      /*const deleteCount = await knex(`${this.prefix}${this.tableName}`)
-        .whereIn('id', id_in)
-        .del();
+      /*const deleteCount = await this._updateMany(args);
 
       if (deleteCount > 0) {
         return { count: deleteCount };
@@ -205,13 +294,17 @@ export default class Crud {
     }
   }
 
-  async deleteMany({ id_in }) {
+  _deleteMany({ where: { id_in } }) {
+    return knex(`${this.prefix}${this.tableName}`)
+      .whereIn('id', id_in)
+      .del();
+  }
+
+  async deleteMany(args) {
     try {
       const e = new FieldError();
 
-      const deleteCount = await knex(`${this.prefix}${this.tableName}`)
-        .whereIn('id', id_in)
-        .del();
+      const deleteCount = await this._deleteMany(args);
 
       if (deleteCount > 0) {
         return { count: deleteCount };
@@ -225,6 +318,7 @@ export default class Crud {
   }
 
   async getByIds(ids, by, Obj, info) {
+    info = parseFields(info);
     info[`${by}Id`] = true;
     const baseQuery = knex(`${Obj.getPrefix()}${Obj.getTableName()} as ${Obj.getTableName()}`);
     const select = selectBy(Obj.getSchema(), info, false, Obj.getPrefix());

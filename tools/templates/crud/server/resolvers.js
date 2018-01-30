@@ -4,11 +4,14 @@ import { createBatchResolver } from 'graphql-resolve-batch';
 // eslint-disable-next-line no-unused-vars
 export default pubsub => ({
   Query: {
-    $module$s: (obj, args, { $Module$ }, info) => {
-      return $Module$.getPaginated(args, info);
+    $module$s: (parent, args, ctx, info) => {
+      return ctx.$Module$.getList(args, info);
     },
-    $module$: (obj, args, { $Module$ }, info) => {
-      return $Module$.get(args, info);
+    $module$sConnection: (parent, args, ctx, info) => {
+      return ctx.$Module$.getPaginated(args, info);
+    },
+    $module$: (parent, args, ctx, info) => {
+      return ctx.$Module$.get(args, info);
     }
   },
   $Module$Data: {
@@ -18,23 +21,23 @@ export default pubsub => ({
   // schema batch resolvers
   // end schema batch resolvers
   Mutation: {
-    create$Module$: (obj, { data }, { $Module$ }, info) => {
-      return $Module$.create(data, info);
+    create$Module$: (parent, args, ctx, info) => {
+      return ctx.$Module$.create(args, ctx, info);
     },
-    update$Module$: (obj, { data, where }, { $Module$ }, info) => {
-      return $Module$.update(data, where, info);
+    update$Module$: (parent, args, ctx, info) => {
+      return ctx.$Module$.update(args, ctx, info);
     },
-    delete$Module$: (obj, { where }, { $Module$ }, info) => {
-      return $Module$.delete(where, info);
+    delete$Module$: (parent, args, ctx, info) => {
+      return ctx.$Module$.delete(args, info);
     },
-    sort$Module$s: (obj, { data }, { $Module$ }) => {
-      return $Module$.sort(data);
+    sort$Module$s: (parent, args, ctx) => {
+      return ctx.$Module$.sort(args);
     },
-    updateMany$Module$s: (obj, { data, where }, { $Module$ }) => {
-      return $Module$.deleteMany(data, where);
+    updateMany$Module$s: (parent, args, ctx) => {
+      return ctx.$Module$.deleteMany(args);
     },
-    deleteMany$Module$s: (obj, { where }, { $Module$ }) => {
-      return $Module$.deleteMany(where);
+    deleteMany$Module$s: (parent, args, ctx) => {
+      return ctx.$Module$.deleteMany(args);
     }
   },
   Subscription: {}

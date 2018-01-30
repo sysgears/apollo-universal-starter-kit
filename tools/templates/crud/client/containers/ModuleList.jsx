@@ -27,28 +27,28 @@ const $Module$WithApollo = compose(
         }
       };
     },
-    props: ({ data: { loading, $module$s, refetch, error, fetchMore } }) => {
+    props: ({ data: { loading, $module$sConnection, refetch, error, fetchMore } }) => {
       const loadMoreRows = () => {
         return fetchMore({
           variables: {
-            offset: $module$s.edges.length
+            offset: $module$sConnection.edges.length
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            const newEdges = fetchMoreResult.$module$s.edges;
-            const pageInfo = fetchMoreResult.$module$s.pageInfo;
+            const newEdges = fetchMoreResult.$module$sConnection.edges;
+            const pageInfo = fetchMoreResult.$module$sConnection.pageInfo;
 
             return {
-              $module$s: {
-                edges: [...previousResult.$module$s.edges, ...newEdges],
+              $module$sConnection: {
+                edges: [...previousResult.$module$sConnection.edges, ...newEdges],
                 pageInfo,
-                __typename: '$Module$s'
+                __typename: '$Module$sConnection'
               }
             };
           }
         });
       };
       if (error) throw new Error(error);
-      return { loading, data: $module$s, loadMoreRows, refetch, errors: error ? error.graphQLErrors : null };
+      return { loading, data: $module$sConnection, loadMoreRows, refetch, errors: error ? error.graphQLErrors : null };
     }
   }),
   graphql(DELETE_$MODULE$, {

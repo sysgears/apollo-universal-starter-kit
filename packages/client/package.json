@@ -169,10 +169,5 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "react-navigation": "^1.0.0-beta.21",
     "spinjs": "^0.4.0"
-  },
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/apollo-universal-starter-kit",
-    "logo": "https://opencollective.com/opencollective/logo.txt"
   }
 }

@@ -194,7 +194,6 @@ describe('Posts and comments example UI works', () => {
       }
     });
     const postForm = content.find('form[name="post"]');
-
     expect(
       postForm
         .find('[name="title"]')
@@ -203,7 +202,7 @@ describe('Posts and comments example UI works', () => {
     ).to.equal('Post title 203');
     expect(
       postForm
-        .find('[name="content"]')
+        .find('[name="title"]')
         .last()
         .instance().value
     ).to.equal('Post content 204');

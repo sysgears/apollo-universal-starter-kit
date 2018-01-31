@@ -5,8 +5,7 @@
   "main": "src",
   "engines": {
     "node": ">= 6.11.1",
-    "npm": ">= 3.10.3",
-    "yarn": ">= 0.19.0"
+    "yarn": ">= 1.0.0"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production spin build",
@@ -14,13 +13,13 @@
     "start": "node --harmony build",
     "tests": "cross-env PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
-    "test": "npm run tests && npm run lint",
+    "test": "yarn tests && yarn lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
-    "seed": "npm run migrate && knex seed:run",
+    "seed": "yarn migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "watch": "spin watch",
-    "heroku-postbuild": "npm run build && npm run seed",
+    "heroku-postbuild": "yarn build && yarn seed",
     "cli": "node ../../tools/cli",
     "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"
   },

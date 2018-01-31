@@ -5,18 +5,17 @@
   "main": "src",
   "engines": {
     "node": ">= 6.11.1",
-    "npm": ">= 3.10.3",
-    "yarn": ">= 0.19.0"
+    "yarn": ">= 1.0.0"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production spin build",
     "clean": "rimraf build .tmp",
     "tests": "cross-env PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
-    "test": "npm run tests && npm run lint",
+    "test": "yarn tests && yarn lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
     "watch": "spin watch",
-    "heroku-postbuild": "npm run build",
+    "heroku-postbuild": "yarn build",
     "cli": "node ../../tools/cli"
   },
   "repository": {

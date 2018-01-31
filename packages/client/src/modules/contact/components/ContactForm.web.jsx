@@ -68,7 +68,7 @@ const ContactFormWithFormik = withFormik({
     await onSubmit(values);
     resetForm();
   },
-  displayName: 'ContactUsForm ' // helps with React DevTools
+  displayName: 'ContactUsForm' // helps with React DevTools
 });
 
 export default ContactFormWithFormik(ContactForm);

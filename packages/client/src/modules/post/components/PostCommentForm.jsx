@@ -38,7 +38,7 @@ const PostCommentFormWithFormik = withFormik({
   handleSubmit: function(values, { props: { onSubmit } }) {
     onSubmit(values);
   },
-  displayName: 'CommentForm ', // helps with React DevTools
+  displayName: 'CommentForm', // helps with React DevTools
   enableReinitialize: true
 });
 

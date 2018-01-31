@@ -52,7 +52,7 @@ const PostCommentFormWithFormik = withFormik({
     onSubmit(values);
     resetForm({ content: '' });
   },
-  displayName: 'CommentForm ', // helps with React DevTools,
+  displayName: 'CommentForm', // helps with React DevTools,
   enableReinitialize: true
 });
 

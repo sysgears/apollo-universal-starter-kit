@@ -55,7 +55,7 @@ const PostFormWithFormik = withFormik({
     onSubmit(values);
   },
   enableReinitialize: true,
-  displayName: 'PostForm ' // helps with React DevTools
+  displayName: 'PostForm' // helps with React DevTools
 });
 
 export default PostFormWithFormik(PostForm);

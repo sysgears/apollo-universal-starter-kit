@@ -53,7 +53,7 @@ const PostFormWithFormik = withFormik({
   handleSubmit(values, { props: { onSubmit } }) {
     onSubmit(values);
   },
-  displayName: 'PostForm ' // helps with React DevTools
+  displayName: 'PostForm' // helps with React DevTools
 });
 
 export default PostFormWithFormik(PostForm);

@@ -67,7 +67,7 @@ const RegisterFormWithFormik = withFormik({
     await onSubmit(values);
     resetForm({ username: '', email: '', password: '', passwordConfirmation: '' });
   },
-  displayName: 'SignUpForm ', // helps with React DevTools
+  displayName: 'SignUpForm', // helps with React DevTools
   validate
 });
 

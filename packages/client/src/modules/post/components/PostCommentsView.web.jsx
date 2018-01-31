@@ -38,7 +38,7 @@ export default class PostCommentsView extends React.PureComponent {
       editComment(comment.id, values.content);
     }
 
-    addCommentClient({ id: null, content: '' });
+    addCommentClient({ id: null, content: 'dasdsadasdsa' });
   };
 
   render() {
@@ -79,7 +79,7 @@ export default class PostCommentsView extends React.PureComponent {
     return (
       <div>
         <h3>Comments</h3>
-        <PostCommentForm postId={postId} onSubmit={this.onSubmit()} initialValues={comment} />
+        <PostCommentForm postId={postId} onSubmit={this.onSubmit()} initialValues={comment} comment={comment} />
         <h1 />
         <Table dataSource={comments} columns={columns} />
       </div>

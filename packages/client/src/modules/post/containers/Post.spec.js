@@ -160,7 +160,7 @@ describe('Posts and comments example UI works', () => {
     postLinks.last().simulate('click', { button: 0 });
   });
 
-  step('Clicking on post opens post form', () => {
+  step('Clicking on post opens post form', done => {
     const postForm = content.find('form[name="post"]');
 
     expect(content.text()).to.include('Edit Post');
@@ -195,7 +195,6 @@ describe('Posts and comments example UI works', () => {
       }
     });
     const postForm = content.find('form[name="post"]');
-
     expect(
       postForm
         .find('[name="title"]')
@@ -204,7 +203,7 @@ describe('Posts and comments example UI works', () => {
     ).to.equal('Post title 203');
     expect(
       postForm
-        .find('[name="content"]')
+        .find('[name="title"]')
         .last()
         .instance().value
     ).to.equal('Post content 204');

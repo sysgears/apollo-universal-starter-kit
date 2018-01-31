@@ -38,7 +38,7 @@ export default class PostCommentsView extends React.PureComponent {
       editComment(comment.id, values.content);
     }
 
-    addCommentClient({ id: null, content: 'dasdsadasdsa' });
+    addCommentClient({ id: null, content: '' });
   };
 
   render() {

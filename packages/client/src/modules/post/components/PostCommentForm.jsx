@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm, reset } from 'redux-form';
+import { withFormik } from 'formik';
+import Yup from 'yup';
+import Field from '../../../utils/FieldAdaptor';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
-import { required, minLength } from '../../../../../common/validation';
 
-const PostCommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
+const validationSchema = Yup.object().shape({
+  content: Yup.string().required('Comment is required!')
+});
+
+const PostCommentForm = ({ handleSubmit, initialValues, onSubmit }) => {
   let operation = 'Add';
   if (initialValues.id !== null) {
     operation = 'Edit';
@@ -12,10 +17,8 @@ const PostCommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
 
   return (
     <FormView>
-      <Field name="content" component={RenderField} type="text" label="Content" validate={[required, minLength(1)]} />
-      <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
-        {operation}
-      </FormButton>
+      <Field name="content" component={RenderField} type="text" />
+      <FormButton onPress={handleSubmit(onSubmit)}>{operation}</FormButton>
     </FormView>
   );
 };
@@ -24,13 +27,17 @@ PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
-  valid: PropTypes.bool
+  submitting: PropTypes.bool,
+  values: PropTypes.object
 };
 
-const afterSubmit = (result, dispatch) => dispatch(reset('comment'));
+const PostCommentFormWithFormik = withFormik({
+  mapPropsToValues: props => ({ comment: props.comment }),
+  validationSchema: validationSchema,
+  handleSubmit(values, { props: { onSubmit } }) {
+    onSubmit(values);
+  },
+  displayName: 'CommentForm ' // helps with React DevTools
+});
 
-export default reduxForm({
-  form: 'comment',
-  enableReinitialize: true,
-  onSubmitSuccess: afterSubmit
-})(PostCommentForm);
+export default PostCommentFormWithFormik(PostCommentForm);

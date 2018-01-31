@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { withFormik } from 'formik';
+import Yup from 'yup';
+import Field from '../../../utils/FieldAdaptor';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { required, email, minLength } from '../../../../../common/validation';
 
 const validate = values => {
   const errors = {};
@@ -13,24 +14,35 @@ const validate = values => {
   return errors;
 };
 
-const RegisterForm = ({ handleSubmit, submitting, onSubmit, error }) => {
+const nameMinLength = 5;
+const passwordMinLength = 5;
+const validationSchema = Yup.object().shape({
+  username: Yup.string()
+    .min(nameMinLength, `Must be ${nameMinLength} characters or more`)
+    .required('Username is required!'),
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required!'),
+  password: Yup.string()
+    .min(passwordMinLength, `Must be ${passwordMinLength} characters or more`)
+    .required('Password is required!'),
+  passwordConfirmation: Yup.string()
+    .min(passwordMinLength, `Must be ${passwordMinLength} characters or more`)
+    .required('Password confirmation is required!')
+});
+
+const RegisterForm = ({ values, handleSubmit, submitting, error }) => {
   return (
-    <Form name="register" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="username" component={RenderField} type="text" label="Username" validate={[required, minLength(3)]} />
-      <Field name="email" component={RenderField} type="email" label="Email" validate={[required, email]} />
-      <Field
-        name="password"
-        component={RenderField}
-        type="password"
-        label="Password"
-        validate={[required, minLength(5)]}
-      />
+    <Form name="register" onSubmit={handleSubmit}>
+      <Field name="username" component={RenderField} type="text" label="Username" value={values.username} />
+      <Field name="email" component={RenderField} type="text" label="Email" value={values.email} />
+      <Field name="password" component={RenderField} type="password" label="Password" value={values.password} />
       <Field
         name="passwordConfirmation"
         component={RenderField}
         type="password"
         label="Password Confirmation"
-        validate={[required, minLength(5)]}
+        value={values.passwordConfirmation}
       />
       <div className="text-center">
         {error && <Alert color="error">{error}</Alert>}
@@ -44,12 +56,19 @@ const RegisterForm = ({ handleSubmit, submitting, onSubmit, error }) => {
 
 RegisterForm.propTypes = {
   handleSubmit: PropTypes.func,
-  onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  error: PropTypes.string
+  error: PropTypes.string,
+  values: PropTypes.object
 };
 
-export default reduxForm({
-  form: 'register',
+const RegisterFormWithFormik = withFormik({
+  validationSchema: validationSchema,
+  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+    await onSubmit(values);
+    resetForm({ username: '', email: '', password: '', passwordConfirmation: '' });
+  },
+  displayName: 'SignUpForm ', // helps with React DevTools
   validate
-})(RegisterForm);
+});
+
+export default RegisterFormWithFormik(RegisterForm);

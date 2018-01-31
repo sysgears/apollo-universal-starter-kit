@@ -51,7 +51,7 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
           Back
         </Link>
         <h2>{post ? 'Edit' : 'Create'} Post</h2>
-        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} initialValues={postObj} />
+        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
         <br />
         {postObj && (
           <PostComments

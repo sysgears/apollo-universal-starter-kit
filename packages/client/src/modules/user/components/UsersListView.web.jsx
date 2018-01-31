@@ -50,7 +50,10 @@ export default class UsersView extends React.PureComponent {
       if (orderBy.order === 'asc') {
         order = 'desc';
       } else if (orderBy.order === 'desc') {
-        return onOrderBy({});
+        return onOrderBy({
+          column: '',
+          order: ''
+        });
       }
     }
 

@@ -180,7 +180,6 @@
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.4.93",
     "style-loader": "^0.19.1",
     "url-loader": "^0.6.2",
     "wait-on": "^2.0.2",
@@ -194,6 +193,9 @@
     "webpack-sources": "^1.1.0",
     "webpack-virtual-modules": "^0.1.8",
     "ws": "^3.3.3"
+  },
+  "optionalDependencies": {
+    "spinjs": "^0.4.0"
   },
   "collective": {
     "type": "opencollective",

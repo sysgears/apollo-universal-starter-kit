@@ -1,4 +1,4 @@
-import Expo from 'expo';
+import Expo, { Constants } from 'expo';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
@@ -32,7 +32,8 @@ class AwakeInDevApp extends React.Component {
       View,
       {
         style: {
-          flex: 1
+          flex: 1,
+          marginTop: Constants.statusBarHeight
         }
       },
       React.createElement(App, { expUri: this.props.exp ? this.props.exp.initialUri : null }),

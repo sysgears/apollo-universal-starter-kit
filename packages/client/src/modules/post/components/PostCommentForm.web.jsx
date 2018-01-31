@@ -1,26 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm, reset } from 'redux-form';
+import { withFormik } from 'formik';
+import Yup from 'yup';
+import Field from '../../../utils/FieldAdaptor';
 import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
-import { required, minLength } from '../../../../../common/validation';
 
-const PostCommentForm = ({ handleSubmit, submitting, initialValues, onSubmit }) => {
+const validationSchema = Yup.object().shape({
+  content: Yup.string().required('Content is required!')
+});
+
+const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) => {
   let operation = 'Add';
   if (initialValues.id !== null) {
     operation = 'Edit';
   }
 
   return (
-    <Form name="comment" onSubmit={handleSubmit(onSubmit)}>
+    <Form name="comment" onSubmit={handleSubmit}>
       <Row>
         <Col xs={2}>
           <Label>{operation} comment</Label>
         </Col>
         <Col xs={8}>
-          <Field name="content" component={RenderField} type="text" validate={[required, minLength(1)]} />
+          <Field name="content" component={RenderField} type="text" value={values.content} onChange={handleChange} />
         </Col>
         <Col xs={2}>
-          <Button color="primary" type="submit" className="float-right" disabled={submitting}>
+          <Button color="primary" type="submit" className="float-right" disabled={false}>
             Save
           </Button>
         </Col>
@@ -31,15 +36,24 @@ const PostCommentForm = ({ handleSubmit, submitting, initialValues, onSubmit }) 
 
 PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
+  handleChange: PropTypes.func,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
-  submitting: PropTypes.bool
+  submitting: PropTypes.bool,
+  values: PropTypes.object,
+  content: PropTypes.string,
+  changeContent: PropTypes.func
 };
 
-const afterSubmit = (result, dispatch) => dispatch(reset('comment'));
+const PostCommentFormWithFormik = withFormik({
+  mapPropsToValues: props => ({ content: (props.comment && props.comment.content) || '' }),
+  validationSchema: validationSchema,
+  handleSubmit(values, { resetForm, props: { onSubmit } }) {
+    onSubmit(values);
+    resetForm({ content: '' });
+  },
+  displayName: 'CommentForm ', // helps with React DevTools,
+  enableReinitialize: true
+});
 
-export default reduxForm({
-  form: 'comment',
-  enableReinitialize: true,
-  onSubmitSuccess: afterSubmit
-})(PostCommentForm);
+export default PostCommentFormWithFormik(PostCommentForm);

@@ -12,7 +12,8 @@ export default class PostCommentsView extends React.PureComponent {
     editComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
     subscribeToMore: PropTypes.func.isRequired,
-    addCommentClient: PropTypes.func.isRequired
+    addCommentClient: PropTypes.func.isRequired,
+    content: PropTypes.string
   };
 
   hendleEditComment = (id, content) => {
@@ -79,7 +80,7 @@ export default class PostCommentsView extends React.PureComponent {
     return (
       <div>
         <h3>Comments</h3>
-        <PostCommentForm postId={postId} onSubmit={this.onSubmit()} initialValues={comment} />
+        <PostCommentForm postId={postId} onSubmit={this.onSubmit()} initialValues={comment} comment={comment} />
         <h1 />
         <Table dataSource={comments} columns={columns} />
       </div>

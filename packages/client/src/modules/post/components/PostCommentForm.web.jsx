@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+import Yup from 'yup';
 import Field from '../../../utils/FieldAdaptor';
 import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
+
+const validationSchema = Yup.object().shape({
+  content: Yup.string().required('Content is required!')
+});
 
 const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) => {
   let operation = 'Add';
@@ -11,7 +16,7 @@ const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) 
   }
 
   return (
-    <Form name="post" onSubmit={handleSubmit}>
+    <Form name="comment" onSubmit={handleSubmit}>
       <Row>
         <Col xs={2}>
           <Label>{operation} comment</Label>
@@ -42,6 +47,7 @@ PostCommentForm.propTypes = {
 
 const PostCommentFormWithFormik = withFormik({
   mapPropsToValues: props => ({ content: (props.comment && props.comment.content) || '' }),
+  validationSchema: validationSchema,
   handleSubmit(values, { resetForm, props: { onSubmit } }) {
     onSubmit(values);
     resetForm({ content: '' });

@@ -41,7 +41,8 @@ PostForm.propTypes = {
   handleChange: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  values: PropTypes.object
+  values: PropTypes.object,
+  post: PropTypes.object
 };
 
 const PostFormWithFormik = withFormik({
@@ -50,10 +51,10 @@ const PostFormWithFormik = withFormik({
     content: (props.post && props.post.content) || ''
   }),
   validationSchema: validationSchema,
-  handleSubmit(values, { resetForm, props: { onSubmit } }) {
+  handleSubmit(values, { props: { onSubmit } }) {
     onSubmit(values);
-    resetForm();
   },
+  enableReinitialize: true,
   displayName: 'PostForm ' // helps with React DevTools
 });
 

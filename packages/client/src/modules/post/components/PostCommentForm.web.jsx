@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import Yup from 'yup';
 import Field from '../../../utils/FieldAdaptor';
 import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
 
-const validationSchema = Yup.object().shape({
-  content: Yup.string().required('Comment is required!')
-});
-
-const PostCommentForm = ({ values, handleSubmit, submitting, initialValues, handleChange }) => {
+const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) => {
   let operation = 'Add';
   if (initialValues.id !== null) {
     operation = 'Edit';
@@ -25,7 +20,7 @@ const PostCommentForm = ({ values, handleSubmit, submitting, initialValues, hand
           <Field name="content" component={RenderField} type="text" value={values.content} onChange={handleChange} />
         </Col>
         <Col xs={2}>
-          <Button color="primary" type="submit" className="float-right" disabled={submitting}>
+          <Button color="primary" type="submit" className="float-right" disabled={false}>
             Save
           </Button>
         </Col>
@@ -40,17 +35,19 @@ PostCommentForm.propTypes = {
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  values: PropTypes.object
+  values: PropTypes.object,
+  content: PropTypes.string,
+  changeContent: PropTypes.func
 };
 
 const PostCommentFormWithFormik = withFormik({
-  mapPropsToValues: () => ({ content: '' }),
-  validationSchema: validationSchema,
+  mapPropsToValues: props => ({ content: (props.comment && props.comment.content) || '' }),
   handleSubmit(values, { resetForm, props: { onSubmit } }) {
     onSubmit(values);
     resetForm({ content: '' });
   },
-  displayName: 'CommentForm ' // helps with React DevTools
+  displayName: 'CommentForm ', // helps with React DevTools,
+  enableReinitialize: true
 });
 
 export default PostCommentFormWithFormik(PostCommentForm);

@@ -160,7 +160,7 @@ describe('Posts and comments example UI works', () => {
     postLinks.last().simulate('click', { button: 0 });
   });
 
-  step('Clicking on post opens post form', done => {
+  step('Clicking on post opens post form', () => {
     const postForm = content.find('form[name="post"]');
 
     expect(content.text()).to.include('Edit Post');

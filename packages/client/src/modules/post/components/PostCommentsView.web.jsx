@@ -12,7 +12,8 @@ export default class PostCommentsView extends React.PureComponent {
     editComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
     subscribeToMore: PropTypes.func.isRequired,
-    addCommentClient: PropTypes.func.isRequired
+    addCommentClient: PropTypes.func.isRequired,
+    content: PropTypes.string
   };
 
   hendleEditComment = (id, content) => {

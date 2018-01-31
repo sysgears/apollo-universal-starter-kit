@@ -9,7 +9,8 @@ export default class FieldAdapter extends Component {
   static propTypes = {
     component: PropTypes.func,
     name: PropTypes.string.isRequired,
-    value: PropTypes.string
+    value: PropTypes.string,
+    defaultValue: PropTypes.string
   };
 
   constructor(props, context) {
@@ -21,7 +22,7 @@ export default class FieldAdapter extends Component {
 
   render() {
     const { formik } = this.context;
-    const { component, name, value } = this.props;
+    const { component, name, value, defaultValue } = this.props;
 
     const meta = {
       touched: formik.touched[name],
@@ -32,7 +33,8 @@ export default class FieldAdapter extends Component {
       onChange: formik.handleChange,
       onBlur: formik.handleBlur,
       name,
-      value
+      value,
+      defaultValue
     };
 
     return React.createElement(component, {

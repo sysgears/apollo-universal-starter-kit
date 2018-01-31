@@ -118,12 +118,12 @@ export default compose(
         await mutate({
           variables: { input: { id, title, content } }
         });
-
+        console.log('====');
         if (history) {
-          return history.push('/posts');
+          //return history.push('/posts');
         }
         if (navigation) {
-          return navigation.goBack();
+          //return navigation.goBack();
         }
       }
     })

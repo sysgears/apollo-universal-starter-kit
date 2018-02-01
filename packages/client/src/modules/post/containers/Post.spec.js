@@ -328,7 +328,7 @@ describe('Posts and comments example UI works', () => {
     expect(content.find('.delete-comment')).has.lengthOf(6);
   });
 
-  step('Comment editing works', done => {
+  step('Comment editing works', async done => {
     mutations.editComment = (obj, { input }) => {
       expect(input.postId).to.equal(3);
       expect(input.content).to.equal('Edited comment 2');
@@ -338,22 +338,20 @@ describe('Posts and comments example UI works', () => {
     const editButtons = content.find('.edit-comment');
     expect(editButtons).has.lengthOf(6);
     editButtons.last().simulate('click');
+    editButtons.last().simulate('click');
     const commentForm = content.find('form[name="comment"]');
-    // TODO this test case
     expect(
       commentForm
         .find('[name="content"]')
         .last()
         .instance().value
-    ).to.equal(''); //must be Post comment 2
+    ).to.equal('Post comment 2'); //must be Post comment 2
     commentForm
       .find('[name="content"]')
       .last()
       .simulate('change', { target: { value: 'Edited comment 2' } });
     commentForm.last().simulate('submit');
-
     expect(content.text()).to.include('Edited comment 2');
-    done();
   });
 
   step('Clicking back button takes to post list', () => {

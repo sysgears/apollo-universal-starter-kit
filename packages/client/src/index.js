@@ -3,7 +3,7 @@ import { render, hydrate } from 'react-native';
 // Work around warning about React.hydrate during SSR
 import AppContainer from 'react-native-web/dist/apis/AppRegistry/AppContainer';
 
-// Virtual module, see webpack-virtual-modules usage in webpack.run.js
+// Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import 'backend_reload';
 

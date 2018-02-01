@@ -266,8 +266,6 @@ describe('Posts and comments example UI works', () => {
       .last()
       .simulate('change', { target: { name: 'content', value: 'Post comment 24' } });
     commentForm.last().simulate('submit');
-    //done();
-    //expect(content.text()).to.include('Post comment 24');
   });
 
   step('Comment adding works after submit', () => {

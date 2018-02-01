@@ -25,7 +25,7 @@ const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) 
           <Field name="content" component={RenderField} type="text" value={values.content} onChange={handleChange} />
         </Col>
         <Col xs={2}>
-          <Button color="primary" type="submit" className="float-right" disabled={false}>
+          <Button color="primary" type="submit" className="float-right">
             Save
           </Button>
         </Col>
@@ -48,8 +48,8 @@ PostCommentForm.propTypes = {
 const PostCommentFormWithFormik = withFormik({
   mapPropsToValues: props => ({ content: (props.comment && props.comment.content) || '' }),
   validationSchema: validationSchema,
-  handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    onSubmit(values);
+  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+    await onSubmit(values);
     resetForm({ content: '' });
   },
   displayName: 'CommentForm', // helps with React DevTools,

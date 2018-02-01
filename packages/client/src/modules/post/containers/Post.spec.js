@@ -266,6 +266,8 @@ describe('Posts and comments example UI works', () => {
       .last()
       .simulate('change', { target: { name: 'content', value: 'Post comment 24' } });
     commentForm.last().simulate('submit');
+    //done();
+    //expect(content.text()).to.include('Post comment 24');
   });
 
   step('Comment adding works after submit', () => {
@@ -340,7 +342,7 @@ describe('Posts and comments example UI works', () => {
     const editButtons = content.find('.edit-comment');
     expect(editButtons).has.lengthOf(6);
     editButtons.last().simulate('click');
-
+    //done();
     const commentForm = content.find('form[name="comment"]');
     expect(
       commentForm
@@ -352,11 +354,15 @@ describe('Posts and comments example UI works', () => {
       .find('[name="content"]')
       .last()
       .simulate('change', { target: { name: 'content', value: 'Edited comment 2' } });
-    commentForm.last().simulate('submit');
-    //expect(content.text()).to.include('Edited comment 2');
+    commentForm.simulate('submit');
+  });
+
+  step('Comment editing works', () => {
+    expect(content.text()).to.include('Edited comment 2');
   });
 
   step('Clicking back button takes to post list', () => {
+    expect(content.text()).to.include('Edited comment 2');
     const backButton = content.find('#back-button');
     backButton.last().simulate('click', { button: 0 });
     app.update();

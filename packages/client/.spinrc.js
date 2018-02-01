@@ -26,7 +26,6 @@ const config = {
     cache: '../../.cache',
     ssr: true,
     webpackDll: true,
-    devProxy: true,
     reactHotLoader: false,
     persistGraphQL: false,
     frontendRefreshOnBackendChange: true,
@@ -36,6 +35,8 @@ const config = {
     }
   }
 };
+
+config.options.devProxy = config.options.ssr;
 
 if (process.env.NODE_ENV === 'production') {
   config.options.defines.__BACKEND_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';

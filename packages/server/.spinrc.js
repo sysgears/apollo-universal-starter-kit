@@ -24,7 +24,6 @@ const config = {
     cache: '../../.cache',
     ssr: true,
     webpackDll: true,
-    devProxy: true,
     reactHotLoader: false,
     persistGraphQL: false,
     frontendRefreshOnBackendChange: true,
@@ -34,6 +33,8 @@ const config = {
     }
   }
 };
+
+config.options.devProxy = config.options.ssr;
 
 if (process.env.NODE_ENV === 'production') {
   // Generating source maps for production will slowdown compilation for roughly 25%

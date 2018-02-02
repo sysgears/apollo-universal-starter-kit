@@ -28,3 +28,28 @@ export const alphaNumeric = value =>
 // Phone number validation
 export const phoneNumber = value =>
   value && !/^(0|[1-9][0-9]{9})$/i.test(value) ? 'Invalid phone number, must be 10 digits' : undefined;
+
+export const validateForm = (fValues, fSchema) => {
+  let errors = {};
+
+  const validateForm1 = (values, schema, collector) => {
+    Object.keys(schema)
+      .filter(v => schema.hasOwnProperty(v))
+      .forEach(v => {
+        const s = schema[v];
+        if (Array.isArray(s)) {
+          s.forEach(validator => {
+            const result = validator(values[v]);
+            if (result) {
+              collector[v] = result;
+            }
+          });
+        } else {
+          validateForm1(values[v], schema[v], collector);
+        }
+      });
+    return collector;
+  };
+
+  return validateForm1(fValues, fSchema, errors);
+};

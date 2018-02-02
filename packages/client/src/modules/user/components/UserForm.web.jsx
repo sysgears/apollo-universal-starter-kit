@@ -2,49 +2,28 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, Form, Formik } from 'formik';
 import { RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
-import { email, minLength } from '../../../../../common/validation';
+import { email, minLength, required, validateForm } from '../../../../../common/validation';
 
 import settings from '../../../../../../settings';
 
-const validate = values => {
-  const errors = {};
-  const fields = ['username', 'email', 'password', 'passwordConfirmation'];
-  fields.forEach(field => {
-    if (!values[field]) {
-      errors[field] = 'Required';
-    } else if (values.email && email(values.email)) {
-      errors.email = email(values.email);
-    } else if (values.password && minLength(5)(values.password)) {
-      errors.password = minLength(5)(values.password);
-    } else if (values.passwordConfirmation && minLength(5)(values.passwordConfirmation)) {
-      errors.passwordConfirmation = minLength(5)(values.passwordConfirmation);
-    } else if (values.username && minLength(3)(values.username)) {
-      errors.username = minLength(3)(values.username);
-    }
-  });
-  if (values.profile && !values.profile.firstName) {
-    errors.firstName = 'Required';
+const userFormSchema = {
+  username: [required, minLength(3)],
+  email: [required, email],
+  password: [minLength(5)],
+  passwordConfirmation: [minLength(5)],
+  profile: {
+    firstName: [required],
+    lastName: [required]
   }
-  if (values.profile && !values.profile.lastName) {
-    errors.lastName = 'Required';
-  }
-  if (!values.profile) {
-    errors.lastName = 'Required';
-    errors.firstName = 'Required';
-  }
-  if (values.password !== values.passwordConfirmation) {
-    errors.passwordConfirmation = 'Passwords do not match';
-  }
-  return errors;
 };
+
+const validate = values => validateForm(values, userFormSchema);
 
 export const UserForm = ({ initialValues, onSubmit, error }) => (
   <div>
     <h1>My Cool Form</h1>
     <Formik
-      onSubmit={values => {
-        return onSubmit(values);
-      }}
+      onSubmit={values => onSubmit(values)}
       validate={values => validate(values)}
       initialValues={{
         ...initialValues,

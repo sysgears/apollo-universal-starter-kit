@@ -21,7 +21,6 @@ const validate = values => validateForm(values, userFormSchema);
 
 export const UserForm = ({ initialValues, onSubmit, error }) => (
   <div>
-    <h1>My Cool Form</h1>
     <Formik
       onSubmit={values => onSubmit(values)}
       validate={values => validate(values)}

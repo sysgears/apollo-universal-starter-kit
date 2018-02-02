@@ -1,9 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Form from 'antd/lib/form';
-import Switch from 'antd/lib/switch';
+import { FormItem, Switch } from './index';
 
-const FormItem = Form.Item;
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 6 }
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12 }
+  }
+};
 
 const RenderField = ({ input: { value, ...restInput }, label, meta: { touched, error } }) => {
   let validateStatus = '';
@@ -12,7 +20,7 @@ const RenderField = ({ input: { value, ...restInput }, label, meta: { touched, e
   }
 
   return (
-    <FormItem label={label} validateStatus={validateStatus} help={touched && error}>
+    <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
       <div>
         <Switch defaultChecked={!!value} {...restInput} />
       </div>

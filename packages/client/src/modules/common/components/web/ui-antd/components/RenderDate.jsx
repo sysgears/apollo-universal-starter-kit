@@ -1,11 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Form from 'antd/lib/form';
 import DatePicker from 'antd/lib/date-picker';
 import moment from 'moment';
+import { FormItem } from './index';
 
 const dateFormat = 'YYYY-MM-DD';
-const FormItem = Form.Item;
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 6 }
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12 }
+  }
+};
 
 const RenderDate = ({ input: { value, onChange, ...inputRest }, label, meta: { touched, error } }) => {
   let validateStatus = '';
@@ -19,7 +29,7 @@ const RenderDate = ({ input: { value, onChange, ...inputRest }, label, meta: { t
   }
 
   return (
-    <FormItem label={label} validateStatus={validateStatus} help={touched && error}>
+    <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
       <div>
         <DatePicker
           value={value}

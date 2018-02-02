@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import { ListView } from '../../common/components/crud';
 import { $Module$ as $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
 import $MODULE$S_QUERY from '../graphql/$Module$sQuery.graphql';
+import UPDATE_$MODULE$ from '../graphql/Update$Module$.graphql';
 import DELETE_$MODULE$ from '../graphql/Delete$Module$.graphql';
 import SORT_$MODULE$S from '../graphql/Sort$Module$s.graphql';
 import DELETEMANY_$MODULE$S from '../graphql/DeleteMany$Module$s.graphql';
+import UPDATEMANY_$MODULE$S from '../graphql/UpdateMany$Module$s.graphql';
 
 class $Module$ extends React.Component {
   render() {
@@ -51,12 +53,31 @@ const $Module$WithApollo = compose(
       return { loading, data: $module$sConnection, loadMoreRows, refetch, errors: error ? error.graphQLErrors : null };
     }
   }),
+  graphql(UPDATE_$MODULE$, {
+    props: ({ ownProps: { refetch }, mutate }) => ({
+      updateEntry: async (data, where) => {
+        try {
+          const { data: { update$Module$ } } = await mutate({
+            variables: { data, where }
+          });
+
+          if (update$Module$.errors) {
+            return { errors: update$Module$.errors };
+          }
+
+          refetch();
+        } catch (e) {
+          console.log(e.graphQLErrors);
+        }
+      }
+    })
+  }),
   graphql(DELETE_$MODULE$, {
     props: ({ ownProps: { refetch }, mutate }) => ({
-      deleteEntry: async id => {
+      deleteEntry: async where => {
         try {
           const { data: { delete$Module$ } } = await mutate({
-            variables: { where: { id } }
+            variables: { where }
           });
 
           if (delete$Module$.errors) {
@@ -91,14 +112,33 @@ const $Module$WithApollo = compose(
   }),
   graphql(DELETEMANY_$MODULE$S, {
     props: ({ ownProps: { refetch }, mutate }) => ({
-      deleteManyEntries: async id_in => {
+      deleteManyEntries: async where => {
         try {
           const { data: { deleteMany$Module$s } } = await mutate({
-            variables: { where: { id_in } }
+            variables: { where }
           });
 
           if (deleteMany$Module$s.errors) {
             return { errors: deleteMany$Module$s.errors };
+          }
+
+          refetch();
+        } catch (e) {
+          console.log(e.graphQLErrors);
+        }
+      }
+    })
+  }),
+  graphql(UPDATEMANY_$MODULE$S, {
+    props: ({ ownProps: { refetch }, mutate }) => ({
+      updateManyEntries: async (data, where) => {
+        try {
+          const { data: { updateMany$Module$s } } = await mutate({
+            variables: { data, where }
+          });
+
+          if (updateMany$Module$s.errors) {
+            return { errors: updateMany$Module$s.errors };
           }
 
           refetch();

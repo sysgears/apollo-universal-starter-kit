@@ -5,10 +5,31 @@ import { startCase, isEqual } from 'lodash';
 import { Field, FieldArray } from 'redux-form';
 import { Link } from 'react-router-dom';
 
-import { RenderField, RenderSelect, RenderDate, RenderSwitch, Button, Popconfirm, Switch } from './components/web';
+import {
+  RenderField,
+  RenderSelect,
+  RenderDate,
+  RenderSwitch,
+  Button,
+  Popconfirm,
+  Switch,
+  FormItem,
+  Row,
+  Col,
+  Input,
+  Icon
+} from './components/web';
 import { required } from '../../../../common/validation';
 
-export const createColumnFields = (schema, link, orderBy, renderOrderByArrow, hendleDelete) => {
+export const createColumnFields = (
+  schema,
+  link,
+  orderBy,
+  renderOrderByArrow,
+  hendleUpdate,
+  hendleDelete,
+  onCellChange
+) => {
   let columns = [];
 
   for (const key of schema.keys()) {
@@ -23,6 +44,7 @@ export const createColumnFields = (schema, link, orderBy, renderOrderByArrow, he
           ),
           dataIndex: 'id',
           key: 'id',
+          width: 100,
           render: (text, record) => (
             <Link className="link" to={`/${link}/${record.id}`}>
               {text}
@@ -46,6 +68,7 @@ export const createColumnFields = (schema, link, orderBy, renderOrderByArrow, he
             ),
             dataIndex: key,
             key: key,
+            width: 300,
             render: text => {
               return text[sortBy];
             }
@@ -59,8 +82,11 @@ export const createColumnFields = (schema, link, orderBy, renderOrderByArrow, he
             ),
             dataIndex: key,
             key: key,
-            render: text => {
-              return <Switch defaultChecked={text} disabled />;
+            width: 100,
+            render: (text, record) => {
+              const data = {};
+              data[key] = !text;
+              return <Switch checked={text} onClick={() => hendleUpdate(data, record.id)} />;
             }
           });
         } else if (value.type.constructor !== Array) {
@@ -71,7 +97,10 @@ export const createColumnFields = (schema, link, orderBy, renderOrderByArrow, he
               </a>
             ),
             dataIndex: key,
-            key: key
+            key: key,
+            render: (text, record) => (
+              <EditableCell value={text} onChange={onCellChange('name', record.id, hendleUpdate)} />
+            )
           });
         }
       }
@@ -81,6 +110,7 @@ export const createColumnFields = (schema, link, orderBy, renderOrderByArrow, he
   columns.push({
     title: 'Actions',
     key: 'actions',
+    width: 100,
     render: (text, record) => (
       <Popconfirm title="Sure to delete?" onConfirm={() => hendleDelete(record.id)}>
         <Button color="primary" size="sm">
@@ -93,23 +123,40 @@ export const createColumnFields = (schema, link, orderBy, renderOrderByArrow, he
   return columns;
 };
 
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0
+    },
+    sm: {
+      span: 16,
+      offset: 6
+    }
+  }
+};
+
 const RenderEntry = ({ fields, formdata, schema, meta: { error, submitFailed } }) => (
-  <ul>
-    <li>
-      <Button color="primary" size="sm" onClick={() => fields.push({})}>
-        Add Entry
-      </Button>
-      {submitFailed && error && <span>{error}</span>}
-    </li>
-    {fields.map((field, index) => (
-      <li key={index}>
-        <Button color="primary" size="sm" onClick={() => fields.remove(index)}>
-          Delete
+  <Row>
+    <Col span={12} offset={6}>
+      {fields.map((field, index) => (
+        <div key={index} className="field-array-form">
+          {createFormFields(schema, formdata, [], `${field}.`)}
+          <FormItem {...tailFormItemLayout}>
+            <Button color="primary" size="sm" onClick={() => fields.remove(index)}>
+              Delete
+            </Button>
+          </FormItem>
+        </div>
+      ))}
+      <FormItem {...tailFormItemLayout}>
+        {submitFailed && error && <span>{error}</span>}
+        <Button color="dashed" onClick={() => fields.push({})} style={{ width: '180px' }}>
+          Add field
         </Button>
-        {createFormFields(schema, formdata, `${field}.`)}
-      </li>
-    ))}
-  </ul>
+      </FormItem>
+    </Col>
+  </Row>
 );
 
 RenderEntry.propTypes = {
@@ -119,11 +166,15 @@ RenderEntry.propTypes = {
   meta: PropTypes.object
 };
 
-export const createFormFields = (schema, formdata, prefix = '') => {
+export const createFormFields = (schema, formdata, only = [], prefix = '') => {
   let fields = [];
 
   for (const key of schema.keys()) {
     const value = schema.values[key];
+
+    if (only.length > 0 && !only.includes(key)) {
+      continue;
+    }
 
     if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
       let validate = [];
@@ -227,3 +278,46 @@ export const pickInputFields = (schema, values, node = null) => {
 
   return inputValues;
 };
+
+class EditableCell extends React.Component {
+  static propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired
+  };
+
+  state = {
+    value: this.props.value,
+    editable: false
+  };
+  handleChange = e => {
+    const value = e.target.value;
+    this.setState({ value });
+  };
+  check = () => {
+    this.setState({ editable: false });
+    if (this.props.onChange) {
+      this.props.onChange(this.state.value);
+    }
+  };
+  edit = () => {
+    this.setState({ editable: true });
+  };
+  render() {
+    const { value, editable } = this.state;
+    return (
+      <div className="editable-cell">
+        {editable ? (
+          <div className="editable-cell-input-wrapper">
+            <Input value={value} onChange={this.handleChange} onPressEnter={this.check} />
+            <Icon type="check" className="editable-cell-icon-check" onClick={this.check} />
+          </div>
+        ) : (
+          <div className="editable-cell-text-wrapper">
+            {value || ' '}
+            <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
+          </div>
+        )}
+      </div>
+    );
+  }
+}

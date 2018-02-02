@@ -34,7 +34,7 @@ export default pubsub => ({
       return ctx.$Module$.sort(args);
     },
     updateMany$Module$s: (parent, args, ctx) => {
-      return ctx.$Module$.deleteMany(args);
+      return ctx.$Module$.updateMany(args);
     },
     deleteMany$Module$s: (parent, args, ctx) => {
       return ctx.$Module$.deleteMany(args);

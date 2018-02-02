@@ -2,10 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { reduxForm } from 'redux-form';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Table, Button } from '../web';
-import { createColumnFields } from '../../util';
+import { Table, Button, Popconfirm, Form, FormItem, Row, Col } from '../web';
+import { createColumnFields, createFormFields } from '../../util';
 
 function dragDirection(dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
@@ -94,18 +95,22 @@ BodyRow = DropTarget('row', rowTarget, (connect, monitor) => ({
   }))(BodyRow)
 );
 
-class ListView extends React.PureComponent {
+class ListView extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     data: PropTypes.object,
     orderBy: PropTypes.object,
     onOrderBy: PropTypes.func.isRequired,
+    updateEntry: PropTypes.func.isRequired,
     deleteEntry: PropTypes.func.isRequired,
     sortEntries: PropTypes.func.isRequired,
     deleteManyEntries: PropTypes.func.isRequired,
+    updateManyEntries: PropTypes.func.isRequired,
     loadMoreRows: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
-    link: PropTypes.string.isRequired
+    link: PropTypes.string.isRequired,
+    handleSubmit: PropTypes.func,
+    submitting: PropTypes.bool
   };
 
   state = {
@@ -151,15 +156,33 @@ class ListView extends React.PureComponent {
     }
   };
 
+  hendleUpdate = (data, id) => {
+    const { updateEntry } = this.props;
+    updateEntry(data, { id });
+  };
+
   hendleDelete = id => {
     const { deleteEntry } = this.props;
-    deleteEntry(id);
+    deleteEntry({ id });
+  };
+
+  onCellChange = (key, id, updateEntry) => {
+    return value => {
+      updateEntry({ [key]: value }, id);
+    };
   };
 
   hendleDeleteMany = () => {
     const { deleteManyEntries } = this.props;
     const { selectedRowKeys } = this.state;
-    deleteManyEntries(selectedRowKeys);
+    deleteManyEntries({ id_in: selectedRowKeys });
+    this.setState({ selectedRowKeys: [] });
+  };
+
+  hendleUpdateMany = values => {
+    const { updateManyEntries } = this.props;
+    const { selectedRowKeys } = this.state;
+    updateManyEntries(values, { id_in: selectedRowKeys });
     this.setState({ selectedRowKeys: [] });
   };
 
@@ -187,7 +210,7 @@ class ListView extends React.PureComponent {
   };
 
   render() {
-    const { loading, data, loadMoreRows, schema, link } = this.props;
+    const { loading, data, loadMoreRows, schema, link, handleSubmit } = this.props;
     const { selectedRowKeys } = this.state;
     const hasSelected = selectedRowKeys.length > 0;
 
@@ -201,46 +224,85 @@ class ListView extends React.PureComponent {
 
     const footer = () => {
       return (
-        <div>
-          <div>
-            <span style={{ marginRight: 8 }}>
-              {data && (
-                <small>
-                  ({data.edges ? data.edges.length : 0} / {data.pageInfo.totalCount})
-                </small>
-              )}
-            </span>
-            <Button color="primary" onClick={this.hendleDeleteMany} disabled={!hasSelected} loading={loading}>
-              Delete
-            </Button>
-            <span style={{ marginLeft: 8 }}>{hasSelected ? `(${selectedRowKeys.length} selected)` : ''}</span>
-          </div>
-        </div>
+        <Row>
+          <Col span={1}>
+            {data && (
+              <div>
+                <div>
+                  <small>
+                    ({data.edges ? data.edges.length : 0} / {data.pageInfo.totalCount})
+                  </small>
+                </div>
+                <div>
+                  <small>{hasSelected ? `(${selectedRowKeys.length} selected)` : ''}</small>
+                </div>
+              </div>
+            )}
+          </Col>
+          <Col span={2}>
+            <Popconfirm title="Sure to delete?" onConfirm={this.hendleDeleteMany}>
+              <Button color="primary" disabled={!hasSelected} loading={loading && !data}>
+                Delete
+              </Button>
+            </Popconfirm>
+          </Col>
+          <Col span={21}>
+            <Form layout="inline" name="post" onSubmit={handleSubmit(this.hendleUpdateMany)}>
+              {createFormFields(schema, {}, ['name', 'split'])}
+              {/*error && <Alert color="error">{error}</Alert>*/}
+              <FormItem>
+                <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>
+                  Update
+                </Button>
+              </FormItem>
+            </Form>
+          </Col>
+        </Row>
       );
     };
 
-    const columns = createColumnFields(schema, link, this.orderBy, this.renderOrderByArrow, this.hendleDelete);
+    const columns = createColumnFields(
+      schema,
+      link,
+      this.orderBy,
+      this.renderOrderByArrow,
+      this.hendleUpdate,
+      this.hendleDelete,
+      this.onCellChange
+    );
+
+    let tableProps = {
+      dataSource: data ? data.edges : null,
+      columns: columns,
+      agination: false,
+      size: 'small',
+      rowSelection: this.rowSelection,
+      loading: loading && !data,
+      title: title,
+      footer: footer
+    };
+
+    // only include this props if table includes rank, taht is used for sorting
+    if (schema.keys().includes('rank')) {
+      tableProps = {
+        ...tableProps,
+        components: this.components,
+        onRow: (record, index) => ({
+          index,
+          moveRow: this.moveRow
+        })
+      };
+    }
+
     return (
       <div>
-        <Table
-          dataSource={data ? data.edges : null}
-          columns={columns}
-          pagination={false}
-          size="small"
-          rowSelection={this.rowSelection}
-          loading={loading && !data}
-          title={title}
-          footer={footer}
-          components={this.components}
-          onRow={(record, index) => ({
-            index,
-            moveRow: this.moveRow
-          })}
-        />
+        {React.createElement(Table, tableProps, null)}
         {data && this.renderLoadMore(data, loadMoreRows)}
       </div>
     );
   }
 }
 
-export default DragDropContext(HTML5Backend)(ListView);
+export default reduxForm({
+  form: 'formUpdateMultiple'
+})(DragDropContext(HTML5Backend)(ListView));

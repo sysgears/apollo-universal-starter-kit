@@ -1,10 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Form from 'antd/lib/form';
 import Select from 'antd/lib/select';
+import { FormItem } from './index';
 
-const FormItem = Form.Item;
 const Option = Select.Option;
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 6 }
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12 }
+  }
+};
 
 const RenderField = ({ input: { value, ...inputRest }, label, data, meta: { touched, error } }) => {
   let validateStatus = '';
@@ -19,7 +29,7 @@ const RenderField = ({ input: { value, ...inputRest }, label, data, meta: { touc
   ));
 
   return (
-    <FormItem label={label} validateStatus={validateStatus} help={error}>
+    <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={error}>
       <div>
         <Select
           showSearch

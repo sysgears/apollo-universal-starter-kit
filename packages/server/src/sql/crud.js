@@ -269,26 +269,22 @@ export default class Crud {
   }
 
   _updateMany({ data, where: { id_in } }) {
-    console.log('_updateMany: data: ', data);
-    console.log('_updateMany: id_in: ', id_in);
-    //return knex(`${this.prefix}${this.tableName}`)
-    //  .whereIn('id', id_in)
-    //  .del();
+    return knex(`${this.prefix}${this.tableName}`)
+      .update(decamelizeKeys(data))
+      .whereIn('id', id_in);
   }
 
   async updateMany(args) {
     try {
-      console.log('updateMany: ', args);
       const e = new FieldError();
-      e.setError('update', 'Not yet implemented. Please try again later.');
-      /*const deleteCount = await this._updateMany(args);
+      const updateCount = await this._updateMany(args);
 
-      if (deleteCount > 0) {
-        return { count: deleteCount };
+      if (updateCount > 0) {
+        return { count: updateCount };
       } else {
-        e.setError('delete', 'Could not delete any of selected Node. Please try again later.');
+        e.setError('update', 'Could not update any of selected Node. Please try again later.');
         e.throwIf();
-      }*/
+      }
     } catch (e) {
       return { errors: e };
     }

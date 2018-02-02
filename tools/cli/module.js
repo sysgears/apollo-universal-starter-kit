@@ -33,6 +33,36 @@ function renameFiles(destinationPath, templatePath, module, location) {
   });
 }
 
+function generateField(value, update = false) {
+  let result = '';
+  switch (value.type.name) {
+    case 'Boolean':
+      result += 'Boolean';
+      break;
+    case 'ID':
+      result += 'ID';
+      break;
+    case 'Integer':
+      result += 'Int';
+      break;
+    case 'Number':
+      result += 'Float';
+      break;
+    case 'String':
+      result += 'String';
+      break;
+    case 'Date':
+      result += 'Date';
+      break;
+  }
+
+  if (!update && !value.optional) {
+    result += '!';
+  }
+
+  return result;
+}
+
 function copyFiles(logger, templatePath, module, action, tablePrefix, location) {
   logger.info(`Copying ${location} files…`);
 
@@ -184,14 +214,12 @@ function updateSchema(logger, module) {
         if (value.type.isSchema) {
           let required = value.optional ? '' : '!';
           inputCreate += `  ${key}Id: Int${required}\n`;
-          inputUpdate += `  ${key}Id: Int${required}\n`;
+          inputUpdate += `  ${key}Id: Int\n`;
           moduleData += `  ${key}s(limit: Int, orderBy: OrderByInput): [${value.type.name}]\n`;
         } else if (value.type.constructor !== Array) {
           if (key !== 'id') {
-            inputCreate +=
-              `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name + '.' + key, value, []) + '\n';
-            inputUpdate +=
-              `  ${key}: ` + new GraphQLGenerator()._generateField(schema.name + '.' + key, value, []) + '\n';
+            inputCreate += `  ${key}: ${generateField(value)}\n`;
+            inputUpdate += `  ${key}: ${generateField(value, true)}\n`;
           }
         } else if (value.type.constructor === Array) {
           inputCreate += `  ${key}: ${pascalize(key)}CreateManyInput\n`;
@@ -204,21 +232,26 @@ function updateSchema(logger, module) {
             }
           }
 
+          let singleKey = key;
+          if (key.slice(-1) === 's') {
+            singleKey = key.slice(0, -1);
+          }
+
           manyInput += `
 
 input ${pascalize(key)}CreateManyInput {
-  create: [${pascalize(key)}CreateInput!]
+  create: [${pascalize(singleKey)}CreateInput!]
 }
 
 input ${pascalize(key)}UpdateManyInput {
-  create: [${pascalize(key)}CreateInput!]
-  delete: [${pascalize(key)}WhereUniqueInput!]
-  update: [${pascalize(key)}UpdateWhereInput!]
+  create: [${pascalize(singleKey)}CreateInput!]
+  delete: [${pascalize(singleKey)}WhereUniqueInput!]
+  update: [${pascalize(singleKey)}UpdateWhereInput!]
 }
 
-input ${pascalize(key)}UpdateWhereInput {
-  where: ${pascalize(key)}WhereUniqueInput!
-  data: ${pascalize(key)}UpdateInput!
+input ${pascalize(singleKey)}UpdateWhereInput {
+  where: ${pascalize(singleKey)}WhereUniqueInput!
+  data: ${pascalize(singleKey)}UpdateInput!
 }`;
         }
       }
@@ -361,10 +394,10 @@ input ${pascalize(key)}UpdateWhereInput {
                   remotecolumn = remoteKey;
                 }
               }
-              graphql += `  ${remoteKey} {\n`;
-              graphql += `    id\n`;
-              graphql += `    ${remotecolumn}\n`;
-              graphql += `  }\n`;
+              graphql += `    ${remoteKey} {\n`;
+              graphql += `      id\n`;
+              graphql += `      ${remotecolumn}\n`;
+              graphql += `    }\n`;
             } else {
               graphql += `    ${remoteKey}\n`;
             }

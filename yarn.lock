@@ -12299,9 +12299,34 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.0, spinjs@^0.4.95:
+spinjs@^0.4.0:
   version "0.4.95"
   resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.95.tgz#74ecb762a15e07773e9ed8b49eee5d006bbbdf6a"
+  dependencies:
+    babel-polyfill "^6.26.0"
+    babel-preset-env "^1.6.1"
+    babel-preset-flow "^6.23.0"
+    babel-register "^6.26.0"
+    connect-cors "^0.5.6"
+    containerized "^1.0.2"
+    debug "^3.1.0"
+    detect-port "^1.2.2"
+    inquirer "^3.3.0"
+    ip "^1.1.5"
+    lodash "^4.17.4"
+    minilog "^3.1.0"
+    mkdirp "^0.5.1"
+    require-relative "^0.8.7"
+    serve-static "^1.13.1"
+    source-list-map "^2.0.0"
+    source-map-support "^0.4.15"
+    webpack-merge "^4.1.0"
+    webpack-sources "^1.0.1"
+    yargs "^8.0.2"
+
+spinjs@^0.4.97:
+  version "0.4.97"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.97.tgz#386ebabe9306e6ebf8ac211d9f8ba29501053bce"
   dependencies:
     babel-polyfill "^6.26.0"
     babel-preset-env "^1.6.1"

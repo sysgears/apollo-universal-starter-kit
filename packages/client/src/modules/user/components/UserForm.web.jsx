@@ -9,7 +9,7 @@ import settings from '../../../../../../settings';
 
 const validate = values => {
   const errors = {};
-  console.log('valid', values);
+  console.log('validate values', values);
   const fields = ['username', 'email', 'password', 'passwordConfirmation'];
   fields.forEach(field => {
     if (!values[field]) {
@@ -24,6 +24,16 @@ const validate = values => {
       errors.username = minLength(3)(values.username);
     }
   });
+  if (values.profile && !values.profile.firstName) {
+    errors.firstName = 'Required';
+  }
+  if (values.profile && !values.profile.lastName) {
+    errors.lastName = 'Required';
+  }
+  if (!values.profile) {
+    errors.lastName = 'Required';
+    errors.firstName = 'Required';
+  }
   if (values.password !== values.passwordConfirmation) {
     errors.passwordConfirmation = 'Passwords do not match';
   }
@@ -47,8 +57,24 @@ export const UserForm = ({ initialValues, onSubmit }) => (
     >
       {props => {
         const { values, handleChange, touched, errors, setFieldValue, setTouched } = props;
+        const handleSetTouch = name => {
+          setTouched({ ...touched, [name]: true });
+        };
         return (
-          <Form name="user">
+          <Form
+            name="user"
+            onSubmit={e => {
+              e.preventDefault();
+              setTouched({
+                username: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+                password: true,
+                passwordConfirmation: true
+              });
+            }}
+          >
             <Field
               name="username"
               component={RenderField}
@@ -58,7 +84,7 @@ export const UserForm = ({ initialValues, onSubmit }) => (
                 value: values.username || '',
                 name: 'username',
                 onChange: handleChange,
-                onBlur: () => setTouched({ ...touched, username: true })
+                onBlur: () => handleSetTouch('username')
               }}
               meta={{ touched: touched.username, error: errors.username || '' }}
             />
@@ -70,7 +96,8 @@ export const UserForm = ({ initialValues, onSubmit }) => (
               input={{
                 value: values.email || '',
                 name: 'email',
-                onChange: handleChange
+                onChange: handleChange,
+                onBlur: () => handleSetTouch('email')
               }}
               meta={{ touched: touched.email, error: errors.email || '' }}
             />
@@ -108,7 +135,8 @@ export const UserForm = ({ initialValues, onSubmit }) => (
               input={{
                 value: (values.profile && values.profile.firstName) || '',
                 name: 'firstName',
-                onChange: e => setFieldValue('profile', { ...values.profile, firstName: e.target.value })
+                onChange: e => setFieldValue('profile', { ...values.profile, firstName: e.target.value }),
+                onBlur: () => handleSetTouch('firstName')
               }}
               meta={{ touched: touched.firstName, error: errors.firstName || '' }}
             />
@@ -121,7 +149,8 @@ export const UserForm = ({ initialValues, onSubmit }) => (
               input={{
                 value: (values.profile && values.profile.lastName) || '',
                 name: 'lastName',
-                onChange: e => setFieldValue('profile', { ...values.profile, lastName: e.target.value })
+                onChange: e => setFieldValue('profile', { ...values.profile, lastName: e.target.value }),
+                onBlur: () => handleSetTouch('lastName')
               }}
               meta={{ touched: touched.lastName, error: errors.lastName || '' }}
             />
@@ -151,7 +180,8 @@ export const UserForm = ({ initialValues, onSubmit }) => (
               input={{
                 value: values.password || '',
                 name: 'password',
-                onChange: handleChange
+                onChange: handleChange,
+                onBlur: () => handleSetTouch('password')
               }}
               meta={{ touched: touched.password, error: errors.password || '' }}
             />
@@ -163,9 +193,10 @@ export const UserForm = ({ initialValues, onSubmit }) => (
               input={{
                 value: values.passwordConfirmation || '',
                 name: 'passwordConfirmation',
-                onChange: handleChange
+                onChange: handleChange,
+                onBlur: () => handleSetTouch('passwordConfirmation')
               }}
-              meta={{ touched: true, error: errors.passwordConfirmation || '' }}
+              meta={{ touched: touched.passwordConfirmation, error: errors.passwordConfirmation || '' }}
             />
             <Button color="primary" type="submit">
               Save
@@ -182,6 +213,7 @@ UserForm.propTypes = {
   handleChange: PropTypes.func,
   setFieldValue: PropTypes.func,
   onSubmit: PropTypes.func,
+  setTouched: PropTypes.func,
   submitting: PropTypes.bool,
   error: PropTypes.string,
   values: PropTypes.object,

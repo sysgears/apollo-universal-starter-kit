@@ -1,153 +1,193 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
-import Yup from 'yup';
-import Field from '../../../utils/FieldAdapter';
-import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
+import { Field, Form, Formik } from 'formik';
+//import Field from '../../../utils/FieldAdapter';
+import { RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
+import { email, minLength } from '../../../../../common/validation';
 
 import settings from '../../../../../../settings';
 
 const validate = values => {
   const errors = {};
-
+  console.log('valid', values);
+  const fields = ['username', 'email', 'password', 'passwordConfirmation'];
+  fields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = 'Required';
+    } else if (values.email && email(values.email)) {
+      errors.email = email(values.email);
+    } else if (values.password && minLength(5)(values.password)) {
+      errors.password = minLength(5)(values.password);
+    } else if (values.passwordConfirmation && minLength(5)(values.passwordConfirmation)) {
+      errors.passwordConfirmation = minLength(5)(values.passwordConfirmation);
+    } else if (values.username && minLength(3)(values.username)) {
+      errors.username = minLength(3)(values.username);
+    }
+  });
   if (values.password !== values.passwordConfirmation) {
     errors.passwordConfirmation = 'Passwords do not match';
   }
+  console.log('errors', errors);
   return errors;
 };
 
-const UserForm = ({ values, handleSubmit, submitting, error, handleChange }) => {
-  return (
-    <Form name="user" onSubmit={handleSubmit}>
-      <Field
-        name="username"
-        component={RenderField}
-        type="text"
-        label="Username"
-        value={values.username || ''}
-        onChange={handleChange}
-      />
-      <Field
-        name="email"
-        component={RenderField}
-        type="email"
-        label="Email"
-        value={values.email || ''}
-        onChange={handleChange}
-      />
-      <Field
-        name="role"
-        component={RenderSelect}
-        type="select"
-        label="Role"
-        value={values.role}
-        onChange={handleChange}
-      >
-        <Option value="user">user</Option>
-        <Option value="admin">admin</Option>
-      </Field>
-      <Field
-        name="isActive"
-        component={RenderCheckBox}
-        type="checkbox"
-        label="Is Active"
-        defaultChecked={values.isActive}
-      />
-      <Field
-        name="firstName"
-        component={RenderField}
-        type="text"
-        label="First Name"
-        value={values.firstName}
-        onChange={handleChange}
-      />
-      <Field
-        name="lastName"
-        component={RenderField}
-        type="text"
-        label="Last Name"
-        value={values.lastName}
-        onChange={handleChange}
-      />
-      {settings.user.auth.certificate.enabled && (
-        <Field
-          name="auth.certificate.serial"
-          component={RenderField}
-          type="text"
-          label="Serial"
-          value={values.lastName}
-        />
-      )}
-      <Field
-        name="password"
-        component={RenderField}
-        type="password"
-        label="Password"
-        value={values.password}
-        onChange={handleChange}
-      />
-      <Field
-        name="passwordConfirmation"
-        component={RenderField}
-        type="password"
-        label="Password Confirmation"
-        value={values.passwordConfirmation}
-        onChange={handleChange}
-      />
-      {error && <Alert color="error">{error}</Alert>}
-      <Button color="primary" type="submit" disabled={submitting}>
-        Save
-      </Button>
-    </Form>
-  );
-};
+export const UserForm = ({ initialValues, onSubmit }) => (
+  <div>
+    <h1>My Cool Form</h1>
+    <Formik
+      onSubmit={values => {
+        return onSubmit(values);
+      }}
+      validate={values => validate(values)}
+      initialValues={{
+        ...initialValues,
+        isActive: (initialValues && initialValues.isActive) || false,
+        role: (initialValues && initialValues.role) || 'user'
+      }}
+    >
+      {props => {
+        const { values, handleChange, touched, errors, setFieldValue, setTouched } = props;
+        return (
+          <Form name="user">
+            <Field
+              name="username"
+              component={RenderField}
+              type="text"
+              label="Username"
+              input={{
+                value: values.username || '',
+                name: 'username',
+                onChange: handleChange,
+                onBlur: () => setTouched({ ...touched, username: true })
+              }}
+              meta={{ touched: touched.username, error: errors.username || '' }}
+            />
+            <Field
+              name="email"
+              component={RenderField}
+              type="email"
+              label="Email"
+              input={{
+                value: values.email || '',
+                name: 'email',
+                onChange: handleChange
+              }}
+              meta={{ touched: touched.email, error: errors.email || '' }}
+            />
+            <Field
+              name="role"
+              component={RenderSelect}
+              type="select"
+              label="Role"
+              input={{
+                value: values.role || 'user',
+                name: 'role',
+                onChange: handleChange
+              }}
+              meta={{ touched: touched.role, error: errors.role || '' }}
+            >
+              <Option value="user">user</Option>
+              <Option value="admin">admin</Option>
+            </Field>
+            <Field
+              name="isActive"
+              component={RenderCheckBox}
+              type="checkbox"
+              label="Is Active"
+              input={{
+                defaultChecked: values.isActive,
+                name: 'isActive'
+              }}
+              meta={{ touched: touched.isActive, error: errors.isActive || '' }}
+            />
+            <Field
+              name="firstName"
+              component={RenderField}
+              type="text"
+              label="First Name"
+              input={{
+                value: (values.profile && values.profile.firstName) || '',
+                name: 'firstName',
+                onChange: e => setFieldValue('profile', { ...values.profile, firstName: e.target.value })
+              }}
+              meta={{ touched: touched.firstName, error: errors.firstName || '' }}
+            />
+            <Field
+              name="lastName"
+              component={RenderField}
+              type="text"
+              label="Last Name"
+              onChange={handleChange}
+              input={{
+                value: (values.profile && values.profile.lastName) || '',
+                name: 'lastName',
+                onChange: e => setFieldValue('profile', { ...values.profile, lastName: e.target.value })
+              }}
+              meta={{ touched: touched.lastName, error: errors.lastName || '' }}
+            />
+            {settings.user.auth.certificate.enabled && (
+              <Field
+                name="auth.certificate.serial"
+                component={RenderField}
+                type="text"
+                label="Serial"
+                input={{
+                  value: (values.auth && values.auth.certificate.serial) || '',
+                  name: 'serial',
+                  onChange: e =>
+                    setFieldValue('auth', {
+                      ...values.auth,
+                      certificate: { ...values.auth.certificate, serial: e.target.value }
+                    })
+                }}
+                meta={{ touched: false, error: '' }}
+              />
+            )}
+            <Field
+              name="password"
+              component={RenderField}
+              type="password"
+              label="Password"
+              input={{
+                value: values.password || '',
+                name: 'password',
+                onChange: handleChange
+              }}
+              meta={{ touched: touched.password, error: errors.password || '' }}
+            />
+            <Field
+              name="passwordConfirmation"
+              component={RenderField}
+              type="password"
+              label="Password Confirmation"
+              input={{
+                value: values.passwordConfirmation || '',
+                name: 'passwordConfirmation',
+                onChange: handleChange
+              }}
+              meta={{ touched: true, error: errors.passwordConfirmation || '' }}
+            />
+            <Button color="primary" type="submit">
+              Save
+            </Button>
+          </Form>
+        );
+      }}
+    </Formik>
+  </div>
+);
 
 UserForm.propTypes = {
   handleSubmit: PropTypes.func,
   handleChange: PropTypes.func,
+  setFieldValue: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   error: PropTypes.string,
-  values: PropTypes.object
+  values: PropTypes.object,
+  errors: PropTypes.object,
+  initialValues: PropTypes.object,
+  touched: PropTypes.object
 };
 
-const UserFormWithFormik = withFormik({
-  mapPropsToValues: values => ({
-    username: (values.initialValues && values.initialValues.username) || '',
-    email: (values.initialValues && values.initialValues.email) || '',
-    role: (values.initialValues && values.initialValues.role) || 'admin',
-    isActive: (values.initialValues && values.initialValues.isActive) || false,
-    firstName: (values.initialValues && values.initialValues.profile.firstName) || '',
-    lastName: (values.initialValues && values.initialValues.profile.lastName) || '',
-    password: '',
-    passwordConfirmation: ''
-  }),
-  validationSchema: Yup.object().shape({
-    username: Yup.string()
-      .min(3, `Must be 3 characters or more`)
-      .required('Username is required!'),
-    email: Yup.string()
-      .email('Invalid email address')
-      .required('Email is required!'),
-    password: Yup.string()
-      .min(5, `Must be 5 characters or more`)
-      .required('Password is required!'),
-    passwordConfirmation: Yup.string()
-      .min(5, `Must be 5 characters or more`)
-      .required('Password confirmation is required!'),
-    'profile.firstName': Yup.string()
-      .min(3, `Must be 5 characters or more`)
-      .required('First name is required!'),
-    'profile.lastName': Yup.string()
-      .min(3, `Must be 5 characters or more`)
-      .required('First name is required!')
-  }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm({ username: '', email: '', password: '', passwordConfirmation: '' });
-  },
-  displayName: 'SignUpForm', // helps with React DevTools
-  validate
-});
-
-export default UserFormWithFormik(UserForm);
+export default UserForm;

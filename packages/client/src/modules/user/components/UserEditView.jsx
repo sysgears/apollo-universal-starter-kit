@@ -23,7 +23,7 @@ export default class UserEditView extends React.PureComponent {
 
     let insertValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
-    insertValues['profile'] = pick(values, ['firstName', 'lastName']);
+    insertValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
 
     if (settings.user.auth.certificate.enabled) {
       insertValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };

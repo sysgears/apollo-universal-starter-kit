@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, Form, Formik } from 'formik';
-//import Field from '../../../utils/FieldAdapter';
 import { RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
 import { email, minLength } from '../../../../../common/validation';
 
@@ -9,7 +8,6 @@ import settings from '../../../../../../settings';
 
 const validate = values => {
   const errors = {};
-  console.log('validate values', values);
   const fields = ['username', 'email', 'password', 'passwordConfirmation'];
   fields.forEach(field => {
     if (!values[field]) {
@@ -37,11 +35,10 @@ const validate = values => {
   if (values.password !== values.passwordConfirmation) {
     errors.passwordConfirmation = 'Passwords do not match';
   }
-  console.log('errors', errors);
   return errors;
 };
 
-export const UserForm = ({ initialValues, onSubmit }) => (
+export const UserForm = ({ initialValues, onSubmit, error }) => (
   <div>
     <h1>My Cool Form</h1>
     <Formik
@@ -56,7 +53,7 @@ export const UserForm = ({ initialValues, onSubmit }) => (
       }}
     >
       {props => {
-        const { values, handleChange, touched, errors, setFieldValue, setTouched } = props;
+        const { values, handleChange, touched, errors, setFieldValue, setTouched, isValid } = props;
         const handleSetTouch = name => {
           setTouched({ ...touched, [name]: true });
         };
@@ -73,6 +70,9 @@ export const UserForm = ({ initialValues, onSubmit }) => (
                 password: true,
                 passwordConfirmation: true
               });
+              if (isValid) {
+                onSubmit(values);
+              }
             }}
           >
             <Field
@@ -198,6 +198,7 @@ export const UserForm = ({ initialValues, onSubmit }) => (
               }}
               meta={{ touched: touched.passwordConfirmation, error: errors.passwordConfirmation || '' }}
             />
+            {error && <Alert color="error">{error}</Alert>}
             <Button color="primary" type="submit">
               Save
             </Button>
@@ -215,6 +216,7 @@ UserForm.propTypes = {
   onSubmit: PropTypes.func,
   setTouched: PropTypes.func,
   submitting: PropTypes.bool,
+  isValid: PropTypes.bool,
   error: PropTypes.string,
   values: PropTypes.object,
   errors: PropTypes.object,

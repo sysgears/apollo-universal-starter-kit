@@ -35,7 +35,7 @@ export default class UserEditView extends React.PureComponent {
       result = await addUser(insertValues);
     }
 
-    if (result.errors) {
+    if (result && result.errors) {
       let submitError = {
         _error: 'Edit user failed!'
       };

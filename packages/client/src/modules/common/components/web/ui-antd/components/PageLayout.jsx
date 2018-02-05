@@ -5,23 +5,28 @@ import Layout from 'antd/lib/layout';
 import NavBar from './NavBar';
 import settings from '../../../../../../../../../settings';
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content, Footer, Sider } = Layout;
 
 const PageLayout = ({ children, navBar }) => {
   return (
     <div className="flex-grow">
-      <Layout>
-        <section className="flex-grow">
-          {navBar !== false && (
-            <Header>
-              <NavBar />
-            </Header>
-          )}
-          <Content id="content" style={{ background: '#fff', padding: 24 }}>
-            {children}
-          </Content>
-        </section>
-        <Footer style={{ textAlign: 'center' }}>&copy; 2017. {settings.app.name}.</Footer>
+      <Layout hasSider={true}>
+        <Sider breakpoint="lg" collapsedWidth="0">
+          Sider
+        </Sider>
+        <Layout>
+          <section className="flex-grow">
+            {navBar !== false && (
+              <Header>
+                <NavBar />
+              </Header>
+            )}
+            <Content id="content" style={{ background: '#fff', padding: 24 }}>
+              {children}
+            </Content>
+          </section>
+          <Footer style={{ textAlign: 'center' }}>&copy; 2017. {settings.app.name}.</Footer>
+        </Layout>
       </Layout>
     </div>
   );

@@ -625,6 +625,12 @@ apollo-link-dedup@^1.0.0:
   dependencies:
     apollo-link "^1.0.7"
 
+apollo-link-schema@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/apollo-link-schema/-/apollo-link-schema-1.0.2.tgz#e4bb1cafcaecca8ff6b9aad7e2de2091179f33c7"
+  dependencies:
+    apollo-link "^1.0.7"
+
 apollo-link-ws@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/apollo-link-ws/-/apollo-link-ws-1.0.4.tgz#d0067aa0204470dbd3955aa5204f8dd72d389350"

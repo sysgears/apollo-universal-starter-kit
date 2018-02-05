@@ -1,13 +1,14 @@
 // React
 import React from 'react';
-import { connect } from 'react-redux';
-
-// Apollo
 import { graphql, compose } from 'react-apollo';
+import { removeTypename } from '../../../../../common/utils';
 
 // Components
 import UsersListView from '../components/UsersListView';
 
+// Graphql
+import USERS_STATE_QUERY from '../graphql/UsersStateQuery.client.graphql';
+import UPDATE_ORDER_BY from '../graphql/UpdateOrderBy.client.graphql';
 import USERS_QUERY from '../graphql/UsersQuery.graphql';
 import DELETE_USER from '../graphql/DeleteUser.graphql';
 
@@ -17,15 +18,17 @@ class UsersList extends React.Component {
   }
 }
 
-const UsersListWithApollo = compose(
+export default compose(
+  graphql(USERS_STATE_QUERY, {
+    props({ data: { usersState } }) {
+      return removeTypename(usersState);
+    }
+  }),
   graphql(USERS_QUERY, {
-    options: ({ orderBy, searchText, role, isActive }) => {
+    options: ({ orderBy, filter }) => {
       return {
         fetchPolicy: 'cache-and-network',
-        variables: {
-          orderBy: orderBy,
-          filter: { searchText, role, isActive }
-        }
+        variables: { orderBy, filter }
       };
     },
     props({ data: { loading, users, refetch, error } }) {
@@ -51,22 +54,12 @@ const UsersListWithApollo = compose(
         }
       }
     })
+  }),
+  graphql(UPDATE_ORDER_BY, {
+    props: ({ mutate }) => ({
+      onOrderBy: orderBy => {
+        mutate({ variables: { orderBy } });
+      }
+    })
   })
 )(UsersList);
-
-export default connect(
-  state => ({
-    searchText: state.user.searchText,
-    role: state.user.role,
-    isActive: state.user.isActive,
-    orderBy: state.user.orderBy
-  }),
-  dispatch => ({
-    onOrderBy(orderBy) {
-      dispatch({
-        type: 'USER_ORDER_BY',
-        value: orderBy
-      });
-    }
-  })
-)(UsersListWithApollo);

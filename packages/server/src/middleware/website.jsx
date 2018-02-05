@@ -24,7 +24,6 @@ import Html from './html';
 import Routes from '../../../client/src/app/Routes';
 import modules from '../modules';
 
-import clientModules from '../../../client/src/modules';
 import settings from '../../../../settings';
 
 let assetMap;
@@ -37,6 +36,7 @@ const renderServerSide = async (req, res) => {
   //   networkInterface = addPersistedQueries(networkInterface, queryMap);
   // }
   //
+  const clientModules = require('../../../client/src/modules').default;
 
   const fetch = createApolloFetch({ uri: apiUrl, constructOptions: modules.constructFetchOptions });
   fetch.batchUse(({ options }, next) => {

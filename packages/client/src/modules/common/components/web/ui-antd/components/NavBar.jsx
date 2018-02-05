@@ -10,6 +10,10 @@ import modules from '../../../../../../modules';
 import settings from '../../../../../../../../../settings';
 
 class NavBar extends React.Component {
+  static propTypes = {
+    location: PropTypes.object.isRequired
+  };
+
   state = {
     current: '/'
   };
@@ -59,9 +63,5 @@ class NavBar extends React.Component {
     );
   }
 }
-
-NavBar.propTypes = {
-  location: PropTypes.object.isRequired
-};
 
 export default withRouter(NavBar);

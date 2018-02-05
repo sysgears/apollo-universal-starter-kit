@@ -9,6 +9,11 @@ import settings from '../../../../../../../../../settings';
 const { Header, Content, Footer, Sider } = Layout;
 
 class PageLayout extends React.Component {
+  static propTypes = {
+    children: PropTypes.node,
+    navBar: PropTypes.bool
+  };
+
   state = {
     collapsed: false
   };
@@ -37,7 +42,7 @@ class PageLayout extends React.Component {
           <Layout>
             <section className="flex-grow">
               {navBar !== false && (
-                <Header style={{ background: '#fff', padding: 0 }}>
+                <Header style={{ padding: 0 }}>
                   {/*<Icon
                     className="trigger"
                     type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
@@ -57,10 +62,5 @@ class PageLayout extends React.Component {
     );
   }
 }
-
-PageLayout.propTypes = {
-  children: PropTypes.node,
-  navBar: PropTypes.bool
-};
 
 export default PageLayout;

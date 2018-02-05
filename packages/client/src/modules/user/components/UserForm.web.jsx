@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, Form, Formik } from 'formik';
 import { RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
-import { email, minLength, required, validateForm } from '../../../../../common/validation';
+import { email, minLength, required, match, validateForm } from '../../../../../common/validation';
 
 import settings from '../../../../../../settings';
 
@@ -10,7 +10,7 @@ const userFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
   password: [required, minLength(5)],
-  passwordConfirmation: [required, minLength(5)],
+  passwordConfirmation: [match('password'), required, minLength(5)],
   profile: {
     firstName: [required],
     lastName: [required]

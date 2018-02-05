@@ -3,6 +3,10 @@
 // Non empty validation
 export const required = value => (value ? undefined : 'Required');
 
+// Match a particular field
+export const match = comparableField => (value, values) =>
+  value !== values[comparableField] ? `Should match field '${comparableField}'` : undefined;
+
 // Max length validation
 export const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined; // Usage: const maxLength15 = maxLength(15)
@@ -38,7 +42,7 @@ export const validateForm = (fValues, fSchema) => {
         const s = schema[v];
         if (Array.isArray(s)) {
           s.forEach(validator => {
-            const result = validator(values[v]);
+            const result = validator(values[v], values);
             if (result) {
               collector[v] = result;
             }
@@ -47,9 +51,6 @@ export const validateForm = (fValues, fSchema) => {
           validateForm1(values[v], schema[v], collector);
         }
       });
-    if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
-      collector.passwordConfirmation = 'Passwords do not match';
-    }
     return collector;
   };
 

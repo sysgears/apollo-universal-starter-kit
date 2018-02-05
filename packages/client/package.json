@@ -83,8 +83,7 @@
     "redux-form": "^7.2.0",
     "sourcemapped-stacktrace": "^1.1.8",
     "styled-components": "^2.3.0",
-    "subscriptions-transport-ws": "^0.9.4",
-    "yup": "^0.24.0"
+    "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
     "apollo-utilities": "^1.0.3",

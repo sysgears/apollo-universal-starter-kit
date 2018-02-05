@@ -12,16 +12,11 @@ const commentFormSchema = {
 const validate = values => validateForm(values, commentFormSchema);
 
 const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) => {
-  let operation = 'Add';
-  if (initialValues.id !== null) {
-    operation = 'Edit';
-  }
-
   return (
     <Form name="comment" onSubmit={handleSubmit}>
       <Row>
         <Col xs={2}>
-          <Label>{operation} comment</Label>
+          <Label>{initialValues.id === null ? 'Add comment' : 'Edit comment'}</Label>
         </Col>
         <Col xs={8}>
           <Field name="content" component={RenderField} type="text" value={values.content} onChange={handleChange} />

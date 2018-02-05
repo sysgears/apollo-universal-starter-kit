@@ -80,7 +80,6 @@
     "reactstrap": "^5.0.0-alpha.3",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
-    "redux-form": "^7.2.0",
     "sourcemapped-stacktrace": "^1.1.8",
     "styled-components": "^2.3.0",
     "subscriptions-transport-ws": "^0.9.4"

@@ -112,23 +112,26 @@ UserForm.propTypes = {
   error: PropTypes.string,
   values: PropTypes.object,
   errors: PropTypes.object,
-  initialValues: PropTypes.object,
+  initialValues: PropTypes.object.isRequired,
   touched: PropTypes.object
 };
 
 const UserFormWithFormik = withFormik({
-  mapPropsToValues: values => ({
-    username: (values.initialValues && values.initialValues.username) || '',
-    email: (values.initialValues && values.initialValues.email) || '',
-    role: (values.initialValues && values.initialValues.role) || 'admin',
-    isActive: (values.initialValues && values.initialValues.isActive) || false,
-    password: '',
-    passwordConfirmation: '',
-    profile: {
-      firstName: (values.initialValues && values.initialValues.profile.firstName) || '',
-      lastName: (values.initialValues && values.initialValues.profile.lastName) || ''
-    }
-  }),
+  mapPropsToValues: values => {
+    const { username, email, role, isActive, profile } = values.initialValues;
+    return {
+      username: username || '',
+      email: email || '',
+      role: role || 'admin',
+      isActive: isActive || false,
+      password: '',
+      passwordConfirmation: '',
+      profile: {
+        firstName: (profile && profile.firstName) || '',
+        lastName: (profile && profile.lastName) || ''
+      }
+    };
+  },
   async handleSubmit(values, { resetForm, props: { onSubmit } }) {
     await onSubmit(values);
     resetForm({ username: '', email: '', password: '', passwordConfirmation: '' });

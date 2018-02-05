@@ -74,7 +74,7 @@ export default class UserEditView extends React.PureComponent {
             Back
           </Link>
           <h2>{user ? 'Edit' : 'Create'} User</h2>
-          <UserForm onSubmit={this.onSubmit} initialValues={user} />
+          <UserForm onSubmit={this.onSubmit} initialValues={user || {}} />
         </PageLayout>
       );
     }

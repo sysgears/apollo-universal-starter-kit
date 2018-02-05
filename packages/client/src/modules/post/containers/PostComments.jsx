@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
-import { reset } from 'redux-form';
 
 import PostCommentsView from '../components/PostCommentsView';
 
@@ -176,9 +175,6 @@ export default connect(
         type: 'COMMENT_SELECT',
         value: comment
       });
-    },
-    onFormSubmitted() {
-      dispatch(reset('comment'));
     }
   })
 )(PostCommentsWithApollo);

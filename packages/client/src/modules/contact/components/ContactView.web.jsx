@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { SubmissionError } from 'redux-form';
 import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 
@@ -10,15 +9,14 @@ import settings from '../../../../../../settings';
 
 export default class ContactView extends React.Component {
   static propTypes = {
-    contact: PropTypes.func.isRequired,
-    onFormSubmitted: PropTypes.func.isRequired
+    contact: PropTypes.func.isRequired
   };
 
   state = {
     sent: false
   };
 
-  onSubmit = ({ contact, onFormSubmitted }) => async values => {
+  onSubmit = ({ contact }) => async values => {
     const result = await contact(values);
 
     if (result.errors) {
@@ -26,15 +24,14 @@ export default class ContactView extends React.Component {
         _error: 'Contact request failed!'
       };
       result.errors.map(error => (submitError[error.field] = error.message));
-      throw new SubmissionError(submitError);
+      throw submitError;
     }
 
     this.setState({ sent: result });
-    onFormSubmitted();
   };
 
   render() {
-    const { contact, onFormSubmitted } = this.props;
+    const { contact } = this.props;
 
     const renderMetaData = () => (
       <Helmet
@@ -53,7 +50,7 @@ export default class ContactView extends React.Component {
         {renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">Contact Us</h1>
-          <ContactForm onSubmit={this.onSubmit({ contact, onFormSubmitted })} sent={this.state.sent} />
+          <ContactForm onSubmit={this.onSubmit({ contact })} sent={this.state.sent} />
         </LayoutCenter>
       </PageLayout>
     );

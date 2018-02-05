@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { SubmissionError } from 'redux-form';
 import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 
@@ -22,7 +21,7 @@ export default class RegisterView extends React.PureComponent {
         _error: 'Registration failed!'
       };
       result.errors.map(error => (submitError[error.field] = error.message));
-      throw new SubmissionError(submitError);
+      throw submitError;
     }
   };
 

@@ -1,7 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
-import { reset } from 'redux-form';
 
 import ForgotPasswordView from '../components/ForgotPasswordView';
 
@@ -32,12 +30,7 @@ const ForgotPasswordWithApollo = compose(
         }
       }
     })
-  }),
-  connect(null, dispatch => ({
-    onFormSubmitted() {
-      dispatch(reset('forgotPassword'));
-    }
-  }))
+  })
 )(ForgotPassword);
 
 export default ForgotPasswordWithApollo;

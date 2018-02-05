@@ -63,9 +63,7 @@ describe('Counter example UI works', () => {
   step('Increase Redux counter button works', () => {
     const reduxButton = content.find('#redux-button').last();
     reduxButton.simulate('click');
-    setTimeout(() => {
-      content.text().should.has.string(`apolloLinkState, is ${COUNTER_REDUX_VALUE + 1}.`);
-    });
+    content.text().should.has.string(`reduxCount, is ${COUNTER_REDUX_VALUE + 1}.`);
   });
 
   step('Check subscribed to counter updates', () => {

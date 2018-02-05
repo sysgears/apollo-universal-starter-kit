@@ -22,7 +22,7 @@ const mutations = {
   editPost: true,
   addComment: true,
   editComment: true,
-  addCommentClient: true
+  onCommentSelect: true
 };
 
 const mocks = {
@@ -345,7 +345,7 @@ describe('Posts and comments example UI works', () => {
         .find('[name="content"]')
         .last()
         .instance().value
-    ).to.equal('Post comment 2'); //must be Post comment 2
+    ).to.equal('Post comment 2');
     commentForm
       .find('[name="content"]')
       .last()

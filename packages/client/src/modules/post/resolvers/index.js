@@ -21,7 +21,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    addCommentClient: async (_, { comment }, { cache }) => {
+    onCommentSelect: async (_, { comment }, { cache }) => {
       await cache.writeData({
         data: {
           comment: {

@@ -49,7 +49,7 @@ class PostComments extends React.Component {
     postId: PropTypes.number.isRequired,
     comments: PropTypes.array.isRequired,
     comment: PropTypes.object.isRequired,
-    addCommentClient: PropTypes.func.isRequired,
+    onCommentSelect: PropTypes.func.isRequired,
     subscribeToMore: PropTypes.func.isRequired
   };
 
@@ -71,7 +71,7 @@ class PostComments extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.addCommentClient({ id: null, content: '' });
+    this.props.onCommentSelect({ id: null, content: '' });
 
     if (this.subscription) {
       // unsubscribe
@@ -169,7 +169,7 @@ const PostCommentsWithApollo = compose(
   }),
   graphql(ADD_COMMENT_CLIENT, {
     props: ({ mutate }) => ({
-      addCommentClient: comment => {
+      onCommentSelect: comment => {
         mutate({ variables: { comment: comment } });
       }
     })

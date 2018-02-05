@@ -14,19 +14,19 @@ export default class PostCommentsView extends React.PureComponent {
     editComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
     subscribeToMore: PropTypes.func.isRequired,
-    addCommentClient: PropTypes.func.isRequired
+    onCommentSelect: PropTypes.func.isRequired
   };
 
   keyExtractor = item => item.id;
 
   renderItem = ({ item: { id, content } }) => {
-    const { comment, deleteComment, addCommentClient } = this.props;
+    const { comment, deleteComment, onCommentSelect } = this.props;
     return (
       <SwipeAction
-        onPress={() => addCommentClient({ id: id, content: content })}
+        onPress={() => onCommentSelect({ id: id, content: content })}
         right={{
           text: 'Delete',
-          onPress: () => this.onCommentDelete(comment, deleteComment, addCommentClient, id)
+          onPress: () => this.onCommentDelete(comment, deleteComment, onCommentSelect, id)
         }}
       >
         {content}
@@ -34,22 +34,22 @@ export default class PostCommentsView extends React.PureComponent {
     );
   };
 
-  onCommentDelete = (comment, deleteComment, addCommentClient, id) => {
+  onCommentDelete = (comment, deleteComment, onCommentSelect, id) => {
     if (comment.id === id) {
-      addCommentClient({ id: null, content: '' });
+      onCommentSelect({ id: null, content: '' });
     }
 
     deleteComment(id);
   };
 
-  onSubmit = (comment, postId, addComment, editComment, addCommentClient) => values => {
+  onSubmit = (comment, postId, addComment, editComment, onCommentSelect) => values => {
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {
       editComment(comment.id, values.content);
     }
 
-    addCommentClient({ id: null, content: '' });
+    onCommentSelect({ id: null, content: '' });
     Keyboard.dismiss();
   };
 

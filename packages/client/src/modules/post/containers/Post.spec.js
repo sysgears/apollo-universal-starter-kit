@@ -340,7 +340,6 @@ describe('Posts and comments example UI works', () => {
     const editButtons = content.find('.edit-comment');
     expect(editButtons).has.lengthOf(6);
     editButtons.last().simulate('click');
-    //done();
     const commentForm = content.find('form[name="comment"]');
     expect(
       commentForm

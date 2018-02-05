@@ -1,14 +1,7 @@
 @import 'bootstrap';
 
-$footer-height: 40px;
-
-html {
-  min-height: 100%;
-  position: relative;
-}
-
-body {
-  margin-bottom: $footer-height;
+.flex-grow {
+  flex: 1 0 auto;
 }
 
 .active {

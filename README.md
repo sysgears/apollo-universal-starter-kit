@@ -296,7 +296,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
   On the initial web page request back end fully renders UI and hands off Apollo Redux Store state to front end.
   Frontend then starts off from there and updates itself on user interactions.
 
-  If you don't need Server Side Rendering, set `.spinrc.js` `ssr` field to `false`
+  If you don't need Server Side Rendering, set `ssr` key value to `false` in `packages/client/.spinrc.js` and `packages/server/.spinrc.js`
 
 * Optimistic UI updates
 
@@ -380,7 +380,7 @@ aims to represent generally accepted guidelines and patterns for building scalab
 
 While developing, you will probably rely mostly on `yarn watch`; however, there are additional scripts at your disposal:
 
-| `npm run or yarn <script>` | Description                                                                                              |
+| `yarn <script>` | Description                                                                                              |
 | -------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `watch`                    | Run your app in development mode and watch your changes. Hot code reload will be enabled in development. |
 | `start`                    | Run your app in production mode.                                                                         |

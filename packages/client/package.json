@@ -5,18 +5,17 @@
   "main": "src",
   "engines": {
     "node": ">= 6.11.1",
-    "npm": ">= 3.10.3",
-    "yarn": ">= 0.19.0"
+    "yarn": ">= 1.0.0"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production spin build",
     "clean": "rimraf build .tmp",
     "tests": "cross-env PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
-    "test": "npm run tests && npm run lint",
+    "test": "yarn tests && yarn lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
     "watch": "spin watch",
-    "heroku-postbuild": "npm run build",
+    "heroku-postbuild": "yarn build",
     "cli": "node ../../tools/cli"
   },
   "repository": {
@@ -38,7 +37,7 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
-    "antd": "^3.0.2",
+    "antd": "^3.2.0",
     "apollo-cache-inmemory": "^1.1.4",
     "apollo-client": "^2.1.0",
     "apollo-fetch": "^0.7.0",
@@ -47,6 +46,7 @@
     "apollo-link-batch-http": "^1.0.3",
     "apollo-link-ws": "^1.0.3",
     "apollo-logger": "0.1.1",
+    "babel-polyfill": "^6.26.0",
     "bootstrap": "4.0.0-beta.2",
     "error-stack-parser": "^2.0.1",
     "filesize": "^3.5.11",
@@ -80,7 +80,7 @@
     "react-router-redux": "^5.0.0-alpha.8",
     "react-stripe-elements": "^1.2.1",
     "react-transition-group": "^2.3.0-beta.0",
-    "reactstrap": "^5.0.0-alpha.3",
+    "reactstrap": "^5.0.0-beta",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^7.2.0",
@@ -99,7 +99,6 @@
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.12",
     "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-minify": "^0.2.0",
@@ -153,7 +152,6 @@
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.4.93",
     "style-loader": "^0.19.1",
     "url-loader": "^0.6.2",
     "wait-on": "^2.0.2",
@@ -172,11 +170,7 @@
     "antd-mobile": "^2.1.2",
     "native-base": "^2.3.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
-    "react-navigation": "^1.0.0-beta.21"
-  },
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/apollo-universal-starter-kit",
-    "logo": "https://opencollective.com/opencollective/logo.txt"
+    "react-navigation": "^1.0.0-beta.21",
+    "spinjs": "^0.4.0"
   }
 }

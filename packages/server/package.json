@@ -5,8 +5,7 @@
   "main": "src",
   "engines": {
     "node": ">= 6.11.1",
-    "npm": ">= 3.10.3",
-    "yarn": ">= 0.19.0"
+    "yarn": ">= 1.0.0"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production spin build",
@@ -14,13 +13,13 @@
     "start": "node --harmony build",
     "tests": "cross-env PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
-    "test": "npm run tests && npm run lint",
+    "test": "yarn tests && yarn lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
-    "seed": "npm run migrate && knex seed:run",
+    "seed": "yarn migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "watch": "spin watch",
-    "heroku-postbuild": "npm run build && npm run seed",
+    "heroku-postbuild": "yarn build && yarn seed",
     "cli": "node ../../tools/cli",
     "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"
   },
@@ -95,7 +94,6 @@
     "minilog": "^3.1.0",
     "mysql2": "^1.5.1",
     "nodemailer": "^4.4.1",
-    "opencollective": "^1.0.3",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth": "^1.0.0",
@@ -187,7 +185,6 @@
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.4.93",
     "style-loader": "^0.19.1",
     "url-loader": "^0.6.2",
     "wait-on": "^2.0.2",
@@ -202,9 +199,7 @@
     "webpack-virtual-modules": "^0.1.8",
     "ws": "^3.3.3"
   },
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/apollo-universal-starter-kit",
-    "logo": "https://opencollective.com/opencollective/logo.txt"
+  "optionalDependencies": {
+    "spinjs": "^0.4.0"
   }
 }

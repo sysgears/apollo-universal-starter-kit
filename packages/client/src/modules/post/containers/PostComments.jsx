@@ -175,11 +175,7 @@ const PostCommentsWithApollo = compose(
     })
   }),
   graphql(COMMENT_QUERY_CLIENT, {
-    props({ data: { comment } }) {
-      return {
-        comment: comment
-      };
-    }
+    props: ({ data: { comment } }) => ({ comment })
   })
 )(PostComments);
 

@@ -98,20 +98,14 @@ const CounterWithApollo = compose(
   }),
   graphql(ADD_COUNTER_CLIENT, {
     props: ({ mutate }) => ({
-      addCounterState: amount => {
-        return () => {
-          const { value } = mutate({ variables: { amount } });
-          return value;
-        };
+      addCounterState: amount => () => {
+        const { value } = mutate({ variables: { amount } });
+        return value;
       }
     })
   }),
   graphql(COUNTER_QUERY_CLIENT, {
-    props({ data: { counterState: { counter } } }) {
-      return {
-        counterState: counter
-      };
-    }
+    props: ({ data: { counterState: { counter } } }) => ({ counterState: counter })
   })
 )(Counter);
 

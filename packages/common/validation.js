@@ -51,6 +51,7 @@ export const validateForm = (fValues, fSchema) => {
           validateForm1(values[v], schema[v], collector);
         }
       });
+
     return collector;
   };
 

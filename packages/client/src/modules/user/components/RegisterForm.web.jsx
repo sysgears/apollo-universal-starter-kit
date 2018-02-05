@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { email, minLength, required, validateForm } from '../../../../../common/validation';
+import { match, email, minLength, required, validateForm } from '../../../../../common/validation';
 
-const userFormSchema = {
+const registerFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
   password: [required, minLength(5)],
-  passwordConfirmation: [required, minLength(5)]
+  passwordConfirmation: [match('password'), required, minLength(5)]
 };
 
-const validate = values => validateForm(values, userFormSchema);
+const validate = values => validateForm(values, registerFormSchema);
 
 const RegisterForm = ({ values, handleSubmit, submitting, error }) => {
   return (

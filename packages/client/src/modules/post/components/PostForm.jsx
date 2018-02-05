@@ -5,12 +5,12 @@ import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
 
-const userFormSchema = {
+const postFormSchema = {
   title: [required],
   content: [required]
 };
 
-const validate = values => validateForm(values, userFormSchema);
+const validate = values => validateForm(values, postFormSchema);
 
 const PostForm = ({ values, handleSubmit, valid, onSubmit, handleChange }) => {
   return (

@@ -5,11 +5,11 @@ import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
 
-const userFormSchema = {
+const commentFormSchema = {
   content: [required]
 };
 
-const validate = values => validateForm(values, userFormSchema);
+const validate = values => validateForm(values, commentFormSchema);
 
 const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) => {
   let operation = 'Add';

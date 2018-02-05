@@ -39,6 +39,9 @@ const UserForm = ({ initialValues, onSubmit, error }) => (
         const handleSetTouch = name => {
           setTouched({ ...touched, [name]: true });
         };
+        if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
+          errors.passwordConfirmation = 'Passwords do not match';
+        }
         return (
           <Form
             name="user"
@@ -197,7 +200,6 @@ UserForm.propTypes = {
   setFieldValue: PropTypes.func,
   onSubmit: PropTypes.func,
   setTouched: PropTypes.func,
-  submitting: PropTypes.bool,
   isValid: PropTypes.bool,
   error: PropTypes.string,
   values: PropTypes.object,

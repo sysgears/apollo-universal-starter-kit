@@ -5,13 +5,13 @@ import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
 
-const userFormSchema = {
+const contactFormSchema = {
   name: [required, minLength(3)],
   email: [required, email],
   content: [required, minLength(10)]
 };
 
-const validate = values => validateForm(values, userFormSchema);
+const validate = values => validateForm(values, contactFormSchema);
 
 const ContactForm = ({ values, handleSubmit }) => {
   return (

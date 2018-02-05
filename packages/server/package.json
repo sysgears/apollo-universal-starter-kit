@@ -193,7 +193,7 @@
     "webpack-virtual-modules": "^0.1.8",
     "ws": "^3.3.3"
   },
-  "optionalDependencies": {
+  "peerDependencies": {
     "spinjs": "^0.4.0"
   }
 }

@@ -162,7 +162,7 @@
     "webpack-sources": "^1.1.0",
     "webpack-virtual-modules": "^0.1.8"
   },
-  "optionalDependencies": {
+  "peerDependencies": {
     "@expo/vector-icons": "^6.2.1",
     "antd-mobile": "^2.1.2",
     "native-base": "^2.3.5",

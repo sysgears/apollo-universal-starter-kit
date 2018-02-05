@@ -16,7 +16,7 @@ class Subscription extends React.Component {
     return (
       <div>
         {__CLIENT__ ? (
-          <StripeProvider apiKey={settings.subscription.stripePublishableKey} stripe={null}>
+          <StripeProvider apiKey={settings.subscription.stripePublishableKey}>
             <SubscriptionView {...this.props} />
           </StripeProvider>
         ) : (

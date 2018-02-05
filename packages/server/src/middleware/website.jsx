@@ -23,7 +23,6 @@ import createReduxStore from '../../../common/createReduxStore';
 import Html from './html';
 import Routes from '../../../client/src/app/Routes';
 import modules from '../modules';
-
 import settings from '../../../../settings';
 
 let assetMap;
@@ -59,7 +58,6 @@ const renderServerSide = async (req, res) => {
   const store = createReduxStore(initialState, client);
 
   const context = {};
-
   const App = () =>
     clientModules.getWrappedRoot(
       <Provider store={store}>

@@ -17,6 +17,8 @@ const userFormSchema = {
 const validate = values => validateForm(values, userFormSchema);
 
 const UserForm = ({ values, handleSubmit, error, handleChange, setFieldValue }) => {
+  // noinspection JSAnnotator
+  const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
   return (
     <Form name="user" onSubmit={handleSubmit}>
       <Field
@@ -24,7 +26,7 @@ const UserForm = ({ values, handleSubmit, error, handleChange, setFieldValue }) 
         component={RenderField}
         type="text"
         label="Username"
-        value={values.username || ''}
+        value={username || ''}
         onChange={handleChange}
       />
       <Field
@@ -32,42 +34,29 @@ const UserForm = ({ values, handleSubmit, error, handleChange, setFieldValue }) 
         component={RenderField}
         type="email"
         label="Email"
-        value={values.email || ''}
+        value={email || ''}
         onChange={handleChange}
       />
-      <Field
-        name="role"
-        component={RenderSelect}
-        type="select"
-        label="Role"
-        value={values.role}
-        onChange={handleChange}
-      >
+      <Field name="role" component={RenderSelect} type="select" label="Role" value={role} onChange={handleChange}>
         <Option value="user">user</Option>
         <Option value="admin">admin</Option>
       </Field>
-      <Field
-        name="isActive"
-        component={RenderCheckBox}
-        type="checkbox"
-        label="Is Active"
-        defaultChecked={values.isActive}
-      />
+      <Field name="isActive" component={RenderCheckBox} type="checkbox" label="Is Active" defaultChecked={isActive} />
       <Field
         name="firstName"
         component={RenderField}
         type="text"
         label="First Name"
-        value={values.profile.firstName}
-        onChange={e => setFieldValue('profile', { ...values.profile, firstName: e.target.value })}
+        value={profile.firstName}
+        onChange={e => setFieldValue('profile', { ...profile, firstName: e.target.value })}
       />
       <Field
         name="lastName"
         component={RenderField}
         type="text"
         label="Last Name"
-        value={values.profile.lastName}
-        onChange={e => setFieldValue('profile', { ...values.profile, lastName: e.target.value })}
+        value={profile.lastName}
+        onChange={e => setFieldValue('profile', { ...profile, lastName: e.target.value })}
       />
       {settings.user.auth.certificate.enabled && (
         <Field
@@ -75,7 +64,7 @@ const UserForm = ({ values, handleSubmit, error, handleChange, setFieldValue }) 
           component={RenderField}
           type="text"
           label="Serial"
-          value={values.lastName}
+          value={(auth && auth.certificate.serial) || ''}
         />
       )}
       <Field
@@ -83,7 +72,7 @@ const UserForm = ({ values, handleSubmit, error, handleChange, setFieldValue }) 
         component={RenderField}
         type="password"
         label="Password"
-        value={values.password}
+        value={password}
         onChange={handleChange}
       />
       <Field
@@ -91,7 +80,7 @@ const UserForm = ({ values, handleSubmit, error, handleChange, setFieldValue }) 
         component={RenderField}
         type="password"
         label="Password Confirmation"
-        value={values.passwordConfirmation}
+        value={passwordConfirmation}
         onChange={handleChange}
       />
       {error && <Alert color="error">{error}</Alert>}

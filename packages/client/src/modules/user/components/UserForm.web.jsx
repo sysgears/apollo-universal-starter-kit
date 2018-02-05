@@ -10,11 +10,7 @@ const userFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
   password: [required, minLength(5)],
-  passwordConfirmation: [match('password'), required, minLength(5)],
-  profile: {
-    firstName: [required],
-    lastName: [required]
-  }
+  passwordConfirmation: [match('password'), required, minLength(5)]
 };
 
 const validate = values => validateForm(values, userFormSchema);
@@ -39,9 +35,6 @@ const UserForm = ({ initialValues, onSubmit, error }) => (
         const handleSetTouch = name => {
           setTouched({ ...touched, [name]: true });
         };
-        if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
-          errors.passwordConfirmation = 'Passwords do not match';
-        }
         return (
           <Form
             name="user"
@@ -50,8 +43,6 @@ const UserForm = ({ initialValues, onSubmit, error }) => (
               setTouched({
                 username: true,
                 email: true,
-                firstName: true,
-                lastName: true,
                 password: true,
                 passwordConfirmation: true
               });
@@ -120,10 +111,9 @@ const UserForm = ({ initialValues, onSubmit, error }) => (
               input={{
                 value: (values.profile && values.profile.firstName) || '',
                 name: 'firstName',
-                onChange: e => setFieldValue('profile', { ...values.profile, firstName: e.target.value }),
-                onBlur: () => handleSetTouch('firstName')
+                onChange: e => setFieldValue('profile', { ...values.profile, firstName: e.target.value })
               }}
-              meta={{ touched: touched.firstName, error: errors.firstName || '' }}
+              meta={{ touched: false, error: '' }}
             />
             <Field
               name="lastName"
@@ -134,10 +124,9 @@ const UserForm = ({ initialValues, onSubmit, error }) => (
               input={{
                 value: (values.profile && values.profile.lastName) || '',
                 name: 'lastName',
-                onChange: e => setFieldValue('profile', { ...values.profile, lastName: e.target.value }),
-                onBlur: () => handleSetTouch('lastName')
+                onChange: e => setFieldValue('profile', { ...values.profile, lastName: e.target.value })
               }}
-              meta={{ touched: touched.lastName, error: errors.lastName || '' }}
+              meta={{ touched: false, error: '' }}
             />
             {settings.user.auth.certificate.enabled && (
               <Field

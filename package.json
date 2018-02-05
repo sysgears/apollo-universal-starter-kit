@@ -54,7 +54,6 @@
   ],
   "author": "SysGears INC",
   "license": "MIT",
-
   "workspaces": [
     "packages/*"
   ],

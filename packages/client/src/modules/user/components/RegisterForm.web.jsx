@@ -1,35 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import Yup from 'yup';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
+import { email, minLength, required, validateForm } from '../../../../../common/validation';
 
-const validate = values => {
-  const errors = {};
-
-  if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
-    errors.passwordConfirmation = 'Passwords do not match';
-  }
-  return errors;
+const userFormSchema = {
+  username: [required, minLength(3)],
+  email: [required, email],
+  password: [required, minLength(5)],
+  passwordConfirmation: [required, minLength(5)]
 };
 
-const nameMinLength = 5;
-const passwordMinLength = 5;
-const validationSchema = Yup.object().shape({
-  username: Yup.string()
-    .min(nameMinLength, `Must be ${nameMinLength} characters or more`)
-    .required('Username is required!'),
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required!'),
-  password: Yup.string()
-    .min(passwordMinLength, `Must be ${passwordMinLength} characters or more`)
-    .required('Password is required!'),
-  passwordConfirmation: Yup.string()
-    .min(passwordMinLength, `Must be ${passwordMinLength} characters or more`)
-    .required('Password confirmation is required!')
-});
+const validate = values => validateForm(values, userFormSchema);
 
 const RegisterForm = ({ values, handleSubmit, submitting, error }) => {
   return (
@@ -62,13 +45,12 @@ RegisterForm.propTypes = {
 };
 
 const RegisterFormWithFormik = withFormik({
-  validationSchema: validationSchema,
+  validate: values => validate(values),
   async handleSubmit(values, { resetForm, props: { onSubmit } }) {
     await onSubmit(values);
     resetForm({ username: '', email: '', password: '', passwordConfirmation: '' });
   },
-  displayName: 'SignUpForm', // helps with React DevTools
-  validate
+  displayName: 'SignUpForm' // helps with React DevTools
 });
 
 export default RegisterFormWithFormik(RegisterForm);

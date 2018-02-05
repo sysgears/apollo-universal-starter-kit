@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import Yup from 'yup';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
+import { required, validateForm } from '../../../../../common/validation';
 
-const validationSchema = Yup.object().shape({
-  title: Yup.string().required('Title is required!'),
-  content: Yup.string().required('Content is required!')
-});
+const userFormSchema = {
+  title: [required],
+  content: [required]
+};
+
+const validate = values => validateForm(values, userFormSchema);
 
 const PostForm = ({ values, handleSubmit, valid, onSubmit, handleChange }) => {
   return (
@@ -49,7 +51,7 @@ const PostFormWithFormik = withFormik({
     title: (props.post && props.post.title) || '',
     content: (props.post && props.post.content) || ''
   }),
-  validationSchema: validationSchema,
+  validate: values => validate(values),
   handleSubmit(values, { props: { onSubmit } }) {
     onSubmit(values);
   },

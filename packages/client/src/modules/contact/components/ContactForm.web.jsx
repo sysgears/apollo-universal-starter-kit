@@ -1,23 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import Yup from 'yup';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
+import { email, minLength, required, validateForm } from '../../../../../common/validation';
 
-const nameMinLength = 3;
-const contentMinLength = 3;
-const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(nameMinLength, `Must be ${nameMinLength} characters or more`)
-    .required('Name is required!'),
-  email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required!'),
-  content: Yup.string()
-    .min(contentMinLength, `Must be ${contentMinLength} characters or more`)
-    .required('Content is required!')
-});
+const userFormSchema = {
+  name: [required, minLength(3)],
+  email: [required, email],
+  content: [required, minLength(10)]
+};
+
+const validate = values => validateForm(values, userFormSchema);
 
 const ContactForm = ({ values, handleSubmit, error, sent, handleChange }) => {
   return (
@@ -63,11 +57,11 @@ ContactForm.propTypes = {
 const ContactFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-  validationSchema: validationSchema,
   async handleSubmit(values, { resetForm, props: { onSubmit } }) {
     await onSubmit(values);
     resetForm();
   },
+  validate: values => validate(values),
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 

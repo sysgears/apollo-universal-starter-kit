@@ -31,7 +31,6 @@ export const phoneNumber = value =>
 
 export const validateForm = (fValues, fSchema) => {
   let errors = {};
-
   const validateForm1 = (values, schema, collector) => {
     Object.keys(schema)
       .filter(v => schema.hasOwnProperty(v))
@@ -48,6 +47,9 @@ export const validateForm = (fValues, fSchema) => {
           validateForm1(values[v], schema[v], collector);
         }
       });
+    if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
+      collector.passwordConfirmation = 'Passwords do not match';
+    }
     return collector;
   };
 

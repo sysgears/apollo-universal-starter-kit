@@ -9,8 +9,8 @@ import settings from '../../../../../../settings';
 const userFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
-  password: [minLength(5)],
-  passwordConfirmation: [minLength(5)],
+  password: [required, minLength(5)],
+  passwordConfirmation: [required, minLength(5)],
   profile: {
     firstName: [required],
     lastName: [required]
@@ -19,7 +19,7 @@ const userFormSchema = {
 
 const validate = values => validateForm(values, userFormSchema);
 
-export const UserForm = ({ initialValues, onSubmit, error }) => (
+const UserForm = ({ initialValues, onSubmit, error }) => (
   <div>
     <Formik
       onSubmit={values => onSubmit(values)}
@@ -27,7 +27,11 @@ export const UserForm = ({ initialValues, onSubmit, error }) => (
       initialValues={{
         ...initialValues,
         isActive: (initialValues && initialValues.isActive) || false,
-        role: (initialValues && initialValues.role) || 'user'
+        role: (initialValues && initialValues.role) || 'user',
+        profile: {
+          firstName: (initialValues && initialValues.profile.firstName) || '',
+          lastName: (initialValues && initialValues.profile.lastName) || ''
+        }
       }}
     >
       {props => {

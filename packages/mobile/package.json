@@ -5,20 +5,20 @@
   "main": "src",
   "engines": {
     "node": ">= 6.11.1",
-    "npm": ">= 3.10.3",
-    "yarn": ">= 0.19.0"
+    "yarn": ">= 1.0.0"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production spin build",
+    "clean": "rimraf build .expo .tmp",
     "exp": "cross-env NODE_ENV=production spin exp",
     "exp-login": "cross-env NODE_ENV=production spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive",
-    "exp-publish": "npm run exp-login && npm run exp -- p --non-interactive",
+    "exp-publish": "yarn exp-login && yarn exp -- p --non-interactive",
     "tests": "cross-env PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
-    "test": "npm run tests && npm run lint",
+    "test": "yarn tests && yarn lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
     "watch": "spin watch",
-    "heroku-postbuild": "npm run build && npm run exp-publish",
+    "heroku-postbuild": "yarn build && yarn exp-publish",
     "cli": "node ../../tools/cli"
   },
   "repository": {
@@ -51,7 +51,7 @@
     "apollo-link-ws": "^1.0.3",
     "apollo-link-state": "^0.3.1",
     "apollo-logger": "0.1.1",
-    "expo": "^24.0.0",
+    "expo": "^25.0.0",
     "filesize": "^3.5.11",
     "graphql": "^0.12.3",
     "graphql-auth": "^0.2.0",
@@ -65,8 +65,8 @@
     "react": "^16.2.0",
     "react-apollo": "^2.0.4",
     "react-debounce-input": "^3.1.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-24.0.0.tar.gz",
-    "react-navigation": "^1.0.0-beta.21",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
+    "react-navigation": "^1.0.0-beta.27",
     "react-redux": "^5.0.6",
     "react-stripe-elements": "^1.2.1",
     "redux": "^3.7.2",
@@ -78,7 +78,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.3",
-    "babel-loader": "^7.1.2",
+    "heroku-babel-loader": "^7.1.2",
     "babel-plugin-styled-components": "^1.3.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -111,7 +111,7 @@
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-prettier": "^2.4.0",
     "eslint-plugin-react": "^7.5.1",
-    "exp": "47.1.1",
+    "exp": "49.0.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "flow-bin": "^0.62.0",
@@ -142,9 +142,9 @@
     "react-test-renderer": "^16.2.0",
     "request": "^2.83.0",
     "resolve-url-loader": "^2.2.1",
+    "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
     "source-list-map": "^2.0.0",
-    "spinjs": "^0.4.84",
     "style-loader": "^0.19.1",
     "url-loader": "^0.6.2",
     "wait-on": "^2.0.2",
@@ -158,12 +158,9 @@
     "webpack-sources": "^1.1.0",
     "webpack-virtual-modules": "^0.1.8",
     "ws": "^3.3.3",
-    "xdl": "^47.0.6"
+    "xdl": "^48.0.2"
   },
-  "resolutions": {
-    "graphql": "^0.12.3"
-  },
-  "greenkeeper": {
-    "ignore": []
+  "peerDependencies": {
+    "spinjs": "^0.4.0"
   }
 }

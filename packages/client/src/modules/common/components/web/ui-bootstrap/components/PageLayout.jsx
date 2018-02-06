@@ -9,18 +9,18 @@ import settings from '../../../../../../../../../settings';
 const footerHeight = '40px';
 
 const Footer = styled.footer`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+  margin-top: 10px;
   line-height: ${footerHeight};
   height: ${footerHeight};
 `;
 
 const PageLayout = ({ children, navBar }) => {
   return (
-    <section>
-      {navBar !== false && <NavBar />}
-      <Container id="content">{children}</Container>
+    <section className="d-flex flex-column flex-grow">
+      <section className="d-flex flex-column flex-grow">
+        {navBar !== false && <NavBar />}
+        <Container id="content">{children}</Container>
+      </section>
       <Footer>
         <div className="text-center">&copy; 2017. {settings.app.name}.</div>
       </Footer>

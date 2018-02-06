@@ -3,6 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
+import { SchemaLink } from 'apollo-link-schema';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
@@ -45,12 +46,15 @@ const renderServerSide = async (req, res) => {
     next();
   });
   const cache = new InMemoryCache();
-
+  const isLocalhost = /localhost/.test(__BACKEND_URL__);
   let link = new BatchHttpLink({ fetch });
   const linkState = withClientState({ ...clientModules.resolvers, cache });
+  let linkSchema = isLocalhost ? new SchemaLink({ schema: { ...modules.schemas } }) : {};
 
   const client = createApolloClient({
-    link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
+    link: ApolloLink.from(
+      (settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link, ...linkSchema])
+    ),
     cache
   });
 

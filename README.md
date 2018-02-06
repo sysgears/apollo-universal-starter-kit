@@ -25,18 +25,21 @@
 
 Checkout our [Mobile App Demo](https://expo.io/@sysgears/apollo-universal-starter-kit)
 
-If you need single-package Apollo v2 version of this repo, plese use
-[starter kit from `single` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/single)
+## Available Branches
 
-If you are using Apollo v1 please use
-[starter kit from `apollo1` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1)
+| Branch   | Description    |
+| -------- | -------------- |
+| [stable](https://github.com/sysgears/apollo-universal-starter-kit/tree/stable) | The latest stable version of the kit |
+| [single](https://github.com/sysgears/apollo-universal-starter-kit/tree/single) | Single-package Apollo v2 version of the kit|
+| [apollo1](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1) | Apollo v1 version of the kit |
+
 
 ## Getting Started
 
-1. Clone starter kit locally.
+1. Clone the latest stable starter kit locally.
 
 ```
-git clone https://github.com/sysgears/apollo-universal-starter-kit.git
+git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
 cd apollo-universal-starter-kit
 ```
 
@@ -296,7 +299,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
   On the initial web page request back end fully renders UI and hands off Apollo Redux Store state to front end.
   Frontend then starts off from there and updates itself on user interactions.
 
-  If you don't need Server Side Rendering, set `.spinrc.js` `ssr` field to `false`
+  If you don't need Server Side Rendering, set `ssr` key value to `false` in `packages/client/.spinrc.js` and `packages/server/.spinrc.js`
 
 * Optimistic UI updates
 
@@ -379,7 +382,7 @@ aims to represent generally accepted guidelines and patterns for building scalab
 
 While developing, you will probably rely mostly on `yarn watch`; however, there are additional scripts at your disposal:
 
-| `npm run or yarn <script>` | Description                                                                                              |
+| `yarn <script>` | Description                                                                                              |
 | -------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `watch`                    | Run your app in development mode and watch your changes. Hot code reload will be enabled in development. |
 | `start`                    | Run your app in production mode.                                                                         |
@@ -397,10 +400,10 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
 
 ### Deploying to Linux running Node.js
 
-1. Clone starter kit locally.
+1. Clone the latest stable starter kit locally.
 
 ```
-git clone https://github.com/sysgears/apollo-universal-starter-kit.git
+git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
 cd apollo-universal-starter-kit
 ```
 

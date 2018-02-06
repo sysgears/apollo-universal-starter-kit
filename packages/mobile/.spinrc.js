@@ -5,6 +5,7 @@ const config = {
     android: {
       entry: './src/index.js',
       buildDir: 'build/android',
+      dllBuildDir: 'build/android/dll',
       stack: ['react-native', 'android'],
       defines: {
         __CLIENT__: true
@@ -14,6 +15,7 @@ const config = {
     ios: {
       entry: './src/index.js',
       buildDir: 'build/ios',
+      dllBuildDir: 'build/ios/dll',
       stack: ['react-native', 'ios'],
       defines: {
         __CLIENT__: true
@@ -29,14 +31,11 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'webpack'],
+    stack: ['apollo', 'react', 'styled-components', 'es6', 'webpack'],
     cache: '../../.cache',
-    ssr: true,
     webpackDll: true,
-    devProxy: true,
     reactHotLoader: false,
     persistGraphQL: false,
-    frontendRefreshOnBackendChange: true,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __BACKEND_URL__: '"http://localhost:8080/graphql"'
@@ -53,7 +52,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const extraDefines = {
-  __SSR__: config.options.ssr,
   __PERSIST_GQL__: config.options.persistGraphQL
 };
 

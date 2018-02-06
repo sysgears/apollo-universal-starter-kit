@@ -4,19 +4,19 @@
   "version": "1.0.0",
   "engines": {
     "node": ">= 6.11.1",
-    "npm": ">= 3.10.3",
     "yarn": ">= 1.0.0"
   },
   "cacheDirectories": [
-    ".unused"
+    ".cache"
   ],
   "scripts": {
     "build": "lerna run build --stream",
-    "exp": "lerna run --scope=mobile exp --stream",
+    "clean": "lerna run clean --stream",
+    "exp": "yarn --cwd packages/mobile exp",
     "start": "lerna run --scope=server start --stream",
     "flow": "flow",
     "tests": "lerna run tests --stream",
-    "test": "npm run tests && npm run lint",
+    "test": "yarn tests && yarn lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json .",
     "seed": "lerna run --scope=server seed --stream",
     "exp-publish": "lerna run --scope=mobile exp-publish --stream",
@@ -57,9 +57,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "resolutions": {
-    "graphql": "^0.11.7"
-  },
   "greenkeeper": {
     "ignore": [
       "graphql"
@@ -78,5 +75,13 @@
   "optionalDependencies": {
     "dotenv": "^4.0.0",
     "lodash": "^4.17.4"
+  },
+  "dependencies": {
+    "opencollective": "^1.0.3",
+    "spinjs": "^0.4.100"
+  },
+  "resolutions": {
+    "graphql": "^0.11.7",
+    "iterall": "^1.1.4"
   }
 }

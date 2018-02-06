@@ -13,6 +13,7 @@ import { LoggingLink } from 'apollo-logger';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import url from 'url';
+import log from '../../common/log';
 
 import modules from '../../client/src/modules';
 import MainScreenNavigator from '../../client/src/app/Routes';
@@ -40,6 +41,7 @@ export default class Main extends React.Component {
       this.props.expUri && hostname === 'localhost'
         ? `${protocol}//${url.parse(this.props.expUri).hostname}:${port}${pathname}`
         : __BACKEND_URL__;
+    log.info(`Connecting to GraphQL backend at: ${uri}`);
     const fetch = createApolloFetch({ uri });
     const cache = new InMemoryCache();
 

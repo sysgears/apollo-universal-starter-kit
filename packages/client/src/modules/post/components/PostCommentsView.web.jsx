@@ -12,7 +12,6 @@ export default class PostCommentsView extends React.PureComponent {
     editComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
     onCommentSelect: PropTypes.func.isRequired,
-    onFormSubmitted: PropTypes.func.isRequired,
     subscribeToMore: PropTypes.func.isRequired
   };
 
@@ -32,7 +31,7 @@ export default class PostCommentsView extends React.PureComponent {
   };
 
   onSubmit = () => values => {
-    const { comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted } = this.props;
+    const { comment, postId, addComment, editComment, onCommentSelect } = this.props;
 
     if (comment.id === null) {
       addComment(values.content, postId);
@@ -41,7 +40,6 @@ export default class PostCommentsView extends React.PureComponent {
     }
 
     onCommentSelect({ id: null, content: '' });
-    onFormSubmitted();
   };
 
   render() {
@@ -83,7 +81,7 @@ export default class PostCommentsView extends React.PureComponent {
     return (
       <div>
         <h3>Comments</h3>
-        <PostCommentForm postId={postId} onSubmit={this.onSubmit()} initialValues={comment} />
+        <PostCommentForm postId={postId} onSubmit={this.onSubmit()} initialValues={comment} comment={comment} />
         <h1 />
         <Table dataSource={comments} columns={columns} />
       </div>

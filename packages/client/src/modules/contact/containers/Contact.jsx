@@ -1,7 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
-import { reset } from 'redux-form';
 
 import ContactView from '../components/ContactView';
 
@@ -32,12 +30,7 @@ const ContactWithApollo = compose(
         }
       }
     })
-  }),
-  connect(null, dispatch => ({
-    onFormSubmitted() {
-      dispatch(reset('contact'));
-    }
-  }))
+  })
 )(Contact);
 
 export default ContactWithApollo;

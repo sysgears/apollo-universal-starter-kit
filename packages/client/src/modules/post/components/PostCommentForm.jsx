@@ -1,10 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { withFormik } from 'formik';
+import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
-import { required, minLength } from '../../../../../common/validation';
+import { required, validateForm } from '../../../../../common/validation';
 
-const PostCommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
+const commentFormSchema = {
+  content: [required]
+};
+
+const validate = values => validateForm(values, commentFormSchema);
+
+const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) => {
   let operation = 'Add';
   if (initialValues.id !== null) {
     operation = 'Edit';
@@ -12,22 +19,29 @@ const PostCommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
 
   return (
     <FormView>
-      <Field name="content" component={RenderField} type="text" label="Content" validate={[required, minLength(1)]} />
-      <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
-        {operation}
-      </FormButton>
+      <Field name="content" component={RenderField} type="text" value={values.content} onChange={handleChange} />
+      <FormButton onPress={handleSubmit}>{operation}</FormButton>
     </FormView>
   );
 };
 
 PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
+  handleChange: PropTypes.func,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
-  valid: PropTypes.bool
+  submitting: PropTypes.bool,
+  values: PropTypes.object
 };
 
-export default reduxForm({
-  form: 'comment',
+const PostCommentFormWithFormik = withFormik({
+  mapPropsToValues: props => ({ content: (props.comment && props.comment.content) || '' }),
+  validate: values => validate(values),
+  handleSubmit: function(values, { props: { onSubmit } }) {
+    onSubmit(values);
+  },
+  displayName: 'CommentForm', // helps with React DevTools
   enableReinitialize: true
-})(PostCommentForm);
+});
+
+export default PostCommentFormWithFormik(PostCommentForm);

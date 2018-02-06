@@ -118,7 +118,6 @@ export default compose(
         await mutate({
           variables: { input: { id, title, content } }
         });
-
         if (history) {
           return history.push('/posts');
         }

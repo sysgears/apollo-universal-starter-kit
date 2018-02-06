@@ -1,17 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { withFormik } from 'formik';
+import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { required, email } from '../../../../../common/validation';
+import { required, email, validateForm } from '../../../../../common/validation';
 
-const ForgotPasswordForm = ({ handleSubmit, submitting, onSubmit, error, sent }) => {
+const contactFormSchema = {
+  email: [required, email]
+};
+
+const validate = values => validateForm(values, contactFormSchema);
+
+const ForgotPasswordForm = ({ handleSubmit, error, sent, handleChange, values }) => {
   return (
-    <Form name="forgotPassword" onSubmit={handleSubmit(onSubmit)}>
+    <Form name="forgotPassword" onSubmit={handleSubmit}>
       {sent && <Alert color="success">Reset password instructions have been emailed to you.</Alert>}
-      <Field name="email" component={RenderField} type="email" label="Email" validate={[required, email]} />
+      <Field
+        name="email"
+        component={RenderField}
+        type="email"
+        label="Email"
+        onChange={handleChange}
+        value={values.email}
+      />
       <div className="text-center">
         {error && <Alert color="error">{error}</Alert>}
-        <Button color="primary" type="submit" disabled={submitting}>
+        <Button color="primary" type="submit">
           Send Reset Instructions
         </Button>
       </div>
@@ -22,11 +36,21 @@ const ForgotPasswordForm = ({ handleSubmit, submitting, onSubmit, error, sent })
 ForgotPasswordForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
   error: PropTypes.string,
-  sent: PropTypes.bool
+  sent: PropTypes.bool,
+  handleChange: PropTypes.func,
+  values: PropTypes.object
 };
 
-export default reduxForm({
-  form: 'forgotPassword'
-})(ForgotPasswordForm);
+const ForgotPasswordFormWithFormik = withFormik({
+  enableReinitialize: true,
+  mapPropsToValues: () => ({ email: '' }),
+  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+    await onSubmit(values);
+    resetForm();
+  },
+  validate: values => validate(values),
+  displayName: 'LoginForm' // helps with React DevTools
+});
+
+export default ForgotPasswordFormWithFormik(ForgotPasswordForm);

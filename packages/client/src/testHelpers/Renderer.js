@@ -9,7 +9,6 @@ import createHistory from 'history/createMemoryHistory';
 import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { combineReducers, createStore } from 'redux';
-import { reducer as formReducer } from 'redux-form';
 import { graphql, print, getOperationAST } from 'graphql';
 
 import { Provider } from 'react-redux';
@@ -158,7 +157,6 @@ export default class Renderer {
 
     const store = createStore(
       combineReducers({
-        form: formReducer,
         ...clientModules.reducers
       }),
       reduxState

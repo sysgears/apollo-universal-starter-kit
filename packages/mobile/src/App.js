@@ -8,6 +8,7 @@ import { reducer as formReducer } from 'redux-form';
 import { createApolloFetch } from 'apollo-fetch';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
+import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { LoggingLink } from 'apollo-logger';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -60,8 +61,10 @@ export default class Main extends React.Component {
       new BatchHttpLink({ fetch })
     );
 
+    const linkState = withClientState({ ...modules.resolvers, cache });
+
     const client = new ApolloClient({
-      link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link])),
+      link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
       cache
     });
 

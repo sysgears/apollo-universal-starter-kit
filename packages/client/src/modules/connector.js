@@ -6,13 +6,14 @@ export const featureCatalog = {};
 
 export default class {
   // eslint-disable-next-line no-unused-vars
-  constructor({ route, navItem, reducer, catalogInfo }, ...features) {
+  constructor({ route, navItem, reducer, resolver, catalogInfo }, ...features) {
     /* eslint-enable no-unused-vars */
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
     this.tabItem = combine(arguments, arg => arg.tabItem);
     this.reducer = combine(arguments, arg => arg.reducer);
+    this.resolver = combine(arguments, arg => arg.resolver);
   }
 
   get tabItems() {
@@ -21,5 +22,9 @@ export default class {
 
   get reducers() {
     return merge(...this.reducer);
+  }
+
+  get resolvers() {
+    return merge(...this.resolver);
   }
 }

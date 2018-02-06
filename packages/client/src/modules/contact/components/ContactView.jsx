@@ -25,8 +25,7 @@ const ContactView = ({ contact }) => {
 };
 
 ContactView.propTypes = {
-  contact: PropTypes.func.isRequired,
-  onFormSubmitted: PropTypes.func.isRequired
+  contact: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

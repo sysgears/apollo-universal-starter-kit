@@ -16,7 +16,7 @@ export default class UsersView extends React.PureComponent {
     errors: []
   };
 
-  hendleDeleteUser = async id => {
+  handleDeleteUser = async id => {
     const { deleteUser } = this.props;
     const result = await deleteUser(id);
     if (result && result.errors) {
@@ -111,7 +111,7 @@ export default class UsersView extends React.PureComponent {
         title: 'Actions',
         key: 'actions',
         render: (text, record) => (
-          <Button color="primary" size="sm" onClick={() => this.hendleDeleteUser(record.id)}>
+          <Button color="primary" size="sm" onClick={() => this.handleDeleteUser(record.id)}>
             Delete
           </Button>
         )

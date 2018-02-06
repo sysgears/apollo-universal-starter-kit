@@ -13,9 +13,8 @@ export default class PostCommentsView extends React.PureComponent {
     addComment: PropTypes.func.isRequired,
     editComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
-    onCommentSelect: PropTypes.func.isRequired,
-    onFormSubmitted: PropTypes.func.isRequired,
-    subscribeToMore: PropTypes.func.isRequired
+    subscribeToMore: PropTypes.func.isRequired,
+    onCommentSelect: PropTypes.func.isRequired
   };
 
   keyExtractor = item => item.id;
@@ -43,7 +42,7 @@ export default class PostCommentsView extends React.PureComponent {
     deleteComment(id);
   };
 
-  onSubmit = (comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted) => values => {
+  onSubmit = (comment, postId, addComment, editComment, onCommentSelect) => values => {
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {
@@ -51,19 +50,18 @@ export default class PostCommentsView extends React.PureComponent {
     }
 
     onCommentSelect({ id: null, content: '' });
-    onFormSubmitted();
     Keyboard.dismiss();
   };
 
   render() {
-    const { postId, comment, addComment, editComment, comments, onCommentSelect, onFormSubmitted } = this.props;
+    const { postId, comment, addComment, editComment, comments } = this.props;
 
     return (
       <View>
         <Text style={styles.title}>Comments</Text>
         <PostCommentForm
           postId={postId}
-          onSubmit={this.onSubmit(comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted)}
+          onSubmit={this.onSubmit(comment, postId, addComment, editComment)}
           initialValues={comment}
         />
         {comments.length > 0 && (

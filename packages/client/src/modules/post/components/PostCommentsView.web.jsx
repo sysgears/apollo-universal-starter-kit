@@ -11,17 +11,16 @@ export default class PostCommentsView extends React.PureComponent {
     addComment: PropTypes.func.isRequired,
     editComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
-    onCommentSelect: PropTypes.func.isRequired,
-    onFormSubmitted: PropTypes.func.isRequired,
-    subscribeToMore: PropTypes.func.isRequired
+    subscribeToMore: PropTypes.func.isRequired,
+    onCommentSelect: PropTypes.func.isRequired
   };
 
-  hendleEditComment = (id, content) => {
+  handleEditComment = (id, content) => {
     const { onCommentSelect } = this.props;
     onCommentSelect({ id, content });
   };
 
-  hendleDeleteComment = id => {
+  handleDeleteComment = id => {
     const { comment, onCommentSelect, deleteComment } = this.props;
 
     if (comment.id === id) {
@@ -32,8 +31,7 @@ export default class PostCommentsView extends React.PureComponent {
   };
 
   onSubmit = () => values => {
-    const { comment, postId, addComment, editComment, onCommentSelect, onFormSubmitted } = this.props;
-
+    const { comment, postId, addComment, editComment, onCommentSelect } = this.props;
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {
@@ -41,12 +39,10 @@ export default class PostCommentsView extends React.PureComponent {
     }
 
     onCommentSelect({ id: null, content: '' });
-    onFormSubmitted();
   };
 
   render() {
-    const { postId, comment, comments } = this.props;
-
+    const { postId, comments, comment } = this.props;
     const columns = [
       {
         title: 'Content',
@@ -63,7 +59,7 @@ export default class PostCommentsView extends React.PureComponent {
               color="primary"
               size="sm"
               className="edit-comment"
-              onClick={() => this.hendleEditComment(record.id, record.content)}
+              onClick={() => this.handleEditComment(record.id, record.content)}
             >
               Edit
             </Button>{' '}
@@ -71,7 +67,7 @@ export default class PostCommentsView extends React.PureComponent {
               color="primary"
               size="sm"
               className="delete-comment"
-              onClick={() => this.hendleDeleteComment(record.id)}
+              onClick={() => this.handleDeleteComment(record.id)}
             >
               Delete
             </Button>

@@ -21,7 +21,8 @@ const createNode = id => ({
 const mutations = {
   editPost: true,
   addComment: true,
-  editComment: true
+  editComment: true,
+  onCommentSelect: true
 };
 
 const mocks = {
@@ -327,18 +328,17 @@ describe('Posts and comments example UI works', () => {
     expect(content.find('.delete-comment')).has.lengthOf(6);
   });
 
-  step('Comment editing works', done => {
+  step('Comment editing works', async done => {
     mutations.editComment = (obj, { input }) => {
       expect(input.postId).to.equal(3);
       expect(input.content).to.equal('Edited comment 2');
       done();
       return input;
     };
-
     const editButtons = content.find('.edit-comment');
     expect(editButtons).has.lengthOf(6);
     editButtons.last().simulate('click');
-
+    editButtons.last().simulate('click');
     const commentForm = content.find('form[name="comment"]');
     expect(
       commentForm
@@ -351,7 +351,6 @@ describe('Posts and comments example UI works', () => {
       .last()
       .simulate('change', { target: { value: 'Edited comment 2' } });
     commentForm.last().simulate('submit');
-
     expect(content.text()).to.include('Edited comment 2');
   });
 

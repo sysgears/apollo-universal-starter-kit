@@ -13,7 +13,7 @@ export default new Feature({
     <Route exact path="/$module$/:id" component={$Module$Edit} />
   ],
   navItem: (
-    <MenuItem key="$module$">
+    <MenuItem key="/$module$">
       <NavLink to="/$module$" className="nav-link" activeClassName="active">
         $MoDuLe$
       </NavLink>

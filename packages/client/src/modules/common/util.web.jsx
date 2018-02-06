@@ -28,81 +28,74 @@ export const createColumnFields = (
   renderOrderByArrow,
   hendleUpdate,
   hendleDelete,
-  onCellChange
+  onCellChange,
+  customTableColumns
 ) => {
   let columns = [];
 
   for (const key of schema.keys()) {
     const value = schema.values[key];
-    if (value.show !== false) {
-      if (key === 'id') {
+    if (value.show !== false && key !== 'id') {
+      if (value.type.isSchema) {
+        let sortBy = 'name';
+        for (const remoteKey of value.type.keys()) {
+          const remoteValue = value.type.values[remoteKey];
+          if (remoteValue.sortBy) {
+            sortBy = remoteKey;
+          }
+        }
         columns.push({
           title: (
             <a onClick={e => orderBy(e, key)} href="#">
               {startCase(key)} {renderOrderByArrow(key)}
             </a>
           ),
-          dataIndex: 'id',
-          key: 'id',
-          width: 100,
-          render: (text, record) => (
-            <Link className="link" to={`/${link}/${record.id}`}>
-              {text}
-            </Link>
-          )
-        });
-      } else {
-        if (value.type.isSchema) {
-          let sortBy = 'name';
-          for (const remoteKey of value.type.keys()) {
-            const remoteValue = value.type.values[remoteKey];
-            if (remoteValue.sortBy) {
-              sortBy = remoteKey;
-            }
+          dataIndex: key,
+          key: key,
+          width: 300,
+          render: text => {
+            return text[sortBy];
           }
-          columns.push({
-            title: (
-              <a onClick={e => orderBy(e, key)} href="#">
-                {startCase(key)} {renderOrderByArrow(key)}
-              </a>
-            ),
-            dataIndex: key,
-            key: key,
-            width: 300,
-            render: text => {
-              return text[sortBy];
-            }
-          });
-        } else if (value.type.name === 'Boolean') {
-          columns.push({
-            title: (
-              <a onClick={e => orderBy(e, key)} href="#">
-                {startCase(key)} {renderOrderByArrow(key)}
-              </a>
-            ),
-            dataIndex: key,
-            key: key,
-            width: 100,
-            render: (text, record) => {
-              const data = {};
-              data[key] = !text;
-              return <Switch checked={text} onClick={() => hendleUpdate(data, record.id)} />;
-            }
-          });
-        } else if (value.type.constructor !== Array) {
-          columns.push({
-            title: (
-              <a onClick={e => orderBy(e, key)} href="#">
-                {startCase(key)} {renderOrderByArrow(key)}
-              </a>
-            ),
-            dataIndex: key,
-            key: key,
-            render: (text, record) => (
-              <EditableCell value={text} onChange={onCellChange('name', record.id, hendleUpdate)} />
+        });
+      } else if (value.type.name === 'Boolean') {
+        columns.push({
+          title: (
+            <a onClick={e => orderBy(e, key)} href="#">
+              {startCase(key)} {renderOrderByArrow(key)}
+            </a>
+          ),
+          dataIndex: key,
+          key: key,
+          width: 100,
+          render: (text, record) => {
+            const data = {};
+            data[key] = !text;
+            return <Switch checked={text} onClick={() => hendleUpdate(data, record.id)} />;
+          }
+        });
+      } else if (value.type.constructor !== Array) {
+        columns.push({
+          title: (
+            <a onClick={e => orderBy(e, key)} href="#">
+              {startCase(key)} {renderOrderByArrow(key)}
+            </a>
+          ),
+          dataIndex: key,
+          key: key,
+          render: (text, record) =>
+            customTableColumns[key] && customTableColumns[key]['render'] ? (
+              customTableColumns[key]['render'](text, record)
+            ) : (
+              <EditableCell
+                value={
+                  customTableColumns[key] && customTableColumns[key]['render']
+                    ? customTableColumns[key]['render'](text, record)
+                    : text
+                }
+                onChange={onCellChange(key, record.id, hendleUpdate)}
+              />
             )
-          });
-        }
+        });
       }
     }
   }
@@ -110,14 +103,19 @@ export const createColumnFields = (
   columns.push({
     title: 'Actions',
     key: 'actions',
-    width: 100,
-    render: (text, record) => (
-      <Popconfirm title="Sure to delete?" onConfirm={() => hendleDelete(record.id)}>
+    width: 150,
+    render: (text, record) => [
+      <Link className="link" to={`/${link}/${record.id}`} key="edit">
+        <Button color="primary" size="sm">
+          Edit
+        </Button>
+      </Link>,
+      <Popconfirm title="Sure to delete?" onConfirm={() => hendleDelete(record.id)} key="delete">
         <Button color="primary" size="sm">
           Delete
         </Button>
       </Popconfirm>
-    )
+    ]
   });
 
   return columns;
@@ -141,7 +139,7 @@ const RenderEntry = ({ fields, formdata, schema, meta: { error, submitFailed } }
     <Col span={12} offset={6}>
       {fields.map((field, index) => (
         <div key={index} className="field-array-form">
-          {createFormFields(schema, formdata, [], `${field}.`)}
+          {createFormFields(schema, formdata, `${field}.`)}
           <FormItem {...tailFormItemLayout}>
             <Button color="primary" size="sm" onClick={() => fields.remove(index)}>
               Delete
@@ -166,19 +164,15 @@ RenderEntry.propTypes = {
   meta: PropTypes.object
 };
 
-export const createFormFields = (schema, formdata, only = [], prefix = '') => {
+export const createFormFields = (schema, formdata, prefix = '', batch = false) => {
   let fields = [];
 
   for (const key of schema.keys()) {
     const value = schema.values[key];
 
-    if (only.length > 0 && !only.includes(key)) {
-      continue;
-    }
-
     if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
       let validate = [];
-      if (!value.optional) {
+      if (!value.optional && !batch) {
         validate.push(required);
       }
 
@@ -211,7 +205,7 @@ export const createFormFields = (schema, formdata, only = [], prefix = '') => {
         />
       );
     } else {
-      if (value.type.constructor === Array) {
+      if (value.type.constructor === Array && !batch) {
         fields.push(
           <FieldArray name={key} key={key} component={RenderEntry} schema={value.type[0]} formdata={formdata} />
         );
@@ -281,7 +275,7 @@ export const pickInputFields = (schema, values, node = null) => {
 
 class EditableCell extends React.Component {
   static propTypes = {
-    value: PropTypes.string.isRequired,
+    value: PropTypes.string,
     onChange: PropTypes.func.isRequired
   };
 
@@ -313,7 +307,7 @@ class EditableCell extends React.Component {
           </div>
         ) : (
           <div className="editable-cell-text-wrapper">
-            {value || ' '}
+            {value || '\u00A0'}
             <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
           </div>
         )}

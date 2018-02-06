@@ -48,7 +48,14 @@ class PageLayout extends React.Component {
             breakpoint="lg"
             collapsedWidth="0"
           >
-            Sider
+            <Menu onClick={this.handleClick} selectedKeys={[this.props.location.pathname]} mode="vertical" theme="dark">
+              <MenuItem key="/">
+                <NavLink to="/" className="nav-link">
+                  {settings.app.name}
+                </NavLink>
+              </MenuItem>
+              {modules.navItems}
+            </Menu>
           </Sider>
           <Layout>
             <section className="flex-grow">
@@ -56,13 +63,7 @@ class PageLayout extends React.Component {
                 <Header style={{ padding: 0 }}>
                   <Row gutter={8}>
                     <Col span={14}>
-                      <Menu
-                        onClick={this.handleClick}
-                        selectedKeys={[this.props.location.pathname]}
-                        mode="horizontal"
-                        theme="dark"
-                        style={{ lineHeight: '64px' }}
-                      >
+                      <Menu mode="horizontal" theme="dark" style={{ lineHeight: '64px' }}>
                         <MenuItem key="trigger">
                           <Icon
                             className="trigger"
@@ -70,12 +71,6 @@ class PageLayout extends React.Component {
                             onClick={this.toggle}
                           />
                         </MenuItem>
-                        <MenuItem key="/">
-                          <NavLink to="/" className="nav-link">
-                            {settings.app.name}
-                          </NavLink>
-                        </MenuItem>
-                        {modules.navItems}
                       </Menu>
                     </Col>
                     <Col span={10}>

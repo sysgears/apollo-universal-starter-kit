@@ -12,8 +12,10 @@ import DELETEMANY_$MODULE$S from '../graphql/DeleteMany$Module$s.graphql';
 import UPDATEMANY_$MODULE$S from '../graphql/UpdateMany$Module$s.graphql';
 
 class $Module$ extends React.Component {
+  customTableColumns = {};
+
   render() {
-    return <ListView {...this.props} schema={$Module$Schema} />;
+    return <ListView {...this.props} customTableColumns={this.customTableColumns} schema={$Module$Schema} />;
   }
 }
 

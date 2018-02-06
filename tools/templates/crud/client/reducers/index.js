@@ -4,11 +4,7 @@ const defaultState = {
   nativeLink: '$Module$Edit',
   limit: 50,
   searchText: '',
-  orderBy: {},
-  formFields: {},
-  listFields: {},
-  filterFields: {},
-  batchUpdateFields: {}
+  orderBy: {}
 };
 
 export default function (state = defaultState, action) {

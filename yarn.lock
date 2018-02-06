@@ -4082,15 +4082,15 @@ domain-browser@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.2.0.tgz#3d31f50191a6749dd1375a7f522e823d42e54eda"
 
-domain-graphql@^0.0.14:
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/domain-graphql/-/domain-graphql-0.0.14.tgz#23d651ce3eaba5e083ed141069f77fad688fbe41"
+domain-graphql@^0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/domain-graphql/-/domain-graphql-0.0.15.tgz#03aff3e0c678d8512aed0f4acd9037598938e074"
   dependencies:
     debug "^3.1.0"
 
-domain-knex@^0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/domain-knex/-/domain-knex-0.0.10.tgz#2685acc0eb27d187dee5f4a7083e709e90ddcbac"
+domain-knex@^0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/domain-knex/-/domain-knex-0.0.11.tgz#3de0d8e66af5125d364822b073ad04fc8add326e"
   dependencies:
     debug "^3.1.0"
     humps "^2.0.1"
@@ -4101,9 +4101,9 @@ domain-react-forms@^0.0.9:
   dependencies:
     debug "^3.1.0"
 
-domain-schema@^0.0.13:
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/domain-schema/-/domain-schema-0.0.13.tgz#dd47c7712d272b4a1a0850321b49c0422c2fdb52"
+domain-schema@^0.0.14:
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/domain-schema/-/domain-schema-0.0.14.tgz#911bdf6d5ae6e2e68fa4979778ec2cb622da97db"
   dependencies:
     debug "^3.1.0"
 

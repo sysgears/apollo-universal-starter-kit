@@ -110,7 +110,8 @@ class ListView extends React.Component {
     schema: PropTypes.object.isRequired,
     link: PropTypes.string.isRequired,
     handleSubmit: PropTypes.func,
-    submitting: PropTypes.bool
+    submitting: PropTypes.bool,
+    customTableColumns: PropTypes.object
   };
 
   state = {
@@ -210,7 +211,7 @@ class ListView extends React.Component {
   };
 
   render() {
-    const { loading, data, loadMoreRows, schema, link, handleSubmit } = this.props;
+    const { loading, data, loadMoreRows, schema, link, handleSubmit, customTableColumns } = this.props;
     const { selectedRowKeys } = this.state;
     const hasSelected = selectedRowKeys.length > 0;
 
@@ -248,7 +249,7 @@ class ListView extends React.Component {
           </Col>
           <Col span={21}>
             <Form layout="inline" name="post" onSubmit={handleSubmit(this.hendleUpdateMany)}>
-              {createFormFields(schema, {}, ['name', 'split'])}
+              {createFormFields(schema, {}, '', true)}
               {/*error && <Alert color="error">{error}</Alert>*/}
               <FormItem>
                 <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>
@@ -268,7 +269,8 @@ class ListView extends React.Component {
       this.renderOrderByArrow,
       this.hendleUpdate,
       this.hendleDelete,
-      this.onCellChange
+      this.onCellChange,
+      customTableColumns
     );
 
     let tableProps = {

@@ -22,11 +22,13 @@ const RenderField = ({ input: { value, ...inputRest }, label, data, meta: { touc
     validateStatus = 'error';
   }
 
-  const options = data.map(opt => (
-    <Option key={opt.id} value={opt.id.toString()}>
-      {opt.name}
-    </Option>
-  ));
+  const options = data
+    ? data.map(opt => (
+        <Option key={opt.id} value={opt.id.toString()}>
+          {opt.name}
+        </Option>
+      ))
+    : null;
 
   return (
     <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={error}>

@@ -1,5 +1,6 @@
 import ApolloClient from 'apollo-client';
 import { ApolloLink, Observable } from 'apollo-link';
+import { withClientState } from 'apollo-link-state';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { SchemaLink } from 'apollo-link-schema';
 import { addTypenameToDocument } from 'apollo-utilities';
@@ -148,9 +149,11 @@ export default class Renderer {
     const isLocalhost = /localhost/.test(__BACKEND_URL__);
     let linkSchema = isLocalhost ? new SchemaLink({ schema: { ...serverModules.schemas } }) : {};
 
+    const linkState = withClientState({ ...clientModules.resolvers, cache });
+
     const client = new ApolloClient({
       link: ApolloLink.from(
-        (settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link, ...linkSchema])
+        (settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link, ...linkSchema])
       ),
       cache
     });

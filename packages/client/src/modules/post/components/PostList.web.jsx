@@ -13,7 +13,7 @@ export default class PostList extends React.PureComponent {
     loadMoreRows: PropTypes.func.isRequired
   };
 
-  hendleDeletePost = id => {
+  handleDeletePost = id => {
     const { deletePost } = this.props;
     deletePost(id);
   };
@@ -70,7 +70,7 @@ export default class PostList extends React.PureComponent {
               color="primary"
               size="sm"
               className="delete-button"
-              onClick={() => this.hendleDeletePost(record.id)}
+              onClick={() => this.handleDeletePost(record.id)}
             >
               Delete
             </Button>

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
+import { withClientState } from 'apollo-link-state';
 import { SchemaLink } from 'apollo-link-schema';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -35,6 +36,7 @@ const renderServerSide = async (req, res) => {
   //   networkInterface = addPersistedQueries(networkInterface, queryMap);
   // }
   //
+  const clientModules = require('../../../client/src/modules').default;
 
   const fetch = createApolloFetch({ uri: apiUrl, constructOptions: modules.constructFetchOptions });
   fetch.batchUse(({ options }, next) => {
@@ -46,11 +48,12 @@ const renderServerSide = async (req, res) => {
   const cache = new InMemoryCache();
   const isLocalhost = /localhost/.test(__BACKEND_URL__);
   let link = new BatchHttpLink({ fetch });
+  const linkState = withClientState({ ...clientModules.resolvers, cache });
   let linkSchema = isLocalhost ? new SchemaLink({ schema: { ...modules.schemas } }) : {};
 
   const client = createApolloClient({
     link: ApolloLink.from(
-      (settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link, ...linkSchema])
+      (settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link, ...linkSchema])
     ),
     cache
   });
@@ -59,7 +62,6 @@ const renderServerSide = async (req, res) => {
   const store = createReduxStore(initialState, client);
 
   const context = {};
-  const clientModules = require('../../../client/src/modules').default;
   const App = () =>
     clientModules.getWrappedRoot(
       <Provider store={store}>

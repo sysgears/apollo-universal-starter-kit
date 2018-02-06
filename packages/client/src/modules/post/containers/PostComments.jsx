@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 
@@ -10,10 +9,12 @@ import ADD_COMMENT from '../graphql/AddComment.graphql';
 import EDIT_COMMENT from '../graphql/EditComment.graphql';
 import DELETE_COMMENT from '../graphql/DeleteComment.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
+import ADD_COMMENT_CLIENT from '../graphql/AddComment.client.graphql';
+import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 
 function AddComment(prev, node) {
   // ignore if duplicate
-  if (node.id !== null && prev.post.comments.some(comment => node.id === comment.id)) {
+  if (node.id !== null && prev.post.comments.some(comment => node.id !== null && node.id === comment.id)) {
     return prev;
   }
 
@@ -120,6 +121,7 @@ const PostCommentsWithApollo = compose(
           updateQueries: {
             post: (prev, { mutationResult: { data: { addComment } } }) => {
               if (prev.post) {
+                prev.post.comments = prev.post.comments.filter(comment => comment.id);
                 return AddComment(prev, addComment);
               }
             }
@@ -164,17 +166,17 @@ const PostCommentsWithApollo = compose(
           }
         })
     })
+  }),
+  graphql(ADD_COMMENT_CLIENT, {
+    props: ({ mutate }) => ({
+      onCommentSelect: comment => {
+        mutate({ variables: { comment: comment } });
+      }
+    })
+  }),
+  graphql(COMMENT_QUERY_CLIENT, {
+    props: ({ data: { comment } }) => ({ comment })
   })
 )(PostComments);
 
-export default connect(
-  state => ({ comment: state.post.comment }),
-  dispatch => ({
-    onCommentSelect(comment) {
-      dispatch({
-        type: 'COMMENT_SELECT',
-        value: comment
-      });
-    }
-  })
-)(PostCommentsWithApollo);
+export default PostCommentsWithApollo;

@@ -3,6 +3,7 @@ import { getOperationAST } from 'graphql';
 import { createApolloFetch } from 'apollo-fetch';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
+import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
@@ -103,12 +104,14 @@ let link = ApolloLink.split(
   new BatchHttpLink({ fetch })
 );
 
+const linkState = withClientState({ ...modules.resolvers, cache });
+
 // if (__PERSIST_GQL__) {
 //   networkInterface = addPersistedQueries(networkInterface, queryMap);
 // }
 
 const client = createApolloClient({
-  link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link])),
+  link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
   cache
 });
 

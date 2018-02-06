@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { withFormik } from 'formik';
 import url from 'url';
 import { NavLink, Link } from 'react-router-dom';
+import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
-import { required, email, minLength } from '../../../../../common/validation';
+import { required, email, minLength, validateForm } from '../../../../../common/validation';
 
 import settings from '../../../../../../settings';
 
@@ -22,16 +23,31 @@ const googleLogin = () => {
   window.location = `${protocol}//${hostname}:${serverPort}/auth/google`;
 };
 
-const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
+const contactFormSchema = {
+  email: [required, email],
+  password: [required, minLength(5)]
+};
+
+const validate = values => validateForm(values, contactFormSchema);
+
+const LoginForm = ({ handleSubmit, submitting, error, handleChange, values }) => {
   return (
-    <Form name="login" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="email" component={RenderField} type="email" label="Email" validate={[required, email]} />
+    <Form name="login" onSubmit={handleSubmit}>
+      <Field
+        name="email"
+        component={RenderField}
+        type="email"
+        label="Email"
+        onChange={handleChange}
+        value={values.email}
+      />
       <Field
         name="password"
         component={RenderField}
         type="password"
         label="Password"
-        validate={[required, minLength(5)]}
+        onChange={handleChange}
+        value={values.password}
       />
       <div className="text-center">{error && <Alert color="error">{error}</Alert>}</div>
       <div className="text-center">
@@ -65,11 +81,22 @@ const LoginForm = ({ handleSubmit, submitting, onSubmit, error }) => {
 
 LoginForm.propTypes = {
   handleSubmit: PropTypes.func,
+  handleChange: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  error: PropTypes.string
+  error: PropTypes.string,
+  values: PropTypes.object
 };
 
-export default reduxForm({
-  form: 'login'
-})(LoginForm);
+const LoginFormWithFormik = withFormik({
+  enableReinitialize: true,
+  mapPropsToValues: () => ({ email: '', password: '' }),
+  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+    await onSubmit(values);
+    resetForm();
+  },
+  validate: values => validate(values),
+  displayName: 'LoginForm' // helps with React DevTools
+});
+
+export default LoginFormWithFormik(LoginForm);

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { SubmissionError } from 'redux-form';
 import { Elements } from 'react-stripe-elements';
 
 import { LayoutCenter, clientOnly } from '../../common/components';
@@ -24,7 +23,7 @@ export default class SubscriptionView extends React.Component {
         _error: 'Transaction failed!'
       };
       result.errors.map(error => (submitError[error.field] = error.message));
-      throw new SubmissionError(submitError);
+      throw submitError;
     }
   };
 

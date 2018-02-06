@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { SubmissionError } from 'redux-form';
 import { PageLayout } from '../../common/components/web';
 
 import ResetPasswordForm from '../components/ResetPasswordForm';
@@ -28,7 +27,7 @@ export default class ResetPasswordView extends React.Component {
         _error: 'Reset Password failed!'
       };
       result.errors.map(error => (submitError[error.field] = error.message));
-      throw new SubmissionError(submitError);
+      throw submitError;
     }
   };
 

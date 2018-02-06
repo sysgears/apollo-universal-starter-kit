@@ -5299,6 +5299,14 @@ formidable@^1.0.17, formidable@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.1.1.tgz#96b8886f7c3c3508b932d6bd70c4d3a88f35f1a9"
 
+formik@^0.10.5:
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/formik/-/formik-0.10.5.tgz#6984d2f22e918c6d2264a3cb86b8582f7277faca"
+  dependencies:
+    lodash.isequal "4.5.0"
+    prop-types "^15.5.10"
+    warning "^3.0.0"
+
 forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
@@ -7629,6 +7637,10 @@ lodash.isarray@^3.0.0:
 lodash.isboolean@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz#6c2e171db2a257cd96802fd43b01b20d5f5870f6"
+
+lodash.isequal@4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
 
 lodash.isfunction@^3.0.8:
   version "3.0.8"

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { SubmissionError } from 'redux-form';
 import { pick } from 'lodash';
 import { PageLayout } from '../../common/components/web';
 
@@ -35,12 +34,12 @@ export default class UserEditView extends React.PureComponent {
       result = await addUser(insertValues);
     }
 
-    if (result.errors) {
+    if (result && result.errors) {
       let submitError = {
         _error: 'Edit user failed!'
       };
       result.errors.map(error => (submitError[error.field] = error.message));
-      throw new SubmissionError(submitError);
+      throw submitError;
     }
   };
 
@@ -74,7 +73,7 @@ export default class UserEditView extends React.PureComponent {
             Back
           </Link>
           <h2>{user ? 'Edit' : 'Create'} User</h2>
-          <UserForm onSubmit={this.onSubmit} initialValues={user} />
+          <UserForm onSubmit={this.onSubmit} initialValues={user || {}} />
         </PageLayout>
       );
     }

@@ -3,6 +3,8 @@
 import type { DocumentNode } from 'graphql';
 import type { Middleware, $Request } from 'express';
 
+import { Connector } from 'connector-js';
+
 import { merge, map, union, without, castArray } from 'lodash';
 
 import log from '../../../common/log';
@@ -22,7 +24,7 @@ type FeatureParams = {
   catalogInfo: any | any[]
 };
 
-class Feature {
+class Feature extends Connector {
   schema: DocumentNode[];
   createResolversFunc: Function[];
   createContextFunc: Function[];
@@ -31,43 +33,60 @@ class Feature {
   middleware: Function[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
+    super(feature, features);
     // console.log(feature.schema[0] instanceof DocumentNode);
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
+    /*
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.beforeware = combine(arguments, arg => arg.beforeware);
     this.middleware = combine(arguments, arg => arg.middleware);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
+    */
   }
 
   get schemas(): DocumentNode[] {
-    return this.schema;
+    let items = this.Get({ schema: true });
+    let docs = combine(items, arg => arg.schema);
+    return docs;
   }
 
   async createContext(req: $Request, connectionParams: any, webSocket: any) {
+    let items = this.Get({ createContextFunc: true });
+    let fns = combine(items, item => item.createContextFunc);
     const results = await Promise.all(
-      this.createContextFunc.map(createContext => createContext(req, connectionParams, webSocket))
+      fns.map(createContext => createContext(req, connectionParams, webSocket))
     );
     return merge({}, ...results);
   }
 
   createResolvers(pubsub: any) {
-    return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
+    let items = this.Get({ createResolversFunc: true });
+    let fns = combine(items, item => item.createResolversFunc);
+    return merge({}, ...fns.map(createResolvers => createResolvers(pubsub)));
   }
 
   get beforewares(): Middleware[] {
-    return this.beforeware;
+    let items = this.Get({beforeware: true})
+    let bs = combine(items, item => item.beforeware)
+    return bs;
+    // return this.beforeware;
   }
 
   get middlewares(): Middleware[] {
-    return this.middleware;
+    let items = this.Get({middleware: true})
+    let ms = combine(items, item => item.middleware)
+    return ms;
+    // return this.middleware;
   }
 
   get constructFetchOptions(): any {
-    return this.createFetchOptions.length
+    let items = this.Get({constructFetchOptions: true})
+    let cs = combine(items, item => item.constructFetchOptions)
+    return cs.length
       ? (...args) => {
           try {
             let result = {};

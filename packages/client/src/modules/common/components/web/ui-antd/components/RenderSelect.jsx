@@ -5,18 +5,7 @@ import { FormItem } from './index';
 
 const Option = Select.Option;
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 }
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 12 }
-  }
-};
-
-const RenderField = ({ input: { value, ...inputRest }, label, data, meta: { touched, error } }) => {
+const RenderField = ({ input: { value, ...inputRest }, label, data, formItemLayout, meta: { touched, error } }) => {
   let validateStatus = '';
   if (touched && error) {
     validateStatus = 'error';
@@ -51,6 +40,7 @@ RenderField.propTypes = {
   data: PropTypes.array,
   input: PropTypes.object,
   label: PropTypes.string,
+  formItemLayout: PropTypes.object,
   meta: PropTypes.object
 };
 

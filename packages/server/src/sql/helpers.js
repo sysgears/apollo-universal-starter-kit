@@ -39,7 +39,7 @@ const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNam
         }
         const as = parentPath.length > 0 ? `${parentPath.join('_')}_${key}` : key;
         const arrayPrefix = single ? '' : '_';
-        selectItems.push(`${decamelize(domainSchema.name)}.${decamelize(key)} as ${arrayPrefix}${as}`);
+        selectItems.push(`${decamelize(domainSchema.__.name)}.${decamelize(key)} as ${arrayPrefix}${as}`);
       } else {
         if (value.type.constructor === Array) {
           //console.log('Array');
@@ -48,7 +48,7 @@ const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNam
           //console.log(value.type[0].name);
         } else {
           if (!value.type.__.transient) {
-            joinNames.push({ key: decamelize(key), name: decamelize(value.type.name) });
+            joinNames.push({ key: decamelize(key), name: decamelize(value.type.__.name) });
           }
 
           parentPath.push(key);
@@ -62,10 +62,7 @@ const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNam
   }
 };
 
-export const selectBy = (schema, fields, single = false, prefix = '') => {
-  // form table name
-  const tableName = decamelize(schema.name);
-
+export const selectBy = (schema, fields, single = false) => {
   // select fields
   const parentPath = [];
   const selectItems = [];
@@ -75,7 +72,11 @@ export const selectBy = (schema, fields, single = false, prefix = '') => {
   return query => {
     // join table names
     joinNames.map(({ key, name }) => {
-      query.leftJoin(`${prefix}${name} as ${name}`, `${name}.id`, `${tableName}.${key}_id`);
+      query.leftJoin(
+        `${schema.__.tablePrefix}${name} as ${name}`,
+        `${name}.id`,
+        `${decamelize(schema.__.name)}.${key}_id`
+      );
     });
 
     return query.select(selectItems);

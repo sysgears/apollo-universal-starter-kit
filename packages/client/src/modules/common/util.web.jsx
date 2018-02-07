@@ -139,7 +139,7 @@ const RenderEntry = ({ fields, formdata, schema, meta: { error, submitFailed } }
     <Col span={12} offset={6}>
       {fields.map((field, index) => (
         <div key={index} className="field-array-form">
-          {createFormFields(schema, formdata, `${field}.`)}
+          {createFormFields(schema, formdata, null, `${field}.`)}
           <FormItem {...tailFormItemLayout}>
             <Button color="primary" size="sm" onClick={() => fields.remove(index)}>
               Delete
@@ -164,7 +164,7 @@ RenderEntry.propTypes = {
   meta: PropTypes.object
 };
 
-export const createFormFields = (schema, formdata, prefix = '', batch = false) => {
+export const createFormFields = (schema, formdata, formItemLayout, prefix = '', batch = false) => {
   let fields = [];
 
   for (const key of schema.keys()) {
@@ -202,6 +202,7 @@ export const createFormFields = (schema, formdata, prefix = '', batch = false) =
           type="text"
           label={startCase(key)}
           validate={validate}
+          formItemLayout={formItemLayout}
         />
       );
     } else {

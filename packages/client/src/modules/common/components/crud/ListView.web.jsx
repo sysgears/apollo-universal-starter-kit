@@ -249,7 +249,7 @@ class ListView extends React.Component {
           </Col>
           <Col span={21}>
             <Form layout="inline" name="post" onSubmit={handleSubmit(this.hendleUpdateMany)}>
-              {createFormFields(schema, {}, '', true)}
+              {createFormFields(schema, {}, null, '', true)}
               {/*error && <Alert color="error">{error}</Alert>*/}
               <FormItem>
                 <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>

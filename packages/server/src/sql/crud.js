@@ -8,12 +8,12 @@ import FieldError from '../../../common/FieldError';
 import knex from './connector';
 
 export default class Crud {
-  getPrefix() {
-    return this.prefix;
+  getTableName() {
+    return decamelize(this.schema.__.name);
   }
 
-  getTableName() {
-    return this.tableName;
+  getFullTableName() {
+    return `${this.schema.__.tablePrefix}${this.getTableName()}`;
   }
 
   getSchema() {
@@ -21,8 +21,8 @@ export default class Crud {
   }
 
   _getList({ limit, offset, orderBy, filter }, info) {
-    const baseQuery = knex(`${this.prefix}${this.tableName} as ${this.tableName}`);
-    const select = selectBy(this.schema, info, false, this.prefix);
+    const baseQuery = knex(`${this.getFullTableName()} as ${this.getTableName()}`);
+    const select = selectBy(this.schema, info, false);
     const queryBuilder = select(baseQuery);
 
     if (limit) {
@@ -51,27 +51,26 @@ export default class Crud {
                 sortBy = remoteKey;
               }
             }
-            column = `${decamelize(value.type.name)}.${sortBy}`;
+            column = `${this.getTableName()}.${sortBy}`;
           } else {
-            column = `${this.tableName}.${decamelize(column)}`;
+            column = `${this.getTableName()}.${decamelize(column)}`;
           }
         }
       }
 
       queryBuilder.orderBy(column, order);
     } else {
-      queryBuilder.orderBy(`${this.tableName}.id`);
+      queryBuilder.orderBy(`${this.getTableName()}.id`);
     }
 
     if (filter) {
       if (has(filter, 'searchText') && filter.searchText !== '') {
         const schema = this.schema;
-        const tableName = this.tableName;
         queryBuilder.where(function() {
           for (const key of schema.keys()) {
             const value = schema.values[key];
             if (value.searchText) {
-              this.orWhere(`${tableName}.${key}`, 'like', `%${filter.searchText}%`);
+              this.orWhere(`${this.getTableName()}.${key}`, 'like', `%${filter.searchText}%`);
             }
           }
         });
@@ -99,7 +98,7 @@ export default class Crud {
   }
 
   getTotal() {
-    return knex(`${this.prefix}${this.tableName}`)
+    return knex(`${this.getFullTableName()}`)
       .countDistinct('id as count')
       .first();
   }
@@ -107,9 +106,9 @@ export default class Crud {
   _get({ where }, info) {
     const { id } = where;
 
-    const baseQuery = knex(`${this.prefix}${this.tableName} as ${this.tableName}`);
-    const select = selectBy(this.schema, info, true, this.prefix);
-    return knexnest(select(baseQuery).where(`${this.tableName}.id`, '=', id));
+    const baseQuery = knex(`${this.getFullTableName()} as ${this.getTableName()}`);
+    const select = selectBy(this.schema, info, true);
+    return knexnest(select(baseQuery).where(`${this.getTableName()}.id`, '=', id));
   }
 
   async get(args, info) {
@@ -118,7 +117,7 @@ export default class Crud {
   }
 
   _create(data) {
-    return knex(`${this.prefix}${this.tableName}`)
+    return knex(`${this.getFullTableName()}`)
       .insert(decamelizeKeys(data))
       .returning('id');
   }
@@ -145,7 +144,7 @@ export default class Crud {
         nestedEntries.map(nested => {
           if (nested.data.create) {
             nested.data.create.map(async create => {
-              create[`${camelize(this.schema.name)}Id`] = id;
+              create[`${camelize(this.schema.__.name)}Id`] = id;
               await ctx[pascalize(nested.key)]._create(create);
             });
           }
@@ -159,7 +158,7 @@ export default class Crud {
   }
 
   _update({ data, where }) {
-    return knex(`${this.prefix}${this.tableName}`)
+    return knex(`${this.getFullTableName()}`)
       .update(decamelizeKeys(data))
       .where(where);
   }
@@ -186,7 +185,7 @@ export default class Crud {
         nestedEntries.map(nested => {
           if (nested.data.create) {
             nested.data.create.map(async create => {
-              create[`${camelize(this.schema.name)}Id`] = args.where.id;
+              create[`${this.getTableName()}Id`] = args.where.id;
               await ctx[pascalize(nested.key)]._create(create);
             });
           }
@@ -210,7 +209,7 @@ export default class Crud {
   }
 
   _delete({ where }) {
-    return knex(`${this.prefix}${this.tableName}`)
+    return knex(`${this.getFullTableName()}`)
       .where(where)
       .del();
   }
@@ -241,11 +240,11 @@ export default class Crud {
 
   _sort({ data }) {
     return knex.raw(
-      `UPDATE ${this.prefix}${this.tableName} t1
-        JOIN ${this.prefix}${this.tableName} t2
-        ON t1.id = ? AND t2.id = ?
-        SET t1.rank = ?,
-        t2.rank = ?`,
+      `UPDATE ${this.getFullTableName()} t1
+JOIN ${this.getFullTableName()} t2
+ON t1.id = ? AND t2.id = ?
+  SET t1.rank = ?,
+  t2.rank = ? `,
       data
     );
   }
@@ -269,7 +268,7 @@ export default class Crud {
   }
 
   _updateMany({ data, where: { id_in } }) {
-    return knex(`${this.prefix}${this.tableName}`)
+    return knex(`${this.getFullTableName()}`)
       .update(decamelizeKeys(data))
       .whereIn('id', id_in);
   }
@@ -291,7 +290,7 @@ export default class Crud {
   }
 
   _deleteMany({ where: { id_in } }) {
-    return knex(`${this.prefix}${this.tableName}`)
+    return knex(`${this.getFullTableName()}`)
       .whereIn('id', id_in)
       .del();
   }
@@ -316,8 +315,8 @@ export default class Crud {
   async getByIds(ids, by, Obj, info) {
     info = parseFields(info);
     info[`${by}Id`] = true;
-    const baseQuery = knex(`${Obj.getPrefix()}${Obj.getTableName()} as ${Obj.getTableName()}`);
-    const select = selectBy(Obj.getSchema(), info, false, Obj.getPrefix());
+    const baseQuery = knex(`${Obj.getFullTableName()} as ${Obj.getTableName()}`);
+    const select = selectBy(Obj.getSchema(), info, false);
     const res = await knexnest(select(baseQuery).whereIn(`${Obj.getTableName()}.${decamelize(by)}_id`, ids));
     return orderedFor(res, ids, `${by}Id`, false);
   }

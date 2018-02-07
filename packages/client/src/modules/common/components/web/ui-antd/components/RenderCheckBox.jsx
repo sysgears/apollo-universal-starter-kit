@@ -5,7 +5,7 @@ import Form from 'antd/lib/form';
 
 const FormItem = Form.Item;
 
-const RenderCheckBox = ({ input, label, meta: { touched, error } }) => {
+const RenderCheckBox = ({ input, label, formItemLayout, meta: { touched, error } }) => {
   let validateStatus = '';
   if (touched && error) {
     validateStatus = 'error';
@@ -14,7 +14,9 @@ const RenderCheckBox = ({ input, label, meta: { touched, error } }) => {
   return (
     <FormItem label={label} validateStatus={validateStatus} help={error}>
       <div>
-        <Checkbox {...input}>{label}</Checkbox>
+        <Checkbox {...input} {...formItemLayout}>
+          {label}
+        </Checkbox>
       </div>
     </FormItem>
   );
@@ -24,6 +26,7 @@ RenderCheckBox.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
   type: PropTypes.string,
+  formItemLayout: PropTypes.object,
   meta: PropTypes.object
 };
 

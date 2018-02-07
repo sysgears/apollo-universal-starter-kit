@@ -1,13 +1,12 @@
 import DomainSchema, { Schema } from 'domain-schema';
 
-/* eslint import/prefer-default-export: 0 */
+export class $Module$ extends Schema {
+  __ = { name: '$Module$', tablePrefix: '' };
+  id = DomainSchema.Int;
+  name = {
+    type: String,
+    searchText: true
+  };
+}
 
-export const $Module$ = new DomainSchema(
-  class $Module$ extends Schema {
-    id = DomainSchema.Integer;
-    name = {
-      type: String,
-      searchText: true
-    };
-  }
-);
+export const $Module$Schema = new DomainSchema($Module$);

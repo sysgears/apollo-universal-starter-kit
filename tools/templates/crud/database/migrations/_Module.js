@@ -1,7 +1,7 @@
 import KnexGenerator from 'domain-knex';
 
-import { $Module$ } from '../../modules/$module$/schema';
+import { $Module$Schema } from '../../modules/$module$/schema';
 
-exports.up = knex => new KnexGenerator(knex).createTables($Module$);
+exports.up = knex => new KnexGenerator(knex).createTables($Module$Schema);
 
-exports.down = knex => new KnexGenerator(knex).dropTables($Module$);
+exports.down = knex => new KnexGenerator(knex).dropTables($Module$Schema);

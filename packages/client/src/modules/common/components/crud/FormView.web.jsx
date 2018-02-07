@@ -18,10 +18,21 @@ const tailFormItemLayout = {
   }
 };
 
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 6 }
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12 }
+  }
+};
+
 const FormView = ({ handleSubmit, submitting, onSubmit, data, error, schema }) => {
   return (
     <Form name="post" onSubmit={handleSubmit(onSubmit)}>
-      {createFormFields(schema, data)}
+      {createFormFields(schema, data, formItemLayout)}
       {error && <Alert color="error">{error}</Alert>}
       <FormItem {...tailFormItemLayout}>
         <Button color="primary" type="submit" disabled={submitting}>

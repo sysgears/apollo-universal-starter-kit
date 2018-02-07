@@ -1,6 +1,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
+const DomainSchema = require('domain-schema').default;
 const GraphQLGenerator = require('domain-graphql').default;
 const { pascalize, camelize } = require('humps');
 const { startCase } = require('lodash');
@@ -35,25 +36,23 @@ function renameFiles(destinationPath, templatePath, module, location) {
 
 function generateField(value, update = false) {
   let result = '';
-  switch (value.type.name) {
-    case 'Boolean':
-      result += 'Boolean';
-      break;
-    case 'ID':
-      result += 'ID';
-      break;
-    case 'Integer':
-      result += 'Int';
-      break;
-    case 'Number':
-      result += 'Float';
-      break;
-    case 'String':
-      result += 'String';
-      break;
-    case 'Date':
-      result += 'Date';
-      break;
+  const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+  if (hasTypeOf(Boolean)) {
+    result += 'Boolean';
+  } else if (hasTypeOf(DomainSchema.ID)) {
+    result += 'ID';
+  } else if (hasTypeOf(DomainSchema.Int)) {
+    result += 'Int';
+  } else if (hasTypeOf(DomainSchema.Float)) {
+    result += 'Float';
+  } else if (hasTypeOf(String)) {
+    result += 'String';
+  } else if (hasTypeOf(Date)) {
+    result += 'Date';
+  } else if (hasTypeOf(DomainSchema.DateTime)) {
+    result += 'DateTime';
+  } else if (hasTypeOf(DomainSchema.Time)) {
+    result += 'Time';
   }
 
   if (!update && !value.optional) {
@@ -197,7 +196,7 @@ function updateSchema(logger, module) {
   if (fs.existsSync(modulePath)) {
     // get module schema
     // eslint-disable-next-line import/no-dynamic-require
-    const schema = require(`${modulePath}/schema`)[Module];
+    const schema = require(`${modulePath}/schema`)[`${Module}Schema`];
 
     // get schema file
     const pathSchema = `${__dirname}/../../packages/server/src/modules/${module}/`;
@@ -232,26 +231,21 @@ function updateSchema(logger, module) {
             }
           }
 
-          let singleKey = key;
-          if (key.slice(-1) === 's') {
-            singleKey = key.slice(0, -1);
-          }
-
           manyInput += `
 
 input ${pascalize(key)}CreateManyInput {
-  create: [${pascalize(singleKey)}CreateInput!]
+  create: [${pascalize(value.type[0].name)}CreateInput!]
 }
 
 input ${pascalize(key)}UpdateManyInput {
-  create: [${pascalize(singleKey)}CreateInput!]
-  delete: [${pascalize(singleKey)}WhereUniqueInput!]
-  update: [${pascalize(singleKey)}UpdateWhereInput!]
+  create: [${pascalize(value.type[0].name)}CreateInput!]
+  delete: [${pascalize(value.type[0].name)}WhereUniqueInput!]
+  update: [${pascalize(value.type[0].name)}UpdateWhereInput!]
 }
 
-input ${pascalize(singleKey)}UpdateWhereInput {
-  where: ${pascalize(singleKey)}WhereUniqueInput!
-  data: ${pascalize(singleKey)}UpdateInput!
+input ${pascalize(value.type[0].name)}UpdateWhereInput {
+  where: ${pascalize(value.type[0].name)}WhereUniqueInput!
+  data: ${pascalize(value.type[0].name)}UpdateInput!
 }`;
         }
       }

@@ -2,18 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormItem, Switch } from './index';
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 }
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 12 }
-  }
-};
-
-const RenderField = ({ input: { value, ...restInput }, label, meta: { touched, error } }) => {
+const RenderField = ({ input: { value, ...restInput }, label, formItemLayout, meta: { touched, error } }) => {
   let validateStatus = '';
   if (touched && error) {
     validateStatus = 'error';
@@ -32,6 +21,7 @@ RenderField.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
   type: PropTypes.string,
+  formItemLayout: PropTypes.object,
   meta: PropTypes.object
 };
 

@@ -6,18 +6,7 @@ import { FormItem } from './index';
 
 const dateFormat = 'YYYY-MM-DD';
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 }
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 12 }
-  }
-};
-
-const RenderDate = ({ input: { value, onChange, ...inputRest }, label, meta: { touched, error } }) => {
+const RenderDate = ({ input: { value, onChange, ...inputRest }, label, formItemLayout, meta: { touched, error } }) => {
   let validateStatus = '';
   if (touched && error) {
     validateStatus = 'error';
@@ -46,6 +35,7 @@ RenderDate.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
   type: PropTypes.string,
+  formItemLayout: PropTypes.object,
   meta: PropTypes.object
 };
 

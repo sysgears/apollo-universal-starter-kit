@@ -6,7 +6,7 @@ import { SubmissionError } from 'redux-form';
 
 import { EditView } from '../../common/components/crud';
 import { pickInputFields } from '../../common/util';
-import { $Module$ as $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
+import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
 import $MODULE$_QUERY from '../graphql/$Module$Query.graphql';
 import CREATE_$MODULE$ from '../graphql/Create$Module$.graphql';
 import UPDATE_$MODULE$ from '../graphql/Update$Module$.graphql';

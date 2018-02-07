@@ -42,7 +42,7 @@ if (settings.user.auth.facebook.enabled) {
               isActive
             });
 
-            await User.createFacebookOuth({
+            await User.createFacebookAuth({
               id,
               displayName,
               userId: createdUserId
@@ -50,7 +50,7 @@ if (settings.user.auth.facebook.enabled) {
 
             user = await User.getUser(createdUserId);
           } else if (!user.fbId) {
-            await User.createFacebookOuth({
+            await User.createFacebookAuth({
               id,
               displayName,
               userId: user.id
@@ -167,10 +167,10 @@ export const parseUser = async ({ req, connectionParams, webSocket }) => {
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
-  createContextFunc: async (req, connectionParams, webSocket) => {
+  createContextFunc: async (req, res, connectionParams, webSocket) => {
     const tokenUser = await parseUser({ req, connectionParams, webSocket });
     const auth = {
-      isAuthenticated: tokenUser ? true : false,
+      isAuthenticated: !!tokenUser,
       scope: tokenUser ? scopes[tokenUser.role] : null
     };
 

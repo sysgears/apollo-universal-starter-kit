@@ -2,8 +2,8 @@ import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import settings from '../../../../../../settings';
-import FieldError from '../../../../../common/FieldError';
+import settings from '../../../../../../../../settings';
+import FieldError from '../../../../../../../common/FieldError';
 
 export const establishSession = async (req, macKey) => {
   let session = getSession(req, macKey);

@@ -2,9 +2,9 @@
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
-import { refreshTokens, tryLogin } from './auth';
-import FieldError from '../../../../common/FieldError';
-import settings from '../../../../../settings';
+import { refreshTokens, tryLogin } from './auth/index';
+import FieldError from '../../../../../../common/FieldError';
+import settings from '../../../../../../../settings';
 
 export default pubsub => ({
   Query: {

@@ -8,6 +8,7 @@ import decode from 'jwt-decode';
 import log from '../../../../../common/log';
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
+import { IfLoggedIn, IfNotLoggedIn } from './AuthBase';
 
 const checkAuth = (cookies, scope) => {
   let token = null;
@@ -160,21 +161,21 @@ AuthLoggedIn.propTypes = {
   to: PropTypes.string
 };
 
-const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        checkAuth(cookies, scope) ? <Component {...props} {...rest} /> : <Redirect to={{ pathname: '/login' }} />
-      }
-    />
-  );
-});
-
-AuthRoute.propTypes = {
-  component: PropTypes.func,
-  cookies: PropTypes.instanceOf(Cookies)
-};
+// const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }) => {
+//   return (
+//     <Route
+//       {...rest}
+//       render={props =>
+//         checkAuth(cookies, scope) ? <Component {...props} {...rest} /> : <Redirect to={{ pathname: '/login' }} />
+//       }
+//     />
+//   );
+// });
+//
+// AuthRoute.propTypes = {
+//   component: PropTypes.func,
+//   cookies: PropTypes.instanceOf(Cookies)
+// };
 
 const AuthLoggedInRoute = withCookies(({ component: Component, cookies, redirect, scope, ...rest }) => {
   return (
@@ -194,9 +195,27 @@ AuthLoggedInRoute.propTypes = {
   scope: PropTypes.string
 };
 
+const AuthRoute = ({ role, redirect, redirectOnLoggedIn, ...props }) =>
+  redirectOnLoggedIn ? (
+    <IfNotLoggedIn role={role} elseComponent={<Redirect to={{ pathname: redirect }} />}>
+      <Route {...props} />
+    </IfNotLoggedIn>
+  ) : (
+    <IfLoggedIn role={role} elseComponent={<Redirect to={{ pathname: redirect }} />}>
+      <Route {...props} />
+    </IfLoggedIn>
+  );
+
+AuthRoute.propTypes = {
+  role: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
+  redirect: PropTypes.string.isRequired,
+  redirectOnLoggedIn: PropTypes.bool
+};
+
+export * from './AuthBase';
+export { AuthRoute };
 export { AuthNav };
 export { AuthLoggedIn };
 export { AuthLoginWithApollo as AuthLogin };
 export { AuthProfile };
-export { AuthRoute };
 export { AuthLoggedInRoute };

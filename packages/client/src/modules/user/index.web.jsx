@@ -1,8 +1,8 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
-import { NavLink } from 'react-router-dom';
+import { Route, NavLink, withRouter } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
-import Profile from './containers/Profile';
+import ProfileView from './components/ProfileView';
 import Users from './components/Users';
 import UserEdit from './containers/UserEdit';
 import Register from './containers/Register';
@@ -11,7 +11,15 @@ import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 import resolvers from './resolvers';
 
-import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
+import {
+  AuthRoute,
+  AuthLoggedInRoute,
+  IfLoggedIn,
+  withUser,
+  withLoadedUser,
+  withLogout,
+  IfNotLoggedIn
+} from './containers/Auth.web';
 
 import Feature from '../connector';
 
@@ -40,36 +48,57 @@ function connectionParam() {
   };
 }
 
+const ProfileName = withLoadedUser(
+  ({ currentUser }) => (currentUser ? currentUser.fullName || currentUser.username : null)
+);
+
+const LogoutLink = withRouter(
+  withLogout(({ logout, history }) => (
+    <a href="#" onClick={() => logout(() => history.push('/'))} className="nav-link">
+      Logout
+    </a>
+  ))
+);
+
 export default new Feature({
   route: [
-    <AuthRoute exact path="/profile" scope="user" component={Profile} />,
-    <AuthRoute exact path="/users" scope="admin" component={Users} />,
-    <AuthRoute exact path="/users/:id" component={UserEdit} />,
-    <AuthLoggedInRoute exact path="/register" redirect="/profile" component={Register} />,
-    <AuthLoggedInRoute exact path="/login" redirect="/profile" component={Login} />,
+    <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={withUser(ProfileView)} />,
+    <AuthRoute exact path="/users" redirect="/login" role="admin" component={Users} />,
+    <Route exact path="/users/:id" component={UserEdit} />,
+    <AuthRoute exact path="/register" redirect="/profile" component={Register} />,
+    <AuthRoute
+      exact
+      path="/login"
+      redirectOnLoggedIn
+      redirect="/profile"
+      component={withRouter(({ history }) => <Login onLogin={() => history.push('/profile')} />)}
+    />,
     <AuthLoggedInRoute exact path="/forgot-password" redirect="/profile" component={ForgotPassword} />,
     <AuthLoggedInRoute exact path="/reset-password/:token" redirect="/profile" component={ResetPassword} />
   ],
   navItem: [
     <MenuItem key="/users">
-      <AuthNav scope="admin">
+      <IfLoggedIn role="admin">
         <NavLink to="/users" className="nav-link" activeClassName="active">
           Users
         </NavLink>
-      </AuthNav>
+      </IfLoggedIn>
     </MenuItem>
   ],
   navItemRight: [
-    <MenuItem key="/profile">
-      <AuthProfile />
-    </MenuItem>,
-    <MenuItem key="/login">
-      <AuthLogin>
-        <NavLink to="/login" className="nav-link" activeClassName="active">
-          Sign In
+    <IfLoggedIn>
+      <MenuItem key="/profile">
+        <NavLink to="/profile" className="nav-link" activeClassName="active">
+          <ProfileName />
         </NavLink>
-      </AuthLogin>
-    </MenuItem>
+      </MenuItem>
+      <LogoutLink />
+    </IfLoggedIn>,
+    <IfNotLoggedIn>
+      <NavLink to="/login" className="nav-link" activeClassName="active">
+        Sign In
+      </NavLink>
+    </IfNotLoggedIn>
   ],
   resolver: resolvers,
   middleware: tokenMiddleware,

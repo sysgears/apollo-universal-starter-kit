@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Connector } from 'connector-js';
+
 import { merge, map, union, without, castArray } from 'lodash';
 
 import log from '../../../common/log';
@@ -8,10 +10,13 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 
 export const featureCatalog = {};
 
-export default class {
+class ClientFeature extends Connector {
   /* eslint-disable no-unused-vars */
-  constructor(
-    {
+  constructor( feature, ...features) {
+
+    super(feature, features);
+
+    let {
       route,
       navItem,
       navItemRight,
@@ -25,9 +30,10 @@ export default class {
       scriptsInsert,
       rootComponentFactory,
       catalogInfo
-    },
-    ...features
-  ) {
+    } = feature;
+
+    console.log(this.Items())
+
     /* eslint-enable no-unused-vars */
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
@@ -44,10 +50,13 @@ export default class {
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
     this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
     this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
-  }
+  } // end of constructor
 
   get routes() {
-    return this.route.map((component, idx) => React.cloneElement(component, { key: idx + this.route.length }));
+    let items = this.Get({route: true})
+    let routes = combine(items, arg => arg.route);
+    return routes.map((component, idx) => React.cloneElement(component, { key: idx + routes.length }));
+    // return this.route.map((component, idx) => React.cloneElement(component, { key: idx + this.route.length }));
   }
 
   get navItems() {
@@ -118,3 +127,5 @@ export default class {
     return nestedRoot;
   }
 }
+
+export default ClientFeature;

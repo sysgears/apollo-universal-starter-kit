@@ -7,8 +7,10 @@ import reducers from './reducers/index';
 
 import Feature from '../connector';
 
-export default new Feature({
+const CounterFeature = new Feature({
   route: <Route exact path="/" component={Counter} />,
   resolver: resolvers,
   reducer: { counter: reducers }
 });
+
+export default CounterFeature;

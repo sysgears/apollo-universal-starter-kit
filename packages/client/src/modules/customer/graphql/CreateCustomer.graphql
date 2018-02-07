@@ -1,0 +1,13 @@
+#import "./Customer.graphql"
+
+mutation createCustomer($data: CustomerCreateInput!) {
+  createCustomer(data: $data) {
+    node {
+      ...CustomerInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

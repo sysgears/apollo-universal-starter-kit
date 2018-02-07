@@ -1,0 +1,12 @@
+mutation updateManyCustomers(
+  $data: CustomerUpdateInput!
+  $where: CustomerWhereInput!
+) {
+  updateManyCustomers(data: $data, where: $where) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

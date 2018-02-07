@@ -1,0 +1,11 @@
+#import "./Customer.graphql"
+
+query customer($where: CustomerWhereUniqueInput!) {
+  customer(where: $where) {
+    node {
+      ...CustomerInfo
+    }
+    ### form data
+    ### end form data
+  }
+}

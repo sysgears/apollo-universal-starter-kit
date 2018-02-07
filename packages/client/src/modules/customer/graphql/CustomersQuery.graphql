@@ -1,0 +1,23 @@
+#import "./Customer.graphql"
+
+query customersConnection(
+  $limit: Int
+  $offset: Int
+  $orderBy: OrderByInput
+  $filter: CustomerFilterInput
+) {
+  customersConnection(
+    limit: $limit
+    offset: $offset
+    orderBy: $orderBy
+    filter: $filter
+  ) {
+    pageInfo {
+      totalCount
+      hasNextPage
+    }
+    edges {
+      ...CustomerInfo
+    }
+  }
+}

@@ -1,0 +1,4 @@
+fragment CustomerInfo on Customer {
+  id
+  name
+}

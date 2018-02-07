@@ -1,0 +1,74 @@
+type Customer {
+  id: Int!
+  name: String!
+}
+
+type CustomerConnection {
+  pageInfo: PageInfo
+  edges: [Customer]
+}
+
+type CustomerData {
+  node: Customer
+}
+
+type CustomerPayload {
+  node: Customer
+  errors: [FieldError!]
+}
+
+input OrderByInput {
+  column: String
+  order: String
+}
+
+input CustomerFilterInput {
+  searchText: String
+}
+
+input CustomerCreateInput {
+  name: String!
+}
+
+input CustomerUpdateInput {
+  name: String!
+}
+
+input CustomerWhereUniqueInput {
+  id: Int!
+}
+
+input CustomerWhereInput {
+  id_in: [Int!]
+}
+
+extend type Query {
+  customers(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: CustomerFilterInput
+  ): [Customer]
+  customersConnection(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: CustomerFilterInput
+  ): CustomerConnection!
+  customer(where: CustomerWhereUniqueInput!): CustomerData
+}
+
+extend type Mutation {
+  createCustomer(data: CustomerCreateInput!): CustomerPayload!
+  updateCustomer(
+    data: CustomerUpdateInput!
+    where: CustomerWhereUniqueInput!
+  ): CustomerPayload!
+  deleteCustomer(where: CustomerWhereUniqueInput!): CustomerPayload!
+  sortCustomers(data: [Int!]): BatchPayload!
+  updateManyCustomers(
+    data: CustomerUpdateInput!
+    where: CustomerWhereInput!
+  ): BatchPayload!
+  deleteManyCustomers(where: CustomerWhereInput!): BatchPayload!
+}

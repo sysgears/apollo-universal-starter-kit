@@ -1,0 +1,11 @@
+mutation deleteCustomer($where: CustomerWhereUniqueInput!) {
+  deleteCustomer(where: $where) {
+    node {
+      id
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

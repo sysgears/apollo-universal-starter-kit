@@ -1,7 +1,0 @@
-#import "./User.graphql"
-
-query user($id: Int!) {
-  user(id: $id) {
-    ... UserInfo
-  }
-}

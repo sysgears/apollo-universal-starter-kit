@@ -35,6 +35,8 @@ export const createColumnFields = (
 
   for (const key of schema.keys()) {
     const value = schema.values[key];
+    const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+
     if (value.show !== false && key !== 'id') {
       if (value.type.isSchema) {
         let sortBy = 'name';
@@ -57,7 +59,7 @@ export const createColumnFields = (
             return text[sortBy];
           }
         });
-      } else if (value.type.name === 'Boolean') {
+      } else if (hasTypeOf(Boolean)) {
         columns.push({
           title: (
             <a onClick={e => orderBy(e, key)} href="#">
@@ -169,6 +171,7 @@ export const createFormFields = (schema, formdata, formItemLayout, prefix = '', 
 
   for (const key of schema.keys()) {
     const value = schema.values[key];
+    const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
 
     if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
       let validate = [];
@@ -182,15 +185,10 @@ export const createFormFields = (schema, formdata, formItemLayout, prefix = '', 
       if (value.type.isSchema) {
         component = RenderSelect;
         data = formdata[`${key}s`];
-      } else {
-        switch (value.type.name) {
-          case 'Date':
-            component = RenderDate;
-            break;
-          case 'Boolean':
-            component = RenderSwitch;
-            break;
-        }
+      } else if (hasTypeOf(Boolean)) {
+        component = RenderDate;
+      } else if (hasTypeOf(Date)) {
+        component = RenderSwitch;
       }
 
       fields.push(

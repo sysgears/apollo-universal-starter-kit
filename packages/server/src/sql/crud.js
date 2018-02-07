@@ -66,11 +66,12 @@ export default class Crud {
     if (filter) {
       if (has(filter, 'searchText') && filter.searchText !== '') {
         const schema = this.schema;
+        const tableName = this.getTableName();
         queryBuilder.where(function() {
           for (const key of schema.keys()) {
             const value = schema.values[key];
             if (value.searchText) {
-              this.orWhere(`${this.getTableName()}.${key}`, 'like', `%${filter.searchText}%`);
+              this.orWhere(`${tableName}.${key}`, 'like', `%${filter.searchText}%`);
             }
           }
         });

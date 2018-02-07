@@ -1,6 +1,6 @@
 import counter from './counter';
 import post from './post';
-import upload from './upload';
+import upload from '../../../modules/src/upload/client';
 import user from './user';
 import subscription from './subscription';
 import contact from './contact';

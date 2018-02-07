@@ -31,12 +31,11 @@ class Feature extends Connector {
       catalogInfo
     } = feature;
 
-    console.log(this.Items());
-
     /* eslint-enable no-unused-vars */
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
+    /*
     this.route = combine(arguments, arg => arg.route);
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);
@@ -49,57 +48,74 @@ class Feature extends Connector {
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
     this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
     this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
+    */
   } // end of constructor
 
   get routes() {
     let items = this.Get({ route: true });
-    let routes = combine(items, arg => arg.route);
+    let routes = combine(items, item => item.route);
     return routes.map((component, idx) => React.cloneElement(component, { key: idx + routes.length }));
     // return this.route.map((component, idx) => React.cloneElement(component, { key: idx + this.route.length }));
   }
 
   get navItems() {
-    return this.navItem.map((component, idx) =>
+    let items = this.Get({navItem: true})
+    let navs = combine(items, item => item.navItem)
+    return navs.map((component, idx) =>
       React.cloneElement(component, {
-        key: component.key ? component.key : idx + this.navItem.length
+        key: component.key ? component.key : idx + navs.length
       })
     );
   }
 
   get navItemsRight() {
-    return this.navItemRight.map((component, idx) =>
+    let items = this.Get({navItemRight: true})
+    let navs = combine(items, item => item.navItemRight)
+    return navs.map((component, idx) =>
       React.cloneElement(component, {
-        key: component.key ? component.key : idx + this.navItem.length
+        key: component.key ? component.key : idx + navs.length
       })
     );
   }
 
   get reducers() {
-    return merge(...this.reducer);
+    let items = this.Get({reducer: true})
+    let rs = combine(items, item => item.reducer)
+    return merge(...rs);
   }
 
   get resolvers() {
-    return merge(...this.resolver);
+    let items = this.Get({resolver: true})
+    let rs = combine(items, item => item.resolver)
+    return merge(...rs);
   }
 
   get middlewares() {
-    return this.middleware;
+    let items = this.Get({middleware: true})
+    let ms = combine(items, item => item.middleware)
+    return ms;
   }
 
   get afterwares() {
-    return this.afterware;
+    let items = this.Get({afterware: true})
+    let as = combine(items, item => item.afterware)
+    return as;
   }
 
   get connectionParams() {
-    return this.connectionParam;
+    let items = this.Get({connectionParam: true})
+    let cs = combine(items, item => item.connectionParam)
+    return cs;
   }
 
   get constructFetchOptions() {
-    return this.createFetchOptions.length
+    let items = this.Get({constructFetchOptions: true})
+    let cs = combine(items, item => item.constructFetchOptions)
+    return cs.length
       ? (...args) => {
           try {
             let result = {};
-            for (let func of this.createFetchOptions) {
+            for (let func of cs) {
               result = { ...result, ...func(...args) };
             }
             return result;
@@ -111,16 +127,22 @@ class Feature extends Connector {
   }
 
   get stylesInserts() {
-    return this.stylesInsert;
+    let items = this.Get({stylesInsert: true})
+    let is = combine(items, item => item.stylesInsert)
+    return is;
   }
 
   get scriptsInserts() {
-    return this.scriptsInsert;
+    let items = this.Get({scriptsInsert: true})
+    let is = combine(items, item => item.scriptsInsert)
+    return is;
   }
 
   getWrappedRoot(root, req) {
+    let items = this.Get({rootComponentFactory: true})
+    let rf = combine(items, item => item.rootComponentFactory)
     let nestedRoot = root;
-    for (const componentFactory of this.rootComponentFactory) {
+    for (const componentFactory of rf) {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
     }
     return nestedRoot;

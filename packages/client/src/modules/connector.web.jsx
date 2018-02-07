@@ -10,10 +10,9 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 
 export const featureCatalog = {};
 
-class ClientFeature extends Connector {
+class Feature extends Connector {
   /* eslint-disable no-unused-vars */
-  constructor( feature, ...features) {
-
+  constructor(feature, ...features) {
     super(feature, features);
 
     let {
@@ -32,7 +31,7 @@ class ClientFeature extends Connector {
       catalogInfo
     } = feature;
 
-    console.log(this.Items())
+    console.log(this.Items());
 
     /* eslint-enable no-unused-vars */
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
@@ -53,7 +52,7 @@ class ClientFeature extends Connector {
   } // end of constructor
 
   get routes() {
-    let items = this.Get({route: true})
+    let items = this.Get({ route: true });
     let routes = combine(items, arg => arg.route);
     return routes.map((component, idx) => React.cloneElement(component, { key: idx + routes.length }));
     // return this.route.map((component, idx) => React.cloneElement(component, { key: idx + this.route.length }));
@@ -128,4 +127,4 @@ class ClientFeature extends Connector {
   }
 }
 
-export default ClientFeature;
+export default Feature;

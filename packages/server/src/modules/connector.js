@@ -3,6 +3,8 @@
 import type { DocumentNode } from 'graphql';
 import type { Middleware, $Request } from 'express';
 
+import { Connector } from 'connector-js';
+
 import { merge, map, union, without, castArray } from 'lodash';
 
 import log from '../../../common/log';
@@ -22,7 +24,7 @@ type FeatureParams = {
   catalogInfo: any | any[]
 };
 
-class Feature {
+class Feature extends Connector {
   schema: DocumentNode[];
   createResolversFunc: Function[];
   createContextFunc: Function[];
@@ -31,6 +33,7 @@ class Feature {
   middleware: Function[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
+    super(feature, features);
     // console.log(feature.schema[0] instanceof DocumentNode);
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
@@ -44,7 +47,10 @@ class Feature {
   }
 
   get schemas(): DocumentNode[] {
-    return this.schema;
+    let items = this.Get({ schema: true });
+    let docs = combine(items, arg => arg.schema);
+    return docs;
+    //return this.schema;
   }
 
   async createContext(req: $Request, connectionParams: any, webSocket: any) {

@@ -39,7 +39,7 @@ const config = {
 config.options.devProxy = config.options.ssr;
 
 if (process.env.NODE_ENV === 'production') {
-  config.options.defines.__BACKEND_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
+  //config.options.defines.__BACKEND_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
   // Generating source maps for production will slowdown compilation for roughly 25%
   config.options.sourceMap = false;
 }

@@ -3170,6 +3170,10 @@ connect@^2.8.3:
     utils-merge "1.0.0"
     vhost "~3.0.1"
 
+connector-js@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/connector-js/-/connector-js-1.0.6.tgz#d944b492732b9fae534bc5746e5795d2cc0ecab8"
+
 console-browserify@1.1.x, console-browserify@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-browserify/-/console-browserify-1.1.0.tgz#f0241c45730a9fc6323b206dbf38edc741d0bb10"

@@ -13,11 +13,6 @@ type BatchPayload {
   errors: [FieldError!]
 }
 
-input OrderByInput {
-  column: String
-  order: String
-}
-
 type Query {
   dummy: Int
 }

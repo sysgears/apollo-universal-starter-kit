@@ -1,18 +1,16 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import settings from '../../../../../settings';
-import FieldError from '../../../../common/FieldError';
+import settings from '../../../../../../../../settings';
+import FieldError from '../../../../../../../common/FieldError';
 import { decryptSession, encryptSession } from './crypto';
 
 export const createSession = req => {
   const session = updateSession(req, { csrfToken: crypto.randomBytes(16).toString('hex') });
-  // console.log(`createSession: ${JSON.stringify(session)}`);
   return session;
 };
 
 export const readSession = req => {
   const session = decryptSession(req.universalCookies.get('session', { doNotParse: true }));
-  // console.log(`readSession: ${JSON.stringify(session)}`);
   return session;
 };
 
@@ -23,7 +21,6 @@ export const updateSession = (req, session) => {
     maxAge: 7 * 24 * 3600
   });
 
-  // console.log(`updateSession: ${JSON.stringify(session)}`);
   return session;
 };
 

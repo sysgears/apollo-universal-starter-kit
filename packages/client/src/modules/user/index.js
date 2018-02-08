@@ -3,4 +3,4 @@ import session from './modules/session';
 
 import Feature from '../connector';
 
-export default new Feature(session);
+export default new Feature(jwt);

@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cookiesMiddleware from 'universal-cookie-express';
+import url from 'url';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
@@ -9,8 +11,6 @@ import { pick } from 'lodash';
 import UserDAO from './sql';
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
-import url from 'url';
-import cookiesMiddleware from 'universal-cookie-express';
 import confirmMiddleware from './confirm';
 import { readSession, createSession } from './auth';
 import Feature from '../../../connector';

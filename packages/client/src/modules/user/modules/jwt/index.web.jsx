@@ -14,7 +14,6 @@ import resolvers from './resolvers';
 import { AuthRoute, IfLoggedIn, withUser, withLoadedUser, withLogout, IfNotLoggedIn } from './containers/Auth.web';
 
 import Feature from '../../../connector';
-
 function tokenMiddleware(req, options, next) {
   options.headers['x-token'] = window.localStorage.getItem('token');
   options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');

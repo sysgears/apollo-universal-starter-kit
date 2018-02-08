@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import Field from '../../../utils/FieldAdapter';
-import { Form, RenderField, Button, Alert } from '../../common/components/web';
+import { Form, RenderField, Button, Alert } from 'ausk-ui-components';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
 
 const contactFormSchema = {

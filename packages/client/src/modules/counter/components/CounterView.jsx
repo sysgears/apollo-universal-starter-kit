@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Button } from '../../common/components';
+import { Button } from 'ausk-ui-components';
 
 const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement, counterState, addCounterState }) => {
   if (loading) {

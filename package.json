@@ -18,7 +18,7 @@
     "tests": "lerna run tests --stream",
     "test": "yarn tests && yarn lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json .",
-    "seed": "lerna run --scope=server seed --stream",
+    "seed": "lerna run --scope=storage seed --stream",
     "exp-publish": "lerna run --scope=mobile exp-publish --stream",
     "watch": "spin watch",
     "heroku-postbuild": "lerna run heroku-postbuild --stream",
@@ -77,6 +77,7 @@
     "lodash": "^4.17.4"
   },
   "dependencies": {
+    "connector-js": "^1.0.6",
     "opencollective": "^1.0.3",
     "spinjs": "^0.4.100"
   },

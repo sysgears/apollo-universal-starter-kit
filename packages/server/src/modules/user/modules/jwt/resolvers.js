@@ -146,27 +146,27 @@ export default pubsub => ({
     },
     async login(obj, { input: { email, password } }, context) {
       try {
-        const tokens = await tryLogin(email, password, context.User, context.SECRET);
+        const result = await tryLogin(email, password, context.User, context.SECRET);
         if (context.req) {
-          context.req.universalCookies.set('x-token', tokens.token, {
+          context.req.universalCookies.set('x-token', result.tokens.token, {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: true
           });
-          context.req.universalCookies.set('x-refresh-token', tokens.refreshToken, {
+          context.req.universalCookies.set('x-refresh-token', result.tokens.refreshToken, {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: true
           });
 
-          context.req.universalCookies.set('r-token', tokens.token, {
+          context.req.universalCookies.set('r-token', result.tokens.token, {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: false
           });
-          context.req.universalCookies.set('r-refresh-token', tokens.refreshToken, {
+          context.req.universalCookies.set('r-refresh-token', result.tokens.refreshToken, {
             maxAge: 60 * 60 * 24 * 7,
             httpOnly: false
           });
         }
-        return { tokens };
+        return { tokens: result.tokens, user: result.user };
       } catch (e) {
         return { errors: e };
       }

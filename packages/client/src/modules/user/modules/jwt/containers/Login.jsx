@@ -31,9 +31,10 @@ const LoginWithApollo = compose(
           if (login.errors) {
             return { errors: login.errors };
           }
-
+          const { token, refreshToken } = login.tokens;
+          localStorage.setItem('token', token);
+          localStorage.setItem('refreshToken', refreshToken);
           await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
-
           onLogin();
         } catch (e) {
           log.error(e);

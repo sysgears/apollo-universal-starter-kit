@@ -40,6 +40,7 @@ type UserPayload {
 }
 
 type AuthPayload {
+    user: User
     tokens: Tokens
     errors: [FieldError!]
 }

@@ -1,46 +1,18 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import settings from '../../../../../../../../settings';
-import FieldError from '../../../../../../../common/FieldError';
+import settings from '../../../../../settings';
+import FieldError from '../../../../common/FieldError';
 import { decryptSession, encryptSession } from './crypto';
-
-export const establishSession = async (req, macKey) => {
-  let session = getSession(req, macKey);
-  if (!session) {
-    crypto.randomBytes(16, (err, buf) => {
-      if (err) throw err;
-      const sessionID = buf.toString('hex');
-      session = { sessionID };
-      updateSession(req, macKey, session);
-    });
-  }
-  return session;
-};
-
-const hmac = (val, macKey) =>
-  crypto
-    .createHmac('sha256', macKey)
-    .update(val)
-    .digest('base64');
-
-export const getSession = (req, macKey) => {
-  const value = req.universalCookies.get('session', { doNotParse: true });
-  const str = value.slice(0, value.lastIndexOf('.'));
-  const valMac = value.slice(value.lastIndexOf('.'));
-  const mac = hmac(str, macKey);
-  const result = valMac !== mac ? undefined : JSON.parse(str);
-
-  console.log('getSession', result);
-  return result;
-};
 
 export const createSession = req => {
   const session = updateSession(req, { csrfToken: crypto.randomBytes(16).toString('hex') });
+  // console.log(`createSession: ${JSON.stringify(session)}`);
   return session;
 };
 
 export const readSession = req => {
   const session = decryptSession(req.universalCookies.get('session', { doNotParse: true }));
+  // console.log(`readSession: ${JSON.stringify(session)}`);
   return session;
 };
 
@@ -50,6 +22,8 @@ export const updateSession = (req, session) => {
     secure: !__DEV__,
     maxAge: 7 * 24 * 3600
   });
+
+  // console.log(`updateSession: ${JSON.stringify(session)}`);
   return session;
 };
 
@@ -75,6 +49,7 @@ export const tryLogin = async (email, password, context) => {
     e.setError('email', 'Please confirm your e-mail first.');
     e.throwIf();
   }
+
   return {
     user
   };

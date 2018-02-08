@@ -1,5 +1,6 @@
 // @flow
 /* eslint-disable no-unused-vars */
+import React from 'react';
 import type { DocumentNode } from 'graphql';
 import type { Middleware, $Request, $Response } from 'express';
 
@@ -19,6 +20,7 @@ type FeatureParams = {
   beforeware?: Middleware | Middleware[],
   middleware?: Middleware | Middleware[],
   createFetchOptions?: Function | Function[],
+  htmlHeadComponents?: any,
   catalogInfo: any | any[]
 };
 
@@ -29,6 +31,7 @@ class Feature {
   createFetchOptions: Function[];
   beforeware: Function[];
   middleware: Function[];
+  htmlHeadComponents: any;
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     // console.log(feature.schema[0] instanceof DocumentNode);
@@ -41,13 +44,14 @@ class Feature {
     this.beforeware = combine(arguments, arg => arg.beforeware);
     this.middleware = combine(arguments, arg => arg.middleware);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
+    this.htmlHeadComponent = combine(arguments, arg => arg.htmlHeadComponent);
   }
 
   get schemas(): DocumentNode[] {
     return this.schema;
   }
 
-  async createContext(req: $Request, connectionParams: any, res: $Response, webSocket: any) {
+  async createContext(req: $Request, res: $Response, connectionParams: any, webSocket: any) {
     const results = await Promise.all(
       this.createContextFunc.map(createContext => createContext(req, res, connectionParams, webSocket))
     );
@@ -80,6 +84,12 @@ class Feature {
           }
         }
       : null;
+  }
+
+  createHtmlHeadComponents(req: $Request): any {
+    return React.Children.map(this.htmlHeadComponent, (child, idx) =>
+      React.cloneElement(child, { key: idx, req: req })
+    );
   }
 }
 

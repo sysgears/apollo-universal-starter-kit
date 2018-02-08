@@ -15,31 +15,6 @@ import { AuthRoute, IfLoggedIn, withUser, withLoadedUser, withLogout, IfNotLogge
 
 import Feature from '../../../connector';
 
-function tokenMiddleware(req, options, next) {
-  options.headers['x-token'] = window.localStorage.getItem('token');
-  options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
-  next();
-}
-
-function tokenAfterware(res, options, next) {
-  const token = options.headers['x-token'];
-  const refreshToken = options.headers['x-refresh-token'];
-  if (token) {
-    window.localStorage.setItem('token', token);
-  }
-  if (refreshToken) {
-    window.localStorage.setItem('refreshToken', refreshToken);
-  }
-  next();
-}
-
-function connectionParam() {
-  return {
-    token: window.localStorage.getItem('token'),
-    refreshToken: window.localStorage.getItem('refreshToken')
-  };
-}
-
 const ProfileName = withLoadedUser(
   ({ currentUser }) => (currentUser ? currentUser.fullName || currentUser.username : null)
 );
@@ -93,9 +68,12 @@ export default new Feature({
     </IfNotLoggedIn>
   ],
   resolver: resolvers,
-  middleware: tokenMiddleware,
-  afterware: tokenAfterware,
-  connectionParam: connectionParam,
+  middleware: (req, options, next) => {
+    if (__CLIENT__) {
+      options.headers = { 'X-Token': window.__CSRF_TOKEN__ };
+    }
+    next();
+  },
   // eslint-disable-next-line react/display-name
   rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
 });

@@ -6,7 +6,7 @@ import { MenuItem } from '../../../../modules/common/components/web';
 import Users from './components/Users';
 import UserEdit from './containers/UserEdit';
 import Register from './containers/Register';
-import Login from './containers/Login';
+import Login from './containers/Login.web';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 import resolvers from './resolvers';
@@ -14,6 +14,7 @@ import resolvers from './resolvers';
 import { AuthRoute, IfLoggedIn, withUser, withLoadedUser, withLogout, IfNotLoggedIn } from './containers/Auth.web';
 
 import Feature from '../../../connector';
+
 function tokenMiddleware(req, options, next) {
   options.headers['x-token'] = window.localStorage.getItem('token');
   options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');

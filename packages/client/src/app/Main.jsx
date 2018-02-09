@@ -180,7 +180,6 @@ export default class Main extends React.Component {
   componentDidCatch(error, info) {
     this.setState({ error, info });
   }
-
   render() {
     return this.state.error ? (
       <RedBox error={this.state.error} />

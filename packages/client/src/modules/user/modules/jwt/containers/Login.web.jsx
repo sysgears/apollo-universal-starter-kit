@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
 // React
 import React from 'react';
-import { AsyncStorage } from 'react-native';
-
 // Apollo
 import { graphql, compose, withApollo } from 'react-apollo';
 
@@ -28,9 +26,6 @@ const LoginWithApollo = compose(
           const { data: { login } } = await mutate({
             variables: { input: { email, password } }
           });
-          const { token, refreshToken } = login.tokens;
-          await AsyncStorage.setItem('token', token);
-          await AsyncStorage.setItem('refreshToken', refreshToken);
           if (login.errors) {
             return { errors: login.errors };
           }

@@ -5,7 +5,6 @@ import { refreshTokens, tryLoginSerial } from './index';
 export default (SECRET, User, jwt) => async (req, res, next) => {
   try {
     let token = req.universalCookies.get('x-token') || req.headers['x-token'];
-
     // if cookie available
     if (req.universalCookies.get('x-token')) {
       // check if header token matches cookie token

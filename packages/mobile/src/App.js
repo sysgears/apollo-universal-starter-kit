@@ -61,6 +61,42 @@ export default class Main extends React.Component {
       new BatchHttpLink({ fetch })
     );
 
+    fetch.batchUse(({ options }, next) => {
+      options.credentials = 'same-origin';
+      options.headers = options.headers || {};
+      next();
+    });
+
+    for (const middleware of modules.middlewares) {
+      fetch.batchUse(({ requests, options }, next) => {
+        // options.credentials = 'same-origin';
+        // options.headers = options.headers || {};
+        const reqs = [...requests];
+        const innerNext = () => {
+          if (reqs.length > 0) {
+            const req = reqs.shift();
+            if (req) {
+              middleware(req, options, innerNext);
+            }
+          } else {
+            next();
+          }
+        };
+        innerNext();
+      });
+    }
+
+    for (const afterware of modules.afterwares) {
+      fetch.batchUseAfter(({ response, options }, next) => {
+        afterware(response, options, next);
+      });
+    }
+
+    let connectionParams = {};
+    for (const connectionParam of modules.connectionParams) {
+      Object.assign(connectionParams, connectionParam());
+    }
+
     const linkState = withClientState({ ...modules.resolvers, cache });
 
     const client = new ApolloClient({

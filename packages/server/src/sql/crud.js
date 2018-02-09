@@ -9,8 +9,6 @@ import knex from './connector';
 
 export default class Crud {
   getTableName() {
-    console.log(this.schema);
-    console.log(this.schema.name);
     return decamelize(this.schema.__.name);
   }
 

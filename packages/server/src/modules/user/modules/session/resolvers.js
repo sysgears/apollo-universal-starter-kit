@@ -145,7 +145,6 @@ export default pubsub => ({
       }
     },
     async login(obj, { input: { email, password } }, context) {
-        console.log('===========================SESSIOn')
       try {
         const data = await tryLogin(email, password, context);
         const session = {

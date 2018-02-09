@@ -27,6 +27,13 @@ const LogoutLink = withRouter(
   ))
 );
 
+function tokenMiddleware(req, options, next) {
+  if (__CLIENT__) {
+    options.headers = { 'X-Token': window.__CSRF_TOKEN__ };
+  }
+  next();
+}
+
 export default new Feature({
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={withUser(ProfileView)} />,
@@ -68,12 +75,7 @@ export default new Feature({
     </IfNotLoggedIn>
   ],
   resolver: resolvers,
-  middleware: (req, options, next) => {
-    if (__CLIENT__) {
-      options.headers = { 'X-Token': window.__CSRF_TOKEN__ };
-    }
-    next();
-  },
+  middleware: tokenMiddleware,
   // eslint-disable-next-line react/display-name
   rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
 });

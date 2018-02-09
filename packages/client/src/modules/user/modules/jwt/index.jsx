@@ -103,7 +103,8 @@ export default new Feature({
         tabBarOptions: {
           showLabel: false
         }
-      }
+      },
+      onPress: () => console.log('===============================PRESS')
     }
   },
   resolver: resolvers,

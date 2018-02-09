@@ -1,9 +1,0 @@
-mutation sortCustomers($data: [Int!]) {
-  sortCustomers(data: $data) {
-    count
-    errors {
-      field
-      message
-    }
-  }
-}

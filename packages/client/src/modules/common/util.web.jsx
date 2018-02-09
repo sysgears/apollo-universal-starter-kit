@@ -186,9 +186,9 @@ export const createFormFields = (schema, formdata, formItemLayout, prefix = '', 
         component = RenderSelect;
         data = formdata[`${key}s`];
       } else if (hasTypeOf(Boolean)) {
-        component = RenderDate;
-      } else if (hasTypeOf(Date)) {
         component = RenderSwitch;
+      } else if (hasTypeOf(Date)) {
+        component = RenderDate;
       }
 
       fields.push(

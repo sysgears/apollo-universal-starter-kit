@@ -12329,9 +12329,9 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.100:
-  version "0.4.100"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.100.tgz#9fea95c0b976b1949516263b1430e6af50331ba2"
+spinjs@^0.4.102:
+  version "0.4.102"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.102.tgz#c81212af17eb99e2af4183d1799ebfd273e8d194"
   dependencies:
     babel-polyfill "^6.26.0"
     babel-preset-env "^1.6.1"

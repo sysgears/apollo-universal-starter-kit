@@ -1,5 +1,5 @@
-import knex from '../client';
-import log from '../../../../../common/log';
+import knex from './connector';
+import log from '../../../common/log';
 
 import paging from './paging';
 import ordering from './ordering';

@@ -2,13 +2,13 @@ import _ from 'lodash';
 import uuidv4 from 'uuid';
 import { camelize, decamelizeKeys, camelizeKeys } from 'humps';
 
-import knex from '../client';
+import knex from './connector';
 
-import { orderedFor } from './batching';
+import { orderedFor } from './helpers';
 
 import selectAdapter from './select';
 
-import log from '../../../../../common/log';
+import log from '../../../common/log';
 
 export function createWithIdGenAdapter(options) {
   const T = options.table;

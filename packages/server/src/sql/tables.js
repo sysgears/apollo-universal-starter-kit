@@ -1,4 +1,4 @@
-import settings from '../../../../../settings';
+import settings from '../../../../settings';
 
 const truncateTables = async (knex, Promise, tables) => {
   if (settings.db.dbType === 'sqlite' || process.env.NODE_ENV === 'test') {

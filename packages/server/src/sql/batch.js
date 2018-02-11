@@ -1,22 +1,14 @@
+/*eslint-disable no-unused-vars*/
 import _ from 'lodash';
 
 export const reconcileBatchOneToOne = (sources, results, matchField) => {
-  if (sources.length === results.length) {
-    return results;
-  }
-
-  let cache = {};
   let ret = [];
 
   for (let src of sources) {
-    let r = cache[src[matchField]];
-    if (!r) {
-      r = results.find(elem => elem[matchField] === src[matchField]);
-      cache[src[matchField]] = r;
-    }
+    let r = results.find(elem => elem[matchField] === src[matchField]);
 
     if (r) {
-      ret.push(r);
+      ret.push(Object.assign({}, r));
     } else {
       ret.push(null);
     }
@@ -26,26 +18,18 @@ export const reconcileBatchOneToOne = (sources, results, matchField) => {
 };
 
 export const reconcileBatchOneToMany = (sources, results, matchField) => {
-  let cache = {};
   let ret = [];
   for (let src of sources) {
     // search cache
-    let r = cache[src[matchField]];
-    if (!r) {
-      // find the match
-      let match = _.find(results, elem => elem.length > 0 && elem[0][matchField] === src[matchField]);
+    // find the match
+    let match = _.find(results, elem => elem.length > 0 && elem[0][matchField] === src[matchField]);
 
-      // Make the matched entries unique
-      // let unique = _.uniqBy(match, matchField);
-
-      r = match;
-
-      cache[src[matchField]] = r;
-    }
+    let r = match;
 
     // Push into ret
     if (r) {
-      ret.push(r);
+      // ret.push(r)
+      ret.push(r.map(elem => Object.assign({}, elem)));
     } else {
       ret.push([]);
     }
@@ -54,33 +38,55 @@ export const reconcileBatchOneToMany = (sources, results, matchField) => {
   return ret;
 };
 
-export const reconcileBatchManyToMany = (sources, matches, results, sourcesField, resultsField) => {
+export const reconcileBatchManyToMany = (
+  sources,
+  matches,
+  results,
+  sourcesField,
+  resultsField,
+  matchFilter,
+  resultFilter
+) => {
+
   // because we have multiple copies of the same source, its how graphql-resolve-batch works
-  let cache = {};
   let ret = [];
   for (let src of sources) {
-    // search cache
-    let r = cache[src[sourcesField]];
-    if (!r) {
-      // find the sources match
-      let match = _.find(matches, elem => elem.length > 0 && elem[0][sourcesField] === src[sourcesField]);
+    // find the sources match
+    const match = _.find(
+      matches,
+      elem =>
+        elem.length > 0 &&
+        elem[0][sourcesField] === src[sourcesField] &&
+        (matchFilter ? elem[0][matchFilter] === src[matchFilter] : true)
+    );
 
-      // Make the matched entries unique
-      let unique = _.uniqBy(match, resultsField);
+    // Make the matched entries unique
+    const unique = _.uniqBy(match, resultsField);
 
-      // Pull the results
-      r = _.intersectionWith(results, unique, (lhs, rhs) => lhs[resultsField] === rhs[resultsField]);
+    // Pull the results
+    let r = _.intersectionWith(results, unique, (lhs, rhs) => lhs[resultsField] === rhs[resultsField]);
+    for (let elem of r) {
+      elem[sourcesField] = src[sourcesField];
+    }
 
-      cache[src[sourcesField]] = r;
+    // Filter by source fields (query path driven)
+    if (resultFilter) {
+      r = r.filter(elem => elem[resultFilter] === src[resultFilter]);
     }
 
     // Push into ret
     if (r) {
-      ret.push(r);
+      ret.push(r.map(elem => Object.assign({}, elem)));
     } else {
       ret.push([]);
     }
   }
 
   return ret;
+};
+
+export default {
+  reconcileBatchOneToOne,
+  reconcileBatchOneToMany,
+  reconcileBatchManyToMany,
 };

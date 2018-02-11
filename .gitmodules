@@ -1,0 +1,3 @@
+[submodule "packages"]
+	path = packages
+	url = git@github.com:hofstadter-io/ausk-base-packages.git

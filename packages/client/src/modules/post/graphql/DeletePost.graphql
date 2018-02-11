@@ -1,5 +1,0 @@
-mutation deletePost($id: Int!) {
-  deletePost(id: $id) {
-    id
-  }
-}

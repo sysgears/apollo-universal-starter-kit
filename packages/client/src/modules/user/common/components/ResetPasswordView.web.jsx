@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { PageLayout } from '../../../../common/components/web/index';
+import { PageLayout } from '../../../common/components/web/index';
 
 import ResetPasswordForm from '../components/ResetPasswordForm';
-import settings from '../../../../../../../../settings';
+import settings from '../../../../../../../settings';
 
 export default class ResetPasswordView extends React.Component {
   static propTypes = {

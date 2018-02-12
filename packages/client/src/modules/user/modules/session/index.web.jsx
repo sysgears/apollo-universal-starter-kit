@@ -1,9 +1,9 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { Route, NavLink, withRouter } from 'react-router-dom';
-import ProfileView from './components/ProfileView';
+import ProfileView from '../../common/components/ProfileView';
 import { MenuItem } from '../../../../modules/common/components/web';
-import Users from './components/Users';
+import Users from '../../common/components/Users';
 import UserEdit from './containers/UserEdit';
 import Register from './containers/Register';
 import Login from './containers/Login.web';

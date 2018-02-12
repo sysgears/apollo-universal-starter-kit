@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import { withFormik } from 'formik';
-import Field from '../../../../../utils/FieldAdapter';
-import { Button } from '../../../../common/components';
-import { RenderField } from '../../../../common/components/native';
-import { required, email, minLength, validateForm } from '../../../../../../../common/validation';
+import Field from '../../../../utils/FieldAdapter';
+import { Button } from '../../../common/components/index';
+import { RenderField } from '../../../common/components/native/index';
+import { required, email, minLength, validateForm } from '../../../../../../common/validation';
 
 const contactFormSchema = {
   email: [required, email],

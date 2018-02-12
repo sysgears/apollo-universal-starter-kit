@@ -5,7 +5,7 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import RegisterView from '../components/RegisterView';
+import RegisterView from '../../../common/components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
 

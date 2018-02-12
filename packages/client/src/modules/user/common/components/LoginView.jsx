@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, StyleSheet } from 'react-native';
 
-import LoginForm from '../components/LoginForm';
+import LoginForm from './LoginForm';
 
 class LoginView extends React.PureComponent {
   onSubmit = login => async values => {

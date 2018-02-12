@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { LayoutCenter } from '../../../../common/components/index';
-import { PageLayout } from '../../../../common/components/web/index';
+import { LayoutCenter } from '../../../common/components/index';
+import { PageLayout } from '../../../common/components/web/index';
 
 import RegisterForm from '../components/RegisterForm';
-import settings from '../../../../../../../../settings';
+import settings from '../../../../../../../settings';
 
 export default class RegisterView extends React.PureComponent {
   static propTypes = {

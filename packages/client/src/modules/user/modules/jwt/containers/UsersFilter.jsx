@@ -4,7 +4,7 @@ import { graphql, compose } from 'react-apollo';
 import { removeTypename } from '../../../../../../../common/utils';
 
 // Components
-import UsersFilterView from '../components/UsersFilterView';
+import UsersFilterView from '../../../common/components/UsersFilterView';
 
 //Graphql
 import USERS_STATE_QUERY from '../graphql/UsersStateQuery.client.graphql';

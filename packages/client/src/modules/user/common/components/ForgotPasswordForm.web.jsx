@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import Field from '../../../../../utils/FieldAdapter';
-import { Form, RenderField, Button, Alert } from '../../../../common/components/web/index';
-import { required, email, validateForm } from '../../../../../../../common/validation';
+import Field from '../../../../utils/FieldAdapter';
+import { Form, RenderField, Button, Alert } from '../../../common/components/web/index';
+import { required, email, validateForm } from '../../../../../../common/validation';
 
 const contactFormSchema = {
   email: [required, email]

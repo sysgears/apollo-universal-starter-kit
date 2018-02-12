@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import url from 'url';
 import { NavLink, Link } from 'react-router-dom';
-import Field from '../../../../../utils/FieldAdapter';
-import { Form, RenderField, Alert, Button } from '../../../../common/components/web/index';
-import { required, email, minLength, validateForm } from '../../../../../../../common/validation';
+import Field from '../../../../utils/FieldAdapter';
+import { Form, RenderField, Alert, Button } from '../../../common/components/web/index';
+import { required, email, minLength, validateForm } from '../../../../../../common/validation';
 
-import settings from '../../../../../../../../settings';
+import settings from '../../../../../../../settings';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
@@ -91,9 +91,8 @@ LoginForm.propTypes = {
 const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ email: '', password: '' }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+  async handleSubmit(values, { props: { onSubmit } }) {
     await onSubmit(values);
-    resetForm();
   },
   validate: values => validate(values),
   displayName: 'LoginForm' // helps with React DevTools

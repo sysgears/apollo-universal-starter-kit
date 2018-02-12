@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
-import ResetPasswordView from '../components/ResetPasswordView';
+import ResetPasswordView from '../../../common/components/ResetPasswordView';
 
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';
 

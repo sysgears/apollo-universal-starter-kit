@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
-import { Form, FormItem, Select, Option, Label, Input } from '../../../../common/components/web/index';
+import { Form, FormItem, Select, Option, Label, Input } from '../../../common/components/web/index';
 
 export default class UsersFilterView extends React.PureComponent {
   static propTypes = {

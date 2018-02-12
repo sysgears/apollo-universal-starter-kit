@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import Field from '../../../../../utils/FieldAdapter';
+import Field from '../../../../utils/FieldAdapter';
 import {
   Form,
   RenderField,
@@ -10,10 +10,10 @@ import {
   Option,
   Button,
   Alert
-} from '../../../../common/components/web/index';
-import { email, minLength, required, match, validateForm } from '../../../../../../../common/validation';
+} from '../../../common/components/web/index';
+import { email, minLength, required, match, validateForm } from '../../../../../../common/validation';
 
-import settings from '../../../../../../../../settings';
+import settings from '../../../../../../../settings';
 
 const userFormSchema = {
   username: [required, minLength(3)],

@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { AsyncStorage } from 'react-native';
 import { withApollo, graphql } from 'react-apollo';
 
-import log from '../../../../../../../common/log';
+import log from '../../../../../../common/log';
 
-import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
-import LOGOUT from '../graphql/Logout.graphql';
+import CURRENT_USER_QUERY from '../../modules/jwt/graphql/CurrentUserQuery.graphql';
+import LOGOUT from '../../modules/jwt/graphql/Logout.graphql';
 
 const withUser = Component => {
   const WithUser = ({ ...props }) => <Component {...props} />;
@@ -65,7 +66,7 @@ const withLogout = Component =>
             if (logout.errors) {
               return { errors: logout.errors };
             }
-
+            await AsyncStorage.multiRemove(['token', 'session', 'refreshToken']);
             await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
 
             onLogout();

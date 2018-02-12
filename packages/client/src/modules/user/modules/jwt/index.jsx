@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createTabBarIconWrapper } from '../../../common/components/native';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
+import Logout from '../../common/containers/Logout';
 import UsersList from './containers/UsersList';
 import resolvers from './resolvers';
 
@@ -51,6 +52,19 @@ LoginScreen.propTypes = {
   navigation: PropTypes.object
 };
 
+class LogoutScreen extends React.Component {
+  static navigationOptions = () => ({
+    title: 'Logout'
+  });
+  render() {
+    return <Logout navigation={this.props.navigation} />;
+  }
+}
+
+LogoutScreen.propTypes = {
+  navigation: PropTypes.object
+};
+
 class UsersLisScreen extends React.Component {
   static navigationOptions = () => ({
     title: 'Users'
@@ -77,15 +91,13 @@ ProfileScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-const LoginNavigator = StackNavigator({
-  Login: { screen: LoginScreen },
-  Profile: { screen: ProfileScreen }
-});
-
 export default new Feature({
   tabItem: {
-    User: {
-      screen: LoginNavigator,
+    Profile: {
+      screen: ProfileScreen,
+      userInfo: {
+        requiredLogin: true
+      },
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
           name: 'user',
@@ -93,18 +105,42 @@ export default new Feature({
         })
       }
     },
+    Login: {
+      screen: LoginScreen,
+      userInfo: {
+        requiredLogin: false
+      },
+      navigationOptions: {
+        tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
+          name: 'login',
+          size: 30
+        })
+      }
+    },
     Users: {
       screen: UsersLisScreen,
+      userInfo: {
+        requiredLogin: true,
+        role: 'admin'
+      },
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(Ionicons, {
           name: 'ios-browsers-outline',
           size: 30
-        }),
-        tabBarOptions: {
-          showLabel: false
-        }
+        })
+      }
+    },
+    Logout: {
+      screen: LogoutScreen,
+      userInfo: {
+        requiredLogin: true
       },
-      onPress: () => console.log('===============================PRESS')
+      navigationOptions: {
+        tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
+          name: 'logout',
+          size: 30
+        })
+      }
     }
   },
   resolver: resolvers,

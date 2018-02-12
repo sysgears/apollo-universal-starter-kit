@@ -4,7 +4,7 @@ import { Route, Redirect, NavLink } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import decode from 'jwt-decode';
 
-import { IfLoggedIn, IfNotLoggedIn } from './AuthBase';
+import { IfLoggedIn, IfNotLoggedIn } from '../../../common/containers/AuthBase';
 
 const checkAuth = (cookies, scope) => {
   let token = null;
@@ -153,7 +153,7 @@ AuthRoute.propTypes = {
   redirectOnLoggedIn: PropTypes.bool
 };
 
-export * from './AuthBase';
+export * from '../../../common/containers/AuthBase';
 export { AuthRoute };
 export { AuthNav };
 export { AuthProfile };

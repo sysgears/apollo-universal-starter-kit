@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SimpleLineIcons } from '@expo/vector-icons';
+import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { StackNavigator } from 'react-navigation';
 
 import { createTabBarIconWrapper } from '../../../common/components/native';
@@ -23,6 +23,32 @@ LoginScreen.propTypes = {
   navigation: PropTypes.object
 };
 
+class LogoutScreen extends React.Component {
+  static navigationOptions = () => ({
+    title: 'Logout'
+  });
+  render() {
+    return <Logout navigation={this.props.navigation} />;
+  }
+}
+
+LogoutScreen.propTypes = {
+  navigation: PropTypes.object
+};
+
+class UsersLisScreen extends React.Component {
+  static navigationOptions = () => ({
+    title: 'Users'
+  });
+  render() {
+    return <UsersList navigation={this.props.navigation} />;
+  }
+}
+
+UsersLisScreen.propTypes = {
+  navigation: PropTypes.object
+};
+
 class ProfileScreen extends React.Component {
   static navigationOptions = () => ({
     title: 'Profile'
@@ -36,18 +62,53 @@ ProfileScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-const LoginNavigator = StackNavigator({
-  Login: { screen: LoginScreen },
-  Profile: { screen: ProfileScreen }
-});
-
 export default new Feature({
   tabItem: {
-    User: {
-      screen: LoginNavigator,
+    Profile: {
+      screen: ProfileScreen,
+      userInfo: {
+        requiredLogin: true
+      },
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
           name: 'user',
+          size: 30
+        })
+      }
+    },
+    Login: {
+      screen: LoginScreen,
+      userInfo: {
+        requiredLogin: false
+      },
+      navigationOptions: {
+        tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
+          name: 'login',
+          size: 30
+        })
+      }
+    },
+    Users: {
+      screen: UsersLisScreen,
+      userInfo: {
+        requiredLogin: true,
+        role: 'admin'
+      },
+      navigationOptions: {
+        tabBarIcon: createTabBarIconWrapper(Ionicons, {
+          name: 'ios-browsers-outline',
+          size: 30
+        })
+      }
+    },
+    Logout: {
+      screen: LogoutScreen,
+      userInfo: {
+        requiredLogin: true
+      },
+      navigationOptions: {
+        tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
+          name: 'logout',
           size: 30
         })
       }

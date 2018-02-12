@@ -23,7 +23,6 @@ function navTabsFilter(currentUser, currentUserLoading) {
 class MainScreenNavigator extends React.Component {
   render() {
     const { currentUser, currentUserLoading } = this.props;
-
     const MainScreenNavigator = TabNavigator({
       ...navTabsFilter(currentUser, currentUserLoading)
     });

@@ -6,6 +6,8 @@ import { StackNavigator } from 'react-navigation';
 import { createTabBarIconWrapper } from '../../../common/components/native';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
+import Logout from '../../common/containers/Logout';
+import UsersList from './containers/UsersList';
 import resolvers from './resolvers';
 
 import Feature from '../../../connector';
@@ -36,7 +38,7 @@ LogoutScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-class UsersLisScreen extends React.Component {
+class UsersListScreen extends React.Component {
   static navigationOptions = () => ({
     title: 'Users'
   });
@@ -45,7 +47,7 @@ class UsersLisScreen extends React.Component {
   }
 }
 
-UsersLisScreen.propTypes = {
+UsersListScreen.propTypes = {
   navigation: PropTypes.object
 };
 
@@ -89,7 +91,7 @@ export default new Feature({
       }
     },
     Users: {
-      screen: UsersLisScreen,
+      screen: UsersListScreen,
       userInfo: {
         requiredLogin: true,
         role: 'admin'

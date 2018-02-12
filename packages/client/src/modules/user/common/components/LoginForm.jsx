@@ -79,9 +79,8 @@ const styles = StyleSheet.create({
 const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ email: '', password: '' }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+  async handleSubmit(values, { props: { onSubmit } }) {
     await onSubmit(values);
-    resetForm();
   },
   validate: values => validate(values),
   displayName: 'LoginForm' // helps with React DevTools

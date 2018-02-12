@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
 import modules from '../modules';
-import { withUser } from '../modules/user/modules/session/containers/AuthBase';
+import { withUser } from '../modules/user/common/containers/AuthBase';
 
 function navTabsFilter(currentUser, currentUserLoading) {
   if (currentUser && !currentUserLoading) {

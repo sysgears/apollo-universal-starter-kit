@@ -6,34 +6,31 @@ import modules from '../modules';
 import { withUser } from '../modules/user/common/containers/AuthBase';
 
 function navTabsFilter(currentUser, currentUserLoading) {
-  if (currentUser && !currentUserLoading) {
-    return pickBy(modules.tabItems, value => {
-      return (
-        (value.userInfo && value.userInfo.requiredLogin && value.userInfo.role === currentUser.role) ||
-        (value.userInfo && value.userInfo.requiredLogin && !value.userInfo.role) ||
-        !value.userInfo
-      );
-    });
-  }
-  return pickBy(modules.tabItems, value => {
-    return !value.userInfo || (value.userInfo && !value.userInfo.requiredLogin);
-  });
+  // TODO: simplify this by removing 'requiredLogin' param
+  const userFilter = value =>
+    (value.userInfo && value.userInfo.requiredLogin && value.userInfo.role === currentUser.role) ||
+    (value.userInfo && value.userInfo.requiredLogin && !value.userInfo.role) ||
+    !value.userInfo;
+
+  const guestFilter = value => !value.userInfo || (value.userInfo && !value.userInfo.requiredLogin);
+
+  return pickBy(modules.tabItems, currentUser && !currentUserLoading ? userFilter : guestFilter);
 }
 
 class MainScreenNavigator extends React.Component {
+  static propTypes = {
+    currentUser: PropTypes.object,
+    currentUserLoading: PropTypes.bool.isRequired
+  };
+
   render() {
     const { currentUser, currentUserLoading } = this.props;
-    const MainScreenNavigator = TabNavigator({
+    const MainScreenNavigatorComponent = TabNavigator({
       ...navTabsFilter(currentUser, currentUserLoading)
     });
 
-    return <MainScreenNavigator />;
+    return <MainScreenNavigatorComponent />;
   }
 }
-
-MainScreenNavigator.propTypes = {
-  currentUser: PropTypes.object,
-  currentUserLoading: PropTypes.bool.isRequired
-};
 
 export default withUser(MainScreenNavigator);

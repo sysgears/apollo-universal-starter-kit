@@ -6,6 +6,7 @@ import { NavLink, Link } from 'react-router-dom';
 import Field from '../../../../utils/FieldAdapter';
 import { Form, RenderField, Alert, Button } from '../../../common/components/web/index';
 import { required, email, minLength, validateForm } from '../../../../../../common/validation';
+import FacebookButton from '../../modules/facebook';
 
 import settings from '../../../../../../../settings';
 
@@ -55,9 +56,7 @@ const LoginForm = ({ handleSubmit, submitting, error, handleChange, values }) =>
           Login
         </Button>
         {settings.user.auth.facebook.enabled && (
-          <Button color="primary" type="button" onClick={facebookLogin} style={{ margin: 10 }}>
-            Login with Facebook
-          </Button>
+            <FacebookButton />
         )}
         {settings.user.auth.google.enabled && (
           <Button color="primary" type="button" onClick={googleLogin} style={{ margin: 10 }}>

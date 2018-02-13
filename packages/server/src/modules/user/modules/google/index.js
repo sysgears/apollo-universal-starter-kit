@@ -1,42 +1,48 @@
 import { pick } from 'lodash';
 import passport from 'passport';
-import FacebookStrategy from 'passport-facebook';
+import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { createTokens } from '../jwt/auth';
 import settings from '../../../../../../../settings';
 
-export function facebookStategy(User) {
+export function googleStategy(User) {
   passport.use(
-    new FacebookStrategy(
+    new GoogleStrategy(
       {
-        clientID: settings.user.auth.facebook.clientID,
-        clientSecret: settings.user.auth.facebook.clientSecret,
-        callbackURL: '/auth/facebook/callback',
-        scope: settings.user.auth.facebook.scope,
-        profileFields: settings.user.auth.facebook.profileFields
+        clientID: settings.user.auth.google.clientID,
+        clientSecret: settings.user.auth.google.clientSecret,
+        callbackURL: '/auth/google/callback'
       },
       async function(accessToken, refreshToken, profile, cb) {
         const { id, username, displayName, emails: [{ value }] } = profile;
         try {
-          let user = await User.getUserByFbIdOrEmail(id, value);
+          let user = await User.getUserByGoogleIdOrEmail(id, value);
 
           if (!user) {
             const isActive = true;
             const [createdUserId] = await User.register({
-              username: username ? username : displayName,
+              username: username ? username : value,
               email: value,
               password: id,
               isActive
             });
 
-            await User.createFacebookAuth({
+            await User.createGoogleOuth({
               id,
               displayName,
               userId: createdUserId
             });
 
+            await User.editUserProfile({
+              id: createdUserId,
+              profile: {
+                firstName: profile.name.givenName,
+                lastName: profile.name.familyName
+              }
+            });
+
             user = await User.getUser(createdUserId);
-          } else if (!user.fbId) {
-            await User.createFacebookAuth({
+          } else if (!user.googleId) {
+            await User.createGoogleOuth({
               id,
               displayName,
               userId: user.id
@@ -52,22 +58,26 @@ export function facebookStategy(User) {
   );
 }
 
-export function facebookAuth(app, SECRET, User) {
+export function googleAuth(app, SECRET, User) {
   app.use(passport.initialize());
 
-  app.get('/auth/facebook', passport.authenticate('facebook'));
+  app.get(
+    '/auth/google',
+    passport.authenticate('google', {
+      scope: settings.user.auth.google.scope
+    })
+  );
 
-  app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
+  app.get('/auth/google/callback', passport.authenticate('google', { session: false }), async function(req, res) {
     const user = await User.getUserWithPassword(req.user.id);
-    const refreshSecret = SECRET + user.password;
 
+    const refreshSecret = SECRET + user.password;
     const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
 
     req.universalCookies.set('x-token', token, {
       maxAge: 60 * 60 * 24 * 7,
       httpOnly: true
     });
-
     req.universalCookies.set('x-refresh-token', refreshToken, {
       maxAge: 60 * 60 * 24 * 7,
       httpOnly: true
@@ -81,6 +91,7 @@ export function facebookAuth(app, SECRET, User) {
       maxAge: 60 * 60 * 24 * 7,
       httpOnly: false
     });
+
     res.redirect('/profile');
   });
 }

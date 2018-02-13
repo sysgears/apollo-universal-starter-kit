@@ -7,6 +7,7 @@ import Field from '../../../../utils/FieldAdapter';
 import { Form, RenderField, Alert, Button } from '../../../common/components/web/index';
 import { required, email, minLength, validateForm } from '../../../../../../common/validation';
 import FacebookButton from '../../modules/facebook';
+import GoogleButton from '../../modules/google';
 
 import settings from '../../../../../../../settings';
 
@@ -16,9 +17,9 @@ if (__DEV__) {
   serverPort = '3000';
 }
 
-const facebookLogin = () => {
-  window.location = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
-};
+// const facebookLogin = () => {
+//   window.location = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
+// };
 
 const googleLogin = () => {
   window.location = `${protocol}//${hostname}:${serverPort}/auth/google`;
@@ -55,14 +56,8 @@ const LoginForm = ({ handleSubmit, submitting, error, handleChange, values }) =>
         <Button color="primary" type="submit" disabled={submitting}>
           Login
         </Button>
-        {settings.user.auth.facebook.enabled && (
-            <FacebookButton />
-        )}
-        {settings.user.auth.google.enabled && (
-          <Button color="primary" type="button" onClick={googleLogin} style={{ margin: 10 }}>
-            Login with Google
-          </Button>
-        )}
+        {settings.user.auth.facebook.enabled && <FacebookButton />}
+        {settings.user.auth.google.enabled && <GoogleButton />}
       </div>
       <Link className="text-center" to="/forgot-password">
         Forgot your password?

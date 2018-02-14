@@ -4,7 +4,6 @@ import { getOperationAST } from 'graphql';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import { reducer as formReducer } from 'redux-form';
 import { createApolloFetch } from 'apollo-fetch';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
@@ -22,8 +21,6 @@ import settings from '../../../settings';
 
 const store = createStore(
   combineReducers({
-    form: formReducer,
-
     ...modules.reducers
   }),
   {} // initial state

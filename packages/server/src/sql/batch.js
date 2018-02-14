@@ -47,7 +47,6 @@ export const reconcileBatchManyToMany = (
   matchFilter,
   resultFilter
 ) => {
-
   // because we have multiple copies of the same source, its how graphql-resolve-batch works
   let ret = [];
   for (let src of sources) {
@@ -88,5 +87,5 @@ export const reconcileBatchManyToMany = (
 export default {
   reconcileBatchOneToOne,
   reconcileBatchOneToMany,
-  reconcileBatchManyToMany,
+  reconcileBatchManyToMany
 };

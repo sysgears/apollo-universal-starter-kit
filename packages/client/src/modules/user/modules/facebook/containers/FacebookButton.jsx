@@ -29,13 +29,7 @@ const FacebookLink = () => {
 };
 
 const FacebookIcon = () => {
-  return (
-    <img
-      src="http://www.pvhc.net/img48/fsbsrwlwxxczsesauqbb.png"
-      style={{ margin: 10, height: 38 }}
-      onClick={facebookLogin}
-    />
-  );
+  return <i className="fa fa-facebook" />;
 };
 
 const FacebookComponent = props => {

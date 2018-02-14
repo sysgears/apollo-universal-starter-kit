@@ -4095,28 +4095,28 @@ domain-browser@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.2.0.tgz#3d31f50191a6749dd1375a7f522e823d42e54eda"
 
-domain-graphql@^0.0.19:
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/domain-graphql/-/domain-graphql-0.0.19.tgz#abbff623d39efac3ac8464538ac18a3cd4a1b3e2"
+domain-graphql@^0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/domain-graphql/-/domain-graphql-0.0.20.tgz#8cf31e4d1c7e0f65dc0c1beb215ba40febe4f927"
   dependencies:
     debug "^3.1.0"
 
-domain-knex@^0.0.19:
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/domain-knex/-/domain-knex-0.0.19.tgz#90ad0fe194155e19fcfff5bab20065b0c68b001c"
+domain-knex@^0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/domain-knex/-/domain-knex-0.0.20.tgz#5090277e5a395792c78a644647c1ffa1884980ca"
   dependencies:
     debug "^3.1.0"
     humps "^2.0.1"
 
-domain-react-forms@^0.0.19:
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/domain-react-forms/-/domain-react-forms-0.0.19.tgz#12c22ab258774369ea25879eae750f33d3959bab"
+domain-react-forms@^0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/domain-react-forms/-/domain-react-forms-0.0.20.tgz#26d0bfa86d6ac99cf59609549741e568e802bce9"
   dependencies:
     debug "^3.1.0"
 
-domain-schema@^0.0.19:
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/domain-schema/-/domain-schema-0.0.19.tgz#5c28b94fb2f0a30991dab93eb7d2e2827453805c"
+domain-schema@^0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/domain-schema/-/domain-schema-0.0.20.tgz#5d7d9293d69ec0e816463a019bde00ff92cb8750"
   dependencies:
     debug "^3.1.0"
 
@@ -4409,7 +4409,7 @@ es6-error@^3.0.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/es6-error/-/es6-error-3.2.0.tgz#e567cfdcb324d4e7ae5922a3700ada5de879a0ca"
 
-es6-error@^4.0.2, es6-error@^4.1.1:
+es6-error@^4.0.2:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/es6-error/-/es6-error-4.1.1.tgz#9e3af407459deed47e9a91f9b885a84eb05c561d"
 
@@ -7602,7 +7602,7 @@ lock@^0.1.2, lock@~0.1.2:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/lock/-/lock-0.1.4.tgz#fec7deaef17e7c3a0a55e1da042803e25d91745d"
 
-lodash-es@^4.17.3, lodash-es@^4.2.0, lodash-es@^4.2.1:
+lodash-es@^4.2.0, lodash-es@^4.2.1:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.4.tgz#dcc1d7552e150a0640073ba9cb31d70f032950e7"
 
@@ -11342,19 +11342,6 @@ reduce-function-call@^1.0.1:
 redux-devtools-extension@^2.13.2:
   version "2.13.2"
   resolved "https://registry.yarnpkg.com/redux-devtools-extension/-/redux-devtools-extension-2.13.2.tgz#e0f9a8e8dfca7c17be92c7124958a3b94eb2911d"
-
-redux-form@^7.2.0:
-  version "7.2.1"
-  resolved "https://registry.yarnpkg.com/redux-form/-/redux-form-7.2.1.tgz#011f6ff0cf050552a4a182a271f22217f4584684"
-  dependencies:
-    deep-equal "^1.0.1"
-    es6-error "^4.1.1"
-    hoist-non-react-statics "^2.3.1"
-    invariant "^2.2.2"
-    is-promise "^2.1.0"
-    lodash "^4.17.3"
-    lodash-es "^4.17.3"
-    prop-types "^15.5.9"
 
 redux-logger@^2.7.4:
   version "2.10.2"

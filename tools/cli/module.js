@@ -3,7 +3,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 const DomainSchema = require('domain-schema').default;
 const GraphQLGenerator = require('domain-graphql').default;
-const { pascalize, camelize } = require('humps');
+const { pascalize, camelize, decamelize } = require('humps');
 const { startCase } = require('lodash');
 
 function renameFiles(destinationPath, templatePath, module, location) {
@@ -27,6 +27,7 @@ function renameFiles(destinationPath, templatePath, module, location) {
   shell.ls('-Rl', '.').forEach(entry => {
     if (entry.isFile()) {
       shell.sed('-i', /\$module\$/g, module, entry.name);
+      shell.sed('-i', /\$_module\$/g, decamelize(module), entry.name);
       shell.sed('-i', /\$Module\$/g, Module, entry.name);
       shell.sed('-i', /\$MoDuLe\$/g, startCase(Module), entry.name);
       shell.sed('-i', /\$MODULE\$/g, module.toUpperCase(), entry.name);

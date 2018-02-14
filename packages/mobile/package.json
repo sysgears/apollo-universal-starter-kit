@@ -70,7 +70,6 @@
     "react-redux": "^5.0.6",
     "react-stripe-elements": "^1.2.1",
     "redux": "^3.7.2",
-    "redux-form": "^7.2.0",
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {

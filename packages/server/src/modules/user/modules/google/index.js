@@ -58,7 +58,7 @@ export function googleStategy(User) {
   );
 }
 
-export function googleAuth(app, SECRET, User) {
+export function googleAuth(module, app, SECRET, User) {
   app.use(passport.initialize());
 
   app.get(
@@ -69,28 +69,29 @@ export function googleAuth(app, SECRET, User) {
   );
 
   app.get('/auth/google/callback', passport.authenticate('google', { session: false }), async function(req, res) {
-    const user = await User.getUserWithPassword(req.user.id);
+    if (module === 'jwt') {
+      const user = await User.getUserWithPassword(req.user.id);
 
-    const refreshSecret = SECRET + user.password;
-    const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
+      const refreshSecret = SECRET + user.password;
+      const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
+      req.universalCookies.set('x-token', token, {
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: true
+      });
+      req.universalCookies.set('x-refresh-token', refreshToken, {
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: true
+      });
 
-    req.universalCookies.set('x-token', token, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: true
-    });
-    req.universalCookies.set('x-refresh-token', refreshToken, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: true
-    });
-
-    req.universalCookies.set('r-token', token, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: false
-    });
-    req.universalCookies.set('r-refresh-token', refreshToken, {
-      maxAge: 60 * 60 * 24 * 7,
-      httpOnly: false
-    });
+      req.universalCookies.set('r-token', token, {
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: false
+      });
+      req.universalCookies.set('r-refresh-token', refreshToken, {
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: false
+      });
+    }
 
     res.redirect('/profile');
   });

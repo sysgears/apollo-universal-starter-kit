@@ -98,12 +98,12 @@ export default new Feature({
 
     // Setup Facebook OAuth
     if (settings.user.auth.facebook.enabled) {
-      facebookAuth(app, SECRET, User);
+      facebookAuth('jwt', app, SECRET, User);
     }
 
     // Setup Google OAuth
     if (settings.user.auth.google.enabled) {
-      googleAuth(app, SECRET, User);
+      googleAuth('jwt', app, SECRET, User);
     }
   }
 });

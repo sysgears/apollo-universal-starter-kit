@@ -136,12 +136,12 @@ const tailFormItemLayout = {
   }
 };
 
-const RenderEntry = ({ fields, formdata, schema, meta: { error, submitFailed } }) => (
+const RenderEntry = ({ fields, formdata, formItemLayout, schema, meta: { error, submitFailed } }) => (
   <Row>
     <Col span={12} offset={6}>
       {fields.map((field, index) => (
         <div key={index} className="field-array-form">
-          {createFormFields(schema, formdata, null, `${field}.`)}
+          {createFormFields(schema, formdata, formItemLayout, `${field}.`)}
           <FormItem {...tailFormItemLayout}>
             <Button color="primary" size="sm" onClick={() => fields.remove(index)}>
               Delete
@@ -163,7 +163,8 @@ RenderEntry.propTypes = {
   fields: PropTypes.object,
   formdata: PropTypes.object,
   schema: PropTypes.object,
-  meta: PropTypes.object
+  meta: PropTypes.object,
+  formItemLayout: PropTypes.object
 };
 
 export const createFormFields = (schema, formdata, formItemLayout, prefix = '', batch = false) => {
@@ -206,7 +207,14 @@ export const createFormFields = (schema, formdata, formItemLayout, prefix = '', 
     } else {
       if (value.type.constructor === Array && !batch) {
         fields.push(
-          <FieldArray name={key} key={key} component={RenderEntry} schema={value.type[0]} formdata={formdata} />
+          <FieldArray
+            name={key}
+            key={key}
+            component={RenderEntry}
+            schema={value.type[0]}
+            formdata={formdata}
+            formItemLayout={formItemLayout}
+          />
         );
       }
     }
@@ -256,7 +264,7 @@ export const pickInputFields = (schema, values, node = null) => {
 
         values[key].forEach(item => {
           if (!keys1[item.id]) {
-            create.push({ ...item });
+            create.push(pickInputFields(value.type[0], item));
           }
         });
 

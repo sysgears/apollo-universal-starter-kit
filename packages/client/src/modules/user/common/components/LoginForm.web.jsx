@@ -56,7 +56,7 @@ const LoginForm = ({ handleSubmit, submitting, error, handleChange, values }) =>
         <Button color="primary" type="submit" disabled={submitting}>
           Login
         </Button>
-        {settings.user.auth.facebook.enabled && <FacebookButton type={'button'} />}
+        {settings.user.auth.facebook.enabled && <FacebookButton type={'icon'} />}
         {settings.user.auth.google.enabled && <GoogleButton type={'link'} />}
       </div>
       <Link className="text-center" to="/forgot-password">

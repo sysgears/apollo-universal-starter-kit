@@ -29,7 +29,7 @@ const FacebookLink = () => {
 };
 
 const FacebookIcon = () => {
-  return <i className="fa fa-facebook" />;
+  return <i className="fa fa-facebook-square" onClick={facebookLogin} style={{ fontSize: '3em', margin: 10 }} />;
 };
 
 const FacebookComponent = props => {

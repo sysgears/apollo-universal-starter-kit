@@ -29,13 +29,7 @@ const GoogleLink = () => {
 };
 
 const GoogleIcon = () => {
-  return (
-    <img
-      src="https://www.outsystems.com/forgeCore/_image.aspx/A28atdGCIn2i_ZW11S_0KWgJm3iqRyDV-m8=/google-login-plugin"
-      style={{ margin: 10, height: 38 }}
-      onClick={googleLogin}
-    />
-  );
+  return <i className="fa fa-google-plus-square" onClick={googleLogin} style={{ fontSize: '3em', margin: 10 }} />;
 };
 
 const GoogleComponent = props => {

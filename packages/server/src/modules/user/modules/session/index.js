@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import cookiesMiddleware from 'universal-cookie-express';
 import url from 'url';
 import jwt from 'jsonwebtoken';
-import passport from 'passport';
-import FacebookStrategy from 'passport-facebook';
-import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
-import { pick } from 'lodash';
 
 import UserDAO from './sql';
 import schema from './schema.graphql';

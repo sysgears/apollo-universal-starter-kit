@@ -46,8 +46,8 @@ const checkAuth = (cookies, scope) => {
 const profileName = cookies => {
   let token = null;
 
-  if (cookies && cookies.get('x-token')) {
-    token = cookies.get('x-token');
+  if (cookies && cookies.get('session')) {
+    token = cookies.get('session');
   }
 
   if (__CLIENT__ && window.localStorage.getItem('token')) {

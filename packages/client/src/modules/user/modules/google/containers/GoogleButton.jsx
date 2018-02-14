@@ -1,6 +1,8 @@
 import React from 'react';
 import url from 'url';
 import { Button } from '../../../../common/components/web/index';
+import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlusSquare';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
@@ -29,7 +31,7 @@ const GoogleLink = () => {
 };
 
 const GoogleIcon = () => {
-  return <i className="fa fa-google-plus-square" onClick={googleLogin} style={{ fontSize: '3em', margin: 10 }} />;
+  return <FontAwesomeIcon icon={faGooglePlusSquare} size="3x" style={{ margin: 10 }} />;
 };
 
 const GoogleComponent = props => {

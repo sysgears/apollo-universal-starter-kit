@@ -1,5 +1,7 @@
 import React from 'react';
 import url from 'url';
+import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSquare';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web/index';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
@@ -29,7 +31,7 @@ const FacebookLink = () => {
 };
 
 const FacebookIcon = () => {
-  return <i className="fa fa-facebook-square" onClick={facebookLogin} style={{ fontSize: '3em', margin: 10 }} />;
+  return <FontAwesomeIcon icon={faFacebookSquare} size="3x" style={{ margin: 10 }} />;
 };
 
 const FacebookComponent = props => {

@@ -10,7 +10,7 @@ const Section = styled.section`
   text-align: center;
 `;
 
-const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement }) => {
+const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement, counterState, addCounterState }) => {
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Counter`}
@@ -49,6 +49,14 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
             Click to increase reduxCount
           </Button>
         </Section>
+        <Section>
+          <p>
+            Current apolloLinkStateCount, is {counterState}. This is being stored client-side with Apollo Link State.
+          </p>
+          <Button id="apollo-link-button" color="primary" onClick={addCounterState(1)}>
+            Click to increase apolloLinkState
+          </Button>
+        </Section>
       </PageLayout>
     );
   }
@@ -58,6 +66,8 @@ CounterView.propTypes = {
   loading: PropTypes.bool.isRequired,
   counter: PropTypes.object,
   addCounter: PropTypes.func.isRequired,
+  counterState: PropTypes.number.isRequired,
+  addCounterState: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired,
   onReduxIncrement: PropTypes.func.isRequired
 };

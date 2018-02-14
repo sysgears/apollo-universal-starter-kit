@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SubmissionError } from 'redux-form';
 import { StyleSheet, View } from 'react-native';
 
 import ContactForm from './ContactForm';
 
-const onSubmit = (contact, onFormSubmitted) => async values => {
+const onSubmit = contact => async values => {
   const result = await contact(values);
 
   if (result.errors) {
@@ -13,22 +12,20 @@ const onSubmit = (contact, onFormSubmitted) => async values => {
       _error: 'Contact request failed!'
     };
     result.errors.map(error => (submitError[error.field] = error.message));
-    throw new SubmissionError(submitError);
+    throw submitError;
   }
-  onFormSubmitted();
 };
 
-const ContactView = ({ contact, onFormSubmitted }) => {
+const ContactView = ({ contact }) => {
   return (
     <View style={styles.container}>
-      <ContactForm onSubmit={onSubmit(contact, onFormSubmitted)} />
+      <ContactForm onSubmit={onSubmit(contact)} />
     </View>
   );
 };
 
 ContactView.propTypes = {
-  contact: PropTypes.func.isRequired,
-  onFormSubmitted: PropTypes.func.isRequired
+  contact: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

@@ -625,6 +625,19 @@ apollo-link-dedup@^1.0.0:
   dependencies:
     apollo-link "^1.0.7"
 
+apollo-link-schema@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/apollo-link-schema/-/apollo-link-schema-1.0.2.tgz#e4bb1cafcaecca8ff6b9aad7e2de2091179f33c7"
+  dependencies:
+    apollo-link "^1.0.7"
+
+apollo-link-state@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/apollo-link-state/-/apollo-link-state-0.3.1.tgz#e323d41357bb908c7b888d51a5650b8cdcef025d"
+  dependencies:
+    apollo-utilities "^1.0.1"
+    graphql-anywhere "^4.1.0-alpha.0"
+
 apollo-link-ws@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/apollo-link-ws/-/apollo-link-ws-1.0.4.tgz#d0067aa0204470dbd3955aa5204f8dd72d389350"
@@ -5344,6 +5357,14 @@ formidable@^1.0.17, formidable@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.1.1.tgz#96b8886f7c3c3508b932d6bd70c4d3a88f35f1a9"
 
+formik@^0.10.5:
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/formik/-/formik-0.10.5.tgz#6984d2f22e918c6d2264a3cb86b8582f7277faca"
+  dependencies:
+    lodash.isequal "4.5.0"
+    prop-types "^15.5.10"
+    warning "^3.0.0"
+
 forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
@@ -5740,7 +5761,7 @@ graphql-anywhere@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-3.1.0.tgz#3ea0d8e8646b5cee68035016a9a7557c15c21e96"
 
-graphql-anywhere@^4.1.1:
+graphql-anywhere@^4.1.0-alpha.0, graphql-anywhere@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.1.tgz#67924b67b053d1a23bc30d0e4c8db943c1d791a8"
   dependencies:
@@ -7733,6 +7754,10 @@ lodash.isarray@^3.0.0:
 lodash.isboolean@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz#6c2e171db2a257cd96802fd43b01b20d5f5870f6"
+
+lodash.isequal@4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
 
 lodash.isfunction@^3.0.8:
   version "3.0.8"
@@ -10984,7 +11009,7 @@ react-native-web@^0.1.16:
     xmldoc "^0.4.0"
     yargs "^9.0.0"
 
-react-navigation@^1.0.0-beta.21, react-navigation@^1.0.0-beta.27:
+react-navigation@^1.0.0-beta.27:
   version "1.0.0-beta.27"
   resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-1.0.0-beta.27.tgz#e6263b01975cd790e32b3711c2eb6cead96c102c"
   dependencies:
@@ -12475,34 +12500,9 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.0:
-  version "0.4.95"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.95.tgz#74ecb762a15e07773e9ed8b49eee5d006bbbdf6a"
-  dependencies:
-    babel-polyfill "^6.26.0"
-    babel-preset-env "^1.6.1"
-    babel-preset-flow "^6.23.0"
-    babel-register "^6.26.0"
-    connect-cors "^0.5.6"
-    containerized "^1.0.2"
-    debug "^3.1.0"
-    detect-port "^1.2.2"
-    inquirer "^3.3.0"
-    ip "^1.1.5"
-    lodash "^4.17.4"
-    minilog "^3.1.0"
-    mkdirp "^0.5.1"
-    require-relative "^0.8.7"
-    serve-static "^1.13.1"
-    source-list-map "^2.0.0"
-    source-map-support "^0.4.15"
-    webpack-merge "^4.1.0"
-    webpack-sources "^1.0.1"
-    yargs "^8.0.2"
-
-spinjs@^0.4.97:
-  version "0.4.97"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.97.tgz#386ebabe9306e6ebf8ac211d9f8ba29501053bce"
+spinjs@^0.4.102:
+  version "0.4.102"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.102.tgz#c81212af17eb99e2af4183d1799ebfd273e8d194"
   dependencies:
     babel-polyfill "^6.26.0"
     babel-preset-env "^1.6.1"
@@ -13546,7 +13546,7 @@ uuid@^2.0.1:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
 
-uuid@^3.0.0, uuid@^3.0.1, uuid@^3.1.0:
+uuid@^3.0.0, uuid@^3.0.1, uuid@^3.1.0, uuid@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.2.1.tgz#12c528bb9d58d0b9265d9a2f6f0fe8be17ff1f14"
 

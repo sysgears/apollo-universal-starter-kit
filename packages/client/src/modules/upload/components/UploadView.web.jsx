@@ -38,7 +38,7 @@ export default class UploadView extends React.PureComponent {
     }
   };
 
-  hendleRemoveFile = async id => {
+  handleRemoveFile = async id => {
     const { removeFile } = this.props;
     const result = await removeFile(id);
     if (result && result.error) {
@@ -68,7 +68,7 @@ export default class UploadView extends React.PureComponent {
         key: 'actions',
         width: 50,
         render: (text, record) => (
-          <Button color="primary" size="sm" className="delete-button" onClick={() => this.hendleRemoveFile(record.id)}>
+          <Button color="primary" size="sm" className="delete-button" onClick={() => this.handleRemoveFile(record.id)}>
             Delete
           </Button>
         )

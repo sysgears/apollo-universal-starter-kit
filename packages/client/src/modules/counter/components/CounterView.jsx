@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '../../common/components';
 
-const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement }) => {
+const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement, counterState, addCounterState }) => {
   if (loading) {
     return (
       <View style={styles.container}>
@@ -27,6 +27,12 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
           </Text>
         </View>
         <Button onPress={onReduxIncrement(1)}>Click to increase reduxCount</Button>
+        <View style={styles.element}>
+          <Text style={styles.box}>
+            Current apolloLinkState, is {counterState}. This is being stored client-side with Apollo Link State.
+          </Text>
+        </View>
+        <Button onPress={addCounterState(1)}>Click to increase apolloLinkStateCount</Button>
       </View>
     );
   }
@@ -54,6 +60,8 @@ CounterView.propTypes = {
   loading: PropTypes.bool.isRequired,
   counter: PropTypes.object,
   addCounter: PropTypes.func.isRequired,
+  counterState: PropTypes.number.isRequired,
+  addCounterState: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired,
   onReduxIncrement: PropTypes.func.isRequired
 };

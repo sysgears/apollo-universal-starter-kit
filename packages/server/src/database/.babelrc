@@ -1,0 +1,10 @@
+{
+  "compact": false,
+  "presets": [["env", { "modules": false }], "stage-0"],
+  "plugins": [
+    "transform-runtime",
+    "transform-decorators-legacy",
+    "transform-class-properties"
+  ],
+  "only": ["*.js"]
+}

@@ -25,18 +25,21 @@
 
 Checkout our [Mobile App Demo](https://expo.io/@sysgears/apollo-universal-starter-kit)
 
-If you need single-package Apollo v2 version of this repo, plese use
-[starter kit from `single` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/single)
+## Available Branches
 
-If you are using Apollo v1 please use
-[starter kit from `apollo1` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1)
+| Branch   | Description    |
+| -------- | -------------- |
+| [stable](https://github.com/sysgears/apollo-universal-starter-kit/tree/stable) | The latest stable version of the kit |
+| [single](https://github.com/sysgears/apollo-universal-starter-kit/tree/single) | Single-package Apollo v2 version of the kit|
+| [apollo1](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1) | Apollo v1 version of the kit |
+
 
 ## Getting Started
 
-1. Clone starter kit locally.
+1. Clone the latest stable starter kit locally.
 
 ```
-git clone https://github.com/sysgears/apollo-universal-starter-kit.git
+git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
 cd apollo-universal-starter-kit
 ```
 
@@ -398,10 +401,10 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
 
 ### Deploying to Linux running Node.js
 
-1. Clone starter kit locally.
+1. Clone the latest stable starter kit locally.
 
 ```
-git clone https://github.com/sysgears/apollo-universal-starter-kit.git
+git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
 cd apollo-universal-starter-kit
 ```
 

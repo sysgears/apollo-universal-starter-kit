@@ -1,6 +1,8 @@
 import ApolloClient from 'apollo-client';
 import { ApolloLink, Observable } from 'apollo-link';
+import { withClientState } from 'apollo-link-state';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { SchemaLink } from 'apollo-link-schema';
 import { addTypenameToDocument } from 'apollo-utilities';
 import { LoggingLink } from 'apollo-logger';
 import { Router, Switch } from 'react-router-dom';
@@ -8,7 +10,6 @@ import createHistory from 'history/createMemoryHistory';
 import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { combineReducers, createStore } from 'redux';
-import { reducer as formReducer } from 'redux-form';
 import { graphql, print, getOperationAST } from 'graphql';
 
 import { Provider } from 'react-redux';
@@ -145,15 +146,20 @@ export default class Renderer {
 
     const cache = new InMemoryCache();
     let link = new MockLink(schema);
+    const isLocalhost = /localhost/.test(__BACKEND_URL__);
+    let linkSchema = isLocalhost ? new SchemaLink({ schema: { ...serverModules.schemas } }) : {};
+
+    const linkState = withClientState({ ...clientModules.resolvers, cache });
 
     const client = new ApolloClient({
-      link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link])),
+      link: ApolloLink.from(
+        (settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link, ...linkSchema])
+      ),
       cache
     });
 
     const store = createStore(
       combineReducers({
-        form: formReducer,
         ...clientModules.reducers
       }),
       reduxState

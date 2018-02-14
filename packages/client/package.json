@@ -44,12 +44,15 @@
     "apollo-fetch-upload": "^1.2.0",
     "apollo-link": "^1.0.6",
     "apollo-link-batch-http": "^1.0.3",
+    "apollo-link-state": "^0.3.1",
+    "apollo-link-schema": "^1.0.2",
     "apollo-link-ws": "^1.0.3",
     "apollo-logger": "0.1.1",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "4.0.0-beta.2",
     "error-stack-parser": "^2.0.1",
     "filesize": "^3.5.11",
+    "formik": "^0.10.5",
     "graphql": "^0.12.3",
     "graphql-auth": "^0.2.0",
     "graphql-iso-date": "^3.3.0",
@@ -83,7 +86,6 @@
     "reactstrap": "^5.0.0-beta",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
-    "redux-form": "^7.2.0",
     "sourcemapped-stacktrace": "^1.1.8",
     "styled-components": "^2.3.0",
     "subscriptions-transport-ws": "^0.9.4"
@@ -165,7 +167,7 @@
     "webpack-sources": "^1.1.0",
     "webpack-virtual-modules": "^0.1.8"
   },
-  "optionalDependencies": {
+  "peerDependencies": {
     "@expo/vector-icons": "^6.2.1",
     "antd-mobile": "^2.1.2",
     "native-base": "^2.3.5",

@@ -12,7 +12,7 @@ const postFormSchema = {
 
 const validate = values => validateForm(values, postFormSchema);
 
-const PostForm = ({ values, handleSubmit, valid, handleChange }) => {
+const PostForm = ({ values, handleSubmit, valid, onSubmit, handleChange }) => {
   return (
     <FormView>
       <Field
@@ -31,7 +31,7 @@ const PostForm = ({ values, handleSubmit, valid, handleChange }) => {
         value={values.content}
         onChange={handleChange}
       />
-      <FormButton onPress={handleSubmit} disabled={!valid}>
+      <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
         Save
       </FormButton>
     </FormView>

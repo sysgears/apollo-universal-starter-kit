@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 
 import { EditView } from '../../common/components/crud';
 import { pickInputFields } from '../../common/util';
-import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
-import $MODULE$_QUERY from '../graphql/$Module$Query.graphql';
-import CREATE_$MODULE$ from '../graphql/Create$Module$.graphql';
-import UPDATE_$MODULE$ from '../graphql/Update$Module$.graphql';
+import { TestModuleSchema } from '../../../../../server/src/modules/testModule/schema';
+import TESTMODULE_QUERY from '../graphql/TestModuleQuery.graphql';
+import CREATE_TESTMODULE from '../graphql/CreateTestModule.graphql';
+import UPDATE_TESTMODULE from '../graphql/UpdateTestModule.graphql';
 
-class $Module$Edit extends React.Component {
+class TestModuleEdit extends React.Component {
   static propTypes = {
     data: PropTypes.object,
     createEntry: PropTypes.func.isRequired,
@@ -21,7 +21,7 @@ class $Module$Edit extends React.Component {
   onSubmit = async values => {
     const { data: { node }, createEntry, updateEntry, title } = this.props;
     let result = null;
-    const insertValues = pickInputFields($Module$Schema, values, node);
+    const insertValues = pickInputFields(TestModuleSchema, values, node);
 
     if (node) {
       result = await updateEntry(insertValues, { id: node.id });
@@ -34,17 +34,17 @@ class $Module$Edit extends React.Component {
         _error: `Edit ${title} failed!`
       };
       result.errors.map(error => (submitError[error.field] = error.message));
-      throw new submitError;
+      throw new submitError();
     }
   };
 
   render() {
-    return <EditView {...this.props} onSubmit={this.onSubmit} schema={$Module$Schema} />;
+    return <EditView {...this.props} onSubmit={this.onSubmit} schema={TestModuleSchema} />;
   }
 }
 
-const $Module$EditWithApollo = compose(
-  graphql($MODULE$_QUERY, {
+const TestModuleEditWithApollo = compose(
+  graphql(TESTMODULE_QUERY, {
     options: props => {
       let id = 0;
       if (props.match) {
@@ -58,24 +58,24 @@ const $Module$EditWithApollo = compose(
         variables: { where: { id } }
       };
     },
-    props({ data: { loading, $module$ } }) {
-      return { loading, data: $module$ };
+    props({ data: { loading, testModule } }) {
+      return { loading, data: testModule };
     }
   }),
-  graphql(CREATE_$MODULE$, {
+  graphql(CREATE_TESTMODULE, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       createEntry: async data => {
         try {
-          const { data: { create$Module$ } } = await mutate({
+          const { data: { createTestModule } } = await mutate({
             variables: { data }
           });
 
-          if (create$Module$.errors) {
-            return { errors: create$Module$.errors };
+          if (createTestModule.errors) {
+            return { errors: createTestModule.errors };
           }
 
           if (history) {
-            return history.push('/$module$');
+            return history.push('/testModule');
           }
           if (navigation) {
             return navigation.goBack();
@@ -86,20 +86,20 @@ const $Module$EditWithApollo = compose(
       }
     })
   }),
-  graphql(UPDATE_$MODULE$, {
+  graphql(UPDATE_TESTMODULE, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       updateEntry: async (data, where) => {
         try {
-          const { data: { update$Module$ } } = await mutate({
+          const { data: { updateTestModule } } = await mutate({
             variables: { data, where }
           });
 
-          if (update$Module$.errors) {
-            return { errors: update$Module$.errors };
+          if (updateTestModule.errors) {
+            return { errors: updateTestModule.errors };
           }
 
           if (history) {
-            return history.push('/$module$');
+            return history.push('/testModule');
           }
           if (navigation) {
             return navigation.goBack();
@@ -110,9 +110,9 @@ const $Module$EditWithApollo = compose(
       }
     })
   })
-)($Module$Edit);
+)(TestModuleEdit);
 
 export default connect(state => ({
-  title: state.$module$.title,
-  link: state.$module$.link
-}))($Module$EditWithApollo);
+  title: state.testModule.title,
+  link: state.testModule.link
+}))(TestModuleEditWithApollo);

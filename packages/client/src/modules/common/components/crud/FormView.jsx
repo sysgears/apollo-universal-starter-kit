@@ -1,29 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm } from 'redux-form';
+import { withFormik } from 'formik';
 
 import { createFormFields } from '../../util';
 import { FormView, FormButton } from '../native';
+import { minLength, required, validateForm } from '../../../../../../common/validation';
 
-const Form = ({ handleSubmit, valid, onSubmit, schema }) => {
+const formSchema = {
+  name: [required, minLength(3)]
+};
+
+const validate = values => validateForm(values, formSchema);
+
+const Form = ({ handleSubmit, schema }) => {
   return (
     <FormView>
       {createFormFields(schema)}
-      <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
-        Save
-      </FormButton>
+      <FormButton onPress={handleSubmit}>Save</FormButton>
     </FormView>
   );
 };
 
 Form.propTypes = {
   handleSubmit: PropTypes.func,
-  onSubmit: PropTypes.func,
-  schema: PropTypes.object,
-  valid: PropTypes.bool
+  schema: PropTypes.object
 };
 
-export default reduxForm({
-  form: 'form',
-  enableReinitialize: true
-})(Form);
+const FormWithFormik = withFormik({
+  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+    await onSubmit(values);
+    resetForm();
+  },
+  validate: values => validate(values),
+  displayName: 'Form' // helps with React DevTools
+});
+
+export default FormWithFormik(Form);

@@ -1,0 +1,72 @@
+### schema type definitions
+type TestModule {
+  id: Int!
+  name: String!
+}
+
+### end schema type definitions
+
+type TestModuleConnection {
+  pageInfo: PageInfo
+  edges: [TestModule]
+}
+
+type TestModuleData {
+  node: TestModule
+}
+
+type TestModulePayload {
+  node: TestModule
+  errors: [FieldError!]
+}
+
+input TestModuleFilterInput {
+  searchText: String
+}
+
+input TestModuleCreateInput {
+  name: String!
+}
+
+input TestModuleUpdateInput {
+  name: String!
+}
+
+input TestModuleWhereUniqueInput {
+  id: Int!
+}
+
+input TestModuleWhereInput {
+  id_in: [Int!]
+}
+
+extend type Query {
+  testModules(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: TestModuleFilterInput
+  ): [TestModule]
+  testModulesConnection(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: TestModuleFilterInput
+  ): TestModuleConnection!
+  testModule(where: TestModuleWhereUniqueInput!): TestModuleData
+}
+
+extend type Mutation {
+  createTestModule(data: TestModuleCreateInput!): TestModulePayload!
+  updateTestModule(
+    data: TestModuleUpdateInput!
+    where: TestModuleWhereUniqueInput!
+  ): TestModulePayload!
+  deleteTestModule(where: TestModuleWhereUniqueInput!): TestModulePayload!
+  sortTestModules(data: [Int!]): BatchPayload!
+  updateManyTestModules(
+    data: TestModuleUpdateInput!
+    where: TestModuleWhereInput!
+  ): BatchPayload!
+  deleteManyTestModules(where: TestModuleWhereInput!): BatchPayload!
+}

@@ -1,0 +1,11 @@
+#import "./TestModule.graphql"
+
+query testModule($where: TestModuleWhereUniqueInput!) {
+  testModule(where: $where) {
+    node {
+      ...TestModuleInfo
+    }
+    ### form data
+    ### end form data
+  }
+}

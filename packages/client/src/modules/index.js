@@ -1,3 +1,4 @@
+import testModule from './testModule';
 import counter from './counter';
 import post from './post';
 import upload from './upload';
@@ -9,4 +10,4 @@ import './favicon';
 
 import Feature from './connector';
 
-export default new Feature(counter, post, upload, user, subscription, contact, pageNotFound);
+export default new Feature(testModule, counter, post, upload, user, subscription, contact, pageNotFound);

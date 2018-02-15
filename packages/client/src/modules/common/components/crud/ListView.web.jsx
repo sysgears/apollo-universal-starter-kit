@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { reduxForm } from 'redux-form';
+import { withFormik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { Table, Button, Popconfirm, Form, FormItem, Row, Col } from '../web';
@@ -248,7 +248,7 @@ class ListView extends React.Component {
             </Popconfirm>
           </Col>
           <Col span={21}>
-            <Form layout="inline" name="post" onSubmit={handleSubmit(this.hendleUpdateMany)}>
+            <Form layout="inline" name="post" onSubmit={handleSubmit}>
               {createFormFields(schema, {}, null, '', true)}
               {/*error && <Alert color="error">{error}</Alert>*/}
               <FormItem>
@@ -305,6 +305,11 @@ class ListView extends React.Component {
   }
 }
 
-export default reduxForm({
-  form: 'formUpdateMultiple'
-})(DragDropContext(HTML5Backend)(ListView));
+const ListViewWithFormik = withFormik({
+  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+    await onSubmit(values);
+    resetForm();
+  }
+});
+
+export default ListViewWithFormik(DragDropContext(HTML5Backend)(ListView));

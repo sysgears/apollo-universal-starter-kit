@@ -256,7 +256,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
 
 * [GraphQL] subscriptions example
 
-  Full CRUD functionality with Counter updating and Subscriptions in Posts and Comments example, with [ReduxForm]
+  Full CRUD functionality with Counter updating and Subscriptions in Posts and Comments example, with [Formik]
 
 * [GraphQL Cursor Pagination] Example of [Relay-style cursor pagination]
 
@@ -499,7 +499,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [react 16]: https://facebook.github.io/react
 [react hot loader v3]: https://github.com/gaearon/react-hot-loader
 [redux]: http://redux.js.org
-[reduxform]: http://redux-form.com
+[formik]: https://github.com/jaredpalmer/formik
 [express]: http://expressjs.com
 [twitter bootstrap]: http://getbootstrap.com
 [nativebase]: https://nativebase.io

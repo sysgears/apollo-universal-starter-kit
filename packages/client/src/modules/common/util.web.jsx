@@ -2,9 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { startCase, isEqual } from 'lodash';
-import { Field, FieldArray } from 'redux-form';
 import { Link } from 'react-router-dom';
 
+import Field from '../../utils/FieldAdapter';
+import FieldArray from '../../utils/FieldArrayAdapter';
 import {
   RenderField,
   RenderSelect,

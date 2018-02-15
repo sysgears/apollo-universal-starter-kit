@@ -1,0 +1,9 @@
+mutation sortTestModules($data: [Int!]) {
+  sortTestModules(data: $data) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

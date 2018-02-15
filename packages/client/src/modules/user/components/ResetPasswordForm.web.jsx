@@ -12,9 +12,9 @@ const contactFormSchema = {
 
 const validate = values => validateForm(values, contactFormSchema);
 
-const ResetPasswordForm = ({ handleChange, values, handleSubmit, submitting, onSubmit, error }) => {
+const ResetPasswordForm = ({ handleChange, values, handleSubmit, submitting, error }) => {
   return (
-    <Form name="resetPassword" onSubmit={handleSubmit(onSubmit)}>
+    <Form name="resetPassword" onSubmit={handleSubmit}>
       <Field
         name="password"
         component={RenderField}

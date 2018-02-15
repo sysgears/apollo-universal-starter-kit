@@ -12,16 +12,17 @@ const formSchema = {
 
 const validate = values => validateForm(values, formSchema);
 
-const Form = ({ handleSubmit, schema }) => {
+const Form = ({ handleChange, handleSubmit, schema }) => {
   return (
     <FormView>
-      {createFormFields(schema)}
+      {createFormFields(handleChange, schema)}
       <FormButton onPress={handleSubmit}>Save</FormButton>
     </FormView>
   );
 };
 
 Form.propTypes = {
+  handleChange: PropTypes.func,
   handleSubmit: PropTypes.func,
   schema: PropTypes.object
 };

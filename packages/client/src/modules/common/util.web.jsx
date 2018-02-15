@@ -20,7 +20,6 @@ import {
   Input,
   Icon
 } from './components/web';
-import { required } from '../../../../common/validation';
 
 export const createColumnFields = (
   schema,
@@ -137,12 +136,12 @@ const tailFormItemLayout = {
   }
 };
 
-const RenderEntry = ({ fields, formdata, formItemLayout, schema, meta: { error, submitFailed } }) => (
+const RenderEntry = ({ handleChange, fields, formdata, formItemLayout, schema, meta: { error, submitFailed } }) => (
   <Row>
     <Col span={12} offset={6}>
       {fields.map((field, index) => (
         <div key={index} className="field-array-form">
-          {createFormFields(schema, formdata, formItemLayout, `${field}.`)}
+          {createFormFields(handleChange, schema, formdata, formItemLayout, `${field}.`)}
           <FormItem {...tailFormItemLayout}>
             <Button color="primary" size="sm" onClick={() => fields.remove(index)}>
               Delete
@@ -161,6 +160,7 @@ const RenderEntry = ({ fields, formdata, formItemLayout, schema, meta: { error, 
 );
 
 RenderEntry.propTypes = {
+  handleChange: PropTypes.func,
   fields: PropTypes.object,
   formdata: PropTypes.object,
   schema: PropTypes.object,
@@ -168,23 +168,26 @@ RenderEntry.propTypes = {
   formItemLayout: PropTypes.object
 };
 
-export const createFormFields = (schema, formdata, formItemLayout, prefix = '', batch = false) => {
+export const createFormFields = (handleChange, schema, formdata, formItemLayout, prefix = '', batch = false) => {
   let fields = [];
 
   for (const key of schema.keys()) {
     const value = schema.values[key];
+    const type = value.type.constructor === Array ? value.type[0] : value.type;
+
     const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
 
     if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
-      let validate = [];
-      if (!value.optional && !batch) {
-        validate.push(required);
-      }
+      //let validate = [];
+      //if (!value.optional && !batch) {
+      //  validate.push(required);
+      //}
 
       let component = RenderField;
       let data = null;
+      let value = formdata && formdata.node ? formdata.node[key] : '';
 
-      if (value.type.isSchema) {
+      if (type.isSchema) {
         component = RenderSelect;
         data = formdata[`${key}s`];
       } else if (hasTypeOf(Boolean)) {
@@ -199,10 +202,12 @@ export const createFormFields = (schema, formdata, formItemLayout, prefix = '', 
           key={key}
           component={component}
           data={data}
+          value={value}
           type="text"
           label={startCase(key)}
-          validate={validate}
+          //validate={validate}
           formItemLayout={formItemLayout}
+          onChange={handleChange}
         />
       );
     } else {
@@ -215,6 +220,7 @@ export const createFormFields = (schema, formdata, formItemLayout, prefix = '', 
             schema={value.type[0]}
             formdata={formdata}
             formItemLayout={formItemLayout}
+            handleChange={handleChange}
           />
         );
       }

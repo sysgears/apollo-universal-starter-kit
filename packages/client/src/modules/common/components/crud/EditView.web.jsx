@@ -49,7 +49,7 @@ class EditView extends React.PureComponent {
           <h2>
             {data ? 'Edit' : 'Create'} {title}
           </h2>
-          <FormView onSubmit={onSubmit} data={data} schema={schema} initialValues={data.node} />
+          <FormView onSubmit={onSubmit} data={data} schema={schema} />
         </PageLayout>
       );
     }

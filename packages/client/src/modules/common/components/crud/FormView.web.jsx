@@ -36,10 +36,10 @@ const formSchema = {
 
 const validate = values => validateForm(values, formSchema);
 
-const FormView = ({ handleSubmit, data, error, schema }) => {
+const FormView = ({ handleChange, handleSubmit, data, error, schema }) => {
   return (
     <Form name="post" onSubmit={handleSubmit}>
-      {createFormFields(schema, data, formItemLayout)}
+      {createFormFields(handleChange, schema, data, formItemLayout)}
       {error && <Alert color="error">{error}</Alert>}
       <FormItem {...tailFormItemLayout}>
         <Button color="primary" type="submit">
@@ -51,9 +51,11 @@ const FormView = ({ handleSubmit, data, error, schema }) => {
 };
 
 FormView.propTypes = {
+  handleChange: PropTypes.func,
   handleSubmit: PropTypes.func,
   data: PropTypes.object,
   schema: PropTypes.object,
+  values: PropTypes.object,
   error: PropTypes.string
 };
 

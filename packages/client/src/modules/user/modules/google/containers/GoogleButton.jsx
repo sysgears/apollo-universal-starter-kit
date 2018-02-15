@@ -31,7 +31,7 @@ const GoogleLink = () => {
 };
 
 const GoogleIcon = () => {
-  return <FontAwesomeIcon icon={faGooglePlusSquare} size="3x" style={{ margin: 10 }} />;
+  return <FontAwesomeIcon icon={faGooglePlusSquare} size="3x" style={{ margin: 10 }} onClick={googleLogin} />;
 };
 
 const GoogleComponent = props => {

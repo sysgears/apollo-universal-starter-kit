@@ -2,6 +2,7 @@ import { pick } from 'lodash';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import { createTokens } from '../jwt/auth';
+import { updateSession } from '../session/auth';
 import settings from '../../../../../../../settings';
 
 export function facebookStategy(User) {
@@ -82,6 +83,11 @@ export function facebookAuth(module, app, SECRET, User) {
         maxAge: 60 * 60 * 24 * 7,
         httpOnly: false
       });
+    } else if (module === 'session') {
+      if (req.user && req.user.id) {
+        req.session.userId = req.user.id;
+      }
+      await updateSession(req, req.session);
     }
     res.redirect('/profile');
   });

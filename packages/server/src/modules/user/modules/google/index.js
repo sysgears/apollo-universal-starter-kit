@@ -3,6 +3,7 @@ import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { createTokens } from '../jwt/auth';
 import settings from '../../../../../../../settings';
+import { updateSession } from '../session/auth';
 
 export function googleStategy(User) {
   passport.use(
@@ -91,6 +92,11 @@ export function googleAuth(module, app, SECRET, User) {
         maxAge: 60 * 60 * 24 * 7,
         httpOnly: false
       });
+    } else if (module === 'session') {
+      if (req.user && req.user.id) {
+        req.session.userId = req.user.id;
+      }
+      await updateSession(req, req.session);
     }
 
     res.redirect('/profile');

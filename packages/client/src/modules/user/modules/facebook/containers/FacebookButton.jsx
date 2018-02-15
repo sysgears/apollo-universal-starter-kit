@@ -31,7 +31,7 @@ const FacebookLink = () => {
 };
 
 const FacebookIcon = () => {
-  return <FontAwesomeIcon icon={faFacebookSquare} size="3x" style={{ margin: 10 }} />;
+  return <FontAwesomeIcon icon={faFacebookSquare} size="3x" style={{ margin: 10 }} onClick={facebookLogin} />;
 };
 
 const FacebookComponent = props => {

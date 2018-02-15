@@ -160,11 +160,7 @@ export default pubsub => ({
     },
     async logout(obj, args, context) {
       if (context.req) {
-        context.req.universalCookies.remove('x-token');
-        context.req.universalCookies.remove('x-refresh-token');
-
-        context.req.universalCookies.remove('r-token');
-        context.req.universalCookies.remove('r-refresh-token');
+        context.req.universalCookies.remove('session');
       }
 
       const session = { ...context.req.session };

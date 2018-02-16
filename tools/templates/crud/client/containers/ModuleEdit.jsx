@@ -34,7 +34,7 @@ class $Module$Edit extends React.Component {
         _error: `Edit ${title} failed!`
       };
       result.errors.map(error => (submitError[error.field] = error.message));
-      throw new submitError;
+      throw new submitError();
     }
   };
 

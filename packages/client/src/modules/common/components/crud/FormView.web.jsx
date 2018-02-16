@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 
-import { createFormFields } from '../../util';
+import { createFormFields, mapFormPropsToValues } from '../../util';
 import { Form, FormItem, Button, Alert } from '../web';
-import { minLength, required, validateForm } from '../../../../../../common/validation';
+//import { minLength, required, validateForm } from '../../../../../../common/validation';
 
 const tailFormItemLayout = {
   wrapperCol: {
@@ -30,16 +30,16 @@ const formItemLayout = {
   }
 };
 
-const formSchema = {
-  name: [required, minLength(3)]
-};
+//const formSchema = {
+//  name: [required, minLength(3)]
+//};
 
-const validate = values => validateForm(values, formSchema);
+//const validate = values => validateForm(values, formSchema);
 
-const FormView = ({ handleChange, handleSubmit, data, error, schema }) => {
+const FormView = ({ handleChange, handleSubmit, values, data, error, schema }) => {
   return (
     <Form name="post" onSubmit={handleSubmit}>
-      {createFormFields(handleChange, schema, data, formItemLayout)}
+      {createFormFields(handleChange, schema, values, data, formItemLayout)}
       {error && <Alert color="error">{error}</Alert>}
       <FormItem {...tailFormItemLayout}>
         <Button color="primary" type="submit">
@@ -60,11 +60,13 @@ FormView.propTypes = {
 };
 
 const FormWithFormik = withFormik({
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+  mapPropsToValues: ({ schema, data: { node } }) => mapFormPropsToValues(schema, node),
+  async handleSubmit(values, { resetForm, setSubmitting, props: { onSubmit } }) {
     await onSubmit(values);
     resetForm();
+    setSubmitting(false);
   },
-  validate: values => validate(values),
+  //validate: values => validate(values),
   displayName: 'Form' // helps with React DevTools
 });
 

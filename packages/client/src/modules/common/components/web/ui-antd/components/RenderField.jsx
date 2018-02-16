@@ -8,7 +8,6 @@ const RenderField = ({ input, label, type, formItemLayout, meta: { touched, erro
     validateStatus = 'error';
   }
 
-  console.log(input);
   return (
     <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
       <div>

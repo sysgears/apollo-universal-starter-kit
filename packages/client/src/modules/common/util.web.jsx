@@ -168,7 +168,29 @@ RenderEntry.propTypes = {
   formItemLayout: PropTypes.object
 };
 
-export const createFormFields = (handleChange, schema, formdata, formItemLayout, prefix = '', batch = false) => {
+export const mapFormPropsToValues = (schema, formdata) => {
+  let fields = {};
+
+  for (const key of schema.keys()) {
+    const value = schema.values[key];
+
+    if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
+      fields[key] = formdata[key];
+    }
+  }
+
+  return fields;
+};
+
+export const createFormFields = (
+  handleChange,
+  schema,
+  values = {},
+  formdata,
+  formItemLayout,
+  prefix = '',
+  batch = false
+) => {
   let fields = [];
 
   for (const key of schema.keys()) {
@@ -185,7 +207,7 @@ export const createFormFields = (handleChange, schema, formdata, formItemLayout,
 
       let component = RenderField;
       let data = null;
-      let value = formdata && formdata.node ? formdata.node[key] : '';
+      let value = values ? values[key] : '';
 
       if (type.isSchema) {
         component = RenderSelect;

@@ -250,7 +250,7 @@ class ListView extends React.Component {
           </Col>
           <Col span={21}>
             <Form layout="inline" name="post" onSubmit={handleSubmit}>
-              {createFormFields(handleChange, schema, {}, null, '', true)}
+              {createFormFields(handleChange, schema, {}, {}, null, '', true)}
               {/*error && <Alert color="error">{error}</Alert>*/}
               <FormItem>
                 <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>

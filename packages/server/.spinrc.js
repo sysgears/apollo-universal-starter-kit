@@ -29,7 +29,7 @@ const config = {
     frontendRefreshOnBackendChange: true,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
-      __BACKEND_URL__: '"http://localhost:8080/graphql"'
+      __BACKEND_URL__: '"http://localhost:8080/graphql"',
     }
   }
 };

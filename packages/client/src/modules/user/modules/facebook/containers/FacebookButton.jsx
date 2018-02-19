@@ -1,18 +1,22 @@
 import React from 'react';
 import url from 'url';
-import { View, StyleSheet, Linking } from 'react-native';
+import { View, StyleSheet, Linking, AsyncStorage } from 'react-native';
 import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { withApollo } from 'react-apollo';
+import PropTypes from 'prop-types';
 import { Button } from '../../../../common/components/index';
+import CURRENT_USER_QUERY from '../../jwt/graphql/CurrentUserQuery.graphql';
+import { withUser } from '../../../common/containers/AuthBase';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
 if (__DEV__) {
-  serverPort = '3000';
+  serverPort = '8080';
 }
 
 const facebookLogin = () => {
-  Linking.openURL(`http://192.168.0.155:8080/auth/facebook/callback`);
+  Linking.openURL(`${protocol}//${hostname}:${serverPort}/auth/facebook`);
 };
 
 const FacebookButton = () => {
@@ -37,17 +41,49 @@ const FacebookIcon = () => {
   return <FontAwesomeIcon icon={faFacebookSquare} size="3x" style={{ margin: 10 }} onPress={facebookLogin} />;
 };
 
-const FacebookComponent = props => {
-  switch (props.type) {
-    case 'button':
-      return <FacebookButton />;
-    case 'link':
-      return <FacebookLink />;
-    case 'icon':
-      return <FacebookIcon />;
-    default:
-      return <FacebookButton />;
+class FacebookComponent extends React.Component {
+  componentDidMount() {
+    Linking.addEventListener('url', this.handleOpenURL);
   }
+
+  componentWillUnmount() {
+    Linking.removeListener('url');
+  }
+
+  handleOpenURL = async ({ url }) => {
+    // Extract stringified user string out of the URL
+    const [, data] = url.match(/data=([^#]+)/);
+    const decodedData = JSON.parse(decodeURI(data));
+
+    if (decodedData.tokens) {
+      await AsyncStorage.setItem('token', decodedData.tokens.token);
+      await AsyncStorage.setItem('refreshToken', decodedData.tokens.refreshToken);
+    }
+    const { data: { currentUser } } = await this.props.refetchCurrentUser();
+    await this.props.client.writeQuery({
+      query: CURRENT_USER_QUERY,
+      data: { currentUser }
+    });
+  };
+
+  render() {
+    switch (this.props.type) {
+      case 'button':
+        return <FacebookButton />;
+      case 'link':
+        return <FacebookLink />;
+      case 'icon':
+        return <FacebookIcon />;
+      default:
+        return <FacebookButton />;
+    }
+  }
+}
+
+FacebookComponent.propTypes = {
+  client: PropTypes.object,
+  type: PropTypes.string,
+  refetchCurrentUser: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -57,4 +93,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default FacebookComponent;
+export default withUser(withApollo(FacebookComponent));

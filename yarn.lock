@@ -8333,6 +8333,10 @@ mkpath@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/mkpath/-/mkpath-0.1.0.tgz#7554a6f8d871834cc97b5462b122c4c124d6de91"
 
+mobile-detect@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/mobile-detect/-/mobile-detect-1.4.1.tgz#f4b67c49bb84bf0437f72e3067deb1c60ad7b23c"
+
 mocha-steps@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/mocha-steps/-/mocha-steps-1.1.0.tgz#40bab89157ef45bb025481ca6f316d06983f2df0"

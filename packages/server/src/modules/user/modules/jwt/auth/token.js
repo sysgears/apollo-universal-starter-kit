@@ -16,7 +16,6 @@ export default (SECRET, User, jwt) => async (req, res, next) => {
         token = undefined;
       }
     }
-    //console.log(token);
     if (token && token !== 'null') {
       try {
         const { user } = jwt.verify(token, SECRET);

@@ -61,7 +61,6 @@ export function googleStategy(User) {
 
 export function googleAuth(module, app, SECRET, User) {
   app.use(passport.initialize());
-
   app.get(
     '/auth/google',
     passport.authenticate('google', {
@@ -92,6 +91,11 @@ export function googleAuth(module, app, SECRET, User) {
         maxAge: 60 * 60 * 24 * 7,
         httpOnly: false
       });
+      await updateSession(req, req.session);
+      res.redirect(
+        'exp://192.168.0.155:19500/+?data=' +
+          JSON.stringify({ user: pick(user, ['id', 'username', 'role', 'email', 'isActive']) })
+      );
     } else if (module === 'session') {
       if (req.user && req.user.id) {
         req.session.userId = req.user.id;

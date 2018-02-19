@@ -61,10 +61,8 @@ FormView.propTypes = {
 
 const FormWithFormik = withFormik({
   mapPropsToValues: ({ schema, data: { node } }) => mapFormPropsToValues(schema, node),
-  async handleSubmit(values, { resetForm, setSubmitting, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm();
-    setSubmitting(false);
+  async handleSubmit(values, { setSubmitting, props: { onSubmit } }) {
+    await onSubmit(values, setSubmitting);
   },
   //validate: values => validate(values),
   displayName: 'Form' // helps with React DevTools

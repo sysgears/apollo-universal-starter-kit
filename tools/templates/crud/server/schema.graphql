@@ -28,7 +28,7 @@ input $Module$CreateInput {
 }
 
 input $Module$UpdateInput {
-  name: String!
+  name: String
 }
 
 input $Module$WhereUniqueInput {

@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import FormView from './FormView';
 
-const EditView = ({ loading, data, navigation, onSubmit }) => {
+const EditView = ({ loading, data, navigation }) => {
   let dataObj = data;
 
   if (!dataObj && navigation.state) {
@@ -18,14 +18,13 @@ const EditView = ({ loading, data, navigation, onSubmit }) => {
       </View>
     );
   } else {
-    return <FormView onSubmit={onSubmit} initialValues={dataObj ? dataObj : {}} />;
+    return <FormView initialValues={dataObj ? dataObj : {}} />;
   }
 };
 
 EditView.propTypes = {
   loading: PropTypes.bool.isRequired,
   data: PropTypes.object,
-  onSubmit: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired
 };
 

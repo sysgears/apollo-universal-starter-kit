@@ -11,8 +11,6 @@ class EditView extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     data: PropTypes.object,
-    onSubmit: PropTypes.func.isRequired,
-    schema: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired
   };
@@ -30,7 +28,7 @@ class EditView extends React.PureComponent {
   );
 
   render() {
-    const { loading, data, onSubmit, schema, title, link } = this.props;
+    const { loading, data, title, link } = this.props;
 
     if (loading && !data) {
       return (
@@ -49,7 +47,7 @@ class EditView extends React.PureComponent {
           <h2>
             {data ? 'Edit' : 'Create'} {title}
           </h2>
-          <FormView onSubmit={onSubmit} data={data} schema={schema} />
+          <FormView {...this.props} />
         </PageLayout>
       );
     }

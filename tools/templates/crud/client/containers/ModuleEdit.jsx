@@ -3,42 +3,14 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 import { EditView } from '../../common/components/crud';
-import { pickInputFields } from '../../common/util';
 import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
 import $MODULE$_QUERY from '../graphql/$Module$Query.graphql';
 import CREATE_$MODULE$ from '../graphql/Create$Module$.graphql';
 import UPDATE_$MODULE$ from '../graphql/Update$Module$.graphql';
 
 class $Module$Edit extends React.Component {
-  static propTypes = {
-    data: PropTypes.object,
-    createEntry: PropTypes.func.isRequired,
-    updateEntry: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired
-  };
-
-  onSubmit = async values => {
-    const { data: { node }, createEntry, updateEntry, title } = this.props;
-    let result = null;
-    const insertValues = pickInputFields($Module$Schema, values, node);
-
-    if (node) {
-      result = await updateEntry(insertValues, { id: node.id });
-    } else {
-      result = await createEntry(insertValues);
-    }
-
-    if (result && result.errors) {
-      let submitError = {
-        _error: `Edit ${title} failed!`
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw new submitError();
-    }
-  };
-
   render() {
-    return <EditView {...this.props} onSubmit={this.onSubmit} schema={$Module$Schema} />;
+    return <EditView {...this.props} schema={$Module$Schema} />;
   }
 }
 

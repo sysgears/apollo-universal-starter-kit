@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 
+import { onSubmit } from '../../../../utils/crud';
 import { createFormFields, mapFormPropsToValues } from '../../util';
 import { Form, FormItem, Button, Alert } from '../web';
 //import { minLength, required, validateForm } from '../../../../../../common/validation';
@@ -61,8 +62,8 @@ FormView.propTypes = {
 
 const FormWithFormik = withFormik({
   mapPropsToValues: ({ schema, data: { node } }) => mapFormPropsToValues(schema, node),
-  async handleSubmit(values, { setSubmitting, props: { onSubmit } }) {
-    await onSubmit(values, setSubmitting);
+  async handleSubmit(values, { props: { schema, updateEntry, createEntry, title, data: { node } } }) {
+    await onSubmit(schema, values, updateEntry, createEntry, title, node);
   },
   //validate: values => validate(values),
   displayName: 'Form' // helps with React DevTools

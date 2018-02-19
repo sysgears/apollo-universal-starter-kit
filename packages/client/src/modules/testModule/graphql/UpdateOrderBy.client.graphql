@@ -1,5 +1,0 @@
-#import "./TestModuleState.client.graphql"
-
-mutation updateTestModuleOrderBy($orderBy: OrderByTestModuleInput!) {
-  updateTestModuleOrderBy(orderBy: $orderBy) @client
-}

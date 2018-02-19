@@ -1,9 +1,0 @@
-fragment TestModuleStateInfo on TestModuleState {
-  orderBy {
-    column
-    order
-  }
-  filter {
-    searchText
-  }
-}

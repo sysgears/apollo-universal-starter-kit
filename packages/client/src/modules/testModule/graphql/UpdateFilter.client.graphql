@@ -1,5 +1,0 @@
-#import "./TestModuleState.client.graphql"
-
-mutation updateTestModuleFilter($filter: FilterTestModuleInput!) {
-  updateTestModuleFilter(filter: $filter) @client
-}

@@ -1,4 +1,0 @@
-fragment TestModuleInfo on TestModule {
-  id
-  name
-}

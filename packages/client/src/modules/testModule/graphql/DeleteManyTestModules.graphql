@@ -1,9 +1,0 @@
-mutation deleteManyTestModules($where: TestModuleWhereInput!) {
-  deleteManyTestModules(where: $where) {
-    count
-    errors {
-      field
-      message
-    }
-  }
-}

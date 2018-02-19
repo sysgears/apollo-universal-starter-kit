@@ -1,0 +1,9 @@
+fragment $Module$StateInfo on $Module$State {
+  orderBy {
+    column
+    order
+  }
+  filter {
+    searchText
+  }
+}

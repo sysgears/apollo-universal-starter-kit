@@ -1,0 +1,7 @@
+#import "./$Module$State.client.graphql"
+
+query $Module$State {
+  $module$State @client {
+    ...$Module$StateInfo
+  }
+}

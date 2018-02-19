@@ -175,7 +175,7 @@ export const mapFormPropsToValues = (schema, formdata) => {
     const value = schema.values[key];
 
     if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
-      fields[key] = formdata ? [key] : '';
+      fields[key] = formdata ? formdata[key] : '';
     }
   }
 

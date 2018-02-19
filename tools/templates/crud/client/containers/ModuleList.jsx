@@ -1,9 +1,12 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
-import { connect } from 'react-redux';
 
+import { removeTypename } from '../../../../../common/utils';
 import { ListView } from '../../common/components/crud';
 import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
+
+import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
+import UPDATE_ORDER_BY from '../graphql/UpdateOrderBy.client.graphql';
 import $MODULE$S_QUERY from '../graphql/$Module$sQuery.graphql';
 import UPDATE_$MODULE$ from '../graphql/Update$Module$.graphql';
 import DELETE_$MODULE$ from '../graphql/Delete$Module$.graphql';
@@ -19,16 +22,17 @@ class $Module$ extends React.Component {
   }
 }
 
-const $Module$WithApollo = compose(
+export default compose(
+  graphql($MODULE$_STATE_QUERY, {
+    props({ data: { $module$State } }) {
+      return removeTypename($module$State);
+    }
+  }),
   graphql($MODULE$S_QUERY, {
-    options: ({ limit, orderBy, searchText }) => {
+    options: ({ limit, orderBy, filter }) => {
       return {
         fetchPolicy: 'cache-and-network',
-        variables: {
-          limit: limit,
-          orderBy: orderBy,
-          filter: { searchText }
-        }
+        variables: { limit, orderBy, filter }
       };
     },
     props: ({ data: { loading, $module$sConnection, refetch, error, fetchMore } }) => {
@@ -149,22 +153,12 @@ const $Module$WithApollo = compose(
         }
       }
     })
+  }),
+  graphql(UPDATE_ORDER_BY, {
+    props: ({ mutate }) => ({
+      onOrderBy: orderBy => {
+        mutate({ variables: { orderBy } });
+      }
+    })
   })
 )($Module$);
-
-export default connect(
-  state => ({
-    link: state.$module$.link,
-    limit: state.$module$.limit,
-    searchText: state.$module$.searchText,
-    orderBy: state.$module$.orderBy
-  }),
-  dispatch => ({
-    onOrderBy(orderBy) {
-      dispatch({
-        type: '$MODULE$_ORDER_BY',
-        value: orderBy
-      });
-    }
-  })
-)($Module$WithApollo);

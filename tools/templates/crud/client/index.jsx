@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createTabBarIconWrapper } from '../common/components/native';
 import $Module$List from './containers/$Module$List';
 import $Module$Edit from './containers/$Module$Edit';
-import reducers from './reducers';
+import resolvers from './resolvers';
 
 import Feature from '../connector';
 
@@ -16,7 +16,7 @@ class $Module$ListScreen extends React.Component {
     headerRight: <Button title="Add" onPress={() => navigation.navigate('$Module$Edit', { id: 0 })} />
   });
   render() {
-    return <$Module$List navigation={this.props.navigation} />;
+    return <$Module$List navigation={this.props.navigation} title="$MoDuLe$" />;
   }
 }
 
@@ -29,7 +29,7 @@ class $Module$EditScreen extends React.Component {
     title: `${navigation.state.params.id === 0 ? 'Create' : 'Edit'} $MoDuLe$`
   });
   render() {
-    return <$Module$Edit navigation={this.props.navigation} />;
+    return <$Module$Edit navigation={this.props.navigation} title="$MoDuLe$" />;
   }
 }
 
@@ -54,5 +54,5 @@ export default new Feature({
       }
     }
   },
-  reducer: { $module$: reducers }
+  resolver: resolvers
 });

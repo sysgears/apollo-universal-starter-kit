@@ -1,7 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
 
+import { removeTypename } from '../../../../../common/utils';
 import { FilterView } from '../../common/components/crud';
+
+import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
+import UPDATE_FILTER from '../graphql/UpdateFilter.client.graphql';
 
 class $Module$Filter extends React.PureComponent {
   render() {
@@ -9,16 +13,17 @@ class $Module$Filter extends React.PureComponent {
   }
 }
 
-export default connect(
-  state => ({
-    searchText: state.$module$.searchText
-  }),
-  dispatch => ({
-    onSearchTextChange(searchText) {
-      dispatch({
-        type: '$MODULE$_FILTER_SEARCH_TEXT',
-        value: searchText
-      });
+export default compose(
+  graphql($MODULE$_STATE_QUERY, {
+    props({ data: { $module$State: { filter } } }) {
+      return removeTypename(filter);
     }
+  }),
+  graphql(UPDATE_FILTER, {
+    props: ({ mutate }) => ({
+      onSearchTextChange(searchText) {
+        mutate({ variables: { filter: { searchText } } });
+      }
+    })
   })
 )($Module$Filter);

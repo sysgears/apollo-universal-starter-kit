@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { PageLayout } from '../../common/components/web';
 
@@ -8,9 +7,10 @@ import $Module$Filter from '../containers/$Module$Filter';
 import $Module$List from '../containers/$Module$List';
 import settings from '../../../../../../settings';
 
-class $Module$ extends React.PureComponent {
+export default class $Module$ extends React.PureComponent {
   static propTypes = {
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired
   };
 
   renderMetaData = title => (
@@ -26,7 +26,7 @@ class $Module$ extends React.PureComponent {
   );
 
   render() {
-    const { title } = this.props;
+    const { title, link } = this.props;
     return (
       <PageLayout>
         {this.renderMetaData(title)}
@@ -34,12 +34,8 @@ class $Module$ extends React.PureComponent {
         <hr />
         <$Module$Filter />
         <hr />
-        <$Module$List />
+        <$Module$List link={link} />
       </PageLayout>
     );
   }
 }
-
-export default connect(state => ({
-  title: state.$module$.title
-}))($Module$);

@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { StyleSheet, Text, View } from 'react-native';
 
-class $Module$ extends React.PureComponent {
+export default class $Module$ extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired
   };
@@ -36,7 +35,3 @@ const styles = StyleSheet.create({
     marginRight: 15
   }
 });
-
-export default connect(state => ({
-  title: state.$module$.title
-}))($Module$);

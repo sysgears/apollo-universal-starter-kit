@@ -1,5 +1,5 @@
-/* eslint-disable no-undef */
 try {
+  // tslint:disable-next-line
   require('./AwakeInDevApp');
 } catch (e) {
   if (typeof ErrorUtils !== 'undefined') {

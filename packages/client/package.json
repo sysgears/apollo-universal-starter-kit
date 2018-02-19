@@ -88,6 +88,8 @@
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
+    "@types/react": "^16.0.38",
+    "@types/react-native": "^0.52.12",
     "apollo-utilities": "^1.0.3",
     "autoprefixer": "^7.2.5",
     "babel-cli": "^6.26.0",

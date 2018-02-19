@@ -3,7 +3,7 @@ const url = require('url');
 const config = {
   builders: {
     server: {
-      entry: './src/index.js',
+      entry: './src/index.ts',
       stack: ['react-native-web', 'server'],
       defines: {
         __BACKEND_URL__: '"http://localhost:8080/graphql"',
@@ -20,7 +20,7 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'webpack'],
+    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'js', 'ts', 'webpack'],
     cache: '../../.cache',
     ssr: true,
     webpackDll: true,

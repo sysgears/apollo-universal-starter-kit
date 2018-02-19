@@ -340,9 +340,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
   build. It will make front end and back end aware of static queries used in the project and will only allow these
   queries for better security and less bandwidth.
 
-* [TypeScript] support. Though the kit itself uses ES6 and [Flow] you can add source files written in TypeScript. In
-  order to do that add `'ts'` into the `.spinrc.js -> options -> stack`, install TypeScript devDependencies: `yarn add
-  -D awesome-typescript-loader typescript` and put `tsconfig.json` into the root folder.
+* [TypeScript] support. This kit supports both ES6 and TypeScript out of the box.
 
 ## Project Structure
 

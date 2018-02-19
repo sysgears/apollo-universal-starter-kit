@@ -1,0 +1,7 @@
+#import "./TestModuleState.client.graphql"
+
+query TestModuleState {
+  testModuleState @client {
+    ...TestModuleStateInfo
+  }
+}

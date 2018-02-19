@@ -1,9 +1,12 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
-import { connect } from 'react-redux';
 
+import { removeTypename } from '../../../../../common/utils';
 import { ListView } from '../../common/components/crud';
 import { TestModuleSchema } from '../../../../../server/src/modules/testModule/schema';
+
+import TESTMODULE_STATE_QUERY from '../graphql/TestModuleStateQuery.client.graphql';
+import UPDATE_ORDER_BY from '../graphql/UpdateOrderBy.client.graphql';
 import TESTMODULES_QUERY from '../graphql/TestModulesQuery.graphql';
 import UPDATE_TESTMODULE from '../graphql/UpdateTestModule.graphql';
 import DELETE_TESTMODULE from '../graphql/DeleteTestModule.graphql';
@@ -19,16 +22,17 @@ class TestModule extends React.Component {
   }
 }
 
-const TestModuleWithApollo = compose(
+export default compose(
+  graphql(TESTMODULE_STATE_QUERY, {
+    props({ data: { testModuleState } }) {
+      return removeTypename(testModuleState);
+    }
+  }),
   graphql(TESTMODULES_QUERY, {
-    options: ({ limit, orderBy, searchText }) => {
+    options: ({ limit, orderBy, filter }) => {
       return {
         fetchPolicy: 'cache-and-network',
-        variables: {
-          limit: limit,
-          orderBy: orderBy,
-          filter: { searchText }
-        }
+        variables: { limit, orderBy, filter }
       };
     },
     props: ({ data: { loading, testModulesConnection, refetch, error, fetchMore } }) => {
@@ -155,22 +159,12 @@ const TestModuleWithApollo = compose(
         }
       }
     })
+  }),
+  graphql(UPDATE_ORDER_BY, {
+    props: ({ mutate }) => ({
+      onOrderBy: orderBy => {
+        mutate({ variables: { orderBy } });
+      }
+    })
   })
 )(TestModule);
-
-export default connect(
-  state => ({
-    link: state.testModule.link,
-    limit: state.testModule.limit,
-    searchText: state.testModule.searchText,
-    orderBy: state.testModule.orderBy
-  }),
-  dispatch => ({
-    onOrderBy(orderBy) {
-      dispatch({
-        type: 'TESTMODULE_ORDER_BY',
-        value: orderBy
-      });
-    }
-  })
-)(TestModuleWithApollo);

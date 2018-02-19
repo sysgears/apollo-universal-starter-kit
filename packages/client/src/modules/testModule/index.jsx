@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createTabBarIconWrapper } from '../common/components/native';
 import TestModuleList from './containers/TestModuleList';
 import TestModuleEdit from './containers/TestModuleEdit';
-import reducers from './reducers';
+import resolvers from './resolvers';
 
 import Feature from '../connector';
 
@@ -16,7 +16,7 @@ class TestModuleListScreen extends React.Component {
     headerRight: <Button title="Add" onPress={() => navigation.navigate('TestModuleEdit', { id: 0 })} />
   });
   render() {
-    return <TestModuleList navigation={this.props.navigation} />;
+    return <TestModuleList navigation={this.props.navigation} title="Test Module" />;
   }
 }
 
@@ -54,5 +54,5 @@ export default new Feature({
       }
     }
   },
-  reducer: { testModule: reducers }
+  resolver: resolvers
 });

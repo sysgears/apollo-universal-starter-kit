@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { PageLayout } from '../../common/components/web';
 
@@ -8,9 +7,10 @@ import TestModuleFilter from '../containers/TestModuleFilter';
 import TestModuleList from '../containers/TestModuleList';
 import settings from '../../../../../../settings';
 
-class TestModule extends React.PureComponent {
+export default class TestModule extends React.PureComponent {
   static propTypes = {
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired
   };
 
   renderMetaData = title => (
@@ -26,7 +26,7 @@ class TestModule extends React.PureComponent {
   );
 
   render() {
-    const { title } = this.props;
+    const { title, link } = this.props;
     return (
       <PageLayout>
         {this.renderMetaData(title)}
@@ -34,12 +34,8 @@ class TestModule extends React.PureComponent {
         <hr />
         <TestModuleFilter />
         <hr />
-        <TestModuleList />
+        <TestModuleList link={link} />
       </PageLayout>
     );
   }
 }
-
-export default connect(state => ({
-  title: state.testModule.title
-}))(TestModule);

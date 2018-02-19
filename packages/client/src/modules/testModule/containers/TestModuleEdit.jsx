@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
-import { connect } from 'react-redux';
 
 import { EditView } from '../../common/components/crud';
 import { pickInputFields } from '../../common/util';
@@ -43,7 +42,7 @@ class TestModuleEdit extends React.Component {
   }
 }
 
-const TestModuleEditWithApollo = compose(
+export default compose(
   graphql(TESTMODULE_QUERY, {
     options: props => {
       let id = 0;
@@ -111,8 +110,3 @@ const TestModuleEditWithApollo = compose(
     })
   })
 )(TestModuleEdit);
-
-export default connect(state => ({
-  title: state.testModule.title,
-  link: state.testModule.link
-}))(TestModuleEditWithApollo);

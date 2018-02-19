@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
-import { removeTypename } from '../../../../../common/utils';
 
+import { removeTypename } from '../../../../../common/utils';
 import { FilterView } from '../../common/components/crud';
 
 import TESTMODULE_STATE_QUERY from '../graphql/TestModuleStateQuery.client.graphql';

@@ -29,7 +29,7 @@ input TestModuleCreateInput {
 }
 
 input TestModuleUpdateInput {
-  name: String!
+  name: String
 }
 
 input TestModuleWhereUniqueInput {

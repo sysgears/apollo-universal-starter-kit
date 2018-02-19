@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default class TestModule extends React.PureComponent {
+export default class TestModule extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired
   };

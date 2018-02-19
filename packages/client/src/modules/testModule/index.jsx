@@ -29,7 +29,7 @@ class TestModuleEditScreen extends React.Component {
     title: `${navigation.state.params.id === 0 ? 'Create' : 'Edit'} Test Module`
   });
   render() {
-    return <TestModuleEdit navigation={this.props.navigation} />;
+    return <TestModuleEdit navigation={this.props.navigation} title="Test Module" />;
   }
 }
 

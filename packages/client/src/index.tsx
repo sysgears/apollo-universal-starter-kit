@@ -1,24 +1,24 @@
-import React from 'react';
-import { render, hydrate } from 'react-native';
+import * as React from 'react';
+import * as RNW from 'react-native-web';
 // Work around warning about React.hydrate during SSR
 import AppContainer from 'react-native-web/dist/apis/AppRegistry/AppContainer';
 
 // Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
-// eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
+// tslint:disable-next-line
 import 'backend_reload';
 
-import Main from './app/Main';
 import log from '../../common/log';
+import Main from './app/Main';
 
-const renderFunc = __SSR__ ? hydrate : render;
+const renderFunc = __SSR__ ? RNW.hydrate : RNW.render;
 const root = document.getElementById('content');
 
 let frontendReloadCount = 0;
 
-const renderApp = props =>
+const renderApp = ({ key }: { key: number }) =>
   renderFunc(
     <AppContainer rootTag={root}>
-      <Main {...props} />
+      <Main key={key} />
     </AppContainer>,
     root
   );

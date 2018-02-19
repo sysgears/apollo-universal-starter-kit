@@ -3,7 +3,7 @@ const url = require('url');
 const config = {
   builders: {
     web: {
-      entry: './src/index.js',
+      entry: './src/index.tsx',
       stack: ['react-native-web', 'web'],
       openBrowser: true,
       defines: {
@@ -22,7 +22,7 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'webpack'],
+    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack'],
     cache: '../../.cache',
     ssr: true,
     webpackDll: true,

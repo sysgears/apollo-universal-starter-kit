@@ -128,6 +128,7 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
+    "@types/webpack-env": "^1.13.5",
     "apollo-utilities": "^1.0.3",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",

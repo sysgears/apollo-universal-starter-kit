@@ -6,6 +6,16 @@ declare var __SSR__: boolean;
 declare var __PERSIST_GQL__: boolean;
 declare var __BACKEND_URL__: string;
 
+declare module 'react-native-web' {
+  const val: any;
+  export = val;
+}
+
+declare module 'react-native-web/dist/apis/AppRegistry/AppContainer' {
+  const val: any;
+  export = val;
+}
+
 declare module '*.graphql' {
   // tslint:disable-next-line
   import { DocumentNode } from "graphql";

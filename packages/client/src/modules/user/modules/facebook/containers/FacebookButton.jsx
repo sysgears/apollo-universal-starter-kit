@@ -1,6 +1,7 @@
 import React from 'react';
 import url from 'url';
 import { View, StyleSheet, Linking, AsyncStorage, Button, TouchableOpacity, Text } from 'react-native';
+import { SecureStore } from 'expo';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
@@ -34,7 +35,7 @@ const FacebookLink = () => {
 const FacebookIcon = () => {
   return (
     <View style={styles.iconWrapper}>
-      <FontAwesome name="facebook-square" size={40} style={{ color: '#3B5998' }} />
+      <FontAwesome name="facebook-square" size={40} style={{ color: '#3B5998' }} onPress={facebookLogin} />
     </View>
   );
 };
@@ -54,10 +55,10 @@ class FacebookComponent extends React.Component {
     const decodedData = JSON.parse(decodeURI(data));
     const { client, refetchCurrentUser } = this.props;
     if (decodedData.tokens) {
-      await AsyncStorage.setItem('token', decodedData.tokens.token);
-      await AsyncStorage.setItem('refreshToken', decodedData.tokens.refreshToken);
+      await SecureStore.setItemAsync('token', decodedData.tokens.token);
+      await SecureStore.setItemAsync('refreshToken', decodedData.tokens.refreshToken);
     } else if (decodedData.session) {
-      await AsyncStorage.setItem('session', decodedData.session);
+      await SecureStore.setItemAsync('session', decodedData.session);
     }
     const { data: { currentUser } } = await refetchCurrentUser();
     await client.writeQuery({

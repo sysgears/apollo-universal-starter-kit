@@ -1,6 +1,7 @@
 import React from 'react';
 import url from 'url';
-import { View, StyleSheet, Linking, AsyncStorage, Button, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Linking, Button, TouchableOpacity, Text } from 'react-native';
+import { SecureStore } from 'expo';
 import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlusSquare';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
@@ -52,8 +53,8 @@ class GoogleComponent extends React.Component {
     const [, data] = url.match(/data=([^#]+)/);
     const decodedData = JSON.parse(decodeURI(data));
     if (decodedData.tokens) {
-      await AsyncStorage.setItem('token', decodedData.tokens.token);
-      await AsyncStorage.setItem('refreshToken', decodedData.tokens.refreshToken);
+      await SecureStore.setItemAsync('token', decodedData.tokens.token);
+      await SecureStore.setItemAsync('refreshToken', decodedData.tokens.refreshToken);
     }
     await this.props.client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: decodedData.user } });
   };

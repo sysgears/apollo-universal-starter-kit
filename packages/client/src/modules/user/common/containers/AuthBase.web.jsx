@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SecureStore } from 'expo';
 import { withApollo, graphql } from 'react-apollo';
 
 import log from '../../../../../../common/log';
@@ -66,7 +65,6 @@ const withLogout = Component =>
             if (logout.errors) {
               return { errors: logout.errors };
             }
-            await Promise.all(['token', 'session', 'refreshToken'].map(item => SecureStore.deleteItemAsync(item)));
             await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
 
             onLogout();

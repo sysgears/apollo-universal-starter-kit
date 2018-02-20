@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // React
 import React from 'react';
-import { AsyncStorage } from 'react-native';
+import { SecureStore } from 'expo';
 
 // Apollo
 import { graphql, compose, withApollo } from 'react-apollo';
@@ -29,8 +29,8 @@ const LoginWithApollo = compose(
             variables: { input: { email, password } }
           });
           const { token, refreshToken } = login.tokens;
-          await AsyncStorage.setItem('token', token);
-          await AsyncStorage.setItem('refreshToken', refreshToken);
+          await SecureStore.setItemAsync('token', token);
+          await SecureStore.setItemAsync('refreshToken', refreshToken);
           if (login.errors) {
             return { errors: login.errors };
           }

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
-import { AsyncStorage } from 'react-native';
+import { SecureStore } from 'expo';
 
 import { createTabBarIconWrapper } from '../../../common/components/native';
 import Profile from './containers/Profile';
@@ -68,7 +68,7 @@ async function tokenMiddleware(req, options, next) {
   if (__CLIENT__) {
     options.headers = { 'X-Token': window.__CSRF_TOKEN__ };
   }
-  const session = await AsyncStorage.getItem('session');
+  const session = await SecureStore.getItemAsync('session');
   if (session) {
     options.headers = { session };
   }

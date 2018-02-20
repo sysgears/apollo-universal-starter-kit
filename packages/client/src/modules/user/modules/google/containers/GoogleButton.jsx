@@ -1,8 +1,8 @@
 import React from 'react';
 import url from 'url';
+import PropTypes from 'prop-types';
 import { View, StyleSheet, Linking, Button, TouchableOpacity, Text } from 'react-native';
 import { SecureStore } from 'expo';
-import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlusSquare';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../jwt/graphql/CurrentUserQuery.graphql';
@@ -14,7 +14,7 @@ if (__DEV__) {
 }
 
 const googleLogin = () => {
-  Linking.openURL(`http://192.168.0.155:8080/auth/google/`);
+  Linking.openURL(`${protocol}//${hostname}:${serverPort}/auth/google`);
 };
 
 const GoogleButton = () => {
@@ -34,7 +34,7 @@ const GoogleLink = () => {
 const GoogleIcon = () => {
   return (
     <View style={styles.iconWrapper}>
-      <FontAwesome name="google-plus-square" size={40} />
+      <FontAwesome onPress={googleLogin} name="google-plus-square" size={40} />
     </View>
   );
 };
@@ -72,6 +72,12 @@ class GoogleComponent extends React.Component {
     }
   }
 }
+
+GoogleComponent.propTypes = {
+  client: PropTypes.object,
+  type: PropTypes.string,
+  writeQuery: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   submit: {

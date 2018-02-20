@@ -7,24 +7,7 @@ export const featureCatalog = {};
 
 export default class {
   // eslint-disable-next-line no-unused-vars
-  constructor(
-    {
-      route,
-      navItem,
-      navItemRight,
-      reducer,
-      resolver,
-      middleware,
-      afterware,
-      connectionParam,
-      createFetchOptions,
-      stylesInsert,
-      scriptsInsert,
-      rootComponentFactory,
-      catalogInfo
-    },
-    ...features
-  ) {
+  constructor() {
     /* eslint-enable no-unused-vars */
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))

@@ -1,6 +1,6 @@
 import React from 'react';
 import url from 'url';
-import { View, StyleSheet, Linking, AsyncStorage, Button, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Linking, Button, TouchableOpacity, Text } from 'react-native';
 import { SecureStore } from 'expo';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';

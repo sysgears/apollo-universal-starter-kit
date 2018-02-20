@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SimpleLineIcons } from '@expo/vector-icons';
-import { StackNavigator } from 'react-navigation';
+import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 import { SecureStore } from 'expo';
-import { Ionicons } from '@expo/vector-icons';
 
 import { createTabBarIconWrapper } from '../../../common/components/native';
 import Profile from './containers/Profile';

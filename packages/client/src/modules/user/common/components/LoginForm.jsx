@@ -7,6 +7,8 @@ import { Button } from '../../../common/components/index';
 import { RenderField } from '../../../common/components/native/index';
 import { required, email, minLength, validateForm } from '../../../../../../common/validation';
 import FacebookButton from '../../modules/facebook';
+import GoogleButton from '../../modules/google';
+import settings from '../../../../../../../settings';
 
 const contactFormSchema = {
   email: [required, email],
@@ -47,7 +49,8 @@ const LoginForm = ({ handleSubmit, setFieldValue, setFieldTouched, valid, values
       <Button style={styles.submit} onPress={handleSubmit} disabled={valid}>
         Sign In
       </Button>
-      <FacebookButton type="icon" />
+      {settings.user.auth.facebook.enabled && <FacebookButton type="icon" />}
+      {settings.user.auth.google.enabled && <GoogleButton type="icon" />}
     </View>
   );
 };

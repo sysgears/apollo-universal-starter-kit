@@ -10,7 +10,7 @@ const config = {
       defines: {
         __CLIENT__: true
       },
-      enabled: false
+      enabled: true
     },
     ios: {
       entry: './src/index.js',
@@ -20,7 +20,7 @@ const config = {
       defines: {
         __CLIENT__: true
       },
-      enabled: true
+      enabled: false
     },
     test: {
       stack: ['react-native-web', 'server'],

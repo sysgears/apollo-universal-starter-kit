@@ -1,5 +1,5 @@
-import jwt from './modules/jwt';
-import session from './modules/session';
+import jwt from './modules/jwt'; // eslint-disable-line
+import session from './modules/session'; // eslint-disable-line
 
 import Feature from '../connector';
 

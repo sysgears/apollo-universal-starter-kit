@@ -8,6 +8,7 @@ const TYPE_$MODULE$_STATE_ORDER_BY = 'OrderBy$Module$Input';
 
 const defaults = {
   $module$State: {
+    limit: 25,
     orderBy: {
       column: '',
       order: '',
@@ -33,7 +34,7 @@ const resolvers = {
       cache.writeData({
         data: {
           $module$State: new$Module$State,
-          __type: TYPE_TESTMODULE_STATE
+          __type: TYPE_$MODULE$_STATE
         }
       });
 

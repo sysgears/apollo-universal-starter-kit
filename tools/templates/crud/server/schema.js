@@ -1,4 +1,4 @@
-import DomainSchema, { Schema } from 'domain-schema';
+import DomainSchema, { Schema } from '@domain-schema/core';
 
 export class $Module$ extends Schema {
   __ = { name: '$Module$', tablePrefix: '' };

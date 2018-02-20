@@ -75,6 +75,37 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@domain-schema/core@^0.0.30":
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/@domain-schema/core/-/core-0.0.30.tgz#53ed07001ed364afef0852aad3683adfbfb89d94"
+  dependencies:
+    debug "^3.1.0"
+
+"@domain-schema/formik@^0.0.30":
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/@domain-schema/formik/-/formik-0.0.30.tgz#99d086f0c908a88554e350f4827e3bac34297db0"
+  dependencies:
+    debug "^3.1.0"
+
+"@domain-schema/graphql@^0.0.30":
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/@domain-schema/graphql/-/graphql-0.0.30.tgz#27daaca798ffe889daac642c45ffa110b27a6429"
+  dependencies:
+    debug "^3.1.0"
+
+"@domain-schema/knex@^0.0.30":
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/@domain-schema/knex/-/knex-0.0.30.tgz#ceea5d0b5a79a9b7fbf2bd64374252ef9279dcb9"
+  dependencies:
+    debug "^3.1.0"
+    humps "^2.0.1"
+
+"@domain-schema/validation@^0.0.30":
+  version "0.0.30"
+  resolved "https://registry.yarnpkg.com/@domain-schema/validation/-/validation-0.0.30.tgz#217a944f2f1c5887988fb7bcfa3dcf80790cec75"
+  dependencies:
+    debug "^3.1.0"
+
 "@expo/bunyan@^1.8.10":
   version "1.8.10"
   resolved "https://registry.yarnpkg.com/@expo/bunyan/-/bunyan-1.8.10.tgz#7d19354a6bce85aae5fea0e973569d3f0142533e"
@@ -4153,31 +4184,6 @@ dom-walk@^0.1.0:
 domain-browser@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.2.0.tgz#3d31f50191a6749dd1375a7f522e823d42e54eda"
-
-domain-graphql@^0.0.20:
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/domain-graphql/-/domain-graphql-0.0.20.tgz#8cf31e4d1c7e0f65dc0c1beb215ba40febe4f927"
-  dependencies:
-    debug "^3.1.0"
-
-domain-knex@^0.0.20:
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/domain-knex/-/domain-knex-0.0.20.tgz#5090277e5a395792c78a644647c1ffa1884980ca"
-  dependencies:
-    debug "^3.1.0"
-    humps "^2.0.1"
-
-domain-react-forms@^0.0.20:
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/domain-react-forms/-/domain-react-forms-0.0.20.tgz#26d0bfa86d6ac99cf59609549741e568e802bce9"
-  dependencies:
-    debug "^3.1.0"
-
-domain-schema@^0.0.20:
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/domain-schema/-/domain-schema-0.0.20.tgz#5d7d9293d69ec0e816463a019bde00ff92cb8750"
-  dependencies:
-    debug "^3.1.0"
 
 domelementtype@1, domelementtype@^1.3.0:
   version "1.3.0"

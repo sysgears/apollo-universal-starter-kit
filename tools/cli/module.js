@@ -1,8 +1,8 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const DomainSchema = require('domain-schema').default;
-const GraphQLGenerator = require('domain-graphql').default;
+const DomainSchema = require('@domain-schema/core').default;
+const GraphQLGenerator = require('@domain-schema/graphql').default;
 const { pascalize, camelize, decamelize } = require('humps');
 const { startCase } = require('lodash');
 

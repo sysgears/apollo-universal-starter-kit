@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { startCase } from 'lodash';
 import { Link } from 'react-router-dom';
+import { FieldArray } from 'formik';
 
 import Field from '../../utils/FieldAdapter';
-import FieldArray from '../../utils/FieldArrayAdapter';
 import {
   RenderField,
   RenderSelect,
@@ -75,7 +75,7 @@ export const createColumnFields = (
             return <Switch checked={text} onClick={() => hendleUpdate(data, record.id)} />;
           }
         });
-      } else if (value.type.constructor !== Array) {
+      } else if (hasTypeOf(String)) {
         columns.push({
           title: (
             <a onClick={e => orderBy(e, key)} href="#">
@@ -89,14 +89,30 @@ export const createColumnFields = (
               customTableColumns[key]['render'](text, record)
             ) : (
               <EditableCell
-                value={
+                value={String(
                   customTableColumns[key] && customTableColumns[key]['render']
                     ? customTableColumns[key]['render'](text, record)
                     : text
-                }
+                )}
                 onChange={onCellChange(key, record.id, hendleUpdate)}
               />
             )
+        });
+      } else if (value.type.constructor !== Array) {
+        columns.push({
+          title: (
+            <a onClick={e => orderBy(e, key)} href="#">
+              {startCase(key)} {renderOrderByArrow(key)}
+            </a>
+          ),
+          dataIndex: key,
+          key: key,
+          render: (text, record) =>
+            customTableColumns[key] && customTableColumns[key]['render']
+              ? customTableColumns[key]['render'](text, record)
+              : customTableColumns[key] && customTableColumns[key]['render']
+                ? customTableColumns[key]['render'](text, record)
+                : text
         });
       }
     }
@@ -136,46 +152,18 @@ const tailFormItemLayout = {
   }
 };
 
-const RenderEntry = ({ handleChange, fields, formdata, formItemLayout, schema, meta: { error, submitFailed } }) => (
-  <Row>
-    <Col span={12} offset={6}>
-      {fields.map((field, index) => (
-        <div key={index} className="field-array-form">
-          {createFormFields(handleChange, schema, formdata, formItemLayout, `${field}.`)}
-          <FormItem {...tailFormItemLayout}>
-            <Button color="primary" size="sm" onClick={() => fields.remove(index)}>
-              Delete
-            </Button>
-          </FormItem>
-        </div>
-      ))}
-      <FormItem {...tailFormItemLayout}>
-        {submitFailed && error && <span>{error}</span>}
-        <Button color="dashed" onClick={() => fields.push({})} style={{ width: '180px' }}>
-          Add field
-        </Button>
-      </FormItem>
-    </Col>
-  </Row>
-);
-
-RenderEntry.propTypes = {
-  handleChange: PropTypes.func,
-  fields: PropTypes.object,
-  formdata: PropTypes.object,
-  schema: PropTypes.object,
-  meta: PropTypes.object,
-  formItemLayout: PropTypes.object
-};
-
 export const mapFormPropsToValues = (schema, formdata) => {
   let fields = {};
-
   for (const key of schema.keys()) {
     const value = schema.values[key];
-
     if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
-      fields[key] = formdata ? formdata[key] : '';
+      if (value.type.isSchema) {
+        fields[key] = formdata && formdata[key] ? formdata[key].id : '';
+      } else {
+        fields[key] = formdata ? formdata[key] : '';
+      }
+    } else if (value.type.constructor === Array) {
+      fields[key] = formdata ? formdata[key] : [];
     }
   }
 
@@ -184,6 +172,9 @@ export const mapFormPropsToValues = (schema, formdata) => {
 
 export const createFormFields = (
   handleChange,
+  setFieldValue,
+  handleBlur,
+  setFieldTouched,
   schema,
   values = {},
   formdata,
@@ -207,13 +198,19 @@ export const createFormFields = (
 
       let component = RenderField;
       let data = null;
-      let value = values ? values[key] : '';
+      const value = values ? values[key] : '';
+      let onChange = handleChange;
+      let onBlur = handleBlur;
 
       if (type.isSchema) {
         component = RenderSelect;
         data = formdata[`${key}s`];
+        onChange = setFieldValue;
+        onBlur = setFieldTouched;
       } else if (hasTypeOf(Boolean)) {
         component = RenderSwitch;
+        onChange = setFieldValue;
+        onBlur = setFieldTouched;
       } else if (hasTypeOf(Date)) {
         component = RenderDate;
       }
@@ -229,22 +226,54 @@ export const createFormFields = (
           label={startCase(key)}
           //validate={validate}
           formItemLayout={formItemLayout}
-          onChange={handleChange}
+          onChange={onChange}
+          onBlur={onBlur}
         />
       );
     } else {
       if (value.type.constructor === Array && !batch) {
-        fields.push(
-          <FieldArray
-            name={key}
-            key={key}
-            component={RenderEntry}
-            schema={value.type[0]}
-            formdata={formdata}
-            formItemLayout={formItemLayout}
-            handleChange={handleChange}
-          />
-        );
+        if (formdata.node[key]) {
+          fields.push(
+            <FieldArray
+              name={key}
+              key={key}
+              render={({ push, remove }) => {
+                return (
+                  <Row>
+                    <Col span={12} offset={6}>
+                      {values[key].map((field, index) => (
+                        <div key={index} className="field-array-form">
+                          {createFormFields(
+                            handleChange,
+                            setFieldValue,
+                            handleBlur,
+                            setFieldTouched,
+                            value.type[0],
+                            mapFormPropsToValues(value.type[0], field),
+                            formdata,
+                            formItemLayout,
+                            `${key}[${index}].`
+                          )}
+                          <FormItem {...tailFormItemLayout}>
+                            <Button color="primary" size="sm" onClick={() => remove(index)}>
+                              Delete
+                            </Button>
+                          </FormItem>
+                        </div>
+                      ))}
+                      <FormItem {...tailFormItemLayout}>
+                        {/*submitFailed && error && <span>{error}</span>*/}
+                        <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
+                          Add field
+                        </Button>
+                      </FormItem>
+                    </Col>
+                  </Row>
+                );
+              }}
+            />
+          );
+        }
       }
     }
   }

@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { withFormik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Table, Button, Popconfirm, Form, FormItem, Row, Col } from '../web';
-import { createColumnFields, createFormFields } from '../../util';
+import { Table, Button, Popconfirm, Row, Col } from '../web';
+import { createColumnFields } from '../../util';
 
 function dragDirection(dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
@@ -109,8 +109,6 @@ class ListView extends React.Component {
     loadMoreRows: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
     link: PropTypes.string.isRequired,
-    handleChange: PropTypes.func,
-    handleSubmit: PropTypes.func,
     submitting: PropTypes.bool,
     customTableColumns: PropTypes.object
   };
@@ -215,7 +213,7 @@ class ListView extends React.Component {
   };
 
   render() {
-    const { loading, data, loadMoreRows, schema, link, handleChange, handleSubmit, customTableColumns } = this.props;
+    const { loading, data, loadMoreRows, schema, link, customTableColumns } = this.props;
     const { selectedRowKeys } = this.state;
     const hasSelected = selectedRowKeys.length > 0;
 
@@ -252,15 +250,16 @@ class ListView extends React.Component {
             </Popconfirm>
           </Col>
           <Col span={21}>
+            {/*
             <Form layout="inline" name="post" onSubmit={handleSubmit}>
               {createFormFields(handleChange, schema, {}, {}, null, '', true)}
-              {/*error && <Alert color="error">{error}</Alert>*/}
-              <FormItem>
-                <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>
-                  Update
+            <FormItem>
+              <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>
+                Update
                 </Button>
-              </FormItem>
+            </FormItem>
             </Form>
+          */}
           </Col>
         </Row>
       );

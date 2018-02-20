@@ -21,6 +21,8 @@ export const onSubmit = async (schema, values, updateEntry, createEntry, title, 
 
 export const pickInputFields = (schema, values, node = null) => {
   let inputValues = {};
+  //console.log('pickInputFields');
+  //console.log(values);
 
   for (const key of schema.keys()) {
     if (key in values) {
@@ -72,6 +74,8 @@ export const pickInputFields = (schema, values, node = null) => {
       }
     }
   }
+
+  //console.log('inputValues:', inputValues);
 
   return inputValues;
 };

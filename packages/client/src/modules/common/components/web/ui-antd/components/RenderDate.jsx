@@ -11,7 +11,8 @@ const RenderDate = ({ input: { value, onChange, ...inputRest }, label, formItemL
   if (touched && error) {
     validateStatus = 'error';
   }
-  if (value !== '') {
+
+  if (value !== 'null') {
     value = moment(value, dateFormat);
   } else {
     value = null;

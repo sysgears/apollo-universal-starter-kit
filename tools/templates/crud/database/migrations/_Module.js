@@ -1,4 +1,4 @@
-import KnexGenerator from 'domain-knex';
+import KnexGenerator from '@domain-schema/knex';
 
 import { $Module$Schema } from '../../modules/$module$/schema';
 

@@ -10,7 +10,10 @@ export const createSession = req => {
 };
 
 export const readSession = req => {
-  const session = decryptSession(req.universalCookies.get('session', { doNotParse: true }));
+  let session = decryptSession(req.universalCookies.get('session', { doNotParse: true }));
+  if (req.headers.session) {
+    session = decryptSession(req.headers.session);
+  }
   return session;
 };
 

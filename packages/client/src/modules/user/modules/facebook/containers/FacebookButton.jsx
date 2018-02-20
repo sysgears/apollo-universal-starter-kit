@@ -54,13 +54,15 @@ class FacebookComponent extends React.Component {
     // Extract stringified user string out of the URL
     const [, data] = url.match(/data=([^#]+)/);
     const decodedData = JSON.parse(decodeURI(data));
-
+    const { client, refetchCurrentUser } = this.props;
     if (decodedData.tokens) {
       await AsyncStorage.setItem('token', decodedData.tokens.token);
       await AsyncStorage.setItem('refreshToken', decodedData.tokens.refreshToken);
+    } else if (decodedData.session) {
+      await AsyncStorage.setItem('session', decodedData.session);
     }
-    const { data: { currentUser } } = await this.props.refetchCurrentUser();
-    await this.props.client.writeQuery({
+    const { data: { currentUser } } = await refetchCurrentUser();
+    await client.writeQuery({
       query: CURRENT_USER_QUERY,
       data: { currentUser }
     });

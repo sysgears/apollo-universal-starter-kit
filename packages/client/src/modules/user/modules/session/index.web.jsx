@@ -28,9 +28,9 @@ const LogoutLink = withRouter(
 );
 
 function tokenMiddleware(req, options, next) {
-  // if (__CLIENT__) {
-  //   options.headers = { 'X-Token': window.__CSRF_TOKEN__ };
-  // }
+  if (__CLIENT__) {
+    options.headers = { 'X-Token': window.__CSRF_TOKEN__ };
+  }
   next();
 }
 

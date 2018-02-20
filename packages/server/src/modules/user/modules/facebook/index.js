@@ -4,6 +4,7 @@ import FacebookStrategy from 'passport-facebook';
 import MobileDetect from 'mobile-detect';
 import { createTokens } from '../jwt/auth';
 import { updateSession } from '../session/auth';
+import { encryptSession } from './../session/auth/crypto';
 import settings from '../../../../../../../settings';
 
 export function facebookStategy(User) {
@@ -105,6 +106,7 @@ export function facebookAuth(module, app, SECRET, User) {
         res.redirect(
           `${settings.user.MOBILE_APP_URL}?data=` +
             JSON.stringify({
+              session: encryptSession(req.session),
               user: pick(user, ['id', 'username', 'role', 'email', 'isActive'])
             })
         );

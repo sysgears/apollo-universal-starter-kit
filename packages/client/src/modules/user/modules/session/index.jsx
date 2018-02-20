@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
-import { StackNavigator } from 'react-navigation';
+import { AsyncStorage } from 'react-native';
 
 import { createTabBarIconWrapper } from '../../../common/components/native';
 import Profile from './containers/Profile';
@@ -64,6 +64,17 @@ ProfileScreen.propTypes = {
   navigation: PropTypes.object
 };
 
+async function tokenMiddleware(req, options, next) {
+  if (__CLIENT__) {
+    options.headers = { 'X-Token': window.__CSRF_TOKEN__ };
+  }
+  const session = await AsyncStorage.getItem('session');
+  if (session) {
+    options.headers = { session };
+  }
+  next();
+}
+
 export default new Feature({
   tabItem: {
     Profile: {
@@ -116,5 +127,6 @@ export default new Feature({
       }
     }
   },
-  resolver: resolvers
+  resolver: resolvers,
+  middleware: tokenMiddleware
 });

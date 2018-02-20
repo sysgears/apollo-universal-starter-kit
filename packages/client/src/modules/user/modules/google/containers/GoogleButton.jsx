@@ -1,10 +1,9 @@
 import React from 'react';
 import url from 'url';
-import { View, StyleSheet, Linking, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Linking, AsyncStorage, Button, TouchableOpacity, Text } from 'react-native';
 import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlusSquare';
 import { withApollo } from 'react-apollo';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import { Button } from '../../../../common/components/index';
+import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../jwt/graphql/CurrentUserQuery.graphql';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
@@ -20,27 +19,26 @@ const googleLogin = () => {
 const GoogleButton = () => {
   return (
     <View>
-      <Button type="button" style={styles.submit} onPress={googleLogin}>
-        Login with Google
-      </Button>
+      <TouchableOpacity onPress={googleLogin} style={styles.submit}>
+        <Text style={styles.text}>Login with Facebook</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const GoogleLink = () => {
-  return (
-    <Button color="link" onPress={googleLogin} style={{ margin: 10 }}>
-      Login with Google
-    </Button>
-  );
+  return <Button onPress={googleLogin} style={{ margin: 10 }} title="Login with Google" />;
 };
 
 const GoogleIcon = () => {
-  return <FontAwesomeIcon icon={faGooglePlusSquare} size="3x" style={{ margin: 10 }} onPress={googleLogin} />;
+  return (
+    <View style={styles.iconWrapper}>
+      <FontAwesome name="google-plus-square" size={40} />
+    </View>
+  );
 };
 
 class GoogleComponent extends React.Component {
-
   componentDidMount() {
     Linking.addEventListener('url', this.handleOpenURL);
   }
@@ -52,13 +50,12 @@ class GoogleComponent extends React.Component {
   handleOpenURL = async ({ url }) => {
     // Extract stringified user string out of the URL
     const [, data] = url.match(/data=([^#]+)/);
-    const decodedData = JSON.parse(decodeURI(data))
+    const decodedData = JSON.parse(decodeURI(data));
     if (decodedData.tokens) {
       await AsyncStorage.setItem('token', decodedData.tokens.token);
       await AsyncStorage.setItem('refreshToken', decodedData.tokens.refreshToken);
     }
     await this.props.client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: decodedData.user } });
-    
   };
 
   render() {
@@ -77,8 +74,18 @@ class GoogleComponent extends React.Component {
 
 const styles = StyleSheet.create({
   submit: {
+    alignItems: 'center',
+    backgroundColor: '#007bff',
+    padding: 10,
     marginTop: 10,
-    alignSelf: 'center'
+    borderRadius: 5
+  },
+  text: {
+    color: '#fff'
+  },
+  iconWrapper: {
+    alignItems: 'center',
+    marginTop: 10
   }
 });
 

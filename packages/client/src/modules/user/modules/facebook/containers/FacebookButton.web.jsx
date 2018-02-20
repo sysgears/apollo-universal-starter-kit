@@ -16,7 +16,7 @@ const facebookLogin = () => {
 
 const FacebookButton = () => {
   return (
-    <Button color="primary" type="button" onClick={facebookLogin} style={{ margin: 10 }}>
+    <Button color="primary" type="button" onClick={facebookLogin} style={{ marginTop: 10 }}>
       Login with Facebook
     </Button>
   );
@@ -24,14 +24,14 @@ const FacebookButton = () => {
 
 const FacebookLink = () => {
   return (
-    <Button color="link" onClick={facebookLogin} style={{ margin: 10 }}>
+    <Button color="link" onClick={facebookLogin} style={{ marginTop: 10 }}>
       Login with Facebook
     </Button>
   );
 };
 
 const FacebookIcon = () => {
-  return <FontAwesomeIcon icon={faFacebookSquare} size="3x" style={{ margin: 10 }} onClick={facebookLogin} />;
+  return <FontAwesomeIcon icon={faFacebookSquare} size="2x" style={{ marginTop: 10 }} onClick={facebookLogin} />;
 };
 
 const FacebookComponent = props => {

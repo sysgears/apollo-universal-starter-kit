@@ -16,7 +16,7 @@ const googleLogin = () => {
 
 const GoogleButton = () => {
   return (
-    <Button color="primary" type="button" onClick={googleLogin} style={{ margin: 10 }}>
+    <Button color="primary" type="button" onClick={googleLogin} style={{ marginTop: 10 }}>
       Login with Google
     </Button>
   );
@@ -24,14 +24,14 @@ const GoogleButton = () => {
 
 const GoogleLink = () => {
   return (
-    <Button color="link" onClick={googleLogin} style={{ margin: 10 }}>
+    <Button color="link" onClick={googleLogin} style={{ marginTop: 10 }}>
       Login with Google
     </Button>
   );
 };
 
 const GoogleIcon = () => {
-  return <FontAwesomeIcon icon={faGooglePlusSquare} size="3x" style={{ margin: 10 }} onClick={googleLogin} />;
+  return <FontAwesomeIcon icon={faGooglePlusSquare} size="3x" style={{ marginTop: 10 }} onClick={googleLogin} />;
 };
 
 const GoogleComponent = props => {

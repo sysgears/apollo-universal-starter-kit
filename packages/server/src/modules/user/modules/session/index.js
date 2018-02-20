@@ -105,15 +105,12 @@ export default new Feature({
       try {
         req.session = readSession(req);
         if (!req.session || !req.session.csrfToken) {
-          console.log('============1')
           req.session = createSession(req);
         }
         if (__SSR__ || __TEST__) {
-          console.log('============2')
           req.headers['x-token'] = req.session.csrfToken;
         }
         if (req.path === pathname) {
-          console.log('============3')
           if (req && req.session.userId && req.session.csrfToken !== req.headers['x-token']) {
             throw new Error('CSRF token validation failed');
           }

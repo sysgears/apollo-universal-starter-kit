@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import url from 'url';
 import { NavLink, Link } from 'react-router-dom';
 import Field from '../../../../utils/FieldAdapter';
 import { Form, RenderField, Alert, Button } from '../../../common/components/web/index';
@@ -10,20 +9,6 @@ import FacebookButton from '../../modules/facebook';
 import GoogleButton from '../../modules/google';
 
 import settings from '../../../../../../../settings';
-
-const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
-let serverPort = process.env.PORT || port;
-if (__DEV__) {
-  serverPort = '3000';
-}
-
-// const facebookLogin = () => {
-//   window.location = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
-// };
-
-const googleLogin = () => {
-  window.location = `${protocol}//${hostname}:${serverPort}/auth/google`;
-};
 
 const contactFormSchema = {
   email: [required, email],
@@ -56,14 +41,22 @@ const LoginForm = ({ handleSubmit, submitting, error, handleChange, values }) =>
         <Button color="primary" type="submit" disabled={submitting}>
           Login
         </Button>
-        {settings.user.auth.facebook.enabled && <FacebookButton type={'icon'} />}
-        {settings.user.auth.google.enabled && <GoogleButton type={'link'} />}
       </div>
-      <Link className="text-center" to="/forgot-password">
-        Forgot your password?
-      </Link>
+      {settings.user.auth.facebook.enabled && (
+        <div className="text-center">
+          <FacebookButton type={'icon'} />
+        </div>
+      )}
+      {settings.user.auth.google.enabled && (
+        <div className="text-center">
+          <GoogleButton type={'button'} />
+        </div>
+      )}
+      <div className="text-center" style={{ marginTop: 10 }}>
+        <Link to="/forgot-password">Forgot your password?</Link>
+      </div>
       <hr />
-      <div style={{ marginBottom: 16 }}>
+      <div className="text-center" style={{ marginBottom: 16 }}>
         <span style={{ lineHeight: '58px' }}>Not registered yet?</span>
         <NavLink className="btn btn-primary" to="/register" activeClassName="active" style={{ margin: 10 }}>
           Sign Up

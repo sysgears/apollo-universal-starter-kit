@@ -1,11 +1,9 @@
 import React from 'react';
 import url from 'url';
-import { View, StyleSheet, Linking, AsyncStorage } from 'react-native';
-import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSquare';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { View, StyleSheet, Linking, AsyncStorage, Button, TouchableOpacity, Text } from 'react-native';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
-import { Button } from '../../../../common/components/index';
+import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../jwt/graphql/CurrentUserQuery.graphql';
 import { withUser } from '../../../common/containers/AuthBase';
 
@@ -22,23 +20,23 @@ const facebookLogin = () => {
 const FacebookButton = () => {
   return (
     <View>
-      <Button type="button" style={styles.submit} onPress={facebookLogin}>
-        Login with Facebook
-      </Button>
+      <TouchableOpacity onPress={facebookLogin} style={styles.submit}>
+        <Text style={styles.text}>Login with Facebook</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const FacebookLink = () => {
-  return (
-    <Button color="link" onPress={facebookLogin} style={{ margin: 10 }}>
-      Login with Facebook
-    </Button>
-  );
+  return <Button onPress={facebookLogin} style={{ margin: 10 }} title="Login with Facebook" />;
 };
 
 const FacebookIcon = () => {
-  return <FontAwesomeIcon icon={faFacebookSquare} size="3x" style={{ margin: 10 }} onPress={facebookLogin} />;
+  return (
+    <View style={styles.iconWrapper}>
+      <FontAwesome name="facebook-square" size={40} style={{ color: '#3B5998' }} />
+    </View>
+  );
 };
 
 class FacebookComponent extends React.Component {
@@ -90,8 +88,18 @@ FacebookComponent.propTypes = {
 
 const styles = StyleSheet.create({
   submit: {
+    alignItems: 'center',
+    backgroundColor: '#007bff',
+    padding: 10,
     marginTop: 10,
-    alignSelf: 'center'
+    borderRadius: 5
+  },
+  text: {
+    color: '#fff'
+  },
+  iconWrapper: {
+    alignItems: 'center',
+    marginTop: 10
   }
 });
 

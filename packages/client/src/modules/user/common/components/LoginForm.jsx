@@ -47,7 +47,7 @@ const LoginForm = ({ handleSubmit, setFieldValue, setFieldTouched, valid, values
       <Button style={styles.submit} onPress={handleSubmit} disabled={valid}>
         Sign In
       </Button>
-      <FacebookButton type="button" />
+      <FacebookButton type="icon" />
     </View>
   );
 };

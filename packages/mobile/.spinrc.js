@@ -38,7 +38,7 @@ const config = {
     persistGraphQL: false,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
-      __BACKEND_URL__: '"http://192.168.0.155:8080/graphql"'
+      __BACKEND_URL__: '"http://192.168.0.155.xip.io:8080/graphql"' //use you local IP
     }
   }
 };

@@ -6,11 +6,12 @@ import { SecureStore } from 'expo';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../jwt/graphql/CurrentUserQuery.graphql';
+import { withUser } from '../../../common/containers/AuthBase';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
 if (__DEV__) {
-  serverPort = '3000';
+  serverPort = '8080';
 }
 
 const googleLogin = () => {
@@ -52,11 +53,18 @@ class GoogleComponent extends React.Component {
     // Extract stringified user string out of the URL
     const [, data] = url.match(/data=([^#]+)/);
     const decodedData = JSON.parse(decodeURI(data));
+    const { client, refetchCurrentUser } = this.props;
     if (decodedData.tokens) {
       await SecureStore.setItemAsync('token', decodedData.tokens.token);
       await SecureStore.setItemAsync('refreshToken', decodedData.tokens.refreshToken);
     }
-    await this.props.client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: decodedData.user } });
+    const result = await refetchCurrentUser();
+    if (result.data && result.data.currentUser) {
+      await client.writeQuery({
+        query: CURRENT_USER_QUERY,
+        data: result.data
+      });
+    }
   };
 
   render() {
@@ -96,4 +104,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withApollo(GoogleComponent);
+export default withUser(withApollo(GoogleComponent));

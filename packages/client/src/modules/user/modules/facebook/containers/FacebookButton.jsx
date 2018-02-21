@@ -14,7 +14,7 @@ if (__DEV__) {
   serverPort = '8080';
 }
 
-const facebookLogin = () => {
+const facebookLogin = async () => {
   Linking.openURL(`${protocol}//${hostname}:${serverPort}/auth/facebook`);
 };
 
@@ -60,11 +60,13 @@ class FacebookComponent extends React.Component {
     } else if (decodedData.session) {
       await SecureStore.setItemAsync('session', decodedData.session);
     }
-    const { data: { currentUser } } = await refetchCurrentUser();
-    await client.writeQuery({
-      query: CURRENT_USER_QUERY,
-      data: { currentUser }
-    });
+    const result = await refetchCurrentUser();
+    if (result.data && result.data.currentUser) {
+      await client.writeQuery({
+        query: CURRENT_USER_QUERY,
+        data: result.data
+      });
+    }
   };
 
   render() {

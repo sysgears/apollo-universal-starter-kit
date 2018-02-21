@@ -1,9 +1,11 @@
 import { pick } from 'lodash';
 import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
+import MobileDetect from 'mobile-detect';
 import { createTokens } from '../jwt/auth';
 import settings from '../../../../../../../settings';
 import { updateSession } from '../session/auth';
+import { encryptSession } from './../session/auth/crypto';
 
 export function googleStategy(User) {
   passport.use(
@@ -69,9 +71,11 @@ export function googleAuth(module, app, SECRET, User) {
   );
 
   app.get('/auth/google/callback', passport.authenticate('google', { session: false }), async function(req, res) {
-    if (module === 'jwt') {
-      const user = await User.getUserWithPassword(req.user.id);
+    const user = await User.getUserWithPassword(req.user.id);
+    const md = new MobileDetect(req.headers['user-agent']);
+    const port = md.os() === 'iOS' ? '19500' : '19000';
 
+    if (module === 'jwt') {
       const refreshSecret = SECRET + user.password;
       const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
       req.universalCookies.set('x-token', token, {
@@ -91,18 +95,33 @@ export function googleAuth(module, app, SECRET, User) {
         maxAge: 60 * 60 * 24 * 7,
         httpOnly: false
       });
-      await updateSession(req, req.session);
-      res.redirect(
-        'exp://192.168.0.155:19500/+?data=' +
-          JSON.stringify({ user: pick(user, ['id', 'username', 'role', 'email', 'isActive']) })
-      );
+      if (['iOS', 'AndroidOS'].includes(md.os())) {
+        res.redirect(
+          `${settings.user.MOBILE_APP_URL}:${port}/+?data=` +
+            JSON.stringify({
+              tokens: { token: token, refreshToken: refreshToken }
+            })
+        );
+      } else {
+        res.redirect('/profile');
+      }
     } else if (module === 'session') {
       if (req.user && req.user.id) {
         req.session.userId = req.user.id;
       }
       await updateSession(req, req.session);
+      if (['iOS', 'AndroidOS'].includes(md.os())) {
+        res.redirect(
+          `${settings.user.MOBILE_APP_URL}:${port}/+?data=` +
+            JSON.stringify({
+              session: encryptSession(req.session)
+            })
+        );
+      } else {
+        res.redirect('/profile');
+      }
     }
 
-    res.redirect('/profile');
+    //res.redirect('/profile');
   });
 }

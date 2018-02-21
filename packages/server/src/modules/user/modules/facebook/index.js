@@ -62,6 +62,7 @@ export function facebookAuth(module, app, SECRET, User) {
   app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
     const user = await User.getUserWithPassword(req.user.id);
     const md = new MobileDetect(req.headers['user-agent']);
+    const port = md.os() === 'iOS' ? '19500' : '19000';
 
     if (module === 'jwt') {
       const refreshSecret = SECRET + user.password;
@@ -88,10 +89,9 @@ export function facebookAuth(module, app, SECRET, User) {
       });
       if (['iOS', 'AndroidOS'].includes(md.os())) {
         res.redirect(
-          `${settings.user.MOBILE_APP_URL}?data=` +
+          `${settings.user.MOBILE_APP_URL}:${port}/+?data=` +
             JSON.stringify({
-              tokens: { token: token, refreshToken: refreshToken },
-              user: pick(user, ['id', 'username', 'role', 'email', 'isActive'])
+              tokens: { token: token, refreshToken: refreshToken }
             })
         );
       } else {
@@ -104,10 +104,9 @@ export function facebookAuth(module, app, SECRET, User) {
       await updateSession(req, req.session);
       if (['iOS', 'AndroidOS'].includes(md.os())) {
         res.redirect(
-          `${settings.user.MOBILE_APP_URL}?data=` +
+          `${settings.user.MOBILE_APP_URL}:${port}/+?data=` +
             JSON.stringify({
-              session: encryptSession(req.session),
-              user: pick(user, ['id', 'username', 'role', 'email', 'isActive'])
+              session: encryptSession(req.session)
             })
         );
       } else {

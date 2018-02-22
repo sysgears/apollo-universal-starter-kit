@@ -29,11 +29,9 @@ const withCheckAction = Component => {
   return compose(
     withApollo,
     graphql(CHANGE_ACTION, {
-      props: ({ ownProps: { client }, mutate }) => ({
+      props: ({ mutate }) => ({
         changeAction: async action => {
           await mutate({ variables: { action: action } });
-          const querry = await client.readQuery({ query: USER_ACTION_QUERY });
-          console.log('query', querry);
         }
       })
     }),
@@ -80,7 +78,7 @@ const withLogout = Component =>
     withApollo(
       graphql(LOGOUT, {
         props: ({ ownProps: { client, changeAction }, mutate }) => ({
-          logout: async onLogout => {
+          logout: async () => {
             try {
               const { data: { logout } } = await mutate();
 
@@ -90,7 +88,6 @@ const withLogout = Component =>
               await Promise.all(['token', 'session', 'refreshToken'].map(item => SecureStore.deleteItemAsync(item)));
               await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
               changeAction('NotLogin');
-              onLogout();
             } catch (e) {
               log.error(e);
             }

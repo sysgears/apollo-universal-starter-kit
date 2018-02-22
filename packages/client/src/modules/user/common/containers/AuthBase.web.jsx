@@ -28,11 +28,9 @@ const withCheckAction = Component => {
   return compose(
     withApollo,
     graphql(CHANGE_ACTION, {
-      props: ({ ownProps: { client }, mutate }) => ({
+      props: ({ mutate }) => ({
         changeAction: async action => {
           await mutate({ variables: { action: action } });
-          const querry = await client.readQuery({ query: USER_ACTION_QUERY });
-          console.log('query', querry);
         }
       })
     }),

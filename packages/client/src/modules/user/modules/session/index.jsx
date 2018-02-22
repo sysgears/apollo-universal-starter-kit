@@ -17,7 +17,7 @@ class LoginScreen extends React.Component {
     title: 'Sign In'
   });
   render() {
-    return <Login navigation={this.props.navigation} onLogin={() => this.props.navigation.navigate('Profile')} />;
+    return <Login navigation={this.props.navigation} />;
   }
 }
 

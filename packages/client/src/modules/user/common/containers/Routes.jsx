@@ -15,13 +15,14 @@ class MainScreenNavigator extends React.Component {
   navTabsFilter = () => {
     const { currentUser, currentUserLoading, routeConfigs } = this.props;
 
-    // TODO: simplify this by removing 'requiredLogin' param
-    const userFilter = value =>
-      (value.userInfo && value.userInfo.showOnLogin && value.userInfo.role === currentUser.role) ||
-      (value.userInfo && value.userInfo.showOnLogin && !value.userInfo.role) ||
-      !value.userInfo;
+    const userFilter = value => {
+      if (!value.userInfo) return true;
+      const { showOnLogin, role } = value.userInfo;
+      return showOnLogin && (!role || role === currentUser.role);
+    };
 
     const guestFilter = value => !value.userInfo || (value.userInfo && !value.userInfo.showOnLogin);
+
     return pickBy(routeConfigs, currentUser && !currentUserLoading ? userFilter : guestFilter);
   };
 
@@ -32,19 +33,13 @@ class MainScreenNavigator extends React.Component {
 
   render() {
     const MainScreenNavigatorComponent = TabNavigator(
-      {
-        ...this.navTabsFilter()
-      },
-      {
-        initialRouteName: this.getInitialRoute()
-      }
+      { ...this.navTabsFilter() },
+      { initialRouteName: this.getInitialRoute() }
     );
 
     return <MainScreenNavigatorComponent />;
   }
 }
-
-// export default withUser(MainScreenNavigator);
 
 const tabNavigator = routeConfigs => {
   const withRoutes = Component => {

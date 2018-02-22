@@ -1,3 +1,3 @@
-import GoogleButton from './containers/GoogleButton';
+import GoogleButton from './containers/GoogleButton.web';
 
 export default GoogleButton;

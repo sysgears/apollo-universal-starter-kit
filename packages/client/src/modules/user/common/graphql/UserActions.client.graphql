@@ -1,0 +1,3 @@
+query UserAction {
+    action @client
+}

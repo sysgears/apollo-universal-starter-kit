@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { LayoutCenter } from '../../../common/components/index';
 import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../../common/components/web/index';
 
-import LoginForm from './LoginForm';
+import LoginForm from './LoginForm.web';
 import settings from '../../../../../../../settings';
 
 export default class LoginView extends React.PureComponent {

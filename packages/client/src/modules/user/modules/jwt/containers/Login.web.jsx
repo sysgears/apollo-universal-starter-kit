@@ -5,7 +5,7 @@ import React from 'react';
 import { graphql, compose, withApollo } from 'react-apollo';
 
 // Components
-import LoginView from '../../../common/components/LoginView';
+import LoginView from '../../../common/components/LoginView.web';
 import log from '../../../../../../../common/log';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';

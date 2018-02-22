@@ -11,6 +11,7 @@ import log from '../../../../../../../common/log';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
+import { withCheckAction } from '../../../common/containers/AuthBase';
 
 class Login extends React.Component {
   render() {
@@ -21,7 +22,7 @@ class Login extends React.Component {
 const LoginWithApollo = compose(
   withApollo,
   graphql(LOGIN, {
-    props: ({ ownProps: { client, onLogin }, mutate }) => ({
+    props: ({ ownProps: { client, onLogin, changeAction }, mutate }) => ({
       login: async ({ email, password }) => {
         try {
           const { data: { login } } = await mutate({
@@ -32,6 +33,7 @@ const LoginWithApollo = compose(
             return { errors: login.errors };
           }
           await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
+          await changeAction('Login');
           onLogin();
         } catch (e) {
           log.error(e);
@@ -41,4 +43,4 @@ const LoginWithApollo = compose(
   })
 )(Login);
 
-export default LoginWithApollo;
+export default withCheckAction(LoginWithApollo);

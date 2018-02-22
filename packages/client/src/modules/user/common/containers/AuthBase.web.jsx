@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withApollo, graphql } from 'react-apollo';
+import { withApollo, graphql, compose } from 'react-apollo';
 
 import log from '../../../../../../common/log';
 
 import CURRENT_USER_QUERY from '../../modules/jwt/graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../../modules/jwt/graphql/Logout.graphql';
+import USER_ACTION_QUERY from '../graphql/UserActions.client.graphql';
+import CHANGE_ACTION from '../graphql/ChangeUserAction.client.graphql';
 
 const withUser = Component => {
   const WithUser = ({ ...props }) => <Component {...props} />;
@@ -20,6 +22,24 @@ const withUser = Component => {
       return { currentUserLoading: loading, currentUser, refetchCurrentUser: refetch };
     }
   })(WithUser);
+};
+
+const withCheckAction = Component => {
+  return compose(
+    withApollo,
+    graphql(CHANGE_ACTION, {
+      props: ({ ownProps: { client }, mutate }) => ({
+        changeAction: async action => {
+          await mutate({ variables: { action: action } });
+          const querry = await client.readQuery({ query: USER_ACTION_QUERY });
+          console.log('query', querry);
+        }
+      })
+    }),
+    graphql(USER_ACTION_QUERY, {
+      props: ({ data: { action } }) => ({ action })
+    })
+  )(Component);
 };
 
 const withLoadedUser = Component => {
@@ -76,8 +96,4 @@ const withLogout = Component =>
     })(Component)
   );
 
-export { withUser };
-export { withLoadedUser };
-export { IfLoggedIn };
-export { IfNotLoggedIn };
-export { withLogout };
+export { withUser, withCheckAction, withLoadedUser, IfLoggedIn, IfNotLoggedIn, withLogout };

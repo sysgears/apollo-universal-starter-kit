@@ -1,0 +1,5 @@
+mutation changeAction($action: ActionInfo) {
+    changeAction(action: $action) @client {
+        action
+    }
+}

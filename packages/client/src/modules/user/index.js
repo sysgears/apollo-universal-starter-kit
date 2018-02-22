@@ -1,6 +1,12 @@
 import jwt from './modules/jwt'; // eslint-disable-line
 import session from './modules/session'; // eslint-disable-line
+import commonResolvers from './common/resolvers';
+import UserTabNavigator from './common/containers/Routes';
 
 import Feature from '../connector';
 
-export default new Feature(jwt);
+const commonFeature = new Feature({ resolver: commonResolvers });
+
+export default new Feature(commonFeature, jwt);
+
+export { UserTabNavigator };

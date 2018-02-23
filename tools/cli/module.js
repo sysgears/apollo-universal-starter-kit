@@ -215,7 +215,7 @@ function updateSchema(logger, module) {
           let required = value.optional ? '' : '!';
           inputCreate += `  ${key}Id: Int${required}\n`;
           inputUpdate += `  ${key}Id: Int\n`;
-          moduleData += `  ${key}s(limit: Int, orderBy: OrderByInput): [${value.type.name}]\n`;
+          //moduleData += `  ${key}s(limit: Int, orderBy: OrderByInput): [${value.type.name}]\n`;
         } else if (value.type.constructor !== Array) {
           if (key !== 'id') {
             inputCreate += `  ${key}: ${generateField(value)}\n`;
@@ -293,14 +293,14 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
 
       const resolverFile = `resolvers.js`;
       let replace = '';
-      moduleData = '';
+      //moduleData = '';
       for (const key of schema.keys()) {
         const value = schema.values[key];
         if (value.type.isSchema) {
-          moduleData += `    ${key}s(obj, args, ctx, info) {
+          /*moduleData += `    ${key}s(obj, args, ctx, info) {
       return ctx.${value.type.name}.getList(args, info);
     },
-`;
+`;*/
         } else if (value.type.constructor === Array) {
           replace += `  ${schema.name}: {
     ${key}: createBatchResolver((sources, args, ctx, info) => {
@@ -310,6 +310,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     })
   },
 `;
+          /*
           for (const remoteKey of value.type[0].keys()) {
             const remoteValue = value.type[0].values[remoteKey];
             if (remoteValue.type.isSchema) {
@@ -318,10 +319,10 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     },
 `;
             }
-          }
+          }*/
         }
       }
-
+      /*
       if (moduleData !== '') {
         moduleData = `${moduleData.replace(/,\s*$/, '')}
 `;
@@ -335,7 +336,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
             .cat(resolverFile)
             .replace(RegExp(replaceModuleData, 'g'), `// related data\n${moduleData}    // end related data`)
         )
-        .to(resolverFile);
+        .to(resolverFile);*/
 
       // override batch resolvers in resolvers.js file
       const replaceBatchResolvers = `// schema batch resolvers([^*]+)// end schema batch resolvers`;
@@ -412,7 +413,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     } else {
       logger.error(chalk.red(`✘ Fragment path ${pathFragment} not found!`));
     }
-
+    /*
     // get module query file
     const pathModuleQuery = `${__dirname}/../../packages/client/src/modules/${module}/graphql/`;
     if (fs.existsSync(pathModuleQuery)) {
@@ -466,7 +467,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
       logger.info(chalk.green(`✔ Module query in ${pathModuleQuery}${file} successfully updated!`));
     } else {
       logger.error(chalk.red(`✘ Module query path ${pathModuleQuery} not found!`));
-    }
+    }*/
   } else {
     logger.info(chalk.red(`✘ Module ${module} in path ${modulePath} not found!`));
   }

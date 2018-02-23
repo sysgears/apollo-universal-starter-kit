@@ -44,13 +44,12 @@ const FormView = ({
   setFieldTouched,
   handleSubmit,
   values,
-  data,
   error,
   schema
 }) => {
   return (
     <Form name="post" onSubmit={handleSubmit}>
-      {createFormFields(handleChange, setFieldValue, handleBlur, setFieldTouched, schema, values, data, formItemLayout)}
+      {createFormFields(handleChange, setFieldValue, handleBlur, setFieldTouched, schema, values, formItemLayout)}
       {error && <Alert color="error">{error}</Alert>}
       <FormItem {...tailFormItemLayout}>
         <Button color="primary" type="submit">

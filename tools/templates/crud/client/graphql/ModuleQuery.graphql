@@ -5,7 +5,5 @@ query $module$($where: $Module$WhereUniqueInput!) {
     node {
       ...$Module$Info
     }
-    ### form data
-    ### end form data
   }
 }

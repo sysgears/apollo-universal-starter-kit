@@ -14,10 +14,6 @@ export default pubsub => ({
       return ctx.$Module$.get(args, info);
     }
   },
-  $Module$Data: {
-    // related data
-    // end related data
-  },
   // schema batch resolvers
   // end schema batch resolvers
   Mutation: {

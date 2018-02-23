@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom';
 import { withFormik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Table, Button, Popconfirm, Row, Col } from '../web';
-import { createColumnFields } from '../../util';
+import { Table, Button, Popconfirm, Row, Col, Form, FormItem } from '../web';
+import { createColumnFields, createFormFields, mapFormPropsToValues } from '../../util';
+import { pickInputFields } from '../../../../utils/crud';
 
 function dragDirection(dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
@@ -110,13 +111,29 @@ class ListView extends React.Component {
     schema: PropTypes.object.isRequired,
     link: PropTypes.string.isRequired,
     submitting: PropTypes.bool,
-    customTableColumns: PropTypes.object
+    customTableColumns: PropTypes.object,
+    handleChange: PropTypes.func,
+    setFieldValue: PropTypes.func,
+    handleBlur: PropTypes.func,
+    setFieldTouched: PropTypes.func,
+    handleSubmit: PropTypes.func,
+    values: PropTypes.object,
+    setValues: PropTypes.func,
+    status: PropTypes.object
   };
 
   state = {
     selectedRowKeys: [],
     loading: false
   };
+
+  componentWillReceiveProps(nextProps) {
+    const { status } = this.props;
+
+    if (nextProps.status !== status) {
+      this.setState({ selectedRowKeys: [] });
+    }
+  }
 
   components = {
     body: {
@@ -206,16 +223,35 @@ class ListView extends React.Component {
     return onOrderBy({ column: name, order });
   };
 
-  rowSelection = {
-    onChange: selectedRowKeys => {
-      this.setState({ selectedRowKeys });
-    }
-  };
-
   render() {
-    const { loading, data, loadMoreRows, schema, link, customTableColumns } = this.props;
+    const {
+      loading,
+      data,
+      loadMoreRows,
+      schema,
+      link,
+      customTableColumns,
+      handleSubmit,
+      handleChange,
+      setFieldValue,
+      handleBlur,
+      setFieldTouched,
+      values
+    } = this.props;
     const { selectedRowKeys } = this.state;
     const hasSelected = selectedRowKeys.length > 0;
+
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: selectedRowKeys => {
+        this.setState({ selectedRowKeys });
+
+        this.props.setValues({
+          ...this.props.values,
+          selectedRowKeys: selectedRowKeys
+        });
+      }
+    };
 
     const title = () => {
       return (
@@ -250,16 +286,27 @@ class ListView extends React.Component {
             </Popconfirm>
           </Col>
           <Col span={21}>
-            {/*
-            <Form layout="inline" name="post" onSubmit={handleSubmit}>
-              {createFormFields(handleChange, schema, {}, {}, null, '', true)}
-            <FormItem>
-              <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>
-                Update
-                </Button>
-            </FormItem>
-            </Form>
-          */}
+            {
+              <Form layout="inline" name="post" onSubmit={handleSubmit}>
+                {createFormFields(
+                  handleChange,
+                  setFieldValue,
+                  handleBlur,
+                  setFieldTouched,
+                  schema,
+                  values,
+                  {},
+                  null,
+                  '',
+                  true
+                )}
+                <FormItem>
+                  <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>
+                    Update
+                  </Button>
+                </FormItem>
+              </Form>
+            }
           </Col>
         </Row>
       );
@@ -281,7 +328,7 @@ class ListView extends React.Component {
       columns: columns,
       agination: false,
       size: 'small',
-      rowSelection: this.rowSelection,
+      rowSelection: rowSelection,
       loading: loading && !data,
       title: title,
       footer: footer
@@ -309,10 +356,22 @@ class ListView extends React.Component {
 }
 
 const ListViewWithFormik = withFormik({
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm();
-  }
+  mapPropsToValues: ({ schema }) => mapFormPropsToValues(schema, {}),
+  async handleSubmit(values, { resetForm, setStatus, props: { updateManyEntries, schema } }) {
+    //console.log('handleSubmit values:', values);
+
+    const { selectedRowKeys, ...restValues } = values;
+    const insertValues = pickInputFields(schema, restValues);
+    //console.log('handleSubmit selectedRowKeys:', selectedRowKeys);
+    //console.log('handleSubmit insertValues:', insertValues);
+
+    if (selectedRowKeys && Object.keys(insertValues).length > 0) {
+      await updateManyEntries(insertValues, { id_in: selectedRowKeys });
+      setStatus({ submitted: true });
+      resetForm();
+    }
+  },
+  displayName: 'BatchUpdateForm'
 });
 
 export default ListViewWithFormik(DragDropContext(HTML5Backend)(ListView));

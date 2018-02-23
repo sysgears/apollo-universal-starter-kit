@@ -25,12 +25,10 @@ export const pickInputFields = (schema, values, node = null) => {
   //console.log(values);
 
   for (const key of schema.keys()) {
-    if (key in values) {
+    if (key in values && values[key]) {
       const value = schema.values[key];
       if (value.type.isSchema) {
-        if (values[key]) {
-          inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
-        }
+        inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
       } else if (key !== 'id' && value.type.constructor !== Array) {
         inputValues[key] = values[key];
       } else if (value.type.constructor === Array) {

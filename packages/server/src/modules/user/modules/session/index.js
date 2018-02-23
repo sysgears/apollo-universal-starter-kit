@@ -4,13 +4,13 @@ import cookiesMiddleware from 'universal-cookie-express';
 import url from 'url';
 import jwt from 'jsonwebtoken';
 
-import UserDAO from './sql';
+import UserDAO from '../../common/sql';
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
 import confirmMiddleware from './confirm';
 import { readSession, createSession } from './auth';
 import Feature from '../../../connector';
-import scopes from './auth/scopes';
+import scopes from '../../common/auth/scopes';
 import settings from '../../../../../../../settings';
 import { facebookAuth, facebookStategy } from '../facebook';
 import { googleAuth, googleStategy } from '../google';

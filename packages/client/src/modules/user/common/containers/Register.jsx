@@ -5,11 +5,11 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import RegisterView from '../../../common/components/RegisterView';
+import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
 
-import settings from '../../../../../../../../settings';
+import settings from '../../../../../../../settings';
 
 class Register extends React.Component {
   render() {

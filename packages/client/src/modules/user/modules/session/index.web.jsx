@@ -4,11 +4,11 @@ import { Route, NavLink, withRouter } from 'react-router-dom';
 import ProfileView from '../../common/components/ProfileView';
 import { MenuItem } from '../../../../modules/common/components/web';
 import Users from '../../common/components/Users';
-import UserEdit from './containers/UserEdit';
-import Register from './containers/Register';
+import UserEdit from '../../common/containers/UserEdit';
+import Register from '../../common/containers/Register';
 import Login from './containers/Login.web';
-import ForgotPassword from './containers/ForgotPassword';
-import ResetPassword from './containers/ResetPassword';
+import ForgotPassword from '../../common/containers/ForgotPassword';
+import ResetPassword from '../../common/containers/ResetPassword';
 import resolvers from './resolvers';
 
 import { AuthRoute, IfLoggedIn, withUser, withLoadedUser, withLogout, IfNotLoggedIn } from './containers/Auth.web';

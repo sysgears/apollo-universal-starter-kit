@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
 
-import UserDAO from './sql';
+import UserDAO from '../../common/sql';
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
 import { refreshTokens } from './auth/index';
 import tokenMiddleware from './auth/token';
 import confirmMiddleware from './confirm';
 import Feature from '../../../connector';
-import scopes from './auth/scopes';
+import scopes from '../../common/auth/scopes';
 import settings from '../../../../../../../settings';
 import { facebookStategy, facebookAuth } from '../facebook';
 import { googleStategy, googleAuth } from '../google';

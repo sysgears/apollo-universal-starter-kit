@@ -7,7 +7,7 @@ import { createTabBarIconWrapper } from '../../../common/components/native';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
 import Logout from '../../common/containers/Logout';
-import UsersList from './containers/UsersList';
+import UsersList from '../../common/containers/UsersList';
 import resolvers from './resolvers';
 
 import Feature from '../../../connector';
@@ -80,7 +80,7 @@ export default new Feature({
     Profile: {
       screen: ProfileScreen,
       userInfo: {
-        requiredLogin: true
+        showOnLogin: true
       },
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
@@ -92,7 +92,7 @@ export default new Feature({
     Login: {
       screen: LoginScreen,
       userInfo: {
-        requiredLogin: false
+        showOnLogin: false
       },
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
@@ -104,7 +104,7 @@ export default new Feature({
     Users: {
       screen: UsersListScreen,
       userInfo: {
-        requiredLogin: true,
+        showOnLogin: true,
         role: 'admin'
       },
       navigationOptions: {
@@ -117,7 +117,7 @@ export default new Feature({
     Logout: {
       screen: LogoutScreen,
       userInfo: {
-        requiredLogin: true
+        showOnLogin: true
       },
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {

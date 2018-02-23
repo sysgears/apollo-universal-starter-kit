@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
-import UserEditView from '../../../common/components/UserEditView';
+import UserEditView from '../components/UserEditView';
 
 import USER_QUERY from '../graphql/UserQuery.graphql';
 import ADD_USER from '../graphql/AddUser.graphql';

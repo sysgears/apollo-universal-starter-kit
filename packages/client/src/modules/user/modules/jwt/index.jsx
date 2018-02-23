@@ -7,7 +7,7 @@ import { createTabBarIconWrapper } from '../../../common/components/native';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
 import Logout from '../../common/containers/Logout';
-import UsersList from './containers/UsersList';
+import UsersList from '../../common/containers/UsersList';
 import resolvers from './resolvers';
 
 import Feature from '../../../connector';

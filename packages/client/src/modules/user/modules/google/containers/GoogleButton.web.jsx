@@ -7,7 +7,7 @@ import { Button } from '../../../../common/components/web/index';
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
 if (__DEV__) {
-  serverPort = '3000';
+  serverPort = '8080';
 }
 
 const googleLogin = () => {
@@ -31,7 +31,7 @@ const GoogleLink = () => {
 };
 
 const GoogleIcon = () => {
-  return <FontAwesomeIcon icon={faGooglePlusSquare} size="3x" style={{ marginTop: 10 }} onClick={googleLogin} />;
+  return <FontAwesomeIcon icon={faGooglePlusSquare} size="2x" style={{ marginTop: 10 }} onClick={googleLogin} />;
 };
 
 const GoogleComponent = props => {

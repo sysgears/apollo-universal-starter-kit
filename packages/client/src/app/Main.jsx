@@ -24,13 +24,18 @@ import createReduxStore, { storeReducer } from '../../../common/createReduxStore
 import settings from '../../../../settings';
 import Routes from './Routes';
 import modules from '../modules';
+import log from '../../../common/log';
 
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
+const uri = hostname === 'localhost' && __SSR__ ? '/graphql' : __BACKEND_URL__;
 const fetch = createApolloFetch({
-  uri: hostname === 'localhost' && __SSR__ ? '/graphql' : __BACKEND_URL__,
+  uri,
   constructOptions: modules.constructFetchOptions
 });
+
+log.info(`Connecting to GraphQL backend at: ${uri}`);
+
 const cache = new InMemoryCache();
 
 fetch.batchUse(({ options }, next) => {

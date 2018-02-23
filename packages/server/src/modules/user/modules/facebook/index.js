@@ -56,9 +56,7 @@ export function facebookStategy(User) {
 
 export function facebookAuth(module, app, SECRET, User) {
   app.use(passport.initialize());
-
   app.get('/auth/facebook', passport.authenticate('facebook'));
-
   app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
     const user = await User.getUserWithPassword(req.user.id);
     const md = new MobileDetect(req.headers['user-agent']);

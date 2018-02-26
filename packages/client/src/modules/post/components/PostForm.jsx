@@ -12,26 +12,12 @@ const postFormSchema = {
 
 const validate = values => validateForm(values, postFormSchema);
 
-const PostForm = ({ values, handleSubmit, valid, handleChange }) => {
+const PostForm = ({ values, handleSubmit, valid, onSubmit }) => {
   return (
     <FormView>
-      <Field
-        name="title"
-        component={RenderField}
-        type="text"
-        label="Title"
-        value={values.title}
-        onChange={handleChange}
-      />
-      <Field
-        name="content"
-        component={RenderField}
-        type="text"
-        label="Content"
-        value={values.content}
-        onChange={handleChange}
-      />
-      <FormButton onPress={handleSubmit} disabled={!valid}>
+      <Field name="title" component={RenderField} type="text" label="Title" value={values.title} />
+      <Field name="content" component={RenderField} type="text" label="Content" value={values.content} />
+      <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
         Save
       </FormButton>
     </FormView>
@@ -42,14 +28,13 @@ PostForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
   valid: PropTypes.bool,
-  values: PropTypes.object,
-  handleChange: PropTypes.func
+  values: PropTypes.object
 };
 
 const PostFormWithFormik = withFormik({
   mapPropsToValues: props => ({
-    title: (props.post && props.post.title) || '',
-    content: (props.post && props.post.content) || ''
+    title: props.post && props.post.title,
+    content: props.post && props.post.content
   }),
   validate: values => validate(values),
   handleSubmit(values, { props: { onSubmit } }) {

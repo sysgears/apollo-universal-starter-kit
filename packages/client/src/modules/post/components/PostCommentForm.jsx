@@ -11,7 +11,7 @@ const commentFormSchema = {
 
 const validate = values => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) => {
+const PostCommentForm = ({ values, handleSubmit, initialValues }) => {
   let operation = 'Add';
   if (initialValues.id !== null) {
     operation = 'Edit';
@@ -19,7 +19,7 @@ const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) 
 
   return (
     <FormView>
-      <Field name="content" component={RenderField} type="text" value={values.content} onChange={handleChange} />
+      <Field name="content" component={RenderField} type="text" value={values.content} />
       <FormButton onPress={handleSubmit}>{operation}</FormButton>
     </FormView>
   );
@@ -27,7 +27,6 @@ const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) 
 
 PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
@@ -35,7 +34,7 @@ PostCommentForm.propTypes = {
 };
 
 const PostCommentFormWithFormik = withFormik({
-  mapPropsToValues: props => ({ content: (props.comment && props.comment.content) || '' }),
+  mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
   validate: values => validate(values),
   handleSubmit: function(values, { props: { onSubmit } }) {
     onSubmit(values);

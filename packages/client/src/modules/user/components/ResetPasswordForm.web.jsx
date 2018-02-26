@@ -12,23 +12,15 @@ const contactFormSchema = {
 
 const validate = values => validateForm(values, contactFormSchema);
 
-const ResetPasswordForm = ({ handleChange, values, handleSubmit, submitting, onSubmit, error }) => {
+const ResetPasswordForm = ({ values, handleSubmit, submitting, onSubmit, error }) => {
   return (
     <Form name="resetPassword" onSubmit={handleSubmit(onSubmit)}>
-      <Field
-        name="password"
-        component={RenderField}
-        type="password"
-        label="Password"
-        onChange={handleChange}
-        value={values.password}
-      />
+      <Field name="password" component={RenderField} type="password" label="Password" value={values.password} />
       <Field
         name="passwordConfirmation"
         component={RenderField}
         type="password"
         label="Password Confirmation"
-        onChange={handleChange}
         value={values.passwordConfirmation}
       />
       {error && <Alert color="error">{error}</Alert>}
@@ -41,7 +33,6 @@ const ResetPasswordForm = ({ handleChange, values, handleSubmit, submitting, onS
 
 ResetPasswordForm.propTypes = {
   handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
   values: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,

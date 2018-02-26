@@ -19,12 +19,11 @@ class SubscriptionCardForm extends React.Component {
     error: PropTypes.string,
     handleSubmit: PropTypes.func,
     onSubmit: PropTypes.func,
-    values: PropTypes.object,
-    handleChange: PropTypes.func
+    values: PropTypes.object
   };
 
   render() {
-    const { handleSubmit, submitting, action, error, values, handleChange } = this.props;
+    const { handleSubmit, submitting, action, error, values } = this.props;
     return (
       <Form name="subscription" onSubmit={handleSubmit}>
         <Field
@@ -33,7 +32,6 @@ class SubscriptionCardForm extends React.Component {
           type="text"
           label="Name On Card"
           validate={required}
-          onChange={handleChange}
           value={values.name}
         />
         <Label>Payment Info</Label>

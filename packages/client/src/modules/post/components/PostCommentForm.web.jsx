@@ -11,7 +11,7 @@ const commentFormSchema = {
 
 const validate = values => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) => {
+const PostCommentForm = ({ values, handleSubmit, initialValues }) => {
   return (
     <Form name="comment" onSubmit={handleSubmit}>
       <Row>
@@ -19,7 +19,7 @@ const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) 
           <Label>{initialValues.id === null ? 'Add comment' : 'Edit comment'}</Label>
         </Col>
         <Col xs={8}>
-          <Field name="content" component={RenderField} type="text" value={values.content} onChange={handleChange} />
+          <Field name="content" component={RenderField} type="text" value={values.content} />
         </Col>
         <Col xs={2}>
           <Button color="primary" type="submit" className="float-right">
@@ -33,7 +33,6 @@ const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) 
 
 PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
@@ -43,7 +42,7 @@ PostCommentForm.propTypes = {
 };
 
 const PostCommentFormWithFormik = withFormik({
-  mapPropsToValues: props => ({ content: (props.comment && props.comment.content) || '' }),
+  mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
   async handleSubmit(values, { resetForm, props: { onSubmit } }) {
     await onSubmit(values);
     resetForm({ content: '' });

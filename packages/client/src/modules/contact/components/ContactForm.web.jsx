@@ -13,27 +13,13 @@ const contactFormSchema = {
 
 const validate = values => validateForm(values, contactFormSchema);
 
-const ContactForm = ({ values, handleSubmit, error, sent, handleChange }) => {
+const ContactForm = ({ values, handleSubmit, error, sent }) => {
   return (
     <Form name="contact" onSubmit={handleSubmit}>
       {sent && <Alert color="success">Thank you for contacting us!</Alert>}
-      <Field name="name" component={RenderField} type="text" label="Name" value={values.name} onChange={handleChange} />
-      <Field
-        name="email"
-        component={RenderField}
-        type="text"
-        label="Email"
-        value={values.email}
-        onChange={handleChange}
-      />
-      <Field
-        name="content"
-        component={RenderField}
-        type="textarea"
-        label="Content"
-        value={values.content}
-        onChange={handleChange}
-      />
+      <Field name="name" component={RenderField} type="text" label="Name" value={values.name} />
+      <Field name="email" component={RenderField} type="text" label="Email" value={values.email} />
+      <Field name="content" component={RenderField} type="textarea" label="Content" value={values.content} />
       <div className="text-center">
         {error && <Alert color="error">{error}</Alert>}
         <Button color="primary" type="submit">
@@ -46,7 +32,6 @@ const ContactForm = ({ values, handleSubmit, error, sent, handleChange }) => {
 
 ContactForm.propTypes = {
   handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   error: PropTypes.string,

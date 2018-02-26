@@ -13,14 +13,14 @@ const config = {
       enabled: true
     },
     ios: {
-      entry: './src/index.js',
+      entry: './src/index.ts',
       buildDir: 'build/ios',
       dllBuildDir: 'build/ios/dll',
       stack: ['react-native', 'ios'],
       defines: {
         __CLIENT__: true
       },
-      enabled: false
+      enabled: true
     },
     test: {
       stack: ['react-native-web', 'server'],

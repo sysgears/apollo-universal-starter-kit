@@ -7,7 +7,7 @@ import { Button } from '../../../../common/components/web/index';
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
 if (__DEV__) {
-  serverPort = '8080';
+  serverPort = '3000';
 }
 
 const googleLogin = () => {

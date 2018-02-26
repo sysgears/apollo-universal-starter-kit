@@ -121,7 +121,5 @@ export function googleAuth(module, app, SECRET, User) {
         res.redirect('/profile');
       }
     }
-
-    //res.redirect('/profile');
   });
 }

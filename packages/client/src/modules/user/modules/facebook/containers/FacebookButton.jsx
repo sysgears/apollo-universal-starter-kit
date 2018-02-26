@@ -10,9 +10,6 @@ import { withUser, withCheckAction } from '../../../common/containers/AuthBase';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
-if (__DEV__) {
-  serverPort = '8080';
-}
 
 const facebookLogin = async () => {
   Linking.openURL(`${protocol}//${hostname}:${serverPort}/auth/facebook`);
@@ -61,6 +58,7 @@ class FacebookComponent extends React.Component {
       await SecureStore.setItemAsync('session', decodedData.session);
     }
     const result = await refetchCurrentUser();
+
     if (result.data && result.data.currentUser) {
       await client.writeQuery({
         query: CURRENT_USER_QUERY,

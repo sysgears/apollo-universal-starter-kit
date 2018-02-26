@@ -10,9 +10,6 @@ import { withUser, withCheckAction } from '../../../common/containers/AuthBase';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
-if (__DEV__) {
-  serverPort = '8080';
-}
 
 const googleLogin = () => {
   Linking.openURL(`${protocol}//${hostname}:${serverPort}/auth/google`);

@@ -7,6 +7,6 @@ import Feature from '../connector';
 
 const commonFeature = new Feature({ resolver: commonResolvers });
 
-export default new Feature(commonFeature, jwt);
+export default new Feature(commonFeature, session);
 
 export { UserTabNavigator };

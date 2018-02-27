@@ -88,7 +88,6 @@
     "knex": "^0.14.2",
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
-    "mobile-detect": "^1.4.1",
     "mysql2": "^1.5.1",
     "nodemailer": "^4.4.1",
     "passport": "^0.4.0",

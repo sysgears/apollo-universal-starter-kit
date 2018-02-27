@@ -1,11 +1,12 @@
 import { pick } from 'lodash';
 import passport from 'passport';
+import ip from 'ip';
 import FacebookStrategy from 'passport-facebook';
-import MobileDetect from 'mobile-detect';
 import { createTokens } from '../jwt/auth';
 import { updateSession } from '../session/auth';
 import { encryptSession } from './../session/auth/crypto';
 import settings from '../../../../../../../settings';
+import { mobileDetect, generateUrl } from '../../common/helpers';
 
 export function facebookStategy(User) {
   passport.use(
@@ -58,9 +59,11 @@ export function facebookAuth(module, app, SECRET, User) {
   app.use(passport.initialize());
   app.get('/auth/facebook', passport.authenticate('facebook'));
   app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
+    const os = mobileDetect(req.headers['user-agent']);
     const user = await User.getUserWithPassword(req.user.id);
-    const md = new MobileDetect(req.headers['user-agent']);
-    const port = md.os() === 'iOS' ? '19500' : '19000';
+    const ipAddress = ip.address();
+    const port = os === 'iOS' ? process.env.IOS_PORT : process.env.ANDROID_PORT;
+    const redirectUrl = generateUrl(req.headers['user-agent'], ipAddress, os, port);
 
     if (module === 'jwt') {
       const refreshSecret = SECRET + user.password;
@@ -81,13 +84,15 @@ export function facebookAuth(module, app, SECRET, User) {
         maxAge: 60 * 60 * 24 * 7,
         httpOnly: false
       });
+
       req.universalCookies.set('r-refresh-token', refreshToken, {
         maxAge: 60 * 60 * 24 * 7,
         httpOnly: false
       });
-      if (['iOS', 'AndroidOS'].includes(md.os())) {
+
+      if (['iOS', 'AndroidOS'].includes(os)) {
         res.redirect(
-          `${settings.user.MOBILE_APP_URL}:${port}/+?data=` +
+          `${redirectUrl}?data=` +
             JSON.stringify({
               tokens: { token: token, refreshToken: refreshToken }
             })
@@ -100,9 +105,9 @@ export function facebookAuth(module, app, SECRET, User) {
         req.session.userId = req.user.id;
       }
       await updateSession(req, req.session);
-      if (['iOS', 'AndroidOS'].includes(md.os())) {
+      if (['iOS', 'AndroidOS'].includes(os)) {
         res.redirect(
-          `${settings.user.MOBILE_APP_URL}:${port}/+?data=` +
+          `${redirectUrl}?data=` +
             JSON.stringify({
               session: encryptSession(req.session)
             })

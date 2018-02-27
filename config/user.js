@@ -1,9 +1,6 @@
 const CERTIFICATE_DEVSERIAL = '00';
-const LOCAL_URL = 'exp://192.168.0.155'; //use you local IP
-const PRODUCTION_URL = 'com.sysgears.apollokit://';
 export default {
   secret: process.env.NODE_ENV === 'test' ? 'secret for tests' : process.env.AUTH_SECRET,
-  MOBILE_APP_URL: process.env.NODE_ENV === 'production' ? PRODUCTION_URL : LOCAL_URL,
   auth: {
     password: {
       confirm: true,

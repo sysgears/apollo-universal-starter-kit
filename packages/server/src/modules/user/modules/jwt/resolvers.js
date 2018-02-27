@@ -28,67 +28,6 @@ export default pubsub => ({
     }
   },
   Mutation: {
-    async register(obj, { input }, context) {
-      try {
-        const e = new FieldError();
-
-        const userExists = await context.User.getUserByUsername(input.username);
-        if (userExists) {
-          e.setError('username', 'Username already exists.');
-        }
-
-        const emailExists = await context.User.getUserByEmail(input.email);
-        if (emailExists) {
-          e.setError('email', 'E-mail already exists.');
-        }
-
-        e.throwIf();
-
-        let userId = 0;
-        if (!emailExists) {
-          let isActive = false;
-          if (!settings.user.auth.password.confirm) {
-            isActive = true;
-          }
-
-          [userId] = await context.User.register({ ...input, isActive });
-
-          // if user has previously logged with facebook auth
-        } else {
-          await context.User.updatePassword(emailExists.userId, input.password);
-          userId = emailExists.userId;
-        }
-
-        const user = await context.User.getUser(userId);
-
-        if (context.mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && context.req) {
-          // async email
-          jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
-            const encodedToken = Buffer.from(emailToken).toString('base64');
-            let url;
-            if (__DEV__) {
-              url = `${context.req.protocol}://localhost:3000/confirmation/${encodedToken}`;
-            }
-            url = `${context.req.protocol}://${context.req.get('host')}/confirmation/${encodedToken}`;
-            context.mailer.sendMail({
-              from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
-              to: user.email,
-              subject: 'Confirm Email',
-              html: `<p>Hi, ${user.username}!</p>
-              <p>Welcome to ${settings.app.name}. Please click the following link to confirm your email:</p>
-              <p><a href="${url}">${url}</a></p>
-              <p>Below are your login information</p>
-              <p>Your email is: ${user.email}</p>
-              <p>Your password is: ${input.password}</p>`
-            });
-          });
-        }
-
-        return { user };
-      } catch (e) {
-        return { errors: e };
-      }
-    },
     async login(obj, { input: { email, password } }, context) {
       try {
         const result = await tryLogin(email, password, context.User, context.SECRET);

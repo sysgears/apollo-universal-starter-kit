@@ -11,7 +11,7 @@ import { withUser, withCheckAction } from '../../../common/containers/AuthBase';
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
 
-const facebookLogin = async () => {
+const facebookLogin = () => {
   Linking.openURL(`${protocol}//${hostname}:${serverPort}/auth/facebook`);
 };
 

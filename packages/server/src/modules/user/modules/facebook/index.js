@@ -1,12 +1,10 @@
 import { pick } from 'lodash';
 import passport from 'passport';
-import ip from 'ip';
 import FacebookStrategy from 'passport-facebook';
 import { createTokens } from '../jwt/auth';
 import { updateSession } from '../session/auth';
 import { encryptSession } from './../session/auth/crypto';
 import settings from '../../../../../../../settings';
-import { mobileDetect, generateUrl } from '../../common/helpers';
 
 export function facebookStategy(User) {
   passport.use(
@@ -57,13 +55,12 @@ export function facebookStategy(User) {
 
 export function facebookAuth(module, app, SECRET, User) {
   app.use(passport.initialize());
-  app.get('/auth/facebook', passport.authenticate('facebook'));
+  app.get('/auth/facebook', (req, res, next) => {
+    passport.authenticate('facebook', { state: req.query.expoUrl })(req, res, next);
+  });
   app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
-    const os = mobileDetect(req.headers['user-agent']);
     const user = await User.getUserWithPassword(req.user.id);
-    const ipAddress = ip.address();
-    const port = os === 'iOS' ? process.env.IOS_PORT : process.env.ANDROID_PORT;
-    const redirectUrl = generateUrl(req.headers['user-agent'], ipAddress, os, port);
+    const redirectUrl = req.query.state;
 
     if (module === 'jwt') {
       const refreshSecret = SECRET + user.password;
@@ -90,7 +87,7 @@ export function facebookAuth(module, app, SECRET, User) {
         httpOnly: false
       });
 
-      if (['iOS', 'AndroidOS'].includes(os)) {
+      if (redirectUrl) {
         res.redirect(
           `${redirectUrl}?data=` +
             JSON.stringify({
@@ -105,7 +102,7 @@ export function facebookAuth(module, app, SECRET, User) {
         req.session.userId = req.user.id;
       }
       await updateSession(req, req.session);
-      if (['iOS', 'AndroidOS'].includes(os)) {
+      if (redirectUrl) {
         res.redirect(
           `${redirectUrl}?data=` +
             JSON.stringify({

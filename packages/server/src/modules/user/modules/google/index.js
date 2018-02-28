@@ -1,12 +1,10 @@
 import { pick } from 'lodash';
 import passport from 'passport';
-import ip from 'ip';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { createTokens } from '../jwt/auth';
 import settings from '../../../../../../../settings';
 import { updateSession } from '../session/auth';
 import { encryptSession } from './../session/auth/crypto';
-import { mobileDetect, generateUrl } from '../../common/helpers';
 
 export function googleStategy(User) {
   passport.use(
@@ -64,20 +62,16 @@ export function googleStategy(User) {
 
 export function googleAuth(module, app, SECRET, User) {
   app.use(passport.initialize());
-  app.get(
-    '/auth/google',
+  app.get('/auth/google', (req, res, next) => {
     passport.authenticate('google', {
-      scope: settings.user.auth.google.scope
-    })
-  );
+      scope: settings.user.auth.google.scope,
+      state: req.query.expoUrl
+    })(req, res, next);
+  });
 
   app.get('/auth/google/callback', passport.authenticate('google', { session: false }), async function(req, res) {
     const user = await User.getUserWithPassword(req.user.id);
-    const os = mobileDetect(req.headers['user-agent']);
-    const ipAddress = ip.address();
-    const port = os === 'iOS' ? process.env.IOS_PORT : process.env.ANDROID_PORT;
-    const redirectUrl = generateUrl(req.headers['user-agent'], ipAddress, os, port);
-
+    const redirectUrl = req.query.state;
     if (module === 'jwt') {
       const refreshSecret = SECRET + user.password;
       const [token, refreshToken] = await createTokens(req.user, SECRET, refreshSecret);
@@ -98,7 +92,7 @@ export function googleAuth(module, app, SECRET, User) {
         maxAge: 60 * 60 * 24 * 7,
         httpOnly: false
       });
-      if (['iOS', 'AndroidOS'].includes(os)) {
+      if (redirectUrl) {
         res.redirect(
           `${redirectUrl}?data=` +
             JSON.stringify({
@@ -113,7 +107,7 @@ export function googleAuth(module, app, SECRET, User) {
         req.session.userId = req.user.id;
       }
       await updateSession(req, req.session);
-      if (['iOS', 'AndroidOS'].includes(os)) {
+      if (redirectUrl) {
         res.redirect(
           `${redirectUrl}?data=` +
             JSON.stringify({

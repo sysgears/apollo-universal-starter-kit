@@ -1,7 +1,7 @@
 import React from 'react';
 import url from 'url';
 import { View, StyleSheet, Linking, Button, TouchableOpacity, Text } from 'react-native';
-import { SecureStore } from 'expo';
+import { SecureStore, Constants } from 'expo';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
@@ -12,7 +12,9 @@ const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
 
 const facebookLogin = () => {
-  Linking.openURL(`${protocol}//${hostname}:${serverPort}/auth/facebook`);
+  Linking.openURL(
+    `${protocol}//${hostname}:${serverPort}/auth/facebook?expoUrl=${encodeURIComponent(Constants.linkingUrl)}`
+  );
 };
 
 const FacebookButton = () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import url from 'url';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, Linking, Button, TouchableOpacity, Text } from 'react-native';
-import { SecureStore } from 'expo';
+import { SecureStore, Constants } from 'expo';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../jwt/graphql/CurrentUserQuery.graphql';
@@ -12,7 +12,9 @@ const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
 
 const googleLogin = () => {
-  Linking.openURL(`${protocol}//${hostname}:${serverPort}/auth/google`);
+  Linking.openURL(
+    `${protocol}//${hostname}:${serverPort}/auth/google/?expoUrl=${encodeURIComponent(Constants.linkingUrl)}`
+  );
 };
 
 const GoogleButton = () => {

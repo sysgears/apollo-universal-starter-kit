@@ -11,7 +11,7 @@ if (__DEV__) {
 }
 
 const googleLogin = () => {
-  window.location = `${protocol}//${hostname}${serverPort ? ':' : ''}${serverPort || ''}/auth/google`;
+  window.location = `${protocol}//${hostname}${serverPort ? `:${serverPort}` : ''}/auth/google`;
 };
 
 const GoogleButton = () => {

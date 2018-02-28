@@ -9,12 +9,12 @@ import CURRENT_USER_QUERY from '../../../common/graphql/CurrentUserQuery.graphql
 import { withUser, withCheckAction } from '../../../common/containers/AuthBase';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
-console.log(url.parse('https://apollo-universal-starter-kit.herokuapp.com/graphql'));
 let serverPort = process.env.PORT || port;
 
 const facebookLogin = () => {
-  const url = `${protocol}//${hostname}${serverPort ? ':' : ''}${serverPort ||
-    ''}/auth/facebook?expoUrl=${encodeURIComponent(Constants.linkingUrl)}`;
+  const url = `${protocol}//${hostname}${serverPort ? `:${serverPort}` : ''}/auth/facebook?expoUrl=${encodeURIComponent(
+    Constants.linkingUrl
+  )}`;
   if (Platform.OS === 'ios') {
     WebBrowser.openBrowserAsync(url);
   } else {

@@ -12,8 +12,9 @@ const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
 
 const googleLogin = () => {
-  const url = `${protocol}//${hostname}${serverPort ? ':' : ''}${serverPort ||
-    ''}/auth/google?expoUrl=${encodeURIComponent(Constants.linkingUrl)}`;
+  const url = `${protocol}//${hostname}${serverPort ? `:${serverPort}` : ''}/auth/google?expoUrl=${encodeURIComponent(
+    Constants.linkingUrl
+  )}`;
   if (Platform.OS === 'ios') {
     WebBrowser.openBrowserAsync(url);
   } else {

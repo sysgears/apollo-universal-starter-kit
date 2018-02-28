@@ -11,7 +11,7 @@ if (__DEV__) {
 }
 
 const facebookLogin = () => {
-  window.location = `${protocol}//${hostname}${serverPort ? ':' : ''}${serverPort || ''}/auth/facebook`;
+  window.location = `${protocol}//${hostname}${serverPort ? `:${serverPort}` : ''}/auth/facebook`;
 };
 
 const FacebookButton = () => {

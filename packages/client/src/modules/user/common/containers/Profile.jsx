@@ -5,9 +5,9 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import ProfileView from '../../../common/components/ProfileView';
+import ProfileView from '../components/ProfileView';
 
-import CURRENT_USER_QUERY from '../../../common/graphql/CurrentUserQuery.graphql';
+import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 class Profile extends React.Component {
   render() {

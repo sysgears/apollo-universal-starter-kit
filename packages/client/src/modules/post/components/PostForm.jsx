@@ -12,7 +12,7 @@ const postFormSchema = {
 
 const validate = values => validateForm(values, postFormSchema);
 
-const PostForm = ({ values, handleSubmit, valid, setFieldValue, setFieldTouched }) => {
+const PostForm = ({ values, handleSubmit, setFieldValue, setFieldTouched }) => {
   return (
     <FormView>
       <Field
@@ -33,9 +33,7 @@ const PostForm = ({ values, handleSubmit, valid, setFieldValue, setFieldTouched 
         onChangeText={text => setFieldValue('content', text)}
         onBlur={() => setFieldTouched('content', true)}
       />
-      <FormButton onPress={handleSubmit} disabled={!valid}>
-        Save
-      </FormButton>
+      <FormButton onPress={handleSubmit}>Save</FormButton>
     </FormView>
   );
 };
@@ -45,7 +43,6 @@ PostForm.propTypes = {
   onSubmit: PropTypes.func,
   setFieldTouched: PropTypes.func,
   setFieldValue: PropTypes.func,
-  valid: PropTypes.bool,
   values: PropTypes.object
 };
 

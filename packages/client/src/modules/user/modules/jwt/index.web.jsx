@@ -10,7 +10,14 @@ import Login from './containers/Login.web';
 import ForgotPassword from '../../common/containers/ForgotPassword';
 import ResetPassword from '../../common/containers/ResetPassword';
 
-import { AuthRoute, IfLoggedIn, withUser, withLoadedUser, withLogout, IfNotLoggedIn } from './containers/Auth.web';
+import {
+  AuthRoute,
+  IfLoggedIn,
+  withUser,
+  withLoadedUser,
+  withLogout,
+  IfNotLoggedIn
+} from '../../common/containers/Auth.web';
 
 import Feature from '../../../connector';
 

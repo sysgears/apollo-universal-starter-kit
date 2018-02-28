@@ -54,15 +54,14 @@ export default class PostCommentsView extends React.PureComponent {
   };
 
   render() {
-    const { postId, comment, addComment, editComment, comments } = this.props;
-
+    const { postId, comment, addComment, editComment, comments, onCommentSelect } = this.props;
     return (
       <View>
         <Text style={styles.title}>Comments</Text>
         <PostCommentForm
           postId={postId}
-          onSubmit={this.onSubmit(comment, postId, addComment, editComment)}
-          initialValues={comment}
+          onSubmit={this.onSubmit(comment, postId, addComment, editComment, onCommentSelect)}
+          comment={comment}
         />
         {comments.length > 0 && (
           <ScrollView style={styles.list} keyboardDismissMode="on-drag">

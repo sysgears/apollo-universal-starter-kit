@@ -11,9 +11,9 @@ const commentFormSchema = {
 
 const validate = values => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, initialValues, setFieldTouched, setFieldValue }) => {
+const PostCommentForm = ({ values, handleSubmit, comment, setFieldTouched, setFieldValue }) => {
   let operation = 'Add';
-  if (initialValues.id !== null) {
+  if (comment.id !== null) {
     operation = 'Edit';
   }
 
@@ -36,7 +36,7 @@ PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
   setFieldTouched: PropTypes.func,
   setFieldValue: PropTypes.func,
-  initialValues: PropTypes.object,
+  comment: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   values: PropTypes.object

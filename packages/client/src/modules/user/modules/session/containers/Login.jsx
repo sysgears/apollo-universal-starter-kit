@@ -9,7 +9,7 @@ import { graphql, compose, withApollo } from 'react-apollo';
 import LoginView from '../../../common/components/LoginView';
 import log from '../../../../../../../common/log';
 
-import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
+import CURRENT_USER_QUERY from '../../../common/graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
 import { withCheckAction } from '../../../common/containers/AuthBase';
 

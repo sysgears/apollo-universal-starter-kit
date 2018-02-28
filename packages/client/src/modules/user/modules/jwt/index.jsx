@@ -8,7 +8,6 @@ import Profile from './containers/Profile';
 import Login from './containers/Login';
 import Logout from '../../common/containers/Logout';
 import UsersList from '../../common/containers/UsersList';
-import resolvers from './resolvers';
 
 import Feature from '../../../connector';
 
@@ -141,7 +140,6 @@ export default new Feature({
       }
     }
   },
-  resolver: resolvers,
   middleware: tokenMiddleware,
   afterware: tokenAfterware,
   connectionParam: connectionParam

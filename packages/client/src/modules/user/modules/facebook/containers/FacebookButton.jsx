@@ -1,20 +1,25 @@
 import React from 'react';
 import url from 'url';
-import { View, StyleSheet, Linking, Button, TouchableOpacity, Text } from 'react-native';
-import { SecureStore, Constants } from 'expo';
+import { View, StyleSheet, Linking, Button, TouchableOpacity, Text, Platform } from 'react-native';
+import { SecureStore, Constants, WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import CURRENT_USER_QUERY from '../../jwt/graphql/CurrentUserQuery.graphql';
+import CURRENT_USER_QUERY from '../../../common/graphql/CurrentUserQuery.graphql';
 import { withUser, withCheckAction } from '../../../common/containers/AuthBase';
 
 const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
 let serverPort = process.env.PORT || port;
 
 const facebookLogin = () => {
-  Linking.openURL(
-    `${protocol}//${hostname}:${serverPort}/auth/facebook?expoUrl=${encodeURIComponent(Constants.linkingUrl)}`
-  );
+  const url = `${protocol}//${hostname}:${serverPort}/auth/facebook?expoUrl=${encodeURIComponent(
+    Constants.linkingUrl
+  )}`;
+  if (Platform.OS === 'ios') {
+    WebBrowser.openBrowserAsync(url);
+  } else {
+    Linking.openURL(url);
+  }
 };
 
 const FacebookButton = () => {
@@ -67,6 +72,9 @@ class FacebookComponent extends React.Component {
         data: result.data
       });
       changeAction('Login');
+    }
+    if (Platform.OS === 'ios') {
+      WebBrowser.dismissBrowser();
     }
   };
 

@@ -9,7 +9,6 @@ import Register from '../../common/containers/Register';
 import Login from './containers/Login.web';
 import ForgotPassword from '../../common/containers/ForgotPassword';
 import ResetPassword from '../../common/containers/ResetPassword';
-import resolvers from './resolvers';
 
 import { AuthRoute, IfLoggedIn, withUser, withLoadedUser, withLogout, IfNotLoggedIn } from './containers/Auth.web';
 
@@ -74,7 +73,6 @@ export default new Feature({
       </NavLink>
     </IfNotLoggedIn>
   ],
-  resolver: resolvers,
   middleware: tokenMiddleware,
   // eslint-disable-next-line react/display-name
   rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />

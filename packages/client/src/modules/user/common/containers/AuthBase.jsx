@@ -5,7 +5,7 @@ import { withApollo, graphql, compose } from 'react-apollo';
 
 import log from '../../../../../../common/log';
 
-import CURRENT_USER_QUERY from '../../modules/jwt/graphql/CurrentUserQuery.graphql';
+import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../../modules/jwt/graphql/Logout.graphql';
 import USER_ACTION_QUERY from '../graphql/UserActions.client.graphql';
 import CHANGE_ACTION from '../graphql/ChangeUserAction.client.graphql';

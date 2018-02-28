@@ -11,7 +11,7 @@ const commentFormSchema = {
 
 const validate = values => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, initialValues }) => {
+const PostCommentForm = ({ values, handleSubmit, initialValues, setFieldTouched, setFieldValue }) => {
   let operation = 'Add';
   if (initialValues.id !== null) {
     operation = 'Edit';
@@ -19,7 +19,14 @@ const PostCommentForm = ({ values, handleSubmit, initialValues }) => {
 
   return (
     <FormView>
-      <Field name="content" component={RenderField} type="text" value={values.content} />
+      <Field
+        name="content"
+        component={RenderField}
+        type="text"
+        value={values.content}
+        onChangeText={text => setFieldValue('content', text)}
+        onBlur={() => setFieldTouched('content', true)}
+      />
       <FormButton onPress={handleSubmit}>{operation}</FormButton>
     </FormView>
   );
@@ -27,6 +34,8 @@ const PostCommentForm = ({ values, handleSubmit, initialValues }) => {
 
 PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
+  setFieldTouched: PropTypes.func,
+  setFieldValue: PropTypes.func,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,

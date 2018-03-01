@@ -25,7 +25,6 @@ const userFormSchema = {
 const validate = values => validateForm(values, userFormSchema);
 
 const UserForm = ({ values, handleSubmit, error, setFieldValue }) => {
-  // noinspection JSAnnotator
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
   return (
     <Form name="user" onSubmit={handleSubmit}>
@@ -42,7 +41,7 @@ const UserForm = ({ values, handleSubmit, error, setFieldValue }) => {
         type="text"
         label="First Name"
         value={profile.firstName}
-        onChange={e => setFieldValue('profile', { ...profile, firstName: e.target.value })}
+        onChange={value => setFieldValue('profile', { ...profile, firstName: value })}
       />
       <Field
         name="lastName"
@@ -50,15 +49,16 @@ const UserForm = ({ values, handleSubmit, error, setFieldValue }) => {
         type="text"
         label="Last Name"
         value={profile.lastName}
-        onChange={e => setFieldValue('profile', { ...profile, lastName: e.target.value })}
+        onChange={value => setFieldValue('profile', { ...profile, lastName: value })}
       />
       {settings.user.auth.certificate.enabled && (
         <Field
-          name="auth.certificate.serial"
+          name="serial"
           component={RenderField}
           type="text"
           label="Serial"
-          value={(auth && auth.certificate.serial) || ''}
+          value={auth && auth.certificate && auth.certificate.serial}
+          onChange={value => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
         />
       )}
       <Field name="password" component={RenderField} type="password" label="Password" value={password} />
@@ -104,12 +104,16 @@ const UserFormWithFormik = withFormik({
       profile: {
         firstName: profile && profile.firstName,
         lastName: profile && profile.lastName
+      },
+      auth: {
+        ...values.initialValues.auth
       }
     };
   },
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm({ username: '', email: '', password: '', passwordConfirmation: '' });
+  async handleSubmit(values, { setErrors, resetForm, props: { onSubmit } }) {
+    await onSubmit(values)
+      .then(() => resetForm({ username: '', email: '', password: '', passwordConfirmation: '' }))
+      .catch(e => setErrors(e));
   },
   displayName: 'SignUpForm ', // helps with React DevTools
   validate: values => validate(values)

@@ -17,7 +17,7 @@ const contactFormSchema = {
 
 const validate = values => validateForm(values, contactFormSchema);
 
-const LoginForm = ({ handleSubmit, setFieldValue, setFieldTouched, valid, values }) => {
+const LoginForm = ({ handleSubmit, valid, values }) => {
   return (
     <View style={styles.form}>
       <Field
@@ -30,8 +30,6 @@ const LoginForm = ({ handleSubmit, setFieldValue, setFieldTouched, valid, values
         label="Email"
         placeholder="Type Your Email"
         value={values.email}
-        onChangeText={text => setFieldValue('email', text)}
-        onBlur={() => setFieldTouched('email', true)}
       />
       <Field
         autoCapitalize="none"
@@ -43,8 +41,6 @@ const LoginForm = ({ handleSubmit, setFieldValue, setFieldTouched, valid, values
         label="Password"
         placeholder="Type Your Password"
         value={values.password}
-        onChangeText={text => setFieldValue('password', text)}
-        onBlur={() => setFieldTouched('password', true)}
       />
       <Button style={styles.submit} onPress={handleSubmit} disabled={valid}>
         Sign In
@@ -57,8 +53,6 @@ const LoginForm = ({ handleSubmit, setFieldValue, setFieldTouched, valid, values
 
 LoginForm.propTypes = {
   handleSubmit: PropTypes.func,
-  setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func,
   onSubmit: PropTypes.func,
   valid: PropTypes.bool,
   values: PropTypes.object

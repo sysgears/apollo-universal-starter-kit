@@ -16,7 +16,7 @@ export default class RegisterView extends React.PureComponent {
     const { register } = this.props;
     const result = await register(values);
 
-    if (result.errors) {
+    if (result && result.errors) {
       let submitError = {
         _error: 'Registration failed!'
       };

@@ -45,11 +45,16 @@ RegisterForm.propTypes = {
 };
 
 const RegisterFormWithFormik = withFormik({
+  mapPropsToValues: () => ({ username: '', email: '', password: '', passwordConfirmation: '' }),
   validate: values => validate(values),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm({ username: '', email: '', password: '', passwordConfirmation: '' });
+  async handleSubmit(values, { setErrors, resetForm, props: { onSubmit } }) {
+    onSubmit(values)
+      .then(() => resetForm({ username: '', email: '', password: '', passwordConfirmation: '' }))
+      .catch(e => {
+        setErrors(e);
+      });
   },
+  enableReinitialize: true,
   displayName: 'SignUpForm' // helps with React DevTools
 });
 

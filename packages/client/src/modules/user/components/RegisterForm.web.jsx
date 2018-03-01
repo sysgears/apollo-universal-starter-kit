@@ -15,7 +15,6 @@ const registerFormSchema = {
 const validate = values => validateForm(values, registerFormSchema);
 
 const RegisterForm = ({ values, handleSubmit, submitting, error }) => {
-  //errors.username = 'fail';
   return (
     <Form name="register" onSubmit={handleSubmit}>
       <Field name="username" component={RenderField} type="text" label="Username" value={values.username} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, FlatList, Text, View, ScrollView, Keyboard } from 'react-native';
+import { StyleSheet, FlatList, Text, View, Keyboard } from 'react-native';
 import { SwipeAction } from '../../common/components/native';
 
 import PostCommentForm from './PostCommentForm';
@@ -65,9 +65,9 @@ export default class PostCommentsView extends React.PureComponent {
           comment={comment}
         />
         {comments.length > 0 && (
-          <ScrollView style={styles.list} keyboardDismissMode="on-drag">
+          <View style={styles.list} keyboardDismissMode="on-drag">
             <FlatList data={comments} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />
-          </ScrollView>
+          </View>
         )}
       </View>
     );

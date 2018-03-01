@@ -12,9 +12,9 @@ const contactFormSchema = {
 
 const validate = values => validateForm(values, contactFormSchema);
 
-const ResetPasswordForm = ({ values, handleSubmit, submitting, onSubmit, error }) => {
+const ResetPasswordForm = ({ values, handleSubmit, error }) => {
   return (
-    <Form name="resetPassword" onSubmit={handleSubmit(onSubmit)}>
+    <Form name="resetPassword" onSubmit={handleSubmit}>
       <Field name="password" component={RenderField} type="password" label="Password" value={values.password} />
       <Field
         name="passwordConfirmation"
@@ -24,7 +24,7 @@ const ResetPasswordForm = ({ values, handleSubmit, submitting, onSubmit, error }
         value={values.passwordConfirmation}
       />
       {error && <Alert color="error">{error}</Alert>}
-      <Button color="primary" type="submit" disabled={submitting}>
+      <Button color="primary" type="submit">
         Reset Password
       </Button>
     </Form>
@@ -33,7 +33,7 @@ const ResetPasswordForm = ({ values, handleSubmit, submitting, onSubmit, error }
 
 ResetPasswordForm.propTypes = {
   handleSubmit: PropTypes.func,
-  values: PropTypes.func,
+  values: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   error: PropTypes.string
@@ -41,10 +41,11 @@ ResetPasswordForm.propTypes = {
 
 const ResetPasswordFormWithFormik = withFormik({
   enableReinitialize: true,
-  mapPropsToValues: () => ({ email: '' }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm();
+  mapPropsToValues: () => ({ password: '', passwordConfirmation: '' }),
+  async handleSubmit(values, { setErrors, resetForm, props: { onSubmit } }) {
+    await onSubmit(values)
+      .then(() => resetForm())
+      .catch(e => setErrors(e));
   },
   validate: values => validate(values),
   displayName: 'LoginForm' // helps with React DevTools

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
@@ -29,8 +29,8 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
     );
   } else {
     return (
-      <View style={styles.container}>
-        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} initialValues={postObj ? postObj : {}} />
+      <ScrollView style={styles.container}>
+        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
         {postObj && (
           <PostComments
             postId={navigation.state.params.id}
@@ -38,7 +38,7 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
             subscribeToMore={subscribeToMore}
           />
         )}
-      </View>
+      </ScrollView>
     );
   }
 };

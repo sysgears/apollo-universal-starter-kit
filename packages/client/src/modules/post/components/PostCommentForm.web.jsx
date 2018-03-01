@@ -11,12 +11,12 @@ const commentFormSchema = {
 
 const validate = values => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, initialValues }) => {
+const PostCommentForm = ({ values, handleSubmit, comment }) => {
   return (
     <Form name="comment" onSubmit={handleSubmit}>
       <Row>
         <Col xs={2}>
-          <Label>{initialValues.id === null ? 'Add comment' : 'Edit comment'}</Label>
+          <Label>{comment.id === null ? 'Add comment' : 'Edit comment'}</Label>
         </Col>
         <Col xs={8}>
           <Field name="content" component={RenderField} type="text" value={values.content} />
@@ -33,7 +33,7 @@ const PostCommentForm = ({ values, handleSubmit, initialValues }) => {
 
 PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
-  initialValues: PropTypes.object,
+  comment: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   values: PropTypes.object,

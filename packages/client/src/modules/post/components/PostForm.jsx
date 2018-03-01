@@ -12,21 +12,20 @@ const postFormSchema = {
 
 const validate = values => validateForm(values, postFormSchema);
 
-const PostForm = ({ values, handleSubmit, valid, onSubmit }) => {
+const PostForm = ({ values, handleSubmit }) => {
   return (
     <FormView>
       <Field name="title" component={RenderField} type="text" label="Title" value={values.title} />
       <Field name="content" component={RenderField} type="text" label="Content" value={values.content} />
-      <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
-        Save
-      </FormButton>
+      <FormButton onPress={handleSubmit}>Save</FormButton>
     </FormView>
   );
 };
 
 PostForm.propTypes = {
   handleSubmit: PropTypes.func,
-  onSubmit: PropTypes.func,
+  setFieldTouched: PropTypes.func,
+  setFieldValue: PropTypes.func,
   valid: PropTypes.bool,
   values: PropTypes.object
 };

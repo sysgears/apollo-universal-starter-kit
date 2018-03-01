@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Platform } from 'react-native';
 import PropTypes from 'prop-types';
 
 export default class FieldAdapter extends Component {
@@ -8,6 +9,7 @@ export default class FieldAdapter extends Component {
 
   static propTypes = {
     component: PropTypes.func,
+    onChangeText: PropTypes.func,
     onChange: PropTypes.func,
     onBlur: PropTypes.func,
     name: PropTypes.string.isRequired,
@@ -25,9 +27,43 @@ export default class FieldAdapter extends Component {
     }
   }
 
+  onChange = e => {
+    const { onChange } = this.props;
+    if (onChange) {
+      onChange(e.target.value, e);
+    } else {
+      this.context.formik.handleChange(e);
+    }
+  };
+
+  onBlur = e => {
+    const { onBlur, name } = this.props;
+    const { formik } = this.context;
+    if (onBlur) {
+      onBlur(e);
+    } else {
+      if (Platform.OS === 'web') {
+        formik.handleBlur(e);
+      } else {
+        formik.setFieldTouched(name, true);
+      }
+    }
+  };
+
+  onChangeText = value => {
+    const { onChangeText, onChange, name } = this.props;
+    if (onChange && !onChangeText) {
+      onChange(value);
+    } else if (onChangeText) {
+      onChangeText(value);
+    } else {
+      this.context.formik.setFieldValue(name, value);
+    }
+  };
+
   render() {
     const { formik } = this.context;
-    const { component, name, defaultValue, defaultChecked, onChange, disabled, onBlur } = this.props;
+    const { component, name, defaultValue, defaultChecked, disabled } = this.props;
     let { value, checked } = this.props;
     value = value || '';
     checked = checked || false;
@@ -37,8 +73,7 @@ export default class FieldAdapter extends Component {
     };
 
     const input = {
-      onChange: onChange ? onChange : formik.handleChange,
-      onBlur: onBlur ? onBlur : formik.handleBlur,
+      onBlur: this.onBlur,
       name,
       value,
       checked,
@@ -46,6 +81,9 @@ export default class FieldAdapter extends Component {
       defaultChecked,
       disabled
     };
+
+    const changeEventHandler = Platform.OS === 'web' ? 'onChange' : 'onChangeText';
+    input[changeEventHandler] = this[changeEventHandler];
 
     return React.createElement(component, {
       ...this.props,

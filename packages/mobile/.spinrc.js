@@ -13,7 +13,7 @@ const config = {
       enabled: false
     },
     ios: {
-      entry: './src/index.js',
+      entry: './src/index.ts',
       buildDir: 'build/ios',
       dllBuildDir: 'build/ios/dll',
       stack: ['react-native', 'ios'],

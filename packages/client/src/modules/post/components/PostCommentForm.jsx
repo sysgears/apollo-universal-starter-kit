@@ -11,9 +11,9 @@ const commentFormSchema = {
 
 const validate = values => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, initialValues }) => {
+const PostCommentForm = ({ values, handleSubmit, comment }) => {
   let operation = 'Add';
-  if (initialValues.id !== null) {
+  if (comment.id !== null) {
     operation = 'Edit';
   }
 
@@ -27,7 +27,9 @@ const PostCommentForm = ({ values, handleSubmit, initialValues }) => {
 
 PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
-  initialValues: PropTypes.object,
+  setFieldValue: PropTypes.func,
+  setFieldTouched: PropTypes.func,
+  comment: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   values: PropTypes.object
@@ -36,8 +38,9 @@ PostCommentForm.propTypes = {
 const PostCommentFormWithFormik = withFormik({
   mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
   validate: values => validate(values),
-  handleSubmit: function(values, { props: { onSubmit } }) {
-    onSubmit(values);
+  handleSubmit: async (values, { resetForm, props: { onSubmit } }) => {
+    await onSubmit(values);
+    resetForm({ content: '' });
   },
   displayName: 'CommentForm', // helps with React DevTools
   enableReinitialize: true

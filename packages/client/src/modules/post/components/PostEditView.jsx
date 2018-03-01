@@ -30,7 +30,7 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
   } else {
     return (
       <View style={styles.container}>
-        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} initialValues={postObj ? postObj : {}} />
+        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
         {postObj && (
           <PostComments
             postId={navigation.state.params.id}

@@ -8,6 +8,7 @@ export default class FieldAdapter extends Component {
 
   static propTypes = {
     component: PropTypes.func,
+    onChangeText: PropTypes.func,
     onChange: PropTypes.func,
     onBlur: PropTypes.func,
     name: PropTypes.string.isRequired,
@@ -27,7 +28,7 @@ export default class FieldAdapter extends Component {
 
   render() {
     const { formik } = this.context;
-    const { component, name, defaultValue, defaultChecked, onChange, disabled, onBlur } = this.props;
+    const { component, name, defaultValue, defaultChecked, onChange, disabled, onBlur, onChangeText } = this.props;
     let { value, checked } = this.props;
     value = value || '';
     checked = checked || false;
@@ -37,7 +38,7 @@ export default class FieldAdapter extends Component {
     };
 
     const input = {
-      onChange: onChange ? onChange : formik.handleChange,
+      onChange: onChange ? onChange : onChangeText ? onChangeText : formik.handleChange,
       onBlur: onBlur ? onBlur : formik.handleBlur,
       name,
       value,

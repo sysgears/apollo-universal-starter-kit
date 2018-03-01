@@ -27,35 +27,39 @@ export default class FieldAdapter extends Component {
     }
   }
 
-  setFieldValue = () => {
-    this.context.formik.setFieldValue(this.props.name, 'dasdasdsa');
-  };
-
-  setFieldTouched = () => {
-    this.context.formik.setFieldValue(this.props.name, true);
-  };
-
   onChange = e => {
-    if (this.props.onChange) {
-      this.props.onChange(e);
+    const { onChange } = this.props;
+    if (onChange) {
+      onChange(e.target.value, e);
     } else {
       this.context.formik.handleChange(e);
     }
   };
 
   onBlur = e => {
-    if (this.props.onBlur) {
-      this.props.onBlur(e);
+    const { onBlur, name } = this.props;
+    const { formik } = this.context;
+    if (onBlur) {
+      onBlur(e);
     } else {
       if (Platform.OS === 'web') {
-        this.context.formik.handleBlur(e);
+        formik.handleBlur(e);
       } else {
-        this.context.formik.setFieldTouched(this.props.name, true);
+        formik.setFieldTouched(name, true);
       }
     }
   };
 
-  onChangeText = value => this.context.formik.setFieldValue(this.props.name, value);
+  onChangeText = value => {
+    const { onChangeText, onChange, name } = this.props;
+    if (onChange && !onChangeText) {
+      onChange(value);
+    } else if (onChangeText) {
+      onChangeText(value);
+    } else {
+      this.context.formik.setFieldValue(name, value);
+    }
+  };
 
   render() {
     const { formik } = this.context;

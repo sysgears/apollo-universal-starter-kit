@@ -42,9 +42,10 @@ ResetPasswordForm.propTypes = {
 const ResetPasswordFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ email: '' }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm();
+  async handleSubmit(values, { setErrors, resetForm, props: { onSubmit } }) {
+    await onSubmit(values)
+      .then(() => resetForm())
+      .catch(e => setErrors(e));
   },
   validate: values => validate(values),
   displayName: 'LoginForm' // helps with React DevTools

@@ -13,6 +13,7 @@ const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) 
       value={input.value}
       placeholder={label}
       onChange={input.onChange}
+      onChangeText={input.onChangeText}
       onBlur={input.onBlur}
       onFocus={input.onFocus}
       {...inputProps}

@@ -13,36 +13,12 @@ const contactFormSchema = {
 
 const validate = values => validateForm(values, contactFormSchema);
 
-const ContactForm = ({ values, handleSubmit, setFieldValue, setFieldTouched }) => {
+const ContactForm = ({ values, handleSubmit }) => {
   return (
     <FormView>
-      <Field
-        name="name"
-        component={RenderField}
-        type="text"
-        label="Name"
-        value={values.name}
-        onChangeText={text => setFieldValue('name', text)}
-        onBlur={() => setFieldTouched('name', true)}
-      />
-      <Field
-        name="email"
-        component={RenderField}
-        type="text"
-        label="Email"
-        value={values.email}
-        onChangeText={text => setFieldValue('email', text)}
-        onBlur={() => setFieldTouched('email', true)}
-      />
-      <Field
-        name="content"
-        component={RenderField}
-        type="textarea"
-        label="Content"
-        value={values.content}
-        onChangeText={text => setFieldValue('content', text)}
-        onBlur={() => setFieldTouched('content', true)}
-      />
+      <Field name="name" component={RenderField} type="text" label="Name" value={values.name} />
+      <Field name="email" component={RenderField} type="text" label="Email" value={values.email} />
+      <Field name="content" component={RenderField} type="textarea" label="Content" value={values.content} />
       <FormButton onPress={handleSubmit}>Send</FormButton>
     </FormView>
   );
@@ -50,8 +26,6 @@ const ContactForm = ({ values, handleSubmit, setFieldValue, setFieldTouched }) =
 
 ContactForm.propTypes = {
   handleSubmit: PropTypes.func,
-  setFieldTouched: PropTypes.func,
-  setFieldValue: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   error: PropTypes.string,

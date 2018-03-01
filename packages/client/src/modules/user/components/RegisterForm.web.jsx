@@ -15,6 +15,7 @@ const registerFormSchema = {
 const validate = values => validateForm(values, registerFormSchema);
 
 const RegisterForm = ({ values, handleSubmit, submitting, error }) => {
+  //errors.username = 'fail';
   return (
     <Form name="register" onSubmit={handleSubmit}>
       <Field name="username" component={RenderField} type="text" label="Username" value={values.username} />
@@ -45,11 +46,16 @@ RegisterForm.propTypes = {
 };
 
 const RegisterFormWithFormik = withFormik({
+  mapPropsToValues: () => ({ username: '', email: '', password: '', passwordConfirmation: '' }),
   validate: values => validate(values),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm({ username: '', email: '', password: '', passwordConfirmation: '' });
+  async handleSubmit(values, { setErrors, resetForm, props: { onSubmit } }) {
+    onSubmit(values)
+      .then(() => resetForm({ username: '', email: '', password: '', passwordConfirmation: '' }))
+      .catch(e => {
+        setErrors(e);
+      });
   },
+  enableReinitialize: true,
   displayName: 'SignUpForm' // helps with React DevTools
 });
 

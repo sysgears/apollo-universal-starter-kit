@@ -99,9 +99,10 @@ const UserFormWithFormik = withFormik({
       }
     };
   },
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm({ username: '', email: '', password: '', passwordConfirmation: '' });
+  async handleSubmit(values, { setErrors, resetForm, props: { onSubmit } }) {
+    await onSubmit(values)
+      .then(() => resetForm({ username: '', email: '', password: '', passwordConfirmation: '' }))
+      .catch(e => setErrors(e));
   },
   displayName: 'SignUpForm ', // helps with React DevTools
   validate: values => validate(values)

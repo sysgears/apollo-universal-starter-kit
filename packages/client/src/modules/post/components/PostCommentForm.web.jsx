@@ -19,7 +19,7 @@ const PostCommentForm = ({ values, handleSubmit, comment }) => {
           <Label>{comment.id === null ? 'Add comment' : 'Edit comment'}</Label>
         </Col>
         <Col xs={8}>
-          <Field name="content" component={RenderField} type="text" value={values.content} />
+          <Field name="content" component={RenderField} type="text" value={values.content} placeholder="Comment" />
         </Col>
         <Col xs={2}>
           <Button color="primary" type="submit" className="float-right">

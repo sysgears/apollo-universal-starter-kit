@@ -24,7 +24,7 @@ function AddComment(prev, node) {
       comments: {
         $set: [...filteredComments, node]
       }
-    }gi
+    }
   });
 }
 

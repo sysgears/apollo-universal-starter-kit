@@ -14,14 +14,15 @@ import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 
 function AddComment(prev, node) {
   // ignore if duplicate
-  if (node.id !== null && prev.post.comments.some(comment => node.id !== null && node.id === comment.id)) {
+  if (prev.post.comments.some(comment => comment.id === node.id)) {
     return prev;
   }
 
+  const filteredComments = prev.post.comments.filter(comment => comment.id);
   return update(prev, {
     post: {
       comments: {
-        $push: [node]
+        $set: [...filteredComments, node]
       }
     }
   });
@@ -121,7 +122,6 @@ const PostCommentsWithApollo = compose(
           updateQueries: {
             post: (prev, { mutationResult: { data: { addComment } } }) => {
               if (prev.post) {
-                prev.post.comments = prev.post.comments.filter(comment => comment.id);
                 return AddComment(prev, addComment);
               }
             }

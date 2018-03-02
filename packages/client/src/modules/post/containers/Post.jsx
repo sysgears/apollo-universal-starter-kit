@@ -11,7 +11,7 @@ import DELETE_POST from '../graphql/DeletePost.graphql';
 
 export function AddPost(prev, node) {
   // ignore if duplicate
-  if (node.id !== null && prev.posts.edges.some(post => node.id === post.cursor)) {
+  if (prev.posts.edges.some(post => node.id === post.cursor)) {
     return prev;
   }
 

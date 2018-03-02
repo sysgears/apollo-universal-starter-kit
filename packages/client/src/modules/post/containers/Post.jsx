@@ -15,6 +15,8 @@ export function AddPost(prev, node) {
     return prev;
   }
 
+  const filteredPosts = prev.posts.edges.filter(post => post.node.id !== null);
+
   const edge = {
     cursor: node.id,
     node: node,
@@ -27,7 +29,7 @@ export function AddPost(prev, node) {
         $set: prev.posts.totalCount + 1
       },
       edges: {
-        $unshift: [edge]
+        $set: [edge, ...filteredPosts]
       }
     }
   });

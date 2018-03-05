@@ -86,7 +86,7 @@ const withLogout = Component =>
               return { errors: logout.errors };
             }
             await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
-
+            ['token', 'refreshTon'].forEach(item => window.localStorage.removeItem(item));
             onLogout();
           } catch (e) {
             log.error(e);

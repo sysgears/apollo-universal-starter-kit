@@ -1,6 +1,6 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
-import { Route, NavLink, withRouter } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import ProfileView from '../../common/components/ProfileView';
 import { MenuItem } from '../../../../modules/common/components/web';
 import Users from '../../common/components/Users';
@@ -44,7 +44,7 @@ export default new Feature({
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={withUser(ProfileView)} />,
     <AuthRoute exact path="/users" redirect="/login" role="admin" component={Users} />,
-    <Route exact path="/users/:id" component={UserEdit} />,
+    <AuthRoute exact path="/users/:id" redirect="/login" role="admin" component={UserEdit} />,
     <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
     <AuthRoute
       exact

@@ -65,7 +65,8 @@ IfLoggedInComponent.propTypes = {
 
 const IfLoggedIn = withLoadedUser(IfLoggedInComponent);
 
-const IfNotLoggedInComponent = ({ currentUser, children }) => (!currentUser ? children : null);
+const IfNotLoggedInComponent = ({ currentUser, children, elseComponent }) =>
+  !currentUser ? children : elseComponent || null;
 IfNotLoggedInComponent.propTypes = {
   currentUser: PropTypes.object,
   children: PropTypes.node

@@ -19,7 +19,7 @@ const PostCommentForm = ({ values, handleSubmit, comment }) => {
 
   return (
     <FormView>
-      <Field name="content" component={RenderField} type="text" value={values.content} />
+      <Field name="content" component={RenderField} type="text" value={values.content} placeholder="Comment" />
       <FormButton onPress={handleSubmit}>{operation}</FormButton>
     </FormView>
   );

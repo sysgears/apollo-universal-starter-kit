@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+import { Keyboard } from 'react-native';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
@@ -63,6 +64,7 @@ const ContactFormWithFormik = withFormik({
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
   async handleSubmit(values, { resetForm, props: { onSubmit } }) {
     await onSubmit(values);
+    Keyboard.dismiss();
     resetForm();
   },
   validate: values => validate(values),

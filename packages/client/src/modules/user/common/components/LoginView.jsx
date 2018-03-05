@@ -9,11 +9,12 @@ class LoginView extends React.PureComponent {
     const result = await login(values);
 
     if (result && result.errors) {
+      console.log(111, result.errors);
       let submitError = {
         _error: 'Login failed!'
       };
-      return result.errors.map(error => (submitError[error.field] = error.message));
-      //throw submitError;
+      result.errors.map(error => (submitError[error.field] = error.message));
+      throw submitError;
     }
   };
 

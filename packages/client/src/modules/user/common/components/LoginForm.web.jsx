@@ -30,7 +30,7 @@ const LoginForm = ({ handleSubmit, submitting, error, values }) => {
       </div>
       {settings.user.auth.facebook.enabled && (
         <div className="text-center">
-          <FacebookButton type={'icon'} />
+          <FacebookButton type={'button'} />
         </div>
       )}
       {settings.user.auth.google.enabled && (

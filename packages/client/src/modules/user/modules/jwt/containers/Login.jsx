@@ -29,9 +29,11 @@ const LoginWithApollo = compose(
           const { data: { login } } = await mutate({
             variables: { input: { email, password } }
           });
-          const { token, refreshToken } = login.tokens;
-          await SecureStore.setItemAsync('token', token);
-          await SecureStore.setItemAsync('refreshToken', refreshToken);
+          if (login && login.tokens) {
+            const { token, refreshToken } = login.tokens;
+            await SecureStore.setItemAsync('token', token);
+            await SecureStore.setItemAsync('refreshToken', refreshToken);
+          }
           if (login.errors) {
             return { errors: login.errors };
           }

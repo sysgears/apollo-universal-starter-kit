@@ -26,6 +26,11 @@ const LoginWithApollo = compose(
           const { data: { login } } = await mutate({
             variables: { input: { email, password } }
           });
+          if (login && login.tokens) {
+            const { token, refreshToken } = login.tokens;
+            window.localStorage.setItem('token', token);
+            window.localStorage.setItem('refreshToken', refreshToken);
+          }
           if (login.errors) {
             return { errors: login.errors };
           }

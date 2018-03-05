@@ -4,5 +4,5 @@ import resolvers from './resolvers';
 
 export default new Feature({
   schema,
-  resolvers
+  createResolversFunc: resolvers
 });

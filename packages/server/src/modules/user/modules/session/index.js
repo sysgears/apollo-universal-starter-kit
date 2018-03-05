@@ -96,6 +96,7 @@ export default new Feature({
       User,
       user: currentUser,
       auth,
+      SECRET,
       req
     };
   },

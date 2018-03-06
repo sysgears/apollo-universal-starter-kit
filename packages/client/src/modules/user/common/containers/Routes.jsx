@@ -18,7 +18,7 @@ class MainScreenNavigator extends React.Component {
     const userFilter = value => {
       if (!value.userInfo) return true;
       const { showOnLogin, role } = value.userInfo;
-      return showOnLogin && (!role || role === currentUser.role);
+      return showOnLogin && (!role || (Array.isArray(role) ? role : [role]).includes(currentUser.role));
     };
 
     const guestFilter = value => !value.userInfo || (value.userInfo && !value.userInfo.showOnLogin);

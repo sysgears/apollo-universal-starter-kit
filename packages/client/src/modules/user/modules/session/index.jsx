@@ -79,7 +79,8 @@ export default new Feature({
     Profile: {
       screen: ProfileScreen,
       userInfo: {
-        showOnLogin: true
+        showOnLogin: true,
+        role: ['user', 'admin']
       },
       navigationOptions: {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {

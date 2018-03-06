@@ -59,17 +59,19 @@ const IfLoggedInComponent = ({ currentUser, role, children, elseComponent }) =>
 IfLoggedInComponent.propTypes = {
   currentUser: PropTypes.object,
   role: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
-  elseComponent: PropTypes.node,
-  children: PropTypes.node
+  children: PropTypes.node,
+  elseComponent: PropTypes.node
 };
 
 const IfLoggedIn = withLoadedUser(IfLoggedInComponent);
 
 const IfNotLoggedInComponent = ({ currentUser, children, elseComponent }) =>
   !currentUser ? children : elseComponent || null;
+
 IfNotLoggedInComponent.propTypes = {
   currentUser: PropTypes.object,
-  children: PropTypes.node
+  children: PropTypes.node,
+  elseComponent: PropTypes.node
 };
 
 const IfNotLoggedIn = withLoadedUser(IfNotLoggedInComponent);

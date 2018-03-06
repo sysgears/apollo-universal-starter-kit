@@ -68,7 +68,7 @@ export default new Feature({
       exact
       path="/login"
       redirectOnLoggedIn
-      redirect="/profile"
+      redirect="/"
       component={withRouter(({ history }) => <Login onLogin={() => history.push('/profile')} />)}
     />,
     <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,

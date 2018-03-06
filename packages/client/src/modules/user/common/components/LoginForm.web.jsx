@@ -63,12 +63,10 @@ LoginForm.propTypes = {
 const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ email: '', password: '' }),
-  async handleSubmit(values, { setErrors, resetForm, props: { onSubmit } }) {
-    await onSubmit(values)
-      .then(() => resetForm())
-      .catch(e => {
-        setErrors(e);
-      });
+  async handleSubmit(values, { setErrors, props: { onSubmit } }) {
+    await onSubmit(values).catch(e => {
+      setErrors(e);
+    });
   },
   validate: values => validate(values),
   displayName: 'LoginForm' // helps with React DevTools

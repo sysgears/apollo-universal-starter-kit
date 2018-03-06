@@ -23,7 +23,7 @@ class Login extends React.Component {
 const LoginWithApollo = compose(
   withApollo,
   graphql(LOGIN, {
-    props: ({ ownProps: { client, onLogin, changeAction }, mutate }) => ({
+    props: ({ ownProps: { client, changeAction }, mutate }) => ({
       login: async ({ email, password }) => {
         try {
           const { data: { login } } = await mutate({
@@ -39,7 +39,6 @@ const LoginWithApollo = compose(
           }
           await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
           await changeAction('Login');
-          onLogin();
         } catch (e) {
           log.error(e);
         }

@@ -1,12 +1,12 @@
 import { graphiqlExpress } from 'apollo-server-express';
 import url from 'url';
 
-const { protocol, hostname, pathname, port } = url.parse(__BACKEND_URL__);
+const { protocol, hostname, pathname, port } = url.parse(__API_URL__);
 
 export default graphiqlExpress(req => {
   const subscriptionsUrl = (hostname === 'localhost'
     ? `${protocol}//${url.parse(req.get('Referer') || `${protocol}//${hostname}`).hostname}:${port}${pathname}`
-    : __BACKEND_URL__
+    : __API_URL__
   ).replace(/^http/, 'ws');
 
   return {

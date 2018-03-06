@@ -8,7 +8,7 @@ import log from '../../common/log';
 // eslint-disable-next-line import/no-mutable-exports
 let server;
 
-const { port } = url.parse(__BACKEND_URL__);
+const { port } = url.parse(__API_URL__);
 const serverPort = process.env.PORT || port || 8080;
 
 server = http.createServer();

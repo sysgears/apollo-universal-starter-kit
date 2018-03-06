@@ -26,7 +26,7 @@ const store = createStore(
   {} // initial state
 );
 
-const { protocol, pathname, port } = url.parse(__BACKEND_URL__);
+const { protocol, pathname, port } = url.parse(__API_URL__);
 
 export default class Main extends React.Component {
   static propTypes = {
@@ -34,11 +34,11 @@ export default class Main extends React.Component {
   };
 
   render() {
-    const { hostname } = url.parse(__BACKEND_URL__);
+    const { hostname } = url.parse(__API_URL__);
     const uri =
       this.props.expUri && hostname === 'localhost'
         ? `${protocol}//${url.parse(this.props.expUri).hostname}:${port}${pathname}`
-        : __BACKEND_URL__;
+        : __API_URL__;
     log.info(`Connecting to GraphQL backend at: ${uri}`);
     const fetch = createApolloFetch({ uri });
     const cache = new InMemoryCache();

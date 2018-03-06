@@ -26,9 +26,9 @@ import Routes from './Routes';
 import modules from '../modules';
 import log from '../../../common/log';
 
-const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
+const { hostname, pathname, port } = url.parse(__API_URL__);
 
-const uri = hostname === 'localhost' && __SSR__ ? '/graphql' : __BACKEND_URL__;
+const uri = hostname === 'localhost' && __SSR__ ? '/graphql' : __API_URL__;
 const fetch = createApolloFetch({
   uri,
   constructOptions: modules.constructFetchOptions
@@ -70,7 +70,7 @@ for (const connectionParam of modules.connectionParams) {
 
 const wsUri = (hostname === 'localhost'
   ? `${window.location.protocol}${window.location.hostname}:${__DEV__ ? port : window.location.port}${pathname}`
-  : __BACKEND_URL__
+  : __API_URL__
 ).replace(/^http/, 'ws');
 
 const wsClient = new SubscriptionClient(wsUri, {

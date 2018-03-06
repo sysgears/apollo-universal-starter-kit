@@ -193,7 +193,7 @@ If you don't need some of these platforms you can turn off building their code i
 | buildDir                | output directory for build files                                            |
 | dllBuildDir                    | output directory for Webpack DLL files used to speed up incremental builds    |
 | webpackDevPort                 | the local port used for Webpack Dev Server process to host web frontend files |
-| \_\_BACKEND_URL__                     | URL to GraphQL backend endpoint                                               |
+| \_\_API_URL__                     | URL to GraphQL backend endpoint                                               |
 | ssr                            | Use server side rendering in backend                                          |
 | webpackDll                     | Utilize Webpack DLLs to speed up incremental builds                           |
 | frontendRefreshOnBackendChange | Trigger web frontend refresh when backend code changes                        |

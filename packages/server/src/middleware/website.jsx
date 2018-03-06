@@ -28,7 +28,7 @@ import settings from '../../../../settings';
 
 let assetMap;
 
-const { protocol, hostname, port, pathname } = url.parse(__BACKEND_URL__);
+const { protocol, hostname, port, pathname } = url.parse(__API_URL__);
 const apiUrl = `${protocol}//${hostname}:${process.env.PORT || port}${pathname}`;
 
 const renderServerSide = async (req, res) => {
@@ -46,7 +46,7 @@ const renderServerSide = async (req, res) => {
     next();
   });
   const cache = new InMemoryCache();
-  const isLocalhost = /localhost/.test(__BACKEND_URL__);
+  const isLocalhost = /localhost/.test(__API_URL__);
   let link = new BatchHttpLink({ fetch });
   const linkState = withClientState({ ...clientModules.resolvers, cache });
   let linkSchema = isLocalhost ? new SchemaLink({ schema: { ...modules.schemas } }) : {};

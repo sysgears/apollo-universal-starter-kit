@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, Linking, Button, TouchableOpacity, Text, Platform } from 'react-native';
-import { SecureStore, Constants, WebBrowser } from 'expo';
+import { SecureStore, WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../../common/graphql/CurrentUserQuery.graphql';
 import { withUser, withCheckAction } from '../../../common/containers/AuthBase';
-import urlHandler from '../../../common/helpers';
+import buildRedirectUrlForMobile from '../../../common/helpers';
 
 const googleLogin = () => {
-  const url = urlHandler(Constants.linkingUrl, 'google');
+  const url = buildRedirectUrlForMobile('google');
   if (Platform.OS === 'ios') {
     WebBrowser.openBrowserAsync(url);
   } else {

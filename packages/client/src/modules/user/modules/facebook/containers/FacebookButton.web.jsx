@@ -2,10 +2,10 @@ import React from 'react';
 import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web/index';
-import { urlHandlerWeb } from '../../../common/helpers';
+import buildRedirectUrlForWeb from '../../../common/helpers';
 
 const facebookLogin = () => {
-  window.location = urlHandlerWeb('facebook');
+  window.location = buildRedirectUrlForWeb('facebook');
 };
 
 const FacebookButton = () => {

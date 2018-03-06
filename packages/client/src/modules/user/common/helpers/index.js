@@ -1,22 +1,13 @@
 import url from 'url';
+import { Constants } from 'expo';
 
-const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
-
-export default function urlHandler(expoUrl, authType) {
+export default function buildRedirectUrlForMobile(authType) {
+  const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
   let serverPort = process.env.PORT || port;
-  const expoHostname = `${url.parse(expoUrl).hostname}.nip.io`;
+  const expoHostname = `${url.parse(Constants.linkingUrl).hostname}.nip.io`;
   const urlHostname = process.env.NODE_ENV === 'production' ? hostname : expoHostname;
 
   return `${protocol}//${urlHostname}${
     serverPort ? `:${serverPort}` : ''
-  }/auth/${authType}?expoUrl=${encodeURIComponent(expoUrl)}`;
-}
-
-export function urlHandlerWeb(authType) {
-  let serverPort = process.env.PORT || port;
-  if (__DEV__) {
-    serverPort = '3000';
-  }
-
-  return `${protocol}//${hostname}${serverPort ? `:${serverPort}` : ''}/auth/${authType}`;
+  }/auth/${authType}?expoUrl=${encodeURIComponent(Constants.linkingUrl)}`;
 }

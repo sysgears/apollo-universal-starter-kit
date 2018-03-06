@@ -38,12 +38,6 @@ log.info(`Connecting to GraphQL backend at: ${uri}`);
 
 const cache = new InMemoryCache();
 
-fetch.batchUse(({ options }, next) => {
-  options.credentials = 'same-origin';
-  options.headers = options.headers || {};
-  next();
-});
-
 for (const middleware of modules.middlewares) {
   fetch.batchUse(({ requests, options }, next) => {
     options.credentials = 'same-origin';

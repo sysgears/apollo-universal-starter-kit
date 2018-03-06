@@ -4,4 +4,4 @@ import commonFeature from './common';
 
 import Feature from '../connector';
 
-export default new Feature(commonFeature, jwt);
+export default new Feature(commonFeature, session);

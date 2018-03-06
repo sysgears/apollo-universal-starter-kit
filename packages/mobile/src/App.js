@@ -58,12 +58,6 @@ export default class Main extends React.Component {
       new BatchHttpLink({ fetch })
     );
 
-    fetch.batchUse(({ options }, next) => {
-      options.credentials = 'same-origin';
-      options.headers = options.headers || {};
-      next();
-    });
-
     for (const middleware of modules.middlewares) {
       fetch.batchUse(({ requests, options }, next) => {
         const reqs = [...requests];

@@ -35,11 +35,13 @@ export default class UserEditView extends React.PureComponent {
     }
 
     if (result && result.errors) {
-      let submitError = {
-        _error: 'Edit user failed!'
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw submitError;
+      throw result.errors.reduce(
+        (res, error) => {
+          res[error.field] = error.message;
+          return res;
+        },
+        { _error: 'Login failed!' }
+      );
     }
   };
 

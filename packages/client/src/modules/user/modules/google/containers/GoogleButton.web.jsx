@@ -2,10 +2,10 @@ import React from 'react';
 import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlusSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web/index';
-import { urlHandlerWeb } from '../../../common/helpers';
+import buildRedirectUrlForWeb from '../../../common/helpers';
 
 const googleLogin = () => {
-  window.location = urlHandlerWeb('google');
+  window.location = buildRedirectUrlForWeb('google');
 };
 
 const GoogleButton = () => {

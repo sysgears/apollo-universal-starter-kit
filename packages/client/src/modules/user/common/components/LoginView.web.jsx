@@ -14,14 +14,16 @@ export default class LoginView extends React.PureComponent {
   };
 
   onSubmit = login => async values => {
-    const result = await login(values);
+    const { errors } = await login(values);
 
-    if (result && result.errors) {
-      let submitError = {
-        _error: 'Login failed!'
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw submitError;
+    if (errors && errors.length) {
+      throw errors.reduce(
+        (res, error) => {
+          res[error.field] = error.message;
+          return res;
+        },
+        { _error: 'Login failed!' }
+      );
     }
   };
 

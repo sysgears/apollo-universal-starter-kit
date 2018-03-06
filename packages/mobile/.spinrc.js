@@ -1,5 +1,4 @@
 const url = require('url');
-const ipAddress = require('ip').address();
 
 const config = {
   builders: {
@@ -11,7 +10,7 @@ const config = {
       defines: {
         __CLIENT__: true
       },
-      enabled: true
+      enabled: false
     },
     ios: {
       entry: './src/index.ts',
@@ -21,7 +20,7 @@ const config = {
       defines: {
         __CLIENT__: true
       },
-      enabled: true
+      enabled: false
     },
     test: {
       stack: ['react-native-web', 'server'],

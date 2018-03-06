@@ -146,7 +146,7 @@ export default class Renderer {
 
     const cache = new InMemoryCache();
     let link = new MockLink(schema);
-    const isLocalhost = /localhost/.test(__BACKEND_URL__);
+    const isLocalhost = /localhost/.test(__API_URL__);
     let linkSchema = isLocalhost ? new SchemaLink({ schema: { ...serverModules.schemas } }) : {};
 
     const linkState = withClientState({ ...clientModules.resolvers, cache });

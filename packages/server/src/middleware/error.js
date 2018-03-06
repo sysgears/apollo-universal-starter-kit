@@ -19,7 +19,7 @@ const stripCircular = (from, seen) => {
   return to;
 };
 
-const { pathname } = url.parse(__BACKEND_URL__);
+const { pathname } = url.parse(__API_URL__);
 
 /*
  * The code below MUST be declared as a function, not closure,

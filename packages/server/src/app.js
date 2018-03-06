@@ -22,7 +22,7 @@ for (const applyBeforeware of modules.beforewares) {
 
 app.use(cookiesMiddleware());
 
-const { pathname } = url.parse(__BACKEND_URL__);
+const { pathname } = url.parse(__API_URL__);
 
 // Don't rate limit heroku
 app.enable('trust proxy');

@@ -9,7 +9,7 @@ import { required, email, minLength, validateForm } from '../../../../../common/
 
 import settings from '../../../../../../settings';
 
-const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
+const { protocol, hostname, port } = url.parse(__API_URL__);
 let serverPort = process.env.PORT || port;
 if (__DEV__) {
   serverPort = '3000';

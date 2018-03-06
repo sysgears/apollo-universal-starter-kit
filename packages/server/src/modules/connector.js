@@ -34,7 +34,6 @@ class Feature {
   htmlHeadComponents: any;
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
-    // console.log(feature.schema[0] instanceof DocumentNode);
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );

@@ -1,4 +1,7 @@
 const url = require('url');
+const ipAddress = require('ip').address();
+
+const backendUrl = `"http://${ipAddress}.xip.io:8080/graphql"`;
 
 const config = {
   builders: {
@@ -38,7 +41,7 @@ const config = {
     persistGraphQL: false,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
-      __BACKEND_URL__: '"http://192.168.0.155.xip.io:8080/graphql"' //use you local IP
+      __BACKEND_URL__: `${backendUrl}`
     }
   }
 };

@@ -1,17 +1,11 @@
 import React from 'react';
-import url from 'url';
 import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlusSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web/index';
-
-const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
-let serverPort = process.env.PORT || port;
-if (__DEV__) {
-  serverPort = '3000';
-}
+import { urlHandlerWeb } from '../../../common/helpers';
 
 const googleLogin = () => {
-  window.location = `${protocol}//${hostname}${serverPort ? `:${serverPort}` : ''}/auth/google`;
+  window.location = urlHandlerWeb('google');
 };
 
 const GoogleButton = () => {

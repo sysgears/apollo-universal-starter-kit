@@ -1,5 +1,4 @@
 import React from 'react';
-import url from 'url';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, Linking, Button, TouchableOpacity, Text, Platform } from 'react-native';
 import { SecureStore, Constants, WebBrowser } from 'expo';
@@ -7,14 +6,10 @@ import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../../common/graphql/CurrentUserQuery.graphql';
 import { withUser, withCheckAction } from '../../../common/containers/AuthBase';
-
-const { protocol, hostname, port } = url.parse(__BACKEND_URL__);
-let serverPort = process.env.PORT || port;
+import urlHandler from '../../../common/helpers';
 
 const googleLogin = () => {
-  const url = `${protocol}//${hostname}${serverPort ? `:${serverPort}` : ''}/auth/google?expoUrl=${encodeURIComponent(
-    Constants.linkingUrl
-  )}`;
+  const url = urlHandler(Constants.linkingUrl, 'google');
   if (Platform.OS === 'ios') {
     WebBrowser.openBrowserAsync(url);
   } else {

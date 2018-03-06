@@ -10,12 +10,12 @@ import GoogleButton from '../../modules/google/index.web';
 
 import settings from '../../../../../../../settings';
 
-const contactFormSchema = {
+const loginFormSchema = {
   email: [required, email],
   password: [required, minLength(5)]
 };
 
-const validate = values => validateForm(values, contactFormSchema);
+const validate = values => validateForm(values, loginFormSchema);
 
 const LoginForm = ({ handleSubmit, submitting, error, values }) => {
   return (

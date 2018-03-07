@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
-import url from 'url';
+
+import { isApiExternal } from '../net';
 import log from '../../../common/log';
 
 let assetMap;
@@ -19,15 +20,13 @@ const stripCircular = (from, seen) => {
   return to;
 };
 
-const { pathname } = url.parse(__API_URL__);
-
 /*
  * The code below MUST be declared as a function, not closure,
  * otherwise Express will fail to execute this handler
  */
 // eslint-disable-next-line no-unused-vars
 function errorMiddleware(e, req, res, next) {
-  if (req.path === pathname) {
+  if (!isApiExternal && req.path === __API_URL__) {
     const stack = e.stack.toString().replace(/[\n]/g, '\\n');
     res.status(200).send(`[{"data": {}, "errors":[{"message": "${stack}"}]}]`);
   } else {

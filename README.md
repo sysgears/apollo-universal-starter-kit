@@ -190,15 +190,16 @@ If you don't need some of these platforms you can turn off building their code i
 
 | Option                         | Description                                                                   |
 | ------------------------------ | ----------------------------------------------------------------------------- |
-| buildDir                | output directory for build files                                            |
-| dllBuildDir                    | output directory for Webpack DLL files used to speed up incremental builds    |
-| webpackDevPort                 | the local port used for Webpack Dev Server process to host web frontend files |
-| \_\_API_URL__                     | URL to GraphQL backend endpoint                                               |
-| ssr                            | Use server side rendering in backend                                          |
-| webpackDll                     | Utilize Webpack DLLs to speed up incremental builds                           |
-| frontendRefreshOnBackendChange | Trigger web frontend refresh when backend code changes                        |
-| reactHotLoader                 | Utilize React Hot Loader v3                                                   |
-| persistGraphQL                 | Generate and use persistent GraphQL queries                                   |
+| buildDir                       | output directory for build files                                                |
+| dllBuildDir                    | output directory for Webpack DLL files used to speed up incremental builds |
+| webpackDevPort                 | the local port used for Webpack Dev Server process to host web frontend files  |
+| \_\_API_URL__                  | URL to GraphQL backend endpoint                                                 |
+| \_\_WEBSITE_URL__              | URL to website                                                                  |
+| ssr                            | Use server side rendering in backend                                            |
+| webpackDll                     | Utilize Webpack DLLs to speed up incremental builds                             |
+| frontendRefreshOnBackendChange | Trigger web frontend refresh when backend code changes                     |
+| reactHotLoader                 | Utilize React Hot Loader v3                                                     |
+| persistGraphQL                 | Generate and use persistent GraphQL queries                                     |
 
 There are also application config options available in `config/app.js` to aid with debugging GraphQL and SQL:
 

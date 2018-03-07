@@ -3,6 +3,9 @@ import settings from '../../../../../../settings';
 import { refreshTokens, tryLoginSerial } from './index';
 
 export default (SECRET, User, jwt) => async (req, res, next) => {
+  if (req.path !== __API_URL__) {
+    return next();
+  }
   try {
     let token = req.universalCookies.get('x-token') || req.headers['x-token'];
 
@@ -17,7 +20,7 @@ export default (SECRET, User, jwt) => async (req, res, next) => {
         token = undefined;
       }
     }
-    //console.log(token);
+    console.log('token mw:', req.url, token);
     if (token && token !== 'null') {
       try {
         const { user } = jwt.verify(token, SECRET);

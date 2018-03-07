@@ -16,7 +16,6 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 // import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
-import url from 'url';
 
 import RedBox from './RedBox';
 import createApolloClient from '../../../common/createApolloClient';
@@ -26,15 +25,12 @@ import Routes from './Routes';
 import modules from '../modules';
 import log from '../../../common/log';
 
-const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
-
-const uri = hostname === 'localhost' && __SSR__ ? '/graphql' : __BACKEND_URL__;
 const fetch = createApolloFetch({
-  uri,
+  uri: __API_URL__,
   constructOptions: modules.constructFetchOptions
 });
 
-log.info(`Connecting to GraphQL backend at: ${uri}`);
+log.info(`Connecting to GraphQL backend at: ${__API_URL__}`);
 
 const cache = new InMemoryCache();
 
@@ -68,10 +64,7 @@ for (const connectionParam of modules.connectionParams) {
   Object.assign(connectionParams, connectionParam());
 }
 
-const wsUri = (hostname === 'localhost'
-  ? `${window.location.protocol}${window.location.hostname}:${__DEV__ ? port : window.location.port}${pathname}`
-  : __BACKEND_URL__
-).replace(/^http/, 'ws');
+const wsUri = __API_URL__.replace(/^http/, 'ws');
 
 const wsClient = new SubscriptionClient(wsUri, {
   reconnect: true,

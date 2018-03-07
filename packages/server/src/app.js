@@ -3,12 +3,12 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 import { invert, isArray } from 'lodash';
-import url from 'url';
 import cookiesMiddleware from 'universal-cookie-express';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 import queryMap from 'persisted_queries.json';
-import modules from './modules';
 
+import { isApiExternal } from './net';
+import modules from './modules';
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
@@ -21,8 +21,6 @@ for (const applyBeforeware of modules.beforewares) {
 }
 
 app.use(cookiesMiddleware());
-
-const { pathname } = url.parse(__BACKEND_URL__);
 
 // Don't rate limit heroku
 app.enable('trust proxy');
@@ -46,10 +44,10 @@ if (__DEV__) {
   app.use('/', express.static(__DLL_BUILD_DIR__, { maxAge: '180 days' }));
 }
 
-if (__PERSIST_GQL__) {
+if (__PERSIST_GQL__ && !isApiExternal) {
   const invertedMap = invert(queryMap);
 
-  app.use(pathname, (req, resp, next) => {
+  app.use(__API_URL__, (req, resp, next) => {
     if (isArray(req.body)) {
       req.body = req.body.map(body => {
         return {
@@ -77,7 +75,9 @@ if (__DEV__) {
     res.send(process.cwd() + path.sep);
   });
 }
-app.use(pathname, (...args) => graphqlMiddleware(...args));
+if (!isApiExternal) {
+  app.use(__API_URL__, (...args) => graphqlMiddleware(...args));
+}
 app.use('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(queryMap)(...args));
 if (__DEV__) {

@@ -10,6 +10,7 @@ import createResolvers from './resolvers';
 import { refreshTokens, createTokens } from './auth';
 import tokenMiddleware from './auth/token';
 import confirmMiddleware from './confirm';
+import { isApiExternal } from '../../net';
 import Feature from '../connector';
 import scopes from './auth/scopes';
 import settings from '../../../../../settings';
@@ -183,7 +184,9 @@ export default new Feature({
     };
   },
   middleware: app => {
-    app.use(tokenMiddleware(SECRET, User, jwt));
+    if (!isApiExternal) {
+      app.use(tokenMiddleware(SECRET, User, jwt));
+    }
 
     if (settings.user.auth.password.sendConfirmationEmail) {
       app.get('/confirmation/:token', confirmMiddleware(SECRET, User, jwt));

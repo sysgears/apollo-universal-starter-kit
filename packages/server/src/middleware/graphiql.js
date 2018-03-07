@@ -1,11 +1,12 @@
 import { graphiqlExpress } from 'apollo-server-express';
 import url from 'url';
 
-const { protocol, hostname, pathname, port } = url.parse(__API_URL__);
+import { isApiExternal, serverPort } from '../net';
 
 export default graphiqlExpress(req => {
-  const subscriptionsUrl = (hostname === 'localhost'
-    ? `${protocol}//${url.parse(req.get('Referer') || `${protocol}//${hostname}`).hostname}:${port}${pathname}`
+  const { protocol, hostname } = url.parse(req.get('Referer') || `http://localhost`);
+  const subscriptionsUrl = (!isApiExternal
+    ? `${protocol}//${hostname}:${serverPort}${__API_URL__}`
     : __API_URL__
   ).replace(/^http/, 'ws');
 

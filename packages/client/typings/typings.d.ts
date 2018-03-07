@@ -5,6 +5,7 @@ declare var __CLIENT__: boolean;
 declare var __SSR__: boolean;
 declare var __PERSIST_GQL__: boolean;
 declare var __API_URL__: string;
+declare var __WEBSITE_URL__: string;
 
 declare module 'react-native-web' {
   const val: any;

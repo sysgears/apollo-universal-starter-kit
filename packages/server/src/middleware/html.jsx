@@ -4,7 +4,7 @@ import serialize from 'serialize-javascript';
 import modules from '../../../client/src/modules';
 import { styles } from '../../../client/src/modules/common/components/web';
 
-const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) => {
+const Html = ({ content, state, assetMap, css, helmet }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent(); // react-helmet html document tags
   const bodyAttrs = helmet.bodyAttributes.toComponent(); // react-helmet body document tags
 
@@ -45,7 +45,7 @@ const Html = ({ content, state, assetMap, css, helmet, token, refreshToken }) =>
           dangerouslySetInnerHTML={{
             __html: `window.__APOLLO_STATE__=${serialize(state, {
               isJSON: true
-            })};window.localStorage.setItem('token','${token}');window.localStorage.setItem('refreshToken','${refreshToken}');`
+            })};`
           }}
           charSet="UTF-8"
         />
@@ -61,9 +61,7 @@ Html.propTypes = {
   state: PropTypes.object.isRequired,
   assetMap: PropTypes.object.isRequired,
   css: PropTypes.array,
-  helmet: PropTypes.object,
-  token: PropTypes.string,
-  refreshToken: PropTypes.string
+  helmet: PropTypes.object
 };
 
 export default Html;

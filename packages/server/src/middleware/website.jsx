@@ -15,10 +15,10 @@ import { LoggingLink } from 'apollo-logger';
 import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
-import url from 'url';
 // eslint-disable-next-line
 import { AppRegistry } from 'react-native';
 
+import { isApiExternal, apiUrl } from '../net';
 import createApolloClient from '../../../common/createApolloClient';
 import createReduxStore from '../../../common/createReduxStore';
 import Html from './html';
@@ -28,9 +28,6 @@ import settings from '../../../../settings';
 
 let assetMap;
 
-const { protocol, hostname, port, pathname } = url.parse(__API_URL__);
-const apiUrl = `${protocol}//${hostname}:${process.env.PORT || port}${pathname}`;
-
 const renderServerSide = async (req, res) => {
   // if (__PERSIST_GQL__) {
   //   networkInterface = addPersistedQueries(networkInterface, queryMap);
@@ -38,7 +35,10 @@ const renderServerSide = async (req, res) => {
   //
   const clientModules = require('../../../client/src/modules').default;
 
-  const fetch = createApolloFetch({ uri: apiUrl, constructOptions: modules.constructFetchOptions });
+  const fetch = createApolloFetch({
+    uri: apiUrl,
+    constructOptions: modules.constructFetchOptions
+  });
   fetch.batchUse(({ options }, next) => {
     options.credentials = 'include';
     options.headers = req.headers;
@@ -46,10 +46,9 @@ const renderServerSide = async (req, res) => {
     next();
   });
   const cache = new InMemoryCache();
-  const isLocalhost = /localhost/.test(__API_URL__);
   let link = new BatchHttpLink({ fetch });
   const linkState = withClientState({ ...clientModules.resolvers, cache });
-  let linkSchema = isLocalhost ? new SchemaLink({ schema: { ...modules.schemas } }) : {};
+  let linkSchema = !isApiExternal ? new SchemaLink({ schema: { ...modules.schemas } }) : {};
 
   const client = createApolloClient({
     link: ApolloLink.from(
@@ -103,22 +102,7 @@ const renderServerSide = async (req, res) => {
 
     const apolloState = Object.assign({}, cache.extract());
 
-    const token = req.universalCookies.get('x-token') ? req.universalCookies.get('x-token') : null;
-    const refreshToken = req.universalCookies.get('x-refresh-token')
-      ? req.universalCookies.get('x-refresh-token')
-      : null;
-
-    const page = (
-      <Html
-        content={html}
-        state={apolloState}
-        assetMap={assetMap}
-        css={css}
-        helmet={helmet}
-        token={token}
-        refreshToken={refreshToken}
-      />
-    );
+    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} helmet={helmet} />;
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
     res.end();
   }

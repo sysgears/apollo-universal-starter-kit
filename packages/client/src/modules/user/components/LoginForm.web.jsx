@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import url from 'url';
 import { NavLink, Link } from 'react-router-dom';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
@@ -9,18 +8,12 @@ import { required, email, minLength, validateForm } from '../../../../../common/
 
 import settings from '../../../../../../settings';
 
-const { protocol, hostname, port } = url.parse(__API_URL__);
-let serverPort = process.env.PORT || port;
-if (__DEV__) {
-  serverPort = '3000';
-}
-
 const facebookLogin = () => {
-  window.location = `${protocol}//${hostname}:${serverPort}/auth/facebook`;
+  window.location = `${__WEBSITE_URL__}/auth/facebook`;
 };
 
 const googleLogin = () => {
-  window.location = `${protocol}//${hostname}:${serverPort}/auth/google`;
+  window.location = `${__WEBSITE_URL__}/auth/google`;
 };
 
 const contactFormSchema = {

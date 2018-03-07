@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
 import { LoggingLink } from 'apollo-logger';
-// import { addPersistedQueries } from 'persistgraphql';
+// import { addPersistedQueries } from 'persistgraphqpl';
 import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
@@ -25,6 +25,7 @@ import Html from './html';
 import Routes from '../../../client/src/app/Routes';
 import modules from '../modules';
 import settings from '../../../../settings';
+import schema from '../api/schema';
 
 let assetMap;
 
@@ -45,23 +46,22 @@ const renderServerSide = async (req, res) => {
 
     next();
   });
+
   const cache = new InMemoryCache();
   const isLocalhost = /localhost/.test(__BACKEND_URL__);
-  let link = new BatchHttpLink({ fetch });
+  const context = await modules.createContext(req, res);
+
+  const link = isLocalhost ? new SchemaLink({ schema, context }) : new BatchHttpLink({ fetch });
   const linkState = withClientState({ ...clientModules.resolvers, cache });
-  let linkSchema = isLocalhost ? new SchemaLink({ schema: { ...modules.schemas } }) : {};
 
   const client = createApolloClient({
-    link: ApolloLink.from(
-      (settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link, ...linkSchema])
-    ),
+    link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
     cache
   });
 
   let initialState = {};
   const store = createReduxStore(initialState, client);
 
-  const context = {};
   const App = () =>
     clientModules.getWrappedRoot(
       <Provider store={store}>

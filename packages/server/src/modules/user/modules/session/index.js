@@ -19,7 +19,7 @@ const SECRET = settings.user.secret;
 
 const User = new UserDAO();
 
-const { pathname } = url.parse(__BACKEND_URL__);
+const { pathname } = url.parse(__API_URL__);
 
 if (settings.user.auth.facebook.enabled) {
   facebookStategy(User);

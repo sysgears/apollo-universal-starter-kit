@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { pick } from 'lodash';
-import { PageLayout } from '../../../common/components/web/index';
+import { PageLayout } from '../../../common/components/web';
 
 import UserForm from './UserForm';
 import settings from '../../../../../../../settings';

@@ -1,7 +1,7 @@
 import React from 'react';
 import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlusSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import { Button } from '../../../../common/components/web/index';
+import { Button } from '../../../../common/components/web';
 
 const googleLogin = () => {
   window.location = __WEBSITE_URL__ + '/auth/google';

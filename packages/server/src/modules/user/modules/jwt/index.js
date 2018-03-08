@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import UserDAO from '../../common/sql';
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
-import { refreshTokens } from './auth/index';
+import { refreshTokens } from './auth';
 import tokenMiddleware from './auth/token';
 import confirmMiddleware from './confirm';
 import Feature from '../../../connector';

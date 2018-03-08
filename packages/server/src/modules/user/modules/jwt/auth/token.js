@@ -1,6 +1,6 @@
 import settings from '../../../../../../../../settings';
 
-import { refreshTokens, tryLoginSerial } from './index';
+import { refreshTokens, tryLoginSerial } from '.';
 
 export default (SECRET, User, jwt) => async (req, res, next) => {
   if (req.path !== __API_URL__) {

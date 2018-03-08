@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Table, Button } from '../../../common/components/web/index';
+import { Table, Button } from '../../../common/components/web';
 
 export default class UsersView extends React.PureComponent {
   static propTypes = {

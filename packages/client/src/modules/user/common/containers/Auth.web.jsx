@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 
-import { IfLoggedIn, IfNotLoggedIn } from './AuthBase.web';
+import { IfLoggedIn, IfNotLoggedIn } from './AuthBase';
 
 const AuthRoute = ({ role, redirect, redirectOnLoggedIn, ...props }) =>
   redirectOnLoggedIn ? (
@@ -21,5 +21,5 @@ AuthRoute.propTypes = {
   redirectOnLoggedIn: PropTypes.bool
 };
 
-export * from './AuthBase.web';
+export * from './AuthBase';
 export { AuthRoute };

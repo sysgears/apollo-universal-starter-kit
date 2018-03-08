@@ -1,3 +1,3 @@
-import FacebookButton from './containers/FacebookButton.web';
+import FacebookButton from './containers/FacebookButton';
 
 export default FacebookButton;

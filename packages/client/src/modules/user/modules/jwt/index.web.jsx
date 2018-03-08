@@ -6,7 +6,7 @@ import { MenuItem } from '../../../../modules/common/components/web';
 import Users from '../../common/components/Users';
 import UserEdit from '../../common/containers/UserEdit';
 import Register from '../../common/containers/Register';
-import Login from './containers/Login.web';
+import Login from './containers/Login';
 import ForgotPassword from '../../common/containers/ForgotPassword';
 import ResetPassword from '../../common/containers/ResetPassword';
 
@@ -17,7 +17,7 @@ import {
   withLoadedUser,
   withLogout,
   IfNotLoggedIn
-} from '../../common/containers/Auth.web';
+} from '../../common/containers/Auth';
 
 import Feature from '../../../connector';
 

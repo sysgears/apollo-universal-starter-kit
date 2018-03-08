@@ -25,6 +25,7 @@ import Html from './html';
 import Routes from '../../../client/src/app/Routes';
 import modules from '../modules';
 import settings from '../../../../settings';
+import schema from '../api/schema';
 
 let assetMap;
 
@@ -45,15 +46,16 @@ const renderServerSide = async (req, res) => {
 
     next();
   });
+
   const cache = new InMemoryCache();
-  let link = new BatchHttpLink({ fetch });
+
+  const link = isApiExternal
+    ? new SchemaLink({ schema, context: await modules.createContext(req, res) })
+    : new BatchHttpLink({ fetch });
   const linkState = withClientState({ ...clientModules.resolvers, cache });
-  let linkSchema = !isApiExternal ? new SchemaLink({ schema: { ...modules.schemas } }) : {};
 
   const client = createApolloClient({
-    link: ApolloLink.from(
-      (settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link, ...linkSchema])
-    ),
+    link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
     cache
   });
 

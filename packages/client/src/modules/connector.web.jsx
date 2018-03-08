@@ -24,6 +24,7 @@ export default class {
       stylesInsert,
       scriptsInsert,
       rootComponentFactory,
+      routerFactory,
       catalogInfo
     },
     ...features
@@ -44,6 +45,13 @@ export default class {
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
     this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
     this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
+    this.routerFactory = combine(arguments, arg => arg.routerFactory)
+      .slice(-1)
+      .pop();
+  }
+
+  get router() {
+    return this.routerFactory();
   }
 
   get routes() {

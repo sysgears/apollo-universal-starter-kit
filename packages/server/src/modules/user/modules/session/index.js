@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cookiesMiddleware from 'universal-cookie-express';
-import url from 'url';
 import jwt from 'jsonwebtoken';
 
 import UserDAO from '../../common/sql';
@@ -18,8 +17,6 @@ import { googleAuth, googleStategy } from '../google';
 const SECRET = settings.user.secret;
 
 const User = new UserDAO();
-
-const { pathname } = url.parse(__API_URL__);
 
 if (settings.user.auth.facebook.enabled) {
   facebookStategy(User);
@@ -111,7 +108,7 @@ export default new Feature({
         if (__SSR__ || __TEST__) {
           req.headers['x-token'] = req.session.csrfToken;
         }
-        if (req.path === pathname) {
+        if (req.path === __API_URL__) {
           if (req && req.session.userId && req.session.csrfToken !== req.headers['x-token']) {
             throw new Error('CSRF token validation failed');
           }

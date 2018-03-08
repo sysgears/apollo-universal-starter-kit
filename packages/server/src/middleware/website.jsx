@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
 import { LoggingLink } from 'apollo-logger';
-// import { addPersistedQueries } from 'persistgraphqpl';
+// import { addPersistedQueries } from 'persistgraphql';
 import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';

@@ -49,9 +49,10 @@ const renderServerSide = async (req, res) => {
 
   const cache = new InMemoryCache();
   const isLocalhost = /localhost/.test(__BACKEND_URL__);
-  const context = await modules.createContext(req, res);
 
-  const link = isLocalhost ? new SchemaLink({ schema, context }) : new BatchHttpLink({ fetch });
+  const link = isLocalhost
+    ? new SchemaLink({ schema, context: await modules.createContext(req, res) })
+    : new BatchHttpLink({ fetch });
   const linkState = withClientState({ ...clientModules.resolvers, cache });
 
   const client = createApolloClient({
@@ -62,6 +63,7 @@ const renderServerSide = async (req, res) => {
   let initialState = {};
   const store = createReduxStore(initialState, client);
 
+  const context = {};
   const App = () =>
     clientModules.getWrappedRoot(
       <Provider store={store}>

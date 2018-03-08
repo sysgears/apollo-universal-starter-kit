@@ -7,6 +7,26 @@ import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
 
 export default pubsub => ({
+  Query: {
+    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, context) => {
+      return context.User.getUsers(orderBy, filter);
+    }),
+    user: withAuth(
+      (obj, args, context) => {
+        return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
+      },
+      (obj, { id }, context) => {
+        return context.User.getUser(id);
+      }
+    ),
+    currentUser(obj, args, context) {
+      if (context.user) {
+        return context.User.getUser(context.user.id);
+      } else {
+        return null;
+      }
+    }
+  },
   Mutation: {
     async login(obj, { input: { email, password } }, context) {
       try {

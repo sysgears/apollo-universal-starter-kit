@@ -1,9 +1,7 @@
-import { TabNavigator } from 'react-navigation';
-
 import modules from '../modules';
 
-const MainScreenNavigator = TabNavigator({
-  ...modules.tabItems
-});
+if (!modules.router) {
+  throw new Error('At least one router must be defined in modules');
+}
 
-export default MainScreenNavigator;
+export default modules.router;

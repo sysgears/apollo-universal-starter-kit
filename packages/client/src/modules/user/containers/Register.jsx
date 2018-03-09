@@ -9,7 +9,7 @@ import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
 
-import settings from '../../../../../../../settings';
+import settings from '../../../../../../settings';
 
 class Register extends React.Component {
   render() {

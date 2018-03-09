@@ -3,7 +3,7 @@ import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import { createTokens } from '../jwt/auth';
 import { updateSession } from '../session/auth';
-import { encryptSession } from './../session/auth/crypto';
+import { encryptSession } from '../session/crypto';
 import settings from '../../../../../../../settings';
 
 export function facebookStategy(User) {

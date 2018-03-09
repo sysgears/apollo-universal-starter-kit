@@ -8,7 +8,7 @@ import Feature from '../connector';
 import stripeLocalMiddleware from './stripeLocal';
 import webhookMiddleware from './webhook';
 
-import { parseUser } from '../user/modules/jwt';
+import { parseUser } from '../user/strategies/jwt';
 
 const Subscription = new SubscriptionDAO();
 

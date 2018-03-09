@@ -1,11 +1,11 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { PageLayout, Button } from '../../../common/components/web';
+import { PageLayout, Button } from '../../common/components/web';
 
 import UsersFilter from '../containers/UsersFilter';
 import UsersList from '../containers/UsersList';
-import settings from '../../../../../../../settings';
+import settings from '../../../../../../settings';
 
 const Users = () => {
   const renderMetaData = () => (

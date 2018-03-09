@@ -1,4 +1,4 @@
-#import "../../../common/graphql/User.graphql"
+#import "../../../graphql/User.graphql"
 mutation login($input: LoginUserInput!) {
     login(input: $input) {
         tokens {

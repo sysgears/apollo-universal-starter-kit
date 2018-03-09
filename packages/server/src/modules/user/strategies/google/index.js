@@ -4,7 +4,7 @@ import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { createTokens } from '../jwt/auth';
 import settings from '../../../../../../../settings';
 import { updateSession } from '../session/auth';
-import { encryptSession } from './../session/auth/crypto';
+import { encryptSession } from '../session/crypto';
 
 export function googleStategy(User) {
   passport.use(

@@ -1,7 +1,7 @@
 import jwt from './modules/jwt'; // eslint-disable-line
 import session from './modules/session'; // eslint-disable-line
-import commonResolvers from './auth/resolvers';
-import UserTabNavigator from './auth/containers/Routes';
+import commonResolvers from './resolvers';
+import UserTabNavigator from './containers/Routes';
 
 import modules from '..';
 

@@ -1,7 +1,7 @@
 // React
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
-import { removeTypename } from '../../../../../../common/utils';
+import { removeTypename } from '../../../../../common/utils';
 
 // Components
 import UsersListView from '../components/UsersListView';

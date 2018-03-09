@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { SecureStore } from 'expo';
 import { withApollo, graphql, compose } from 'react-apollo';
 
-import log from '../../../../../../common/log';
+import log from '../../../../../common/log';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
-import LOGOUT from '../../modules/jwt/graphql/Logout.graphql';
+import LOGOUT from '../strategies/jwt/graphql/Logout.graphql';
 import USER_ACTION_QUERY from '../graphql/UserActions.client.graphql';
 import CHANGE_ACTION from '../graphql/ChangeUserAction.client.graphql';
 

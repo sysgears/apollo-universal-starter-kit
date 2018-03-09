@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import settings from '../../../../../../../../settings';
+import settings from '../../../../../../../settings';
 
 // Use password-based key derivation function to derive MAC key and encryption key from secret passphrase
 const _deriveSymmetricKey = salt => crypto.pbkdf2Sync(settings.user.secret, salt, 10000, 32, 'sha256');

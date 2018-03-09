@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { NavLink, Link } from 'react-router-dom';
 
-import Field from '../../../../utils/FieldAdapter';
-import { Form, RenderField, Alert, Button } from '../../../common/components/web';
-import { required, email, minLength, validateForm } from '../../../../../../common/validation';
-import FacebookButton from '../../modules/facebook';
-import GoogleButton from '../../modules/google';
+import Field from '../../../utils/FieldAdapter';
+import { Form, RenderField, Alert, Button } from '../../common/components/web';
+import { required, email, minLength, validateForm } from '../../../../../common/validation';
+import FacebookButton from '../strategies/facebook';
+import GoogleButton from '../strategies/google';
 
-import settings from '../../../../../../../settings';
+import settings from '../../../../../../settings';
 
 const loginFormSchema = {
   email: [required, email],

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { LayoutCenter } from '../../../common/components';
-import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../../common/components/web';
+import { LayoutCenter } from '../../common/components';
+import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
 import LoginForm from './LoginForm';
-import settings from '../../../../../../../settings';
+import settings from '../../../../../../settings';
 
 export default class LoginView extends React.PureComponent {
   static propTypes = {

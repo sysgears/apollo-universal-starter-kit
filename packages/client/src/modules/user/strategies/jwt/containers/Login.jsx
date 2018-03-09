@@ -7,11 +7,11 @@ import { SecureStore } from 'expo';
 import { graphql, compose, withApollo } from 'react-apollo';
 
 // Components
-import LoginView from '../../../common/components/LoginView';
+import LoginView from '../../../components/LoginView';
 import log from '../../../../../../../common/log';
-import { withCheckAction } from '../../../common/containers/AuthBase';
+import { withCheckAction } from '../../../containers/AuthBase';
 
-import CURRENT_USER_QUERY from '../../../common/graphql/CurrentUserQuery.graphql';
+import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
 
 class Login extends React.Component {

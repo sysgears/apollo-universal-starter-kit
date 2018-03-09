@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { LayoutCenter } from '../../../common/components';
-import { PageLayout } from '../../../common/components/web';
+import { LayoutCenter } from '../../common/components';
+import { PageLayout } from '../../common/components/web';
 
 import ForgotPasswordForm from '../components/ForgotPasswordForm';
-import settings from '../../../../../../../settings';
+import settings from '../../../../../../settings';
 
 export default class ForgotPasswordView extends React.Component {
   static propTypes = {

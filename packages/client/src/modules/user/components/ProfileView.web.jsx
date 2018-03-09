@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { LayoutCenter } from '../../../common/components';
-import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../../common/components/web';
-import SubscriptionProfile from '../../../subscription/containers/SubscriptionProfile';
+import { LayoutCenter } from '../../common/components';
+import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
+import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
 
-import settings from '../../../../../../../settings';
+import settings from '../../../../../../settings';
 
 const renderMetaData = () => (
   <Helmet

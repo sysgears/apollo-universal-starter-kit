@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import cookiesMiddleware from 'universal-cookie-express';
 import jwt from 'jsonwebtoken';
 
-import UserDAO from '../../common/sql';
+import UserDAO from '../../sql';
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
 import confirmMiddleware from './confirm';
 import { readSession, createSession } from './auth';
 import Feature from '../../../connector';
-import scopes from '../../common/auth/scopes';
+import scopes from '../../scopes';
 import settings from '../../../../../../../settings';
 import { facebookAuth, facebookStategy } from '../facebook';
 import { googleAuth, googleStategy } from '../google';

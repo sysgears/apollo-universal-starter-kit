@@ -4,10 +4,10 @@ import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 import { SecureStore } from 'expo';
 
 import { createTabBarIconWrapper } from '../../../common/components/native';
-import Profile from '../../common/containers/Profile';
+import Profile from '../../containers/Profile';
 import Login from './containers/Login';
-import Logout from '../../common/containers/Logout';
-import UsersList from '../../common/containers/UsersList';
+import Logout from '../../containers/Logout';
+import UsersList from '../../containers/UsersList';
 
 import Feature from '../../../connector';
 

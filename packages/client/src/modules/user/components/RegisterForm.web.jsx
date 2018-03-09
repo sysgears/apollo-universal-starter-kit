@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import Field from '../../../../utils/FieldAdapter';
-import { Form, RenderField, Button, Alert } from '../../../common/components/web';
-import { match, email, minLength, required, validateForm } from '../../../../../../common/validation';
+import Field from '../../../utils/FieldAdapter';
+import { Form, RenderField, Button, Alert } from '../../common/components/web';
+import { match, email, minLength, required, validateForm } from '../../../../../common/validation';
 
 const registerFormSchema = {
   username: [required, minLength(3)],

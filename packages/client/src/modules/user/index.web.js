@@ -1,6 +1,6 @@
 import jwt from './strategies/jwt'; // eslint-disable-line
 import session from './strategies/session'; // eslint-disable-line
-import commonResolvers from './auth/resolvers';
+import commonResolvers from './resolvers';
 
 import Feature from '../connector';
 

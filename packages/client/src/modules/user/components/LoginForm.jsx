@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import { withFormik } from 'formik';
-import Field from '../../../../utils/FieldAdapter';
-import { Button } from '../../../common/components';
-import { RenderField } from '../../../common/components/native';
-import { required, email, minLength, validateForm } from '../../../../../../common/validation';
-import FacebookButton from '../../modules/facebook';
-import GoogleButton from '../../modules/google';
-import settings from '../../../../../../../settings';
+import Field from '../../../utils/FieldAdapter';
+import { Button } from '../../common/components';
+import { RenderField } from '../../common/components/native';
+import { required, email, minLength, validateForm } from '../../../../../common/validation';
+import FacebookButton from '../strategies/facebook';
+import GoogleButton from '../strategies/google';
+import settings from '../../../../../../settings';
 
 const loginFormSchema = {
   email: [required, email],

@@ -4,9 +4,9 @@ import { View, StyleSheet, Linking, Button, TouchableOpacity, Text, Platform } f
 import { SecureStore, WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
-import CURRENT_USER_QUERY from '../../../common/graphql/CurrentUserQuery.graphql';
-import { withUser, withCheckAction } from '../../../common/containers/AuthBase';
-import buildRedirectUrlForMobile from '../../../common/helpers';
+import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
+import { withUser, withCheckAction } from '../../../containers/AuthBase';
+import buildRedirectUrlForMobile from '../../../helpers';
 
 const googleLogin = () => {
   const url = buildRedirectUrlForMobile('google');

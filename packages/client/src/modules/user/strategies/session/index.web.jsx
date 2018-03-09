@@ -1,23 +1,16 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink, withRouter } from 'react-router-dom';
-import ProfileView from '../../common/components/ProfileView';
+import ProfileView from '../../components/ProfileView';
 import { MenuItem } from '../../../../modules/common/components/web';
-import Users from '../../common/components/Users';
-import UserEdit from '../../common/containers/UserEdit';
-import Register from '../../common/containers/Register';
+import Users from '../../components/Users';
+import UserEdit from '../../containers/UserEdit';
+import Register from '../../containers/Register';
 import Login from './containers/Login';
-import ForgotPassword from '../../common/containers/ForgotPassword';
-import ResetPassword from '../../common/containers/ResetPassword';
+import ForgotPassword from '../../containers/ForgotPassword';
+import ResetPassword from '../../containers/ResetPassword';
 
-import {
-  AuthRoute,
-  IfLoggedIn,
-  withUser,
-  withLoadedUser,
-  withLogout,
-  IfNotLoggedIn
-} from '../../common/containers/Auth';
+import { AuthRoute, IfLoggedIn, withUser, withLoadedUser, withLogout, IfNotLoggedIn } from '../../containers/Auth';
 
 import Feature from '../../../connector';
 

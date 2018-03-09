@@ -2,8 +2,8 @@
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
-import FieldError from '../../../../../common/FieldError';
-import settings from '../../../../../../settings';
+import FieldError from '../../../../common/FieldError';
+import settings from '../../../../../settings';
 
 export default pubsub => ({
   User: {

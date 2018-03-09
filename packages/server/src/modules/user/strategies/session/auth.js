@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import settings from '../../../../../../../../settings';
-import FieldError from '../../../../../../../common/FieldError';
+import settings from '../../../../../../../settings';
+import FieldError from '../../../../../../common/FieldError';
 import { decryptSession, encryptSession } from './crypto';
 
 export const createSession = req => {

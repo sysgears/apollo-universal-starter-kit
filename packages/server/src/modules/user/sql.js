@@ -2,7 +2,7 @@
 import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has } from 'lodash';
 import bcrypt from 'bcryptjs';
-import knex from '../../../sql/connector';
+import knex from '../../sql/connector';
 
 // Actual query fetching and transformation in DB
 export default class User {

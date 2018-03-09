@@ -3,10 +3,12 @@ import session from './modules/session'; // eslint-disable-line
 import commonResolvers from './common/resolvers';
 import UserTabNavigator from './common/containers/Routes';
 
+import modules from '..';
+
 import Feature from '../connector';
 
 const commonFeature = new Feature({ resolver: commonResolvers });
 
-export default new Feature(commonFeature, jwt);
-
-export { UserTabNavigator };
+export default new Feature(commonFeature, jwt, {
+  routerFactory: () => UserTabNavigator(modules.tabItems)
+});

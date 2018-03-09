@@ -6,26 +6,25 @@ interface Meta {
   error: string;
 }
 
-interface RenderFieldProps {
+interface RenderSelectProps {
   input: any;
   label: string;
   type: string;
   meta: Meta;
-  placeholder: string;
   children: any;
 }
 
-const RenderField = ({ input, label, type, meta: { touched, error }, children, placeholder }: RenderFieldProps) => {
-  let valid = null;
+const RenderSelect = ({ input, label, type, children, meta: { touched, error } }: RenderSelectProps) => {
+  let color = 'normal';
   if (touched && error) {
-    valid = false;
+    color = 'danger';
   }
 
   return (
-    <FormGroup>
+    <FormGroup color={color}>
       {label && <Label>{label}</Label>}
       <div>
-        <Input {...input} placeholder={label || placeholder} type={type} valid={valid}>
+        <Input {...input} type={type}>
           {children}
         </Input>
         {touched && (error && <FormFeedback>{error}</FormFeedback>)}
@@ -34,4 +33,4 @@ const RenderField = ({ input, label, type, meta: { touched, error }, children, p
   );
 };
 
-export default RenderField;
+export default RenderSelect;

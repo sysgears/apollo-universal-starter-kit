@@ -37,6 +37,8 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
+    "@types/react": "^16.0.40",
+    "@types/react-dom": "^16.0.4",
     "antd": "^3.2.0",
     "apollo-cache-inmemory": "^1.1.4",
     "apollo-client": "^2.1.0",

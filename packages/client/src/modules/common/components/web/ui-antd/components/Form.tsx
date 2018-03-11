@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ADForm from 'antd/lib/form';
 
 interface FormProps {
@@ -7,7 +6,7 @@ interface FormProps {
   type?: string;
 }
 
-const Form = ({ children, ...props }) => {
+const Form = ({ children, ...props }: FormProps) => {
   return <ADForm {...props}>{children}</ADForm>;
 };
 

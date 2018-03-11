@@ -3,7 +3,7 @@ import { Alert as RSAlert } from 'reactstrap';
 
 interface AlertProps {
   children: any;
-  color: string;
+  color?: string;
 }
 
 const Alert = ({ children, color, ...props }: AlertProps) => {

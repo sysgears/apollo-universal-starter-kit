@@ -8,7 +8,7 @@ interface Meta {
 
 interface RenderCheckBoxProps {
   input: any;
-  label: string;
+  label?: string;
   type: string;
   meta: Meta;
 }

@@ -8,10 +8,10 @@ interface Meta {
 
 interface RenderFieldProps {
   input: any;
-  label: string;
+  label?: string;
   type: string;
   meta: Meta;
-  placeholder: string;
+  placeholder?: string;
   children: any;
 }
 

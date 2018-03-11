@@ -8,7 +8,7 @@ interface Meta {
 
 interface RenderSelectProps {
   input: any;
-  label: string;
+  label?: string;
   type: string;
   meta: Meta;
   children: any;

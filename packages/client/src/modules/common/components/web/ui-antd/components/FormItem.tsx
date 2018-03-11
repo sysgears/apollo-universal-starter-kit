@@ -7,7 +7,7 @@ interface FormItemProps {
 
 const ADFormItem = Form.Item;
 
-const FormItem = ({ children, ...props }) => {
+const FormItem = ({ children, ...props }: FormItemProps) => {
   return <ADFormItem {...props}>{children}</ADFormItem>;
 };
 

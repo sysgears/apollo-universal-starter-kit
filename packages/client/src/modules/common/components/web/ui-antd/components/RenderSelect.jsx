@@ -14,8 +14,9 @@ export default class RenderSelect extends React.Component {
     label: PropTypes.string,
     formItemLayout: PropTypes.object,
     meta: PropTypes.object,
-    schemaName: PropTypes.string,
-    style: PropTypes.object
+    schema: PropTypes.object,
+    style: PropTypes.object,
+    formType: PropTypes.string.isRequired
   };
 
   state = {
@@ -23,19 +24,18 @@ export default class RenderSelect extends React.Component {
     dirty: false
   };
 
-  handleChange = ({ key, label }) => {
+  handleChange = value => {
     const { input: { onChange, name } } = this.props;
     //console.log('RenderSelect: handleChange');
     //console.log('name:', name);
-    //console.log('key:', key);
-    //console.log('label:', label);
-    onChange(name, { id: key, name: label });
+    //console.log('value:', value);
+    onChange(name, value ? { id: value.key, name: value.label } : undefined);
   };
 
   search = value => {
     const { dirty } = this.state;
     //onsole.log('search:', value);
-    if ((value && value.length >= 2) || dirty) {
+    if ((value && value.length >= 1) || dirty) {
       this.setState({ searchText: value, dirty: true });
     }
   };
@@ -44,10 +44,11 @@ export default class RenderSelect extends React.Component {
     const {
       input: { value, onChange, ...inputRest },
       label,
-      schemaName,
+      schema,
       style,
       formItemLayout,
-      meta: { touched, error }
+      meta: { touched, error },
+      formType
     } = this.props;
     const { searchText, dirty } = this.state;
 
@@ -56,12 +57,20 @@ export default class RenderSelect extends React.Component {
       validateStatus = 'error';
     }
 
-    const camelizeSchemaName = camelize(schemaName);
-    const pascalizeSchemaName = pascalize(schemaName);
+    const camelizeSchemaName = camelize(schema.name);
+    const pascalizeSchemaName = pascalize(schema.name);
+    let column = 'name';
+    for (const remoteKey of schema.keys()) {
+      const remoteValue = schema.values[remoteKey];
+      if (remoteValue.sortBy) {
+        column = remoteKey;
+      }
+    }
     let formatedValue =
       value && value != '' && value != undefined
-        ? { key: value.id.toString(), label: value.name }
+        ? { key: value.id.toString(), label: value.name ? value.name : value[column] }
         : { key: '', label: '' };
+    //console.log('formatedValue:', formatedValue);
 
     // eslint-disable-next-line import/no-dynamic-require
     const Query = require(`../../../../../${camelizeSchemaName}/containers/${pascalizeSchemaName}Query`)['default'];
@@ -80,12 +89,13 @@ export default class RenderSelect extends React.Component {
                 const options = data.edges
                   ? data.edges.map(opt => (
                       <Option key={opt.id} value={opt.id.toString()}>
-                        {opt.name}
+                        {opt[column]}
                       </Option>
                     ))
                   : null;
 
                 let props = {
+                  allowClear: formType !== 'form' ? true : false,
                   showSearch: true,
                   labelInValue: true,
                   dropdownMatchSelectWidth: false,
@@ -101,11 +111,11 @@ export default class RenderSelect extends React.Component {
                       if (!dirty) {
                         options.unshift(
                           <Option key={value.id} value={value.id.toString()}>
-                            {value.name}
+                            {value[column]}
                           </Option>
                         );
                       } else {
-                        formatedValue = { key: data.edges[0].id.toString(), label: data.edges[0].name };
+                        formatedValue = { key: data.edges[0].id.toString() };
                       }
                     }
                   }
@@ -124,7 +134,7 @@ export default class RenderSelect extends React.Component {
                       option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   };
                 }
-                return React.createElement(Select, props, options);
+                return <Select {...props}>{options}</Select>;
               } else {
                 return <Spin size="small" />;
               }

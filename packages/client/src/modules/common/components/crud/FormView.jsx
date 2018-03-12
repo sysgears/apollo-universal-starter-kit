@@ -1,39 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
+import { Formik } from 'formik';
 
+import { onSubmit, mapFormPropsToValues } from '../../../../utils/crud';
 import { createFormFields } from '../../util';
 import { FormView, FormButton } from '../native';
-import { minLength, required, validateForm } from '../../../../../../common/validation';
+//import { minLength, required, validateForm } from '../../../../../../common/validation';
 
-const formSchema = {
-  name: [required, minLength(3)]
-};
+//const formSchema = {
+//  name: [required, minLength(3)]
+//};
 
-const validate = values => validateForm(values, formSchema);
+//const validate = values => validateForm(values, formSchema);
 
-const Form = ({ handleChange, handleSubmit, schema }) => {
+const Form = ({ schema, data: { node } }) => {
   return (
-    <FormView>
-      {createFormFields(handleChange, schema)}
-      <FormButton onPress={handleSubmit}>Save</FormButton>
-    </FormView>
+    <Formik
+      initialValues={mapFormPropsToValues({ schema, data: node })}
+      onSubmit={async values => {
+        //console.log('onSubmit, values:', pickInputFields({schema, values}));
+        await onSubmit({ schema, values });
+      }}
+      render={({ handleChange, handleSubmit }) => (
+        <FormView>
+          {createFormFields({ handleChange, schema })}
+          <FormButton onPress={handleSubmit}>Save</FormButton>
+        </FormView>
+      )}
+    />
   );
 };
 
 Form.propTypes = {
-  handleChange: PropTypes.func,
-  handleSubmit: PropTypes.func,
-  schema: PropTypes.object
+  schema: PropTypes.object.isRequired,
+  data: PropTypes.object
 };
 
-const FormWithFormik = withFormik({
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm();
-  },
-  validate: values => validate(values),
-  displayName: 'Form' // helps with React DevTools
-});
-
-export default FormWithFormik(Form);
+export default Form;

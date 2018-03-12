@@ -12,6 +12,7 @@ import moment from 'moment';
 import DomainSchema from '@domain-schema/core';
 
 import Field from '../../utils/FieldAdapter';
+import { mapFormPropsToValues } from '../../utils/crud';
 import {
   RenderField,
   RenderSelect,
@@ -29,7 +30,7 @@ import {
 
 const dateFormat = 'YYYY-MM-DD';
 
-export const createColumnFields = (
+export const createColumnFields = ({
   schema,
   link,
   orderBy,
@@ -37,109 +38,121 @@ export const createColumnFields = (
   hendleUpdate,
   hendleDelete,
   onCellChange,
-  customTableColumns
-) => {
+  customFields = {}
+}) => {
   let columns = [];
+  // use customFields if definded otherwise use schema.keys()
+  const keys =
+    customFields.constructor === Object && Object.keys(customFields).length !== 0
+      ? Object.keys(customFields)
+      : schema.keys();
 
-  for (const key of schema.keys()) {
-    const value = schema.values[key];
-    const hasTypeOf = targetType =>
-      value.type === targetType || value.type.prototype instanceof targetType || value.type instanceof targetType;
-    //console.log(key);
-    //console.log(hasTypeOf(DomainSchema));
-    if (value.show !== false && (key !== 'id' || customTableColumns['id'])) {
-      if (value.type.isSchema) {
-        //console.log(value.type);
+  for (const key of keys) {
+    if (schema.values[key]) {
+      const value = schema.values[key];
+      const hasTypeOf = targetType =>
+        value.type === targetType || value.type.prototype instanceof targetType || value.type instanceof targetType;
+      //console.log(key);
+      //console.log(hasTypeOf(DomainSchema));
+      if (value.show !== false && (key !== 'id' || customFields['id'])) {
+        if (value.type.isSchema) {
+          //console.log(value.type);
 
-        let sortBy = 'name';
-        for (const remoteKey of value.type.keys()) {
-          const remoteValue = value.type.values[remoteKey];
-          if (remoteValue.sortBy) {
-            sortBy = remoteKey;
+          let sortBy = 'name';
+          for (const remoteKey of value.type.keys()) {
+            const remoteValue = value.type.values[remoteKey];
+            if (remoteValue.sortBy) {
+              sortBy = remoteKey;
+            }
           }
-        }
-        columns.push({
-          title: (
-            <a onClick={e => orderBy(e, key)} href="#">
-              {startCase(key)} {renderOrderByArrow(key)}
-            </a>
-          ),
-          dataIndex: key,
-          key: key,
-          width: 300,
-          render: (text, record) =>
-            customTableColumns[key] && customTableColumns[key]['render'] ? (
-              customTableColumns[key]['render'](text, record)
-            ) : (
+          columns.push({
+            title: (
+              <a onClick={e => orderBy(e, key)} href="#">
+                {startCase(key)} {renderOrderByArrow(key)}
+              </a>
+            ),
+            dataIndex: key,
+            key: key,
+            width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+            render: (text, record) =>
+              customFields[key] && customFields[key]['render'] ? (
+                customFields[key]['render'](text, record)
+              ) : (
+                <EditableCell
+                  value={text}
+                  hasTypeOf={hasTypeOf}
+                  schema={value.type}
+                  record={record}
+                  render={
+                    customFields[key] && customFields[key]['render']
+                      ? customFields[key]['render']
+                      : text => (text && text[sortBy] ? text[sortBy] : '')
+                  }
+                  onChange={onCellChange(`${key}Id`, record.id, hendleUpdate)}
+                />
+              )
+          });
+        } else if (hasTypeOf(Boolean)) {
+          columns.push({
+            title: (
+              <a onClick={e => orderBy(e, key)} href="#">
+                {startCase(key)} {renderOrderByArrow(key)}
+              </a>
+            ),
+            dataIndex: key,
+            key: key,
+            width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+            render: (text, record) => {
+              const data = {};
+              data[key] = !text;
+              return <Switch checked={text} onClick={() => hendleUpdate(data, record.id)} />;
+            }
+          });
+        } else if ((hasTypeOf(String) || hasTypeOf(Number) || hasTypeOf(Date)) && key !== 'id') {
+          columns.push({
+            title: (
+              <a onClick={e => orderBy(e, key)} href="#">
+                {startCase(key)} {renderOrderByArrow(key)}
+              </a>
+            ),
+            dataIndex: key,
+            key: key,
+            width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+            render: (text, record) => (
               <EditableCell
                 value={text}
                 hasTypeOf={hasTypeOf}
-                schemaName={value.type.name}
-                record={record}
-                render={
-                  customTableColumns[key] && customTableColumns[key]['render']
-                    ? customTableColumns[key]['render']
-                    : text => text[sortBy]
-                }
-                onChange={onCellChange(`${key}Id`, record.id, hendleUpdate)}
+                render={customFields[key] && customFields[key]['render'] ? customFields[key]['render'] : text => text}
+                onChange={onCellChange(key, record.id, hendleUpdate)}
               />
             )
-        });
-      } else if (hasTypeOf(Boolean)) {
-        columns.push({
-          title: (
-            <a onClick={e => orderBy(e, key)} href="#">
-              {startCase(key)} {renderOrderByArrow(key)}
-            </a>
-          ),
-          dataIndex: key,
-          key: key,
-          width: 100,
-          render: (text, record) => {
-            const data = {};
-            data[key] = !text;
-            return <Switch checked={text} onClick={() => hendleUpdate(data, record.id)} />;
-          }
-        });
-      } else if ((hasTypeOf(String) || hasTypeOf(Number) || hasTypeOf(Date)) && key !== 'id') {
-        columns.push({
-          title: (
-            <a onClick={e => orderBy(e, key)} href="#">
-              {startCase(key)} {renderOrderByArrow(key)}
-            </a>
-          ),
-          dataIndex: key,
-          key: key,
-          render: (text, record) => (
-            <EditableCell
-              value={text}
-              hasTypeOf={hasTypeOf}
-              render={
-                customTableColumns[key] && customTableColumns[key]['render']
-                  ? customTableColumns[key]['render']
-                  : text => text
-              }
-              onChange={onCellChange(key, record.id, hendleUpdate)}
-            />
-          )
-        });
-      } else if (value.type.constructor !== Array) {
-        columns.push({
-          title: (
-            <a onClick={e => orderBy(e, key)} href="#">
-              {startCase(key)} {renderOrderByArrow(key)}
-            </a>
-          ),
-          dataIndex: key,
-          key: key,
-          render: (text, record) =>
-            customTableColumns[key] && customTableColumns[key]['render']
-              ? customTableColumns[key]['render'](text, record)
-              : customTableColumns[key] && customTableColumns[key]['render']
-                ? customTableColumns[key]['render'](text, record)
-                : text
-        });
+          });
+        } else if (value.type.constructor !== Array) {
+          columns.push({
+            title: (
+              <a onClick={e => orderBy(e, key)} href="#">
+                {startCase(key)} {renderOrderByArrow(key)}
+              </a>
+            ),
+            dataIndex: key,
+            key: key,
+            width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+            render: (text, record) =>
+              customFields[key] && customFields[key]['render']
+                ? customFields[key]['render'](text, record)
+                : customFields[key] && customFields[key]['render'] ? customFields[key]['render'](text, record) : text
+          });
+        }
       }
+    } else {
+      columns.push({
+        title: startCase(key),
+        dataIndex: key,
+        key: key,
+        width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+        render: (text, record) =>
+          customFields[key] && customFields[key]['render'] ? customFields[key]['render'](text, record) : null
+      });
     }
   }
 
@@ -147,6 +160,7 @@ export const createColumnFields = (
     title: 'Actions',
     key: 'actions',
     width: 150,
+    fixed: 'right',
     render: (text, record) => [
       <Link className="link" to={`/${link}/${record.id}`} key="edit">
         <Button color="primary" size="sm">
@@ -177,21 +191,7 @@ const tailFormItemLayout = {
   }
 };
 
-export const mapFormPropsToValues = (schema, formdata) => {
-  let fields = {};
-  for (const key of schema.keys()) {
-    const value = schema.values[key];
-    if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
-      fields[key] = formdata ? formdata[key] : '';
-    } else if (value.type.constructor === Array) {
-      fields[key] = formdata ? formdata[key] : [];
-    }
-  }
-
-  return fields;
-};
-
-export const createFormFields = (
+export const createFormFields = ({
   handleChange,
   setFieldValue,
   handleBlur,
@@ -200,103 +200,254 @@ export const createFormFields = (
   values = {},
   formItemLayout,
   prefix = '',
-  batch = false
-) => {
+  customFields = {},
+  formType = 'form'
+}) => {
   let fields = [];
+  // use customFields if definded otherwise use schema.keys()
+  const keys =
+    customFields.constructor === Object && Object.keys(customFields).length !== 0
+      ? Object.keys(customFields)
+      : schema.keys();
 
-  for (const key of schema.keys()) {
+  for (const key of keys) {
     const value = schema.values[key];
     const type = value.type.constructor === Array ? value.type[0] : value.type;
 
     const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
 
-    if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
-      //let validate = [];
-      //if (!value.optional && !batch) {
-      //  validate.push(required);
-      //}
+    if (formType === 'filter') {
+      if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
+        //let validate = [];
+        //if (!value.optional && !batch) {
+        //  validate.push(required);
+        //}
 
-      let component = RenderField;
-      const value = values ? values[key] : '';
-      let onChange = handleChange;
-      let onBlur = handleBlur;
-      let style = {};
+        let component = RenderField;
+        const value = values ? values[key] : '';
+        let style = {};
+        let inputType = 'text';
 
-      if (type.isSchema) {
-        component = RenderSelect;
-        onChange = setFieldValue;
-        onBlur = setFieldTouched;
-        if (batch) {
-          style = { width: 100 };
-        }
-      } else if (hasTypeOf(Boolean)) {
-        component = RenderSwitch;
-        onChange = setFieldValue;
-        onBlur = setFieldTouched;
-      } else if (hasTypeOf(Date)) {
-        component = RenderDate;
-        onChange = setFieldValue;
-        onBlur = setFieldTouched;
-      }
-
-      fields.push(
-        <Field
-          name={`${prefix}${key}`}
-          key={key}
-          component={component}
-          schemaName={type.name}
-          value={value}
-          type="text"
-          style={style}
-          label={startCase(key)}
-          //validate={validate}
-          formItemLayout={formItemLayout}
-          onChange={onChange}
-          onBlur={onBlur}
-        />
-      );
-    } else {
-      if (value.type.constructor === Array && !batch) {
-        if (values[key]) {
+        if (type.isSchema) {
+          component = RenderSelect;
+          if (formType !== 'form') {
+            style = { width: 100 };
+          }
           fields.push(
-            <FieldArray
-              name={key}
-              key={key}
-              render={({ push, remove }) => {
-                return (
-                  <Row>
-                    <Col span={12} offset={6}>
-                      {values[key].map((field, index) => (
-                        <div key={index} className="field-array-form">
-                          {createFormFields(
-                            handleChange,
-                            setFieldValue,
-                            handleBlur,
-                            setFieldTouched,
-                            value.type[0],
-                            mapFormPropsToValues(value.type[0], field),
-                            formItemLayout,
-                            `${key}[${index}].`
-                          )}
-                          <FormItem {...tailFormItemLayout}>
-                            <Button color="primary" size="sm" onClick={() => remove(index)}>
-                              Delete
-                            </Button>
-                          </FormItem>
-                        </div>
-                      ))}
-                      <FormItem {...tailFormItemLayout}>
-                        {/*submitFailed && error && <span>{error}</span>*/}
-                        <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
-                          Add field
-                        </Button>
-                      </FormItem>
-                    </Col>
-                  </Row>
-                );
-              }}
-            />
+            <Col span={8} key={key}>
+              <Field
+                name={`${prefix}${key}`}
+                key={key}
+                component={component}
+                schema={type}
+                value={value}
+                type={inputType}
+                style={style}
+                label={startCase(key)}
+                //validate={validate}
+                formItemLayout={formItemLayout}
+                onChange={setFieldValue}
+                onBlur={setFieldTouched}
+                formType={formType}
+                hasTypeOf={hasTypeOf}
+              />
+            </Col>
           );
+        } else if (hasTypeOf(Boolean)) {
+          component = RenderSwitch;
+          fields.push(
+            <Col span={8} key={key}>
+              <Field
+                name={`${prefix}${key}`}
+                key={key}
+                component={component}
+                schema={type}
+                value={value}
+                type={inputType}
+                style={style}
+                label={startCase(key)}
+                //validate={validate}
+                formItemLayout={formItemLayout}
+                onChange={setFieldValue}
+                onBlur={setFieldTouched}
+                formType={formType}
+                hasTypeOf={hasTypeOf}
+              />
+            </Col>
+          );
+        } else if (hasTypeOf(Date)) {
+          component = RenderDate;
+          fields.push(
+            <Col span={8} key={`${key}_lte`}>
+              <Field
+                name={`${prefix}${key}_lte`}
+                key={`${key}_lte`}
+                component={component}
+                schema={type}
+                value={values[`${key}_lte`] ? values[`${key}_lte`] : ''}
+                type={inputType}
+                style={style}
+                label={`From ${startCase(key)}`}
+                //validate={validate}
+                formItemLayout={formItemLayout}
+                onChange={setFieldValue}
+                onBlur={setFieldTouched}
+                formType={formType}
+                hasTypeOf={hasTypeOf}
+              />
+            </Col>
+          );
+          fields.push(
+            <Col span={8} key={`${key}_gte`}>
+              <Field
+                name={`${prefix}${key}_gte`}
+                key={`${key}_gte`}
+                component={component}
+                schema={type}
+                value={values[`${key}_gte`] ? values[`${key}_gte`] : ''}
+                type={inputType}
+                style={style}
+                label={`To ${startCase(key)}`}
+                //validate={validate}
+                formItemLayout={formItemLayout}
+                onChange={setFieldValue}
+                onBlur={setFieldTouched}
+                formType={formType}
+                hasTypeOf={hasTypeOf}
+              />
+            </Col>
+          );
+        } else if (hasTypeOf(Number)) {
+          inputType = 'number';
+          fields.push(
+            <Col span={8} key={key}>
+              <Field
+                name={`${prefix}${key}`}
+                key={key}
+                component={component}
+                schema={type}
+                value={value}
+                type={inputType}
+                style={style}
+                label={startCase(key)}
+                //validate={validate}
+                formItemLayout={formItemLayout}
+                onChange={setFieldValue}
+                onBlur={setFieldTouched}
+                formType={formType}
+                hasTypeOf={hasTypeOf}
+              />
+            </Col>
+          );
+        } else {
+          fields.push(
+            <Col span={8} key={key}>
+              <Field
+                name={`${prefix}${key}`}
+                key={key}
+                component={component}
+                schema={type}
+                value={value}
+                type={inputType}
+                style={style}
+                label={startCase(key)}
+                //validate={validate}
+                formItemLayout={formItemLayout}
+                onChange={setFieldValue}
+                onBlur={setFieldTouched}
+                formType={formType}
+                hasTypeOf={hasTypeOf}
+              />
+            </Col>
+          );
+        }
+      }
+    } else {
+      if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
+        //let validate = [];
+        //if (!value.optional && !batch) {
+        //  validate.push(required);
+        //}
+
+        let component = RenderField;
+        const value = values ? values[key] : '';
+        let style = {};
+        let inputType = 'text';
+
+        if (type.isSchema) {
+          component = RenderSelect;
+          if (formType !== 'form') {
+            style = { width: 100 };
+          }
+        } else if (hasTypeOf(Boolean)) {
+          component = RenderSwitch;
+        } else if (hasTypeOf(Date)) {
+          component = RenderDate;
+        } else if (hasTypeOf(Number)) {
+          inputType = 'number';
+        }
+
+        fields.push(
+          <Field
+            name={`${prefix}${key}`}
+            key={key}
+            component={component}
+            schema={type}
+            value={value}
+            type={inputType}
+            style={style}
+            label={startCase(key)}
+            //validate={validate}
+            formItemLayout={formItemLayout}
+            onChange={setFieldValue}
+            onBlur={setFieldTouched}
+            formType={formType}
+            hasTypeOf={hasTypeOf}
+          />
+        );
+      } else {
+        if (value.type.constructor === Array && formType === 'form') {
+          if (values[key]) {
+            fields.push(
+              <FieldArray
+                name={key}
+                key={key}
+                render={({ push, remove }) => {
+                  return (
+                    <Row>
+                      <Col span={12} offset={6}>
+                        {values[key].map((field, index) => (
+                          <div key={index} className="field-array-form">
+                            {createFormFields({
+                              handleChange,
+                              setFieldValue,
+                              handleBlur,
+                              setFieldTouched,
+                              schema: value.type[0],
+                              values: mapFormPropsToValues({ schema: value.type[0], data: field }),
+                              formItemLayout: formItemLayout,
+                              prefix: `${key}[${index}].`
+                            })}
+                            <FormItem {...tailFormItemLayout}>
+                              <Button color="primary" size="sm" onClick={() => remove(index)}>
+                                Delete
+                              </Button>
+                            </FormItem>
+                          </div>
+                        ))}
+                        <FormItem {...tailFormItemLayout}>
+                          {/*submitFailed && error && <span>{error}</span>*/}
+                          <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
+                            Add field
+                          </Button>
+                        </FormItem>
+                      </Col>
+                    </Row>
+                  );
+                }}
+              />
+            );
+          }
         }
       }
     }
@@ -311,7 +462,7 @@ class EditableCell extends React.Component {
     record: PropTypes.object,
     render: PropTypes.func,
     hasTypeOf: PropTypes.func,
-    schemaName: PropTypes.string,
+    schema: PropTypes.object,
     onChange: PropTypes.func.isRequired
   };
 
@@ -336,6 +487,9 @@ class EditableCell extends React.Component {
     this.setState({ value: dateString });
   };
   handleSelectChange = ({ key, label }) => {
+    //console.log('EditableCell: handleSelectChange');
+    //console.log('key:', key);
+    //console.log('label:', label);
     this.setState({ value: { id: key, name: label } });
   };
   check = () => {
@@ -364,7 +518,7 @@ class EditableCell extends React.Component {
   };
   render() {
     const { value, record, searchText, dirty, editable } = this.state;
-    const { render, hasTypeOf, schemaName } = this.props;
+    const { render, hasTypeOf, schema } = this.props;
 
     let input = null;
     if (editable) {
@@ -388,10 +542,17 @@ class EditableCell extends React.Component {
         );
       } else if (hasTypeOf(DomainSchema)) {
         const Option = Select.Option;
-        const camelizeSchemaName = camelize(schemaName);
-        const pascalizeSchemaName = pascalize(schemaName);
-
-        let formatedValue = { key: value.id.toString(), label: value.name };
+        const camelizeSchemaName = camelize(schema.name);
+        const pascalizeSchemaName = pascalize(schema.name);
+        let column = 'name';
+        for (const remoteKey of schema.keys()) {
+          const remoteValue = schema.values[remoteKey];
+          if (remoteValue.sortBy) {
+            column = remoteKey;
+          }
+        }
+        let formatedValue = { key: value.id.toString(), label: value.name ? value.name : value[column] };
+        //console.log('formatedValue:', formatedValue);
         // eslint-disable-next-line import/no-dynamic-require
         const Query = require(`../${camelizeSchemaName}/containers/${pascalizeSchemaName}Query`)['default'];
 
@@ -402,7 +563,7 @@ class EditableCell extends React.Component {
                 const options = data.edges
                   ? data.edges.map(opt => (
                       <Option key={opt.id} value={opt.id.toString()}>
-                        {opt.name}
+                        {opt[column]}
                       </Option>
                     ))
                   : null;
@@ -422,7 +583,7 @@ class EditableCell extends React.Component {
                       if (!dirty) {
                         options.unshift(
                           <Option key={value.id} value={value.id.toString()}>
-                            {value.name}
+                            {value[column]}
                           </Option>
                         );
                       } else {
@@ -444,7 +605,7 @@ class EditableCell extends React.Component {
                       option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   };
                 }
-                return React.createElement(Select, props, options);
+                return <Select {...props}>{options}</Select>;
               } else {
                 return <Spin size="small" />;
               }

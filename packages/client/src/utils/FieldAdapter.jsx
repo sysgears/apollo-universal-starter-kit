@@ -15,7 +15,9 @@ export default class FieldAdapter extends Component {
     defaultValue: PropTypes.string,
     checked: PropTypes.bool,
     defaultChecked: PropTypes.bool,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    formType: PropTypes.string.isRequired,
+    hasTypeOf: PropTypes.func.isRequired
   };
 
   constructor(props, context) {
@@ -27,7 +29,19 @@ export default class FieldAdapter extends Component {
 
   render() {
     const { formik } = this.context;
-    const { component, name, value, defaultValue, checked, defaultChecked, onChange, onBlur, disabled } = this.props;
+    const {
+      component,
+      name,
+      value,
+      defaultValue,
+      checked,
+      defaultChecked,
+      onChange,
+      onBlur,
+      disabled,
+      formType,
+      hasTypeOf
+    } = this.props;
 
     const meta = {
       touched: formik.touched[name],
@@ -48,7 +62,9 @@ export default class FieldAdapter extends Component {
     return React.createElement(component, {
       ...this.props,
       input,
-      meta
+      meta,
+      formType,
+      hasTypeOf
     });
   }
 }

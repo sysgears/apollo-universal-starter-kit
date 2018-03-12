@@ -3,12 +3,15 @@ import uuidv4 from 'uuid';
 import { decamelize, decamelizeKeys, camelize, camelizeKeys, pascalize } from 'humps';
 import knexnest from 'knexnest';
 import parseFields from 'graphql-parse-fields';
+import moment from 'moment';
 
 import FieldError from '../../../common/FieldError';
 import knex from './connector';
 import { selectBy, orderedFor } from './helpers';
 import selectAdapter from './select';
 import log from '../../../common/log';
+
+const dateFormat = 'YYYY-MM-DD';
 
 export function createWithIdGenAdapter(options) {
   const T = options.table;
@@ -406,7 +409,7 @@ export function deleteRelationAdapter(options) {
 
 export default class Crud {
   getTableName() {
-    return decamelize(this.schema.__.name);
+    return decamelize(this.schema.__.tableName ? this.schema.__.tableName : this.schema.name);
   }
 
   getFullTableName() {
@@ -415,6 +418,21 @@ export default class Crud {
 
   getSchema() {
     return this.schema;
+  }
+
+  normalizeFields(data) {
+    //console.log('normalizeFields: ', data);
+    for (const key of _.keys(data)) {
+      if (this.schema.values.hasOwnProperty(key)) {
+        const value = this.schema.values[key];
+        const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+        if (hasTypeOf(Date)) {
+          data[key] = moment(data[key]).format('YYYY-MM-DD');
+        }
+      }
+    }
+    //console.log('normalizeFields: ', data);
+    return data;
   }
 
   _getList({ limit, offset, orderBy, filter }, info) {
@@ -436,11 +454,14 @@ export default class Crud {
       if (orderBy.order) {
         order = orderBy.order;
       }
+      //console.log('orderBy, column:', column);
+      //console.log('orderBy, order:', order);
 
       for (const key of this.schema.keys()) {
         if (column === key) {
           const value = this.schema.values[key];
           if (value.type.isSchema) {
+            const tableName = decamelize(value.type.__.tableName ? value.type.__.tableName : value.type.name);
             let sortBy = 'name';
             for (const remoteKey of value.type.keys()) {
               const remoteValue = value.type.values[remoteKey];
@@ -448,22 +469,53 @@ export default class Crud {
                 sortBy = remoteKey;
               }
             }
-            column = `${this.getTableName()}.${sortBy}`;
+            column = `${tableName}.${sortBy}`;
           } else {
             column = `${this.getTableName()}.${decamelize(column)}`;
           }
         }
       }
-
+      //console.log('column:', column);
+      //console.log('order:', order);
       queryBuilder.orderBy(column, order);
     } else {
       queryBuilder.orderBy(`${this.getTableName()}.id`);
     }
 
     if (filter) {
+      //console.log('filter: ', filter);
+      const schema = this.schema;
+      const tableName = this.getTableName();
+      queryBuilder.where(function() {
+        for (const key of schema.keys()) {
+          const value = schema.values[key];
+          const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+          //console.log('filter, key: ', key);
+          let filterKey = key;
+
+          if (value.type.isSchema) {
+            filterKey = `${key}Id`;
+          }
+
+          let filterValue = filter[filterKey];
+          if (hasTypeOf(Date)) {
+            if (filter[`${filterKey}_lte`] && filter[`${filterKey}_lte`] !== '') {
+              const filterValue_lte = moment(filter[`${filterKey}_lte`]).format(dateFormat);
+              this.andWhere(`${tableName}.${decamelize(filterKey)}`, '>=', `${filterValue_lte}`);
+            }
+            if (filter[`${filterKey}_gte`] && filter[`${filterKey}_gte`] !== '') {
+              const filterValue_gte = moment(filter[`${filterKey}_gte`]).format(dateFormat);
+              this.andWhere(`${tableName}.${decamelize(filterKey)}`, '<=', `${filterValue_gte}`);
+            }
+          } else {
+            if (_.has(filter, filterKey) && filter[filterKey] !== '') {
+              this.andWhere(`${tableName}.${decamelize(filterKey)}`, '=', `${filterValue}`);
+            }
+          }
+        }
+      });
+
       if (_.has(filter, 'searchText') && filter.searchText !== '') {
-        const schema = this.schema;
-        const tableName = this.getTableName();
         queryBuilder.where(function() {
           for (const key of schema.keys()) {
             const value = schema.values[key];
@@ -481,6 +533,8 @@ export default class Crud {
   async getPaginated(args, info) {
     const edges = await this._getList(args, parseFields(info).edges);
     const { count } = await this.getTotal();
+    //console.log('getPaginated, edges:', edges);
+    //console.log('getPaginated, count:', edges);
 
     return {
       edges,
@@ -516,7 +570,7 @@ export default class Crud {
 
   _create(data) {
     return knex(`${this.getFullTableName()}`)
-      .insert(decamelizeKeys(data))
+      .insert(decamelizeKeys(this.normalizeFields(data)))
       .returning('id');
   }
 
@@ -542,7 +596,7 @@ export default class Crud {
         nestedEntries.map(nested => {
           if (nested.data.create) {
             nested.data.create.map(async create => {
-              create[`${camelize(this.schema.__.name)}Id`] = id;
+              create[`${camelize(this.schema.name)}Id`] = id;
               await ctx[pascalize(nested.key)]._create(create);
             });
           }
@@ -557,7 +611,7 @@ export default class Crud {
 
   _update({ data, where }) {
     return knex(`${this.getFullTableName()}`)
-      .update(decamelizeKeys(data))
+      .update(decamelizeKeys(this.normalizeFields(data)))
       .where(where);
   }
 
@@ -667,7 +721,7 @@ ON t1.id = ? AND t2.id = ?
 
   _updateMany({ data, where: { id_in } }) {
     return knex(`${this.getFullTableName()}`)
-      .update(decamelizeKeys(data))
+      .update(decamelizeKeys(this.normalizeFields(data)))
       .whereIn('id', id_in);
   }
 

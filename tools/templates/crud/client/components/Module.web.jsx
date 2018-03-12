@@ -31,9 +31,7 @@ export default class $Module$ extends React.PureComponent {
       <PageLayout>
         {this.renderMetaData(title)}
         <h2>{title}</h2>
-        <hr />
         <$Module$Filter />
-        <hr />
         <$Module$List link={link} />
       </PageLayout>
     );

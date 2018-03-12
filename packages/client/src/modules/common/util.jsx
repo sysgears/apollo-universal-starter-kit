@@ -15,6 +15,6 @@ export const createFormFields = schema => {
   return fields;
 };
 
-export const pickInputFields = (schema, values) => {
+export const pickInputFields = ({ schema, values }) => {
   return pick(values, schema.keys());
 };

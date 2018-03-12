@@ -29,6 +29,20 @@ export const orderedFor = (rows, collection, field, singleObject) => {
   });
 };
 
+export const orderedForArray = (rows, collection, field, arrayElement) => {
+  // return the rows ordered for the collection
+  const inGroupsOfField = groupBy(rows, field);
+  return collection.map(element => {
+    const elementArray = inGroupsOfField[element];
+    if (elementArray) {
+      return inGroupsOfField[element].map(elm => {
+        return elm[arrayElement];
+      });
+    }
+    return [];
+  });
+};
+
 const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNames, single) => {
   for (const key of Object.keys(fields)) {
     if (key !== '__typename') {
@@ -39,7 +53,11 @@ const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNam
         }
         const as = parentPath.length > 0 ? `${parentPath.join('_')}_${key}` : key;
         const arrayPrefix = single ? '' : '_';
-        selectItems.push(`${decamelize(domainSchema.__.name)}.${decamelize(key)} as ${arrayPrefix}${as}`);
+        selectItems.push(
+          `${decamelize(domainSchema.__.tableName ? domainSchema.__.tableName : domainSchema.name)}.${decamelize(
+            key
+          )} as ${arrayPrefix}${as}`
+        );
       } else {
         if (value.type.constructor === Array) {
           //console.log('Array');
@@ -48,7 +66,11 @@ const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNam
           //console.log(value.type[0].name);
         } else {
           if (!value.type.__.transient) {
-            joinNames.push({ key: decamelize(key), name: decamelize(value.type.__.name) });
+            joinNames.push({
+              key: decamelize(key),
+              prefix: value.type.__.tablePrefix ? value.type.__.tablePrefix : '',
+              name: decamelize(value.type.__.tableName ? value.type.__.tableName : value.type.name)
+            });
           }
 
           parentPath.push(key);
@@ -71,12 +93,8 @@ export const selectBy = (schema, fields, single = false) => {
 
   return query => {
     // join table names
-    joinNames.map(({ key, name }) => {
-      query.leftJoin(
-        `${schema.__.tablePrefix}${name} as ${name}`,
-        `${name}.id`,
-        `${decamelize(schema.__.name)}.${key}_id`
-      );
+    joinNames.map(({ key, prefix, name }) => {
+      query.leftJoin(`${prefix}${name} as ${name}`, `${name}.id`, `${decamelize(schema.name)}.${key}_id`);
     });
 
     return query.select(selectItems);

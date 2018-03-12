@@ -2,12 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { withFormik } from 'formik';
+import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { Table, Button, Popconfirm, Row, Col, Form, FormItem } from '../web';
-import { createColumnFields, createFormFields, mapFormPropsToValues } from '../../util';
-import { pickInputFields } from '../../../../utils/crud';
+import { createColumnFields, createFormFields } from '../../util';
+import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
 
 function dragDirection(dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
@@ -100,40 +100,26 @@ class ListView extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     data: PropTypes.object,
+    sortEntries: PropTypes.func.isRequired,
     orderBy: PropTypes.object,
-    onOrderBy: PropTypes.func.isRequired,
     updateEntry: PropTypes.func.isRequired,
     deleteEntry: PropTypes.func.isRequired,
-    sortEntries: PropTypes.func.isRequired,
+    onOrderBy: PropTypes.func.isRequired,
     deleteManyEntries: PropTypes.func.isRequired,
     updateManyEntries: PropTypes.func.isRequired,
     loadMoreRows: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
     link: PropTypes.string.isRequired,
-    submitting: PropTypes.bool,
-    customTableColumns: PropTypes.object,
-    handleChange: PropTypes.func,
-    setFieldValue: PropTypes.func,
-    handleBlur: PropTypes.func,
-    setFieldTouched: PropTypes.func,
-    handleSubmit: PropTypes.func,
-    values: PropTypes.object,
-    setValues: PropTypes.func,
-    status: PropTypes.object
+    customColumnFields: PropTypes.object,
+    customColumnActions: PropTypes.object,
+    customBatchFields: PropTypes.object,
+    tableScroll: PropTypes.object
   };
 
   state = {
     selectedRowKeys: [],
     loading: false
   };
-
-  componentWillReceiveProps(nextProps) {
-    const { status } = this.props;
-
-    if (nextProps.status !== status) {
-      this.setState({ selectedRowKeys: [] });
-    }
-  }
 
   components = {
     body: {
@@ -230,13 +216,11 @@ class ListView extends React.Component {
       loadMoreRows,
       schema,
       link,
-      customTableColumns,
-      handleSubmit,
-      handleChange,
-      setFieldValue,
-      handleBlur,
-      setFieldTouched,
-      values
+      customColumnFields = {},
+      customColumnActions = {},
+      customBatchFields,
+      updateManyEntries,
+      tableScroll = null
     } = this.props;
     const { selectedRowKeys } = this.state;
     const hasSelected = selectedRowKeys.length > 0;
@@ -245,13 +229,13 @@ class ListView extends React.Component {
       selectedRowKeys,
       onChange: selectedRowKeys => {
         this.setState({ selectedRowKeys });
-
-        this.props.setValues({
-          ...this.props.values,
-          selectedRowKeys: selectedRowKeys
-        });
       }
     };
+
+    let showBatchFields = true;
+    if (customBatchFields && customBatchFields.constructor === Object && Object.keys(customBatchFields).length === 0) {
+      showBatchFields = false;
+    }
 
     const title = () => {
       return (
@@ -285,43 +269,61 @@ class ListView extends React.Component {
               </Button>
             </Popconfirm>
           </Col>
-          <Col span={21}>
-            {
-              <Form layout="inline" name="post" onSubmit={handleSubmit}>
-                {createFormFields(
-                  handleChange,
-                  setFieldValue,
-                  handleBlur,
-                  setFieldTouched,
-                  schema,
-                  values,
-                  {},
-                  null,
-                  '',
-                  true
+          {showBatchFields && (
+            <Col span={21}>
+              <Formik
+                initialValues={mapFormPropsToValues({ schema })}
+                onSubmit={async (values, { resetForm }) => {
+                  //console.log('handleSubmit values:', values);
+
+                  const insertValues = pickInputFields({ schema, values });
+                  //console.log('handleSubmit selectedRowKeys:', selectedRowKeys);
+                  //console.log('handleSubmit insertValues:', insertValues);
+
+                  if (selectedRowKeys && Object.keys(insertValues).length > 0) {
+                    await updateManyEntries(insertValues, { id_in: selectedRowKeys });
+                    this.setState({ selectedRowKeys: [] });
+                    resetForm();
+                  }
+                }}
+                render={({ values, setFieldValue, setFieldTouched, handleChange, handleBlur, handleSubmit }) => (
+                  <Form layout="inline" name="post" onSubmit={handleSubmit}>
+                    {createFormFields({
+                      handleChange,
+                      setFieldValue,
+                      handleBlur,
+                      setFieldTouched,
+                      schema,
+                      values,
+                      formItemLayout: {},
+                      prefix: '',
+                      formType: 'batch'
+                    })}
+                    <FormItem>
+                      <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>
+                        Update
+                      </Button>
+                    </FormItem>
+                  </Form>
                 )}
-                <FormItem>
-                  <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>
-                    Update
-                  </Button>
-                </FormItem>
-              </Form>
-            }
-          </Col>
+              />
+            </Col>
+          )}
         </Row>
       );
     };
 
-    const columns = createColumnFields(
+    const columns = createColumnFields({
       schema,
       link,
-      this.orderBy,
-      this.renderOrderByArrow,
-      this.hendleUpdate,
-      this.hendleDelete,
-      this.onCellChange,
-      customTableColumns
-    );
+      orderBy: this.orderBy,
+      renderOrderByArrow: this.renderOrderByArrow,
+      hendleUpdate: this.hendleUpdate,
+      hendleDelete: this.hendleDelete,
+      onCellChange: this.onCellChange,
+      customFields: customColumnFields,
+      customActions: customColumnActions
+    });
 
     let tableProps = {
       dataSource: data ? data.edges : null,
@@ -333,6 +335,13 @@ class ListView extends React.Component {
       title: title,
       footer: footer
     };
+
+    if (tableScroll) {
+      tableProps = {
+        ...tableProps,
+        scroll: tableScroll
+      };
+    }
 
     // only include this props if table includes rank, taht is used for sorting
     if (schema.keys().includes('rank')) {
@@ -348,30 +357,11 @@ class ListView extends React.Component {
 
     return (
       <div>
-        {React.createElement(Table, tableProps, null)}
+        <Table {...tableProps} />
         {data && this.renderLoadMore(data, loadMoreRows)}
       </div>
     );
   }
 }
 
-const ListViewWithFormik = withFormik({
-  mapPropsToValues: ({ schema }) => mapFormPropsToValues(schema, {}),
-  async handleSubmit(values, { resetForm, setStatus, props: { updateManyEntries, schema } }) {
-    //console.log('handleSubmit values:', values);
-
-    const { selectedRowKeys, ...restValues } = values;
-    const insertValues = pickInputFields(schema, restValues);
-    //console.log('handleSubmit selectedRowKeys:', selectedRowKeys);
-    //console.log('handleSubmit insertValues:', insertValues);
-
-    if (selectedRowKeys && Object.keys(insertValues).length > 0) {
-      await updateManyEntries(insertValues, { id_in: selectedRowKeys });
-      setStatus({ submitted: true });
-      resetForm();
-    }
-  },
-  displayName: 'BatchUpdateForm'
-});
-
-export default ListViewWithFormik(DragDropContext(HTML5Backend)(ListView));
+export default DragDropContext(HTML5Backend)(ListView);

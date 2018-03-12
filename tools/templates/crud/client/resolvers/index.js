@@ -6,6 +6,14 @@ const TYPE_$MODULE$_STATE = '$Module$State';
 const TYPE_$MODULE$_STATE_FILTER = 'Filter$Module$Input';
 const TYPE_$MODULE$_STATE_ORDER_BY = 'OrderBy$Module$Input';
 
+// filter data
+const defaultFilters = {
+  id: '',
+  name: '',
+  searchText: ''
+};
+// end filter data
+
 const defaults = {
   $module$State: {
     limit: 25,
@@ -15,7 +23,7 @@ const defaults = {
       __typename: TYPE_$MODULE$_STATE_ORDER_BY
     },
     filter: {
-      searchText: '',
+      ...defaultFilters,
       __typename: TYPE_$MODULE$_STATE_FILTER
     },
     __typename: TYPE_$MODULE$_STATE
@@ -42,8 +50,15 @@ const resolvers = {
     },
     update$Module$Filter: (_, { filter }, { cache }) => {
       const { $module$State } = cache.readQuery({ query: $MODULE$_STATE_QUERY });
+
+      let mergeFilter = filter;
+      if (!filter.hasOwnProperty('searchText')) {
+        const { searchText, ...restFilters } = defaults.$module$State.filter;
+        mergeFilter = { ...restFilters, ...filter };
+      }
+
       const new$Module$State = update($module$State, {
-        filter: { $merge: filter }
+        filter: { $merge: mergeFilter }
       });
 
       cache.writeData({

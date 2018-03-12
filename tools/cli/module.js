@@ -205,32 +205,42 @@ function updateSchema(logger, module) {
       const file = `schema.graphql`;
 
       // regenerate input fields
-      let moduleData = `  node: ${Module}\n`;
+      //let moduleData = `  node: ${Module}\n`;
       let inputCreate = '';
       let inputUpdate = '';
+      let inputFilter = `  searchText: String\n`;
       let manyInput = '';
       for (const key of schema.keys()) {
         const value = schema.values[key];
+        const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
         if (value.type.isSchema) {
           let required = value.optional ? '' : '!';
           inputCreate += `  ${key}Id: Int${required}\n`;
           inputUpdate += `  ${key}Id: Int\n`;
+          inputFilter += `  ${key}Id: Int\n`;
           //moduleData += `  ${key}s(limit: Int, orderBy: OrderByInput): [${value.type.name}]\n`;
         } else if (value.type.constructor !== Array) {
           if (key !== 'id') {
             inputCreate += `  ${key}: ${generateField(value)}\n`;
             inputUpdate += `  ${key}: ${generateField(value, true)}\n`;
           }
+
+          if (hasTypeOf(Date)) {
+            inputFilter += `  ${key}_lte: ${generateField(value, true)}\n`;
+            inputFilter += `  ${key}_gte: ${generateField(value, true)}\n`;
+          } else {
+            inputFilter += `  ${key}: ${generateField(value, true)}\n`;
+          }
         } else if (value.type.constructor === Array) {
           inputCreate += `  ${key}: ${pascalize(key)}CreateManyInput\n`;
           inputUpdate += `  ${key}: ${pascalize(key)}UpdateManyInput\n`;
 
-          for (const remoteKey of value.type[0].keys()) {
+          /*for (const remoteKey of value.type[0].keys()) {
             const remoteValue = value.type[0].values[remoteKey];
             if (remoteValue.type.isSchema) {
               moduleData += `  ${remoteKey}s: [${pascalize(remoteKey)}]\n`;
             }
-          }
+          }*/
 
           manyInput += `
 
@@ -268,12 +278,12 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         .to(file);
 
       // override ModuleData in schema.graphql file
-      let replaceModuleData = `type ${Module}Data {([^}])*\\n}`;
+      /*let replaceModuleData = `type ${Module}Data {([^}])*\\n}`;
       shell
         .ShellString(shell.cat(file).replace(RegExp(replaceModuleData, 'g'), `type ${Module}Data {\n${moduleData}}`))
-        .to(file);
+        .to(file);*/
 
-      // override CreateModuleInput in schema.graphql file
+      // override ModuleCreateInput in schema.graphql file
       const replaceCreate = `input ${Module}CreateInput {([^}])*\\n}`;
       shell
         .ShellString(
@@ -281,7 +291,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         )
         .to(file);
 
-      // override UpdateModuleInput in schema.graphql file
+      // override ModuleUpdateInput in schema.graphql file
       const replaceUpdate = `input ${Module}UpdateInput {([^}])*\\n}`;
       shell
         .ShellString(
@@ -289,10 +299,19 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         )
         .to(file);
 
+      // override ModuleFilterInput in schema.graphql file
+      const replaceFilter = `input ${Module}FilterInput {([^}])*\\n}`;
+      shell
+        .ShellString(
+          shell.cat(file).replace(RegExp(replaceFilter, 'g'), `input ${Module}FilterInput {\n${inputFilter}}`)
+        )
+        .to(file);
+
       logger.info(chalk.green(`✔ Schema in ${pathSchema}${file} successfully updated!`));
 
       const resolverFile = `resolvers.js`;
-      let replace = '';
+      let replace = `  ${schema.name}: {
+`;
       //moduleData = '';
       for (const key of schema.keys()) {
         const value = schema.values[key];
@@ -302,13 +321,11 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     },
 `;*/
         } else if (value.type.constructor === Array) {
-          replace += `  ${schema.name}: {
-    ${key}: createBatchResolver((sources, args, ctx, info) => {
+          replace += `    ${key}: createBatchResolver((sources, args, ctx, info) => {
       return ctx.${schema.name}.getByIds(sources.map(({ id }) => id), '${camelize(schema.name)}', ctx.${
             value.type[0].name
           }, info);
-    })
-  },
+    }),
 `;
           /*
           for (const remoteKey of value.type[0].keys()) {
@@ -322,6 +339,8 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
           }*/
         }
       }
+      replace += `  },
+`;
       /*
       if (moduleData !== '') {
         moduleData = `${moduleData.replace(/,\s*$/, '')}
@@ -394,7 +413,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
               graphql += `      id\n`;
               graphql += `      ${remotecolumn}\n`;
               graphql += `    }\n`;
-            } else {
+            } else if (remoteValue.type.constructor !== Array) {
               graphql += `    ${remoteKey}\n`;
             }
           }
@@ -468,6 +487,123 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     } else {
       logger.error(chalk.red(`✘ Module query path ${pathModuleQuery} not found!`));
     }*/
+
+    // get state client file
+    const pathStateClient = `${__dirname}/../../packages/client/src/modules/${module}/graphql/`;
+    if (fs.existsSync(pathStateClient)) {
+      const file = `${Module}State.client.graphql`;
+
+      // regenerate graphql fragment
+      let graphql = '';
+      for (const key of schema.keys()) {
+        const value = schema.values[key];
+        const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+        if (value.type.isSchema) {
+          graphql += `    ${key}Id\n`;
+          /*} else if (value.type.constructor === Array) {
+            graphql += `  ${key} {\n`;
+            for (const remoteKey of value.type[0].keys()) {
+              const remoteValue = value.type[0].values[remoteKey];
+              if (remoteValue.type.isSchema) {
+                let remotecolumn = 'name';
+                for (const remoteKey of remoteValue.type.keys()) {
+                  const remoteValue1 = remoteValue.type.values[remoteKey];
+                  if (remoteValue1.sortBy) {
+                    remotecolumn = remoteKey;
+                  }
+                }
+                graphql += `    ${remoteKey} {\n`;
+                graphql += `      id\n`;
+                graphql += `      ${remotecolumn}\n`;
+                graphql += `    }\n`;
+              } else {
+                graphql += `    ${remoteKey}\n`;
+              }
+            }
+            graphql += `  }\n`;*/
+        } else {
+          if (hasTypeOf(Date)) {
+            graphql += `    ${key}_lte\n`;
+            graphql += `    ${key}_gte\n`;
+          } else {
+            graphql += `    ${key}\n`;
+          }
+        }
+      }
+      graphql += `    searchText
+  }\n`;
+
+      shell.cd(pathStateClient);
+      // override graphql fragment file
+      const replaceStateClient = `filter {(.|\n)*\n}\n`;
+      shell.ShellString(shell.cat(file).replace(RegExp(replaceStateClient, 'g'), `filter {\n${graphql}}\n`)).to(file);
+
+      logger.info(chalk.green(`✔ State Client in ${pathStateClient}${file} successfully updated!`));
+    } else {
+      logger.error(chalk.red(`✘ State Client path ${pathStateClient} not found!`));
+    }
+
+    // get state resolver file
+    const pathStateResolver = `${__dirname}/../../packages/client/src/modules/${module}/resolvers/`;
+    if (fs.existsSync(pathStateResolver)) {
+      const file = `index.js`;
+
+      // regenerate resolver defaults
+      let defaults = `const defaultFilters = {\n`;
+      for (const key of schema.keys()) {
+        const value = schema.values[key];
+        const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+        if (value.type.isSchema) {
+          defaults += `  ${key}Id: '',\n`;
+          /*} else if (value.type.constructor === Array) {
+            graphql += `  ${key} {\n`;
+            for (const remoteKey of value.type[0].keys()) {
+              const remoteValue = value.type[0].values[remoteKey];
+              if (remoteValue.type.isSchema) {
+                let remotecolumn = 'name';
+                for (const remoteKey of remoteValue.type.keys()) {
+                  const remoteValue1 = remoteValue.type.values[remoteKey];
+                  if (remoteValue1.sortBy) {
+                    remotecolumn = remoteKey;
+                  }
+                }
+                graphql += `    ${remoteKey} {\n`;
+                graphql += `      id\n`;
+                graphql += `      ${remotecolumn}\n`;
+                graphql += `    }\n`;
+              } else {
+                graphql += `    ${remoteKey}\n`;
+              }
+            }
+            graphql += `  }\n`;*/
+        } else {
+          if (hasTypeOf(Date)) {
+            defaults += `  ${key}_lte: '',\n`;
+            defaults += `  ${key}_gte: '',\n`;
+          } else {
+            defaults += `  ${key}: '',\n`;
+          }
+        }
+      }
+
+      defaults += `  searchText: ''
+};\n`;
+
+      shell.cd(pathStateResolver);
+      // override state resolver file
+      const replaceStateResolverDefaults = `// filter data([^*]+)// end filter data`;
+      shell
+        .ShellString(
+          shell
+            .cat(file)
+            .replace(RegExp(replaceStateResolverDefaults, 'g'), `// filter data\n${defaults}// end filter data`)
+        )
+        .to(file);
+
+      logger.info(chalk.green(`✔ State Resolver in ${pathStateResolver}${file} successfully updated!`));
+    } else {
+      logger.error(chalk.red(`✘ State Resolver path ${pathStateResolver} not found!`));
+    }
   } else {
     logger.info(chalk.red(`✘ Module ${module} in path ${modulePath} not found!`));
   }

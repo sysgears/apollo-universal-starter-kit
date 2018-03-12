@@ -11,3 +11,11 @@ export const nestedOmit = (obj, iteratee, context) => {
 };
 
 export const removeTypename = obj => nestedOmit(obj, '__typename');
+
+export const removeEmpty = obj =>
+  Object.keys(obj)
+    .filter(key => obj[key] !== '')
+    .reduce((redObj, key) => {
+      redObj[key] = obj[key];
+      return redObj;
+    }, {});

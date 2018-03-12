@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
+import { Formik } from 'formik';
 
-import { onSubmit } from '../../../../utils/crud';
-import { createFormFields, mapFormPropsToValues } from '../../util';
-import { Form, FormItem, Button, Alert } from '../web';
+import { onSubmit, mapFormPropsToValues } from '../../../../utils/crud';
+import { createFormFields } from '../../util';
+import { Form, FormItem, Button } from '../web';
 //import { minLength, required, validateForm } from '../../../../../../common/validation';
 
 const tailFormItemLayout = {
@@ -37,48 +37,45 @@ const formItemLayout = {
 
 //const validate = values => validateForm(values, formSchema);
 
-const FormView = ({
-  handleChange,
-  setFieldValue,
-  handleBlur,
-  setFieldTouched,
-  handleSubmit,
-  values,
-  error,
-  schema
-}) => {
+const FormView = ({ schema, updateEntry, createEntry, title, customFields, data }) => {
   return (
-    <Form name="post" onSubmit={handleSubmit}>
-      {createFormFields(handleChange, setFieldValue, handleBlur, setFieldTouched, schema, values, formItemLayout)}
-      {error && <Alert color="error">{error}</Alert>}
-      <FormItem {...tailFormItemLayout}>
-        <Button color="primary" type="submit">
-          Save
-        </Button>
-      </FormItem>
-    </Form>
+    <Formik
+      initialValues={mapFormPropsToValues({ schema, data: data ? data.node : null })}
+      onSubmit={async values => {
+        //console.log('onSubmit, values:', pickInputFields({schema, values}));
+        await onSubmit({ schema, values, updateEntry, createEntry, title, data: data ? data.node : null });
+      }}
+      render={({ values, setFieldValue, setFieldTouched, handleChange, handleBlur, handleSubmit }) => (
+        <Form name="post" onSubmit={handleSubmit}>
+          {createFormFields({
+            handleChange,
+            setFieldValue,
+            handleBlur,
+            setFieldTouched,
+            schema,
+            values,
+            formItemLayout,
+            customFields
+          })}
+          {/*errors && <Alert color="error">{errors}</Alert>*/}
+          <FormItem {...tailFormItemLayout}>
+            <Button color="primary" type="submit">
+              Save
+            </Button>
+          </FormItem>
+        </Form>
+      )}
+    />
   );
 };
 
 FormView.propTypes = {
-  handleChange: PropTypes.func,
-  setFieldValue: PropTypes.func,
-  handleBlur: PropTypes.func,
-  setFieldTouched: PropTypes.func,
-  handleSubmit: PropTypes.func,
-  data: PropTypes.object,
-  schema: PropTypes.object,
-  values: PropTypes.object,
-  error: PropTypes.string
+  updateEntry: PropTypes.func.isRequired,
+  schema: PropTypes.object.isRequired,
+  createEntry: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  customFields: PropTypes.object,
+  data: PropTypes.object
 };
 
-const FormWithFormik = withFormik({
-  mapPropsToValues: ({ schema, data: { node } }) => mapFormPropsToValues(schema, node),
-  async handleSubmit(values, { props: { schema, updateEntry, createEntry, title, data: { node } } }) {
-    await onSubmit(schema, values, updateEntry, createEntry, title, node);
-  },
-  //validate: values => validate(values),
-  displayName: 'Form' // helps with React DevTools
-});
-
-export default FormWithFormik(FormView);
+export default FormView;

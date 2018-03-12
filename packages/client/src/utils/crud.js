@@ -1,11 +1,11 @@
 import { isEqual } from 'lodash';
 
-export const onSubmit = async (schema, values, updateEntry, createEntry, title, node = null) => {
+export const onSubmit = async ({ schema, values, updateEntry, createEntry, title, data = null }) => {
   let result = null;
-  const insertValues = pickInputFields(schema, values, node);
+  const insertValues = pickInputFields({ schema, values, data });
 
-  if (node) {
-    result = await updateEntry(insertValues, { id: node.id });
+  if (data) {
+    result = await updateEntry(insertValues, { id: data.id });
   } else {
     result = await createEntry(insertValues);
   }
@@ -19,56 +19,104 @@ export const onSubmit = async (schema, values, updateEntry, createEntry, title, 
   }
 };
 
-export const pickInputFields = (schema, values, node = null) => {
+export const mapFormPropsToValues = ({ schema, data = null, formType = 'form' }) => {
+  let fields = {};
+  for (const key of schema.keys()) {
+    const value = schema.values[key];
+    const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+    if (formType === 'filter') {
+      if (value.show !== false && value.type.constructor !== Array) {
+        if (hasTypeOf(Date)) {
+          fields[`${key}_lte`] = data ? data[key] : '';
+          fields[`${key}_gte`] = data ? data[key] : '';
+        } else {
+          fields[key] = data ? data[key] : '';
+        }
+      } else if (value.type.constructor === Array) {
+        fields[key] = data ? data[key] : [];
+      }
+    } else {
+      if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
+        fields[key] = data ? data[key] : '';
+      } else if (value.type.constructor === Array) {
+        fields[key] = data ? data[key] : [];
+      }
+    }
+  }
+
+  return fields;
+};
+
+export const pickInputFields = ({ schema, values, data = null, formType = 'form' }) => {
   let inputValues = {};
   //console.log('pickInputFields');
+  //console.log('formType:', formType);
   //console.log(values);
 
   for (const key of schema.keys()) {
-    if (key in values && values[key]) {
-      const value = schema.values[key];
-      if (value.type.isSchema) {
-        inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
-      } else if (key !== 'id' && value.type.constructor !== Array) {
-        inputValues[key] = values[key];
-      } else if (value.type.constructor === Array) {
-        const keys1 = {};
-        const keys2 = {};
+    const value = schema.values[key];
+    const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+    if (formType === 'filter') {
+      if (value.show !== false && value.type.constructor !== Array) {
+        if (value.type.isSchema && values[key]) {
+          inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
+        } else if (hasTypeOf(Date)) {
+          if (values[`${key}_lte`]) {
+            inputValues[`${key}_lte`] = values[`${key}_lte`];
+          }
+          if (values[`${key}_gte`]) {
+            inputValues[`${key}_gte`] = values[`${key}_gte`];
+          }
+        } else {
+          if (key in values && values[key]) {
+            inputValues[key] = values[key];
+          }
+        }
+      }
+    } else {
+      if (key in values && values[key]) {
+        if (value.type.isSchema) {
+          inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
+        } else if (key !== 'id' && value.type.constructor !== Array) {
+          inputValues[key] = values[key];
+        } else if (value.type.constructor === Array) {
+          const keys1 = {};
+          const keys2 = {};
 
-        let create = [];
-        let update = [];
-        let deleted = [];
+          let create = [];
+          let update = [];
+          let deleted = [];
 
-        node[key].forEach(item => {
-          keys1[item.id] = item;
-        });
+          data[key].forEach(item => {
+            keys1[item.id] = item;
+          });
 
-        values[key].forEach(item => {
-          keys2[item.id] = item;
-        });
+          values[key].forEach(item => {
+            keys2[item.id] = item;
+          });
 
-        node[key].forEach(item => {
-          const obj = keys2[item.id];
-          if (!obj) {
-            deleted.push({ id: item.id });
-          } else {
-            if (!isEqual(obj, item)) {
-              update.push({ where: { id: obj.id }, data: pickInputFields(value.type[0], obj) });
+          data[key].forEach(item => {
+            const obj = keys2[item.id];
+            if (!obj) {
+              deleted.push({ id: item.id });
+            } else {
+              if (!isEqual(obj, item)) {
+                update.push({ where: { id: obj.id }, data: pickInputFields({ schema: value.type[0], data: obj }) });
+              }
             }
-          }
-        });
+          });
 
-        values[key].forEach(item => {
-          if (!keys1[item.id]) {
-            create.push(pickInputFields(value.type[0], item));
-          }
-        });
+          values[key].forEach(item => {
+            if (!keys1[item.id]) {
+              create.push(pickInputFields({ schema: value.type[0], data: item }));
+            }
+          });
+          //console.log('created: ', create);
+          //console.log('updated: ', update);
+          //console.log('deleted: ', deleted);
 
-        //console.log('created: ', create);
-        //console.log('updated: ', update);
-        //console.log('deleted: ', deleted);
-
-        inputValues[key] = { create, update, delete: deleted };
+          inputValues[key] = { create, update, delete: deleted };
+        }
       }
     }
   }

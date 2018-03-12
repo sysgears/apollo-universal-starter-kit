@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
-import { removeTypename } from '../../../../../common/utils';
+import { removeTypename, removeEmpty } from '../../../../../common/utils';
 import { ListView } from '../../common/components/crud';
 import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
 
@@ -15,10 +15,8 @@ import DELETEMANY_$MODULE$S from '../graphql/DeleteMany$Module$s.graphql';
 import UPDATEMANY_$MODULE$S from '../graphql/UpdateMany$Module$s.graphql';
 
 class $Module$ extends React.Component {
-  customTableColumns = {};
-
   render() {
-    return <ListView {...this.props} customTableColumns={this.customTableColumns} schema={$Module$Schema} />;
+    return <ListView {...this.props} schema={$Module$Schema} />;
   }
 }
 
@@ -32,7 +30,7 @@ export default compose(
     options: ({ limit, orderBy, filter }) => {
       return {
         fetchPolicy: 'cache-and-network',
-        variables: { limit, orderBy, filter }
+        variables: { limit, orderBy, filter: removeEmpty(filter) }
       };
     },
     props: ({ data: { loading, $module$sConnection, refetch, error, fetchMore } }) => {

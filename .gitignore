@@ -12,5 +12,4 @@ build
 .DS_Store
 jsconfig.json
 public
-.env
 *.iml

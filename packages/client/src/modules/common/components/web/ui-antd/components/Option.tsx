@@ -4,7 +4,7 @@ import React from 'react';
 //const ADOption = Select.Option;
 
 interface OptionProps {
-  children: any;  
+  children: any;
 }
 
 const Option = ({ children, ...props }: OptionProps) => {

@@ -4,7 +4,7 @@ import Button from 'antd-mobile/lib/button';
 
 interface FormButtonProps {
   children: any;
-  onPress: () => void;  
+  onPress: () => void;
 }
 
 const FormButton = ({ children, onPress, ...props }: FormButtonProps) => {

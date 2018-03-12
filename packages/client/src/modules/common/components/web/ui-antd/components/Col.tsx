@@ -3,7 +3,7 @@ import ADCol from 'antd/lib/col';
 
 interface ColProps {
   children: any;
-  xs: number;
+  xs?: number;
 }
 
 const Col = ({ children, xs, ...props }: ColProps) => {

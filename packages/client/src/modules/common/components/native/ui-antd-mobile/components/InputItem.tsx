@@ -2,7 +2,7 @@ import React from 'react';
 import ADInputItem from 'antd-mobile/lib/input-item';
 
 interface InputItemProps {
-  children: any;  
+  children: any;
 }
 
 const InputItem = ({ children, ...props }: InputItemProps) => {

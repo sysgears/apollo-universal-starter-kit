@@ -5,7 +5,7 @@ import List from 'antd-mobile/lib/list';
 interface SwipeActionProps {
   children: any;
   right: any;
-  onPress: () => void;  
+  onPress: () => void;
 }
 
 const SwipeAction = ({ children, onPress, right, ...props }: SwipeActionProps) => {

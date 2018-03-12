@@ -2,7 +2,7 @@ import React from 'react';
 import ADAlert from 'antd/lib/alert';
 
 interface AlertProps {
-  color: 'success' | 'info' | 'warning' | 'error';
+  color?: 'success' | 'info' | 'warning' | 'error';
   children: any;
 }
 

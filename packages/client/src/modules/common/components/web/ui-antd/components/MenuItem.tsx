@@ -5,8 +5,8 @@ interface MenuItemProps {
   children: any;
 }
 
-class MenuItem extends React.Component {
-  render() {
+class MenuItem extends React.Component<MenuItemProps, {}> {
+  public render() {
     const { children, ...props } = this.props;
     return <Menu.Item {...props}>{children}</Menu.Item>;
   }

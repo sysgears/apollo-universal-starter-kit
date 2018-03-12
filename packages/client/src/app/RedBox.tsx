@@ -7,13 +7,6 @@ interface RedBoxState {
   mapped?: boolean;
 }
 
-interface Frame {
-  fileName?: string;
-  lineNumber?: string;
-  columnNumber?: string;
-  replace: (value: string, replacedValue: string) => any;
-}
-
 const format = (fmt: any, ...args: any[]) =>
   fmt.replace(/{(\d+)}/g, (match: any, num: number) => (typeof args[num] !== 'undefined' ? args[num] : match));
 
@@ -31,7 +24,7 @@ export default class RedBox extends React.Component<any, RedBoxState> {
         const processStack = __DEV__
           ? fetch('/servdir')
               .then(res => res.text())
-              .then(servDir => mappedStack.map((frame: Frame) => frame.replace('webpack:///', servDir)))
+              .then(servDir => mappedStack.map((frame: any) => frame.replace('webpack:///', servDir)))
           : Promise.resolve(mappedStack);
         processStack.then(stack => {
           this.props.error.stack = stack.join('\n');
@@ -41,7 +34,7 @@ export default class RedBox extends React.Component<any, RedBoxState> {
     }
   }
 
-  public renderFrames(frames: any) {
+  public renderFrames(frames: any[]) {
     const { frame, file, linkToFile } = styles;
     return frames.map((f: any, index: number) => {
       const text = `at ${f.fileName}:${f.lineNumber}:${f.columnNumber}`;

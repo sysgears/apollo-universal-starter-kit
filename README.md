@@ -159,7 +159,7 @@ Get latest Docker and Docker Compose: https://www.docker.com/ https://docs.docke
 To run starter kit in development mode with hot code reload execute:
 
 ```
-docker-compose up
+APP_DIR=`pwd` docker-compose up
 ```
 
 , then open URL `http://localhost:3000` in web browser or open URL `exp://localhost:19001` in Expo Client Explore

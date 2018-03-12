@@ -87,8 +87,12 @@
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
+    "@types/history": "^4.6.2",
     "@types/react": "^16.0.38",
+    "@types/react-dom": "^16.0.4",
     "@types/react-native": "^0.52.12",
+    "@types/react-redux": "^5.0.15",
+    "@types/react-router-redux": "^5.0.12",
     "apollo-utilities": "^1.0.3",
     "autoprefixer": "^7.2.5",
     "babel-cli": "^6.26.0",

@@ -175,7 +175,7 @@ export default class Main extends React.Component<any, MainState> {
   constructor(props: any) {
     super(props);
     const serverError: any = window.__SERVER_ERROR__;
-    this.state = serverError ? new ServerError(serverError) : {};
+    this.state = serverError ? { error: new ServerError(serverError) } : {};
   }
 
   public componentDidCatch(error: ServerError, info: any) {

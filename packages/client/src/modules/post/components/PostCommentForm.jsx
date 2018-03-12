@@ -11,15 +11,15 @@ const commentFormSchema = {
 
 const validate = values => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) => {
+const PostCommentForm = ({ values, handleSubmit, comment }) => {
   let operation = 'Add';
-  if (initialValues.id !== null) {
+  if (comment.id !== null) {
     operation = 'Edit';
   }
 
   return (
     <FormView>
-      <Field name="content" component={RenderField} type="text" value={values.content} onChange={handleChange} />
+      <Field name="content" component={RenderField} type="text" value={values.content} placeholder="Comment" />
       <FormButton onPress={handleSubmit}>{operation}</FormButton>
     </FormView>
   );
@@ -27,18 +27,20 @@ const PostCommentForm = ({ values, handleSubmit, initialValues, handleChange }) 
 
 PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
-  handleChange: PropTypes.func,
-  initialValues: PropTypes.object,
+  setFieldValue: PropTypes.func,
+  setFieldTouched: PropTypes.func,
+  comment: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   values: PropTypes.object
 };
 
 const PostCommentFormWithFormik = withFormik({
-  mapPropsToValues: props => ({ content: (props.comment && props.comment.content) || '' }),
+  mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
   validate: values => validate(values),
-  handleSubmit: function(values, { props: { onSubmit } }) {
-    onSubmit(values);
+  handleSubmit: async (values, { resetForm, props: { onSubmit } }) => {
+    await onSubmit(values);
+    resetForm({ content: '' });
   },
   displayName: 'CommentForm', // helps with React DevTools
   enableReinitialize: true

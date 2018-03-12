@@ -11,18 +11,11 @@ const contactFormSchema = {
 
 const validate = values => validateForm(values, contactFormSchema);
 
-const ForgotPasswordForm = ({ handleSubmit, error, sent, handleChange, values }) => {
+const ForgotPasswordForm = ({ handleSubmit, error, sent, values }) => {
   return (
     <Form name="forgotPassword" onSubmit={handleSubmit}>
       {sent && <Alert color="success">Reset password instructions have been emailed to you.</Alert>}
-      <Field
-        name="email"
-        component={RenderField}
-        type="email"
-        label="Email"
-        onChange={handleChange}
-        value={values.email}
-      />
+      <Field name="email" component={RenderField} type="email" label="Email" value={values.email} />
       <div className="text-center">
         {error && <Alert color="error">{error}</Alert>}
         <Button color="primary" type="submit">
@@ -38,16 +31,16 @@ ForgotPasswordForm.propTypes = {
   onSubmit: PropTypes.func,
   error: PropTypes.string,
   sent: PropTypes.bool,
-  handleChange: PropTypes.func,
   values: PropTypes.object
 };
 
 const ForgotPasswordFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ email: '' }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
-    await onSubmit(values);
-    resetForm();
+  async handleSubmit(values, { setErrors, resetForm, props: { onSubmit } }) {
+    await onSubmit(values)
+      .then(() => resetForm())
+      .catch(e => setErrors(e));
   },
   validate: values => validate(values),
   displayName: 'LoginForm' // helps with React DevTools

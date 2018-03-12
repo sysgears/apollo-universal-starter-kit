@@ -3,7 +3,7 @@ import { decamelize } from 'humps';
 import settings from '../../../../settings';
 
 export const truncateTables = async (knex, Promise, tables) => {
-  if (settings.db.dbType === 'sqlite' || process.env.NODE_ENV === 'test') {
+  if (settings.db.dbType === 'sqlite') {
     return Promise.all(tables.map(table => knex(table).truncate()));
   } else if (settings.db.dbType === 'mysql') {
     return knex.transaction(async function(trx) {

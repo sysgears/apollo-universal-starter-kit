@@ -247,7 +247,7 @@ yarn cli
 * Full LOGIN funcionality in user example with [JWT] tokens stored in `localStorage` and `cookies`
 
 * [Stripe] Payment Processor integration as a starting point for apps that use user subscriptions.
-Check [subscription module documentation](src/client/modules/subscription/README.md) for details.
+Check [subscription module documentation](packages/client/src/modules/subscription/README.md) for details.
 
 * [GraphQL] API
 
@@ -256,7 +256,7 @@ Check [subscription module documentation](src/client/modules/subscription/README
 
 * [GraphQL] subscriptions example
 
-  Full CRUD functionality with Counter updating and Subscriptions in Posts and Comments example, with [Formik]
+  Full CRUD functionality with Counter updating and Subscriptions in Posts and Comments example, with [ReduxForm]
 
 * [GraphQL Cursor Pagination] Example of [Relay-style cursor pagination]
 
@@ -322,11 +322,10 @@ Check [subscription module documentation](src/client/modules/subscription/README
 
   If you would like to use a different styling than [Twitter Bootstrap], UI components are structured in a way to make
   it easy to use something else. We already prepared [Ant Design] integation. To switch the UI all you need to do is
-  change the module import in `src/client/modules/index.js` and rename the import in
-  `src/client/modules/common/components/web/index.jsx`.
+  rename the import in `packages/client/src/modules/common/components/web/index.jsx`.
 
   [NativeBase] for mobile styling, with an option to use [Ant Design Mobile]. To switch, just change the export in
-  `src/client/modules/common/components/native/index.jsx`.
+  `packages/client/src/modules/common/components/native/index.jsx`.
 
 * [Babel] for ES2017 transpiling
 
@@ -351,30 +350,33 @@ aims to represent generally accepted guidelines and patterns for building scalab
 
 ```
 .
-├── src                      # Application source code
-│   ├── client               # Front-end source code
-│   │   ├── app              # Common front-end application code
-│   │   └── modules          # Front-end feature-modules, each module has:
-│   │   │                    # (components, containers, GraphQL queries, redux reducers)
-│   │   └── styles           # Application-wide styles
-│   │   └── testHelpers      # Test helper for front-end integration tests
-│   │   └── index.jsx        # Entry point to web front-end wtih hot code reload
-│   ├── common               # Common code, redux store and logging
-│   ├── mobile               # Mobile front-end source code
-│   │   ├── index.js         # Entry point to mobile front-end wtih live code reload
-│   └── server               # Back-end server source code
-│   │   ├── api              # GraphQL API implementation
-│   │   └── database         # Database migrations and seeds
-│   │   │   └── migrations   # Database migration scripts using Knex
-│   │   │   └── seeds        # Database seed scripts using Knex
-│   │   └── middleware       # Graphiql, GraphQL express and SSR rendering
-│   │   └── modules          # Back-end server feature-modules, each module has:
-│   │   │                    # (schema definition, resolvers, sql queries)
-│   │   └── sql              # Knex connector
-│   │   └── testHelpers      # Test helper for back-end integration tests
-│   │   └── server.js        # GraphQL api server set up
-│   │   └── index.js         # Entry point to back-end wtih hot code reload
-└── tools                    # All build and cli related files
+├── packages                   # Yarn packages with application source code
+│   ├── client                 # Front-end Yarn package
+│   |   └── src
+│   │       ├── app            # Common front-end application code
+│   │       ├── modules        # Front-end feature-modules, each module has:
+│   │       │                  # (components, containers, GraphQL queries, redux reducers)
+│   │       ├── styles         # Application-wide styles
+│   │       ├── testHelpers    # Test helper for front-end integration tests
+│   │       └── index.tsx      # Entry point to web front-end wtih hot code reload
+│   ├── common                 # Yarn package with Common code, redux store and logging
+│   ├── mobile                 # Mobile front-end Yarn package
+│   |   └── src
+│   │       └── index.ts       # Entry point to mobile front-end wtih live code reload
+│   └── server                 # Back-end Yarn package
+│   |   └── src
+│   │       ├── api            # GraphQL API implementation
+│   │       ├── database       # Database migrations and seeds
+│   │       │   └── migrations # Database migration scripts using Knex
+│   │       │   └── seeds      # Database seed scripts using Knex
+│   │       ├── middleware     # Graphiql, GraphQL express and SSR rendering
+│   │       ├── modules        # Back-end server feature-modules, each module has:
+│   │       │                  # (schema definition, resolvers, sql queries)
+│   │       ├── sql            # Knex connector
+│   │       ├── testHelpers    # Test helper for back-end integration tests
+│   │       ├── server.js      # GraphQL api server set up
+│   │       └── index.ts       # Entry point to back-end wtih hot code reload
+└── tools                      # All build and cli related files
 ```
 
 ## Additional scripts
@@ -497,7 +499,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [react 16]: https://facebook.github.io/react
 [react hot loader v3]: https://github.com/gaearon/react-hot-loader
 [redux]: http://redux.js.org
-[formik]: https://github.com/jaredpalmer/formik
+[reduxform]: http://redux-form.com
 [express]: http://expressjs.com
 [twitter bootstrap]: http://getbootstrap.com
 [nativebase]: https://nativebase.io

@@ -1,4 +1,4 @@
-let DB_TYPE = process.env.DB_TYPE || 'sqlite';
+let DB_TYPE = process.env.NODE_ENV === 'test' || !process.env.DB_TYPE ? 'sqlite' : process.env.DB_TYPE;
 let client = '';
 let connectionDevelopment = {
   host: process.env.DB_HOST,

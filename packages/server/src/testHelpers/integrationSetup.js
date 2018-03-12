@@ -2,8 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 
 import { getOperationAST } from 'graphql';
-import { createApolloFetch } from 'apollo-fetch';
-import { BatchHttpLink } from 'apollo-link-batch-http';
+import { SchemaLink } from 'apollo-link-schema';
 import { ApolloLink } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -14,6 +13,8 @@ import { LoggingLink } from 'apollo-logger';
 import '../../knexfile';
 import knex from '../sql/connector';
 import settings from '../../../../settings';
+import schema from '../api/schema';
+import modules from '../modules';
 
 chai.use(chaiHttp);
 chai.should();
@@ -27,8 +28,9 @@ before(async () => {
 
   server = require('../server').default;
 
-  const fetch = createApolloFetch({ uri: `http://localhost:${process.env['PORT']}/graphql` });
+  const context = await modules.createContext();
   const cache = new InMemoryCache();
+
   let link = ApolloLink.split(
     operation => {
       const operationAST = getOperationAST(operation.query, operation.operationName);
@@ -38,7 +40,7 @@ before(async () => {
       uri: `ws://localhost:${process.env['PORT']}/graphql`,
       webSocketImpl: WebSocket
     }),
-    new BatchHttpLink({ fetch })
+    new SchemaLink({ schema, context })
   );
 
   apollo = new ApolloClient({

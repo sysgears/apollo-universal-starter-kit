@@ -11,9 +11,11 @@ import DELETE_POST from '../graphql/DeletePost.graphql';
 
 export function AddPost(prev, node) {
   // ignore if duplicate
-  if (node.id !== null && prev.posts.edges.some(post => node.id === post.cursor)) {
+  if (prev.posts.edges.some(post => node.id === post.cursor)) {
     return prev;
   }
+
+  const filteredPosts = prev.posts.edges.filter(post => post.node.id !== null);
 
   const edge = {
     cursor: node.id,
@@ -27,7 +29,7 @@ export function AddPost(prev, node) {
         $set: prev.posts.totalCount + 1
       },
       edges: {
-        $unshift: [edge]
+        $set: [edge, ...filteredPosts]
       }
     }
   });

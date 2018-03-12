@@ -10,8 +10,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production spin build",
     "clean": "rimraf build .tmp",
-    "tests": "cross-env PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.js\"",
-    "tests:watch": "cross-env PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.js\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "yarn tests && yarn lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
     "watch": "spin watch",
@@ -45,7 +45,6 @@
     "apollo-fetch-upload": "^1.2.0",
     "apollo-link": "^1.0.6",
     "apollo-link-batch-http": "^1.0.3",
-    "apollo-link-schema": "^1.0.2",
     "apollo-link-state": "^0.3.1",
     "apollo-link-ws": "^1.0.3",
     "apollo-logger": "0.1.1",

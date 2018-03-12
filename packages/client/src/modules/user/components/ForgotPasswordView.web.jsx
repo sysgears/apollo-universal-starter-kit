@@ -19,7 +19,7 @@ export default class ForgotPasswordView extends React.Component {
   onSubmit = ({ forgotPassword }) => async values => {
     const result = await forgotPassword(values);
 
-    if (result.errors) {
+    if (result && result.errors) {
       let submitError = {
         _error: 'Reset password failed!'
       };

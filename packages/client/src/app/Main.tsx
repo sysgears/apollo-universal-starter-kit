@@ -1,30 +1,31 @@
-import React from 'react';
-import { getOperationAST } from 'graphql';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createApolloFetch } from 'apollo-fetch';
-import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
+import { BatchHttpLink } from 'apollo-link-batch-http';
 import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
-import { ApolloProvider } from 'react-apollo';
-import { Provider } from 'react-redux';
+import { getOperationAST } from 'graphql';
+import { LocationDescriptorObject } from 'history';
 import createHistory from 'history/createBrowserHistory';
-import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
+import React from 'react';
+import { ApolloProvider } from 'react-apollo';
 // import { addPersistedQueries } from 'persistgraphql';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
 // import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
+import { Provider } from 'react-redux';
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 import url from 'url';
 
-import RedBox from './RedBox';
+import settings from '../../../../settings';
 import createApolloClient from '../../../common/createApolloClient';
 import createReduxStore, { storeReducer } from '../../../common/createReduxStore';
-import settings from '../../../../settings';
-import Routes from './Routes';
-import modules from '../modules';
 import log from '../../../common/log';
+import modules from '../modules';
+import RedBox from './RedBox';
+import Routes from './Routes';
 
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
@@ -63,7 +64,7 @@ for (const afterware of modules.afterwares) {
   });
 }
 
-let connectionParams = {};
+const connectionParams = {};
 for (const connectionParam of modules.connectionParams) {
   Object.assign(connectionParams, connectionParam());
 }
@@ -75,13 +76,13 @@ const wsUri = (hostname === 'localhost'
 
 const wsClient = new SubscriptionClient(wsUri, {
   reconnect: true,
-  connectionParams: connectionParams
+  connectionParams
 });
 
 wsClient.use([
   {
     applyMiddleware(operationOptions, next) {
-      let params = {};
+      const params = {};
       for (const param of modules.connectionParams) {
         Object.assign(params, param());
       }
@@ -93,14 +94,14 @@ wsClient.use([
 ]);
 
 wsClient.onDisconnected(() => {
-  //console.log('onDisconnected');
+  // console.log('onDisconnected');
 });
 
 wsClient.onReconnected(() => {
-  //console.log('onReconnected');
+  // console.log('onReconnected');
 });
 
-let link = ApolloLink.split(
+const link = ApolloLink.split(
   operation => {
     const operationAST = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';
@@ -126,7 +127,7 @@ if (window.__APOLLO_STATE__) {
 
 const history = createHistory();
 
-const logPageView = location => {
+const logPageView = (location: LocationDescriptorObject) => {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);
 };
@@ -135,9 +136,9 @@ const logPageView = location => {
 ReactGA.initialize(settings.analytics.ga.trackingId);
 logPageView(window.location);
 
-history.listen(location => logPageView(location));
+history.listen((location: LocationDescriptorObject) => logPageView(location));
 
-let store;
+let store: any;
 if (module.hot && module.hot.data && module.hot.data.store) {
   // console.log("Restoring Redux store:", JSON.stringify(module.hot.data.store.getState()));
   store = module.hot.data.store;
@@ -147,7 +148,7 @@ if (module.hot && module.hot.data && module.hot.data.store) {
 }
 
 if (module.hot) {
-  module.hot.dispose(data => {
+  module.hot.dispose((data: any) => {
     // console.log("Saving Redux store:", JSON.stringify(store.getState()));
     data.store = store;
     // Force Apollo to fetch the latest data from the server
@@ -156,7 +157,7 @@ if (module.hot) {
 }
 
 class ServerError extends Error {
-  constructor(error) {
+  constructor(error: any) {
     super();
     for (const key of Object.getOwnPropertyNames(error)) {
       this[key] = error[key];
@@ -165,22 +166,23 @@ class ServerError extends Error {
   }
 }
 
-export default class Main extends React.Component {
-  constructor(props) {
+interface MainState {
+  error?: ServerError;
+  info?: any;
+}
+
+export default class Main extends React.Component<any, MainState> {
+  constructor(props: any) {
     super(props);
-    const serverError = window.__SERVER_ERROR__;
-    if (serverError) {
-      this.state = { error: new ServerError(serverError) };
-    } else {
-      this.state = {};
-    }
+    const serverError: any = window.__SERVER_ERROR__;
+    this.state = serverError ? new ServerError(serverError) : {};
   }
 
-  componentDidCatch(error, info) {
+  public componentDidCatch(error: ServerError, info: any) {
     this.setState({ error, info });
   }
 
-  render() {
+  public render() {
     return this.state.error ? (
       <RedBox error={this.state.error} />
     ) : (

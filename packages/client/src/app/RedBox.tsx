@@ -1,32 +1,37 @@
-import PropTypes from 'prop-types';
 import ErrorStackParser from 'error-stack-parser';
-import { mapStackTrace } from 'sourcemapped-stacktrace';
+import * as sourcemapped from 'sourcemapped-stacktrace';
 import React from 'react';
 import settings from '../../../../settings';
 
-const format = (fmt, ...args) =>
-  fmt.replace(/{(\d+)}/g, (match, number) => (typeof args[number] != 'undefined' ? args[number] : match));
+interface RedBoxState {
+  mapped?: boolean;
+}
 
-export default class RedBox extends React.Component {
-  static propTypes = {
-    error: PropTypes.instanceOf(Error).isRequired
-  };
+interface Frame {
+  fileName?: string;
+  lineNumber?: string;
+  columnNumber?: string;
+  replace: (value: string, replacedValue: string) => any;
+}
 
-  constructor(props) {
+const format = (fmt: any, ...args: any[]) =>
+  fmt.replace(/{(\d+)}/g, (match: any, num: number) => (typeof args[num] !== 'undefined' ? args[num] : match));
+
+export default class RedBox extends React.Component<any, RedBoxState> {
+  constructor(props: any) {
     super(props);
+    this.state = {
+      mapped: false
+    };
   }
 
-  state = {
-    mapped: false
-  };
-
-  componentDidMount() {
+  public componentDidMount() {
     if (!this.state.mapped) {
-      mapStackTrace(this.props.error.stack, mappedStack => {
+      sourcemapped.mapStackTrace(this.props.error.stack, (mappedStack: any) => {
         const processStack = __DEV__
           ? fetch('/servdir')
               .then(res => res.text())
-              .then(servDir => mappedStack.map(frame => frame.replace('webpack:///', servDir)))
+              .then(servDir => mappedStack.map((frame: Frame) => frame.replace('webpack:///', servDir)))
           : Promise.resolve(mappedStack);
         processStack.then(stack => {
           this.props.error.stack = stack.join('\n');
@@ -36,9 +41,9 @@ export default class RedBox extends React.Component {
     }
   }
 
-  renderFrames(frames) {
+  public renderFrames(frames: any) {
     const { frame, file, linkToFile } = styles;
-    return frames.map((f, index) => {
+    return frames.map((f: any, index: number) => {
       const text = `at ${f.fileName}:${f.lineNumber}:${f.columnNumber}`;
       const url = format(settings.app.stackFragmentFormat, f.fileName, f.lineNumber, f.columnNumber);
 
@@ -55,7 +60,7 @@ export default class RedBox extends React.Component {
     });
   }
 
-  render() {
+  public render() {
     const error = this.props.error;
 
     const { redbox, message, stack, frame } = styles;
@@ -96,7 +101,7 @@ export default class RedBox extends React.Component {
   }
 }
 
-const styles = {
+const styles: any = {
   redbox: {
     boxSizing: 'border-box',
     fontFamily: 'sans-serif',

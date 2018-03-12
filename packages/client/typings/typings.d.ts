@@ -27,7 +27,7 @@ declare module '*.graphql' {
 declare module '*.json' {
   const value: any;
   export = value;
-}
+} 
 
 declare module '*.scss' {
   const value: any;
@@ -37,4 +37,9 @@ declare module '*.scss' {
 interface Window {
   __APOLLO_STATE__?: any;
   __SERVER_ERROR__?: any;
+}
+
+declare module 'sourcemapped-stacktrace' {
+  const val: any;
+  export = val;
 }

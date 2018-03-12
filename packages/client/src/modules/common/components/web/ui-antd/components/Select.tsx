@@ -1,8 +1,8 @@
 import React from 'react';
-//import ADSelect from 'antd/lib/select';
+// import ADSelect from 'antd/lib/select';
 
 interface SelectProps {
-  children: any;  
+  children: any;
 }
 
 const Select = ({ children, ...props }: SelectProps) => {

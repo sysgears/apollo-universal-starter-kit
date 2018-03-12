@@ -2,7 +2,7 @@ import React from 'react';
 import ADTable from 'antd/lib/table';
 
 interface TableProps {
-  children: any;  
+  children: any;
 }
 
 const Table = ({ ...props }: TableProps) => {

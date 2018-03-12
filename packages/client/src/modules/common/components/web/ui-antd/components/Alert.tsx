@@ -1,8 +1,10 @@
 import React from 'react';
 import ADAlert from 'antd/lib/alert';
 
+type AlertType = 'success' | 'info' | 'warning' | 'error';
+
 interface AlertProps {
-  color?: 'success' | 'info' | 'warning' | 'error';
+  color?: AlertType;
   children: any;
 }
 

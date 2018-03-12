@@ -3,7 +3,7 @@ import ADButton from 'antd-mobile/lib/button';
 
 interface ButtonProps {
   children: any;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const Button = ({ children, onPress, ...props }: ButtonProps) => {

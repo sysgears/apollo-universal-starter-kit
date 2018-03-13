@@ -9,20 +9,38 @@ const combine = (features: any, extractor: any) =>
 
 export const featureCatalog = {};
 
+interface FeatureParams {
+  route?: any;
+  navItem?: any;
+  navItemRight?: any;
+  reducer?: any;
+  resolver?: any;
+  middleware?: any;
+  afterware?: any;
+  connectionParam?: any;
+  createFetchOptions?: any;
+  stylesInsert?: any;
+  scriptsInsert?: any;
+  rootComponentFactory?: any;
+  routerFactory?: any;
+  catalogInfo?: any;
+}
+
 export default class {
-  public route: any;
-  public navItem: any;
-  public navItemRight: any;
-  public reducer: any;
-  public resolver: any;
-  public middleware: any;
-  public afterware: any;
-  public connectionParam: any;
-  public createFetchOptions: any;
-  public stylesInsert: any;
-  public scriptsInsert: any;
-  public rootComponentFactory: any;
+  public route: any[];
+  public navItem: any[];
+  public navItemRight: any[];
+  public reducer: any[];
+  public resolver: any[];
+  public middleware: any[];
+  public afterware: any[];
+  public connectionParam: any[];
+  public createFetchOptions: any[];
+  public stylesInsert: any[];
+  public scriptsInsert: any[];
+  public rootComponentFactory: any[];
   public routerFactory: any;
+  public catalogInfo: any[];
   /* eslint-disable no-unused-vars */
   constructor(
     {
@@ -40,8 +58,8 @@ export default class {
       rootComponentFactory,
       routerFactory,
       catalogInfo
-    }: any,
-    ...features: any[]
+    }: FeatureParams,
+    ...features: FeatureParams[]
   ) {
     /* eslint-enable no-unused-vars */
     combine(arguments, (arg: any) => arg.catalogInfo).forEach((info: any) =>

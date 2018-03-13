@@ -3,15 +3,18 @@ import * as sourcemapped from 'sourcemapped-stacktrace';
 import React from 'react';
 import settings from '../../../../settings';
 
-interface RedBoxState {
-  mapped?: boolean;
-}
-
 const format = (fmt: any, ...args: any[]) =>
   fmt.replace(/{(\d+)}/g, (match: any, num: number) => (typeof args[num] !== 'undefined' ? args[num] : match));
 
-export default class RedBox extends React.Component<any, RedBoxState> {
-  constructor(props: any) {
+interface RedBoxState {
+  mapped?: boolean;
+}
+interface RedBoxProps {
+  error: Error;
+}
+
+export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
+  constructor(props: RedBoxProps) {
     super(props);
     this.state = {
       mapped: false
@@ -20,14 +23,15 @@ export default class RedBox extends React.Component<any, RedBoxState> {
 
   public componentDidMount() {
     if (!this.state.mapped) {
-      sourcemapped.mapStackTrace(this.props.error.stack, (mappedStack: any) => {
+      let { stack } = this.props.error;
+      sourcemapped.mapStackTrace(stack, (mappedStack: any) => {
         const processStack = __DEV__
           ? fetch('/servdir')
               .then(res => res.text())
               .then(servDir => mappedStack.map((frame: any) => frame.replace('webpack:///', servDir)))
           : Promise.resolve(mappedStack);
-        processStack.then(stack => {
-          this.props.error.stack = stack.join('\n');
+        processStack.then((ps: any[]) => {
+          stack = ps.join('\n');
           this.setState({ mapped: true });
         });
       });
@@ -54,12 +58,11 @@ export default class RedBox extends React.Component<any, RedBoxState> {
   }
 
   public render() {
-    const error = this.props.error;
-
+    const error: Error = this.props.error;
     const { redbox, message, stack, frame } = styles;
 
-    let frames;
-    let parseError;
+    let frames: any;
+    let parseError: Error;
     try {
       if (error.message.indexOf('\n    at ') >= 0) {
         // We probably have stack in our error message

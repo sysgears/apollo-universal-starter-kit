@@ -196,3 +196,5 @@ export default class Main extends React.Component<any, MainState> {
     );
   }
 }
+
+export { ServerError };

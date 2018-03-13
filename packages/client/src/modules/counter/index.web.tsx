@@ -5,7 +5,7 @@ import Counter from './containers/Counter';
 import resolvers from './resolvers/index';
 import reducers from './reducers/index';
 
-import Feature from '../connector';
+import Feature from '../connector.web';
 
 export default new Feature({
   route: <Route exact path="/" component={Counter} />,

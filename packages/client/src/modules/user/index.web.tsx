@@ -22,8 +22,8 @@ function tokenMiddleware(req: any, options: any, next: any) {
 }
 
 function tokenAfterware(req: any, options: any, next: any) {
-  const token = options.headers['x-token'];
-  const refreshToken = options.headers['x-refresh-token'];
+  const token: string = options.headers['x-token'];
+  const refreshToken: string = options.headers['x-refresh-token'];
   if (token) {
     window.localStorage.setItem('token', token);
   }

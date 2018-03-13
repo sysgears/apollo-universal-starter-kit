@@ -7,7 +7,7 @@ import PostEdit from './containers/PostEdit';
 
 import resolvers from './resolvers';
 
-import Feature from '../connector';
+import Feature from '../connector.web';
 
 export default new Feature({
   route: [<Route exact path="/posts" component={Post} />, <Route exact path="/post/:id" component={PostEdit} />],

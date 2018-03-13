@@ -1,8 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { createTabBarIconWrapper } from '../common/components/native';
 
@@ -11,34 +10,30 @@ import PostEdit from './containers/PostEdit';
 
 import resolvers from './resolvers';
 
-import Feature from '../connector';
+import Feature from '../connector.native';
 
-class PostListScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
+interface PostProps {
+  navigation: any;
+}
+
+class PostListScreen extends React.Component<PostProps, any> {
+  public static navigationOptions = ({ navigation }: any) => ({
     title: 'Post list',
     headerRight: <Button title="Add" onPress={() => navigation.navigate('PostEdit', { id: 0 })} />
   });
-  render() {
+  public render() {
     return <Post navigation={this.props.navigation} />;
   }
 }
 
-PostListScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
-class PostEditScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
+class PostEditScreen extends React.Component<PostProps, any> {
+  public static navigationOptions = ({ navigation }: any) => ({
     title: `${navigation.state.params.id === 0 ? 'Create' : 'Edit'} post`
   });
-  render() {
+  public render() {
     return <PostEdit navigation={this.props.navigation} />;
   }
 }
-
-PostEditScreen.propTypes = {
-  navigation: PropTypes.object
-};
 
 const PostNavigator = StackNavigator({
   PostList: { screen: PostListScreen },

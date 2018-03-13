@@ -2,6 +2,7 @@ import ErrorStackParser from 'error-stack-parser';
 import * as sourcemapped from 'sourcemapped-stacktrace';
 import React from 'react';
 import settings from '../../../../settings';
+import { ServerError } from './Main';
 
 const format = (fmt: any, ...args: any[]) =>
   fmt.replace(/{(\d+)}/g, (match: any, num: number) => (typeof args[num] !== 'undefined' ? args[num] : match));
@@ -10,7 +11,7 @@ interface RedBoxState {
   mapped?: boolean;
 }
 interface RedBoxProps {
-  error: Error;
+  error: ServerError;
 }
 
 export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
@@ -58,7 +59,7 @@ export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
   }
 
   public render() {
-    const error: Error = this.props.error;
+    const error: ServerError = this.props.error;
     const { redbox, message, stack, frame } = styles;
 
     let frames: any;

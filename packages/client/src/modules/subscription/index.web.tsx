@@ -9,7 +9,7 @@ import { SubscriberRoute } from './containers/Auth';
 import reducers from './reducers';
 import settings from '../../../../../settings';
 
-import Feature from '../connector';
+import Feature from '../connector.web';
 
 export default new Feature({
   route: settings.subscription.enabled

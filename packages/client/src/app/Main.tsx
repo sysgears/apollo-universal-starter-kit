@@ -40,7 +40,7 @@ log.info(`Connecting to GraphQL backend at: ${uri}`);
 const cache = new InMemoryCache();
 
 for (const middleware of modules.middlewares) {
-  fetch.batchUse(({ requests, options }, next) => {
+  fetch.batchUse(({ requests, options }: any, next: any) => {
     options.credentials = 'same-origin';
     options.headers = options.headers || {};
     const reqs = [...requests];
@@ -59,7 +59,7 @@ for (const middleware of modules.middlewares) {
 }
 
 for (const afterware of modules.afterwares) {
-  fetch.batchUseAfter(({ response, options }, next) => {
+  fetch.batchUseAfter(({ response, options }: any, next: any) => {
     afterware(response, options, next);
   });
 }
@@ -102,7 +102,7 @@ wsClient.onReconnected(() => {
 });
 
 const link = ApolloLink.split(
-  operation => {
+  (operation: any) => {
     const operationAST = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';
   },

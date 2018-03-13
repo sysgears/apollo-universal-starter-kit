@@ -1,8 +1,8 @@
 import { TabNavigator } from 'react-navigation';
 
-import modules from '../';
+import modules from '../index.native';
 
-import Feature from '../connector';
+import Feature from '../connector.native';
 
 const routerFactory = () =>
   TabNavigator({

@@ -43,3 +43,13 @@ declare module 'sourcemapped-stacktrace' {
   const val: any;
   export = val;
 }
+
+declare module '@expo/vector-icons/Ionicons' {
+  const val: any;
+  export = val;
+}
+
+declare module 'react-cookie/lib/CookiesProvider' {
+  const val: any;
+  export = val;
+}

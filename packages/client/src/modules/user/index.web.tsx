@@ -1,9 +1,9 @@
 import React from 'react';
-import { CookiesProvider } from 'react-cookie';
+import CookiesProvider from 'react-cookie/lib/CookiesProvider';
 import { NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
 import Profile from './containers/Profile';
-import Users from './components/Users';
+import Users from './components/Users.web';
 import UserEdit from './containers/UserEdit';
 import Register from './containers/Register';
 import Login from './containers/Login';
@@ -13,15 +13,15 @@ import resolvers from './resolvers';
 
 import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
 
-import Feature from '../connector';
+import Feature from '../connector.web';
 
-function tokenMiddleware(req, options, next) {
+function tokenMiddleware(req: any, options: any, next: any) {
   options.headers['x-token'] = window.localStorage.getItem('token');
   options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
   next();
 }
 
-function tokenAfterware(res, options, next) {
+function tokenAfterware(req: any, options: any, next: any) {
   const token = options.headers['x-token'];
   const refreshToken = options.headers['x-refresh-token'];
   if (token) {
@@ -74,7 +74,7 @@ export default new Feature({
   resolver: resolvers,
   middleware: tokenMiddleware,
   afterware: tokenAfterware,
-  connectionParam: connectionParam,
+  connectionParam,
   // eslint-disable-next-line react/display-name
-  rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
+  rootComponentFactory: (req: any) => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
 });

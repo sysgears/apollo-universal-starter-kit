@@ -7,7 +7,7 @@ import { MenuItem } from '../../modules/common/components/web';
 import Upload from './containers/Upload';
 import reducers from './reducers';
 
-import Feature from '../connector';
+import Feature from '../connector.web';
 
 export default new Feature({
   catalogInfo: { upload: true },

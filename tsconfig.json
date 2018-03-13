@@ -17,7 +17,8 @@
   },
   "include": [
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "./packages/**/*.d.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
     "reportFiles": [

@@ -13,7 +13,7 @@ interface AwakeInDevAppState {
 
 // we don't want this to require transformation
 class AwakeInDevApp extends React.Component<AwakeInDevAppProps, AwakeInDevAppState> {
-  constructor(props: any) {
+  constructor(props: AwakeInDevAppProps) {
     super(props);
     this.state = {
       isReady: false
@@ -31,10 +31,12 @@ class AwakeInDevApp extends React.Component<AwakeInDevAppProps, AwakeInDevAppSta
   }
 
   public render() {
+    // Required by AppLoading interface in Expo
     const appLoadingProps = {
       startAsync: () => Promise.resolve(),
-      onFinish: () => { }
+      onFinish: () => {}
     };
+
     if (!this.state.isReady) {
       return <Expo.AppLoading {...appLoadingProps} />;
     }

@@ -29,12 +29,12 @@ interface CounterProps {
 
 class Counter extends React.Component<CounterProps, any> {
   public subscription: any;
-  constructor(props: any) {
+  constructor(props: CounterProps) {
     super(props);
     this.subscription = null;
   }
 
-  public componentWillReceiveProps(nextProps: any) {
+  public componentWillReceiveProps(nextProps: CounterProps) {
     if (!nextProps.loading) {
       // Subscribe or re-subscribe
       if (!this.subscription) {

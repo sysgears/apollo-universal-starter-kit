@@ -1,5 +1,5 @@
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import { createApolloFetch, FetchOptions, ApolloFetch } from 'apollo-fetch';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { createApolloFetch, ApolloFetch } from 'apollo-fetch';
 import { ApolloLink, Operation } from 'apollo-link';
 import ApolloClient from 'apollo-client';
 import { BatchHttpLink } from 'apollo-link-batch-http';
@@ -10,7 +10,7 @@ import { getOperationAST, OperationDefinitionNode } from 'graphql';
 import { LocationDescriptorObject, History } from 'history';
 import createHistory from 'history/createBrowserHistory';
 import React from 'react';
-import { StoreCreator } from 'redux';
+import { Store } from 'redux';
 import { ApolloProvider } from 'react-apollo';
 // import { addPersistedQueries } from 'persistgraphql';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
@@ -45,9 +45,9 @@ for (const middleware of modules.middlewares) {
   fetch.batchUse(({ requests, options }: any, next: any) => {
     options.credentials = 'same-origin';
     options.headers = options.headers || {};
-    const reqs: any = [...requests];
+    const reqs: any[] = [...requests];
     const innerNext = (): void => {
-      if (reqs.length > 0) {
+      if (reqs.length) {
         const req: any = reqs.shift();
         if (req) {
           middleware(req, options, innerNext);
@@ -140,7 +140,7 @@ logPageView(window.location);
 
 history.listen((location: LocationDescriptorObject) => logPageView(location));
 
-let store: StoreCreator | any;
+let store: Store<any>;
 if (module.hot && module.hot.data && module.hot.data.store) {
   // console.log("Restoring Redux store:", JSON.stringify(module.hot.data.store.getState()));
   store = module.hot.data.store;

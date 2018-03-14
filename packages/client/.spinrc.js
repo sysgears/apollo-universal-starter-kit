@@ -5,7 +5,7 @@ const config = {
     web: {
       entry: './src/index.tsx',
       stack: ['react-native-web', 'web'],
-      openBrowser: true,
+      openBrowser: false,
       defines: {
         __CLIENT__: true
       },

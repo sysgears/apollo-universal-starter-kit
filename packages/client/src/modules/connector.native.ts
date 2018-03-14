@@ -15,7 +15,7 @@ interface FeatureParams {
   catalogInfo?: any;
 }
 
-export default class Feature {
+export default class Feature implements FeatureParams {
   public tabItem: any[];
   public route: any[];
   public reducer: any[];
@@ -25,13 +25,13 @@ export default class Feature {
   // eslint-disable-next-line no-unused-vars
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     /* eslint-enable no-unused-vars */
-    combine(arguments, (arg: Feature) => arg.catalogInfo).forEach((info: any) =>
+    combine(arguments, (arg: FeatureParams) => arg.catalogInfo).forEach((info: any) =>
       Object.keys(info).forEach((key: any) => (featureCatalog[key] = info[key]))
     );
-    this.tabItem = combine(arguments, (arg: Feature) => arg.tabItem);
-    this.reducer = combine(arguments, (arg: Feature) => arg.reducer);
-    this.resolver = combine(arguments, (arg: Feature) => arg.resolver);
-    this.routerFactory = combine(arguments, (arg: Feature) => arg.routerFactory)
+    this.tabItem = combine(arguments, (arg: FeatureParams) => arg.tabItem);
+    this.reducer = combine(arguments, (arg: FeatureParams) => arg.reducer);
+    this.resolver = combine(arguments, (arg: FeatureParams) => arg.resolver);
+    this.routerFactory = combine(arguments, (arg: FeatureParams) => arg.routerFactory)
       .slice(-1)
       .pop();
   }

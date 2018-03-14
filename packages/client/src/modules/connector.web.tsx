@@ -26,7 +26,7 @@ interface FeatureParams {
   catalogInfo?: any;
 }
 
-export default class Feature {
+export default class Feature implements FeatureParams {
   public route: any[];
   public navItem: any[];
   public navItemRight: any[];
@@ -44,22 +44,22 @@ export default class Feature {
   /* eslint-disable no-unused-vars */
   constructor(feature?: FeatureParams, ...features: Feature[]) {
     /* eslint-enable no-unused-vars */
-    combine(arguments, (arg: Feature) => arg.catalogInfo).forEach((info: any) =>
+    combine(arguments, (arg: FeatureParams) => arg.catalogInfo).forEach((info: any) =>
       Object.keys(info).forEach((key: any) => (featureCatalog[key] = info[key]))
     );
-    this.route = combine(arguments, (arg: Feature) => arg.route);
-    this.navItem = combine(arguments, (arg: Feature) => arg.navItem);
-    this.navItemRight = combine(arguments, (arg: Feature) => arg.navItemRight);
-    this.reducer = combine(arguments, (arg: Feature) => arg.reducer);
-    this.resolver = combine(arguments, (arg: Feature) => arg.resolver);
-    this.middleware = combine(arguments, (arg: Feature) => arg.middleware);
-    this.afterware = combine(arguments, (arg: Feature) => arg.afterware);
-    this.connectionParam = combine(arguments, (arg: Feature) => arg.connectionParam);
-    this.createFetchOptions = combine(arguments, (arg: Feature) => arg.createFetchOptions);
-    this.stylesInsert = combine(arguments, (arg: Feature) => arg.stylesInsert);
-    this.scriptsInsert = combine(arguments, (arg: Feature) => arg.scriptsInsert);
-    this.rootComponentFactory = combine(arguments, (arg: Feature) => arg.rootComponentFactory);
-    this.routerFactory = combine(arguments, (arg: Feature) => arg.routerFactory)
+    this.route = combine(arguments, (arg: FeatureParams) => arg.route);
+    this.navItem = combine(arguments, (arg: FeatureParams) => arg.navItem);
+    this.navItemRight = combine(arguments, (arg: FeatureParams) => arg.navItemRight);
+    this.reducer = combine(arguments, (arg: FeatureParams) => arg.reducer);
+    this.resolver = combine(arguments, (arg: FeatureParams) => arg.resolver);
+    this.middleware = combine(arguments, (arg: FeatureParams) => arg.middleware);
+    this.afterware = combine(arguments, (arg: FeatureParams) => arg.afterware);
+    this.connectionParam = combine(arguments, (arg: FeatureParams) => arg.connectionParam);
+    this.createFetchOptions = combine(arguments, (arg: FeatureParams) => arg.createFetchOptions);
+    this.stylesInsert = combine(arguments, (arg: FeatureParams) => arg.stylesInsert);
+    this.scriptsInsert = combine(arguments, (arg: FeatureParams) => arg.scriptsInsert);
+    this.rootComponentFactory = combine(arguments, (arg: FeatureParams) => arg.rootComponentFactory);
+    this.routerFactory = combine(arguments, (arg: FeatureParams) => arg.routerFactory)
       .slice(-1)
       .pop();
   }

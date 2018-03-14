@@ -1,14 +1,16 @@
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { createApolloFetch } from 'apollo-fetch';
-import { ApolloLink } from 'apollo-link';
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { createApolloFetch, FetchOptions, ApolloFetch } from 'apollo-fetch';
+import { ApolloLink, Operation } from 'apollo-link';
+import ApolloClient from 'apollo-client';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { LoggingLink } from 'apollo-logger';
-import { getOperationAST } from 'graphql';
-import { LocationDescriptorObject } from 'history';
+import { getOperationAST, OperationDefinitionNode } from 'graphql';
+import { LocationDescriptorObject, History } from 'history';
 import createHistory from 'history/createBrowserHistory';
 import React from 'react';
+import { StoreCreator } from 'redux';
 import { ApolloProvider } from 'react-apollo';
 // import { addPersistedQueries } from 'persistgraphql';
 // eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
@@ -29,24 +31,24 @@ import Routes from './Routes';
 
 const { hostname, pathname, port } = url.parse(__BACKEND_URL__);
 
-const uri = hostname === 'localhost' && __SSR__ ? '/graphql' : __BACKEND_URL__;
-const fetch = createApolloFetch({
+const uri: string = hostname === 'localhost' && __SSR__ ? '/graphql' : __BACKEND_URL__;
+const fetch: ApolloFetch = createApolloFetch({
   uri,
   constructOptions: modules.constructFetchOptions
 });
 
 log.info(`Connecting to GraphQL backend at: ${uri}`);
 
-const cache = new InMemoryCache();
+const cache: InMemoryCache = new InMemoryCache();
 
 for (const middleware of modules.middlewares) {
   fetch.batchUse(({ requests, options }: any, next: any) => {
     options.credentials = 'same-origin';
     options.headers = options.headers || {};
-    const reqs = [...requests];
-    const innerNext = () => {
+    const reqs: any = [...requests];
+    const innerNext = (): void => {
       if (reqs.length > 0) {
-        const req = reqs.shift();
+        const req: any = reqs.shift();
         if (req) {
           middleware(req, options, innerNext);
         }
@@ -64,25 +66,25 @@ for (const afterware of modules.afterwares) {
   });
 }
 
-const connectionParams = {};
+const connectionParams: any = {};
 for (const connectionParam of modules.connectionParams) {
   Object.assign(connectionParams, connectionParam());
 }
 
-const wsUri = (hostname === 'localhost'
+const wsUri: string = (hostname === 'localhost'
   ? `${window.location.protocol}${window.location.hostname}:${__DEV__ ? port : window.location.port}${pathname}`
   : __BACKEND_URL__
 ).replace(/^http/, 'ws');
 
-const wsClient = new SubscriptionClient(wsUri, {
+const wsClient: SubscriptionClient = new SubscriptionClient(wsUri, {
   reconnect: true,
   connectionParams
 });
 
 wsClient.use([
   {
-    applyMiddleware(operationOptions, next) {
-      const params = {};
+    applyMiddleware(operationOptions: any, next: any) {
+      const params: any = {};
       for (const param of modules.connectionParams) {
         Object.assign(params, param());
       }
@@ -101,22 +103,22 @@ wsClient.onReconnected(() => {
   // console.log('onReconnected');
 });
 
-const link = ApolloLink.split(
-  (operation: any) => {
-    const operationAST = getOperationAST(operation.query, operation.operationName);
+const link: ApolloLink = ApolloLink.split(
+  (operation: Operation) => {
+    const operationAST: OperationDefinitionNode = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';
   },
   new WebSocketLink(wsClient),
   new BatchHttpLink({ fetch })
 );
 
-const linkState = withClientState({ ...modules.resolvers, cache });
+const linkState: any = withClientState({ ...modules.resolvers, cache });
 
 // if (__PERSIST_GQL__) {
 //   networkInterface = addPersistedQueries(networkInterface, queryMap);
 // }
 
-const client = createApolloClient({
+const client: ApolloClient<any> = createApolloClient({
   link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
   cache
 });
@@ -125,9 +127,9 @@ if (window.__APOLLO_STATE__) {
   cache.restore(window.__APOLLO_STATE__);
 }
 
-const history = createHistory();
+const history: History = createHistory();
 
-const logPageView = (location: LocationDescriptorObject) => {
+const logPageView = (location: LocationDescriptorObject): void => {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);
 };
@@ -138,7 +140,7 @@ logPageView(window.location);
 
 history.listen((location: LocationDescriptorObject) => logPageView(location));
 
-let store: any;
+let store: StoreCreator | any;
 if (module.hot && module.hot.data && module.hot.data.store) {
   // console.log("Restoring Redux store:", JSON.stringify(module.hot.data.store.getState()));
   store = module.hot.data.store;

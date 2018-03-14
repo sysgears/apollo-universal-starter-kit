@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 
 import { merge, map, union, without, castArray } from 'lodash';
 
 import log from '../../../common/log';
 
-const combine = (features: any, extractor: any) =>
+const combine = (features: IArguments, extractor: (x: Feature) => any) =>
   without(union(...map(features, (res: any) => castArray(extractor(res)))), undefined);
 
-export const featureCatalog = {};
+export const featureCatalog: any = {};
 
 interface FeatureParams {
   route?: any;
@@ -26,7 +26,7 @@ interface FeatureParams {
   catalogInfo?: any;
 }
 
-export default class {
+export default class Feature {
   public route: any[];
   public navItem: any[];
   public navItemRight: any[];
@@ -42,42 +42,24 @@ export default class {
   public routerFactory: any;
   public catalogInfo: any[];
   /* eslint-disable no-unused-vars */
-  constructor(
-    {
-      route,
-      navItem,
-      navItemRight,
-      reducer,
-      resolver,
-      middleware,
-      afterware,
-      connectionParam,
-      createFetchOptions,
-      stylesInsert,
-      scriptsInsert,
-      rootComponentFactory,
-      routerFactory,
-      catalogInfo
-    }: FeatureParams,
-    ...features: FeatureParams[]
-  ) {
+  constructor(feature?: FeatureParams, ...features: Feature[]) {
     /* eslint-enable no-unused-vars */
-    combine(arguments, (arg: any) => arg.catalogInfo).forEach((info: any) =>
-      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
+    combine(arguments, (arg: Feature) => arg.catalogInfo).forEach((info: any) =>
+      Object.keys(info).forEach((key: any) => (featureCatalog[key] = info[key]))
     );
-    this.route = combine(arguments, (arg: any) => arg.route);
-    this.navItem = combine(arguments, (arg: any) => arg.navItem);
-    this.navItemRight = combine(arguments, (arg: any) => arg.navItemRight);
-    this.reducer = combine(arguments, (arg: any) => arg.reducer);
-    this.resolver = combine(arguments, (arg: any) => arg.resolver);
-    this.middleware = combine(arguments, (arg: any) => arg.middleware);
-    this.afterware = combine(arguments, (arg: any) => arg.afterware);
-    this.connectionParam = combine(arguments, (arg: any) => arg.connectionParam);
-    this.createFetchOptions = combine(arguments, (arg: any) => arg.createFetchOptions);
-    this.stylesInsert = combine(arguments, (arg: any) => arg.stylesInsert);
-    this.scriptsInsert = combine(arguments, (arg: any) => arg.scriptsInsert);
-    this.rootComponentFactory = combine(arguments, (arg: any) => arg.rootComponentFactory);
-    this.routerFactory = combine(arguments, (arg: any) => arg.routerFactory)
+    this.route = combine(arguments, (arg: Feature) => arg.route);
+    this.navItem = combine(arguments, (arg: Feature) => arg.navItem);
+    this.navItemRight = combine(arguments, (arg: Feature) => arg.navItemRight);
+    this.reducer = combine(arguments, (arg: Feature) => arg.reducer);
+    this.resolver = combine(arguments, (arg: Feature) => arg.resolver);
+    this.middleware = combine(arguments, (arg: Feature) => arg.middleware);
+    this.afterware = combine(arguments, (arg: Feature) => arg.afterware);
+    this.connectionParam = combine(arguments, (arg: Feature) => arg.connectionParam);
+    this.createFetchOptions = combine(arguments, (arg: Feature) => arg.createFetchOptions);
+    this.stylesInsert = combine(arguments, (arg: Feature) => arg.stylesInsert);
+    this.scriptsInsert = combine(arguments, (arg: Feature) => arg.scriptsInsert);
+    this.rootComponentFactory = combine(arguments, (arg: Feature) => arg.rootComponentFactory);
+    this.routerFactory = combine(arguments, (arg: Feature) => arg.routerFactory)
       .slice(-1)
       .pop();
   }
@@ -87,13 +69,13 @@ export default class {
   }
 
   get routes() {
-    return this.route.map((component: any, idx: number) =>
+    return this.route.map((component: ReactElement<any>, idx: number) =>
       React.cloneElement(component, { key: idx + this.route.length })
     );
   }
 
   get navItems() {
-    return this.navItem.map((component: any, idx: number) =>
+    return this.navItem.map((component: ReactElement<any>, idx: number) =>
       React.cloneElement(component, {
         key: component.key ? component.key : idx + this.navItem.length
       })
@@ -101,7 +83,7 @@ export default class {
   }
 
   get navItemsRight() {
-    return this.navItemRight.map((component: any, idx: number) =>
+    return this.navItemRight.map((component: ReactElement<any>, idx: number) =>
       React.cloneElement(component, {
         key: component.key ? component.key : idx + this.navItem.length
       })
@@ -152,7 +134,7 @@ export default class {
     return this.scriptsInsert;
   }
 
-  public getWrappedRoot(root: any, req?: any): any {
+  public getWrappedRoot(root: ReactNode, req?: any): ReactNode {
     let nestedRoot = root;
     for (const componentFactory of this.rootComponentFactory) {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Platform } from 'react-native';
 import PropTypes from 'prop-types';
 
 export default class FieldAdapter extends Component {
@@ -8,16 +9,15 @@ export default class FieldAdapter extends Component {
 
   static propTypes = {
     component: PropTypes.func,
+    onChangeText: PropTypes.func,
     onChange: PropTypes.func,
     onBlur: PropTypes.func,
     name: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.number, PropTypes.object]),
+    value: PropTypes.string,
     defaultValue: PropTypes.string,
     checked: PropTypes.bool,
     defaultChecked: PropTypes.bool,
-    disabled: PropTypes.bool,
-    formType: PropTypes.string.isRequired,
-    hasTypeOf: PropTypes.func.isRequired
+    disabled: PropTypes.bool
   };
 
   constructor(props, context) {
@@ -27,30 +27,53 @@ export default class FieldAdapter extends Component {
     }
   }
 
+  onChange = e => {
+    const { onChange } = this.props;
+    if (onChange) {
+      onChange(e.target.value, e);
+    } else {
+      this.context.formik.handleChange(e);
+    }
+  };
+
+  onBlur = e => {
+    const { onBlur, name } = this.props;
+    const { formik } = this.context;
+    if (onBlur) {
+      onBlur(e);
+    } else {
+      if (Platform.OS === 'web') {
+        formik.handleBlur(e);
+      } else {
+        formik.setFieldTouched(name, true);
+      }
+    }
+  };
+
+  onChangeText = value => {
+    const { onChangeText, onChange, name } = this.props;
+    if (onChange && !onChangeText) {
+      onChange(value);
+    } else if (onChangeText) {
+      onChangeText(value);
+    } else {
+      this.context.formik.setFieldValue(name, value);
+    }
+  };
+
   render() {
     const { formik } = this.context;
-    const {
-      component,
-      name,
-      value,
-      defaultValue,
-      checked,
-      defaultChecked,
-      onChange,
-      onBlur,
-      disabled,
-      formType,
-      hasTypeOf
-    } = this.props;
-
+    const { component, name, defaultValue, defaultChecked, disabled } = this.props;
+    let { value, checked } = this.props;
+    value = value || '';
+    checked = checked || false;
     const meta = {
       touched: formik.touched[name],
       error: formik.errors[name]
     };
 
     const input = {
-      onChange,
-      onBlur,
+      onBlur: this.onBlur,
       name,
       value,
       checked,
@@ -59,12 +82,13 @@ export default class FieldAdapter extends Component {
       disabled
     };
 
+    const changeEventHandler = Platform.OS === 'web' ? 'onChange' : 'onChangeText';
+    input[changeEventHandler] = this[changeEventHandler];
+
     return React.createElement(component, {
       ...this.props,
       input,
-      meta,
-      formType,
-      hasTypeOf
+      meta
     });
   }
 }

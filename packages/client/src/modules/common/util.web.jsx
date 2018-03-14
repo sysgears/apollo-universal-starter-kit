@@ -14,8 +14,10 @@ import DomainSchema from '@domain-schema/core';
 import Field from '../../utils/FieldAdapter';
 import { mapFormPropsToValues } from '../../utils/crud';
 import {
-  RenderField,
-  RenderSelect,
+  RenderInput,
+  RenderNumber,
+  RenderTextArea,
+  RenderSelectQuery,
   RenderDate,
   RenderSwitch,
   Button,
@@ -223,13 +225,13 @@ export const createFormFields = ({
         //  validate.push(required);
         //}
 
-        let component = RenderField;
+        let component = RenderInput;
         const value = values ? values[key] : '';
         let style = {};
         let inputType = 'text';
 
         if (type.isSchema) {
-          component = RenderSelect;
+          component = RenderSelectQuery;
           if (formType !== 'form') {
             style = { width: 100 };
           }
@@ -319,6 +321,7 @@ export const createFormFields = ({
           );
         } else if (hasTypeOf(Number)) {
           inputType = 'number';
+          component = RenderNumber;
           fields.push(
             <Col span={8} key={key}>
               <Field
@@ -369,13 +372,13 @@ export const createFormFields = ({
         //  validate.push(required);
         //}
 
-        let component = RenderField;
-        const value = values ? values[key] : '';
+        let component = RenderInput;
+        const fieldValue = values ? values[key] : '';
         let style = {};
         let inputType = 'text';
 
         if (type.isSchema) {
-          component = RenderSelect;
+          component = RenderSelectQuery;
           if (formType !== 'form') {
             style = { width: 100 };
           }
@@ -385,6 +388,9 @@ export const createFormFields = ({
           component = RenderDate;
         } else if (hasTypeOf(Number)) {
           inputType = 'number';
+          component = RenderNumber;
+        } else if (hasTypeOf(String) && value.fieldInput === 'textarea') {
+          component = RenderTextArea;
         }
 
         fields.push(
@@ -393,7 +399,7 @@ export const createFormFields = ({
             key={key}
             component={component}
             schema={type}
-            value={value}
+            value={fieldValue}
             type={inputType}
             style={style}
             label={startCase(key)}

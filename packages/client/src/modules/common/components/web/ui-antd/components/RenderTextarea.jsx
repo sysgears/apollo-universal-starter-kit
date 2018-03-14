@@ -6,7 +6,7 @@ import { FormItem } from './index';
 
 const { TextArea } = Input;
 
-export default class RenderTextarea extends React.Component {
+export default class RenderTextArea extends React.Component {
   static propTypes = {
     input: PropTypes.object,
     label: PropTypes.string,

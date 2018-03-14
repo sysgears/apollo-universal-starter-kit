@@ -1,10 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql, compose, NamedProps, QueryProps } from 'react-apollo';
+import { SubscribeToMoreOptions, ApolloError } from 'apollo-client';
 import update from 'immutability-helper';
 
-import { connect } from 'react-redux';
-import CounterView from '../components/CounterView';
+import { connect, Dispatch } from 'react-redux';
+import CounterView from '../components/CounterView.native';
 
 import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
 import ADD_COUNTER from '../graphql/AddCounter.graphql';
@@ -12,18 +12,29 @@ import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
 
-class Counter extends React.Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    subscribeToMore: PropTypes.func.isRequired
-  };
+interface Counter {
+  amount: number;
+}
 
-  constructor(props) {
+interface CounterProps {
+  loading: boolean;
+  subscribeToMore: (option: SubscribeToMoreOptions) => void;
+  counter: Counter;
+  reduxCount: number;
+  counterState: number;
+  addCounter: (amount: number) => any;
+  addCounterState: (amount: number) => any;
+  onReduxIncrement: (amount: number) => any;
+}
+
+class Counter extends React.Component<CounterProps, any> {
+  public subscription: any;
+  constructor(props: any) {
     super(props);
     this.subscription = null;
   }
 
-  componentWillReceiveProps(nextProps) {
+  public componentWillReceiveProps(nextProps: any) {
     if (!nextProps.loading) {
       // Subscribe or re-subscribe
       if (!this.subscription) {
@@ -32,49 +43,63 @@ class Counter extends React.Component {
     }
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     if (this.subscription) {
       this.subscription();
     }
   }
 
-  subscribeToCount() {
+  public subscribeToCount() {
     const { subscribeToMore } = this.props;
     this.subscription = subscribeToMore({
       document: COUNTER_SUBSCRIPTION,
       variables: {},
-      updateQuery: (prev, { subscriptionData: { data: { counterUpdated: { amount } } } }) => {
+      updateQuery: (prev: any, { subscriptionData: { data: { counterUpdated: { amount } } } }) => {
         return update(prev, {
-          counter: {
-            amount: {
-              $set: amount
-            }
-          }
+          $set: amount
         });
       }
     });
   }
 
-  render() {
+  public render() {
     return <CounterView {...this.props} />;
   }
 }
 
+interface Counter {
+  amount: number;
+}
+
+interface CounterResponse {
+  counter: Counter;
+}
+
+interface CounterState {
+  counter: number;
+}
+
+interface CounterStateResponse {
+  counterState: CounterState;
+}
+
 const CounterWithApollo = compose(
-  graphql(COUNTER_QUERY, {
+  graphql<CounterResponse>(COUNTER_QUERY, {
     props({ data: { loading, error, counter, subscribeToMore } }) {
-      if (error) throw new Error(error);
+      if (error) {
+        throw new ApolloError(error);
+      }
       return { loading, counter, subscribeToMore };
     }
   }),
   graphql(ADD_COUNTER, {
-    props: ({ ownProps, mutate }) => ({
-      addCounter(amount) {
+    props: ({ ownProps, mutate }: any) => ({
+      addCounter(amount: number) {
         return () =>
           mutate({
             variables: { amount },
             updateQueries: {
-              counterQuery: (prev, { mutationResult }) => {
+              counterQuery: (prev: any, { mutationResult }: any) => {
                 const newAmount = mutationResult.data.addCounter.amount;
                 return update(prev, {
                   counter: {
@@ -97,22 +122,30 @@ const CounterWithApollo = compose(
     })
   }),
   graphql(ADD_COUNTER_CLIENT, {
-    props: ({ mutate }) => ({
-      addCounterState: amount => () => {
+    props: ({ mutate }: any) => ({
+      addCounterState: (amount: number): any => () => {
         const { value } = mutate({ variables: { amount } });
         return value;
       }
     })
   }),
-  graphql(COUNTER_QUERY_CLIENT, {
+  graphql<CounterStateResponse>(COUNTER_QUERY_CLIENT, {
     props: ({ data: { counterState: { counter } } }) => ({ counterState: counter })
   })
 )(Counter);
 
+interface ReduxCount {
+  reduxCount: number;
+}
+
+interface State {
+  counter: ReduxCount;
+}
+
 export default connect(
-  state => ({ reduxCount: state.counter.reduxCount }),
-  dispatch => ({
-    onReduxIncrement(value) {
+  (state: State) => ({ reduxCount: state.counter.reduxCount }),
+  (dispatch: Dispatch<any>) => ({
+    onReduxIncrement(value: number) {
       return () =>
         dispatch({
           type: 'COUNTER_INCREMENT',

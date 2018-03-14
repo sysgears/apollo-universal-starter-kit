@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { createTabBarIconWrapper } from '../common/components/native';
-import Counter from './containers/Counter';
+import Counter from './containers/Counter.native';
 import reducers from './reducers/index';
 import resolvers from './resolvers/index';
 

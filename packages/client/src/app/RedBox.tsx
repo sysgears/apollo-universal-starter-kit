@@ -4,7 +4,7 @@ import React from 'react';
 import settings from '../../../../settings';
 import { ServerError } from './Main';
 
-const format = (fmt: any, ...args: any[]) =>
+const format = (fmt: any, ...args: any[]): string =>
   fmt.replace(/{(\d+)}/g, (match: any, num: number) => (typeof args[num] !== 'undefined' ? args[num] : match));
 
 interface RedBoxState {
@@ -42,8 +42,8 @@ export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
   public renderFrames(frames: any[]) {
     const { frame, file, linkToFile } = styles;
     return frames.map((f: any, index: number) => {
-      const text = `at ${f.fileName}:${f.lineNumber}:${f.columnNumber}`;
-      const url = format(settings.app.stackFragmentFormat, f.fileName, f.lineNumber, f.columnNumber);
+      const text: string = `at ${f.fileName}:${f.lineNumber}:${f.columnNumber}`;
+      const url: string = format(settings.app.stackFragmentFormat, f.fileName, f.lineNumber, f.columnNumber);
 
       return (
         <div style={frame} key={index}>

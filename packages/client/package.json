@@ -91,6 +91,7 @@
     "@types/lodash": "^4.14.104",
     "@types/react": "^16.0.38",
     "@types/react-dom": "^16.0.4",
+    "@types/react-helmet": "^5.0.5",
     "@types/react-navigation": "^1.2.1",
     "@types/react-redux": "^5.0.15",
     "@types/react-router-dom": "^4.2.4",

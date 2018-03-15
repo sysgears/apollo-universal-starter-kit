@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
-import { PageLayout, Button } from '../../common/components/web';
+import { Button } from '../../common/components/web';
+import PageLayout from '../../common/components/web/ui-bootstrap/components/PageLayout';
 import settings from '../../../../../../settings';
 
 const Section = styled.section`
@@ -10,7 +10,29 @@ const Section = styled.section`
   text-align: center;
 `;
 
-const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement, counterState, addCounterState }) => {
+interface Counter {
+  amount: number;
+}
+
+interface CounterProps {
+  loading: boolean;
+  counter: Counter;
+  reduxCount: number;
+  counterState: number;
+  addCounter: (amount: number) => any;
+  addCounterState: (amount: number) => any;
+  onReduxIncrement: (amount: number) => any;
+}
+
+const CounterView = ({
+  loading,
+  counter,
+  addCounter,
+  reduxCount,
+  onReduxIncrement,
+  counterState,
+  addCounterState
+}: CounterProps) => {
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Counter`}
@@ -60,16 +82,6 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
       </PageLayout>
     );
   }
-};
-
-CounterView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  counter: PropTypes.object,
-  addCounter: PropTypes.func.isRequired,
-  counterState: PropTypes.number.isRequired,
-  addCounterState: PropTypes.func.isRequired,
-  reduxCount: PropTypes.number.isRequired,
-  onReduxIncrement: PropTypes.func.isRequired
 };
 
 export default CounterView;

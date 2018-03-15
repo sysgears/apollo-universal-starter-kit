@@ -1,10 +1,31 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '../../common/components';
 
-const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement, counterState, addCounterState }) => {
+interface Counter {
+  amount: number;
+}
+
+interface CounterProps {
+  loading: boolean;
+  counter: Counter;
+  reduxCount: number;
+  counterState: number;
+  addCounter: (amount: number) => any;
+  addCounterState: (amount: number) => any;
+  onReduxIncrement: (amount: number) => any;
+}
+
+const CounterView = ({
+  loading,
+  counter,
+  addCounter,
+  reduxCount,
+  onReduxIncrement,
+  counterState,
+  addCounterState
+}: CounterProps) => {
   if (loading) {
     return (
       <View style={styles.container}>
@@ -55,15 +76,5 @@ const styles = StyleSheet.create({
     marginBottom: 5
   }
 });
-
-CounterView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  counter: PropTypes.object,
-  addCounter: PropTypes.func.isRequired,
-  counterState: PropTypes.number.isRequired,
-  addCounterState: PropTypes.func.isRequired,
-  reduxCount: PropTypes.number.isRequired,
-  onReduxIncrement: PropTypes.func.isRequired
-};
 
 export default CounterView;

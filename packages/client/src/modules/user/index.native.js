@@ -1,14 +1,12 @@
-import jwt from './modules/jwt'; // eslint-disable-line
-import session from './modules/session'; // eslint-disable-line
-import commonResolvers from './resolvers';
+import auth from './auth';
+import resolvers from './resolvers';
 import UserTabNavigator from './containers/Routes';
 
 import modules from '..';
 
 import Feature from '../connector';
 
-const commonFeature = new Feature({ resolver: commonResolvers });
-
-export default new Feature(commonFeature, jwt, {
+export default new Feature(auth, {
+  resolver: resolvers,
   routerFactory: () => UserTabNavigator(modules.tabItems)
 });

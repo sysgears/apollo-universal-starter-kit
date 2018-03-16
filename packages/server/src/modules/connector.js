@@ -51,10 +51,11 @@ class Feature {
   }
 
   async createContext(req: $Request, res: $Response, connectionParams: any, webSocket: any) {
-    const results = await Promise.all(
-      this.createContextFunc.map(createContext => createContext(req, res, connectionParams, webSocket))
-    );
-    return merge({}, ...results);
+    let context = {};
+    for (const createContextFunc of this.createContextFunc) {
+      context = merge(context, await createContextFunc(req, res, connectionParams, webSocket, context));
+    }
+    return context;
   }
 
   createResolvers(pubsub: any) {

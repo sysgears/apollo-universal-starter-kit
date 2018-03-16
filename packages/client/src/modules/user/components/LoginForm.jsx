@@ -6,8 +6,8 @@ import Field from '../../../utils/FieldAdapter';
 import { Button } from '../../common/components';
 import { RenderField } from '../../common/components/native';
 import { required, email, minLength, validateForm } from '../../../../../common/validation';
-import FacebookButton from '../strategies/facebook';
-import GoogleButton from '../strategies/google';
+import FacebookButton from '../auth/facebook';
+import GoogleButton from '../auth/google';
 import settings from '../../../../../../settings';
 
 const loginFormSchema = {

@@ -1,0 +1,13 @@
+extend type AuthPayload {
+    credentials: Credentials
+}
+
+type Credentials {
+    token: String!
+    refreshToken: String!
+}
+
+extend type Mutation {
+    # Refresh user tokens
+    refreshTokens(token: String!, refreshToken: String!): AuthPayload!
+}

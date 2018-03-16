@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Elements } from 'react-stripe-elements';
 import { LayoutCenter } from '../../common/components';
-import { PageLayout } from '../../common/components/web';
 
 import SubscriptionCardForm from './SubscriptionCardForm';
 import settings from '../../../../../../settings';
@@ -41,7 +40,7 @@ export default class UpdateCardView extends React.Component {
     );
 
     return (
-      <PageLayout>
+      <section>
         {renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">Update card!</h1>
@@ -49,7 +48,7 @@ export default class UpdateCardView extends React.Component {
             <SubscriptionCardForm onSubmit={this.onSubmit(updateCard)} action="Update Card" />
           </Elements>
         </LayoutCenter>
-      </PageLayout>
+      </section>
     );
   }
 }

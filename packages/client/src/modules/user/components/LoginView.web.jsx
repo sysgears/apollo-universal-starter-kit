@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { LayoutCenter } from '../../common/components';
-import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
+import { Card, CardGroup, CardText, CardTitle } from '../../common/components/web';
 
 import LoginForm from '../components/LoginForm';
 import settings from '../../../../../../settings';
@@ -41,7 +41,7 @@ export default class LoginView extends React.PureComponent {
     );
 
     return (
-      <PageLayout>
+      <section>
         {renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">Sign In</h1>
@@ -56,7 +56,7 @@ export default class LoginView extends React.PureComponent {
             </CardGroup>
           </Card>
         </LayoutCenter>
-      </PageLayout>
+      </section>
     );
   }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
-import { PageLayout, Button } from '../../common/components/web';
+import { Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
 const Section = styled.section`
@@ -25,14 +25,14 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
 
   if (loading) {
     return (
-      <PageLayout>
+      <section>
         {renderMetaData()}
         <div className="text-center">Loading...</div>
-      </PageLayout>
+      </section>
     );
   } else {
     return (
-      <PageLayout>
+      <section>
         {renderMetaData()}
         <Section>
           <p>
@@ -57,7 +57,7 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
             Click to increase apolloLinkState
           </Button>
         </Section>
-      </PageLayout>
+      </section>
     );
   }
 };

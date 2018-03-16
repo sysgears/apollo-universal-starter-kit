@@ -4,7 +4,6 @@ import Helmet from 'react-helmet';
 import { Elements } from 'react-stripe-elements';
 
 import { LayoutCenter, clientOnly } from '../../common/components';
-import { PageLayout } from '../../common/components/web';
 import SubscriptionCardForm from './SubscriptionCardForm';
 import settings from '../../../../../../settings';
 
@@ -43,7 +42,7 @@ export default class SubscriptionView extends React.Component {
     );
 
     return (
-      <PageLayout>
+      <section>
         {renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">Subscription!</h1>
@@ -51,7 +50,7 @@ export default class SubscriptionView extends React.Component {
             <SubscriptionCardForm onSubmit={this.onSubmit(subscribe)} action="Subscribe" />
           </ElementsClientOnly>
         </LayoutCenter>
-      </PageLayout>
+      </section>
     );
   }
 }

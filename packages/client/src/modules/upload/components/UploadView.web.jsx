@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
 import filesize from 'filesize';
-import { PageLayout, Row, Col, Table, Button, Alert } from '../../common/components/web';
+import { Row, Col, Table, Button, Alert } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
 export default class UploadView extends React.PureComponent {
@@ -76,7 +76,7 @@ export default class UploadView extends React.PureComponent {
     ];
 
     return (
-      <PageLayout>
+      <section>
         {this.renderMetaData()}
         <div className="text-center">
           <Row>
@@ -91,7 +91,7 @@ export default class UploadView extends React.PureComponent {
             </Col>
           </Row>
         </div>
-      </PageLayout>
+      </section>
     );
   }
 }

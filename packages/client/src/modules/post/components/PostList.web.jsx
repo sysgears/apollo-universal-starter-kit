@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { PageLayout, Table, Button } from '../../common/components/web';
+import { Table, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
 export default class PostList extends React.PureComponent {
@@ -44,10 +44,10 @@ export default class PostList extends React.PureComponent {
     const { loading, posts, loadMoreRows } = this.props;
     if (loading) {
       return (
-        <PageLayout>
+        <section>
           {this.renderMetaData()}
           <div className="text-center">Loading...</div>
-        </PageLayout>
+        </section>
       );
     } else {
       const columns = [
@@ -78,7 +78,7 @@ export default class PostList extends React.PureComponent {
         }
       ];
       return (
-        <PageLayout>
+        <section>
           {this.renderMetaData()}
           <h2>Posts</h2>
           <Link to="/post/0">
@@ -92,7 +92,7 @@ export default class PostList extends React.PureComponent {
             </small>
           </div>
           {this.renderLoadMore(posts, loadMoreRows)}
-        </PageLayout>
+        </section>
       );
     }
   }

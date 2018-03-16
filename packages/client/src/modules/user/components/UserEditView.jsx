@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { pick } from 'lodash';
-import { PageLayout } from '../../common/components/web';
 
 import UserForm from './UserForm';
 import settings from '../../../../../../settings';
@@ -60,21 +59,21 @@ export default class UserEditView extends React.PureComponent {
 
     if (loading && !user) {
       return (
-        <PageLayout>
+        <section>
           {this.renderMetaData()}
           <div className="text-center">Loading...</div>
-        </PageLayout>
+        </section>
       );
     } else {
       return (
-        <PageLayout>
+        <section>
           {this.renderMetaData()}
           <Link id="back-button" to="/users">
             Back
           </Link>
           <h2>{user ? 'Edit' : 'Create'} User</h2>
           <UserForm onSubmit={this.onSubmit} initialValues={user || {}} />
-        </PageLayout>
+        </section>
       );
     }
   }

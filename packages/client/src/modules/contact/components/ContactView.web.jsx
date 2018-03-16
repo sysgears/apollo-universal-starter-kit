@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { LayoutCenter } from '../../common/components';
-import { PageLayout } from '../../common/components/web';
 
 import ContactForm from './ContactForm';
 import settings from '../../../../../../settings';
@@ -46,13 +45,13 @@ export default class ContactView extends React.Component {
     );
 
     return (
-      <PageLayout>
+      <section>
         {renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">Contact Us</h1>
           <ContactForm onSubmit={this.onSubmit({ contact })} sent={this.state.sent} />
         </LayoutCenter>
-      </PageLayout>
+      </section>
     );
   }
 }

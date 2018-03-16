@@ -1,16 +1,30 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Switch, withRouter } from 'react-router-dom';
 
 import modules from '../';
 import { PageLayout } from '../common/components/web';
 import Feature from '../connector';
 
-const routerFactory = () => (
-  <PageLayout>
-    <Switch>{modules.routes}</Switch>
-  </PageLayout>
-);
+const Wrapper = ({ children }) => {
+  return <PageLayout>{children}</PageLayout>;
+};
+
+const routerFactory = () => {
+  const WrapperComponent = withRouter(Wrapper);
+
+  return (
+    <WrapperComponent>
+      <Switch>{modules.routes}</Switch>
+    </WrapperComponent>
+  );
+};
 
 export default new Feature({
   routerFactory
 });
+
+Wrapper.propTypes = {
+  location: PropTypes.string,
+  children: PropTypes.object
+};

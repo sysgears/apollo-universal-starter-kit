@@ -13,5 +13,6 @@ export default new Feature({
         Contact Us
       </NavLink>
     </MenuItem>
-  )
+  ),
+  container: { path: ['contact'], wrapper: 'ContactWrapper' }
 });

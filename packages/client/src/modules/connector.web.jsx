@@ -15,6 +15,7 @@ export default class {
       route,
       navItem,
       navItemRight,
+      container,
       reducer,
       resolver,
       middleware,
@@ -36,6 +37,7 @@ export default class {
     this.route = combine(arguments, arg => arg.route);
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);
+    this.container = combine(arguments, arg => arg.container);
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
     this.middleware = combine(arguments, arg => arg.middleware);
@@ -72,6 +74,10 @@ export default class {
         key: component.key ? component.key : idx + this.navItem.length
       })
     );
+  }
+
+  get containers() {
+    return this.container;
   }
 
   get reducers() {

@@ -1,5 +1,6 @@
-interface Action {
-  type: string;
+import { Action } from 'redux';
+
+interface CounterAction extends Action {
   value: any;
 }
 
@@ -11,7 +12,7 @@ const defaultState: DefaultState = {
   reduxCount: 1
 };
 
-export default function(state = defaultState, action: Action) {
+export default function(state = defaultState, action: CounterAction) {
   switch (action.type) {
     case 'COUNTER_INCREMENT':
       return {

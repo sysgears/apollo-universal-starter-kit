@@ -28,7 +28,7 @@ const ReactEnzymeAdapter = require('enzyme-adapter-react-16');
 const { ApolloProvider } = require('react-apollo');
 const Enzyme = require('enzyme');
 const clientModules = require('../modules').default;
-const { PageLayout } = require('../modules/common/components/web');
+const PageLayout = require('../modules/defaultRouter/components/PageLayout').default;
 
 const mount = Enzyme.mount;
 

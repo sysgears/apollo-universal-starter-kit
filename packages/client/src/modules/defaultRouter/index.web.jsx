@@ -3,11 +3,17 @@ import PropTypes from 'prop-types';
 import { Switch, withRouter } from 'react-router-dom';
 
 import modules from '../';
-import { PageLayout } from '../common/components/web';
+import PageLayout from './components/PageLayout';
 import Feature from '../connector';
 
-const Wrapper = ({ children }) => {
-  return <PageLayout>{children}</PageLayout>;
+const Wrapper = ({ location: { pathname }, children }) => {
+  let wrapper = <PageLayout>{children}</PageLayout>;
+  modules.containers.forEach(cont => {
+    if (cont.path.includes(pathname)) {
+      wrapper = React.createElement(cont.wrapper, cont.props, children);
+    }
+  });
+  return wrapper;
 };
 
 const routerFactory = () => {
@@ -25,6 +31,6 @@ export default new Feature({
 });
 
 Wrapper.propTypes = {
-  location: PropTypes.string,
+  location: PropTypes.object,
   children: PropTypes.object
 };

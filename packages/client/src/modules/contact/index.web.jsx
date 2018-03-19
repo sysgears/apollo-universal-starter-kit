@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { MenuItem } from '../../modules/common/components/web';
-import Contact from './containers/Contact';
 
+import Contact from './containers/Contact';
 import Feature from '../connector';
+import { MenuItem } from '../../modules/common/components/web';
 
 export default new Feature({
   route: <Route exact path="/contact" component={Contact} />,
@@ -13,6 +13,5 @@ export default new Feature({
         Contact Us
       </NavLink>
     </MenuItem>
-  ),
-  container: { path: ['contact'], wrapper: 'ContactWrapper' }
+  )
 });

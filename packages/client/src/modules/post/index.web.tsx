@@ -3,7 +3,7 @@ import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
 
 import Post from './containers/Post';
-import PostEdit from './containers/PostEdit';
+import PostEdit from './containers/PostEdit.web';
 
 import resolvers from './resolvers';
 

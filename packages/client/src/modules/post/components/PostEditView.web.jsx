@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
+import { PageLayout } from '../../common/components/web';
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
 import settings from '../../../../../../settings';
@@ -36,14 +37,14 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
 
   if (loading && !postObj) {
     return (
-      <section>
+      <PageLayout>
         {renderMetaData()}
         <div className="text-center">Loading...</div>
-      </section>
+      </PageLayout>
     );
   } else {
     return (
-      <section>
+      <PageLayout>
         {renderMetaData()}
         <Link id="back-button" to="/posts">
           Back
@@ -58,7 +59,7 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
             subscribeToMore={subscribeToMore}
           />
         )}
-      </section>
+      </PageLayout>
     );
   }
 };

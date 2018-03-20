@@ -28,7 +28,6 @@ const ReactEnzymeAdapter = require('enzyme-adapter-react-16');
 const { ApolloProvider } = require('react-apollo');
 const Enzyme = require('enzyme');
 const clientModules = require('../modules').default;
-const PageLayout = require('../modules/defaultRouter/components/PageLayout').default;
 
 const mount = Enzyme.mount;
 
@@ -189,9 +188,7 @@ export default class Renderer {
       this.withApollo(
         clientModules.getWrappedRoot(
           <Router history={this.history}>
-            <PageLayout>
-              <Switch>{clientModules.routes}</Switch>
-            </PageLayout>
+            <Switch>{clientModules.routes}</Switch>
           </Router>
         )
       )

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { LayoutCenter } from '../../common/components';
-import { Card, CardGroup, CardText, CardTitle } from '../../common/components/web';
+import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
 import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
 
 import settings from '../../../../../../settings';
@@ -22,14 +22,14 @@ const renderMetaData = () => (
 const ProfileView = ({ loading, currentUser }) => {
   if (loading && !currentUser) {
     return (
-      <section>
+      <PageLayout>
         {renderMetaData()}
         <div className="text-center">Loading...</div>
-      </section>
+      </PageLayout>
     );
   } else if (currentUser) {
     return (
-      <section>
+      <PageLayout>
         {renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">Profile</h1>
@@ -56,14 +56,14 @@ const ProfileView = ({ loading, currentUser }) => {
             {settings.subscription.enabled && <SubscriptionProfile />}
           </Card>
         </LayoutCenter>
-      </section>
+      </PageLayout>
     );
   } else {
     return (
-      <section>
+      <PageLayout>
         {renderMetaData()}
         <h2>No current user logged in</h2>
-      </section>
+      </PageLayout>
     );
   }
 };

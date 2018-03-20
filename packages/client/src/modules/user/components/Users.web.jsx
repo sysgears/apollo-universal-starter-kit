@@ -1,7 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { Button } from '../../common/components/web';
+import { PageLayout, Button } from '../../common/components/web';
 
 import UsersFilter from '../containers/UsersFilter';
 import UsersList from '../containers/UsersList';
@@ -21,7 +21,7 @@ const Users = () => {
   );
 
   return (
-    <section>
+    <PageLayout>
       {renderMetaData()}
       <h2>Users</h2>
       <Link to="/users/0">
@@ -31,7 +31,7 @@ const Users = () => {
       <UsersFilter />
       <hr />
       <UsersList />
-    </section>
+    </PageLayout>
   );
 };
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
-import { Button } from '../../common/components/web';
+import { PageLayout, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
 const Section = styled.section`
@@ -13,7 +13,7 @@ const Section = styled.section`
 const PageNotFound = ({ staticContext = {} }) => {
   staticContext.pageNotFound = true;
   return (
-    <section>
+    <PageLayout>
       <Section>
         <Helmet
           title={`${settings.app.name} - Page not found`}
@@ -31,7 +31,7 @@ const PageNotFound = ({ staticContext = {} }) => {
           </Button>
         </Link>
       </Section>
-    </section>
+    </PageLayout>
   );
 };
 

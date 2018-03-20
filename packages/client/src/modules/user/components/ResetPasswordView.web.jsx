@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { PageLayout } from '../../common/components/web';
 
 import ResetPasswordForm from '../components/ResetPasswordForm';
 import settings from '../../../../../../settings';
@@ -46,11 +47,11 @@ export default class ResetPasswordView extends React.Component {
     );
 
     return (
-      <section>
+      <PageLayout>
         {renderMetaData()}
         <h1>Reset password!</h1>
         <ResetPasswordForm onSubmit={this.onSubmit(resetPassword)} />
-      </section>
+      </PageLayout>
     );
   }
 }

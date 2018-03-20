@@ -7,14 +7,19 @@ import PageLayout from './components/PageLayout';
 import Feature from '../connector';
 
 const Wrapper = ({ location: { pathname }, children }) => {
-  let wrapper = <PageLayout>{children}</PageLayout>;
-  modules.containers.forEach(cont => {
+  let content = children;
+  modules.containers.find(cont => {
     if (cont.path.includes(pathname)) {
-      wrapper = React.createElement(cont.wrapper, cont.props, children);
+      content = React.createElement(cont.wrapper, cont.props, children);
+      return true;
+    } else if (cont.path[0] === '*') {
+      content = React.createElement(cont.wrapper, cont.props, children);
     }
   });
-  return wrapper;
+  return content;
 };
+
+const container = { path: ['*'], wrapper: PageLayout };
 
 const routerFactory = () => {
   const WrapperComponent = withRouter(Wrapper);
@@ -27,7 +32,8 @@ const routerFactory = () => {
 };
 
 export default new Feature({
-  routerFactory
+  routerFactory,
+  container
 });
 
 Wrapper.propTypes = {

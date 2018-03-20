@@ -3,6 +3,9 @@ import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
 import Contact from './containers/Contact';
 
+// eslint-disable-next-line
+import resources from '@alienfast/i18next-loader!./locales/index.js';
+
 import Feature from '../connector';
 
 export default new Feature({
@@ -14,4 +17,5 @@ export default new Feature({
       </NavLink>
     </MenuItem>
   )
+  // localization: resources
 });

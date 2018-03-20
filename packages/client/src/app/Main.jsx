@@ -17,6 +17,9 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 // import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
 import url from 'url';
+import i18n from 'i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import { reactI18nextModule, translate } from 'react-i18next';
 
 import RedBox from './RedBox';
 import createApolloClient from '../../../common/createApolloClient';
@@ -56,6 +59,29 @@ for (const middleware of modules.middlewares) {
     innerNext();
   });
 }
+
+console.log(modules.intls);
+i18n
+  .use(LanguageDetector)
+  .use(reactI18nextModule)
+  .init({
+    fallbackLng: 'en',
+    resources: modules.localizations[0],
+    // have a common namespace used around the full app
+    ns: ['translations'],
+    defaultNS: 'translations',
+
+    debug: true,
+
+    interpolation: {
+      escapeValue: false // not needed for react!!
+    },
+
+    react: {
+      wait: true
+    }
+  });
+// translate.setI18n(i18n);
 
 for (const afterware of modules.afterwares) {
   fetch.batchUseAfter(({ response, options }, next) => {
@@ -165,7 +191,7 @@ class ServerError extends Error {
   }
 }
 
-export default class Main extends React.Component {
+class Main extends React.Component {
   constructor(props) {
     super(props);
     const serverError = window.__SERVER_ERROR__;
@@ -181,6 +207,7 @@ export default class Main extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     return this.state.error ? (
       <RedBox error={this.state.error} />
     ) : (
@@ -194,3 +221,5 @@ export default class Main extends React.Component {
     );
   }
 }
+
+export default translate()(Main);

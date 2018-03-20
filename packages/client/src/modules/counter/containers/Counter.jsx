@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
-
 import { connect } from 'react-redux';
 import CounterView from '../components/CounterView';
 
@@ -56,9 +55,12 @@ class Counter extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     return <CounterView {...this.props} />;
   }
 }
+
+// const CounterWithIntl = translate('translations')(Counter);
 
 const CounterWithApollo = compose(
   graphql(COUNTER_QUERY, {

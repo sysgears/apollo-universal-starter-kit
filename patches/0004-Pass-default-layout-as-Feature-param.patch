@@ -1,0 +1,51 @@
+From deec9ef852003a6684f6d73a214533a8ff9d5088 Mon Sep 17 00:00:00 2001
+From: alekseyzadorozhniy <zadorozhniyal@gmail.com>
+Date: Tue, 20 Mar 2018 10:35:59 +0200
+Subject: [PATCH 4/4] Pass default layout as Feature param
+
+---
+ packages/client/src/modules/defaultRouter/index.web.jsx | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/packages/client/src/modules/defaultRouter/index.web.jsx b/packages/client/src/modules/defaultRouter/index.web.jsx
+index 9eca9468..460e0a3e 100644
+--- a/packages/client/src/modules/defaultRouter/index.web.jsx
++++ b/packages/client/src/modules/defaultRouter/index.web.jsx
+@@ -7,15 +7,20 @@ import PageLayout from './components/PageLayout';
+ import Feature from '../connector';
+ 
+ const Wrapper = ({ location: { pathname }, children }) => {
+-  let wrapper = <PageLayout>{children}</PageLayout>;
+-  modules.containers.forEach(cont => {
++  let content = children;
++  modules.containers.find(cont => {
+     if (cont.path.includes(pathname)) {
+-      wrapper = React.createElement(cont.wrapper, cont.props, children);
++      content = React.createElement(cont.wrapper, cont.props, children);
++      return true;
++    } else if (cont.path[0] === '*') {
++      content = React.createElement(cont.wrapper, cont.props, children);
+     }
+   });
+-  return wrapper;
++  return content;
+ };
+ 
++const container = { path: ['*'], wrapper: PageLayout };
++
+ const routerFactory = () => {
+   const WrapperComponent = withRouter(Wrapper);
+ 
+@@ -27,7 +32,8 @@ const routerFactory = () => {
+ };
+ 
+ export default new Feature({
+-  routerFactory
++  routerFactory,
++  container
+ });
+ 
+ Wrapper.propTypes = {
+-- 
+2.16.2.windows.1
+

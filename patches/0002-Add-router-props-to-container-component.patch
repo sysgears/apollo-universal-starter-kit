@@ -1,0 +1,98 @@
+From bf4da52411a04ba1c24c5ab4254088491b0f36eb Mon Sep 17 00:00:00 2001
+From: Aleksey Zadorozhniy <zadorozhniyal@gmail.com>
+Date: Fri, 16 Mar 2018 18:51:51 +0200
+Subject: [PATCH 2/4] Add router props to container component
+
+---
+ packages/client/src/modules/connector.web.jsx      |  6 +++++
+ packages/client/src/modules/contact/index.web.jsx  |  3 ++-
+ .../client/src/modules/defaultRouter/index.web.jsx | 26 +++++++++++++++++-----
+ 3 files changed, 28 insertions(+), 7 deletions(-)
+
+diff --git a/packages/client/src/modules/connector.web.jsx b/packages/client/src/modules/connector.web.jsx
+index f71e9fb1..f7a3ef75 100644
+--- a/packages/client/src/modules/connector.web.jsx
++++ b/packages/client/src/modules/connector.web.jsx
+@@ -15,6 +15,7 @@ export default class {
+       route,
+       navItem,
+       navItemRight,
++      container,
+       reducer,
+       resolver,
+       middleware,
+@@ -36,6 +37,7 @@ export default class {
+     this.route = combine(arguments, arg => arg.route);
+     this.navItem = combine(arguments, arg => arg.navItem);
+     this.navItemRight = combine(arguments, arg => arg.navItemRight);
++    this.container = combine(arguments, arg => arg.container);
+     this.reducer = combine(arguments, arg => arg.reducer);
+     this.resolver = combine(arguments, arg => arg.resolver);
+     this.middleware = combine(arguments, arg => arg.middleware);
+@@ -74,6 +76,10 @@ export default class {
+     );
+   }
+ 
++  get containers() {
++    return this.container;
++  }
++
+   get reducers() {
+     return merge(...this.reducer);
+   }
+diff --git a/packages/client/src/modules/contact/index.web.jsx b/packages/client/src/modules/contact/index.web.jsx
+index b68f7a47..97636639 100644
+--- a/packages/client/src/modules/contact/index.web.jsx
++++ b/packages/client/src/modules/contact/index.web.jsx
+@@ -13,5 +13,6 @@ export default new Feature({
+         Contact Us
+       </NavLink>
+     </MenuItem>
+-  )
++  ),
++  container: { path: ['contact'], wrapper: 'ContactWrapper' }
+ });
+diff --git a/packages/client/src/modules/defaultRouter/index.web.jsx b/packages/client/src/modules/defaultRouter/index.web.jsx
+index cec7d1bf..a4398961 100644
+--- a/packages/client/src/modules/defaultRouter/index.web.jsx
++++ b/packages/client/src/modules/defaultRouter/index.web.jsx
+@@ -1,16 +1,30 @@
+ import React from 'react';
+-import { Switch } from 'react-router-dom';
++import PropTypes from 'prop-types';
++import { Switch, withRouter } from 'react-router-dom';
+ 
+ import modules from '../';
+ import { PageLayout } from '../common/components/web';
+ import Feature from '../connector';
+ 
+-const routerFactory = () => (
+-  <PageLayout>
+-    <Switch>{modules.routes}</Switch>
+-  </PageLayout>
+-);
++const Wrapper = ({ children }) => {
++  return <PageLayout>{children}</PageLayout>;
++};
++
++const routerFactory = () => {
++  const WrapperComponent = withRouter(Wrapper);
++
++  return (
++    <WrapperComponent>
++      <Switch>{modules.routes}</Switch>
++    </WrapperComponent>
++  );
++};
+ 
+ export default new Feature({
+   routerFactory
+ });
++
++Wrapper.propTypes = {
++  location: PropTypes.string,
++  children: PropTypes.object
++};
+-- 
+2.16.2.windows.1
+

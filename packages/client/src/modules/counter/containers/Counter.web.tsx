@@ -1,5 +1,5 @@
 import React from 'react';
-import { graphql, compose, NamedProps, QueryProps } from 'react-apollo';
+import { graphql, compose, OptionProps } from 'react-apollo';
 import { SubscribeToMoreOptions, ApolloError } from 'apollo-client';
 import update from 'immutability-helper';
 
@@ -13,18 +13,47 @@ import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
 
 interface Counter {
+  counter: Amount;
+}
+
+interface Amount {
   amount: number;
+}
+
+interface CounterOperation {
+  addCounter?: (amount: number) => any;
+  addCounterState?: (amount: number) => any;
 }
 
 interface CounterProps {
   loading: boolean;
   subscribeToMore: (option: SubscribeToMoreOptions) => void;
-  counter: Counter;
+  counter: Amount;
   reduxCount: number;
   counterState: number;
   addCounter: (amount: number) => any;
   addCounterState: (amount: number) => any;
   onReduxIncrement: (amount: number) => any;
+}
+
+interface CounterResponse {
+  counter: Amount;
+}
+
+interface CounterState {
+  counter: number;
+}
+
+interface CounterStateResponse {
+  counterState: CounterState;
+}
+
+interface ReduxCount {
+  reduxCount: number;
+}
+
+interface CounterReduxState {
+  counter: ReduxCount;
 }
 
 class Counter extends React.Component<CounterProps, any> {
@@ -54,9 +83,13 @@ class Counter extends React.Component<CounterProps, any> {
     this.subscription = subscribeToMore({
       document: COUNTER_SUBSCRIPTION,
       variables: {},
-      updateQuery: (prev: any, { subscriptionData: { data: { counterUpdated: { amount } } } }) => {
+      updateQuery: (prev: Counter, { subscriptionData: { data: { counterUpdated: { amount } } } }) => {
         return update(prev, {
-          $set: amount
+          counter: {
+            amount: {
+              $set: amount
+            }
+          }
         });
       }
     });
@@ -65,22 +98,6 @@ class Counter extends React.Component<CounterProps, any> {
   public render() {
     return <CounterView {...this.props} />;
   }
-}
-
-interface Counter {
-  amount: number;
-}
-
-interface CounterResponse {
-  counter: Counter;
-}
-
-interface CounterState {
-  counter: number;
-}
-
-interface CounterStateResponse {
-  counterState: CounterState;
 }
 
 const CounterWithApollo = compose(
@@ -93,14 +110,14 @@ const CounterWithApollo = compose(
     }
   }),
   graphql(ADD_COUNTER, {
-    props: ({ ownProps, mutate }: any) => ({
+    props: ({ ownProps, mutate }: OptionProps<any, CounterOperation>) => ({
       addCounter(amount: number) {
         return () =>
           mutate({
             variables: { amount },
             updateQueries: {
-              counterQuery: (prev: any, { mutationResult }: any) => {
-                const newAmount = mutationResult.data.addCounter.amount;
+              counterQuery: (prev: Counter, { mutationResult }: any) => {
+                const newAmount: number = mutationResult.data.addCounter.amount;
                 return update(prev, {
                   counter: {
                     amount: {
@@ -122,10 +139,10 @@ const CounterWithApollo = compose(
     })
   }),
   graphql(ADD_COUNTER_CLIENT, {
-    props: ({ mutate }: any) => ({
+    props: ({ mutate }: OptionProps<any, CounterOperation>) => ({
       addCounterState: (amount: number): any => () => {
-        const { value } = mutate({ variables: { amount } });
-        return value;
+        const result: Promise<any> = mutate({ variables: { amount } });
+        return result;
       }
     })
   }),
@@ -134,17 +151,9 @@ const CounterWithApollo = compose(
   })
 )(Counter);
 
-interface ReduxCount {
-  reduxCount: number;
-}
-
-interface State {
-  counter: ReduxCount;
-}
-
 export default connect(
-  (state: State) => ({ reduxCount: state.counter.reduxCount }),
-  (dispatch: Dispatch<any>) => ({
+  (state: CounterReduxState) => ({ reduxCount: state.counter.reduxCount }),
+  (dispatch: Dispatch<CounterReduxState>) => ({
     onReduxIncrement(value: number) {
       return () =>
         dispatch({

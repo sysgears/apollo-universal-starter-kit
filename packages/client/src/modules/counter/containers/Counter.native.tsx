@@ -1,10 +1,10 @@
 import React from 'react';
 import { graphql, compose, OptionProps } from 'react-apollo';
-import { SubscribeToMoreOptions, ApolloError } from 'apollo-client';
+import { ApolloError } from 'apollo-client';
 import update from 'immutability-helper';
 
 import { connect, Dispatch } from 'react-redux';
-import CounterView from '../components/CounterView.native';
+import CounterView from '../components/CounterView.web';
 
 import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
 import ADD_COUNTER from '../graphql/AddCounter.graphql';
@@ -15,28 +15,11 @@ import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
 import { Counter } from '../models';
 import { CounterReduxState } from '../reducers';
 import { CounterApolloState } from '../resolvers';
-
-interface CounterOperation {
-  addCounter?: (amount: number) => any;
-  addStateCounter?: (amount: number) => any;
-}
-
-interface CounterOperationResult {
-  counter: Counter;
-  loading: boolean;
-  subscribeToMore: (option: SubscribeToMoreOptions) => void;
-}
-
-interface CounterProps extends CounterOperationResult {
-  reduxCounter: Counter;
-  stateCounter: Counter;
-  addCounter: (amount: number) => any;
-  addStateCounter: (amount: number) => any;
-  onReduxIncrement: (amount: number) => any;
-}
+import { CounterOperation, CounterQueryResult, CounterProps } from '../models';
 
 class CounterComponent extends React.Component<CounterProps, any> {
-  public subscription: any;
+  private subscription: any;
+
   constructor(props: CounterProps) {
     super(props);
     this.subscription = null;
@@ -62,8 +45,8 @@ class CounterComponent extends React.Component<CounterProps, any> {
     this.subscription = subscribeToMore({
       document: COUNTER_SUBSCRIPTION,
       variables: {},
-      updateQuery: (prev: CounterOperationResult, { subscriptionData: { data: { counterUpdated: { amount } } } }) => {
-        return update(prev, {
+      updateQuery: (prev: CounterQueryResult, { subscriptionData: { data: { counterUpdated: { amount } } } }) => {
+        return update<CounterQueryResult>(prev, {
           counter: {
             amount: {
               $set: amount
@@ -80,8 +63,9 @@ class CounterComponent extends React.Component<CounterProps, any> {
 }
 
 const CounterWithApollo = compose(
-  graphql<CounterOperationResult>(COUNTER_QUERY, {
-    props({ data: { loading, error, counter, subscribeToMore } }) {
+  // TODO: move queries and mutations out of the component to make them reusable
+  graphql(COUNTER_QUERY, {
+    props: ({ data: { loading, error, counter, subscribeToMore } }: OptionProps<CounterProps, CounterQueryResult>) => {
       if (error) {
         throw new ApolloError(error);
       }
@@ -89,18 +73,17 @@ const CounterWithApollo = compose(
     }
   }),
   graphql(ADD_COUNTER, {
-    props: ({ ownProps, mutate }: OptionProps<any, CounterOperation>) => ({
+    props: ({ ownProps, mutate }: OptionProps<CounterProps, CounterOperation>) => ({
       addCounter(amount: number) {
         return () =>
           mutate({
             variables: { amount },
             updateQueries: {
-              counterQuery: (prev: CounterOperationResult, { mutationResult }: any) => {
-                const newAmount: number = mutationResult.data.addCounter.amount;
+              counterQuery: (prev: CounterQueryResult, { mutationResult }: any) => {
                 return update(prev, {
                   counter: {
                     amount: {
-                      $set: newAmount
+                      $set: mutationResult.data.addCounter.amount
                     }
                   }
                 });
@@ -118,14 +101,12 @@ const CounterWithApollo = compose(
     })
   }),
   graphql(ADD_COUNTER_CLIENT, {
-    props: ({ mutate }: OptionProps<any, CounterOperation>) => ({
-      addStateCounter: (value: number): any => () => {
-        mutate({ variables: { value } });
-      }
+    props: ({ mutate }: OptionProps<CounterProps, CounterOperation>) => ({
+      addStateCounter: (value: number): any => () => mutate({ variables: { value } })
     })
   }),
-  graphql<CounterApolloState>(COUNTER_QUERY_CLIENT, {
-    props: ({ data: { stateCounter } }) => ({ stateCounter })
+  graphql(COUNTER_QUERY_CLIENT, {
+    props: ({ data: { stateCounter } }: OptionProps<CounterProps, CounterApolloState>) => ({ stateCounter })
   })
 )(CounterComponent);
 

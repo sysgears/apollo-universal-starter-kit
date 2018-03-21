@@ -1,9 +1,11 @@
 import React from 'react';
 import { graphql, compose, OptionProps } from 'react-apollo';
 import { SubscribeToMoreOptions, ApolloError } from 'apollo-client';
+import { NavigationScreenProp } from 'react-navigation';
 
 import PostEditView from '../components/PostEditView';
 import { AddPost } from './Post';
+import { Post, Comment } from '../models';
 
 import POST_QUERY from '../graphql/PostQuery.graphql';
 import ADD_POST from '../graphql/AddPost.graphql';
@@ -20,10 +22,8 @@ export interface PostEditProps {
   subscribeToMore: (option: SubscribeToMoreOptions) => void;
   addPost: AddPostFn;
   editPost: EditPostFn;
-  match: any;
-  location: any;
+  navigation: NavigationScreenProp<any>;
   comments: Comment[];
-  navigation: any;
 }
 
 interface PostOperation {
@@ -31,25 +31,17 @@ interface PostOperation {
   editPost?: (id: number, title: string, content: string) => void;
 }
 
-interface Post {
-  id: number;
-  content: string;
-  title: string;
-  comments: Comment[];
-}
-
-export interface PostQuery {
+interface PostOperationResult {
   post: Post;
 }
 
-export interface Comment {
-  id?: number;
-  content: string;
+export interface PostQuery extends PostOperationResult {
+  loading: boolean;
+  subscribeToMore: (option: SubscribeToMoreOptions) => void;
 }
 
-export interface AddPostResponse {
-  history: any;
-  navigation: any;
+export interface PostProps {
+  navigation: NavigationScreenProp<any>;
 }
 
 class PostEdit extends React.Component<PostEditProps, any> {
@@ -117,7 +109,7 @@ export default compose(
     }
   }),
   graphql(ADD_POST, {
-    props: ({ ownProps: { history, navigation }, mutate }: OptionProps<AddPostResponse, PostOperation>) => ({
+    props: ({ ownProps: { navigation }, mutate }: OptionProps<PostProps, PostOperation>) => ({
       addPost: async (title: string, content: string) => {
         const { data } = await mutate({
           variables: { input: { title, content } },
@@ -132,17 +124,12 @@ export default compose(
             }
           },
           updateQueries: {
-            posts: (prev: PostQuery, { mutationResult: { data: { addPost } } }) => {
+            posts: (prev: PostOperationResult, { mutationResult: { data: { addPost } } }) => {
               return AddPost(prev, addPost);
             }
           }
         });
-
-        if (history) {
-          return history.push('/post/' + data.addPost.id, {
-            post: data.addPost
-          });
-        } else if (navigation) {
+        if (navigation) {
           return navigation.setParams({
             id: data.addPost.id,
             post: data.addPost
@@ -152,14 +139,11 @@ export default compose(
     })
   }),
   graphql(EDIT_POST, {
-    props: ({ ownProps: { history, navigation }, mutate }: OptionProps<AddPostResponse, PostOperation>) => ({
+    props: ({ ownProps: { navigation }, mutate }: OptionProps<PostProps, PostOperation>) => ({
       editPost: async (id: number, title: string, content: string) => {
         await mutate({
           variables: { input: { id, title, content } }
         });
-        if (history) {
-          return history.push('/posts');
-        }
         if (navigation) {
           return navigation.goBack();
         }

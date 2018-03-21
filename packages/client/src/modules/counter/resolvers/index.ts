@@ -1,42 +1,39 @@
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
+import { Counter } from '../models';
 
-const TYPE_NAME = 'CounterState';
+const TYPE_NAME = 'Amount';
 
-interface CounterState {
-  counter: number;
+interface ApolloCounter extends Counter {
   __typename: string;
 }
 
-interface Defaults {
-  counterState: CounterState;
+export interface CounterApolloState {
+  stateCounter: ApolloCounter;
 }
 
-const defaults: Defaults = {
-  counterState: {
-    counter: 1,
+const defaults: CounterApolloState = {
+  stateCounter: {
+    amount: 1,
     __typename: TYPE_NAME
   }
 };
 
 const resolvers = {
   Query: {
-    counterState: (_: any, args: any, { cache }: any) => {
-      const { counterState: { counter } } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
-      return {
-        counter,
-        __typename: TYPE_NAME
-      };
+    stateCounter: (_: any, args: any, { cache }: any) => {
+      const { counter } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
+      return counter;
     }
   },
   Mutation: {
-    addCounterState: async (_: any, { amount }: any, { cache }: any): Promise<boolean> => {
-      const { counterState: { counter } } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
-      const newAmount: number = amount + counter;
+    addStateCounter: async (_: any, { value }: any, { cache }: any): Promise<boolean> => {
+      const { stateCounter: { amount } } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
+      const newAmount: number = amount + value;
 
       await cache.writeData({
         data: {
-          counterState: {
-            counter: newAmount,
+          stateCounter: {
+            amount: newAmount,
             __typename: TYPE_NAME
           }
         }

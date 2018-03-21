@@ -12,51 +12,30 @@ import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
 
-interface Counter {
-  counter: Amount;
-}
-
-interface Amount {
-  amount: number;
-}
+import { Counter } from '../models';
+import { CounterReduxState } from '../reducers';
+import { CounterApolloState } from '../resolvers';
 
 interface CounterOperation {
   addCounter?: (amount: number) => any;
-  addCounterState?: (amount: number) => any;
+  addStateCounter?: (amount: number) => any;
 }
 
-interface CounterProps {
+interface CounterOperationResult {
+  counter: Counter;
   loading: boolean;
   subscribeToMore: (option: SubscribeToMoreOptions) => void;
-  counter: Amount;
-  reduxCount: number;
-  counterState: number;
+}
+
+interface CounterProps extends CounterOperationResult {
+  reduxCounter: Counter;
+  stateCounter: Counter;
   addCounter: (amount: number) => any;
-  addCounterState: (amount: number) => any;
+  addStateCounter: (amount: number) => any;
   onReduxIncrement: (amount: number) => any;
 }
 
-interface CounterResponse {
-  counter: Amount;
-}
-
-interface CounterState {
-  counter: number;
-}
-
-interface CounterStateResponse {
-  counterState: CounterState;
-}
-
-interface ReduxCount {
-  reduxCount: number;
-}
-
-interface CounterReduxState {
-  counter: ReduxCount;
-}
-
-class Counter extends React.Component<CounterProps, any> {
+class CounterComponent extends React.Component<CounterProps, any> {
   public subscription: any;
   constructor(props: CounterProps) {
     super(props);
@@ -83,7 +62,7 @@ class Counter extends React.Component<CounterProps, any> {
     this.subscription = subscribeToMore({
       document: COUNTER_SUBSCRIPTION,
       variables: {},
-      updateQuery: (prev: Counter, { subscriptionData: { data: { counterUpdated: { amount } } } }) => {
+      updateQuery: (prev: CounterOperationResult, { subscriptionData: { data: { counterUpdated: { amount } } } }) => {
         return update(prev, {
           counter: {
             amount: {
@@ -101,7 +80,7 @@ class Counter extends React.Component<CounterProps, any> {
 }
 
 const CounterWithApollo = compose(
-  graphql<CounterResponse>(COUNTER_QUERY, {
+  graphql<CounterOperationResult>(COUNTER_QUERY, {
     props({ data: { loading, error, counter, subscribeToMore } }) {
       if (error) {
         throw new ApolloError(error);
@@ -116,7 +95,7 @@ const CounterWithApollo = compose(
           mutate({
             variables: { amount },
             updateQueries: {
-              counterQuery: (prev: Counter, { mutationResult }: any) => {
+              counterQuery: (prev: CounterOperationResult, { mutationResult }: any) => {
                 const newAmount: number = mutationResult.data.addCounter.amount;
                 return update(prev, {
                   counter: {
@@ -140,25 +119,24 @@ const CounterWithApollo = compose(
   }),
   graphql(ADD_COUNTER_CLIENT, {
     props: ({ mutate }: OptionProps<any, CounterOperation>) => ({
-      addCounterState: (amount: number): any => () => {
-        const result: Promise<any> = mutate({ variables: { amount } });
-        return result;
+      addStateCounter: (value: number): any => () => {
+        mutate({ variables: { value } });
       }
     })
   }),
-  graphql<CounterStateResponse>(COUNTER_QUERY_CLIENT, {
-    props: ({ data: { counterState: { counter } } }) => ({ counterState: counter })
+  graphql<CounterApolloState>(COUNTER_QUERY_CLIENT, {
+    props: ({ data: { stateCounter } }) => ({ stateCounter })
   })
-)(Counter);
+)(CounterComponent);
 
 export default connect(
-  (state: CounterReduxState) => ({ reduxCount: state.counter.reduxCount }),
+  (state: any) => ({ reduxCounter: state.counter.counter }),
   (dispatch: Dispatch<CounterReduxState>) => ({
     onReduxIncrement(value: number) {
       return () =>
         dispatch({
           type: 'COUNTER_INCREMENT',
-          value: Number(value)
+          value
         });
     }
   })

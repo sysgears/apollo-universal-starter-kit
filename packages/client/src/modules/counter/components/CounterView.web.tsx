@@ -5,22 +5,20 @@ import { Button } from '../../common/components/web';
 import PageLayout from '../../common/components/web/ui-bootstrap/components/PageLayout';
 import settings from '../../../../../../settings';
 
+import { Counter } from '../models';
+
 const Section = styled.section`
   margin-bottom: 30px;
   text-align: center;
 `;
 
-interface Counter {
-  amount: number;
-}
-
 interface CounterProps {
   loading: boolean;
   counter: Counter;
-  reduxCount: number;
-  counterState: number;
+  reduxCounter: Counter;
+  stateCounter: Counter;
   addCounter: (amount: number) => any;
-  addCounterState: (amount: number) => any;
+  addStateCounter: (amount: number) => any;
   onReduxIncrement: (amount: number) => any;
 }
 
@@ -28,10 +26,10 @@ const CounterView = ({
   loading,
   counter,
   addCounter,
-  reduxCount,
+  reduxCounter,
   onReduxIncrement,
-  counterState,
-  addCounterState
+  stateCounter,
+  addStateCounter
 }: CounterProps) => {
   const renderMetaData = () => (
     <Helmet
@@ -66,16 +64,17 @@ const CounterView = ({
           </Button>
         </Section>
         <Section>
-          <p>Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.</p>
+          <p>Current reduxCount, is {reduxCounter.amount}. This is being stored client-side with Redux.</p>
           <Button id="redux-button" color="primary" onClick={onReduxIncrement(1)}>
             Click to increase reduxCount
           </Button>
         </Section>
         <Section>
           <p>
-            Current apolloLinkStateCount, is {counterState}. This is being stored client-side with Apollo Link State.
+            Current apolloLinkStateCount, is {stateCounter.amount}. This is being stored client-side with Apollo Link
+            State.
           </p>
-          <Button id="apollo-link-button" color="primary" onClick={addCounterState(1)}>
+          <Button id="apollo-link-button" color="primary" onClick={addStateCounter(1)}>
             Click to increase apolloLinkState
           </Button>
         </Section>

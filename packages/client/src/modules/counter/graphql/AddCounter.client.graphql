@@ -1,5 +1,3 @@
-mutation addCounterState($amount: Int!) {
-    addCounterState(amount: $amount) @client {
-        counter
-    }
+mutation addStateCounter($value: Int!) {
+    addStateCounter(value: $value) @client
 }

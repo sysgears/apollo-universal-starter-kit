@@ -1,23 +1,28 @@
 import { Action } from 'redux';
+import { Counter } from '../models';
 
 interface CounterAction extends Action {
   value: any;
 }
 
-interface DefaultState {
-  reduxCount: number;
+export interface CounterReduxState {
+  counter: Counter;
 }
 
-const defaultState: DefaultState = {
-  reduxCount: 1
+const defaultState: CounterReduxState = {
+  counter: {
+    amount: 1
+  }
 };
 
-export default function(state = defaultState, action: CounterAction) {
+export default function(state = defaultState, action: CounterAction): CounterReduxState {
   switch (action.type) {
     case 'COUNTER_INCREMENT':
       return {
         ...state,
-        reduxCount: state.reduxCount + action.value
+        counter: {
+          amount: state.counter.amount + action.value
+        }
       };
 
     default:

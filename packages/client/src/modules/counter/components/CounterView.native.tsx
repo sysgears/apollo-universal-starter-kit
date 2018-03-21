@@ -3,17 +3,15 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '../../common/components';
 
-interface Counter {
-  amount: number;
-}
+import { Counter } from '../models';
 
 interface CounterProps {
   loading: boolean;
   counter: Counter;
-  reduxCount: number;
-  counterState: number;
+  reduxCounter: Counter;
+  stateCounter: Counter;
   addCounter: (amount: number) => any;
-  addCounterState: (amount: number) => any;
+  addStateCounter: (amount: number) => any;
   onReduxIncrement: (amount: number) => any;
 }
 
@@ -21,10 +19,10 @@ const CounterView = ({
   loading,
   counter,
   addCounter,
-  reduxCount,
+  reduxCounter,
   onReduxIncrement,
-  counterState,
-  addCounterState
+  stateCounter,
+  addStateCounter
 }: CounterProps) => {
   if (loading) {
     return (
@@ -44,16 +42,16 @@ const CounterView = ({
         <Button onPress={addCounter(1)}>Click to increase counter</Button>
         <View style={styles.element}>
           <Text style={styles.box}>
-            Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.
+            Current reduxCount, is {reduxCounter.amount}. This is being stored client-side with Redux.
           </Text>
         </View>
         <Button onPress={onReduxIncrement(1)}>Click to increase reduxCount</Button>
         <View style={styles.element}>
           <Text style={styles.box}>
-            Current apolloLinkState, is {counterState}. This is being stored client-side with Apollo Link State.
+            Current apolloLinkState, is {stateCounter.amount}. This is being stored client-side with Apollo Link State.
           </Text>
         </View>
-        <Button onPress={addCounterState(1)}>Click to increase apolloLinkStateCount</Button>
+        <Button onPress={addStateCounter(1)}>Click to increase apolloLinkStateCount</Button>
       </View>
     );
   }

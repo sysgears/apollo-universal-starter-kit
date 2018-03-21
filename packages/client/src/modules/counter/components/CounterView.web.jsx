@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
+import { translate } from 'react-i18next';
 import { PageLayout, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
@@ -10,7 +11,17 @@ const Section = styled.section`
   text-align: center;
 `;
 
-const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement, counterState, addCounterState }) => {
+const CounterView = ({
+  loading,
+  counter,
+  addCounter,
+  reduxCount,
+  onReduxIncrement,
+  counterState,
+  addCounterState,
+  ...props
+}) => {
+  console.log(props);
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Counter`}
@@ -72,4 +83,4 @@ CounterView.propTypes = {
   onReduxIncrement: PropTypes.func.isRequired
 };
 
-export default CounterView;
+export default translate()(CounterView);

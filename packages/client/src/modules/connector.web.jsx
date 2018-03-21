@@ -16,6 +16,7 @@ export default class {
       navItem,
       navItemRight,
       localization,
+      i18n,
       reducer,
       resolver,
       middleware,
@@ -38,6 +39,7 @@ export default class {
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);
     this.localization = combine(arguments, arg => arg.localization);
+    this.i18n = combine(arguments, arg => arg.i18n);
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
     this.middleware = combine(arguments, arg => arg.middleware);
@@ -78,6 +80,10 @@ export default class {
 
   get localizations() {
     return this.localization;
+  }
+
+  get internationalizations() {
+    return this.i18n;
   }
 
   get reducers() {

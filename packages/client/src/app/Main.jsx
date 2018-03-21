@@ -17,9 +17,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 // import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
 import url from 'url';
-import i18n from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import { reactI18nextModule, translate } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 
 import RedBox from './RedBox';
 import createApolloClient from '../../../common/createApolloClient';
@@ -60,28 +58,27 @@ for (const middleware of modules.middlewares) {
   });
 }
 
-console.log(modules.intls);
-i18n
-  .use(LanguageDetector)
-  .use(reactI18nextModule)
-  .init({
-    fallbackLng: 'en',
-    resources: modules.localizations[0],
-    // have a common namespace used around the full app
-    ns: ['translations'],
-    defaultNS: 'translations',
+// i18n
+//   .use(LanguageDetector)
+//   .use(reactI18nextModule)
+//   .init({
+//     fallbackLng: 'en',
+//     resources: modules.localizations[0],
+//     // have a common namespace used around the full app
+//     ns: ['translations'],
+//     defaultNS: 'translations',
+//     debug: true,
+//     interpolation: {
+//       escapeValue: false // not needed for react!!
+//     },
 
-    debug: true,
-
-    interpolation: {
-      escapeValue: false // not needed for react!!
-    },
-
-    react: {
-      wait: true
-    }
-  });
+//     react: {
+//       wait: true
+//     }
+//   });
 // translate.setI18n(i18n);
+console.log(modules);
+modules.internationalizations[0].addResourceBundle('ru-RU', 'translations', modules.localizations[0], true, false);
 
 for (const afterware of modules.afterwares) {
   fetch.batchUseAfter(({ response, options }, next) => {
@@ -214,7 +211,10 @@ class Main extends React.Component {
       modules.getWrappedRoot(
         <Provider store={store}>
           <ApolloProvider client={client}>
-            <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
+            <ConnectedRouter history={history}>
+              <I18nextProvider i18n={modules.internationalizations[0]}>{Routes}</I18nextProvider>
+              {/* {Routes} */}
+            </ConnectedRouter>
           </ApolloProvider>
         </Provider>
       )
@@ -222,4 +222,4 @@ class Main extends React.Component {
   }
 }
 
-export default translate()(Main);
+export default Main;

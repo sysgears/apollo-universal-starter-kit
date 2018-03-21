@@ -1,4 +1,5 @@
 import defaultRouter from './defaultRouter';
+import i18n from './i18n';
 import counter from './counter';
 import post from './post';
 import upload from './upload';
@@ -10,4 +11,4 @@ import './favicon';
 
 import Feature from './connector';
 
-export default new Feature(defaultRouter, counter, post, upload, user, subscription, contact, pageNotFound);
+export default new Feature(defaultRouter, i18n, counter, post, upload, user, subscription, contact, pageNotFound);

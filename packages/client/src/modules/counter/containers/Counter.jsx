@@ -55,12 +55,10 @@ class Counter extends React.Component {
   }
 
   render() {
-    console.log(this.props);
+    // return <I18nextProvider i18n={modules.internationalizations[0]}><CounterView {...this.props} /></I18nextProvider>;
     return <CounterView {...this.props} />;
   }
 }
-
-// const CounterWithIntl = translate('translations')(Counter);
 
 const CounterWithApollo = compose(
   graphql(COUNTER_QUERY, {

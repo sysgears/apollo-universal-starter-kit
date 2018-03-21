@@ -12,10 +12,9 @@ import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
 
-import { Counter } from '../models';
+import { Counter, CounterOperation, CounterQueryResult, CounterProps } from '../models';
 import { CounterReduxState } from '../reducers';
 import { CounterApolloState } from '../resolvers';
-import { CounterOperation, CounterQueryResult, CounterProps } from '../models';
 
 class CounterComponent extends React.Component<CounterProps, any> {
   private subscription: any;

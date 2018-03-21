@@ -4,7 +4,7 @@ import { ApolloError } from 'apollo-client';
 import update from 'immutability-helper';
 
 import { connect, Dispatch } from 'react-redux';
-import CounterView from '../components/CounterView.web';
+import CounterView from '../components/CounterView.native';
 
 import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
 import ADD_COUNTER from '../graphql/AddCounter.graphql';
@@ -12,10 +12,9 @@ import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
 
-import { Counter } from '../models';
+import { Counter, CounterOperation, CounterQueryResult, CounterProps } from '../models';
 import { CounterReduxState } from '../reducers';
 import { CounterApolloState } from '../resolvers';
-import { CounterOperation, CounterQueryResult, CounterProps } from '../models';
 
 class CounterComponent extends React.Component<CounterProps, any> {
   private subscription: any;

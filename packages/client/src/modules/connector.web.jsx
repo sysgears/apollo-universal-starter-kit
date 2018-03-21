@@ -25,6 +25,7 @@ export default class {
       scriptsInsert,
       rootComponentFactory,
       routerFactory,
+      onInit,
       catalogInfo
     },
     ...features
@@ -48,6 +49,7 @@ export default class {
     this.routerFactory = combine(arguments, arg => arg.routerFactory)
       .slice(-1)
       .pop();
+    this.onInit = combine(arguments, arg => arg.onInit);
   }
 
   get router() {

@@ -76,15 +76,15 @@ if (settings.user.auth.google.enabled) {
     app.get('/auth/google/callback', passport.authenticate('google', { session: false }), async function(req, res) {
       const user = await User.getUserWithPassword(req.user.id);
       const redirectUrl = req.query.state;
-      const credentials = access.grant(user);
+      const tokens = access.grant(user);
 
       if (redirectUrl) {
         res.redirect(
           redirectUrl +
-            (credentials
+            (tokens
               ? '?data=' +
                 JSON.stringify({
-                  credentials
+                  tokens
                 })
               : '')
         );

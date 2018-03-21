@@ -85,7 +85,9 @@ const withLogout = Component =>
               if (logout.errors) {
                 return { errors: logout.errors };
               }
-              await Promise.all(['token', 'session', 'refreshToken'].map(item => SecureStore.deleteItemAsync(item)));
+              await Promise.all(
+                ['accessToken', 'session', 'refreshToken'].map(item => SecureStore.deleteItemAsync(item))
+              );
               await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
               changeAction('NotLogin');
             } catch (e) {

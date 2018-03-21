@@ -30,8 +30,8 @@ const LoginWithApollo = compose(
             variables: { input: { email, password } }
           });
           if (login && login.tokens) {
-            const { token, refreshToken } = login.tokens;
-            await SecureStore.setItemAsync('token', token);
+            const { accessToken, refreshToken } = login.tokens;
+            await SecureStore.setItemAsync('accessToken', accessToken);
             await SecureStore.setItemAsync('refreshToken', refreshToken);
           }
           if (login.errors) {

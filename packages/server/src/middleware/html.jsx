@@ -64,8 +64,6 @@ Html.propTypes = {
   assetMap: PropTypes.object.isRequired,
   css: PropTypes.array,
   helmet: PropTypes.object,
-  token: PropTypes.string,
-  refreshToken: PropTypes.string,
   req: PropTypes.object.isRequired
 };
 

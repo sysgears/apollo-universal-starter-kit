@@ -66,6 +66,7 @@ const LoginFormWithFormik = withFormik({
   mapPropsToValues: () => ({ email: '', password: '' }),
   async handleSubmit(values, { setErrors, props: { onSubmit } }) {
     await onSubmit(values).catch(e => {
+      console.log(e);
       setErrors(e);
     });
   },

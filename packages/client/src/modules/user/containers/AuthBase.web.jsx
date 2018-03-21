@@ -84,11 +84,11 @@ const withLogout = Component =>
           try {
             const { data: { logout } } = await mutate();
 
-            if (logout.errors) {
+            if (logout && logout.errors) {
               return { errors: logout.errors };
             }
             await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
-            ['token', 'refreshToken'].forEach(item => window.localStorage.removeItem(item));
+            ['accessToken', 'refreshToken'].forEach(item => window.localStorage.removeItem(item));
             onLogout();
           } catch (e) {
             log.error(e);

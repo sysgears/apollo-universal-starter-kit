@@ -163,26 +163,37 @@ export default class Main extends React.Component {
     super(props);
     const serverError = window.__SERVER_ERROR__;
     if (serverError) {
-      this.state = { error: new ServerError(serverError) };
+      this.state = { error: new ServerError(serverError), ready: true };
     } else {
-      this.state = {};
+      this.state = { ready: false };
     }
   }
 
+  async componentDidMount() {
+    for (const onInit of modules.onInit) {
+      await onInit(client);
+    }
+    this.setState({ ready: true });
+  }
+
   componentDidCatch(error, info) {
-    this.setState({ error, info });
+    this.setState({ error, info, ready: true });
   }
   render() {
-    return this.state.error ? (
-      <RedBox error={this.state.error} />
-    ) : (
-      modules.getWrappedRoot(
-        <Provider store={store}>
-          <ApolloProvider client={client}>
-            <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
-          </ApolloProvider>
-        </Provider>
-      )
-    );
+    if (this.state.ready) {
+      return this.state.error ? (
+        <RedBox error={this.state.error} />
+      ) : (
+        modules.getWrappedRoot(
+          <Provider store={store}>
+            <ApolloProvider client={client}>
+              <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
+            </ApolloProvider>
+          </Provider>
+        )
+      );
+    } else {
+      return null;
+    }
   }
 }

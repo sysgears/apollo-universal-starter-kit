@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import { createTokens } from './tokens';
+import createTokens from './createTokens';
 import resolvers from './resolvers';
 import schema from './schema.graphql';
 import Feature from '../connector';
@@ -11,10 +11,10 @@ import UserDAO from '../../sql';
 const User = new UserDAO();
 const grant = async user => {
   const refreshSecret = settings.user.secret + user.passwordHash;
-  const [token, refreshToken] = await createTokens(user, settings.user.secret, refreshSecret);
+  const [accessToken, refreshToken] = await createTokens(user, settings.user.secret, refreshSecret);
 
   return {
-    token,
+    accessToken,
     refreshToken
   };
 };
@@ -23,10 +23,12 @@ const grant = async user => {
 const revoke = async () => {};
 
 const getCurrentUser = async ({ req }) => {
-  const token = req && req.headers['x-token'];
+  const authorization = req && req.headers['authorization'];
+  const parts = authorization && authorization.split(' ');
+  const token = parts && parts.length === 2 && parts[1];
   if (token) {
     const { user } = jwt.verify(token, settings.user.secret);
-    req.user = user;
+    return user;
   }
 };
 

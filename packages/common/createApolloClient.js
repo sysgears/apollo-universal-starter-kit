@@ -7,9 +7,9 @@ const createApolloClient = clientParams => {
       if (window.__APOLLO_STATE__) {
         params.initialState = window.__APOLLO_STATE__;
       }
-      params.ssrForceFetchDelay = 100;
     } else {
       params.ssrMode = true;
+      params.ssrForceFetchDelay = 100;
     }
   }
   return new ApolloClient(params);

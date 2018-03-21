@@ -9,7 +9,7 @@ export async function seed(knex, Promise) {
     .insert({
       username: 'admin',
       email: 'admin@example.com',
-      password: await bcrypt.hash('admin', 12),
+      password_hash: await bcrypt.hash('admin', 12),
       role: 'admin',
       is_active: true
     });
@@ -19,7 +19,7 @@ export async function seed(knex, Promise) {
     .insert({
       username: 'user',
       email: 'user@example.com',
-      password: await bcrypt.hash('user', 12),
+      password_hash: await bcrypt.hash('user', 12),
       role: 'user',
       is_active: true
     });

@@ -38,9 +38,9 @@ export default () => ({
 
         validateUserPassword(user, password);
 
-        const credentials = await access.grant(user);
+        const tokens = await access.grant(user);
 
-        return { user, credentials };
+        return { user, tokens };
       } catch (e) {
         return { errors: e };
       }

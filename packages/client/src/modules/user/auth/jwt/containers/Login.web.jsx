@@ -27,8 +27,8 @@ const LoginWithApollo = compose(
             variables: { input: { email, password } }
           });
           if (login && login.tokens) {
-            const { token, refreshToken } = login.tokens;
-            window.localStorage.setItem('token', token);
+            const { accessToken, refreshToken } = login.tokens;
+            window.localStorage.setItem('accessToken', accessToken);
             window.localStorage.setItem('refreshToken', refreshToken);
           }
           if (login.errors) {

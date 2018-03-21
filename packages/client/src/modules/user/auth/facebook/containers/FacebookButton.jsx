@@ -54,7 +54,7 @@ class FacebookComponent extends React.Component {
     const decodedData = JSON.parse(decodeURI(data));
     const { client, refetchCurrentUser, changeAction } = this.props;
     if (decodedData.tokens) {
-      await SecureStore.setItemAsync('token', decodedData.tokens.token);
+      await SecureStore.setItemAsync('accessToken', decodedData.tokens.accessToken);
       await SecureStore.setItemAsync('refreshToken', decodedData.tokens.refreshToken);
     } else if (decodedData.session) {
       await SecureStore.setItemAsync('session', decodedData.session);

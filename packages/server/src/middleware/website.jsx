@@ -53,7 +53,7 @@ const renderServerSide = async (req, res) => {
   const link = isLocalhost
     ? new SchemaLink({ schema, context: await modules.createContext(req, res) })
     : new BatchHttpLink({ fetch });
-  const linkState = withClientState({ ...clientModules.resolvers, cache });
+  const linkState = withClientState({ ...clientModules.getResolvers, cache });
 
   const client = createApolloClient({
     link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),

@@ -57,7 +57,7 @@ export default class Main extends React.Component<MainProps, any> {
       new BatchHttpLink({ fetch })
     );
 
-    const linkState: any = withClientState({ ...modules.resolvers, cache });
+    const linkState: any = withClientState({ ...modules.getResolvers, cache });
 
     const client: ApolloClient<any> = new ApolloClient({
       link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),

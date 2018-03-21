@@ -9,6 +9,6 @@ import Feature from '../connector.web';
 
 export default new Feature({
   route: <Route exact path="/" component={Counter} />,
-  resolver: resolvers,
+  resolvers,
   reducer: { counter: reducers }
 });

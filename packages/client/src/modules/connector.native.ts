@@ -10,7 +10,7 @@ interface FeatureParams {
   navItem?: any;
   route?: any;
   reducer?: any;
-  resolver?: any;
+  resolvers?: any;
   routerFactory?: any;
   catalogInfo?: any;
 }
@@ -19,7 +19,7 @@ export default class Feature implements FeatureParams {
   public tabItem: any[];
   public route: any[];
   public reducer: any[];
-  public resolver: any[];
+  public resolvers: any[];
   public routerFactory: any;
   public catalogInfo: any[];
   // eslint-disable-next-line no-unused-vars
@@ -30,7 +30,7 @@ export default class Feature implements FeatureParams {
     );
     this.tabItem = combine(arguments, (arg: FeatureParams) => arg.tabItem);
     this.reducer = combine(arguments, (arg: FeatureParams) => arg.reducer);
-    this.resolver = combine(arguments, (arg: FeatureParams) => arg.resolver);
+    this.resolvers = combine(arguments, (arg: FeatureParams) => arg.resolvers);
     this.routerFactory = combine(arguments, (arg: FeatureParams) => arg.routerFactory)
       .slice(-1)
       .pop();
@@ -44,8 +44,8 @@ export default class Feature implements FeatureParams {
     return merge({}, ...this.reducer);
   }
 
-  get resolvers() {
-    return merge({}, ...this.resolver);
+  get getResolvers() {
+    return merge({}, ...this.resolvers);
   }
 
   get router() {

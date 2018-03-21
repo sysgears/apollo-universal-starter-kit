@@ -71,7 +71,7 @@ export default new Feature({
       </AuthLogin>
     </MenuItem>
   ],
-  resolver: resolvers,
+  resolvers,
   middleware: tokenMiddleware,
   afterware: tokenAfterware,
   connectionParam,

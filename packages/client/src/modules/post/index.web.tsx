@@ -18,5 +18,5 @@ export default new Feature({
       </NavLink>
     </MenuItem>
   ),
-  resolver: resolvers
+  resolvers
 });

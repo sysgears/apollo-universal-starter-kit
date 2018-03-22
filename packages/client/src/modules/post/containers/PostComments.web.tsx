@@ -4,7 +4,14 @@ import { graphql, compose, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 
 import PostCommentsView from '../components/PostCommentsView.web';
-import { Post, Comment } from '../models';
+import {
+  Comment,
+  CommentOperation,
+  CommentQueryResult,
+  PostCommentsProps,
+  CommentProps,
+  CommentOperationResult
+} from '../types';
 
 import ADD_COMMENT from '../graphql/AddComment.graphql';
 import EDIT_COMMENT from '../graphql/EditComment.graphql';
@@ -12,43 +19,6 @@ import DELETE_COMMENT from '../graphql/DeleteComment.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
 import ADD_COMMENT_CLIENT from '../graphql/AddComment.client.graphql';
 import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
-
-type SubscriptionToMoreFn = (option: SubscribeToMoreOptions) => void;
-
-type AddCommentFn = (content: string, postId: number) => any;
-type EditCommentFn = (id: number, content: string) => any;
-type DeleteCommentFn = (id: number) => any;
-type OnCommentSelectFn = (comment: Comment) => void;
-
-interface CommentOperation {
-  addComment?: AddCommentFn;
-  editComment?: EditCommentFn;
-  deleteComment?: DeleteCommentFn;
-  onCommentSelect?: OnCommentSelectFn;
-}
-
-interface CommentQueryResult {
-  comment: Comment;
-}
-
-interface PostCommentsProps {
-  postId: number;
-  comments: Comment[];
-  comment: Comment;
-  onCommentSelect: OnCommentSelectFn;
-  subscribeToMore: SubscriptionToMoreFn;
-  addComment: AddCommentFn;
-  editComment: EditCommentFn;
-  deleteComment: DeleteCommentFn;
-}
-
-interface PostProps {
-  postId: number;
-}
-
-export interface CommentOperationResult {
-  post: Post;
-}
 
 function AddComment(prev: CommentOperationResult, node: Comment) {
   // ignore if duplicate
@@ -167,7 +137,7 @@ const PostCommentsWithApollo: any = compose(
     })
   }),
   graphql(EDIT_COMMENT, {
-    props: ({ ownProps: { postId }, mutate }: OptionProps<PostProps, CommentOperation>) => ({
+    props: ({ ownProps: { postId }, mutate }: OptionProps<CommentProps, CommentOperation>) => ({
       editComment: (id: number, content: string) =>
         mutate({
           variables: { input: { id, postId, content } },
@@ -183,7 +153,7 @@ const PostCommentsWithApollo: any = compose(
     })
   }),
   graphql(DELETE_COMMENT, {
-    props: ({ ownProps: { postId }, mutate }: OptionProps<PostProps, CommentOperation>) => ({
+    props: ({ ownProps: { postId }, mutate }: OptionProps<CommentProps, CommentOperation>) => ({
       deleteComment: (id: number) =>
         mutate({
           variables: { input: { id, postId } },

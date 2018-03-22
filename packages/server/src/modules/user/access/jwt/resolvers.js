@@ -4,13 +4,18 @@ import settings from '../../../../../../../settings';
 
 export default () => ({
   Mutation: {
-    async refreshTokens(obj, { refreshToken: inputRefreshToken }, { User }) {
+    async refreshTokens(obj, { refreshToken: inputRefreshToken }, { User, res }) {
       const { user: id } = jwt.decode(inputRefreshToken);
 
       const user = await User.getUserWithPassword(id);
       const refreshSecret = settings.user.secret + user.passwordHash;
 
-      jwt.verify(inputRefreshToken, refreshSecret);
+      try {
+        jwt.verify(inputRefreshToken, refreshSecret);
+      } catch (e) {
+        res.status(401);
+        throw e;
+      }
 
       const [accessToken, refreshToken] = await createTokens(user, settings.user.secret, refreshSecret);
 

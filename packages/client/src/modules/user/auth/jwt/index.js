@@ -1,3 +1,5 @@
+import { setContext } from 'apollo-link-context';
+
 import Feature from '../connector';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
@@ -13,13 +15,19 @@ const loginHandler = async loginResponse => {
   }
 };
 
-const middleware = async (req, options, next) => {
-  if (['login', 'refreshTokens'].indexOf(req.operationName) < 0) {
+const withToken = setContext(async (operationName, { headers }) => {
+  if (['login', 'refreshTokens'].indexOf(operationName) < 0) {
     const accessToken = window.localStorage.getItem('accessToken');
-    if (accessToken) {
-      options.headers['Authorization'] = 'Bearer ' + accessToken;
-    }
+    return {
+      headers: {
+        ...headers,
+        authorization: accessToken ? `Bearer ${accessToken}` : null
+      }
+    };
   }
+});
+
+const middleware = async (req, options, next) => {
   next();
 };
 
@@ -31,9 +39,11 @@ const refreshTokens = async client => {
     });
     window.localStorage.setItem('accessToken', accessToken);
     window.localStorage.setItem('refreshToken', refreshToken);
+    return true;
   } catch (e) {
     window.localStorage.removeItem('accessToken');
     window.localStorage.removeItem('refreshToken');
+    return false;
   }
 };
 
@@ -42,10 +52,8 @@ const onInit = async client => {
   if (refreshToken) {
     const result = client.readQuery({ query: CURRENT_USER_QUERY });
     if (result && !result.currentUser) {
-      try {
-        await client.query({ query: CURRENT_USER_QUERY, fetchPolicy: 'network-only' });
-      } catch (e) {
-        await refreshTokens(client, refreshToken);
+      const { data: { currentUser } } = await client.query({ query: CURRENT_USER_QUERY, fetchPolicy: 'network-only' });
+      if (!currentUser && (await refreshTokens(client, refreshToken))) {
         // await client.cache.reset();
         // await client.cache.writeData({ data: modules.resolvers.defaults });
         await client.query({ query: CURRENT_USER_QUERY, fetchPolicy: 'network-only' });
@@ -57,5 +65,6 @@ const onInit = async client => {
 export default new Feature({
   loginHandler,
   middleware,
-  onInit
+  onInit,
+  link: withToken
 });

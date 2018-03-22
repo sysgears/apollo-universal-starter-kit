@@ -12,7 +12,7 @@ export default async (req, res, next) => {
 
     graphqlExpress(() => ({
       schema,
-      context,
+      context: { ...context, req, res },
       debug: false,
       formatError: error => {
         log.error('GraphQL execution error:', error);

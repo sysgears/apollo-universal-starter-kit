@@ -4,9 +4,9 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 
 export default class {
   // eslint-disable-next-line no-unused-vars
-  constructor({ loginHandler, middleware }, ...features) {
+  constructor({ loginHandler, link, onInit }, ...features) {
     this.loginHandler = combine(arguments, arg => arg.loginHandler);
-    this.middleware = combine(arguments, arg => arg.middleware);
     this.onInit = combine(arguments, arg => arg.onInit);
+    this.link = combine(arguments, arg => arg.link);
   }
 }

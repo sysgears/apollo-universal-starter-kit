@@ -34,31 +34,6 @@ log.info(`Connecting to GraphQL backend at: ${__API_URL__}`);
 
 const cache = new InMemoryCache();
 
-for (const middleware of modules.middlewares) {
-  fetch.batchUse(({ requests, options }, next) => {
-    options.credentials = 'same-origin';
-    options.headers = options.headers || {};
-    const reqs = [...requests];
-    const innerNext = () => {
-      if (reqs.length > 0) {
-        const req = reqs.shift();
-        if (req) {
-          middleware(req, options, innerNext);
-        }
-      } else {
-        next();
-      }
-    };
-    innerNext();
-  });
-}
-
-for (const afterware of modules.afterwares) {
-  fetch.batchUseAfter(({ response, options }, next) => {
-    afterware(response, options, next);
-  });
-}
-
 let connectionParams = {};
 for (const connectionParam of modules.connectionParams) {
   Object.assign(connectionParams, connectionParam());
@@ -93,7 +68,7 @@ wsClient.onReconnected(() => {
   //console.log('onReconnected');
 });
 
-let link = ApolloLink.split(
+const netLink = ApolloLink.split(
   operation => {
     const operationAST = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';
@@ -108,8 +83,14 @@ const linkState = withClientState({ ...modules.resolvers, cache });
 //   networkInterface = addPersistedQueries(networkInterface, queryMap);
 // }
 
+const links = [...modules.link, linkState, netLink];
+
+if (settings.app.logging.apolloLogging) {
+  links.unshift(new LoggingLink());
+}
+
 const client = createApolloClient({
-  link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
+  link: ApolloLink.from(links),
   cache
 });
 

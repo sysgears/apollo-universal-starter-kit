@@ -17,31 +17,6 @@ import { AuthRoute, IfLoggedIn, withUser, withLoadedUser, withLogout, IfNotLogge
 
 import Feature from '../connector';
 
-// function tokenMiddleware(req, options, next) {
-//   options.headers['x-token'] = window.localStorage.getItem('accessToken');
-//   options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
-//   next();
-// }
-
-// function tokenAfterware(res, options, next) {
-//   const accessToken = options.headers['x-token'];
-//   const refreshToken = options.headers['x-refresh-token'];
-//   if (token) {
-//     window.localStorage.setItem('token', token);
-//   }
-//   if (refreshToken) {
-//     window.localStorage.setItem('refreshToken', refreshToken);
-//   }
-//   next();
-// }
-
-// function connectionParam() {
-//   return {
-//     accessToken: window.localStorage.getItem('accessToken'),
-//     refreshToken: window.localStorage.getItem('refreshToken')
-//   };
-// }
-
 const ProfileName = withLoadedUser(
   ({ currentUser }) => (currentUser ? currentUser.fullName || currentUser.username : null)
 );
@@ -94,9 +69,6 @@ export default new Feature(auth, {
       </NavLink>
     </IfNotLoggedIn>
   ],
-  // middleware: tokenMiddleware,
-  // afterware: tokenAfterware,
-  // connectionParam: connectionParam,
   resolver: resolvers,
   // eslint-disable-next-line react/display-name
   rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />

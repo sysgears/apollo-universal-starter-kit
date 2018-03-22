@@ -38,8 +38,7 @@ const createContextFunc = async (req, res, connectionParams, webSocket) => {
   return {
     User,
     user,
-    auth,
-    req
+    auth
   };
 };
 

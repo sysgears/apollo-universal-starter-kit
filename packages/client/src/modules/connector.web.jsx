@@ -13,6 +13,7 @@ export default class {
   constructor(
     {
       route,
+      link,
       navItem,
       navItemRight,
       reducer,
@@ -34,6 +35,7 @@ export default class {
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
+    this.link = combine(arguments, arg => arg.link);
     this.route = combine(arguments, arg => arg.route);
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);

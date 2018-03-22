@@ -27,8 +27,12 @@ const getCurrentUser = async ({ req }) => {
   const parts = authorization && authorization.split(' ');
   const token = parts && parts.length === 2 && parts[1];
   if (token) {
-    const { user } = jwt.verify(token, settings.user.secret);
-    return user;
+    try {
+      const { user } = jwt.verify(token, settings.user.secret);
+      return user;
+    } catch (e) {
+      return undefined;
+    }
   }
 };
 
@@ -42,8 +46,7 @@ const createContextFunc = async (req, res, connectionParams, webSocket) => {
   return {
     User,
     user,
-    auth,
-    req
+    auth
   };
 };
 

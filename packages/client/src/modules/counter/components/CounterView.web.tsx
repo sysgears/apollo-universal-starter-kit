@@ -1,8 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
-import { Button } from '../../common/components/web';
-import PageLayout from '../../common/components/web/ui-bootstrap/components/PageLayout';
+import { Button, PageLayout } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
 import { CounterProps } from '../types';

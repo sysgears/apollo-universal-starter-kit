@@ -2,7 +2,7 @@ import React from 'react';
 import { compose } from 'react-apollo';
 
 import { connect, Dispatch } from 'react-redux';
-import CounterView from '../components/CounterView.native';
+import CounterView from '../components/CounterView.web';
 
 import { withCounter, withCounterAdding, withCounterState, subscriptionOptions } from '../graphql';
 

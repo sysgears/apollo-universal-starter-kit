@@ -6,7 +6,7 @@ import CounterView from '../components/CounterView.native';
 
 import { withCounter, withCounterAdding, withCounterState, subscriptionOptions } from '../graphql';
 
-import { CounterProps } from '../models';
+import { CounterProps } from '../types';
 import { CounterReduxState } from '../reducers';
 
 class CounterComponent extends React.Component<CounterProps, any> {

@@ -3,17 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '../../common/components';
 
-import { Counter } from '../models';
-
-interface CounterProps {
-  loading: boolean;
-  counter: Counter;
-  reduxCounter: Counter;
-  stateCounter: Counter;
-  addCounter: (amount: number) => any;
-  addStateCounter: (amount: number) => any;
-  onReduxIncrement: (amount: number) => any;
-}
+import { CounterProps } from '../types';
 
 const CounterView = ({
   loading,

@@ -5,22 +5,12 @@ import { Button } from '../../common/components/web';
 import PageLayout from '../../common/components/web/ui-bootstrap/components/PageLayout';
 import settings from '../../../../../../settings';
 
-import { Counter } from '../models';
+import { CounterProps } from '../types';
 
 const Section = styled.section`
   margin-bottom: 30px;
   text-align: center;
 `;
-
-interface CounterProps {
-  loading: boolean;
-  counter: Counter;
-  reduxCounter: Counter;
-  stateCounter: Counter;
-  addCounter: (amount: number) => any;
-  addStateCounter: (amount: number) => any;
-  onReduxIncrement: (amount: number) => any;
-}
 
 const CounterView = ({
   loading,

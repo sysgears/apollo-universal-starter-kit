@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
 
-import Post from './containers/Post';
+import Post from './containers/Post.web';
 import PostEdit from './containers/PostEdit.web';
 
 import clientStateParams from './resolvers';

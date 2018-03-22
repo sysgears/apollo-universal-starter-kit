@@ -1,47 +1,19 @@
 import React from 'react';
 import { graphql, compose, OptionProps } from 'react-apollo';
 import { SubscribeToMoreOptions, ApolloError } from 'apollo-client';
-import { NavigationScreenProp } from 'react-navigation';
+import { match as Match } from 'react-router';
 
 import PostEditView from '../components/PostEditView';
-import { AddPost } from './Post';
-import { Post, Comment } from '../models';
+import { AddPost } from './Post.web';
+import { PostOperation, PostQuery, PostEditProps, PostQueryResult as PostOperationResult } from '../types';
 
 import POST_QUERY from '../graphql/PostQuery.graphql';
 import ADD_POST from '../graphql/AddPost.graphql';
 import EDIT_POST from '../graphql/EditPost.graphql';
 import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
 
-export type AddPostFn = (title: string, content: string) => any;
-export type EditPostFn = (id: number, title: string, content: string) => any;
-export type DeletePostFn = (id: number) => any;
-
-export interface PostEditProps {
-  loading: boolean;
-  post: Post;
-  subscribeToMore: (option: SubscribeToMoreOptions) => void;
-  addPost: AddPostFn;
-  editPost: EditPostFn;
-  navigation: NavigationScreenProp<any>;
-  comments: Comment[];
-}
-
-interface PostOperation {
-  addPost?: Post;
-  editPost?: (id: number, title: string, content: string) => void;
-}
-
-interface PostOperationResult {
-  post: Post;
-}
-
-export interface PostQuery extends PostOperationResult {
-  loading: boolean;
-  subscribeToMore: (option: SubscribeToMoreOptions) => void;
-}
-
 export interface PostProps {
-  navigation: NavigationScreenProp<any>;
+  navigation: any;
 }
 
 class PostEdit extends React.Component<PostEditProps, any> {

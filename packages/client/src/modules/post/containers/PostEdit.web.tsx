@@ -5,42 +5,13 @@ import { Location, History } from 'history';
 import { match as Match } from 'react-router';
 
 import PostEditView from '../components/PostEditView.web';
-import { AddPost } from './Post';
-import { Post, Comment } from '../models';
+import { AddPost } from './Post.web';
+import { PostOperation, PostQuery, PostEditProps, PostQueryResult as PostOperationResult } from '../types';
 
 import POST_QUERY from '../graphql/PostQuery.graphql';
 import ADD_POST from '../graphql/AddPost.graphql';
 import EDIT_POST from '../graphql/EditPost.graphql';
 import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
-
-export type AddPostFn = (title: string, content: string) => any;
-export type EditPostFn = (id: number, title: string, content: string) => any;
-export type DeletePostFn = (id: number) => any;
-
-export interface PostEditProps {
-  loading: boolean;
-  post: Post;
-  subscribeToMore: (option: SubscribeToMoreOptions) => void;
-  addPost: AddPostFn;
-  editPost: EditPostFn;
-  match: Match<any>;
-  location: Location;
-  comments: Comment[];
-}
-
-interface PostOperation {
-  addPost?: Post;
-  editPost?: (id: number, title: string, content: string) => void;
-}
-
-interface PostOperationResult {
-  post: Post;
-}
-
-export interface PostQuery extends PostOperationResult {
-  loading: boolean;
-  subscribeToMore: (option: SubscribeToMoreOptions) => void;
-}
 
 export interface PostProps {
   history: History;

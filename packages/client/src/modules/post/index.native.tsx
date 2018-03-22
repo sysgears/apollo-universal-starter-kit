@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { createTabBarIconWrapper } from '../common/components/native';
 
-import Post from './containers/Post';
+import Post from './containers/Post.native';
 import PostEdit from './containers/PostEdit.native';
 
 import clientStateParams from './resolvers';

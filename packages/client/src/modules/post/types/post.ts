@@ -1,7 +1,9 @@
 import { SubscribeToMoreOptions } from 'apollo-client';
 import { match as Match } from 'react-router';
 import { Comment } from './comment';
+import { Location } from 'history';
 import { EntityList, PageInfo } from '../../../../../common/types';
+import { NavigationScreenProp } from 'react-navigation';
 
 // Post types
 
@@ -40,7 +42,7 @@ interface PostEditProps {
   addPost: AddPostFn;
   editPost: EditPostFn;
   match: Match<any>;
-  navigation: any;
+  navigation: NavigationScreenProp<any>;
   location: Location;
   comments: Comment[];
 }
@@ -51,7 +53,7 @@ interface PostProps {
   loading: boolean;
   posts: EntityList<Post>;
   subscribeToMore: (option: SubscribeToMoreOptions) => void;
-  navigation: any;
+  navigation: NavigationScreenProp<any>;
 }
 
 interface PostQueryResult {
@@ -70,7 +72,7 @@ interface PostListProps {
   posts?: EntityList<Post>;
   deletePost: DeletePostFn;
   loadMoreRows: LoadMoreRowsFn;
-  navigation: any;
+  navigation: NavigationScreenProp<any>;
 }
 
 export {
@@ -83,5 +85,7 @@ export {
   PostQueryResult,
   PostOperationResult,
   PostListProps,
-  LoadMoreRowsFn
+  LoadMoreRowsFn,
+  EditPostFn,
+  AddPostFn
 };

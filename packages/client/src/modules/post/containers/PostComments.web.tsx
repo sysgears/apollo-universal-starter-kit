@@ -1,5 +1,4 @@
 import React from 'react';
-import { SubscribeToMoreOptions } from 'apollo-client';
 import { graphql, compose, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 

@@ -1,8 +1,7 @@
 import React from 'react';
 import { graphql, compose, OptionProps } from 'react-apollo';
-import { SubscribeToMoreOptions, ApolloError } from 'apollo-client';
-import { Location, History } from 'history';
-import { match as Match } from 'react-router';
+import { ApolloError } from 'apollo-client';
+import { History } from 'history';
 
 import PostEditView from '../components/PostEditView.web';
 import { AddPost } from './Post.web';

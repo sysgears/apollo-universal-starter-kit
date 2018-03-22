@@ -1,11 +1,11 @@
 import React from 'react';
-import { SubscribeToMoreOptions, ApolloError } from 'apollo-client';
+import { ApolloError } from 'apollo-client';
 import { graphql, compose, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 
 import PostList from '../components/PostList.native';
 import { Post, PostProps, PostQueryResult, PostOperationResult } from '../types';
-import { PageInfo, EntityList, Edge } from '../../../../../common/types';
+import { Edge } from '../../../../../common/types';
 
 import POSTS_QUERY from '../graphql/PostsQuery.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';

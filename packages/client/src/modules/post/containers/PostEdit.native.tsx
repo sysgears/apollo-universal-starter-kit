@@ -1,7 +1,6 @@
 import React from 'react';
 import { graphql, compose, OptionProps } from 'react-apollo';
-import { SubscribeToMoreOptions, ApolloError } from 'apollo-client';
-import { match as Match } from 'react-router';
+import { ApolloError } from 'apollo-client';
 
 import PostEditView from '../components/PostEditView';
 import { AddPost } from './Post.native';

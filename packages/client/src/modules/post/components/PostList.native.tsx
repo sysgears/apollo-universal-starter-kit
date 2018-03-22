@@ -4,7 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { StyleSheet, FlatList, Text, View, Platform, TouchableOpacity } from 'react-native';
 import { SwipeAction } from '../../common/components/native';
 
-import { PostListProps, LoadMoreRowsFn, Posts, Post } from '../types/post';
+import { PostListProps, Post } from '../types/post';
 
 interface Node {
   node: Post;

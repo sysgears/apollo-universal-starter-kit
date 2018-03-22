@@ -18,8 +18,6 @@ export default class {
       navItemRight,
       reducer,
       resolver,
-      middleware,
-      afterware,
       connectionParam,
       createFetchOptions,
       stylesInsert,
@@ -41,8 +39,6 @@ export default class {
     this.navItemRight = combine(arguments, arg => arg.navItemRight);
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
-    this.middleware = combine(arguments, arg => arg.middleware);
-    this.afterware = combine(arguments, arg => arg.afterware);
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
@@ -84,14 +80,6 @@ export default class {
 
   get resolvers() {
     return merge(...this.resolver);
-  }
-
-  get middlewares() {
-    return this.middleware;
-  }
-
-  get afterwares() {
-    return this.afterware;
   }
 
   get connectionParams() {

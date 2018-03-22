@@ -19,6 +19,7 @@ const withToken = setContext(async (operationName, { headers }) => {
   if (['login', 'refreshTokens'].indexOf(operationName) < 0) {
     const accessToken = window.localStorage.getItem('accessToken');
     return {
+      credentials: 'same-origin',
       headers: {
         ...headers,
         authorization: accessToken ? `Bearer ${accessToken}` : null

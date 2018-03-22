@@ -58,30 +58,9 @@ for (const middleware of modules.middlewares) {
   });
 }
 
-// i18n
-//   .use(LanguageDetector)
-//   .use(reactI18nextModule)
-//   .init({
-//     fallbackLng: 'en',
-//     resources: modules.localizations[0],
-//     // have a common namespace used around the full app
-//     ns: ['translations'],
-//     defaultNS: 'translations',
-//     debug: true,
-//     interpolation: {
-//       escapeValue: false // not needed for react!!
-//     },
-
-//     react: {
-//       wait: true
-//     }
-//   });
-// translate.setI18n(i18n);
 console.log(modules);
-modules.internationalizations[0].addResourceBundle('ru', 'translations', modules.localizations[0].ru);
-modules.internationalizations[0].addResourceBundle('en', 'translations', modules.localizations[0].en);
-modules.internationalizations[0].options.resources = null;
-console.log(modules.internationalizations[0].getResource('ru', 'translations', 'title'));
+modules.i18n[0].addResourceBundle('ru', 'counter', modules.localizations[0].ru);
+modules.i18n[0].addResourceBundle('en', 'counter', modules.localizations[0].en);
 
 for (const afterware of modules.afterwares) {
   fetch.batchUseAfter(({ response, options }, next) => {
@@ -214,8 +193,7 @@ class Main extends React.Component {
         <Provider store={store}>
           <ApolloProvider client={client}>
             <ConnectedRouter history={history}>
-              <I18nextProvider i18n={modules.internationalizations[0]}>{Routes}</I18nextProvider>
-              {/* {Routes} */}
+              <I18nextProvider i18n={modules.i18n[0]}>{Routes}</I18nextProvider>
             </ConnectedRouter>
           </ApolloProvider>
         </Provider>

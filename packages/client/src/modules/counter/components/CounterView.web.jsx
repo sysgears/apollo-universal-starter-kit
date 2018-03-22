@@ -46,8 +46,6 @@ const CounterView = ({
     return (
       <PageLayout>
         {renderMetaData()}
-        <button onClick={() => props.i18n.changeLanguage('ru')}>Ru</button>
-        <button onClick={() => props.i18n.changeLanguage('en')}>En</button>
         <Section>
           <p>{t('counter.text', { counter })}</p>
           <Button id="graphql-button" color="primary" onClick={addCounter(1)}>
@@ -82,4 +80,4 @@ CounterView.propTypes = {
   t: PropTypes.func
 };
 
-export default translate('translations')(CounterView);
+export default translate('counter')(CounterView);

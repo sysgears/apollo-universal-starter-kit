@@ -8,7 +8,7 @@ import COUNTER_QUERY_CLIENT from './CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from './AddCounter.client.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
-import { Counter, CounterOperation, CounterQueryResult, CounterProps } from '../models';
+import { Counter, CounterOperation, CounterQueryResult, CounterProps } from '../types';
 import { CounterApolloState } from '../resolvers';
 
 interface CounterUpdated {

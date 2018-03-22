@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { Counter } from '../models';
+import { Counter } from '../types';
 
 interface CounterAction extends Action {
   value: any;

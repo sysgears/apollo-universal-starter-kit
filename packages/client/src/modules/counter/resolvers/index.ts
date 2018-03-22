@@ -1,5 +1,5 @@
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
-import { Counter } from '../models';
+import { Counter } from '../types';
 
 const TYPE_NAME = 'Amount';
 

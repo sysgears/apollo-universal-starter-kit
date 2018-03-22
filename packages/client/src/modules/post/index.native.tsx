@@ -8,7 +8,7 @@ import { createTabBarIconWrapper } from '../common/components/native';
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit.native';
 
-import resolvers from './resolvers';
+import clientStateParams from './resolvers';
 
 import Feature from '../connector.native';
 
@@ -52,5 +52,5 @@ export default new Feature({
       }
     }
   },
-  resolvers
+  clientStateParams
 });

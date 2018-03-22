@@ -9,7 +9,7 @@ import Register from './containers/Register';
 import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
-import resolvers from './resolvers';
+import clientStateParams from './resolvers';
 
 import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
 
@@ -71,7 +71,7 @@ export default new Feature({
       </AuthLogin>
     </MenuItem>
   ],
-  resolvers,
+  clientStateParams,
   middleware: tokenMiddleware,
   afterware: tokenAfterware,
   connectionParam,

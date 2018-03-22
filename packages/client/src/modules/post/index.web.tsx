@@ -5,7 +5,7 @@ import { MenuItem } from '../../modules/common/components/web';
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit.web';
 
-import resolvers from './resolvers';
+import clientStateParams from './resolvers';
 
 import Feature from '../connector.web';
 
@@ -18,5 +18,5 @@ export default new Feature({
       </NavLink>
     </MenuItem>
   ),
-  resolvers
+  clientStateParams
 });

@@ -14,7 +14,7 @@ interface FeatureParams {
   navItem?: any;
   navItemRight?: any;
   reducer?: any;
-  resolvers?: any;
+  clientStateParams?: any;
   middleware?: any;
   afterware?: any;
   connectionParam?: any;
@@ -31,7 +31,7 @@ export default class Feature implements FeatureParams {
   public navItem: any[];
   public navItemRight: any[];
   public reducer: any[];
-  public resolvers: any[];
+  public clientStateParams: any[];
   public middleware: any[];
   public afterware: any[];
   public connectionParam: any[];
@@ -51,7 +51,7 @@ export default class Feature implements FeatureParams {
     this.navItem = combine(arguments, (arg: FeatureParams) => arg.navItem);
     this.navItemRight = combine(arguments, (arg: FeatureParams) => arg.navItemRight);
     this.reducer = combine(arguments, (arg: FeatureParams) => arg.reducer);
-    this.resolvers = combine(arguments, (arg: FeatureParams) => arg.resolvers);
+    this.clientStateParams = combine(arguments, (arg: FeatureParams) => arg.clientStateParams);
     this.middleware = combine(arguments, (arg: FeatureParams) => arg.middleware);
     this.afterware = combine(arguments, (arg: FeatureParams) => arg.afterware);
     this.connectionParam = combine(arguments, (arg: FeatureParams) => arg.connectionParam);
@@ -95,7 +95,7 @@ export default class Feature implements FeatureParams {
   }
 
   get getResolvers() {
-    return merge({}, ...this.resolvers);
+    return merge({}, ...this.clientStateParams);
   }
 
   get middlewares() {

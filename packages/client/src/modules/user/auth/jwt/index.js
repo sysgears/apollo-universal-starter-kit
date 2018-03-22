@@ -1,11 +1,11 @@
-import { setContext } from 'apollo-link-context';
+import { ApolloLink, Observable, execute } from 'apollo-link';
 
 import Feature from '../connector';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import CURRENT_USER_QUERY from '../../graphql/CurrentUserQuery.graphql';
 
-// import modules from '../../..';
+import modules from '../../..';
 
 const loginHandler = async loginResponse => {
   if (loginResponse && loginResponse.tokens) {
@@ -15,22 +15,75 @@ const loginHandler = async loginResponse => {
   }
 };
 
-const withToken = setContext(async (operationName, { headers }) => {
-  if (['login', 'refreshTokens'].indexOf(operationName) < 0) {
-    const accessToken = window.localStorage.getItem('accessToken');
-    return {
-      credentials: 'same-origin',
-      headers: {
-        ...headers,
-        authorization: accessToken ? `Bearer ${accessToken}` : null
-      }
-    };
-  }
-});
-
-const middleware = async (req, options, next) => {
-  next();
+const setJWTContext = operation => {
+  const accessToken = window.localStorage.getItem('accessToken');
+  operation.setContext({
+    credentials: 'same-origin',
+    headers: {
+      authorization: accessToken ? `Bearer ${accessToken}` : null
+    }
+  });
 };
+
+const JWTLink = new ApolloLink((operation, forward) => {
+  return new Observable(observer => {
+    const refreshToken = window.localStorage.getItem('refreshToken');
+    if (!refreshToken || ['login', 'refreshTokens'].indexOf(operation.operationName) >= 0) {
+      return forward(operation).subscribe(observer);
+    }
+    setJWTContext(operation);
+    let sub;
+    try {
+      sub = forward(operation).subscribe({
+        next: result => {
+          let needTokenRefresh = false;
+          if (result.errors) {
+            for (const error of result.errors) {
+              if (error.message && error.message.indexOf('Not Authenticated') >= 0) {
+                needTokenRefresh = true;
+                break;
+              }
+            }
+          }
+          if (needTokenRefresh) {
+            execute(
+              new ApolloLink(refreshOperation => {
+                forward(refreshOperation).subscribe({
+                  next: ({ data: { refreshTokens: { accessToken, refreshToken } } }) => {
+                    window.localStorage.setItem('accessToken', accessToken);
+                    window.localStorage.setItem('refreshToken', refreshToken);
+                    setJWTContext(operation);
+                    forward(operation).subscribe(observer);
+                  },
+                  error: err => {
+                    window.localStorage.removeItem('accessToken');
+                    window.localStorage.removeItem('refreshToken');
+                    observer.error(err);
+                  }
+                });
+              }),
+              {
+                query: REFRESH_TOKENS_MUTATION,
+                variables: { refreshToken: window.localStorage.getItem('refreshToken') }
+              }
+            );
+          } else {
+            observer.next(result);
+            observer.complete();
+          }
+        },
+        error: observer.error.bind(observer),
+        complete: () => {}
+      });
+    } catch (e) {
+      observer.error(e);
+    }
+
+    return () => {
+      if (sub) sub.unsubscribe();
+    };
+  });
+});
 
 const refreshTokens = async client => {
   try {
@@ -40,11 +93,11 @@ const refreshTokens = async client => {
     });
     window.localStorage.setItem('accessToken', accessToken);
     window.localStorage.setItem('refreshToken', refreshToken);
-    return true;
+    return { accessToken, refreshToken };
   } catch (e) {
     window.localStorage.removeItem('accessToken');
     window.localStorage.removeItem('refreshToken');
-    return false;
+    return {};
   }
 };
 
@@ -53,11 +106,17 @@ const onInit = async client => {
   if (refreshToken) {
     const result = client.readQuery({ query: CURRENT_USER_QUERY });
     if (result && !result.currentUser) {
+      // If we don't have current user but have refresh token, then
+      // It means either our initial Apollo Cache is invalid or we have expired refresh token
+      // Below we try to figure out which of these two options is the case
       const { data: { currentUser } } = await client.query({ query: CURRENT_USER_QUERY, fetchPolicy: 'network-only' });
-      if (!currentUser && (await refreshTokens(client, refreshToken))) {
-        // await client.cache.reset();
-        // await client.cache.writeData({ data: modules.resolvers.defaults });
-        await client.query({ query: CURRENT_USER_QUERY, fetchPolicy: 'network-only' });
+      if (!currentUser) {
+        const { accessToken } = await refreshTokens(client, refreshToken);
+        if (accessToken) {
+          await client.cache.reset();
+          await client.cache.writeData({ data: modules.resolvers.defaults });
+          await client.query({ query: CURRENT_USER_QUERY, fetchPolicy: 'network-only' });
+        }
       }
     }
   }
@@ -65,7 +124,6 @@ const onInit = async client => {
 
 export default new Feature({
   loginHandler,
-  middleware,
   onInit,
-  link: withToken
+  link: JWTLink
 });

@@ -3,27 +3,13 @@ import { SubscribeToMoreOptions, ApolloError } from 'apollo-client';
 import { graphql, compose, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 
-import PostList from '../components/PostList';
-import { Post } from '../types';
+import PostList from '../components/PostList.native';
+import { Post, PostProps, PostQueryResult, PostOperationResult } from '../types';
 import { PageInfo, EntityList, Edge } from '../../../../../common/types';
 
 import POSTS_QUERY from '../graphql/PostsQuery.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import DELETE_POST from '../graphql/DeletePost.graphql';
-
-interface PostOperationResult {
-  deletePost: (id: number) => any;
-}
-
-interface PostProps {
-  loading: boolean;
-  posts: EntityList<Post>;
-  subscribeToMore: (option: SubscribeToMoreOptions) => void;
-}
-
-export interface PostQueryResult extends PostProps {
-  loadMoreRows: () => EntityList<Post>;
-}
 
 export function AddPost(prev: PostQueryResult, node: Post) {
   // ignore if duplicate

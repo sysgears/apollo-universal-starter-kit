@@ -1,24 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { PageLayout, Table, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
-export default class PostList extends React.PureComponent {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    posts: PropTypes.object,
-    deletePost: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func.isRequired
-  };
+import { PostListProps, LoadMoreRowsFn, Posts } from '../types/post';
 
-  handleDeletePost = id => {
+export default class PostList extends React.PureComponent<PostListProps, any> {
+  public handleDeletePost = (id: number) => {
     const { deletePost } = this.props;
     deletePost(id);
   };
 
-  renderLoadMore = (posts, loadMoreRows) => {
+  public renderLoadMore = (posts: Posts, loadMoreRows: LoadMoreRowsFn) => {
     if (posts.pageInfo.hasNextPage) {
       return (
         <Button id="load-more" color="primary" onClick={loadMoreRows}>
@@ -28,7 +22,7 @@ export default class PostList extends React.PureComponent {
     }
   };
 
-  renderMetaData = () => (
+  public renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Posts list`}
       meta={[
@@ -40,7 +34,7 @@ export default class PostList extends React.PureComponent {
     />
   );
 
-  render() {
+  public render() {
     const { loading, posts, loadMoreRows } = this.props;
     if (loading) {
       return (
@@ -55,7 +49,7 @@ export default class PostList extends React.PureComponent {
           title: 'Title',
           dataIndex: 'title',
           key: 'title',
-          render: (text, record) => (
+          render: (text: string, record: any) => (
             <Link className="post-link" to={`/post/${record.id}`}>
               {text}
             </Link>
@@ -65,7 +59,7 @@ export default class PostList extends React.PureComponent {
           title: 'Actions',
           key: 'actions',
           width: 50,
-          render: (text, record) => (
+          render: (text: string, record: any) => (
             <Button
               color="primary"
               size="sm"
@@ -85,7 +79,7 @@ export default class PostList extends React.PureComponent {
             <Button color="primary">Add</Button>
           </Link>
           <h1 />
-          <Table dataSource={posts.edges.map(({ node }) => node)} columns={columns} />
+          <Table dataSource={posts.edges.map(({ node }: any) => node)} columns={columns} />
           <div>
             <small>
               ({posts.edges.length} / {posts.totalCount})

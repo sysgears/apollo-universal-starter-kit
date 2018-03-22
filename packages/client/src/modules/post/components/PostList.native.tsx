@@ -1,24 +1,25 @@
 /*eslint-disable react/display-name*/
 import React from 'react';
-import PropTypes from 'prop-types';
-import { FontAwesome } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { StyleSheet, FlatList, Text, View, Platform, TouchableOpacity } from 'react-native';
 import { SwipeAction } from '../../common/components/native';
 
-export default class PostList extends React.PureComponent {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    posts: PropTypes.object,
-    navigation: PropTypes.object,
-    deletePost: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func.isRequired
-  };
+import { PostListProps, LoadMoreRowsFn, Posts, Post } from '../types/post';
 
-  onEndReachedCalledDuringMomentum = false;
+interface Node {
+  node: Post;
+}
 
-  keyExtractor = item => item.node.id;
+interface RenderItemOptions {
+  item: Node;
+}
 
-  renderItemIOS = ({ item: { node: { id, title } } }) => {
+export default class PostList extends React.PureComponent<PostListProps, any> {
+  public onEndReachedCalledDuringMomentum = false;
+
+  public keyExtractor = (item: any) => item.node.id;
+
+  public renderItemIOS = ({ item: { node: { id, title } } }: RenderItemOptions) => {
     const { deletePost, navigation } = this.props;
     return (
       <SwipeAction
@@ -33,7 +34,7 @@ export default class PostList extends React.PureComponent {
     );
   };
 
-  renderItemAndroid = ({ item: { node: { id, title } } }) => {
+  public renderItemAndroid = ({ item: { node: { id, title } } }: RenderItemOptions) => {
     const { deletePost, navigation } = this.props;
     return (
       <TouchableOpacity style={styles.postWrapper} onPress={() => navigation.navigate('PostEdit', { id })}>
@@ -45,9 +46,9 @@ export default class PostList extends React.PureComponent {
     );
   };
 
-  render() {
+  public render() {
     const { loading, posts, loadMoreRows } = this.props;
-    const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
+    const renderItem: any = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     if (loading) {
       return (
         <View style={styles.container}>
@@ -79,7 +80,7 @@ export default class PostList extends React.PureComponent {
   }
 }
 
-const styles = StyleSheet.create({
+const styles: any = StyleSheet.create({
   container: {
     flex: 1
   },

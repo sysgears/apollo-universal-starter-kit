@@ -1,19 +1,25 @@
 import { SubscribeToMoreOptions } from 'apollo-client';
 import { match as Match } from 'react-router';
 import { Comment } from './comment';
-import { EntityList } from '../../../../../common/types';
+import { EntityList, PageInfo } from '../../../../../common/types';
 
 // Post types
 
 type AddPostFn = (title: string, content: string) => any;
 type EditPostFn = (id: number, title: string, content: string) => any;
 type DeletePostFn = (id: number) => any;
+type LoadMoreRowsFn = () => boolean;
 
 interface Post {
   id: number;
   content: string;
   title: string;
   comments: Comment[];
+}
+
+interface Posts {
+  posts?: EntityList<Post>;
+  pageInfo: PageInfo;
 }
 
 interface PostOperation {
@@ -40,17 +46,42 @@ interface PostEditProps {
 }
 
 interface PostProps {
+  loadMoreRows: LoadMoreRowsFn;
+  deletePost: DeletePostFn;
   loading: boolean;
   posts: EntityList<Post>;
   subscribeToMore: (option: SubscribeToMoreOptions) => void;
+  navigation: any;
 }
 
-interface PostQueryResult extends PostProps {
+interface PostQueryResult {
   loadMoreRows: () => EntityList<Post>;
+  loading: boolean;
+  subscribeToMore: (option: SubscribeToMoreOptions) => void;
+  posts: EntityList<Post>;
 }
 
 interface PostOperationResult {
   deletePost: (id: number) => any;
 }
 
-export { Post, PostOperation, PostQuery, PostEditProps, PostProps, PostQueryResult, PostOperationResult };
+interface PostListProps {
+  loading: boolean;
+  posts?: EntityList<Post>;
+  deletePost: DeletePostFn;
+  loadMoreRows: LoadMoreRowsFn;
+  navigation: any;
+}
+
+export {
+  Post,
+  Posts,
+  PostOperation,
+  PostQuery,
+  PostEditProps,
+  PostProps,
+  PostQueryResult,
+  PostOperationResult,
+  PostListProps,
+  LoadMoreRowsFn
+};

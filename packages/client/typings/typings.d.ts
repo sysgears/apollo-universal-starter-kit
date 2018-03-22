@@ -49,6 +49,11 @@ declare module '@expo/vector-icons/Ionicons' {
   export = val;
 }
 
+declare module '@expo/vector-icons/FontAwesome' {
+  const val: any;
+  export = val;
+}
+
 declare module 'react-cookie/lib/CookiesProvider' {
   const val: any;
   export = val;

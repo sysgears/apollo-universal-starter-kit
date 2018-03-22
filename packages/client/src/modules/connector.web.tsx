@@ -94,7 +94,7 @@ export default class Feature implements FeatureParams {
     return merge({}, ...this.reducer);
   }
 
-  get getResolvers() {
+  get getStateParams() {
     return merge({}, ...this.clientStateParams);
   }
 

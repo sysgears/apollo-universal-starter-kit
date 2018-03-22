@@ -112,7 +112,7 @@ const link: ApolloLink = ApolloLink.split(
   new BatchHttpLink({ fetch })
 );
 
-const linkState: any = withClientState({ ...modules.getResolvers, cache });
+const linkState: any = withClientState({ ...modules.getStateParams, cache });
 
 // if (__PERSIST_GQL__) {
 //   networkInterface = addPersistedQueries(networkInterface, queryMap);

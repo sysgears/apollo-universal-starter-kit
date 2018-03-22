@@ -9,12 +9,18 @@ const combine = (features: IArguments, extractor: (x: Feature) => any) =>
 
 export const featureCatalog: any = {};
 
+interface ClientStateParams {
+  resolvers: any;
+  defaults?: any;
+  typeDefs?: string | string[];
+}
+
 interface FeatureParams {
   route?: any;
   navItem?: any;
   navItemRight?: any;
   reducer?: any;
-  clientStateParams?: any;
+  clientStateParams?: ClientStateParams | ClientStateParams[];
   middleware?: any;
   afterware?: any;
   connectionParam?: any;
@@ -31,7 +37,7 @@ export default class Feature implements FeatureParams {
   public navItem: any[];
   public navItemRight: any[];
   public reducer: any[];
-  public clientStateParams: any[];
+  public clientStateParams: ClientStateParams[];
   public middleware: any[];
   public afterware: any[];
   public connectionParam: any[];

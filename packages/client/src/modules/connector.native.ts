@@ -5,12 +5,18 @@ const combine = (features: IArguments, extractor: (x: Feature) => any) =>
 
 export const featureCatalog: any = {};
 
+interface ClientStateParams {
+  resolvers: any;
+  defaults?: any;
+  typeDefs?: string | string[];
+}
+
 interface FeatureParams {
   tabItem?: any;
   navItem?: any;
   route?: any;
   reducer?: any;
-  clientStateParams?: any;
+  clientStateParams?: ClientStateParams | ClientStateParams[];
   routerFactory?: any;
   catalogInfo?: any;
 }
@@ -19,7 +25,7 @@ export default class Feature implements FeatureParams {
   public tabItem: any[];
   public route: any[];
   public reducer: any[];
-  public clientStateParams: any[];
+  public clientStateParams: ClientStateParams[];
   public routerFactory: any;
   public catalogInfo: any[];
   // eslint-disable-next-line no-unused-vars

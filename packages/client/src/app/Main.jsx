@@ -78,7 +78,10 @@ for (const middleware of modules.middlewares) {
 //   });
 // translate.setI18n(i18n);
 console.log(modules);
-modules.internationalizations[0].addResourceBundle('ru-RU', 'translations', modules.localizations[0], true, false);
+modules.internationalizations[0].addResourceBundle('ru', 'translations', modules.localizations[0].ru);
+modules.internationalizations[0].addResourceBundle('en', 'translations', modules.localizations[0].en);
+modules.internationalizations[0].options.resources = null;
+console.log(modules.internationalizations[0].getResource('ru', 'translations', 'title'));
 
 for (const afterware of modules.afterwares) {
   fetch.batchUseAfter(({ response, options }, next) => {
@@ -204,7 +207,6 @@ class Main extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return this.state.error ? (
       <RedBox error={this.state.error} />
     ) : (

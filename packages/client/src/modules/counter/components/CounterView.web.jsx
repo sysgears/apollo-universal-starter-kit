@@ -19,9 +19,10 @@ const CounterView = ({
   onReduxIncrement,
   counterState,
   addCounterState,
+  t,
   ...props
 }) => {
-  console.log(props);
+  console.log(props.i18n);
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Counter`}
@@ -45,27 +46,24 @@ const CounterView = ({
     return (
       <PageLayout>
         {renderMetaData()}
+        <button onClick={() => props.i18n.changeLanguage('ru')}>Ru</button>
+        <button onClick={() => props.i18n.changeLanguage('en')}>En</button>
         <Section>
-          <p>
-            Current counter, is {counter.amount}. This is being stored server-side in the database and using Apollo
-            subscription for real-time updates.
-          </p>
+          <p>{t('counter.text', { counter })}</p>
           <Button id="graphql-button" color="primary" onClick={addCounter(1)}>
-            Click to increase counter
+            {t('counter.btnLabel')}
           </Button>
         </Section>
         <Section>
-          <p>Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.</p>
+          <p>{t('reduxCount.text', { reduxCount })}</p>
           <Button id="redux-button" color="primary" onClick={onReduxIncrement(1)}>
-            Click to increase reduxCount
+            {t('reduxCount.btnLabel')}
           </Button>
         </Section>
         <Section>
-          <p>
-            Current apolloLinkStateCount, is {counterState}. This is being stored client-side with Apollo Link State.
-          </p>
+          <p>{t('apolloCount.text', { counterState })}</p>
           <Button id="apollo-link-button" color="primary" onClick={addCounterState(1)}>
-            Click to increase apolloLinkState
+            {t('apolloCount.btnLabel')}
           </Button>
         </Section>
       </PageLayout>
@@ -80,7 +78,8 @@ CounterView.propTypes = {
   counterState: PropTypes.number.isRequired,
   addCounterState: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired,
-  onReduxIncrement: PropTypes.func.isRequired
+  onReduxIncrement: PropTypes.func.isRequired,
+  t: PropTypes.func
 };
 
-export default translate()(CounterView);
+export default translate('translations')(CounterView);

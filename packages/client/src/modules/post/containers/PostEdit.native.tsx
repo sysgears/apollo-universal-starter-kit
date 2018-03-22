@@ -4,7 +4,7 @@ import { SubscribeToMoreOptions, ApolloError } from 'apollo-client';
 import { match as Match } from 'react-router';
 
 import PostEditView from '../components/PostEditView';
-import { AddPost } from './Post.web';
+import { AddPost } from './Post.native';
 import { PostOperation, PostQuery, PostEditProps, PostQueryResult as PostOperationResult } from '../types';
 
 import POST_QUERY from '../graphql/PostQuery.graphql';

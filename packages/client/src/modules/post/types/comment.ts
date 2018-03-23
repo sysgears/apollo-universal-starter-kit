@@ -7,6 +7,8 @@ type EditCommentFn = (id: number, content: string) => any;
 type DeleteCommentFn = (id: number) => any;
 type OnCommentSelectFn = (comment: Comment) => void;
 
+export { AddCommentFn, DeleteCommentFn, OnCommentSelectFn, EditCommentFn };
+
 // Models
 interface Comment {
   id?: number;
@@ -44,3 +46,10 @@ interface CommentQueryResult {
 }
 
 export { CommentQueryResult };
+
+// Formik values and props
+interface CommentValues {
+  content: string;
+}
+
+export { CommentValues };

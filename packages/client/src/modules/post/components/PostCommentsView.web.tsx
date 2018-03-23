@@ -1,26 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Table, Button } from '../../common/components/web';
-import PostCommentForm from './PostCommentForm';
+import PostCommentForm from './PostCommentForm.web';
 
-export default class PostCommentsView extends React.PureComponent {
-  static propTypes = {
-    postId: PropTypes.number.isRequired,
-    comments: PropTypes.array.isRequired,
-    comment: PropTypes.object,
-    addComment: PropTypes.func.isRequired,
-    editComment: PropTypes.func.isRequired,
-    deleteComment: PropTypes.func.isRequired,
-    subscribeToMore: PropTypes.func.isRequired,
-    onCommentSelect: PropTypes.func.isRequired
-  };
+import { PostCommentsProps, Comment, CommentValues } from '../types';
 
-  handleEditComment = (id, content) => {
+export default class PostCommentsView extends React.PureComponent<PostCommentsProps, any> {
+  public handleEditComment = (id: number, content: string) => {
     const { onCommentSelect } = this.props;
     onCommentSelect({ id, content });
   };
 
-  handleDeleteComment = id => {
+  public handleDeleteComment = (id: number) => {
     const { comment, onCommentSelect, deleteComment } = this.props;
 
     if (comment.id === id) {
@@ -30,7 +20,7 @@ export default class PostCommentsView extends React.PureComponent {
     deleteComment(id);
   };
 
-  onSubmit = () => values => {
+  public onSubmit = () => (values: CommentValues) => {
     const { comment, postId, addComment, editComment, onCommentSelect } = this.props;
 
     if (comment.id === null) {
@@ -42,9 +32,9 @@ export default class PostCommentsView extends React.PureComponent {
     onCommentSelect({ id: null, content: '' });
   };
 
-  render() {
+  public render() {
     const { postId, comments, comment } = this.props;
-    const columns = [
+    const columns: any = [
       {
         title: 'Content',
         dataIndex: 'content',
@@ -54,7 +44,7 @@ export default class PostCommentsView extends React.PureComponent {
         title: 'Actions',
         key: 'actions',
         width: 120,
-        render: (text, record) => (
+        render: (text: string, record: Comment) => (
           <div style={{ width: 120 }}>
             <Button
               color="primary"

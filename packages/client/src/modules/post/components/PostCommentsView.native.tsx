@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   StyleSheet,
   FlatList,
@@ -10,30 +9,32 @@ import {
   Platform,
   TouchableWithoutFeedback
 } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { SwipeAction } from '../../common/components/native';
 
 import PostCommentForm from './PostCommentForm';
+import {
+  PostCommentsProps,
+  Comment,
+  CommentValues,
+  AddCommentFn,
+  DeleteCommentFn,
+  EditCommentFn,
+  OnCommentSelectFn
+} from '../types';
 
-export default class PostCommentsView extends React.PureComponent {
-  static propTypes = {
-    postId: PropTypes.number.isRequired,
-    comments: PropTypes.array.isRequired,
-    comment: PropTypes.object,
-    addComment: PropTypes.func.isRequired,
-    editComment: PropTypes.func.isRequired,
-    deleteComment: PropTypes.func.isRequired,
-    subscribeToMore: PropTypes.func.isRequired,
-    onCommentSelect: PropTypes.func.isRequired
-  };
+interface RenderItemProps {
+  item: Comment;
+}
 
-  keyExtractor = item => item.id;
+export default class PostCommentsView extends React.PureComponent<PostCommentsProps, any> {
+  public keyExtractor = (item: any) => item.id;
 
-  renderItemIOS = ({ item: { id, content } }) => {
+  public renderItemIOS = ({ item: { id, content } }: RenderItemProps) => {
     const { comment, deleteComment, onCommentSelect } = this.props;
     return (
       <SwipeAction
-        onPress={() => onCommentSelect({ id: id, content: content })}
+        onPress={() => onCommentSelect({ id, content })}
         right={{
           text: 'Delete',
           onPress: () => this.onCommentDelete(comment, deleteComment, onCommentSelect, id)
@@ -44,10 +45,10 @@ export default class PostCommentsView extends React.PureComponent {
     );
   };
 
-  renderItemAndroid = ({ item: { id, content } }) => {
+  public renderItemAndroid = ({ item: { id, content } }: RenderItemProps) => {
     const { deleteComment, onCommentSelect, comment } = this.props;
     return (
-      <TouchableWithoutFeedback onPress={() => onCommentSelect({ id: id, content: content })}>
+      <TouchableWithoutFeedback onPress={() => onCommentSelect({ id, content })}>
         <View style={styles.postWrapper}>
           <Text style={styles.text}>{content}</Text>
           <TouchableOpacity
@@ -61,7 +62,12 @@ export default class PostCommentsView extends React.PureComponent {
     );
   };
 
-  onCommentDelete = (comment, deleteComment, onCommentSelect, id) => {
+  public onCommentDelete = (
+    comment: Comment,
+    deleteComment: DeleteCommentFn,
+    onCommentSelect: OnCommentSelectFn,
+    id: number
+  ) => {
     if (comment.id === id) {
       onCommentSelect({ id: null, content: '' });
     }
@@ -69,7 +75,13 @@ export default class PostCommentsView extends React.PureComponent {
     deleteComment(id);
   };
 
-  onSubmit = (comment, postId, addComment, editComment, onCommentSelect) => values => {
+  public onSubmit = (
+    comment: Comment,
+    postId: number,
+    addComment: AddCommentFn,
+    editComment: EditCommentFn,
+    onCommentSelect: OnCommentSelectFn
+  ) => (values: CommentValues) => {
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {
@@ -80,9 +92,9 @@ export default class PostCommentsView extends React.PureComponent {
     Keyboard.dismiss();
   };
 
-  render() {
+  public render() {
     const { postId, comment, addComment, editComment, comments, onCommentSelect } = this.props;
-    const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
+    const renderItem: any = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
 
     return (
       <View>
@@ -93,7 +105,7 @@ export default class PostCommentsView extends React.PureComponent {
           comment={comment}
         />
         {comments.length > 0 && (
-          <View style={styles.list} keyboardDismissMode="on-drag">
+          <View style={styles.list}>
             <FlatList data={comments} keyExtractor={this.keyExtractor} renderItem={renderItem} />
           </View>
         )}

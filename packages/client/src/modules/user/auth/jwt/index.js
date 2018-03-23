@@ -69,9 +69,11 @@ const JWTLink = new ApolloLink((operation, forward) => {
                 setJWTContext(operation);
                 retrySub = forward(operation).subscribe(observer);
               } catch (e) {
+                // We have received error during refresh - drop tokens and return original request result
                 window.localStorage.removeItem('accessToken');
                 window.localStorage.removeItem('refreshToken');
-                observer.error(e);
+                observer.next(result);
+                observer.complete();
               }
             })();
           } else {
@@ -105,7 +107,12 @@ class DataRootComponent extends React.Component {
     apolloClient = client;
     const refreshToken = window.localStorage.getItem('refreshToken');
     if (refreshToken) {
-      const result = client.readQuery({ query: CURRENT_USER_QUERY });
+      let result;
+      try {
+        result = client.readQuery({ query: CURRENT_USER_QUERY });
+      } catch (e) {
+        // If not current user in the cache, then we have no cache yet, it is fine
+      }
       if (result && !result.currentUser) {
         // If we don't have current user but have refresh token,
         // then we need to trigger our token refresh logic by sending network request

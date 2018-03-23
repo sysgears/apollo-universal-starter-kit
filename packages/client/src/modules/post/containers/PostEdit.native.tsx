@@ -1,19 +1,9 @@
 import React from 'react';
-import { graphql, compose, OptionProps } from 'react-apollo';
-import { ApolloError } from 'apollo-client';
+import { compose } from 'react-apollo';
 
 import PostEditView from '../components/PostEditView';
-import { AddPost } from './Post.native';
-import { PostOperation, PostQuery, PostEditProps, PostQueryResult as PostOperationResult } from '../types';
-
-import POST_QUERY from '../graphql/PostQuery.graphql';
-import ADD_POST from '../graphql/AddPost.graphql';
-import EDIT_POST from '../graphql/EditPost.graphql';
-import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
-
-export interface PostProps {
-  navigation: any;
-}
+import { PostEditProps } from '../types';
+import { withPost, withPostAdding, withPostEditing, getSubscriptionPostOptions } from '../graphql';
 
 class PostEdit extends React.Component<PostEditProps, any> {
   public subscription: any;
@@ -47,10 +37,7 @@ class PostEdit extends React.Component<PostEditProps, any> {
   public subscribeToPostEdit = (postId: number) => {
     const { subscribeToMore } = this.props;
 
-    this.subscription = subscribeToMore({
-      document: POST_SUBSCRIPTION,
-      variables: { id: postId }
-    });
+    this.subscription = subscribeToMore(getSubscriptionPostOptions(postId));
   };
 
   public render() {
@@ -58,67 +45,4 @@ class PostEdit extends React.Component<PostEditProps, any> {
   }
 }
 
-export default compose(
-  graphql<PostQuery>(POST_QUERY, {
-    options: ({ match, navigation }) => {
-      let id: number = 0;
-      if (match) {
-        id = match.params.id;
-      } else if (navigation) {
-        id = navigation.state.params.id;
-      }
-
-      return {
-        variables: { id }
-      };
-    },
-    props({ data: { loading, error, post, subscribeToMore } }) {
-      if (error) {
-        throw new ApolloError(error);
-      }
-      return { loading, post, subscribeToMore };
-    }
-  }),
-  graphql(ADD_POST, {
-    props: ({ ownProps: { navigation }, mutate }: OptionProps<PostProps, PostOperation>) => ({
-      addPost: async (title: string, content: string) => {
-        const { data } = await mutate({
-          variables: { input: { title, content } },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            addPost: {
-              __typename: 'Post',
-              id: null,
-              title,
-              content,
-              comments: []
-            }
-          },
-          updateQueries: {
-            posts: (prev: PostOperationResult, { mutationResult: { data: { addPost } } }) => {
-              return AddPost(prev, addPost);
-            }
-          }
-        });
-        if (navigation) {
-          return navigation.setParams({
-            id: data.addPost.id,
-            post: data.addPost
-          });
-        }
-      }
-    })
-  }),
-  graphql(EDIT_POST, {
-    props: ({ ownProps: { navigation }, mutate }: OptionProps<PostProps, PostOperation>) => ({
-      editPost: async (id: number, title: string, content: string) => {
-        await mutate({
-          variables: { input: { id, title, content } }
-        });
-        if (navigation) {
-          return navigation.goBack();
-        }
-      }
-    })
-  })
-)(PostEdit);
+export default compose(withPost, withPostAdding, withPostEditing)(PostEdit);

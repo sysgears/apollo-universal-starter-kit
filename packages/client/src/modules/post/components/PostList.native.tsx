@@ -4,7 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { StyleSheet, FlatList, Text, View, Platform, TouchableOpacity } from 'react-native';
 import { SwipeAction } from '../../common/components/native';
 
-import { PostListProps, Post } from '../types/post';
+import { PostProps, Post } from '../types/post';
 
 interface Node {
   node: Post;
@@ -14,7 +14,7 @@ interface RenderItemOptions {
   item: Node;
 }
 
-export default class PostList extends React.PureComponent<PostListProps, any> {
+export default class PostList extends React.PureComponent<PostProps, any> {
   public onEndReachedCalledDuringMomentum = false;
 
   public keyExtractor = (item: any) => item.node.id;

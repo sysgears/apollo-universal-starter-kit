@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { PageLayout, Table, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
-import { PostListProps, LoadMoreRowsFn, Posts } from '../types/post';
+import { PostProps, LoadMoreRowsFn, Posts } from '../types/post';
 
-export default class PostList extends React.PureComponent<PostListProps, any> {
+export default class PostList extends React.PureComponent<PostProps, any> {
   public handleDeletePost = (id: number) => {
     const { deletePost } = this.props;
     deletePost(id);

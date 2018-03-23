@@ -3,6 +3,8 @@ import React from 'react';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
+import { LayoutCenter } from '../../../common/components';
+
 import Feature from '../connector';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
@@ -96,6 +98,8 @@ const JWTLink = new ApolloLink((operation, forward) => {
   });
 });
 
+// TODO: shouldn't be needed at all when React Apollo will allow rendering
+// all queries as loading: true during SSR
 class DataRootComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -112,10 +116,9 @@ class DataRootComponent extends React.Component {
       try {
         result = client.readQuery({ query: CURRENT_USER_QUERY });
       } catch (e) {
-        // If no current user in the Apollo Cache, then we have no Apollo Cache yet
-        // and we shouldn't discard Apollo Cache since nothing to discard
+        // We have no current user in the cache, we need to load it to properly draw UI
       }
-      if (result && !result.currentUser) {
+      if (!result || !result.currentUser) {
         // If we don't have current user but have refresh token, this means our Apollo Cache
         // might be invalid: we received this Apollo Cache from server in __APOLLO_STATE__
         // as generated during server-sider rendering. Server had no idea about our client-side
@@ -138,7 +141,13 @@ class DataRootComponent extends React.Component {
   }
 
   render() {
-    return this.state.ready ? this.props.children : null;
+    return this.state.ready ? (
+      this.props.children
+    ) : (
+      <LayoutCenter>
+        <div className="text-center">App is loading...</div>
+      </LayoutCenter>
+    );
   }
 }
 

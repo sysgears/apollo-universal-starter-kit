@@ -49,13 +49,19 @@ const renderServerSide = async (req, res) => {
 
   const cache = new InMemoryCache();
 
-  const link = isApiExternal
+  const netLink = !isApiExternal
     ? new SchemaLink({ schema, context: await modules.createContext(req, res) })
     : new BatchHttpLink({ fetch });
   const linkState = withClientState({ ...clientModules.resolvers, cache });
 
+  const links = [...clientModules.link, linkState, netLink];
+
+  if (settings.app.logging.apolloLogging) {
+    links.unshift(new LoggingLink());
+  }
+
   const client = createApolloClient({
-    link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
+    link: ApolloLink.from(links),
     cache
   });
 
@@ -67,9 +73,11 @@ const renderServerSide = async (req, res) => {
     clientModules.getWrappedRoot(
       <Provider store={store}>
         <ApolloProvider client={client}>
-          <StaticRouter location={req.url} context={context}>
-            {Routes}
-          </StaticRouter>
+          {clientModules.getDataRoot(
+            <StaticRouter location={req.url} context={context}>
+              {Routes}
+            </StaticRouter>
+          )}
         </ApolloProvider>
       </Provider>,
       req

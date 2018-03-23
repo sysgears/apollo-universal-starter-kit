@@ -146,28 +146,24 @@ export default class Main extends React.Component {
     if (serverError) {
       this.state = { error: new ServerError(serverError), ready: true };
     } else {
-      this.state = { ready: false };
+      this.state = {};
     }
   }
 
   componentDidCatch(error, info) {
-    this.setState({ error, info, ready: true });
+    this.setState({ error, info });
   }
   render() {
-    if (this.state.ready) {
-      return this.state.error ? (
-        <RedBox error={this.state.error} />
-      ) : (
-        modules.getWrappedRoot(
-          <Provider store={store}>
-            <ApolloProvider client={client}>
-              {modules.getDataRoot(<ConnectedRouter history={history}>{Routes}</ConnectedRouter>)}
-            </ApolloProvider>
-          </Provider>
-        )
-      );
-    } else {
-      return null;
-    }
+    return this.state.error ? (
+      <RedBox error={this.state.error} />
+    ) : (
+      modules.getWrappedRoot(
+        <Provider store={store}>
+          <ApolloProvider client={client}>
+            {modules.getDataRoot(<ConnectedRouter history={history}>{Routes}</ConnectedRouter>)}
+          </ApolloProvider>
+        </Provider>
+      )
+    );
   }
 }

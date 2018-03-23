@@ -7,9 +7,9 @@ import PostForm from './PostForm.web';
 import PostComments from '../containers/PostComments.web';
 import settings from '../../../../../../settings';
 
-import { PostEditProps, AddPostFn, EditPostFn, Post, PostValues } from '../types';
+import { PostEditProps, AddPostFn, EditPostFn, Post } from '../types';
 
-const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (values: PostValues) => {
+const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (values: Post) => {
   if (post) {
     editPost(post.id, values.title, values.content);
   } else {

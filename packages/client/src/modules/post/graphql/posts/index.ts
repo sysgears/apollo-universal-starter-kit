@@ -2,7 +2,7 @@ import { ApolloError } from 'apollo-client';
 import { graphql, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 
-import { Post, PostQueryResult, PostOperationResult, PostEditOptionProps, PostOperation, PostQuery } from '../../types';
+import { Post, PostQueryResult, PostOperation, PostProps } from '../../types';
 import { Edge, SubscriptionData } from '../../../../../../common/types';
 
 import POSTS_QUERY from '../PostsQuery.graphql';
@@ -13,6 +13,10 @@ import EDIT_POST from '../EditPost.graphql';
 import POST_SUBSCRIPTION from '../PostSubscription.graphql';
 import POSTS_SUBSCRIPTION from '../PostsSubscription.graphql';
 
+interface PostEdge<T> extends Edge<T> {
+  __typename: string;
+}
+
 function AddPost(prev: PostQueryResult, node: Post) {
   // ignore if duplicate
   if (prev.posts.edges.some((post: any) => node.id === post.cursor)) {
@@ -20,9 +24,10 @@ function AddPost(prev: PostQueryResult, node: Post) {
   }
 
   const filteredPosts: Array<Edge<Post>> = prev.posts.edges.filter((post: any) => post.node.id !== null);
-  const edge: Edge<Post> = {
+  const edge: PostEdge<Post> = {
     cursor: node.id,
-    node
+    node,
+    __typename: 'Post'
   };
 
   return update(prev, {
@@ -98,7 +103,7 @@ const withPostList = graphql<PostQueryResult>(POSTS_QUERY, {
 });
 
 const withPostDeleting = graphql(DELETE_POST, {
-  props: ({ mutate }: OptionProps<any, PostOperationResult>) => ({
+  props: ({ mutate }: OptionProps<any, PostOperation>) => ({
     deletePost: (id: number) => {
       mutate({
         variables: { id },
@@ -121,7 +126,7 @@ const withPostDeleting = graphql(DELETE_POST, {
 
 export { withPostList, withPostDeleting };
 
-const withPost = graphql<PostQuery>(POST_QUERY, {
+const withPost = graphql<PostQueryResult>(POST_QUERY, {
   options: ({ match, navigation }) => {
     let id: number = 0;
     if (match) {
@@ -143,9 +148,9 @@ const withPost = graphql<PostQuery>(POST_QUERY, {
 });
 
 const withPostAdding = graphql(ADD_POST, {
-  props: ({ ownProps: { history, navigation }, mutate }: OptionProps<PostEditOptionProps, PostOperation>) => ({
+  props: ({ ownProps: { history, navigation }, mutate }: OptionProps<PostProps, PostOperation>) => ({
     addPost: async (title: string, content: string) => {
-      const { data } = await mutate({
+      const { data }: any = await mutate({
         variables: { input: { title, content } },
         optimisticResponse: {
           __typename: 'Mutation',
@@ -178,7 +183,7 @@ const withPostAdding = graphql(ADD_POST, {
 });
 
 const withPostEditing = graphql(EDIT_POST, {
-  props: ({ ownProps: { history, navigation }, mutate }: OptionProps<PostEditOptionProps, PostOperation>) => ({
+  props: ({ ownProps: { history, navigation }, mutate }: OptionProps<PostProps, PostOperation>) => ({
     editPost: async (id: number, title: string, content: string) => {
       await mutate({
         variables: { input: { id, title, content } }

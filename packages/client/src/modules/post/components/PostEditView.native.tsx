@@ -4,9 +4,9 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import PostForm from './PostForm.native';
 import PostComments from '../containers/PostComments.native';
 
-import { PostEditProps, AddPostFn, EditPostFn, Post, PostValues } from '../types';
+import { PostEditProps, AddPostFn, EditPostFn, Post } from '../types';
 
-const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (values: PostValues) => {
+const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (values: Post) => {
   if (post) {
     editPost(post.id, values.title, values.content);
   } else {

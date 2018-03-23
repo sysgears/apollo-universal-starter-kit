@@ -3,13 +3,13 @@ import { withFormik, ComponentDecorator } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
 import { required, validateForm } from '../../../../../common/validation';
-import { Comment, CommentValues, PostCommentFormProps, FormikCommentProps, CommentFormSchema } from '../types';
+import { Comment, PostCommentFormProps, FormikCommentProps } from '../types';
 
-const commentFormSchema: CommentFormSchema = {
+const commentFormSchema: any = {
   content: [required]
 };
 
-const validate = (values: CommentValues) => validateForm(values, commentFormSchema);
+const validate = (values: Comment) => validateForm(values, commentFormSchema);
 
 const PostCommentForm = ({ values, handleSubmit, comment }: PostCommentFormProps) => {
   return (
@@ -33,11 +33,11 @@ const PostCommentForm = ({ values, handleSubmit, comment }: PostCommentFormProps
 
 const PostCommentFormWithFormik: ComponentDecorator<FormikCommentProps, any> = withFormik({
   mapPropsToValues: ({ comment }) => ({ content: comment && comment.content }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }: any) {
+  async handleSubmit(values: Comment, { resetForm, props: { onSubmit } }: any) {
     await onSubmit(values);
     resetForm({ content: '' });
   },
-  validate: values => validate(values),
+  validate: (values: Comment) => validate(values),
   displayName: 'CommentForm', // helps with React DevTools,
   enableReinitialize: true
 });

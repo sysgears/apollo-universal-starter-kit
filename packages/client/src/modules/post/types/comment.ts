@@ -8,16 +8,13 @@ type EditCommentFn = (id: number, content: string) => any;
 type DeleteCommentFn = (id: number) => any;
 type OnCommentSelectFn = (comment: Comment) => void;
 
-export { AddCommentFn, DeleteCommentFn, OnCommentSelectFn, EditCommentFn };
-
 // Models
 interface Comment {
   id?: number;
   content: string;
 }
 
-interface PostCommentsProps extends QueryProps, CommentOperation, CommentQueryResult {
-  postId: number;
+interface PostCommentsProps extends QueryProps, CommentOperation, CommentQueryResult, CommentProps {
   comments: Comment[];
 }
 
@@ -25,17 +22,10 @@ interface CommentProps {
   postId: number;
 }
 
-interface PostCommentFormProps {
-  values: CommentValues;
-  handleSubmit: (values: CommentValues, formikBag: FormikBag<FormikCommentProps, CommentValues>) => void;
-  comment: Comment;
+interface PostCommentFormProps extends CommentQueryResult {
+  values: Comment;
+  handleSubmit: (values: Comment, formikBag: FormikBag<FormikCommentProps, Comment>) => void;
 }
-
-interface CommentFormSchema {
-  content: any[];
-}
-
-export { Comment, PostCommentsProps, CommentProps, PostCommentFormProps, CommentFormSchema };
 
 // Operations
 interface CommentOperation {
@@ -43,29 +33,21 @@ interface CommentOperation {
   editComment?: EditCommentFn;
   deleteComment?: DeleteCommentFn;
   onCommentSelect?: OnCommentSelectFn;
+  post?: Post;
 }
-
-interface CommentOperationResult {
-  post: Post;
-}
-
-export { CommentOperation, CommentOperationResult }
 
 // Queries
 interface CommentQueryResult {
   comment: Comment;
 }
 
-export { CommentQueryResult };
-
 // Formik values and props
-interface CommentValues {
-  content: string;
+interface FormikCommentProps extends CommentQueryResult, CommentProps {
+  onSubmit: any;
 }
 
-interface FormikCommentProps {
-  onSubmit: () => void;
-  comment: Comment;
-}
-
-export { CommentValues, FormikCommentProps };
+export { CommentOperation };
+export { CommentQueryResult };
+export { FormikCommentProps };
+export { Comment, PostCommentsProps, CommentProps, PostCommentFormProps };
+export { AddCommentFn, DeleteCommentFn, OnCommentSelectFn, EditCommentFn };

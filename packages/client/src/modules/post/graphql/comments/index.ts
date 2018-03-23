@@ -1,7 +1,7 @@
 import { graphql, compose, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 
-import { Comment, CommentOperation, CommentQueryResult, CommentProps, CommentOperationResult } from '../../types';
+import { Comment, CommentOperation, CommentQueryResult, CommentProps } from '../../types';
 import { SubscriptionData } from '../../../../../../common/types';
 
 import ADD_COMMENT from '../AddComment.graphql';
@@ -11,7 +11,7 @@ import ADD_COMMENT_CLIENT from '../AddComment.client.graphql';
 import COMMENT_QUERY_CLIENT from '../CommentQuery.client.graphql';
 import COMMENT_SUBSCRIPTION from '../CommentSubscription.graphql';
 
-function AddComment(prev: CommentOperationResult, node: Comment) {
+function AddComment(prev: CommentOperation, node: Comment) {
   // ignore if duplicate
   if (prev.post.comments.some((comment: Comment) => comment.id === node.id)) {
     return prev;
@@ -26,7 +26,7 @@ function AddComment(prev: CommentOperationResult, node: Comment) {
   });
 }
 
-function DeleteComment(prev: CommentOperationResult, id: number) {
+function DeleteComment(prev: CommentOperation, id: number) {
   const index: number = prev.post.comments.findIndex((comment: Comment) => comment.id === id);
 
   // ignore if not found
@@ -57,7 +57,7 @@ const withCommentAdding = graphql(ADD_COMMENT, {
           }
         },
         updateQueries: {
-          post: (prev: CommentOperationResult, { mutationResult: { data: { addComment } } }) => {
+          post: (prev: CommentOperation, { mutationResult: { data: { addComment } } }) => {
             if (prev.post) {
               return AddComment(prev, addComment);
             }
@@ -97,7 +97,7 @@ const withCommentDeleting = graphql(DELETE_COMMENT, {
           }
         },
         updateQueries: {
-          post: (prev: CommentOperationResult, { mutationResult: { data: { deleteComment } } }) => {
+          post: (prev: CommentOperation, { mutationResult: { data: { deleteComment } } }) => {
             if (prev.post) {
               return DeleteComment(prev, deleteComment.id);
             }
@@ -137,10 +137,10 @@ function getSubscriptionCommentOptions(postId: number) {
     document: COMMENT_SUBSCRIPTION,
     variables: { postId },
     updateQuery: (
-      prev: CommentOperationResult,
+      prev: CommentOperation,
       { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }: SubscriptionData<CommentUpdated>
     ) => {
-      let newResult: CommentOperationResult = prev;
+      let newResult: CommentOperation = prev;
 
       if (mutation === 'CREATED') {
         newResult = AddComment(prev, node);

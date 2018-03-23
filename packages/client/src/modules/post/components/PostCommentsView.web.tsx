@@ -2,7 +2,7 @@ import React from 'react';
 import { Table, Button } from '../../common/components/web';
 import PostCommentForm from './PostCommentForm.web';
 
-import { PostCommentsProps, Comment, CommentValues } from '../types';
+import { PostCommentsProps, Comment } from '../types';
 
 export default class PostCommentsView extends React.PureComponent<PostCommentsProps, any> {
   public handleEditComment = (id: number, content: string) => {
@@ -20,7 +20,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
     deleteComment(id);
   };
 
-  public onSubmit = () => (values: CommentValues) => {
+  public onSubmit = () => (values: Comment) => {
     const { comment, postId, addComment, editComment, onCommentSelect } = this.props;
 
     if (comment.id === null) {
@@ -70,7 +70,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
     return (
       <div>
         <h3>Comments</h3>
-        <PostCommentForm postId={postId} onSubmit={this.onSubmit()} initialValues={comment} comment={comment} />
+        <PostCommentForm postId={postId} onSubmit={this.onSubmit()} comment={comment} />
         <h1 />
         <Table dataSource={comments} columns={columns} />
       </div>

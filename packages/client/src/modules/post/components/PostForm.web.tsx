@@ -4,14 +4,14 @@ import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button } from '../../common/components/web';
 import { required, validateForm } from '../../../../../common/validation';
 
-import { PostFormProps, PostValues, PostFormikProps, PostFormSchema } from '../types';
+import { PostFormProps, PostFormikProps, Post } from '../types';
 
-const postFormSchema: PostFormSchema = {
+const postFormSchema: any = {
   title: [required],
   content: [required]
 };
 
-const validate = (values: PostValues) => validateForm(values, postFormSchema);
+const validate = (values: Post) => validateForm(values, postFormSchema);
 
 const PostForm = ({ values, handleSubmit, submitting }: PostFormProps) => {
   return (
@@ -30,8 +30,8 @@ const PostFormWithFormik: ComponentDecorator<PostFormikProps, any> = withFormik(
     title: post && post.title,
     content: post && post.content
   }),
-  validate: (values: PostValues) => validate(values),
-  handleSubmit(values: PostValues, { props: { onSubmit } }: any) {
+  validate: (values: Post) => validate(values),
+  handleSubmit(values: Post, { props: { onSubmit } }: any) {
     onSubmit(values);
   },
   enableReinitialize: true,

@@ -13,15 +13,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { SwipeAction } from '../../common/components/native';
 
 import PostCommentForm from './PostCommentForm.native';
-import {
-  PostCommentsProps,
-  Comment,
-  CommentValues,
-  AddCommentFn,
-  DeleteCommentFn,
-  EditCommentFn,
-  OnCommentSelectFn
-} from '../types';
+import { PostCommentsProps, Comment, AddCommentFn, DeleteCommentFn, EditCommentFn, OnCommentSelectFn } from '../types';
 
 interface RenderItemProps {
   item: Comment;
@@ -81,7 +73,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
     addComment: AddCommentFn,
     editComment: EditCommentFn,
     onCommentSelect: OnCommentSelectFn
-  ) => (values: CommentValues) => {
+  ) => (values: Comment) => {
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {

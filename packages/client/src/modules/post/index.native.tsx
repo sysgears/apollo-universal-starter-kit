@@ -9,12 +9,9 @@ import Post from './containers/Post.native';
 import PostEdit from './containers/PostEdit.native';
 
 import clientStateParams from './resolvers';
+import { PostProps } from './types';
 
 import Feature from '../connector.native';
-
-interface PostProps {
-  navigation: any;
-}
 
 class PostListScreen extends React.Component<PostProps, any> {
   public static navigationOptions = ({ navigation }: any) => ({

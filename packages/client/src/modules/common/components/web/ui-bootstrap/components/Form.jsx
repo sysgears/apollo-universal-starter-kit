@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form as RSForm } from 'reactstrap';
 
-const Form = ({ children, layout, ...props }) => {
+const Form = props => {
+  const { children, layout, ...rest } = props;
   let inline = false;
   if (layout === 'inline') {
     inline = true;
   }
   return (
-    <RSForm {...props} inline={inline}>
+    <RSForm {...rest} inline={inline}>
       {children}
     </RSForm>
   );

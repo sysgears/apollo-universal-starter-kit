@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
-import PostForm from './PostCommentForm';
+import PostForm from './PostForm.native';
 import PostComments from '../containers/PostComments.native';
 
 import { PostEditProps, AddPostFn, EditPostFn, Post, PostValues } from '../types';

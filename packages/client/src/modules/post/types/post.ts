@@ -4,6 +4,7 @@ import { Comment } from './comment';
 import { Location, History } from 'history';
 import { EntityList, PageInfo } from '../../../../../common/types';
 import { NavigationScreenProp } from 'react-navigation';
+import { FormikBag } from 'formik';
 
 // Post types
 
@@ -41,7 +42,15 @@ interface PostProps extends PostQueryResult {
   navigation: NavigationScreenProp<any>;
 }
 
-export { Post, Posts, PostEditProps, PostProps };
+interface PostFormProps {
+  handleSubmit: (values: PostValues, formikBag: FormikBag<PostFormikProps, PostFormProps>) => void;
+  submitting?: boolean;
+  values: any;
+  post: Post;
+  onSubmit: any;
+}
+
+export { Post, Posts, PostEditProps, PostProps, PostFormProps };
 
 // Operations
 interface PostOperation {
@@ -74,11 +83,16 @@ interface PostQueryResult extends QueryProps {
 
 export { PostQuery, PostQueryResult };
 
-// Formik values
+// Formik props and values
 
 interface PostValues {
   title: string;
   content: string;
 }
 
-export { PostValues };
+interface PostFormikProps {
+  onSubmit: (post: Post, addPost: AddPostFn, editPost: EditPostFn) => void;
+  post: any;
+}
+
+export { PostValues, PostFormikProps };

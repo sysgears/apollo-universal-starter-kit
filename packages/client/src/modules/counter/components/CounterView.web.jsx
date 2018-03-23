@@ -19,10 +19,8 @@ const CounterView = ({
   onReduxIncrement,
   counterState,
   addCounterState,
-  t,
-  ...props
+  t
 }) => {
-  console.log(props.i18n);
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Counter`}

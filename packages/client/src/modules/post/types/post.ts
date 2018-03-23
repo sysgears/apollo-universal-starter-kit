@@ -1,4 +1,3 @@
-import { SubscribeToMoreOptions } from 'apollo-client';
 import { match as Match } from 'react-router';
 import { QueryProps } from 'react-apollo';
 import { Comment } from './comment';
@@ -28,9 +27,7 @@ interface Posts {
   pageInfo: PageInfo;
 }
 
-interface PostEditProps extends QueryProps {
-  loading: boolean;
-  post: Post;
+interface PostEditProps extends PostQuery {
   addPost: AddPostFn;
   editPost: EditPostFn;
   match: Match<any>;
@@ -39,11 +36,8 @@ interface PostEditProps extends QueryProps {
   comments: Comment[];
 }
 
-interface PostProps extends QueryProps {
-  loadMoreRows: LoadMoreRowsFn;
+interface PostProps extends PostQueryResult {
   deletePost: DeletePostFn;
-  loading: boolean;
-  posts: EntityList<Post>;
   navigation: NavigationScreenProp<any>;
 }
 
@@ -73,7 +67,7 @@ interface PostQuery extends QueryProps {
 }
 
 interface PostQueryResult extends QueryProps {
-  loadMoreRows: () => EntityList<Post>;
+  loadMoreRows: LoadMoreRowsFn;
   loading: boolean;
   posts: EntityList<Post>;
 }

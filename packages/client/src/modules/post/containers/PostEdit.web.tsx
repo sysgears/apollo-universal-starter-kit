@@ -1,6 +1,5 @@
 import React from 'react';
 import { compose } from 'react-apollo';
-import { History } from 'history';
 
 import PostEditView from '../components/PostEditView.web';
 import { PostEditProps } from '../types';

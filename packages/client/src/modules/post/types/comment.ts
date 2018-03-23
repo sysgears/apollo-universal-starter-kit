@@ -1,4 +1,3 @@
-import { SubscribeToMoreOptions } from 'apollo-client';
 import { QueryProps } from 'react-apollo';
 import { Post } from './post';
 
@@ -14,10 +13,9 @@ interface Comment {
   content: string;
 }
 
-interface PostCommentsProps extends QueryProps, CommentOperation {
+interface PostCommentsProps extends QueryProps, CommentOperation, CommentQueryResult {
   postId: number;
   comments: Comment[];
-  comment: Comment;
 }
 
 interface CommentProps {

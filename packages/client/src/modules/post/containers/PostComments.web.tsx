@@ -1,9 +1,8 @@
 import React from 'react';
 import { compose } from 'react-apollo';
-import update from 'immutability-helper';
 
 import PostCommentsView from '../components/PostCommentsView.web';
-import { Comment, PostCommentsProps, CommentOperationResult } from '../types';
+import { PostCommentsProps } from '../types';
 
 import {
   withCommentAdding,

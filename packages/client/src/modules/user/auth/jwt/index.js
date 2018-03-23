@@ -32,7 +32,8 @@ const isTokenRefreshNeeded = (operation, result) => {
         }
       }
     } else if (operation.operationName === 'currentUser' && result.data.currentUser === null) {
-      // We have refresh token here, and empty current user, it means we need to refresh tokens
+      // We have refresh token here, and empty current user received as a network request result,
+      // it means we need to refresh tokens
       needRefresh = true;
     }
   }
@@ -111,17 +112,22 @@ class DataRootComponent extends React.Component {
       try {
         result = client.readQuery({ query: CURRENT_USER_QUERY });
       } catch (e) {
-        // If not current user in the cache, then we have no cache yet, it is fine
+        // If no current user in the Apollo Cache, then we have no Apollo Cache yet
+        // and we shouldn't discard Apollo Cache since nothing to discard
       }
       if (result && !result.currentUser) {
-        // If we don't have current user but have refresh token,
-        // then we need to trigger our token refresh logic by sending network request
+        // If we don't have current user but have refresh token, this means our Apollo Cache
+        // might be invalid: we received this Apollo Cache from server in __APOLLO_STATE__
+        // as generated during server-sider rendering. Server had no idea about our client-side
+        // access token and refresh token. In this case we need to trigger our JWT link
+        // by sending network request
         const { data: { currentUser } } = await client.query({
           query: CURRENT_USER_QUERY,
           fetchPolicy: 'network-only'
         });
-        // If we have received current user, then we have invalid Apollo Cache and we should discard it
         if (currentUser) {
+          // If we have received current user, then we had invalid Apollo Cache previously
+          // and we should discard it
           await client.cache.reset();
           await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser } });
           await client.cache.writeData({ data: modules.resolvers.defaults });

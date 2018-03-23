@@ -16,3 +16,13 @@ interface PageInfo {
 }
 
 export { PageInfo, EntityList, Edge };
+
+// Subscription data
+
+interface Data<T> {
+  data: T;
+}
+
+export interface SubscriptionData<T> {
+  subscriptionData: Data<T>;
+}

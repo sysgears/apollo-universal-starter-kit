@@ -1,5 +1,6 @@
 import { graphql, OptionProps, compose } from 'react-apollo';
 import { ApolloError } from 'apollo-client';
+import { SubscriptionData } from '../../../../../common/types';
 import update from 'immutability-helper';
 
 import COUNTER_QUERY from './CounterQuery.graphql';
@@ -15,20 +16,12 @@ interface CounterUpdated {
   counterUpdated: Counter;
 }
 
-interface CounterData {
-  data: CounterUpdated;
-}
-
-interface SubscriptionResult {
-  subscriptionData: CounterData;
-}
-
 const subscriptionOptions = {
   document: COUNTER_SUBSCRIPTION,
   variables: {},
   updateQuery: (
     prev: CounterQueryResult,
-    { subscriptionData: { data: { counterUpdated: { amount } } } }: SubscriptionResult
+    { subscriptionData: { data: { counterUpdated: { amount } } } }: SubscriptionData<CounterUpdated>
   ) => {
     return update<CounterQueryResult>(prev, {
       counter: {

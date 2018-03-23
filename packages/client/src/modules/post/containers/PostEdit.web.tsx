@@ -2,17 +2,17 @@ import React from 'react';
 import { compose } from 'react-apollo';
 
 import PostEditView from '../components/PostEditView.web';
-import { PostEditProps } from '../types';
+import { PostProps } from '../types';
 import { withPost, withPostAdding, withPostEditing, getSubscriptionPostOptions } from '../graphql';
 
-class PostEdit extends React.Component<PostEditProps, any> {
+class PostEdit extends React.Component<PostProps, any> {
   public subscription: any;
-  constructor(props: PostEditProps) {
+  constructor(props: PostProps) {
     super(props);
     this.subscription = null;
   }
 
-  public componentWillReceiveProps(nextProps: PostEditProps) {
+  public componentWillReceiveProps(nextProps: PostProps) {
     if (!nextProps.loading) {
       // Check if props have changed and, if necessary, stop the subscription
       if (this.subscription && this.props.post.id !== nextProps.post.id) {

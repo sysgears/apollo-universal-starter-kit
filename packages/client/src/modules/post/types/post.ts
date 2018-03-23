@@ -22,20 +22,6 @@ interface Post {
   comments: Comment[];
 }
 
-interface Posts {
-  posts?: EntityList<Post>;
-  pageInfo: PageInfo;
-}
-
-interface PostEditProps
-  extends PostQueryResult,
-    PostOperation,
-    RouteComponentProps<any>,
-    QueryProps,
-    NavigationScreenProps {
-  comments: Comment[];
-}
-
 interface PostProps
   extends PostQueryResult,
     PostOperation,
@@ -64,7 +50,6 @@ interface PostQueryResult {
 }
 
 // Formik props
-
 interface PostFormikProps {
   onSubmit: (post: Post, addPost: AddPostFn, editPost: EditPostFn) => void;
   post: Post;
@@ -74,4 +59,4 @@ export { PostQueryResult };
 export { PostOperation };
 export { PostFormikProps };
 export { EditPostFn, AddPostFn, LoadMoreRowsFn };
-export { Post, Posts, PostEditProps, PostProps, PostFormProps };
+export { Post, PostProps, PostFormProps };

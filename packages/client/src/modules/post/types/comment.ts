@@ -14,11 +14,8 @@ interface Comment {
   content: string;
 }
 
-interface PostCommentsProps extends QueryProps, CommentOperation, CommentQueryResult, CommentProps {
+interface PostCommentsProps extends QueryProps, CommentOperation, CommentQueryResult {
   comments: Comment[];
-}
-
-interface CommentProps {
   postId: number;
 }
 
@@ -42,12 +39,13 @@ interface CommentQueryResult {
 }
 
 // Formik values and props
-interface FormikCommentProps extends CommentQueryResult, CommentProps {
+interface FormikCommentProps extends CommentQueryResult {
   onSubmit: any;
+  postId: number;
 }
 
 export { CommentOperation };
 export { CommentQueryResult };
 export { FormikCommentProps };
-export { Comment, PostCommentsProps, CommentProps, PostCommentFormProps };
+export { Comment, PostCommentsProps, PostCommentFormProps };
 export { AddCommentFn, DeleteCommentFn, OnCommentSelectFn, EditCommentFn };

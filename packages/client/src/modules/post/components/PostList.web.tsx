@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { PageLayout, Table, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
-import { PostProps, LoadMoreRowsFn, Posts } from '../types/post';
+import { PostProps, LoadMoreRowsFn, Post } from '../types/post';
+import { EntityList } from '../../../../../common/types';
 
 export default class PostList extends React.PureComponent<PostProps, any> {
   public handleDeletePost = (id: number) => {
@@ -12,7 +13,7 @@ export default class PostList extends React.PureComponent<PostProps, any> {
     deletePost(id);
   };
 
-  public renderLoadMore = (posts: Posts, loadMoreRows: LoadMoreRowsFn) => {
+  public renderLoadMore = (posts: EntityList<Post>, loadMoreRows: LoadMoreRowsFn) => {
     if (posts.pageInfo.hasNextPage) {
       return (
         <Button id="load-more" color="primary" onClick={loadMoreRows}>

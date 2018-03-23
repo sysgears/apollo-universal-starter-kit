@@ -7,7 +7,7 @@ import PostForm from './PostForm.web';
 import PostComments from '../containers/PostComments.web';
 import settings from '../../../../../../settings';
 
-import { PostEditProps, AddPostFn, EditPostFn, Post } from '../types';
+import { PostProps, AddPostFn, EditPostFn, Post } from '../types';
 
 const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (values: Post) => {
   if (post) {
@@ -17,7 +17,7 @@ const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (valu
   }
 };
 
-const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost }: PostEditProps) => {
+const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost }: PostProps) => {
   let postObj = post;
   // if new post was just added read it from router
   if (!postObj && location.state) {

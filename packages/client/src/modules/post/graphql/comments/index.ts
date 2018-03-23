@@ -1,7 +1,7 @@
 import { graphql, compose, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 
-import { Comment, CommentOperation, CommentQueryResult, CommentProps } from '../../types';
+import { Comment, CommentOperation, CommentQueryResult, PostCommentsProps } from '../../types';
 import { SubscriptionData } from '../../../../../../common/types';
 
 import ADD_COMMENT from '../AddComment.graphql';
@@ -68,7 +68,7 @@ const withCommentAdding = graphql(ADD_COMMENT, {
 });
 
 const withCommentEditing = graphql(EDIT_COMMENT, {
-  props: ({ ownProps: { postId }, mutate }: OptionProps<CommentProps, CommentOperation>) => ({
+  props: ({ ownProps: { postId }, mutate }: OptionProps<PostCommentsProps, CommentOperation>) => ({
     editComment: (id: number, content: string) =>
       mutate({
         variables: { input: { id, postId, content } },
@@ -85,7 +85,7 @@ const withCommentEditing = graphql(EDIT_COMMENT, {
 });
 
 const withCommentDeleting = graphql(DELETE_COMMENT, {
-  props: ({ ownProps: { postId }, mutate }: OptionProps<CommentProps, CommentOperation>) => ({
+  props: ({ ownProps: { postId }, mutate }: OptionProps<PostCommentsProps, CommentOperation>) => ({
     deleteComment: (id: number) =>
       mutate({
         variables: { input: { id, postId } },

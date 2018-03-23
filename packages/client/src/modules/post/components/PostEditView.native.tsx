@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import PostForm from './PostForm.native';
 import PostComments from '../containers/PostComments.native';
 
-import { PostEditProps, AddPostFn, EditPostFn, Post } from '../types';
+import { PostProps, AddPostFn, EditPostFn, Post } from '../types';
 
 const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (values: Post) => {
   if (post) {
@@ -14,7 +14,7 @@ const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (valu
   }
 };
 
-const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, editPost }: PostEditProps) => {
+const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, editPost }: PostProps) => {
   let postObj: Post = post;
 
   // if new post was just added read it from router

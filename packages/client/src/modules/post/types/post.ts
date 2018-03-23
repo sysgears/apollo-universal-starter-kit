@@ -43,14 +43,19 @@ interface PostProps extends PostQueryResult {
 }
 
 interface PostFormProps {
-  handleSubmit: (values: PostValues, formikBag: FormikBag<PostFormikProps, PostFormProps>) => void;
+  handleSubmit: (values: PostValues, formikBag: FormikBag<PostFormikProps, PostValues>) => void;
   submitting?: boolean;
   values: any;
   post: Post;
   onSubmit: any;
 }
 
-export { Post, Posts, PostEditProps, PostProps, PostFormProps };
+interface PostFormSchema {
+  title: any[];
+  content: any[];
+}
+
+export { Post, Posts, PostEditProps, PostProps, PostFormProps, PostFormSchema };
 
 // Operations
 interface PostOperation {

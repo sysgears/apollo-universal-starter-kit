@@ -12,7 +12,7 @@ import {
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { SwipeAction } from '../../common/components/native';
 
-import PostCommentForm from './PostCommentForm';
+import PostCommentForm from './PostCommentForm.native';
 import {
   PostCommentsProps,
   Comment,

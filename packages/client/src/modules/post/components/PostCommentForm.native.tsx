@@ -1,17 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
+import { withFormik, ComponentDecorator } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
+import { Comment, CommentValues, PostCommentFormProps, FormikCommentProps, CommentFormSchema } from '../types';
 
-const commentFormSchema = {
+const commentFormSchema: CommentFormSchema = {
   content: [required]
 };
 
-const validate = values => validateForm(values, commentFormSchema);
+const validate = (values: CommentValues) => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, comment }) => {
+const PostCommentForm = ({ values, handleSubmit, comment }: PostCommentFormProps) => {
   let operation = 'Add';
   if (comment.id !== null) {
     operation = 'Edit';
@@ -25,20 +25,10 @@ const PostCommentForm = ({ values, handleSubmit, comment }) => {
   );
 };
 
-PostCommentForm.propTypes = {
-  handleSubmit: PropTypes.func,
-  setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func,
-  comment: PropTypes.object,
-  onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
-  values: PropTypes.object
-};
-
-const PostCommentFormWithFormik = withFormik({
-  mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
+const PostCommentFormWithFormik: ComponentDecorator<FormikCommentProps, any> = withFormik({
+  mapPropsToValues: ({ comment }) => ({ content: comment && comment.content }),
   validate: values => validate(values),
-  handleSubmit: async (values, { resetForm, props: { onSubmit } }) => {
+  handleSubmit: async (values, { resetForm, props: { onSubmit } }: any) => {
     await onSubmit(values);
     resetForm({ content: '' });
   },

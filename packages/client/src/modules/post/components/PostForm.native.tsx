@@ -4,9 +4,9 @@ import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
 
-import { PostFormProps, PostValues, PostFormikProps } from '../types';
+import { PostFormProps, PostValues, PostFormikProps, PostFormSchema } from '../types';
 
-const postFormSchema: any = {
+const postFormSchema: PostFormSchema = {
   title: [required],
   content: [required]
 };

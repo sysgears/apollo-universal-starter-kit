@@ -1,5 +1,6 @@
 import { QueryProps } from 'react-apollo';
 import { Post } from './post';
+import { FormikBag } from 'formik';
 
 // Comment types
 type AddCommentFn = (content: string, postId: number) => any;
@@ -24,7 +25,17 @@ interface CommentProps {
   postId: number;
 }
 
-export { Comment, PostCommentsProps, CommentProps}
+interface PostCommentFormProps {
+  values: CommentValues;
+  handleSubmit: (values: CommentValues, formikBag: FormikBag<FormikCommentProps, CommentValues>) => void;
+  comment: Comment;
+}
+
+interface CommentFormSchema {
+  content: any[];
+}
+
+export { Comment, PostCommentsProps, CommentProps, PostCommentFormProps, CommentFormSchema };
 
 // Operations
 interface CommentOperation {
@@ -52,4 +63,9 @@ interface CommentValues {
   content: string;
 }
 
-export { CommentValues };
+interface FormikCommentProps {
+  onSubmit: () => void;
+  comment: Comment;
+}
+
+export { CommentValues, FormikCommentProps };

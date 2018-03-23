@@ -73,3 +73,12 @@ interface PostQueryResult extends QueryProps {
 }
 
 export { PostQuery, PostQueryResult };
+
+// Formik values
+
+interface PostValues {
+  title: string;
+  content: string;
+}
+
+export { PostValues };

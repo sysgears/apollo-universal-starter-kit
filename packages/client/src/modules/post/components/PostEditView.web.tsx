@@ -1,14 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
 import { PageLayout } from '../../common/components/web';
-import PostForm from './PostForm';
-import PostComments from '../containers/PostComments';
+import PostForm from './PostForm.web';
+import PostComments from '../containers/PostComments.web';
 import settings from '../../../../../../settings';
 
-const onSubmit = (post, addPost, editPost) => values => {
+import { PostEditProps, AddPostFn, EditPostFn, Post, PostValues } from '../types';
+
+const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (values: PostValues) => {
   if (post) {
     editPost(post.id, values.title, values.content);
   } else {
@@ -16,7 +17,7 @@ const onSubmit = (post, addPost, editPost) => values => {
   }
 };
 
-const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost }) => {
+const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost }: PostEditProps) => {
   let postObj = post;
   // if new post was just added read it from router
   if (!postObj && location.state) {
@@ -62,16 +63,6 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
       </PageLayout>
     );
   }
-};
-
-PostEditView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  post: PropTypes.object,
-  addPost: PropTypes.func.isRequired,
-  editPost: PropTypes.func.isRequired,
-  match: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
-  subscribeToMore: PropTypes.func.isRequired
 };
 
 export default PostEditView;

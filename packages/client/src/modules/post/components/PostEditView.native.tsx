@@ -1,11 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
-import PostForm from './PostForm';
-import PostComments from '../containers/PostComments';
+import PostForm from './PostCommentForm';
+import PostComments from '../containers/PostComments.native';
 
-const onSubmit = (post, addPost, editPost) => values => {
+import { PostEditProps, AddPostFn, EditPostFn, Post, PostValues } from '../types';
+
+const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (values: PostValues) => {
   if (post) {
     editPost(post.id, values.title, values.content);
   } else {
@@ -13,8 +14,8 @@ const onSubmit = (post, addPost, editPost) => values => {
   }
 };
 
-const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, editPost }) => {
-  let postObj = post;
+const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, editPost }: PostEditProps) => {
+  let postObj: Post = post;
 
   // if new post was just added read it from router
   if (!postObj && navigation.state) {
@@ -43,16 +44,7 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
   }
 };
 
-PostEditView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  post: PropTypes.object,
-  addPost: PropTypes.func.isRequired,
-  editPost: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired,
-  subscribeToMore: PropTypes.func.isRequired
-};
-
-const styles = StyleSheet.create({
+const styles: any = StyleSheet.create({
   container: {
     flexDirection: 'column'
   }

@@ -4,16 +4,15 @@ import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import { LayoutCenter } from '../../../common/components';
-
+import { getItem, setItem, removeItem } from './tokenStorage';
 import Feature from '../connector';
+import modules from '../../..';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import CURRENT_USER_QUERY from '../../graphql/CurrentUserQuery.graphql';
 
-import modules from '../../..';
-
-const setJWTContext = operation => {
-  const accessToken = window.localStorage.getItem('accessToken');
+const setJWTContext = async operation => {
+  const accessToken = await getItem('accessToken');
   operation.setContext({
     credentials: 'same-origin',
     headers: {
@@ -22,9 +21,9 @@ const setJWTContext = operation => {
   });
 };
 
-const isTokenRefreshNeeded = (operation, result) => {
+const isTokenRefreshNeeded = async (operation, result) => {
   let needRefresh = false;
-  const refreshToken = window.localStorage.getItem('refreshToken');
+  const refreshToken = await getItem('refreshToken');
   if (refreshToken && operation.operationName !== 'refreshTokens') {
     if (result.errors) {
       for (const error of result.errors) {
@@ -46,50 +45,50 @@ let apolloClient;
 
 const JWTLink = new ApolloLink((operation, forward) => {
   return new Observable(observer => {
-    if (['login', 'refreshTokens'].indexOf(operation.operationName) < 0) {
-      setJWTContext(operation);
-    }
     let sub, retrySub;
-    try {
-      sub = forward(operation).subscribe({
-        next: result => {
-          if (operation.operationName === 'login') {
-            const { data: { login: { tokens: { accessToken, refreshToken } } } } = result;
-            window.localStorage.setItem('accessToken', accessToken);
-            window.localStorage.setItem('refreshToken', refreshToken);
-            observer.next(result);
-            observer.complete();
-          } else if (isTokenRefreshNeeded(operation, result)) {
-            (async () => {
+    (async () => {
+      if (['login', 'refreshTokens'].indexOf(operation.operationName) < 0) {
+        await setJWTContext(operation);
+      }
+      try {
+        sub = forward(operation).subscribe({
+          next: async result => {
+            if (operation.operationName === 'login') {
+              const { data: { login: { tokens: { accessToken, refreshToken } } } } = result;
+              await setItem('accessToken', accessToken);
+              await setItem('refreshToken', refreshToken);
+              observer.next(result);
+              observer.complete();
+            } else if (await isTokenRefreshNeeded(operation, result)) {
               try {
                 const { data: { refreshTokens: { accessToken, refreshToken } } } = await apolloClient.mutate({
                   mutation: REFRESH_TOKENS_MUTATION,
-                  variables: { refreshToken: window.localStorage.getItem('refreshToken') }
+                  variables: { refreshToken: await getItem('refreshToken') }
                 });
-                window.localStorage.setItem('accessToken', accessToken);
-                window.localStorage.setItem('refreshToken', refreshToken);
+                await setItem('accessToken', accessToken);
+                await setItem('refreshToken', refreshToken);
                 // Retry current operation
                 setJWTContext(operation);
                 retrySub = forward(operation).subscribe(observer);
               } catch (e) {
                 // We have received error during refresh - drop tokens and return original request result
-                window.localStorage.removeItem('accessToken');
-                window.localStorage.removeItem('refreshToken');
+                await removeItem('accessToken');
+                await removeItem('refreshToken');
                 observer.next(result);
                 observer.complete();
               }
-            })();
-          } else {
-            observer.next(result);
-            observer.complete();
-          }
-        },
-        error: observer.error.bind(observer),
-        complete: () => {}
-      });
-    } catch (e) {
-      observer.error(e);
-    }
+            } else {
+              observer.next(result);
+              observer.complete();
+            }
+          },
+          error: observer.error.bind(observer),
+          complete: () => {}
+        });
+      } catch (e) {
+        observer.error(e);
+      }
+    })();
 
     return () => {
       if (sub) sub.unsubscribe();
@@ -110,7 +109,7 @@ class DataRootComponent extends React.Component {
   async componentDidMount() {
     const { client } = this.props;
     apolloClient = client;
-    const refreshToken = window.localStorage.getItem('refreshToken');
+    const refreshToken = await getItem('refreshToken');
     if (refreshToken) {
       let result;
       try {

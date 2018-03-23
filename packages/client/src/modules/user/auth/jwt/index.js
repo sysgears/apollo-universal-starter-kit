@@ -10,14 +10,6 @@ import CURRENT_USER_QUERY from '../../graphql/CurrentUserQuery.graphql';
 
 import modules from '../../..';
 
-const loginHandler = async loginResponse => {
-  if (loginResponse && loginResponse.tokens) {
-    const { accessToken, refreshToken } = loginResponse.tokens;
-    window.localStorage.setItem('accessToken', accessToken);
-    window.localStorage.setItem('refreshToken', refreshToken);
-  }
-};
-
 const setJWTContext = operation => {
   const accessToken = window.localStorage.getItem('accessToken');
   operation.setContext({
@@ -29,69 +21,76 @@ const setJWTContext = operation => {
 };
 
 const isTokenRefreshNeeded = (operation, result) => {
-  if (result.errors) {
-    for (const error of result.errors) {
-      if (error.message && error.message.indexOf('Not Authenticated') >= 0) {
-        return true;
+  let needRefresh = false;
+  const refreshToken = window.localStorage.getItem('refreshToken');
+  if (refreshToken && operation.operationName !== 'refreshTokens') {
+    if (result.errors) {
+      for (const error of result.errors) {
+        if (error.message && error.message.indexOf('Not Authenticated') >= 0) {
+          needRefresh = true;
+          break;
+        }
       }
+    } else if (operation.operationName === 'currentUser' && result.data.currentUser === null) {
+      // We have refresh token here, and empty current user, it means we need to refresh tokens
+      needRefresh = true;
     }
   }
-  if (operation.operationName === 'currentUser' && result.data.currentUser === null) {
-    // We have refresh token here, and empty current user, it means we need to refresh tokens
-    return true;
-  }
-  return false;
+  return needRefresh;
 };
 
 let apolloClient;
 
 const JWTLink = new ApolloLink((operation, forward) => {
-  const refreshToken = window.localStorage.getItem('refreshToken');
-  if (!refreshToken || ['login', 'refreshTokens'].indexOf(operation.operationName) >= 0) {
-    return forward(operation);
-  } else {
-    return new Observable(observer => {
+  return new Observable(observer => {
+    if (['login', 'refreshTokens'].indexOf(operation.operationName) < 0) {
       setJWTContext(operation);
-      let sub, retrySub;
-      try {
-        sub = forward(operation).subscribe({
-          next: result => {
-            if (isTokenRefreshNeeded(operation, result)) {
-              (async () => {
-                try {
-                  const { data: { refreshTokens: { accessToken, refreshToken } } } = await apolloClient.mutate({
-                    mutation: REFRESH_TOKENS_MUTATION,
-                    variables: { refreshToken: window.localStorage.getItem('refreshToken') }
-                  });
-                  window.localStorage.setItem('accessToken', accessToken);
-                  window.localStorage.setItem('refreshToken', refreshToken);
-                  // Retry current operation
-                  setJWTContext(operation);
-                  retrySub = forward(operation).subscribe(observer);
-                } catch (e) {
-                  window.localStorage.removeItem('accessToken');
-                  window.localStorage.removeItem('refreshToken');
-                  observer.error(e);
-                }
-              })();
-            } else {
-              observer.next(result);
-              observer.complete();
-            }
-          },
-          error: observer.error.bind(observer),
-          complete: () => {}
-        });
-      } catch (e) {
-        observer.error(e);
-      }
+    }
+    let sub, retrySub;
+    try {
+      sub = forward(operation).subscribe({
+        next: result => {
+          if (operation.operationName === 'login') {
+            const { data: { login: { tokens: { accessToken, refreshToken } } } } = result;
+            window.localStorage.setItem('accessToken', accessToken);
+            window.localStorage.setItem('refreshToken', refreshToken);
+            observer.next(result);
+            observer.complete();
+          } else if (isTokenRefreshNeeded(operation, result)) {
+            (async () => {
+              try {
+                const { data: { refreshTokens: { accessToken, refreshToken } } } = await apolloClient.mutate({
+                  mutation: REFRESH_TOKENS_MUTATION,
+                  variables: { refreshToken: window.localStorage.getItem('refreshToken') }
+                });
+                window.localStorage.setItem('accessToken', accessToken);
+                window.localStorage.setItem('refreshToken', refreshToken);
+                // Retry current operation
+                setJWTContext(operation);
+                retrySub = forward(operation).subscribe(observer);
+              } catch (e) {
+                window.localStorage.removeItem('accessToken');
+                window.localStorage.removeItem('refreshToken');
+                observer.error(e);
+              }
+            })();
+          } else {
+            observer.next(result);
+            observer.complete();
+          }
+        },
+        error: observer.error.bind(observer),
+        complete: () => {}
+      });
+    } catch (e) {
+      observer.error(e);
+    }
 
-      return () => {
-        if (sub) sub.unsubscribe();
-        if (retrySub) retrySub.unsubscribe();
-      };
-    });
-  }
+    return () => {
+      if (sub) sub.unsubscribe();
+      if (retrySub) retrySub.unsubscribe();
+    };
+  });
 });
 
 class DataRootComponent extends React.Component {
@@ -136,7 +135,6 @@ DataRootComponent.propTypes = {
 };
 
 export default new Feature({
-  loginHandler,
   dataRootComponent: withApollo(DataRootComponent),
   link: JWTLink
 });

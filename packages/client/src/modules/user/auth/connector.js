@@ -4,9 +4,8 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 
 export default class {
   // eslint-disable-next-line no-unused-vars
-  constructor({ loginHandler, link, dataRootComponent }, ...features) {
-    this.loginHandler = combine(arguments, arg => arg.loginHandler);
-    this.dataRootComponent = combine(arguments, arg => arg.dataRootComponent);
+  constructor({ link, dataRootComponent }, ...features) {
     this.link = combine(arguments, arg => arg.link);
+    this.dataRootComponent = combine(arguments, arg => arg.dataRootComponent);
   }
 }

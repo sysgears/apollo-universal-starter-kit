@@ -1,4 +1,7 @@
 import { ApolloLink, Observable } from 'apollo-link';
+import React from 'react';
+import { withApollo } from 'react-apollo';
+import PropTypes from 'prop-types';
 
 import Feature from '../connector';
 
@@ -91,27 +94,49 @@ const JWTLink = new ApolloLink((operation, forward) => {
   }
 });
 
-const onInit = async client => {
-  apolloClient = client;
-  const refreshToken = window.localStorage.getItem('refreshToken');
-  if (refreshToken) {
-    const result = client.readQuery({ query: CURRENT_USER_QUERY });
-    if (result && !result.currentUser) {
-      // If we don't have current user but have refresh token,
-      // then we need to trigger our token refresh logic by sending network request
-      const { data: { currentUser } } = await client.query({ query: CURRENT_USER_QUERY, fetchPolicy: 'network-only' });
-      // If we have received current user, then we have invalid Apollo Cache and we should discard it
-      if (currentUser) {
-        await client.cache.reset();
-        await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser } });
-        await client.cache.writeData({ data: modules.resolvers.defaults });
+class DataRootComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props = props;
+    this.state = { ready: false };
+  }
+
+  async componentDidMount() {
+    const { client } = this.props;
+    apolloClient = client;
+    const refreshToken = window.localStorage.getItem('refreshToken');
+    if (refreshToken) {
+      const result = client.readQuery({ query: CURRENT_USER_QUERY });
+      if (result && !result.currentUser) {
+        // If we don't have current user but have refresh token,
+        // then we need to trigger our token refresh logic by sending network request
+        const { data: { currentUser } } = await client.query({
+          query: CURRENT_USER_QUERY,
+          fetchPolicy: 'network-only'
+        });
+        // If we have received current user, then we have invalid Apollo Cache and we should discard it
+        if (currentUser) {
+          await client.cache.reset();
+          await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser } });
+          await client.cache.writeData({ data: modules.resolvers.defaults });
+        }
       }
     }
+    this.setState({ ready: true });
   }
+
+  render() {
+    return this.state.ready ? this.props.children : null;
+  }
+}
+
+DataRootComponent.propTypes = {
+  client: PropTypes.object,
+  children: PropTypes.node
 };
 
 export default new Feature({
   loginHandler,
-  onInit,
+  dataRootComponent: withApollo(DataRootComponent),
   link: JWTLink
 });

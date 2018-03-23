@@ -150,13 +150,6 @@ export default class Main extends React.Component {
     }
   }
 
-  async componentDidMount() {
-    for (const onInit of modules.onInit) {
-      await onInit(client);
-    }
-    this.setState({ ready: true });
-  }
-
   componentDidCatch(error, info) {
     this.setState({ error, info, ready: true });
   }
@@ -168,7 +161,7 @@ export default class Main extends React.Component {
         modules.getWrappedRoot(
           <Provider store={store}>
             <ApolloProvider client={client}>
-              <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
+              {modules.getDataRoot(<ConnectedRouter history={history}>{Routes}</ConnectedRouter>)}
             </ApolloProvider>
           </Provider>
         )

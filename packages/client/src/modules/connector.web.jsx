@@ -23,8 +23,8 @@ export default class {
       stylesInsert,
       scriptsInsert,
       rootComponentFactory,
+      dataRootComponent,
       routerFactory,
-      onInit,
       catalogInfo
     },
     ...features
@@ -44,10 +44,10 @@ export default class {
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
     this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
     this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
+    this.dataRootComponent = combine(arguments, arg => arg.dataRootComponent);
     this.routerFactory = combine(arguments, arg => arg.routerFactory)
       .slice(-1)
       .pop();
-    this.onInit = combine(arguments, arg => arg.onInit);
   }
 
   get router() {
@@ -114,6 +114,14 @@ export default class {
     let nestedRoot = root;
     for (const componentFactory of this.rootComponentFactory) {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
+    }
+    return nestedRoot;
+  }
+
+  getDataRoot(root) {
+    let nestedRoot = root;
+    for (const component of this.dataRootComponent) {
+      nestedRoot = React.createElement(component, {}, nestedRoot);
     }
     return nestedRoot;
   }

@@ -55,7 +55,6 @@ class Counter extends React.Component {
   }
 
   render() {
-    // return <I18nextProvider i18n={modules.internationalizations[0]}><CounterView {...this.props} /></I18nextProvider>;
     return <CounterView {...this.props} />;
   }
 }

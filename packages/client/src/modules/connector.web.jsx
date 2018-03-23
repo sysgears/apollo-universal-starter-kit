@@ -83,7 +83,7 @@ export default class {
   }
 
   get i18n() {
-    return this.internationalization;
+    return merge(...this.internationalization);
   }
 
   get reducers() {

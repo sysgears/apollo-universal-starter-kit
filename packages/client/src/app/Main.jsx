@@ -58,9 +58,13 @@ for (const middleware of modules.middlewares) {
   });
 }
 
-console.log(modules);
-modules.i18n[0].addResourceBundle('ru', 'counter', modules.localizations[0].ru);
-modules.i18n[0].addResourceBundle('en', 'counter', modules.localizations[0].en);
+for (const localization of modules.localizations) {
+  // eslint-disable-next-line
+  const resource = require(`@alienfast/i18next-loader!../modules/${localization.ns}/${localization.path}`);
+  for (const lang of Object.keys(resource)) {
+    modules.i18n.addResourceBundle(lang, localization.ns, resource[lang]);
+  }
+}
 
 for (const afterware of modules.afterwares) {
   fetch.batchUseAfter(({ response, options }, next) => {
@@ -193,7 +197,7 @@ class Main extends React.Component {
         <Provider store={store}>
           <ApolloProvider client={client}>
             <ConnectedRouter history={history}>
-              <I18nextProvider i18n={modules.i18n[0]}>{Routes}</I18nextProvider>
+              <I18nextProvider i18n={modules.i18n}>{Routes}</I18nextProvider>
             </ConnectedRouter>
           </ApolloProvider>
         </Provider>

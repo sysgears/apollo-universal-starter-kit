@@ -1,0 +1,30 @@
+{
+  "comment": {
+    "label": "Comment",
+    "add": "Add comment",
+    "edit": "Edit comment",
+    "btnEdit": "Edit",
+    "title": "Comments"
+  },
+  "post": {
+    "btnSave": "Save",
+    "btnDelete": "Delete",
+    "title": "Edit post",
+    "meta": "Edit post example page",
+    "loading": "Loading...",
+    "edit": "Edit",
+    "create": "Create",
+    "name": "Post",
+    "titleField": "Title",
+    "content": "Content",
+    "actions": "Actions",
+    "back": "Back"
+  },
+  "list": {
+    "title": "Posts list",
+    "meta": "List of all posts example page",
+    "add": "Add",
+    "posts": "Posts",
+    "morePosts": "Load more ..."
+  }
+}

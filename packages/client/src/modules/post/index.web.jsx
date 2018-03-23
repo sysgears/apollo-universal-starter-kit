@@ -18,5 +18,6 @@ export default new Feature({
       </NavLink>
     </MenuItem>
   ),
-  resolver: resolvers
+  resolver: resolvers,
+  localization: { ns: 'post', path: 'locales/index.js' }
 });

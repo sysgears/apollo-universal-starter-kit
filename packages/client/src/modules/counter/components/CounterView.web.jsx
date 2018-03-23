@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import { translate } from 'react-i18next';
+
 import { PageLayout, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
@@ -23,11 +24,11 @@ const CounterView = ({
 }) => {
   const renderMetaData = () => (
     <Helmet
-      title={`${settings.app.name} - Counter`}
+      title={`${settings.app.name} - ${t('title')}`}
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - Counter example page`
+          content: `${settings.app.name} - ${t('meta')}`
         }
       ]}
     />
@@ -37,7 +38,7 @@ const CounterView = ({
     return (
       <PageLayout>
         {renderMetaData()}
-        <div className="text-center">Loading...</div>
+        <div className="text-center">{t('loading')}</div>
       </PageLayout>
     );
   } else {

@@ -2,7 +2,7 @@ export default {
   name: 'Apollo Starter Kit',
   logging: {
     debugSQL: false,
-    apolloLogging: true
+    apolloLogging: process.env.NODE_ENV === 'development' ? true : false
   },
   // Check here for Windows and Mac OS X: https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
   // Use this protocol handler for Linux: https://github.com/sysgears/vscode-handler

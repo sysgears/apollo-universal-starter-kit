@@ -1,4 +1,3 @@
-// import session from './session';
 import jwt from './jwt';
 
 import Feature from './connector';

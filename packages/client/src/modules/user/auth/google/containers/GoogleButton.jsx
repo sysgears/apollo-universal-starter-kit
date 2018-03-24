@@ -5,7 +5,7 @@ import { SecureStore, WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
-import { withUser, withCheckAction } from '../../../containers/AuthBase';
+import { withUser, withChangeAction } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
 
 const googleLogin = () => {
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withCheckAction(withUser(withApollo(GoogleComponent)));
+export default withChangeAction(withUser(withApollo(GoogleComponent)));

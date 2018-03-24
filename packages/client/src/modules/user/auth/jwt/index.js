@@ -68,7 +68,7 @@ const JWTLink = new ApolloLink((operation, forward) => {
                 await setItem('accessToken', accessToken);
                 await setItem('refreshToken', refreshToken);
                 // Retry current operation
-                setJWTContext(operation);
+                await setJWTContext(operation);
                 retrySub = forward(operation).subscribe(observer);
               } catch (e) {
                 // We have received error during refresh - drop tokens and return original request result

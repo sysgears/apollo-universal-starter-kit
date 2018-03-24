@@ -10,4 +10,4 @@ import './favicon';
 
 import Feature from './connector';
 
-export default new Feature(defaultRouter, counter, post, upload, subscription, contact, pageNotFound, user);
+export default new Feature(defaultRouter, counter, post, upload, subscription, contact, user, pageNotFound);

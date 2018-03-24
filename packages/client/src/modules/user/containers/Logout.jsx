@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Button } from 'react-native';
-import { withLogout } from './AuthBase';
+import { withLogout } from './Auth';
 
 class LogoutView extends React.Component {
   render() {

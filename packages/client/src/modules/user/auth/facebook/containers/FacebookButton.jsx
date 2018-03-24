@@ -5,7 +5,7 @@ import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
-import { withUser, withCheckAction } from '../../../containers/AuthBase';
+import { withUser, withChangeAction } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
 
 const facebookLogin = () => {
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withCheckAction(withUser(withApollo(FacebookComponent)));
+export default withChangeAction(withUser(withApollo(FacebookComponent)));

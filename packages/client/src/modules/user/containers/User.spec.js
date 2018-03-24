@@ -3,8 +3,8 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 // Components and helpers
-import Renderer from '../../../../../testHelpers/Renderer';
-import Routes from '../../../../../app/Routes';
+import Renderer from '../../../testHelpers/Renderer';
+import Routes from '../../../app/Routes';
 
 describe('User UI works', () => {
   const renderer = new Renderer({});

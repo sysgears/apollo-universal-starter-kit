@@ -2,7 +2,7 @@ import { TabNavigator } from 'react-navigation';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
-import { withUser, withCheckAction } from './AuthBase';
+import { withUser, withChangeAction } from './Auth';
 
 class UserScreenNavigator extends React.Component {
   static propTypes = {
@@ -48,7 +48,7 @@ const tabNavigator = routeConfigs => {
     return WithRoutesComponent;
   };
 
-  return withCheckAction(withRoutes(withUser(UserScreenNavigator)));
+  return withChangeAction(withRoutes(withUser(UserScreenNavigator)));
 };
 
 export default tabNavigator;

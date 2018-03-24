@@ -5855,15 +5855,9 @@ graphql-tools@^2.13.0:
     graphql-subscriptions "^0.5.6"
     uuid "^3.1.0"
 
-"graphql@>=0.9.4 <0.11", graphql@^0.10.0, graphql@^0.10.3:
-  version "0.10.5"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.10.5.tgz#c9be17ca2bdfdbd134077ffd9bbaa48b8becd298"
-  dependencies:
-    iterall "^1.1.0"
-
-graphql@^0.12.0, graphql@^0.12.3:
-  version "0.12.3"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.12.3.tgz#11668458bbe28261c0dcb6e265f515ba79f6ce07"
+"graphql@>=0.9.4 <0.11", graphql@^0.10.0, graphql@^0.10.3, graphql@^0.11.7, graphql@^0.12.0, graphql@^0.12.3:
+  version "0.11.7"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.7.tgz#e5abaa9cb7b7cccb84e9f0836bf4370d268750c6"
   dependencies:
     iterall "1.1.3"
 
@@ -7009,17 +7003,9 @@ items@2.x.x:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/items/-/items-2.1.1.tgz#8bd16d9c83b19529de5aea321acaada78364a198"
 
-iterall@1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.3.tgz#1cbbff96204056dde6656e2ed2e2226d0e6d72c9"
-
-iterall@^1.1.0:
+iterall@1.1.3, iterall@^1.1.1, iterall@^1.1.3, iterall@^1.1.4:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
-
-iterall@^1.1.1, iterall@^1.1.3:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.4.tgz#0db40d38fdcf53ae14dc8ec674e62ab190d52cfc"
 
 jest-docblock@22.1.0, jest-docblock@^22.1.0:
   version "22.1.0"
@@ -12500,9 +12486,9 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.104:
-  version "0.4.104"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.104.tgz#adcb99c50fadebbe36922613ee0f2b0f25925734"
+spinjs@^0.4.109:
+  version "0.4.109"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.109.tgz#1852f255f93dd1eac918f2af287f9d4a8b0337bb"
   dependencies:
     babel-polyfill "^6.26.0"
     babel-preset-env "^1.6.1"

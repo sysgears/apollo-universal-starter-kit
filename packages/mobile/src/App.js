@@ -44,7 +44,7 @@ export default class Main extends React.Component {
     const cache = new InMemoryCache();
 
     const wsUri = uri.replace(/^http/, 'ws');
-    let link = ApolloLink.split(
+    const netLink = ApolloLink.split(
       operation => {
         const operationAST = getOperationAST(operation.query, operation.operationName);
         return !!operationAST && operationAST.operation === 'subscription';
@@ -58,29 +58,6 @@ export default class Main extends React.Component {
       new BatchHttpLink({ fetch })
     );
 
-    for (const middleware of modules.middlewares) {
-      fetch.batchUse(({ requests, options }, next) => {
-        const reqs = [...requests];
-        const innerNext = () => {
-          if (reqs.length > 0) {
-            const req = reqs.shift();
-            if (req) {
-              middleware(req, options, innerNext);
-            }
-          } else {
-            next();
-          }
-        };
-        innerNext();
-      });
-    }
-
-    for (const afterware of modules.afterwares) {
-      fetch.batchUseAfter(({ response, options }, next) => {
-        afterware(response, options, next);
-      });
-    }
-
     let connectionParams = {};
     for (const connectionParam of modules.connectionParams) {
       Object.assign(connectionParams, connectionParam());
@@ -88,8 +65,14 @@ export default class Main extends React.Component {
 
     const linkState = withClientState({ ...modules.resolvers, cache });
 
+    const links = [...modules.link, linkState, netLink];
+
+    if (settings.app.logging.apolloLogging) {
+      links.unshift(new LoggingLink());
+    }
+
     const client = new ApolloClient({
-      link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
+      link: ApolloLink.from(links),
       cache
     });
 

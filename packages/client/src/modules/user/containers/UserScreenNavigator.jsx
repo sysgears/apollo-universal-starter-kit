@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
 import { withUser, withCheckAction } from './AuthBase';
 
-class MainScreenNavigator extends React.Component {
+class UserScreenNavigator extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
     currentUserLoading: PropTypes.bool.isRequired,
@@ -48,7 +48,7 @@ const tabNavigator = routeConfigs => {
     return WithRoutesComponent;
   };
 
-  return withCheckAction(withRoutes(withUser(MainScreenNavigator)));
+  return withCheckAction(withRoutes(withUser(UserScreenNavigator)));
 };
 
 export default tabNavigator;

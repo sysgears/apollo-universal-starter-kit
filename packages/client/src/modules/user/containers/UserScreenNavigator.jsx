@@ -2,14 +2,13 @@ import { TabNavigator } from 'react-navigation';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
-import { withUser, withChangeAction } from './Auth';
+import { withUser } from './Auth';
 
 class UserScreenNavigator extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
     currentUserLoading: PropTypes.bool.isRequired,
-    routeConfigs: PropTypes.object,
-    action: PropTypes.string
+    routeConfigs: PropTypes.object
   };
 
   navTabsFilter = () => {
@@ -27,8 +26,8 @@ class UserScreenNavigator extends React.Component {
   };
 
   getInitialRoute = () => {
-    const { currentUser, action } = this.props;
-    return action === 'Login' && currentUser ? 'Profile' : 'Counter';
+    const { currentUser } = this.props;
+    return currentUser ? 'Profile' : 'Counter';
   };
 
   render() {
@@ -48,7 +47,7 @@ const tabNavigator = routeConfigs => {
     return WithRoutesComponent;
   };
 
-  return withChangeAction(withRoutes(withUser(UserScreenNavigator)));
+  return withRoutes(withUser(UserScreenNavigator));
 };
 
 export default tabNavigator;

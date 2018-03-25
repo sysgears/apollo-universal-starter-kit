@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withApollo, graphql, compose } from 'react-apollo';
+import { withApollo, graphql } from 'react-apollo';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
-import USER_ACTION_QUERY from '../graphql/UserActions.client.graphql';
-import CHANGE_ACTION from '../graphql/ChangeUserAction.client.graphql';
 
 const withUser = Component => {
   const WithUser = ({ ...props }) => <Component {...props} />;
@@ -20,22 +18,6 @@ const withUser = Component => {
       return { currentUserLoading: loading, currentUser, refetchCurrentUser: refetch };
     }
   })(WithUser);
-};
-
-const withChangeAction = Component => {
-  return compose(
-    withApollo,
-    graphql(CHANGE_ACTION, {
-      props: ({ mutate }) => ({
-        changeAction: async action => {
-          await mutate({ variables: { action: action } });
-        }
-      })
-    }),
-    graphql(USER_ACTION_QUERY, {
-      props: ({ data: { action } }) => ({ action })
-    })
-  )(Component);
 };
 
 const withLoadedUser = Component => {
@@ -71,22 +53,19 @@ IfNotLoggedInComponent.propTypes = {
 const IfNotLoggedIn = withLoadedUser(IfNotLoggedInComponent);
 
 const withLogout = Component =>
-  withChangeAction(
-    withApollo(
-      graphql(LOGOUT, {
-        props: ({ ownProps: { client, changeAction }, mutate }) => ({
-          logout: async () => {
-            const { data: { logout } } = await mutate();
+  withApollo(
+    graphql(LOGOUT, {
+      props: ({ ownProps: { client }, mutate }) => ({
+        logout: async () => {
+          const { data: { logout } } = await mutate();
 
-            if (!logout || !logout.errors) {
-              await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
-              changeAction('NotLogin');
-            }
-            return logout;
+          if (!logout || !logout.errors) {
+            await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
           }
-        })
-      })(Component)
-    )
+          return logout;
+        }
+      })
+    })(Component)
   );
 
-export { withUser, withChangeAction, withLoadedUser, IfLoggedIn, IfNotLoggedIn, withLogout };
+export { withUser, withLoadedUser, IfLoggedIn, IfNotLoggedIn, withLogout };

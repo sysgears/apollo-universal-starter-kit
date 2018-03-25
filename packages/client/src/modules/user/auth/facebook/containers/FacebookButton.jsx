@@ -5,7 +5,7 @@ import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
-import { withUser, withChangeAction } from '../../../containers/Auth';
+import { withUser } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
 
 const facebookLogin = () => {
@@ -52,7 +52,7 @@ class FacebookComponent extends React.Component {
     // Extract stringified user string out of the URL
     const [, data] = url.match(/data=([^#]+)/);
     const decodedData = JSON.parse(decodeURI(data));
-    const { client, refetchCurrentUser, changeAction } = this.props;
+    const { client, refetchCurrentUser } = this.props;
     if (decodedData.tokens) {
       await SecureStore.setItemAsync('accessToken', decodedData.tokens.accessToken);
       await SecureStore.setItemAsync('refreshToken', decodedData.tokens.refreshToken);
@@ -66,7 +66,6 @@ class FacebookComponent extends React.Component {
         query: CURRENT_USER_QUERY,
         data: result.data
       });
-      changeAction('Login');
     }
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser();
@@ -90,8 +89,7 @@ class FacebookComponent extends React.Component {
 FacebookComponent.propTypes = {
   client: PropTypes.object,
   type: PropTypes.string,
-  refetchCurrentUser: PropTypes.func,
-  changeAction: PropTypes.func
+  refetchCurrentUser: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -111,4 +109,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withChangeAction(withUser(withApollo(FacebookComponent)));
+export default withUser(withApollo(FacebookComponent));

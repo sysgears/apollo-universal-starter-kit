@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 
-import { withChangeAction } from './containers/Auth';
 import auth from './auth';
 import resolvers from './resolvers';
 import UserScreenNavigator from './containers/UserScreenNavigator';
@@ -19,13 +18,12 @@ class LoginScreen extends React.Component {
     title: 'Sign In'
   });
   render() {
-    return <Login navigation={this.props.navigation} onLogin={() => this.props.changeAction('Login')} />;
+    return <Login navigation={this.props.navigation} />;
   }
 }
 
 LoginScreen.propTypes = {
-  navigation: PropTypes.object,
-  changeAction: PropTypes.func.isRequired
+  navigation: PropTypes.object
 };
 
 class LogoutScreen extends React.Component {
@@ -83,7 +81,7 @@ export default new Feature(auth, {
       }
     },
     Login: {
-      screen: withChangeAction(LoginScreen),
+      screen: LoginScreen,
       userInfo: {
         showOnLogin: false
       },

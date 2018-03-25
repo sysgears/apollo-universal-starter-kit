@@ -5,7 +5,7 @@ import { SecureStore, WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
-import { withUser, withChangeAction } from '../../../containers/Auth';
+import { withUser } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
 
 const googleLogin = () => {
@@ -52,7 +52,7 @@ class GoogleComponent extends React.Component {
     // Extract stringified user string out of the URL
     const [, data] = url.match(/data=([^#]+)/);
     const decodedData = JSON.parse(decodeURI(data));
-    const { client, refetchCurrentUser, changeAction } = this.props;
+    const { client, refetchCurrentUser } = this.props;
     if (decodedData.tokens) {
       await SecureStore.setItemAsync('accessToken', decodedData.tokens.accessToken);
       await SecureStore.setItemAsync('refreshToken', decodedData.tokens.refreshToken);
@@ -63,7 +63,6 @@ class GoogleComponent extends React.Component {
         query: CURRENT_USER_QUERY,
         data: result.data
       });
-      changeAction('Login');
     }
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser();
@@ -87,8 +86,7 @@ class GoogleComponent extends React.Component {
 GoogleComponent.propTypes = {
   client: PropTypes.object,
   type: PropTypes.string,
-  writeQuery: PropTypes.func,
-  changeAction: PropTypes.func
+  writeQuery: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -108,4 +106,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withChangeAction(withUser(withApollo(GoogleComponent)));
+export default withUser(withApollo(GoogleComponent));

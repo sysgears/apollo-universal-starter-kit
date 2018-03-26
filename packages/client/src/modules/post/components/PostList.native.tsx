@@ -4,22 +4,14 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { StyleSheet, FlatList, Text, View, Platform, TouchableOpacity } from 'react-native';
 import { SwipeAction } from '../../common/components/native';
 
-import { PostProps, Post } from '../types/post';
-
-interface Node {
-  node: Post;
-}
-
-interface RenderItemOptions {
-  item: Node;
-}
+import { PostProps, Post, RenderItemProps, PostItemRenderProps } from '../types';
 
 export default class PostList extends React.PureComponent<PostProps, any> {
   public onEndReachedCalledDuringMomentum = false;
 
   public keyExtractor = (item: any) => item.node.id;
 
-  public renderItemIOS = ({ item: { node: { id, title } } }: RenderItemOptions) => {
+  public renderItemIOS = ({ item: { node: { id, title } } }: RenderItemProps<PostItemRenderProps>) => {
     const { deletePost, navigation } = this.props;
     return (
       <SwipeAction
@@ -34,7 +26,7 @@ export default class PostList extends React.PureComponent<PostProps, any> {
     );
   };
 
-  public renderItemAndroid = ({ item: { node: { id, title } } }: RenderItemOptions) => {
+  public renderItemAndroid = ({ item: { node: { id, title } } }: RenderItemProps<PostItemRenderProps>) => {
     const { deletePost, navigation } = this.props;
     return (
       <TouchableOpacity style={styles.postWrapper} onPress={() => navigation.navigate('PostEdit', { id })}>

@@ -8,6 +8,10 @@ export interface Counter {
   amount: number;
 }
 
+interface CounterUpdatedResult {
+  counterUpdated: Counter;
+}
+
 /* Component props */
 
 interface CounterOperation {
@@ -27,4 +31,4 @@ interface StateProps {
 
 interface CounterProps extends StateProps, QueryProps, CounterQueryResult, CounterOperation {}
 
-export { CounterOperation, CounterQueryResult, StateProps, CounterProps };
+export { CounterOperation, CounterQueryResult, StateProps, CounterProps, CounterUpdatedResult };

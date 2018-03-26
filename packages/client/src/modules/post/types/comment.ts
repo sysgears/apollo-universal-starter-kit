@@ -2,16 +2,32 @@ import { QueryProps } from 'react-apollo';
 import { Post } from './post';
 import { FormikBag } from 'formik';
 
-// Comment types
-type AddCommentFn = (content: string, postId: number) => any;
-type EditCommentFn = (id: number, content: string) => any;
-type DeleteCommentFn = (id: number) => any;
-type OnCommentSelectFn = (comment: Comment) => void;
-
-// Models
+/* Entities */
 interface Comment {
   id?: number;
   content: string;
+}
+
+/* Component props */
+interface CommentUpdatedProps {
+  id: number;
+  mutation: string;
+  node: Comment;
+}
+
+interface CommentUpdatedResult {
+  commentUpdated: CommentUpdatedProps;
+}
+
+interface CommentQueryResult {
+  comment: Comment;
+}
+
+interface CommentOperation {
+  addComment?: AddCommentFn;
+  editComment?: EditCommentFn;
+  deleteComment?: DeleteCommentFn;
+  onCommentSelect?: OnCommentSelectFn;
 }
 
 interface PostCommentsProps extends QueryProps, CommentOperation, CommentQueryResult {
@@ -19,33 +35,26 @@ interface PostCommentsProps extends QueryProps, CommentOperation, CommentQueryRe
   postId: number;
 }
 
-interface PostCommentFormProps extends CommentQueryResult {
-  values: Comment;
-  handleSubmit: (values: Comment, formikBag: FormikBag<FormikCommentProps, Comment>) => void;
-}
-
-// Operations
-interface CommentOperation {
-  addComment?: AddCommentFn;
-  editComment?: EditCommentFn;
-  deleteComment?: DeleteCommentFn;
-  onCommentSelect?: OnCommentSelectFn;
-  post?: Post;
-}
-
-// Queries
-interface CommentQueryResult {
+interface CommentFormikProps {
+  onSubmit: (options?: any) => void;
+  postId: number;
   comment: Comment;
 }
 
-// Formik values and props
-interface FormikCommentProps extends CommentQueryResult {
-  onSubmit: any;
-  postId: number;
+interface PostCommentFormProps extends PostCommentsProps {
+  values: Comment;
+  handleSubmit: (values: Comment, formikBag: FormikBag<CommentFormikProps, Comment>) => void;
 }
+
+/* Types */
+type AddCommentFn = (content: string, postId: number) => any;
+type EditCommentFn = (id: number, content: string) => any;
+type DeleteCommentFn = (id: number) => any;
+type OnCommentSelectFn = (comment: Comment) => void;
 
 export { CommentOperation };
 export { CommentQueryResult };
-export { FormikCommentProps };
+export { CommentFormikProps };
+export { CommentUpdatedResult };
 export { Comment, PostCommentsProps, PostCommentFormProps };
 export { AddCommentFn, DeleteCommentFn, OnCommentSelectFn, EditCommentFn };

@@ -13,16 +13,20 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { SwipeAction } from '../../common/components/native';
 
 import PostCommentForm from './PostCommentForm.native';
-import { PostCommentsProps, Comment, AddCommentFn, DeleteCommentFn, EditCommentFn, OnCommentSelectFn } from '../types';
-
-interface RenderItemProps {
-  item: Comment;
-}
+import {
+  PostCommentsProps,
+  Comment,
+  AddCommentFn,
+  DeleteCommentFn,
+  EditCommentFn,
+  OnCommentSelectFn,
+  RenderItemProps
+} from '../types';
 
 export default class PostCommentsView extends React.PureComponent<PostCommentsProps, any> {
   public keyExtractor = (item: any) => item.id;
 
-  public renderItemIOS = ({ item: { id, content } }: RenderItemProps) => {
+  public renderItemIOS = ({ item: { id, content } }: RenderItemProps<Comment>) => {
     const { comment, deleteComment, onCommentSelect } = this.props;
     return (
       <SwipeAction
@@ -37,7 +41,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
     );
   };
 
-  public renderItemAndroid = ({ item: { id, content } }: RenderItemProps) => {
+  public renderItemAndroid = ({ item: { id, content } }: RenderItemProps<Comment>) => {
     const { deleteComment, onCommentSelect, comment } = this.props;
     return (
       <TouchableWithoutFeedback onPress={() => onCommentSelect({ id, content })}>

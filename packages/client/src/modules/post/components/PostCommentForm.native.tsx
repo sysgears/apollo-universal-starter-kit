@@ -3,7 +3,7 @@ import { withFormik, ComponentDecorator } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
-import { Comment, PostCommentFormProps, FormikCommentProps } from '../types';
+import { Comment, PostCommentFormProps, CommentFormikProps } from '../types';
 
 const commentFormSchema: any = {
   content: [required]
@@ -25,7 +25,7 @@ const PostCommentForm = ({ values, handleSubmit, comment }: PostCommentFormProps
   );
 };
 
-const PostCommentFormWithFormik: ComponentDecorator<FormikCommentProps, any> = withFormik({
+const PostCommentFormWithFormik: ComponentDecorator<CommentFormikProps, any> = withFormik({
   mapPropsToValues: ({ comment }) => ({ content: comment && comment.content }),
   validate: (values: Comment) => validate(values),
   handleSubmit: async (values: Comment, { resetForm, props: { onSubmit } }: any) => {

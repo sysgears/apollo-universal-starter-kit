@@ -18,11 +18,10 @@ interface PageInfo {
 export { PageInfo, EntityList, Edge };
 
 // Subscription data
-
-interface Data<T> {
+interface SubscriptionData<T> {
   data: T;
 }
 
-export interface SubscriptionData<T> {
-  subscriptionData: Data<T>;
+export interface SubscriptionResult<T> {
+  subscriptionData: SubscriptionData<T>;
 }

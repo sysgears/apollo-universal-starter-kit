@@ -51,10 +51,6 @@ class PostComments extends React.Component<PostCommentsProps, any> {
   }
 }
 
-interface Data {
-  data: any;
-}
-
 const PostCommentsWithApollo: any = compose(
   withCommentAdding,
   withCommentEditing,

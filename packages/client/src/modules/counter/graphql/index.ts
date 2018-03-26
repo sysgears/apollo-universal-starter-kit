@@ -1,6 +1,6 @@
 import { graphql, OptionProps, compose } from 'react-apollo';
 import { ApolloError } from 'apollo-client';
-import { SubscriptionData } from '../../../../../common/types';
+import { SubscriptionResult } from '../../../../../common/types';
 import update from 'immutability-helper';
 
 import COUNTER_QUERY from './CounterQuery.graphql';
@@ -9,19 +9,15 @@ import COUNTER_QUERY_CLIENT from './CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from './AddCounter.client.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
-import { Counter, CounterOperation, CounterQueryResult, CounterProps } from '../types';
+import { CounterOperation, CounterQueryResult, CounterProps, CounterUpdatedResult } from '../types';
 import { CounterApolloState } from '../resolvers';
-
-interface CounterUpdated {
-  counterUpdated: Counter;
-}
 
 const subscriptionOptions = {
   document: COUNTER_SUBSCRIPTION,
   variables: {},
   updateQuery: (
     prev: CounterQueryResult,
-    { subscriptionData: { data: { counterUpdated: { amount } } } }: SubscriptionData<CounterUpdated>
+    { subscriptionData: { data: { counterUpdated: { amount } } } }: SubscriptionResult<CounterUpdatedResult>
   ) => {
     return update<CounterQueryResult>(prev, {
       counter: {

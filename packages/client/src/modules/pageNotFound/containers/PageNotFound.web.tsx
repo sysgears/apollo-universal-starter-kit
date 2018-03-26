@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
@@ -10,7 +9,7 @@ const Section = styled.section`
   text-align: center;
 `;
 
-const PageNotFound = ({ staticContext = {} }) => {
+const PageNotFound = ({ staticContext = {} }: any) => {
   staticContext.pageNotFound = true;
   return (
     <PageLayout>
@@ -33,10 +32,6 @@ const PageNotFound = ({ staticContext = {} }) => {
       </Section>
     </PageLayout>
   );
-};
-
-PageNotFound.propTypes = {
-  staticContext: PropTypes.object
 };
 
 export default PageNotFound;

@@ -6,6 +6,12 @@ interface Comment {
   content: string;
 }
 
+/* Types */
+type AddCommentFn = (content: string, postId: number) => any;
+type EditCommentFn = (id: number, content: string) => any;
+type DeleteCommentFn = (id: number) => any;
+type OnCommentSelectFn = (comment: Comment) => void;
+
 /* Component props */
 interface CommentUpdatedProps {
   id: number;
@@ -38,12 +44,6 @@ interface CommentFormikProps {
   postId: number;
   comment: Comment;
 }
-
-/* Types */
-type AddCommentFn = (content: string, postId: number) => any;
-type EditCommentFn = (id: number, content: string) => any;
-type DeleteCommentFn = (id: number) => any;
-type OnCommentSelectFn = (comment: Comment) => void;
 
 export { CommentOperation };
 export { CommentQueryResult };

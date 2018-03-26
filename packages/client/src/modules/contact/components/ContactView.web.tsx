@@ -1,36 +1,28 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 
-import ContactForm from './ContactForm';
+import ContactForm from './ContactForm.web';
 import settings from '../../../../../../settings';
+import { ContactProps, Contact, ContactState, ContactError, ContactOperations } from '../types';
 
-export default class ContactView extends React.Component {
-  static propTypes = {
-    contact: PropTypes.func.isRequired
-  };
-
-  state = {
-    sent: false
-  };
-
-  onSubmit = ({ contact }) => async values => {
-    const result = await contact(values);
+export default class ContactView extends React.Component<ContactProps, ContactState> {
+  public onSubmit = ({ contact }: ContactOperations) => async (values: Contact) => {
+    const result: any = await contact(values);
 
     if (result.errors) {
-      let submitError = {
+      const submitError: any = {
         _error: 'Contact request failed!'
       };
-      result.errors.map(error => (submitError[error.field] = error.message));
+      result.errors.map((error: ContactError) => (submitError[error.field] = error.message));
       throw submitError;
     }
 
     this.setState({ sent: result });
   };
 
-  render() {
+  public render() {
     const { contact } = this.props;
 
     const renderMetaData = () => (

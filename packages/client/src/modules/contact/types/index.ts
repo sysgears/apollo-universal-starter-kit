@@ -5,11 +5,25 @@ interface Contact {
   content: string;
 }
 
+/* Types */
+type SendContactFn = (contactData: Contact) => any;
+
 /* ComponentProps */
 interface ContactOperations {
-  contact: (contactData: Contact) => boolean;
+  contact: SendContactFn;
 }
 
 interface ContactProps extends ContactOperations {}
 
-export { Contact, ContactOperations, ContactProps };
+interface ContactState {
+  sent: boolean;
+}
+
+interface ContactError {
+  field: string;
+  message: string;
+}
+
+export { Contact };
+export { SendContactFn };
+export { ContactOperations, ContactProps, ContactState, ContactError };

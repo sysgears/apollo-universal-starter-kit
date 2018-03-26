@@ -2,17 +2,15 @@ import { RouteComponentProps } from 'react-router';
 import { QueryProps } from 'react-apollo';
 import { ApolloQueryResult } from 'apollo-client';
 import { Comment } from './comment';
-import { Location, History } from 'history';
-import { EntityList, PageInfo } from '../../../../../common/types';
+import { EntityList } from '../../../../../common/types';
 import { NavigationScreenProps } from 'react-navigation';
-import { FormikBag } from 'formik';
 
 /* Entities */
 interface Post {
-  id: number;
+  id?: number;
   content: string;
   title: string;
-  comments: Comment[];
+  comments?: Comment[];
 }
 
 /* Component props */
@@ -53,10 +51,8 @@ interface PostFormikProps {
   post: Post;
 }
 
-interface PostFormProps extends PostProps {
-  handleSubmit: (values: Post, formikBag: FormikBag<PostFormikProps, Post>) => void;
+interface PostFormProps {
   submitting?: boolean;
-  values: Post;
 }
 
 /* Types */

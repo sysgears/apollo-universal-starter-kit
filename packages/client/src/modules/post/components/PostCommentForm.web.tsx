@@ -1,9 +1,9 @@
 import React from 'react';
-import { withFormik, ComponentDecorator } from 'formik';
+import { withFormik, FormikProps } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
 import { required, validateForm } from '../../../../../common/validation';
-import { Comment, PostCommentFormProps, CommentFormikProps } from '../types';
+import { Comment, CommentFormikProps, CommentQueryResult } from '../types';
 
 const commentFormSchema: any = {
   content: [required]
@@ -11,7 +11,7 @@ const commentFormSchema: any = {
 
 const validate = (values: Comment) => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, comment }: PostCommentFormProps) => {
+const PostCommentForm = ({ values, handleSubmit, comment }: CommentQueryResult & FormikProps<Comment>) => {
   return (
     <Form name="comment" onSubmit={handleSubmit}>
       <Row>
@@ -31,7 +31,7 @@ const PostCommentForm = ({ values, handleSubmit, comment }: PostCommentFormProps
   );
 };
 
-const PostCommentFormWithFormik: ComponentDecorator<CommentFormikProps, any> = withFormik({
+const PostCommentFormWithFormik = withFormik<CommentFormikProps, Comment>({
   mapPropsToValues: ({ comment }) => ({ content: comment && comment.content }),
   async handleSubmit(values: Comment, { resetForm, props: { onSubmit } }: any) {
     await onSubmit(values);

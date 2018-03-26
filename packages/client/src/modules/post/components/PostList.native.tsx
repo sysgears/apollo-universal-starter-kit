@@ -4,7 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { StyleSheet, FlatList, Text, View, Platform, TouchableOpacity } from 'react-native';
 import { SwipeAction } from '../../common/components/native';
 
-import { PostProps, Post, RenderItemProps, PostItemRenderProps } from '../types';
+import { PostProps, RenderItemProps, PostItemRenderProps } from '../types';
 
 export default class PostList extends React.PureComponent<PostProps, any> {
   public onEndReachedCalledDuringMomentum = false;

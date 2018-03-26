@@ -1,5 +1,5 @@
 import React from 'react';
-import { withFormik, ComponentDecorator } from 'formik';
+import { withFormik, FormikProps } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
@@ -13,7 +13,7 @@ const postFormSchema: any = {
 
 const validate = (values: Post) => validateForm(values, postFormSchema);
 
-const PostForm = ({ values, handleSubmit }: PostFormProps) => {
+const PostForm = ({ values, handleSubmit }: FormikProps<Post>) => {
   return (
     <FormView>
       <Field name="title" component={RenderField} type="text" label="Title" value={values.title} />
@@ -23,7 +23,7 @@ const PostForm = ({ values, handleSubmit }: PostFormProps) => {
   );
 };
 
-const PostFormWithFormik: ComponentDecorator<PostFormikProps, any> = withFormik({
+const PostFormWithFormik = withFormik<PostFormikProps, Post>({
   mapPropsToValues: ({ post }) => ({
     title: post && post.title,
     content: post && post.content

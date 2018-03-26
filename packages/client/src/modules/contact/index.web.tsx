@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
-import Contact from './containers/Contact';
+import Contact from './containers/Contact.web';
 
 import Feature from '../connector.web';
 

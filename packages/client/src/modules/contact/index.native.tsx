@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { createTabBarIconWrapper } from '../common/components/native';
-import Contact from './containers/Contact';
+import Contact from './containers/Contact.native';
 
 import Feature from '../connector.native';
 

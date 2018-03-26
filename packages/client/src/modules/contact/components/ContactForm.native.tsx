@@ -1,20 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
+import { withFormik, FormikProps } from 'formik';
 import { Keyboard } from 'react-native';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
+import { Contact, ContactFormikProps } from '../types';
 
-const contactFormSchema = {
+const contactFormSchema: any = {
   name: [required, minLength(3)],
   email: [required, email],
   content: [required, minLength(10)]
 };
 
-const validate = values => validateForm(values, contactFormSchema);
+const validate = (values: Contact) => validateForm(values, contactFormSchema);
 
-const ContactForm = ({ values, handleSubmit }) => {
+const ContactForm = ({ values, handleSubmit }: FormikProps<Contact>) => {
   return (
     <FormView>
       <Field name="name" component={RenderField} type="text" label="Name" value={values.name} />
@@ -25,23 +25,14 @@ const ContactForm = ({ values, handleSubmit }) => {
   );
 };
 
-ContactForm.propTypes = {
-  handleSubmit: PropTypes.func,
-  onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
-  error: PropTypes.string,
-  sent: PropTypes.bool,
-  values: PropTypes.object
-};
-
-const ContactFormWithFormik = withFormik({
+const ContactFormWithFormik = withFormik<ContactFormikProps, Contact>({
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+  async handleSubmit(values: Contact, { resetForm, props: { onSubmit } }) {
     await onSubmit(values);
     Keyboard.dismiss();
     resetForm();
   },
-  validate: values => validate(values),
+  validate: (values: Contact) => validate(values),
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 

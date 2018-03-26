@@ -1,19 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
+import { withFormik, FormikProps } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
+import { Contact, ContactFormikProps } from '../types';
 
-const contactFormSchema = {
+const contactFormSchema: any = {
   name: [required, minLength(3)],
   email: [required, email],
   content: [required, minLength(10)]
 };
 
-const validate = values => validateForm(values, contactFormSchema);
+const validate = (values: Contact) => validateForm(values, contactFormSchema);
 
-const ContactForm = ({ values, handleSubmit, error, sent }) => {
+const ContactForm = ({ values, handleSubmit, error, sent }: ContactFormikProps & FormikProps<Contact>) => {
   return (
     <Form name="contact" onSubmit={handleSubmit}>
       {sent && <Alert color="success">Thank you for contacting us!</Alert>}
@@ -30,23 +30,14 @@ const ContactForm = ({ values, handleSubmit, error, sent }) => {
   );
 };
 
-ContactForm.propTypes = {
-  handleSubmit: PropTypes.func,
-  onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
-  error: PropTypes.string,
-  sent: PropTypes.bool,
-  values: PropTypes.object
-};
-
-const ContactFormWithFormik = withFormik({
+const ContactFormWithFormik = withFormik<ContactFormikProps, Contact>({
   enableReinitialize: true,
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+  async handleSubmit(values: Contact, { resetForm, props: { onSubmit } }) {
     await onSubmit(values);
     resetForm();
   },
-  validate: values => validate(values),
+  validate: (values: Contact) => validate(values),
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 

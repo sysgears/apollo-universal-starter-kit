@@ -24,6 +24,11 @@ interface ContactError {
   message: string;
 }
 
+interface ContactFormikProps {
+  onSubmit: (options?: any) => void;
+  sent?: boolean;
+}
+
 export { Contact };
 export { SendContactFn };
-export { ContactOperations, ContactProps, ContactState, ContactError };
+export { ContactOperations, ContactProps, ContactState, ContactError, ContactFormikProps };

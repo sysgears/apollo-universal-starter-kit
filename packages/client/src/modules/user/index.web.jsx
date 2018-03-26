@@ -73,6 +73,7 @@ export default new Feature({
   ],
   resolver: resolvers,
   middleware: tokenMiddleware,
+  localization: { ns: 'user', path: 'locales/index.js' },
   afterware: tokenAfterware,
   connectionParam: connectionParam,
   // eslint-disable-next-line react/display-name

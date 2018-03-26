@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { PageLayout } from '../../common/components/web';
+import { translate } from 'react-i18next';
 
 import ResetPasswordForm from '../components/ResetPasswordForm';
+import { PageLayout } from '../../common/components/web';
+
 import settings from '../../../../../../settings';
 
-export default class ResetPasswordView extends React.Component {
+class ResetPasswordView extends React.Component {
   static propTypes = {
     resetPassword: PropTypes.func.isRequired,
+    t: PropTypes.func,
     match: PropTypes.shape({
       params: PropTypes.shape({
         token: PropTypes.string.isRequired
@@ -21,10 +24,11 @@ export default class ResetPasswordView extends React.Component {
       ...values,
       token: this.props.match.params.token
     });
+    const { t } = this.props;
 
     if (result.errors) {
       let submitError = {
-        _error: 'Reset Password failed!'
+        _error: t('resetPass.errorMsg')
       };
       result.errors.map(error => (submitError[error.field] = error.message));
       throw submitError;
@@ -32,15 +36,15 @@ export default class ResetPasswordView extends React.Component {
   };
 
   render() {
-    const { resetPassword } = this.props;
+    const { resetPassword, t } = this.props;
 
     const renderMetaData = () => (
       <Helmet
-        title={`${settings.app.name} - Reset Password`}
+        title={`${settings.app.name} - ${t('resetPass.title')}`}
         meta={[
           {
             name: 'description',
-            content: `${settings.app.name} - Reset password page`
+            content: `${settings.app.name} - ${t('resetPass.meta')}`
           }
         ]}
       />
@@ -49,9 +53,11 @@ export default class ResetPasswordView extends React.Component {
     return (
       <PageLayout>
         {renderMetaData()}
-        <h1>Reset password!</h1>
+        <h1>${t('resetPass.form.title')}</h1>
         <ResetPasswordForm onSubmit={this.onSubmit(resetPassword)} />
       </PageLayout>
     );
   }
 }
+
+export default translate('user')(ResetPasswordView);

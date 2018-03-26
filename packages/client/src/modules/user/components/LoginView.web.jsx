@@ -1,24 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { translate } from 'react-i18next';
+
+import LoginForm from '../components/LoginForm';
 import { LayoutCenter } from '../../common/components';
 import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
-import LoginForm from '../components/LoginForm';
 import settings from '../../../../../../settings';
 
-export default class LoginView extends React.PureComponent {
+class LoginView extends React.PureComponent {
   static propTypes = {
     error: PropTypes.string,
-    login: PropTypes.func.isRequired
+    login: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   onSubmit = login => async values => {
     const result = await login(values);
+    const { t } = this.props;
 
     if (result && result.errors) {
       let submitError = {
-        _error: 'Login failed!'
+        _error: t('login.errorMsg')
       };
       result.errors.map(error => (submitError[error.field] = error.message));
       throw submitError;
@@ -26,15 +30,15 @@ export default class LoginView extends React.PureComponent {
   };
 
   render() {
-    const { login } = this.props;
+    const { login, t } = this.props;
 
     const renderMetaData = () => (
       <Helmet
-        title={`${settings.app.name} - Login`}
+        title={`${settings.app.name} - ${t('login.title')}`}
         meta={[
           {
             name: 'description',
-            content: `${settings.app.name} - Login page`
+            content: `${settings.app.name} - ${t('login.meta')}`
           }
         ]}
       />
@@ -44,12 +48,12 @@ export default class LoginView extends React.PureComponent {
       <PageLayout>
         {renderMetaData()}
         <LayoutCenter>
-          <h1 className="text-center">Sign In</h1>
+          <h1 className="text-center">{t('login.form.title')}</h1>
           <LoginForm onSubmit={this.onSubmit(login)} />
           <hr />
           <Card>
             <CardGroup>
-              <CardTitle>Available logins:</CardTitle>
+              <CardTitle>{t('login.cardTitle')}:</CardTitle>
               <CardText>admin@example.com:admin</CardText>
               <CardText>user@example.com:user</CardText>
               {settings.subscription.enabled && <CardText>subscriber@example.com:subscriber</CardText>}
@@ -60,3 +64,5 @@ export default class LoginView extends React.PureComponent {
     );
   }
 }
+
+export default translate('user')(LoginView);

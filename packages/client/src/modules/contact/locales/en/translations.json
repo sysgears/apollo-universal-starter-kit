@@ -1,5 +1,15 @@
 {
-  "contact": {
-    "test": "Test translation"
+  "title": "Contact Us",
+  "meta": "Contact us example page",
+  "errorMsg": "Contact request failed!",
+  "form": {
+    "title": "Contact Us",
+    "submitMsg": "Thank you for contacting us!",
+    "field": {
+      "name": "Name",
+      "email": "Email",
+      "content": "Content"
+    },
+    "btnSubmit": "Submit"
   }
 }

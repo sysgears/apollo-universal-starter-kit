@@ -20,5 +20,6 @@ export default new Feature({
     </MenuItem>
   ),
   reducer: { upload: reducers },
-  createFetchOptions: constructUploadOptions
+  createFetchOptions: constructUploadOptions,
+  localization: { ns: 'upload', path: 'locales/index.js' }
 });

@@ -3,31 +3,37 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
 import filesize from 'filesize';
+import { translate } from 'react-i18next';
+
 import { PageLayout, Row, Col, Table, Button, Alert } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
-export default class UploadView extends React.PureComponent {
+class UploadView extends React.PureComponent {
   static propTypes = {
     files: PropTypes.array,
     uploadFiles: PropTypes.func.isRequired,
-    removeFile: PropTypes.func.isRequired
+    removeFile: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   state = {
     error: null
   };
 
-  renderMetaData = () => (
-    <Helmet
-      title={`${settings.app.name} - Upload`}
-      meta={[
-        {
-          name: 'description',
-          content: `${settings.app.name} - Upload page`
-        }
-      ]}
-    />
-  );
+  renderMetaData = () => {
+    const { t } = this.props;
+    return (
+      <Helmet
+        title={`${settings.app.name} - ${t('title')}`}
+        meta={[
+          {
+            name: 'description',
+            content: `${settings.app.name} - ${t('meta')}`
+          }
+        ]}
+      />
+    );
+  };
 
   onDrop = uploadFiles => async files => {
     const result = await uploadFiles(files);
@@ -49,12 +55,12 @@ export default class UploadView extends React.PureComponent {
   };
 
   render() {
-    const { files, uploadFiles } = this.props;
+    const { files, uploadFiles, t } = this.props;
     const { error } = this.state;
 
     const columns = [
       {
-        title: 'Name',
+        title: t('table.column.name'),
         dataIndex: 'name',
         key: 'name',
         render: (text, record) => (
@@ -64,12 +70,12 @@ export default class UploadView extends React.PureComponent {
         )
       },
       {
-        title: 'Actions',
+        title: t('table.column.actions'),
         key: 'actions',
         width: 50,
         render: (text, record) => (
           <Button color="primary" size="sm" className="delete-button" onClick={() => this.handleRemoveFile(record.id)}>
-            Delete
+            {t('table.btnDel')}
           </Button>
         )
       }
@@ -82,7 +88,7 @@ export default class UploadView extends React.PureComponent {
           <Row>
             <Col xs={4}>
               <Dropzone onDrop={this.onDrop(uploadFiles)}>
-                <p>Try dropping some files here, or click to select files to upload.</p>
+                <p>{t('message')}</p>
               </Dropzone>
             </Col>
             <Col xs={8}>
@@ -95,3 +101,5 @@ export default class UploadView extends React.PureComponent {
     );
   }
 }
+
+export default translate('upload')(UploadView);

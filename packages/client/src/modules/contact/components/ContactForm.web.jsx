@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+import { translate } from 'react-i18next';
+
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
@@ -13,17 +15,23 @@ const contactFormSchema = {
 
 const validate = values => validateForm(values, contactFormSchema);
 
-const ContactForm = ({ values, handleSubmit, error, sent }) => {
+const ContactForm = ({ values, handleSubmit, error, sent, t }) => {
   return (
     <Form name="contact" onSubmit={handleSubmit}>
-      {sent && <Alert color="success">Thank you for contacting us!</Alert>}
-      <Field name="name" component={RenderField} type="text" label="Name" value={values.name} />
-      <Field name="email" component={RenderField} type="text" label="Email" value={values.email} />
-      <Field name="content" component={RenderField} type="textarea" label="Content" value={values.content} />
+      {sent && <Alert color="success">{t('form.submitMsg')}</Alert>}
+      <Field name="name" component={RenderField} type="text" label={t('form.field.name')} value={values.name} />
+      <Field name="email" component={RenderField} type="text" label={t('form.field.email')} value={values.email} />
+      <Field
+        name="content"
+        component={RenderField}
+        type="textarea"
+        label={t('form.field.content')}
+        value={values.content}
+      />
       <div className="text-center">
         {error && <Alert color="error">{error}</Alert>}
         <Button color="primary" type="submit">
-          Submit
+          {t('form.btnSubmit')}
         </Button>
       </div>
     </Form>
@@ -36,7 +44,8 @@ ContactForm.propTypes = {
   submitting: PropTypes.bool,
   error: PropTypes.string,
   sent: PropTypes.bool,
-  values: PropTypes.object
+  values: PropTypes.object,
+  t: PropTypes.func
 };
 
 const ContactFormWithFormik = withFormik({
@@ -50,4 +59,4 @@ const ContactFormWithFormik = withFormik({
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 
-export default ContactFormWithFormik(ContactForm);
+export default translate('contact')(ContactFormWithFormik(ContactForm));

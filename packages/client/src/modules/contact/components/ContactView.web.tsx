@@ -8,6 +8,12 @@ import settings from '../../../../../../settings';
 import { ContactProps, Contact, ContactState, ContactError, ContactOperations } from '../types';
 
 export default class ContactView extends React.Component<ContactProps, ContactState> {
+  constructor(props: ContactProps) {
+    super(props);
+    this.state = {
+      sent: false
+    };
+  }
   public onSubmit = ({ contact }: ContactOperations) => async (values: Contact) => {
     const result: any = await contact(values);
 

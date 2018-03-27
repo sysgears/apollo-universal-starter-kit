@@ -1,10 +1,10 @@
 import React from 'react';
 import { compose } from 'react-apollo';
 
-import PostList from '../components/PostList.native';
-import { PostProps } from '../types';
+import PostList from '../../components/PostList.native';
+import { PostProps } from '../../types';
 
-import { withPostList, withPostDeleting, getSubscriptionOptions } from '../graphql';
+import { withPostList, withPostDeleting, getSubscriptionOptions } from '../../graphql';
 
 class PostComponent extends React.Component<PostProps, any> {
   public subscription: any;

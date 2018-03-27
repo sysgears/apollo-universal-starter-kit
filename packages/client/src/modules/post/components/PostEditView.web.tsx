@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { PageLayout } from '../../common/components/web';
 import PostForm from './PostForm.web';
-import PostComments from '../containers/PostComments.web';
+import PostComments from '../containers/comment/PostComments.web';
 import settings from '../../../../../../settings';
 
 import { PostProps, AddPostFn, EditPostFn, Post } from '../types';

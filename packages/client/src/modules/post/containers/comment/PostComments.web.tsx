@@ -1,8 +1,8 @@
 import React from 'react';
 import { compose } from 'react-apollo';
 
-import PostCommentsView from '../components/PostCommentsView.web';
-import { PostCommentsProps } from '../types';
+import PostCommentsView from '../../components/PostCommentsView.web';
+import { PostCommentsProps } from '../../types';
 
 import {
   withCommentAdding,
@@ -10,7 +10,7 @@ import {
   withCommentDeleting,
   withCommentState,
   getSubscriptionCommentOptions
-} from '../graphql';
+} from '../../graphql';
 
 class PostComments extends React.Component<PostCommentsProps, any> {
   public subscription: any;

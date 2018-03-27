@@ -1,9 +1,9 @@
 import React from 'react';
 import { compose } from 'react-apollo';
 
-import PostEditView from '../components/PostEditView.native';
-import { PostProps } from '../types';
-import { withPost, withPostAdding, withPostEditing, getSubscriptionPostOptions } from '../graphql';
+import PostEditView from '../../components/PostEditView.web';
+import { PostProps } from '../../types';
+import { withPost, withPostAdding, withPostEditing, getSubscriptionPostOptions } from '../../graphql';
 
 class PostEdit extends React.Component<PostProps, any> {
   public subscription: any;

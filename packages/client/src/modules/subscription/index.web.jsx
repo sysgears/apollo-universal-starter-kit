@@ -8,7 +8,7 @@ import UpdateCard from './containers/UpdateCard';
 import { SubscriberRoute } from './containers/Auth';
 import reducers from './reducers';
 import settings from '../../../../../settings';
-
+import resources from './locales';
 import Feature from '../connector';
 
 export default new Feature({
@@ -29,5 +29,6 @@ export default new Feature({
       ]
     : [],
   reducer: { subscription: reducers },
-  scriptsInsert: 'https://js.stripe.com/v3/'
+  scriptsInsert: 'https://js.stripe.com/v3/',
+  localization: { ns: 'subscription', resources }
 });

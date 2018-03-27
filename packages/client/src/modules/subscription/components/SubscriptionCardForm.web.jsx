@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { CardElement, injectStripe } from 'react-stripe-elements';
+import { translate } from 'react-i18next';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert, Label } from '../../common/components/web';
 import { required, validateForm } from '../../../../../common/validation';
@@ -19,22 +20,23 @@ class SubscriptionCardForm extends React.Component {
     error: PropTypes.string,
     handleSubmit: PropTypes.func,
     onSubmit: PropTypes.func,
-    values: PropTypes.object
+    values: PropTypes.object,
+    t: PropTypes.func
   };
 
   render() {
-    const { handleSubmit, submitting, action, error, values } = this.props;
+    const { handleSubmit, submitting, action, error, values, t } = this.props;
     return (
       <Form name="subscription" onSubmit={handleSubmit}>
         <Field
           name="name"
           component={RenderField}
           type="text"
-          label="Name On Card"
+          label={t('card.name')}
           validate={required}
           value={values.name}
         />
-        <Label>Payment Info</Label>
+        <Label>{t('card.info')}</Label>
         <CardElement className="form-control" style={{ base: { lineHeight: '30px' } }} />
         {error && <Alert color="error">{error}</Alert>}
         <Button color="primary" type="submit" disabled={submitting} style={{ marginTop: 15 }}>
@@ -71,4 +73,4 @@ const SubscriptionFormWithFormik = withFormik({
   enableReinitialize: true
 });
 
-export default injectStripe(SubscriptionFormWithFormik(SubscriptionCardForm));
+export default translate('subscription')(injectStripe(SubscriptionFormWithFormik(SubscriptionCardForm)));

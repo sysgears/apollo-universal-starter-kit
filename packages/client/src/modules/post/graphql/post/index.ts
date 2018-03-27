@@ -3,7 +3,7 @@ import { graphql, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 
 import { Post, PostQueryResult, PostOperation, PostProps, PostsUpdatedResult } from '../../types';
-import { Edge, SubscriptionResult } from '../../../../../../common/types';
+import { Edge, SubscriptionResult, ApolloTypeName } from '../../../../../../common/types';
 
 import POSTS_QUERY from '../PostsQuery.graphql';
 import DELETE_POST from '../DeletePost.graphql';
@@ -13,10 +13,6 @@ import EDIT_POST from '../EditPost.graphql';
 import POST_SUBSCRIPTION from '../PostSubscription.graphql';
 import POSTS_SUBSCRIPTION from '../PostsSubscription.graphql';
 
-interface PostEdge<T> extends Edge<T> {
-  __typename: string;
-}
-
 function AddPost(prev: PostQueryResult, node: Post) {
   // ignore if duplicate
   if (prev.posts.edges.some((post: any) => node.id === post.cursor)) {
@@ -24,7 +20,7 @@ function AddPost(prev: PostQueryResult, node: Post) {
   }
 
   const filteredPosts: Array<Edge<Post>> = prev.posts.edges.filter((post: any) => post.node.id !== null);
-  const edge: PostEdge<Post> = {
+  const edge: ApolloTypeName & Edge<Post> = {
     cursor: node.id,
     node,
     __typename: 'Post'
@@ -68,7 +64,7 @@ const withPostList = graphql(POSTS_QUERY, {
       variables: { limit: 10, after: 0 }
     };
   },
-  props: ({ data }: OptionProps<any, PostQueryResult>) => {
+  props: ({ data }: OptionProps<PostProps, PostQueryResult>) => {
     const { loading, error, posts, fetchMore, subscribeToMore } = data;
     const loadMoreRows = () => {
       return fetchMore({
@@ -76,16 +72,13 @@ const withPostList = graphql(POSTS_QUERY, {
           after: posts.pageInfo.endCursor
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const totalCount = fetchMoreResult.posts.totalCount;
-          const newEdges = fetchMoreResult.posts.edges;
-          const pageInfo = fetchMoreResult.posts.pageInfo;
-
+          const { totalCount, edges, pageInfo } = fetchMoreResult.posts;
           return {
             // By returning `cursor` here, we update the `fetchMore` function
             // to the new cursor.
             posts: {
               totalCount,
-              edges: [...previousResult.posts.edges, ...newEdges],
+              edges: [...previousResult.posts.edges, ...edges],
               pageInfo,
               __typename: 'Posts'
             }

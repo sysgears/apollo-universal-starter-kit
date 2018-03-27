@@ -116,7 +116,7 @@ const withCommentDeleting = graphql(DELETE_COMMENT, {
 
 const withCommentState = compose(
   graphql(ADD_COMMENT_CLIENT, {
-    props: ({ mutate }: OptionProps<any, CommentOperation>) => ({
+    props: ({ mutate }: OptionProps<PostCommentsProps, CommentOperation>) => ({
       onCommentSelect: (comment: Comment) => {
         mutate({ variables: { comment } });
       }

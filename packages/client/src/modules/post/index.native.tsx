@@ -18,6 +18,7 @@ class PostListScreen extends React.Component<PostProps, any> {
     title: 'Post list',
     headerRight: <Button title="Add" onPress={() => navigation.navigate('PostEdit', { id: 0 })} />
   });
+
   public render() {
     return <Post navigation={this.props.navigation} />;
   }

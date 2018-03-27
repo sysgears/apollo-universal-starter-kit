@@ -3,7 +3,7 @@ import { withFormik, FormikProps } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
-import { Contact, ContactFormikProps } from '../types';
+import { Contact, ContactFormProps } from '../types';
 
 const contactFormSchema: any = {
   name: [required, minLength(3)],
@@ -13,7 +13,7 @@ const contactFormSchema: any = {
 
 const validate = (values: Contact) => validateForm(values, contactFormSchema);
 
-const ContactForm = ({ values, handleSubmit, error, sent }: ContactFormikProps & FormikProps<Contact>) => {
+const ContactForm = ({ values, handleSubmit, error, sent }: ContactFormProps & FormikProps<Contact>) => {
   return (
     <Form name="contact" onSubmit={handleSubmit}>
       {sent && <Alert color="success">Thank you for contacting us!</Alert>}
@@ -30,7 +30,7 @@ const ContactForm = ({ values, handleSubmit, error, sent }: ContactFormikProps &
   );
 };
 
-const ContactFormWithFormik = withFormik<ContactFormikProps, Contact>({
+const ContactFormWithFormik = withFormik<ContactFormProps, Contact>({
   enableReinitialize: true,
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
   async handleSubmit(values: Contact, { resetForm, props: { onSubmit } }) {

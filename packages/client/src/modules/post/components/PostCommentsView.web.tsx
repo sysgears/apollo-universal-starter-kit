@@ -34,7 +34,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
 
   public render() {
     const { postId, comments, comment } = this.props;
-    const columns: any = [
+    const columns: any[] = [
       {
         title: 'Content',
         dataIndex: 'content',

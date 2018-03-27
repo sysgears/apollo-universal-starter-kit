@@ -3,7 +3,7 @@ import { withFormik, FormikProps } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
 import { required, validateForm } from '../../../../../common/validation';
-import { Comment, CommentFormikProps, CommentQueryResult } from '../types';
+import { Comment, CommentFormProps } from '../types';
 
 const commentFormSchema: any = {
   content: [required]
@@ -11,7 +11,7 @@ const commentFormSchema: any = {
 
 const validate = (values: Comment) => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, comment }: CommentQueryResult & FormikProps<Comment>) => {
+const PostCommentForm = ({ values, handleSubmit, comment }: CommentFormProps & FormikProps<Comment>) => {
   return (
     <Form name="comment" onSubmit={handleSubmit}>
       <Row>
@@ -31,7 +31,7 @@ const PostCommentForm = ({ values, handleSubmit, comment }: CommentQueryResult &
   );
 };
 
-const PostCommentFormWithFormik = withFormik<CommentFormikProps, Comment>({
+const PostCommentFormWithFormik = withFormik<CommentFormProps, Comment>({
   mapPropsToValues: ({ comment }) => ({ content: comment && comment.content }),
   async handleSubmit(values: Comment, { resetForm, props: { onSubmit } }: any) {
     await onSubmit(values);

@@ -18,7 +18,7 @@ const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (valu
 };
 
 const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost }: PostProps) => {
-  let postObj = post;
+  let postObj: Post = post;
   // if new post was just added read it from router
   if (!postObj && location.state) {
     postObj = location.state.post;

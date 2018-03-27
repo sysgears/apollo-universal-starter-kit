@@ -5,7 +5,7 @@ import { PageLayout } from '../../common/components/web';
 
 import ContactForm from './ContactForm.web';
 import settings from '../../../../../../settings';
-import { ContactProps, Contact, ContactState, ContactError, ContactOperations } from '../types';
+import { ContactProps, Contact, ContactState, ContactError, ContactOperation } from '../types';
 
 export default class ContactView extends React.Component<ContactProps, ContactState> {
   constructor(props: ContactProps) {
@@ -14,7 +14,8 @@ export default class ContactView extends React.Component<ContactProps, ContactSt
       sent: false
     };
   }
-  public onSubmit = ({ contact }: ContactOperations) => async (values: Contact) => {
+
+  public onSubmit = ({ contact }: ContactOperation) => async (values: Contact) => {
     const result: any = await contact(values);
 
     if (result.errors) {

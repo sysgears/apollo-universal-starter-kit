@@ -4,7 +4,7 @@ import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button } from '../../common/components/web';
 import { required, validateForm } from '../../../../../common/validation';
 
-import { PostFormProps, PostFormikProps, Post } from '../types';
+import { PostFormProps, Post } from '../types';
 
 const postFormSchema: any = {
   title: [required],
@@ -25,7 +25,7 @@ const PostForm = ({ values, handleSubmit, submitting }: PostFormProps & FormikPr
   );
 };
 
-const PostFormWithFormik = withFormik<PostFormikProps, Post>({
+const PostFormWithFormik = withFormik<PostFormProps, Post>({
   mapPropsToValues: ({ post }) => ({
     title: post && post.title,
     content: post && post.content

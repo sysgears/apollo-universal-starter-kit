@@ -3,16 +3,10 @@ import { QueryProps } from 'react-apollo';
 /* Entities */
 interface Comment {
   id?: number;
-  content: string;
+  content?: string;
 }
 
-/* Types */
-type AddCommentFn = (content: string, postId: number) => any;
-type EditCommentFn = (id: number, content: string) => any;
-type DeleteCommentFn = (id: number) => any;
-type OnCommentSelectFn = (comment: Comment) => void;
-
-/* Component props */
+/* Graphql types */
 interface CommentUpdatedProps {
   id: number;
   mutation: string;
@@ -23,15 +17,22 @@ interface CommentUpdatedResult {
   commentUpdated: CommentUpdatedProps;
 }
 
+/* Types */
+type AddCommentFn = (content: string, postId: number) => any;
+type EditCommentFn = (id: number, content: string) => any;
+type DeleteCommentFn = (id: number) => any;
+type OnCommentSelectFn = (comment: Comment) => Promise<any>;
+
+/* Component props */
 interface CommentQueryResult {
   comment: Comment;
 }
 
 interface CommentOperation {
-  addComment?: AddCommentFn;
-  editComment?: EditCommentFn;
-  deleteComment?: DeleteCommentFn;
-  onCommentSelect?: OnCommentSelectFn;
+  addComment: AddCommentFn;
+  editComment: EditCommentFn;
+  deleteComment: DeleteCommentFn;
+  onCommentSelect: OnCommentSelectFn;
 }
 
 interface PostCommentsProps extends QueryProps, CommentOperation, CommentQueryResult {
@@ -39,7 +40,7 @@ interface PostCommentsProps extends QueryProps, CommentOperation, CommentQueryRe
   postId: number;
 }
 
-interface CommentFormikProps {
+interface CommentFormProps {
   onSubmit: (options?: any) => void;
   postId: number;
   comment: Comment;
@@ -47,7 +48,7 @@ interface CommentFormikProps {
 
 export { CommentOperation };
 export { CommentQueryResult };
-export { CommentFormikProps };
+export { CommentFormProps };
 export { CommentUpdatedResult };
 export { Comment, PostCommentsProps };
 export { AddCommentFn, DeleteCommentFn, OnCommentSelectFn, EditCommentFn };

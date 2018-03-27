@@ -1,10 +1,10 @@
-import { graphql } from 'react-apollo';
+import { graphql, OptionProps } from 'react-apollo';
 
-import { Contact, ContactOperations } from '../types';
+import { Contact, ContactOperation } from '../types';
 import CONTACT from './Contact.graphql';
 
-const withContactSending = graphql<ContactOperations>(CONTACT, {
-  props: ({ mutate }) => ({
+const withContactSending = graphql(CONTACT, {
+  props: ({ mutate }: OptionProps<any, ContactOperation>) => ({
     contact: async ({ name, email, content }: Contact) => {
       try {
         const { data: { contact } }: any = await mutate({

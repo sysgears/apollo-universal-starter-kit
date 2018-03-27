@@ -8,12 +8,12 @@ export interface Counter {
   amount: number;
 }
 
+/* Graphql types */
 interface CounterUpdatedResult {
   counterUpdated: Counter;
 }
 
 /* Component props */
-
 interface CounterOperation {
   addCounter: (amount: number) => any;
   addStateCounter: (amount: number) => any;

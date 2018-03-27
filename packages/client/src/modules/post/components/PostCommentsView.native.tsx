@@ -7,26 +7,20 @@ import {
   Keyboard,
   TouchableOpacity,
   Platform,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  ListRenderItem,
+  ListRenderItemInfo
 } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { SwipeAction } from '../../common/components/native';
 
 import PostCommentForm from './PostCommentForm.native';
-import {
-  PostCommentsProps,
-  Comment,
-  AddCommentFn,
-  DeleteCommentFn,
-  EditCommentFn,
-  OnCommentSelectFn,
-  RenderItemProps
-} from '../types';
+import { PostCommentsProps, Comment, AddCommentFn, DeleteCommentFn, EditCommentFn, OnCommentSelectFn } from '../types';
 
 export default class PostCommentsView extends React.PureComponent<PostCommentsProps, any> {
-  public keyExtractor = (item: any) => item.id;
+  public keyExtractor = (item: Comment) => `${item.id}`;
 
-  public renderItemIOS = ({ item: { id, content } }: RenderItemProps<Comment>) => {
+  public renderItemIOS = ({ item: { id, content } }: ListRenderItemInfo<Comment>) => {
     const { comment, deleteComment, onCommentSelect } = this.props;
     return (
       <SwipeAction
@@ -41,7 +35,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
     );
   };
 
-  public renderItemAndroid = ({ item: { id, content } }: RenderItemProps<Comment>) => {
+  public renderItemAndroid = ({ item: { id, content } }: ListRenderItemInfo<Comment>) => {
     const { deleteComment, onCommentSelect, comment } = this.props;
     return (
       <TouchableWithoutFeedback onPress={() => onCommentSelect({ id, content })}>
@@ -90,7 +84,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
 
   public render() {
     const { postId, comment, addComment, editComment, comments, onCommentSelect } = this.props;
-    const renderItem: any = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
+    const renderItem: ListRenderItem<Comment> = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
 
     return (
       <View>
@@ -110,7 +104,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
   }
 }
 
-const styles = StyleSheet.create({
+const styles: any = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '600',

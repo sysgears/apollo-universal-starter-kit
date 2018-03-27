@@ -11,6 +11,4 @@ class ContactComponent extends React.Component<ContactProps, any> {
   }
 }
 
-const ContactWithApollo = compose(withContactSending)(ContactComponent);
-
-export default ContactWithApollo;
+export default compose(withContactSending)(ContactComponent);

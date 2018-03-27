@@ -62,15 +62,13 @@ function DeletePost(prev: PostQueryResult, id: number) {
   });
 }
 
-export { AddPost, DeletePost };
-
-const withPostList = graphql<PostQueryResult>(POSTS_QUERY, {
+const withPostList = graphql(POSTS_QUERY, {
   options: () => {
     return {
       variables: { limit: 10, after: 0 }
     };
   },
-  props: ({ data }) => {
+  props: ({ data }: OptionProps<any, PostQueryResult>) => {
     const { loading, error, posts, fetchMore, subscribeToMore } = data;
     const loadMoreRows = () => {
       return fetchMore({
@@ -103,7 +101,7 @@ const withPostList = graphql<PostQueryResult>(POSTS_QUERY, {
 });
 
 const withPostDeleting = graphql(DELETE_POST, {
-  props: ({ mutate }: OptionProps<any, PostOperation>) => ({
+  props: ({ mutate }: OptionProps<PostProps, PostOperation>) => ({
     deletePost: (id: number) => {
       mutate({
         variables: { id },
@@ -124,9 +122,7 @@ const withPostDeleting = graphql(DELETE_POST, {
   })
 });
 
-export { withPostList, withPostDeleting };
-
-const withPost = graphql<PostQueryResult>(POST_QUERY, {
+const withPost = graphql(POST_QUERY, {
   options: ({ match, navigation }) => {
     let id: number = 0;
     if (match) {
@@ -139,7 +135,7 @@ const withPost = graphql<PostQueryResult>(POST_QUERY, {
       variables: { id }
     };
   },
-  props({ data: { loading, error, post, subscribeToMore } }) {
+  props({ data: { loading, error, post, subscribeToMore } }: OptionProps<PostProps, PostQueryResult>) {
     if (error) {
       throw new ApolloError(error);
     }
@@ -198,8 +194,6 @@ const withPostEditing = graphql(EDIT_POST, {
   })
 });
 
-export { withPost, withPostAdding, withPostEditing };
-
 function getSubscriptionOptions(endCursor: number) {
   return {
     document: POSTS_SUBSCRIPTION,
@@ -227,4 +221,7 @@ function getSubscriptionPostOptions(postId: number) {
   };
 }
 
+export { AddPost, DeletePost };
+export { withPostList, withPostDeleting };
+export { withPost, withPostAdding, withPostEditing };
 export { getSubscriptionOptions, getSubscriptionPostOptions };

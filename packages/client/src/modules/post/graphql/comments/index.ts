@@ -127,8 +127,6 @@ const withCommentState = compose(
   })
 );
 
-export { withCommentAdding, withCommentEditing, withCommentDeleting, withCommentState };
-
 function getSubscriptionCommentOptions(postId: number) {
   return {
     document: COMMENT_SUBSCRIPTION,
@@ -153,3 +151,4 @@ function getSubscriptionCommentOptions(postId: number) {
 }
 
 export { getSubscriptionCommentOptions };
+export { withCommentAdding, withCommentEditing, withCommentDeleting, withCommentState };

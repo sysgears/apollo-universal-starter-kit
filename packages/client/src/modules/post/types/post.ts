@@ -13,11 +13,7 @@ interface Post {
   comments?: Comment[];
 }
 
-/* Component props */
-interface PostItemRenderProps {
-  node: Post;
-}
-
+/* Graphql types */
 interface PostsUpdatedProps {
   mutation: string;
   node: Post;
@@ -27,6 +23,13 @@ interface PostsUpdatedResult {
   postsUpdated: PostsUpdatedProps;
 }
 
+/* Types */
+type AddPostFn = (title: string, content: string) => any;
+type EditPostFn = (id: number, title: string, content: string) => any;
+type DeletePostFn = (id: number) => any;
+type LoadMoreRowsFn = () => Promise<ApolloQueryResult<any>>;
+
+/* Component props */
 interface PostQueryResult {
   post: Post;
   loadMoreRows: LoadMoreRowsFn;
@@ -46,24 +49,14 @@ interface PostProps
     QueryProps,
     NavigationScreenProps {}
 
-interface PostFormikProps {
+interface PostFormProps {
   onSubmit: (post: Post, addPost: AddPostFn, editPost: EditPostFn) => void;
   post: Post;
-}
-
-interface PostFormProps {
   submitting?: boolean;
 }
 
-/* Types */
-type AddPostFn = (title: string, content: string) => any;
-type EditPostFn = (id: number, title: string, content: string) => any;
-type DeletePostFn = (id: number) => any;
-type LoadMoreRowsFn = () => Promise<ApolloQueryResult<any>>;
-
 export { PostOperation };
 export { PostQueryResult };
-export { PostFormikProps };
-export { PostsUpdatedResult, PostItemRenderProps };
+export { PostsUpdatedResult };
 export { EditPostFn, AddPostFn, LoadMoreRowsFn };
 export { Post, PostProps, PostFormProps };

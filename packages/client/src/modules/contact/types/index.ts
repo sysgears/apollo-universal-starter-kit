@@ -5,11 +5,7 @@ interface Contact {
   content: string;
 }
 
-/* ComponentProps */
-interface ContactState {
-  sent: boolean;
-}
-
+/* Errors */
 interface ContactError {
   field: string;
   message: string;
@@ -20,20 +16,26 @@ interface ContactErrors {
 }
 
 /* Types */
-type SendContactFn = (contactData: Contact) => boolean | ContactErrors;
+type SendContactFn = (values: Contact) => Promise<boolean | ContactErrors>;
 
-interface ContactOperations {
+/* State */
+interface ContactState {
+  sent: boolean;
+}
+
+/* ComponentProps */
+interface ContactOperation {
   contact: SendContactFn;
 }
 
 // tslint:disable-next-line:no-empty-interface
-interface ContactProps extends ContactOperations {}
+interface ContactProps extends ContactOperation {}
 
-interface ContactFormikProps {
+interface ContactFormProps {
   onSubmit: (options?: any) => void;
   sent?: boolean;
 }
 
 export { Contact };
 export { SendContactFn };
-export { ContactOperations, ContactProps, ContactState, ContactError, ContactFormikProps, ContactErrors };
+export { ContactOperation, ContactProps, ContactState, ContactError, ContactFormProps };

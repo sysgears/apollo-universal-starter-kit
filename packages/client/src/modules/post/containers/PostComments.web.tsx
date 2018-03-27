@@ -51,11 +51,4 @@ class PostComments extends React.Component<PostCommentsProps, any> {
   }
 }
 
-const PostCommentsWithApollo: any = compose(
-  withCommentAdding,
-  withCommentEditing,
-  withCommentDeleting,
-  withCommentState
-)(PostComments);
-
-export default PostCommentsWithApollo;
+export default compose(withCommentAdding, withCommentEditing, withCommentDeleting, withCommentState)(PostComments);

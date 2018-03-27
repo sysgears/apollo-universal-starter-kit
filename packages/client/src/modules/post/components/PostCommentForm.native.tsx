@@ -3,7 +3,7 @@ import { withFormik, FormikProps } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
-import { Comment, CommentQueryResult, CommentFormikProps } from '../types';
+import { Comment, CommentFormProps } from '../types';
 
 const commentFormSchema: any = {
   content: [required]
@@ -11,7 +11,7 @@ const commentFormSchema: any = {
 
 const validate = (values: Comment) => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, comment }: CommentQueryResult & FormikProps<Comment>) => {
+const PostCommentForm = ({ values, handleSubmit, comment }: CommentFormProps & FormikProps<Comment>) => {
   let operation = 'Add';
   if (comment.id !== null) {
     operation = 'Edit';
@@ -25,7 +25,7 @@ const PostCommentForm = ({ values, handleSubmit, comment }: CommentQueryResult &
   );
 };
 
-const PostCommentFormWithFormik = withFormik<CommentFormikProps, Comment>({
+const PostCommentFormWithFormik = withFormik<CommentFormProps, Comment>({
   mapPropsToValues: ({ comment }) => ({ content: comment && comment.content }),
   validate: (values: Comment) => validate(values),
   handleSubmit: async (values: Comment, { resetForm, props: { onSubmit } }: any) => {

@@ -59,10 +59,12 @@ for (const middleware of modules.middlewares) {
 }
 
 for (const localization of modules.localizations) {
-  // eslint-disable-next-line
-  const resource = require(`@alienfast/i18next-loader!../modules/${localization.ns}/${localization.path}`);
-  for (const lang of Object.keys(resource)) {
-    modules.i18n.addResourceBundle(lang, localization.ns, resource[lang]);
+  console.log(localization);
+  if (!localization.resources) {
+    continue;
+  }
+  for (const lang of Object.keys(localization.resources)) {
+    modules.i18n.addResourceBundle(lang, localization.ns, localization.resources[lang]);
   }
 }
 

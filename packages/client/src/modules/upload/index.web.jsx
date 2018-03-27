@@ -6,7 +6,7 @@ import { MenuItem } from '../../modules/common/components/web';
 // Component and helpers
 import Upload from './containers/Upload';
 import reducers from './reducers';
-
+import resources from './locales';
 import Feature from '../connector';
 
 export default new Feature({
@@ -21,5 +21,5 @@ export default new Feature({
   ),
   reducer: { upload: reducers },
   createFetchOptions: constructUploadOptions,
-  localization: { ns: 'upload', path: 'locales/index.js' }
+  localization: { ns: 'upload', resources }
 });

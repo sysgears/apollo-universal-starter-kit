@@ -1,12 +1,11 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { MenuItem } from '../../modules/common/components/web';
 
+import { MenuItem } from '../../modules/common/components/web';
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';
-
+import resources from './locales';
 import resolvers from './resolvers';
-
 import Feature from '../connector';
 
 export default new Feature({
@@ -19,5 +18,5 @@ export default new Feature({
     </MenuItem>
   ),
   resolver: resolvers,
-  localization: { ns: 'post', path: 'locales/index.js' }
+  localization: { ns: 'post', resources }
 });

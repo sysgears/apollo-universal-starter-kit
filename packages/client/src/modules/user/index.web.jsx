@@ -1,6 +1,7 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink } from 'react-router-dom';
+
 import { MenuItem } from '../../modules/common/components/web';
 import Profile from './containers/Profile';
 import Users from './components/Users';
@@ -10,7 +11,7 @@ import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 import resolvers from './resolvers';
-
+import resources from './locales';
 import { AuthRoute, AuthLoggedInRoute, AuthNav, AuthLogin, AuthProfile } from './containers/Auth';
 
 import Feature from '../connector';
@@ -73,7 +74,7 @@ export default new Feature({
   ],
   resolver: resolvers,
   middleware: tokenMiddleware,
-  localization: { ns: 'user', path: 'locales/index.js' },
+  localization: { ns: 'user', resources },
   afterware: tokenAfterware,
   connectionParam: connectionParam,
   // eslint-disable-next-line react/display-name

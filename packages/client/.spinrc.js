@@ -2,6 +2,17 @@ const url = require('url');
 
 const config = {
   builders: {
+    electron: {
+      entry: './src/index.tsx',
+      stack: ['react-native-web', 'electron'],
+      openBrowser: false,
+      defines: {
+        __CLIENT__: true
+      },
+      // Wait for backend to start prior to letting webpack load frontend page
+      waitOn: ['tcp:localhost:8080'],
+      enabled: true
+    },
     web: {
       entry: './src/index.tsx',
       stack: ['react-native-web', 'web'],
@@ -11,7 +22,7 @@ const config = {
       },
       // Wait for backend to start prior to letting webpack load frontend page
       waitOn: ['tcp:localhost:8080'],
-      enabled: true
+      enabled: false
     },
     test: {
       stack: ['react-native-web', 'server'],

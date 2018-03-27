@@ -18,7 +18,7 @@
     "seed": "yarn migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
-    "watch": "spin watch",
+    "watch": "node ../../node_modules/spinjs/spin.js watch",
     "heroku-postbuild": "yarn build && yarn seed",
     "cli": "node ../../tools/cli",
     "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"

@@ -7,21 +7,21 @@ interface Comment {
 }
 
 /* Graphql types */
-interface CommentUpdatedProps {
+interface CommentUpdatedPayload {
   id: number;
   mutation: string;
   node: Comment;
 }
 
 interface CommentUpdatedResult {
-  commentUpdated: CommentUpdatedProps;
+  commentUpdated: CommentUpdatedPayload;
 }
 
 /* Types */
 type AddCommentFn = (content: string, postId: number) => any;
 type EditCommentFn = (id: number, content: string) => any;
 type DeleteCommentFn = (id: number) => any;
-type OnCommentSelectFn = (comment: Comment) => Promise<any>;
+type OnCommentSelectFn = (comment: Comment) => any;
 
 /* Component props */
 interface CommentQueryResult {

@@ -14,13 +14,13 @@ interface Post {
 }
 
 /* Graphql types */
-interface PostsUpdatedProps {
+interface PostsUpdatedPayload {
   mutation: string;
   node: Post;
 }
 
 interface PostsUpdatedResult {
-  postsUpdated: PostsUpdatedProps;
+  postsUpdated: PostsUpdatedPayload;
 }
 
 /* Types */

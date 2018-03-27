@@ -1,14 +1,11 @@
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import { Counter } from '../types';
+import { ApolloTypeName } from '../../../../../common/types';
 
 const TYPE_NAME = 'Amount';
 
-interface ApolloCounter extends Counter {
-  __typename: string;
-}
-
 export interface CounterApolloState {
-  stateCounter: ApolloCounter;
+  stateCounter: ApolloTypeName & Counter;
 }
 
 const defaults: CounterApolloState = {
@@ -26,11 +23,11 @@ const resolvers = {
     }
   },
   Mutation: {
-    addStateCounter: async (_: any, { value }: any, { cache }: any): Promise<boolean> => {
+    addStateCounter: (_: any, { value }: any, { cache }: any): any => {
       const { stateCounter: { amount } } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
       const newAmount: number = amount + value;
 
-      await cache.writeData({
+      cache.writeData({
         data: {
           stateCounter: {
             amount: newAmount,

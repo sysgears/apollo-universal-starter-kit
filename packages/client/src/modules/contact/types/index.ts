@@ -1,3 +1,5 @@
+import { Errors } from '../../../../../common/types';
+
 /* Entities */
 interface Contact {
   name: string;
@@ -5,25 +7,15 @@ interface Contact {
   content: string;
 }
 
-/* Errors */
-interface ContactError {
-  field: string;
-  message: string;
-}
-
-interface ContactErrors {
-  errors: ContactError[];
-}
-
 /* Types */
-type SendContactFn = (values: Contact) => Promise<boolean | ContactErrors>;
+type SendContactFn = (values: Contact) => Promise<boolean | Errors>;
 
-/* State */
+/* Component State */
 interface ContactState {
   sent: boolean;
 }
 
-/* ComponentProps */
+/* Component Props */
 interface ContactOperation {
   contact: SendContactFn;
 }
@@ -38,4 +30,4 @@ interface ContactFormProps {
 
 export { Contact };
 export { SendContactFn };
-export { ContactOperation, ContactProps, ContactState, ContactError, ContactFormProps };
+export { ContactOperation, ContactProps, ContactState, ContactFormProps };

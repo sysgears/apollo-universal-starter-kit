@@ -4,11 +4,12 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 
 class Feature {
   // eslint-disable-next-line
-  constructor({ grant, schema, createResolversFunc, createContextFunc }) {
+  constructor({ grant, schema, createResolversFunc, createContextFunc, htmlHeadComponent }) {
     this.grant = combine(arguments, arg => arg.grant);
     this.schema = combine(arguments, arg => arg.schema);
     this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
+    this.htmlHeadComponent = combine(arguments, arg => arg.htmlHeadComponent);
   }
 
   get grantAccess() {

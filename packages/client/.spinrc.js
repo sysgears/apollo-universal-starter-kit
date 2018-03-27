@@ -24,10 +24,9 @@ const config = {
   options: {
     stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack'],
     cache: '../../.cache',
-    ssr: false,
+    ssr: true,
     webpackDll: true,
     reactHotLoader: false,
-    persistGraphQL: false,
     frontendRefreshOnBackendChange: true,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
@@ -47,8 +46,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const extraDefines = {
-  __SSR__: config.options.ssr,
-  __PERSIST_GQL__: config.options.persistGraphQL
+  __SSR__: config.options.ssr
 };
 
 config.options.defines = Object.assign(config.options.defines, extraDefines);

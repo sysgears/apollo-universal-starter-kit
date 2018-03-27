@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { constructUploadOptions } from 'apollo-fetch-upload';
 import { MenuItem } from '../../modules/common/components/web';
 
 // Component and helpers
@@ -19,6 +18,5 @@ export default new Feature({
       </NavLink>
     </MenuItem>
   ),
-  reducer: { upload: reducers },
-  createFetchOptions: constructUploadOptions
+  reducer: { upload: reducers }
 });

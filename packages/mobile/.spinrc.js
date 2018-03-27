@@ -53,9 +53,7 @@ if (process.env.NODE_ENV === 'production') {
   config.options.sourceMap = false;
 }
 
-const extraDefines = {
-  __PERSIST_GQL__: config.options.persistGraphQL
-};
+const extraDefines = {};
 
 config.options.defines = Object.assign(config.options.defines, extraDefines);
 

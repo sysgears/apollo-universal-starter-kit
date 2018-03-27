@@ -4,7 +4,6 @@ import { getOperationAST } from 'graphql';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import { createApolloFetch } from 'apollo-fetch';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
@@ -40,7 +39,6 @@ export default class Main extends React.Component {
         ? `${protocol}//${url.parse(this.props.expUri).hostname}:${port}${pathname}`
         : __API_URL__;
     log.info(`Connecting to GraphQL backend at: ${uri}`);
-    const fetch = createApolloFetch({ uri });
     const cache = new InMemoryCache();
 
     const wsUri = uri.replace(/^http/, 'ws');
@@ -55,7 +53,7 @@ export default class Main extends React.Component {
           reconnect: true
         }
       }),
-      new BatchHttpLink({ fetch })
+      new BatchHttpLink({ uri, credentials: 'include' })
     );
 
     let connectionParams = {};

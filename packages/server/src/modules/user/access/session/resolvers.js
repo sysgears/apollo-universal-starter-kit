@@ -1,4 +1,4 @@
-import { updateSession } from './sessions';
+import { writeSession } from './sessions';
 
 export default () => ({
   Mutation: {
@@ -7,7 +7,7 @@ export default () => ({
 
       delete session.userId;
 
-      req.session = updateSession(req, session);
+      req.session = writeSession(req, session);
     }
   }
 });

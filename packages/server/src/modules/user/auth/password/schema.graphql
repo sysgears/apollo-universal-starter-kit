@@ -3,8 +3,14 @@ input LoginUserInput {
     password: String!
 }
 
+type Tokens {
+    accessToken: String
+    refreshToken: String
+}
+
 type AuthPayload {
     user: User
+    tokens: Tokens
     errors: [FieldError!]
 }
 

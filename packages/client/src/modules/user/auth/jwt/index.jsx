@@ -7,18 +7,19 @@ import { LayoutCenter } from '../../../common/components';
 import { getItem, setItem, removeItem } from './tokenStorage';
 import Feature from '../connector';
 import modules from '../../..';
+import settings from '../../../../../../../settings';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import CURRENT_USER_QUERY from '../../graphql/CurrentUserQuery.graphql';
 
 const setJWTContext = async operation => {
   const accessToken = await getItem('accessToken');
-  operation.setContext({
-    credentials: 'same-origin',
+  operation.setContext(context => ({
+    ...context,
     headers: {
-      authorization: accessToken ? `Bearer ${accessToken}` : null
+      Authorization: accessToken ? `Bearer ${accessToken}` : null
     }
-  });
+  }));
 };
 
 const isTokenRefreshNeeded = async (operation, result) => {
@@ -105,6 +106,8 @@ const JWTLink = new ApolloLink((operation, forward) => {
 
 // TODO: shouldn't be needed at all when React Apollo will allow rendering
 // all queries as loading: true during SSR
+// TODO: shouldn't be needed at all when React Apollo will allow rendering
+// all queries as loading: true during SSR
 class DataRootComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -161,8 +164,12 @@ DataRootComponent.propTypes = {
   children: PropTypes.node
 };
 
-export default new Feature({
-  dataRootComponent: withApollo(DataRootComponent),
-  link: __CLIENT__ ? JWTLink : undefined,
-  logout: removeTokens
-});
+export default new Feature(
+  settings.user.auth.access.jwt.enabled
+    ? {
+        dataRootComponent: !settings.user.auth.access.session.enabled ? withApollo(DataRootComponent) : undefined,
+        link: __CLIENT__ ? JWTLink : undefined,
+        logout: removeTokens
+      }
+    : {}
+);

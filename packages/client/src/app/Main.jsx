@@ -1,6 +1,5 @@
 import React from 'react';
 import { getOperationAST } from 'graphql';
-import { createApolloFetch } from 'apollo-fetch';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
@@ -12,9 +11,6 @@ import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
-// import { addPersistedQueries } from 'persistgraphql';
-// eslint-disable-next-line import/no-unresolved, import/no-extraneous-dependencies, import/extensions
-// import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
 
 import RedBox from './RedBox';
@@ -24,11 +20,6 @@ import settings from '../../../../settings';
 import Routes from './Routes';
 import modules from '../modules';
 import log from '../../../common/log';
-
-const fetch = createApolloFetch({
-  uri: __API_URL__,
-  constructOptions: modules.constructFetchOptions
-});
 
 log.info(`Connecting to GraphQL backend at: ${__API_URL__}`);
 
@@ -74,14 +65,10 @@ const netLink = ApolloLink.split(
     return !!operationAST && operationAST.operation === 'subscription';
   },
   new WebSocketLink(wsClient),
-  new BatchHttpLink({ fetch })
+  new BatchHttpLink({ uri: __API_URL__, credentials: 'include' })
 );
 
 const linkState = withClientState({ ...modules.resolvers, cache });
-
-// if (__PERSIST_GQL__) {
-//   networkInterface = addPersistedQueries(networkInterface, queryMap);
-// }
 
 const links = [...modules.link, linkState, netLink];
 
@@ -113,7 +100,6 @@ history.listen(location => logPageView(location));
 
 let store;
 if (module.hot && module.hot.data && module.hot.data.store) {
-  // console.log("Restoring Redux store:", JSON.stringify(module.hot.data.store.getState()));
   store = module.hot.data.store;
   store.replaceReducer(storeReducer);
 } else {
@@ -122,9 +108,7 @@ if (module.hot && module.hot.data && module.hot.data.store) {
 
 if (module.hot) {
   module.hot.dispose(data => {
-    // console.log("Saving Redux store:", JSON.stringify(store.getState()));
     data.store = store;
-    // Force Apollo to fetch the latest data from the server
     delete window.__APOLLO_STATE__;
   });
 }

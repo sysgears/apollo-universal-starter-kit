@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 import { SchemaLink } from 'apollo-link-schema';
@@ -11,7 +10,6 @@ import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
 import { LoggingLink } from 'apollo-logger';
-// import { addPersistedQueries } from 'persistgraphql';
 import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
@@ -30,28 +28,13 @@ import schema from '../api/schema';
 let assetMap;
 
 const renderServerSide = async (req, res) => {
-  // if (__PERSIST_GQL__) {
-  //   networkInterface = addPersistedQueries(networkInterface, queryMap);
-  // }
-  //
   const clientModules = require('../../../client/src/modules').default;
-
-  const fetch = createApolloFetch({
-    uri: apiUrl,
-    constructOptions: modules.constructFetchOptions
-  });
-  fetch.batchUse(({ options }, next) => {
-    options.credentials = 'include';
-    options.headers = req.headers;
-
-    next();
-  });
 
   const cache = new InMemoryCache();
 
   const netLink = !isApiExternal
     ? new SchemaLink({ schema, context: await modules.createContext(req, res) })
-    : new BatchHttpLink({ fetch });
+    : new BatchHttpLink({ uri: apiUrl, credentials: 'include' });
   const linkState = withClientState({ ...clientModules.resolvers, cache });
 
   const links = [...clientModules.link, linkState, netLink];
@@ -118,10 +101,10 @@ const renderServerSide = async (req, res) => {
   }
 };
 
-export default queryMap => async (req, res, next) => {
+export default async (req, res, next) => {
   try {
     if (req.url.indexOf('.') < 0 && __SSR__) {
-      return await renderServerSide(req, res, queryMap);
+      return await renderServerSide(req, res);
     } else {
       next();
     }

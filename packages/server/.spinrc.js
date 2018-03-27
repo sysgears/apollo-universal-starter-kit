@@ -45,7 +45,6 @@ if (process.env.NODE_ENV === 'production') {
 
 const extraDefines = {
   __SSR__: config.options.ssr,
-  __PERSIST_GQL__: config.options.persistGraphQL,
   __FRONTEND_BUILD_DIR__: `"../client/build"`,
   __DLL_BUILD_DIR__: `"../client/build/dll"`
 };

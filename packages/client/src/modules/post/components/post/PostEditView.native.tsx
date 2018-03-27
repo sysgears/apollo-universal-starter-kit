@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 import PostForm from './PostForm.native';
-import PostComments from '../containers/comment/PostComments.native';
+import PostComments from '../../containers/comment/PostComments.native';
 
-import { PostProps, AddPostFn, EditPostFn, Post } from '../types';
+import { PostProps, AddPostFn, EditPostFn, Post } from '../../types';
 
 const onSubmit = (post: Post, addPost: AddPostFn, editPost: EditPostFn) => (values: Post) => {
   if (post) {

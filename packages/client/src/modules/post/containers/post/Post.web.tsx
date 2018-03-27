@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose } from 'react-apollo';
 
-import PostList from '../../components/PostList.web';
+import PostList from '../../components/post/PostList.web';
 import { PostProps } from '../../types';
 
 import { withPostList, withPostDeleting, getSubscriptionOptions } from '../../graphql';

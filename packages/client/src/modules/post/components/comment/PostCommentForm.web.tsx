@@ -1,9 +1,9 @@
 import React from 'react';
 import { withFormik, FormikProps } from 'formik';
-import Field from '../../../utils/FieldAdapter';
-import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
-import { required, validateForm } from '../../../../../common/validation';
-import { Comment, CommentFormProps } from '../types';
+import Field from '../../../../utils/FieldAdapter';
+import { Form, RenderField, Row, Col, Label, Button } from '../../../common/components/web';
+import { required, validateForm } from '../../../../../../common/validation';
+import { Comment, CommentFormProps } from '../../types';
 
 const commentFormSchema: any = {
   content: [required]

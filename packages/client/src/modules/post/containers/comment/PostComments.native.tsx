@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose } from 'react-apollo';
 
-import PostCommentsView from '../../components/PostCommentsView.native';
+import PostCommentsView from '../../components/comment/PostCommentsView.native';
 import { PostCommentsProps } from '../../types';
 
 import {

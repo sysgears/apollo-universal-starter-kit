@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose } from 'react-apollo';
 
-import PostEditView from '../../components/PostEditView.web';
+import PostEditView from '../../components/post/PostEditView.web';
 import { PostProps } from '../../types';
 import { withPost, withPostAdding, withPostEditing, getSubscriptionPostOptions } from '../../graphql';
 

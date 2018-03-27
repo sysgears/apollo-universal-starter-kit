@@ -1,11 +1,11 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { PageLayout, Table, Button } from '../../common/components/web';
-import settings from '../../../../../../settings';
+import { PageLayout, Table, Button } from '../../../common/components/web';
+import settings from '../../../../../../../settings';
 
-import { PostProps, LoadMoreRowsFn, Post } from '../types/post';
-import { EntityList } from '../../../../../common/types';
+import { PostProps, LoadMoreRowsFn, Post } from '../../types';
+import { EntityList } from '../../../../../../common/types';
 
 export default class PostList extends React.PureComponent<PostProps, any> {
   public handleDeletePost = (id: number) => {

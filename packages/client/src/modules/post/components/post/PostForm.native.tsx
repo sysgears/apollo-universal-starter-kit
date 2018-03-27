@@ -1,10 +1,10 @@
 import React from 'react';
 import { withFormik, FormikProps } from 'formik';
-import Field from '../../../utils/FieldAdapter';
-import { Form, RenderField, Button } from '../../common/components/web';
-import { required, validateForm } from '../../../../../common/validation';
+import Field from '../../../../utils/FieldAdapter';
+import { FormView, RenderField, FormButton } from '../../../common/components/native';
+import { required, validateForm } from '../../../../../../common/validation';
 
-import { PostFormProps, Post } from '../types';
+import { PostFormProps, Post } from '../../types';
 
 const postFormSchema: any = {
   title: [required],
@@ -13,15 +13,13 @@ const postFormSchema: any = {
 
 const validate = (values: Post) => validateForm(values, postFormSchema);
 
-const PostForm = ({ values, handleSubmit, submitting }: PostFormProps & FormikProps<Post>) => {
+const PostForm = ({ values, handleSubmit }: FormikProps<Post>) => {
   return (
-    <Form name="post" onSubmit={handleSubmit}>
+    <FormView>
       <Field name="title" component={RenderField} type="text" label="Title" value={values.title} />
       <Field name="content" component={RenderField} type="text" label="Content" value={values.content} />
-      <Button color="primary" type="submit" disabled={submitting}>
-        Save
-      </Button>
-    </Form>
+      <FormButton onPress={handleSubmit}>Save</FormButton>
+    </FormView>
   );
 };
 
@@ -34,7 +32,6 @@ const PostFormWithFormik = withFormik<PostFormProps, Post>({
   handleSubmit(values: Post, { props: { onSubmit } }: any) {
     onSubmit(values);
   },
-  enableReinitialize: true,
   displayName: 'PostForm' // helps with React DevTools
 });
 

@@ -12,10 +12,17 @@ import {
   ListRenderItemInfo
 } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { SwipeAction } from '../../common/components/native';
+import { SwipeAction } from '../../../common/components/native';
 
 import PostCommentForm from './PostCommentForm.native';
-import { PostCommentsProps, Comment, AddCommentFn, DeleteCommentFn, EditCommentFn, OnCommentSelectFn } from '../types';
+import {
+  PostCommentsProps,
+  Comment,
+  AddCommentFn,
+  DeleteCommentFn,
+  EditCommentFn,
+  OnCommentSelectFn
+} from '../../types';
 
 export default class PostCommentsView extends React.PureComponent<PostCommentsProps, any> {
   public keyExtractor = (item: Comment) => `${item.id}`;

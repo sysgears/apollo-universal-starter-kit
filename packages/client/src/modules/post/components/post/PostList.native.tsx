@@ -11,10 +11,10 @@ import {
   ListRenderItem,
   ListRenderItemInfo
 } from 'react-native';
-import { SwipeAction } from '../../common/components/native';
+import { SwipeAction } from '../../../common/components/native';
 
-import { PostProps, Post } from '../types';
-import { Edge } from '../../../../../common/types';
+import { PostProps, Post } from '../../types';
+import { Edge } from '../../../../../../common/types';
 
 export default class PostList extends React.PureComponent<PostProps, any> {
   public onEndReachedCalledDuringMomentum = false;

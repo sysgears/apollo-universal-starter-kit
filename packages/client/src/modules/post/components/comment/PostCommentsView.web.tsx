@@ -1,8 +1,8 @@
 import React from 'react';
-import { Table, Button } from '../../common/components/web';
+import { Table, Button } from '../../../common/components/web';
 import PostCommentForm from './PostCommentForm.web';
 
-import { PostCommentsProps, Comment } from '../types';
+import { PostCommentsProps, Comment } from '../../types';
 
 export default class PostCommentsView extends React.PureComponent<PostCommentsProps, any> {
   public handleEditComment = (id: number, content: string) => {

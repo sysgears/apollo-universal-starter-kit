@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import ContactForm from './ContactForm.native';
-import { ContactProps, Contact, ContactError, SendContactFn } from '../types';
+import { ContactProps, Contact, SendContactFn } from '../types';
+import { Error } from '../../../../../common/types';
 
 const onSubmit = (contact: SendContactFn) => async (values: Contact) => {
   const result: any = await contact(values);
@@ -11,7 +12,7 @@ const onSubmit = (contact: SendContactFn) => async (values: Contact) => {
     const submitError: any = {
       _error: 'Contact request failed!'
     };
-    result.errors.map((error: ContactError) => (submitError[error.field] = error.message));
+    result.errors.map((error: Error) => (submitError[error.field] = error.message));
     throw submitError;
   }
 };

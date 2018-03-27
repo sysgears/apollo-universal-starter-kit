@@ -5,7 +5,8 @@ import { PageLayout } from '../../common/components/web';
 
 import ContactForm from './ContactForm.web';
 import settings from '../../../../../../settings';
-import { ContactProps, Contact, ContactState, ContactError, ContactOperation } from '../types';
+import { ContactProps, Contact, ContactState, ContactOperation } from '../types';
+import { Error } from '../../../../../common/types';
 
 export default class ContactView extends React.Component<ContactProps, ContactState> {
   constructor(props: ContactProps) {
@@ -22,7 +23,7 @@ export default class ContactView extends React.Component<ContactProps, ContactSt
       const submitError: any = {
         _error: 'Contact request failed!'
       };
-      result.errors.map((error: ContactError) => (submitError[error.field] = error.message));
+      result.errors.map((error: Error) => (submitError[error.field] = error.message));
       throw submitError;
     }
 

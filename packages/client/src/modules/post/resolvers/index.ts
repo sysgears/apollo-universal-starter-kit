@@ -1,4 +1,4 @@
-import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
+import COMMENT_QUERY_CLIENT from '../graphql/comment/CommentQuery.client.graphql';
 import { Comment } from '../types';
 import { ApolloTypeName } from '../../../../../common/types';
 

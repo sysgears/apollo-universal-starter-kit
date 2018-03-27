@@ -5,13 +5,13 @@ import update from 'immutability-helper';
 import { Post, PostQueryResult, PostOperation, PostProps, PostsUpdatedResult } from '../../types';
 import { Edge, SubscriptionResult, ApolloTypeName } from '../../../../../../common/types';
 
-import POSTS_QUERY from '../PostsQuery.graphql';
-import DELETE_POST from '../DeletePost.graphql';
-import POST_QUERY from '../PostQuery.graphql';
-import ADD_POST from '../AddPost.graphql';
-import EDIT_POST from '../EditPost.graphql';
-import POST_SUBSCRIPTION from '../PostSubscription.graphql';
-import POSTS_SUBSCRIPTION from '../PostsSubscription.graphql';
+import POSTS_QUERY from './PostsQuery.graphql';
+import DELETE_POST from './DeletePost.graphql';
+import POST_QUERY from './PostQuery.graphql';
+import ADD_POST from './AddPost.graphql';
+import EDIT_POST from './EditPost.graphql';
+import POST_SUBSCRIPTION from './PostSubscription.graphql';
+import POSTS_SUBSCRIPTION from './PostsSubscription.graphql';
 
 function AddPost(prev: PostQueryResult, node: Post) {
   // ignore if duplicate

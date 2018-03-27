@@ -11,12 +11,12 @@ import {
 } from '../../types';
 import { SubscriptionResult } from '../../../../../../common/types';
 
-import ADD_COMMENT from '../AddComment.graphql';
-import EDIT_COMMENT from '../EditComment.graphql';
-import DELETE_COMMENT from '../DeleteComment.graphql';
-import ADD_COMMENT_CLIENT from '../AddComment.client.graphql';
-import COMMENT_QUERY_CLIENT from '../CommentQuery.client.graphql';
-import COMMENT_SUBSCRIPTION from '../CommentSubscription.graphql';
+import ADD_COMMENT from './AddComment.graphql';
+import EDIT_COMMENT from './EditComment.graphql';
+import DELETE_COMMENT from './DeleteComment.graphql';
+import ADD_COMMENT_CLIENT from './AddComment.client.graphql';
+import COMMENT_QUERY_CLIENT from './CommentQuery.client.graphql';
+import COMMENT_SUBSCRIPTION from './CommentSubscription.graphql';
 
 function AddComment(prev: PostQueryResult, node: Comment) {
   // ignore if duplicate

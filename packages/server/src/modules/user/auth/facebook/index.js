@@ -65,7 +65,7 @@ if (settings.user.auth.facebook.enabled) {
     app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
       const user = await User.getUserWithPassword(req.user.id);
       const redirectUrl = req.query.state;
-      const tokens = access.grant(user);
+      const tokens = access.grantAccess(user, req);
 
       if (redirectUrl) {
         res.redirect(

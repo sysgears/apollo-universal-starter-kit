@@ -19,9 +19,6 @@ const grant = async user => {
   };
 };
 
-// Do nothing, revoking access should be done client-side
-const revoke = async () => {};
-
 const getCurrentUser = async ({ req }) => {
   const authorization = req && req.headers['authorization'];
   const parts = authorization && authorization.split(' ');
@@ -36,8 +33,8 @@ const getCurrentUser = async ({ req }) => {
   }
 };
 
-const createContextFunc = async (req, res, connectionParams, webSocket) => {
-  const user = await getCurrentUser({ req, connectionParams, webSocket });
+const createContextFunc = async (req, res, connectionParams, webSocket, context) => {
+  const user = context.user || (await getCurrentUser({ req, connectionParams, webSocket }));
   const auth = {
     isAuthenticated: !!user,
     scope: user ? scopes[user.role] : null
@@ -50,10 +47,13 @@ const createContextFunc = async (req, res, connectionParams, webSocket) => {
   };
 };
 
-export default new Feature({
-  grant,
-  revoke,
-  schema,
-  createResolversFunc: resolvers,
-  createContextFunc
-});
+export default new Feature(
+  settings.user.auth.access.jwt.enabled
+    ? {
+        grant,
+        schema,
+        createResolversFunc: resolvers,
+        createContextFunc
+      }
+    : {}
+);

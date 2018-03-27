@@ -24,7 +24,7 @@ const config = {
   options: {
     stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack'],
     cache: '../../.cache',
-    ssr: true,
+    ssr: false,
     webpackDll: true,
     reactHotLoader: false,
     persistGraphQL: false,

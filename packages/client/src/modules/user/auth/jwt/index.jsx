@@ -43,6 +43,16 @@ const isTokenRefreshNeeded = async (operation, result) => {
 
 let apolloClient;
 
+const saveTokens = async ({ accessToken, refreshToken }) => {
+  await setItem('accessToken', accessToken);
+  await setItem('refreshToken', refreshToken);
+};
+
+const removeTokens = async () => {
+  await removeItem('accessToken');
+  await removeItem('refreshToken');
+};
+
 const JWTLink = new ApolloLink((operation, forward) => {
   return new Observable(observer => {
     let sub, retrySub;
@@ -53,31 +63,27 @@ const JWTLink = new ApolloLink((operation, forward) => {
       try {
         sub = forward(operation).subscribe({
           next: async result => {
+            let retry = false;
             if (operation.operationName === 'login') {
               const { data: { login: { tokens: { accessToken, refreshToken } } } } = result;
-              await setItem('accessToken', accessToken);
-              await setItem('refreshToken', refreshToken);
-              observer.next(result);
-              observer.complete();
+              await saveTokens({ accessToken, refreshToken });
             } else if (await isTokenRefreshNeeded(operation, result)) {
               try {
                 const { data: { refreshTokens: { accessToken, refreshToken } } } = await apolloClient.mutate({
                   mutation: REFRESH_TOKENS_MUTATION,
                   variables: { refreshToken: await getItem('refreshToken') }
                 });
-                await setItem('accessToken', accessToken);
-                await setItem('refreshToken', refreshToken);
+                await saveTokens({ accessToken, refreshToken });
                 // Retry current operation
                 await setJWTContext(operation);
                 retrySub = forward(operation).subscribe(observer);
+                retry = true;
               } catch (e) {
                 // We have received error during refresh - drop tokens and return original request result
-                await removeItem('accessToken');
-                await removeItem('refreshToken');
-                observer.next(result);
-                observer.complete();
+                await removeTokens();
               }
-            } else {
+            }
+            if (!retry) {
               observer.next(result);
               observer.complete();
             }
@@ -157,5 +163,6 @@ DataRootComponent.propTypes = {
 
 export default new Feature({
   dataRootComponent: withApollo(DataRootComponent),
-  link: JWTLink
+  link: __CLIENT__ ? JWTLink : undefined,
+  logout: removeTokens
 });

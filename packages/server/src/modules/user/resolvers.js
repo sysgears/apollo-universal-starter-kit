@@ -3,7 +3,6 @@ import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 
-import access from './access';
 import auth from './auth';
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
@@ -30,9 +29,6 @@ export default pubsub => ({
     }
   },
   Mutation: {
-    logout(obj, args, context) {
-      return access.revoke(context.req);
-    },
     addUser: withAuth(
       (obj, args, context) => {
         return context.user.id !== args.id ? ['user:create'] : ['user:create:self'];

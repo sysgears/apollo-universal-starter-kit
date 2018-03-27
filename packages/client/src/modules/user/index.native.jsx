@@ -65,6 +65,8 @@ ProfileScreen.propTypes = {
   navigation: PropTypes.object
 };
 
+export * from './containers/Auth';
+
 export default new Feature(auth, {
   tabItem: {
     Profile: {

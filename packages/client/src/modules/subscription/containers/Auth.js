@@ -5,7 +5,7 @@ import { Redirect, NavLink } from 'react-router-dom';
 
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 
-import { IfLoggedIn, AuthRoute } from '../../user/containers/Auth';
+import { IfLoggedIn, AuthRoute } from '../../user';
 
 const SubscriberNav = ({ loading, active, children, ...rest }) => {
   return (

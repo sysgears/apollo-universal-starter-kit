@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo, graphql } from 'react-apollo';
 
+import auth from '../auth';
+
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
-import LOGOUT from '../graphql/Logout.graphql';
 
 const withUser = Component => {
   const WithUser = ({ ...props }) => <Component {...props} />;
@@ -28,7 +29,7 @@ const withLoadedUser = Component => {
     currentUserLoading: PropTypes.bool.isRequired
   };
 
-  return withUser(Component);
+  return withUser(WithLoadedUser);
 };
 
 const IfLoggedInComponent = ({ currentUser, role, children, elseComponent }) =>
@@ -53,19 +54,9 @@ IfNotLoggedInComponent.propTypes = {
 const IfNotLoggedIn = withLoadedUser(IfNotLoggedInComponent);
 
 const withLogout = Component =>
-  withApollo(
-    graphql(LOGOUT, {
-      props: ({ ownProps: { client }, mutate }) => ({
-        logout: async () => {
-          const { data: { logout } } = await mutate();
-
-          if (!logout || !logout.errors) {
-            await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
-          }
-          return logout;
-        }
-      })
-    })(Component)
-  );
+  withApollo(({ client, ...props }) => {
+    const newProps = { ...props, logout: () => auth.doLogout(client) };
+    return <Component {...newProps} />;
+  });
 
 export { withUser, withLoadedUser, IfLoggedIn, IfNotLoggedIn, withLogout };

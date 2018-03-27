@@ -2,6 +2,14 @@ const CERTIFICATE_DEVSERIAL = '00';
 export default {
   secret: process.env.NODE_ENV === 'test' ? 'secret for tests' : process.env.AUTH_SECRET,
   auth: {
+    access: {
+      session: {
+        enabled: true
+      },
+      jwt: {
+        enabled: true
+      }
+    },
     password: {
       confirm: true,
       sendConfirmationEmail: true,
@@ -13,7 +21,7 @@ export default {
       enabled: false
     },
     facebook: {
-      enabled: false,
+      enabled: true,
       clientID: process.env.FACEBOOK_CLIENTID,
       clientSecret: process.env.FACEBOOK_CLIENTSECRET,
       scope: ['email'],

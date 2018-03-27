@@ -29,6 +29,8 @@ const LogoutLink = withRouter(
   ))
 );
 
+export * from './containers/Auth';
+
 export default new Feature(auth, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={withUser(ProfileView)} />,

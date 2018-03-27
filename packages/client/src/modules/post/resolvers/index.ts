@@ -2,7 +2,6 @@ import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 import { Comment } from '../types';
 
 const TYPE_NAME = 'CommentState';
-const TYPE_NAME_COMMENT = 'Comment';
 
 interface ApolloComment extends Comment {
   __typename: string;
@@ -16,7 +15,7 @@ const defaults: CommentApolloState = {
   comment: {
     id: null,
     content: '',
-    __typename: TYPE_NAME_COMMENT
+    __typename: TYPE_NAME
   }
 };
 
@@ -27,7 +26,7 @@ const resolvers = {
       return {
         comment: {
           ...comment,
-          __typename: TYPE_NAME_COMMENT
+          __typename: TYPE_NAME
         }
       };
     }
@@ -38,7 +37,7 @@ const resolvers = {
         data: {
           comment: {
             ...comment,
-            __typename: TYPE_NAME_COMMENT
+            __typename: TYPE_NAME
           }
         }
       });

@@ -10,7 +10,6 @@ import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { combineReducers, createStore } from 'redux';
 import { graphql, print, getOperationAST } from 'graphql';
-import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 
 import rootSchema from '../../../server/src/api/rootSchema.graphql';
@@ -38,9 +37,7 @@ process.on('uncaughtException', ex => {
 });
 
 for (const localization of clientModules.localizations) {
-  // eslint-disable-next-line
-  const resource = require(`@alienfast/i18next-loader!../modules/${localization.ns}/${localization.path}`);
-  clientModules.i18n.addResourceBundle('en', localization.ns, resource.en);
+  clientModules.i18n.addResourceBundle('en', localization.ns, localization.resources.en);
 }
 
 class MockLink extends ApolloLink {
@@ -193,11 +190,9 @@ export default class Renderer {
     return mount(
       this.withApollo(
         clientModules.getWrappedRoot(
-          <I18nextProvider i18n={clientModules.i18n}>
-            <Router history={this.history}>
-              <Switch>{clientModules.routes}</Switch>
-            </Router>
-          </I18nextProvider>
+          <Router history={this.history}>
+            <Switch>{clientModules.routes}</Switch>
+          </Router>
         )
       )
     );

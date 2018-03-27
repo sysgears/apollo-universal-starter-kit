@@ -49,12 +49,12 @@ class PostCommentsView extends React.PureComponent {
     const { postId, comments, comment, t } = this.props;
     const columns = [
       {
-        title: t('post.content'),
+        title: t('comment.column.content'),
         dataIndex: 'content',
         key: 'content'
       },
       {
-        title: t('post.actions'),
+        title: t('comment.column.actions'),
         key: 'actions',
         width: 120,
         render: (text, record) => (
@@ -65,7 +65,7 @@ class PostCommentsView extends React.PureComponent {
               className="edit-comment"
               onClick={() => this.handleEditComment(record.id, record.content)}
             >
-              {t('comment.btnEdit')}
+              {t('comment.btn.edit')}
             </Button>{' '}
             <Button
               color="primary"
@@ -73,7 +73,7 @@ class PostCommentsView extends React.PureComponent {
               className="delete-comment"
               onClick={() => this.handleDeleteComment(record.id)}
             >
-              {t('post.btnDelete')}
+              {t('comment.btn.del')}
             </Button>
           </div>
         )

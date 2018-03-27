@@ -1,30 +1,57 @@
 {
   "comment": {
-    "label": "Comment",
-    "add": "Add comment",
-    "edit": "Edit comment",
-    "btnEdit": "Edit",
-    "title": "Comments"
+    "title": "Comments",
+    "label": {
+      "field": "Comment",
+      "add": "Add",
+      "edit": "Edit",
+      "comment": "comment"
+    },
+    "btn": {
+      "edit": "Edit",
+      "submit": "Save",
+      "del": "Delete"
+    },
+    "column": {
+      "content": "Content",
+      "actions": "Actions"
+    }
+
   },
+
   "post": {
-    "btnSave": "Save",
-    "btnDelete": "Delete",
     "title": "Edit post",
     "meta": "Edit post example page",
-    "loading": "Loading...",
-    "edit": "Edit",
-    "create": "Create",
-    "name": "Post",
-    "titleField": "Title",
-    "content": "Content",
-    "actions": "Actions",
-    "back": "Back"
+    "loadMsg": "Loading...",
+    "btn": {
+      "edit": "Edit",
+      "submit": "Save",
+      "del": "Delete",
+      "back": "Back"
+    },
+    "label": {
+      "edit": "Edit",
+      "create": "Create",
+      "post": "post"
+    },
+    "field": {
+      "title": "Title",
+      "content": "Content"
+    }
   },
+
   "list": {
     "title": "Posts list",
     "meta": "List of all posts example page",
-    "add": "Add",
-    "posts": "Posts",
-    "morePosts": "Load more ..."
+    "column": {
+      "title": "Title",
+      "actions": "Actions"
+    },
+    "btn": {
+      "add": "Add",
+      "del": "Delete",
+      "more": "Load more ..."
+    },
+    "subTitle": "Posts"
   }
 }

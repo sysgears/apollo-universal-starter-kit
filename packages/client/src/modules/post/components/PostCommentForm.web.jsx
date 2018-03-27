@@ -18,7 +18,9 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
     <Form name="comment" onSubmit={handleSubmit}>
       <Row>
         <Col xs={2}>
-          <Label>{comment.id === null ? t('comment.add') : t('comment.add')}</Label>
+          <Label>
+            {comment.id === null ? t('comment.label.add') : t('comment.label.edit')} {t('comment.label.comment')}
+          </Label>
         </Col>
         <Col xs={8}>
           <Field
@@ -26,12 +28,12 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
             component={RenderField}
             type="text"
             value={values.content}
-            placeholder={t('comment.label')}
+            placeholder={t('comment.label.field')}
           />
         </Col>
         <Col xs={2}>
           <Button color="primary" type="submit" className="float-right">
-            {t('post.btnSave')}
+            {t('comment.btn.submit')}
           </Button>
         </Col>
       </Row>

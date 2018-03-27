@@ -40,7 +40,7 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
     return (
       <PageLayout>
         {renderMetaData()}
-        <div className="text-center">{t('post.loading')}</div>
+        <div className="text-center">{t('post.loadMsg')}</div>
       </PageLayout>
     );
   } else {
@@ -48,11 +48,10 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
       <PageLayout>
         {renderMetaData()}
         <Link id="back-button" to="/posts">
-          {t('post.back')}
+          {t('post.btn.back')}
         </Link>
         <h2>
-          {post ? t('post.edit') : t('post.create')}
-          {' ' + t('post.name')}
+          {post ? t('post.label.edit') : t('post.label.create')} {t('post.label.post')}
         </h2>
         <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
         <br />

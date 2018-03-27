@@ -26,7 +26,7 @@ class PostList extends React.PureComponent {
     if (posts.pageInfo.hasNextPage) {
       return (
         <Button id="load-more" color="primary" onClick={loadMoreRows}>
-          {t('list.morePosts')}
+          {t('list.btn.more')}
         </Button>
       );
     }
@@ -53,13 +53,13 @@ class PostList extends React.PureComponent {
       return (
         <PageLayout>
           {this.renderMetaData()}
-          <div className="text-center">{t('post.loading')}</div>
+          <div className="text-center">{t('post.loadMsg')}</div>
         </PageLayout>
       );
     } else {
       const columns = [
         {
-          title: t('post.titleField'),
+          title: t('list.column.title'),
           dataIndex: 'title',
           key: 'title',
           render: (text, record) => (
@@ -69,7 +69,7 @@ class PostList extends React.PureComponent {
           )
         },
         {
-          title: t('post.actions'),
+          title: t('list.column.actions'),
           key: 'actions',
           width: 50,
           render: (text, record) => (
@@ -79,7 +79,7 @@ class PostList extends React.PureComponent {
               className="delete-button"
               onClick={() => this.handleDeletePost(record.id)}
             >
-              {t('post.btnDelete')}
+              {t('post.btn.del')}
             </Button>
           )
         }
@@ -87,9 +87,9 @@ class PostList extends React.PureComponent {
       return (
         <PageLayout>
           {this.renderMetaData()}
-          <h2>{t('list.posts')}</h2>
+          <h2>{t('list.subTitle')}</h2>
           <Link to="/post/0">
-            <Button color="primary">{t('list.add')}</Button>
+            <Button color="primary">{t('list.btn.add')}</Button>
           </Link>
           <h1 />
           <Table dataSource={posts.edges.map(({ node }) => node)} columns={columns} />

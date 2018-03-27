@@ -17,7 +17,6 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 // import queryMap from 'persisted_queries.json';
 import ReactGA from 'react-ga';
 import url from 'url';
-import { I18nextProvider } from 'react-i18next';
 
 import RedBox from './RedBox';
 import createApolloClient from '../../../common/createApolloClient';
@@ -59,10 +58,6 @@ for (const middleware of modules.middlewares) {
 }
 
 for (const localization of modules.localizations) {
-  console.log(localization);
-  if (!localization.resources) {
-    continue;
-  }
   for (const lang of Object.keys(localization.resources)) {
     modules.i18n.addResourceBundle(lang, localization.ns, localization.resources[lang]);
   }
@@ -198,9 +193,7 @@ class Main extends React.Component {
       modules.getWrappedRoot(
         <Provider store={store}>
           <ApolloProvider client={client}>
-            <ConnectedRouter history={history}>
-              <I18nextProvider i18n={modules.i18n}>{Routes}</I18nextProvider>
-            </ConnectedRouter>
+            <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
           </ApolloProvider>
         </Provider>
       )

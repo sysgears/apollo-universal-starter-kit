@@ -1,7 +1,7 @@
 import React from 'react';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import { reactI18nextModule } from 'react-i18next';
+import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
 import Feature from '../connector';
 import LanguagePicker from './components/LanguagePicker';
@@ -12,7 +12,7 @@ i18n
   .use(reactI18nextModule)
   .init({
     fallbackLng: 'en',
-    debug: true,
+    debug: true, // set false to hide logs
     interpolation: {
       escapeValue: false // not needed for react!!
     },
@@ -27,5 +27,11 @@ export default new Feature({
       <LanguagePicker i18n={i18n} />
     </MenuItem>
   ),
-  internationalization: i18n
+  internationalization: i18n,
+  // eslint-disable-next-line react/display-name
+  rootComponentFactory: () => (
+    <I18nextProvider i18n={i18n}>
+      <div>{/* render an empty div so that the propTypes of the I18nextProvider are satisfied */}</div>
+    </I18nextProvider>
+  )
 });

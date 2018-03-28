@@ -1,11 +1,11 @@
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import { Counter } from '../types';
-import { ApolloTypeName } from '../../../../../common/types';
+import { ApolloItem } from '../../../../../common/types';
 
 const TYPE_NAME = 'Amount';
 
 export interface CounterApolloState {
-  stateCounter: ApolloTypeName & Counter;
+  stateCounter: ApolloItem<Counter>;
 }
 
 const defaults: CounterApolloState = {

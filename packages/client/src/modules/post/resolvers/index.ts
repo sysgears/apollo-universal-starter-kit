@@ -1,11 +1,11 @@
 import COMMENT_QUERY_CLIENT from '../graphql/comment/CommentQuery.client.graphql';
 import { Comment } from '../types';
-import { ApolloTypeName } from '../../../../../common/types';
+import { ApolloItem } from '../../../../../common/types';
 
 const TYPE_NAME = 'Comment';
 
 interface CommentApolloState {
-  comment: Comment & ApolloTypeName;
+  comment: ApolloItem<Comment>;
 }
 
 const defaults: CommentApolloState = {

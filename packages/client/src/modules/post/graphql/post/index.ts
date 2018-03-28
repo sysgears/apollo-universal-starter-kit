@@ -3,7 +3,7 @@ import { graphql, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 
 import { Post, PostQueryResult, PostOperation, PostProps, PostsUpdatedResult } from '../../types';
-import { Edge, SubscriptionResult, ApolloTypeName } from '../../../../../../common/types';
+import { Edge, SubscriptionResult, ApolloItem } from '../../../../../../common/types';
 
 import POSTS_QUERY from './PostsQuery.graphql';
 import DELETE_POST from './DeletePost.graphql';
@@ -20,7 +20,7 @@ function AddPost(prev: PostQueryResult, node: Post) {
   }
 
   const filteredPosts: Array<Edge<Post>> = prev.posts.edges.filter((post: any) => post.node.id !== null);
-  const edge: ApolloTypeName & Edge<Post> = {
+  const edge: ApolloItem<Edge<Post>> = {
     cursor: node.id,
     node,
     __typename: 'Post'

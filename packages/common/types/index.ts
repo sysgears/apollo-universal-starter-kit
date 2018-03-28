@@ -34,11 +34,9 @@ interface Errors {
   errors: Error[];
 }
 
-/* Apollo types */
-interface ApolloTypeName {
-  __typename: string;
-}
+/* Types */
+type ApolloItem<T> = { [P in keyof T]?: T[P] } & { __typename: string };
 
 export { Errors, Error };
-export { ApolloTypeName };
 export { PageInfo, EntityList, Edge };
+export { ApolloItem };

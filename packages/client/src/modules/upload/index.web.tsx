@@ -4,7 +4,7 @@ import { constructUploadOptions } from 'apollo-fetch-upload';
 import { MenuItem } from '../../modules/common/components/web';
 
 // Component and helpers
-import Upload from './containers/Upload';
+import Upload from './containers/Upload.web';
 
 import Feature from '../connector.web';
 

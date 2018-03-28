@@ -23,3 +23,5 @@ interface UploadQueryResult {
 }
 
 interface UploadProps extends UploadOption, UploadQueryResult {}
+
+export { UploadOption, UploadQueryResult, UploadProps };

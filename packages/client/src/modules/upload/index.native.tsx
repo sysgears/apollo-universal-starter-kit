@@ -3,7 +3,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 // Component and helpers
 import { createTabBarIconWrapper } from '../common/components/native';
-import Upload from './containers/Upload';
+import Upload from './containers/Upload.native';
 
 import Feature from '../connector.native';
 

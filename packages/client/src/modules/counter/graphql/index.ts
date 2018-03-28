@@ -37,7 +37,7 @@ const subscriptionOptions = {
  *
  * @param Component to be wrapped with the HOC
  */
-const withCounter = Component =>
+const withCounter = (Component: any) =>
   graphql(COUNTER_QUERY, {
     props: ({ data: { loading, error, counter, subscribeToMore } }: OptionProps<any, CounterQueryResult>) => {
       if (error) {
@@ -52,7 +52,7 @@ const withCounter = Component =>
  *
  * @param Component to be wrapped with the HOC
  */
-const withCounterAdding = Component =>
+const withCounterAdding = (Component: any) =>
   graphql(ADD_COUNTER, {
     props: ({ ownProps, mutate }: OptionProps<any, CounterOperation>) => ({
       addCounter(amount: number) {
@@ -87,7 +87,7 @@ const withCounterAdding = Component =>
  *
  * @param Component to be wrapped with the HOC
  */
-const withCounterState = Component =>
+const withCounterState = (Component: any) =>
   compose(
     graphql(ADD_COUNTER_CLIENT, {
       props: ({ mutate }: OptionProps<any, CounterOperation>) => ({

@@ -53,7 +53,8 @@ const withCommentAdding = graphql(ADD_COMMENT, {
           addComment: {
             __typename: 'Comment',
             id: null,
-            content
+            content,
+            postId
           }
         },
         updateQueries: {
@@ -71,13 +72,14 @@ const withCommentEditing = graphql(EDIT_COMMENT, {
   props: ({ ownProps: { postId }, mutate }: OptionProps<PostCommentsProps, CommentOperation>) => ({
     editComment: (id: number, content: string) =>
       mutate({
-        variables: { input: { id, postId, content } },
+        variables: { input: { id, content } },
         optimisticResponse: {
           __typename: 'Mutation',
           editComment: {
             __typename: 'Comment',
             id,
-            content
+            content,
+            postId
           }
         }
       })
@@ -93,7 +95,8 @@ const withCommentDeleting = graphql(DELETE_COMMENT, {
           __typename: 'Mutation',
           deleteComment: {
             __typename: 'Comment',
-            id
+            id,
+            postId
           }
         },
         updateQueries: {

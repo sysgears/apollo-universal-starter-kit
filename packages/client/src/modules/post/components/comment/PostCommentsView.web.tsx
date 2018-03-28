@@ -6,15 +6,15 @@ import { PostCommentsProps, Comment } from '../../types';
 
 export default class PostCommentsView extends React.PureComponent<PostCommentsProps, any> {
   public handleEditComment = (id: number, content: string) => {
-    const { onCommentSelect } = this.props;
-    onCommentSelect({ id, content });
+    const { onCommentSelect, postId } = this.props;
+    onCommentSelect({ id, content, postId });
   };
 
   public handleDeleteComment = (id: number) => {
-    const { comment, onCommentSelect, deleteComment } = this.props;
+    const { comment, onCommentSelect, deleteComment, postId } = this.props;
 
     if (comment.id === id) {
-      onCommentSelect({ id: null, content: '' });
+      onCommentSelect({ id: null, content: '', postId });
     }
 
     deleteComment(id);
@@ -29,7 +29,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
       editComment(comment.id, values.content);
     }
 
-    onCommentSelect({ id: null, content: '' });
+    onCommentSelect({ id: null, content: '', postId });
   };
 
   public render() {

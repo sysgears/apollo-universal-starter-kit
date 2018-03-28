@@ -10,6 +10,7 @@ type Post {
 type Comment {
   id: Int!
   content: String!
+  postId: Int!
 }
 
 # Edges for Posts
@@ -73,19 +74,16 @@ input AddCommentInput {
   postId: Int!
 }
 
-# Input for editComment Mutation
+# Input for deleteComment Mutation
 input DeleteCommentInput {
   id: Int!
-  # Needed for commentUpdated Subscription filter
   postId: Int!
 }
 
-# Input for deleteComment Mutation
+# Input for editComment Mutation
 input EditCommentInput {
   id: Int!
   content: String!
-  # Needed for commentUpdated Subscription filter
-  postId: Int!
 }
 
 extend type Subscription {

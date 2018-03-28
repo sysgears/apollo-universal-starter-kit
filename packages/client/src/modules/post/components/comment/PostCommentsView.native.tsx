@@ -28,10 +28,10 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
   public keyExtractor = (item: Comment) => `${item.id}`;
 
   public renderItemIOS = ({ item: { id, content } }: ListRenderItemInfo<Comment>) => {
-    const { comment, deleteComment, onCommentSelect } = this.props;
+    const { comment, deleteComment, onCommentSelect, postId } = this.props;
     return (
       <SwipeAction
-        onPress={() => onCommentSelect({ id, content })}
+        onPress={() => onCommentSelect({ id, content, postId })}
         right={{
           text: 'Delete',
           onPress: () => this.onCommentDelete(comment, deleteComment, onCommentSelect, id)
@@ -43,9 +43,9 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
   };
 
   public renderItemAndroid = ({ item: { id, content } }: ListRenderItemInfo<Comment>) => {
-    const { deleteComment, onCommentSelect, comment } = this.props;
+    const { deleteComment, onCommentSelect, comment, postId } = this.props;
     return (
-      <TouchableWithoutFeedback onPress={() => onCommentSelect({ id, content })}>
+      <TouchableWithoutFeedback onPress={() => onCommentSelect({ id, content, postId })}>
         <View style={styles.postWrapper}>
           <Text style={styles.text}>{content}</Text>
           <TouchableOpacity
@@ -66,7 +66,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
     id: number
   ) => {
     if (comment.id === id) {
-      onCommentSelect({ id: null, content: '' });
+      onCommentSelect({ id: null, content: '', postId: null });
     }
 
     deleteComment(id);
@@ -85,7 +85,7 @@ export default class PostCommentsView extends React.PureComponent<PostCommentsPr
       editComment(comment.id, values.content);
     }
 
-    onCommentSelect({ id: null, content: '' });
+    onCommentSelect({ id: null, content: '', postId });
     Keyboard.dismiss();
   };
 

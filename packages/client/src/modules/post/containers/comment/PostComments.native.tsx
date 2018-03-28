@@ -32,7 +32,7 @@ class PostComments extends React.Component<PostCommentsProps, any> {
   }
 
   public componentWillUnmount() {
-    this.props.onCommentSelect({ id: null, content: '' });
+    this.props.onCommentSelect({ id: null, content: '', postId: this.props.postId });
 
     if (this.subscription) {
       // unsubscribe

@@ -1,4 +1,5 @@
 fragment CommentInfo on Comment {
   id
   content
+  postId
 }

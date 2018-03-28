@@ -12,6 +12,7 @@ const defaults: CommentApolloState = {
   comment: {
     id: null,
     content: '',
+    postId: null,
     __typename: TYPE_NAME
   }
 };

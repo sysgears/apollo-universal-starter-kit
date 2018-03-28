@@ -75,7 +75,7 @@ export default class Post {
 
   getComment(id) {
     return knex
-      .select('id', 'content')
+      .select('id', 'content', 'post_id as postId')
       .from('comment')
       .where('id', '=', id)
       .first();

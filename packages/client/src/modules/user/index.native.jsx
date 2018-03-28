@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createTabBarIconWrapper } from '../common/components/native';
 import Profile from './containers/Profile';
 import resolvers from './resolvers';
+import resources from './locales';
 
 import Feature from '../connector';
 
@@ -20,5 +21,6 @@ export default new Feature({
       }
     }
   },
-  resolver: resolvers
+  resolver: resolvers,
+  localization: { ns: 'user', resources }
 });

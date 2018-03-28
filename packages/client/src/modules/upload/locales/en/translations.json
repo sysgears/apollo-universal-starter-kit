@@ -9,5 +9,6 @@
       "actions": "Actions"
     },
     "btnDel": "Delete"
-  }
+  },
+  "nativeMock": "Hello Upload!"
 }

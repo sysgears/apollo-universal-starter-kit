@@ -1,31 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
+import { translate } from 'react-i18next';
 
 import ContactForm from './ContactForm';
 
-const onSubmit = contact => async values => {
+const onSubmit = (contact, t) => async values => {
   const result = await contact(values);
 
   if (result.errors) {
     let submitError = {
-      _error: 'Contact request failed!'
+      _error: t('errorMsg')
     };
     result.errors.map(error => (submitError[error.field] = error.message));
     throw submitError;
   }
 };
 
-const ContactView = ({ contact }) => {
+const ContactView = ({ contact, t }) => {
   return (
     <View style={styles.container}>
-      <ContactForm onSubmit={onSubmit(contact)} />
+      <ContactForm onSubmit={onSubmit(contact, t)} />
     </View>
   );
 };
 
 ContactView.propTypes = {
-  contact: PropTypes.func.isRequired
+  contact: PropTypes.func.isRequired,
+  t: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -34,4 +36,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ContactView;
+export default translate('contact')(ContactView);

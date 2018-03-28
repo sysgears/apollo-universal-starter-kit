@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createTabBarIconWrapper } from '../common/components/native';
 import Upload from './containers/Upload';
 import reducers from './reducers';
+import resources from './locales';
 
 import Feature from '../connector';
 
@@ -21,5 +22,6 @@ export default new Feature({
       }
     }
   },
-  reducer: { upload: reducers }
+  reducer: { upload: reducers },
+  localization: { ns: 'upload', resources }
 });

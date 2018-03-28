@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { createTabBarIconWrapper } from '../common/components/native';
 import Contact from './containers/Contact';
+import resources from './locales';
 
 import Feature from '../connector';
 
@@ -15,5 +16,6 @@ export default new Feature({
         })
       }
     }
-  }
+  },
+  localization: { ns: 'contact', resources }
 });

@@ -22,7 +22,7 @@ export default class RegisterView extends React.PureComponent {
           res[error.field] = error.message;
           return res;
         },
-        { _error: 'register failed!' }
+        { _error: 'Registration failed!' }
       );
     }
   };

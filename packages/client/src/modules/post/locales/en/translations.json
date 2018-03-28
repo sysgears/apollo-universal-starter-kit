@@ -1,4 +1,5 @@
 {
+  "navLink": "Posts",
   "comment": {
     "title": "Comments",
     "label": {
@@ -16,7 +17,6 @@
       "content": "Content",
       "actions": "Actions"
     }
-
   },
 
   "post": {
@@ -32,7 +32,7 @@
     "label": {
       "edit": "Edit",
       "create": "Create",
-      "post": "post"
+      "post": "Post"
     },
     "field": {
       "title": "Title",

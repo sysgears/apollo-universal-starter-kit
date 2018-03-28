@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
+import { translate } from 'react-i18next';
 
 import { MenuItem } from '../../modules/common/components/web';
 import Subscription from './containers/Subscription';
@@ -11,6 +12,14 @@ import settings from '../../../../../settings';
 import resources from './locales';
 import Feature from '../connector';
 
+const MenuItemWithI18n = translate('subscription')(({ t }) => (
+  <MenuItem key="/subscribers-only">
+    <NavLink to="/subscribers-only" className="nav-link" activeClassName="active">
+      {t('navLink')}
+    </NavLink>
+  </MenuItem>
+));
+
 export default new Feature({
   route: settings.subscription.enabled
     ? [
@@ -19,15 +28,7 @@ export default new Feature({
         <SubscriberRoute exact scope="user" path="/update-card" component={UpdateCard} />
       ]
     : [],
-  navItem: settings.subscription.enabled
-    ? [
-        <MenuItem key="/subscribers-only">
-          <NavLink to="/subscribers-only" className="nav-link" activeClassName="active">
-            Subscribers Only
-          </NavLink>
-        </MenuItem>
-      ]
-    : [],
+  navItem: settings.subscription.enabled ? <MenuItemWithI18n /> : [],
   reducer: { subscription: reducers },
   scriptsInsert: 'https://js.stripe.com/v3/',
   localization: { ns: 'subscription', resources }

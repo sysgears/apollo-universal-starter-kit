@@ -1,4 +1,5 @@
 {
+  "navLink": "Upload",
   "title": "Upload",
   "meta": "Upload example page",
   "message": "Try dropping some files here, or click to select files to upload.",

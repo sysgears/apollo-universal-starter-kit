@@ -1,6 +1,7 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink } from 'react-router-dom';
+import { translate } from 'react-i18next';
 
 import { MenuItem } from '../../modules/common/components/web';
 import Profile from './containers/Profile';
@@ -41,6 +42,25 @@ function connectionParam() {
   };
 }
 
+const MenuItemUsersWithI18n = translate('user')(({ t }) => (
+  <MenuItem key="/users">
+    <AuthNav scope="admin">
+      <NavLink to="/users" className="nav-link" activeClassName="active">
+        {t('navLink.users')}
+      </NavLink>
+    </AuthNav>
+  </MenuItem>
+));
+const MenuItemLoginWithI18n = translate('user')(({ t }) => (
+  <MenuItem key="/login">
+    <AuthLogin>
+      <NavLink to="/login" className="nav-link" activeClassName="active">
+        {t('navLink.sign')}
+      </NavLink>
+    </AuthLogin>
+  </MenuItem>
+));
+
 export default new Feature({
   route: [
     <AuthRoute exact path="/profile" scope="user" component={Profile} />,
@@ -51,26 +71,12 @@ export default new Feature({
     <AuthLoggedInRoute exact path="/forgot-password" redirect="/profile" component={ForgotPassword} />,
     <AuthLoggedInRoute exact path="/reset-password/:token" redirect="/profile" component={ResetPassword} />
   ],
-  navItem: [
-    <MenuItem key="/users">
-      <AuthNav scope="admin">
-        <NavLink to="/users" className="nav-link" activeClassName="active">
-          Users
-        </NavLink>
-      </AuthNav>
-    </MenuItem>
-  ],
+  navItem: <MenuItemUsersWithI18n />,
   navItemRight: [
     <MenuItem key="/profile">
       <AuthProfile />
     </MenuItem>,
-    <MenuItem key="/login">
-      <AuthLogin>
-        <NavLink to="/login" className="nav-link" activeClassName="active">
-          Sign In
-        </NavLink>
-      </AuthLogin>
-    </MenuItem>
+    <MenuItemLoginWithI18n />
   ],
   resolver: resolvers,
   middleware: tokenMiddleware,

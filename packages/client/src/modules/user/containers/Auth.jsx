@@ -4,6 +4,7 @@ import { withApollo, graphql, compose } from 'react-apollo';
 import { Route, Redirect, NavLink, withRouter } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import decode from 'jwt-decode';
+import { translate } from 'react-i18next';
 
 import log from '../../../../../common/log';
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
@@ -78,20 +79,23 @@ AuthNav.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthLogin = ({ children, cookies, logout }) => {
+const AuthLogin = ({ children, cookies, logout, t }) => {
   return checkAuth(cookies) ? (
     <a href="#" onClick={() => logout()} className="nav-link">
-      Logout
+      {t('navLink.logout')}
     </a>
   ) : (
     children
   );
 };
 
+const AuthLoginWithI18n = translate('user')(AuthLogin);
+
 AuthLogin.propTypes = {
   children: PropTypes.object,
   cookies: PropTypes.instanceOf(Cookies),
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  t: PropTypes.func
 };
 
 const AuthLoginWithApollo = withCookies(
@@ -128,7 +132,7 @@ const AuthLoginWithApollo = withCookies(
             }
           })
         })
-      )(AuthLogin)
+      )(AuthLoginWithI18n)
     )
   )
 );

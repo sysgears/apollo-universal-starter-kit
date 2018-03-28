@@ -1,4 +1,9 @@
 {
+  "navLink": {
+    "users": "Users",
+    "sign": "Sign In",
+    "logout": "Logout"
+  },
   "forgotPass": {
     "title": "Forgot password",
     "meta": "Forgot password example page",

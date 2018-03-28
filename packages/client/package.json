@@ -87,10 +87,12 @@
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
+    "@types/filesize": "^3.6.0",
     "@types/history": "^4.6.2",
     "@types/lodash": "^4.14.104",
     "@types/react": "^16.0.38",
     "@types/react-dom": "^16.0.4",
+    "@types/react-dropzone": "^4.2.0",
     "@types/react-helmet": "^5.0.5",
     "@types/react-navigation": "^1.2.1",
     "@types/react-redux": "^5.0.15",

@@ -5,7 +5,6 @@ import { MenuItem } from '../../modules/common/components/web';
 
 // Component and helpers
 import Upload from './containers/Upload';
-import reducers from './reducers';
 
 import Feature from '../connector.web';
 
@@ -19,6 +18,5 @@ export default new Feature({
       </NavLink>
     </MenuItem>
   ),
-  reducer: { upload: reducers },
   createFetchOptions: constructUploadOptions
 });

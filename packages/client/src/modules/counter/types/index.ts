@@ -3,32 +3,39 @@
 
 import { QueryProps } from 'react-apollo';
 
-/* Entities */
+/* --- ENTITIES --- */
+
 export interface Counter {
   amount: number;
 }
 
-/* Graphql types */
+/* --- GRAPHQL TYPES --- */
+
+// TODO: remove it after a common subscription interface is created
 interface CounterUpdatedResult {
   counterUpdated: Counter;
 }
 
-/* Component props */
+/* --- COMPONENT PROPS --- */
+
+/**
+ * Mutation props
+ */
 interface CounterOperation {
   addCounter: (amount: number) => any;
   addStateCounter: (amount: number) => any;
-}
-
-interface CounterQueryResult {
-  counter: Counter;
-}
-
-interface StateProps {
-  reduxCounter: Counter;
-  stateCounter: Counter;
   onReduxIncrement: (amount: number) => any;
 }
 
-interface CounterProps extends StateProps, QueryProps, CounterQueryResult, CounterOperation {}
+/**
+ * Query props
+ */
+interface CounterQueryResult {
+  counter: Counter;
+  reduxCounter: Counter;
+  stateCounter: Counter;
+}
 
-export { CounterOperation, CounterQueryResult, StateProps, CounterProps, CounterUpdatedResult };
+interface CounterProps extends QueryProps, CounterQueryResult, CounterOperation {}
+
+export { CounterOperation, CounterQueryResult, CounterProps, CounterUpdatedResult };

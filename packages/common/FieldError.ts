@@ -1,7 +1,8 @@
-import { Error } from '../common/types';
+import { Error } from './types';
 
 export default class FieldError {
   private errors: Error[];
+
   constructor() {
     this.errors = [];
   }

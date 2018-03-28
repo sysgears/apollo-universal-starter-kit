@@ -1,32 +1,35 @@
 import { Errors } from '../../../../../common/types';
 
-/* Entities */
+/* --- TYPES --- */
+type SendContactFn = (values: Contact) => Promise<boolean | Errors>;
+
+/* --- ENTITIES --- */
+
 interface Contact {
   name: string;
   email: string;
   content: string;
 }
 
-/* Types */
-type SendContactFn = (values: Contact) => Promise<boolean | Errors>;
+/* --- COMPONENT STATE--- */
 
-/* Component State */
 interface ContactState {
   sent: boolean;
 }
 
-/* Component Props */
+/* --- COMPONENT PROPS --- */
+
 interface ContactOperation {
   contact: SendContactFn;
 }
-
-// tslint:disable-next-line:no-empty-interface
-interface ContactProps extends ContactOperation {}
 
 interface ContactFormProps {
   onSubmit: (options?: any) => void;
   sent?: boolean;
 }
+
+// tslint:disable-next-line:no-empty-interface
+interface ContactProps extends ContactOperation {}
 
 export { Contact };
 export { SendContactFn };

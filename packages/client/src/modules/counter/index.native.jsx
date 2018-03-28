@@ -4,6 +4,7 @@ import { createTabBarIconWrapper } from '../common/components/native';
 import Counter from './containers/Counter';
 import reducers from './reducers/index';
 import resolvers from './resolvers/index';
+import resources from './locales';
 
 import Feature from '../connector';
 
@@ -20,5 +21,6 @@ export default new Feature({
     }
   },
   resolver: resolvers,
-  reducer: { counter: reducers }
+  reducer: { counter: reducers },
+  localization: { ns: 'counter', resources }
 });

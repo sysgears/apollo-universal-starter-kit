@@ -31,7 +31,7 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'es6', 'ts', 'webpack'],
+    stack: ['apollo', 'react', 'styled-components', 'es6', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
     webpackDll: true,
     reactHotLoader: false,

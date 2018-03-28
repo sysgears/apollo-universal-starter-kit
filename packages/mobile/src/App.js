@@ -58,6 +58,12 @@ export default class Main extends React.Component {
       new BatchHttpLink({ fetch })
     );
 
+    for (const localization of modules.localizations) {
+      for (const lang of Object.keys(localization.resources)) {
+        modules.i18n.addResourceBundle(lang, localization.ns, localization.resources[lang]);
+      }
+    }
+
     const linkState = withClientState({ ...modules.resolvers, cache });
 
     const client = new ApolloClient({

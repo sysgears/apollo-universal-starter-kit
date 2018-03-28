@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { merge, map, union, without, castArray } from 'lodash';
 
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
@@ -5,15 +7,31 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 export const featureCatalog = {};
 
 export default class {
-  // eslint-disable-next-line no-unused-vars
-  constructor({ route, navItem, reducer, resolver, routerFactory, catalogInfo }, ...features) {
+  /* eslint-disable no-unused-vars */
+  constructor(
+    {
+      route,
+      tabItem,
+      internationalization,
+      localization,
+      reducer,
+      resolver,
+      routerFactory,
+      catalogInfo,
+      rootComponentFactory
+    },
+    ...features
+  ) {
     /* eslint-enable no-unused-vars */
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
     this.tabItem = combine(arguments, arg => arg.tabItem);
+    this.internationalization = combine(arguments, arg => arg.internationalization);
+    this.localization = combine(arguments, arg => arg.localization);
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
+    this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
     this.routerFactory = combine(arguments, arg => arg.routerFactory)
       .slice(-1)
       .pop();
@@ -21,6 +39,14 @@ export default class {
 
   get tabItems() {
     return merge(...this.tabItem);
+  }
+
+  get i18n() {
+    return merge(...this.internationalization);
+  }
+
+  get localizations() {
+    return this.localization;
   }
 
   get reducers() {
@@ -33,5 +59,13 @@ export default class {
 
   get router() {
     return this.routerFactory();
+  }
+
+  getWrappedRoot(root, req) {
+    let nestedRoot = root;
+    for (const componentFactory of this.rootComponentFactory) {
+      nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
+    }
+    return nestedRoot;
   }
 }

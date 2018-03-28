@@ -6330,6 +6330,10 @@ i18next@^10.5.1:
   version "10.5.1"
   resolved "https://registry.yarnpkg.com/i18next/-/i18next-10.5.1.tgz#f8e1ca4e15c440ebc3a9a5c3d015c3a6d2887890"
 
+i18next@^10.6.0:
+  version "10.6.0"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-10.6.0.tgz#90ffd9f9bc617f34b9a12e037260f524445f7684"
+
 iconv-lite@0.4.11:
   version "0.4.11"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.11.tgz#2ecb42fd294744922209a2e7c404dac8793d8ade"
@@ -10808,6 +10812,14 @@ react-hot-loader@^3.1.3:
 react-i18next@^7.5.0:
   version "7.5.0"
   resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-7.5.0.tgz#96a92ba7492edb746975eae316534b42423362fe"
+  dependencies:
+    hoist-non-react-statics "^2.3.1"
+    html-parse-stringify2 "2.0.1"
+    prop-types "^15.6.0"
+
+react-i18next@^7.5.1:
+  version "7.5.1"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-7.5.1.tgz#5fe4cdfd2ecba22cc967213d880ab4cdd2c2ce61"
   dependencies:
     hoist-non-react-statics "^2.3.1"
     html-parse-stringify2 "2.0.1"

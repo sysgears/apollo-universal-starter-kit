@@ -172,6 +172,7 @@
   "peerDependencies": {
     "@expo/vector-icons": "^6.2.1",
     "antd-mobile": "^2.1.2",
+    "expo": "^25.0.0",
     "native-base": "^2.3.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "react-navigation": "^1.0.0-beta.21",

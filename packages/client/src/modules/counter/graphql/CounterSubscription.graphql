@@ -1,5 +1,8 @@
 subscription onCounterUpdated {
   counterUpdated {
-    amount
+    mutation
+    node {
+      amount
+    }
   }
 }

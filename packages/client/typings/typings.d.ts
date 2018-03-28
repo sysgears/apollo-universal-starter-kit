@@ -27,7 +27,7 @@ declare module '*.graphql' {
 declare module '*.json' {
   const value: any;
   export = value;
-}
+} 
 
 declare module '*.scss' {
   const value: any;
@@ -36,4 +36,25 @@ declare module '*.scss' {
 
 interface Window {
   __APOLLO_STATE__?: any;
+  __SERVER_ERROR__?: any;
+}
+
+declare module 'sourcemapped-stacktrace' {
+  const val: any;
+  export = val;
+}
+
+declare module '@expo/vector-icons/Ionicons' {
+  const val: any;
+  export = val;
+}
+
+declare module '@expo/vector-icons/FontAwesome' {
+  const val: any;
+  export = val;
+}
+
+declare module 'react-cookie/lib/CookiesProvider' {
+  const val: any;
+  export = val;
 }

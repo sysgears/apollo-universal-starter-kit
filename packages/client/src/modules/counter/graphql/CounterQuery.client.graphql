@@ -1,5 +1,5 @@
-query CounterState {
-    counterState @client {
-        counter
+query StateCounter {
+    stateCounter @client {
+        amount
     }
 }

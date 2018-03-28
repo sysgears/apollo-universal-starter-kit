@@ -19,5 +19,11 @@ extend type Mutation {
 
 extend type Subscription {
   # Subscription fired when anyone increases counter
-  counterUpdated: Counter
+  counterUpdated: CounterUpdatedPayload
+}
+
+type CounterUpdatedPayload {
+  mutation: String!
+  id: Int
+  node: Counter
 }

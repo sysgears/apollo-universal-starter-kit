@@ -146,7 +146,7 @@ export default class Renderer {
     const cache = new InMemoryCache();
     let link = new MockLink(schema);
 
-    const linkState = withClientState({ ...clientModules.resolvers, cache });
+    const linkState = withClientState({ ...clientModules.getStateParams, cache });
 
     const client = new ApolloClient({
       link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),

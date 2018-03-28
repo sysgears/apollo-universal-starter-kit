@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const Button = ({ children, onPress, disabled }) => {
+const Button = props => {
+  const { children, onPress, disabled } = props;
   const { buttonStyle, textStyle } = styles;
 
   return (

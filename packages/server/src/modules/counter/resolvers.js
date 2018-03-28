@@ -10,9 +10,13 @@ export default pubsub => ({
     async addCounter(obj, { amount }, context) {
       await context.Counter.addCounter(amount);
       const counter = await context.Counter.counterQuery();
-
       pubsub.publish(COUNTER_SUBSCRIPTION, {
-        counterUpdated: { amount: counter.amount }
+        counterUpdated: {
+          mutation: 'UPDATED',
+          node: {
+            amount: counter.amount
+          }
+        }
       });
 
       return counter;

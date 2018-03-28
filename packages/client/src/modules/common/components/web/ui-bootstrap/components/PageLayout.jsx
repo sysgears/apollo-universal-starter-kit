@@ -14,7 +14,8 @@ const Footer = styled.footer`
   height: ${footerHeight};
 `;
 
-const PageLayout = ({ children, navBar }) => {
+const PageLayout = props => {
+  const { children, navBar } = props;
   return (
     <section className="d-flex flex-column flex-grow">
       <section className="d-flex flex-column flex-grow">

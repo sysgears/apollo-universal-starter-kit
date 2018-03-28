@@ -90,7 +90,7 @@ input EditCommentInput {
 
 extend type Subscription {
   # Subscription for when editing a post
-  postUpdated(id: Int!): Post
+  postUpdated(id: Int!): UpdatePostPayload
   # Subscription for post list
   postsUpdated(endCursor: Int!): UpdatePostPayload
   # Subscription for comments
@@ -108,6 +108,5 @@ type UpdatePostPayload {
 type UpdateCommentPayload {
   mutation: String!
   id: Int
-  postId: Int!
   node: Comment
 }

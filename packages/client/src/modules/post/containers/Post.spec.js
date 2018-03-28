@@ -3,9 +3,9 @@ import { step } from 'mocha-steps';
 import _ from 'lodash';
 
 import Renderer from '../../../testHelpers/Renderer';
-import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
-import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
-import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
+import POSTS_SUBSCRIPTION from '../graphql/post/PostsSubscription.graphql';
+import POST_SUBSCRIPTION from '../graphql/post/PostSubscription.graphql';
+import COMMENT_SUBSCRIPTION from '../graphql/comment/CommentSubscription.graphql';
 
 const createNode = id => ({
   id: `${id}`,

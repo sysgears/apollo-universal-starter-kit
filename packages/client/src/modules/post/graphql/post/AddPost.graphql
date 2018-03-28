@@ -1,0 +1,11 @@
+#import "./Post.graphql"
+#import "../comment/Comment.graphql"
+
+mutation addPost($input: AddPostInput!) {
+  addPost(input: $input) {
+    ... PostInfo
+    comments {
+      ... CommentInfo
+    }
+  }
+}

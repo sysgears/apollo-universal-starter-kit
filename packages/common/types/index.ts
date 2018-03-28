@@ -15,12 +15,26 @@ interface PageInfo {
   hasNextPage: boolean;
 }
 
+/* Types */
+type MutationActions = 'CREATED' | 'DELETED' | 'UPDATED';
+type ApolloItem<T> = { [P in keyof T]?: T[P] } & { __typename: string };
+
 // Subscription data
-interface SubscriptionData<T> {
-  data: T;
+interface SubscriptionSchema<T> {
+  id?: number;
+  node?: T;
+  mutation: MutationActions;
 }
 
-export interface SubscriptionResult<T> {
+interface SubscriptionDataPayload<T> {
+  [operation: string]: SubscriptionSchema<T>;
+}
+
+interface SubscriptionData<T> {
+  data: SubscriptionDataPayload<T>;
+}
+
+interface SubscriptionResult<T> {
   subscriptionData: SubscriptionData<T>;
 }
 
@@ -34,9 +48,7 @@ interface Errors {
   errors: Error[];
 }
 
-/* Types */
-type ApolloItem<T> = { [P in keyof T]?: T[P] } & { __typename: string };
-
 export { Errors, Error };
 export { PageInfo, EntityList, Edge };
 export { ApolloItem };
+export { SubscriptionResult };

@@ -1,5 +1,3 @@
-import { ApolloLink, Observable } from 'apollo-link';
-
 import Feature from '../connector';
 import settings from '../../../../../../../settings';
 
@@ -14,21 +12,9 @@ const logout = async client => {
   return logout;
 };
 
-const SessionLink = new ApolloLink((operation, forward) => {
-  return new Observable(observer => {
-    operation.setContext(context => ({
-      ...context,
-      headers: { 'x-token': window.__CSRF_TOKEN__ }
-    }));
-    const sub = forward(operation).subscribe(observer);
-    return () => sub.unsubscribe();
-  });
-});
-
 export default new Feature(
   settings.user.auth.access.session.enabled
     ? {
-        link: __CLIENT__ ? SessionLink : undefined,
         logout
       }
     : {}

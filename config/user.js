@@ -7,7 +7,7 @@ export default {
         enabled: true
       },
       jwt: {
-        enabled: true
+        enabled: false
       }
     },
     password: {

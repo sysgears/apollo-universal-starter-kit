@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
 import { writeSession, createSession, readSession } from './sessions';
 import { isApiExternal } from '../../../../net';
 import Feature from '../connector';
@@ -34,7 +31,8 @@ const createContextFunc = async (req, res, connectionParams, webSocket, context)
       req.session = createSession(req);
     } else {
       if (!isApiExternal && req.path === __API_URL__) {
-        if (req.headers['x-token'] !== req.session.csrfToken) {
+        if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
+          req.session = createSession(req);
           throw new Error('CSRF token validation failed');
         }
       }
@@ -53,26 +51,13 @@ const createContextFunc = async (req, res, connectionParams, webSocket, context)
   };
 };
 
-const CSRFComponent = ({ req }) => (
-  <script
-    dangerouslySetInnerHTML={{
-      __html: `window.__CSRF_TOKEN__="${req.session.csrfToken}";`
-    }}
-    charSet="UTF-8"
-  />
-);
-CSRFComponent.propTypes = {
-  req: PropTypes.object
-};
-
 export default new Feature(
   settings.user.auth.access.session.enabled
     ? {
         grant,
         schema,
         createResolversFunc: resolvers,
-        createContextFunc,
-        htmlHeadComponent: <CSRFComponent />
+        createContextFunc
       }
     : {}
 );

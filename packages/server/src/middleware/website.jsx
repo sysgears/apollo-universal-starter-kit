@@ -4,6 +4,7 @@ import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 import { SchemaLink } from 'apollo-link-schema';
 import { BatchHttpLink } from 'apollo-link-batch-http';
+import { createApolloFetch, constructDefaultOptions } from 'apollo-fetch';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { Provider } from 'react-redux';
@@ -34,7 +35,17 @@ const renderServerSide = async (req, res) => {
 
   const netLink = !isApiExternal
     ? new SchemaLink({ schema, context: await modules.createContext(req, res) })
-    : new BatchHttpLink({ uri: apiUrl, credentials: 'include' });
+    : new BatchHttpLink({
+        fetch:
+          modules.fetch ||
+          createApolloFetch({
+            uri: apiUrl,
+            constructOptions: (reqs, options) => ({
+              ...constructDefaultOptions(reqs, options),
+              credentials: 'include'
+            })
+          })
+      });
   const linkState = withClientState({ ...clientModules.resolvers, cache });
 
   const links = [...clientModules.link, linkState, netLink];

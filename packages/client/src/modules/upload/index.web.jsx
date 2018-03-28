@@ -1,11 +1,11 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { MenuItem } from '../../modules/common/components/web';
+import { createApolloFetch } from 'apollo-fetch';
+import { constructUploadOptions } from 'apollo-fetch-upload';
 
-// Component and helpers
+import { MenuItem } from '../../modules/common/components/web';
 import Upload from './containers/Upload';
 import reducers from './reducers';
-
 import Feature from '../connector';
 
 export default new Feature({
@@ -18,5 +18,12 @@ export default new Feature({
       </NavLink>
     </MenuItem>
   ),
-  reducer: { upload: reducers }
+  reducer: { upload: reducers },
+  fetch: createApolloFetch({
+    uri: __API_URL__,
+    constructOptions: (reqs, options) => ({
+      ...constructUploadOptions(reqs, options),
+      credentials: 'include'
+    })
+  })
 });

@@ -14,6 +14,7 @@ export default class {
     {
       route,
       link,
+      fetch,
       navItem,
       navItemRight,
       reducer,
@@ -34,6 +35,9 @@ export default class {
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
     this.link = combine(arguments, arg => arg.link);
+    this.fetch = combine(arguments, arg => arg.fetch)
+      .slice(-1)
+      .pop();
     this.route = combine(arguments, arg => arg.route);
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);

@@ -2,6 +2,7 @@ import React from 'react';
 import { getOperationAST } from 'graphql';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
+import { createApolloFetch, constructDefaultOptions } from 'apollo-fetch';
 import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -65,7 +66,17 @@ const netLink = ApolloLink.split(
     return !!operationAST && operationAST.operation === 'subscription';
   },
   new WebSocketLink(wsClient),
-  new BatchHttpLink({ uri: __API_URL__, credentials: 'include' })
+  new BatchHttpLink({
+    fetch:
+      modules.fetch ||
+      createApolloFetch({
+        uri: __API_URL__,
+        constructOptions: (reqs, options) => ({
+          ...constructDefaultOptions(reqs, options),
+          credentials: 'include'
+        })
+      })
+  })
 );
 
 const linkState = withClientState({ ...modules.resolvers, cache });

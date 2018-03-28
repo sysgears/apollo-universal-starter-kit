@@ -20,12 +20,14 @@ export const readSession = req => {
 };
 
 export const writeSession = (req, session) => {
-  req.universalCookies.set('session', encryptSession(session), {
+  const cookieParams = {
     httpOnly: true,
     secure: !__DEV__,
     maxAge: 7 * 24 * 3600,
     path: '/'
-  });
+  };
+  req.universalCookies.set('session', encryptSession(session), cookieParams);
+  req.universalCookies.set('x-token', session.csrfToken, cookieParams);
   if (__DEV__) {
     log.debug('write session', session);
   }

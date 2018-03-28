@@ -6,6 +6,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
+import { createApolloFetch, constructDefaultOptions } from 'apollo-fetch';
 import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { LoggingLink } from 'apollo-logger';
@@ -53,7 +54,17 @@ export default class Main extends React.Component {
           reconnect: true
         }
       }),
-      new BatchHttpLink({ uri, credentials: 'include' })
+      new BatchHttpLink({
+        fetch:
+          modules.fetch ||
+          createApolloFetch({
+            uri: __API_URL__,
+            constructOptions: (reqs, options) => ({
+              ...constructDefaultOptions(reqs, options),
+              credentials: 'include'
+            })
+          })
+      })
     );
 
     let connectionParams = {};

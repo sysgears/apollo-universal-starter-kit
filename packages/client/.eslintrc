@@ -6,8 +6,5 @@
         "config": "webpack.config.lint.js"
       }
     }
-  },
-  "globals": {
-    "__CSRF_TOKEN__": true
   }
 }

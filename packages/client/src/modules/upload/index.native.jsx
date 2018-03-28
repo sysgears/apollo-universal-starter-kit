@@ -21,11 +21,12 @@ export default new Feature({
     }
   },
   reducer: { upload: reducers },
-  fetch: createApolloFetch({
-    uri: __API_URL__,
-    constructOptions: (reqs, options) => ({
-      ...constructUploadOptions(reqs, options),
-      credentials: 'include'
+  createFetch: uri =>
+    createApolloFetch({
+      uri,
+      constructOptions: (reqs, options) => ({
+        ...constructUploadOptions(reqs, options),
+        credentials: 'include'
+      })
     })
-  })
 });

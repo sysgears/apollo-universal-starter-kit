@@ -56,9 +56,9 @@ export default class Main extends React.Component {
       }),
       new BatchHttpLink({
         fetch:
-          modules.fetch ||
+          modules.createFetch(uri) ||
           createApolloFetch({
-            uri: __API_URL__,
+            uri,
             constructOptions: (reqs, options) => ({
               ...constructDefaultOptions(reqs, options),
               credentials: 'include'

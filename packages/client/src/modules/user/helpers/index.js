@@ -6,5 +6,7 @@ export default function buildRedirectUrlForMobile(authType) {
   const expoHostname = `${url.parse(Constants.linkingUrl).hostname}.nip.io`;
   const urlHostname = process.env.NODE_ENV === 'production' ? hostname : expoHostname;
 
-  return `${protocol}//${urlHostname}${port}/auth/${authType}?expoUrl=${encodeURIComponent(Constants.linkingUrl)}`;
+  return `${protocol}//${urlHostname}${port ? ':' + port : ''}/auth/${authType}?expoUrl=${encodeURIComponent(
+    Constants.linkingUrl
+  )}`;
 }

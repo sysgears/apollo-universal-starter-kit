@@ -56,8 +56,6 @@ class FacebookComponent extends React.Component {
     if (decodedData.tokens) {
       await SecureStore.setItemAsync('accessToken', decodedData.tokens.accessToken);
       await SecureStore.setItemAsync('refreshToken', decodedData.tokens.refreshToken);
-    } else if (decodedData.session) {
-      await SecureStore.setItemAsync('session', decodedData.session);
     }
     const result = await refetchCurrentUser();
 

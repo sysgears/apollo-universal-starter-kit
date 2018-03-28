@@ -32,6 +32,11 @@ const config = {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"http://localhost:8080/graphql"',
       __WEBSITE_URL__: '"http://localhost:3000"'
+    },
+    webpackConfig: {
+      devServer: {
+        disableHostCheck: true
+      }
     }
   }
 };

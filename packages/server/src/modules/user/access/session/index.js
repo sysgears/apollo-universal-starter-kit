@@ -24,7 +24,7 @@ const getCurrentUser = async ({ req }) => {
   }
 };
 
-const createContextFunc = async (req, res, connectionParams, webSocket, context) => {
+const attachSession = req => {
   if (req) {
     req.session = readSession(req);
     if (!req.session) {
@@ -38,6 +38,10 @@ const createContextFunc = async (req, res, connectionParams, webSocket, context)
       }
     }
   }
+};
+
+const createContextFunc = async (req, res, connectionParams, webSocket, context) => {
+  attachSession(req);
   const user = context.user || (await getCurrentUser({ req, connectionParams, webSocket }));
   const auth = {
     isAuthenticated: !!user,
@@ -57,7 +61,17 @@ export default new Feature(
         grant,
         schema,
         createResolversFunc: resolvers,
-        createContextFunc
+        createContextFunc,
+        middleware: app => {
+          app.use((req, res, next) => {
+            try {
+              attachSession(req);
+              next();
+            } catch (e) {
+              next(e);
+            }
+          });
+        }
       }
     : {}
 );

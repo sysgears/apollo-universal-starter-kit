@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
       table.increments();
       table.string('username').unique();
       table.string('email').unique();
-      table.string('password');
+      table.string('password_hash');
       table.string('role').defaultTo('user');
       table.boolean('is_active').defaultTo(false);
       table.timestamps(false, true);

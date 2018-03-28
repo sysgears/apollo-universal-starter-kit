@@ -1,24 +1,23 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
 import { SchemaLink } from 'apollo-link-schema';
 import { BatchHttpLink } from 'apollo-link-batch-http';
+import { createApolloFetch, constructDefaultOptions } from 'apollo-fetch';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
 import { LoggingLink } from 'apollo-logger';
-// import { addPersistedQueries } from 'persistgraphql';
 import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
-import url from 'url';
 // eslint-disable-next-line
 import { AppRegistry } from 'react-native';
 
+import { isApiExternal, apiUrl } from '../net';
 import createApolloClient from '../../../common/createApolloClient';
 import createReduxStore from '../../../common/createReduxStore';
 import Html from './html';
@@ -29,34 +28,34 @@ import schema from '../api/schema';
 
 let assetMap;
 
-const { protocol, hostname, port, pathname } = url.parse(__BACKEND_URL__);
-const apiUrl = `${protocol}//${hostname}:${process.env.PORT || port}${pathname}`;
-
 const renderServerSide = async (req, res) => {
-  // if (__PERSIST_GQL__) {
-  //   networkInterface = addPersistedQueries(networkInterface, queryMap);
-  // }
-  //
   const clientModules = require('../../../client/src/modules').default;
 
-  const fetch = createApolloFetch({ uri: apiUrl, constructOptions: modules.constructFetchOptions });
-  fetch.batchUse(({ options }, next) => {
-    options.credentials = 'include';
-    options.headers = req.headers;
-
-    next();
-  });
-
   const cache = new InMemoryCache();
-  const isLocalhost = /localhost/.test(__BACKEND_URL__);
 
-  const link = isLocalhost
+  const netLink = !isApiExternal
     ? new SchemaLink({ schema, context: await modules.createContext(req, res) })
-    : new BatchHttpLink({ fetch });
+    : new BatchHttpLink({
+        fetch:
+          modules.fetch ||
+          createApolloFetch({
+            uri: apiUrl,
+            constructOptions: (reqs, options) => ({
+              ...constructDefaultOptions(reqs, options),
+              credentials: 'include'
+            })
+          })
+      });
   const linkState = withClientState({ ...clientModules.resolvers, cache });
 
+  const links = [...clientModules.link, linkState, netLink];
+
+  if (settings.app.logging.apolloLogging) {
+    links.unshift(new LoggingLink());
+  }
+
   const client = createApolloClient({
-    link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
+    link: ApolloLink.from(links),
     cache
   });
 
@@ -68,9 +67,11 @@ const renderServerSide = async (req, res) => {
     clientModules.getWrappedRoot(
       <Provider store={store}>
         <ApolloProvider client={client}>
-          <StaticRouter location={req.url} context={context}>
-            {Routes}
-          </StaticRouter>
+          {clientModules.getDataRoot(
+            <StaticRouter location={req.url} context={context}>
+              {Routes}
+            </StaticRouter>
+          )}
         </ApolloProvider>
       </Provider>,
       req
@@ -105,31 +106,16 @@ const renderServerSide = async (req, res) => {
 
     const apolloState = Object.assign({}, cache.extract());
 
-    const token = req.universalCookies.get('x-token') ? req.universalCookies.get('x-token') : null;
-    const refreshToken = req.universalCookies.get('x-refresh-token')
-      ? req.universalCookies.get('x-refresh-token')
-      : null;
-
-    const page = (
-      <Html
-        content={html}
-        state={apolloState}
-        assetMap={assetMap}
-        css={css}
-        helmet={helmet}
-        token={token}
-        refreshToken={refreshToken}
-      />
-    );
+    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} helmet={helmet} req={req} />;
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
     res.end();
   }
 };
 
-export default queryMap => async (req, res, next) => {
+export default async (req, res, next) => {
   try {
     if (req.url.indexOf('.') < 0 && __SSR__) {
-      return await renderServerSide(req, res, queryMap);
+      return await renderServerSide(req, res);
     } else {
       next();
     }

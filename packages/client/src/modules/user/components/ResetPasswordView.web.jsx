@@ -17,17 +17,19 @@ export default class ResetPasswordView extends React.Component {
   };
 
   onSubmit = resetPassword => async values => {
-    const result = await resetPassword({
+    const { errors } = await resetPassword({
       ...values,
       token: this.props.match.params.token
     });
 
-    if (result.errors) {
-      let submitError = {
-        _error: 'Reset Password failed!'
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw submitError;
+    if (errors && errors.length) {
+      throw errors.reduce(
+        (res, error) => {
+          res[error.field] = error.message;
+          return res;
+        },
+        { _error: 'Reset password failed!' }
+      );
     }
   };
 

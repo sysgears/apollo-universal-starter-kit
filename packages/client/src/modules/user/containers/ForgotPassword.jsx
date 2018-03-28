@@ -23,7 +23,6 @@ const ForgotPasswordWithApollo = compose(
           if (forgotPassword.errors) {
             return { errors: forgotPassword.errors };
           }
-
           return forgotPassword;
         } catch (e) {
           console.log(e.graphQLErrors);

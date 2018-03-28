@@ -5,12 +5,12 @@ import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 import { required, minLength, validateForm, match } from '../../../../../common/validation';
 
-const contactFormSchema = {
+const resetPasswordFormSchema = {
   password: [required, minLength(5)],
   passwordConfirmation: [match('password'), required, minLength(5)]
 };
 
-const validate = values => validateForm(values, contactFormSchema);
+const validate = values => validateForm(values, resetPasswordFormSchema);
 
 const ResetPasswordForm = ({ values, handleSubmit, error }) => {
   return (

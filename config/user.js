@@ -1,8 +1,15 @@
 const CERTIFICATE_DEVSERIAL = '00';
-
 export default {
-  secret: process.env.AUTH_SECRET,
+  secret: process.env.NODE_ENV === 'test' ? 'secret for tests' : process.env.AUTH_SECRET,
   auth: {
+    access: {
+      session: {
+        enabled: true
+      },
+      jwt: {
+        enabled: true
+      }
+    },
     password: {
       confirm: true,
       sendConfirmationEmail: true,

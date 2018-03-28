@@ -4,7 +4,7 @@ import Dropzone from 'react-dropzone';
 import filesize from 'filesize';
 import { PageLayout, Row, Col, Table, Button, Alert } from '../../common/components/web';
 import settings from '../../../../../../settings';
-import { UploadProps, UploadState, UploadFilesFn, RemoveFileFn } from '../types';
+import { UploadProps, UploadState, UploadFilesFn, RemoveFileFn, File } from '../types';
 
 export default class UploadView extends React.PureComponent<UploadProps, UploadState> {
   constructor(props: UploadProps) {
@@ -26,7 +26,7 @@ export default class UploadView extends React.PureComponent<UploadProps, UploadS
     />
   );
 
-  public onDrop = (uploadFiles: UploadFilesFn) => async (files: any[]) => {
+  public onDrop = (uploadFiles: UploadFilesFn) => async (files: File[]) => {
     const result: any = await uploadFiles(files);
     if (result && result.error) {
       this.setState({ error: result.error });

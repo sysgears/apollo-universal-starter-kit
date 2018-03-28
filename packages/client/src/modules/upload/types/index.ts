@@ -1,3 +1,9 @@
+import { ImageFile } from 'react-dropzone';
+
+/* --- ENTITIES --- */
+// tslint:disable-next-line:no-empty-interface
+interface File extends ImageFile {}
+
 /**
  * Errors
  */
@@ -8,7 +14,7 @@ interface Error {
 /**
  * Types
  */
-type UploadFilesFn = (files: any[]) => Promise<boolean | Error>;
+type UploadFilesFn = (files: File[]) => Promise<boolean | Error>;
 type RemoveFileFn = (id: number) => Promise<boolean | Error>;
 
 /* --- COMPONENT STATE --- */
@@ -29,7 +35,7 @@ interface UploadOption {
  * Query props
  */
 interface UploadQueryResult {
-  files: any[];
+  files: File[];
 }
 
 interface UploadProps extends UploadOption, UploadQueryResult {}
@@ -37,3 +43,4 @@ interface UploadProps extends UploadOption, UploadQueryResult {}
 export { UploadOption, UploadQueryResult, UploadProps };
 export { RemoveFileFn, UploadFilesFn };
 export { UploadState };
+export { File };

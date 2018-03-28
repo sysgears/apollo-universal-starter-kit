@@ -5,10 +5,10 @@ const POST_SUBSCRIPTION = 'post_subscription';
 const POSTS_SUBSCRIPTION = 'posts_subscription';
 const COMMENT_SUBSCRIPTION = 'comment_subscription';
 
-const subscriptionFn = (type, name, mutation, id, node, pubsub) => {
-  pubsub.publish(type, {
-    [name]: {
-      mutation: mutation,
+const publishSubscription = (subscriptionId, operation, mutation, id, node, pubsub) => {
+  pubsub.publish(subscriptionId, {
+    [operation]: {
+      mutation,
       id,
       node
     }
@@ -59,7 +59,7 @@ export default pubsub => ({
       const [id] = await context.Post.addPost(input);
       const post = await context.Post.post(id);
       // publish for post list
-      subscriptionFn(POSTS_SUBSCRIPTION, 'postsUpdated', 'CREATED', id, post, pubsub);
+      publishSubscription(POSTS_SUBSCRIPTION, 'postsUpdated', 'CREATED', id, post, pubsub);
       return post;
     },
     async deletePost(obj, { id }, context) {
@@ -67,7 +67,7 @@ export default pubsub => ({
       const isDeleted = await context.Post.deletePost(id);
       if (isDeleted) {
         // publish for post list
-        subscriptionFn(POSTS_SUBSCRIPTION, 'postsUpdated', 'CREATED', id, post, pubsub);
+        publishSubscription(POSTS_SUBSCRIPTION, 'postsUpdated', 'CREATED', id, post, pubsub);
         return { id: post.id };
       } else {
         return { id: null };
@@ -77,7 +77,7 @@ export default pubsub => ({
       await context.Post.editPost(input);
       const post = await context.Post.post(input.id);
       // publish for post list
-      subscriptionFn(POSTS_SUBSCRIPTION, 'postsUpdated', 'CREATED', post.id, post, pubsub);
+      publishSubscription(POSTS_SUBSCRIPTION, 'postsUpdated', 'CREATED', post.id, post, pubsub);
       // publish for edit post page
       pubsub.publish(POST_SUBSCRIPTION, { postUpdated: post });
       return post;
@@ -86,21 +86,21 @@ export default pubsub => ({
       const [id] = await context.Post.addComment(input);
       const comment = await context.Post.getComment(id);
       // publish for edit post page
-      subscriptionFn(COMMENT_SUBSCRIPTION, 'commentUpdated', 'CREATED', comment.id, comment, pubsub);
+      publishSubscription(COMMENT_SUBSCRIPTION, 'commentUpdated', 'CREATED', comment.id, comment, pubsub);
       return comment;
     },
     async deleteComment(obj, { input: { id } }, context) {
       const comment = await context.Post.getComment(id);
       await context.Post.deleteComment(id);
       // publish for edit post page
-      subscriptionFn(COMMENT_SUBSCRIPTION, 'commentUpdated', 'DELETED', id, comment, pubsub);
+      publishSubscription(COMMENT_SUBSCRIPTION, 'commentUpdated', 'DELETED', id, comment, pubsub);
       return { id };
     },
     async editComment(obj, { input }, context) {
       await context.Post.editComment(input);
       const comment = await context.Post.getComment(input.id);
       // publish for edit post page
-      subscriptionFn(COMMENT_SUBSCRIPTION, 'commentUpdated', 'UPDATED', input.id, comment, pubsub);
+      publishSubscription(COMMENT_SUBSCRIPTION, 'commentUpdated', 'UPDATED', input.id, comment, pubsub);
       return comment;
     }
   },

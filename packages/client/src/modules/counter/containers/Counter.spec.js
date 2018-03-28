@@ -74,7 +74,7 @@ describe('Counter example UI works', () => {
     const subscription = renderer.getSubscriptions(COUNTER_SUBSCRIPTION)[0];
     subscription.next({
       data: {
-        counterUpdated: { amount: COUNTER_SUBSCRIPTION_VALUE, __typename: 'Counter' }
+        counterUpdated: { node: { amount: COUNTER_SUBSCRIPTION_VALUE, __typename: 'Counter' }, mutation: 'UPDATED' }
       }
     });
     content.text().should.has.string(`Current counter, is ${COUNTER_SUBSCRIPTION_VALUE}.`);

@@ -58,135 +58,6 @@ function DeletePost(prev: PostQueryResult, id: number) {
   });
 }
 
-const withPostList = graphql(POSTS_QUERY, {
-  options: () => {
-    return {
-      variables: { limit: 10, after: 0 }
-    };
-  },
-  props: ({ data }: OptionProps<PostProps, PostQueryResult>) => {
-    const { loading, error, posts, fetchMore, subscribeToMore } = data;
-    const loadMoreRows = () => {
-      return fetchMore({
-        variables: {
-          after: posts.pageInfo.endCursor
-        },
-        updateQuery: (previousResult, { fetchMoreResult }) => {
-          const { totalCount, edges, pageInfo } = fetchMoreResult.posts;
-          return {
-            // By returning `cursor` here, we update the `fetchMore` function
-            // to the new cursor.
-            posts: {
-              totalCount,
-              edges: [...previousResult.posts.edges, ...edges],
-              pageInfo,
-              __typename: 'Posts'
-            }
-          };
-        }
-      });
-    };
-    if (error) {
-      throw new ApolloError(error);
-    }
-    return { loading, posts, subscribeToMore, loadMoreRows };
-  }
-});
-
-const withPostDeleting = graphql(DELETE_POST, {
-  props: ({ mutate }: OptionProps<PostProps, PostOperation>) => ({
-    deletePost: (id: number) => {
-      mutate({
-        variables: { id },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          deletePost: {
-            id,
-            __typename: 'Post'
-          }
-        },
-        updateQueries: {
-          posts: (prev: PostQueryResult, { mutationResult: { data: { deletePost } } }) => {
-            return DeletePost(prev, deletePost.id);
-          }
-        }
-      });
-    }
-  })
-});
-
-const withPost = graphql(POST_QUERY, {
-  options: ({ match, navigation }) => {
-    let id: number = 0;
-    if (match) {
-      id = match.params.id;
-    } else if (navigation) {
-      id = navigation.state.params.id;
-    }
-
-    return {
-      variables: { id }
-    };
-  },
-  props({ data: { loading, error, post, subscribeToMore } }: OptionProps<PostProps, PostQueryResult>) {
-    if (error) {
-      throw new ApolloError(error);
-    }
-    return { loading, post, subscribeToMore };
-  }
-});
-
-const withPostAdding = graphql(ADD_POST, {
-  props: ({ ownProps: { history, navigation }, mutate }: OptionProps<PostProps, PostOperation>) => ({
-    addPost: async (title: string, content: string) => {
-      const { data }: any = await mutate({
-        variables: { input: { title, content } },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          addPost: {
-            __typename: 'Post',
-            id: null,
-            title,
-            content,
-            comments: []
-          }
-        },
-        updateQueries: {
-          posts: (prev: PostQueryResult, { mutationResult: { data: { addPost } } }) => {
-            return AddPost(prev, addPost);
-          }
-        }
-      });
-      if (history) {
-        return history.push('/post/' + data.addPost.id, {
-          post: data.addPost
-        });
-      } else if (navigation) {
-        return navigation.setParams({
-          id: data.addPost.id,
-          post: data.addPost
-        });
-      }
-    }
-  })
-});
-
-const withPostEditing = graphql(EDIT_POST, {
-  props: ({ ownProps: { history, navigation }, mutate }: OptionProps<PostProps, PostOperation>) => ({
-    editPost: async (id: number, title: string, content: string) => {
-      await mutate({
-        variables: { input: { id, title, content } }
-      });
-      if (history) {
-        return history.push('/posts');
-      }
-      if (navigation) {
-        return navigation.goBack();
-      }
-    }
-  })
-});
-
 function getSubscriptionOptions(endCursor: number) {
   return {
     document: POSTS_SUBSCRIPTION,
@@ -213,6 +84,140 @@ function getSubscriptionPostOptions(postId: number) {
     variables: { id: postId }
   };
 }
+
+const withPostList = (Component: any) =>
+  graphql(POSTS_QUERY, {
+    options: () => {
+      return {
+        variables: { limit: 10, after: 0 }
+      };
+    },
+    props: ({ data }: OptionProps<PostProps, PostQueryResult>) => {
+      const { loading, error, posts, fetchMore, subscribeToMore } = data;
+      const loadMoreRows = () => {
+        return fetchMore({
+          variables: {
+            after: posts.pageInfo.endCursor
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            const { totalCount, edges, pageInfo } = fetchMoreResult.posts;
+            return {
+              // By returning `cursor` here, we update the `fetchMore` function
+              // to the new cursor.
+              posts: {
+                totalCount,
+                edges: [...previousResult.posts.edges, ...edges],
+                pageInfo,
+                __typename: 'Posts'
+              }
+            };
+          }
+        });
+      };
+      if (error) {
+        throw new ApolloError(error);
+      }
+      return { loading, posts, subscribeToMore, loadMoreRows };
+    }
+  })(Component);
+
+const withPostDeleting = (Component: any) =>
+  graphql(DELETE_POST, {
+    props: ({ mutate }: OptionProps<PostProps, PostOperation>) => ({
+      deletePost: (id: number) => {
+        mutate({
+          variables: { id },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            deletePost: {
+              id,
+              __typename: 'Post'
+            }
+          },
+          updateQueries: {
+            posts: (prev: PostQueryResult, { mutationResult: { data: { deletePost } } }) => {
+              return DeletePost(prev, deletePost.id);
+            }
+          }
+        });
+      }
+    })
+  })(Component);
+
+const withPost = (Component: any) =>
+  graphql(POST_QUERY, {
+    options: ({ match, navigation }) => {
+      let id: number = 0;
+      if (match) {
+        id = match.params.id;
+      } else if (navigation) {
+        id = navigation.state.params.id;
+      }
+
+      return {
+        variables: { id }
+      };
+    },
+    props({ data: { loading, error, post, subscribeToMore } }: OptionProps<PostProps, PostQueryResult>) {
+      if (error) {
+        throw new ApolloError(error);
+      }
+      return { loading, post, subscribeToMore };
+    }
+  })(Component);
+
+const withPostAdding = (Component: any) =>
+  graphql(ADD_POST, {
+    props: ({ ownProps: { history, navigation }, mutate }: OptionProps<PostProps, PostOperation>) => ({
+      addPost: async (title: string, content: string) => {
+        const { data }: any = await mutate({
+          variables: { input: { title, content } },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            addPost: {
+              __typename: 'Post',
+              id: null,
+              title,
+              content,
+              comments: []
+            }
+          },
+          updateQueries: {
+            posts: (prev: PostQueryResult, { mutationResult: { data: { addPost } } }) => {
+              return AddPost(prev, addPost);
+            }
+          }
+        });
+        if (history) {
+          return history.push('/post/' + data.addPost.id, {
+            post: data.addPost
+          });
+        } else if (navigation) {
+          return navigation.setParams({
+            id: data.addPost.id,
+            post: data.addPost
+          });
+        }
+      }
+    })
+  })(Component);
+
+const withPostEditing = (Component: any) =>
+  graphql(EDIT_POST, {
+    props: ({ ownProps: { history, navigation }, mutate }: OptionProps<PostProps, PostOperation>) => ({
+      editPost: async (id: number, title: string, content: string) => {
+        await mutate({
+          variables: { input: { id, title, content } }
+        });
+        if (history) {
+          return history.push('/posts');
+        }
+        if (navigation) {
+          return navigation.goBack();
+        }
+      }
+    })
+  })(Component);
 
 export { AddPost, DeletePost };
 export { withPostList, withPostDeleting };

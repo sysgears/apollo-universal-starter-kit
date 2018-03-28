@@ -43,86 +43,6 @@ function DeleteComment(prev: PostQueryResult, id: number) {
   });
 }
 
-const withCommentAdding = graphql(ADD_COMMENT, {
-  props: ({ mutate }: OptionProps<any, CommentOperation>) => ({
-    addComment: (content: string, postId: number) =>
-      mutate({
-        variables: { input: { content, postId } },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          addComment: {
-            __typename: 'Comment',
-            id: null,
-            content,
-            postId
-          }
-        },
-        updateQueries: {
-          post: (prev: PostQueryResult, { mutationResult: { data: { addComment } } }) => {
-            if (prev.post) {
-              return AddComment(prev, addComment);
-            }
-          }
-        }
-      })
-  })
-});
-
-const withCommentEditing = graphql(EDIT_COMMENT, {
-  props: ({ ownProps: { postId }, mutate }: OptionProps<PostCommentsProps, CommentOperation>) => ({
-    editComment: (id: number, content: string) =>
-      mutate({
-        variables: { input: { id, content } },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          editComment: {
-            __typename: 'Comment',
-            id,
-            content,
-            postId
-          }
-        }
-      })
-  })
-});
-
-const withCommentDeleting = graphql(DELETE_COMMENT, {
-  props: ({ ownProps: { postId }, mutate }: OptionProps<PostCommentsProps, CommentOperation>) => ({
-    deleteComment: (id: number) =>
-      mutate({
-        variables: { input: { id, postId } },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          deleteComment: {
-            __typename: 'Comment',
-            id,
-            postId
-          }
-        },
-        updateQueries: {
-          post: (prev: PostQueryResult, { mutationResult: { data: { deleteComment } } }) => {
-            if (prev.post) {
-              return DeleteComment(prev, deleteComment.id);
-            }
-          }
-        }
-      })
-  })
-});
-
-const withCommentState = compose(
-  graphql(ADD_COMMENT_CLIENT, {
-    props: ({ mutate }: OptionProps<PostCommentsProps, CommentOperation>) => ({
-      onCommentSelect: (comment: Comment) => {
-        mutate({ variables: { comment } });
-      }
-    })
-  }),
-  graphql(COMMENT_QUERY_CLIENT, {
-    props: ({ data: { comment } }: OptionProps<PostCommentsProps, CommentQueryResult>) => ({ comment })
-  })
-);
-
 function getSubscriptionCommentOptions(postId: number) {
   return {
     document: COMMENT_SUBSCRIPTION,
@@ -143,6 +63,90 @@ function getSubscriptionCommentOptions(postId: number) {
     }
   };
 }
+
+const withCommentAdding = (Component: any) =>
+  graphql(ADD_COMMENT, {
+    props: ({ mutate }: OptionProps<any, CommentOperation>) => ({
+      addComment: (content: string, postId: number) =>
+        mutate({
+          variables: { input: { content, postId } },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            addComment: {
+              __typename: 'Comment',
+              id: null,
+              content,
+              postId
+            }
+          },
+          updateQueries: {
+            post: (prev: PostQueryResult, { mutationResult: { data: { addComment } } }) => {
+              if (prev.post) {
+                return AddComment(prev, addComment);
+              }
+            }
+          }
+        })
+    })
+  })(Component);
+
+const withCommentEditing = (Component: any) =>
+  graphql(EDIT_COMMENT, {
+    props: ({ ownProps: { postId }, mutate }: OptionProps<PostCommentsProps, CommentOperation>) => ({
+      editComment: (id: number, content: string) =>
+        mutate({
+          variables: { input: { id, content } },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            editComment: {
+              __typename: 'Comment',
+              id,
+              content,
+              postId
+            }
+          }
+        })
+    })
+  })(Component);
+
+const withCommentDeleting = (Component: any) =>
+  graphql(DELETE_COMMENT, {
+    props: ({ ownProps: { postId }, mutate }: OptionProps<PostCommentsProps, CommentOperation>) => ({
+      deleteComment: (id: number) =>
+        mutate({
+          variables: { input: { id, postId } },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            deleteComment: {
+              __typename: 'Comment',
+              id,
+              postId
+            }
+          },
+          updateQueries: {
+            post: (prev: PostQueryResult, { mutationResult: { data: { deleteComment } } }) => {
+              if (prev.post) {
+                return DeleteComment(prev, deleteComment.id);
+              }
+            }
+          }
+        })
+    })
+  })(Component);
+
+const withCommentState = (Component: any) =>
+  compose(
+    graphql(ADD_COMMENT_CLIENT, {
+      props: ({ mutate }: OptionProps<PostCommentsProps, CommentOperation>) => ({
+        onCommentSelect: (comment: Comment) => {
+          mutate({ variables: { comment } });
+        }
+      })
+    }),
+    graphql(COMMENT_QUERY_CLIENT, {
+      props: ({ data: { comment } }: OptionProps<PostCommentsProps, CommentQueryResult>) => ({ comment })
+    })
+  )(Component);
 
 export { getSubscriptionCommentOptions };
 export { withCommentAdding, withCommentEditing, withCommentDeleting, withCommentState };

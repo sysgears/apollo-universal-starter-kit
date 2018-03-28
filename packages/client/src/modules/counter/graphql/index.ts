@@ -9,7 +9,8 @@ import COUNTER_QUERY_CLIENT from './CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from './AddCounter.client.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
-import { CounterOperation, CounterQueryResult, CounterUpdatedResult } from '../types';
+import { CounterOperation, CounterQueryResult, Counter } from '../types';
+
 import { CounterApolloState } from '../resolvers';
 
 /**
@@ -20,7 +21,7 @@ const subscriptionOptions = {
   variables: {},
   updateQuery: (
     prev: CounterQueryResult,
-    { subscriptionData: { data: { counterUpdated: { amount } } } }: SubscriptionResult<CounterUpdatedResult>
+    { subscriptionData: { data: { counterUpdated: { node: amount } } } }: SubscriptionResult<Counter>
   ) => {
     return update<CounterQueryResult>(prev, {
       counter: {

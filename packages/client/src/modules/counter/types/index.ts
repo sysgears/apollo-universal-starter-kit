@@ -9,13 +9,6 @@ export interface Counter {
   amount: number;
 }
 
-/* --- GRAPHQL TYPES --- */
-
-// TODO: remove it after a common subscription interface is created
-interface CounterUpdatedResult {
-  counterUpdated: Counter;
-}
-
 /* --- COMPONENT PROPS --- */
 
 /**
@@ -38,4 +31,4 @@ interface CounterQueryResult {
 
 interface CounterProps extends QueryProps, CounterQueryResult, CounterOperation {}
 
-export { CounterOperation, CounterQueryResult, CounterProps, CounterUpdatedResult };
+export { CounterOperation, CounterQueryResult, CounterProps };

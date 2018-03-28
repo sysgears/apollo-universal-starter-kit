@@ -9,7 +9,7 @@ import access from '../../access';
 
 let middleware;
 
-if (settings.user.auth.facebook.enabled) {
+if (settings.user.auth.facebook.enabled && !__TEST__) {
   const User = new UserDAO();
 
   passport.use(

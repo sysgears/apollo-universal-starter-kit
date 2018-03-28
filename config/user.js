@@ -7,7 +7,7 @@ export default {
         enabled: true
       },
       jwt: {
-        enabled: false
+        enabled: true
       }
     },
     password: {
@@ -21,7 +21,7 @@ export default {
       enabled: false
     },
     facebook: {
-      enabled: true,
+      enabled: false,
       clientID: process.env.FACEBOOK_CLIENTID,
       clientSecret: process.env.FACEBOOK_CLIENTSECRET,
       scope: ['email'],

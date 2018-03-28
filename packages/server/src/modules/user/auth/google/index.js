@@ -9,7 +9,7 @@ import settings from '../../../../../../../settings';
 
 let middleware;
 
-if (settings.user.auth.google.enabled) {
+if (settings.user.auth.google.enabled && !__TEST__) {
   const User = new UserDAO();
 
   passport.use(

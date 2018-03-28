@@ -1,14 +1,7 @@
 import { graphql, compose, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 
-import {
-  Comment,
-  CommentOperation,
-  PostQueryResult,
-  CommentQueryResult,
-  PostCommentsProps,
-  CommentUpdatedResult
-} from '../../types';
+import { Comment, CommentOperation, PostQueryResult, CommentQueryResult, PostCommentsProps } from '../../types';
 import { SubscriptionResult } from '../../../../../../common/types';
 
 import ADD_COMMENT from './AddComment.graphql';
@@ -133,9 +126,7 @@ function getSubscriptionCommentOptions(postId: number) {
     variables: { postId },
     updateQuery: (
       prev: PostQueryResult,
-      {
-        subscriptionData: { data: { commentUpdated: { mutation, id, node } } }
-      }: SubscriptionResult<CommentUpdatedResult>
+      { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }: SubscriptionResult<Comment>
     ) => {
       let newResult: PostQueryResult = prev;
 

@@ -4,17 +4,7 @@ import { QueryProps } from 'react-apollo';
 interface Comment {
   id?: number;
   content?: string;
-}
-
-/* Graphql types */
-interface CommentUpdatedPayload {
-  id: number;
-  mutation: string;
-  node: Comment;
-}
-
-interface CommentUpdatedResult {
-  commentUpdated: CommentUpdatedPayload;
+  postId?: number;
 }
 
 /* Types */
@@ -49,6 +39,5 @@ interface CommentFormProps {
 export { CommentOperation };
 export { CommentQueryResult };
 export { CommentFormProps };
-export { CommentUpdatedResult };
 export { Comment, PostCommentsProps };
 export { AddCommentFn, DeleteCommentFn, OnCommentSelectFn, EditCommentFn };

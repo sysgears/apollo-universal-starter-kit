@@ -2,7 +2,7 @@ import { ApolloError } from 'apollo-client';
 import { graphql, OptionProps } from 'react-apollo';
 import update from 'immutability-helper';
 
-import { Post, PostQueryResult, PostOperation, PostProps, PostsUpdatedResult } from '../../types';
+import { Post, PostQueryResult, PostOperation, PostProps } from '../../types';
 import { Edge, SubscriptionResult, ApolloItem } from '../../../../../../common/types';
 
 import POSTS_QUERY from './PostsQuery.graphql';
@@ -193,7 +193,7 @@ function getSubscriptionOptions(endCursor: number) {
     variables: { endCursor },
     updateQuery: (
       prev: PostQueryResult,
-      { subscriptionData: { data: { postsUpdated: { mutation, node } } } }: SubscriptionResult<PostsUpdatedResult>
+      { subscriptionData: { data: { postsUpdated: { mutation, node } } } }: SubscriptionResult<Post>
     ) => {
       let newResult: PostQueryResult = prev;
       if (mutation === 'CREATED') {

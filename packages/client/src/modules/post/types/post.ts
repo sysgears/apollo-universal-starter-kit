@@ -13,16 +13,6 @@ interface Post {
   comments?: Comment[];
 }
 
-/* Graphql types */
-interface PostsUpdatedPayload {
-  mutation: string;
-  node: Post;
-}
-
-interface PostsUpdatedResult {
-  postsUpdated: PostsUpdatedPayload;
-}
-
 /* Types */
 type AddPostFn = (title: string, content: string) => any;
 type EditPostFn = (id: number, title: string, content: string) => any;
@@ -57,6 +47,5 @@ interface PostFormProps {
 
 export { PostOperation };
 export { PostQueryResult };
-export { PostsUpdatedResult };
 export { EditPostFn, AddPostFn, LoadMoreRowsFn };
 export { Post, PostProps, PostFormProps };

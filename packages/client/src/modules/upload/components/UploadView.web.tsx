@@ -1,23 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
 import filesize from 'filesize';
 import { PageLayout, Row, Col, Table, Button, Alert } from '../../common/components/web';
 import settings from '../../../../../../settings';
+import { UploadProps, UploadState, UploadFilesFn, RemoveFileFn } from '../types';
 
-export default class UploadView extends React.PureComponent {
-  static propTypes = {
-    files: PropTypes.array,
-    uploadFiles: PropTypes.func.isRequired,
-    removeFile: PropTypes.func.isRequired
-  };
+export default class UploadView extends React.PureComponent<UploadProps, UploadState> {
+  constructor(props: UploadProps) {
+    super(props);
+    this.state = {
+      error: null
+    };
+  }
 
-  state = {
-    error: null
-  };
-
-  renderMetaData = () => (
+  public renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - Upload`}
       meta={[
@@ -29,8 +26,8 @@ export default class UploadView extends React.PureComponent {
     />
   );
 
-  onDrop = uploadFiles => async files => {
-    const result = await uploadFiles(files);
+  public onDrop = (uploadFiles: UploadFilesFn) => async (files: any[]) => {
+    const result: any = await uploadFiles(files);
     if (result && result.error) {
       this.setState({ error: result.error });
     } else {
@@ -38,9 +35,9 @@ export default class UploadView extends React.PureComponent {
     }
   };
 
-  handleRemoveFile = async id => {
+  public handleRemoveFile = async (id: number) => {
     const { removeFile } = this.props;
-    const result = await removeFile(id);
+    const result: any = await removeFile(id);
     if (result && result.error) {
       this.setState({ error: result.error });
     } else {
@@ -48,7 +45,7 @@ export default class UploadView extends React.PureComponent {
     }
   };
 
-  render() {
+  public render() {
     const { files, uploadFiles } = this.props;
     const { error } = this.state;
 
@@ -57,7 +54,7 @@ export default class UploadView extends React.PureComponent {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        render: (text, record) => (
+        render: (text: string, record: any) => (
           <a href={record.path} download={text}>
             {text} ({filesize(record.size)})
           </a>
@@ -67,7 +64,7 @@ export default class UploadView extends React.PureComponent {
         title: 'Actions',
         key: 'actions',
         width: 50,
-        render: (text, record) => (
+        render: (text: string, record: any) => (
           <Button color="primary" size="sm" className="delete-button" onClick={() => this.handleRemoveFile(record.id)}>
             Delete
           </Button>

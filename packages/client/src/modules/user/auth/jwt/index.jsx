@@ -106,8 +106,6 @@ const JWTLink = new ApolloLink((operation, forward) => {
 
 // TODO: shouldn't be needed at all when React Apollo will allow rendering
 // all queries as loading: true during SSR
-// TODO: shouldn't be needed at all when React Apollo will allow rendering
-// all queries as loading: true during SSR
 class DataRootComponent extends React.Component {
   constructor(props) {
     super(props);

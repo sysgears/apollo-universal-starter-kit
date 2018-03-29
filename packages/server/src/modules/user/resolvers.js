@@ -52,35 +52,11 @@ export default pubsub => ({
     }
   },
   UserAuth: {
-    certificate(obj) {
-      return obj;
-    },
     facebook(obj) {
       return obj;
     },
     google(obj) {
       return obj;
-    }
-  },
-  CertificateAuth: {
-    serial(obj) {
-      return obj.serial;
-    }
-  },
-  FacebookAuth: {
-    fbId(obj) {
-      return obj.fbId;
-    },
-    displayName(obj) {
-      return obj.displayName;
-    }
-  },
-  GoogleAuth: {
-    googleId(obj) {
-      return obj.googleId;
-    },
-    displayName(obj) {
-      return obj.displayName;
     }
   },
   Mutation: {

@@ -8,6 +8,8 @@ import { FormItem } from './index';
 export default class RenderNumber extends React.Component {
   static propTypes = {
     input: PropTypes.object,
+    setFieldValue: PropTypes.func.isRequired,
+    setFieldTouched: PropTypes.func.isRequired,
     label: PropTypes.string,
     type: PropTypes.string,
     formItemLayout: PropTypes.object,
@@ -16,7 +18,7 @@ export default class RenderNumber extends React.Component {
   };
 
   handleChange = value => {
-    const { input: { onChange, name }, hasTypeOf } = this.props;
+    const { input: { name }, setFieldValue, hasTypeOf } = this.props;
     //console.log('RenderInput: handleChange');
     //console.log('name:', name);
     if (hasTypeOf(Number)) {
@@ -24,12 +26,17 @@ export default class RenderNumber extends React.Component {
       //console.log('RenderInput: hasTypeOf(Number) TRUE');
     }
 
-    onChange(name, value);
+    setFieldValue(name, value);
+  };
+
+  handleBlur = () => {
+    const { input: { name }, setFieldTouched } = this.props;
+    setFieldTouched(name, true);
   };
 
   render() {
     const {
-      input: { onChange, ...inputRest },
+      input: { onChange, onBlur, ...inputRest },
       label,
       type,
       formItemLayout,
@@ -59,7 +66,13 @@ export default class RenderNumber extends React.Component {
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
         <div>
-          <InputNumber {...input} placeholder={label} type={type} onChange={this.handleChange} />
+          <InputNumber
+            {...input}
+            placeholder={label}
+            type={type}
+            onChange={this.handleChange}
+            onBlur={this.handleBlur}
+          />
         </div>
       </FormItem>
     );

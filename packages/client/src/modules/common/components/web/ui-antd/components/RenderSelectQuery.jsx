@@ -11,6 +11,8 @@ const Option = Select.Option;
 export default class RenderSelectQuery extends React.Component {
   static propTypes = {
     input: PropTypes.object,
+    setFieldValue: PropTypes.func.isRequired,
+    setFieldTouched: PropTypes.func.isRequired,
     label: PropTypes.string,
     formItemLayout: PropTypes.object,
     meta: PropTypes.object,
@@ -25,11 +27,16 @@ export default class RenderSelectQuery extends React.Component {
   };
 
   handleChange = value => {
-    const { input: { onChange, name } } = this.props;
+    const { input: { name }, setFieldValue } = this.props;
     //console.log('RenderSelect: handleChange');
     //console.log('name:', name);
     //console.log('value:', value);
-    onChange(name, value ? { id: value.key, name: value.label } : undefined);
+    setFieldValue(name, value ? { id: value.key, name: value.label } : undefined);
+  };
+
+  handleBlur = () => {
+    const { input: { name }, setFieldTouched } = this.props;
+    setFieldTouched(name, true);
   };
 
   search = value => {
@@ -42,7 +49,7 @@ export default class RenderSelectQuery extends React.Component {
 
   render() {
     const {
-      input: { value, onChange, ...inputRest },
+      input: { value, onChange, onBlur, ...inputRest },
       label,
       schema,
       style,
@@ -80,6 +87,12 @@ export default class RenderSelectQuery extends React.Component {
     if (style) {
       defaultStyle = style;
     }
+
+    let defaultValue = 'defaultValue';
+    if (formType === 'filter') {
+      defaultValue = 'value';
+    }
+
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={error}>
         <div>
@@ -101,8 +114,9 @@ export default class RenderSelectQuery extends React.Component {
                   dropdownMatchSelectWidth: false,
                   style: defaultStyle,
                   onChange: this.handleChange,
+                  onBlur: this.handleBlur,
                   ...inputRest,
-                  defaultValue: formatedValue
+                  [defaultValue]: formatedValue
                 };
 
                 if (data.pageInfo.totalCount > 10) {
@@ -123,7 +137,7 @@ export default class RenderSelectQuery extends React.Component {
                   props = {
                     ...props,
                     filterOption: false,
-                    defaultValue: formatedValue,
+                    [defaultValue]: formatedValue,
                     onSearch: this.search
                   };
                 } else {

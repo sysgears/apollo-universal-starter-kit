@@ -101,14 +101,17 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
               deleted.push({ id: item.id });
             } else {
               if (!isEqual(obj, item)) {
-                update.push({ where: { id: obj.id }, data: pickInputFields({ schema: value.type[0], data: obj }) });
+                update.push({
+                  where: { id: obj.id },
+                  data: pickInputFields({ schema: value.type[0], values: obj, data: obj })
+                });
               }
             }
           });
 
           values[key].forEach(item => {
             if (!keys1[item.id]) {
-              create.push(pickInputFields({ schema: value.type[0], data: item }));
+              create.push(pickInputFields({ schema: value.type[0], values: item, data: item }));
             }
           });
           //console.log('created: ', create);

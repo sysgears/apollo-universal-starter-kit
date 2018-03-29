@@ -69,7 +69,8 @@ const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNam
             joinNames.push({
               key: decamelize(key),
               prefix: value.type.__.tablePrefix ? value.type.__.tablePrefix : '',
-              name: decamelize(value.type.__.tableName ? value.type.__.tableName : value.type.name)
+              name: decamelize(value.type.__.tableName ? value.type.__.tableName : value.type.name),
+              schemaName: decamelize(domainSchema.name)
             });
           }
 
@@ -93,8 +94,8 @@ export const selectBy = (schema, fields, single = false) => {
 
   return query => {
     // join table names
-    joinNames.map(({ key, prefix, name }) => {
-      query.leftJoin(`${prefix}${name} as ${name}`, `${name}.id`, `${decamelize(schema.name)}.${key}_id`);
+    joinNames.map(({ key, prefix, name, schemaName }) => {
+      query.leftJoin(`${prefix}${name} as ${name}`, `${name}.id`, `${schemaName}.${key}_id`);
     });
 
     return query.select(selectItems);

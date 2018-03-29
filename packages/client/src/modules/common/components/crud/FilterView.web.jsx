@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-
 import { DebounceInput } from 'react-debounce-input';
+
+import { hasRole } from '../../../user/containers/Auth';
 import { Form, FormItem, Input, Row, Col, Button, Icon } from '../web';
 import { createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
@@ -23,7 +24,9 @@ class FilterView extends React.PureComponent {
     schema: PropTypes.object.isRequired,
     searchText: PropTypes.string,
     onFilterChange: PropTypes.func.isRequired,
-    customFields: PropTypes.object
+    customFields: PropTypes.object,
+    currentUser: PropTypes.object,
+    currentUserLoading: PropTypes.bool
   };
 
   state = {
@@ -41,10 +44,15 @@ class FilterView extends React.PureComponent {
   };
 
   render() {
-    const { schema, onFilterChange, customFields } = this.props;
+    const { schema, onFilterChange, customFields, currentUser } = this.props;
     const { expand } = this.state;
 
-    if (customFields && customFields.constructor === Object && Object.keys(customFields).length === 0) {
+    const showFilter =
+      customFields === null
+        ? false
+        : customFields && customFields.role ? (hasRole(customFields.role, currentUser) ? true : false) : true;
+
+    if (!showFilter) {
       return null;
     }
 
@@ -61,7 +69,7 @@ class FilterView extends React.PureComponent {
           formikBag.resetForm();
           onFilterChange({});
         }}
-        render={({ values, setFieldValue, setFieldTouched, handleChange, handleBlur, handleSubmit, handleReset }) => (
+        render={({ values, handleChange, handleBlur, handleSubmit, handleReset }) => (
           <Form className="ant-advanced-search-form" onSubmit={handleSubmit}>
             <Row>
               <Col span={8}>
@@ -90,13 +98,12 @@ class FilterView extends React.PureComponent {
             <Row gutter={24} style={{ display: expand ? 'block' : 'none' }}>
               {createFormFields({
                 handleChange,
-                setFieldValue,
                 handleBlur,
-                setFieldTouched,
                 schema,
                 values,
                 formItemLayout,
                 prefix: '',
+                customFields,
                 formType: 'filter'
               })}
             </Row>

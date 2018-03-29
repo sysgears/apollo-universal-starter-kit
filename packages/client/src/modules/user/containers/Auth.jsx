@@ -10,6 +10,7 @@ import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGOUT from '../graphql/Logout.graphql';
 
 const checkAuth = (cookies, scope) => {
+  //console.log('checkAuth, scope:', scope);
   let token = null;
   let refreshToken = null;
 
@@ -33,17 +34,19 @@ const checkAuth = (cookies, scope) => {
       return false;
     }
 
-    if (scope === 'admin') {
-      const { user: { role } } = decode(token);
-      if (scope !== role) {
-        return false;
-      }
-    }
+    /*
+    ? children
+    : elseComponent || null;*/
+
+    //if (scope === 'admin') {
+    const { user: { role } } = decode(token);
+    //if (scope !== role) {
+    return role && (!scope || (Array.isArray(scope) ? scope : [scope]).indexOf(role) >= 0);
+    //}
+    //}
   } catch (e) {
     return false;
   }
-
-  return true;
 };
 
 const profileName = cookies => {
@@ -68,12 +71,28 @@ const profileName = cookies => {
     return '';
   }
 };
-
-const AuthNav = withCookies(({ children, cookies, scope }) => {
-  return checkAuth(cookies, scope) ? children : null;
+/*
+class IfLoggedIn extends React.Component {
+  static propTypes = {
+    children: PropTypes.object
+  };
+  render() {
+    const { children, ...restProps } = this.props;
+    return React.cloneElement(children, {
+      ...restProps
+    });
+  }
+}
+*/
+const IfLoggedIn = withCookies(({ children, cookies, role, ...restProps }) => {
+  return checkAuth(cookies, role)
+    ? React.cloneElement(children, {
+        ...restProps
+      })
+    : null;
 });
 
-AuthNav.propTypes = {
+IfLoggedIn.propTypes = {
   children: PropTypes.object,
   cookies: PropTypes.instanceOf(Cookies)
 };
@@ -117,7 +136,7 @@ const AuthLoginWithApollo = withCookies(
                 window.localStorage.setItem('refreshToken', null);
 
                 if (history) {
-                  return history.push('/');
+                  return history.push('/login');
                 }
                 if (navigation) {
                   return navigation.goBack();
@@ -160,12 +179,12 @@ AuthLoggedIn.propTypes = {
   to: PropTypes.string
 };
 
-const AuthRoute = withCookies(({ component: Component, cookies, scope, ...rest }) => {
+const AuthRoute = withCookies(({ component: Component, cookies, role, ...rest }) => {
   return (
     <Route
       {...rest}
       render={props =>
-        checkAuth(cookies, scope) ? <Component {...props} {...rest} /> : <Redirect to={{ pathname: '/login' }} />
+        checkAuth(cookies, role) ? <Component {...props} {...rest} /> : <Redirect to={{ pathname: '/login' }} />
       }
     />
   );
@@ -176,13 +195,11 @@ AuthRoute.propTypes = {
   cookies: PropTypes.instanceOf(Cookies)
 };
 
-const AuthLoggedInRoute = withCookies(({ component: Component, cookies, redirect, scope, ...rest }) => {
+const AuthLoggedInRoute = withCookies(({ component: Component, cookies, redirect, role, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
-        checkAuth(cookies, scope) ? <Redirect to={{ pathname: redirect }} /> : <Component {...props} />
-      }
+      render={props => (checkAuth(cookies, role) ? <Redirect to={{ pathname: redirect }} /> : <Component {...props} />)}
     />
   );
 });
@@ -191,10 +208,31 @@ AuthLoggedInRoute.propTypes = {
   component: PropTypes.func,
   cookies: PropTypes.instanceOf(Cookies),
   redirect: PropTypes.string,
-  scope: PropTypes.string
+  role: PropTypes.string
 };
 
-export { AuthNav };
+const withUser = Component => {
+  const WithUser = ({ ...props }) => <Component {...props} />;
+
+  WithUser.propTypes = {
+    currentUser: PropTypes.object,
+    currentUserLoading: PropTypes.bool.isRequired
+  };
+
+  return graphql(CURRENT_USER_QUERY, {
+    props({ data: { loading, currentUser, refetch } }) {
+      return { currentUserLoading: loading, currentUser, refetchCurrentUser: refetch };
+    }
+  })(WithUser);
+};
+
+const hasRole = (role, currentUser) => {
+  return currentUser && (!role || (Array.isArray(role) ? role : [role]).indexOf(currentUser.role) >= 0) ? true : false;
+};
+
+export { withUser };
+export { hasRole };
+export { IfLoggedIn };
 export { AuthLoggedIn };
 export { AuthLoginWithApollo as AuthLogin };
 export { AuthProfile };

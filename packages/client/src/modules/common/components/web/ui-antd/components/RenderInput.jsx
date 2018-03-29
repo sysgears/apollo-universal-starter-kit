@@ -12,32 +12,18 @@ export default class RenderInput extends React.Component {
     meta: PropTypes.object
   };
 
-  handleChange = e => {
-    const { input: { onChange, name } } = this.props;
-    //console.log('RenderInput: handleChange');
-    //console.log('name:', name);
-    let value = e.target.value;
-    //console.log('value:', value);
-
-    onChange(name, value);
-  };
-
   render() {
-    const { input: { onChange, ...inputRest }, label, formItemLayout, meta: { touched, error } } = this.props;
+    const { input, label, formItemLayout, meta: { touched, error } } = this.props;
 
     let validateStatus = '';
     if (touched && error) {
       validateStatus = 'error';
     }
 
-    let input = {
-      ...inputRest
-    };
-
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
         <div>
-          <Input {...input} placeholder={label} type="text" onChange={this.handleChange} />
+          <Input {...input} placeholder={label} type="text" />
         </div>
       </FormItem>
     );

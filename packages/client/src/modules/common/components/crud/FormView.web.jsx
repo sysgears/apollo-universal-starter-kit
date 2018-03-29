@@ -45,13 +45,11 @@ const FormView = ({ schema, updateEntry, createEntry, title, customFields, data 
         //console.log('onSubmit, values:', pickInputFields({schema, values}));
         await onSubmit({ schema, values, updateEntry, createEntry, title, data: data ? data.node : null });
       }}
-      render={({ values, setFieldValue, setFieldTouched, handleChange, handleBlur, handleSubmit }) => (
+      render={({ values, handleChange, handleBlur, handleSubmit }) => (
         <Form name="post" onSubmit={handleSubmit}>
           {createFormFields({
             handleChange,
-            setFieldValue,
             handleBlur,
-            setFieldTouched,
             schema,
             values,
             formItemLayout,

@@ -48,7 +48,7 @@ class PageLayout extends React.Component {
             breakpoint="lg"
             collapsedWidth="0"
           >
-            <Menu onClick={this.handleClick} selectedKeys={[this.props.location.pathname]} mode="vertical" theme="dark">
+            <Menu onClick={this.handleClick} selectedKeys={[this.props.location.pathname]} mode="inline" theme="dark">
               <MenuItem key="/">
                 <NavLink to="/" className="nav-link">
                   {settings.app.name}
@@ -63,7 +63,7 @@ class PageLayout extends React.Component {
                 <Header style={{ padding: 0 }}>
                   <Row gutter={8}>
                     <Col span={14}>
-                      <Menu mode="horizontal" theme="dark" style={{ lineHeight: '64px' }}>
+                      <Menu mode="horizontal" theme="dark" selectable={false} style={{ lineHeight: '64px' }}>
                         <MenuItem key="trigger">
                           <Icon
                             className="trigger"

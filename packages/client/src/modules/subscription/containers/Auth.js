@@ -5,10 +5,10 @@ import { Redirect } from 'react-router-dom';
 
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 
-import { AuthNav, AuthRoute } from '../../user/containers/Auth';
+import { IfLoggedIn, AuthRoute } from '../../user/containers/Auth';
 
 const SubscriberNav = ({ loading, active, children, ...rest }) => {
-  return <AuthNav {...rest}>{loading || !active ? null : children}</AuthNav>;
+  return <IfLoggedIn {...rest}>{loading || !active ? null : children}</IfLoggedIn>;
 };
 
 SubscriberNav.propTypes = {

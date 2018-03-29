@@ -497,6 +497,8 @@ export default class Crud {
             filterKey = `${key}Id`;
           }
 
+          //console.log('filter, filterKey: ', filterKey);
+
           let filterValue = filter[filterKey];
           if (hasTypeOf(Date)) {
             if (filter[`${filterKey}_lte`] && filter[`${filterKey}_lte`] !== '') {
@@ -556,11 +558,17 @@ export default class Crud {
   }
 
   _get({ where }, info) {
-    const { id } = where;
-
     const baseQuery = knex(`${this.getFullTableName()} as ${this.getTableName()}`);
     const select = selectBy(this.schema, info, true);
-    return knexnest(select(baseQuery).where(`${this.getTableName()}.id`, '=', id));
+
+    const tableName = this.getTableName();
+    baseQuery.where(function() {
+      Object.keys(where).map(key => {
+        this.andWhere(`${tableName}.${decamelize(key)}`, '=', where[key]);
+      });
+    });
+
+    return knexnest(select(baseQuery));
   }
 
   async get(args, info) {
@@ -625,7 +633,7 @@ export default class Crud {
       for (const key of this.schema.keys()) {
         const value = this.schema.values[key];
         if (value.type.constructor === Array && args.data[key]) {
-          nestedEntries.push({ key, data: args.data[key] });
+          nestedEntries.push({ key: value.type[0].name, data: args.data[key] });
           delete args.data[key];
         }
       }

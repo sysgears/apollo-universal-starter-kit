@@ -9,6 +9,8 @@ const dateFormat = 'YYYY-MM-DD';
 export default class RenderDate extends React.Component {
   static propTypes = {
     input: PropTypes.object,
+    setFieldValue: PropTypes.func.isRequired,
+    setFieldTouched: PropTypes.func.isRequired,
     label: PropTypes.string,
     type: PropTypes.string,
     formItemLayout: PropTypes.object,
@@ -16,15 +18,25 @@ export default class RenderDate extends React.Component {
   };
 
   handleChange = (date, dateString) => {
-    const { input: { onChange, name } } = this.props;
+    const { input: { name }, setFieldValue } = this.props;
     //console.log('RenderDate: handleChange');
     //console.log('name:', name);
     //console.log('dateString:', dateString);
-    onChange(name, dateString);
+    setFieldValue(name, dateString);
+  };
+
+  handleBlur = () => {
+    const { input: { name }, setFieldTouched } = this.props;
+    setFieldTouched(name, true);
   };
 
   render() {
-    const { input: { value, onChange, ...inputRest }, label, formItemLayout, meta: { touched, error } } = this.props;
+    const {
+      input: { value, onChange, onBlur, ...inputRest },
+      label,
+      formItemLayout,
+      meta: { touched, error }
+    } = this.props;
 
     let validateStatus = '';
     if (touched && error) {
@@ -43,7 +55,13 @@ export default class RenderDate extends React.Component {
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
         <div>
-          <DatePicker value={formatedValue} format={dateFormat} onChange={this.handleChange} {...inputRest} />
+          <DatePicker
+            value={formatedValue}
+            format={dateFormat}
+            onChange={this.handleChange}
+            onBlur={this.handleBlur}
+            {...inputRest}
+          />
         </div>
       </FormItem>
     );

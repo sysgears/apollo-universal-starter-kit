@@ -8,6 +8,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { Table, Button, Popconfirm, Row, Col, Form, FormItem } from '../web';
 import { createColumnFields, createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
+import { hasRole } from '../../../user/containers/Auth';
 
 function dragDirection(dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
@@ -113,7 +114,10 @@ class ListView extends React.Component {
     customColumnFields: PropTypes.object,
     customColumnActions: PropTypes.object,
     customBatchFields: PropTypes.object,
-    tableScroll: PropTypes.object
+    customActions: PropTypes.object,
+    tableScroll: PropTypes.object,
+    currentUser: PropTypes.object,
+    currentUserLoading: PropTypes.bool
   };
 
   state = {
@@ -216,8 +220,10 @@ class ListView extends React.Component {
       loadMoreRows,
       schema,
       link,
+      currentUser,
       customColumnFields = {},
-      customColumnActions = {},
+      customColumnActions,
+      customActions,
       customBatchFields,
       updateManyEntries,
       tableScroll = null
@@ -225,20 +231,31 @@ class ListView extends React.Component {
     const { selectedRowKeys } = this.state;
     const hasSelected = selectedRowKeys.length > 0;
 
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: selectedRowKeys => {
-        this.setState({ selectedRowKeys });
-      }
-    };
+    const showBatchFields =
+      customBatchFields === null
+        ? false
+        : customBatchFields && customBatchFields.role
+          ? hasRole(customBatchFields.role, currentUser) ? true : false
+          : true;
 
-    let showBatchFields = true;
-    if (customBatchFields && customBatchFields.constructor === Object && Object.keys(customBatchFields).length === 0) {
-      showBatchFields = false;
-    }
+    const showCustomActions =
+      customActions === null
+        ? false
+        : customActions && customActions.role ? (hasRole(customActions.role, currentUser) ? true : false) : true;
+
+    const rowSelection = showBatchFields
+      ? {
+          selectedRowKeys,
+          onChange: selectedRowKeys => {
+            this.setState({ selectedRowKeys });
+          }
+        }
+      : null;
 
     const title = () => {
-      return (
+      return showCustomActions && customActions && customActions.render ? (
+        customActions.render
+      ) : (
         <Link to={`/${link}/0`}>
           <Button color="primary">Add</Button>
         </Link>
@@ -262,15 +279,15 @@ class ListView extends React.Component {
               </div>
             )}
           </Col>
-          <Col span={2}>
-            <Popconfirm title="Sure to delete?" onConfirm={this.hendleDeleteMany}>
-              <Button color="primary" disabled={!hasSelected} loading={loading && !data}>
-                Delete
-              </Button>
-            </Popconfirm>
-          </Col>
-          {showBatchFields && (
-            <Col span={21}>
+          {showBatchFields && [
+            <Col span={2} key="batchDelete">
+              <Popconfirm title="Sure to delete?" onConfirm={this.hendleDeleteMany}>
+                <Button color="primary" disabled={!hasSelected} loading={loading && !data}>
+                  Delete
+                </Button>
+              </Popconfirm>
+            </Col>,
+            <Col span={21} key="batchUpdate">
               <Formik
                 initialValues={mapFormPropsToValues({ schema })}
                 onSubmit={async (values, { resetForm }) => {
@@ -286,13 +303,11 @@ class ListView extends React.Component {
                     resetForm();
                   }
                 }}
-                render={({ values, setFieldValue, setFieldTouched, handleChange, handleBlur, handleSubmit }) => (
+                render={({ values, handleChange, handleBlur, handleSubmit }) => (
                   <Form layout="inline" name="post" onSubmit={handleSubmit}>
                     {createFormFields({
                       handleChange,
-                      setFieldValue,
                       handleBlur,
-                      setFieldTouched,
                       schema,
                       values,
                       formItemLayout: {},
@@ -308,7 +323,7 @@ class ListView extends React.Component {
                 )}
               />
             </Col>
-          )}
+          ]}
         </Row>
       );
     };
@@ -316,6 +331,7 @@ class ListView extends React.Component {
     const columns = createColumnFields({
       schema,
       link,
+      currentUser,
       orderBy: this.orderBy,
       renderOrderByArrow: this.renderOrderByArrow,
       hendleUpdate: this.hendleUpdate,
@@ -328,11 +344,11 @@ class ListView extends React.Component {
     let tableProps = {
       dataSource: data ? data.edges : null,
       columns: columns,
-      agination: false,
+      pagination: false,
       size: 'small',
       rowSelection: rowSelection,
       loading: loading && !data,
-      title: title,
+      title: showCustomActions ? title : null,
       footer: footer
     };
 

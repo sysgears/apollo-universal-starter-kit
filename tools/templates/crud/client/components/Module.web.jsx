@@ -9,8 +9,7 @@ import settings from '../../../../../../settings';
 
 export default class $Module$ extends React.PureComponent {
   static propTypes = {
-    title: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired
   };
 
   renderMetaData = title => (
@@ -26,13 +25,13 @@ export default class $Module$ extends React.PureComponent {
   );
 
   render() {
-    const { title, link } = this.props;
+    const { title } = this.props;
     return (
       <PageLayout>
         {this.renderMetaData(title)}
         <h2>{title}</h2>
-        <$Module$Filter />
-        <$Module$List link={link} />
+        <$Module$Filter {...this.props} />
+        <$Module$List {...this.props} />
       </PageLayout>
     );
   }

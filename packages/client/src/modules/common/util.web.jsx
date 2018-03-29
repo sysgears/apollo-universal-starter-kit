@@ -11,6 +11,7 @@ import Spin from 'antd/lib/spin';
 import moment from 'moment';
 import DomainSchema from '@domain-schema/core';
 
+import { hasRole } from '../user/containers/Auth';
 import Field from '../../utils/FieldAdapter';
 import { mapFormPropsToValues } from '../../utils/crud';
 import {
@@ -18,6 +19,7 @@ import {
   RenderNumber,
   RenderTextArea,
   RenderSelectQuery,
+  RenderSelectCountry,
   RenderDate,
   RenderSwitch,
   Button,
@@ -27,6 +29,7 @@ import {
   Row,
   Col,
   Input,
+  InputNumber,
   Icon
 } from './components/web';
 
@@ -35,12 +38,14 @@ const dateFormat = 'YYYY-MM-DD';
 export const createColumnFields = ({
   schema,
   link,
+  currentUser,
   orderBy,
   renderOrderByArrow,
   hendleUpdate,
   hendleDelete,
   onCellChange,
-  customFields = {}
+  customFields = {},
+  customActions
 }) => {
   let columns = [];
   // use customFields if definded otherwise use schema.keys()
@@ -50,13 +55,20 @@ export const createColumnFields = ({
       : schema.keys();
 
   for (const key of keys) {
+    //console.log('customFields, key: ', customFields[key]);
+    const role = customFields && customFields[key] && customFields[key].role ? customFields[key].role : false;
+    //console.log('customFields, role: ', role);
+    const hasRole =
+      currentUser && (!role || (Array.isArray(role) ? role : [role]).indexOf(currentUser.role) >= 0) ? true : false;
+    //console.log('customFields, hasRole: ', hasRole);
+
     if (schema.values[key]) {
       const value = schema.values[key];
       const hasTypeOf = targetType =>
         value.type === targetType || value.type.prototype instanceof targetType || value.type instanceof targetType;
       //console.log(key);
       //console.log(hasTypeOf(DomainSchema));
-      if (value.show !== false && (key !== 'id' || customFields['id'])) {
+      if (hasRole && value.show !== false && (key !== 'id' || customFields['id'])) {
         if (value.type.isSchema) {
           //console.log(value.type);
 
@@ -75,6 +87,7 @@ export const createColumnFields = ({
             ),
             dataIndex: key,
             key: key,
+            fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
             width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
             render: (text, record) =>
               customFields[key] && customFields[key]['render'] ? (
@@ -85,6 +98,8 @@ export const createColumnFields = ({
                   hasTypeOf={hasTypeOf}
                   schema={value.type}
                   record={record}
+                  role={customFields[key] && customFields[key]['editRole'] ? customFields[key]['editRole'] : null}
+                  currentUser={currentUser}
                   render={
                     customFields[key] && customFields[key]['render']
                       ? customFields[key]['render']
@@ -103,6 +118,7 @@ export const createColumnFields = ({
             ),
             dataIndex: key,
             key: key,
+            fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
             width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
             render: (text, record) => {
               const data = {};
@@ -119,11 +135,14 @@ export const createColumnFields = ({
             ),
             dataIndex: key,
             key: key,
+            fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
             width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
             render: (text, record) => (
               <EditableCell
                 value={text}
                 hasTypeOf={hasTypeOf}
+                role={customFields[key] && customFields[key]['editRole'] ? customFields[key]['editRole'] : null}
+                currentUser={currentUser}
                 render={customFields[key] && customFields[key]['render'] ? customFields[key]['render'] : text => text}
                 onChange={onCellChange(key, record.id, hendleUpdate)}
               />
@@ -138,6 +157,7 @@ export const createColumnFields = ({
             ),
             dataIndex: key,
             key: key,
+            fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
             width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
             render: (text, record) =>
               customFields[key] && customFields[key]['render']
@@ -147,35 +167,45 @@ export const createColumnFields = ({
         }
       }
     } else {
-      columns.push({
-        title: startCase(key),
-        dataIndex: key,
-        key: key,
-        width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
-        render: (text, record) =>
-          customFields[key] && customFields[key]['render'] ? customFields[key]['render'](text, record) : null
-      });
+      if (hasRole) {
+        columns.push({
+          title: startCase(key),
+          dataIndex: key,
+          key: key,
+          fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
+          width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+          render: (text, record) =>
+            customFields[key] && customFields[key]['render'] ? customFields[key]['render'](text, record) : null
+        });
+      }
     }
   }
 
-  columns.push({
-    title: 'Actions',
-    key: 'actions',
-    width: 150,
-    fixed: 'right',
-    render: (text, record) => [
-      <Link className="link" to={`/${link}/${record.id}`} key="edit">
-        <Button color="primary" size="sm">
-          Edit
-        </Button>
-      </Link>,
-      <Popconfirm title="Sure to delete?" onConfirm={() => hendleDelete(record.id)} key="delete">
-        <Button color="primary" size="sm">
-          Delete
-        </Button>
-      </Popconfirm>
-    ]
-  });
+  const showColumnActions =
+    customActions === null
+      ? false
+      : customActions && customActions.role ? (hasRole(customActions.role, currentUser) ? true : false) : true;
+
+  if (showColumnActions) {
+    columns.push({
+      title: 'Actions',
+      key: 'actions',
+      width: 150,
+      fixed: 'right',
+      render: (text, record) => [
+        <Link className="link" to={`/${link}/${record.id}`} key="edit">
+          <Button color="primary" size="sm">
+            Edit
+          </Button>
+        </Link>,
+        <Popconfirm title="Sure to delete?" onConfirm={() => hendleDelete(record.id)} key="delete">
+          <Button color="primary" size="sm">
+            Delete
+          </Button>
+        </Popconfirm>
+      ]
+    });
+  }
 
   return columns;
 };
@@ -195,9 +225,7 @@ const tailFormItemLayout = {
 
 export const createFormFields = ({
   handleChange,
-  setFieldValue,
   handleBlur,
-  setFieldTouched,
   schema,
   values = {},
   formItemLayout,
@@ -219,7 +247,7 @@ export const createFormFields = ({
     const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
 
     if (formType === 'filter') {
-      if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
+      if (value.show !== false && value.type.constructor !== Array) {
         //let validate = [];
         //if (!value.optional && !batch) {
         //  validate.push(required);
@@ -248,8 +276,6 @@ export const createFormFields = ({
                 label={startCase(key)}
                 //validate={validate}
                 formItemLayout={formItemLayout}
-                onChange={setFieldValue}
-                onBlur={setFieldTouched}
                 formType={formType}
                 hasTypeOf={hasTypeOf}
               />
@@ -270,8 +296,6 @@ export const createFormFields = ({
                 label={startCase(key)}
                 //validate={validate}
                 formItemLayout={formItemLayout}
-                onChange={setFieldValue}
-                onBlur={setFieldTouched}
                 formType={formType}
                 hasTypeOf={hasTypeOf}
               />
@@ -292,8 +316,6 @@ export const createFormFields = ({
                 label={`From ${startCase(key)}`}
                 //validate={validate}
                 formItemLayout={formItemLayout}
-                onChange={setFieldValue}
-                onBlur={setFieldTouched}
                 formType={formType}
                 hasTypeOf={hasTypeOf}
               />
@@ -312,8 +334,6 @@ export const createFormFields = ({
                 label={`To ${startCase(key)}`}
                 //validate={validate}
                 formItemLayout={formItemLayout}
-                onChange={setFieldValue}
-                onBlur={setFieldTouched}
                 formType={formType}
                 hasTypeOf={hasTypeOf}
               />
@@ -335,8 +355,6 @@ export const createFormFields = ({
                 label={startCase(key)}
                 //validate={validate}
                 formItemLayout={formItemLayout}
-                onChange={setFieldValue}
-                onBlur={setFieldTouched}
                 formType={formType}
                 hasTypeOf={hasTypeOf}
               />
@@ -356,8 +374,6 @@ export const createFormFields = ({
                 label={startCase(key)}
                 //validate={validate}
                 formItemLayout={formItemLayout}
-                onChange={setFieldValue}
-                onBlur={setFieldTouched}
                 formType={formType}
                 hasTypeOf={hasTypeOf}
               />
@@ -391,6 +407,8 @@ export const createFormFields = ({
           component = RenderNumber;
         } else if (hasTypeOf(String) && value.fieldInput === 'textarea') {
           component = RenderTextArea;
+        } else if (hasTypeOf(String) && value.fieldInput === 'country') {
+          component = RenderSelectCountry;
         }
 
         fields.push(
@@ -405,8 +423,6 @@ export const createFormFields = ({
             label={startCase(key)}
             //validate={validate}
             formItemLayout={formItemLayout}
-            onChange={setFieldValue}
-            onBlur={setFieldTouched}
             formType={formType}
             hasTypeOf={hasTypeOf}
           />
@@ -426,9 +442,7 @@ export const createFormFields = ({
                           <div key={index} className="field-array-form">
                             {createFormFields({
                               handleChange,
-                              setFieldValue,
                               handleBlur,
-                              setFieldTouched,
                               schema: value.type[0],
                               values: mapFormPropsToValues({ schema: value.type[0], data: field }),
                               formItemLayout: formItemLayout,
@@ -466,6 +480,8 @@ class EditableCell extends React.Component {
   static propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
     record: PropTypes.object,
+    role: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
+    currentUser: PropTypes.object,
     render: PropTypes.func,
     hasTypeOf: PropTypes.func,
     schema: PropTypes.object,
@@ -487,6 +503,9 @@ class EditableCell extends React.Component {
   }
   handleChange = e => {
     const value = e.target.value;
+    this.setState({ value });
+  };
+  handleNumberChange = value => {
     this.setState({ value });
   };
   handleDateChange = (date, dateString) => {
@@ -524,14 +543,39 @@ class EditableCell extends React.Component {
   };
   render() {
     const { value, record, searchText, dirty, editable } = this.state;
-    const { render, hasTypeOf, schema } = this.props;
+    const { render, hasTypeOf, schema, role, currentUser } = this.props;
 
+    if (role) {
+      //console.log('EditableCell, value:', value);
+      //console.log('EditableCell, role:', role);
+      //console.log('EditableCell, currentUser:', currentUser);
+
+      const hasRole =
+        currentUser && (!role || (Array.isArray(role) ? role : [role]).indexOf(currentUser.role) >= 0) ? true : false;
+
+      if (!hasRole) {
+        return render(value, record);
+      }
+    }
     let input = null;
     if (editable) {
       let formatedValue = value;
-      //console.log(value);
+      //console.log('value:', value);
       input = <Input value={formatedValue} onChange={this.handleChange} onPressEnter={this.check} />;
-      if (hasTypeOf(Date)) {
+      if (hasTypeOf(Number) || hasTypeOf(DomainSchema.Float)) {
+        let inputParms = {
+          value: formatedValue,
+          onChange: this.handleNumberChange,
+          onPressEnter: this.check
+        };
+        if (hasTypeOf(DomainSchema.Float)) {
+          inputParms = {
+            step: '0.01',
+            ...inputParms
+          };
+        }
+        input = <InputNumber {...inputParms} />;
+      } else if (hasTypeOf(Date)) {
         if (value !== null && value !== '') {
           formatedValue = moment(value, dateFormat);
         } else {

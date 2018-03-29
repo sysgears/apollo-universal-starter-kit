@@ -36,7 +36,7 @@ export default () => ({
       try {
         const user = await User.getUserByEmail(email);
 
-        validateUserPassword(user, password);
+        await validateUserPassword(user, password);
 
         const tokens = await access.grantAccess(user, req);
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { translate } from 'react-i18next';
 
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
@@ -13,7 +14,7 @@ const onSubmit = (post, addPost, editPost) => values => {
   }
 };
 
-const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, editPost }) => {
+const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, editPost, t }) => {
   let postObj = post;
 
   // if new post was just added read it from router
@@ -24,7 +25,7 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
   if (loading && !postObj) {
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <Text>{t('post.loadMsg')}</Text>
       </View>
     );
   } else {
@@ -49,7 +50,8 @@ PostEditView.propTypes = {
   addPost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
-  subscribeToMore: PropTypes.func.isRequired
+  subscribeToMore: PropTypes.func.isRequired,
+  t: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -58,4 +60,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default PostEditView;
+export default translate('post')(PostEditView);

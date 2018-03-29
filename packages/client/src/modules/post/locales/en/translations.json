@@ -41,7 +41,7 @@
   },
 
   "list": {
-    "title": "Posts list",
+    "title": "Posts",
     "meta": "List of all posts example page",
     "column": {
       "title": "Title",
@@ -52,6 +52,6 @@
       "del": "Delete",
       "more": "Load more ..."
     },
-    "subTitle": "Posts"
+    "subTitle": "Post list"
   }
 }

@@ -95,7 +95,16 @@ export default class User {
   async getUserWithPassword(id) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.password', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
+        .select(
+          'u.id',
+          'u.username',
+          'u.password_hash',
+          'u.role',
+          'u.is_active',
+          'u.email',
+          'up.first_name',
+          'up.last_name'
+        )
         .from('user AS u')
         .where('u.id', '=', id)
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
@@ -116,24 +125,24 @@ export default class User {
   }
 
   async register({ username, email, password, role, isActive }) {
-    const passwordHashed = await bcrypt.hash(password, 12);
+    const passwordHash = await bcrypt.hash(password, 12);
 
     if (role === undefined) {
       role = 'user';
     }
 
     return knex('user')
-      .insert({ username, email, role, password: passwordHashed, is_active: !!isActive })
+      .insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive })
       .returning('id');
   }
 
-  createFacebookOuth({ id, displayName, userId }) {
+  createFacebookAuth({ id, displayName, userId }) {
     return knex('auth_facebook')
       .insert({ fb_id: id, display_name: displayName, user_id: userId })
       .returning('id');
   }
 
-  createGoogleOuth({ id, displayName, userId }) {
+  createGoogleOAuth({ id, displayName, userId }) {
     return knex('auth_google')
       .insert({ google_id: id, display_name: displayName, user_id: userId })
       .returning('id');
@@ -142,8 +151,8 @@ export default class User {
   async editUser({ id, username, email, role, isActive, password }) {
     let localAuthInput = { email };
     if (password) {
-      const passwordHashed = await bcrypt.hash(password, 12);
-      localAuthInput = { email, password: passwordHashed };
+      const passwordHash = await bcrypt.hash(password, 12);
+      localAuthInput = { email, password_hash: passwordHash };
     }
 
     return knex('user')
@@ -199,10 +208,10 @@ export default class User {
   }
 
   async updatePassword(id, newPassword) {
-    const password = await bcrypt.hash(newPassword, 12);
+    const passwordHash = await bcrypt.hash(newPassword, 12);
 
     return knex('user')
-      .update({ password })
+      .update({ password_hash: passwordHash })
       .where({ id });
   }
 
@@ -215,7 +224,16 @@ export default class User {
   async getUserByEmail(email) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.password', 'u.role', 'u.is_active', 'u.email', 'up.first_name', 'up.last_name')
+        .select(
+          'u.id',
+          'u.username',
+          'u.password_hash',
+          'u.role',
+          'u.is_active',
+          'u.email',
+          'up.first_name',
+          'up.last_name'
+        )
         .from('user AS u')
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where({ email })
@@ -233,7 +251,7 @@ export default class User {
           'u.is_active',
           'fa.fb_id',
           'u.email',
-          'u.password',
+          'u.password_hash',
           'up.first_name',
           'up.last_name'
         )
@@ -256,7 +274,7 @@ export default class User {
           'u.is_active',
           'ga.google_id',
           'u.email',
-          'u.password',
+          'u.password_hash',
           'up.first_name',
           'up.last_name'
         )

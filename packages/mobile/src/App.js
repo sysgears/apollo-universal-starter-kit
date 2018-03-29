@@ -4,9 +4,9 @@ import { getOperationAST } from 'graphql';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import { createApolloFetch } from 'apollo-fetch';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
+import { createApolloFetch, constructDefaultOptions } from 'apollo-fetch';
 import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { LoggingLink } from 'apollo-logger';
@@ -26,7 +26,7 @@ const store = createStore(
   {} // initial state
 );
 
-const { protocol, pathname, port } = url.parse(__BACKEND_URL__);
+const { protocol, pathname, port } = url.parse(__API_URL__);
 
 export default class Main extends React.Component {
   static propTypes = {
@@ -34,17 +34,16 @@ export default class Main extends React.Component {
   };
 
   render() {
-    const { hostname } = url.parse(__BACKEND_URL__);
+    const { hostname } = url.parse(__API_URL__);
     const uri =
       this.props.expUri && hostname === 'localhost'
         ? `${protocol}//${url.parse(this.props.expUri).hostname}:${port}${pathname}`
-        : __BACKEND_URL__;
+        : __API_URL__;
     log.info(`Connecting to GraphQL backend at: ${uri}`);
-    const fetch = createApolloFetch({ uri });
     const cache = new InMemoryCache();
 
     const wsUri = uri.replace(/^http/, 'ws');
-    let link = ApolloLink.split(
+    const netLink = ApolloLink.split(
       operation => {
         const operationAST = getOperationAST(operation.query, operation.operationName);
         return !!operationAST && operationAST.operation === 'subscription';
@@ -55,13 +54,34 @@ export default class Main extends React.Component {
           reconnect: true
         }
       }),
-      new BatchHttpLink({ fetch })
+      new BatchHttpLink({
+        fetch:
+          modules.createFetch(uri) ||
+          createApolloFetch({
+            uri,
+            constructOptions: (reqs, options) => ({
+              ...constructDefaultOptions(reqs, options),
+              credentials: 'include'
+            })
+          })
+      })
     );
+
+    let connectionParams = {};
+    for (const connectionParam of modules.connectionParams) {
+      Object.assign(connectionParams, connectionParam());
+    }
 
     const linkState = withClientState({ ...modules.resolvers, cache });
 
+    const links = [...modules.link, linkState, netLink];
+
+    if (settings.app.logging.apolloLogging) {
+      links.unshift(new LoggingLink());
+    }
+
     const client = new ApolloClient({
-      link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
+      link: ApolloLink.from(links),
       cache
     });
 

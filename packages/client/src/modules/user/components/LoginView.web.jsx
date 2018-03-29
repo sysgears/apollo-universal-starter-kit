@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { LayoutCenter } from '../../common/components';
 import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
-import LoginForm from '../components/LoginForm';
+import LoginForm from './LoginForm';
 import settings from '../../../../../../settings';
 
 export default class LoginView extends React.PureComponent {
@@ -14,14 +14,17 @@ export default class LoginView extends React.PureComponent {
   };
 
   onSubmit = login => async values => {
-    const result = await login(values);
+    const res = await login(values);
+    const { errors } = res;
 
-    if (result && result.errors) {
-      let submitError = {
-        _error: 'Login failed!'
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw submitError;
+    if (errors && errors.length) {
+      throw errors.reduce(
+        (res, error) => {
+          res[error.field] = error.message;
+          return res;
+        },
+        { _error: 'Login failed!' }
+      );
     }
   };
 

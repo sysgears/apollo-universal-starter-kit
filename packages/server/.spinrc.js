@@ -6,7 +6,6 @@ const config = {
       entry: './src/index.ts',
       stack: ['react-native-web', 'server'],
       defines: {
-        __BACKEND_URL__: '"http://localhost:8080/graphql"',
         __SERVER__: true
       },
       enabled: true
@@ -29,7 +28,9 @@ const config = {
     frontendRefreshOnBackendChange: true,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
-      __BACKEND_URL__: '"http://localhost:8080/graphql"'
+      __SERVER_PORT__: 8080,
+      __API_URL__: '"/graphql"', // Use full URL if API is external, e.g. https://example.com/graphql
+      __WEBSITE_URL__: '"http://localhost:3000"'
     }
   }
 };
@@ -37,13 +38,13 @@ const config = {
 config.options.devProxy = config.options.ssr;
 
 if (process.env.NODE_ENV === 'production') {
+  //config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
   // Generating source maps for production will slowdown compilation for roughly 25%
   config.options.sourceMap = false;
 }
 
 const extraDefines = {
   __SSR__: config.options.ssr,
-  __PERSIST_GQL__: config.options.persistGraphQL,
   __FRONTEND_BUILD_DIR__: `"../client/build"`,
   __DLL_BUILD_DIR__: `"../client/build/dll"`
 };

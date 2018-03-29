@@ -1,7 +1,8 @@
 // @flow
 /* eslint-disable no-unused-vars */
+import React from 'react';
 import type { DocumentNode } from 'graphql';
-import type { Middleware, $Request } from 'express';
+import type { Middleware, $Request, $Response } from 'express';
 
 import { merge, map, union, without, castArray } from 'lodash';
 
@@ -19,6 +20,7 @@ type FeatureParams = {
   beforeware?: Middleware | Middleware[],
   middleware?: Middleware | Middleware[],
   createFetchOptions?: Function | Function[],
+  htmlHeadComponents?: any,
   catalogInfo: any | any[]
 };
 
@@ -29,9 +31,9 @@ class Feature {
   createFetchOptions: Function[];
   beforeware: Function[];
   middleware: Function[];
+  htmlHeadComponents: any;
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
-    // console.log(feature.schema[0] instanceof DocumentNode);
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
@@ -41,17 +43,19 @@ class Feature {
     this.beforeware = combine(arguments, arg => arg.beforeware);
     this.middleware = combine(arguments, arg => arg.middleware);
     this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
+    this.htmlHeadComponent = combine(arguments, arg => arg.htmlHeadComponent);
   }
 
   get schemas(): DocumentNode[] {
     return this.schema;
   }
 
-  async createContext(req: $Request, connectionParams: any, webSocket: any) {
-    const results = await Promise.all(
-      this.createContextFunc.map(createContext => createContext(req, connectionParams, webSocket))
-    );
-    return merge({}, ...results);
+  async createContext(req: $Request, res: $Response, connectionParams: any, webSocket: any) {
+    let context = {};
+    for (const createContextFunc of this.createContextFunc) {
+      context = merge(context, await createContextFunc(req, res, connectionParams, webSocket, context));
+    }
+    return context;
   }
 
   createResolvers(pubsub: any) {
@@ -80,6 +84,12 @@ class Feature {
           }
         }
       : null;
+  }
+
+  createHtmlHeadComponents(req: $Request): any {
+    return React.Children.map(this.htmlHeadComponent, (child, idx) =>
+      React.cloneElement(child, { key: idx, req: req })
+    );
   }
 }
 

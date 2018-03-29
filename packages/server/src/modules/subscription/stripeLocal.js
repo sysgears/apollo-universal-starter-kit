@@ -15,7 +15,7 @@ export default () => {
       log('Starting stripe local proxy');
       require('stripe-local')({
         secretKey: settings.subscription.stripeSecretKey,
-        webhookUrl: 'http://localhost:3000/stripe/webhook'
+        webhookUrl: `http://localhost:3000/stripe/webhook`
       });
       running = true;
     }

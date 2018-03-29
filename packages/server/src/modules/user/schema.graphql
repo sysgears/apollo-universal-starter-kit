@@ -14,6 +14,7 @@ type UserProfile {
   fullName: String
 }
 
+# Additional authentication service info
 type UserAuth {
   certificate: CertificateAuth
   facebook: FacebookAuth
@@ -34,25 +35,6 @@ type GoogleAuth {
   displayName: String
 }
 
-type UserPayload {
-  user: User
-  errors: [FieldError!]
-}
-
-type AuthPayload {
-  tokens: Tokens
-  errors: [FieldError!]
-}
-
-type ResetPayload {
-  errors: [FieldError!]
-}
-
-type Tokens {
-  token: String!
-  refreshToken: String!
-}
-
 extend type Query {
   # Get all users ordered by: OrderByUserInput add filtered by: FilterUserInput
   users(orderBy: OrderByUserInput, filter: FilterUserInput): [User]
@@ -62,23 +44,20 @@ extend type Query {
   currentUser: User
 }
 
+type UserPayload {
+  user: User
+  errors: [FieldError!]
+}
+
 extend type Mutation {
-  # Register user
-  register(input: RegisterUserInput!): UserPayload!
-  # Login user
-  login(input: LoginUserInput!): AuthPayload!
   # Logout user
-  logout: Boolean!
-  # Refreash user tokens
-  refreshTokens(token: String!, refreshToken: String!): AuthPayload!
+  logout: String
   # Create new user
   addUser(input: AddUserInput!): UserPayload!
   # Edit a user
   editUser(input: EditUserInput!): UserPayload!
   # Delete a user
   deleteUser(id: Int!): UserPayload!
-  forgotPassword(input: ForgotPasswordInput!): Boolean!
-  resetPassword(input: ResetPasswordInput!): ResetPayload!
 }
 
 # Input for ordering users
@@ -99,15 +78,25 @@ input FilterUserInput {
   isActive: Boolean
 }
 
-input RegisterUserInput {
-  username: String!
-  email: String!
-  password: String!
+# Additional authentication service info
+input AuthInput {
+  certificate: AuthCertificateInput
+  facebook: AuthFacebookInput
+  google: AuthGoogleInput
 }
 
-input LoginUserInput {
-  email: String!
-  password: String!
+input AuthCertificateInput {
+  serial: String
+}
+
+input AuthFacebookInput {
+  fbId: String
+  displayName: String
+}
+
+input AuthGoogleInput {
+  googleId: String
+  displayName: String
 }
 
 # Input for addUser Mutation
@@ -136,28 +125,4 @@ input EditUserInput {
 input ProfileInput {
   firstName: String
   lastName: String
-}
-
-input AuthInput {
-  certificate: AuthCertificateInput
-  facebook: AuthFacebookInput
-}
-
-input AuthCertificateInput {
-  serial: String
-}
-
-input AuthFacebookInput {
-  fbId: String
-  displayName: String
-}
-
-input ForgotPasswordInput {
-  email: String!
-}
-
-input ResetPasswordInput {
-  token: String!
-  password: String!
-  passwordConfirmation: String!
 }

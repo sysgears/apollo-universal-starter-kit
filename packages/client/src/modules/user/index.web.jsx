@@ -1,67 +1,83 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
-import { NavLink } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
+
+import auth from './auth';
+import resolvers from './resolvers';
+import ProfileView from './components/ProfileView';
 import { MenuItem } from '../../modules/common/components/web';
-import Profile from './containers/Profile';
+import Users from './components/Users';
+import UserEdit from './containers/UserEdit';
 import Register from './containers/Register';
 import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
-import resolvers from './resolvers';
 
-import { AuthRoute, AuthLoggedInRoute, AuthLogin, AuthProfile } from './containers/Auth';
+import { AuthRoute, IfLoggedIn, withUser, withLoadedUser, withLogout, IfNotLoggedIn } from './containers/Auth';
 
 import Feature from '../connector';
 
-function tokenMiddleware(req, options, next) {
-  options.headers['x-token'] = window.localStorage.getItem('token');
-  options.headers['x-refresh-token'] = window.localStorage.getItem('refreshToken');
-  next();
-}
+const ProfileName = withLoadedUser(
+  ({ currentUser }) => (currentUser ? currentUser.fullName || currentUser.username : null)
+);
 
-function tokenAfterware(res, options, next) {
-  const token = options.headers['x-token'];
-  const refreshToken = options.headers['x-refresh-token'];
-  if (token) {
-    window.localStorage.setItem('token', token);
-  }
-  if (refreshToken) {
-    window.localStorage.setItem('refreshToken', refreshToken);
-  }
-  next();
-}
+const LogoutLink = withRouter(
+  withLogout(({ logout, history }) => (
+    <a href="#" onClick={() => logout(() => history.push('/'))} className="nav-link">
+      Logout
+    </a>
+  ))
+);
 
-function connectionParam() {
-  return {
-    token: window.localStorage.getItem('token'),
-    refreshToken: window.localStorage.getItem('refreshToken')
-  };
-}
+export * from './containers/Auth';
 
-export default new Feature({
+export default new Feature(auth, {
   route: [
-    <AuthRoute exact path="/profile" role={['user', 'editor', 'admin']} component={Profile} />,
-    <AuthLoggedInRoute exact path="/register" redirect="/profile" component={Register} />,
-    <AuthLoggedInRoute exact path="/login" redirect="/profile" component={Login} />,
-    <AuthLoggedInRoute exact path="/forgot-password" redirect="/profile" component={ForgotPassword} />,
-    <AuthLoggedInRoute exact path="/reset-password/:token" redirect="/profile" component={ResetPassword} />
+    <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={withUser(ProfileView)} />,
+    <AuthRoute exact path="/users" redirect="/login" role="admin" component={Users} />,
+    <AuthRoute exact path="/users/:id" redirect="/login" role="admin" component={UserEdit} />,
+    <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
+    <AuthRoute
+      exact
+      path="/login"
+      redirectOnLoggedIn
+      redirect="/"
+      component={withRouter(({ history }) => <Login onLogin={() => history.push('/profile')} />)}
+    />,
+    <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,
+    <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />
+  ],
+  navItem: [
+    <IfLoggedIn key="/users" role="admin">
+      <MenuItem>
+        <NavLink to="/users" className="nav-link" activeClassName="active">
+          Users
+        </NavLink>
+      </MenuItem>
+    </IfLoggedIn>
   ],
   navItemRight: [
-    <MenuItem key="/profile">
-      <AuthProfile />
-    </MenuItem>,
-    <MenuItem key="/login">
-      <AuthLogin>
+    <IfLoggedIn key="/profile">
+      <MenuItem>
+        <NavLink to="/profile" className="nav-link" activeClassName="active">
+          <ProfileName />
+        </NavLink>
+      </MenuItem>
+    </IfLoggedIn>,
+    <IfLoggedIn key="/logout">
+      <MenuItem>
+        <LogoutLink />
+      </MenuItem>
+    </IfLoggedIn>,
+    <IfNotLoggedIn key="/login">
+      <MenuItem>
         <NavLink to="/login" className="nav-link" activeClassName="active">
           Sign In
         </NavLink>
-      </AuthLogin>
-    </MenuItem>
+      </MenuItem>
+    </IfNotLoggedIn>
   ],
   resolver: resolvers,
-  middleware: tokenMiddleware,
-  afterware: tokenAfterware,
-  connectionParam: connectionParam,
   // eslint-disable-next-line react/display-name
   rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
 });

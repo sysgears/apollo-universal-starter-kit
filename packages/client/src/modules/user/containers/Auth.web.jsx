@@ -4,22 +4,24 @@ import { Route, Redirect } from 'react-router-dom';
 
 import { withLoadedUser } from './AuthBase';
 
-const AuthRoute = withLoadedUser(({ currentUser, role, redirect, redirectOnLoggedIn, component, ...props }) => (
-  <Route
-    {...props}
-    render={() =>
-      (currentUser && redirectOnLoggedIn) || (!currentUser && !redirectOnLoggedIn) ? (
-        <Redirect to={{ pathname: redirect }} />
-      ) : (
-        React.createElement(component)
-      )
-    }
-  />
-));
+const AuthRoute = withLoadedUser(
+  ({ currentUser, role, redirect = '/login', redirectOnLoggedIn, component, ...props }) => (
+    <Route
+      {...props}
+      render={() =>
+        (currentUser && redirectOnLoggedIn) || (!currentUser && !redirectOnLoggedIn) ? (
+          <Redirect to={{ pathname: redirect }} />
+        ) : (
+          React.createElement(component)
+        )
+      }
+    />
+  )
+);
 
 AuthRoute.propTypes = {
   role: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string]),
-  redirect: PropTypes.string.isRequired,
+  redirect: PropTypes.string,
   redirectOnLoggedIn: PropTypes.bool
 };
 

@@ -21,6 +21,10 @@ const withUser = Component => {
   })(WithUser);
 };
 
+const hasRole = (role, currentUser) => {
+  return currentUser && (!role || (Array.isArray(role) ? role : [role]).indexOf(currentUser.role) >= 0) ? true : false;
+};
+
 const withLoadedUser = Component => {
   const WithLoadedUser = ({ currentUserLoading, ...props }) => (currentUserLoading ? null : <Component {...props} />);
 
@@ -32,9 +36,11 @@ const withLoadedUser = Component => {
   return withUser(WithLoadedUser);
 };
 
-const IfLoggedInComponent = ({ currentUser, role, children, elseComponent }) =>
-  currentUser && (!role || (Array.isArray(role) ? role : [role]).indexOf(currentUser.role) >= 0)
-    ? children
+const IfLoggedInComponent = ({ currentUser, role, children, elseComponent, refetchCurrentUser, ...restProps }) =>
+  hasRole(role, currentUser)
+    ? React.cloneElement(children, {
+        ...restProps
+      })
     : elseComponent || null;
 IfLoggedInComponent.propTypes = {
   currentUser: PropTypes.object,
@@ -45,7 +51,12 @@ IfLoggedInComponent.propTypes = {
 
 const IfLoggedIn = withLoadedUser(IfLoggedInComponent);
 
-const IfNotLoggedInComponent = ({ currentUser, children }) => (!currentUser ? children : null);
+const IfNotLoggedInComponent = ({ currentUser, children, refetchCurrentUser, ...restProps }) =>
+  !currentUser
+    ? React.cloneElement(children, {
+        ...restProps
+      })
+    : null;
 IfNotLoggedInComponent.propTypes = {
   currentUser: PropTypes.object,
   children: PropTypes.node
@@ -59,4 +70,4 @@ const withLogout = Component =>
     return <Component {...newProps} />;
   });
 
-export { withUser, withLoadedUser, IfLoggedIn, IfNotLoggedIn, withLogout };
+export { withUser, hasRole, withLoadedUser, IfLoggedIn, IfNotLoggedIn, withLogout };

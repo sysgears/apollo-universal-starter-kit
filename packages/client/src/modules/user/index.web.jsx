@@ -35,7 +35,7 @@ export default new Feature(auth, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={withUser(ProfileView)} />,
     <AuthRoute exact path="/users" redirect="/login" role="admin" component={Users} />,
-    <AuthRoute exact path="/users/:id" redirect="/login" role="admin" component={UserEdit} />,
+    <AuthRoute exact path="/users/:id" redirect="/login" role="admin" component={withRouter(UserEdit)} />,
     <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
     <AuthRoute
       exact
@@ -48,27 +48,33 @@ export default new Feature(auth, {
     <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />
   ],
   navItem: [
-    <MenuItem key="/users">
-      <IfLoggedIn role="admin">
+    <IfLoggedIn key="/users" role="admin">
+      <MenuItem>
         <NavLink to="/users" className="nav-link" activeClassName="active">
           Users
         </NavLink>
-      </IfLoggedIn>
-    </MenuItem>
+      </MenuItem>
+    </IfLoggedIn>
   ],
   navItemRight: [
-    <IfLoggedIn>
-      <MenuItem key="/profile">
+    <IfLoggedIn key="/profile">
+      <MenuItem>
         <NavLink to="/profile" className="nav-link" activeClassName="active">
           <ProfileName />
         </NavLink>
       </MenuItem>
-      <LogoutLink />
     </IfLoggedIn>,
-    <IfNotLoggedIn>
-      <NavLink to="/login" className="nav-link" activeClassName="active">
-        Sign In
-      </NavLink>
+    <IfLoggedIn key="/logout">
+      <MenuItem>
+        <LogoutLink />
+      </MenuItem>
+    </IfLoggedIn>,
+    <IfNotLoggedIn key="/login">
+      <MenuItem>
+        <NavLink to="/login" className="nav-link" activeClassName="active">
+          Sign In
+        </NavLink>
+      </MenuItem>
     </IfNotLoggedIn>
   ],
   resolver: resolvers,

@@ -2,6 +2,7 @@ import { pick } from 'lodash';
 import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
+import resolvers from './resolvers';
 import Feature from '../connector';
 import UserDAO from '../../sql';
 import access from '../../access';
@@ -95,4 +96,4 @@ if (settings.user.auth.google.enabled && !__TEST__) {
   };
 }
 
-export default new Feature({ middleware });
+export default new Feature({ middleware, createResolversFunc: resolvers });

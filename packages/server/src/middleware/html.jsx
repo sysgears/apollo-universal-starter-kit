@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
 import clientModules from '../../../client/src/modules';
-import serverModules from '../../../server/src/modules';
 import { styles } from '../../../client/src/modules/common/components/web';
 
-const Html = ({ content, state, assetMap, css, helmet, req }) => {
+const Html = ({ content, state, assetMap, css, helmet }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent(); // react-helmet html document tags
   const bodyAttrs = helmet.bodyAttributes.toComponent(); // react-helmet body document tags
 
@@ -15,7 +14,6 @@ const Html = ({ content, state, assetMap, css, helmet, req }) => {
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
         {helmet.link.toComponent()}
-        {serverModules.createHtmlHeadComponents(req)}
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <link rel="apple-touch-icon" sizes="180x180" href={`/${assetMap['apple-touch-icon.png']}`} />
@@ -63,8 +61,7 @@ Html.propTypes = {
   state: PropTypes.object.isRequired,
   assetMap: PropTypes.object.isRequired,
   css: PropTypes.array,
-  helmet: PropTypes.object,
-  req: PropTypes.object.isRequired
+  helmet: PropTypes.object
 };
 
 export default Html;

@@ -2,8 +2,6 @@ import React from 'react';
 
 import { merge, map, union, without, castArray } from 'lodash';
 
-import log from '../../../common/log';
-
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 export const featureCatalog = {};
@@ -12,46 +10,54 @@ export default class {
   /* eslint-disable no-unused-vars */
   constructor(
     {
-      route,
       link,
       fetch,
-      navItem,
-      navItemRight,
+      connectionParam,
       reducer,
       resolver,
-      connectionParam,
-      createFetchOptions,
-      stylesInsert,
-      scriptsInsert,
+      routerFactory,
+      route,
+      navItem,
+      navItemRight,
       rootComponentFactory,
       dataRootComponent,
-      routerFactory,
+      stylesInsert,
+      scriptsInsert,
       catalogInfo
     },
     ...features
   ) {
     /* eslint-enable no-unused-vars */
-    combine(arguments, arg => arg.catalogInfo).forEach(info =>
-      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
-    );
+    // Connectivity
     this.link = combine(arguments, arg => arg.link);
     this.fetch = combine(arguments, arg => arg.fetch)
+      .slice(-1)
+      .pop();
+    this.connectionParam = combine(arguments, arg => arg.connectionParam);
+
+    // State management
+    this.reducer = combine(arguments, arg => arg.reducer);
+    this.resolver = combine(arguments, arg => arg.resolver);
+
+    // Navigation
+    this.routerFactory = combine(arguments, arg => arg.routerFactory)
       .slice(-1)
       .pop();
     this.route = combine(arguments, arg => arg.route);
     this.navItem = combine(arguments, arg => arg.navItem);
     this.navItemRight = combine(arguments, arg => arg.navItemRight);
-    this.reducer = combine(arguments, arg => arg.reducer);
-    this.resolver = combine(arguments, arg => arg.resolver);
-    this.connectionParam = combine(arguments, arg => arg.connectionParam);
-    this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
-    this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
-    this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
+
+    // UI provider-components
     this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
     this.dataRootComponent = combine(arguments, arg => arg.dataRootComponent);
-    this.routerFactory = combine(arguments, arg => arg.routerFactory)
-      .slice(-1)
-      .pop();
+
+    // TODO: Use React Helmet for those. Low level DOM manipulation
+    this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
+    this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
+
+    combine(arguments, arg => arg.catalogInfo).forEach(info =>
+      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
+    );
   }
 
   get router() {
@@ -88,22 +94,6 @@ export default class {
 
   get connectionParams() {
     return this.connectionParam;
-  }
-
-  get constructFetchOptions() {
-    return this.createFetchOptions.length
-      ? (...args) => {
-          try {
-            let result = {};
-            for (let func of this.createFetchOptions) {
-              result = { ...result, ...func(...args) };
-            }
-            return result;
-          } catch (e) {
-            log.error(e.stack);
-          }
-        }
-      : null;
   }
 
   get stylesInserts() {

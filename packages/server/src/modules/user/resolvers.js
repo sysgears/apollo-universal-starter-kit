@@ -51,14 +51,6 @@ export default pubsub => ({
       }
     }
   },
-  UserAuth: {
-    facebook(obj) {
-      return obj;
-    },
-    google(obj) {
-      return obj;
-    }
-  },
   Mutation: {
     addUser: withAuth(
       (obj, args, context) => {

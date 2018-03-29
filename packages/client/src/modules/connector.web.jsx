@@ -2,8 +2,6 @@ import React from 'react';
 
 import { merge, map, union, without, castArray } from 'lodash';
 
-import log from '../../../common/log';
-
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 export const featureCatalog = {};
@@ -20,7 +18,6 @@ export default class {
       reducer,
       resolver,
       connectionParam,
-      createFetchOptions,
       stylesInsert,
       scriptsInsert,
       rootComponentFactory,
@@ -44,7 +41,6 @@ export default class {
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
-    this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
     this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
     this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
@@ -88,22 +84,6 @@ export default class {
 
   get connectionParams() {
     return this.connectionParam;
-  }
-
-  get constructFetchOptions() {
-    return this.createFetchOptions.length
-      ? (...args) => {
-          try {
-            let result = {};
-            for (let func of this.createFetchOptions) {
-              result = { ...result, ...func(...args) };
-            }
-            return result;
-          } catch (e) {
-            log.error(e.stack);
-          }
-        }
-      : null;
   }
 
   get stylesInserts() {

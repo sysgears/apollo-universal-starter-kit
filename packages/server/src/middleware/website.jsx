@@ -106,7 +106,7 @@ const renderServerSide = async (req, res) => {
 
     const apolloState = Object.assign({}, cache.extract());
 
-    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} helmet={helmet} req={req} />;
+    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} helmet={helmet} />;
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
     res.end();
   }

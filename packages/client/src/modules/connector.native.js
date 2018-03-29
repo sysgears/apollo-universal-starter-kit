@@ -1,5 +1,4 @@
 import { merge, map, union, without, castArray } from 'lodash';
-import log from '../../../common/log';
 
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
@@ -20,7 +19,6 @@ export default class {
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
-    this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
     this.routerFactory = combine(arguments, arg => arg.routerFactory)
       .slice(-1)
       .pop();
@@ -40,22 +38,6 @@ export default class {
 
   get connectionParams() {
     return this.connectionParam;
-  }
-
-  get constructFetchOptions() {
-    return this.createFetchOptions.length
-      ? (...args) => {
-          try {
-            let result = {};
-            for (let func of this.createFetchOptions) {
-              result = { ...result, ...func(...args) };
-            }
-            return result;
-          } catch (e) {
-            log.error(e.stack);
-          }
-        }
-      : null;
   }
 
   get router() {

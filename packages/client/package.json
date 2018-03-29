@@ -92,7 +92,10 @@
   },
   "devDependencies": {
     "@types/react": "^16.0.38",
+    "@types/react-dom": "^16.0.4",
     "@types/react-native": "^0.52.12",
+    "@types/react-router-dom": "^4.2.4",
+    "@types/reactstrap": "^5.0.20",    
     "apollo-utilities": "^1.0.3",
     "autoprefixer": "^7.2.5",
     "babel-cli": "^6.26.0",

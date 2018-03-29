@@ -66,8 +66,12 @@ const JWTLink = new ApolloLink((operation, forward) => {
           next: async result => {
             let retry = false;
             if (operation.operationName === 'login') {
-              const { data: { login: { tokens: { accessToken, refreshToken } } } } = result;
-              await saveTokens({ accessToken, refreshToken });
+              if (result.data.login.tokens && !result.data.login.errors) {
+                const { data: { login: { tokens: { accessToken, refreshToken } } } } = result;
+                await saveTokens({ accessToken, refreshToken });
+              } else {
+                await removeTokens();
+              }
             } else if (await isTokenRefreshNeeded(operation, result)) {
               try {
                 const { data: { refreshTokens: { accessToken, refreshToken } } } = await apolloClient.mutate({

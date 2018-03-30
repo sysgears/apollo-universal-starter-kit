@@ -20,7 +20,8 @@ import settings from '../../../../settings';
 import createApolloClient from '../../../common/createApolloClient';
 import createReduxStore, { storeReducer } from '../../../common/createReduxStore';
 import log from '../../../common/log';
-import modules from '../modules';
+// See the index.web.ts file to get more details on this
+import modules from '../modules/index.web';
 import RedBox from './RedBox';
 import Routes from './Routes';
 

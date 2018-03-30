@@ -5,14 +5,14 @@ import { Route, Redirect } from 'react-router-dom';
 import { withLoadedUser } from './AuthBase';
 
 const AuthRoute = withLoadedUser(
-  ({ currentUser, role, redirect = '/login', redirectOnLoggedIn, component, ...props }) => (
+  ({ currentUser, role, redirect = '/login', redirectOnLoggedIn, component: Component, ...rest }) => (
     <Route
-      {...props}
-      render={() =>
+      {...rest}
+      render={props =>
         (currentUser && redirectOnLoggedIn) || (!currentUser && !redirectOnLoggedIn) ? (
           <Redirect to={{ pathname: redirect }} />
         ) : (
-          React.createElement(component)
+          <Component currentUser={currentUser} {...props} {...rest} />
         )
       }
     />

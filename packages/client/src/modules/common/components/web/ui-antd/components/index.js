@@ -13,7 +13,7 @@ export { default as Option } from './Option';
 export { default as RenderField } from './RenderField';
 export { default as RenderInput } from './RenderInput';
 export { default as RenderNumber } from './RenderNumber';
-export { default as RenderTextArea } from './RenderTextArea1';
+export { default as RenderTextArea } from './RenderTextArea';
 export { default as RenderDate } from './RenderDate';
 export { default as RenderSelect } from './RenderSelect';
 export { default as RenderSelectCountry } from './RenderSelectCountry';

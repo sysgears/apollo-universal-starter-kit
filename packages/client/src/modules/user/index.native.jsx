@@ -83,7 +83,8 @@ export default new Feature(auth, {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
           name: 'user',
           size: 30
-        })
+        }),
+        tabBarLabel: <HeaderTitleWithI18n i18nKey="navLink.profile" />
       }
     },
     Login: {
@@ -95,7 +96,8 @@ export default new Feature(auth, {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
           name: 'login',
           size: 30
-        })
+        }),
+        tabBarLabel: <HeaderTitleWithI18n i18nKey="navLink.sign" />
       }
     },
     Users: {
@@ -121,7 +123,8 @@ export default new Feature(auth, {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
           name: 'logout',
           size: 30
-        })
+        }),
+        tabBarLabel: <HeaderTitleWithI18n i18nKey="navLink.logout" />
       }
     }
   },

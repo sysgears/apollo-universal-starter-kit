@@ -2,7 +2,8 @@
   "navLink": {
     "users": "Пользователи",
     "sign": "Вход в систему",
-    "logout": "Выход"
+    "logout": "Выход",
+    "profile": "Профиль"
   },
   "forgotPass": {
     "title": "Забыли пароль",
@@ -30,8 +31,6 @@
       "btnSubmit": "Войти"
     },
     "btn": {
-      "fb": "Войти с Facebook",
-      "google": "Войти с Google",
       "forgotPass": "Забыли пароль?",
       "notReg": "Ещё не зарегистрированы?",
       "sign": "Зарегистрироваться"
@@ -144,5 +143,18 @@
     }
   },
 
-  "nativeMock": "Привет, Пользователь!"
+  "nativeMock": "Привет, ",
+  "mobile": {
+    "login": {
+      "email": {
+        "label": "Эл. адрес",
+        "placeholder": "Введите эл. адрес"
+      },
+      "pass": {
+        "label": "Пароль",
+        "placeholder": "Введите пароль"
+      }
+    },
+    "logout": "Выйти"
+  }
 }

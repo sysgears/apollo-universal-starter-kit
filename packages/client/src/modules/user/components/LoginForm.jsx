@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import { withFormik } from 'formik';
+import { translate } from 'react-i18next';
+
 import Field from '../../../utils/FieldAdapter';
 import { Button } from '../../common/components';
 import { RenderField } from '../../common/components/native';
@@ -17,7 +19,7 @@ const loginFormSchema = {
 
 const validate = values => validateForm(values, loginFormSchema);
 
-const LoginForm = ({ handleSubmit, valid, values }) => {
+const LoginForm = ({ handleSubmit, valid, values, t }) => {
   return (
     <View style={styles.form}>
       <Field
@@ -27,8 +29,8 @@ const LoginForm = ({ handleSubmit, valid, values }) => {
         component={RenderField}
         type="email"
         keyboardType="email-address"
-        label="Email"
-        placeholder="Type Your Email"
+        label={t('mobile.login.email.label')}
+        placeholder={t('mobile.login.email.placeholder')}
         value={values.email}
       />
       <Field
@@ -38,12 +40,12 @@ const LoginForm = ({ handleSubmit, valid, values }) => {
         component={RenderField}
         type="password"
         secureTextEntry={true}
-        label="Password"
-        placeholder="Type Your Password"
+        label={t('mobile.login.pass.label')}
+        placeholder={t('mobile.login.pass.placeholder')}
         value={values.password}
       />
       <Button style={styles.submit} onPress={handleSubmit} disabled={valid}>
-        Sign In
+        {t('login.form.btnSubmit')}
       </Button>
       {settings.user.auth.facebook.enabled && <FacebookButton type="icon" />}
       {settings.user.auth.google.enabled && <GoogleButton type="icon" />}
@@ -55,7 +57,8 @@ LoginForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
   valid: PropTypes.bool,
-  values: PropTypes.object
+  values: PropTypes.object,
+  t: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -87,4 +90,4 @@ const LoginFormWithFormik = withFormik({
   displayName: 'LoginForm' // helps with React DevTools
 });
 
-export default LoginFormWithFormik(LoginForm);
+export default translate('user')(LoginFormWithFormik(LoginForm));

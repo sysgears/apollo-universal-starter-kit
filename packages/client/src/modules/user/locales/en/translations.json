@@ -2,7 +2,8 @@
   "navLink": {
     "users": "Users",
     "sign": "Sign In",
-    "logout": "Logout"
+    "logout": "Logout",
+    "profile": "Profile"
   },
   "forgotPass": {
     "title": "Forgot password",
@@ -30,8 +31,6 @@
       "btnSubmit": "Login"
     },
     "btn": {
-      "fb": "Login with Facebook",
-      "google": "Login with Google",
       "forgotPass": "Forgot your password?",
       "notReg": "Not registered yet?",
       "sign": "Sign Up"
@@ -146,5 +145,18 @@
     }
   },
 
-  "nativeMock": "Hello User!"
+  "nativeMock": "Hello, ",
+  "mobile": {
+    "login": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Type Your Email"
+      },
+      "pass": {
+        "label": "Password",
+        "placeholder": "Type Your Password"
+      }
+    },
+    "logout": "Log out"
+  }
 }

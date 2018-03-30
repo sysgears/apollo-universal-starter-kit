@@ -5905,10 +5905,6 @@ graphql-iso-date@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.3.0.tgz#cbe434b41e035e806338121b1b2b509a0f72bb80"
 
-graphql-iso-enums@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/graphql-iso-enums/-/graphql-iso-enums-1.0.4.tgz#cfccdd4967501c5d43b8bcd65244c4d0d9187afc"
-
 graphql-parse-fields@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/graphql-parse-fields/-/graphql-parse-fields-1.2.0.tgz#c97119a91951b98dcbe656c46a203e966a720f28"

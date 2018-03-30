@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CODES as countries } from 'graphql-iso-enums/types/ISOTerritory';
 import Select from 'antd/lib/select';
+
+import countries from '../../../../../../../../common/ISOCountries';
 import { FormItem } from './index';
 
 const Option = Select.Option;
@@ -44,7 +45,6 @@ export default class RenderSelectCountry extends React.Component {
     }
 
     const options = [];
-
     Object.entries(countries).forEach(([key, value]) =>
       options.push(
         <Option key={key} value={key}>

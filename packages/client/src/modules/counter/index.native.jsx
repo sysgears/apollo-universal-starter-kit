@@ -1,12 +1,16 @@
+import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { translate } from 'react-i18next';
 
-import { createTabBarIconWrapper } from '../common/components/native';
+import { createTabBarIconWrapper, HeaderTitle } from '../common/components/native';
 import Counter from './containers/Counter';
 import reducers from './reducers/index';
 import resolvers from './resolvers/index';
 import resources from './locales';
 
 import Feature from '../connector';
+
+const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 
 export default new Feature({
   tabItem: {
@@ -16,7 +20,8 @@ export default new Feature({
         tabBarIcon: createTabBarIconWrapper(Ionicons, {
           name: 'ios-home-outline',
           size: 30
-        })
+        }),
+        tabBarLabel: <HeaderTitleWithI18n i18nKey="title" />
       }
     }
   },

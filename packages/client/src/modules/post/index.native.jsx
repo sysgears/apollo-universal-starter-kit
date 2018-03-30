@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Text, StyleSheet } from 'react-native';
+import { Button, Text, StyleSheet, Platform } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { translate } from 'react-i18next';
 
-import { createTabBarIconWrapper } from '../common/components/native';
+import { createTabBarIconWrapper, HeaderTitle } from '../common/components/native';
 
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';
@@ -15,35 +15,9 @@ import resolvers from './resolvers';
 
 import Feature from '../connector';
 
-const withI18N = Component => {
+const withI18N = (Component, props) => {
   const WithI18N = translate('post')(Component);
-  return <WithI18N />;
-};
-
-const PostListTitle = ({ t }) => <Text style={styles.listTitle}>{t('list.subTitle')}</Text>;
-PostListTitle.propTypes = {
-  t: PropTypes.func
-};
-
-const NavTitle = ({ t }) => <Text style={styles.menuLabel}>{t('list.title')}</Text>;
-NavTitle.propTypes = {
-  t: PropTypes.func
-};
-
-class PostListScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    // headerTitle: <PostListTitleWithI18n style={styles.listTitle} />,
-    headerTitle: withI18N(PostListTitle),
-    headerRight: <PostListHeaderRightWithI18n navigation={navigation} />
-  });
-
-  render() {
-    return <Post navigation={this.props.navigation} />;
-  }
-}
-
-PostListScreen.propTypes = {
-  navigation: PropTypes.object
+  return <WithI18N {...props} />;
 };
 
 const PostListHeaderRight = ({ navigation, t }) => (
@@ -53,23 +27,23 @@ PostListHeaderRight.propTypes = {
   navigation: PropTypes.object,
   t: PropTypes.func
 };
-const PostListHeaderRightWithI18n = translate('post')(PostListHeaderRight);
 
-class PostEditScreen extends React.Component {
+class PostListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: <PostEditTitleWithI18n navigation={navigation} />
+    headerTitle: withI18N(HeaderTitle, { style: styles.subTitle, i18nKey: 'list.subTitle' }),
+    headerRight: withI18N(PostListHeaderRight, { navigation })
   });
+
   render() {
-    return <PostEdit navigation={this.props.navigation} />;
+    return <Post navigation={this.props.navigation} />;
   }
 }
-
-PostEditScreen.propTypes = {
+PostListScreen.propTypes = {
   navigation: PropTypes.object
 };
 
 const PostEditTitle = ({ navigation, t }) => (
-  <Text>
+  <Text style={styles.subTitle}>
     {navigation.state.params.id === 0 ? t('post.label.create') : t('post.label.edit')} {t('post.label.post')}
   </Text>
 );
@@ -77,7 +51,18 @@ PostEditTitle.propTypes = {
   navigation: PropTypes.object,
   t: PropTypes.func
 };
-const PostEditTitleWithI18n = translate('post')(PostEditTitle);
+
+class PostEditScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: withI18N(PostEditTitle, { navigation })
+  });
+  render() {
+    return <PostEdit navigation={this.props.navigation} />;
+  }
+}
+PostEditScreen.propTypes = {
+  navigation: PropTypes.object
+};
 
 const PostNavigator = StackNavigator({
   PostList: { screen: PostListScreen },
@@ -85,12 +70,12 @@ const PostNavigator = StackNavigator({
 });
 
 const styles = StyleSheet.create({
-  listTitle: {
-    fontSize: 20,
-    fontWeight: 'bold'
-  },
-  menuLabel: {
-    color: 'white'
+  subTitle: {
+    fontSize: Platform.OS === 'ios' ? 17 : 20,
+    fontWeight: Platform.OS === 'ios' ? '700' : '500',
+    color: 'rgba(0, 0, 0, .9)',
+    textAlign: Platform.OS === 'ios' ? 'center' : 'left',
+    marginHorizontal: 16
   }
 });
 
@@ -103,7 +88,7 @@ export default new Feature({
           name: 'ios-book-outline',
           size: 30
         }),
-        tabBarLabel: withI18N(NavTitle)
+        tabBarLabel: withI18N(HeaderTitle, { i18nKey: 'list.title' })
       }
     }
   },

@@ -13,7 +13,7 @@ import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 
-import { AuthRoute, IfLoggedIn, withUser, withLoadedUser, withLogout, IfNotLoggedIn } from './containers/Auth';
+import { AuthRoute, IfLoggedIn, withLoadedUser, withLogout, IfNotLoggedIn } from './containers/Auth';
 
 import Feature from '../connector';
 
@@ -33,9 +33,9 @@ export * from './containers/Auth';
 
 export default new Feature(auth, {
   route: [
-    <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={withUser(ProfileView)} />,
+    <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
     <AuthRoute exact path="/users" redirect="/login" role="admin" component={Users} />,
-    <AuthRoute exact path="/users/:id" redirect="/login" role="admin" component={withRouter(UserEdit)} />,
+    <AuthRoute exact path="/users/:id" redirect="/login" role="admin" component={UserEdit} />,
     <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
     <AuthRoute
       exact

@@ -62,23 +62,25 @@ wsClient.onReconnected(() => {
   // console.log('onReconnected');
 });
 
+const fetchParams: BatchHttpLink.Options = {
+  fetch:
+    modules.fetch ||
+    createApolloFetch({
+      uri: __API_URL__,
+      constructOptions: (reqs, options) => ({
+        ...constructDefaultOptions(reqs, options),
+        credentials: 'include'
+      })
+    })
+};
+
 const netLink: ApolloLink = ApolloLink.split(
   operation => {
     const operationAST: OperationDefinitionNode = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';
   },
   new WebSocketLink(wsClient),
-  new BatchHttpLink({
-    fetch:
-      modules.fetch ||
-      createApolloFetch({
-        uri: __API_URL__,
-        constructOptions: (reqs, options) => ({
-          ...constructDefaultOptions(reqs, options),
-          credentials: 'include'
-        })
-      })
-  })
+  new BatchHttpLink(fetchParams) as any // A workaround for [at-loader] ERROR that casts type BatchHttpLink to ApolloLink
 );
 
 const linkState: ApolloLink = withClientState({ ...modules.resolvers, cache });

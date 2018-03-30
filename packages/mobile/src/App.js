@@ -30,14 +30,14 @@ const { protocol, pathname, port } = url.parse(__API_URL__);
 
 export default class Main extends React.Component {
   static propTypes = {
-    expUri: PropTypes.string
+    exp: PropTypes.object
   };
 
   render() {
     const { hostname } = url.parse(__API_URL__);
     const uri =
-      this.props.expUri && hostname === 'localhost'
-        ? `${protocol}//${url.parse(this.props.expUri).hostname}:${port}${pathname}`
+      this.props.exp.manifest.bundleUrl && hostname === 'localhost'
+        ? `${protocol}//${url.parse(this.props.exp.manifest.bundleUrl).hostname}:${port}${pathname}`
         : __API_URL__;
     log.info(`Connecting to GraphQL backend at: ${uri}`);
     const cache = new InMemoryCache();

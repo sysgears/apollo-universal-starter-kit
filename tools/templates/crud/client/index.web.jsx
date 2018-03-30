@@ -5,7 +5,7 @@ import $Module$ from './components/$Module$';
 import $Module$Edit from './containers/$Module$Edit';
 import resolvers from './resolvers';
 
-import { AuthRoute, IfLoggedIn, withUser } from '../user/containers/Auth';
+import { AuthRoute, IfLoggedIn } from '../user/containers/Auth';
 import Feature from '../connector';
 
 export default new Feature({
@@ -13,7 +13,7 @@ export default new Feature({
     <AuthRoute
       exact
       path="/$module$"
-      component={withUser($Module$)}
+      component={$Module$}
       role={['editor', 'admin']}
       title="$MoDuLe$"
       link="$module$"
@@ -21,7 +21,7 @@ export default new Feature({
     <AuthRoute
       exact
       path="/$module$/:id"
-      component={withUser($Module$Edit)}
+      component={$Module$Edit}
       role={['editor', 'admin']}
       title="$MoDuLe$"
       link="$module$"

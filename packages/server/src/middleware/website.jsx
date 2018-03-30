@@ -114,7 +114,7 @@ const renderServerSide = async (req, res) => {
 
 export default async (req, res, next) => {
   try {
-    if (req.url.indexOf('.') < 0 && __SSR__) {
+    if (req.path.indexOf('.') < 0 && __SSR__) {
       return await renderServerSide(req, res);
     } else {
       next();

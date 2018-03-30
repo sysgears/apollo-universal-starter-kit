@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { pick } from 'lodash';
 
+import settings from '../../../../../../../settings';
+
 const createTokens = async (user, secret, refreshSecret) => {
   let tokenUser = pick(user, ['id', 'username', 'role']);
   tokenUser.fullName = user.firstName ? `${user.firstName} ${user.lastName}` : null;
@@ -11,7 +13,7 @@ const createTokens = async (user, secret, refreshSecret) => {
     },
     secret,
     {
-      expiresIn: '5s'
+      expiresIn: settings.user.auth.access.jwt.tokenExpiresIn
     }
   );
 
@@ -21,7 +23,7 @@ const createTokens = async (user, secret, refreshSecret) => {
     },
     refreshSecret,
     {
-      expiresIn: '7d'
+      expiresIn: settings.user.auth.access.jwt.refreshTokenExpiresIn
     }
   );
 

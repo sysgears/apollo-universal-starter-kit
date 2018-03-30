@@ -21,13 +21,14 @@ class ForgotPasswordView extends React.Component {
 
   onSubmit = ({ forgotPassword, t }) => async values => {
     const result = await forgotPassword(values);
-
     if (result && result.errors) {
-      let submitError = {
-        _error: t('forgotPass.errorMsg')
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw submitError;
+      throw result.errors.reduce(
+        (res, error) => {
+          res[error.field] = error.message;
+          return res;
+        },
+        { _error: t('forgotPass.errorMsg') }
+      );
     }
 
     this.setState({ sent: result });

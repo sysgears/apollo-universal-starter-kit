@@ -1,11 +1,11 @@
 mutation deleteUser($id: Int!) {
-  deleteUser(id: $id) {
-    user {
-      id
+    deleteUser(id: $id) {
+        user {
+            id
+        }
+        errors {
+            field
+            message
+        }
     }
-    errors {
-      field
-      message
-    }
-  }
 }

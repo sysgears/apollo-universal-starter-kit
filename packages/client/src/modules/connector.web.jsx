@@ -2,8 +2,6 @@ import React from 'react';
 
 import { merge, map, union, without, castArray } from 'lodash';
 
-import log from '../../../common/log';
-
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 export const featureCatalog = {};
@@ -12,46 +10,59 @@ export default class {
   /* eslint-disable no-unused-vars */
   constructor(
     {
+      link,
+      fetch,
+      connectionParam,
+      reducer,
+      resolver,
+      routerFactory,
       route,
       navItem,
       navItemRight,
       localization,
       internationalization,
-      reducer,
-      resolver,
-      middleware,
-      afterware,
-      connectionParam,
-      createFetchOptions,
+      rootComponentFactory,
+      dataRootComponent,
       stylesInsert,
       scriptsInsert,
-      rootComponentFactory,
-      routerFactory,
       catalogInfo
     },
     ...features
   ) {
-    /* eslint-enable no-unused-vars */
-    combine(arguments, arg => arg.catalogInfo).forEach(info =>
-      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
-    );
-    this.route = combine(arguments, arg => arg.route);
-    this.navItem = combine(arguments, arg => arg.navItem);
-    this.navItemRight = combine(arguments, arg => arg.navItemRight);
+    // i18n
     this.localization = combine(arguments, arg => arg.localization);
     this.internationalization = combine(arguments, arg => arg.internationalization);
+
+    // Connectivity
+    this.link = combine(arguments, arg => arg.link);
+    this.fetch = combine(arguments, arg => arg.fetch)
+      .slice(-1)
+      .pop();
+    this.connectionParam = combine(arguments, arg => arg.connectionParam);
+
+    // State management
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
-    this.middleware = combine(arguments, arg => arg.middleware);
-    this.afterware = combine(arguments, arg => arg.afterware);
-    this.connectionParam = combine(arguments, arg => arg.connectionParam);
-    this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
-    this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
-    this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
-    this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
+
+    // Navigation
     this.routerFactory = combine(arguments, arg => arg.routerFactory)
       .slice(-1)
       .pop();
+    this.route = combine(arguments, arg => arg.route);
+    this.navItem = combine(arguments, arg => arg.navItem);
+    this.navItemRight = combine(arguments, arg => arg.navItemRight);
+
+    // UI provider-components
+    this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
+    this.dataRootComponent = combine(arguments, arg => arg.dataRootComponent);
+
+    // TODO: Use React Helmet for those. Low level DOM manipulation
+    this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
+    this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
+
+    combine(arguments, arg => arg.catalogInfo).forEach(info =>
+      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
+    );
   }
 
   get router() {
@@ -94,32 +105,8 @@ export default class {
     return merge(...this.resolver);
   }
 
-  get middlewares() {
-    return this.middleware;
-  }
-
-  get afterwares() {
-    return this.afterware;
-  }
-
   get connectionParams() {
     return this.connectionParam;
-  }
-
-  get constructFetchOptions() {
-    return this.createFetchOptions.length
-      ? (...args) => {
-          try {
-            let result = {};
-            for (let func of this.createFetchOptions) {
-              result = { ...result, ...func(...args) };
-            }
-            return result;
-          } catch (e) {
-            log.error(e.stack);
-          }
-        }
-      : null;
   }
 
   get stylesInserts() {
@@ -134,6 +121,14 @@ export default class {
     let nestedRoot = root;
     for (const componentFactory of this.rootComponentFactory) {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
+    }
+    return nestedRoot;
+  }
+
+  getDataRoot(root) {
+    let nestedRoot = root;
+    for (const component of this.dataRootComponent) {
+      nestedRoot = React.createElement(component, {}, nestedRoot);
     }
     return nestedRoot;
   }

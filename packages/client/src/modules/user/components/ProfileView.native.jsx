@@ -4,18 +4,22 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import { translate } from 'react-i18next';
 
-const ProfileView = ({ t }) => {
+import { withLoadedUser } from '../';
+
+const ProfileView = ({ currentUserLoading, currentUser, t }) => {
   return (
     <View style={styles.container}>
       <View style={styles.element}>
-        <Text style={styles.box}>{t('nativeMock')}</Text>
+        {currentUserLoading ? (
+          <Text style={styles.box}>{t('profile.loadMsg')}</Text>
+        ) : (
+          <Text style={styles.box}>
+            {t('nativeMock')} {currentUser ? currentUser.fullName || currentUser.username : null}!
+          </Text>
+        )}
       </View>
     </View>
   );
-};
-
-ProfileView.propTypes = {
-  t: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -34,5 +38,11 @@ const styles = StyleSheet.create({
     marginRight: 15
   }
 });
+
+ProfileView.propTypes = {
+  currentUserLoading: PropTypes.bool,
+  currentUser: PropTypes.object,
+  t: PropTypes.func
+};
 
 export default translate('user')(ProfileView);

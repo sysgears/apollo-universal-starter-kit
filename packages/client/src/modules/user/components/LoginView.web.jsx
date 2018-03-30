@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { translate } from 'react-i18next';
 
-import LoginForm from '../components/LoginForm';
 import { LayoutCenter } from '../../common/components';
 import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
+import LoginForm from './LoginForm';
 import settings from '../../../../../../settings';
 
 class LoginView extends React.PureComponent {
@@ -17,15 +17,18 @@ class LoginView extends React.PureComponent {
   };
 
   onSubmit = login => async values => {
-    const result = await login(values);
+    const res = await login(values);
+    const { errors } = res;
     const { t } = this.props;
 
-    if (result && result.errors) {
-      let submitError = {
-        _error: t('login.errorMsg')
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw submitError;
+    if (errors && errors.length) {
+      throw errors.reduce(
+        (res, error) => {
+          res[error.field] = error.message;
+          return res;
+        },
+        { _error: t('login.errorMsg') }
+      );
     }
   };
 

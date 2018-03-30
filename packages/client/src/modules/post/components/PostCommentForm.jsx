@@ -35,8 +35,6 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
 
 PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
-  setFieldValue: PropTypes.func,
-  setFieldTouched: PropTypes.func,
   comment: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,

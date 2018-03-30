@@ -7,11 +7,11 @@ import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 import { required, email, validateForm } from '../../../../../common/validation';
 
-const contactFormSchema = {
+const forgotPasswordFormSchema = {
   email: [required, email]
 };
 
-const validate = values => validateForm(values, contactFormSchema);
+const validate = values => validateForm(values, forgotPasswordFormSchema);
 
 const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
   return (

@@ -38,11 +38,13 @@ class UserEditView extends React.PureComponent {
     }
 
     if (result && result.errors) {
-      let submitError = {
-        _error: t('userEdit.errorMsg')
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw submitError;
+      throw result.errors.reduce(
+        (res, error) => {
+          res[error.field] = error.message;
+          return res;
+        },
+        { _error: t('userEdit.errorMsg') }
+      );
     }
   };
 

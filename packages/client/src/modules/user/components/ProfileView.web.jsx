@@ -23,8 +23,8 @@ const renderMetaData = t => {
   );
 };
 
-const ProfileView = ({ loading, currentUser, t }) => {
-  if (loading && !currentUser) {
+const ProfileView = ({ currentUserLoading, currentUser, t }) => {
+  if (currentUserLoading && !currentUser) {
     return (
       <PageLayout>
         {renderMetaData(t)}
@@ -73,7 +73,7 @@ const ProfileView = ({ loading, currentUser, t }) => {
 };
 
 ProfileView.propTypes = {
-  loading: PropTypes.bool.isRequired,
+  currentUserLoading: PropTypes.bool.isRequired,
   currentUser: PropTypes.object,
   t: PropTypes.func
 };

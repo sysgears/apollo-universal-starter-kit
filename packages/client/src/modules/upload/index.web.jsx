@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
+import { createApolloFetch } from 'apollo-fetch';
 import { constructUploadOptions } from 'apollo-fetch-upload';
 import { translate } from 'react-i18next';
 
 import { MenuItem } from '../../modules/common/components/web';
-
-// Component and helpers
 import Upload from './containers/Upload';
 import reducers from './reducers';
 import resources from './locales';
+
 import Feature from '../connector';
 
 const MenuItemWithI18n = translate('upload')(({ t }) => (
@@ -24,6 +24,12 @@ export default new Feature({
   route: <Route exact path="/upload" component={Upload} />,
   navItem: <MenuItemWithI18n />,
   reducer: { upload: reducers },
-  createFetchOptions: constructUploadOptions,
-  localization: { ns: 'upload', resources }
+  localization: { ns: 'upload', resources },
+  fetch: createApolloFetch({
+    uri: __API_URL__,
+    constructOptions: (reqs, options) => ({
+      ...constructUploadOptions(reqs, options),
+      credentials: 'include'
+    })
+  })
 });

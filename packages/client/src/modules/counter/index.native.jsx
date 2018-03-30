@@ -4,8 +4,8 @@ import { translate } from 'react-i18next';
 
 import { createTabBarIconWrapper, HeaderTitle } from '../common/components/native';
 import Counter from './containers/Counter';
-import reducers from './reducers/index';
-import resolvers from './resolvers/index';
+import reducers from './reducers';
+import resolvers from './resolvers';
 import resources from './locales';
 
 import Feature from '../connector';

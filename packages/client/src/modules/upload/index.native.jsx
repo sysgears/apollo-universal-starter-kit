@@ -1,8 +1,9 @@
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { createApolloFetch } from 'apollo-fetch';
+import { constructUploadOptions } from 'apollo-fetch-upload';
 import { translate } from 'react-i18next';
 
-// Component and helpers
 import { createTabBarIconWrapper, HeaderTitle } from '../common/components/native';
 import Upload from './containers/Upload';
 import reducers from './reducers';
@@ -27,5 +28,13 @@ export default new Feature({
     }
   },
   reducer: { upload: reducers },
-  localization: { ns: 'upload', resources }
+  localization: { ns: 'upload', resources },
+  createFetch: uri =>
+    createApolloFetch({
+      uri,
+      constructOptions: (reqs, options) => ({
+        ...constructUploadOptions(reqs, options),
+        credentials: 'include'
+      })
+    })
 });

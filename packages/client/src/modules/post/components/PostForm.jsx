@@ -32,9 +32,7 @@ const PostForm = ({ values, handleSubmit, t }) => {
 
 PostForm.propTypes = {
   handleSubmit: PropTypes.func,
-  setFieldTouched: PropTypes.func,
-  setFieldValue: PropTypes.func,
-  valid: PropTypes.bool,
+  onSubmit: PropTypes.func,
   values: PropTypes.object,
   t: PropTypes.func
 };

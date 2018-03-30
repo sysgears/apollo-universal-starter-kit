@@ -10,6 +10,8 @@ export default class {
   /* eslint-disable no-unused-vars */
   constructor(
     {
+      link,
+      createFetch,
       route,
       tabItem,
       internationalization,
@@ -26,12 +28,17 @@ export default class {
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
+    this.link = combine(arguments, arg => arg.link);
+    this.createFetch = combine(arguments, arg => arg.createFetch)
+      .slice(-1)
+      .pop();
     this.tabItem = combine(arguments, arg => arg.tabItem);
     this.internationalization = combine(arguments, arg => arg.internationalization);
     this.localization = combine(arguments, arg => arg.localization);
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
     this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
+    this.connectionParam = combine(arguments, arg => arg.connectionParam);
     this.routerFactory = combine(arguments, arg => arg.routerFactory)
       .slice(-1)
       .pop();
@@ -55,6 +62,10 @@ export default class {
 
   get resolvers() {
     return merge(...this.resolver);
+  }
+
+  get connectionParams() {
+    return this.connectionParam;
   }
 
   get router() {

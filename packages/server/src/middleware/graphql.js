@@ -12,10 +12,13 @@ export default async (req, res, next) => {
 
     graphqlExpress(() => ({
       schema,
-      context,
+      context: { ...context, req, res },
       debug: false,
       formatError: error => {
-        log.error('GraphQL execution error:', error);
+        // Don't log annoying errors from 'graphql-auth' produced due to expired JWT token
+        if (error.message && error.message.indexOf('Not Authenticated!') < 0) {
+          log.error('GraphQL execution error:', error);
+        }
         return error;
       },
       tracing: !!settings.engine.engineConfig.apiKey,

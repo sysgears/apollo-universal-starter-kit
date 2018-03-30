@@ -36,7 +36,7 @@ const withLoadedUser = Component => {
   return withUser(WithLoadedUser);
 };
 
-const IfLoggedInComponent = ({ currentUser, role, children, elseComponent, ...restProps }) =>
+const IfLoggedInComponent = ({ currentUser, role, children, elseComponent, refetchCurrentUser, ...restProps }) =>
   hasRole(role, currentUser)
     ? React.cloneElement(children, {
         ...restProps
@@ -51,7 +51,7 @@ IfLoggedInComponent.propTypes = {
 
 const IfLoggedIn = withLoadedUser(IfLoggedInComponent);
 
-const IfNotLoggedInComponent = ({ currentUser, children, ...restProps }) =>
+const IfNotLoggedInComponent = ({ currentUser, children, refetchCurrentUser, ...restProps }) =>
   !currentUser
     ? React.cloneElement(children, {
         ...restProps

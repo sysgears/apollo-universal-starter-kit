@@ -28,6 +28,29 @@ export default pubsub => ({
       }
     }
   },
+  User: {
+    profile(obj) {
+      return obj;
+    },
+    auth(obj) {
+      return obj;
+    }
+  },
+  UserProfile: {
+    firstName(obj) {
+      return obj.firstName;
+    },
+    lastName(obj) {
+      return obj.lastName;
+    },
+    fullName(obj) {
+      if (obj.firstName && obj.lastName) {
+        return `${obj.firstName} ${obj.lastName}`;
+      } else {
+        return null;
+      }
+    }
+  },
   Mutation: {
     addUser: withAuth(
       (obj, args, context) => {
@@ -64,7 +87,7 @@ export default pubsub => ({
 
           if (context.mailer && settings.user.auth.password.sendAddNewUserEmail && !emailExists && context.req) {
             // async email
-            jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
+            jwt.sign({ user: pick(user, 'id') }, settings.user.secret, { expiresIn: '1d' }, (err, emailToken) => {
               const encodedToken = Buffer.from(emailToken).toString('base64');
               const url = `${__WEBSITE_URL__}/confirmation/${encodedToken}`;
               context.mailer.sendMail({

@@ -2,6 +2,7 @@ import { pick } from 'lodash';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 
+import resolvers from './resolvers';
 import Feature from '../connector';
 import UserDAO from '../../sql';
 import settings from '../../../../../../../settings';
@@ -84,4 +85,4 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
   };
 }
 
-export default new Feature({ middleware });
+export default new Feature({ middleware, createResolversFunc: resolvers });

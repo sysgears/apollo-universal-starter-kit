@@ -36,7 +36,7 @@ export default () => ({
       try {
         const user = await User.getUserByEmail(email);
 
-        validateUserPassword(user, password);
+        await validateUserPassword(user, password);
 
         const tokens = await access.grantAccess(user, req);
 
@@ -80,7 +80,7 @@ export default () => ({
 
         if (context.mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && context.req) {
           // async email
-          jwt.sign({ user: pick(user, 'id') }, context.SECRET, { expiresIn: '1d' }, (err, emailToken) => {
+          jwt.sign({ user: pick(user, 'id') }, settings.user.secret, { expiresIn: '1d' }, (err, emailToken) => {
             const encodedToken = Buffer.from(emailToken).toString('base64');
             const url = `${__WEBSITE_URL__}/confirmation/${encodedToken}`;
             context.mailer.sendMail({
@@ -111,7 +111,7 @@ export default () => ({
           // async email
           jwt.sign(
             { email: user.email, password: user.passwordHash },
-            context.SECRET,
+            settings.user.secret,
             { expiresIn: '1d' },
             (err, emailToken) => {
               // encoded token since react router does not match dots in params
@@ -144,7 +144,7 @@ export default () => ({
         e.throwIf();
 
         const token = Buffer.from(reset.token, 'base64').toString();
-        const { email, password } = jwt.verify(token, context.SECRET);
+        const { email, password } = jwt.verify(token, settings.user.secret);
         const user = await context.User.getUserByEmail(email);
         if (user.passwordHash !== password) {
           e.setError('token', 'Invalid token');

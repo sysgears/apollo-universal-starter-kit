@@ -21,8 +21,9 @@ import settings from '../../../../settings';
 import Routes from './Routes';
 import modules from '../modules';
 import log from '../../../common/log';
+import { apiUrl } from '../net';
 
-log.info(`Connecting to GraphQL backend at: ${__API_URL__}`);
+log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
 const cache = new InMemoryCache();
 
@@ -37,7 +38,7 @@ for (const connectionParam of modules.connectionParams) {
   Object.assign(connectionParams, connectionParam());
 }
 
-const wsUri = __API_URL__.replace(/^http/, 'ws');
+const wsUri = apiUrl.replace(/^http/, 'ws');
 
 const wsClient = new SubscriptionClient(wsUri, {
   reconnect: true,
@@ -74,9 +75,9 @@ const netLink = ApolloLink.split(
   new WebSocketLink(wsClient),
   new BatchHttpLink({
     fetch:
-      modules.fetch ||
+      modules.createFetch(apiUrl) ||
       createApolloFetch({
-        uri: __API_URL__,
+        uri: apiUrl,
         constructOptions: (reqs, options) => ({
           ...constructDefaultOptions(reqs, options),
           credentials: 'include'

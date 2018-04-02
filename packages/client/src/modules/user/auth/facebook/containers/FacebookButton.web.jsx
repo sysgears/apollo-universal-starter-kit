@@ -4,7 +4,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web';
 
 const facebookLogin = () => {
-  window.location = __WEBSITE_URL__ + `/auth/facebook`;
+  window.location = '/auth/facebook';
 };
 
 const FacebookButton = () => {

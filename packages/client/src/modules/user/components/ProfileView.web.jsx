@@ -73,7 +73,7 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
 };
 
 ProfileView.propTypes = {
-  currentUserLoading: PropTypes.bool.isRequired,
+  currentUserLoading: PropTypes.bool,
   currentUser: PropTypes.object,
   t: PropTypes.func
 };

@@ -25,11 +25,12 @@ export default new Feature({
   navItem: <MenuItemWithI18n />,
   reducer: { upload: reducers },
   localization: { ns: 'upload', resources },
-  fetch: createApolloFetch({
-    uri: __API_URL__,
-    constructOptions: (reqs, options) => ({
-      ...constructUploadOptions(reqs, options),
-      credentials: 'include'
+  createFetch: uri =>
+    createApolloFetch({
+      uri,
+      constructOptions: (reqs, options) => ({
+        ...constructUploadOptions(reqs, options),
+        credentials: 'include'
+      })
     })
-  })
 });

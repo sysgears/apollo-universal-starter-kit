@@ -12,7 +12,7 @@ import createHistory from 'history/createBrowserHistory';
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import ReactGA from 'react-ga';
-import { Provider } from 'react-redux';
+import { Provider, Store } from 'react-redux';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import { OperationOptions, SubscriptionClient } from 'subscriptions-transport-ws';
 
@@ -86,7 +86,7 @@ const netLink: ApolloLink = ApolloLink.split(
 
 const linkState: ApolloLink = withClientState({ ...modules.resolvers, cache });
 
-const links = [...modules.link, linkState, netLink];
+const links: ApolloLink[] = [...modules.link, linkState, netLink];
 
 if (settings.app.logging.apolloLogging) {
   links.unshift(new LoggingLink());
@@ -114,7 +114,7 @@ logPageView(window.location);
 
 history.listen(location => logPageView(location));
 
-let store: any;
+let store: Store<any>;
 if (module.hot && module.hot.data && module.hot.data.store) {
   store = module.hot.data.store;
   store.replaceReducer(storeReducer);

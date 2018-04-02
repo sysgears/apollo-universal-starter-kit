@@ -12,6 +12,7 @@ i18n
   .use(reactI18nextModule)
   .init({
     fallbackLng: 'en',
+    resources: {},
     debug: true, // set false to hide logs
     interpolation: {
       escapeValue: false // not needed for react!!

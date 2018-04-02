@@ -16,6 +16,7 @@ export default class {
       tabItem,
       internationalization,
       localization,
+      drawerFooterItem,
       reducer,
       resolver,
       routerFactory,
@@ -35,6 +36,7 @@ export default class {
     this.tabItem = combine(arguments, arg => arg.tabItem);
     this.internationalization = combine(arguments, arg => arg.internationalization);
     this.localization = combine(arguments, arg => arg.localization);
+    this.drawerFooterItem = combine(arguments, arg => arg.drawerFooterItem);
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
     this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
@@ -56,6 +58,10 @@ export default class {
     return this.localization;
   }
 
+  get drawerFooterItems() {
+    return this.drawerFooterItem;
+  }
+
   get reducers() {
     return merge(...this.reducer);
   }
@@ -69,6 +75,7 @@ export default class {
   }
 
   get router() {
+    console.warn(this.routerFactory());
     return this.routerFactory();
   }
 

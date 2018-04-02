@@ -1,8 +1,9 @@
-import { TabNavigator } from 'react-navigation';
+import { DrawerNavigator } from 'react-navigation';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
 import { withUser } from './Auth';
+import { DrawerComponent } from '../../common/components/native';
 
 class UserScreenNavigator extends React.Component {
   static propTypes = {
@@ -31,9 +32,12 @@ class UserScreenNavigator extends React.Component {
   };
 
   render() {
-    const MainScreenNavigatorComponent = TabNavigator(
+    const MainScreenNavigatorComponent = DrawerNavigator(
       { ...this.navTabsFilter() },
-      { initialRouteName: this.getInitialRoute() }
+      {
+        contentComponent: DrawerComponent,
+        initialRouteName: this.getInitialRoute()
+      }
     );
 
     return <MainScreenNavigatorComponent />;

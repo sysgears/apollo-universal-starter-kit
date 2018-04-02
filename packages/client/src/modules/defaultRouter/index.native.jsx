@@ -7,7 +7,7 @@ import Feature from '../connector';
 const routerFactory = () =>
   DrawerNavigator(
     {
-      ...modules.tabItems
+      ...modules.drawerItems
     },
     {
       contentComponent: DrawerComponent

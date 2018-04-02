@@ -1,10 +1,9 @@
 import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
 import { createApolloFetch } from 'apollo-fetch';
 import { constructUploadOptions } from 'apollo-fetch-upload';
 import { translate } from 'react-i18next';
 
-import { createTabBarIconWrapper, HeaderTitle } from '../common/components/native';
+import { HeaderTitle } from '../common/components/native';
 import Upload from './containers/Upload';
 import reducers from './reducers';
 import resources from './locales';
@@ -15,15 +14,11 @@ const HeaderTitleWithI18n = translate('upload')(HeaderTitle);
 
 export default new Feature({
   catalogInfo: { upload: true },
-  tabItem: {
+  drawerItem: {
     Upload: {
       screen: Upload,
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(Ionicons, {
-          name: 'ios-browsers-outline',
-          size: 30
-        }),
-        tabBarLabel: <HeaderTitleWithI18n />
+        drawerLabel: <HeaderTitleWithI18n />
       }
     }
   },

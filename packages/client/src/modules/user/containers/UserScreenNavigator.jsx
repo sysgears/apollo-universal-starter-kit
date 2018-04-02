@@ -12,7 +12,7 @@ class UserScreenNavigator extends React.Component {
     routeConfigs: PropTypes.object
   };
 
-  navTabsFilter = () => {
+  navItemsFilter = () => {
     const { currentUser, currentUserLoading, routeConfigs } = this.props;
 
     const userFilter = value => {
@@ -33,7 +33,7 @@ class UserScreenNavigator extends React.Component {
 
   render() {
     const MainScreenNavigatorComponent = DrawerNavigator(
-      { ...this.navTabsFilter() },
+      { ...this.navItemsFilter() },
       {
         contentComponent: DrawerComponent,
         initialRouteName: this.getInitialRoute()
@@ -44,7 +44,7 @@ class UserScreenNavigator extends React.Component {
   }
 }
 
-const tabNavigator = routeConfigs => {
+const drawerNavigator = routeConfigs => {
   const withRoutes = Component => {
     const ownProps = { routeConfigs };
     const WithRoutesComponent = ({ ...props }) => <Component {...props} {...ownProps} />;
@@ -54,4 +54,4 @@ const tabNavigator = routeConfigs => {
   return withRoutes(withUser(UserScreenNavigator));
 };
 
-export default tabNavigator;
+export default drawerNavigator;

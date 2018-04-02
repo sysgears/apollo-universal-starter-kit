@@ -13,7 +13,7 @@ export default class {
       link,
       createFetch,
       route,
-      tabItem,
+      drawerItem,
       internationalization,
       localization,
       drawerFooterItem,
@@ -33,7 +33,7 @@ export default class {
     this.createFetch = combine(arguments, arg => arg.createFetch)
       .slice(-1)
       .pop();
-    this.tabItem = combine(arguments, arg => arg.tabItem);
+    this.drawerItem = combine(arguments, arg => arg.drawerItem);
     this.internationalization = combine(arguments, arg => arg.internationalization);
     this.localization = combine(arguments, arg => arg.localization);
     this.drawerFooterItem = combine(arguments, arg => arg.drawerFooterItem);
@@ -46,8 +46,8 @@ export default class {
       .pop();
   }
 
-  get tabItems() {
-    return merge(...this.tabItem);
+  get drawerItems() {
+    return merge(...this.drawerItem);
   }
 
   get i18n() {
@@ -75,7 +75,6 @@ export default class {
   }
 
   get router() {
-    console.warn(this.routerFactory());
     return this.routerFactory();
   }
 

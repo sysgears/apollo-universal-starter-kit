@@ -12,7 +12,8 @@ HeaderTitle.propTypes = {
 
 const styles = StyleSheet.create({
   menuTitle: {
-    color: 'white'
+    margin: 16,
+    fontWeight: 'bold'
   }
 });
 

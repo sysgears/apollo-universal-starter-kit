@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Text, StyleSheet, Platform } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
 import { translate } from 'react-i18next';
 
-import { createTabBarIconWrapper, HeaderTitle } from '../common/components/native';
+import { HeaderTitle } from '../common/components/native';
 
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';
@@ -80,15 +79,11 @@ const styles = StyleSheet.create({
 });
 
 export default new Feature({
-  tabItem: {
+  drawerItem: {
     Post: {
       screen: PostNavigator,
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(Ionicons, {
-          name: 'ios-book-outline',
-          size: 30
-        }),
-        tabBarLabel: withI18N(HeaderTitle, { i18nKey: 'list.title' })
+        drawerLabel: withI18N(HeaderTitle, { i18nKey: 'list.title' })
       }
     }
   },

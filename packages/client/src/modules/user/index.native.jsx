@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 import { translate } from 'react-i18next';
 
 import auth from './auth';
 import resolvers from './resolvers';
 import resources from './locales';
 import UserScreenNavigator from './containers/UserScreenNavigator';
-import { createTabBarIconWrapper, HeaderTitle } from '../common/components/native';
+import { HeaderTitle } from '../common/components/native';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
 import Logout from './containers/Logout';
@@ -72,7 +71,7 @@ const HeaderTitleWithI18n = translate('user')(HeaderTitle);
 export * from './containers/Auth';
 
 export default new Feature(auth, {
-  tabItem: {
+  drawerItem: {
     Profile: {
       screen: ProfileScreen,
       userInfo: {
@@ -80,11 +79,7 @@ export default new Feature(auth, {
         role: ['user', 'admin']
       },
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
-          name: 'user',
-          size: 30
-        }),
-        tabBarLabel: <HeaderTitleWithI18n i18nKey="navLink.profile" />
+        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.profile" />
       }
     },
     Login: {
@@ -93,11 +88,7 @@ export default new Feature(auth, {
         showOnLogin: false
       },
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
-          name: 'login',
-          size: 30
-        }),
-        tabBarLabel: <HeaderTitleWithI18n i18nKey="navLink.sign" />
+        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.sign" />
       }
     },
     Users: {
@@ -107,11 +98,7 @@ export default new Feature(auth, {
         role: 'admin'
       },
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(Ionicons, {
-          name: 'ios-browsers-outline',
-          size: 30
-        }),
-        tabBarLabel: <HeaderTitleWithI18n i18nKey="navLink.users" />
+        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.users" />
       }
     },
     Logout: {
@@ -120,17 +107,13 @@ export default new Feature(auth, {
         showOnLogin: true
       },
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
-          name: 'logout',
-          size: 30
-        }),
-        tabBarLabel: <HeaderTitleWithI18n i18nKey="navLink.logout" />
+        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.logout" />
       }
     }
   },
   resolver: resolvers,
   localization: { ns: 'user', resources },
   routerFactory: () => {
-    return UserScreenNavigator(modules.tabItems);
+    return UserScreenNavigator(modules.drawerItems);
   }
 });

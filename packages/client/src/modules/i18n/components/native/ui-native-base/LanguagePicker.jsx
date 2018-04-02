@@ -25,7 +25,7 @@ export default class LanguagePicker extends React.Component {
       i18n.language &&
       langs.length > 1 && (
         <Picker
-          iosHeader="Select one"
+          iosHeader={i18n.t('i18n:iosPickerTitle')}
           mode="dropdown"
           selectedValue={this.state.currentLang}
           onValueChange={this.changeLang}

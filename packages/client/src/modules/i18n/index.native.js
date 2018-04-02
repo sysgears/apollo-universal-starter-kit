@@ -4,6 +4,7 @@ import Expo from 'expo';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
 import { LanguagePicker } from './components/native';
+import resources from './locales';
 import Feature from '../connector';
 
 const languageDetector = {
@@ -35,6 +36,7 @@ i18n
 
 export default new Feature({
   internationalization: i18n,
+  localization: { ns: 'i18n', resources },
   drawerFooterItem: <LanguagePicker key={'picker'} i18n={i18n} />,
   // eslint-disable-next-line react/display-name
   rootComponentFactory: () => (

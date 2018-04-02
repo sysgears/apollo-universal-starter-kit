@@ -7,10 +7,11 @@ import modules from '../../../../modules';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    paddingTop: 20
   },
   footerContainer: {
-    padding: 20,
+    padding: 15,
     backgroundColor: 'lightgrey'
   }
 });

@@ -22,10 +22,11 @@ import createReduxStore, { storeReducer } from '../../../common/createReduxStore
 import log from '../../../common/log';
 // See the index.web.ts file to get more details on this
 import modules from '../modules/index.web';
+import { apiUrl } from '../net';
 import RedBox from './RedBox';
 import Routes from './Routes';
 
-log.info(`Connecting to GraphQL backend at: ${__API_URL__}`);
+log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
 const cache: InMemoryCache = new InMemoryCache();
 
@@ -34,7 +35,7 @@ for (const connectionParam of modules.connectionParams) {
   Object.assign(connectionParams, connectionParam());
 }
 
-const wsUri: string = __API_URL__.replace(/^http/, 'ws');
+const wsUri: string = apiUrl.replace(/^http/, 'ws');
 
 const wsClient: SubscriptionClient = new SubscriptionClient(wsUri, {
   reconnect: true,
@@ -65,9 +66,9 @@ wsClient.onReconnected(() => {
 
 const fetchParams: BatchHttpLink.Options = {
   fetch:
-    modules.fetch ||
+    modules.createFetch(apiUrl) ||
     createApolloFetch({
-      uri: __API_URL__,
+      uri: apiUrl,
       constructOptions: (reqs, options) => ({
         ...constructDefaultOptions(reqs, options),
         credentials: 'include'

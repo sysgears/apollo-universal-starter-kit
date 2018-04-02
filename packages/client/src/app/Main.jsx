@@ -1,4 +1,6 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
+
 import { getOperationAST } from 'graphql';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
@@ -9,7 +11,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
-import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import ReactGA from 'react-ga';
@@ -22,6 +23,8 @@ import Routes from './Routes';
 import modules from '../modules';
 import log from '../../../common/log';
 import { apiUrl } from '../net';
+
+const history = require('./routerHistory');
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
@@ -135,7 +138,7 @@ class ServerError extends Error {
   }
 }
 
-export default class Main extends React.Component {
+class Main extends React.Component {
   constructor(props) {
     super(props);
     const serverError = window.__SERVER_ERROR__;
@@ -163,3 +166,5 @@ export default class Main extends React.Component {
     );
   }
 }
+
+export default hot(module)(Main);

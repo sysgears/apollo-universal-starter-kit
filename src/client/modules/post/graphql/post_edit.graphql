@@ -1,7 +1,0 @@
-#import "./post.graphql"
-
-mutation editPost($input: EditPostInput!) {
-    editPost(input: $input) {
-        ... PostInfo
-    }
-}

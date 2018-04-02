@@ -1,0 +1,19 @@
+{
+  "name": "common",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "lint": "eslint --fix --ext js --ext jsx --ext json ."
+  },
+  "dependencies": {
+    "apollo-client": "^2.1.0",
+    "lodash": "^4.17.4",
+    "minilog": "^3.1.0",
+    "react-router-redux": "^5.0.0-alpha.8",
+    "redux": "^3.7.2",
+    "redux-devtools-extension": "^2.13.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.13.1"
+  }
+}

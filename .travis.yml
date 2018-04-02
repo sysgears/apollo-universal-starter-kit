@@ -1,18 +1,20 @@
 language: node_js
 node_js:
   - "node"
-os:
-  - linux
 cache:
   directories:
-    - node_modules
+    - $HOME/.cache/yarn
+    - .cache
+dist: trusty
+os:
+  - linux
 script:
-  - npm run seed
-  - npm test
+  - yarn test
+before_deploy: rm -rf node_modules
 deploy:
   provider: heroku
   api_key:
     secure: fNhB+2DcXLoez7unhEMEUlL8WRBdWADn3Ye5Bm5MzFXVY2ZbjhhBaTo/v1XOHKRO/JrLNe7pzoaqwONWbhSTOe8sKBawUNQUAtcaR1MhZeLaCNGACblhc8YYffm4oRvwdv/N6GYZKo2aUsDwgkZmNu4GJFi3eBNXHaVobnzU09nnrs2WHm0JIiDs23z7TcIjTqC8sa7D7Q7LFeNhtsJl54s2s1wGfzEdhkPqc4OGM/87tLgtdwnCTPQs/nbetr6BfFndrT3fYmVbuFe6m4/e94eZHr7D/c2eiWEyb4FZv0FLkndY/7PCV0egUs1uSYkQeQcE2eAv5ZacgqYA9miFw3bhTEinM1ud0CfOxnYYtwniR4X0XxuHMpsVU71olChWnSwt7TvJG/uncjfvmWzWX+VA9f+n6Ya5+C893rledOLMrwJN6R+bqGLxBC0dwFI1Cfhxb/Io4/PjgmK0NNiSWJ+UCr26IEzKEAi7dz0zUqCDdykH9Co7R/hTeBT/rMrE0SYumc66Or4nhZohEFzdQSRBKtG+6xAcmMkLtut15grsxJ9+OvZUIIEoB2PFKuh4ephskEo5UQUQzVJscuFtDC+VIf+4vRwP8lvkV7LF6M8mN3FMyHwDb4+/q9lKIRAu4/fGY8P4NGrMSBgkgQI7CANgDj1mIROPsSVd4JVnpMc=
-  app: apollo-fullstack-starter-kit
+  app: apollo-universal-starter-kit
   on:
-    repo: sysgears/apollo-fullstack-starter-kit
+    repo: sysgears/apollo-universal-starter-kit

@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "jsx": "react",
+    "lib": ["es2015", "dom", "esnext"],
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "allowSyntheticDefaultImports": true,
+    "pretty": true,
+    "removeComments": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "reportFiles": [
+      "**/*.ts",
+      "**/*.tsx"
+    ]
+  }
+}

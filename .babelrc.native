@@ -1,0 +1,11 @@
+{
+  "compact": false,
+  "presets": ["expo"],
+  "plugins": ["haul/src/utils/fixRequireIssues"],
+  "env": {
+    "production": {
+      "compact": true,
+      "presets": [["minify", { "mangle": false }]]
+    }
+  }
+}

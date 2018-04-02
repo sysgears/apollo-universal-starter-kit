@@ -1,0 +1,17 @@
+#import "./Post.graphql"
+
+query posts($limit: Int!, $after: Int) {
+  posts(limit: $limit, after: $after) {
+    totalCount
+    edges {
+      cursor
+      node {
+        ... PostInfo
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

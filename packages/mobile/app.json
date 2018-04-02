@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Apollo Universal Starter Kit",
+    "icon": "../../app.png",
+    "version": "1.0.0",
+    "slug": "apollo-universal-starter-kit",
+    "sdkVersion": "25.0.0",
+    "ios": {
+      "bundleIdentifier": "com.sysgears.apollokit"
+    },
+    "android": {
+      "package": "com.sysgears.apollokit"
+    }
+  }
+}

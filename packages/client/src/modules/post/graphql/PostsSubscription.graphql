@@ -1,0 +1,10 @@
+#import "./Post.graphql"
+
+subscription onPostsUpdated($endCursor: Int!) {
+  postsUpdated(endCursor: $endCursor) {
+    mutation
+    node {
+      ...PostInfo
+    }
+  }
+}

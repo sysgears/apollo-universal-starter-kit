@@ -1,3 +1,3 @@
 import createHistory from 'history/createBrowserHistory';
 
-module.exports = createHistory();
+export default createHistory();

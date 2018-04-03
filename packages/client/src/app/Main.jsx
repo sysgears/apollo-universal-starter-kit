@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import ReactGA from 'react-ga';
+import history from './routerHistory';
 
 import RedBox from './RedBox';
 import createApolloClient from '../../../common/createApolloClient';
@@ -24,7 +25,6 @@ import modules from '../modules';
 import log from '../../../common/log';
 import { apiUrl } from '../net';
 
-const history = require('./routerHistory');
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
@@ -99,8 +99,6 @@ const client = createApolloClient({
 if (window.__APOLLO_STATE__) {
   cache.restore(window.__APOLLO_STATE__);
 }
-
-const history = createHistory();
 
 const logPageView = location => {
   ReactGA.set({ page: location.pathname });

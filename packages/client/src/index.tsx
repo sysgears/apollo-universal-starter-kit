@@ -17,9 +17,10 @@ let frontendReloadCount = 0;
 
 const renderApp = ({ key }: { key: number }) =>
   renderFunc(
-    <AppContainer rootTag={root}>
-      <Main key={key} />
-    </AppContainer>,
+    // <AppContainer rootTag={root}>
+    <Main key={key} />
+    // </AppContainer>
+    ,
     root
   );
 

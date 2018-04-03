@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { withFormik } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { Button } from '../../common/components';
@@ -19,34 +19,55 @@ const validate = values => validateForm(values, loginFormSchema);
 
 const LoginForm = ({ handleSubmit, valid, values }) => {
   return (
-    <View style={styles.form}>
-      <Field
-        autoCapitalize="none"
-        autoCorrect={false}
-        name="email"
-        component={RenderField}
-        type="email"
-        keyboardType="email-address"
-        label="Email"
-        placeholder="Type Your Email"
-        value={values.email}
-      />
-      <Field
-        autoCapitalize="none"
-        autoCorrect={false}
-        name="password"
-        component={RenderField}
-        type="password"
-        secureTextEntry={true}
-        label="Password"
-        placeholder="Type Your Password"
-        value={values.password}
-      />
-      <Button style={styles.submit} onPress={handleSubmit} disabled={valid}>
-        Sign In
-      </Button>
-      {settings.user.auth.facebook.enabled && <FacebookButton type="icon" />}
-      {settings.user.auth.google.enabled && <GoogleButton type="icon" />}
+    <View style={styles.formContainer}>
+      <View style={styles.form}>
+        <View>
+          <View>
+            <Field
+              autoCapitalize="none"
+              autoCorrect={false}
+              name="email"
+              component={RenderField}
+              type="email"
+              keyboardType="email-address"
+              placeholder="Email"
+              placeholderTextColor="#8e908c"
+              value={values.email}
+            />
+            <Field
+              autoCapitalize="none"
+              autoCorrect={false}
+              name="password"
+              component={RenderField}
+              type="password"
+              secureTextEntry={true}
+              placeholder="Password"
+              placeholderTextColor="#8e908c"
+              value={values.password}
+            />
+          </View>
+          <View style={styles.submit}>
+            <Button onPress={handleSubmit} disabled={valid}>
+              Sign In
+            </Button>
+          </View>
+          <View>
+            {settings.user.auth.facebook.enabled && <FacebookButton type="button" />}
+            {settings.user.auth.google.enabled && <GoogleButton type="button" />}
+          </View>
+          <View style={styles.buttonsGroup}>
+            <TouchableOpacity>
+              <Text style={styles.signUpText}>Forgot password</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      <View style={styles.buttonWrapper}>
+        <Text style={styles.text}>Not registered yet?</Text>
+        <TouchableOpacity>
+          <Text style={styles.signUpText}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -65,13 +86,39 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10
   },
+  formContainer: {
+    flex: 1
+  },
   form: {
-    flex: 0.8,
-    alignItems: 'stretch'
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    flex: 9
   },
   submit: {
-    marginTop: 10,
-    alignSelf: 'center'
+    paddingTop: 30,
+    paddingBottom: 15
+  },
+  buttonsGroup: {
+    flex: 1,
+    paddingTop: 10
+  },
+  buttonWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+  },
+  text: {
+    fontSize: 14,
+    color: '#bcb8b8'
+  },
+  signUpText: {
+    fontSize: 16,
+    paddingLeft: 3,
+    color: '#8e908c',
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+    textAlign: 'center'
   }
 });
 

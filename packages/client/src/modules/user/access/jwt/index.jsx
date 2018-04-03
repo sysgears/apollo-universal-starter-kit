@@ -96,14 +96,13 @@ class DataRootComponent extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
-    this.state = { ready: false };
+    apolloClient = this.props.client;
+    this.state = { ready: settings.user.auth.access.session.enabled };
   }
 
   async componentDidMount() {
-    const { client } = this.props;
-    apolloClient = client;
-    const refreshToken = await getItem('refreshToken');
-    if (refreshToken) {
+    if (!this.state.ready && (await getItem('refreshToken'))) {
+      const { client } = this.props;
       let result;
       try {
         result = client.readQuery({ query: CURRENT_USER_QUERY });
@@ -151,7 +150,7 @@ DataRootComponent.propTypes = {
 export default new Feature(
   settings.user.auth.access.jwt.enabled
     ? {
-        dataRootComponent: !settings.user.auth.access.session.enabled ? withApollo(DataRootComponent) : undefined,
+        dataRootComponent: withApollo(DataRootComponent),
         link: __CLIENT__ ? JWTLink : undefined,
         logout: removeTokens
       }

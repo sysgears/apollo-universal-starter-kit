@@ -55,7 +55,8 @@ yarn
 yarn seed
 ```
 
-4. Run starter kit in development mode.
+4. Run starter kit in development mode. 
+For running Android or iOS you need to set in .spinrc.js builders.ios.enabled and/or builders.android.enabled field true. See *Getting Started with React Native* section.
 
 ```
 yarn watch

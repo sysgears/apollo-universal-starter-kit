@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 
-import auth from './auth';
+import access from './access';
 import resolvers from './resolvers';
 import UserScreenNavigator from './containers/UserScreenNavigator';
 import { createTabBarIconWrapper } from '../common/components/native';
@@ -67,7 +67,7 @@ ProfileScreen.propTypes = {
 
 export * from './containers/Auth';
 
-export default new Feature(auth, {
+export default new Feature(access, {
   tabItem: {
     Profile: {
       screen: ProfileScreen,

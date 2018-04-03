@@ -2,7 +2,7 @@ import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink, withRouter } from 'react-router-dom';
 
-import auth from './auth';
+import access from './access';
 import resolvers from './resolvers';
 import ProfileView from './components/ProfileView';
 import { MenuItem } from '../../modules/common/components/web';
@@ -31,7 +31,7 @@ const LogoutLink = withRouter(
 
 export * from './containers/Auth';
 
-export default new Feature(auth, {
+export default new Feature(access, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
     <AuthRoute exact path="/users" redirect="/login" role="admin" component={Users} />,

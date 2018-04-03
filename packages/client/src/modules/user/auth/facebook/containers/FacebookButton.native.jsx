@@ -93,13 +93,16 @@ FacebookComponent.propTypes = {
 const styles = StyleSheet.create({
   submit: {
     alignItems: 'center',
-    backgroundColor: '#007bff',
+    backgroundColor: '#0275d8',
     padding: 10,
     marginTop: 10,
     borderRadius: 5
   },
   text: {
-    color: '#fff'
+    alignSelf: 'center',
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: '600'
   },
   iconWrapper: {
     alignItems: 'center',

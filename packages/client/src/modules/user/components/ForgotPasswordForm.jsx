@@ -38,6 +38,7 @@ const ForgotPasswordForm = ({ handleSubmit, values, sent }) => {
             label="Email"
             value={values.email}
             keyboardType="email-address"
+            placeholderTextColor="#8e908c"
           />
         </View>
         <View style={styles.submit}>

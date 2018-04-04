@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
+import { StackNavigator } from 'react-navigation';
 
 import auth from './auth';
 import resolvers from './resolvers';
@@ -8,6 +9,7 @@ import UserScreenNavigator from './containers/UserScreenNavigator';
 import { createTabBarIconWrapper } from '../common/components/native';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
+import ForgotPassword from './containers/ForgotPassword';
 import Logout from './containers/Logout';
 import UsersList from './containers/UsersList';
 import modules from '..';
@@ -15,8 +17,10 @@ import Feature from '../connector';
 
 class LoginScreen extends React.Component {
   static navigationOptions = () => ({
-    title: 'Sign In'
+    title: 'Sign In',
+    header: false
   });
+
   render() {
     return <Login navigation={this.props.navigation} />;
   }
@@ -25,6 +29,24 @@ class LoginScreen extends React.Component {
 LoginScreen.propTypes = {
   navigation: PropTypes.object
 };
+
+class ForgotPasswordScreen extends React.Component {
+  static navigationOptions = () => ({
+    title: 'Forgot Password'
+  });
+  render() {
+    return <ForgotPassword navigation={this.props.navigation} />;
+  }
+}
+
+ForgotPasswordScreen.propTypes = {
+  navigation: PropTypes.object
+};
+
+const AuthScreen = StackNavigator({
+  Login: { screen: LoginScreen },
+  ForgotPassword: { screen: ForgotPasswordScreen }
+});
 
 class LogoutScreen extends React.Component {
   static navigationOptions = () => ({
@@ -82,8 +104,8 @@ export default new Feature(auth, {
         })
       }
     },
-    Login: {
-      screen: LoginScreen,
+    Auth: {
+      screen: AuthScreen,
       userInfo: {
         showOnLogin: false
       },

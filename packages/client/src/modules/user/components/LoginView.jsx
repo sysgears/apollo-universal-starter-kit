@@ -31,12 +31,12 @@ class LoginView extends React.PureComponent {
   );
 
   render() {
-    const { login } = this.props;
+    const { login, navigation } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.examplesContainer}>{this.renderAvailableLogins()}</View>
         <View style={styles.loginContainer}>
-          <LoginForm onSubmit={this.onSubmit(login)} />
+          <LoginForm onSubmit={this.onSubmit(login)} navigation={navigation} />
         </View>
       </View>
     );
@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
 
 LoginView.propTypes = {
   login: PropTypes.func.isRequired,
-  error: PropTypes.string
+  error: PropTypes.string,
+  navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
 };
 
 export default LoginView;

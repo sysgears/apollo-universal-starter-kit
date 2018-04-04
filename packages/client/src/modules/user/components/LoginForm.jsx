@@ -17,7 +17,7 @@ const loginFormSchema = {
 
 const validate = values => validateForm(values, loginFormSchema);
 
-const LoginForm = ({ handleSubmit, valid, values }) => {
+const LoginForm = ({ handleSubmit, valid, values, navigation }) => {
   return (
     <View style={styles.formContainer}>
       <View style={styles.form}>
@@ -56,7 +56,7 @@ const LoginForm = ({ handleSubmit, valid, values }) => {
             {settings.user.auth.google.enabled && <GoogleButton type="button" />}
           </View>
           <View style={styles.buttonsGroup}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
               <Text style={styles.signUpText}>Forgot password</Text>
             </TouchableOpacity>
           </View>
@@ -76,7 +76,8 @@ LoginForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
   valid: PropTypes.bool,
-  values: PropTypes.object
+  values: PropTypes.object,
+  navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
 };
 
 const styles = StyleSheet.create({

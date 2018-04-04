@@ -57,11 +57,18 @@ RegisterScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-const AuthScreen = StackNavigator({
-  Login: { screen: LoginScreen },
-  ForgotPassword: { screen: ForgotPasswordScreen },
-  Register: { screen: RegisterScreen }
-});
+const AuthScreen = StackNavigator(
+  {
+    Login: { screen: LoginScreen },
+    ForgotPassword: { screen: ForgotPasswordScreen },
+    Register: { screen: RegisterScreen }
+  },
+  {
+    cardStyle: {
+      backgroundColor: '#fff'
+    }
+  }
+);
 
 class LogoutScreen extends React.Component {
   static navigationOptions = () => ({
@@ -128,7 +135,10 @@ export default new Feature(auth, {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
           name: 'login',
           size: 30
-        })
+        }),
+        style: {
+          backgroundColor: 'red'
+        }
       }
     },
     Users: {
@@ -153,7 +163,8 @@ export default new Feature(auth, {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
           name: 'logout',
           size: 30
-        })
+        }),
+        backgroundColor: 'red'
       }
     }
   },

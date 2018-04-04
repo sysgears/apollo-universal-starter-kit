@@ -17,9 +17,31 @@ const validate = values => validateForm(values, contactFormSchema);
 const ContactForm = ({ values, handleSubmit }) => {
   return (
     <FormView>
-      <Field name="name" component={RenderField} type="text" label="Name" value={values.name} />
-      <Field name="email" component={RenderField} type="text" label="Email" value={values.email} />
-      <Field name="content" component={RenderField} type="textarea" label="Content" value={values.content} />
+      <Field
+        name="name"
+        component={RenderField}
+        type="text"
+        label="Name"
+        value={values.name}
+        placeholderTextColor="#8e908c"
+      />
+      <Field
+        name="email"
+        component={RenderField}
+        type="text"
+        label="Email"
+        value={values.email}
+        keyboardType="email-address"
+        placeholderTextColor="#8e908c"
+      />
+      <Field
+        name="content"
+        component={RenderField}
+        type="textarea"
+        label="Content"
+        value={values.content}
+        placeholderTextColor="#8e908c"
+      />
       <FormButton onPress={handleSubmit}>Send</FormButton>
     </FormView>
   );

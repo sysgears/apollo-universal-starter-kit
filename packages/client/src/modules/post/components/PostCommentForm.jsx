@@ -19,7 +19,14 @@ const PostCommentForm = ({ values, handleSubmit, comment }) => {
 
   return (
     <FormView>
-      <Field name="content" component={RenderField} type="text" value={values.content} placeholder="Comment" />
+      <Field
+        name="content"
+        component={RenderField}
+        type="text"
+        value={values.content}
+        placeholder="Comment"
+        placeholderTextColor="#8e908c"
+      />
       <FormButton onPress={handleSubmit}>{operation}</FormButton>
     </FormView>
   );

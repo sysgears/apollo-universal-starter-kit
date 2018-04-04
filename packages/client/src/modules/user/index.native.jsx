@@ -11,6 +11,7 @@ import Profile from './containers/Profile';
 import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import Logout from './containers/Logout';
+import Register from './containers/Register';
 import UsersList from './containers/UsersList';
 import modules from '..';
 import Feature from '../connector';
@@ -43,9 +44,23 @@ ForgotPasswordScreen.propTypes = {
   navigation: PropTypes.object
 };
 
+class RegisterScreen extends React.Component {
+  static navigationOptions = () => ({
+    title: 'Register'
+  });
+  render() {
+    return <Register navigation={this.props.navigation} />;
+  }
+}
+
+RegisterScreen.propTypes = {
+  navigation: PropTypes.object
+};
+
 const AuthScreen = StackNavigator({
   Login: { screen: LoginScreen },
-  ForgotPassword: { screen: ForgotPasswordScreen }
+  ForgotPassword: { screen: ForgotPasswordScreen },
+  Register: { screen: RegisterScreen }
 });
 
 class LogoutScreen extends React.Component {

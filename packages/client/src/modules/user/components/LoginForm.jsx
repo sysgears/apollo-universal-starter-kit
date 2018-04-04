@@ -64,7 +64,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation }) => {
       </View>
       <View style={styles.buttonWrapper}>
         <Text style={styles.text}>Not registered yet?</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
           <Text style={styles.signUpText}>Sign Up</Text>
         </TouchableOpacity>
       </View>

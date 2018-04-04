@@ -43,7 +43,7 @@ const ForgotPasswordFormWithFormik = withFormik({
       .catch(e => setErrors(e));
   },
   validate: values => validate(values),
-  displayName: 'LoginForm' // helps with React DevTools
+  displayName: 'ForgotPasswordForm' // helps with React DevTools
 });
 
 export default ForgotPasswordFormWithFormik(ForgotPasswordForm);

@@ -28,7 +28,7 @@ export default class ForgotPasswordView extends React.Component {
       );
     }
 
-    this.setState({ sent: result });
+    this.setState({ sent: true });
   };
 
   render() {

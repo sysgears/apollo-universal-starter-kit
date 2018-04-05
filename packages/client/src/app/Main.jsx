@@ -69,7 +69,7 @@ const netLink = ApolloLink.split(
   new WebSocketLink(wsClient),
   new BatchHttpLink({
     fetch:
-      modules.createFetch(apiUrl) ||
+      (!!modules.createFetch && modules.createFetch(apiUrl)) ||
       createApolloFetch({
         uri: apiUrl,
         constructOptions: (reqs, options) => ({

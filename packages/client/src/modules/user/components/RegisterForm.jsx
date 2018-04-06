@@ -23,15 +23,15 @@ const RegisterForm = ({ values, handleSubmit }) => {
         name="username"
         component={RenderField}
         type="text"
-        label="Username"
+        placeholder="Username"
         value={values.username}
         placeholderTextColor="#8e908c"
       />
       <Field
         name="email"
         component={RenderField}
-        type="text"
-        label="Email"
+        type="email"
+        placeholder="Email"
         value={values.email}
         keyboardType="email-address"
         placeholderTextColor="#8e908c"
@@ -40,7 +40,7 @@ const RegisterForm = ({ values, handleSubmit }) => {
         name="password"
         component={RenderField}
         type="password"
-        label="Password"
+        placeholder="Password"
         value={values.password}
         secureTextEntry={true}
         placeholderTextColor="#8e908c"
@@ -49,7 +49,7 @@ const RegisterForm = ({ values, handleSubmit }) => {
         name="passwordConfirmation"
         component={RenderField}
         type="password"
-        label="Password Confirmation"
+        placeholder="Password Confirmation"
         value={values.passwordConfirmation}
         secureTextEntry={true}
         placeholderTextColor="#8e908c"

@@ -1,34 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Button, CardGroup, CardTitle, CardText } from '../../common/components/web';
+import { View, StyleSheet } from 'react-native';
+import { CardItem, CardText, CardSubtitleText, CardLabel, Button } from '../../common/components/native';
+
+const renderCardItem = (title, value) => (
+  <CardItem>
+    <CardLabel>{title}</CardLabel>
+    <CardText>{value}</CardText>
+  </CardItem>
+);
 
 const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand }) => {
   return (
-    <div>
+    <View style={styles.container}>
       {!loading &&
         expiryMonth &&
         expiryYear &&
         last4 &&
         brand && (
-          <CardGroup>
-            <CardTitle>Card Info</CardTitle>
-            <CardText>
-              card: {brand} ************{last4}
-            </CardText>
-            <CardText>
-              expires: {expiryMonth}/{expiryYear}
-            </CardText>
-            <CardText>
-              <Link to="/update-card">
+          <View>
+            <CardSubtitleText>Card Info</CardSubtitleText>
+            {renderCardItem('Card: ', `${brand} ************${last4}`)}
+            {renderCardItem('Expires: ', `${expiryMonth}/${expiryYear}`)}
+            <View>
+              <View style={styles.buttonWrapper}>
                 <Button color="primary">Update Card</Button>
-              </Link>
-            </CardText>
-          </CardGroup>
+              </View>
+            </View>
+          </View>
         )}
-    </div>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  buttonWrapper: {
+    paddingHorizontal: 10
+  }
+});
 
 CardInfoView.propTypes = {
   loading: PropTypes.bool.isRequired,

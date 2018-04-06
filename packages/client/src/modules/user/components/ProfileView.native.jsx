@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { Card, CardItem, CardText, CardTitle, CardHeader } from '../../common/components/native';
+import { Card, CardItem, CardText, CardTitle, CardHeader, CardLabel } from '../../common/components/native';
 import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
 
 import { withLoadedUser } from '../';
@@ -11,7 +11,7 @@ import settings from '../../../../../../settings';
 
 const renderProfileItem = (title, value) => (
   <CardItem>
-    <CardText style={styles.title}>{title.toUpperCase()}</CardText>
+    <CardLabel>{title}</CardLabel>
     <CardText>{value}</CardText>
   </CardItem>
 );
@@ -32,6 +32,10 @@ const ProfileView = ({ currentUserLoading, currentUser }) => {
               ? renderProfileItem('Full Name: ', currentUser.profile.fullName)
               : null}
           </Card>
+          <Card>
+            <CardHeader title="Subscription info" />
+            <SubscriptionProfile />
+          </Card>
         </ScrollView>
       )}
     </View>
@@ -45,11 +49,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1
-  },
-  title: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#686b70'
   },
   box: {
     textAlign: 'center',

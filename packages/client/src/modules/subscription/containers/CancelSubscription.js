@@ -26,6 +26,7 @@ const CancelSubscriptionWithApollo = compose(
     // file and change the query name to `SubscriptionDataTwo`, then it works.
     // skipping for now on server.
     skip: __SERVER__,
+    options: { fetchPolicy: 'network-only' },
     props({ data: { loading, subscription } }) {
       return {
         loading,

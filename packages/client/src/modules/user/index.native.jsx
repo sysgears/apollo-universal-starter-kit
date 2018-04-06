@@ -135,10 +135,7 @@ export default new Feature(auth, {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
           name: 'login',
           size: 30
-        }),
-        style: {
-          backgroundColor: 'red'
-        }
+        })
       }
     },
     Users: {
@@ -163,8 +160,7 @@ export default new Feature(auth, {
         tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
           name: 'logout',
           size: 30
-        }),
-        backgroundColor: 'red'
+        })
       }
     }
   },

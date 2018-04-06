@@ -2,11 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, StyleSheet } from 'react-native';
 
+import CardItem from './CardItem';
+
 const CardSubtitleText = ({ children, ...props }) => {
   return (
-    <Text style={styles.text} {...props}>
-      {children}
-    </Text>
+    <CardItem>
+      <Text style={styles.text} {...props}>
+        {children}
+      </Text>
+    </CardItem>
   );
 };
 

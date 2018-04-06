@@ -10,5 +10,6 @@ export { default as CardHeader } from './CardHeader';
 export { default as CardItem } from './CardItem';
 export { default as CardFooter } from './CardFooter';
 export { default as CardText } from './CardText';
+export { default as CardLabel } from './CardLabel';
 export { default as CardTitle } from './CardTitle';
 export { default as CardSubtitleText } from './CardSubtitleText';

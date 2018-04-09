@@ -100,9 +100,9 @@
     debug "^3.1.0"
     humps "^2.0.1"
 
-"@domain-schema/validation@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@domain-schema/validation/-/validation-0.0.30.tgz#217a944f2f1c5887988fb7bcfa3dcf80790cec75"
+"@domain-schema/validation@^0.0.32":
+  version "0.0.32"
+  resolved "https://registry.yarnpkg.com/@domain-schema/validation/-/validation-0.0.32.tgz#3f452b6063d4764b0c369d13eadff0f69bf74a04"
   dependencies:
     debug "^3.1.0"
 

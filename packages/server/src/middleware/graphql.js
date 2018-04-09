@@ -14,17 +14,14 @@ export default async (req, res, next) => {
       schema,
       context: { ...context, req, res },
       debug: false,
-      formatError: error => {
-        // Don't log annoying errors from 'graphql-auth' produced due to expired JWT token
-        if (error.message && error.message.indexOf('Not Authenticated!') < 0) {
-          log.error('GraphQL execution error:', error);
-        }
-        return error;
-      },
+      formatError: error => log.error('GraphQL execution error:', error),
       tracing: !!settings.engine.engineConfig.apiKey,
       cacheControl: !!settings.engine.engineConfig.apiKey
     }))(req, res, next);
   } catch (e) {
-    next(e);
+    // If createContext decided to finish response, don't pass error downwards
+    if (!res.headersSent) {
+      next(e);
+    }
   }
 };

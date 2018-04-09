@@ -4,6 +4,8 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 
 export const featureCatalog = {};
 
+const defaultCreateFetch = () => {};
+
 export default class {
   // eslint-disable-next-line no-unused-vars
   constructor({ link, createFetch, route, navItem, reducer, resolver, routerFactory, catalogInfo }, ...features) {
@@ -12,9 +14,10 @@ export default class {
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
     this.link = combine(arguments, arg => arg.link);
-    this.createFetch = combine(arguments, arg => arg.createFetch)
-      .slice(-1)
-      .pop();
+    this.createFetch =
+      combine(arguments, arg => arg.createFetch !== defaultCreateFetch && arg.createFetch)
+        .slice(-1)
+        .pop() || defaultCreateFetch;
     this.tabItem = combine(arguments, arg => arg.tabItem);
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);

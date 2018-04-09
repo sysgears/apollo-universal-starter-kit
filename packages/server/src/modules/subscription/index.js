@@ -13,7 +13,7 @@ const Subscription = new SubscriptionDAO();
 export default new Feature({
   schema,
   createResolversFunc: createResolvers,
-  createContextFunc: async (req, res, connectionParams, webSocket, { user }) => {
+  createContextFunc: async ({ context: { user } }) => {
     const subscription = user ? await Subscription.getSubscription(user.id) : null;
 
     return {

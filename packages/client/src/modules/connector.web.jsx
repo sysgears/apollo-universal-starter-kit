@@ -4,6 +4,8 @@ import { merge, map, union, without, castArray } from 'lodash';
 
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
+const defaultCreateFetch = () => {};
+
 export const featureCatalog = {};
 
 export default class {
@@ -11,7 +13,7 @@ export default class {
   constructor(
     {
       link,
-      fetch,
+      createFetch,
       connectionParam,
       reducer,
       resolver,
@@ -30,9 +32,10 @@ export default class {
     /* eslint-enable no-unused-vars */
     // Connectivity
     this.link = combine(arguments, arg => arg.link);
-    this.fetch = combine(arguments, arg => arg.fetch)
-      .slice(-1)
-      .pop();
+    this.createFetch =
+      combine(arguments, arg => arg.createFetch !== defaultCreateFetch && arg.createFetch)
+        .slice(-1)
+        .pop() || defaultCreateFetch;
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
 
     // State management

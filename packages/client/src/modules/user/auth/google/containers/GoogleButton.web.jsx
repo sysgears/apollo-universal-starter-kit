@@ -4,7 +4,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web';
 
 const googleLogin = () => {
-  window.location = __API_URL__ + '/auth/google';
+  window.location = '/auth/google';
 };
 
 const GoogleButton = () => {

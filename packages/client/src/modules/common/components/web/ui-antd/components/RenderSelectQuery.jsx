@@ -73,9 +73,12 @@ export default class RenderSelectQuery extends React.Component {
         column = remoteKey;
       }
     }
+
+    const toString = schema.__.__toString ? schema.__.__toString : opt => opt[column];
+
     let formatedValue =
       value && value != '' && value != undefined
-        ? { key: value.id.toString(), label: value.name ? value.name : value[column] }
+        ? { key: value.id.toString(), label: toString(value) }
         : { key: '', label: '' };
     //console.log('formatedValue:', formatedValue);
 
@@ -102,7 +105,7 @@ export default class RenderSelectQuery extends React.Component {
                 const options = data.edges
                   ? data.edges.map(opt => (
                       <Option key={opt.id} value={opt.id.toString()}>
-                        {opt[column]}
+                        {toString(opt)}
                       </Option>
                     ))
                   : null;
@@ -125,7 +128,7 @@ export default class RenderSelectQuery extends React.Component {
                       if (!dirty) {
                         options.unshift(
                           <Option key={value.id} value={value.id.toString()}>
-                            {value[column]}
+                            {toString(value)}
                           </Option>
                         );
                       } else {

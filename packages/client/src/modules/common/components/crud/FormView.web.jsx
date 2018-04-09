@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
+import DomainValidation from '@domain-schema/validation';
 
 import { onSubmit, mapFormPropsToValues } from '../../../../utils/crud';
 import { createFormFields } from '../../util';
 import { Form, FormItem, Button } from '../web';
-//import { minLength, required, validateForm } from '../../../../../../common/validation';
 
 const tailFormItemLayout = {
   wrapperCol: {
@@ -31,16 +31,11 @@ const formItemLayout = {
   }
 };
 
-//const formSchema = {
-//  name: [required, minLength(3)]
-//};
-
-//const validate = values => validateForm(values, formSchema);
-
 const FormView = ({ schema, updateEntry, createEntry, title, customFields, data }) => {
   return (
     <Formik
       initialValues={mapFormPropsToValues({ schema, data: data ? data.node : null })}
+      validate={values => DomainValidation.validate(values, schema)}
       onSubmit={async values => {
         //console.log('onSubmit, values:', pickInputFields({schema, values}));
         await onSubmit({ schema, values, updateEntry, createEntry, title, data: data ? data.node : null });

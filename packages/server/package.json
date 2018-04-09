@@ -56,7 +56,7 @@
     "@domain-schema/formik": "^0.0.30",
     "@domain-schema/graphql": "^0.0.30",
     "@domain-schema/knex": "^0.0.30",
-    "@domain-schema/validation": "^0.0.30",
+    "@domain-schema/validation": "^0.0.32",
     "apollo-cache-inmemory": "^1.1.4",
     "apollo-client": "^2.1.0",
     "apollo-engine": "^0.7.0",

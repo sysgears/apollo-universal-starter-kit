@@ -30,5 +30,5 @@ export default new Feature({
     : [],
   reducer: { subscription: reducers },
   scriptsInsert:
-    settings.subscription.enabled && settings.subscription.stripePrivateKey ? 'https://js.stripe.com/v3/' : undefined
+    settings.subscription.enabled && settings.subscription.stripeSecretKey ? 'https://js.stripe.com/v3/' : undefined
 });

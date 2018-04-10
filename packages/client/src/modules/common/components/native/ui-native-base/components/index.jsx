@@ -3,6 +3,7 @@ export { default as Button } from './Button';
 export { default as FormView } from './FormView';
 export { default as FormButton } from './FormButton';
 export { default as InputItem } from './InputItem';
+export { default as CheckBox } from './CheckBox';
 export { default as SwipeAction } from './SwipeAction';
 export { default as ListItem } from './ListItem';
 export { default as Card } from './Card';

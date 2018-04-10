@@ -91,8 +91,15 @@
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
+    "@types/expo": "^25.0.0",
+    "@types/history": "^4.6.2",
+    "@types/lodash": "^4.14.104",
     "@types/react": "^16.0.38",
-    "@types/react-native": "^0.52.12",
+    "@types/react-dom": "^16.0.4",
+    "@types/react-navigation": "^1.5.2",
+    "@types/react-redux": "^5.0.15",
+    "@types/react-router-dom": "^4.2.6",
+    "@types/react-router-redux": "^5.0.12",
     "apollo-utilities": "^1.0.3",
     "autoprefixer": "^7.2.5",
     "babel-cli": "^6.26.0",

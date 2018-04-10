@@ -1,48 +1,51 @@
-import React from 'react';
-import { getOperationAST } from 'graphql';
-import { BatchHttpLink } from 'apollo-link-batch-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import ApolloClient from 'apollo-client';
+import { constructDefaultOptions, createApolloFetch } from 'apollo-fetch';
 import { ApolloLink } from 'apollo-link';
-import { createApolloFetch, constructDefaultOptions } from 'apollo-fetch';
+import { BatchHttpLink } from 'apollo-link-batch-http';
 import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
-import { ApolloProvider } from 'react-apollo';
-import { Provider } from 'react-redux';
+import { getOperationAST, OperationDefinitionNode } from 'graphql';
+import { History } from 'history';
 import createHistory from 'history/createBrowserHistory';
-import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
+import React from 'react';
+import { ApolloProvider } from 'react-apollo';
 import ReactGA from 'react-ga';
+import { Provider, Store } from 'react-redux';
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
+import { OperationOptions, SubscriptionClient } from 'subscriptions-transport-ws';
 
-import RedBox from './RedBox';
+import settings from '../../../../settings';
 import createApolloClient from '../../../common/createApolloClient';
 import createReduxStore, { storeReducer } from '../../../common/createReduxStore';
-import settings from '../../../../settings';
-import Routes from './Routes';
-import modules from '../modules';
 import log from '../../../common/log';
+// See the index.web.ts file to get more details on this
+import modules from '../modules/index.web';
 import { apiUrl } from '../net';
+import RedBox from './RedBox';
+import Routes from './Routes';
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
-const cache = new InMemoryCache();
+const cache: InMemoryCache = new InMemoryCache();
 
-let connectionParams = {};
+const connectionParams: any = {};
 for (const connectionParam of modules.connectionParams) {
   Object.assign(connectionParams, connectionParam());
 }
 
-const wsUri = apiUrl.replace(/^http/, 'ws');
+const wsUri: string = apiUrl.replace(/^http/, 'ws');
 
-const wsClient = new SubscriptionClient(wsUri, {
+const wsClient: SubscriptionClient = new SubscriptionClient(wsUri, {
   reconnect: true,
-  connectionParams: connectionParams
+  connectionParams
 });
 
 wsClient.use([
   {
-    applyMiddleware(operationOptions, next) {
-      let params = {};
+    applyMiddleware(operationOptions: OperationOptions, next: any) {
+      const params: any = {};
       for (const param of modules.connectionParams) {
         Object.assign(params, param());
       }
@@ -54,41 +57,43 @@ wsClient.use([
 ]);
 
 wsClient.onDisconnected(() => {
-  //console.log('onDisconnected');
+  // console.log('onDisconnected');
 });
 
 wsClient.onReconnected(() => {
-  //console.log('onReconnected');
+  // console.log('onReconnected');
 });
 
-const netLink = ApolloLink.split(
+const fetchParams: BatchHttpLink.Options = {
+  fetch:
+    modules.createFetch(apiUrl) ||
+    createApolloFetch({
+      uri: apiUrl,
+      constructOptions: (reqs, options) => ({
+        ...constructDefaultOptions(reqs, options),
+        credentials: 'include'
+      })
+    })
+};
+
+const netLink: ApolloLink = ApolloLink.split(
   operation => {
-    const operationAST = getOperationAST(operation.query, operation.operationName);
+    const operationAST: OperationDefinitionNode = getOperationAST(operation.query, operation.operationName);
     return !!operationAST && operationAST.operation === 'subscription';
   },
   new WebSocketLink(wsClient),
-  new BatchHttpLink({
-    fetch:
-      modules.createFetch(apiUrl) ||
-      createApolloFetch({
-        uri: apiUrl,
-        constructOptions: (reqs, options) => ({
-          ...constructDefaultOptions(reqs, options),
-          credentials: 'include'
-        })
-      })
-  })
+  new BatchHttpLink(fetchParams) as any // A workaround for [at-loader] ERROR that casts type BatchHttpLink to ApolloLink
 );
 
-const linkState = withClientState({ ...modules.resolvers, cache });
+const linkState: ApolloLink = withClientState({ ...modules.resolvers, cache });
 
-const links = [...modules.link, linkState, netLink];
+const links: ApolloLink[] = [...modules.link, linkState, netLink];
 
 if (settings.app.logging.apolloLogging) {
   links.unshift(new LoggingLink());
 }
 
-const client = createApolloClient({
+const client: ApolloClient<InMemoryCache> = createApolloClient({
   link: ApolloLink.from(links),
   cache
 });
@@ -97,9 +102,9 @@ if (window.__APOLLO_STATE__) {
   cache.restore(window.__APOLLO_STATE__);
 }
 
-const history = createHistory();
+const history: History = createHistory();
 
-const logPageView = location => {
+const logPageView = (location: any) => {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);
 };
@@ -110,7 +115,7 @@ logPageView(window.location);
 
 history.listen(location => logPageView(location));
 
-let store;
+let store: Store<any>;
 if (module.hot && module.hot.data && module.hot.data.store) {
   store = module.hot.data.store;
   store.replaceReducer(storeReducer);
@@ -126,7 +131,7 @@ if (module.hot) {
 }
 
 class ServerError extends Error {
-  constructor(error) {
+  constructor(error: any) {
     super();
     for (const key of Object.getOwnPropertyNames(error)) {
       this[key] = error[key];
@@ -135,21 +140,22 @@ class ServerError extends Error {
   }
 }
 
-export default class Main extends React.Component {
-  constructor(props) {
+interface MainState {
+  error?: ServerError;
+  info?: any;
+}
+
+export default class Main extends React.Component<any, MainState> {
+  constructor(props: any) {
     super(props);
     const serverError = window.__SERVER_ERROR__;
-    if (serverError) {
-      this.state = { error: new ServerError(serverError), ready: true };
-    } else {
-      this.state = {};
-    }
+    this.state = serverError ? { error: new ServerError(serverError) } : {};
   }
 
-  componentDidCatch(error, info) {
+  public componentDidCatch(error: ServerError, info: any) {
     this.setState({ error, info });
   }
-  render() {
+  public render() {
     return this.state.error ? (
       <RedBox error={this.state.error} />
     ) : (

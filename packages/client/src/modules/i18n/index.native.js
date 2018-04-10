@@ -3,7 +3,7 @@ import i18n from 'i18next';
 import Expo from 'expo';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
-import { LanguagePicker } from './components/native';
+import { LanguagePicker, Root } from './components/native';
 import resources from './locales';
 import Feature from '../connector';
 
@@ -49,8 +49,10 @@ export default new Feature({
   localization: { ns: 'i18n', resources },
   // eslint-disable-next-line react/display-name
   rootComponentFactory: () => (
-    <I18nextProvider i18n={i18n}>
-      <div>{/* render an empty div so that the propTypes of the I18nextProvider are satisfied */}</div>
-    </I18nextProvider>
+    <Root>
+      <I18nextProvider i18n={i18n}>
+        <div>{/* render an empty div so that the propTypes of the I18nextProvider are satisfied */}</div>
+      </I18nextProvider>
+    </Root>
   )
 });

@@ -68,6 +68,7 @@
     "react-debounce-input": "^3.1.0",
     "react-i18next": "^7.5.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
+    "react-native-simple-picker": "^2.0.0",
     "react-navigation": "^1.0.0-beta.27",
     "react-redux": "^5.0.6",
     "react-stripe-elements": "^1.2.1",

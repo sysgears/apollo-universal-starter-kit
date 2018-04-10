@@ -1,3 +1,6 @@
 {
-  "pickerTitle": "Choose language"
+  "pickerTitle": "Choose language",
+  "pickerMenu": "Change language",
+  "btnCancel": "Cancel",
+  "btnConfirm": "Confirm"
 }

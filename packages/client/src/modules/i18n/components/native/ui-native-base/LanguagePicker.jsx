@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { Text, Platform } from 'react-native';
 import { ActionSheet } from 'native-base';
+import SimplePicker from 'react-native-simple-picker';
 
 import { HeaderTitle } from '../../../../common/components/native';
 
@@ -25,21 +26,36 @@ export default class LanguagePicker extends React.Component {
     return (
       i18n.language &&
       langs.length > 1 && (
-        <View>
+        <Fragment>
           <HeaderTitle
             onPress={() =>
-              ActionSheet.show(
-                {
-                  options: langs,
-                  title: i18n.t('i18n:pickerTitle')
-                },
-                langIndex => this.changeLang(langs[langIndex])
-              )
+              Platform.OS === 'ios'
+                ? this.pickerRef.show()
+                : ActionSheet.show(
+                    {
+                      options: langs,
+                      title: i18n.t('i18n:pickerTitle')
+                    },
+                    langIndex => this.changeLang(langs[langIndex])
+                  )
             }
           >
-            {i18n.t('i18n:pickerTitle')}
+            {i18n.t('i18n:pickerMenu')}
           </HeaderTitle>
-        </View>
+          <Text style={{ position: 'absolute', right: 16, color: 'rgba(0, 0, 0, .7)' }}>
+            {this.state.currentLang.toUpperCase()}
+          </Text>
+          {Platform.OS === 'ios' && (
+            <SimplePicker
+              ref={el => (this.pickerRef = el)}
+              options={langs}
+              onSubmit={lang => this.changeLang(lang)}
+              buttonStyle={{ fontWidth: 'bold', color: '#0275d8' }}
+              cancelText={i18n.t('i18n:btnCancel')}
+              confirmText={i18n.t('i18n:btnConfirm')}
+            />
+          )}
+        </Fragment>
       )
     );
   }

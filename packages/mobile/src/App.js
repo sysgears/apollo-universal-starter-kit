@@ -91,7 +91,7 @@ export default class Main extends React.Component {
       cache
     });
 
-    return (
+    return modules.getWrappedRoot(
       <Provider store={store}>
         <ApolloProvider client={client}>
           <MainScreenNavigator />

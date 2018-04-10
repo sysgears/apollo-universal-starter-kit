@@ -24,7 +24,6 @@ i18n
   .use(reactI18nextModule)
   .init({
     fallbackLng: 'en',
-    lng: 'ru',
     resources: {},
     debug: true, // set false to hide logs
     interpolation: {

@@ -18,7 +18,7 @@ export default new Feature({
   drawerItem: {
     Upload: {
       screen: StackNavigator({
-        Counter: {
+        Upload: {
           screen: Upload,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,

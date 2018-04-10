@@ -75,7 +75,7 @@ export default new Feature(auth, {
   drawerItem: {
     Profile: {
       screen: StackNavigator({
-        Counter: {
+        Profile: {
           screen: Profile,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
@@ -102,7 +102,7 @@ export default new Feature(auth, {
     },
     Users: {
       screen: StackNavigator({
-        Counter: {
+        Users: {
           screen: UsersListScreen,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.users" style="subTitle" />,

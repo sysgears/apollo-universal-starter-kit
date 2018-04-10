@@ -14,7 +14,7 @@ export default new Feature({
   drawerItem: {
     Contact: {
       screen: StackNavigator({
-        Counter: {
+        Contact: {
           screen: Contact,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,

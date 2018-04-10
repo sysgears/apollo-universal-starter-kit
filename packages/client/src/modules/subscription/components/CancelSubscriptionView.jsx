@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { CardItem, CardText, CardSubtitleText, Button } from '../../common/components/native';
+import { CardText, CardSubtitleText, Button } from '../../common/components/native';
 
 export default class CancelSubscriptionView extends React.Component {
   static propTypes = {
@@ -42,9 +42,7 @@ export default class CancelSubscriptionView extends React.Component {
 
     return (
       <View style={styles.container}>
-        <CardItem>
-          <CardSubtitleText>Subscription</CardSubtitleText>
-        </CardItem>
+        <CardSubtitleText>Subscription</CardSubtitleText>
         <View style={styles.buttonWrapper}>
           {active && (
             <Button onPress={this.onClick} disabled={this.state.cancelling} danger>

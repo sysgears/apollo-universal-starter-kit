@@ -16,7 +16,9 @@ CardSubtitleText.propTypes = {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 18
+    fontSize: 18,
+    paddingHorizontal: 15,
+    marginBottom: 5
   }
 });
 

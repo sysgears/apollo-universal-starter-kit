@@ -16,7 +16,6 @@ export default class {
       drawerItem,
       internationalization,
       localization,
-      drawerFooterItem,
       reducer,
       resolver,
       routerFactory,
@@ -36,7 +35,6 @@ export default class {
     this.drawerItem = combine(arguments, arg => arg.drawerItem);
     this.internationalization = combine(arguments, arg => arg.internationalization);
     this.localization = combine(arguments, arg => arg.localization);
-    this.drawerFooterItem = combine(arguments, arg => arg.drawerFooterItem);
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
     this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
@@ -56,10 +54,6 @@ export default class {
 
   get localizations() {
     return this.localization;
-  }
-
-  get drawerFooterItems() {
-    return this.drawerFooterItem;
   }
 
   get reducers() {
@@ -84,5 +78,12 @@ export default class {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
     }
     return nestedRoot;
+  }
+
+  getSkippedDrawerItems() {
+    const items = this.drawerItems;
+    return Object.keys(items).filter(itemName => {
+      return items[itemName].skip;
+    });
   }
 }

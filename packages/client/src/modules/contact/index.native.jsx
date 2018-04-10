@@ -1,7 +1,8 @@
 import React from 'react';
 import { translate } from 'react-i18next';
+import { StackNavigator } from 'react-navigation';
 
-import { HeaderTitle } from '../common/components/native';
+import { HeaderTitle, MenuButton } from '../common/components/native';
 import Contact from './containers/Contact';
 import resources from './locales';
 
@@ -12,7 +13,15 @@ const HeaderTitleWithI18n = translate('contact')(HeaderTitle);
 export default new Feature({
   drawerItem: {
     Contact: {
-      screen: Contact,
+      screen: StackNavigator({
+        Counter: {
+          screen: Contact,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       navigationOptions: {
         drawerLabel: <HeaderTitleWithI18n />
       }

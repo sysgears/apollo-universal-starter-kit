@@ -1,39 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { DrawerItems } from 'react-navigation';
 
-import modules from '../../../../modules';
+import modules from '../../../';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20
-  },
-  footerContainer: {
-    padding: 15,
-    backgroundColor: 'lightgrey'
   }
 });
 
 const DrawerComponent = props => {
-  const items = modules.drawerFooterItems;
+  const skippedItems = modules.getSkippedDrawerItems();
   return (
-    <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
-      <View style={styles.container}>
-        <ScrollView>
-          <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
-            <DrawerItems {...props} />
-          </SafeAreaView>
-        </ScrollView>
-        {items.length > 0 && <View style={styles.footerContainer}>{items}</View>}
-      </View>
-    </SafeAreaView>
+    <ScrollView style={styles.container}>
+      <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
+        <DrawerItems
+          {...props}
+          onItemPress={({ focused, route }) => {
+            if (!skippedItems.includes(route.routeName)) {
+              props.onItemPress({ route, focused });
+            }
+          }}
+        />
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 
 DrawerComponent.propTypes = {
-  navigation: PropTypes.object
+  onItemPress: PropTypes.func
 };
 
 export default DrawerComponent;

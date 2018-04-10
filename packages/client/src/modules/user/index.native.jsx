@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
+import { StackNavigator } from 'react-navigation';
 
 import auth from './auth';
 import resolvers from './resolvers';
 import resources from './locales';
 import UserScreenNavigator from './containers/UserScreenNavigator';
-import { HeaderTitle } from '../common/components/native';
+import { HeaderTitle, MenuButton } from '../common/components/native';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
 import Logout from './containers/Logout';
@@ -40,7 +41,7 @@ LogoutScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-class UsersLisScreen extends React.Component {
+class UsersListScreen extends React.Component {
   static navigationOptions = () => ({
     title: 'Users'
   });
@@ -49,7 +50,7 @@ class UsersLisScreen extends React.Component {
   }
 }
 
-UsersLisScreen.propTypes = {
+UsersListScreen.propTypes = {
   navigation: PropTypes.object
 };
 
@@ -73,7 +74,15 @@ export * from './containers/Auth';
 export default new Feature(auth, {
   drawerItem: {
     Profile: {
-      screen: ProfileScreen,
+      screen: StackNavigator({
+        Counter: {
+          screen: Profile,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       userInfo: {
         showOnLogin: true,
         role: ['user', 'admin']
@@ -92,7 +101,15 @@ export default new Feature(auth, {
       }
     },
     Users: {
-      screen: UsersLisScreen,
+      screen: StackNavigator({
+        Counter: {
+          screen: UsersListScreen,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.users" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       userInfo: {
         showOnLogin: true,
         role: 'admin'

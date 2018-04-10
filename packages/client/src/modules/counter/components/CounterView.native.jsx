@@ -18,7 +18,7 @@ const CounterView = ({
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <Text>{t('loading')}</Text>
       </View>
     );
   } else {

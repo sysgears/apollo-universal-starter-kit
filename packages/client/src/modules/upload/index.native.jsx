@@ -2,8 +2,9 @@ import React from 'react';
 import { createApolloFetch } from 'apollo-fetch';
 import { constructUploadOptions } from 'apollo-fetch-upload';
 import { translate } from 'react-i18next';
+import { StackNavigator } from 'react-navigation';
 
-import { HeaderTitle } from '../common/components/native';
+import { HeaderTitle, MenuButton } from '../common/components/native';
 import Upload from './containers/Upload';
 import reducers from './reducers';
 import resources from './locales';
@@ -16,7 +17,15 @@ export default new Feature({
   catalogInfo: { upload: true },
   drawerItem: {
     Upload: {
-      screen: Upload,
+      screen: StackNavigator({
+        Counter: {
+          screen: Upload,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       navigationOptions: {
         drawerLabel: <HeaderTitleWithI18n />
       }

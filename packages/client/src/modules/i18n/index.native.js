@@ -11,7 +11,7 @@ const languageDetector = {
   type: 'languageDetector',
   async: true, // flags below detection to be async
   detect: callback => {
-    return /*'en'; */ Expo.Util.getCurrentLocaleAsync().then(lng => {
+    return Expo.Util.getCurrentLocaleAsync().then(lng => {
       callback(lng.replace('_', '-'));
     });
   },
@@ -24,6 +24,7 @@ i18n
   .use(reactI18nextModule)
   .init({
     fallbackLng: 'en',
+    lng: 'ru',
     resources: {},
     debug: true, // set false to hide logs
     interpolation: {
@@ -35,9 +36,17 @@ i18n
   });
 
 export default new Feature({
+  drawerItem: {
+    LangPicker: {
+      screen: () => null,
+      navigationOptions: {
+        drawerLabel: <LanguagePicker key={'picker'} i18n={i18n} />
+      },
+      skip: true
+    }
+  },
   internationalization: i18n,
   localization: { ns: 'i18n', resources },
-  drawerFooterItem: <LanguagePicker key={'picker'} i18n={i18n} />,
   // eslint-disable-next-line react/display-name
   rootComponentFactory: () => (
     <I18nextProvider i18n={i18n}>

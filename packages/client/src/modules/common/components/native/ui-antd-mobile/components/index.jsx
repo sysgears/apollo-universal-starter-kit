@@ -6,6 +6,7 @@ export { default as InputItem } from './InputItem';
 export { default as CheckBox } from './CheckBox';
 export { default as SwipeAction } from './SwipeAction';
 export { default as ListItem } from './ListItem';
+export { default as List } from './List';
 export { default as Card } from './Card';
 export { default as CardHeader } from './CardHeader';
 export { default as CardItem } from './CardItem';

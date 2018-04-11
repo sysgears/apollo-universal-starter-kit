@@ -7,6 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
 import { withUser } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
+import access from '../../../access';
 
 const facebookLogin = () => {
   const url = buildRedirectUrlForMobile('facebook');
@@ -17,15 +18,15 @@ const facebookLogin = () => {
   }
 };
 
-const FacebookButton = () => {
+const FacebookButton = withApollo(({ client }) => {
   return (
     <View>
-      <TouchableOpacity onPress={facebookLogin} style={styles.submit}>
+      <TouchableOpacity onPress={access.doLogin(client).then(facebookLogin)} style={styles.submit}>
         <Text style={styles.text}>Login with Facebook</Text>
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 const FacebookLink = () => {
   return <Button onPress={facebookLogin} style={{ margin: 10 }} title="Login with Facebook" />;

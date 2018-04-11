@@ -92,6 +92,7 @@ const client = createApolloClient({
   link: ApolloLink.from(links),
   cache
 });
+client.onResetStore(linkState.writeDefaults);
 
 if (window.__APOLLO_STATE__) {
   cache.restore(window.__APOLLO_STATE__);

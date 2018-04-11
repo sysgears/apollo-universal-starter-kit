@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { LayoutCenter } from '../../../common/components';
 import { getItem, setItem, removeItem } from './tokenStorage';
 import Feature from '../connector';
-import modules from '../../..';
 import settings from '../../../../../../../settings';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
@@ -122,9 +121,8 @@ class DataRootComponent extends React.Component {
         if (currentUser) {
           // If we have received current user, then we had invalid Apollo Cache previously
           // and we should discard it
-          await client.cache.reset();
+          await client.resetStore();
           await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser } });
-          await client.cache.writeData({ data: modules.resolvers.defaults });
         }
       }
     }

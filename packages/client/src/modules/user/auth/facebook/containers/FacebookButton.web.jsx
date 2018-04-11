@@ -1,19 +1,26 @@
 import React from 'react';
+import { withApollo } from 'react-apollo';
 import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web';
+import access from '../../../access';
 
 const facebookLogin = () => {
   window.location = '/auth/facebook';
 };
 
-const FacebookButton = () => {
+const FacebookButton = withApollo(({ client }) => {
   return (
-    <Button color="primary" type="button" onClick={facebookLogin} style={{ marginTop: 10 }}>
+    <Button
+      color="primary"
+      type="button"
+      onClick={() => access.doLogin(client).then(facebookLogin)}
+      style={{ marginTop: 10 }}
+    >
       Login with Facebook
     </Button>
   );
-};
+});
 
 const FacebookLink = () => {
   return (

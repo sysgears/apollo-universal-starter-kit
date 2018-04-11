@@ -58,6 +58,7 @@ const renderServerSide = async (req, res) => {
     link: ApolloLink.from(links),
     cache
   });
+  client.onResetStore(linkState.writeDefaults);
 
   let initialState = {};
   const store = createReduxStore(initialState, client);

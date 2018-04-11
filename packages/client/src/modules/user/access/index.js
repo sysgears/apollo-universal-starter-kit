@@ -3,4 +3,15 @@ import session from './session';
 
 import Feature from './connector';
 
-export default new Feature(jwt, session);
+const login = client => {
+  return client.resetStore();
+};
+
+const logout = client => {
+  return client.resetStore();
+};
+
+export default new Feature(jwt, session, {
+  login,
+  logout
+});

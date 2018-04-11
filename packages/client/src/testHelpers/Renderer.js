@@ -152,6 +152,7 @@ export default class Renderer {
       link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
       cache
     });
+    client.onResetStore(linkState.writeDefaults);
 
     const store = createStore(
       combineReducers({

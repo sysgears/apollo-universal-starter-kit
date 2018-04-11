@@ -16,8 +16,10 @@ export default class LanguagePicker extends React.Component {
   }
 
   changeLang(lang) {
-    this.props.i18n.changeLanguage(lang);
-    this.setState({ currentLang: lang });
+    if (lang) {
+      this.props.i18n.changeLanguage(lang);
+      this.setState({ currentLang: lang });
+    }
   }
 
   render() {
@@ -42,7 +44,7 @@ export default class LanguagePicker extends React.Component {
           >
             {i18n.t('i18n:pickerMenu')}
           </HeaderTitle>
-          <Text style={{ position: 'absolute', right: 16, color: 'rgba(0, 0, 0, .7)' }}>
+          <Text style={{ position: 'absolute', right: 16, color: 'rgba(0, 0, 0, .5)' }}>
             {this.state.currentLang.toUpperCase()}
           </Text>
           {Platform.OS === 'ios' && (
@@ -50,9 +52,7 @@ export default class LanguagePicker extends React.Component {
               ref={el => (this.pickerRef = el)}
               options={langs}
               onSubmit={lang => this.changeLang(lang)}
-              buttonStyle={{ fontWidth: 'bold', color: '#0275d8' }}
-              cancelText={i18n.t('i18n:btnCancel')}
-              confirmText={i18n.t('i18n:btnConfirm')}
+              buttonStyle={{ fontWidth: '700', color: '#0275d8', fontSize: 20 }}
             />
           )}
         </Fragment>

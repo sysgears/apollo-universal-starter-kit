@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from 'antd-mobile/lib/list';
+import { List } from 'antd-mobile';
 
 const ListItem = ({ children, ...props }) => {
   return <List.Item {...props}>{children}</List.Item>;

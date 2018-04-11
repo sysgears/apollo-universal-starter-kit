@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from 'antd-mobile/lib/list';
+import { ListItem as ListItemComponent } from 'native-base';
 
 const ListItem = ({ children, ...props }) => {
-  return <List.Item {...props}>{children}</List.Item>;
+  return <ListItemComponent {...props}>{children}</ListItemComponent>;
 };
 
 ListItem.propTypes = {

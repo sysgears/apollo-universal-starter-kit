@@ -15,7 +15,7 @@ const NavBar = () => (
         {modules.navItems}
       </Nav>
 
-      <Nav className="ustify-content-end">
+      <Nav className="justify-content-end">
         {modules.navItemsRight}
         {__DEV__ && (
           <NavItem>

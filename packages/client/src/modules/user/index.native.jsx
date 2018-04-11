@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { translate } from 'react-i18next';
 import { StackNavigator } from 'react-navigation';
 
-import auth from './auth';
+import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';
 import UserScreenNavigator from './containers/UserScreenNavigator';
@@ -71,7 +71,7 @@ const HeaderTitleWithI18n = translate('user')(HeaderTitle);
 
 export * from './containers/Auth';
 
-export default new Feature(auth, {
+export default new Feature(access, {
   drawerItem: {
     Profile: {
       screen: StackNavigator({

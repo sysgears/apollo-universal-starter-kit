@@ -6,6 +6,8 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 
 export const featureCatalog = {};
 
+const defaultCreateFetch = () => {};
+
 export default class {
   /* eslint-disable no-unused-vars */
   constructor(
@@ -29,9 +31,10 @@ export default class {
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
     this.link = combine(arguments, arg => arg.link);
-    this.createFetch = combine(arguments, arg => arg.createFetch)
-      .slice(-1)
-      .pop();
+    this.createFetch =
+      combine(arguments, arg => arg.createFetch !== defaultCreateFetch && arg.createFetch)
+        .slice(-1)
+        .pop() || defaultCreateFetch;
     this.drawerItem = combine(arguments, arg => arg.drawerItem);
     this.internationalization = combine(arguments, arg => arg.internationalization);
     this.localization = combine(arguments, arg => arg.localization);

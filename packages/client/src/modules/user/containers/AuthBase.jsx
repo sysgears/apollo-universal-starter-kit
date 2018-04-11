@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo, graphql } from 'react-apollo';
 
-import auth from '../auth';
+import access from '../access';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
@@ -66,7 +66,7 @@ const IfNotLoggedIn = withLoadedUser(IfNotLoggedInComponent);
 
 const withLogout = Component =>
   withApollo(({ client, ...props }) => {
-    const newProps = { ...props, logout: () => auth.doLogout(client) };
+    const newProps = { ...props, logout: () => access.doLogout(client) };
     return <Component {...newProps} />;
   });
 

@@ -3,7 +3,7 @@ import { CookiesProvider } from 'react-cookie';
 import { NavLink, withRouter } from 'react-router-dom';
 import { translate } from 'react-i18next';
 
-import auth from './auth';
+import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';
 import ProfileView from './components/ProfileView';
@@ -52,7 +52,7 @@ const MenuItemLoginWithI18n = translate('user')(({ t }) => (
   </IfNotLoggedIn>
 ));
 
-export default new Feature(auth, {
+export default new Feature(access, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
     <AuthRoute exact path="/users" redirect="/login" role="admin" component={Users} />,

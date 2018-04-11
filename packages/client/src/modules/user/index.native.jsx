@@ -12,7 +12,8 @@ import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import Logout from './containers/Logout';
 import Register from './containers/Register';
-import UsersList from './containers/UsersList';
+import Users from './components/Users';
+import UserEdit from './containers/UserEdit';
 import modules from '..';
 import Feature from '../connector';
 
@@ -85,16 +86,34 @@ LogoutScreen.propTypes = {
 
 class UsersLisScreen extends React.Component {
   static navigationOptions = () => ({
-    title: 'Users'
+    header: false
   });
   render() {
-    return <UsersList navigation={this.props.navigation} />;
+    return <Users navigation={this.props.navigation} />;
   }
 }
 
 UsersLisScreen.propTypes = {
   navigation: PropTypes.object
 };
+
+class UserEditScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.id === 0 ? 'Create' : 'Edit'} user`
+  });
+  render() {
+    return <UserEdit navigation={this.props.navigation} />;
+  }
+}
+
+UserEditScreen.propTypes = {
+  navigation: PropTypes.object
+};
+
+const UsersNavigation = StackNavigator({
+  UsersList: { screen: UsersLisScreen },
+  UserEdit: { screen: UserEditScreen }
+});
 
 class ProfileScreen extends React.Component {
   static navigationOptions = () => ({
@@ -139,7 +158,7 @@ export default new Feature(auth, {
       }
     },
     Users: {
-      screen: UsersLisScreen,
+      screen: UsersNavigation,
       userInfo: {
         showOnLogin: true,
         role: 'admin'

@@ -25,7 +25,7 @@ i18n
   .init({
     fallbackLng: 'en',
     resources: {},
-    debug: true, // set false to hide logs
+    debug: false, // set true to show logs
     interpolation: {
       escapeValue: false // not needed for react!!
     },

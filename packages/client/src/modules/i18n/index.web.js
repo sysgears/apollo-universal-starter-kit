@@ -4,7 +4,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
 import Feature from '../connector';
-import LanguagePicker from './components/LanguagePicker';
+import LanguagePicker from './components/web/LanguagePicker';
 import { MenuItem } from '../../modules/common/components/web';
 
 i18n
@@ -13,7 +13,7 @@ i18n
   .init({
     fallbackLng: 'en',
     resources: {},
-    debug: true, // set false to hide logs
+    debug: false, // set true to show logs
     interpolation: {
       escapeValue: false // not needed for react!!
     },

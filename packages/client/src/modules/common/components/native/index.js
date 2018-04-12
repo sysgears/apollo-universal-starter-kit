@@ -3,3 +3,4 @@ export * from './ui-native-base/components';
 //export * from './ui-antd-mobile/components';
 export { default as RenderField } from './RenderField';
 export { default as createTabBarIconWrapper } from './createTabBarIconWrapper';
+export * from './ButtonTypes';

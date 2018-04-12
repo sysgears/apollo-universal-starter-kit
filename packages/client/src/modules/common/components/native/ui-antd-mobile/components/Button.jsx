@@ -1,18 +1,62 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ADButton from 'antd-mobile/lib/button';
+import { Text } from 'react-native';
+import * as TYPES from '../../ButtonTypes';
 
-const Button = ({ children, onPress, ...props }) => {
+const Button = ({ children, onPress, onClick, type, style, ...props }) => {
+  const btnData = buttonTypes[type] || {};
+  const btnProps = {
+    ...props,
+    type: btnData.type || 'default',
+    style: { ...btnData.styles, ...style }
+  };
+
   return (
-    <ADButton onClick={onPress} {...props}>
-      {children}
+    <ADButton onClick={onPress || onClick} {...btnProps}>
+      <Text>{children}</Text>
     </ADButton>
   );
 };
 
 Button.propTypes = {
   children: PropTypes.node,
-  onPress: PropTypes.func
+  onPress: PropTypes.func,
+  type: PropTypes.string,
+  style: PropTypes.object,
+  onClick: PropTypes.func
+};
+
+const getStyles = color => {
+  return {
+    backgroundColor: color,
+    borderColor: color
+  };
+};
+
+const buttonTypes = {
+  primary: {
+    type: TYPES.primary
+  },
+  success: {
+    type: 'default',
+    styles: getStyles('#59b662')
+  },
+  dark: {
+    type: TYPES.primary,
+    styles: getStyles('#000')
+  },
+  info: {
+    type: 'default',
+    styles: getStyles('#51b1f3')
+  },
+  danger: {
+    type: TYPES.warning
+  },
+  warning: {
+    type: 'default',
+    styles: getStyles('#f6aa57')
+  }
 };
 
 export default Button;

@@ -1,29 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, StyleSheet } from 'react-native';
-import { Button as NBButton } from 'native-base';
+import { Button as NBButton, Text } from 'native-base';
 
-const Button = ({ children, ...props }) => {
+const Button = ({ children, onClick, onPress, type, size, ...props }) => {
+  const btnProps = {
+    ...props,
+    [type]: true,
+    [size]: true,
+    block: true,
+    onPress: onPress || onClick
+  };
+
   return (
-    <NBButton block {...props}>
-      <Text style={styles.textStyle}>{children}</Text>
+    <NBButton {...btnProps}>
+      <Text>{children}</Text>
     </NBButton>
   );
 };
 
 Button.propTypes = {
-  children: PropTypes.string
+  children: PropTypes.string,
+  type: PropTypes.string,
+  size: PropTypes.string,
+  onPress: PropTypes.func,
+  onClick: PropTypes.func
 };
-
-const styles = StyleSheet.create({
-  textStyle: {
-    alignSelf: 'center',
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
-    paddingTop: 10,
-    paddingBottom: 10
-  }
-});
 
 export default Button;

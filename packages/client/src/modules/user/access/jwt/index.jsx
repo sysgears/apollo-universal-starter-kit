@@ -55,6 +55,11 @@ const JWTLink = new ApolloLink((operation, forward) => {
               observer.next(result);
             })();
             queue.push(promise);
+            if (queue.length > 100) {
+              Promise.all(queue).then(() => {
+                queue.length = 0;
+              });
+            }
           },
           error: networkError => {
             (async () => {

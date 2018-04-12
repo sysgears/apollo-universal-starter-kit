@@ -26,7 +26,6 @@ import {
   Popconfirm,
   Switch,
   FormItem,
-  Row,
   Col,
   Input,
   InputNumber,
@@ -89,6 +88,7 @@ export const createColumnFields = ({
             key: key,
             fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
             width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+            align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
             render: (text, record) =>
               customFields[key] && customFields[key]['render'] ? (
                 customFields[key]['render'](text, record)
@@ -120,6 +120,7 @@ export const createColumnFields = ({
             key: key,
             fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
             width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+            align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
             render: (text, record) => {
               const data = {};
               data[key] = !text;
@@ -137,6 +138,7 @@ export const createColumnFields = ({
             key: key,
             fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
             width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+            align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
             render: (text, record) => (
               <EditableCell
                 value={text}
@@ -159,6 +161,7 @@ export const createColumnFields = ({
             key: key,
             fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
             width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+            align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
             render: (text, record) =>
               customFields[key] && customFields[key]['render']
                 ? customFields[key]['render'](text, record)
@@ -174,6 +177,7 @@ export const createColumnFields = ({
           key: key,
           fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
           width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+          align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
           render: (text, record) =>
             customFields[key] && customFields[key]['render'] ? customFields[key]['render'](text, record) : null
         });
@@ -436,33 +440,35 @@ export const createFormFields = ({
                 key={key}
                 render={({ push, remove }) => {
                   return (
-                    <Row>
-                      <Col span={12} offset={6}>
-                        {values[key].map((field, index) => (
-                          <div key={index} className="field-array-form">
-                            {createFormFields({
-                              handleChange,
-                              handleBlur,
-                              schema: value.type[0],
-                              values: mapFormPropsToValues({ schema: value.type[0], data: field }),
-                              formItemLayout: formItemLayout,
-                              prefix: `${key}[${index}].`
-                            })}
+                    <FormItem {...formItemLayout} label={startCase(key)}>
+                      {values[key].map((field, index) => (
+                        <div key={index} className="field-array-form">
+                          {createFormFields({
+                            handleChange,
+                            handleBlur,
+                            schema: value.type[0],
+                            values: mapFormPropsToValues({ schema: value.type[0], data: field }),
+                            formItemLayout: formItemLayout,
+                            prefix: `${key}[${index}].`
+                          })}
+                          {!value.hasOne && (
                             <FormItem {...tailFormItemLayout}>
                               <Button color="primary" size="sm" onClick={() => remove(index)}>
                                 Delete
                               </Button>
                             </FormItem>
-                          </div>
-                        ))}
+                          )}
+                        </div>
+                      ))}
+                      {!value.hasOne && (
                         <FormItem {...tailFormItemLayout}>
                           {/*submitFailed && error && <span>{error}</span>*/}
                           <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
                             Add field
                           </Button>
                         </FormItem>
-                      </Col>
-                    </Row>
+                      )}
+                    </FormItem>
                   );
                 }}
               />

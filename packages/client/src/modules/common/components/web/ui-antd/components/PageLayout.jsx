@@ -96,7 +96,9 @@ class PageLayout extends React.Component {
                 {children}
               </Content>
             </section>
-            <Footer style={{ textAlign: 'center' }}>&copy; 2017. {settings.app.name}.</Footer>
+            <Footer style={{ textAlign: 'center' }}>
+              &copy; {new Date().getFullYear()}. {settings.app.name}.
+            </Footer>
           </Layout>
         </Layout>
       </div>

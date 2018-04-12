@@ -509,6 +509,15 @@ export default class Crud {
               const filterValue_gte = moment(filter[`${filterKey}_gte`]).format(dateFormat);
               this.andWhere(`${tableName}.${decamelize(filterKey)}`, '<=', `${filterValue_gte}`);
             }
+          } else if (hasTypeOf(Boolean)) {
+            if (_.has(filter, filterKey) && filter[filterKey] !== '') {
+              if (filterValue === true) {
+                filterValue = 1;
+              } else {
+                filterValue = 0;
+              }
+              this.andWhere(`${tableName}.${decamelize(filterKey)}`, '=', `${filterValue}`);
+            }
           } else {
             if (_.has(filter, filterKey) && filter[filterKey] !== '') {
               this.andWhere(`${tableName}.${decamelize(filterKey)}`, '=', `${filterValue}`);
@@ -567,6 +576,15 @@ export default class Crud {
         this.andWhere(`${tableName}.${decamelize(key)}`, '=', where[key]);
       });
     });
+
+    return knexnest(select(baseQuery));
+  }
+
+  _getMany({ where: { id_in } }, info) {
+    const baseQuery = knex(`${this.getFullTableName()} as ${this.getTableName()}`);
+    const select = selectBy(this.schema, info);
+
+    baseQuery.whereIn('id', [...id_in]);
 
     return knexnest(select(baseQuery));
   }

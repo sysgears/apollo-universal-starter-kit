@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import { isEqual, has } from 'lodash';
 
 export const onSubmit = async ({ schema, values, updateEntry, createEntry, title, data = null }) => {
   let result = null;
@@ -74,7 +74,7 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
         }
       }
     } else {
-      if (key in values && values[key]) {
+      if (key in values && has(values, key)) {
         if (value.type.isSchema) {
           inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
         } else if (key !== 'id' && value.type.constructor !== Array) {

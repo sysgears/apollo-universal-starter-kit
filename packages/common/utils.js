@@ -19,3 +19,11 @@ export const removeEmpty = obj =>
       redObj[key] = obj[key];
       return redObj;
     }, {});
+
+export const add3Dots = (string, limit) => {
+  const dots = '...';
+  if (string.length > limit) {
+    string = string.substring(0, limit) + dots;
+  }
+  return string;
+};

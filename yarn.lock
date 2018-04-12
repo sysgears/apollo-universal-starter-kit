@@ -5847,13 +5847,9 @@ graphql-anywhere@^4.1.8:
   dependencies:
     apollo-utilities "^1.0.11"
 
-graphql-auth@^0.2.0:
+graphql-auth@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/graphql-auth/-/graphql-auth-0.2.0.tgz#cd28baee533d2c697c40bf201da19f170b562cbe"
-
-graphql-auth@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/graphql-auth/-/graphql-auth-0.2.1.tgz#209b6854375ad960c806360b61e81298fb73177f"
 
 graphql-extensions@^0.0.x:
   version "0.0.7"

@@ -4,6 +4,7 @@ export { default as FormView } from './FormView';
 export { default as FormButton } from './FormButton';
 export { default as InputItem } from './InputItem';
 export { default as CheckBox } from './CheckBox';
+export { default as Select } from './Select';
 export { default as SwipeAction } from './SwipeAction';
 export { default as List } from './List';
 export { default as ListItem } from './ListItem';

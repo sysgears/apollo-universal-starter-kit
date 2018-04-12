@@ -84,6 +84,7 @@ export default class Main extends React.Component {
       link: ApolloLink.from(links),
       cache
     });
+    client.onResetStore(linkState.writeDefaults);
 
     return (
       <Provider store={store}>

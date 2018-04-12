@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import log from './log';
 
 export const nestedOmit = (obj, iteratee, context) => {
   let r = _.omit(obj, iteratee, context);
@@ -11,6 +12,24 @@ export const nestedOmit = (obj, iteratee, context) => {
 };
 
 export const removeTypename = obj => nestedOmit(obj, '__typename');
+
+/**
+ * Wraps target object to trace and log all method calls
+ *
+ * @param {*} obj target object to trace
+ */
+export const traceMethodCalls = obj => {
+  return new Proxy(obj, {
+    get(target, property) {
+      const origProperty = target[property];
+      return function(...args) {
+        const result = origProperty.apply(target, args);
+        log.debug(property + JSON.stringify(args) + ' -> ' + JSON.stringify(result));
+        return result;
+      };
+    }
+  });
+};
 
 export const removeEmpty = obj =>
   Object.keys(obj)

@@ -1,9 +1,5 @@
-import ApolloClient from 'apollo-client';
 import { ApolloLink, Observable } from 'apollo-link';
-import { withClientState } from 'apollo-link-state';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { addTypenameToDocument } from 'apollo-utilities';
-import { LoggingLink } from 'apollo-logger';
 import { Router, Switch } from 'react-router-dom';
 import createHistory from 'history/createMemoryHistory';
 import { JSDOM } from 'jsdom';
@@ -13,9 +9,9 @@ import { graphql, print, getOperationAST } from 'graphql';
 
 import { Provider } from 'react-redux';
 
+import createApolloClient from '../../../common/createApolloClient';
 import rootSchema from '../../../server/src/api/rootSchema.graphql';
 import serverModules from '../../../server/src/modules';
-import settings from '../../../../settings';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;
@@ -143,16 +139,12 @@ export default class Renderer {
     });
     addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
 
-    const cache = new InMemoryCache();
-    let link = new MockLink(schema);
-
-    const linkState = withClientState({ ...clientModules.resolvers, cache });
-
-    const client = new ApolloClient({
-      link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([linkState, link])),
-      cache
+    const schemaLink = new MockLink(schema);
+    const client = createApolloClient({
+      schemaLink,
+      links: clientModules.link,
+      clientResolvers: clientModules.resolvers
     });
-    client.onResetStore(linkState.writeDefaults);
 
     const store = createStore(
       combineReducers({
@@ -166,8 +158,7 @@ export default class Renderer {
     this.client = client;
     this.store = store;
     this.history = history;
-    this.mockLink = link;
-    // this.networkInterface = mockNetworkInterface;
+    this.mockLink = schemaLink;
   }
 
   withApollo(component) {

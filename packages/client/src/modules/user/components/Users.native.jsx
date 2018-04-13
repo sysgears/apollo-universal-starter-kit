@@ -1,11 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import PropTypes from 'prop-types';
+import UsersList from '../containers/UsersList';
+import UsersFilter from '../containers/UsersFilter';
 
-const Users = () => {
+const Users = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.element}>
-        <Text style={styles.box}>Hello Users!</Text>
+      <View style={styles.filterContainer}>
+        <UsersFilter />
+      </View>
+      <View style={styles.usersListContainer}>
+        <UsersList navigation={navigation} />
       </View>
     </View>
   );
@@ -15,17 +21,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
+    alignItems: 'stretch',
     justifyContent: 'center'
   },
-  element: {
-    paddingTop: 30
+  filterContainer: {
+    flex: 3,
+    borderWidth: 1,
+    borderColor: '#e3e3e3',
+    marginBottom: 15,
+    justifyContent: 'center'
   },
-  box: {
-    textAlign: 'center',
-    marginLeft: 15,
-    marginRight: 15
+  usersListContainer: {
+    flex: 8
   }
 });
+
+Users.propTypes = {
+  navigation: PropTypes.object
+};
 
 export default Users;

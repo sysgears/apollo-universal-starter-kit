@@ -54,7 +54,6 @@
     "expo": "^25.0.0",
     "filesize": "^3.5.11",
     "graphql": "^0.12.3",
-    "graphql-auth": "^0.2.0",
     "graphql-iso-date": "^3.3.0",
     "graphql-tag": "^2.6.0",
     "immutability-helper": "^2.6.2",

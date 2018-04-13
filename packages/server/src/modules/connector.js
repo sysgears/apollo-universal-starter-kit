@@ -38,7 +38,6 @@ class Feature {
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.beforeware = combine(arguments, arg => arg.beforeware);
     this.middleware = combine(arguments, arg => arg.middleware);
-    this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
   }
 
   get schemas(): DocumentNode[] {

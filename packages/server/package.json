@@ -62,7 +62,7 @@
     "express": "^4.16.2",
     "filesize": "^3.5.11",
     "graphql": "^0.12.3",
-    "graphql-auth": "0.2.1",
+    "graphql-auth": "0.2.2",
     "graphql-iso-date": "^3.3.0",
     "graphql-resolve-batch": "^1.0.2",
     "graphql-subscriptions": "^0.5.5",

@@ -29,7 +29,7 @@ const createApolloClient = ({ apiUrl, createFetch, schemaLink, links, connection
       });
 
   let apiLink = netLink;
-  if (typeof window !== 'undefined') {
+  if (apiUrl && (__TEST__ || typeof navigator !== 'undefined')) {
     let finalConnectionParams = {};
     if (connectionParams) {
       for (const connectionParam of connectionParams) {
@@ -39,10 +39,17 @@ const createApolloClient = ({ apiUrl, createFetch, schemaLink, links, connection
 
     const wsUri = apiUrl.replace(/^http/, 'ws');
 
-    const wsClient = new SubscriptionClient(wsUri, {
-      reconnect: true,
-      connectionParams: finalConnectionParams
-    });
+    const globalVar = typeof global !== 'undefined' ? global : typeof window !== 'undefined' ? window : {};
+    const webSocketImpl = globalVar.WebSocket || globalVar.MozWebSocket;
+
+    const wsClient = new SubscriptionClient(
+      wsUri,
+      {
+        reconnect: true,
+        connectionParams: finalConnectionParams
+      },
+      webSocketImpl
+    );
 
     wsClient.use([
       {
@@ -73,7 +80,7 @@ const createApolloClient = ({ apiUrl, createFetch, schemaLink, links, connection
 
   const linkState = withClientState({ ...clientResolvers, cache });
 
-  const allLinks = [...links, linkState, apiLink];
+  const allLinks = [...(links || []), linkState, apiLink];
 
   if (settings.app.logging.apolloLogging) {
     allLinks.unshift(new LoggingLink());

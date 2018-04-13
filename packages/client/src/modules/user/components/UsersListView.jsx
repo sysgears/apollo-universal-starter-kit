@@ -28,40 +28,46 @@ const UsersListView = ({ users, loading, navigation, deleteUser }) => {
                 Add user
               </Button>
             </View>
-            <List>
-              {users &&
-                users.map(({ username, email, isActive, role, id }, idx) => (
-                  <ListItem key={idx} onPress={() => navigation.navigate('UserEdit', { id })}>
-                    <Card>
-                      <CardItem>
-                        <View style={styles.itemsContainer}>
-                          <CardItem style={styles.cardItemWrapper}>
-                            <CardLabel>Username: </CardLabel>
-                            <CardText>{username}</CardText>
-                          </CardItem>
-                          <CardItem style={styles.cardItemWrapper}>
-                            <CardLabel>Email: </CardLabel>
-                            <CardText>{email}</CardText>
-                          </CardItem>
-                          <CardItem style={styles.cardItemWrapper}>
-                            <CardLabel>Role: </CardLabel>
-                            <CardText>{role}</CardText>
-                          </CardItem>
-                          <CardItem style={styles.cardItemWrapper}>
-                            <CardLabel>Is Active: </CardLabel>
-                            <CardText>{String(isActive)}</CardText>
-                          </CardItem>
-                        </View>
-                        <View style={styles.buttonContainer}>
-                          <TouchableOpacity style={styles.iconWrapper} onPress={() => deleteUser(id)}>
-                            <FontAwesome name="trash" size={25} style={{ color: '#de5251' }} />
-                          </TouchableOpacity>
-                        </View>
-                      </CardItem>
-                    </Card>
-                  </ListItem>
-                ))}
-            </List>
+            {(users &&
+              users.length && (
+                <List>
+                  {users.map(({ username, email, isActive, role, id }, idx) => (
+                    <ListItem key={idx} onPress={() => navigation.navigate('UserEdit', { id })}>
+                      <Card>
+                        <CardItem>
+                          <View style={styles.itemsContainer}>
+                            <CardItem style={styles.cardItemWrapper}>
+                              <CardLabel>Username: </CardLabel>
+                              <CardText>{username}</CardText>
+                            </CardItem>
+                            <CardItem style={styles.cardItemWrapper}>
+                              <CardLabel>Email: </CardLabel>
+                              <CardText>{email}</CardText>
+                            </CardItem>
+                            <CardItem style={styles.cardItemWrapper}>
+                              <CardLabel>Role: </CardLabel>
+                              <CardText>{role}</CardText>
+                            </CardItem>
+                            <CardItem style={styles.cardItemWrapper}>
+                              <CardLabel>Is Active: </CardLabel>
+                              <CardText>{String(isActive)}</CardText>
+                            </CardItem>
+                          </View>
+                          <View style={styles.buttonContainer}>
+                            <TouchableOpacity style={styles.iconWrapper} onPress={() => deleteUser(id)}>
+                              <FontAwesome name="trash" size={25} style={{ color: '#de5251' }} />
+                            </TouchableOpacity>
+                          </View>
+                        </CardItem>
+                      </Card>
+                    </ListItem>
+                  ))}
+                </List>
+              )) || (
+              <View style={styles.notificationContainer}>
+                <Text style={styles.notificationText}>Users not found</Text>
+              </View>
+            )}
           </View>
         )}
       </ScrollView>
@@ -98,6 +104,14 @@ const styles = StyleSheet.create({
   cardItemWrapper: {
     paddingTop: 3,
     paddingBottom: 3
+  },
+  notificationContainer: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  notificationText: {
+    fontSize: 24,
+    fontWeight: '600'
   }
 });
 

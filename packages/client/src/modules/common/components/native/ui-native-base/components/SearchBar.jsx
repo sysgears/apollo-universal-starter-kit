@@ -6,7 +6,7 @@ const SearchBar = ({ onChange, onChangeText, ...props }) => {
   return (
     <Item>
       <Icon name="ios-search" />
-      <Input placeholder="Search" onChangeText={onChangeText || onChange} {...props} />
+      <Input placeholderTextColor="#8e908c" placeholder="Search" onChangeText={onChangeText || onChange} {...props} />
     </Item>
   );
 };

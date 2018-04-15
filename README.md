@@ -360,11 +360,11 @@ aims to represent generally accepted guidelines and patterns for building scalab
 │   │       │                  # (components, containers, GraphQL queries, redux reducers)
 │   │       ├── styles         # Application-wide styles
 │   │       ├── testHelpers    # Test helper for front-end integration tests
-│   │       └── index.tsx      # Entry point to web front-end wtih hot code reload
+│   │       └── index.tsx      # Entry point to web front-end with hot code reload
 │   ├── common                 # Yarn package with Common code, redux store and logging
 │   ├── mobile                 # Mobile front-end Yarn package
 │   |   └── src
-│   │       └── index.ts       # Entry point to mobile front-end wtih live code reload
+│   │       └── index.ts       # Entry point to mobile front-end with live code reload
 │   └── server                 # Back-end Yarn package
 │   |   └── src
 │   │       ├── api            # GraphQL API implementation
@@ -377,7 +377,7 @@ aims to represent generally accepted guidelines and patterns for building scalab
 │   │       ├── sql            # Knex connector
 │   │       ├── testHelpers    # Test helper for back-end integration tests
 │   │       ├── server.js      # GraphQL api server set up
-│   │       └── index.ts       # Entry point to back-end wtih hot code reload
+│   │       └── index.ts       # Entry point to back-end with hot code reload
 └── tools                      # All build and cli related files
 ```
 

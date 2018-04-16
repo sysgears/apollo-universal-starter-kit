@@ -7,6 +7,10 @@ services:
         APP_DIR: ${APP_DIR}
     environment:
       - NODE_ENV=development
+      - DB_TYPE=pg
+      - DB_HOST=db
+      - DB_USER=postgres
+      - DB_PASSWORD=password
     container_name: apollo_universal_starter
     tty: true
     stdin_open: true
@@ -29,3 +33,13 @@ services:
       - 8080:8080
       - 19000:19000
       - 19001:19001
+
+  db:
+    image: postgres
+    container_name: apollo_universal_starter_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432

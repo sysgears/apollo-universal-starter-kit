@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheets } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Picker, List } from 'antd-mobile';
 
 const RenderSelect = ({ placeholder, onValueChange, selectedValue, value, onChange, ...props }) => {
@@ -25,7 +25,7 @@ RenderSelect.propTypes = {
   selectedValue: PropTypes.string
 };
 
-const styles = StyleSheets.create({
+const styles = StyleSheet.create({
   pickerLabel: {
     backgroundColor: 'transparent'
   }

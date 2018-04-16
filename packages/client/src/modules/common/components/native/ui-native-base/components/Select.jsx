@@ -15,6 +15,7 @@ const Select = ({
   value,
   onChange,
   style,
+  itemStyle,
   ...props
 }) => {
   return Platform.OS === 'ios' ? (
@@ -23,7 +24,9 @@ const Select = ({
         <FontAwesome name={iconName || 'filter'} size={iconSize || 20} style={{ color: `${iconColor || '#000'}` }} />
       )}
       <Picker style={style} onValueChange={onValueChange || onChange} selectedValue={selectedValue || value} {...props}>
-        {data.map((option, idx) => <Picker.Item key={idx} label={option.label} value={option.value} />)}
+        {data.map((option, idx) => (
+          <Picker.Item style={itemStyle} key={idx} label={option.label} value={option.value} />
+        ))}
       </Picker>
     </Item>
   ) : (
@@ -34,7 +37,9 @@ const Select = ({
         selectedValue={selectedValue || value}
         {...props}
       >
-        {data.map((option, idx) => <Picker.Item key={idx} label={option.label} value={option.value} />)}
+        {data.map((option, idx) => (
+          <Picker.Item style={itemStyle} key={idx} label={option.label} value={option.value} />
+        ))}
       </Picker>
     </Item>
   );
@@ -50,7 +55,8 @@ Select.propTypes = {
   iconName: PropTypes.string,
   iconColor: PropTypes.string,
   iconSize: PropTypes.number,
-  style: PropTypes.oneOfType([PropTypes.array, PropTypes.number])
+  style: PropTypes.oneOfType([PropTypes.array, PropTypes.number]),
+  itemStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
 };
 
 const styles = StyleSheet.create({

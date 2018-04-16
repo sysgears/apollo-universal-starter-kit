@@ -6,6 +6,7 @@ export { default as InputItem } from './InputItem';
 export { default as CheckBox } from './CheckBox';
 export { default as Select } from './Select';
 export { default as RenderSelect } from './RenderSelect';
+export { default as RenderSwitch } from './RenderSwitch';
 export { default as SwipeAction } from './SwipeAction';
 export { default as SearchBar } from './SearchBar';
 export { default as Switch } from './Switch';

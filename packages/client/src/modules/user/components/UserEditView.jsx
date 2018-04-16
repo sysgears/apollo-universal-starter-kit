@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { View, Text, StyleSheet } from 'react-native';
 import { pick } from 'lodash';
-import { PageLayout } from '../../common/components/web';
 
-import UserForm from './UserForm';
 import settings from '../../../../../../settings';
+import UserForm from './UserForm';
 
 export default class UserEditView extends React.PureComponent {
   static propTypes = {
@@ -45,39 +43,24 @@ export default class UserEditView extends React.PureComponent {
     }
   };
 
-  renderMetaData = () => (
-    <Helmet
-      title={`${settings.app.name} - Edit User`}
-      meta={[
-        {
-          name: 'description',
-          content: `${settings.app.name} - Edit user example page`
-        }
-      ]}
-    />
-  );
-
   render() {
     const { loading, user } = this.props;
 
     if (loading && !user) {
-      return (
-        <PageLayout>
-          {this.renderMetaData()}
-          <div className="text-center">Loading...</div>
-        </PageLayout>
-      );
+      return <Text>Loading...</Text>;
     } else {
       return (
-        <PageLayout>
-          {this.renderMetaData()}
-          <Link id="back-button" to="/users">
-            Back
-          </Link>
-          <h2>{user ? 'Edit' : 'Create'} User</h2>
+        <View style={styles.container}>
           <UserForm onSubmit={this.onSubmit} initialValues={user || {}} />
-        </PageLayout>
+        </View>
       );
     }
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  }
+});

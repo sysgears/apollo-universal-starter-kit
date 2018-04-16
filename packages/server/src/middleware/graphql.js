@@ -1,4 +1,5 @@
 import { graphqlExpress } from 'apollo-server-express';
+import { formatResponse } from 'apollo-logger';
 import 'isomorphic-fetch';
 
 import schema from '../api/schema';
@@ -15,6 +16,8 @@ export default async (req, res, next) => {
       context: { ...context, req, res },
       debug: false,
       formatError: error => log.error('GraphQL execution error:', error),
+      formatResponse: (response, options) =>
+        settings.app.logging.apolloLogging ? formatResponse(response, options) : response,
       tracing: !!settings.engine.engineConfig.apiKey,
       cacheControl: !!settings.engine.engineConfig.apiKey
     }))(req, res, next);

@@ -13,7 +13,7 @@
     "apollo-link-batch-http": "1.0.5",
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
-    "apollo-logger": "0.1.1",
+    "apollo-logger": "^0.2.0",
     "apollo-utilities": "^1.0.11",
     "graphql": "^0.12.3",
     "lodash": "^4.17.4",

@@ -64,12 +64,18 @@ const UserForm = ({ values, handleSubmit, setFieldValue }) => {
           name="serial"
           component={RenderField}
           placeholder="Serial"
-          secureTextEntry={true}
           value={auth && auth.certificate && auth.certificate.serial}
           onChange={value => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
         />
       )}
-      <Field name="password" component={RenderField} type="password" placeholder="Password" value={password} />
+      <Field
+        name="password"
+        secureTextEntry={true}
+        component={RenderField}
+        type="password"
+        placeholder="Password"
+        value={password}
+      />
       <Field
         name="passwordConfirmation"
         component={RenderField}

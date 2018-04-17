@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, Platform } from 'react-native';
+import { Text, Platform, View } from 'react-native';
 import { ActionSheet } from 'native-base';
 import SimplePicker from 'react-native-simple-picker';
 
@@ -28,7 +28,7 @@ export default class LanguagePicker extends React.Component {
     return (
       i18n.language &&
       langs.length > 1 && (
-        <Fragment>
+        <View style={{ flex: 1 }}>
           <HeaderTitle
             onPress={() =>
               Platform.OS === 'ios'
@@ -44,7 +44,7 @@ export default class LanguagePicker extends React.Component {
           >
             {i18n.t('i18n:pickerMenu')}
           </HeaderTitle>
-          <Text style={{ position: 'absolute', right: 16, color: 'rgba(0, 0, 0, .5)' }}>
+          <Text style={{ position: 'absolute', right: 16, top: 16, color: 'rgba(0, 0, 0, .5)' }}>
             {this.state.currentLang.toUpperCase()}
           </Text>
           {Platform.OS === 'ios' && (
@@ -55,7 +55,7 @@ export default class LanguagePicker extends React.Component {
               buttonStyle={{ fontWidth: '700', color: '#0275d8', fontSize: 20 }}
             />
           )}
-        </Fragment>
+        </View>
       )
     );
   }

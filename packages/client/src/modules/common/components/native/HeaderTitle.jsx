@@ -17,7 +17,7 @@ HeaderTitle.propTypes = {
 
 const styles = StyleSheet.create({
   menuTitle: {
-    margin: 16,
+    padding: 16,
     fontWeight: 'bold'
   },
   subTitle: {

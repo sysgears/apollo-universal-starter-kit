@@ -21,7 +21,7 @@ const DrawerComponent = props => {
           {...props}
           onItemPress={({ focused, route }) => {
             if (!skippedItems.includes(route.routeName)) {
-              props.onItemPress({ route, focused });
+              props.onItemPress({ focused, route });
             }
           }}
         />

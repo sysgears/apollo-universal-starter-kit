@@ -18,16 +18,17 @@ export default class LanguagePicker extends React.Component {
   }
 
   render() {
-    const { i18n: { store: { data }, language, languages, changeLanguage } } = this.props;
+    const { i18n } = this.props;
+    const languages = Object.keys(i18n.store.data);
     return (
       <section className="lang-section">
-        {language &&
-          Object.keys(data).length > 1 && (
+        {i18n.language &&
+          languages.length > 1 && (
             <Dropdown size="sm" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-              <DropdownToggle caret>{languages[1].toUpperCase()}</DropdownToggle>
+              <DropdownToggle caret>{i18n.language.toUpperCase()}</DropdownToggle>
               <DropdownMenu>
-                {Object.keys(data).map(lang => (
-                  <DropdownItem key={lang} onClick={() => changeLanguage(lang)}>
+                {languages.map(lang => (
+                  <DropdownItem key={lang} onClick={() => i18n.changeLanguage(lang)}>
                     {lang.toUpperCase()}
                   </DropdownItem>
                 ))}

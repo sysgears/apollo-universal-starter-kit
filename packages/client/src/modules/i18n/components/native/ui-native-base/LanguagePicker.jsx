@@ -52,7 +52,7 @@ export default class LanguagePicker extends React.Component {
               ref={el => (this.pickerRef = el)}
               options={langs}
               onSubmit={lang => this.changeLang(lang)}
-              buttonStyle={{ fontWidth: '700', color: '#0275d8', fontSize: 20 }}
+              buttonStyle={{ fontWeight: '700', color: '#0275d8', fontSize: 20 }}
             />
           )}
         </View>

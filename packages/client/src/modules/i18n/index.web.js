@@ -24,7 +24,7 @@ i18n
 
 export default new Feature({
   navItemRight: (
-    <MenuItem key="languagePicker">
+    <MenuItem key="languagePicker" style={{ display: 'flex', alignItems: 'center' }}>
       <LanguagePicker i18n={i18n} />
     </MenuItem>
   ),

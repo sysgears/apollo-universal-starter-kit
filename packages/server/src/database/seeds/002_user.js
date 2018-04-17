@@ -17,7 +17,7 @@ export async function seed(knex, Promise) {
   await knex('user')
     .returning('id')
     .insert({
-      username: 'user',
+      username: 'user1',
       email: 'user@example.com',
       password_hash: await bcrypt.hash('user', 12),
       role: 'user',

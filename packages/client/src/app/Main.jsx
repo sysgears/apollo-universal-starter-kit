@@ -1,17 +1,8 @@
 import React from 'react';
-import { getOperationAST } from 'graphql';
-import { BatchHttpLink } from 'apollo-link-batch-http';
-import { ApolloLink } from 'apollo-link';
-import { createApolloFetch, constructDefaultOptions } from 'apollo-fetch';
-import { withClientState } from 'apollo-link-state';
-import { WebSocketLink } from 'apollo-link-ws';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { LoggingLink } from 'apollo-logger';
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
 import ReactGA from 'react-ga';
 
 import RedBox from './RedBox';
@@ -25,83 +16,19 @@ import { apiUrl } from '../net';
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
-const cache = new InMemoryCache();
-
 for (const localization of modules.localizations) {
   for (const lang of Object.keys(localization.resources)) {
     modules.i18n.addResourceBundle(lang, localization.ns, localization.resources[lang]);
   }
 }
 
-let connectionParams = {};
-for (const connectionParam of modules.connectionParams) {
-  Object.assign(connectionParams, connectionParam());
-}
-
-const wsUri = apiUrl.replace(/^http/, 'ws');
-
-const wsClient = new SubscriptionClient(wsUri, {
-  reconnect: true,
-  connectionParams: connectionParams
-});
-
-wsClient.use([
-  {
-    applyMiddleware(operationOptions, next) {
-      let params = {};
-      for (const param of modules.connectionParams) {
-        Object.assign(params, param());
-      }
-
-      Object.assign(operationOptions, params);
-      next();
-    }
-  }
-]);
-
-wsClient.onDisconnected(() => {
-  //console.log('onDisconnected');
-});
-
-wsClient.onReconnected(() => {
-  //console.log('onReconnected');
-});
-
-const netLink = ApolloLink.split(
-  operation => {
-    const operationAST = getOperationAST(operation.query, operation.operationName);
-    return !!operationAST && operationAST.operation === 'subscription';
-  },
-  new WebSocketLink(wsClient),
-  new BatchHttpLink({
-    fetch:
-      modules.createFetch(apiUrl) ||
-      createApolloFetch({
-        uri: apiUrl,
-        constructOptions: (reqs, options) => ({
-          ...constructDefaultOptions(reqs, options),
-          credentials: 'include'
-        })
-      })
-  })
-);
-
-const linkState = withClientState({ ...modules.resolvers, cache });
-
-const links = [...modules.link, linkState, netLink];
-
-if (settings.app.logging.apolloLogging) {
-  links.unshift(new LoggingLink());
-}
-
 const client = createApolloClient({
-  link: ApolloLink.from(links),
-  cache
+  apiUrl,
+  createFetch: modules.createFetch,
+  links: modules.link,
+  connectionParams: modules.connectionParams,
+  clientResolvers: modules.resolvers
 });
-
-if (window.__APOLLO_STATE__) {
-  cache.restore(window.__APOLLO_STATE__);
-}
 
 const history = createHistory();
 

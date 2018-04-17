@@ -15,7 +15,10 @@ export default async (req, res, next) => {
       schema,
       context: { ...context, req, res },
       debug: false,
-      formatError: error => log.error('GraphQL execution error:', error),
+      formatError: error => {
+        log.error('GraphQL execution error:', error);
+        return error;
+      },
       formatResponse: (response, options) =>
         settings.app.logging.apolloLogging ? formatResponse(response, options) : response,
       tracing: !!settings.engine.engineConfig.apiKey,

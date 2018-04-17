@@ -81,7 +81,7 @@ class UserEditView extends React.PureComponent {
             Back
           </Link>
           <h2>
-            {user ? t('userEdit.form.titleEdit') : t('userEdit.form.titleCreate')} {t('userEdit.form.title')}
+            {t(`userEdit.form.${user ? 'titleEdit' : 'titleCreate'}`)} {t('userEdit.form.title')}
           </h2>
           <UserForm onSubmit={this.onSubmit} initialValues={user || {}} />
         </PageLayout>

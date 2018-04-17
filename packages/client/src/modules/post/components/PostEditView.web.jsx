@@ -51,7 +51,7 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
           {t('post.btn.back')}
         </Link>
         <h2>
-          {post ? t('post.label.edit') : t('post.label.create')} {t('post.label.post')}
+          {t(`post.label.${post ? 'edit' : 'create'}`)} {t('post.label.post')}
         </h2>
         <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
         <br />

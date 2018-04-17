@@ -14,10 +14,7 @@ const commentFormSchema = {
 const validate = values => validateForm(values, commentFormSchema);
 
 const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
-  let operation = t('comment.label.add');
-  if (comment.id !== null) {
-    operation = t('comment.label.edit');
-  }
+  const operation = t(`comment.label.${comment.id ? 'edit' : 'add'}`);
 
   return (
     <FormView>

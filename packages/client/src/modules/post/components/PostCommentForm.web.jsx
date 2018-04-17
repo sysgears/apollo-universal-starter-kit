@@ -19,7 +19,7 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
       <Row>
         <Col xs={2}>
           <Label>
-            {comment.id === null ? t('comment.label.add') : t('comment.label.edit')} {t('comment.label.comment')}
+            {t(`comment.label.${comment.id ? 'edit' : 'add'}`)} {t('comment.label.comment')}
           </Label>
         </Col>
         <Col xs={8}>

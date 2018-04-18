@@ -19,7 +19,7 @@ export default pubsub => ({
     },
     async subscriptionCardInfo(obj, args, context) {
       const { user } = context;
-      return context.Subscription.getCardInfo(user.id);
+      return !user ? undefined : context.Subscription.getCardInfo(user.id);
     }
   },
   Mutation: {

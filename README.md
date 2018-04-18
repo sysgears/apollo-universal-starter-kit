@@ -55,7 +55,8 @@ yarn
 yarn seed
 ```
 
-4. Run starter kit in development mode.
+4. Run starter kit in development mode. 
+For running Android or iOS you need to set in .spinrc.js builders.ios.enabled and/or builders.android.enabled field true. See *Getting Started with React Native* section.
 
 ```
 yarn watch
@@ -190,15 +191,16 @@ If you don't need some of these platforms you can turn off building their code i
 
 | Option                         | Description                                                                   |
 | ------------------------------ | ----------------------------------------------------------------------------- |
-| buildDir                | output directory for build files                                            |
-| dllBuildDir                    | output directory for Webpack DLL files used to speed up incremental builds    |
-| webpackDevPort                 | the local port used for Webpack Dev Server process to host web frontend files |
-| \_\_BACKEND_URL__                     | URL to GraphQL backend endpoint                                               |
-| ssr                            | Use server side rendering in backend                                          |
-| webpackDll                     | Utilize Webpack DLLs to speed up incremental builds                           |
-| frontendRefreshOnBackendChange | Trigger web frontend refresh when backend code changes                        |
-| reactHotLoader                 | Utilize React Hot Loader v3                                                   |
-| persistGraphQL                 | Generate and use persistent GraphQL queries                                   |
+| buildDir                       | output directory for build files                                                |
+| dllBuildDir                    | output directory for Webpack DLL files used to speed up incremental builds |
+| webpackDevPort                 | the local port used for Webpack Dev Server process to host web frontend files  |
+| \_\_API_URL__                  | URL to GraphQL backend endpoint                                                 |
+| \_\_WEBSITE_URL__              | URL to website                                                                  |
+| ssr                            | Use server side rendering in backend                                            |
+| webpackDll                     | Utilize Webpack DLLs to speed up incremental builds                             |
+| frontendRefreshOnBackendChange | Trigger web frontend refresh when backend code changes                     |
+| reactHotLoader                 | Utilize React Hot Loader v3                                                     |
+| persistGraphQL                 | Generate and use persistent GraphQL queries                                     |
 
 There are also application config options available in `config/app.js` to aid with debugging GraphQL and SQL:
 
@@ -358,11 +360,11 @@ aims to represent generally accepted guidelines and patterns for building scalab
 │   │       │                  # (components, containers, GraphQL queries, redux reducers)
 │   │       ├── styles         # Application-wide styles
 │   │       ├── testHelpers    # Test helper for front-end integration tests
-│   │       └── index.tsx      # Entry point to web front-end wtih hot code reload
+│   │       └── index.tsx      # Entry point to web front-end with hot code reload
 │   ├── common                 # Yarn package with Common code, redux store and logging
 │   ├── mobile                 # Mobile front-end Yarn package
 │   |   └── src
-│   │       └── index.ts       # Entry point to mobile front-end wtih live code reload
+│   │       └── index.ts       # Entry point to mobile front-end with live code reload
 │   └── server                 # Back-end Yarn package
 │   |   └── src
 │   │       ├── api            # GraphQL API implementation
@@ -375,7 +377,7 @@ aims to represent generally accepted guidelines and patterns for building scalab
 │   │       ├── sql            # Knex connector
 │   │       ├── testHelpers    # Test helper for back-end integration tests
 │   │       ├── server.js      # GraphQL api server set up
-│   │       └── index.ts       # Entry point to back-end wtih hot code reload
+│   │       └── index.ts       # Entry point to back-end with hot code reload
 └── tools                      # All build and cli related files
 ```
 

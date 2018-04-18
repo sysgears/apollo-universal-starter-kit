@@ -1,5 +1,5 @@
 #import "./UsersState.client.graphql"
 
-mutation updateFilter($filter: OrderByUserInput!) {
+mutation updateFilter($filter: FilterUserInput!) {
     updateFilter(filter: $filter) @client
 }

@@ -1,12 +1,18 @@
-export default (SECRET, User, jwt) => async (req, res) => {
+import jwt from 'jsonwebtoken';
+import UserDAO from './sql';
+import settings from '../../../../../settings';
+
+const User = new UserDAO();
+
+export default async (req, res) => {
   try {
     const token = Buffer.from(req.params.token, 'base64').toString();
-    const { user: { id } } = jwt.verify(token, SECRET);
+    const { user: { id } } = jwt.verify(token, settings.user.secret);
 
     await User.updateActive(id, true);
-  } catch (e) {
-    return res.send('error');
-  }
 
-  return res.redirect('/login');
+    res.redirect('/login');
+  } catch (e) {
+    res.send('error');
+  }
 };

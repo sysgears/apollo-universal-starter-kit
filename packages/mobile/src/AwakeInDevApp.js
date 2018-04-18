@@ -36,7 +36,7 @@ class AwakeInDevApp extends React.Component {
           marginTop: Constants.statusBarHeight
         }
       },
-      React.createElement(App, { expUri: this.props.exp ? this.props.exp.initialUri : null }),
+      React.createElement(App, this.props),
       React.createElement(process.env.NODE_ENV === 'development' ? Expo.KeepAwake : View)
     );
   }

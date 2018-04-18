@@ -15,8 +15,8 @@ export default new Feature({
   route: settings.subscription.enabled
     ? [
         <Route exact path="/subscription" component={Subscription} />,
-        <SubscriberRoute exact scope="user" path="/subscribers-only" component={SubscribersOnly} />,
-        <SubscriberRoute exact scope="user" path="/update-card" component={UpdateCard} />
+        <SubscriberRoute exact role="user" path="/subscribers-only" component={SubscribersOnly} />,
+        <SubscriberRoute exact role="user" path="/update-card" component={UpdateCard} />
       ]
     : [],
   navItem: settings.subscription.enabled
@@ -29,5 +29,6 @@ export default new Feature({
       ]
     : [],
   reducer: { subscription: reducers },
-  scriptsInsert: 'https://js.stripe.com/v3/'
+  scriptsInsert:
+    settings.subscription.enabled && settings.subscription.stripePrivateKey ? 'https://js.stripe.com/v3/' : undefined
 });

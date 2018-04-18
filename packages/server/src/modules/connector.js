@@ -1,7 +1,8 @@
 // @flow
 /* eslint-disable no-unused-vars */
+import React from 'react';
 import type { DocumentNode } from 'graphql';
-import type { Middleware, $Request } from 'express';
+import type { Middleware, $Request, $Response } from 'express';
 
 import { merge, map, union, without, castArray } from 'lodash';
 
@@ -18,7 +19,6 @@ type FeatureParams = {
   createContextFunc?: Function | Function[],
   beforeware?: Middleware | Middleware[],
   middleware?: Middleware | Middleware[],
-  createFetchOptions?: Function | Function[],
   catalogInfo: any | any[]
 };
 
@@ -26,12 +26,10 @@ class Feature {
   schema: DocumentNode[];
   createResolversFunc: Function[];
   createContextFunc: Function[];
-  createFetchOptions: Function[];
   beforeware: Function[];
   middleware: Function[];
 
   constructor(feature?: FeatureParams, ...features: Feature[]) {
-    // console.log(feature.schema[0] instanceof DocumentNode);
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
@@ -40,18 +38,18 @@ class Feature {
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.beforeware = combine(arguments, arg => arg.beforeware);
     this.middleware = combine(arguments, arg => arg.middleware);
-    this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
   }
 
   get schemas(): DocumentNode[] {
     return this.schema;
   }
 
-  async createContext(req: $Request, connectionParams: any, webSocket: any) {
-    const results = await Promise.all(
-      this.createContextFunc.map(createContext => createContext(req, connectionParams, webSocket))
-    );
-    return merge({}, ...results);
+  async createContext(req: $Request, res: $Response, connectionParams: any, webSocket: any) {
+    let context = {};
+    for (const createContextFunc of this.createContextFunc) {
+      context = merge(context, await createContextFunc({ req, res, connectionParams, webSocket, context }));
+    }
+    return context;
   }
 
   createResolvers(pubsub: any) {
@@ -64,22 +62,6 @@ class Feature {
 
   get middlewares(): Middleware[] {
     return this.middleware;
-  }
-
-  get constructFetchOptions(): any {
-    return this.createFetchOptions.length
-      ? (...args) => {
-          try {
-            let result = {};
-            for (let func of this.createFetchOptions) {
-              result = { ...result, ...func(...args) };
-            }
-            return result;
-          } catch (e) {
-            log.error(e.stack);
-          }
-        }
-      : null;
   }
 }
 

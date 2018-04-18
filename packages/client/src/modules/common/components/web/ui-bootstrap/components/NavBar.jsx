@@ -15,9 +15,9 @@ const NavBar = () => (
         {modules.navItems}
       </Nav>
 
-      <Nav className="ustify-content-end">
+      <Nav className="justify-content-end">
         {modules.navItemsRight}
-        {(!__PERSIST_GQL__ || __DEV__) && (
+        {__DEV__ && (
           <NavItem>
             <a href="/graphiql" className="nav-link">
               GraphiQL

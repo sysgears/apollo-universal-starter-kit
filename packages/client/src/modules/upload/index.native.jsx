@@ -1,11 +1,10 @@
-// Ionicons
 import { Ionicons } from '@expo/vector-icons';
+import { createApolloFetch } from 'apollo-fetch';
+import { constructUploadOptions } from 'apollo-fetch-upload';
 
-// Component and helpers
 import { createTabBarIconWrapper } from '../common/components/native';
 import Upload from './containers/Upload';
 import reducers from './reducers';
-
 import Feature from '../connector';
 
 export default new Feature({
@@ -21,5 +20,13 @@ export default new Feature({
       }
     }
   },
-  reducer: { upload: reducers }
+  reducer: { upload: reducers },
+  createFetch: uri =>
+    createApolloFetch({
+      uri,
+      constructOptions: (reqs, options) => ({
+        ...constructUploadOptions(reqs, options),
+        credentials: 'include'
+      })
+    })
 });

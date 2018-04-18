@@ -22,7 +22,6 @@ export default class {
       navItem,
       navItemRight,
       localization,
-      internationalization,
       rootComponentFactory,
       dataRootComponent,
       stylesInsert,
@@ -31,9 +30,8 @@ export default class {
     },
     ...features
   ) {
-    // i18n
+    // Localization
     this.localization = combine(arguments, arg => arg.localization);
-    this.internationalization = combine(arguments, arg => arg.internationalization);
 
     // Connectivity
     this.link = combine(arguments, arg => arg.link);
@@ -94,10 +92,6 @@ export default class {
 
   get localizations() {
     return this.localization;
-  }
-
-  get i18n() {
-    return merge(...this.internationalization);
   }
 
   get reducers() {

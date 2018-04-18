@@ -16,12 +16,6 @@ import { apiUrl } from '../net';
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
-for (const localization of modules.localizations) {
-  for (const lang of Object.keys(localization.resources)) {
-    modules.i18n.addResourceBundle(lang, localization.ns, localization.resources[lang]);
-  }
-}
-
 const client = createApolloClient({
   apiUrl,
   createFetch: modules.createFetch,

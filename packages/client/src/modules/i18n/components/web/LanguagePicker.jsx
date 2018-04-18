@@ -25,7 +25,7 @@ export default class LanguagePicker extends React.Component {
         {i18n.language &&
           languages.length > 1 && (
             <Dropdown size="sm" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-              <DropdownToggle caret>{i18n.language.toUpperCase()}</DropdownToggle>
+              <DropdownToggle caret>{i18n.language.slice(0, 2).toUpperCase()}</DropdownToggle>
               <DropdownMenu>
                 {languages.map(lang => (
                   <DropdownItem key={lang} onClick={() => i18n.changeLanguage(lang)}>

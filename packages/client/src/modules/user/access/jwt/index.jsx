@@ -19,7 +19,7 @@ const setJWTContext = async operation => {
       : {};
   operation.setContext(context => ({
     ...context,
-    ...headers
+    headers: { ...headers }
   }));
 };
 

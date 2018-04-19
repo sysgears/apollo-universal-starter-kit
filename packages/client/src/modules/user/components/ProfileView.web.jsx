@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { Link } from 'react-router-dom';
 import { LayoutCenter } from '../../common/components';
 import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
 import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
@@ -55,6 +56,9 @@ const ProfileView = ({ currentUserLoading, currentUser }) => {
               )}
             {settings.subscription.enabled && <SubscriptionProfile />}
           </Card>
+          <Link className="mt-2 btn user-link" to={`/users/${currentUser.id}`}>
+            Edit Profile
+          </Link>
         </LayoutCenter>
       </PageLayout>
     );

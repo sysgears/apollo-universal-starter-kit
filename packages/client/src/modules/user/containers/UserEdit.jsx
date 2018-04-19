@@ -68,8 +68,9 @@ export default compose(
           }
 
           if (history) {
-            return history.push('/users');
+            return input.role === 'admin' ? history.push('/users') : history.push('/profile');
           }
+
           if (navigation) {
             return navigation.goBack();
           }

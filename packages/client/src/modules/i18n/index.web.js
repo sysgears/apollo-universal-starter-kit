@@ -9,23 +9,14 @@ import LanguagePicker from './components/web/LanguagePicker';
 import { MenuItem } from '../../modules/common/components/web';
 import modules from '../';
 
-class I18nProvider extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
-    for (const localization of modules.localizations) {
-      for (const lang of Object.keys(localization.resources)) {
-        this.props.i18n.addResourceBundle(lang, localization.ns, localization.resources[lang]);
-      }
+const I18nProvider = ({ i18n, children }) => {
+  for (const localization of modules.localizations) {
+    for (const lang of Object.keys(localization.resources)) {
+      i18n.addResourceBundle(lang, localization.ns, localization.resources[lang]);
     }
   }
-
-  render() {
-    return <I18nextProvider i18n={this.props.i18n}>{this.props.children}</I18nextProvider>;
-  }
-}
+  return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
+};
 
 I18nProvider.propTypes = {
   i18n: PropTypes.object,
@@ -43,7 +34,7 @@ i18n
       escapeValue: false // not needed for react!!
     },
     react: {
-      wait: true
+      wait: __CLIENT__
     }
   });
 
@@ -53,7 +44,6 @@ export default new Feature({
       <LanguagePicker i18n={i18n} />
     </MenuItem>
   ),
-  // internationalization: i18n,
   // eslint-disable-next-line react/display-name
   rootComponentFactory: () => <I18nProvider i18n={i18n} />
 });

@@ -8,7 +8,7 @@
 .*node_modules/haul/.*
 .*node_modules/metro-bundler/.*
 .*node_modules/persistgraphql/.*
-.*node_modules/react-aoollo/.*
+.*node_modules/react-apollo/.*
 .*node_modules/react-native-tab-view/.*
 .*node_modules/react-navigation/.*
 .*node_modules/react-native/.*

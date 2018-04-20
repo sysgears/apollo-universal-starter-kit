@@ -6,6 +6,7 @@ import { Form, FormItem, Select, Option, Label, Input } from '../../common/compo
 export default class UsersFilterView extends React.PureComponent {
   static propTypes = {
     searchText: PropTypes.string,
+    filter: PropTypes.object,
     role: PropTypes.string,
     isActive: PropTypes.bool,
     onSearchTextChange: PropTypes.func.isRequired,
@@ -24,12 +25,12 @@ export default class UsersFilterView extends React.PureComponent {
   };
 
   handleIsActive = () => {
-    const { onIsActiveChange, isActive } = this.props;
+    const { onIsActiveChange, filter: { isActive } } = this.props;
     onIsActiveChange(!isActive);
   };
 
   render() {
-    const { role, isActive } = this.props;
+    const { role, isActive } = this.props.filter;
     return (
       <Form layout="inline">
         <FormItem label="Filter">

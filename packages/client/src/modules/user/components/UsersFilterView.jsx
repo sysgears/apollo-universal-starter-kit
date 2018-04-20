@@ -43,7 +43,8 @@ export default class UsersFilterView extends React.PureComponent {
     onRoleChange: PropTypes.func.isRequired,
     onIsActiveChange: PropTypes.func.isRequired,
     orderBy: PropTypes.object,
-    onOrderBy: PropTypes.func.isRequired
+    onOrderBy: PropTypes.func.isRequired,
+    filter: PropTypes.object
   };
 
   constructor(props) {
@@ -143,12 +144,12 @@ export default class UsersFilterView extends React.PureComponent {
   };
 
   handleIsActive = () => {
-    const { onIsActiveChange, isActive } = this.props;
+    const { onIsActiveChange, filter: { isActive } } = this.props;
     onIsActiveChange(!isActive);
   };
 
   render() {
-    const { role, isActive } = this.props;
+    const { role, isActive } = this.props.filter;
     return (
       <View style={styles.container}>
         <View style={styles.inputContainer}>

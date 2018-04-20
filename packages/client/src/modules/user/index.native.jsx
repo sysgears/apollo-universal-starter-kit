@@ -12,7 +12,7 @@ import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import Logout from './containers/Logout';
 import Register from './containers/Register';
-import Users from './components/Users';
+import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import modules from '..';
 import Feature from '../connector';

@@ -6,7 +6,7 @@ import auth from './auth';
 import resolvers from './resolvers';
 import ProfileView from './components/ProfileView';
 import { MenuItem } from '../../modules/common/components/web';
-import Users from './components/Users';
+import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import Register from './containers/Register';
 import Login from './containers/Login';

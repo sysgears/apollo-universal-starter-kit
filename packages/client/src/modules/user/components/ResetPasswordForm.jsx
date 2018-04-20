@@ -8,8 +8,8 @@ import { RenderField } from '../../common/components/native';
 import { required, minLength, validateForm, match } from '../../../../../common/validation';
 
 const resetPasswordFormSchema = {
-  password: [required, minLength(5)],
-  passwordConfirmation: [match('password'), required, minLength(5)]
+  password: [required, minLength(8)],
+  passwordConfirmation: [match('password'), required, minLength(8)]
 };
 
 const validate = values => validateForm(values, resetPasswordFormSchema);

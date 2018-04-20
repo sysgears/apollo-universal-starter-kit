@@ -12,7 +12,7 @@ import settings from '../../../../../../settings';
 
 const loginFormSchema = {
   email: [required, email],
-  password: [required, minLength(4)]
+  password: [required, minLength(8)]
 };
 
 const validate = values => validateForm(values, loginFormSchema);

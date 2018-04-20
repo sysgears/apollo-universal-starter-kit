@@ -8,8 +8,8 @@ import { match, email, minLength, required, validateForm } from '../../../../../
 const registerFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
-  password: [required, minLength(4)],
-  passwordConfirmation: [match('password'), required, minLength(4)]
+  password: [required, minLength(8)],
+  passwordConfirmation: [match('password'), required, minLength(8)]
 };
 
 const validate = values => validateForm(values, registerFormSchema);

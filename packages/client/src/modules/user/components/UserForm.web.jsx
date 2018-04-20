@@ -10,8 +10,8 @@ import settings from '../../../../../../settings';
 const userFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
-  password: [required, minLength(4)],
-  passwordConfirmation: [match('password'), required, minLength(4)]
+  password: [required, minLength(8)],
+  passwordConfirmation: [match('password'), required, minLength(8)]
 };
 
 const validate = values => validateForm(values, userFormSchema);

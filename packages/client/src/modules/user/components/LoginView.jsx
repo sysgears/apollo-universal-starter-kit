@@ -24,8 +24,8 @@ class LoginView extends React.PureComponent {
   renderAvailableLogins = () => (
     <View style={styles.examplesArea}>
       <Text style={styles.title}>Available logins:</Text>
-      <Text style={styles.exampleText}>admin@example.com: admin</Text>
-      <Text style={styles.exampleText}>user@example.com: user</Text>
+      <Text style={styles.exampleText}>admin@example.com: admin123</Text>
+      <Text style={styles.exampleText}>user@example.com: user1234</Text>
       {settings.subscription.enabled && <Text style={styles.exampleText}>subscriber@example.com: subscriber</Text>}
     </View>
   );

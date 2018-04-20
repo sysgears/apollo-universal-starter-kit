@@ -11,8 +11,8 @@ import settings from '../../../../../../settings';
 const userFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
-  password: [required, minLength(5)],
-  passwordConfirmation: [match('password'), required, minLength(5)]
+  password: [required, minLength(8)],
+  passwordConfirmation: [match('password'), required, minLength(8)]
 };
 
 const handleRoleChange = (type, value, setFieldValue) => {

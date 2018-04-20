@@ -31,12 +31,6 @@ export default class Main extends React.Component {
         ? `${protocol}//${url.parse(this.props.exp.manifest.bundleUrl).hostname}:${port}${pathname}`
         : __API_URL__;
 
-    for (const localization of modules.localizations) {
-      for (const lang of Object.keys(localization.resources)) {
-        modules.i18n.addResourceBundle(lang, localization.ns, localization.resources[lang]);
-      }
-    }
-
     log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
     const client = createApolloClient({
       apiUrl,

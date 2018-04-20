@@ -16,7 +16,6 @@ export default class {
       createFetch,
       route,
       drawerItem,
-      internationalization,
       localization,
       reducer,
       resolver,
@@ -36,7 +35,6 @@ export default class {
         .slice(-1)
         .pop() || defaultCreateFetch;
     this.drawerItem = combine(arguments, arg => arg.drawerItem);
-    this.internationalization = combine(arguments, arg => arg.internationalization);
     this.localization = combine(arguments, arg => arg.localization);
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
@@ -49,10 +47,6 @@ export default class {
 
   get drawerItems() {
     return merge(...this.drawerItem);
-  }
-
-  get i18n() {
-    return merge(...this.internationalization);
   }
 
   get localizations() {

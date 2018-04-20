@@ -54,7 +54,7 @@ export default class LoginView extends React.PureComponent {
             <CardGroup>
               <CardTitle>Available logins:</CardTitle>
               <CardText>admin@example.com:admin</CardText>
-              <CardText>user@example.com:user</CardText>
+              <CardText>user@example.com:user1</CardText>
               {settings.subscription.enabled && <CardText>subscriber@example.com:subscriber</CardText>}
             </CardGroup>
           </Card>

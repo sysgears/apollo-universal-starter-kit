@@ -13,12 +13,13 @@ import CURRENT_USER_QUERY from '../../graphql/CurrentUserQuery.graphql';
 
 const setJWTContext = async operation => {
   const accessToken = await getItem('accessToken');
+  const headers =
+    ['login', 'refreshTokens'].indexOf(operation.operationName) < 0 && accessToken
+      ? { Authorization: `Bearer ${accessToken}` }
+      : {};
   operation.setContext(context => ({
     ...context,
-    headers: {
-      Authorization:
-        ['login', 'refreshTokens'].indexOf(operation.operationName) < 0 && accessToken ? `Bearer ${accessToken}` : null
-    }
+    headers
   }));
 };
 

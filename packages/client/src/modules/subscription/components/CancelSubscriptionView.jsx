@@ -50,7 +50,7 @@ export default class CancelSubscriptionView extends React.Component {
             </Button>
           )}
           {!active && (
-            <View>
+            <View style={styles.subscriptionText}>
               <CardText>You do not have a subscription.</CardText>
             </View>
           )}
@@ -100,6 +100,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginTop: 10
   },
+  subscriptionText: { 
+    paddingLeft: 5
+   },
   buttonWrapper: {
     paddingHorizontal: 10
   }

@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, Linking, Button, TouchableOpacity, Text, Platform } from 'react-native';
-import { SecureStore, WebBrowser } from 'expo';
+import { WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
+
+import { setItem } from '../../../../common/clientStorage';
 import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
 import { withUser } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
@@ -55,8 +57,8 @@ class GoogleComponent extends React.Component {
     const decodedData = JSON.parse(decodeURI(data));
     const { client, refetchCurrentUser } = this.props;
     if (decodedData.tokens) {
-      await SecureStore.setItemAsync('accessToken', decodedData.tokens.accessToken);
-      await SecureStore.setItemAsync('refreshToken', decodedData.tokens.refreshToken);
+      await setItem('accessToken', decodedData.tokens.accessToken);
+      await setItem('refreshToken', decodedData.tokens.refreshToken);
     }
     const result = await refetchCurrentUser();
     if (result.data && result.data.currentUser) {

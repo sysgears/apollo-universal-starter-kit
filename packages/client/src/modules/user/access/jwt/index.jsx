@@ -4,7 +4,7 @@ import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import { LayoutCenter } from '../../../common/components';
-import { getItem, setItem, removeItem } from './tokenStorage';
+import { getItem, setItem, removeItem } from '../../../common/clientStorage';
 import Feature from '../connector';
 import settings from '../../../../../../../settings';
 

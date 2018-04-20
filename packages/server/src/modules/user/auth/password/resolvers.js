@@ -138,8 +138,8 @@ export default () => ({
           e.setError('password', 'Passwords do not match.');
         }
 
-        if (reset.password.length < 5) {
-          e.setError('password', `Password must be 5 characters or more.`);
+        if (reset.password.length < 8) {
+          e.setError('password', `Password must be 8 characters or more.`);
         }
         e.throwIf();
 

@@ -70,8 +70,8 @@ export default pubsub => ({
             e.setError('email', 'E-mail already exists.');
           }
 
-          if (input.password.length < 5) {
-            e.setError('password', `Password must be 5 characters or more.`);
+          if (input.password.length < 8) {
+            e.setError('password', `Password must be 8 characters or more.`);
           }
 
           e.throwIf();
@@ -127,8 +127,8 @@ export default pubsub => ({
             e.setError('email', 'E-mail already exists.');
           }
 
-          if (input.password && input.password.length < 5) {
-            e.setError('password', `Password must be 5 characters or more.`);
+          if (input.password && input.password.length < 8) {
+            e.setError('password', `Password must be 8 characters or more.`);
           }
 
           e.throwIf();

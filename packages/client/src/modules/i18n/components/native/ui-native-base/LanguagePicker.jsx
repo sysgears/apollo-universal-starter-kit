@@ -11,7 +11,7 @@ export default class LanguagePicker extends React.Component {
     super(props);
     this.changeLang = this.changeLang.bind(this);
     this.state = {
-      currentLang: this.props.i18n.language.slice(0, 2)
+      currentLang: this.props.i18n.language
     };
   }
 
@@ -35,7 +35,7 @@ export default class LanguagePicker extends React.Component {
                 ? this.pickerRef.show()
                 : ActionSheet.show(
                     {
-                      options: langs,
+                      options: langs.map(lang => lang.slice(0, 2).toUpperCase()),
                       title: i18n.t('i18n:pickerTitle')
                     },
                     langIndex => this.changeLang(langs[langIndex])
@@ -45,12 +45,12 @@ export default class LanguagePicker extends React.Component {
             {i18n.t('i18n:pickerMenu')}
           </HeaderTitle>
           <Text style={{ position: 'absolute', right: 16, top: 16, color: 'rgba(0, 0, 0, .5)' }}>
-            {this.state.currentLang.toUpperCase()}
+            {this.state.currentLang.slice(0, 2).toUpperCase()}
           </Text>
           {Platform.OS === 'ios' && (
             <SimplePicker
               ref={el => (this.pickerRef = el)}
-              options={langs}
+              options={langs.map(lang => lang.slice(0, 2).toUpperCase())}
               onSubmit={lang => this.changeLang(lang)}
               buttonStyle={{ fontWeight: '700', color: '#0275d8', fontSize: 20 }}
             />

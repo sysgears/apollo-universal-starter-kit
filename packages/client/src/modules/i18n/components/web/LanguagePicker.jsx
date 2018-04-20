@@ -29,7 +29,7 @@ export default class LanguagePicker extends React.Component {
               <DropdownMenu>
                 {languages.map(lang => (
                   <DropdownItem key={lang} onClick={() => i18n.changeLanguage(lang)}>
-                    {lang.toUpperCase()}
+                    {lang.slice(0, 2).toUpperCase()}
                   </DropdownItem>
                 ))}
               </DropdownMenu>

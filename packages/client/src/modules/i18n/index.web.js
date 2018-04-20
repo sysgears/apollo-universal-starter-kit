@@ -12,7 +12,11 @@ import modules from '../';
 const I18nProvider = ({ i18n, children }) => {
   for (const localization of modules.localizations) {
     for (const lang of Object.keys(localization.resources)) {
-      i18n.addResourceBundle(lang, localization.ns, localization.resources[lang]);
+      i18n.addResourceBundle(
+        i18n.options.whitelist.filter(lng => lng.indexOf(lang) > -1)[0] || lang,
+        localization.ns,
+        localization.resources[lang]
+      );
     }
   }
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
@@ -27,9 +31,10 @@ i18n
   .use(LanguageDetector)
   .use(reactI18nextModule)
   .init({
-    fallbackLng: 'en',
+    fallbackLng: 'en-US',
     resources: {},
     debug: false, // set true to show logs
+    whitelist: ['en-US', 'ru-RU'],
     interpolation: {
       escapeValue: false // not needed for react!!
     },

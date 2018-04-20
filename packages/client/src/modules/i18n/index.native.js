@@ -9,6 +9,7 @@ import { LanguagePicker, Root } from './components/native';
 import resources from './locales';
 import Feature from '../connector';
 import modules from '../';
+import settings from '../../../../../settings';
 
 const languageDetector = {
   type: 'languageDetector',
@@ -52,6 +53,7 @@ i18n
   .init({
     fallbackLng: 'en-US',
     resources: {},
+    lng: settings.i18n.defaultLang,
     debug: false, // set true to show logs
     whitelist: ['en-US', 'ru-RU'],
     interpolation: {
@@ -62,8 +64,9 @@ i18n
     }
   });
 
-export default new Feature({
-  drawerItem: {
+const langPicker = {};
+if (settings.i18n.langPickerRender) {
+  langPicker.drawerItem = {
     LangPicker: {
       screen: () => null,
       navigationOptions: {
@@ -71,7 +74,11 @@ export default new Feature({
       },
       skip: true
     }
-  },
+  };
+}
+
+export default new Feature({
+  ...langPicker,
   localization: { ns: 'i18n', resources },
   // eslint-disable-next-line react/display-name
   rootComponentFactory: () => <I18nProvider i18n={i18n} />

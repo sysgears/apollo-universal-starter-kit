@@ -8,6 +8,7 @@ import Feature from '../connector';
 import LanguagePicker from './components/web/LanguagePicker';
 import { MenuItem } from '../../modules/common/components/web';
 import modules from '../';
+import settings from '../../../../../settings';
 
 const I18nProvider = ({ i18n, children }) => {
   for (const localization of modules.localizations) {
@@ -33,6 +34,7 @@ i18n
   .init({
     fallbackLng: 'en-US',
     resources: {},
+    lng: settings.i18n.defaultLang,
     debug: false, // set true to show logs
     whitelist: ['en-US', 'ru-RU'],
     interpolation: {
@@ -43,12 +45,17 @@ i18n
     }
   });
 
-export default new Feature({
-  navItemRight: (
+const langPicker = {};
+if (settings.i18n.langPickerRender) {
+  langPicker.navItemRight = (
     <MenuItem key="languagePicker" style={{ display: 'flex', alignItems: 'center' }}>
       <LanguagePicker i18n={i18n} />
     </MenuItem>
-  ),
+  );
+}
+
+export default new Feature({
   // eslint-disable-next-line react/display-name
-  rootComponentFactory: () => <I18nProvider i18n={i18n} />
+  rootComponentFactory: () => <I18nProvider i18n={i18n} />,
+  ...langPicker
 });

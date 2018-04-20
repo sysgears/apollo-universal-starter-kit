@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { translate } from 'react-i18next';
+import translate from '../../../i18n';
 
 import { Button, CardGroup, CardTitle, CardText } from '../../common/components/web';
 

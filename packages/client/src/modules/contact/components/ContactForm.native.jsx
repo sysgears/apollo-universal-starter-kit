@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { Keyboard } from 'react-native';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';

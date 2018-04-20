@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import { Table, Button } from '../../common/components/web';
 import PostCommentForm from './PostCommentForm';
 

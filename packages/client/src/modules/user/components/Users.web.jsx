@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import UsersFilter from '../containers/UsersFilter';
 import UsersList from '../containers/UsersList';
 import { PageLayout, Button } from '../../common/components/web';

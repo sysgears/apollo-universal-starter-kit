@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { translate } from 'react-i18next';
 import { StackNavigator } from 'react-navigation';
 
+import translate from '../../i18n';
 import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';

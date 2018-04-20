@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import { Form, FormItem, Select, Option, Label, Input } from '../../common/components/web';
 
 class UsersFilterView extends React.PureComponent {

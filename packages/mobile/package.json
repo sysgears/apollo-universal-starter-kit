@@ -65,7 +65,7 @@
     "react": "^16.2.0",
     "react-apollo": "^2.0.4",
     "react-debounce-input": "^3.1.0",
-    "react-i18next": "^7.5.1",
+    "react-i18next": "^7.6.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "react-native-simple-picker": "^2.0.0",
     "react-navigation": "^1.0.0-beta.27",

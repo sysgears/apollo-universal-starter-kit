@@ -1,8 +1,8 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink, withRouter } from 'react-router-dom';
-import { translate } from 'react-i18next';
 
+import translate from '../../i18n';
 import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';

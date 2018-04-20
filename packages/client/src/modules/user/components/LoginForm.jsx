@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 import { withFormik } from 'formik';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Button } from '../../common/components';
 import { RenderField } from '../../common/components/native';

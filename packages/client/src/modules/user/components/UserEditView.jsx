@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { pick } from 'lodash';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import UserForm from './UserForm';
 import { PageLayout } from '../../common/components/web';
 

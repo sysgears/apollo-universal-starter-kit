@@ -1,9 +1,9 @@
 import React from 'react';
 import { createApolloFetch } from 'apollo-fetch';
 import { constructUploadOptions } from 'apollo-fetch-upload';
-import { translate } from 'react-i18next';
 import { StackNavigator } from 'react-navigation';
 
+import translate from '../../i18n';
 import { HeaderTitle, MenuButton } from '../common/components/native';
 import Upload from './containers/Upload';
 import reducers from './reducers';

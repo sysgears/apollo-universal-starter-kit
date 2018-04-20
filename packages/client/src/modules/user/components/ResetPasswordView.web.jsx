@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import ResetPasswordForm from '../components/ResetPasswordForm';
 import { PageLayout } from '../../common/components/web';
 

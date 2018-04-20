@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // React native UI
 import { StyleSheet, Text, View } from 'react-native';
 
-import { translate } from 'react-i18next';
+import translate from '../../../i18n';
 
 const UploadView = ({ t }) => {
   return (

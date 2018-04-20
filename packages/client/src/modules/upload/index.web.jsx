@@ -2,8 +2,8 @@ import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import { createApolloFetch } from 'apollo-fetch';
 import { constructUploadOptions } from 'apollo-fetch-upload';
-import { translate } from 'react-i18next';
 
+import translate from '../../i18n';
 import { MenuItem } from '../../modules/common/components/web';
 import Upload from './containers/Upload';
 import reducers from './reducers';

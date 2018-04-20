@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Text, StyleSheet, Platform } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { translate } from 'react-i18next';
 
+import translate from '../../i18n';
 import { HeaderTitle, MenuButton } from '../common/components/native';
 
 import Post from './containers/Post';

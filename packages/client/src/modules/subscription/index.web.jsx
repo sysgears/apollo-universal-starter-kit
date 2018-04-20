@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { translate } from 'react-i18next';
 
+import translate from '../../i18n';
 import { MenuItem } from '../../modules/common/components/web';
 import Subscription from './containers/Subscription';
 import SubscribersOnly from './containers/SubscribersOnly';

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 import ContactForm from './ContactForm';

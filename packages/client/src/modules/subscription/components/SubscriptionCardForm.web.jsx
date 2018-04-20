@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-import { translate } from 'react-i18next';
+
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert, Label } from '../../common/components/web';
 import { required, validateForm } from '../../../../../common/validation';

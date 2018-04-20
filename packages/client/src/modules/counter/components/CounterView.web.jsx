@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import { PageLayout, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 

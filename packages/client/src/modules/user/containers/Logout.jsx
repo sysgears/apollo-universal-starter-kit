@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Button } from 'react-native';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import { withLogout } from './Auth';
 
 class LogoutView extends React.Component {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { translate } from 'react-i18next';
 import { StackNavigator } from 'react-navigation';
 
+import translate from '../../i18n';
 import { HeaderTitle, MenuButton } from '../common/components/native';
 import Contact from './containers/Contact';
 import resources from './locales';

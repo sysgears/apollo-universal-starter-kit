@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, FlatList, Text, View, Platform, TouchableOpacity } from 'react-native';
-import { translate } from 'react-i18next';
 
+import translate from '../../../i18n';
 import { SwipeAction } from '../../common/components/native';
 
 class PostList extends React.PureComponent {

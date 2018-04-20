@@ -39,7 +39,7 @@ const buttonTypes = {
     type: TYPES.primary
   },
   success: {
-    type: 'default',
+    type: TYPES.primary,
     styles: getStyles('#59b662')
   },
   dark: {
@@ -47,14 +47,14 @@ const buttonTypes = {
     styles: getStyles('#000')
   },
   info: {
-    type: 'default',
+    type: TYPES.primary,
     styles: getStyles('#51b1f3')
   },
   danger: {
     type: TYPES.warning
   },
   warning: {
-    type: 'default',
+    type: TYPES.primary,
     styles: getStyles('#f6aa57')
   }
 };

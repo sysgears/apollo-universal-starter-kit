@@ -9,33 +9,51 @@ import SubscriptionProfile from '../../subscription/containers/SubscriptionProfi
 import { withLoadedUser } from '../';
 import settings from '../../../../../../settings';
 
-const renderProfileItem = (title, value) => (
-  <CardItem>
+const renderProfileItem = (title, value, idx) => (
+  <CardItem key={idx}>
     <CardLabel>{title}</CardLabel>
     <CardText>{value}</CardText>
   </CardItem>
 );
 
 const ProfileView = ({ currentUserLoading, currentUser }) => {
+  const profileItems = [
+    {
+      label: 'User Name: ',
+      value: currentUser.username
+    },
+    {
+      label: 'Email: ',
+      value: currentUser.email
+    },
+    {
+      label: 'Role: ',
+      value: currentUser.role
+    }
+  ];
+
+  if (currentUser.profile && currentUser.profile.fullName) {
+    profileItems.push({ label: 'Full name', value: currentUser.profile.fullName });
+  }
+
   return (
     <View style={styles.container}>
       {currentUserLoading ? (
         <Text style={styles.box}>Loading...</Text>
       ) : (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Card>
-            <CardHeader title="Profile info" />
-            {renderProfileItem('User Name: ', currentUser.username)}
-            {renderProfileItem('Email: ', currentUser.email)}
-            {renderProfileItem('Role: ', currentUser.role)}
-            {currentUser.profile && currentUser.profile.fullName
-              ? renderProfileItem('Full Name: ', currentUser.profile.fullName)
-              : null}
-          </Card>
-          <Card>
-            <CardHeader title="Subscription info" />
-            <SubscriptionProfile />
-          </Card>
+          <View style={styles.cardWrapper}>
+            <Card>
+              <CardHeader title="Profile info" />
+              {profileItems.map((item, idx) => renderProfileItem(item.label, item.value, idx))}
+            </Card>
+          </View>
+          <View style={styles.cardWrapper}>
+            <Card>
+              <CardHeader title="Subscription info" />
+              <SubscriptionProfile />
+            </Card>
+          </View>
         </ScrollView>
       )}
     </View>
@@ -54,6 +72,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: 15,
     marginRight: 15
+  },
+  cardWrapper: {
+    marginBottom: 15
   }
 });
 

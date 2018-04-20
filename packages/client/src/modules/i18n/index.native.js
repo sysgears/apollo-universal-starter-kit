@@ -4,6 +4,7 @@ import i18n from 'i18next';
 import Expo from 'expo';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
+import { getItem, setItem } from '../common/clientStorage';
 import { LanguagePicker, Root } from './components/native';
 import resources from './locales';
 import Feature from '../connector';
@@ -12,13 +13,14 @@ import modules from '../';
 const languageDetector = {
   type: 'languageDetector',
   async: true, // flags below detection to be async
-  detect: callback => {
-    return Expo.Util.getCurrentLocaleAsync().then(lng => {
-      callback(lng.replace('_', '-'));
-    });
+  detect: async callback => {
+    let lng = await getItem('i18nextLng');
+    return callback(lng || (await Expo.Util.getCurrentLocaleAsync()).replace('_', '-'));
   },
   init: () => {},
-  cacheUserLanguage: () => {}
+  cacheUserLanguage: async lng => {
+    setItem('i18nextLng', lng);
+  }
 };
 
 const I18nProvider = ({ i18n, children }) => {

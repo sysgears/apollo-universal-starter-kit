@@ -182,7 +182,7 @@
   version "2.0.46"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.46.tgz#f13a6c336a6582b95d0c0269e796b709488fd54d"
 
-"@types/async@^2.0.31":
+"@types/async@2.0.47", "@types/async@^2.0.31":
   version "2.0.47"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.47.tgz#f49ba1dd1f189486beb6e1d070a850f6ab4bd521"
 
@@ -543,19 +543,25 @@ apollo-cache-control@^0.0.x:
   dependencies:
     graphql-extensions "^0.0.x"
 
-apollo-cache-inmemory@^1.1.4:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.1.5.tgz#74111367fd59caee120197ef663dcb2516971300"
+apollo-cache-inmemory@^1.1.12:
+  version "1.1.12"
+  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.1.12.tgz#ab489bf046b3e026556ab28bdebb6e010cac9531"
   dependencies:
-    apollo-cache "^1.1.0"
-    apollo-utilities "^1.0.4"
-    graphql-anywhere "^4.1.1"
+    apollo-cache "^1.1.7"
+    apollo-utilities "^1.0.11"
+    graphql-anywhere "^4.1.8"
 
 apollo-cache@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.0.tgz#281b6a0fb6ca2c5bce69825642f685de92d05f3c"
   dependencies:
     apollo-utilities "^1.0.4"
+
+apollo-cache@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.7.tgz#5817018a2fbfc05a21ba319bd17a3e7538110cc5"
+  dependencies:
+    apollo-utilities "^1.0.11"
 
 apollo-client@^1.1:
   version "1.9.3"
@@ -599,6 +605,20 @@ apollo-client@^2.1.0:
     zen-observable "^0.7.0"
   optionalDependencies:
     "@types/async" "2.0.46"
+
+apollo-client@^2.2.2:
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.2.8.tgz#b604d31ab2d2dd00db3105d8793b93ee02ce567e"
+  dependencies:
+    "@types/zen-observable" "^0.5.3"
+    apollo-cache "^1.1.7"
+    apollo-link "^1.0.0"
+    apollo-link-dedup "^1.0.0"
+    apollo-utilities "^1.0.11"
+    symbol-observable "^1.0.2"
+    zen-observable "^0.7.0"
+  optionalDependencies:
+    "@types/async" "2.0.47"
 
 apollo-engine-binary-darwin@0.2017.12-28-gcc16cbea7:
   version "0.2017.12-28-gcc16cbea7"
@@ -677,11 +697,11 @@ apollo-link-schema@^1.0.2:
   dependencies:
     apollo-link "^1.0.7"
 
-apollo-link-state@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/apollo-link-state/-/apollo-link-state-0.3.1.tgz#e323d41357bb908c7b888d51a5650b8cdcef025d"
+apollo-link-state@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/apollo-link-state/-/apollo-link-state-0.4.1.tgz#65e9e0e12c67936b8c4b12b8438434f393104579"
   dependencies:
-    apollo-utilities "^1.0.1"
+    apollo-utilities "^1.0.8"
     graphql-anywhere "^4.1.0-alpha.0"
 
 apollo-link-ws@^1.0.3:
@@ -748,6 +768,10 @@ apollo-upload-server@^3.0.0:
 apollo-utilities@^1.0.0, apollo-utilities@^1.0.1, apollo-utilities@^1.0.3, apollo-utilities@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.4.tgz#560009ea5541b9fdc4ee07ebb1714ee319a76c15"
+
+apollo-utilities@^1.0.11, apollo-utilities@^1.0.8:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.11.tgz#cd36bfa6e5c04eea2caf0c204a0f38a0ad550802"
 
 app-root-path@^2.0.0:
   version "2.0.1"
@@ -5811,15 +5835,21 @@ graphql-anywhere@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-3.1.0.tgz#3ea0d8e8646b5cee68035016a9a7557c15c21e96"
 
-graphql-anywhere@^4.1.0-alpha.0, graphql-anywhere@^4.1.1:
+graphql-anywhere@^4.1.0-alpha.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.1.tgz#67924b67b053d1a23bc30d0e4c8db943c1d791a8"
   dependencies:
     apollo-utilities "^1.0.4"
 
-graphql-auth@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/graphql-auth/-/graphql-auth-0.2.0.tgz#cd28baee533d2c697c40bf201da19f170b562cbe"
+graphql-anywhere@^4.1.8:
+  version "4.1.8"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.8.tgz#23882e6a16ec824febbe5bca40937cdd76c5acdc"
+  dependencies:
+    apollo-utilities "^1.0.11"
+
+graphql-auth@0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/graphql-auth/-/graphql-auth-0.2.2.tgz#52b73ba46854365b615e7a95f1d3d490d7be1e63"
 
 graphql-extensions@^0.0.x:
   version "0.0.7"
@@ -12506,9 +12536,9 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.113:
-  version "0.4.113"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.113.tgz#b99d89a783a947034f3f6c4752e42650f3a4b401"
+spinjs@^0.4.115:
+  version "0.4.115"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.115.tgz#41729d5177cd5005c2d12a17edaa4e421061b4fc"
   dependencies:
     babel-polyfill "^6.26.0"
     babel-preset-env "^1.6.1"

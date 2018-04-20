@@ -38,7 +38,6 @@ class Feature {
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.beforeware = combine(arguments, arg => arg.beforeware);
     this.middleware = combine(arguments, arg => arg.middleware);
-    this.createFetchOptions = combine(arguments, arg => arg.createFetchOptions);
   }
 
   get schemas(): DocumentNode[] {
@@ -48,7 +47,7 @@ class Feature {
   async createContext(req: $Request, res: $Response, connectionParams: any, webSocket: any) {
     let context = {};
     for (const createContextFunc of this.createContextFunc) {
-      context = merge(context, await createContextFunc(req, res, connectionParams, webSocket, context));
+      context = merge(context, await createContextFunc({ req, res, connectionParams, webSocket, context }));
     }
     return context;
   }

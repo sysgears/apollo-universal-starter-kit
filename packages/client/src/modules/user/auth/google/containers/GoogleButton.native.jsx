@@ -7,6 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
 import { withUser } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
+import access from '../../../access';
 
 const googleLogin = () => {
   const url = buildRedirectUrlForMobile('google');
@@ -17,15 +18,15 @@ const googleLogin = () => {
   }
 };
 
-const GoogleButton = () => {
+const GoogleButton = withApollo(({ client }) => {
   return (
     <View>
-      <TouchableOpacity onPress={googleLogin} style={styles.submit}>
+      <TouchableOpacity onPress={access.doLogin(client).then(googleLogin)} style={styles.submit}>
         <Text style={styles.text}>Login with Google</Text>
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 const GoogleLink = () => {
   return <Button onPress={googleLogin} style={{ margin: 10 }} title="Login with Google" />;

@@ -1,4 +1,5 @@
 import { graphqlExpress } from 'apollo-server-express';
+import { formatResponse } from 'apollo-logger';
 import 'isomorphic-fetch';
 
 import schema from '../api/schema';
@@ -15,16 +16,18 @@ export default async (req, res, next) => {
       context: { ...context, req, res },
       debug: false,
       formatError: error => {
-        // Don't log annoying errors from 'graphql-auth' produced due to expired JWT token
-        if (error.message && error.message.indexOf('Not Authenticated!') < 0) {
-          log.error('GraphQL execution error:', error);
-        }
+        log.error('GraphQL execution error:', error);
         return error;
       },
+      formatResponse: (response, options) =>
+        settings.app.logging.apolloLogging ? formatResponse(response, options) : response,
       tracing: !!settings.engine.engineConfig.apiKey,
       cacheControl: !!settings.engine.engineConfig.apiKey
     }))(req, res, next);
   } catch (e) {
-    next(e);
+    // If createContext decided to finish response, don't pass error downwards
+    if (!res.headersSent) {
+      next(e);
+    }
   }
 };

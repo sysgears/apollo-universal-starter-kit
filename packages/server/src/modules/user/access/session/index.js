@@ -40,7 +40,7 @@ const attachSession = req => {
   }
 };
 
-const createContextFunc = async (req, res, connectionParams, webSocket, context) => {
+const createContextFunc = async ({ req, connectionParams, webSocket, context }) => {
   attachSession(req);
   const user = context.user || (await getCurrentUser({ req, connectionParams, webSocket }));
   const auth = {

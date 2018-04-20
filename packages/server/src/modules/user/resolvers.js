@@ -54,7 +54,7 @@ export default pubsub => ({
   Mutation: {
     addUser: withAuth(
       (obj, args, context) => {
-        return context.user.id !== args.id ? ['user:create'] : ['user:create:self'];
+        return context.user.id !== args.input.id ? ['user:create'] : ['user:create:self'];
       },
       async (obj, { input }, context) => {
         try {
@@ -112,7 +112,7 @@ export default pubsub => ({
     ),
     editUser: withAuth(
       (obj, args, context) => {
-        return context.user.id !== args.id ? ['user:update'] : ['user:update:self'];
+        return context.user.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
       async (obj, { input }, context) => {
         try {
@@ -150,7 +150,7 @@ export default pubsub => ({
     ),
     deleteUser: withAuth(
       (obj, args, context) => {
-        return context.user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
+        return context.user.id !== args.input.id ? ['user:delete'] : ['user:delete:self'];
       },
       async (obj, { id }, context) => {
         try {

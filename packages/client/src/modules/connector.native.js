@@ -40,7 +40,10 @@ export default class {
       .pop();
 
     // Shared modules data
-    this.data = combine([{}].join(arguments), arg => arg.data).reduce((acc, el) => [{ ...acc[0], ...el }], [{}]);
+    this.data = combine([{}].concat(Array.from(arguments)), arg => arg.data).reduce(
+      (acc, el) => [{ ...acc[0], ...el }],
+      [{}]
+    );
   }
 
   get drawerItems() {

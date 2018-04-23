@@ -1,12 +1,8 @@
 import React from 'react';
-import modules from '../';
 
 export default ns => {
   return Component => {
     try {
-      if (!modules.data[0].i18n) {
-        throw new Error();
-      }
       const reactI18next = require('react-i18next');
       if (!reactI18next.getI18n()) {
         throw new Error();

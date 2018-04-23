@@ -3,12 +3,16 @@ import PropTypes from 'prop-types';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
+import Cookies from 'universal-cookie';
 
 import Feature from '../connector';
 import LanguagePicker from './components/web/LanguagePicker';
+import { LayoutCenter } from '../common/components';
 import { MenuItem } from '../../modules/common/components/web';
 import modules from '../';
 import settings from '../../../../../settings';
+
+const clientCookies = new Cookies();
 
 const I18nProvider = ({ i18n, children }) => {
   for (const localization of modules.localizations) {
@@ -60,14 +64,43 @@ if (settings.i18n.langPickerRender) {
   );
 }
 
+class RootComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props = props;
+    const cookies = this.props.req ? this.props.req.universalCookies : clientCookies;
+    const lang = cookies.get(LANG_COOKIE);
+    if (lang) {
+      i18n.changeLanguage(lang);
+    }
+    this.state = { ready: !!lang || !__SSR__ };
+  }
+
+  componentDidMount() {
+    if (!this.state.ready) {
+      this.setState({ ready: true });
+    }
+  }
+
+  render() {
+    return this.state.ready ? (
+      <I18nProvider i18n={i18n}>{this.props.children}</I18nProvider>
+    ) : (
+      <LayoutCenter>
+        <div className="text-center">Detecting language...</div>
+      </LayoutCenter>
+    );
+  }
+}
+
+RootComponent.propTypes = {
+  req: PropTypes.object,
+  children: PropTypes.node
+};
+
 export default new Feature({
   data: { i18n: true },
   // eslint-disable-next-line react/display-name
-  rootComponentFactory: req => {
-    if (req) {
-      i18n.changeLanguage(req.universalCookies.get(LANG_COOKIE));
-    }
-    return <I18nProvider i18n={i18n} />;
-  },
+  rootComponentFactory: req => <RootComponent req={req} />,
   ...langPicker
 });

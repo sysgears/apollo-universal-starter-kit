@@ -12,8 +12,6 @@ import { MenuItem } from '../../modules/common/components/web';
 import modules from '../';
 import settings from '../../../../../settings';
 
-const clientCookies = new Cookies();
-
 const I18nProvider = ({ i18n, children }) => {
   for (const localization of modules.localizations) {
     for (const lang of Object.keys(localization.resources)) {
@@ -33,6 +31,8 @@ I18nProvider.propTypes = {
 };
 
 const LANG_COOKIE = 'lang';
+const clientCookies = new Cookies();
+const clientLang = clientCookies.get(LANG_COOKIE);
 
 i18n
   .use(LanguageDetector)
@@ -68,11 +68,11 @@ class RootComponent extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
-    const cookies = this.props.req ? this.props.req.universalCookies : clientCookies;
-    const lang = cookies.get(LANG_COOKIE);
+    const lang = this.props.req ? this.props.req.universalCookies.get(LANG_COOKIE) : clientLang;
     if (lang) {
       i18n.changeLanguage(lang);
     }
+
     this.state = { ready: !!lang || !__SSR__ };
   }
 

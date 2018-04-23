@@ -28,6 +28,8 @@ I18nProvider.propTypes = {
   children: PropTypes.node
 };
 
+const LANG_COOKIE = 'lang';
+
 i18n
   .use(LanguageDetector)
   .use(reactI18nextModule)
@@ -37,6 +39,10 @@ i18n
     lng: settings.i18n.defaultLang,
     debug: false, // set true to show logs
     whitelist: ['en-US', 'ru-RU'],
+    detection: {
+      lookupCookie: LANG_COOKIE,
+      caches: __SSR__ ? ['cookie'] : ['localStorage']
+    },
     interpolation: {
       escapeValue: false // not needed for react!!
     },
@@ -57,6 +63,11 @@ if (settings.i18n.langPickerRender) {
 export default new Feature({
   data: { i18n: true },
   // eslint-disable-next-line react/display-name
-  rootComponentFactory: () => <I18nProvider i18n={i18n} />,
+  rootComponentFactory: req => {
+    if (req) {
+      i18n.changeLanguage(req.universalCookies.get(LANG_COOKIE));
+    }
+    return <I18nProvider i18n={i18n} />;
+  },
   ...langPicker
 });

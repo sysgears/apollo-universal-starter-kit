@@ -8,8 +8,8 @@ import { Form, RenderField, Button, Alert } from '../../common/components/web';
 import { required, minLength, validateForm, match } from '../../../../../common/validation';
 
 const resetPasswordFormSchema = {
-  password: [required, minLength(5)],
-  passwordConfirmation: [match('password'), required, minLength(5)]
+  password: [required, minLength(4)],
+  passwordConfirmation: [match('password'), required, minLength(4)]
 };
 
 const validate = values => validateForm(values, resetPasswordFormSchema);

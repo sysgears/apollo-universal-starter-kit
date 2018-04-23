@@ -51,7 +51,7 @@ export default class LanguagePicker extends React.Component {
             <SimplePicker
               ref={el => (this.pickerRef = el)}
               options={langs.map(lang => lang.slice(0, 2).toUpperCase())}
-              onSubmit={lang => this.changeLang(lang)}
+              onSubmit={lang => this.changeLang(langs.filter(lng => lng.indexOf(lang) > -1)[0] || lang)}
               buttonStyle={{ fontWeight: '700', color: '#0275d8', fontSize: 20 }}
             />
           )}

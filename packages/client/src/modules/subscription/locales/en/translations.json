@@ -1,0 +1,40 @@
+{
+  "navLink": "Subscribers Only",
+  "errorMsg": "Transaction failed!",
+  "title": "Subscription",
+  "meta": "Subscription example page",
+  "subTitle": "Subscription!",
+  "action": "Subscribe",
+
+  "card": {
+    "title": "Card Info",
+    "text": {
+      "card": "card",
+      "expires": "expires"
+    },
+    "btnUpdate": "Update Card",
+    "name": "Name On Card",
+    "info": "Payment Info"
+  },
+
+  "cancel": {
+    "title": "Subscription",
+    "load": "Loading...",
+    "btn": "Cancel Subscription",
+    "msg": "You do not have a subscription."
+  },
+
+  "subOnly": {
+    "title": "Private",
+    "msg": "Your magic number is",
+    "load": "loading..."
+  },
+
+  "update": {
+    "errorMsg": "Update failed!",
+    "title": "Update Card",
+    "meta": "Update card example page",
+    "subTitle": "Update card!",
+    "action": "Update Card"
+  }
+}

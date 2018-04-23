@@ -3,15 +3,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, FlatList, Text, View, Platform, TouchableOpacity } from 'react-native';
+
+import translate from '../../../i18n';
 import { SwipeAction } from '../../common/components/native';
 
-export default class PostList extends React.PureComponent {
+class PostList extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posts: PropTypes.object,
     navigation: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func.isRequired
+    loadMoreRows: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   onEndReachedCalledDuringMomentum = false;
@@ -19,12 +22,12 @@ export default class PostList extends React.PureComponent {
   keyExtractor = item => item.node.id;
 
   renderItemIOS = ({ item: { node: { id, title } } }) => {
-    const { deletePost, navigation } = this.props;
+    const { deletePost, navigation, t } = this.props;
     return (
       <SwipeAction
         onPress={() => navigation.navigate('PostEdit', { id })}
         right={{
-          text: 'Delete',
+          text: t('list.btn.del'),
           onPress: () => deletePost(id)
         }}
       >
@@ -46,12 +49,12 @@ export default class PostList extends React.PureComponent {
   };
 
   render() {
-    const { loading, posts, loadMoreRows } = this.props;
+    const { loading, posts, loadMoreRows, t } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     if (loading) {
       return (
         <View style={styles.container}>
-          <Text>Loading...</Text>
+          <Text>{t('post.loadMsg')}</Text>
         </View>
       );
     } else {
@@ -78,6 +81,8 @@ export default class PostList extends React.PureComponent {
     }
   }
 }
+
+export default translate('post')(PostList);
 
 const styles = StyleSheet.create({
   container: {

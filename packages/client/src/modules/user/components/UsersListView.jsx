@@ -1,15 +1,22 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
-const UsersListView = () => {
+import translate from '../../../i18n';
+
+const UsersListView = ({ t }) => {
   return (
     <View style={styles.container}>
       <View style={styles.element}>
-        <Text style={styles.box}>Users List!</Text>
+        <Text style={styles.box}>{t('users.title')}</Text>
       </View>
     </View>
   );
+};
+
+UsersListView.propTypes = {
+  t: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -29,4 +36,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default UsersListView;
+export default translate('user')(UsersListView);

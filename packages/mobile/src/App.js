@@ -30,6 +30,7 @@ export default class Main extends React.Component {
       this.props.exp.manifest.bundleUrl && hostname === 'localhost'
         ? `${protocol}//${url.parse(this.props.exp.manifest.bundleUrl).hostname}:${port}${pathname}`
         : __API_URL__;
+
     log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
     const client = createApolloClient({
       apiUrl,
@@ -39,7 +40,7 @@ export default class Main extends React.Component {
       clientResolvers: modules.resolvers
     });
 
-    return (
+    return modules.getWrappedRoot(
       <Provider store={store}>
         <ApolloProvider client={client}>
           <MainScreenNavigator />

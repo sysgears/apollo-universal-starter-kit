@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Button } from 'react-native';
+
+import translate from '../../../i18n';
 import { withLogout } from './Auth';
 
 class LogoutView extends React.Component {
   render() {
-    const { logout } = this.props;
+    const { logout, t } = this.props;
     return (
       <View
         style={{
@@ -15,7 +17,7 @@ class LogoutView extends React.Component {
           alignItems: 'center'
         }}
       >
-        <Button onPress={logout} title="Log Out" />
+        <Button onPress={logout} title={t('mobile.logout')} />
       </View>
     );
   }
@@ -23,7 +25,8 @@ class LogoutView extends React.Component {
 
 LogoutView.propTypes = {
   logout: PropTypes.func.isRequired,
-  error: PropTypes.string
+  error: PropTypes.string,
+  t: PropTypes.func
 };
 
-export default withLogout(LogoutView);
+export default translate('user')(withLogout(LogoutView));

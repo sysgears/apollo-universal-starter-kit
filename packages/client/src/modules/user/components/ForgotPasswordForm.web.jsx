@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 import { required, email, validateForm } from '../../../../../common/validation';
@@ -11,15 +13,21 @@ const forgotPasswordFormSchema = {
 
 const validate = values => validateForm(values, forgotPasswordFormSchema);
 
-const ForgotPasswordForm = ({ handleSubmit, error, sent, values }) => {
+const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
   return (
     <Form name="forgotPassword" onSubmit={handleSubmit}>
-      {sent && <Alert color="success">Reset password instructions have been emailed to you.</Alert>}
-      <Field name="email" component={RenderField} type="email" label="Email" value={values.email} />
+      {sent && <Alert color="success">{t('forgotPass.submitMsg')}</Alert>}
+      <Field
+        name="email"
+        component={RenderField}
+        type="email"
+        label={t('forgotPass.form.fldEmail')}
+        value={values.email}
+      />
       <div className="text-center">
         {error && <Alert color="error">{error}</Alert>}
         <Button color="primary" type="submit">
-          Send Reset Instructions
+          {t('forgotPass.form.btnSubmit')}
         </Button>
       </div>
     </Form>
@@ -31,7 +39,8 @@ ForgotPasswordForm.propTypes = {
   onSubmit: PropTypes.func,
   error: PropTypes.string,
   sent: PropTypes.bool,
-  values: PropTypes.object
+  values: PropTypes.object,
+  t: PropTypes.func
 };
 
 const ForgotPasswordFormWithFormik = withFormik({
@@ -46,4 +55,4 @@ const ForgotPasswordFormWithFormik = withFormik({
   displayName: 'LoginForm' // helps with React DevTools
 });
 
-export default ForgotPasswordFormWithFormik(ForgotPasswordForm);
+export default translate('user')(ForgotPasswordFormWithFormik(ForgotPasswordForm));

@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import translate from '../../../i18n';
 import { Button, Alert, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
-export default class CancelSubscriptionView extends React.Component {
+class CancelSubscriptionView extends React.Component {
   static propTypes = {
     loading: PropTypes.bool,
     active: PropTypes.bool,
-    cancel: PropTypes.func.isRequired
+    cancel: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   state = {
@@ -26,24 +29,26 @@ export default class CancelSubscriptionView extends React.Component {
   };
 
   render() {
-    const { loading, active } = this.props;
+    const { loading, active, t } = this.props;
     const { errors } = this.state;
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <p>{t('cancel.load')}</p>;
 
     return (
       <CardGroup>
-        <CardTitle>Subscription</CardTitle>
+        <CardTitle>{t('cancel.title')}</CardTitle>
         <CardText>
           {active && (
             <Button color="danger" onClick={this.onClick} disabled={this.state.cancelling}>
-              Cancel Subscription
+              {t('cancel.btn')}
             </Button>
           )}
-          {!active && <span>You do not have a subscription.</span>}
+          {!active && <span>{t('cancel.msg')}</span>}
           {errors && <Alert color="error">{errors}</Alert>}
         </CardText>
       </CardGroup>
     );
   }
 }
+
+export default translate('subscription')(CancelSubscriptionView);

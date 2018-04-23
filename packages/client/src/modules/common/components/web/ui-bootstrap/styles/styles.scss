@@ -7,3 +7,12 @@
 .active {
   color: #000;
 }
+
+.lang-section {
+  button {
+    cursor: pointer;
+    &.active {
+      border: 1px solid #000;
+    }
+  }
+}

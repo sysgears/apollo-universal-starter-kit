@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
@@ -11,15 +13,18 @@ const commentFormSchema = {
 
 const validate = values => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, comment }) => {
-  let operation = 'Add';
-  if (comment.id !== null) {
-    operation = 'Edit';
-  }
+const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
+  const operation = t(`comment.label.${comment.id ? 'edit' : 'add'}`);
 
   return (
     <FormView>
-      <Field name="content" component={RenderField} type="text" value={values.content} placeholder="Comment" />
+      <Field
+        name="content"
+        component={RenderField}
+        type="text"
+        value={values.content}
+        placeholder={t('comment.label.field')}
+      />
       <FormButton onPress={handleSubmit}>{operation}</FormButton>
     </FormView>
   );
@@ -30,7 +35,8 @@ PostCommentForm.propTypes = {
   comment: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  values: PropTypes.object
+  values: PropTypes.object,
+  t: PropTypes.func
 };
 
 const PostCommentFormWithFormik = withFormik({
@@ -44,4 +50,4 @@ const PostCommentFormWithFormik = withFormik({
   enableReinitialize: true
 });
 
-export default PostCommentFormWithFormik(PostCommentForm);
+export default translate('post')(PostCommentFormWithFormik(PostCommentForm));

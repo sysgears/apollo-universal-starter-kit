@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { Link } from 'react-router-dom';
 
 import translate from '../../../i18n';
 import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
-import { Link } from 'react-router-dom';
 import { LayoutCenter } from '../../common/components';
 import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
 

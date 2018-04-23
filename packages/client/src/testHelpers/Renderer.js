@@ -32,10 +32,6 @@ process.on('uncaughtException', ex => {
   console.error('Uncaught error', ex.stack);
 });
 
-for (const localization of clientModules.localizations) {
-  clientModules.i18n.addResourceBundle('en', localization.ns, localization.resources.en);
-}
-
 class MockLink extends ApolloLink {
   constructor(schema) {
     super();

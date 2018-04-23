@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
-import Cookies from 'universal-cookie';
 
 import Feature from '../connector';
 import LanguagePicker from './components/web/LanguagePicker';
-import { LayoutCenter } from '../common/components';
 import { MenuItem } from '../../modules/common/components/web';
 import modules from '../';
 import settings from '../../../../../settings';
@@ -31,8 +29,7 @@ I18nProvider.propTypes = {
 };
 
 const LANG_COOKIE = 'lang';
-const clientCookies = new Cookies();
-const clientLang = clientCookies.get(LANG_COOKIE);
+const LANG_LIST = ['en-US', 'ru-RU'];
 
 i18n
   .use(LanguageDetector)
@@ -42,7 +39,7 @@ i18n
     resources: {},
     lng: settings.i18n.defaultLang,
     debug: false, // set true to show logs
-    whitelist: ['en-US', 'ru-RU'],
+    whitelist: LANG_LIST,
     detection: {
       lookupCookie: LANG_COOKIE,
       caches: __SSR__ ? ['cookie'] : ['localStorage']
@@ -68,28 +65,16 @@ class RootComponent extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
-    const lang = this.props.req ? this.props.req.universalCookies.get(LANG_COOKIE) : clientLang;
-    if (lang) {
+
+    if (this.props.req) {
+      const lang = this.props.req.universalCookies.get(LANG_COOKIE) || this.props.req.acceptsLanguages(LANG_LIST);
+      this.props.req.universalCookies.set(LANG_COOKIE, lang);
       i18n.changeLanguage(lang);
-    }
-
-    this.state = { ready: !!lang || !__SSR__ };
-  }
-
-  componentDidMount() {
-    if (!this.state.ready) {
-      this.setState({ ready: true });
     }
   }
 
   render() {
-    return this.state.ready ? (
-      <I18nProvider i18n={i18n}>{this.props.children}</I18nProvider>
-    ) : (
-      <LayoutCenter>
-        <div className="text-center">Detecting language...</div>
-      </LayoutCenter>
-    );
+    return <I18nProvider i18n={i18n}>{this.props.children}</I18nProvider>;
   }
 }
 

@@ -90,8 +90,7 @@
     "redux-devtools-extension": "^2.13.2",
     "sourcemapped-stacktrace": "^1.1.8",
     "styled-components": "^2.3.0",
-    "subscriptions-transport-ws": "^0.9.4",
-    "universal-cookie": "^2.1.2"
+    "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
     "@alienfast/i18next-loader": "^1.0.14",

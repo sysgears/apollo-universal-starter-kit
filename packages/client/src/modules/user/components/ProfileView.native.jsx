@@ -1,12 +1,11 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { Card, CardItem, CardText, CardTitle, CardHeader, CardLabel } from '../../common/components/native';
 import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
 
-import { withLoadedUser } from '../';
 import settings from '../../../../../../settings';
 
 const renderProfileItem = (title, value, idx) => (
@@ -16,7 +15,7 @@ const renderProfileItem = (title, value, idx) => (
   </CardItem>
 );
 
-const ProfileView = ({ currentUserLoading, currentUser }) => {
+const ProfileView = ({ currentUserLoading, currentUser, navigation }) => {
   const profileItems = [
     {
       label: 'User Name: ',
@@ -54,6 +53,12 @@ const ProfileView = ({ currentUserLoading, currentUser }) => {
               <SubscriptionProfile />
             </Card>
           </View>
+          <TouchableOpacity
+            style={styles.linkWrapper}
+            onPress={() => navigation.navigate('ProfileEdit', { id: currentUser.id })}
+          >
+            <Text style={styles.link}>Edit profile</Text>
+          </TouchableOpacity>
         </ScrollView>
       )}
     </View>
@@ -75,12 +80,21 @@ const styles = StyleSheet.create({
   },
   cardWrapper: {
     marginBottom: 15
+  },
+  linkWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  link: {
+    color: '#0056b3',
+    fontSize: 16
   }
 });
 
 ProfileView.propTypes = {
   currentUserLoading: PropTypes.bool,
-  currentUser: PropTypes.object
+  currentUser: PropTypes.object,
+  navigation: PropTypes.object
 };
 
 export default ProfileView;

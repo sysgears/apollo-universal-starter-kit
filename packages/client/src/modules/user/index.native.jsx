@@ -124,16 +124,34 @@ class ProfileScreen extends React.Component {
   }
 }
 
+class ProfilerEditScreen extends React.Component {
+  static navigationOptions = () => ({
+    title: 'Edit profile'
+  });
+  render() {
+    return <UserEdit navigation={this.props.navigation} />;
+  }
+}
+
+ProfilerEditScreen.propTypes = {
+  navigation: PropTypes.object
+};
+
 ProfileScreen.propTypes = {
   navigation: PropTypes.object
 };
+
+const ProfileNavigation = StackNavigator({
+  Profile: { screen: ProfileScreen },
+  ProfileEdit: { screen: ProfilerEditScreen }
+});
 
 export * from './containers/Auth';
 
 export default new Feature(access, {
   tabItem: {
     Profile: {
-      screen: ProfileScreen,
+      screen: ProfileNavigation,
       userInfo: {
         showOnLogin: true,
         role: ['user', 'admin']

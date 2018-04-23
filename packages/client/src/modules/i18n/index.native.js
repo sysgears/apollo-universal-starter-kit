@@ -60,7 +60,7 @@ i18n
       escapeValue: false // not needed for react!!
     },
     react: {
-      wait: true
+      wait: false
     }
   });
 

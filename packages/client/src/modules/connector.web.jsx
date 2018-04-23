@@ -6,8 +6,6 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 
 const defaultCreateFetch = () => {};
 
-export const featureCatalog = {};
-
 export default class {
   /* eslint-disable no-unused-vars */
   constructor(
@@ -26,7 +24,7 @@ export default class {
       dataRootComponent,
       stylesInsert,
       scriptsInsert,
-      catalogInfo
+      data
     },
     ...features
   ) {
@@ -61,9 +59,8 @@ export default class {
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
     this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
 
-    combine(arguments, arg => arg.catalogInfo).forEach(info =>
-      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
-    );
+    // Shared modules data
+    this.data = combine([{}].join(arguments), arg => arg.data).reduce((acc, el) => [{ ...acc[0], ...el }], [{}]);
   }
 
   get router() {

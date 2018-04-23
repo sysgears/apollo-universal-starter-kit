@@ -14,7 +14,7 @@ import Feature from '../connector';
 const HeaderTitleWithI18n = translate('upload')(HeaderTitle);
 
 export default new Feature({
-  catalogInfo: { upload: true },
+  data: { upload: true },
   drawerItem: {
     Upload: {
       screen: StackNavigator({

@@ -4,8 +4,6 @@ import { merge, map, union, without, castArray } from 'lodash';
 
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
-export const featureCatalog = {};
-
 const defaultCreateFetch = () => {};
 
 export default class {
@@ -20,15 +18,12 @@ export default class {
       reducer,
       resolver,
       routerFactory,
-      catalogInfo,
-      rootComponentFactory
+      rootComponentFactory,
+      data
     },
     ...features
   ) {
     /* eslint-enable no-unused-vars */
-    combine(arguments, arg => arg.catalogInfo).forEach(info =>
-      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
-    );
     this.link = combine(arguments, arg => arg.link);
     this.createFetch =
       combine(arguments, arg => arg.createFetch !== defaultCreateFetch && arg.createFetch)
@@ -43,6 +38,9 @@ export default class {
     this.routerFactory = combine(arguments, arg => arg.routerFactory)
       .slice(-1)
       .pop();
+
+    // Shared modules data
+    this.data = combine([{}].join(arguments), arg => arg.data).reduce((acc, el) => [{ ...acc[0], ...el }], [{}]);
   }
 
   get drawerItems() {

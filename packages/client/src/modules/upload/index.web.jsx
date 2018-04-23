@@ -20,7 +20,7 @@ const MenuItemWithI18n = translate('upload')(({ t }) => (
 ));
 
 export default new Feature({
-  catalogInfo: { upload: true },
+  data: { upload: true },
   route: <Route exact path="/upload" component={Upload} />,
   navItem: <MenuItemWithI18n />,
   reducer: { upload: reducers },

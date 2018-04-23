@@ -55,6 +55,7 @@ if (settings.i18n.langPickerRender) {
 }
 
 export default new Feature({
+  data: { i18n: true },
   // eslint-disable-next-line react/display-name
   rootComponentFactory: () => <I18nProvider i18n={i18n} />,
   ...langPicker

@@ -81,6 +81,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue }) => {
         component={RenderField}
         placeholder="Password Confirmation"
         value={passwordConfirmation}
+        type="password"
         secureTextEntry={true}
       />
       <View style={styles.submit}>

@@ -12,12 +12,10 @@ import settings from '../../../../../settings';
 import resources from './locales';
 import Feature from '../connector';
 
-const MenuItemWithI18n = translate('subscription')(({ t }) => (
-  <MenuItem key="/subscribers-only">
-    <NavLink to="/subscribers-only" className="nav-link" activeClassName="active">
-      {t('navLink')}
-    </NavLink>
-  </MenuItem>
+const NavLinkWithI18n = translate('subscription')(({ t }) => (
+  <NavLink to="/subscribers-only" className="nav-link" activeClassName="active">
+    {t('navLink')}
+  </NavLink>
 ));
 
 export default new Feature({
@@ -28,7 +26,13 @@ export default new Feature({
         <SubscriberRoute exact role="user" path="/update-card" component={UpdateCard} />
       ]
     : [],
-  navItem: settings.subscription.enabled ? <MenuItemWithI18n /> : [],
+  navItem: settings.subscription.enabled ? (
+    <MenuItem key="/subscribers-only">
+      <NavLinkWithI18n />
+    </MenuItem>
+  ) : (
+    []
+  ),
   reducer: { subscription: reducers },
   scriptsInsert:
     settings.subscription.enabled && settings.subscription.stripePrivateKey ? 'https://js.stripe.com/v3/' : undefined,

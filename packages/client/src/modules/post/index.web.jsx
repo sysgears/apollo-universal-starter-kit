@@ -9,17 +9,19 @@ import resources from './locales';
 import resolvers from './resolvers';
 import Feature from '../connector';
 
-const MenuItemWithI18n = translate()(({ t }) => (
-  <MenuItem key="/posts">
-    <NavLink to="/posts" className="nav-link" activeClassName="active">
-      {t('post:navLink')}
-    </NavLink>
-  </MenuItem>
+const NavLinkWithI18n = translate()(({ t }) => (
+  <NavLink to="/posts" className="nav-link" activeClassName="active">
+    {t('post:navLink')}
+  </NavLink>
 ));
 
 export default new Feature({
   route: [<Route exact path="/posts" component={Post} />, <Route exact path="/post/:id" component={PostEdit} />],
-  navItem: <MenuItemWithI18n />,
+  navItem: (
+    <MenuItem key="/posts">
+      <NavLinkWithI18n />
+    </MenuItem>
+  ),
   resolver: resolvers,
   localization: { ns: 'post', resources }
 });

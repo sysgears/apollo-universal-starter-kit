@@ -11,18 +11,20 @@ import resources from './locales';
 
 import Feature from '../connector';
 
-const MenuItemWithI18n = translate('upload')(({ t }) => (
-  <MenuItem key="/upload">
-    <NavLink to="/upload" className="nav-link" activeClassName="active">
-      {t('navLink')}
-    </NavLink>
-  </MenuItem>
+const NavLinkWithI18n = translate('upload')(({ t }) => (
+  <NavLink to="/upload" className="nav-link" activeClassName="active">
+    {t('navLink')}
+  </NavLink>
 ));
 
 export default new Feature({
   data: { upload: true },
   route: <Route exact path="/upload" component={Upload} />,
-  navItem: <MenuItemWithI18n />,
+  navItem: (
+    <MenuItem key="/upload">
+      <NavLinkWithI18n />
+    </MenuItem>
+  ),
   reducer: { upload: reducers },
   localization: { ns: 'upload', resources },
   createFetch: uri =>

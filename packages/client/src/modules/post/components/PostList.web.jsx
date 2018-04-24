@@ -10,23 +10,12 @@ export default class PostList extends React.PureComponent {
     loading: PropTypes.bool.isRequired,
     posts: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func.isRequired
+    loadPost: PropTypes.func
   };
 
   handleDeletePost = id => {
     const { deletePost } = this.props;
     deletePost(id);
-  };
-
-  renderLoadMore = (posts, loadMoreRows) => {
-    console.log(posts);
-    if (posts.pageInfo.hasNextPage) {
-      return (
-        <Button id="load-more" color="primary" onClick={loadMoreRows}>
-          Load more ...
-        </Button>
-      );
-    }
   };
 
   renderMetaData = () => (
@@ -42,7 +31,7 @@ export default class PostList extends React.PureComponent {
   );
 
   render() {
-    const { loading, posts, loadMoreRows } = this.props;
+    const { loading, posts, loadPost } = this.props;
     if (loading) {
       return (
         <PageLayout>
@@ -78,10 +67,9 @@ export default class PostList extends React.PureComponent {
           )
         }
       ];
-      // paginationType can be 'standart' or 'relay'
-      const paginationType = 'relay';
-      // const paginationType = 'standart';
-      let pagination = paginationType !== 'relay';
+      // pagination can be 'standart' or 'relay'
+      // const pagination = 'relay';
+      const pagination = 'standart';
       return (
         <PageLayout>
           {this.renderMetaData()}
@@ -95,7 +83,7 @@ export default class PostList extends React.PureComponent {
             columns={columns}
             pagination={pagination}
             pageInfo={posts.pageInfo}
-            loadMoreRows={loadMoreRows}
+            loadPost={loadPost}
             totalCount={posts.totalCount}
           />
         </PageLayout>

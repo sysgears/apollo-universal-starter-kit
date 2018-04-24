@@ -149,8 +149,32 @@ export default compose(
           }
         });
       };
+      const loadPost = e => {
+        console.log(posts.edges[0].cursor);
+        return fetchMore({
+          variables: {
+            after: e * 10
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            const totalCount = fetchMoreResult.posts.totalCount;
+            const newEdges = fetchMoreResult.posts.edges;
+            const pageInfo = fetchMoreResult.posts.pageInfo;
+
+            return {
+              // By returning `cursor` here, we update the `fetchMore` function
+              // to the new cursor.
+              posts: {
+                totalCount,
+                edges: newEdges,
+                pageInfo,
+                __typename: 'Posts'
+              }
+            };
+          }
+        });
+      };
       if (error) throw new Error(error);
-      return { loading, posts, subscribeToMore, loadMoreRows };
+      return { loading, posts, subscribeToMore, loadMoreRows, loadPost };
     }
   }),
   graphql(DELETE_POST, {

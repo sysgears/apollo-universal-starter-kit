@@ -61,7 +61,7 @@ Table.propTypes = {
   totalCount: PropTypes.number,
   loadMoreRows: PropTypes.func.isRequired,
   pageInfo: PropTypes.object,
-  pagination: PropTypes.bool
+  pagination: PropTypes.string
 };
 
 export default Table;

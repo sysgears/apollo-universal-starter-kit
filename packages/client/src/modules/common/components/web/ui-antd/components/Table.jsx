@@ -1,30 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ADTable from 'antd/lib/table';
+import { Pagination } from 'antd';
 import { Button } from '../components';
 
-const Table = ({ ...props }) => {
-  console.log(props);
+const Table = ({ totalCount, loadMoreRows, loadPost, pageInfo, pagination, ...props }) => {
+  pagination = pagination !== 'relay';
   return (
     <div>
-      <ADTable {...props} rowKey="id" />
-      <div>
-        <small>
-          ({props.dataSource.length} / {props.totalCount})
-        </small>
-      </div>
-      {renderLoadMore(props.dataSource, props.loadMoreRows, props.pageInfo)}
+      <ADTable pagination={false} {...props} rowKey="id" />
+      {renderLoadMore(props.dataSource, loadMoreRows, loadPost, pageInfo, pagination, totalCount)}
     </div>
   );
 };
 
-const renderLoadMore = (dataSource, loadMoreRows, pageInfo) => {
-  if (pageInfo.hasNextPage) {
+const renderLoadMore = (dataSource, loadMoreRows, loadPost, pageInfo, pagination, totalCount) => {
+  if (pageInfo.hasNextPage && !pagination) {
     return (
-      <Button id="load-more" color="primary" onClick={loadMoreRows}>
-        Load more ...
-      </Button>
+      <div>
+        <div>
+          <small>
+            ({dataSource.length} / {totalCount})
+          </small>
+        </div>
+        <Button id="load-more" color="primary" onClick={loadMoreRows}>
+          Load more ...
+        </Button>
+      </div>
     );
+  } else {
+    return <Pagination defaultCurrent={1} total={totalCount} onChange={e => loadPost(e)} />;
   }
 };
 
@@ -32,9 +37,10 @@ Table.propTypes = {
   children: PropTypes.node,
   dataSource: PropTypes.array,
   totalCount: PropTypes.number,
-  loadMoreRows: PropTypes.func.isRequired,
+  loadMoreRows: PropTypes.func,
+  loadPost: PropTypes.func,
   pageInfo: PropTypes.object,
-  pagination: PropTypes.bool
+  pagination: PropTypes.string
 };
 
 export default Table;

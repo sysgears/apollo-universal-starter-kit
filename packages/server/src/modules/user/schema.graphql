@@ -126,3 +126,14 @@ input ProfileInput {
     firstName: String
     lastName: String
 }
+
+extend type Subscription {
+  # Subscription for users list
+  usersUpdated(filter: FilterUserInput): UpdateUserPayload
+}
+
+# Payload for usersUpdated Subscription
+type UpdateUserPayload {
+  mutation: String!
+  node: User!
+}

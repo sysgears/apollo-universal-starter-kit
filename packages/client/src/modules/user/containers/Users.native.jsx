@@ -6,24 +6,46 @@ import UsersList from '../components/UsersListView';
 import UsersFilter from '../components/UsersFilterView';
 import {
   withUsersState,
-  whitUsers,
+  withUsers,
   withUsersDeleting,
   withOrderByUpdating,
-  withFilterUpdating
+  withFilterUpdating,
+  subscribeToUsersList
 } from './UserOperations';
 
-const Users = ({ ...props }) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.filterContainer}>
-        <UsersFilter {...props} />
+class Users extends React.Component {
+  constructor(props) {
+    super(props);
+    this.subscription = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { subscribeToMore, filter } = this.props;
+    if (!nextProps.loading) {
+      if (this.subscription) {
+        this.subscription();
+        this.subscription = null;
+      }
+
+      if (!this.subscription) {
+        this.subscription = subscribeToUsersList(subscribeToMore, filter);
+      }
+    }
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.filterContainer}>
+          <UsersFilter {...this.props} />
+        </View>
+        <View style={styles.usersListContainer}>
+          <UsersList {...this.props} />
+        </View>
       </View>
-      <View style={styles.usersListContainer}>
-        <UsersList {...props} />
-      </View>
-    </View>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -45,7 +67,9 @@ const styles = StyleSheet.create({
 });
 
 Users.propTypes = {
-  navigation: PropTypes.object
+  filter: PropTypes.object,
+  subscribeToMore: PropTypes.func,
+  loading: PropTypes.bool
 };
 
-export default compose(withUsersState, whitUsers, withUsersDeleting, withOrderByUpdating, withFilterUpdating)(Users);
+export default compose(withUsersState, withUsers, withUsersDeleting, withOrderByUpdating, withFilterUpdating)(Users);

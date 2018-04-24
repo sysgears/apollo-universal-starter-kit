@@ -2,10 +2,13 @@
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
+import { withFilter } from 'graphql-subscriptions';
 
 import auth from './auth';
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
+
+const USERS_SUBSCRIPTION = 'users_subscription';
 
 export default pubsub => ({
   Query: {
@@ -14,10 +17,14 @@ export default pubsub => ({
     }),
     user: withAuth(
       (obj, args, context) => {
-        return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
+        return ['user:view:self'];
       },
       (obj, { id }, context) => {
-        return context.User.getUser(id);
+        const e = new FieldError();
+        if (context.user.id === id || context.user.role === 'admin') {
+          return context.User.getUser(id);
+        }
+        return null;
       }
     ),
     currentUser(obj, args, context) {
@@ -150,7 +157,7 @@ export default pubsub => ({
     ),
     deleteUser: withAuth(
       (obj, args, context) => {
-        return context.user.id !== args.input.id ? ['user:delete'] : ['user:delete:self'];
+        return context.user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
       },
       async (obj, { id }, context) => {
         try {

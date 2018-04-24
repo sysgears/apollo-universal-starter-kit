@@ -33,7 +33,8 @@ Table.propTypes = {
   dataSource: PropTypes.array,
   totalCount: PropTypes.number,
   loadMoreRows: PropTypes.func.isRequired,
-  pageInfo: PropTypes.object
+  pageInfo: PropTypes.object,
+  pagination: PropTypes.bool
 };
 
 export default Table;

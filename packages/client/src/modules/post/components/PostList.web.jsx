@@ -19,6 +19,7 @@ export default class PostList extends React.PureComponent {
   };
 
   renderLoadMore = (posts, loadMoreRows) => {
+    console.log(posts);
     if (posts.pageInfo.hasNextPage) {
       return (
         <Button id="load-more" color="primary" onClick={loadMoreRows}>
@@ -77,6 +78,10 @@ export default class PostList extends React.PureComponent {
           )
         }
       ];
+      // paginationType can be 'standart' or 'relay'
+      const paginationType = 'relay';
+      // const paginationType = 'standart';
+      let pagination = paginationType !== 'relay';
       return (
         <PageLayout>
           {this.renderMetaData()}
@@ -85,13 +90,14 @@ export default class PostList extends React.PureComponent {
             <Button color="primary">Add</Button>
           </Link>
           <h1 />
-          <Table dataSource={posts.edges.map(({ node }) => node)} columns={columns} />
-          <div>
-            <small>
-              ({posts.edges.length} / {posts.totalCount})
-            </small>
-          </div>
-          {this.renderLoadMore(posts, loadMoreRows)}
+          <Table
+            dataSource={posts.edges.map(({ node }) => node)}
+            columns={columns}
+            pagination={pagination}
+            pageInfo={posts.pageInfo}
+            loadMoreRows={loadMoreRows}
+            totalCount={posts.totalCount}
+          />
         </PageLayout>
       );
     }

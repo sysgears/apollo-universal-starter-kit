@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
 
 import { StackNavigator } from 'react-navigation';
 
@@ -113,11 +112,6 @@ UserEditScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-// const UsersNavigation = StackNavigator({
-//   UsersList: { screen: UsersLisScreen },
-//   UserEdit: { screen: UserEditScreen }
-// });
-
 class ProfileScreen extends React.Component {
   static navigationOptions = () => ({
     title: 'Profile'
@@ -144,11 +138,6 @@ ProfileScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-// const ProfileNavigation = StackNavigator({
-//   Profile: { screen: ProfileScreen },
-//   ProfileEdit: { screen: ProfilerEditScreen }
-// });
-
 const HeaderTitleWithI18n = translate('user')(HeaderTitle);
 
 export * from './containers/Auth';
@@ -164,7 +153,12 @@ export default new Feature(access, {
             headerLeft: <MenuButton navigation={navigation} />
           })
         },
-        ProfileEdit: { screen: ProfilerEditScreen }
+        ProfileEdit: {
+          screen: ProfilerEditScreen,
+          navigationOptions: () => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editProfile" style="subTitle" />
+          })
+        }
       }),
       userInfo: {
         showOnLogin: true,
@@ -193,7 +187,10 @@ export default new Feature(access, {
           })
         },
         UserEdit: {
-          screen: UserEditScreen
+          screen: UserEditScreen,
+          navigationOptions: () => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
+          })
         }
       }),
       userInfo: {

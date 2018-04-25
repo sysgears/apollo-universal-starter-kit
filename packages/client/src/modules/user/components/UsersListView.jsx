@@ -38,19 +38,19 @@ const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
                         <CardItem>
                           <View style={styles.itemsContainer}>
                             <CardItem style={styles.cardItemWrapper}>
-                              <CardLabel>{t('users.column.name')}</CardLabel>
+                              <CardLabel>{`${t('users.column.name')}: `}</CardLabel>
                               <CardText>{username}</CardText>
                             </CardItem>
                             <CardItem style={styles.cardItemWrapper}>
-                              <CardLabel>{t('users.column.email')}</CardLabel>
+                              <CardLabel>{`${t('users.column.email')}: `}</CardLabel>
                               <CardText>{email}</CardText>
                             </CardItem>
                             <CardItem style={styles.cardItemWrapper}>
-                              <CardLabel>{t('users.column.role')}</CardLabel>
+                              <CardLabel>{`${t('users.column.role')}: `}</CardLabel>
                               <CardText>{role}</CardText>
                             </CardItem>
                             <CardItem style={styles.cardItemWrapper}>
-                              <CardLabel>{t('users.column.active')}</CardLabel>
+                              <CardLabel>{`${t('users.column.active')}: `}</CardLabel>
                               <CardText>{String(isActive)}</CardText>
                             </CardItem>
                           </View>
@@ -107,8 +107,10 @@ const styles = StyleSheet.create({
     flex: 9
   },
   cardItemWrapper: {
-    paddingTop: 3,
-    paddingBottom: 3
+    paddingTop: 5,
+    paddingBottom: 5,
+    flexDirection: 'column',
+    alignItems: 'flex-start'
   },
   notificationContainer: {
     justifyContent: 'center',

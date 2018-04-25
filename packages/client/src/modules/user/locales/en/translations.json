@@ -3,7 +3,9 @@
     "users": "Users",
     "sign": "Sign In",
     "logout": "Logout",
-    "profile": "Profile"
+    "profile": "Profile",
+    "editProfile": "Edit profile",
+    "editUser": "Edit user"
   },
   "forgotPass": {
     "title": "Forgot password",

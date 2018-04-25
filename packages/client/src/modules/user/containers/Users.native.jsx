@@ -20,9 +20,10 @@ class Users extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { subscribeToMore, filter } = this.props;
+    const { subscribeToMore, filter, users } = this.props;
     if (!nextProps.loading) {
-      if (this.subscription) {
+      if (this.subscription && nextProps.users.length !== users.length) {
+        this.subscription();
         this.subscription = null;
       }
 
@@ -73,6 +74,7 @@ const styles = StyleSheet.create({
 
 Users.propTypes = {
   filter: PropTypes.object,
+  users: PropTypes.array,
   subscribeToMore: PropTypes.func,
   loading: PropTypes.bool
 };

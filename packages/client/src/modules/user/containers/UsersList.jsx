@@ -21,9 +21,9 @@ class UsersList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { subscribeToMore, filter } = this.props;
+    const { subscribeToMore, filter, users } = this.props;
     if (!nextProps.loading) {
-      if (this.subscription) {
+      if (this.subscription && nextProps.users.length !== users.length) {
         this.subscription = null;
       }
 
@@ -47,6 +47,7 @@ class UsersList extends React.Component {
 UsersList.propTypes = {
   navigation: PropTypes.object,
   filter: PropTypes.object,
+  users: PropTypes.array,
   subscribeToMore: PropTypes.func,
   loading: PropTypes.bool
 };

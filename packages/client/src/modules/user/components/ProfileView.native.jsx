@@ -49,12 +49,15 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
               {profileItems.map((item, idx) => renderProfileItem(item.label, item.value, idx))}
             </Card>
           </View>
-          <View style={styles.cardWrapper}>
+          {/* 
+            * TODO Add this code after implementation Subscription module for mobile platform          
+          */}
+          {/* <View style={styles.cardWrapper}>
             <Card>
               <CardHeader title="Subscription info" />
               <SubscriptionProfile />
             </Card>
-          </View>
+          </View> */}
           <TouchableOpacity
             style={styles.linkWrapper}
             onPress={() => navigation.navigate('ProfileEdit', { id: currentUser.id })}

@@ -62,13 +62,12 @@ export default compose(
           const { data: { editUser } } = await mutate({
             variables: { input }
           });
-
           if (editUser.errors) {
             return { errors: editUser.errors };
           }
 
           if (history) {
-            return input.role === 'admin' ? history.push('/users') : history.push('/profile');
+            return history.push('/users');
           }
 
           if (navigation) {

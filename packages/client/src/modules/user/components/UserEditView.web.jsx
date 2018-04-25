@@ -19,7 +19,7 @@ class UserEditView extends React.PureComponent {
   };
 
   onSubmit = async values => {
-    const { user, addUser, editUser } = this.props;
+    const { user, addUser, editUser, t } = this.props;
     let result = null;
 
     let insertValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
@@ -72,7 +72,7 @@ class UserEditView extends React.PureComponent {
     } else {
       return (
         <PageLayout>
-          {this.renderMetaData()}
+          {this.renderMetaData(t)}
           <Link id="back-button" to={user && user.role === 'admin' ? '/users' : '/profile'}>
             Back
           </Link>

@@ -20,7 +20,6 @@ export default pubsub => ({
         return ['user:view:self'];
       },
       (obj, { id }, context) => {
-        const e = new FieldError();
         if (context.user.id === id || context.user.role === 'admin') {
           return context.User.getUser(id);
         }
@@ -111,6 +110,13 @@ export default pubsub => ({
             });
           }
 
+          pubsub.publish(USERS_SUBSCRIPTION, {
+            usersUpdated: {
+              mutation: 'CREATED',
+              node: user
+            }
+          });
+
           return { user };
         } catch (e) {
           return { errors: e };
@@ -146,8 +152,13 @@ export default pubsub => ({
           if (settings.user.auth.certificate.enabled) {
             await context.User.editAuthCertificate(input);
           }
-
           const user = await context.User.getUser(input.id);
+          pubsub.publish(USERS_SUBSCRIPTION, {
+            usersUpdated: {
+              mutation: 'UPDATED',
+              node: user
+            }
+          });
 
           return { user };
         } catch (e) {
@@ -175,6 +186,12 @@ export default pubsub => ({
 
           const isDeleted = await context.User.deleteUser(id);
           if (isDeleted) {
+            pubsub.publish(USERS_SUBSCRIPTION, {
+              usersUpdated: {
+                mutation: 'DELETED',
+                node: user
+              }
+            });
             return { user };
           } else {
             e.setError('delete', 'Could not delete user. Please try again later.');
@@ -186,5 +203,29 @@ export default pubsub => ({
       }
     )
   },
-  Subscription: {}
+  Subscription: {
+    usersUpdated: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(USERS_SUBSCRIPTION),
+        (payload, variables) => {
+          const { mutation, node } = payload.usersUpdated;
+          const { filter: { isActive, role, searchText } } = variables;
+
+          const checkByFilter =
+            !!node.isActive === isActive &&
+            (!role || role === node.role) &&
+            (!searchText || node.username.includes(searchText) || node.email.includes(searchText));
+
+          switch (mutation) {
+            case 'DELETED':
+              return true;
+            case 'CREATED':
+              return checkByFilter;
+            case 'UPDATED':
+              return !checkByFilter;
+          }
+        }
+      )
+    }
+  }
 });

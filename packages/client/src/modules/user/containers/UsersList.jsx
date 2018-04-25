@@ -24,6 +24,7 @@ class UsersList extends React.Component {
     const { subscribeToMore, filter, users } = this.props;
     if (!nextProps.loading) {
       if (this.subscription && nextProps.users.length !== users.length) {
+        this.subscription();
         this.subscription = null;
       }
 

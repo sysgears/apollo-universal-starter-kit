@@ -94,23 +94,22 @@ class UsersFilterView extends React.PureComponent {
 
     const orderByParams = [
       {
-        label: t('userEdit.column.name'),
+        label: t('users.column.name'),
         value: 'username'
       },
       {
-        label: t('userEdit.column.email'),
+        label: t('users.column.email'),
         value: 'email'
       },
       {
-        label: t('userEdit.column.role'),
+        label: t('users.column.role'),
         value: 'role'
       },
       {
-        label: t('userEdit.column.active'),
+        label: t('users.column.active'),
         value: 'isActive'
       }
     ];
-
     return (
       <View>
         <View style={styles.listWrapper}>
@@ -118,12 +117,12 @@ class UsersFilterView extends React.PureComponent {
         </View>
         <View style={styles.buttonWrapper}>
           <Button type={success} onPress={this.onOrderBy}>
-            Submit
+            {t('users.btnModalSubmit')}
           </Button>
         </View>
         <View style={styles.buttonWrapper}>
           <Button type={danger} onPress={() => this.setState({ showModal: !this.state.showModal, orderBy })}>
-            Close
+            {t('users.btnModalClose')}
           </Button>
         </View>
       </View>
@@ -162,20 +161,24 @@ class UsersFilterView extends React.PureComponent {
           <Select
             icon
             mode="dropdown"
-            data={[{ value: '', label: 'All' }, { value: 'user', label: 'user' }, { value: 'admin', label: 'admin' }]}
+            data={[
+              { value: '', label: t('users.list.item.role.select') },
+              { value: 'user', label: t('users.list.item.role.user') },
+              { value: 'admin', label: t('users.list.item.role.admin') }
+            ]}
             selectedValue={role}
             placeholder={t('users.list.item.role.label')}
             onValueChange={value => this.handleRole(value)}
             cols={1}
-            extra="All"
+            extra={t('users.list.item.role.select')}
           />
         </View>
         <View style={styles.switchContainer}>
-          <Text style={styles.switchText}>Is Active</Text>
+          <Text style={styles.switchText}>{t('users.column.active')}</Text>
           <Switch onValueChange={this.handleIsActive} value={isActive} />
         </View>
         <TouchableOpacity style={styles.orderByContainer} onPress={() => this.setState({ showModal: true })}>
-          <Text>Order By</Text>
+          <Text style={styles.switchText}>{t('users.orderByText')}</Text>
           <FontAwesome name="sort" size={25} style={styles.iconStyle} />
         </TouchableOpacity>
         <Modal

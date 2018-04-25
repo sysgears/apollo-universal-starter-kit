@@ -61,7 +61,7 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
             {settings.subscription.enabled && <SubscriptionProfile />}
           </Card>
           <Link className="mt-2 btn user-link" to={`/users/${currentUser.id}`}>
-            Edit Profile
+            {t('profile.editProfileText')}
           </Link>
         </LayoutCenter>
       </PageLayout>

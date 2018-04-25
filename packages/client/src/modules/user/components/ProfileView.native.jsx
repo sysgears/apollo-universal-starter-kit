@@ -45,7 +45,7 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.cardWrapper}>
             <Card>
-              <CardHeader title="Profile info" />
+              <CardHeader title={t('profile.headerText')} />
               {profileItems.map((item, idx) => renderProfileItem(item.label, item.value, idx))}
             </Card>
           </View>
@@ -62,7 +62,7 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
             style={styles.linkWrapper}
             onPress={() => navigation.navigate('ProfileEdit', { id: currentUser.id })}
           >
-            <Text style={styles.link}>Edit profile</Text>
+            <Text style={styles.link}>{t('profile.editProfileText')}</Text>
           </TouchableOpacity>
         </ScrollView>
       )}

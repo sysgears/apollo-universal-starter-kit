@@ -43,7 +43,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
       />
       <Field
         name="isActive"
-        label={t('userEdit.form.field.name')}
+        label={t('userEdit.form.field.active')}
         onValueChange={() => setFieldValue('isActive', !isActive)}
         component={RenderSwitch}
         placeholder={t('userEdit.form.field.active')}
@@ -92,9 +92,9 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
       <Field
         name="passwordConfirmation"
         component={RenderField}
-        placeholder="Password Confirmation"
+        placeholder={t('userEdit.form.field.passConf')}
         value={passwordConfirmation}
-        type={t('userEdit.form.field.passConf')}
+        type="password"
         secureTextEntry={true}
       />
       <View style={styles.submit}>

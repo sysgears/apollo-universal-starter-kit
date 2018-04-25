@@ -40,9 +40,11 @@
 
   "profile": {
     "title": "Profile",
+    "headerText": "Profile info",
     "meta": "Profile example page",
     "loadMsg": "Loading...",
     "errorMsg": "No current user logged in",
+    "editProfileText": "Edit Profile",
     "card": {
       "title": "Profile",
       "group": {
@@ -133,6 +135,9 @@
         "active": "Is Active"
       }
     },
+    "btnModalSubmit": "Submit",
+    "btnModalClose": "Close",
+    "orderByText": "Order by",
     "column": {
       "name": "Username",
       "email": "Email",

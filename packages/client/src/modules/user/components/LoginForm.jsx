@@ -32,7 +32,6 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
               component={RenderField}
               type="email"
               keyboardType="email-address"
-              label={t('mobile.login.email.label')}
               placeholder={t('mobile.login.email.placeholder')}
               placeholderTextColor="#8e908c"
               value={values.email}
@@ -44,7 +43,6 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
               component={RenderField}
               type="password"
               secureTextEntry={true}
-              label={t('mobile.login.pass.label')}
               placeholder={t('mobile.login.pass.placeholder')}
               placeholderTextColor="#8e908c"
               value={values.password}

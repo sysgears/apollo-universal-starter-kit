@@ -21,7 +21,7 @@ const PostForm = ({ values, handleSubmit, t }) => {
         name="title"
         component={RenderField}
         type="text"
-        label={t('post.field.title')}
+        placeholder={t('post.field.title')}
         value={values.title}
         placeholderTextColor="#8e908c"
       />
@@ -29,7 +29,7 @@ const PostForm = ({ values, handleSubmit, t }) => {
         name="content"
         component={RenderField}
         type="text"
-        label={t('post.field.content')}
+        placeholder={t('post.field.content')}
         value={values.content}
         placeholderTextColor="#8e908c"
       />

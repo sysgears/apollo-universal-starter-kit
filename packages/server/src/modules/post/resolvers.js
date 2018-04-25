@@ -11,9 +11,9 @@ export default pubsub => ({
       let edgesArray = [];
       let posts = await context.Post.postsPagination(limit, after);
 
-      posts.map(post => {
+      posts.map((post, index) => {
         edgesArray.push({
-          cursor: post.id,
+          cursor: after + index,
           node: {
             id: post.id,
             title: post.title,
@@ -22,16 +22,15 @@ export default pubsub => ({
         });
       });
 
-      const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
-
-      const values = await Promise.all([context.Post.getTotal(), context.Post.getNextPageFlag(endCursor)]);
-
+      const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor + 1 : 0;
+      const values = await Promise.all([context.Post.getTotal()]);
+      const hasNextPage = values[0].count - after - 10 > 0;
       return {
         totalCount: values[0].count,
         edges: edgesArray,
         pageInfo: {
           endCursor: endCursor,
-          hasNextPage: values[1].count > 0
+          hasNextPage: hasNextPage
         }
       };
     },

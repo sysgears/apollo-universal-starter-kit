@@ -3,17 +3,12 @@ import knex from '../../sql/connector';
 
 export default class Post {
   postsPagination(limit, after) {
-    let where = '';
-    if (after > 0) {
-      where = `id < ${after}`;
-    }
-
     return knex
       .select('id', 'title', 'content')
       .from('post')
-      .whereRaw(where)
       .orderBy('id', 'desc')
-      .limit(limit);
+      .limit(limit)
+      .offset(after);
   }
 
   async getCommentsForPostIds(postIds) {
@@ -28,13 +23,6 @@ export default class Post {
   getTotal() {
     return knex('post')
       .countDistinct('id as count')
-      .first();
-  }
-
-  getNextPageFlag(id) {
-    return knex('post')
-      .countDistinct('id as count')
-      .where('id', '<', id)
       .first();
   }
 

@@ -10,7 +10,7 @@ export default class PostList extends React.PureComponent {
     loading: PropTypes.bool.isRequired,
     posts: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
-    loadPost: PropTypes.func
+    loadMoreRows: PropTypes.func
   };
 
   handleDeletePost = id => {
@@ -31,7 +31,7 @@ export default class PostList extends React.PureComponent {
   );
 
   render() {
-    const { loading, posts, loadPost } = this.props;
+    const { loading, posts, loadMoreRows } = this.props;
     if (loading) {
       return (
         <PageLayout>
@@ -67,9 +67,7 @@ export default class PostList extends React.PureComponent {
           )
         }
       ];
-      // pagination can be 'standart' or 'relay'
-      // const pagination = 'relay';
-      const pagination = 'standart';
+
       return (
         <PageLayout>
           {this.renderMetaData()}
@@ -81,9 +79,9 @@ export default class PostList extends React.PureComponent {
           <Table
             dataSource={posts.edges.map(({ node }) => node)}
             columns={columns}
-            pagination={pagination}
+            pagination="standard"
             pageInfo={posts.pageInfo}
-            loadPost={loadPost}
+            loadData={loadMoreRows}
             totalCount={posts.totalCount}
           />
         </PageLayout>

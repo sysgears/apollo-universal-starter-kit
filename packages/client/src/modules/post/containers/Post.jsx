@@ -126,46 +126,25 @@ export default compose(
     },
     props: ({ data }) => {
       const { loading, error, posts, fetchMore, subscribeToMore } = data;
-      const loadMoreRows = () => {
+      const loadMoreRows = (pagination = 'relay', e = null) => {
+        const newEndCursor = e * 10 - 10;
+        const endCursor = pagination === 'relay' ? posts.pageInfo.endCursor : newEndCursor;
         return fetchMore({
           variables: {
-            after: posts.pageInfo.endCursor
+            after: endCursor
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             const totalCount = fetchMoreResult.posts.totalCount;
             const newEdges = fetchMoreResult.posts.edges;
             const pageInfo = fetchMoreResult.posts.pageInfo;
+            const displayedEdges = pagination === 'relay' ? [...previousResult.posts.edges, ...newEdges] : newEdges;
 
             return {
               // By returning `cursor` here, we update the `fetchMore` function
               // to the new cursor.
               posts: {
                 totalCount,
-                edges: [...previousResult.posts.edges, ...newEdges],
-                pageInfo,
-                __typename: 'Posts'
-              }
-            };
-          }
-        });
-      };
-      const loadPost = e => {
-        console.log(posts.edges[0].cursor);
-        return fetchMore({
-          variables: {
-            after: e * 10
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            const totalCount = fetchMoreResult.posts.totalCount;
-            const newEdges = fetchMoreResult.posts.edges;
-            const pageInfo = fetchMoreResult.posts.pageInfo;
-
-            return {
-              // By returning `cursor` here, we update the `fetchMore` function
-              // to the new cursor.
-              posts: {
-                totalCount,
-                edges: newEdges,
+                edges: displayedEdges,
                 pageInfo,
                 __typename: 'Posts'
               }
@@ -174,7 +153,7 @@ export default compose(
         });
       };
       if (error) throw new Error(error);
-      return { loading, posts, subscribeToMore, loadMoreRows, loadPost };
+      return { loading, posts, subscribeToMore, loadMoreRows };
     }
   }),
   graphql(DELETE_POST, {

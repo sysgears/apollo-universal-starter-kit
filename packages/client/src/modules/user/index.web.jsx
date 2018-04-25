@@ -33,23 +33,15 @@ const LogoutLink = withRouter(
 
 export * from './containers/Auth';
 
-const MenuItemUsersWithI18n = translate('user')(({ t }) => (
-  <IfLoggedIn key="/users" role="admin">
-    <MenuItem>
-      <NavLink to="/users" className="nav-link" activeClassName="active">
-        {t('navLink.users')}
-      </NavLink>
-    </MenuItem>
-  </IfLoggedIn>
+const NavLinkUsersWithI18n = translate('user')(({ t }) => (
+  <NavLink to="/users" className="nav-link" activeClassName="active">
+    {t('navLink.users')}
+  </NavLink>
 ));
-const MenuItemLoginWithI18n = translate('user')(({ t }) => (
-  <IfNotLoggedIn key="/login">
-    <MenuItem>
-      <NavLink to="/login" className="nav-link" activeClassName="active">
-        {t('navLink.sign')}
-      </NavLink>
-    </MenuItem>
-  </IfNotLoggedIn>
+const NavLinkLoginWithI18n = translate('user')(({ t }) => (
+  <NavLink to="/login" className="nav-link" activeClassName="active">
+    {t('navLink.sign')}
+  </NavLink>
 ));
 
 export default new Feature(access, {
@@ -75,7 +67,13 @@ export default new Feature(access, {
     <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,
     <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />
   ],
-  navItem: [<MenuItemUsersWithI18n />],
+  navItem: [
+    <IfLoggedIn key="/users" role="admin">
+      <MenuItem>
+        <NavLinkUsersWithI18n />
+      </MenuItem>
+    </IfLoggedIn>
+  ],
   navItemRight: [
     <IfLoggedIn key="/profile">
       <MenuItem>
@@ -89,7 +87,11 @@ export default new Feature(access, {
         <LogoutLink />
       </MenuItem>
     </IfLoggedIn>,
-    <MenuItemLoginWithI18n />
+    <IfNotLoggedIn key="/login">
+      <MenuItem>
+        <NavLinkLoginWithI18n />
+      </MenuItem>
+    </IfNotLoggedIn>
   ],
   resolver: resolvers,
   localization: { ns: 'user', resources },

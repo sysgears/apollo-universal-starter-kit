@@ -7,12 +7,14 @@ import { PageLayout } from '../../common/components/web';
 
 import UserForm from './UserForm';
 import settings from '../../../../../../settings';
+import translate from '../../../i18n';
 
-export default class UserEditView extends React.PureComponent {
+class UserEditView extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
     addUser: PropTypes.func.isRequired,
+    t: PropTypes.func,
     editUser: PropTypes.func.isRequired
   };
 
@@ -40,31 +42,31 @@ export default class UserEditView extends React.PureComponent {
           res[error.field] = error.message;
           return res;
         },
-        { _error: 'Login failed!' }
+        { _error: t('userEdit.errorMsg') }
       );
     }
   };
 
-  renderMetaData = () => (
+  renderMetaData = t => (
     <Helmet
-      title={`${settings.app.name} - Edit User`}
+      title={`${settings.app.name} - ${t('userEdit.title')}`}
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - Edit user example page`
+          content: `${settings.app.name} - ${t('userEdit.meta')}`
         }
       ]}
     />
   );
 
   render() {
-    const { loading, user } = this.props;
+    const { loading, user, t } = this.props;
 
     if (loading && !user) {
       return (
         <PageLayout>
-          {this.renderMetaData()}
-          <div className="text-center">Loading...</div>
+          {this.renderMetaData(t)}
+          <div className="text-center">{t('editUser.loadMsg')}</div>
         </PageLayout>
       );
     } else {
@@ -74,10 +76,14 @@ export default class UserEditView extends React.PureComponent {
           <Link id="back-button" to={user && user.role === 'admin' ? '/users' : '/profile'}>
             Back
           </Link>
-          <h2>{user ? 'Edit' : 'Create'} User</h2>
+          <h2>
+            {t(`userEdit.form.${user ? 'titleEdit' : 'titleCreate'}`)} {t('userEdit.form.title')}
+          </h2>
           <UserForm onSubmit={this.onSubmit} initialValues={user || {}} />
         </PageLayout>
       );
     }
   }
 }
+
+export default translate('user')(UserEditView);

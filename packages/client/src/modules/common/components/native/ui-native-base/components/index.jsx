@@ -20,3 +20,4 @@ export { default as CardText } from './CardText';
 export { default as CardLabel } from './CardLabel';
 export { default as CardTitle } from './CardTitle';
 export { default as CardSubtitleText } from './CardSubtitleText';
+export { default as MenuButton } from './MenuButton';

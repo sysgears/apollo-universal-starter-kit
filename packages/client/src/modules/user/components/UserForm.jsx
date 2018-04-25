@@ -7,6 +7,7 @@ import { RenderField, Button, RenderSelect, RenderSwitch } from '../../common/co
 import { email, minLength, required, match, validateForm } from '../../../../../common/validation';
 
 import settings from '../../../../../../settings';
+import translate from '../../../i18n';
 
 const userFormSchema = {
   username: [required, minLength(3)],
@@ -22,24 +23,36 @@ const handleRoleChange = (type, value, setFieldValue) => {
 
 const validate = values => validateForm(values, userFormSchema);
 
-const UserForm = ({ values, handleSubmit, setFieldValue }) => {
+const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
   return (
     <View style={styles.formContainer}>
-      <Field placeholder="User name" name="username" component={RenderField} type="text" value={username} />
-      <Field name="email" component={RenderField} placeholder="Email" value={email} keyboardType="email-address" />
+      <Field
+        placeholder={t('userEdit.form.field.name')}
+        name="username"
+        component={RenderField}
+        type="text"
+        value={username}
+      />
+      <Field
+        name="email"
+        component={RenderField}
+        placeholder={t('userEdit.form.field.email')}
+        value={email}
+        keyboardType="email-address"
+      />
       <Field
         name="isActive"
-        label="Is Active"
+        label={t('userEdit.form.field.name')}
         onValueChange={() => setFieldValue('isActive', !isActive)}
         component={RenderSwitch}
-        placeholder="Is Active"
+        placeholder={t('userEdit.form.field.active')}
         checked={isActive}
       />
       <Field
         name="role"
         component={RenderSelect}
-        placeholder="Select role"
+        placeholder={t('userEdit.form.field.role.label')}
         selectedValue={role}
         onValueChange={value => handleRoleChange('role', value, setFieldValue)}
         cols={1}
@@ -48,14 +61,14 @@ const UserForm = ({ values, handleSubmit, setFieldValue }) => {
       <Field
         name="firstName"
         component={RenderField}
-        placeholder="First Name"
+        placeholder={t('userEdit.form.field.firstName')}
         value={profile.firstName}
         onChange={value => setFieldValue('profile', { ...profile, firstName: value })}
       />
       <Field
         name="lastName"
         component={RenderField}
-        placeholder="Last Name"
+        placeholder={t('userEdit.form.field.lastName')}
         value={profile.lastName}
         onChange={value => setFieldValue('profile', { ...profile, lastName: value })}
       />
@@ -63,7 +76,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue }) => {
         <Field
           name="serial"
           component={RenderField}
-          placeholder="Serial"
+          placeholder={t('userEdit.form.field.serial')}
           value={auth && auth.certificate && auth.certificate.serial}
           onChange={value => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
         />
@@ -73,7 +86,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue }) => {
         secureTextEntry={true}
         component={RenderField}
         type="password"
-        placeholder="Password"
+        placeholder={t('userEdit.form.field.pass')}
         value={password}
       />
       <Field
@@ -81,12 +94,12 @@ const UserForm = ({ values, handleSubmit, setFieldValue }) => {
         component={RenderField}
         placeholder="Password Confirmation"
         value={passwordConfirmation}
-        type="password"
+        type={t('userEdit.form.field.passConf')}
         secureTextEntry={true}
       />
       <View style={styles.submit}>
         <Button type="primary" onPress={handleSubmit}>
-          Save
+          {t('userEdit.form.btnSubmit')}
         </Button>
       </View>
     </View>
@@ -95,6 +108,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue }) => {
 
 UserForm.propTypes = {
   handleSubmit: PropTypes.func,
+  t: PropTypes.func,
   handleChange: PropTypes.func,
   setFieldValue: PropTypes.func,
   onSubmit: PropTypes.func,
@@ -144,4 +158,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default UserFormWithFormik(UserForm);
+export default translate('user')(UserFormWithFormik(UserForm));

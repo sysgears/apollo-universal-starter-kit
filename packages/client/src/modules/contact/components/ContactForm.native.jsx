@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { Keyboard } from 'react-native';
+
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
@@ -14,14 +16,14 @@ const contactFormSchema = {
 
 const validate = values => validateForm(values, contactFormSchema);
 
-const ContactForm = ({ values, handleSubmit }) => {
+const ContactForm = ({ values, handleSubmit, t }) => {
   return (
     <FormView>
       <Field
         name="name"
         component={RenderField}
         type="text"
-        label="Name"
+        label={t('form.field.name')}
         value={values.name}
         placeholderTextColor="#8e908c"
       />
@@ -29,7 +31,7 @@ const ContactForm = ({ values, handleSubmit }) => {
         name="email"
         component={RenderField}
         type="text"
-        label="Email"
+        label={t('form.field.email')}
         value={values.email}
         keyboardType="email-address"
         placeholderTextColor="#8e908c"
@@ -38,11 +40,11 @@ const ContactForm = ({ values, handleSubmit }) => {
         name="content"
         component={RenderField}
         type="textarea"
-        label="Content"
+        label={t('form.field.content')}
         value={values.content}
         placeholderTextColor="#8e908c"
       />
-      <FormButton onPress={handleSubmit}>Send</FormButton>
+      <FormButton onPress={handleSubmit}>{t('form.btnSubmit')}</FormButton>
     </FormView>
   );
 };
@@ -53,7 +55,8 @@ ContactForm.propTypes = {
   submitting: PropTypes.bool,
   error: PropTypes.string,
   sent: PropTypes.bool,
-  values: PropTypes.object
+  values: PropTypes.object,
+  t: PropTypes.func
 };
 
 const ContactFormWithFormik = withFormik({
@@ -67,4 +70,4 @@ const ContactFormWithFormik = withFormik({
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 
-export default ContactFormWithFormik(ContactForm);
+export default translate('contact')(ContactFormWithFormik(ContactForm));

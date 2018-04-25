@@ -2,8 +2,10 @@ import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink, withRouter } from 'react-router-dom';
 
+import translate from '../../i18n';
 import access from './access';
 import resolvers from './resolvers';
+import resources from './locales';
 import ProfileView from './components/ProfileView';
 import { MenuItem } from '../../modules/common/components/web';
 import Users from './containers/Users';
@@ -31,6 +33,25 @@ const LogoutLink = withRouter(
 
 export * from './containers/Auth';
 
+const MenuItemUsersWithI18n = translate('user')(({ t }) => (
+  <IfLoggedIn key="/users" role="admin">
+    <MenuItem>
+      <NavLink to="/users" className="nav-link" activeClassName="active">
+        {t('navLink.users')}
+      </NavLink>
+    </MenuItem>
+  </IfLoggedIn>
+));
+const MenuItemLoginWithI18n = translate('user')(({ t }) => (
+  <IfNotLoggedIn key="/login">
+    <MenuItem>
+      <NavLink to="/login" className="nav-link" activeClassName="active">
+        {t('navLink.sign')}
+      </NavLink>
+    </MenuItem>
+  </IfNotLoggedIn>
+));
+
 export default new Feature(access, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
@@ -54,15 +75,7 @@ export default new Feature(access, {
     <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,
     <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />
   ],
-  navItem: [
-    <IfLoggedIn key="/users" role="admin">
-      <MenuItem>
-        <NavLink to="/users" className="nav-link" activeClassName="active">
-          Users
-        </NavLink>
-      </MenuItem>
-    </IfLoggedIn>
-  ],
+  navItem: [<MenuItemUsersWithI18n />],
   navItemRight: [
     <IfLoggedIn key="/profile">
       <MenuItem>
@@ -76,15 +89,10 @@ export default new Feature(access, {
         <LogoutLink />
       </MenuItem>
     </IfLoggedIn>,
-    <IfNotLoggedIn key="/login">
-      <MenuItem>
-        <NavLink to="/login" className="nav-link" activeClassName="active">
-          Sign In
-        </NavLink>
-      </MenuItem>
-    </IfNotLoggedIn>
+    <MenuItemLoginWithI18n />
   ],
   resolver: resolvers,
+  localization: { ns: 'user', resources },
   // eslint-disable-next-line react/display-name
   rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
 });

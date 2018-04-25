@@ -1,0 +1,17 @@
+{
+  "title": "Counter",
+  "meta": "Counter example page",
+  "loading": "Loading...",
+  "counter": {
+    "text": "Current counter, is {{ counter.amount }}. This is being stored server-side in the database and using Apollo subscription for real-time updates.",
+    "btnLabel": "Click to increase counter"
+  },
+  "reduxCount": {
+    "text": "Current reduxCount, is {{reduxCount}}. This is being stored client-side with Redux.",
+    "btnLabel": "Click to increase reduxCount"
+  },
+  "apolloCount": {
+    "text": "Current apolloLinkStateCount, is {{counterState}}. This is being stored client-side with Apollo Link State.",
+    "btnLabel": "Click to increase apolloLinkState"
+  }
+}

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 
 import settings from '../../../../../../settings';
+import translate from '../../../i18n';
 
 import LoginForm from './LoginForm';
 
@@ -23,7 +24,7 @@ class LoginView extends React.PureComponent {
 
   renderAvailableLogins = () => (
     <View style={styles.examplesArea}>
-      <Text style={styles.title}>Available logins:</Text>
+      <Text style={styles.title}>{this.props.t('login.cardTitle')}:</Text>
       <Text style={styles.exampleText}>admin@example.com: admin123</Text>
       <Text style={styles.exampleText}>user@example.com: user1234</Text>
       {settings.subscription.enabled && <Text style={styles.exampleText}>subscriber@example.com: subscriber</Text>}
@@ -82,8 +83,9 @@ const styles = StyleSheet.create({
 
 LoginView.propTypes = {
   login: PropTypes.func.isRequired,
+  t: PropTypes.func,
   error: PropTypes.string,
   navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
 };
 
-export default LoginView;
+export default translate('user')(LoginView);

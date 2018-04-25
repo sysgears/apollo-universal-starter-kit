@@ -10,7 +10,7 @@ import {
   withUsersDeleting,
   withOrderByUpdating,
   withFilterUpdating,
-  subscribeToUsersList
+  //subscribeToUsersList
 } from './UserOperations';
 
 class Users extends React.Component {
@@ -19,19 +19,19 @@ class Users extends React.Component {
     this.subscription = null;
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { subscribeToMore, filter } = this.props;
-    if (!nextProps.loading) {
-      if (this.subscription) {
-        this.subscription();
-        this.subscription = null;
-      }
+  // componentWillReceiveProps(nextProps) {
+  //   const { subscribeToMore, filter } = this.props;
+  //   if (!nextProps.loading) {
+  //     if (this.subscription) {
+  //       this.subscription();
+  //       this.subscription = null;
+  //     }
 
-      if (!this.subscription) {
-        this.subscription = subscribeToUsersList(subscribeToMore, filter);
-      }
-    }
-  }
+  //     if (!this.subscription) {
+  //       this.subscription = subscribeToUsersList(subscribeToMore, filter);
+  //     }
+  //   }
+  // }
 
   render() {
     return (

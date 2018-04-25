@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
+import translate from '../../../i18n';
 import { CardItem, CardText, CardSubtitleText, CardLabel, Button } from '../../common/components/native';
 
 const renderCardItem = (title, value) => (
@@ -10,7 +11,7 @@ const renderCardItem = (title, value) => (
   </CardItem>
 );
 
-const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand }) => {
+const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand, t }) => {
   return (
     <View style={styles.container}>
       {!loading &&
@@ -19,12 +20,12 @@ const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand }) => {
         last4 &&
         brand && (
           <View>
-            <CardSubtitleText>Card Info</CardSubtitleText>
-            {renderCardItem('Card: ', `${brand} ************${last4}`)}
-            {renderCardItem('Expires: ', `${expiryMonth}/${expiryYear}`)}
+            <CardSubtitleText>{t('card.title')}</CardSubtitleText>
+            {renderCardItem(`${t('card.text.card')}: `, `${brand} ************${last4}`)}
+            {renderCardItem(`${t('card.text.expires')}: `, `${expiryMonth}/${expiryYear}`)}
             <View>
               <View style={styles.buttonWrapper}>
-                <Button color="primary">Update Card</Button>
+                <Button color="primary">{t('card.btnUpdate')}</Button>
               </View>
             </View>
           </View>
@@ -47,7 +48,8 @@ CardInfoView.propTypes = {
   expiryMonth: PropTypes.number,
   expiryYear: PropTypes.number,
   last4: PropTypes.string,
-  brand: PropTypes.string
+  brand: PropTypes.string,
+  t: PropTypes.func
 };
 
-export default CardInfoView;
+export default translate('subscription')(CardInfoView);

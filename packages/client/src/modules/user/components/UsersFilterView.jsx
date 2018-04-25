@@ -15,26 +15,9 @@ import {
   Button
 } from '../../common/components/native';
 
-const orderByParams = [
-  {
-    label: 'Username',
-    value: 'username'
-  },
-  {
-    label: 'Email',
-    value: 'email'
-  },
-  {
-    label: 'Role',
-    value: 'role'
-  },
-  {
-    label: 'Is Active',
-    value: 'isActive'
-  }
-];
+import translate from '../../../i18n';
 
-export default class UsersFilterView extends React.PureComponent {
+class UsersFilterView extends React.PureComponent {
   static propTypes = {
     searchText: PropTypes.string,
     role: PropTypes.string,
@@ -44,6 +27,7 @@ export default class UsersFilterView extends React.PureComponent {
     onIsActiveChange: PropTypes.func.isRequired,
     orderBy: PropTypes.object,
     onOrderBy: PropTypes.func.isRequired,
+    t: PropTypes.func,
     filter: PropTypes.object
   };
 
@@ -106,7 +90,26 @@ export default class UsersFilterView extends React.PureComponent {
   };
 
   renderModalChildren = () => {
-    const { orderBy } = this.props;
+    const { orderBy, t } = this.props;
+
+    const orderByParams = [
+      {
+        label: t('userEdit.column.name'),
+        value: 'username'
+      },
+      {
+        label: t('userEdit.column.email'),
+        value: 'email'
+      },
+      {
+        label: t('userEdit.column.role'),
+        value: 'role'
+      },
+      {
+        label: t('userEdit.column.active'),
+        value: 'isActive'
+      }
+    ];
 
     return (
       <View>
@@ -149,11 +152,11 @@ export default class UsersFilterView extends React.PureComponent {
   };
 
   render() {
-    const { role, isActive } = this.props.filter;
+    const { filter: { role, isActive }, t } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.inputContainer}>
-          <SearchBar placeholder="Search user..." onChangeText={this.onChangeTextDelayed} />
+          <SearchBar placeholder={t('users.list.item.search')} onChangeText={this.onChangeTextDelayed} />
         </View>
         <View style={styles.selectContainer}>
           <Select
@@ -161,7 +164,7 @@ export default class UsersFilterView extends React.PureComponent {
             mode="dropdown"
             data={[{ value: '', label: 'All' }, { value: 'user', label: 'user' }, { value: 'admin', label: 'admin' }]}
             selectedValue={role}
-            placeholder="Filter by role..."
+            placeholder={t('users.list.item.role.label')}
             onValueChange={value => this.handleRole(value)}
             cols={1}
             extra="All"
@@ -241,3 +244,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   }
 });
+
+export default translate('user')(UsersFilterView);

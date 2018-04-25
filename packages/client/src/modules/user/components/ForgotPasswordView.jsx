@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 
 import ForgotPasswordForm from './ForgotPasswordForm';
+import translate from '../../../i18n';
 
-class ForgotPassword extends React.Component {
+class ForgotPasswordView extends React.Component {
   static propTypes = {
-    forgotPassword: PropTypes.func.isRequired
+    forgotPassword: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   state = {
@@ -21,7 +23,7 @@ class ForgotPassword extends React.Component {
           res[error.field] = error.message;
           return res;
         },
-        { _error: 'Forgot password failed!' }
+        { _error: this.props.t('forgotPass.errorMsg') }
       );
     }
 
@@ -47,4 +49,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ForgotPassword;
+export default translate('user')(ForgotPasswordView);

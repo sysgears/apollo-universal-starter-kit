@@ -3,19 +3,22 @@ import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import { pick } from 'lodash';
 
-import settings from '../../../../../../settings';
+import translate from '../../../i18n';
 import UserForm from './UserForm';
 
-export default class UserEditView extends React.PureComponent {
+import settings from '../../../../../../settings';
+
+class UserEditView extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
     addUser: PropTypes.func.isRequired,
-    editUser: PropTypes.func.isRequired
+    editUser: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   onSubmit = async values => {
-    const { user, addUser, editUser } = this.props;
+    const { user, addUser, editUser, t } = this.props;
     let result = null;
 
     let insertValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
@@ -38,16 +41,16 @@ export default class UserEditView extends React.PureComponent {
           res[error.field] = error.message;
           return res;
         },
-        { _error: 'Login failed!' }
+        { _error: t('userEdit.errorMsg') }
       );
     }
   };
 
   render() {
-    const { loading, user } = this.props;
+    const { loading, user, t } = this.props;
 
     if (loading && !user) {
-      return <Text>Loading...</Text>;
+      return <Text>{t('editUser.loadMsg')}</Text>;
     } else {
       return (
         <View style={styles.container}>
@@ -64,3 +67,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
+
+export default translate('user')(UserEditView);

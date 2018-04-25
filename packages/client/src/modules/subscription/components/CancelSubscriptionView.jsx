@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { CardText, CardSubtitleText, Button } from '../../common/components/native';
+import translate from '../../../i18n';
 
-export default class CancelSubscriptionView extends React.Component {
+class CancelSubscriptionView extends React.Component {
   static propTypes = {
     loading: PropTypes.bool,
     active: PropTypes.bool,
-    cancel: PropTypes.func.isRequired
+    cancel: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   state = {
@@ -29,29 +31,29 @@ export default class CancelSubscriptionView extends React.Component {
   };
 
   render() {
-    const { loading, active } = this.props;
+    const { loading, active, t } = this.props;
     const { errors } = this.state;
 
     if (loading) {
       return (
         <View>
-          <Text>Loading...</Text>
+          <Text>{t('cancel.load')}</Text>
         </View>
       );
     }
 
     return (
       <View style={styles.container}>
-        <CardSubtitleText>Subscription</CardSubtitleText>
+        <CardSubtitleText>{t('cancel.title')}</CardSubtitleText>
         <View style={styles.buttonWrapper}>
           {active && (
             <Button onPress={this.onClick} disabled={this.state.cancelling} danger>
-              Cancel Subscription
+              {t('cancel.btn')}
             </Button>
           )}
           {!active && (
             <View style={styles.subscriptionText}>
-              <CardText>You do not have a subscription.</CardText>
+              <CardText>{t('cancel.msg')}</CardText>
             </View>
           )}
           {errors && (
@@ -100,10 +102,12 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginTop: 10
   },
-  subscriptionText: { 
+  subscriptionText: {
     paddingLeft: 5
-   },
+  },
   buttonWrapper: {
     paddingHorizontal: 10
   }
 });
+
+export default translate('subscription')(CancelSubscriptionView);

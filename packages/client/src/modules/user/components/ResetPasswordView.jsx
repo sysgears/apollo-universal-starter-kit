@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 
 import ResetPasswordForm from '../components/ResetPasswordForm';
+import translate from '../../../i18n';
 
-export default class ResetPasswordView extends React.Component {
+class ResetPasswordView extends React.Component {
   static propTypes = {
     resetPassword: PropTypes.func.isRequired,
+    t: PropTypes.func,
     match: PropTypes.shape({
       params: PropTypes.shape({
         token: PropTypes.string.isRequired
@@ -26,7 +28,7 @@ export default class ResetPasswordView extends React.Component {
           res[error.field] = error.message;
           return res;
         },
-        { _error: 'Reset password failed!' }
+        { _error: this.props.t('resetPass.errorMsg') }
       );
     }
   };
@@ -48,3 +50,5 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
+
+export default translate('user')(ResetPasswordView);

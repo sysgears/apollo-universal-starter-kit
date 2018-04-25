@@ -10,7 +10,7 @@ const config = {
       defines: {
         __CLIENT__: true
       },
-      enabled: false
+      enabled: true
     },
     ios: {
       entry: './src/index.ts',
@@ -20,7 +20,7 @@ const config = {
       defines: {
         __CLIENT__: true
       },
-      enabled: false
+      enabled: true
     },
     test: {
       stack: ['react-native-web', 'server'],
@@ -31,7 +31,7 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'es6', 'ts', 'webpack'],
+    stack: ['apollo', 'react', 'styled-components', 'es6', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
     webpackDll: true,
     reactHotLoader: false,

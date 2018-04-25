@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { withFormik } from 'formik';
+
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Button } from '../../common/components';
 import { RenderField } from '../../common/components/native';
@@ -17,7 +19,7 @@ const loginFormSchema = {
 
 const validate = values => validateForm(values, loginFormSchema);
 
-const LoginForm = ({ handleSubmit, valid, values, navigation }) => {
+const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
   return (
     <View style={styles.formContainer}>
       <View style={styles.form}>
@@ -30,7 +32,8 @@ const LoginForm = ({ handleSubmit, valid, values, navigation }) => {
               component={RenderField}
               type="email"
               keyboardType="email-address"
-              placeholder="Email"
+              label={t('mobile.login.email.label')}
+              placeholder={t('mobile.login.email.placeholder')}
               placeholderTextColor="#8e908c"
               value={values.email}
             />
@@ -41,14 +44,15 @@ const LoginForm = ({ handleSubmit, valid, values, navigation }) => {
               component={RenderField}
               type="password"
               secureTextEntry={true}
-              placeholder="Password"
+              label={t('mobile.login.pass.label')}
+              placeholder={t('mobile.login.pass.placeholder')}
               placeholderTextColor="#8e908c"
               value={values.password}
             />
           </View>
           <View style={styles.submit}>
             <Button onPress={handleSubmit} disabled={valid}>
-              Sign In
+              {t('login.form.btnSubmit')}
             </Button>
           </View>
           <View>
@@ -57,15 +61,15 @@ const LoginForm = ({ handleSubmit, valid, values, navigation }) => {
           </View>
           <View style={styles.buttonsGroup}>
             <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-              <Text style={styles.signUpText}>Forgot password</Text>
+              <Text style={styles.signUpText}>{t('login.btn.forgotPass')}</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
       <View style={styles.buttonWrapper}>
-        <Text style={styles.text}>Not registered yet?</Text>
+        <Text style={styles.text}>{t('login.notRegText')}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.signUpText}>Sign Up</Text>
+          <Text style={styles.signUpText}>{t('login.btn.sign')}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -77,7 +81,8 @@ LoginForm.propTypes = {
   onSubmit: PropTypes.func,
   valid: PropTypes.bool,
   values: PropTypes.object,
-  navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
+  navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+  t: PropTypes.func
 };
 
 const styles = StyleSheet.create({
@@ -135,4 +140,4 @@ const LoginFormWithFormik = withFormik({
   displayName: 'LoginForm' // helps with React DevTools
 });
 
-export default LoginFormWithFormik(LoginForm);
+export default translate('user')(LoginFormWithFormik(LoginForm));

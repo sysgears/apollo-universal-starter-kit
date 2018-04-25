@@ -6,6 +6,7 @@ import Field from '../../../utils/FieldAdapter';
 import { Button } from '../../common/components';
 import { RenderField } from '../../common/components/native';
 import { required, minLength, validateForm, match } from '../../../../../common/validation';
+import translate from '../../../i18n';
 
 const resetPasswordFormSchema = {
   password: [required, minLength(8)],
@@ -14,14 +15,14 @@ const resetPasswordFormSchema = {
 
 const validate = values => validateForm(values, resetPasswordFormSchema);
 
-const ResetPasswordForm = ({ values, handleSubmit }) => {
+const ResetPasswordForm = ({ values, handleSubmit, t }) => {
   return (
     <View style={styles.formContainer}>
       <Field
         name="password"
         component={RenderField}
         type="password"
-        label="Password"
+        label={t('resetPass.form.field.pass')}
         value={values.password}
         secureTextEntry={true}
         placeholderTextColor="#8e908c"
@@ -30,13 +31,13 @@ const ResetPasswordForm = ({ values, handleSubmit }) => {
         name="passwordConfirmation"
         component={RenderField}
         type="password"
-        label="Password Confirmation"
+        label={t('resetPass.form.field.passConf')}
         value={values.passwordConfirmation}
         secureTextEntry={true}
         placeholderTextColor="#8e908c"
       />
       <View style={styles.submit}>
-        <Button onPress={handleSubmit}>Reset Password</Button>
+        <Button onPress={handleSubmit}>{t('resetPass.form.btnSubmit')}</Button>
       </View>
     </View>
   );
@@ -44,6 +45,7 @@ const ResetPasswordForm = ({ values, handleSubmit }) => {
 
 ResetPasswordForm.propTypes = {
   handleSubmit: PropTypes.func,
+  t: PropTypes.func,
   values: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool
@@ -72,4 +74,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ResetPasswordFormWithFormik(ResetPasswordForm);
+export default translate('user')(ResetPasswordFormWithFormik(ResetPasswordForm));

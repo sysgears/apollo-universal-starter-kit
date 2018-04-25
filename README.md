@@ -344,6 +344,8 @@ Check [subscription module documentation](packages/client/src/modules/subscripti
 
 * [TypeScript] support. This kit supports both ES6 and TypeScript out of the box.
 
+* Internationalization with [i18next]
+
 ## Project Structure
 
 The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by feature
@@ -534,6 +536,7 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
 [flow]: https://flow.org
 [typescript]: https://www.typescriptlang.org
+[i18next]: https://www.i18next.com
 [Stripe]: https://stripe.com
 [Wiki]: https://github.com/sysgears/apollo-universal-starter-kit/wiki
 [FAQ]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Frequently-Asked-Questions

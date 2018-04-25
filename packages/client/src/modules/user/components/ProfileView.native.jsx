@@ -1,7 +1,9 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+
 import PropTypes from 'prop-types';
+import translate from '../../../i18n';
 
 import { Card, CardItem, CardText, CardTitle, CardHeader, CardLabel } from '../../common/components/native';
 import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
@@ -10,35 +12,35 @@ import settings from '../../../../../../settings';
 
 const renderProfileItem = (title, value, idx) => (
   <CardItem key={idx}>
-    <CardLabel>{title}</CardLabel>
+    <CardLabel>{`${title}: `}</CardLabel>
     <CardText>{value}</CardText>
   </CardItem>
 );
 
-const ProfileView = ({ currentUserLoading, currentUser, navigation }) => {
+const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
   const profileItems = [
     {
-      label: 'User Name: ',
+      label: `${t('profile.card.group.name')}`,
       value: currentUser.username
     },
     {
-      label: 'Email: ',
+      label: `${t('profile.card.group.email')}`,
       value: currentUser.email
     },
     {
-      label: 'Role: ',
+      label: `${t('profile.card.group.role')}`,
       value: currentUser.role
     }
   ];
 
   if (currentUser.profile && currentUser.profile.fullName) {
-    profileItems.push({ label: 'Full name', value: currentUser.profile.fullName });
+    profileItems.push({ label: `${t('profile.card.group.full')}}`, value: currentUser.profile.fullName });
   }
 
   return (
     <View style={styles.container}>
       {currentUserLoading ? (
-        <Text style={styles.box}>Loading...</Text>
+        <Text style={styles.box}>{t('profile.loadMsg')}</Text>
       ) : (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.cardWrapper}>
@@ -94,7 +96,8 @@ const styles = StyleSheet.create({
 ProfileView.propTypes = {
   currentUserLoading: PropTypes.bool,
   currentUser: PropTypes.object,
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
+  t: PropTypes.func
 };
 
-export default ProfileView;
+export default translate('user')(ProfileView);

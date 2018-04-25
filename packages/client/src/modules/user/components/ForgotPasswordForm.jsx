@@ -7,6 +7,7 @@ import Field from '../../../utils/FieldAdapter';
 import { RenderField } from '../../common/components/native';
 import { Button } from '../../common/components';
 import { required, email, validateForm } from '../../../../../common/validation';
+import translate from '../../../i18n';
 
 const forgotPasswordFormSchema = {
   email: [required, email]
@@ -14,7 +15,7 @@ const forgotPasswordFormSchema = {
 
 const validate = values => validateForm(values, forgotPasswordFormSchema);
 
-const ForgotPasswordForm = ({ handleSubmit, values, sent }) => {
+const ForgotPasswordForm = ({ handleSubmit, values, sent, t }) => {
   return (
     <View style={styles.formContainer}>
       <View style={styles.alertContainer}>
@@ -35,7 +36,7 @@ const ForgotPasswordForm = ({ handleSubmit, values, sent }) => {
             name="email"
             component={RenderField}
             type="email"
-            placeholder="Email"
+            placeholder={t('forgotPass.form.fldEmail')}
             value={values.email}
             keyboardType="email-address"
             placeholderTextColor="#8e908c"
@@ -51,6 +52,7 @@ const ForgotPasswordForm = ({ handleSubmit, values, sent }) => {
 
 ForgotPasswordForm.propTypes = {
   handleSubmit: PropTypes.func,
+  t: PropTypes.func,
   values: PropTypes.object,
   sent: PropTypes.bool
 };
@@ -117,4 +119,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ForgotPasswordFormWithFormik(ForgotPasswordForm);
+export default translate('user')(ForgotPasswordFormWithFormik(ForgotPasswordForm));

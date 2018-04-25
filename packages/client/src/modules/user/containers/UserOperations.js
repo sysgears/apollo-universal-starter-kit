@@ -14,7 +14,7 @@ const withUsersState = Component =>
     }
   })(Component);
 
-const whitUsers = Component =>
+const withUsers = Component =>
   graphql(USERS_QUERY, {
     options: ({ orderBy, filter }) => {
       return {
@@ -73,4 +73,4 @@ const withFilterUpdating = Component =>
     })
   })(Component);
 
-export { withUsersState, whitUsers, withUsersDeleting, withOrderByUpdating, withFilterUpdating };
+export { withUsersState, withUsers, withUsersDeleting, withOrderByUpdating, withFilterUpdating };

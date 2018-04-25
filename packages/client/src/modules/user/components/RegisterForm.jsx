@@ -6,6 +6,7 @@ import Field from '../../../utils/FieldAdapter';
 import { Button } from '../../common/components';
 import { RenderField } from '../../common/components/native';
 import { match, email, minLength, required, validateForm } from '../../../../../common/validation';
+import translate from '../../../i18n';
 
 const registerFormSchema = {
   username: [required, minLength(3)],
@@ -16,14 +17,14 @@ const registerFormSchema = {
 
 const validate = values => validateForm(values, registerFormSchema);
 
-const RegisterForm = ({ values, handleSubmit }) => {
+const RegisterForm = ({ values, handleSubmit, t }) => {
   return (
     <View style={styles.formContainer}>
       <Field
         name="username"
         component={RenderField}
         type="text"
-        placeholder="Username"
+        placeholder={t('reg.form.field.name')}
         value={values.username}
         placeholderTextColor="#8e908c"
       />
@@ -31,7 +32,7 @@ const RegisterForm = ({ values, handleSubmit }) => {
         name="email"
         component={RenderField}
         type="email"
-        placeholder="Email"
+        placeholder={t('reg.form.field.email')}
         value={values.email}
         keyboardType="email-address"
         placeholderTextColor="#8e908c"
@@ -40,7 +41,7 @@ const RegisterForm = ({ values, handleSubmit }) => {
         name="password"
         component={RenderField}
         type="password"
-        placeholder="Password"
+        placeholder={t('reg.form.field.pass')}
         value={values.password}
         secureTextEntry={true}
         placeholderTextColor="#8e908c"
@@ -49,13 +50,13 @@ const RegisterForm = ({ values, handleSubmit }) => {
         name="passwordConfirmation"
         component={RenderField}
         type="password"
-        placeholder="Password Confirmation"
+        placeholder={t('reg.form.field.passConf')}
         value={values.passwordConfirmation}
         secureTextEntry={true}
         placeholderTextColor="#8e908c"
       />
       <View style={styles.submit}>
-        <Button onPress={handleSubmit}>Sign Up</Button>
+        <Button onPress={handleSubmit}> {t('reg.form.btnSubmit')}</Button>
       </View>
     </View>
   );
@@ -63,6 +64,7 @@ const RegisterForm = ({ values, handleSubmit }) => {
 
 RegisterForm.propTypes = {
   handleSubmit: PropTypes.func,
+  t: PropTypes.func,
   submitting: PropTypes.bool,
   error: PropTypes.string,
   values: PropTypes.object
@@ -91,4 +93,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default RegisterFormWithFormik(RegisterForm);
+export default translate('user')(RegisterFormWithFormik(RegisterForm));

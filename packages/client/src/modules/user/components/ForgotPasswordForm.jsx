@@ -25,7 +25,7 @@ const ForgotPasswordForm = ({ handleSubmit, values, sent, t }) => {
               <FontAwesome name="check-circle" size={30} style={{ color: '#155724' }} />
             </View>
             <View style={styles.alertTextWrapper}>
-              <Text style={styles.alertText}>Reset password instructions have been emailed to you.</Text>
+              <Text style={styles.alertText}>{t('forgotPass.submitMsg')}</Text>
             </View>
           </View>
         )}
@@ -43,7 +43,7 @@ const ForgotPasswordForm = ({ handleSubmit, values, sent, t }) => {
           />
         </View>
         <View style={styles.submit}>
-          <Button onPress={handleSubmit}>Send Reset Instructions</Button>
+          <Button onPress={handleSubmit}>{t('forgotPass.form.btnSubmit')}</Button>
         </View>
       </View>
     </View>

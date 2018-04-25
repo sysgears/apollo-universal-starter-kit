@@ -5,7 +5,10 @@
     "logout": "Logout",
     "profile": "Profile",
     "editProfile": "Edit profile",
-    "editUser": "Edit user"
+    "editUser": "Edit user",
+    "forgotPassword": "Forgot password",
+    "register": "Register",
+    "resetPassword": "Reset password"
   },
   "forgotPass": {
     "title": "Forgot password",

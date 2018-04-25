@@ -5,7 +5,10 @@
     "logout": "Выход",
     "profile": "Профиль",
     "editProfile": "Редактирование профиля",
-    "editUser": "Редактирование пользователя"
+    "editUser": "Редактирование пользователя",
+    "forgotPassword": "Забыли пароль",
+    "register": "Регистрация",
+    "resetPassword": "Сброс пароля"
   },
   "forgotPass": {
     "title": "Забыли пароль",

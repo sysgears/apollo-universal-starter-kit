@@ -36,7 +36,7 @@ LoginScreen.propTypes = {
 
 class ForgotPasswordScreen extends React.Component {
   static navigationOptions = () => ({
-    title: 'Forgot Password'
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.forgotPassword" style="subTitle" />
   });
   render() {
     return <ForgotPassword navigation={this.props.navigation} />;
@@ -49,7 +49,7 @@ ForgotPasswordScreen.propTypes = {
 
 class RegisterScreen extends React.Component {
   static navigationOptions = () => ({
-    title: 'Register'
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.register" style="subTitle" />
   });
   render() {
     return <Register navigation={this.props.navigation} />;

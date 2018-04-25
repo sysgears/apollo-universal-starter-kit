@@ -58,9 +58,9 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
             {settings.user.auth.google.enabled && <GoogleButton type="button" />}
           </View>
           <View style={styles.buttonsGroup}>
-            <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-              <Text style={styles.signUpText}>{t('login.btn.forgotPass')}</Text>
-            </TouchableOpacity>
+            <Text style={styles.signUpText} onPress={() => navigation.navigate('ForgotPassword')}>
+              {t('login.btn.forgotPass')}
+            </Text>
           </View>
         </View>
       </View>

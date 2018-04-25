@@ -23,7 +23,7 @@ const ContactForm = ({ values, handleSubmit, t }) => {
         name="name"
         component={RenderField}
         type="text"
-        label={t('form.field.name')}
+        placeholder={t('form.field.name')}
         value={values.name}
         placeholderTextColor="#8e908c"
       />
@@ -31,7 +31,7 @@ const ContactForm = ({ values, handleSubmit, t }) => {
         name="email"
         component={RenderField}
         type="text"
-        label={t('form.field.email')}
+        placeholder={t('form.field.email')}
         value={values.email}
         keyboardType="email-address"
         placeholderTextColor="#8e908c"
@@ -40,7 +40,7 @@ const ContactForm = ({ values, handleSubmit, t }) => {
         name="content"
         component={RenderField}
         type="textarea"
-        label={t('form.field.content')}
+        placeholder={t('form.field.content')}
         value={values.content}
         placeholderTextColor="#8e908c"
       />

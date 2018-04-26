@@ -28,39 +28,79 @@ const renderData = (columns, entry) => {
   });
 };
 
-class PaginationItems extends React.Component {
+class TablePagination extends React.Component {
   static propTypes = {
     loadData: PropTypes.func,
     pagination: PropTypes.string,
-    numbers: PropTypes.array
+    numbers: PropTypes.array,
+    pagesCount: PropTypes.number
   };
 
   constructor(props) {
     super(props);
-    this.state = { active: 1 };
+    this.state = { activePage: 1 };
+  }
+
+  componentDidUpdate() {
+    this.props.loadData(this.props.pagination, this.state.activePage);
   }
 
   handleItemClick = number => {
-    this.setState({ active: number });
-    this.props.loadData(this.props.pagination, number);
+    this.setState({ activePage: number });
   };
 
   handleLinkClick = e => {
     e.preventDefault();
   };
 
-  render() {
+  previousPage = e => {
+    e.preventDefault();
+    if (this.state.activePage > 1) {
+      this.setState(prevState => {
+        return {
+          activePage: prevState.activePage - 1
+        };
+      });
+    }
+  };
+
+  nextPage = e => {
+    e.preventDefault();
+    if (this.state.activePage < this.props.pagesCount) {
+      this.setState(prevState => {
+        return {
+          activePage: prevState.activePage + 1
+        };
+      });
+    }
+  };
+
+  renderPaginationItems() {
     return this.props.numbers.map(number => (
       <PaginationItem
         key={number.toString()}
         onClick={() => this.handleItemClick(number)}
-        active={this.state.active === number}
+        active={this.state.activePage === number}
       >
         <PaginationLink href="#" onClick={e => this.handleLinkClick(e)}>
           {number}
         </PaginationLink>
       </PaginationItem>
     ));
+  }
+
+  render() {
+    return (
+      <Pagination className="float-right">
+        <PaginationItem disabled={this.state.activePage <= 1}>
+          <PaginationLink previous href="#" onClick={e => this.previousPage(e)} />
+        </PaginationItem>
+        {this.renderPaginationItems()}
+        <PaginationItem disabled={this.state.activePage >= this.props.pagesCount}>
+          <PaginationLink next href="#" onClick={e => this.nextPage(e)} />
+        </PaginationItem>
+      </Pagination>
+    );
   }
 }
 
@@ -89,9 +129,12 @@ const renderLoadMore = (dataSource, loadData, pageInfo, pagination, totalCount) 
         .fill(1)
         .map((x, y) => x + y);
       return (
-        <Pagination className="float-right">
-          <PaginationItems numbers={pagesArray} loadData={loadData} pagination={STANDARD_PAGINATION} />
-        </Pagination>
+        <TablePagination
+          numbers={pagesArray}
+          loadData={loadData}
+          pagination={STANDARD_PAGINATION}
+          pagesCount={pagesCount}
+        />
       );
     }
   }

@@ -65,7 +65,7 @@ const renderServerSide = async (req, res) => {
   const css = sheet
     .getStyleElement()
     .concat(stylesheets)
-    .map((el, idx) => React.cloneElement(el, { key: idx }));
+    .map((el, idx) => (el ? React.cloneElement(el, { key: idx }) : el));
   const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
 
   if (context.url) {

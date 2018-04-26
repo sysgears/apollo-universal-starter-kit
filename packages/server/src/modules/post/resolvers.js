@@ -1,5 +1,6 @@
 import { withFilter } from 'graphql-subscriptions';
 import { createBatchResolver } from 'graphql-resolve-batch';
+// import RELAY_PAGINATION from '../../../../client/src/modules/common/components/web';
 
 const POST_SUBSCRIPTION = 'post_subscription';
 const POSTS_SUBSCRIPTION = 'posts_subscription';
@@ -14,19 +15,14 @@ export default pubsub => ({
       posts.map((post, index) => {
         edgesArray.push({
           cursor: after + index,
-          node: {
-            id: post.id,
-            title: post.title,
-            content: post.content
-          }
+          node: post
         });
       });
-
       const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor + 1 : 0;
-      const values = await Promise.all([context.Post.getTotal()]);
-      const hasNextPage = values[0].count - after - 10 > 0;
+      const total = (await context.Post.getTotal()).count;
+      const hasNextPage = total > after + limit;
       return {
-        totalCount: values[0].count,
+        totalCount: total,
         edges: edgesArray,
         pageInfo: {
           endCursor: endCursor,

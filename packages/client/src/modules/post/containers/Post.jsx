@@ -8,6 +8,7 @@ import PostList from '../components/PostList';
 import POSTS_QUERY from '../graphql/PostsQuery.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import DELETE_POST from '../graphql/DeletePost.graphql';
+import { RELAY_PAGINATION } from '../../common/components/web';
 
 export function AddPost(prev, node) {
   // ignore if duplicate
@@ -126,9 +127,9 @@ export default compose(
     },
     props: ({ data }) => {
       const { loading, error, posts, fetchMore, subscribeToMore } = data;
-      const loadMoreRows = (pagination = 'relay', e = null) => {
-        const newEndCursor = e * 10 - 10;
-        const endCursor = pagination === 'relay' ? posts.pageInfo.endCursor : newEndCursor;
+      const loadMoreRows = (pagination = RELAY_PAGINATION, e = null) => {
+        const newEndCursor = e * data.variables.limit - data.variables.limit;
+        const endCursor = pagination === RELAY_PAGINATION ? posts.pageInfo.endCursor : newEndCursor;
         return fetchMore({
           variables: {
             after: endCursor
@@ -137,7 +138,8 @@ export default compose(
             const totalCount = fetchMoreResult.posts.totalCount;
             const newEdges = fetchMoreResult.posts.edges;
             const pageInfo = fetchMoreResult.posts.pageInfo;
-            const displayedEdges = pagination === 'relay' ? [...previousResult.posts.edges, ...newEdges] : newEdges;
+            const displayedEdges =
+              pagination === RELAY_PAGINATION ? [...previousResult.posts.edges, ...newEdges] : newEdges;
 
             return {
               // By returning `cursor` here, we update the `fetchMore` function

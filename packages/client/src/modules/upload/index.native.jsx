@@ -4,7 +4,7 @@ import { constructUploadOptions } from 'apollo-fetch-upload';
 import { StackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
-import { HeaderTitle, MenuButton } from '../common/components/native';
+import { HeaderTitle, IconButton } from '../common/components/native';
 import Upload from './containers/Upload';
 import reducers from './reducers';
 import resources from './locales';
@@ -22,7 +22,14 @@ export default new Feature({
           screen: Upload,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
-            headerLeft: <MenuButton navigation={navigation} />
+            headerLeft: (
+              <IconButton
+                iconName="ios-menu"
+                iconSize={32}
+                iconColor="#0275d8"
+                onPress={() => navigation.navigate('DrawerOpen')}
+              />
+            )
           })
         }
       }),

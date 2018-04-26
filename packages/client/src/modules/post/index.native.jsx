@@ -4,7 +4,7 @@ import { Button, Text, StyleSheet, Platform } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
-import { HeaderTitle, MenuButton } from '../common/components/native';
+import { HeaderTitle, IconButton } from '../common/components/native';
 
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';
@@ -31,7 +31,14 @@ class PostListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: withI18N(HeaderTitle, { style: 'subTitle', i18nKey: 'list.subTitle' }),
     headerRight: withI18N(PostListHeaderRight, { navigation }),
-    headerLeft: <MenuButton navigation={navigation} />
+    headerLeft: (
+      <IconButton
+        iconName="ios-menu"
+        iconSize={32}
+        iconColor="#0275d8"
+        onPress={() => navigation.navigate('DrawerOpen')}
+      />
+    )
   });
 
   render() {

@@ -8,7 +8,7 @@ import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';
 import UserScreenNavigator from './containers/UserScreenNavigator';
-import { HeaderTitle, MenuButton } from '../common/components/native';
+import { HeaderTitle, IconButton } from '../common/components/native';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
@@ -150,7 +150,14 @@ export default new Feature(access, {
           screen: Profile,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
-            headerLeft: <MenuButton navigation={navigation} />
+            headerLeft: (
+              <IconButton
+                iconName="ios-menu"
+                iconSize={32}
+                iconColor="#0275d8"
+                onPress={() => navigation.navigate('DrawerOpen')}
+              />
+            )
           })
         },
         ProfileEdit: {
@@ -183,7 +190,14 @@ export default new Feature(access, {
           screen: UsersListScreen,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.users" style="subTitle" />,
-            headerLeft: <MenuButton navigation={navigation} />
+            headerLeft: (
+              <IconButton
+                iconName="ios-menu"
+                iconSize={32}
+                iconColor="#0275d8"
+                onPress={() => navigation.navigate('DrawerOpen')}
+              />
+            )
           })
         },
         UserEdit: {

@@ -4,7 +4,7 @@ import { withFormik } from 'formik';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
-import { FormView, RenderField, FormButton } from '../../common/components/native';
+import { FormView, RenderField, FormButton, placeholderColor } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
 
 const commentFormSchema = {
@@ -24,7 +24,7 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
         type="text"
         value={values.content}
         placeholder={t('comment.label.field')}
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <FormButton onPress={handleSubmit}>{operation}</FormButton>
     </FormView>

@@ -4,7 +4,7 @@ import { withFormik } from 'formik';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
-import { FormView, RenderField, FormButton } from '../../common/components/native';
+import { FormView, RenderField, FormButton, placeholderColor } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
 
 const postFormSchema = {
@@ -23,7 +23,7 @@ const PostForm = ({ values, handleSubmit, t }) => {
         type="text"
         placeholder={t('post.field.title')}
         value={values.title}
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <Field
         name="content"
@@ -31,7 +31,7 @@ const PostForm = ({ values, handleSubmit, t }) => {
         type="text"
         placeholder={t('post.field.content')}
         value={values.content}
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <FormButton onPress={handleSubmit}>{t('post.btn.submit')}</FormButton>
     </FormView>

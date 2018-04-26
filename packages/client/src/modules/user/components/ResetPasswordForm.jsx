@@ -4,7 +4,7 @@ import { withFormik } from 'formik';
 import { View, StyleSheet } from 'react-native';
 import Field from '../../../utils/FieldAdapter';
 import { Button } from '../../common/components';
-import { RenderField } from '../../common/components/native';
+import { RenderField, placeholderColor } from '../../common/components/native';
 import { required, minLength, validateForm, match } from '../../../../../common/validation';
 import translate from '../../../i18n';
 
@@ -25,7 +25,7 @@ const ResetPasswordForm = ({ values, handleSubmit, t }) => {
         label={t('resetPass.form.field.pass')}
         value={values.password}
         secureTextEntry={true}
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <Field
         name="passwordConfirmation"
@@ -34,7 +34,7 @@ const ResetPasswordForm = ({ values, handleSubmit, t }) => {
         label={t('resetPass.form.field.passConf')}
         value={values.passwordConfirmation}
         secureTextEntry={true}
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <View style={styles.submit}>
         <Button onPress={handleSubmit}>{t('resetPass.form.btnSubmit')}</Button>

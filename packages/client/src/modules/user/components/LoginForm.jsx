@@ -6,7 +6,7 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Button } from '../../common/components';
-import { RenderField } from '../../common/components/native';
+import { RenderField, placeholderColor } from '../../common/components/native';
 import { required, email, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
@@ -33,7 +33,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
               type="email"
               keyboardType="email-address"
               placeholder={t('mobile.login.email.placeholder')}
-              placeholderTextColor="#8e908c"
+              placeholderTextColor={placeholderColor}
               value={values.email}
             />
             <Field
@@ -44,7 +44,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
               type="password"
               secureTextEntry={true}
               placeholder={t('mobile.login.pass.placeholder')}
-              placeholderTextColor="#8e908c"
+              placeholderTextColor={placeholderColor}
               value={values.password}
             />
           </View>

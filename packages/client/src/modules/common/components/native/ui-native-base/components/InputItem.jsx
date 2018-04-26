@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import { Item, Input } from 'native-base';
 
-const InputItem = ({ children, error, ...props }) => {
+const InputItem = ({ error, ...props }) => {
   return (
     <View>
       <Item fixedLabel style={styles.item} error={!!error}>
@@ -15,7 +15,6 @@ const InputItem = ({ children, error, ...props }) => {
 };
 
 InputItem.propTypes = {
-  children: PropTypes.node,
   error: PropTypes.string
 };
 

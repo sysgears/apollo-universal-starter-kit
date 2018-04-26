@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import Switch from './Switch';
+import { borderColor } from '../../';
 
 const RenderSwitch = ({ label, ...props }) => {
   return (
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderColor: '#ddd'
+    borderColor: borderColor
   },
   text: {
     fontSize: 17

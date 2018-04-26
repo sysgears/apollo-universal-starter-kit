@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { View, StyleSheet } from 'react-native';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, Button, RenderSelect, RenderSwitch } from '../../common/components/native';
+import { RenderField, Button, RenderSelect, RenderSwitch, placeholderColor } from '../../common/components/native';
 import { email, minLength, required, match, validateForm } from '../../../../../common/validation';
 
 import settings from '../../../../../../settings';
@@ -33,6 +33,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
         component={RenderField}
         type="text"
         value={username}
+        placeholderTextColor={placeholderColor}
       />
       <Field
         name="email"
@@ -40,6 +41,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
         placeholder={t('userEdit.form.field.email')}
         value={email}
         keyboardType="email-address"
+        placeholderTextColor={placeholderColor}
       />
       <Field
         name="isActive"
@@ -48,11 +50,13 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
         component={RenderSwitch}
         placeholder={t('userEdit.form.field.active')}
         checked={isActive}
+        placeholderTextColor={placeholderColor}
       />
       <Field
         name="role"
         component={RenderSelect}
         placeholder={t('userEdit.form.field.role.label')}
+        placeholderTextColor={placeholderColor}
         selectedValue={role}
         onValueChange={value => handleRoleChange('role', value, setFieldValue)}
         cols={1}
@@ -62,6 +66,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
         name="firstName"
         component={RenderField}
         placeholder={t('userEdit.form.field.firstName')}
+        placeholderTextColor={placeholderColor}
         value={profile.firstName}
         onChange={value => setFieldValue('profile', { ...profile, firstName: value })}
       />
@@ -69,6 +74,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
         name="lastName"
         component={RenderField}
         placeholder={t('userEdit.form.field.lastName')}
+        placeholderTextColor={placeholderColor}
         value={profile.lastName}
         onChange={value => setFieldValue('profile', { ...profile, lastName: value })}
       />
@@ -77,6 +83,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
           name="serial"
           component={RenderField}
           placeholder={t('userEdit.form.field.serial')}
+          placeholderTextColor={placeholderColor}
           value={auth && auth.certificate && auth.certificate.serial}
           onChange={value => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
         />
@@ -87,12 +94,14 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
         component={RenderField}
         type="password"
         placeholder={t('userEdit.form.field.pass')}
+        placeholderTextColor={placeholderColor}
         value={password}
       />
       <Field
         name="passwordConfirmation"
         component={RenderField}
         placeholder={t('userEdit.form.field.passConf')}
+        placeholderTextColor={placeholderColor}
         value={passwordConfirmation}
         type="password"
         secureTextEntry={true}

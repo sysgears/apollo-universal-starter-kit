@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { withFormik } from 'formik';
 import Field from '../../../utils/FieldAdapter';
 import { Button } from '../../common/components';
-import { RenderField } from '../../common/components/native';
+import { RenderField, placeholderColor } from '../../common/components/native';
 import { match, email, minLength, required, validateForm } from '../../../../../common/validation';
 import translate from '../../../i18n';
 
@@ -26,7 +26,7 @@ const RegisterForm = ({ values, handleSubmit, t }) => {
         type="text"
         placeholder={t('reg.form.field.name')}
         value={values.username}
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <Field
         name="email"
@@ -35,7 +35,7 @@ const RegisterForm = ({ values, handleSubmit, t }) => {
         placeholder={t('reg.form.field.email')}
         value={values.email}
         keyboardType="email-address"
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <Field
         name="password"
@@ -44,7 +44,7 @@ const RegisterForm = ({ values, handleSubmit, t }) => {
         placeholder={t('reg.form.field.pass')}
         value={values.password}
         secureTextEntry={true}
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <Field
         name="passwordConfirmation"
@@ -53,7 +53,7 @@ const RegisterForm = ({ values, handleSubmit, t }) => {
         placeholder={t('reg.form.field.passConf')}
         value={values.passwordConfirmation}
         secureTextEntry={true}
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <View style={styles.submit}>
         <Button onPress={handleSubmit}> {t('reg.form.btnSubmit')}</Button>

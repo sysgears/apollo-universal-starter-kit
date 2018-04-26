@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Item, Input, Icon } from 'native-base';
+import { placeholderColor } from '../../';
 
 const SearchBar = ({ onChange, onChangeText, ...props }) => {
   return (
     <Item>
       <Icon name="ios-search" />
-      <Input placeholderTextColor="#8e908c" placeholder="Search" onChangeText={onChangeText || onChange} {...props} />
+      <Input
+        placeholderTextColor={placeholderColor}
+        placeholder="Search"
+        onChangeText={onChangeText || onChange}
+        {...props}
+      />
     </Item>
   );
 };

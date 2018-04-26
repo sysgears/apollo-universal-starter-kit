@@ -12,7 +12,8 @@ import {
   success,
   danger,
   Modal,
-  Button
+  Button,
+  borderColor
 } from '../../common/components/native';
 
 import translate from '../../../i18n';
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderColor: '#ddd'
+    borderColor: borderColor
   },
   switchText: {
     fontSize: 16

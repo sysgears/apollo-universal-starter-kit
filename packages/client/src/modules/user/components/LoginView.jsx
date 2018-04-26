@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
+import { placeholderColor } from '../../common/components/native';
 
 import settings from '../../../../../../settings';
 import translate from '../../../i18n';
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   examplesArea: {
     borderWidth: 0.5,
     borderRadius: 5,
-    borderColor: '#8e908c',
+    borderColor: placeholderColor,
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#e3e3e3',
@@ -69,12 +70,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
-    color: '#8e908c'
+    color: placeholderColor
   },
   exampleText: {
     fontSize: 14,
     fontWeight: '400',
-    color: '#8e908c'
+    color: placeholderColor
   },
   loginContainer: {
     flex: 3

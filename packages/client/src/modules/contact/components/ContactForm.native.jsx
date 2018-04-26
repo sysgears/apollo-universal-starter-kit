@@ -5,7 +5,7 @@ import { Keyboard } from 'react-native';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
-import { FormView, RenderField, FormButton } from '../../common/components/native';
+import { FormView, RenderField, FormButton, placeholderColor } from '../../common/components/native';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
 
 const contactFormSchema = {
@@ -25,7 +25,7 @@ const ContactForm = ({ values, handleSubmit, t }) => {
         type="text"
         placeholder={t('form.field.name')}
         value={values.name}
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <Field
         name="email"
@@ -34,7 +34,7 @@ const ContactForm = ({ values, handleSubmit, t }) => {
         placeholder={t('form.field.email')}
         value={values.email}
         keyboardType="email-address"
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <Field
         name="content"
@@ -42,7 +42,7 @@ const ContactForm = ({ values, handleSubmit, t }) => {
         type="textarea"
         placeholder={t('form.field.content')}
         value={values.content}
-        placeholderTextColor="#8e908c"
+        placeholderTextColor={placeholderColor}
       />
       <FormButton onPress={handleSubmit}>{t('form.btnSubmit')}</FormButton>
     </FormView>

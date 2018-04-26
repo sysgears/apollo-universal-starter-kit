@@ -14,9 +14,16 @@ class UserEditView extends React.PureComponent {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
     addUser: PropTypes.func.isRequired,
+    history: PropTypes.object,
     t: PropTypes.func,
     editUser: PropTypes.func.isRequired
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.loading && !nextProps.user) {
+      this.props.history.push('/profile');
+    }
+  }
 
   onSubmit = async values => {
     const { user, addUser, editUser, t } = this.props;

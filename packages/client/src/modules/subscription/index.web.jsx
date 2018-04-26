@@ -7,6 +7,7 @@ import Subscription from './containers/Subscription';
 import SubscribersOnly from './containers/SubscribersOnly';
 import UpdateCard from './containers/UpdateCard';
 import { SubscriberRoute } from './containers/Auth';
+import { IfLoggedIn } from '../user';
 import reducers from './reducers';
 import settings from '../../../../../settings';
 import resources from './locales';
@@ -27,9 +28,11 @@ export default new Feature({
       ]
     : [],
   navItem: settings.subscription.enabled ? (
-    <MenuItem key="/subscribers-only">
-      <NavLinkWithI18n />
-    </MenuItem>
+    <IfLoggedIn role="user">
+      <MenuItem key="/subscribers-only">
+        <NavLinkWithI18n />
+      </MenuItem>
+    </IfLoggedIn>
   ) : (
     []
   ),

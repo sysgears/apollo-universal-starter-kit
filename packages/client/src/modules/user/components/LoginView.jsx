@@ -17,7 +17,7 @@ class LoginView extends React.PureComponent {
           res[error.field] = error.message;
           return res;
         },
-        { _error: 'Login failed!' }
+        { _error: this.props.t('login.errorMsg') }
       );
     }
   };

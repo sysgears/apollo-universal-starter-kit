@@ -37,23 +37,28 @@ class PaginationItems extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = { active: 1 };
   }
 
-  handleClick = number => {
+  handleItemClick = number => {
     this.setState({ active: number });
     this.props.loadData(this.props.pagination, number);
+  };
+
+  handleLinkClick = e => {
+    e.preventDefault();
   };
 
   render() {
     return this.props.numbers.map(number => (
       <PaginationItem
         key={number.toString()}
-        onClick={() => this.handleClick(number)}
+        onClick={() => this.handleItemClick(number)}
         active={this.state.active === number}
       >
-        <PaginationLink href="#">{number}</PaginationLink>
+        <PaginationLink href="#" onClick={e => this.handleLinkClick(e)}>
+          {number}
+        </PaginationLink>
       </PaginationItem>
     ));
   }

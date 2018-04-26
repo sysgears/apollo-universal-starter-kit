@@ -73,19 +73,6 @@ const AuthScreen = StackNavigator(
   }
 );
 
-class LogoutScreen extends React.Component {
-  static navigationOptions = () => ({
-    title: 'Logout'
-  });
-  render() {
-    return <Logout navigation={this.props.navigation} />;
-  }
-}
-
-LogoutScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
 class UsersListScreen extends React.Component {
   static navigationOptions = () => ({
     header: false
@@ -216,12 +203,12 @@ export default new Feature(access, {
       }
     },
     Logout: {
-      screen: LogoutScreen,
+      screen: () => null,
       userInfo: {
         showOnLogin: true
       },
       navigationOptions: {
-        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.logout" />
+        drawerLabel: <Logout />
       }
     }
   },

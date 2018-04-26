@@ -83,12 +83,6 @@ LoginForm.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-    textAlign: 'center',
-    margin: 10
-  },
   formContainer: {
     flex: 1
   },

@@ -2,6 +2,9 @@
 
 query user($id: Int!) {
     user(id: $id) {
+        userPayload {
         ...UserInfo
+        }
+        error
     }
 }

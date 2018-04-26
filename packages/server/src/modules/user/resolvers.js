@@ -21,9 +21,9 @@ export default pubsub => ({
       },
       (obj, { id }, context) => {
         if (context.user.id === id || context.user.role === 'admin') {
-          return context.User.getUser(id);
+          return { userPayload: context.User.getUser(id) };
         }
-        return null;
+        return { userPayload: null, error: 'Access Denied' };
       }
     ),
     currentUser(obj, args, context) {

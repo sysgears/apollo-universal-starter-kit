@@ -28,7 +28,7 @@ export default compose(
       };
     },
     props({ data: { loading, user } }) {
-      return { loading, user };
+      return { loading, user: user && user.userPayload, error: user && user.error };
     }
   }),
   graphql(ADD_USER, {

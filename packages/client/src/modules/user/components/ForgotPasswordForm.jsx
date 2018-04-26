@@ -4,8 +4,7 @@ import { withFormik } from 'formik';
 import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet, Text, Keyboard } from 'react-native';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, placeholderColor } from '../../common/components/native';
-import { Button } from '../../common/components';
+import { RenderField, placeholderColor, Button } from '../../common/components/native';
 import { required, email, validateForm } from '../../../../../common/validation';
 import translate from '../../../i18n';
 
@@ -43,7 +42,9 @@ const ForgotPasswordForm = ({ handleSubmit, values, sent, t }) => {
           />
         </View>
         <View style={styles.submit}>
-          <Button onPress={handleSubmit}>{t('forgotPass.form.btnSubmit')}</Button>
+          <Button type="primary" onPress={handleSubmit}>
+            {t('forgotPass.form.btnSubmit')}
+          </Button>
         </View>
       </View>
     </View>

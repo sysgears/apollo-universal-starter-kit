@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
 import translate from '../../../i18n';
-import { Button } from '../../common/components';
+import { Button } from '../../common/components/native';
 
 const CounterView = ({
   loading,
@@ -27,15 +27,21 @@ const CounterView = ({
         <View style={styles.element}>
           <Text style={styles.box}>{t('counter.text', { counter })}</Text>
         </View>
-        <Button onPress={addCounter(1)}>{t('counter.btnLabel')}</Button>
+        <Button type="primary" onPress={addCounter(1)}>
+          {t('counter.btnLabel')}
+        </Button>
         <View style={styles.element}>
           <Text style={styles.box}>{t('reduxCount.text', { reduxCount })}</Text>
         </View>
-        <Button onPress={onReduxIncrement(1)}>{t('reduxCount.btnLabel')}</Button>
+        <Button type="primary" onPress={onReduxIncrement(1)}>
+          {t('reduxCount.btnLabel')}
+        </Button>
         <View style={styles.element}>
           <Text style={styles.box}>{t('apolloCount.text', { counterState })}</Text>
         </View>
-        <Button onPress={addCounterState(1)}>{t('apolloCount.btnLabel')}</Button>
+        <Button type="primary" onPress={addCounterState(1)}>
+          {t('apolloCount.btnLabel')}
+        </Button>
       </View>
     );
   }

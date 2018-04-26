@@ -28,9 +28,40 @@ const renderData = (columns, entry) => {
   });
 };
 
+class PaginationItems extends React.Component {
+  static propTypes = {
+    loadData: PropTypes.func,
+    pagination: PropTypes.string,
+    numbers: PropTypes.array
+  };
+
+  constructor(props) {
+    super(props);
+    console.log(props);
+    this.state = { active: 1 };
+  }
+
+  handleClick = number => {
+    this.setState({ active: number });
+    this.props.loadData(this.props.pagination, number);
+  };
+
+  render() {
+    return this.props.numbers.map(number => (
+      <PaginationItem
+        key={number.toString()}
+        onClick={() => this.handleClick(number)}
+        active={this.state.active === number}
+      >
+        <PaginationLink href="#">{number}</PaginationLink>
+      </PaginationItem>
+    ));
+  }
+}
+
 const renderLoadMore = (dataSource, loadData, pageInfo, pagination, totalCount) => {
   switch (pagination) {
-    case RELAY_PAGINATION:
+    case RELAY_PAGINATION: {
       if (pageInfo.hasNextPage) {
         return (
           <div>
@@ -46,32 +77,18 @@ const renderLoadMore = (dataSource, loadData, pageInfo, pagination, totalCount) 
         );
       }
       break;
-    case STANDARD_PAGINATION:
+    }
+    case STANDARD_PAGINATION: {
+      const pagesCount = Math.ceil(totalCount / 10);
+      const pagesArray = Array(pagesCount)
+        .fill(1)
+        .map((x, y) => x + y);
       return (
-        <Pagination>
-          <PaginationItem>
-            <PaginationLink previous href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">2</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">4</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">5</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink next href="#" />
-          </PaginationItem>
+        <Pagination className="float-right">
+          <PaginationItems numbers={pagesArray} loadData={loadData} pagination={STANDARD_PAGINATION} />
         </Pagination>
       );
+    }
   }
 };
 

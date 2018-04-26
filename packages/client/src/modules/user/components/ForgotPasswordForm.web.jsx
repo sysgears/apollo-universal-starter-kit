@@ -16,7 +16,7 @@ const validate = values => validateForm(values, forgotPasswordFormSchema);
 const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
   return (
     <Form name="forgotPassword" onSubmit={handleSubmit}>
-      {sent && <Alert color="success">{t('forgotPass.submitMsg')}</Alert>}
+      {sent && <Alert color="success">{t('forgotPass.form.submitMsg')}</Alert>}
       <Field
         name="email"
         component={RenderField}

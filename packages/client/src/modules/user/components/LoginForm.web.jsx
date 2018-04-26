@@ -78,8 +78,8 @@ LoginForm.propTypes = {
 const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ email: '', password: '' }),
-  async handleSubmit(values, { setErrors, props: { onSubmit } }) {
-    await onSubmit(values).catch(e => {
+  handleSubmit(values, { setErrors, props: { onSubmit } }) {
+    onSubmit(values).catch(e => {
       console.log(e);
       setErrors(e);
     });

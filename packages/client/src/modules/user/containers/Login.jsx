@@ -24,7 +24,9 @@ const LoginWithApollo = compose(
         if (!login.errors) {
           await access.doLogin(client);
           await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
-          onLogin();
+          if (onLogin) {
+            onLogin();
+          }
         }
         return login;
       }

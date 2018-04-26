@@ -48,14 +48,7 @@ export default new Feature(access, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
     <AuthRoute exact path="/users" redirect="/profile" role="admin" component={Users} />,
-    <AuthRoute
-      exact
-      path="/users/:id"
-      redirectOnIdMatch
-      redirect="/profile"
-      role={['user', 'admin']}
-      component={UserEdit}
-    />,
+    <AuthRoute exact path="/users/:id" redirect="/profile" role={['user', 'admin']} component={UserEdit} />,
     <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
     <AuthRoute
       exact

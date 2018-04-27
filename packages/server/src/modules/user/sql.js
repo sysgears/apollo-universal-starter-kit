@@ -4,7 +4,7 @@ import { has } from 'lodash';
 import bcrypt from 'bcryptjs';
 
 import knex from '../../sql/connector';
-import { knexWithId } from '../../sql/helpers';
+import { returnId } from '../../sql/helpers';
 
 // Actual query fetching and transformation in DB
 export default class User {
@@ -134,17 +134,17 @@ export default class User {
       role = 'user';
     }
 
-    return knexWithId('user')
+    return returnId(knex('user'))
       .insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive });
   }
 
   createFacebookAuth({ id, displayName, userId }) {
-    return knexWithId('auth_facebook')
+    return returnId(knex('auth_facebook'))
       .insert({ fb_id: id, display_name: displayName, user_id: userId });
   }
 
   createGoogleOAuth({ id, displayName, userId }) {
-    return knexWithId('auth_google')
+    return returnId(knex('auth_google'))
       .insert({ google_id: id, display_name: displayName, user_id: userId });
   }
 
@@ -177,7 +177,7 @@ export default class User {
         .update(decamelizeKeys(profile))
         .where({ user_id: id });
     } else {
-      return knexWithId('user_profile')
+      return returnId(knex('user_profile'))
         .insert({ ...decamelizeKeys(profile), user_id: id });
     }
   }
@@ -194,7 +194,7 @@ export default class User {
         .update({ serial })
         .where({ user_id: id });
     } else {
-      return knexWithId('auth_certificate')
+      return returnId(knex('auth_certificate'))
         .insert({ serial, user_id: id });
     }
   }

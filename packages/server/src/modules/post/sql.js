@@ -1,4 +1,4 @@
-import { knexWithId, orderedFor } from '../../sql/helpers';
+import { returnId, orderedFor } from '../../sql/helpers';
 import knex from '../../sql/connector';
 
 export default class Post {
@@ -47,7 +47,7 @@ export default class Post {
   }
 
   addPost({ title, content }) {
-    return knexWithId('post')
+    return returnId(knex('post'))
       .insert({ title, content });
   }
 
@@ -67,7 +67,7 @@ export default class Post {
   }
 
   addComment({ content, postId }) {
-    return knexWithId('comment')
+    return returnId(knex('comment'))
       .insert({ content, post_id: postId });
   }
 

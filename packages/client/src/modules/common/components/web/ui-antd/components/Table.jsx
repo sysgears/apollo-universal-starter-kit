@@ -8,16 +8,16 @@ const RELAY_PAGINATION = 'relay';
 const STANDARD_PAGINATION = 'standard';
 
 // pagination accepts 'standard' and 'relay' params
-const Table = ({ totalCount, handlePageChange, pageInfo, pagination, ...props }) => {
+const Table = ({ totalCount, handlePageChange, pageInfo, pagination, loadMoreText, ...props }) => {
   return (
     <div>
       <ADTable pagination={false} {...props} rowKey="id" />
-      {renderLoadMore(props.dataSource, handlePageChange, pageInfo, pagination, totalCount)}
+      {renderLoadMore(props.dataSource, handlePageChange, pageInfo, pagination, totalCount, loadMoreText)}
     </div>
   );
 };
 
-const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, totalCount) => {
+const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, totalCount, loadMoreText) => {
   switch (pagination) {
     case RELAY_PAGINATION:
       if (pageInfo.hasNextPage) {
@@ -29,7 +29,7 @@ const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, tota
               </small>
             </div>
             <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination)}>
-              Load more ...
+              {loadMoreText}
             </Button>
           </div>
         );
@@ -52,7 +52,8 @@ Table.propTypes = {
   totalCount: PropTypes.number,
   handlePageChange: PropTypes.func,
   pageInfo: PropTypes.object,
-  pagination: PropTypes.string
+  pagination: PropTypes.string,
+  loadMoreText: PropTypes.string
 };
 
 export default Table;

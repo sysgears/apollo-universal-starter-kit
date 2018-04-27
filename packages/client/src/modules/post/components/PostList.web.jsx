@@ -21,17 +21,6 @@ class PostList extends React.PureComponent {
     deletePost(id);
   };
 
-  // renderLoadMore = (posts, loadMoreRows) => {
-  //   const { t } = this.props;
-  //   if (posts.pageInfo.hasNextPage) {
-  //     return (
-  //       <Button id="load-more" color="primary" onClick={loadMoreRows}>
-  //         {t('list.btn.more')}
-  //       </Button>
-  //     );
-  //   }
-  // };
-
   renderMetaData = () => {
     const { t } = this.props;
     return (
@@ -106,6 +95,7 @@ class PostList extends React.PureComponent {
             pageInfo={posts.pageInfo}
             handlePageChange={this.handlePageChange}
             totalCount={posts.totalCount}
+            loadMoreText={t('list.btn.more')}
           />
         </PageLayout>
       );

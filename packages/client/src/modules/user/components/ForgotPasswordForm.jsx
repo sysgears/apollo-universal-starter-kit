@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet, Text, Keyboard } from 'react-native';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, placeholderColor, Button, primary } from '../../common/components/native';
 import { required, email, validateForm } from '../../../../../common/validation';
@@ -47,6 +48,7 @@ const ForgotPasswordForm = ({ handleSubmit, values, sent, t }) => {
           </Button>
         </View>
       </View>
+      <KeyboardSpacer />
     </View>
   );
 };

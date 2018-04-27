@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import { withFormik } from 'formik';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, placeholderColor, Button, primary } from '../../common/components/native';
+import { RenderField, placeholderColor, Button, primary, FormView } from '../../common/components/native';
 import { match, email, minLength, required, validateForm } from '../../../../../common/validation';
 import translate from '../../../i18n';
 
@@ -18,49 +19,51 @@ const validate = values => validateForm(values, registerFormSchema);
 
 const RegisterForm = ({ values, handleSubmit, t }) => {
   return (
-    <View style={styles.formContainer}>
-      <Field
-        name="username"
-        component={RenderField}
-        type="text"
-        placeholder={t('reg.form.field.name')}
-        value={values.username}
-        placeholderTextColor={placeholderColor}
-      />
-      <Field
-        name="email"
-        component={RenderField}
-        type="email"
-        placeholder={t('reg.form.field.email')}
-        value={values.email}
-        keyboardType="email-address"
-        placeholderTextColor={placeholderColor}
-      />
-      <Field
-        name="password"
-        component={RenderField}
-        type="password"
-        placeholder={t('reg.form.field.pass')}
-        value={values.password}
-        secureTextEntry={true}
-        placeholderTextColor={placeholderColor}
-      />
-      <Field
-        name="passwordConfirmation"
-        component={RenderField}
-        type="password"
-        placeholder={t('reg.form.field.passConf')}
-        value={values.passwordConfirmation}
-        secureTextEntry={true}
-        placeholderTextColor={placeholderColor}
-      />
-      <View style={styles.submit}>
-        <Button type={primary} onPress={handleSubmit}>
-          {' '}
-          {t('reg.form.btnSubmit')}
-        </Button>
+    <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
+      <View style={styles.formContainer}>
+        <Field
+          name="username"
+          component={RenderField}
+          type="text"
+          placeholder={t('reg.form.field.name')}
+          value={values.username}
+          placeholderTextColor={placeholderColor}
+        />
+        <Field
+          name="email"
+          component={RenderField}
+          type="email"
+          placeholder={t('reg.form.field.email')}
+          value={values.email}
+          keyboardType="email-address"
+          placeholderTextColor={placeholderColor}
+        />
+        <Field
+          name="password"
+          component={RenderField}
+          type="password"
+          placeholder={t('reg.form.field.pass')}
+          value={values.password}
+          secureTextEntry={true}
+          placeholderTextColor={placeholderColor}
+        />
+        <Field
+          name="passwordConfirmation"
+          component={RenderField}
+          type="password"
+          placeholder={t('reg.form.field.passConf')}
+          value={values.passwordConfirmation}
+          secureTextEntry={true}
+          placeholderTextColor={placeholderColor}
+        />
+        <View style={styles.submit}>
+          <Button type={primary} onPress={handleSubmit}>
+            {t('reg.form.btnSubmit')}
+          </Button>
+        </View>
+        <KeyboardSpacer />
       </View>
-    </View>
+    </FormView>
   );
 };
 
@@ -89,8 +92,13 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 15
   },
+  formView: {
+    flex: 1,
+    alignSelf: 'stretch'
+  },
   formContainer: {
     paddingHorizontal: 20,
+    flex: 1,
     justifyContent: 'center'
   }
 });

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { View, StyleSheet } from 'react-native';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, placeholderColor, primary } from '../../common/components/native';
 import { required, minLength, validateForm, match } from '../../../../../common/validation';
@@ -40,6 +41,7 @@ const ResetPasswordForm = ({ values, handleSubmit, t }) => {
           {t('resetPass.form.btnSubmit')}
         </Button>
       </View>
+      <KeyboardSpacer />
     </View>
   );
 };

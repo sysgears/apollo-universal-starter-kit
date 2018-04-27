@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { withFormik } from 'formik';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, placeholderColor, Button, primary } from '../../common/components/native';
+import { RenderField, placeholderColor, Button, primary, FormView } from '../../common/components/native';
 import { required, email, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
@@ -20,56 +21,59 @@ const validate = values => validateForm(values, loginFormSchema);
 
 const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
   return (
-    <View style={styles.formContainer}>
-      <View style={styles.form}>
-        <View>
+    <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
+      <View style={styles.formContainer}>
+        <View style={styles.form}>
           <View>
-            <Field
-              autoCapitalize="none"
-              autoCorrect={false}
-              name="email"
-              component={RenderField}
-              type="email"
-              keyboardType="email-address"
-              placeholder={t('mobile.login.email.placeholder')}
-              placeholderTextColor={placeholderColor}
-              value={values.email}
-            />
-            <Field
-              autoCapitalize="none"
-              autoCorrect={false}
-              name="password"
-              component={RenderField}
-              type="password"
-              secureTextEntry={true}
-              placeholder={t('mobile.login.pass.placeholder')}
-              placeholderTextColor={placeholderColor}
-              value={values.password}
-            />
-          </View>
-          <View style={styles.submit}>
-            <Button type={primary} onPress={handleSubmit} disabled={valid}>
-              {t('login.form.btnSubmit')}
-            </Button>
-          </View>
-          <View>
-            {settings.user.auth.facebook.enabled && <FacebookButton type="button" />}
-            {settings.user.auth.google.enabled && <GoogleButton type="button" />}
-          </View>
-          <View style={styles.buttonsGroup}>
-            <Text style={styles.signUpText} onPress={() => navigation.navigate('ForgotPassword')}>
-              {t('login.btn.forgotPass')}
-            </Text>
+            <View>
+              <Field
+                autoCapitalize="none"
+                autoCorrect={false}
+                name="email"
+                component={RenderField}
+                type="email"
+                keyboardType="email-address"
+                placeholder={t('mobile.login.email.placeholder')}
+                placeholderTextColor={placeholderColor}
+                value={values.email}
+              />
+              <Field
+                autoCapitalize="none"
+                autoCorrect={false}
+                name="password"
+                component={RenderField}
+                type="password"
+                secureTextEntry={true}
+                placeholder={t('mobile.login.pass.placeholder')}
+                placeholderTextColor={placeholderColor}
+                value={values.password}
+              />
+            </View>
+            <View style={styles.submit}>
+              <Button type={primary} onPress={handleSubmit} disabled={valid}>
+                {t('login.form.btnSubmit')}
+              </Button>
+            </View>
+            <View>
+              {settings.user.auth.facebook.enabled && <FacebookButton type="button" />}
+              {settings.user.auth.google.enabled && <GoogleButton type="button" />}
+            </View>
+            <View style={styles.buttonsGroup}>
+              <Text style={styles.signUpText} onPress={() => navigation.navigate('ForgotPassword')}>
+                {t('login.btn.forgotPass')}
+              </Text>
+            </View>
+            <KeyboardSpacer />
           </View>
         </View>
+        <View style={styles.buttonWrapper}>
+          <Text style={styles.text}>{t('login.notRegText')}</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.signUpText}>{t('login.btn.sign')}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.buttonWrapper}>
-        <Text style={styles.text}>{t('login.notRegText')}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.signUpText}>{t('login.btn.sign')}</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </FormView>
   );
 };
 
@@ -85,6 +89,10 @@ LoginForm.propTypes = {
 const styles = StyleSheet.create({
   formContainer: {
     flex: 1
+  },
+  formView: {
+    flex: 1,
+    alignSelf: 'stretch'
   },
   form: {
     justifyContent: 'center',

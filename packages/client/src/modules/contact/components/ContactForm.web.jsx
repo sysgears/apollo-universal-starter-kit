@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 //eslint-disable-next-line import/no-extraneous-dependencies
 import DomainSchema from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik, FormSchema } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 
-const ContactForm = ({ onSubmit, t }) => {
-  const contactFormSchema = new DomainSchema(
+const contactFormSchema = t =>
+  new DomainSchema(
     class extends FormSchema {
       __ = { name: 'ContactForm' };
       name = {
         type: String,
-        fieldType: FieldTypes.input,
+        fieldType: DomainSchemaFormik.fields.input,
         input: {
           label: t('form.field.name')
         },
@@ -21,7 +21,7 @@ const ContactForm = ({ onSubmit, t }) => {
       };
       email = {
         type: String,
-        fieldType: FieldTypes.input,
+        fieldType: DomainSchemaFormik.fields.input,
         input: {
           type: 'email',
           label: t('form.field.email')
@@ -30,7 +30,7 @@ const ContactForm = ({ onSubmit, t }) => {
       };
       content = {
         type: String,
-        fieldType: FieldTypes.input,
+        fieldType: DomainSchemaFormik.fields.input,
         input: {
           type: 'textarea',
           label: t('form.field.content')
@@ -43,16 +43,12 @@ const ContactForm = ({ onSubmit, t }) => {
           color: 'primary'
         };
       }
-      setBtnsWrapperProps() {
-        return {
-          className: 'text-center'
-        };
-      }
     }
   );
 
-  const contactForm = new DomainSchemaFormik(contactFormSchema);
-  const ContactFormComponent = contactForm.generateForm(onSubmit);
+const ContactForm = ({ onSubmit, t }) => {
+  const contactForm = new DomainSchemaFormik(contactFormSchema(t));
+  const ContactFormComponent = contactForm.generateForm();
 
   return <ContactFormComponent onSubmit={async values => await onSubmit(values)} />;
 };

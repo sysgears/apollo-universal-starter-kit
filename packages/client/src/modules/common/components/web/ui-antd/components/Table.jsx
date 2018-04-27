@@ -8,16 +8,16 @@ const RELAY_PAGINATION = 'relay';
 const STANDARD_PAGINATION = 'standard';
 
 // pagination accepts 'standard' and 'relay' params
-const Table = ({ totalCount, loadData, pageInfo, pagination, ...props }) => {
+const Table = ({ totalCount, handlePageChange, pageInfo, pagination, ...props }) => {
   return (
     <div>
       <ADTable pagination={false} {...props} rowKey="id" />
-      {renderLoadMore(props.dataSource, loadData, pageInfo, pagination, totalCount)}
+      {renderLoadMore(props.dataSource, handlePageChange, pageInfo, pagination, totalCount)}
     </div>
   );
 };
 
-const renderLoadMore = (dataSource, loadData, pageInfo, pagination, totalCount) => {
+const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, totalCount) => {
   switch (pagination) {
     case RELAY_PAGINATION:
       if (pageInfo.hasNextPage) {
@@ -28,7 +28,7 @@ const renderLoadMore = (dataSource, loadData, pageInfo, pagination, totalCount) 
                 ({dataSource.length} / {totalCount})
               </small>
             </div>
-            <Button id="load-more" color="primary" onClick={() => loadData(pagination)}>
+            <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination)}>
               Load more ...
             </Button>
           </div>
@@ -36,7 +36,13 @@ const renderLoadMore = (dataSource, loadData, pageInfo, pagination, totalCount) 
       }
       break;
     case STANDARD_PAGINATION:
-      return <Pagination defaultCurrent={1} total={totalCount} onChange={e => loadData(pagination, e)} />;
+      return (
+        <Pagination
+          defaultCurrent={1}
+          total={totalCount}
+          onChange={pageNumber => handlePageChange(pagination, pageNumber)}
+        />
+      );
   }
 };
 
@@ -44,7 +50,7 @@ Table.propTypes = {
   children: PropTypes.node,
   dataSource: PropTypes.array,
   totalCount: PropTypes.number,
-  loadData: PropTypes.func,
+  handlePageChange: PropTypes.func,
   pageInfo: PropTypes.object,
   pagination: PropTypes.string
 };

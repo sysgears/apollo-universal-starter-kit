@@ -8,7 +8,8 @@ import PostList from '../components/PostList';
 import POSTS_QUERY from '../graphql/PostsQuery.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import DELETE_POST from '../graphql/DeletePost.graphql';
-import { RELAY_PAGINATION } from '../../common/components/web';
+
+const LIMIT = 10;
 
 export function AddPost(prev, node) {
   // ignore if duplicate
@@ -122,24 +123,21 @@ export default compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
-        variables: { limit: 10, after: 0 }
+        variables: { limit: LIMIT, after: 0 }
       };
     },
     props: ({ data }) => {
       const { loading, error, posts, fetchMore, subscribeToMore } = data;
-      const loadMoreRows = (pagination = RELAY_PAGINATION, e = null) => {
-        const newEndCursor = e * data.variables.limit - data.variables.limit;
-        const endCursor = pagination === RELAY_PAGINATION ? posts.pageInfo.endCursor : newEndCursor;
+      const loadData = (offset, dataDelivery) => {
         return fetchMore({
           variables: {
-            after: endCursor
+            after: offset
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             const totalCount = fetchMoreResult.posts.totalCount;
             const newEdges = fetchMoreResult.posts.edges;
             const pageInfo = fetchMoreResult.posts.pageInfo;
-            const displayedEdges =
-              pagination === RELAY_PAGINATION ? [...previousResult.posts.edges, ...newEdges] : newEdges;
+            const displayedEdges = dataDelivery === 'add' ? [...previousResult.posts.edges, ...newEdges] : newEdges;
 
             return {
               // By returning `cursor` here, we update the `fetchMore` function
@@ -155,7 +153,7 @@ export default compose(
         });
       };
       if (error) throw new Error(error);
-      return { loading, posts, subscribeToMore, loadMoreRows };
+      return { loading, posts, subscribeToMore, loadData };
     }
   }),
   graphql(DELETE_POST, {
@@ -180,3 +178,5 @@ export default compose(
     })
   })
 )(Post);
+
+export { LIMIT };

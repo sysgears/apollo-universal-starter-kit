@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { PageLayout, Table, Button, STANDARD_PAGINATION } from '../../common/components/web';
+import { PageLayout, Table, Button, STANDARD_PAGINATION, RELAY_PAGINATION } from '../../common/components/web';
 import settings from '../../../../../../settings';
+import { LIMIT } from '../containers/Post';
 
 export default class PostList extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posts: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func
+    loadData: PropTypes.func
   };
 
   handleDeletePost = id => {
@@ -30,8 +31,15 @@ export default class PostList extends React.PureComponent {
     />
   );
 
+  handlePageChange = (pagination = RELAY_PAGINATION, pageNumber = null) => {
+    const newOffset = (pageNumber - 1) * LIMIT;
+    const offset = pagination === RELAY_PAGINATION ? this.props.posts.pageInfo.endCursor : newOffset;
+    const dataDelivery = pagination === RELAY_PAGINATION ? 'add' : 'replace';
+    this.props.loadData(offset, dataDelivery);
+  };
+
   render() {
-    const { loading, posts, loadMoreRows } = this.props;
+    const { loading, posts } = this.props;
     if (loading) {
       return (
         <PageLayout>
@@ -81,7 +89,7 @@ export default class PostList extends React.PureComponent {
             columns={columns}
             pagination={STANDARD_PAGINATION}
             pageInfo={posts.pageInfo}
-            loadData={loadMoreRows}
+            handlePageChange={this.handlePageChange}
             totalCount={posts.totalCount}
           />
         </PageLayout>

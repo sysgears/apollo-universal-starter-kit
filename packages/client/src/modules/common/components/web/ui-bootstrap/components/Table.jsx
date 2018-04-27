@@ -30,7 +30,7 @@ const renderData = (columns, entry) => {
 
 class TablePagination extends React.Component {
   static propTypes = {
-    loadData: PropTypes.func,
+    handlePageChange: PropTypes.func,
     pagination: PropTypes.string,
     numbers: PropTypes.array,
     pagesCount: PropTypes.number
@@ -42,7 +42,7 @@ class TablePagination extends React.Component {
   }
 
   componentDidUpdate() {
-    this.props.loadData(this.props.pagination, this.state.activePage);
+    this.props.handlePageChange(this.props.pagination, this.state.activePage);
   }
 
   handleItemClick = number => {
@@ -104,7 +104,7 @@ class TablePagination extends React.Component {
   }
 }
 
-const renderLoadMore = (dataSource, loadData, pageInfo, pagination, totalCount) => {
+const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, totalCount) => {
   switch (pagination) {
     case RELAY_PAGINATION: {
       if (pageInfo.hasNextPage) {
@@ -115,7 +115,7 @@ const renderLoadMore = (dataSource, loadData, pageInfo, pagination, totalCount) 
                 ({dataSource.length} / {totalCount})
               </small>
             </div>
-            <Button id="load-more" color="primary" onClick={() => loadData(pagination)}>
+            <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination)}>
               Load more ...
             </Button>
           </div>
@@ -131,7 +131,7 @@ const renderLoadMore = (dataSource, loadData, pageInfo, pagination, totalCount) 
       return (
         <TablePagination
           numbers={pagesArray}
-          loadData={loadData}
+          handlePageChange={handlePageChange}
           pagination={STANDARD_PAGINATION}
           pagesCount={pagesCount}
         />
@@ -140,7 +140,7 @@ const renderLoadMore = (dataSource, loadData, pageInfo, pagination, totalCount) 
   }
 };
 
-const Table = ({ dataSource, columns, totalCount, loadData, pageInfo, pagination, ...props }) => {
+const Table = ({ dataSource, columns, totalCount, handlePageChange, pageInfo, pagination, ...props }) => {
   return (
     <div>
       <RSTable {...props}>
@@ -149,7 +149,7 @@ const Table = ({ dataSource, columns, totalCount, loadData, pageInfo, pagination
         </thead>
         <tbody>{renderBody(columns, dataSource)}</tbody>
       </RSTable>
-      {renderLoadMore(dataSource, loadData, pageInfo, pagination, totalCount)}
+      {renderLoadMore(dataSource, handlePageChange, pageInfo, pagination, totalCount)}
     </div>
   );
 };
@@ -158,7 +158,7 @@ Table.propTypes = {
   dataSource: PropTypes.array,
   columns: PropTypes.array,
   totalCount: PropTypes.number,
-  loadData: PropTypes.func.isRequired,
+  handlePageChange: PropTypes.func,
   pageInfo: PropTypes.object,
   pagination: PropTypes.string
 };

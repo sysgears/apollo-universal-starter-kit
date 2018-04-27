@@ -1,8 +1,7 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { createApolloFetch } from 'apollo-fetch';
-import { constructUploadOptions } from 'apollo-fetch-upload';
 
+import createNetLink from './netLink';
 import translate from '../../i18n';
 import { MenuItem } from '../../modules/common/components/web';
 import Upload from './containers/Upload';
@@ -27,12 +26,5 @@ export default new Feature({
   ),
   reducer: { upload: reducers },
   localization: { ns: 'upload', resources },
-  createFetch: uri =>
-    createApolloFetch({
-      uri,
-      constructOptions: (reqs, options) => ({
-        ...constructUploadOptions(reqs, options),
-        credentials: 'include'
-      })
-    })
+  createNetLink
 });

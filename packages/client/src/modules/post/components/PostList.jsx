@@ -13,7 +13,7 @@ class PostList extends React.PureComponent {
     posts: PropTypes.object,
     navigation: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func.isRequired,
+    loadData: PropTypes.func.isRequired,
     t: PropTypes.func
   };
 
@@ -48,8 +48,14 @@ class PostList extends React.PureComponent {
     );
   };
 
+  handlePageChange = () => {
+    const offset = this.props.posts.pageInfo.endCursor;
+    const dataDelivery = 'add';
+    this.props.loadData(offset, dataDelivery);
+  };
+
   render() {
-    const { loading, posts, loadMoreRows, t } = this.props;
+    const { loading, posts, t } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     if (loading) {
       return (
@@ -72,7 +78,7 @@ class PostList extends React.PureComponent {
             if (!this.onEndReachedCalledDuringMomentum) {
               if (posts.pageInfo.hasNextPage) {
                 this.onEndReachedCalledDuringMomentum = true;
-                return loadMoreRows();
+                return this.handlePageChange();
               }
             }
           }}

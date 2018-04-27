@@ -12,7 +12,7 @@ const CardTitle = ({ children, style, ...props }) => {
 
 CardTitle.propTypes = {
   children: PropTypes.string,
-  style: PropTypes.number
+  style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
 };
 
 const styles = StyleSheet.create({

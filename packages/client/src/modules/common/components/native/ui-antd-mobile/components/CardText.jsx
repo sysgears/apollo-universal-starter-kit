@@ -12,7 +12,7 @@ const CardText = ({ children, style, ...props }) => {
 
 CardText.propTypes = {
   children: PropTypes.string,
-  style: PropTypes.number
+  style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
 };
 
 const styles = StyleSheet.create({

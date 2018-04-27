@@ -4,10 +4,10 @@ import { Text, StyleSheet } from 'react-native';
 
 import CardItem from './CardItem';
 
-const CardSubtitleText = ({ children, ...props }) => {
+const CardSubtitleText = ({ children, style, ...props }) => {
   return (
     <CardItem>
-      <Text style={styles.text} {...props}>
+      <Text style={[styles.text, style]} {...props}>
         {children}
       </Text>
     </CardItem>
@@ -15,7 +15,8 @@ const CardSubtitleText = ({ children, ...props }) => {
 };
 
 CardSubtitleText.propTypes = {
-  children: PropTypes.string
+  children: PropTypes.string,
+  style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
 };
 
 const styles = StyleSheet.create({

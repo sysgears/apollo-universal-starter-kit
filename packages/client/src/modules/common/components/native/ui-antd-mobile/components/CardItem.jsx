@@ -8,7 +8,7 @@ const CardItem = ({ children, style }) => {
 
 CardItem.propTypes = {
   children: PropTypes.node,
-  style: PropTypes.number
+  style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
 };
 
 const styles = StyleSheet.create({

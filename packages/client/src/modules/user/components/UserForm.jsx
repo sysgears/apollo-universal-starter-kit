@@ -33,6 +33,16 @@ const handleRoleChange = (type, value, setFieldValue) => {
 const validate = values => validateForm(values, userFormSchema);
 
 const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
+  const options = [
+    {
+      value: 'user',
+      label: t('userEdit.form.field.role.user')
+    },
+    {
+      value: 'admin',
+      label: t('userEdit.form.field.role.admin')
+    }
+  ];
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
   return (
     <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
@@ -66,11 +76,13 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
           name="role"
           component={RenderSelect}
           placeholder={t('userEdit.form.field.role.label')}
+          okText={t('userEdit.select.okText')}
+          dismissText={t('userEdit.select.dismissText')}
           placeholderTextColor={placeholderColor}
           selectedValue={role}
           onValueChange={value => handleRoleChange('role', value, setFieldValue)}
           cols={1}
-          data={[{ value: 'user', label: 'user' }, { value: 'admin', label: 'admin' }]}
+          data={options}
         />
         <Field
           name="firstName"
@@ -161,8 +173,8 @@ const UserFormWithFormik = withFormik({
       }
     };
   },
-  async handleSubmit(values, { setErrors, props: { onSubmit } }) {
-    await onSubmit(values).catch(e => setErrors(e));
+  handleSubmit(values, { setErrors, props: { onSubmit } }) {
+    onSubmit(values).catch(e => setErrors(e));
   },
   displayName: 'SignUpForm ', // helps with React DevTools
   validate: values => validate(values)

@@ -117,6 +117,10 @@
       },
       "btnSubmit": "Сохранить"
     },
+    "select": {
+      "okText": "Подтвердить",
+      "dismissText": "Отмена"
+    },
     "btnBack": "Назад"
   },
 
@@ -137,6 +141,10 @@
         },
         "active": "Активен"
       }
+    },
+    "select": {
+      "okText": "Подтвердить",
+      "dismissText": "Отмена"
     },
     "btnModalSubmit": "Сохранить",
     "btnModalClose": "Закрыть",

@@ -119,6 +119,10 @@
       },
       "btnSubmit": "Save"
     },
+    "select": {
+      "okText": "Done",
+      "dismissText": "Cancel"
+    },
     "btnBack": "Back"
   },
 
@@ -139,6 +143,10 @@
         },
         "active": "Is Active"
       }
+    },
+    "select": {
+      "okText": "Done",
+      "dismissText": "Cancel"
     },
     "btnModalSubmit": "Submit",
     "btnModalClose": "Close",

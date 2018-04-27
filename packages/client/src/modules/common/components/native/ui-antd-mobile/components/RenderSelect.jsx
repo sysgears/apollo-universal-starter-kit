@@ -5,13 +5,7 @@ import { Picker, List } from 'antd-mobile';
 
 const RenderSelect = ({ placeholder, onValueChange, selectedValue, value, onChange, ...props }) => {
   return (
-    <Picker
-      onChange={onValueChange || onChange}
-      value={[selectedValue || value]}
-      okText="Done"
-      dismissText="Cancel"
-      {...props}
-    >
+    <Picker onChange={onValueChange || onChange} value={[selectedValue || value]} {...props}>
       <List.Item style={styles.pickerLabel}>{placeholder}</List.Item>
     </Picker>
   );

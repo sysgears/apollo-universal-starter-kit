@@ -24,13 +24,7 @@ const Select = ({
         </View>
       )}
       <View style={styles.pickerWrapper}>
-        <Picker
-          onChange={onValueChange || onChange}
-          value={[selectedValue || value]}
-          okText="Done"
-          dismissText="Cancel"
-          {...props}
-        >
+        <Picker onChange={onValueChange || onChange} value={[selectedValue || value]} {...props}>
           <List.Item>{placeholder}</List.Item>
         </Picker>
       </View>

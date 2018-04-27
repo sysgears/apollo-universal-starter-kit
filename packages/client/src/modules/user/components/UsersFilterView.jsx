@@ -153,6 +153,11 @@ class UsersFilterView extends React.PureComponent {
 
   render() {
     const { filter: { role, isActive }, t } = this.props;
+    const options = [
+      { value: '', label: t('users.list.item.role.select') },
+      { value: 'user', label: t('users.list.item.role.user') },
+      { value: 'admin', label: t('users.list.item.role.admin') }
+    ];
     return (
       <View style={styles.container}>
         <View style={styles.inputContainer}>
@@ -162,14 +167,12 @@ class UsersFilterView extends React.PureComponent {
           <Select
             icon
             mode="dropdown"
-            data={[
-              { value: '', label: t('users.list.item.role.select') },
-              { value: 'user', label: t('users.list.item.role.user') },
-              { value: 'admin', label: t('users.list.item.role.admin') }
-            ]}
+            data={options}
             selectedValue={role}
             placeholder={t('users.list.item.role.label')}
             onValueChange={value => this.handleRole(value)}
+            okText={t('users.select.okText')}
+            dismissText={t('users.select.dismissText')}
             cols={1}
             extra={t('users.list.item.role.select')}
           />

@@ -5,7 +5,7 @@ import { withFormik } from 'formik';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, placeholderColor, Button } from '../../common/components/native';
+import { RenderField, placeholderColor, Button, primary } from '../../common/components/native';
 import { required, email, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
@@ -48,7 +48,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
             />
           </View>
           <View style={styles.submit}>
-            <Button type="primary" onPress={handleSubmit} disabled={valid}>
+            <Button type={primary} onPress={handleSubmit} disabled={valid}>
               {t('login.form.btnSubmit')}
             </Button>
           </View>

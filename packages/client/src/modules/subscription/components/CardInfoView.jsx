@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import translate from '../../../i18n';
-import { CardItem, CardText, CardSubtitleText, CardLabel, Button } from '../../common/components/native';
+import { CardItem, CardText, CardSubtitleText, CardLabel, Button, primary } from '../../common/components/native';
 
 const renderCardItem = (title, value) => (
   <CardItem>
@@ -25,7 +25,7 @@ const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand, t }) => 
             {renderCardItem(`${t('card.text.expires')}: `, `${expiryMonth}/${expiryYear}`)}
             <View>
               <View style={styles.buttonWrapper}>
-                <Button color="primary">{t('card.btnUpdate')}</Button>
+                <Button color={primary}>{t('card.btnUpdate')}</Button>
               </View>
             </View>
           </View>

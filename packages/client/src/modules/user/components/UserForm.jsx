@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { View, StyleSheet } from 'react-native';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, Button, RenderSelect, RenderSwitch, placeholderColor } from '../../common/components/native';
+import {
+  RenderField,
+  Button,
+  RenderSelect,
+  RenderSwitch,
+  placeholderColor,
+  primary
+} from '../../common/components/native';
 import { email, minLength, required, match, validateForm } from '../../../../../common/validation';
 
 import settings from '../../../../../../settings';
@@ -107,7 +114,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
         secureTextEntry={true}
       />
       <View style={styles.submit}>
-        <Button type="primary" onPress={handleSubmit}>
+        <Button type={primary} onPress={handleSubmit}>
           {t('userEdit.form.btnSubmit')}
         </Button>
       </View>

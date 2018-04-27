@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { View, StyleSheet } from 'react-native';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, Button, placeholderColor } from '../../common/components/native';
+import { RenderField, Button, placeholderColor, primary } from '../../common/components/native';
 import { required, minLength, validateForm, match } from '../../../../../common/validation';
 import translate from '../../../i18n';
 
@@ -36,7 +36,7 @@ const ResetPasswordForm = ({ values, handleSubmit, t }) => {
         placeholderTextColor={placeholderColor}
       />
       <View style={styles.submit}>
-        <Button type="primary" onPress={handleSubmit}>
+        <Button type={primary} onPress={handleSubmit}>
           {t('resetPass.form.btnSubmit')}
         </Button>
       </View>

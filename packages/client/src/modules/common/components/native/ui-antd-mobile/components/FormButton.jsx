@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import List from 'antd-mobile/lib/list';
 import Button from 'antd-mobile/lib/button';
+import { primary } from '../../';
 
 const FormButton = ({ children, onPress, ...props }) => {
   return (
     <List.Item>
-      <Button type="primary" onClick={onPress} {...props}>
+      <Button type={primary} onClick={onPress} {...props}>
         {children}
       </Button>
     </List.Item>

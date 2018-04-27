@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import { withFormik } from 'formik';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, placeholderColor, Button } from '../../common/components/native';
+import { RenderField, placeholderColor, Button, primary } from '../../common/components/native';
 import { match, email, minLength, required, validateForm } from '../../../../../common/validation';
 import translate from '../../../i18n';
 
@@ -55,7 +55,7 @@ const RegisterForm = ({ values, handleSubmit, t }) => {
         placeholderTextColor={placeholderColor}
       />
       <View style={styles.submit}>
-        <Button type="primary" onPress={handleSubmit}>
+        <Button type={primary} onPress={handleSubmit}>
           {' '}
           {t('reg.form.btnSubmit')}
         </Button>

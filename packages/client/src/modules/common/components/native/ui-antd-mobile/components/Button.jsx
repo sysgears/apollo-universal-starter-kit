@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ADButton from 'antd-mobile/lib/button';
-import { Text, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 import * as TYPES from '../../ButtonTypes';
 
 const Button = ({ children, onPress, onClick, type, style, ...props }) => {
@@ -34,7 +34,7 @@ const getStyles = color => {
   };
 };
 
-const buttonTypes = StyleSheet.create({
+const buttonTypes = {
   primary: {
     type: TYPES.primary
   },
@@ -57,6 +57,6 @@ const buttonTypes = StyleSheet.create({
     type: TYPES.primary,
     styles: getStyles('#f6aa57')
   }
-});
+};
 
 export default Button;

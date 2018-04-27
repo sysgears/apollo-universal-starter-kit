@@ -1,6 +1,7 @@
 // Helpers
 import { camelizeKeys, decamelizeKeys } from 'humps';
 import knex from '../../sql/connector';
+import { knexWithId } from '../../sql/helpers';
 
 // Actual query fetching and transformation in DB
 export default class Subscription {
@@ -41,14 +42,12 @@ export default class Subscription {
       .first();
 
     if (userSubscription) {
-      return await knex('subscription')
+      return await knexWithId('subscription')
         .update(decamelizeKeys(subscription))
-        .where({ user_id: userId })
-        .returning('id');
+        .where({ user_id: userId });
     } else {
-      return await knex('subscription')
-        .insert({ ...decamelizeKeys(subscription), user_id: userId })
-        .returning('id');
+      return await knexWithId('subscription')
+        .insert({ ...decamelizeKeys(subscription), user_id: userId });
     }
   }
 

@@ -2,7 +2,9 @@
 import { camelizeKeys, decamelizeKeys, decamelize } from 'humps';
 import { has } from 'lodash';
 import bcrypt from 'bcryptjs';
+
 import knex from '../../sql/connector';
+import { knexWithId } from '../../sql/helpers';
 
 // Actual query fetching and transformation in DB
 export default class User {
@@ -132,21 +134,18 @@ export default class User {
       role = 'user';
     }
 
-    return knex('user')
-      .insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive })
-      .returning('id');
+    return knexWithId('user')
+      .insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive });
   }
 
   createFacebookAuth({ id, displayName, userId }) {
-    return knex('auth_facebook')
-      .insert({ fb_id: id, display_name: displayName, user_id: userId })
-      .returning('id');
+    return knexWithId('auth_facebook')
+      .insert({ fb_id: id, display_name: displayName, user_id: userId });
   }
 
   createGoogleOAuth({ id, displayName, userId }) {
-    return knex('auth_google')
-      .insert({ google_id: id, display_name: displayName, user_id: userId })
-      .returning('id');
+    return knexWithId('auth_google')
+      .insert({ google_id: id, display_name: displayName, user_id: userId });
   }
 
   async editUser({ id, username, email, role, isActive, password }) {
@@ -178,9 +177,8 @@ export default class User {
         .update(decamelizeKeys(profile))
         .where({ user_id: id });
     } else {
-      return knex('user_profile')
-        .insert({ ...decamelizeKeys(profile), user_id: id })
-        .returning('id');
+      return knexWithId('user_profile')
+        .insert({ ...decamelizeKeys(profile), user_id: id });
     }
   }
 
@@ -196,9 +194,8 @@ export default class User {
         .update({ serial })
         .where({ user_id: id });
     } else {
-      return knex('auth_certificate')
-        .insert({ serial, user_id: id })
-        .returning('id');
+      return knexWithId('auth_certificate')
+        .insert({ serial, user_id: id });
     }
   }
 

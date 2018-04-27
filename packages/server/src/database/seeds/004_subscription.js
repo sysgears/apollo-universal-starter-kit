@@ -1,11 +1,10 @@
 import bcrypt from 'bcryptjs';
-import { truncateTables } from '../../sql/helpers';
+import { knexWithId, truncateTables } from '../../sql/helpers';
 
 export async function seed(knex, Promise) {
   await truncateTables(knex, Promise, ['subscription']);
 
-  const [subscriberId] = await knex('user')
-    .returning('id')
+  const [subscriberId] = await knexWithId('user')
     .insert({
       username: 'subscriber',
       email: 'subscriber@example.com',
@@ -13,8 +12,7 @@ export async function seed(knex, Promise) {
       role: 'user',
       is_active: true
     });
-  await knex('subscription')
-    .returning('id')
+  await knexWithId('subscription')
     .insert({
       stripe_customer_id: 'test',
       stripe_subscription_id: 'test',

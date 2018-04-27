@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, ScrollView } from 'react-native';
-import List from 'antd-mobile/lib/list';
 
 const FormView = ({ children, style, ...props }) => {
   return (
     <ScrollView style={[styles.scroll, style]} keyboardShouldPersistTaps="always" keyboardDismissMode="none" {...props}>
-      <List>{children}</List>
+      {children}
     </ScrollView>
   );
 };

@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
+import { StackNavigator } from 'react-navigation';
 
+import translate from '../../i18n';
 import access from './access';
 import resolvers from './resolvers';
+import resources from './locales';
 import UserScreenNavigator from './containers/UserScreenNavigator';
-import { createTabBarIconWrapper } from '../common/components/native';
+import { HeaderTitle, MenuButton } from '../common/components/native';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
 import Logout from './containers/Logout';
@@ -39,7 +41,7 @@ LogoutScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-class UsersLisScreen extends React.Component {
+class UsersListScreen extends React.Component {
   static navigationOptions = () => ({
     title: 'Users'
   });
@@ -48,7 +50,7 @@ class UsersLisScreen extends React.Component {
   }
 }
 
-UsersLisScreen.propTypes = {
+UsersListScreen.propTypes = {
   navigation: PropTypes.object
 };
 
@@ -65,21 +67,28 @@ ProfileScreen.propTypes = {
   navigation: PropTypes.object
 };
 
+const HeaderTitleWithI18n = translate('user')(HeaderTitle);
+
 export * from './containers/Auth';
 
 export default new Feature(access, {
-  tabItem: {
+  drawerItem: {
     Profile: {
-      screen: ProfileScreen,
+      screen: StackNavigator({
+        Profile: {
+          screen: Profile,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       userInfo: {
         showOnLogin: true,
         role: ['user', 'admin']
       },
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
-          name: 'user',
-          size: 30
-        })
+        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.profile" />
       }
     },
     Login: {
@@ -88,23 +97,25 @@ export default new Feature(access, {
         showOnLogin: false
       },
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
-          name: 'login',
-          size: 30
-        })
+        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.sign" />
       }
     },
     Users: {
-      screen: UsersLisScreen,
+      screen: StackNavigator({
+        Users: {
+          screen: UsersListScreen,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.users" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       userInfo: {
         showOnLogin: true,
         role: 'admin'
       },
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(Ionicons, {
-          name: 'ios-browsers-outline',
-          size: 30
-        })
+        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.users" />
       }
     },
     Logout: {
@@ -113,15 +124,13 @@ export default new Feature(access, {
         showOnLogin: true
       },
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(SimpleLineIcons, {
-          name: 'logout',
-          size: 30
-        })
+        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.logout" />
       }
     }
   },
   resolver: resolvers,
+  localization: { ns: 'user', resources },
   routerFactory: () => {
-    return UserScreenNavigator(modules.tabItems);
+    return UserScreenNavigator(modules.drawerItems);
   }
 });

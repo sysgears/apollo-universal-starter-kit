@@ -1,8 +1,9 @@
-import { TabNavigator } from 'react-navigation';
+import { DrawerNavigator } from 'react-navigation';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
 import { withUser } from './Auth';
+import { DrawerComponent } from '../../common/components/native';
 
 class UserScreenNavigator extends React.Component {
   static propTypes = {
@@ -11,7 +12,7 @@ class UserScreenNavigator extends React.Component {
     routeConfigs: PropTypes.object
   };
 
-  navTabsFilter = () => {
+  navItemsFilter = () => {
     const { currentUser, currentUserLoading, routeConfigs } = this.props;
 
     const userFilter = value => {
@@ -31,16 +32,19 @@ class UserScreenNavigator extends React.Component {
   };
 
   render() {
-    const MainScreenNavigatorComponent = TabNavigator(
-      { ...this.navTabsFilter() },
-      { initialRouteName: this.getInitialRoute() }
+    const MainScreenNavigatorComponent = DrawerNavigator(
+      { ...this.navItemsFilter() },
+      {
+        contentComponent: DrawerComponent,
+        initialRouteName: this.getInitialRoute()
+      }
     );
 
     return <MainScreenNavigatorComponent />;
   }
 }
 
-const tabNavigator = routeConfigs => {
+const drawerNavigator = routeConfigs => {
   const withRoutes = Component => {
     const ownProps = { routeConfigs };
     const WithRoutesComponent = ({ ...props }) => <Component {...props} {...ownProps} />;
@@ -50,4 +54,4 @@ const tabNavigator = routeConfigs => {
   return withRoutes(withUser(UserScreenNavigator));
 };
 
-export default tabNavigator;
+export default drawerNavigator;

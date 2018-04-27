@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, FormButton } from '../../common/components/native';
 import { required, validateForm } from '../../../../../common/validation';
@@ -12,12 +14,18 @@ const postFormSchema = {
 
 const validate = values => validateForm(values, postFormSchema);
 
-const PostForm = ({ values, handleSubmit }) => {
+const PostForm = ({ values, handleSubmit, t }) => {
   return (
     <FormView>
-      <Field name="title" component={RenderField} type="text" label="Title" value={values.title} />
-      <Field name="content" component={RenderField} type="text" label="Content" value={values.content} />
-      <FormButton onPress={handleSubmit}>Save</FormButton>
+      <Field name="title" component={RenderField} type="text" label={t('post.field.title')} value={values.title} />
+      <Field
+        name="content"
+        component={RenderField}
+        type="text"
+        label={t('post.field.content')}
+        value={values.content}
+      />
+      <FormButton onPress={handleSubmit}>{t('post.btn.submit')}</FormButton>
     </FormView>
   );
 };
@@ -25,7 +33,8 @@ const PostForm = ({ values, handleSubmit }) => {
 PostForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
-  values: PropTypes.object
+  values: PropTypes.object,
+  t: PropTypes.func
 };
 
 const PostFormWithFormik = withFormik({
@@ -40,4 +49,4 @@ const PostFormWithFormik = withFormik({
   displayName: 'PostForm' // helps with React DevTools
 });
 
-export default PostFormWithFormik(PostForm);
+export default translate('post')(PostFormWithFormik(PostForm));

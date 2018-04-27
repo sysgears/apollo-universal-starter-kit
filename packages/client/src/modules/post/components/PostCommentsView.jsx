@@ -11,11 +11,13 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+
+import translate from '../../../i18n';
 import { SwipeAction } from '../../common/components/native';
 
 import PostCommentForm from './PostCommentForm';
 
-export default class PostCommentsView extends React.PureComponent {
+class PostCommentsView extends React.PureComponent {
   static propTypes = {
     postId: PropTypes.number.isRequired,
     comments: PropTypes.array.isRequired,
@@ -24,18 +26,19 @@ export default class PostCommentsView extends React.PureComponent {
     editComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
     subscribeToMore: PropTypes.func.isRequired,
-    onCommentSelect: PropTypes.func.isRequired
+    onCommentSelect: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   keyExtractor = item => item.id;
 
   renderItemIOS = ({ item: { id, content } }) => {
-    const { comment, deleteComment, onCommentSelect } = this.props;
+    const { comment, deleteComment, onCommentSelect, t } = this.props;
     return (
       <SwipeAction
         onPress={() => onCommentSelect({ id: id, content: content })}
         right={{
-          text: 'Delete',
+          text: t('comment.btn.del'),
           onPress: () => this.onCommentDelete(comment, deleteComment, onCommentSelect, id)
         }}
       >
@@ -81,12 +84,12 @@ export default class PostCommentsView extends React.PureComponent {
   };
 
   render() {
-    const { postId, comment, addComment, editComment, comments, onCommentSelect } = this.props;
+    const { postId, comment, addComment, editComment, comments, onCommentSelect, t } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
 
     return (
       <View>
-        <Text style={styles.title}>Comments</Text>
+        <Text style={styles.title}>{t('comment.title')}</Text>
         <PostCommentForm
           postId={postId}
           onSubmit={this.onSubmit(comment, postId, addComment, editComment, onCommentSelect)}
@@ -101,6 +104,8 @@ export default class PostCommentsView extends React.PureComponent {
     );
   }
 }
+
+export default translate('post')(PostCommentsView);
 
 const styles = StyleSheet.create({
   title: {

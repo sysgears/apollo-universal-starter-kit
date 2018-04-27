@@ -1,19 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+
+import translate from '../../../i18n';
+import RegisterForm from '../components/RegisterForm';
 import { LayoutCenter } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 
-import RegisterForm from '../components/RegisterForm';
 import settings from '../../../../../../settings';
 
-export default class RegisterView extends React.PureComponent {
+class RegisterView extends React.PureComponent {
   static propTypes = {
-    register: PropTypes.func.isRequired
+    register: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   onSubmit = async values => {
-    const { register } = this.props;
+    const { register, t } = this.props;
     const { errors } = await register(values);
 
     if (errors && errors.length) {
@@ -22,32 +25,35 @@ export default class RegisterView extends React.PureComponent {
           res[error.field] = error.message;
           return res;
         },
-        { _error: 'Registration failed!' }
+        { _error: t('reg.errorMsg') }
       );
     }
   };
 
-  renderMetaData = () => (
+  renderMetaData = t => (
     <Helmet
-      title={`${settings.app.name} - Register`}
+      title={`${settings.app.name} - ${t('reg.title')}`}
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - Register page`
+          content: `${settings.app.name} - ${t('reg.meta')}`
         }
       ]}
     />
   );
 
   render() {
+    const { t } = this.props;
     return (
       <PageLayout>
-        {this.renderMetaData()}
+        {this.renderMetaData(t)}
         <LayoutCenter>
-          <h1 className="text-center">Sign Up</h1>
+          <h1 className="text-center">{t('reg.form.title')}</h1>
           <RegisterForm onSubmit={this.onSubmit} />
         </LayoutCenter>
       </PageLayout>
     );
   }
 }
+
+export default translate('user')(RegisterView);

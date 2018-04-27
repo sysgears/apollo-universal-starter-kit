@@ -6,8 +6,6 @@ const combine = (features, extractor) => without(union(...map(features, res => c
 
 const defaultCreateFetch = () => {};
 
-export const featureCatalog = {};
-
 export default class {
   /* eslint-disable no-unused-vars */
   constructor(
@@ -21,15 +19,18 @@ export default class {
       route,
       navItem,
       navItemRight,
+      localization,
       rootComponentFactory,
       dataRootComponent,
       stylesInsert,
       scriptsInsert,
-      catalogInfo
+      data
     },
     ...features
   ) {
-    /* eslint-enable no-unused-vars */
+    // Localization
+    this.localization = combine(arguments, arg => arg.localization);
+
     // Connectivity
     this.link = combine(arguments, arg => arg.link);
     this.createFetch =
@@ -58,8 +59,10 @@ export default class {
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
     this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
 
-    combine(arguments, arg => arg.catalogInfo).forEach(info =>
-      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
+    // Shared modules data
+    this.data = combine([{}].concat(Array.from(arguments)), arg => arg.data).reduce(
+      (acc, el) => [{ ...acc[0], ...el }],
+      [{}]
     );
   }
 
@@ -85,6 +88,10 @@ export default class {
         key: component.key ? component.key : idx + this.navItem.length
       })
     );
+  }
+
+  get localizations() {
+    return this.localization;
   }
 
   get reducers() {

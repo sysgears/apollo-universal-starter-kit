@@ -6,7 +6,6 @@ import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { combineReducers, createStore } from 'redux';
 import { graphql, print, getOperationAST } from 'graphql';
-
 import { Provider } from 'react-redux';
 
 import createApolloClient from '../../../common/createApolloClient';

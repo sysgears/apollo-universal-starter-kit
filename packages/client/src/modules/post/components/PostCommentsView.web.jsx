@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import translate from '../../../i18n';
 import { Table, Button } from '../../common/components/web';
 import PostCommentForm from './PostCommentForm';
 
-export default class PostCommentsView extends React.PureComponent {
+class PostCommentsView extends React.PureComponent {
   static propTypes = {
     postId: PropTypes.number.isRequired,
     comments: PropTypes.array.isRequired,
@@ -12,7 +14,8 @@ export default class PostCommentsView extends React.PureComponent {
     editComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
     subscribeToMore: PropTypes.func.isRequired,
-    onCommentSelect: PropTypes.func.isRequired
+    onCommentSelect: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   handleEditComment = (id, content) => {
@@ -43,15 +46,15 @@ export default class PostCommentsView extends React.PureComponent {
   };
 
   render() {
-    const { postId, comments, comment } = this.props;
+    const { postId, comments, comment, t } = this.props;
     const columns = [
       {
-        title: 'Content',
+        title: t('comment.column.content'),
         dataIndex: 'content',
         key: 'content'
       },
       {
-        title: 'Actions',
+        title: t('comment.column.actions'),
         key: 'actions',
         width: 120,
         render: (text, record) => (
@@ -62,7 +65,7 @@ export default class PostCommentsView extends React.PureComponent {
               className="edit-comment"
               onClick={() => this.handleEditComment(record.id, record.content)}
             >
-              Edit
+              {t('comment.btn.edit')}
             </Button>{' '}
             <Button
               color="primary"
@@ -70,7 +73,7 @@ export default class PostCommentsView extends React.PureComponent {
               className="delete-comment"
               onClick={() => this.handleDeleteComment(record.id)}
             >
-              Delete
+              {t('comment.btn.del')}
             </Button>
           </div>
         )
@@ -79,7 +82,7 @@ export default class PostCommentsView extends React.PureComponent {
 
     return (
       <div>
-        <h3>Comments</h3>
+        <h3>{t('comment.title')}</h3>
         <PostCommentForm postId={postId} onSubmit={this.onSubmit()} initialValues={comment} comment={comment} />
         <h1 />
         <Table dataSource={comments} columns={columns} />
@@ -87,3 +90,5 @@ export default class PostCommentsView extends React.PureComponent {
     );
   }
 }
+
+export default translate('post')(PostCommentsView);

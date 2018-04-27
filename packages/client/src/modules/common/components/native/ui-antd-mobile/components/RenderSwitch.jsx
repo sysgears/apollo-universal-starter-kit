@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import Switch from './Switch';
-import { borderColor } from '../../';
+import { borderColor } from '../../stylesConstants';
 
 const RenderSwitch = ({ label, ...props }) => {
   return (

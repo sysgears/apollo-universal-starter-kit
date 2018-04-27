@@ -12,6 +12,7 @@ const Select = ({
   placeholder,
   onValueChange,
   onChange,
+  cols,
   selectedValue,
   value,
   ...props
@@ -24,7 +25,12 @@ const Select = ({
         </View>
       )}
       <View style={styles.pickerWrapper}>
-        <Picker onChange={onValueChange || onChange} value={[selectedValue || value]} {...props}>
+        <Picker
+          onChange={val => onValueChange(cols === 1 ? val[0] : val)}
+          value={[selectedValue || value]}
+          cols={cols || 1}
+          {...props}
+        >
           <List.Item>{placeholder}</List.Item>
         </Picker>
       </View>
@@ -36,6 +42,7 @@ Select.propTypes = {
   data: PropTypes.array.isRequired,
   onValueChange: PropTypes.func,
   placeholder: PropTypes.string,
+  cols: PropTypes.number,
   onChange: PropTypes.func,
   value: PropTypes.string,
   selectedValue: PropTypes.string,

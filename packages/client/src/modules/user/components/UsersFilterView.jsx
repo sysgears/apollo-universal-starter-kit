@@ -142,8 +142,7 @@ class UsersFilterView extends React.PureComponent {
 
   handleRole = value => {
     const { onRoleChange } = this.props;
-    const preparedValue = Array.isArray(value) ? value[0] : value;
-    onRoleChange(preparedValue);
+    onRoleChange(value);
   };
 
   handleIsActive = () => {

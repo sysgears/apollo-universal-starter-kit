@@ -24,24 +24,30 @@ const CounterView = ({
   } else {
     return (
       <View style={styles.container}>
-        <View style={styles.element}>
-          <Text style={styles.box}>{t('counter.text', { counter })}</Text>
+        <View>
+          <View style={styles.element}>
+            <Text style={styles.box}>{t('counter.text', { counter })}</Text>
+          </View>
+          <Button type={primary} onPress={addCounter(1)}>
+            {t('counter.btnLabel')}
+          </Button>
         </View>
-        <Button type={primary} onPress={addCounter(1)}>
-          {t('counter.btnLabel')}
-        </Button>
-        <View style={styles.element}>
-          <Text style={styles.box}>{t('reduxCount.text', { reduxCount })}</Text>
+        <View>
+          <View style={styles.element}>
+            <Text style={styles.box}>{t('reduxCount.text', { reduxCount })}</Text>
+          </View>
+          <Button type={primary} onPress={onReduxIncrement(1)}>
+            {t('reduxCount.btnLabel')}
+          </Button>
         </View>
-        <Button type={primary} onPress={onReduxIncrement(1)}>
-          {t('reduxCount.btnLabel')}
-        </Button>
-        <View style={styles.element}>
-          <Text style={styles.box}>{t('apolloCount.text', { counterState })}</Text>
+        <View>
+          <View style={styles.element}>
+            <Text style={styles.box}>{t('apolloCount.text', { counterState })}</Text>
+          </View>
+          <Button type={primary} onPress={addCounterState(1)}>
+            {t('apolloCount.btnLabel')}
+          </Button>
         </View>
-        <Button type={primary} onPress={addCounterState(1)}>
-          {t('apolloCount.btnLabel')}
-        </Button>
       </View>
     );
   }
@@ -51,16 +57,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingHorizontal: 15
   },
   element: {
     paddingTop: 30
   },
   box: {
     textAlign: 'center',
-    marginLeft: 15,
-    marginRight: 15,
     marginBottom: 5
   }
 });

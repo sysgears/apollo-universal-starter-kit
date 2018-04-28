@@ -15,7 +15,15 @@
     "no-console": 0,
     "react/jsx-key": 0,
     "semi": 2,
-    "react/sort-comp": 1
+    "react/sort-comp": 1,
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 120,
+        "singleQuote": true,
+        "parser": "babylon"
+      }
+    ]
   },
   "env": {
     "mocha": true
@@ -38,6 +46,7 @@
   "plugins": [
     "react",
     "json",
+    "prettier",
     "flowtype"
   ]
 }

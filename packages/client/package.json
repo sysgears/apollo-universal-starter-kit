@@ -67,7 +67,7 @@
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
     "prop-types": "^15.6.0",
-    "react": "^16.2.0",
+    "react": "16.3.1",
     "react-apollo": "^2.0.4",
     "react-art": "^16.3.2",
     "react-cookie": "^2.1.2",
@@ -142,6 +142,7 @@
     "jsdom": "^11.5.1",
     "less": "^3.0.2",
     "less-loader": "^4.0.5",
+    "mini-css-extract-plugin": "^0.4.0",
     "mkdirp": "^0.5.1",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",
@@ -175,11 +176,11 @@
   "peerDependencies": {
     "@expo/vector-icons": "^6.2.1",
     "antd-mobile": "^2.1.2",
-    "expo": "^26.0.0",
+    "expo": "^27.0.0",
     "native-base": "^2.3.5",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-26.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz",
     "react-native-simple-picker": "^2.0.0",
-    "react-navigation": "^2.0.0-rc.3",
+    "react-navigation": "^1.5.11",
     "spinjs": "^0.4.0"
   }
 }

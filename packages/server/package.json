@@ -85,7 +85,7 @@
     "performance-now": "^2.1.0",
     "pg": "^7.4.0",
     "prop-types": "^15.6.0",
-    "react": "^16.2.0",
+    "react": "16.3.1",
     "react-apollo": "^2.0.4",
     "react-art": "^16.3.2",
     "react-cookie": "^2.1.2",

@@ -35,7 +35,9 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       addUser: async input => {
         try {
-          const { data: { addUser } } = await mutate({
+          const {
+            data: { addUser }
+          } = await mutate({
             variables: { input }
           });
 
@@ -59,7 +61,9 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       editUser: async input => {
         try {
-          const { data: { editUser } } = await mutate({
+          const {
+            data: { editUser }
+          } = await mutate({
             variables: { input }
           });
 

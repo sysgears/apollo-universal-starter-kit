@@ -28,7 +28,9 @@ const UploadWithApollo = compose(
     props: ({ ownProps: { refetch }, mutate }) => ({
       uploadFiles: async files => {
         try {
-          const { data: { uploadFiles } } = await mutate({
+          const {
+            data: { uploadFiles }
+          } = await mutate({
             variables: { files }
           });
           refetch();
@@ -43,7 +45,9 @@ const UploadWithApollo = compose(
     props: ({ ownProps: { refetch }, mutate }) => ({
       removeFile: async id => {
         try {
-          const { data: { removeFile } } = await mutate({
+          const {
+            data: { removeFile }
+          } = await mutate({
             variables: { id }
           });
           refetch();

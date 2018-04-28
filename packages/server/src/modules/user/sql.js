@@ -134,18 +134,15 @@ export default class User {
       role = 'user';
     }
 
-    return returnId(knex('user'))
-      .insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive });
+    return returnId(knex('user')).insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive });
   }
 
   createFacebookAuth({ id, displayName, userId }) {
-    return returnId(knex('auth_facebook'))
-      .insert({ fb_id: id, display_name: displayName, user_id: userId });
+    return returnId(knex('auth_facebook')).insert({ fb_id: id, display_name: displayName, user_id: userId });
   }
 
   createGoogleOAuth({ id, displayName, userId }) {
-    return returnId(knex('auth_google'))
-      .insert({ google_id: id, display_name: displayName, user_id: userId });
+    return returnId(knex('auth_google')).insert({ google_id: id, display_name: displayName, user_id: userId });
   }
 
   async editUser({ id, username, email, role, isActive, password }) {
@@ -177,12 +174,16 @@ export default class User {
         .update(decamelizeKeys(profile))
         .where({ user_id: id });
     } else {
-      return returnId(knex('user_profile'))
-        .insert({ ...decamelizeKeys(profile), user_id: id });
+      return returnId(knex('user_profile')).insert({ ...decamelizeKeys(profile), user_id: id });
     }
   }
 
-  async editAuthCertificate({ id, auth: { certificate: { serial } } }) {
+  async editAuthCertificate({
+    id,
+    auth: {
+      certificate: { serial }
+    }
+  }) {
     const userProfile = await knex
       .select('id')
       .from('auth_certificate')
@@ -194,8 +195,7 @@ export default class User {
         .update({ serial })
         .where({ user_id: id });
     } else {
-      return returnId(knex('auth_certificate'))
-        .insert({ serial, user_id: id });
+      return returnId(knex('auth_certificate')).insert({ serial, user_id: id });
     }
   }
 

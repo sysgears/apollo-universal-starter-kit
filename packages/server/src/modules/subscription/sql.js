@@ -46,8 +46,7 @@ export default class Subscription {
         .update(decamelizeKeys(subscription))
         .where({ user_id: userId });
     } else {
-      return await returnId(knex('subscription'))
-        .insert({ ...decamelizeKeys(subscription), user_id: userId });
+      return await returnId(knex('subscription')).insert({ ...decamelizeKeys(subscription), user_id: userId });
     }
   }
 

@@ -47,8 +47,7 @@ export default class Post {
   }
 
   addPost({ title, content }) {
-    return returnId(knex('post'))
-      .insert({ title, content });
+    return returnId(knex('post')).insert({ title, content });
   }
 
   deletePost(id) {
@@ -67,8 +66,7 @@ export default class Post {
   }
 
   addComment({ content, postId }) {
-    return returnId(knex('comment'))
-      .insert({ content, post_id: postId });
+    return returnId(knex('comment')).insert({ content, post_id: postId });
   }
 
   getComment(id) {

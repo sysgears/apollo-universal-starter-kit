@@ -329,8 +329,8 @@ describe('Posts and comments example UI works', () => {
     expect(content.text()).to.not.include('Post comment 24');
     expect(content.find('.delete-comment')).has.lengthOf(6);
   });
-// TODO: switch to more reliable testing framework
-/*  step('Comment editing works', async done => {
+  // TODO: switch to more reliable testing framework
+  /*  step('Comment editing works', async done => {
     mutations.editComment = (obj, { input }) => {
       expect(input.postId).to.equal(3);
       expect(input.content).to.equal('Edited comment 2');

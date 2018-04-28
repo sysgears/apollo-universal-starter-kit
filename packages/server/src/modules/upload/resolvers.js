@@ -40,9 +40,7 @@ export default pubsub => ({
   },
   Mutation: {
     uploadFiles: async (obj, { files }, { Upload }) => {
-      const results = await Promise.all(
-        files.map(processUpload)
-      );
+      const results = await Promise.all(files.map(processUpload));
       return Upload.saveFiles(results);
     },
     removeFile: async (obj, { id }, { Upload }) => {

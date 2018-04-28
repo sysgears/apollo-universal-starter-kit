@@ -51,7 +51,13 @@ ContactForm.propTypes = {
 const ContactFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+  async handleSubmit(
+    values,
+    {
+      resetForm,
+      props: { onSubmit }
+    }
+  ) {
     await onSubmit(values);
     resetForm();
   },

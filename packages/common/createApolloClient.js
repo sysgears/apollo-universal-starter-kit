@@ -13,8 +13,9 @@ import settings from '../../settings';
 const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, clientResolvers }) => {
   const cache = new InMemoryCache();
 
-  const queryLink = createNetLink ? createNetLink(apiUrl) :
-      new BatchHttpLink({
+  const queryLink = createNetLink
+    ? createNetLink(apiUrl)
+    : new BatchHttpLink({
         uri: apiUrl,
         credentials: 'include'
       });

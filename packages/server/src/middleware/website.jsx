@@ -28,7 +28,7 @@ const renderServerSide = async (req, res) => {
 
   const client = createApolloClient({
     apiUrl,
-    createNetLink: !isApiExternal ? () => schemaLink: undefined,
+    createNetLink: !isApiExternal ? () => schemaLink : undefined,
     links: clientModules.link,
     clientResolvers: clientModules.resolvers
   });

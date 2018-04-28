@@ -4,14 +4,12 @@ import { merge, map, union, without, castArray } from 'lodash';
 
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
-const defaultCreateFetch = () => {};
-
 export default class {
   /* eslint-disable no-unused-vars */
   constructor(
     {
       link,
-      createFetch,
+      createNetLink,
       route,
       drawerItem,
       localization,
@@ -25,10 +23,9 @@ export default class {
   ) {
     /* eslint-enable no-unused-vars */
     this.link = combine(arguments, arg => arg.link);
-    this.createFetch =
-      combine(arguments, arg => arg.createFetch !== defaultCreateFetch && arg.createFetch)
-        .slice(-1)
-        .pop() || defaultCreateFetch;
+    this.createNetLink = combine(arguments, arg => arg.createNetLink)
+      .slice(-1)
+      .pop();
     this.drawerItem = combine(arguments, arg => arg.drawerItem);
     this.localization = combine(arguments, arg => arg.localization);
     this.reducer = combine(arguments, arg => arg.reducer);

@@ -64,7 +64,7 @@ const JWTLink = new ApolloLink((operation, forward) => {
           },
           error: networkError => {
             (async () => {
-              if (networkError.response.status === 401) {
+              if (networkError.response && networkError.response.status === 401) {
                 try {
                   const { data: { refreshTokens: { accessToken, refreshToken } } } = await apolloClient.mutate({
                     mutation: REFRESH_TOKENS_MUTATION,

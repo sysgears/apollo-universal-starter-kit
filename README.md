@@ -56,7 +56,7 @@ yarn seed
 ```
 
 4. Run starter kit in development mode. 
-For running Android or iOS you need to set in .spinrc.js builders.ios.enabled and/or builders.android.enabled field true. See *Getting Started with React Native* section.
+For running Android or iOS you need to set in `packages/mobile/.spinrc.js` `config.builders.ios.enabled` and/or `config.builders.android.enabled` field `true`. See *Getting Started with React Native* section.
 
 ```
 yarn watch
@@ -74,7 +74,7 @@ This starter kit adds full [React Native] integration, with [Webpack] as a packa
 compilation tools are needed in order to develop native mobile applications with this kit. You are able to run both web
 and mobile versions of your app at the same time connected to the same backend.
 
-For running Android or iOS you need to set in `.spinrc.js` `builders.ios.enabled` and/or `builders.android.enabled` field `true`.
+For running Android or iOS you need to set in `packages/mobile/.spinrc.js` `config.builders.ios.enabled` and/or `config.builders.android.enabled` field `true`.
 
 #### Running on a device
 

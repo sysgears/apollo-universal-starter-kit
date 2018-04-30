@@ -48,7 +48,7 @@
     "apollo-link-context": "^1.0.7",
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
-    "apollo-logger": "^0.2.0",
+    "apollo-logger": "^0.3.0",
     "apollo-upload-client": "^8.0.0",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.1.0",

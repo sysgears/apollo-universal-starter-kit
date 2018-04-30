@@ -1296,9 +1296,9 @@ apollo-link@^1.0.0, apollo-link@^1.0.6, apollo-link@^1.2.1, apollo-link@^1.2.2:
     apollo-utilities "^1.0.0"
     zen-observable-ts "^0.8.9"
 
-apollo-logger@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/apollo-logger/-/apollo-logger-0.2.0.tgz#34f3ac6ebef1dc9b0a5ee1e890188c30b241a2a2"
+apollo-logger@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/apollo-logger/-/apollo-logger-0.3.0.tgz#e6a68ad915678c1827c27394b23d3cb42775c18c"
   dependencies:
     debug "^3.0.1"
 

@@ -8,6 +8,7 @@ import { LoggingLink } from 'apollo-logger';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import ApolloClient from 'apollo-client';
 
+import log from './log';
 import settings from '../../settings';
 
 const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, clientResolvers }) => {
@@ -75,7 +76,7 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
   const allLinks = [...(links || []), linkState, apiLink];
 
   if (settings.app.logging.apolloLogging) {
-    allLinks.unshift(new LoggingLink());
+    allLinks.unshift(new LoggingLink({ logger: log.debug.bind(log) }));
   }
 
   const clientParams = {

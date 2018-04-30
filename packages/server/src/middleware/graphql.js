@@ -20,7 +20,9 @@ export default async (req, res, next) => {
         return error;
       },
       formatResponse: (response, options) =>
-        settings.app.logging.apolloLogging ? formatResponse(response, options) : response,
+        settings.app.logging.apolloLogging
+          ? formatResponse({ logger: log.debug.bind(log) }, response, options)
+          : response,
       tracing: !!settings.engine.engineConfig.apiKey,
       cacheControl: !!settings.engine.engineConfig.apiKey
     }))(req, res, next);

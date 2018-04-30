@@ -140,7 +140,7 @@ export default class Renderer {
 
     const schemaLink = new MockLink(schema);
     const client = createApolloClient({
-      schemaLink,
+      createNetLink: () => schemaLink,
       links: clientModules.link,
       clientResolvers: clientModules.resolvers
     });

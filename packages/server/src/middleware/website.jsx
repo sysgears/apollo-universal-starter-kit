@@ -24,9 +24,11 @@ let assetMap;
 const renderServerSide = async (req, res) => {
   const clientModules = require('../../../client/src/modules').default;
 
+  const schemaLink = new SchemaLink({ schema, context: await modules.createContext(req, res) });
+
   const client = createApolloClient({
     apiUrl,
-    schemaLink: !isApiExternal ? new SchemaLink({ schema, context: await modules.createContext(req, res) }) : undefined,
+    createNetLink: !isApiExternal ? () => schemaLink : undefined,
     links: clientModules.link,
     clientResolvers: clientModules.resolvers
   });
@@ -65,7 +67,7 @@ const renderServerSide = async (req, res) => {
   const css = sheet
     .getStyleElement()
     .concat(stylesheets)
-    .map((el, idx) => React.cloneElement(el, { key: idx }));
+    .map((el, idx) => (el ? React.cloneElement(el, { key: idx }) : el));
   const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
 
   if (context.url) {

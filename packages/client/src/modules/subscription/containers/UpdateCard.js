@@ -31,7 +31,9 @@ const UpdateCardWithApollo = compose(
     props: ({ ownProps: { history }, mutate }) => ({
       updateCard: async ({ token, expiryMonth, expiryYear, last4, brand }) => {
         try {
-          const { data: { updateCard } } = await mutate({
+          const {
+            data: { updateCard }
+          } = await mutate({
             variables: { input: { token, expiryMonth, expiryYear, last4, brand } },
             refetchQueries: [{ query: CARD_INFO }]
           });

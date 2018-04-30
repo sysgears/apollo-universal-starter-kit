@@ -1,6 +1,8 @@
 import { groupBy } from 'lodash';
 import settings from '../../../../settings';
 
+export const returnId = knexTable => (settings.db.dbType === 'sqlite' ? knexTable : knexTable.returning('id'));
+
 export const truncateTables = async (knex, Promise, tables) => {
   if (settings.db.dbType === 'sqlite') {
     return Promise.all(tables.map(table => knex(table).truncate()));

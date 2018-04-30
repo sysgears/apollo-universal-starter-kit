@@ -86,7 +86,16 @@ class PostComments extends React.Component {
     this.subscription = subscribeToMore({
       document: COMMENT_SUBSCRIPTION,
       variables: { postId },
-      updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
+      updateQuery: (
+        prev,
+        {
+          subscriptionData: {
+            data: {
+              commentUpdated: { mutation, id, node }
+            }
+          }
+        }
+      ) => {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
@@ -120,7 +129,14 @@ const PostCommentsWithApollo = compose(
             }
           },
           updateQueries: {
-            post: (prev, { mutationResult: { data: { addComment } } }) => {
+            post: (
+              prev,
+              {
+                mutationResult: {
+                  data: { addComment }
+                }
+              }
+            ) => {
               if (prev.post) {
                 return AddComment(prev, addComment);
               }
@@ -158,7 +174,14 @@ const PostCommentsWithApollo = compose(
             }
           },
           updateQueries: {
-            post: (prev, { mutationResult: { data: { deleteComment } } }) => {
+            post: (
+              prev,
+              {
+                mutationResult: {
+                  data: { deleteComment }
+                }
+              }
+            ) => {
               if (prev.post) {
                 return DeleteComment(prev, deleteComment.id);
               }

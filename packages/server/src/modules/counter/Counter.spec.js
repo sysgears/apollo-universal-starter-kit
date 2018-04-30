@@ -39,8 +39,8 @@ describe('Counter example API works', () => {
       variables: { amount: 2 }
     });
 
-    result.data.should.deep.equal({
-      addCounter: { amount: 7, __typename: 'Counter' }
+    result.should.deep.equal({
+      data: { addCounter: { amount: 7, __typename: 'Counter' } }
     });
   });
 

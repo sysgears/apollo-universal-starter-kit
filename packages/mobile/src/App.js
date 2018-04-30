@@ -34,7 +34,7 @@ export default class Main extends React.Component {
     log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
     const client = createApolloClient({
       apiUrl,
-      createFetch: modules.createFetch,
+      createNetLink: modules.createNetLink,
       links: modules.link,
       connectionParams: modules.connectionParams,
       clientResolvers: modules.resolvers

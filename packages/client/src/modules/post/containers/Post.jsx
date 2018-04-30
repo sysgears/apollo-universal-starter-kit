@@ -137,10 +137,10 @@ export default compose(
     },
     props: ({ data }) => {
       const { loading, error, posts, fetchMore, subscribeToMore } = data;
-      const loadData = (offset, dataDelivery) => {
+      const loadData = (after, dataDelivery) => {
         return fetchMore({
           variables: {
-            after: offset
+            after: after
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             const totalCount = fetchMoreResult.posts.totalCount;
@@ -162,7 +162,7 @@ export default compose(
         });
       };
       if (error) throw new Error(error);
-      return { loading, posts, subscribeToMore, loadData };
+      return { loading, posts, subscribeToMore, loadData, LIMIT };
     }
   }),
   graphql(DELETE_POST, {

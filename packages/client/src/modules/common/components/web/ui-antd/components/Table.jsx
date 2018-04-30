@@ -8,19 +8,19 @@ const RELAY_PAGINATION = 'relay';
 const STANDARD_PAGINATION = 'standard';
 
 // pagination accepts 'standard' and 'relay' params
-const Table = ({ totalCount, handlePageChange, pageInfo, pagination, loadMoreText, ...props }) => {
+const Table = ({ totalCount, handlePageChange, hasNextPage, pagination, loadMoreText, limit, ...props }) => {
   return (
     <div>
       <ADTable pagination={false} {...props} rowKey="id" />
-      {renderLoadMore(props.dataSource, handlePageChange, pageInfo, pagination, totalCount, loadMoreText)}
+      {renderPagination(props.dataSource, handlePageChange, hasNextPage, pagination, totalCount, loadMoreText, limit)}
     </div>
   );
 };
 
-const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, totalCount, loadMoreText) => {
+const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination, totalCount, loadMoreText, limit) => {
   switch (pagination) {
     case RELAY_PAGINATION:
-      if (pageInfo.hasNextPage) {
+      if (hasNextPage) {
         return (
           <div>
             <div>
@@ -28,7 +28,7 @@ const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, tota
                 ({dataSource.length} / {totalCount})
               </small>
             </div>
-            <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination)}>
+            <Button id="load-more" color="primary" onClick={() => handlePageChange(limit, pagination)}>
               {loadMoreText}
             </Button>
           </div>
@@ -40,7 +40,7 @@ const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, tota
         <Pagination
           defaultCurrent={1}
           total={totalCount}
-          onChange={pageNumber => handlePageChange(pagination, pageNumber)}
+          onChange={pageNumber => handlePageChange(limit, pagination, pageNumber)}
         />
       );
   }
@@ -51,9 +51,10 @@ Table.propTypes = {
   dataSource: PropTypes.array,
   totalCount: PropTypes.number,
   handlePageChange: PropTypes.func,
-  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
   pagination: PropTypes.string,
-  loadMoreText: PropTypes.string
+  loadMoreText: PropTypes.string,
+  limit: PropTypes.number
 };
 
 export default Table;

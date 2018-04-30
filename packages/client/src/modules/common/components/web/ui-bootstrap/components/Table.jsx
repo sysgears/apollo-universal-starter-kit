@@ -32,8 +32,8 @@ class TablePagination extends React.Component {
   static propTypes = {
     handlePageChange: PropTypes.func,
     pagination: PropTypes.string,
-    numbers: PropTypes.array,
-    pagesCount: PropTypes.number
+    pagesArray: PropTypes.array,
+    limit: PropTypes.number
   };
 
   constructor(props) {
@@ -42,7 +42,7 @@ class TablePagination extends React.Component {
   }
 
   componentDidUpdate() {
-    this.props.handlePageChange(this.props.pagination, this.state.activePage);
+    this.props.handlePageChange(this.props.limit, this.props.pagination, this.state.activePage);
   }
 
   handleItemClick = number => {
@@ -66,7 +66,7 @@ class TablePagination extends React.Component {
 
   nextPage = e => {
     e.preventDefault();
-    if (this.state.activePage < this.props.pagesCount) {
+    if (this.state.activePage < this.props.pagesArray.length) {
       this.setState(prevState => {
         return {
           activePage: prevState.activePage + 1
@@ -76,7 +76,7 @@ class TablePagination extends React.Component {
   };
 
   renderPaginationItems() {
-    return this.props.numbers.map(number => (
+    return this.props.pagesArray.map(number => (
       <PaginationItem
         key={number.toString()}
         onClick={() => this.handleItemClick(number)}
@@ -96,7 +96,7 @@ class TablePagination extends React.Component {
           <PaginationLink previous href="#" onClick={e => this.previousPage(e)} />
         </PaginationItem>
         {this.renderPaginationItems()}
-        <PaginationItem disabled={this.state.activePage >= this.props.pagesCount}>
+        <PaginationItem disabled={this.state.activePage >= this.props.pagesArray.length}>
           <PaginationLink next href="#" onClick={e => this.nextPage(e)} />
         </PaginationItem>
       </Pagination>
@@ -104,10 +104,10 @@ class TablePagination extends React.Component {
   }
 }
 
-const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, totalCount, loadMoreText) => {
+const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination, totalCount, loadMoreText, limit) => {
   switch (pagination) {
     case RELAY_PAGINATION: {
-      if (pageInfo.hasNextPage) {
+      if (hasNextPage) {
         return (
           <div>
             <div>
@@ -115,7 +115,7 @@ const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, tota
                 ({dataSource.length} / {totalCount})
               </small>
             </div>
-            <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination)}>
+            <Button id="load-more" color="primary" onClick={() => handlePageChange(limit, pagination, null)}>
               {loadMoreText}
             </Button>
           </div>
@@ -124,23 +124,32 @@ const renderLoadMore = (dataSource, handlePageChange, pageInfo, pagination, tota
       break;
     }
     case STANDARD_PAGINATION: {
-      const pagesCount = Math.ceil(totalCount / 10);
-      const pagesArray = Array(pagesCount)
+      const pagesArray = Array(Math.ceil(totalCount / limit))
         .fill(1)
         .map((x, y) => x + y);
       return (
         <TablePagination
-          numbers={pagesArray}
+          pagesArray={pagesArray}
           handlePageChange={handlePageChange}
           pagination={STANDARD_PAGINATION}
-          pagesCount={pagesCount}
+          limit={limit}
         />
       );
     }
   }
 };
 
-const Table = ({ dataSource, columns, totalCount, handlePageChange, pageInfo, pagination, loadMoreText, ...props }) => {
+const Table = ({
+  dataSource,
+  columns,
+  totalCount,
+  handlePageChange,
+  hasNextPage,
+  pagination,
+  loadMoreText,
+  limit,
+  ...props
+}) => {
   return (
     <div>
       <RSTable {...props}>
@@ -149,7 +158,7 @@ const Table = ({ dataSource, columns, totalCount, handlePageChange, pageInfo, pa
         </thead>
         <tbody>{renderBody(columns, dataSource)}</tbody>
       </RSTable>
-      {renderLoadMore(dataSource, handlePageChange, pageInfo, pagination, totalCount, loadMoreText)}
+      {renderPagination(dataSource, handlePageChange, hasNextPage, pagination, totalCount, loadMoreText, limit)}
     </div>
   );
 };
@@ -159,9 +168,10 @@ Table.propTypes = {
   columns: PropTypes.array,
   totalCount: PropTypes.number,
   handlePageChange: PropTypes.func,
-  pageInfo: PropTypes.object,
+  hasNextPage: PropTypes.bool,
   pagination: PropTypes.string,
-  loadMoreText: PropTypes.string
+  loadMoreText: PropTypes.string,
+  limit: PropTypes.number
 };
 
 export default Table;

@@ -42,6 +42,7 @@
     "@fortawesome/react-fontawesome": "0.0.18",
     "antd": "^3.3.3",
     "apollo-cache-inmemory": "^1.1.12",
+    "apollo-cache-router": "^1.1.0",
     "apollo-client": "^2.2.2",
     "apollo-link": "^1.0.6",
     "apollo-link-batch-http": "1.2.2",

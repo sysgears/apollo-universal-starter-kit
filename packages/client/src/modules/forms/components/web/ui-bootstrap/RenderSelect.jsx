@@ -4,7 +4,7 @@ import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 
 import { Option } from './';
 
-const RenderField = ({ input, options, meta: { touched, error } }) => {
+const RenderSelect = ({ input, options, meta: { touched, error } }) => {
   const { label, values } = input;
   const invalid = !!(touched && error);
 
@@ -29,10 +29,10 @@ const RenderField = ({ input, options, meta: { touched, error } }) => {
   );
 };
 
-RenderField.propTypes = {
+RenderSelect.propTypes = {
   input: PropTypes.object,
   options: PropTypes.object,
   meta: PropTypes.object
 };
 
-export default RenderField;
+export default RenderSelect;

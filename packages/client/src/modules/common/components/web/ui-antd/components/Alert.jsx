@@ -8,7 +8,7 @@ const Alert = ({ children, color, ...props }) => {
 
 Alert.propTypes = {
   children: PropTypes.node,
-  color: PropTypes.String
+  color: PropTypes.string
 };
 
 export default Alert;

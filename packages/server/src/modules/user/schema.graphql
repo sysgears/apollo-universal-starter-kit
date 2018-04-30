@@ -50,8 +50,6 @@ type UserPayload {
 }
 
 extend type Mutation {
-    # Logout user
-    logout: String
     # Create new user
     addUser(input: AddUserInput!): UserPayload!
     # Edit a user

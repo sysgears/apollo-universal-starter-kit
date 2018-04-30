@@ -22,7 +22,9 @@ const RegisterWithApollo = compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       register: async ({ username, email, password }) => {
         try {
-          const { data: { register } } = await mutate({
+          const {
+            data: { register }
+          } = await mutate({
             variables: { input: { username, email, password } }
           });
 

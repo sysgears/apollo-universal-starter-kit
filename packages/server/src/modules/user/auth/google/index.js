@@ -21,7 +21,12 @@ if (settings.user.auth.google.enabled && !__TEST__) {
         callbackURL: '/auth/google/callback'
       },
       async function(accessToken, refreshToken, profile, cb) {
-        const { id, username, displayName, emails: [{ value }] } = profile;
+        const {
+          id,
+          username,
+          displayName,
+          emails: [{ value }]
+        } = profile;
         try {
           let user = await User.getUserByGoogleIdOrEmail(id, value);
 

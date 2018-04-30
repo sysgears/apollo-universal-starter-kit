@@ -6,6 +6,7 @@ const config = {
       entry: './src/index.tsx',
       stack: ['react-native-web', 'web'],
       openBrowser: true,
+      dllExcludes: ['bootstrap'],
       defines: {
         __CLIENT__: true
       },

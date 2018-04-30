@@ -18,7 +18,11 @@ class UsersFilter extends React.Component {
 
 export default compose(
   graphql(USERS_STATE_QUERY, {
-    props({ data: { usersState: { filter } } }) {
+    props({
+      data: {
+        usersState: { filter }
+      }
+    }) {
       return removeTypename(filter);
     }
   }),

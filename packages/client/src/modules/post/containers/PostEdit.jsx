@@ -93,7 +93,14 @@ export default compose(
             }
           },
           updateQueries: {
-            posts: (prev, { mutationResult: { data: { addPost } } }) => {
+            posts: (
+              prev,
+              {
+                mutationResult: {
+                  data: { addPost }
+                }
+              }
+            ) => {
               return AddPost(prev, addPost);
             }
           }

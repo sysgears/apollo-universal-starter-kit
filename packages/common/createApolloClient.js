@@ -1,7 +1,6 @@
 import { getOperationAST } from 'graphql';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
-import { createApolloFetch, constructDefaultOptions } from 'apollo-fetch';
 import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -11,24 +10,17 @@ import ApolloClient from 'apollo-client';
 
 import settings from '../../settings';
 
-const createApolloClient = ({ apiUrl, createFetch, schemaLink, links, connectionParams, clientResolvers }) => {
+const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, clientResolvers }) => {
   const cache = new InMemoryCache();
 
-  const netLink = schemaLink
-    ? schemaLink
+  const queryLink = createNetLink
+    ? createNetLink(apiUrl)
     : new BatchHttpLink({
-        fetch:
-          (createFetch && createFetch(apiUrl)) ||
-          createApolloFetch({
-            uri: apiUrl,
-            constructOptions: (reqs, options) => ({
-              ...constructDefaultOptions(reqs, options),
-              credentials: 'include'
-            })
-          })
+        uri: apiUrl,
+        credentials: 'include'
       });
 
-  let apiLink = netLink;
+  let apiLink = queryLink;
   if (apiUrl && (__TEST__ || typeof navigator !== 'undefined')) {
     let finalConnectionParams = {};
     if (connectionParams) {
@@ -74,7 +66,7 @@ const createApolloClient = ({ apiUrl, createFetch, schemaLink, links, connection
         return !!operationAST && operationAST.operation === 'subscription';
       },
       new WebSocketLink(wsClient),
-      netLink
+      queryLink
     );
   }
 

@@ -15,7 +15,9 @@ const defaults = {
 const resolvers = {
   Query: {
     commentState: (_, args, { cache }) => {
-      const { comment: { comment } } = cache.readQuery({ query: COMMENT_QUERY_CLIENT });
+      const {
+        comment: { comment }
+      } = cache.readQuery({ query: COMMENT_QUERY_CLIENT });
       return {
         comment: {
           ...comment,

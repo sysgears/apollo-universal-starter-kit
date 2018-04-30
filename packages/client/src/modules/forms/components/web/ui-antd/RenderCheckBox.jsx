@@ -12,7 +12,7 @@ const RenderCheckBox = ({ input, options, meta: { touched, error } }) => {
   }
 
   return (
-    <FormItem label={input.label} validateStatus={validateStatus} help={error} {...options}>
+    <FormItem label={input.label} validateStatus={validateStatus} help={touched && error} {...options}>
       <div>
         <Checkbox {...input}>{input.label}</Checkbox>
       </div>

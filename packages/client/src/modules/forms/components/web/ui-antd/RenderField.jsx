@@ -14,7 +14,7 @@ const RenderField = ({ input, options, meta: { touched, error } }) => {
   const InputComponent = input.type === 'textarea' ? TextArea : Input;
 
   return (
-    <FormItem label={input.label || ''} validateStatus={validateStatus} help={error} {...options}>
+    <FormItem label={input.label || ''} validateStatus={validateStatus} help={touched && error} {...options}>
       <div>
         <InputComponent {...input} placeholder={input.placeholder || input.label || ''} />
       </div>

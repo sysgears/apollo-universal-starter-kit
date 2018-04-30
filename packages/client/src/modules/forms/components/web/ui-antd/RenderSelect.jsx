@@ -14,7 +14,7 @@ const RenderSelect = ({ input, options, meta: { touched, error } }) => {
   const { label, values } = input;
 
   return (
-    <FormItem label={label} validateStatus={validateStatus} help={error} {...options}>
+    <FormItem label={label} validateStatus={validateStatus} help={touched && error} {...options}>
       <div>
         <Select {...input} defaultValue={input.value}>
           {values.map(option => {

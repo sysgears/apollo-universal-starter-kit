@@ -46,7 +46,7 @@ class PostCommentsView extends React.PureComponent {
   };
 
   render() {
-    const { postId, comments, comment, t } = this.props;
+    const { comments, comment, t } = this.props;
     const columns = [
       {
         title: t('comment.column.content'),
@@ -83,7 +83,7 @@ class PostCommentsView extends React.PureComponent {
     return (
       <div>
         <h3>{t('comment.title')}</h3>
-        <PostCommentForm postId={postId} onSubmit={this.onSubmit()} initialValues={comment} comment={comment} />
+        <PostCommentForm onSubmit={this.onSubmit()} comment={comment} />
         <h1 />
         <Table dataSource={comments} columns={columns} />
       </div>

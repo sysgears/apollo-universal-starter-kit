@@ -54,7 +54,6 @@ class ContactView extends React.Component {
           <h1 className="text-center">{t('form.title')}</h1>
           {this.state.sent && <Alert color="success">{t('form.submitMsg')}</Alert>}
           <ContactForm onSubmit={this.onSubmit({ contact, t })} />
-          {/* TODO error msg*/}
         </LayoutCenter>
       </PageLayout>
     );

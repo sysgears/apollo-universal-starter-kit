@@ -9,7 +9,7 @@ import POSTS_QUERY from '../graphql/PostsQuery.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import DELETE_POST from '../graphql/DeletePost.graphql';
 
-const LIMIT = 10;
+const limit = 10;
 
 export function AddPost(prev, node) {
   // ignore if duplicate
@@ -132,7 +132,7 @@ export default compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
-        variables: { limit: LIMIT, after: 0 }
+        variables: { limit: limit, after: 0 }
       };
     },
     props: ({ data }) => {
@@ -162,7 +162,7 @@ export default compose(
         });
       };
       if (error) throw new Error(error);
-      return { loading, posts, subscribeToMore, loadData, LIMIT };
+      return { loading, posts, subscribeToMore, loadData, limit };
     }
   }),
   graphql(DELETE_POST, {
@@ -194,5 +194,3 @@ export default compose(
     })
   })
 )(Post);
-
-export { LIMIT };

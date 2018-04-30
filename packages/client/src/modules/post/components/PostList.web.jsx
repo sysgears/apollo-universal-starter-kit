@@ -12,7 +12,7 @@ class PostList extends React.PureComponent {
     posts: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
     loadData: PropTypes.func,
-    LIMIT: PropTypes.number,
+    limit: PropTypes.number,
     t: PropTypes.func
   };
 
@@ -36,15 +36,23 @@ class PostList extends React.PureComponent {
     );
   };
 
-  handlePageChange = (limit, pagination = RELAY_PAGINATION, pageNumber = null) => {
-    const newOffset = (pageNumber - 1) * limit;
-    const offset = pagination === RELAY_PAGINATION ? this.props.posts.pageInfo.endCursor : newOffset;
-    const dataDelivery = pagination === RELAY_PAGINATION ? 'add' : 'replace';
-    this.props.loadData(offset, dataDelivery);
+  handlePageChange = (pagination, pageNumber) => {
+    const {
+      posts: {
+        pageInfo: { endCursor }
+      },
+      limit,
+      loadData
+    } = this.props;
+    if (pagination === RELAY_PAGINATION) {
+      loadData(endCursor, 'add');
+    } else {
+      loadData((pageNumber - 1) * limit, 'replace');
+    }
   };
 
   render() {
-    const { loading, posts, LIMIT, t } = this.props;
+    const { loading, posts, limit, t } = this.props;
     if (loading) {
       return (
         <PageLayout>
@@ -96,7 +104,7 @@ class PostList extends React.PureComponent {
             handlePageChange={this.handlePageChange}
             totalCount={posts.totalCount}
             loadMoreText={t('list.btn.more')}
-            limit={LIMIT}
+            limit={limit}
           />
         </PageLayout>
       );

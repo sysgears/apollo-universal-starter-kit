@@ -32,21 +32,20 @@ class TablePagination extends React.Component {
   static propTypes = {
     handlePageChange: PropTypes.func,
     pagination: PropTypes.string,
-    pagesArray: PropTypes.array,
-    limit: PropTypes.number
+    pagesArray: PropTypes.array
   };
 
   constructor(props) {
     super(props);
-    this.state = { activePage: 1 };
+    this.state = { pageNumber: 1 };
   }
 
   componentDidUpdate() {
-    this.props.handlePageChange(this.props.limit, this.props.pagination, this.state.activePage);
+    this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
   }
 
-  handleItemClick = number => {
-    this.setState({ activePage: number });
+  handleItemClick = pageNumber => {
+    this.setState({ pageNumber: pageNumber });
   };
 
   handleLinkClick = e => {
@@ -55,10 +54,10 @@ class TablePagination extends React.Component {
 
   previousPage = e => {
     e.preventDefault();
-    if (this.state.activePage > 1) {
+    if (this.state.pageNumber > 1) {
       this.setState(prevState => {
         return {
-          activePage: prevState.activePage - 1
+          pageNumber: prevState.pageNumber - 1
         };
       });
     }
@@ -66,38 +65,39 @@ class TablePagination extends React.Component {
 
   nextPage = e => {
     e.preventDefault();
-    if (this.state.activePage < this.props.pagesArray.length) {
+    if (this.state.pageNumber < this.props.pagesArray.length) {
       this.setState(prevState => {
         return {
-          activePage: prevState.activePage + 1
+          pageNumber: prevState.pageNumber + 1
         };
       });
     }
   };
 
   renderPaginationItems() {
-    return this.props.pagesArray.map(number => (
+    return this.props.pagesArray.map(pageNumber => (
       <PaginationItem
-        key={number.toString()}
-        onClick={() => this.handleItemClick(number)}
-        active={this.state.activePage === number}
+        key={pageNumber.toString()}
+        onClick={() => this.handleItemClick(pageNumber)}
+        active={this.state.pageNumber === pageNumber}
       >
-        <PaginationLink href="#" onClick={e => this.handleLinkClick(e)}>
-          {number}
+        <PaginationLink href="#" onClick={this.handleLinkClick}>
+          {pageNumber}
         </PaginationLink>
       </PaginationItem>
     ));
   }
 
   render() {
+    const { pageNumber } = this.state;
     return (
       <Pagination className="float-right">
-        <PaginationItem disabled={this.state.activePage <= 1}>
-          <PaginationLink previous href="#" onClick={e => this.previousPage(e)} />
+        <PaginationItem disabled={pageNumber <= 1}>
+          <PaginationLink previous href="#" onClick={this.previousPage} />
         </PaginationItem>
         {this.renderPaginationItems()}
-        <PaginationItem disabled={this.state.activePage >= this.props.pagesArray.length}>
-          <PaginationLink next href="#" onClick={e => this.nextPage(e)} />
+        <PaginationItem disabled={pageNumber >= this.props.pagesArray.length}>
+          <PaginationLink next href="#" onClick={this.nextPage} />
         </PaginationItem>
       </Pagination>
     );
@@ -115,7 +115,7 @@ const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination,
                 ({dataSource.length} / {totalCount})
               </small>
             </div>
-            <Button id="load-more" color="primary" onClick={() => handlePageChange(limit, pagination, null)}>
+            <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination, null)}>
               {loadMoreText}
             </Button>
           </div>
@@ -128,12 +128,7 @@ const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination,
         .fill(1)
         .map((x, y) => x + y);
       return (
-        <TablePagination
-          pagesArray={pagesArray}
-          handlePageChange={handlePageChange}
-          pagination={STANDARD_PAGINATION}
-          limit={limit}
-        />
+        <TablePagination pagesArray={pagesArray} handlePageChange={handlePageChange} pagination={STANDARD_PAGINATION} />
       );
     }
   }

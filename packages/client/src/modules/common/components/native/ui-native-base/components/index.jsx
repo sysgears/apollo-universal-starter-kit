@@ -6,3 +6,4 @@ export { default as InputItem } from './InputItem';
 export { default as SwipeAction } from './SwipeAction';
 export { default as ListItem } from './ListItem';
 export { default as MenuButton } from './MenuButton';
+export { default as Table } from './Table';

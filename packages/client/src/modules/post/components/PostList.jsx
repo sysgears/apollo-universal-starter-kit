@@ -2,10 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, FlatList, Text, View, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Platform, TouchableOpacity } from 'react-native';
 
 import translate from '../../../i18n';
-import { SwipeAction } from '../../common/components/native';
+import { SwipeAction, Table, RELAY_PAGINATION, STANDARD_PAGINATION } from '../../common/components/native';
 
 class PostList extends React.PureComponent {
   static propTypes = {
@@ -14,12 +14,13 @@ class PostList extends React.PureComponent {
     navigation: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
     loadData: PropTypes.func.isRequired,
+    limit: PropTypes.number,
     t: PropTypes.func
   };
 
   onEndReachedCalledDuringMomentum = false;
 
-  keyExtractor = item => item.node.id;
+  keyExtractor = item => item.node.id.toString();
 
   renderItemIOS = ({
     item: {
@@ -56,40 +57,44 @@ class PostList extends React.PureComponent {
     );
   };
 
-  handlePageChange = () => {
-    const offset = this.props.posts.pageInfo.endCursor;
-    const dataDelivery = 'add';
-    this.props.loadData(offset, dataDelivery);
+  handlePageChange = (pagination, pageNumber) => {
+    const {
+      posts: {
+        pageInfo: { endCursor }
+      },
+      limit,
+      loadData
+    } = this.props;
+    if (pagination === RELAY_PAGINATION) {
+      loadData(endCursor, 'add');
+    } else {
+      loadData((pageNumber - 1) * limit, 'replace');
+    }
   };
 
   render() {
-    const { loading, posts, t } = this.props;
+    const { loading, posts, t, limit } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
+    const loadMessage = t('post.loadMsg');
     if (loading) {
       return (
         <View style={styles.container}>
-          <Text>{t('post.loadMsg')}</Text>
+          <Text>{loadMessage}</Text>
         </View>
       );
     } else {
       return (
-        <FlatList
-          data={posts.edges}
-          style={{ marginTop: 5 }}
-          keyExtractor={this.keyExtractor}
+        <Table
+          posts={posts}
+          loading={loading}
           renderItem={renderItem}
-          onEndReachedThreshold={0.5}
-          onMomentumScrollBegin={() => {
-            this.onEndReachedCalledDuringMomentum = false;
-          }}
-          onEndReached={() => {
-            if (!this.onEndReachedCalledDuringMomentum) {
-              if (posts.pageInfo.hasNextPage) {
-                this.onEndReachedCalledDuringMomentum = true;
-                return this.handlePageChange();
-              }
-            }
-          }}
+          loadMessage={loadMessage}
+          handlePageChange={this.handlePageChange}
+          styles={styles}
+          keyExtractor={this.keyExtractor}
+          onEndReachedCalledDuringMomentum={this.onEndReachedCalledDuringMomentum}
+          limit={limit}
+          pagination={STANDARD_PAGINATION}
         />
       );
     }
@@ -121,7 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomColor: '#000',
     borderBottomWidth: 0.3,
-    height: 50,
+    height: 48,
     paddingLeft: 7
   }
 });

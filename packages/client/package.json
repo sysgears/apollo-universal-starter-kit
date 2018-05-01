@@ -179,7 +179,7 @@
     "antd-mobile": "^2.1.2",
     "expo": "^27.0.0",
     "native-base": "^2.3.5",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz",
+    "react-native": "0.55.3",
     "react-native-simple-picker": "^2.0.0",
     "react-navigation": "^1.5.11",
     "spinjs": "^0.4.0"

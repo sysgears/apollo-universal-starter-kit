@@ -1,19 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ADButton from 'antd-mobile/lib/button';
-import BtnStyles from 'antd-mobile/lib/button/style/index.native';
-import { StyleSheet } from 'react-native';
 import * as TYPES from '../../ButtonTypes';
-
-const styles = StyleSheet.create({
-  ...BtnStyles,
-  primaryRawText: {
-    textAlign: 'center'
-  },
-  defaultRawText: {
-    textAlign: 'center'
-  }
-});
 
 const Button = ({ children, onPress, onClick, type, style, ...props }) => {
   const btnData = buttonTypes[type] || {};
@@ -24,7 +12,7 @@ const Button = ({ children, onPress, onClick, type, style, ...props }) => {
   };
 
   return (
-    <ADButton onClick={onPress || onClick} {...btnProps} styles={styles}>
+    <ADButton onClick={onPress || onClick} {...btnProps}>
       {children}
     </ADButton>
   );

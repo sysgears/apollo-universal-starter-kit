@@ -12,8 +12,7 @@ import {
   success,
   danger,
   Modal,
-  Button,
-  borderColor
+  Button
 } from '../../common/components/native';
 
 import translate from '../../../i18n';
@@ -80,11 +79,11 @@ class UsersFilterView extends React.PureComponent {
   renderListItem = (label, value, idx) => {
     return (
       <ListItem key={idx} onPress={() => this.orderBy(value)}>
-        <View style={styles.orderByListItemWrapper}>
-          <View style={styles.labelWrapper}>
-            <Text style={styles.switchText}>{label}</Text>
+        <View style={styles.itemContainer}>
+          <View style={styles.itemTitle}>
+            <Text>{label}</Text>
           </View>
-          <View style={styles.iconWrapper}>{this.renderOrderByArrow(value)}</View>
+          <View style={styles.itemAction}>{this.renderOrderByArrow(value)}</View>
         </View>
       </ListItem>
     );
@@ -159,30 +158,36 @@ class UsersFilterView extends React.PureComponent {
     ];
     return (
       <View style={styles.container}>
-        <View style={styles.inputContainer}>
+        <View style={styles.itemContainer}>
           <SearchBar placeholder={t('users.list.item.search')} onChangeText={this.onChangeTextDelayed} />
         </View>
-        <View style={styles.selectContainer}>
-          <Select
-            icon
-            mode="dropdown"
-            data={options}
-            selectedValue={role}
-            placeholder={t('users.list.item.role.label')}
-            onValueChange={value => this.handleRole(value)}
-            okText={t('users.select.okText')}
-            dismissText={t('users.select.dismissText')}
-            cols={1}
-            extra={t('users.list.item.role.select')}
-          />
+        <View style={styles.itemContainer}>
+          <Text style={styles.itemTitle}>{t('users.list.item.filter')}</Text>
+          <View style={styles.itemAction}>
+            <Select
+              icon
+              mode="dropdown"
+              data={options}
+              selectedValue={role}
+              onValueChange={value => this.handleRole(value)}
+              okText={t('users.select.okText')}
+              dismissText={t('users.select.dismissText')}
+              cols={1}
+              extra={t('users.list.item.role.select')}
+            />
+          </View>
         </View>
-        <View style={styles.switchContainer}>
-          <Text style={styles.switchText}>{t('users.column.active')}</Text>
-          <Switch onValueChange={this.handleIsActive} value={isActive} />
+        <View style={styles.itemContainer}>
+          <Text style={styles.itemTitle}>{t('users.column.active')}</Text>
+          <View style={styles.itemAction}>
+            <Switch onValueChange={this.handleIsActive} value={isActive} />
+          </View>
         </View>
-        <TouchableOpacity style={styles.orderByContainer} onPress={() => this.setState({ showModal: true })}>
-          <Text style={styles.switchText}>{t('users.orderByText')}</Text>
-          <FontAwesome name="sort" size={25} style={styles.iconStyle} />
+        <TouchableOpacity style={styles.itemContainer} onPress={() => this.setState({ showModal: true })}>
+          <Text style={styles.itemTitle}>{t('users.orderByText')}</Text>
+          <View style={styles.itemAction}>
+            <FontAwesome name="sort" size={25} style={styles.iconStyle} />
+          </View>
         </TouchableOpacity>
         <Modal
           isVisible={this.state.showModal}
@@ -202,44 +207,25 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15
   },
-  inputContainer: {
-    flex: 1,
-    justifyContent: 'center'
-  },
-  selectContainer: {
-    flex: 1,
-    justifyContent: 'center'
-  },
-  switchContainer: {
+
+  itemContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomWidth: 0.5,
-    borderColor: borderColor
-  },
-  switchText: {
-    fontSize: 16
-  },
-  orderByContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center'
   },
-  orderByListItemWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+
+  itemTitle: {
+    flex: 20,
+    flexDirection: 'column'
   },
-  labelWrapper: {
-    flex: 9
-  },
-  iconWrapper: {
-    flex: 1,
+
+  itemAction: {
+    flex: 4,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'
   },
+
   iconStyle: {
     color: '#000'
   },

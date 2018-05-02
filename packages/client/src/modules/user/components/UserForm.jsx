@@ -75,7 +75,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
         <Field
           name="role"
           component={RenderSelect}
-          placeholder={t('userEdit.form.field.role.label')}
+          label={t('userEdit.form.field.role.label')}
           okText={t('userEdit.select.okText')}
           dismissText={t('userEdit.select.dismissText')}
           placeholderTextColor={placeholderColor}

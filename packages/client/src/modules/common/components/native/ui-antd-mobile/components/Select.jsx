@@ -19,11 +19,6 @@ const Select = ({
 }) => {
   return (
     <View style={styles.container}>
-      {icon && (
-        <View style={styles.iconWrapper}>
-          <FontAwesome name={iconName || 'filter'} size={iconSize || 20} style={{ color: `${iconColor || '#000'}` }} />
-        </View>
-      )}
       <View style={styles.pickerWrapper}>
         <Picker
           onChange={val => onValueChange(cols === 1 ? val[0] : val)}
@@ -31,7 +26,15 @@ const Select = ({
           cols={cols || 1}
           {...props}
         >
-          <List.Item>{placeholder}</List.Item>
+          <List.Item style={{ flex: 1 }}>
+            {icon && (
+              <FontAwesome
+                name={iconName || 'filter'}
+                size={iconSize || 20}
+                style={{ color: `${iconColor || '#000'}` }}
+              />
+            )}
+          </List.Item>
         </Picker>
       </View>
     </View>

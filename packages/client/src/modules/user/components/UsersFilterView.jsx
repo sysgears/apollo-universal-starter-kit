@@ -145,12 +145,18 @@ class UsersFilterView extends React.PureComponent {
   };
 
   handleIsActive = () => {
-    const { onIsActiveChange, filter: { isActive } } = this.props;
+    const {
+      onIsActiveChange,
+      filter: { isActive }
+    } = this.props;
     onIsActiveChange(!isActive);
   };
 
   render() {
-    const { filter: { role, isActive }, t } = this.props;
+    const {
+      filter: { role, isActive },
+      t
+    } = this.props;
     const options = [
       { value: '', label: t('users.list.item.role.select') },
       { value: 'user', label: t('users.list.item.role.user') },
@@ -158,14 +164,16 @@ class UsersFilterView extends React.PureComponent {
     ];
     return (
       <View style={styles.container}>
-        <View style={styles.itemContainer}>
+        <View style={{ flex: 1 }}>
           <SearchBar placeholder={t('users.list.item.search')} onChangeText={this.onChangeTextDelayed} />
         </View>
         <View style={styles.itemContainer}>
-          <Text style={styles.itemTitle}>{t('users.list.item.filter')}</Text>
+          <Text style={styles.itemTitle}>{t('users.list.item.role.label')}</Text>
           <View style={styles.itemAction}>
             <Select
               icon
+              iconName="caret-down"
+              placeholder={t('users.list.item.role.label')}
               mode="dropdown"
               data={options}
               selectedValue={role}
@@ -207,25 +215,21 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15
   },
-
   itemContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center'
   },
-
   itemTitle: {
     flex: 20,
     flexDirection: 'column'
   },
-
   itemAction: {
     flex: 4,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'
   },
-
   iconStyle: {
     color: '#000'
   },

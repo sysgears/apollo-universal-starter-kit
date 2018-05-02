@@ -16,14 +16,21 @@ const Select = ({
   onChange,
   style,
   itemStyle,
+  placeholder = '...',
   ...props
 }) => {
   return Platform.OS === 'ios' ? (
-    <Item>
+    <Item style={{ flex: 1 }}>
       {icon && (
         <FontAwesome name={iconName || 'filter'} size={iconSize || 20} style={{ color: `${iconColor || '#000'}` }} />
       )}
-      <Picker style={style} onValueChange={onValueChange || onChange} selectedValue={selectedValue || value} {...props}>
+      <Picker
+        placeholder={placeholder}
+        style={style}
+        onValueChange={onValueChange || onChange}
+        selectedValue={selectedValue || value}
+        {...props}
+      >
         {data.map((option, idx) => (
           <Picker.Item style={itemStyle} key={idx} label={option.label} value={option.value} />
         ))}
@@ -51,6 +58,7 @@ Select.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.string,
   selectedValue: PropTypes.string,
+  placeholder: PropTypes.string,
   icon: PropTypes.bool,
   iconName: PropTypes.string,
   iconColor: PropTypes.string,

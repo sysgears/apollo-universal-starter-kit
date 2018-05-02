@@ -64,15 +64,6 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
           placeholderTextColor={placeholderColor}
         />
         <Field
-          name="isActive"
-          label={t('userEdit.form.field.active')}
-          onValueChange={() => setFieldValue('isActive', !isActive)}
-          component={RenderSwitch}
-          placeholder={t('userEdit.form.field.active')}
-          checked={isActive}
-          placeholderTextColor={placeholderColor}
-        />
-        <Field
           name="role"
           component={RenderSelect}
           label={t('userEdit.form.field.role.label')}
@@ -83,6 +74,15 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
           onValueChange={value => handleRoleChange('role', value, setFieldValue)}
           cols={1}
           data={options}
+        />
+        <Field
+          name="isActive"
+          label={t('userEdit.form.field.active')}
+          onValueChange={() => setFieldValue('isActive', !isActive)}
+          component={RenderSwitch}
+          placeholder={t('userEdit.form.field.active')}
+          checked={isActive}
+          placeholderTextColor={placeholderColor}
         />
         <Field
           name="firstName"
@@ -173,7 +173,13 @@ const UserFormWithFormik = withFormik({
       }
     };
   },
-  handleSubmit(values, { setErrors, props: { onSubmit } }) {
+  handleSubmit(
+    values,
+    {
+      setErrors,
+      props: { onSubmit }
+    }
+  ) {
     onSubmit(values).catch(e => setErrors(e));
   },
   displayName: 'SignUpForm ', // helps with React DevTools

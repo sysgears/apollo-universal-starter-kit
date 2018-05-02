@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   itemTitle: {
-    flex: 20,
+    flex: 5,
     fontSize: 16
   },
   itemAction: {
-    flex: 4,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
   }

@@ -35,13 +35,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   itemTitle: {
-    flex: 2,
+    flex: 5,
     fontSize: 16
   },
   itemAction: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'flex-end'
   }
 });
 

@@ -26,7 +26,7 @@ const Select = ({
           cols={cols || 1}
           {...props}
         >
-          <List.Item style={{ flex: 1 }}>
+          <List.Item style={styles.list}>
             {icon && (
               <FontAwesome
                 name={iconName || 'filter'}
@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center'
   },
-  iconWrapper: {
-    flex: 1
+  list: {
+    backgroundColor: 'transparent'
   },
   pickerWrapper: {
     flex: 14

@@ -48,15 +48,15 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   itemTitle: {
-    flex: 20,
+    flex: 5,
     fontSize: 16,
     flexDirection: 'column'
   },
   itemAction: {
-    flex: 4,
+    flex: 2,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'flex-end'
   }
 });
 

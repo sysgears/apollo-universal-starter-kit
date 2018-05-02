@@ -169,7 +169,7 @@ class UsersFilterView extends React.PureComponent {
         </View>
         <View style={styles.itemContainer}>
           <Text style={styles.itemTitle}>{t('users.list.item.role.label')}</Text>
-          <View style={styles.itemAction}>
+          <View style={[styles.itemAction, styles.itemSelect]}>
             <Select
               icon
               iconName="caret-down"
@@ -221,14 +221,17 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   itemTitle: {
-    flex: 20,
+    flex: 5,
     flexDirection: 'column'
   },
   itemAction: {
-    flex: 4,
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  itemSelect: {
+    flex: 2
   },
   iconStyle: {
     color: '#000'

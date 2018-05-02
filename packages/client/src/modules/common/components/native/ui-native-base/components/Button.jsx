@@ -13,7 +13,9 @@ const Button = ({ children, onClick, onPress, type, size, ...props }) => {
 
   return (
     <NBButton {...btnProps}>
-      <Text style={{ textAlign: 'center' }}>{children}</Text>
+      <Text style={{ flex: 1 }} numberOfLines={1}>
+        {children}
+      </Text>
     </NBButton>
   );
 };

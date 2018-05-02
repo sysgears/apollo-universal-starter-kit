@@ -1,65 +1,48 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
+//eslint-disable-next-line import/no-extraneous-dependencies
+import DomainSchema from '@domain-schema/core';
+//eslint-disable-next-line import/no-extraneous-dependencies
+import { DomainSchemaFormik, FormSchema } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
-import Field from '../../../utils/FieldAdapter';
-import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { required, email, validateForm } from '../../../../../common/validation';
 
-const forgotPasswordFormSchema = {
-  email: [required, email]
-};
+const forgotPassFormSchema = t =>
+  new DomainSchema(
+    class extends FormSchema {
+      __ = { name: 'PostForm' };
+      email = {
+        type: String,
+        fieldType: DomainSchemaFormik.fields.input,
+        input: {
+          type: 'email',
+          label: t('forgotPass.form.fldEmail')
+        },
+        email: true
+      };
+      setSubmitBtn() {
+        return {
+          label: t('forgotPass.form.btnSubmit'),
+          color: 'primary'
+        };
+      }
+    }
+  );
 
-const validate = values => validateForm(values, forgotPasswordFormSchema);
+const ForgotPasswordForm = ({ onSubmit, t }) => {
+  const forgotPassForm = new DomainSchemaFormik(forgotPassFormSchema(t));
+  const ForgotPassFormComponent = forgotPassForm.generateForm();
 
-const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
   return (
-    <Form name="forgotPassword" onSubmit={handleSubmit}>
-      {sent && <Alert color="success">{t('forgotPass.submitMsg')}</Alert>}
-      <Field
-        name="email"
-        component={RenderField}
-        type="email"
-        label={t('forgotPass.form.fldEmail')}
-        value={values.email}
-      />
-      <div className="text-center">
-        {error && <Alert color="error">{error}</Alert>}
-        <Button color="primary" type="submit">
-          {t('forgotPass.form.btnSubmit')}
-        </Button>
-      </div>
-    </Form>
+    <ForgotPassFormComponent
+      onSubmit={async (values, { setErrors }) => await onSubmit(values).catch(e => setErrors(e))}
+    />
   );
 };
 
 ForgotPasswordForm.propTypes = {
-  handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
-  error: PropTypes.string,
-  sent: PropTypes.bool,
-  values: PropTypes.object,
   t: PropTypes.func
 };
 
-const ForgotPasswordFormWithFormik = withFormik({
-  enableReinitialize: true,
-  mapPropsToValues: () => ({ email: '' }),
-  async handleSubmit(
-    values,
-    {
-      setErrors,
-      resetForm,
-      props: { onSubmit }
-    }
-  ) {
-    await onSubmit(values)
-      .then(() => resetForm())
-      .catch(e => setErrors(e));
-  },
-  validate: values => validate(values),
-  displayName: 'LoginForm' // helps with React DevTools
-});
-
-export default translate('user')(ForgotPasswordFormWithFormik(ForgotPasswordForm));
+export default translate('user')(ForgotPasswordForm);

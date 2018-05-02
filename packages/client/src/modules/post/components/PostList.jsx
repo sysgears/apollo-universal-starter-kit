@@ -73,22 +73,18 @@ class PostList extends React.PureComponent {
   render() {
     const { loading, posts, t, limit } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
-    const loadMessage = t('post.loadMsg');
     if (loading) {
       return (
         <View style={styles.container}>
-          <Text>{loadMessage}</Text>
+          <Text>{t('post.loadMsg')}</Text>
         </View>
       );
     } else {
       return (
         <Table
           posts={posts}
-          loading={loading}
           renderItem={renderItem}
-          loadMessage={loadMessage}
           handlePageChange={this.handlePageChange}
-          styles={styles}
           keyExtractor={this.keyExtractor}
           limit={limit}
           pagination={STANDARD_PAGINATION}

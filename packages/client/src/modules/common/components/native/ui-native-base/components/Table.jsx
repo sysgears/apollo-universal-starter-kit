@@ -6,17 +6,10 @@ import { Button } from 'native-base';
 const RELAY_PAGINATION = 'relay';
 const STANDARD_PAGINATION = 'standard';
 
-class Table extends React.Component {
+class StandardPagination extends React.Component {
   static propTypes = {
-    loading: PropTypes.bool,
-    posts: PropTypes.object,
-    renderItem: PropTypes.func,
-    loadMessage: PropTypes.string,
-    handlePageChange: PropTypes.func,
-    styles: PropTypes.object,
-    keyExtractor: PropTypes.func,
-    limit: PropTypes.number,
-    pagination: PropTypes.string
+    totalPages: PropTypes.number,
+    handlePageChange: PropTypes.func
   };
 
   constructor(props) {
@@ -25,7 +18,7 @@ class Table extends React.Component {
   }
 
   componentDidUpdate() {
-    this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
+    this.props.handlePageChange(STANDARD_PAGINATION, this.state.pageNumber);
   }
 
   showPreviousPage(e) {
@@ -50,106 +43,91 @@ class Table extends React.Component {
     }
   }
 
-  renderStandardPagination = (pagination, totalPages) => {
-    if (pagination === STANDARD_PAGINATION) {
-      const styles = StyleSheet.create({
-        container: {
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between'
-        },
-        text: {
-          fontSize: 20,
-          alignSelf: 'center'
-        },
-        button: {
-          paddingLeft: 20,
-          paddingRight: 20
-        },
-        buttonText: {
-          color: 'white',
-          fontSize: 20
-        }
-      });
-      const { pageNumber } = this.state;
-      return (
-        <View style={styles.container}>
-          <Button
-            onPress={this.showPreviousPage.bind(this)}
-            info={true}
-            style={styles.button}
-            disabled={pageNumber <= 1}
-          >
-            <Text style={styles.buttonText}>{'<'}</Text>
-          </Button>
-          <Text style={styles.text}>
-            {pageNumber}/{totalPages}
-          </Text>
-          <Button
-            onPress={e => this.showNextPage(e, totalPages)}
-            info={true}
-            style={styles.button}
-            disabled={pageNumber >= totalPages}
-          >
-            <Text style={styles.buttonText}>{'>'}</Text>
-          </Button>
-        </View>
-      );
-    }
-  };
-
-  handleStandardPaginationPageChange = (pageNumber, handlePageChange) => {
-    this.setState({ pageNumber: pageNumber });
-    handlePageChange(STANDARD_PAGINATION, pageNumber);
-  };
-
   render() {
-    const {
-      loading,
-      posts,
-      renderItem,
-      loadMessage,
-      handlePageChange,
-      styles,
-      keyExtractor,
-      limit,
-      pagination
-    } = this.props;
-    let onEndReachedCalledDuringMomentum = false;
-    const totalPages = Math.ceil(posts.totalCount / limit);
-    if (loading) {
-      return (
-        <View style={styles.container}>
-          <Text>{loadMessage}</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View>
-          <FlatList
-            data={posts.edges}
-            style={{ marginTop: 5 }}
-            keyExtractor={keyExtractor}
-            renderItem={renderItem}
-            onEndReachedThreshold={0.5}
-            onMomentumScrollBegin={() => {
-              onEndReachedCalledDuringMomentum = false;
-            }}
-            onEndReached={() => {
-              if (pagination === RELAY_PAGINATION && !onEndReachedCalledDuringMomentum) {
-                if (posts.pageInfo.hasNextPage) {
-                  onEndReachedCalledDuringMomentum = true;
-                  return handlePageChange(RELAY_PAGINATION, null);
-                }
-              }
-            }}
-          />
-          {this.renderStandardPagination(pagination, totalPages)}
-        </View>
-      );
-    }
+    const { pageNumber } = this.state;
+    const { totalPages } = this.props;
+    return (
+      <View style={styles.paginationContainer}>
+        <Button onPress={this.showPreviousPage.bind(this)} info={true} style={styles.button} disabled={pageNumber <= 1}>
+          <Text style={styles.buttonText}>{'<'}</Text>
+        </Button>
+        <Text style={styles.text}>
+          {pageNumber}/{totalPages}
+        </Text>
+        <Button
+          onPress={e => this.showNextPage(e, totalPages)}
+          info={true}
+          style={styles.button}
+          disabled={pageNumber >= totalPages}
+        >
+          <Text style={styles.buttonText}>{'>'}</Text>
+        </Button>
+      </View>
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  paginationContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  text: {
+    fontSize: 20,
+    alignSelf: 'center'
+  },
+  button: {
+    paddingLeft: 40,
+    paddingRight: 40
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20
+  }
+});
+
+const renderStandardPagination = (pagination, totalPages, handlePageChange) => {
+  if (pagination === STANDARD_PAGINATION) {
+    return <StandardPagination totalPages={totalPages} handlePageChange={handlePageChange} />;
+  }
+};
+
+const Table = ({ posts, renderItem, handlePageChange, keyExtractor, limit, pagination }) => {
+  let onEndReachedCalledDuringMomentum = false;
+  return (
+    <View>
+      <FlatList
+        data={posts.edges}
+        style={{ marginTop: 5 }}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        onEndReachedThreshold={0.5}
+        onMomentumScrollBegin={() => {
+          onEndReachedCalledDuringMomentum = false;
+        }}
+        onEndReached={() => {
+          if (pagination === RELAY_PAGINATION && !onEndReachedCalledDuringMomentum) {
+            if (posts.pageInfo.hasNextPage) {
+              onEndReachedCalledDuringMomentum = true;
+              return handlePageChange(RELAY_PAGINATION, null);
+            }
+          }
+        }}
+      />
+      {renderStandardPagination(pagination, Math.ceil(posts.totalCount / limit), handlePageChange)}
+    </View>
+  );
+};
+
+Table.propTypes = {
+  posts: PropTypes.object,
+  renderItem: PropTypes.func,
+  handlePageChange: PropTypes.func,
+  keyExtractor: PropTypes.func,
+  limit: PropTypes.number,
+  pagination: PropTypes.string
+};
 
 export default Table;
 export { RELAY_PAGINATION, STANDARD_PAGINATION };

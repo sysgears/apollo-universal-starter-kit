@@ -18,8 +18,6 @@ class PostList extends React.PureComponent {
     t: PropTypes.func
   };
 
-  onEndReachedCalledDuringMomentum = false;
-
   keyExtractor = item => item.node.id.toString();
 
   renderItemIOS = ({
@@ -92,7 +90,6 @@ class PostList extends React.PureComponent {
           handlePageChange={this.handlePageChange}
           styles={styles}
           keyExtractor={this.keyExtractor}
-          onEndReachedCalledDuringMomentum={this.onEndReachedCalledDuringMomentum}
           limit={limit}
           pagination={STANDARD_PAGINATION}
         />

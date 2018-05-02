@@ -24,26 +24,24 @@ class Table extends React.Component {
     this.state = { pageNumber: 1 };
   }
 
-  renderPagination = (pagination, totalPages, handlePageChange) => {
-    const locale = {
-      prevText: '<',
-      nextText: '>'
-    };
+  renderStandardPagination = (pagination, totalPages, handlePageChange) => {
     if (pagination === STANDARD_PAGINATION) {
+      const locale = {
+        prevText: '<',
+        nextText: '>'
+      };
       return (
         <Pagination
           total={totalPages}
           current={this.state.pageNumber}
           locale={locale}
-          onChange={pageNumber =>
-            this.handleStandardPaginationPageChange(STANDARD_PAGINATION, pageNumber, handlePageChange)
-          }
+          onChange={pageNumber => this.handleStandardPaginationPageChange(pageNumber, handlePageChange)}
         />
       );
     }
   };
 
-  handleStandardPaginationPageChange = (STANDARD_PAGINATION, pageNumber, handlePageChange) => {
+  handleStandardPaginationPageChange = (pageNumber, handlePageChange) => {
     this.setState({ pageNumber: pageNumber });
     handlePageChange(STANDARD_PAGINATION, pageNumber);
   };
@@ -89,7 +87,7 @@ class Table extends React.Component {
               }
             }}
           />
-          {this.renderPagination(pagination, totalPages, handlePageChange)}
+          {this.renderStandardPagination(pagination, totalPages, handlePageChange)}
         </View>
       );
     }

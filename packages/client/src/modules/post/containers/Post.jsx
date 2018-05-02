@@ -9,7 +9,9 @@ import POSTS_QUERY from '../graphql/PostsQuery.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import DELETE_POST from '../graphql/DeletePost.graphql';
 
-const limit = 10;
+import PaginationConfig from '../../../../../../config/pagination';
+
+const limit = PaginationConfig.limit;
 
 export function AddPost(prev, node) {
   // ignore if duplicate

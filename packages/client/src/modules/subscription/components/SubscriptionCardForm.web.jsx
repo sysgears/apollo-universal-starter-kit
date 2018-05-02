@@ -54,10 +54,13 @@ const SubscriptionFormWithFormik = withFormik({
     const onSubmitForm = async ({ name }) => {
       const { stripe, onSubmit } = props;
       const { token, error } = await stripe.createToken({ name });
-      if (error) {
-        return;
-      }
-      const { id, card: { exp_month, exp_year, last4, brand } } = token;
+
+      if (error) return;
+
+      const {
+        id,
+        card: { exp_month, exp_year, last4, brand }
+      } = token;
 
       await onSubmit({
         token: id,

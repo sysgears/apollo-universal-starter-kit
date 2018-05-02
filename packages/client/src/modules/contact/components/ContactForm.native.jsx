@@ -85,9 +85,16 @@ const styles = StyleSheet.create({
 
 const ContactFormWithFormik = withFormik({
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+
+  handleSubmit(
+    values,
+    {
+      resetForm,
+      props: { onSubmit }
+    }
+  ) {
     Keyboard.dismiss();
-    await onSubmit(values);
+    onSubmit(values);
     resetForm();
   },
   validate: values => validate(values),

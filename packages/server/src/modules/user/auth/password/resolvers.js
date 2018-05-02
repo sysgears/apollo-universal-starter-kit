@@ -32,7 +32,13 @@ const validateUserPassword = async (user, password) => {
 
 export default () => ({
   Mutation: {
-    async login(obj, { input: { email, password } }, { req }) {
+    async login(
+      obj,
+      {
+        input: { email, password }
+      },
+      { req }
+    ) {
       try {
         const user = await User.getUserByEmail(email);
 

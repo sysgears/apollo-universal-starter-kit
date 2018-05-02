@@ -38,7 +38,9 @@ const CancelSubscriptionWithApollo = compose(
     props: ({ mutate }) => ({
       cancel: async () => {
         try {
-          const { data: { cancel } } = await mutate({
+          const {
+            data: { cancel }
+          } = await mutate({
             update: (store, { data: { cancel } }) => {
               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
               data.subscription = cancel;

@@ -46,7 +46,6 @@ class UsersList extends React.Component {
 }
 
 UsersList.propTypes = {
-  navigation: PropTypes.object,
   filter: PropTypes.object,
   users: PropTypes.array,
   subscribeToMore: PropTypes.func,

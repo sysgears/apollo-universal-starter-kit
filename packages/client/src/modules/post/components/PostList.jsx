@@ -21,7 +21,11 @@ class PostList extends React.PureComponent {
 
   keyExtractor = item => item.node.id;
 
-  renderItemIOS = ({ item: { node: { id, title } } }) => {
+  renderItemIOS = ({
+    item: {
+      node: { id, title }
+    }
+  }) => {
     const { deletePost, navigation, t } = this.props;
     return (
       <SwipeAction
@@ -36,7 +40,11 @@ class PostList extends React.PureComponent {
     );
   };
 
-  renderItemAndroid = ({ item: { node: { id, title } } }) => {
+  renderItemAndroid = ({
+    item: {
+      node: { id, title }
+    }
+  }) => {
     const { deletePost, navigation } = this.props;
     return (
       <TouchableOpacity style={styles.postWrapper} onPress={() => navigation.navigate('PostEdit', { id })}>

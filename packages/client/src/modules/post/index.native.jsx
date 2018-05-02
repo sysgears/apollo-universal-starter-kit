@@ -49,7 +49,14 @@ PostListScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-const PostEditTitle = ({ navigation: { state: { params: { id } } }, t }) => (
+const PostEditTitle = ({
+  navigation: {
+    state: {
+      params: { id }
+    }
+  },
+  t
+}) => (
   <Text style={styles.subTitle}>
     {t(`post.label.${id === 0 ? 'create' : 'edit'}`)} {t('post.label.post')}
   </Text>

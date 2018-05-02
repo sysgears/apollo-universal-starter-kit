@@ -1,34 +1,47 @@
 import { getOperationAST } from 'graphql';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
-import { createApolloFetch, constructDefaultOptions } from 'apollo-fetch';
 import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import ApolloClient from 'apollo-client';
+import ApolloCacheRouter from 'apollo-cache-router';
+import { hasDirectives } from 'apollo-utilities';
 
+import log from './log';
 import settings from '../../settings';
 
-const createApolloClient = ({ apiUrl, createFetch, schemaLink, links, connectionParams, clientResolvers }) => {
-  const cache = new InMemoryCache();
+const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, clientResolvers }) => {
+  const netCache = new InMemoryCache();
+  const localCache = new InMemoryCache();
+  const cache = ApolloCacheRouter.override(
+    ApolloCacheRouter.route([netCache, localCache], document => {
+      if (hasDirectives(['client'], document) || getOperationAST(document).name.value === 'GeneratedClientQuery') {
+        // Pass all @client queries and @client defaults to localCache
+        return [localCache];
+      } else {
+        // Pass all the other queries to netCache
+        return [netCache];
+      }
+    }),
+    {
+      reset: () => {
+        // On apolloClient.resetStore() reset only netCache and keep localCache intact
+        return netCache.reset();
+      }
+    }
+  );
 
-  const netLink = schemaLink
-    ? schemaLink
+  const queryLink = createNetLink
+    ? createNetLink(apiUrl)
     : new BatchHttpLink({
-        fetch:
-          (createFetch && createFetch(apiUrl)) ||
-          createApolloFetch({
-            uri: apiUrl,
-            constructOptions: (reqs, options) => ({
-              ...constructDefaultOptions(reqs, options),
-              credentials: 'include'
-            })
-          })
+        uri: apiUrl,
+        credentials: 'include'
       });
 
-  let apiLink = netLink;
+  let apiLink = queryLink;
   if (apiUrl && (__TEST__ || typeof navigator !== 'undefined')) {
     let finalConnectionParams = {};
     if (connectionParams) {
@@ -74,7 +87,7 @@ const createApolloClient = ({ apiUrl, createFetch, schemaLink, links, connection
         return !!operationAST && operationAST.operation === 'subscription';
       },
       new WebSocketLink(wsClient),
-      netLink
+      queryLink
     );
   }
 
@@ -83,7 +96,7 @@ const createApolloClient = ({ apiUrl, createFetch, schemaLink, links, connection
   const allLinks = [...(links || []), linkState, apiLink];
 
   if (settings.app.logging.apolloLogging) {
-    allLinks.unshift(new LoggingLink());
+    allLinks.unshift(new LoggingLink({ logger: log.debug.bind(log) }));
   }
 
   const clientParams = {

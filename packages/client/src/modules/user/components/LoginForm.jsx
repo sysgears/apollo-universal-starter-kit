@@ -130,7 +130,14 @@ const styles = StyleSheet.create({
 const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ email: '', password: '' }),
-  handleSubmit(values, { setErrors, props: { onSubmit } }) {
+
+  handleSubmit(
+    values,
+    {
+      setErrors,
+      props: { onSubmit }
+    }
+  ) {
     onSubmit(values).catch(e => {
       setErrors(e);
     });

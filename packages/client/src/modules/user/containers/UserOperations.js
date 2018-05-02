@@ -34,7 +34,9 @@ const withUsersDeleting = Component =>
     props: ({ mutate }) => ({
       deleteUser: async id => {
         try {
-          const { data: { deleteUser } } = await mutate({
+          const {
+            data: { deleteUser }
+          } = await mutate({
             variables: { id }
           });
 
@@ -97,7 +99,16 @@ const subscribeToUsersList = (subscribeToMore, filter) => {
   return subscribeToMore({
     document: USERS_SUBSCRIPTION,
     variables: { filter },
-    updateQuery: (prev, { subscriptionData: { data: { usersUpdated: { mutation, node } } } }) => {
+    updateQuery: (
+      prev,
+      {
+        subscriptionData: {
+          data: {
+            usersUpdated: { mutation, node }
+          }
+        }
+      }
+    ) => {
       switch (mutation) {
         case 'CREATED':
           return addUser(prev, node);

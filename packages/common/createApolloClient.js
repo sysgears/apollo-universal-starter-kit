@@ -7,11 +7,32 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import ApolloClient from 'apollo-client';
+import ApolloCacheRouter from 'apollo-cache-router';
+import { hasDirectives } from 'apollo-utilities';
 
+import log from './log';
 import settings from '../../settings';
 
 const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, clientResolvers }) => {
-  const cache = new InMemoryCache();
+  const netCache = new InMemoryCache();
+  const localCache = new InMemoryCache();
+  const cache = ApolloCacheRouter.override(
+    ApolloCacheRouter.route([netCache, localCache], document => {
+      if (hasDirectives(['client'], document) || getOperationAST(document).name.value === 'GeneratedClientQuery') {
+        // Pass all @client queries and @client defaults to localCache
+        return [localCache];
+      } else {
+        // Pass all the other queries to netCache
+        return [netCache];
+      }
+    }),
+    {
+      reset: () => {
+        // On apolloClient.resetStore() reset only netCache and keep localCache intact
+        return netCache.reset();
+      }
+    }
+  );
 
   const queryLink = createNetLink
     ? createNetLink(apiUrl)
@@ -75,7 +96,7 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
   const allLinks = [...(links || []), linkState, apiLink];
 
   if (settings.app.logging.apolloLogging) {
-    allLinks.unshift(new LoggingLink());
+    allLinks.unshift(new LoggingLink({ logger: log.debug.bind(log) }));
   }
 
   const clientParams = {

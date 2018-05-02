@@ -71,15 +71,26 @@ class Table extends React.Component {
           fontSize: 20
         }
       });
+      const { pageNumber } = this.state;
       return (
         <View style={styles.container}>
-          <Button onPress={this.showPreviousPage.bind(this)} info={true} style={styles.button}>
+          <Button
+            onPress={this.showPreviousPage.bind(this)}
+            info={true}
+            style={styles.button}
+            disabled={pageNumber <= 1}
+          >
             <Text style={styles.buttonText}>{'<'}</Text>
           </Button>
           <Text style={styles.text}>
-            {this.state.pageNumber}/{totalPages}
+            {pageNumber}/{totalPages}
           </Text>
-          <Button onPress={e => this.showNextPage(e, totalPages)} info={true} style={styles.button}>
+          <Button
+            onPress={e => this.showNextPage(e, totalPages)}
+            info={true}
+            style={styles.button}
+            disabled={pageNumber >= totalPages}
+          >
             <Text style={styles.buttonText}>{'>'}</Text>
           </Button>
         </View>

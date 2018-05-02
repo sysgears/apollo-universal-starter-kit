@@ -56,7 +56,7 @@ export default compose(
     })
   }),
   graphql(EDIT_USER, {
-    props: ({ ownProps: { history, navigation }, mutate }) => ({
+    props: ({ ownProps: { history, navigation, location }, mutate }) => ({
       editUser: async input => {
         try {
           const { data: { editUser } } = await mutate({
@@ -67,6 +67,9 @@ export default compose(
           }
 
           if (history) {
+            if (location && location.search) {
+              return history.push('/profile');
+            }
             return history.push('/users');
           }
 

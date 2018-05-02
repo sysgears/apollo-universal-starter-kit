@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import Switch from './Switch';
-import { borderColor } from '../../stylesConstants';
 
 const RenderSwitch = ({ label, ...props }) => {
   return (
-    <View style={styles.item} label={label}>
-      <Text style={styles.text}>{label}</Text>
-      <Switch {...props} />
+    <View style={styles.itemContainer}>
+      {label && <Text style={styles.itemTitle}>{label}</Text>}
+      <View style={styles.itemAction}>
+        <Switch {...props} />
+      </View>
     </View>
   );
 };
@@ -18,17 +19,20 @@ RenderSwitch.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  item: {
+  itemContainer: {
+    paddingLeft: 15,
     height: 40,
-    marginLeft: 15,
-    justifyContent: 'space-between',
     flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 0.5,
-    borderColor: borderColor
+    alignItems: 'center'
   },
-  text: {
-    fontSize: 17
+  itemTitle: {
+    flex: 20,
+    fontSize: 16
+  },
+  itemAction: {
+    flex: 4,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 

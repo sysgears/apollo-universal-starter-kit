@@ -65,7 +65,6 @@ class UserEditView extends React.PureComponent {
 
   render() {
     const { loading, user, t } = this.props;
-
     if (loading && !user) {
       return (
         <PageLayout>
@@ -83,7 +82,7 @@ class UserEditView extends React.PureComponent {
           <h2>
             {t(`userEdit.form.${user ? 'titleEdit' : 'titleCreate'}`)} {t('userEdit.form.title')}
           </h2>
-          <UserForm onSubmit={this.onSubmit} initialValues={user || {}} />
+          <UserForm onSubmit={this.onSubmit} user={user || {}} />
         </PageLayout>
       );
     }

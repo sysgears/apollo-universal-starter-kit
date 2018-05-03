@@ -67,11 +67,11 @@ export default class TablePagination extends React.Component {
     return (
       <Pagination className="float-right">
         <PaginationItem disabled={pageNumber <= 1}>
-          <PaginationLink previous href="#" onClick={this.previousPage} />
+          <PaginationLink previous href="#" onClick={this.previousPage} className={'bootstrap-pagination-previous'} />
         </PaginationItem>
         {this.renderPaginationItems()}
         <PaginationItem disabled={pageNumber >= this.props.pagesArray.length}>
-          <PaginationLink next href="#" onClick={this.nextPage} />
+          <PaginationLink next href="#" onClick={this.nextPage} className={'bootstrap-pagination-next'} />
         </PaginationItem>
       </Pagination>
     );

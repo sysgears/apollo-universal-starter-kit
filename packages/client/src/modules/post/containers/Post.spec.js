@@ -73,6 +73,8 @@ describe('Posts and comments example UI works', () => {
     }
   });
 
+  const loadMoreButton = content.find('#load-more').last();
+
   step('Posts page renders without data', () => {
     app = renderer.mount();
     content = app.find('#content').last();
@@ -84,18 +86,26 @@ describe('Posts and comments example UI works', () => {
   step('Posts page renders with data', () => {
     expect(content.text()).to.include('Post title 1');
     expect(content.text()).to.include('Post title 2');
-    expect(content.text()).to.include('2 / 4');
   });
 
   step('Clicking load more works', () => {
-    const loadMoreButton = content.find('#load-more').last();
-    loadMoreButton.simulate('click');
+    const pagination = content.find('.pagination').last();
+    const antNextPageButton = pagination.find('.ant-pagination-next');
+    const bootstrapNextPageButton = pagination.find('.bootstrap-pagination-next');
+    if (loadMoreButton.length) {
+      loadMoreButton.simulate('click');
+    } else {
+      if (antNextPageButton.length) {
+        antNextPageButton.last().simulate('click');
+      } else {
+        bootstrapNextPageButton.last().simulate('click');
+      }
+    }
   });
 
   step('Clicking load more loads more posts', () => {
     expect(content.text()).to.include('Post title 3');
     expect(content.text()).to.include('Post title 4');
-    expect(content.text()).to.include('4 / 4');
   });
 
   step('Check subscribed to post list updates', () => {
@@ -115,7 +125,6 @@ describe('Posts and comments example UI works', () => {
     });
 
     expect(content.text()).to.not.include('Post title 2');
-    expect(content.text()).to.include('3 / 3');
   });
 
   step('Updates post list on post create from subscription', () => {
@@ -133,7 +142,6 @@ describe('Posts and comments example UI works', () => {
     );
 
     expect(content.text()).to.include('Post title 2');
-    expect(content.text()).to.include('4 / 4');
   });
 
   step('Clicking delete optimistically removes post', () => {
@@ -142,17 +150,19 @@ describe('Posts and comments example UI works', () => {
     };
 
     const deleteButtons = content.find('.delete-button');
-    expect(deleteButtons).has.lengthOf(12);
+    if (loadMoreButton.length) {
+      expect(deleteButtons).has.lengthOf(12);
+    } else {
+      expect(deleteButtons).has.lengthOf(6);
+    }
     deleteButtons.last().simulate('click');
 
     expect(content.text()).to.not.include('Post title 4');
-    expect(content.text()).to.include('3 / 3');
   });
 
   step('Clicking delete removes the post', () => {
     expect(content.text()).to.include('Post title 3');
     expect(content.text()).to.not.include('Post title 4');
-    expect(content.text()).to.include('3 / 3');
   });
 
   step('Clicking on post works', () => {

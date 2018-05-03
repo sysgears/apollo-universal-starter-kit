@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { PageLayout, Table, Button, RELAY_PAGINATION } from '../../common/components/web';
+import { PageLayout, Table, Button, STANDARD_PAGINATION, RELAY_PAGINATION } from '../../common/components/web';
 import translate from '../../../i18n';
 import settings from '../../../../../../settings';
 
@@ -99,7 +99,7 @@ class PostList extends React.PureComponent {
           <Table
             dataSource={posts.edges.map(({ node }) => node)}
             columns={columns}
-            pagination={RELAY_PAGINATION}
+            pagination={STANDARD_PAGINATION}
             hasNextPage={posts.pageInfo.hasNextPage}
             handlePageChange={this.handlePageChange}
             totalCount={posts.totalCount}

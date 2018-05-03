@@ -38,6 +38,7 @@ const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination,
     case STANDARD_PAGINATION:
       return (
         <Pagination
+          className="pagination"
           defaultCurrent={1}
           total={totalCount}
           onChange={pageNumber => handlePageChange(pagination, pageNumber)}

@@ -5,8 +5,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
 import Feature from '../connector';
-import { LanguagePicker } from './components/web';
-import { MenuItem } from '../../modules/common/components/web';
+import { MenuItem, LanguagePicker } from '../../modules/common/components/web';
 import modules from '../';
 import settings from '../../../../../settings';
 

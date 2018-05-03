@@ -7,3 +7,5 @@ export { default as SwipeAction } from './SwipeAction';
 export { default as ListItem } from './ListItem';
 export { default as MenuButton } from './MenuButton';
 export { default as Table, RELAY_PAGINATION, STANDARD_PAGINATION } from './Table';
+export { default as LanguagePicker } from './LanguagePicker';
+export { default as Root } from './Root';

@@ -128,9 +128,12 @@ export default pubsub => ({
         return context.user.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
       async (obj, { input }, context) => {
+        const isAdmin = () => context.user.role === 'admin';
+        const isSelf = () => context.user.id === input.id;
         try {
           const e = new FieldError();
           const userExists = await context.User.getUserByUsername(input.username);
+
           if (userExists && userExists.id !== input.id) {
             e.setError('username', 'Username already exists.');
           }
@@ -146,7 +149,9 @@ export default pubsub => ({
 
           e.throwIf();
 
-          await context.User.editUser(input);
+          const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
+
+          await context.User.editUser(userInfo);
           await context.User.editUserProfile(input);
 
           if (settings.user.auth.certificate.enabled) {

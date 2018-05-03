@@ -1,32 +1,36 @@
-import { Ionicons } from '@expo/vector-icons';
-import { createApolloFetch } from 'apollo-fetch';
-import { constructUploadOptions } from 'apollo-fetch-upload';
+import React from 'react';
+import { StackNavigator } from 'react-navigation';
 
-import { createTabBarIconWrapper } from '../common/components/native';
+import createNetLink from './netLink';
+import translate from '../../i18n';
+import { HeaderTitle, MenuButton } from '../common/components/native';
 import Upload from './containers/Upload';
 import reducers from './reducers';
+import resources from './locales';
+
 import Feature from '../connector';
 
+const HeaderTitleWithI18n = translate('upload')(HeaderTitle);
+
 export default new Feature({
-  catalogInfo: { upload: true },
-  tabItem: {
+  data: { upload: true },
+  drawerItem: {
     Upload: {
-      screen: Upload,
+      screen: StackNavigator({
+        Upload: {
+          screen: Upload,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(Ionicons, {
-          name: 'ios-browsers-outline',
-          size: 30
-        })
+        drawerLabel: <HeaderTitleWithI18n />
       }
     }
   },
   reducer: { upload: reducers },
-  createFetch: uri =>
-    createApolloFetch({
-      uri,
-      constructOptions: (reqs, options) => ({
-        ...constructUploadOptions(reqs, options),
-        credentials: 'include'
-      })
-    })
+  localization: { ns: 'upload', resources },
+  createNetLink
 });

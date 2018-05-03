@@ -23,7 +23,12 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
         profileFields: settings.user.auth.facebook.profileFields
       },
       async function(accessToken, refreshToken, profile, cb) {
-        const { id, username, displayName, emails: [{ value }] } = profile;
+        const {
+          id,
+          username,
+          displayName,
+          emails: [{ value }]
+        } = profile;
         try {
           let user = await User.getUserByFbIdOrEmail(id, value);
 

@@ -18,7 +18,7 @@ log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
 const client = createApolloClient({
   apiUrl,
-  createFetch: modules.createFetch,
+  createNetLink: modules.createNetLink,
   links: modules.link,
   connectionParams: modules.connectionParams,
   clientResolvers: modules.resolvers
@@ -62,7 +62,7 @@ class ServerError extends Error {
   }
 }
 
-export default class Main extends React.Component {
+class Main extends React.Component {
   constructor(props) {
     super(props);
     const serverError = window.__SERVER_ERROR__;
@@ -90,3 +90,5 @@ export default class Main extends React.Component {
     );
   }
 }
+
+export default Main;

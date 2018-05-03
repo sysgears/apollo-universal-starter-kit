@@ -2,15 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
+
+import translate from '../../../i18n';
 import { PageLayout, Table, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
-export default class PostList extends React.PureComponent {
+class PostList extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posts: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func.isRequired
+    loadMoreRows: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   handleDeletePost = id => {
@@ -19,40 +22,44 @@ export default class PostList extends React.PureComponent {
   };
 
   renderLoadMore = (posts, loadMoreRows) => {
+    const { t } = this.props;
     if (posts.pageInfo.hasNextPage) {
       return (
         <Button id="load-more" color="primary" onClick={loadMoreRows}>
-          Load more ...
+          {t('list.btn.more')}
         </Button>
       );
     }
   };
 
-  renderMetaData = () => (
-    <Helmet
-      title={`${settings.app.name} - Posts list`}
-      meta={[
-        {
-          name: 'description',
-          content: `${settings.app.name} - List of all posts example page`
-        }
-      ]}
-    />
-  );
+  renderMetaData = () => {
+    const { t } = this.props;
+    return (
+      <Helmet
+        title={`${settings.app.name} - ${t('list.title')}`}
+        meta={[
+          {
+            name: 'description',
+            content: `${settings.app.name} - ${t('list.meta')}`
+          }
+        ]}
+      />
+    );
+  };
 
   render() {
-    const { loading, posts, loadMoreRows } = this.props;
+    const { loading, posts, loadMoreRows, t } = this.props;
     if (loading) {
       return (
         <PageLayout>
           {this.renderMetaData()}
-          <div className="text-center">Loading...</div>
+          <div className="text-center">{t('post.loadMsg')}</div>
         </PageLayout>
       );
     } else {
       const columns = [
         {
-          title: 'Title',
+          title: t('list.column.title'),
           dataIndex: 'title',
           key: 'title',
           render: (text, record) => (
@@ -62,7 +69,7 @@ export default class PostList extends React.PureComponent {
           )
         },
         {
-          title: 'Actions',
+          title: t('list.column.actions'),
           key: 'actions',
           width: 50,
           render: (text, record) => (
@@ -72,7 +79,7 @@ export default class PostList extends React.PureComponent {
               className="delete-button"
               onClick={() => this.handleDeletePost(record.id)}
             >
-              Delete
+              {t('post.btn.del')}
             </Button>
           )
         }
@@ -80,9 +87,9 @@ export default class PostList extends React.PureComponent {
       return (
         <PageLayout>
           {this.renderMetaData()}
-          <h2>Posts</h2>
+          <h2>{t('list.subTitle')}</h2>
           <Link to="/post/0">
-            <Button color="primary">Add</Button>
+            <Button color="primary">{t('list.btn.add')}</Button>
           </Link>
           <h1 />
           <Table dataSource={posts.edges.map(({ node }) => node)} columns={columns} />
@@ -97,3 +104,5 @@ export default class PostList extends React.PureComponent {
     }
   }
 }
+
+export default translate('post')(PostList);

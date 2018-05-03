@@ -2,8 +2,10 @@ import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink, withRouter } from 'react-router-dom';
 
+import translate from '../../i18n';
 import access from './access';
 import resolvers from './resolvers';
+import resources from './locales';
 import ProfileView from './components/ProfileView';
 import { MenuItem } from '../../modules/common/components/web';
 import Users from './components/Users';
@@ -31,6 +33,17 @@ const LogoutLink = withRouter(
 
 export * from './containers/Auth';
 
+const NavLinkUsersWithI18n = translate('user')(({ t }) => (
+  <NavLink to="/users" className="nav-link" activeClassName="active">
+    {t('navLink.users')}
+  </NavLink>
+));
+const NavLinkLoginWithI18n = translate('user')(({ t }) => (
+  <NavLink to="/login" className="nav-link" activeClassName="active">
+    {t('navLink.sign')}
+  </NavLink>
+));
+
 export default new Feature(access, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
@@ -50,9 +63,7 @@ export default new Feature(access, {
   navItem: [
     <IfLoggedIn key="/users" role="admin">
       <MenuItem>
-        <NavLink to="/users" className="nav-link" activeClassName="active">
-          Users
-        </NavLink>
+        <NavLinkUsersWithI18n />
       </MenuItem>
     </IfLoggedIn>
   ],
@@ -71,13 +82,12 @@ export default new Feature(access, {
     </IfLoggedIn>,
     <IfNotLoggedIn key="/login">
       <MenuItem>
-        <NavLink to="/login" className="nav-link" activeClassName="active">
-          Sign In
-        </NavLink>
+        <NavLinkLoginWithI18n />
       </MenuItem>
     </IfNotLoggedIn>
   ],
   resolver: resolvers,
+  localization: { ns: 'user', resources },
   // eslint-disable-next-line react/display-name
   rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
 });

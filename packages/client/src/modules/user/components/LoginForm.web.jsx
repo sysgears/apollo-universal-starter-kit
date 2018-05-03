@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { NavLink, Link } from 'react-router-dom';
 
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
 import { required, email, minLength, validateForm } from '../../../../../common/validation';
@@ -18,15 +19,27 @@ const loginFormSchema = {
 
 const validate = values => validateForm(values, loginFormSchema);
 
-const LoginForm = ({ handleSubmit, submitting, error, values }) => {
+const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
   return (
     <Form name="login" onSubmit={handleSubmit}>
-      <Field name="email" component={RenderField} type="email" label="Email" value={values.email} />
-      <Field name="password" component={RenderField} type="password" label="Password" value={values.password} />
+      <Field
+        name="email"
+        component={RenderField}
+        type="email"
+        label={t('login.form.field.email')}
+        value={values.email}
+      />
+      <Field
+        name="password"
+        component={RenderField}
+        type="password"
+        label={t('login.form.field.pass')}
+        value={values.password}
+      />
       <div className="text-center">{error && <Alert color="error">{error}</Alert>}</div>
       <div className="text-center">
         <Button color="primary" type="submit" disabled={submitting}>
-          Login
+          {t('login.form.btnSubmit')}
         </Button>
       </div>
       {settings.user.auth.facebook.enabled && (
@@ -40,13 +53,13 @@ const LoginForm = ({ handleSubmit, submitting, error, values }) => {
         </div>
       )}
       <div className="text-center" style={{ marginTop: 10 }}>
-        <Link to="/forgot-password">Forgot your password?</Link>
+        <Link to="/forgot-password">{t('login.btn.forgotPass')}</Link>
       </div>
       <hr />
       <div className="text-center" style={{ marginBottom: 16 }}>
-        <span style={{ lineHeight: '58px' }}>Not registered yet?</span>
+        <span style={{ lineHeight: '58px' }}>{t('login.btn.notReg')}</span>
         <NavLink className="btn btn-primary" to="/register" activeClassName="active" style={{ margin: 10 }}>
-          Sign Up
+          {t('login.btn.sign')}
         </NavLink>
       </div>
     </Form>
@@ -58,13 +71,20 @@ LoginForm.propTypes = {
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   error: PropTypes.string,
-  values: PropTypes.object
+  values: PropTypes.object,
+  t: PropTypes.func
 };
 
 const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ email: '', password: '' }),
-  async handleSubmit(values, { setErrors, props: { onSubmit } }) {
+  async handleSubmit(
+    values,
+    {
+      setErrors,
+      props: { onSubmit }
+    }
+  ) {
     await onSubmit(values).catch(e => {
       console.log(e);
       setErrors(e);
@@ -74,4 +94,4 @@ const LoginFormWithFormik = withFormik({
   displayName: 'LoginForm' // helps with React DevTools
 });
 
-export default LoginFormWithFormik(LoginForm);
+export default translate('user')(LoginFormWithFormik(LoginForm));

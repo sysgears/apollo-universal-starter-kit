@@ -39,7 +39,9 @@ export default compose(
     props: ({ ownProps: { refetch }, mutate }) => ({
       deleteUser: async id => {
         try {
-          const { data: { deleteUser } } = await mutate({
+          const {
+            data: { deleteUser }
+          } = await mutate({
             variables: { id }
           });
 

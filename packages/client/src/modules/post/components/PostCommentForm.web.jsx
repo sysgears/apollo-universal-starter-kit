@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
 import { required, validateForm } from '../../../../../common/validation';
@@ -11,19 +13,27 @@ const commentFormSchema = {
 
 const validate = values => validateForm(values, commentFormSchema);
 
-const PostCommentForm = ({ values, handleSubmit, comment }) => {
+const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
   return (
     <Form name="comment" onSubmit={handleSubmit}>
       <Row>
         <Col xs={2}>
-          <Label>{comment.id === null ? 'Add comment' : 'Edit comment'}</Label>
+          <Label>
+            {t(`comment.label.${comment.id ? 'edit' : 'add'}`)} {t('comment.label.comment')}
+          </Label>
         </Col>
         <Col xs={8}>
-          <Field name="content" component={RenderField} type="text" value={values.content} placeholder="Comment" />
+          <Field
+            name="content"
+            component={RenderField}
+            type="text"
+            value={values.content}
+            placeholder={t('comment.label.field')}
+          />
         </Col>
         <Col xs={2}>
           <Button color="primary" type="submit" className="float-right">
-            Save
+            {t('comment.btn.submit')}
           </Button>
         </Col>
       </Row>
@@ -38,12 +48,19 @@ PostCommentForm.propTypes = {
   submitting: PropTypes.bool,
   values: PropTypes.object,
   content: PropTypes.string,
-  changeContent: PropTypes.func
+  changeContent: PropTypes.func,
+  t: PropTypes.func
 };
 
 const PostCommentFormWithFormik = withFormik({
   mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
-  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
+  async handleSubmit(
+    values,
+    {
+      resetForm,
+      props: { onSubmit }
+    }
+  ) {
     await onSubmit(values);
     resetForm({ content: '' });
   },
@@ -52,4 +69,4 @@ const PostCommentFormWithFormik = withFormik({
   enableReinitialize: true
 });
 
-export default PostCommentFormWithFormik(PostCommentForm);
+export default translate('post')(PostCommentFormWithFormik(PostCommentForm));

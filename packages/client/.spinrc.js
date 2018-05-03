@@ -6,6 +6,7 @@ const config = {
       entry: './src/index.tsx',
       stack: ['react-native-web', 'web'],
       openBrowser: false,
+      dllExcludes: ['bootstrap'],
       defines: {
         __CLIENT__: true
       },
@@ -22,7 +23,7 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack'],
+    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
     ssr: true,
     webpackDll: true,

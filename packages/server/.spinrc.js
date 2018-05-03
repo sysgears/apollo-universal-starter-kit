@@ -19,7 +19,7 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'js', 'ts', 'webpack'],
+    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'js', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
     ssr: true,
     webpackDll: true,

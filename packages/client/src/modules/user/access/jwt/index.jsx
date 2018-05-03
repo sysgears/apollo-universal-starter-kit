@@ -4,7 +4,7 @@ import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import { LayoutCenter } from '../../../common/components';
-import { getItem, setItem, removeItem } from './tokenStorage';
+import { getItem, setItem, removeItem } from '../../../common/clientStorage';
 import Feature from '../connector';
 import settings from '../../../../../../../settings';
 
@@ -47,7 +47,13 @@ const JWTLink = new ApolloLink((operation, forward) => {
             const promise = (async () => {
               if (operation.operationName === 'login') {
                 if (result.data.login.tokens && !result.data.login.errors) {
-                  const { data: { login: { tokens: { accessToken, refreshToken } } } } = result;
+                  const {
+                    data: {
+                      login: {
+                        tokens: { accessToken, refreshToken }
+                      }
+                    }
+                  } = result;
                   await saveTokens({ accessToken, refreshToken });
                 } else {
                   await removeTokens();
@@ -64,9 +70,13 @@ const JWTLink = new ApolloLink((operation, forward) => {
           },
           error: networkError => {
             (async () => {
-              if (networkError.response.status === 401) {
+              if (networkError.response && networkError.response.status === 401) {
                 try {
-                  const { data: { refreshTokens: { accessToken, refreshToken } } } = await apolloClient.mutate({
+                  const {
+                    data: {
+                      refreshTokens: { accessToken, refreshToken }
+                    }
+                  } = await apolloClient.mutate({
                     mutation: REFRESH_TOKENS_MUTATION,
                     variables: { refreshToken: await getItem('refreshToken') }
                   });
@@ -128,7 +138,9 @@ class DataRootComponent extends React.Component {
         // as generated during server-sider rendering. Server had no idea about our client-side
         // access token and refresh token. In this case we need to trigger our JWT link
         // by sending network request
-        const { data: { currentUser } } = await client.query({
+        const {
+          data: { currentUser }
+        } = await client.query({
           query: CURRENT_USER_QUERY,
           fetchPolicy: 'network-only'
         });

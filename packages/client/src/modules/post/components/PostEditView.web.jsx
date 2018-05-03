@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
+import translate from '../../../i18n';
 import { PageLayout } from '../../common/components/web';
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
@@ -16,7 +17,7 @@ const onSubmit = (post, addPost, editPost) => values => {
   }
 };
 
-const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost }) => {
+const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost, t }) => {
   let postObj = post;
   // if new post was just added read it from router
   if (!postObj && location.state) {
@@ -25,11 +26,11 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
 
   const renderMetaData = () => (
     <Helmet
-      title={`${settings.app.name} - Edit post`}
+      title={`${settings.app.name} - ${t('post.title')}`}
       meta={[
         {
           name: 'description',
-          content: 'Edit post example page'
+          content: t('post.meta')
         }
       ]}
     />
@@ -39,7 +40,7 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
     return (
       <PageLayout>
         {renderMetaData()}
-        <div className="text-center">Loading...</div>
+        <div className="text-center">{t('post.loadMsg')}</div>
       </PageLayout>
     );
   } else {
@@ -47,9 +48,11 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
       <PageLayout>
         {renderMetaData()}
         <Link id="back-button" to="/posts">
-          Back
+          {t('post.btn.back')}
         </Link>
-        <h2>{post ? 'Edit' : 'Create'} Post</h2>
+        <h2>
+          {t(`post.label.${post ? 'edit' : 'create'}`)} {t('post.label.post')}
+        </h2>
         <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
         <br />
         {postObj && (
@@ -71,7 +74,8 @@ PostEditView.propTypes = {
   editPost: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  subscribeToMore: PropTypes.func.isRequired
+  subscribeToMore: PropTypes.func.isRequired,
+  t: PropTypes.func
 };
 
-export default PostEditView;
+export default translate('post')(PostEditView);

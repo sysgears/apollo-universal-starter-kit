@@ -16,7 +16,9 @@ const ForgotPasswordWithApollo = compose(
     props: ({ mutate }) => ({
       forgotPassword: async ({ email }) => {
         try {
-          const { data: { forgotPassword } } = await mutate({
+          const {
+            data: { forgotPassword }
+          } = await mutate({
             variables: { input: { email } }
           });
 

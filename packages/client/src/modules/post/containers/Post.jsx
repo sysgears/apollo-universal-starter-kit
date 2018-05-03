@@ -98,7 +98,16 @@ class Post extends React.Component {
     this.subscription = subscribeToMore({
       document: POSTS_SUBSCRIPTION,
       variables: { endCursor },
-      updateQuery: (prev, { subscriptionData: { data: { postsUpdated: { mutation, node } } } }) => {
+      updateQuery: (
+        prev,
+        {
+          subscriptionData: {
+            data: {
+              postsUpdated: { mutation, node }
+            }
+          }
+        }
+      ) => {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
@@ -166,7 +175,14 @@ export default compose(
             }
           },
           updateQueries: {
-            posts: (prev, { mutationResult: { data: { deletePost } } }) => {
+            posts: (
+              prev,
+              {
+                mutationResult: {
+                  data: { deletePost }
+                }
+              }
+            ) => {
               return DeletePost(prev, deletePost.id);
             }
           }

@@ -16,7 +16,9 @@ const ContactWithApollo = compose(
     props: ({ mutate }) => ({
       contact: async ({ name, email, content }) => {
         try {
-          const { data: { contact } } = await mutate({
+          const {
+            data: { contact }
+          } = await mutate({
             variables: { input: { name, email, content } }
           });
 

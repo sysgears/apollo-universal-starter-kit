@@ -1,12 +1,7 @@
+scalar Upload
+
 type File {
   id: Int!
-  name: String!
-  type: String!
-  size: Int!
-  path: String!
-}
-
-input Upload {
   name: String!
   type: String!
   size: Int!

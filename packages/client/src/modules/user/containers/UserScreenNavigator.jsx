@@ -12,6 +12,20 @@ class UserScreenNavigator extends React.Component {
     routeConfigs: PropTypes.object
   };
 
+  shouldComponentUpdate(nextProps) {
+    /**
+     * Re-render router when current user role be changing.
+     */
+    const { currentUserLoading, currentUser } = this.props;
+    return !(
+      !currentUserLoading &&
+      currentUser &&
+      nextProps.currentUser &&
+      currentUser.id === nextProps.currentUser.id &&
+      currentUser.role === nextProps.currentUser.role
+    );
+  }
+
   navItemsFilter = () => {
     const { currentUser, currentUserLoading, routeConfigs } = this.props;
 

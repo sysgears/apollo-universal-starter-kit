@@ -146,7 +146,7 @@
   dependencies:
     "@babel/types" "7.0.0-beta.46"
 
-"@babel/helper-module-imports@7.0.0-beta.46":
+"@babel/helper-module-imports@7.0.0-beta.46", "@babel/helper-module-imports@^7.0.0-beta.34":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/helper-module-imports/-/helper-module-imports-7.0.0-beta.46.tgz#8bd2e1fcfae883d28149a350e31ce606aa24eda6"
   dependencies:
@@ -1922,6 +1922,12 @@ babel-plugin-external-helpers@^6.22.0:
   resolved "https://registry.yarnpkg.com/babel-plugin-external-helpers/-/babel-plugin-external-helpers-6.22.0.tgz#2285f48b02bd5dede85175caf8c62e86adccefa1"
   dependencies:
     babel-runtime "^6.22.0"
+
+babel-plugin-import@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-import/-/babel-plugin-import-1.7.0.tgz#7da886c26d46a048bc9ed126890fa7e419a6133d"
+  dependencies:
+    "@babel/helper-module-imports" "^7.0.0-beta.34"
 
 babel-plugin-minify-builtins@^0.4.0:
   version "0.4.0"

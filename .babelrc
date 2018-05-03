@@ -5,7 +5,8 @@
     "transform-runtime",
     "transform-decorators-legacy",
     "transform-class-properties",
-    ["styled-components", { "ssr": true }]
+    ["styled-components", { "ssr": true }],
+    ["import", {"libraryName": "antd-mobile"}]
   ],
   "only": ["*.jsx", "*.js"],
   "env": {

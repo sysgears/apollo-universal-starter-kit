@@ -1,46 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet } from 'react-native';
+import styled from 'styled-components';
+
+const Section = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Content = styled.div`
+  width: 500px;
+  max-width: 100%;
+`;
 
 const LayoutCenter = ({ children }) => {
-  const { container, layout, offset, content, column } = styles;
-
   return (
-    <View style={container}>
-      <View style={layout}>
-        <View style={offset} />
-        <View style={content}>
-          <View style={column}>{children}</View>
-        </View>
-        <View style={offset} />
-      </View>
-    </View>
+    <Section>
+      <Content>{children}</Content>
+    </Section>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  layout: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  column: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'stretch'
-  },
-  content: {
-    flexGrow: 3
-  },
-  offset: {
-    flexGrow: 3
-  }
-});
 
 LayoutCenter.propTypes = {
   children: PropTypes.node

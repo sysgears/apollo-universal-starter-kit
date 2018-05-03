@@ -28,6 +28,8 @@ class UserEditView extends React.PureComponent {
     return null;
   }
 
+  state = {};
+
   onSubmit = async values => {
     const { user, addUser, editUser, t } = this.props;
     let result = null;

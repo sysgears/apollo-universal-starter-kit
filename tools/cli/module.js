@@ -231,7 +231,7 @@ function updateSchema(logger, module) {
           } else {
             inputFilter += `  ${key}: ${generateField(value, true)}\n`;
           }
-        } else if (value.type.constructor === Array) {
+        } else if (value.type.constructor === Array && value.type[0].isSchema) {
           inputCreate += `  ${key}: ${pascalize(key)}CreateManyInput\n`;
           inputUpdate += `  ${key}: ${pascalize(key)}UpdateManyInput\n`;
 
@@ -397,7 +397,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
           graphql += `    id\n`;
           graphql += `    ${column}\n`;
           graphql += `  }\n`;
-        } else if (value.type.constructor === Array) {
+        } else if (value.type.constructor === Array && value.type[0].isSchema) {
           graphql += `  ${key} {\n`;
           for (const remoteKey of value.type[0].keys()) {
             const remoteValue = value.type[0].values[remoteKey];

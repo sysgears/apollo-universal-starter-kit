@@ -20,3 +20,5 @@ export { default as CardLabel } from './CardLabel';
 export { default as CardTitle } from './CardTitle';
 export { default as CardSubtitleText } from './CardSubtitleText';
 export { default as IconButton } from './IconButton';
+export { default as LanguagePicker } from './LanguagePicker';
+export { default as Root } from './Root';

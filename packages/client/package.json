@@ -144,7 +144,7 @@
     "isomorphic-style-loader": "^4.0.0",
     "jsdom": "^11.5.1",
     "less": "^3.0.2",
-    "less-loader": "^4.0.5",
+    "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.0",
     "mkdirp": "^0.5.1",
     "mocha": "^5.1.1",

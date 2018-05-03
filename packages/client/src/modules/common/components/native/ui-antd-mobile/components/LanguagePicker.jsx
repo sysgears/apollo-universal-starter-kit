@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { Picker, List } from 'antd-mobile';
 
-import { HeaderTitle } from '../../../../common/components/native';
+import { HeaderTitle } from '../..';
 
 export default class LanguagePicker extends React.Component {
   constructor(props) {

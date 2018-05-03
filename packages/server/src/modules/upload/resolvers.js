@@ -2,15 +2,23 @@
 import { GraphQLUpload } from 'apollo-upload-server';
 import shell from 'shelljs';
 import fs from 'fs';
+import mkdirp from 'mkdirp';
 import shortid from 'shortid';
 
 import FieldError from '../../../../common/FieldError';
 
 const UPLOAD_DIR = 'public';
 
-const storeFS = ({ stream, filename }) => {
+const storeFS = ({ stream, name }) => {
+  // Check if UPLOAD_DIR exists, create one if not
+  if (!fs.existsSync(UPLOAD_DIR)) {
+    mkdirp(UPLOAD_DIR, err => {
+      if (err) throw new Error(err);
+    });
+  }
+
   const id = shortid.generate();
-  const path = `${UPLOAD_DIR}/${id}-${filename}`;
+  const path = `${UPLOAD_DIR}/${id}-${name}`;
   return new Promise((resolve, reject) =>
     stream
       .on('error', error => {
@@ -27,7 +35,7 @@ const storeFS = ({ stream, filename }) => {
 };
 
 const processUpload = async uploadPromise => {
-  const { stream, filename: name, mimetype: type, encoding } = await uploadPromise;
+  const { stream, name, type, encoding } = await uploadPromise;
   const { id, path, size } = await storeFS({ stream, name });
   return { name, type, path, size };
 };

@@ -13,6 +13,7 @@ class UserEditView extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
+    currentUser: PropTypes.object,
     error: PropTypes.string,
     addUser: PropTypes.func.isRequired,
     history: PropTypes.object,
@@ -20,10 +21,11 @@ class UserEditView extends React.PureComponent {
     editUser: PropTypes.func.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps) {
     if (!nextProps.loading && nextProps.error) {
-      this.props.history.push('/profile');
+      nextProps.history.push('/profile');
     }
+    return null;
   }
 
   onSubmit = async values => {
@@ -68,7 +70,7 @@ class UserEditView extends React.PureComponent {
   );
 
   render() {
-    const { loading, user, t } = this.props;
+    const { loading, user, t, currentUser } = this.props;
 
     if (loading && !user) {
       return (
@@ -87,7 +89,12 @@ class UserEditView extends React.PureComponent {
           <h2>
             {t(`userEdit.form.${user ? 'titleEdit' : 'titleCreate'}`)} {t('userEdit.form.title')}
           </h2>
-          <UserForm onSubmit={this.onSubmit} initialValues={user || {}} />
+          <UserForm
+            onSubmit={this.onSubmit}
+            currentUser={currentUser}
+            isRender={user && user.id !== currentUser.id}
+            initialValues={user || {}}
+          />
         </PageLayout>
       );
     }

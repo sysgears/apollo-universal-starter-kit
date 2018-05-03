@@ -32,7 +32,7 @@ const handleRoleChange = (type, value, setFieldValue) => {
 
 const validate = values => validateForm(values, userFormSchema);
 
-const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
+const UserForm = ({ values, handleSubmit, setFieldValue, t, isRender }) => {
   const options = [
     {
       value: 'user',
@@ -43,6 +43,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
       label: t('userEdit.form.field.role.admin')
     }
   ];
+
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
   return (
     <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
@@ -63,27 +64,31 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t }) => {
           keyboardType="email-address"
           placeholderTextColor={placeholderColor}
         />
-        <Field
-          name="role"
-          component={RenderSelect}
-          label={t('userEdit.form.field.role.label')}
-          okText={t('userEdit.select.okText')}
-          dismissText={t('userEdit.select.dismissText')}
-          placeholderTextColor={placeholderColor}
-          selectedValue={role}
-          onValueChange={value => handleRoleChange('role', value, setFieldValue)}
-          cols={1}
-          data={options}
-        />
-        <Field
-          name="isActive"
-          label={t('userEdit.form.field.active')}
-          onValueChange={() => setFieldValue('isActive', !isActive)}
-          component={RenderSwitch}
-          placeholder={t('userEdit.form.field.active')}
-          checked={isActive}
-          placeholderTextColor={placeholderColor}
-        />
+        {isRender && (
+          <Field
+            name="role"
+            component={RenderSelect}
+            label={t('userEdit.form.field.role.label')}
+            okText={t('userEdit.select.okText')}
+            dismissText={t('userEdit.select.dismissText')}
+            placeholderTextColor={placeholderColor}
+            selectedValue={role}
+            onValueChange={value => handleRoleChange('role', value, setFieldValue)}
+            cols={1}
+            data={options}
+          />
+        )}
+        {isRender && (
+          <Field
+            name="isActive"
+            label={t('userEdit.form.field.active')}
+            onValueChange={() => setFieldValue('isActive', !isActive)}
+            component={RenderSwitch}
+            placeholder={t('userEdit.form.field.active')}
+            checked={isActive}
+            placeholderTextColor={placeholderColor}
+          />
+        )}
         <Field
           name="firstName"
           component={RenderField}
@@ -148,6 +153,7 @@ UserForm.propTypes = {
   setTouched: PropTypes.func,
   isValid: PropTypes.bool,
   error: PropTypes.string,
+  isRender: PropTypes.bool,
   values: PropTypes.object,
   errors: PropTypes.object,
   initialValues: PropTypes.object.isRequired,

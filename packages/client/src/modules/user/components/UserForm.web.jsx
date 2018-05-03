@@ -18,8 +18,9 @@ const userFormSchema = {
 
 const validate = values => validateForm(values, userFormSchema);
 
-const UserForm = ({ values, handleSubmit, error, setFieldValue, t }) => {
+const UserForm = ({ values, handleSubmit, error, setFieldValue, t, isRender }) => {
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
+
   return (
     <Form name="user" onSubmit={handleSubmit}>
       <Field
@@ -30,23 +31,27 @@ const UserForm = ({ values, handleSubmit, error, setFieldValue, t }) => {
         value={username}
       />
       <Field name="email" component={RenderField} type="email" label={t('userEdit.form.field.email')} value={email} />
-      <Field
-        name="role"
-        component={RenderSelect}
-        type="select"
-        label={t('userEdit.form.field.role.label')}
-        value={role}
-      >
-        <Option value="user">{t('userEdit.form.field.role.user')}</Option>
-        <Option value="admin">{t('userEdit.form.field.role.admin')}</Option>
-      </Field>
-      <Field
-        name="isActive"
-        component={RenderCheckBox}
-        type="checkbox"
-        label={t('userEdit.form.field.active')}
-        checked={isActive}
-      />
+      {isRender && (
+        <Field
+          name="role"
+          component={RenderSelect}
+          type="select"
+          label={t('userEdit.form.field.role.label')}
+          value={role}
+        >
+          <Option value="user">{t('userEdit.form.field.role.user')}</Option>
+          <Option value="admin">{t('userEdit.form.field.role.admin')}</Option>
+        </Field>
+      )}
+      {isRender && (
+        <Field
+          name="isActive"
+          component={RenderCheckBox}
+          type="checkbox"
+          label={t('userEdit.form.field.active')}
+          checked={isActive}
+        />
+      )}
       <Field
         name="firstName"
         component={RenderField}
@@ -102,6 +107,7 @@ UserForm.propTypes = {
   onSubmit: PropTypes.func,
   setTouched: PropTypes.func,
   isValid: PropTypes.bool,
+  isRender: PropTypes.bool,
   error: PropTypes.string,
   values: PropTypes.object,
   errors: PropTypes.object,

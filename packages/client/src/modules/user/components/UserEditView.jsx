@@ -5,6 +5,7 @@ import { pick } from 'lodash';
 
 import translate from '../../../i18n';
 import UserForm from './UserForm';
+import { withLoadedUser } from '../containers/Auth';
 
 import settings from '../../../../../../settings';
 
@@ -12,6 +13,7 @@ class UserEditView extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
+    currentUser: PropTypes.object,
     addUser: PropTypes.func.isRequired,
     editUser: PropTypes.func.isRequired,
     t: PropTypes.func
@@ -47,14 +49,19 @@ class UserEditView extends React.PureComponent {
   };
 
   render() {
-    const { loading, user, t } = this.props;
+    const { loading, user, t, currentUser } = this.props;
 
     if (loading && !user) {
       return <Text>{t('editUser.loadMsg')}</Text>;
     } else {
       return (
         <View style={styles.container}>
-          <UserForm onSubmit={this.onSubmit} initialValues={user || {}} />
+          <UserForm
+            onSubmit={this.onSubmit}
+            isRender={user && user.id !== currentUser.id}
+            currentUser={currentUser}
+            initialValues={user || {}}
+          />
         </View>
       );
     }
@@ -68,4 +75,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('user')(UserEditView);
+export default withLoadedUser(translate('user')(UserEditView));

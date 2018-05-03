@@ -35,7 +35,9 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       addUser: async input => {
         try {
-          const { data: { addUser } } = await mutate({
+          const {
+            data: { addUser }
+          } = await mutate({
             variables: { input }
           });
 
@@ -59,15 +61,16 @@ export default compose(
     props: ({ ownProps: { history, navigation, location }, mutate }) => ({
       editUser: async input => {
         try {
-          const { data: { editUser } } = await mutate({
+          const {
+            data: { editUser }
+          } = await mutate({
             variables: { input }
           });
           if (editUser.errors) {
             return { errors: editUser.errors };
           }
-
           if (history) {
-            if (location && location.search) {
+            if (location && location.state && location.state.from === 'profile') {
               return history.push('/profile');
             }
             return history.push('/users');

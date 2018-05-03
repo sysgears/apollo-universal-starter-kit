@@ -5,7 +5,7 @@ import Expo from 'expo';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
 import { getItem, setItem } from '../common/clientStorage';
-import { LanguagePicker, Root } from './components/native';
+import { LanguagePicker, Root } from '../../modules/common/components/native';
 import resources from './locales';
 import Feature from '../connector';
 import modules from '../';

@@ -10,7 +10,7 @@ const config = {
       defines: {
         __CLIENT__: true
       },
-      enabled: false
+      enabled: true
     },
     ios: {
       entry: './src/index.ts',

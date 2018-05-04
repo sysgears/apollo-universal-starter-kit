@@ -78,7 +78,13 @@ RegisterForm.propTypes = {
 const RegisterFormWithFormik = withFormik({
   mapPropsToValues: () => ({ username: '', email: '', password: '', passwordConfirmation: '' }),
   validate: values => validate(values),
-  async handleSubmit(values, { setErrors, props: { onSubmit } }) {
+  async handleSubmit(
+    values,
+    {
+      setErrors,
+      props: { onSubmit }
+    }
+  ) {
     onSubmit(values).catch(e => {
       setErrors(e);
     });

@@ -28,12 +28,18 @@ class UsersFilterView extends React.PureComponent {
   };
 
   handleIsActive = () => {
-    const { onIsActiveChange, filter: { isActive } } = this.props;
+    const {
+      onIsActiveChange,
+      filter: { isActive }
+    } = this.props;
     onIsActiveChange(!isActive);
   };
 
   render() {
-    const { filter: { role, isActive }, t } = this.props;
+    const {
+      filter: { role, isActive },
+      t
+    } = this.props;
     return (
       <Form layout="inline">
         <FormItem label={t('users.list.item.filter')}>

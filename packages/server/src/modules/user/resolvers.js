@@ -214,7 +214,9 @@ export default pubsub => ({
         () => pubsub.asyncIterator(USERS_SUBSCRIPTION),
         (payload, variables) => {
           const { mutation, node } = payload.usersUpdated;
-          const { filter: { isActive, role, searchText } } = variables;
+          const {
+            filter: { isActive, role, searchText }
+          } = variables;
 
           const checkByFilter =
             !!node.isActive === isActive &&

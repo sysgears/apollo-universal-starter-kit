@@ -78,7 +78,7 @@ class UserEditView extends React.PureComponent {
       return (
         <PageLayout>
           {this.renderMetaData(t)}
-          <div className="text-center">{t('editUser.loadMsg')}</div>
+          <div className="text-center">{t('userEdit.loadMsg')}</div>
         </PageLayout>
       );
     } else {

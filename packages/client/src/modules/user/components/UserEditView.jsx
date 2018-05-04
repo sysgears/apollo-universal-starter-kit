@@ -52,7 +52,7 @@ class UserEditView extends React.PureComponent {
     const { loading, user, t, currentUser } = this.props;
 
     if (loading && !user) {
-      return <Text>{t('editUser.loadMsg')}</Text>;
+      return <Text>{t('userEdit.loadMsg')}</Text>;
     } else {
       return (
         <View style={styles.container}>

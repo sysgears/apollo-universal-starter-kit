@@ -14,7 +14,6 @@
     "clean": "lerna run clean --stream",
     "exp": "yarn --cwd packages/mobile exp",
     "start": "lerna run --scope=server start --stream",
-    "flow": "flow",
     "tests": "lerna run tests --stream",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json .",

@@ -54,7 +54,7 @@ yarn
 yarn seed
 ```
 
-4. Run starter kit in development mode. 
+4. Run starter kit in development mode.
 For running Android or iOS you need to set in `packages/mobile/.spinrc.js` `config.builders.ios.enabled` and/or `config.builders.android.enabled` field `true`. See *Getting Started with React Native* section.
 
 ```
@@ -126,11 +126,7 @@ technologies used in the kit. Contact us using [Skype](http://hatscripts.com/add
 This starter kit is designed so you can use it for just web, mobile or projects using both together. In case you do not
 want to use mobile, just set both `builders.ios.enabled` or `builders.android.enabled` settings in `.spinrc.js` to `false`.
 
-We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
-is possible. In this case you can write your components with React Native's building blocks that are supported in [React
-Native Web] and run them both on web and mobile.
-
-To cover more differences you can use platform-specific files.
+To cover differences between platforms you can use platform-specific files.
 
 ```
 MyComponent.web.jsx
@@ -525,7 +521,6 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [react ga]: https://github.com/react-ga/react-ga
 [haul]: https://github.com/callstack-io/haul
 [react native]: https://github.com/facebook/react-native
-[react native web]: https://github.com/necolas/react-native-web
 [expo]: https://expo.io
 [genymotion]: https://www.genymotion.com
 [xcode]: https://developer.apple.com/xcode/

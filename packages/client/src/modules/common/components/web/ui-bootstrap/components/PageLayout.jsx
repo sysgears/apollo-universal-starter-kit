@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-// import { Container } from 'reactstrap';
+import { Container } from 'reactstrap';
 
 import NavBar from './NavBar';
 import settings from '../../../../../../../../../settings';
@@ -19,9 +19,7 @@ const PageLayout = ({ children, navBar }) => {
     <section className="d-flex flex-column flex-grow-1">
       <section className="d-flex flex-column flex-grow-1 flex-shrink-0">
         <section className="d-flex flex-column">{navBar !== false && <NavBar />}</section>
-        <section id="content" className="d-flex flex-column justify-content-center container">
-          {children}
-        </section>
+        <Container id="content">{children}</Container>
       </section>
       <Footer className="d-flex flex-shrink-0 justify-content-center">
         <span>&copy; 2017. {settings.app.name}.</span>

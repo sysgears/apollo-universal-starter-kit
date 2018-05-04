@@ -87,7 +87,7 @@ class PostList extends React.PureComponent {
           handlePageChange={this.handlePageChange}
           keyExtractor={this.keyExtractor}
           limit={paginationConfig.limit}
-          pagination={paginationConfig.pagination}
+          pagination={paginationConfig.paginationMobile}
         />
       );
     }

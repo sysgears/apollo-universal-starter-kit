@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button } from 'native-base';
-import { STANDARD_PAGINATION } from './Table';
 
 export default class StandardPagination extends React.Component {
   static propTypes = {
     totalPages: PropTypes.number,
-    handlePageChange: PropTypes.func
+    handlePageChange: PropTypes.func,
+    pagination: PropTypes.string
   };
 
   constructor(props) {
@@ -16,7 +16,7 @@ export default class StandardPagination extends React.Component {
   }
 
   componentDidUpdate() {
-    this.props.handlePageChange(STANDARD_PAGINATION, this.state.pageNumber);
+    this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
   }
 
   showPreviousPage(e) {

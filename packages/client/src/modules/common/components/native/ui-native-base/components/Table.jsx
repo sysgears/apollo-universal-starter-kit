@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, View } from 'react-native';
 import StandardPagination from './Pagination';
-
-const RELAY_PAGINATION = 'relay';
-const STANDARD_PAGINATION = 'standard';
+import paginationConfig from '../../../../../../../../../config/pagination';
 
 const renderStandardPagination = (pagination, totalPages, handlePageChange) => {
-  if (pagination === STANDARD_PAGINATION) {
-    return <StandardPagination totalPages={totalPages} handlePageChange={handlePageChange} />;
+  if (pagination === paginationConfig.paginationTypes.standard) {
+    return <StandardPagination totalPages={totalPages} handlePageChange={handlePageChange} pagination={pagination} />;
   }
 };
 
@@ -26,10 +24,10 @@ const Table = ({ posts, renderItem, handlePageChange, keyExtractor, limit, pagin
           onEndReachedCalledDuringMomentum = false;
         }}
         onEndReached={() => {
-          if (pagination === RELAY_PAGINATION && !onEndReachedCalledDuringMomentum) {
+          if (pagination === paginationConfig.paginationTypes.relay && !onEndReachedCalledDuringMomentum) {
             if (posts.pageInfo.hasNextPage) {
               onEndReachedCalledDuringMomentum = true;
-              return handlePageChange(RELAY_PAGINATION, null);
+              return handlePageChange(paginationConfig.paginationTypes.relay, null);
             }
           }
         }}
@@ -49,4 +47,3 @@ Table.propTypes = {
 };
 
 export default Table;
-export { RELAY_PAGINATION, STANDARD_PAGINATION };

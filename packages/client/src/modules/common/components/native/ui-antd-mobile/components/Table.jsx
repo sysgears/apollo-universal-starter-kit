@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, View } from 'react-native';
 import { Pagination } from 'antd-mobile/lib';
-
-const RELAY_PAGINATION = 'relay';
-const STANDARD_PAGINATION = 'standard';
+import paginationConfig from '../../../../../../../../../config/pagination';
 
 export default class Table extends React.Component {
   static propTypes = {
@@ -22,7 +20,7 @@ export default class Table extends React.Component {
   }
 
   renderStandardPagination = (pagination, totalPages, handlePageChange) => {
-    if (pagination === STANDARD_PAGINATION) {
+    if (pagination === paginationConfig.paginationTypes.standard) {
       const locale = {
         prevText: '<',
         nextText: '>'
@@ -40,7 +38,7 @@ export default class Table extends React.Component {
 
   handleStandardPaginationPageChange = (pageNumber, handlePageChange) => {
     this.setState({ pageNumber: pageNumber });
-    handlePageChange(STANDARD_PAGINATION, pageNumber);
+    handlePageChange(paginationConfig.paginationTypes.standard, pageNumber);
   };
 
   render() {
@@ -59,10 +57,10 @@ export default class Table extends React.Component {
             onEndReachedCalledDuringMomentum = false;
           }}
           onEndReached={() => {
-            if (!onEndReachedCalledDuringMomentum && pagination === RELAY_PAGINATION) {
+            if (!onEndReachedCalledDuringMomentum && pagination === paginationConfig.paginationTypes.relay) {
               if (posts.pageInfo.hasNextPage) {
                 onEndReachedCalledDuringMomentum = true;
-                return handlePageChange(RELAY_PAGINATION, null);
+                return handlePageChange(paginationConfig.paginationTypes.relay, null);
               }
             }
           }}
@@ -72,5 +70,3 @@ export default class Table extends React.Component {
     );
   }
 }
-
-export { RELAY_PAGINATION, STANDARD_PAGINATION };

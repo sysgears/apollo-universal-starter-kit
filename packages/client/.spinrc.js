@@ -4,7 +4,7 @@ const config = {
   builders: {
     web: {
       entry: './src/index.tsx',
-      stack: ['react-native-web', 'web'],
+      stack: ['web'],
       openBrowser: true,
       dllExcludes: ['bootstrap'],
       defines: {
@@ -15,7 +15,7 @@ const config = {
       enabled: true
     },
     test: {
-      stack: ['react-native-web', 'server'],
+      stack: ['server'],
       roles: ['test'],
       defines: {
         __TEST__: true

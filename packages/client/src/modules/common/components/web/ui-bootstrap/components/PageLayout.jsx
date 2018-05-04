@@ -16,13 +16,13 @@ const Footer = styled.footer`
 
 const PageLayout = ({ children, navBar }) => {
   return (
-    <section className="d-flex flex-column flex-grow">
-      <section className="d-flex flex-column flex-grow">
-        {navBar !== false && <NavBar />}
+    <section className="d-flex flex-column flex-grow-1">
+      <section className="d-flex flex-column flex-grow-1 flex-shrink-0">
+        <section className="d-flex flex-column">{navBar !== false && <NavBar />}</section>
         <Container id="content">{children}</Container>
       </section>
-      <Footer>
-        <div className="text-center">&copy; 2017. {settings.app.name}.</div>
+      <Footer className="d-flex flex-shrink-0 justify-content-center">
+        <span>&copy; 2017. {settings.app.name}.</span>
       </Footer>
     </section>
   );

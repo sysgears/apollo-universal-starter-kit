@@ -11,7 +11,6 @@ const Section = styled.section`
 
 const Content = styled.div`
   width: 500px;
-  max-width: 100%;
 `;
 
 const LayoutCenter = ({ children }) => {

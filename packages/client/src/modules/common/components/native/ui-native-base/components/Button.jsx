@@ -1,19 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
+import { Button as NBButton } from 'native-base';
 
-const Button = ({ children, onPress, disabled }) => {
+const Button = ({ children, ...props }) => {
   const { buttonStyle, textStyle } = styles;
 
   return (
-    <TouchableOpacity onPress={onPress} style={buttonStyle} activeOpacity={disabled ? 0.5 : 1}>
+    <NBButton style={buttonStyle} {...props}>
       <Text style={textStyle}>{children}</Text>
-    </TouchableOpacity>
+    </NBButton>
   );
 };
 
 const styles = StyleSheet.create({
   buttonStyle: {
+    alignSelf: 'center',
     backgroundColor: '#0275d8',
     borderRadius: 5,
     paddingLeft: 10,
@@ -30,9 +32,7 @@ const styles = StyleSheet.create({
 });
 
 Button.propTypes = {
-  children: PropTypes.node,
-  onPress: PropTypes.func,
-  disabled: PropTypes.bool
+  children: PropTypes.node
 };
 
 export default Button;

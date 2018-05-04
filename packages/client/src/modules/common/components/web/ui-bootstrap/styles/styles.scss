@@ -1,7 +1,9 @@
 @import 'bootstrap';
 
-.flex-grow {
-  flex: 1 0 auto;
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .active {

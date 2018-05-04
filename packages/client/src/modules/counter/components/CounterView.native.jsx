@@ -56,6 +56,7 @@ const CounterView = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     backgroundColor: '#fff',
     justifyContent: 'center',
     paddingHorizontal: 15

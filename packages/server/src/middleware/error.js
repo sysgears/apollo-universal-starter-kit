@@ -44,7 +44,7 @@ function errorMiddleware(e, req, res, next) {
       : '';
 
     res.status(200).send(
-      `<html>${serverErrorScript}<body><div id="content"></div>
+      `<html>${serverErrorScript}<body><div id="root"></div>
       ${vendorScript}
           <script src="/${assetMap['index.js']}" charSet="utf-8"></script>
           </body></html>`

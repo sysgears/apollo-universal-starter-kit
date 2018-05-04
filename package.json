@@ -14,7 +14,6 @@
     "clean": "lerna run clean --stream",
     "exp": "yarn --cwd packages/mobile exp",
     "start": "lerna run --scope=server start --stream",
-    "flow": "flow",
     "tests": "lerna run tests --stream",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json .",
@@ -74,7 +73,7 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "devDependencies": {
-    "awesome-typescript-loader": "^5.0.0",
+    "awesome-typescript-loader": "^3.4.1",
     "husky": "^0.14.3",
     "lerna": "^2.5.1",
     "lint-staged": "^7.0.4",

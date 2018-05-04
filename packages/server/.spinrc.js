@@ -4,14 +4,14 @@ const config = {
   builders: {
     server: {
       entry: './src/index.ts',
-      stack: ['react-native-web', 'server'],
+      stack: ['server'],
       defines: {
         __SERVER__: true
       },
       enabled: true
     },
     test: {
-      stack: ['react-native-web', 'server'],
+      stack: ['server'],
       roles: ['test'],
       defines: {
         __TEST__: true

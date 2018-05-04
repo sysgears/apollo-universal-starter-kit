@@ -23,7 +23,7 @@ const config = {
       enabled: false
     },
     test: {
-      stack: ['react-native-web', 'server'],
+      stack: ['server'],
       roles: ['test'],
       defines: {
         __TEST__: true

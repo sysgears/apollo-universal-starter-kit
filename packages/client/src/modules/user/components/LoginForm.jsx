@@ -74,7 +74,11 @@ const styles = StyleSheet.create({
   },
   submit: {
     marginTop: 10,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    backgroundColor: '#0275d8',
+    borderRadius: 5,
+    paddingLeft: 10,
+    paddingRight: 10
   }
 });
 

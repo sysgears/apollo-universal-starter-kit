@@ -9,7 +9,7 @@ import FieldError from '../../../../common/FieldError';
 
 const UPLOAD_DIR = 'public';
 
-const storeFS = ({ stream, name }) => {
+const storeFS = ({ stream, filename }) => {
   // Check if UPLOAD_DIR exists, create one if not
   if (!fs.existsSync(UPLOAD_DIR)) {
     mkdirp(UPLOAD_DIR, err => {
@@ -18,7 +18,7 @@ const storeFS = ({ stream, name }) => {
   }
 
   const id = shortid.generate();
-  const path = `${UPLOAD_DIR}/${id}-${name}`;
+  const path = `${UPLOAD_DIR}/${id}-${filename}`;
   return new Promise((resolve, reject) =>
     stream
       .on('error', error => {
@@ -35,9 +35,9 @@ const storeFS = ({ stream, name }) => {
 };
 
 const processUpload = async uploadPromise => {
-  const { stream, name, type, encoding } = await uploadPromise;
-  const { id, path, size } = await storeFS({ stream, name });
-  return { name, type, path, size };
+  const { stream, filename, mimetype, encoding } = await uploadPromise;
+  const { id, path, size } = await storeFS({ stream, filename });
+  return { name: filename, type: mimetype, path, size };
 };
 
 export default pubsub => ({

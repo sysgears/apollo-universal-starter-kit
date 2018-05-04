@@ -4,7 +4,7 @@ const config = {
   builders: {
     web: {
       entry: './src/index.tsx',
-      stack: ['react-native-web', 'web'],
+      stack: ['web'],
       openBrowser: false,
       dllExcludes: ['bootstrap'],
       defines: {
@@ -15,7 +15,7 @@ const config = {
       enabled: true
     },
     test: {
-      stack: ['react-native-web', 'server'],
+      stack: ['server'],
       roles: ['test'],
       defines: {
         __TEST__: true
@@ -44,7 +44,6 @@ const config = {
 config.options.devProxy = config.options.ssr;
 
 if (process.env.NODE_ENV === 'production') {
-  //config.options.defines.__API_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
   // Generating source maps for production will slowdown compilation for roughly 25%
   config.options.sourceMap = false;
 }

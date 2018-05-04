@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 //eslint-disable-next-line import/no-extraneous-dependencies
 import DomainSchema from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 
@@ -13,7 +13,7 @@ const postFormSchema = ({ t, post, submitting }) =>
       __ = { name: 'PostForm' };
       title = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           label: t('post.field.title')
         },
@@ -21,7 +21,7 @@ const postFormSchema = ({ t, post, submitting }) =>
       };
       content = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           label: t('post.field.content')
         },

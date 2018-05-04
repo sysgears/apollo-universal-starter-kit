@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 //eslint-disable-next-line import/no-extraneous-dependencies
 import DomainSchema, { Schema } from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 
@@ -14,7 +14,7 @@ const getProfile = (t, profile) =>
     __ = { name: 'Profile' };
     firstName = {
       type: String,
-      fieldType: DomainSchemaFormik.fields.input,
+      fieldType: FieldTypes.input,
       input: {
         label: t('userEdit.form.field.firstName')
       },
@@ -23,7 +23,7 @@ const getProfile = (t, profile) =>
     };
     lastName = {
       type: String,
-      fieldType: DomainSchemaFormik.fields.input,
+      fieldType: FieldTypes.input,
       input: {
         label: t('userEdit.form.field.lastName')
       },
@@ -38,7 +38,7 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
       __ = { name: 'UserForm' };
       username = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           label: t('userEdit.form.field.name')
         },
@@ -47,7 +47,7 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
       };
       email = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           type: 'email',
           label: t('userEdit.form.field.email')
@@ -57,7 +57,7 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
       };
       role = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.select,
+        fieldType: FieldTypes.select,
         input: {
           label: t('userEdit.form.field.role.label'),
           values: [
@@ -70,7 +70,7 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
       };
       isActive = {
         type: Boolean,
-        fieldType: DomainSchemaFormik.fields.checkbox,
+        fieldType: FieldTypes.checkbox,
         input: {
           label: t('userEdit.form.field.active')
         },
@@ -82,7 +82,7 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
       };
       serial = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           label: t('userEdit.form.field.serial')
         },
@@ -92,7 +92,7 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
       };
       password = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           type: 'password',
           label: t('userEdit.form.field.pass')
@@ -101,7 +101,7 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
       };
       passwordConfirmation = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           type: 'password',
           label: t('userEdit.form.field.passConf')

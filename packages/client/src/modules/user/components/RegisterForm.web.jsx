@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 //eslint-disable-next-line import/no-extraneous-dependencies
 import DomainSchema from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 
@@ -13,7 +13,7 @@ const registerFormSchema = ({ t, submitting }) =>
       __ = { name: 'PostForm' };
       username = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           label: t('reg.form.field.name')
         },
@@ -21,7 +21,7 @@ const registerFormSchema = ({ t, submitting }) =>
       };
       email = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           type: 'email',
           label: t('reg.form.field.email')
@@ -30,7 +30,7 @@ const registerFormSchema = ({ t, submitting }) =>
       };
       password = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           type: 'password',
           label: t('reg.form.field.pass')
@@ -39,7 +39,7 @@ const registerFormSchema = ({ t, submitting }) =>
       };
       passwordConfirmation = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           type: 'password',
           label: t('reg.form.field.passConf')

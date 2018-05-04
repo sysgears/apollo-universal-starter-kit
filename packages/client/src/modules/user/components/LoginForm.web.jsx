@@ -4,7 +4,7 @@ import { NavLink, Link } from 'react-router-dom';
 //eslint-disable-next-line import/no-extraneous-dependencies
 import DomainSchema from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 import FacebookButton from '../auth/facebook';
@@ -18,7 +18,7 @@ const loginFormSchema = ({ t, submitting }) =>
       __ = { name: 'PostForm' };
       email = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           type: 'email',
           label: t('login.form.field.email')
@@ -27,7 +27,7 @@ const loginFormSchema = ({ t, submitting }) =>
       };
       password = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           type: 'password',
           label: t('login.form.field.pass')

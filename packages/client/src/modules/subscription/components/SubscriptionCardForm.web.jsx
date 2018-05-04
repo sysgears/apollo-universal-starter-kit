@@ -4,7 +4,7 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 //eslint-disable-next-line import/no-extraneous-dependencies
 import DomainSchema from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 import { Label } from '../../common/components/web';
@@ -15,7 +15,7 @@ const subscriptionFormSchema = ({ t, submitting, action }) =>
       __ = { name: 'PostForm' };
       name = {
         type: String,
-        fieldType: DomainSchemaFormik.fields.input,
+        fieldType: FieldTypes.input,
         input: {
           label: t('card.name')
         }

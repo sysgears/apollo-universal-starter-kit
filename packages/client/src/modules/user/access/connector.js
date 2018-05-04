@@ -18,6 +18,8 @@ export default class {
   }
 
   async doLogout(client) {
-    this.logout.map(async logoutFn => await logoutFn(client));
+    for (const logout of this.logout) {
+      await logout(client);
+    }
   }
 }

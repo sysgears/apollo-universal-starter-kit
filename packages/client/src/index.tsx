@@ -9,7 +9,7 @@ import log from '../../common/log';
 import Main from './app/Main';
 
 const renderFunc = __SSR__ ? hydrate : render;
-const root = document.getElementById('content');
+const root = document.getElementById('root');
 
 let frontendReloadCount = 0;
 

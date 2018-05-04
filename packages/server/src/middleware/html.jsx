@@ -40,7 +40,7 @@ const Html = ({ content, state, assetMap, css, helmet }) => {
         })}
       </head>
       <body {...bodyAttrs}>
-        <div id="content" dangerouslySetInnerHTML={{ __html: content || '' }} />
+        <div id="root" dangerouslySetInnerHTML={{ __html: content || '' }} />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.__APOLLO_STATE__=${serialize(state, {

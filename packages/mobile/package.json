@@ -150,7 +150,7 @@
     "url-loader": "^1.0.1",
     "wait-on": "^2.0.2",
     "webpack": "^3.10.0",
-    "webpack-dev-middleware": "^3.1.2",
+    "webpack-dev-middleware": "^2.0.6",
     "webpack-dev-server": "^2.9.7",
     "webpack-hot-middleware": "^2.21.0",
     "webpack-manifest-plugin": "^2.0.1",

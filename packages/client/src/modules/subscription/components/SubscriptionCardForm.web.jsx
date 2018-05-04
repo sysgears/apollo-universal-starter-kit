@@ -1,76 +1,80 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withFormik } from 'formik';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-//eslint-disable-next-line import/no-extraneous-dependencies
-import DomainSchema from '@domain-schema/core';
-//eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
-import { Label } from '../../common/components/web';
+import Field from '../../../utils/FieldAdapter';
+import { Form, RenderField, Button, Alert, Label } from '../../common/components/web';
+import { required, validateForm } from '../../../../../common/validation';
 
-const subscriptionFormSchema = ({ t, submitting, action }) =>
-  new DomainSchema(
-    class extends FormSchema {
-      __ = { name: 'PostForm' };
-      name = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          label: t('card.name')
-        }
-      };
-      setSubmitBtn() {
-        return {
-          label: action,
-          color: 'primary',
-          disabled: submitting
-        };
-      }
-    }
-  );
+const commentFormSchema = {
+  name: [required]
+};
+
+const validate = values => validateForm(values, commentFormSchema);
 
 class SubscriptionCardForm extends React.Component {
   static propTypes = {
     submitting: PropTypes.bool,
     action: PropTypes.string.isRequired,
+    error: PropTypes.string,
+    handleSubmit: PropTypes.func,
     onSubmit: PropTypes.func,
-    t: PropTypes.func,
-    stripe: PropTypes.object
+    values: PropTypes.object,
+    t: PropTypes.func
   };
 
   render() {
-    const { onSubmit, ...props } = this.props;
-
-    const subscriptionForm = new DomainSchemaFormik(subscriptionFormSchema(props));
-    const SubscriptionFormComponent = subscriptionForm.generateForm();
-
+    const { handleSubmit, submitting, action, error, values, t } = this.props;
     return (
-      <React.Fragment>
-        <Label>{props.t('card.info')}</Label>
-        <CardElement className="form-control" style={{ base: { lineHeight: '30px' } }} />
-        <SubscriptionFormComponent
-          onSubmit={async ({ name }, { setErrors }) => {
-            const { stripe } = props;
-            const { token, error } = await stripe.createToken({ name });
-            if (error) return;
-
-            const {
-              id,
-              card: { exp_month, exp_year, last4, brand }
-            } = token;
-            await onSubmit({
-              token: id,
-              expiryMonth: exp_month,
-              expiryYear: exp_year,
-              last4,
-              brand
-            }).catch(e => setErrors(e));
-          }}
+      <Form name="subscription" onSubmit={handleSubmit}>
+        <Field
+          name="name"
+          component={RenderField}
+          type="text"
+          label={t('card.name')}
+          validate={required}
+          value={values.name}
         />
-      </React.Fragment>
+        <Label>{t('card.info')}</Label>
+        <CardElement className="form-control" style={{ base: { lineHeight: '30px' } }} />
+        {error && <Alert color="error">{error}</Alert>}
+        <Button color="primary" type="submit" disabled={submitting} style={{ marginTop: 15 }}>
+          {action}
+        </Button>
+      </Form>
     );
   }
 }
 
-export default translate('subscription')(injectStripe(SubscriptionCardForm));
+const SubscriptionFormWithFormik = withFormik({
+  mapPropsToValues: () => ({ name: '' }),
+  async handleSubmit(values, { resetForm, props }) {
+    const onSubmit = async ({ name }) => {
+      const { stripe } = props;
+      const { token, error } = await stripe.createToken({ name });
+      if (error) return;
+
+      const {
+        id,
+        card: { exp_month, exp_year, last4, brand }
+      } = token;
+
+      await this.props.onSubmit({
+        token: id,
+        expiryMonth: exp_month,
+        expiryYear: exp_year,
+        last4,
+        brand
+      });
+    };
+    await onSubmit(values);
+    resetForm({ name: '' });
+  },
+  validate: values => validate(values),
+  displayName: 'SubscriptionForm', // helps with React DevTools,
+  enableReinitialize: true
+});
+
+export default translate('subscription')(injectStripe(SubscriptionFormWithFormik(SubscriptionCardForm)));

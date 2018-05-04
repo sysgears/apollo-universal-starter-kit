@@ -19,7 +19,7 @@ class PostList extends React.PureComponent {
 
   onEndReachedCalledDuringMomentum = false;
 
-  keyExtractor = item => String(item.node.id);
+  keyExtractor = item => `${item.node.id}`;
 
   renderItemIOS = ({
     item: {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { PageLayout, Table, Button, STANDARD_PAGINATION, RELAY_PAGINATION } from '../../common/components/web';
+import { PageLayout, Table, Button } from '../../common/components/web';
 import translate from '../../../i18n';
 import settings from '../../../../../../settings';
 
@@ -12,7 +12,7 @@ class PostList extends React.PureComponent {
     posts: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
     loadData: PropTypes.func,
-    limit: PropTypes.number,
+    paginationConfig: PropTypes.object,
     t: PropTypes.func
   };
 
@@ -41,18 +41,18 @@ class PostList extends React.PureComponent {
       posts: {
         pageInfo: { endCursor }
       },
-      limit,
+      paginationConfig,
       loadData
     } = this.props;
-    if (pagination === RELAY_PAGINATION) {
+    if (pagination === paginationConfig.paginationTypes.relay) {
       loadData(endCursor, 'add');
     } else {
-      loadData((pageNumber - 1) * limit, 'replace');
+      loadData((pageNumber - 1) * paginationConfig.limit, 'replace');
     }
   };
 
   render() {
-    const { loading, posts, limit, t } = this.props;
+    const { loading, posts, paginationConfig, t } = this.props;
     if (loading) {
       return (
         <PageLayout>
@@ -99,12 +99,12 @@ class PostList extends React.PureComponent {
           <Table
             dataSource={posts.edges.map(({ node }) => node)}
             columns={columns}
-            pagination={STANDARD_PAGINATION}
+            pagination={paginationConfig.pagination}
             hasNextPage={posts.pageInfo.hasNextPage}
             handlePageChange={this.handlePageChange}
             totalCount={posts.totalCount}
             loadMoreText={t('list.btn.more')}
-            limit={limit}
+            limit={paginationConfig.limit}
           />
         </PageLayout>
       );

@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, View, Platform, TouchableOpacity } from 'react-native';
 
 import translate from '../../../i18n';
-import { SwipeAction, Table, RELAY_PAGINATION, STANDARD_PAGINATION } from '../../common/components/native';
+import { SwipeAction, Table } from '../../common/components/native';
 
 class PostList extends React.PureComponent {
   static propTypes = {
@@ -14,7 +14,7 @@ class PostList extends React.PureComponent {
     navigation: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
     loadData: PropTypes.func.isRequired,
-    limit: PropTypes.number,
+    paginationConfig: PropTypes.object,
     t: PropTypes.func
   };
 
@@ -60,18 +60,18 @@ class PostList extends React.PureComponent {
       posts: {
         pageInfo: { endCursor }
       },
-      limit,
+      paginationConfig,
       loadData
     } = this.props;
-    if (pagination === RELAY_PAGINATION) {
+    if (pagination === paginationConfig.paginationTypes.relay) {
       loadData(endCursor, 'add');
     } else {
-      loadData((pageNumber - 1) * limit, 'replace');
+      loadData((pageNumber - 1) * paginationConfig.limit, 'replace');
     }
   };
 
   render() {
-    const { loading, posts, t, limit } = this.props;
+    const { loading, posts, t, paginationConfig } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     if (loading) {
       return (
@@ -86,8 +86,8 @@ class PostList extends React.PureComponent {
           renderItem={renderItem}
           handlePageChange={this.handlePageChange}
           keyExtractor={this.keyExtractor}
-          limit={limit}
-          pagination={STANDARD_PAGINATION}
+          limit={paginationConfig.limit}
+          pagination={paginationConfig.pagination}
         />
       );
     }

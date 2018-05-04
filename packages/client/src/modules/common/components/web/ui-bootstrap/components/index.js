@@ -19,7 +19,7 @@ export { default as Card } from './Card';
 export { default as CardGroup } from './CardGroup';
 export { default as CardTitle } from './CardTitle';
 export { default as CardText } from './CardText';
-export { default as Table, RELAY_PAGINATION, STANDARD_PAGINATION } from './Table';
+export { default as Table } from './Table';
 export { default as ListGroup } from './ListGroup';
 export { default as ListItem } from './ListItem';
 export { default as LanguagePicker } from './LanguagePicker';

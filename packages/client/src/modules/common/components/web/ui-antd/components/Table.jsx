@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import ADTable from 'antd/lib/table';
 import { Pagination } from 'antd';
 import { Button } from '../components';
-
-const RELAY_PAGINATION = 'relay';
-const STANDARD_PAGINATION = 'standard';
+import paginationConfig from '../../../../../../../../../config/pagination';
 
 // pagination accepts 'standard' and 'relay' params
 const Table = ({ totalCount, handlePageChange, hasNextPage, pagination, loadMoreText, ...props }) => {
@@ -19,7 +17,7 @@ const Table = ({ totalCount, handlePageChange, hasNextPage, pagination, loadMore
 
 const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination, totalCount, loadMoreText) => {
   switch (pagination) {
-    case RELAY_PAGINATION:
+    case paginationConfig.paginationTypes.relay:
       if (hasNextPage) {
         return (
           <div>
@@ -35,7 +33,7 @@ const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination,
         );
       }
       break;
-    case STANDARD_PAGINATION:
+    case paginationConfig.paginationTypes.standard:
       return (
         <Pagination
           className="pagination"
@@ -58,4 +56,3 @@ Table.propTypes = {
 };
 
 export default Table;
-export { RELAY_PAGINATION, STANDARD_PAGINATION };

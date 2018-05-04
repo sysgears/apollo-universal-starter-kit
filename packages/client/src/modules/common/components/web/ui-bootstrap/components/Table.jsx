@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { Table as RSTable } from 'reactstrap';
 import { Button } from '../components';
 import TablePagination from './Pagination';
-
-const RELAY_PAGINATION = 'relay';
-const STANDARD_PAGINATION = 'standard';
+import paginationConfig from '../../../../../../../../../config/pagination';
 
 const renderHead = columns => {
   return columns.map(({ title, dataIndex, renderHeader, key }) => {
@@ -31,7 +29,7 @@ const renderData = (columns, entry) => {
 
 const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination, totalCount, loadMoreText, limit) => {
   switch (pagination) {
-    case RELAY_PAGINATION: {
+    case paginationConfig.paginationTypes.relay: {
       if (hasNextPage) {
         return (
           <div>
@@ -48,13 +46,11 @@ const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination,
       }
       break;
     }
-    case STANDARD_PAGINATION: {
+    case paginationConfig.paginationTypes.standard: {
       const pagesArray = Array(Math.ceil(totalCount / limit))
         .fill(1)
         .map((x, y) => x + y);
-      return (
-        <TablePagination pagesArray={pagesArray} handlePageChange={handlePageChange} pagination={STANDARD_PAGINATION} />
-      );
+      return <TablePagination pagesArray={pagesArray} handlePageChange={handlePageChange} pagination={pagination} />;
     }
   }
 };
@@ -95,4 +91,3 @@ Table.propTypes = {
 };
 
 export default Table;
-export { RELAY_PAGINATION, STANDARD_PAGINATION };

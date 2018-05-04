@@ -1,3 +1,7 @@
+const paginationTypes = { standard: 'standard', relay: 'relay' };
+
 export default {
-  limit: 10
+  limit: 10,
+  paginationTypes,
+  pagination: paginationTypes.standard
 };

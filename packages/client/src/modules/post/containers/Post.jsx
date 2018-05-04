@@ -9,9 +9,7 @@ import POSTS_QUERY from '../graphql/PostsQuery.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import DELETE_POST from '../graphql/DeletePost.graphql';
 
-import PaginationConfig from '../../../../../../config/pagination';
-
-const limit = PaginationConfig.limit;
+import paginationConfig from '../../../../../../config/pagination';
 
 export function AddPost(prev, node) {
   // ignore if duplicate
@@ -134,7 +132,7 @@ export default compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
-        variables: { limit: limit, after: 0 }
+        variables: { limit: paginationConfig.limit, after: 0 }
       };
     },
     props: ({ data }) => {
@@ -164,7 +162,7 @@ export default compose(
         });
       };
       if (error) throw new Error(error);
-      return { loading, posts, subscribeToMore, loadData, limit };
+      return { loading, posts, subscribeToMore, loadData, paginationConfig };
     }
   }),
   graphql(DELETE_POST, {

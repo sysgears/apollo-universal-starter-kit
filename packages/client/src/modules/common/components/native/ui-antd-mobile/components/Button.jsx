@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ADButton from 'antd-mobile/lib/button';
+import { Text } from 'react-native';
 import * as TYPES from '../../ButtonTypes';
 
-const Button = ({ children, onPress, onClick, type, style, ...props }) => {
+const Button = ({ textStyle, children, onPress, onClick, type, style, ...props }) => {
   const btnData = buttonTypes[type] || {};
   const btnProps = {
     ...props,
@@ -13,7 +14,9 @@ const Button = ({ children, onPress, onClick, type, style, ...props }) => {
 
   return (
     <ADButton onClick={onPress || onClick} {...btnProps}>
-      {children}
+      <Text style={textStyle} numberOfLines={1}>
+        {children}
+      </Text>
     </ADButton>
   );
 };
@@ -22,6 +25,7 @@ Button.propTypes = {
   children: PropTypes.node,
   onPress: PropTypes.func,
   type: PropTypes.string,
+  textStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
   style: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
   onClick: PropTypes.func
 };

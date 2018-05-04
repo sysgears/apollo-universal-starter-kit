@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ADButton from 'antd/lib/button';
+import { Button as ADButton } from 'antd';
 
 const Button = ({ children, color, type, size, ...props }) => {
   let buttonSize = 'default';
@@ -12,7 +12,7 @@ const Button = ({ children, color, type, size, ...props }) => {
   }
 
   return (
-    <ADButton type={color} htmlType={type} size={buttonSize} {...props}>
+    <ADButton htmlType={type} type={color} size={buttonSize} {...props}>
       {children}
     </ADButton>
   );

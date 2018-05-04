@@ -2,31 +2,37 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 
-const RenderField = ({ input, label, type, children, meta: { touched, error } }) => {
-  let color = 'normal';
-  if (touched && error) {
-    color = 'danger';
-  }
+import { Option } from './';
+
+const RenderSelect = ({ input, options, meta: { touched, error } }) => {
+  const { label, values } = input;
+  const invalid = !!(touched && error);
 
   return (
-    <FormGroup color={color}>
+    <FormGroup {...options}>
       {label && <Label>{label}</Label>}
-      <div>
-        <Input {...input} type={type}>
-          {children}
-        </Input>
-        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
-      </div>
+      <Input {...input} invalid={invalid}>
+        {values.map(option => {
+          return option.value ? (
+            <Option key={option.value} value={option.value}>
+              {option.label}
+            </Option>
+          ) : (
+            <Option key={option} value={option}>
+              {option}
+            </Option>
+          );
+        })}
+      </Input>
+      {invalid && <FormFeedback>{error}</FormFeedback>}
     </FormGroup>
   );
 };
 
-RenderField.propTypes = {
+RenderSelect.propTypes = {
   input: PropTypes.object,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  meta: PropTypes.object,
-  children: PropTypes.node
+  options: PropTypes.object,
+  meta: PropTypes.object
 };
 
-export default RenderField;
+export default RenderSelect;

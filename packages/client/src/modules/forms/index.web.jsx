@@ -1,7 +1,7 @@
 import React from 'react';
 //eslint-disable-next-line import/no-extraneous-dependencies
 import { DomainSchemaFormik } from '@domain-schema/formik';
-import { Button, Form, RenderField, RenderCheckBox, RenderSelect } from './components/web';
+import { Button, Form, RenderField, RenderCheckBox, RenderSelect } from '../common/components/web';
 
 import Feature from '../connector';
 

@@ -1,20 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Form from 'antd/lib/form';
-import Input from 'antd/lib/input';
+import { Form, Input } from 'antd';
 
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
-const RenderField = ({ input, label, type, meta: { touched, error }, placeholder }) => {
+const RenderField = ({ input, options, meta: { touched, error } }) => {
   let validateStatus = '';
   if (touched && error) {
     validateStatus = 'error';
   }
+  const InputComponent = input.type === 'textarea' ? TextArea : Input;
 
   return (
-    <FormItem label={label} validateStatus={validateStatus} help={touched && error}>
+    <FormItem label={input.label || ''} validateStatus={validateStatus} help={touched && error} {...options}>
       <div>
-        <Input {...input} placeholder={label || placeholder} type={type} />
+        <InputComponent {...input} placeholder={input.placeholder || input.label || ''} />
       </div>
     </FormItem>
   );
@@ -22,9 +23,7 @@ const RenderField = ({ input, label, type, meta: { touched, error }, placeholder
 
 RenderField.propTypes = {
   input: PropTypes.object,
-  label: PropTypes.string,
-  placeholder: PropTypes.string,
-  type: PropTypes.string,
+  options: PropTypes.object,
   meta: PropTypes.object
 };
 

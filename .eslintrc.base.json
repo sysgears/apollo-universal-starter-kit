@@ -4,8 +4,7 @@
     "airbnb/base",
     "plugin:import/errors",
     "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:flowtype/recommended"
+    "plugin:react/recommended"
   ],
   "rules": {
     "import/no-extraneous-dependencies": ["error", {"optionalDependencies": true}],
@@ -46,7 +45,6 @@
   "plugins": [
     "react",
     "json",
-    "prettier",
-    "flowtype"
+    "prettier"
   ]
 }

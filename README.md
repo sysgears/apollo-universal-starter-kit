@@ -8,7 +8,6 @@
 [![Sponsors on Open Collective](https://opencollective.com/apollo-universal-starter-kit/sponsors/badge.svg)](#sponsors)
 [![Join the chat at https://gitter.im/sysgears/apollo-fullstack-starter-kit](https://badges.gitter.im/sysgears/apollo-fullstack-starter-kit.svg)](https://gitter.im/sysgears/apollo-fullstack-starter-kit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/sysgears/apollo-universal-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-universal-starter-kit)
-[![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-universal-starter-kit.svg)](https://greenkeeper.io/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Twitter Follow](https://img.shields.io/twitter/follow/sysgears.svg?style=social)](https://twitter.com/sysgears)
 
@@ -55,7 +54,7 @@ yarn
 yarn seed
 ```
 
-4. Run starter kit in development mode. 
+4. Run starter kit in development mode.
 For running Android or iOS you need to set in `packages/mobile/.spinrc.js` `config.builders.ios.enabled` and/or `config.builders.android.enabled` field `true`. See *Getting Started with React Native* section.
 
 ```
@@ -127,11 +126,7 @@ technologies used in the kit. Contact us using [Skype](http://hatscripts.com/add
 This starter kit is designed so you can use it for just web, mobile or projects using both together. In case you do not
 want to use mobile, just set both `builders.ios.enabled` or `builders.android.enabled` settings in `.spinrc.js` to `false`.
 
-We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
-is possible. In this case you can write your components with React Native's building blocks that are supported in [React
-Native Web] and run them both on web and mobile.
-
-To cover more differences you can use platform-specific files.
+To cover differences between platforms you can use platform-specific files.
 
 ```
 MyComponent.web.jsx
@@ -526,7 +521,6 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [react ga]: https://github.com/react-ga/react-ga
 [haul]: https://github.com/callstack-io/haul
 [react native]: https://github.com/facebook/react-native
-[react native web]: https://github.com/necolas/react-native-web
 [expo]: https://expo.io
 [genymotion]: https://www.genymotion.com
 [xcode]: https://developer.apple.com/xcode/
@@ -534,7 +528,6 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [jwt]: https://jwt.io
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
-[flow]: https://flow.org
 [typescript]: https://www.typescriptlang.org
 [i18next]: https://www.i18next.com
 [Stripe]: https://stripe.com

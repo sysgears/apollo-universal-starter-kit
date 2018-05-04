@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Platform } from 'react-native';
 import PropTypes from 'prop-types';
 
 export default class FieldAdapter extends Component {
@@ -42,7 +41,7 @@ export default class FieldAdapter extends Component {
     if (onBlur) {
       onBlur(e);
     } else {
-      if (Platform.OS === 'web') {
+      if (typeof document !== 'undefined') {
         formik.handleBlur(e);
       } else {
         formik.setFieldTouched(name, true);
@@ -82,7 +81,7 @@ export default class FieldAdapter extends Component {
       disabled
     };
 
-    const changeEventHandler = Platform.OS === 'web' ? 'onChange' : 'onChangeText';
+    const changeEventHandler = typeof document !== 'undefined' ? 'onChange' : 'onChangeText';
     input[changeEventHandler] = this[changeEventHandler];
 
     return React.createElement(component, {

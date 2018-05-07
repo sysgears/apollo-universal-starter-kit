@@ -528,7 +528,6 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [jwt]: https://jwt.io
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
-[flow]: https://flow.org
 [typescript]: https://www.typescriptlang.org
 [i18next]: https://www.i18next.com
 [Stripe]: https://stripe.com

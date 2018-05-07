@@ -1,5 +1,4 @@
 **/node_modules/*
 **/.tmp/*
 **/build/*
-flow-typed/*
 tools/templates/*

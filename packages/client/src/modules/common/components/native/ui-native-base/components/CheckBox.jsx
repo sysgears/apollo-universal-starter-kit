@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CheckBox as CheckBoxComponent } from 'native-base';
+import { Checkbox as NBCheckbox } from 'native-base';
 
 const CheckBox = props => {
-  return <CheckBoxComponent onPress={props.onChange || props.onPress} {...props} />;
+  return <NBCheckbox onPress={props.onChange || props.onPress} {...props} />;
 };
 
 CheckBox.propTypes = {

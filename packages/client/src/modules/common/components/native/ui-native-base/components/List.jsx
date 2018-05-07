@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List as ListComponent } from 'native-base';
+import { List as NBList } from 'native-base';
 
 const List = ({ children, ...props }) => {
-  return <ListComponent {...props}>{children}</ListComponent>;
+  return <NBList {...props}>{children}</NBList>;
 };
 
 List.propTypes = {

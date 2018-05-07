@@ -1,9 +1,9 @@
 import React from 'react';
-import { Switch as SwitchComponent } from 'antd-mobile';
+import ADSwitch from 'antd-mobile/lib/switch';
 import PropTypes from 'prop-types';
 
 const Switch = ({ checked, value, onValueChange, onChange, ...props }) => {
-  return <SwitchComponent checked={value || checked} onChange={onValueChange || onChange} {...props} />;
+  return <ADSwitch checked={value || checked} onChange={onValueChange || onChange} {...props} />;
 };
 
 Switch.propTypes = {

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ListItem as ListItemComponent } from 'native-base';
+import { ListItem as NBListItem } from 'native-base';
 
 const ListItem = ({ children, onPress, onClick, ...props }) => {
   return (
-    <ListItemComponent {...props} onPress={onPress || onClick}>
+    <NBListItem {...props} onPress={onPress || onClick}>
       {children}
-    </ListItemComponent>
+    </NBListItem>
   );
 };
 

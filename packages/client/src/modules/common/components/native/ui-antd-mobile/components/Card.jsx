@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card as CardComponent } from 'antd-mobile/lib';
+import ADCard from 'antd-mobile/lib/card';
 
 const Card = ({ children, ...props }) => {
-  return <CardComponent {...props}>{children}</CardComponent>;
+  return <ADCard {...props}>{children}</ADCard>;
 };
 
 Card.propTypes = {

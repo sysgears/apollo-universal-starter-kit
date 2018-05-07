@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card as CardComponent } from 'native-base';
+import { Card as NBCard } from 'native-base';
 
 const Card = ({ children, ...props }) => {
-  return <CardComponent {...props}>{children}</CardComponent>;
+  return <NBCard {...props}>{children}</NBCard>;
 };
 
 Card.propTypes = {

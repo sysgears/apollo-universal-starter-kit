@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SearchBar as SearchBarComponent } from 'antd-mobile';
+import ADSearchBar from 'antd-mobile/lib/search-bar';
 
 const SearchBar = ({ onChange, onChangeText, ...props }) => {
-  return <SearchBarComponent onChange={onChangeText || onChange} {...props} cancelText=" " />;
+  return <ADSearchBar onChange={onChangeText || onChange} {...props} cancelText=" " />;
 };
 
 SearchBar.propTypes = {

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-native-modal';
+import RNModal from 'react-native-modal';
 
-const ModalComponent = ({ children, ...props }) => <Modal {...props}>{children}</Modal>;
+const Modal = ({ children, ...props }) => <RNModal {...props}>{children}</RNModal>;
 
-ModalComponent.propTypes = {
+Modal.propTypes = {
   children: PropTypes.node
 };
 
-export default ModalComponent;
+export default Modal;

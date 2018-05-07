@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CardItem as CardItemComponent } from 'native-base';
+import { CardItem } from 'native-base';
 
 import CardTitle from './CardTitle';
 
 const CardHeader = ({ title, ...props }) => {
   return (
-    <CardItemComponent header {...props}>
+    <CardItem header {...props}>
       <CardTitle>{title}</CardTitle>
-    </CardItemComponent>
+    </CardItem>
   );
 };
 

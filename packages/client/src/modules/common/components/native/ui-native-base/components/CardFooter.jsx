@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CardItem as CardItemComponent } from 'native-base';
+import { CardItem } from 'native-base';
 
 import CardText from './CardText';
 
 const CardFooter = ({ content, ...props }) => {
   return (
-    <CardItemComponent footer {...props}>
+    <CardItem footer {...props}>
       <CardText>{content}</CardText>
-    </CardItemComponent>
+    </CardItem>
   );
 };
 

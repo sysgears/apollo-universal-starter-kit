@@ -10,6 +10,9 @@ import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import DELETE_POST from '../graphql/DeletePost.graphql';
 
 import paginationConfig from '../../../../../../config/pagination';
+import { getPlatform } from '../../../../../common/utils';
+
+const limit = getPlatform() === 'web' ? paginationConfig.web.itemsNumber : paginationConfig.mobile.itemsNumber;
 
 export function AddPost(prev, node) {
   // ignore if duplicate
@@ -132,7 +135,7 @@ export default compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
-        variables: { limit: paginationConfig.web.itemsNumber, after: 0 }
+        variables: { limit: limit, after: 0 }
       };
     },
     props: ({ data }) => {

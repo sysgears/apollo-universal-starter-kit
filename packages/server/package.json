@@ -54,7 +54,7 @@
   "dependencies": {
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-cache-router": "^1.1.0",
-    "apollo-client": "^2.2.2",
+    "apollo-client": "^2.3.1",
     "apollo-engine": "^1.1.0",
     "apollo-link": "^1.0.6",
     "apollo-link-batch-http": "1.2.2",
@@ -99,7 +99,7 @@
     "pg": "^7.4.0",
     "prop-types": "^15.6.0",
     "react": "16.3.1",
-    "react-apollo": "^2.0.4",
+    "react-apollo": "^2.1.4",
     "react-art": "^16.3.2",
     "react-cookie": "^2.1.2",
     "react-debounce-input": "^3.1.0",

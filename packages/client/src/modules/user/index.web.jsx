@@ -25,7 +25,17 @@ const ProfileName = withLoadedUser(
 
 const LogoutLink = withRouter(
   withLogout(({ logout, history }) => (
-    <a href="#" onClick={() => logout(() => history.push('/'))} className="nav-link">
+    <a
+      href="javascript:void(0)"
+      onClick={e => {
+        e.preventDefault();
+        (async () => {
+          await logout();
+          history.push('/');
+        })();
+      }}
+      className="nav-link"
+    >
       Logout
     </a>
   ))

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Picker, List } from 'antd-mobile/lib';
 import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet } from 'react-native';
+import SelectStyles from '../styles/Select';
 
 const Select = ({
   icon,
@@ -55,19 +56,6 @@ Select.propTypes = {
   iconSize: PropTypes.number
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    flex: 1,
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  list: {
-    backgroundColor: 'transparent'
-  },
-  pickerWrapper: {
-    flex: 14
-  }
-});
+const styles = StyleSheet.create(SelectStyles);
 
 export default Select;

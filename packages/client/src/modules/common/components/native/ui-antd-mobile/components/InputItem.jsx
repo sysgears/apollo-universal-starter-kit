@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ADInputItem from 'antd-mobile/lib/input-item';
 import { Text, View, StyleSheet } from 'react-native';
+import InputItemStyles from '../styles/InputItem';
 
 const InputItem = ({ children, error, ...props }) => {
   return (
@@ -17,12 +18,6 @@ InputItem.propTypes = {
   error: PropTypes.string
 };
 
-const styles = StyleSheet.create({
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    margin: 3
-  }
-});
+const styles = StyleSheet.create(InputItemStyles);
 
 export default InputItem;

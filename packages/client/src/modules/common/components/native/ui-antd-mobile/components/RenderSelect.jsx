@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
-import { itemAction, itemTitle } from '../../styles';
 import Select from './Select';
+import RenderSelectStyles from '../styles/RenderSelect';
 
 const RenderSelect = ({ label, ...props }) => {
   return (
@@ -19,19 +19,6 @@ RenderSelect.propTypes = {
   label: PropTypes.string
 };
 
-const styles = StyleSheet.create({
-  itemContainer: {
-    paddingLeft: 15,
-    height: 40,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  itemTitle,
-  itemAction: {
-    ...itemAction,
-    flex: 2,
-    alignItems: 'flex-end'
-  }
-});
+const styles = StyleSheet.create(RenderSelectStyles);
 
 export default RenderSelect;

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, StyleSheet } from 'react-native';
+import CardTextStyles from '../styles/CardText';
 
 const CardText = ({ children, style, ...props }) => {
   return (
@@ -15,10 +16,6 @@ CardText.propTypes = {
   style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
 };
 
-const styles = StyleSheet.create({
-  text: {
-    fontSize: 14
-  }
-});
+const styles = StyleSheet.create(CardTextStyles);
 
 export default CardText;

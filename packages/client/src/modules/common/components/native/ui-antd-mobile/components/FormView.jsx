@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, ScrollView } from 'react-native';
+import FormViewStyles from '../styles/FormView';
 
 const FormView = ({ children, style, ...props }) => {
   return (
@@ -15,10 +16,6 @@ FormView.propTypes = {
   style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
 };
 
-const styles = StyleSheet.create({
-  scroll: {
-    marginBottom: 5
-  }
-});
+const styles = StyleSheet.create(FormViewStyles);
 
 export default FormView;

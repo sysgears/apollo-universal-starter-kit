@@ -15,15 +15,15 @@ export default pubsub => ({
     users: withAuth(['user:view:all'], (obj, { orderBy, filter }, context) => {
       return context.User.getUsers(orderBy, filter);
     }),
-    user: withAuth(
+    userPayload: withAuth(
       (obj, args, context) => {
         return ['user:view:self'];
       },
       (obj, { id }, context) => {
         if (context.user.id === id || context.user.role === 'admin') {
-          return { userPayload: context.User.getUser(id) };
+          return { user: context.User.getUser(id) };
         }
-        return { userPayload: null, error: 'Access Denied' };
+        return { user: null, error: 'Access Denied' };
       }
     ),
     currentUser(obj, args, context) {

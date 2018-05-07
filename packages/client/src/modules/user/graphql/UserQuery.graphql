@@ -1,8 +1,8 @@
 #import "./User.graphql"
 
 query user($id: Int!) {
-    user(id: $id) {
-        userPayload {
+    userPayload(id: $id) {
+        user {
         ...UserInfo
         }
         error

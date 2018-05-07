@@ -10,7 +10,7 @@ import translate from '../../../i18n';
 const commentFormSchema = ({ t, comment }) =>
   new DomainSchema(
     class extends FormSchema {
-      __ = { name: 'CommentForm' };
+      __ = { name: 'comment' };
       content = {
         type: String,
         fieldType: FieldTypes.input,

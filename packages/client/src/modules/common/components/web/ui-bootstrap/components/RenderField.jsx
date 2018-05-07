@@ -8,8 +8,8 @@ const RenderField = ({ input, options, meta: { touched, error } }) => {
 
   return (
     <FormGroup {...options}>
-      {label && <Label for={input.name}>{label}</Label>}
-      <Input id={input.name} {...input} placeholder={placeholder || label || ''} invalid={invalid} />
+      {label && <Label for={input.name + '_input'}>{label}</Label>}
+      <Input id={input.name + '_input'} {...input} placeholder={placeholder || label || ''} invalid={invalid} />
       {invalid && <FormFeedback>{error}</FormFeedback>}
     </FormGroup>
   );

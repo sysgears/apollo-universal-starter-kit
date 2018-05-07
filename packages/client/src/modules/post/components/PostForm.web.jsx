@@ -7,10 +7,10 @@ import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formi
 
 import translate from '../../../i18n';
 
-const postFormSchema = ({ t, post, submitting }) =>
+const postFormSchema = (post, { t, submitting }) =>
   new DomainSchema(
     class extends FormSchema {
-      __ = { name: 'PostForm' };
+      __ = { name: 'post' };
       title = {
         type: String,
         fieldType: FieldTypes.input,
@@ -37,8 +37,9 @@ const postFormSchema = ({ t, post, submitting }) =>
     }
   );
 
-const PostForm = ({ onSubmit, ...props }) => {
-  const contactForm = new DomainSchemaFormik(postFormSchema(props));
+const PostForm = ({ onSubmit, post, ...props }) => {
+  console.log('RENDER', post.title);
+  const contactForm = new DomainSchemaFormik(postFormSchema(post, props));
   const ContactFormComponent = contactForm.generateForm();
 
   return <ContactFormComponent onSubmit={onSubmit} />;

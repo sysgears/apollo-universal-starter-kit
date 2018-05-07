@@ -207,8 +207,10 @@ export default new Feature(access, {
       userInfo: {
         showOnLogin: true
       },
-      navigationOptions: {
-        drawerLabel: <Logout />
+      navigationOptions: ({ navigation }) => {
+        return {
+          drawerLabel: <Logout navigation={navigation} />
+        };
       }
     }
   },

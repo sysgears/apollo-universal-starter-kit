@@ -6,14 +6,21 @@ import { HeaderTitle } from '../../common/components/native';
 import translate from '../../../i18n';
 import { withLogout } from './Auth';
 
-const LogoutView = ({ logout, t }) => {
+const LogoutView = ({ logout, t, navigation }) => {
   return (
     <View
       style={{
         flex: 1
       }}
     >
-      <HeaderTitle onPress={() => logout()}>{t('mobile.logout')}</HeaderTitle>
+      <HeaderTitle
+        onPress={async () => {
+          await logout();
+          navigation.navigate('Counter');
+        }}
+      >
+        {t('mobile.logout')}
+      </HeaderTitle>
     </View>
   );
 };
@@ -21,6 +28,7 @@ const LogoutView = ({ logout, t }) => {
 LogoutView.propTypes = {
   logout: PropTypes.func.isRequired,
   error: PropTypes.string,
+  navigation: PropTypes.object,
   t: PropTypes.func
 };
 

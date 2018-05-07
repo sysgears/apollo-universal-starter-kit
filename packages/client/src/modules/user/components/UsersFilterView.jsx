@@ -159,7 +159,7 @@ class UsersFilterView extends React.PureComponent {
       t
     } = this.props;
     const options = [
-      { value: '', label: t('users.list.item.role.select') },
+      { value: '', label: t('users.list.item.role.all') },
       { value: 'user', label: t('users.list.item.role.user') },
       { value: 'admin', label: t('users.list.item.role.admin') }
     ];
@@ -182,7 +182,7 @@ class UsersFilterView extends React.PureComponent {
               okText={t('users.select.okText')}
               dismissText={t('users.select.dismissText')}
               cols={1}
-              extra={t('users.list.item.role.select')}
+              extra={t('users.list.item.role.all')}
             />
           </View>
         </View>

@@ -137,7 +137,7 @@
         "search": "Search ...",
         "role": {
           "label": "Role",
-          "select": "All",
+          "all": "All",
           "user": "user",
           "admin": "admin"
         },

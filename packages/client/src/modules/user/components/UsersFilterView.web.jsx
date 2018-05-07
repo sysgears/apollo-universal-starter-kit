@@ -55,7 +55,7 @@ class UsersFilterView extends React.PureComponent {
         <FormItem label={t('users.list.item.role.label')}>
           <Select name="role" defaultValue={role} onChange={this.handleRole}>
             <Option key={1} value="">
-              {t('users.list.item.role.select')}
+              {t('users.list.item.role.all')}
             </Option>
             <Option key={2} value="user">
               {t('users.list.item.role.user')}

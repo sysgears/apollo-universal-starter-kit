@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import { Picker, List } from 'antd-mobile';
+import { Picker, List } from 'antd-mobile/lib';
 
 import { HeaderTitle } from '../..';
 

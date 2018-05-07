@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, View } from 'react-native';
+import { FlatList, ScrollView } from 'react-native';
 import StandardPagination from './Pagination';
 
 const renderStandardPagination = (pagination, totalPages, handlePageChange) => {
@@ -12,7 +12,7 @@ const renderStandardPagination = (pagination, totalPages, handlePageChange) => {
 const Table = ({ posts, renderItem, handlePageChange, keyExtractor, itemsNumber, pagination }) => {
   let onEndReachedCalledDuringMomentum = false;
   return (
-    <View>
+    <ScrollView style={{ flex: 1 }}>
       <FlatList
         data={posts.edges}
         style={{ marginTop: 5 }}
@@ -32,7 +32,7 @@ const Table = ({ posts, renderItem, handlePageChange, keyExtractor, itemsNumber,
         }}
       />
       {renderStandardPagination(pagination, Math.ceil(posts.totalCount / itemsNumber), handlePageChange)}
-    </View>
+    </ScrollView>
   );
 };
 

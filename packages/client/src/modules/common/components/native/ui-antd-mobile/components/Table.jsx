@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, View } from 'react-native';
-import { Pagination } from 'antd-mobile/lib';
+import { FlatList, ScrollView } from 'react-native';
+import Pagination from 'antd-mobile/lib/pagination';
 
 export default class Table extends React.Component {
   static propTypes = {
@@ -45,7 +45,7 @@ export default class Table extends React.Component {
     let onEndReachedCalledDuringMomentum = false;
     const totalPages = Math.ceil(posts.totalCount / itemsNumber);
     return (
-      <View>
+      <ScrollView style={{ flex: 1 }}>
         <FlatList
           data={posts.edges}
           style={{ marginTop: 5 }}
@@ -56,16 +56,18 @@ export default class Table extends React.Component {
             onEndReachedCalledDuringMomentum = false;
           }}
           onEndReached={() => {
-            if (!onEndReachedCalledDuringMomentum && pagination === 'relay') {
-              if (posts.pageInfo.hasNextPage) {
+            if (!onEndReachedCalledDuringMomentum) {
+              if (posts.pageInfo.hasNextPage && pagination === 'relay') {
                 onEndReachedCalledDuringMomentum = true;
                 return handlePageChange('relay', null);
+              } else {
+                return (onEndReachedCalledDuringMomentum = true);
               }
             }
           }}
         />
         {this.renderStandardPagination(pagination, totalPages, handlePageChange)}
-      </View>
+      </ScrollView>
     );
   }
 }

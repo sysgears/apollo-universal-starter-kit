@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary } from '../../common/components/native';
-import { placeholderColor } from '../../common/components/native/styles';
+import { placeholderColor, submit } from '../../common/components/native/styles';
 import { required, minLength, validateForm, match } from '../../../../../common/validation';
 import translate from '../../../i18n';
 
@@ -75,10 +75,7 @@ const ResetPasswordFormWithFormik = withFormik({
 });
 
 const styles = StyleSheet.create({
-  submit: {
-    paddingTop: 30,
-    paddingBottom: 15
-  },
+  submit,
   formContainer: {
     paddingHorizontal: 20,
     justifyContent: 'center'

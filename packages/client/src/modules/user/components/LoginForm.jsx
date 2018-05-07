@@ -7,7 +7,7 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary, FormView } from '../../common/components/native';
-import { placeholderColor } from '../../common/components/native/styles';
+import { placeholderColor, submit } from '../../common/components/native/styles';
 import { required, email, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
@@ -100,10 +100,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flex: 9
   },
-  submit: {
-    paddingTop: 30,
-    paddingBottom: 15
-  },
+  submit,
   buttonsGroup: {
     flex: 1,
     paddingTop: 10

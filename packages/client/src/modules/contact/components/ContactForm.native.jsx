@@ -7,7 +7,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, FormView, Button } from '../../common/components/native';
-import { placeholderColor } from '../../common/components/native/styles';
+import { placeholderColor, submit } from '../../common/components/native/styles';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
 
 const contactFormSchema = {
@@ -78,10 +78,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'stretch'
   },
-  submit: {
-    paddingTop: 30,
-    paddingBottom: 15
-  }
+  submit
 });
 
 const ContactFormWithFormik = withFormik({

@@ -5,7 +5,7 @@ import { View, StyleSheet } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, RenderSelect, RenderSwitch, FormView, primary } from '../../common/components/native';
-import { placeholderColor } from '../../common/components/native/styles';
+import { placeholderColor, submit } from '../../common/components/native/styles';
 import { email, minLength, required, match, validateForm } from '../../../../../common/validation';
 
 import settings from '../../../../../../settings';
@@ -191,10 +191,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1
   },
-  submit: {
-    paddingTop: 30,
-    paddingBottom: 15
-  },
+  submit,
   formView: {
     flex: 1,
     alignSelf: 'stretch'

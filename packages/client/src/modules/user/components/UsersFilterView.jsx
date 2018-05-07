@@ -14,6 +14,7 @@ import {
   Modal,
   Button
 } from '../../common/components/native';
+import { itemAction, itemContainer, itemTitle } from '../../common/components/native/styles';
 
 import translate from '../../../i18n';
 
@@ -215,21 +216,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15
   },
-  itemContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  itemTitle: {
-    flex: 5,
-    flexDirection: 'column'
-  },
-  itemAction: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
+  itemAction,
+  itemContainer,
+  itemTitle,
   itemSelect: {
     flex: 2
   },

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Platform, StyleSheet, View, Text } from 'react-native';
 import Select from './Select';
+import { itemContainer, itemAction, itemTitle } from '../../styles';
 
 const RenderSelect = ({ style, label, ...props }) => {
   const selectProps = {
@@ -43,18 +44,11 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 15
   },
-  itemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  itemTitle: {
-    flex: 5,
-    fontSize: 16,
-    flexDirection: 'column'
-  },
+  itemContainer,
+  itemTitle,
   itemAction: {
+    ...itemAction,
     flex: 2,
-    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-end'
   }

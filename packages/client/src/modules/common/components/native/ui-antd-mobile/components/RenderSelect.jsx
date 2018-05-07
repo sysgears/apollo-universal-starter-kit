@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
+import { itemAction, itemTitle } from '../../styles';
 import Select from './Select';
 
 const RenderSelect = ({ label, ...props }) => {
@@ -25,13 +26,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  itemTitle: {
-    flex: 5,
-    fontSize: 16
-  },
+  itemTitle,
   itemAction: {
+    ...itemAction,
     flex: 2,
-    justifyContent: 'center',
     alignItems: 'flex-end'
   }
 });

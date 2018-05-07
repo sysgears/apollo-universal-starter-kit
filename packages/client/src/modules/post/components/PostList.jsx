@@ -63,10 +63,10 @@ class PostList extends React.PureComponent {
       paginationConfig,
       loadData
     } = this.props;
-    if (pagination === paginationConfig.paginationTypes.relay) {
+    if (pagination === 'relay') {
       loadData(endCursor, 'add');
     } else {
-      loadData((pageNumber - 1) * paginationConfig.limit, 'replace');
+      loadData((pageNumber - 1) * paginationConfig.mobile.itemsNumber, 'replace');
     }
   };
 
@@ -86,8 +86,8 @@ class PostList extends React.PureComponent {
           renderItem={renderItem}
           handlePageChange={this.handlePageChange}
           keyExtractor={this.keyExtractor}
-          limit={paginationConfig.limit}
-          pagination={paginationConfig.paginationMobile}
+          itemsNumber={paginationConfig.mobile.itemsNumber}
+          pagination={paginationConfig.mobile.type}
         />
       );
     }

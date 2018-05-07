@@ -1,8 +1,10 @@
-const paginationTypes = { standard: 'standard', relay: 'relay' };
-
 export default {
-  limit: 10,
-  paginationTypes,
-  pagination: paginationTypes.standard,
-  paginationMobile: paginationTypes.relay
+  web: {
+    itemsNumber: 10,
+    type: 'relay' // 'standard' or 'relay'
+  },
+  mobile: {
+    itemsNumber: 10,
+    type: 'standard' // 'standard' or 'relay'
+  }
 };

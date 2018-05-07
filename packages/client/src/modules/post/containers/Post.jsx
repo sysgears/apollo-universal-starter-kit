@@ -132,7 +132,7 @@ export default compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
-        variables: { limit: paginationConfig.limit, after: 0 }
+        variables: { limit: paginationConfig.web.itemsNumber, after: 0 }
       };
     },
     props: ({ data }) => {

@@ -44,10 +44,10 @@ class PostList extends React.PureComponent {
       paginationConfig,
       loadData
     } = this.props;
-    if (pagination === paginationConfig.paginationTypes.relay) {
+    if (pagination === 'relay') {
       loadData(endCursor, 'add');
     } else {
-      loadData((pageNumber - 1) * paginationConfig.limit, 'replace');
+      loadData((pageNumber - 1) * paginationConfig.web.itemsNumber, 'replace');
     }
   };
 
@@ -99,12 +99,12 @@ class PostList extends React.PureComponent {
           <Table
             dataSource={posts.edges.map(({ node }) => node)}
             columns={columns}
-            pagination={paginationConfig.pagination}
+            pagination={paginationConfig.web.type}
             hasNextPage={posts.pageInfo.hasNextPage}
             handlePageChange={this.handlePageChange}
             totalCount={posts.totalCount}
             loadMoreText={t('list.btn.more')}
-            limit={paginationConfig.limit}
+            itemsNumber={paginationConfig.web.itemsNumber}
           />
         </PageLayout>
       );

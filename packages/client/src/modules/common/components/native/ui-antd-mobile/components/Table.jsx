@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, View } from 'react-native';
 import { Pagination } from 'antd-mobile/lib';
-import paginationConfig from '../../../../../../../../../config/pagination';
 
 export default class Table extends React.Component {
   static propTypes = {
@@ -10,7 +9,7 @@ export default class Table extends React.Component {
     renderItem: PropTypes.func,
     handlePageChange: PropTypes.func,
     keyExtractor: PropTypes.func,
-    limit: PropTypes.number,
+    itemsNumber: PropTypes.number,
     pagination: PropTypes.string
   };
 
@@ -20,7 +19,7 @@ export default class Table extends React.Component {
   }
 
   renderStandardPagination = (pagination, totalPages, handlePageChange) => {
-    if (pagination === paginationConfig.paginationTypes.standard) {
+    if (pagination === 'standard') {
       const locale = {
         prevText: '<',
         nextText: '>'
@@ -38,13 +37,13 @@ export default class Table extends React.Component {
 
   handleStandardPaginationPageChange = (pageNumber, handlePageChange) => {
     this.setState({ pageNumber: pageNumber });
-    handlePageChange(paginationConfig.paginationTypes.standard, pageNumber);
+    handlePageChange('standard', pageNumber);
   };
 
   render() {
-    const { posts, renderItem, handlePageChange, keyExtractor, limit, pagination } = this.props;
+    const { posts, renderItem, handlePageChange, keyExtractor, itemsNumber, pagination } = this.props;
     let onEndReachedCalledDuringMomentum = false;
-    const totalPages = Math.ceil(posts.totalCount / limit);
+    const totalPages = Math.ceil(posts.totalCount / itemsNumber);
     return (
       <View>
         <FlatList
@@ -57,10 +56,10 @@ export default class Table extends React.Component {
             onEndReachedCalledDuringMomentum = false;
           }}
           onEndReached={() => {
-            if (!onEndReachedCalledDuringMomentum && pagination === paginationConfig.paginationTypes.relay) {
+            if (!onEndReachedCalledDuringMomentum && pagination === 'relay') {
               if (posts.pageInfo.hasNextPage) {
                 onEndReachedCalledDuringMomentum = true;
-                return handlePageChange(paginationConfig.paginationTypes.relay, null);
+                return handlePageChange('relay', null);
               }
             }
           }}

@@ -2,15 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, View } from 'react-native';
 import StandardPagination from './Pagination';
-import paginationConfig from '../../../../../../../../../config/pagination';
 
 const renderStandardPagination = (pagination, totalPages, handlePageChange) => {
-  if (pagination === paginationConfig.paginationTypes.standard) {
+  if (pagination === 'standard') {
     return <StandardPagination totalPages={totalPages} handlePageChange={handlePageChange} pagination={pagination} />;
   }
 };
 
-const Table = ({ posts, renderItem, handlePageChange, keyExtractor, limit, pagination }) => {
+const Table = ({ posts, renderItem, handlePageChange, keyExtractor, itemsNumber, pagination }) => {
   let onEndReachedCalledDuringMomentum = false;
   return (
     <View>
@@ -24,15 +23,15 @@ const Table = ({ posts, renderItem, handlePageChange, keyExtractor, limit, pagin
           onEndReachedCalledDuringMomentum = false;
         }}
         onEndReached={() => {
-          if (pagination === paginationConfig.paginationTypes.relay && !onEndReachedCalledDuringMomentum) {
+          if (pagination === 'relay' && !onEndReachedCalledDuringMomentum) {
             if (posts.pageInfo.hasNextPage) {
               onEndReachedCalledDuringMomentum = true;
-              return handlePageChange(paginationConfig.paginationTypes.relay, null);
+              return handlePageChange('relay', null);
             }
           }
         }}
       />
-      {renderStandardPagination(pagination, Math.ceil(posts.totalCount / limit), handlePageChange)}
+      {renderStandardPagination(pagination, Math.ceil(posts.totalCount / itemsNumber), handlePageChange)}
     </View>
   );
 };
@@ -42,7 +41,7 @@ Table.propTypes = {
   renderItem: PropTypes.func,
   handlePageChange: PropTypes.func,
   keyExtractor: PropTypes.func,
-  limit: PropTypes.number,
+  itemsNumber: PropTypes.number,
   pagination: PropTypes.string
 };
 

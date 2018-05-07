@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Table as RSTable } from 'reactstrap';
 import { Button } from '../components';
 import TablePagination from './Pagination';
-import paginationConfig from '../../../../../../../../../config/pagination';
 
 const renderHead = columns => {
   return columns.map(({ title, dataIndex, renderHeader, key }) => {
@@ -27,9 +26,17 @@ const renderData = (columns, entry) => {
   });
 };
 
-const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination, totalCount, loadMoreText, limit) => {
+const renderPagination = (
+  dataSource,
+  handlePageChange,
+  hasNextPage,
+  pagination,
+  totalCount,
+  loadMoreText,
+  itemsNumber
+) => {
   switch (pagination) {
-    case paginationConfig.paginationTypes.relay: {
+    case 'relay': {
       if (hasNextPage) {
         return (
           <div>
@@ -46,8 +53,8 @@ const renderPagination = (dataSource, handlePageChange, hasNextPage, pagination,
       }
       break;
     }
-    case paginationConfig.paginationTypes.standard: {
-      const pagesArray = Array(Math.ceil(totalCount / limit))
+    case 'standard': {
+      const pagesArray = Array(Math.ceil(totalCount / itemsNumber))
         .fill(1)
         .map((x, y) => x + y);
       return <TablePagination pagesArray={pagesArray} handlePageChange={handlePageChange} pagination={pagination} />;
@@ -63,7 +70,7 @@ const Table = ({
   hasNextPage,
   pagination,
   loadMoreText,
-  limit,
+  itemsNumber,
   ...props
 }) => {
   return (
@@ -74,7 +81,7 @@ const Table = ({
         </thead>
         <tbody>{renderBody(columns, dataSource)}</tbody>
       </RSTable>
-      {renderPagination(dataSource, handlePageChange, hasNextPage, pagination, totalCount, loadMoreText, limit)}
+      {renderPagination(dataSource, handlePageChange, hasNextPage, pagination, totalCount, loadMoreText, itemsNumber)}
     </div>
   );
 };
@@ -87,7 +94,7 @@ Table.propTypes = {
   hasNextPage: PropTypes.bool,
   pagination: PropTypes.string,
   loadMoreText: PropTypes.string,
-  limit: PropTypes.number
+  itemsNumber: PropTypes.number
 };
 
 export default Table;

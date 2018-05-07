@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button as NBButton, Text } from 'native-base';
 import { StyleSheet } from 'react-native';
+import ButtonStyles from '../styles/Button';
 
 const Button = ({ textStyle, children, onClick, onPress, type, size, ...props }) => {
   const btnProps = {
@@ -21,12 +22,7 @@ const Button = ({ textStyle, children, onClick, onPress, type, size, ...props })
   );
 };
 
-const styles = StyleSheet.create({
-  btnText: {
-    flex: 1,
-    textAlign: 'center'
-  }
-});
+const styles = StyleSheet.create(ButtonStyles);
 
 Button.propTypes = {
   children: PropTypes.string,

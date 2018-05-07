@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, StyleSheet, View } from 'react-native';
-import { itemAction, itemTitle } from '../../styles';
 import Switch from './Switch';
+import RenderSwitchStyles from '../styles/RenderSwitch';
 
 const RenderSwitch = ({ label, ...props }) => {
   return (
@@ -19,15 +19,6 @@ RenderSwitch.propTypes = {
   label: PropTypes.string
 };
 
-const styles = StyleSheet.create({
-  itemContainer: {
-    paddingLeft: 15,
-    height: 40,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  itemTitle,
-  itemAction
-});
+const styles = StyleSheet.create(RenderSwitchStyles);
 
 export default RenderSwitch;

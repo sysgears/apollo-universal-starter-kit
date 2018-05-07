@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import { Item, Input } from 'native-base';
+import InputItemStyles from '../styles/InputItem';
 
 const InputItem = ({ error, ...props }) => {
   return (
@@ -18,15 +19,6 @@ InputItem.propTypes = {
   error: PropTypes.string
 };
 
-const styles = StyleSheet.create({
-  item: {
-    paddingLeft: 10
-  },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    margin: 3
-  }
-});
+const styles = StyleSheet.create(InputItemStyles);
 
 export default InputItem;

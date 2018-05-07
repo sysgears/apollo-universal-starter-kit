@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Text, StyleSheet } from 'react-native';
 
 import CardItem from './CardItem';
+import SubtitleTextStyles from '../styles/CardSubTitleText';
 
 const CardSubtitleText = ({ children, style, ...props }) => {
   return (
@@ -19,10 +20,6 @@ CardSubtitleText.propTypes = {
   style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
 };
 
-const styles = StyleSheet.create({
-  text: {
-    fontSize: 18
-  }
-});
+const styles = StyleSheet.create(SubtitleTextStyles);
 
 export default CardSubtitleText;

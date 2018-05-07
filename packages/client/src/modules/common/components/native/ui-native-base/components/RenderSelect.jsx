@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Platform, StyleSheet, View, Text } from 'react-native';
 import Select from './Select';
-import { itemContainer, itemAction, itemTitle } from '../../styles';
+import RenderSelectStyles from '../styles/RenderSelect';
 
 const RenderSelect = ({ style, label, ...props }) => {
   const selectProps = {
@@ -37,21 +37,6 @@ RenderSelect.propTypes = {
   label: PropTypes.string
 };
 
-const styles = StyleSheet.create({
-  androidPickerWrapper: {
-    flex: 1
-  },
-  container: {
-    paddingLeft: 15
-  },
-  itemContainer,
-  itemTitle,
-  itemAction: {
-    ...itemAction,
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'flex-end'
-  }
-});
+const styles = StyleSheet.create(RenderSelectStyles);
 
 export default RenderSelect;

@@ -6,7 +6,8 @@ import { withFormik } from 'formik';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, placeholderColor, Button, primary, FormView } from '../../common/components/native';
+import { RenderField, Button, primary, FormView } from '../../common/components/native';
+import { placeholderColor } from '../../common/components/native/styles';
 import { required, email, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';

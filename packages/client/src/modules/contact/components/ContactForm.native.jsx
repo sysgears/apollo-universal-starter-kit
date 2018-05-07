@@ -6,7 +6,8 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, FormView, Button, placeholderColor } from '../../common/components/native';
+import { RenderField, FormView, Button } from '../../common/components/native';
+import { placeholderColor } from '../../common/components/native/styles';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
 
 const contactFormSchema = {

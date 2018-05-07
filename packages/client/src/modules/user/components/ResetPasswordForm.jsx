@@ -4,7 +4,8 @@ import { withFormik } from 'formik';
 import { View, StyleSheet } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, Button, placeholderColor, primary } from '../../common/components/native';
+import { RenderField, Button, primary } from '../../common/components/native';
+import { placeholderColor } from '../../common/components/native/styles';
 import { required, minLength, validateForm, match } from '../../../../../common/validation';
 import translate from '../../../i18n';
 

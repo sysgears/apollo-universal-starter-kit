@@ -7,5 +7,4 @@ export { default as HeaderTitle } from './HeaderTitle';
 export { default as DrawerComponent } from './DrawerComponent';
 export { default as createTabBarIconWrapper } from './createTabBarIconWrapper';
 export * from './ButtonTypes';
-export * from './stylesConstants';
 export { default as LayoutCenter } from './LayoutCenter';

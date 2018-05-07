@@ -5,7 +5,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet, Text, Keyboard } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, placeholderColor, Button, primary } from '../../common/components/native';
+import { RenderField, Button, primary } from '../../common/components/native';
+import { placeholderColor } from '../../common/components/native/styles';
 import { required, email, validateForm } from '../../../../../common/validation';
 import translate from '../../../i18n';
 

@@ -15,19 +15,10 @@ const RenderSelect = ({ label, ...props }) => {
 };
 
 RenderSelect.propTypes = {
-  onValueChange: PropTypes.func,
-  label: PropTypes.string,
-  cols: PropTypes.number,
-  onChange: PropTypes.func,
-  value: PropTypes.string,
-  selectedValue: PropTypes.string
+  label: PropTypes.string
 };
 
 const styles = StyleSheet.create({
-  pickerLabel: {
-    backgroundColor: 'transparent',
-    borderBottomColor: 'red'
-  },
   itemContainer: {
     paddingLeft: 15,
     height: 40,

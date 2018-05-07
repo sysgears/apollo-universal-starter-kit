@@ -26,7 +26,7 @@ const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
           <View>
             <View style={styles.buttonWrapper}>
               <Button type={primary} onPress={() => navigation.navigate('UserEdit', { id: 0 })}>
-                Add user
+                {t('users.btn.add')}
               </Button>
             </View>
             {(users &&

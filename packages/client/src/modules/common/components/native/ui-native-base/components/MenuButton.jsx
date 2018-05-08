@@ -5,7 +5,7 @@ import { Button, Icon } from 'native-base';
 
 const MenuButton = ({ navigation }) => {
   return (
-    <Button transparent onPress={() => navigation.navigate('DrawerOpen')}>
+    <Button transparent onPress={() => navigation.openDrawer()}>
       <Icon name="ios-menu" style={styles.icon} />
     </Button>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
 import { HeaderTitle, MenuButton } from '../common/components/native';
@@ -15,7 +15,7 @@ const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 export default new Feature({
   drawerItem: {
     Counter: {
-      screen: StackNavigator({
+      screen: createStackNavigator({
         Counter: {
           screen: Counter,
           navigationOptions: ({ navigation }) => ({

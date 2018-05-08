@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const MenuButton = ({ navigation }) => {
   return (
-    <Button style={{ borderWidth: 0 }} type="ghost" onClick={() => navigation.navigate('DrawerOpen')}>
+    <Button style={{ borderWidth: 0 }} type="ghost" onClick={() => navigation.openDrawer()}>
       <Ionicons name="ios-menu" size={32} color="#0275d8" />
     </Button>
   );

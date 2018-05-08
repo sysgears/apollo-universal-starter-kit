@@ -1,5 +1,5 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import createNetLink from './netLink';
 import translate from '../../i18n';
@@ -16,7 +16,7 @@ export default new Feature({
   data: { upload: true },
   drawerItem: {
     Upload: {
-      screen: StackNavigator({
+      screen: createStackNavigator({
         Upload: {
           screen: Upload,
           navigationOptions: ({ navigation }) => ({

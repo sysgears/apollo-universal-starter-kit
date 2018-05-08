@@ -38,7 +38,6 @@ const postFormSchema = (post, { t, submitting }) =>
   );
 
 const PostForm = ({ onSubmit, post, ...props }) => {
-  console.log('RENDER', post.title);
   const contactForm = new DomainSchemaFormik(postFormSchema(post, props));
   const ContactFormComponent = contactForm.generateForm();
 

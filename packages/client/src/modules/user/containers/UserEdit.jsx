@@ -27,9 +27,12 @@ export default compose(
         variables: { id }
       };
     },
-    props({ data: { loading, userPayload } }) {
-      console.log(userPayload);
-      return { loading, user: userPayload && userPayload.user, error: userPayload && userPayload.error };
+    props({ data: { loading, user } }) {
+      const userPayload = user ? { user: user.user, errors: user.errors } : {};
+      return {
+        loading,
+        ...userPayload
+      };
     }
   }),
   graphql(ADD_USER, {

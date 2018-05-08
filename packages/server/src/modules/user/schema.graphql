@@ -39,15 +39,14 @@ extend type Query {
     # Get all users ordered by: OrderByUserInput add filtered by: FilterUserInput
     users(orderBy: OrderByUserInput, filter: FilterUserInput): [User]
     # Get user by id
-    userPayload(id: Int!): UserPayload
+    user(id: Int!): UserPayload
     # Get current user
     currentUser: User
 }
 
 type UserPayload {
     user: User
-    errors: [FieldError!],
-    error: String
+    errors: [FieldError!]
 }
 
 extend type Mutation {

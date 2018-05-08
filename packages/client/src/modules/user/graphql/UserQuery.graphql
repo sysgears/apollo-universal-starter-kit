@@ -1,10 +1,13 @@
 #import "./User.graphql"
 
 query user($id: Int!) {
-    userPayload(id: $id) {
+    user(id: $id) {
         user {
-        ...UserInfo
+            ...UserInfo
         }
-        error
+        errors {
+            field
+            message
+        }
     }
 }

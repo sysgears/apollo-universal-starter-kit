@@ -14,7 +14,7 @@ class UserEditView extends React.PureComponent {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
     currentUser: PropTypes.object,
-    error: PropTypes.string,
+    errors: PropTypes.array,
     addUser: PropTypes.func.isRequired,
     history: PropTypes.object,
     t: PropTypes.func,
@@ -22,7 +22,7 @@ class UserEditView extends React.PureComponent {
   };
 
   static getDerivedStateFromProps(nextProps) {
-    if (!nextProps.loading && nextProps.error) {
+    if (!nextProps.loading && nextProps.errors && nextProps.errors.length) {
       nextProps.history.push('/profile');
     }
     return null;

@@ -12,7 +12,10 @@ import DELETE_POST from '../graphql/DeletePost.graphql';
 import paginationConfig from '../../../../../../config/pagination';
 import { getPlatform } from '../../../../../common/utils';
 
-const limit = getPlatform() === 'web' ? paginationConfig.web.itemsNumber : paginationConfig.mobile.itemsNumber;
+const limit =
+  getPlatform() === 'web' || getPlatform() === 'server'
+    ? paginationConfig.web.itemsNumber
+    : paginationConfig.mobile.itemsNumber;
 
 export function AddPost(prev, node) {
   // ignore if duplicate
@@ -165,7 +168,7 @@ export default compose(
         });
       };
       if (error) throw new Error(error);
-      return { loading, posts, subscribeToMore, loadData, paginationConfig };
+      return { loading, posts, subscribeToMore, loadData };
     }
   }),
   graphql(DELETE_POST, {

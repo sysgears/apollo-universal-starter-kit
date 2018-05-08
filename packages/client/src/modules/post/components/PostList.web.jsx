@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import { PageLayout, Table, Button } from '../../common/components/web';
 import translate from '../../../i18n';
 import settings from '../../../../../../settings';
+import paginationConfig from '../../../../../../config/pagination';
+
+const { itemsNumber, type } = paginationConfig.web;
 
 class PostList extends React.PureComponent {
   static propTypes = {
@@ -12,7 +15,6 @@ class PostList extends React.PureComponent {
     posts: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
     loadData: PropTypes.func,
-    paginationConfig: PropTypes.object,
     t: PropTypes.func
   };
 
@@ -41,18 +43,17 @@ class PostList extends React.PureComponent {
       posts: {
         pageInfo: { endCursor }
       },
-      paginationConfig,
       loadData
     } = this.props;
     if (pagination === 'relay') {
-      loadData(endCursor, 'add');
+      loadData(endCursor + 1, 'add');
     } else {
-      loadData((pageNumber - 1) * paginationConfig.web.itemsNumber, 'replace');
+      loadData((pageNumber - 1) * itemsNumber, 'replace');
     }
   };
 
   render() {
-    const { loading, posts, paginationConfig, t } = this.props;
+    const { loading, posts, t } = this.props;
     if (loading) {
       return (
         <PageLayout>
@@ -99,12 +100,12 @@ class PostList extends React.PureComponent {
           <Table
             dataSource={posts.edges.map(({ node }) => node)}
             columns={columns}
-            pagination={paginationConfig.web.type}
+            pagination={type}
             hasNextPage={posts.pageInfo.hasNextPage}
             handlePageChange={this.handlePageChange}
             totalCount={posts.totalCount}
             loadMoreText={t('list.btn.more')}
-            itemsNumber={paginationConfig.web.itemsNumber}
+            itemsNumber={itemsNumber}
           />
         </PageLayout>
       );

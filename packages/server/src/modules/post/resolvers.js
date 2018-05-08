@@ -17,7 +17,7 @@ export default pubsub => ({
           node: post
         });
       });
-      const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor + 1 : 0;
+      const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
       const total = (await context.Post.getTotal()).count;
       const hasNextPage = total > after + limit;
       return {

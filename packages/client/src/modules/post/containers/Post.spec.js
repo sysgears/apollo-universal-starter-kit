@@ -103,7 +103,7 @@ describe('Posts and comments example UI works', () => {
     });
     expect(content.text()).to.not.include('Post title 2');
   });
-  // test works currently only with relay pagination option, will be updated when migrate to new testing framework
+  // test works properly only with relay pagination type, will be updated when migrate to new testing framework
   step('Updates post list on post create from subscription', () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
     subscription.next(
@@ -119,7 +119,7 @@ describe('Posts and comments example UI works', () => {
     );
     expect(content.text()).to.include('Post title 2');
   });
-  // test works currently only with relay pagination option, will be updated when migrate to new testing framework
+  // test works properly only with relay pagination type, will be updated when migrate to new testing framework
   step('Clicking delete optimistically removes post', () => {
     mutations.deletePost = (obj, { id }) => {
       return createNode(id);

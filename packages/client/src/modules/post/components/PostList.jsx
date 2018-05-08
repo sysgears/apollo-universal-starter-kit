@@ -2,9 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, Text, View, Platform, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Platform, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import translate from '../../../i18n';
-import { SwipeAction, Table, Pagination } from '../../common/components/native';
+import { SwipeAction, Pagination } from '../../common/components/native';
 import paginationConfig from '../../../../../../config/pagination';
 
 const { itemsNumber, type } = paginationConfig.mobile;
@@ -73,6 +73,7 @@ class PostList extends React.PureComponent {
   render() {
     const { loading, posts, t } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
+    let onEndReachedCalledDuringMomentum = false;
     if (loading) {
       return (
         <View style={styles.container}>
@@ -82,12 +83,25 @@ class PostList extends React.PureComponent {
     } else {
       return (
         <ScrollView style={{ flex: 1 }}>
-          <Table
-            posts={posts}
-            renderItem={renderItem}
-            handlePageChange={this.handlePageChange}
+          <FlatList
+            data={posts.edges}
+            style={{ marginTop: 5 }}
             keyExtractor={this.keyExtractor}
-            pagination={type}
+            renderItem={renderItem}
+            onEndReachedThreshold={0.5}
+            onMomentumScrollBegin={() => {
+              onEndReachedCalledDuringMomentum = false;
+            }}
+            onEndReached={() => {
+              if (!onEndReachedCalledDuringMomentum) {
+                if (posts.pageInfo.hasNextPage && type === 'relay') {
+                  onEndReachedCalledDuringMomentum = true;
+                  return this.handlePageChange('relay', null);
+                } else {
+                  return (onEndReachedCalledDuringMomentum = true);
+                }
+              }
+            }}
           />
           <Pagination
             totalPages={Math.ceil(posts.totalCount / itemsNumber)}

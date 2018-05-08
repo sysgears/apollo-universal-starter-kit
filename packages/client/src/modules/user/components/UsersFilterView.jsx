@@ -174,7 +174,7 @@ class UsersFilterView extends React.PureComponent {
             <Select
               icon
               iconName="caret-down"
-              placeholder={t('users.list.item.role.label')}
+              placeholder={t('users.list.item.role.all')}
               mode="dropdown"
               data={options}
               selectedValue={role}

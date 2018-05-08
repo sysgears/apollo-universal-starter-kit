@@ -74,9 +74,6 @@ const AuthScreen = StackNavigator(
 );
 
 class UsersListScreen extends React.Component {
-  static navigationOptions = () => ({
-    header: false
-  });
   render() {
     return <Users navigation={this.props.navigation} />;
   }

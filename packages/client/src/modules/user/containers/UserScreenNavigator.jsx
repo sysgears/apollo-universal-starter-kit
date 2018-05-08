@@ -1,4 +1,4 @@
-import { DrawerNavigator } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
@@ -46,7 +46,7 @@ class UserScreenNavigator extends React.Component {
   };
 
   render() {
-    const MainScreenNavigatorComponent = DrawerNavigator(
+    const MainScreenNavigatorComponent = createDrawerNavigator(
       { ...this.navItemsFilter() },
       {
         contentComponent: DrawerComponent,

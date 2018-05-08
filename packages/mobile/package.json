@@ -69,7 +69,7 @@
     "react-i18next": "^7.6.0",
     "react-native": "0.55.3",
     "react-native-simple-picker": "^2.0.0",
-    "react-navigation": "^1.5.11",
+    "react-navigation": "^2.0.0",
     "react-redux": "^5.0.6",
     "react-stripe-elements": "^1.2.1",
     "redux": "^4.0.0",

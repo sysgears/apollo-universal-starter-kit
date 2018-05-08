@@ -1,5 +1,5 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
 import { HeaderTitle, IconButton } from '../common/components/native';
@@ -13,7 +13,7 @@ const HeaderTitleWithI18n = translate('contact')(HeaderTitle);
 export default new Feature({
   drawerItem: {
     Contact: {
-      screen: StackNavigator({
+      screen: createStackNavigator({
         Contact: {
           screen: Contact,
           navigationOptions: ({ navigation }) => ({
@@ -23,7 +23,7 @@ export default new Feature({
                 iconName="ios-menu"
                 iconSize={32}
                 iconColor="#0275d8"
-                onPress={() => navigation.navigate('DrawerOpen')}
+                onPress={() => navigation.openDrawer()}
               />
             )
           })

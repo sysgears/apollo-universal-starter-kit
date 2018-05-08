@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
 import access from './access';
@@ -60,7 +60,7 @@ RegisterScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-const AuthScreen = StackNavigator(
+const AuthScreen = createStackNavigator(
   {
     Login: { screen: LoginScreen },
     ForgotPassword: { screen: ForgotPasswordScreen },
@@ -129,7 +129,7 @@ export * from './containers/Auth';
 export default new Feature(access, {
   drawerItem: {
     Profile: {
-      screen: StackNavigator({
+      screen: createStackNavigator({
         Profile: {
           screen: Profile,
           navigationOptions: ({ navigation }) => ({
@@ -139,7 +139,7 @@ export default new Feature(access, {
                 iconName="ios-menu"
                 iconSize={32}
                 iconColor="#0275d8"
-                onPress={() => navigation.navigate('DrawerOpen')}
+                onPress={() => navigation.openDrawer()}
               />
             )
           })
@@ -169,8 +169,8 @@ export default new Feature(access, {
       }
     },
     Users: {
-      screen: StackNavigator({
-        UsersList: {
+      screen: createStackNavigator({
+        Users: {
           screen: UsersListScreen,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.users" style="subTitle" />,
@@ -179,7 +179,7 @@ export default new Feature(access, {
                 iconName="ios-menu"
                 iconSize={32}
                 iconColor="#0275d8"
-                onPress={() => navigation.navigate('DrawerOpen')}
+                onPress={() => navigation.openDrawer()}
               />
             )
           })

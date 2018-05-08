@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table as RSTable } from 'reactstrap';
-import { Button } from '../components';
-import TablePagination from './Pagination';
 
 const renderHead = columns => {
   return columns.map(({ title, dataIndex, renderHeader, key }) => {
@@ -26,53 +24,7 @@ const renderData = (columns, entry) => {
   });
 };
 
-const renderPagination = (
-  dataSource,
-  handlePageChange,
-  hasNextPage,
-  pagination,
-  totalCount,
-  loadMoreText,
-  itemsNumber
-) => {
-  switch (pagination) {
-    case 'relay': {
-      if (hasNextPage) {
-        return (
-          <div>
-            <div>
-              <small>
-                ({dataSource.length} / {totalCount})
-              </small>
-            </div>
-            <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination, null)}>
-              {loadMoreText}
-            </Button>
-          </div>
-        );
-      }
-      break;
-    }
-    case 'standard': {
-      const pagesArray = Array(Math.ceil(totalCount / itemsNumber))
-        .fill(1)
-        .map((x, y) => x + y);
-      return <TablePagination pagesArray={pagesArray} handlePageChange={handlePageChange} pagination={pagination} />;
-    }
-  }
-};
-
-const Table = ({
-  dataSource,
-  columns,
-  totalCount,
-  handlePageChange,
-  hasNextPage,
-  pagination,
-  loadMoreText,
-  itemsNumber,
-  ...props
-}) => {
+const Table = ({ dataSource, columns, ...props }) => {
   return (
     <div>
       <RSTable {...props}>
@@ -81,20 +33,13 @@ const Table = ({
         </thead>
         <tbody>{renderBody(columns, dataSource)}</tbody>
       </RSTable>
-      {renderPagination(dataSource, handlePageChange, hasNextPage, pagination, totalCount, loadMoreText, itemsNumber)}
     </div>
   );
 };
 
 Table.propTypes = {
   dataSource: PropTypes.array,
-  columns: PropTypes.array,
-  totalCount: PropTypes.number,
-  handlePageChange: PropTypes.func,
-  hasNextPage: PropTypes.bool,
-  pagination: PropTypes.string,
-  loadMoreText: PropTypes.string,
-  itemsNumber: PropTypes.number
+  columns: PropTypes.array
 };
 
 export default Table;

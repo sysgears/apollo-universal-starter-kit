@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { PageLayout, Table, Button } from '../../common/components/web';
+import { PageLayout, Table, Button, Pagination } from '../../common/components/web';
 import translate from '../../../i18n';
 import settings from '../../../../../../settings';
 import paginationConfig from '../../../../../../config/pagination';
@@ -97,12 +97,12 @@ class PostList extends React.PureComponent {
             <Button color="primary">{t('list.btn.add')}</Button>
           </Link>
           <h1 />
-          <Table
-            dataSource={posts.edges.map(({ node }) => node)}
-            columns={columns}
-            pagination={type}
-            hasNextPage={posts.pageInfo.hasNextPage}
+          <Table dataSource={posts.edges.map(({ node }) => node)} columns={columns} />
+          <Pagination
+            displayedAmount={posts.edges.length}
             handlePageChange={this.handlePageChange}
+            hasNextPage={posts.pageInfo.hasNextPage}
+            pagination={type}
             totalCount={posts.totalCount}
             loadMoreText={t('list.btn.more')}
             itemsNumber={itemsNumber}

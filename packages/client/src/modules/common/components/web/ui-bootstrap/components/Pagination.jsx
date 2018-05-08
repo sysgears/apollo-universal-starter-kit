@@ -1,12 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import {
+  Pagination as RSPagination,
+  PaginationItem as RSPaginationItem,
+  PaginationLink as RSPaginationLink
+} from 'reactstrap';
+import { Button } from '../components';
 
-export default class TablePagination extends React.Component {
+export default class Pagination extends React.Component {
   static propTypes = {
+    displayedAmount: PropTypes.number,
     handlePageChange: PropTypes.func,
+    hasNextPage: PropTypes.bool,
     pagination: PropTypes.string,
-    pagesArray: PropTypes.array
+    totalCount: PropTypes.number,
+    loadMoreText: PropTypes.string,
+    itemsNumber: PropTypes.number
   };
 
   constructor(props) {
@@ -15,7 +24,9 @@ export default class TablePagination extends React.Component {
   }
 
   componentDidUpdate() {
-    this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
+    if (this.props.pagination === 'standard') {
+      this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
+    }
   }
 
   handleItemClick = pageNumber => {
@@ -37,9 +48,9 @@ export default class TablePagination extends React.Component {
     }
   };
 
-  nextPage = e => {
+  nextPage = (e, pagesArray) => {
     e.preventDefault();
-    if (this.state.pageNumber < this.props.pagesArray.length) {
+    if (this.state.pageNumber < pagesArray.length) {
       this.setState(prevState => {
         return {
           pageNumber: prevState.pageNumber + 1
@@ -48,32 +59,73 @@ export default class TablePagination extends React.Component {
     }
   };
 
-  renderPaginationItems() {
-    return this.props.pagesArray.map(pageNumber => (
-      <PaginationItem
+  renderPaginationItems(pagesArray) {
+    return pagesArray.map(pageNumber => (
+      <RSPaginationItem
         key={pageNumber.toString()}
         onClick={() => this.handleItemClick(pageNumber)}
         active={this.state.pageNumber === pageNumber}
       >
-        <PaginationLink href="#" onClick={this.handleLinkClick}>
+        <RSPaginationLink href="#" onClick={this.handleLinkClick}>
           {pageNumber}
-        </PaginationLink>
-      </PaginationItem>
+        </RSPaginationLink>
+      </RSPaginationItem>
     ));
   }
 
   render() {
     const { pageNumber } = this.state;
-    return (
-      <Pagination className="float-right">
-        <PaginationItem disabled={pageNumber <= 1}>
-          <PaginationLink previous href="#" onClick={this.previousPage} className={'bootstrap-pagination-previous'} />
-        </PaginationItem>
-        {this.renderPaginationItems()}
-        <PaginationItem disabled={pageNumber >= this.props.pagesArray.length}>
-          <PaginationLink next href="#" onClick={this.nextPage} className={'bootstrap-pagination-next'} />
-        </PaginationItem>
-      </Pagination>
-    );
+    const {
+      displayedAmount,
+      handlePageChange,
+      hasNextPage,
+      pagination,
+      totalCount,
+      loadMoreText,
+      itemsNumber
+    } = this.props;
+    if (pagination === 'relay') {
+      if (hasNextPage) {
+        return (
+          <div>
+            <div>
+              <small>
+                ({displayedAmount} / {totalCount})
+              </small>
+            </div>
+            <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination, null)}>
+              {loadMoreText}
+            </Button>
+          </div>
+        );
+      } else {
+        return null;
+      }
+    } else {
+      const pagesArray = Array(Math.ceil(totalCount / itemsNumber))
+        .fill(1)
+        .map((x, y) => x + y);
+      return (
+        <RSPagination className="float-right">
+          <RSPaginationItem disabled={pageNumber <= 1}>
+            <RSPaginationLink
+              previous
+              href="#"
+              onClick={this.previousPage}
+              className={'bootstrap-pagination-previous'}
+            />
+          </RSPaginationItem>
+          {this.renderPaginationItems(pagesArray)}
+          <RSPaginationItem disabled={pageNumber >= pagesArray.length}>
+            <RSPaginationLink
+              next
+              href="#"
+              onClick={e => this.nextPage(e, pagesArray)}
+              className={'bootstrap-pagination-next'}
+            />
+          </RSPaginationItem>
+        </RSPagination>
+      );
+    }
   }
 }

@@ -5,7 +5,7 @@ const iconWrapper = {
 
 const linkText = {
   color: '#0056b3',
-  fontSize: 18,
+  fontSize: 16,
   fontWeight: '600'
 };
 

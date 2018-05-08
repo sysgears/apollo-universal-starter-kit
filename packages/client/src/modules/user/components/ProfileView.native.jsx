@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import translate from '../../../i18n';
 
 import { Card, CardItem, CardText, CardTitle, CardHeader, CardLabel } from '../../common/components/native';
+import { linkText } from '../../common/components/native/styles';
 import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
 
 import settings from '../../../../../../settings';
@@ -62,7 +63,7 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
             style={styles.linkWrapper}
             onPress={() => navigation.navigate('ProfileEdit', { id: currentUser.id })}
           >
-            <Text style={styles.link}>{t('profile.editProfileText')}</Text>
+            <Text style={styles.linkText}>{t('profile.editProfileText')}</Text>
           </TouchableOpacity>
         </ScrollView>
       )}
@@ -90,10 +91,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  link: {
-    color: '#0056b3',
-    fontSize: 16
-  }
+  linkText
 });
 
 ProfileView.propTypes = {

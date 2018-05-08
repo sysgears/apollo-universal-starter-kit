@@ -30,7 +30,7 @@ class PostCommentsView extends React.PureComponent {
     t: PropTypes.func
   };
 
-  keyExtractor = item => item.id;
+  keyExtractor = item => `${item.id}`;
 
   renderItemIOS = ({ item: { id, content } }) => {
     const { comment, deleteComment, onCommentSelect, t } = this.props;

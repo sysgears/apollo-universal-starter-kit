@@ -9,3 +9,4 @@ export { default as MenuButton } from './MenuButton';
 export { default as Table } from './Table';
 export { default as LanguagePicker } from './LanguagePicker';
 export { default as Root } from './Root';
+export { default as Pagination } from './Pagination';

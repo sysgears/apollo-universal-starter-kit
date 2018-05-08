@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button } from 'native-base';
 
-export default class StandardPagination extends React.Component {
+export default class Pagination extends React.Component {
   static propTypes = {
     totalPages: PropTypes.number,
     handlePageChange: PropTypes.func,
@@ -16,7 +16,9 @@ export default class StandardPagination extends React.Component {
   }
 
   componentDidUpdate() {
-    this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
+    if (this.props.pagination === 'standard') {
+      this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
+    }
   }
 
   showPreviousPage(e) {
@@ -43,25 +45,34 @@ export default class StandardPagination extends React.Component {
 
   render() {
     const { pageNumber } = this.state;
-    const { totalPages } = this.props;
-    return (
-      <View style={styles.paginationContainer}>
-        <Button onPress={this.showPreviousPage.bind(this)} info={true} style={styles.button} disabled={pageNumber <= 1}>
-          <Text style={styles.buttonText}>{'<'}</Text>
-        </Button>
-        <Text style={styles.text}>
-          {pageNumber}/{totalPages}
-        </Text>
-        <Button
-          onPress={e => this.showNextPage(e, totalPages)}
-          info={true}
-          style={styles.button}
-          disabled={pageNumber >= totalPages}
-        >
-          <Text style={styles.buttonText}>{'>'}</Text>
-        </Button>
-      </View>
-    );
+    const { totalPages, pagination } = this.props;
+    if (pagination === 'standard') {
+      return (
+        <View style={styles.paginationContainer}>
+          <Button
+            onPress={this.showPreviousPage.bind(this)}
+            info={true}
+            style={styles.button}
+            disabled={pageNumber <= 1}
+          >
+            <Text style={styles.buttonText}>{'<'}</Text>
+          </Button>
+          <Text style={styles.text}>
+            {pageNumber}/{totalPages}
+          </Text>
+          <Button
+            onPress={e => this.showNextPage(e, totalPages)}
+            info={true}
+            style={styles.button}
+            disabled={pageNumber >= totalPages}
+          >
+            <Text style={styles.buttonText}>{'>'}</Text>
+          </Button>
+        </View>
+      );
+    } else {
+      return null;
+    }
   }
 }
 

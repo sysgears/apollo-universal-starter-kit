@@ -2,9 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, Text, View, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Platform, TouchableOpacity, ScrollView } from 'react-native';
 import translate from '../../../i18n';
-import { SwipeAction, Table } from '../../common/components/native';
+import { SwipeAction, Table, Pagination } from '../../common/components/native';
 import paginationConfig from '../../../../../../config/pagination';
 
 const { itemsNumber, type } = paginationConfig.mobile;
@@ -81,14 +81,20 @@ class PostList extends React.PureComponent {
       );
     } else {
       return (
-        <Table
-          posts={posts}
-          renderItem={renderItem}
-          handlePageChange={this.handlePageChange}
-          keyExtractor={this.keyExtractor}
-          itemsNumber={itemsNumber}
-          pagination={type}
-        />
+        <ScrollView style={{ flex: 1 }}>
+          <Table
+            posts={posts}
+            renderItem={renderItem}
+            handlePageChange={this.handlePageChange}
+            keyExtractor={this.keyExtractor}
+            pagination={type}
+          />
+          <Pagination
+            totalPages={Math.ceil(posts.totalCount / itemsNumber)}
+            handlePageChange={this.handlePageChange}
+            pagination={type}
+          />
+        </ScrollView>
       );
     }
   }

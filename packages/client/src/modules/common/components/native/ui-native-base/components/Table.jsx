@@ -1,38 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, ScrollView } from 'react-native';
-import StandardPagination from './Pagination';
+import { FlatList } from 'react-native';
 
-const renderStandardPagination = (pagination, totalPages, handlePageChange) => {
-  if (pagination === 'standard') {
-    return <StandardPagination totalPages={totalPages} handlePageChange={handlePageChange} pagination={pagination} />;
-  }
-};
-
-const Table = ({ posts, renderItem, handlePageChange, keyExtractor, itemsNumber, pagination }) => {
+const Table = ({ posts, renderItem, handlePageChange, keyExtractor, pagination }) => {
   let onEndReachedCalledDuringMomentum = false;
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <FlatList
-        data={posts.edges}
-        style={{ marginTop: 5 }}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        onEndReachedThreshold={0.5}
-        onMomentumScrollBegin={() => {
-          onEndReachedCalledDuringMomentum = false;
-        }}
-        onEndReached={() => {
-          if (pagination === 'relay' && !onEndReachedCalledDuringMomentum) {
-            if (posts.pageInfo.hasNextPage) {
-              onEndReachedCalledDuringMomentum = true;
-              return handlePageChange('relay', null);
-            }
+    <FlatList
+      data={posts.edges}
+      style={{ marginTop: 5 }}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      onEndReachedThreshold={0.5}
+      onMomentumScrollBegin={() => {
+        onEndReachedCalledDuringMomentum = false;
+      }}
+      onEndReached={() => {
+        if (pagination === 'relay' && !onEndReachedCalledDuringMomentum) {
+          if (posts.pageInfo.hasNextPage) {
+            onEndReachedCalledDuringMomentum = true;
+            return handlePageChange('relay', null);
           }
-        }}
-      />
-      {renderStandardPagination(pagination, Math.ceil(posts.totalCount / itemsNumber), handlePageChange)}
-    </ScrollView>
+        }
+      }}
+    />
   );
 };
 
@@ -41,7 +31,6 @@ Table.propTypes = {
   renderItem: PropTypes.func,
   handlePageChange: PropTypes.func,
   keyExtractor: PropTypes.func,
-  itemsNumber: PropTypes.number,
   pagination: PropTypes.string
 };
 

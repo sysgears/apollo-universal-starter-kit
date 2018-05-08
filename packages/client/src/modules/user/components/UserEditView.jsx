@@ -58,7 +58,7 @@ class UserEditView extends React.PureComponent {
         <View style={styles.container}>
           <UserForm
             onSubmit={this.onSubmit}
-            isRender={user && user.id !== currentUser.id}
+            isRender={!user || (user && user.id !== currentUser.id)}
             currentUser={currentUser}
             initialValues={user || {}}
           />

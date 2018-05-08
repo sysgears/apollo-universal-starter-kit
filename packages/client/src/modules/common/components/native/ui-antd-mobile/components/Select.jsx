@@ -5,19 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet } from 'react-native';
 import SelectStyles from '../styles/Select';
 
-const Select = ({
-  icon,
-  iconName,
-  iconColor,
-  iconSize,
-  placeholder,
-  onValueChange,
-  onChange,
-  cols,
-  selectedValue,
-  value,
-  ...props
-}) => {
+const Select = ({ icon, iconName, iconColor, iconSize, onValueChange, cols, selectedValue, value, ...props }) => {
   return (
     <View style={styles.container}>
       <View style={styles.pickerWrapper}>
@@ -43,11 +31,8 @@ const Select = ({
 };
 
 Select.propTypes = {
-  data: PropTypes.array.isRequired,
   onValueChange: PropTypes.func,
-  placeholder: PropTypes.string,
   cols: PropTypes.number,
-  onChange: PropTypes.func,
   value: PropTypes.string,
   selectedValue: PropTypes.string,
   icon: PropTypes.bool,

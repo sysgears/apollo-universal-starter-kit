@@ -64,7 +64,7 @@ Select.propTypes = {
   iconName: PropTypes.string,
   iconColor: PropTypes.string,
   iconSize: PropTypes.number,
-  style: PropTypes.oneOfType([PropTypes.array, PropTypes.number]),
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
   itemStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
 };
 

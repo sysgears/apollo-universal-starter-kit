@@ -5,11 +5,8 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-nati
 import PropTypes from 'prop-types';
 import translate from '../../../i18n';
 
-import { Card, CardItem, CardText, CardTitle, CardHeader, CardLabel } from '../../common/components/native';
+import { Card, CardItem, CardText, CardHeader, CardLabel } from '../../common/components/native';
 import { linkText } from '../../common/components/native/styles';
-import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
-
-import settings from '../../../../../../settings';
 
 const renderProfileItem = (title, value, idx) => (
   <CardItem key={idx}>

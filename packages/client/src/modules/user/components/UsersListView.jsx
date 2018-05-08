@@ -10,7 +10,6 @@ import {
   CardItem,
   CardLabel,
   CardText,
-  SwipeAction,
   Button,
   primary
 } from '../../common/components/native';

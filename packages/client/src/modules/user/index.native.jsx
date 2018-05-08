@@ -92,7 +92,15 @@ export default new Feature(access, {
       }
     },
     Login: {
-      screen: LoginScreen,
+      screen: createStackNavigator({
+        Login: {
+          screen: LoginScreen,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.sign" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       userInfo: {
         showOnLogin: false
       },
@@ -119,7 +127,15 @@ export default new Feature(access, {
       }
     },
     Logout: {
-      screen: LogoutScreen,
+      screen: createStackNavigator({
+        Logout: {
+          screen: LogoutScreen,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.logout" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       userInfo: {
         showOnLogin: true
       },

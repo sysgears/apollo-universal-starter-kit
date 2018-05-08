@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Linking, Button, TouchableOpacity, Text, Platform } from 'react-native';
+import { View, StyleSheet, Linking, TouchableOpacity, Text, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
@@ -10,6 +10,8 @@ import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
 import { withUser } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
 import access from '../../../access';
+import { Button, primary } from '../../../../common/components/native';
+import { iconWrapper, linkText, link } from '../../../../common/components/native/styles';
 
 const facebookLogin = () => {
   const url = buildRedirectUrlForMobile('facebook');
@@ -23,24 +25,33 @@ const facebookLogin = () => {
 const FacebookButton = withApollo(({ client }) => {
   return (
     <View>
-      <TouchableOpacity onPress={access.doLogin(client).then(facebookLogin)} style={styles.submit}>
-        <Text style={styles.text}>Login with Facebook</Text>
-      </TouchableOpacity>
+      <Button onPress={() => access.doLogin(client).then(facebookLogin)} type={primary}>
+        Login with Facebook
+      </Button>
     </View>
   );
 });
 
-const FacebookLink = () => {
-  return <Button onPress={facebookLogin} style={{ margin: 10 }} title="Login with Facebook" />;
-};
+const FacebookLink = withApollo(({ client }) => {
+  return (
+    <TouchableOpacity onPress={() => access.doLogin(client).then(facebookLogin)} style={styles.link}>
+      <Text style={styles.linkText}>Login with Facebook</Text>
+    </TouchableOpacity>
+  );
+});
 
-const FacebookIcon = () => {
+const FacebookIcon = withApollo(({ client }) => {
   return (
     <View style={styles.iconWrapper}>
-      <FontAwesome name="facebook-square" size={40} style={{ color: '#3B5998' }} onPress={facebookLogin} />
+      <FontAwesome
+        name="facebook-square"
+        size={40}
+        style={{ color: '#3B5998' }}
+        onPress={() => access.doLogin(client).then(facebookLogin)}
+      />
     </View>
   );
-};
+});
 
 class FacebookComponent extends React.Component {
   componentDidMount() {
@@ -94,23 +105,9 @@ FacebookComponent.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  submit: {
-    alignItems: 'center',
-    backgroundColor: '#0275d8',
-    padding: 10,
-    marginTop: 10,
-    borderRadius: 5
-  },
-  text: {
-    alignSelf: 'center',
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600'
-  },
-  iconWrapper: {
-    alignItems: 'center',
-    marginTop: 10
-  }
+  iconWrapper,
+  linkText,
+  link
 });
 
 export default withUser(withApollo(FacebookComponent));

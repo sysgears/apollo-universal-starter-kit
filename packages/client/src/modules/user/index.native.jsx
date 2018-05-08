@@ -20,9 +20,11 @@ import modules from '..';
 import Feature from '../connector';
 
 class LoginScreen extends React.Component {
-  static navigationOptions = () => ({
-    title: 'Sign In',
-    header: false
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.sign" style="subTitle" />,
+    headerLeft: (
+      <IconButton iconName="ios-menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+    )
   });
 
   render() {
@@ -160,22 +162,7 @@ export default new Feature(access, {
       }
     },
     Login: {
-      screen: createStackNavigator({
-        Login: {
-          screen: LoginScreen,
-          navigationOptions: ({ navigation }) => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.sign" style="subTitle" />,
-            headerLeft: (
-              <IconButton
-                iconName="ios-menu"
-                iconSize={32}
-                iconColor="#0275d8"
-                onPress={() => navigation.openDrawer()}
-              />
-            )
-          })
-        }
-      }),
+      screen: AuthScreen,
       userInfo: {
         showOnLogin: false
       },

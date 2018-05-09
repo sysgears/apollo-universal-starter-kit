@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   filterContainer: {
-    flex: 4,
+    flex: 5,
     borderWidth: 1,
     borderColor: '#e3e3e3',
     marginBottom: 15,

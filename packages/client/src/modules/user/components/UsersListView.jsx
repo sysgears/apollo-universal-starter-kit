@@ -3,16 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import {
-  List,
-  ListItem,
-  Card,
-  CardItem,
-  CardLabel,
-  CardText,
-  Button,
-  primary
-} from '../../common/components/native';
+import { List, ListItem, Card, CardItem, CardLabel, CardText, Button, primary } from '../../common/components/native';
 import translate from '../../../i18n';
 
 const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {

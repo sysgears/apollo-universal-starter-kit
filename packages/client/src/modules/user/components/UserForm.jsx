@@ -25,7 +25,7 @@ const handleRoleChange = (type, value, setFieldValue) => {
 
 const validate = values => validateForm(values, userFormSchema);
 
-const UserForm = ({ values, handleSubmit, setFieldValue, t, isRenderRole, isRenderActive }) => {
+const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldRoleDisplay, shouldActiveDisplay }) => {
   const options = [
     {
       value: 'user',
@@ -57,7 +57,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, isRenderRole, isRend
           keyboardType="email-address"
           placeholderTextColor={placeholderColor}
         />
-        {isRenderRole && (
+        {shouldRoleDisplay && (
           <Field
             name="role"
             component={RenderSelect}
@@ -71,7 +71,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, isRenderRole, isRend
             data={options}
           />
         )}
-        {isRenderActive && (
+        {shouldActiveDisplay && (
           <Field
             name="isActive"
             label={t('userEdit.form.field.active')}
@@ -146,8 +146,8 @@ UserForm.propTypes = {
   setTouched: PropTypes.func,
   isValid: PropTypes.bool,
   error: PropTypes.string,
-  isRenderRole: PropTypes.bool,
-  isRenderActive: PropTypes.bool,
+  shouldRoleDisplay: PropTypes.bool,
+  shouldActiveDisplay: PropTypes.bool,
   values: PropTypes.object,
   errors: PropTypes.object,
   initialValues: PropTypes.object.isRequired,

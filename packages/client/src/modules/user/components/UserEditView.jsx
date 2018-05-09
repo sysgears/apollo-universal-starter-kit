@@ -49,12 +49,13 @@ class UserEditView extends React.PureComponent {
     if (loading && !user) {
       return <Text>{t('userEdit.loadMsg')}</Text>;
     } else {
+      const isNotSelf = !user || (user && user.id !== currentUser.id);
       return (
         <View style={styles.container}>
           <UserForm
             onSubmit={this.onSubmit}
-            isRenderRole={!user || (user && user.id !== currentUser.id)}
-            isRenderActive={!user || (user && user.id !== currentUser.id)}
+            shouldRoleDisplay={isNotSelf}
+            shouldActiveDisplay={isNotSelf}
             initialValues={user || {}}
           />
         </View>

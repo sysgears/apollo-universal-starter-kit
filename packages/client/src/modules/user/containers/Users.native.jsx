@@ -40,7 +40,7 @@ class Users extends React.Component {
   }
 
   render() {
-    const isOpenFilter = this.props.navigation.getParam('isOpenFilter') || false;
+    const isOpenFilter = !!this.props.navigation.getParam('isOpenFilter');
     return (
       <View style={styles.container}>
         {isOpenFilter && (

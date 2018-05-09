@@ -77,6 +77,7 @@ class UserEditView extends React.PureComponent {
         </PageLayout>
       );
     } else {
+      const isNotSelf = !user || (user && user.id !== currentUser.id);
       return (
         <PageLayout>
           {this.renderMetaData(t)}
@@ -88,8 +89,8 @@ class UserEditView extends React.PureComponent {
           </h2>
           <UserForm
             onSubmit={this.onSubmit}
-            isRenderRole={!user || (user && user.id !== currentUser.id)}
-            isRenderActive={!user || (user && user.id !== currentUser.id)}
+            shouldRoleDisplay={isNotSelf}
+            shouldActiveDisplay={isNotSelf}
             initialValues={user || {}}
           />
         </PageLayout>

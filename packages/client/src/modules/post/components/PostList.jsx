@@ -2,10 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, FlatList, Text, View, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, FlatList, Text, Platform, TouchableOpacity } from 'react-native';
 
 import translate from '../../../i18n';
-import { SwipeAction } from '../../common/components/native';
+import { SwipeAction, Loading } from '../../common/components/native';
 
 class PostList extends React.PureComponent {
   static propTypes = {
@@ -60,11 +60,7 @@ class PostList extends React.PureComponent {
     const { loading, posts, loadMoreRows, t } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     if (loading) {
-      return (
-        <View style={styles.container}>
-          <Text>{t('post.loadMsg')}</Text>
-        </View>
-      );
+      return <Loading text={t('post.loadMsg')} />;
     } else {
       return (
         <FlatList
@@ -93,9 +89,6 @@ class PostList extends React.PureComponent {
 export default translate('post')(PostList);
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
   text: {
     fontSize: 18
   },

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, Linking, Button, TouchableOpacity, Text, Platform } from 'react-native';
+import { View, StyleSheet, Linking, TouchableOpacity, Text, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
@@ -10,6 +10,8 @@ import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
 import { withUser } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
 import access from '../../../access';
+import { Button, primary } from '../../../../common/components/native';
+import { iconWrapper, linkText, link } from '../../../../common/components/native/styles';
 
 const googleLogin = () => {
   const url = buildRedirectUrlForMobile('google');
@@ -22,25 +24,29 @@ const googleLogin = () => {
 
 const GoogleButton = withApollo(({ client }) => {
   return (
-    <View>
-      <TouchableOpacity onPress={access.doLogin(client).then(googleLogin)} style={styles.submit}>
-        <Text style={styles.text}>Login with Google</Text>
-      </TouchableOpacity>
+    <View style={{ marginTop: 15 }}>
+      <Button onPress={() => access.doLogin(client).then(googleLogin)} type={primary}>
+        Login with Google
+      </Button>
     </View>
   );
 });
 
-const GoogleLink = () => {
-  return <Button onPress={googleLogin} style={{ margin: 10 }} title="Login with Google" />;
-};
+const GoogleLink = withApollo(({ client }) => {
+  return (
+    <TouchableOpacity onPress={() => access.doLogin(client).then(googleLogin)} style={styles.link}>
+      <Text style={styles.linkText}>Login with Google</Text>
+    </TouchableOpacity>
+  );
+});
 
-const GoogleIcon = () => {
+const GoogleIcon = withApollo(({ client }) => {
   return (
     <View style={styles.iconWrapper}>
-      <FontAwesome onPress={googleLogin} name="google-plus-square" size={40} />
+      <FontAwesome onPress={() => access.doLogin(client).then(googleLogin)} name="google-plus-square" size={40} />
     </View>
   );
-};
+});
 
 class GoogleComponent extends React.Component {
   componentDidMount() {
@@ -93,20 +99,9 @@ GoogleComponent.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  submit: {
-    alignItems: 'center',
-    backgroundColor: '#007bff',
-    padding: 10,
-    marginTop: 10,
-    borderRadius: 5
-  },
-  text: {
-    color: '#fff'
-  },
-  iconWrapper: {
-    alignItems: 'center',
-    marginTop: 10
-  }
+  iconWrapper,
+  linkText,
+  link
 });
 
 export default withUser(withApollo(GoogleComponent));

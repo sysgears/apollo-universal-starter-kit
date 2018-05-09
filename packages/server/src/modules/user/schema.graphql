@@ -39,7 +39,7 @@ extend type Query {
     # Get all users ordered by: OrderByUserInput add filtered by: FilterUserInput
     users(orderBy: OrderByUserInput, filter: FilterUserInput): [User]
     # Get user by id
-    user(id: Int!): User
+    user(id: Int!): UserPayload
     # Get current user
     currentUser: User
 }
@@ -123,4 +123,15 @@ input EditUserInput {
 input ProfileInput {
     firstName: String
     lastName: String
+}
+
+extend type Subscription {
+  # Subscription for users list
+  usersUpdated(filter: FilterUserInput): UpdateUserPayload
+}
+
+# Payload for usersUpdated Subscription
+type UpdateUserPayload {
+  mutation: String!
+  node: User!
 }

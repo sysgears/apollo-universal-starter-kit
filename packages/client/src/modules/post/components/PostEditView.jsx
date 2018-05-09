@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
+import { Loading } from '../../common/components/native';
 
 import translate from '../../../i18n';
 import PostForm from './PostForm';
@@ -23,11 +24,7 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
   }
 
   if (loading && !postObj) {
-    return (
-      <View style={styles.container}>
-        <Text>{t('post.loadMsg')}</Text>
-      </View>
-    );
+    return <Loading text={t('post.loadMsg')} />;
   } else {
     return (
       <ScrollView style={styles.container}>

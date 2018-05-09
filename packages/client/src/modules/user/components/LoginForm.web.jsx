@@ -14,7 +14,7 @@ import settings from '../../../../../../settings';
 
 const loginFormSchema = {
   email: [required, email],
-  password: [required, minLength(4)]
+  password: [required, minLength(8)]
 };
 
 const validate = values => validateForm(values, loginFormSchema);
@@ -78,14 +78,15 @@ LoginForm.propTypes = {
 const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ email: '', password: '' }),
-  async handleSubmit(
+
+  handleSubmit(
     values,
     {
       setErrors,
       props: { onSubmit }
     }
   ) {
-    await onSubmit(values).catch(e => {
+    onSubmit(values).catch(e => {
       console.log(e);
       setErrors(e);
     });

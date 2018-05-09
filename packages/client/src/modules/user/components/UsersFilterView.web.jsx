@@ -8,6 +8,7 @@ import { Form, FormItem, Select, Option, Label, Input } from '../../common/compo
 class UsersFilterView extends React.PureComponent {
   static propTypes = {
     searchText: PropTypes.string,
+    filter: PropTypes.object,
     role: PropTypes.string,
     isActive: PropTypes.bool,
     onSearchTextChange: PropTypes.func.isRequired,
@@ -27,12 +28,18 @@ class UsersFilterView extends React.PureComponent {
   };
 
   handleIsActive = () => {
-    const { onIsActiveChange, isActive } = this.props;
+    const {
+      onIsActiveChange,
+      filter: { isActive }
+    } = this.props;
     onIsActiveChange(!isActive);
   };
 
   render() {
-    const { role, isActive, t } = this.props;
+    const {
+      filter: { role, isActive },
+      t
+    } = this.props;
     return (
       <Form layout="inline">
         <FormItem label={t('users.list.item.filter')}>
@@ -48,7 +55,7 @@ class UsersFilterView extends React.PureComponent {
         <FormItem label={t('users.list.item.role.label')}>
           <Select name="role" defaultValue={role} onChange={this.handleRole}>
             <Option key={1} value="">
-              {t('users.list.item.role.select')}
+              {t('users.list.item.role.all')}
             </Option>
             <Option key={2} value="user">
               {t('users.list.item.role.user')}

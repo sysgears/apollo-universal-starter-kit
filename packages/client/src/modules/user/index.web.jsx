@@ -8,7 +8,7 @@ import resolvers from './resolvers';
 import resources from './locales';
 import ProfileView from './components/ProfileView';
 import { MenuItem } from '../../modules/common/components/web';
-import Users from './components/Users';
+import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import Register from './containers/Register';
 import Login from './containers/Login';
@@ -57,8 +57,8 @@ const NavLinkLoginWithI18n = translate('user')(({ t }) => (
 export default new Feature(access, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
-    <AuthRoute exact path="/users" redirect="/login" role="admin" component={Users} />,
-    <AuthRoute exact path="/users/:id" redirect="/login" role="admin" component={UserEdit} />,
+    <AuthRoute exact path="/users" redirect="/profile" role="admin" component={Users} />,
+    <AuthRoute exact path="/users/:id" redirect="/profile" role={['user', 'admin']} component={UserEdit} />,
     <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
     <AuthRoute
       exact

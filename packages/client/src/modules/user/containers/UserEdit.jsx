@@ -28,7 +28,11 @@ export default compose(
       };
     },
     props({ data: { loading, user } }) {
-      return { loading, user };
+      const userPayload = user ? { user: user.user, errors: user.errors } : {};
+      return {
+        loading,
+        ...userPayload
+      };
     }
   }),
   graphql(ADD_USER, {
@@ -58,7 +62,7 @@ export default compose(
     })
   }),
   graphql(EDIT_USER, {
-    props: ({ ownProps: { history, navigation }, mutate }) => ({
+    props: ({ ownProps: { history, navigation, location }, mutate }) => ({
       editUser: async input => {
         try {
           const {
@@ -66,13 +70,14 @@ export default compose(
           } = await mutate({
             variables: { input }
           });
-
           if (editUser.errors) {
             return { errors: editUser.errors };
           }
-
           if (history) {
-            return input.role === 'admin' ? history.push('/users') : history.push('/profile');
+            if (location && location.state && location.state.from === 'profile') {
+              return history.push('/profile');
+            }
+            return history.push('/users');
           }
 
           if (navigation) {

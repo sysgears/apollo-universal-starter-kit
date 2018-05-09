@@ -16,7 +16,7 @@ const validate = values => validateForm(values, forgotPasswordFormSchema);
 const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
   return (
     <Form name="forgotPassword" onSubmit={handleSubmit}>
-      {sent && <Alert color="success">{t('forgotPass.submitMsg')}</Alert>}
+      {sent && <Alert color="success">{t('forgotPass.form.submitMsg')}</Alert>}
       <Field
         name="email"
         component={RenderField}
@@ -59,7 +59,7 @@ const ForgotPasswordFormWithFormik = withFormik({
       .catch(e => setErrors(e));
   },
   validate: values => validate(values),
-  displayName: 'LoginForm' // helps with React DevTools
+  displayName: 'ForgotPasswordForm' // helps with React DevTools
 });
 
 export default translate('user')(ForgotPasswordFormWithFormik(ForgotPasswordForm));

@@ -24,8 +24,14 @@
     "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"
   },
   "lint-staged": {
-    "*.{js,jsx,json}": ["eslint --fix", "git add"],
-    "*.graphql": ["prettier --parser graphql --write", "git add"]
+    "*.{js,jsx,json}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.graphql": [
+      "prettier --parser graphql --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -35,7 +41,14 @@
     "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
-  "keywords": ["apollo", "universal", "starter", "graphql", "react", "redux"],
+  "keywords": [
+    "apollo",
+    "universal",
+    "starter",
+    "graphql",
+    "react",
+    "redux"
+  ],
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
@@ -118,6 +131,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.3",
+    "babel-plugin-import": "^1.7.0",
     "babel-plugin-styled-components": "^1.3.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",

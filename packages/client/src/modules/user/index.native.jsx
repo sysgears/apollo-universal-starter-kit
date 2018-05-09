@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
@@ -7,18 +8,23 @@ import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';
 import UserScreenNavigator from './containers/UserScreenNavigator';
-import { HeaderTitle, MenuButton } from '../common/components/native';
+import { HeaderTitle, IconButton } from '../common/components/native';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
+import ForgotPassword from './containers/ForgotPassword';
 import Logout from './containers/Logout';
-import UsersList from './containers/UsersList';
+import Register from './containers/Register';
+import Users from './containers/Users';
+import UserEdit from './containers/UserEdit';
 import modules from '..';
 import Feature from '../connector';
 
 class LoginScreen extends React.Component {
-  static navigationOptions = () => ({
-    title: 'Sign In'
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.sign" style="subTitle" />,
+    headerLeft: <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
   });
+
   render() {
     return <Login navigation={this.props.navigation} />;
   }
@@ -28,29 +34,65 @@ LoginScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-class LogoutScreen extends React.Component {
+class ForgotPasswordScreen extends React.Component {
   static navigationOptions = () => ({
-    title: 'Logout'
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.forgotPassword" style="subTitle" />
   });
   render() {
-    return <Logout navigation={this.props.navigation} />;
+    return <ForgotPassword navigation={this.props.navigation} />;
   }
 }
 
-LogoutScreen.propTypes = {
+ForgotPasswordScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-class UsersListScreen extends React.Component {
+class RegisterScreen extends React.Component {
   static navigationOptions = () => ({
-    title: 'Users'
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.register" style="subTitle" />
   });
   render() {
-    return <UsersList navigation={this.props.navigation} />;
+    return <Register navigation={this.props.navigation} />;
+  }
+}
+
+RegisterScreen.propTypes = {
+  navigation: PropTypes.object
+};
+
+const AuthScreen = createStackNavigator(
+  {
+    Login: { screen: LoginScreen },
+    ForgotPassword: { screen: ForgotPasswordScreen },
+    Register: { screen: RegisterScreen }
+  },
+  {
+    cardStyle: {
+      backgroundColor: '#fff'
+    }
+  }
+);
+
+class UsersListScreen extends React.Component {
+  render() {
+    return <Users navigation={this.props.navigation} />;
   }
 }
 
 UsersListScreen.propTypes = {
+  navigation: PropTypes.object
+};
+
+class UserEditScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: `${navigation.state.params.id === 0 ? 'Create' : 'Edit'} user`
+  });
+  render() {
+    return <UserEdit navigation={this.props.navigation} />;
+  }
+}
+
+UserEditScreen.propTypes = {
   navigation: PropTypes.object
 };
 
@@ -62,6 +104,19 @@ class ProfileScreen extends React.Component {
     return <Profile navigation={this.props.navigation} />;
   }
 }
+
+class ProfilerEditScreen extends React.Component {
+  static navigationOptions = () => ({
+    title: 'Edit profile'
+  });
+  render() {
+    return <UserEdit navigation={this.props.navigation} />;
+  }
+}
+
+ProfilerEditScreen.propTypes = {
+  navigation: PropTypes.object
+};
 
 ProfileScreen.propTypes = {
   navigation: PropTypes.object
@@ -79,7 +134,15 @@ export default new Feature(access, {
           screen: Profile,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
-            headerLeft: <MenuButton navigation={navigation} />
+            headerLeft: (
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+            )
+          })
+        },
+        ProfileEdit: {
+          screen: ProfilerEditScreen,
+          navigationOptions: () => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editProfile" style="subTitle" />
           })
         }
       }),
@@ -92,15 +155,7 @@ export default new Feature(access, {
       }
     },
     Login: {
-      screen: createStackNavigator({
-        Login: {
-          screen: LoginScreen,
-          navigationOptions: ({ navigation }) => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.sign" style="subTitle" />,
-            headerLeft: <MenuButton navigation={navigation} />
-          })
-        }
-      }),
+      screen: AuthScreen,
       userInfo: {
         showOnLogin: false
       },
@@ -114,7 +169,26 @@ export default new Feature(access, {
           screen: UsersListScreen,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.users" style="subTitle" />,
-            headerLeft: <MenuButton navigation={navigation} />
+            headerLeft: (
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+            ),
+            headerRight: (
+              <IconButton
+                iconName="filter"
+                iconSize={32}
+                iconColor="#0275d8"
+                onPress={() => {
+                  const isOpenFilter = navigation.getParam('isOpenFilter');
+                  navigation.setParams({ isOpenFilter: !isOpenFilter });
+                }}
+              />
+            )
+          })
+        },
+        UserEdit: {
+          screen: UserEditScreen,
+          navigationOptions: () => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
           })
         }
       }),
@@ -127,20 +201,14 @@ export default new Feature(access, {
       }
     },
     Logout: {
-      screen: createStackNavigator({
-        Logout: {
-          screen: LogoutScreen,
-          navigationOptions: ({ navigation }) => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.logout" style="subTitle" />,
-            headerLeft: <MenuButton navigation={navigation} />
-          })
-        }
-      }),
+      screen: () => null,
       userInfo: {
         showOnLogin: true
       },
-      navigationOptions: {
-        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.logout" />
+      navigationOptions: ({ navigation }) => {
+        return {
+          drawerLabel: <Logout navigation={navigation} />
+        };
       }
     }
   },

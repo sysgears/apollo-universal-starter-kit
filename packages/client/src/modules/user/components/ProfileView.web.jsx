@@ -60,8 +60,11 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
               )}
             {settings.subscription.enabled && <SubscriptionProfile />}
           </Card>
-          <Link className="mt-2 btn user-link" to={`/users/${currentUser.id}`}>
-            Edit Profile
+          <Link
+            className="mt-2 btn user-link"
+            to={{ pathname: `/users/${currentUser.id}`, state: { from: 'profile' } }}
+          >
+            {t('profile.editProfileText')}
           </Link>
         </LayoutCenter>
       </PageLayout>

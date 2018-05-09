@@ -4,7 +4,8 @@ import { withFormik } from 'formik';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
-import { FormView, RenderField, FormButton } from '../../common/components/native';
+import { FormView, RenderField, Button, primary } from '../../common/components/native';
+import { placeholderColor } from '../../common/components/native/styles';
 import { required, validateForm } from '../../../../../common/validation';
 
 const commentFormSchema = {
@@ -17,15 +18,18 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
   const operation = t(`comment.label.${comment.id ? 'edit' : 'add'}`);
 
   return (
-    <FormView>
+    <FormView style={{ paddingHorizontal: 15 }}>
       <Field
         name="content"
         component={RenderField}
         type="text"
         value={values.content}
         placeholder={t('comment.label.field')}
+        placeholderTextColor={placeholderColor}
       />
-      <FormButton onPress={handleSubmit}>{operation}</FormButton>
+      <Button type={primary} onPress={handleSubmit}>
+        {operation}
+      </Button>
     </FormView>
   );
 };

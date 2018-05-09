@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Icon } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 const IconButton = ({ iconName, style, iconColor, iconSize, ...props }) => {
   return (
     <Button transparent style={[{ alignSelf: 'center' }, style]} {...props}>
       <Icon>
-        <Ionicons name={iconName} size={iconSize} color={iconColor} />
+        <FontAwesome name={iconName} size={iconSize} color={iconColor} />
       </Icon>
     </Button>
   );

@@ -31,9 +31,7 @@ class PostListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: withI18N(HeaderTitle, { style: 'subTitle', i18nKey: 'list.subTitle' }),
     headerRight: withI18N(PostListHeaderRight, { navigation }),
-    headerLeft: (
-      <IconButton iconName="ios-menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-    )
+    headerLeft: <IconButton iconName="bars" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
   });
 
   render() {

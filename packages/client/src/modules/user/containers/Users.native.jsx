@@ -40,11 +40,14 @@ class Users extends React.Component {
   }
 
   render() {
+    const isOpenFilter = this.props.navigation.getParam('isOpenFilter') || false;
     return (
       <View style={styles.container}>
-        <View style={styles.filterContainer}>
-          <UsersFilter {...this.props} />
-        </View>
+        {isOpenFilter && (
+          <View style={styles.filterContainer}>
+            <UsersFilter {...this.props} />
+          </View>
+        )}
         <View style={styles.usersListContainer}>
           <UsersList {...this.props} />
         </View>
@@ -68,12 +71,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   usersListContainer: {
-    flex: 8
+    flex: 8,
+    marginTop: 15
   }
 });
 
 Users.propTypes = {
   filter: PropTypes.object,
+  navigation: PropTypes.object,
   users: PropTypes.array,
   subscribeToMore: PropTypes.func,
   loading: PropTypes.bool

@@ -19,12 +19,7 @@ export default new Feature({
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
             headerLeft: (
-              <IconButton
-                iconName="ios-menu"
-                iconSize={32}
-                iconColor="#0275d8"
-                onPress={() => navigation.openDrawer()}
-              />
+              <IconButton iconName="bars" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
             )
           })
         }

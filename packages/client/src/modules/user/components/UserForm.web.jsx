@@ -18,7 +18,7 @@ const userFormSchema = {
 
 const validate = values => validateForm(values, userFormSchema);
 
-const UserForm = ({ values, handleSubmit, error, setFieldValue, t, isRender }) => {
+const UserForm = ({ values, handleSubmit, error, setFieldValue, t, isRenderRole, isRenderActive }) => {
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
 
   return (
@@ -31,7 +31,7 @@ const UserForm = ({ values, handleSubmit, error, setFieldValue, t, isRender }) =
         value={username}
       />
       <Field name="email" component={RenderField} type="email" label={t('userEdit.form.field.email')} value={email} />
-      {isRender && (
+      {isRenderRole && (
         <Field
           name="role"
           component={RenderSelect}
@@ -43,7 +43,7 @@ const UserForm = ({ values, handleSubmit, error, setFieldValue, t, isRender }) =
           <Option value="admin">{t('userEdit.form.field.role.admin')}</Option>
         </Field>
       )}
-      {isRender && (
+      {isRenderActive && (
         <Field
           name="isActive"
           component={RenderCheckBox}
@@ -107,7 +107,8 @@ UserForm.propTypes = {
   onSubmit: PropTypes.func,
   setTouched: PropTypes.func,
   isValid: PropTypes.bool,
-  isRender: PropTypes.bool,
+  isRenderRole: PropTypes.bool,
+  isRenderActive: PropTypes.bool,
   error: PropTypes.string,
   values: PropTypes.object,
   errors: PropTypes.object,

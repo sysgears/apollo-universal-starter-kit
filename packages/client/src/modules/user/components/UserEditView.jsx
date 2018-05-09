@@ -21,7 +21,6 @@ class UserEditView extends React.PureComponent {
 
   onSubmit = async values => {
     const { user, addUser, editUser, t } = this.props;
-    let result = null;
 
     let insertValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
@@ -31,11 +30,7 @@ class UserEditView extends React.PureComponent {
       insertValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    if (user) {
-      result = await editUser({ id: user.id, ...insertValues });
-    } else {
-      result = await addUser(insertValues);
-    }
+    const result = user ? await editUser({ id: user.id, ...insertValues }) : await addUser(insertValues);
 
     if (result && result.errors) {
       throw result.errors.reduce(
@@ -58,8 +53,8 @@ class UserEditView extends React.PureComponent {
         <View style={styles.container}>
           <UserForm
             onSubmit={this.onSubmit}
-            isRender={!user || (user && user.id !== currentUser.id)}
-            currentUser={currentUser}
+            isRenderRole={!user || (user && user.id !== currentUser.id)}
+            isRenderActive={!user || (user && user.id !== currentUser.id)}
             initialValues={user || {}}
           />
         </View>

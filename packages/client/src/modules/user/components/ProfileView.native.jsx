@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-nati
 import PropTypes from 'prop-types';
 import translate from '../../../i18n';
 
-import { Card, CardItem, CardText, CardHeader, CardLabel } from '../../common/components/native';
+import { Card, CardItem, CardText, CardHeader, CardLabel, Loading } from '../../common/components/native';
 import { linkText } from '../../common/components/native/styles';
 
 const renderProfileItem = (title, value, idx) => (
@@ -38,7 +38,7 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
   return (
     <View style={styles.container}>
       {currentUserLoading ? (
-        <Text style={styles.box}>{t('profile.loadMsg')}</Text>
+        <Loading text={t('profile.loadMsg')} />
       ) : (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.cardWrapper}>
@@ -75,11 +75,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1
-  },
-  box: {
-    textAlign: 'center',
-    marginLeft: 15,
-    marginRight: 15
   },
   cardWrapper: {
     marginBottom: 15

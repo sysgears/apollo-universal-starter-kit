@@ -3,16 +3,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { List, ListItem, Card, CardItem, CardLabel, CardText, Button, primary } from '../../common/components/native';
+import {
+  List,
+  ListItem,
+  Card,
+  CardItem,
+  CardLabel,
+  CardText,
+  Button,
+  primary,
+  Loading
+} from '../../common/components/native';
 import translate from '../../../i18n';
 
 const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
   return (
     <View style={styles.container}>
-      <ScrollView>
-        {loading ? (
-          <Text>Loading...</Text>
-        ) : (
+      {loading ? (
+        <Loading text={t('users.loadMsg')} />
+      ) : (
+        <ScrollView>
           <View>
             <View style={styles.buttonWrapper}>
               <Button type={primary} onPress={() => navigation.navigate('UserEdit', { id: 0 })}>
@@ -60,8 +70,8 @@ const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
               </View>
             )}
           </View>
-        )}
-      </ScrollView>
+        </ScrollView>
+      )}
     </View>
   );
 };

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
 import translate from '../../../i18n';
-import { Button, primary } from '../../common/components/native';
+import { Button, primary, Loading } from '../../common/components/native';
 
 const CounterView = ({
   loading,
@@ -16,11 +16,7 @@ const CounterView = ({
   t
 }) => {
   if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text>{t('loading')}</Text>
-      </View>
-    );
+    return <Loading text={t('loading')} />;
   } else {
     return (
       <View style={styles.container}>

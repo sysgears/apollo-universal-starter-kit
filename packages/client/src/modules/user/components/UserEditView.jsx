@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { pick } from 'lodash';
 
 import translate from '../../../i18n';
 import UserForm from './UserForm';
 import { withLoadedUser } from '../containers/Auth';
+import { Loading } from '../../common/components/native';
 
 import settings from '../../../../../../settings';
 
@@ -47,7 +48,7 @@ class UserEditView extends React.PureComponent {
     const { loading, user, t, currentUser } = this.props;
 
     if (loading && !user) {
-      return <Text>{t('userEdit.loadMsg')}</Text>;
+      return <Loading text={t('userEdit.loadMsg')} />;
     } else {
       const isNotSelf = !user || (user && user.id !== currentUser.id);
       return (

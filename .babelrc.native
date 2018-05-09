@@ -1,7 +1,10 @@
 {
   "compact": false,
   "presets": ["expo"],
-  "plugins": ["haul/src/utils/fixRequireIssues"],
+  "plugins": [
+    "haul/src/utils/fixRequireIssues",
+    ["import", {"libraryName": "antd-mobile"}]
+  ],
   "env": {
     "production": {
       "compact": true,

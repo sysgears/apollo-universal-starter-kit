@@ -22,7 +22,7 @@ import Feature from '../connector';
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: <HeaderTitleWithI18n i18nKey="navLink.sign" style="subTitle" />,
-    headerLeft: <IconButton iconName="bars" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+    headerLeft: <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
   });
 
   render() {
@@ -135,7 +135,7 @@ export default new Feature(access, {
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
             headerLeft: (
-              <IconButton iconName="bars" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
             )
           })
         },
@@ -170,7 +170,7 @@ export default new Feature(access, {
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.users" style="subTitle" />,
             headerLeft: (
-              <IconButton iconName="bars" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
             ),
             headerRight: (
               <IconButton

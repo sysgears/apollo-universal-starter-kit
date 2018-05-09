@@ -14,7 +14,10 @@ class UserScreenNavigator extends React.Component {
 
   shouldComponentUpdate(nextProps) {
     /**
-     * Re-render router when current user role be changing.
+     * After a user edits the profile the CurrentUser being updated in the State as well.
+     * That leads to the Navigator re-rendering and, as a result, takes the user back to the initial route.
+     * In order to let the user get back to his/her profile we need to prevent the Navigator
+     * re-render action after profile was edited
      */
     const { currentUserLoading, currentUser } = this.props;
     return !(

@@ -24,7 +24,7 @@ const RenderSelect = ({ style, label, ...props }) => {
         <View style={styles.itemContainer}>
           {label && <Text style={styles.itemTitle}>{label}</Text>}
           <View style={styles.itemAction}>
-            <Select style={[styles.androidPickerWrapper, style]} {...props} />
+            <Select {...props} />
           </View>
         </View>
       )}

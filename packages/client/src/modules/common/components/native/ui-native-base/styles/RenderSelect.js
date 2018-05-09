@@ -1,9 +1,6 @@
 import { itemContainer, itemAction, itemTitle } from '../../styles';
 
 const RenderSelectStyles = {
-  androidPickerWrapper: {
-    flex: 1
-  },
   container: {
     paddingLeft: 15
   },

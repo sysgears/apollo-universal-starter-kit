@@ -11,6 +11,7 @@ import { placeholderColor, submit } from '../../common/components/native/styles'
 import { required, email, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
+import GitHubButton from '../auth/github';
 import settings from '../../../../../../settings';
 
 const loginFormSchema = {
@@ -58,6 +59,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
             <View>
               {settings.user.auth.facebook.enabled && <FacebookButton text={t('login.fbBtn')} type="button" />}
               {settings.user.auth.google.enabled && <GoogleButton text={t('login.googleBtn')} type="button" />}
+              {settings.user.auth.github.enabled && <GitHubButton text={t('login.githubBtn')} type="button" />}
             </View>
             <View style={styles.buttonsGroup}>
               <Text style={styles.signUpText} onPress={() => navigation.navigate('ForgotPassword')}>

@@ -30,6 +30,7 @@
     "notRegText": "Ещё не зарегистрированы?",
     "fbBtn": "Войти через Facebook",
     "googleBtn": "Войти через Google",
+    "githubBtn": "Войти через Git Hub",
     "form": {
       "title": "Вход в систему",
       "field": {

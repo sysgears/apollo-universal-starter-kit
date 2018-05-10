@@ -30,6 +30,7 @@
     "notRegText": "Not registered yet?",
     "fbBtn": "Login with Facebook",
     "googleBtn": "Login with Google",
+    "githubBtn": "Login with Git Hub",
     "form": {
       "title": "Sign In",
       "field": {

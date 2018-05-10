@@ -19,6 +19,7 @@ type UserAuth {
     certificate: CertificateAuth
     facebook: FacebookAuth
     google: GoogleAuth
+    github: GithubAuth
 }
 
 type CertificateAuth {
@@ -32,6 +33,11 @@ type FacebookAuth {
 
 type GoogleAuth {
     googleId: String
+    displayName: String
+}
+
+type GithubAuth {
+    ghId: String
     displayName: String
 }
 
@@ -81,6 +87,7 @@ input AuthInput {
     certificate: AuthCertificateInput
     facebook: AuthFacebookInput
     google: AuthGoogleInput
+    github: AuthGitHubInput 
 }
 
 input AuthCertificateInput {
@@ -94,6 +101,11 @@ input AuthFacebookInput {
 
 input AuthGoogleInput {
     googleId: String
+    displayName: String
+}
+
+input AuthGitHubInput {
+    ghId: String
     displayName: String
 }
 

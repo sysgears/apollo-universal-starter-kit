@@ -21,6 +21,8 @@ export default class User {
         'ca.serial',
         'fa.fb_id',
         'fa.display_name AS fbDisplayName',
+        'gha.gh_id',
+        'gha.display_name AS ghDisplayName',
         'ga.google_id',
         'ga.display_name AS googleDisplayName'
       )
@@ -28,7 +30,8 @@ export default class User {
       .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
       .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
       .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
-      .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id');
+      .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id')
+      .leftJoin('auth_github AS gha', 'gha.user_id', 'u.id');
 
     // add order by
     if (orderBy && orderBy.column) {
@@ -82,6 +85,8 @@ export default class User {
           'ca.serial',
           'fa.fb_id',
           'fa.display_name AS fbDisplayName',
+          'gha.gh_id',
+          'gha.display_name AS ghDisplayName',
           'ga.google_id',
           'ga.display_name AS googleDisplayName'
         )
@@ -90,6 +95,7 @@ export default class User {
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id')
+        .leftJoin('auth_github AS gha', 'gha.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );
@@ -139,6 +145,10 @@ export default class User {
 
   createFacebookAuth({ id, displayName, userId }) {
     return returnId(knex('auth_facebook')).insert({ fb_id: id, display_name: displayName, user_id: userId });
+  }
+
+  createGithubAuth({ id, displayName, userId }) {
+    return returnId(knex('auth_github')).insert({ gh_id: id, display_name: displayName, user_id: userId });
   }
 
   createGoogleOAuth({ id, displayName, userId }) {
@@ -257,6 +267,29 @@ export default class User {
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where('fa.fb_id', '=', id)
+        .orWhere('u.email', '=', email)
+        .first()
+    );
+  }
+
+  async getUserByGHIdOrEmail(id, email) {
+    return camelizeKeys(
+      await knex
+        .select(
+          'u.id',
+          'u.username',
+          'u.role',
+          'u.is_active',
+          'gha.gh_id',
+          'u.email',
+          'u.password_hash',
+          'up.first_name',
+          'up.last_name'
+        )
+        .from('user AS u')
+        .leftJoin('auth_github AS gha', 'gha.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+        .where('gha.gh_id', '=', id)
         .orWhere('u.email', '=', email)
         .first()
     );

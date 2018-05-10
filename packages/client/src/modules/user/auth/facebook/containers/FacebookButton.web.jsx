@@ -14,11 +14,7 @@ const FacebookButton = withApollo(({ client, text }) => {
   return (
     <Button type="button" size="lg" onClick={() => access.doLogin(client).then(facebookLogin)} className="facebookBtn">
       <div className="iconContainer">
-        <FontAwesomeIcon
-          icon={faFacebookSquare}
-          className="facebookIcon"
-          onClick={() => access.doLogin(client).then(facebookLogin)}
-        />
+        <FontAwesomeIcon icon={faFacebookSquare} className="facebookIcon" />
         <div className="separator" />
       </div>
       <div className="btnText">

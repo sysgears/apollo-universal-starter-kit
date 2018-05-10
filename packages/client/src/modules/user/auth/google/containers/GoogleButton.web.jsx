@@ -4,28 +4,30 @@ import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlu
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web';
 import access from '../../../access';
+import './GoogleButton.scss';
 
 const googleLogin = () => {
   window.location = '/auth/google';
 };
 
-const GoogleButton = withApollo(({ client }) => {
+const GoogleButton = withApollo(({ client, text }) => {
   return (
-    <Button
-      color="primary"
-      type="button"
-      onClick={() => access.doLogin(client).then(googleLogin)}
-      style={{ marginTop: 10 }}
-    >
-      Login with Google
+    <Button type="button" size="lg" onClick={() => access.doLogin(client).then(googleLogin)} className="googleBtn">
+      <div className="iconContainer">
+        <FontAwesomeIcon icon={faGooglePlusSquare} className="googleIcon" />
+        <div className="separator" />
+      </div>
+      <div className="btnText">
+        <span>{text}</span>
+      </div>
     </Button>
   );
 });
 
-const GoogleLink = withApollo(({ client }) => {
+const GoogleLink = withApollo(({ client, text }) => {
   return (
     <Button color="link" onClick={() => access.doLogin(client).then(googleLogin)} style={{ marginTop: 10 }}>
-      Login with Google
+      {text}
     </Button>
   );
 });
@@ -41,16 +43,16 @@ const GoogleIcon = withApollo(({ client }) => {
   );
 });
 
-const GoogleComponent = props => {
-  switch (props.type) {
+const GoogleComponent = ({ type, text }) => {
+  switch (type) {
     case 'button':
-      return <GoogleButton />;
+      return <GoogleButton text={text} />;
     case 'link':
-      return <GoogleLink />;
+      return <GoogleLink text={text} />;
     case 'icon':
       return <GoogleIcon />;
     default:
-      return <GoogleButton />;
+      return <GoogleButton text={text} />;
   }
 };
 

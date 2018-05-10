@@ -4,28 +4,34 @@ import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSqu
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web';
 import access from '../../../access';
+import './FacebookButton.scss';
 
 const facebookLogin = () => {
   window.location = '/auth/facebook';
 };
 
-const FacebookButton = withApollo(({ client }) => {
+const FacebookButton = withApollo(({ client, text }) => {
   return (
-    <Button
-      color="primary"
-      type="button"
-      onClick={() => access.doLogin(client).then(facebookLogin)}
-      style={{ marginTop: 10 }}
-    >
-      Login with Facebook
+    <Button type="button" size="lg" onClick={() => access.doLogin(client).then(facebookLogin)} className="facebookBtn">
+      <div className="iconContainer">
+        <FontAwesomeIcon
+          icon={faFacebookSquare}
+          className="facebookIcon"
+          onClick={() => access.doLogin(client).then(facebookLogin)}
+        />
+        <div className="separator" />
+      </div>
+      <div className="btnText">
+        <span>{text}</span>
+      </div>
     </Button>
   );
 });
 
-const FacebookLink = withApollo(({ client }) => {
+const FacebookLink = withApollo(({ client, text }) => {
   return (
     <Button color="link" onClick={() => access.doLogin(client).then(facebookLogin)} style={{ marginTop: 10 }}>
-      Login with Facebook
+      {text}
     </Button>
   );
 });
@@ -41,16 +47,16 @@ const FacebookIcon = withApollo(({ client }) => {
   );
 });
 
-const FacebookComponent = props => {
-  switch (props.type) {
+const FacebookComponent = ({ text, type }) => {
+  switch (type) {
     case 'button':
-      return <FacebookButton />;
+      return <FacebookButton text={text} />;
     case 'link':
-      return <FacebookLink />;
+      return <FacebookLink text={text} />;
     case 'icon':
       return <FacebookIcon />;
     default:
-      return <FacebookButton />;
+      return <FacebookButton text={text} />;
   }
 };
 

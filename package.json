@@ -88,7 +88,7 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.127"
+    "spinjs": "^0.4.128"
   },
   "resolutions": {
     "graphql": "0.13.0",

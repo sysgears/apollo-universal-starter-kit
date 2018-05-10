@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, Text, Platform, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, Platform, TouchableOpacity, View, FlatList } from 'react-native';
 import translate from '../../../i18n';
 import { SwipeAction, Pagination, Loading } from '../../common/components/native';
 import paginationConfig from '../../../../../../config/pagination';
@@ -69,6 +69,9 @@ class PostList extends React.PureComponent {
       loadData(endCursor + 1, 'add');
     } else {
       loadData((pageNumber - 1) * itemsNumber, 'replace');
+      setTimeout(() => this.listRef.scrollToIndex({ viewPosition: 0.5, index: 0 }), 2000);
+      // this.listRef.scrollTop();
+      // this.listRef.scrollToIndex({viewPosition: 0.5, index: 0});
     }
   };
 
@@ -79,33 +82,42 @@ class PostList extends React.PureComponent {
       return <Loading text={t('post.loadMsg')} />;
     } else {
       return (
-        <ScrollView style={{ flex: 1 }}>
-          <FlatList
-            data={posts.edges}
-            style={{ marginTop: 5 }}
-            keyExtractor={this.keyExtractor}
-            renderItem={renderItem}
-            onEndReachedThreshold={0.5}
-            onMomentumScrollBegin={() => {
-              this.onEndReachedCalledDuringMomentum = false;
-            }}
-            onEndReached={() => {
-              if (!this.onEndReachedCalledDuringMomentum) {
-                if (posts.pageInfo.hasNextPage && type === 'relay') {
-                  this.onEndReachedCalledDuringMomentum = true;
-                  return this.handlePageChange('relay', null);
-                } else {
-                  return (this.onEndReachedCalledDuringMomentum = true);
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 0.9 }}>
+            <FlatList
+              data={posts.edges}
+              ref={ref => (this.listRef = ref)}
+              style={{ marginTop: 5 }}
+              keyExtractor={this.keyExtractor}
+              renderItem={renderItem}
+              onEndReachedThreshold={0.5}
+              onMomentumScrollBegin={() => {
+                console.log('+++++++++++++++');
+                this.onEndReachedCalledDuringMomentum = false;
+              }}
+              onScroll={() => {
+                console.log('------------');
+              }}
+              onEndReached={() => {
+                if (!this.onEndReachedCalledDuringMomentum) {
+                  if (posts.pageInfo.hasNextPage && type === 'relay') {
+                    this.onEndReachedCalledDuringMomentum = true;
+                    return this.handlePageChange('relay', null);
+                  } else {
+                    return (this.onEndReachedCalledDuringMomentum = true);
+                  }
                 }
-              }
-            }}
-          />
-          <Pagination
-            totalPages={Math.ceil(posts.totalCount / itemsNumber)}
-            handlePageChange={this.handlePageChange}
-            pagination={type}
-          />
-        </ScrollView>
+              }}
+            />
+          </View>
+          <View style={{ flex: 0.1 }}>
+            <Pagination
+              totalPages={Math.ceil(posts.totalCount / itemsNumber)}
+              handlePageChange={this.handlePageChange}
+              pagination={type}
+            />
+          </View>
+        </View>
       );
     }
   }

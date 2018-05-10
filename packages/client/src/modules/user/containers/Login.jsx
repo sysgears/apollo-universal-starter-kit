@@ -17,11 +17,11 @@ const LoginWithApollo = compose(
   withApollo,
   graphql(LOGIN, {
     props: ({ ownProps: { client, onLogin }, mutate }) => ({
-      login: async ({ email, password }) => {
+      login: async ({ usernameOrEmail, password }) => {
         const {
           data: { login }
         } = await mutate({
-          variables: { input: { email, password } }
+          variables: { input: { usernameOrEmail, password } }
         });
         if (!login.errors) {
           await access.doLogin(client);

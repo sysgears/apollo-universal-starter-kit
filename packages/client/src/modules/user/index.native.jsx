@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
 import access from './access';
@@ -74,7 +74,7 @@ export * from './containers/Auth';
 export default new Feature(access, {
   drawerItem: {
     Profile: {
-      screen: StackNavigator({
+      screen: createStackNavigator({
         Profile: {
           screen: Profile,
           navigationOptions: ({ navigation }) => ({
@@ -92,7 +92,15 @@ export default new Feature(access, {
       }
     },
     Login: {
-      screen: LoginScreen,
+      screen: createStackNavigator({
+        Login: {
+          screen: LoginScreen,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.sign" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       userInfo: {
         showOnLogin: false
       },
@@ -101,7 +109,7 @@ export default new Feature(access, {
       }
     },
     Users: {
-      screen: StackNavigator({
+      screen: createStackNavigator({
         Users: {
           screen: UsersListScreen,
           navigationOptions: ({ navigation }) => ({
@@ -119,7 +127,15 @@ export default new Feature(access, {
       }
     },
     Logout: {
-      screen: LogoutScreen,
+      screen: createStackNavigator({
+        Logout: {
+          screen: LogoutScreen,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.logout" style="subTitle" />,
+            headerLeft: <MenuButton navigation={navigation} />
+          })
+        }
+      }),
       userInfo: {
         showOnLogin: true
       },

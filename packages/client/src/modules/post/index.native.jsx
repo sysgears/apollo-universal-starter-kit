@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Text, StyleSheet, Platform } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
 import { HeaderTitle, MenuButton } from '../common/components/native';
@@ -71,7 +71,7 @@ PostEditScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-const PostNavigator = StackNavigator({
+const PostNavigator = createStackNavigator({
   PostList: { screen: PostListScreen },
   PostEdit: { screen: PostEditScreen }
 });

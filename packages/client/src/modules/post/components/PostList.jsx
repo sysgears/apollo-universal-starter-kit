@@ -19,7 +19,9 @@ class PostList extends React.PureComponent {
     t: PropTypes.func
   };
 
-  keyExtractor = item => item.node.id.toString();
+  onEndReachedCalledDuringMomentum = false;
+
+  keyExtractor = item => `${item.node.id}`;
 
   renderItemIOS = ({
     item: {
@@ -73,7 +75,6 @@ class PostList extends React.PureComponent {
   render() {
     const { loading, posts, t } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
-    let onEndReachedCalledDuringMomentum = false;
     if (loading) {
       return (
         <View style={styles.container}>
@@ -90,15 +91,15 @@ class PostList extends React.PureComponent {
             renderItem={renderItem}
             onEndReachedThreshold={0.5}
             onMomentumScrollBegin={() => {
-              onEndReachedCalledDuringMomentum = false;
+              this.onEndReachedCalledDuringMomentum = false;
             }}
             onEndReached={() => {
-              if (!onEndReachedCalledDuringMomentum) {
+              if (!this.onEndReachedCalledDuringMomentum) {
                 if (posts.pageInfo.hasNextPage && type === 'relay') {
-                  onEndReachedCalledDuringMomentum = true;
+                  this.onEndReachedCalledDuringMomentum = true;
                   return this.handlePageChange('relay', null);
                 } else {
-                  return (onEndReachedCalledDuringMomentum = true);
+                  return (this.onEndReachedCalledDuringMomentum = true);
                 }
               }
             }}

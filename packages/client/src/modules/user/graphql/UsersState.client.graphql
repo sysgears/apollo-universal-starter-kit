@@ -1,11 +1,11 @@
 fragment UsersStateInfo on UsersState {
-    orderBy {
-        column
-        order
-    }
-    filter {
-        searchText
-        role
-        isActive
-    }
+  orderBy {
+    column
+    order
+  }
+  filter {
+    searchText
+    role
+    isActive
+  }
 }

@@ -10,8 +10,16 @@ import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
 import { withUser } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
 import access from '../../../access';
-import { Button, primary } from '../../../../common/components/native';
-import { iconWrapper, linkText, link } from '../../../../common/components/native/styles';
+import {
+  iconWrapper,
+  linkText,
+  link,
+  buttonContainer,
+  separator,
+  btnIconContainer,
+  btnTextContainer,
+  btnText
+} from '../../../../common/components/native/styles';
 
 const googleLogin = () => {
   const url = buildRedirectUrlForMobile('google');
@@ -22,20 +30,24 @@ const googleLogin = () => {
   }
 };
 
-const GoogleButton = withApollo(({ client }) => {
+const GoogleButton = withApollo(({ client, text }) => {
   return (
-    <View style={{ marginTop: 15 }}>
-      <Button onPress={() => access.doLogin(client).then(googleLogin)} type={primary}>
-        Login with Google
-      </Button>
-    </View>
+    <TouchableOpacity style={styles.buttonContainer} onPress={() => access.doLogin(client).then(googleLogin)}>
+      <View style={styles.btnIconContainer}>
+        <FontAwesome name="google-plus-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
+        <View style={styles.separator} />
+      </View>
+      <View style={styles.btnTextContainer}>
+        <Text style={styles.btnText}>{text}</Text>
+      </View>
+    </TouchableOpacity>
   );
 });
 
-const GoogleLink = withApollo(({ client }) => {
+const GoogleLink = withApollo(({ client, text }) => {
   return (
     <TouchableOpacity onPress={() => access.doLogin(client).then(googleLogin)} style={styles.link}>
-      <Text style={styles.linkText}>Login with Google</Text>
+      <Text style={styles.linkText}>{text}</Text>
     </TouchableOpacity>
   );
 });
@@ -79,15 +91,16 @@ class GoogleComponent extends React.Component {
   };
 
   render() {
-    switch (this.props.type) {
+    const { type, text } = this.props;
+    switch (type) {
       case 'button':
-        return <GoogleButton />;
+        return <GoogleButton text={text} />;
       case 'link':
-        return <GoogleLink />;
+        return <GoogleLink text={text} />;
       case 'icon':
         return <GoogleIcon />;
       default:
-        return <GoogleButton />;
+        return <GoogleButton text={text} />;
     }
   }
 }
@@ -95,13 +108,26 @@ class GoogleComponent extends React.Component {
 GoogleComponent.propTypes = {
   client: PropTypes.object,
   type: PropTypes.string,
+  text: PropTypes.string.isRequired,
   writeQuery: PropTypes.func
 };
 
 const styles = StyleSheet.create({
   iconWrapper,
   linkText,
-  link
+  link,
+  buttonContainer: {
+    ...buttonContainer,
+    marginTop: 15,
+    backgroundColor: '#c43832'
+  },
+  separator: {
+    ...separator,
+    backgroundColor: '#fff'
+  },
+  btnIconContainer,
+  btnTextContainer,
+  btnText
 });
 
 export default withUser(withApollo(GoogleComponent));

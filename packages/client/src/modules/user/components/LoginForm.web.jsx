@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import DomainSchema from '@domain-schema/core';
+import { Schema } from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 import FacebookButton from '../auth/facebook';
@@ -12,42 +12,38 @@ import GoogleButton from '../auth/google';
 
 import settings from '../../../../../../settings';
 
-const loginFormSchema = ({ t, submitting }) =>
-  new DomainSchema(
-    class extends FormSchema {
-      __ = { name: 'PostForm' };
-      email = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          type: 'email',
-          label: t('login.form.field.email')
-        },
-        email: true
-      };
-      password = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          type: 'password',
-          label: t('login.form.field.pass')
-        },
-        min: 4
-      };
-      setSubmitBtn() {
-        return {
-          label: t('login.form.btnSubmit'),
-          color: 'primary',
-          disabled: submitting
-        };
-      }
+const loginFormSchema = t =>
+  class extends Schema {
+    __ = { name: 'PostForm' };
+    email = {
+      type: String,
+      input: {
+        type: 'email',
+        label: t('login.form.field.email')
+      },
+      email: true
+    };
+    password = {
+      type: String,
+      input: {
+        type: 'password',
+        label: t('login.form.field.pass')
+      },
+      min: 4
+    };
+    setSubmitBtn() {
+      return;
     }
-  );
+  };
 
-const LoginForm = ({ onSubmit, ...props }) => {
-  const loginForm = new DomainSchemaFormik(loginFormSchema(props));
-  const LoginFormComponent = loginForm.generateForm();
-  const { t } = props;
+const LoginForm = ({ onSubmit, submitting, t }) => {
+  const loginForm = new DomainSchemaFormik(loginFormSchema(t));
+  const LoginFormComponent = loginForm.generateForm({
+    label: t('login.form.btnSubmit'),
+    color: 'primary',
+    disabled: submitting
+  });
+
   return (
     <React.Fragment>
       <LoginFormComponent onSubmit={async (values, { setErrors }) => await onSubmit(values).catch(e => setErrors(e))} />

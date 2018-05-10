@@ -1,45 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import DomainSchema from '@domain-schema/core';
+import { Schema } from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 
-const postFormSchema = (post, { t, submitting }) =>
-  new DomainSchema(
-    class extends FormSchema {
-      __ = { name: 'post' };
-      title = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          label: t('post.field.title')
-        },
-        defaultValue: post && post.title
-      };
-      content = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          label: t('post.field.content')
-        },
-        defaultValue: post && post.content
-      };
-      setSubmitBtn() {
-        return {
-          label: t('post.btn.submit'),
-          color: 'primary',
-          disabled: submitting
-        };
-      }
-    }
-  );
+const postFormSchema = (post, t) =>
+  class extends Schema {
+    __ = { name: 'post' };
+    title = {
+      type: String,
+      input: {
+        label: t('post.field.title')
+      },
+      defaultValue: post && post.title
+    };
+    content = {
+      type: String,
+      input: {
+        label: t('post.field.content')
+      },
+      defaultValue: post && post.content
+    };
+  };
 
-const PostForm = ({ onSubmit, post, ...props }) => {
-  const contactForm = new DomainSchemaFormik(postFormSchema(post, props));
-  const ContactFormComponent = contactForm.generateForm();
+const PostForm = ({ onSubmit, post, submitting, t }) => {
+  const contactForm = new DomainSchemaFormik(postFormSchema(post, t));
+  const ContactFormComponent = contactForm.generateForm({
+    label: t('post.btn.submit'),
+    color: 'primary',
+    disabled: submitting
+  });
 
   return <ContactFormComponent onSubmit={onSubmit} />;
 };

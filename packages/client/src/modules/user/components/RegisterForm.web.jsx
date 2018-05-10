@@ -1,64 +1,55 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import DomainSchema from '@domain-schema/core';
+import { Schema } from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 
-const registerFormSchema = ({ t, submitting }) =>
-  new DomainSchema(
-    class extends FormSchema {
-      __ = { name: 'PostForm' };
-      username = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          label: t('reg.form.field.name')
-        },
-        min: 3
-      };
-      email = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          type: 'email',
-          label: t('reg.form.field.email')
-        },
-        email: true
-      };
-      password = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          type: 'password',
-          label: t('reg.form.field.pass')
-        },
-        min: 4
-      };
-      passwordConfirmation = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          type: 'password',
-          label: t('reg.form.field.passConf')
-        },
-        matches: 'password'
-      };
-      setSubmitBtn() {
-        return {
-          label: t('reg.form.btnSubmit'),
-          color: 'primary',
-          disabled: submitting
-        };
-      }
-    }
-  );
+const registerFormSchema = t =>
+  class extends Schema {
+    __ = { name: 'PostForm' };
+    username = {
+      type: String,
+      input: {
+        label: t('reg.form.field.name')
+      },
+      min: 3
+    };
+    email = {
+      type: String,
+      input: {
+        type: 'email',
+        label: t('reg.form.field.email')
+      },
+      email: true
+    };
+    password = {
+      type: String,
+      input: {
+        type: 'password',
+        label: t('reg.form.field.pass')
+      },
+      min: 4
+    };
+    passwordConfirmation = {
+      type: String,
+      input: {
+        type: 'password',
+        label: t('reg.form.field.passConf')
+      },
+      matches: 'password'
+    };
+  };
 
-const RegisterForm = ({ onSubmit, ...props }) => {
-  const registerForm = new DomainSchemaFormik(registerFormSchema(props));
-  const RegisterFormComponent = registerForm.generateForm();
+const RegisterForm = ({ onSubmit, submitting, t }) => {
+  const registerForm = new DomainSchemaFormik(registerFormSchema(t));
+  const RegisterFormComponent = registerForm.generateForm({
+    label: t('reg.form.btnSubmit'),
+    color: 'primary',
+    disabled: submitting
+  });
 
   return (
     <RegisterFormComponent

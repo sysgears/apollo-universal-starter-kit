@@ -1,37 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import DomainSchema from '@domain-schema/core';
+import { Schema } from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 
 const forgotPassFormSchema = t =>
-  new DomainSchema(
-    class extends FormSchema {
-      __ = { name: 'PostForm' };
-      email = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          type: 'email',
-          label: t('forgotPass.form.fldEmail')
-        },
-        email: true
-      };
-      setSubmitBtn() {
-        return {
-          label: t('forgotPass.form.btnSubmit'),
-          color: 'primary'
-        };
-      }
-    }
-  );
+  class extends Schema {
+    __ = { name: 'PostForm' };
+    email = {
+      type: String,
+      input: {
+        type: 'email',
+        label: t('forgotPass.form.fldEmail')
+      },
+      email: true
+    };
+  };
 
 const ForgotPasswordForm = ({ onSubmit, t }) => {
   const forgotPassForm = new DomainSchemaFormik(forgotPassFormSchema(t));
-  const ForgotPassFormComponent = forgotPassForm.generateForm();
+  const ForgotPassFormComponent = forgotPassForm.generateForm({
+    label: t('forgotPass.form.btnSubmit'),
+    color: 'primary'
+  });
 
   return (
     <ForgotPassFormComponent

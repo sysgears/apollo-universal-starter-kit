@@ -1,36 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import DomainSchema from '@domain-schema/core';
+import { Schema } from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 
-const commentFormSchema = ({ t, comment }) =>
-  new DomainSchema(
-    class extends FormSchema {
-      __ = { name: 'comment' };
-      content = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          label: `${t(`comment.label.${comment.id ? 'edit' : 'add'}`)} ${t('comment.label.comment')}`
-        },
-        defaultValue: comment && comment.content
+const commentFormSchema = (comment, t) =>
+  class extends Schema {
+    __ = { name: 'comment' };
+    content = {
+      type: String,
+      input: {
+        label: `${t(`comment.label.${comment.id ? 'edit' : 'add'}`)} ${t('comment.label.comment')}`
+      },
+      defaultValue: comment && comment.content
+    };
+    setSubmitBtn() {
+      return {
+        label: t('comment.btn.submit'),
+        color: 'primary'
       };
-      setSubmitBtn() {
-        return {
-          label: t('comment.btn.submit'),
-          color: 'primary'
-        };
-      }
     }
-  );
+  };
 
-const PostCommentForm = ({ onSubmit, ...props }) => {
-  const commentForm = new DomainSchemaFormik(commentFormSchema(props));
-  const CommentFormComponent = commentForm.generateForm();
+const PostCommentForm = ({ onSubmit, comment, t }) => {
+  const commentForm = new DomainSchemaFormik(commentFormSchema(comment, t));
+  const CommentFormComponent = commentForm.generateForm({
+    label: t('comment.btn.submit'),
+    color: 'primary'
+  });
 
   return <CommentFormComponent onSubmit={onSubmit} />;
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import DomainSchema, { Schema } from '@domain-schema/core';
+import { Schema } from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 
@@ -14,7 +14,6 @@ const getProfile = (t, profile) =>
     __ = { name: 'Profile' };
     firstName = {
       type: String,
-      fieldType: FieldTypes.input,
       input: {
         label: t('userEdit.form.field.firstName')
       },
@@ -23,7 +22,6 @@ const getProfile = (t, profile) =>
     };
     lastName = {
       type: String,
-      fieldType: FieldTypes.input,
       input: {
         label: t('userEdit.form.field.lastName')
       },
@@ -33,98 +31,94 @@ const getProfile = (t, profile) =>
   };
 
 const userFormSchema = ({ t, user: { username, email, isActive, role, profile, auth } }) =>
-  new DomainSchema(
-    class extends FormSchema {
-      __ = { name: 'UserForm' };
-      username = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          label: t('userEdit.form.field.name')
-        },
-        defaultValue: username,
-        min: 3
+  class extends Schema {
+    __ = { name: 'UserForm' };
+    username = {
+      type: String,
+      input: {
+        label: t('userEdit.form.field.name')
+      },
+      defaultValue: username,
+      min: 3
+    };
+    email = {
+      type: String,
+      input: {
+        type: 'email',
+        label: t('userEdit.form.field.email')
+      },
+      defaultValue: email,
+      email: true
+    };
+    role = {
+      type: String,
+      fieldType: 'select',
+      input: {
+        label: t('userEdit.form.field.role.label'),
+        values: [
+          { value: 'user', label: t('userEdit.form.field.role.user') },
+          { value: 'admin', label: t('userEdit.form.field.role.admin') }
+        ]
+      },
+      defaultValue: role || 'user',
+      optional: true
+    };
+    isActive = {
+      type: Boolean,
+      fieldType: 'checkbox',
+      input: {
+        label: t('userEdit.form.field.active')
+      },
+      defaultValue: isActive,
+      optional: true
+    };
+    profile = {
+      type: getProfile(t, profile)
+    };
+    serial = {
+      type: String,
+      input: {
+        label: t('userEdit.form.field.serial')
+      },
+      defaultValue: auth && auth.certificate && auth.certificate.serial,
+      ignore: !settings.user.auth.certificate.enabled,
+      optional: true
+    };
+    password = {
+      type: String,
+      input: {
+        type: 'password',
+        label: t('userEdit.form.field.pass')
+      },
+      min: 4
+    };
+    passwordConfirmation = {
+      type: String,
+      input: {
+        type: 'password',
+        label: t('userEdit.form.field.passConf')
+      },
+      matches: 'password'
+    };
+    setSubmitBtn() {
+      return {
+        label: t('userEdit.form.btnSubmit'),
+        color: 'primary'
       };
-      email = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          type: 'email',
-          label: t('userEdit.form.field.email')
-        },
-        defaultValue: email,
-        email: true
-      };
-      role = {
-        type: String,
-        fieldType: FieldTypes.select,
-        input: {
-          label: t('userEdit.form.field.role.label'),
-          values: [
-            { value: 'user', label: t('userEdit.form.field.role.user') },
-            { value: 'admin', label: t('userEdit.form.field.role.admin') }
-          ]
-        },
-        defaultValue: role || 'user',
-        optional: true
-      };
-      isActive = {
-        type: Boolean,
-        fieldType: FieldTypes.checkbox,
-        input: {
-          label: t('userEdit.form.field.active')
-        },
-        defaultValue: isActive,
-        optional: true
-      };
-      profile = {
-        type: getProfile(t, profile)
-      };
-      serial = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          label: t('userEdit.form.field.serial')
-        },
-        defaultValue: auth && auth.certificate && auth.certificate.serial,
-        ignore: !settings.user.auth.certificate.enabled,
-        optional: true
-      };
-      password = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          type: 'password',
-          label: t('userEdit.form.field.pass')
-        },
-        min: 4
-      };
-      passwordConfirmation = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          type: 'password',
-          label: t('userEdit.form.field.passConf')
-        },
-        matches: 'password'
-      };
-      setSubmitBtn() {
-        return {
-          label: t('userEdit.form.btnSubmit'),
-          color: 'primary'
-        };
-      }
     }
-  );
+  };
 
-const UserForm = ({ onSubmit, ...props }) => {
-  const userForm = new DomainSchemaFormik(userFormSchema(props));
-  const UserFormComponent = userForm.generateForm();
+const UserForm = ({ onSubmit, t, user }) => {
+  const userForm = new DomainSchemaFormik(userFormSchema({ t, user }));
+  const UserFormComponent = userForm.generateForm({
+    label: t('userEdit.form.btnSubmit'),
+    color: 'primary'
+  });
 
   return (
     <UserFormComponent
       onSubmit={async ({ serial, ...values }, { setErrors }) =>
-        await onSubmit({ ...values, auth: { ...props.user.auth, certificate: serial ? { serial } : null } }).catch(e =>
+        await onSubmit({ ...values, auth: { ...user.auth, certificate: serial ? { serial } : null } }).catch(e =>
           setErrors(e)
         )
       }

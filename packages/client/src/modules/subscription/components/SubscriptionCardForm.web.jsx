@@ -2,33 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import DomainSchema from '@domain-schema/core';
+import { Schema } from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
-import { DomainSchemaFormik, FieldTypes, FormSchema } from '@domain-schema/formik';
+import { DomainSchemaFormik } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
 import { Label } from '../../common/components/web';
 
-const subscriptionFormSchema = ({ action, t }) =>
-  new DomainSchema(
-    class extends FormSchema {
-      __ = { name: 'SubscriptionForm' };
-      name = {
-        type: String,
-        fieldType: FieldTypes.input,
-        input: {
-          label: t('card.name')
-        }
-      };
-      setSubmitBtn() {
-        return {
-          label: action,
-          color: 'primary',
-          style: { marginTop: 15 }
-        };
+const subscriptionFormSchema = t =>
+  class extends Schema {
+    __ = { name: 'SubscriptionForm' };
+    name = {
+      type: String,
+      input: {
+        label: t('card.name')
       }
-    }
-  );
+    };
+  };
 
 class SubscriptionCardForm extends React.Component {
   static propTypes = {
@@ -39,8 +29,13 @@ class SubscriptionCardForm extends React.Component {
   };
 
   render() {
-    const subscriptionForm = new DomainSchemaFormik(subscriptionFormSchema(this.props));
-    const SubscriptionFormComponent = subscriptionForm.generateForm();
+    const { t, action } = this.props;
+    const subscriptionForm = new DomainSchemaFormik(subscriptionFormSchema(t));
+    const SubscriptionFormComponent = subscriptionForm.generateForm({
+      label: action,
+      color: 'primary',
+      style: { marginTop: 15 }
+    });
 
     return (
       <React.Fragment>

@@ -6,14 +6,14 @@ import { NavLink, Link } from 'react-router-dom';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
-import { required, email, minLength, validateForm } from '../../../../../common/validation';
+import { required, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
 
 import settings from '../../../../../../settings';
 
 const loginFormSchema = {
-  email: [required, email],
+  usernameOrEmail: [required, minLength(3)],
   password: [required, minLength(8)]
 };
 
@@ -23,11 +23,11 @@ const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
   return (
     <Form name="login" onSubmit={handleSubmit}>
       <Field
-        name="email"
+        name="usernameOrEmail"
         component={RenderField}
-        type="email"
-        label={t('login.form.field.email')}
-        value={values.email}
+        type="text"
+        label={t('login.form.field.usenameOrEmail')}
+        value={values.usernameOrEmail}
       />
       <Field
         name="password"
@@ -77,7 +77,7 @@ LoginForm.propTypes = {
 
 const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
-  mapPropsToValues: () => ({ email: '', password: '' }),
+  mapPropsToValues: () => ({ usernameOrEmail: '', password: '' }),
 
   handleSubmit(
     values,

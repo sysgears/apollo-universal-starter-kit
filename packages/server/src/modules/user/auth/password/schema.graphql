@@ -1,5 +1,5 @@
 input LoginUserInput {
-    email: String!
+    usernameOrEmail: String!
     password: String!
 }
 

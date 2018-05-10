@@ -8,13 +8,13 @@ import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary, FormView } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { required, email, minLength, validateForm } from '../../../../../common/validation';
+import { required, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
 import settings from '../../../../../../settings';
 
 const loginFormSchema = {
-  email: [required, email],
+  usernameOrEmail: [required, minLength(3)],
   password: [required, minLength(8)]
 };
 
@@ -30,13 +30,13 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
               <Field
                 autoCapitalize="none"
                 autoCorrect={false}
-                name="email"
+                name="usernameOrEmail"
                 component={RenderField}
-                type="email"
+                type="text"
                 keyboardType="email-address"
-                placeholder={t('mobile.login.email.placeholder')}
+                placeholder={t('mobile.login.usernameOrEmail.placeholder')}
                 placeholderTextColor={placeholderColor}
-                value={values.email}
+                value={values.usernameOrEmail}
               />
               <Field
                 autoCapitalize="none"
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
 
 const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
-  mapPropsToValues: () => ({ email: '', password: '' }),
+  mapPropsToValues: () => ({ usernameOrEmail: '', password: '' }),
 
   handleSubmit(
     values,

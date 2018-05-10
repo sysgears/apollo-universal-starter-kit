@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 
 import { onSubmit, mapFormPropsToValues } from '../../../../utils/crud';
 import { createFormFields } from '../../util';
-import { FormView, FormButton } from '../native';
+import { FormView, Button } from '../native';
 //import { minLength, required, validateForm } from '../../../../../../common/validation';
 
 //const formSchema = {
@@ -24,7 +24,7 @@ const Form = ({ schema, data: { node } }) => {
       render={({ handleChange, handleSubmit }) => (
         <FormView>
           {createFormFields({ handleChange, schema })}
-          <FormButton onPress={handleSubmit}>Save</FormButton>
+          <Button onPress={handleSubmit}>Save</Button>
         </FormView>
       )}
     />

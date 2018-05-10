@@ -50,7 +50,11 @@ class FilterView extends React.PureComponent {
     const showFilter =
       customFields === null
         ? false
-        : customFields && customFields.role ? (hasRole(customFields.role, currentUser) ? true : false) : true;
+        : customFields && customFields.role
+          ? hasRole(customFields.role, currentUser)
+            ? true
+            : false
+          : true;
 
     if (!showFilter) {
       return null;

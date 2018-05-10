@@ -235,13 +235,19 @@ class ListView extends React.Component {
       customBatchFields === null
         ? false
         : customBatchFields && customBatchFields.role
-          ? hasRole(customBatchFields.role, currentUser) ? true : false
+          ? hasRole(customBatchFields.role, currentUser)
+            ? true
+            : false
           : true;
 
     const showCustomActions =
       customActions === null
         ? false
-        : customActions && customActions.role ? (hasRole(customActions.role, currentUser) ? true : false) : true;
+        : customActions && customActions.role
+          ? hasRole(customActions.role, currentUser)
+            ? true
+            : false
+          : true;
 
     const rowSelection = showBatchFields
       ? {

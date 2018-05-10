@@ -3,7 +3,12 @@
     "users": "Users",
     "sign": "Sign In",
     "logout": "Logout",
-    "profile": "Profile"
+    "profile": "Profile",
+    "editProfile": "Edit profile",
+    "editUser": "Edit user",
+    "forgotPassword": "Forgot password",
+    "register": "Register",
+    "resetPassword": "Reset password"
   },
   "forgotPass": {
     "title": "Forgot password",
@@ -22,6 +27,7 @@
     "meta": "Login example page",
     "errorMsg": "Login failed!",
     "cardTitle": "Available logins",
+    "notRegText": "Not registered yet?",
     "form": {
       "title": "Sign In",
       "field": {
@@ -39,9 +45,11 @@
 
   "profile": {
     "title": "Profile",
+    "headerText": "Profile info",
     "meta": "Profile example page",
     "loadMsg": "Loading...",
     "errorMsg": "No current user logged in",
+    "editProfileText": "Edit Profile",
     "card": {
       "title": "Profile",
       "group": {
@@ -111,6 +119,10 @@
       },
       "btnSubmit": "Save"
     },
+    "select": {
+      "okText": "Done",
+      "dismissText": "Cancel"
+    },
     "btnBack": "Back"
   },
 
@@ -125,13 +137,20 @@
         "search": "Search ...",
         "role": {
           "label": "Role",
-          "select": "Select ...",
+          "all": "All",
           "user": "user",
           "admin": "admin"
         },
         "active": "Is Active"
       }
     },
+    "select": {
+      "okText": "Done",
+      "dismissText": "Cancel"
+    },
+    "btnModalSubmit": "Submit",
+    "btnModalClose": "Close",
+    "orderByText": "Order by",
     "column": {
       "name": "Username",
       "email": "Email",
@@ -140,7 +159,7 @@
       "actions": "Actions"
     },
     "btn": {
-      "add": "Add",
+      "add": "Add user",
       "delete": "Delete"
     }
   },

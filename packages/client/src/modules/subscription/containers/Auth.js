@@ -35,8 +35,17 @@ const SubscriberNavWithApollo = compose(
 
 const SubscribeRedirect = () => <Redirect to="/subscription" />;
 
+const LoadingComponent = () => <div>Loading...</div>;
+
 const SubscriberRoute = ({ loading, active, component, ...rest }) => {
-  return <AuthRoute component={!loading && active ? component : SubscribeRedirect} {...rest} redirect={'/login'} />;
+  return (
+    <AuthRoute
+      component={loading ? LoadingComponent : !loading && active ? component : SubscribeRedirect}
+      role="user"
+      {...rest}
+      redirect={'/login'}
+    />
+  );
 };
 
 SubscriberRoute.propTypes = {

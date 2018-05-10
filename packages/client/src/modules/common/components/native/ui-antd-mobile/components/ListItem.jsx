@@ -1,13 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from 'antd-mobile/lib/list';
+import { List } from 'antd-mobile';
 
-const ListItem = ({ children, ...props }) => {
-  return <List.Item {...props}>{children}</List.Item>;
+const ListItem = ({ children, onClick, onPress, ...props }) => {
+  return (
+    <List.Item {...props} onClick={onPress || onClick}>
+      {children}
+    </List.Item>
+  );
 };
 
 ListItem.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
+  onClick: PropTypes.func,
+  onPress: PropTypes.func
 };
 
 export default ListItem;

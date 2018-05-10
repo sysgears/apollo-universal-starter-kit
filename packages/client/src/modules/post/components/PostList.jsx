@@ -2,9 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, Text, View, Platform, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, Platform, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import translate from '../../../i18n';
-import { SwipeAction, Pagination } from '../../common/components/native';
+import { SwipeAction, Pagination, Loading } from '../../common/components/native';
 import paginationConfig from '../../../../../../config/pagination';
 
 const { itemsNumber, type } = paginationConfig.mobile;
@@ -76,11 +76,7 @@ class PostList extends React.PureComponent {
     const { loading, posts, t } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     if (loading) {
-      return (
-        <View style={styles.container}>
-          <Text>{t('post.loadMsg')}</Text>
-        </View>
-      );
+      return <Loading text={t('post.loadMsg')} />;
     } else {
       return (
         <ScrollView style={{ flex: 1 }}>
@@ -118,9 +114,6 @@ class PostList extends React.PureComponent {
 export default translate('post')(PostList);
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
   text: {
     fontSize: 18
   },

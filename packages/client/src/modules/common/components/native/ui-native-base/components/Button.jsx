@@ -1,38 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text, StyleSheet } from 'react-native';
-import { Button as NBButton } from 'native-base';
+import { Button as NBButton, Text } from 'native-base';
+import { StyleSheet } from 'react-native';
+import ButtonStyles from '../styles/Button';
 
-const Button = ({ children, ...props }) => {
-  const { buttonStyle, textStyle } = styles;
+const Button = ({ textStyle, children, onClick, onPress, type, size, ...props }) => {
+  const btnProps = {
+    ...props,
+    [type]: true,
+    [size]: true,
+    block: true,
+    onPress: onPress || onClick
+  };
 
   return (
-    <NBButton style={buttonStyle} {...props}>
-      <Text style={textStyle}>{children}</Text>
+    <NBButton {...btnProps}>
+      <Text style={[styles.btnText, textStyle]} numberOfLines={1}>
+        {children}
+      </Text>
     </NBButton>
   );
 };
 
-const styles = StyleSheet.create({
-  buttonStyle: {
-    alignSelf: 'center',
-    backgroundColor: '#0275d8',
-    borderRadius: 5,
-    paddingLeft: 10,
-    paddingRight: 10
-  },
-  textStyle: {
-    alignSelf: 'center',
-    color: '#FFF',
-    fontSize: 16,
-    fontWeight: '600',
-    paddingTop: 10,
-    paddingBottom: 10
-  }
-});
+const styles = StyleSheet.create(ButtonStyles);
 
 Button.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.string,
+  textStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  type: PropTypes.string,
+  size: PropTypes.string,
+  onPress: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 export default Button;

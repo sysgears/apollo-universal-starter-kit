@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Text, StyleSheet, Platform } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
-import { HeaderTitle, MenuButton } from '../common/components/native';
+import { HeaderTitle, IconButton } from '../common/components/native';
 
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';
@@ -31,7 +31,7 @@ class PostListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: withI18N(HeaderTitle, { style: 'subTitle', i18nKey: 'list.subTitle' }),
     headerRight: withI18N(PostListHeaderRight, { navigation }),
-    headerLeft: <MenuButton navigation={navigation} />
+    headerLeft: <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
   });
 
   render() {
@@ -71,7 +71,7 @@ PostEditScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-const PostNavigator = StackNavigator({
+const PostNavigator = createStackNavigator({
   PostList: { screen: PostListScreen },
   PostEdit: { screen: PostEditScreen }
 });

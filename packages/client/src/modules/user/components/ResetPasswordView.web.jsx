@@ -55,7 +55,7 @@ class ResetPasswordView extends React.Component {
     return (
       <PageLayout>
         {renderMetaData()}
-        <h1>${t('resetPass.form.title')}</h1>
+        <h1>{t('resetPass.form.title')}</h1>
         <ResetPasswordForm onSubmit={this.onSubmit(resetPassword)} />
       </PageLayout>
     );

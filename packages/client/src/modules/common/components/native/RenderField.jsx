@@ -3,11 +3,6 @@ import PropTypes from 'prop-types';
 import { InputItem } from './';
 
 const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
-  let hasError = false;
-  if (touched && error) {
-    hasError = true;
-  }
-
   return (
     <InputItem
       value={input.value}
@@ -17,7 +12,7 @@ const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) 
       onBlur={input.onBlur}
       onFocus={input.onFocus}
       {...inputProps}
-      error={hasError}
+      error={touched && error ? error : ''}
     >
       {label}
     </InputItem>

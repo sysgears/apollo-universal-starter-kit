@@ -11,23 +11,35 @@ const googleLogin = () => {
 
 const GoogleButton = withApollo(({ client }) => {
   return (
-    <Button color="primary" type="button" onClick={access.doLogin(client).then(googleLogin)} style={{ marginTop: 10 }}>
+    <Button
+      color="primary"
+      type="button"
+      onClick={() => access.doLogin(client).then(googleLogin)}
+      style={{ marginTop: 10 }}
+    >
       Login with Google
     </Button>
   );
 });
 
-const GoogleLink = () => {
+const GoogleLink = withApollo(({ client }) => {
   return (
-    <Button color="link" onClick={googleLogin} style={{ marginTop: 10 }}>
+    <Button color="link" onClick={() => access.doLogin(client).then(googleLogin)} style={{ marginTop: 10 }}>
       Login with Google
     </Button>
   );
-};
+});
 
-const GoogleIcon = () => {
-  return <FontAwesomeIcon icon={faGooglePlusSquare} size="2x" style={{ marginTop: 10 }} onClick={googleLogin} />;
-};
+const GoogleIcon = withApollo(({ client }) => {
+  return (
+    <FontAwesomeIcon
+      icon={faGooglePlusSquare}
+      size="2x"
+      style={{ marginTop: 10 }}
+      onClick={() => access.doLogin(client).then(googleLogin)}
+    />
+  );
+});
 
 const GoogleComponent = props => {
   switch (props.type) {

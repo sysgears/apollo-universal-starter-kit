@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
 import translate from '../../../i18n';
-import { Button } from '../../common/components';
+import { Button, primary, Loading } from '../../common/components/native';
 
 const CounterView = ({
   loading,
@@ -16,26 +16,34 @@ const CounterView = ({
   t
 }) => {
   if (loading) {
-    return (
-      <View style={styles.container}>
-        <Text>{t('loading')}</Text>
-      </View>
-    );
+    return <Loading text={t('loading')} />;
   } else {
     return (
       <View style={styles.container}>
-        <View style={styles.element}>
-          <Text style={styles.box}>{t('counter.text', { counter })}</Text>
+        <View>
+          <View style={styles.element}>
+            <Text style={styles.box}>{t('counter.text', { counter })}</Text>
+          </View>
+          <Button type={primary} onPress={addCounter(1)}>
+            {t('counter.btnLabel')}
+          </Button>
         </View>
-        <Button onPress={addCounter(1)}>{t('counter.btnLabel')}</Button>
-        <View style={styles.element}>
-          <Text style={styles.box}>{t('reduxCount.text', { reduxCount })}</Text>
+        <View>
+          <View style={styles.element}>
+            <Text style={styles.box}>{t('reduxCount.text', { reduxCount })}</Text>
+          </View>
+          <Button type={primary} onPress={onReduxIncrement(1)}>
+            {t('reduxCount.btnLabel')}
+          </Button>
         </View>
-        <Button onPress={onReduxIncrement(1)}>{t('reduxCount.btnLabel')}</Button>
-        <View style={styles.element}>
-          <Text style={styles.box}>{t('apolloCount.text', { counterState })}</Text>
+        <View>
+          <View style={styles.element}>
+            <Text style={styles.box}>{t('apolloCount.text', { counterState })}</Text>
+          </View>
+          <Button type={primary} onPress={addCounterState(1)}>
+            {t('apolloCount.btnLabel')}
+          </Button>
         </View>
-        <Button onPress={addCounterState(1)}>{t('apolloCount.btnLabel')}</Button>
       </View>
     );
   }
@@ -46,16 +54,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingHorizontal: 15
   },
   element: {
     paddingTop: 30
   },
   box: {
     textAlign: 'center',
-    marginLeft: 15,
-    marginRight: 15,
     marginBottom: 5
   }
 });

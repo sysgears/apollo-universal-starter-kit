@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import i18n from 'i18next';
-import Expo from 'expo';
+import { DangerZone } from 'expo';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
 import { getItem, setItem } from '../common/clientStorage';
@@ -11,12 +11,14 @@ import Feature from '../connector';
 import modules from '../';
 import settings from '../../../../../settings';
 
+const { Localization } = DangerZone;
+
 const languageDetector = {
   type: 'languageDetector',
   async: true, // flags below detection to be async
   detect: async callback => {
     let lng = await getItem('i18nextLng');
-    return callback(lng || (await Expo.Util.getCurrentLocaleAsync()).replace('_', '-'));
+    return callback(lng || (await Localization.getCurrentLocaleAsync()).replace('_', '-'));
   },
   init: () => {},
   cacheUserLanguage: async lng => {

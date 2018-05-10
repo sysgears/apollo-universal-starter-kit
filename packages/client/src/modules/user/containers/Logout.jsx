@@ -1,31 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Button } from 'react-native';
+import { View } from 'react-native';
+import { HeaderTitle } from '../../common/components/native';
 
 import translate from '../../../i18n';
 import { withLogout } from './Auth';
 
-class LogoutView extends React.Component {
-  render() {
-    const { logout, t } = this.props;
-    return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center'
+const LogoutView = ({ logout, t, navigation }) => {
+  return (
+    <View
+      style={{
+        flex: 1
+      }}
+    >
+      <HeaderTitle
+        onPress={async () => {
+          await logout();
+          navigation.navigate('Counter');
         }}
       >
-        <Button onPress={logout} title={t('mobile.logout')} />
-      </View>
-    );
-  }
-}
+        {t('mobile.logout')}
+      </HeaderTitle>
+    </View>
+  );
+};
 
 LogoutView.propTypes = {
   logout: PropTypes.func.isRequired,
   error: PropTypes.string,
+  navigation: PropTypes.object,
   t: PropTypes.func
 };
 

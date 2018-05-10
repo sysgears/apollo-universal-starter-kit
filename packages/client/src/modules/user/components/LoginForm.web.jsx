@@ -37,21 +37,23 @@ const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
         value={values.password}
       />
       <div className="text-center">{error && <Alert color="error">{error}</Alert>}</div>
-      <div className="text-center">
-        <Button color="primary" type="submit" disabled={submitting}>
-          {t('login.form.btnSubmit')}
-        </Button>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <div className="text-center">
+          <Button size="lg" style={{ minWidth: '320px' }} color="primary" type="submit" disabled={submitting}>
+            {t('login.form.btnSubmit')}
+          </Button>
+        </div>
+        {settings.user.auth.facebook.enabled && (
+          <div className="text-center">
+            <FacebookButton text={t('login.fbBtn')} type={'button'} />
+          </div>
+        )}
+        {settings.user.auth.google.enabled && (
+          <div className="text-center">
+            <GoogleButton text={t('login.googleBtn')} type={'button'} />
+          </div>
+        )}
       </div>
-      {settings.user.auth.facebook.enabled && (
-        <div className="text-center">
-          <FacebookButton type={'button'} />
-        </div>
-      )}
-      {settings.user.auth.google.enabled && (
-        <div className="text-center">
-          <GoogleButton type={'button'} />
-        </div>
-      )}
       <div className="text-center" style={{ marginTop: 10 }}>
         <Link to="/forgot-password">{t('login.btn.forgotPass')}</Link>
       </div>

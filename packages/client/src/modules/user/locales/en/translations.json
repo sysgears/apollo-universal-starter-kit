@@ -28,6 +28,8 @@
     "errorMsg": "Login failed!",
     "cardTitle": "Available logins",
     "notRegText": "Not registered yet?",
+    "fbBtn": "Login with Facebook",
+    "googleBtn": "Login with Google",
     "form": {
       "title": "Sign In",
       "field": {

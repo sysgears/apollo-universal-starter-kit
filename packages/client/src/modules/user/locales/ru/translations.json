@@ -28,6 +28,8 @@
     "errorMsg": "Ошибка входа!",
     "cardTitle": "Доступные учетные записи",
     "notRegText": "Ещё не зарегистрированы?",
+    "fbBtn": "Войти через Facebook",
+    "googleBtn": "Войти через Google",
     "form": {
       "title": "Вход в систему",
       "field": {

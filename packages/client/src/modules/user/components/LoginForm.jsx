@@ -56,8 +56,8 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
               </Button>
             </View>
             <View>
-              {settings.user.auth.facebook.enabled && <FacebookButton type="button" />}
-              {settings.user.auth.google.enabled && <GoogleButton type="button" />}
+              {settings.user.auth.facebook.enabled && <FacebookButton text={t('login.fbBtn')} type="button" />}
+              {settings.user.auth.google.enabled && <GoogleButton text={t('login.googleBtn')} type="button" />}
             </View>
             <View style={styles.buttonsGroup}>
               <Text style={styles.signUpText} onPress={() => navigation.navigate('ForgotPassword')}>

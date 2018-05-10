@@ -31,7 +31,7 @@
     "form": {
       "title": "Вход в систему",
       "field": {
-        "usenameOrEmail": "Username or Электронная почта",
+        "usernameOrEmail": "Имя пользователя или email",
         "pass": "Пароль"
       },
       "btnSubmit": "Войти"
@@ -165,9 +165,9 @@
   "nativeMock": "Привет, ",
   "mobile": {
     "login": {
-      "email": {
-        "label": "Эл. адрес",
-        "placeholder": "Введите эл. адрес"
+      "usernameOrEmail": {
+        "label": "Имя пользователи или email",
+        "placeholder": "Введите имя полыьзователя или email"
       },
       "pass": {
         "label": "Пароль",

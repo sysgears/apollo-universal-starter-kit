@@ -57,7 +57,7 @@ const GitHubIcon = withApollo(({ client }) => {
     <View style={styles.iconWrapper}>
       <FontAwesome
         name="github-square"
-        size={40}
+        size={45}
         style={{ color: '#464646' }}
         onPress={() => access.doLogin(client).then(githubLogin )}
       />

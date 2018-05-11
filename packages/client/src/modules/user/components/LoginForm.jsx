@@ -21,8 +21,29 @@ const loginFormSchema = {
 };
 
 const validate = values => validateForm(values, loginFormSchema);
+const { facebook, linkedin, google, github } = settings.user.auth;
+
+const renderSocialButtons = (buttonsLength, t) => {
+  return buttonsLength > 2 ? (
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+      {facebook.enabled && <FacebookButton text={t('login.fbBtn')} type="icon" />}
+      {google.enabled && <GoogleButton text={t('login.googleBtn')} type="icon" />}
+      {github.enabled && <GitHubButton text={t('login.githubBtn')} type="icon" />}
+      {linkedin.enabled && <LinkedInButton text={t('login.linkedinBtn')} type="icon" />}
+    </View>
+  ) : (
+    <View>
+      {facebook.enabled && <FacebookButton text={t('login.fbBtn')} type="button" />}
+      {google.enabled && <GoogleButton text={t('login.googleBtn')} type="button" />}
+      {github.enabled && <GitHubButton text={t('login.githubBtn')} type="button" />}
+      {linkedin.enabled && <LinkedInButton text={t('login.linkedinBtn')} type="button" />}
+    </View>
+  );
+};
 
 const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
+  const buttonsLength = [facebook.enabled, linkedin.enabled, google.enabled, github.enabled].filter(button => button)
+    .length;
   return (
     <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
       <View style={styles.formContainer}>
@@ -57,12 +78,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
                 {t('login.form.btnSubmit')}
               </Button>
             </View>
-            <View>
-              {settings.user.auth.facebook.enabled && <FacebookButton text={t('login.fbBtn')} type="button" />}
-              {settings.user.auth.google.enabled && <GoogleButton text={t('login.googleBtn')} type="button" />}
-              {settings.user.auth.github.enabled && <GitHubButton text={t('login.githubBtn')} type="button" />}
-              {settings.user.auth.linkedin.enabled && <LinkedInButton text={t('login.linkedinBtn')} type="button" />}
-            </View>
+            {buttonsLength && renderSocialButtons(buttonsLength, t)}
             <View style={styles.buttonsGroup}>
               <Text style={styles.signUpText} onPress={() => navigation.navigate('ForgotPassword')}>
                 {t('login.btn.forgotPass')}

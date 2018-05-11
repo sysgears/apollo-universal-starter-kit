@@ -57,7 +57,7 @@ const LinkedInIcon = withApollo(({ client }) => {
     <View style={styles.iconWrapper}>
       <FontAwesome
         name="linkedin-square"
-        size={40}
+        size={45}
         style={{ color: '#3B5998' }}
         onPress={() => access.doLogin(client).then(linkedInLogin)}
       />

@@ -55,7 +55,12 @@ const GoogleLink = withApollo(({ client, text }) => {
 const GoogleIcon = withApollo(({ client }) => {
   return (
     <View style={styles.iconWrapper}>
-      <FontAwesome onPress={() => access.doLogin(client).then(googleLogin)} name="google-plus-square" size={40} />
+      <FontAwesome
+        style={{ color: '#c43832' }}
+        onPress={() => access.doLogin(client).then(googleLogin)}
+        name="google-plus-square"
+        size={45}
+      />
     </View>
   );
 });

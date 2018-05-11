@@ -57,7 +57,7 @@ const FacebookIcon = withApollo(({ client }) => {
     <View style={styles.iconWrapper}>
       <FontAwesome
         name="facebook-square"
-        size={40}
+        size={45}
         style={{ color: '#3B5998' }}
         onPress={() => access.doLogin(client).then(facebookLogin)}
       />

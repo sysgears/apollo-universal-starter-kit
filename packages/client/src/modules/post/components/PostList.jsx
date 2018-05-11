@@ -99,7 +99,6 @@ class PostList extends React.PureComponent {
               keyExtractor={this.keyExtractor}
               renderItem={renderItem}
               onEndReachedThreshold={0.5}
-              onMomentumScrollEnd={this.handleScrollEvent}
               onEndReached={this.handleScrollEvent}
             />
           </View>

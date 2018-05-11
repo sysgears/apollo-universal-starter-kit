@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Form from 'antd/lib/form';
+import { Form } from 'antd';
 
 const ADFormItem = Form.Item;
 

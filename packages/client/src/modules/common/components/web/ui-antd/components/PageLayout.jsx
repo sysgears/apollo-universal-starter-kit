@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Layout from 'antd/lib/layout';
+import { Layout } from 'antd';
 
 import NavBar from './NavBar';
 import settings from '../../../../../../../../../settings';

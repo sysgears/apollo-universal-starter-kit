@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import Select from 'antd/lib/select';
+//import { Select } from 'antd';
 
 //const ADOption = Select.Option;
 

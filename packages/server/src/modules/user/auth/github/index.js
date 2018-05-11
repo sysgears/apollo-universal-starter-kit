@@ -17,9 +17,8 @@ if (settings.user.auth.github.enabled && !__TEST__) {
       {
         clientID: settings.user.auth.github.clientID,
         clientSecret: settings.user.auth.github.clientSecret,
-        scope: settings.user.auth.github.scope
-        //TODO fix redirect_url
-        //callbackURL: '/auth/github/callback'
+        scope: settings.user.auth.github.scope,
+        callbackURL: '/auth/github/callback'
       },
       async function(accessToken, refreshToken, profile, cb) {
         const {

@@ -21,6 +21,8 @@ export default class User {
         'ca.serial',
         'fa.fb_id',
         'fa.display_name AS fbDisplayName',
+        'lna.ln_id',
+        'lna.display_name AS lnDisplayName',
         'gha.gh_id',
         'gha.display_name AS ghDisplayName',
         'ga.google_id',
@@ -31,7 +33,8 @@ export default class User {
       .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
       .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
       .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id')
-      .leftJoin('auth_github AS gha', 'gha.user_id', 'u.id');
+      .leftJoin('auth_github AS gha', 'gha.user_id', 'u.id')
+      .leftJoin('auth_linkedin AS lna', 'lna.user_id', 'u.id');
 
     // add order by
     if (orderBy && orderBy.column) {
@@ -85,6 +88,8 @@ export default class User {
           'ca.serial',
           'fa.fb_id',
           'fa.display_name AS fbDisplayName',
+          'lna.ln_id',
+          'lna.display_name AS lnDisplayName',
           'gha.gh_id',
           'gha.display_name AS ghDisplayName',
           'ga.google_id',
@@ -96,6 +101,7 @@ export default class User {
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id')
         .leftJoin('auth_github AS gha', 'gha.user_id', 'u.id')
+        .leftJoin('auth_linkedin AS lna', 'lna.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );
@@ -153,6 +159,10 @@ export default class User {
 
   createGoogleOAuth({ id, displayName, userId }) {
     return returnId(knex('auth_google')).insert({ google_id: id, display_name: displayName, user_id: userId });
+  }
+
+  createLinkedInAuth({ id, displayName, userId }) {
+    return returnId(knex('auth_linkedin')).insert({ ln_id: id, display_name: displayName, user_id: userId });
   }
 
   async editUser({ id, username, email, role, isActive, password }) {
@@ -267,6 +277,29 @@ export default class User {
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .where('fa.fb_id', '=', id)
+        .orWhere('u.email', '=', email)
+        .first()
+    );
+  }
+
+  async getUserByLnInIdOrEmail(id, email) {
+    return camelizeKeys(
+      await knex
+        .select(
+          'u.id',
+          'u.username',
+          'u.role',
+          'u.is_active',
+          'lna.ln_id',
+          'u.email',
+          'u.password_hash',
+          'up.first_name',
+          'up.last_name'
+        )
+        .from('user AS u')
+        .leftJoin('auth_linkedin AS lna', 'lna.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+        .where('lna.ln_id', '=', id)
         .orWhere('u.email', '=', email)
         .first()
     );

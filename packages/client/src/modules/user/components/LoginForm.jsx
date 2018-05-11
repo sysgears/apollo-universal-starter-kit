@@ -12,6 +12,7 @@ import { required, email, minLength, validateForm } from '../../../../../common/
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
 import GitHubButton from '../auth/github';
+import LinkedInButton from '../auth/linkedin';
 import settings from '../../../../../../settings';
 
 const loginFormSchema = {
@@ -60,6 +61,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
               {settings.user.auth.facebook.enabled && <FacebookButton text={t('login.fbBtn')} type="button" />}
               {settings.user.auth.google.enabled && <GoogleButton text={t('login.googleBtn')} type="button" />}
               {settings.user.auth.github.enabled && <GitHubButton text={t('login.githubBtn')} type="button" />}
+              {settings.user.auth.linkedin.enabled && <LinkedInButton text={t('login.linkedinBtn')} type="button" />}
             </View>
             <View style={styles.buttonsGroup}>
               <Text style={styles.signUpText} onPress={() => navigation.navigate('ForgotPassword')}>

@@ -95,7 +95,7 @@
     "passport-facebook": "^2.1.1",
     "passport-github": "^1.1.0",
     "passport-google-oauth": "^1.0.0",
-    "passport-linkedin": "^1.0.0",
+    "passport-linkedin-oauth2": "^1.5.0",
     "passport-local": "^1.0.0",
     "performance-now": "^2.1.0",
     "pg": "^7.4.0",

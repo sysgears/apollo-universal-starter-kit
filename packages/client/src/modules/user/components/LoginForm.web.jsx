@@ -9,6 +9,7 @@ import { Form, RenderField, Alert, Button } from '../../common/components/web';
 import { required, email, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
+import LinkedInButton from '../auth/linkedin';
 import GitHubButton from '../auth/github';
 
 import settings from '../../../../../../settings';
@@ -57,6 +58,11 @@ const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
         {settings.user.auth.github.enabled && (
           <div className="text-center">
             <GitHubButton text={t('login.githubBtn')} type={'button'} />
+          </div>
+        )}
+        {settings.user.auth.linkedin.enabled && (
+          <div className="text-center">
+            <LinkedInButton text={t('login.linkedinBtn')} type={'button'} />
           </div>
         )}
       </div>

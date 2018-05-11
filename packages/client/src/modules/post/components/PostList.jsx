@@ -19,8 +19,6 @@ class PostList extends React.PureComponent {
     t: PropTypes.func
   };
 
-  onEndReachedCalledDuringMomentum = false;
-
   keyExtractor = item => `${item.node.id}`;
 
   renderItemIOS = ({
@@ -68,22 +66,32 @@ class PostList extends React.PureComponent {
     if (pagination === 'relay') {
       loadData(endCursor + 1, 'add');
     } else {
+      this.listRef.scrollToIndex({ viewPosition: 0.5, index: 0 });
       loadData((pageNumber - 1) * itemsNumber, 'replace');
-      setTimeout(() => this.listRef.scrollToIndex({ viewPosition: 0.5, index: 0 }), 2000);
-      // this.listRef.scrollTop();
-      // this.listRef.scrollToIndex({viewPosition: 0.5, index: 0});
+    }
+  };
+
+  handleScrollEvent = () => {
+    if (this.allowLoadData) {
+      if (this.props.posts.pageInfo.hasNextPage && type === 'relay') {
+        this.allowLoadData = false;
+        return this.handlePageChange('relay', null);
+      }
     }
   };
 
   render() {
     const { loading, posts, t } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
+    const containerStyle = type === 'relay' ? styles.relayPaginationContainer : styles.standardPaginationContainer;
+    const paginationStyle = type === 'standard' ? styles.pagination : null;
     if (loading) {
       return <Loading text={t('post.loadMsg')} />;
     } else {
+      this.allowLoadData = true;
       return (
         <View style={{ flex: 1 }}>
-          <View style={{ flex: 0.9 }}>
+          <View style={containerStyle}>
             <FlatList
               data={posts.edges}
               ref={ref => (this.listRef = ref)}
@@ -91,26 +99,11 @@ class PostList extends React.PureComponent {
               keyExtractor={this.keyExtractor}
               renderItem={renderItem}
               onEndReachedThreshold={0.5}
-              onMomentumScrollBegin={() => {
-                console.log('+++++++++++++++');
-                this.onEndReachedCalledDuringMomentum = false;
-              }}
-              onScroll={() => {
-                console.log('------------');
-              }}
-              onEndReached={() => {
-                if (!this.onEndReachedCalledDuringMomentum) {
-                  if (posts.pageInfo.hasNextPage && type === 'relay') {
-                    this.onEndReachedCalledDuringMomentum = true;
-                    return this.handlePageChange('relay', null);
-                  } else {
-                    return (this.onEndReachedCalledDuringMomentum = true);
-                  }
-                }
-              }}
+              onMomentumScrollEnd={this.handleScrollEvent}
+              onEndReached={this.handleScrollEvent}
             />
           </View>
-          <View style={{ flex: 0.1 }}>
+          <View style={paginationStyle}>
             <Pagination
               totalPages={Math.ceil(posts.totalCount / itemsNumber)}
               handlePageChange={this.handlePageChange}
@@ -147,5 +140,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.3,
     height: 48,
     paddingLeft: 7
+  },
+  relayPaginationContainer: {
+    flex: 1
+  },
+  standardPaginationContainer: {
+    flex: 0.9
+  },
+  pagination: {
+    flex: 0.1
   }
 });

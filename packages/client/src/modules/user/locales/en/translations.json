@@ -35,7 +35,7 @@
     "form": {
       "title": "Sign In",
       "field": {
-        "email": "Email",
+        "usenameOrEmail": "Username or Email",
         "pass": "Password"
       },
       "btnSubmit": "Login"
@@ -171,9 +171,9 @@
   "nativeMock": "Hello, ",
   "mobile": {
     "login": {
-      "email": {
-        "label": "Email",
-        "placeholder": "Type Your Email"
+      "usernameOrEmail": {
+        "label": "Username or Email",
+        "placeholder": "Type Your Username or Email"
       },
       "pass": {
         "label": "Password",

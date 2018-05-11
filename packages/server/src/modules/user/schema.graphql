@@ -1,17 +1,17 @@
 type User {
-    id: Int!
-    username: String!
-    role: String!
-    isActive: Boolean
-    email: String!
-    profile: UserProfile
-    auth: UserAuth
+  id: Int!
+  username: String!
+  role: String!
+  isActive: Boolean
+  email: String!
+  profile: UserProfile
+  auth: UserAuth
 }
 
 type UserProfile {
-    firstName: String
-    lastName: String
-    fullName: String
+  firstName: String
+  lastName: String
+  fullName: String
 }
 
 # Additional authentication service info
@@ -24,17 +24,17 @@ type UserAuth {
 }
 
 type CertificateAuth {
-    serial: String
+  serial: String
 }
 
 type FacebookAuth {
-    fbId: String
-    displayName: String
+  fbId: String
+  displayName: String
 }
 
 type GoogleAuth {
-    googleId: String
-    displayName: String
+  googleId: String
+  displayName: String
 }
 
 type GithubAuth {
@@ -47,44 +47,44 @@ type LinkedInAuth {
 }
 
 extend type Query {
-    # Get all users ordered by: OrderByUserInput add filtered by: FilterUserInput
-    users(orderBy: OrderByUserInput, filter: FilterUserInput): [User]
-    # Get user by id
-    user(id: Int!): UserPayload
-    # Get current user
-    currentUser: User
+  # Get all users ordered by: OrderByUserInput add filtered by: FilterUserInput
+  users(orderBy: OrderByUserInput, filter: FilterUserInput): [User]
+  # Get user by id
+  user(id: Int!): UserPayload
+  # Get current user
+  currentUser: User
 }
 
 type UserPayload {
-    user: User
-    errors: [FieldError!]
+  user: User
+  errors: [FieldError!]
 }
 
 extend type Mutation {
-    # Create new user
-    addUser(input: AddUserInput!): UserPayload!
-    # Edit a user
-    editUser(input: EditUserInput!): UserPayload!
-    # Delete a user
-    deleteUser(id: Int!): UserPayload!
+  # Create new user
+  addUser(input: AddUserInput!): UserPayload!
+  # Edit a user
+  editUser(input: EditUserInput!): UserPayload!
+  # Delete a user
+  deleteUser(id: Int!): UserPayload!
 }
 
 # Input for ordering users
 input OrderByUserInput {
-    # id | username | role | isActive | email
-    column: String
-    # asc | desc
-    order: String
+  # id | username | role | isActive | email
+  column: String
+  # asc | desc
+  order: String
 }
 
 # Input for filtering users
 input FilterUserInput {
-    # search by username or email
-    searchText: String
-    # filter by role
-    role: String
-    # filter by isActive
-    isActive: Boolean
+  # search by username or email
+  searchText: String
+  # filter by role
+  role: String
+  # filter by isActive
+  isActive: Boolean
 }
 
 # Additional authentication service info
@@ -97,17 +97,17 @@ input AuthInput {
 }
 
 input AuthCertificateInput {
-    serial: String
+  serial: String
 }
 
 input AuthFacebookInput {
-    fbId: String
-    displayName: String
+  fbId: String
+  displayName: String
 }
 
 input AuthGoogleInput {
-    googleId: String
-    displayName: String
+  googleId: String
+  displayName: String
 }
 
 input AuthGitHubInput {
@@ -122,30 +122,30 @@ input AuthLinkedInInput {
 
 # Input for addUser Mutation
 input AddUserInput {
-    username: String!
-    email: String!
-    password: String!
-    role: String!
-    isActive: Boolean
-    profile: ProfileInput
-    auth: AuthInput
+  username: String!
+  email: String!
+  password: String!
+  role: String!
+  isActive: Boolean
+  profile: ProfileInput
+  auth: AuthInput
 }
 
 # Input for editUser Mutation
 input EditUserInput {
-    id: Int!
-    username: String!
-    role: String!
-    isActive: Boolean
-    email: String!
-    password: String
-    profile: ProfileInput
-    auth: AuthInput
+  id: Int!
+  username: String!
+  role: String!
+  isActive: Boolean
+  email: String!
+  password: String
+  profile: ProfileInput
+  auth: AuthInput
 }
 
 input ProfileInput {
-    firstName: String
-    lastName: String
+  firstName: String
+  lastName: String
 }
 
 extend type Subscription {

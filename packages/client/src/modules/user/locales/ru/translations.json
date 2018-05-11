@@ -21,7 +21,7 @@
       "btnSubmit": "Отправить инструкции"
     }
   },
-  
+
   "login": {
     "title": "Вход",
     "meta": "Пример страницы с входом",
@@ -35,7 +35,7 @@
     "form": {
       "title": "Вход в систему",
       "field": {
-        "email": "Электронная почта",
+        "usernameOrEmail": "Имя пользователя или email",
         "pass": "Пароль"
       },
       "btnSubmit": "Войти"
@@ -169,9 +169,9 @@
   "nativeMock": "Привет, ",
   "mobile": {
     "login": {
-      "email": {
-        "label": "Эл. адрес",
-        "placeholder": "Введите эл. адрес"
+      "usernameOrEmail": {
+        "label": "Имя пользователи или email",
+        "placeholder": "Введите имя полыьзователя или email"
       },
       "pass": {
         "label": "Пароль",

@@ -3,9 +3,9 @@
 
 query post($id: Int!) {
   post(id: $id) {
-    ... PostInfo
+    ...PostInfo
     comments {
-      ... CommentInfo
+      ...CommentInfo
     }
   }
 }

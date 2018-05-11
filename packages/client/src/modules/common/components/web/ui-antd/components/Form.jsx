@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ADForm from 'antd/lib/form';
+import { Form as ADForm } from 'antd';
 
 const Form = ({ children, ...props }) => {
   return <ADForm {...props}>{children}</ADForm>;

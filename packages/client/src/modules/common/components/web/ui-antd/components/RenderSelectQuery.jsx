@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from 'antd/lib/select';
-import Spin from 'antd/lib/spin';
+import { Select, Spin } from 'antd';
 import { pascalize, camelize } from 'humps';
 
 import { FormItem } from './index';
@@ -27,7 +26,10 @@ export default class RenderSelectQuery extends React.Component {
   };
 
   handleChange = value => {
-    const { input: { name }, setFieldValue } = this.props;
+    const {
+      input: { name },
+      setFieldValue
+    } = this.props;
     //console.log('RenderSelect: handleChange');
     //console.log('name:', name);
     //console.log('value:', value);
@@ -35,7 +37,10 @@ export default class RenderSelectQuery extends React.Component {
   };
 
   handleBlur = () => {
-    const { input: { name }, setFieldTouched } = this.props;
+    const {
+      input: { name },
+      setFieldTouched
+    } = this.props;
     setFieldTouched(name, true);
   };
 

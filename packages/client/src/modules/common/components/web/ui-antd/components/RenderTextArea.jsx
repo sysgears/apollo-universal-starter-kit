@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Input from 'antd/lib/input';
+import { Input } from 'antd';
 
 import { FormItem } from './index';
 
@@ -17,7 +17,12 @@ export default class RenderTextArea extends React.Component {
   };
 
   render() {
-    const { input, label, formItemLayout, meta: { touched, error } } = this.props;
+    const {
+      input,
+      label,
+      formItemLayout,
+      meta: { touched, error }
+    } = this.props;
 
     let validateStatus = '';
     if (touched && error) {

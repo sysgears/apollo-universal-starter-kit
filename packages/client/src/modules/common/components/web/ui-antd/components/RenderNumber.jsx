@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DomainSchema from '@domain-schema/core';
-import InputNumber from 'antd/lib/input-number';
+import { InputNumber } from 'antd';
 
 import { FormItem } from './index';
 
@@ -18,7 +18,11 @@ export default class RenderNumber extends React.Component {
   };
 
   handleChange = value => {
-    const { input: { name }, setFieldValue, hasTypeOf } = this.props;
+    const {
+      input: { name },
+      setFieldValue,
+      hasTypeOf
+    } = this.props;
     //console.log('RenderInput: handleChange');
     //console.log('name:', name);
     if (hasTypeOf(Number)) {
@@ -30,7 +34,10 @@ export default class RenderNumber extends React.Component {
   };
 
   handleBlur = () => {
-    const { input: { name }, setFieldTouched } = this.props;
+    const {
+      input: { name },
+      setFieldTouched
+    } = this.props;
     setFieldTouched(name, true);
   };
 

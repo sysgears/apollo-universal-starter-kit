@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ADPopconfirm from 'antd/lib/popconfirm';
+import { Popconfirm as ADPopconfirm } from 'antd';
 
 const Popconfirm = ({ children, ...props }) => {
   return <ADPopconfirm {...props}>{children}</ADPopconfirm>;

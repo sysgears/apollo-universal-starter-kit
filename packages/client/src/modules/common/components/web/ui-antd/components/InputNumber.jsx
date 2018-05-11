@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ADInputNumber from 'antd/lib/input-number';
+import { InputNumber as ADInputNumber } from 'antd';
 
 const InputNumber = ({ children, ...props }) => {
   return <ADInputNumber {...props}>{children}</ADInputNumber>;

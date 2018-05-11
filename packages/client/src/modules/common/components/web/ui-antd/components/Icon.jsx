@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ADIcon from 'antd/lib/icon';
+import { Icon as ADIcon } from 'antd';
 
 const Icon = ({ children, ...props }) => {
   return <ADIcon {...props}>{children}</ADIcon>;

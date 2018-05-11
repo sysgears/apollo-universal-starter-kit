@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from 'antd/lib/select';
+import { Select } from 'antd';
 
 import countries from '../../../../../../../../common/ISOCountries';
 import { FormItem } from './index';
@@ -20,12 +20,18 @@ export default class RenderSelectCountry extends React.Component {
   };
 
   handleChange = value => {
-    const { input: { name }, setFieldValue } = this.props;
+    const {
+      input: { name },
+      setFieldValue
+    } = this.props;
     setFieldValue(name, value);
   };
 
   handleBlur = () => {
-    const { input: { name }, setFieldTouched } = this.props;
+    const {
+      input: { name },
+      setFieldTouched
+    } = this.props;
     setFieldTouched(name, true);
   };
 

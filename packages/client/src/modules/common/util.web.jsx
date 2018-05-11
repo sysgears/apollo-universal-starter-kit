@@ -5,9 +5,7 @@ import { startCase } from 'lodash';
 import { pascalize, camelize } from 'humps';
 import { Link } from 'react-router-dom';
 import { FieldArray } from 'formik';
-import Select from 'antd/lib/select';
-import DatePicker from 'antd/lib/date-picker';
-import Spin from 'antd/lib/spin';
+import { Select, DatePicker, Spin } from 'antd';
 import moment from 'moment';
 import DomainSchema from '@domain-schema/core';
 
@@ -165,7 +163,9 @@ export const createColumnFields = ({
             render: (text, record) =>
               customFields[key] && customFields[key]['render']
                 ? customFields[key]['render'](text, record)
-                : customFields[key] && customFields[key]['render'] ? customFields[key]['render'](text, record) : text
+                : customFields[key] && customFields[key]['render']
+                  ? customFields[key]['render'](text, record)
+                  : text
           });
         }
       }
@@ -188,7 +188,11 @@ export const createColumnFields = ({
   const showColumnActions =
     customActions === null
       ? false
-      : customActions && customActions.role ? (hasRole(customActions.role, currentUser) ? true : false) : true;
+      : customActions && customActions.role
+        ? hasRole(customActions.role, currentUser)
+          ? true
+          : false
+        : true;
 
   if (showColumnActions) {
     columns.push({

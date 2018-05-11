@@ -1,5 +1,5 @@
 import React from 'react';
-import ADSwitch from 'antd/lib/switch';
+import { Switch as ADSwitch } from 'antd';
 
 const witch = ({ ...props }) => {
   return <ADSwitch {...props} />;

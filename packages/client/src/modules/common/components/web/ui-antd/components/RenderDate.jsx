@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DatePicker from 'antd/lib/date-picker';
+import { DatePicker } from 'antd';
 import moment from 'moment';
 import { FormItem } from './index';
 
@@ -18,7 +18,10 @@ export default class RenderDate extends React.Component {
   };
 
   handleChange = (date, dateString) => {
-    const { input: { name }, setFieldValue } = this.props;
+    const {
+      input: { name },
+      setFieldValue
+    } = this.props;
     //console.log('RenderDate: handleChange');
     //console.log('name:', name);
     //console.log('dateString:', dateString);
@@ -26,7 +29,10 @@ export default class RenderDate extends React.Component {
   };
 
   handleBlur = () => {
-    const { input: { name }, setFieldTouched } = this.props;
+    const {
+      input: { name },
+      setFieldTouched
+    } = this.props;
     setFieldTouched(name, true);
   };
 

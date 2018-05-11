@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, NavLink } from 'react-router-dom';
-import Menu from 'antd/lib/menu';
-import Row from 'antd/lib/row';
-import Col from 'antd/lib/col';
+import { Menu, Row, Col } from 'antd';
 import MenuItem from './MenuItem';
 
 import modules from '../../../../../../modules';

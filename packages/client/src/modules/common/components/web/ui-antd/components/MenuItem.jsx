@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Menu from 'antd/lib/menu';
+import { Menu } from 'antd';
 
 class MenuItem extends React.Component {
   static propTypes = {

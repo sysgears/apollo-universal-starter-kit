@@ -1,12 +1,13 @@
 import React from 'react';
-import ADTable from 'antd/lib/table';
+import PropTypes from 'prop-types';
+import { Table as ADTable } from 'antd';
 
 const Table = ({ ...props }) => {
-  return (
-    <div>
-      <ADTable pagination={false} {...props} rowKey="id" />
-    </div>
-  );
+  return <ADTable pagination={false} {...props} rowKey="id" />;
+};
+
+Table.propTypes = {
+  children: PropTypes.node
 };
 
 export default Table;

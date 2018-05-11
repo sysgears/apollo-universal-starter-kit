@@ -1,4 +1,4 @@
 extend type Mutation {
-    # Refresh user tokens
-    refreshTokens(refreshToken: String!): Tokens!
+  # Refresh user tokens
+  refreshTokens(refreshToken: String!): Tokens!
 }

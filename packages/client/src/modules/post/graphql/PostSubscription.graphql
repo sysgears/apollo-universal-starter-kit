@@ -2,6 +2,6 @@
 
 subscription onPostUpdated($id: Int!) {
   postUpdated(id: $id) {
-    ... PostInfo
+    ...PostInfo
   }
 }

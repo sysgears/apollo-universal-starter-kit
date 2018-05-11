@@ -14,11 +14,11 @@ const validateUserPassword = async (user, password) => {
 
   if (!user) {
     // user with provided email not found
-    e.setError('email', 'Please enter a valid e-mail.');
+    e.setError('usernameOrEmail', 'Please enter a valid username or e-mail.');
     e.throwIf();
   }
   if (settings.user.auth.password.confirm && !user.isActive) {
-    e.setError('email', 'Please confirm your e-mail first.');
+    e.setError('usernameOrEmail', 'Please confirm your e-mail first.');
     e.throwIf();
   }
 
@@ -35,12 +35,12 @@ export default () => ({
     async login(
       obj,
       {
-        input: { email, password }
+        input: { usernameOrEmail, password }
       },
       { req }
     ) {
       try {
-        const user = await User.getUserByEmail(email);
+        const user = await User.getUserByUsernameOrEmail(usernameOrEmail);
 
         await validateUserPassword(user, password);
 

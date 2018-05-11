@@ -1,6 +1,6 @@
 mutation refreshTokens($refreshToken: String!) {
-    refreshTokens(refreshToken: $refreshToken) {
-        accessToken
-        refreshToken
-    }
+  refreshTokens(refreshToken: $refreshToken) {
+    accessToken
+    refreshToken
+  }
 }

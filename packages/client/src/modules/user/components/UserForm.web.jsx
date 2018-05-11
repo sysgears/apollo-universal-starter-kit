@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+import { isEmpty } from 'lodash';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
@@ -11,12 +12,22 @@ import settings from '../../../../../../settings';
 
 const userFormSchema = {
   username: [required, minLength(3)],
-  email: [required, email],
-  password: [required, minLength(8)],
-  passwordConfirmation: [match('password'), required, minLength(8)]
+  email: [required, email]
 };
 
-const validate = values => validateForm(values, userFormSchema);
+const createUserFormSchema = {
+  ...userFormSchema,
+  password: [required, minLength(8)],
+  passwordConfirmation: [required, match('password'), minLength(8)]
+};
+
+const updateUserFormSchema = {
+  ...userFormSchema,
+  password: minLength(8),
+  passwordConfirmation: [match('password'), minLength(8)]
+};
+
+const validate = (values, createNew) => validateForm(values, createNew ? createUserFormSchema : updateUserFormSchema);
 
 const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldRoleDisplay, shouldActiveDisplay }) => {
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
@@ -146,7 +157,7 @@ const UserFormWithFormik = withFormik({
     await onSubmit(values).catch(e => setErrors(e));
   },
   displayName: 'SignUpForm ', // helps with React DevTools
-  validate: values => validate(values)
+  validate: (values, props) => validate(values, isEmpty(props.initialValues))
 });
 
 export default translate('user')(UserFormWithFormik(UserForm));

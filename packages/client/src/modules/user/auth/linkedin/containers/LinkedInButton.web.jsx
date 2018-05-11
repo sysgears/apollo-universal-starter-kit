@@ -1,6 +1,6 @@
 import React from 'react';
 import { withApollo } from 'react-apollo';
-import faLinkedInSquare from '@fortawesome/fontawesome-free-brands/faLinkedinIn';
+import faLinkedInSquare from '@fortawesome/fontawesome-free-brands/faLinkedin';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web';
 import access from '../../../access';
@@ -36,8 +36,7 @@ const LinkedInIcon = withApollo(({ client }) => {
   return (
     <FontAwesomeIcon
       icon={faLinkedInSquare}
-      size="2x"
-      style={{ marginTop: 10 }}
+      style={{ marginTop: 10, color: '#3B5998', fontSize: 40 }}
       onClick={() => access.doLogin(client).then(linkedInLogin)}
     />
   );

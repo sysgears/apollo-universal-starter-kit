@@ -20,8 +20,61 @@ const loginFormSchema = {
 };
 
 const validate = values => validateForm(values, loginFormSchema);
+const { facebook, linkedin, google, github } = settings.user.auth;
+
+const renderSocialButtons = (buttonsLength, t) => {
+  return buttonsLength > 2 ? (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: 200 }}>
+      {settings.user.auth.facebook.enabled && (
+        <div className="text-center">
+          <FacebookButton text={t('login.fbBtn')} type={'icon'} />
+        </div>
+      )}
+      {settings.user.auth.google.enabled && (
+        <div className="text-center">
+          <GoogleButton text={t('login.googleBtn')} type={'icon'} />
+        </div>
+      )}
+      {settings.user.auth.github.enabled && (
+        <div className="text-center">
+          <GitHubButton text={t('login.githubBtn')} type={'icon'} />
+        </div>
+      )}
+      {settings.user.auth.linkedin.enabled && (
+        <div className="text-center">
+          <LinkedInButton text={t('login.linkedinBtn')} type={'icon'} />
+        </div>
+      )}
+    </div>
+  ) : (
+    <div>
+      {settings.user.auth.facebook.enabled && (
+        <div className="text-center">
+          <FacebookButton text={t('login.fbBtn')} type={'button'} />
+        </div>
+      )}
+      {settings.user.auth.google.enabled && (
+        <div className="text-center">
+          <GoogleButton text={t('login.googleBtn')} type={'button'} />
+        </div>
+      )}
+      {settings.user.auth.github.enabled && (
+        <div className="text-center">
+          <GitHubButton text={t('login.githubBtn')} type={'button'} />
+        </div>
+      )}
+      {settings.user.auth.linkedin.enabled && (
+        <div className="text-center">
+          <LinkedInButton text={t('login.linkedinBtn')} type={'button'} />
+        </div>
+      )}
+    </div>
+  );
+};
 
 const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
+  const buttonsLength = [facebook.enabled, linkedin.enabled, google.enabled, github.enabled].filter(button => button)
+    .length;
   return (
     <Form name="login" onSubmit={handleSubmit}>
       <Field
@@ -45,26 +98,7 @@ const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
             {t('login.form.btnSubmit')}
           </Button>
         </div>
-        {settings.user.auth.facebook.enabled && (
-          <div className="text-center">
-            <FacebookButton text={t('login.fbBtn')} type={'button'} />
-          </div>
-        )}
-        {settings.user.auth.google.enabled && (
-          <div className="text-center">
-            <GoogleButton text={t('login.googleBtn')} type={'button'} />
-          </div>
-        )}
-        {settings.user.auth.github.enabled && (
-          <div className="text-center">
-            <GitHubButton text={t('login.githubBtn')} type={'button'} />
-          </div>
-        )}
-        {settings.user.auth.linkedin.enabled && (
-          <div className="text-center">
-            <LinkedInButton text={t('login.linkedinBtn')} type={'button'} />
-          </div>
-        )}
+        {renderSocialButtons(buttonsLength, t)}
       </div>
       <div className="text-center" style={{ marginTop: 10 }}>
         <Link to="/forgot-password">{t('login.btn.forgotPass')}</Link>

@@ -36,8 +36,7 @@ const GoogleIcon = withApollo(({ client }) => {
   return (
     <FontAwesomeIcon
       icon={faGooglePlusSquare}
-      size="2x"
-      style={{ marginTop: 10 }}
+      style={{ marginTop: 10, color: '#c43832', fontSize: 40 }}
       onClick={() => access.doLogin(client).then(googleLogin)}
     />
   );

@@ -36,8 +36,7 @@ const FacebookIcon = withApollo(({ client }) => {
   return (
     <FontAwesomeIcon
       icon={faFacebookSquare}
-      size="2x"
-      style={{ marginTop: 10 }}
+      style={{ marginTop: 10, color: '#17427e', fontSize: 40 }}
       onClick={() => access.doLogin(client).then(facebookLogin)}
     />
   );

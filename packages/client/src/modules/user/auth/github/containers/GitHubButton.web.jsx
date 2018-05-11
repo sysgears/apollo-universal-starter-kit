@@ -36,8 +36,7 @@ const GitHubIcon = withApollo(({ client }) => {
   return (
     <FontAwesomeIcon
       icon={faGithubSquare}
-      size="2x"
-      style={{ marginTop: 10 }}
+      style={{ marginTop: 10, color: '#5f5e5e', fontSize: 40 }}
       onClick={() => access.doLogin(client).then(githubLogin)}
     />
   );

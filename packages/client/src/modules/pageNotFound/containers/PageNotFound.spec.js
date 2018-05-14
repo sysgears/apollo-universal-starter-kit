@@ -9,10 +9,9 @@ describe('Page not found example UI works', () => {
   let content;
 
   step('404 page renders with sample text', () => {
-    app = renderer.mount();
+    app = renderer.render();
     renderer.history.push('/non-existing-page');
-    app.update();
-    content = app.find('#content').last();
-    expect(content.text()).to.include('Page not found - 404');
+    content = app.container.querySelector('#content');
+    expect(content.textContent).to.include('Page not found - 404');
   });
 });

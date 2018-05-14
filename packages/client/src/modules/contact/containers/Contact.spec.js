@@ -9,9 +9,9 @@ describe('Contact UI works', () => {
   let content;
 
   step('Contact page renders on mount', () => {
-    app = renderer.mount(Routes);
+    app = renderer.render(Routes);
     renderer.history.push('/contact');
-    content = app.find('#content');
+    content = app.container.querySelector('#content');
     expect(content).to.not.be.empty;
   });
 });

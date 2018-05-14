@@ -16,7 +16,7 @@ const resetPassFormSchema = t =>
         type: 'password',
         label: t('resetPass.form.field.pass')
       },
-      min: 4
+      min: 8
     };
     passwordConfirmation = {
       type: String,

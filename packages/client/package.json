@@ -43,7 +43,7 @@
     "antd": "^3.3.3",
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-cache-router": "^1.1.0",
-    "apollo-client": "^2.2.2",
+    "apollo-client": "^2.3.1",
     "apollo-link": "^1.0.6",
     "apollo-link-batch-http": "1.2.2",
     "apollo-link-context": "^1.0.7",
@@ -69,7 +69,7 @@
     "minilog": "^3.1.0",
     "prop-types": "^15.6.0",
     "react": "16.3.1",
-    "react-apollo": "^2.0.4",
+    "react-apollo": "^2.1.4",
     "react-art": "^16.3.2",
     "react-cookie": "^2.1.2",
     "react-debounce-input": "^3.1.0",
@@ -178,6 +178,8 @@
     "native-base": "^2.3.5",
     "react-native": "0.55.3",
     "react-native-simple-picker": "^2.0.0",
+    "react-native-keyboard-spacer": "^0.4.1",
+    "react-native-modal": "^5.4.0",
     "react-navigation": "^1.5.11",
     "spinjs": "^0.4.0"
   }

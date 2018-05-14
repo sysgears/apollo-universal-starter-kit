@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { View, StyleSheet } from 'react-native';
 import { pick } from 'lodash';
 
 import translate from '../../../i18n';
 import UserForm from './UserForm';
-import { PageLayout } from '../../common/components/web';
+import { withLoadedUser } from '../containers/Auth';
+import { Loading } from '../../common/components/native';
 
 import settings from '../../../../../../settings';
 
@@ -14,6 +14,7 @@ class UserEditView extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
+    currentUser: PropTypes.object,
     addUser: PropTypes.func.isRequired,
     editUser: PropTypes.func.isRequired,
     t: PropTypes.func
@@ -21,7 +22,6 @@ class UserEditView extends React.PureComponent {
 
   onSubmit = async values => {
     const { user, addUser, editUser, t } = this.props;
-    let result = null;
 
     let insertValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
@@ -31,11 +31,7 @@ class UserEditView extends React.PureComponent {
       insertValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    if (user) {
-      result = await editUser({ id: user.id, ...insertValues });
-    } else {
-      result = await addUser(insertValues);
-    }
+    const result = user ? await editUser({ id: user.id, ...insertValues }) : await addUser(insertValues);
 
     if (result && result.errors) {
       throw result.errors.reduce(
@@ -48,45 +44,32 @@ class UserEditView extends React.PureComponent {
     }
   };
 
-  renderMetaData = () => {
-    const { t } = this.props;
-    return (
-      <Helmet
-        title={`${settings.app.name} - ${t('userEdit.title')}`}
-        meta={[
-          {
-            name: 'description',
-            content: `${settings.app.name} - ${t('userEdit.meta')}`
-          }
-        ]}
-      />
-    );
-  };
-
   render() {
-    const { loading, user, t } = this.props;
+    const { loading, user, t, currentUser } = this.props;
+
     if (loading && !user) {
-      return (
-        <PageLayout>
-          {this.renderMetaData()}
-          <div className="text-center">{t('userEdit.loadMsg')}</div>
-        </PageLayout>
-      );
+      return <Loading text={t('userEdit.loadMsg')} />;
     } else {
+      const isNotSelf = !user || (user && user.id !== currentUser.id);
       return (
-        <PageLayout>
-          {this.renderMetaData()}
-          <Link id="back-button" to={user && user.role === 'admin' ? '/users' : '/profile'}>
-            Back
-          </Link>
-          <h2>
-            {t(`userEdit.form.${user ? 'titleEdit' : 'titleCreate'}`)} {t('userEdit.form.title')}
-          </h2>
-          <UserForm onSubmit={this.onSubmit} user={user || {}} />
-        </PageLayout>
+        <View style={styles.container}>
+          <UserForm
+            onSubmit={this.onSubmit}
+            shouldRoleDisplay={isNotSelf}
+            shouldActiveDisplay={isNotSelf}
+            initialValues={user || {}}
+          />
+        </View>
       );
     }
   }
 }
 
-export default translate('user')(UserEditView);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  }
+});
+
+export default withLoadedUser(translate('user')(UserEditView));

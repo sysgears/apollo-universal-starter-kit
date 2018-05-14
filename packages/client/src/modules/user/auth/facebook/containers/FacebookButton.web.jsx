@@ -22,17 +22,24 @@ const FacebookButton = withApollo(({ client }) => {
   );
 });
 
-const FacebookLink = () => {
+const FacebookLink = withApollo(({ client }) => {
   return (
-    <Button color="link" onClick={facebookLogin} style={{ marginTop: 10 }}>
+    <Button color="link" onClick={() => access.doLogin(client).then(facebookLogin)} style={{ marginTop: 10 }}>
       Login with Facebook
     </Button>
   );
-};
+});
 
-const FacebookIcon = () => {
-  return <FontAwesomeIcon icon={faFacebookSquare} size="2x" style={{ marginTop: 10 }} onClick={facebookLogin} />;
-};
+const FacebookIcon = withApollo(({ client }) => {
+  return (
+    <FontAwesomeIcon
+      icon={faFacebookSquare}
+      size="2x"
+      style={{ marginTop: 10 }}
+      onClick={() => access.doLogin(client).then(facebookLogin)}
+    />
+  );
+});
 
 const FacebookComponent = props => {
   switch (props.type) {

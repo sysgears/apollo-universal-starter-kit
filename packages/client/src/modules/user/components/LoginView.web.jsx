@@ -57,8 +57,8 @@ class LoginView extends React.PureComponent {
           <Card>
             <CardGroup>
               <CardTitle>{t('login.cardTitle')}:</CardTitle>
-              <CardText>admin@example.com:admin</CardText>
-              <CardText>user@example.com:user1</CardText>
+              <CardText>admin@example.com:admin123</CardText>
+              <CardText>user@example.com:user1234</CardText>
               {settings.subscription.enabled && <CardText>subscriber@example.com:subscriber</CardText>}
             </CardGroup>
           </Card>

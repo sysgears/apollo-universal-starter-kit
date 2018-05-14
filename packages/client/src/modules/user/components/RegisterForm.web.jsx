@@ -31,7 +31,7 @@ const registerFormSchema = t =>
         type: 'password',
         label: t('reg.form.field.pass')
       },
-      min: 4
+      min: 8
     };
     passwordConfirmation = {
       type: String,

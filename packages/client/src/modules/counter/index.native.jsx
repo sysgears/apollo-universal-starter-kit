@@ -1,8 +1,8 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
-import { HeaderTitle, MenuButton } from '../common/components/native';
+import { HeaderTitle, IconButton } from '../common/components/native';
 import Counter from './containers/Counter';
 import reducers from './reducers';
 import resolvers from './resolvers';
@@ -15,12 +15,14 @@ const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 export default new Feature({
   drawerItem: {
     Counter: {
-      screen: StackNavigator({
+      screen: createStackNavigator({
         Counter: {
           screen: Counter,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
-            headerLeft: <MenuButton navigation={navigation} />
+            headerLeft: (
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+            )
           })
         }
       }),

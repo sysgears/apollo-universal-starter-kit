@@ -3,7 +3,12 @@
     "users": "Пользователи",
     "sign": "Вход в систему",
     "logout": "Выход",
-    "profile": "Профиль"
+    "profile": "Профиль",
+    "editProfile": "Редактирование профиля",
+    "editUser": "Редактирование пользователя",
+    "forgotPassword": "Забыли пароль",
+    "register": "Регистрация",
+    "resetPassword": "Сброс пароля"
   },
   "forgotPass": {
     "title": "Забыли пароль",
@@ -16,16 +21,17 @@
       "btnSubmit": "Отправить инструкции"
     }
   },
-  
+
   "login": {
     "title": "Вход",
     "meta": "Пример страницы с входом",
     "errorMsg": "Ошибка входа!",
     "cardTitle": "Доступные учетные записи",
+    "notRegText": "Ещё не зарегистрированы?",
     "form": {
       "title": "Вход в систему",
       "field": {
-        "email": "Электронная почта",
+        "usernameOrEmail": "Имя пользователя или email",
         "pass": "Пароль"
       },
       "btnSubmit": "Войти"
@@ -39,9 +45,11 @@
 
   "profile": {
     "title": "Профиль",
+    "headerText": "Информация о профиле",
     "meta": "Пример страницы с профилем",
     "loadMsg": "Загрузка...",
     "errorMsg": "Нет текущего пользователя",
+    "editProfileText": "Редактировать профиль",
     "card": {
       "title": "Профиль",
       "group": {
@@ -109,6 +117,10 @@
       },
       "btnSubmit": "Сохранить"
     },
+    "select": {
+      "okText": "Подтвердить",
+      "dismissText": "Отмена"
+    },
     "btnBack": "Назад"
   },
 
@@ -123,13 +135,20 @@
         "search": "Поиск ...",
         "role": {
           "label": "Роль",
-          "select": "Выбрать ...",
+          "all": "Все",
           "user": "пользователь",
           "admin": "админ"
         },
         "active": "Активен"
       }
     },
+    "select": {
+      "okText": "Подтвердить",
+      "dismissText": "Отмена"
+    },
+    "btnModalSubmit": "Сохранить",
+    "btnModalClose": "Закрыть",
+    "orderByText": "Сортировать",
     "column": {
       "name": "Имя пользователя",
       "email": "Электронная почта",
@@ -138,7 +157,7 @@
       "actions": "Действия"
     },
     "btn": {
-      "add": "Добавить",
+      "add": "Добавить пользователя",
       "delete": "Удалить"
     }
   },
@@ -146,9 +165,9 @@
   "nativeMock": "Привет, ",
   "mobile": {
     "login": {
-      "email": {
-        "label": "Эл. адрес",
-        "placeholder": "Введите эл. адрес"
+      "usernameOrEmail": {
+        "label": "Имя пользователи или email",
+        "placeholder": "Введите имя полыьзователя или email"
       },
       "pass": {
         "label": "Пароль",

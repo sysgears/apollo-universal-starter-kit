@@ -2,10 +2,13 @@
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
+import { withFilter } from 'graphql-subscriptions';
 
 import auth from './auth';
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
+
+const USERS_SUBSCRIPTION = 'users_subscription';
 
 export default pubsub => ({
   Query: {
@@ -14,10 +17,20 @@ export default pubsub => ({
     }),
     user: withAuth(
       (obj, args, context) => {
-        return context.user.id !== args.id ? ['user:view'] : ['user:view:self'];
+        return ['user:view:self'];
       },
-      (obj, { id }, context) => {
-        return context.User.getUser(id);
+      (obj, { id }, { user, User }) => {
+        if (user.id === id || user.role === 'admin') {
+          try {
+            return { user: User.getUser(id) };
+          } catch (e) {
+            return { errors: e };
+          }
+        }
+
+        const e = new FieldError();
+        e.setError('user', 'Access Denied');
+        return { user: null, errors: e.getErrors() };
       }
     ),
     currentUser(obj, args, context) {
@@ -70,8 +83,8 @@ export default pubsub => ({
             e.setError('email', 'E-mail already exists.');
           }
 
-          if (input.password.length < 5) {
-            e.setError('password', `Password must be 5 characters or more.`);
+          if (input.password.length < 8) {
+            e.setError('password', `Password must be 8 characters or more.`);
           }
 
           e.throwIf();
@@ -104,6 +117,13 @@ export default pubsub => ({
             });
           }
 
+          pubsub.publish(USERS_SUBSCRIPTION, {
+            usersUpdated: {
+              mutation: 'CREATED',
+              node: user
+            }
+          });
+
           return { user };
         } catch (e) {
           return { errors: e };
@@ -115,9 +135,12 @@ export default pubsub => ({
         return context.user.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
       async (obj, { input }, context) => {
+        const isAdmin = () => context.user.role === 'admin';
+        const isSelf = () => context.user.id === input.id;
         try {
           const e = new FieldError();
           const userExists = await context.User.getUserByUsername(input.username);
+
           if (userExists && userExists.id !== input.id) {
             e.setError('username', 'Username already exists.');
           }
@@ -127,20 +150,27 @@ export default pubsub => ({
             e.setError('email', 'E-mail already exists.');
           }
 
-          if (input.password && input.password.length < 5) {
-            e.setError('password', `Password must be 5 characters or more.`);
+          if (input.password && input.password.length < 8) {
+            e.setError('password', `Password must be 8 characters or more.`);
           }
 
           e.throwIf();
 
-          await context.User.editUser(input);
+          const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
+
+          await context.User.editUser(userInfo);
           await context.User.editUserProfile(input);
 
           if (settings.user.auth.certificate.enabled) {
             await context.User.editAuthCertificate(input);
           }
-
           const user = await context.User.getUser(input.id);
+          pubsub.publish(USERS_SUBSCRIPTION, {
+            usersUpdated: {
+              mutation: 'UPDATED',
+              node: user
+            }
+          });
 
           return { user };
         } catch (e) {
@@ -150,7 +180,7 @@ export default pubsub => ({
     ),
     deleteUser: withAuth(
       (obj, args, context) => {
-        return context.user.id !== args.input.id ? ['user:delete'] : ['user:delete:self'];
+        return context.user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
       },
       async (obj, { id }, context) => {
         try {
@@ -168,6 +198,12 @@ export default pubsub => ({
 
           const isDeleted = await context.User.deleteUser(id);
           if (isDeleted) {
+            pubsub.publish(USERS_SUBSCRIPTION, {
+              usersUpdated: {
+                mutation: 'DELETED',
+                node: user
+              }
+            });
             return { user };
           } else {
             e.setError('delete', 'Could not delete user. Please try again later.');
@@ -179,5 +215,31 @@ export default pubsub => ({
       }
     )
   },
-  Subscription: {}
+  Subscription: {
+    usersUpdated: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(USERS_SUBSCRIPTION),
+        (payload, variables) => {
+          const { mutation, node } = payload.usersUpdated;
+          const {
+            filter: { isActive, role, searchText }
+          } = variables;
+
+          const checkByFilter =
+            !!node.isActive === isActive &&
+            (!role || role === node.role) &&
+            (!searchText || node.username.includes(searchText) || node.email.includes(searchText));
+
+          switch (mutation) {
+            case 'DELETED':
+              return true;
+            case 'CREATED':
+              return checkByFilter;
+            case 'UPDATED':
+              return !checkByFilter;
+          }
+        }
+      )
+    }
+  }
 });

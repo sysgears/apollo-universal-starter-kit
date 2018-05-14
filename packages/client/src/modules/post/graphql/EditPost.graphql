@@ -2,6 +2,6 @@
 
 mutation editPost($input: EditPostInput!) {
   editPost(input: $input) {
-    ... PostInfo
+    ...PostInfo
   }
 }

@@ -15,7 +15,7 @@ const NavLinkWithI18n = translate('contact')(({ t }) => (
 export default new Feature({
   route: <Route exact path="/contact" component={Contact} />,
   navItem: (
-    <MenuItem key="contact">
+    <MenuItem key="/contact">
       <NavLinkWithI18n />
     </MenuItem>
   ),

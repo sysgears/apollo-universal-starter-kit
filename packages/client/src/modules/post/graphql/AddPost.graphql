@@ -3,9 +3,9 @@
 
 mutation addPost($input: AddPostInput!) {
   addPost(input: $input) {
-    ... PostInfo
+    ...PostInfo
     comments {
-      ... CommentInfo
+      ...CommentInfo
     }
   }
 }

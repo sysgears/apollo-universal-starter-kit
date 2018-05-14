@@ -1,36 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { View, StyleSheet } from 'react-native';
 import translate from '../../../i18n';
+import { CardItem, CardText, CardSubtitleText, CardLabel, Button, primary } from '../../common/components/native';
 
-import { Button, CardGroup, CardTitle, CardText } from '../../common/components/web';
+const renderCardItem = (title, value) => (
+  <CardItem>
+    <CardLabel>{title}</CardLabel>
+    <CardText>{value}</CardText>
+  </CardItem>
+);
 
 const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand, t }) => {
   return (
-    <div>
+    <View style={styles.container}>
       {!loading &&
         expiryMonth &&
         expiryYear &&
         last4 &&
         brand && (
-          <CardGroup>
-            <CardTitle>{t('card.title')}</CardTitle>
-            <CardText>
-              {t('card.text.card')}: {brand} ************{last4}
-            </CardText>
-            <CardText>
-              {t('card.text.expires')}: {expiryMonth}/{expiryYear}
-            </CardText>
-            <CardText>
-              <Link to="/update-card">
-                <Button color="primary">{t('card.btnUpdate')}</Button>
-              </Link>
-            </CardText>
-          </CardGroup>
+          <View>
+            <CardSubtitleText>{t('card.title')}</CardSubtitleText>
+            {renderCardItem(`${t('card.text.card')}: `, `${brand} ************${last4}`)}
+            {renderCardItem(`${t('card.text.expires')}: `, `${expiryMonth}/${expiryYear}`)}
+            <View>
+              <View style={styles.buttonWrapper}>
+                <Button color={primary}>{t('card.btnUpdate')}</Button>
+              </View>
+            </View>
+          </View>
         )}
-    </div>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  buttonWrapper: {
+    paddingHorizontal: 10
+  }
+});
 
 CardInfoView.propTypes = {
   loading: PropTypes.bool.isRequired,

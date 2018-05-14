@@ -1,5 +1,5 @@
 mutation addCounterState($amount: Int!) {
-    addCounterState(amount: $amount) @client {
-        counter
-    }
+  addCounterState(amount: $amount) @client {
+    counter
+  }
 }

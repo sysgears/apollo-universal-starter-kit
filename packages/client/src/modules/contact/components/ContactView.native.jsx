@@ -32,7 +32,7 @@ ContactView.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column'
+    flex: 1
   }
 });
 

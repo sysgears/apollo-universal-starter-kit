@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Schema } from '@domain-schema/core';
 //eslint-disable-next-line import/no-extraneous-dependencies
 import { DomainSchemaFormik } from '@domain-schema/formik';
+import { isEmpty } from 'lodash';
 
 import translate from '../../../i18n';
 
@@ -30,8 +31,9 @@ const getProfile = (t, profile) =>
     };
   };
 
-const userFormSchema = ({ t, user: { username, email, isActive, role, profile, auth } }) =>
-  class extends Schema {
+const userFormSchema = ({ t, user, shouldActiveDisplay, shouldRoleDisplay }) => {
+  const { username, email, isActive, role, profile, auth } = user;
+  return class extends Schema {
     __ = { name: 'UserForm' };
     username = {
       type: String,
@@ -61,7 +63,8 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
         ]
       },
       defaultValue: role || 'user',
-      optional: true
+      optional: true,
+      ignore: shouldRoleDisplay
     };
     isActive = {
       type: Boolean,
@@ -70,7 +73,8 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
         label: t('userEdit.form.field.active')
       },
       defaultValue: isActive,
-      optional: true
+      optional: true,
+      ignore: shouldActiveDisplay
     };
     profile = {
       type: getProfile(t, profile)
@@ -90,7 +94,8 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
         type: 'password',
         label: t('userEdit.form.field.pass')
       },
-      min: 4
+      optional: !isEmpty(user),
+      min: isEmpty(user) ? 8 : 0
     };
     passwordConfirmation = {
       type: String,
@@ -101,9 +106,10 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
       matches: 'password'
     };
   };
+};
 
-const UserForm = ({ onSubmit, t, user }) => {
-  const userForm = new DomainSchemaFormik(userFormSchema({ t, user }));
+const UserForm = ({ onSubmit, t, user, shouldActiveDisplay, shouldRoleDisplay }) => {
+  const userForm = new DomainSchemaFormik(userFormSchema({ t, user, shouldActiveDisplay, shouldRoleDisplay }));
   const UserFormComponent = userForm.generateForm({
     label: t('userEdit.form.btnSubmit'),
     color: 'primary'
@@ -123,7 +129,9 @@ const UserForm = ({ onSubmit, t, user }) => {
 UserForm.propTypes = {
   onSubmit: PropTypes.func,
   user: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
+  shouldRoleDisplay: PropTypes.bool,
+  shouldActiveDisplay: PropTypes.bool
 };
 
 export default translate('user')(UserForm);

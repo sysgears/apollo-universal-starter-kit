@@ -43,12 +43,12 @@ const registerFormSchema = t =>
     };
   };
 
-const RegisterForm = ({ onSubmit, submitting, t }) => {
+const RegisterForm = ({ onSubmit, t }) => {
   const registerForm = new DomainSchemaFormik(registerFormSchema(t));
   const RegisterFormComponent = registerForm.generateForm({
     label: t('reg.form.btnSubmit'),
     color: 'primary',
-    disabled: submitting
+    disableOnInvalid: true
   });
 
   return (
@@ -60,7 +60,6 @@ const RegisterForm = ({ onSubmit, submitting, t }) => {
 
 RegisterForm.propTypes = {
   onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
   t: PropTypes.func
 };
 

@@ -103,6 +103,7 @@ const userFormSchema = ({ t, user, shouldActiveDisplay, shouldRoleDisplay }) => 
         type: 'password',
         label: t('userEdit.form.field.passConf')
       },
+      optional: !isEmpty(user),
       matches: 'password'
     };
   };

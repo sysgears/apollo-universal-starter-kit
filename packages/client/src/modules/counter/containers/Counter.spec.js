@@ -2,6 +2,7 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 
 import Renderer from '../../../testHelpers/Renderer';
+import { click } from '../../../testHelpers/testUtils';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
 chai.should();
@@ -31,39 +32,33 @@ describe('Counter example UI works', () => {
   let app;
   let content;
 
-  beforeEach(() => {
-    if (app) {
-      app.update();
-      content = app.find('#content').last();
-    }
-  });
-
   step('Counter page renders without data', () => {
-    app = renderer.mount();
+    app = renderer.render();
     renderer.history.push('/');
-    content = app.find('#content').last();
-    content.text().should.equal('Loading...');
+    content = app.container.querySelector('#content');
+    content.textContent.should.equal('Loading...');
   });
 
   step('Counter page renders with queries data', () => {
-    content.text().should.has.string(`Current counter, is ${COUNTER_APOLLO_VALUE}.`);
-    content.text().should.has.string(`reduxCount, is ${COUNTER_REDUX_VALUE}.`);
+    content.textContent.should.has.string(`Current counter, is ${COUNTER_APOLLO_VALUE}.`);
+    content.textContent.should.has.string(`reduxCount, is ${COUNTER_REDUX_VALUE}.`);
   });
 
   step('Clicking on increase counter button shows optimistic response', () => {
-    const graphQLButton = app.find('#graphql-button').last();
-    graphQLButton.simulate('click');
-    content.text().should.has.string(`Current counter, is ${COUNTER_APOLLO_VALUE + 1}.`);
+    const graphQLButton = app.container.querySelector('#graphql-button');
+    graphQLButton.click();
+    click(graphQLButton);
+    content.textContent.should.has.string(`Current counter, is ${COUNTER_APOLLO_VALUE + 1}.`);
   });
 
   step('Page shows GraphQL response when it arrives after button click', () => {
-    content.text().should.has.string(`Current counter, is ${INC_COUNTER_VALUE + 1}.`);
+    content.textContent.should.has.string(`Current counter, is ${INC_COUNTER_VALUE + 1}.`);
   });
 
   step('Increase Redux counter button works', () => {
-    const reduxButton = content.find('#redux-button').last();
-    reduxButton.simulate('click');
-    content.text().should.has.string(`reduxCount, is ${COUNTER_REDUX_VALUE + 1}.`);
+    const reduxButton = app.container.querySelector('#redux-button');
+    click(reduxButton);
+    content.textContent.should.has.string(`reduxCount, is ${COUNTER_REDUX_VALUE + 1}.`);
   });
 
   step('Check subscribed to counter updates', () => {
@@ -77,7 +72,7 @@ describe('Counter example UI works', () => {
         counterUpdated: { amount: COUNTER_SUBSCRIPTION_VALUE, __typename: 'Counter' }
       }
     });
-    content.text().should.has.string(`Current counter, is ${COUNTER_SUBSCRIPTION_VALUE}.`);
+    content.textContent.should.has.string(`Current counter, is ${COUNTER_SUBSCRIPTION_VALUE}.`);
   });
 
   step('Unmount page and check unsubscription', () => {

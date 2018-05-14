@@ -17,19 +17,14 @@ const commentFormSchema = (comment, t) =>
       },
       defaultValue: comment && comment.content
     };
-    setSubmitBtn() {
-      return {
-        label: t('comment.btn.submit'),
-        color: 'primary'
-      };
-    }
   };
 
 const PostCommentForm = ({ onSubmit, comment, t }) => {
   const commentForm = new DomainSchemaFormik(commentFormSchema(comment, t));
   const CommentFormComponent = commentForm.generateForm({
     label: t('comment.btn.submit'),
-    color: 'primary'
+    color: 'primary',
+    disableOnInvalid: true
   });
 
   return <CommentFormComponent onSubmit={onSubmit} />;

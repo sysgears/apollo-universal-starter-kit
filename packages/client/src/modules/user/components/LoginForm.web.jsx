@@ -31,17 +31,14 @@ const loginFormSchema = t =>
       },
       min: 4
     };
-    setSubmitBtn() {
-      return;
-    }
   };
 
-const LoginForm = ({ onSubmit, submitting, t }) => {
+const LoginForm = ({ onSubmit, t }) => {
   const loginForm = new DomainSchemaFormik(loginFormSchema(t));
   const LoginFormComponent = loginForm.generateForm({
     label: t('login.form.btnSubmit'),
     color: 'primary',
-    disabled: submitting
+    disabledOnInvalid: true
   });
 
   return (
@@ -73,7 +70,6 @@ const LoginForm = ({ onSubmit, submitting, t }) => {
 
 LoginForm.propTypes = {
   onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
   t: PropTypes.func
 };
 

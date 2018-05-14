@@ -39,7 +39,8 @@ const ContactForm = ({ onSubmit, t }) => {
   const contactForm = new DomainSchemaFormik(contactFormSchema(t));
   const ContactFormComponent = contactForm.generateForm({
     label: t('form.btnSubmit'),
-    color: 'primary'
+    color: 'primary',
+    disableOnInvalid: true
   });
 
   return <ContactFormComponent onSubmit={async values => await onSubmit(values)} />;

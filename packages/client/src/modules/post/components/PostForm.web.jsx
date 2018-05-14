@@ -26,12 +26,12 @@ const postFormSchema = (post, t) =>
     };
   };
 
-const PostForm = ({ onSubmit, post, submitting, t }) => {
+const PostForm = ({ onSubmit, post, t }) => {
   const contactForm = new DomainSchemaFormik(postFormSchema(post, t));
   const ContactFormComponent = contactForm.generateForm({
     label: t('post.btn.submit'),
     color: 'primary',
-    disabled: submitting
+    disableOnInvalid: true
   });
 
   return <ContactFormComponent onSubmit={onSubmit} />;
@@ -39,7 +39,6 @@ const PostForm = ({ onSubmit, post, submitting, t }) => {
 
 PostForm.propTypes = {
   onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
   post: PropTypes.object,
   t: PropTypes.func
 };

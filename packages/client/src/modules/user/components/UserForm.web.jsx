@@ -100,12 +100,6 @@ const userFormSchema = ({ t, user: { username, email, isActive, role, profile, a
       },
       matches: 'password'
     };
-    setSubmitBtn() {
-      return {
-        label: t('userEdit.form.btnSubmit'),
-        color: 'primary'
-      };
-    }
   };
 
 const UserForm = ({ onSubmit, t, user }) => {

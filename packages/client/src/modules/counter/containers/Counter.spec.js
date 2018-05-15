@@ -2,7 +2,7 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 
 import Renderer from '../../../testHelpers/Renderer';
-import { click } from '../../../testHelpers/testUtils';
+import { click, updateContent, find } from '../../../testHelpers/testUtils';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
 chai.should();
@@ -30,12 +30,21 @@ describe('Counter example UI works', () => {
     counter: { reduxCount: COUNTER_REDUX_VALUE }
   });
   let app;
+  let container;
   let content;
+
+  beforeEach(() => {
+    if (app) {
+      container = app.container;
+      content = updateContent(container);
+    }
+  });
 
   step('Counter page renders without data', () => {
     app = renderer.render();
+    container = app.container;
     renderer.history.push('/');
-    content = app.container.querySelector('#content');
+    content = updateContent(container);
     content.textContent.should.equal('Loading...');
   });
 
@@ -45,7 +54,7 @@ describe('Counter example UI works', () => {
   });
 
   step('Clicking on increase counter button shows optimistic response', () => {
-    const graphQLButton = app.container.querySelector('#graphql-button');
+    const graphQLButton = find(container, '#graphql-button');
     click(graphQLButton);
     content.textContent.should.has.string(`Current counter, is ${COUNTER_APOLLO_VALUE + 1}.`);
   });
@@ -55,7 +64,7 @@ describe('Counter example UI works', () => {
   });
 
   step('Increase Redux counter button works', () => {
-    const reduxButton = app.container.querySelector('#redux-button');
+    const reduxButton = find(container, '#redux-button');
     click(reduxButton);
     content.textContent.should.has.string(`reduxCount, is ${COUNTER_REDUX_VALUE + 1}.`);
   });

@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
+
 import Renderer from '../../../../src/testHelpers/Renderer';
+import { updateContent } from '../../../testHelpers/testUtils';
 import Routes from '../../../../src/app/Routes';
 
 describe('Contact UI works', () => {
@@ -11,7 +13,7 @@ describe('Contact UI works', () => {
   step('Contact page renders on mount', () => {
     app = renderer.render(Routes);
     renderer.history.push('/contact');
-    content = app.container.querySelector('#content');
+    content = updateContent(app.container);
     expect(content).to.not.be.empty;
   });
 });

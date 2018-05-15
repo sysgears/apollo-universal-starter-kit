@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 import Renderer from '../../../testHelpers/Renderer';
+import { updateContent } from '../../../testHelpers/testUtils';
 
 describe('Page not found example UI works', () => {
   const renderer = new Renderer({});
@@ -11,7 +12,7 @@ describe('Page not found example UI works', () => {
   step('404 page renders with sample text', () => {
     app = renderer.render();
     renderer.history.push('/non-existing-page');
-    content = app.container.querySelector('#content');
+    content = updateContent(app.container);
     expect(content.textContent).to.include('Page not found - 404');
   });
 });

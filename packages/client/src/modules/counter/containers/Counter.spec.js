@@ -46,7 +46,6 @@ describe('Counter example UI works', () => {
 
   step('Clicking on increase counter button shows optimistic response', () => {
     const graphQLButton = app.container.querySelector('#graphql-button');
-    graphQLButton.click();
     click(graphQLButton);
     content.textContent.should.has.string(`Current counter, is ${COUNTER_APOLLO_VALUE + 1}.`);
   });

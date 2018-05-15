@@ -1,11 +1,14 @@
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
 import { step } from 'mocha-steps';
 import _ from 'lodash';
 
 import Renderer from '../../../testHelpers/Renderer';
+import { wait, find, findAll, updateContent, click, change, submit } from '../../../testHelpers/testUtils';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
+
+chai.should();
 
 const createNode = id => ({
   id: `${id}`,
@@ -62,40 +65,41 @@ const mocks = {
 describe('Posts and comments example UI works', () => {
   const renderer = new Renderer(mocks, {});
   let app;
+  let container;
   let content;
 
   beforeEach(() => {
     // Reset spy mutations on each step
     Object.keys(mutations).forEach(key => delete mutations[key]);
     if (app) {
-      app.update();
-      content = app.find('#content').last();
+      container = app.container;
+      content = updateContent(container);
     }
   });
 
   step('Posts page renders without data', () => {
-    app = renderer.mount();
-    content = app.find('#content').last();
+    app = renderer.render();
+    container = app.container;
     renderer.history.push('/posts');
-
-    content.text().should.equal('Loading...');
+    content = updateContent(container);
+    content.textContent.should.equal('Loading...');
   });
 
   step('Posts page renders with data', () => {
-    expect(content.text()).to.include('Post title 1');
-    expect(content.text()).to.include('Post title 2');
-    expect(content.text()).to.include('2 / 4');
+    expect(content.textContent).to.include('Post title 1');
+    expect(content.textContent).to.include('Post title 2');
+    expect(content.textContent).to.include('2 / 4');
   });
 
   step('Clicking load more works', () => {
-    const loadMoreButton = content.find('#load-more').last();
-    loadMoreButton.simulate('click');
+    const loadMoreButton = find(container, '#load-more');
+    click(loadMoreButton);
   });
 
   step('Clicking load more loads more posts', () => {
-    expect(content.text()).to.include('Post title 3');
-    expect(content.text()).to.include('Post title 4');
-    expect(content.text()).to.include('4 / 4');
+    expect(content.textContent).to.include('Post title 3');
+    expect(content.textContent).to.include('Post title 4');
+    expect(content.textContent).to.include('4 / 4');
   });
 
   step('Check subscribed to post list updates', () => {
@@ -114,8 +118,8 @@ describe('Posts and comments example UI works', () => {
       }
     });
 
-    expect(content.text()).to.not.include('Post title 2');
-    expect(content.text()).to.include('3 / 3');
+    expect(content.textContent).to.not.include('Post title 2');
+    expect(content.textContent).to.include('3 / 3');
   });
 
   step('Updates post list on post create from subscription', () => {
@@ -132,8 +136,8 @@ describe('Posts and comments example UI works', () => {
       })
     );
 
-    expect(content.text()).to.include('Post title 2');
-    expect(content.text()).to.include('4 / 4');
+    expect(content.textContent).to.include('Post title 2');
+    expect(content.textContent).to.include('4 / 4');
   });
 
   step('Clicking delete optimistically removes post', () => {
@@ -141,41 +145,29 @@ describe('Posts and comments example UI works', () => {
       return createNode(id);
     };
 
-    const deleteButtons = content.find('.delete-button');
-    expect(deleteButtons).has.lengthOf(12);
-    deleteButtons.last().simulate('click');
-
-    expect(content.text()).to.not.include('Post title 4');
-    expect(content.text()).to.include('3 / 3');
+    const deleteButtons = findAll(container, '.delete-button');
+    expect(deleteButtons).has.lengthOf(4);
+    click(deleteButtons[deleteButtons.length - 1]);
+    expect(content.textContent).to.not.include('Post title 4');
+    expect(content.textContent).to.include('3 / 3');
   });
 
   step('Clicking delete removes the post', () => {
-    expect(content.text()).to.include('Post title 3');
-    expect(content.text()).to.not.include('Post title 4');
-    expect(content.text()).to.include('3 / 3');
+    expect(content.textContent).to.include('Post title 3');
+    expect(content.textContent).to.not.include('Post title 4');
+    expect(content.textContent).to.include('3 / 3');
   });
 
   step('Clicking on post works', () => {
-    const postLinks = content.find('.post-link');
-    postLinks.last().simulate('click', { button: 0 });
+    const postLinks = findAll(container, '.post-link');
+    click(postLinks[postLinks.length - 1]);
   });
 
   step('Clicking on post opens post form', () => {
-    const postForm = content.find('form[name="post"]');
-
-    expect(content.text()).to.include('Edit Post');
-    expect(
-      postForm
-        .find('[name="title"]')
-        .last()
-        .instance().value
-    ).to.equal('Post title 3');
-    expect(
-      postForm
-        .find('[name="content"]')
-        .last()
-        .instance().value
-    ).to.equal('Post content 3');
+    expect(content.textContent).to.include('Edit Post');
+    const postForm = find(container, 'form[name="post"]');
+    expect(find(postForm, '[name="title"]').value).to.equal('Post title 3');
+    expect(find(postForm, '[name="content"]').value).to.equal('Post content 3');
   });
 
   step('Check subscribed to post updates', () => {
@@ -194,19 +186,9 @@ describe('Posts and comments example UI works', () => {
         }
       }
     });
-    const postForm = content.find('form[name="post"]');
-    expect(
-      postForm
-        .find('[name="title"]')
-        .last()
-        .instance().value
-    ).to.equal('Post title 203');
-    expect(
-      postForm
-        .find('[name="content"]')
-        .last()
-        .instance().value
-    ).to.equal('Post content 204');
+    const postForm = find(container, 'form[name="post"]');
+    expect(find(postForm, '[name="title"]').value).to.equal('Post title 203');
+    expect(find(postForm, '[name="content"]').value).to.equal('Post content 204');
   });
 
   step('Post editing form works', done => {
@@ -218,16 +200,10 @@ describe('Posts and comments example UI works', () => {
       return input;
     };
 
-    const postForm = app.find('form[name="post"]').last();
-    postForm
-      .find('[name="title"]')
-      .last()
-      .simulate('change', { target: { name: 'title', value: 'Post title 33' } });
-    postForm
-      .find('[name="content"]')
-      .last()
-      .simulate('change', { target: { name: 'content', value: 'Post content 33' } });
-    postForm.simulate('submit');
+    const postForm = find(container, 'form[name="post"]');
+    change(find(postForm, '[name="title"]'), { target: { name: 'title', value: 'Post title 33' } });
+    change(find(postForm, '[name="content"]'), { target: { name: 'content', value: 'Post content 33' } });
+    submit(postForm);
   });
 
   step('Check opening post by URL', () => {
@@ -235,22 +211,10 @@ describe('Posts and comments example UI works', () => {
   });
 
   step('Opening post by URL works', () => {
-    const postForm = content.find('form[name="post"]');
-
-    expect(content.text()).to.include('Edit Post');
-    expect(
-      postForm
-        .find('[name="title"]')
-        .last()
-        .instance().value
-    ).to.equal('Post title 33');
-    expect(
-      postForm
-        .find('[name="content"]')
-        .last()
-        .instance().value
-    ).to.equal('Post content 33');
-    expect(content.text()).to.include('Edit Post');
+    const postForm = find(container, 'form[name="post"]');
+    expect(content.textContent).to.include('Edit Post');
+    expect(find(postForm, '[name="title"]').value).to.equal('Post title 33');
+    expect(find(postForm, '[name="content"]').value).to.equal('Post content 33');
   });
 
   step('Comment adding works', done => {
@@ -261,16 +225,13 @@ describe('Posts and comments example UI works', () => {
       return input;
     };
 
-    const commentForm = content.find('form[name="comment"]');
-    commentForm
-      .find('[name="content"]')
-      .last()
-      .simulate('change', { target: { name: 'content', value: 'Post comment 24' } });
-    commentForm.last().simulate('submit');
+    const commentForm = find(container, 'form[name="comment"]');
+    change(find(commentForm, '[name="content"]'), { target: { name: 'content', value: 'Post comment 24' } });
+    submit(commentForm);
   });
 
   step('Comment adding works after submit', () => {
-    expect(content.text()).to.include('Post comment 24');
+    expect(content.textContent).to.include('Post comment 24');
   });
 
   step('Updates comment form on comment added got from subscription', () => {
@@ -291,7 +252,7 @@ describe('Posts and comments example UI works', () => {
       }
     });
 
-    expect(content.text()).to.include('Post comment 3');
+    expect(content.textContent).to.include('Post comment 3');
   });
 
   step('Updates comment form on comment deleted got from subscription', () => {
@@ -311,57 +272,43 @@ describe('Posts and comments example UI works', () => {
         }
       }
     });
-    expect(content.text()).to.not.include('Post comment 3');
+    expect(content.textContent).to.not.include('Post comment 3');
   });
 
   step('Comment deleting optimistically removes comment', () => {
-    const deleteButtons = content.find('.delete-comment');
-    expect(deleteButtons).has.lengthOf(9);
-    deleteButtons.last().simulate('click');
-
-    app.update();
-    content = app.find('#content').last();
-    expect(content.text()).to.not.include('Post comment 24');
-    expect(content.find('.delete-comment')).has.lengthOf(6);
+    const deleteButtons = findAll(container, '.delete-comment');
+    expect(deleteButtons).has.lengthOf(3);
+    click(deleteButtons[deleteButtons.length - 1]);
+    expect(content.textContent).to.not.include('Post comment 24');
+    expect(findAll(container, '.delete-comment')).has.lengthOf(2);
   });
 
   step('Clicking comment delete removes the comment', () => {
-    expect(content.text()).to.not.include('Post comment 24');
-    expect(content.find('.delete-comment')).has.lengthOf(6);
+    expect(content.textContent).to.not.include('Post comment 24');
+    expect(findAll(container, '.delete-comment')).has.lengthOf(2);
   });
-  // TODO: switch to more reliable testing framework
-  /*  step('Comment editing works', async done => {
+  step('Comment editing works', async done => {
     mutations.editComment = (obj, { input }) => {
       expect(input.postId).to.equal(3);
       expect(input.content).to.equal('Edited comment 2');
       done();
       return input;
     };
-    const commentForm = content.find('form[name="comment"]');
-    const editButtons = content.find('.edit-comment');
-    expect(editButtons).has.lengthOf(6);
-    editButtons.last().simulate('click');
-    editButtons.last().simulate('click');
-    expect(
-      commentForm
-        .find('[name="content"]')
-        .last()
-        .instance().value
-    ).to.equal('Post comment 2');
-    commentForm
-      .find('[name="content"]')
-      .last()
-      .simulate('change', { target: { name: 'content', value: 'Edited comment 2' } });
-    commentForm.simulate('submit');
-    expect(content.text()).to.include('Edited comment 2');
+    const editButtons = findAll(container, '.edit-comment');
+    expect(editButtons).has.lengthOf(2);
+    click(editButtons[editButtons.length - 1]);
+    await wait(() => app.getByPlaceholderText('Comment', { exact: false }));
+    const commentForm = find(container, 'form[name="comment"]');
+    expect(find(commentForm, '[name="content"]').value).to.equal('Post comment 2');
+    change(find(commentForm, '[name="content"]'), { target: { name: 'content', value: 'Edited comment 2' } });
+    submit(commentForm);
   });
 
-  step('Clicking back button takes to post list', () => {
-    expect(content.text()).to.include('Edited comment 2');
-    const backButton = content.find('#back-button');
-    backButton.last().simulate('click', { button: 0 });
-    app.update();
-    content = app.find('#content').last();
-    expect(content.text()).to.include('Post title 3');
-  }); */
+  step('Clicking back button takes to post list', async () => {
+    expect(content.textContent).to.include('Edited comment 2');
+    const backButton = find(container, '#back-button');
+    click(backButton);
+    content = updateContent(container);
+    expect(content.textContent).to.include('Post title 3');
+  });
 });

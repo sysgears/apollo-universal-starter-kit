@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import Counter from './containers/Counter';
-import resolvers from './resolvers';
+import resolvers from './clientCounter/resolvers';
 import reducers from './reducers';
 import resources from './locales';
 

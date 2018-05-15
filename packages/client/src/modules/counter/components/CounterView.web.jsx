@@ -6,22 +6,14 @@ import styled from 'styled-components';
 import translate from '../../../i18n';
 import { PageLayout, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
+import ClientCounter from '../clientCounter';
 
 const Section = styled.section`
   margin-bottom: 30px;
   text-align: center;
 `;
 
-const CounterView = ({
-  loading,
-  counter,
-  addCounter,
-  reduxCount,
-  onReduxIncrement,
-  counterState,
-  addCounterState,
-  t
-}) => {
+const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement, t }) => {
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - ${t('title')}`}
@@ -57,12 +49,7 @@ const CounterView = ({
             {t('reduxCount.btnLabel')}
           </Button>
         </Section>
-        <Section>
-          <p>{t('apolloCount.text', { counterState })}</p>
-          <Button id="apollo-link-button" color="primary" onClick={addCounterState(1)}>
-            {t('apolloCount.btnLabel')}
-          </Button>
-        </Section>
+        <ClientCounter t={t} />
       </PageLayout>
     );
   }
@@ -72,8 +59,6 @@ CounterView.propTypes = {
   loading: PropTypes.bool.isRequired,
   counter: PropTypes.object,
   addCounter: PropTypes.func.isRequired,
-  counterState: PropTypes.number.isRequired,
-  addCounterState: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired,
   onReduxIncrement: PropTypes.func.isRequired,
   t: PropTypes.func

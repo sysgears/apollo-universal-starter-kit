@@ -9,7 +9,7 @@ export default () => ({
       return obj.ghId;
     },
     displayName(obj) {
-      return obj.displayName;
+      return obj.ghDisplayName;
     }
   }
 });

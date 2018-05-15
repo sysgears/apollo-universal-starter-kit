@@ -9,7 +9,7 @@ export default () => ({
       return obj.lnId;
     },
     displayName(obj) {
-      return obj.displayName;
+      return obj.lnDisplayName;
     }
   }
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import update from 'immutability-helper';
 
 import { connect } from 'react-redux';
@@ -23,8 +23,8 @@ class Counter extends React.Component {
     this.subscription = null;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.loading) {
+  componentDidUpdate() {
+    if (!this.props.loading) {
       // Subscribe or re-subscribe
       if (!this.subscription) {
         this.subscribeToCount();
@@ -69,58 +69,68 @@ class Counter extends React.Component {
   }
 }
 
-const CounterWithApollo = compose(
-  graphql(COUNTER_QUERY, {
-    props({ data: { loading, error, counter, subscribeToMore } }) {
+const ApolloCounter = props => (
+  <Query query={COUNTER_QUERY}>
+    {({ loading, error, data: { counter }, subscribeToMore }) => {
       if (error) throw new Error(error);
-      return { loading, counter, subscribeToMore };
-    }
-  }),
-  graphql(ADD_COUNTER, {
-    props: ({ ownProps, mutate }) => ({
-      addCounter(amount) {
-        return () =>
-          mutate({
-            variables: { amount },
-            updateQueries: {
-              counterQuery: (prev, { mutationResult }) => {
-                const newAmount = mutationResult.data.addCounter.amount;
-                return update(prev, {
-                  counter: {
-                    amount: {
-                      $set: newAmount
-                    }
+      return (
+        <Mutation mutation={ADD_COUNTER}>
+          {mutate => {
+            const addCounter = amount => () =>
+              mutate({
+                variables: { amount },
+                updateQueries: {
+                  counterQuery: (prev, { mutationResult }) => {
+                    const newAmount = mutationResult.data.addCounter.amount;
+                    return update(prev, {
+                      counter: {
+                        amount: {
+                          $set: newAmount
+                        }
+                      }
+                    });
                   }
-                });
-              }
-            },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              addCounter: {
-                __typename: 'Counter',
-                amount: ownProps.counter.amount + 1
-              }
-            }
-          });
-      }
-    })
-  }),
-  graphql(ADD_COUNTER_CLIENT, {
-    props: ({ mutate }) => ({
-      addCounterState: amount => () => {
-        const { value } = mutate({ variables: { amount } });
-        return value;
-      }
-    })
-  }),
-  graphql(COUNTER_QUERY_CLIENT, {
-    props: ({
-      data: {
-        counterState: { counter }
-      }
-    }) => ({ counterState: counter })
-  })
-)(Counter);
+                },
+                optimisticResponse: {
+                  __typename: 'Mutation',
+                  addCounter: {
+                    __typename: 'Counter',
+                    amount: counter.amount + 1
+                  }
+                }
+              });
+
+            return (
+              <Mutation mutation={ADD_COUNTER_CLIENT}>
+                {mutate => {
+                  const addCounterState = amount => () => {
+                    const { value } = mutate({ variables: { amount } });
+                    return value;
+                  };
+                  return (
+                    <Query query={COUNTER_QUERY_CLIENT}>
+                      {({ data: { counterState } }) => (
+                        <Counter
+                          {...props}
+                          loading={loading}
+                          counter={counter}
+                          subscribeToMore={subscribeToMore}
+                          addCounterState={addCounterState}
+                          addCounter={addCounter}
+                          counterState={counterState.counter}
+                        />
+                      )}
+                    </Query>
+                  );
+                }}
+              </Mutation>
+            );
+          }}
+        </Mutation>
+      );
+    }}
+  </Query>
+);
 
 export default connect(
   state => ({ reduxCount: state.counter.reduxCount }),
@@ -133,4 +143,4 @@ export default connect(
         });
     }
   })
-)(CounterWithApollo);
+)(ApolloCounter);

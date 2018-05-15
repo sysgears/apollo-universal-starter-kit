@@ -4,7 +4,7 @@ import { step } from 'mocha-steps';
 
 // Components and helpers
 import Renderer from '../../../testHelpers/Renderer';
-import Routes from '../../../app/Routes';
+import { updateContent } from '../../../testHelpers/testUtils';
 
 describe('Upload UI works', () => {
   const renderer = new Renderer({});
@@ -12,9 +12,9 @@ describe('Upload UI works', () => {
   let content;
 
   step('Upload page renders on mount', () => {
-    app = renderer.mount(Routes);
+    app = renderer.render();
     renderer.history.push('/upload');
-    content = app.find('#content');
+    content = updateContent(app.container);
     expect(content).to.not.be.empty;
   });
 });

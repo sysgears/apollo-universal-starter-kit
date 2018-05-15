@@ -4,7 +4,7 @@ import { step } from 'mocha-steps';
 
 // Components and helpers
 import Renderer from '../../../testHelpers/Renderer';
-import Routes from '../../../app/Routes';
+import { updateContent } from '../../../testHelpers/testUtils';
 
 describe('Subscription UI works', () => {
   const renderer = new Renderer({});
@@ -12,9 +12,9 @@ describe('Subscription UI works', () => {
   let content;
 
   step('Subscription page renders on mount', () => {
-    app = renderer.mount(Routes);
+    app = renderer.render();
     renderer.history.push('/subscription');
-    content = app.find('#content');
+    content = updateContent(app.container);
     expect(content).to.not.be.empty;
   });
 });

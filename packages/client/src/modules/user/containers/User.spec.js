@@ -4,17 +4,35 @@ import { step } from 'mocha-steps';
 
 // Components and helpers
 import Renderer from '../../../testHelpers/Renderer';
-import Routes from '../../../app/Routes';
+import { updateContent, isElementExist, wait } from '../../../testHelpers/testUtils';
+
+const mocks = {
+  Query: () => ({
+    currentUser() {
+      return {
+        id: 1,
+        username: 'user',
+        role: 'user',
+        isActive: true,
+        email: 'user@example.com',
+        profile: null,
+        auth: null,
+        __typename: 'User'
+      };
+    }
+  })
+};
 
 describe('User UI works', () => {
-  const renderer = new Renderer({});
+  const renderer = new Renderer(mocks, {});
   let app;
   let content;
 
-  step('User page renders on mount', () => {
-    app = renderer.mount(Routes);
+  step('User page renders on mount', async () => {
+    app = renderer.render();
+    await wait(() => isElementExist(app.container, 'a[href="/profile"]'));
     renderer.history.push('/profile');
-    content = app.find('#content');
+    content = updateContent(app.container);
     expect(content).to.not.be.empty;
   });
 });

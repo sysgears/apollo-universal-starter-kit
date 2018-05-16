@@ -1,3 +1,4 @@
+import { prettyDOM } from 'dom-testing-library';
 import { render, renderIntoDocument, Simulate, wait, waitForElement, fireEvent, cleanup } from 'react-testing-library';
 
 const find = (container, selector) => {
@@ -6,6 +7,14 @@ const find = (container, selector) => {
 
 const findAll = (container, selector) => {
   return container.querySelectorAll(selector);
+};
+
+const isElementExist = (container, selector) => {
+  const element = find(container, selector);
+  if (!element) {
+    throw new Error(`Unable to find element by selector: ${selector}. Container: \n${prettyDOM(container)}`);
+  }
+  return element;
 };
 
 const click = element => {
@@ -27,11 +36,13 @@ const updateContent = container => {
 export {
   render,
   renderIntoDocument,
+  prettyDOM,
   wait,
   waitForElement,
   fireEvent,
   cleanup,
   find,
+  isElementExist,
   findAll,
   updateContent,
   click,

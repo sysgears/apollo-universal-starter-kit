@@ -117,6 +117,7 @@
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
+    "dom-testing-library": "^2.3.0",
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.0",
     "eslint": "^4.13.1",

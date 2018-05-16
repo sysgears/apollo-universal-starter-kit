@@ -7,7 +7,9 @@ export default class Pagination extends React.Component {
   static propTypes = {
     totalPages: PropTypes.number,
     handlePageChange: PropTypes.func,
-    pagination: PropTypes.string
+    pagination: PropTypes.string,
+    loadMoreText: PropTypes.string,
+    hasNextPage: PropTypes.bool
   };
 
   constructor(props) {
@@ -15,14 +17,13 @@ export default class Pagination extends React.Component {
     this.state = { pageNumber: 1 };
   }
 
-  componentDidUpdate() {
-    if (this.props.pagination === 'standard') {
+  componentDidUpdate(prevState) {
+    if (this.props.pagination === 'standard' && this.state.pageNumber !== prevState.pageNumber) {
       this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
     }
   }
 
-  showPreviousPage(e) {
-    e.preventDefault();
+  showPreviousPage() {
     if (this.state.pageNumber > 1) {
       this.setState(prevState => {
         return {
@@ -32,8 +33,7 @@ export default class Pagination extends React.Component {
     }
   }
 
-  showNextPage(e, totalPages) {
-    e.preventDefault();
+  showNextPage(totalPages) {
     if (this.state.pageNumber < totalPages) {
       this.setState(prevState => {
         return {
@@ -43,9 +43,13 @@ export default class Pagination extends React.Component {
     }
   }
 
+  onPressLoadMore = () => {
+    this.props.handlePageChange(this.props.pagination, null);
+  };
+
   render() {
     const { pageNumber } = this.state;
-    const { totalPages, pagination } = this.props;
+    const { totalPages, pagination, loadMoreText, hasNextPage } = this.props;
     if (pagination === 'standard') {
       return (
         <View style={styles.paginationContainer}>
@@ -61,7 +65,7 @@ export default class Pagination extends React.Component {
             {pageNumber}/{totalPages}
           </Text>
           <Button
-            onPress={e => this.showNextPage(e, totalPages)}
+            onPress={() => this.showNextPage(totalPages)}
             info={true}
             style={styles.button}
             disabled={pageNumber >= totalPages}
@@ -71,7 +75,11 @@ export default class Pagination extends React.Component {
         </View>
       );
     } else {
-      return null;
+      return hasNextPage ? (
+        <Button style={styles.loadMoreButton} onPress={this.onPressLoadMore}>
+          <Text style={styles.loadMoreButtonText}>{loadMoreText}</Text>
+        </Button>
+      ) : null;
     }
   }
 }
@@ -93,5 +101,14 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 20
+  },
+  loadMoreButton: {
+    marginTop: 10,
+    marginBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  loadMoreButtonText: {
+    color: 'white'
   }
 });

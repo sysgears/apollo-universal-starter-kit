@@ -76,9 +76,11 @@ export default class Pagination extends React.Component {
       );
     } else {
       return hasNextPage ? (
-        <Button style={styles.loadMoreButton} onPress={this.onPressLoadMore}>
-          <Text style={styles.loadMoreButtonText}>{loadMoreText}</Text>
-        </Button>
+        <View style={styles.loadMoreView}>
+          <Button style={styles.loadMoreButton} onPress={this.onPressLoadMore}>
+            <Text style={styles.loadMoreButtonText}>{loadMoreText}</Text>
+          </Button>
+        </View>
       ) : null;
     }
   }
@@ -102,11 +104,16 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20
   },
+  loadMoreView: {
+    flex: 1,
+    flexDirection: 'row'
+  },
   loadMoreButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 10,
-    marginBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10
+    marginBottom: 10
   },
   loadMoreButtonText: {
     color: 'white'

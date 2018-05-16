@@ -17,10 +17,6 @@ const renderProfileItem = (title, value, idx) => (
 );
 
 const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
-  if (currentUser && Platform.OS === 'ios') {
-    WebBrowser.dismissBrowser();
-  }
-
   const profileItems = currentUser
     ? [
         {

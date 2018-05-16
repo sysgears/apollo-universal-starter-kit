@@ -7,7 +7,6 @@ import { FontAwesome } from '@expo/vector-icons';
 
 import { setItem } from '../../../../common/clientStorage';
 import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
-import { withUser } from '../../../containers/Auth';
 import buildRedirectUrlForMobile from '../../../helpers';
 import access from '../../../access';
 import {
@@ -78,17 +77,16 @@ class LinkedInComponent extends React.Component {
     // Extract stringified user string out of the URL
     const [, data] = url.match(/data=([^#]+)/);
     const decodedData = JSON.parse(decodeURI(data));
-    const { client, refetchCurrentUser } = this.props;
+    const { client } = this.props;
     if (decodedData.tokens) {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
     }
-    const result = await refetchCurrentUser();
 
-    if (result.data && result.data.currentUser) {
+    if (decodedData.user) {
       await client.writeQuery({
         query: CURRENT_USER_QUERY,
-        data: result.data
+        data: decodedData.user
       });
     }
     if (Platform.OS === 'ios') {
@@ -114,8 +112,7 @@ class LinkedInComponent extends React.Component {
 LinkedInComponent.propTypes = {
   client: PropTypes.object,
   type: PropTypes.string,
-  text: PropTypes.string.isRequired,
-  refetchCurrentUser: PropTypes.func
+  text: PropTypes.string.isRequired
 };
 
 const styles = StyleSheet.create({
@@ -133,4 +130,4 @@ const styles = StyleSheet.create({
   btnText
 });
 
-export default withUser(withApollo(LinkedInComponent));
+export default withApollo(LinkedInComponent);

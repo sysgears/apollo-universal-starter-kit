@@ -7,7 +7,7 @@ import knex from '../../sql/connector';
 import { returnId } from '../../sql/helpers';
 
 // Actual query fetching and transformation in DB
-export default class User {
+class User {
   async getUsers(orderBy, filter) {
     const queryBuilder = knex
       .select(
@@ -383,3 +383,59 @@ export default class User {
     );
   }
 }
+const userDAO = new User();
+
+/**
+ * Build user object to being send to client during social authentication
+ */
+export const buildUser = async userId => {
+  const {
+    id,
+    email,
+    isActive,
+    role,
+    username,
+    googleDisplayName,
+    fbDisplayName,
+    ghDisplayName,
+    lnDisplayName,
+    firstName,
+    lastName,
+    fullName,
+    googleId,
+    serial,
+    fbId,
+    lnId,
+    ghId
+  } = await userDAO.getUser(userId);
+  return {
+    currentUser: {
+      __typename: 'User',
+      id,
+      email,
+      role,
+      isActive,
+      username,
+      auth: {
+        __typename: 'UserAuth',
+        google: { __typename: 'GoogleAuth', googleId, displayName: googleDisplayName },
+        facebook: { __typename: 'FacebookAuth', fbId, displayName: fbDisplayName },
+        github: { __typename: 'GithubAuth', ghId, displayName: ghDisplayName },
+        linkedin: {
+          __typename: 'LinkedInAuth',
+          lnId,
+          displayName: lnDisplayName
+        },
+        certificate: serial
+      },
+      profile: {
+        firstName,
+        lastName,
+        fullName: fullName || null,
+        __typename: 'UserProfile'
+      }
+    }
+  };
+};
+
+export default userDAO;

@@ -5,10 +5,8 @@ import schema from './schema.graphql';
 import resolvers from './resolvers';
 import scopes from './scopes';
 import settings from '../../../../../settings';
-import UserDAO from './sql';
+import User from './sql';
 import Feature from '../connector';
-
-const User = new UserDAO();
 
 const createContextFunc = async ({ context: { user } }) => ({
   User,

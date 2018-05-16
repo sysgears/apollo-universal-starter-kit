@@ -4,14 +4,13 @@ import GitHubStrategy from 'passport-github';
 
 import resolvers from './resolvers';
 import Feature from '../connector';
-import UserDAO from '../../sql';
+import User, { buildUser } from '../../sql';
 import settings from '../../../../../../../settings';
 import access from '../../access';
 
 let middleware;
 
 if (settings.user.auth.github.enabled && !__TEST__) {
-  const User = new UserDAO();
   passport.use(
     new GitHubStrategy(
       {
@@ -70,9 +69,10 @@ if (settings.user.auth.github.enabled && !__TEST__) {
       '/auth/github/callback',
       passport.authenticate('github', { session: false, failureRedirect: '/login' }),
       async function(req, res) {
-        const user = await User.getUserWithPassword(req.user.id);
+        const user = await buildUser(req.user.id);
+        const { id, role, username, profile } = user.currentUser;
         const redirectUrl = req.query.state;
-        const tokens = await access.grantAccess(user, req);
+        const tokens = await access.grantAccess({ id, role, username, ...profile }, req);
 
         if (redirectUrl) {
           res.redirect(
@@ -80,7 +80,8 @@ if (settings.user.auth.github.enabled && !__TEST__) {
               (tokens
                 ? '?data=' +
                   JSON.stringify({
-                    tokens
+                    tokens,
+                    user
                   })
                 : '')
           );

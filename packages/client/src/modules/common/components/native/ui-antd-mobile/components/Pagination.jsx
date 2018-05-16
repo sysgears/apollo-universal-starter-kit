@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Pagination as ADPagination } from 'antd-mobile/lib';
+import { Pagination as ADPagination, Button } from 'antd-mobile/lib';
+import { Text } from 'react-native';
 
 export default class Pagination extends React.Component {
   static propTypes = {
     totalPages: PropTypes.number,
     handlePageChange: PropTypes.func,
-    pagination: PropTypes.string
+    pagination: PropTypes.string,
+    loadMoreText: PropTypes.string,
+    hasNextPage: PropTypes.bool
   };
 
   constructor(props) {
@@ -14,34 +17,38 @@ export default class Pagination extends React.Component {
     this.state = { pageNumber: 1 };
   }
 
-  componentDidUpdate() {
-    if (this.props.pagination === 'standard') {
+  componentDidUpdate(prevState) {
+    if (this.props.pagination === 'standard' && this.state.pageNumber !== prevState.pageNumber) {
       this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
     }
   }
 
-  handleStandardPaginationPageChange = pageNumber => {
+  onPageChange = pageNumber => {
     this.setState({ pageNumber: pageNumber });
+  };
+
+  onPressLoadMore = () => {
+    this.props.handlePageChange(this.props.pagination, null);
   };
 
   render() {
     const { pageNumber } = this.state;
-    const { totalPages, pagination } = this.props;
+    const { totalPages, pagination, hasNextPage, loadMoreText } = this.props;
     if (pagination === 'standard') {
-      const locale = {
-        prevText: '<',
-        nextText: '>'
-      };
       return (
         <ADPagination
           total={totalPages}
           current={pageNumber}
-          locale={locale}
-          onChange={pageNumber => this.handleStandardPaginationPageChange(pageNumber)}
+          locale={{ prevText: '<', nextText: '>' }}
+          onChange={pageNumber => this.onPageChange(pageNumber)}
         />
       );
     } else {
-      return null;
+      return hasNextPage ? (
+        <Button type="primary" onClick={this.onPressLoadMore}>
+          <Text>{loadMoreText}</Text>
+        </Button>
+      ) : null;
     }
   }
 }

@@ -17,6 +17,14 @@ const isElementExist = (container, selector) => {
   return element;
 };
 
+const waitForElementRender = async (container, selector) => {
+  let element = null;
+  await wait(() => {
+    element = isElementExist(container, selector);
+  });
+  return element;
+};
+
 const click = element => {
   Simulate.click(element, { button: 0 });
 };
@@ -39,6 +47,7 @@ export {
   prettyDOM,
   wait,
   waitForElement,
+  waitForElementRender,
   fireEvent,
   cleanup,
   find,

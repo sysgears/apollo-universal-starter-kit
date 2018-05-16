@@ -4,7 +4,7 @@ import { step } from 'mocha-steps';
 
 // Components and helpers
 import Renderer from '../../../testHelpers/Renderer';
-import { updateContent, isElementExist, wait } from '../../../testHelpers/testUtils';
+import { updateContent, waitForElementRender } from '../../../testHelpers/testUtils';
 
 const mocks = {
   Query: () => ({
@@ -30,7 +30,7 @@ describe('User UI works', () => {
 
   step('User page renders on mount', async () => {
     app = renderer.mount();
-    await wait(() => isElementExist(app.container, 'a[href="/profile"]'));
+    await waitForElementRender(app.container, 'a[href="/profile"]');
     renderer.history.push('/profile');
     content = updateContent(app.container);
     expect(content).to.not.be.empty;

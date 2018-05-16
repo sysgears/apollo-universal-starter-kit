@@ -87,38 +87,51 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
           let update = [];
           let deleted = [];
 
-          data[key].forEach(item => {
-            keys1[item.id] = item;
-          });
+          if (data && data.hasOwnProperty(key)) {
+            data[key].forEach(item => {
+              keys1[item.id] = item;
+            });
+          }
 
-          values[key].forEach(item => {
-            keys2[item.id] = item;
-          });
+          if (values && values.hasOwnProperty(key)) {
+            values[key].forEach(item => {
+              keys2[item.id] = item;
+            });
+          }
 
-          data[key].forEach(item => {
-            const obj = keys2[item.id];
-            if (!obj) {
-              deleted.push({ id: item.id });
-            } else {
-              if (!isEqual(obj, item)) {
-                update.push({
-                  where: { id: obj.id },
-                  data: pickInputFields({ schema: value.type[0], values: obj, data: obj })
-                });
+          if (data && data.hasOwnProperty(key)) {
+            data[key].forEach(item => {
+              const obj = keys2[item.id];
+              if (!obj) {
+                deleted.push({ id: item.id });
+              } else {
+                if (!isEqual(obj, item)) {
+                  update.push({
+                    where: { id: obj.id },
+                    data: pickInputFields({ schema: value.type[0], values: obj, data: obj })
+                  });
+                }
               }
-            }
-          });
+            });
+          }
 
-          values[key].forEach(item => {
-            if (!keys1[item.id]) {
-              create.push(pickInputFields({ schema: value.type[0], values: item, data: item }));
-            }
-          });
+          if (values && values.hasOwnProperty(key)) {
+            values[key].forEach(item => {
+              if (!keys1[item.id]) {
+                create.push(pickInputFields({ schema: value.type[0], values: item, data: item }));
+              }
+            });
+          }
+
           //console.log('created: ', create);
           //console.log('updated: ', update);
           //console.log('deleted: ', deleted);
 
-          inputValues[key] = { create, update, delete: deleted };
+          if (data) {
+            inputValues[key] = { create, update, delete: deleted };
+          } else {
+            inputValues[key] = { create };
+          }
         }
       }
     }

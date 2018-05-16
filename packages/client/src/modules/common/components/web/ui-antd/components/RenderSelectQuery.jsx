@@ -72,10 +72,16 @@ export default class RenderSelectQuery extends React.Component {
     const camelizeSchemaName = camelize(schema.name);
     const pascalizeSchemaName = pascalize(schema.name);
     let column = 'name';
+    let orderBy = null;
     for (const remoteKey of schema.keys()) {
       const remoteValue = schema.values[remoteKey];
       if (remoteValue.sortBy) {
         column = remoteKey;
+      }
+      if (remoteKey === 'rank') {
+        orderBy = {
+          column: 'rank'
+        };
       }
     }
 
@@ -104,7 +110,7 @@ export default class RenderSelectQuery extends React.Component {
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={error}>
         <div>
-          <Query limit={10} filter={{ searchText }}>
+          <Query limit={10} filter={{ searchText }} orderBy={orderBy}>
             {({ loading, data }) => {
               if (!loading || data) {
                 const options = data.edges

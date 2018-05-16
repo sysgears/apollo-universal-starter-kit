@@ -580,7 +580,12 @@ export default class Crud {
     return knexnest(select(baseQuery));
   }
 
-  _getMany({ where: { id_in } }, info) {
+  _getMany(
+    {
+      where: { id_in }
+    },
+    info
+  ) {
     const baseQuery = knex(`${this.getFullTableName()} as ${this.getTableName()}`);
     const select = selectBy(this.schema, info);
 
@@ -612,6 +617,9 @@ export default class Crud {
         if (value.type.constructor === Array && data[key]) {
           nestedEntries.push({ key, data: data[key] });
           delete data[key];
+        } else if (key === 'rank') {
+          const total = await this.getTotal();
+          data[key] = total.count + 1;
         }
       }
 
@@ -717,14 +725,10 @@ export default class Crud {
   }
 
   _sort({ data }) {
-    return knex.raw(
-      `UPDATE ${this.getFullTableName()} t1
-JOIN ${this.getFullTableName()} t2
-ON t1.id = ? AND t2.id = ?
-  SET t1.rank = ?,
-  t2.rank = ? `,
-      data
-    );
+    return Promise.all([
+      this._update({ data: { rank: data[2] }, where: { id: data[0] } }),
+      this._update({ data: { rank: data[3] }, where: { id: data[1] } })
+    ]);
   }
 
   async sort(args) {
@@ -732,10 +736,10 @@ ON t1.id = ? AND t2.id = ?
       const e = new FieldError();
       e.throwIf();
 
-      const [sortCount] = await this._sort(args);
-
-      if (sortCount.affectedRows > 0) {
-        return { count: sortCount.affectedRows };
+      const sortCount = await this._sort(args);
+      const count = sortCount.reduce((total, num) => total + num);
+      if (count > 1) {
+        return { count };
       } else {
         e.setError('sort', 'Could not sort Node. Please try again later.');
         e.throwIf();

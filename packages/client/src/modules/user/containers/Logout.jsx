@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { compose } from 'react-apollo';
 import { HeaderTitle } from '../../common/components/native';
-import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 import translate from '../../../i18n';
 import { withLogout } from './Auth';
+import { withAppContext } from '../../../../../mobile/src/appContext';
 
-const LogoutView = ({ logout, t, client }) => {
+const LogoutView = ({ logout, t, navigation, context: { triggerRender } }) => {
   return (
     <View
       style={{
@@ -17,7 +17,9 @@ const LogoutView = ({ logout, t, client }) => {
     >
       <HeaderTitle
         onPress={async () => {
-          logout().then(() => client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } }));
+          await logout();
+          triggerRender();
+          navigation.navigate('Counter');
         }}
       >
         {t('mobile.logout')}
@@ -29,8 +31,9 @@ const LogoutView = ({ logout, t, client }) => {
 LogoutView.propTypes = {
   logout: PropTypes.func.isRequired,
   error: PropTypes.string,
-  client: PropTypes.object,
+  context: PropTypes.object,
+  navigation: PropTypes.object,
   t: PropTypes.func
 };
 
-export default compose(translate('user'), withLogout)(LogoutView);
+export default compose(translate('user'), withLogout, withAppContext)(LogoutView);

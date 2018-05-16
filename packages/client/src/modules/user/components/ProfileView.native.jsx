@@ -1,6 +1,7 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Platform } from 'react-native';
+import { WebBrowser } from 'expo';
 
 import PropTypes from 'prop-types';
 import translate from '../../../i18n';
@@ -16,22 +17,28 @@ const renderProfileItem = (title, value, idx) => (
 );
 
 const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
-  const profileItems = [
-    {
-      label: `${t('profile.card.group.name')}`,
-      value: currentUser.username
-    },
-    {
-      label: `${t('profile.card.group.email')}`,
-      value: currentUser.email
-    },
-    {
-      label: `${t('profile.card.group.role')}`,
-      value: currentUser.role
-    }
-  ];
+  if (currentUser && Platform.OS === 'ios') {
+    WebBrowser.dismissBrowser();
+  }
 
-  if (currentUser.profile && currentUser.profile.fullName) {
+  const profileItems = currentUser
+    ? [
+        {
+          label: `${t('profile.card.group.name')}`,
+          value: currentUser.username
+        },
+        {
+          label: `${t('profile.card.group.email')}`,
+          value: currentUser.email
+        },
+        {
+          label: `${t('profile.card.group.role')}`,
+          value: currentUser.role
+        }
+      ]
+    : [];
+
+  if (currentUser && currentUser.profile && currentUser.profile.fullName) {
     profileItems.push({ label: `${t('profile.card.group.full')}}`, value: currentUser.profile.fullName });
   }
 

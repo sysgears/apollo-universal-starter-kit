@@ -67,7 +67,7 @@ const IfNotLoggedIn = withLoadedUser(IfNotLoggedInComponent);
 const withLogout = Component =>
   withApollo(({ client, ...props }) => {
     const newProps = { ...props, logout: () => access.doLogout(client) };
-    return <Component client={client} {...newProps} />;
+    return <Component {...newProps} />;
   });
 
 export { withUser, hasRole, withLoadedUser, IfLoggedIn, IfNotLoggedIn, withLogout };

@@ -5,6 +5,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import url from 'url';
 import log from '../../common/log';
+import { ContextProvider } from './appContext';
 
 import modules from '../../client/src/modules';
 import MainScreenNavigator from '../../client/src/app/Routes';
@@ -43,7 +44,9 @@ export default class Main extends React.Component {
     return modules.getWrappedRoot(
       <Provider store={store}>
         <ApolloProvider client={client}>
-          <MainScreenNavigator />
+          <ContextProvider>
+            <MainScreenNavigator />
+          </ContextProvider>
         </ApolloProvider>
       </Provider>
     );

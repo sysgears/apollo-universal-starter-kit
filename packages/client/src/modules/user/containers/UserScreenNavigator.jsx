@@ -2,8 +2,10 @@ import { createDrawerNavigator } from 'react-navigation';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
+import { compose } from 'react-apollo';
 import { withUser } from './Auth';
 import { DrawerComponent } from '../../common/components/native';
+import { withAppContext } from '../../../../../mobile/src/appContext';
 
 class UserScreenNavigator extends React.Component {
   static propTypes = {
@@ -20,6 +22,10 @@ class UserScreenNavigator extends React.Component {
      * re-render action after profile was edited
      */
     const { currentUserLoading, currentUser } = this.props;
+
+    if (!currentUser && !currentUserLoading && !nextProps.currentUser) {
+      return false;
+    }
     return !(
       !currentUserLoading &&
       currentUser &&
@@ -68,7 +74,7 @@ const drawerNavigator = routeConfigs => {
     return WithRoutesComponent;
   };
 
-  return withRoutes(withUser(UserScreenNavigator));
+  return compose(withRoutes, withUser, withAppContext)(UserScreenNavigator);
 };
 
 export default drawerNavigator;

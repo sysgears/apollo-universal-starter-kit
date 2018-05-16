@@ -7,7 +7,7 @@ import { Button, primary } from '../../../common/components/native';
 export const ServerCounterView = ({ t, children, counter }) => (
   <View>
     <View style={styles.element}>
-      <Text style={styles.box}>{t('counter.text', { counter })}</Text>
+      <Text style={styles.box}>{t('serverCounter.text', { counter })}</Text>
     </View>
     {children}
   </View>
@@ -31,7 +31,7 @@ ServerCounterView.propTypes = {
 
 export const ServerCounterButton = ({ addCounter, amount, t }) => (
   <Button type={primary} onPress={addCounter(amount)}>
-    {t('counter.btnLabel')}
+    {t('serverCounter.btnLabel')}
   </Button>
 );
 

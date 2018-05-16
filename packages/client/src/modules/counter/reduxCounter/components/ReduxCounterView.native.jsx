@@ -7,7 +7,7 @@ import { Button, primary } from '../../../common/components/native';
 export const ReduxCounterView = ({ t, children, reduxCount }) => (
   <View>
     <View style={styles.element}>
-      <Text style={styles.box}>{t('reduxCount.text', { reduxCount })}</Text>
+      <Text style={styles.box}>{t('reduxCounter.text', { reduxCount })}</Text>
     </View>
     {children}
   </View>
@@ -31,7 +31,7 @@ ReduxCounterView.propTypes = {
 
 export const ReduxCounterButton = ({ onReduxIncrement, amount, t }) => (
   <Button type={primary} onPress={onReduxIncrement(amount)}>
-    {t('reduxCount.btnLabel')}
+    {t('reduxCounter.btnLabel')}
   </Button>
 );
 

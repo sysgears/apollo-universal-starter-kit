@@ -11,7 +11,7 @@ const Section = styled.section`
 
 export const ServerCounterView = ({ t, children, counter }) => (
   <Section>
-    <p>{t('counter.text', { counter })}</p>
+    <p>{t('serverCounter.text', { counter })}</p>
     {children}
   </Section>
 );
@@ -24,7 +24,7 @@ ServerCounterView.propTypes = {
 
 export const ServerCounterButton = ({ addCounter, amount, t }) => (
   <Button id="graphql-button" color="primary" onClick={addCounter(amount)}>
-    {t('counter.btnLabel')}
+    {t('serverCounter.btnLabel')}
   </Button>
 );
 

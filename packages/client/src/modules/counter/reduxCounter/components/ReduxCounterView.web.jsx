@@ -11,7 +11,7 @@ const Section = styled.section`
 
 export const ReduxCounterView = ({ t, children, reduxCount }) => (
   <Section>
-    <p>{t('reduxCount.text', { reduxCount })}</p>
+    <p>{t('reduxCounter.text', { reduxCount })}</p>
     {children}
   </Section>
 );
@@ -24,7 +24,7 @@ ReduxCounterView.propTypes = {
 
 export const ReduxCounterButton = ({ onReduxIncrement, amount, t }) => (
   <Button id="redux-button" color="primary" onClick={onReduxIncrement(amount)}>
-    {t('reduxCount.btnLabel')}
+    {t('reduxCounter.btnLabel')}
   </Button>
 );
 

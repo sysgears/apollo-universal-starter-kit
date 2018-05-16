@@ -7,7 +7,7 @@ import { Button, primary } from '../../../common/components/native';
 export const ClientCounterView = ({ t, children, counterState }) => (
   <View>
     <View style={styles.element}>
-      <Text style={styles.box}>{t('apolloCount.text', { counterState })}</Text>
+      <Text style={styles.box}>{t('clientCounter.text', { counterState })}</Text>
     </View>
     {children}
   </View>
@@ -31,7 +31,7 @@ ClientCounterView.propTypes = {
 
 export const ClientCounterButton = ({ addCounterState, amount, t }) => (
   <Button type={primary} onPress={addCounterState(amount)}>
-    {t('apolloCount.btnLabel')}
+    {t('clientCounter.btnLabel')}
   </Button>
 );
 

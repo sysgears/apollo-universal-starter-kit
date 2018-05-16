@@ -11,7 +11,7 @@ const Section = styled.section`
 
 export const ClientCounterView = ({ t, children, counterState }) => (
   <Section>
-    <p>{t('apolloCount.text', { counterState })}</p>
+    <p>{t('clientCounter.text', { counterState })}</p>
     {children}
   </Section>
 );
@@ -24,7 +24,7 @@ ClientCounterView.propTypes = {
 
 export const ClientCounterButton = ({ addCounterState, amount, t }) => (
   <Button id="apollo-link-button" color="primary" onClick={addCounterState(amount)}>
-    {t('apolloCount.btnLabel')}
+    {t('clientCounter.btnLabel')}
   </Button>
 );
 

@@ -73,8 +73,7 @@ export default class ServerCounter extends React.Component {
   }
 
   subscribeToCount() {
-    const { subscribeToMore } = this.props;
-    this.subscription = subscribeToMore({
+    this.subscription = this.props.subscribeToMore({
       document: COUNTER_SUBSCRIPTION,
       variables: {},
       updateQuery: (
@@ -86,15 +85,14 @@ export default class ServerCounter extends React.Component {
             }
           }
         }
-      ) => {
-        return update(prev, {
+      ) =>
+        update(prev, {
           counter: {
             amount: {
               $set: amount
             }
           }
-        });
-      }
+        })
     });
   }
 

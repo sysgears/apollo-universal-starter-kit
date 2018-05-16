@@ -29,7 +29,7 @@ describe('User UI works', () => {
   let content;
 
   step('User page renders on mount', async () => {
-    app = renderer.render();
+    app = renderer.mount();
     await wait(() => isElementExist(app.container, 'a[href="/profile"]'));
     renderer.history.push('/profile');
     content = updateContent(app.container);

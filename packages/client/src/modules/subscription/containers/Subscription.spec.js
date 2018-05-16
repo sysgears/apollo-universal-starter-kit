@@ -33,7 +33,7 @@ if (enabled && stripePublishableKey !== '') {
     let content;
 
     step('Subscription page renders on mount', async () => {
-      app = renderer.render();
+      app = renderer.mount();
       await wait(() => isElementExist(app.container, 'a[href="/subscribers-only"]'));
       renderer.history.push('/subscription');
       content = updateContent(app.container);

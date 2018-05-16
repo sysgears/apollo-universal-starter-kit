@@ -78,7 +78,7 @@ describe('Posts and comments example UI works', () => {
   });
 
   step('Posts page renders without data', () => {
-    app = renderer.render();
+    app = renderer.mount();
     container = app.container;
     renderer.history.push('/posts');
     content = updateContent(container);

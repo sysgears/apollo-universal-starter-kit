@@ -1,3 +1,5 @@
+import React from 'react';
+import { ApolloProvider } from 'react-apollo';
 import { ApolloLink, Observable } from 'apollo-link';
 import { addTypenameToDocument } from 'apollo-utilities';
 import { Router, Switch } from 'react-router-dom';
@@ -17,17 +19,8 @@ global.document = dom.window.document;
 global.window = dom.window;
 global.navigator = dom.window.navigator;
 
-// React imports MUST come after `global.document =` in order for enzyme `unmount` to work
-const React = require('react');
-const ReactEnzymeAdapter = require('enzyme-adapter-react-16');
-const { ApolloProvider } = require('react-apollo');
-const Enzyme = require('enzyme');
 const { render } = require('./testUtils');
 const clientModules = require('../modules').default;
-
-const mount = Enzyme.mount;
-
-Enzyme.configure({ adapter: new ReactEnzymeAdapter() });
 
 process.on('uncaughtException', ex => {
   console.error('Uncaught error', ex.stack);
@@ -175,20 +168,7 @@ export default class Renderer {
     return this.mockLink._getSubscriptions(query, variables);
   }
 
-  // TODO: replace it with render() when Enzyme will be completely removed.
   mount() {
-    return mount(
-      this.withApollo(
-        clientModules.getWrappedRoot(
-          <Router history={this.history}>
-            <Switch>{clientModules.routes}</Switch>
-          </Router>
-        )
-      )
-    );
-  }
-
-  render() {
     return render(
       this.withApollo(
         clientModules.getWrappedRoot(

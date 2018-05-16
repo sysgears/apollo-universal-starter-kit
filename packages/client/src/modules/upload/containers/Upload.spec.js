@@ -12,7 +12,7 @@ describe('Upload UI works', () => {
   let content;
 
   step('Upload page renders on mount', () => {
-    app = renderer.render();
+    app = renderer.mount();
     renderer.history.push('/upload');
     content = updateContent(app.container);
     expect(content).to.not.be.empty;

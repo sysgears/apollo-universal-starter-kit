@@ -10,7 +10,7 @@ describe('Contact UI works', () => {
   let content;
 
   step('Contact page renders on mount', () => {
-    app = renderer.render();
+    app = renderer.mount();
     renderer.history.push('/contact');
     content = updateContent(app.container);
     expect(content).to.not.be.empty;

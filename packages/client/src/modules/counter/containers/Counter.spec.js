@@ -41,7 +41,7 @@ describe('Counter example UI works', () => {
   });
 
   step('Counter page renders without data', () => {
-    app = renderer.render();
+    app = renderer.mount();
     container = app.container;
     renderer.history.push('/');
     content = updateContent(container);

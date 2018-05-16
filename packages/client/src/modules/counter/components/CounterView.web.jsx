@@ -1,19 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import styled from 'styled-components';
 
-import translate from '../../../i18n';
-import { PageLayout, Button } from '../../common/components/web';
+import { PageLayout } from '../../common/components/web';
 import settings from '../../../../../../settings';
 import ClientCounter from '../clientCounter';
+import ServerCounter from '../serverCounter';
+import ReduxCounter from '../reduxCounter';
 
-const Section = styled.section`
-  margin-bottom: 30px;
-  text-align: center;
-`;
-
-const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement, t }) => {
+const CounterView = ({ t, loading, subscribeToMore, counter }) => {
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - ${t('title')}`}
@@ -37,18 +32,8 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
     return (
       <PageLayout>
         {renderMetaData()}
-        <Section>
-          <p>{t('counter.text', { counter })}</p>
-          <Button id="graphql-button" color="primary" onClick={addCounter(1)}>
-            {t('counter.btnLabel')}
-          </Button>
-        </Section>
-        <Section>
-          <p>{t('reduxCount.text', { reduxCount })}</p>
-          <Button id="redux-button" color="primary" onClick={onReduxIncrement(1)}>
-            {t('reduxCount.btnLabel')}
-          </Button>
-        </Section>
+        <ServerCounter t={t} loading={loading} subscribeToMore={subscribeToMore} counter={counter} />
+        <ReduxCounter t={t} />
         <ClientCounter t={t} />
       </PageLayout>
     );
@@ -56,12 +41,10 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
 };
 
 CounterView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  counter: PropTypes.object,
-  addCounter: PropTypes.func.isRequired,
-  reduxCount: PropTypes.number.isRequired,
-  onReduxIncrement: PropTypes.func.isRequired,
-  t: PropTypes.func
+  t: PropTypes.func,
+  loading: PropTypes.bool,
+  subscribeToMore: PropTypes.func,
+  counter: PropTypes.object
 };
 
-export default translate('counter')(CounterView);
+export default CounterView;

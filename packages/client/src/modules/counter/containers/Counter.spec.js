@@ -2,7 +2,7 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 
 import Renderer from '../../../testHelpers/Renderer';
-import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
+import COUNTER_SUBSCRIPTION from '../serverCounter/graphql/CounterSubscription.graphql';
 
 chai.should();
 

@@ -4,7 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 import translate from '../../i18n';
 import { HeaderTitle, IconButton } from '../common/components/native';
 import Counter from './containers/Counter';
-import reducers from './reducers';
+import reducers from './reduxCounter/reducers';
 import resolvers from './clientCounter/resolvers';
 import resources from './locales';
 

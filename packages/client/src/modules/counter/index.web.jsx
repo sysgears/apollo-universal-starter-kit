@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 
 import Counter from './containers/Counter';
 import resolvers from './clientCounter/resolvers';
-import reducers from './reducers';
+import reducers from './reduxCounter/reducers';
 import resources from './locales';
 
 import Feature from '../connector';

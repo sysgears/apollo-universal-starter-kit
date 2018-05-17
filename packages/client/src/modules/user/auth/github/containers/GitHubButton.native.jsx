@@ -31,7 +31,7 @@ const githubLogin = () => {
 
 const GitHubButton = withApollo(({ client, text }) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} onPress={() => access.doLogin(client).then(githubLogin )}>
+    <TouchableOpacity style={styles.buttonContainer} onPress={() => access.doLogin(client).then(githubLogin)}>
       <View style={styles.btnIconContainer}>
         <FontAwesome name="github-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
         <View style={styles.separator} />
@@ -45,7 +45,7 @@ const GitHubButton = withApollo(({ client, text }) => {
 
 const GitHubLink = withApollo(({ client, text }) => {
   return (
-    <TouchableOpacity onPress={() => access.doLogin(client).then(githubLogin )} style={styles.link}>
+    <TouchableOpacity onPress={() => access.doLogin(client).then(githubLogin)} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>
     </TouchableOpacity>
   );
@@ -58,7 +58,7 @@ const GitHubIcon = withApollo(({ client }) => {
         name="github-square"
         size={45}
         style={{ color: '#464646' }}
-        onPress={() => access.doLogin(client).then(githubLogin )}
+        onPress={() => access.doLogin(client).then(githubLogin)}
       />
     </View>
   );

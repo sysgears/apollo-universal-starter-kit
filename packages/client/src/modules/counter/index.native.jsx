@@ -22,7 +22,8 @@ export default new Feature({
             headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
             headerLeft: (
               <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-            )
+            ),
+            headerStyle: { backgroundColor: '#fff' }
           })
         }
       }),

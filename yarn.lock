@@ -538,9 +538,9 @@
   dependencies:
     debug "^3.1.0"
 
-"@domain-schema/knex@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@domain-schema/knex/-/knex-0.0.30.tgz#ceea5d0b5a79a9b7fbf2bd64374252ef9279dcb9"
+"@domain-schema/knex@^0.0.31":
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/@domain-schema/knex/-/knex-0.0.31.tgz#afbbb0705751745a781293217529a2f8269dcfbc"
   dependencies:
     debug "^3.1.0"
     humps "^2.0.1"

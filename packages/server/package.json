@@ -24,14 +24,8 @@
     "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"
   },
   "lint-staged": {
-    "*.{js,jsx,json}": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.graphql": [
-      "prettier --parser graphql --write",
-      "git add"
-    ]
+    "*.{js,jsx,json}": ["eslint --fix", "git add"],
+    "*.graphql": ["prettier --parser graphql --write", "git add"]
   },
   "repository": {
     "type": "git",
@@ -41,21 +35,14 @@
     "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
-  "keywords": [
-    "apollo",
-    "universal",
-    "starter",
-    "graphql",
-    "react",
-    "redux"
-  ],
+  "keywords": ["apollo", "universal", "starter", "graphql", "react", "redux"],
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
     "@domain-schema/core": "^0.0.30",
     "@domain-schema/formik": "^0.0.30",
     "@domain-schema/graphql": "^0.0.30",
-    "@domain-schema/knex": "^0.0.30",
+    "@domain-schema/knex": "^0.0.31",
     "@domain-schema/validation": "^0.0.32",
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-cache-router": "^1.1.0",

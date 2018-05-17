@@ -16,7 +16,7 @@ export async function seed(knex, Promise) {
     username: 'user',
     email: 'user@example.com',
     password_hash: await bcrypt.hash('user1234', 12),
-    role: 'user',
+    role: 'editor',
     is_active: true
   });
 }

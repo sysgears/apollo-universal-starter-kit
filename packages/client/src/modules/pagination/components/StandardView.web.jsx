@@ -37,13 +37,14 @@ const StandardView = ({ t }) => {
     // }
   };
 
+  const renderFunc = text => <span>{text}</span>;
   const columns = [
     {
       title: t('list.column.title'),
       dataIndex: 'title',
       key: 'title',
-      render: () => {}
-      // <span>{text}</span>
+      displayName: 'MyComponent',
+      render: renderFunc
     }
   ];
 

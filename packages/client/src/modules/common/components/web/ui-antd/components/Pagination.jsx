@@ -16,22 +16,18 @@ const Pagination = ({
   itemsNumber
 }) => {
   if (pagination === 'relay') {
-    if (hasNextPage) {
-      return (
+    return hasNextPage ? (
+      <div>
         <div>
-          <div>
-            <small>
-              ({displayedAmount} / {totalCount})
-            </small>
-          </div>
-          <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination)}>
-            {loadMoreText}
-          </Button>
+          <small>
+            ({displayedAmount} / {totalCount})
+          </small>
         </div>
-      );
-    } else {
-      return null;
-    }
+        <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination)}>
+          {loadMoreText}
+        </Button>
+      </div>
+    ) : null;
   } else {
     return (
       <ADPagination

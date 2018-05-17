@@ -86,22 +86,18 @@ export default class Pagination extends React.Component {
       itemsNumber
     } = this.props;
     if (pagination === 'relay') {
-      if (hasNextPage) {
-        return (
+      return hasNextPage ? (
+        <div>
           <div>
-            <div>
-              <small>
-                ({displayedAmount} / {totalCount})
-              </small>
-            </div>
-            <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination, null)}>
-              {loadMoreText}
-            </Button>
+            <small>
+              ({displayedAmount} / {totalCount})
+            </small>
           </div>
-        );
-      } else {
-        return null;
-      }
+          <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination, null)}>
+            {loadMoreText}
+          </Button>
+        </div>
+      ) : null;
     } else {
       const pagesArray = Array(Math.ceil(totalCount / itemsNumber))
         .fill(1)

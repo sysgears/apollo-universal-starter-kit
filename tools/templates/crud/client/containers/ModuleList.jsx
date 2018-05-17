@@ -61,7 +61,9 @@ export default compose(
     props: ({ ownProps: { refetch }, mutate }) => ({
       updateEntry: async (data, where) => {
         try {
-          const { data: { update$Module$ } } = await mutate({
+          const {
+            data: { update$Module$ }
+          } = await mutate({
             variables: { data, where }
           });
 
@@ -80,7 +82,9 @@ export default compose(
     props: ({ ownProps: { refetch }, mutate }) => ({
       deleteEntry: async where => {
         try {
-          const { data: { delete$Module$ } } = await mutate({
+          const {
+            data: { delete$Module$ }
+          } = await mutate({
             variables: { where }
           });
 
@@ -99,7 +103,9 @@ export default compose(
     props: ({ ownProps: { refetch }, mutate }) => ({
       sortEntries: async data => {
         try {
-          const { data: { sort$Module$s } } = await mutate({
+          const {
+            data: { sort$Module$s }
+          } = await mutate({
             variables: { data }
           });
 
@@ -118,7 +124,9 @@ export default compose(
     props: ({ ownProps: { refetch }, mutate }) => ({
       deleteManyEntries: async where => {
         try {
-          const { data: { deleteMany$Module$s } } = await mutate({
+          const {
+            data: { deleteMany$Module$s }
+          } = await mutate({
             variables: { where }
           });
 
@@ -137,8 +145,10 @@ export default compose(
     props: ({ ownProps: { refetch }, mutate }) => ({
       updateManyEntries: async (data, where) => {
         try {
-          const { data: { updateMany$Module$s } } = await mutate({
-            variables: { data, where }
+          const {
+            data: { updateMany$Module$s }
+          } = await mutate({
+            variables: { data: removeEmpty(data), where }
           });
 
           if (updateMany$Module$s.errors) {

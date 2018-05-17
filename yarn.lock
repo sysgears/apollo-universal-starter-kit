@@ -538,9 +538,9 @@
   dependencies:
     debug "^3.1.0"
 
-"@domain-schema/knex@^0.0.31":
-  version "0.0.31"
-  resolved "https://registry.yarnpkg.com/@domain-schema/knex/-/knex-0.0.31.tgz#afbbb0705751745a781293217529a2f8269dcfbc"
+"@domain-schema/knex@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@domain-schema/knex/-/knex-0.0.33.tgz#0b7c1d0d25697a73bd845f67ae87b3a18c3f8fd1"
   dependencies:
     debug "^3.1.0"
     humps "^2.0.1"
@@ -6289,7 +6289,7 @@ graphql-extensions@^0.0.x, graphql-extensions@~0.0.9:
     core-js "^2.5.3"
     source-map-support "^0.5.1"
 
-graphql-iso-date@^3.3.0:
+graphql-iso-date@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.5.0.tgz#55a1be0efa8d28c1453afd2eb5ce1d052189a513"
 

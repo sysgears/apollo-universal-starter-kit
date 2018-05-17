@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { startCase } from 'lodash';
+import { startCase, round } from 'lodash';
 import { pascalize, camelize } from 'humps';
 import { Link } from 'react-router-dom';
 import { FieldArray } from 'formik';
@@ -137,16 +137,22 @@ export const createColumnFields = ({
             fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
             width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
             align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
-            render: (text, record) => (
-              <EditableCell
-                value={text}
-                hasTypeOf={hasTypeOf}
-                role={customFields[key] && customFields[key]['editRole'] ? customFields[key]['editRole'] : null}
-                currentUser={currentUser}
-                render={customFields[key] && customFields[key]['render'] ? customFields[key]['render'] : text => text}
-                onChange={onCellChange(key, record.id, hendleUpdate)}
-              />
-            )
+            render: (text, record) => {
+              let formatedText = text => text;
+              if (value.fieldInput === 'price') {
+                formatedText = text => (text > 0 ? `${round(text, 2).toFixed(2)} €` : '');
+              }
+              return (
+                <EditableCell
+                  value={text}
+                  hasTypeOf={hasTypeOf}
+                  role={customFields[key] && customFields[key]['editRole'] ? customFields[key]['editRole'] : null}
+                  currentUser={currentUser}
+                  render={customFields[key] && customFields[key]['render'] ? customFields[key]['render'] : formatedText}
+                  onChange={onCellChange(key, record.id, hendleUpdate)}
+                />
+              );
+            }
           });
         } else if (value.type.constructor !== Array) {
           columns.push({

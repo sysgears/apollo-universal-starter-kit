@@ -29,14 +29,7 @@
     "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
-  "keywords": [
-    "apollo",
-    "universal",
-    "starter",
-    "graphql",
-    "react",
-    "redux"
-  ],
+  "keywords": ["apollo", "universal", "starter", "graphql", "react", "redux"],
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
@@ -55,7 +48,7 @@
     "extract-files": "^3.1.0",
     "filesize": "^3.5.11",
     "graphql": "0.13.0",
-    "graphql-iso-date": "^3.3.0",
+    "graphql-iso-date": "^3.5.0",
     "graphql-tag": "^2.6.0",
     "i18next": "^11.2.3",
     "immutability-helper": "^2.6.2",

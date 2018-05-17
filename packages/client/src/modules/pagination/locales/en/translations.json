@@ -1,0 +1,12 @@
+{
+  "navLink": "Pagination",
+  "list": {
+    "title": {
+      "standard": "Standard pagination",
+      "relay": "Relay pagination"
+    },
+    "column": {
+      "title": "Name"
+    }
+  }
+}

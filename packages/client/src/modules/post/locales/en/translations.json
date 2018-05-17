@@ -23,6 +23,7 @@
     "title": "Edit post",
     "meta": "Edit post example page",
     "loadMsg": "Loading...",
+    "noPostsMsg": "No Posts in the db",
     "btn": {
       "edit": "Edit",
       "submit": "Save",

@@ -7,7 +7,7 @@ import translate from '../../../i18n';
 import { PageLayout, Table, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
-class PostList extends React.PureComponent {
+class PostList extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posts: PropTypes.object,
@@ -32,31 +32,10 @@ class PostList extends React.PureComponent {
     }
   };
 
-  renderMetaData = () => {
-    const { t } = this.props;
-    return (
-      <Helmet
-        title={`${settings.app.name} - ${t('list.title')}`}
-        meta={[
-          {
-            name: 'description',
-            content: `${settings.app.name} - ${t('list.meta')}`
-          }
-        ]}
-      />
-    );
-  };
-
-  render() {
-    const { loading, posts, loadMoreRows, t } = this.props;
-    if (loading) {
-      return (
-        <PageLayout>
-          {this.renderMetaData()}
-          <div className="text-center">{t('post.loadMsg')}</div>
-        </PageLayout>
-      );
-    } else {
+  renderPosts = () => {
+    const { posts, loadMoreRows, t } = this.props;
+    console.log('RENDER =>', this.props.posts);
+    if (posts && posts.totalCount && posts.edges.length <= posts.totalCount) {
       const columns = [
         {
           title: t('list.column.title'),
@@ -85,13 +64,7 @@ class PostList extends React.PureComponent {
         }
       ];
       return (
-        <PageLayout>
-          {this.renderMetaData()}
-          <h2>{t('list.subTitle')}</h2>
-          <Link to="/post/0">
-            <Button color="primary">{t('list.btn.add')}</Button>
-          </Link>
-          <h1 />
+        <div>
           <Table dataSource={posts.edges.map(({ node }) => node)} columns={columns} />
           <div>
             <small>
@@ -99,6 +72,48 @@ class PostList extends React.PureComponent {
             </small>
           </div>
           {this.renderLoadMore(posts, loadMoreRows)}
+        </div>
+      );
+    } else {
+      return <div className="text-center">{t('post.noPostsMsg')}</div>;
+    }
+  };
+
+  renderMetaData = () => {
+    const { t } = this.props;
+    return (
+      <Helmet
+        title={`${settings.app.name} - ${t('list.title')}`}
+        meta={[
+          {
+            name: 'description',
+            content: `${settings.app.name} - ${t('list.meta')}`
+          }
+        ]}
+      />
+    );
+  };
+
+  render() {
+    const { loading, t } = this.props;
+
+    if (loading) {
+      return (
+        <PageLayout>
+          {this.renderMetaData()}
+          <div className="text-center">{t('post.loadMsg')}</div>
+        </PageLayout>
+      );
+    } else {
+      return (
+        <PageLayout>
+          {this.renderMetaData()}
+          <h2>{t('list.subTitle')}</h2>
+          <Link to="/post/0">
+            <Button color="primary">{t('list.btn.add')}</Button>
+          </Link>
+          <h1 />
+          {this.renderPosts()}
         </PageLayout>
       );
     }

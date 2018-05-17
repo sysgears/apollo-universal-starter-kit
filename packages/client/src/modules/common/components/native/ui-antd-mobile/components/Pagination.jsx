@@ -12,19 +12,11 @@ export default class Pagination extends React.Component {
     hasNextPage: PropTypes.bool
   };
 
-  constructor(props) {
-    super(props);
-    this.state = { pageNumber: 1 };
-  }
-
-  componentDidUpdate(prevState) {
-    if (this.props.pagination === 'standard' && this.state.pageNumber !== prevState.pageNumber) {
-      this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
-    }
-  }
+  state = { pageNumber: 1 };
 
   onPageChange = pageNumber => {
-    this.setState({ pageNumber: pageNumber });
+    const { pagination, handlePageChange } = this.props;
+    this.setState({ pageNumber: pageNumber }, handlePageChange(pagination, pageNumber));
   };
 
   onPressLoadMore = () => {

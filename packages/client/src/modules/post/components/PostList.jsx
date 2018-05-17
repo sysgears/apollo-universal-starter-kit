@@ -2,12 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, Text, Platform, TouchableOpacity, View, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, Platform, TouchableOpacity, View, FlatList } from 'react-native';
 import translate from '../../../i18n';
-import { SwipeAction, Pagination, Loading } from '../../common/components/native';
-import paginationConfig from '../../../../../../config/pagination';
-
-const { itemsNumber, type } = paginationConfig.mobile;
+import { SwipeAction, Loading } from '../../common/components/native';
 
 class PostList extends React.PureComponent {
   static propTypes = {
@@ -56,67 +53,39 @@ class PostList extends React.PureComponent {
     );
   };
 
-  handlePageChange = (pagination, pageNumber) => {
+  handleScrollEvent = () => {
     const {
       posts: {
         pageInfo: { endCursor }
       },
       loadData
     } = this.props;
-    if (pagination === 'relay') {
-      loadData(endCursor + 1, 'add');
-    } else {
-      this.listRef.scrollToIndex({ viewPosition: 0.5, index: 0 });
-      loadData((pageNumber - 1) * itemsNumber, 'replace');
+    if (this.allowLoadData) {
+      if (this.props.posts.pageInfo.hasNextPage) {
+        this.allowLoadData = false;
+        return loadData(endCursor + 1, 'add');
+      }
     }
   };
-
-  // handleScrollEvent = () => {
-  //   const {
-  //     posts: {
-  //       pageInfo: { endCursor }
-  //     },
-  //     loadData
-  //   } = this.props;
-  //   if (this.allowLoadData) {
-  //     if (this.props.posts.pageInfo.hasNextPage) {
-  //       this.allowLoadData = false;
-  //       return loadData(endCursor + 1, 'add');
-  //     }
-  //   }
-  // };
 
   render() {
     const { loading, posts, t } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
-    const containerStyle = type === 'relay' ? styles.relayPaginationContainer : styles.standardPaginationContainer;
-    // const paginationStyle = type === 'standard' ? styles.pagination : null;
     if (loading) {
       return <Loading text={t('post.loadMsg')} />;
     } else {
       this.allowLoadData = true;
       return (
-        <View style={{ flex: 1 }}>
-          <ScrollView style={containerStyle}>
-            <FlatList
-              data={posts.edges}
-              ref={ref => (this.listRef = ref)}
-              style={{ marginTop: 5 }}
-              keyExtractor={this.keyExtractor}
-              renderItem={renderItem}
-              // onEndReachedThreshold={0.5}
-              // onEndReached={this.handleScrollEvent}
-            />
-            <View>
-              <Pagination
-                totalPages={Math.ceil(posts.totalCount / itemsNumber)}
-                loadMoreText={t('list.btn.more')}
-                handlePageChange={this.handlePageChange}
-                pagination={type}
-                hasNextPage={posts.pageInfo.hasNextPage}
-              />
-            </View>
-          </ScrollView>
+        <View style={styles.container}>
+          <FlatList
+            data={posts.edges}
+            ref={ref => (this.listRef = ref)}
+            style={styles.list}
+            keyExtractor={this.keyExtractor}
+            renderItem={renderItem}
+            onEndReachedThreshold={0.5}
+            onEndReached={this.handleScrollEvent}
+          />
         </View>
       );
     }
@@ -148,13 +117,10 @@ const styles = StyleSheet.create({
     height: 48,
     paddingLeft: 7
   },
-  relayContainer: {
+  container: {
     flex: 1
   },
-  standardContainer: {
-    flex: 0.9
-  },
-  standardView: {
-    flex: 0.1
+  list: {
+    marginTop: 5
   }
 });

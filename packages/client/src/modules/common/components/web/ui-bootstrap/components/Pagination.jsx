@@ -18,42 +18,38 @@ export default class Pagination extends React.Component {
     itemsNumber: PropTypes.number
   };
 
-  constructor(props) {
-    super(props);
-    this.state = { pageNumber: 1 };
-  }
+  state = { pageNumber: 1 };
 
-  componentDidUpdate() {
-    if (this.props.pagination === 'standard') {
-      this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
-    }
-  }
-
-  handleItemClick = pageNumber => {
-    this.setState({ pageNumber: pageNumber });
+  onItemClick = pageNumber => {
+    const { handlePageChange, pagination } = this.props;
+    this.setState({ pageNumber: pageNumber }, handlePageChange(pagination, pageNumber));
   };
 
-  handleLinkClick = e => {
+  showPreviousPage = e => {
     e.preventDefault();
-  };
-
-  previousPage = e => {
-    e.preventDefault();
-    if (this.state.pageNumber > 1) {
+    const { handlePageChange, pagination } = this.props;
+    const { pageNumber } = this.state;
+    if (pageNumber > 1) {
       this.setState(prevState => {
+        const newPageNumber = prevState.pageNumber - 1;
+        handlePageChange(pagination, newPageNumber);
         return {
-          pageNumber: prevState.pageNumber - 1
+          pageNumber: newPageNumber
         };
       });
     }
   };
 
-  nextPage = (e, pagesArray) => {
+  showNextPage = (e, pagesArray) => {
     e.preventDefault();
-    if (this.state.pageNumber < pagesArray.length) {
+    const { handlePageChange, pagination } = this.props;
+    const { pageNumber } = this.state;
+    if (pageNumber < pagesArray.length) {
       this.setState(prevState => {
+        const newPageNumber = prevState.pageNumber + 1;
+        handlePageChange(pagination, newPageNumber);
         return {
-          pageNumber: prevState.pageNumber + 1
+          pageNumber: newPageNumber
         };
       });
     }
@@ -63,10 +59,15 @@ export default class Pagination extends React.Component {
     return pagesArray.map(pageNumber => (
       <RSPaginationItem
         key={pageNumber.toString()}
-        onClick={() => this.handleItemClick(pageNumber)}
+        onClick={() => this.onItemClick(pageNumber)}
         active={this.state.pageNumber === pageNumber}
       >
-        <RSPaginationLink href="#" onClick={this.handleLinkClick}>
+        <RSPaginationLink
+          href="#"
+          onClick={e => {
+            e.preventDefault();
+          }}
+        >
           {pageNumber}
         </RSPaginationLink>
       </RSPaginationItem>
@@ -111,7 +112,7 @@ export default class Pagination extends React.Component {
             <RSPaginationLink
               previous
               href="#"
-              onClick={this.previousPage}
+              onClick={this.showPreviousPage}
               className={'bootstrap-pagination-previous'}
             />
           </RSPaginationItem>
@@ -120,7 +121,7 @@ export default class Pagination extends React.Component {
             <RSPaginationLink
               next
               href="#"
-              onClick={e => this.nextPage(e, pagesArray)}
+              onClick={e => this.showNextPage(e, pagesArray)}
               className={'bootstrap-pagination-next'}
             />
           </RSPaginationItem>

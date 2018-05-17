@@ -12,22 +12,15 @@ export default class Pagination extends React.Component {
     hasNextPage: PropTypes.bool
   };
 
-  constructor(props) {
-    super(props);
-    this.state = { pageNumber: 1 };
-  }
-
-  componentDidUpdate(prevState) {
-    if (this.props.pagination === 'standard' && this.state.pageNumber !== prevState.pageNumber) {
-      this.props.handlePageChange(this.props.pagination, this.state.pageNumber);
-    }
-  }
+  state = { pageNumber: 1 };
 
   showPreviousPage() {
     if (this.state.pageNumber > 1) {
       this.setState(prevState => {
+        const newPageNumber = prevState.pageNumber - 1;
+        this.props.handlePageChange(this.props.pagination, newPageNumber);
         return {
-          pageNumber: prevState.pageNumber - 1
+          pageNumber: newPageNumber
         };
       });
     }
@@ -36,8 +29,10 @@ export default class Pagination extends React.Component {
   showNextPage(totalPages) {
     if (this.state.pageNumber < totalPages) {
       this.setState(prevState => {
+        const newPageNumber = prevState.pageNumber + 1;
+        this.props.handlePageChange(this.props.pagination, newPageNumber);
         return {
-          pageNumber: prevState.pageNumber + 1
+          pageNumber: newPageNumber
         };
       });
     }

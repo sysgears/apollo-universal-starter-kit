@@ -69,13 +69,14 @@ export const createColumnFields = ({
         if (value.type.isSchema) {
           //console.log(value.type);
 
-          let sortBy = 'name';
+          let column = 'name';
           for (const remoteKey of value.type.keys()) {
             const remoteValue = value.type.values[remoteKey];
             if (remoteValue.sortBy) {
-              sortBy = remoteKey;
+              column = remoteKey;
             }
           }
+          const toString = value.type.__.__toString ? value.type.__.__toString : opt => opt[column];
           columns.push({
             title: (
               <a onClick={e => orderBy(e, key)} href="#">
@@ -101,7 +102,7 @@ export const createColumnFields = ({
                   render={
                     customFields[key] && customFields[key]['render']
                       ? customFields[key]['render']
-                      : text => (text && text[sortBy] ? text[sortBy] : '')
+                      : text => (text && text[column] ? toString(text) : '')
                   }
                   onChange={onCellChange(`${key}Id`, record.id, hendleUpdate)}
                 />
@@ -611,25 +612,32 @@ class EditableCell extends React.Component {
         const camelizeSchemaName = camelize(schema.name);
         const pascalizeSchemaName = pascalize(schema.name);
         let column = 'name';
+        let orderBy = null;
         for (const remoteKey of schema.keys()) {
           const remoteValue = schema.values[remoteKey];
           if (remoteValue.sortBy) {
             column = remoteKey;
           }
+          if (remoteKey === 'rank') {
+            orderBy = {
+              column: 'rank'
+            };
+          }
         }
+        const toString = schema.__.__toString ? schema.__.__toString : opt => opt[column];
         let formatedValue = { key: value.id.toString(), label: value.name ? value.name : value[column] };
         //console.log('formatedValue:', formatedValue);
         // eslint-disable-next-line import/no-dynamic-require
         const Query = require(`../${camelizeSchemaName}/containers/${pascalizeSchemaName}Query`)['default'];
 
         input = (
-          <Query limit={10} filter={{ searchText }}>
+          <Query limit={10} filter={{ searchText }} orderBy={orderBy}>
             {({ loading, data }) => {
               if (!loading || data) {
                 const options = data.edges
                   ? data.edges.map(opt => (
                       <Option key={opt.id} value={opt.id.toString()}>
-                        {opt[column]}
+                        {toString(opt)}
                       </Option>
                     ))
                   : null;
@@ -649,7 +657,7 @@ class EditableCell extends React.Component {
                       if (!dirty) {
                         options.unshift(
                           <Option key={value.id} value={value.id.toString()}>
-                            {value[column]}
+                            {toString(value)}
                           </Option>
                         );
                       } else {

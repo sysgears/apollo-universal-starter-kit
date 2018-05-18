@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 import translate from '../../../i18n';
 
-const RelayView = ({ t }) => {
-  console.log(t);
-  return <View>standard component mobile</View>;
+const RelayView = () => {
+  return (
+    <View>
+      <Text>standard component mobile</Text>
+    </View>
+  );
 };
 
 RelayView.propTypes = {

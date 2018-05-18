@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
-import StandardView from '../components/StandardView';
-import RelayView from '../components/RelayView';
+import StandardView from '../components/StandardView.web';
+import RelayView from '../components/RelayView.web';
 import { PageLayout, Option } from '../../common/components/web';
 import translate from '../../../i18n';
 import settings from '../../../../../../settings';
@@ -62,9 +62,7 @@ export default class Pagination extends React.Component {
     const { data } = this.state;
     const { allEdges, itemsNumber } = this;
     const edges =
-      dataDelivery === 'add'
-        ? allEdges.slice(0, data.pageInfo.endCursor + itemsNumber + 1)
-        : allEdges.slice(offset, offset + itemsNumber);
+      dataDelivery === 'add' ? allEdges.slice(0, offset + itemsNumber) : allEdges.slice(offset, offset + itemsNumber);
     const endCursor = edges[edges.length - 1].cursor;
     const hasNextPage = endCursor < allEdges[allEdges.length - 1].cursor;
     const newData = {
@@ -81,7 +79,7 @@ export default class Pagination extends React.Component {
   };
 
   handlePageChange = (pagination, pageNumber) => {
-    if (this.pagination === 'relay') {
+    if (pagination === 'relay') {
       this.loadData(this.state.data.pageInfo.endCursor + 1, 'add');
     } else {
       this.loadData((pageNumber - 1) * this.itemsNumber, 'replace');

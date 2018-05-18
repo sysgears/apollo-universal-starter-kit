@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 import translate from '../../../i18n';
 
-const StandardView = ({ t }) => {
-  console.log(t);
-  return <View>standard component mobile</View>;
+const StandardView = () => {
+  return (
+    <View>
+      <Text>standard component mobile</Text>
+    </View>
+  );
 };
 
 StandardView.propTypes = {

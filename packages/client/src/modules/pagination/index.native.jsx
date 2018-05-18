@@ -17,7 +17,7 @@ export default new Feature({
         Pagination: {
           screen: Pagination,
           navigationOptions: ({ navigation }) => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
+            headerTitle: <HeaderTitleWithI18n style="subTitle" />,
             headerLeft: (
               <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
             )
@@ -25,7 +25,7 @@ export default new Feature({
         }
       }),
       navigationOptions: {
-        drawerLabel: <HeaderTitleWithI18n i18nKey="title" />
+        drawerLabel: <HeaderTitleWithI18n />
       }
     }
   },

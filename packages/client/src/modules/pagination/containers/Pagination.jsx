@@ -19,10 +19,6 @@ export default class Pagination extends React.Component {
     this.state = { data: this.generateDataObject(46) };
   }
 
-  componentDidUpdate() {
-    console.log(this.state.data);
-  }
-
   itemsNumber = settings.pagination.web.itemsNumber;
 
   renderMetaData = () => {
@@ -67,7 +63,7 @@ export default class Pagination extends React.Component {
     const { allEdges, itemsNumber } = this;
     const edges =
       dataDelivery === 'add'
-        ? allEdges.slice(0, data.pageInfo.endCursor + itemsNumber)
+        ? allEdges.slice(0, data.pageInfo.endCursor + itemsNumber + 1)
         : allEdges.slice(offset, offset + itemsNumber);
     const endCursor = edges[edges.length - 1].cursor;
     const hasNextPage = endCursor < allEdges[allEdges.length - 1].cursor;
@@ -81,12 +77,10 @@ export default class Pagination extends React.Component {
       offset: 0,
       limit: itemsNumber
     };
-    console.log(newData);
-    return this.setState({ data: newData });
+    this.setState({ data: newData });
   };
 
   handlePageChange = (pagination, pageNumber) => {
-    console.log(this.pagination, pageNumber, this.itemsNumber);
     if (this.pagination === 'relay') {
       this.loadData(this.state.data.pageInfo.endCursor + 1, 'add');
     } else {
@@ -97,7 +91,6 @@ export default class Pagination extends React.Component {
   pagination = 'relay'; // relay or standard
 
   renderPagination = () => {
-    console.log(this.state.data);
     const { t } = this.props;
     return this.pagination === 'standard' ? (
       <div>

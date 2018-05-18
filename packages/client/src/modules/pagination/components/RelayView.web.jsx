@@ -22,7 +22,7 @@ const RelayView = ({ data, handlePageChange, t }) => {
     <div>
       <Table dataSource={data.edges.map(({ node }) => node)} columns={columns} />
       <Pagination
-        displayedAmount={itemsNumber}
+        displayedAmount={data.edges.length}
         handlePageChange={handlePageChange}
         hasNextPage={data.pageInfo.hasNextPage}
         pagination={'relay'}

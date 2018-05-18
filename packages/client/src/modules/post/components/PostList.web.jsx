@@ -34,7 +34,6 @@ class PostList extends React.Component {
 
   renderPosts = () => {
     const { posts, loadMoreRows, t } = this.props;
-    console.log('RENDER =>', this.props.posts);
     if (posts && posts.totalCount && posts.edges.length <= posts.totalCount) {
       const columns = [
         {

@@ -5,6 +5,9 @@
       "standard": "Standard pagination",
       "relay": "Relay pagination"
     },
+    "btn": {
+      "more": "Load more.."
+    },
     "column": {
       "title": "Name"
     }

@@ -6,7 +6,7 @@ import settings from '../../../../../../settings';
 
 const { itemsNumber } = settings.pagination.web;
 
-const StandardView = ({ data, handlePageChange, t }) => {
+const RelayView = ({ data, handlePageChange, t }) => {
   const renderFunc = text => <span>{text}</span>;
   const columns = [
     {
@@ -25,7 +25,7 @@ const StandardView = ({ data, handlePageChange, t }) => {
         displayedAmount={itemsNumber}
         handlePageChange={handlePageChange}
         hasNextPage={data.pageInfo.hasNextPage}
-        pagination={'standard'}
+        pagination={'relay'}
         totalCount={data.edges.length}
         loadMoreText={t('list.btn.more')}
         itemsNumber={itemsNumber}
@@ -34,10 +34,10 @@ const StandardView = ({ data, handlePageChange, t }) => {
   );
 };
 
-StandardView.propTypes = {
+RelayView.propTypes = {
   data: PropTypes.object,
   handlePageChange: PropTypes.func,
   t: PropTypes.func
 };
 
-export default translate('pagination')(StandardView);
+export default translate('pagination')(RelayView);

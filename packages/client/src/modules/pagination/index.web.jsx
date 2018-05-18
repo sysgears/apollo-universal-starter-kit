@@ -7,7 +7,6 @@ import Pagination from './containers/Pagination';
 import resources from './locales';
 import Feature from '../connector';
 
-console.log(1111111111111111111);
 const NavLinkWithI18n = translate()(({ t }) => (
   <NavLink to="/pagination" className="nav-link" activeClassName="active">
     {t('pagination:navLink')}

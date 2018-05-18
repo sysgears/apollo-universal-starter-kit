@@ -4,13 +4,13 @@ import { View } from 'react-native';
 
 import translate from '../../../i18n';
 
-const StandardView = ({ t }) => {
+const RelayView = ({ t }) => {
   console.log(t);
   return <View>standard component mobile</View>;
 };
 
-StandardView.propTypes = {
+RelayView.propTypes = {
   t: PropTypes.func
 };
 
-export default translate('pagination')(StandardView);
+export default translate('pagination')(RelayView);

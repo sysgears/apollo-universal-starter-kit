@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 
 import StandardView from '../components/StandardView';
 import RelayView from '../components/RelayView';
-import { PageLayout } from '../../common/components/web';
+import { PageLayout, Option } from '../../common/components/web';
 import translate from '../../../i18n';
 import settings from '../../../../../../settings';
 
@@ -16,7 +16,7 @@ export default class Pagination extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { data: this.generateDataObject(46) };
+    this.state = { pagination: 'standard', data: this.generateDataObject(46) };
   }
 
   itemsNumber = settings.pagination.web.itemsNumber;
@@ -88,11 +88,9 @@ export default class Pagination extends React.Component {
     }
   };
 
-  pagination = 'relay'; // relay or standard
-
   renderPagination = () => {
     const { t } = this.props;
-    return this.pagination === 'standard' ? (
+    return this.state.pagination === 'standard' ? (
       <div>
         <h2>{t('list.title.standard')}</h2>
         <StandardView data={this.state.data} handlePageChange={this.handlePageChange} />
@@ -105,9 +103,18 @@ export default class Pagination extends React.Component {
     );
   };
 
+  onSelectChange = e => {
+    this.setState({ pagination: e.target.value });
+  };
+
   render() {
+    const { t } = this.props;
     return (
       <PageLayout>
+        <select onChange={this.onSelectChange}>
+          <Option value="standard">{t('list.title.standard')}</Option>
+          <Option value="relay">{t('list.title.relay')}</Option>
+        </select>
         {this.renderMetaData()}
         {this.renderPagination()}
       </PageLayout>

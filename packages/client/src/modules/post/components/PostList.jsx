@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, FlatList, Text, Platform, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Platform, TouchableOpacity } from 'react-native';
 
 import translate from '../../../i18n';
 import { SwipeAction, Loading } from '../../common/components/native';
@@ -63,24 +63,26 @@ class PostList extends React.PureComponent {
       return <Loading text={t('post.loadMsg')} />;
     } else {
       return (
-        <FlatList
-          data={posts.edges}
-          style={{ marginTop: 5 }}
-          keyExtractor={this.keyExtractor}
-          renderItem={renderItem}
-          onEndReachedThreshold={0.5}
-          onMomentumScrollBegin={() => {
-            this.onEndReachedCalledDuringMomentum = false;
-          }}
-          onEndReached={() => {
-            if (!this.onEndReachedCalledDuringMomentum) {
-              if (posts.pageInfo.hasNextPage) {
-                this.onEndReachedCalledDuringMomentum = true;
-                return loadMoreRows();
+        <View style={styles.container}>
+          <FlatList
+            data={posts.edges}
+            style={{ marginTop: 5 }}
+            keyExtractor={this.keyExtractor}
+            renderItem={renderItem}
+            onEndReachedThreshold={0.5}
+            onMomentumScrollBegin={() => {
+              this.onEndReachedCalledDuringMomentum = false;
+            }}
+            onEndReached={() => {
+              if (!this.onEndReachedCalledDuringMomentum) {
+                if (posts.pageInfo.hasNextPage) {
+                  this.onEndReachedCalledDuringMomentum = true;
+                  return loadMoreRows();
+                }
               }
-            }
-          }}
-        />
+            }}
+          />
+        </View>
       );
     }
   }
@@ -89,6 +91,11 @@ class PostList extends React.PureComponent {
 export default translate('post')(PostList);
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center'
+  },
   text: {
     fontSize: 18
   },

@@ -11,13 +11,12 @@ import settings from '../../../../../../settings';
 @translate('pagination')
 export default class Pagination extends React.Component {
   static propTypes = {
-    t: PropTypes.func
+    t: PropTypes.func,
+    loadData: PropTypes.func,
+    data: PropTypes.object
   };
 
-  constructor(props) {
-    super(props);
-    this.state = { pagination: 'standard', data: this.generateDataObject(46) };
-  }
+  state = { pagination: 'standard' };
 
   itemsNumber = settings.pagination.web.itemsNumber;
 
@@ -36,73 +35,32 @@ export default class Pagination extends React.Component {
     );
   };
 
-  generateDataObject = quantity => {
-    const allEdges = [];
-    [...Array(quantity).keys()].forEach(function(element) {
-      allEdges.push({ cursor: element, node: { id: element + 1, title: 'Item ' + (element + 1) } });
-    });
-    const edges = allEdges.slice(0, 10);
-    const hasNextPage = quantity > this.itemsNumber;
-    const endCursor = edges[edges.length - 1].cursor;
-    const data = {
-      totalCount: quantity,
-      pageInfo: {
-        endCursor: endCursor,
-        hasNextPage: hasNextPage
-      },
-      edges: edges,
-      offset: 0,
-      limit: this.itemsNumber
-    };
-    this.allEdges = allEdges;
-    return data;
-  };
-
-  loadData = (offset, dataDelivery) => {
-    const { data } = this.state;
-    const { allEdges, itemsNumber } = this;
-    const edges =
-      dataDelivery === 'add' ? allEdges.slice(0, offset + itemsNumber) : allEdges.slice(offset, offset + itemsNumber);
-    const endCursor = edges[edges.length - 1].cursor;
-    const hasNextPage = endCursor < allEdges[allEdges.length - 1].cursor;
-    const newData = {
-      totalCount: data.totalCount,
-      pageInfo: {
-        endCursor: endCursor,
-        hasNextPage: hasNextPage
-      },
-      edges: edges,
-      offset: 0,
-      limit: itemsNumber
-    };
-    this.setState({ data: newData });
-  };
-
   handlePageChange = (pagination, pageNumber) => {
+    const { loadData, data } = this.props;
     if (pagination === 'relay') {
-      this.loadData(this.state.data.pageInfo.endCursor + 1, 'add');
+      loadData(data.pageInfo.endCursor + 1, 'add');
     } else {
-      this.loadData((pageNumber - 1) * this.itemsNumber, 'replace');
+      loadData((pageNumber - 1) * this.itemsNumber, 'replace');
     }
   };
 
   renderPagination = () => {
-    const { t } = this.props;
+    const { t, data } = this.props;
     return this.state.pagination === 'standard' ? (
       <div>
         <h2>{t('list.title.standard')}</h2>
-        <StandardView data={this.state.data} handlePageChange={this.handlePageChange} />
+        <StandardView data={data} handlePageChange={this.handlePageChange} />
       </div>
     ) : (
       <div>
         <h2>{t('list.title.relay')}</h2>
-        <RelayView data={this.state.data} handlePageChange={this.handlePageChange} />
+        <RelayView data={data} handlePageChange={this.handlePageChange} />
       </div>
     );
   };
 
   onSelectChange = e => {
-    this.setState({ pagination: e.target.value });
+    this.setState({ pagination: e.target.value }, this.props.loadData(0, this.itemsNumber));
   };
 
   render() {

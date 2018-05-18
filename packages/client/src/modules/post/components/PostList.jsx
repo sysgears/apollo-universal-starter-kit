@@ -103,8 +103,8 @@ export default translate('post')(PostList);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: '#fff'
   },
   text: {
     fontSize: 18

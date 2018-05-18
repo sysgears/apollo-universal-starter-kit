@@ -48,7 +48,7 @@ const PostCommentFormWithFormik = withFormik({
   validate: values => validate(values),
   handleSubmit: async (values, { resetForm, props: { onSubmit } }) => {
     await onSubmit(values);
-    resetForm({ content: '' });
+    resetForm();
   },
   displayName: 'CommentForm', // helps with React DevTools
   enableReinitialize: true

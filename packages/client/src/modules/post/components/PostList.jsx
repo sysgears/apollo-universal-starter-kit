@@ -56,12 +56,10 @@ class PostList extends React.PureComponent {
     );
   };
 
-  render() {
-    const { loading, posts, loadMoreRows, t } = this.props;
-    const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
-    if (loading) {
-      return <Loading text={t('post.loadMsg')} />;
-    } else {
+  renderPosts = () => {
+    const { posts, loadMoreRows, t } = this.props;
+    if (posts && posts.totalCount && posts.edges.length <= posts.totalCount) {
+      const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
       return (
         <View style={styles.container}>
           <FlatList
@@ -84,6 +82,18 @@ class PostList extends React.PureComponent {
           />
         </View>
       );
+    } else {
+      return <Loading text={t('post.noPostsMsg')} />;
+    }
+  };
+
+  render() {
+    const { loading, t } = this.props;
+
+    if (loading) {
+      return <Loading text={t('post.loadMsg')} />;
+    } else {
+      return this.renderPosts();
     }
   }
 }
@@ -93,8 +103,9 @@ export default translate('post')(PostList);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
     backgroundColor: '#fff',
-    justifyContent: 'center'
+    paddingHorizontal: 15
   },
   text: {
     fontSize: 18

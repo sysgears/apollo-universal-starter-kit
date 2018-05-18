@@ -1,0 +1,7 @@
+#import "./ProductTypeState.client.graphql"
+
+query ProductTypeState {
+  productTypeState @client {
+    ...ProductTypeStateInfo
+  }
+}

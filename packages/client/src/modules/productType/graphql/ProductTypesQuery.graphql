@@ -1,0 +1,23 @@
+#import "./ProductType.graphql"
+
+query productTypesConnection(
+  $limit: Int
+  $offset: Int
+  $orderBy: OrderByInput
+  $filter: ProductTypeFilterInput
+) {
+  productTypesConnection(
+    limit: $limit
+    offset: $offset
+    orderBy: $orderBy
+    filter: $filter
+  ) {
+    pageInfo {
+      totalCount
+      hasNextPage
+    }
+    edges {
+      ...ProductTypeInfo
+    }
+  }
+}

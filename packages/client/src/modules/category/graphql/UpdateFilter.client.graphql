@@ -1,0 +1,5 @@
+#import "./CategoryState.client.graphql"
+
+mutation updateCategoryFilter($filter: FilterCategoryInput!) {
+  updateCategoryFilter(filter: $filter) @client
+}

@@ -1,0 +1,9 @@
+mutation sortProducts($data: [Int!]) {
+  sortProducts(data: $data) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

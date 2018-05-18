@@ -1,0 +1,9 @@
+#import "./Product.graphql"
+
+query product($where: ProductWhereUniqueInput!) {
+  product(where: $where) {
+    node {
+      ...ProductInfo
+    }
+  }
+}

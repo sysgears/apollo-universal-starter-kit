@@ -1,0 +1,12 @@
+mutation updateManyProductTypes(
+  $data: ProductTypeUpdateInput!
+  $where: ProductTypeWhereInput!
+) {
+  updateManyProductTypes(data: $data, where: $where) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

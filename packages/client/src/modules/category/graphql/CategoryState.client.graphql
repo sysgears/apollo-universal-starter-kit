@@ -1,0 +1,13 @@
+fragment CategoryStateInfo on CategoryState {
+  limit
+  orderBy {
+    column
+    order
+  }
+  filter {
+    id
+    name
+    products
+    searchText
+  }
+}

@@ -1,0 +1,13 @@
+#import "./Category.graphql"
+
+mutation createCategory($data: CategoryCreateInput!) {
+  createCategory(data: $data) {
+    node {
+      ...CategoryInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

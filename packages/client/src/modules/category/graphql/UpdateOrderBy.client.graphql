@@ -1,0 +1,5 @@
+#import "./CategoryState.client.graphql"
+
+mutation updateCategoryOrderBy($orderBy: OrderByCategoryInput!) {
+  updateCategoryOrderBy(orderBy: $orderBy) @client
+}

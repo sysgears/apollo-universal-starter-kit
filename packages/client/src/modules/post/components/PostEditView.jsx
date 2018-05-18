@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, ScrollView } from 'react-native';
-import { Loading } from '../../common/components/native';
+import { StyleSheet, View, ScrollView, Keyboard } from 'react-native';
 
+import { Loading } from '../../common/components/native';
 import translate from '../../../i18n';
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
@@ -13,6 +13,7 @@ const onSubmit = (post, addPost, editPost) => values => {
   } else {
     addPost(values.title, values.content);
   }
+  Keyboard.dismiss();
 };
 
 const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, editPost, t }) => {
@@ -28,7 +29,7 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
   } else {
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView keyboardDismissMode="none" keyboardShouldPersistTaps="always">
           <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
           {postObj && (
             <PostComments

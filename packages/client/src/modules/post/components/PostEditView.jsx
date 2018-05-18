@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, ScrollView, Keyboard } from 'react-native';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import { Loading } from '../../common/components/native';
 import translate from '../../../i18n';
@@ -38,6 +39,7 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
               subscribeToMore={subscribeToMore}
             />
           )}
+          <KeyboardSpacer />
         </ScrollView>
       </View>
     );

@@ -26,7 +26,7 @@ const StandardView = ({ data, handlePageChange, t }) => {
         handlePageChange={handlePageChange}
         hasNextPage={data.pageInfo.hasNextPage}
         pagination={'standard'}
-        totalCount={data.edges.length}
+        totalCount={data.totalCount}
         loadMoreText={t('list.btn.more')}
         itemsNumber={itemsNumber}
       />

@@ -14,8 +14,18 @@ export default class Pagination extends React.Component {
     t: PropTypes.func
   };
 
+  constructor(props) {
+    super(props);
+    this.state = { data: this.generateDataObject(46) };
+  }
+
+  componentDidUpdate() {
+    console.log(this.state.data);
+  }
+
+  itemsNumber = settings.pagination.web.itemsNumber;
+
   renderMetaData = () => {
-    console.log(this.props);
     const { t } = this.props;
     return (
       <Helmet
@@ -30,81 +40,74 @@ export default class Pagination extends React.Component {
     );
   };
 
-  data = {
-    totalCount: 41,
-    edges: [
-      {
-        cursor: 0,
-        node: { id: 51, title: 'dogkljikljdfn', content: '345346456', __typename: 'Post' },
-        __typename: 'PostEdges'
+  generateDataObject = quantity => {
+    const allEdges = [];
+    [...Array(quantity).keys()].forEach(function(element) {
+      allEdges.push({ cursor: element, node: { id: element + 1, title: 'Item ' + (element + 1) } });
+    });
+    const edges = allEdges.slice(0, 10);
+    const hasNextPage = quantity > this.itemsNumber;
+    const endCursor = edges[edges.length - 1].cursor;
+    const data = {
+      totalCount: quantity,
+      pageInfo: {
+        endCursor: endCursor,
+        hasNextPage: hasNextPage
       },
-      {
-        cursor: 1,
-        node: { id: 50, title: 'dfgd', content: '34534', __typename: 'Post' },
-        __typename: 'PostEdges'
+      edges: edges,
+      offset: 0,
+      limit: this.itemsNumber
+    };
+    this.allEdges = allEdges;
+    return data;
+  };
+
+  loadData = (offset, dataDelivery) => {
+    const { data } = this.state;
+    const { allEdges, itemsNumber } = this;
+    const edges =
+      dataDelivery === 'add'
+        ? allEdges.slice(0, data.pageInfo.endCursor + itemsNumber)
+        : allEdges.slice(offset, offset + itemsNumber);
+    const endCursor = edges[edges.length - 1].cursor;
+    const hasNextPage = endCursor < allEdges[allEdges.length - 1].cursor;
+    const newData = {
+      totalCount: data.totalCount,
+      pageInfo: {
+        endCursor: endCursor,
+        hasNextPage: hasNextPage
       },
-      {
-        cursor: 2,
-        node: { id: 49, title: '34534', content: '345', __typename: 'Post' },
-        __typename: 'PostEdges'
-      },
-      {
-        cursor: 3,
-        node: { id: 46, title: 'edtyg', content: '234234', __typename: 'Post' },
-        __typename: 'PostEdges'
-      },
-      {
-        cursor: 4,
-        node: { id: 45, title: 'tyge', content: '354345', __typename: 'Post' },
-        __typename: 'PostEdges'
-      },
-      {
-        cursor: 5,
-        node: { id: 44, title: 'dfeg', content: '3453', __typename: 'Post' },
-        __typename: 'PostEdges'
-      },
-      {
-        cursor: 6,
-        node: { id: 43, title: '34534', content: 'dfetygd', __typename: 'Post' },
-        __typename: 'PostEdges'
-      },
-      {
-        cursor: 7,
-        node: { id: 42, title: 'dertyg', content: '3453', __typename: 'Post' },
-        __typename: 'PostEdges'
-      },
-      {
-        cursor: 8,
-        node: { id: 41, title: 'dfgdfhf', content: '345', __typename: 'Post' },
-        __typename: 'PostEdges'
-      },
-      {
-        cursor: 9,
-        node: { id: 40, title: 'Hhj', content: 'Yyh', __typename: 'Post' },
-        __typename: 'PostEdges'
-      }
-    ],
-    pageInfo: { endCursor: 9, hasNextPage: true, __typename: 'PostPageInfo' },
-    __typename: 'Posts'
+      edges: edges,
+      offset: 0,
+      limit: itemsNumber
+    };
+    console.log(newData);
+    return this.setState({ data: newData });
   };
 
   handlePageChange = (pagination, pageNumber) => {
-    console.log(pagination, pageNumber);
+    console.log(this.pagination, pageNumber, this.itemsNumber);
+    if (this.pagination === 'relay') {
+      this.loadData(this.state.data.pageInfo.endCursor + 1, 'add');
+    } else {
+      this.loadData((pageNumber - 1) * this.itemsNumber, 'replace');
+    }
   };
 
-  pagination = 'relay'; // 'relay'
+  pagination = 'relay'; // relay or standard
 
   renderPagination = () => {
+    console.log(this.state.data);
     const { t } = this.props;
     return this.pagination === 'standard' ? (
       <div>
         <h2>{t('list.title.standard')}</h2>
-        <StandardView data={this.data} handlePageChange={this.handlePageChange} />
+        <StandardView data={this.state.data} handlePageChange={this.handlePageChange} />
       </div>
     ) : (
       <div>
         <h2>{t('list.title.relay')}</h2>
-        <RelayView data={this.data} handlePageChange={this.handlePageChange} />
+        <RelayView data={this.state.data} handlePageChange={this.handlePageChange} />
       </div>
     );
   };

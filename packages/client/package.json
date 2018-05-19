@@ -175,7 +175,7 @@
   "peerDependencies": {
     "@expo/vector-icons": "^6.2.1",
     "antd-mobile": "^2.1.2",
-    "expo": "^27.0.0",
+    "expo": "^27.0.2",
     "native-base": "^2.3.5",
     "react-native": "0.55.3",
     "react-native-keyboard-spacer": "^0.4.1",

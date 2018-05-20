@@ -12,7 +12,7 @@ const Button = ({ children, color, type, size, ...props }) => {
   }
 
   return (
-    <ADButton type={color} htmlType={type} size={buttonSize} {...props}>
+    <ADButton htmlType={type} type={color} size={buttonSize} {...props}>
       {children}
     </ADButton>
   );

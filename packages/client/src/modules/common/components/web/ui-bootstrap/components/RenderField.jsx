@@ -2,32 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 
-const RenderField = ({ input, label, type, meta: { touched, error }, children, placeholder }) => {
-  let valid = true;
-  if (touched && error) {
-    valid = false;
-  }
+const RenderField = ({ input, options, meta: { touched, error } }) => {
+  const { label, placeholder } = input;
+  const invalid = !!(touched && error);
 
   return (
-    <FormGroup>
-      {label && <Label>{label}</Label>}
-      <div>
-        <Input {...input} placeholder={label || placeholder} type={type} invalid={!valid}>
-          {children}
-        </Input>
-        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
-      </div>
+    <FormGroup {...options}>
+      {label && <Label for={input.name + '_input'}>{label}</Label>}
+      <Input id={input.name + '_input'} {...input} placeholder={placeholder || label || ''} invalid={invalid} />
+      {invalid && <FormFeedback>{error}</FormFeedback>}
     </FormGroup>
   );
 };
 
 RenderField.propTypes = {
   input: PropTypes.object,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  meta: PropTypes.object,
-  placeholder: PropTypes.string,
-  children: PropTypes.array
+  options: PropTypes.object,
+  meta: PropTypes.object
 };
 
 export default RenderField;

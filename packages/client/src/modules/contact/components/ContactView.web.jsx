@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 
 import translate from '../../../i18n';
 import { LayoutCenter } from '../../common/components';
-import { PageLayout } from '../../common/components/web';
+import { PageLayout, Alert } from '../../common/components/web';
 import ContactForm from './ContactForm';
 import settings from '../../../../../../settings';
 
@@ -52,7 +52,8 @@ class ContactView extends React.Component {
         {renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">{t('form.title')}</h1>
-          <ContactForm onSubmit={this.onSubmit({ contact, t })} sent={this.state.sent} />
+          {this.state.sent && <Alert color="success">{t('form.submitMsg')}</Alert>}
+          <ContactForm onSubmit={this.onSubmit({ contact, t })} />
         </LayoutCenter>
       </PageLayout>
     );

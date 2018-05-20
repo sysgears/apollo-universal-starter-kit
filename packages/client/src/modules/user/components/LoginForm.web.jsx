@@ -1,47 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
 import { NavLink, Link } from 'react-router-dom';
+//eslint-disable-next-line import/no-extraneous-dependencies
+import { Schema } from '@domain-schema/core';
+//eslint-disable-next-line import/no-extraneous-dependencies
+import { DomainSchemaFormik } from '@domain-schema/formik';
 
 import translate from '../../../i18n';
-import Field from '../../../utils/FieldAdapter';
-import { Form, RenderField, Alert, Button } from '../../common/components/web';
-import { required, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
 
 import settings from '../../../../../../settings';
 
-const loginFormSchema = {
-  usernameOrEmail: [required, minLength(3)],
-  password: [required, minLength(8)]
-};
+const loginFormSchema = t =>
+  class extends Schema {
+    __ = { name: 'PostForm' };
+    email = {
+      type: String,
+      input: {
+        type: 'email',
+        label: t('login.form.field.email')
+      },
+      email: true
+    };
+    password = {
+      type: String,
+      input: {
+        type: 'password',
+        label: t('login.form.field.pass')
+      },
+      min: 4
+    };
+  };
 
-const validate = values => validateForm(values, loginFormSchema);
+const LoginForm = ({ onSubmit, t }) => {
+  const loginForm = new DomainSchemaFormik(loginFormSchema(t));
+  const LoginFormComponent = loginForm.generateForm({
+    label: t('login.form.btnSubmit'),
+    color: 'primary',
+    disabledOnInvalid: true
+  });
 
-const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
   return (
-    <Form name="login" onSubmit={handleSubmit}>
-      <Field
-        name="usernameOrEmail"
-        component={RenderField}
-        type="text"
-        label={t('login.form.field.usenameOrEmail')}
-        value={values.usernameOrEmail}
-      />
-      <Field
-        name="password"
-        component={RenderField}
-        type="password"
-        label={t('login.form.field.pass')}
-        value={values.password}
-      />
-      <div className="text-center">{error && <Alert color="error">{error}</Alert>}</div>
-      <div className="text-center">
-        <Button color="primary" type="submit" disabled={submitting}>
-          {t('login.form.btnSubmit')}
-        </Button>
-      </div>
+    <React.Fragment>
+      <LoginFormComponent onSubmit={async (values, { setErrors }) => await onSubmit(values).catch(e => setErrors(e))} />
       {settings.user.auth.facebook.enabled && (
         <div className="text-center">
           <FacebookButton type={'button'} />
@@ -62,37 +64,13 @@ const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
           {t('login.btn.sign')}
         </NavLink>
       </div>
-    </Form>
+    </React.Fragment>
   );
 };
 
 LoginForm.propTypes = {
-  handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
-  error: PropTypes.string,
-  values: PropTypes.object,
   t: PropTypes.func
 };
 
-const LoginFormWithFormik = withFormik({
-  enableReinitialize: true,
-  mapPropsToValues: () => ({ usernameOrEmail: '', password: '' }),
-
-  handleSubmit(
-    values,
-    {
-      setErrors,
-      props: { onSubmit }
-    }
-  ) {
-    onSubmit(values).catch(e => {
-      console.log(e);
-      setErrors(e);
-    });
-  },
-  validate: values => validate(values),
-  displayName: 'LoginForm' // helps with React DevTools
-});
-
-export default translate('user')(LoginFormWithFormik(LoginForm));
+export default translate('user')(LoginForm);

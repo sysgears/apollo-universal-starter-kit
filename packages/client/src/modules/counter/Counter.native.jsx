@@ -7,9 +7,9 @@ import ServerCounter from './serverCounter';
 import ReduxCounter from './reduxCounter';
 import translate from '../../i18n';
 
-const Counter = ({ t, loading, counter, subscribeToMore }) => (
+const Counter = ({ t }) => (
   <View style={styles.container}>
-    <ServerCounter t={t} loading={loading} subscribeToMore={subscribeToMore} counter={counter} />
+    <ServerCounter t={t} />
     <ReduxCounter t={t} />
     <ClientCounter t={t} />
   </View>
@@ -26,9 +26,6 @@ const styles = StyleSheet.create({
 });
 
 Counter.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  counter: PropTypes.object,
-  subscribeToMore: PropTypes.func.isRequired,
   t: PropTypes.func
 };
 

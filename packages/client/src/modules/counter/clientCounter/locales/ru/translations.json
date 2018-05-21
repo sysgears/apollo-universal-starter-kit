@@ -1,0 +1,7 @@
+{
+  "clientCounter": {
+    "text":
+      "Текущий apolloLinkState счетчик, равен {{counterState}}. Он хранится на стороне клиента с помощью Apollo Link State.",
+    "btnLabel": "Нажмите, чтобы увеличить apolloLinkState счетчик"
+  }
+}

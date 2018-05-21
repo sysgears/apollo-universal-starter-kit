@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Picker, ScrollView, View, Text, Platform, TouchableOpacity } from 'react-native';
 import { SwipeAction } from '../../common/components/native';
 import translate from '../../../i18n';
-import StandardView from '../components/StandardView.native';
-import RelayView from '../components/RelayView.native';
+import PaginationView from '../components/PaginationView.native';
 
 @translate('pagination')
-export default class Pagination extends React.Component {
+export default class PaginationContainer extends React.Component {
   static propTypes = {
     t: PropTypes.func,
     data: PropTypes.object,
@@ -34,13 +33,14 @@ export default class Pagination extends React.Component {
     const { data } = this.props;
     const { pagination } = this.state;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
-    return pagination === 'standard' ? (
+    return (
       <View>
-        <StandardView data={data} handlePageChange={this.handlePageChange} renderItem={renderItem} />
-      </View>
-    ) : (
-      <View>
-        <RelayView data={data} handlePageChange={this.handlePageChange} renderItem={renderItem} />
+        <PaginationView
+          data={data}
+          handlePageChange={this.handlePageChange}
+          renderItem={renderItem}
+          pagination={pagination}
+        />
       </View>
     );
   };

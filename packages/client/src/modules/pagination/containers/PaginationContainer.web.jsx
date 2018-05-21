@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
-import StandardView from '../components/StandardView.web';
-import RelayView from '../components/RelayView.web';
+import PaginationView from '../components/PaginationView.web';
 import { PageLayout, Option } from '../../common/components/web';
 import translate from '../../../i18n';
 import settings from '../../../../../../settings';
 
 @translate('pagination')
-export default class Pagination extends React.Component {
+export default class PaginationContainer extends React.Component {
   static propTypes = {
     t: PropTypes.func,
     loadData: PropTypes.func,
@@ -44,15 +43,11 @@ export default class Pagination extends React.Component {
 
   renderPagination = () => {
     const { t, data } = this.props;
-    return this.state.pagination === 'standard' ? (
+    const { pagination } = this.state;
+    return (
       <div>
         <h2>{t('list.title.standard')}</h2>
-        <StandardView data={data} handlePageChange={this.handlePageChange} />
-      </div>
-    ) : (
-      <div>
-        <h2>{t('list.title.relay')}</h2>
-        <RelayView data={data} handlePageChange={this.handlePageChange} />
+        <PaginationView data={data} handlePageChange={this.handlePageChange} pagination={pagination} />
       </div>
     );
   };

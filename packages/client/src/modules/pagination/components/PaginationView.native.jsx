@@ -5,7 +5,7 @@ import { Pagination } from '../../common/components/native';
 
 import translate from '../../../i18n';
 
-const StandardView = ({ data, handlePageChange, renderItem, t }) => {
+const PaginationView = ({ data, handlePageChange, renderItem, pagination, t }) => {
   return (
     <View>
       <FlatList
@@ -17,7 +17,7 @@ const StandardView = ({ data, handlePageChange, renderItem, t }) => {
       <Pagination
         totalPages={Math.ceil(data.totalCount / data.limit)}
         handlePageChange={handlePageChange}
-        pagination="standard"
+        pagination={pagination}
         loadMoreText={t('list.btn.more')}
         hasNextPage={data.pageInfo.hasNextPage}
       />
@@ -25,11 +25,12 @@ const StandardView = ({ data, handlePageChange, renderItem, t }) => {
   );
 };
 
-StandardView.propTypes = {
+PaginationView.propTypes = {
   t: PropTypes.func,
   data: PropTypes.object,
   handlePageChange: PropTypes.func,
-  renderItem: PropTypes.func
+  renderItem: PropTypes.func,
+  pagination: PropTypes.string
 };
 
 const styles = StyleSheet.create({
@@ -38,4 +39,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('pagination')(StandardView);
+export default translate('pagination')(PaginationView);

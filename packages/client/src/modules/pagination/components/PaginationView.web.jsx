@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Table, Pagination } from '../../common/components/web';
 import translate from '../../../i18n';
 
-const RelayView = ({ data, handlePageChange, t }) => {
+const PaginationView = ({ data, handlePageChange, pagination, t }) => {
   const renderFunc = text => <span>{text}</span>;
   const columns = [
     {
@@ -22,7 +22,7 @@ const RelayView = ({ data, handlePageChange, t }) => {
         displayedAmount={data.edges.length}
         handlePageChange={handlePageChange}
         hasNextPage={data.pageInfo.hasNextPage}
-        pagination={'relay'}
+        pagination={pagination}
         totalCount={data.totalCount}
         loadMoreText={t('list.btn.more')}
         itemsNumber={data.limit}
@@ -31,10 +31,11 @@ const RelayView = ({ data, handlePageChange, t }) => {
   );
 };
 
-RelayView.propTypes = {
+PaginationView.propTypes = {
   data: PropTypes.object,
   handlePageChange: PropTypes.func,
-  t: PropTypes.func
+  t: PropTypes.func,
+  pagination: PropTypes.string
 };
 
-export default translate('pagination')(RelayView);
+export default translate('pagination')(PaginationView);

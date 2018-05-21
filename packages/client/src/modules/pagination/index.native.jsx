@@ -3,7 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
 import { HeaderTitle, IconButton } from '../common/components/native';
-import PaginationContainer from './containers/PaginationContainer';
+import Pagination from './containers/Pagination';
 import resources from './locales';
 
 import Feature from '../connector';
@@ -15,7 +15,7 @@ export default new Feature({
     Pagination: {
       screen: createStackNavigator({
         Pagination: {
-          screen: PaginationContainer,
+          screen: Pagination,
           navigationOptions: ({ navigation }) => ({
             headerTitle: <HeaderTitleWithI18n style="subTitle" />,
             headerLeft: (

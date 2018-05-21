@@ -1,10 +1,10 @@
 import React from 'react';
-import Pagination from '../containers/Pagination';
+import PaginationContainer from '../containers/PaginationContainer';
 import paginationConfig from '../../../../../../config/pagination';
 
 const itemsNumber = paginationConfig.web.itemsNumber;
 
-export default class PaginationContainer extends React.Component {
+export default class Pagination extends React.Component {
   constructor(props) {
     super(props);
     this.allEdges = generateEdgesArray(47);
@@ -19,7 +19,7 @@ export default class PaginationContainer extends React.Component {
 
   render() {
     const { data } = this.state;
-    return <Pagination data={data} loadData={this.loadData} />;
+    return <PaginationContainer data={data} loadData={this.loadData} />;
   }
 }
 

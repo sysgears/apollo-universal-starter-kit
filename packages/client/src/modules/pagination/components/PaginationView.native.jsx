@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, Text } from 'react-native';
 import { Pagination } from '../../common/components/native';
 
 import translate from '../../../i18n';
@@ -8,6 +8,7 @@ import translate from '../../../i18n';
 const PaginationView = ({ data, handlePageChange, renderItem, pagination, t }) => {
   return (
     <View>
+      <Text style={styles.title}>{t('list.column.title')}</Text>
       <FlatList
         data={data.edges}
         style={styles.list}
@@ -36,6 +37,15 @@ PaginationView.propTypes = {
 const styles = StyleSheet.create({
   list: {
     marginTop: 5
+  },
+  title: {
+    marginTop: 5,
+    paddingTop: 10,
+    paddingBottom: 10,
+    fontSize: 18,
+    paddingLeft: 7,
+    borderBottomColor: '#000',
+    borderBottomWidth: 0.3
   }
 });
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Picker, ScrollView, View, Text, Platform, TouchableOpacity } from 'react-native';
-import { SwipeAction } from '../../common/components/native';
+import { StyleSheet, ScrollView, View, Text, Platform, TouchableOpacity } from 'react-native';
+import { SwipeAction, Select } from '../../common/components/native';
 import translate from '../../../i18n';
 import PaginationView from '../components/PaginationView.native';
 
@@ -68,12 +68,13 @@ export default class PaginationContainer extends React.Component {
   render() {
     const { t } = this.props;
     const { pagination } = this.state;
+    const options = [
+      { value: 'standard', label: t('list.title.standard') },
+      { value: 'relay', label: t('list.title.relay') }
+    ];
     return (
       <ScrollView style={styles.container}>
-        <Picker selectedValue={pagination} onValueChange={this.onPickerChange}>
-          <Picker.Item label={t('list.title.standard')} value="standard" />
-          <Picker.Item label={t('list.title.relay')} value="relay" />
-        </Picker>
+        <Select selectedValue={pagination} value="relay" onValueChange={this.onPickerChange} data={options} />
         {this.renderPagination()}
       </ScrollView>
     );

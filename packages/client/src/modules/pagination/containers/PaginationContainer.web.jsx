@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
 import PaginationView from '../components/PaginationView.web';
-import { PageLayout, Option } from '../../common/components/web';
+import { PageLayout, Select, Option } from '../../common/components/web';
 import translate from '../../../i18n';
 import settings from '../../../../../../settings';
 
@@ -62,10 +62,10 @@ export default class PaginationContainer extends React.Component {
     const { t } = this.props;
     return (
       <PageLayout>
-        <select onChange={this.onSelectChange}>
+        <Select onChange={this.onSelectChange}>
           <Option value="standard">{t('list.title.standard')}</Option>
           <Option value="relay">{t('list.title.relay')}</Option>
-        </select>
+        </Select>
         {this.renderMetaData()}
         {this.renderPagination()}
       </PageLayout>

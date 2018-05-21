@@ -8,26 +8,12 @@ export default class PaginationContainer extends React.Component {
   constructor(props) {
     super(props);
     this.allEdges = generateEdgesArray(47);
-    this.state = { data: generateDataObject(this.allEdges) };
+    this.state = { data: generateDataObject(this.allEdges, 0, 'replace') };
   }
 
   loadData = (offset, dataDelivery) => {
-    const { data } = this.state;
     const { allEdges } = this;
-    const edges =
-      dataDelivery === 'add' ? allEdges.slice(0, offset + itemsNumber) : allEdges.slice(offset, offset + itemsNumber);
-    const endCursor = edges[edges.length - 1].cursor;
-    const hasNextPage = endCursor < allEdges[allEdges.length - 1].cursor;
-    const newData = {
-      totalCount: data.totalCount,
-      pageInfo: {
-        endCursor: endCursor,
-        hasNextPage: hasNextPage
-      },
-      edges: edges,
-      offset: 0,
-      limit: itemsNumber
-    };
+    const newData = generateDataObject(allEdges, offset, dataDelivery);
     this.setState({ data: newData });
   };
 
@@ -45,10 +31,11 @@ const generateEdgesArray = quantity => {
   return arr;
 };
 
-const generateDataObject = allEdges => {
-  const edges = allEdges.slice(0, 10);
-  const hasNextPage = allEdges.length > itemsNumber;
+const generateDataObject = (allEdges, offset, dataDelivery) => {
+  const edges =
+    dataDelivery === 'add' ? allEdges.slice(0, offset + itemsNumber) : allEdges.slice(offset, offset + itemsNumber);
   const endCursor = edges[edges.length - 1].cursor;
+  const hasNextPage = endCursor < allEdges[allEdges.length - 1].cursor;
   return {
     totalCount: allEdges.length,
     pageInfo: {
@@ -56,7 +43,7 @@ const generateDataObject = allEdges => {
       hasNextPage: hasNextPage
     },
     edges: edges,
-    offset: 0,
+    offset: offset,
     limit: itemsNumber
   };
 };

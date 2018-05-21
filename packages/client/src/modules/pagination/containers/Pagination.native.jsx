@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Picker, ScrollView, View } from 'react-native';
+import { StyleSheet, Picker, ScrollView, View, Text, Platform, TouchableOpacity } from 'react-native';
+import { SwipeAction } from '../../common/components/native';
 import translate from '../../../i18n';
 import StandardView from '../components/StandardView.native';
 import RelayView from '../components/RelayView.native';
@@ -32,14 +33,35 @@ export default class Pagination extends React.Component {
   renderPagination = () => {
     const { data } = this.props;
     const { pagination } = this.state;
+    const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     return pagination === 'standard' ? (
       <View>
-        <StandardView data={data} handlePageChange={this.handlePageChange} />
+        <StandardView data={data} handlePageChange={this.handlePageChange} renderItem={renderItem} />
       </View>
     ) : (
       <View>
-        <RelayView data={data} handlePageChange={this.handlePageChange} />
+        <RelayView data={data} handlePageChange={this.handlePageChange} renderItem={renderItem} />
       </View>
+    );
+  };
+
+  renderItemIOS = ({
+    item: {
+      node: { title }
+    }
+  }) => {
+    return <SwipeAction>{title}</SwipeAction>;
+  };
+
+  renderItemAndroid = ({
+    item: {
+      node: { title }
+    }
+  }) => {
+    return (
+      <TouchableOpacity style={styles.postWrapper}>
+        <Text style={styles.text}>{title}</Text>
+      </TouchableOpacity>
     );
   };
 
@@ -62,5 +84,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff'
+  },
+  text: {
+    fontSize: 18
+  },
+  postWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderBottomColor: '#000',
+    borderBottomWidth: 0.3,
+    height: 48,
+    paddingLeft: 7
   }
 });

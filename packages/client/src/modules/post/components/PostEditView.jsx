@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Loading } from '../../common/components/native';
 
 import translate from '../../../i18n';
@@ -27,16 +27,18 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
     return <Loading text={t('post.loadMsg')} />;
   } else {
     return (
-      <ScrollView style={styles.container}>
-        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
-        {postObj && (
-          <PostComments
-            postId={navigation.state.params.id}
-            comments={postObj.comments}
-            subscribeToMore={subscribeToMore}
-          />
-        )}
-      </ScrollView>
+      <View style={styles.container}>
+        <ScrollView>
+          <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
+          {postObj && (
+            <PostComments
+              postId={navigation.state.params.id}
+              comments={postObj.comments}
+              subscribeToMore={subscribeToMore}
+            />
+          )}
+        </ScrollView>
+      </View>
     );
   }
 };
@@ -53,7 +55,9 @@ PostEditView.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column'
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#fff'
   }
 });
 

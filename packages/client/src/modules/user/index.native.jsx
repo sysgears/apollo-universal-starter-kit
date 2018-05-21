@@ -69,6 +69,9 @@ const AuthScreen = createStackNavigator(
   {
     cardStyle: {
       backgroundColor: '#fff'
+    },
+    navigationOptions: {
+      headerStyle: { backgroundColor: '#fff' }
     }
   }
 );

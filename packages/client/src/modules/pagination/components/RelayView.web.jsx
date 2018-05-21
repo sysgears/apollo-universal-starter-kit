@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Pagination } from '../../common/components/web';
 import translate from '../../../i18n';
-import settings from '../../../../../../settings';
-
-const { itemsNumber } = settings.pagination.web;
 
 const RelayView = ({ data, handlePageChange, t }) => {
   const renderFunc = text => <span>{text}</span>;
@@ -28,7 +25,7 @@ const RelayView = ({ data, handlePageChange, t }) => {
         pagination={'relay'}
         totalCount={data.totalCount}
         loadMoreText={t('list.btn.more')}
-        itemsNumber={itemsNumber}
+        itemsNumber={data.limit}
       />
     </div>
   );

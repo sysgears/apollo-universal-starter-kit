@@ -5,13 +5,11 @@ import paginationConfig from '../../../../../../config/pagination';
 const itemsNumber = paginationConfig.web.itemsNumber;
 
 export default class PaginationContainer extends React.Component {
-  state = { data: null };
-
-  componentWillMount() {
-    this.setState({ data: generateDataObject(this.allEdges) });
+  constructor(props) {
+    super(props);
+    this.allEdges = generateEdgesArray(47);
+    this.state = { data: generateDataObject(this.allEdges) };
   }
-
-  allEdges = generateEdgesArray(47);
 
   loadData = (offset, dataDelivery) => {
     const { data } = this.state;
@@ -34,7 +32,8 @@ export default class PaginationContainer extends React.Component {
   };
 
   render() {
-    return <Pagination data={this.state.data} loadData={this.loadData} />;
+    const { data } = this.state;
+    return <Pagination data={data} loadData={this.loadData} />;
   }
 }
 

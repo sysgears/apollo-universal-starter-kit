@@ -18,8 +18,6 @@ export default class Pagination extends React.Component {
 
   state = { pagination: 'standard' };
 
-  itemsNumber = settings.pagination.web.itemsNumber;
-
   renderMetaData = () => {
     const { t } = this.props;
     return (
@@ -40,7 +38,7 @@ export default class Pagination extends React.Component {
     if (pagination === 'relay') {
       loadData(data.pageInfo.endCursor + 1, 'add');
     } else {
-      loadData((pageNumber - 1) * this.itemsNumber, 'replace');
+      loadData((pageNumber - 1) * data.limit, 'replace');
     }
   };
 
@@ -60,7 +58,9 @@ export default class Pagination extends React.Component {
   };
 
   onSelectChange = e => {
-    this.setState({ pagination: e.target.value }, this.props.loadData(0, this.itemsNumber));
+    const { loadData, data } = this.props;
+    const paginationType = e.target.value;
+    this.setState({ pagination: paginationType }, loadData(0, data.limit));
   };
 
   render() {

@@ -16,7 +16,8 @@ export default class Pagination extends React.Component {
   state = { pagination: 'standard' };
 
   onPickerChange = itemValue => {
-    this.setState({ pagination: itemValue }, this.props.loadData(0, this.props.data.limit));
+    const { loadData, data } = this.props;
+    this.setState({ pagination: itemValue }, loadData(0, data.limit));
   };
 
   handlePageChange = (pagination, pageNumber) => {
@@ -30,7 +31,8 @@ export default class Pagination extends React.Component {
 
   renderPagination = () => {
     const { data } = this.props;
-    return this.state.pagination === 'standard' ? (
+    const { pagination } = this.state;
+    return pagination === 'standard' ? (
       <View>
         <StandardView data={data} handlePageChange={this.handlePageChange} />
       </View>
@@ -43,9 +45,10 @@ export default class Pagination extends React.Component {
 
   render() {
     const { t } = this.props;
+    const { pagination } = this.state;
     return (
       <ScrollView style={styles.container}>
-        <Picker selectedValue={this.state.pagination} onValueChange={this.onPickerChange}>
+        <Picker selectedValue={pagination} onValueChange={this.onPickerChange}>
           <Picker.Item label={t('list.title.standard')} value="standard" />
           <Picker.Item label={t('list.title.relay')} value="relay" />
         </Picker>

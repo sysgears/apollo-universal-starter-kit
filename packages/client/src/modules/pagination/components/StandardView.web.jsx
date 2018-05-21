@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Pagination } from '../../common/components/web';
 import translate from '../../../i18n';
-import settings from '../../../../../../settings';
-
-const { itemsNumber } = settings.pagination.web;
 
 const StandardView = ({ data, handlePageChange, t }) => {
   const renderFunc = text => <span>{text}</span>;
@@ -22,13 +19,13 @@ const StandardView = ({ data, handlePageChange, t }) => {
     <div>
       <Table dataSource={data.edges.map(({ node }) => node)} columns={columns} />
       <Pagination
-        displayedAmount={itemsNumber}
+        displayedAmount={data.edges.length}
         handlePageChange={handlePageChange}
         hasNextPage={data.pageInfo.hasNextPage}
         pagination={'standard'}
         totalCount={data.totalCount}
         loadMoreText={t('list.btn.more')}
-        itemsNumber={itemsNumber}
+        itemsNumber={data.limit}
       />
     </div>
   );

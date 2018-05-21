@@ -88,7 +88,7 @@ class PostCommentsView extends React.PureComponent {
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
 
     return (
-      <View>
+      <View style={styles.container}>
         <Text style={styles.title}>{t('comment.title')}</Text>
         <PostCommentForm
           postId={postId}
@@ -108,6 +108,11 @@ class PostCommentsView extends React.PureComponent {
 export default translate('post')(PostCommentsView);
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center'
+  },
   title: {
     fontSize: 20,
     fontWeight: '600',
@@ -133,7 +138,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
     borderBottomColor: '#000',
     borderBottomWidth: 0.3,
     height: 50,

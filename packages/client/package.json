@@ -97,6 +97,7 @@
     "@types/react": "^16.0.38",
     "@types/react-dom": "^16.0.5",
     "@types/react-native": "^0.55.7",
+    "@types/webpack-env": "^1.13.6",
     "apollo-utilities": "^1.0.3",
     "autoprefixer": "^8.3.0",
     "babel-cli": "^6.26.0",
@@ -174,7 +175,7 @@
   "peerDependencies": {
     "@expo/vector-icons": "^6.2.1",
     "antd-mobile": "^2.1.2",
-    "expo": "^27.0.0",
+    "expo": "^27.0.2",
     "native-base": "^2.3.5",
     "react-native": "0.55.3",
     "react-native-keyboard-spacer": "^0.4.1",

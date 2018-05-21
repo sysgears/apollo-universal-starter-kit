@@ -74,7 +74,14 @@ export default class PaginationContainer extends React.Component {
     ];
     return (
       <ScrollView style={styles.container}>
-        <Select selectedValue={pagination} value="relay" onValueChange={this.onPickerChange} data={options} />
+        <Select
+          data={options}
+          selectedValue={pagination}
+          onValueChange={this.onPickerChange}
+          okText={t('select.ok')}
+          dismissText={t('select.dismiss')}
+          cols={1}
+        />
         {this.renderPagination()}
       </ScrollView>
     );

@@ -62,11 +62,11 @@ export default class PaginationContainer extends React.Component {
     const { t } = this.props;
     return (
       <PageLayout>
+        {this.renderMetaData()}
         <Select onChange={this.onSelectChange}>
           <Option value="standard">{t('list.title.standard')}</Option>
           <Option value="relay">{t('list.title.relay')}</Option>
         </Select>
-        {this.renderMetaData()}
         {this.renderPagination()}
       </PageLayout>
     );

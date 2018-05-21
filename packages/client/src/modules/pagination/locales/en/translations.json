@@ -10,6 +10,10 @@
     },
     "column": {
       "title": "Name"
+    },
+    "select": {
+      "ok": "Select",
+      "dismiss": "Cancel"
     }
   }
 }

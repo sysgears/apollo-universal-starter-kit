@@ -2,16 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Button, primary } from '../../../common/components/native';
+import { Button, Loading, primary } from '../../../common/components/native';
 
-export const ServerCounterView = ({ t, children, counter }) => (
-  <View>
-    <View style={styles.element}>
-      <Text style={styles.box}>{t('serverCounter.text', { counter })}</Text>
-    </View>
-    {children}
-  </View>
-);
+export const ServerCounterView = ({ t, children, counter, loading }) => {
+  if (loading) {
+    return <Loading text={t('loading')} />;
+  } else {
+    return (
+      <View>
+        <View style={styles.element}>
+          <Text style={styles.box}>{t('serverCounter.text', { counter })}</Text>
+        </View>
+        {children}
+      </View>
+    );
+  }
+};
 
 const styles = StyleSheet.create({
   element: {
@@ -26,7 +32,8 @@ const styles = StyleSheet.create({
 ServerCounterView.propTypes = {
   t: PropTypes.func,
   children: PropTypes.node,
-  counter: PropTypes.object
+  counter: PropTypes.object,
+  loading: PropTypes.bool
 };
 
 export const ServerCounterButton = ({ addCounter, amount, t }) => (

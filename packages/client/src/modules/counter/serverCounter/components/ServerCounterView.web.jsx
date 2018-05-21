@@ -9,17 +9,28 @@ const Section = styled.section`
   text-align: center;
 `;
 
-export const ServerCounterView = ({ t, children, counter }) => (
-  <Section>
-    <p>{t('serverCounter.text', { counter })}</p>
-    {children}
-  </Section>
-);
+export const ServerCounterView = ({ t, children, counter, loading }) => {
+  if (loading) {
+    return (
+      <Section>
+        <div className="text-center">{t('loading')}</div>
+      </Section>
+    );
+  } else {
+    return (
+      <Section>
+        <p>{t('serverCounter.text', { counter })}</p>
+        {children}
+      </Section>
+    );
+  }
+};
 
 ServerCounterView.propTypes = {
   t: PropTypes.func,
   children: PropTypes.node,
-  counter: PropTypes.object
+  counter: PropTypes.object,
+  loading: PropTypes.bool
 };
 
 export const ServerCounterButton = ({ addCounter, amount, t }) => (

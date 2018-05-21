@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Counter from './containers/Counter';
+import Counter from './Counter';
 import resolvers from './clientCounter/resolvers';
 import reducers from './reduxCounter/reducers';
 import resources from './locales';

@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import update from 'immutability-helper';
 
 import { ServerCounterView, ServerCounterButton } from './components/ServerCounterView';
 import ADD_COUNTER from './graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from './graphql/CounterSubscription.graphql';
+import COUNTER_QUERY from './graphql/CounterQuery.graphql';
 
 const IncreaseButton = ({ counterAmount, t, counter }) => (
   <Mutation mutation={ADD_COUNTER}>
@@ -44,7 +45,20 @@ IncreaseButton.propTypes = {
   counter: PropTypes.object
 };
 
-export default class ServerCounter extends React.Component {
+const ServerCounter = ({ t }) => (
+  <Query query={COUNTER_QUERY}>
+    {({ loading, error, data: { counter }, subscribeToMore }) => {
+      if (error) throw new Error(error);
+      return <ServerCounterComponent t={t} loading={loading} subscribeToMore={subscribeToMore} counter={counter} />;
+    }}
+  </Query>
+);
+
+ServerCounter.propTypes = {
+  t: PropTypes.func
+};
+
+class ServerCounterComponent extends React.Component {
   static propTypes = {
     t: PropTypes.func,
     subscribeToMore: PropTypes.func,
@@ -97,11 +111,13 @@ export default class ServerCounter extends React.Component {
   }
 
   render() {
-    const { t, counter } = this.props;
+    const { t, counter, loading } = this.props;
     return (
-      <ServerCounterView t={t} counter={counter}>
+      <ServerCounterView t={t} counter={counter} loading={loading}>
         <IncreaseButton t={t} counterAmount={1} counter={counter} />
       </ServerCounterView>
     );
   }
 }
+
+export default ServerCounter;

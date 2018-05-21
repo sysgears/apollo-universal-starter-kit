@@ -2,14 +2,20 @@ import React from 'react';
 import Pagination from '../containers/Pagination';
 import paginationConfig from '../../../../../../config/pagination';
 
+const itemsNumber = paginationConfig.web.itemsNumber;
+
 export default class PaginationContainer extends React.Component {
-  allEdges = generateEdgesArray(46);
-  state = { data: generateDataObject(this.allEdges) };
-  itemsNumber = paginationConfig.web.itemsNumber;
+  state = { data: null };
+
+  componentWillMount() {
+    this.setState({ data: generateDataObject(this.allEdges) });
+  }
+
+  allEdges = generateEdgesArray(47);
 
   loadData = (offset, dataDelivery) => {
     const { data } = this.state;
-    const { allEdges, itemsNumber } = this;
+    const { allEdges } = this;
     const edges =
       dataDelivery === 'add' ? allEdges.slice(0, offset + itemsNumber) : allEdges.slice(offset, offset + itemsNumber);
     const endCursor = edges[edges.length - 1].cursor;
@@ -33,16 +39,16 @@ export default class PaginationContainer extends React.Component {
 }
 
 const generateEdgesArray = quantity => {
-  const allEdges = [];
-  [...Array(quantity).keys()].forEach(function(element) {
-    allEdges.push({ cursor: element, node: { id: element + 1, title: 'Item ' + (element + 1) } });
-  });
-  return allEdges;
+  const arr = [];
+  for (let i = 1; i <= quantity; i++) {
+    arr.push({ cursor: i, node: { id: i, title: 'Item ' + i } });
+  }
+  return arr;
 };
 
 const generateDataObject = allEdges => {
   const edges = allEdges.slice(0, 10);
-  const hasNextPage = allEdges.length > paginationConfig.web.itemsNumber;
+  const hasNextPage = allEdges.length > itemsNumber;
   const endCursor = edges[edges.length - 1].cursor;
   return {
     totalCount: allEdges.length,
@@ -52,6 +58,6 @@ const generateDataObject = allEdges => {
     },
     edges: edges,
     offset: 0,
-    limit: paginationConfig.web.itemsNumber
+    limit: itemsNumber
   };
 };

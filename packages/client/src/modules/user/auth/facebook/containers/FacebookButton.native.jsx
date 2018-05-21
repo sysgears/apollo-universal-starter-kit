@@ -82,10 +82,13 @@ class FacebookComponent extends React.Component {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
     }
-    if (decodedData.user) {
+
+    const currentUser = await client.query({ query: CURRENT_USER_QUERY });
+
+    if (currentUser.data) {
       await client.writeQuery({
         query: CURRENT_USER_QUERY,
-        data: decodedData.user
+        data: currentUser.data
       });
     }
     if (Platform.OS === 'ios') {

@@ -35,7 +35,7 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
     : [];
 
   if (currentUser && currentUser.profile && currentUser.profile.fullName) {
-    profileItems.push({ label: `${t('profile.card.group.full')}}`, value: currentUser.profile.fullName });
+    profileItems.push({ label: `${t('profile.card.group.full')}`, value: currentUser.profile.fullName });
   }
 
   return (

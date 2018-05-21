@@ -4,7 +4,7 @@ import FacebookStrategy from 'passport-facebook';
 
 import resolvers from './resolvers';
 import Feature from '../connector';
-import User, { buildUser } from '../../sql';
+import User from '../../sql';
 import settings from '../../../../../../../settings';
 import access from '../../access';
 
@@ -67,10 +67,9 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
       passport.authenticate('facebook', { state: req.query.expoUrl })(req, res, next);
     });
     app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
-      const user = await buildUser(req.user.id);
-      const { id, role, username, profile } = user.currentUser;
+      const user = await User.getUser(req.user.id);
       const redirectUrl = req.query.state;
-      const tokens = await access.grantAccess({ id, role, username, ...profile }, req);
+      const tokens = await access.grantAccess(user, req);
 
       if (redirectUrl) {
         res.redirect(
@@ -78,8 +77,7 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
             (tokens
               ? '?data=' +
                 JSON.stringify({
-                  tokens,
-                  user
+                  tokens
                 })
               : '')
         );

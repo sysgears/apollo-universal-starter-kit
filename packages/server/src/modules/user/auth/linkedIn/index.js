@@ -4,7 +4,7 @@ import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 
 import resolvers from './resolvers';
 import Feature from '../connector';
-import User, { buildUser } from '../../sql';
+import User from '../../sql';
 import settings from '../../../../../../../settings';
 import access from '../../access';
 
@@ -69,10 +69,9 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
       '/auth/linkedin/callback',
       passport.authenticate('linkedin', { session: false, failureRedirect: '/login' }),
       async function(req, res) {
-        const user = await buildUser(req.user.id);
-        const { id, role, username, profile } = user.currentUser;
+        const user = await User.getUser(req.user.id);
         const redirectUrl = req.query.state;
-        const tokens = await access.grantAccess({ id, role, username, ...profile }, req);
+        const tokens = await access.grantAccess(user, req);
 
         if (redirectUrl) {
           res.redirect(
@@ -80,8 +79,7 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
               (tokens
                 ? '?data=' +
                   JSON.stringify({
-                    tokens,
-                    user
+                    tokens
                   })
                 : '')
           );

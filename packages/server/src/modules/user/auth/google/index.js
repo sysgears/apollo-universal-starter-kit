@@ -4,7 +4,7 @@ import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
 import resolvers from './resolvers';
 import Feature from '../connector';
-import User, { buildUser } from '../../sql';
+import User from '../../sql';
 import access from '../../access';
 import settings from '../../../../../../../settings';
 
@@ -78,10 +78,9 @@ if (settings.user.auth.google.enabled && !__TEST__) {
     });
 
     app.get('/auth/google/callback', passport.authenticate('google', { session: false }), async function(req, res) {
-      const user = await buildUser(req.user.id);
-      const { id, role, username, profile } = user.currentUser;
+      const user = await User.getUser(req.user.id);
       const redirectUrl = req.query.state;
-      const tokens = await access.grantAccess({ id, role, username, ...profile }, req);
+      const tokens = await access.grantAccess(user, req);
 
       if (redirectUrl) {
         res.redirect(
@@ -89,8 +88,7 @@ if (settings.user.auth.google.enabled && !__TEST__) {
             (tokens
               ? '?data=' +
                 JSON.stringify({
-                  tokens,
-                  user
+                  tokens
                 })
               : '')
         );

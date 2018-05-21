@@ -58,14 +58,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18
   },
-  iconWrapper: {
-    backgroundColor: 'transparent',
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row'
-  },
   postWrapper: {
     flex: 1,
     flexDirection: 'row',

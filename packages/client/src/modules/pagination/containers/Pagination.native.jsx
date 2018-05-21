@@ -16,7 +16,7 @@ export default class Pagination extends React.Component {
   state = { pagination: 'standard' };
 
   onPickerChange = itemValue => {
-    this.setState({ pagination: itemValue });
+    this.setState({ pagination: itemValue }, this.props.loadData(0, this.props.data.limit));
   };
 
   handlePageChange = (pagination, pageNumber) => {

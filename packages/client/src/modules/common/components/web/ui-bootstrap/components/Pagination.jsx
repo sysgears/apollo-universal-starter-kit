@@ -9,13 +9,13 @@ import { Button } from '../components';
 
 export default class Pagination extends React.Component {
   static propTypes = {
-    displayedAmount: PropTypes.number,
+    itemsPerPage: PropTypes.number,
     handlePageChange: PropTypes.func,
     hasNextPage: PropTypes.bool,
     pagination: PropTypes.string,
-    totalCount: PropTypes.number,
+    total: PropTypes.number,
     loadMoreText: PropTypes.string,
-    itemsNumber: PropTypes.number
+    defaultPageSize: PropTypes.number
   };
 
   state = { pageNumber: 1 };
@@ -77,20 +77,20 @@ export default class Pagination extends React.Component {
   render() {
     const { pageNumber } = this.state;
     const {
-      displayedAmount,
+      itemsPerPage,
       handlePageChange,
       hasNextPage,
       pagination,
-      totalCount,
+      total,
       loadMoreText,
-      itemsNumber
+      defaultPageSize
     } = this.props;
     if (pagination === 'relay') {
       return hasNextPage ? (
         <div>
           <div>
             <small>
-              ({displayedAmount} / {totalCount})
+              ({itemsPerPage} / {total})
             </small>
           </div>
           <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination, null)}>
@@ -99,7 +99,7 @@ export default class Pagination extends React.Component {
         </div>
       ) : null;
     } else {
-      const pagesArray = Array(Math.ceil(totalCount / itemsNumber))
+      const pagesArray = Array(Math.ceil(total / defaultPageSize))
         .fill(1)
         .map((x, y) => x + y);
       return (

@@ -19,13 +19,13 @@ const PaginationDemoView = ({ data, handlePageChange, pagination, t }) => {
     <div>
       <Table dataSource={data.edges.map(({ node }) => node)} columns={columns} />
       <Pagination
-        displayedAmount={data.edges.length}
+        itemsPerPage={data.edges.length}
         handlePageChange={handlePageChange}
         hasNextPage={data.pageInfo.hasNextPage}
         pagination={pagination}
-        totalCount={data.totalCount}
+        total={data.totalCount}
         loadMoreText={t('list.btn.more')}
-        itemsNumber={data.limit}
+        defaultPageSize={data.limit}
       />
     </div>
   );

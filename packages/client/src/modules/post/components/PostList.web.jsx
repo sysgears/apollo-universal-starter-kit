@@ -99,13 +99,13 @@ class PostList extends React.PureComponent {
           <h1 />
           <Table dataSource={posts.edges.map(({ node }) => node)} columns={columns} />
           <Pagination
-            displayedAmount={posts.edges.length}
+            itemsPerPage={posts.edges.length}
             handlePageChange={this.handlePageChange}
             hasNextPage={posts.pageInfo.hasNextPage}
             pagination={type}
-            totalCount={posts.totalCount}
+            total={posts.totalCount}
             loadMoreText={t('list.btn.more')}
-            itemsNumber={itemsNumber}
+            defaultPageSize={itemsNumber}
           />
         </PageLayout>
       );

@@ -7,20 +7,20 @@ import { Button } from '../components';
  * @return {boolean}
  */
 const Pagination = ({
-  displayedAmount,
+  itemsPerPage,
   handlePageChange,
   hasNextPage,
   pagination,
-  totalCount,
+  total,
   loadMoreText,
-  itemsNumber
+  defaultPageSize
 }) => {
   if (pagination === 'relay') {
     return hasNextPage ? (
       <div>
         <div>
           <small>
-            ({displayedAmount} / {totalCount})
+            ({itemsPerPage} / {total})
           </small>
         </div>
         <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination)}>
@@ -32,8 +32,8 @@ const Pagination = ({
     return (
       <ADPagination
         defaultCurrent={1}
-        defaultPageSize={itemsNumber}
-        total={totalCount}
+        defaultPageSize={defaultPageSize}
+        total={total}
         onChange={pageNumber => handlePageChange(pagination, pageNumber)}
       />
     );
@@ -41,13 +41,13 @@ const Pagination = ({
 };
 
 Pagination.propTypes = {
-  displayedAmount: PropTypes.number,
+  itemsPerPage: PropTypes.number,
   handlePageChange: PropTypes.func,
   hasNextPage: PropTypes.bool,
   pagination: PropTypes.string,
-  totalCount: PropTypes.number,
+  total: PropTypes.number,
   loadMoreText: PropTypes.string,
-  itemsNumber: PropTypes.number
+  defaultPageSize: PropTypes.number
 };
 
 export default Pagination;

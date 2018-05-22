@@ -7,6 +7,7 @@ import Feature from '../connector';
 import User from '../../sql';
 import settings from '../../../../../../../settings';
 import access from '../../access';
+import getCurrentUser from '../utils';
 
 let middleware;
 
@@ -70,6 +71,7 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
       const user = await User.getUser(req.user.id);
       const redirectUrl = req.query.state;
       const tokens = await access.grantAccess(user, req);
+      const currentUser = await getCurrentUser(req, res);
 
       if (redirectUrl) {
         res.redirect(
@@ -77,7 +79,8 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
             (tokens
               ? '?data=' +
                 JSON.stringify({
-                  tokens
+                  tokens,
+                  user: currentUser.data
                 })
               : '')
         );

@@ -5,8 +5,6 @@ import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 
-import { setItem } from '../../../../common/clientStorage';
-import CURRENT_USER_QUERY from '../../../graphql/CurrentUserQuery.graphql';
 import buildRedirectUrlForMobile from '../../../helpers';
 import access from '../../../access';
 import {
@@ -65,37 +63,6 @@ const GitHubIcon = withApollo(({ client }) => {
 });
 
 class GitHubComponent extends React.Component {
-  componentDidMount() {
-    Linking.addEventListener('url', this.handleOpenURL);
-  }
-
-  componentWillUnmount() {
-    Linking.removeListener('url');
-  }
-
-  handleOpenURL = async ({ url }) => {
-    // Extract stringified user string out of the URL
-    const [, data] = url.match(/data=([^#]+)/);
-    const decodedData = JSON.parse(decodeURI(data));
-    const { client } = this.props;
-    if (decodedData.tokens) {
-      await setItem('accessToken', decodedData.tokens.accessToken);
-      await setItem('refreshToken', decodedData.tokens.refreshToken);
-    }
-
-    const currentUser = await client.query({ query: CURRENT_USER_QUERY });
-
-    if (currentUser.data) {
-      await client.writeQuery({
-        query: CURRENT_USER_QUERY,
-        data: currentUser.data
-      });
-    }
-    if (Platform.OS === 'ios') {
-      WebBrowser.dismissBrowser();
-    }
-  };
-
   render() {
     const { type, text } = this.props;
     switch (type) {
@@ -132,4 +99,4 @@ const styles = StyleSheet.create({
   btnText
 });
 
-export default withApollo(GitHubComponent);
+export default GitHubComponent;

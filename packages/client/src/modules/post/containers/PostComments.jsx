@@ -60,7 +60,6 @@ class PostComments extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('Subscription', nextProps);
     // Check if props have changed and, if necessary, stop the subscription
     if (this.subscription && this.props.postId !== nextProps.postId) {
       this.subscription = null;
@@ -69,6 +68,12 @@ class PostComments extends React.Component {
     // Subscribe or re-subscribe
     if (!this.subscription) {
       this.subscribeToCommentList(nextProps.postId);
+    }
+  }
+
+  componentDidMount() {
+    if (!this.subscription) {
+      this.subscribeToCommentList(this.props.postId);
     }
   }
 

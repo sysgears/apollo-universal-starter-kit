@@ -37,6 +37,12 @@ class PostEdit extends React.Component {
     }
   }
 
+  componentDidMount() {
+    if (!this.subscription && this.props.post) {
+      this.subscribeToPostEdit(this.props.post.id);
+    }
+  }
+
   componentWillUnmount() {
     if (this.subscription) {
       // unsubscribe

@@ -92,6 +92,13 @@ class Post extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const endCursor = this.props.posts ? this.props.posts.pageInfo.endCursor : 0;
+    if (!this.subscription) {
+      this.subscribeToPostList(endCursor);
+    }
+  }
+
   subscribeToPostList = endCursor => {
     const { subscribeToMore } = this.props;
 

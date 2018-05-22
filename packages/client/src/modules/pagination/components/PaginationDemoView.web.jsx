@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Table, Pagination } from '../../common/components/web';
 import translate from '../../../i18n';
 
-const PaginationView = ({ data, handlePageChange, pagination, t }) => {
+const PaginationDemoView = ({ data, handlePageChange, pagination, t }) => {
   const renderFunc = text => <span>{text}</span>;
   const columns = [
     {
@@ -31,11 +31,11 @@ const PaginationView = ({ data, handlePageChange, pagination, t }) => {
   );
 };
 
-PaginationView.propTypes = {
+PaginationDemoView.propTypes = {
   data: PropTypes.object,
   handlePageChange: PropTypes.func,
   t: PropTypes.func,
   pagination: PropTypes.string
 };
 
-export default translate('pagination')(PaginationView);
+export default translate('pagination')(PaginationDemoView);

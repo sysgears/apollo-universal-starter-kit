@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { StyleSheet, ScrollView, View, Text, Platform, TouchableOpacity } from 'react-native';
 import { SwipeAction, Select } from '../../common/components/native';
 import translate from '../../../i18n';
-import PaginationView from '../components/PaginationView.native';
+import PaginationDemoView from '../components/PaginationDemoView.native';
+import withDataProvider from '../containers/DataProvider';
 
 @translate('pagination')
-export default class PaginationContainer extends React.Component {
+class PaginationDemo extends React.Component {
   static propTypes = {
     t: PropTypes.func,
     data: PropTypes.object,
@@ -35,7 +36,7 @@ export default class PaginationContainer extends React.Component {
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     return (
       <View>
-        <PaginationView
+        <PaginationDemoView
           data={data}
           handlePageChange={this.handlePageChange}
           renderItem={renderItem}
@@ -108,3 +109,7 @@ const styles = StyleSheet.create({
     paddingLeft: 7
   }
 });
+
+const PaginationDemoWithData = withDataProvider(PaginationDemo);
+
+export default PaginationDemoWithData;

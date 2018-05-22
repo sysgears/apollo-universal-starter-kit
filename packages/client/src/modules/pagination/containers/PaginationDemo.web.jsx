@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
-import PaginationView from '../components/PaginationView.web';
+import PaginationDemoView from '../components/PaginationDemoView.web';
+import withDataProvider from '../containers/DataProvider';
 import { PageLayout, Select, Option } from '../../common/components/web';
 import translate from '../../../i18n';
 import settings from '../../../../../../settings';
 
 @translate('pagination')
-export default class PaginationContainer extends React.Component {
+class PaginationDemo extends React.Component {
   static propTypes = {
     t: PropTypes.func,
     loadData: PropTypes.func,
@@ -47,7 +48,7 @@ export default class PaginationContainer extends React.Component {
     return (
       <div>
         <h2>{t('list.title.standard')}</h2>
-        <PaginationView data={data} handlePageChange={this.handlePageChange} pagination={pagination} />
+        <PaginationDemoView data={data} handlePageChange={this.handlePageChange} pagination={pagination} />
       </div>
     );
   };
@@ -72,3 +73,7 @@ export default class PaginationContainer extends React.Component {
     );
   }
 }
+
+const PaginationDemoWithData = withDataProvider(PaginationDemo);
+
+export default PaginationDemoWithData;

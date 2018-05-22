@@ -5,7 +5,7 @@ import { Pagination } from '../../common/components/native';
 
 import translate from '../../../i18n';
 
-const PaginationView = ({ data, handlePageChange, renderItem, pagination, t }) => {
+const PaginationDemoView = ({ data, handlePageChange, renderItem, pagination, t }) => {
   return (
     <View>
       <Text style={styles.title}>{t('list.column.title')}</Text>
@@ -26,7 +26,7 @@ const PaginationView = ({ data, handlePageChange, renderItem, pagination, t }) =
   );
 };
 
-PaginationView.propTypes = {
+PaginationDemoView.propTypes = {
   t: PropTypes.func,
   data: PropTypes.object,
   handlePageChange: PropTypes.func,
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('pagination')(PaginationView);
+export default translate('pagination')(PaginationDemoView);

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, ScrollView, View, Text, Platform, TouchableOpacity } from 'react-native';
-import { SwipeAction, Select } from '../../common/components/native';
+import { StyleSheet, ScrollView, View, Text, Platform, TouchableOpacity, Picker } from 'react-native';
+import { SwipeAction } from '../../common/components/native';
 import translate from '../../../i18n';
 import PaginationDemoView from '../components/PaginationDemoView.native';
 import withDataProvider from '../containers/DataProvider';
@@ -53,21 +53,13 @@ class PaginationDemo extends React.Component {
   render() {
     const { t, data } = this.props;
     const { pagination } = this.state;
-    const options = [
-      { value: 'standard', label: t('list.title.standard') },
-      { value: 'relay', label: t('list.title.relay') }
-    ];
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     return (
       <ScrollView style={styles.container}>
-        <Select
-          data={options}
-          selectedValue={pagination}
-          onValueChange={this.onPaginationTypeChange}
-          okText={t('select.ok')}
-          dismissText={t('select.dismiss')}
-          cols={1}
-        />
+        <Picker selectedValue={pagination} onValueChange={this.onPaginationTypeChange}>
+          <Picker.Item label={t('list.title.standard')} value="standard" />
+          <Picker.Item label={t('list.title.relay')} value="relay" />
+        </Picker>
         <View>
           <PaginationDemoView
             data={data}
@@ -87,7 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   text: {
-    fontSize: 18
+    fontSize: 16
   },
   postWrapper: {
     flex: 1,

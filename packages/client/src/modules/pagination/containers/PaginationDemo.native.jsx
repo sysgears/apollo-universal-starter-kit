@@ -24,7 +24,7 @@ class PaginationDemo extends React.Component {
   handlePageChange = (pagination, pageNumber) => {
     const { loadData, data } = this.props;
     if (pagination === 'relay') {
-      loadData(data.pageInfo.endCursor + 1, 'add');
+      loadData(data.pageInfo.endCursor, 'add');
     } else {
       loadData((pageNumber - 1) * data.limit, 'replace');
     }

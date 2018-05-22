@@ -1,0 +1,39 @@
+.googleBtn {
+  min-width: 320px;
+  margin-top: 10px;
+  background-color: #c43832;
+  border-color: #c43832;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.googleBtn:hover {
+  background-color: #aa1c17;
+  border-color: #aa1c17;
+}
+
+.iconContainer { 
+  display: flex;
+  flex: 1 1 10%;
+  justify-content: flex-start;
+   align-items: center; 
+}
+
+.separator { 
+  height: 28px;
+  width: 1px;
+  background-color: #fff;
+  margin-left: 10px;
+}
+
+.btnText { 
+  display: flex;
+  justify-content: flex-start; 
+  flex: 5
+}
+
+.googleIcon { 
+  color: #fff;
+  font-size: 30px;
+}

@@ -2,11 +2,10 @@ import Stripe from 'stripe';
 
 import SubscriptionDAO from './sql';
 import mailer from '../mailer/mailer';
-import UserDAO from '../user/sql';
+import User from '../user/sql';
 import settings from '../../../../../settings';
 
 const Subscription = new SubscriptionDAO();
-const User = new UserDAO();
 const stripe = Stripe(settings.subscription.stripeSecretKey);
 
 export default async (req, res) => {

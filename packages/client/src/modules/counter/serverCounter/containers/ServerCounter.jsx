@@ -48,20 +48,7 @@ IncreaseButton.propTypes = {
   counter: PropTypes.object
 };
 
-const ServerCounter = ({ t }) => (
-  <Query query={COUNTER_QUERY}>
-    {({ loading, error, data: { counter }, subscribeToMore }) => {
-      if (error) throw new Error(error);
-      return <ServerCounterComponent t={t} loading={loading} subscribeToMore={subscribeToMore} counter={counter} />;
-    }}
-  </Query>
-);
-
-ServerCounter.propTypes = {
-  t: PropTypes.func
-};
-
-class ServerCounterComponent extends React.Component {
+class ServerCounter extends React.Component {
   static propTypes = {
     t: PropTypes.func,
     subscribeToMore: PropTypes.func,
@@ -76,6 +63,16 @@ class ServerCounterComponent extends React.Component {
 
   componentDidMount() {
     if (!this.props.loading) {
+      // Subscribe or re-subscribe
+      if (!this.subscription) {
+        this.subscribeToCount();
+      }
+    }
+  }
+
+  // remove when Renderer is overwritten
+  componentDidUpdate(prevProps) {
+    if (!prevProps.loading) {
       // Subscribe or re-subscribe
       if (!this.subscription) {
         this.subscribeToCount();
@@ -123,4 +120,13 @@ class ServerCounterComponent extends React.Component {
   }
 }
 
-export default ServerCounter;
+const ServerCounterWithQuery = props => (
+  <Query query={COUNTER_QUERY}>
+    {({ loading, error, data: { counter }, subscribeToMore }) => {
+      if (error) throw new Error(error);
+      return <ServerCounter {...props} loading={loading} subscribeToMore={subscribeToMore} counter={counter} />;
+    }}
+  </Query>
+);
+
+export default ServerCounterWithQuery;

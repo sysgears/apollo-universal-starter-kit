@@ -4,7 +4,7 @@ import faGithubSquare from '@fortawesome/fontawesome-free-brands/faGithubSquare'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web';
 import access from '../../../access';
-import './GitHubButton.scss';
+import './GitHubButton.css';
 
 const githubLogin = () => {
   window.location = '/auth/github';

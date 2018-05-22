@@ -4,7 +4,7 @@ import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSqu
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web';
 import access from '../../../access';
-import './FacebookButton.scss';
+import './FacebookButton.css';
 
 const facebookLogin = () => {
   window.location = '/auth/facebook';

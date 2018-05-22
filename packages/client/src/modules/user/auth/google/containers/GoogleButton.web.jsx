@@ -4,7 +4,7 @@ import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlu
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web';
 import access from '../../../access';
-import './GoogleButton.scss';
+import './GoogleButton.css';
 
 const googleLogin = () => {
   window.location = '/auth/google';

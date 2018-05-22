@@ -4,7 +4,7 @@ import faLinkedInSquare from '@fortawesome/fontawesome-free-brands/faLinkedin';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '../../../../common/components/web';
 import access from '../../../access';
-import './LinkedInButton.scss';
+import './LinkedInButton.css';
 
 const linkedInLogin = () => {
   window.location = '/auth/linkedin';

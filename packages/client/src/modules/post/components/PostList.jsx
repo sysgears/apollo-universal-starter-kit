@@ -95,6 +95,11 @@ class PostList extends React.PureComponent {
 export default translate('post')(PostList);
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center'
+  },
   text: {
     fontSize: 18
   },
@@ -114,11 +119,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomColor: '#000',
     borderBottomWidth: 0.3,
-    height: 48,
+    height: 50,
     paddingLeft: 7
-  },
-  container: {
-    flex: 1
   },
   list: {
     marginTop: 5

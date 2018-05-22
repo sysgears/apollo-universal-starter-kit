@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
-import { HeaderTitle, IconButton } from '../common/components/native';
+import { Button, primary, HeaderTitle, IconButton } from '../common/components/native';
 
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';
@@ -20,7 +20,16 @@ const withI18N = (Component, props) => {
 };
 
 const PostListHeaderRight = ({ navigation, t }) => (
-  <Button title={t('list.btn.add')} onPress={() => navigation.navigate('PostEdit', { id: 0 })} />
+  <View style={styles.addButtonContainer}>
+    <Button
+      style={styles.addButton}
+      size={'small'}
+      type={primary}
+      onPress={() => navigation.navigate('PostEdit', { id: 0 })}
+    >
+      {t('list.btn.add')}
+    </Button>
+  </View>
 );
 PostListHeaderRight.propTypes = {
   navigation: PropTypes.object,
@@ -31,7 +40,10 @@ class PostListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: withI18N(HeaderTitle, { style: 'subTitle', i18nKey: 'list.subTitle' }),
     headerRight: withI18N(PostListHeaderRight, { navigation }),
-    headerLeft: <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+    headerLeft: (
+      <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+    ),
+    headerStyle: styles.header
   });
 
   render() {
@@ -61,7 +73,8 @@ PostEditTitle.propTypes = {
 
 class PostEditScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: withI18N(PostEditTitle, { navigation })
+    headerTitle: withI18N(PostEditTitle, { navigation }),
+    headerStyle: styles.header
   });
   render() {
     return <PostEdit navigation={this.props.navigation} />;
@@ -77,12 +90,25 @@ const PostNavigator = createStackNavigator({
 });
 
 const styles = StyleSheet.create({
+  header: {
+    backgroundColor: '#fff'
+  },
   subTitle: {
     fontSize: Platform.OS === 'ios' ? 17 : 20,
     fontWeight: Platform.OS === 'ios' ? '700' : '500',
     color: 'rgba(0, 0, 0, .9)',
     textAlign: Platform.OS === 'ios' ? 'center' : 'left',
     marginHorizontal: 16
+  },
+  addButtonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10
+  },
+  addButton: {
+    height: 32,
+    width: 60
   }
 });
 

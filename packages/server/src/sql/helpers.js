@@ -45,7 +45,7 @@ export const orderedForArray = (rows, collection, field, arrayElement) => {
   });
 };
 
-const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNames, single) => {
+const _getSelectFields = (fields, parentPath, parentKey, domainSchema, selectItems, joinNames, single) => {
   for (const key of Object.keys(fields)) {
     if (key !== '__typename') {
       const value = domainSchema.values[key];
@@ -55,9 +55,9 @@ const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNam
         }
         const as = parentPath.length > 0 ? `${parentPath.join('_')}_${key}` : key;
         const tableName = `${decamelize(domainSchema.__.tableName ? domainSchema.__.tableName : domainSchema.name)}`;
-        const fullTableName = parentPath.length > 0 ? `${parentPath.join('_')}_${tableName}` : tableName;
+        const fullTableName = parentKey !== null && parentKey !== tableName ? `${parentKey}_${tableName}` : tableName;
         const arrayPrefix = single ? '' : '_';
-        selectItems.push(`${fullTableName}.${decamelize(key)} as ${arrayPrefix}${as}`);
+        selectItems.push(`${decamelize(fullTableName)}.${decamelize(key)} as ${arrayPrefix}${as}`);
       } else {
         if (value.type.constructor === Array) {
           //console.log('Array');
@@ -76,7 +76,7 @@ const _getSelectFields = (fields, parentPath, domainSchema, selectItems, joinNam
 
           parentPath.push(key);
 
-          _getSelectFields(fields[key], parentPath, value.type, selectItems, joinNames, single);
+          _getSelectFields(fields[key], parentPath, decamelize(key), value.type, selectItems, joinNames, single);
 
           parentPath.pop();
         }
@@ -90,12 +90,13 @@ export const selectBy = (schema, fields, single = false) => {
   const parentPath = [];
   const selectItems = [];
   const joinNames = [];
-  _getSelectFields(fields, parentPath, schema, selectItems, joinNames, single);
+  _getSelectFields(fields, parentPath, null, schema, selectItems, joinNames, single);
 
   return query => {
     // join table names
     joinNames.map(({ key, prefix, name, schemaName }) => {
-      query.leftJoin(`${prefix}${name} as ${key}_${name}`, `${key}_${name}.id`, `${schemaName}.${key}_id`);
+      const tableName = key !== null && key !== name ? `${key}_${name}` : name;
+      query.leftJoin(`${prefix}${name} as ${tableName}`, `${tableName}.id`, `${schemaName}.${key}_id`);
     });
 
     return query.select(selectItems);

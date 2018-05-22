@@ -7,21 +7,25 @@ import translate from '../../../i18n';
 
 const PaginationDemoView = ({ data, handlePageChange, renderItem, pagination, t }) => {
   return (
-    <View>
-      <Text style={styles.title}>{t('list.column.title')}</Text>
-      <FlatList
-        data={data.edges}
-        style={styles.list}
-        keyExtractor={item => `${item.node.id}`}
-        renderItem={renderItem}
-      />
-      <Pagination
-        totalPages={Math.ceil(data.totalCount / data.limit)}
-        handlePageChange={handlePageChange}
-        pagination={pagination}
-        loadMoreText={t('list.btn.more')}
-        hasNextPage={data.pageInfo.hasNextPage}
-      />
+    <View style={styles.container}>
+      <View style={styles.listContainer}>
+        <Text style={styles.title}>{t('list.column.title')}</Text>
+        <FlatList
+          data={data.edges}
+          style={styles.list}
+          keyExtractor={item => `${item.node.id}`}
+          renderItem={renderItem}
+        />
+      </View>
+      <View style={styles.pagination}>
+        <Pagination
+          totalPages={Math.ceil(data.totalCount / data.limit)}
+          handlePageChange={handlePageChange}
+          pagination={pagination}
+          loadMoreText={t('list.btn.more')}
+          hasNextPage={data.pageInfo.hasNextPage}
+        />
+      </View>
     </View>
   );
 };
@@ -45,7 +49,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingLeft: 7,
     borderBottomColor: '#000',
-    borderBottomWidth: 0.3
+    borderBottomWidth: 0.3,
+    borderTopColor: '#000',
+    borderTopWidth: 0.3
+  },
+  pagination: {
+    flex: 0.13
+  },
+  container: {
+    flex: 1
+  },
+  listContainer: {
+    flex: 1
   }
 });
 

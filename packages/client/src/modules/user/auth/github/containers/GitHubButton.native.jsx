@@ -18,8 +18,8 @@ import {
   btnText
 } from '../../../../common/components/native/styles';
 
-const facebookLogin = () => {
-  const url = buildRedirectUrlForMobile('facebook');
+const githubLogin = () => {
+  const url = buildRedirectUrlForMobile('github');
   if (Platform.OS === 'ios') {
     WebBrowser.openBrowserAsync(url);
   } else {
@@ -27,11 +27,11 @@ const facebookLogin = () => {
   }
 };
 
-const FacebookButton = withApollo(({ client, text }) => {
+const GitHubButton = withApollo(({ client, text }) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} onPress={() => access.doLogin(client).then(facebookLogin)}>
+    <TouchableOpacity style={styles.buttonContainer} onPress={() => access.doLogin(client).then(githubLogin)}>
       <View style={styles.btnIconContainer}>
-        <FontAwesome name="facebook-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
+        <FontAwesome name="github-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
         <View style={styles.separator} />
       </View>
       <View style={styles.btnTextContainer}>
@@ -41,44 +41,44 @@ const FacebookButton = withApollo(({ client, text }) => {
   );
 });
 
-const FacebookLink = withApollo(({ client, text }) => {
+const GitHubLink = withApollo(({ client, text }) => {
   return (
-    <TouchableOpacity onPress={() => access.doLogin(client).then(facebookLogin)} style={styles.link}>
+    <TouchableOpacity onPress={() => access.doLogin(client).then(githubLogin)} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>
     </TouchableOpacity>
   );
 });
 
-const FacebookIcon = withApollo(({ client }) => {
+const GitHubIcon = withApollo(({ client }) => {
   return (
     <View style={styles.iconWrapper}>
       <FontAwesome
-        name="facebook-square"
+        name="github-square"
         size={45}
-        style={{ color: '#3B5998' }}
-        onPress={() => access.doLogin(client).then(facebookLogin)}
+        style={{ color: '#464646' }}
+        onPress={() => access.doLogin(client).then(githubLogin)}
       />
     </View>
   );
 });
 
-class FacebookComponent extends React.Component {
+class GitHubComponent extends React.Component {
   render() {
     const { type, text } = this.props;
     switch (type) {
       case 'button':
-        return <FacebookButton text={text} />;
+        return <GitHubButton text={text} />;
       case 'link':
-        return <FacebookLink text={text} />;
+        return <GitHubLink text={text} />;
       case 'icon':
-        return <FacebookIcon />;
+        return <GitHubIcon />;
       default:
-        return <FacebookButton text={text} />;
+        return <GitHubButton text={text} />;
     }
   }
 }
 
-FacebookComponent.propTypes = {
+GitHubComponent.propTypes = {
   client: PropTypes.object,
   type: PropTypes.string,
   text: PropTypes.string.isRequired
@@ -88,11 +88,15 @@ const styles = StyleSheet.create({
   iconWrapper,
   linkText,
   link,
-  buttonContainer,
+  buttonContainer: {
+    ...buttonContainer,
+    marginTop: 15,
+    backgroundColor: '#464646'
+  },
   separator,
   btnIconContainer,
   btnTextContainer,
   btnText
 });
 
-export default FacebookComponent;
+export default GitHubComponent;

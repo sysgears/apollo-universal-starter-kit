@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Mutation, Query } from 'react-apollo';
 import update from 'immutability-helper';
 
-import { ServerCounterView, ServerCounterButton } from './components/ServerCounterView';
-import ADD_COUNTER from './graphql/AddCounter.graphql';
-import COUNTER_SUBSCRIPTION from './graphql/CounterSubscription.graphql';
-import COUNTER_QUERY from './graphql/CounterQuery.graphql';
+import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
+import ADD_COUNTER from '../graphql/AddCounter.graphql';
+import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
+import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
 
 const IncreaseButton = ({ counterAmount, t, counter }) => (
   <Mutation mutation={ADD_COUNTER}>
@@ -34,7 +34,10 @@ const IncreaseButton = ({ counterAmount, t, counter }) => (
             }
           }
         });
-      return <ServerCounterButton t={t} addCounter={addCounter} amount={counterAmount} />;
+
+      const onClickHandler = () => addCounter(counterAmount);
+
+      return <ServerCounterButton text={t('serverCounter.btnLabel')} onClick={onClickHandler()} />;
     }}
   </Mutation>
 );

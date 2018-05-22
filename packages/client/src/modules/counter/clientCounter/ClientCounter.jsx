@@ -13,7 +13,9 @@ const IncreaseButton = ({ counterAmount, t }) => (
         const { value } = mutate({ variables: { amount } });
         return value;
       };
-      return <ClientCounterButton t={t} addCounterState={addCounterState} amount={counterAmount} />;
+
+      const onClickHandler = () => addCounterState(counterAmount);
+      return <ClientCounterButton text={t('clientCounter.btnLabel')} onClick={onClickHandler()} />;
     }}
   </Mutation>
 );
@@ -30,7 +32,7 @@ const ClientCounter = ({ t }) => (
         counterState: { counter }
       }
     }) => (
-      <ClientCounterView t={t} counterState={counter}>
+      <ClientCounterView text={t('clientCounter.text', { counter })}>
         <IncreaseButton t={t} counterAmount={1} />
       </ClientCounterView>
     )}

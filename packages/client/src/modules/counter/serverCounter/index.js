@@ -1,3 +1,3 @@
-import ServerCounter from './ServerCounter';
+import ServerCounter from './containers/ServerCounter';
 
 export default ServerCounter;

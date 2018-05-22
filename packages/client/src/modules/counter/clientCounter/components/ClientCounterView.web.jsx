@@ -9,27 +9,25 @@ const Section = styled.section`
   text-align: center;
 `;
 
-export const ClientCounterView = ({ t, children, counterState }) => (
+export const ClientCounterView = ({ text, children }) => (
   <Section>
-    <p>{t('clientCounter.text', { counterState })}</p>
+    <p>{text}</p>
     {children}
   </Section>
 );
 
 ClientCounterView.propTypes = {
-  t: PropTypes.func,
-  children: PropTypes.node,
-  counterState: PropTypes.number
+  text: PropTypes.string,
+  children: PropTypes.node
 };
 
-export const ClientCounterButton = ({ addCounterState, amount, t }) => (
-  <Button id="apollo-link-button" color="primary" onClick={addCounterState(amount)}>
-    {t('clientCounter.btnLabel')}
+export const ClientCounterButton = ({ onClick, text }) => (
+  <Button id="apollo-link-button" color="primary" onClick={onClick}>
+    {text}
   </Button>
 );
 
 ClientCounterButton.propTypes = {
-  addCounterState: PropTypes.func,
-  amount: PropTypes.number,
-  t: PropTypes.func
+  onClick: PropTypes.func,
+  text: PropTypes.string
 };

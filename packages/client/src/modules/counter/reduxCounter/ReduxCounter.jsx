@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { ReduxCounterView, ReduxCounterButton } from './components/ReduxCounterView';
 
 const ReduxCounter = ({ t, onReduxIncrement, reduxCount }) => (
-  <ReduxCounterView t={t} reduxCount={reduxCount}>
-    <ReduxCounterButton t={t} amount={1} onReduxIncrement={onReduxIncrement} />
+  <ReduxCounterView text={t('reduxCounter.text', { reduxCount })}>
+    <ReduxCounterButton text={t('reduxCounter.btnLabel')} onClick={onReduxIncrement(1)} />
   </ReduxCounterView>
 );
 

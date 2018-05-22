@@ -36,14 +36,13 @@ ServerCounterView.propTypes = {
   loading: PropTypes.bool
 };
 
-export const ServerCounterButton = ({ addCounter, amount, t }) => (
-  <Button type={primary} onPress={addCounter(amount)}>
-    {t('serverCounter.btnLabel')}
+export const ServerCounterButton = ({ onClick, text }) => (
+  <Button type={primary} onPress={onClick}>
+    {text}
   </Button>
 );
 
 ServerCounterButton.propTypes = {
-  addCounter: PropTypes.func,
-  amount: PropTypes.number,
-  t: PropTypes.func
+  onClick: PropTypes.func,
+  text: PropTypes.string
 };

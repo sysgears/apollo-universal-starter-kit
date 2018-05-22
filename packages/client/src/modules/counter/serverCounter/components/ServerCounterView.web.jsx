@@ -33,14 +33,13 @@ ServerCounterView.propTypes = {
   loading: PropTypes.bool
 };
 
-export const ServerCounterButton = ({ addCounter, amount, t }) => (
-  <Button id="graphql-button" color="primary" onClick={addCounter(amount)}>
-    {t('serverCounter.btnLabel')}
+export const ServerCounterButton = ({ onClick, text }) => (
+  <Button id="graphql-button" color="primary" onClick={onClick}>
+    {text}
   </Button>
 );
 
 ServerCounterButton.propTypes = {
-  addCounter: PropTypes.func,
-  amount: PropTypes.number,
-  t: PropTypes.func
+  onClick: PropTypes.func,
+  text: PropTypes.string
 };

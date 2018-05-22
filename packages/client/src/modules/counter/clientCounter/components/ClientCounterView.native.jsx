@@ -4,10 +4,10 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Button, primary } from '../../../common/components/native';
 
-export const ClientCounterView = ({ t, children, counterState }) => (
+export const ClientCounterView = ({ text, children }) => (
   <View>
     <View style={styles.element}>
-      <Text style={styles.box}>{t('clientCounter.text', { counterState })}</Text>
+      <Text style={styles.box}>{text}</Text>
     </View>
     {children}
   </View>
@@ -24,19 +24,17 @@ const styles = StyleSheet.create({
 });
 
 ClientCounterView.propTypes = {
-  t: PropTypes.func,
-  children: PropTypes.node,
-  counterState: PropTypes.number
+  text: PropTypes.string,
+  children: PropTypes.node
 };
 
-export const ClientCounterButton = ({ addCounterState, amount, t }) => (
-  <Button type={primary} onPress={addCounterState(amount)}>
-    {t('clientCounter.btnLabel')}
+export const ClientCounterButton = ({ onClick, text }) => (
+  <Button type={primary} onPress={onClick}>
+    {text}
   </Button>
 );
 
 ClientCounterButton.propTypes = {
-  addCounterState: PropTypes.func,
-  amount: PropTypes.number,
-  t: PropTypes.func
+  onClick: PropTypes.func,
+  text: PropTypes.string
 };

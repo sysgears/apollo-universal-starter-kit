@@ -9,27 +9,25 @@ const Section = styled.section`
   text-align: center;
 `;
 
-export const ReduxCounterView = ({ t, children, reduxCount }) => (
+export const ReduxCounterView = ({ text, children }) => (
   <Section>
-    <p>{t('reduxCounter.text', { reduxCount })}</p>
+    <p>{text}</p>
     {children}
   </Section>
 );
 
 ReduxCounterView.propTypes = {
-  t: PropTypes.func,
-  children: PropTypes.node,
-  reduxCount: PropTypes.number
+  text: PropTypes.string,
+  children: PropTypes.node
 };
 
-export const ReduxCounterButton = ({ onReduxIncrement, amount, t }) => (
-  <Button id="redux-button" color="primary" onClick={onReduxIncrement(amount)}>
-    {t('reduxCounter.btnLabel')}
+export const ReduxCounterButton = ({ onClick, text }) => (
+  <Button id="redux-button" color="primary" onClick={onClick}>
+    {text}
   </Button>
 );
 
 ReduxCounterButton.propTypes = {
-  onReduxIncrement: PropTypes.func,
-  amount: PropTypes.number,
-  t: PropTypes.func
+  onClick: PropTypes.func,
+  text: PropTypes.string
 };

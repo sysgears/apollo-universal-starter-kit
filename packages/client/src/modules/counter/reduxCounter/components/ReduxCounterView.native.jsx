@@ -4,10 +4,10 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Button, primary } from '../../../common/components/native';
 
-export const ReduxCounterView = ({ t, children, reduxCount }) => (
+export const ReduxCounterView = ({ text, children }) => (
   <View>
     <View style={styles.element}>
-      <Text style={styles.box}>{t('reduxCounter.text', { reduxCount })}</Text>
+      <Text style={styles.box}>{text}</Text>
     </View>
     {children}
   </View>
@@ -24,19 +24,17 @@ const styles = StyleSheet.create({
 });
 
 ReduxCounterView.propTypes = {
-  t: PropTypes.func,
-  children: PropTypes.node,
-  reduxCount: PropTypes.number
+  text: PropTypes.string,
+  children: PropTypes.node
 };
 
-export const ReduxCounterButton = ({ onReduxIncrement, amount, t }) => (
-  <Button type={primary} onPress={onReduxIncrement(amount)}>
-    {t('reduxCounter.btnLabel')}
+export const ReduxCounterButton = ({ onClick, text }) => (
+  <Button type={primary} onPress={onClick}>
+    {text}
   </Button>
 );
 
 ReduxCounterButton.propTypes = {
-  onReduxIncrement: PropTypes.func,
-  amount: PropTypes.number,
-  t: PropTypes.func
+  onClick: PropTypes.func,
+  text: PropTypes.string
 };

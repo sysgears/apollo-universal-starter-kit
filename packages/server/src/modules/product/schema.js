@@ -11,7 +11,8 @@ export class Category extends Schema {
   parent = {
     type: Category,
     external: true,
-    optional: true
+    optional: true,
+    blackbox: true
   };
   products = {
     type: [Product],

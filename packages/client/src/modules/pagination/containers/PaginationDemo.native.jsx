@@ -16,7 +16,7 @@ class PaginationDemo extends React.Component {
 
   state = { pagination: 'standard' };
 
-  onPickerChange = itemValue => {
+  onPaginationTypeChange = itemValue => {
     const { loadData, data } = this.props;
     this.setState({ pagination: itemValue }, loadData(0, data.limit));
   };
@@ -28,22 +28,6 @@ class PaginationDemo extends React.Component {
     } else {
       loadData((pageNumber - 1) * data.limit, 'replace');
     }
-  };
-
-  renderPagination = () => {
-    const { data } = this.props;
-    const { pagination } = this.state;
-    const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
-    return (
-      <View>
-        <PaginationDemoView
-          data={data}
-          handlePageChange={this.handlePageChange}
-          renderItem={renderItem}
-          pagination={pagination}
-        />
-      </View>
-    );
   };
 
   renderItemIOS = ({
@@ -67,23 +51,31 @@ class PaginationDemo extends React.Component {
   };
 
   render() {
-    const { t } = this.props;
+    const { t, data } = this.props;
     const { pagination } = this.state;
     const options = [
       { value: 'standard', label: t('list.title.standard') },
       { value: 'relay', label: t('list.title.relay') }
     ];
+    const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     return (
       <ScrollView style={styles.container}>
         <Select
           data={options}
           selectedValue={pagination}
-          onValueChange={this.onPickerChange}
+          onValueChange={this.onPaginationTypeChange}
           okText={t('select.ok')}
           dismissText={t('select.dismiss')}
           cols={1}
         />
-        {this.renderPagination()}
+        <View>
+          <PaginationDemoView
+            data={data}
+            handlePageChange={this.handlePageChange}
+            renderItem={renderItem}
+            pagination={pagination}
+          />
+        </View>
       </ScrollView>
     );
   }

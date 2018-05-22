@@ -42,33 +42,23 @@ class PaginationDemo extends React.Component {
     }
   };
 
-  renderPagination = () => {
-    const { t, data } = this.props;
-    const { pagination } = this.state;
-    return (
-      <div>
-        <h2>{t('list.title.standard')}</h2>
-        <PaginationDemoView data={data} handlePageChange={this.handlePageChange} pagination={pagination} />
-      </div>
-    );
-  };
-
-  onSelectChange = e => {
+  onPaginationTypeChange = e => {
     const { loadData, data } = this.props;
     const paginationType = e.target.value;
     this.setState({ pagination: paginationType }, loadData(0, data.limit));
   };
 
   render() {
-    const { t } = this.props;
+    const { t, data } = this.props;
+    const { pagination } = this.state;
     return (
       <PageLayout>
         {this.renderMetaData()}
-        <Select onChange={this.onSelectChange}>
+        <Select onChange={this.onPaginationTypeChange}>
           <Option value="standard">{t('list.title.standard')}</Option>
           <Option value="relay">{t('list.title.relay')}</Option>
         </Select>
-        {this.renderPagination()}
+        <PaginationDemoView data={data} handlePageChange={this.handlePageChange} pagination={pagination} />
       </PageLayout>
     );
   }

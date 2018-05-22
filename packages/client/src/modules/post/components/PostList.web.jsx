@@ -88,7 +88,7 @@ class PostList extends React.PureComponent {
         <PageLayout>
           {this.renderMetaData()}
           <h2>{t('list.subTitle')}</h2>
-          <Link to="/post/0">
+          <Link to="/post/new">
             <Button color="primary">{t('list.btn.add')}</Button>
           </Link>
           <h1 />

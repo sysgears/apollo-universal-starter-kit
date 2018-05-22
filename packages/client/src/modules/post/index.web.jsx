@@ -16,7 +16,11 @@ const NavLinkWithI18n = translate()(({ t }) => (
 ));
 
 export default new Feature({
-  route: [<Route exact path="/posts" component={Post} />, <Route exact path="/post/:id" component={PostEdit} />],
+  route: [
+    <Route exact path="/posts" component={Post} />,
+    <Route exact path="/post/:id" component={PostEdit} />,
+    <Route exact path="/post/new" component={PostEdit} />
+  ],
   navItem: (
     <MenuItem key="/posts">
       <NavLinkWithI18n />

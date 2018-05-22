@@ -548,27 +548,31 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
-"@domain-schema/core@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@domain-schema/core/-/core-0.0.30.tgz#53ed07001ed364afef0852aad3683adfbfb89d94"
-  dependencies:
-    debug "^3.1.0"
-
-"@domain-schema/formik@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@domain-schema/formik/-/formik-0.0.30.tgz#99d086f0c908a88554e350f4827e3bac34297db0"
-  dependencies:
-    debug "^3.1.0"
-
-"@domain-schema/graphql@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@domain-schema/graphql/-/graphql-0.0.30.tgz#27daaca798ffe889daac642c45ffa110b27a6429"
-  dependencies:
-    debug "^3.1.0"
-
-"@domain-schema/knex@^0.0.33":
+"@domain-schema/core@^0.0.33":
   version "0.0.33"
-  resolved "https://registry.yarnpkg.com/@domain-schema/knex/-/knex-0.0.33.tgz#0b7c1d0d25697a73bd845f67ae87b3a18c3f8fd1"
+  resolved "https://registry.yarnpkg.com/@domain-schema/core/-/core-0.0.33.tgz#c84c9ad5e14eca488376525138c0fdaf1df3dce6"
+  dependencies:
+    debug "^3.1.0"
+
+"@domain-schema/formik@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@domain-schema/formik/-/formik-0.0.33.tgz#76d223f897d98cffef8930262c987a0c485e2a29"
+  dependencies:
+    debug "^3.1.0"
+    formik "^0.11.11"
+  optionalDependencies:
+    react-test-renderer "^16.2.0"
+    reactstrap "^6.0.1"
+
+"@domain-schema/graphql@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@domain-schema/graphql/-/graphql-0.0.33.tgz#201d8cc5d21a9eba69f2eb8cb1fe44f012381cec"
+  dependencies:
+    debug "^3.1.0"
+
+"@domain-schema/knex@^0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@domain-schema/knex/-/knex-0.0.34.tgz#61019e9b3668c6274b7dd59684a2911f8386a19c"
   dependencies:
     debug "^3.1.0"
     humps "^2.0.1"
@@ -6002,7 +6006,7 @@ formidable@^1.1.1, formidable@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.2.1.tgz#70fb7ca0290ee6ff961090415f4b3df3d2082659"
 
-formik@^0.11.10:
+formik@^0.11.10, formik@^0.11.11:
   version "0.11.11"
   resolved "https://registry.yarnpkg.com/formik/-/formik-0.11.11.tgz#4b02838133c0196b1ef443aa973766cd097ec4a5"
   dependencies:
@@ -10265,7 +10269,7 @@ pool2@^1.1.0:
     hashmap "^2.0.1"
     simple-backoff "^1.0.0"
 
-popper.js@^1.12.9:
+popper.js@^1.12.9, popper.js@^1.14.1:
   version "1.14.3"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.3.tgz#1438f98d046acf7b4d78cd502bf418ac64d4f095"
 
@@ -11687,6 +11691,13 @@ react-navigation@^2.0.0:
     react-navigation-deprecated-tab-navigator "1.2.0"
     react-navigation-tabs "0.2.0"
 
+react-popper@^0.10.4:
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.10.4.tgz#af2a415ea22291edd504678d7afda8a6ee3295aa"
+  dependencies:
+    popper.js "^1.14.1"
+    prop-types "^15.6.1"
+
 react-popper@^0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.8.3.tgz#0f73333137c9fb0af6ec4074d2d0585a0a0461e1"
@@ -11803,7 +11814,7 @@ react-transform-hmr@^1.0.4:
     global "^4.3.0"
     react-proxy "^1.1.7"
 
-react-transition-group@^2.2.1, react-transition-group@^2.3.0-beta.0:
+react-transition-group@^2.2.1, react-transition-group@^2.3.0-beta.0, react-transition-group@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.3.1.tgz#31d611b33e143a5e0f2d94c348e026a0f3b474b6"
   dependencies:
@@ -11847,6 +11858,18 @@ reactstrap@^5.0.0-beta:
     prop-types "^15.5.8"
     react-popper "^0.8.3"
     react-transition-group "^2.2.1"
+
+reactstrap@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-6.0.1.tgz#944984ee8dc684c7dc09b8de9b722153a1ca7e95"
+  dependencies:
+    classnames "^2.2.3"
+    lodash.isfunction "^3.0.9"
+    lodash.isobject "^3.0.2"
+    lodash.tonumber "^4.0.3"
+    prop-types "^15.5.8"
+    react-popper "^0.10.4"
+    react-transition-group "^2.3.1"
 
 read-chunk@^2.0.0:
   version "2.1.0"

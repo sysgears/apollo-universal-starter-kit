@@ -2,6 +2,7 @@
 type Category {
   id: Int!
   name: String!
+  parent: Category
   products: [Product]
 }
 
@@ -40,15 +41,18 @@ input CategoryFilterInput {
   searchText: String
   id: Int
   name: String
+  parentId: Int
 }
 
 input CategoryCreateInput {
   name: String!
+  parentId: Int
   products: ProductsCreateManyInput
 }
 
 input CategoryUpdateInput {
   name: String
+  parentId: Int
   products: ProductsUpdateManyInput
 }
 

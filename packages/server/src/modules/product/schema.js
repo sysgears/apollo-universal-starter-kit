@@ -8,6 +8,11 @@ export class Category extends Schema {
     searchText: true,
     min: 3
   };
+  parent = {
+    type: Category,
+    external: true,
+    optional: true
+  };
   products = {
     type: [Product],
     optional: true,

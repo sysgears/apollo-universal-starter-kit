@@ -7,10 +7,10 @@ export async function seed(knex, Promise) {
   await returnId(knex('product_type').insert({ name: 'M', description: 'Medum', rank: 2 }));
   await returnId(knex('product_type').insert({ name: 'L', description: 'Large', rank: 3 }));
 
-  const [category_id] = await returnId(knex('category').insert({ name: 'Textiles' }));
-  await returnId(knex('category').insert({ name: 'Shoes' }));
-  await returnId(knex('category').insert({ name: 'Hats' }));
-  await returnId(knex('category').insert({ name: 'Bags' }));
+  const [category_id] = await returnId(knex('category').insert({ name: 'Textiles', parent_id: null }));
+  await returnId(knex('category').insert({ name: 'Shoes', parent_id: category_id }));
+  await returnId(knex('category').insert({ name: 'Hats', parent_id: category_id }));
+  await returnId(knex('category').insert({ name: 'Bags', parent_id: category_id }));
 
   await returnId(
     knex('product').insert({

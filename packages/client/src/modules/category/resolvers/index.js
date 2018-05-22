@@ -10,6 +10,7 @@ const TYPE_CATEGORY_STATE_ORDER_BY = 'OrderByCategoryInput';
 const defaultFilters = {
   id: '',
   name: '',
+  parentId: '',
   products: '',
   searchText: ''
 };

@@ -1,6 +1,10 @@
 fragment CategoryInfo on Category {
   id
   name
+  parent {
+    id
+    name
+  }
   products {
     id
     name

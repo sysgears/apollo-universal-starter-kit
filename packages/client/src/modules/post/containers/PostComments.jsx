@@ -72,7 +72,7 @@ class PostComments extends React.Component {
   }
 
   componentDidMount() {
-    if (!this.subscription) {
+    if (!this.subscription && this.props.postId) {
       this.subscribeToCommentList(this.props.postId);
     }
   }

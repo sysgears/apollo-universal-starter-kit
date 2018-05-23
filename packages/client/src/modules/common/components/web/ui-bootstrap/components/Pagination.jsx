@@ -18,11 +18,11 @@ export default class Pagination extends React.Component {
     defaultPageSize: PropTypes.number
   };
 
-  state = { pageNumber: 1, pagination: this.props.pagination };
-
   static getDerivedStateFromProps(nextProps, prevState) {
     return nextProps.pagination !== prevState.pagination ? { pageNumber: 1, pagination: nextProps.pagination } : null;
   }
+
+  state = { pageNumber: 1, pagination: this.props.pagination };
 
   onItemClick = pageNumber => {
     const { handlePageChange, pagination } = this.props;

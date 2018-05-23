@@ -33,7 +33,8 @@ const mocks = {
     posts(ignored, { after }) {
       const totalCount = 4;
       const edges = [];
-      for (let i = +after + 1; i <= +after + 2; i++) {
+      const postId = after < 1 ? +after + 1 : +after;
+      for (let i = postId; i <= postId + 1; i++) {
         edges.push({
           cursor: i,
           node: createNode(i),

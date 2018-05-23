@@ -10,14 +10,12 @@ const PaginationDemoView = ({ items, handlePageChange, renderItem, pagination, t
     <View style={styles.container}>
       <View style={styles.listContainer}>
         <Text style={styles.title}>{t('list.column.title')}</Text>
-        {items && (
-          <FlatList
-            data={items.edges}
-            style={styles.list}
-            keyExtractor={item => `${item.node.id}`}
-            renderItem={renderItem}
-          />
-        )}
+        <FlatList
+          data={items.edges}
+          style={styles.list}
+          keyExtractor={item => `${item.node.id}`}
+          renderItem={renderItem}
+        />
       </View>
       <View style={styles.pagination}>
         <Pagination

@@ -1,20 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, FlatList, StyleSheet, Text } from 'react-native';
+import { View, ScrollView, FlatList, StyleSheet, Text } from 'react-native';
 import { Pagination } from '../../common/components/native';
 
 import translate from '../../../i18n';
 
 const PaginationDemoView = ({ items, handlePageChange, renderItem, pagination, t }) => {
-  return (
+  const renderHeader = t => {
+    return <Text style={styles.title}>{t}</Text>;
+  };
+
+  const handleScrollEvent = () => {
+    if (this.allowLoadData) {
+      if (items.pageInfo.hasNextPage) {
+        this.allowLoadData = false;
+        return handlePageChange('relay', null);
+      }
+    }
+  };
+
+  const titleTexti18n = t('list.column.title');
+  this.allowLoadData = true;
+  return pagination === 'standard' ? (
     <View style={styles.container}>
       <View style={styles.listContainer}>
-        <Text style={styles.title}>{t('list.column.title')}</Text>
         <FlatList
           data={items.edges}
           style={styles.list}
           keyExtractor={item => `${item.node.id}`}
           renderItem={renderItem}
+          ListHeaderComponent={renderHeader(titleTexti18n)}
         />
       </View>
       <View style={styles.pagination}>
@@ -26,6 +41,38 @@ const PaginationDemoView = ({ items, handlePageChange, renderItem, pagination, t
           hasNextPage={items.pageInfo.hasNextPage}
         />
       </View>
+    </View>
+  ) : pagination === 'relay' ? (
+    <View style={styles.container}>
+      <ScrollView>
+        <FlatList
+          data={items.edges}
+          style={styles.list}
+          keyExtractor={item => `${item.node.id}`}
+          renderItem={renderItem}
+          ListHeaderComponent={renderHeader(titleTexti18n)}
+        />
+        <Pagination
+          totalPages={Math.ceil(items.totalCount / items.limit)}
+          handlePageChange={handlePageChange}
+          pagination={pagination}
+          loadMoreText={t('list.btn.more')}
+          hasNextPage={items.pageInfo.hasNextPage}
+        />
+      </ScrollView>
+    </View>
+  ) : (
+    <View style={styles.container}>
+      <FlatList
+        data={items.edges}
+        ref={ref => (this.listRef = ref)}
+        style={styles.list}
+        keyExtractor={item => `${item.node.id}`}
+        renderItem={renderItem}
+        ListHeaderComponent={renderHeader(titleTexti18n)}
+        onEndReachedThreshold={0.5}
+        onEndReached={handleScrollEvent}
+      />
     </View>
   );
 };
@@ -54,7 +101,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.3
   },
   pagination: {
-    flex: 0.13
+    flex: 0.12
   },
   container: {
     flex: 1

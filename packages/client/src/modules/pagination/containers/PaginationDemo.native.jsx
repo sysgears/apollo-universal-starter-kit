@@ -59,6 +59,7 @@ class PaginationDemo extends React.Component {
         <Picker selectedValue={pagination} onValueChange={this.onPaginationTypeChange}>
           <Picker.Item label={t('list.title.standard')} value="standard" />
           <Picker.Item label={t('list.title.relay')} value="relay" />
+          <Picker.Item label={t('list.title.scroll')} value="scroll" />
         </Picker>
         {items && (
           <PaginationDemoView

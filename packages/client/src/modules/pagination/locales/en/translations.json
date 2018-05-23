@@ -3,7 +3,8 @@
   "list": {
     "title": {
       "standard": "Standard pagination",
-      "relay": "Relay pagination"
+      "relay": "Relay pagination",
+      "scroll": "Load data on scroll"
     },
     "btn": {
       "more": "Load more.."

@@ -21,6 +21,7 @@ export { default as RenderSelectQuery } from './RenderSelectQuery';
 export { default as RenderCheckBox } from './RenderCheckBox';
 export { default as RenderSwitch } from './RenderSwitch';
 export { default as Alert } from './Alert';
+export { default as Spin } from './Spin';
 export { default as Container } from './Container';
 export { default as Row } from './Row';
 export { default as Col } from './Col';

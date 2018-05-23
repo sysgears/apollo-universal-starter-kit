@@ -3,6 +3,7 @@ import { graphql, compose } from 'react-apollo';
 
 import { removeTypename, removeEmpty } from '../../../../../common/utils';
 import { ListView } from '../../common/components/crud';
+import { updateEntry, deleteEntry } from '../../common/crud';
 import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
 
 import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
@@ -58,45 +59,13 @@ export default compose(
     }
   }),
   graphql(UPDATE_$MODULE$, {
-    props: ({ ownProps: { refetch }, mutate }) => ({
-      updateEntry: async (data, where) => {
-        try {
-          const {
-            data: { update$Module$ }
-          } = await mutate({
-            variables: { data, where }
-          });
-
-          if (update$Module$.errors) {
-            return { errors: update$Module$.errors };
-          }
-
-          refetch();
-        } catch (e) {
-          console.log(e.graphQLErrors);
-        }
-      }
+    props: props => ({
+      updateEntry: args => updateEntry(props, args, 'update$Module$')
     })
   }),
   graphql(DELETE_$MODULE$, {
-    props: ({ ownProps: { refetch }, mutate }) => ({
-      deleteEntry: async where => {
-        try {
-          const {
-            data: { delete$Module$ }
-          } = await mutate({
-            variables: { where }
-          });
-
-          if (delete$Module$.errors) {
-            return { errors: delete$Module$.errors };
-          }
-
-          refetch();
-        } catch (e) {
-          console.log(e.graphQLErrors);
-        }
-      }
+    props: props => ({
+      deleteEntry: args => deleteEntry(props, args, 'delete$Module$')
     })
   }),
   graphql(SORT_$MODULE$S, {

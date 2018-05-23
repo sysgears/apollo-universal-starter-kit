@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Table, Button, Popconfirm, Row, Col, Form, FormItem } from '../web';
+import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from '../web';
 import { createColumnFields, createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
 import { hasRole } from '../../../user/containers/Auth';
@@ -122,7 +122,10 @@ class ListView extends React.Component {
 
   state = {
     selectedRowKeys: [],
-    loading: false
+    loading: false,
+    wait: false,
+    error: null,
+    success: null
   };
 
   components = {
@@ -163,14 +166,26 @@ class ListView extends React.Component {
     }
   };
 
-  hendleUpdate = (data, id) => {
+  hendleUpdate = async (data, id) => {
     const { updateEntry } = this.props;
-    updateEntry(data, { id });
+    this.setState({ wait: true, error: null, success: null });
+    const result = await updateEntry({ data, where: { id } });
+    if (result && result.error) {
+      this.setState({ wait: false, error: result.error, success: null });
+    } else {
+      this.setState({ wait: false, error: null, success: 'Successfully updated entry.' });
+    }
   };
 
-  hendleDelete = id => {
+  hendleDelete = async id => {
     const { deleteEntry } = this.props;
-    deleteEntry({ id });
+    this.setState({ wait: true, error: null, success: null });
+    const result = await deleteEntry({ where: { id } });
+    if (result && result.error) {
+      this.setState({ wait: false, error: result.error, success: null });
+    } else {
+      this.setState({ wait: false, error: null, success: 'Successfully deleted entry.' });
+    }
   };
 
   onCellChange = (key, id, updateEntry) => {
@@ -228,7 +243,7 @@ class ListView extends React.Component {
       updateManyEntries,
       tableScroll = null
     } = this.props;
-    const { selectedRowKeys } = this.state;
+    const { selectedRowKeys, wait, error, success } = this.state;
     const hasSelected = selectedRowKeys.length > 0;
 
     const showBatchFields =
@@ -379,6 +394,9 @@ class ListView extends React.Component {
 
     return (
       <div>
+        {wait && <Spin size="small" />}
+        {error && <Alert color="error" message={error} />}
+        {success && <Alert color="success" message={success} />}
         <Table {...tableProps} />
         {data && this.renderLoadMore(data, loadMoreRows)}
       </div>

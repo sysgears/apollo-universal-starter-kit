@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form as ADForm } from 'antd';
+import { Spin as ADSpin } from 'antd';
 
 const Form = ({ children, ...props }) => {
-  return <ADForm {...props}>{children}</ADForm>;
+  return <ADSpin {...props}>{children}</ADSpin>;
 };
 
 Form.propTypes = {

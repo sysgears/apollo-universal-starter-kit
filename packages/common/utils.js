@@ -32,7 +32,7 @@ export const traceMethodCalls = obj => {
 };
 
 // Get current platform
-export const getPlatform = () => {
+const getPlatform = () => {
   if (typeof document !== 'undefined') {
     return 'web';
   } else if (typeof window === 'undefined') {
@@ -41,3 +41,5 @@ export const getPlatform = () => {
     return 'mobile';
   }
 };
+
+export const PLATFORM = getPlatform();

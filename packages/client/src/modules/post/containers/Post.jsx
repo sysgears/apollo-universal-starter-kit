@@ -10,12 +10,10 @@ import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import DELETE_POST from '../graphql/DeletePost.graphql';
 
 import paginationConfig from '../../../../../../config/pagination';
-import { getPlatform } from '../../../../../common/utils';
+import { PLATFORM } from '../../../../../common/utils';
 
 const limit =
-  getPlatform() === 'web' || getPlatform() === 'server'
-    ? paginationConfig.web.itemsNumber
-    : paginationConfig.mobile.itemsNumber;
+  PLATFORM === 'web' || PLATFORM === 'server' ? paginationConfig.web.itemsNumber : paginationConfig.mobile.itemsNumber;
 
 export function AddPost(prev, node) {
   // ignore if duplicate

@@ -19,34 +19,37 @@ class PostEdit extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      subscription: null
-    };
+    this.subscription = null;
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (!prevState.subscription && nextProps.post) {
-      return {
-        subscription: PostEdit.subscribeToPostEdit(nextProps)
-      };
-    }
-    return null;
+  componentDidMount() {
+    this.initPostEditSubscription();
+  }
+
+  componentDidUpdate() {
+    this.initPostEditSubscription();
   }
 
   componentWillUnmount() {
-    if (this.state.subscription) {
+    if (this.subscription) {
       // unsubscribe
-      this.state.subscription();
-      this.setState({ subscription: null });
+      this.subscription();
+      this.subscription = null;
     }
   }
 
-  static subscribeToPostEdit = props => {
-    let { subscribeToMore, post } = props;
+  initPostEditSubscription() {
+    if (!this.subscription && this.props.post) {
+      this.subscribeToPostEdit(this.props.post.id);
+    }
+  }
 
-    return subscribeToMore({
+  subscribeToPostEdit = postId => {
+    let { subscribeToMore } = this.props;
+
+    this.subscription = subscribeToMore({
       document: POST_SUBSCRIPTION,
-      variables: { id: post.id }
+      variables: { id: postId }
     });
   };
 

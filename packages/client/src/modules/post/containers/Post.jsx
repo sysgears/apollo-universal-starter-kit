@@ -9,6 +9,12 @@ import POSTS_QUERY from '../graphql/PostsQuery.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import DELETE_POST from '../graphql/DeletePost.graphql';
 
+import paginationConfig from '../../../../../../config/pagination';
+import { PLATFORM } from '../../../../../common/utils';
+
+const limit =
+  PLATFORM === 'web' || PLATFORM === 'server' ? paginationConfig.web.itemsNumber : paginationConfig.mobile.itemsNumber;
+
 export function AddPost(prev, node) {
   // ignore if duplicate
   if (prev.posts.edges.some(post => node.id === post.cursor)) {
@@ -130,27 +136,28 @@ export default compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
-        variables: { limit: 10, after: 0 }
+        variables: { limit: limit, after: 0 }
       };
     },
     props: ({ data }) => {
       const { loading, error, posts, fetchMore, subscribeToMore } = data;
-      const loadMoreRows = () => {
+      const loadData = (after, dataDelivery) => {
         return fetchMore({
           variables: {
-            after: posts.pageInfo.endCursor
+            after: after
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
             const totalCount = fetchMoreResult.posts.totalCount;
             const newEdges = fetchMoreResult.posts.edges;
             const pageInfo = fetchMoreResult.posts.pageInfo;
+            const displayedEdges = dataDelivery === 'add' ? [...previousResult.posts.edges, ...newEdges] : newEdges;
 
             return {
               // By returning `cursor` here, we update the `fetchMore` function
               // to the new cursor.
               posts: {
                 totalCount,
-                edges: [...previousResult.posts.edges, ...newEdges],
+                edges: displayedEdges,
                 pageInfo,
                 __typename: 'Posts'
               }
@@ -159,7 +166,7 @@ export default compose(
         });
       };
       if (error) throw new Error(error);
-      return { loading, posts, subscribeToMore, loadMoreRows };
+      return { loading, posts, subscribeToMore, loadData };
     }
   }),
   graphql(DELETE_POST, {

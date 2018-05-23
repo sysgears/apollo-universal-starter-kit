@@ -30,3 +30,16 @@ export const traceMethodCalls = obj => {
     }
   });
 };
+
+// Get current platform
+const getPlatform = () => {
+  if (typeof document !== 'undefined') {
+    return 'web';
+  } else if (typeof window === 'undefined') {
+    return 'server';
+  } else {
+    return 'mobile';
+  }
+};
+
+export const PLATFORM = getPlatform();

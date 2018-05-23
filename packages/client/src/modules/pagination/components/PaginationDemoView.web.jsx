@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Table, Pagination } from '../../common/components/web';
 import translate from '../../../i18n';
 
-const PaginationDemoView = ({ data, handlePageChange, pagination, t }) => {
+const PaginationDemoView = ({ items, handlePageChange, pagination, t }) => {
   const renderFunc = text => <span>{text}</span>;
   const columns = [
     {
@@ -17,22 +17,22 @@ const PaginationDemoView = ({ data, handlePageChange, pagination, t }) => {
 
   return (
     <div>
-      <Table dataSource={data.edges.map(({ node }) => node)} columns={columns} />
+      <Table dataSource={items.edges.map(({ node }) => node)} columns={columns} />
       <Pagination
-        itemsPerPage={data.edges.length}
+        itemsPerPage={items.edges.length}
         handlePageChange={handlePageChange}
-        hasNextPage={data.pageInfo.hasNextPage}
+        hasNextPage={items.pageInfo.hasNextPage}
         pagination={pagination}
-        total={data.totalCount}
+        total={items.totalCount}
         loadMoreText={t('list.btn.more')}
-        defaultPageSize={data.limit}
+        defaultPageSize={items.limit}
       />
     </div>
   );
 };
 
 PaginationDemoView.propTypes = {
-  data: PropTypes.object,
+  items: PropTypes.object,
   handlePageChange: PropTypes.func,
   t: PropTypes.func,
   pagination: PropTypes.string

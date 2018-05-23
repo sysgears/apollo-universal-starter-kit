@@ -5,25 +5,27 @@ import { Pagination } from '../../common/components/native';
 
 import translate from '../../../i18n';
 
-const PaginationDemoView = ({ data, handlePageChange, renderItem, pagination, t }) => {
+const PaginationDemoView = ({ items, handlePageChange, renderItem, pagination, t }) => {
   return (
     <View style={styles.container}>
       <View style={styles.listContainer}>
         <Text style={styles.title}>{t('list.column.title')}</Text>
-        <FlatList
-          data={data.edges}
-          style={styles.list}
-          keyExtractor={item => `${item.node.id}`}
-          renderItem={renderItem}
-        />
+        {items && (
+          <FlatList
+            data={items.edges}
+            style={styles.list}
+            keyExtractor={item => `${item.node.id}`}
+            renderItem={renderItem}
+          />
+        )}
       </View>
       <View style={styles.pagination}>
         <Pagination
-          totalPages={Math.ceil(data.totalCount / data.limit)}
+          totalPages={Math.ceil(items.totalCount / items.limit)}
           handlePageChange={handlePageChange}
           pagination={pagination}
           loadMoreText={t('list.btn.more')}
-          hasNextPage={data.pageInfo.hasNextPage}
+          hasNextPage={items.pageInfo.hasNextPage}
         />
       </View>
     </View>
@@ -32,7 +34,7 @@ const PaginationDemoView = ({ data, handlePageChange, renderItem, pagination, t 
 
 PaginationDemoView.propTypes = {
   t: PropTypes.func,
-  data: PropTypes.object,
+  items: PropTypes.object,
   handlePageChange: PropTypes.func,
   renderItem: PropTypes.func,
   pagination: PropTypes.string

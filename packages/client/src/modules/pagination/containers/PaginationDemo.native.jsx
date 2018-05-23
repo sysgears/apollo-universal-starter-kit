@@ -10,23 +10,23 @@ import withDataProvider from '../containers/DataProvider';
 class PaginationDemo extends React.Component {
   static propTypes = {
     t: PropTypes.func,
-    data: PropTypes.object,
+    items: PropTypes.object,
     loadData: PropTypes.func
   };
 
   state = { pagination: 'standard' };
 
   onPaginationTypeChange = itemValue => {
-    const { loadData, data } = this.props;
-    this.setState({ pagination: itemValue }, loadData(0, data.limit));
+    const { loadData, items } = this.props;
+    this.setState({ pagination: itemValue }, loadData(0, items.limit));
   };
 
   handlePageChange = (pagination, pageNumber) => {
-    const { loadData, data } = this.props;
+    const { loadData, items } = this.props;
     if (pagination === 'relay') {
-      loadData(data.pageInfo.endCursor, 'add');
+      loadData(items.pageInfo.endCursor, 'add');
     } else {
-      loadData((pageNumber - 1) * data.limit, 'replace');
+      loadData((pageNumber - 1) * items.limit, 'replace');
     }
   };
 
@@ -51,7 +51,7 @@ class PaginationDemo extends React.Component {
   };
 
   render() {
-    const { t, data } = this.props;
+    const { t, items } = this.props;
     const { pagination } = this.state;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     return (
@@ -60,12 +60,14 @@ class PaginationDemo extends React.Component {
           <Picker.Item label={t('list.title.standard')} value="standard" />
           <Picker.Item label={t('list.title.relay')} value="relay" />
         </Picker>
-        <PaginationDemoView
-          data={data}
-          handlePageChange={this.handlePageChange}
-          renderItem={renderItem}
-          pagination={pagination}
-        />
+        {items && (
+          <PaginationDemoView
+            items={items}
+            handlePageChange={this.handlePageChange}
+            renderItem={renderItem}
+            pagination={pagination}
+          />
+        )}
       </View>
     );
   }

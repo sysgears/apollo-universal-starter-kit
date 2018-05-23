@@ -13,7 +13,7 @@ class PaginationDemo extends React.Component {
   static propTypes = {
     t: PropTypes.func,
     loadData: PropTypes.func,
-    data: PropTypes.object
+    items: PropTypes.object
   };
 
   state = { pagination: 'standard' };
@@ -34,22 +34,22 @@ class PaginationDemo extends React.Component {
   };
 
   handlePageChange = (pagination, pageNumber) => {
-    const { loadData, data } = this.props;
+    const { loadData, items } = this.props;
     if (pagination === 'relay') {
-      loadData(data.pageInfo.endCursor, 'add');
+      loadData(items.pageInfo.endCursor, 'add');
     } else {
-      loadData((pageNumber - 1) * data.limit, 'replace');
+      loadData((pageNumber - 1) * items.limit, 'replace');
     }
   };
 
   onPaginationTypeChange = e => {
-    const { loadData, data } = this.props;
+    const { loadData, items } = this.props;
     const paginationType = e.target.value;
-    this.setState({ pagination: paginationType }, loadData(0, data.limit));
+    this.setState({ pagination: paginationType }, loadData(0, items.limit));
   };
 
   render() {
-    const { t, data } = this.props;
+    const { t, items } = this.props;
     const { pagination } = this.state;
     return (
       <PageLayout>
@@ -58,7 +58,7 @@ class PaginationDemo extends React.Component {
           <Option value="standard">{t('list.title.standard')}</Option>
           <Option value="relay">{t('list.title.relay')}</Option>
         </Select>
-        <PaginationDemoView data={data} handlePageChange={this.handlePageChange} pagination={pagination} />
+        {items && <PaginationDemoView items={items} handlePageChange={this.handlePageChange} pagination={pagination} />}
       </PageLayout>
     );
   }

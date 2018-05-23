@@ -26,14 +26,12 @@ const renderData = (columns, entry) => {
 
 const Table = ({ dataSource, columns, ...props }) => {
   return (
-    <div>
-      <RSTable {...props}>
-        <thead>
-          <tr>{renderHead(columns)}</tr>
-        </thead>
-        <tbody>{renderBody(columns, dataSource)}</tbody>
-      </RSTable>
-    </div>
+    <RSTable {...props}>
+      <thead>
+        <tr>{renderHead(columns)}</tr>
+      </thead>
+      <tbody>{renderBody(columns, dataSource)}</tbody>
+    </RSTable>
   );
 };
 

@@ -94,17 +94,17 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     fontSize: 16,
-    paddingLeft: 7,
     borderBottomColor: '#000',
     borderBottomWidth: 0.3,
     borderTopColor: '#000',
     borderTopWidth: 0.3
   },
   pagination: {
-    flex: 0.12
+    flex: 0.15
   },
   container: {
-    flex: 1
+    flex: 1,
+    paddingHorizontal: 15
   },
   listContainer: {
     flex: 1

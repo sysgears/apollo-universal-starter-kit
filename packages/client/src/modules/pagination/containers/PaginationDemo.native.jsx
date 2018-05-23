@@ -46,11 +46,13 @@ class PaginationDemo extends React.Component {
     const { pagination } = this.state;
     return (
       <View style={styles.container}>
-        <Picker selectedValue={pagination} onValueChange={this.onPaginationTypeChange}>
-          <Picker.Item label={t('list.title.standard')} value="standard" />
-          <Picker.Item label={t('list.title.relay')} value="relay" />
-          <Picker.Item label={t('list.title.scroll')} value="scroll" />
-        </Picker>
+        <View style={styles.pickerItem}>
+          <Picker selectedValue={pagination} onValueChange={this.onPaginationTypeChange}>
+            <Picker.Item label={t('list.title.standard')} value="standard" />
+            <Picker.Item label={t('list.title.relay')} value="relay" />
+            <Picker.Item label={t('list.title.scroll')} value="scroll" />
+          </Picker>
+        </View>
         {items && (
           <PaginationDemoView
             items={items}
@@ -80,8 +82,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomColor: '#000',
     borderBottomWidth: 0.3,
-    height: 48,
-    paddingLeft: 7
+    height: 48
+  },
+  pickerItem: {
+    paddingHorizontal: 7
   }
 });
 

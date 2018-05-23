@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.3
   },
   pagination: {
-    flex: 0.15
+    flex: 0.15,
+    marginTop: 5
   },
   container: {
     flex: 1,

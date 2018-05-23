@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, TouchableOpacity, Picker } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import translate from '../../../i18n';
 import PaginationDemoView from '../components/PaginationDemoView.native';
 import withDataProvider from '../containers/DataProvider';
+import { itemAction, itemTitle } from '../../common/components/native/styles';
+import { Select } from '../../common/components/native';
 
 @translate('pagination')
 class PaginationDemo extends React.Component {
@@ -44,14 +46,27 @@ class PaginationDemo extends React.Component {
   render() {
     const { t, items } = this.props;
     const { pagination } = this.state;
+    const options = [
+      { value: 'standard', label: t('list.title.standard') },
+      { value: 'relay', label: t('list.title.relay') },
+      { value: 'scroll', label: t('list.title.scroll') }
+    ];
     return (
       <View style={styles.container}>
-        <View style={styles.pickerItem}>
-          <Picker selectedValue={pagination} onValueChange={this.onPaginationTypeChange}>
-            <Picker.Item label={t('list.title.standard')} value="standard" />
-            <Picker.Item label={t('list.title.relay')} value="relay" />
-            <Picker.Item label={t('list.title.scroll')} value="scroll" />
-          </Picker>
+        <View style={styles.itemContainer}>
+          <View style={[styles.itemAction, styles.itemSelect]}>
+            <Select
+              icon
+              iconName="caret-down"
+              mode="dropdown"
+              data={options}
+              selectedValue={pagination}
+              onValueChange={this.onPaginationTypeChange}
+              okText={t('list.select.ok')}
+              dismissText={t('list.select.dismiss')}
+              cols={1}
+            />
+          </View>
         </View>
         {items && (
           <PaginationDemoView
@@ -69,7 +84,8 @@ class PaginationDemo extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    paddingHorizontal: 7
   },
   text: {
     fontSize: 16
@@ -84,8 +100,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.3,
     height: 48
   },
-  pickerItem: {
-    paddingHorizontal: 7
+  itemContainer: {
+    flex: 0.1
+  },
+  itemAction,
+  itemTitle,
+  itemSelect: {
+    flex: 25
   }
 });
 

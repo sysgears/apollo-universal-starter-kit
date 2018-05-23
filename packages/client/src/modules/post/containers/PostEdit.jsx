@@ -45,7 +45,7 @@ class PostEdit extends React.Component {
   }
 
   subscribeToPostEdit = postId => {
-    let { subscribeToMore } = this.props;
+    const { subscribeToMore } = this.props;
 
     this.subscription = subscribeToMore({
       document: POST_SUBSCRIPTION,

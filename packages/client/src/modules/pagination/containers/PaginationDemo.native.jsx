@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Platform, TouchableOpacity, Picker } from 'react-native';
-import { SwipeAction } from '../../common/components/native';
+import { StyleSheet, View, Text, TouchableOpacity, Picker } from 'react-native';
 import translate from '../../../i18n';
 import PaginationDemoView from '../components/PaginationDemoView.native';
 import withDataProvider from '../containers/DataProvider';
@@ -30,15 +29,7 @@ class PaginationDemo extends React.Component {
     }
   };
 
-  renderItemIOS = ({
-    item: {
-      node: { title }
-    }
-  }) => {
-    return <SwipeAction>{title}</SwipeAction>;
-  };
-
-  renderItemAndroid = ({
+  renderItem = ({
     item: {
       node: { title }
     }
@@ -53,7 +44,6 @@ class PaginationDemo extends React.Component {
   render() {
     const { t, items } = this.props;
     const { pagination } = this.state;
-    const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     return (
       <View style={styles.container}>
         <Picker selectedValue={pagination} onValueChange={this.onPaginationTypeChange}>
@@ -65,7 +55,7 @@ class PaginationDemo extends React.Component {
           <PaginationDemoView
             items={items}
             handlePageChange={this.handlePageChange}
-            renderItem={renderItem}
+            renderItem={this.renderItem}
             pagination={pagination}
           />
         )}

@@ -1,15 +1,15 @@
 export default () => ({
   UserAuth: {
-    facebook(obj) {
+    github(obj) {
       return obj;
     }
   },
-  FacebookAuth: {
-    fbId(obj) {
-      return obj.fbId;
+  GithubAuth: {
+    ghId(obj) {
+      return obj.ghId;
     },
     displayName(obj) {
-      return obj.fbDisplayName;
+      return obj.ghDisplayName;
     }
   }
 });

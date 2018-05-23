@@ -3,11 +3,9 @@ import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 
 import access from '../../access';
-import UserDAO from '../../sql';
+import User from '../../sql';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
-
-const User = new UserDAO();
 
 const validateUserPassword = async (user, password) => {
   const e = new FieldError();

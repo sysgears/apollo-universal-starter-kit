@@ -1,7 +1,15 @@
+enum Role {
+  admin
+  editor
+  user
+  distributor
+  producer
+}
+
 type User {
   id: Int!
   username: String!
-  role: String!
+  role: Role!
   isActive: Boolean
   email: String!
   profile: UserProfile
@@ -83,7 +91,7 @@ input FilterUserInput {
   # search by username or email
   searchText: String
   # filter by role
-  role: String
+  role: Role
   # filter by isActive
   isActive: Boolean
 }
@@ -126,7 +134,7 @@ input AddUserInput {
   username: String!
   email: String!
   password: String!
-  role: String!
+  role: Role!
   isActive: Boolean
   profile: ProfileInput
   auth: AuthInput
@@ -136,7 +144,7 @@ input AddUserInput {
 input EditUserInput {
   id: Int!
   username: String!
-  role: String!
+  role: Role!
   isActive: Boolean
   email: String!
   password: String

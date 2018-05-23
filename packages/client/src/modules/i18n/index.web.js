@@ -28,17 +28,15 @@ I18nProvider.propTypes = {
 };
 
 const LANG_COOKIE = 'lang';
-const LANG_LIST = ['en-US', 'ru-RU'];
 
 i18n
   .use(LanguageDetector)
   .use(reactI18nextModule)
   .init({
-    fallbackLng: 'en-US',
+    fallbackLng: settings.i18n.fallbackLng,
     resources: {},
-    lng: settings.i18n.defaultLang,
     debug: false, // set true to show logs
-    whitelist: LANG_LIST,
+    whitelist: settings.i18n.langList,
     detection: {
       lookupCookie: LANG_COOKIE,
       caches: __SSR__ ? ['cookie'] : ['localStorage']
@@ -66,7 +64,8 @@ class RootComponent extends React.Component {
     this.props = props;
 
     if (this.props.req) {
-      const lang = this.props.req.universalCookies.get(LANG_COOKIE) || this.props.req.acceptsLanguages(LANG_LIST);
+      const lang =
+        this.props.req.universalCookies.get(LANG_COOKIE) || this.props.req.acceptsLanguages(settings.i18n.langList);
       this.props.req.universalCookies.set(LANG_COOKIE, lang);
       i18n.changeLanguage(lang);
     }

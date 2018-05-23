@@ -1,15 +1,15 @@
 export default () => ({
   UserAuth: {
-    facebook(obj) {
+    linkedin(obj) {
       return obj;
     }
   },
-  FacebookAuth: {
-    fbId(obj) {
-      return obj.fbId;
+  LinkedInAuth: {
+    lnId(obj) {
+      return obj.lnId;
     },
     displayName(obj) {
-      return obj.fbDisplayName;
+      return obj.lnDisplayName;
     }
   }
 });

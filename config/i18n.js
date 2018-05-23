@@ -1,4 +1,5 @@
 export default {
   langPickerRender: true,
-  defaultLang: ''
+  langList: ['en-US', 'ru-RU'],
+  fallbackLng: 'en-US'
 };

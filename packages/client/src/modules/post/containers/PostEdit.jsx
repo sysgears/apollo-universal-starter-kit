@@ -81,7 +81,7 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       addPost: async (title, content) => {
         let postData = await mutate({
-          variables: { input: { title, content } },
+          variables: { input: { title: title.trim(), content: content.trim() } },
           optimisticResponse: {
             __typename: 'Mutation',
             addPost: {
@@ -123,7 +123,7 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       editPost: async (id, title, content) => {
         await mutate({
-          variables: { input: { id, title, content } }
+          variables: { input: { id, title: title.trim(), content: content.trim() } }
         });
         if (history) {
           return history.push('/posts');

@@ -60,9 +60,9 @@ class PostList extends React.PureComponent {
       },
       loadData
     } = this.props;
-    if (this.allowLoadData) {
+    if (this.allowDataLoad) {
       if (this.props.posts.pageInfo.hasNextPage) {
-        this.allowLoadData = false;
+        this.allowDataLoad = false;
         return loadData(endCursor + 1, 'add');
       }
     }
@@ -74,7 +74,7 @@ class PostList extends React.PureComponent {
     if (loading) {
       return <Loading text={t('post.loadMsg')} />;
     } else {
-      this.allowLoadData = true;
+      this.allowDataLoad = true;
       return (
         <View style={styles.container}>
           <FlatList

@@ -11,16 +11,16 @@ const PaginationDemoView = ({ items, handlePageChange, renderItem, pagination, t
   };
 
   const handleScrollEvent = () => {
-    if (this.allowLoadData) {
+    if (this.allowDataLoad) {
       if (items.pageInfo.hasNextPage) {
-        this.allowLoadData = false;
+        this.allowDataLoad = false;
         return handlePageChange('relay', null);
       }
     }
   };
 
   const titleTexti18n = t('list.column.title');
-  this.allowLoadData = true;
+  this.allowDataLoad = true;
   return pagination === 'standard' ? (
     <View style={styles.container}>
       <View style={styles.listContainer}>

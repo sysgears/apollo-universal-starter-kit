@@ -15,7 +15,8 @@ class PostEdit extends React.Component {
     loading: PropTypes.bool.isRequired,
     post: PropTypes.object,
     subscribeToMore: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object,
+    navigation: PropTypes.object
   };
 
   constructor(props) {
@@ -46,7 +47,7 @@ class PostEdit extends React.Component {
   }
 
   subscribeToPostEdit = postId => {
-    const { subscribeToMore, history } = this.props;
+    const { subscribeToMore, history, navigation } = this.props;
 
     this.subscription = subscribeToMore({
       document: POST_SUBSCRIPTION,
@@ -64,6 +65,8 @@ class PostEdit extends React.Component {
         if (mutation === 'DELETED') {
           if (history) {
             return history.push('/posts');
+          } else if (navigation) {
+            return navigation.goBack();
           }
         }
         return prev;

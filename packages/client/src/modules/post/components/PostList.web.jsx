@@ -2,34 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-
+import { PageLayout, Table, Button, Pagination } from '../../common/components/web';
 import translate from '../../../i18n';
-import { PageLayout, Table, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
+import paginationConfig from '../../../../../../config/pagination';
+
+const { itemsNumber, type } = paginationConfig.web;
 
 class PostList extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posts: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func.isRequired,
+    loadData: PropTypes.func,
     t: PropTypes.func
   };
 
   handleDeletePost = id => {
     const { deletePost } = this.props;
     deletePost(id);
-  };
-
-  renderLoadMore = (posts, loadMoreRows) => {
-    const { t } = this.props;
-    if (posts.pageInfo.hasNextPage) {
-      return (
-        <Button id="load-more" color="primary" onClick={loadMoreRows}>
-          {t('list.btn.more')}
-        </Button>
-      );
-    }
   };
 
   renderMetaData = () => {
@@ -47,8 +38,22 @@ class PostList extends React.PureComponent {
     );
   };
 
+  handlePageChange = (pagination, pageNumber) => {
+    const {
+      posts: {
+        pageInfo: { endCursor }
+      },
+      loadData
+    } = this.props;
+    if (pagination === 'relay') {
+      loadData(endCursor + 1, 'add');
+    } else {
+      loadData((pageNumber - 1) * itemsNumber, 'replace');
+    }
+  };
+
   render() {
-    const { loading, posts, loadMoreRows, t } = this.props;
+    const { loading, posts, t } = this.props;
     if (loading) {
       return (
         <PageLayout>
@@ -93,12 +98,15 @@ class PostList extends React.PureComponent {
           </Link>
           <h1 />
           <Table dataSource={posts.edges.map(({ node }) => node)} columns={columns} />
-          <div>
-            <small>
-              ({posts.edges.length} / {posts.totalCount})
-            </small>
-          </div>
-          {this.renderLoadMore(posts, loadMoreRows)}
+          <Pagination
+            itemsPerPage={posts.edges.length}
+            handlePageChange={this.handlePageChange}
+            hasNextPage={posts.pageInfo.hasNextPage}
+            pagination={type}
+            total={posts.totalCount}
+            loadMoreText={t('list.btn.more')}
+            defaultPageSize={itemsNumber}
+          />
         </PageLayout>
       );
     }

@@ -2,8 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { View, StyleSheet, FlatList, Text, Platform, TouchableOpacity } from 'react-native';
-
+import { StyleSheet, Text, Platform, TouchableOpacity, View, FlatList } from 'react-native';
 import translate from '../../../i18n';
 import { SwipeAction, Loading } from '../../common/components/native';
 
@@ -13,11 +12,9 @@ class PostList extends React.PureComponent {
     posts: PropTypes.object,
     navigation: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func.isRequired,
+    loadData: PropTypes.func.isRequired,
     t: PropTypes.func
   };
-
-  onEndReachedCalledDuringMomentum = false;
 
   keyExtractor = item => `${item.node.id}`;
 
@@ -56,31 +53,38 @@ class PostList extends React.PureComponent {
     );
   };
 
+  handleScrollEvent = () => {
+    const {
+      posts: {
+        pageInfo: { endCursor }
+      },
+      loadData
+    } = this.props;
+    if (this.allowDataLoad) {
+      if (this.props.posts.pageInfo.hasNextPage) {
+        this.allowDataLoad = false;
+        return loadData(endCursor + 1, 'add');
+      }
+    }
+  };
+
   render() {
-    const { loading, posts, loadMoreRows, t } = this.props;
+    const { loading, posts, t } = this.props;
     const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
     if (loading) {
       return <Loading text={t('post.loadMsg')} />;
     } else {
+      this.allowDataLoad = true;
       return (
         <View style={styles.container}>
           <FlatList
             data={posts.edges}
-            style={{ marginTop: 5 }}
+            ref={ref => (this.listRef = ref)}
+            style={styles.list}
             keyExtractor={this.keyExtractor}
             renderItem={renderItem}
             onEndReachedThreshold={0.5}
-            onMomentumScrollBegin={() => {
-              this.onEndReachedCalledDuringMomentum = false;
-            }}
-            onEndReached={() => {
-              if (!this.onEndReachedCalledDuringMomentum) {
-                if (posts.pageInfo.hasNextPage) {
-                  this.onEndReachedCalledDuringMomentum = true;
-                  return loadMoreRows();
-                }
-              }
-            }}
+            onEndReached={this.handleScrollEvent}
           />
         </View>
       );
@@ -117,5 +121,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.3,
     height: 50,
     paddingLeft: 7
+  },
+  list: {
+    marginTop: 5
   }
 });

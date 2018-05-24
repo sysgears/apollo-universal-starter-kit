@@ -91,7 +91,7 @@ input FilterUserInput {
   # search by username or email
   searchText: String
   # filter by role
-  role: Role
+  role: String
   # filter by isActive
   isActive: Boolean
 }

@@ -27,7 +27,7 @@ describe('Post and comments example API works', () => {
         totalCount: 20,
         edges: [
           {
-            cursor: 20,
+            cursor: 0,
             node: {
               id: 20,
               title: 'Post title 20',
@@ -38,7 +38,7 @@ describe('Post and comments example API works', () => {
           }
         ],
         pageInfo: {
-          endCursor: 20,
+          endCursor: 0,
           hasNextPage: true,
           __typename: 'PostPageInfo'
         },

@@ -70,6 +70,14 @@ export default pubsub => ({
             node: post
           }
         });
+        // publish for edit post page
+        pubsub.publish(POST_SUBSCRIPTION, {
+          postUpdated: {
+            mutation: 'DELETED',
+            id,
+            node: post
+          }
+        });
         return { id: post.id };
       } else {
         return { id: null };
@@ -87,7 +95,13 @@ export default pubsub => ({
         }
       });
       // publish for edit post page
-      pubsub.publish(POST_SUBSCRIPTION, { postUpdated: post });
+      pubsub.publish(POST_SUBSCRIPTION, {
+        postUpdated: {
+          mutation: 'UPDATED',
+          id: post.id,
+          node: post
+        }
+      });
       return post;
     },
     async addComment(obj, { input }, context) {

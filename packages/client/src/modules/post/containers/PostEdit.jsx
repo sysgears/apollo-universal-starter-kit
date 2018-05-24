@@ -14,7 +14,8 @@ class PostEdit extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     post: PropTypes.object,
-    subscribeToMore: PropTypes.func.isRequired
+    subscribeToMore: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -45,11 +46,28 @@ class PostEdit extends React.Component {
   }
 
   subscribeToPostEdit = postId => {
-    const { subscribeToMore } = this.props;
+    const { subscribeToMore, history } = this.props;
 
     this.subscription = subscribeToMore({
       document: POST_SUBSCRIPTION,
-      variables: { id: postId }
+      variables: { id: postId },
+      updateQuery: (
+        prev,
+        {
+          subscriptionData: {
+            data: {
+              postUpdated: { mutation }
+            }
+          }
+        }
+      ) => {
+        if (mutation === 'DELETED') {
+          if (history) {
+            return history.push('/posts');
+          }
+        }
+        return prev;
+      }
     });
   };
 

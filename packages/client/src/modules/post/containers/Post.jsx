@@ -127,7 +127,8 @@ export default compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
-        variables: { limit: 10, after: 0 }
+        variables: { limit: 10, after: 0 },
+        fetchPolicy: 'cache-and-network'
       };
     },
     props: ({ data }) => {

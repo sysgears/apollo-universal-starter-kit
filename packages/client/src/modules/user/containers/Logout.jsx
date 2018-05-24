@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
+import { compose } from 'react-apollo';
 import { HeaderTitle } from '../../common/components/native';
 
 import translate from '../../../i18n';
@@ -32,4 +33,4 @@ LogoutView.propTypes = {
   t: PropTypes.func
 };
 
-export default translate('user')(withLogout(LogoutView));
+export default compose(translate('user'), withLogout)(LogoutView);

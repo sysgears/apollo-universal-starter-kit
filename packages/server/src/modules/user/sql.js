@@ -7,7 +7,7 @@ import knex from '../../sql/connector';
 import { returnId } from '../../sql/helpers';
 
 // Actual query fetching and transformation in DB
-export default class User {
+class User {
   async getUsers(orderBy, filter) {
     const queryBuilder = knex
       .select(
@@ -21,6 +21,10 @@ export default class User {
         'ca.serial',
         'fa.fb_id',
         'fa.display_name AS fbDisplayName',
+        'lna.ln_id',
+        'lna.display_name AS lnDisplayName',
+        'gha.gh_id',
+        'gha.display_name AS ghDisplayName',
         'ga.google_id',
         'ga.display_name AS googleDisplayName'
       )
@@ -28,7 +32,9 @@ export default class User {
       .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
       .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
       .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
-      .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id');
+      .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id')
+      .leftJoin('auth_github AS gha', 'gha.user_id', 'u.id')
+      .leftJoin('auth_linkedin AS lna', 'lna.user_id', 'u.id');
 
     // add order by
     if (orderBy && orderBy.column) {
@@ -82,6 +88,10 @@ export default class User {
           'ca.serial',
           'fa.fb_id',
           'fa.display_name AS fbDisplayName',
+          'lna.ln_id',
+          'lna.display_name AS lnDisplayName',
+          'gha.gh_id',
+          'gha.display_name AS ghDisplayName',
           'ga.google_id',
           'ga.display_name AS googleDisplayName'
         )
@@ -90,6 +100,8 @@ export default class User {
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
         .leftJoin('auth_facebook AS fa', 'fa.user_id', 'u.id')
         .leftJoin('auth_google AS ga', 'ga.user_id', 'u.id')
+        .leftJoin('auth_github AS gha', 'gha.user_id', 'u.id')
+        .leftJoin('auth_linkedin AS lna', 'lna.user_id', 'u.id')
         .where('u.id', '=', id)
         .first()
     );
@@ -141,8 +153,16 @@ export default class User {
     return returnId(knex('auth_facebook')).insert({ fb_id: id, display_name: displayName, user_id: userId });
   }
 
+  createGithubAuth({ id, displayName, userId }) {
+    return returnId(knex('auth_github')).insert({ gh_id: id, display_name: displayName, user_id: userId });
+  }
+
   createGoogleOAuth({ id, displayName, userId }) {
     return returnId(knex('auth_google')).insert({ google_id: id, display_name: displayName, user_id: userId });
+  }
+
+  createLinkedInAuth({ id, displayName, userId }) {
+    return returnId(knex('auth_linkedin')).insert({ ln_id: id, display_name: displayName, user_id: userId });
   }
 
   async editUser({ id, username, email, role, isActive, password }) {
@@ -262,6 +282,52 @@ export default class User {
     );
   }
 
+  async getUserByLnInIdOrEmail(id, email) {
+    return camelizeKeys(
+      await knex
+        .select(
+          'u.id',
+          'u.username',
+          'u.role',
+          'u.is_active',
+          'lna.ln_id',
+          'u.email',
+          'u.password_hash',
+          'up.first_name',
+          'up.last_name'
+        )
+        .from('user AS u')
+        .leftJoin('auth_linkedin AS lna', 'lna.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+        .where('lna.ln_id', '=', id)
+        .orWhere('u.email', '=', email)
+        .first()
+    );
+  }
+
+  async getUserByGHIdOrEmail(id, email) {
+    return camelizeKeys(
+      await knex
+        .select(
+          'u.id',
+          'u.username',
+          'u.role',
+          'u.is_active',
+          'gha.gh_id',
+          'u.email',
+          'u.password_hash',
+          'up.first_name',
+          'up.last_name'
+        )
+        .from('user AS u')
+        .leftJoin('auth_github AS gha', 'gha.user_id', 'u.id')
+        .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
+        .where('gha.gh_id', '=', id)
+        .orWhere('u.email', '=', email)
+        .first()
+    );
+  }
+
   async getUserByGoogleIdOrEmail(id, email) {
     return camelizeKeys(
       await knex
@@ -317,3 +383,6 @@ export default class User {
     );
   }
 }
+const userDAO = new User();
+
+export default userDAO;

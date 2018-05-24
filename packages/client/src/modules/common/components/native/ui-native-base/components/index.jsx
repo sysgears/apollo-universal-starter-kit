@@ -22,3 +22,4 @@ export { default as CardSubtitleText } from './CardSubtitleText';
 export { default as IconButton } from './IconButton';
 export { default as LanguagePicker } from './LanguagePicker';
 export { default as Root } from './Root';
+export { default as Pagination } from './Pagination';

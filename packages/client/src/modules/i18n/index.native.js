@@ -53,11 +53,10 @@ i18n
   .use(languageDetector)
   .use(reactI18nextModule)
   .init({
-    fallbackLng: 'en-US',
+    fallbackLng: settings.i18n.fallbackLng,
     resources: {},
-    lng: settings.i18n.defaultLang,
     debug: false, // set true to show logs
-    whitelist: ['en-US', 'ru-RU'],
+    whitelist: settings.i18n.langList,
     interpolation: {
       escapeValue: false // not needed for react!!
     },

@@ -9,7 +9,7 @@ export default () => ({
       return obj.googleId;
     },
     displayName(obj) {
-      return obj.displayName;
+      return obj.googleDisplayName;
     }
   }
 });

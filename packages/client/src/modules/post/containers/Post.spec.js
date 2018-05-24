@@ -180,10 +180,15 @@ describe('Posts and comments example UI works', () => {
     subscription.next({
       data: {
         postUpdated: {
+          mutation: 'UPDATED',
           id: '3',
-          title: 'Post title 203',
-          content: 'Post content 204',
-          __typename: 'Post'
+          node: {
+            id: '3',
+            title: 'Post title 203',
+            content: 'Post content 204',
+            __typename: 'Post'
+          },
+          __typename: 'UpdatePostPayload'
         }
       }
     });

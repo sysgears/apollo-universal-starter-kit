@@ -117,15 +117,40 @@ class ListView extends React.Component {
     customActions: PropTypes.object,
     tableScroll: PropTypes.object,
     currentUser: PropTypes.object,
-    currentUserLoading: PropTypes.bool
+    currentUserLoading: PropTypes.bool,
+    parentWait: PropTypes.bool,
+    parentError: PropTypes.string,
+    parentSuccess: PropTypes.string
   };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (
+      prevState.lastParentWait !== nextProps.parentWait ||
+      prevState.lastParentError !== nextProps.parentError ||
+      prevState.lastParentSuccess !== nextProps.parentSuccess
+    ) {
+      return {
+        wait: nextProps.parentWait,
+        error: nextProps.parentError,
+        success: nextProps.parentSuccess,
+        lastParentWait: nextProps.parentWait,
+        lastParentError: nextProps.parentError,
+        lastParentSuccess: nextProps.parentSuccess
+      };
+    }
+
+    return null;
+  }
 
   state = {
     selectedRowKeys: [],
     loading: false,
     wait: false,
     error: null,
-    success: null
+    success: null,
+    lastParentWait: false,
+    lastParentError: null,
+    lastParentSuccess: null
   };
 
   components = {

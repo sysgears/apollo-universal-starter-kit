@@ -31,14 +31,14 @@ const renderSocialButtons = (buttonsLength, t) => {
       {github.enabled && <GitHubButton text={t('login.githubBtn')} type="icon" />}
       {linkedin.enabled && <LinkedInButton text={t('login.linkedinBtn')} type="icon" />}
     </View>
-  ) : (
+  ) : buttonsLength > 0 ? (
     <View>
       {facebook.enabled && <FacebookButton text={t('login.fbBtn')} type="button" />}
       {google.enabled && <GoogleButton text={t('login.googleBtn')} type="button" />}
       {github.enabled && <GitHubButton text={t('login.githubBtn')} type="button" />}
       {linkedin.enabled && <LinkedInButton text={t('login.linkedinBtn')} type="button" />}
     </View>
-  );
+  ) : null;
 };
 
 const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
@@ -78,7 +78,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
                 {t('login.form.btnSubmit')}
               </Button>
             </View>
-            {buttonsLength && renderSocialButtons(buttonsLength, t)}
+            {renderSocialButtons(buttonsLength, t)}
             <View style={styles.buttonsGroup}>
               <Text style={styles.signUpText} onPress={() => navigation.navigate('ForgotPassword')}>
                 {t('login.btn.forgotPass')}

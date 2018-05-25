@@ -5,6 +5,7 @@ import translate from '../../i18n';
 import { MenuItem } from '../../modules/common/components/web';
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';
+import PostAdd from './containers/PostAdd';
 import resources from './locales';
 import resolvers from './resolvers';
 import Feature from '../connector';
@@ -18,8 +19,8 @@ const NavLinkWithI18n = translate()(({ t }) => (
 export default new Feature({
   route: [
     <Route exact path="/posts" component={Post} />,
-    <Route exact path="/post/:id" component={PostEdit} />,
-    <Route exact path="/post/new" component={PostEdit} />
+    <Route exact path="/post/new" component={PostAdd} />,
+    <Route path="/post/:id" component={PostEdit} />
   ],
   navItem: (
     <MenuItem key="/posts">

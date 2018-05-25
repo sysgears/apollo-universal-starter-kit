@@ -3,21 +3,20 @@ import PropTypes from 'prop-types';
 import { View, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import translate from '../../../i18n';
-// import ChatView from '../components/ChatView.native';
 
 @translate('chat')
 class Chat extends React.Component {
   static propTypes = {
-    t: PropTypes.func,
-    items: PropTypes.object,
-    loadData: PropTypes.func
+    t: PropTypes.func
   };
 
   state = {
-    messages: []
+    messages: [],
+    userId: 1,
+    message: ''
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       messages: [
         {
@@ -34,21 +33,28 @@ class Chat extends React.Component {
     });
   }
 
-  onSend(messages = []) {
+  setMessageState = text => {
+    this.setState({ message: text });
+  };
+
+  onSend = (messages = []) => {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages)
     }));
-  }
+  };
 
   render() {
+    const { messages, userId, message } = this.state;
     return (
       <View style={{ flex: 1 }}>
         <GiftedChat
-          messages={this.state.messages}
+          text={message}
+          onInputTextChanged={text => this.setMessageState(text)}
+          placeholder={'Type a message...'}
+          keyboardShouldPersistTaps="never"
+          messages={messages}
           onSend={messages => this.onSend(messages)}
-          user={{
-            _id: 1
-          }}
+          user={{ _id: userId }}
         />
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />
       </View>

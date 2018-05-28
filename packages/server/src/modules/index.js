@@ -5,11 +5,22 @@ import user from './user';
 import subscription from './subscription';
 import contact from './contact';
 import mailer from './mailer';
-// import chat from './chat';
+import chat from './chat';
 import graphqlTypes from './graphqlTypes';
 import apolloEngine from './apolloEngine';
 import './debug';
 
 import Feature from './connector';
 
-export default new Feature(counter, post, upload, user, subscription, contact, mailer, graphqlTypes, apolloEngine);
+export default new Feature(
+  counter,
+  post,
+  upload,
+  user,
+  subscription,
+  contact,
+  mailer,
+  chat,
+  graphqlTypes,
+  apolloEngine
+);

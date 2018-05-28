@@ -3,7 +3,10 @@ const MESSAGES_SUBSCRIPTION = 'messages_subscription';
 
 export default pubsub => ({
   Query: {
-    post(obj, { id }, context) {
+    messages(obj, args, context) {
+      return context.Chat.getMessages();
+    },
+    message(obj, { id }, context) {
       return context.Chat.message(id);
     }
   },

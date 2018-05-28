@@ -1,0 +1,7 @@
+#import "./Message.graphql"
+
+subscription onMessagesUpdated {
+  messagesUpdated {
+    ...MessageInfo
+  }
+}

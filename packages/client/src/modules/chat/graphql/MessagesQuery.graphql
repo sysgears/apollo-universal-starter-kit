@@ -1,0 +1,5 @@
+#import "./Message.graphql"
+
+query messages {
+  ...MessageInfo
+}

@@ -1,0 +1,46 @@
+# Message
+type Message {
+  id: Int!
+  text: String!
+  userId: Int!
+}
+
+extend type Query {
+  # Messages
+  messages: [Message]
+  # Message
+  message(id: Int!): Message
+}
+
+extend type Mutation {
+  # Create new message
+  addMessage(input: AddMessageInput!): Message
+  # Delete a message
+  deleteMessage(id: Int!): Message
+  # Edit a message
+  editMessage(input: EditMessageInput!): Message
+}
+
+# Input for addMessage Mutation
+input AddMessageInput {
+  text: String!
+  userId: Int!
+}
+
+# Input for editMessage Mutation
+input EditMessageInput {
+  id: Int!
+  text: String!
+  userId: Int!
+}
+
+extend type Subscription {
+  # Subscription fired when anyone changes messages list
+  messagesUpdated: UpdateMessagesPayload
+}
+
+# Payload for messagesUpdated Subscription
+type UpdateMessagesPayload {
+  mutation: String!
+  node: Message!
+}

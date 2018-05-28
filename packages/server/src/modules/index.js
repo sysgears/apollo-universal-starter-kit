@@ -5,6 +5,7 @@ import user from './user';
 import subscription from './subscription';
 import contact from './contact';
 import mailer from './mailer';
+// import chat from './chat';
 import graphqlTypes from './graphqlTypes';
 import apolloEngine from './apolloEngine';
 import './debug';

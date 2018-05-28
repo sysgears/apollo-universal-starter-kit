@@ -25,8 +25,7 @@ class Chat extends React.Component {
           createdAt: new Date(),
           user: {
             _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any'
+            name: 'React Native'
           }
         }
       ]
@@ -54,7 +53,7 @@ class Chat extends React.Component {
           keyboardShouldPersistTaps="never"
           messages={messages}
           onSend={messages => this.onSend(messages)}
-          user={{ _id: userId }}
+          user={{ _id: userId, name: 'Sergey' }}
         />
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />
       </View>

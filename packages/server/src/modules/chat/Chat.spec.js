@@ -1,13 +1,15 @@
+/*eslint-disable no-unused-vars*/
 import chai from 'chai';
 import { step } from 'mocha-steps';
 
-import { getServer } from '../../testHelpers/integrationSetup';
+import { getServer, getApollo } from '../../testHelpers/integrationSetup';
 
 describe('Chat example API works', () => {
-  let server;
+  let server, apollo;
 
   before(() => {
     server = getServer();
+    apollo = getApollo();
   });
 
   step('Has GraphiQL endpoint', () => {

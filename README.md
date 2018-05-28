@@ -31,6 +31,7 @@ Checkout our [Mobile App Demo](https://expo.io/@sysgears/apollo-universal-starte
 | [stable](https://github.com/sysgears/apollo-universal-starter-kit/tree/stable) | The latest stable version of the kit |
 | [single](https://github.com/sysgears/apollo-universal-starter-kit/tree/single) | Single-package Apollo v2 version of the kit|
 | [apollo1](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1) | Apollo v1 version of the kit |
+| [cli-crud](https://github.com/sysgears/apollo-universal-starter-kit/tree/cli-crud) | generate CRUD implementations from the command line |
 
 
 ## Getting Started

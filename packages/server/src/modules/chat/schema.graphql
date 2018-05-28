@@ -2,7 +2,7 @@
 type Message {
   id: Int!
   text: String!
-  userId: Int!
+  userId: Int
 }
 
 extend type Query {
@@ -24,14 +24,14 @@ extend type Mutation {
 # Input for addMessage Mutation
 input AddMessageInput {
   text: String!
-  userId: Int!
+  userId: Int
 }
 
 # Input for editMessage Mutation
 input EditMessageInput {
   id: Int!
-  text: String!
-  userId: Int!
+  text: String
+  userId: Int
 }
 
 extend type Subscription {

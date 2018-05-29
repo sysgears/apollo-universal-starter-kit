@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 
 import PostEditView from '../components/PostEditView';
 
@@ -61,7 +61,7 @@ export default compose(
     options: props => {
       let id = 0;
       if (props.match) {
-        id = props.match.params.id !== 'new' ? props.match.params.id : 0;
+        id = props.match.params.id;
       } else if (props.navigation) {
         id = props.navigation.state.params.id;
       }

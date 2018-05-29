@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import translate from '../../../i18n';
 import PostForm from './PostForm';
@@ -20,9 +20,7 @@ const PostAddView = ({ addPost }) => {
 };
 
 PostAddView.propTypes = {
-  addPost: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired,
-  t: PropTypes.func
+  addPost: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({

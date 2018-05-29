@@ -2,6 +2,9 @@
 
 subscription onMessagesUpdated {
   messagesUpdated {
-    ...MessageInfo
+    mutation
+    node {
+      ...MessageInfo
+    }
   }
 }

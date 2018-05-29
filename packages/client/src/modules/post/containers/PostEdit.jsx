@@ -14,7 +14,9 @@ class PostEdit extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     post: PropTypes.object,
-    subscribeToMore: PropTypes.func.isRequired
+    subscribeToMore: PropTypes.func.isRequired,
+    history: PropTypes.object,
+    navigation: PropTypes.object
   };
 
   constructor(props) {
@@ -22,18 +24,21 @@ class PostEdit extends React.Component {
     this.subscription = null;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.loading) {
+  componentDidMount() {
+    if (!this.props.loading) {
+      this.initPostEditSubscription();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!this.props.loading) {
+      let prevPostId = prevProps.post ? prevProps.post.id : null;
       // Check if props have changed and, if necessary, stop the subscription
-      if (this.subscription && this.props.post.id !== nextProps.post.id) {
+      if (this.subscription && prevPostId !== this.props.post.id) {
         this.subscription();
         this.subscription = null;
       }
-
-      // Subscribe or re-subscribe
-      if (!this.subscription && nextProps.post) {
-        this.subscribeToPostEdit(nextProps.post.id);
-      }
+      this.initPostEditSubscription();
     }
   }
 
@@ -41,15 +46,41 @@ class PostEdit extends React.Component {
     if (this.subscription) {
       // unsubscribe
       this.subscription();
+      this.subscription = null;
+    }
+  }
+
+  initPostEditSubscription() {
+    if (!this.subscription && this.props.post) {
+      this.subscribeToPostEdit(this.props.post.id);
     }
   }
 
   subscribeToPostEdit = postId => {
-    const { subscribeToMore } = this.props;
+    const { subscribeToMore, history, navigation } = this.props;
 
     this.subscription = subscribeToMore({
       document: POST_SUBSCRIPTION,
-      variables: { id: postId }
+      variables: { id: postId },
+      updateQuery: (
+        prev,
+        {
+          subscriptionData: {
+            data: {
+              postUpdated: { mutation }
+            }
+          }
+        }
+      ) => {
+        if (mutation === 'DELETED') {
+          if (history) {
+            return history.push('/posts');
+          } else if (navigation) {
+            return navigation.goBack();
+          }
+        }
+        return prev;
+      }
     });
   };
 

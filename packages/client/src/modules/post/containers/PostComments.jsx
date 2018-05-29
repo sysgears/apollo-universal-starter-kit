@@ -63,7 +63,13 @@ class PostComments extends React.Component {
     this.initCommentListSubscription();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    let prevPostId = prevProps.postId || null;
+    // Check if props have changed and, if necessary, stop the subscription
+    if (this.subscription && this.props.postId !== prevPostId) {
+      this.subscription();
+      this.subscription = null;
+    }
     this.initCommentListSubscription();
   }
 
@@ -78,7 +84,7 @@ class PostComments extends React.Component {
   }
 
   initCommentListSubscription() {
-    if (!this.subscription && this.props.postId) {
+    if (!this.subscription) {
       this.subscribeToCommentList(this.props.postId);
     }
   }

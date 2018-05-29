@@ -73,25 +73,26 @@ class Post extends React.Component {
     this.subscription = null;
   }
 
-  componentDidMount() {
-    this.initPostListSubscription();
+  componentDidUpdate(prevProps) {
+    if (!this.props.loading) {
+      const endCursor = this.props.posts ? this.props.posts.pageInfo.endCursor : 0;
+      const prevEndCursor = prevProps.posts ? prevProps.posts.pageInfo.endCursor : null;
+      // Check if props have changed and, if necessary, stop the subscription
+      if (this.subscription && prevEndCursor !== endCursor) {
+        this.subscription();
+        this.subscription = null;
+      }
+      if (!this.subscription) {
+        this.subscribeToPostList(endCursor);
+      }
+    }
   }
 
-  componentDidUpdate() {
-    this.initPostListSubscription();
-  }
   componentWillUnmount() {
     if (this.subscription) {
       // unsubscribe
       this.subscription();
       this.subscription = null;
-    }
-  }
-
-  initPostListSubscription() {
-    if (!this.subscription) {
-      const endCursor = this.props.posts ? this.props.posts.pageInfo.endCursor : 0;
-      this.subscribeToPostList(endCursor);
     }
   }
 

@@ -99,5 +99,5 @@ export default new Feature(access, {
   resolver: resolvers,
   localization: { ns: 'user', resources },
   // eslint-disable-next-line react/display-name
-  rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
+  rootComponentFactory: req => (req ? <CookiesProvider cookies={req.universalCookies} /> : <CookiesProvider />)
 });

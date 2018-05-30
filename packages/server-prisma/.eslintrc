@@ -1,0 +1,13 @@
+{
+  "extends": "../../.eslintrc.base.json",
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.config.lint.js"
+      }
+    }
+  },
+  "globals": {
+    "__SERVER_PORT__": true
+  }
+}

@@ -39,7 +39,7 @@ class UserAdd extends React.Component {
   };
 
   render() {
-    return <UserAddView onSubmit={this.onSubmit} trimExtraSpaces={UserAdd.trimExtraSpaces} {...this.props} />;
+    return <UserAddView onSubmit={this.onSubmit} {...this.props} />;
   }
 }
 

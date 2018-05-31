@@ -85,7 +85,7 @@ export default compose(
           return history.push('/posts');
         }
         if (navigation) {
-          return navigation.goBack();
+          return navigation.navigate('PostList');
         }
       }
     })

@@ -51,10 +51,7 @@ export default graphql(ADD_POST, {
           post: postData.data.addPost
         });
       } else if (navigation) {
-        return navigation.setParams({
-          id: postData.data.addPost.id,
-          post: postData.data.addPost
-        });
+        return navigation.navigate('PostEdit', { id: postData.data.addPost.id });
       }
     }
   })

@@ -20,13 +20,15 @@ const withI18N = (Component, props) => {
   return <WithI18N {...props} />;
 };
 
-const PostListHeaderRight = ({ navigation, t }) => (
-  <View style={styles.addButtonContainer}>
-    <Button style={styles.addButton} size={'small'} type={primary} onPress={() => navigation.navigate('PostAdd')}>
-      {t('list.btn.add')}
-    </Button>
-  </View>
-);
+const PostListHeaderRight = ({ navigation, t }) => {
+  return (
+    <View style={styles.addButtonContainer}>
+      <Button style={styles.addButton} size={'small'} type={primary} onPress={() => navigation.navigate('PostAdd')}>
+        {t('list.btn.add')}
+      </Button>
+    </View>
+  );
+};
 PostListHeaderRight.propTypes = {
   navigation: PropTypes.object,
   t: PropTypes.func
@@ -92,7 +94,7 @@ class PostAddScreen extends React.Component {
   });
 
   render() {
-    return <PostAdd />;
+    return <PostAdd navigation={this.props.navigation} />;
   }
 }
 

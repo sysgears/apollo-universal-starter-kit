@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import translate from '../../../i18n';
 import UsersFilter from '../containers/UsersFilter';
 import UsersList from '../containers/UsersList';
-import { PageLayout, Button } from '../../common/components/web';
+import { Button, PageLayout } from '../../common/components/web';
 
 import settings from '../../../../../../settings';
 
@@ -27,7 +27,7 @@ const Users = ({ t }) => {
     <PageLayout>
       {renderMetaData()}
       <h2>{t('users.list.title')}</h2>
-      <Link to="/users/0">
+      <Link to="/users/new">
         <Button color="primary">{t('users.btn.add')}</Button>
       </Link>
       <hr />

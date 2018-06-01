@@ -7,17 +7,12 @@ import translate from '../../../i18n';
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
 
-const onSubmit = (post, addPost, editPost) => values => {
-  if (post) {
-    editPost(post.id, values.title, values.content);
-  } else {
-    addPost(values.title, values.content);
-  }
+const onSubmit = (post, editPost) => values => {
+  editPost(post.id, values.title, values.content);
 };
 
-const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, editPost, t }) => {
+const PostEditView = ({ loading, post, navigation, subscribeToMore, editPost, t }) => {
   let postObj = post;
-
   // if new post was just added read it from router
   if (!postObj && navigation.state) {
     postObj = navigation.state.params.post;
@@ -29,7 +24,7 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
     return (
       <View style={styles.container}>
         <ScrollView>
-          <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
+          <PostForm onSubmit={onSubmit(postObj, editPost)} post={post} />
           {postObj && (
             <PostComments
               postId={navigation.state.params.id}
@@ -46,7 +41,6 @@ const PostEditView = ({ loading, post, navigation, subscribeToMore, addPost, edi
 PostEditView.propTypes = {
   loading: PropTypes.bool.isRequired,
   post: PropTypes.object,
-  addPost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
   subscribeToMore: PropTypes.func.isRequired,

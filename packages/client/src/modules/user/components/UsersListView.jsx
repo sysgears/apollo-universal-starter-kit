@@ -1,18 +1,18 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import {
-  List,
-  ListItem,
+  Button,
   Card,
   CardItem,
   CardLabel,
   CardText,
-  Button,
-  primary,
-  Loading
+  List,
+  ListItem,
+  Loading,
+  primary
 } from '../../common/components/native';
 import translate from '../../../i18n';
 
@@ -25,7 +25,7 @@ const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
         <ScrollView>
           <View>
             <View style={styles.buttonWrapper}>
-              <Button type={primary} onPress={() => navigation.navigate('UserEdit', { id: 0 })}>
+              <Button type={primary} onPress={() => navigation.navigate('UserAdd')}>
                 {t('users.btn.add')}
               </Button>
             </View>

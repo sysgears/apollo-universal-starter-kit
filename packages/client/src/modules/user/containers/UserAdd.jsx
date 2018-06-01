@@ -15,17 +15,17 @@ class UserAdd extends React.Component {
   onSubmit = async values => {
     const { addUser, t } = this.props;
 
-    let insertValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
+    let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
-    insertValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
+    userValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
 
-    insertValues = UserFormatter.trimExtraSpaces(insertValues);
+    userValues = UserFormatter.trimExtraSpaces(userValues);
 
     if (settings.user.auth.certificate.enabled) {
-      insertValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
+      userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    const result = await addUser(insertValues);
+    const result = await addUser(userValues);
 
     if (result && result.errors) {
       throw result.errors.reduce(

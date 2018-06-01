@@ -1,0 +1,10 @@
+projects:
+  app:
+    schemPath: ./modules/post/schema.graphql
+    extensions:
+      endpoints:
+        default: http://localhost:8080
+  prisma:
+    schemaPath: ./modules/generated/prisma.graphql
+    extensions:
+      prisma: prisma.yml

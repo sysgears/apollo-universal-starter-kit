@@ -1,0 +1,7 @@
+endpoint: ${__PRISMA_ENDPOINT__}
+datamodel: ./database/datamodel.graphql
+
+hooks:
+  post-deploy:
+    - graphql get-schema --project prisma
+    - graphql prepare

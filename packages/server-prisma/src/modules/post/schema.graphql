@@ -1,0 +1,70 @@
+# Post
+type Post {
+  id: String!
+  title: String!
+  content: String!
+  comments: [Comment]
+}
+
+# Comment
+type Comment {
+  id: String!
+  content: String!
+}
+
+extend type Query {
+  # Posts pagination query
+  posts(limit: Int, after: Int): Posts
+  # Post
+  post(id: String!): Post
+}
+
+extend type Mutation {
+  # Create new post
+  addPost(input: AddPostInput!): Post
+  # Delete a post
+  deletePost(id: String!): Post
+  # Edit a post
+  editPost(input: EditPostInput!): Post
+  # Create a ne comment
+  addComment(input: AddCommentInput!): Comment
+}
+
+# Input for addPost Mutation
+input AddPostInput {
+  title: String!
+  content: String!
+}
+
+# Input for editPost Mutation
+input EditPostInput {
+  id: String!
+  title: String!
+  content: String!
+}
+
+# Input for addComment Mutation
+input AddCommentInput {
+  content: String!
+  # Needed for commentUpdated Subscription filter
+  postId: Int!
+}
+
+# Edges for Posts
+type PostEdges {
+  node: Post
+  cursor: Int
+}
+
+# PageInfo for Posts
+type PostPageInfo {
+  endCursor: Int
+  hasNextPage: Boolean
+}
+
+# Posts relay-style pagination query
+type Posts {
+  totalCount: Int
+  edges: [PostEdges]
+  pageInfo: PostPageInfo
+}

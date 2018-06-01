@@ -97,6 +97,7 @@
     "lerna": "^2.5.1",
     "less": "^3.0.2",
     "less-loader": "^4.1.0",
+    "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",

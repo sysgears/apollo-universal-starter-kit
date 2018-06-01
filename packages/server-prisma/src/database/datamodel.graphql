@@ -1,0 +1,13 @@
+# Post
+type Post {
+  id: ID! @unique
+  title: String!
+  content: String!
+  comments: [Comment!]!
+}
+
+# Comment
+type Comment {
+  id: ID! @unique
+  content: String!
+}

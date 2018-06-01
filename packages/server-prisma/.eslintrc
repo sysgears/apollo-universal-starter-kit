@@ -8,6 +8,7 @@
     }
   },
   "globals": {
-    "__SERVER_PORT__": true
+    "__SERVER_PORT__": true,
+    "__PRISMA_ENDPOINT__": true
   }
 }

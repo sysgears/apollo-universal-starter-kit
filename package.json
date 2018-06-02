@@ -61,7 +61,7 @@
     "typescript": "^2.7.2"
   },
   "optionalDependencies": {
-    "dotenv": "^5.0.1",
+    "dotenv": "^6.0.0",
     "lodash": "^4.17.4"
   },
   "dependencies": {

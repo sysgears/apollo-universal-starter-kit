@@ -8,7 +8,6 @@
 [![Sponsors on Open Collective](https://opencollective.com/apollo-universal-starter-kit/sponsors/badge.svg)](#sponsors)
 [![Join the chat at https://gitter.im/sysgears/apollo-fullstack-starter-kit](https://badges.gitter.im/sysgears/apollo-fullstack-starter-kit.svg)](https://gitter.im/sysgears/apollo-fullstack-starter-kit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/sysgears/apollo-universal-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-universal-starter-kit)
-[![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-universal-starter-kit.svg)](https://greenkeeper.io/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Twitter Follow](https://img.shields.io/twitter/follow/sysgears.svg?style=social)](https://twitter.com/sysgears)
 
@@ -32,6 +31,7 @@ Checkout our [Mobile App Demo](https://expo.io/@sysgears/apollo-universal-starte
 | [stable](https://github.com/sysgears/apollo-universal-starter-kit/tree/stable) | The latest stable version of the kit |
 | [single](https://github.com/sysgears/apollo-universal-starter-kit/tree/single) | Single-package Apollo v2 version of the kit|
 | [apollo1](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1) | Apollo v1 version of the kit |
+| [cli-crud](https://github.com/sysgears/apollo-universal-starter-kit/tree/cli-crud) | generate CRUD implementations from the command line |
 
 
 ## Getting Started
@@ -55,8 +55,8 @@ yarn
 yarn seed
 ```
 
-4. Run starter kit in development mode. 
-For running Android or iOS you need to set in .spinrc.js builders.ios.enabled and/or builders.android.enabled field true. See *Getting Started with React Native* section.
+4. Run starter kit in development mode.
+For running Android or iOS you need to set in `packages/mobile/.spinrc.js` `config.builders.ios.enabled` and/or `config.builders.android.enabled` field `true`. See *Getting Started with React Native* section.
 
 ```
 yarn watch
@@ -74,7 +74,7 @@ This starter kit adds full [React Native] integration, with [Webpack] as a packa
 compilation tools are needed in order to develop native mobile applications with this kit. You are able to run both web
 and mobile versions of your app at the same time connected to the same backend.
 
-For running Android or iOS you need to set in `.spinrc.js` `builders.ios.enabled` and/or `builders.android.enabled` field `true`.
+For running Android or iOS you need to set in `packages/mobile/.spinrc.js` `config.builders.ios.enabled` and/or `config.builders.android.enabled` field `true`.
 
 #### Running on a device
 
@@ -127,11 +127,7 @@ technologies used in the kit. Contact us using [Skype](http://hatscripts.com/add
 This starter kit is designed so you can use it for just web, mobile or projects using both together. In case you do not
 want to use mobile, just set both `builders.ios.enabled` or `builders.android.enabled` settings in `.spinrc.js` to `false`.
 
-We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
-is possible. In this case you can write your components with React Native's building blocks that are supported in [React
-Native Web] and run them both on web and mobile.
-
-To cover more differences you can use platform-specific files.
+To cover differences between platforms you can use platform-specific files.
 
 ```
 MyComponent.web.jsx
@@ -344,6 +340,8 @@ Check [subscription module documentation](packages/client/src/modules/subscripti
 
 * [TypeScript] support. This kit supports both ES6 and TypeScript out of the box.
 
+* Internationalization with [i18next]
+
 ## Project Structure
 
 The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by feature
@@ -524,7 +522,6 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [react ga]: https://github.com/react-ga/react-ga
 [haul]: https://github.com/callstack-io/haul
 [react native]: https://github.com/facebook/react-native
-[react native web]: https://github.com/necolas/react-native-web
 [expo]: https://expo.io
 [genymotion]: https://www.genymotion.com
 [xcode]: https://developer.apple.com/xcode/
@@ -532,8 +529,8 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [jwt]: https://jwt.io
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
-[flow]: https://flow.org
 [typescript]: https://www.typescriptlang.org
+[i18next]: https://www.i18next.com
 [Stripe]: https://stripe.com
 [Wiki]: https://github.com/sysgears/apollo-universal-starter-kit/wiki
 [FAQ]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Frequently-Asked-Questions

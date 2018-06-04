@@ -1,19 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import translate from '../../../i18n';
+
 import { PageLayout } from '../../common/components/web';
 
-const SubscribersOnlyView = ({ loading, number }) => {
+const SubscribersOnlyView = ({ loading, number, t }) => {
   return (
     <PageLayout>
-      <h1>Private</h1>
-      <p>Your magic number is {loading ? 'loading...' : number}.</p>
+      <h1>{t('subOnly.title')}</h1>
+      <p>
+        {t('subOnly.msg')} {loading ? t('subOnly.load') : number}.
+      </p>
     </PageLayout>
   );
 };
 
 SubscribersOnlyView.propTypes = {
   loading: PropTypes.bool.isRequired,
-  number: PropTypes.number
+  number: PropTypes.number,
+  t: PropTypes.func
 };
 
-export default SubscribersOnlyView;
+export default translate('subscription')(SubscribersOnlyView);

@@ -32,7 +32,9 @@ const SubscriptionViewWithApollo = compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       subscribe: async ({ token, expiryMonth, expiryYear, last4, brand }) => {
         try {
-          const { data: { subscribe } } = await mutate({
+          const {
+            data: { subscribe }
+          } = await mutate({
             variables: { input: { token, expiryMonth, expiryYear, last4, brand } },
             update: (store, { data: { subscribe } }) => {
               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });

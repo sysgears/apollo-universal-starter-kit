@@ -26,6 +26,7 @@ const CancelSubscriptionWithApollo = compose(
     // file and change the query name to `SubscriptionDataTwo`, then it works.
     // skipping for now on server.
     skip: __SERVER__,
+    options: { fetchPolicy: 'network-only' },
     props({ data: { loading, subscription } }) {
       return {
         loading,
@@ -37,7 +38,9 @@ const CancelSubscriptionWithApollo = compose(
     props: ({ mutate }) => ({
       cancel: async () => {
         try {
-          const { data: { cancel } } = await mutate({
+          const {
+            data: { cancel }
+          } = await mutate({
             update: (store, { data: { cancel } }) => {
               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
               data.subscription = cancel;

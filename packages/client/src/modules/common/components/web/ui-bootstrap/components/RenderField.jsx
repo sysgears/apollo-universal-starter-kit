@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 
 const RenderField = ({ input, label, type, meta: { touched, error }, children, placeholder }) => {
-  let valid = null;
+  let valid = true;
   if (touched && error) {
     valid = false;
   }
@@ -12,7 +12,7 @@ const RenderField = ({ input, label, type, meta: { touched, error }, children, p
     <FormGroup>
       {label && <Label>{label}</Label>}
       <div>
-        <Input {...input} placeholder={label || placeholder} type={type} valid={valid}>
+        <Input {...input} placeholder={label || placeholder} type={type} invalid={!valid}>
           {children}
         </Input>
         {touched && (error && <FormFeedback>{error}</FormFeedback>)}

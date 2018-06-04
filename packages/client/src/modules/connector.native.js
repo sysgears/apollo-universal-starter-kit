@@ -1,34 +1,54 @@
+import React from 'react';
+
 import { merge, map, union, without, castArray } from 'lodash';
 
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
-export const featureCatalog = {};
-
-const defaultCreateFetch = () => {};
-
 export default class {
-  // eslint-disable-next-line no-unused-vars
-  constructor({ link, createFetch, route, navItem, reducer, resolver, routerFactory, catalogInfo }, ...features) {
+  /* eslint-disable no-unused-vars */
+  constructor(
+    {
+      link,
+      createNetLink,
+      route,
+      drawerItem,
+      localization,
+      reducer,
+      resolver,
+      routerFactory,
+      rootComponentFactory,
+      data
+    },
+    ...features
+  ) {
     /* eslint-enable no-unused-vars */
-    combine(arguments, arg => arg.catalogInfo).forEach(info =>
-      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
-    );
     this.link = combine(arguments, arg => arg.link);
-    this.createFetch =
-      combine(arguments, arg => arg.createFetch !== defaultCreateFetch && arg.createFetch)
-        .slice(-1)
-        .pop() || defaultCreateFetch;
-    this.tabItem = combine(arguments, arg => arg.tabItem);
+    this.createNetLink = combine(arguments, arg => arg.createNetLink)
+      .slice(-1)
+      .pop();
+    this.drawerItem = combine(arguments, arg => arg.drawerItem);
+    this.localization = combine(arguments, arg => arg.localization);
     this.reducer = combine(arguments, arg => arg.reducer);
     this.resolver = combine(arguments, arg => arg.resolver);
+    this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
     this.routerFactory = combine(arguments, arg => arg.routerFactory)
       .slice(-1)
       .pop();
+
+    // Shared modules data
+    this.data = combine([{}].concat(Array.from(arguments)), arg => arg.data).reduce(
+      (acc, el) => [{ ...acc[0], ...el }],
+      [{}]
+    );
   }
 
-  get tabItems() {
-    return merge(...this.tabItem);
+  get drawerItems() {
+    return merge(...this.drawerItem);
+  }
+
+  get localizations() {
+    return this.localization;
   }
 
   get reducers() {
@@ -45,5 +65,20 @@ export default class {
 
   get router() {
     return this.routerFactory();
+  }
+
+  getWrappedRoot(root, req) {
+    let nestedRoot = root;
+    for (const componentFactory of this.rootComponentFactory) {
+      nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
+    }
+    return nestedRoot;
+  }
+
+  getSkippedDrawerItems() {
+    const items = this.drawerItems;
+    return Object.keys(items).filter(itemName => {
+      return items[itemName].skip;
+    });
   }
 }

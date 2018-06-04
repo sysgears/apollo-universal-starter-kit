@@ -8,8 +8,6 @@ import { ServerStyleSheet } from 'styled-components';
 import fs from 'fs';
 import path from 'path';
 import Helmet from 'react-helmet';
-// eslint-disable-next-line
-import { AppRegistry } from 'react-native';
 
 import { isApiExternal, apiUrl } from '../net';
 import createApolloClient from '../../../common/createApolloClient';
@@ -24,9 +22,11 @@ let assetMap;
 const renderServerSide = async (req, res) => {
   const clientModules = require('../../../client/src/modules').default;
 
+  const schemaLink = new SchemaLink({ schema, context: await modules.createContext(req, res) });
+
   const client = createApolloClient({
     apiUrl,
-    schemaLink: !isApiExternal ? new SchemaLink({ schema, context: await modules.createContext(req, res) }) : undefined,
+    createNetLink: !isApiExternal ? () => schemaLink : undefined,
     links: clientModules.link,
     clientResolvers: clientModules.resolvers
   });
@@ -35,24 +35,20 @@ const renderServerSide = async (req, res) => {
   const store = createReduxStore(initialState, client);
 
   const context = {};
-  const App = () =>
-    clientModules.getWrappedRoot(
-      <Provider store={store}>
-        <ApolloProvider client={client}>
-          {clientModules.getDataRoot(
-            <StaticRouter location={req.url} context={context}>
-              {Routes}
-            </StaticRouter>
-          )}
-        </ApolloProvider>
-      </Provider>,
-      req
-    );
+  const App = clientModules.getWrappedRoot(
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        {clientModules.getDataRoot(
+          <StaticRouter location={req.url} context={context}>
+            {Routes}
+          </StaticRouter>
+        )}
+      </ApolloProvider>
+    </Provider>,
+    req
+  );
 
-  AppRegistry.registerComponent('App', () => App);
-  const { element, stylesheets } = AppRegistry.getApplication('App', {});
-
-  await getDataFromTree(element);
+  await getDataFromTree(App);
 
   if (context.pageNotFound === true) {
     res.status(404);
@@ -61,11 +57,8 @@ const renderServerSide = async (req, res) => {
   }
 
   const sheet = new ServerStyleSheet();
-  const html = ReactDOMServer.renderToString(sheet.collectStyles(element));
-  const css = sheet
-    .getStyleElement()
-    .concat(stylesheets)
-    .map((el, idx) => React.cloneElement(el, { key: idx }));
+  const html = ReactDOMServer.renderToString(sheet.collectStyles(App));
+  const css = sheet.getStyleElement().map((el, idx) => (el ? React.cloneElement(el, { key: idx }) : el));
   const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
 
   if (context.url) {

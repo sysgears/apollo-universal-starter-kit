@@ -3,22 +3,20 @@ import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 
 import access from '../../access';
-import UserDAO from '../../sql';
+import User from '../../sql';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
-
-const User = new UserDAO();
 
 const validateUserPassword = async (user, password) => {
   const e = new FieldError();
 
   if (!user) {
     // user with provided email not found
-    e.setError('email', 'Please enter a valid e-mail.');
+    e.setError('usernameOrEmail', 'Please enter a valid username or e-mail.');
     e.throwIf();
   }
   if (settings.user.auth.password.confirm && !user.isActive) {
-    e.setError('email', 'Please confirm your e-mail first.');
+    e.setError('usernameOrEmail', 'Please confirm your e-mail first.');
     e.throwIf();
   }
 
@@ -32,9 +30,15 @@ const validateUserPassword = async (user, password) => {
 
 export default () => ({
   Mutation: {
-    async login(obj, { input: { email, password } }, { req }) {
+    async login(
+      obj,
+      {
+        input: { usernameOrEmail, password }
+      },
+      { req }
+    ) {
       try {
-        const user = await User.getUserByEmail(email);
+        const user = await User.getUserByUsernameOrEmail(usernameOrEmail);
 
         await validateUserPassword(user, password);
 
@@ -138,8 +142,8 @@ export default () => ({
           e.setError('password', 'Passwords do not match.');
         }
 
-        if (reset.password.length < 5) {
-          e.setError('password', `Password must be 5 characters or more.`);
+        if (reset.password.length < 8) {
+          e.setError('password', `Password must be 8 characters or more.`);
         }
         e.throwIf();
 

@@ -83,7 +83,9 @@ export default pubsub => ({
       try {
         const data = pick(input, ['token', 'expiryMonth', 'expiryYear', 'last4', 'brand']);
         const user = await context.User.getUserByUsername(context.user.username);
-        const { subscription: { stripeCustomerId, stripeSourceId } } = context;
+        const {
+          subscription: { stripeCustomerId, stripeSourceId }
+        } = context;
 
         await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
         const source = await stripe.customers.createSource(stripeCustomerId, {

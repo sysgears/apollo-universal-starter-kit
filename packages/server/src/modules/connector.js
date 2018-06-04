@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import type { DocumentNode } from 'graphql';
@@ -8,28 +7,12 @@ import { merge, map, union, without, castArray } from 'lodash';
 
 import log from '../../../common/log';
 
-export const featureCatalog: any = {};
+export const featureCatalog = {};
 
-const combine = (features, extractor): any =>
-  without(union(...map(features, res => castArray(extractor(res)))), undefined);
-
-type FeatureParams = {
-  schema: DocumentNode | DocumentNode[],
-  createResolversFunc?: Function | Function[],
-  createContextFunc?: Function | Function[],
-  beforeware?: Middleware | Middleware[],
-  middleware?: Middleware | Middleware[],
-  catalogInfo: any | any[]
-};
+const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 class Feature {
-  schema: DocumentNode[];
-  createResolversFunc: Function[];
-  createContextFunc: Function[];
-  beforeware: Function[];
-  middleware: Function[];
-
-  constructor(feature?: FeatureParams, ...features: Feature[]) {
+  constructor({ schema, createResolversFunc, createContextFunc, beforeware, middleware, catalogInfo }, ...features) {
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
@@ -40,11 +23,11 @@ class Feature {
     this.middleware = combine(arguments, arg => arg.middleware);
   }
 
-  get schemas(): DocumentNode[] {
+  get schemas() {
     return this.schema;
   }
 
-  async createContext(req: $Request, res: $Response, connectionParams: any, webSocket: any) {
+  async createContext(req, res, connectionParams, webSocket) {
     let context = {};
     for (const createContextFunc of this.createContextFunc) {
       context = merge(context, await createContextFunc({ req, res, connectionParams, webSocket, context }));
@@ -52,15 +35,15 @@ class Feature {
     return context;
   }
 
-  createResolvers(pubsub: any) {
+  createResolvers(pubsub) {
     return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
   }
 
-  get beforewares(): Middleware[] {
+  get beforewares() {
     return this.beforeware;
   }
 
-  get middlewares(): Middleware[] {
+  get middlewares() {
     return this.middleware;
   }
 }

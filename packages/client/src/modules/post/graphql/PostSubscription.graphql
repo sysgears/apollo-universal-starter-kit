@@ -2,6 +2,10 @@
 
 subscription onPostUpdated($id: Int!) {
   postUpdated(id: $id) {
-    ... PostInfo
+    mutation
+    id
+    node {
+      ...PostInfo
+    }
   }
 }

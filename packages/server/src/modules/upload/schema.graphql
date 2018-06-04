@@ -1,23 +1,18 @@
-type File {
-    id: Int!
-    name: String!
-    type: String!
-    size: Int!
-    path: String!
-}
+scalar Upload
 
-input Upload {
-    name: String!
-    type: String!
-    size: Int!
-    path: String!
+type File {
+  id: Int!
+  name: String!
+  type: String!
+  size: Int!
+  path: String!
 }
 
 extend type Query {
-    files: [File]
+  files: [File]
 }
 
 extend type Mutation {
-    uploadFiles(files: [Upload!]!): Boolean!
-    removeFile(id: Int!): Boolean!
+  uploadFiles(files: [Upload!]!): Boolean!
+  removeFile(id: Int!): Boolean!
 }

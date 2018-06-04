@@ -6,7 +6,7 @@ subscription onCommentUpdated($postId: Int!) {
     id
     postId
     node {
-      ... CommentInfo
+      ...CommentInfo
     }
   }
 }

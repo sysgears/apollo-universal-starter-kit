@@ -4,16 +4,12 @@ import { merge, map, union, without, castArray } from 'lodash';
 
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
-const defaultCreateFetch = () => {};
-
-export const featureCatalog = {};
-
 export default class {
   /* eslint-disable no-unused-vars */
   constructor(
     {
       link,
-      createFetch,
+      createNetLink,
       connectionParam,
       reducer,
       resolver,
@@ -21,21 +17,23 @@ export default class {
       route,
       navItem,
       navItemRight,
+      localization,
       rootComponentFactory,
       dataRootComponent,
       stylesInsert,
       scriptsInsert,
-      catalogInfo
+      data
     },
     ...features
   ) {
-    /* eslint-enable no-unused-vars */
+    // Localization
+    this.localization = combine(arguments, arg => arg.localization);
+
     // Connectivity
     this.link = combine(arguments, arg => arg.link);
-    this.createFetch =
-      combine(arguments, arg => arg.createFetch !== defaultCreateFetch && arg.createFetch)
-        .slice(-1)
-        .pop() || defaultCreateFetch;
+    this.createNetLink = combine(arguments, arg => arg.createNetLink)
+      .slice(-1)
+      .pop();
     this.connectionParam = combine(arguments, arg => arg.connectionParam);
 
     // State management
@@ -58,8 +56,10 @@ export default class {
     this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
     this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
 
-    combine(arguments, arg => arg.catalogInfo).forEach(info =>
-      Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
+    // Shared modules data
+    this.data = combine([{}].concat(Array.from(arguments)), arg => arg.data).reduce(
+      (acc, el) => [{ ...acc[0], ...el }],
+      [{}]
     );
   }
 
@@ -85,6 +85,10 @@ export default class {
         key: component.key ? component.key : idx + this.navItem.length
       })
     );
+  }
+
+  get localizations() {
+    return this.localization;
   }
 
   get reducers() {

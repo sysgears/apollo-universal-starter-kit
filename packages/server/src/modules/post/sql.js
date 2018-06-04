@@ -1,19 +1,14 @@
-import { orderedFor } from '../../sql/helpers';
+import { returnId, orderedFor } from '../../sql/helpers';
 import knex from '../../sql/connector';
 
 export default class Post {
   postsPagination(limit, after) {
-    let where = '';
-    if (after > 0) {
-      where = `id < ${after}`;
-    }
-
     return knex
       .select('id', 'title', 'content')
       .from('post')
-      .whereRaw(where)
       .orderBy('id', 'desc')
-      .limit(limit);
+      .limit(limit)
+      .offset(after);
   }
 
   async getCommentsForPostIds(postIds) {
@@ -31,13 +26,6 @@ export default class Post {
       .first();
   }
 
-  getNextPageFlag(id) {
-    return knex('post')
-      .countDistinct('id as count')
-      .where('id', '<', id)
-      .first();
-  }
-
   post(id) {
     return knex
       .select('id', 'title', 'content')
@@ -47,9 +35,7 @@ export default class Post {
   }
 
   addPost({ title, content }) {
-    return knex('post')
-      .insert({ title, content })
-      .returning('id');
+    return returnId(knex('post')).insert({ title, content });
   }
 
   deletePost(id) {
@@ -68,9 +54,7 @@ export default class Post {
   }
 
   addComment({ content, postId }) {
-    return knex('comment')
-      .insert({ content, post_id: postId })
-      .returning('id');
+    return returnId(knex('comment')).insert({ content, post_id: postId });
   }
 
   getComment(id) {

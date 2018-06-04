@@ -16,7 +16,9 @@ const ResetPasswordWithApollo = compose(
     props: ({ ownProps: { history }, mutate }) => ({
       resetPassword: async ({ password, passwordConfirmation, token }) => {
         try {
-          const { data: { resetPassword } } = await mutate({
+          const {
+            data: { resetPassword }
+          } = await mutate({
             variables: { input: { password, passwordConfirmation, token } }
           });
 

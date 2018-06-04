@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Elements } from 'react-stripe-elements';
 
+import translate from '../../../i18n';
 import { LayoutCenter, clientOnly } from '../../common/components';
 import { PageLayout } from '../../common/components/web';
 import SubscriptionCardForm from './SubscriptionCardForm';
@@ -10,17 +11,19 @@ import settings from '../../../../../../settings';
 
 const ElementsClientOnly = clientOnly(Elements);
 
-export default class SubscriptionView extends React.Component {
+class SubscriptionView extends React.Component {
   static propTypes = {
-    subscribe: PropTypes.func.isRequired
+    subscribe: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   onSubmit = subscribe => async values => {
     const result = await subscribe(values);
+    const { t } = this.props;
 
     if (result.errors) {
       let submitError = {
-        _error: 'Transaction failed!'
+        _error: t('errorMsg')
       };
       result.errors.map(error => (submitError[error.field] = error.message));
       throw submitError;
@@ -28,15 +31,15 @@ export default class SubscriptionView extends React.Component {
   };
 
   render() {
-    const { subscribe } = this.props;
+    const { subscribe, t } = this.props;
 
     const renderMetaData = () => (
       <Helmet
-        title={`${settings.app.name} - Subscription`}
+        title={`${settings.app.name} - ${t('title')}`}
         meta={[
           {
             name: 'description',
-            content: `${settings.app.name} - Subscription page`
+            content: `${settings.app.name} - ${t('meta')}`
           }
         ]}
       />
@@ -46,12 +49,14 @@ export default class SubscriptionView extends React.Component {
       <PageLayout>
         {renderMetaData()}
         <LayoutCenter>
-          <h1 className="text-center">Subscription!</h1>
+          <h1 className="text-center">{t('subTitle')}</h1>
           <ElementsClientOnly>
-            <SubscriptionCardForm onSubmit={this.onSubmit(subscribe)} action="Subscribe" />
+            <SubscriptionCardForm onSubmit={this.onSubmit(subscribe)} action={t('action')} />
           </ElementsClientOnly>
         </LayoutCenter>
       </PageLayout>
     );
   }
 }
+
+export default translate('subscription')(SubscriptionView);

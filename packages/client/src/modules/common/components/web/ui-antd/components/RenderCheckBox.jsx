@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Checkbox from 'antd/lib/checkbox';
-import Form from 'antd/lib/form';
+import { Checkbox, Form } from 'antd';
 
 const FormItem = Form.Item;
 

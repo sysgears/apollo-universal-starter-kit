@@ -23,7 +23,7 @@ const config = {
       enabled: false
     },
     test: {
-      stack: ['react-native-web', 'server'],
+      stack: ['server'],
       roles: ['test'],
       defines: {
         __TEST__: true
@@ -31,7 +31,7 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'es6', 'ts', 'webpack'],
+    stack: ['apollo', 'react', 'styled-components', 'es6', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
     webpackDll: true,
     reactHotLoader: false,
@@ -39,7 +39,7 @@ const config = {
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"http://localhost:8080/graphql"',
-      __WEBSITE_URL__: '"http://localhost:3000"'
+      __WEBSITE_URL__: '"http://localhost:8080"'
     }
   }
 };

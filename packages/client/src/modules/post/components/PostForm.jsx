@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+
+import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
-import { FormView, RenderField, FormButton } from '../../common/components/native';
+import { FormView, RenderField, Button, primary } from '../../common/components/native';
+import { placeholderColor } from '../../common/components/native/styles';
 import { required, validateForm } from '../../../../../common/validation';
 
 const postFormSchema = {
@@ -12,12 +15,28 @@ const postFormSchema = {
 
 const validate = values => validateForm(values, postFormSchema);
 
-const PostForm = ({ values, handleSubmit }) => {
+const PostForm = ({ values, handleSubmit, t }) => {
   return (
-    <FormView>
-      <Field name="title" component={RenderField} type="text" label="Title" value={values.title} />
-      <Field name="content" component={RenderField} type="text" label="Content" value={values.content} />
-      <FormButton onPress={handleSubmit}>Save</FormButton>
+    <FormView style={{ paddingHorizontal: 15 }}>
+      <Field
+        name="title"
+        component={RenderField}
+        type="text"
+        placeholder={t('post.field.title')}
+        value={values.title}
+        placeholderTextColor={placeholderColor}
+      />
+      <Field
+        name="content"
+        component={RenderField}
+        type="text"
+        placeholder={t('post.field.content')}
+        value={values.content}
+        placeholderTextColor={placeholderColor}
+      />
+      <Button type={primary} onPress={handleSubmit}>
+        {t('post.btn.submit')}
+      </Button>
     </FormView>
   );
 };
@@ -25,7 +44,8 @@ const PostForm = ({ values, handleSubmit }) => {
 PostForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
-  values: PropTypes.object
+  values: PropTypes.object,
+  t: PropTypes.func
 };
 
 const PostFormWithFormik = withFormik({
@@ -34,10 +54,15 @@ const PostFormWithFormik = withFormik({
     content: props.post && props.post.content
   }),
   validate: values => validate(values),
-  handleSubmit(values, { props: { onSubmit } }) {
+  handleSubmit(
+    values,
+    {
+      props: { onSubmit }
+    }
+  ) {
     onSubmit(values);
   },
   displayName: 'PostForm' // helps with React DevTools
 });
 
-export default PostFormWithFormik(PostForm);
+export default translate('post')(PostFormWithFormik(PostForm));

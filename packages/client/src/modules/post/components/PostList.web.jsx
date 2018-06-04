@@ -2,15 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { PageLayout, Table, Button } from '../../common/components/web';
+import { PageLayout, Table, Button, Pagination } from '../../common/components/web';
+import translate from '../../../i18n';
 import settings from '../../../../../../settings';
+import paginationConfig from '../../../../../../config/pagination';
 
-export default class PostList extends React.PureComponent {
+const { itemsNumber, type } = paginationConfig.web;
+
+class PostList extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     posts: PropTypes.object,
     deletePost: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func.isRequired
+    loadData: PropTypes.func,
+    t: PropTypes.func
   };
 
   handleDeletePost = id => {
@@ -18,41 +23,48 @@ export default class PostList extends React.PureComponent {
     deletePost(id);
   };
 
-  renderLoadMore = (posts, loadMoreRows) => {
-    if (posts.pageInfo.hasNextPage) {
-      return (
-        <Button id="load-more" color="primary" onClick={loadMoreRows}>
-          Load more ...
-        </Button>
-      );
+  renderMetaData = () => {
+    const { t } = this.props;
+    return (
+      <Helmet
+        title={`${settings.app.name} - ${t('list.title')}`}
+        meta={[
+          {
+            name: 'description',
+            content: `${settings.app.name} - ${t('list.meta')}`
+          }
+        ]}
+      />
+    );
+  };
+
+  handlePageChange = (pagination, pageNumber) => {
+    const {
+      posts: {
+        pageInfo: { endCursor }
+      },
+      loadData
+    } = this.props;
+    if (pagination === 'relay') {
+      loadData(endCursor + 1, 'add');
+    } else {
+      loadData((pageNumber - 1) * itemsNumber, 'replace');
     }
   };
 
-  renderMetaData = () => (
-    <Helmet
-      title={`${settings.app.name} - Posts list`}
-      meta={[
-        {
-          name: 'description',
-          content: `${settings.app.name} - List of all posts example page`
-        }
-      ]}
-    />
-  );
-
   render() {
-    const { loading, posts, loadMoreRows } = this.props;
+    const { loading, posts, t } = this.props;
     if (loading) {
       return (
         <PageLayout>
           {this.renderMetaData()}
-          <div className="text-center">Loading...</div>
+          <div className="text-center">{t('post.loadMsg')}</div>
         </PageLayout>
       );
     } else {
       const columns = [
         {
-          title: 'Title',
+          title: t('list.column.title'),
           dataIndex: 'title',
           key: 'title',
           render: (text, record) => (
@@ -62,7 +74,7 @@ export default class PostList extends React.PureComponent {
           )
         },
         {
-          title: 'Actions',
+          title: t('list.column.actions'),
           key: 'actions',
           width: 50,
           render: (text, record) => (
@@ -72,7 +84,7 @@ export default class PostList extends React.PureComponent {
               className="delete-button"
               onClick={() => this.handleDeletePost(record.id)}
             >
-              Delete
+              {t('post.btn.del')}
             </Button>
           )
         }
@@ -80,20 +92,25 @@ export default class PostList extends React.PureComponent {
       return (
         <PageLayout>
           {this.renderMetaData()}
-          <h2>Posts</h2>
-          <Link to="/post/0">
-            <Button color="primary">Add</Button>
+          <h2>{t('list.subTitle')}</h2>
+          <Link to="/post/new">
+            <Button color="primary">{t('list.btn.add')}</Button>
           </Link>
           <h1 />
           <Table dataSource={posts.edges.map(({ node }) => node)} columns={columns} />
-          <div>
-            <small>
-              ({posts.edges.length} / {posts.totalCount})
-            </small>
-          </div>
-          {this.renderLoadMore(posts, loadMoreRows)}
+          <Pagination
+            itemsPerPage={posts.edges.length}
+            handlePageChange={this.handlePageChange}
+            hasNextPage={posts.pageInfo.hasNextPage}
+            pagination={type}
+            total={posts.totalCount}
+            loadMoreText={t('list.btn.more')}
+            defaultPageSize={itemsNumber}
+          />
         </PageLayout>
       );
     }
   }
 }
+
+export default translate('post')(PostList);

@@ -1,13 +1,18 @@
-import { TabNavigator } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation';
 
 import modules from '..';
-
+import { DrawerComponent } from '../common/components/native';
 import Feature from '../connector';
 
 const routerFactory = () =>
-  TabNavigator({
-    ...modules.tabItems
-  });
+  createDrawerNavigator(
+    {
+      ...modules.drawerItems
+    },
+    {
+      contentComponent: DrawerComponent
+    }
+  );
 
 export default new Feature({
   routerFactory

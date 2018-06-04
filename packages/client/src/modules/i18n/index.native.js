@@ -66,7 +66,7 @@ i18n
   });
 
 const langPicker = {};
-if (settings.i18n.langPickerRender) {
+if (settings.i18n.enabled && settings.i18n.langPickerRender) {
   langPicker.drawerItem = {
     LangPicker: {
       screen: () => null,
@@ -78,9 +78,13 @@ if (settings.i18n.langPickerRender) {
   };
 }
 
-export default new Feature({
-  ...langPicker,
-  localization: { ns: 'i18n', resources },
-  // eslint-disable-next-line react/display-name
-  rootComponentFactory: () => <I18nProvider i18n={i18n} />
-});
+export default new Feature(
+  settings.i18n.enabled
+    ? {
+        ...langPicker,
+        localization: { ns: 'i18n', resources },
+        // eslint-disable-next-line react/display-name
+        rootComponentFactory: () => <I18nProvider i18n={i18n} />
+      }
+    : {}
+);

@@ -180,10 +180,15 @@ describe('Posts and comments example UI works', () => {
     subscription.next({
       data: {
         postUpdated: {
+          mutation: 'UPDATED',
           id: '3',
-          title: 'Post title 203',
-          content: 'Post content 204',
-          __typename: 'Post'
+          node: {
+            id: '3',
+            title: 'Post title 203',
+            content: 'Post content 204',
+            __typename: 'Post'
+          },
+          __typename: 'UpdatePostPayload'
         }
       }
     });
@@ -310,6 +315,7 @@ describe('Posts and comments example UI works', () => {
     const backButton = find(container, '#back-button');
     click(backButton);
     content = updateContent(container);
-    expect(content.textContent).to.include('Post title 3');
+    // change posts query fetching policy, now if present difference in data we will get data from network
+    expect(content.textContent).to.include('Post title 1');
   });
 });

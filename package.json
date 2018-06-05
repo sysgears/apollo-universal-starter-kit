@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "engines": {
-    "node": ">= 6.11.1 < 10",
+    "node": ">= 6.11.1",
     "yarn": ">= 1.0.0"
   },
   "cacheDirectories": [".cache"],
@@ -54,7 +54,7 @@
     "awesome-typescript-loader": "^3.4.1",
     "husky": "^0.14.3",
     "lerna": "^2.5.1",
-    "lint-staged": "^7.0.4",
+    "lint-staged": "^7.1.2",
     "tslint": "^5.2.0",
     "tslint-config-prettier": "^1.5.0",
     "tslint-plugin-prettier": "^1.3.0",
@@ -70,6 +70,7 @@
   },
   "resolutions": {
     "graphql": "0.13.0",
-    "iterall": "^1.2.2"
+    "iterall": "^1.2.2",
+    "upath": "^1.1.0"
   }
 }

@@ -45,10 +45,10 @@ const config = {
 };
 
 if (process.env.NODE_ENV === 'production') {
-  config.builders.android.enabled = false;
-  config.builders.ios.enabled = false;
-  //config.options.defines.__API_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
-  //config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
+  config.builders.android.enabled = true;
+  config.builders.ios.enabled = true;
+  config.options.defines.__API_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
+  config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
   // Generating source maps for production will slowdown compilation for roughly 25%
   config.options.sourceMap = false;
 }

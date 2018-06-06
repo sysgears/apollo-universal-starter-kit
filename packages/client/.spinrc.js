@@ -5,7 +5,7 @@ const config = {
     web: {
       entry: './src/index.tsx',
       stack: ['web'],
-      openBrowser: false,
+      openBrowser: true,
       dllExcludes: ['bootstrap'],
       defines: {
         __CLIENT__: true

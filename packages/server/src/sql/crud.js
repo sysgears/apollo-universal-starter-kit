@@ -531,7 +531,7 @@ export default class Crud {
           for (const key of schema.keys()) {
             const value = schema.values[key];
             if (value.searchText) {
-              this.orWhere(`${tableName}.${key}`, 'like', `%${filter.searchText}%`);
+              this.orWhere(`${tableName}.${decamelize(key)}`, 'like', `%${filter.searchText}%`);
             }
           }
         });

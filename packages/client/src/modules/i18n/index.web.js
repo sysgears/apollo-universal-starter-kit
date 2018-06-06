@@ -50,7 +50,7 @@ i18n
   });
 
 const langPicker = {};
-if (settings.i18n.langPickerRender) {
+if (settings.i18n.enabled && settings.i18n.langPickerRender) {
   langPicker.navItemRight = (
     <MenuItem key="languagePicker" style={{ display: 'flex', alignItems: 'center' }}>
       <LanguagePicker i18n={i18n} />
@@ -81,9 +81,13 @@ RootComponent.propTypes = {
   children: PropTypes.node
 };
 
-export default new Feature({
-  data: { i18n: true },
-  // eslint-disable-next-line react/display-name
-  rootComponentFactory: req => <RootComponent req={req} />,
-  ...langPicker
-});
+export default new Feature(
+  settings.i18n.enabled
+    ? {
+        data: { i18n: true },
+        // eslint-disable-next-line react/display-name
+        rootComponentFactory: req => <RootComponent req={req} />,
+        ...langPicker
+      }
+    : {}
+);

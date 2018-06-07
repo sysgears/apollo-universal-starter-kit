@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { createTabBarIconWrapper } from '../common/components/native';
 import $Module$List from './containers/$Module$List';
@@ -16,7 +16,7 @@ class $Module$ListScreen extends React.Component {
     headerRight: <Button title="Add" onPress={() => navigation.navigate('$Module$Edit', { id: 0 })} />
   });
   render() {
-    return <$Module$List navigation={this.props.navigation} title="$MoDuLe$" />;
+    return <$Module$List navigation={this.props.navigation} title="$MoDuLe$" nativeLink={"$MoDuLe$Edit"} />;
   }
 }
 
@@ -37,13 +37,13 @@ $Module$EditScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-const $Module$Navigator = StackNavigator({
+const $Module$Navigator = createStackNavigator({
   $Module$List: { screen: $Module$ListScreen },
   $Module$Edit: { screen: $Module$EditScreen }
 });
 
 export default new Feature({
-  tabItem: {
+  drawerItem: {
     $Module$: {
       screen: $Module$Navigator,
       navigationOptions: {
@@ -51,6 +51,9 @@ export default new Feature({
           name: 'ios-browsers-outline',
           size: 30
         })
+      },
+      userInfo: {
+        showOnLogin: true
       }
     }
   },

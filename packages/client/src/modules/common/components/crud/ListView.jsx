@@ -14,7 +14,7 @@ class ListView extends React.PureComponent {
     nativeLink: PropTypes.string.isRequired
   };
 
-  keyExtractor = item => item.id;
+  keyExtractor = item => `${item.id}`;
 
   renderItem = ({ item: { id, name } }) => {
     const { deleteEntry, navigation, nativeLink } = this.props;
@@ -41,7 +41,7 @@ class ListView extends React.PureComponent {
         </View>
       );
     } else {
-      return <FlatList data={data} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />;
+      return <FlatList data={data.edges} keyExtractor={this.keyExtractor} renderItem={this.renderItem} />;
     }
   }
 }

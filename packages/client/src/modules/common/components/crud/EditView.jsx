@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import FormView from './FormView';
 
-const EditView = ({ loading, data, navigation }) => {
+const EditView = ({ loading, data, navigation, schema }) => {
   let dataObj = data;
 
   if (!dataObj && navigation.state) {
@@ -18,7 +18,7 @@ const EditView = ({ loading, data, navigation }) => {
       </View>
     );
   } else {
-    return <FormView initialValues={dataObj ? dataObj : {}} />;
+    return <FormView data={dataObj ? dataObj : {}} schema={schema} />;
   }
 };
 

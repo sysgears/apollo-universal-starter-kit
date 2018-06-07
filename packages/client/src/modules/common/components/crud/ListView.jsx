@@ -6,7 +6,7 @@ import { SwipeAction } from '../native';
 class ListView extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    data: PropTypes.array,
+    data: PropTypes.object,
     orderBy: PropTypes.object,
     onOrderBy: PropTypes.func.isRequired,
     deleteEntry: PropTypes.func.isRequired,

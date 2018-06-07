@@ -21,9 +21,9 @@ const Form = ({ schema, data: { node } }) => {
         //console.log('onSubmit, values:', pickInputFields({schema, values}));
         await onSubmit({ schema, values });
       }}
-      render={({ handleChange, handleSubmit }) => (
+      render={({ handleSubmit }) => (
         <FormView>
-          {createFormFields({ handleChange, schema })}
+          {createFormFields({ schema })}
           <Button onPress={handleSubmit}>Save</Button>
         </FormView>
       )}

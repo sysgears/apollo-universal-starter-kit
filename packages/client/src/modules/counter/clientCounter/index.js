@@ -1,3 +1,3 @@
-import ClientCounter from './ClientCounter';
+import ClientCounter from './containers/ClientCounter';
 
 export default ClientCounter;

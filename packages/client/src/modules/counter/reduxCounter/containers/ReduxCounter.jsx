@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { ReduxCounterView, ReduxCounterButton } from './components/ReduxCounterView';
+import { ReduxCounterButton, ReduxCounterView } from '../components/ReduxCounterView';
 
 const ReduxCounter = ({ t, onReduxIncrement, reduxCount }) => (
   <ReduxCounterView text={t('reduxCounter.text', { reduxCount })}>

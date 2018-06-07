@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Query, Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 
-import { ClientCounterView, ClientCounterButton } from './components/ClientCounterView';
-import COUNTER_QUERY_CLIENT from './graphql/CounterQuery.client.graphql';
-import ADD_COUNTER_CLIENT from './graphql/AddCounter.client.graphql';
+import { ClientCounterButton, ClientCounterView } from '../components/ClientCounterView';
+import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
+import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
 
 const IncreaseButton = ({ counterAmount, t }) => (
   <Mutation mutation={ADD_COUNTER_CLIENT}>

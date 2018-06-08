@@ -554,6 +554,12 @@
   dependencies:
     debug "^3.1.0"
 
+"@domain-schema/core@^0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@domain-schema/core/-/core-0.0.34.tgz#5900ae4f0844cb8e7ffa91f5be32bd0417d96429"
+  dependencies:
+    debug "^3.1.0"
+
 "@domain-schema/formik@^0.0.33":
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/@domain-schema/formik/-/formik-0.0.33.tgz#76d223f897d98cffef8930262c987a0c485e2a29"

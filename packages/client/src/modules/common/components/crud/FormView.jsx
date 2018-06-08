@@ -13,17 +13,19 @@ import { FormView, Button } from '../native';
 
 //const validate = values => validateForm(values, formSchema);
 
-const Form = ({ schema, data: { node } }) => {
+const Form = ({ schema, data: { node }, updateEntry, createEntry }) => {
   return (
     <Formik
       initialValues={mapFormPropsToValues({ schema, data: node })}
       onSubmit={async values => {
-        //console.log('onSubmit, values:', pickInputFields({schema, values}));
-        await onSubmit({ schema, values });
+        let title = node && node.__typename ? node.__typename : 'Model',
+          data = node || null;
+
+        await onSubmit({ schema, values, updateEntry, createEntry, title, data });
       }}
-      render={({ handleSubmit }) => (
+      render={({ handleSubmit, values }) => (
         <FormView>
-          {createFormFields({ schema })}
+          {createFormFields(schema, values)}
           <Button onPress={handleSubmit}>Save</Button>
         </FormView>
       )}
@@ -33,7 +35,9 @@ const Form = ({ schema, data: { node } }) => {
 
 Form.propTypes = {
   schema: PropTypes.object.isRequired,
-  data: PropTypes.object
+  data: PropTypes.object,
+  updateEntry: PropTypes.func.isRequired,
+  createEntry: PropTypes.func.isRequired
 };
 
 export default Form;

@@ -23,7 +23,7 @@ class ListView extends React.PureComponent {
         onPress={() => navigation.navigate(nativeLink, { id })}
         right={{
           text: 'Delete',
-          onPress: () => deleteEntry({ where: id })
+          onPress: () => deleteEntry({ where: { id } })
         }}
       >
         {name}

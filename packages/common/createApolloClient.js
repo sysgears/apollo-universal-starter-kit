@@ -34,6 +34,14 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
     }
   );
 
+  //polifill for apollo-client setting prototype on android platform
+  Object.setPrototypeOf =
+    Object.setPrototypeOf ||
+    function(obj, proto) {
+      obj.__proto__ = proto;
+      return obj;
+    };
+
   const queryLink = createNetLink
     ? createNetLink(apiUrl)
     : new BatchHttpLink({

@@ -39,7 +39,7 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
-    "@domain-schema/core": "^0.0.33",
+    "@domain-schema/core": "^0.0.34",
     "@domain-schema/formik": "^0.0.33",
     "@domain-schema/graphql": "^0.0.33",
     "@domain-schema/knex": "^0.0.34",

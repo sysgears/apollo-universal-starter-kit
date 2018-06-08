@@ -272,7 +272,7 @@ class ListView extends React.Component {
     const hasSelected = selectedRowKeys.length > 0;
 
     const showBatchFields =
-      customBatchFields === null
+      customBatchFields === null || typeof customBatchFields === 'undefined'
         ? false
         : customBatchFields && customBatchFields.role
           ? hasRole(customBatchFields.role, currentUser)
@@ -281,7 +281,7 @@ class ListView extends React.Component {
           : true;
 
     const showCustomActions =
-      customActions === null
+      customActions === null || typeof customActions === 'undefined'
         ? false
         : customActions && customActions.role
           ? hasRole(customActions.role, currentUser)
@@ -394,7 +394,7 @@ class ListView extends React.Component {
       size: 'small',
       rowSelection: rowSelection,
       loading: loading && !data,
-      title: showCustomActions ? title : null,
+      title: title,
       footer: footer
     };
 

@@ -28,7 +28,7 @@ import {
   FormItem,
   Col,
   Input
-} from './components/web';
+} from './components/web/index-antd';
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -42,7 +42,8 @@ export const createColumnFields = ({
   hendleDelete,
   onCellChange,
   customFields = {},
-  customActions
+  customActions,
+  tableActionColumnHeight = '48px'
 }) => {
   let columns = [];
   // use customFields if definded otherwise use schema.keys()
@@ -207,21 +208,31 @@ export const createColumnFields = ({
       key: 'actions',
       width: 150,
       fixed: 'right',
-      render: (text, record) => [
-        <Link className="link" to={`/${link}/${record.id}`} key="edit">
-          <Button color="primary" size="sm">
-            Edit
-          </Button>
-        </Link>,
-        <Popconfirm title="Sure to delete?" onConfirm={() => hendleDelete(record.id)} key="delete">
-          <Button color="primary" size="sm">
-            Delete
-          </Button>
-        </Popconfirm>
-      ]
+      render: (text, record) => {
+        return {
+          props: {
+            style: {
+              height: tableActionColumnHeight
+            }
+          },
+          children: (
+            <div>
+              <Link className="link" to={`/${link}/${record.id}`} key="edit">
+                <Button color="primary" size="sm">
+                  Edit
+                </Button>
+              </Link>
+              <Popconfirm title="Sure to delete?" onConfirm={() => hendleDelete(record.id)} key="delete">
+                <Button color="primary" size="sm">
+                  Delete
+                </Button>
+              </Popconfirm>
+            </div>
+          )
+        };
+      }
     });
   }
-
   return columns;
 };
 

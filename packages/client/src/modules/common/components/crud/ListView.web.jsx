@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from '../web';
+import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from '../web/index-antd';
 import { createColumnFields, createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
 import { hasRole } from '../../../user/containers/Auth';
@@ -120,7 +120,12 @@ class ListView extends React.Component {
     currentUserLoading: PropTypes.bool,
     parentWait: PropTypes.bool,
     parentError: PropTypes.string,
-    parentSuccess: PropTypes.string
+    parentSuccess: PropTypes.string,
+    tableHeaderColumnHeight: PropTypes.string
+  };
+
+  static defaultProps = {
+    tableHeaderColumnHeight: '38px'
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -266,27 +271,24 @@ class ListView extends React.Component {
       customActions,
       customBatchFields,
       updateManyEntries,
-      tableScroll = null
+      tableScroll = null,
+      tableHeaderColumnHeight
     } = this.props;
     const { selectedRowKeys, wait, error, success } = this.state;
     const hasSelected = selectedRowKeys.length > 0;
 
     const showBatchFields =
-      customBatchFields === null || typeof customBatchFields === 'undefined'
+      customBatchFields === null
         ? false
         : customBatchFields && customBatchFields.role
-          ? hasRole(customBatchFields.role, currentUser)
-            ? true
-            : false
+          ? !!hasRole(customBatchFields.role, currentUser)
           : true;
 
     const showCustomActions =
-      customActions === null || typeof customActions === 'undefined'
+      customActions === null
         ? false
         : customActions && customActions.role
-          ? hasRole(customActions.role, currentUser)
-            ? true
-            : false
+          ? !!hasRole(customActions.role, currentUser)
           : true;
 
     const rowSelection = showBatchFields
@@ -311,7 +313,7 @@ class ListView extends React.Component {
     const footer = () => {
       return (
         <Row>
-          <Col span={1}>
+          <Col span={2}>
             {data && (
               <div>
                 <div>
@@ -326,14 +328,14 @@ class ListView extends React.Component {
             )}
           </Col>
           {showBatchFields && [
-            <Col span={2} key="batchDelete">
+            <Col span={2} key="batchDelete" style={{ paddingTop: '3px' }}>
               <Popconfirm title="Sure to delete?" onConfirm={this.hendleDeleteMany}>
                 <Button color="primary" disabled={!hasSelected} loading={loading && !data}>
                   Delete
                 </Button>
               </Popconfirm>
             </Col>,
-            <Col span={21} key="batchUpdate">
+            <Col span={20} key="batchUpdate">
               <Formik
                 initialValues={mapFormPropsToValues({ schema })}
                 onSubmit={async (values, { resetForm }) => {
@@ -422,7 +424,16 @@ class ListView extends React.Component {
         {wait && <Spin size="small" />}
         {error && <Alert color="error" message={error} />}
         {success && <Alert color="success" message={success} />}
-        <Table {...tableProps} />
+        <Table
+          {...tableProps}
+          onHeaderRow={() => {
+            return {
+              style: {
+                height: tableHeaderColumnHeight
+              }
+            };
+          }}
+        />
         {data && this.renderLoadMore(data, loadMoreRows)}
       </div>
     );

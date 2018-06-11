@@ -3,8 +3,6 @@ import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
-
-import auth from './auth';
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
 
@@ -29,7 +27,7 @@ export default pubsub => ({
         }
 
         const e = new FieldError();
-        e.setError('user', 'Access Denied');
+        e.setError('user', context.req.headers.cookie, 'user', 'accessDenied');
         return { user: null, errors: e.getErrors() };
       }
     ),
@@ -75,16 +73,16 @@ export default pubsub => ({
 
           const userExists = await context.User.getUserByUsername(input.username);
           if (userExists) {
-            e.setError('username', 'Username already exists.');
+            e.setError('username', context.req.headers.cookie, 'user', 'usernameIsExisted');
           }
 
           const emailExists = await context.User.getUserByEmail(input.email);
           if (emailExists) {
-            e.setError('email', 'E-mail already exists.');
+            e.setError('email', context.req.headers.cookie, 'user', 'emailIsExisted');
           }
 
           if (input.password.length < 8) {
-            e.setError('password', `Password must be 8 characters or more.`);
+            e.setError('password', context.req.headers.cookie, 'user', 'passwordLength');
           }
 
           e.throwIf();
@@ -142,16 +140,16 @@ export default pubsub => ({
           const userExists = await context.User.getUserByUsername(input.username);
 
           if (userExists && userExists.id !== input.id) {
-            e.setError('username', 'Username already exists.');
+            e.setError('username', context.req.headers.cookie, 'user', 'usernameIsExisted');
           }
 
           const emailExists = await context.User.getUserByEmail(input.email);
           if (emailExists && emailExists.id !== input.id) {
-            e.setError('email', 'E-mail already exists.');
+            e.setError('email', context.req.headers.cookie, 'user', 'emailIsExisted');
           }
 
           if (input.password && input.password.length < 8) {
-            e.setError('password', `Password must be 8 characters or more.`);
+            e.setError('password', context.req.headers.cookie, 'user', 'passwordLength');
           }
 
           e.throwIf();
@@ -187,12 +185,12 @@ export default pubsub => ({
           const e = new FieldError();
           const user = await context.User.getUser(id);
           if (!user) {
-            e.setError('delete', 'User does not exist.');
+            e.setError('delete', context.req.headers.cookie, 'user', 'userIsNotExisted');
             e.throwIf();
           }
 
           if (user.id === context.user.id) {
-            e.setError('delete', 'You can not delete your self.');
+            e.setError('delete', context.req.headers.cookie, 'user', 'userCannotDeleteYourself');
             e.throwIf();
           }
 
@@ -206,7 +204,7 @@ export default pubsub => ({
             });
             return { user };
           } else {
-            e.setError('delete', 'Could not delete user. Please try again later.');
+            e.setError('delete', context.req.headers.cookie, 'user', 'userCouldNotDeleted');
             e.throwIf();
           }
         } catch (e) {

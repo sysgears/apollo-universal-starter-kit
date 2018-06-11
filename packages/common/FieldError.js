@@ -1,3 +1,5 @@
+import Translator from '../server/src/i18n/utils/Translator';
+
 export default class FieldError {
   constructor() {
     this.errors = {};
@@ -7,8 +9,8 @@ export default class FieldError {
     return !!Object.keys(this.errors).length;
   }
 
-  setError(field, message) {
-    this.errors[field] = message;
+  setError(field, cookie, moduleName, messageKey) {
+    this.errors[field] = Translator.translate(cookie, moduleName, messageKey);
   }
 
   getErrors() {

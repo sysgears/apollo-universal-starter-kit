@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { DebounceInput } from 'react-debounce-input';
 
 import { hasRole } from '../../../user/containers/Auth';
-import { Form, FormItem, Input, Row, Col, Button, Icon } from '../web/index-antd';
+import { Form, FormItem, Input, Row, Col, Button, Icon } from '../web/ui-antd/index';
 import { createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
 

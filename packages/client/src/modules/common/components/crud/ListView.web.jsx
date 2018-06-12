@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from '../web/index-antd';
+import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from '../web/ui-antd/index';
 import { createColumnFields, createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
 import { hasRole } from '../../../user/containers/Auth';

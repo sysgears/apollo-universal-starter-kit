@@ -5,7 +5,7 @@ import DomainValidation from '@domain-schema/validation';
 
 import { onSubmit, mapFormPropsToValues } from '../../../../utils/crud';
 import { createFormFields } from '../../util';
-import { Form, FormItem, Button } from '../web/index-antd';
+import { Form, FormItem, Button } from '../web/ui-antd/index';
 
 const tailFormItemLayout = {
   wrapperCol: {

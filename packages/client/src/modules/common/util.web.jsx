@@ -28,7 +28,7 @@ import {
   FormItem,
   Col,
   Input
-} from './components/web/index-antd';
+} from './components/web/ui-antd/index';
 
 const dateFormat = 'YYYY-MM-DD';
 

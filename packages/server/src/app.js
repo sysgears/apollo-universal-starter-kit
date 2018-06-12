@@ -10,7 +10,6 @@ import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
 import graphqlMiddleware from './middleware/graphql';
 import errorMiddleware from './middleware/error';
-import i18Init from '../src/i18n/index';
 
 const app = express();
 
@@ -19,8 +18,6 @@ for (const applyBeforeware of modules.beforewares) {
 }
 
 app.use(cookiesMiddleware());
-
-app.use(i18Init());
 
 // Don't rate limit heroku
 app.enable('trust proxy');

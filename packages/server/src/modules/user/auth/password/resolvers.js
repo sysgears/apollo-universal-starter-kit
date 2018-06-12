@@ -5,25 +5,26 @@ import jwt from 'jsonwebtoken';
 import access from '../../access';
 import User from '../../sql';
 import FieldError from '../../../../../../common/FieldError';
+import { translator } from '../../../i18n';
 import settings from '../../../../../../../settings';
 
-const validateUserPassword = async (user, password) => {
+const validateUserPassword = async (user, password, clientLanguage) => {
   const e = new FieldError();
 
   if (!user) {
     // user with provided email not found
-    e.setError('usernameOrEmail', context.req.headers.cookie, 'password', 'validPasswordEmail');
+    e.setError('usernameOrEmail', translator(clientLanguage, 'password', 'validPasswordEmail'));
     e.throwIf();
   }
   if (settings.user.auth.password.confirm && !user.isActive) {
-    e.setError('usernameOrEmail', context.req.headers.cookie, 'password', 'emailConfirmation');
+    e.setError('usernameOrEmail', translator(clientLanguage, 'password', 'emailConfirmation'));
     e.throwIf();
   }
 
   const valid = await bcrypt.compare(password, user.passwordHash);
   if (!valid) {
     // bad password
-    e.setError('password', 'Please enter a valid password.');
+    e.setError('password', translator(clientLanguage, 'password', 'validPassword'));
     e.throwIf();
   }
 };
@@ -40,7 +41,7 @@ export default () => ({
       try {
         const user = await User.getUserByUsernameOrEmail(usernameOrEmail);
 
-        await validateUserPassword(user, password);
+        await validateUserPassword(user, password, req.universalCookies.get('lang'));
 
         const tokens = await access.grantAccess(user, req);
 
@@ -49,18 +50,25 @@ export default () => ({
         return { errors: e };
       }
     },
-    async register(obj, { input }, context) {
+    async register(
+      obj,
+      { input },
+      {
+        User,
+        req: { universalCookies }
+      }
+    ) {
       try {
         const e = new FieldError();
 
-        const userExists = await context.User.getUserByUsername(input.username);
+        const userExists = await User.getUserByUsername(input.username);
         if (userExists) {
-          e.setError('username', context.req.headers.cookie, 'password', 'usernameIsExisted');
+          e.setError('username', translator(universalCookies.get('lang'), 'password', 'usernameIsExisted'));
         }
 
-        const emailExists = await context.User.getUserByEmail(input.email);
+        const emailExists = await User.getUserByEmail(input.email);
         if (emailExists) {
-          e.setError('email', context.req.headers.cookie, 'password', 'emailIsExisted');
+          e.setError('email', translator(universalCookies.get('lang'), 'password', 'emailIsExisted'));
         }
 
         e.throwIf();
@@ -134,16 +142,22 @@ export default () => ({
         // don't throw error so you can't discover users this way
       }
     },
-    async resetPassword(obj, { input }, context) {
+    async resetPassword(
+      obj,
+      { input },
+      {
+        req: { universalCookies }
+      }
+    ) {
       try {
         const e = new FieldError();
         const reset = pick(input, ['password', 'passwordConfirmation', 'token']);
         if (reset.password !== reset.passwordConfirmation) {
-          e.setError('password', context.req.headers.cookie, 'password', 'passwordsIsNotMatch');
+          e.setError('password', translator(universalCookies.get('lang'), 'password', 'passwordsIsNotMatch'));
         }
 
         if (reset.password.length < 8) {
-          e.setError('password', context.req.headers.cookie, 'password', 'passwordLength');
+          e.setError('password', translator(universalCookies.get('lang'), 'password', 'passwordLength'));
         }
         e.throwIf();
 
@@ -151,7 +165,7 @@ export default () => ({
         const { email, password } = jwt.verify(token, settings.user.secret);
         const user = await context.User.getUserByEmail(email);
         if (user.passwordHash !== password) {
-          e.setError('token', context.req.headers.cookie, 'password', 'invalidToken');
+          e.setError('token', translator(universalCookies.get('lang'), 'password', 'invalidToken'));
           e.throwIf();
         }
 

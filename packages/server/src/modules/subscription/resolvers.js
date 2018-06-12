@@ -3,6 +3,7 @@ import { pick } from 'lodash';
 import Stripe from 'stripe';
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
+import { translator } from '../i18n';
 
 const stripe = Stripe(settings.subscription.stripeSecretKey);
 
@@ -118,7 +119,10 @@ export default pubsub => ({
           await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
         } catch (e) {
           const e = new FieldError();
-          e.setError('subscription', context.req.headers.cookie, 'user', 'cancelSubscription');
+          e.setError(
+            'subscription',
+            translator(context.req.universalCookies.get('lang'), 'user', 'cancelSubscription')
+          );
           e.throwIf();
         }
 

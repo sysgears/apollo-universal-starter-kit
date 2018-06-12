@@ -4,20 +4,21 @@ import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import FieldError from '../../../../common/FieldError';
+import { translator } from '../i18n';
 import settings from '../../../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
 
 export default pubsub => ({
   Query: {
-    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, context) => {
-      return context.User.getUsers(orderBy, filter);
+    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, { User, user, req: { universalCookies } }) => {
+      return User.getUsers(orderBy, filter);
     }),
     user: withAuth(
       (obj, args, context) => {
         return ['user:view:self'];
       },
-      (obj, { id }, { user, User }) => {
+      (obj, { id }, { user, User, req: { universalCookies } }) => {
         if (user.id === id || user.role === 'admin') {
           try {
             return { user: User.getUser(id) };
@@ -27,13 +28,13 @@ export default pubsub => ({
         }
 
         const e = new FieldError();
-        e.setError('user', context.req.headers.cookie, 'user', 'accessDenied');
+        e.setError('user', translator(universalCookies.get('lang'), 'user', 'accessDenied'));
         return { user: null, errors: e.getErrors() };
       }
     ),
-    currentUser(obj, args, context) {
-      if (context.user) {
-        return context.User.getUser(context.user.id);
+    currentUser(obj, args, { User, user }) {
+      if (user) {
+        return User.getUser(user.id);
       } else {
         return null;
       }
@@ -64,44 +65,44 @@ export default pubsub => ({
   },
   Mutation: {
     addUser: withAuth(
-      (obj, args, context) => {
-        return context.user.id !== args.input.id ? ['user:create'] : ['user:create:self'];
+      (obj, args, { User, user }) => {
+        return user.id !== args.input.id ? ['user:create'] : ['user:create:self'];
       },
-      async (obj, { input }, context) => {
+      async (obj, { input }, { User, user, req: { universalCookies }, mailer, req }) => {
         try {
           const e = new FieldError();
 
-          const userExists = await context.User.getUserByUsername(input.username);
+          const userExists = await User.getUserByUsername(input.username);
           if (userExists) {
-            e.setError('username', context.req.headers.cookie, 'user', 'usernameIsExisted');
+            e.setError('username', translator(universalCookies.get('lang'), 'user', 'usernameIsExisted'));
           }
 
-          const emailExists = await context.User.getUserByEmail(input.email);
+          const emailExists = await User.getUserByEmail(input.email);
           if (emailExists) {
-            e.setError('email', context.req.headers.cookie, 'user', 'emailIsExisted');
+            e.setError('email', translator(universalCookies.get('lang'), 'user', 'emailIsExisted'));
           }
 
           if (input.password.length < 8) {
-            e.setError('password', context.req.headers.cookie, 'user', 'passwordLength');
+            e.setError('password', translator(universalCookies.get('lang'), 'user', 'passwordLength'));
           }
 
           e.throwIf();
 
-          const [createdUserId] = await context.User.register({ ...input });
-          await context.User.editUserProfile({ id: createdUserId, ...input });
+          const [createdUserId] = await User.register({ ...input });
+          await User.editUserProfile({ id: createdUserId, ...input });
 
           if (settings.user.auth.certificate.enabled) {
-            await context.User.editAuthCertificate({ id: createdUserId, ...input });
+            await User.editAuthCertificate({ id: createdUserId, ...input });
           }
 
-          const user = await context.User.getUser(createdUserId);
+          const user = await User.getUser(createdUserId);
 
-          if (context.mailer && settings.user.auth.password.sendAddNewUserEmail && !emailExists && context.req) {
+          if (mailer && settings.user.auth.password.sendAddNewUserEmail && !emailExists && req) {
             // async email
             jwt.sign({ user: pick(user, 'id') }, settings.user.secret, { expiresIn: '1d' }, (err, emailToken) => {
               const encodedToken = Buffer.from(emailToken).toString('base64');
               const url = `${__WEBSITE_URL__}/confirmation/${encodedToken}`;
-              context.mailer.sendMail({
+              mailer.sendMail({
                 from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
                 to: user.email,
                 subject: 'Your account has been created',
@@ -129,40 +130,40 @@ export default pubsub => ({
       }
     ),
     editUser: withAuth(
-      (obj, args, context) => {
-        return context.user.id !== args.input.id ? ['user:update'] : ['user:update:self'];
+      (obj, args, { User, user }) => {
+        return user.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
-      async (obj, { input }, context) => {
-        const isAdmin = () => context.user.role === 'admin';
-        const isSelf = () => context.user.id === input.id;
+      async (obj, { input }, { User, user, req: { universalCookies } }) => {
+        const isAdmin = () => user.role === 'admin';
+        const isSelf = () => user.id === input.id;
         try {
           const e = new FieldError();
-          const userExists = await context.User.getUserByUsername(input.username);
+          const userExists = await User.getUserByUsername(input.username);
 
           if (userExists && userExists.id !== input.id) {
-            e.setError('username', context.req.headers.cookie, 'user', 'usernameIsExisted');
+            e.setError('username', translator(universalCookies.get('lang'), 'user', 'usernameIsExisted'));
           }
 
-          const emailExists = await context.User.getUserByEmail(input.email);
+          const emailExists = await User.getUserByEmail(input.email);
           if (emailExists && emailExists.id !== input.id) {
-            e.setError('email', context.req.headers.cookie, 'user', 'emailIsExisted');
+            e.setError('email', translator(universalCookies.get('lang'), 'user', 'emailIsExisted'));
           }
 
           if (input.password && input.password.length < 8) {
-            e.setError('password', context.req.headers.cookie, 'user', 'passwordLength');
+            e.setError('password', translator(universalCookies.get('lang'), 'user', 'passwordLength'));
           }
 
           e.throwIf();
 
           const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
 
-          await context.User.editUser(userInfo);
-          await context.User.editUserProfile(input);
+          await User.editUser(userInfo);
+          await User.editUserProfile(input);
 
           if (settings.user.auth.certificate.enabled) {
-            await context.User.editAuthCertificate(input);
+            await User.editAuthCertificate(input);
           }
-          const user = await context.User.getUser(input.id);
+          const user = await User.getUser(input.id);
           pubsub.publish(USERS_SUBSCRIPTION, {
             usersUpdated: {
               mutation: 'UPDATED',
@@ -177,24 +178,25 @@ export default pubsub => ({
       }
     ),
     deleteUser: withAuth(
-      (obj, args, context) => {
-        return context.user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
+      (obj, args, { User, user }) => {
+        return user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
       },
-      async (obj, { id }, context) => {
+      async (obj, { id }, { User, user, req: { universalCookies } }) => {
         try {
           const e = new FieldError();
-          const user = await context.User.getUser(id);
+          const user = await User.getUser(id);
           if (!user) {
-            e.setError('delete', context.req.headers.cookie, 'user', 'userIsNotExisted');
+            e.setError('delete', translator(universalCookies.get('lang'), 'user', 'userIsNotExisted'));
+
             e.throwIf();
           }
 
-          if (user.id === context.user.id) {
-            e.setError('delete', context.req.headers.cookie, 'user', 'userCannotDeleteYourself');
+          if (user.id === user.id) {
+            e.setError('delete', translator(universalCookies.get('lang'), 'user', 'userCannotDeleteYourself'));
             e.throwIf();
           }
 
-          const isDeleted = await context.User.deleteUser(id);
+          const isDeleted = await User.deleteUser(id);
           if (isDeleted) {
             pubsub.publish(USERS_SUBSCRIPTION, {
               usersUpdated: {
@@ -204,7 +206,7 @@ export default pubsub => ({
             });
             return { user };
           } else {
-            e.setError('delete', context.req.headers.cookie, 'user', 'userCouldNotDeleted');
+            e.setError('delete', translator(universalCookies.get('lang'), 'user', 'userCouldNotDeleted'));
             e.throwIf();
           }
         } catch (e) {

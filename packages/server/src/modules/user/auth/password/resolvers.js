@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import access from '../../access';
 import User from '../../sql';
 import FieldError from '../../../../../../common/FieldError';
-import { translator } from '../../../i18n';
+import translate from '../../../../i18n';
 import settings from '../../../../../../../settings';
 
 const validateUserPassword = async (user, password, clientLanguage) => {
@@ -13,18 +13,18 @@ const validateUserPassword = async (user, password, clientLanguage) => {
 
   if (!user) {
     // user with provided email not found
-    e.setError('usernameOrEmail', translator(clientLanguage, 'password', 'validPasswordEmail'));
+    e.setError('usernameOrEmail', translate(clientLanguage, 'password', 'validPasswordEmail'));
     e.throwIf();
   }
   if (settings.user.auth.password.confirm && !user.isActive) {
-    e.setError('usernameOrEmail', translator(clientLanguage, 'password', 'emailConfirmation'));
+    e.setError('usernameOrEmail', translate(clientLanguage, 'password', 'emailConfirmation'));
     e.throwIf();
   }
 
   const valid = await bcrypt.compare(password, user.passwordHash);
   if (!valid) {
     // bad password
-    e.setError('password', translator(clientLanguage, 'password', 'validPassword'));
+    e.setError('password', translate(clientLanguage, 'password', 'validPassword'));
     e.throwIf();
   }
 };
@@ -63,12 +63,12 @@ export default () => ({
 
         const userExists = await User.getUserByUsername(input.username);
         if (userExists) {
-          e.setError('username', translator(universalCookies.get('lang'), 'password', 'usernameIsExisted'));
+          e.setError('username', translate(universalCookies.get('lang'), 'password', 'usernameIsExisted'));
         }
 
         const emailExists = await User.getUserByEmail(input.email);
         if (emailExists) {
-          e.setError('email', translator(universalCookies.get('lang'), 'password', 'emailIsExisted'));
+          e.setError('email', translate(universalCookies.get('lang'), 'password', 'emailIsExisted'));
         }
 
         e.throwIf();
@@ -153,11 +153,11 @@ export default () => ({
         const e = new FieldError();
         const reset = pick(input, ['password', 'passwordConfirmation', 'token']);
         if (reset.password !== reset.passwordConfirmation) {
-          e.setError('password', translator(universalCookies.get('lang'), 'password', 'passwordsIsNotMatch'));
+          e.setError('password', translate(universalCookies.get('lang'), 'password', 'passwordsIsNotMatch'));
         }
 
         if (reset.password.length < 8) {
-          e.setError('password', translator(universalCookies.get('lang'), 'password', 'passwordLength'));
+          e.setError('password', translate(universalCookies.get('lang'), 'password', 'passwordLength'));
         }
         e.throwIf();
 
@@ -165,7 +165,7 @@ export default () => ({
         const { email, password } = jwt.verify(token, settings.user.secret);
         const user = await context.User.getUserByEmail(email);
         if (user.passwordHash !== password) {
-          e.setError('token', translator(universalCookies.get('lang'), 'password', 'invalidToken'));
+          e.setError('token', translate(universalCookies.get('lang'), 'password', 'invalidToken'));
           e.throwIf();
         }
 

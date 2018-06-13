@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import { reactI18nextModule, I18nextProvider } from 'react-i18next';
+import { I18nextProvider, reactI18nextModule } from 'react-i18next';
 
 import Feature from '../connector';
-import { MenuItem, LanguagePicker } from '../../modules/common/components/web';
+import { LanguagePicker, MenuItem } from '../../modules/common/components/web';
 import modules from '../';
 import settings from '../../../../../settings';
 
@@ -33,10 +33,10 @@ i18n
   .use(LanguageDetector)
   .use(reactI18nextModule)
   .init({
-    fallbackLng: settings.i18n.fallbackLng,
+    fallbackLng: settings.clientI18n.fallbackLng,
     resources: {},
     debug: false, // set true to show logs
-    whitelist: settings.i18n.langList,
+    whitelist: settings.clientI18n.langList,
     detection: {
       lookupCookie: LANG_COOKIE,
       caches: __SSR__ ? ['cookie'] : ['localStorage']
@@ -50,7 +50,7 @@ i18n
   });
 
 const langPicker = {};
-if (settings.i18n.langPickerRender) {
+if (settings.clientI18n.langPickerRender) {
   langPicker.navItemRight = (
     <MenuItem key="languagePicker" style={{ display: 'flex', alignItems: 'center' }}>
       <LanguagePicker i18n={i18n} />
@@ -65,7 +65,8 @@ class RootComponent extends React.Component {
 
     if (this.props.req) {
       const lang =
-        this.props.req.universalCookies.get(LANG_COOKIE) || this.props.req.acceptsLanguages(settings.i18n.langList);
+        this.props.req.universalCookies.get(LANG_COOKIE) ||
+        this.props.req.acceptsLanguages(settings.clientI18n.langList);
       this.props.req.universalCookies.set(LANG_COOKIE, lang);
       i18n.changeLanguage(lang);
     }

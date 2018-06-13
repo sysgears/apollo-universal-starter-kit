@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import i18n from 'i18next';
 import { DangerZone } from 'expo';
-import { reactI18nextModule, I18nextProvider } from 'react-i18next';
+import { I18nextProvider, reactI18nextModule } from 'react-i18next';
 
 import { getItem, setItem } from '../common/clientStorage';
 import { LanguagePicker, Root } from '../../modules/common/components/native';
@@ -53,10 +53,10 @@ i18n
   .use(languageDetector)
   .use(reactI18nextModule)
   .init({
-    fallbackLng: settings.i18n.fallbackLng,
+    fallbackLng: settings.clientI18n.cfallbackLng,
     resources: {},
     debug: false, // set true to show logs
-    whitelist: settings.i18n.langList,
+    whitelist: settings.clientI18n.langList,
     interpolation: {
       escapeValue: false // not needed for react!!
     },
@@ -66,7 +66,7 @@ i18n
   });
 
 const langPicker = {};
-if (settings.i18n.langPickerRender) {
+if (settings.clientI18n.langPickerRender) {
   langPicker.drawerItem = {
     LangPicker: {
       screen: () => null,

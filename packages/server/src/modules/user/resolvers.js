@@ -4,18 +4,18 @@ import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import FieldError from '../../../../common/FieldError';
-import { translator } from '../i18n';
+import translate from '../../i18n';
 import settings from '../../../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
 
 export default pubsub => ({
   Query: {
-    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, { User, user, req: { universalCookies } }) => {
+    users: withAuth(['user:view:all'], (obj, { orderBy, filter }, { User }) => {
       return User.getUsers(orderBy, filter);
     }),
     user: withAuth(
-      (obj, args, context) => {
+      () => {
         return ['user:view:self'];
       },
       (obj, { id }, { user, User, req: { universalCookies } }) => {
@@ -28,7 +28,7 @@ export default pubsub => ({
         }
 
         const e = new FieldError();
-        e.setError('user', translator(universalCookies.get('lang'), 'user', 'accessDenied'));
+        e.setError('user', translate(universalCookies.get('lang'), 'user', 'accessDenied'));
         return { user: null, errors: e.getErrors() };
       }
     ),
@@ -74,16 +74,16 @@ export default pubsub => ({
 
           const userExists = await User.getUserByUsername(input.username);
           if (userExists) {
-            e.setError('username', translator(universalCookies.get('lang'), 'user', 'usernameIsExisted'));
+            e.setError('username', translate(universalCookies.get('lang'), 'user', 'usernameIsExisted'));
           }
 
           const emailExists = await User.getUserByEmail(input.email);
           if (emailExists) {
-            e.setError('email', translator(universalCookies.get('lang'), 'user', 'emailIsExisted'));
+            e.setError('email', translate(universalCookies.get('lang'), 'user', 'emailIsExisted'));
           }
 
           if (input.password.length < 8) {
-            e.setError('password', translator(universalCookies.get('lang'), 'user', 'passwordLength'));
+            e.setError('password', translate(universalCookies.get('lang'), 'user', 'passwordLength'));
           }
 
           e.throwIf();
@@ -141,16 +141,16 @@ export default pubsub => ({
           const userExists = await User.getUserByUsername(input.username);
 
           if (userExists && userExists.id !== input.id) {
-            e.setError('username', translator(universalCookies.get('lang'), 'user', 'usernameIsExisted'));
+            e.setError('username', translate(universalCookies.get('lang'), 'user', 'usernameIsExisted'));
           }
 
           const emailExists = await User.getUserByEmail(input.email);
           if (emailExists && emailExists.id !== input.id) {
-            e.setError('email', translator(universalCookies.get('lang'), 'user', 'emailIsExisted'));
+            e.setError('email', translate(universalCookies.get('lang'), 'user', 'emailIsExisted'));
           }
 
           if (input.password && input.password.length < 8) {
-            e.setError('password', translator(universalCookies.get('lang'), 'user', 'passwordLength'));
+            e.setError('password', translate(universalCookies.get('lang'), 'user', 'passwordLength'));
           }
 
           e.throwIf();
@@ -186,13 +186,13 @@ export default pubsub => ({
           const e = new FieldError();
           const user = await User.getUser(id);
           if (!user) {
-            e.setError('delete', translator(universalCookies.get('lang'), 'user', 'userIsNotExisted'));
+            e.setError('delete', translate(universalCookies.get('lang'), 'user', 'userIsNotExisted'));
 
             e.throwIf();
           }
 
           if (user.id === user.id) {
-            e.setError('delete', translator(universalCookies.get('lang'), 'user', 'userCannotDeleteYourself'));
+            e.setError('delete', translate(universalCookies.get('lang'), 'user', 'userCannotDeleteYourself'));
             e.throwIf();
           }
 
@@ -206,7 +206,7 @@ export default pubsub => ({
             });
             return { user };
           } else {
-            e.setError('delete', translator(universalCookies.get('lang'), 'user', 'userCouldNotDeleted'));
+            e.setError('delete', translate(universalCookies.get('lang'), 'user', 'userCouldNotDeleted'));
             e.throwIf();
           }
         } catch (e) {

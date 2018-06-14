@@ -5,5 +5,5 @@ export { default as user } from './user';
 export { default as mailer } from './mailer';
 export { default as analytics } from './analytics';
 export { default as subscription } from './subscription';
-export { clientI18n, serverI18n } from './i18n';
+export { default as i18n } from './i18n';
 export { default as pagination } from './pagination';

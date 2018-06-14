@@ -1,13 +1,6 @@
-const clientI18n = {
+export default {
   langPickerRender: true,
-  langList: ['en-US', 'ru-RU'],
-  fallbackLng: 'en-US'
+  langList: ['en', 'ru'],
+  fallbackLng: 'en',
+  cookie: 'lang'
 };
-
-const serverI18n = {
-  locales: ['en', 'ru'],
-  directory: process.cwd() + '/src/modules/i18n/locales',
-  cookie: 'locale'
-};
-
-export { clientI18n, serverI18n };

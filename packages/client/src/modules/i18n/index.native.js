@@ -53,10 +53,10 @@ i18n
   .use(languageDetector)
   .use(reactI18nextModule)
   .init({
-    fallbackLng: settings.clientI18n.cfallbackLng,
+    fallbackLng: settings.i18n.fallbackLng,
     resources: {},
     debug: false, // set true to show logs
-    whitelist: settings.clientI18n.langList,
+    whitelist: settings.i18n.langList,
     interpolation: {
       escapeValue: false // not needed for react!!
     },
@@ -66,7 +66,7 @@ i18n
   });
 
 const langPicker = {};
-if (settings.clientI18n.langPickerRender) {
+if (settings.i18n.langPickerRender) {
   langPicker.drawerItem = {
     LangPicker: {
       screen: () => null,

@@ -16,7 +16,7 @@ const initMiddleware = async (req, res, next) => {
 };
 
 export default new Feature({
-  middleware: app => {
+  beforeware: app => {
     app.use(initMiddleware);
   }
 });

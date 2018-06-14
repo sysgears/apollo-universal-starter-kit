@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Select as ADSelect } from 'antd';
 
 const Select = ({ children, ...props }) => {
-  return <select {...props}>{children}</select>;
+  return <ADSelect {...props}>{children}</ADSelect>;
 };
 
 Select.propTypes = {

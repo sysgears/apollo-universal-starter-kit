@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { DebounceInput } from 'react-debounce-input';
 
 import { hasRole } from '../../../user/containers/Auth';
-import { Form, FormItem, Input, Row, Col, Button, Icon } from '../web/ui-antd/index';
+import { Form, FormItem, Input, Row, Col, Button, Icon } from '../web';
 import { createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
 
@@ -74,7 +74,7 @@ class FilterView extends React.PureComponent {
           onFilterChange({});
         }}
         render={({ values, handleChange, handleBlur, handleSubmit, handleReset }) => (
-          <Form className="ant-advanced-search-form" onSubmit={handleSubmit}>
+          <Form className="ant-advanced-search-form bootstrap-advanced-search-form" onSubmit={handleSubmit}>
             <Row>
               <Col span={8}>
                 <FormItem label="Find" {...formItemLayout}>
@@ -95,7 +95,11 @@ class FilterView extends React.PureComponent {
                   Clear
                 </Button>
                 <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
-                  Advanced <Icon type={this.state.expand ? 'up' : 'down'} />
+                  Advanced{' '}
+                  <Icon
+                    type={this.state.expand ? 'up' : 'down'}
+                    className={this.state.expand ? 'fas fa-chevron-up' : 'fas fa-chevron-down'}
+                  />
                 </a>
               </Col>
             </Row>

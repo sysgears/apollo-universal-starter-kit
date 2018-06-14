@@ -5,7 +5,6 @@ import { startCase, round } from 'lodash';
 import { pascalize, camelize } from 'humps';
 import { Link } from 'react-router-dom';
 import { FieldArray } from 'formik';
-import { Select, DatePicker, Spin } from 'antd';
 import moment from 'moment';
 import DomainSchema from '@domain-schema/core';
 
@@ -27,8 +26,11 @@ import {
   Button,
   FormItem,
   Col,
-  Input
-} from './components/web/ui-antd/index';
+  Input,
+  DatePicker,
+  Spin,
+  Select
+} from './components/web';
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -42,8 +44,7 @@ export const createColumnFields = ({
   hendleDelete,
   onCellChange,
   customFields = {},
-  customActions,
-  tableActionColumnHeight = '48px'
+  customActions
 }) => {
   let columns = [];
   // use customFields if definded otherwise use schema.keys()
@@ -124,7 +125,7 @@ export const createColumnFields = ({
             render: (text, record) => {
               const data = {};
               data[key] = !text;
-              return <Switch checked={text} onClick={() => hendleUpdate(data, record.id)} />;
+              return <Switch checked={text} onClick={() => hendleUpdate(data, record.id)} onChange={() => {}} />;
             }
           });
         } else if ((hasTypeOf(String) || hasTypeOf(Number) || hasTypeOf(Date)) && key !== 'id') {
@@ -209,27 +210,26 @@ export const createColumnFields = ({
       width: 150,
       fixed: 'right',
       render: (text, record) => {
-        return {
-          props: {
-            style: {
-              height: tableActionColumnHeight
-            }
-          },
-          children: (
-            <div>
-              <Link className="link" to={`/${link}/${record.id}`} key="edit">
-                <Button color="primary" size="sm">
-                  Edit
-                </Button>
-              </Link>
-              <Popconfirm title="Sure to delete?" onConfirm={() => hendleDelete(record.id)} key="delete">
-                <Button color="primary" size="sm">
-                  Delete
-                </Button>
-              </Popconfirm>
-            </div>
-          )
-        };
+        return (
+          <div>
+            <Link className="link" to={`/${link}/${record.id}`} key="edit">
+              <Button color="primary" size="sm">
+                Edit
+              </Button>
+            </Link>
+            <Popconfirm
+              title="Sure to delete?"
+              onConfirm={() => hendleDelete(record.id)}
+              key="delete"
+              target={`delete-button-${record.id}`}
+              className={'bootstrap-cell-delete-button'}
+            >
+              <Button color="primary" size="sm">
+                Delete
+              </Button>
+            </Popconfirm>
+          </div>
+        );
       }
     });
   }
@@ -533,10 +533,17 @@ class EditableCell extends React.Component {
     const value = e.target.value;
     this.setState({ value });
   };
-  handleNumberChange = value => {
+  handleNumberChange = e => {
+    let value = e;
+    if (e.target) {
+      value = e.target.value;
+    }
     this.setState({ value });
   };
   handleDateChange = (date, dateString) => {
+    if (moment(date).isValid()) {
+      return this.setState({ value: moment(date).format(dateFormat) });
+    }
     this.setState({ value: dateString });
   };
   handleSelectChange = ({ key, label }) => {
@@ -704,12 +711,12 @@ class EditableCell extends React.Component {
         {editable ? (
           <div className="editable-cell-input-wrapper">
             {input}
-            <Icon type="check" className="editable-cell-icon-check" onClick={this.check} />
+            <Icon type="check" className="editable-cell-icon-check fas fa-check" onClick={this.check} />
           </div>
         ) : (
           <div className="editable-cell-text-wrapper">
             {render(value, record) || '\u00A0'}
-            <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
+            <Icon type="edit" className="editable-cell-icon fas fa-pencil-alt" onClick={this.edit} />
           </div>
         )}
       </div>

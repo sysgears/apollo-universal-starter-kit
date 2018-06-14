@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Label } from 'reactstrap';
 
-const FormItem = ({ children, label, ...props }) => {
+const FormItem = ({ children, labelCol, wrapperCol, validateStatus, label, ...props }) => {
   return (
     <FormGroup {...props}>
       {label && <Label size="md">{label}:&nbsp;</Label>}
@@ -13,7 +13,10 @@ const FormItem = ({ children, label, ...props }) => {
 
 FormItem.propTypes = {
   children: PropTypes.node,
-  label: PropTypes.string
+  label: PropTypes.string,
+  labelCol: PropTypes.any,
+  wrapperCol: PropTypes.any,
+  validateStatus: PropTypes.any
 };
 
 export default FormItem;

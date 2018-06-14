@@ -16,7 +16,7 @@ export default class RenderDate extends React.Component {
     meta: PropTypes.object
   };
 
-  handleChange = (date, dateString) => {
+  handleChange = date => {
     const {
       input: { name },
       setFieldValue
@@ -24,7 +24,7 @@ export default class RenderDate extends React.Component {
     //console.log('RenderDate: handleChange');
     //console.log('name:', name);
     //console.log('dateString:', dateString);
-    setFieldValue(name, dateString);
+    setFieldValue(name, moment(date).format(dateFormat));
   };
 
   handleBlur = () => {
@@ -56,13 +56,13 @@ export default class RenderDate extends React.Component {
     }
     //console.log('value:', value);
     //console.log('typeof value:', typeof value);
-    //console.log('formatedValue:', formatedValue);
+    // console.log('formatedValue:', formatedValue);
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
         <div>
           <DatePicker
             value={formatedValue}
-            format={dateFormat}
+            dateFormat={dateFormat}
             onChange={this.handleChange}
             onBlur={this.handleBlur}
             {...inputRest}

@@ -24,10 +24,15 @@ const renderData = (columns, entry) => {
   });
 };
 
-const Table = ({ dataSource, columns, pagination, loading, ...props }) => {
+const Table = ({ dataSource, columns, title, footer, onHeaderRow, rowSelection, pagination, loading, ...props }) => {
   return (
     <RSTable {...props}>
       <thead>
+        {title ? (
+          <tr>
+            <th colSpan={100}>{title()}</th>
+          </tr>
+        ) : null}
         <tr>{renderHead(columns)}</tr>
       </thead>
       <tbody>{dataSource && renderBody(columns, dataSource)}</tbody>
@@ -39,7 +44,11 @@ Table.propTypes = {
   dataSource: PropTypes.array,
   columns: PropTypes.array,
   pagination: PropTypes.bool,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  title: PropTypes.func,
+  footer: PropTypes.any,
+  onHeaderRow: PropTypes.any,
+  rowSelection: PropTypes.any
 };
 
 export default Table;

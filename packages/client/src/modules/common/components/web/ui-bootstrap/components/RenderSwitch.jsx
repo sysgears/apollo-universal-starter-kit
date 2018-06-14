@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import { FormItem, DatePicker } from './index';
+import { FormItem, Switch } from './index';
 
-const dateFormat = 'YYYY-MM-DD';
-
-export default class RenderDate extends React.Component {
+export default class RenderSwitch extends React.Component {
   static propTypes = {
     input: PropTypes.object,
     setFieldValue: PropTypes.func.isRequired,
@@ -16,15 +13,15 @@ export default class RenderDate extends React.Component {
     meta: PropTypes.object
   };
 
-  handleChange = (date, dateString) => {
+  handleChange = e => {
     const {
       input: { name },
       setFieldValue
     } = this.props;
-    //console.log('RenderDate: handleChange');
+    //console.log('RenderSwitch: handleChange');
     //console.log('name:', name);
-    //console.log('dateString:', dateString);
-    setFieldValue(name, dateString);
+
+    setFieldValue(name, e.target.checked);
   };
 
   handleBlur = () => {
@@ -37,7 +34,7 @@ export default class RenderDate extends React.Component {
 
   render() {
     const {
-      input: { value, onChange, onBlur, ...inputRest },
+      input: { value },
       label,
       formItemLayout,
       meta: { touched, error }
@@ -48,25 +45,10 @@ export default class RenderDate extends React.Component {
       validateStatus = 'error';
     }
 
-    let formatedValue = value;
-    if (value !== null && value !== undefined && value !== '') {
-      formatedValue = moment(value, dateFormat);
-    } else {
-      formatedValue = null;
-    }
-    //console.log('value:', value);
-    //console.log('typeof value:', typeof value);
-    //console.log('formatedValue:', formatedValue);
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
         <div>
-          <DatePicker
-            value={formatedValue}
-            format={dateFormat}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            {...inputRest}
-          />
+          <Switch checked={!!value} onChange={this.handleChange} onBlur={this.handleBlur} />
         </div>
       </FormItem>
     );

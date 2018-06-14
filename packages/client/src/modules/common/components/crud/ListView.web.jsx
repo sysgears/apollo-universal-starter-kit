@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from '../web/ui-antd/index';
+import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from '../web';
 import { createColumnFields, createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
 import { hasRole } from '../../../user/containers/Auth';
@@ -329,7 +329,7 @@ class ListView extends React.Component {
           </Col>
           {showBatchFields && [
             <Col span={2} key="batchDelete" style={{ paddingTop: '3px' }}>
-              <Popconfirm title="Sure to delete?" onConfirm={this.hendleDeleteMany}>
+              <Popconfirm title="Sure to delete?" onConfirm={this.hendleDeleteMany} target={'batch-delete-button'}>
                 <Button color="primary" disabled={!hasSelected} loading={loading && !data}>
                   Delete
                 </Button>
@@ -415,7 +415,14 @@ class ListView extends React.Component {
         onRow: (record, index) => ({
           index,
           moveRow: this.moveRow
-        })
+        }),
+        onHeaderRow: () => {
+          return {
+            style: {
+              height: tableHeaderColumnHeight
+            }
+          };
+        }
       };
     }
 
@@ -424,16 +431,7 @@ class ListView extends React.Component {
         {wait && <Spin size="small" />}
         {error && <Alert color="error" message={error} />}
         {success && <Alert color="success" message={success} />}
-        <Table
-          {...tableProps}
-          onHeaderRow={() => {
-            return {
-              style: {
-                height: tableHeaderColumnHeight
-              }
-            };
-          }}
-        />
+        <Table {...tableProps} />
         {data && this.renderLoadMore(data, loadMoreRows)}
       </div>
     );

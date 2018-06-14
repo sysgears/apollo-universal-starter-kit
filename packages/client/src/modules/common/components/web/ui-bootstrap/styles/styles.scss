@@ -1,4 +1,7 @@
 @import 'bootstrap';
+@import "bootstrap-switch";
+@import "datepicker";
+@import 'fontawesome';
 
 #root {
   min-height: 100vh;
@@ -30,4 +33,54 @@
 .pagination-select {
   width: 30%;
   margin-bottom: 20px;
+}
+
+.editable-cell {
+  .editable-cell-text-wrapper, .editable-cell-input-wrapper {
+    & > div {
+      display: inline-block;
+    }
+    &:hover {
+      cursor: pointer;
+      color: #007bff;
+      .editable-cell-icon {
+        display: block;
+      }
+    }
+    .editable-cell-icon {
+      float: right;
+      color: lightgray;
+      display: none;
+      &:hover {
+        cursor: pointer;
+        color: #007bff;
+      }
+    }
+    .editable-cell-icon-check{
+      color: lightgray;
+      float: right;
+      position: relative;
+      top: 10px;
+      &:hover {
+        cursor: pointer;
+        color: #007bff;
+      }
+    }
+
+    .form-control{
+      display: inline-block;
+      width: 90%;
+    }
+  }
+}
+
+.bootstrap-advanced-search-form{
+  padding: 15px;
+  background-color: #d3d3d34a;
+  border-top: 1px solid #d3d3d3ba;
+}
+
+.bootstrap-cell-delete-button{
+  display: inline-block;
+  margin-left: 5px;
 }

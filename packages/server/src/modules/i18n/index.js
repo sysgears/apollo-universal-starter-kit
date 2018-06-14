@@ -6,7 +6,7 @@ import settings from '../../../../../settings';
 const config = {
   directory: process.cwd() + '/src/modules/i18n/locales',
   locales: settings.i18n.langList,
-  cookies: settings.cookies
+  cookies: settings.cookie
 };
 
 const initMiddleware = async (req, res, next) => {

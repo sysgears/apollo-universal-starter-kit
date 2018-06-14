@@ -1,0 +1,5 @@
+#import "./ProductTypeState.client.graphql"
+
+mutation updateProductTypeFilter($filter: FilterProductTypeInput!) {
+  updateProductTypeFilter(filter: $filter) @client
+}

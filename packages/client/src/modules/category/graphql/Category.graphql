@@ -1,0 +1,19 @@
+fragment CategoryInfo on Category {
+  id
+  name
+  products {
+    id
+    name
+    price
+    releaseDate
+    display
+    category {
+      id
+      name
+    }
+    productType {
+      id
+      name
+    }
+  }
+}

@@ -1,0 +1,96 @@
+### schema type definitions
+type Category {
+  id: Int!
+  name: String!
+  parent: Category
+  products: [Product]
+}
+
+input ProductsCreateManyInput {
+  create: [ProductCreateInput!]
+}
+
+input ProductsUpdateManyInput {
+  create: [ProductCreateInput!]
+  delete: [ProductWhereUniqueInput!]
+  update: [ProductUpdateWhereInput!]
+}
+
+input ProductUpdateWhereInput {
+  where: ProductWhereUniqueInput!
+  data: ProductUpdateInput!
+}
+
+### end schema type definitions
+
+type CategoryConnection {
+  pageInfo: PageInfo
+  edges: [Category]
+}
+
+type CategoryData {
+  node: Category
+}
+
+type CategoryPayload {
+  node: Category
+  errors: [FieldError!]
+}
+
+input CategoryFilterInput {
+  searchText: String
+  id: Int
+  name: String
+  parentId: Int
+}
+
+input CategoryCreateInput {
+  name: String!
+  parentId: Int
+  products: ProductsCreateManyInput
+}
+
+input CategoryUpdateInput {
+  name: String
+  parentId: Int
+  products: ProductsUpdateManyInput
+}
+
+input CategoryWhereUniqueInput {
+  id: Int!
+}
+
+input CategoryWhereInput {
+  id_in: [Int!]
+}
+
+extend type Query {
+  categorys(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: CategoryFilterInput
+  ): [Category]
+  categorysConnection(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: CategoryFilterInput
+  ): CategoryConnection!
+  category(where: CategoryWhereUniqueInput!): CategoryData
+}
+
+extend type Mutation {
+  createCategory(data: CategoryCreateInput!): CategoryPayload!
+  updateCategory(
+    data: CategoryUpdateInput!
+    where: CategoryWhereUniqueInput!
+  ): CategoryPayload!
+  deleteCategory(where: CategoryWhereUniqueInput!): CategoryPayload!
+  sortCategorys(data: [Int!]): BatchPayload!
+  updateManyCategorys(
+    data: CategoryUpdateInput!
+    where: CategoryWhereInput!
+  ): BatchPayload!
+  deleteManyCategorys(where: CategoryWhereInput!): BatchPayload!
+}

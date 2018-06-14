@@ -1,0 +1,82 @@
+### schema type definitions
+type ProductType {
+  id: Int!
+  name: String!
+  description: String
+  rank: Int
+}
+
+### end schema type definitions
+
+type ProductTypeConnection {
+  pageInfo: PageInfo
+  edges: [ProductType]
+}
+
+type ProductTypeData {
+  node: ProductType
+}
+
+type ProductTypePayload {
+  node: ProductType
+  errors: [FieldError!]
+}
+
+input ProductTypeFilterInput {
+  searchText: String
+  id: Int
+  name: String
+  description: String
+  rank: Int
+}
+
+input ProductTypeCreateInput {
+  name: String!
+  description: String
+  rank: Int
+}
+
+input ProductTypeUpdateInput {
+  name: String
+  description: String
+  rank: Int
+}
+
+input ProductTypeWhereUniqueInput {
+  id: Int!
+}
+
+input ProductTypeWhereInput {
+  id_in: [Int!]
+}
+
+extend type Query {
+  productTypes(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: ProductTypeFilterInput
+  ): [ProductType]
+  productTypesConnection(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: ProductTypeFilterInput
+  ): ProductTypeConnection!
+  productType(where: ProductTypeWhereUniqueInput!): ProductTypeData
+}
+
+extend type Mutation {
+  createProductType(data: ProductTypeCreateInput!): ProductTypePayload!
+  updateProductType(
+    data: ProductTypeUpdateInput!
+    where: ProductTypeWhereUniqueInput!
+  ): ProductTypePayload!
+  deleteProductType(where: ProductTypeWhereUniqueInput!): ProductTypePayload!
+  sortProductTypes(data: [Int!]): BatchPayload!
+  updateManyProductTypes(
+    data: ProductTypeUpdateInput!
+    where: ProductTypeWhereInput!
+  ): BatchPayload!
+  deleteManyProductTypes(where: ProductTypeWhereInput!): BatchPayload!
+}

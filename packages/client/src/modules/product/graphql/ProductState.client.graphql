@@ -1,0 +1,18 @@
+fragment ProductStateInfo on ProductState {
+  limit
+  orderBy {
+    column
+    order
+  }
+  filter {
+    id
+    name
+    categoryId
+    productTypeId
+    price
+    releaseDate_lte
+    releaseDate_gte
+    display
+    searchText
+  }
+}

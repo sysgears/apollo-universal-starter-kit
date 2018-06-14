@@ -1,3 +1,6 @@
+import productType from './productType';
+import product from './product';
+import category from './category';
 import defaultRouter from './defaultRouter';
 import i18n from './i18n';
 import counter from './counter';
@@ -13,6 +16,9 @@ import './favicon';
 import Feature from './connector';
 
 export default new Feature(
+  productType,
+  product,
+  category,
   defaultRouter,
   counter,
   post,

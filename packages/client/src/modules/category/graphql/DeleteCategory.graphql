@@ -1,0 +1,11 @@
+mutation deleteCategory($where: CategoryWhereUniqueInput!) {
+  deleteCategory(where: $where) {
+    node {
+      id
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

@@ -1,0 +1,9 @@
+#import "./Category.graphql"
+
+query category($where: CategoryWhereUniqueInput!) {
+  category(where: $where) {
+    node {
+      ...CategoryInfo
+    }
+  }
+}

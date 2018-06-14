@@ -1,0 +1,16 @@
+#import "./ProductType.graphql"
+
+mutation updateProductType(
+  $data: ProductTypeUpdateInput!
+  $where: ProductTypeWhereUniqueInput!
+) {
+  updateProductType(data: $data, where: $where) {
+    node {
+      ...ProductTypeInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

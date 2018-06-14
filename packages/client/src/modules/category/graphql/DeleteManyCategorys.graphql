@@ -1,0 +1,9 @@
+mutation deleteManyCategorys($where: CategoryWhereInput!) {
+  deleteManyCategorys(where: $where) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

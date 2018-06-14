@@ -1,0 +1,13 @@
+#import "./Product.graphql"
+
+mutation createProduct($data: ProductCreateInput!) {
+  createProduct(data: $data) {
+    node {
+      ...ProductInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

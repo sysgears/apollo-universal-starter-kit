@@ -1,0 +1,11 @@
+mutation deleteProduct($where: ProductWhereUniqueInput!) {
+  deleteProduct(where: $where) {
+    node {
+      id
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

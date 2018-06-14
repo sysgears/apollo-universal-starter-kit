@@ -1,0 +1,6 @@
+fragment ProductTypeInfo on ProductType {
+  id
+  name
+  description
+  rank
+}

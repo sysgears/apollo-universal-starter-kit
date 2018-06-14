@@ -1,0 +1,23 @@
+#import "./Category.graphql"
+
+query categorysConnection(
+  $limit: Int
+  $offset: Int
+  $orderBy: OrderByInput
+  $filter: CategoryFilterInput
+) {
+  categorysConnection(
+    limit: $limit
+    offset: $offset
+    orderBy: $orderBy
+    filter: $filter
+  ) {
+    pageInfo {
+      totalCount
+      hasNextPage
+    }
+    edges {
+      ...CategoryInfo
+    }
+  }
+}

@@ -1,0 +1,95 @@
+### schema type definitions
+type Product {
+  id: Int!
+  name: String!
+  category: Category!
+  productType: ProductType
+  price: Float!
+  releaseDate: Date
+  display: Boolean
+}
+
+### end schema type definitions
+
+type ProductConnection {
+  pageInfo: PageInfo
+  edges: [Product]
+}
+
+type ProductData {
+  node: Product
+}
+
+type ProductPayload {
+  node: Product
+  errors: [FieldError!]
+}
+
+input ProductFilterInput {
+  searchText: String
+  id: Int
+  name: String
+  categoryId: Int
+  productTypeId: Int
+  price: Float
+  releaseDate_lte: Date
+  releaseDate_gte: Date
+  display: Boolean
+}
+
+input ProductCreateInput {
+  name: String!
+  categoryId: Int!
+  productTypeId: Int
+  price: Float!
+  releaseDate: Date
+  display: Boolean
+}
+
+input ProductUpdateInput {
+  name: String
+  categoryId: Int
+  productTypeId: Int
+  price: Float
+  releaseDate: Date
+  display: Boolean
+}
+
+input ProductWhereUniqueInput {
+  id: Int!
+}
+
+input ProductWhereInput {
+  id_in: [Int!]
+}
+
+extend type Query {
+  products(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: ProductFilterInput
+  ): [Product]
+  productsConnection(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: ProductFilterInput
+  ): ProductConnection!
+  product(where: ProductWhereUniqueInput!): ProductData
+}
+
+extend type Mutation {
+  createProduct(data: ProductCreateInput!): ProductPayload!
+  updateProduct(
+    data: ProductUpdateInput!
+    where: ProductWhereUniqueInput!
+  ): ProductPayload!
+  deleteProduct(where: ProductWhereUniqueInput!): ProductPayload!
+  sortProducts(data: [Int!]): BatchPayload!
+  updateManyProducts(
+    data: ProductUpdateInput!
+    where: ProductWhereInput!
+  ): BatchPayload!
+  deleteManyProducts(where: ProductWhereInput!): BatchPayload!
+}

@@ -218,8 +218,6 @@ export const createColumnFields = ({
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => hendleDelete(record.id)}
-              onConfirmBootstrap={hendleDelete}
-              record={record.id}
               key="delete"
               target={`delete-button-${record.id}`}
               className={'bootstrap-cell-delete-button'}

@@ -7,9 +7,7 @@ class Popconfirm extends React.Component {
     children: PropTypes.node,
     title: PropTypes.string.isRequired,
     target: PropTypes.string.isRequired,
-    onConfirmBootstrap: PropTypes.func.isRequired,
-    record: PropTypes.number.isRequired,
-    onConfirm: PropTypes.any,
+    onConfirm: PropTypes.func.isRequired,
     size: PropTypes.string,
     color: PropTypes.string,
     placement: PropTypes.string,
@@ -19,7 +17,6 @@ class Popconfirm extends React.Component {
   constructor(props) {
     super(props);
     this.toggle = this.toggle.bind(this);
-    this.onConfirm = this.onConfirm.bind(this);
     this.state = {
       isOpen: false
     };
@@ -29,10 +26,6 @@ class Popconfirm extends React.Component {
     this.setState({
       isOpen: !this.state.isOpen
     });
-  }
-
-  onConfirm() {
-    this.props.onConfirmBootstrap(this.props.record);
   }
 
   render() {
@@ -52,7 +45,7 @@ class Popconfirm extends React.Component {
             <Button color={color ? color : 'secondary'} size={size} onClick={this.toggle} style={buttonsStyle}>
               Cancel
             </Button>
-            <Button color={color ? color : 'primary'} size={size} onClick={this.onConfirm} style={buttonsStyle}>
+            <Button color={color ? color : 'primary'} size={size} onClick={this.props.onConfirm} style={buttonsStyle}>
               Ok
             </Button>
           </PopoverBody>

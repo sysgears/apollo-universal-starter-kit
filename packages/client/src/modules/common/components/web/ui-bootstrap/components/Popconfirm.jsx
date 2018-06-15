@@ -7,7 +7,9 @@ class Popconfirm extends React.Component {
     children: PropTypes.node,
     title: PropTypes.string.isRequired,
     target: PropTypes.string.isRequired,
-    onConfirm: PropTypes.func.isRequired,
+    onConfirmBootstrap: PropTypes.func.isRequired,
+    record: PropTypes.number.isRequired,
+    onConfirm: PropTypes.any,
     size: PropTypes.string,
     color: PropTypes.string,
     placement: PropTypes.string,
@@ -30,7 +32,7 @@ class Popconfirm extends React.Component {
   }
 
   onConfirm() {
-    this.props.onConfirm();
+    this.props.onConfirmBootstrap(this.props.record);
   }
 
   render() {

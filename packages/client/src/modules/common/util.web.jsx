@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { startCase, round } from 'lodash';
-import { pascalize, camelize } from 'humps';
 import { Link } from 'react-router-dom';
 import { FieldArray } from 'formik';
 import moment from 'moment';
@@ -28,8 +27,7 @@ import {
   Col,
   Input,
   DatePicker,
-  Spin,
-  Select
+  RenderCellSelectQuery
 } from './components/web';
 
 const dateFormat = 'YYYY-MM-DD';
@@ -220,6 +218,8 @@ export const createColumnFields = ({
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => hendleDelete(record.id)}
+              onConfirmBootstrap={hendleDelete}
+              record={record.id}
               key="delete"
               target={`delete-button-${record.id}`}
               className={'bootstrap-cell-delete-button'}
@@ -593,7 +593,17 @@ class EditableCell extends React.Component {
       }
     }
     let input = null;
-    if (editable) {
+    if (hasTypeOf(DomainSchema)) {
+      input = (
+        <RenderCellSelectQuery
+          searchText={searchText}
+          value={value}
+          schema={schema}
+          handleOnChange={this.handleSelectChange}
+          dirty={dirty}
+        />
+      );
+    } else if (editable) {
       let formatedValue = value;
       //console.log('value:', value);
       input = <Input value={formatedValue} onChange={this.handleChange} onPressEnter={this.check} />;
@@ -624,85 +634,6 @@ class EditableCell extends React.Component {
             onChange={this.handleDateChange}
             onPressEnter={this.check}
           />
-        );
-      } else if (hasTypeOf(DomainSchema)) {
-        const Option = Select.Option;
-        const camelizeSchemaName = camelize(schema.name);
-        const pascalizeSchemaName = pascalize(schema.name);
-        let column = 'name';
-        let orderBy = null;
-        for (const remoteKey of schema.keys()) {
-          const remoteValue = schema.values[remoteKey];
-          if (remoteValue.sortBy) {
-            column = remoteKey;
-          }
-          if (remoteKey === 'rank') {
-            orderBy = {
-              column: 'rank'
-            };
-          }
-        }
-        const toString = schema.__.__toString ? schema.__.__toString : opt => opt[column];
-        let formatedValue = { key: value.id.toString(), label: value.name ? value.name : value[column] };
-        //console.log('formatedValue:', formatedValue);
-        // eslint-disable-next-line import/no-dynamic-require
-        const Query = require(`../${camelizeSchemaName}/containers/${pascalizeSchemaName}Query`)['default'];
-
-        input = (
-          <Query limit={10} filter={{ searchText }} orderBy={orderBy}>
-            {({ loading, data }) => {
-              if (!loading || data) {
-                const options = data.edges
-                  ? data.edges.map(opt => (
-                      <Option key={opt.id} value={opt.id.toString()}>
-                        {toString(opt)}
-                      </Option>
-                    ))
-                  : null;
-
-                let props = {
-                  showSearch: true,
-                  labelInValue: true,
-                  dropdownMatchSelectWidth: false,
-                  style: { width: '100%' },
-                  onChange: this.handleSelectChange,
-                  defaultValue: formatedValue
-                };
-
-                if (data.pageInfo.totalCount > 10) {
-                  if (data.edges) {
-                    if (!data.edges.find(node => node.id === value.id)) {
-                      if (!dirty) {
-                        options.unshift(
-                          <Option key={value.id} value={value.id.toString()}>
-                            {toString(value)}
-                          </Option>
-                        );
-                      } else {
-                        formatedValue = { key: data.edges[0].id.toString() };
-                      }
-                    }
-                  }
-
-                  props = {
-                    ...props,
-                    filterOption: false,
-                    onSearch: this.search
-                  };
-                } else {
-                  props = {
-                    ...props,
-                    optionFilterProp: 'children',
-                    filterOption: (input, option) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  };
-                }
-                return <Select {...props}>{options}</Select>;
-              } else {
-                return <Spin size="small" />;
-              }
-            }}
-          </Query>
         );
       }
     }

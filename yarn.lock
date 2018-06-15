@@ -548,12 +548,6 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
-"@domain-schema/core@^0.0.33":
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/@domain-schema/core/-/core-0.0.33.tgz#c84c9ad5e14eca488376525138c0fdaf1df3dce6"
-  dependencies:
-    debug "^3.1.0"
-
 "@domain-schema/core@^0.0.34":
   version "0.0.34"
   resolved "https://registry.yarnpkg.com/@domain-schema/core/-/core-0.0.34.tgz#5900ae4f0844cb8e7ffa91f5be32bd0417d96429"

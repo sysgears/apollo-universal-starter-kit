@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pascalize, camelize } from 'humps';
 
-import { FormItem, Input } from './index';
+import { FormItem, Select } from './index';
 
 export default class RenderSelectQuery extends React.Component {
   static propTypes = {
@@ -14,23 +14,27 @@ export default class RenderSelectQuery extends React.Component {
     meta: PropTypes.object,
     schema: PropTypes.object,
     style: PropTypes.object,
-    formType: PropTypes.string.isRequired
+    formType: PropTypes.string
   };
+
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
 
   state = {
     searchText: '',
     dirty: false
   };
 
-  handleChange = value => {
+  handleChange = (e, edges) => {
     const {
       input: { name },
       setFieldValue
     } = this.props;
-    //console.log('RenderSelect: handleChange');
-    //console.log('name:', name);
-    //console.log('value:', value);
-    setFieldValue(name, value ? { id: value.key, name: value.label } : undefined);
+    //console.log('edges:', edges);
+    let selectedItem = edges && Array.isArray(edges) ? edges.find(item => item.id == e.target.value) : '';
+    setFieldValue(name, selectedItem ? { id: selectedItem.id, name: selectedItem.name } : '');
   };
 
   handleBlur = () => {
@@ -43,7 +47,6 @@ export default class RenderSelectQuery extends React.Component {
 
   search = value => {
     const { dirty } = this.state;
-    //onsole.log('search:', value);
     if ((value && value.length >= 1) || dirty) {
       this.setState({ searchText: value, dirty: true });
     }
@@ -56,10 +59,9 @@ export default class RenderSelectQuery extends React.Component {
       schema,
       style,
       formItemLayout,
-      meta: { touched, error },
-      formType
+      meta: { touched, error }
     } = this.props;
-    const { searchText, dirty } = this.state;
+    const { searchText } = this.state;
 
     let validateStatus = '';
     if (touched && error) {
@@ -68,40 +70,21 @@ export default class RenderSelectQuery extends React.Component {
 
     const camelizeSchemaName = camelize(schema.name);
     const pascalizeSchemaName = pascalize(schema.name);
-    let column = 'name';
     let orderBy = null;
     for (const remoteKey of schema.keys()) {
-      const remoteValue = schema.values[remoteKey];
-      if (remoteValue.sortBy) {
-        column = remoteKey;
-      }
       if (remoteKey === 'rank') {
         orderBy = {
           column: 'rank'
         };
       }
     }
-
-    const toString = schema.__.__toString ? schema.__.__toString : opt => opt[column];
-
-    let formatedValue =
-      value && value != '' && value != undefined
-        ? { key: value.id.toString(), label: toString(value) }
-        : { key: '', label: '' };
-    //console.log('formatedValue:', formatedValue);
-
+    let formatedValue = value && value != '' && typeof value !== 'undefined' ? value.id : '';
     // eslint-disable-next-line import/no-dynamic-require
     const Query = require(`../../../../../${camelizeSchemaName}/containers/${pascalizeSchemaName}Query`)['default'];
-    //console.log(`../../../../../${camelizeSchemaName}/containers/${pascalizeSchemaName}Query`);
 
     let defaultStyle = { width: '100%' };
     if (style) {
       defaultStyle = style;
-    }
-
-    let defaultValue = 'defaultValue';
-    if (formType === 'filter') {
-      defaultValue = 'value';
     }
 
     return (
@@ -110,59 +93,32 @@ export default class RenderSelectQuery extends React.Component {
           <Query limit={10} filter={{ searchText }} orderBy={orderBy}>
             {({ loading, data }) => {
               if (!loading || data) {
-                const options = data.edges
+                let options = data.edges
                   ? data.edges.map(opt => (
-                      <option key={opt.id} value={opt.id.toString()}>
-                        {toString(opt)}
+                      <option key={opt.id} value={opt.id.toString()} label={opt.name}>
+                        {opt.name}
                       </option>
                     ))
                   : null;
+                if (!value && data.edges && data.edges.length > 0) {
+                  options.unshift(
+                    <option key="0" value="0">
+                      Select Item
+                    </option>
+                  );
+                }
 
                 let props = {
-                  allowClear: formType !== 'form' ? true : false,
-                  showSearch: true,
-                  labelInValue: true,
-                  dropdownMatchSelectWidth: false,
                   style: defaultStyle,
-                  onChange: this.handleChange,
+                  value: formatedValue,
+                  onChange: e => this.handleChange(e, data.edges),
                   onBlur: this.handleBlur,
-                  ...inputRest,
-                  [defaultValue]: formatedValue
+                  ...inputRest
                 };
-
-                if (data.pageInfo.totalCount > 10) {
-                  if (data.edges && value && value != '' && value != undefined) {
-                    if (!data.edges.find(node => node.id === value.id)) {
-                      if (!dirty) {
-                        options.unshift(
-                          <option key={value.id} value={value.id.toString()}>
-                            {toString(value)}
-                          </option>
-                        );
-                      } else {
-                        formatedValue = { key: data.edges[0].id.toString() };
-                      }
-                    }
-                  }
-
-                  props = {
-                    ...props,
-                    filterOption: false,
-                    [defaultValue]: formatedValue,
-                    onSearch: this.search
-                  };
-                } else {
-                  props = {
-                    ...props,
-                    optionFilterProp: 'children',
-                    filterOption: (input, option) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  };
-                }
                 return (
-                  <Input type="select" {...props}>
+                  <Select type="select" {...props}>
                     {options}
-                  </Input>
+                  </Select>
                 );
               } else {
                 return <div>Loading...</div>;

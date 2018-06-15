@@ -38,3 +38,4 @@ export { default as Icon } from './Icon';
 export { default as LanguagePicker } from './LanguagePicker';
 export { default as Pagination } from './Pagination';
 export { default as DatePicker } from './DatePicker';
+export { default as RenderCellSelectQuery } from './RenderCellSelectQuery';

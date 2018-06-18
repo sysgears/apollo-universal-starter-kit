@@ -378,11 +378,11 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     // get fragment file
     const pathFragment = `${__dirname}/../../packages/client/src/modules/${module}/graphql/`;
     if (fs.existsSync(pathFragment)) {
-      const file = `${Module}.graphql`;
+      const fragmentGraphqlFile = `${Module}.graphql`;
 
       // regenerate graphql fragment
       // TODO: refactor to generate this recursively
-      let graphql = '';
+      let fragmentGraphql = '';
       for (const key of schema.keys()) {
         const value = schema.values[key];
         if (value.type.isSchema) {
@@ -393,12 +393,12 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
               column = remoteKey;
             }
           }
-          graphql += `  ${key} {\n`;
-          graphql += `    id\n`;
-          graphql += `    ${column}\n`;
-          graphql += `  }\n`;
+          fragmentGraphql += `  ${key} {\n`;
+          fragmentGraphql += `    id\n`;
+          fragmentGraphql += `    ${column}\n`;
+          fragmentGraphql += `  }\n`;
         } else if (value.type.constructor === Array && value.type[0].isSchema) {
-          graphql += `  ${key} {\n`;
+          fragmentGraphql += `  ${key} {\n`;
           for (const remoteKey of value.type[0].keys()) {
             const remoteValue = value.type[0].values[remoteKey];
             if (remoteValue.type.isSchema) {
@@ -409,26 +409,32 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
                   remotecolumn = remoteKey;
                 }
               }
-              graphql += `    ${remoteKey} {\n`;
-              graphql += `      id\n`;
-              graphql += `      ${remotecolumn}\n`;
-              graphql += `    }\n`;
+              fragmentGraphql += `    ${remoteKey} {\n`;
+              fragmentGraphql += `      id\n`;
+              fragmentGraphql += `      ${remotecolumn}\n`;
+              fragmentGraphql += `    }\n`;
             } else if (remoteValue.type.constructor !== Array) {
-              graphql += `    ${remoteKey}\n`;
+              fragmentGraphql += `    ${remoteKey}\n`;
             }
           }
-          graphql += `  }\n`;
+          fragmentGraphql += `  }\n`;
         } else {
-          graphql += `  ${key}\n`;
+          fragmentGraphql += `  ${key}\n`;
         }
       }
 
       shell.cd(pathFragment);
       // override graphql fragment file
-      const replaceFragment = `${Module} {(.|\n)*\n}\n`;
-      shell.ShellString(shell.cat(file).replace(RegExp(replaceFragment, 'g'), `${Module} {\n${graphql}}\n`)).to(file);
-
-      logger.info(chalk.green(`✔ Fragment in ${pathFragment}${file} successfully updated!`));
+      const replaceFragment = `${Module} {(.|\n)*\n}`;
+      fragmentGraphql = shell
+        .cat(fragmentGraphqlFile)
+        .replace(RegExp(replaceFragment, 'g'), `${Module} {\n${fragmentGraphql}}`);
+      try {
+        fs.writeFileSync(pathFragment + fragmentGraphqlFile, fragmentGraphql);
+      } catch (err) {
+        logger.error(chalk.red(`✘ Failed to write a ${pathFragment}${fragmentGraphqlFile} file!`));
+      }
+      logger.info(chalk.green(`✔ Fragment in ${pathFragment}${fragmentGraphqlFile} successfully updated!`));
     } else {
       logger.error(chalk.red(`✘ Fragment path ${pathFragment} not found!`));
     }

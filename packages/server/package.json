@@ -15,7 +15,7 @@
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "yarn tests && yarn lint",
     "lint": "eslint --fix --ext js --ext jsx --ext json src config",
-    "seed": "yarn migrate && knex seed:run",
+    "seed": "DEBUG=* yarn migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "watch": "spin watch",

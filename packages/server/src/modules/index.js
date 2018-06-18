@@ -1,3 +1,4 @@
+import subCategory from './subCategory';
 import productType from './productType';
 import product from './product';
 import category from './category';
@@ -15,6 +16,7 @@ import './debug';
 import Feature from './connector';
 
 export default new Feature(
+  subCategory,
   productType,
   product,
   category,

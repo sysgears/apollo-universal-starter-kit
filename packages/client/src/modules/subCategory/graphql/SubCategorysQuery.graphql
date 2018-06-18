@@ -1,0 +1,23 @@
+#import "./SubCategory.graphql"
+
+query subCategorysConnection(
+  $limit: Int
+  $offset: Int
+  $orderBy: OrderByInput
+  $filter: SubCategoryFilterInput
+) {
+  subCategorysConnection(
+    limit: $limit
+    offset: $offset
+    orderBy: $orderBy
+    filter: $filter
+  ) {
+    pageInfo {
+      totalCount
+      hasNextPage
+    }
+    edges {
+      ...SubCategoryInfo
+    }
+  }
+}

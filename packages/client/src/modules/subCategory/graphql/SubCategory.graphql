@@ -1,0 +1,4 @@
+fragment SubCategoryInfo on SubCategory {
+  id
+  name
+}

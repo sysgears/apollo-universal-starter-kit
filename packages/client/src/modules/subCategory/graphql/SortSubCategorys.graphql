@@ -1,0 +1,9 @@
+mutation sortSubCategorys($data: [Int!]) {
+  sortSubCategorys(data: $data) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

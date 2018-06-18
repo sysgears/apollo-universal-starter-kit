@@ -11,11 +11,13 @@ import subscription from './subscription';
 import contact from './contact';
 import pageNotFound from './pageNotFound';
 import pagination from './pagination';
+import subCategory from './subCategory';
 import './favicon';
 
 import Feature from './connector';
 
 export default new Feature(
+  subCategory,
   productType,
   product,
   category,

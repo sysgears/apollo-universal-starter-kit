@@ -1,0 +1,13 @@
+#import "./SubCategory.graphql"
+
+mutation createSubCategory($data: SubCategoryCreateInput!) {
+  createSubCategory(data: $data) {
+    node {
+      ...SubCategoryInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

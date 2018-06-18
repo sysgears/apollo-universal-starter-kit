@@ -1,0 +1,16 @@
+#import "./SubCategory.graphql"
+
+mutation updateSubCategory(
+  $data: SubCategoryUpdateInput!
+  $where: SubCategoryWhereUniqueInput!
+) {
+  updateSubCategory(data: $data, where: $where) {
+    node {
+      ...SubCategoryInfo
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

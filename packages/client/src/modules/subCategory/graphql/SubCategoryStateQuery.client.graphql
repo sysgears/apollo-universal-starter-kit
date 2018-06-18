@@ -1,0 +1,7 @@
+#import "./SubCategoryState.client.graphql"
+
+query SubCategoryState {
+  subCategoryState @client {
+    ...SubCategoryStateInfo
+  }
+}

@@ -1,0 +1,12 @@
+mutation updateManySubCategorys(
+  $data: SubCategoryUpdateInput!
+  $where: SubCategoryWhereInput!
+) {
+  updateManySubCategorys(data: $data, where: $where) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

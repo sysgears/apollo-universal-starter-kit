@@ -1,0 +1,9 @@
+#import "./SubCategory.graphql"
+
+query subCategory($where: SubCategoryWhereUniqueInput!) {
+  subCategory(where: $where) {
+    node {
+      ...SubCategoryInfo
+    }
+  }
+}

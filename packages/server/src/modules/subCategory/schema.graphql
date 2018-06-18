@@ -1,0 +1,82 @@
+### schema type definitions
+type SubCategory {
+  id: Int!
+  name: String!
+  description: String
+  category: Category
+}
+
+### end schema type definitions
+
+type SubCategoryConnection {
+  pageInfo: PageInfo
+  edges: [SubCategory]
+}
+
+type SubCategoryData {
+  node: SubCategory
+}
+
+type SubCategoryPayload {
+  node: SubCategory
+  errors: [FieldError!]
+}
+
+input SubCategoryFilterInput {
+  searchText: String
+  id: Int
+  name: String
+  description: String
+  categoryId: Int
+}
+
+input SubCategoryCreateInput {
+  name: String!
+  description: String
+  categoryId: Int
+}
+
+input SubCategoryUpdateInput {
+  name: String
+  description: String
+  categoryId: Int
+}
+
+input SubCategoryWhereUniqueInput {
+  id: Int!
+}
+
+input SubCategoryWhereInput {
+  id_in: [Int!]
+}
+
+extend type Query {
+  subCategorys(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: SubCategoryFilterInput
+  ): [SubCategory]
+  subCategorysConnection(
+    limit: Int
+    offset: Int
+    orderBy: OrderByInput
+    filter: SubCategoryFilterInput
+  ): SubCategoryConnection!
+  subCategory(where: SubCategoryWhereUniqueInput!): SubCategoryData
+}
+
+extend type Mutation {
+  createSubCategory(data: SubCategoryCreateInput!): SubCategoryPayload!
+  updateSubCategory(
+    data: SubCategoryUpdateInput!
+    where: SubCategoryWhereUniqueInput!
+  ): SubCategoryPayload!
+  deleteSubCategory(where: SubCategoryWhereUniqueInput!): SubCategoryPayload!
+  sortSubCategorys(data: [Int!]): BatchPayload!
+  updateManySubCategorys(
+    data: SubCategoryUpdateInput!
+    where: SubCategoryWhereInput!
+  ): BatchPayload!
+  deleteManySubCategorys(where: SubCategoryWhereInput!): BatchPayload!
+}

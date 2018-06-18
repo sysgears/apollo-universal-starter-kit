@@ -1,0 +1,14 @@
+fragment SubCategoryStateInfo on SubCategoryState {
+  limit
+  orderBy {
+    column
+    order
+  }
+  filter {
+    id
+    name
+    description
+    categoryId
+    searchText
+  }
+}

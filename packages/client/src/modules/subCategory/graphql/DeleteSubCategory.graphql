@@ -1,0 +1,11 @@
+mutation deleteSubCategory($where: SubCategoryWhereUniqueInput!) {
+  deleteSubCategory(where: $where) {
+    node {
+      id
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

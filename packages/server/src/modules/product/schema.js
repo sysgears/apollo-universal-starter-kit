@@ -19,6 +19,33 @@ export class Category extends Schema {
     optional: true,
     external: true
   };
+  subCategories = {
+    type: [SubCategory],
+    optional: true,
+    external: true
+  };
+}
+
+export class SubCategory extends Schema {
+  __ = {
+    name: 'SubCategory',
+    tablePrefix: ''
+  };
+  id = DomainSchema.Int;
+  name = {
+    type: String,
+    searchText: true
+  };
+  description = {
+    type: String,
+    searchText: true,
+    optional: true
+  };
+  category = {
+    type: Category,
+    optional: true,
+    external: true
+  };
 }
 
 export class ProductType extends Schema {

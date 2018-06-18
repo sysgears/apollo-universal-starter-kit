@@ -432,7 +432,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
       try {
         fs.writeFileSync(pathFragment + fragmentGraphqlFile, fragmentGraphql);
       } catch (err) {
-        logger.error(chalk.red(`✘ Failed to write a ${pathFragment}${fragmentGraphqlFile} file!`));
+        return logger.error(chalk.red(`✘ Failed to write a ${pathFragment}${fragmentGraphqlFile} file!`));
       }
       logger.info(chalk.green(`✔ Fragment in ${pathFragment}${fragmentGraphqlFile} successfully updated!`));
     } else {

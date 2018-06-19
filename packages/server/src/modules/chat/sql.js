@@ -4,14 +4,14 @@ import knex from '../../sql/connector';
 export default class Chat {
   message(id) {
     return knex
-      .select('id', 'text', 'userId')
+      .select('id', 'text', 'userId', 'created_at as createdAt')
       .from('message')
       .where('id', '=', id)
       .first();
   }
 
   getMessages() {
-    return knex.select('id', 'text', 'userId').from('message');
+    return knex.select('id', 'text', 'userId', 'created_at as createdAt').from('message');
   }
 
   addMessage({ text, userId }) {

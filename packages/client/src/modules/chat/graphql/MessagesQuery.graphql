@@ -1,5 +1,7 @@
 #import "./Message.graphql"
 
 query messages {
-  ...MessageInfo
+  messages {
+    ...MessageInfo
+  }
 }

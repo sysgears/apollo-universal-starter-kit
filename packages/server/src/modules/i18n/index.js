@@ -1,5 +1,4 @@
 import i18n from 'i18next';
-import * as middleware from 'i18next-express-middleware';
 
 import Feature from '../connector';
 import settings from '../../../../../settings';
@@ -18,16 +17,14 @@ const I18nProvider = () => {
 };
 
 const initMiddleware = async (req, res, next) => {
-  i18n.use(middleware.LanguageDetector).init({
+  i18n.init({
     fallbackLng: settings.i18n.fallbackLng,
     resources: {},
     debug: false, // set true to show logs
-    whitelist: settings.i18n.langList,
-    detection: {
-      lookupCookie: settings.i18n.cookie
-    }
+    whitelist: settings.i18n.langList
   });
   I18nProvider();
+  i18n.changeLanguage(req.universalCookies.get(settings.i18n.cookie));
   next();
 };
 

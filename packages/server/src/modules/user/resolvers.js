@@ -3,9 +3,9 @@ import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
+import i18n from 'i18next';
 
 import FieldError from '../../../../common/FieldError';
-import translate from '../../i18n';
 import settings from '../../../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
@@ -19,7 +19,7 @@ export default pubsub => ({
       () => {
         return ['user:view:self'];
       },
-      (obj, { id }, { user, User, req: { universalCookies } }) => {
+      (obj, { id }, { user, User }) => {
         if (user.id === id || user.role === 'admin') {
           try {
             return { user: User.getUser(id) };
@@ -29,7 +29,7 @@ export default pubsub => ({
         }
 
         const e = new FieldError();
-        e.setError('user', translate(universalCookies.get('lang'), 'user', 'accessDenied'));
+        e.setError('user', i18n.t('user:accessDenied'));
         return { user: null, errors: e.getErrors() };
       }
     ),
@@ -75,16 +75,16 @@ export default pubsub => ({
 
           const userExists = await User.getUserByUsername(input.username);
           if (userExists) {
-            e.setError('username', translate(universalCookies.get('lang'), 'user', 'usernameIsExisted'));
+            e.setError('username', i18n.t('user:usernameIsExisted'));
           }
 
           const emailExists = await User.getUserByEmail(input.email);
           if (emailExists) {
-            e.setError('email', translate(universalCookies.get('lang'), 'user', 'emailIsExisted'));
+            e.setError('email', i18n.t('user:emailIsExisted'));
           }
 
           if (input.password.length < 8) {
-            e.setError('password', translate(universalCookies.get('lang'), 'user', 'passwordLength'));
+            e.setError('password', i18n.t('user:passwordLength'));
           }
 
           e.throwIf();
@@ -134,7 +134,7 @@ export default pubsub => ({
       (obj, args, { User, user }) => {
         return user.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
-      async (obj, { input }, { User, user, req: { universalCookies } }) => {
+      async (obj, { input }, { User, user }) => {
         const isAdmin = () => user.role === 'admin';
         const isSelf = () => user.id === input.id;
         try {
@@ -142,16 +142,16 @@ export default pubsub => ({
           const userExists = await User.getUserByUsername(input.username);
 
           if (userExists && userExists.id !== input.id) {
-            e.setError('username', translate(universalCookies.get('lang'), 'user', 'usernameIsExisted'));
+            e.setError('username', i18n.t('user:usernameIsExisted'));
           }
 
           const emailExists = await User.getUserByEmail(input.email);
           if (emailExists && emailExists.id !== input.id) {
-            e.setError('email', translate(universalCookies.get('lang'), 'user', 'emailIsExisted'));
+            e.setError('email', i18n.t('user:emailIsExisted'));
           }
 
           if (input.password && input.password.length < 8) {
-            e.setError('password', translate(universalCookies.get('lang'), 'user', 'passwordLength'));
+            e.setError('password', i18n.t('user:passwordLength'));
           }
 
           e.throwIf();
@@ -182,18 +182,18 @@ export default pubsub => ({
       (obj, args, { User, user }) => {
         return user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
       },
-      async (obj, { id }, { User, user, req: { universalCookies } }) => {
+      async (obj, { id }, { User }) => {
         try {
           const e = new FieldError();
           const user = await User.getUser(id);
           if (!user) {
-            e.setError('delete', translate(universalCookies.get('lang'), 'user', 'userIsNotExisted'));
+            e.setError('delete', i18n.t('user:userIsNotExisted'));
 
             e.throwIf();
           }
 
           if (user.id === user.id) {
-            e.setError('delete', translate(universalCookies.get('lang'), 'user', 'userCannotDeleteYourself'));
+            e.setError('delete', i18n.t('user:userCannotDeleteYourself'));
             e.throwIf();
           }
 
@@ -207,7 +207,7 @@ export default pubsub => ({
             });
             return { user };
           } else {
-            e.setError('delete', translate(universalCookies.get('lang'), 'user', 'userCouldNotDeleted'));
+            e.setError('delete', i18n.t('user:userCouldNotDeleted'));
             e.throwIf();
           }
         } catch (e) {

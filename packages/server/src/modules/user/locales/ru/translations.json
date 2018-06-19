@@ -1,13 +1,11 @@
 {
-  "user": {
-    "accessDenied": "Доступ запрещен",
-    "usernameIsExisted": "Данное имя пользователя уже используется.",
-    "emailIsExisted": "Данный e-mail уже используется.",
-    "passwordLength": "Длина пароля должна составлять 8 символов и больше.",
-    "userIsNotExisted": "Такого пользователя не существует.",
-    "userCannotDeleteYourself": "Вы не можете удалить себя",
-    "userCouldNotDeleted": "Невозможно удалить пользователя. Побробуйте повторить попытку позже."
-  },
+  "accessDenied": "Доступ запрещен",
+  "usernameIsExisted": "Данное имя пользователя уже используется.",
+  "emailIsExisted": "Данный e-mail уже используется.",
+  "passwordLength": "Длина пароля должна составлять 8 символов и больше.",
+  "userIsNotExisted": "Такого пользователя не существует.",
+  "userCannotDeleteYourself": "Вы не можете удалить себя",
+  "userCouldNotDeleted": "Невозможно удалить пользователя. Побробуйте повторить попытку позже.",
   "auth": {
     "password": {
       "validPasswordEmail": "Пожалуйста, введите Ваш username или e-mail.",

@@ -63,6 +63,59 @@ function generateField(value, update = false) {
   return result;
 }
 
+/**
+ *
+ * @param module
+ * @param commonGraphqlPath
+ * @param moduleGraphqlContainer
+ */
+function generateCommonGraphqlFile(module, commonGraphqlPath, moduleGraphqlContainer) {
+  const importGraphqlContainer = `import ${moduleGraphqlContainer} from '../../../${module}/containers/${moduleGraphqlContainer}';\n`;
+  const exportGraphqlContainer = `\nexport default {\n  ${moduleGraphqlContainer}\n};\n`;
+
+  if (fs.existsSync(commonGraphqlPath)) {
+    const commonGraphqlData = fs.readFileSync(commonGraphqlPath);
+    const commonGraphql = commonGraphqlData.toString().trim();
+    if (commonGraphql.length > 1) {
+      const index = commonGraphql.lastIndexOf("';");
+      const computedIndex = index >= 0 ? index + 3 : false;
+      if (computedIndex) {
+        let computedCommonGraphql =
+          commonGraphql.slice(0, computedIndex) +
+          importGraphqlContainer +
+          commonGraphql.slice(computedIndex, commonGraphql.length);
+        computedCommonGraphql = computedCommonGraphql.replace(/(,|)\s};/g, `,\n  ${moduleGraphqlContainer}\n};`);
+        return fs.writeFileSync(commonGraphqlPath, computedCommonGraphql);
+      }
+    }
+  }
+  return fs.writeFileSync(commonGraphqlPath, importGraphqlContainer + exportGraphqlContainer);
+}
+
+/**
+ *
+ * @param module
+ * @param commonGraphqlPath
+ * @param moduleGraphqlContainer
+ */
+function deleteModuleFromCommonGraphqlFile(module, commonGraphqlPath, moduleGraphqlContainer) {
+  if (fs.existsSync(commonGraphqlPath)) {
+    const commonGraphqlData = fs.readFileSync(commonGraphqlPath);
+    const reg = `(\\n\\s\\s${moduleGraphqlContainer}(.|)|import ${moduleGraphqlContainer}.+;\\n+(?!ex))`;
+    const commonGraphql = commonGraphqlData.toString().replace(new RegExp(reg, 'g'), '');
+    fs.writeFileSync(commonGraphqlPath, commonGraphql);
+  }
+}
+
+/**
+ *
+ * @param logger
+ * @param templatePath
+ * @param module
+ * @param action
+ * @param tablePrefix
+ * @param location
+ */
 function copyFiles(logger, templatePath, module, action, tablePrefix, location) {
   logger.info(`Copying ${location} files…`);
 
@@ -94,6 +147,13 @@ function copyFiles(logger, templatePath, module, action, tablePrefix, location) 
 
     // add module to Feature function
     shell.ShellString(shell.cat('index.js').replace(RegExp(re, 'g'), `Feature(${module}, ${match[1]})`)).to('index.js');
+
+    if (action === 'addcrud' && location === 'client') {
+      const commonGraphqlFile = 'commonGraphql.js';
+      const commonGraphqlPath = `${__dirname}/../../packages/${location}/src/modules/common/components/web/${commonGraphqlFile}`;
+      const graphqlQuery = `${Module}Query`;
+      generateCommonGraphqlFile(module, commonGraphqlPath, graphqlQuery);
+    }
 
     if (action === 'addcrud' && location === 'server') {
       console.log('copy database files');
@@ -127,6 +187,8 @@ function deleteFiles(logger, templatePath, module, location) {
   const Module = pascalize(module);
 
   const modulePath = `${__dirname}/../../packages/${location}/src/modules/${module}`;
+  const commonGraphqlFile = 'commonGraphql.js';
+  const commonGraphqlPath = `${__dirname}/../../packages/${location}/src/modules/common/components/web/${commonGraphqlFile}`;
 
   if (fs.existsSync(modulePath)) {
     // remove module directory
@@ -183,6 +245,11 @@ function deleteFiles(logger, templatePath, module, location) {
     logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));
   } else {
     logger.info(chalk.red(`✘ Module ${location} location for ${modulePath} not found!`));
+  }
+
+  if (fs.existsSync(commonGraphqlPath)) {
+    const graphqlQuery = `${Module}Query`;
+    deleteModuleFromCommonGraphqlFile(module, commonGraphqlPath, graphqlQuery);
   }
 }
 

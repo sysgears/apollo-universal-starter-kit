@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Spin } from 'antd';
-import { pascalize, camelize } from 'humps';
+import { pascalize } from 'humps';
+import schemaQueries from '../../commonGraphql';
 
 const Option = Select.Option;
 export default class RenderCellSelectQuery extends React.Component {
@@ -21,7 +22,6 @@ export default class RenderCellSelectQuery extends React.Component {
   render() {
     const { value, schema, style, searchText, dirty } = this.props;
 
-    const camelizeSchemaName = camelize(schema.name);
     const pascalizeSchemaName = pascalize(schema.name);
     let column = 'name';
     let orderBy = null;
@@ -43,8 +43,8 @@ export default class RenderCellSelectQuery extends React.Component {
       value && value != '' && value != undefined
         ? { key: value.id.toString(), label: toString(value) }
         : { key: '', label: '' };
-    // eslint-disable-next-line import/no-dynamic-require
-    const Query = require(`../../../../../${camelizeSchemaName}/containers/${pascalizeSchemaName}Query`)['default'];
+
+    const Query = schemaQueries[`${pascalizeSchemaName}Query`];
 
     let defaultStyle = { width: '100%' };
     if (style) {

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { pascalize, camelize } from 'humps';
-
+import { pascalize } from 'humps';
 import { FormItem, Select } from './index';
+import schemaQueries from '../../commonGraphql';
 
 export default class RenderSelectQuery extends React.Component {
   static propTypes = {
@@ -68,7 +68,6 @@ export default class RenderSelectQuery extends React.Component {
       validateStatus = 'error';
     }
 
-    const camelizeSchemaName = camelize(schema.name);
     const pascalizeSchemaName = pascalize(schema.name);
     let orderBy = null;
     for (const remoteKey of schema.keys()) {
@@ -79,8 +78,8 @@ export default class RenderSelectQuery extends React.Component {
       }
     }
     let formatedValue = value && value != '' && typeof value !== 'undefined' ? value.id : '';
-    // eslint-disable-next-line import/no-dynamic-require
-    const Query = require(`../../../../../${camelizeSchemaName}/containers/${pascalizeSchemaName}Query`)['default'];
+
+    const Query = schemaQueries[`${pascalizeSchemaName}Query`];
 
     let defaultStyle = { width: '100%' };
     if (style) {

@@ -1,10 +1,10 @@
 /*eslint-disable no-unused-vars*/
 import { pick } from 'lodash';
 import Stripe from 'stripe';
+import i18n from 'i18next';
 
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
-import i18n from 'i18next';
 
 const stripe = Stripe(settings.subscription.stripeSecretKey);
 

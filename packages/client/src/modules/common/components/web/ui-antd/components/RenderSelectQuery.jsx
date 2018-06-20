@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Spin } from 'antd';
-import { pascalize, camelize } from 'humps';
-
+import { pascalize } from 'humps';
 import { FormItem } from './index';
+import schemaQueries from '../../commonGraphql';
 
 const Option = Select.Option;
 
@@ -30,9 +30,7 @@ export default class RenderSelectQuery extends React.Component {
       input: { name },
       setFieldValue
     } = this.props;
-    //console.log('RenderSelect: handleChange');
-    //console.log('name:', name);
-    //console.log('value:', value);
+
     setFieldValue(name, value ? { id: value.key, name: value.label } : undefined);
   };
 
@@ -46,7 +44,6 @@ export default class RenderSelectQuery extends React.Component {
 
   search = value => {
     const { dirty } = this.state;
-    //onsole.log('search:', value);
     if ((value && value.length >= 1) || dirty) {
       this.setState({ searchText: value, dirty: true });
     }
@@ -69,7 +66,6 @@ export default class RenderSelectQuery extends React.Component {
       validateStatus = 'error';
     }
 
-    const camelizeSchemaName = camelize(schema.name);
     const pascalizeSchemaName = pascalize(schema.name);
     let column = 'name';
     let orderBy = null;
@@ -91,11 +87,8 @@ export default class RenderSelectQuery extends React.Component {
       value && value != '' && value != undefined
         ? { key: value.id.toString(), label: toString(value) }
         : { key: '', label: '' };
-    //console.log('formatedValue:', formatedValue);
 
-    // eslint-disable-next-line import/no-dynamic-require
-    const Query = require(`../../../../../${camelizeSchemaName}/containers/${pascalizeSchemaName}Query`)['default'];
-    //console.log(`../../../../../${camelizeSchemaName}/containers/${pascalizeSchemaName}Query`);
+    const Query = schemaQueries[`${pascalizeSchemaName}Query`];
 
     let defaultStyle = { width: '100%' };
     if (style) {

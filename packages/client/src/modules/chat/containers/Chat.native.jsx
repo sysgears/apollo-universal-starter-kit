@@ -3,17 +3,33 @@ import PropTypes from 'prop-types';
 import { View, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
+import update from 'immutability-helper';
 
 import translate from '../../../i18n';
 import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
 import ADD_MESSAGE from '../graphql/AddMessage.graphql';
+import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
+
+function AddMessage(prev, node) {
+  // ignore if duplicate
+  if (prev.messages.some(message => node.id === message.id)) {
+    return prev;
+  }
+
+  return update(prev, {
+    messages: {
+      $set: [node, ...prev.messages]
+    }
+  });
+}
 
 @translate('chat')
 class Chat extends React.Component {
   static propTypes = {
     t: PropTypes.func,
     messages: PropTypes.array,
-    addMessage: PropTypes.func
+    addMessage: PropTypes.func,
+    subscribeToMore: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -24,6 +40,43 @@ class Chat extends React.Component {
     messages: [],
     userId: 1,
     message: ''
+  };
+
+  componentWillReceiveProps() {
+    // Check if props have changed and, if necessary, stop the subscription
+    if (this.subscription) {
+      this.subscription();
+      this.subscription = null;
+    } else {
+      // Subscribe or re-subscribe
+      this.subscribeToMessages();
+    }
+  }
+
+  subscribeToMessages = () => {
+    const { subscribeToMore } = this.props;
+
+    this.subscription = subscribeToMore({
+      document: MESSAGES_SUBSCRIPTION,
+
+      updateQuery: (
+        prev,
+        {
+          subscriptionData: {
+            data: {
+              messagesUpdated: { mutation, node }
+            }
+          }
+        }
+      ) => {
+        let newResult = prev;
+        if (mutation === 'CREATED') {
+          newResult = AddMessage(prev, node);
+        }
+
+        return newResult;
+      }
+    });
   };
 
   setMessageState = text => {
@@ -75,9 +128,9 @@ class Chat extends React.Component {
 export default compose(
   graphql(MESSAGES_QUERY, {
     props: ({ data }) => {
-      const { error, messages } = data;
+      const { error, messages, subscribeToMore } = data;
       if (error) throw new Error(error);
-      return { messages };
+      return { messages, subscribeToMore };
     }
   }),
   graphql(ADD_MESSAGE, {
@@ -85,11 +138,27 @@ export default compose(
       addMessage: async input => {
         mutate({
           variables: { input },
+          updateQueries: {
+            messages: (
+              prev,
+              {
+                mutationResult: {
+                  data: { addMessage }
+                }
+              }
+            ) => {
+              return AddMessage(prev, addMessage);
+            }
+          },
           optimisticResponse: {
             __typename: 'Mutation',
             addMessage: {
               __typename: 'Message',
-              text: input.text
+              text: input.text,
+              username: 'admin',
+              createdAt: new Date(),
+              userId: 1,
+              id: 1
             }
           }
         });

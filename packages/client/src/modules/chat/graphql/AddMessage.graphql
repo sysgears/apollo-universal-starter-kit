@@ -1,5 +1,7 @@
+#import "./Message.graphql"
+
 mutation addMessage($input: AddMessageInput!) {
   addMessage(input: $input) {
-    text
+    ...MessageInfo
   }
 }

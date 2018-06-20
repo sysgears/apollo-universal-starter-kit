@@ -62,16 +62,14 @@ export default pubsub => ({
           node: message
         }
       });
+
       // publish for edit post page
       pubsub.publish(MESSAGE_SUBSCRIPTION, { messagesUpdated: message });
       return message;
     }
   },
   Subscription: {
-    postUpdated: {
-      subscribe: () => pubsub.asyncIterator(MESSAGE_SUBSCRIPTION)
-    },
-    postsUpdated: {
+    messagesUpdated: {
       subscribe: () => pubsub.asyncIterator(MESSAGES_SUBSCRIPTION)
     }
   }

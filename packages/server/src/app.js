@@ -13,8 +13,6 @@ import errorMiddleware from './middleware/error';
 
 const app = express();
 
-app.use(cookiesMiddleware());
-
 for (const applyBeforeware of modules.beforewares) {
   applyBeforeware(app);
 }

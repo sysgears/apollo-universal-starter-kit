@@ -62,7 +62,6 @@ export default () => ({
     ) {
       try {
         const e = new FieldError();
-        console.log('T-FUNCTION', t);
         const userExists = await User.getUserByUsername(input.username);
         if (userExists) {
           e.setError('username', t('user:auth.password.usernameIsExisted'));

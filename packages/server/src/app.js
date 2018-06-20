@@ -19,6 +19,8 @@ for (const applyBeforeware of modules.beforewares) {
   applyBeforeware(app);
 }
 
+app.use(cookiesMiddleware());
+
 // Don't rate limit heroku
 app.enable('trust proxy');
 

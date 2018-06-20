@@ -82,7 +82,6 @@
     "graphql-tag": "^2.6.0",
     "graphql-tools": "^2.13.0",
     "humps": "^2.0.1",
-    "i18n": "^0.8.3",
     "i18next": "^11.3.3",
     "i18next-express-middleware": "^1.1.1",
     "isomorphic-fetch": "^2.2.1",

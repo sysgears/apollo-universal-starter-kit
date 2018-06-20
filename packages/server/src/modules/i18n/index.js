@@ -1,10 +1,11 @@
 import i18n from 'i18next';
+import * as i18nMiddleware from 'i18next-express-middleware';
 
 import Feature from '../connector';
 import settings from '../../../../../settings';
-import modules from '../../../../server/src/modules';
+import modules from '../../modules';
 
-const I18nProvider = () => {
+const addResourcesI18n = () => {
   for (const localization of modules.localizations) {
     for (const lang of Object.keys(localization.resources)) {
       i18n.addResourceBundle(
@@ -16,20 +17,23 @@ const I18nProvider = () => {
   }
 };
 
-const initMiddleware = async (req, res, next) => {
-  i18n.init({
+const initI18n = () => {
+  i18n.use(i18nMiddleware.LanguageDetector).init({
     fallbackLng: settings.i18n.fallbackLng,
     resources: {},
     debug: false, // set true to show logs
-    whitelist: settings.i18n.langList
+    whitelist: settings.i18n.langList,
+    preload: settings.i18n.langList,
+    detection: {
+      lookupCookie: settings.i18n.cookie
+    }
   });
-  I18nProvider();
-  i18n.changeLanguage(req.universalCookies.get(settings.i18n.cookie));
-  next();
+  addResourcesI18n();
 };
 
 export default new Feature({
   beforeware: app => {
-    app.use(initMiddleware);
+    initI18n();
+    app.use(i18nMiddleware.handle(i18n));
   }
 });

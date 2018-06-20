@@ -3,7 +3,6 @@ import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
-import i18n from 'i18next';
 
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
@@ -19,7 +18,7 @@ export default pubsub => ({
       () => {
         return ['user:view:self'];
       },
-      (obj, { id }, { user, User }) => {
+      (obj, { id }, { user, User, req: { t } }) => {
         if (user.id === id || user.role === 'admin') {
           try {
             return { user: User.getUser(id) };
@@ -29,7 +28,7 @@ export default pubsub => ({
         }
 
         const e = new FieldError();
-        e.setError('user', i18n.t('user:accessDenied'));
+        e.setError('user', t('user:accessDenied'));
         return { user: null, errors: e.getErrors() };
       }
     ),
@@ -69,22 +68,22 @@ export default pubsub => ({
       (obj, args, { User, user }) => {
         return user.id !== args.input.id ? ['user:create'] : ['user:create:self'];
       },
-      async (obj, { input }, { User, user, req: { universalCookies }, mailer, req }) => {
+      async (obj, { input }, { User, user, req: { universalCookies }, mailer, req, req: { t } }) => {
         try {
           const e = new FieldError();
 
           const userExists = await User.getUserByUsername(input.username);
           if (userExists) {
-            e.setError('username', i18n.t('user:usernameIsExisted'));
+            e.setError('username', t('user:usernameIsExisted'));
           }
 
           const emailExists = await User.getUserByEmail(input.email);
           if (emailExists) {
-            e.setError('email', i18n.t('user:emailIsExisted'));
+            e.setError('email', t('user:emailIsExisted'));
           }
 
           if (input.password.length < 8) {
-            e.setError('password', i18n.t('user:passwordLength'));
+            e.setError('password', t('user:passwordLength'));
           }
 
           e.throwIf();
@@ -134,7 +133,7 @@ export default pubsub => ({
       (obj, args, { User, user }) => {
         return user.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
-      async (obj, { input }, { User, user }) => {
+      async (obj, { input }, { User, user, req: { t } }) => {
         const isAdmin = () => user.role === 'admin';
         const isSelf = () => user.id === input.id;
         try {
@@ -142,16 +141,16 @@ export default pubsub => ({
           const userExists = await User.getUserByUsername(input.username);
 
           if (userExists && userExists.id !== input.id) {
-            e.setError('username', i18n.t('user:usernameIsExisted'));
+            e.setError('username', t('user:usernameIsExisted'));
           }
 
           const emailExists = await User.getUserByEmail(input.email);
           if (emailExists && emailExists.id !== input.id) {
-            e.setError('email', i18n.t('user:emailIsExisted'));
+            e.setError('email', t('user:emailIsExisted'));
           }
 
           if (input.password && input.password.length < 8) {
-            e.setError('password', i18n.t('user:passwordLength'));
+            e.setError('password', t('user:passwordLength'));
           }
 
           e.throwIf();
@@ -182,18 +181,18 @@ export default pubsub => ({
       (obj, args, { User, user }) => {
         return user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
       },
-      async (obj, { id }, { User }) => {
+      async (obj, { id }, { User, req: { t } }) => {
         try {
           const e = new FieldError();
           const user = await User.getUser(id);
           if (!user) {
-            e.setError('delete', i18n.t('user:userIsNotExisted'));
+            e.setError('delete', t('user:userIsNotExisted'));
 
             e.throwIf();
           }
 
           if (user.id === user.id) {
-            e.setError('delete', i18n.t('user:userCannotDeleteYourself'));
+            e.setError('delete', t('user:userCannotDeleteYourself'));
             e.throwIf();
           }
 
@@ -207,7 +206,7 @@ export default pubsub => ({
             });
             return { user };
           } else {
-            e.setError('delete', i18n.t('user:userCouldNotDeleted'));
+            e.setError('delete', t('user:userCouldNotDeleted'));
             e.throwIf();
           }
         } catch (e) {

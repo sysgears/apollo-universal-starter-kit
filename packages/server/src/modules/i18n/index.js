@@ -35,6 +35,12 @@ export default new Feature({
 
     if (settings.i18n.enabled) {
       initI18n(i18n, i18nMiddleware);
+      app.use((req, res, next) => {
+        const lang = req.universalCookies.get(settings.i18n.cookie) || req.acceptsLanguages(settings.i18n.langList);
+        req.universalCookies.set(settings.i18n.cookie, lang);
+        next();
+      });
+
       app.use(i18nMiddleware.handle(i18n));
     } else {
       app.use((req, res, next) => {

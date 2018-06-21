@@ -27,8 +27,6 @@ I18nProvider.propTypes = {
   children: PropTypes.node
 };
 
-const LANG_COOKIE = settings.i18n.cookie;
-
 i18n
   .use(LanguageDetector)
   .use(reactI18nextModule)
@@ -38,7 +36,7 @@ i18n
     debug: false, // set true to show logs
     whitelist: settings.i18n.langList,
     detection: {
-      lookupCookie: LANG_COOKIE,
+      lookupCookie: settings.i18n.cookie,
       caches: __SSR__ ? ['cookie'] : ['localStorage']
     },
     interpolation: {
@@ -64,9 +62,7 @@ class RootComponent extends React.Component {
     this.props = props;
 
     if (this.props.req) {
-      const lang =
-        this.props.req.universalCookies.get(LANG_COOKIE) || this.props.req.acceptsLanguages(settings.i18n.langList);
-      this.props.req.universalCookies.set(LANG_COOKIE, lang);
+      const lang = this.props.req.universalCookies.get(settings.i18n.cookie);
       i18n.changeLanguage(lang);
     }
   }

@@ -196,7 +196,7 @@ class ListView extends React.Component {
     }
   };
 
-  hendleUpdate = async (data, id) => {
+  handleUpdate = async (data, id) => {
     const { updateEntry } = this.props;
     this.setState({ wait: true, error: null, success: null });
     const result = await updateEntry({ data, where: { id } });
@@ -207,7 +207,7 @@ class ListView extends React.Component {
     }
   };
 
-  hendleDelete = async id => {
+  handleDelete = async id => {
     const { deleteEntry } = this.props;
     this.setState({ wait: true, error: null, success: null });
     const result = await deleteEntry({ where: { id } });
@@ -224,14 +224,14 @@ class ListView extends React.Component {
     };
   };
 
-  hendleDeleteMany = () => {
+  handleDeleteMany = () => {
     const { deleteManyEntries } = this.props;
     const { selectedRowKeys } = this.state;
     deleteManyEntries({ id_in: selectedRowKeys });
     this.setState({ selectedRowKeys: [] });
   };
 
-  hendleUpdateMany = values => {
+  handleUpdateMany = values => {
     const { updateManyEntries } = this.props;
     const { selectedRowKeys } = this.state;
     updateManyEntries(values, { id_in: selectedRowKeys });
@@ -329,7 +329,7 @@ class ListView extends React.Component {
           </Col>
           {showBatchFields && [
             <Col span={2} key="batchDelete" style={{ paddingTop: '3px' }}>
-              <Popconfirm title="Sure to delete?" onConfirm={this.hendleDeleteMany} target={'batch-delete-button'}>
+              <Popconfirm title="Sure to delete?" onConfirm={this.handleDeleteMany} target={'batch-delete-button'}>
                 <Button color="primary" disabled={!hasSelected} loading={loading && !data}>
                   Delete
                 </Button>
@@ -339,12 +339,7 @@ class ListView extends React.Component {
               <Formik
                 initialValues={mapFormPropsToValues({ schema })}
                 onSubmit={async (values, { resetForm }) => {
-                  //console.log('handleSubmit values:', values);
-
                   const insertValues = pickInputFields({ schema, values });
-                  //console.log('handleSubmit selectedRowKeys:', selectedRowKeys);
-                  //console.log('handleSubmit insertValues:', insertValues);
-
                   if (selectedRowKeys && Object.keys(insertValues).length > 0) {
                     await updateManyEntries(insertValues, { id_in: selectedRowKeys });
                     this.setState({ selectedRowKeys: [] });
@@ -382,8 +377,8 @@ class ListView extends React.Component {
       currentUser,
       orderBy: this.orderBy,
       renderOrderByArrow: this.renderOrderByArrow,
-      hendleUpdate: this.hendleUpdate,
-      hendleDelete: this.hendleDelete,
+      handleUpdate: this.handleUpdate,
+      handleDelete: this.handleDelete,
       onCellChange: this.onCellChange,
       customFields: customColumnFields,
       customActions: customColumnActions

@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import type { DocumentNode } from 'graphql';
-import type { $Request, $Response, Middleware } from 'express';
+import type { Middleware, $Request, $Response } from 'express';
 
-import { castArray, map, merge, union, without } from 'lodash';
+import { merge, map, union, without, castArray } from 'lodash';
 
 export const featureCatalog = {};
 

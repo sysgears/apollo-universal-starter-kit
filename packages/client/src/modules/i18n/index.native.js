@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import i18n from 'i18next';
 import { DangerZone } from 'expo';
-import { I18nextProvider, reactI18nextModule } from 'react-i18next';
+import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
 import { getItem, setItem } from '../common/clientStorage';
 import { LanguagePicker, Root } from '../../modules/common/components/native';

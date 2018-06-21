@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import { I18nextProvider, reactI18nextModule } from 'react-i18next';
+import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
 import Feature from '../connector';
-import { LanguagePicker, MenuItem } from '../../modules/common/components/web';
+import { MenuItem, LanguagePicker } from '../../modules/common/components/web';
 import modules from '../';
 import settings from '../../../../../settings';
 

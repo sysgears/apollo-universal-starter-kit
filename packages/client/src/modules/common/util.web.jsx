@@ -38,37 +38,37 @@ export const createColumnFields = ({
   currentUser,
   orderBy,
   renderOrderByArrow,
-  hendleUpdate,
-  hendleDelete,
+  handleUpdate,
+  handleDelete,
   onCellChange,
   customFields = {},
   customActions
 }) => {
   let columns = [];
-  // use customFields if definded otherwise use schema.keys()
+
   const keys =
     customFields.constructor === Object && Object.keys(customFields).length !== 0
       ? Object.keys(customFields)
       : schema.keys();
 
   for (const key of keys) {
-    //console.log('customFields, key: ', customFields[key]);
     const role = customFields && customFields[key] && customFields[key].role ? customFields[key].role : false;
-    //console.log('customFields, role: ', role);
+
     const hasRole =
       currentUser && (!role || (Array.isArray(role) ? role : [role]).indexOf(currentUser.role) >= 0) ? true : false;
-    //console.log('customFields, hasRole: ', hasRole);
 
     if (schema.values[key]) {
       const value = schema.values[key];
       const hasTypeOf = targetType =>
         value.type === targetType || value.type.prototype instanceof targetType || value.type instanceof targetType;
-      //console.log(key);
-      //console.log(hasTypeOf(DomainSchema));
+      const title = (
+        <a onClick={e => orderBy(e, key)} href="#">
+          {startCase(key)} {renderOrderByArrow(key)}
+        </a>
+      );
+
       if (hasRole && value.show !== false && (key !== 'id' || customFields['id'])) {
         if (value.type.isSchema) {
-          //console.log(value.type);
-
           let column = 'name';
           for (const remoteKey of value.type.keys()) {
             const remoteValue = value.type.values[remoteKey];
@@ -77,117 +77,100 @@ export const createColumnFields = ({
             }
           }
           const toString = value.type.__.__toString ? value.type.__.__toString : opt => opt[column];
-          columns.push({
-            title: (
-              <a onClick={e => orderBy(e, key)} href="#">
-                {startCase(key)} {renderOrderByArrow(key)}
-              </a>
-            ),
-            dataIndex: key,
-            key: key,
-            fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
-            width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
-            align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
-            render: (text, record) =>
-              customFields[key] && customFields[key]['render'] ? (
-                customFields[key]['render'](text, record)
-              ) : (
-                <EditableCell
-                  value={text}
-                  hasTypeOf={hasTypeOf}
-                  schema={value.type}
-                  record={record}
-                  role={customFields[key] && customFields[key]['editRole'] ? customFields[key]['editRole'] : null}
-                  currentUser={currentUser}
-                  render={
-                    customFields[key] && customFields[key]['render']
-                      ? customFields[key]['render']
-                      : text => (text && text[column] ? toString(text) : '')
-                  }
-                  onChange={onCellChange(`${key}Id`, record.id, hendleUpdate)}
-                />
-              )
-          });
+
+          columns.push(
+            createColumnField(
+              key,
+              customFields,
+              (text, record) =>
+                customFields[key] && customFields[key]['render'] ? (
+                  customFields[key]['render'](text, record)
+                ) : (
+                  <EditableCell
+                    value={text}
+                    hasTypeOf={hasTypeOf}
+                    schema={value.type}
+                    record={record}
+                    role={customFields[key] && customFields[key]['editRole'] ? customFields[key]['editRole'] : null}
+                    currentUser={currentUser}
+                    render={
+                      customFields[key] && customFields[key]['render']
+                        ? customFields[key]['render']
+                        : text => (text && text[column] ? toString(text) : '')
+                    }
+                    onChange={onCellChange(`${key}Id`, record.id, handleUpdate)}
+                  />
+                ),
+              title
+            )
+          );
         } else if (hasTypeOf(Boolean)) {
-          columns.push({
-            title: (
-              <a onClick={e => orderBy(e, key)} href="#">
-                {startCase(key)} {renderOrderByArrow(key)}
-              </a>
-            ),
-            dataIndex: key,
-            key: key,
-            fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
-            width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
-            align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
-            render: (text, record) => {
-              const data = {};
-              data[key] = !text;
-              return <Switch checked={text} onClick={() => hendleUpdate(data, record.id)} onChange={() => {}} />;
-            }
-          });
+          columns.push(
+            createColumnField(
+              key,
+              customFields,
+              (text, record) => {
+                const data = {};
+                data[key] = !text;
+                return <Switch checked={text} onClick={() => handleUpdate(data, record.id)} onChange={() => {}} />;
+              },
+              title
+            )
+          );
         } else if ((hasTypeOf(String) || hasTypeOf(Number) || hasTypeOf(Date)) && key !== 'id') {
-          columns.push({
-            title: (
-              <a onClick={e => orderBy(e, key)} href="#">
-                {startCase(key)} {renderOrderByArrow(key)}
-              </a>
-            ),
-            dataIndex: key,
-            key: key,
-            fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
-            width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
-            align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
-            render: (text, record) => {
-              let formatedText = text => text;
-              if (value.fieldInput === 'price') {
-                formatedText = text => (text > 0 ? `${round(text, 2).toFixed(2)} €` : '');
-              }
-              return (
-                <EditableCell
-                  value={text}
-                  hasTypeOf={hasTypeOf}
-                  role={customFields[key] && customFields[key]['editRole'] ? customFields[key]['editRole'] : null}
-                  currentUser={currentUser}
-                  render={customFields[key] && customFields[key]['render'] ? customFields[key]['render'] : formatedText}
-                  onChange={onCellChange(key, record.id, hendleUpdate)}
-                />
-              );
-            }
-          });
+          columns.push(
+            createColumnField(
+              key,
+              customFields,
+              (text, record) => {
+                let formatedText = text => text;
+                if (value.fieldInput === 'price') {
+                  formatedText = text => (text > 0 ? `${round(text, 2).toFixed(2)} €` : '');
+                }
+                return (
+                  <EditableCell
+                    value={text}
+                    hasTypeOf={hasTypeOf}
+                    role={customFields[key] && customFields[key]['editRole'] ? customFields[key]['editRole'] : null}
+                    currentUser={currentUser}
+                    render={
+                      customFields[key] && customFields[key]['render'] ? customFields[key]['render'] : formatedText
+                    }
+                    onChange={onCellChange(key, record.id, handleUpdate)}
+                  />
+                );
+              },
+              title
+            )
+          );
         } else if (value.type.constructor !== Array) {
-          columns.push({
-            title: (
-              <a onClick={e => orderBy(e, key)} href="#">
-                {startCase(key)} {renderOrderByArrow(key)}
-              </a>
-            ),
-            dataIndex: key,
-            key: key,
-            fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
-            width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
-            align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
-            render: (text, record) =>
-              customFields[key] && customFields[key]['render']
-                ? customFields[key]['render'](text, record)
-                : customFields[key] && customFields[key]['render']
+          columns.push(
+            createColumnField(
+              key,
+              customFields,
+              (text, record) => {
+                return customFields[key] && customFields[key]['render']
                   ? customFields[key]['render'](text, record)
-                  : text
-          });
+                  : customFields[key] && customFields[key]['render']
+                    ? customFields[key]['render'](text, record)
+                    : text;
+              },
+              title
+            )
+          );
         }
       }
     } else {
       if (hasRole) {
-        columns.push({
-          title: startCase(key),
-          dataIndex: key,
-          key: key,
-          fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
-          width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
-          align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
-          render: (text, record) =>
-            customFields[key] && customFields[key]['render'] ? customFields[key]['render'](text, record) : null
-        });
+        columns.push(
+          createColumnField(
+            key,
+            customFields,
+            (text, record) =>
+              customFields[key] && customFields[key]['render'] ? customFields[key]['render'](text, record) : null,
+            startCase(key)
+          )
+        );
       }
     }
   }
@@ -196,9 +179,7 @@ export const createColumnFields = ({
     customActions === null
       ? false
       : customActions && customActions.role
-        ? hasRole(customActions.role, currentUser)
-          ? true
-          : false
+        ? !!hasRole(customActions.role, currentUser)
         : true;
 
   if (showColumnActions) {
@@ -217,7 +198,7 @@ export const createColumnFields = ({
             </Link>
             <Popconfirm
               title="Sure to delete?"
-              onConfirm={() => hendleDelete(record.id)}
+              onConfirm={() => handleDelete(record.id)}
               key="delete"
               target={`delete-button-${record.id}`}
               className={'bootstrap-cell-delete-button'}
@@ -232,6 +213,18 @@ export const createColumnFields = ({
     });
   }
   return columns;
+};
+
+const createColumnField = (key, customFields, render, title) => {
+  return {
+    title: title,
+    dataIndex: key,
+    key: key,
+    fixed: customFields[key] && customFields[key]['fixed'] ? customFields[key]['fixed'] : null,
+    width: customFields[key] && customFields[key]['width'] ? customFields[key]['width'] : null,
+    align: customFields[key] && customFields[key]['align'] ? customFields[key]['align'] : null,
+    render: render
+  };
 };
 
 const tailFormItemLayout = {
@@ -407,11 +400,6 @@ export const createFormFields = ({
       }
     } else {
       if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
-        //let validate = [];
-        //if (!value.optional && !batch) {
-        //  validate.push(required);
-        //}
-
         let component = RenderInput;
         const fieldValue = values ? values[key] : '';
         let style = {};

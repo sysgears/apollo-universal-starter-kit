@@ -1,3 +1,4 @@
+import cookies from './cookies';
 import i18n from './i18n';
 import counter from './counter';
 import post from './post';
@@ -13,6 +14,7 @@ import './debug';
 import Feature from './connector';
 
 export default new Feature(
+  cookies,
   i18n,
   counter,
   post,

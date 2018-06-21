@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
-import cookiesMiddleware from 'universal-cookie-express';
 
 import { isApiExternal } from './net';
 import modules from './modules';
@@ -16,8 +15,6 @@ const app = express();
 for (const applyBeforeware of modules.beforewares) {
   applyBeforeware(app);
 }
-
-app.use(cookiesMiddleware());
 
 // Don't rate limit heroku
 app.enable('trust proxy');

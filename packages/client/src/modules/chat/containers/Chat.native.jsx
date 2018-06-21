@@ -9,6 +9,7 @@ import translate from '../../../i18n';
 import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
 import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
+import { withUser } from '../../user/containers/AuthBase';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
@@ -24,12 +25,14 @@ function AddMessage(prev, node) {
 }
 
 @translate('chat')
+@withUser
 class Chat extends React.Component {
   static propTypes = {
     t: PropTypes.func,
     messages: PropTypes.array,
     addMessage: PropTypes.func,
-    subscribeToMore: PropTypes.func.isRequired
+    subscribeToMore: PropTypes.func.isRequired,
+    currentUser: PropTypes.object
   };
 
   constructor(props) {
@@ -84,8 +87,17 @@ class Chat extends React.Component {
   };
 
   onSend = (messages = [], addMessage) => {
+    const {
+      text,
+      user: { _id: userId, name: username },
+      _id: id
+    } = messages[0];
+
     addMessage({
-      text: messages[0].text
+      text,
+      username,
+      userId,
+      id
     });
 
     this.setState(previousState => ({
@@ -94,15 +106,17 @@ class Chat extends React.Component {
   };
 
   render() {
-    const { message, userId } = this.state;
-    const { messages = [] } = this.props;
+    const { message } = this.state;
+    const { messages = [], currentUser } = this.props;
+    const defaultUser = { id: 0, username: 'Anonymous' };
+    const { id, username } = currentUser ? currentUser : defaultUser;
     const formatMessages = messages.map(item => {
       return {
         _id: item.id,
         text: item.text,
         createdAt: item.createdAt,
         user: {
-          _id: item.userId,
+          _id: item.userId ? item.userId : 0,
           name: item.username ? item.username : 'Anonymous'
         }
       };
@@ -117,7 +131,7 @@ class Chat extends React.Component {
           keyboardShouldPersistTaps="never"
           messages={formatMessages}
           onSend={messages => this.onSend(messages, this.props.addMessage)}
-          user={{ _id: userId, name: 'Sergey' }}
+          user={{ _id: id, name: username }}
         />
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />
       </View>
@@ -137,7 +151,7 @@ export default compose(
     props: ({ mutate }) => ({
       addMessage: async input => {
         mutate({
-          variables: { input },
+          variables: { input: { text: input.text } },
           updateQueries: {
             messages: (
               prev,
@@ -155,10 +169,10 @@ export default compose(
             addMessage: {
               __typename: 'Message',
               text: input.text,
-              username: 'admin',
+              username: input.username,
               createdAt: new Date(),
-              userId: 1,
-              id: 1
+              userId: input.userId,
+              id: input.id
             }
           }
         });

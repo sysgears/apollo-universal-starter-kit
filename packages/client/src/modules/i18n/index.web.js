@@ -27,7 +27,7 @@ I18nProvider.propTypes = {
   children: PropTypes.node
 };
 
-const LANG_COOKIE = 'lang';
+const LANG_COOKIE = settings.i18n.cookie;
 
 i18n
   .use(LanguageDetector)

@@ -6,7 +6,9 @@
     "node": ">= 6.11.1",
     "yarn": ">= 1.0.0"
   },
-  "cacheDirectories": [".cache"],
+  "cacheDirectories": [
+    ".cache"
+  ],
   "scripts": {
     "build": "lerna run build --stream",
     "clean": "lerna run clean --stream",
@@ -26,9 +28,18 @@
     "postinstall": "opencollective postinstall"
   },
   "lint-staged": {
-    "*.{js,jsx,json}": ["eslint --fix", "git add"],
-    "*.{ts,tsx}": ["tslint --fix", "git add"],
-    "*.graphql": ["prettier --parser graphql --write", "git add"]
+    "*.{js,jsx,json}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "tslint --fix",
+      "git add"
+    ],
+    "*.graphql": [
+      "prettier --parser graphql --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -38,12 +49,23 @@
     "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
-  "keywords": ["apollo", "universal", "starter", "graphql", "react", "redux"],
+  "keywords": [
+    "apollo",
+    "universal",
+    "starter",
+    "graphql",
+    "react",
+    "redux"
+  ],
   "author": "SysGears INC",
   "license": "MIT",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "greenkeeper": {
-    "ignore": ["graphql"]
+    "ignore": [
+      "graphql"
+    ]
   },
   "collective": {
     "type": "opencollective",

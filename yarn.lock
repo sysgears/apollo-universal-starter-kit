@@ -11,6 +11,15 @@
     loader-utils "^1.1.0"
     lodash "^4.17.5"
 
+"@alienfast/i18next-loader@^1.0.15":
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/@alienfast/i18next-loader/-/i18next-loader-1.0.16.tgz#218e9736c94457d36bdae68a5085ed68434c9bbf"
+  dependencies:
+    glob-all "^3.1.0"
+    js-yaml "^3.11.0"
+    loader-utils "^1.1.0"
+    lodash "^4.17.10"
+
 "@babel/code-frame@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.0.0-beta.44.tgz#2a02643368de80916162be70865c97774f3adbd9"
@@ -4101,6 +4110,13 @@ cookiejar@^2.1.0, cookiejar@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.1.tgz#41ad57b1b555951ec171412a81942b1e8200d34a"
 
+cookies@0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/cookies/-/cookies-0.7.1.tgz#7c8a615f5481c61ab9f16c833731bcb8f663b99b"
+  dependencies:
+    depd "~1.1.1"
+    keygrip "~1.0.2"
+
 copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
@@ -6814,9 +6830,19 @@ i18next-browser-languagedetector@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/i18next-browser-languagedetector/-/i18next-browser-languagedetector-2.2.0.tgz#5f41abe61964a56dce70102ab31c3ed5d5866edc"
 
+i18next-express-middleware@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/i18next-express-middleware/-/i18next-express-middleware-1.1.1.tgz#9204f28c8800ac3bff87fbee01945367956f349c"
+  dependencies:
+    cookies "0.7.1"
+
 i18next@^11.2.3:
   version "11.2.3"
   resolved "https://registry.yarnpkg.com/i18next/-/i18next-11.2.3.tgz#cc29400460ede53ecc0a3a399e3497e82a1d830e"
+
+i18next@^11.3.3:
+  version "11.3.3"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-11.3.3.tgz#a6ca3c2a93237c94e242bda7df3411588ac37ea1"
 
 iconv-lite@0.4.19:
   version "0.4.19"
@@ -7474,7 +7500,11 @@ items@2.x.x:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/items/-/items-2.1.1.tgz#8bd16d9c83b19529de5aea321acaada78364a198"
 
-iterall@1.1.x, iterall@^1.1.3, iterall@^1.2.1, iterall@^1.2.2:
+iterall@1.1.x:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.4.tgz#0db40d38fdcf53ae14dc8ec674e62ab190d52cfc"
+
+iterall@^1.1.3, iterall@^1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
 
@@ -7885,6 +7915,10 @@ jws@^3.1.4:
 jwt-decode@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-2.2.0.tgz#7d86bd56679f58ce6a84704a657dd392bba81a79"
+
+keygrip@~1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/keygrip/-/keygrip-1.0.2.tgz#ad3297c557069dea8bcfe7a4fa491b75c5ddeb91"
 
 killable@^1.0.0:
   version "1.0.0"
@@ -8465,7 +8499,7 @@ lodash@4.17.5:
   version "4.17.5"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
 
-"lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.10.1, lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.14.1, lodash@^4.16.5, lodash@^4.16.6, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1, lodash@~4.17.4:
+"lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.10.1, lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.14.1, lodash@^4.16.5, lodash@^4.16.6, lodash@^4.17.10, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1, lodash@~4.17.4:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 

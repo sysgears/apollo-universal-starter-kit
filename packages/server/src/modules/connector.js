@@ -5,14 +5,15 @@ import type { Middleware, $Request, $Response } from 'express';
 
 import { merge, map, union, without, castArray } from 'lodash';
 
-import log from '../../../common/log';
-
 export const featureCatalog = {};
 
 const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
 
 class Feature {
-  constructor({ schema, createResolversFunc, createContextFunc, beforeware, middleware, catalogInfo }, ...features) {
+  constructor(
+    { schema, createResolversFunc, createContextFunc, beforeware, middleware, catalogInfo, localization },
+    ...features
+  ) {
     combine(arguments, arg => arg.catalogInfo).forEach(info =>
       Object.keys(info).forEach(key => (featureCatalog[key] = info[key]))
     );
@@ -21,6 +22,8 @@ class Feature {
     this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
     this.beforeware = combine(arguments, arg => arg.beforeware);
     this.middleware = combine(arguments, arg => arg.middleware);
+    // Localization
+    this.localization = combine(arguments, arg => arg.localization);
   }
 
   get schemas() {
@@ -45,6 +48,10 @@ class Feature {
 
   get middlewares() {
     return this.middleware;
+  }
+
+  get localizations() {
+    return this.localization;
   }
 }
 

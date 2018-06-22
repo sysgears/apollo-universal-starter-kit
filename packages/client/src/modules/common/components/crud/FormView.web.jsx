@@ -37,7 +37,6 @@ const FormView = ({ schema, updateEntry, createEntry, title, customFields, data 
       initialValues={mapFormPropsToValues({ schema, data: data ? data.node : null })}
       validate={values => DomainValidation.validate(values, schema)}
       onSubmit={async values => {
-        //console.log('onSubmit, values:', pickInputFields({schema, values}));
         await onSubmit({ schema, values, updateEntry, createEntry, title, data: data ? data.node : null });
       }}
       render={({ values, handleChange, handleBlur, handleSubmit }) => (
@@ -50,7 +49,6 @@ const FormView = ({ schema, updateEntry, createEntry, title, customFields, data 
             formItemLayout,
             customFields
           })}
-          {/*errors && <Alert color="error">{errors}</Alert>*/}
           <FormItem {...tailFormItemLayout}>
             <Button color="primary" type="submit">
               Save

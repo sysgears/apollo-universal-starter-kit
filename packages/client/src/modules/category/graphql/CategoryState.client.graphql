@@ -9,6 +9,7 @@ fragment CategoryStateInfo on CategoryState {
     name
     parentId
     products
+    subCategories
     searchText
   }
 }

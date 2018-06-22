@@ -80,7 +80,8 @@ export class Product extends Schema {
   };
   category = {
     type: Category,
-    external: true
+    external: true,
+    optional: true
   };
   productType = {
     type: ProductType,

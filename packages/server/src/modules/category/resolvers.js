@@ -19,6 +19,9 @@ export default pubsub => ({
   Category: {
     products: createBatchResolver((sources, args, ctx, info) => {
       return ctx.Category.getByIds(sources.map(({ id }) => id), 'category', ctx.Product, info);
+    }),
+    subCategories: createBatchResolver((sources, args, ctx, info) => {
+      return ctx.Category.getByIds(sources.map(({ id }) => id), 'category', ctx.SubCategory, info);
     })
   },
   // end schema batch resolvers

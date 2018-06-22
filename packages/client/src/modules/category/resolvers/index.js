@@ -12,6 +12,7 @@ const defaultFilters = {
   name: '',
   parentId: '',
   products: '',
+  subCategories: '',
   searchText: ''
 };
 // end filter data

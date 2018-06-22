@@ -4,6 +4,7 @@ type Category {
   name: String!
   parent: Category
   products: [Product]
+  subCategories: [SubCategory]
 }
 
 input ProductsCreateManyInput {
@@ -19,6 +20,21 @@ input ProductsUpdateManyInput {
 input ProductUpdateWhereInput {
   where: ProductWhereUniqueInput!
   data: ProductUpdateInput!
+}
+
+input SubCategoriesCreateManyInput {
+  create: [SubCategoryCreateInput!]
+}
+
+input SubCategoriesUpdateManyInput {
+  create: [SubCategoryCreateInput!]
+  delete: [SubCategoryWhereUniqueInput!]
+  update: [SubCategoryUpdateWhereInput!]
+}
+
+input SubCategoryUpdateWhereInput {
+  where: SubCategoryWhereUniqueInput!
+  data: SubCategoryUpdateInput!
 }
 
 ### end schema type definitions
@@ -48,12 +64,14 @@ input CategoryCreateInput {
   name: String!
   parentId: Int
   products: ProductsCreateManyInput
+  subCategories: SubCategoriesCreateManyInput
 }
 
 input CategoryUpdateInput {
   name: String
   parentId: Int
   products: ProductsUpdateManyInput
+  subCategories: SubCategoriesUpdateManyInput
 }
 
 input CategoryWhereUniqueInput {

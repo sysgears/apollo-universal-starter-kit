@@ -1,17 +1,30 @@
 fragment CategoryInfo on Category {
   id
   name
+  parent {
+    id
+    name
+  }
   products {
     id
     name
-    price
-    releaseDate
-    display
     category {
       id
       name
     }
     productType {
+      id
+      name
+    }
+    price
+    releaseDate
+    display
+  }
+  subCategories {
+    id
+    name
+    description
+    category {
       id
       name
     }

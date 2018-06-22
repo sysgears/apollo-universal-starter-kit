@@ -227,19 +227,6 @@ const createColumnField = (key, customFields, render, title) => {
   };
 };
 
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0
-    },
-    sm: {
-      span: 16,
-      offset: 6
-    }
-  }
-};
-
 export const createFormFields = ({
   handleChange,
   handleBlur,
@@ -260,234 +247,173 @@ export const createFormFields = ({
   for (const key of keys) {
     const value = schema.values[key];
     const type = value.type.constructor === Array ? value.type[0] : value.type;
-
     const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
 
-    if (formType === 'filter') {
-      if (value.show !== false && value.type.constructor !== Array) {
-        //let validate = [];
-        //if (!value.optional && !batch) {
-        //  validate.push(required);
-        //}
-
-        let component = RenderInput;
-        const value = values ? values[key] : '';
-        let style = {};
-        let inputType = 'text';
-
-        if (type.isSchema) {
-          component = RenderSelectQuery;
-          if (formType !== 'form') {
-            style = { width: 100 };
-          }
-          fields.push(
-            <Col span={8} key={key}>
-              <Field
-                name={`${prefix}${key}`}
-                key={key}
-                component={component}
-                schema={type}
-                value={value}
-                type={inputType}
-                style={style}
-                label={startCase(key)}
-                //validate={validate}
-                formItemLayout={formItemLayout}
-                formType={formType}
-                hasTypeOf={hasTypeOf}
-              />
-            </Col>
-          );
-        } else if (hasTypeOf(Boolean)) {
-          component = RenderSwitch;
-          fields.push(
-            <Col span={8} key={key}>
-              <Field
-                name={`${prefix}${key}`}
-                key={key}
-                component={component}
-                schema={type}
-                value={value}
-                type={inputType}
-                style={style}
-                label={startCase(key)}
-                //validate={validate}
-                formItemLayout={formItemLayout}
-                formType={formType}
-                hasTypeOf={hasTypeOf}
-              />
-            </Col>
-          );
-        } else if (hasTypeOf(Date)) {
-          component = RenderDate;
-          fields.push(
-            <Col span={8} key={`${key}_lte`}>
-              <Field
-                name={`${prefix}${key}_lte`}
-                key={`${key}_lte`}
-                component={component}
-                schema={type}
-                value={values[`${key}_lte`] ? values[`${key}_lte`] : ''}
-                type={inputType}
-                style={style}
-                label={`From ${startCase(key)}`}
-                //validate={validate}
-                formItemLayout={formItemLayout}
-                formType={formType}
-                hasTypeOf={hasTypeOf}
-              />
-            </Col>
-          );
-          fields.push(
-            <Col span={8} key={`${key}_gte`}>
-              <Field
-                name={`${prefix}${key}_gte`}
-                key={`${key}_gte`}
-                component={component}
-                schema={type}
-                value={values[`${key}_gte`] ? values[`${key}_gte`] : ''}
-                type={inputType}
-                style={style}
-                label={`To ${startCase(key)}`}
-                //validate={validate}
-                formItemLayout={formItemLayout}
-                formType={formType}
-                hasTypeOf={hasTypeOf}
-              />
-            </Col>
-          );
-        } else if (hasTypeOf(Number)) {
-          inputType = 'number';
-          component = RenderNumber;
-          fields.push(
-            <Col span={8} key={key}>
-              <Field
-                name={`${prefix}${key}`}
-                key={key}
-                component={component}
-                schema={type}
-                value={value}
-                type={inputType}
-                style={style}
-                label={startCase(key)}
-                //validate={validate}
-                formItemLayout={formItemLayout}
-                formType={formType}
-                hasTypeOf={hasTypeOf}
-              />
-            </Col>
-          );
+    if (value.show !== false && value.type.constructor !== Array) {
+      let formField = createFormField(key, type, values, formItemLayout, formType, hasTypeOf, prefix);
+      if (formField) {
+        if (Array.isArray(formField)) {
+          formField.forEach(field => fields.push(field));
         } else {
-          fields.push(
-            <Col span={8} key={key}>
-              <Field
-                name={`${prefix}${key}`}
-                key={key}
-                component={component}
-                schema={type}
-                value={value}
-                type={inputType}
-                style={style}
-                label={startCase(key)}
-                //validate={validate}
-                formItemLayout={formItemLayout}
-                formType={formType}
-                hasTypeOf={hasTypeOf}
-              />
-            </Col>
-          );
+          fields.push(formField);
         }
       }
     } else {
-      if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
-        let component = RenderInput;
-        const fieldValue = values ? values[key] : '';
-        let style = {};
-        let inputType = 'text';
-
-        if (type.isSchema) {
-          component = RenderSelectQuery;
-          if (formType !== 'form') {
-            style = { width: 100 };
-          }
-        } else if (hasTypeOf(Boolean)) {
-          component = RenderSwitch;
-        } else if (hasTypeOf(Date)) {
-          component = RenderDate;
-        } else if (hasTypeOf(Number)) {
-          inputType = 'number';
-          component = RenderNumber;
-        } else if (hasTypeOf(String) && value.fieldInput === 'textarea') {
-          component = RenderTextArea;
-        } else if (hasTypeOf(String) && value.fieldInput === 'country') {
-          component = RenderSelectCountry;
-        }
-
-        fields.push(
-          <Field
-            name={`${prefix}${key}`}
-            key={key}
-            component={component}
-            schema={type}
-            value={fieldValue}
-            type={inputType}
-            style={style}
-            label={startCase(key)}
-            //validate={validate}
-            formItemLayout={formItemLayout}
-            formType={formType}
-            hasTypeOf={hasTypeOf}
-          />
-        );
-      } else {
-        if (value.type.constructor === Array && formType === 'form') {
-          if (values[key]) {
-            fields.push(
-              <FieldArray
-                name={key}
-                key={key}
-                render={({ push, remove }) => {
-                  return (
-                    <FormItem {...formItemLayout} label={startCase(key)}>
-                      {values[key].map((field, index) => (
-                        <div key={index} className="field-array-form">
-                          {createFormFields({
-                            handleChange,
-                            handleBlur,
-                            schema: value.type[0],
-                            values: mapFormPropsToValues({ schema: value.type[0], data: field }),
-                            formItemLayout: formItemLayout,
-                            prefix: `${key}[${index}].`
-                          })}
-                          {!value.hasOne && (
-                            <FormItem {...tailFormItemLayout}>
-                              <Button color="primary" size="sm" onClick={() => remove(index)}>
-                                Delete
-                              </Button>
-                            </FormItem>
-                          )}
-                        </div>
-                      ))}
-                      {!value.hasOne && (
-                        <FormItem {...tailFormItemLayout}>
-                          {/*submitFailed && error && <span>{error}</span>*/}
-                          <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
-                            Add field
-                          </Button>
-                        </FormItem>
-                      )}
-                    </FormItem>
-                  );
-                }}
-              />
-            );
-          }
+      if (value.type.constructor === Array && formType === 'form') {
+        if (values[key]) {
+          fields.push(createFormFieldsArray(key, values, value, type, handleChange, handleBlur, formItemLayout));
         }
       }
     }
   }
 
   return fields;
+};
+
+const createFormField = (key, type, values, formItemLayout, formType, hasTypeOf, prefix) => {
+  let component = RenderInput;
+  const value = values ? values[key] : '';
+  let style = {};
+  let dateFields = [];
+  let inputType = 'text';
+
+  if (key === 'id' && formType !== 'filter') {
+    return false;
+  }
+
+  if (type.isSchema) {
+    component = RenderSelectQuery;
+    if (formType !== 'form') {
+      style = { width: 100 };
+    }
+  } else if (hasTypeOf(Boolean)) {
+    component = RenderSwitch;
+  } else if (hasTypeOf(Date)) {
+    component = RenderDate;
+    if (formType === 'filter') {
+      dateFields.push(
+        <Col span={8} key={`${key}_lte`}>
+          <Field
+            name={`${prefix}${key}_lte`}
+            key={`${key}_lte`}
+            component={component}
+            schema={type}
+            value={values[`${key}_lte`] ? values[`${key}_lte`] : ''}
+            type={inputType}
+            style={style}
+            label={`From ${startCase(key)}`}
+            formItemLayout={formItemLayout}
+            formType={formType}
+            hasTypeOf={hasTypeOf}
+          />
+        </Col>
+      );
+      dateFields.push(
+        <Col span={8} key={`${key}_gte`}>
+          <Field
+            name={`${prefix}${key}_gte`}
+            key={`${key}_gte`}
+            component={component}
+            schema={type}
+            value={values[`${key}_gte`] ? values[`${key}_gte`] : ''}
+            type={inputType}
+            style={style}
+            label={`To ${startCase(key)}`}
+            formItemLayout={formItemLayout}
+            formType={formType}
+            hasTypeOf={hasTypeOf}
+          />
+        </Col>
+      );
+    }
+  } else if (hasTypeOf(Number)) {
+    inputType = 'number';
+    component = RenderNumber;
+  } else if (hasTypeOf(String) && value.fieldInput === 'textarea' && formType !== 'filter') {
+    component = RenderTextArea;
+  } else if (hasTypeOf(String) && value.fieldInput === 'country' && formType !== 'filter') {
+    component = RenderSelectCountry;
+  }
+
+  let field = (
+    <Field
+      name={`${prefix}${key}`}
+      key={key}
+      component={component}
+      schema={type}
+      value={value}
+      type={inputType}
+      style={style}
+      label={startCase(key)}
+      formItemLayout={formItemLayout}
+      formType={formType}
+      hasTypeOf={hasTypeOf}
+    />
+  );
+
+  return dateFields.length === 2 ? (
+    dateFields
+  ) : formType === 'filter' ? (
+    <Col span={8} key={key}>
+      {field}
+    </Col>
+  ) : (
+    field
+  );
+};
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0
+    },
+    sm: {
+      span: 16,
+      offset: 6
+    }
+  }
+};
+
+const createFormFieldsArray = (key, values, value, type, handleChange, handleBlur, formItemLayout) => {
+  return (
+    <FieldArray
+      name={key}
+      key={key}
+      render={({ push, remove }) => {
+        return (
+          <FormItem {...formItemLayout} label={startCase(key)}>
+            {values[key].map((field, index) => (
+              <div key={index} className="field-array-form">
+                {createFormFields({
+                  handleChange,
+                  handleBlur,
+                  schema: type,
+                  values: mapFormPropsToValues({ schema: type, data: field }),
+                  formItemLayout: formItemLayout,
+                  prefix: `${key}[${index}].`
+                })}
+                {!value.hasOne && (
+                  <FormItem {...tailFormItemLayout}>
+                    <Button color="primary" size="sm" onClick={() => remove(index)}>
+                      Delete
+                    </Button>
+                  </FormItem>
+                )}
+              </div>
+            ))}
+            {!value.hasOne && (
+              <FormItem {...tailFormItemLayout}>
+                <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
+                  Add field
+                </Button>
+              </FormItem>
+            )}
+          </FormItem>
+        );
+      }}
+    />
+  );
 };
 
 class EditableCell extends React.Component {

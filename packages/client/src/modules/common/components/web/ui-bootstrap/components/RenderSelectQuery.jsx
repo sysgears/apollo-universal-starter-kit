@@ -32,7 +32,6 @@ export default class RenderSelectQuery extends React.Component {
       input: { name },
       setFieldValue
     } = this.props;
-    //console.log('edges:', edges);
     let selectedItem = edges && Array.isArray(edges) ? edges.find(item => item.id == e.target.value) : '';
     setFieldValue(name, selectedItem ? { id: selectedItem.id, name: selectedItem.name } : '');
   };

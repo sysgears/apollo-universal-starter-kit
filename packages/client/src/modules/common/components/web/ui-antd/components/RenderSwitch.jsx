@@ -14,20 +14,28 @@ export default class RenderSwitch extends React.Component {
   };
 
   handleChange = value => {
-    const { input: { name }, setFieldValue } = this.props;
-    //console.log('RenderSwitch: handleChange');
-    //console.log('name:', name);
-    //console.log('value:', value);
+    const {
+      input: { name },
+      setFieldValue
+    } = this.props;
     setFieldValue(name, value);
   };
 
   handleBlur = () => {
-    const { input: { name }, setFieldTouched } = this.props;
+    const {
+      input: { name },
+      setFieldTouched
+    } = this.props;
     setFieldTouched(name, true);
   };
 
   render() {
-    const { input: { value }, label, formItemLayout, meta: { touched, error } } = this.props;
+    const {
+      input: { value },
+      label,
+      formItemLayout,
+      meta: { touched, error }
+    } = this.props;
 
     let validateStatus = '';
     if (touched && error) {

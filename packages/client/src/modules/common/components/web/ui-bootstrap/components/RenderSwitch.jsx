@@ -18,9 +18,6 @@ export default class RenderSwitch extends React.Component {
       input: { name },
       setFieldValue
     } = this.props;
-    //console.log('RenderSwitch: handleChange');
-    //console.log('name:', name);
-
     setFieldValue(name, e.target.checked);
   };
 

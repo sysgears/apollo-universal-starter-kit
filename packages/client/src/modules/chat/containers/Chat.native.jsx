@@ -35,10 +35,6 @@ class Chat extends React.Component {
     currentUser: PropTypes.object
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     messages: [],
     userId: 1,
@@ -108,19 +104,15 @@ class Chat extends React.Component {
   render() {
     const { message } = this.state;
     const { messages = [], currentUser } = this.props;
-    const defaultUser = { id: null, username: 'Anonymous' };
+    const anonymous = 'Anonymous';
+    const defaultUser = { id: null, username: anonymous };
     const { id, username } = currentUser ? currentUser : defaultUser;
-    const formatMessages = messages.map(item => {
-      return {
-        _id: item.id,
-        text: item.text,
-        createdAt: item.createdAt,
-        user: {
-          _id: item.userId ? item.userId : 0,
-          name: item.username ? item.username : 'Anonymous'
-        }
-      };
-    });
+    const formatMessages = messages.map(({ id: _id, text, userId, username, createdAt }) => ({
+      _id,
+      text,
+      createdAt,
+      user: { _id: userId, name: username || anonymous }
+    }));
 
     return (
       <View style={{ flex: 1 }}>
@@ -149,9 +141,9 @@ export default compose(
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
-      addMessage: async input => {
+      addMessage: async ({ text, userId, username, id }) => {
         mutate({
-          variables: { input: { text: input.text, userId: input.userId } },
+          variables: { input: { text, userId } },
           updateQueries: {
             messages: (
               prev,
@@ -168,11 +160,11 @@ export default compose(
             __typename: 'Mutation',
             addMessage: {
               __typename: 'Message',
-              text: input.text,
-              username: input.username,
               createdAt: new Date(),
-              userId: input.userId,
-              id: input.id
+              text,
+              username,
+              userId,
+              id
             }
           }
         });

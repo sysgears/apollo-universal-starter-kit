@@ -15,6 +15,7 @@
     "exp": "yarn --cwd packages/mobile exp",
     "start": "lerna run --scope=server start --stream",
     "tests": "lerna run tests --stream",
+    "tests:watch": "lerna run tests:watch --stream",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json .",
     "tslint": "tslint --fix -p tsconfig.json -c tslint.json",
@@ -88,7 +89,7 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.131"
+    "spinjs": "^0.4.143"
   },
   "resolutions": {
     "graphql": "0.13.0",

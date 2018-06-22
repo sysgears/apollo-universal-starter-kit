@@ -436,7 +436,6 @@ class EditableCell extends React.Component {
   };
   componentWillReceiveProps(nextProps) {
     const { value } = this.props;
-
     if (nextProps.value !== value) {
       this.setState({ value: nextProps.value });
     }
@@ -459,9 +458,6 @@ class EditableCell extends React.Component {
     this.setState({ value: dateString });
   };
   handleSelectChange = ({ key, label }) => {
-    //console.log('EditableCell: handleSelectChange');
-    //console.log('key:', key);
-    //console.log('label:', label);
     this.setState({ value: { id: key, name: label } });
   };
   check = () => {
@@ -470,17 +466,14 @@ class EditableCell extends React.Component {
     this.setState({ editable: false });
     if (this.props.onChange) {
       if (hasTypeOf(DomainSchema)) {
-        //console.log('check:', this.state.value);
         this.props.onChange(this.state.value.id);
       } else {
-        //console.log('check:', this.state.value);
         this.props.onChange(this.state.value);
       }
     }
   };
   search = value => {
     const { dirty } = this.state;
-    //console.log('search:', value);
     if ((value && value.length >= 2) || dirty) {
       this.setState({ searchText: value, dirty: true });
     }
@@ -493,10 +486,6 @@ class EditableCell extends React.Component {
     const { render, hasTypeOf, schema, role, currentUser } = this.props;
 
     if (role) {
-      //console.log('EditableCell, value:', value);
-      //console.log('EditableCell, role:', role);
-      //console.log('EditableCell, currentUser:', currentUser);
-
       const hasRole =
         currentUser && (!role || (Array.isArray(role) ? role : [role]).indexOf(currentUser.role) >= 0) ? true : false;
 
@@ -517,7 +506,6 @@ class EditableCell extends React.Component {
       );
     } else if (editable) {
       let formatedValue = value;
-      //console.log('value:', value);
       input = <Input value={formatedValue} onChange={this.handleChange} onPressEnter={this.check} />;
       if (hasTypeOf(Number) || hasTypeOf(DomainSchema.Float)) {
         let inputParms = {
@@ -527,7 +515,7 @@ class EditableCell extends React.Component {
         };
         if (hasTypeOf(DomainSchema.Float)) {
           inputParms = {
-            step: '0.01',
+            step: '0.1',
             ...inputParms
           };
         }

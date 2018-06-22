@@ -72,7 +72,6 @@ export default class RenderSelectCountry extends React.Component {
     let props = {
       allowClear: formType !== 'form' ? true : false,
       showSearch: true,
-      //labelInValue: true,
       dropdownMatchSelectWidth: false,
       style: defaultStyle,
       onChange: this.handleChange,

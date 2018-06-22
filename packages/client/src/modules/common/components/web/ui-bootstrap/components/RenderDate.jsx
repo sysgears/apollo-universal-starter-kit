@@ -21,9 +21,6 @@ export default class RenderDate extends React.Component {
       input: { name },
       setFieldValue
     } = this.props;
-    //console.log('RenderDate: handleChange');
-    //console.log('name:', name);
-    //console.log('dateString:', dateString);
     setFieldValue(name, moment(date).format(dateFormat));
   };
 
@@ -54,9 +51,7 @@ export default class RenderDate extends React.Component {
     } else {
       formatedValue = null;
     }
-    //console.log('value:', value);
-    //console.log('typeof value:', typeof value);
-    // console.log('formatedValue:', formatedValue);
+
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
         <div>

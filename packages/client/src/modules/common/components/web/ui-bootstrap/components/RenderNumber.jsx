@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DomainSchema from '@domain-schema/core';
 
 import { FormItem, InputNumber } from './index';
 
@@ -21,7 +20,6 @@ export default class RenderNumber extends React.Component {
       input: { name },
       setFieldValue
     } = this.props;
-
     setFieldValue(name, e.target.value);
   };
 
@@ -38,7 +36,6 @@ export default class RenderNumber extends React.Component {
       input: { onChange, onBlur, ...inputRest },
       label,
       formItemLayout,
-      hasTypeOf,
       meta: { touched, error }
     } = this.props;
 
@@ -47,24 +44,10 @@ export default class RenderNumber extends React.Component {
       validateStatus = 'error';
     }
 
-    let input = {
-      ...inputRest
-    };
-
-    if (hasTypeOf(DomainSchema.Float)) {
-      //console.log('RenderNumber: hasTypeOf(Float) TRUE');
-      input = {
-        //step: '0.01',
-        ...inputRest
-      };
-    } else if (hasTypeOf(Number)) {
-      //console.log('RenderNumber: hasTypeOf(Number) TRUE');
-    }
-
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
         <div>
-          <InputNumber {...input} placeholder={label} onChange={this.handleChange} onBlur={this.handleBlur} />
+          <InputNumber {...inputRest} placeholder={label} onChange={this.handleChange} onBlur={this.handleBlur} />
         </div>
       </FormItem>
     );

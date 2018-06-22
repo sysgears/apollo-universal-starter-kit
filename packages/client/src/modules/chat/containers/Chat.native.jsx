@@ -8,6 +8,7 @@ import update from 'immutability-helper';
 import translate from '../../../i18n';
 import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
 import ADD_MESSAGE from '../graphql/AddMessage.graphql';
+import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 
@@ -24,6 +25,21 @@ function AddMessage(prev, node) {
   });
 }
 
+function DeleteMessage(prev, id) {
+  const index = prev.messages.findIndex(x => x.id === id);
+
+  // ignore if not found
+  if (index < 0) {
+    return prev;
+  }
+
+  return update(prev, {
+    messages: {
+      $splice: [[index, 1]]
+    }
+  });
+}
+
 @translate('chat')
 @withUser
 class Chat extends React.Component {
@@ -31,6 +47,7 @@ class Chat extends React.Component {
     t: PropTypes.func,
     messages: PropTypes.array,
     addMessage: PropTypes.func,
+    deleteMessage: PropTypes.func,
     subscribeToMore: PropTypes.func.isRequired,
     currentUser: PropTypes.object
   };
@@ -69,6 +86,8 @@ class Chat extends React.Component {
         let newResult = prev;
         if (mutation === 'CREATED') {
           newResult = AddMessage(prev, node);
+        } else if (mutation === 'DELETED') {
+          newResult = DeleteMessage(prev, node.id);
         }
 
         return newResult;
@@ -95,7 +114,7 @@ class Chat extends React.Component {
     });
   };
 
-  onLongPress(context, currentMessage) {
+  onLongPress(context, currentMessage, deleteMessage) {
     const options = ['Copy Text', 'Edit', 'Delete', 'Cancel'];
 
     const cancelButtonIndex = options.length - 1;
@@ -108,6 +127,10 @@ class Chat extends React.Component {
         switch (buttonIndex) {
           case 0:
             Clipboard.setString(currentMessage.text);
+            break;
+
+          case 2:
+            deleteMessage({ id: currentMessage._id });
             break;
         }
       }
@@ -137,7 +160,7 @@ class Chat extends React.Component {
           messages={formatMessages}
           onSend={messages => this.onSend(messages, this.props.addMessage)}
           user={{ _id: id, name: username }}
-          onLongPress={(context, currentMessage) => this.onLongPress(context, currentMessage)}
+          onLongPress={(context, currentMessage) => this.onLongPress(context, currentMessage, this.props.deleteMessage)}
         />
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />
       </View>
@@ -179,6 +202,34 @@ export default compose(
               username: username,
               userId: userId,
               id: id
+            }
+          }
+        });
+      }
+    })
+  }),
+  graphql(DELETE_MESSAGE, {
+    props: ({ mutate }) => ({
+      deleteMessage: id => {
+        mutate({
+          variables: id,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            deleteMessage: {
+              id: id,
+              __typename: 'Message'
+            }
+          },
+          updateQueries: {
+            messages: (
+              prev,
+              {
+                mutationResult: {
+                  data: { deleteMessage }
+                }
+              }
+            ) => {
+              return DeleteMessage(prev, deleteMessage.id);
             }
           }
         });

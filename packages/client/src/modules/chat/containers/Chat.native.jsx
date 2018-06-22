@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, KeyboardAvoidingView } from 'react-native';
+import { View, KeyboardAvoidingView, Clipboard } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
@@ -95,6 +95,25 @@ class Chat extends React.Component {
     });
   };
 
+  onLongPress(context, currentMessage) {
+    const options = ['Copy Text', 'Edit', 'Delete', 'Cancel'];
+
+    const cancelButtonIndex = options.length - 1;
+    context.actionSheet().showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 0:
+            Clipboard.setString(currentMessage.text);
+            break;
+        }
+      }
+    );
+  }
+
   render() {
     const { message } = this.state;
     const { messages = [], currentUser } = this.props;
@@ -118,6 +137,7 @@ class Chat extends React.Component {
           messages={formatMessages}
           onSend={messages => this.onSend(messages, this.props.addMessage)}
           user={{ _id: id, name: username }}
+          onLongPress={(context, currentMessage) => this.onLongPress(context, currentMessage)}
         />
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />
       </View>

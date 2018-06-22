@@ -51,9 +51,7 @@ class FilterView extends React.PureComponent {
       customFields === null
         ? false
         : customFields && customFields.role
-          ? hasRole(customFields.role, currentUser)
-            ? true
-            : false
+          ? !!hasRole(customFields.role, currentUser)
           : true;
 
     if (!showFilter) {
@@ -64,12 +62,9 @@ class FilterView extends React.PureComponent {
       <Formik
         initialValues={mapFormPropsToValues({ schema, formType: 'filter' })}
         onSubmit={values => {
-          //console.log('onSubmit, values:', values);
-          //console.log('onSubmit, pickInputFields values:', pickInputFields({ schema, values, formType: 'filter' }));
           onFilterChange(pickInputFields({ schema, values, formType: 'filter' }));
         }}
         onReset={(values, formikBag) => {
-          //console.log('onReset, formikBag:', formikBag);
           formikBag.resetForm();
           onFilterChange({});
         }}

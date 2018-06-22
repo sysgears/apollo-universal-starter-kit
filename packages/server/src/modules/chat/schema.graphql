@@ -26,6 +26,7 @@ extend type Mutation {
 # Input for addMessage Mutation
 input AddMessageInput {
   text: String!
+  userId: Int
 }
 
 # Input for editMessage Mutation

@@ -3,17 +3,8 @@ const MESSAGES_SUBSCRIPTION = 'messages_subscription';
 
 export default pubsub => ({
   Query: {
-    async messages(obj, args, context) {
-      const result = await context.Chat.getMessages();
-      return await result
-        .map(async item => {
-          if (item.userId) {
-            const user = await context.User.getUser(item.userId);
-            item.username = user.username;
-          }
-          return item;
-        })
-        .reverse();
+    messages(obj, args, context) {
+      return context.Chat.getMessages();
     },
     message(obj, { id }, context) {
       return context.Chat.message(id);
@@ -21,7 +12,6 @@ export default pubsub => ({
   },
   Mutation: {
     async addMessage(obj, { input }, context) {
-      input.userId = context.user ? context.user.id : null;
       const [id] = await context.Chat.addMessage(input);
       const message = await context.Chat.message(id);
       // publish for message list

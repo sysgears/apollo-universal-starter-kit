@@ -11,7 +11,11 @@ export default class Chat {
   }
 
   getMessages() {
-    return knex.select('id', 'text', 'userId', 'created_at as createdAt').from('message');
+    return knex
+      .select('m.id', 'm.text', 'm.userId', 'u.username', 'm.created_at as createdAt')
+      .from('message as m')
+      .leftJoin('user as u', 'u.id', 'm.userId')
+      .orderBy('m.id', 'desc');
   }
 
   addMessage({ text, userId }) {

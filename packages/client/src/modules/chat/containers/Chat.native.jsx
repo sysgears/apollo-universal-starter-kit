@@ -108,7 +108,7 @@ class Chat extends React.Component {
   render() {
     const { message } = this.state;
     const { messages = [], currentUser } = this.props;
-    const defaultUser = { id: 0, username: 'Anonymous' };
+    const defaultUser = { id: null, username: 'Anonymous' };
     const { id, username } = currentUser ? currentUser : defaultUser;
     const formatMessages = messages.map(item => {
       return {
@@ -151,7 +151,7 @@ export default compose(
     props: ({ mutate }) => ({
       addMessage: async input => {
         mutate({
-          variables: { input: { text: input.text } },
+          variables: { input: { text: input.text, userId: input.userId } },
           updateQueries: {
             messages: (
               prev,

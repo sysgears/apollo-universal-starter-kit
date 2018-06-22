@@ -126,21 +126,18 @@ class MockLink extends ApolloLink {
 }
 
 export default class Renderer {
-  constructor(graphqlMocks, reduxState, linkStateResolvers) {
+  constructor(graphqlMocks, reduxState) {
     const schema = makeExecutableSchema({
       typeDefs: [rootSchema, ...serverModules.schemas]
     });
-
-    if (!linkStateResolvers) {
-      addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
-    }
+    addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
 
     const schemaLink = new MockLink(schema);
 
     const client = createApolloClient({
       createNetLink: () => schemaLink,
       links: clientModules.link,
-      clientResolvers: linkStateResolvers ? linkStateResolvers : clientModules.resolvers
+      clientResolvers: clientModules.resolvers
     });
 
     const store = createStore(
@@ -182,5 +179,97 @@ export default class Renderer {
         )
       )
     );
+  }
+}
+
+export class Renderer2 {
+  static get Builder() {
+    class Builder {
+      constructor() {
+        this.schema = makeExecutableSchema({
+          typeDefs: [rootSchema, ...serverModules.schemas]
+        });
+      }
+
+      withHistory() {
+        this.history = createHistory();
+        return this;
+      }
+
+      withMock(graphqlMocks) {
+        addMockFunctionsToSchema({ schema: this.schema, mocks: graphqlMocks });
+        return this;
+      }
+
+      withMockLink() {
+        this.mockLink = new MockLink(this.schema);
+        return this;
+      }
+
+      withApolloClient(resolvers) {
+        this.client = createApolloClient({
+          createNetLink: () => this.mockLink,
+          links: clientModules.link,
+          clientResolvers: resolvers
+        });
+
+        return this;
+      }
+
+      withSubscribtions() {
+        this.getSubscriptions = (query, variables) => {
+          return this.mockLink._getSubscriptions(query, variables);
+        };
+
+        return this;
+      }
+
+      withRedux(reduxState) {
+        this.store = createStore(
+          combineReducers({
+            ...clientModules.reducers
+          }),
+          reduxState
+        );
+
+        return this;
+      }
+
+      withApollo(component) {
+        this.withApollo = () => {
+          const { store, client } = this;
+
+          return clientModules.getWrappedRoot(
+            <Provider store={store}>
+              <ApolloProvider client={client}>{component}</ApolloProvider>
+            </Provider>
+          );
+        };
+
+        return this;
+      }
+
+      withMount() {
+        this.mount = () => {
+          return render(
+            this.withApollo(
+              clientModules.getWrappedRoot(
+                <Router history={this.history}>
+                  <Switch>{clientModules.routes}</Switch>
+                </Router>
+              )
+            )
+          );
+        };
+
+        return this;
+      }
+
+      build() {
+        return new Renderer2(this);
+      }
+    }
+
+    return Builder;
   }
 }

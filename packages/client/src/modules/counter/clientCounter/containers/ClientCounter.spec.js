@@ -3,36 +3,59 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 import { render } from 'react-testing-library';
 
-import Renderer from '../../../../testHelpers/Renderer';
+import { Renderer2 } from '../../../../testHelpers/Renderer';
 import { click, find } from '../../../../testHelpers/testUtils';
 import ClientCounter from './ClientCounter';
 import translate from '../../../../i18n';
+import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 
 chai.should();
 
-const COUNTER_APOLLO_LINK_VALUE = 1;
-const INC_COUNTER_VALUE = COUNTER_APOLLO_LINK_VALUE + 5;
+const COUNTER_APOLLO_LINK_VALUE = 20;
+const INCREMENT = 1;
 
-const mocks = {
-  counterState: () => {
-    return {
-      counter: COUNTER_APOLLO_LINK_VALUE,
-      __typename: 'CounterState'
-    };
+const resolvers = {
+  defaults: {
+    counterState: { counter: COUNTER_APOLLO_LINK_VALUE, __typename: 'CounterState' }
   },
-  Mutation: () => ({
-    addCounterState: (obj, { amount }) => {
-      console.log('INCREMENT_COUNTER');
-      return {
-        amount: INC_COUNTER_VALUE + amount,
-        __typename: 'CounterState'
-      };
+  resolvers: {
+    Query: {
+      counterState: (_, args, { cache }) => {
+        const {
+          counterState: { counter }
+        } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
+        return {
+          counter: counter,
+          __typename: 'CounterState'
+        };
+      }
+    },
+    Mutation: {
+      addCounterState: async (_, args, { cache }) => {
+        const {
+          counterState: { counter }
+        } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
+
+        await cache.writeData({
+          data: {
+            counterState: {
+              counter: counter + INCREMENT,
+              __typename: 'CounterState'
+            }
+          }
+        });
+        return null;
+      }
     }
-  })
+  }
 };
 
 describe('Apollo link counter example UI works', () => {
-  const renderer = new Renderer(mocks, {});
+  const renderer = new Renderer2.Builder()
+    .withMockLink()
+    .withApolloClient(resolvers)
+    .withApollo(ClientCounter);
+
   let app;
   let container;
   let content;
@@ -51,7 +74,7 @@ describe('Apollo link counter example UI works', () => {
     content = container.firstChild;
     content.textContent.should.has.string(`Current apolloLinkStateCount, is ${COUNTER_APOLLO_LINK_VALUE}.`);
   });
-  /*TODO Don't work. Need to add apollo link state supporting to the Renderer class*/
+
   step('Clicking on increase counter button shows optimistic response', () => {
     const apolloLinkButton = find(container, '#apollo-link-button');
     click(apolloLinkButton);

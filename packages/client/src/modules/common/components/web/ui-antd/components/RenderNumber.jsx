@@ -23,14 +23,12 @@ export default class RenderNumber extends React.Component {
       setFieldValue,
       hasTypeOf
     } = this.props;
-    //console.log('RenderInput: handleChange');
-    //console.log('name:', name);
-    if (hasTypeOf(Number)) {
-      value = value !== '' ? parseFloat(value) : '';
-      //console.log('RenderInput: hasTypeOf(Number) TRUE');
-    }
 
-    setFieldValue(name, value);
+    let computedValue = value;
+    if (hasTypeOf(Number)) {
+      computedValue = value !== '' ? parseFloat(value) : '';
+    }
+    setFieldValue(name, computedValue);
   };
 
   handleBlur = () => {
@@ -45,7 +43,6 @@ export default class RenderNumber extends React.Component {
     const {
       input: { onChange, onBlur, ...inputRest },
       label,
-      type,
       formItemLayout,
       hasTypeOf,
       meta: { touched, error }
@@ -61,25 +58,16 @@ export default class RenderNumber extends React.Component {
     };
 
     if (hasTypeOf(DomainSchema.Float)) {
-      //console.log('RenderNumber: hasTypeOf(Float) TRUE');
       input = {
-        step: '0.01',
+        step: '0.1',
         ...inputRest
       };
-    } else if (hasTypeOf(Number)) {
-      //console.log('RenderNumber: hasTypeOf(Number) TRUE');
     }
 
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
         <div>
-          <InputNumber
-            {...input}
-            placeholder={label}
-            type={type}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-          />
+          <InputNumber {...input} placeholder={label} onChange={this.handleChange} onBlur={this.handleBlur} />
         </div>
       </FormItem>
     );

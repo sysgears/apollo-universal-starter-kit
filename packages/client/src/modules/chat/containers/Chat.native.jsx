@@ -175,10 +175,10 @@ export default compose(
             addMessage: {
               __typename: 'Message',
               createdAt: new Date(),
-              text,
-              username,
-              userId,
-              id
+              text: text,
+              username: username,
+              userId: userId,
+              id: id
             }
           }
         });

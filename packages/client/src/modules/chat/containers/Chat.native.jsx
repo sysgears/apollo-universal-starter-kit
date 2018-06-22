@@ -36,8 +36,6 @@ class Chat extends React.Component {
   };
 
   state = {
-    messages: [],
-    userId: 1,
     message: ''
   };
 
@@ -95,10 +93,6 @@ class Chat extends React.Component {
       userId,
       id
     });
-
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages)
-    }));
   };
 
   render() {

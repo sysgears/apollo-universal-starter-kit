@@ -96,7 +96,7 @@ export default class RenderSelectQuery extends React.Component {
     }
 
     let defaultValue = 'defaultValue';
-    if (formType === 'filter') {
+    if (formType === 'filter' || formType === 'batch') {
       defaultValue = 'value';
     }
 

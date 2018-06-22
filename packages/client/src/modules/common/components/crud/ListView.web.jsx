@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import PropTypes from 'prop-types';
+import DomainValidation from '@domain-schema/validation';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
@@ -338,6 +339,7 @@ class ListView extends React.Component {
             <Col span={20} key="batchUpdate">
               <Formik
                 initialValues={mapFormPropsToValues({ schema })}
+                validate={values => DomainValidation.validate(values, schema)}
                 onSubmit={async (values, { resetForm }) => {
                   const insertValues = pickInputFields({ schema, values });
                   if (selectedRowKeys && Object.keys(insertValues).length > 0) {

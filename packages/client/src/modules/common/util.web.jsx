@@ -283,7 +283,7 @@ const createFormField = (key, type, values, formItemLayout, formType, hasTypeOf,
 
   if (type.isSchema) {
     component = RenderSelectQuery;
-    if (formType !== 'form') {
+    if (formType === 'batch') {
       style = { width: 100 };
     }
   } else if (hasTypeOf(Boolean)) {

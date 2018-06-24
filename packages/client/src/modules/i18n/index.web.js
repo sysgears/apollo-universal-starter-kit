@@ -27,25 +27,33 @@ I18nProvider.propTypes = {
   children: PropTypes.node
 };
 
-i18n
-  .use(LanguageDetector)
-  .use(reactI18nextModule)
-  .init({
-    fallbackLng: settings.i18n.fallbackLng,
-    resources: {},
-    debug: false, // set true to show logs
-    whitelist: settings.i18n.langList,
-    detection: {
-      lookupCookie: settings.i18n.cookie,
-      caches: __SSR__ ? ['cookie'] : ['localStorage']
-    },
-    interpolation: {
-      escapeValue: false // not needed for react!!
-    },
-    react: {
-      wait: false
-    }
-  });
+const I18N_CONFIG = {
+  fallbackLng: settings.i18n.fallbackLng,
+  resources: {},
+  debug: false, // set true to show logs
+  whitelist: settings.i18n.langList,
+  interpolation: {
+    escapeValue: false // not needed for react!!
+  },
+  react: {
+    wait: false
+  }
+};
+
+if (!__SSR__) {
+  i18n
+    .use(LanguageDetector)
+    .use(reactI18nextModule)
+    .init({
+      ...I18N_CONFIG,
+      detection: {
+        lookupCookie: settings.i18n.cookie,
+        caches: ['localStorage']
+      }
+    });
+} else {
+  i18n.use(reactI18nextModule).init(I18N_CONFIG);
+}
 
 const langPicker = {};
 if (settings.i18n.enabled && settings.i18n.langPickerRender) {

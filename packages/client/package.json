@@ -71,7 +71,7 @@
     "react": "16.3.1",
     "react-apollo": "^2.1.4",
     "react-art": "^16.3.2",
-    "react-cookie": "^2.1.2",
+    "react-cookie": "^2.2.0",
     "react-debounce-input": "^3.1.0",
     "react-dom": "^16.2.0",
     "react-dropzone": "^4.2.3",

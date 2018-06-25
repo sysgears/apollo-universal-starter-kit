@@ -1,6 +1,7 @@
 export default {
   name: 'Apollo Starter Kit',
   logging: {
+    level: 'info',
     debugSQL: false,
     apolloLogging: ['test', 'production'].indexOf(process.env.NODE_ENV) < 0
   },

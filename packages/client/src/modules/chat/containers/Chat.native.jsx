@@ -9,6 +9,7 @@ import translate from '../../../i18n';
 import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
 import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
+import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 
@@ -40,6 +41,21 @@ function DeleteMessage(prev, id) {
   });
 }
 
+function EditMessage(prev, node) {
+  const index = prev.messages.findIndex(x => node.id === x.id);
+
+  // ignore if not found
+  if (index < 0) {
+    return prev;
+  }
+
+  return update(prev, {
+    messages: {
+      $splice: [[index, 1, node]]
+    }
+  });
+}
+
 @translate('chat')
 @withUser
 class Chat extends React.Component {
@@ -48,12 +64,15 @@ class Chat extends React.Component {
     messages: PropTypes.array,
     addMessage: PropTypes.func,
     deleteMessage: PropTypes.func,
+    editMessage: PropTypes.func,
     subscribeToMore: PropTypes.func.isRequired,
     currentUser: PropTypes.object
   };
 
   state = {
-    message: ''
+    message: '',
+    isEdit: false,
+    messageInfo: null
   };
 
   componentWillReceiveProps() {
@@ -88,6 +107,8 @@ class Chat extends React.Component {
           newResult = AddMessage(prev, node);
         } else if (mutation === 'DELETED') {
           newResult = DeleteMessage(prev, node.id);
+        } else if (mutation === 'UPDATED') {
+          newResult = EditMessage(prev, node);
         }
 
         return newResult;
@@ -99,38 +120,50 @@ class Chat extends React.Component {
     this.setState({ message: text });
   };
 
-  onSend = (messages = [], addMessage) => {
-    const {
-      text,
-      user: { _id: userId, name: username },
-      _id: id
-    } = messages[0];
+  onSend = (messages = [], addMessage, editMessage) => {
+    const { isEdit, messageInfo, message } = this.state;
 
-    addMessage({
-      text,
-      username,
-      userId,
-      id
-    });
+    if (isEdit) {
+      editMessage({
+        ...messageInfo,
+        text: message
+      });
+      this.setState({ isEdit: false });
+    } else {
+      const {
+        text,
+        user: { _id: userId, name: username },
+        _id: id
+      } = messages[0];
+
+      addMessage({
+        text,
+        username,
+        userId,
+        id
+      });
+    }
   };
 
-  onLongPress(context, currentMessage, id, deleteMessage) {
-    const options = ['Copy Text', 'Cancel'];
+  onLongPress(context, currentMessage, id, deleteMessage, setEditState) {
+    const options = ['Copy Text'];
 
     if (id === currentMessage.user._id) {
       options.splice(1, 0, 'Edit', 'Delete');
     }
 
-    const cancelButtonIndex = options.length - 1;
     context.actionSheet().showActionSheetWithOptions(
       {
-        options,
-        cancelButtonIndex
+        options
       },
       buttonIndex => {
         switch (buttonIndex) {
           case 0:
             Clipboard.setString(currentMessage.text);
+            break;
+
+          case 1:
+            setEditState(currentMessage.text, currentMessage);
             break;
 
           case 2:
@@ -141,9 +174,21 @@ class Chat extends React.Component {
     );
   }
 
+  setEditState(
+    message,
+    {
+      _id: id,
+      text,
+      createdAt,
+      user: { _id: userId, name: username }
+    }
+  ) {
+    this.setState({ isEdit: true, message, messageInfo: { id, text, createdAt, userId, username } });
+  }
+
   render() {
     const { message } = this.state;
-    const { messages = [], currentUser } = this.props;
+    const { messages = [], currentUser, addMessage, editMessage, deleteMessage } = this.props;
     const anonymous = 'Anonymous';
     const defaultUser = { id: null, username: anonymous };
     const { id, username } = currentUser ? currentUser : defaultUser;
@@ -162,10 +207,10 @@ class Chat extends React.Component {
           placeholder={'Type a message...'}
           keyboardShouldPersistTaps="never"
           messages={formatMessages}
-          onSend={messages => this.onSend(messages, this.props.addMessage)}
+          onSend={messages => this.onSend(messages, addMessage, editMessage)}
           user={{ _id: id, name: username }}
           onLongPress={(context, currentMessage) =>
-            this.onLongPress(context, currentMessage, id, this.props.deleteMessage)
+            this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState.bind(this))
           }
         />
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />
@@ -236,6 +281,38 @@ export default compose(
               }
             ) => {
               return DeleteMessage(prev, deleteMessage.id);
+            }
+          }
+        });
+      }
+    })
+  }),
+  graphql(EDIT_MESSAGE, {
+    props: ({ mutate }) => ({
+      editMessage: ({ text, id, createdAt, userId = null, username }) => {
+        mutate({
+          variables: { input: { text, id, userId } },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            editMessage: {
+              id: id,
+              text: text,
+              userId: userId,
+              username: username,
+              createdAt: createdAt,
+              __typename: 'Message'
+            }
+          },
+          updateQueries: {
+            messages: (
+              prev,
+              {
+                mutationResult: {
+                  data: { editMessage }
+                }
+              }
+            ) => {
+              return EditMessage(prev, editMessage);
             }
           }
         });

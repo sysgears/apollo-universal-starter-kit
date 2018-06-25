@@ -33,7 +33,7 @@ export default class RenderSelectQuery extends React.Component {
       setFieldValue
     } = this.props;
     let selectedItem = edges && Array.isArray(edges) ? edges.find(item => item.id == e.target.value) : '';
-    setFieldValue(name, selectedItem ? { id: selectedItem.id, name: selectedItem.name } : '');
+    setFieldValue(name, selectedItem ? selectedItem : '');
   };
 
   handleBlur = () => {
@@ -109,7 +109,7 @@ export default class RenderSelectQuery extends React.Component {
                 let props = {
                   style: defaultStyle,
                   value: formatedValue,
-                  onChange: e => this.handleChange(e, data.edges),
+                  onChange: e => this.handleChange(e, data.edges ? data.edges : null),
                   onBlur: this.handleBlur,
                   ...inputRest
                 };

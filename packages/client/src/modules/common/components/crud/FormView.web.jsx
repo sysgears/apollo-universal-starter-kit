@@ -6,6 +6,7 @@ import DomainValidation from '@domain-schema/validation';
 import { onSubmit, mapFormPropsToValues } from '../../../../utils/crud';
 import { createFormFields } from '../../util';
 import { Form, FormItem, Button } from '../web';
+import { computeDomainValidationErrors } from '../../../../../../common/validation';
 
 const tailFormItemLayout = {
   wrapperCol: {
@@ -35,7 +36,10 @@ const FormView = ({ schema, updateEntry, createEntry, title, customFields, data 
   return (
     <Formik
       initialValues={mapFormPropsToValues({ schema, data: data ? data.node : null })}
-      validate={values => DomainValidation.validate(values, schema)}
+      validate={values => {
+        let rawErrors = DomainValidation.validate(values, schema);
+        return computeDomainValidationErrors(rawErrors);
+      }}
       onSubmit={async values => {
         await onSubmit({ schema, values, updateEntry, createEntry, title, data: data ? data.node : null });
       }}

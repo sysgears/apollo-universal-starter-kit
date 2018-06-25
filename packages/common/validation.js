@@ -57,3 +57,15 @@ export const validateForm = (formValues, formSchema) => {
 
   return validateFormInner(formValues, formSchema, errors);
 };
+
+export const computeDomainValidationErrors = rawErrors => {
+  let computedErrors = {};
+  for (let errorField in rawErrors) {
+    if (rawErrors.hasOwnProperty(errorField) && rawErrors[errorField] === Object(rawErrors[errorField])) {
+      computedErrors[errorField] = 'Required';
+    } else {
+      computedErrors[errorField] = rawErrors[errorField];
+    }
+  }
+  return computedErrors;
+};

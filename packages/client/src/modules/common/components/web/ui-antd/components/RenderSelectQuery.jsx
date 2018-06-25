@@ -25,13 +25,18 @@ export default class RenderSelectQuery extends React.Component {
     dirty: false
   };
 
-  handleChange = value => {
+  handleChange = (value, edges) => {
     const {
       input: { name },
       setFieldValue
     } = this.props;
 
-    setFieldValue(name, value ? { id: value.key, name: value.label } : undefined);
+    let selectedValue = '';
+    if (edges && Array.isArray(edges) && edges.length > 0 && value) {
+      selectedValue = edges.find(item => item.id === Number(value.key));
+    }
+
+    setFieldValue(name, selectedValue);
   };
 
   handleBlur = () => {
@@ -107,11 +112,13 @@ export default class RenderSelectQuery extends React.Component {
             {({ loading, data }) => {
               if (!loading || data) {
                 const options = data.edges
-                  ? data.edges.map(opt => (
-                      <Option key={opt.id} value={opt.id.toString()}>
-                        {toString(opt)}
-                      </Option>
-                    ))
+                  ? data.edges.map(opt => {
+                      return (
+                        <Option key={opt.id} value={opt.id.toString()}>
+                          {toString(opt)}
+                        </Option>
+                      );
+                    })
                   : null;
 
                 let props = {
@@ -120,7 +127,7 @@ export default class RenderSelectQuery extends React.Component {
                   labelInValue: true,
                   dropdownMatchSelectWidth: false,
                   style: defaultStyle,
-                  onChange: this.handleChange,
+                  onChange: value => this.handleChange(value, data.edges ? data.edges : null),
                   onBlur: this.handleBlur,
                   ...inputRest,
                   [defaultValue]: formatedValue

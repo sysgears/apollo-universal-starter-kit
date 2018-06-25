@@ -114,8 +114,12 @@ class Chat extends React.Component {
     });
   };
 
-  onLongPress(context, currentMessage, deleteMessage) {
-    const options = ['Copy Text', 'Edit', 'Delete', 'Cancel'];
+  onLongPress(context, currentMessage, id, deleteMessage) {
+    const options = ['Copy Text', 'Cancel'];
+
+    if (id === currentMessage.user._id) {
+      options.splice(1, 0, 'Edit', 'Delete');
+    }
 
     const cancelButtonIndex = options.length - 1;
     context.actionSheet().showActionSheetWithOptions(
@@ -160,7 +164,9 @@ class Chat extends React.Component {
           messages={formatMessages}
           onSend={messages => this.onSend(messages, this.props.addMessage)}
           user={{ _id: id, name: username }}
-          onLongPress={(context, currentMessage) => this.onLongPress(context, currentMessage, this.props.deleteMessage)}
+          onLongPress={(context, currentMessage) =>
+            this.onLongPress(context, currentMessage, id, this.props.deleteMessage)
+          }
         />
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />
       </View>

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Button, primary } from '../../../common/components/native';
+import { Button, primary } from '../../../../common/components/native';
 
-export const ReduxCounterView = ({ text, children }) => (
+export const ClientCounterView = ({ text, children }) => (
   <View>
     <View style={styles.element}>
       <Text style={styles.box}>{text}</Text>
@@ -23,18 +23,20 @@ const styles = StyleSheet.create({
   }
 });
 
-ReduxCounterView.propTypes = {
+ClientCounterView.propTypes = {
   text: PropTypes.string,
   children: PropTypes.node
 };
 
-export const ReduxCounterButton = ({ onClick, text }) => (
+export const ClientCounterButton = ({ onClick, text }) => (
   <Button type={primary} onPress={onClick}>
     {text}
   </Button>
 );
 
-ReduxCounterButton.propTypes = {
+ClientCounterButton.propTypes = {
   onClick: PropTypes.func,
   text: PropTypes.string
 };
+
+export default ClientCounterView;

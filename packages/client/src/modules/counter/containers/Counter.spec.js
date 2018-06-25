@@ -3,7 +3,7 @@ import { step } from 'mocha-steps';
 
 import Renderer from '../../../testHelpers/Renderer';
 import { click, updateContent, find } from '../../../testHelpers/testUtils';
-import COUNTER_SUBSCRIPTION from '../serverCounter/graphql/CounterSubscription.graphql';
+import COUNTER_SUBSCRIPTION from '../modules/serverCounter/graphql/CounterSubscription.graphql';
 
 chai.should();
 

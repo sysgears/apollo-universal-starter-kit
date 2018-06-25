@@ -21,7 +21,7 @@ export default class RenderCellSelectQuery extends React.Component {
 
   handleChange = (e, edges) => {
     let selectedItem = edges && Array.isArray(edges) ? edges.find(item => item.id == e.target.value) : '';
-    this.props.handleOnChange(selectedItem ? { key: selectedItem.id, label: selectedItem.name } : '');
+    this.props.handleOnChange(selectedItem ? selectedItem : '');
   };
 
   render() {

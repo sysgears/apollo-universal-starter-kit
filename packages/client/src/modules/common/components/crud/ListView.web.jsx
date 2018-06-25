@@ -10,6 +10,7 @@ import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from
 import { createColumnFields, createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
 import { hasRole } from '../../../user/containers/Auth';
+import { computeDomainValidationErrors } from '../../../../../../common/validation';
 
 function dragDirection(dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
@@ -339,7 +340,10 @@ class ListView extends React.Component {
             <Col span={20} key="batchUpdate">
               <Formik
                 initialValues={mapFormPropsToValues({ schema })}
-                validate={values => DomainValidation.validate(values, schema)}
+                validate={values => {
+                  let rawErrors = DomainValidation.validate(values, schema);
+                  return computeDomainValidationErrors(rawErrors);
+                }}
                 onSubmit={async (values, { resetForm }) => {
                   const insertValues = pickInputFields({ schema, values });
                   if (selectedRowKeys && Object.keys(insertValues).length > 0) {

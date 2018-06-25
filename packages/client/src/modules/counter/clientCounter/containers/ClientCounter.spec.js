@@ -3,7 +3,7 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 import { render } from 'react-testing-library';
 
-import { Renderer2 } from '../../../../testHelpers/Renderer';
+import Renderer from '../../../../testHelpers/Renderer';
 import { click, find } from '../../../../testHelpers/testUtils';
 import ClientCounter from './ClientCounter';
 import translate from '../../../../i18n';
@@ -14,7 +14,7 @@ chai.should();
 const COUNTER_APOLLO_LINK_VALUE = 20;
 const INCREMENT = 1;
 
-const resolvers = {
+const mock = {
   defaults: {
     counterState: { counter: COUNTER_APOLLO_LINK_VALUE, __typename: 'CounterState' }
   },
@@ -51,10 +51,7 @@ const resolvers = {
 };
 
 describe('Apollo link counter example UI works', () => {
-  const renderer = new Renderer2.Builder()
-    .withMockLink()
-    .withApolloClient(resolvers)
-    .withApollo(ClientCounter);
+  const renderer = new Renderer(mock, {});
 
   let app;
   let container;

@@ -32,6 +32,10 @@ const I18N_CONFIG = {
   resources: {},
   debug: false, // set true to show logs
   whitelist: settings.i18n.langList,
+  detection: {
+    lookupCookie: settings.i18n.cookie,
+    caches: __SSR__ ? ['cookie'] : ['localStorage']
+  },
   interpolation: {
     escapeValue: false // not needed for react!!
   },
@@ -40,20 +44,11 @@ const I18N_CONFIG = {
   }
 };
 
-if (!__SSR__) {
-  i18n
-    .use(LanguageDetector)
-    .use(reactI18nextModule)
-    .init({
-      ...I18N_CONFIG,
-      detection: {
-        lookupCookie: settings.i18n.cookie,
-        caches: ['localStorage']
-      }
-    });
-} else {
-  i18n.use(reactI18nextModule).init(I18N_CONFIG);
+if (__CLIENT__) {
+  i18n.use(LanguageDetector);
 }
+
+i18n.use(reactI18nextModule).init(I18N_CONFIG);
 
 const langPicker = {};
 if (settings.i18n.enabled && settings.i18n.langPickerRender) {

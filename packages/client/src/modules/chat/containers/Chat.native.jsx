@@ -69,6 +69,11 @@ class Chat extends React.Component {
     currentUser: PropTypes.object
   };
 
+  constructor(props) {
+    super(props);
+    this.gc = React.createRef();
+  }
+
   state = {
     message: '',
     isEdit: false,
@@ -184,6 +189,7 @@ class Chat extends React.Component {
     }
   ) {
     this.setState({ isEdit: true, message, messageInfo: { id, text, createdAt, userId, username } });
+    this.gc.focusTextInput();
   }
 
   render() {
@@ -202,6 +208,7 @@ class Chat extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <GiftedChat
+          ref={gc => (this.gc = gc)}
           text={message}
           onInputTextChanged={text => this.setMessageState(text)}
           placeholder={'Type a message...'}

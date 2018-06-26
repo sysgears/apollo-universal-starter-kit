@@ -6,7 +6,9 @@ import ClientCounter from './modules/clientCounter';
 import ReduxCounter from './modules/reduxCounter';
 import ServerCounter from './modules/serverCounter';
 import Feature from '../connector';
+import resources from './locales';
 
 export default new Feature(ClientCounter, ReduxCounter, ServerCounter, {
-  route: <Route exact path="/" component={Counter} />
+  route: <Route exact path="/" component={Counter} />,
+  localization: { ns: 'counter', resources }
 });

@@ -11,7 +11,7 @@ export const ServerCounterView = ({ t, children, counter, loading }) => {
     return (
       <View>
         <View style={styles.element}>
-          <Text style={styles.box}>{t('serverCounter.text', { counter })}</Text>
+          <Text style={styles.box}>{t('text', { counter })}</Text>
         </View>
         {children}
       </View>

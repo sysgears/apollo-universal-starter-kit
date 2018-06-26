@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { ReduxCounterButton, ReduxCounterView } from '../components/ReduxCounterView';
+import translate from '../../../../../i18n';
 
 const ReduxCounter = ({ t, onReduxIncrement, reduxCount }) => (
-  <ReduxCounterView text={t('reduxCounter.text', { reduxCount })}>
-    <ReduxCounterButton text={t('reduxCounter.btnLabel')} onClick={onReduxIncrement(1)} />
+  <ReduxCounterView text={t('text', { reduxCount })}>
+    <ReduxCounterButton text={t('btnLabel')} onClick={onReduxIncrement(1)} />
   </ReduxCounterView>
 );
 
@@ -27,4 +28,4 @@ export default connect(
         });
     }
   })
-)(ReduxCounter);
+)(translate('reduxCounter')(ReduxCounter));

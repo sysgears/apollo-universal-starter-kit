@@ -7,6 +7,7 @@ import { ServerCounterView, ServerCounterButton } from '../components/ServerCoun
 import ADD_COUNTER from '../graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
+import translate from '../../../../../i18n';
 
 const IncreaseButton = ({ counterAmount, t, counter }) => (
   <Mutation mutation={ADD_COUNTER}>
@@ -37,7 +38,7 @@ const IncreaseButton = ({ counterAmount, t, counter }) => (
 
       const onClickHandler = () => addCounter(counterAmount);
 
-      return <ServerCounterButton text={t('serverCounter.btnLabel')} onClick={onClickHandler()} />;
+      return <ServerCounterButton text={t('btnLabel')} onClick={onClickHandler()} />;
     }}
   </Mutation>
 );
@@ -129,4 +130,4 @@ const ServerCounterWithQuery = props => (
   </Query>
 );
 
-export default ServerCounterWithQuery;
+export default translate('serverCounter')(ServerCounterWithQuery);

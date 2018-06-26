@@ -24,5 +24,5 @@ export default new Feature({
     }
   },
   resolver: resolvers,
-  localization: { ns: 'counter', resources }
+  localization: { ns: 'clientCounter', resources }
 });

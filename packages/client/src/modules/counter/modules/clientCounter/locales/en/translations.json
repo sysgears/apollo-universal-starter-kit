@@ -1,6 +1,4 @@
 {
-  "clientCounter": {
     "text": "Current apolloLinkStateCount, is {{counter}}. This is being stored client-side with Apollo Link State.",
     "btnLabel": "Click to increase apolloLinkState"
-  }
 }

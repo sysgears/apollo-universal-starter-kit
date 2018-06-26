@@ -24,5 +24,5 @@ export default new Feature({
     }
   },
   reducer: { counter: reducers },
-  localization: { ns: 'counter', resources }
+  localization: { ns: 'reduxCounter', resources }
 });

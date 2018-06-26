@@ -20,9 +20,9 @@ const Counter = ({ t }) => (
         }
       ]}
     />
-    <ServerCounter t={t} />
-    <ReduxCounter t={t} />
-    <ClientCounter t={t} />
+    <ServerCounter />
+    <ReduxCounter />
+    <ClientCounter />
   </PageLayout>
 );
 

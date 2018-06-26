@@ -22,5 +22,5 @@ export default new Feature({
       }
     }
   },
-  localization: { ns: 'counter', resources }
+  localization: { ns: 'serverCounter', resources }
 });

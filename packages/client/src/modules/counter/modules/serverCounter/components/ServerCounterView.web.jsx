@@ -19,7 +19,7 @@ export const ServerCounterView = ({ t, children, counter, loading }) => {
   } else {
     return (
       <Section>
-        <p>{t('serverCounter.text', { counter })}</p>
+        <p>{t('text', { counter })}</p>
         {children}
       </Section>
     );

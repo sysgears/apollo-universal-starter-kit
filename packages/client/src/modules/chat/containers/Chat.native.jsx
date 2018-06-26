@@ -216,6 +216,7 @@ class Chat extends React.Component {
           messages={formatMessages}
           onSend={messages => this.onSend(messages, addMessage, editMessage)}
           user={{ _id: id, name: username }}
+          showAvatarForEveryMessage={true}
           onLongPress={(context, currentMessage) =>
             this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState.bind(this))
           }

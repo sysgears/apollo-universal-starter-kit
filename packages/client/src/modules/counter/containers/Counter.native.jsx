@@ -7,13 +7,28 @@ import ServerCounter from '../serverCounter/containers/ServerCounter';
 import ReduxCounter from '../reduxCounter/containers/ReduxCounter';
 import translate from '../../../i18n/index';
 
-const Counter = ({ t }) => (
-  <View style={styles.container}>
-    <ServerCounter t={t} />
-    <ReduxCounter t={t} />
-    <ClientCounter t={t} />
-  </View>
-);
+class Counter extends React.Component {
+  static propTypes = {
+    t: PropTypes.func
+  };
+
+  constructor(props) {
+    super();
+    this.props = props;
+  }
+
+  render() {
+    const { t } = this.props;
+
+    return (
+      <View style={styles.container}>
+        <ServerCounter t={t} />
+        <ReduxCounter t={t} />
+        <ClientCounter t={t} />
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -24,9 +39,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15
   }
 });
-
-Counter.propTypes = {
-  t: PropTypes.func
-};
 
 export default translate('counter')(Counter);

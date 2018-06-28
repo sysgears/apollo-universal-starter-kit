@@ -7,12 +7,20 @@ import Renderer from '../../../../testHelpers/Renderer';
 import { click, find } from '../../../../testHelpers/testUtils';
 import ClientCounter from './ClientCounter';
 import translate from '../../../../i18n';
-import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 
 chai.should();
 
 const COUNTER_APOLLO_LINK_VALUE = 20;
 const INCREMENT = 1;
+
+const mockedCache = {
+  data: {
+    counterState: {
+      counter: COUNTER_APOLLO_LINK_VALUE,
+      __typename: 'CounterState'
+    }
+  }
+};
 
 const resolvers = {
   defaults: {
@@ -20,30 +28,16 @@ const resolvers = {
   },
   resolvers: {
     Query: {
-      counterState: (_, args, { cache }) => {
-        const {
-          counterState: { counter }
-        } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
-        return {
-          counter: counter,
-          __typename: 'CounterState'
-        };
-      }
+      counterState: () => mockedCache.data.counterState
     },
     Mutation: {
-      addCounterState: (_, args, { cache }) => {
-        const {
-          counterState: { counter }
-        } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
-
-        cache.writeData({
-          data: {
-            counterState: {
-              counter: counter + INCREMENT,
-              __typename: 'CounterState'
-            }
+      addCounterState: () => {
+        mockedCache.data = {
+          counterState: {
+            counter: mockedCache.data.counterState.counter + INCREMENT,
+            __typename: 'CounterState'
           }
-        });
+        };
         return null;
       }
     }
@@ -72,11 +66,9 @@ describe('Apollo link counter example UI works', () => {
     content.textContent.should.has.string(`Current apolloLinkStateCount, is ${COUNTER_APOLLO_LINK_VALUE}.`);
   });
 
-  step('Clicking on increase counter button shows optimistic response', () => {
+  step('Clicking on increase counter button shows optimistic response', async () => {
     const apolloLinkButton = find(container, '#apollo-link-button');
-    click(apolloLinkButton);
-    setTimeout(() => {
-      content.textContent.should.has.string(`Current apolloLinkStateCount, is ${COUNTER_APOLLO_LINK_VALUE + 1}.`);
-    }, 1000);
+    await click(apolloLinkButton);
+    mockedCache.data.counterState.counter.should.to.equal(COUNTER_APOLLO_LINK_VALUE + INCREMENT);
   });
 });

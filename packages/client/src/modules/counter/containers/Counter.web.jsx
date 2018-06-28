@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
-import { PageLayout } from '../common/components/web';
-import settings from '../../../../../settings';
-import ClientCounter from './clientCounter/containers/ClientCounter';
-import ServerCounter from './serverCounter/containers/ServerCounter';
-import ReduxCounter from './reduxCounter/containers/ReduxCounter';
-import translate from '../../i18n';
+import { PageLayout } from '../../common/components/web/index';
+import settings from '../../../../../../settings';
+import ClientCounter from '../clientCounter/containers/ClientCounter';
+import ServerCounter from '../serverCounter/containers/ServerCounter';
+import ReduxCounter from '../reduxCounter/containers/ReduxCounter';
+import translate from '../../../i18n/index';
 
 const Counter = ({ t }) => (
   <PageLayout>

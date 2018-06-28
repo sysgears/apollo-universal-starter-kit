@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 
-import ClientCounter from './clientCounter/containers/ClientCounter';
-import ServerCounter from './serverCounter/containers/ServerCounter';
-import ReduxCounter from './reduxCounter/containers/ReduxCounter';
-import translate from '../../i18n';
+import ClientCounter from '../clientCounter/containers/ClientCounter';
+import ServerCounter from '../serverCounter/containers/ServerCounter';
+import ReduxCounter from '../reduxCounter/containers/ReduxCounter';
+import translate from '../../../i18n/index';
 
 const Counter = ({ t }) => (
   <View style={styles.container}>

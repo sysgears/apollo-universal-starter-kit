@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Counter from './Counter';
+import Counter from './containers/Counter.web';
 import ClientCounter from './clientCounter';
 import ReduxCounter from './reduxCounter';
 import ServerCounter from './serverCounter';

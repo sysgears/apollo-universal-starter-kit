@@ -4,9 +4,9 @@ import { createStackNavigator } from 'react-navigation';
 import translate from '../../i18n';
 import { HeaderTitle, IconButton } from '../common/components/native';
 import Counter from './Counter';
-import ClientCounter from './modules/clientCounter';
-import ReduxCounter from './modules/reduxCounter';
-import ServerCounter from './modules/serverCounter';
+import ClientCounter from './clientCounter';
+import ReduxCounter from './reduxCounter';
+import ServerCounter from './serverCounter';
 import Feature from '../connector';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);

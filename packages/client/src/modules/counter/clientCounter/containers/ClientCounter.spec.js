@@ -3,10 +3,10 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 import { render } from 'react-testing-library';
 
-import Renderer from '../../../../../testHelpers/Renderer';
-import { click, find } from '../../../../../testHelpers/testUtils';
+import Renderer from '../../../../testHelpers/Renderer';
+import { click, find } from '../../../../testHelpers/testUtils';
 import ClientCounter from './ClientCounter';
-import translate from '../../../../../i18n/index';
+import translate from '../../../../i18n/index';
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 
 chai.should();

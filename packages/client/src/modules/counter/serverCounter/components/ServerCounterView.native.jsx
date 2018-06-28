@@ -1,30 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { Button } from '../../../../common/components/web/index';
-
-const Section = styled.section`
-  margin-bottom: 30px;
-  text-align: center;
-`;
+import { Button, Loading, primary } from '../../../common/components/native/index';
 
 export const ServerCounterView = ({ t, children, counter, loading }) => {
   if (loading) {
-    return (
-      <Section>
-        <div className="text-center">{t('loading')}</div>
-      </Section>
-    );
+    return <Loading text={t('loading')} />;
   } else {
     return (
-      <Section>
-        <p>{t('text', { counter })}</p>
+      <View>
+        <View style={styles.element}>
+          <Text style={styles.box}>{t('text', { counter })}</Text>
+        </View>
         {children}
-      </Section>
+      </View>
     );
   }
 };
+
+const styles = StyleSheet.create({
+  element: {
+    paddingTop: 30
+  },
+  box: {
+    textAlign: 'center',
+    marginBottom: 5
+  }
+});
 
 ServerCounterView.propTypes = {
   t: PropTypes.func,
@@ -34,7 +37,7 @@ ServerCounterView.propTypes = {
 };
 
 export const ServerCounterButton = ({ onClick, text }) => (
-  <Button id="graphql-button" color="primary" onClick={onClick}>
+  <Button type={primary} onPress={onClick}>
     {text}
   </Button>
 );

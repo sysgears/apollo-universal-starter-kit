@@ -1,12 +1,11 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
-import translate from '../../../../i18n/index';
-import { HeaderTitle } from '../../../common/components/native/index';
-import ReduxCounter from './containers/ReduxCounter';
-import reducers from './reducers/index';
+import translate from '../../../i18n/index';
+import { HeaderTitle } from '../../common/components/native/index';
+import ServerCounter from './containers/ServerCounter';
 import resources from './locales/index';
-import Feature from '../../../connector';
+import Feature from '../../connector';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 
@@ -15,7 +14,7 @@ export default new Feature({
     Counter: {
       screen: createStackNavigator({
         Counter: {
-          screen: ReduxCounter
+          screen: ServerCounter
         }
       }),
       navigationOptions: {
@@ -23,6 +22,5 @@ export default new Feature({
       }
     }
   },
-  reducer: { counter: reducers },
-  localization: { ns: 'reduxCounter', resources }
+  localization: { ns: 'serverCounter', resources }
 });

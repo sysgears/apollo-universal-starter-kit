@@ -2,9 +2,9 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 
 import Counter from './Counter';
-import ClientCounter from './modules/clientCounter';
-import ReduxCounter from './modules/reduxCounter';
-import ServerCounter from './modules/serverCounter';
+import ClientCounter from './clientCounter';
+import ReduxCounter from './reduxCounter';
+import ServerCounter from './serverCounter';
 import Feature from '../connector';
 import resources from './locales';
 

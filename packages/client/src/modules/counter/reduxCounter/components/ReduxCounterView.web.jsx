@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { Button } from '../../../../common/components/web/index';
+import { Button } from '../../../common/components/web/index';
 
 const Section = styled.section`
   margin-bottom: 30px;

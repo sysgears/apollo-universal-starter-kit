@@ -7,7 +7,7 @@ import { ServerCounterView, ServerCounterButton } from '../components/ServerCoun
 import ADD_COUNTER from '../graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
-import translate from '../../../../../i18n';
+import translate from '../../../../i18n/index';
 
 const IncreaseButton = ({ counterAmount, t, counter }) => (
   <Mutation mutation={ADD_COUNTER}>

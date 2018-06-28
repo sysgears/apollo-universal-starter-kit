@@ -1,11 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
-import translate from '../../../../i18n/index';
-import { HeaderTitle } from '../../../common/components/native/index';
-import ServerCounter from './containers/ServerCounter';
+import translate from '../../../i18n/index';
+import { HeaderTitle } from '../../common/components/native/index';
+import ClientCounter from './containers/ClientCounter';
+import resolvers from './resolvers/index';
 import resources from './locales/index';
-import Feature from '../../../connector';
+import Feature from '../../connector';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 
@@ -14,7 +15,7 @@ export default new Feature({
     Counter: {
       screen: createStackNavigator({
         Counter: {
-          screen: ServerCounter
+          screen: ClientCounter
         }
       }),
       navigationOptions: {
@@ -22,5 +23,6 @@ export default new Feature({
       }
     }
   },
-  localization: { ns: 'serverCounter', resources }
+  resolver: resolvers,
+  localization: { ns: 'clientCounter', resources }
 });

@@ -4,9 +4,9 @@ import Helmet from 'react-helmet';
 
 import { PageLayout } from '../common/components/web';
 import settings from '../../../../../settings';
-import ClientCounter from './modules/clientCounter/containers/ClientCounter';
-import ServerCounter from './modules/serverCounter/containers/ServerCounter';
-import ReduxCounter from './modules/reduxCounter/containers/ReduxCounter';
+import ClientCounter from './clientCounter/containers/ClientCounter';
+import ServerCounter from './serverCounter/containers/ServerCounter';
+import ReduxCounter from './reduxCounter/containers/ReduxCounter';
 import translate from '../../i18n';
 
 const Counter = ({ t }) => (

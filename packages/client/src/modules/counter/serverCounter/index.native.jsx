@@ -1,10 +1,10 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
-import translate from '../../../i18n/index';
-import { HeaderTitle } from '../../common/components/native/index';
+import translate from '../../../i18n';
+import { HeaderTitle } from '../../common/components/native';
 import ServerCounter from './containers/ServerCounter';
-import resources from './locales/index';
+import resources from './locales';
 import Feature from '../../connector';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);

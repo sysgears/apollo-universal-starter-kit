@@ -1,4 +1,4 @@
-import resources from './locales/index';
+import resources from './locales';
 import Feature from '../../connector';
 
 export default new Feature({

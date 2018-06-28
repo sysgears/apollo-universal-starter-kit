@@ -1,11 +1,11 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
-import translate from '../../../i18n/index';
-import { HeaderTitle } from '../../common/components/native/index';
+import translate from '../../../i18n';
+import { HeaderTitle } from '../../common/components/native';
 import ReduxCounter from './containers/ReduxCounter';
-import reducers from './reducers/index';
-import resources from './locales/index';
+import reducers from './reducers';
+import resources from './locales';
 import Feature from '../../connector';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);

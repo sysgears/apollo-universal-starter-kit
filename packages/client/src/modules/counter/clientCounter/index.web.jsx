@@ -1,5 +1,5 @@
-import resolvers from './resolvers/index';
-import resources from './locales/index';
+import resolvers from './resolvers';
+import resources from './locales';
 import Feature from '../../connector';
 
 export default new Feature({

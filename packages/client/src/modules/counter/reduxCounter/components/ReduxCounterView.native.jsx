@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Button, primary } from '../../../common/components/native/index';
+import { Button, primary } from '../../../common/components/native';
 
 export const ReduxCounterView = ({ text, children }) => (
   <View>

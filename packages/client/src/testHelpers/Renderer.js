@@ -137,7 +137,7 @@ export default class Renderer {
     const client = createApolloClient({
       createNetLink: () => schemaLink,
       links: clientModules.link,
-      clientResolvers: resolvers ? resolvers : clientModules.resolvers
+      clientResolvers: resolvers || clientModules.resolvers
     });
 
     const store = createStore(

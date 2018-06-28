@@ -14,7 +14,7 @@ chai.should();
 const COUNTER_APOLLO_LINK_VALUE = 20;
 const INCREMENT = 1;
 
-const mock = {
+const resolvers = {
   defaults: {
     counterState: { counter: COUNTER_APOLLO_LINK_VALUE, __typename: 'CounterState' }
   },
@@ -31,12 +31,12 @@ const mock = {
       }
     },
     Mutation: {
-      addCounterState: async (_, args, { cache }) => {
+      addCounterState: (_, args, { cache }) => {
         const {
           counterState: { counter }
         } = cache.readQuery({ query: COUNTER_QUERY_CLIENT });
 
-        await cache.writeData({
+        cache.writeData({
           data: {
             counterState: {
               counter: counter + INCREMENT,
@@ -51,7 +51,7 @@ const mock = {
 };
 
 describe('Apollo link counter example UI works', () => {
-  const renderer = new Renderer(mock, {});
+  const renderer = new Renderer({}, {}, resolvers);
 
   let app;
   let container;
@@ -75,6 +75,8 @@ describe('Apollo link counter example UI works', () => {
   step('Clicking on increase counter button shows optimistic response', () => {
     const apolloLinkButton = find(container, '#apollo-link-button');
     click(apolloLinkButton);
-    content.textContent.should.has.string(`Current apolloLinkStateCount, is ${COUNTER_APOLLO_LINK_VALUE + 1}.`);
+    setTimeout(() => {
+      content.textContent.should.has.string(`Current apolloLinkStateCount, is ${COUNTER_APOLLO_LINK_VALUE + 1}.`);
+    }, 1000);
   });
 });

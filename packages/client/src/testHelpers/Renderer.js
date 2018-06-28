@@ -126,7 +126,7 @@ class MockLink extends ApolloLink {
 }
 
 export default class Renderer {
-  constructor(graphqlMocks, reduxState) {
+  constructor(graphqlMocks, reduxState, resolvers) {
     const schema = makeExecutableSchema({
       typeDefs: [rootSchema, ...serverModules.schemas]
     });
@@ -137,7 +137,7 @@ export default class Renderer {
     const client = createApolloClient({
       createNetLink: () => schemaLink,
       links: clientModules.link,
-      clientResolvers: clientModules.resolvers
+      clientResolvers: resolvers ? resolvers : clientModules.resolvers
     });
 
     const store = createStore(

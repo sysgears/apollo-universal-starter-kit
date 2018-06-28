@@ -46,7 +46,7 @@ describe('Server counter example UI works', () => {
     app = render(renderer.withApollo(<ServerCounterWithI18n />));
     container = app.container;
     content = container.firstChild;
-    content.textContent.should.has.string('Loading...');
+    content.textContent.should.has.string('loading');
   });
 
   step('Counter section renders with queries data', () => {

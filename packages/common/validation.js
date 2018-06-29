@@ -64,7 +64,11 @@ export const computeDomainValidationErrors = rawErrors => {
     if (rawErrors.hasOwnProperty(errorField) && rawErrors[errorField] === Object(rawErrors[errorField])) {
       computedErrors[errorField] = 'Required';
     } else {
-      computedErrors[errorField] = rawErrors[errorField];
+      if (Array.isArray(rawErrors[errorField]) && rawErrors[errorField].length > 0) {
+        computedErrors[errorField] = rawErrors[errorField][0];
+      } else {
+        computedErrors[errorField] = rawErrors[errorField];
+      }
     }
   }
   return computedErrors;

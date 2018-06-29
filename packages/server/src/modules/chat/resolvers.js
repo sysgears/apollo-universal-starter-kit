@@ -12,7 +12,8 @@ export default pubsub => ({
   },
   Mutation: {
     async addMessage(obj, { input }, context) {
-      const [id] = await context.Chat.addMessage(input);
+      const userId = context.user ? context.user.id : null;
+      const [id] = await context.Chat.addMessage({ ...input, userId });
       const message = await context.Chat.message(id);
       // publish for message list
       pubsub.publish(MESSAGES_SUBSCRIPTION, {

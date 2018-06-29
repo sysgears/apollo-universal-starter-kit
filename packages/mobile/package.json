@@ -71,6 +71,7 @@
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",
+    "react-native-uuid": "^1.4.9",
     "react-navigation": "^2.0.0",
     "react-redux": "^5.0.6",
     "react-stripe-elements": "^1.2.1",

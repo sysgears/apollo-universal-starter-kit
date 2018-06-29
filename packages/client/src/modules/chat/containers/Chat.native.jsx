@@ -12,6 +12,7 @@ import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import { withUser } from '../../user/containers/AuthBase';
+import withUuid from './WithUuid';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
@@ -57,6 +58,7 @@ function EditMessage(prev, node) {
 }
 
 @translate('chat')
+@withUuid
 @withUser
 class Chat extends React.Component {
   static propTypes = {
@@ -66,7 +68,8 @@ class Chat extends React.Component {
     deleteMessage: PropTypes.func,
     editMessage: PropTypes.func,
     subscribeToMore: PropTypes.func.isRequired,
-    currentUser: PropTypes.object
+    currentUser: PropTypes.object,
+    uuid: PropTypes.string
   };
 
   constructor(props) {
@@ -127,11 +130,13 @@ class Chat extends React.Component {
 
   onSend = (messages = [], addMessage, editMessage) => {
     const { isEdit, messageInfo, message } = this.state;
+    const { uuid } = this.props;
 
     if (isEdit) {
       editMessage({
         ...messageInfo,
-        text: message
+        text: message,
+        uuid
       });
       this.setState({ isEdit: false });
     } else {
@@ -145,7 +150,8 @@ class Chat extends React.Component {
         text,
         username,
         userId,
-        id
+        id,
+        uuid
       });
     }
   };
@@ -194,15 +200,15 @@ class Chat extends React.Component {
 
   render() {
     const { message } = this.state;
-    const { messages = [], currentUser, addMessage, editMessage, deleteMessage } = this.props;
+    const { messages = [], currentUser, addMessage, editMessage, deleteMessage, uuid } = this.props;
     const anonymous = 'Anonymous';
-    const defaultUser = { id: null, username: anonymous };
+    const defaultUser = { id: uuid, username: anonymous };
     const { id, username } = currentUser ? currentUser : defaultUser;
-    const formatMessages = messages.map(({ id: _id, text, userId, username, createdAt }) => ({
+    const formatMessages = messages.map(({ id: _id, text, userId, username, createdAt, uuid }) => ({
       _id,
       text,
       createdAt,
-      user: { _id: userId, name: username || anonymous }
+      user: { _id: userId ? userId : uuid, name: username || anonymous }
     }));
 
     return (
@@ -216,7 +222,7 @@ class Chat extends React.Component {
           messages={formatMessages}
           onSend={messages => this.onSend(messages, addMessage, editMessage)}
           user={{ _id: id, name: username }}
-          showAvatarForEveryMessage={true}
+          showAvatarForEveryMessage
           onLongPress={(context, currentMessage) =>
             this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState.bind(this))
           }
@@ -237,9 +243,9 @@ export default compose(
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
-      addMessage: async ({ text, userId, username, id }) => {
+      addMessage: async ({ text, userId, username, uuid, id }) => {
         mutate({
-          variables: { input: { text, userId } },
+          variables: { input: { text, uuid } },
           updateQueries: {
             messages: (
               prev,
@@ -260,6 +266,7 @@ export default compose(
               text: text,
               username: username,
               userId: userId,
+              uuid: uuid,
               id: id
             }
           }
@@ -297,9 +304,9 @@ export default compose(
   }),
   graphql(EDIT_MESSAGE, {
     props: ({ mutate }) => ({
-      editMessage: ({ text, id, createdAt, userId = null, username }) => {
+      editMessage: ({ text, id, createdAt, userId = null, username, uuid }) => {
         mutate({
-          variables: { input: { text, id, userId } },
+          variables: { input: { text, id } },
           optimisticResponse: {
             __typename: 'Mutation',
             editMessage: {
@@ -308,6 +315,7 @@ export default compose(
               userId: userId,
               username: username,
               createdAt: createdAt,
+              uuid: uuid,
               __typename: 'Message'
             }
           },

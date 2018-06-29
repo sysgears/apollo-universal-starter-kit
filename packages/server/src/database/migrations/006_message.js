@@ -3,6 +3,7 @@ export async function up(knex) {
     table.increments();
     table.string('text').notNull();
     table.integer('userId');
+    table.string('uuid');
     table.timestamps(false, true);
   });
 }

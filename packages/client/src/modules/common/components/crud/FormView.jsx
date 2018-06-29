@@ -23,9 +23,9 @@ const Form = ({ schema, data: { node }, updateEntry, createEntry }) => {
 
         await onSubmit({ schema, values, updateEntry, createEntry, title, data });
       }}
-      render={({ handleSubmit, values }) => (
+      render={({ handleSubmit, values, setFieldValue }) => (
         <FormView>
-          {createFormFields(schema, values)}
+          {createFormFields(schema, values, setFieldValue)}
           <Button onPress={handleSubmit}>Save</Button>
         </FormView>
       )}

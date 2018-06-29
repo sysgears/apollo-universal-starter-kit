@@ -6,8 +6,8 @@ import path from 'path';
 import { isApiExternal } from './net';
 import modules from './modules';
 import websiteMiddleware from './middleware/website';
-import graphiqlMiddleware from './middleware/graphiql';
-import graphqlMiddleware from './middleware/graphql';
+// import graphiqlMiddleware from './middleware/graphiql';
+import getGraphqlServer from './middleware/graphql';
 import errorMiddleware from './middleware/error';
 
 const app = express();
@@ -48,10 +48,13 @@ if (__DEV__) {
     res.send(process.cwd() + path.sep);
   });
 }
+
 if (!isApiExternal) {
-  app.post(__API_URL__, (...args) => graphqlMiddleware(...args));
+  const graphqlServer = getGraphqlServer();
+  graphqlServer.applyMiddleware({ app, path: __API_URL__, cors: corsOptions });
+  // app.post(__API_URL__, (...args) => graphqlMiddleware(...args));
 }
-app.get('/graphiql', (...args) => graphiqlMiddleware(...args));
+// app.get('/graphiql', (...args) => graphiqlMiddleware(...args));
 app.use((...args) => websiteMiddleware(...args));
 if (__DEV__) {
   app.use(errorMiddleware);

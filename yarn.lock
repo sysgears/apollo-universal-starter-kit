@@ -6549,7 +6549,7 @@ graphql-playground-html@1.6.0:
   dependencies:
     graphql-config "2.0.0"
 
-graphql-playground-middleware-express@^1.7.0, graphql-playground-middleware-express@^1.7.1:
+graphql-playground-middleware-express@^1.7.0:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/graphql-playground-middleware-express/-/graphql-playground-middleware-express-1.7.1.tgz#9bac69fd7691056334ddea2c56c687bddb22844a"
   dependencies:

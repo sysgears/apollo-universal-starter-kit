@@ -77,6 +77,7 @@
     "graphql": "0.13.0",
     "graphql-auth": "0.2.2",
     "graphql-iso-date": "^3.3.0",
+    "graphql-playground-middleware-express": "^1.7.1",
     "graphql-resolve-batch": "^1.0.2",
     "graphql-subscriptions": "^0.5.5",
     "graphql-tag": "^2.6.0",

@@ -6,7 +6,7 @@ import path from 'path';
 import { isApiExternal } from './net';
 import modules from './modules';
 import websiteMiddleware from './middleware/website';
-// import graphiqlMiddleware from './middleware/graphiql';
+import graphiqlMiddleware from './middleware/graphiql';
 import getGraphqlServer from './middleware/graphql';
 import errorMiddleware from './middleware/error';
 
@@ -51,10 +51,16 @@ if (__DEV__) {
 
 if (!isApiExternal) {
   const graphqlServer = getGraphqlServer();
-  graphqlServer.applyMiddleware({ app, path: __API_URL__, cors: corsOptions });
+  graphqlServer.applyMiddleware({
+    app,
+    path: __API_URL__,
+    cors: corsOptions
+  });
   // app.post(__API_URL__, (...args) => graphqlMiddleware(...args));
 }
-// app.get('/graphiql', (...args) => graphiqlMiddleware(...args));
+
+app.get('/graphiql', (...args) => graphiqlMiddleware(args[0])(...args));
+
 app.use((...args) => websiteMiddleware(...args));
 if (__DEV__) {
   app.use(errorMiddleware);

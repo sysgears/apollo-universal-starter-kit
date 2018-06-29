@@ -24,7 +24,18 @@ const renderData = (columns, entry) => {
   });
 };
 
-const Table = ({ dataSource, columns, title, footer, onHeaderRow, rowSelection, pagination, loading, ...props }) => {
+const Table = ({
+  dataSource,
+  columns,
+  title,
+  footer,
+  onHeaderRow,
+  rowSelection,
+  pagination,
+  loading,
+  onRow,
+  ...props
+}) => {
   return (
     <RSTable {...props}>
       <thead>
@@ -48,7 +59,8 @@ Table.propTypes = {
   title: PropTypes.func,
   footer: PropTypes.any,
   onHeaderRow: PropTypes.any,
-  rowSelection: PropTypes.any
+  rowSelection: PropTypes.any,
+  onRow: PropTypes.any
 };
 
 export default Table;

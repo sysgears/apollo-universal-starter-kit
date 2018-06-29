@@ -577,11 +577,12 @@
     debug "^3.1.0"
     humps "^2.0.1"
 
-"@domain-schema/validation@^0.0.33":
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/@domain-schema/validation/-/validation-0.0.33.tgz#f4e83e2abe249cea2f83762d01c065a3132f4a2f"
+"@domain-schema/validation@^0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@domain-schema/validation/-/validation-0.0.34.tgz#f10f4b810911c989490d269df315296bdbe0cfc2"
   dependencies:
     debug "^3.1.0"
+    humps "^2.0.1"
 
 "@expo/bunyan@^1.8.10":
   version "1.8.10"

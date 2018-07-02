@@ -204,10 +204,12 @@ class Chat extends React.Component {
     const anonymous = 'Anonymous';
     const defaultUser = { id: uuid, username: anonymous };
     const { id, username } = currentUser ? currentUser : defaultUser;
+    const date = new Date();
+    const timeDiff = (date.getHours() - date.getUTCHours()) * 60 * 60 * 1000;
     const formatMessages = messages.map(({ id: _id, text, userId, username, createdAt, uuid }) => ({
       _id,
       text,
-      createdAt,
+      createdAt: Date.parse(createdAt) + timeDiff,
       user: { _id: userId ? userId : uuid, name: username || anonymous }
     }));
 
@@ -262,7 +264,7 @@ export default compose(
             __typename: 'Mutation',
             addMessage: {
               __typename: 'Message',
-              createdAt: new Date(),
+              createdAt: new Date(Date.now() + new Date().getTimezoneOffset() * 60000),
               text: text,
               username: username,
               userId: userId,
@@ -314,7 +316,7 @@ export default compose(
               text: text,
               userId: userId,
               username: username,
-              createdAt: createdAt,
+              createdAt: new Date(createdAt + new Date().getTimezoneOffset() * 60000),
               uuid: uuid,
               __typename: 'Message'
             }

@@ -210,7 +210,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
       let fragmentGraphql = '';
 
       for (const key of schema.keys()) {
-        fragmentGraphql += regenerateGraphqlFragment(schema.values[key], key, fragmentGraphql);
+        fragmentGraphql += regenerateGraphqlFragment(schema.values[key], key);
       }
 
       shell.cd(pathFragment);

@@ -19,7 +19,7 @@ function deleteModule(logger, templatePath, module, location) {
   const startPath = `${__dirname}/../../..`;
   const modulePath = `${startPath}/packages/${location}/src/modules/${module}`;
   const commonGraphqlFile = 'commonGraphql.js';
-  const commonGraphqlPath = `${startPath}/packages/${location}/src/modules/common/components/web/${commonGraphqlFile}`;
+  const commonGraphqlPath = `${startPath}/packages/${location}/src/modules/common/${commonGraphqlFile}`;
 
   if (fs.existsSync(modulePath)) {
     // remove module directory

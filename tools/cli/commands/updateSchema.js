@@ -207,46 +207,10 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
       const fragmentGraphqlFile = `${Module}.graphql`;
 
       // regenerate graphql fragment
-      // TODO: refactor to generate this recursively
       let fragmentGraphql = '';
+
       for (const key of schema.keys()) {
-        const value = schema.values[key];
-        if (value.type.isSchema) {
-          let column = 'name';
-          for (const remoteKey of value.type.keys()) {
-            const remoteValue = value.type.values[remoteKey];
-            if (remoteValue.sortBy) {
-              column = remoteKey;
-            }
-          }
-          fragmentGraphql += `  ${key} {\n`;
-          fragmentGraphql += `    id\n`;
-          fragmentGraphql += `    ${column}\n`;
-          fragmentGraphql += `  }\n`;
-        } else if (value.type.constructor === Array && value.type[0].isSchema) {
-          fragmentGraphql += `  ${key} {\n`;
-          for (const remoteKey of value.type[0].keys()) {
-            const remoteValue = value.type[0].values[remoteKey];
-            if (remoteValue.type.isSchema) {
-              let remotecolumn = 'name';
-              for (const remoteKey of remoteValue.type.keys()) {
-                const remoteValue1 = remoteValue.type.values[remoteKey];
-                if (remoteValue1.sortBy) {
-                  remotecolumn = remoteKey;
-                }
-              }
-              fragmentGraphql += `    ${remoteKey} {\n`;
-              fragmentGraphql += `      id\n`;
-              fragmentGraphql += `      ${remotecolumn}\n`;
-              fragmentGraphql += `    }\n`;
-            } else if (remoteValue.type.constructor !== Array) {
-              fragmentGraphql += `    ${remoteKey}\n`;
-            }
-          }
-          fragmentGraphql += `  }\n`;
-        } else {
-          fragmentGraphql += `  ${key}\n`;
-        }
+        fragmentGraphql += regenerateGraphqlFragment(schema.values[key], key, fragmentGraphql);
       }
 
       shell.cd(pathFragment);
@@ -440,5 +404,22 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     logger.info(chalk.red(`✘ Module ${module} in path ${modulePath} not found!`));
   }
 }
+
+const regenerateGraphqlFragment = (value, key) => {
+  if (value.type.isSchema) {
+    let column = 'name';
+    for (const remoteKey of value.type.keys()) {
+      const remoteValue = value.type.values[remoteKey];
+      if (remoteValue.sortBy) {
+        column = remoteKey;
+      }
+    }
+    return `  ${key} {\n    id\n    ${column}\n  }\n`;
+  } else if (value.type.constructor === Array && value.type[0].isSchema) {
+    return regenerateGraphqlFragment(value, key) + `  }\n`;
+  } else {
+    return `  ${key}\n`;
+  }
+};
 
 module.exports = updateSchema;

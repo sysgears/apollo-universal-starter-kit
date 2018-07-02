@@ -81,7 +81,7 @@ function generateField(value, update = false) {
  * @param moduleGraphqlContainer
  */
 function generateCommonGraphqlFile(module, commonGraphqlPath, moduleGraphqlContainer) {
-  const importGraphqlContainer = `import ${moduleGraphqlContainer} from '../../../${module}/containers/${moduleGraphqlContainer}';\n`;
+  const importGraphqlContainer = `import ${moduleGraphqlContainer} from '../${module}/containers/${moduleGraphqlContainer}';\n`;
   const exportGraphqlContainer = `\nexport default {\n  ${moduleGraphqlContainer}\n};\n`;
 
   if (fs.existsSync(commonGraphqlPath)) {

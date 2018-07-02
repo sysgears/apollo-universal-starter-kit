@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Spin } from 'antd';
 import { pascalize } from 'humps';
-import schemaQueries from '../../commonGraphql';
+import schemaQueries from '../../../../commonGraphql';
 
 const Option = Select.Option;
 export default class RenderCellSelectQuery extends React.Component {

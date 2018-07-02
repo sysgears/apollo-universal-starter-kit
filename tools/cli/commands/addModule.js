@@ -48,7 +48,7 @@ function addModule(logger, templatePath, module, action, tablePrefix, location) 
 
     if (action === 'addcrud' && location === 'client') {
       const commonGraphqlFile = 'commonGraphql.js';
-      const commonGraphqlPath = `${startPath}/packages/${location}/src/modules/common/components/web/${commonGraphqlFile}`;
+      const commonGraphqlPath = `${startPath}/packages/${location}/src/modules/common/${commonGraphqlFile}`;
       const graphqlQuery = `${Module}Query`;
       generateCommonGraphqlFile(module, commonGraphqlPath, graphqlQuery);
     }

@@ -1,7 +1,7 @@
 import React from 'react';
-import { pick, capitalize } from 'lodash';
+import { pick, capitalize, startCase } from 'lodash';
 import Field from '../../utils/FieldAdapter';
-import { RenderField, RenderSwitch, RenderSelectQuery } from './components/native';
+import { RenderField, RenderSwitch, RenderSelectQuery, RenderDatepicker } from './components/native';
 
 export const createFormFields = (schema, values, setFieldValue) => {
   let fields = [];
@@ -27,7 +27,7 @@ export const createFormFields = (schema, values, setFieldValue) => {
           key={key}
           value={values[key]}
           component={RenderSelectQuery}
-          placeholder={capitalize(key)}
+          placeholder={startCase(key)}
           onChange={selectedValue => setFieldValue(key, selectedValue)}
         />
       );
@@ -40,7 +40,7 @@ export const createFormFields = (schema, values, setFieldValue) => {
           component={RenderField}
           type="text"
           style={inputStyle}
-          placeholder={capitalize(key)}
+          placeholder={startCase(key)}
         />
       );
     } else if (hasTypeOf(Number)) {
@@ -53,7 +53,7 @@ export const createFormFields = (schema, values, setFieldValue) => {
           type="number"
           component={RenderField}
           style={inputStyle}
-          placeholder={capitalize(key)}
+          placeholder={startCase(key)}
         />
       );
     } else if (hasTypeOf(Boolean)) {
@@ -64,9 +64,21 @@ export const createFormFields = (schema, values, setFieldValue) => {
           key={key}
           value={!!values[key]}
           component={RenderSwitch}
-          placeholder={capitalize(key)}
+          placeholder={startCase(key)}
           onChange={selectedValue => setFieldValue(key, selectedValue)}
           style={switchStyle}
+        />
+      );
+    } else if (hasTypeOf(Date)) {
+      fields.push(
+        <Field
+          name={key}
+          key={key}
+          value={values[key]}
+          component={RenderDatepicker}
+          style={inputStyle}
+          onChange={selectedValue => setFieldValue(key, selectedValue)}
+          placeholder={startCase(key)}
         />
       );
     }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Select, Spin } from 'antd';
 import { pascalize } from 'humps';
 import { FormItem } from './index';
-import schemaQueries from '../../../../commonGraphql';
+import schemaQueries from '../../../../generatedContainers';
 
 const Option = Select.Option;
 

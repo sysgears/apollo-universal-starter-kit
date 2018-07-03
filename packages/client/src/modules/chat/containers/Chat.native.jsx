@@ -13,6 +13,8 @@ import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 import withUuid from './WithUuid';
+import ChatFooter from '../components/ChatFooter.native';
+import CustomView from '../components/CustomView.native';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
@@ -80,7 +82,9 @@ class Chat extends React.Component {
   state = {
     message: '',
     isEdit: false,
-    messageInfo: null
+    messageInfo: null,
+    isReply: false,
+    quotedMessage: null
   };
 
   componentWillReceiveProps() {
@@ -129,7 +133,8 @@ class Chat extends React.Component {
   };
 
   onSend = (messages = [], addMessage, editMessage) => {
-    const { isEdit, messageInfo, message } = this.state;
+    const { isEdit, messageInfo, message, quotedMessage } = this.state;
+    const reply = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
     const { uuid } = this.props;
 
     if (isEdit) {
@@ -151,16 +156,19 @@ class Chat extends React.Component {
         username,
         userId,
         id,
-        uuid
+        uuid,
+        reply
       });
+
+      this.setState({ isReply: false, quotedMessage: null });
     }
   };
 
   onLongPress(context, currentMessage, id, deleteMessage, setEditState) {
-    const options = ['Copy Text'];
+    const options = ['Copy Text', 'Reply'];
 
     if (id === currentMessage.user._id) {
-      options.splice(1, 0, 'Edit', 'Delete');
+      options.push('Edit', 'Delete');
     }
 
     context.actionSheet().showActionSheetWithOptions(
@@ -174,10 +182,14 @@ class Chat extends React.Component {
             break;
 
           case 1:
-            setEditState(currentMessage.text, currentMessage);
+            this.setReplyState(currentMessage);
             break;
 
           case 2:
+            setEditState(currentMessage.text, currentMessage);
+            break;
+
+          case 3:
             deleteMessage({ id: currentMessage._id });
             break;
         }
@@ -198,6 +210,31 @@ class Chat extends React.Component {
     this.gc.focusTextInput();
   }
 
+  setReplyState({ _id: id, text, user: { name: username } }) {
+    this.setState({ isReply: true, quotedMessage: { id, text, username } });
+    this.gc.focusTextInput();
+  }
+
+  renderChatFooter() {
+    if (this.state.isReply) {
+      const { quotedMessage } = this.state;
+      return <ChatFooter {...quotedMessage} />;
+    }
+  }
+
+  renderCustomView() {
+    if (this.currentMessage.reply) {
+      const quotedMessage = this.messages.filter(item => this.currentMessage.reply === item._id)[0];
+      if (quotedMessage) {
+        const {
+          text,
+          user: { name: username }
+        } = quotedMessage;
+        return <CustomView username={username} text={text} />;
+      }
+    }
+  }
+
   render() {
     const { message } = this.state;
     const { messages = [], currentUser, addMessage, editMessage, deleteMessage, uuid } = this.props;
@@ -206,11 +243,12 @@ class Chat extends React.Component {
     const { id, username } = currentUser ? currentUser : defaultUser;
     const date = new Date();
     const timeDiff = (date.getHours() - date.getUTCHours()) * 60 * 60 * 1000;
-    const formatMessages = messages.map(({ id: _id, text, userId, username, createdAt, uuid }) => ({
+    const formatMessages = messages.map(({ id: _id, text, userId, username, createdAt, uuid, reply }) => ({
       _id,
       text,
       createdAt: Date.parse(createdAt) + timeDiff,
-      user: { _id: userId ? userId : uuid, name: username || anonymous }
+      user: { _id: userId ? userId : uuid, name: username || anonymous },
+      reply
     }));
 
     return (
@@ -225,6 +263,8 @@ class Chat extends React.Component {
           onSend={messages => this.onSend(messages, addMessage, editMessage)}
           user={{ _id: id, name: username }}
           showAvatarForEveryMessage
+          renderChatFooter={this.renderChatFooter.bind(this)}
+          renderCustomView={this.renderCustomView}
           onLongPress={(context, currentMessage) =>
             this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState.bind(this))
           }
@@ -245,9 +285,9 @@ export default compose(
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
-      addMessage: async ({ text, userId, username, uuid, id }) => {
+      addMessage: async ({ text, userId, username, uuid, id, reply }) => {
         mutate({
-          variables: { input: { text, uuid } },
+          variables: { input: { text, uuid, reply } },
           updateQueries: {
             messages: (
               prev,
@@ -269,7 +309,8 @@ export default compose(
               username: username,
               userId: userId,
               uuid: uuid,
-              id: id
+              id: id,
+              reply: reply
             }
           }
         });

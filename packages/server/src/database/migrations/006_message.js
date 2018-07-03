@@ -4,6 +4,7 @@ export async function up(knex) {
     table.string('text').notNull();
     table.integer('userId');
     table.string('uuid');
+    table.integer('reply');
     table.timestamps(false, true);
   });
 }

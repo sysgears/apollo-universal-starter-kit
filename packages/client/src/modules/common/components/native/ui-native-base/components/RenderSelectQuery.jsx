@@ -11,7 +11,7 @@ const handleSelect = (selectedValue, edges, onChangeValue) => {
 };
 
 const RenderSelectQuery = ({
-  input: { value: inputValue, onChange, onBlur, defaultValue, ...inputRest },
+  input: { name },
   label,
   schema,
   customStyles,
@@ -20,9 +20,8 @@ const RenderSelectQuery = ({
   ...props
 }) => {
   const pascalizeSchemaName = pascalize(schema.name);
-
-  const formatedValue = value && value != '' && typeof value !== 'undefined' ? value.id : '';
-
+  const formatedValue = value && value != '' && typeof value !== 'undefined' ? value.id : '0';
+  const defaultOption = { label: 'Select Item', value: '0' };
   const Query = schemaQueries[`${pascalizeSchemaName}Query`];
 
   let defaultStyle = {
@@ -46,17 +45,22 @@ const RenderSelectQuery = ({
     <Query limit={10}>
       {({ loading, data }) => {
         if (!loading || data) {
-          let computedData = data.edges
-            ? data.edges.map(item => {
-                return { label: item.name, value: item.id };
-              })
-            : null;
+          let computedData = null;
+          if (Array.isArray(data.edges) && data.edges.length > 0) {
+            computedData = data.edges.map(item => {
+              return { label: item.name, value: item.id };
+            });
+            if (!value) {
+              computedData.push(defaultOption);
+            }
+          }
+
           let computedProps = {
             renderSelectStyles: defaultStyle,
             value: formatedValue,
             data: computedData,
+            name,
             onChange: selectedValue => handleSelect(selectedValue, computedData, onChangeValue),
-            ...inputRest,
             ...props
           };
           return <RenderSelect {...computedProps} />;

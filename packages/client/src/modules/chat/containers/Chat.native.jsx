@@ -218,8 +218,12 @@ class Chat extends React.Component {
   renderChatFooter() {
     if (this.state.isReply) {
       const { quotedMessage } = this.state;
-      return <ChatFooter {...quotedMessage} />;
+      return <ChatFooter {...quotedMessage} undoReply={this.clearReplyState.bind(this)} />;
     }
+  }
+
+  clearReplyState() {
+    this.setState({ isReply: false, quotedMessage: null });
   }
 
   renderCustomView() {

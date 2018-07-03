@@ -26,7 +26,9 @@ const RenderSelectQuery = ({
   const Query = schemaQueries[`${pascalizeSchemaName}Query`];
 
   let defaultStyle = {
-    container: {},
+    container: {
+      paddingLeft: 0
+    },
     itemContainer: {},
     itemTitle: {},
     itemAction: {
@@ -72,7 +74,7 @@ RenderSelectQuery.propTypes = {
   schema: PropTypes.object,
   customStyles: PropTypes.object,
   formType: PropTypes.string,
-  onChange: PropTypes.func.required,
+  onChange: PropTypes.any,
   value: PropTypes.any
 };
 

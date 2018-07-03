@@ -34,6 +34,13 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
     }
   );
 
+  Object.setPrototypeOf =
+    Object.setPrototypeOf ||
+    function(obj, proto) {
+      obj.__proto__ = proto;
+      return obj;
+    };
+
   const queryLink = createNetLink
     ? createNetLink(apiUrl)
     : new BatchHttpLink({

@@ -62,7 +62,7 @@ export const createFormFields = (schema, values, setFieldValue) => {
           label={capitalize(key)}
           name={key}
           key={key}
-          value={values[key]}
+          value={!!values[key]}
           component={RenderSwitch}
           placeholder={capitalize(key)}
           onChange={selectedValue => setFieldValue(key, selectedValue)}

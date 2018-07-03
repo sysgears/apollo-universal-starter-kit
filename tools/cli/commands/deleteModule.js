@@ -2,7 +2,7 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const { pascalize } = require('humps');
-const { deleteModuleFromCommonGraphqlFile } = require('../helpers/util');
+const { deleteModuleFromGeneratedContainersFile } = require('../helpers/util');
 
 /**
  *
@@ -18,8 +18,8 @@ function deleteModule(logger, templatePath, module, location) {
   const Module = pascalize(module);
   const startPath = `${__dirname}/../../..`;
   const modulePath = `${startPath}/packages/${location}/src/modules/${module}`;
-  const commonGraphqlFile = 'commonGraphql.js';
-  const commonGraphqlPath = `${startPath}/packages/${location}/src/modules/common/${commonGraphqlFile}`;
+  const generatedContainerFile = 'generatedContainers.js';
+  const generatedContainerPath = `${startPath}/packages/${location}/src/modules/common/${generatedContainerFile}`;
 
   if (fs.existsSync(modulePath)) {
     // remove module directory
@@ -78,9 +78,9 @@ function deleteModule(logger, templatePath, module, location) {
     logger.info(chalk.red(`✘ Module ${location} location for ${modulePath} not found!`));
   }
 
-  if (fs.existsSync(commonGraphqlPath)) {
+  if (fs.existsSync(generatedContainerPath)) {
     const graphqlQuery = `${Module}Query`;
-    deleteModuleFromCommonGraphqlFile(module, commonGraphqlPath, graphqlQuery);
+    deleteModuleFromGeneratedContainersFile(module, generatedContainerPath, graphqlQuery);
   }
 }
 

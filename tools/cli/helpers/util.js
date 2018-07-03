@@ -77,50 +77,53 @@ function generateField(value, update = false) {
 /**
  *
  * @param module
- * @param commonGraphqlPath
+ * @param generatedContainerPath
  * @param moduleGraphqlContainer
  */
-function generateCommonGraphqlFile(module, commonGraphqlPath, moduleGraphqlContainer) {
+function createGeneratedContainersFile(module, generatedContainerPath, moduleGraphqlContainer) {
   const importGraphqlContainer = `import ${moduleGraphqlContainer} from '../${module}/containers/${moduleGraphqlContainer}';\n`;
   const exportGraphqlContainer = `\nexport default {\n  ${moduleGraphqlContainer}\n};\n`;
 
-  if (fs.existsSync(commonGraphqlPath)) {
-    const commonGraphqlData = fs.readFileSync(commonGraphqlPath);
-    const commonGraphql = commonGraphqlData.toString().trim();
-    if (commonGraphql.length > 1) {
-      const index = commonGraphql.lastIndexOf("';");
+  if (fs.existsSync(generatedContainerPath)) {
+    const generatedContainerData = fs.readFileSync(generatedContainerPath);
+    const generatedContainer = generatedContainerData.toString().trim();
+    if (generatedContainer.length > 1) {
+      const index = generatedContainer.lastIndexOf("';");
       const computedIndex = index >= 0 ? index + 3 : false;
       if (computedIndex) {
-        let computedCommonGraphql =
-          commonGraphql.slice(0, computedIndex) +
+        let computedGeneratedContainer =
+          generatedContainer.slice(0, computedIndex) +
           importGraphqlContainer +
-          commonGraphql.slice(computedIndex, commonGraphql.length);
-        computedCommonGraphql = computedCommonGraphql.replace(/(,|)\s};/g, `,\n  ${moduleGraphqlContainer}\n};`);
-        return fs.writeFileSync(commonGraphqlPath, computedCommonGraphql);
+          generatedContainer.slice(computedIndex, generatedContainer.length);
+        computedGeneratedContainer = computedGeneratedContainer.replace(
+          /(,|)\s};/g,
+          `,\n  ${moduleGraphqlContainer}\n};`
+        );
+        return fs.writeFileSync(generatedContainerPath, computedGeneratedContainer);
       }
     }
   }
-  return fs.writeFileSync(commonGraphqlPath, importGraphqlContainer + exportGraphqlContainer);
+  return fs.writeFileSync(generatedContainerPath, importGraphqlContainer + exportGraphqlContainer);
 }
 
 /**
  *
  * @param module
- * @param commonGraphqlPath
+ * @param generatedContainerPath
  * @param moduleGraphqlContainer
  */
-function deleteModuleFromCommonGraphqlFile(module, commonGraphqlPath, moduleGraphqlContainer) {
-  if (fs.existsSync(commonGraphqlPath)) {
-    const commonGraphqlData = fs.readFileSync(commonGraphqlPath);
+function deleteModuleFromGeneratedContainersFile(module, generatedContainerPath, moduleGraphqlContainer) {
+  if (fs.existsSync(generatedContainerPath)) {
+    const generatedContainerData = fs.readFileSync(generatedContainerPath);
     const reg = `(\\n\\s\\s${moduleGraphqlContainer}(.|)|import ${moduleGraphqlContainer}.+;\\n+(?!ex))`;
-    const commonGraphql = commonGraphqlData.toString().replace(new RegExp(reg, 'g'), '');
-    fs.writeFileSync(commonGraphqlPath, commonGraphql);
+    const generatedContainer = generatedContainerData.toString().replace(new RegExp(reg, 'g'), '');
+    fs.writeFileSync(generatedContainerPath, generatedContainer);
   }
 }
 
 module.exports = {
   renameFiles,
   generateField,
-  generateCommonGraphqlFile,
-  deleteModuleFromCommonGraphqlFile
+  createGeneratedContainersFile,
+  deleteModuleFromGeneratedContainersFile
 };

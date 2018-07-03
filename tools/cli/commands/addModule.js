@@ -2,7 +2,7 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const { pascalize } = require('humps');
-const { renameFiles, generateCommonGraphqlFile } = require('../helpers/util');
+const { renameFiles, createGeneratedContainersFile } = require('../helpers/util');
 
 /**
  *
@@ -47,10 +47,10 @@ function addModule(logger, templatePath, module, action, tablePrefix, location) 
     shell.ShellString(shell.cat('index.js').replace(RegExp(re, 'g'), `Feature(${module}, ${match[1]})`)).to('index.js');
 
     if (action === 'addcrud' && location === 'client') {
-      const commonGraphqlFile = 'commonGraphql.js';
-      const commonGraphqlPath = `${startPath}/packages/${location}/src/modules/common/${commonGraphqlFile}`;
+      const generatedContainerFile = 'generatedContainers.js';
+      const generatedContainerPath = `${startPath}/packages/${location}/src/modules/common/${generatedContainerFile}`;
       const graphqlQuery = `${Module}Query`;
-      generateCommonGraphqlFile(module, commonGraphqlPath, graphqlQuery);
+      createGeneratedContainersFile(module, generatedContainerPath, graphqlQuery);
     }
 
     if (action === 'addcrud' && location === 'server') {

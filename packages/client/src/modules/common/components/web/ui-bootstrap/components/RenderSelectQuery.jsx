@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pascalize } from 'humps';
 import { FormItem, Select } from './index';
-import schemaQueries from '../../../../commonGraphql';
+import schemaQueries from '../../../../generatedContainers';
 
 export default class RenderSelectQuery extends React.Component {
   static propTypes = {

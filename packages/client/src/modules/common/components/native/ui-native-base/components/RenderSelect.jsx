@@ -11,20 +11,20 @@ const RenderSelect = ({ renderSelectStyles, label, ...props }) => {
     iconSize: 20,
     ...props
   };
-  const computedStyles = renderSelectStyles ? renderSelectStyles : styles;
+
   return (
-    <View style={computedStyles.container}>
+    <View style={[styles.container, renderSelectStyles.container]}>
       {Platform.OS === 'ios' ? (
-        <View style={computedStyles.itemContainer}>
-          {label && <Text style={computedStyles.itemTitle}>{label}</Text>}
-          <View style={computedStyles.itemAction}>
+        <View style={[styles.itemContainer, renderSelectStyles.itemContainer]}>
+          {label && <Text style={[styles.itemTitle, renderSelectStyles.itemTitle]}>{label}</Text>}
+          <View style={[styles.itemAction, renderSelectStyles.itemAction]}>
             <Select {...selectProps} />
           </View>
         </View>
       ) : (
-        <View style={computedStyles.itemContainer}>
-          {label && <Text style={computedStyles.itemTitle}>{label}</Text>}
-          <View style={computedStyles.itemAction}>
+        <View style={[styles.itemContainer, renderSelectStyles.itemContainer]}>
+          {label && <Text style={[styles.itemTitle, renderSelectStyles.itemTitle]}>{label}</Text>}
+          <View style={[styles.itemAction, renderSelectStyles.itemAction]}>
             <Select {...props} />
           </View>
         </View>

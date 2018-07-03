@@ -6,9 +6,9 @@ import RenderSwitchStyles from '../styles/RenderSwitch';
 
 const RenderSwitch = ({ style, label, ...props }) => {
   return (
-    <View style={[style.itemContainer, styles.itemContainer]}>
-      <Text style={[style.itemTitle, styles.itemTitle]}>{label}</Text>
-      <View style={[style.itemAction, styles.itemAction]}>
+    <View style={[styles.itemContainer, style.itemContainer]}>
+      <Text style={[styles.itemTitle, style.itemTitle]}>{label}</Text>
+      <View style={[styles.itemAction, style.itemAction]}>
         <Switch {...props} />
       </View>
     </View>

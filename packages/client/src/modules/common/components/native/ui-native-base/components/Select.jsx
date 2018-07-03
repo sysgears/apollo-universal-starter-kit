@@ -21,7 +21,7 @@ const Select = ({
   ...props
 }) => {
   return Platform.OS === 'ios' ? (
-    <Item style={{ flex: 1 }}>
+    <Item style={styles.selectItemIos}>
       {icon && (
         <FontAwesome name={iconName || 'filter'} size={iconSize || 20} style={{ color: `${iconColor || '#000'}` }} />
       )}
@@ -38,7 +38,7 @@ const Select = ({
       </Picker>
     </Item>
   ) : (
-    <Item>
+    <Item style={styles.selectItemAndroid}>
       <Picker
         style={[styles.androidPickerWrapper, style]}
         onValueChange={onValueChange || onChange}
@@ -57,7 +57,7 @@ Select.propTypes = {
   data: PropTypes.array.isRequired,
   onValueChange: PropTypes.func,
   onChange: PropTypes.func,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   selectedValue: PropTypes.string,
   placeholder: PropTypes.string,
   icon: PropTypes.bool,

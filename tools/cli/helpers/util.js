@@ -76,16 +76,15 @@ function generateField(value, update = false) {
 
 /**
  *
- * @param module
- * @param generatedContainerPath
- * @param moduleGraphqlContainer
+ * @param pathToFileWithExports
+ * @param exportName
+ * @param importString
  */
-function createGeneratedContainersFile(module, generatedContainerPath, moduleGraphqlContainer) {
-  const importGraphqlContainer = `import ${moduleGraphqlContainer} from '../${module}/containers/${moduleGraphqlContainer}';\n`;
-  const exportGraphqlContainer = `\nexport default {\n  ${moduleGraphqlContainer}\n};\n`;
+function updateFileWithExports({ pathToFileWithExports, exportName, importString }) {
+  const exportGraphqlContainer = `\nexport default {\n  ${exportName}\n};\n`;
 
-  if (fs.existsSync(generatedContainerPath)) {
-    const generatedContainerData = fs.readFileSync(generatedContainerPath);
+  if (fs.existsSync(pathToFileWithExports)) {
+    const generatedContainerData = fs.readFileSync(pathToFileWithExports);
     const generatedContainer = generatedContainerData.toString().trim();
     if (generatedContainer.length > 1) {
       const index = generatedContainer.lastIndexOf("';");
@@ -93,37 +92,33 @@ function createGeneratedContainersFile(module, generatedContainerPath, moduleGra
       if (computedIndex) {
         let computedGeneratedContainer =
           generatedContainer.slice(0, computedIndex) +
-          importGraphqlContainer +
+          importString +
           generatedContainer.slice(computedIndex, generatedContainer.length);
-        computedGeneratedContainer = computedGeneratedContainer.replace(
-          /(,|)\s};/g,
-          `,\n  ${moduleGraphqlContainer}\n};`
-        );
-        return fs.writeFileSync(generatedContainerPath, computedGeneratedContainer);
+        computedGeneratedContainer = computedGeneratedContainer.replace(/(,|)\s};/g, `,\n  ${exportName}\n};`);
+        return fs.writeFileSync(pathToFileWithExports, computedGeneratedContainer);
       }
     }
   }
-  return fs.writeFileSync(generatedContainerPath, importGraphqlContainer + exportGraphqlContainer);
+  return fs.writeFileSync(pathToFileWithExports, importString + exportGraphqlContainer);
 }
 
 /**
  *
- * @param module
- * @param generatedContainerPath
- * @param moduleGraphqlContainer
+ * @param pathToFileWithExports
+ * @param exportName
  */
-function deleteModuleFromGeneratedContainersFile(module, generatedContainerPath, moduleGraphqlContainer) {
-  if (fs.existsSync(generatedContainerPath)) {
-    const generatedContainerData = fs.readFileSync(generatedContainerPath);
-    const reg = `(\\n\\s\\s${moduleGraphqlContainer}(.|)|import ${moduleGraphqlContainer}.+;\\n+(?!ex))`;
-    const generatedContainer = generatedContainerData.toString().replace(new RegExp(reg, 'g'), '');
-    fs.writeFileSync(generatedContainerPath, generatedContainer);
+function deleteFromFileWithExports(pathToFileWithExports, exportName) {
+  if (fs.existsSync(pathToFileWithExports)) {
+    const generatedElementData = fs.readFileSync(pathToFileWithExports);
+    const reg = `(\\n\\s\\s${exportName}(.|)|import ${exportName}.+;\\n+(?!ex))`;
+    const generatedElement = generatedElementData.toString().replace(new RegExp(reg, 'g'), '');
+    fs.writeFileSync(pathToFileWithExports, generatedElement);
   }
 }
 
 module.exports = {
   renameFiles,
   generateField,
-  createGeneratedContainersFile,
-  deleteModuleFromGeneratedContainersFile
+  updateFileWithExports,
+  deleteFromFileWithExports
 };

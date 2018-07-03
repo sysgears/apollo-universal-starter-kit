@@ -2,7 +2,7 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const { pascalize } = require('humps');
-const { renameFiles, createGeneratedContainersFile } = require('../helpers/util');
+const { renameFiles, updateFileWithExports } = require('../helpers/util');
 
 /**
  *
@@ -48,9 +48,13 @@ function addModule(logger, templatePath, module, action, tablePrefix, location) 
 
     if (action === 'addcrud' && location === 'client') {
       const generatedContainerFile = 'generatedContainers.js';
-      const generatedContainerPath = `${startPath}/packages/${location}/src/modules/common/${generatedContainerFile}`;
       const graphqlQuery = `${Module}Query`;
-      createGeneratedContainersFile(module, generatedContainerPath, graphqlQuery);
+      const options = {
+        pathToFileWithExports: `${startPath}/packages/${location}/src/modules/common/${generatedContainerFile}`,
+        exportName: graphqlQuery,
+        importString: `import ${graphqlQuery} from '../${module}/containers/${graphqlQuery}';\n`
+      };
+      updateFileWithExports(options);
     }
 
     if (action === 'addcrud' && location === 'server') {

@@ -3,6 +3,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 const GraphQLGenerator = require('@domain-schema/graphql').default;
 const { pascalize, camelize } = require('humps');
+
 const { generateField } = require('../helpers/util');
 const schemas = require('../../../packages/server/src/modules/common/generatedSchemas');
 
@@ -31,7 +32,6 @@ function updateSchema(logger, module) {
       const file = `schema.graphql`;
 
       // regenerate input fields
-      //let moduleData = `  node: ${Module}\n`;
       let inputCreate = '';
       let inputUpdate = '';
       let inputFilter = `  searchText: String\n`;
@@ -44,7 +44,6 @@ function updateSchema(logger, module) {
           inputCreate += `  ${key}Id: Int${required}\n`;
           inputUpdate += `  ${key}Id: Int\n`;
           inputFilter += `  ${key}Id: Int\n`;
-          //moduleData += `  ${key}s(limit: Int, orderBy: OrderByInput): [${value.type.name}]\n`;
         } else if (value.type.constructor !== Array) {
           if (key !== 'id') {
             inputCreate += `  ${key}: ${generateField(value)}\n`;

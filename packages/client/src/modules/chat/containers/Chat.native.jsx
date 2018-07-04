@@ -4,6 +4,7 @@ import { View, KeyboardAvoidingView, Clipboard } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
+import moment from 'moment';
 
 import translate from '../../../i18n';
 import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
@@ -245,12 +246,11 @@ class Chat extends React.Component {
     const anonymous = 'Anonymous';
     const defaultUser = { id: uuid, username: anonymous };
     const { id, username } = currentUser ? currentUser : defaultUser;
-    const date = new Date();
-    const timeDiff = (date.getHours() - date.getUTCHours()) * 60 * 60 * 1000;
+    const timeDiff = moment().utcOffset() * 60000;
     const formatMessages = messages.map(({ id: _id, text, userId, username, createdAt, uuid, reply }) => ({
       _id,
       text,
-      createdAt: Date.parse(createdAt) + timeDiff,
+      createdAt: moment(moment(createdAt) + timeDiff),
       user: { _id: userId ? userId : uuid, name: username || anonymous },
       reply
     }));
@@ -308,7 +308,9 @@ export default compose(
             __typename: 'Mutation',
             addMessage: {
               __typename: 'Message',
-              createdAt: new Date(Date.now() + new Date().getTimezoneOffset() * 60000),
+              createdAt: moment()
+                .utc()
+                .format('YYYY-MM-DD hh:mm:ss'),
               text: text,
               username: username,
               userId: userId,
@@ -361,7 +363,7 @@ export default compose(
               text: text,
               userId: userId,
               username: username,
-              createdAt: new Date(createdAt + new Date().getTimezoneOffset() * 60000),
+              createdAt: moment(moment(createdAt) - moment().utcOffset() * 60000).format('YYYY-MM-DD hh:mm:ss'),
               uuid: uuid,
               __typename: 'Message'
             }

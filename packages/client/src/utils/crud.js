@@ -36,7 +36,7 @@ export const mapFormPropsToValues = ({ schema, data = null, formType = 'form' })
         fields[key] = data ? data[key] : [];
       }
     } else {
-      if (key !== 'id' && value.show !== false && value.type.constructor !== Array) {
+      if (value.show !== false && value.type.constructor !== Array) {
         fields[key] = data ? data[key] : '';
       } else if (value.type.constructor === Array) {
         fields[key] = data ? data[key] : [];

@@ -11,6 +11,10 @@ export const createFormFields = (schema, values, setFieldValue) => {
     const hasTypeOf = targetType => type === targetType || type.prototype instanceof targetType;
     const inputStyle = { fontSize: 16 };
     const switchStyle = {
+      itemContainer: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#c9cccc'
+      },
       itemTitle: {
         fontSize: 16
       }

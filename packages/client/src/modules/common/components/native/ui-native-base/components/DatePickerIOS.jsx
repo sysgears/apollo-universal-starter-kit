@@ -4,6 +4,13 @@ import { View, TouchableOpacity, StyleSheet, DatePickerIOS as DatePickerIOSNativ
 import DatePickerStyles from '../styles/DatePicker';
 
 class DatePickerIOS extends React.Component {
+  static propTypes = {
+    onChange: PropTypes.func,
+    value: PropTypes.string,
+    style: PropTypes.object,
+    placeholder: PropTypes.string
+  };
+
   constructor() {
     super();
     this.setDate = this.setDate.bind(this);
@@ -12,13 +19,6 @@ class DatePickerIOS extends React.Component {
       showDatePicker: false
     };
   }
-
-  static propTypes = {
-    onChange: PropTypes.func,
-    value: PropTypes.string,
-    style: PropTypes.object,
-    placeholder: PropTypes.string
-  };
 
   setDate(newDate) {
     if (!(newDate instanceof Date)) {

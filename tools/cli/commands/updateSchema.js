@@ -4,6 +4,7 @@ const chalk = require('chalk');
 const GraphQLGenerator = require('@domain-schema/graphql').default;
 const { pascalize, camelize } = require('humps');
 const { generateField } = require('../helpers/util');
+const schemas = require('../../../packages/server/src/modules/common/generatedSchemas');
 
 /**
  *
@@ -22,8 +23,7 @@ function updateSchema(logger, module) {
 
   if (fs.existsSync(modulePath)) {
     // get module schema
-    // eslint-disable-next-line import/no-dynamic-require
-    const schema = require(`${modulePath}/schema`)[`${Module}Schema`];
+    const schema = schemas.default[`${Module}Schema`];
 
     // get schema file
     const pathSchema = `${startPath}/packages/server/src/modules/${module}/`;

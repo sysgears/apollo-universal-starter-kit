@@ -2,7 +2,7 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const { pascalize } = require('humps');
-const { deleteModuleFromGeneratedContainersFile } = require('../helpers/util');
+const { deleteFromFileWithExports } = require('../helpers/util');
 
 /**
  *
@@ -80,7 +80,7 @@ function deleteModule(logger, templatePath, module, location) {
 
   if (fs.existsSync(generatedContainerPath)) {
     const graphqlQuery = `${Module}Query`;
-    deleteModuleFromGeneratedContainersFile(module, generatedContainerPath, graphqlQuery);
+    deleteFromFileWithExports(generatedContainerPath, graphqlQuery);
   }
 }
 

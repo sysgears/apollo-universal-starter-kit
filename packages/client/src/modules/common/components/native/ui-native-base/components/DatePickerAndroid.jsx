@@ -4,17 +4,17 @@ import { View, TouchableOpacity, StyleSheet, DatePickerAndroid as DatePickerAndr
 import DatePickerStyles from '../styles/DatePicker';
 
 class DatePickerAndroid extends React.Component {
-  constructor() {
-    super();
-    this.openDatePicker = this.openDatePicker.bind(this);
-  }
-
   static propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.string,
     style: PropTypes.object,
     placeholder: PropTypes.string
   };
+
+  constructor() {
+    super();
+    this.openDatePicker = this.openDatePicker.bind(this);
+  }
 
   async openDatePicker() {
     try {

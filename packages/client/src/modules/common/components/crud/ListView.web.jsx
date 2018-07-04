@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import PropTypes from 'prop-types';
-import DomainValidation from '@domain-schema/validation';
+import DomainValidator from '@domain-schema/validation';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
@@ -313,6 +313,7 @@ class ListView extends React.Component {
     };
 
     const footer = () => {
+      const domainValidator = new DomainValidator();
       return (
         <Row>
           <Col span={2}>
@@ -341,7 +342,7 @@ class ListView extends React.Component {
               <Formik
                 initialValues={mapFormPropsToValues({ schema })}
                 validate={values => {
-                  let rawErrors = DomainValidation.validate(values, schema);
+                  let rawErrors = domainValidator.validate(schema, values);
                   return computeDomainValidationErrors(rawErrors);
                 }}
                 onSubmit={async (values, { resetForm }) => {

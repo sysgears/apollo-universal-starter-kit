@@ -26,15 +26,18 @@ const RenderSelectQuery = ({
 
   let defaultStyle = {
     container: {
-      paddingLeft: 0
+      paddingLeft: 0,
+      flex: 1
     },
-    itemContainer: {},
+    itemContainer: {
+      flex: 1
+    },
     itemTitle: {},
     itemAction: {
-      flexDirection: 'column',
-      flex: 2,
-      justifyContent: 'center',
-      alignItems: 'flex-end'
+      flexDirection: 'row',
+      flex: 1,
+      justifyContent: 'flex-end',
+      alignItems: 'center'
     }
   };
   if (customStyles) {

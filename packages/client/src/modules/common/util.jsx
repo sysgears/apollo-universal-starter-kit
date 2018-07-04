@@ -1,7 +1,7 @@
 import React from 'react';
 import { pick, capitalize, startCase } from 'lodash';
 import Field from '../../utils/FieldAdapter';
-import { RenderField, RenderSwitch, RenderSelectQuery, RenderDatepicker } from './components/native';
+import { RenderField, RenderSwitch, RenderSelectQuery, RenderDatePicker } from './components/native';
 
 export const createFormFields = (schema, values, setFieldValue) => {
   let fields = [];
@@ -11,6 +11,10 @@ export const createFormFields = (schema, values, setFieldValue) => {
     const hasTypeOf = targetType => type === targetType || type.prototype instanceof targetType;
     const inputStyle = { fontSize: 16 };
     const switchStyle = {
+      itemContainer: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#c9cccc'
+      },
       itemTitle: {
         fontSize: 16
       }
@@ -75,7 +79,7 @@ export const createFormFields = (schema, values, setFieldValue) => {
           name={key}
           key={key}
           value={values[key]}
-          component={RenderDatepicker}
+          component={RenderDatePicker}
           style={inputStyle}
           onChange={selectedValue => setFieldValue(key, selectedValue)}
           placeholder={startCase(key)}

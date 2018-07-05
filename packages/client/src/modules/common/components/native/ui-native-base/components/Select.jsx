@@ -18,10 +18,11 @@ const Select = ({
   style,
   itemStyle,
   placeholder = '...',
+  error,
   ...props
 }) => {
   return Platform.OS === 'ios' ? (
-    <Item style={styles.selectItemIos}>
+    <Item style={styles.selectItemIos} error={!!error}>
       {icon && (
         <FontAwesome name={iconName || 'filter'} size={iconSize || 20} style={{ color: `${iconColor || '#000'}` }} />
       )}
@@ -38,7 +39,7 @@ const Select = ({
       </Picker>
     </Item>
   ) : (
-    <Item style={styles.selectItemAndroid}>
+    <Item style={styles.selectItemAndroid} error={!!error}>
       <Picker
         style={[styles.androidPickerWrapper, style]}
         onValueChange={onValueChange || onChange}
@@ -65,7 +66,8 @@ Select.propTypes = {
   iconColor: PropTypes.string,
   iconSize: PropTypes.number,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
-  itemStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
+  itemStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
+  error: PropTypes.string
 };
 
 const styles = StyleSheet.create(SelectStyles);

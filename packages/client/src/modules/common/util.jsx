@@ -3,7 +3,7 @@ import { pick, capitalize, startCase } from 'lodash';
 import Field from '../../utils/FieldAdapter';
 import { RenderField, RenderSwitch, RenderSelectQuery, RenderDatePicker } from './components/native';
 
-export const createFormFields = (schema, values, setFieldValue) => {
+export const createFormFields = (schema, values, setFieldValue, setFieldTouched) => {
   let fields = [];
   for (const key of schema.keys()) {
     const value = schema.values[key];
@@ -32,7 +32,10 @@ export const createFormFields = (schema, values, setFieldValue) => {
           value={values[key]}
           component={RenderSelectQuery}
           placeholder={startCase(key)}
-          onChange={selectedValue => setFieldValue(key, selectedValue)}
+          onChange={selectedValue => {
+            setFieldValue(key, selectedValue);
+            setFieldTouched(key, true);
+          }}
         />
       );
     } else if (hasTypeOf(String)) {
@@ -44,6 +47,10 @@ export const createFormFields = (schema, values, setFieldValue) => {
           component={RenderField}
           type="text"
           style={inputStyle}
+          onChange={selectedValue => {
+            setFieldValue(key, selectedValue);
+            setFieldTouched(key, true);
+          }}
           placeholder={startCase(key)}
         />
       );
@@ -57,6 +64,10 @@ export const createFormFields = (schema, values, setFieldValue) => {
           type="number"
           component={RenderField}
           style={inputStyle}
+          onChange={selectedValue => {
+            setFieldValue(key, selectedValue);
+            setFieldTouched(key, true);
+          }}
           placeholder={startCase(key)}
         />
       );

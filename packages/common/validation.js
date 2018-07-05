@@ -1,3 +1,4 @@
+import { startCase } from 'lodash';
 // Validations
 
 // Non empty validation
@@ -62,7 +63,18 @@ export const computeDomainValidationErrors = rawErrors => {
   let computedErrors = {};
   for (let errorField in rawErrors) {
     if (rawErrors.hasOwnProperty(errorField) && rawErrors[errorField] === Object(rawErrors[errorField])) {
-      computedErrors[errorField] = 'Required';
+      computedErrors[errorField] = 'Required ';
+      let nestedErrors = [];
+      nestedErrors.push(startCase(errorField));
+      for (let nestedErrorField in rawErrors[errorField]) {
+        if (
+          rawErrors[errorField].hasOwnProperty(nestedErrorField) &&
+          rawErrors[errorField][nestedErrorField] === Object(rawErrors[errorField][nestedErrorField])
+        ) {
+          nestedErrors.push(startCase(nestedErrorField));
+        }
+      }
+      computedErrors[errorField] += nestedErrors.join(', ');
     } else {
       if (Array.isArray(rawErrors[errorField]) && rawErrors[errorField].length > 0) {
         computedErrors[errorField] = rawErrors[errorField][0];
@@ -70,6 +82,9 @@ export const computeDomainValidationErrors = rawErrors => {
         computedErrors[errorField] = rawErrors[errorField];
       }
     }
+  }
+  if (computedErrors.id) {
+    delete computedErrors.id;
   }
   return computedErrors;
 };

@@ -1,21 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pascalize } from 'humps';
-import { View } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { RenderSelect } from './index';
 import schemaQueries from '../../../../generatedContainers';
+import InputItemStyles from '../styles/InputItem';
 
-const handleSelect = (selectedValue, edges, onChangeValue) => {
+const handleSelect = (selectedValue, edges, onChange) => {
   let selectedItem = edges && Array.isArray(edges) ? edges.find(item => item.value == selectedValue) : '';
-  onChangeValue(selectedItem ? { id: selectedItem.value } : '');
+  onChange(selectedItem ? selectedItem : '');
 };
 
 const RenderSelectQuery = ({
   input: { name },
+  meta: { error },
   label,
   schema,
   customStyles,
-  onChange: onChangeValue,
+  onChange,
   value,
   ...props
 }) => {
@@ -40,6 +42,7 @@ const RenderSelectQuery = ({
       alignItems: 'center'
     }
   };
+
   if (customStyles) {
     defaultStyle = customStyles;
   }
@@ -51,22 +54,32 @@ const RenderSelectQuery = ({
           let computedData = null;
           if (Array.isArray(data.edges) && data.edges.length > 0) {
             computedData = data.edges.map(item => {
-              return { label: item.name, value: item.id };
+              return { ...item, label: item.name, value: item.id };
             });
-            if (!value) {
+            if (formatedValue) {
               computedData.push(defaultOption);
             }
           }
 
           let computedProps = {
+            ...props,
             renderSelectStyles: defaultStyle,
             value: formatedValue,
             data: computedData,
             name,
-            onChange: selectedValue => handleSelect(selectedValue, computedData, onChangeValue),
-            ...props
+            error,
+            onChange: selectedValue => handleSelect(selectedValue, computedData, onChange)
           };
-          return <RenderSelect {...computedProps} />;
+          return (
+            <View>
+              <RenderSelect {...computedProps} />
+              {!!error && (
+                <View>
+                  <Text style={styles.errorText}>{error}</Text>
+                </View>
+              )}
+            </View>
+          );
         } else {
           return <View />;
         }
@@ -75,6 +88,8 @@ const RenderSelectQuery = ({
   );
 };
 
+const styles = StyleSheet.create(InputItemStyles);
+
 RenderSelectQuery.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
@@ -82,7 +97,9 @@ RenderSelectQuery.propTypes = {
   customStyles: PropTypes.object,
   formType: PropTypes.string,
   onChange: PropTypes.any,
-  value: PropTypes.any
+  value: PropTypes.any,
+  meta: PropTypes.object,
+  error: PropTypes.string
 };
 
 export default RenderSelectQuery;

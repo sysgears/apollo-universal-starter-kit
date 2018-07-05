@@ -20,6 +20,8 @@ function deleteModule(logger, templatePath, module, location) {
   const modulePath = `${startPath}/packages/${location}/src/modules/${module}`;
   const generatedContainerFile = 'generatedContainers.js';
   const generatedContainerPath = `${startPath}/packages/${location}/src/modules/common/${generatedContainerFile}`;
+  const generatedSchemasFile = 'generatedSchemas.js';
+  const generatedSchemaPath = `${startPath}/packages/${location}/src/modules/common/${generatedSchemasFile}`;
 
   if (fs.existsSync(modulePath)) {
     // remove module directory
@@ -81,6 +83,10 @@ function deleteModule(logger, templatePath, module, location) {
   if (fs.existsSync(generatedContainerPath)) {
     const graphqlQuery = `${Module}Query`;
     deleteFromFileWithExports(generatedContainerPath, graphqlQuery);
+  }
+  if (fs.existsSync(generatedSchemaPath)) {
+    const schema = `${Module}Schema`;
+    deleteFromFileWithExports(generatedSchemaPath, schema);
   }
 }
 

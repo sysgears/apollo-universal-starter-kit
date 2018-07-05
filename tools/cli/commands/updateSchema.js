@@ -3,7 +3,9 @@ const fs = require('fs');
 const chalk = require('chalk');
 const GraphQLGenerator = require('@domain-schema/graphql').default;
 const { pascalize, camelize } = require('humps');
+
 const { generateField } = require('../helpers/util');
+const schemas = require('../../../packages/server/src/modules/common/generatedSchemas');
 
 /**
  *
@@ -22,8 +24,7 @@ function updateSchema(logger, module) {
 
   if (fs.existsSync(modulePath)) {
     // get module schema
-    // eslint-disable-next-line import/no-dynamic-require
-    const schema = require(`${modulePath}/schema`)[`${Module}Schema`];
+    const schema = schemas.default[`${Module}Schema`];
 
     // get schema file
     const pathSchema = `${startPath}/packages/server/src/modules/${module}/`;
@@ -31,7 +32,6 @@ function updateSchema(logger, module) {
       const file = `schema.graphql`;
 
       // regenerate input fields
-      //let moduleData = `  node: ${Module}\n`;
       let inputCreate = '';
       let inputUpdate = '';
       let inputFilter = `  searchText: String\n`;
@@ -44,7 +44,6 @@ function updateSchema(logger, module) {
           inputCreate += `  ${key}Id: Int${required}\n`;
           inputUpdate += `  ${key}Id: Int\n`;
           inputFilter += `  ${key}Id: Int\n`;
-          //moduleData += `  ${key}s(limit: Int, orderBy: OrderByInput): [${value.type.name}]\n`;
         } else if (value.type.constructor !== Array) {
           if (key !== 'id') {
             inputCreate += `  ${key}: ${generateField(value)}\n`;
@@ -60,13 +59,6 @@ function updateSchema(logger, module) {
         } else if (value.type.constructor === Array && value.type[0].isSchema) {
           inputCreate += `  ${key}: ${pascalize(key)}CreateManyInput\n`;
           inputUpdate += `  ${key}: ${pascalize(key)}UpdateManyInput\n`;
-
-          /*for (const remoteKey of value.type[0].keys()) {
-            const remoteValue = value.type[0].values[remoteKey];
-            if (remoteValue.type.isSchema) {
-              moduleData += `  ${remoteKey}s: [${pascalize(remoteKey)}]\n`;
-            }
-          }*/
 
           manyInput += `
 
@@ -103,12 +95,6 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         )
         .to(file);
 
-      // override ModuleData in schema.graphql file
-      /*let replaceModuleData = `type ${Module}Data {([^}])*\\n}`;
-      shell
-        .ShellString(shell.cat(file).replace(RegExp(replaceModuleData, 'g'), `type ${Module}Data {\n${moduleData}}`))
-        .to(file);*/
-
       // override ModuleCreateInput in schema.graphql file
       const replaceCreate = `input ${Module}CreateInput {([^}])*\\n}`;
       shell
@@ -138,50 +124,19 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
       const resolverFile = `resolvers.js`;
       let replace = `  ${schema.name}: {
 `;
-      //moduleData = '';
       for (const key of schema.keys()) {
         const value = schema.values[key];
-        if (value.type.isSchema) {
-          /*moduleData += `    ${key}s(obj, args, ctx, info) {
-      return ctx.${value.type.name}.getList(args, info);
-    },
-`;*/
-        } else if (value.type.constructor === Array) {
+        if (value.type.constructor === Array) {
           replace += `    ${key}: createBatchResolver((sources, args, ctx, info) => {
       return ctx.${schema.name}.getByIds(sources.map(({ id }) => id), '${camelize(schema.name)}', ctx.${
             value.type[0].name
           }, info);
     }),
 `;
-          /*
-          for (const remoteKey of value.type[0].keys()) {
-            const remoteValue = value.type[0].values[remoteKey];
-            if (remoteValue.type.isSchema) {
-              moduleData += `    ${remoteKey}s(obj, args, ctx, info) {
-      return ctx.${remoteValue.type.name}.getList(args, info);
-    },
-`;
-            }
-          }*/
         }
       }
       replace += `  },
 `;
-      /*
-      if (moduleData !== '') {
-        moduleData = `${moduleData.replace(/,\s*$/, '')}
-`;
-      }
-
-      // override batch resolvers in resolvers.js file
-      replaceModuleData = `// related data([^*]+)// end related data`;
-      shell
-        .ShellString(
-          shell
-            .cat(resolverFile)
-            .replace(RegExp(replaceModuleData, 'g'), `// related data\n${moduleData}    // end related data`)
-        )
-        .to(resolverFile);*/
 
       // override batch resolvers in resolvers.js file
       const replaceBatchResolvers = `// schema batch resolvers([^*]+)// end schema batch resolvers`;
@@ -228,61 +183,6 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     } else {
       logger.error(chalk.red(`✘ Fragment path ${pathFragment} not found!`));
     }
-    /*
-    // get module query file
-    const pathModuleQuery = `${__dirname}/../../packages/client/src/modules/${module}/graphql/`;
-    if (fs.existsSync(pathModuleQuery)) {
-      const file = `${Module}Query.graphql`;
-
-      // regenerate graphql module query
-      let graphql = '';
-      for (const key of schema.keys()) {
-        const value = schema.values[key];
-        if (value.type.isSchema) {
-          let column = 'name';
-          for (const remoteKey of value.type.keys()) {
-            const remoteValue = value.type.values[remoteKey];
-            if (remoteValue.sortBy) {
-              column = remoteKey;
-            }
-          }
-          graphql += `    ${key}s {\n`;
-          graphql += `      id\n`;
-          graphql += `      ${column}\n`;
-          graphql += `    }\n`;
-        } else if (value.type.constructor === Array) {
-          for (const remoteKey of value.type[0].keys()) {
-            const remoteValue = value.type[0].values[remoteKey];
-            if (remoteValue.type.isSchema) {
-              let remotecolumn = 'name';
-              for (const remoteKey of remoteValue.type.keys()) {
-                const remoteValue1 = remoteValue.type.values[remoteKey];
-                if (remoteValue1.sortBy) {
-                  remotecolumn = remoteKey;
-                }
-              }
-              graphql += `    ${remoteKey}s {\n`;
-              graphql += `      id\n`;
-              graphql += `      ${remotecolumn}\n`;
-              graphql += `    }\n`;
-            }
-          }
-        }
-      }
-
-      shell.cd(pathModuleQuery);
-      // override graphql module query file
-      const replaceFragment = `### form data([^()]+)### end form data`;
-      shell
-        .ShellString(
-          shell.cat(file).replace(RegExp(replaceFragment, 'g'), `### form data\n${graphql}    ### end form data`)
-        )
-        .to(file);
-
-      logger.info(chalk.green(`✔ Module query in ${pathModuleQuery}${file} successfully updated!`));
-    } else {
-      logger.error(chalk.red(`✘ Module query path ${pathModuleQuery} not found!`));
-    }*/
 
     // get state client file
     const pathStateClient = `${startPath}/packages/client/src/modules/${module}/graphql/`;
@@ -296,27 +196,6 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
         if (value.type.isSchema) {
           graphql += `    ${key}Id\n`;
-          /*} else if (value.type.constructor === Array) {
-            graphql += `  ${key} {\n`;
-            for (const remoteKey of value.type[0].keys()) {
-              const remoteValue = value.type[0].values[remoteKey];
-              if (remoteValue.type.isSchema) {
-                let remotecolumn = 'name';
-                for (const remoteKey of remoteValue.type.keys()) {
-                  const remoteValue1 = remoteValue.type.values[remoteKey];
-                  if (remoteValue1.sortBy) {
-                    remotecolumn = remoteKey;
-                  }
-                }
-                graphql += `    ${remoteKey} {\n`;
-                graphql += `      id\n`;
-                graphql += `      ${remotecolumn}\n`;
-                graphql += `    }\n`;
-              } else {
-                graphql += `    ${remoteKey}\n`;
-              }
-            }
-            graphql += `  }\n`;*/
         } else {
           if (hasTypeOf(Date)) {
             graphql += `    ${key}_lte\n`;
@@ -351,27 +230,6 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
         if (value.type.isSchema) {
           defaults += `  ${key}Id: '',\n`;
-          /*} else if (value.type.constructor === Array) {
-            graphql += `  ${key} {\n`;
-            for (const remoteKey of value.type[0].keys()) {
-              const remoteValue = value.type[0].values[remoteKey];
-              if (remoteValue.type.isSchema) {
-                let remotecolumn = 'name';
-                for (const remoteKey of remoteValue.type.keys()) {
-                  const remoteValue1 = remoteValue.type.values[remoteKey];
-                  if (remoteValue1.sortBy) {
-                    remotecolumn = remoteKey;
-                  }
-                }
-                graphql += `    ${remoteKey} {\n`;
-                graphql += `      id\n`;
-                graphql += `      ${remotecolumn}\n`;
-                graphql += `    }\n`;
-              } else {
-                graphql += `    ${remoteKey}\n`;
-              }
-            }
-            graphql += `  }\n`;*/
         } else {
           if (hasTypeOf(Date)) {
             defaults += `  ${key}_lte: '',\n`;

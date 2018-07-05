@@ -76,6 +76,15 @@ function addModule(logger, templatePath, module, action, tablePrefix, location) 
 
         logger.info(chalk.green(`✔ Inserted db table prefix!`));
       }
+
+      const generatedSchemasFile = 'generatedSchemas.js';
+      const schema = `${Module}Schema`;
+      const options = {
+        pathToFileWithExports: `${startPath}/packages/${location}/src/modules/common/${generatedSchemasFile}`,
+        exportName: schema,
+        importString: `import { ${schema} } from '../${module}/schema';\n`
+      };
+      updateFileWithExports(options);
     }
 
     logger.info(chalk.green(`✔ Module for ${location} successfully created!`));

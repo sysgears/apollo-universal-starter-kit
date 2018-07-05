@@ -6,7 +6,7 @@ query posts($limit: Int!, $after: Int) {
     edges {
       cursor
       node {
-        ... PostInfo
+        ...PostInfo
       }
     }
     pageInfo {

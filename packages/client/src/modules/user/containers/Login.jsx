@@ -1,13 +1,10 @@
-/* eslint-disable no-undef */
-// React
 import React from 'react';
+import { graphql, compose, withApollo } from 'react-apollo';
 
-// Apollo
-import { graphql, compose } from 'react-apollo';
-
-// Components
 import LoginView from '../components/LoginView';
+import access from '../access';
 
+import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
 
 class Login extends React.Component {
@@ -17,31 +14,23 @@ class Login extends React.Component {
 }
 
 const LoginWithApollo = compose(
+  withApollo,
   graphql(LOGIN, {
-    props: ({ ownProps: { history, navigation }, mutate }) => ({
-      login: async ({ email, password }) => {
-        try {
-          const { data: { login } } = await mutate({
-            variables: { input: { email, password } }
-          });
-
-          if (login.errors) {
-            return { errors: login.errors };
+    props: ({ ownProps: { client, onLogin }, mutate }) => ({
+      login: async ({ usernameOrEmail, password }) => {
+        const {
+          data: { login }
+        } = await mutate({
+          variables: { input: { usernameOrEmail, password } }
+        });
+        if (!login.errors) {
+          await access.doLogin(client);
+          await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
+          if (onLogin) {
+            onLogin();
           }
-
-          const { token, refreshToken } = login.tokens;
-          localStorage.setItem('token', token);
-          localStorage.setItem('refreshToken', refreshToken);
-
-          if (history) {
-            return history.push('/profile');
-          }
-          if (navigation) {
-            return navigation.goBack();
-          }
-        } catch (e) {
-          console.log(e.graphQLErrors);
         }
+        return login;
       }
     })
   })

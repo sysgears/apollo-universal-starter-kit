@@ -2,6 +2,12 @@
 
 query user($id: Int!) {
   user(id: $id) {
-    ... UserInfo
+    user {
+      ...UserInfo
+    }
+    errors {
+      field
+      message
+    }
   }
 }

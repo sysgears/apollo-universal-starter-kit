@@ -1,52 +1,111 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { withFormik } from 'formik';
+import { isEmpty } from 'lodash';
+
+import translate from '../../../i18n';
+import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
-import { required, email, minLength } from '../../../../../common/validation';
+import { email, minLength, required, match, validateForm } from '../../../../../common/validation';
 
 import settings from '../../../../../../settings';
 
-const validate = values => {
-  const errors = {};
-
-  if (values.password !== values.passwordConfirmation) {
-    errors.passwordConfirmation = 'Passwords do not match';
-  }
-  return errors;
+const userFormSchema = {
+  username: [required, minLength(3)],
+  email: [required, email]
 };
 
-const UserForm = ({ handleSubmit, submitting, onSubmit, error }) => {
+const createUserFormSchema = {
+  ...userFormSchema,
+  password: [required, minLength(8)],
+  passwordConfirmation: [required, match('password'), minLength(8)]
+};
+
+const updateUserFormSchema = {
+  ...userFormSchema,
+  password: minLength(8),
+  passwordConfirmation: [match('password'), minLength(8)]
+};
+
+const validate = (values, createNew) => validateForm(values, createNew ? createUserFormSchema : updateUserFormSchema);
+
+const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldRoleDisplay, shouldActiveDisplay }) => {
+  const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
+
   return (
-    <Form name="user" onSubmit={handleSubmit(onSubmit)}>
-      <Field name="username" component={RenderField} type="text" label="Username" validate={[required, minLength(3)]} />
-      <Field name="email" component={RenderField} type="email" label="Email" validate={[required, email]} />
-      <Field name="role" component={RenderSelect} type="select" label="Role">
-        <Option value="user">user</Option>
-        <Option value="admin">admin</Option>
-      </Field>
-      <Field name="isActive" component={RenderCheckBox} type="checkbox" label="Is Active" />
-      <Field name="profile.firstName" component={RenderField} type="text" label="First Name" validate={required} />
-      <Field name="profile.lastName" component={RenderField} type="text" label="Last Name" validate={required} />
+    <Form name="user" onSubmit={handleSubmit}>
+      <Field
+        name="username"
+        component={RenderField}
+        type="text"
+        label={t('userEdit.form.field.name')}
+        value={username}
+      />
+      <Field name="email" component={RenderField} type="email" label={t('userEdit.form.field.email')} value={email} />
+      {shouldRoleDisplay && (
+        <Field
+          name="role"
+          component={RenderSelect}
+          type="select"
+          label={t('userEdit.form.field.role.label')}
+          value={role}
+        >
+          <Option value="user">{t('userEdit.form.field.role.user')}</Option>
+          <Option value="admin">{t('userEdit.form.field.role.admin')}</Option>
+        </Field>
+      )}
+      {shouldActiveDisplay && (
+        <Field
+          name="isActive"
+          component={RenderCheckBox}
+          type="checkbox"
+          label={t('userEdit.form.field.active')}
+          checked={isActive}
+        />
+      )}
+      <Field
+        name="firstName"
+        component={RenderField}
+        type="text"
+        label={t('userEdit.form.field.firstName')}
+        value={profile.firstName}
+        onChange={value => setFieldValue('profile', { ...profile, firstName: value })}
+      />
+      <Field
+        name="lastName"
+        component={RenderField}
+        type="text"
+        label={t('userEdit.form.field.lastName')}
+        value={profile.lastName}
+        onChange={value => setFieldValue('profile', { ...profile, lastName: value })}
+      />
       {settings.user.auth.certificate.enabled && (
-        <Field name="auth.certificate.serial" component={RenderField} type="text" label="Serial" validate={required} />
+        <Field
+          name="serial"
+          component={RenderField}
+          type="text"
+          label={t('userEdit.form.field.serial')}
+          value={auth && auth.certificate && auth.certificate.serial}
+          onChange={value => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
+        />
       )}
       <Field
         name="password"
         component={RenderField}
         type="password"
-        label="Password"
-        validate={[required, minLength(5)]}
+        label={t('userEdit.form.field.pass')}
+        value={password}
       />
       <Field
         name="passwordConfirmation"
         component={RenderField}
         type="password"
-        label="Password Confirmation"
-        validate={[required, minLength(5)]}
+        label={t('userEdit.form.field.passConf')}
+        value={passwordConfirmation}
       />
       {error && <Alert color="error">{error}</Alert>}
-      <Button color="primary" type="submit" disabled={submitting}>
-        Save
+      <Button color="primary" type="submit">
+        {t('userEdit.form.btnSubmit')}
       </Button>
     </Form>
   );
@@ -54,12 +113,51 @@ const UserForm = ({ handleSubmit, submitting, onSubmit, error }) => {
 
 UserForm.propTypes = {
   handleSubmit: PropTypes.func,
+  handleChange: PropTypes.func,
+  setFieldValue: PropTypes.func,
   onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
-  error: PropTypes.string
+  setTouched: PropTypes.func,
+  isValid: PropTypes.bool,
+  shouldRoleDisplay: PropTypes.bool,
+  shouldActiveDisplay: PropTypes.bool,
+  error: PropTypes.string,
+  values: PropTypes.object,
+  errors: PropTypes.object,
+  initialValues: PropTypes.object.isRequired,
+  touched: PropTypes.object,
+  t: PropTypes.func
 };
 
-export default reduxForm({
-  form: 'user',
-  validate
-})(UserForm);
+const UserFormWithFormik = withFormik({
+  mapPropsToValues: values => {
+    const { username, email, role, isActive, profile } = values.initialValues;
+    return {
+      username: username,
+      email: email,
+      role: role || 'user',
+      isActive: isActive,
+      password: '',
+      passwordConfirmation: '',
+      profile: {
+        firstName: profile && profile.firstName,
+        lastName: profile && profile.lastName
+      },
+      auth: {
+        ...values.initialValues.auth
+      }
+    };
+  },
+  async handleSubmit(
+    values,
+    {
+      setErrors,
+      props: { onSubmit }
+    }
+  ) {
+    await onSubmit(values).catch(e => setErrors(e));
+  },
+  displayName: 'SignUpForm ', // helps with React DevTools
+  validate: (values, props) => validate(values, isEmpty(props.initialValues))
+});
+
+export default translate('user')(UserFormWithFormik(UserForm));

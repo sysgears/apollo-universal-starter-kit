@@ -1,3 +1,5 @@
+import cookies from './cookies';
+import i18n from './i18n';
 import counter from './counter';
 import post from './post';
 import upload from './upload';
@@ -11,4 +13,16 @@ import './debug';
 
 import Feature from './connector';
 
-export default new Feature(counter, post, upload, user, subscription, contact, mailer, graphqlTypes, apolloEngine);
+export default new Feature(
+  cookies,
+  i18n,
+  counter,
+  post,
+  upload,
+  user,
+  subscription,
+  contact,
+  mailer,
+  graphqlTypes,
+  apolloEngine
+);

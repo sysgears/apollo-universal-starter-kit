@@ -1,76 +1,88 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { Link } from 'react-router-dom';
+
+import translate from '../../../i18n';
+import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
 import { LayoutCenter } from '../../common/components';
 import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
-import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
 
 import settings from '../../../../../../settings';
 
-const renderMetaData = () => (
-  <Helmet
-    title={`${settings.app.name} - Profile`}
-    meta={[
-      {
-        name: 'description',
-        content: `${settings.app.name} - Profile page`
-      }
-    ]}
-  />
-);
+const renderMetaData = t => {
+  return (
+    <Helmet
+      title={`${settings.app.name} - ${t('profile.title')}`}
+      meta={[
+        {
+          name: 'description',
+          content: `${settings.app.name} - ${t('profile.meta')}`
+        }
+      ]}
+    />
+  );
+};
 
-const ProfileView = ({ loading, currentUser }) => {
-  if (loading && !currentUser) {
+const ProfileView = ({ currentUserLoading, currentUser, t }) => {
+  if (currentUserLoading && !currentUser) {
     return (
       <PageLayout>
-        {renderMetaData()}
-        <div className="text-center">Loading...</div>
+        {renderMetaData(t)}
+        <div className="text-center">{t('profile.loadMsg')}</div>
       </PageLayout>
     );
   } else if (currentUser) {
     return (
       <PageLayout>
-        {renderMetaData()}
+        {renderMetaData(t)}
         <LayoutCenter>
-          <h1 className="text-center">Profile</h1>
+          <h1 className="text-center">{t('profile.card.title')}</h1>
           <Card>
             <CardGroup>
-              <CardTitle>User Name:</CardTitle>
+              <CardTitle>{t('profile.card.group.name')}:</CardTitle>
               <CardText>{currentUser.username}</CardText>
             </CardGroup>
             <CardGroup>
-              <CardTitle>Email:</CardTitle>
+              <CardTitle>{t('profile.card.group.email')}:</CardTitle>
               <CardText>{currentUser.email}</CardText>
             </CardGroup>
             <CardGroup>
-              <CardTitle>Role:</CardTitle>
+              <CardTitle>{t('profile.card.group.role')}:</CardTitle>
               <CardText>{currentUser.role}</CardText>
             </CardGroup>
             {currentUser.profile &&
               currentUser.profile.fullName && (
                 <CardGroup>
-                  <CardTitle>Full Name:</CardTitle>
+                  <CardTitle>{t('profile.card.group.full')}:</CardTitle>
                   <CardText>{currentUser.profile.fullName}</CardText>
                 </CardGroup>
               )}
             {settings.subscription.enabled && <SubscriptionProfile />}
           </Card>
+          <Link
+            className="mt-2 btn user-link"
+            to={{ pathname: `/users/${currentUser.id}`, state: { from: 'profile' } }}
+          >
+            {t('profile.editProfileText')}
+          </Link>
         </LayoutCenter>
       </PageLayout>
     );
   } else {
     return (
       <PageLayout>
-        {renderMetaData()}
-        <h2>No current user logged in</h2>
+        {renderMetaData(t)}
+        <h2>{t('profile.errorMsg')}</h2>
       </PageLayout>
     );
   }
 };
 
 ProfileView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  currentUser: PropTypes.object
+  currentUserLoading: PropTypes.bool,
+  currentUser: PropTypes.object,
+  t: PropTypes.func
 };
 
-export default ProfileView;
+export default translate('user')(ProfileView);

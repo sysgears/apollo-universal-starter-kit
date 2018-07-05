@@ -1,4 +1,4 @@
-let DB_TYPE = process.env.DB_TYPE || 'sqlite';
+let DB_TYPE = process.env.NODE_ENV === 'test' || !process.env.DB_TYPE ? 'sqlite' : process.env.DB_TYPE;
 let client = '';
 let connectionDevelopment = {
   host: process.env.DB_HOST,
@@ -6,6 +6,7 @@ let connectionDevelopment = {
   socketPath: process.env.DB_SOCKET_PATH,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
+  ssl: process.env.DB_SSL,
   multipleStatements: true,
   charset: 'utf8'
 };

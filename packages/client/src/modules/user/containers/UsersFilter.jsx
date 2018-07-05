@@ -1,9 +1,11 @@
 // React
 import React from 'react';
-import { connect } from 'react-redux';
+import { compose } from 'react-apollo';
 
 // Components
 import UsersFilterView from '../components/UsersFilterView';
+
+import { withUsersState, withFilterUpdating } from './UserOperations';
 
 class UsersFilter extends React.Component {
   render() {
@@ -11,30 +13,4 @@ class UsersFilter extends React.Component {
   }
 }
 
-export default connect(
-  state => ({
-    searchText: state.user.searchText,
-    role: state.user.role,
-    isActive: state.user.isActive
-  }),
-  dispatch => ({
-    onSearchTextChange(searchText) {
-      dispatch({
-        type: 'USER_FILTER_SEARCH_TEXT',
-        value: searchText
-      });
-    },
-    onRoleChange(role) {
-      dispatch({
-        type: 'USER_FILTER_ROLE',
-        value: role
-      });
-    },
-    onIsActiveChange(isActive) {
-      dispatch({
-        type: 'USER_FILTER_IS_ACTIVE',
-        value: isActive
-      });
-    }
-  })
-)(UsersFilter);
+export default compose(withUsersState, withFilterUpdating)(UsersFilter);

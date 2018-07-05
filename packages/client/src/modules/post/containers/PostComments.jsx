@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
-import { reset } from 'redux-form';
 
 import PostCommentsView from '../components/PostCommentsView';
 
@@ -11,17 +9,20 @@ import ADD_COMMENT from '../graphql/AddComment.graphql';
 import EDIT_COMMENT from '../graphql/EditComment.graphql';
 import DELETE_COMMENT from '../graphql/DeleteComment.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
+import ADD_COMMENT_CLIENT from '../graphql/AddComment.client.graphql';
+import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 
 function AddComment(prev, node) {
   // ignore if duplicate
-  if (node.id !== null && prev.post.comments.some(comment => node.id === comment.id)) {
+  if (prev.post.comments.some(comment => comment.id === node.id)) {
     return prev;
   }
 
+  const filteredComments = prev.post.comments.filter(comment => comment.id);
   return update(prev, {
     post: {
       comments: {
-        $push: [node]
+        $set: [...filteredComments, node]
       }
     }
   });
@@ -58,16 +59,18 @@ class PostComments extends React.Component {
     this.subscription = null;
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
+    this.initCommentListSubscription();
+  }
+
+  componentDidUpdate(prevProps) {
+    let prevPostId = prevProps.postId || null;
     // Check if props have changed and, if necessary, stop the subscription
-    if (this.subscription && this.props.postId !== nextProps.postId) {
+    if (this.subscription && this.props.postId !== prevPostId) {
+      this.subscription();
       this.subscription = null;
     }
-
-    // Subscribe or re-subscribe
-    if (!this.subscription) {
-      this.subscribeToCommentList(nextProps.postId);
-    }
+    this.initCommentListSubscription();
   }
 
   componentWillUnmount() {
@@ -76,6 +79,13 @@ class PostComments extends React.Component {
     if (this.subscription) {
       // unsubscribe
       this.subscription();
+      this.subscription = null;
+    }
+  }
+
+  initCommentListSubscription() {
+    if (!this.subscription) {
+      this.subscribeToCommentList(this.props.postId);
     }
   }
 
@@ -85,7 +95,16 @@ class PostComments extends React.Component {
     this.subscription = subscribeToMore({
       document: COMMENT_SUBSCRIPTION,
       variables: { postId },
-      updateQuery: (prev, { subscriptionData: { data: { commentUpdated: { mutation, id, node } } } }) => {
+      updateQuery: (
+        prev,
+        {
+          subscriptionData: {
+            data: {
+              commentUpdated: { mutation, id, node }
+            }
+          }
+        }
+      ) => {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
@@ -119,7 +138,14 @@ const PostCommentsWithApollo = compose(
             }
           },
           updateQueries: {
-            post: (prev, { mutationResult: { data: { addComment } } }) => {
+            post: (
+              prev,
+              {
+                mutationResult: {
+                  data: { addComment }
+                }
+              }
+            ) => {
               if (prev.post) {
                 return AddComment(prev, addComment);
               }
@@ -157,7 +183,14 @@ const PostCommentsWithApollo = compose(
             }
           },
           updateQueries: {
-            post: (prev, { mutationResult: { data: { deleteComment } } }) => {
+            post: (
+              prev,
+              {
+                mutationResult: {
+                  data: { deleteComment }
+                }
+              }
+            ) => {
               if (prev.post) {
                 return DeleteComment(prev, deleteComment.id);
               }
@@ -165,20 +198,17 @@ const PostCommentsWithApollo = compose(
           }
         })
     })
+  }),
+  graphql(ADD_COMMENT_CLIENT, {
+    props: ({ mutate }) => ({
+      onCommentSelect: comment => {
+        mutate({ variables: { comment: comment } });
+      }
+    })
+  }),
+  graphql(COMMENT_QUERY_CLIENT, {
+    props: ({ data: { comment } }) => ({ comment })
   })
 )(PostComments);
 
-export default connect(
-  state => ({ comment: state.post.comment }),
-  dispatch => ({
-    onCommentSelect(comment) {
-      dispatch({
-        type: 'COMMENT_SELECT',
-        value: comment
-      });
-    },
-    onFormSubmitted() {
-      dispatch(reset('comment'));
-    }
-  })
-)(PostCommentsWithApollo);
+export default PostCommentsWithApollo;

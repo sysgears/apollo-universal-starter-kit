@@ -1,82 +1,48 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
-import { Link } from 'react-router-dom';
-import { SubmissionError } from 'redux-form';
-import { pick } from 'lodash';
-import { PageLayout } from '../../common/components/web';
+import { StyleSheet, View } from 'react-native';
 
+import translate from '../../../i18n';
 import UserForm from './UserForm';
-import settings from '../../../../../../settings';
+import { withLoadedUser } from '../containers/Auth';
+import { Loading } from '../../common/components/native';
 
-export default class UserEditView extends React.PureComponent {
+class UserEditView extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
-    addUser: PropTypes.func.isRequired,
-    editUser: PropTypes.func.isRequired
+    currentUser: PropTypes.object,
+    editUser: PropTypes.func.isRequired,
+    t: PropTypes.func,
+    onSubmit: PropTypes.func
   };
-
-  onSubmit = async values => {
-    const { user, addUser, editUser } = this.props;
-    let result = null;
-
-    let insertValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
-
-    insertValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
-
-    if (settings.user.auth.certificate.enabled) {
-      insertValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
-    }
-
-    if (user) {
-      result = await editUser({ id: user.id, ...insertValues });
-    } else {
-      result = await addUser(insertValues);
-    }
-
-    if (result.errors) {
-      let submitError = {
-        _error: 'Edit user failed!'
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw new SubmissionError(submitError);
-    }
-  };
-
-  renderMetaData = () => (
-    <Helmet
-      title={`${settings.app.name} - Edit User`}
-      meta={[
-        {
-          name: 'description',
-          content: `${settings.app.name} - Edit user example page`
-        }
-      ]}
-    />
-  );
 
   render() {
-    const { loading, user } = this.props;
+    const { loading, user, t, currentUser } = this.props;
 
     if (loading && !user) {
-      return (
-        <PageLayout>
-          {this.renderMetaData()}
-          <div className="text-center">Loading...</div>
-        </PageLayout>
-      );
+      return <Loading text={t('userEdit.loadMsg')} />;
     } else {
+      const isNotSelf = !user || (user && user.id !== currentUser.id);
       return (
-        <PageLayout>
-          {this.renderMetaData()}
-          <Link id="back-button" to="/users">
-            Back
-          </Link>
-          <h2>{user ? 'Edit' : 'Create'} User</h2>
-          <UserForm onSubmit={this.onSubmit} initialValues={user} />
-        </PageLayout>
+        <View style={styles.container}>
+          <UserForm
+            onSubmit={this.props.onSubmit}
+            shouldRoleDisplay={isNotSelf}
+            shouldActiveDisplay={isNotSelf}
+            initialValues={user || {}}
+          />
+        </View>
       );
     }
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  }
+});
+
+export default withLoadedUser(translate('user')(UserEditView));

@@ -8,7 +8,6 @@
 [![Sponsors on Open Collective](https://opencollective.com/apollo-universal-starter-kit/sponsors/badge.svg)](#sponsors)
 [![Join the chat at https://gitter.im/sysgears/apollo-fullstack-starter-kit](https://badges.gitter.im/sysgears/apollo-fullstack-starter-kit.svg)](https://gitter.im/sysgears/apollo-fullstack-starter-kit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/sysgears/apollo-universal-starter-kit.svg?branch=master)](https://travis-ci.org/sysgears/apollo-universal-starter-kit)
-[![Greenkeeper badge](https://badges.greenkeeper.io/sysgears/apollo-universal-starter-kit.svg)](https://greenkeeper.io/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![Twitter Follow](https://img.shields.io/twitter/follow/sysgears.svg?style=social)](https://twitter.com/sysgears)
 
@@ -25,18 +24,22 @@
 
 Checkout our [Mobile App Demo](https://expo.io/@sysgears/apollo-universal-starter-kit)
 
-If you need single-package Apollo v2 version of this repo, plese use
-[starter kit from `single` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/single)
+## Available Branches
 
-If you are using Apollo v1 please use
-[starter kit from `apollo1` branch](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1)
+| Branch   | Description    |
+| -------- | -------------- |
+| [stable](https://github.com/sysgears/apollo-universal-starter-kit/tree/stable) | The latest stable version of the kit |
+| [single](https://github.com/sysgears/apollo-universal-starter-kit/tree/single) | Single-package Apollo v2 version of the kit|
+| [apollo1](https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1) | Apollo v1 version of the kit |
+| [cli-crud](https://github.com/sysgears/apollo-universal-starter-kit/tree/cli-crud) | generate CRUD implementations from the command line |
+
 
 ## Getting Started
 
-1. Clone starter kit locally.
+1. Clone the latest stable starter kit locally.
 
 ```
-git clone https://github.com/sysgears/apollo-universal-starter-kit.git
+git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
 cd apollo-universal-starter-kit
 ```
 
@@ -53,6 +56,7 @@ yarn seed
 ```
 
 4. Run starter kit in development mode.
+For running Android or iOS you need to set in `packages/mobile/.spinrc.js` `config.builders.ios.enabled` and/or `config.builders.android.enabled` field `true`. See *Getting Started with React Native* section.
 
 ```
 yarn watch
@@ -70,7 +74,7 @@ This starter kit adds full [React Native] integration, with [Webpack] as a packa
 compilation tools are needed in order to develop native mobile applications with this kit. You are able to run both web
 and mobile versions of your app at the same time connected to the same backend.
 
-For running Android or iOS you need to set in `.spinrc.js` `builders.ios.enabled` and/or `builders.android.enabled` field `true`.
+For running Android or iOS you need to set in `packages/mobile/.spinrc.js` `config.builders.ios.enabled` and/or `config.builders.android.enabled` field `true`.
 
 #### Running on a device
 
@@ -123,11 +127,7 @@ technologies used in the kit. Contact us using [Skype](http://hatscripts.com/add
 This starter kit is designed so you can use it for just web, mobile or projects using both together. In case you do not
 want to use mobile, just set both `builders.ios.enabled` or `builders.android.enabled` settings in `.spinrc.js` to `false`.
 
-We have integrated [React Native Web], so writing `universal` components that can run both on web and mobile platforms
-is possible. In this case you can write your components with React Native's building blocks that are supported in [React
-Native Web] and run them both on web and mobile.
-
-To cover more differences you can use platform-specific files.
+To cover differences between platforms you can use platform-specific files.
 
 ```
 MyComponent.web.jsx
@@ -187,15 +187,16 @@ If you don't need some of these platforms you can turn off building their code i
 
 | Option                         | Description                                                                   |
 | ------------------------------ | ----------------------------------------------------------------------------- |
-| buildDir                | output directory for build files                                            |
-| dllBuildDir                    | output directory for Webpack DLL files used to speed up incremental builds    |
-| webpackDevPort                 | the local port used for Webpack Dev Server process to host web frontend files |
-| \_\_BACKEND_URL__                     | URL to GraphQL backend endpoint                                               |
-| ssr                            | Use server side rendering in backend                                          |
-| webpackDll                     | Utilize Webpack DLLs to speed up incremental builds                           |
-| frontendRefreshOnBackendChange | Trigger web frontend refresh when backend code changes                        |
-| reactHotLoader                 | Utilize React Hot Loader v3                                                   |
-| persistGraphQL                 | Generate and use persistent GraphQL queries                                   |
+| buildDir                       | output directory for build files                                                |
+| dllBuildDir                    | output directory for Webpack DLL files used to speed up incremental builds |
+| webpackDevPort                 | the local port used for Webpack Dev Server process to host web frontend files  |
+| \_\_API_URL__                  | URL to GraphQL backend endpoint                                                 |
+| \_\_WEBSITE_URL__              | URL to website                                                                  |
+| ssr                            | Use server side rendering in backend                                            |
+| webpackDll                     | Utilize Webpack DLLs to speed up incremental builds                             |
+| frontendRefreshOnBackendChange | Trigger web frontend refresh when backend code changes                     |
+| reactHotLoader                 | Utilize React Hot Loader v3                                                     |
+| persistGraphQL                 | Generate and use persistent GraphQL queries                                     |
 
 There are also application config options available in `config/app.js` to aid with debugging GraphQL and SQL:
 
@@ -244,7 +245,7 @@ yarn cli
 * Full LOGIN funcionality in user example with [JWT] tokens stored in `localStorage` and `cookies`
 
 * [Stripe] Payment Processor integration as a starting point for apps that use user subscriptions.
-Check [subscription module documentation](src/client/modules/subscription/README.md) for details.
+Check [subscription module documentation](packages/client/src/modules/subscription/README.md) for details.
 
 * [GraphQL] API
 
@@ -319,10 +320,10 @@ Check [subscription module documentation](src/client/modules/subscription/README
 
   If you would like to use a different styling than [Twitter Bootstrap], UI components are structured in a way to make
   it easy to use something else. We already prepared [Ant Design] integation. To switch the UI all you need to do is
-  rename the import in `src/client/modules/common/components/web/index.jsx`.
+  rename the import in `packages/client/src/modules/common/components/web/index.jsx`.
 
   [NativeBase] for mobile styling, with an option to use [Ant Design Mobile]. To switch, just change the export in
-  `src/client/modules/common/components/native/index.jsx`.
+  `packages/client/src/modules/common/components/native/index.jsx`.
 
 * [Babel] for ES2017 transpiling
 
@@ -337,9 +338,9 @@ Check [subscription module documentation](src/client/modules/subscription/README
   build. It will make front end and back end aware of static queries used in the project and will only allow these
   queries for better security and less bandwidth.
 
-* [TypeScript] support. Though the kit itself uses ES6 and [Flow] you can add source files written in TypeScript. In
-  order to do that add `'ts'` into the `.spinrc.js -> options -> stack`, install TypeScript devDependencies: `yarn add
-  -D awesome-typescript-loader typescript` and put `tsconfig.json` into the root folder.
+* [TypeScript] support. This kit supports both ES6 and TypeScript out of the box.
+
+* Internationalization with [i18next]
 
 ## Project Structure
 
@@ -349,30 +350,33 @@ aims to represent generally accepted guidelines and patterns for building scalab
 
 ```
 .
-├── src                      # Application source code
-│   ├── client               # Front-end source code
-│   │   ├── app              # Common front-end application code
-│   │   └── modules          # Front-end feature-modules, each module has:
-│   │   │                    # (components, containers, GraphQL queries, redux reducers)
-│   │   └── styles           # Application-wide styles
-│   │   └── testHelpers      # Test helper for front-end integration tests
-│   │   └── index.jsx        # Entry point to web front-end wtih hot code reload
-│   ├── common               # Common code, redux store and logging
-│   ├── mobile               # Mobile front-end source code
-│   │   ├── index.js         # Entry point to mobile front-end wtih live code reload
-│   └── server               # Back-end server source code
-│   │   ├── api              # GraphQL API implementation
-│   │   └── database         # Database migrations and seeds
-│   │   │   └── migrations   # Database migration scripts using Knex
-│   │   │   └── seeds        # Database seed scripts using Knex
-│   │   └── middleware       # Graphiql, GraphQL express and SSR rendering
-│   │   └── modules          # Back-end server feature-modules, each module has:
-│   │   │                    # (schema definition, resolvers, sql queries)
-│   │   └── sql              # Knex connector
-│   │   └── testHelpers      # Test helper for back-end integration tests
-│   │   └── server.js        # GraphQL api server set up
-│   │   └── index.js         # Entry point to back-end wtih hot code reload
-└── tools                    # All build and cli related files
+├── packages                   # Yarn packages with application source code
+│   ├── client                 # Front-end Yarn package
+│   |   └── src
+│   │       ├── app            # Common front-end application code
+│   │       ├── modules        # Front-end feature-modules, each module has:
+│   │       │                  # (components, containers, GraphQL queries, redux reducers)
+│   │       ├── styles         # Application-wide styles
+│   │       ├── testHelpers    # Test helper for front-end integration tests
+│   │       └── index.tsx      # Entry point to web front-end with hot code reload
+│   ├── common                 # Yarn package with Common code, redux store and logging
+│   ├── mobile                 # Mobile front-end Yarn package
+│   |   └── src
+│   │       └── index.ts       # Entry point to mobile front-end with live code reload
+│   └── server                 # Back-end Yarn package
+│   |   └── src
+│   │       ├── api            # GraphQL API implementation
+│   │       ├── database       # Database migrations and seeds
+│   │       │   └── migrations # Database migration scripts using Knex
+│   │       │   └── seeds      # Database seed scripts using Knex
+│   │       ├── middleware     # Graphiql, GraphQL express and SSR rendering
+│   │       ├── modules        # Back-end server feature-modules, each module has:
+│   │       │                  # (schema definition, resolvers, sql queries)
+│   │       ├── sql            # Knex connector
+│   │       ├── testHelpers    # Test helper for back-end integration tests
+│   │       ├── server.js      # GraphQL api server set up
+│   │       └── index.ts       # Entry point to back-end with hot code reload
+└── tools                      # All build and cli related files
 ```
 
 ## Additional scripts
@@ -397,10 +401,10 @@ While developing, you will probably rely mostly on `yarn watch`; however, there 
 
 ### Deploying to Linux running Node.js
 
-1. Clone starter kit locally.
+1. Clone the latest stable starter kit locally.
 
 ```
-git clone https://github.com/sysgears/apollo-universal-starter-kit.git
+git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
 cd apollo-universal-starter-kit
 ```
 
@@ -518,7 +522,6 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [react ga]: https://github.com/react-ga/react-ga
 [haul]: https://github.com/callstack-io/haul
 [react native]: https://github.com/facebook/react-native
-[react native web]: https://github.com/necolas/react-native-web
 [expo]: https://expo.io
 [genymotion]: https://www.genymotion.com
 [xcode]: https://developer.apple.com/xcode/
@@ -526,8 +529,8 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [jwt]: https://jwt.io
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
-[flow]: https://flow.org
 [typescript]: https://www.typescriptlang.org
+[i18next]: https://www.i18next.com
 [Stripe]: https://stripe.com
 [Wiki]: https://github.com/sysgears/apollo-universal-starter-kit/wiki
 [FAQ]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Frequently-Asked-Questions

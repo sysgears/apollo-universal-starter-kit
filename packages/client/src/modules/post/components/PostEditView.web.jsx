@@ -3,22 +3,18 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
+import translate from '../../../i18n';
 import { PageLayout } from '../../common/components/web';
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
 import settings from '../../../../../../settings';
 
-const onSubmit = (post, addPost, editPost) => values => {
-  if (post) {
-    editPost(post.id, values.title, values.content);
-  } else {
-    addPost(values.title, values.content);
-  }
+const onSubmit = (post, editPost) => values => {
+  editPost(post.id, values.title, values.content);
 };
 
-const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost }) => {
+const PostEditView = ({ loading, post, match, location, subscribeToMore, editPost, t }) => {
   let postObj = post;
-
   // if new post was just added read it from router
   if (!postObj && location.state) {
     postObj = location.state.post;
@@ -26,11 +22,11 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
 
   const renderMetaData = () => (
     <Helmet
-      title={`${settings.app.name} - Edit post`}
+      title={`${settings.app.name} - ${t('post.title')}`}
       meta={[
         {
           name: 'description',
-          content: 'Edit post example page'
+          content: t('post.meta')
         }
       ]}
     />
@@ -40,7 +36,7 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
     return (
       <PageLayout>
         {renderMetaData()}
-        <div className="text-center">Loading...</div>
+        <div className="text-center">{t('post.loadMsg')}</div>
       </PageLayout>
     );
   } else {
@@ -48,10 +44,12 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
       <PageLayout>
         {renderMetaData()}
         <Link id="back-button" to="/posts">
-          Back
+          {t('post.btn.back')}
         </Link>
-        <h2>{post ? 'Edit' : 'Create'} Post</h2>
-        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} initialValues={postObj} />
+        <h2>
+          {t(`post.label.edit`)} {t('post.label.post')}
+        </h2>
+        <PostForm onSubmit={onSubmit(postObj, editPost)} post={post} />
         <br />
         {postObj && (
           <PostComments
@@ -68,11 +66,11 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
 PostEditView.propTypes = {
   loading: PropTypes.bool.isRequired,
   post: PropTypes.object,
-  addPost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  subscribeToMore: PropTypes.func.isRequired
+  subscribeToMore: PropTypes.func.isRequired,
+  t: PropTypes.func
 };
 
-export default PostEditView;
+export default translate('post')(PostEditView);

@@ -1,38 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
+import { withFormik } from 'formik';
+
+import translate from '../../../i18n';
+import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { required, minLength } from '../../../../../common/validation';
+import { required, minLength, validateForm, match } from '../../../../../common/validation';
 
-const validate = values => {
-  const errors = {};
-
-  if (values.password && values.passwordConfirmation && values.password !== values.passwordConfirmation) {
-    errors.passwordConfirmation = 'Passwords do not match';
-  }
-  return errors;
+const resetPasswordFormSchema = {
+  password: [required, minLength(8)],
+  passwordConfirmation: [match('password'), required, minLength(8)]
 };
 
-const ResetPasswordForm = ({ handleSubmit, submitting, onSubmit, error }) => {
+const validate = values => validateForm(values, resetPasswordFormSchema);
+
+const ResetPasswordForm = ({ values, handleSubmit, error, t }) => {
   return (
-    <Form name="resetPassword" onSubmit={handleSubmit(onSubmit)}>
+    <Form name="resetPassword" onSubmit={handleSubmit}>
       <Field
         name="password"
         component={RenderField}
         type="password"
-        label="Password"
-        validate={[required, minLength(5)]}
+        label={t('resetPass.form.field.pass')}
+        value={values.password}
       />
       <Field
         name="passwordConfirmation"
         component={RenderField}
         type="password"
-        label="Password Confirmation"
-        validate={[required, minLength(5)]}
+        label={t('resetPass.form.field.passConf')}
+        value={values.passwordConfirmation}
       />
       {error && <Alert color="error">{error}</Alert>}
-      <Button color="primary" type="submit" disabled={submitting}>
-        Reset Password
+      <Button color="primary" type="submit">
+        {t('resetPass.form.btnSubmit')}
       </Button>
     </Form>
   );
@@ -40,12 +41,30 @@ const ResetPasswordForm = ({ handleSubmit, submitting, onSubmit, error }) => {
 
 ResetPasswordForm.propTypes = {
   handleSubmit: PropTypes.func,
+  values: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  error: PropTypes.string
+  error: PropTypes.string,
+  t: PropTypes.func
 };
 
-export default reduxForm({
-  form: 'resetPassword',
-  validate
-})(ResetPasswordForm);
+const ResetPasswordFormWithFormik = withFormik({
+  enableReinitialize: true,
+  mapPropsToValues: () => ({ password: '', passwordConfirmation: '' }),
+  async handleSubmit(
+    values,
+    {
+      setErrors,
+      resetForm,
+      props: { onSubmit }
+    }
+  ) {
+    await onSubmit(values)
+      .then(() => resetForm())
+      .catch(e => setErrors(e));
+  },
+  validate: values => validate(values),
+  displayName: 'LoginForm' // helps with React DevTools
+});
+
+export default translate('user')(ResetPasswordFormWithFormik(ResetPasswordForm));

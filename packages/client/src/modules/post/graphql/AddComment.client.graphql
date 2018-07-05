@@ -1,0 +1,5 @@
+#import "./Comment.graphql"
+
+mutation addCommentClient($comment: CommentInfo!) {
+  onCommentSelect(comment: $comment) @client
+}

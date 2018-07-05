@@ -19,7 +19,8 @@ describe('Post and comments example API works', () => {
   step('Query post list works', async () => {
     let result = await apollo.query({
       query: POSTS_QUERY,
-      variables: { limit: 1, after: 0 }
+      variables: { limit: 1, after: 0 },
+      fetchPolicy: 'network-only'
     });
 
     expect(result.data).to.deep.equal({
@@ -27,7 +28,7 @@ describe('Post and comments example API works', () => {
         totalCount: 20,
         edges: [
           {
-            cursor: 20,
+            cursor: 0,
             node: {
               id: 20,
               title: 'Post title 20',
@@ -38,7 +39,7 @@ describe('Post and comments example API works', () => {
           }
         ],
         pageInfo: {
-          endCursor: 20,
+          endCursor: 0,
           hasNextPage: true,
           __typename: 'PostPageInfo'
         },

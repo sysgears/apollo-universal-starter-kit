@@ -1,33 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, reduxForm } from 'redux-form';
-import { FormView, RenderField, FormButton } from '../../common/components/native';
-import { required, minLength } from '../../../../../common/validation';
+import { withFormik } from 'formik';
 
-const PostCommentForm = ({ handleSubmit, valid, initialValues, onSubmit }) => {
-  let operation = 'Add';
-  if (initialValues.id !== null) {
-    operation = 'Edit';
-  }
+import translate from '../../../i18n';
+import Field from '../../../utils/FieldAdapter';
+import { FormView, RenderField, Button, primary } from '../../common/components/native';
+import { placeholderColor } from '../../common/components/native/styles';
+import { required, validateForm } from '../../../../../common/validation';
+
+const commentFormSchema = {
+  content: [required]
+};
+
+const validate = values => validateForm(values, commentFormSchema);
+
+const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
+  const operation = t(`comment.label.${comment.id ? 'edit' : 'add'}`);
 
   return (
-    <FormView>
-      <Field name="content" component={RenderField} type="text" label="Content" validate={[required, minLength(1)]} />
-      <FormButton onPress={handleSubmit(onSubmit)} disabled={!valid}>
+    <FormView style={{ paddingHorizontal: 15 }}>
+      <Field
+        name="content"
+        component={RenderField}
+        type="text"
+        value={values.content}
+        placeholder={t('comment.label.field')}
+        placeholderTextColor={placeholderColor}
+      />
+      <Button type={primary} onPress={handleSubmit}>
         {operation}
-      </FormButton>
+      </Button>
     </FormView>
   );
 };
 
 PostCommentForm.propTypes = {
   handleSubmit: PropTypes.func,
-  initialValues: PropTypes.object,
+  comment: PropTypes.object,
   onSubmit: PropTypes.func,
-  valid: PropTypes.bool
+  submitting: PropTypes.bool,
+  values: PropTypes.object,
+  t: PropTypes.func
 };
 
-export default reduxForm({
-  form: 'comment',
+const PostCommentFormWithFormik = withFormik({
+  mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
+  validate: values => validate(values),
+  handleSubmit: async (values, { resetForm, props: { onSubmit } }) => {
+    await onSubmit(values);
+    resetForm({ content: '' });
+  },
+  displayName: 'CommentForm', // helps with React DevTools
   enableReinitialize: true
-})(PostCommentForm);
+});
+
+export default translate('post')(PostCommentFormWithFormik(PostCommentForm));

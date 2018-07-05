@@ -2,11 +2,10 @@ import Stripe from 'stripe';
 
 import SubscriptionDAO from './sql';
 import mailer from '../mailer/mailer';
-import UserDAO from '../user/sql';
+import User from '../user/sql';
 import settings from '../../../../../settings';
 
 const Subscription = new SubscriptionDAO();
-const User = new UserDAO();
 const stripe = Stripe(settings.subscription.stripeSecretKey);
 
 export default async (req, res) => {
@@ -66,7 +65,7 @@ export default async (req, res) => {
           from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
           to: user.email,
           subject: 'Charge Failed',
-          html: `We are having trouble charing your card. Please update your card details here: <a href="${url}">${url}</a>`
+          html: `We are having trouble charging your card. Please update your card details here: <a href="${url}">${url}</a>`
         });
       }
     }

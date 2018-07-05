@@ -1,0 +1,39 @@
+.linkedInBtn {
+  min-width: 320px;
+  margin-top: 10px;
+  background-color: #0077b0;
+  border-color: #0077b0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.linkedInBtn:hover {
+    background-color: #054b6b;
+    border-color: #054b6b;
+}
+
+.iconContainer { 
+  display: flex;
+  flex: 1 1 10%;
+  justify-content: flex-start;
+   align-items: center; 
+}
+
+.separator { 
+  height: 28px;
+  width: 1px;
+  background-color: #fff !important;
+  margin-left: 10px;
+}
+
+.btnText { 
+  display: flex;
+  justify-content: flex-start; 
+  flex: 5
+}
+
+.linkedInIcon { 
+  color: #fff;
+  font-size: 30px;
+}

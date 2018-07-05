@@ -22,6 +22,7 @@ CardInfo.propTypes = {
 
 const CardInfoWithApollo = compose(
   graphql(CARD_INFO_QUERY, {
+    options: { fetchPolicy: 'network-only' },
     props({ data: { loading, subscriptionCardInfo } }) {
       return {
         loading,

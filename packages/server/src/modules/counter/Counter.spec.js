@@ -19,9 +19,9 @@ describe('Counter example API works', () => {
     return chai
       .request(server)
       .get('/graphiql')
-      .end((err, res) => {
-        res.status.should.be(200);
-        res.body.should.be('{}');
+      .then(res => {
+        res.should.have.status(200);
+        res.body.should.be.eql({});
       });
   });
 
@@ -39,8 +39,8 @@ describe('Counter example API works', () => {
       variables: { amount: 2 }
     });
 
-    result.data.should.deep.equal({
-      addCounter: { amount: 7, __typename: 'Counter' }
+    result.should.deep.equal({
+      data: { addCounter: { amount: 7, __typename: 'Counter' } }
     });
   });
 

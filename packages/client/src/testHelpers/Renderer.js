@@ -1,37 +1,26 @@
-import ApolloClient from 'apollo-client';
+import React from 'react';
+import { ApolloProvider } from 'react-apollo';
 import { ApolloLink, Observable } from 'apollo-link';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { addTypenameToDocument } from 'apollo-utilities';
-import { LoggingLink } from 'apollo-logger';
 import { Router, Switch } from 'react-router-dom';
 import createHistory from 'history/createMemoryHistory';
 import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { combineReducers, createStore } from 'redux';
-import { reducer as formReducer } from 'redux-form';
 import { graphql, print, getOperationAST } from 'graphql';
-
 import { Provider } from 'react-redux';
 
+import createApolloClient from '../../../common/createApolloClient';
 import rootSchema from '../../../server/src/api/rootSchema.graphql';
 import serverModules from '../../../server/src/modules';
-import settings from '../../../../settings';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;
 global.window = dom.window;
 global.navigator = dom.window.navigator;
 
-// React imports MUST come after `global.document =` in order for enzyme `unmount` to work
-const React = require('react');
-const ReactEnzymeAdapter = require('enzyme-adapter-react-16');
-const { ApolloProvider } = require('react-apollo');
-const Enzyme = require('enzyme');
+const { render } = require('./testUtils');
 const clientModules = require('../modules').default;
-
-const mount = Enzyme.mount;
-
-Enzyme.configure({ adapter: new ReactEnzymeAdapter() });
 
 process.on('uncaughtException', ex => {
   console.error('Uncaught error', ex.stack);
@@ -143,17 +132,15 @@ export default class Renderer {
     });
     addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
 
-    const cache = new InMemoryCache();
-    let link = new MockLink(schema);
-
-    const client = new ApolloClient({
-      link: ApolloLink.from((settings.app.logging.apolloLogging ? [new LoggingLink()] : []).concat([link])),
-      cache
+    const schemaLink = new MockLink(schema);
+    const client = createApolloClient({
+      createNetLink: () => schemaLink,
+      links: clientModules.link,
+      clientResolvers: clientModules.resolvers
     });
 
     const store = createStore(
       combineReducers({
-        form: formReducer,
         ...clientModules.reducers
       }),
       reduxState
@@ -164,8 +151,7 @@ export default class Renderer {
     this.client = client;
     this.store = store;
     this.history = history;
-    this.mockLink = link;
-    // this.networkInterface = mockNetworkInterface;
+    this.mockLink = schemaLink;
   }
 
   withApollo(component) {
@@ -183,7 +169,7 @@ export default class Renderer {
   }
 
   mount() {
-    return mount(
+    return render(
       this.withApollo(
         clientModules.getWrappedRoot(
           <Router history={this.history}>

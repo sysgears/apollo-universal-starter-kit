@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
+
+import translate from '../../../i18n';
 import { PageLayout, Button } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
@@ -10,14 +12,23 @@ const Section = styled.section`
   text-align: center;
 `;
 
-const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncrement }) => {
+const CounterView = ({
+  loading,
+  counter,
+  addCounter,
+  reduxCount,
+  onReduxIncrement,
+  counterState,
+  addCounterState,
+  t
+}) => {
   const renderMetaData = () => (
     <Helmet
-      title={`${settings.app.name} - Counter`}
+      title={`${settings.app.name} - ${t('title')}`}
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - Counter example page`
+          content: `${settings.app.name} - ${t('meta')}`
         }
       ]}
     />
@@ -27,7 +38,7 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
     return (
       <PageLayout>
         {renderMetaData()}
-        <div className="text-center">Loading...</div>
+        <div className="text-center">{t('loading')}</div>
       </PageLayout>
     );
   } else {
@@ -35,18 +46,21 @@ const CounterView = ({ loading, counter, addCounter, reduxCount, onReduxIncremen
       <PageLayout>
         {renderMetaData()}
         <Section>
-          <p>
-            Current counter, is {counter.amount}. This is being stored server-side in the database and using Apollo
-            subscription for real-time updates.
-          </p>
+          <p>{t('counter.text', { counter })}</p>
           <Button id="graphql-button" color="primary" onClick={addCounter(1)}>
-            Click to increase counter
+            {t('counter.btnLabel')}
           </Button>
         </Section>
         <Section>
-          <p>Current reduxCount, is {reduxCount}. This is being stored client-side with Redux.</p>
+          <p>{t('reduxCount.text', { reduxCount })}</p>
           <Button id="redux-button" color="primary" onClick={onReduxIncrement(1)}>
-            Click to increase reduxCount
+            {t('reduxCount.btnLabel')}
+          </Button>
+        </Section>
+        <Section>
+          <p>{t('apolloCount.text', { counterState })}</p>
+          <Button id="apollo-link-button" color="primary" onClick={addCounterState(1)}>
+            {t('apolloCount.btnLabel')}
           </Button>
         </Section>
       </PageLayout>
@@ -58,8 +72,11 @@ CounterView.propTypes = {
   loading: PropTypes.bool.isRequired,
   counter: PropTypes.object,
   addCounter: PropTypes.func.isRequired,
+  counterState: PropTypes.number.isRequired,
+  addCounterState: PropTypes.func.isRequired,
   reduxCount: PropTypes.number.isRequired,
-  onReduxIncrement: PropTypes.func.isRequired
+  onReduxIncrement: PropTypes.func.isRequired,
+  t: PropTypes.func
 };
 
-export default CounterView;
+export default translate('counter')(CounterView);

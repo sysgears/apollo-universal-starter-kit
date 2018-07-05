@@ -1,0 +1,18 @@
+{
+  "compact": false,
+  "presets": ["react", ["env", { "modules": false }], "stage-0"],
+  "plugins": [
+    "transform-runtime",
+    "transform-decorators-legacy",
+    "transform-class-properties",
+    ["styled-components", { "ssr": true }],
+    ["import", { "libraryName": "antd-mobile" }]
+  ],
+  "only": ["*.jsx", "*.js"],
+  "env": {
+    "production": {
+      "compact": true,
+      "presets": [["minify", { "mangle": false }]]
+    }
+  }
+}

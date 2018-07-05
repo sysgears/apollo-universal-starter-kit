@@ -1,9 +1,9 @@
 /*eslint-disable no-unused-vars*/
 import { pick } from 'lodash';
 import Stripe from 'stripe';
+
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
-import log from '../../../../common/log';
 
 const stripe = Stripe(settings.subscription.stripeSecretKey);
 
@@ -19,7 +19,7 @@ export default pubsub => ({
     },
     async subscriptionCardInfo(obj, args, context) {
       const { user } = context;
-      return context.Subscription.getCardInfo(user.id);
+      return !user ? undefined : context.Subscription.getCardInfo(user.id);
     }
   },
   Mutation: {
@@ -83,7 +83,9 @@ export default pubsub => ({
       try {
         const data = pick(input, ['token', 'expiryMonth', 'expiryYear', 'last4', 'brand']);
         const user = await context.User.getUserByUsername(context.user.username);
-        const { subscription: { stripeCustomerId, stripeSourceId } } = context;
+        const {
+          subscription: { stripeCustomerId, stripeSourceId }
+        } = context;
 
         await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
         const source = await stripe.customers.createSource(stripeCustomerId, {
@@ -117,7 +119,7 @@ export default pubsub => ({
           await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
         } catch (e) {
           const e = new FieldError();
-          e.setError('subscription', 'Error cancelling subscription.');
+          e.setError('subscription', context.req.t('subscription:cancelSubscription'));
           e.throwIf();
         }
 

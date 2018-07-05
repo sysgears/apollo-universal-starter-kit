@@ -1,8 +1,12 @@
+#import "./User.graphql"
 mutation login($input: LoginUserInput!) {
   login(input: $input) {
     tokens {
-      token
+      accessToken
       refreshToken
+    }
+    user {
+      ...UserInfo
     }
     errors {
       field

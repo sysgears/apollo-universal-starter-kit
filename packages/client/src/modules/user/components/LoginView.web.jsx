@@ -1,41 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { SubmissionError } from 'redux-form';
+
+import translate from '../../../i18n';
 import { LayoutCenter } from '../../common/components';
 import { PageLayout, Card, CardGroup, CardTitle, CardText } from '../../common/components/web';
 
-import LoginForm from '../components/LoginForm';
+import LoginForm from './LoginForm';
 import settings from '../../../../../../settings';
 
-export default class LoginView extends React.PureComponent {
+class LoginView extends React.PureComponent {
   static propTypes = {
     error: PropTypes.string,
-    login: PropTypes.func.isRequired
+    login: PropTypes.func.isRequired,
+    t: PropTypes.func
   };
 
   onSubmit = login => async values => {
-    const result = await login(values);
+    const res = await login(values);
+    const { errors } = res;
+    const { t } = this.props;
 
-    if (result && result.errors) {
-      let submitError = {
-        _error: 'Login failed!'
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw new SubmissionError(submitError);
+    if (errors && errors.length) {
+      throw errors.reduce(
+        (res, error) => {
+          res[error.field] = error.message;
+          return res;
+        },
+        { _error: t('login.errorMsg') }
+      );
     }
   };
 
   render() {
-    const { login } = this.props;
+    const { login, t } = this.props;
 
     const renderMetaData = () => (
       <Helmet
-        title={`${settings.app.name} - Login`}
+        title={`${settings.app.name} - ${t('login.title')}`}
         meta={[
           {
             name: 'description',
-            content: `${settings.app.name} - Login page`
+            content: `${settings.app.name} - ${t('login.meta')}`
           }
         ]}
       />
@@ -45,14 +51,14 @@ export default class LoginView extends React.PureComponent {
       <PageLayout>
         {renderMetaData()}
         <LayoutCenter>
-          <h1 className="text-center">Sign In</h1>
+          <h1 className="text-center">{t('login.form.title')}</h1>
           <LoginForm onSubmit={this.onSubmit(login)} />
           <hr />
           <Card>
             <CardGroup>
-              <CardTitle>Available logins:</CardTitle>
-              <CardText>admin@example.com:admin</CardText>
-              <CardText>user@example.com:user</CardText>
+              <CardTitle>{t('login.cardTitle')}:</CardTitle>
+              <CardText>admin@example.com:admin123</CardText>
+              <CardText>user@example.com:user1234</CardText>
               {settings.subscription.enabled && <CardText>subscriber@example.com:subscriber</CardText>}
             </CardGroup>
           </Card>
@@ -61,3 +67,5 @@ export default class LoginView extends React.PureComponent {
     );
   }
 }
+
+export default translate('user')(LoginView);

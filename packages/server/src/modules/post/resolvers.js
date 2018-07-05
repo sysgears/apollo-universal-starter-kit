@@ -11,27 +11,21 @@ export default pubsub => ({
       let edgesArray = [];
       let posts = await context.Post.postsPagination(limit, after);
 
-      posts.map(post => {
+      posts.map((post, index) => {
         edgesArray.push({
-          cursor: post.id,
-          node: {
-            id: post.id,
-            title: post.title,
-            content: post.content
-          }
+          cursor: after + index,
+          node: post
         });
       });
-
       const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
-
-      const values = await Promise.all([context.Post.getTotal(), context.Post.getNextPageFlag(endCursor)]);
-
+      const total = (await context.Post.getTotal()).count;
+      const hasNextPage = total > after + limit;
       return {
-        totalCount: values[0].count,
+        totalCount: total,
         edges: edgesArray,
         pageInfo: {
           endCursor: endCursor,
-          hasNextPage: values[1].count > 0
+          hasNextPage: hasNextPage
         }
       };
     },
@@ -70,6 +64,14 @@ export default pubsub => ({
             node: post
           }
         });
+        // publish for edit post page
+        pubsub.publish(POST_SUBSCRIPTION, {
+          postUpdated: {
+            mutation: 'DELETED',
+            id,
+            node: post
+          }
+        });
         return { id: post.id };
       } else {
         return { id: null };
@@ -87,7 +89,13 @@ export default pubsub => ({
         }
       });
       // publish for edit post page
-      pubsub.publish(POST_SUBSCRIPTION, { postUpdated: post });
+      pubsub.publish(POST_SUBSCRIPTION, {
+        postUpdated: {
+          mutation: 'UPDATED',
+          id: post.id,
+          node: post
+        }
+      });
       return post;
     },
     async addComment(obj, { input }, context) {
@@ -104,7 +112,13 @@ export default pubsub => ({
       });
       return comment;
     },
-    async deleteComment(obj, { input: { id, postId } }, context) {
+    async deleteComment(
+      obj,
+      {
+        input: { id, postId }
+      },
+      context
+    ) {
       await context.Post.deleteComment(id);
       // publish for edit post page
       pubsub.publish(COMMENT_SUBSCRIPTION, {

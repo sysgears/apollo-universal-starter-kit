@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from '../web';
+import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin, Pagination } from '../web';
 import { createColumnFields, createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
 import { hasRole } from '../../../user/containers/Auth';
@@ -110,7 +110,7 @@ class ListView extends React.Component {
     onOrderBy: PropTypes.func.isRequired,
     deleteManyEntries: PropTypes.func.isRequired,
     updateManyEntries: PropTypes.func.isRequired,
-    loadMoreRows: PropTypes.func.isRequired,
+    loadData: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
     link: PropTypes.string.isRequired,
     customColumnFields: PropTypes.object,
@@ -174,13 +174,17 @@ class ListView extends React.Component {
     sortEntries([dragRow.id, dragReplace.id, dragReplace.rank, dragRow.rank]);
   };
 
-  renderLoadMore = (data, loadMoreRows) => {
-    if (data.pageInfo.hasNextPage) {
-      return (
-        <Button id="load-more" color="primary" onClick={loadMoreRows}>
-          Load more ...
-        </Button>
-      );
+  handlePageChange = (pagination, pageNumber) => {
+    const {
+      data: {
+        pageInfo: { endCursor }
+      },
+      loadData
+    } = this.props;
+    if (pagination === 'relay') {
+      loadData(endCursor + 1, 'add');
+    } else {
+      loadData((pageNumber - 1) * 10, 'replace');
     }
   };
 
@@ -264,7 +268,6 @@ class ListView extends React.Component {
     const {
       loading,
       data,
-      loadMoreRows,
       schema,
       link,
       currentUser,
@@ -434,7 +437,15 @@ class ListView extends React.Component {
         {error && <Alert color="error" message={error} />}
         {success && <Alert color="success" message={success} />}
         <Table {...tableProps} />
-        {data && this.renderLoadMore(data, loadMoreRows)}
+        <Pagination
+          itemsPerPage={data.edges.length}
+          handlePageChange={this.handlePageChange}
+          hasNextPage={data.pageInfo.hasNextPage}
+          pagination={'relay'}
+          total={data.totalCount}
+          loadMoreText={'Load more ...'}
+          defaultPageSize={10}
+        />
       </div>
     );
   }

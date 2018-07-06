@@ -246,10 +246,11 @@ export const createFormFields = ({
 
   for (const key of keys) {
     const value = schema.values[key];
-    const type = value.type.constructor === Array ? value.type[0] : value.type;
+    const typeIsArray = Array.isArray(value.type);
+    const type = typeIsArray ? value.type[0] : value.type;
     const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
 
-    if (value.show !== false && value.type.constructor !== Array) {
+    if (value.show !== false && !typeIsArray) {
       let formField = createFormField(key, type, values, formItemLayout, formType, hasTypeOf, prefix);
       if (formField) {
         if (Array.isArray(formField)) {
@@ -258,11 +259,11 @@ export const createFormFields = ({
           fields.push(formField);
         }
       }
-    } else {
-      if (value.type.constructor === Array && formType === 'form') {
-        if (values[key]) {
-          fields.push(createFormFieldsArray(key, values, value, type, handleChange, handleBlur, formItemLayout));
-        }
+    } else if (typeIsArray && type && formType === 'form') {
+      fields.push(createFormField(key, type, values, formItemLayout, formType, hasTypeOf, prefix));
+    } else if (typeIsArray && formType === 'nested') {
+      if (values[key]) {
+        fields.push(createFormFieldsArray(key, values, value, type, handleChange, handleBlur, formItemLayout));
       }
     }
   }

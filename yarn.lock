@@ -577,9 +577,9 @@
     debug "^3.1.0"
     humps "^2.0.1"
 
-"@domain-schema/validation@^0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@domain-schema/validation/-/validation-0.0.34.tgz#f10f4b810911c989490d269df315296bdbe0cfc2"
+"@domain-schema/validation@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@domain-schema/validation/-/validation-0.0.35.tgz#a636c046784a2703304eab88c237d504340deac1"
   dependencies:
     debug "^3.1.0"
     humps "^2.0.1"

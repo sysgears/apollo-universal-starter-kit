@@ -135,10 +135,10 @@ class Chat extends React.Component {
     this.setState({ message: text });
   };
 
-  onSend = (messages = [], addMessage, editMessage) => {
+  onSend = (messages = []) => {
     const { isEdit, messageInfo, message, quotedMessage } = this.state;
+    const { addMessage, editMessage, uuid } = this.props;
     const reply = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
-    const { uuid } = this.props;
 
     if (isEdit) {
       editMessage({
@@ -255,7 +255,7 @@ class Chat extends React.Component {
 
   render() {
     const { message } = this.state;
-    const { messages = [], currentUser, addMessage, editMessage, deleteMessage, uuid } = this.props;
+    const { currentUser, deleteMessage, uuid, messages = [] } = this.props;
     const anonymous = 'Anonymous';
     const defaultUser = { id: uuid, username: anonymous };
     const { id, username } = currentUser ? currentUser : defaultUser;
@@ -277,7 +277,7 @@ class Chat extends React.Component {
           placeholder={'Type a message...'}
           keyboardShouldPersistTaps="never"
           messages={formatMessages}
-          onSend={messages => this.onSend(messages, addMessage, editMessage)}
+          onSend={this.onSend}
           user={{ _id: id, name: username }}
           showAvatarForEveryMessage
           renderChatFooter={this.renderChatFooter.bind(this)}

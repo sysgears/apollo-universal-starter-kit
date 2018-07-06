@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { FormFeedback } from 'reactstrap';
 import { FormItem, InputNumber } from './index';
 
 export default class RenderNumber extends React.Component {
@@ -9,6 +9,7 @@ export default class RenderNumber extends React.Component {
     setFieldValue: PropTypes.func.isRequired,
     setFieldTouched: PropTypes.func.isRequired,
     label: PropTypes.string,
+    placeholder: PropTypes.string,
     type: PropTypes.string,
     formItemLayout: PropTypes.object,
     hasTypeOf: PropTypes.func.isRequired,
@@ -36,18 +37,26 @@ export default class RenderNumber extends React.Component {
       input: { onChange, onBlur, ...inputRest },
       label,
       formItemLayout,
+      placeholder,
       meta: { touched, error }
     } = this.props;
 
-    let validateStatus = '';
+    let valid = true;
     if (touched && error) {
-      validateStatus = 'error';
+      valid = false;
     }
 
     return (
-      <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
+      <FormItem label={label} {...formItemLayout}>
         <div>
-          <InputNumber {...inputRest} placeholder={label} onChange={this.handleChange} onBlur={this.handleBlur} />
+          <InputNumber
+            {...inputRest}
+            placeholder={label || placeholder}
+            onChange={this.handleChange}
+            onBlur={this.handleBlur}
+            invalid={!valid}
+          />
+          {touched && (error && <FormFeedback>{error}</FormFeedback>)}
         </div>
       </FormItem>
     );

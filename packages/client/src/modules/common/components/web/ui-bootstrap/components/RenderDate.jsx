@@ -21,7 +21,12 @@ export default class RenderDate extends React.Component {
       input: { name },
       setFieldValue
     } = this.props;
-    setFieldValue(name, moment(date).format(dateFormat));
+
+    let computedDate = moment(date);
+    if (computedDate.isValid()) {
+      return setFieldValue(name, computedDate.format(dateFormat));
+    }
+    setFieldValue(name, moment().format(dateFormat));
   };
 
   handleBlur = () => {

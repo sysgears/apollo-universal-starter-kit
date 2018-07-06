@@ -149,7 +149,8 @@ class Chat extends React.Component {
       this.setState({ isEdit: false });
     } else {
       const {
-        text,
+        text = '',
+        image = null,
         user: { _id: userId, name: username },
         _id: id
       } = messages[0];
@@ -160,18 +161,23 @@ class Chat extends React.Component {
         userId,
         id,
         uuid,
-        reply
+        reply,
+        image
       });
 
       this.setState({ isReply: false, quotedMessage: null });
     }
   };
 
-  pickImage() {
-    ImagePicker.launchImageLibraryAsync({
+  async pickImage(props) {
+    const { onSend } = props;
+    const uploadImage = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: false,
       base64: false
     });
+    if (!uploadImage.cancelled) {
+      onSend({ image: uploadImage.uri });
+    }
   }
 
   onLongPress(context, currentMessage, id, deleteMessage, setEditState) {
@@ -249,8 +255,8 @@ class Chat extends React.Component {
     }
   }
 
-  renderCustomActions() {
-    return <RenderCustomActions {...this.props} pickImage={this.pickImage} />;
+  renderCustomActions(props) {
+    return <RenderCustomActions {...props} pickImage={this.pickImage} />;
   }
 
   render() {
@@ -260,12 +266,13 @@ class Chat extends React.Component {
     const defaultUser = { id: uuid, username: anonymous };
     const { id, username } = currentUser ? currentUser : defaultUser;
     const timeDiff = moment().utcOffset() * 60000;
-    const formatMessages = messages.map(({ id: _id, text, userId, username, createdAt, uuid, reply }) => ({
+    const formatMessages = messages.map(({ id: _id, text, userId, username, createdAt, uuid, reply, image }) => ({
       _id,
       text,
       createdAt: moment(moment(createdAt) + timeDiff),
       user: { _id: userId ? userId : uuid, name: username || anonymous },
-      reply
+      reply,
+      image
     }));
 
     return (
@@ -303,7 +310,7 @@ export default compose(
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
-      addMessage: async ({ text, userId, username, uuid, id, reply }) => {
+      addMessage: async ({ text, userId, username, uuid, id, reply, image }) => {
         mutate({
           variables: { input: { text, uuid, reply } },
           updateQueries: {
@@ -330,7 +337,8 @@ export default compose(
               userId: userId,
               uuid: uuid,
               id: id,
-              reply: reply
+              reply: reply,
+              image: image
             }
           }
         });

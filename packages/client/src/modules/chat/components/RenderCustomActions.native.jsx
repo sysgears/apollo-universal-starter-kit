@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const RenderCustomActions = props => {
   const { pickImage } = props;
   return (
-    <TouchableOpacity style={styles.container} onPress={pickImage}>
+    <TouchableOpacity style={styles.container} onPress={() => pickImage(props)}>
       <FontAwesome name="photo" size={30} style={styles.icon} />
     </TouchableOpacity>
   );

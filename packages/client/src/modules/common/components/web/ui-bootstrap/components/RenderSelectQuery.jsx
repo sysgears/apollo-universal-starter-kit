@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pascalize } from 'humps';
+import { FormFeedback } from 'reactstrap';
 import { FormItem, Select } from './index';
 import schemaQueries from '../../../../generatedContainers';
 
@@ -85,6 +86,11 @@ export default class RenderSelectQuery extends React.Component {
       defaultStyle = style;
     }
 
+    let valid = true;
+    if (touched && error) {
+      valid = false;
+    }
+
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={error}>
         <div>
@@ -111,12 +117,16 @@ export default class RenderSelectQuery extends React.Component {
                   value: formatedValue,
                   onChange: e => this.handleChange(e, data.edges ? data.edges : null),
                   onBlur: this.handleBlur,
+                  invalid: !valid,
                   ...inputRest
                 };
                 return (
-                  <Select type="select" {...props}>
-                    {options}
-                  </Select>
+                  <div>
+                    <Select type="select" {...props}>
+                      {options}
+                    </Select>
+                    {error && (error && <FormFeedback>{error}</FormFeedback>)}
+                  </div>
                 );
               } else {
                 return <div>Loading...</div>;

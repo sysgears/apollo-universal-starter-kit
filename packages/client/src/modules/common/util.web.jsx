@@ -11,7 +11,7 @@ import { hasRole } from '../user/containers/Auth';
 import Field from '../../utils/FieldAdapter';
 import { mapFormPropsToValues } from '../../utils/crud';
 import {
-  RenderInput,
+  RenderField,
   RenderNumber,
   RenderTextArea,
   RenderSelectQuery,
@@ -271,7 +271,7 @@ export const createFormFields = ({
 };
 
 const createFormField = (key, type, values, formItemLayout, formType, hasTypeOf, prefix) => {
-  let component = RenderInput;
+  let component = RenderField;
   const value = values ? values[key] : '';
   let style = {};
   let dateFields = [];

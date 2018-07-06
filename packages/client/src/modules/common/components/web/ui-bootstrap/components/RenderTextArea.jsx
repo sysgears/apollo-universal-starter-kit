@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { FormFeedback } from 'reactstrap';
 import { FormItem, Input } from './index';
 
 export default class RenderTextArea extends React.Component {
@@ -21,16 +21,17 @@ export default class RenderTextArea extends React.Component {
       meta: { touched, error }
     } = this.props;
 
-    let validateStatus = '';
+    let valid = true;
     if (touched && error) {
-      validateStatus = 'error';
+      valid = false;
     }
 
     return (
-      <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
+      <FormItem label={label} {...formItemLayout}>
         <div>
-          <Input {...input} type="textarea" placeholder={label} autosize />
+          <Input {...input} type="textarea" placeholder={label} invalid={!valid} autosize />
         </div>
+        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
       </FormItem>
     );
   }

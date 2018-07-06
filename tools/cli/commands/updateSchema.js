@@ -263,7 +263,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
   }
 }
 
-const regenerateGraphqlFragment = (value, key) => {
+const regenerateGraphqlFragment = (value, key, spaces = '') => {
   if (value.type.isSchema) {
     let column = 'name';
     for (const remoteKey of value.type.keys()) {
@@ -272,9 +272,18 @@ const regenerateGraphqlFragment = (value, key) => {
         column = remoteKey;
       }
     }
-    return `  ${key} {\n    id\n    ${column}\n  }\n`;
+    return `  ${key} {\n    ${spaces}id\n    ${spaces}${column}\n  ${spaces}}\n`;
   } else if (value.type.constructor === Array && value.type[0].isSchema) {
-    return regenerateGraphqlFragment(value, key) + `  }\n`;
+    let str = `  ${key} {\n`;
+    for (const remoteKey of value.type[0].keys()) {
+      const remoteValue = value.type[0].values[remoteKey];
+      if (remoteValue.type.isSchema) {
+        str += `  ${regenerateGraphqlFragment(remoteValue, remoteKey, '  ')}`;
+      } else if (remoteValue.type.constructor !== Array) {
+        str += `    ${remoteKey}\n`;
+      }
+    }
+    return str + `  }\n`;
   } else {
     return `  ${key}\n`;
   }

@@ -31,26 +31,22 @@ export default compose(
     options: ({ limit, orderBy, filter }) => {
       return {
         fetchPolicy: 'cache-and-network',
-        variables: { limit, offset: 0, orderBy, filter: removeEmpty(filter) }
+        variables: { limit, orderBy, filter: removeEmpty(filter) }
       };
     },
     props: ({ data: { loading, $module$sConnection, refetch, error, fetchMore } }) => {
-      const loadData = (offset, dataDelivery) => {
+      const loadMoreRows = () => {
         return fetchMore({
           variables: {
-            offset
+            offset: $module$sConnection.edges.length
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
-            const totalCount = fetchMoreResult.$module$sConnection.totalCount;
             const newEdges = fetchMoreResult.$module$sConnection.edges;
             const pageInfo = fetchMoreResult.$module$sConnection.pageInfo;
-            const displayedEdges =
-              dataDelivery === 'add' ? [...previousResult.$module$sConnection.edges, ...newEdges] : newEdges;
 
             return {
               $module$sConnection: {
-                totalCount,
-                edges: displayedEdges,
+                edges: [...previousResult.$module$sConnection.edges, ...newEdges],
                 pageInfo,
                 __typename: '$Module$sConnection'
               }
@@ -59,7 +55,7 @@ export default compose(
         });
       };
       if (error) throw new Error(error);
-      return { loading, data: $module$sConnection, loadData, refetch, errors: error ? error.graphQLErrors : null };
+      return { loading, data: $module$sConnection, loadMoreRows, refetch, errors: error ? error.graphQLErrors : null };
     }
   }),
   graphql(UPDATE_$MODULE$, {

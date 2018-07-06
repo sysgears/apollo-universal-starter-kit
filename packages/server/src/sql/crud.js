@@ -543,16 +543,15 @@ export default class Crud {
 
   async getPaginated(args, info) {
     const edges = await this._getList(args, parseFields(info).edges);
-    const { totalCount } = await this.getTotal();
-    const hasNextPage = totalCount > args.offset + args.limit;
+    const { count } = await this.getTotal();
     //console.log('getPaginated, edges:', edges);
     //console.log('getPaginated, count:', edges);
 
     return {
       edges,
       pageInfo: {
-        totalCount,
-        hasNextPage
+        totalCount: count,
+        hasNextPage: edges && edges.length === args.limit
       }
     };
   }
@@ -563,7 +562,7 @@ export default class Crud {
 
   getTotal() {
     return knex(`${this.getFullTableName()}`)
-      .countDistinct('id as totalCount')
+      .countDistinct('id as count')
       .first();
   }
 
@@ -619,8 +618,8 @@ export default class Crud {
           nestedEntries.push({ key, data: data[key] });
           delete data[key];
         } else if (key === 'rank') {
-          const { totalCount } = await this.getTotal();
-          data[key] = totalCount + 1;
+          const total = await this.getTotal();
+          data[key] = total.count + 1;
         }
       }
 

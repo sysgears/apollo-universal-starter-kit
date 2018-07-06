@@ -5,6 +5,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
 import moment from 'moment';
+import { ImagePicker } from 'expo';
 
 import translate from '../../../i18n';
 import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
@@ -16,6 +17,7 @@ import { withUser } from '../../user/containers/AuthBase';
 import withUuid from './WithUuid';
 import ChatFooter from '../components/ChatFooter.native';
 import CustomView from '../components/CustomView.native';
+import RenderCustomActions from '../components/RenderCustomActions.native';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
@@ -165,6 +167,13 @@ class Chat extends React.Component {
     }
   };
 
+  pickImage() {
+    ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+      base64: false
+    });
+  }
+
   onLongPress(context, currentMessage, id, deleteMessage, setEditState) {
     const options = ['Copy Text', 'Reply'];
 
@@ -240,6 +249,10 @@ class Chat extends React.Component {
     }
   }
 
+  renderCustomActions() {
+    return <RenderCustomActions {...this.props} pickImage={this.pickImage} />;
+  }
+
   render() {
     const { message } = this.state;
     const { messages = [], currentUser, addMessage, editMessage, deleteMessage, uuid } = this.props;
@@ -269,6 +282,7 @@ class Chat extends React.Component {
           showAvatarForEveryMessage
           renderChatFooter={this.renderChatFooter.bind(this)}
           renderCustomView={this.renderCustomView}
+          renderActions={this.renderCustomActions.bind(this)}
           onLongPress={(context, currentMessage) =>
             this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState.bind(this))
           }

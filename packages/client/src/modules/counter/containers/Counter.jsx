@@ -23,7 +23,7 @@ class Counter extends React.Component {
     this.subscription = null;
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!nextProps.loading) {
       // Subscribe or re-subscribe
       if (!this.subscription) {

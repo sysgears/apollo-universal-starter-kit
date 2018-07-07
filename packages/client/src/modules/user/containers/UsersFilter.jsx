@@ -13,4 +13,7 @@ class UsersFilter extends React.Component {
   }
 }
 
-export default compose(withUsersState, withFilterUpdating)(UsersFilter);
+export default compose(
+  withUsersState,
+  withFilterUpdating
+)(UsersFilter);

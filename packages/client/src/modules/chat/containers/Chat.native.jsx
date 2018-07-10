@@ -6,6 +6,7 @@ import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
 import moment from 'moment';
 import { ImagePicker } from 'expo';
+import { ReactNativeFile } from 'apollo-upload-client';
 
 import translate from '../../../i18n';
 import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
@@ -13,6 +14,7 @@ import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
+import UPLOAD_IMAGE from '../graphql/UploadImage.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 import withUuid from './WithUuid';
 import ChatFooter from '../components/ChatFooter.native';
@@ -169,16 +171,20 @@ class Chat extends React.Component {
     }
   };
 
-  async pickImage(props) {
-    const { onSend } = props;
-    const uploadImage = await ImagePicker.launchImageLibraryAsync({
+  pickImage = async props => {
+    const { uploadImage } = this.props;
+    // const { onSend } = props;
+    console.log(props);
+    const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: false,
       base64: false
     });
-    if (!uploadImage.cancelled) {
-      onSend({ image: uploadImage.uri });
+
+    if (!image.cancelled) {
+      uploadImage(image);
+      // onSend({ image: image.uri });
     }
-  }
+  };
 
   onLongPress(context, currentMessage, id, deleteMessage, setEditState) {
     const options = ['Copy Text', 'Reply'];
@@ -303,10 +309,28 @@ class Chat extends React.Component {
 export default compose(
   graphql(MESSAGES_QUERY, {
     props: ({ data }) => {
-      const { error, messages, subscribeToMore } = data;
+      const { error, messages, subscribeToMore, refetch } = data;
       if (error) throw new Error(error);
-      return { messages, subscribeToMore };
+      return { messages, subscribeToMore, refetch };
     }
+  }),
+  graphql(UPLOAD_IMAGE, {
+    props: ({ ownProps: { refetch }, mutate }) => ({
+      uploadImage: async image => {
+        const file = new ReactNativeFile({ uri: image.uri, type: 'image/jpeg', name: 'photo.jpg' });
+        try {
+          const {
+            data: { image: uploadImage }
+          } = await mutate({
+            variables: { image: file }
+          });
+          refetch();
+          return uploadImage;
+        } catch (e) {
+          return { error: e.graphQLErrors[0].message };
+        }
+      }
+    })
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({

@@ -1,5 +1,44 @@
+import { GraphQLUpload } from 'apollo-upload-server';
+import fs from 'fs';
+import shortid from 'shortid';
+import mkdirp from 'mkdirp';
+
 const MESSAGE_SUBSCRIPTION = 'message_subscription';
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
+const UPLOAD_DIR = 'public';
+
+const storeFS = ({ stream, filename }) => {
+  // Check if UPLOAD_DIR exists, create one if not
+  if (!fs.existsSync(UPLOAD_DIR)) {
+    mkdirp(UPLOAD_DIR, err => {
+      if (err) throw new Error(err);
+    });
+  }
+
+  const id = shortid.generate();
+  const path = `${UPLOAD_DIR}/${id}-${filename}`;
+  return new Promise((resolve, reject) =>
+    stream
+      .on('error', error => {
+        if (stream.truncated) {
+          // Delete the truncated file
+          fs.unlinkSync(path);
+        }
+        reject(error);
+      })
+      .pipe(fs.createWriteStream(path))
+      .on('error', error => {
+        return reject(error);
+      })
+      .on('finish', () => resolve({ id, path, size: fs.statSync(path).size }))
+  );
+};
+
+const processUpload = async uploadPromise => {
+  const { stream, filename, mimetype } = await uploadPromise;
+  const { path, size } = await storeFS({ stream, filename });
+  return { name: filename, type: mimetype, path, size };
+};
 
 export default pubsub => ({
   Query: {
@@ -11,6 +50,10 @@ export default pubsub => ({
     }
   },
   Mutation: {
+    async uploadImage(obj, { image }, { Upload }) {
+      const results = await processUpload(image);
+      return Upload.saveFiles(results);
+    },
     async addMessage(obj, { input }, context) {
       const userId = context.user ? context.user.id : null;
       const [id] = await context.Chat.addMessage({ ...input, userId });
@@ -63,5 +106,6 @@ export default pubsub => ({
     messagesUpdated: {
       subscribe: () => pubsub.asyncIterator(MESSAGES_SUBSCRIPTION)
     }
-  }
+  },
+  UploadImage: GraphQLUpload
 });

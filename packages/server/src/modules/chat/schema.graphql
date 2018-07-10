@@ -1,3 +1,5 @@
+scalar UploadImage
+
 # Message
 type Message {
   id: Int!
@@ -17,6 +19,7 @@ extend type Query {
 }
 
 extend type Mutation {
+  uploadImage(image: UploadImage!): Boolean!
   # Create new message
   addMessage(input: AddMessageInput!): Message
   # Delete a message

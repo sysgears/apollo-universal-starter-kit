@@ -47,6 +47,9 @@ export default pubsub => ({
     },
     message(obj, { id }, context) {
       return context.Chat.message(id);
+    },
+    image(obj, { id }, context) {
+      return context.Chat.image(id);
     }
   },
   Mutation: {

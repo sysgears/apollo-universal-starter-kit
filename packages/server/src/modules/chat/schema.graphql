@@ -11,11 +11,22 @@ type Message {
   reply: Int
 }
 
+#Image
+type Image {
+  id: Int!
+  name: String!
+  type: String!
+  size: String!
+  path: String!
+}
+
 extend type Query {
   # Messages
   messages: [Message]
   # Message
   message(id: Int!): Message
+  # Image
+  image(id: Int!): Image
 }
 
 extend type Mutation {

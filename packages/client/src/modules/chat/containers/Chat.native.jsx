@@ -15,6 +15,7 @@ import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import UPLOAD_IMAGE from '../graphql/UploadImage.graphql';
+import IMAGE_QUERY from '../graphql/ImageQuery.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 import withUuid from './WithUuid';
 import ChatFooter from '../components/ChatFooter.native';
@@ -173,7 +174,6 @@ class Chat extends React.Component {
 
   pickImage = async props => {
     const { onSend } = props;
-    console.log(props);
     const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: false,
       base64: false
@@ -311,6 +311,18 @@ export default compose(
       const { error, messages, subscribeToMore, refetch } = data;
       if (error) throw new Error(error);
       return { messages, subscribeToMore, refetch };
+    }
+  }),
+  graphql(IMAGE_QUERY, {
+    options: () => {
+      const id = 1;
+      return {
+        variables: { id }
+      };
+    },
+    props({ data: { error, image, subscribeToMore, refetch } }) {
+      if (error) throw new Error(error);
+      return { image, subscribeToMore, refetch };
     }
   }),
   graphql(UPLOAD_IMAGE, {

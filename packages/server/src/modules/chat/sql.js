@@ -10,6 +10,14 @@ export default class Chat {
       .first();
   }
 
+  image(id) {
+    return knex
+      .select('id', 'name', 'type', 'size', 'path')
+      .from('attachment')
+      .where('id', '=', id)
+      .first();
+  }
+
   getMessages() {
     return knex
       .select(

@@ -172,8 +172,7 @@ class Chat extends React.Component {
   };
 
   pickImage = async props => {
-    const { uploadImage } = this.props;
-    // const { onSend } = props;
+    const { onSend } = props;
     console.log(props);
     const image = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: false,
@@ -181,8 +180,8 @@ class Chat extends React.Component {
     });
 
     if (!image.cancelled) {
-      uploadImage(image);
-      // onSend({ image: image.uri });
+      const imageData = new ReactNativeFile({ uri: image.uri, type: 'image/jpeg', name: 'photo.jpg' });
+      onSend({ image: imageData });
     }
   };
 
@@ -336,7 +335,7 @@ export default compose(
     props: ({ mutate }) => ({
       addMessage: async ({ text, userId, username, uuid, id, reply, image }) => {
         mutate({
-          variables: { input: { text, uuid, reply } },
+          variables: { input: { text, uuid, reply, image } },
           updateQueries: {
             messages: (
               prev,

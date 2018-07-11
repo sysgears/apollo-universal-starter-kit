@@ -55,8 +55,9 @@ export default pubsub => ({
       return Upload.saveFiles(results);
     },
     async addMessage(obj, { input }, context) {
+      const results = input.image ? await processUpload(input.image) : null;
       const userId = context.user ? context.user.id : null;
-      const [id] = await context.Chat.addMessage({ ...input, userId });
+      const [id] = await context.Chat.addMessage({ ...input, image: results, userId });
       const message = await context.Chat.message(id);
       // publish for message list
       pubsub.publish(MESSAGES_SUBSCRIPTION, {

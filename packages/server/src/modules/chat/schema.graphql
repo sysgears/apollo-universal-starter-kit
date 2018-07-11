@@ -3,7 +3,7 @@ scalar UploadImage
 # Message
 type Message {
   id: Int!
-  text: String!
+  text: String
   userId: Int
   createdAt: String
   username: String
@@ -30,10 +30,11 @@ extend type Mutation {
 
 # Input for addMessage Mutation
 input AddMessageInput {
-  text: String!
+  text: String
   userId: Int
   uuid: String
   reply: Int
+  image: UploadImage
 }
 
 # Input for editMessage Mutation

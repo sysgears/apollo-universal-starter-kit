@@ -12,9 +12,20 @@ export default class Chat {
 
   getMessages() {
     return knex
-      .select('m.id', 'm.text', 'm.userId', 'm.uuid', 'u.username', 'm.created_at as createdAt', 'm.reply')
+      .select(
+        'm.id',
+        'm.text',
+        'm.attachment_id',
+        'm.userId',
+        'm.uuid',
+        'u.username',
+        'a.name',
+        'm.created_at as createdAt',
+        'm.reply'
+      )
       .from('message as m')
       .leftJoin('user as u', 'u.id', 'm.userId')
+      .leftJoin('attachment as a', 'a.id', 'm.attachment_id')
       .orderBy('m.id', 'desc');
   }
 

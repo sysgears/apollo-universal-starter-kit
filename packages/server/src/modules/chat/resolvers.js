@@ -55,9 +55,11 @@ export default pubsub => ({
       return Upload.saveFiles(results);
     },
     async addMessage(obj, { input }, context) {
-      const results = input.image ? await processUpload(input.image) : null;
+      const { attachment = null } = input;
       const userId = context.user ? context.user.id : null;
-      const [id] = await context.Chat.addMessage({ ...input, image: results, userId });
+      const results = attachment ? await processUpload(attachment) : null;
+      const data = { ...input, attachment: results, userId };
+      const [id] = attachment ? await context.Chat.addMessageWithAttachment(data) : await context.Chat.addMessage(data);
       const message = await context.Chat.message(id);
       // publish for message list
       pubsub.publish(MESSAGES_SUBSCRIPTION, {
@@ -108,5 +110,5 @@ export default pubsub => ({
       subscribe: () => pubsub.asyncIterator(MESSAGES_SUBSCRIPTION)
     }
   },
-  UploadImage: GraphQLUpload
+  UploadAttachment: GraphQLUpload
 });

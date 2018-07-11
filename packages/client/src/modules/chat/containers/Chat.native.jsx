@@ -335,7 +335,7 @@ export default compose(
     props: ({ mutate }) => ({
       addMessage: async ({ text, userId, username, uuid, id, reply, image }) => {
         mutate({
-          variables: { input: { text, uuid, reply, image } },
+          variables: { input: { text, uuid, reply, attachment: image } },
           updateQueries: {
             messages: (
               prev,

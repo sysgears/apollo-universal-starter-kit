@@ -1,4 +1,4 @@
-scalar UploadImage
+scalar UploadAttachment
 
 # Message
 type Message {
@@ -19,7 +19,7 @@ extend type Query {
 }
 
 extend type Mutation {
-  uploadImage(image: UploadImage!): Boolean!
+  uploadImage(image: UploadAttachment!): Boolean!
   # Create new message
   addMessage(input: AddMessageInput!): Message
   # Delete a message
@@ -34,7 +34,7 @@ input AddMessageInput {
   userId: Int
   uuid: String
   reply: Int
-  image: UploadImage
+  attachment: UploadAttachment
 }
 
 # Input for editMessage Mutation

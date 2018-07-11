@@ -22,6 +22,25 @@ export default class Chat {
     return returnId(knex('message')).insert({ text, userId, uuid, reply });
   }
 
+  addMessageWithAttachment({ text, userId, uuid, reply, attachment }) {
+    return knex
+      .transaction(trx => {
+        knex('attachment')
+          .transacting(trx)
+          .insert(attachment)
+          .then(resp => {
+            const id = resp[0];
+            return returnId(knex('message'))
+              .transacting(trx)
+              .insert({ text, userId, uuid, reply, attachment_id: id });
+          })
+          .then(trx.commit)
+          .catch(trx.rollback);
+      })
+      .then(resp => resp)
+      .catch(err => console.error(err));
+  }
+
   deleteMessage(id) {
     return knex('message')
       .where('id', '=', id)

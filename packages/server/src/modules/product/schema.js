@@ -17,7 +17,8 @@ export class Category extends Schema {
   products = {
     type: [Product],
     optional: true,
-    external: true
+    external: true,
+    blackbox: true
   };
   subCategories = {
     type: [SubCategory],
@@ -76,29 +77,54 @@ export class Product extends Schema {
   id = DomainSchema.Int;
   name = {
     type: String,
-    searchText: true
+    searchText: true,
+    input: {
+      label: 'Name',
+      placeholder: 'Name'
+    }
   };
   category = {
     type: Category,
     external: true,
-    optional: true
+    optional: true,
+    input: {
+      label: 'Category',
+      placeholder: 'Category'
+    }
   };
   productType = {
     type: ProductType,
     optional: true,
-    external: true
+    external: true,
+    input: {
+      label: 'Product Type',
+      placeholder: 'Product Type'
+    }
   };
   price = {
     type: DomainSchema.Float,
-    fieldInput: 'price'
+    fieldType: 'number',
+    input: {
+      label: 'Price',
+      placeholder: 'Price'
+    }
   };
   releaseDate = {
     type: Date,
-    optional: true
+    optional: true,
+    fieldType: 'date',
+    input: {
+      label: 'Release Date',
+      placeholder: 'Release Date'
+    }
   };
   display = {
     type: Boolean,
-    optional: true
+    optional: true,
+    fieldType: 'checkbox',
+    input: {
+      label: 'Display'
+    }
   };
 }
 

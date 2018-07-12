@@ -2,7 +2,7 @@
 type Product {
   id: Int!
   name: String!
-  category: Category!
+  category: Category
   productType: ProductType
   price: Float!
   releaseDate: Date
@@ -39,7 +39,7 @@ input ProductFilterInput {
 
 input ProductCreateInput {
   name: String!
-  categoryId: Int!
+  categoryId: Int
   productTypeId: Int
   price: Float!
   releaseDate: Date

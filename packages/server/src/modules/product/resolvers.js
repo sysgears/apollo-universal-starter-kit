@@ -1,6 +1,6 @@
 import withAuth from 'graphql-auth';
-// eslint-disable-next-line no-unused-vars
-import { createBatchResolver } from 'graphql-resolve-batch';
+
+const PRODUCTS_SUBSCRIPTION = 'products_subscription';
 
 // eslint-disable-next-line no-unused-vars
 export default pubsub => ({
@@ -19,8 +19,17 @@ export default pubsub => ({
   Product: {},
   // end schema batch resolvers
   Mutation: {
-    createProduct: withAuth(['editor:create'], (parent, args, ctx, info) => {
-      return ctx.Product.create(args, ctx, info);
+    createProduct: withAuth(['editor:create'], async (parent, args, ctx, info) => {
+      const product = await ctx.Product.create(args, ctx, info);
+
+      pubsub.publish(PRODUCTS_SUBSCRIPTION, {
+        productsUpdated: {
+          mutation: 'CREATED',
+          node: product.node
+        }
+      });
+
+      return product;
     }),
     updateProduct: withAuth(['editor:update'], (parent, args, ctx, info) => {
       return ctx.Product.update(args, ctx, info);
@@ -38,5 +47,9 @@ export default pubsub => ({
       return ctx.Product.deleteMany(args);
     })
   },
-  Subscription: {}
+  Subscription: {
+    productsUpdated: {
+      subscribe: () => pubsub.asyncIterator(PRODUCTS_SUBSCRIPTION)
+    }
+  }
 });

@@ -1,5 +1,7 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
+import update from 'immutability-helper';
+import PropTypes from 'prop-types';
 
 import { removeTypename, removeEmpty } from '../../../../../common/utils';
 import { ListView } from '../../common/components/crud';
@@ -14,8 +16,74 @@ import DELETE_PRODUCT from '../graphql/DeleteProduct.graphql';
 import SORT_PRODUCTS from '../graphql/SortProducts.graphql';
 import DELETEMANY_PRODUCTS from '../graphql/DeleteManyProducts.graphql';
 import UPDATEMANY_PRODUCTS from '../graphql/UpdateManyProducts.graphql';
+import PRODUCTS_SUBSCRIPTION from '../graphql/ProductsSubscription.graphql';
+
+function AddProduct(prev, node) {
+  return update(prev, {
+    productsConnection: {
+      totalCount: {
+        $set: prev.productsConnection.totalCount + 1
+      },
+      edges: {
+        $set: [...prev.productsConnection.edges, node]
+      }
+    }
+  });
+}
 
 class Product extends React.Component {
+  static propTypes = {
+    subscribeToMore: PropTypes.func.isRequired
+  };
+
+  constructor(props) {
+    super(props);
+    this.subscription = null;
+  }
+
+  componentDidMount() {
+    this.initCommentListSubscription();
+  }
+
+  componentWillUnmount() {
+    if (this.subscription) {
+      // unsubscribe
+      this.subscription();
+      this.subscription = null;
+    }
+  }
+
+  initCommentListSubscription() {
+    if (!this.subscription) {
+      this.subscribeToProductsList();
+    }
+  }
+
+  subscribeToProductsList = () => {
+    const { subscribeToMore } = this.props;
+
+    this.subscription = subscribeToMore({
+      document: PRODUCTS_SUBSCRIPTION,
+      updateQuery: (
+        prev,
+        {
+          subscriptionData: {
+            data: {
+              productsUpdated: { mutation, node }
+            }
+          }
+        }
+      ) => {
+        let newResult = prev;
+
+        if (mutation === 'CREATED') {
+          newResult = AddProduct(prev, node);
+        }
+        return newResult;
+      }
+    });
+  };
+
   render() {
     return <ListView {...this.props} schema={ProductSchema} />;
   }
@@ -34,7 +102,7 @@ export default compose(
         variables: { limit, orderBy, filter: removeEmpty(filter) }
       };
     },
-    props: ({ data: { loading, productsConnection, refetch, error, fetchMore } }) => {
+    props: ({ data: { loading, productsConnection, refetch, error, fetchMore, subscribeToMore } }) => {
       const loadMoreRows = () => {
         return fetchMore({
           variables: {
@@ -55,7 +123,14 @@ export default compose(
         });
       };
       if (error) throw new Error(error);
-      return { loading, data: productsConnection, loadMoreRows, refetch, errors: error ? error.graphQLErrors : null };
+      return {
+        loading,
+        data: productsConnection,
+        loadMoreRows,
+        refetch,
+        subscribeToMore,
+        errors: error ? error.graphQLErrors : null
+      };
     }
   }),
   graphql(UPDATE_PRODUCT, {

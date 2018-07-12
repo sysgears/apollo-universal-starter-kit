@@ -93,3 +93,14 @@ extend type Mutation {
   ): BatchPayload!
   deleteManyProducts(where: ProductWhereInput!): BatchPayload!
 }
+
+extend type Subscription {
+  # Subscription for products list
+  productsUpdated: UpdateProductPayload
+}
+
+# Payload for productsUpdated Subscription
+type UpdateProductPayload {
+  mutation: String!
+  node: Product!
+}

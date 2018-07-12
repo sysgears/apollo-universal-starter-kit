@@ -2,6 +2,8 @@ import withAuth from 'graphql-auth';
 // eslint-disable-next-line no-unused-vars
 import { createBatchResolver } from 'graphql-resolve-batch';
 
+const $MODULE$S_SUBSCRIPTION = '$module$s_subscription';
+
 // eslint-disable-next-line no-unused-vars
 export default pubsub => ({
   Query: {
@@ -18,8 +20,17 @@ export default pubsub => ({
   // schema batch resolvers
   // end schema batch resolvers
   Mutation: {
-    create$Module$: withAuth(['editor:create'], (parent, args, ctx, info) => {
-      return ctx.$Module$.create(args, ctx, info);
+    create$Module$: withAuth(['editor:create'], async (parent, args, ctx, info) => {
+      const $module$ = await ctx.$Module$.create(args, ctx, info);
+
+      pubsub.publish($MODULE$S_SUBSCRIPTION, {
+        $module$sUpdated: {
+          mutation: 'CREATED',
+          node: $module$.node
+        }
+      });
+
+      return $module$;
     }),
     update$Module$: withAuth(['editor:update'], (parent, args, ctx, info) => {
       return ctx.$Module$.update(args, ctx, info);
@@ -37,5 +48,9 @@ export default pubsub => ({
       return ctx.$Module$.deleteMany(args);
     })
   },
-  Subscription: {}
+  Subscription: {
+    $module$sUpdated: {
+      subscribe: () => pubsub.asyncIterator($MODULE$S_SUBSCRIPTION)
+    }
+  }
 });

@@ -53,3 +53,12 @@ extend type Mutation {
   updateMany$Module$s(data: $Module$UpdateInput!, where: $Module$WhereInput!): BatchPayload!
   deleteMany$Module$s(where: $Module$WhereInput!): BatchPayload!
 }
+
+extend type Subscription {
+  $module$sUpdated: Update$Module$Payload
+}
+
+type Update$Module$Payload {
+  mutation: String!
+  node: $Module$!
+}

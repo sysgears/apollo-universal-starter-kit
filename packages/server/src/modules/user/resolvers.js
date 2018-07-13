@@ -182,7 +182,10 @@ export default pubsub => ({
         return user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
       },
       async (obj, { id }, context) => {
-        const { User, req: { t } } = context;
+        const {
+          User,
+          req: { t }
+        } = context;
         const isAdmin = () => context.user.role === 'admin';
         const isSelf = () => context.user.id === id;
 

@@ -1,16 +1,14 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import Counter from './containers/Counter';
-import resolvers from './resolvers';
-import reducers from './reducers';
+import Counter from './containers/Counter.web';
+import ClientCounter from './clientCounter';
+import ReduxCounter from './reduxCounter';
+import ServerCounter from './serverCounter';
+import Feature from '../connector';
 import resources from './locales';
 
-import Feature from '../connector';
-
-export default new Feature({
+export default new Feature(ClientCounter, ReduxCounter, ServerCounter, {
   route: <Route exact path="/" component={Counter} />,
-  resolver: resolvers,
-  reducer: { counter: reducers },
   localization: { ns: 'counter', resources }
 });

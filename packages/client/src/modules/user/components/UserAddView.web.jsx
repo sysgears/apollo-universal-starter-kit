@@ -18,18 +18,18 @@ class UserAddView extends React.PureComponent {
     onSubmit: PropTypes.func
   };
 
+  constructor(props) {
+    super(props);
+  }
+
+  state = {};
+
   static getDerivedStateFromProps(nextProps) {
     if (!nextProps.loading && nextProps.errors && nextProps.errors.length) {
       nextProps.history.push('/profile');
     }
     return null;
   }
-
-  constructor(props) {
-    super(props);
-  }
-
-  state = {};
 
   renderMetaData = t => (
     <Helmet

@@ -5,7 +5,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
 import moment from 'moment';
-import { ImagePicker } from 'expo';
+import { ImagePicker, MediaLibrary, Permissions } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 
 import translate from '../../../i18n';
@@ -138,6 +138,22 @@ class Chat extends React.Component {
     this.setState({ message: text });
   };
 
+  async addImageToAlbum(localFile) {
+    const albumName = 'StarterKit';
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    if (status === 'granted') {
+      const asset = await MediaLibrary.createAssetAsync(localFile);
+      const album = await MediaLibrary.getAlbumAsync(albumName);
+      if (album) {
+        return await MediaLibrary.addAssetsToAlbumAsync(asset, album.id, false);
+      } else {
+        await MediaLibrary.createAlbumAsync(albumName, asset);
+        return await MediaLibrary.removeAssetsFromAlbumAsync(asset, asset.albumId);
+      }
+    }
+  }
+
   onSend = (messages = []) => {
     const { isEdit, messageInfo, message, quotedMessage } = this.state;
     const { addMessage, editMessage, uuid } = this.props;
@@ -181,6 +197,7 @@ class Chat extends React.Component {
 
     if (!image.cancelled) {
       const imageData = new ReactNativeFile({ uri: image.uri, type: 'image/jpeg', name: 'photo.jpg' });
+      await this.addImageToAlbum(image.uri);
       onSend({ image: imageData });
     }
   };

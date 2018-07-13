@@ -1,10 +1,9 @@
 import React from 'react';
 import chai from 'chai';
 import { step } from 'mocha-steps';
-import { render } from 'react-testing-library';
 
 import Renderer from '../../../../testHelpers/Renderer';
-import { click, find } from '../../../../testHelpers/testUtils';
+import { click, find, wait, render } from '../../../../testHelpers/testUtils';
 import ClientCounter from './ClientCounter';
 import translate from '../../../../i18n';
 
@@ -44,7 +43,7 @@ const resolvers = {
   }
 };
 
-describe('Apollo link counter example UI works', () => {
+describe('Client counter example UI works', () => {
   const renderer = new Renderer({}, {}, resolvers);
 
   let app;
@@ -66,9 +65,10 @@ describe('Apollo link counter example UI works', () => {
     content.textContent.should.has.string(`Current apolloLinkStateCount, is ${COUNTER_APOLLO_LINK_VALUE}.`);
   });
 
-  step('Clicking on increase counter button shows optimistic response', async () => {
+  step('Clicking on increase counter button increases counter', async () => {
     const apolloLinkButton = find(container, '#apollo-link-button');
     await click(apolloLinkButton);
+    await wait();
     mockedCache.data.counterState.counter.should.to.equal(COUNTER_APOLLO_LINK_VALUE + INCREMENT);
   });
 });

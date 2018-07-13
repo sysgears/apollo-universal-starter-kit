@@ -143,7 +143,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.12",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-flow": "^6.23.0",
-    "babel-preset-minify": "^0.4.0",
+    "babel-preset-minify": "^0.5.0-alpha.a24dd066",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "canvas-prebuilt": "^1.6.5-prerelease.1",

@@ -6,6 +6,7 @@ import { FormItem } from './index';
 import schemaQueries from '../../../../generatedContainers';
 
 const Option = Select.Option;
+const LIMIT = 10;
 
 export default class RenderSelectQuery extends React.Component {
   static propTypes = {
@@ -17,7 +18,8 @@ export default class RenderSelectQuery extends React.Component {
     meta: PropTypes.object,
     schema: PropTypes.object,
     style: PropTypes.object,
-    formType: PropTypes.string.isRequired
+    formType: PropTypes.string.isRequired,
+    value: PropTypes.any
   };
 
   state = {
@@ -25,18 +27,13 @@ export default class RenderSelectQuery extends React.Component {
     dirty: false
   };
 
-  handleChange = (value, edges) => {
+  handleChange = edges => value => {
     const {
       input: { name },
       setFieldValue
     } = this.props;
 
-    let selectedValue = '';
-    if (edges && Array.isArray(edges) && edges.length > 0 && value) {
-      selectedValue = edges.find(item => item.id === Number(value.key));
-    }
-
-    setFieldValue(name, selectedValue);
+    setFieldValue(name, edges.find(item => item.id === parseInt(value.key)) || '');
   };
 
   handleBlur = () => {
@@ -56,116 +53,86 @@ export default class RenderSelectQuery extends React.Component {
 
   render() {
     const {
-      input: { value, onChange, onBlur, ...inputRest },
-      label,
+      value,
       schema,
-      style,
+      style = { width: '80%' },
       formItemLayout,
       meta: { touched, error },
-      formType
+      formType,
+      label
     } = this.props;
     const { searchText, dirty } = this.state;
-
-    let validateStatus = '';
-    if (touched && error) {
-      validateStatus = 'error';
-    }
-
-    const pascalizeSchemaName = pascalize(schema.name);
-    let column = 'name';
-    let orderBy = null;
-    for (const remoteKey of schema.keys()) {
-      const remoteValue = schema.values[remoteKey];
-      if (remoteValue.sortBy) {
-        column = remoteKey;
-      }
-      if (remoteKey === 'rank') {
-        orderBy = {
-          column: 'rank'
-        };
-      }
-    }
-
+    const column = schema.keys().find(key => !!schema.values[key].sortBy) || 'name';
+    const orderBy = () => {
+      const foundOrderBy = schema.keys().find(key => !!schema.values[key].orderBy);
+      return foundOrderBy ? { column: foundOrderBy } : null;
+    };
     const toString = schema.__.__toString ? schema.__.__toString : opt => opt[column];
-
-    let formatedValue =
-      value && value != '' && value != undefined
-        ? { key: value.id.toString(), label: toString(value) }
-        : { key: '', label: '' };
-
-    const Query = schemaQueries[`${pascalizeSchemaName}Query`];
-
-    let defaultStyle = { width: '100%' };
-    if (style) {
-      defaultStyle = style;
-    }
-
-    let defaultValue = 'defaultValue';
-    if (formType === 'filter' || formType === 'batch') {
-      defaultValue = 'value';
-    }
+    const formattedValue = value ? { key: `${value.id}`, label: toString(value) } : { key: '', label: '' };
+    const Query = schemaQueries[`${pascalize(schema.name)}Query`];
 
     return (
-      <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={error}>
+      <FormItem label={label} {...formItemLayout} validateStatus={touched && error ? 'error' : ''} help={error}>
         <div>
-          <Query limit={10} filter={{ searchText }} orderBy={orderBy}>
+          <Query limit={10} filter={{ searchText }} orderBy={orderBy()}>
             {({ loading, data }) => {
-              if (!loading || data) {
-                const options = data.edges
-                  ? data.edges.map(opt => {
-                      return (
-                        <Option key={opt.id} value={opt.id.toString()}>
+              if (loading || !data) {
+                return <Spin size="small" />;
+              }
+              const {
+                edges,
+                pageInfo: { totalCount }
+              } = data;
+              const isEdgesNotIncludeValue = value && edges && !edges.find(({ id }) => id === value.id);
+              const renderOptions = () => {
+                const defaultOption = formattedValue
+                  ? []
+                  : [
+                      <Option key="0" value="0">
+                        Select {pascalize(schema.name)}
+                      </Option>
+                    ];
+                return edges
+                  ? edges.reduce((acc, opt) => {
+                      acc.push(
+                        <Option key={opt.id} value={`${opt.id}`}>
                           {toString(opt)}
                         </Option>
                       );
-                    })
-                  : null;
+                      return acc;
+                    }, defaultOption)
+                  : defaultOption;
+              };
 
-                let props = {
-                  allowClear: formType !== 'form' ? true : false,
-                  showSearch: true,
-                  labelInValue: true,
-                  dropdownMatchSelectWidth: false,
-                  style: defaultStyle,
-                  onChange: value => this.handleChange(value, data.edges ? data.edges : null),
-                  onBlur: this.handleBlur,
-                  ...inputRest,
-                  [defaultValue]: formatedValue
+              const getSearchProps = () => {
+                return {
+                  filterOption: false,
+                  onSearch: this.search,
+                  value: isEdgesNotIncludeValue && dirty ? { key: `${edges[0].id}` } : formattedValue
                 };
+              };
 
-                if (data.pageInfo.totalCount > 10) {
-                  if (data.edges && value && value != '' && value != undefined) {
-                    if (!data.edges.find(node => node.id === value.id)) {
-                      if (!dirty) {
-                        options.unshift(
-                          <Option key={value.id} value={value.id.toString()}>
-                            {toString(value)}
-                          </Option>
-                        );
-                      } else {
-                        formatedValue = { key: data.edges[0].id.toString() };
-                      }
-                    }
-                  }
+              const getChildrenProps = () => {
+                return {
+                  optionFilterProp: 'children',
+                  filterOption: (input, { props: { children } }) =>
+                    children.toLowerCase().includes(input.toLowerCase()),
+                  value: formattedValue
+                };
+              };
 
-                  props = {
-                    ...props,
-                    filterOption: false,
-                    [defaultValue]: formatedValue,
-                    onSearch: this.search
-                  };
-                } else {
-                  props = {
-                    ...props,
-                    optionFilterProp: 'children',
-                    filterOption: (input, option) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  };
-                }
-                return <Select {...props}>{options}</Select>;
-              } else {
-                return <Spin size="small" />;
-              }
+              const basicProps = {
+                allowClear: formType !== 'form',
+                showSearch: true,
+                labelInValue: true,
+                dropdownMatchSelectWidth: false,
+                style,
+                onChange: this.handleChange(edges || null),
+                onBlur: this.handleBlur
+              };
+              const filterProps = totalCount > LIMIT ? getSearchProps() : getChildrenProps();
+              const props = { ...basicProps, ...filterProps };
+              return <Select {...props}>{renderOptions()}</Select>;
             }}
           </Query>
         </div>

@@ -459,11 +459,7 @@ class EditableCell extends React.Component {
     this.setState({ value: dateString });
   };
   handleSelectChange = (value, edges) => {
-    let selectedValue = '';
-    if (edges && Array.isArray(edges) && edges.length > 0 && value) {
-      selectedValue = edges.find(item => item.id === Number(value.key));
-    }
-    this.setState({ value: selectedValue });
+    this.setState({ value: edges.find(item => item.id === parseInt(value.key)) || '' });
   };
   check = () => {
     const { hasTypeOf } = this.props;
@@ -506,6 +502,7 @@ class EditableCell extends React.Component {
           value={value}
           schema={schema}
           handleOnChange={this.handleSelectChange}
+          handleSearch={this.search}
           dirty={dirty}
         />
       );

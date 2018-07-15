@@ -4,20 +4,17 @@ import { pascalize } from 'humps';
 import { Select, Spin } from './index';
 import schemaQueries from '../../../../generatedContainers';
 
+const LIMIT = 10;
+
 export default class RenderCellSelectQuery extends React.Component {
   static propTypes = {
     schema: PropTypes.object,
     value: PropTypes.object,
-    searchText: PropTypes.any,
     handleOnChange: PropTypes.func.isRequired,
+    handleSearch: PropTypes.any,
     style: PropTypes.object,
     dirty: PropTypes.any
   };
-
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
 
   handleChange = (e, edges) => {
     let value = { key: e.target.value };
@@ -25,59 +22,52 @@ export default class RenderCellSelectQuery extends React.Component {
   };
 
   render() {
-    const { value, schema, searchText, style } = this.props;
-
-    const pascalizeSchemaName = pascalize(schema.name);
-
-    let orderBy = null;
-    for (const remoteKey of schema.keys()) {
-      if (remoteKey === 'rank') {
-        orderBy = {
-          column: 'rank'
-        };
-      }
-    }
-
-    let formatedValue = value && value != '' && typeof value !== 'undefined' ? value.id : '';
-
-    const Query = schemaQueries[`${pascalizeSchemaName}Query`];
-
-    let defaultStyle = { width: '80%' };
-    if (style) {
-      defaultStyle = style;
-    }
+    const { value, schema, style = { width: '80%' } } = this.props;
+    const column = schema.keys().find(key => !!schema.values[key].sortBy) || 'name';
+    const orderBy = () => {
+      const foundOrderBy = schema.keys().find(key => !!schema.values[key].orderBy);
+      return foundOrderBy ? { column: foundOrderBy } : null;
+    };
+    const toString = schema.__.__toString ? schema.__.__toString : opt => opt[column];
+    const formattedValue = value ? value.id : '';
+    const Query = schemaQueries[`${pascalize(schema.name)}Query`];
 
     return (
-      <Query limit={10} filter={{ searchText }} orderBy={orderBy}>
+      <Query limit={LIMIT} orderBy={orderBy()}>
         {({ loading, data }) => {
-          if (!loading || data) {
-            let options = data.edges
-              ? data.edges.map(opt => (
-                  <option key={opt.id} value={opt.id.toString()} label={opt.name}>
-                    {opt.name}
-                  </option>
-                ))
-              : null;
-            if (!value && data.edges && data.edges.length > 0) {
-              options.unshift(
-                <option key="0" value="0">
-                  Select Item
-                </option>
-              );
-            }
-            let props = {
-              style: defaultStyle,
-              value: formatedValue,
-              onChange: e => this.handleChange(e, data.edges)
-            };
-            return (
-              <Select type="select" {...props}>
-                {options}
-              </Select>
-            );
-          } else {
+          if (loading || !data) {
             return <Spin size="small" />;
           }
+          const { edges } = data;
+          const renderOptions = () => {
+            const defaultOption = formattedValue
+              ? []
+              : [
+                  <option key="0" value="0">
+                    Select {pascalize(schema.name)}
+                  </option>
+                ];
+            return edges
+              ? edges.reduce((acc, opt) => {
+                  acc.push(
+                    <option key={opt.id} value={`${opt.id}`}>
+                      {toString(opt)}
+                    </option>
+                  );
+                  return acc;
+                }, defaultOption)
+              : defaultOption;
+          };
+          let props = {
+            style,
+            value: formattedValue,
+            onChange: e => this.handleChange(e, data.edges)
+          };
+          return (
+            <Select type="select" {...props}>
+              {renderOptions()}
+            </Select>
+          );
         }}
       </Query>
     );

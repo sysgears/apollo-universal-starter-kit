@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pascalize } from 'humps';
 import { FormFeedback } from 'reactstrap';
-import { FormItem, Select } from './index';
+import { FormItem, Select, Spin } from './index';
 import schemaQueries from '../../../../generatedContainers';
+
+const LIMIT = 10;
 
 export default class RenderSelectQuery extends React.Component {
   static propTypes = {
@@ -15,7 +17,8 @@ export default class RenderSelectQuery extends React.Component {
     meta: PropTypes.object,
     schema: PropTypes.object,
     style: PropTypes.object,
-    formType: PropTypes.string
+    formType: PropTypes.string,
+    value: PropTypes.any
   };
 
   constructor(props) {
@@ -23,18 +26,12 @@ export default class RenderSelectQuery extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  state = {
-    searchText: '',
-    dirty: false
-  };
-
   handleChange = (e, edges) => {
     const {
       input: { name },
       setFieldValue
     } = this.props;
-    let selectedItem = edges && Array.isArray(edges) ? edges.find(item => item.id == e.target.value) : '';
-    setFieldValue(name, selectedItem ? selectedItem : '');
+    setFieldValue(name, edges.find(item => item.id === parseInt(e.target.value)) || '');
   };
 
   handleBlur = () => {
@@ -45,92 +42,67 @@ export default class RenderSelectQuery extends React.Component {
     setFieldTouched(name, true);
   };
 
-  search = value => {
-    const { dirty } = this.state;
-    if ((value && value.length >= 1) || dirty) {
-      this.setState({ searchText: value, dirty: true });
-    }
-  };
-
   render() {
     const {
-      input: { value, onChange, onBlur, ...inputRest },
-      label,
+      value,
       schema,
-      style,
-      formItemLayout,
-      meta: { touched, error }
+      style = { width: '100%' },
+      meta: { touched, error },
+      label
     } = this.props;
-    const { searchText } = this.state;
-
-    let validateStatus = '';
-    if (touched && error) {
-      validateStatus = 'error';
-    }
-
-    const pascalizeSchemaName = pascalize(schema.name);
-    let orderBy = null;
-    for (const remoteKey of schema.keys()) {
-      if (remoteKey === 'rank') {
-        orderBy = {
-          column: 'rank'
-        };
-      }
-    }
-    let formatedValue = value && value != '' && typeof value !== 'undefined' ? value.id : '';
-
-    const Query = schemaQueries[`${pascalizeSchemaName}Query`];
-
-    let defaultStyle = { width: '100%' };
-    if (style) {
-      defaultStyle = style;
-    }
-
-    let valid = true;
-    if (touched && error) {
-      valid = false;
-    }
+    const column = schema.keys().find(key => !!schema.values[key].sortBy) || 'name';
+    const toString = schema.__.__toString ? schema.__.__toString : opt => opt[column];
+    const orderBy = () => {
+      const foundOrderBy = schema.keys().find(key => !!schema.values[key].orderBy);
+      return foundOrderBy ? { column: foundOrderBy } : null;
+    };
+    const formattedValue = value ? value.id : '';
+    const Query = schemaQueries[`${pascalize(schema.name)}Query`];
 
     return (
-      <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={error}>
+      <FormItem label={label}>
         <div>
-          <Query limit={10} filter={{ searchText }} orderBy={orderBy}>
+          <Query limit={LIMIT} orderBy={orderBy()}>
             {({ loading, data }) => {
-              if (!loading || data) {
-                let options = data.edges
-                  ? data.edges.map(opt => (
-                      <option key={opt.id} value={opt.id.toString()} label={opt.name}>
-                        {opt.name}
-                      </option>
-                    ))
-                  : null;
-                if (!value && data.edges && data.edges.length > 0) {
-                  options.unshift(
-                    <option key="0" value="0">
-                      Select Item
-                    </option>
-                  );
-                }
-
-                let props = {
-                  style: defaultStyle,
-                  value: formatedValue,
-                  onChange: e => this.handleChange(e, data.edges ? data.edges : null),
-                  onBlur: this.handleBlur,
-                  invalid: !valid,
-                  ...inputRest
-                };
-                return (
-                  <div>
-                    <Select type="select" {...props}>
-                      {options}
-                    </Select>
-                    {error && (error && <FormFeedback>{error}</FormFeedback>)}
-                  </div>
-                );
-              } else {
-                return <div>Loading...</div>;
+              if (loading || !data) {
+                return <Spin size="small" />;
               }
+              console.log('orderBy', orderBy);
+              const { edges } = data;
+              const renderOptions = () => {
+                const defaultOption = formattedValue
+                  ? []
+                  : [
+                      <option key="0" value="0">
+                        Select {pascalize(schema.name)}
+                      </option>
+                    ];
+                return edges
+                  ? edges.reduce((acc, opt) => {
+                      acc.push(
+                        <option key={opt.id} value={`${opt.id}`}>
+                          {toString(opt)}
+                        </option>
+                      );
+                      return acc;
+                    }, defaultOption)
+                  : defaultOption;
+              };
+              const props = {
+                style,
+                value: formattedValue,
+                onChange: e => this.handleChange(e, edges || null),
+                onBlur: this.handleBlur,
+                invalid: !!(touched && error)
+              };
+              return (
+                <div>
+                  <Select type="select" {...props}>
+                    {renderOptions()}
+                  </Select>
+                  {error && <FormFeedback>{error}</FormFeedback>}
+                </div>
+              );
             }}
           </Query>
         </div>

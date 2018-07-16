@@ -16,7 +16,7 @@ export default class RenderCellSelectQuery extends React.Component {
     dirty: PropTypes.any
   };
 
-  handleChange = (e, edges) => {
+  handleChange = edges => e => {
     let value = { key: e.target.value };
     this.props.handleOnChange(value, edges);
   };
@@ -61,7 +61,7 @@ export default class RenderCellSelectQuery extends React.Component {
           let props = {
             style,
             value: formattedValue,
-            onChange: e => this.handleChange(e, data.edges)
+            onChange: this.handleChange(edges || null)
           };
           return (
             <Select type="select" {...props}>

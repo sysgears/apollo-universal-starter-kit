@@ -26,7 +26,7 @@ export default class RenderSelectQuery extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange = (e, edges) => {
+  handleChange = edges => e => {
     const {
       input: { name },
       setFieldValue
@@ -67,7 +67,6 @@ export default class RenderSelectQuery extends React.Component {
               if (loading || !data) {
                 return <Spin size="small" />;
               }
-              console.log('orderBy', orderBy);
               const { edges } = data;
               const renderOptions = () => {
                 const defaultOption = formattedValue
@@ -91,7 +90,7 @@ export default class RenderSelectQuery extends React.Component {
               const props = {
                 style,
                 value: formattedValue,
-                onChange: e => this.handleChange(e, edges || null),
+                onChange: this.handleChange(edges || null),
                 onBlur: this.handleBlur,
                 invalid: !!(touched && error)
               };

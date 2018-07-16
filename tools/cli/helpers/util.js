@@ -110,7 +110,7 @@ function updateFileWithExports({ pathToFileWithExports, exportName, importString
 function deleteFromFileWithExports(pathToFileWithExports, exportName) {
   if (fs.existsSync(pathToFileWithExports)) {
     const generatedElementData = fs.readFileSync(pathToFileWithExports);
-    const reg = `(\\n\\s\\s${exportName}(.|)|import ${exportName}.+;\\n+(?!ex))`;
+    const reg = `(\\n\\s\\s${exportName}(.|)|import (${exportName}|{ ${exportName} }).+;\\n+(?!ex))`;
     const generatedElement = generatedElementData.toString().replace(new RegExp(reg, 'g'), '');
     fs.writeFileSync(pathToFileWithExports, generatedElement);
   }

@@ -10,12 +10,12 @@ import translate from '../../../../i18n';
 const IncreaseButton = ({ counterAmount, t }) => (
   <Mutation mutation={ADD_COUNTER_CLIENT}>
     {mutate => {
-      const addCounterState = amount => () => {
+      const addClientCounter = amount => () => {
         const { value } = mutate({ variables: { amount } });
         return value;
       };
 
-      const onClickHandler = () => addCounterState(counterAmount);
+      const onClickHandler = () => addClientCounter(counterAmount);
       return <ClientCounterButton text={t('btnLabel')} onClick={onClickHandler()} />;
     }}
   </Mutation>
@@ -30,13 +30,15 @@ const ClientCounter = ({ t }) => (
   <Query query={COUNTER_QUERY_CLIENT} t={t}>
     {({
       data: {
-        counterState: { counter }
+        clientCounter: { amount }
       }
-    }) => (
-      <ClientCounterView text={t('text', { counter })} t>
-        <IncreaseButton t={t} counterAmount={1} />
-      </ClientCounterView>
-    )}
+    }) => {
+      return (
+        <ClientCounterView text={t('text', { amount })} t>
+          <IncreaseButton t={t} counterAmount={1} />
+        </ClientCounterView>
+      );
+    }}
   </Query>
 );
 

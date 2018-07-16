@@ -3,7 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
 import { HeaderTitle, IconButton } from '../common/components/native';
-import Counter from './containers/Counter.native';
+import Counter from './containers/Counter';
 import ClientCounter from './clientCounter';
 import ReduxCounter from './reduxCounter';
 import ServerCounter from './serverCounter';

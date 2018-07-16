@@ -14,27 +14,27 @@ const INCREMENT = 1;
 
 const mockedCache = {
   data: {
-    counterState: {
-      counter: COUNTER_APOLLO_LINK_VALUE,
-      __typename: 'CounterState'
+    clientCounter: {
+      amount: COUNTER_APOLLO_LINK_VALUE,
+      __typename: 'ClientCounter'
     }
   }
 };
 
 const resolvers = {
   defaults: {
-    counterState: { counter: COUNTER_APOLLO_LINK_VALUE, __typename: 'CounterState' }
+    clientCounter: { amount: COUNTER_APOLLO_LINK_VALUE, __typename: 'ClientCounter' }
   },
   resolvers: {
     Query: {
-      counterState: () => mockedCache.data.counterState
+      clientCounter: () => mockedCache.data.clientCounter
     },
     Mutation: {
-      addCounterState: () => {
+      addClientCounter: () => {
         mockedCache.data = {
-          counterState: {
-            counter: mockedCache.data.counterState.counter + INCREMENT,
-            __typename: 'CounterState'
+          clientCounter: {
+            amount: mockedCache.data.clientCounter.amount + INCREMENT,
+            __typename: 'ClientCounter'
           }
         };
         return null;
@@ -69,6 +69,6 @@ describe('Client counter example UI works', () => {
     const apolloLinkButton = find(container, '#apollo-link-button');
     await click(apolloLinkButton);
     await wait();
-    mockedCache.data.counterState.counter.should.to.equal(COUNTER_APOLLO_LINK_VALUE + INCREMENT);
+    mockedCache.data.clientCounter.amount.should.to.equal(COUNTER_APOLLO_LINK_VALUE + INCREMENT);
   });
 });

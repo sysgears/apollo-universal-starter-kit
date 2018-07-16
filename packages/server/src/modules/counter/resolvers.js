@@ -2,12 +2,12 @@ const COUNTER_SUBSCRIPTION = 'counter_subscription';
 
 export default pubsub => ({
   Query: {
-    counter(obj, args, context) {
+    serverCounter(obj, args, context) {
       return context.Counter.counterQuery();
     }
   },
   Mutation: {
-    async addCounter(obj, { amount }, context) {
+    async addServerCounter(obj, { amount }, context) {
       await context.Counter.addCounter(amount);
       const counter = await context.Counter.counterQuery();
 

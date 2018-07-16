@@ -12,14 +12,14 @@ import translate from '../../../../i18n';
 const IncreaseButton = ({ counterAmount, t, counter }) => (
   <Mutation mutation={ADD_COUNTER}>
     {mutate => {
-      const addCounter = amount => () =>
+      const addServerCounter = amount => () =>
         mutate({
           variables: { amount },
           updateQueries: {
             counterQuery: (prev, { mutationResult }) => {
-              const newAmount = mutationResult.data.addCounter.amount;
+              const newAmount = mutationResult.data.addServerCounter.amount;
               return update(prev, {
-                counter: {
+                serverCounter: {
                   amount: {
                     $set: newAmount
                   }
@@ -29,14 +29,14 @@ const IncreaseButton = ({ counterAmount, t, counter }) => (
           },
           optimisticResponse: {
             __typename: 'Mutation',
-            addCounter: {
+            addServerCounter: {
               __typename: 'Counter',
               amount: counter.amount + 1
             }
           }
         });
 
-      const onClickHandler = () => addCounter(counterAmount);
+      const onClickHandler = () => addServerCounter(counterAmount);
 
       return <ServerCounterButton text={t('btnLabel')} onClick={onClickHandler()} />;
     }}
@@ -100,14 +100,15 @@ class ServerCounter extends React.Component {
             }
           }
         }
-      ) =>
-        update(prev, {
-          counter: {
+      ) => {
+        return update(prev, {
+          serverCounter: {
             amount: {
               $set: amount
             }
           }
-        })
+        });
+      }
     });
   }
 
@@ -123,9 +124,9 @@ class ServerCounter extends React.Component {
 
 const ServerCounterWithQuery = props => (
   <Query query={COUNTER_QUERY}>
-    {({ loading, error, data: { counter }, subscribeToMore }) => {
+    {({ loading, error, data: { serverCounter }, subscribeToMore }) => {
       if (error) throw new Error(error);
-      return <ServerCounter {...props} loading={loading} subscribeToMore={subscribeToMore} counter={counter} />;
+      return <ServerCounter {...props} loading={loading} subscribeToMore={subscribeToMore} counter={serverCounter} />;
     }}
   </Query>
 );

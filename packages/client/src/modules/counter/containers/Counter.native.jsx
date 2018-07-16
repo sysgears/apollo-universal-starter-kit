@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import ClientCounter from '../clientCounter/containers/ClientCounter';
 import ServerCounter from '../serverCounter/containers/ServerCounter';
 import ReduxCounter from '../reduxCounter/containers/ReduxCounter';
-import translate from '../../../i18n/index';
+import translate from '../../../i18n';
 
 class Counter extends React.Component {
   static propTypes = {

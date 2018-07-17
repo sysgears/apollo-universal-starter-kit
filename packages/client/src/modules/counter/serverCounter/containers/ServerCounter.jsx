@@ -4,7 +4,10 @@ import { Mutation, Query } from 'react-apollo';
 import update from 'immutability-helper';
 
 import translate from '../../../../i18n';
-import { ServerCounterView, ServerCounterButton, ADD_COUNTER, COUNTER_SUBSCRIPTION, COUNTER_QUERY } from '..';
+import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
+import ADD_COUNTER from '../graphql/AddCounter.graphql';
+import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
+import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
 
 const IncreaseButton = ({ counterAmount, t, counter }) => (
   <Mutation mutation={ADD_COUNTER}>

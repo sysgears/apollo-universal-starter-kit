@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
 
 import translate from '../../../i18n';
-import {
-  ClientCounterContainer as ClientCounter,
-  ServerCounterContainer as ServerCounter,
-  ReduxCounterContainer as ReduxCounter
-} from '..';
+import { ClientCounter, ServerCounter, ReduxCounter } from '..';
 
 class Counter extends React.Component {
   static propTypes = {

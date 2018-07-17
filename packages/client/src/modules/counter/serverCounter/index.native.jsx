@@ -3,13 +3,9 @@ import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../../i18n';
 import { HeaderTitle } from '../../common/components/native';
-import ServerCounterContainer from './containers/ServerCounter';
+import ServerCounter from './containers/ServerCounter';
 import resources from './locales';
 import Feature from '../../connector';
-import { ServerCounterView, ServerCounterButton } from './components/ServerCounterView';
-import ADD_COUNTER from './graphql/AddCounter.graphql';
-import COUNTER_SUBSCRIPTION from './graphql/CounterSubscription.graphql';
-import COUNTER_QUERY from './graphql/CounterQuery.graphql';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 
@@ -18,7 +14,7 @@ export default new Feature({
     Counter: {
       screen: createStackNavigator({
         Counter: {
-          screen: ServerCounterContainer
+          screen: ServerCounter
         }
       }),
       navigationOptions: {
@@ -29,11 +25,4 @@ export default new Feature({
   localization: { ns: 'serverCounter', resources }
 });
 
-export {
-  ServerCounterView,
-  ServerCounterButton,
-  ServerCounterContainer,
-  ADD_COUNTER,
-  COUNTER_SUBSCRIPTION,
-  COUNTER_QUERY
-};
+export { ServerCounter };

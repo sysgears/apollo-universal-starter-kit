@@ -5,11 +5,7 @@ import Helmet from 'react-helmet';
 import { PageLayout } from '../../common/components/web';
 import settings from '../../../../../../settings';
 import translate from '../../../i18n';
-import {
-  ClientCounterContainer as ClientCounter,
-  ServerCounterContainer as ServerCounter,
-  ReduxCounterContainer as ReduxCounter
-} from '..';
+import { ClientCounter, ServerCounter, ReduxCounter } from '..';
 
 class Counter extends React.Component {
   static propTypes = {

@@ -29,7 +29,7 @@ describe('Counter example API works', () => {
     let result = await apollo.query({ query: COUNTER_QUERY });
 
     result.data.should.deep.equal({
-      counter: { amount: 5, __typename: 'Counter' }
+      serverCounter: { amount: 5, __typename: 'Counter' }
     });
   });
 
@@ -40,7 +40,7 @@ describe('Counter example API works', () => {
     });
 
     result.should.deep.equal({
-      data: { addCounter: { amount: 7, __typename: 'Counter' } }
+      data: { addServerCounter: { amount: 7, __typename: 'Counter' } }
     });
   });
 

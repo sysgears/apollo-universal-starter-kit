@@ -29,7 +29,7 @@ export default class RenderCellSelectQuery extends React.Component {
       return foundOrderBy ? { column: foundOrderBy } : null;
     };
     const toString = schema.__.__toString ? schema.__.__toString : opt => opt[column];
-    const formattedValue = value ? value.id : '';
+    const formattedValue = value ? value.id : '0';
     const Query = schemaQueries[`${pascalize(schema.name)}Query`];
 
     return (

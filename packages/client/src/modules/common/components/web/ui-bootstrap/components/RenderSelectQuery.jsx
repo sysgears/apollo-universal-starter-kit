@@ -21,11 +21,6 @@ export default class RenderSelectQuery extends React.Component {
     value: PropTypes.any
   };
 
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
   handleChange = edges => e => {
     const {
       input: { name },
@@ -56,7 +51,7 @@ export default class RenderSelectQuery extends React.Component {
       const foundOrderBy = schema.keys().find(key => !!schema.values[key].orderBy);
       return foundOrderBy ? { column: foundOrderBy } : null;
     };
-    const formattedValue = value ? value.id : '';
+    const formattedValue = value ? value.id : '0';
     const Query = schemaQueries[`${pascalize(schema.name)}Query`];
 
     return (

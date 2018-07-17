@@ -8,6 +8,8 @@ import reducers from './reducers';
 import resources from './locales';
 import Feature from '../../connector';
 
+import { ReduxCounterButton, ReduxCounterView } from './components/ReduxCounterView';
+
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 
 export default new Feature({
@@ -26,3 +28,5 @@ export default new Feature({
   reducer: { counter: reducers },
   localization: { ns: 'reduxCounter', resources }
 });
+
+export { ReduxCounterButton, ReduxCounterView };

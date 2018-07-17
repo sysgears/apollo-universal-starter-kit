@@ -21,6 +21,7 @@ import withUuid from './WithUuid';
 import ChatFooter from '../components/ChatFooter.native';
 import CustomView from '../components/CustomView.native';
 import RenderCustomActions from '../components/RenderCustomActions.native';
+import MessageImage from './MessageImage';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
@@ -457,5 +458,6 @@ export default compose(
         });
       }
     })
-  })
+  }),
+  MessageImage
 )(Chat);

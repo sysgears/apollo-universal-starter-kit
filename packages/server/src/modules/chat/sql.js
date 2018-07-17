@@ -28,6 +28,7 @@ export default class Chat {
         'm.uuid',
         'u.username',
         'a.name',
+        'a.path',
         'm.created_at as createdAt',
         'm.reply'
       )

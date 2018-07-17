@@ -9,6 +9,9 @@ type Message {
   username: String
   uuid: String
   reply: Int
+  name: String
+  path: String
+  attachment_id: Int
 }
 
 #Image

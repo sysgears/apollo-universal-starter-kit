@@ -6,4 +6,7 @@ fragment MessageInfo on Message {
   createdAt
   uuid
   reply
+  name
+  path
+  attachment_id
 }

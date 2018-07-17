@@ -4,15 +4,14 @@ import { createStackNavigator } from 'react-navigation';
 import translate from '../../i18n';
 import { HeaderTitle, IconButton } from '../common/components/native';
 import Counter from './containers/Counter';
-import reducers from './reducers';
-import resolvers from './resolvers';
-import resources from './locales';
-
+import clientCounter from './clientCounter';
+import reduxCounter from './reduxCounter';
+import serverCounter from './serverCounter';
 import Feature from '../connector';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 
-export default new Feature({
+export default new Feature(clientCounter, reduxCounter, serverCounter, {
   drawerItem: {
     Counter: {
       screen: createStackNavigator({
@@ -31,8 +30,5 @@ export default new Feature({
         drawerLabel: <HeaderTitleWithI18n i18nKey="title" />
       }
     }
-  },
-  resolver: resolvers,
-  reducer: { counter: reducers },
-  localization: { ns: 'counter', resources }
+  }
 });

@@ -16,7 +16,7 @@ const IncreaseButton = ({ counterAmount, t, counter }) => (
         mutate({
           variables: { amount },
           updateQueries: {
-            counterQuery: (prev, { mutationResult }) => {
+            serverCounterQuery: (prev, { mutationResult }) => {
               const newAmount = mutationResult.data.addServerCounter.amount;
               return update(prev, {
                 serverCounter: {

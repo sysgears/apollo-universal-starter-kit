@@ -3,7 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../../i18n';
 import { HeaderTitle } from '../../common/components/native';
-import ServerCounter from './containers/ServerCounter';
+import ServerCounterContainer from './containers/ServerCounter';
 import resources from './locales';
 import Feature from '../../connector';
 import { ServerCounterView, ServerCounterButton } from './components/ServerCounterView';
@@ -18,7 +18,7 @@ export default new Feature({
     Counter: {
       screen: createStackNavigator({
         Counter: {
-          screen: ServerCounter
+          screen: ServerCounterContainer
         }
       }),
       navigationOptions: {
@@ -29,4 +29,11 @@ export default new Feature({
   localization: { ns: 'serverCounter', resources }
 });
 
-export { ServerCounterView, ServerCounterButton, ADD_COUNTER, COUNTER_SUBSCRIPTION, COUNTER_QUERY };
+export {
+  ServerCounterView,
+  ServerCounterButton,
+  ServerCounterContainer,
+  ADD_COUNTER,
+  COUNTER_SUBSCRIPTION,
+  COUNTER_QUERY
+};

@@ -4,13 +4,10 @@ import { createStackNavigator } from 'react-navigation';
 import translate from '../../i18n';
 import { HeaderTitle, IconButton } from '../common/components/native';
 import Counter from './containers/Counter';
-import ClientCounter from './clientCounter';
-import ReduxCounter from './reduxCounter';
-import ServerCounter from './serverCounter';
+import ClientCounter, { ClientCounterContainer } from './clientCounter';
+import ReduxCounter, { ReduxCounterContainer } from './reduxCounter';
+import ServerCounter, { ServerCounterContainer } from './serverCounter';
 import Feature from '../connector';
-import ClientCounterContainer from './clientCounter/containers/ClientCounter';
-import ServerCounterContainer from './serverCounter/containers/ServerCounter';
-import ReduxCounterContainer from './reduxCounter/containers/ReduxCounter';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 

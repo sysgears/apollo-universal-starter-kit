@@ -3,7 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../../i18n';
 import { HeaderTitle } from '../../common/components/native';
-import ClientCounter from './containers/ClientCounter';
+import ClientCounterContainer from './containers/ClientCounter';
 import resolvers from './resolvers';
 import resources from './locales';
 import Feature from '../../connector';
@@ -16,7 +16,7 @@ export default new Feature({
     Counter: {
       screen: createStackNavigator({
         Counter: {
-          screen: ClientCounter
+          screen: ClientCounterContainer
         }
       }),
       navigationOptions: {
@@ -28,4 +28,4 @@ export default new Feature({
   localization: { ns: 'clientCounter', resources }
 });
 
-export { ClientCounterButton, ClientCounterView };
+export { ClientCounterButton, ClientCounterView, ClientCounterContainer };

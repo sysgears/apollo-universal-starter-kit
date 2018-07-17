@@ -1,4 +1,4 @@
-query serverCounter {
+query serverCounterQuery {
   serverCounter {
     amount
   }

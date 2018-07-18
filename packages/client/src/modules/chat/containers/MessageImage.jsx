@@ -27,6 +27,7 @@ const messageImage = Component => {
         }
         return { messages };
       }
+      return null;
     }
 
     state = {
@@ -70,31 +71,37 @@ const messageImage = Component => {
       return downloadImage.uri;
     }
 
+    getAssets = async albumName => {
+      const album = await MediaLibrary.getAlbumAsync(albumName);
+      return album ? (await MediaLibrary.getAssetsAsync({ ...options, id: album.id })).assets : [];
+    };
+
+    findImage = (assets, imageName) => {
+      const result = assets.find(({ filename }) => filename === imageName);
+      return result ? result.uri : null;
+    };
+
     addImageToMessage = async () => {
       const albumName = 'StarterKit';
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      const { messages } = this.state;
 
       if (status === 'granted') {
-        const album = await MediaLibrary.getAlbumAsync(albumName);
-        const assets = album ? (await MediaLibrary.getAssetsAsync({ ...options, id: album.id })).assets : [];
+        const assets = await this.getAssets(albumName);
 
-        messages.forEach(async message => {
-          const { messages } = this.state;
-          if (message.path) {
-            const result = assets.find(({ filename }) => filename === message.name);
-            const image = result ? result.uri : null;
-            if (!image) {
-              const downloadImage = await this.downloadImage(message.path);
-              await this.addImageToAlbum(downloadImage);
-            }
-
-            this.setState({
-              messages: messages.map(item => {
-                return item.id === message.id ? { ...item, image } : item;
-              })
-            });
+        this.state.messages.forEach(async message => {
+          let image = this.findImage(assets, message.name);
+          if (!image && message.path) {
+            const downloadImage = await this.downloadImage(message.path);
+            await this.addImageToAlbum(downloadImage);
+            const assets = await this.getAssets(albumName);
+            image = this.findImage(assets, message.name);
           }
+
+          this.setState({
+            messages: this.state.messages.map(item => {
+              return item.id === message.id ? { ...item, image } : item;
+            })
+          });
         });
       }
     };

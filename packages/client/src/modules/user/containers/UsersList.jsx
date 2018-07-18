@@ -20,23 +20,25 @@ class UsersList extends React.Component {
     this.subscription = null;
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { subscribeToMore, filter, users } = this.props;
-    if (!nextProps.loading) {
-      if (this.subscription && nextProps.users.length !== users.length) {
-        this.subscription();
-        this.subscription = null;
-      }
+  componentDidMount() {
+    this.checkSubscription();
+  }
 
-      if (!this.subscription) {
-        this.subscription = subscribeToUsersList(subscribeToMore, filter);
-      }
-    }
+  componentDidUpdate() {
+    this.checkSubscription();
   }
 
   componentWillUnmount() {
     if (this.subscription) {
       this.subscription();
+    }
+  }
+
+  checkSubscription() {
+    const { loading, subscribeToMore, filter } = this.props;
+
+    if (!loading && !this.subscription) {
+      this.subscription = subscribeToUsersList(subscribeToMore, filter);
     }
   }
 

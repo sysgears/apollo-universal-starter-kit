@@ -5,7 +5,7 @@ import { render } from 'react-testing-library';
 
 import Renderer from '../../../../testHelpers/Renderer';
 import { click, find } from '../../../../testHelpers/testUtils';
-import ReduxCounter from './ReduxCounter';
+import ReduxCounter from '../containers/ReduxCounter';
 import translate from '../../../../i18n';
 
 chai.should();

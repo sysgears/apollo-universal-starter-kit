@@ -22,7 +22,6 @@ export const readSession = req => {
 export const writeSession = (req, session) => {
   const cookieParams = {
     httpOnly: true,
-    secure: !__DEV__,
     maxAge: 7 * 24 * 3600,
     path: '/'
   };

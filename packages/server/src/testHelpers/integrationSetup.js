@@ -5,7 +5,7 @@ import { SchemaLink } from 'apollo-link-schema';
 import WebSocket from 'ws';
 
 import createApolloClient from '../../../common/createApolloClient';
-import '../../knexfile';
+import '../../knexdata';
 import knex from '../sql/connector';
 import schema from '../api/schema';
 import modules from '../modules';
@@ -17,6 +17,8 @@ let server;
 let apollo;
 
 before(async () => {
+  require('babel-register')({ presets: ['env'] });
+
   await knex.migrate.latest();
   await knex.seed.run();
 

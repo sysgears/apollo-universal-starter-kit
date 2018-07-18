@@ -6,13 +6,16 @@
     "node": ">= 6.11.1",
     "yarn": ">= 1.0.0"
   },
-  "cacheDirectories": [".cache"],
+  "cacheDirectories": [
+    ".cache"
+  ],
   "scripts": {
     "build": "lerna run build --stream",
     "clean": "lerna run clean --stream",
     "exp": "yarn --cwd packages/mobile exp",
     "start": "lerna run --scope=server start --stream",
     "tests": "lerna run tests --stream",
+    "tests:watch": "lerna run tests:watch --stream",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json .",
     "tslint": "tslint --fix -p tsconfig.json -c tslint.json",
@@ -26,9 +29,18 @@
     "postinstall": "opencollective postinstall"
   },
   "lint-staged": {
-    "*.{js,jsx,json}": ["eslint --fix", "git add"],
-    "*.{ts,tsx}": ["tslint --fix", "git add"],
-    "*.graphql": ["prettier --parser graphql --write", "git add"]
+    "*.{js,jsx,json}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "tslint --fix",
+      "git add"
+    ],
+    "*.graphql": [
+      "prettier --parser graphql --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -38,12 +50,23 @@
     "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
-  "keywords": ["apollo", "universal", "starter", "graphql", "react", "redux"],
+  "keywords": [
+    "apollo",
+    "universal",
+    "starter",
+    "graphql",
+    "react",
+    "redux"
+  ],
   "author": "SysGears INC",
   "license": "MIT",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "greenkeeper": {
-    "ignore": ["graphql"]
+    "ignore": [
+      "graphql"
+    ]
   },
   "collective": {
     "type": "opencollective",
@@ -61,12 +84,12 @@
     "typescript": "^2.7.2"
   },
   "optionalDependencies": {
-    "dotenv": "^5.0.1",
+    "dotenv": "^6.0.0",
     "lodash": "^4.17.4"
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.131"
+    "spinjs": "^0.4.145"
   },
   "resolutions": {
     "graphql": "0.13.0",

@@ -70,7 +70,10 @@ const drawerNavigator = routeConfigs => {
     return WithRoutesComponent;
   };
 
-  return compose(withUser, withRoutes)(UserScreenNavigator);
+  return compose(
+    withUser,
+    withRoutes
+  )(UserScreenNavigator);
 };
 
 export default drawerNavigator;

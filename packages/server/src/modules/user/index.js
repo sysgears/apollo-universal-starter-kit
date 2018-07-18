@@ -7,6 +7,7 @@ import scopes from './scopes';
 import settings from '../../../../../settings';
 import User from './sql';
 import Feature from '../connector';
+import resources from './locales';
 
 const createContextFunc = async ({ context: { user } }) => ({
   User,
@@ -25,5 +26,6 @@ export default new Feature(access, auth, {
     if (settings.user.auth.password.sendConfirmationEmail) {
       app.get('/confirmation/:token', confirmMiddleware);
     }
-  }
+  },
+  localization: { ns: 'user', resources }
 });

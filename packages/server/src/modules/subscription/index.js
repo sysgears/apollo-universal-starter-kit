@@ -7,6 +7,7 @@ import Feature from '../connector';
 
 import stripeLocalMiddleware from './stripeLocal';
 import webhookMiddleware from './webhook';
+import resources from './locales';
 
 const Subscription = new SubscriptionDAO();
 
@@ -24,5 +25,6 @@ export default new Feature({
   middleware: app => {
     app.use(stripeLocalMiddleware());
     app.post('/stripe/webhook', webhookMiddleware);
-  }
+  },
+  localization: { ns: 'subscription', resources }
 });

@@ -10,7 +10,7 @@ import settings from '../../../../../../settings';
 
 class ContactView extends React.Component {
   static propTypes = {
-    contact: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
     t: PropTypes.func
   };
 
@@ -18,22 +18,8 @@ class ContactView extends React.Component {
     sent: false
   };
 
-  onSubmit = ({ contact, t }) => async values => {
-    const result = await contact(values);
-
-    if (result.errors) {
-      let submitError = {
-        _error: t('errorMsg')
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
-      throw submitError;
-    }
-
-    this.setState({ sent: result });
-  };
-
   render() {
-    const { contact, t } = this.props;
+    const { onSubmit, t } = this.props;
 
     const renderMetaData = () => (
       <Helmet
@@ -52,7 +38,7 @@ class ContactView extends React.Component {
         {renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">{t('form.title')}</h1>
-          <ContactForm onSubmit={this.onSubmit({ contact, t })} sent={this.state.sent} />
+          <ContactForm onSubmit={onSubmit} sent={this.state.sent} />
         </LayoutCenter>
       </PageLayout>
     );

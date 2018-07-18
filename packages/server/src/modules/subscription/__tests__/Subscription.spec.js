@@ -4,9 +4,9 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 
 // Helpers
-import { getServer, getApollo } from '../../testHelpers/integrationSetup';
+import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
 
-describe('Upload API works', () => {
+describe('Subscription API works', () => {
   let server, apollo;
 
   before(() => {

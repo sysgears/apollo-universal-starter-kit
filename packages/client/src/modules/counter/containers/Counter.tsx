@@ -10,7 +10,7 @@ import { ServerCounter } from '../serverCounter';
 import { ReduxCounter } from '../reduxCounter';
 
 class Counter extends React.Component {
-  static propTypes = {
+  public static propTypes = {
     t: PropTypes.func
   };
 
@@ -19,7 +19,7 @@ class Counter extends React.Component {
     this.props = props;
   }
 
-  render() {
+  public render() {
     const { t } = this.props;
 
     return (

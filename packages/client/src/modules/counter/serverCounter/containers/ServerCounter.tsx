@@ -50,7 +50,7 @@ IncreaseButton.propTypes = {
 };
 
 class ServerCounter extends React.Component {
-  static propTypes = {
+  public static propTypes = {
     t: PropTypes.func,
     subscribeToMore: PropTypes.func,
     loading: PropTypes.bool,
@@ -62,7 +62,7 @@ class ServerCounter extends React.Component {
     this.subscription = null;
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     if (!this.props.loading) {
       // Subscribe or re-subscribe
       if (!this.subscription) {
@@ -72,7 +72,7 @@ class ServerCounter extends React.Component {
   }
 
   // remove when Renderer is overwritten
-  componentDidUpdate(prevProps) {
+  public componentDidUpdate(prevProps) {
     if (!prevProps.loading) {
       // Subscribe or re-subscribe
       if (!this.subscription) {
@@ -81,13 +81,13 @@ class ServerCounter extends React.Component {
     }
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     if (this.subscription) {
       this.subscription();
     }
   }
 
-  subscribeToCount() {
+  public subscribeToCount() {
     this.subscription = this.props.subscribeToMore({
       document: COUNTER_SUBSCRIPTION,
       variables: {},
@@ -112,7 +112,7 @@ class ServerCounter extends React.Component {
     });
   }
 
-  render() {
+  public render() {
     const { t, counter, loading } = this.props;
     return (
       <ServerCounterView t={t} counter={counter} loading={loading}>
@@ -125,7 +125,9 @@ class ServerCounter extends React.Component {
 const ServerCounterWithQuery = props => (
   <Query query={COUNTER_QUERY}>
     {({ loading, error, data: { serverCounter }, subscribeToMore }) => {
-      if (error) throw new Error(error);
+      if (error) {
+        throw new Error(error);
+      }
       return <ServerCounter {...props} loading={loading} subscribeToMore={subscribeToMore} counter={serverCounter} />;
     }}
   </Query>

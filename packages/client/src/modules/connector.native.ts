@@ -67,7 +67,7 @@ export default class {
     return this.routerFactory();
   }
 
-  getWrappedRoot(root, req) {
+  public getWrappedRoot(root, req) {
     let nestedRoot = root;
     for (const componentFactory of this.rootComponentFactory) {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
@@ -75,7 +75,7 @@ export default class {
     return nestedRoot;
   }
 
-  getSkippedDrawerItems() {
+  public getSkippedDrawerItems() {
     const items = this.drawerItems;
     return Object.keys(items).filter(itemName => {
       return items[itemName].skip;

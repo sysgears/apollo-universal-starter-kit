@@ -111,7 +111,7 @@ export default class {
     return this.scriptsInsert;
   }
 
-  getWrappedRoot(root, req) {
+  public getWrappedRoot(root, req) {
     let nestedRoot = root;
     for (const componentFactory of this.rootComponentFactory) {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
@@ -119,7 +119,7 @@ export default class {
     return nestedRoot;
   }
 
-  getDataRoot(root) {
+  public getDataRoot(root) {
     let nestedRoot = root;
     for (const component of this.dataRootComponent) {
       nestedRoot = React.createElement(component, {}, nestedRoot);

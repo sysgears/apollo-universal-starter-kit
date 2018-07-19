@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import bodyParser from 'body-parser';
 import path from 'path';
 
 import { isApiExternal } from './net';
@@ -24,9 +23,6 @@ const corsOptions = {
   origin: true
 };
 app.use(cors(corsOptions));
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.use(
   '/',
@@ -58,6 +54,11 @@ if (!isApiExternal) {
   });
   // app.post(__API_URL__, (...args) => graphqlMiddleware(...args));
 }
+
+app.use((req, res, next) => {
+  console.log('REQ_BODY', req.body);
+  return next();
+});
 
 app.get('/graphiql', (...args) => graphiqlMiddleware(args[0])(...args));
 

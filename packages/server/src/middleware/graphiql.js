@@ -12,6 +12,12 @@ export default req => {
 
   return expressPlayground({
     endpoint: '/graphql',
-    subscriptionEndpoint: subscriptionsUrl
+    subscriptionEndpoint: subscriptionsUrl,
+    tabs: [
+      {
+        endpoint: '/graphql',
+        query: '{\n' + '  counter {\n' + '    amount\n' + '  }\n' + '}'
+      }
+    ]
   });
 };

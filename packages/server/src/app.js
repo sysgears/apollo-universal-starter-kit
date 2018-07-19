@@ -56,7 +56,6 @@ if (!isApiExternal) {
 }
 
 app.use((req, res, next) => {
-  console.log('REQ_BODY', req.body);
   return next();
 });
 

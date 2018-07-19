@@ -7,6 +7,7 @@ export async function up(knex, Promise) {
         table.integer('userId');
         table.string('uuid');
         table.integer('reply');
+        table.integer('attachment_id');
         table.timestamps(false, true);
       })
       .createTable('attachment', table => {

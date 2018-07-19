@@ -4,9 +4,22 @@ import knex from '../../sql/connector';
 export default class Chat {
   message(id) {
     return knex
-      .select('id', 'text', 'userId', 'uuid', 'created_at as createdAt', 'reply')
-      .from('message')
-      .where('id', '=', id)
+      .select(
+        'm.id',
+        'm.text',
+        'm.attachment_id',
+        'm.userId',
+        'm.uuid',
+        'u.username',
+        'a.name',
+        'a.path',
+        'm.created_at as createdAt',
+        'm.reply'
+      )
+      .from('message as m')
+      .leftJoin('user as u', 'u.id', 'm.userId')
+      .leftJoin('attachment as a', 'a.id', 'm.attachment_id')
+      .where('m.id', '=', id)
       .first();
   }
 

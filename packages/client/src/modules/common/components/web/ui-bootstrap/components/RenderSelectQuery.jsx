@@ -17,8 +17,7 @@ export default class RenderSelectQuery extends React.Component {
     meta: PropTypes.object,
     schema: PropTypes.object,
     style: PropTypes.object,
-    formType: PropTypes.string,
-    value: PropTypes.any
+    formType: PropTypes.string
   };
 
   handleChange = edges => e => {
@@ -39,7 +38,7 @@ export default class RenderSelectQuery extends React.Component {
 
   render() {
     const {
-      value,
+      input: { value },
       schema,
       style = { width: '100%' },
       meta: { touched, error },
@@ -51,7 +50,7 @@ export default class RenderSelectQuery extends React.Component {
       const foundOrderBy = schema.keys().find(key => !!schema.values[key].orderBy);
       return foundOrderBy ? { column: foundOrderBy } : null;
     };
-    const formattedValue = value ? value.id : '0';
+    const formattedValue = value ? value.id : 0;
     const Query = schemaQueries[`${pascalize(schema.name)}Query`];
 
     return (
@@ -64,13 +63,14 @@ export default class RenderSelectQuery extends React.Component {
               }
               const { edges } = data;
               const renderOptions = () => {
-                const defaultOption = formattedValue
-                  ? []
-                  : [
-                      <option key="0" value="0">
-                        Select {pascalize(schema.name)}
-                      </option>
-                    ];
+                const defaultOption =
+                  formattedValue === 0
+                    ? [
+                        <option key="0" value="0">
+                          Select {pascalize(schema.name)}
+                        </option>
+                      ]
+                    : [];
                 return edges
                   ? edges.reduce((acc, opt) => {
                       acc.push(

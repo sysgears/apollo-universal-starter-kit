@@ -18,8 +18,7 @@ export default class RenderSelectQuery extends React.Component {
     meta: PropTypes.object,
     schema: PropTypes.object,
     style: PropTypes.object,
-    formType: PropTypes.string.isRequired,
-    value: PropTypes.any
+    formType: PropTypes.string.isRequired
   };
 
   state = {
@@ -53,7 +52,7 @@ export default class RenderSelectQuery extends React.Component {
 
   render() {
     const {
-      value,
+      input: { value },
       schema,
       style = { width: '80%' },
       formItemLayout,
@@ -68,7 +67,7 @@ export default class RenderSelectQuery extends React.Component {
       return foundOrderBy ? { column: foundOrderBy } : null;
     };
     const toString = schema.__.__toString ? schema.__.__toString : opt => opt[column];
-    const formattedValue = value ? { key: `${value.id}`, label: toString(value) } : { key: '', label: '' };
+    const formattedValue = value ? { key: `${value.id}`, label: toString(value) } : { key: '0', label: '' };
     const Query = schemaQueries[`${pascalize(schema.name)}Query`];
 
     return (
@@ -85,13 +84,14 @@ export default class RenderSelectQuery extends React.Component {
               } = data;
               const isEdgesNotIncludeValue = value && edges && !edges.find(({ id }) => id === value.id);
               const renderOptions = () => {
-                const defaultOption = formattedValue
-                  ? []
-                  : [
-                      <Option key="0" value="0">
-                        Select {pascalize(schema.name)}
-                      </Option>
-                    ];
+                const defaultOption =
+                  parseInt(formattedValue.key) === 0
+                    ? [
+                        <Option key="0" value="0">
+                          Select {pascalize(schema.name)}
+                        </Option>
+                      ]
+                    : [];
                 return edges
                   ? edges.reduce((acc, opt) => {
                       acc.push(

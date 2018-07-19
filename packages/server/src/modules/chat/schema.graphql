@@ -14,6 +14,25 @@ type Message {
   attachment_id: Int
 }
 
+# Edges for Messages
+type MessageEdges {
+  node: Message
+  cursor: Int
+}
+
+# PageInfo for Messages
+type MessagePageInfo {
+  endCursor: Int
+  hasNextPage: Boolean
+}
+
+# Messages relay-style pagination query
+type Messages {
+  totalCount: Int
+  edges: [MessageEdges]
+  pageInfo: MessagePageInfo
+}
+
 #Image
 type Image {
   id: Int!
@@ -25,7 +44,7 @@ type Image {
 
 extend type Query {
   # Messages
-  messages: [Message]
+  messages(limit: Int, after: Int): Messages
   # Message
   message(id: Int!): Message
   # Image
@@ -60,11 +79,13 @@ input EditMessageInput {
 
 extend type Subscription {
   # Subscription fired when anyone changes messages list
-  messagesUpdated: UpdateMessagesPayload
+  messagesUpdated(endCursor: Int!): UpdateMessagesPayload
+  # messagesUpdated: UpdateMessagesPayload
 }
 
 # Payload for messagesUpdated Subscription
 type UpdateMessagesPayload {
   mutation: String!
+  id: Int
   node: Message!
 }

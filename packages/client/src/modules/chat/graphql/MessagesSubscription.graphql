@@ -1,7 +1,7 @@
 #import "./Message.graphql"
 
-subscription onMessagesUpdated {
-  messagesUpdated {
+subscription onMessagesUpdated($endCursor: Int!) {
+  messagesUpdated(endCursor: $endCursor) {
     mutation
     node {
       ...MessageInfo

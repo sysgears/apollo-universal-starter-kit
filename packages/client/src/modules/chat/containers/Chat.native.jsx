@@ -15,7 +15,7 @@ import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import UPLOAD_IMAGE from '../graphql/UploadImage.graphql';
-import IMAGE_QUERY from '../graphql/ImageQuery.graphql';
+// import IMAGE_QUERY from '../graphql/ImageQuery.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 import withUuid from './WithUuid';
 import ChatFooter from '../components/ChatFooter.native';
@@ -25,19 +25,31 @@ import MessageImage from './MessageImage';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
-  if (prev.messages.some(message => node.id === message.id)) {
+  if (prev.messages.edges.some(message => node.id === message.cursor)) {
     return prev;
   }
 
+  const filteredMessages = prev.messages.edges.filter(message => message.node.id !== null);
+  const edge = {
+    cursor: node.id,
+    node: node,
+    __typename: 'MessageEdges'
+  };
+
   return update(prev, {
     messages: {
-      $set: [node, ...prev.messages]
+      totalCount: {
+        $set: prev.messages.totalCount + 1
+      },
+      edges: {
+        $set: [edge, ...filteredMessages]
+      }
     }
   });
 }
 
 function DeleteMessage(prev, id) {
-  const index = prev.messages.findIndex(x => x.id === id);
+  const index = prev.messages.edges.findIndex(x => x.node.id === id);
 
   // ignore if not found
   if (index < 0) {
@@ -46,22 +58,35 @@ function DeleteMessage(prev, id) {
 
   return update(prev, {
     messages: {
-      $splice: [[index, 1]]
+      totalCount: {
+        $set: prev.messages.totalCount - 1
+      },
+      edges: {
+        $splice: [[index, 1]]
+      }
     }
   });
 }
 
 function EditMessage(prev, node) {
-  const index = prev.messages.findIndex(x => node.id === x.id);
+  const index = prev.messages.edges.findIndex(x => x.node.id === node.id);
 
   // ignore if not found
   if (index < 0) {
     return prev;
   }
 
+  const edge = {
+    cursor: node.id,
+    node: node,
+    __typename: 'MessageEdges'
+  };
+
   return update(prev, {
     messages: {
-      $splice: [[index, 1, node]]
+      edges: {
+        $splice: [[index, 1, edge]]
+      }
     }
   });
 }
@@ -71,8 +96,9 @@ function EditMessage(prev, node) {
 @withUser
 class Chat extends React.Component {
   static propTypes = {
+    loading: PropTypes.bool.isRequired,
     t: PropTypes.func,
-    messages: PropTypes.array,
+    messages: PropTypes.object,
     addMessage: PropTypes.func,
     deleteMessage: PropTypes.func,
     editMessage: PropTypes.func,
@@ -83,6 +109,7 @@ class Chat extends React.Component {
 
   constructor(props) {
     super(props);
+    this.subscription = null;
     this.gc = React.createRef();
   }
 
@@ -94,23 +121,37 @@ class Chat extends React.Component {
     quotedMessage: null
   };
 
-  componentWillReceiveProps() {
-    // Check if props have changed and, if necessary, stop the subscription
-    if (this.subscription) {
-      this.subscription();
-      this.subscription = null;
-    } else {
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.loading) {
+      const endCursor = this.props.messages ? this.props.messages.pageInfo.endCursor : 0;
+      const nextEndCursor = nextProps.messages.pageInfo.endCursor;
+
+      // Check if props have changed and, if necessary, stop the subscription
+      if (this.subscription && endCursor !== nextEndCursor) {
+        this.subscription();
+        this.subscription = null;
+      }
+
       // Subscribe or re-subscribe
-      this.subscribeToMessages();
+      if (!this.subscription) {
+        this.subscribeToMessageList(nextEndCursor);
+      }
     }
   }
 
-  subscribeToMessages = () => {
+  componentWillUnmount() {
+    if (this.subscription) {
+      // unsubscribe
+      this.subscription();
+    }
+  }
+
+  subscribeToMessageList = endCursor => {
     const { subscribeToMore } = this.props;
 
     this.subscription = subscribeToMore({
       document: MESSAGES_SUBSCRIPTION,
-
+      variables: { endCursor },
       updateQuery: (
         prev,
         {
@@ -284,19 +325,22 @@ class Chat extends React.Component {
 
   render() {
     const { message } = this.state;
-    const { currentUser, deleteMessage, uuid, messages = [] } = this.props;
+    const { currentUser, deleteMessage, uuid, messages } = this.props;
     const anonymous = 'Anonymous';
     const defaultUser = { id: uuid, username: anonymous };
     const { id, username } = currentUser ? currentUser : defaultUser;
     const timeDiff = moment().utcOffset() * 60000;
-    const formatMessages = messages.map(({ id: _id, text, userId, username, createdAt, uuid, reply, image }) => ({
-      _id,
-      text,
-      createdAt: moment(moment(createdAt) + timeDiff),
-      user: { _id: userId ? userId : uuid, name: username || anonymous },
-      reply,
-      image
-    }));
+    const messageEdges = messages ? messages.edges : [];
+    const formatMessages = messageEdges.map(
+      ({ node: { id: _id, text, userId, username, createdAt, uuid, reply, image } }) => ({
+        _id,
+        text,
+        createdAt: moment(moment(createdAt) + timeDiff),
+        user: { _id: userId ? userId : uuid, name: username || anonymous },
+        reply,
+        image
+      })
+    );
 
     return (
       <View style={{ flex: 1 }}>
@@ -325,24 +369,29 @@ class Chat extends React.Component {
 
 export default compose(
   graphql(MESSAGES_QUERY, {
-    props: ({ data }) => {
-      const { error, messages, subscribeToMore, refetch } = data;
-      if (error) throw new Error(error);
-      return { messages, subscribeToMore, refetch };
-    }
-  }),
-  graphql(IMAGE_QUERY, {
     options: () => {
-      const id = 1;
       return {
-        variables: { id }
+        variables: { limit: 100, after: 0 }
       };
     },
-    props({ data: { error, image, subscribeToMore, refetch } }) {
+    props: ({ data }) => {
+      const { loading, error, messages, subscribeToMore, refetch } = data;
       if (error) throw new Error(error);
-      return { image, subscribeToMore, refetch };
+      return { loading, messages, subscribeToMore, refetch };
     }
   }),
+  // graphql(IMAGE_QUERY, {
+  //   options: () => {
+  //     const id = 1;
+  //     return {
+  //       variables: { id }
+  //     };
+  //   },
+  //   props({ data: { error, image, subscribeToMore, refetch } }) {
+  //     if (error) throw new Error(error);
+  //     return { image, subscribeToMore, refetch };
+  //   }
+  // }),
   graphql(UPLOAD_IMAGE, {
     props: ({ ownProps: { refetch }, mutate }) => ({
       uploadImage: async image => {
@@ -363,7 +412,7 @@ export default compose(
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
-      addMessage: async ({ text, userId, username, uuid, id, reply, image }) => {
+      addMessage: async ({ text, userId, username, uuid, reply, image }) => {
         mutate({
           variables: { input: { text, uuid, reply, attachment: image } },
           updateQueries: {
@@ -389,9 +438,12 @@ export default compose(
               username: username,
               userId: userId,
               uuid: uuid,
-              id: id,
+              id: null,
               reply: reply,
-              image: image
+              image: null,
+              name: null,
+              path: null,
+              attachment_id: null
             }
           }
         });
@@ -440,6 +492,10 @@ export default compose(
               username: username,
               createdAt: moment(moment(createdAt) - moment().utcOffset() * 60000).format('YYYY-MM-DD hh:mm:ss'),
               uuid: uuid,
+              reply: null,
+              name: null,
+              path: null,
+              attachment_id: null,
               __typename: 'Message'
             }
           },

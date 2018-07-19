@@ -1,7 +1,17 @@
 #import "./Message.graphql"
 
-query messages {
-  messages {
-    ...MessageInfo
+query messages($limit: Int!, $after: Int) {
+  messages(limit: $limit, after: $after) {
+    totalCount
+    edges {
+      cursor
+      node {
+        ...MessageInfo
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
   }
 }

@@ -42,8 +42,29 @@ const processUpload = async uploadPromise => {
 
 export default pubsub => ({
   Query: {
-    messages(obj, args, context) {
-      return context.Chat.getMessages();
+    async messages(obj, { limit, after }, context) {
+      const edgesArray = [];
+      const messages = await context.Chat.messagesPagination(limit, after);
+
+      messages.map((message, index) => {
+        edgesArray.push({
+          cursor: after + index,
+          node: message
+        });
+      });
+
+      const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
+      const total = (await context.Chat.getTotal()).count;
+      const hasNextPage = total > after + limit;
+
+      return {
+        totalCount: total,
+        edges: edgesArray,
+        pageInfo: {
+          endCursor: endCursor,
+          hasNextPage: hasNextPage
+        }
+      };
     },
     message(obj, { id }, context) {
       return context.Chat.message(id);

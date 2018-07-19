@@ -18,7 +18,7 @@ export default class Chat {
       .first();
   }
 
-  getMessages() {
+  messagesPagination(limit, after) {
     return knex
       .select(
         'm.id',
@@ -35,7 +35,15 @@ export default class Chat {
       .from('message as m')
       .leftJoin('user as u', 'u.id', 'm.userId')
       .leftJoin('attachment as a', 'a.id', 'm.attachment_id')
-      .orderBy('m.id', 'desc');
+      .orderBy('m.id', 'desc')
+      .limit(limit)
+      .offset(after);
+  }
+
+  getTotal() {
+    return knex('message')
+      .countDistinct('id as count')
+      .first();
   }
 
   addMessage({ text, userId, uuid, reply }) {

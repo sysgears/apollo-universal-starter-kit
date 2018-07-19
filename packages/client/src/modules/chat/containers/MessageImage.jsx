@@ -12,31 +12,36 @@ const options = {
 const messageImage = Component => {
   return class MessageImage extends React.Component {
     static getDerivedStateFromProps(props, state) {
-      const messages = props.messages;
-      const messagesState = state.messages;
-
-      if (messages) {
-        if (messagesState.length) {
-          return {
-            addImage: true,
-            messages: messages.map(message => {
-              const currentMessage = messagesState.find(messageState => message.id === messageState.id);
-              return currentMessage ? { ...message, image: currentMessage.image } : message;
-            })
-          };
+      if (props.messages) {
+        const messages = props.messages;
+        const messagesState = state.messages;
+        if (messages) {
+          if (messagesState && messagesState.edges.length) {
+            return {
+              addImage: true,
+              messages: {
+                ...messages,
+                edges: messages.edges.map(message => {
+                  const currentMessage = messagesState.edges.find(messageState => message.id === messageState.id);
+                  return currentMessage ? { ...message, image: currentMessage.image } : message;
+                })
+              }
+            };
+          }
+          return { messages };
         }
-        return { messages };
+        return null;
       }
       return null;
     }
 
     state = {
-      messages: [],
+      messages: null,
       addImage: true
     };
 
     componentDidMount() {
-      if (this.state.messages.length) {
+      if (this.state.messages) {
         this.setState({ addImage: false });
         this.addImageToMessage();
       }
@@ -88,19 +93,22 @@ const messageImage = Component => {
       if (status === 'granted') {
         const assets = await this.getAssets(albumName);
 
-        this.state.messages.forEach(async message => {
-          let image = this.findImage(assets, message.name);
-          if (!image && message.path) {
-            const downloadImage = await this.downloadImage(message.path);
+        this.state.messages.edges.forEach(async message => {
+          let image = this.findImage(assets, message.node.name);
+          if (!image && message.node.path) {
+            const downloadImage = await this.downloadImage(message.node.path);
             await this.addImageToAlbum(downloadImage);
             const assets = await this.getAssets(albumName);
-            image = this.findImage(assets, message.name);
+            image = this.findImage(assets, message.node.name);
           }
 
           this.setState({
-            messages: this.state.messages.map(item => {
-              return item.id === message.id ? { ...item, image } : item;
-            })
+            messages: {
+              ...this.state.messages,
+              edges: this.state.messages.edges.map(item => {
+                return item.node.id === message.node.id ? { ...item, node: { ...item.node, image } } : item;
+              })
+            }
           });
         });
       }

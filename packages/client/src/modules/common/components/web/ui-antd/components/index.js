@@ -11,7 +11,6 @@ export { default as Switch } from './Switch';
 export { default as Select } from './Select';
 export { default as Option } from './Option';
 export { default as RenderField } from './RenderField';
-export { default as RenderInput } from './RenderInput';
 export { default as RenderNumber } from './RenderNumber';
 export { default as RenderTextArea } from './RenderTextArea';
 export { default as RenderDate } from './RenderDate';

@@ -37,13 +37,13 @@ export default class RenderSwitch extends React.Component {
       meta: { touched, error }
     } = this.props;
 
-    let validateStatus = '';
-    if (touched && error) {
-      validateStatus = 'error';
-    }
-
     return (
-      <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
+      <FormItem
+        label={label}
+        {...formItemLayout}
+        validateStatus={touched && error ? 'error' : ''}
+        help={touched && error}
+      >
         <div>
           <Switch defaultChecked={!!value} onChange={this.handleChange} onBlur={this.handleBlur} />
         </div>

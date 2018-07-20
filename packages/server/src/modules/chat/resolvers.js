@@ -1,6 +1,5 @@
 import { GraphQLUpload } from 'apollo-upload-server';
 import fs from 'fs';
-import shortid from 'shortid';
 import mkdirp from 'mkdirp';
 
 const MESSAGE_SUBSCRIPTION = 'message_subscription';
@@ -15,8 +14,7 @@ const storeFS = ({ stream, filename }) => {
     });
   }
 
-  const id = shortid.generate();
-  const path = `${UPLOAD_DIR}/${id}-${filename}`;
+  const path = `${UPLOAD_DIR}/${filename}`;
   return new Promise((resolve, reject) =>
     stream
       .on('error', error => {
@@ -30,7 +28,7 @@ const storeFS = ({ stream, filename }) => {
       .on('error', error => {
         return reject(error);
       })
-      .on('finish', () => resolve({ id, path, size: fs.statSync(path).size }))
+      .on('finish', () => resolve({ path, size: fs.statSync(path).size }))
   );
 };
 

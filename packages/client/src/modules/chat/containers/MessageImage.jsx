@@ -87,8 +87,8 @@ const messageImage = Component => {
     };
 
     setAlbumUri(uri) {
-      const reqPattern = /(.*[^.|-\w*$])/;
-      const albumUri = uri.match(reqPattern)[0];
+      const regPattern = /(.*[^.|-\w*$])/;
+      const albumUri = uri.match(regPattern)[0];
       this.setState({ albumUri });
     }
 

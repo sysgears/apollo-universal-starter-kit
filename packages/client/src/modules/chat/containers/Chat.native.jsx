@@ -239,11 +239,17 @@ class Chat extends React.Component {
     });
 
     if (!image.cancelled) {
-      const imageData = new ReactNativeFile({ uri: image.uri, type: 'image/jpeg', name: 'photo.jpg' });
+      const name = this.receiveImageName(image.uri);
+      const imageData = new ReactNativeFile({ uri: image.uri, type: 'image/jpeg', name });
       await this.addImageToAlbum(image.uri);
       onSend({ image: imageData });
     }
   };
+
+  receiveImageName(uri) {
+    const reg = /((\w|-)*.\w*)$/;
+    return uri.match(reg)[0];
+  }
 
   onLongPress(context, currentMessage, id, deleteMessage, setEditState) {
     const options = ['Copy Text', 'Reply'];

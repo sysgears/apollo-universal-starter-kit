@@ -37,7 +37,7 @@ class UsersFilter extends React.Component {
 
   render() {
     const filterViewProps = {
-      ...this.props.filter,
+      filter: this.props.filter,
       handleSearch: this.handleSearch,
       handleRole: this.handleRole,
       handleIsActive: this.handleIsActive

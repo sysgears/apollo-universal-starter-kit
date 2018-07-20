@@ -9,35 +9,36 @@ const options = {
   mediaType: [MediaLibrary.MediaType.photo]
 };
 
+const albumName = 'StarterKit';
+
 const messageImage = Component => {
   return class MessageImage extends React.Component {
     static getDerivedStateFromProps(props, state) {
-      if (props.messages) {
-        const messages = props.messages;
-        const messagesState = state.messages;
-        if (messages) {
-          if (messagesState && messagesState.edges.length) {
-            return {
-              addImage: true,
-              messages: {
-                ...messages,
-                edges: messages.edges.map(message => {
-                  const currentMessage = messagesState.edges.find(messageState => message.id === messageState.id);
-                  return currentMessage ? { ...message, image: currentMessage.image } : message;
-                })
-              }
-            };
-          }
+      const messages = props.messages;
+      const messagesState = state.messages;
+      if (messages) {
+        if (messagesState && messagesState.edges.length) {
+          return {
+            addImage: true,
+            messages: {
+              ...messages,
+              edges: messages.edges.map(message => {
+                const currentMessage = messagesState.edges.find(messageState => message.id === messageState.id);
+                return currentMessage ? { ...message, image: currentMessage.image } : message;
+              })
+            }
+          };
+        } else {
           return { messages };
         }
-        return null;
       }
       return null;
     }
 
     state = {
       messages: null,
-      addImage: true
+      addImage: true,
+      albumUri: ''
     };
 
     componentDidMount() {
@@ -48,14 +49,13 @@ const messageImage = Component => {
     }
 
     componentDidUpdate() {
-      if (this.state.addImage) {
+      if (this.state.messages && this.state.addImage) {
         this.setState({ addImage: false });
         this.addImageToMessage();
       }
     }
 
     async addImageToAlbum(localFile) {
-      const albumName = 'StarterKit';
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
       if (status === 'granted') {
@@ -86,36 +86,40 @@ const messageImage = Component => {
       return result ? result.uri : null;
     };
 
-    addImageToMessage = async () => {
-      const albumName = 'StarterKit';
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    setAlbumUri(uri) {
+      const reqPattern = /(.*[^.|-\w*$])/;
+      const albumUri = uri.match(reqPattern)[0];
+      this.setState({ albumUri });
+    }
 
+    addImageToMessage = async () => {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status === 'granted') {
         const assets = await this.getAssets(albumName);
-
+        if (assets.length && !this.state.albumUri) this.setAlbumUri(assets[0].uri);
         this.state.messages.edges.forEach(async message => {
-          let image = this.findImage(assets, message.node.name);
+          const image = this.findImage(assets, message.node.name);
           if (!image && message.node.path) {
             const downloadImage = await this.downloadImage(message.node.path);
             await this.addImageToAlbum(downloadImage);
-            const assets = await this.getAssets(albumName);
-            image = this.findImage(assets, message.node.name);
-          }
-
-          this.setState({
-            messages: {
-              ...this.state.messages,
-              edges: this.state.messages.edges.map(item => {
-                return item.node.id === message.node.id ? { ...item, node: { ...item.node, image } } : item;
-              })
+            if (!this.state.albumUri) {
+              const assets = await this.getAssets(albumName);
+              if (assets.length) this.setAlbumUri(assets[0].uri);
             }
-          });
+          }
         });
       }
     };
 
     render() {
-      return <Component {...this.props} messages={this.state.messages} />;
+      return (
+        <Component
+          {...this.props}
+          albumUri={this.state.albumUri}
+          update={this.state.update}
+          // messages={this.state.messages}
+        />
+      );
     }
   };
 };

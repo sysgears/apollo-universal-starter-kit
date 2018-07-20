@@ -104,7 +104,8 @@ class Chat extends React.Component {
     editMessage: PropTypes.func,
     subscribeToMore: PropTypes.func.isRequired,
     currentUser: PropTypes.object,
-    uuid: PropTypes.string
+    uuid: PropTypes.string,
+    albumUri: PropTypes.string
   };
 
   constructor(props) {
@@ -325,20 +326,20 @@ class Chat extends React.Component {
 
   render() {
     const { message } = this.state;
-    const { currentUser, deleteMessage, uuid, messages } = this.props;
+    const { currentUser, deleteMessage, uuid, messages, albumUri } = this.props;
     const anonymous = 'Anonymous';
     const defaultUser = { id: uuid, username: anonymous };
     const { id, username } = currentUser ? currentUser : defaultUser;
     const timeDiff = moment().utcOffset() * 60000;
     const messageEdges = messages ? messages.edges : [];
     const formatMessages = messageEdges.map(
-      ({ node: { id: _id, text, userId, username, createdAt, uuid, reply, image } }) => ({
+      ({ node: { id: _id, text, userId, username, createdAt, uuid, reply, name } }) => ({
         _id,
         text,
         createdAt: moment(moment(createdAt) + timeDiff),
         user: { _id: userId ? userId : uuid, name: username || anonymous },
         reply,
-        image
+        image: name ? albumUri + name : null
       })
     );
 
@@ -412,7 +413,7 @@ export default compose(
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
-      addMessage: async ({ text, userId, username, uuid, reply, image }) => {
+      addMessage: async ({ text, userId, username, uuid, reply, image, id }) => {
         mutate({
           variables: { input: { text, uuid, reply, attachment: image } },
           updateQueries: {
@@ -438,7 +439,7 @@ export default compose(
               username: username,
               userId: userId,
               uuid: uuid,
-              id: null,
+              id: id,
               reply: reply,
               image: null,
               name: null,

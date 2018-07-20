@@ -1,4 +1,9 @@
 fragment SubCategoryInfo on SubCategory {
   id
   name
+  description
+  category {
+    id
+    name
+  }
 }

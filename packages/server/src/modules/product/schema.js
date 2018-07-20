@@ -22,6 +22,7 @@ export class Category extends Schema {
   };
   subCategories = {
     type: [SubCategory],
+    blackbox: true,
     optional: true,
     external: true
   };

@@ -26,7 +26,6 @@ export { default as LanguagePicker } from './LanguagePicker';
 export { default as Pagination } from './Pagination';
 export { default as Switch } from './Switch';
 export { default as InputNumber } from './InputNumber';
-export { default as RenderInput } from './RenderInput';
 export { default as RenderNumber } from './RenderNumber';
 export { default as RenderSelectQuery } from './RenderSelectQuery';
 export { default as RenderSwitch } from './RenderSwitch';

@@ -40,23 +40,18 @@ export default class RenderDate extends React.Component {
       meta: { touched, error }
     } = this.props;
 
-    let validateStatus = '';
-    if (touched && error) {
-      validateStatus = 'error';
-    }
-
-    let formatedValue = value;
-    if (value !== null && value !== undefined && value !== '') {
-      formatedValue = moment(value, dateFormat);
-    } else {
-      formatedValue = null;
-    }
+    const formattedValue = value ? moment(value, dateFormat) : null;
 
     return (
-      <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
+      <FormItem
+        label={label}
+        {...formItemLayout}
+        validateStatus={touched && error ? 'error' : ''}
+        help={touched && error}
+      >
         <div>
           <DatePicker
-            value={formatedValue}
+            value={formattedValue}
             format={dateFormat}
             onChange={this.handleChange}
             onBlur={this.handleBlur}

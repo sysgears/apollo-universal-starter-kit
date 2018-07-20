@@ -5,7 +5,7 @@ import { DebounceInput } from 'react-debounce-input';
 import translate from '../../../i18n';
 import { Form, FormItem, Select, Option, Label, Input } from '../../common/components/web';
 
-const UsersFilterView = ({ role, isActive, handleSearch, handleRole, handleIsActive, t }) => (
+const UsersFilterView = ({ filter: { searchText, role, isActive }, handleSearch, handleRole, handleIsActive, t }) => (
   <Form layout="inline">
     <FormItem label={t('users.list.item.filter')}>
       <DebounceInput
@@ -13,6 +13,7 @@ const UsersFilterView = ({ role, isActive, handleSearch, handleRole, handleIsAct
         debounceTimeout={300}
         placeholder={t('users.list.item.search')}
         element={Input}
+        value={searchText}
         onChange={e => handleSearch(e.target.value)}
       />
     </FormItem>
@@ -41,8 +42,7 @@ const UsersFilterView = ({ role, isActive, handleSearch, handleRole, handleIsAct
 );
 
 UsersFilterView.propTypes = {
-  role: PropTypes.string,
-  isActive: PropTypes.bool,
+  filter: PropTypes.object.isRequired,
   handleSearch: PropTypes.func.isRequired,
   handleRole: PropTypes.func.isRequired,
   handleIsActive: PropTypes.func.isRequired,

@@ -61,7 +61,8 @@ app.use((req, res, next) => {
 
 app.get('/graphiql', (...args) => graphiqlMiddleware(args[0])(...args));
 
-app.use((...args) => websiteMiddleware(...args));
+app.get('/', (...args) => websiteMiddleware(...args));
+
 if (__DEV__) {
   app.use(errorMiddleware);
 }

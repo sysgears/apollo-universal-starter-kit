@@ -13,7 +13,7 @@ export default class RenderNumber extends React.Component {
     label: PropTypes.string,
     type: PropTypes.string,
     formItemLayout: PropTypes.object,
-    hasTypeOf: PropTypes.func.isRequired,
+    hasTypeOf: PropTypes.func,
     meta: PropTypes.object
   };
 
@@ -24,11 +24,7 @@ export default class RenderNumber extends React.Component {
       hasTypeOf
     } = this.props;
 
-    let computedValue = value;
-    if (hasTypeOf(Number)) {
-      computedValue = value !== '' ? parseFloat(value) : '';
-    }
-    setFieldValue(name, computedValue);
+    setFieldValue(name, hasTypeOf && hasTypeOf(DomainSchema.Int) ? parseInt(value) || '' : value);
   };
 
   handleBlur = () => {
@@ -48,26 +44,27 @@ export default class RenderNumber extends React.Component {
       meta: { touched, error }
     } = this.props;
 
-    let validateStatus = '';
-    if (touched && error) {
-      validateStatus = 'error';
-    }
-
-    let input = {
+    const input = {
+      onChange: this.handleChange,
+      onBlur: this.handleBlur,
       ...inputRest
     };
 
-    if (hasTypeOf(DomainSchema.Float)) {
-      input = {
-        step: '0.1',
-        ...inputRest
-      };
+    if (hasTypeOf && hasTypeOf(DomainSchema.Int)) {
+      input.step = '1';
+    } else if (hasTypeOf && hasTypeOf(DomainSchema.Float)) {
+      input.step = '0.1';
     }
 
     return (
-      <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
+      <FormItem
+        label={label}
+        {...formItemLayout}
+        validateStatus={touched && error ? 'error' : ''}
+        help={touched && error}
+      >
         <div>
-          <InputNumber {...input} placeholder={label} onChange={this.handleChange} onBlur={this.handleBlur} />
+          <InputNumber {...input} placeholder={label} />
         </div>
       </FormItem>
     );

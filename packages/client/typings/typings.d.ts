@@ -30,6 +30,6 @@ interface Window {
 }
 
 declare module 'mocha-steps' {
-  var step: Mocha.IContextDefinition;
-  var xstep: Mocha.IContextDefinition;
+  var step: Mocha.TestFunction;
+  var xstep: Mocha.TestFunction;
 }

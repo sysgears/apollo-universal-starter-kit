@@ -6,9 +6,11 @@ import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
 import COUNTER_QUERY from '../../../../../client/src/modules/counter/serverCounter/graphql/CounterQuery.graphql';
 import ADD_COUNTER from '../../../../../client/src/modules/counter/serverCounter/graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from '../../../../../client/src/modules/counter/serverCounter/graphql/CounterSubscription.graphql';
+import { ISuiteCallbackContext } from 'mocha';
 
 describe('Counter example API works', () => {
-  let server, apollo;
+  let server: any;
+  let apollo: any;
 
   before(() => {
     server = getServer();
@@ -26,7 +28,7 @@ describe('Counter example API works', () => {
   });
 
   step('Responds to counter get GraphQL query', async () => {
-    let result = await apollo.query({ query: COUNTER_QUERY });
+    const result = await apollo.query({ query: COUNTER_QUERY });
 
     result.data.should.deep.equal({
       serverCounter: { amount: 5, __typename: 'Counter' }
@@ -34,7 +36,7 @@ describe('Counter example API works', () => {
   });
 
   step('Increments counter on GraphQL mutation', async () => {
-    let result = await apollo.mutate({
+    const result = await apollo.mutate({
       mutation: ADD_COUNTER,
       variables: { amount: 2 }
     });
@@ -53,7 +55,7 @@ describe('Counter example API works', () => {
         variables: {}
       })
       .subscribe({
-        next(data) {
+        next(data: any) {
           data.should.deep.equal({
             data: { counterUpdated: { amount: 8, __typename: 'Counter' } }
           });

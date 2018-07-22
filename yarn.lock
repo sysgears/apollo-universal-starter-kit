@@ -780,7 +780,15 @@
     "@types/events" "*"
     "@types/node" "*"
 
-"@types/chai@^4.1.4":
+"@types/chai-http@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/chai-http/-/chai-http-3.0.5.tgz#a56d1113f50309b96905935aab45dd2496ea558e"
+  dependencies:
+    "@types/chai" "*"
+    "@types/node" "*"
+    "@types/superagent" "*"
+
+"@types/chai@*", "@types/chai@^4.1.4":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.1.4.tgz#5ca073b330d90b4066d6ce18f60d57f2084ce8ca"
 
@@ -789,6 +797,10 @@
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.32.tgz#aa0e9616b9435ccad02bc52b5b454ffc2c70ba28"
   dependencies:
     "@types/node" "*"
+
+"@types/cookiejar@*":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/cookiejar/-/cookiejar-2.1.0.tgz#4b7daf2c51696cfc70b942c11690528229d1a1ce"
 
 "@types/cookies@*":
   version "0.7.1"
@@ -974,6 +986,13 @@
   version "3.4.4"
   resolved "https://registry.yarnpkg.com/@types/spdy/-/spdy-3.4.4.tgz#3282fd4ad8c4603aa49f7017dd520a08a345b2bc"
   dependencies:
+    "@types/node" "*"
+
+"@types/superagent@*":
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-3.8.3.tgz#51aa6040c21b66df00f46e10bb08fb51c541acfc"
+  dependencies:
+    "@types/cookiejar" "*"
     "@types/node" "*"
 
 "@types/webpack-env@^1.13.5", "@types/webpack-env@^1.13.6":

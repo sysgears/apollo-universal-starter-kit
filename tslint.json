@@ -53,6 +53,7 @@
     "no-duplicate-imports": false,
     "no-empty": false,
     "no-eval": true,
+    "no-implicit-dependencies": [true, "dev", "optional"],
     "no-inferrable-types": false,
     "no-internal-module": true,
     "no-null-keyword": false,

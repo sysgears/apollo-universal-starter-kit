@@ -1,10 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Button, Loading, primary } from '../../../common/components/native';
+import { TranslateFunction } from '../../../../i18n';
 
-export const ServerCounterView = ({ t, children, counter, loading }) => {
+interface ViewProps {
+  t: TranslateFunction;
+  children: any;
+  counter: any;
+  loading: boolean;
+}
+
+export const ServerCounterView = ({ t, children, counter, loading }: ViewProps) => {
   if (loading) {
     return <Loading text={t('loading')} />;
   } else {
@@ -29,20 +36,13 @@ const styles = StyleSheet.create({
   }
 });
 
-ServerCounterView.propTypes = {
-  t: PropTypes.func,
-  children: PropTypes.node,
-  counter: PropTypes.object,
-  loading: PropTypes.bool
-};
+interface ButtonProps {
+  onClick: () => any;
+  text: string;
+}
 
-export const ServerCounterButton = ({ onClick, text }) => (
+export const ServerCounterButton = ({ onClick, text }: ButtonProps) => (
   <Button type={primary} onPress={onClick}>
     {text}
   </Button>
 );
-
-ServerCounterButton.propTypes = {
-  onClick: PropTypes.func,
-  text: PropTypes.string
-};

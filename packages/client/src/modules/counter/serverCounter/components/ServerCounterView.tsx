@@ -1,15 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { Button } from '../../../common/components/web';
+import { TranslateFunction } from '../../../../i18n';
 
 const Section = styled.section`
   margin-bottom: 30px;
   text-align: center;
 `;
 
-export const ServerCounterView = ({ t, children, counter, loading }) => {
+interface ViewProps {
+  t: TranslateFunction;
+  children: any;
+  counter: any;
+  loading: boolean;
+}
+
+export const ServerCounterView = ({ t, children, counter, loading }: ViewProps) => {
   if (loading) {
     return (
       <Section>
@@ -26,20 +33,13 @@ export const ServerCounterView = ({ t, children, counter, loading }) => {
   }
 };
 
-ServerCounterView.propTypes = {
-  t: PropTypes.func,
-  children: PropTypes.node,
-  serverCounter: PropTypes.object,
-  loading: PropTypes.bool
-};
+interface ButtonProps {
+  onClick: () => any;
+  text: string;
+}
 
-export const ServerCounterButton = ({ onClick, text }) => (
+export const ServerCounterButton = ({ onClick, text }: ButtonProps) => (
   <Button id="graphql-button" color="primary" onClick={onClick}>
     {text}
   </Button>
 );
-
-ServerCounterButton.propTypes = {
-  onClick: PropTypes.func,
-  text: PropTypes.string
-};

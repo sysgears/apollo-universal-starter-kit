@@ -142,6 +142,16 @@ Currently `counter` example is implemented to support web and mobile version. If
 `CounterView.jsx` as `universal` component, just delete or rename `CounterView.web.jsx` and you can see how the same
 component can be used for both web and mobile.
 
+#### Writing modules in TypeScript
+
+The starter kit supports both modules written in ES6 JavaScript and TypeScript. You can have a mix - some modules or even parts of modules written in ES6 and some in TypeScript.
+
+When writting TypeScript modules you can face some pitfalls. The general discussion about TypeScript pitfalls will be handled [here](https://github.com/sysgears/apollo-universal-starter-kit/issues/785). The recipes from discussion will be mirrored into this section of documentation.
+
+Known pitfalls:
+- When using stateless JSX component written in JavaScript from within TypeScript code you can get error `TS2322` - missing key, despite the fact that key in question is declared optional. The known workaround for now is to convert this component to stateful JSX component.
+- `tslint` complains that the module is missing, though it is present in `peerDependencies`. `tslint` checks `dependencies` and either `peerDependencies` or `devDependencies`, not both, hence we face this problem. We have configured `tslint` to look into `dependencies`, `devDependencies` and `optionalDependencies`, this is the best that can be reached at the moment. Hence you can work around this issue by switching from using `peerDependencies` in `package.json` to `optionalDependencies`, this way both `eslint` and `tslint` find all needed modules.
+
 #### Known issues
 
 Currently we do not yet support persisted queries. This can be used in this starter kit currently only for web, but it

@@ -30,7 +30,7 @@ const resolvers = {
       clientCounter: () => mockedCache.data.clientCounter
     },
     Mutation: {
-      addClientCounter: () => {
+      addClientCounter: (): any => {
         mockedCache.data = {
           clientCounter: {
             amount: mockedCache.data.clientCounter.amount + INCREMENT,
@@ -46,8 +46,8 @@ const resolvers = {
 describe('Client counter example UI works', () => {
   const renderer = new Renderer({}, {}, resolvers);
 
-  let app;
-  let container;
+  let app: any;
+  let container: any;
   let content;
   const ApolloLinkStateCounterWithI18n = translate('counter')(ClientCounter);
 

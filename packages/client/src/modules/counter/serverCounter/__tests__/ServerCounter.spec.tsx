@@ -21,7 +21,7 @@ const mocks = {
     __typename: 'Counter'
   }),
   Mutation: () => ({
-    addServerCounter: (obj, { amount }) => ({
+    addServerCounter: (obj: any, { amount }: any) => ({
       amount: INC_COUNTER_VALUE + amount,
       __typename: 'Counter'
     })
@@ -30,9 +30,9 @@ const mocks = {
 
 describe('Server counter example UI works', () => {
   const renderer = new Renderer(mocks, {});
-  let app;
-  let container;
-  let content;
+  let app: any;
+  let container: any;
+  let content: any;
   const ServerCounterWithI18n = translate('counter')(ServerCounter);
 
   beforeEach(() => {

@@ -7,7 +7,8 @@ import Counter from './containers/Counter';
 import clientCounter from './clientCounter';
 import reduxCounter from './reduxCounter';
 import serverCounter from './serverCounter';
-import Feature from '../connector';
+import resources from './locales';
+import Feature from '../connector.native';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 
@@ -17,7 +18,7 @@ export default new Feature(clientCounter, reduxCounter, serverCounter, {
       screen: createStackNavigator({
         Counter: {
           screen: Counter,
-          navigationOptions: ({ navigation }) => ({
+          navigationOptions: ({ navigation }: any) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
             headerLeft: (
               <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
@@ -30,5 +31,6 @@ export default new Feature(clientCounter, reduxCounter, serverCounter, {
         drawerLabel: <HeaderTitleWithI18n i18nKey="title" />
       }
     }
-  }
+  },
+  localization: { ns: 'counter', resources }
 });

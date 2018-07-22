@@ -1,17 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Mutation, Query } from 'react-apollo';
 
 import { ClientCounterButton, ClientCounterView } from '../components/ClientCounterView';
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
 import translate from '../../../../i18n';
+import { TranslateFunc } from '../..';
 
-const IncreaseButton = ({ counterAmount, t }) => (
+interface ButtonProps {
+  counterAmount: number;
+  t: TranslateFunc;
+}
+
+const IncreaseButton = ({ counterAmount, t }: ButtonProps): any => (
   <Mutation mutation={ADD_COUNTER_CLIENT}>
     {mutate => {
-      const addClientCounter = amount => () => {
-        const { value } = mutate({ variables: { amount } });
+      const addClientCounter = (amount: any) => () => {
+        const { value }: any = mutate({ variables: { amount } });
         return value;
       };
 
@@ -21,29 +26,24 @@ const IncreaseButton = ({ counterAmount, t }) => (
   </Mutation>
 );
 
-IncreaseButton.propTypes = {
-  counterAmount: PropTypes.number,
-  t: PropTypes.func
-};
+interface CounterProps {
+  t: TranslateFunc;
+}
 
-const ClientCounter = ({ t }) => (
-  <Query query={COUNTER_QUERY_CLIENT} t={t}>
+const ClientCounter = ({ t }: CounterProps) => (
+  <Query query={COUNTER_QUERY_CLIENT}>
     {({
       data: {
         clientCounter: { amount }
       }
     }) => {
       return (
-        <ClientCounterView text={t('text', { amount })} t>
+        <ClientCounterView text={t('text', { amount })}>
           <IncreaseButton t={t} counterAmount={1} />
         </ClientCounterView>
       );
     }}
   </Query>
 );
-
-ClientCounter.propTypes = {
-  t: PropTypes.func
-};
 
 export default translate('clientCounter')(ClientCounter);

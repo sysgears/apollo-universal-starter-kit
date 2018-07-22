@@ -1,78 +1,41 @@
 import React from 'react';
+import BaseConnector, { BaseFeature, combine } from './BaseConnector';
 
-import { merge, map, union, without, castArray } from 'lodash';
+interface FeatureShape extends BaseFeature {
+  route?: any | any[];
+  navItem?: any | any[];
+  navItemRight?: any | any[];
+  stylesInsert?: any | any[];
+  scriptsInsert?: any | any[];
+}
 
-const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
+export default class extends BaseConnector {
+  public route: any[];
+  public navItem: any[];
+  public navItemRight: any[];
+  public stylesInsert: any[];
+  public scriptsInsert: any[];
 
-export default class {
-  /* eslint-disable no-unused-vars */
-  constructor(
-    {
-      link,
-      createNetLink,
-      connectionParam,
-      reducer,
-      resolver,
-      routerFactory,
-      route,
-      navItem,
-      navItemRight,
-      localization,
-      rootComponentFactory,
-      dataRootComponent,
-      stylesInsert,
-      scriptsInsert,
-      data
-    },
-    ...features
-  ) {
-    // Localization
-    this.localization = combine(arguments, arg => arg.localization);
-
-    // Connectivity
-    this.link = combine(arguments, arg => arg.link);
-    this.createNetLink = combine(arguments, arg => arg.createNetLink)
-      .slice(-1)
-      .pop();
-    this.connectionParam = combine(arguments, arg => arg.connectionParam);
-
-    // State management
-    this.reducer = combine(arguments, arg => arg.reducer);
-    this.resolver = combine(arguments, arg => arg.resolver);
-
+  constructor(...features: FeatureShape[]) {
+    super(...features);
     // Navigation
-    this.routerFactory = combine(arguments, arg => arg.routerFactory)
-      .slice(-1)
-      .pop();
-    this.route = combine(arguments, arg => arg.route);
-    this.navItem = combine(arguments, arg => arg.navItem);
-    this.navItemRight = combine(arguments, arg => arg.navItemRight);
-
-    // UI provider-components
-    this.rootComponentFactory = combine(arguments, arg => arg.rootComponentFactory);
-    this.dataRootComponent = combine(arguments, arg => arg.dataRootComponent);
+    this.route = combine(features, arg => arg.route);
+    this.navItem = combine(features, arg => arg.navItem);
+    this.navItemRight = combine(features, arg => arg.navItemRight);
 
     // TODO: Use React Helmet for those. Low level DOM manipulation
-    this.stylesInsert = combine(arguments, arg => arg.stylesInsert);
-    this.scriptsInsert = combine(arguments, arg => arg.scriptsInsert);
-
-    // Shared modules data
-    this.data = combine([{}].concat(Array.from(arguments)), arg => arg.data).reduce(
-      (acc, el) => [{ ...acc[0], ...el }],
-      [{}]
-    );
-  }
-
-  get router() {
-    return this.routerFactory();
+    this.stylesInsert = combine(features, arg => arg.stylesInsert);
+    this.scriptsInsert = combine(features, arg => arg.scriptsInsert);
   }
 
   get routes() {
-    return this.route.map((component, idx) => React.cloneElement(component, { key: idx + this.route.length }));
+    return this.route.map((component: any, idx: number) =>
+      React.cloneElement(component, { key: idx + this.route.length })
+    );
   }
 
   get navItems() {
-    return this.navItem.map((component, idx) =>
+    return this.navItem.map((component: any, idx: number) =>
       React.cloneElement(component, {
         key: component.key ? component.key : idx + this.navItem.length
       })
@@ -80,27 +43,11 @@ export default class {
   }
 
   get navItemsRight() {
-    return this.navItemRight.map((component, idx) =>
+    return this.navItemRight.map((component: any, idx: number) =>
       React.cloneElement(component, {
         key: component.key ? component.key : idx + this.navItem.length
       })
     );
-  }
-
-  get localizations() {
-    return this.localization;
-  }
-
-  get reducers() {
-    return merge(...this.reducer);
-  }
-
-  get resolvers() {
-    return merge(...this.resolver);
-  }
-
-  get connectionParams() {
-    return this.connectionParam;
   }
 
   get stylesInserts() {
@@ -109,21 +56,5 @@ export default class {
 
   get scriptsInserts() {
     return this.scriptsInsert;
-  }
-
-  public getWrappedRoot(root, req) {
-    let nestedRoot = root;
-    for (const componentFactory of this.rootComponentFactory) {
-      nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
-    }
-    return nestedRoot;
-  }
-
-  public getDataRoot(root) {
-    let nestedRoot = root;
-    for (const component of this.dataRootComponent) {
-      nestedRoot = React.createElement(component, {}, nestedRoot);
-    }
-    return nestedRoot;
   }
 }

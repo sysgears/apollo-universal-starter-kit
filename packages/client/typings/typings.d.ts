@@ -1,3 +1,5 @@
+/// <reference types="mocha" />
+
 declare var __TEST__: boolean;
 declare var __SERVER__: boolean;
 declare var __CLIENT__: boolean;
@@ -25,4 +27,9 @@ declare module '*.scss' {
 
 interface Window {
   __APOLLO_STATE__?: any;
+}
+
+declare module 'mocha-steps' {
+  var step: Mocha.IContextDefinition;
+  var xstep: Mocha.IContextDefinition;
 }

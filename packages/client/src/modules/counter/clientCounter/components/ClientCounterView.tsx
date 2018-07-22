@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { Button } from '../../../common/components/web';
@@ -9,25 +8,25 @@ const Section = styled.section`
   text-align: center;
 `;
 
-export const ClientCounterView = ({ text, children }) => (
+interface ViewProps {
+  text: string;
+  children: any;
+}
+
+export const ClientCounterView = ({ text, children }: ViewProps) => (
   <Section>
     <p>{text}</p>
     {children}
   </Section>
 );
 
-ClientCounterView.propTypes = {
-  text: PropTypes.string,
-  children: PropTypes.node
-};
+interface ButtonProps {
+  onClick: () => any;
+  text: string;
+}
 
-export const ClientCounterButton = ({ onClick, text }) => (
+export const ClientCounterButton = ({ onClick, text }: ButtonProps) => (
   <Button id="apollo-link-button" color="primary" onClick={onClick}>
     {text}
   </Button>
 );
-
-ClientCounterButton.propTypes = {
-  onClick: PropTypes.func,
-  text: PropTypes.string
-};

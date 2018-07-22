@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Button, Loading, primary } from '../../../common/components/native';
-import { TranslateFunc } from '../..';
+import { TranslateFunction } from '../../../../i18n';
 
 interface ViewProps {
-  t: TranslateFunc;
+  t: TranslateFunction;
   children: any;
   counter: any;
   loading: boolean;

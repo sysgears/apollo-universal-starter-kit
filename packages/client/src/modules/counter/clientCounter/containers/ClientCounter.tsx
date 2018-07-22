@@ -4,12 +4,11 @@ import { Mutation, Query } from 'react-apollo';
 import { ClientCounterButton, ClientCounterView } from '../components/ClientCounterView';
 import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
 import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
-import translate from '../../../../i18n';
-import { TranslateFunc } from '../..';
+import translate, { TranslateFunction } from '../../../../i18n';
 
 interface ButtonProps {
   counterAmount: number;
-  t: TranslateFunc;
+  t: TranslateFunction;
 }
 
 const IncreaseButton = ({ counterAmount, t }: ButtonProps): any => (
@@ -27,7 +26,7 @@ const IncreaseButton = ({ counterAmount, t }: ButtonProps): any => (
 );
 
 interface CounterProps {
-  t: TranslateFunc;
+  t: TranslateFunction;
 }
 
 const ClientCounter = ({ t }: CounterProps) => (

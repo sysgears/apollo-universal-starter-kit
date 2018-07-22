@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Button } from '../../../common/components/web';
-import { TranslateFunc } from '../..';
+import { TranslateFunction } from '../../../../i18n';
 
 const Section = styled.section`
   margin-bottom: 30px;
@@ -10,7 +10,7 @@ const Section = styled.section`
 `;
 
 interface ViewProps {
-  t: TranslateFunc;
+  t: TranslateFunction;
   children: any;
   counter: any;
   loading: boolean;

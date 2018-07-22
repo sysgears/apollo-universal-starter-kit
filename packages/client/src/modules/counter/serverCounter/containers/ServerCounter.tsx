@@ -2,16 +2,15 @@ import React from 'react';
 import { Mutation, Query } from 'react-apollo';
 import update from 'immutability-helper';
 
-import translate from '../../../../i18n';
+import translate, { TranslateFunction } from '../../../../i18n';
 import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
 import ADD_COUNTER from '../graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
-import { TranslateFunc } from '../..';
 
 interface ButtonProps {
   counterAmount: number;
-  t: TranslateFunc;
+  t: TranslateFunction;
   counter: any;
 }
 
@@ -50,7 +49,7 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
 );
 
 interface CounterProps {
-  t: TranslateFunc;
+  t: TranslateFunction;
   subscribeToMore: (opts: any) => any;
   loading: boolean;
   counter: any;

@@ -3,14 +3,13 @@ import Helmet from 'react-helmet';
 
 import { PageLayout } from '../../common/components/web';
 import settings from '../../../../../../settings';
-import translate from '../../../i18n';
+import translate, { TranslateFunction } from '../../../i18n';
 import { ClientCounter } from '../clientCounter';
 import { ServerCounter } from '../serverCounter';
 import { ReduxCounter } from '../reduxCounter';
-import { TranslateFunc } from '..';
 
 interface CounterProps {
-  t: TranslateFunc;
+  t: TranslateFunction;
 }
 
 const Counter = ({ t }: CounterProps) => (

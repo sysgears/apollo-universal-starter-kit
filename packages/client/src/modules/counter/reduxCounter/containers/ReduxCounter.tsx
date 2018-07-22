@@ -2,11 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { ReduxCounterButton, ReduxCounterView } from '../components/ReduxCounterView';
-import translate from '../../../../i18n';
-import { TranslateFunc } from '../..';
+import translate, { TranslateFunction } from '../../../../i18n';
 
 interface CounterProps {
-  t: TranslateFunc;
+  t: TranslateFunction;
   onReduxIncrement: (increment: number) => void;
   reduxCount: number;
 }

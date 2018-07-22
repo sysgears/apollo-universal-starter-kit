@@ -1,14 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import translate from '../../../i18n';
+import translate, { TranslateFunction } from '../../../i18n';
 import { ClientCounter } from '../clientCounter';
 import { ReduxCounter } from '../reduxCounter';
 import { ServerCounter } from '../serverCounter';
-import { TranslateFunc } from '..';
 
 interface CounterProps {
-  t: TranslateFunc;
+  t: TranslateFunction;
 }
 
 const Counter = ({ t }: CounterProps) => (

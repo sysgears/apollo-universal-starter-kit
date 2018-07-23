@@ -115,7 +115,7 @@ export default compose(
               $module$sConnection: {
                 edges: [...previousResult.$module$sConnection.edges, ...newEdges],
                 pageInfo,
-                __typename: '$Module$sConnection'
+                __typename: '$Module$Connection'
               }
             };
           }

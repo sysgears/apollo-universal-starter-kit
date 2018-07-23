@@ -115,14 +115,21 @@ export default compose(
               $module$sConnection: {
                 edges: [...previousResult.$module$sConnection.edges, ...newEdges],
                 pageInfo,
-                __typename: '$Module$sConnection'
+                __typename: '$Module$Connection'
               }
             };
           }
         });
       };
       if (error) throw new Error(error);
-      return { loading, data: $module$sConnection, loadMoreRows, refetch, subscribeToMore, errors: error ? error.graphQLErrors : null };
+      return {
+        loading,
+        data: $module$sConnection,
+        loadMoreRows,
+        refetch,
+        subscribeToMore,
+        errors: error ? error.graphQLErrors : null
+      };
     }
   }),
   graphql(UPDATE_$MODULE$, {

@@ -25,13 +25,13 @@ import MessageImage from './MessageImage';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
-  if (prev.messages.edges.some(message => node.id === message.cursor)) {
+  if (prev.messages.edges.some(message => node.id === message.node.id)) {
     return prev;
   }
 
   const filteredMessages = prev.messages.edges.filter(message => message.node.id !== null);
   const edge = {
-    cursor: node.id,
+    cursor: prev.messages.totalCount,
     node: node,
     __typename: 'MessageEdges'
   };
@@ -43,6 +43,11 @@ function AddMessage(prev, node) {
       },
       edges: {
         $set: [edge, ...filteredMessages]
+      },
+      pageInfo: {
+        endCursor: {
+          $set: prev.messages.totalCount
+        }
       }
     }
   });

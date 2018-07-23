@@ -5,7 +5,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
 import moment from 'moment';
-import { ImagePicker, MediaLibrary, Permissions } from 'expo';
+import { ImagePicker } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 
 import translate from '../../../i18n';
@@ -181,22 +181,6 @@ class Chat extends React.Component {
     this.setState({ message: text });
   };
 
-  async addImageToAlbum(localFile) {
-    const albumName = 'StarterKit';
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
-    if (status === 'granted') {
-      const asset = await MediaLibrary.createAssetAsync(localFile);
-      const album = await MediaLibrary.getAlbumAsync(albumName);
-      if (album) {
-        return await MediaLibrary.addAssetsToAlbumAsync(asset, album.id, false);
-      } else {
-        await MediaLibrary.createAlbumAsync(albumName, asset);
-        return await MediaLibrary.removeAssetsFromAlbumAsync(asset, asset.albumId);
-      }
-    }
-  }
-
   onSend = (messages = []) => {
     const { isEdit, messageInfo, message, quotedMessage } = this.state;
     const { addMessage, editMessage, uuid } = this.props;
@@ -241,7 +225,6 @@ class Chat extends React.Component {
     if (!image.cancelled) {
       const name = this.receiveImageName(image.uri);
       const imageData = new ReactNativeFile({ uri: image.uri, type: 'image/jpeg', name });
-      await this.addImageToAlbum(image.uri);
       onSend({ image: imageData });
     }
   };
@@ -332,23 +315,22 @@ class Chat extends React.Component {
 
   render() {
     const { message } = this.state;
-    const { currentUser, deleteMessage, uuid, messages, albumUri } = this.props;
+    const { currentUser, deleteMessage, uuid, messages } = this.props;
     const anonymous = 'Anonymous';
     const defaultUser = { id: uuid, username: anonymous };
     const { id, username } = currentUser ? currentUser : defaultUser;
     const timeDiff = moment().utcOffset() * 60000;
     const messageEdges = messages ? messages.edges : [];
     const formatMessages = messageEdges.map(
-      ({ node: { id: _id, text, userId, username, createdAt, uuid, reply, name } }) => ({
+      ({ node: { id: _id, text, userId, username, createdAt, uuid, reply, image } }) => ({
         _id,
         text,
         createdAt: moment(moment(createdAt) + timeDiff),
         user: { _id: userId ? userId : uuid, name: username || anonymous },
         reply,
-        image: name ? albumUri + name : null
+        image
       })
     );
-
     return (
       <View style={{ flex: 1 }}>
         <GiftedChat

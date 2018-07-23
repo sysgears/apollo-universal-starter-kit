@@ -9,43 +9,14 @@ import {
   withUsers,
   withUsersDeleting,
   withOrderByUpdating,
-  withFilterUpdating,
-  subscribeToUsersList
+  withFilterUpdating
 } from './UserOperations';
+
+import usersWithSubscription from './UsersWithSubscription';
 
 class Users extends React.Component {
   constructor(props) {
     super(props);
-    this.subscription = null;
-  }
-
-  componentDidMount() {
-    this.checkSubscription();
-  }
-
-  componentDidUpdate() {
-    this.checkSubscription();
-  }
-
-  componentWillUnmount() {
-    if (this.subscription) {
-      this.subscription();
-    }
-  }
-
-  checkSubscription() {
-    const { loading, subscribeToMore, filter } = this.props;
-
-    if (!loading) {
-      // The component must re-subscribe every time filters changed.
-      // That allows to get valid data after some CRUD operation happens.
-      if (this.subscription) {
-        this.subscription();
-        this.subscription = null;
-      }
-
-      this.subscription = subscribeToUsersList(subscribeToMore, filter);
-    }
   }
 
   render() {
@@ -98,5 +69,6 @@ export default compose(
   withUsers,
   withUsersDeleting,
   withOrderByUpdating,
-  withFilterUpdating
+  withFilterUpdating,
+  usersWithSubscription
 )(Users);

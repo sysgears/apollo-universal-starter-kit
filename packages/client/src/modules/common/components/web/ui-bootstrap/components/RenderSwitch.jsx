@@ -21,14 +21,6 @@ export default class RenderSwitch extends React.Component {
     setFieldValue(name, e.target.checked);
   };
 
-  handleBlur = () => {
-    const {
-      input: { name },
-      setFieldTouched
-    } = this.props;
-    setFieldTouched(name, true);
-  };
-
   render() {
     const {
       input: { value },
@@ -45,7 +37,7 @@ export default class RenderSwitch extends React.Component {
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
         <div>
-          <Switch checked={!!value} onChange={this.handleChange} onBlur={this.handleBlur} />
+          <Switch checked={!!value} onChange={this.handleChange} />
         </div>
       </FormItem>
     );

@@ -21,14 +21,6 @@ export default class RenderSwitch extends React.Component {
     setFieldValue(name, value);
   };
 
-  handleBlur = () => {
-    const {
-      input: { name },
-      setFieldTouched
-    } = this.props;
-    setFieldTouched(name, true);
-  };
-
   render() {
     const {
       input: { value },
@@ -45,7 +37,7 @@ export default class RenderSwitch extends React.Component {
         help={touched && error}
       >
         <div>
-          <Switch defaultChecked={!!value} onChange={this.handleChange} onBlur={this.handleBlur} />
+          <Switch defaultChecked={!!value} onChange={this.handleChange} />
         </div>
       </FormItem>
     );

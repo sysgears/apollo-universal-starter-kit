@@ -27,17 +27,9 @@ export default class RenderNumber extends React.Component {
     setFieldValue(name, hasTypeOf && hasTypeOf(DomainSchema.Int) ? parseInt(value) || '' : value);
   };
 
-  handleBlur = () => {
-    const {
-      input: { name },
-      setFieldTouched
-    } = this.props;
-    setFieldTouched(name, true);
-  };
-
   render() {
     const {
-      input: { onChange, onBlur, ...inputRest },
+      input: { onChange, ...inputRest },
       label,
       formItemLayout,
       hasTypeOf,
@@ -46,7 +38,6 @@ export default class RenderNumber extends React.Component {
 
     const input = {
       onChange: this.handleChange,
-      onBlur: this.handleBlur,
       ...inputRest
     };
 

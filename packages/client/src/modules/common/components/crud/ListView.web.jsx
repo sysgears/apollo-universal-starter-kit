@@ -313,7 +313,6 @@ class ListView extends React.Component {
     };
 
     const footer = () => {
-      const domainValidator = new DomainValidator();
       return (
         <Row>
           <Col span={2}>
@@ -342,7 +341,7 @@ class ListView extends React.Component {
               <Formik
                 initialValues={mapFormPropsToValues({ schema })}
                 validate={values => {
-                  let rawErrors = domainValidator.validate(schema, values);
+                  let rawErrors = DomainValidator.validate(schema, values);
                   return computeDomainValidationErrors(rawErrors);
                 }}
                 onSubmit={async (values, { resetForm }) => {

@@ -12,7 +12,7 @@ export default class RenderNumber extends React.Component {
     placeholder: PropTypes.string,
     type: PropTypes.string,
     formItemLayout: PropTypes.object,
-    hasTypeOf: PropTypes.func.isRequired,
+    hasTypeOf: PropTypes.func,
     meta: PropTypes.object
   };
 
@@ -28,7 +28,7 @@ export default class RenderNumber extends React.Component {
     return (
       <FormItem label={label} {...formItemLayout}>
         <div>
-          <InputNumber {...input} placeholder={label || placeholder} invalid={touched && error} />
+          <InputNumber {...input} placeholder={label || placeholder} invalid={!!(touched && error)} />
           {touched && (error && <FormFeedback>{error}</FormFeedback>)}
         </div>
       </FormItem>

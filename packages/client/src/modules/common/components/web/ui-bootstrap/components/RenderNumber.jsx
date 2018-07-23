@@ -16,46 +16,19 @@ export default class RenderNumber extends React.Component {
     meta: PropTypes.object
   };
 
-  handleChange = e => {
-    const {
-      input: { name },
-      setFieldValue
-    } = this.props;
-    setFieldValue(name, e.target.value);
-  };
-
-  handleBlur = () => {
-    const {
-      input: { name },
-      setFieldTouched
-    } = this.props;
-    setFieldTouched(name, true);
-  };
-
   render() {
     const {
-      input: { onChange, onBlur, ...inputRest },
+      input,
       label,
       formItemLayout,
       placeholder,
       meta: { touched, error }
     } = this.props;
 
-    let valid = true;
-    if (touched && error) {
-      valid = false;
-    }
-
     return (
       <FormItem label={label} {...formItemLayout}>
         <div>
-          <InputNumber
-            {...inputRest}
-            placeholder={label || placeholder}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            invalid={!valid}
-          />
+          <InputNumber {...input} placeholder={label || placeholder} invalid={touched && error} />
           {touched && (error && <FormFeedback>{error}</FormFeedback>)}
         </div>
       </FormItem>

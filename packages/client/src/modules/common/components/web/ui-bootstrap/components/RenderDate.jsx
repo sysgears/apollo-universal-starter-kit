@@ -29,34 +29,20 @@ export default class RenderDate extends React.Component {
     setFieldValue(name, moment().format(dateFormat));
   };
 
-  handleBlur = () => {
-    const {
-      input: { name },
-      setFieldTouched
-    } = this.props;
-    setFieldTouched(name, true);
-  };
-
   render() {
     const {
-      input: { value, onChange, onBlur, ...inputRest },
+      input: { value, onChange, ...inputRest },
       label,
       formItemLayout,
       meta: { touched, error }
     } = this.props;
 
-    let formattedValue = value ? moment(value, dateFormat) : moment();
+    let formattedValue = value ? moment(value, dateFormat) : null;
 
     return (
       <FormItem label={label} {...formItemLayout} help={touched && error}>
         <div>
-          <DatePicker
-            value={formattedValue}
-            dateFormat={dateFormat}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            {...inputRest}
-          />
+          <DatePicker value={formattedValue} dateFormat={dateFormat} onChange={this.handleChange} {...inputRest} />
         </div>
       </FormItem>
     );

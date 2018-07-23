@@ -5,7 +5,13 @@ import { DebounceInput } from 'react-debounce-input';
 import translate from '../../../i18n';
 import { Form, FormItem, Select, Option, Label, Input } from '../../common/components/web';
 
-const UsersFilterView = ({ filter: { searchText, role, isActive }, handleSearch, handleRole, handleIsActive, t }) => (
+const UsersFilterView = ({
+  filter: { searchText, role, isActive },
+  onSearchTextChange,
+  onRoleChange,
+  onIsActiveChange,
+  t
+}) => (
   <Form layout="inline">
     <FormItem label={t('users.list.item.filter')}>
       <DebounceInput
@@ -14,12 +20,12 @@ const UsersFilterView = ({ filter: { searchText, role, isActive }, handleSearch,
         placeholder={t('users.list.item.search')}
         element={Input}
         value={searchText}
-        onChange={e => handleSearch(e.target.value)}
+        onChange={e => onSearchTextChange(e.target.value)}
       />
     </FormItem>
     &nbsp;
     <FormItem label={t('users.list.item.role.label')}>
-      <Select name="role" defaultValue={role} onChange={e => handleRole(e.target.value)}>
+      <Select name="role" defaultValue={role} onChange={e => onRoleChange(e.target.value)}>
         <Option key={1} value="">
           {t('users.list.item.role.all')}
         </Option>
@@ -34,7 +40,7 @@ const UsersFilterView = ({ filter: { searchText, role, isActive }, handleSearch,
     &nbsp;
     <FormItem>
       <Label>
-        <Input type="checkbox" defaultChecked={isActive} onChange={handleIsActive} />
+        <Input type="checkbox" defaultChecked={isActive} onChange={() => onIsActiveChange(!isActive)} />
         {t('users.list.item.active')}
       </Label>
     </FormItem>
@@ -43,9 +49,9 @@ const UsersFilterView = ({ filter: { searchText, role, isActive }, handleSearch,
 
 UsersFilterView.propTypes = {
   filter: PropTypes.object.isRequired,
-  handleSearch: PropTypes.func.isRequired,
-  handleRole: PropTypes.func.isRequired,
-  handleIsActive: PropTypes.func.isRequired,
+  onSearchTextChange: PropTypes.func.isRequired,
+  onRoleChange: PropTypes.func.isRequired,
+  onIsActiveChange: PropTypes.func.isRequired,
   t: PropTypes.func
 };
 

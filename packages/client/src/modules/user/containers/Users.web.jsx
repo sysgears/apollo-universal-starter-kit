@@ -2,22 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-
-import translate from '../../../i18n';
-import UsersFilter from '../containers/UsersFilter';
-import UsersList from '../containers/UsersList';
-import { Button, PageLayout } from '../../common/components/web';
+import { compose } from 'react-apollo';
 
 import settings from '../../../../../../settings';
+import translate from '../../../i18n';
+import UsersFilterView from '../components/UsersFilterView';
+import { Button, PageLayout } from '../../common/components/web';
+import UsersList from '../containers/UsersList';
+import { withUsersState, withFilterUpdating } from './UserOperations';
 
-const Users = ({ t }) => {
+const Users = props => {
   const renderMetaData = () => (
     <Helmet
-      title={`${settings.app.name} - ${t('users.title')}`}
+      title={`${settings.app.name} - ${props.t('users.title')}`}
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - ${t('users.meta')}`
+          content: `${settings.app.name} - ${props.t('users.meta')}`
         }
       ]}
     />
@@ -26,12 +27,12 @@ const Users = ({ t }) => {
   return (
     <PageLayout>
       {renderMetaData()}
-      <h2>{t('users.list.title')}</h2>
+      <h2>{props.t('users.list.title')}</h2>
       <Link to="/users/new">
-        <Button color="primary">{t('users.btn.add')}</Button>
+        <Button color="primary">{props.t('users.btn.add')}</Button>
       </Link>
       <hr />
-      <UsersFilter />
+      <UsersFilterView {...props} />
       <hr />
       <UsersList />
     </PageLayout>
@@ -42,4 +43,7 @@ Users.propTypes = {
   t: PropTypes.func
 };
 
-export default translate('user')(Users);
+export default compose(
+  withUsersState,
+  withFilterUpdating
+)(translate('user')(Users));

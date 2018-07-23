@@ -1,0 +1,9 @@
+#import "./$Module$.graphql"
+
+query $module$($where: $Module$WhereUniqueInput!) {
+  $module$(where: $where) {
+    node {
+      ...$Module$Info
+    }
+  }
+}

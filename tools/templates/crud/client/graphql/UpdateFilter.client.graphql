@@ -1,0 +1,5 @@
+#import "./$Module$State.client.graphql"
+
+mutation update$Module$Filter($filter: Filter$Module$Input!) {
+  update$Module$Filter(filter: $filter) @client
+}

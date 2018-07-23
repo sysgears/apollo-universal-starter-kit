@@ -1,0 +1,12 @@
+fragment $Module$StateInfo on $Module$State {
+  limit
+  orderBy {
+    column
+    order
+  }
+  filter {
+    id
+    name
+    searchText
+  }
+}

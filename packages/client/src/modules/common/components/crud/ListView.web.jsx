@@ -341,7 +341,7 @@ class ListView extends React.Component {
               <Formik
                 initialValues={mapFormPropsToValues({ schema })}
                 validate={values => {
-                  let rawErrors = DomainValidator.validate(schema, values);
+                  const rawErrors = DomainValidator.validate(schema, values);
                   return computeDomainValidationErrors(rawErrors);
                 }}
                 onSubmit={async (values, { resetForm }) => {

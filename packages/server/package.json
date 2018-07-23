@@ -62,7 +62,7 @@
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
     "apollo-logger": "^0.3.0",
-    "apollo-server-express": "^2.0.0-rc.5",
+    "apollo-server-express": "^2.0.0",
     "apollo-upload-server": "^5.0.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",

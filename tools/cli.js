@@ -1,8 +1,10 @@
 require('babel-register')({ presets: ['env'], plugins: ['transform-class-properties'] });
 require('babel-polyfill');
+const CommandInvoker = require('./cli/CommandInvoker');
 
 const prog = require('caporal');
-const moduleCmd = require('./cli/module');
+
+const commandInvoker = new CommandInvoker();
 
 prog
   .version('1.0.0')
@@ -14,7 +16,7 @@ prog
     ['both', 'server', 'client'],
     'both'
   )
-  .action((args, options, logger) => moduleCmd('addmodule', args, options, logger))
+  .action((args, options, logger) => commandInvoker.runAddModule(args, options, logger))
   .command('addcrud', 'Create a new Module with CRUD')
   .argument('<module>', 'Module name')
   .argument(
@@ -24,8 +26,8 @@ prog
     'both'
   )
   .argument('[tablePrefix]', 'DB table prefix.')
-  .action((args, options, logger) => moduleCmd('addcrud', args, options, logger))
-  .command('deletemodule', 'Delete a Module')
+  .action((args, options, logger) => commandInvoker.runAddCrud(args, options, logger));
+/*  .command('deletemodule', 'Delete a Module')
   .argument('<module>', 'Module name')
   .argument(
     '[location]',
@@ -33,9 +35,6 @@ prog
     ['both', 'server', 'client'],
     'both'
   )
-  .action((args, options, logger) => moduleCmd('deletemodule', args, options, logger))
-  .command('updateschema', 'Update Module Schema')
-  .argument('<module>', 'Module name')
-  .action((args, options, logger) => moduleCmd('updateschema', args, options, logger));
+  .action((args, options, logger) => moduleCmd('deletemodule', args, options, logger));*/
 
 prog.parse(process.argv);

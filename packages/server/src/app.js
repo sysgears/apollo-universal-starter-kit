@@ -54,10 +54,6 @@ if (!isApiExternal) {
   });
 }
 
-app.use((req, res, next) => {
-  return next();
-});
-
 app.get('/graphiql', (...args) => graphiqlMiddleware(args[0])(...args));
 
 app.get('/', (...args) => websiteMiddleware(...args));

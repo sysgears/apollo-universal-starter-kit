@@ -52,7 +52,6 @@ if (!isApiExternal) {
     path: __API_URL__,
     cors: corsOptions
   });
-  // app.post(__API_URL__, (...args) => graphqlMiddleware(...args));
 }
 
 app.use((req, res, next) => {

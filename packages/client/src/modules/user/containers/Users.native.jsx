@@ -1,18 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { compose } from 'react-apollo';
 import UsersList from '../components/UsersListView';
 import UsersFilter from '../components/UsersFilterView';
-import {
-  withUsersState,
-  withUsers,
-  withUsersDeleting,
-  withOrderByUpdating,
-  withFilterUpdating
-} from './UserOperations';
 
-import usersWithSubscription from './UsersWithSubscription';
+import usersWithSubscription from './usersWithSubscription';
 
 class Users extends React.Component {
   constructor(props) {
@@ -36,6 +28,14 @@ class Users extends React.Component {
   }
 }
 
+Users.propTypes = {
+  filter: PropTypes.object,
+  navigation: PropTypes.object,
+  users: PropTypes.array,
+  subscribeToMore: PropTypes.func,
+  loading: PropTypes.bool
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -56,19 +56,4 @@ const styles = StyleSheet.create({
   }
 });
 
-Users.propTypes = {
-  filter: PropTypes.object,
-  navigation: PropTypes.object,
-  users: PropTypes.array,
-  subscribeToMore: PropTypes.func,
-  loading: PropTypes.bool
-};
-
-export default compose(
-  withUsersState,
-  withUsers,
-  withUsersDeleting,
-  withOrderByUpdating,
-  withFilterUpdating,
-  usersWithSubscription
-)(Users);
+export default usersWithSubscription(Users);

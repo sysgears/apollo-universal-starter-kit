@@ -2,22 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { compose } from 'react-apollo';
 
 import settings from '../../../../../../settings';
 import translate from '../../../i18n';
 import UsersFilterView from '../components/UsersFilterView';
 import { Button, PageLayout } from '../../common/components/web';
 import UsersListView from '../components/UsersListView';
-import {
-  withUsersState,
-  withFilterUpdating,
-  withUsers,
-  withUsersDeleting,
-  withOrderByUpdating
-} from './UserOperations';
 
-import usersWithSubscription from './UsersWithSubscription';
+import usersWithSubscription from './usersWithSubscription';
 
 class Users extends React.Component {
   constructor(props) {
@@ -64,11 +56,4 @@ Users.propTypes = {
   t: PropTypes.func
 };
 
-export default compose(
-  withUsersState,
-  withUsers,
-  withUsersDeleting,
-  withOrderByUpdating,
-  withFilterUpdating,
-  usersWithSubscription
-)(translate('user')(Users));
+export default usersWithSubscription(translate('user')(Users));

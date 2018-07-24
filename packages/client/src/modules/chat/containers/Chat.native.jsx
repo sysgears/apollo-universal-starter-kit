@@ -5,7 +5,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
 import moment from 'moment';
-import { ImagePicker } from 'expo';
+import { ImagePicker, FileSystem } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 
 import translate from '../../../i18n';
@@ -124,7 +124,8 @@ class Chat extends React.Component {
     isEdit: false,
     messageInfo: null,
     isReply: false,
-    quotedMessage: null
+    quotedMessage: null,
+    maxImageSize: 1000000
   };
 
   componentWillReceiveProps(nextProps) {
@@ -223,14 +224,17 @@ class Chat extends React.Component {
   pickImage = async props => {
     const { onSend } = props;
     const image = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: false,
+      allowsEditing: true,
       base64: false
     });
 
     if (!image.cancelled) {
-      const name = this.receiveImageName(image.uri);
-      const imageData = new ReactNativeFile({ uri: image.uri, type: 'image/jpeg', name });
-      onSend({ image: imageData });
+      const { size } = await FileSystem.getInfoAsync(image.uri);
+      if (size <= this.state.maxImageSize) {
+        const name = this.receiveImageName(image.uri);
+        const imageData = new ReactNativeFile({ uri: image.uri, type: 'image', name });
+        onSend({ image: imageData });
+      }
     }
   };
 

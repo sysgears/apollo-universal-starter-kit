@@ -1,5 +1,13 @@
 import React from 'react';
-import { FileSystem } from 'expo';
+import { FileSystem, ImagePicker } from 'expo';
+import { ReactNativeFile } from 'apollo-upload-client';
+
+const maxImageSize = 1000000;
+const imagePickerOptions = {
+  allowsEditing: true,
+  base64: false,
+  quality: 0.75
+};
 
 const messageImage = Component => {
   return class MessageImage extends React.Component {
@@ -63,9 +71,7 @@ const messageImage = Component => {
       this.state.messages.edges.forEach(async message => {
         if (!message.node.image && message.node.path) {
           const result = files.find(filename => filename === message.node.name);
-          if (!result) {
-            await this.downloadImage(message.node.path, message.node.name);
-          }
+          if (!result) await this.downloadImage(message.node.path, message.node.name);
           this.setState({
             messages: {
               ...this.state.messages,
@@ -83,8 +89,27 @@ const messageImage = Component => {
       });
     };
 
+    pickImage = async props => {
+      const { onSend } = props;
+      const image = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
+
+      if (!image.cancelled) {
+        const { size } = await FileSystem.getInfoAsync(image.uri);
+        if (size <= maxImageSize) {
+          const name = this.receiveImageName(image.uri);
+          const imageData = new ReactNativeFile({ uri: image.uri, type: 'image/jpg', name });
+          onSend({ image: imageData });
+        }
+      }
+    };
+
+    receiveImageName(uri) {
+      const reg = /((\w|-)*.\w*)$/;
+      return uri.match(reg)[0];
+    }
+
     render() {
-      return <Component {...this.props} messages={this.state.messages} />;
+      return <Component {...this.props} messages={this.state.messages} pickImage={this.pickImage} />;
     }
   };
 };

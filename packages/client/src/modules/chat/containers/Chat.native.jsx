@@ -5,7 +5,6 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
 import moment from 'moment';
-import { ImagePicker, FileSystem } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 
 import translate from '../../../i18n';
@@ -110,7 +109,7 @@ class Chat extends React.Component {
     subscribeToMore: PropTypes.func.isRequired,
     currentUser: PropTypes.object,
     uuid: PropTypes.string,
-    albumUri: PropTypes.string
+    pickImage: PropTypes.func
   };
 
   constructor(props) {
@@ -124,8 +123,7 @@ class Chat extends React.Component {
     isEdit: false,
     messageInfo: null,
     isReply: false,
-    quotedMessage: null,
-    maxImageSize: 1000000
+    quotedMessage: null
   };
 
   componentWillReceiveProps(nextProps) {
@@ -221,28 +219,6 @@ class Chat extends React.Component {
     }
   };
 
-  pickImage = async props => {
-    const { onSend } = props;
-    const image = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      base64: false
-    });
-
-    if (!image.cancelled) {
-      const { size } = await FileSystem.getInfoAsync(image.uri);
-      if (size <= this.state.maxImageSize) {
-        const name = this.receiveImageName(image.uri);
-        const imageData = new ReactNativeFile({ uri: image.uri, type: 'image', name });
-        onSend({ image: imageData });
-      }
-    }
-  };
-
-  receiveImageName(uri) {
-    const reg = /((\w|-)*.\w*)$/;
-    return uri.match(reg)[0];
-  }
-
   onLongPress(context, currentMessage, id, deleteMessage, setEditState) {
     const options = ['Copy Text', 'Reply'];
 
@@ -319,7 +295,7 @@ class Chat extends React.Component {
   }
 
   renderCustomActions(props) {
-    return <RenderCustomActions {...props} pickImage={this.pickImage} />;
+    return <RenderCustomActions {...props} pickImage={this.props.pickImage} />;
   }
 
   render() {

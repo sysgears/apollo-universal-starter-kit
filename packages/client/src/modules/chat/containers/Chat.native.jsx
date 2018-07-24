@@ -20,7 +20,8 @@ import withUuid from './WithUuid';
 import ChatFooter from '../components/ChatFooter.native';
 import CustomView from '../components/CustomView.native';
 import RenderCustomActions from '../components/RenderCustomActions.native';
-import MessageImage from './MessageImage';
+import messageImage from './MessageImage';
+import messagesFormatter from './MessagesFormatter';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
@@ -301,21 +302,8 @@ class Chat extends React.Component {
   render() {
     const { message } = this.state;
     const { currentUser, deleteMessage, uuid, messages } = this.props;
-    const anonymous = 'Anonymous';
-    const defaultUser = { id: uuid, username: anonymous };
-    const { id, username } = currentUser ? currentUser : defaultUser;
-    const timeDiff = moment().utcOffset() * 60000;
-    const messageEdges = messages ? messages.edges : [];
-    const formatMessages = messageEdges.map(
-      ({ node: { id: _id, text, userId, username, createdAt, uuid, reply, image } }) => ({
-        _id,
-        text,
-        createdAt: moment(moment(createdAt) + timeDiff),
-        user: { _id: userId ? userId : uuid, name: username || anonymous },
-        reply,
-        image
-      })
-    );
+    const messagesEdges = messages ? messages.edges : [];
+    const { id = uuid, username = null } = currentUser ? currentUser : {};
     return (
       <View style={{ flex: 1 }}>
         <GiftedChat
@@ -324,7 +312,7 @@ class Chat extends React.Component {
           onInputTextChanged={text => this.setMessageState(text)}
           placeholder={'Type a message...'}
           keyboardShouldPersistTaps="never"
-          messages={formatMessages}
+          messages={messagesEdges}
           onSend={this.onSend}
           user={{ _id: id, name: username }}
           showAvatarForEveryMessage
@@ -489,5 +477,6 @@ export default compose(
       }
     })
   }),
-  MessageImage
+  messageImage,
+  messagesFormatter
 )(Chat);

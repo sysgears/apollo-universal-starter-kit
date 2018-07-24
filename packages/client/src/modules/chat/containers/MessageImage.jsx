@@ -1,6 +1,7 @@
 import React from 'react';
 import { FileSystem, ImagePicker } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
+import * as mime from 'react-native-mime-types';
 
 const maxImageSize = 1000000;
 const imagePickerOptions = {
@@ -96,8 +97,9 @@ const messageImage = Component => {
       if (!image.cancelled) {
         const { size } = await FileSystem.getInfoAsync(image.uri);
         if (size <= maxImageSize) {
+          const type = mime.lookup(image.uri);
           const name = this.receiveImageName(image.uri);
-          const imageData = new ReactNativeFile({ uri: image.uri, type: 'image/jpg', name });
+          const imageData = new ReactNativeFile({ uri: image.uri, type, name });
           onSend({ image: imageData });
         }
       }

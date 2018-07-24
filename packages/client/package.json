@@ -186,6 +186,7 @@
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",
     "react-navigation": "^1.5.11",
+    "react-native-mime-types": "^2.2.1",
     "spinjs": "^0.4.0"
   }
 }

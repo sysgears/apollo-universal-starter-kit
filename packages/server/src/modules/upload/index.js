@@ -1,4 +1,3 @@
-import { apolloUploadExpress } from 'apollo-upload-server';
 import express from 'express';
 import Upload from './sql';
 
@@ -11,7 +10,6 @@ export default new Feature({
   createResolversFunc: createResolvers,
   createContextFunc: () => ({ Upload: new Upload() }),
   middleware: app => {
-    app.use('/graphql', apolloUploadExpress({ uploadDir: './public' }));
     app.use('/public', express.static('public'));
   }
 });

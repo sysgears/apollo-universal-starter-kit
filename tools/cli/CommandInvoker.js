@@ -1,6 +1,3 @@
-const addModuleCommand = require('./commands/addModule');
-const addCrudCommand = require('./commands/addCrud');
-
 class CommandInvoker {
   static get moduleTemplatePath() {
     return `${__dirname}/../templates/module`;
@@ -21,9 +18,10 @@ class CommandInvoker {
     }
   }
 
-  constructor(addModule = addModuleCommand, addCrud = addCrudCommand) {
+  constructor(addModule, addCrud, deleteModule) {
     this.addModule = addModule;
     this.addCrud = addCrud;
+    this.deleteModule = deleteModule;
   }
 
   runAddCrud(args, options, logger) {
@@ -35,6 +33,11 @@ class CommandInvoker {
   runAddModule(args, options, logger) {
     const { module, location = 'both' } = args;
     CommandInvoker.runCommand(this.addModule, location, logger, CommandInvoker.moduleTemplatePath, module);
+  }
+
+  runDeleteModule(args, options, logger) {
+    const { module, location = 'both' } = args;
+    CommandInvoker.runCommand(this.deleteModule, location, logger, module);
   }
 }
 

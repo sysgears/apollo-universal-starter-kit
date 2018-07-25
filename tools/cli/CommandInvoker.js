@@ -28,6 +28,7 @@ class CommandInvoker {
 
   runAddCrud(args, options, logger) {
     const { module, tablePrefix = '' } = args;
+    // server - is only available location for addCrud, client in development
     CommandInvoker.runCommand(this.addCrud, 'server', logger, CommandInvoker.crudTemplatePath, module, tablePrefix);
   }
 

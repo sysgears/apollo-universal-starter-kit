@@ -3,8 +3,6 @@ const fs = require('fs');
 const chalk = require('chalk');
 const { pascalize } = require('humps');
 const readline = require('readline');
-
-const { deleteFromFileWithExports } = require('../helpers/util');
 /**
  *
  * @param logger
@@ -19,10 +17,10 @@ async function deleteModule(logger, templatePath, module, location) {
   const Module = pascalize(module);
   const startPath = `${__dirname}/../../..`;
   const modulePath = `${startPath}/packages/${location}/src/modules/${module}`;
-  const generatedContainerFile = 'generatedContainers.js';
+  /*  const generatedContainerFile = 'generatedContainers.js';
   const generatedContainerPath = `${startPath}/packages/${location}/src/modules/common/${generatedContainerFile}`;
   const generatedSchemasFile = 'generatedSchemas.js';
-  const generatedSchemaPath = `${startPath}/packages/${location}/src/modules/common/${generatedSchemasFile}`;
+  const generatedSchemaPath = `${startPath}/packages/${location}/src/modules/common/${generatedSchemasFile}`;*/
   let userAnswer;
 
   if (fs.existsSync(modulePath)) {
@@ -121,14 +119,14 @@ async function deleteModule(logger, templatePath, module, location) {
     logger.info(chalk.red(`✘ Module ${location} location for ${modulePath} not found!`));
   }
 
-  if (fs.existsSync(generatedContainerPath)) {
+  /*  if (fs.existsSync(generatedContainerPath)) {
     const graphqlQuery = `${Module}Query`;
     deleteFromFileWithExports(generatedContainerPath, graphqlQuery);
   }
   if (fs.existsSync(generatedSchemaPath)) {
     const schema = `${Module}Schema`;
     deleteFromFileWithExports(generatedSchemaPath, schema);
-  }
+  }*/
 }
 
 module.exports = deleteModule;

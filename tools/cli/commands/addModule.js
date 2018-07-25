@@ -1,10 +1,10 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { renameFiles } = require('../helpers/util');
+const { copyFiles, renameFiles } = require('../helpers/util');
 
 /**
- * Add module in client or server and add new module to feature initialization
+ * Add module in client or server and add new module to the Feature connector
  * @param logger
  * @param templatePath
  * @param module
@@ -24,12 +24,13 @@ function addModule(logger, templatePath, module, location, finished = true) {
     logger.error(chalk.red(`The ${module} directory is already exists.`));
     process.exit();
   }
-  // copy templates to destination folder
-  renameFiles(modulePath, templatePath, module, location);
+  //copy and rename templates in destination directory
+  copyFiles(modulePath, templatePath, 'database');
+  renameFiles(modulePath, module);
 
   logger.info(chalk.green(`✔ The ${location} files have been copied!`));
 
-  // get module input data
+  // get modules index data
   const indexPath = `${startPath}/packages/${location}/src/modules/index.js`;
   let indexContent;
   try {
@@ -44,7 +45,7 @@ function addModule(logger, templatePath, module, location, finished = true) {
   const featureRegExp = /Feature\(([^()]+)\)/g;
   const [, features] = featureRegExp.exec(indexContent) || ['', ''];
 
-  // add module to Feature function
+  // add module to Feature connector
   shell.ShellString(indexContent.replace(RegExp(featureRegExp, 'g'), `Feature(${module}, ${features})`)).to(indexPath);
 
   if (finished) {

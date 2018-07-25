@@ -27,8 +27,8 @@ class CommandInvoker {
   }
 
   runAddCrud(args, options, logger) {
-    const { module, location = 'both', tablePrefix = '' } = args;
-    CommandInvoker.runCommand(this.addCrud, location, logger, CommandInvoker.crudTemplatePath, module, tablePrefix);
+    const { module, tablePrefix = '' } = args;
+    CommandInvoker.runCommand(this.addCrud, 'server', logger, CommandInvoker.crudTemplatePath, module, tablePrefix);
   }
 
   runAddModule(args, options, logger) {

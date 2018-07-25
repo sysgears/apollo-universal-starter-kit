@@ -48,7 +48,7 @@ export default class Chat {
       .from('message as m')
       .leftJoin('user as u', 'u.id', 'm.userId')
       .leftJoin('attachment as a', 'a.id', 'm.attachment_id')
-      .orderBy('m.id', 'desc')
+      .orderBy('m.id', 'asc')
       .limit(limit)
       .offset(after);
   }

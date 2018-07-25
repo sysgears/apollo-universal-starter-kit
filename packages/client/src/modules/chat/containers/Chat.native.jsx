@@ -42,11 +42,11 @@ function AddMessage(prev, node) {
         $set: prev.messages.totalCount + 1
       },
       edges: {
-        $set: [edge, ...filteredMessages]
+        $set: [...filteredMessages, edge]
       },
       pageInfo: {
         endCursor: {
-          $set: prev.messages.totalCount
+          $set: prev.messages.pageInfo.endCursor + 1
         }
       }
     }
@@ -61,13 +61,21 @@ function DeleteMessage(prev, id) {
     return prev;
   }
 
+  const filteredEdges = prev.messages.edges.filter((item, i) => i !== index);
+  const updatedEdges = filteredEdges.map((item, i) => (item.cursor > index ? { ...item, cursor: i } : item));
+
   return update(prev, {
     messages: {
       totalCount: {
         $set: prev.messages.totalCount - 1
       },
       edges: {
-        $splice: [[index, 1]]
+        $set: updatedEdges
+      },
+      pageInfo: {
+        endCursor: {
+          $set: prev.messages.pageInfo.endCursor - 1
+        }
       }
     }
   });
@@ -312,7 +320,7 @@ class Chat extends React.Component {
           onInputTextChanged={text => this.setMessageState(text)}
           placeholder={'Type a message...'}
           keyboardShouldPersistTaps="never"
-          messages={messagesEdges}
+          messages={messagesEdges.reverse()}
           onSend={this.onSend}
           user={{ _id: id, name: username }}
           showAvatarForEveryMessage
@@ -374,7 +382,7 @@ export default compose(
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
-      addMessage: async ({ text, userId, username, uuid, reply, image, id }) => {
+      addMessage: async ({ text, userId, username, uuid, reply, image }) => {
         mutate({
           variables: { input: { text, uuid, reply, attachment: image } },
           updateQueries: {
@@ -400,7 +408,7 @@ export default compose(
               username: username,
               userId: userId,
               uuid: uuid,
-              id: id,
+              id: null,
               reply: reply,
               image: null,
               name: null,

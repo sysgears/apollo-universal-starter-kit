@@ -10,6 +10,17 @@ class CommandInvoker {
     return `${__dirname}/../templates/crud`;
   }
 
+  static runCommand(func, location, ...args) {
+    // client
+    if (location === 'client' || location === 'both') {
+      func(...args, 'client');
+    }
+    // server
+    if (location === 'server' || location === 'both') {
+      func(...args, 'server');
+    }
+  }
+
   constructor(addModule = addModuleCommand, addCrud = addCrudCommand) {
     this.addModule = addModule;
     this.addCrud = addCrud;
@@ -17,28 +28,12 @@ class CommandInvoker {
 
   runAddCrud(args, options, logger) {
     const { module, location = 'both', tablePrefix = '' } = args;
-    // client
-    if (location === 'client' || location === 'both') {
-      this.addCrud(logger, CommandInvoker.crudTemplatePath, module, tablePrefix, 'client');
-    }
-
-    // server
-    if (location === 'server' || location === 'both') {
-      this.addCrud(logger, CommandInvoker.crudTemplatePath, module, tablePrefix, 'server');
-    }
+    CommandInvoker.runCommand(this.addCrud, location, logger, CommandInvoker.crudTemplatePath, module, tablePrefix);
   }
 
   runAddModule(args, options, logger) {
     const { module, location = 'both' } = args;
-    // client
-    if (location === 'client' || location === 'both') {
-      this.addModule(logger, CommandInvoker.moduleTemplatePath, module, 'client');
-    }
-
-    // server
-    if (location === 'server' || location === 'both') {
-      this.addModule(logger, CommandInvoker.moduleTemplatePath, module, 'server');
-    }
+    CommandInvoker.runCommand(this.addModule, location, logger, CommandInvoker.moduleTemplatePath, module);
   }
 }
 

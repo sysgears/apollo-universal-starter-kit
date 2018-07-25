@@ -2,7 +2,7 @@ const shell = require('shelljs');
 const chalk = require('chalk');
 const { pascalize } = require('humps');
 const { renameFiles, updateFileWithExports } = require('../helpers/util');
-const { addModule } = require('./addModule');
+const addModule = require('./addModule');
 
 /**
  *

@@ -410,9 +410,8 @@ export default compose(
               uuid: uuid,
               id: null,
               reply: reply,
-              image: null,
-              name: null,
-              path: null,
+              name: image ? image.name : null,
+              path: image ? image.uri : null,
               attachment_id: null
             }
           }

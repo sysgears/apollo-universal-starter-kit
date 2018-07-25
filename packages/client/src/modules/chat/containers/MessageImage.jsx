@@ -4,6 +4,7 @@ import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 
 const maxImageSize = 1000000;
+const imageDir = FileSystem.cacheDirectory + 'ImagePicker/';
 const imagePickerOptions = {
   allowsEditing: true,
   base64: false,
@@ -13,25 +14,25 @@ const imagePickerOptions = {
 const messageImage = Component => {
   return class MessageImage extends React.Component {
     static getDerivedStateFromProps(props, state) {
-      const messages = props.messages;
-      const messagesState = state.messages;
-
+      const { messages } = props;
+      const { messages: messagesState } = state;
       if (messages && messages.edges) {
         if (messagesState) {
           return {
-            addImage: true,
+            endCursor: messagesState.pageInfo.endCursor,
             messages: {
               ...messages,
               edges: messages.edges.map(message => {
+                const {
+                  cursor,
+                  node,
+                  node: { id }
+                } = message;
                 const currentMessage = messagesState.edges.find(
-                  messageState => message.node.id === messageState.node.id
+                  ({ node: { id: messageStateId } }) =>
+                    id === messageStateId || (cursor === messages.pageInfo.endCursor && messageStateId === null)
                 );
-                return currentMessage
-                  ? {
-                      ...message,
-                      node: { ...message.node, image: currentMessage.node.image }
-                    }
-                  : message;
+                return currentMessage ? { ...message, node: { ...node, image: currentMessage.node.image } } : message;
               })
             }
           };
@@ -44,45 +45,56 @@ const messageImage = Component => {
 
     state = {
       messages: null,
-      addImage: true
+      endCursor: 0
     };
 
     componentDidMount() {
-      if (this.state.messages) {
-        this.setState({ addImage: false });
-        this.addImageToMessage();
-      }
+      this.checkImages();
     }
 
     componentDidUpdate() {
-      if (this.state.messages && this.state.addImage) {
-        this.setState({ addImage: false });
+      this.checkImages();
+    }
+
+    checkImages() {
+      const { messages, endCursor } = this.state;
+      if (messages && endCursor < messages.pageInfo.endCursor) {
         this.addImageToMessage();
       }
     }
 
     async downloadImage(path, name) {
       const uri = 'http://192.168.0.146:8080/' + path;
-      const downloadImage = await FileSystem.downloadAsync(uri, FileSystem.cacheDirectory + name);
+      const downloadImage = await FileSystem.downloadAsync(uri, imageDir + name);
       return downloadImage.uri;
     }
 
     addImageToMessage = async () => {
-      const files = await FileSystem.readDirectoryAsync(FileSystem.cacheDirectory);
-      this.state.messages.edges.forEach(async message => {
-        if (!message.node.image && message.node.path) {
-          const result = files.find(filename => filename === message.node.name);
-          if (!result) await this.downloadImage(message.node.path, message.node.name);
+      const {
+        messages: { edges },
+        endCursor
+      } = this.state;
+      const newMessages = edges.filter(({ cursor, node: { path } }) => path && (cursor > endCursor || !endCursor));
+      const files = await FileSystem.readDirectoryAsync(imageDir);
+      newMessages.forEach(async message => {
+        const {
+          node: { image, path, name }
+        } = message;
+        if (!image) {
+          const result = files.find(filename => filename === name);
+          if (!result) await this.downloadImage(path, name);
+          const { messages } = this.state;
           this.setState({
+            endCursor: messages.pageInfo.endCursor,
             messages: {
-              ...this.state.messages,
-              edges: this.state.messages.edges.map(item => {
-                return item.node.id === message.node.id
-                  ? {
-                      ...item,
-                      node: { ...item.node, image: FileSystem.cacheDirectory + item.node.name }
-                    }
-                  : item;
+              ...messages,
+              edges: messages.edges.map(item => {
+                const {
+                  cursor,
+                  node,
+                  node: { name }
+                } = item;
+                return cursor === message.cursor ? { ...item, node: { ...node, image: imageDir + name } } : item;
               })
             }
           });

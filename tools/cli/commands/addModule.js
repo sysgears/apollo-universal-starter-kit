@@ -30,8 +30,10 @@ function addModule(logger, templatePath, module, location, finished = true) {
 
   logger.info(chalk.green(`✔ The ${location} files have been copied!`));
 
-  // get modules index data
-  const indexPath = `${startPath}/packages/${location}/src/modules/index.js`;
+  // get index file path
+  const modulesPath = `${startPath}/packages/${location}/src/modules/`;
+  const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
+  const indexPath = modulesPath + indexFullFileName;
   let indexContent;
   try {
     // prepend import module

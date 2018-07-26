@@ -22,8 +22,11 @@ function deleteModule(logger, module, location) {
     // change to destination directory
     shell.cd(`${startPath}/packages/${location}/src/modules/`);
 
-    // get modules index data
-    const indexPath = `${startPath}/packages/${location}/src/modules/index.js`;
+    // get index file path
+    const modulesPath = `${startPath}/packages/${location}/src/modules/`;
+    const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
+    const indexPath = modulesPath + indexFullFileName;
+
     let indexContent;
     try {
       indexContent = fs.readFileSync(indexPath);

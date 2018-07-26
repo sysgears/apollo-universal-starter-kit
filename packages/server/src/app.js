@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import path from 'path';
 
 import { isApiExternal } from './net';
@@ -22,7 +21,6 @@ const corsOptions = {
   credentials: true,
   origin: true
 };
-app.use(cors(corsOptions));
 
 app.use(
   '/',

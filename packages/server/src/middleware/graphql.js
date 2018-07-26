@@ -22,7 +22,10 @@ export default () => {
       settings.app.logging.apolloLogging
         ? formatResponse({ logger: log.debug.bind(log) }, response, options)
         : response,
-    tracing: !!settings.engine.engineConfig.apiKey,
-    cacheControl: !!settings.engine.engineConfig.apiKey
+    tracing: !!settings.engine.apiKey,
+    cacheControl: !!settings.engine.apiKey,
+    engine: {
+      apiKey: settings.engine.apiKey
+    }
   });
 };

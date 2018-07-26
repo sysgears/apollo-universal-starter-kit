@@ -2,16 +2,15 @@ import { ApolloServer } from 'apollo-server-express';
 import { formatResponse } from 'apollo-logger';
 import 'isomorphic-fetch';
 
-import modules from '../modules';
-import { schemas } from '../api/schema';
-import settings from '../../../../settings';
-import log from '../../../common/log';
+import modules from './modules/index';
+import schema from './api/schema';
+import settings from '../../../settings';
+import log from '../../common/log';
 
 export default () => {
   const createContext = async (req, res) => await modules.createContext(req, res);
   return new ApolloServer({
-    typeDefs: schemas.typeDefs,
-    resolvers: schemas.resolvers,
+    schema,
     context: async ({ req, res }) => ({ ...(await createContext(req, res)), req, res }),
     debug: false,
     formatError: error => {

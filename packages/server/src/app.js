@@ -5,7 +5,7 @@ import { isApiExternal } from './net';
 import modules from './modules';
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
-import getGraphqlServer from './middleware/graphql';
+import getGraphqlServer from './graphql';
 import errorMiddleware from './middleware/error';
 
 const app = express();
@@ -58,7 +58,7 @@ if (__DEV__) {
 }
 
 if (module.hot) {
-  module.hot.accept(['./middleware/website', './middleware/graphql']);
+  module.hot.accept(['./middleware/website', './graphql']);
 }
 
 export default app;

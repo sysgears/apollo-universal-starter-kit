@@ -28,6 +28,7 @@ export default () => {
       ? {
           apiKey: settings.engine.apiKey
         }
-      : false
+      : false,
+    playground: false
   });
 };

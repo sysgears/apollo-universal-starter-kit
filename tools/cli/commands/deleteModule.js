@@ -22,27 +22,31 @@ function deleteModule(logger, module, location) {
     // change to destination directory
     shell.cd(`${startPath}/packages/${location}/src/modules/`);
 
-    // get module input data
-    const path = `${startPath}/packages/${location}/src/modules/index.js`;
-    let data = fs.readFileSync(path);
+    // get modules index data
+    const indexPath = `${startPath}/packages/${location}/src/modules/index.js`;
+    let indexContent;
+    try {
+      indexContent = fs.readFileSync(indexPath);
+    } catch (e) {
+      logger.error(chalk.red(`Failed to read /packages/${location}/src/modules/index.js file`));
+      process.exit();
+    }
 
     // extract Feature modules
-    const re = /Feature\(([^()]+)\)/g;
-    const match = re.exec(data);
-    const modules = match[1].split(',').filter(featureModule => featureModule.trim() !== module);
+    const featureRegExp = /Feature\(([^()]+)\)/g;
+    const [, featureModules] = featureRegExp.exec(indexContent) || ['', ''];
+    const featureModulesWithoutDeleted = featureModules
+      .split(',')
+      .filter(featureModule => featureModule.trim() !== module);
 
-    // remove import module line
-    const lines = data
+    const contentWithoutDeletedModule = indexContent
       .toString()
-      .split('\n')
-      .filter(line => line.match(`import ${module} from './${module}';`) === null);
-    fs.writeFileSync(path, lines.join('\n'));
+      // replace features modules on features without deleted module
+      .replace(featureRegExp, `Feature(${featureModulesWithoutDeleted.toString().trim()})`)
+      // remove import module
+      .replace(RegExp(`import ${module} from './${module}';\n`, 'g'), '');
 
-    // remove module from Feature function
-    //shell.sed('-i', re, `Feature(${modules.toString().trim()})`, 'index.js');
-    shell
-      .ShellString(shell.cat('index.js').replace(RegExp(re, 'g'), `Feature(${modules.toString().trim()})`))
-      .to('index.js');
+    fs.writeFileSync(indexPath, contentWithoutDeletedModule);
 
     if (location === 'server') {
       // change to database migrations directory

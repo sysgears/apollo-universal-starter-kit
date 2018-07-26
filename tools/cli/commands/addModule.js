@@ -25,7 +25,7 @@ function addModule(logger, templatePath, module, location, finished = true) {
     process.exit();
   }
   //copy and rename templates in destination directory
-  copyFiles(modulePath, templatePath, 'database');
+  copyFiles(modulePath, templatePath, location);
   renameFiles(modulePath, module);
 
   logger.info(chalk.green(`✔ The ${location} files have been copied!`));
@@ -43,10 +43,12 @@ function addModule(logger, templatePath, module, location, finished = true) {
 
   // extract Feature modules
   const featureRegExp = /Feature\(([^()]+)\)/g;
-  const [, features] = featureRegExp.exec(indexContent) || ['', ''];
+  const [, featureModules] = featureRegExp.exec(indexContent) || ['', ''];
 
   // add module to Feature connector
-  shell.ShellString(indexContent.replace(RegExp(featureRegExp, 'g'), `Feature(${module}, ${features})`)).to(indexPath);
+  shell
+    .ShellString(indexContent.replace(RegExp(featureRegExp, 'g'), `Feature(${module}, ${featureModules})`))
+    .to(indexPath);
 
   if (finished) {
     logger.info(chalk.green(`✔ Module for ${location} successfully created!`));

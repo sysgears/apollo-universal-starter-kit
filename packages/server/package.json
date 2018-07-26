@@ -139,7 +139,9 @@
     "mocha-steps": "^1.1.0",
     "mocha-webpack": "^0.7.0",
     "mkdirp": "^0.5.1",
-    "spinjs": "^0.4.0",
     "ws": "^5.1.1"
+  },
+  "peerDependencies": {
+    "spinjs": "^0.4.0"
   }
 }

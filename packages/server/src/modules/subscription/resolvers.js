@@ -117,7 +117,7 @@ export default pubsub => ({
         try {
           await stripe.subscriptions.del(stripeSubscriptionId);
           await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
-        } catch (e) {
+        } catch (err) {
           const e = new FieldError();
           e.setError('subscription', context.req.t('subscription:cancelSubscription'));
           e.throwIf();

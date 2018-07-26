@@ -56,7 +56,7 @@ if (!isApiExternal) {
 
 app.get('/graphiql', (...args) => graphiqlMiddleware(args[0])(...args));
 
-app.get('/', (...args) => websiteMiddleware(...args));
+app.use((...args) => websiteMiddleware(...args));
 
 if (__DEV__) {
   app.use(errorMiddleware);

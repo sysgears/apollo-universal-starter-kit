@@ -18,8 +18,13 @@ import modules from '../modules';
 import schema from '../api/schema';
 
 let assetMap;
+const playgroundUrl = '/graphiql';
 
 const renderServerSide = async (req, res) => {
+  if (req.url === playgroundUrl) {
+    return;
+  }
+
   const clientModules = require('../../../client/src/modules').default;
 
   const schemaLink = new SchemaLink({ schema, context: await modules.createContext(req, res) });

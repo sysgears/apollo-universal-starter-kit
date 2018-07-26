@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class FieldAdapter extends Component {
-  static contextTypes = {
-    formik: PropTypes.object
-  };
-
   static propTypes = {
     component: PropTypes.func,
     onChangeText: PropTypes.func,
@@ -17,6 +13,10 @@ export default class FieldAdapter extends Component {
     checked: PropTypes.bool,
     defaultChecked: PropTypes.bool,
     disabled: PropTypes.bool
+  };
+
+  static contextTypes = {
+    formik: PropTypes.object
   };
 
   constructor(props, context) {

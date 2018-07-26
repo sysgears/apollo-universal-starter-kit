@@ -3,9 +3,9 @@ import { step } from 'mocha-steps';
 
 import { getServer, getApollo } from '../../testHelpers/integrationSetup';
 
-import COUNTER_QUERY from '../../../../client/src/modules/counter/graphql/CounterQuery.graphql';
-import ADD_COUNTER from '../../../../client/src/modules/counter/graphql/AddCounter.graphql';
-import COUNTER_SUBSCRIPTION from '../../../../client/src/modules/counter/graphql/CounterSubscription.graphql';
+import COUNTER_QUERY from '../../../../client/src/modules/counter/serverCounter/graphql/CounterQuery.graphql';
+import ADD_COUNTER from '../../../../client/src/modules/counter/serverCounter/graphql/AddCounter.graphql';
+import COUNTER_SUBSCRIPTION from '../../../../client/src/modules/counter/serverCounter/graphql/CounterSubscription.graphql';
 
 describe('Counter example API works', () => {
   let server, apollo;
@@ -29,7 +29,7 @@ describe('Counter example API works', () => {
     let result = await apollo.query({ query: COUNTER_QUERY });
 
     result.data.should.deep.equal({
-      counter: { amount: 5, __typename: 'Counter' }
+      serverCounter: { amount: 5, __typename: 'Counter' }
     });
   });
 
@@ -40,7 +40,7 @@ describe('Counter example API works', () => {
     });
 
     result.should.deep.equal({
-      data: { addCounter: { amount: 7, __typename: 'Counter' } }
+      data: { addServerCounter: { amount: 7, __typename: 'Counter' } }
     });
   });
 

@@ -20,7 +20,7 @@ class UsersList extends React.Component {
     this.subscription = null;
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { subscribeToMore, filter, users } = this.props;
     if (!nextProps.loading) {
       if (this.subscription && nextProps.users.length !== users.length) {
@@ -52,4 +52,9 @@ UsersList.propTypes = {
   loading: PropTypes.bool
 };
 
-export default compose(withUsersState, withUsers, withOrderByUpdating, withUsersDeleting)(UsersList);
+export default compose(
+  withUsersState,
+  withUsers,
+  withOrderByUpdating,
+  withUsersDeleting
+)(UsersList);

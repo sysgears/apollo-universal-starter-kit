@@ -22,17 +22,6 @@ const corsOptions = {
   origin: true
 };
 
-app.use(
-  '/',
-  express.static(__FRONTEND_BUILD_DIR__, {
-    maxAge: '180 days'
-  })
-);
-
-if (__DEV__) {
-  app.use('/', express.static(__DLL_BUILD_DIR__, { maxAge: '180 days' }));
-}
-
 for (const applyMiddleware of modules.middlewares) {
   applyMiddleware(app);
 }
@@ -56,7 +45,15 @@ app.get('/graphiql', (...args) => graphiqlMiddleware(args[0])(...args));
 
 app.use((...args) => websiteMiddleware(...args));
 
+app.use(
+  '/',
+  express.static(__FRONTEND_BUILD_DIR__, {
+    maxAge: '180 days'
+  })
+);
+
 if (__DEV__) {
+  app.use('/', express.static(__DLL_BUILD_DIR__, { maxAge: '180 days' }));
   app.use(errorMiddleware);
 }
 

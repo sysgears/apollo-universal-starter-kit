@@ -127,6 +127,8 @@
   },
   "devDependencies": {
     "@alienfast/i18next-loader": "^1.0.15",
+    "@types/chai": "^4.1.4",
+    "@types/chai-http": "^3.0.5",
     "@types/react-dom": "^16.0.5",
     "@types/webpack-env": "^1.13.5",
     "apollo-utilities": "^1.0.3",

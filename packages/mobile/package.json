@@ -16,7 +16,9 @@
     "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "yarn tests && yarn lint",
-    "lint": "eslint --fix --ext js --ext jsx --ext json src config",
+    "eslint": "eslint --fix --ext js --ext jsx --ext json src",
+    "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
+    "lint": "yarn eslint && yarn tslint",
     "watch": "spin watch",
     "heroku-postbuild": "yarn build && yarn exp-publish",
     "cli": "node ../../tools/cli"

@@ -24,8 +24,10 @@ export default () => {
         : response,
     tracing: !!settings.engine.apiKey,
     cacheControl: !!settings.engine.apiKey,
-    engine: {
-      apiKey: settings.engine.apiKey
-    }
+    engine: settings.engine.apiKey
+      ? {
+          apiKey: settings.engine.apiKey
+        }
+      : false
   });
 };

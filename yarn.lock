@@ -575,6 +575,25 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
+"@domain-schema/core@^0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@domain-schema/core/-/core-0.0.34.tgz#5900ae4f0844cb8e7ffa91f5be32bd0417d96429"
+  dependencies:
+    debug "^3.1.0"
+
+"@domain-schema/graphql@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@domain-schema/graphql/-/graphql-0.0.33.tgz#201d8cc5d21a9eba69f2eb8cb1fe44f012381cec"
+  dependencies:
+    debug "^3.1.0"
+
+"@domain-schema/knex@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@domain-schema/knex/-/knex-0.0.35.tgz#3ea8fb1fdf57e9c9334843ed8bfa3b4e9e1f03c4"
+  dependencies:
+    debug "^3.1.0"
+    humps "^2.0.1"
+
 "@expo/bunyan@^1.8.10":
   version "1.8.10"
   resolved "https://registry.yarnpkg.com/@expo/bunyan/-/bunyan-1.8.10.tgz#7d19354a6bce85aae5fea0e973569d3f0142533e"

@@ -25,6 +25,9 @@
     "redux-devtools-extension": "^2.13.2",
     "subscriptions-transport-ws": "^0.9.4"
   },
+  "peerDependencies": {
+    "spinjs": "^0.4.0"
+  },
   "devDependencies": {
     "eslint": "^4.13.1"
   }

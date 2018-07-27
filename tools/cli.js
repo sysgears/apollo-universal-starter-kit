@@ -24,7 +24,7 @@ prog
   .argument('<module>', 'Module name')
   .argument(
     '[location]',
-    'Where should new module be created. [both, server, client]',
+    'Where should CRUD module be created. [both, server, client]',
     ['both', 'server', 'client'],
     'both'
   )
@@ -32,12 +32,8 @@ prog
   .action((args, options, logger) => commandInvoker.runAddCrud(args, options, logger))
   .command('deletemodule', 'Delete a Module')
   .argument('<module>', 'Module name')
-  .argument(
-    '[location]',
-    'Where should new module be created. [both, server, client]',
-    ['both', 'server', 'client'],
-    'both'
-  )
+  .argument('[location]', 'Where should we delete module. [both, server, client]', ['both', 'server', 'client'], 'both')
+  .option('-m', 'Delete migration and seeds')
   .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger));
 
 prog.parse(process.argv);

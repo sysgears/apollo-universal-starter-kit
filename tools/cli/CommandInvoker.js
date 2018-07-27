@@ -37,7 +37,7 @@ class CommandInvoker {
 
   runDeleteModule(args, options, logger) {
     const { module, location = 'both' } = args;
-    CommandInvoker.runCommand(this.deleteModule, location, logger, module);
+    CommandInvoker.runCommand(this.deleteModule, location, logger, module, options);
   }
 }
 

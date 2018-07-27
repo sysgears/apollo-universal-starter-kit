@@ -135,20 +135,17 @@ class Chat extends React.Component {
     quotedMessage: null
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.loading) {
+  componentDidUpdate(prevProps) {
+    if (!this.props.loading) {
       const endCursor = this.props.messages ? this.props.messages.pageInfo.endCursor : 0;
-      const nextEndCursor = nextProps.messages.pageInfo.endCursor;
-
+      const prevEndCursor = prevProps.messages ? prevProps.messages.pageInfo.endCursor : null;
       // Check if props have changed and, if necessary, stop the subscription
-      if (this.subscription && endCursor !== nextEndCursor) {
+      if (this.subscription && prevEndCursor !== endCursor) {
         this.subscription();
         this.subscription = null;
       }
-
-      // Subscribe or re-subscribe
       if (!this.subscription) {
-        this.subscribeToMessageList(nextEndCursor);
+        this.subscribeToMessageList(endCursor);
       }
     }
   }

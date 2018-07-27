@@ -23,7 +23,7 @@ export default class Chat {
       .first();
   }
 
-  image(id) {
+  attachment(id) {
     return knex
       .select('id', 'name', 'type', 'size', 'path')
       .from('attachment')
@@ -84,6 +84,12 @@ export default class Chat {
 
   deleteMessage(id) {
     return knex('message')
+      .where('id', '=', id)
+      .del();
+  }
+
+  deleteAttachment(id) {
+    return knex('attachment')
       .where('id', '=', id)
       .del();
   }

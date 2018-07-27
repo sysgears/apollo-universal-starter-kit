@@ -1,6 +1,7 @@
 import { GraphQLUpload } from 'apollo-upload-server';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
+import shell from 'shelljs';
 
 const MESSAGE_SUBSCRIPTION = 'message_subscription';
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
@@ -96,6 +97,23 @@ export default pubsub => ({
     async deleteMessage(obj, { id }, context) {
       const message = await context.Chat.message(id);
       const isDeleted = await context.Chat.deleteMessage(id);
+      const { attachment_id } = message;
+      if (attachment_id) {
+        const attachment = await context.Chat.attachment(attachment_id);
+        if (!attachment) {
+          throw new Error('Attachment not found.');
+        }
+
+        const ok = await context.Chat.deleteAttachment(attachment_id);
+        if (ok) {
+          const attachmentPath = `${attachment.path}`;
+          const res = shell.rm(attachmentPath);
+          if (res.code > 0) {
+            throw new Error('Unable to delete attachment.');
+          }
+        }
+      }
+
       if (isDeleted) {
         // publish for message list
         pubsub.publish(MESSAGES_SUBSCRIPTION, {

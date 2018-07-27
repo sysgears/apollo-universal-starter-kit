@@ -1,17 +1,16 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { pascalize } = require('humps');
+const deleteMigrations = require('./subCommands/deleteMigrations');
 /**
- *
+ * Delete module
  * @param logger
  * @param module
  * @param location
+ * @param options
  */
-function deleteModule(logger, module, location) {
+function deleteModule(logger, module, location, options) {
   logger.info(`Deleting ${location} files…`);
-
-  const Module = pascalize(module);
   const startPath = `${__dirname}/../../..`;
   const modulePath = `${startPath}/packages/${location}/src/modules/${module}`;
 
@@ -51,29 +50,10 @@ function deleteModule(logger, module, location) {
 
     fs.writeFileSync(indexPath, contentWithoutDeletedModule);
 
-    if (location === 'server') {
-      // change to database migrations directory
-      shell.cd(`${startPath}/packages/${location}/src/database/migrations`);
-      // check if any migrations files for this module exist
-      if (shell.find('.').filter(file => file.search(`_${Module}.js`) > -1).length > 0) {
-        let okMigrations = shell.rm(`*_${Module}.js`);
-        if (okMigrations) {
-          logger.info(chalk.green(`✔ Database migrations files successfully deleted!`));
-        }
-      }
-
-      // change to database seeds directory
-      shell.cd(`${startPath}/packages/${location}/src/database/seeds`);
-      // check if any seed files for this module exist
-      if (shell.find('.').filter(file => file.search(`_${Module}.js`) > -1).length > 0) {
-        let okSeeds = shell.rm(`*_${Module}.js`);
-        if (okSeeds) {
-          logger.info(chalk.green(`✔ Database seed files successfully deleted!`));
-        }
-      }
+    // delete migration and seed if server location and option -m specified
+    if (location === 'server' && options.m) {
+      deleteMigrations(logger, module);
     }
-
-    // continue only if directory does not jet exist
     logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));
   } else {
     logger.info(chalk.red(`✘ Module ${location} location for ${modulePath} not found!`));

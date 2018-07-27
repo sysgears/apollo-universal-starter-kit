@@ -24,7 +24,7 @@
     "exp-publish": "lerna run --scope=mobile exp-publish --stream",
     "watch": "spin watch",
     "heroku-postbuild": "lerna run heroku-postbuild --stream",
-    "cli": "node $NODE_DEBUG_OPTION tools/cli",
+    "cli": "node tools/cli",
     "precommit": "lint-staged",
     "postinstall": "opencollective postinstall"
   },

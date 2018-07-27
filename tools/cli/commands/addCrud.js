@@ -17,7 +17,7 @@ function addCrud(logger, templatesPath, module, tablePrefix, location) {
   addModule(logger, templatesPath, module, location, false);
 
   if (location === 'server') {
-    // add module migration and seed
+    // add migration and seed for new module
     addMigration(logger, templatesPath, module);
 
     if (tablePrefix) {

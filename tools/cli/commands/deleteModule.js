@@ -19,11 +19,8 @@ function deleteModule(logger, module, options, location) {
     shell.rm('-rf', modulePath);
 
     const modulesPath = computeModulesPath(location);
-    // change to destination directory
-    shell.cd(modulesPath);
 
     // get index file path
-
     const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
     const indexPath = modulesPath + indexFullFileName;
 
@@ -31,7 +28,7 @@ function deleteModule(logger, module, options, location) {
     try {
       indexContent = fs.readFileSync(indexPath);
     } catch (e) {
-      logger.error(chalk.red(`Failed to read /packages/${location}/src/modules/index.js file`));
+      logger.error(chalk.red(`Failed to read ${indexPath} file`));
       process.exit();
     }
 
@@ -51,7 +48,7 @@ function deleteModule(logger, module, options, location) {
 
     fs.writeFileSync(indexPath, contentWithoutDeletedModule);
 
-    // delete migration and seed if server location and option -m specified
+    // delete migrations and seeds if server location and option -m specified
     if (location === 'server' && options.m) {
       deleteMigrations(logger, module);
     }

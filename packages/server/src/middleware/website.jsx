@@ -21,10 +21,6 @@ let assetMap;
 const playgroundUrl = '/graphiql';
 
 const renderServerSide = async (req, res) => {
-  if (req.url === playgroundUrl) {
-    return;
-  }
-
   const clientModules = require('../../../client/src/modules').default;
 
   const schemaLink = new SchemaLink({ schema, context: await modules.createContext(req, res) });
@@ -84,6 +80,9 @@ const renderServerSide = async (req, res) => {
 
 export default async (req, res, next) => {
   try {
+    if (req.url === playgroundUrl) {
+      return;
+    }
     if (req.path.indexOf('.') < 0 && __SSR__) {
       return await renderServerSide(req, res);
     } else if (!__SSR__ && req.method === 'GET') {

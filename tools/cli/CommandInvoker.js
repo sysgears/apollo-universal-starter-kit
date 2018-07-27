@@ -1,12 +1,6 @@
+const { CRUD_TEMPLATES, MODULE_TEMPLATES } = require('./config');
+
 class CommandInvoker {
-  static get moduleTemplatePath() {
-    return `${__dirname}/../templates/module`;
-  }
-
-  static get crudTemplatePath() {
-    return `${__dirname}/../templates/crud`;
-  }
-
   static runCommand(func, location, ...args) {
     // client
     if (location === 'client' || location === 'both') {
@@ -27,12 +21,13 @@ class CommandInvoker {
   runAddCrud(args, options, logger) {
     const { module, tablePrefix = '' } = args;
     // server - is only available location for addCrud, client in development
-    CommandInvoker.runCommand(this.addCrud, 'server', logger, CommandInvoker.crudTemplatePath, module, tablePrefix);
+    console.log('crud', CRUD_TEMPLATES);
+    CommandInvoker.runCommand(this.addCrud, 'server', logger, CRUD_TEMPLATES, module, tablePrefix);
   }
 
   runAddModule(args, options, logger) {
     const { module, location = 'both' } = args;
-    CommandInvoker.runCommand(this.addModule, location, logger, CommandInvoker.moduleTemplatePath, module);
+    CommandInvoker.runCommand(this.addModule, location, logger, MODULE_TEMPLATES, module);
   }
 
   runDeleteModule(args, options, logger) {

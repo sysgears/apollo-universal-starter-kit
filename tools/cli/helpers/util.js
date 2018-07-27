@@ -1,6 +1,7 @@
 const shell = require('shelljs');
 const { pascalize, decamelize } = require('humps');
 const { startCase } = require('lodash');
+const { BASE_PATH } = require('../config');
 
 /**
  * Copy templates to the destination directory
@@ -9,6 +10,8 @@ const { startCase } = require('lodash');
  * @param location
  */
 function copyFiles(destinationPath, templatePath, location) {
+  console.log('templatePath', templatePath);
+  console.log('destinationPath', destinationPath);
   shell.cp('-R', `${templatePath}/${location}/*`, destinationPath);
 }
 
@@ -42,7 +45,18 @@ function renameFiles(destinationPath, module) {
   });
 }
 
+/**
+ * Computing modules path
+ * @param location
+ * @param module
+ * @returns {string}
+ */
+function computeModulesPath(location, module = '') {
+  return `${BASE_PATH}/packages/${location}/src/modules/${module}`;
+}
+
 module.exports = {
   renameFiles,
-  copyFiles
+  copyFiles,
+  computeModulesPath
 };

@@ -2,27 +2,28 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const deleteMigrations = require('./subCommands/deleteMigrations');
+const { computeModulesPath } = require('../helpers/util');
 /**
  * Delete module
  * @param logger
  * @param module
- * @param location
  * @param options
+ * @param location
  */
-function deleteModule(logger, module, location, options) {
+function deleteModule(logger, module, options, location) {
   logger.info(`Deleting ${location} files…`);
-  const startPath = `${__dirname}/../../..`;
-  const modulePath = `${startPath}/packages/${location}/src/modules/${module}`;
+  const modulePath = computeModulesPath(location, module);
 
   if (fs.existsSync(modulePath)) {
     // remove module directory
     shell.rm('-rf', modulePath);
 
+    const modulesPath = computeModulesPath(location);
     // change to destination directory
-    shell.cd(`${startPath}/packages/${location}/src/modules/`);
+    shell.cd(modulesPath);
 
     // get index file path
-    const modulesPath = `${startPath}/packages/${location}/src/modules/`;
+
     const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
     const indexPath = modulesPath + indexFullFileName;
 

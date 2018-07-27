@@ -1,7 +1,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { copyFiles, renameFiles } = require('../helpers/util');
+const { copyFiles, renameFiles, computeModulesPath } = require('../helpers/util');
 
 /**
  * Add module in client or server and add new module to the Feature connector
@@ -15,8 +15,7 @@ function addModule(logger, templatePath, module, location, finished = true) {
   logger.info(`Copying ${location} files…`);
 
   // create new module directory
-  const startPath = `${__dirname}/../../..`;
-  const modulePath = `${startPath}/packages/${location}/src/modules/${module}`;
+  const modulePath = computeModulesPath(location, module);
   const newModule = shell.mkdir(modulePath);
 
   // continue only if directory does not jet exist
@@ -31,7 +30,7 @@ function addModule(logger, templatePath, module, location, finished = true) {
   logger.info(chalk.green(`✔ The ${location} files have been copied!`));
 
   // get index file path
-  const modulesPath = `${startPath}/packages/${location}/src/modules/`;
+  const modulesPath = computeModulesPath(location);
   const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
   const indexPath = modulesPath + indexFullFileName;
   let indexContent;
@@ -39,7 +38,7 @@ function addModule(logger, templatePath, module, location, finished = true) {
     // prepend import module
     indexContent = `import ${module} from './${module}';\n` + fs.readFileSync(indexPath);
   } catch (e) {
-    logger.error(chalk.red(`Failed to read /packages/${location}/src/modules/index.js file`));
+    logger.error(chalk.red(`Failed to read ${indexPath} file`));
     process.exit();
   }
 

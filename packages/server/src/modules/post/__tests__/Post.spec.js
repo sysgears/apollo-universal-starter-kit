@@ -20,7 +20,7 @@ describe('Post and comments example API works', () => {
     let result = await apollo.query({
       query: POSTS_QUERY,
       variables: { limit: 1, after: 0 },
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'no-cache'
     });
 
     expect(result.data).to.deep.equal({

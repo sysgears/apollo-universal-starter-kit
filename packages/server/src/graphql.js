@@ -8,10 +8,9 @@ import settings from '../../../settings';
 import log from '../../common/log';
 
 export default () => {
-  const createContext = async (req, res) => await modules.createContext(req, res);
   return new ApolloServer({
     schema,
-    context: async ({ req, res }) => ({ ...(await createContext(req, res)), req, res }),
+    context: async ({ req, res }) => ({ ...(await modules.createContext()), req, res }),
     debug: false,
     formatError: error => {
       log.error('GraphQL execution error:', error);

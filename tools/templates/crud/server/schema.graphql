@@ -19,6 +19,21 @@ type $Module$Payload {
   errors: [FieldError!]
 }
 
+type PageInfo {
+  totalCount: Int
+  hasNextPage: Boolean
+}
+
+type BatchPayload {
+  count: Int
+  errors: [FieldError!]
+}
+
+input OrderByInput {
+  column: String
+  order: String
+}
+
 input $Module$FilterInput {
   searchText: String
 }

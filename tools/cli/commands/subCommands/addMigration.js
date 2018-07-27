@@ -8,14 +8,14 @@ const { DATABASE_DIR, MIGRATIONS_DIR, SEEDS_DIR } = require('../../config');
  * Create migration and seed for module
  * @param logger
  * @param module
- * @param templatePath
+ * @param templatesPath
  */
-function addMigration(logger, templatePath, module) {
+function addMigration(logger, templatesPath, module) {
   const Module = pascalize(module);
   logger.info('Copying database files...');
 
   //copy and rename templates in destination directory
-  copyFiles(DATABASE_DIR, templatePath, 'database');
+  copyFiles(DATABASE_DIR, templatesPath, 'database');
   renameFiles(DATABASE_DIR, module);
   const timestamp = new Date().getTime();
   // rename migrations and seeds

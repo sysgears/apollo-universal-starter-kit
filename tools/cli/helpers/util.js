@@ -10,8 +10,6 @@ const { BASE_PATH } = require('../config');
  * @param location
  */
 function copyFiles(destinationPath, templatePath, location) {
-  console.log('templatePath', templatePath);
-  console.log('destinationPath', destinationPath);
   shell.cp('-R', `${templatePath}/${location}/*`, destinationPath);
 }
 
@@ -46,7 +44,7 @@ function renameFiles(destinationPath, module) {
 }
 
 /**
- * Computing modules path
+ * Get computed module or modules path
  * @param location
  * @param module
  * @returns {string}

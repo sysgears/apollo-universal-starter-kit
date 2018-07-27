@@ -7,18 +7,18 @@ const { computeModulesPath } = require('../helpers/util');
 /**
  * Add CRUD module command
  * @param logger
- * @param templatePath
+ * @param templatesPath
  * @param module
  * @param tablePrefix
  * @param location
  */
-function addCrud(logger, templatePath, module, tablePrefix, location) {
+function addCrud(logger, templatesPath, module, tablePrefix, location) {
   // add module in server, client
-  addModule(logger, templatePath, module, location, false);
+  addModule(logger, templatesPath, module, location, false);
 
   if (location === 'server') {
     // add module migration and seed
-    addMigration(logger, templatePath, module);
+    addMigration(logger, templatesPath, module);
 
     if (tablePrefix) {
       shell.cd(computeModulesPath(location, module));

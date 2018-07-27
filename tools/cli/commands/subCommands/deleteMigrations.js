@@ -10,9 +10,8 @@ const { MIGRATIONS_DIR, SEEDS_DIR } = require('../../config');
  */
 function deleteMigrations(logger, module) {
   const Module = pascalize(module);
-  const startPath = `${__dirname}/../../../..`;
   // change to database migrations directory
-  shell.cd(`${startPath}${MIGRATIONS_DIR}`);
+  shell.cd(MIGRATIONS_DIR);
   // check if any migrations files for this module exist
   if (shell.find('.').find(file => file.search(`_${Module}.js`) > -1)) {
     const okMigrations = shell.rm(`*_${Module}.js`);
@@ -22,7 +21,7 @@ function deleteMigrations(logger, module) {
   }
 
   // change to database seeds directory
-  shell.cd(`${startPath}${SEEDS_DIR}`);
+  shell.cd(SEEDS_DIR);
   // check if any seed files for this module exist
   if (shell.find('.').find(file => file.search(`_${Module}.js`) > -1)) {
     const okSeeds = shell.rm(`*_${Module}.js`);

@@ -6,12 +6,12 @@ const { copyFiles, renameFiles, computeModulesPath } = require('../helpers/util'
 /**
  * Add module in client or server and add new module to the Feature connector
  * @param logger
- * @param templatePath
+ * @param templatesPath
  * @param module
  * @param location
  * @param finished
  */
-function addModule(logger, templatePath, module, location, finished = true) {
+function addModule(logger, templatesPath, module, location, finished = true) {
   logger.info(`Copying ${location} files…`);
 
   // create new module directory
@@ -24,7 +24,7 @@ function addModule(logger, templatePath, module, location, finished = true) {
     process.exit();
   }
   //copy and rename templates in destination directory
-  copyFiles(modulePath, templatePath, location);
+  copyFiles(modulePath, templatesPath, location);
   renameFiles(modulePath, module);
 
   logger.info(chalk.green(`✔ The ${location} files have been copied!`));

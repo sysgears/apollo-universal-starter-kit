@@ -41,9 +41,9 @@ const processUpload = async uploadPromise => {
 
 export default pubsub => ({
   Query: {
-    async messages(obj, { limit, after }, context) {
+    async messages(obj, { limit, after }, { Chat }) {
       const edgesArray = [];
-      const messages = await context.Chat.messagesPagination(limit, after);
+      const messages = await Chat.messagesPagination(limit, after);
 
       messages.map((message, index) => {
         edgesArray.push({
@@ -53,7 +53,7 @@ export default pubsub => ({
       });
 
       const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
-      const total = (await context.Chat.getTotal()).count;
+      const total = (await Chat.getTotal()).count;
       const hasNextPage = total > after + limit;
 
       return {
@@ -65,11 +65,11 @@ export default pubsub => ({
         }
       };
     },
-    message(obj, { id }, context) {
-      return context.Chat.message(id);
+    message(obj, { id }, { Chat }) {
+      return Chat.message(id);
     },
-    image(obj, { id }, context) {
-      return context.Chat.image(id);
+    image(obj, { id }, { Chat }) {
+      return Chat.image(id);
     }
   },
   Mutation: {
@@ -78,12 +78,13 @@ export default pubsub => ({
       return Upload.saveFiles(results);
     },
     async addMessage(obj, { input }, context) {
+      const { Chat, user } = context;
       const { attachment = null } = input;
-      const userId = context.user ? context.user.id : null;
+      const userId = user ? user.id : null;
       const results = attachment ? await processUpload(attachment) : null;
       const data = { ...input, attachment: results, userId };
-      const [id] = attachment ? await context.Chat.addMessageWithAttachment(data) : await context.Chat.addMessage(data);
-      const message = await context.Chat.message(id);
+      const [id] = attachment ? await Chat.addMessageWithAttachment(data) : await Chat.addMessage(data);
+      const message = await Chat.message(id);
       // publish for message list
       pubsub.publish(MESSAGES_SUBSCRIPTION, {
         messagesUpdated: {
@@ -94,17 +95,17 @@ export default pubsub => ({
       });
       return message;
     },
-    async deleteMessage(obj, { id }, context) {
-      const message = await context.Chat.message(id);
-      const isDeleted = await context.Chat.deleteMessage(id);
+    async deleteMessage(obj, { id }, { Chat }) {
+      const message = await Chat.message(id);
+      const isDeleted = await Chat.deleteMessage(id);
       const { attachment_id } = message;
       if (attachment_id) {
-        const attachment = await context.Chat.attachment(attachment_id);
+        const attachment = await Chat.attachment(attachment_id);
         if (!attachment) {
           throw new Error('Attachment not found.');
         }
 
-        const ok = await context.Chat.deleteAttachment(attachment_id);
+        const ok = await Chat.deleteAttachment(attachment_id);
         if (ok) {
           const attachmentPath = `${attachment.path}`;
           const res = shell.rm(attachmentPath);
@@ -128,9 +129,9 @@ export default pubsub => ({
         return { id: null };
       }
     },
-    async editMessage(obj, { input }, context) {
-      await context.Chat.editMessage(input);
-      const message = await context.Chat.message(input.id);
+    async editMessage(obj, { input }, { Chat }) {
+      await Chat.editMessage(input);
+      const message = await Chat.message(input.id);
       // publish for post list
       pubsub.publish(MESSAGES_SUBSCRIPTION, {
         messagesUpdated: {

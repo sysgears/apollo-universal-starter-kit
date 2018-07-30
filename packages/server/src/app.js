@@ -5,7 +5,7 @@ import { isApiExternal } from './net';
 import modules from './modules';
 import websiteMiddleware from './middleware/website';
 import graphiqlMiddleware from './middleware/graphiql';
-import getGraphqlServer from './graphql';
+import createApolloServer from './graphql';
 import errorMiddleware from './middleware/error';
 
 const app = express();
@@ -33,7 +33,7 @@ if (__DEV__) {
 }
 
 if (!isApiExternal) {
-  const graphqlServer = getGraphqlServer();
+  const graphqlServer = createApolloServer();
   graphqlServer.applyMiddleware({
     app,
     path: __API_URL__,

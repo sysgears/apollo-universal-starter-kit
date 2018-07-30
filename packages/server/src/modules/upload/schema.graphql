@@ -1,4 +1,4 @@
-scalar Upload
+scalar FileUpload
 
 type File {
   id: Int!
@@ -13,6 +13,6 @@ extend type Query {
 }
 
 extend type Mutation {
-  uploadFiles(files: [Upload!]!): Boolean!
+  uploadFiles(files: [FileUpload!]!): Boolean!
   removeFile(id: Int!): Boolean!
 }

@@ -82,14 +82,28 @@ export default class Chat {
       .catch(err => console.error(err));
   }
 
-  deleteMessage(id) {
-    return knex('message')
-      .where('id', '=', id)
-      .del();
+  deleteMessageWithAttachment(messageId, attachmentId) {
+    return knex
+      .transaction(trx => {
+        knex('message')
+          .transacting(trx)
+          .where('id', '=', messageId)
+          .del()
+          .then(() => {
+            return returnId(knex('attachment'))
+              .transacting(trx)
+              .where('id', '=', attachmentId)
+              .del();
+          })
+          .then(trx.commit)
+          .catch(trx.rollback);
+      })
+      .then(resp => resp)
+      .catch(err => console.error(err));
   }
 
-  deleteAttachment(id) {
-    return knex('attachment')
+  deleteMessage(id) {
+    return knex('message')
       .where('id', '=', id)
       .del();
   }

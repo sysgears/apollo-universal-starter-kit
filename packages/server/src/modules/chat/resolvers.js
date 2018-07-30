@@ -97,21 +97,17 @@ export default pubsub => ({
     },
     async deleteMessage(obj, { id }, { Chat }) {
       const message = await Chat.message(id);
-      const isDeleted = await Chat.deleteMessage(id);
       const { attachment_id } = message;
-      if (attachment_id) {
-        const attachment = await Chat.attachment(attachment_id);
-        if (!attachment) {
-          throw new Error('Attachment not found.');
-        }
+      const attachment = attachment_id ? await Chat.attachment(attachment_id) : null;
+      const isDeleted = attachment_id
+        ? await Chat.deleteMessageWithAttachment(id, attachment_id)
+        : await Chat.deleteMessage(id);
 
-        const ok = await Chat.deleteAttachment(attachment_id);
-        if (ok) {
-          const attachmentPath = `${attachment.path}`;
-          const res = shell.rm(attachmentPath);
-          if (res.code > 0) {
-            throw new Error('Unable to delete attachment.');
-          }
+      if (isDeleted && attachment) {
+        const attachmentPath = `${attachment.path}`;
+        const res = shell.rm(attachmentPath);
+        if (res.code > 0) {
+          throw new Error('Unable to delete attachment.');
         }
       }
 

@@ -80,31 +80,35 @@ const messageImage = Component => {
         endCursor
       } = this.state;
       const newMessages = edges.filter(({ cursor, node: { path } }) => path && (cursor > endCursor || !endCursor));
-      const files = await FileSystem.readDirectoryAsync(imageDir);
-      newMessages.forEach(async message => {
-        const {
-          node: { image, path, name }
-        } = message;
-        if (!image) {
-          const result = files.find(filename => filename === name);
-          if (!result) await this.downloadImage(path, name);
-          const { messages } = this.state;
-          this.setState({
-            endCursor: messages.pageInfo.endCursor,
-            messages: {
-              ...messages,
-              edges: messages.edges.map(item => {
-                const {
-                  cursor,
-                  node,
-                  node: { name }
-                } = item;
-                return cursor === message.cursor ? { ...item, node: { ...node, image: imageDir + name } } : item;
-              })
-            }
-          });
-        }
-      });
+      if (newMessages.length) {
+        const { isDirectory } = await FileSystem.getInfoAsync(imageDir);
+        if (!isDirectory) await FileSystem.makeDirectoryAsync(imageDir);
+        const files = await FileSystem.readDirectoryAsync(imageDir);
+        newMessages.forEach(async message => {
+          const {
+            node: { image, path, name }
+          } = message;
+          if (!image) {
+            const result = files.find(filename => filename === name);
+            if (!result) await this.downloadImage(path, name);
+            const { messages } = this.state;
+            this.setState({
+              endCursor: messages.pageInfo.endCursor,
+              messages: {
+                ...messages,
+                edges: messages.edges.map(item => {
+                  const {
+                    cursor,
+                    node,
+                    node: { name }
+                  } = item;
+                  return cursor === message.cursor ? { ...item, node: { ...node, image: imageDir + name } } : item;
+                })
+              }
+            });
+          }
+        });
+      }
     };
 
     pickImage = async props => {

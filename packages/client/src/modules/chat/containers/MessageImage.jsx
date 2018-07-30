@@ -1,8 +1,14 @@
 import React from 'react';
-import { FileSystem, ImagePicker } from 'expo';
+import { Constants, FileSystem, ImagePicker } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
+import url from 'url';
 
+const {
+  manifest: { bundleUrl }
+} = Constants;
+const { protocol, port, hostname } = url.parse(__API_URL__);
+const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl).hostname : hostname}:${port}`;
 const maxImageSize = 1000000;
 const imageDir = FileSystem.cacheDirectory + 'ImagePicker/';
 const imagePickerOptions = {
@@ -64,10 +70,7 @@ const messageImage = Component => {
     }
 
     async downloadImage(path, name) {
-      const uri = `${window.location.protocol}//${window.location.hostname}${
-        __DEV__ ? ':8080' : window.location.port ? ':' + window.location.port : ''
-      }`;
-      const downloadImage = await FileSystem.downloadAsync(uri, imageDir + name);
+      const downloadImage = await FileSystem.downloadAsync(serverUrl + '/' + path, imageDir + name);
       return downloadImage.uri;
     }
 

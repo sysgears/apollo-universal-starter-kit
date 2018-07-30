@@ -43,7 +43,7 @@ git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
 cd apollo-universal-starter-kit
 ```
 
-2. Install dependencies.
+2. Install dependencies (make sure you have yarn >= `1.0.0`).
 
 ```
 yarn
@@ -75,6 +75,10 @@ compilation tools are needed in order to develop native mobile applications with
 and mobile versions of your app at the same time connected to the same backend.
 
 For running Android or iOS you need to set in `packages/mobile/.spinrc.js` `config.builders.ios.enabled` and/or `config.builders.android.enabled` field `true`.
+
+### Configuring IDE/Editor
+
+Make sure to enable `eslint` and `tslint` integration in your Editor or IDE this will save you from many little and big traps when working with the code.
 
 #### Running on a device
 

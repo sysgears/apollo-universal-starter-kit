@@ -103,7 +103,7 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
     link: ApolloLink.from(allLinks),
     cache
   };
-  if (__SSR__) {
+  if (__SSR__ && !__TEST__) {
     if (typeof window !== 'undefined' && window.__APOLLO_STATE__) {
       clientParams.initialState = window.__APOLLO_STATE__;
     } else {

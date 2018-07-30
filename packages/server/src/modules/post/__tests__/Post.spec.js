@@ -19,8 +19,7 @@ describe('Post and comments example API works', () => {
   step('Query post list works', async () => {
     let result = await apollo.query({
       query: POSTS_QUERY,
-      variables: { limit: 1, after: 0 },
-      fetchPolicy: 'network-only'
+      variables: { limit: 1, after: 0 }
     });
 
     expect(result.data).to.deep.equal({
@@ -116,8 +115,7 @@ describe('Post and comments example API works', () => {
   step('Adding post works', async () => {
     let result = await apollo.query({
       query: POSTS_QUERY,
-      variables: { limit: 1, after: 0 },
-      fetchPolicy: 'network-only'
+      variables: { limit: 1, after: 0 }
     });
     expect(result.data.posts).to.have.property('totalCount', 21);
     expect(result.data.posts).to.have.nested.property('edges[0].node.title', 'New post 1');
@@ -168,8 +166,7 @@ describe('Post and comments example API works', () => {
   step('Updating post works', async () => {
     let result = await apollo.query({
       query: POSTS_QUERY,
-      variables: { limit: 1, after: 0 },
-      fetchPolicy: 'network-only'
+      variables: { limit: 1, after: 0 }
     });
     expect(result.data.posts).to.have.property('totalCount', 21);
     expect(result.data.posts).to.have.nested.property('edges[0].node.title', 'New post 2');
@@ -214,8 +211,7 @@ describe('Post and comments example API works', () => {
   step('Deleting post works', async () => {
     let result = await apollo.query({
       query: POSTS_QUERY,
-      variables: { limit: 2, after: 0 },
-      fetchPolicy: 'network-only'
+      variables: { limit: 2, after: 0 }
     });
     expect(result.data.posts).to.have.property('totalCount', 20);
     expect(result.data.posts).to.have.nested.property('edges[0].node.title', 'Post title 20');

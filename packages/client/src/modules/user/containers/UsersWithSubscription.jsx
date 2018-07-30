@@ -16,19 +16,23 @@ export default Component => {
 
     render() {
       const { client, orderBy, filter } = this.props;
+
       return (
         <Subscription subscription={USERS_SUBSCRIPTION} variables={{ filter }}>
           {({ data, loading }) => {
-            if (!loading) {
+            if (!loading && data.usersUpdated) {
               const {
                 usersUpdated: { mutation, node }
               } = data;
               let cachedUsers = client.readQuery({ query: USERS_QUERY, variables: { orderBy, filter } });
 
               switch (mutation) {
-                case 'CREATED':
-                  cachedUsers = addUser(cachedUsers, node);
+                case 'CREATED': {
+                  if (!isDuplicateUser(data.usersUpdated.node, cachedUsers.users)) {
+                    cachedUsers = addUser(cachedUsers, node);
+                  }
                   break;
+                }
                 case 'DELETED':
                   cachedUsers = deleteUser(cachedUsers, node.id);
                   break;
@@ -39,7 +43,7 @@ export default Component => {
                   return <Component {...this.props} />;
               }
 
-              client.writeQuery({ query: USERS_QUERY, data: cachedUsers });
+              client.writeQuery({ query: USERS_QUERY, variables: { orderBy, filter }, data: cachedUsers });
 
               return <Component {...this.props} users={cachedUsers.users} />;
             }
@@ -51,6 +55,10 @@ export default Component => {
     }
   };
 };
+
+function isDuplicateUser(newuser, existingUsers) {
+  return newuser.id !== null && existingUsers.some(doc => newuser.id === doc.id);
+}
 
 function addUser(prev, node) {
   return update(prev, {

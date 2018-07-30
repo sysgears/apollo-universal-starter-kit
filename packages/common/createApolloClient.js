@@ -112,6 +112,14 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
     }
   }
 
+  if (__TEST__) {
+    clientParams.defaultOptions = {
+      query: {
+        fetchPolicy: 'no-cache'
+      }
+    };
+  }
+
   const client = new ApolloClient(clientParams);
   client.onResetStore(linkState.writeDefaults);
 

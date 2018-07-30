@@ -64,7 +64,9 @@ const messageImage = Component => {
     }
 
     async downloadImage(path, name) {
-      const uri = 'http://192.168.0.146:8080/' + path;
+      const uri = `${window.location.protocol}//${window.location.hostname}${
+        __DEV__ ? ':8080' : window.location.port ? ':' + window.location.port : ''
+      }`;
       const downloadImage = await FileSystem.downloadAsync(uri, imageDir + name);
       return downloadImage.uri;
     }

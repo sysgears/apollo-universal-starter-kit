@@ -5,8 +5,9 @@ import { compose } from 'react-apollo';
 
 import UsersList from '../components/UsersListView';
 import UsersFilter from '../components/UsersFilterView';
-import usersWithSubscription from './UsersWithSubscription';
+import withSubscription from './UsersWithSubscription';
 import {
+  updateUsersState,
   withFilterUpdating,
   withOrderByUpdating,
   withUsers,
@@ -17,6 +18,13 @@ import {
 class Users extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidUpdate() {
+    const { usersUpdated, updateQuery } = this.props;
+    if (usersUpdated) {
+      updateUsersState(usersUpdated, updateQuery);
+    }
   }
 
   render() {
@@ -37,10 +45,9 @@ class Users extends React.Component {
 }
 
 Users.propTypes = {
-  filter: PropTypes.object,
   navigation: PropTypes.object,
-  users: PropTypes.array,
-  subscribeToMore: PropTypes.func,
+  usersUpdated: PropTypes.object,
+  updateQuery: PropTypes.func,
   loading: PropTypes.bool
 };
 
@@ -69,5 +76,6 @@ export default compose(
   withUsers,
   withUsersDeleting,
   withOrderByUpdating,
-  withFilterUpdating
-)(usersWithSubscription(Users));
+  withFilterUpdating,
+  withSubscription
+)(Users);

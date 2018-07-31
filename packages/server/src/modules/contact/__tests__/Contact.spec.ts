@@ -4,7 +4,8 @@ import { step } from 'mocha-steps';
 import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
 
 describe('Contact API works', () => {
-  let server, apollo;
+  let server: any;
+  let apollo: any;
 
   before(() => {
     server = getServer();

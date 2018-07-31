@@ -329,7 +329,7 @@ class Chat extends React.Component {
             onInputTextChanged={text => this.setMessageState(text)}
             placeholder={t('input.text')}
             keyboardShouldPersistTaps="never"
-            messages={messagesEdges.reverse()}
+            messages={messagesEdges}
             renderSend={this.renderSend}
             onSend={this.onSend}
             user={{ _id: id, name: username }}

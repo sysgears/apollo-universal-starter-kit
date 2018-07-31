@@ -7,16 +7,16 @@ const messagesFormatter = Component => {
 
     if (messages) {
       const timeDiff = moment().utcOffset() * 60000;
-      const formatMessages = messages.edges.map(
-        ({ node: { id: _id, text, userId, username, createdAt, uuid, reply, image } }) => ({
+      const formatMessages = messages.edges
+        .map(({ node: { id: _id, text, userId, username, createdAt, uuid, reply, image } }) => ({
           _id,
           text,
           createdAt: moment(moment(createdAt) + timeDiff),
           user: { _id: userId ? userId : uuid, name: username || 'Anonymous' },
           reply,
           image
-        })
-      );
+        }))
+        .reverse();
       return <Component {...props} messages={{ ...props.messages, edges: formatMessages }} />;
     } else {
       return <Component {...props} />;

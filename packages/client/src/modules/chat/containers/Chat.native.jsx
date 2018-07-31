@@ -303,13 +303,13 @@ class Chat extends React.Component {
     }
   }
 
-  renderSend = props => {
+  renderSend = chatProps => {
     const { t } = this.props;
-    return <RenderSend {...props} sendButtonName={t('input.btn')} />;
+    return <RenderSend {...chatProps} sendButtonName={t('input.btn')} />;
   };
 
-  renderCustomActions(props) {
-    return <RenderCustomActions {...props} pickImage={this.props.pickImage} />;
+  renderCustomActions(chatProps) {
+    return <RenderCustomActions {...chatProps} pickImage={this.props.pickImage} />;
   }
 
   render() {

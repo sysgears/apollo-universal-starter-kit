@@ -111,8 +111,8 @@ const messageImage = Component => {
       }
     };
 
-    pickImage = async props => {
-      const { onSend } = props;
+    pickImage = async chatProps => {
+      const { onSend } = chatProps;
       const image = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
 
       if (!image.cancelled) {

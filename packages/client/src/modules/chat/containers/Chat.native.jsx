@@ -20,6 +20,7 @@ import withUuid from './WithUuid';
 import ChatFooter from '../components/ChatFooter.native';
 import CustomView from '../components/CustomView.native';
 import RenderCustomActions from '../components/RenderCustomActions.native';
+import RenderSend from '../components/RenderSend.native';
 import messageImage from './MessageImage';
 import messagesFormatter from './MessagesFormatter';
 
@@ -300,6 +301,10 @@ class Chat extends React.Component {
     }
   }
 
+  renderSend = props => {
+    return <RenderSend {...props} sendButtonName={'Send'} />;
+  };
+
   renderCustomActions(props) {
     return <RenderCustomActions {...props} pickImage={this.props.pickImage} />;
   }
@@ -318,6 +323,7 @@ class Chat extends React.Component {
           placeholder={'Type a message...'}
           keyboardShouldPersistTaps="never"
           messages={messagesEdges.reverse()}
+          renderSend={this.renderSend}
           onSend={this.onSend}
           user={{ _id: id, name: username }}
           showAvatarForEveryMessage

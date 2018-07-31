@@ -23,6 +23,7 @@ import RenderCustomActions from '../components/RenderCustomActions.native';
 import RenderSend from '../components/RenderSend.native';
 import messageImage from './MessageImage';
 import messagesFormatter from './MessagesFormatter';
+import { Loading } from '../../common/components/native';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
@@ -310,33 +311,38 @@ class Chat extends React.Component {
   }
 
   render() {
-    const { message } = this.state;
-    const { currentUser, deleteMessage, uuid, messages } = this.props;
-    const messagesEdges = messages ? messages.edges : [];
-    const { id = uuid, username = null } = currentUser ? currentUser : {};
-    return (
-      <View style={{ flex: 1 }}>
-        <GiftedChat
-          ref={gc => (this.gc = gc)}
-          text={message}
-          onInputTextChanged={text => this.setMessageState(text)}
-          placeholder={'Type a message...'}
-          keyboardShouldPersistTaps="never"
-          messages={messagesEdges.reverse()}
-          renderSend={this.renderSend}
-          onSend={this.onSend}
-          user={{ _id: id, name: username }}
-          showAvatarForEveryMessage
-          renderChatFooter={this.renderChatFooter.bind(this)}
-          renderCustomView={this.renderCustomView}
-          renderActions={this.renderCustomActions.bind(this)}
-          onLongPress={(context, currentMessage) =>
-            this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState.bind(this))
-          }
-        />
-        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />
-      </View>
-    );
+    const { currentUser, deleteMessage, uuid, messages, loading } = this.props;
+
+    if (loading) {
+      return <Loading text={'loading'} />;
+    } else {
+      const { message } = this.state;
+      const messagesEdges = messages ? messages.edges : [];
+      const { id = uuid, username = null } = currentUser ? currentUser : {};
+      return (
+        <View style={{ flex: 1 }}>
+          <GiftedChat
+            ref={gc => (this.gc = gc)}
+            text={message}
+            onInputTextChanged={text => this.setMessageState(text)}
+            placeholder={'Type a message...'}
+            keyboardShouldPersistTaps="never"
+            messages={messagesEdges.reverse()}
+            renderSend={this.renderSend}
+            onSend={this.onSend}
+            user={{ _id: id, name: username }}
+            showAvatarForEveryMessage
+            renderChatFooter={this.renderChatFooter.bind(this)}
+            renderCustomView={this.renderCustomView}
+            renderActions={this.renderCustomActions.bind(this)}
+            onLongPress={(context, currentMessage) =>
+              this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState.bind(this))
+            }
+          />
+          <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />
+        </View>
+      );
+    }
   }
 }
 

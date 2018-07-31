@@ -15,7 +15,7 @@ const RenderSend = props => {
 };
 
 RenderSend.propTypes = {
-  sendButtonName: PropTypes.String
+  sendButtonName: PropTypes.string
 };
 
 const styles = StyleSheet.create({

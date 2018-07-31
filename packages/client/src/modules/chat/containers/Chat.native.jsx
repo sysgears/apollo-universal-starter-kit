@@ -228,10 +228,11 @@ class Chat extends React.Component {
   };
 
   onLongPress(context, currentMessage, id, deleteMessage, setEditState) {
-    const options = ['Copy Text', 'Reply'];
+    const { t } = this.props;
+    const options = [t('msg.btn.copy'), t('msg.btn.reply')];
 
     if (id === currentMessage.user._id) {
-      options.push('Edit', 'Delete');
+      options.push(t('msg.btn.edit'), t('msg.btn.delete'));
     }
 
     context.actionSheet().showActionSheetWithOptions(
@@ -303,7 +304,8 @@ class Chat extends React.Component {
   }
 
   renderSend = props => {
-    return <RenderSend {...props} sendButtonName={'Send'} />;
+    const { t } = this.props;
+    return <RenderSend {...props} sendButtonName={t('input.btn')} />;
   };
 
   renderCustomActions(props) {
@@ -311,10 +313,10 @@ class Chat extends React.Component {
   }
 
   render() {
-    const { currentUser, deleteMessage, uuid, messages, loading } = this.props;
+    const { currentUser, deleteMessage, uuid, messages, loading, t } = this.props;
 
     if (loading) {
-      return <Loading text={'loading'} />;
+      return <Loading text={t('loading')} />;
     } else {
       const { message } = this.state;
       const messagesEdges = messages ? messages.edges : [];
@@ -325,7 +327,7 @@ class Chat extends React.Component {
             ref={gc => (this.gc = gc)}
             text={message}
             onInputTextChanged={text => this.setMessageState(text)}
-            placeholder={'Type a message...'}
+            placeholder={t('input.text')}
             keyboardShouldPersistTaps="never"
             messages={messagesEdges.reverse()}
             renderSend={this.renderSend}

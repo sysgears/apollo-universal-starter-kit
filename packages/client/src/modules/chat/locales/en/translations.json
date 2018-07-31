@@ -1,3 +1,18 @@
 {
-  "navLink": "Chat"
+  "navLink": "Chat",
+  "loading": "Loading...",
+
+  "msg": {
+    "btn": {
+      "copy": "Copy",
+      "reply": "Reply",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  },
+
+  "input": {
+    "text": "Type a message...",
+    "btn": "Send"
+  }
 }

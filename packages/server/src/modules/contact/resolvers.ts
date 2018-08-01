@@ -1,7 +1,14 @@
-/*eslint-disable no-unused-vars*/
-export default pubsub => ({
+interface ContactInput {
+  input: {
+    name: string;
+    email: string;
+    content: string;
+  };
+}
+
+export default () => ({
   Mutation: {
-    async contact(obj, { input }, context) {
+    async contact(obj: any, { input }: ContactInput, context: any) {
       try {
         if (context.mailer) {
           context.mailer.sendMail({

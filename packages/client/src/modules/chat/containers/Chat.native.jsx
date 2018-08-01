@@ -222,7 +222,7 @@ class Chat extends React.Component {
     }
   };
 
-  onLongPress(context, currentMessage, id, deleteMessage, setEditState) {
+  onLongPress = (context, currentMessage, id, deleteMessage, setEditState) => {
     const { t } = this.props;
     const options = [t('msg.btn.copy'), t('msg.btn.reply')];
 
@@ -254,49 +254,41 @@ class Chat extends React.Component {
         }
       }
     );
-  }
+  };
 
-  setEditState(
-    message,
-    {
-      _id: id,
-      text,
-      createdAt,
-      user: { _id: userId, name: username }
-    }
-  ) {
+  setEditState = (message, { _id: id, text, createdAt, user: { _id: userId, name: username } }) => {
     this.setState({ isEdit: true, message, messageInfo: { id, text, createdAt, userId, username } });
     this.gc.focusTextInput();
-  }
+  };
 
-  setReplyState({ _id: id, text, user: { name: username } }) {
+  setReplyState = ({ _id: id, text, user: { name: username } }) => {
     this.setState({ isReply: true, quotedMessage: { id, text, username } });
     this.gc.focusTextInput();
-  }
+  };
 
-  renderChatFooter() {
+  renderChatFooter = () => {
     if (this.state.isReply) {
       const { quotedMessage } = this.state;
       return <ChatFooter {...quotedMessage} undoReply={this.clearReplyState.bind(this)} />;
     }
-  }
+  };
 
-  clearReplyState() {
+  clearReplyState = () => {
     this.setState({ isReply: false, quotedMessage: null });
-  }
+  };
 
-  renderCustomView(chatProps) {
+  renderCustomView = chatProps => {
     return <CustomView {...chatProps} />;
-  }
+  };
 
   renderSend = chatProps => {
     const { t } = this.props;
     return <Send {...chatProps} label={t('input.btn')} />;
   };
 
-  renderCustomActions(chatProps) {
+  renderCustomActions = chatProps => {
     return <RenderCustomActions {...chatProps} pickImage={this.props.pickImage} />;
-  }
+  };
 
   render() {
     const { currentUser, deleteMessage, uuid, messages, loading, t } = this.props;
@@ -320,11 +312,11 @@ class Chat extends React.Component {
             onSend={this.onSend}
             user={{ _id: id, name: username }}
             showAvatarForEveryMessage
-            renderChatFooter={this.renderChatFooter.bind(this)}
+            renderChatFooter={this.renderChatFooter}
             renderCustomView={this.renderCustomView}
-            renderActions={this.renderCustomActions.bind(this)}
+            renderActions={this.renderCustomActions}
             onLongPress={(context, currentMessage) =>
-              this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState.bind(this))
+              this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
             }
           />
           <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />

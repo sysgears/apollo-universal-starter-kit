@@ -62,17 +62,17 @@ const messageImage = Component => {
       this.checkImages();
     }
 
-    checkImages() {
+    checkImages = () => {
       const { messages, endCursor } = this.state;
       if (messages && endCursor < messages.pageInfo.endCursor) {
         this.addImageToMessage();
       }
-    }
+    };
 
-    async downloadImage(path, name) {
+    downloadImage = async (path, name) => {
       const downloadImage = await FileSystem.downloadAsync(serverUrl + '/' + path, imageDir + name);
       return downloadImage.uri;
-    }
+    };
 
     addImageToMessage = async () => {
       const {
@@ -126,10 +126,10 @@ const messageImage = Component => {
       }
     };
 
-    receiveImageName(uri) {
+    receiveImageName = uri => {
       const reg = /((\w|-)*.\w*)$/;
       return uri.match(reg)[0];
-    }
+    };
 
     render() {
       return <Component {...this.props} messages={this.state.messages} pickImage={this.pickImage} />;

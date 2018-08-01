@@ -8,5 +8,4 @@ fragment MessageInfo on Message {
   reply
   name
   path
-  attachment_id
 }

@@ -4,7 +4,6 @@ import { View, KeyboardAvoidingView, Clipboard } from 'react-native';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
-import { ReactNativeFile } from 'apollo-upload-client';
 
 import translate from '../../../i18n';
 import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
@@ -12,8 +11,6 @@ import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
-import UPLOAD_IMAGE from '../graphql/UploadImage.graphql';
-// import IMAGE_QUERY from '../graphql/ImageQuery.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 import withUuid from './WithUuid';
 import ChatFooter from '../components/ChatFooter.native';
@@ -350,36 +347,6 @@ export default compose(
       return { loading, messages, subscribeToMore, refetch };
     }
   }),
-  // graphql(IMAGE_QUERY, {
-  //   options: () => {
-  //     const id = 1;
-  //     return {
-  //       variables: { id }
-  //     };
-  //   },
-  //   props({ data: { error, image, subscribeToMore, refetch } }) {
-  //     if (error) throw new Error(error);
-  //     return { image, subscribeToMore, refetch };
-  //   }
-  // }),
-  graphql(UPLOAD_IMAGE, {
-    props: ({ ownProps: { refetch }, mutate }) => ({
-      uploadImage: async image => {
-        const file = new ReactNativeFile({ uri: image.uri, type: 'image/jpeg', name: 'photo.jpg' });
-        try {
-          const {
-            data: { image: uploadImage }
-          } = await mutate({
-            variables: { image: file }
-          });
-          refetch();
-          return uploadImage;
-        } catch (e) {
-          return { error: e.graphQLErrors[0].message };
-        }
-      }
-    })
-  }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
       addMessage: async ({ text, userId, username, uuid, reply, image }) => {
@@ -409,8 +376,7 @@ export default compose(
               id: null,
               reply: reply,
               name: image ? image.name : null,
-              path: image ? image.uri : null,
-              attachment_id: null
+              path: image ? image.uri : null
             }
           }
         });
@@ -447,7 +413,7 @@ export default compose(
   }),
   graphql(EDIT_MESSAGE, {
     props: ({ mutate }) => ({
-      editMessage: ({ text, id, createdAt, userId = null, username, uuid }) => {
+      editMessage: ({ text, id, createdAt, userId, username, uuid }) => {
         mutate({
           variables: { input: { text, id } },
           optimisticResponse: {
@@ -462,7 +428,6 @@ export default compose(
               reply: null,
               name: null,
               path: null,
-              attachment_id: null,
               __typename: 'Message'
             }
           },

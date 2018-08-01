@@ -1,9 +1,0 @@
-query imageQuery($id: Int!) {
-  image(id: $id) {
-    id
-    name
-    type
-    size
-    path
-  }
-}

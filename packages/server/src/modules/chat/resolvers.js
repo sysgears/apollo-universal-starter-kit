@@ -1,4 +1,3 @@
-import { GraphQLUpload } from 'apollo-upload-server';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
 import shell from 'shelljs';
@@ -67,16 +66,9 @@ export default pubsub => ({
     },
     message(obj, { id }, { Chat }) {
       return Chat.message(id);
-    },
-    image(obj, { id }, { Chat }) {
-      return Chat.image(id);
     }
   },
   Mutation: {
-    async uploadImage(obj, { image }, { Upload }) {
-      const results = await processUpload(image);
-      return Upload.saveFiles(results);
-    },
     async addMessage(obj, { input }, context) {
       const { Chat, user } = context;
       const { attachment = null } = input;
@@ -146,6 +138,5 @@ export default pubsub => ({
     messagesUpdated: {
       subscribe: () => pubsub.asyncIterator(MESSAGES_SUBSCRIPTION)
     }
-  },
-  UploadAttachment: GraphQLUpload
+  }
 });

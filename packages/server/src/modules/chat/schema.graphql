@@ -11,7 +11,6 @@ type Message {
   reply: Int
   name: String
   path: String
-  attachment_id: Int
 }
 
 # Edges for Messages
@@ -33,26 +32,14 @@ type Messages {
   pageInfo: MessagePageInfo
 }
 
-#Image
-type Image {
-  id: Int!
-  name: String!
-  type: String!
-  size: String!
-  path: String!
-}
-
 extend type Query {
   # Messages
   messages(limit: Int, after: Int): Messages
   # Message
   message(id: Int!): Message
-  # Image
-  image(id: Int!): Image
 }
 
 extend type Mutation {
-  uploadImage(image: UploadAttachment!): Boolean!
   # Create new message
   addMessage(input: AddMessageInput!): Message
   # Delete a message

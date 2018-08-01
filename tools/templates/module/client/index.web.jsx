@@ -9,7 +9,7 @@ import Feature from '../connector';
 export default new Feature({
   route: <Route exact path="/$module$" component={$Module$} />,
   navItem: (
-    <MenuItem key="$module$">
+    <MenuItem key="/$module$">
       <NavLink to="/$module$" className="nav-link" activeClassName="active">
         $Module$
       </NavLink>

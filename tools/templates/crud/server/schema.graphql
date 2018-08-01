@@ -1,0 +1,64 @@
+### schema type definitions
+type $Module$ {
+  id: Int!
+  name: String!
+}
+### end schema type definitions
+
+type $Module$Connection {
+  pageInfo: PageInfo
+  edges: [$Module$]
+}
+
+type $Module$Data {
+  node: $Module$
+}
+
+type $Module$Payload {
+  node: $Module$
+  errors: [FieldError!]
+}
+
+input $Module$FilterInput {
+  searchText: String
+}
+
+input $Module$CreateInput {
+  name: String!
+}
+
+input $Module$UpdateInput {
+  name: String
+}
+
+input $Module$WhereUniqueInput {
+  id: Int!
+}
+
+input $Module$WhereInput {
+  id_in: [Int!]
+}
+
+extend type Query {
+  $module$s(limit: Int, offset: Int, orderBy: OrderByInput, filter: $Module$FilterInput): [$Module$]
+  $module$sConnection(limit: Int, offset: Int, orderBy: OrderByInput, filter: $Module$FilterInput): $Module$Connection!
+  $module$(where: $Module$WhereUniqueInput!): $Module$Data
+}
+
+extend type Mutation {
+  create$Module$(data: $Module$CreateInput!): $Module$Payload!
+  update$Module$(data: $Module$UpdateInput!, where: $Module$WhereUniqueInput!): $Module$Payload!
+  delete$Module$(where: $Module$WhereUniqueInput!): $Module$Payload!
+  sort$Module$s(data: [Int!]): BatchPayload!
+  updateMany$Module$s(data: $Module$UpdateInput!, where: $Module$WhereInput!): BatchPayload!
+  deleteMany$Module$s(where: $Module$WhereInput!): BatchPayload!
+}
+
+extend type Subscription {
+  $module$sUpdated: Update$Module$Payload
+}
+
+type Update$Module$Payload {
+  mutation: String!
+  node: $Module$!
+}

@@ -1,0 +1,11 @@
+mutation delete$Module$($where: $Module$WhereUniqueInput!) {
+  delete$Module$(where: $where) {
+    node {
+      id
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

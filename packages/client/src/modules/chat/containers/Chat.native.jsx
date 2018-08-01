@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, KeyboardAvoidingView, Clipboard } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, Send } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
 import moment from 'moment';
@@ -20,7 +20,6 @@ import withUuid from './WithUuid';
 import ChatFooter from '../components/ChatFooter.native';
 import CustomView from '../components/CustomView.native';
 import RenderCustomActions from '../components/RenderCustomActions.native';
-import RenderSend from '../components/RenderSend.native';
 import messageImage from './MessageImage';
 import messagesFormatter from './MessagesFormatter';
 import { Loading } from '../../common/components/native';
@@ -296,7 +295,7 @@ class Chat extends React.Component {
 
   renderSend = chatProps => {
     const { t } = this.props;
-    return <RenderSend {...chatProps} sendButtonName={t('input.btn')} />;
+    return <Send {...chatProps} label={t('input.btn')} />;
   };
 
   renderCustomActions(chatProps) {

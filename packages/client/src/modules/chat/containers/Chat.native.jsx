@@ -290,17 +290,8 @@ class Chat extends React.Component {
     this.setState({ isReply: false, quotedMessage: null });
   }
 
-  renderCustomView() {
-    if (this.currentMessage.reply) {
-      const quotedMessage = this.messages.filter(item => this.currentMessage.reply === item._id)[0];
-      if (quotedMessage) {
-        const {
-          text,
-          user: { name: username }
-        } = quotedMessage;
-        return <CustomView username={username} text={text} />;
-      }
-    }
+  renderCustomView(chatProps) {
+    return <CustomView {...chatProps} />;
   }
 
   renderSend = chatProps => {

@@ -1,11 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
 const CustomView = props => {
   const {
     messages,
-    currentMessage: { loadingImage, reply }
+    currentMessage: {
+      loadingImage,
+      reply,
+      user: { _id: id }
+    },
+    user: { _id: userId }
   } = props;
 
   if (loadingImage) {
@@ -21,15 +26,21 @@ const CustomView = props => {
     if (replyMessage) {
       const {
         text,
+        image,
         user: { name }
       } = replyMessage;
-
+      const color = userId === id ? styles.ownColorText : styles.colorText;
       return (
         <View style={styles.container}>
-          <View style={styles.messageInfo}>
-            <Text style={styles.username}>{name}</Text>
-            <Text style={styles.text}>{text}</Text>
-          </View>
+          <Text style={[styles.username, color]}>{name}</Text>
+          <Image style={styles.image} source={{ uri: image ? image : null }} />
+          <Text style={color}>{text}</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.status}>{'Deleted message'}</Text>
         </View>
       );
     }
@@ -39,12 +50,16 @@ const CustomView = props => {
 
 CustomView.propTypes = {
   messages: PropTypes.array,
-  currentMessage: PropTypes.object
+  currentMessage: PropTypes.object,
+  user: PropTypes.object
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5
+    margin: 5,
+    paddingBottom: 2,
+    borderBottomWidth: 1,
+    borderBottomColor: '#00468A'
   },
 
   uploading: {
@@ -55,25 +70,27 @@ const styles = StyleSheet.create({
     margin: 3
   },
 
-  messageInfo: {
-    backgroundColor: '#005CB5',
-    borderRadius: 15,
-    borderLeftWidth: 15,
-    borderLeftColor: '#00468A'
+  status: {
+    color: '#333',
+    fontStyle: 'italic'
   },
 
   username: {
-    color: 'white',
-    paddingHorizontal: 10,
     paddingTop: 5,
     fontWeight: '700'
   },
 
-  text: {
-    color: 'white',
-    paddingHorizontal: 10,
-    paddingTop: 5,
-    paddingBottom: 5
+  image: {
+    width: 120,
+    height: 50
+  },
+
+  colorText: {
+    color: '#000'
+  },
+
+  ownColorText: {
+    color: '#fff'
   }
 });
 

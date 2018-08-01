@@ -180,7 +180,6 @@
     "native-base": "^2.3.5",
     "react-native": "0.55.3",
     "react-native-uuid": "^1.4.9",
-    "moment": "^2.22.2",
     "react-native-elements": "^0.19.1",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-modal": "^5.4.0",

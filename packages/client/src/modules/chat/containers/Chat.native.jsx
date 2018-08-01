@@ -4,7 +4,6 @@ import { View, KeyboardAvoidingView, Clipboard } from 'react-native';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
-import moment from 'moment';
 import { ReactNativeFile } from 'apollo-upload-client';
 
 import translate from '../../../i18n';
@@ -402,9 +401,7 @@ export default compose(
             __typename: 'Mutation',
             addMessage: {
               __typename: 'Message',
-              createdAt: moment()
-                .utc()
-                .format('YYYY-MM-DD hh:mm:ss'),
+              createdAt: new Date(),
               text: text,
               username: username,
               userId: userId,
@@ -460,7 +457,7 @@ export default compose(
               text: text,
               userId: userId,
               username: username,
-              createdAt: moment(moment(createdAt) - moment().utcOffset() * 60000).format('YYYY-MM-DD hh:mm:ss'),
+              createdAt: createdAt,
               uuid: uuid,
               reply: null,
               name: null,

@@ -1,4 +1,5 @@
 import React from 'react';
+import * as uuidGenerator from 'react-native-uuid';
 
 const messagesFormatter = Component => {
   return props => {
@@ -6,8 +7,9 @@ const messagesFormatter = Component => {
 
     if (messages) {
       const formatMessages = messages.edges
-        .map(({ node: { id: _id, text, userId, username, createdAt, uuid, reply, image, path } }) => {
+        .map(({ node: { id, text, userId, username, createdAt, uuid, reply, image, path } }) => {
           const newCreatedAt = (createdAt + '').search(/T/) === -1 ? createdAt.replace(' ', 'T') : createdAt;
+          const _id = id ? id : uuidGenerator.v4();
           const time = new Date(Date.parse(newCreatedAt));
           return {
             _id,

@@ -8,7 +8,9 @@ const {
   manifest: { bundleUrl }
 } = Constants;
 const { protocol, port, hostname } = url.parse(__API_URL__);
-const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl).hostname : hostname}:${port}`;
+const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl).hostname : hostname}${
+  port ? ':' + port : ''
+}`;
 const maxImageSize = 1000000;
 const imageDir = FileSystem.cacheDirectory + 'ImagePicker/';
 const imagePickerOptions = {

@@ -1,26 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import { Keyboard, View, StyleSheet } from 'react-native';
+import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, FormView, Button } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { email, minLength, required, validateForm } from '../../../../../common/validation';
+// import { email, minLength, required, validateForm } from '../../../../../common/validation';
+//
+// const contactFormSchema = {
+//   name: [required, minLength(3)],
+//   email: [required, email],
+//   content: [required, minLength(10)]
+// };
 
-const contactFormSchema = {
-  name: [required, minLength(3)],
-  email: [required, email],
-  content: [required, minLength(10)]
-};
-
-const validate = values => validateForm(values, contactFormSchema);
-
-const ContactForm = ({ values, handleSubmit, t }) => {
+const ContactForm = ({ values, handleSubmit, t, errors, status }) => {
   return (
     <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
+      {status && status.sent && <Text>{t('form.submitMsg')}</Text>}
       <View style={styles.formContainer}>
         <View>
           <Field
@@ -50,6 +49,7 @@ const ContactForm = ({ values, handleSubmit, t }) => {
           />
         </View>
         <View style={styles.submit}>
+          {errors._error && <Text color="error">{errors._error}</Text>}
           <Button onPress={handleSubmit}>{t('form.btnSubmit')}</Button>
         </View>
       </View>
@@ -60,10 +60,8 @@ const ContactForm = ({ values, handleSubmit, t }) => {
 
 ContactForm.propTypes = {
   handleSubmit: PropTypes.func,
-  onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
-  error: PropTypes.string,
-  sent: PropTypes.bool,
+  errors: PropTypes.object,
+  status: PropTypes.object,
   values: PropTypes.object,
   t: PropTypes.func
 };
@@ -83,19 +81,27 @@ const styles = StyleSheet.create({
 
 const ContactFormWithFormik = withFormik({
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-
-  handleSubmit(
+  async handleSubmit(
     values,
     {
       resetForm,
+      setErrors,
+      setStatus,
       props: { onSubmit }
     }
   ) {
     Keyboard.dismiss();
-    onSubmit(values);
-    resetForm();
+
+    try {
+      await onSubmit(values);
+      resetForm();
+      setStatus({ sent: true });
+    } catch (e) {
+      setStatus({ sent: false });
+      setErrors(e);
+    }
   },
-  validate: values => validate(values),
+  // validate: values => validateForm(values, contactFormSchema),
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 

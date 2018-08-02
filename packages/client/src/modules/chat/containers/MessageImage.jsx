@@ -111,24 +111,20 @@ const messageImage = Component => {
       }
     };
 
-    pickImage = async chatProps => {
-      const { onSend } = chatProps;
-      const image = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
-
-      if (!image.cancelled) {
-        const { size } = await FileSystem.getInfoAsync(image.uri);
+    pickImage = async ({ onSend }) => {
+      const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
+      if (!cancelled) {
+        const { size } = await FileSystem.getInfoAsync(uri);
         if (size <= maxImageSize) {
-          const type = mime.lookup(image.uri);
-          const name = this.receiveImageName(image.uri);
-          const imageData = new ReactNativeFile({ uri: image.uri, type, name });
-          onSend({ image: imageData });
+          const type = mime.lookup(uri);
+          const reg = /[^\\/]*\.\w+$/;
+          if (reg.test(uri)) {
+            const name = uri.match(reg)[0];
+            const imageData = new ReactNativeFile({ uri, type, name });
+            onSend({ image: imageData });
+          }
         }
       }
-    };
-
-    receiveImageName = uri => {
-      const reg = /((\w|-)*.\w*)$/;
-      return uri.match(reg)[0];
     };
 
     render() {

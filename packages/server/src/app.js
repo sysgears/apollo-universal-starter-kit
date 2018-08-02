@@ -58,7 +58,7 @@ if (__DEV__) {
 }
 
 if (module.hot) {
-  module.hot.accept(['./middleware/website', './graphql']);
+  module.hot.accept(['./middleware/website']);
 }
 
 export default app;

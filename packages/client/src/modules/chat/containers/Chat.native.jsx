@@ -360,7 +360,7 @@ export default compose(
             __typename: 'Mutation',
             addMessage: {
               __typename: 'Message',
-              createdAt: new Date(),
+              createdAt: new Date().toISOString(),
               text: text,
               username: username,
               userId: userId,
@@ -415,7 +415,7 @@ export default compose(
               text: text,
               userId: userId,
               username: username,
-              createdAt: createdAt,
+              createdAt: createdAt.toISOString(),
               uuid: uuid,
               reply: null,
               name: null,

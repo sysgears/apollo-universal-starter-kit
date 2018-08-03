@@ -2,15 +2,18 @@
   "navLink": "Contact Us",
   "title": "Contact Us",
   "meta": "Contact us example page",
-  "errorMsg": "Contact request failed!",
   "form": {
     "title": "Contact Us",
-    "submitMsg": "Thank you for contacting us!",
     "field": {
       "name": "Name",
       "email": "Email",
       "content": "Content"
     },
     "btnSubmit": "Send"
-  }
+  },
+  "modal": {
+    "btnMsg": "OK"
+  },
+  "errorMsg": "Contact request failed! Try again later.",
+  "successMsg": "Thank you for contacting us!"
 }

@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import { Keyboard, View, StyleSheet } from 'react-native';
+import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
-import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
-import { RenderField, FormView, Button } from '../../common/components/native';
+import { RenderField, FormView, Button, Modal, danger, success } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
 
@@ -16,54 +15,57 @@ const contactFormSchema = {
   content: [required, minLength(10)]
 };
 
-const validate = values => validateForm(values, contactFormSchema);
-
-const ContactForm = ({ values, handleSubmit, t }) => {
-  return (
-    <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
-      <View style={styles.formContainer}>
-        <View>
-          <Field
-            name="name"
-            component={RenderField}
-            type="text"
-            placeholder={t('form.field.name')}
-            value={values.name}
-            placeholderTextColor={placeholderColor}
-          />
-          <Field
-            name="email"
-            component={RenderField}
-            type="text"
-            placeholder={t('form.field.email')}
-            value={values.email}
-            keyboardType="email-address"
-            placeholderTextColor={placeholderColor}
-          />
-          <Field
-            name="content"
-            component={RenderField}
-            type="textarea"
-            placeholder={t('form.field.content')}
-            value={values.content}
-            placeholderTextColor={placeholderColor}
-          />
-        </View>
-        <View style={styles.submit}>
-          <Button onPress={handleSubmit}>{t('form.btnSubmit')}</Button>
-        </View>
+const ContactForm = ({ values, handleSubmit, t, errors, status, setStatus }) => (
+  <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
+    <Modal isVisible={status && status.showModal} onBackdropPress={setStatus}>
+      <View style={styles.modal}>
+        <Text style={styles.modalText}>{errors._error ? errors._error : t('successMsg')}</Text>
+        <Button type={errors._error ? danger : success} onPress={setStatus}>
+          {t('modal.btnMsg')}
+        </Button>
       </View>
-      <KeyboardSpacer />
-    </FormView>
-  );
-};
+    </Modal>
+    <View style={styles.formContainer}>
+      <View>
+        <Field
+          name="name"
+          component={RenderField}
+          type="text"
+          placeholder={t('form.field.name')}
+          value={values.name}
+          placeholderTextColor={placeholderColor}
+        />
+        <Field
+          name="email"
+          component={RenderField}
+          type="text"
+          placeholder={t('form.field.email')}
+          value={values.email}
+          keyboardType="email-address"
+          placeholderTextColor={placeholderColor}
+        />
+        <Field
+          name="content"
+          component={RenderField}
+          type="textarea"
+          placeholder={t('form.field.content')}
+          value={values.content}
+          placeholderTextColor={placeholderColor}
+        />
+      </View>
+      <View style={styles.submit}>
+        <Button onPress={handleSubmit}>{t('form.btnSubmit')}</Button>
+      </View>
+    </View>
+    <KeyboardSpacer />
+  </FormView>
+);
 
 ContactForm.propTypes = {
   handleSubmit: PropTypes.func,
-  onSubmit: PropTypes.func,
-  submitting: PropTypes.bool,
-  error: PropTypes.string,
-  sent: PropTypes.bool,
+  setStatus: PropTypes.func,
+  errors: PropTypes.object,
+  status: PropTypes.object,
   values: PropTypes.object,
   t: PropTypes.func
 };
@@ -74,6 +76,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
+  modal: {
+    backgroundColor: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 15
+  },
+  modalText: {
+    textAlign: 'center',
+    paddingBottom: 15
+  },
   formView: {
     flex: 1,
     alignSelf: 'stretch'
@@ -83,20 +95,28 @@ const styles = StyleSheet.create({
 
 const ContactFormWithFormik = withFormik({
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-
-  handleSubmit(
+  async handleSubmit(
     values,
     {
       resetForm,
+      setErrors,
+      setStatus,
       props: { onSubmit }
     }
   ) {
     Keyboard.dismiss();
-    onSubmit(values);
-    resetForm();
+
+    try {
+      await onSubmit(values);
+      resetForm();
+    } catch (e) {
+      setErrors(e);
+    }
+
+    setStatus({ showModal: true });
   },
-  validate: values => validate(values),
+  validate: values => validateForm(values, contactFormSchema),
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 
-export default translate('contact')(ContactFormWithFormik(ContactForm));
+export default ContactFormWithFormik(ContactForm);

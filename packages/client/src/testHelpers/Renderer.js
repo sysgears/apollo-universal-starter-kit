@@ -17,6 +17,8 @@ import serverModules from '../../../server/src/modules';
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;
 global.window = dom.window;
+// Needed by Formik >= 1.x
+global.HTMLButtonElement = dom.window.HTMLButtonElement;
 global.navigator = dom.window.navigator;
 
 const { render } = require('./testUtils');

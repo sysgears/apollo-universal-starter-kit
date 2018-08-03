@@ -18,6 +18,7 @@ import modules from '../modules';
 import schema from '../api/schema';
 
 let assetMap;
+const playgroundUrl = '/gplayground';
 
 const renderServerSide = async (req, res) => {
   const clientModules = require('../../../client/src/modules').default;
@@ -79,7 +80,9 @@ const renderServerSide = async (req, res) => {
 
 export default async (req, res, next) => {
   try {
-    if (req.path.indexOf('.') < 0 && __SSR__) {
+    if (req.url === playgroundUrl) {
+      return next();
+    } else if (req.path.indexOf('.') < 0 && __SSR__) {
       return await renderServerSide(req, res);
     } else if (!__SSR__ && req.method === 'GET') {
       res.sendFile(path.resolve(__FRONTEND_BUILD_DIR__, 'index.html'));

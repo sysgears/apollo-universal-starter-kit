@@ -43,7 +43,7 @@ git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
 cd apollo-universal-starter-kit
 ```
 
-2. Install dependencies.
+2. Install dependencies (make sure you have yarn >= `1.0.0`).
 
 ```
 yarn
@@ -75,6 +75,10 @@ compilation tools are needed in order to develop native mobile applications with
 and mobile versions of your app at the same time connected to the same backend.
 
 For running Android or iOS you need to set in `packages/mobile/.spinrc.js` `config.builders.ios.enabled` and/or `config.builders.android.enabled` field `true`.
+
+### Configuring IDE/Editor
+
+Make sure to enable `eslint` and `tslint` integration in your Editor or IDE this will save you from many little and big traps when working with the code.
 
 #### Running on a device
 
@@ -141,6 +145,18 @@ extension and just use `MyComponent.jsx`. Same applies if you just wish to use i
 Currently `counter` example is implemented to support web and mobile version. If you want to try running
 `CounterView.jsx` as `universal` component, just delete or rename `CounterView.web.jsx` and you can see how the same
 component can be used for both web and mobile.
+
+#### Writing modules in TypeScript
+
+The starter kit supports both modules written in ES6 JavaScript and TypeScript. You can have a mix - some modules or even parts of modules written in ES6 and some in TypeScript.
+
+When writting TypeScript modules you can face some pitfalls. The general discussion about TypeScript pitfalls will be handled [here](https://github.com/sysgears/apollo-universal-starter-kit/issues/785). The recipes from discussion will be mirrored into this section of documentation.
+
+Known pitfalls:
+- TypeScript has limited support for the code using custom extensions. All the code targeted for web platform should have extension `somefile.ts`, because of that, not `somefile.web.ts`, so that the TS compiler can find it. And if the same file has different implementation for mobile platforms, it should have extension `somefile.native.ts`. In JavaScript code when you import `somefile` you never include per-platform extension, i.e. you never import `somefile.native`, because extension is determined at compile time automatically for you. With TypeScript the situation is different, `somefile` and `somefile.naitve.ts` might export different interfaces and in this case you will have to import `somefile.native`.
+- `locales/index.js` must be kept in JavaScript for now, if you rename it to have `.ts` extension you will run into incompatibilities between `@alienfast/i18next-loader` and TypeScript compiler. This can be fixed by making changes to `@alienfast/i18next-loader`.
+- When using stateless JSX component written in JavaScript from within TypeScript code you can get error `TS2322` - missing key, despite the fact that key in question is declared optional. The known workaround for now is to convert this component to stateful JSX component.
+- `tslint` complains that the module is missing, though it is present in `peerDependencies`. `tslint` checks `dependencies` and either `peerDependencies` or `devDependencies`, not both, hence we face this problem. We have configured `tslint` to look into `dependencies`, `devDependencies` and `optionalDependencies`, this is the best that can be reached at the moment. Hence you can work around this issue by switching from using `peerDependencies` in `package.json` to `optionalDependencies`, this way both `eslint` and `tslint` find all needed modules.
 
 #### Known issues
 
@@ -369,7 +385,7 @@ aims to represent generally accepted guidelines and patterns for building scalab
 │   │       ├── database       # Database migrations and seeds
 │   │       │   └── migrations # Database migration scripts using Knex
 │   │       │   └── seeds      # Database seed scripts using Knex
-│   │       ├── middleware     # Graphiql, GraphQL express and SSR rendering
+│   │       ├── middleware     # GraphQL Playground, GraphQL express and SSR rendering
 │   │       ├── modules        # Back-end server feature-modules, each module has:
 │   │       │                  # (schema definition, resolvers, sql queries)
 │   │       ├── sql            # Knex connector

@@ -13,7 +13,9 @@
     "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.js\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.js\"",
     "test": "yarn tests && yarn lint",
-    "lint": "eslint --fix --ext js --ext jsx --ext json src config",
+    "eslint": "eslint --fix --ext js --ext jsx --ext json src",
+    "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
+    "lint": "yarn eslint && yarn tslint",
     "watch": "spin watch",
     "heroku-postbuild": "yarn build",
     "cli": "node ../../tools/cli"
@@ -93,10 +95,17 @@
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
-    "@alienfast/i18next-loader": "^1.0.14",
-    "@types/react": "^16.0.38",
+    "@alienfast/i18next-loader": "^1.0.16",
+    "@types/chai": "^4.1.4",
+    "@types/lodash": "^4.14.112",
+    "@types/mocha": "^5.2.5",
+    "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.5",
+    "@types/react-helmet": "^5.0.6",
     "@types/react-native": "^0.55.7",
+    "@types/react-navigation": "^2.0.11",
+    "@types/react-redux": "^6.0.4",
+    "@types/react-router-dom": "^4.2.7",
     "@types/webpack-env": "^1.13.6",
     "apollo-utilities": "^1.0.3",
     "autoprefixer": "^8.3.0",
@@ -172,7 +181,7 @@
     "webpack-sources": "^1.1.0",
     "webpack-virtual-modules": "^0.1.10"
   },
-  "peerDependencies": {
+  "optionalDependencies": {
     "@expo/vector-icons": "^6.2.1",
     "antd-mobile": "^2.1.2",
     "expo": "^27.0.2",
@@ -181,7 +190,7 @@
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",
-    "react-navigation": "^1.5.11",
+    "react-navigation": "^2.0.0",
     "spinjs": "^0.4.0"
   }
 }

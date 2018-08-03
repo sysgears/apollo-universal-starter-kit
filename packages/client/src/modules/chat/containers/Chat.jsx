@@ -13,7 +13,7 @@ import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 import withUuid from './WithUuid';
-import ChatFooterNative from '../components/ChatFooter';
+import ChatFooter from '../components/ChatFooter';
 import CustomView from '../components/CustomView';
 import RenderCustomActions from '../components/RenderCustomActions';
 import messageImage from './MessageImage';
@@ -115,7 +115,8 @@ class Chat extends React.Component {
     subscribeToMore: PropTypes.func.isRequired,
     currentUser: PropTypes.object,
     uuid: PropTypes.string,
-    pickImage: PropTypes.func
+    pickImage: PropTypes.func,
+    images: PropTypes.bool
   };
 
   constructor(props) {
@@ -269,7 +270,7 @@ class Chat extends React.Component {
   renderChatFooter = () => {
     if (this.state.isReply) {
       const { quotedMessage } = this.state;
-      return <ChatFooterNative {...quotedMessage} undoReply={this.clearReplyState.bind(this)} />;
+      return <ChatFooter {...quotedMessage} undoReply={this.clearReplyState.bind(this)} />;
     }
   };
 
@@ -278,7 +279,8 @@ class Chat extends React.Component {
   };
 
   renderCustomView = chatProps => {
-    return <CustomView {...chatProps} />;
+    const { images } = this.props;
+    return <CustomView {...chatProps} images={images} />;
   };
 
   renderSend = chatProps => {
@@ -287,7 +289,10 @@ class Chat extends React.Component {
   };
 
   renderCustomActions = chatProps => {
-    return <RenderCustomActions {...chatProps} pickImage={this.props.pickImage} />;
+    const { images } = this.props;
+    if (images) {
+      return <RenderCustomActions {...chatProps} pickImage={this.props.pickImage} />;
+    }
   };
 
   render() {

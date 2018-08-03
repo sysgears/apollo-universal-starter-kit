@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 const CustomView = props => {
   const {
     messages,
+    images,
     currentMessage: {
       loadingImage,
       reply,
@@ -13,7 +14,7 @@ const CustomView = props => {
     user: { _id: userId }
   } = props;
 
-  if (loadingImage) {
+  if (images && loadingImage) {
     return (
       <View style={styles.uploading}>
         <ActivityIndicator size="large" color="#0000ff" />
@@ -51,7 +52,8 @@ const CustomView = props => {
 CustomView.propTypes = {
   messages: PropTypes.array,
   currentMessage: PropTypes.object,
-  user: PropTypes.object
+  user: PropTypes.object,
+  images: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

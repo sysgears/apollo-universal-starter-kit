@@ -3,6 +3,7 @@ import { Constants, FileSystem, ImagePicker } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import url from 'url';
+import PropTypes from 'prop-types';
 
 const {
   manifest: { bundleUrl }
@@ -21,10 +22,14 @@ const imagePickerOptions = {
 
 const messageImage = Component => {
   return class MessageImage extends React.Component {
+    static propTypes = {
+      messages: PropTypes.object
+    };
+
     static getDerivedStateFromProps(props, state) {
       const { messages } = props;
-      const { messages: messagesState } = state;
-      if (messages && messages.edges) {
+      const { images, messages: messagesState } = state;
+      if (images && messages && messages.edges) {
         if (messagesState) {
           return {
             endCursor: messagesState.pageInfo.endCursor,
@@ -53,7 +58,8 @@ const messageImage = Component => {
 
     state = {
       messages: null,
-      endCursor: 0
+      endCursor: 0,
+      images: true
     };
 
     componentDidMount() {
@@ -130,7 +136,15 @@ const messageImage = Component => {
     };
 
     render() {
-      return <Component {...this.props} messages={this.state.messages} pickImage={this.pickImage} />;
+      const { images } = this.state;
+      const props = {
+        ...this.props,
+        images,
+        messages: images ? this.state.messages : this.props.messages,
+        pickImage: this.pickImage
+      };
+
+      return <Component {...props} />;
     }
   };
 };

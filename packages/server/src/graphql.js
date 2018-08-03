@@ -10,16 +10,7 @@ import log from '../../common/log';
 export default () => {
   return new ApolloServer({
     schema,
-    context: async ({ req, res }) => {
-      try {
-        const context = await modules.createContext(req, res);
-        return { ...context, req, res };
-      } catch (e) {
-        log.error('GraphQL context creation error', e);
-        throw e;
-      }
-    },
-    debug: false,
+    context: async ({ req, res }) => ({ ...(await modules.createContext(req, res)), req, res }),
     formatError: error => {
       return error.message === 'Not Authenticated!' ? new AuthenticationError(error) : error;
     },

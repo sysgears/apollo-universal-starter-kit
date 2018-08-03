@@ -4,6 +4,9 @@ import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import url from 'url';
 import PropTypes from 'prop-types';
+import { StyleSheet, Text, View } from 'react-native';
+
+import { Modal } from '../../common/components/native';
 
 const {
   manifest: { bundleUrl }
@@ -23,7 +26,8 @@ const imagePickerOptions = {
 const messageImage = Component => {
   return class MessageImage extends React.Component {
     static propTypes = {
-      messages: PropTypes.object
+      messages: PropTypes.object,
+      t: PropTypes.func
     };
 
     static getDerivedStateFromProps(props, state) {
@@ -59,7 +63,8 @@ const messageImage = Component => {
     state = {
       messages: null,
       endCursor: 0,
-      images: true
+      images: true,
+      showModal: false
     };
 
     componentDidMount() {
@@ -131,7 +136,23 @@ const messageImage = Component => {
             const imageData = new ReactNativeFile({ uri, type, name });
             onSend({ image: imageData });
           }
+        } else {
+          this.setState({ showModal: true });
         }
+      }
+    };
+
+    renderModal = () => {
+      const { t } = this.props;
+      const { showModal } = this.state;
+      if (showModal) {
+        return (
+          <Modal isVisible={showModal} onBackdropPress={() => this.setState({ showModal: false })}>
+            <View style={styles.alertTextWrapper}>
+              <Text>{t('attachment.errorMsg')}</Text>
+            </View>
+          </Modal>
+        );
       }
     };
 
@@ -144,9 +165,21 @@ const messageImage = Component => {
         pickImage: this.pickImage
       };
 
-      return <Component {...props} />;
+      return (
+        <View style={{ flex: 1 }}>
+          <Component {...props} />
+          {this.renderModal()}
+        </View>
+      );
     }
   };
 };
+
+const styles = StyleSheet.create({
+  alertTextWrapper: {
+    backgroundColor: '#fff',
+    padding: 10
+  }
+});
 
 export default messageImage;

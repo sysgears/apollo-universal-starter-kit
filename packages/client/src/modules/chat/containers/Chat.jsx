@@ -101,7 +101,6 @@ function EditMessage(prev, node) {
   });
 }
 
-@translate('chat')
 @withUuid
 @withUser
 class Chat extends React.Component {
@@ -444,6 +443,7 @@ export default compose(
       }
     })
   }),
+  translate('chat'),
   messageImage,
   messagesFormatter
 )(Chat);

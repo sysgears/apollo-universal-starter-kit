@@ -22,7 +22,7 @@ class Contact extends React.Component {
       throw { _error: t('errorMsg') };
     }
 
-    // merge custom errors
+    // set custom errors
     if (result && result.errors) {
       throw result.errors.reduce((res, error) => {
         res[error.field] = error.message;
@@ -36,7 +36,7 @@ class Contact extends React.Component {
   }
 }
 
-const ContactWithApollo = compose(
+export default compose(
   graphql(CONTACT, {
     props: ({ mutate }) => ({
       contact: async ({ name, email, content }) => {
@@ -58,5 +58,3 @@ const ContactWithApollo = compose(
     })
   })
 )(translate('contact')(Contact));
-
-export default ContactWithApollo;

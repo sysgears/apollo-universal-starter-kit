@@ -32,9 +32,9 @@ const ContactView = props => {
     </PageLayout>
   );
 };
+
 ContactView.propTypes = {
-  t: PropTypes.func,
-  onSubmit: PropTypes.func
+  t: PropTypes.func
 };
 
 export default ContactView;

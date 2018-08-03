@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 
-import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
 import { email, minLength, required, validateForm } from '../../../../../common/validation';
@@ -15,7 +14,7 @@ const contactFormSchema = {
 
 const ContactForm = ({ values, handleSubmit, errors, t, status }) => (
   <Form name="contact" onSubmit={handleSubmit}>
-    {status && status.sent && <Alert color="success">{t('form.submitMsg')}</Alert>}
+    {status && status.sent && <Alert color="success">{t('successMsg')}</Alert>}
     <Field name="name" component={RenderField} type="text" label={t('form.field.name')} value={values.name} />
     <Field name="email" component={RenderField} type="text" label={t('form.field.email')} value={values.email} />
     <Field
@@ -67,4 +66,4 @@ const ContactFormWithFormik = withFormik({
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 
-export default translate('contact')(ContactFormWithFormik(ContactForm));
+export default ContactFormWithFormik(ContactForm);

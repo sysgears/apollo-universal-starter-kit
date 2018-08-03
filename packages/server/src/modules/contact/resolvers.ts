@@ -8,7 +8,7 @@ interface ContactInput {
 
 export default () => ({
   Mutation: {
-    async contact(obj: any, { input }: ContactInput, { mailer }: any): Promise<any> {
+    async contact(obj: any, { input }: ContactInput, { mailer }: any): Promise<{ errors: null }> {
       await mailer.sendMail({
         from: input.email,
         to: process.env.EMAIL_USER,

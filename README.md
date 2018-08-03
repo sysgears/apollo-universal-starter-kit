@@ -385,7 +385,7 @@ aims to represent generally accepted guidelines and patterns for building scalab
 │   │       ├── database       # Database migrations and seeds
 │   │       │   └── migrations # Database migration scripts using Knex
 │   │       │   └── seeds      # Database seed scripts using Knex
-│   │       ├── middleware     # Graphiql, GraphQL express and SSR rendering
+│   │       ├── middleware     # GraphQL Playground, GraphQL express and SSR rendering
 │   │       ├── modules        # Back-end server feature-modules, each module has:
 │   │       │                  # (schema definition, resolvers, sql queries)
 │   │       ├── sql            # Knex connector

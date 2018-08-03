@@ -18,7 +18,7 @@ import modules from '../modules';
 import schema from '../api/schema';
 
 let assetMap;
-const playgroundUrl = '/graphiql';
+const playgroundUrl = '/gplayground';
 
 const renderServerSide = async (req, res) => {
   const clientModules = require('../../../client/src/modules').default;

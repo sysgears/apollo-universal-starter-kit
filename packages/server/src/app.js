@@ -9,6 +9,7 @@ import createApolloServer from './graphql';
 import errorMiddleware from './middleware/error';
 
 const app = express();
+const graphqlServer = createApolloServer();
 
 for (const applyBeforeware of modules.beforewares) {
   applyBeforeware(app);
@@ -33,7 +34,6 @@ if (__DEV__) {
 }
 
 if (!isApiExternal) {
-  const graphqlServer = createApolloServer();
   graphqlServer.applyMiddleware({
     app,
     path: __API_URL__,
@@ -62,3 +62,4 @@ if (module.hot) {
 }
 
 export default app;
+export { graphqlServer };

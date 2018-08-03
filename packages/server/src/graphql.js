@@ -25,6 +25,15 @@ export default () => {
           apiKey: settings.engine.apiKey
         }
       : false,
-    playground: false
+    playground: false,
+    subscriptions: {
+      onConnect: (connectionParams, webSocket) => {
+        return modules.createContext(null, connectionParams, webSocket);
+      },
+      onOperation: async (message, params, webSocket) => {
+        params.context = await modules.createContext(null, message.payload, webSocket);
+        return params;
+      }
+    }
   });
 };

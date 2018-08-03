@@ -13,9 +13,9 @@ import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 import withUuid from './WithUuid';
-import ChatFooter from '../components/ChatFooter.native';
-import CustomView from '../components/CustomView.native';
-import RenderCustomActions from '../components/RenderCustomActions.native';
+import ChatFooterNative from '../components/ChatFooter';
+import CustomView from '../components/CustomView';
+import RenderCustomActions from '../components/RenderCustomActions';
 import messageImage from './MessageImage';
 import messagesFormatter from './MessagesFormatter';
 import { Loading } from '../../common/components/native';
@@ -269,7 +269,7 @@ class Chat extends React.Component {
   renderChatFooter = () => {
     if (this.state.isReply) {
       const { quotedMessage } = this.state;
-      return <ChatFooter {...quotedMessage} undoReply={this.clearReplyState.bind(this)} />;
+      return <ChatFooterNative {...quotedMessage} undoReply={this.clearReplyState.bind(this)} />;
     }
   };
 

@@ -3,7 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../i18n';
 import { HeaderTitle, IconButton } from '../common/components/native';
-import Chat from './containers/Chat.native';
+import Chat from './containers/Chat';
 import resources from './locales';
 
 import Feature from '../connector';

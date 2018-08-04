@@ -1,15 +1,11 @@
-// React
 import React from 'react';
+import { graphql, compose, withApollo } from 'react-apollo';
 
-// Apollo
-import { graphql, compose } from 'react-apollo';
-
-// Components
 import RegisterView from '../components/RegisterView';
 
+import access from '../access';
 import REGISTER from '../graphql/Register.graphql';
-
-import settings from '../../../../../../settings';
+import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 class Register extends React.Component {
   render() {
@@ -18,8 +14,9 @@ class Register extends React.Component {
 }
 
 const RegisterWithApollo = compose(
+  withApollo,
   graphql(REGISTER, {
-    props: ({ ownProps: { history, navigation }, mutate }) => ({
+    props: ({ ownProps: { client, onRegister }, mutate }) => ({
       register: async ({ username, email, password }) => {
         try {
           const {
@@ -30,15 +27,15 @@ const RegisterWithApollo = compose(
 
           if (register.errors) {
             return { errors: register.errors };
-          } else if (history) {
-            if (settings.subscription.enabled) {
-              history.push('/subscription');
-            } else {
-              history.push('/profile');
+          } else {
+            await access.doLogin(client);
+            await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: register.user } });
+            if (onRegister) {
+              onRegister();
             }
-          } else if (navigation) {
-            navigation.goBack();
           }
+
+          return register;
         } catch (e) {
           console.log(e.graphQLErrors);
         }

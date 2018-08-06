@@ -7,7 +7,7 @@ import modules from './modules/index';
 import schema from './api/schema';
 import settings from '../../../settings';
 import log from '../../common/log';
-import { host } from './net';
+import { internalHost } from './net';
 
 export default () => {
   return new ApolloServer({
@@ -28,7 +28,7 @@ export default () => {
     playground: false,
     persistedQueries: {
       cache: new MemcachedCache(
-        [host],
+        [internalHost],
         { retries: 10, retry: 10000 } // Options
       )
     }

@@ -12,11 +12,7 @@ interface StoreFsProps {
 const storeFS = ({ stream, filename }: StoreFsProps): Promise<{ path: string; size: number }> => {
   // Check if UPLOAD_DIR exists, create one if not
   if (!fs.existsSync(UPLOAD_DIR)) {
-    try {
-      mkdirp.sync(UPLOAD_DIR);
-    } catch (e) {
-      throw new Error('Can not create such directory');
-    }
+    mkdirp.sync(UPLOAD_DIR);
   }
 
   const id = shortid.generate();
@@ -57,23 +53,30 @@ export default () => ({
     }
   },
   Mutation: {
-    async uploadFiles(obj: any, { files }: { files: [Promise<ProcessUploadProps>] }, { Upload }: any) {
-      const results = await Promise.all(files.map(processUpload));
+    async uploadFiles(obj: any, { files }: { files: [Promise<ProcessUploadProps>] }, { Upload, req }: any) {
+      const { t } = req;
 
-      return Upload.saveFiles(results);
+      try {
+        const results = await Promise.all(files.map(processUpload));
+
+        return Upload.saveFiles(results);
+      } catch (e) {
+        throw new Error(t('upload:fileNotLoaded'));
+      }
     },
-    async removeFile(obj: {}, { id }: { id: number }, { Upload }: any) {
+    async removeFile(obj: {}, { id }: { id: number }, { Upload, req }: any) {
       const file = await Upload.file(id);
+      const { t } = req;
 
       if (!file || !(await Upload.deleteFile(id))) {
-        throw new Error('File not found.');
+        throw new Error(t('upload:fileNotFound'));
       }
 
       // remove file
       try {
         fs.unlinkSync(file.path);
       } catch (e) {
-        throw new Error('Unable to delete file.');
+        throw new Error(t('upload:fileNotDeleted'));
       }
 
       return true;

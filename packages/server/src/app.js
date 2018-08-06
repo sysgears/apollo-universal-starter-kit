@@ -58,6 +58,11 @@ if (__DEV__) {
 }
 
 if (module.hot) {
+  module.hot.dispose(async () => {
+    if (graphqlServer) {
+      await graphqlServer.stop();
+    }
+  });
   module.hot.accept(['./middleware/website']);
 }
 

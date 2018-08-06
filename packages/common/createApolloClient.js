@@ -9,6 +9,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import ApolloClient from 'apollo-client';
 import ApolloCacheRouter from 'apollo-cache-router';
 import { hasDirectives } from 'apollo-utilities';
+import { createPersistedQueryLink } from 'apollo-link-persisted-queries';
 
 import log from './log';
 import settings from '../../settings';
@@ -34,12 +35,14 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
     }
   );
 
-  const queryLink = createNetLink
-    ? createNetLink(apiUrl)
-    : new BatchHttpLink({
-        uri: apiUrl,
-        credentials: 'include'
-      });
+  const queryLink = createPersistedQueryLink().concat(
+    createNetLink
+      ? createNetLink(apiUrl)
+      : new BatchHttpLink({
+          uri: apiUrl,
+          credentials: 'include'
+        })
+  );
 
   let apiLink = queryLink;
   if (apiUrl && (__TEST__ || typeof navigator !== 'undefined')) {

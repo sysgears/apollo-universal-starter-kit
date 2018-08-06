@@ -13,6 +13,7 @@
     "apollo-client": "^2.3.1",
     "apollo-link": "^1.0.6",
     "apollo-link-batch-http": "1.2.2",
+    "apollo-link-persisted-queries": "^0.2.1",
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
     "apollo-logger": "^0.3.0",

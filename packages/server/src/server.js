@@ -1,8 +1,7 @@
 import http from 'http';
-import addGraphQLSubscriptions from './api/subscriptions';
 
 import { serverPort } from './net';
-import app from './app';
+import app, { graphqlServer } from './app';
 import log from '../../common/log';
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -10,8 +9,7 @@ let server;
 
 server = http.createServer();
 server.on('request', app);
-
-addGraphQLSubscriptions(server);
+graphqlServer.installSubscriptionHandlers(server);
 
 const serverPromise = new Promise(resolve => {
   server.listen(serverPort, () => {
@@ -35,17 +33,14 @@ if (module.hot) {
     }
   });
   module.hot.accept(['./app'], () => {
-    server.removeAllListeners('request');
-    server.on('request', app);
-  });
-  module.hot.accept(['./api/subscriptions'], () => {
     try {
-      addGraphQLSubscriptions(server);
+      server.removeAllListeners('request');
+      server.on('request', app);
+      graphqlServer.installSubscriptionHandlers(server);
     } catch (error) {
       log(error.stack);
     }
   });
-
   module.hot.accept();
 }
 

@@ -101,8 +101,6 @@ function EditMessage(prev, node) {
   });
 }
 
-@withUuid
-@withUser
 class Chat extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
@@ -444,6 +442,8 @@ export default compose(
     })
   }),
   translate('chat'),
+  withUuid,
+  withUser,
   messageImage,
   messagesFormatter
 )(Chat);

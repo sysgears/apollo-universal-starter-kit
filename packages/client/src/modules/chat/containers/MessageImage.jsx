@@ -40,15 +40,8 @@ const messageImage = Component => {
             messages: {
               ...messages,
               edges: messages.edges.map(message => {
-                const {
-                  cursor,
-                  node,
-                  node: { id }
-                } = message;
-                const currentMessage = messagesState.edges.find(
-                  ({ node: { id: messageStateId } }) =>
-                    id === messageStateId || (cursor === messages.pageInfo.endCursor && messageStateId === null)
-                );
+                const { node } = message;
+                const currentMessage = messagesState.edges.find(({ node: { id } }) => node.id === id || id === null);
                 return currentMessage ? { ...message, node: { ...node, image: currentMessage.node.image } } : message;
               })
             }
@@ -78,50 +71,32 @@ const messageImage = Component => {
     checkImages = () => {
       const { messages, endCursor } = this.state;
       if (messages && endCursor < messages.pageInfo.endCursor) {
-        this.addImageToMessage();
+        const newMsg = messages.edges.filter(({ cursor, node }) => node.path && (cursor > endCursor || !endCursor));
+        if (newMsg.length) this.addImageToMessage(newMsg);
       }
     };
 
-    downloadImage = async (path, name) => {
-      const downloadImage = await FileSystem.downloadAsync(serverUrl + '/' + path, imageDir + name);
-      return downloadImage.uri;
-    };
+    downloadImage = async (path, name) => await FileSystem.downloadAsync(serverUrl + '/' + path, imageDir + name).uri;
 
-    addImageToMessage = async () => {
-      const {
-        messages: { edges },
-        endCursor
-      } = this.state;
-      const newMessages = edges.filter(({ cursor, node: { path } }) => path && (cursor > endCursor || !endCursor));
-      if (newMessages.length) {
-        const { isDirectory } = await FileSystem.getInfoAsync(imageDir);
-        if (!isDirectory) await FileSystem.makeDirectoryAsync(imageDir);
-        const files = await FileSystem.readDirectoryAsync(imageDir);
-        newMessages.forEach(async message => {
-          const {
-            node: { image, path, name }
-          } = message;
-          if (!image) {
-            const result = files.find(filename => filename === name);
-            if (!result) await this.downloadImage(path, name);
-            const { messages } = this.state;
-            this.setState({
-              endCursor: messages.pageInfo.endCursor,
-              messages: {
-                ...messages,
-                edges: messages.edges.map(item => {
-                  const {
-                    cursor,
-                    node,
-                    node: { name }
-                  } = item;
-                  return cursor === message.cursor ? { ...item, node: { ...node, image: imageDir + name } } : item;
-                })
-              }
-            });
+    addImageToMessage = async newMsg => {
+      const { isDirectory } = await FileSystem.getInfoAsync(imageDir);
+      if (!isDirectory) await FileSystem.makeDirectoryAsync(imageDir);
+      const files = await FileSystem.readDirectoryAsync(imageDir);
+      newMsg.forEach(async ({ cursor, node }) => {
+        const result = files.find(filename => filename === node.name);
+        if (!result) await this.downloadImage(node.path, node.name);
+        const { messages } = this.state;
+        this.setState({
+          endCursor: messages.pageInfo.endCursor,
+          messages: {
+            ...messages,
+            edges: messages.edges.map(item => {
+              const { cursor: itemCursor, node } = item;
+              return itemCursor === cursor ? { ...item, node: { ...node, image: imageDir + node.name } } : item;
+            })
           }
         });
-      }
+      });
     };
 
     pickImage = async ({ onSend }) => {

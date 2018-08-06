@@ -63,15 +63,15 @@ export default () => ({
       return Upload.saveFiles(results);
     },
     async removeFile(obj: {}, { id }: { id: number }, { Upload }: any) {
-      const { path } = await Upload.file(id);
+      const file = await Upload.file(id);
 
-      if (!path || !(await Upload.deleteFile(id))) {
+      if (!file || !(await Upload.deleteFile(id))) {
         throw new Error('File not found.');
       }
 
       // remove file
       try {
-        fs.unlinkSync(path);
+        fs.unlinkSync(file.path);
       } catch (e) {
         throw new Error('Unable to delete file.');
       }

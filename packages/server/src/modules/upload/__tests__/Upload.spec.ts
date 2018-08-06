@@ -1,17 +1,14 @@
-/*eslint-disable no-unused-vars*/
-// General imports
 import chai from 'chai';
 import { step } from 'mocha-steps';
+import { Server } from 'http';
 
-// Helpers
-import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
+import { getServer } from '../../../testHelpers/integrationSetup';
 
 describe('Upload API works', () => {
-  let server, apollo;
+  let server: Server;
 
   before(() => {
     server = getServer();
-    apollo = getApollo();
   });
 
   step('Has GraphQL Playground endpoint', () => {

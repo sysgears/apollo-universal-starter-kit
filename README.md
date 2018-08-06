@@ -358,6 +358,9 @@ Check [subscription module documentation](packages/client/src/modules/subscripti
 
 * Internationalization with [i18next]
 
+* [Apollo Persisted queries] support. Saving bandwidth between the client and server by only sending a query ID or hash 
+  instead of an entire GraphQL query.
+
 ## Project Structure
 
 The project structure presented in this boilerplate is **fractal**, where functionality is grouped primarily by feature

@@ -30,15 +30,14 @@ const RegisterWithApollo = compose(
 
           if (register.errors) {
             return { errors: register.errors };
-          }
-          if (history) {
+          } else if (history) {
             if (settings.subscription.enabled) {
-              return history.push('/subscription');
+              history.push('/subscription');
+            } else {
+              history.push('/profile');
             }
-            return history.push('/profile');
-          }
-          if (navigation) {
-            return navigation.goBack();
+          } else if (navigation) {
+            navigation.goBack();
           }
         } catch (e) {
           console.log(e.graphQLErrors);

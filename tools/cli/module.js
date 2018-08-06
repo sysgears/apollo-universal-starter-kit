@@ -44,21 +44,28 @@ function copyFiles(logger, templatePath, module, location) {
       }
     });
 
-    shell.cd('..');
-    // get module input data
-    const path = `${__dirname}/../../packages/${location}/src/modules/index.js`;
-    let data = fs.readFileSync(path);
+    // get index file path
+    const modulesPath = `${__dirname}/../../packages/${location}/src/modules/`;
+    const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
+    const indexPath = modulesPath + indexFullFileName;
+    let indexContent;
+
+    try {
+      // prepend import module
+      indexContent = `import ${module} from './${module}';\n` + fs.readFileSync(indexPath);
+    } catch (e) {
+      logger.error(`Failed to read ${indexPath} file`);
+      process.exit();
+    }
 
     // extract Feature modules
-    const re = /Feature\(([^()]+)\)/g;
-    const match = re.exec(data);
+    const featureRegExp = /Feature\(([^()]+)\)/g;
+    const [, featureModules] = featureRegExp.exec(indexContent) || ['', ''];
 
-    // prepend import module
-    const prepend = `import ${module} from './${module}';\n`;
-    fs.writeFileSync(path, prepend + data);
-
-    // add module to Feature function
-    shell.sed('-i', re, `Feature(${module}, ${match[1]})`, 'index.js');
+    // add module to Feature connector
+    shell
+      .ShellString(indexContent.replace(RegExp(featureRegExp, 'g'), `Feature(${module}, ${featureModules})`))
+      .to(indexPath);
 
     logger.info(`✔ Module for ${location} successfully created!`);
   }
@@ -70,35 +77,40 @@ function deleteFiles(logger, templatePath, module, location) {
   const modulePath = `${__dirname}/../../packages/${location}/src/modules/${module}`;
 
   if (fs.existsSync(modulePath)) {
-    // create new module directory
+    // delete module directory
     shell.rm('-rf', modulePath);
 
-    // change to destination directory
-    shell.cd(`${__dirname}/../../packages/${location}/src/modules/`);
+    // path to modules index file
+    const modulesPath = `${__dirname}/../../packages/${location}/src/modules/`;
 
-    // add module to Feature function
-    //let ok = shell.sed('-i', `import ${module} from '.\/${module}';`, '', 'index.js');
+    // get index file path
+    const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
+    const indexPath = modulesPath + indexFullFileName;
+    let indexContent;
 
-    // get module input data
-    const path = `${__dirname}/../../packages/${location}/src/modules/index.js`;
-    let data = fs.readFileSync(path);
+    try {
+      indexContent = fs.readFileSync(indexPath);
+    } catch (e) {
+      logger.error(`Failed to read ${indexPath} file`);
+      process.exit();
+    }
 
     // extract Feature modules
-    const re = /Feature\(([^()]+)\)/g;
-    const match = re.exec(data);
-    const modules = match[1].split(',').filter(featureModule => featureModule.trim() !== module);
+    const featureRegExp = /Feature\(([^()]+)\)/g;
+    const [, featureModules] = featureRegExp.exec(indexContent) || ['', ''];
+    const featureModulesWithoutDeleted = featureModules
+      .split(',')
+      .filter(featureModule => featureModule.trim() !== module);
 
-    // remove import module line
-    const lines = data
+    const contentWithoutDeletedModule = indexContent
       .toString()
-      .split('\n')
-      .filter(line => line.match(`import ${module} from './${module}';`) === null);
-    fs.writeFileSync(path, lines.join('\n'));
+      // replace features modules on features without deleted module
+      .replace(featureRegExp, `Feature(${featureModulesWithoutDeleted.toString().trim()})`)
+      // remove import module
+      .replace(RegExp(`import ${module} from './${module}';\n`, 'g'), '');
 
-    // remove module from Feature function
-    shell.sed('-i', re, `Feature(${modules.toString().trim()})`, 'index.js');
+    fs.writeFileSync(indexPath, contentWithoutDeletedModule);
 
-    // continue only if directory does not jet exist
     logger.info(`✔ Module for ${location} successfully deleted!`);
   } else {
     logger.info(`✔ Module ${location} location for ${modulePath} wasn't found!`);

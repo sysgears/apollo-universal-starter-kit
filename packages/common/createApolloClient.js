@@ -95,7 +95,7 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
 
   const allLinks = [...(links || []), linkState, apiLink];
 
-  if (settings.app.logging.apolloLogging) {
+  if (settings.app.logging.apolloLogging && (!__TEST__ || typeof window !== 'undefined')) {
     allLinks.unshift(new LoggingLink({ logger: log.debug.bind(log) }));
   }
 

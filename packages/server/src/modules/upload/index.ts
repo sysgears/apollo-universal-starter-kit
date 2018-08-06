@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Express } from 'express';
 import Upload from './sql';
 
 import schema from './schema.graphql';
@@ -9,7 +9,7 @@ export default new Feature({
   schema,
   createResolversFunc: createResolvers,
   createContextFunc: () => ({ Upload: new Upload() }),
-  middleware: app => {
+  middleware: (app: Express) => {
     app.use('/public', express.static('public'));
   }
 });

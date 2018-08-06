@@ -245,7 +245,7 @@ class Chat extends React.Component {
             break;
 
           case 2:
-            setEditState(currentMessage.text, currentMessage);
+            setEditState(currentMessage);
             break;
 
           case 3:
@@ -256,8 +256,8 @@ class Chat extends React.Component {
     );
   };
 
-  setEditState = (message, { _id: id, text, createdAt, user: { _id: userId, name: username } }) => {
-    this.setState({ isEdit: true, message, messageInfo: { id, text, createdAt, userId, username } });
+  setEditState = ({ _id: id, text, createdAt, reply, user: { _id: userId, name: username } }) => {
+    this.setState({ isEdit: true, message: text, messageInfo: { id, text, createdAt, userId, username, reply } });
     this.gc.focusTextInput();
   };
 
@@ -409,7 +409,7 @@ export default compose(
   }),
   graphql(EDIT_MESSAGE, {
     props: ({ mutate }) => ({
-      editMessage: ({ text, id, createdAt, userId, username, uuid }) => {
+      editMessage: ({ text, id, createdAt, userId, username, uuid, reply }) => {
         mutate({
           variables: { input: { text, id } },
           optimisticResponse: {
@@ -421,7 +421,7 @@ export default compose(
               username: username,
               createdAt: createdAt.toISOString(),
               uuid: uuid,
-              reply: null,
+              reply: reply,
               name: null,
               path: null,
               __typename: 'Message'

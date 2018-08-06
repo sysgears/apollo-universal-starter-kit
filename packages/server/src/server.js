@@ -20,7 +20,7 @@ server.on('close', () => {
 });
 
 if (module.hot) {
-  module.hot.dispose(data => {
+  module.hot.dispose(() => {
     try {
       if (server) {
         server.close();

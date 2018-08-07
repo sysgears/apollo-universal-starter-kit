@@ -3,15 +3,21 @@ export async function up(knex, Promise) {
     knex.schema
       .createTable('message', table => {
         table.increments();
-        table.string('text').notNull();
-        table.integer('userId');
-        table.string('uuid');
-        table.integer('reply');
-        table.integer('attachment_id');
+        table.string('text').nullable();
+        table.integer('userId').nullable();
+        table.string('uuid').notNull();
+        table.integer('reply').nullable();
         table.timestamps(false, true);
       })
       .createTable('attachment', table => {
         table.increments();
+        table
+          .integer('message_id')
+          .nullable()
+          .unsigned()
+          .references('id')
+          .inTable('message')
+          .onDelete('CASCADE');
         table.string('name').notNull();
         table.string('type').notNull();
         table.integer('size').notNull();

@@ -89,9 +89,8 @@ export default pubsub => ({
     },
     async deleteMessage(obj, { id }, { Chat }) {
       const message = await Chat.message(id);
-      const { attachment_id } = message;
-      const attachment = attachment_id ? await Chat.attachment(attachment_id) : null;
-      const isDeleted = Chat.deleteMessage(id, attachment_id);
+      const attachment = await Chat.attachment(id);
+      const isDeleted = await Chat.deleteMessage(id);
 
       if (isDeleted && attachment) {
         const attachmentPath = `${attachment.path}`;

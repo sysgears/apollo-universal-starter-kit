@@ -7,7 +7,6 @@ export default class Chat {
       .select(
         'm.id',
         'm.text',
-        'm.attachment_id',
         'm.userId',
         'm.uuid',
         'u.username',
@@ -18,7 +17,9 @@ export default class Chat {
       )
       .from('message as m')
       .leftJoin('user as u', 'u.id', 'm.userId')
-      .leftJoin('attachment as a', 'a.id', 'm.attachment_id')
+      .leftJoin('attachment as a', function() {
+        this.on('a.message_id', '=', 'm.id');
+      })
       .where('m.id', '=', id)
       .first();
   }
@@ -27,7 +28,7 @@ export default class Chat {
     return knex
       .select('id', 'name', 'type', 'size', 'path')
       .from('attachment')
-      .where('id', '=', id)
+      .where('message_id', '=', id)
       .first();
   }
 
@@ -36,7 +37,6 @@ export default class Chat {
       .select(
         'm.id',
         'm.text',
-        'm.attachment_id',
         'm.userId',
         'm.uuid',
         'u.username',
@@ -47,7 +47,9 @@ export default class Chat {
       )
       .from('message as m')
       .leftJoin('user as u', 'u.id', 'm.userId')
-      .leftJoin('attachment as a', 'a.id', 'm.attachment_id')
+      .leftJoin('attachment as a', function() {
+        this.on('a.message_id', '=', 'm.id');
+      })
       .orderBy('m.id', 'asc')
       .limit(limit)
       .offset(after);
@@ -64,44 +66,26 @@ export default class Chat {
   }
 
   addMessageWithAttachment({ text, userId, uuid, reply, attachment }) {
-    return knex
-      .transaction(trx => {
-        knex('attachment')
-          .transacting(trx)
-          .insert(attachment)
-          .then(resp => {
-            const id = resp[0];
-            return returnId(knex('message'))
-              .transacting(trx)
-              .insert({ text, userId, uuid, reply, attachment_id: id });
-          })
-          .then(trx.commit)
-          .catch(trx.rollback);
-      })
-      .then(resp => resp)
-      .catch(err => console.error(err));
+    return knex.transaction(trx => {
+      knex('message')
+        .transacting(trx)
+        .insert({ text, userId, uuid, reply })
+        .then(resp => {
+          const id = resp[0];
+          return knex('attachment')
+            .transacting(trx)
+            .insert({ ...attachment, message_id: id })
+            .then(() => [id]);
+        })
+        .then(trx.commit)
+        .catch(trx.rollback);
+    });
   }
 
-  deleteMessage(messageId, attachmentId) {
-    return knex
-      .transaction(trx => {
-        knex('message')
-          .transacting(trx)
-          .where('id', '=', messageId)
-          .del()
-          .then(() => {
-            if (attachmentId) {
-              return returnId(knex('attachment'))
-                .transacting(trx)
-                .where('id', '=', attachmentId)
-                .del();
-            }
-          })
-          .then(trx.commit)
-          .catch(trx.rollback);
-      })
-      .then(resp => resp)
-      .catch(err => console.error(err));
+  deleteMessage(id) {
+    return knex('message')
+      .where('id', '=', id)
+      .del();
   }
 
   editMessage({ id, text, userId }) {

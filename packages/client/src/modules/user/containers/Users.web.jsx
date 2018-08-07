@@ -9,7 +9,7 @@ import translate from '../../../i18n';
 import UsersFilterView from '../components/UsersFilterView';
 import { Button, PageLayout } from '../../common/components/web';
 import UsersListView from '../components/UsersListView';
-import withSubscription from './UsersWithSubscription';
+import withSubscription from './withSubscription';
 import {
   withFilterUpdating,
   withOrderByUpdating,

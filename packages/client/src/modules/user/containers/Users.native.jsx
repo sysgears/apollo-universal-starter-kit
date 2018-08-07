@@ -5,7 +5,7 @@ import { compose } from 'react-apollo';
 
 import UsersList from '../components/UsersListView';
 import UsersFilter from '../components/UsersFilterView';
-import withSubscription from './UsersWithSubscription';
+import withSubscription from './withSubscription';
 import {
   updateUsersState,
   withFilterUpdating,

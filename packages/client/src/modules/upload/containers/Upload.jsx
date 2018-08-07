@@ -19,19 +19,15 @@ class Upload extends React.Component {
     const { uploadFiles } = this.props;
     const result = await uploadFiles(files);
 
-    this.handleErrors(result);
+    this.setState({ error: result && result.error ? result.error : null });
   };
 
   handleRemoveFile = async id => {
     const { removeFile } = this.props;
     const result = await removeFile(id);
 
-    this.handleErrors(result);
-  };
-
-  handleErrors(result) {
     this.setState({ error: result && result.error ? result.error : null });
-  }
+  };
 
   render() {
     return (
@@ -52,24 +48,20 @@ export default compose(
         fetchPolicy: 'cache-and-network'
       };
     },
-    props({ data: { loading, error, files, refetch } }) {
+    props({ data: { loading, error, files } }) {
       if (error) throw new Error(error);
 
-      return { loading, files, refetch };
+      return { loading, files };
     }
   }),
   graphql(UPLOAD_FILES, {
-    props: ({ ownProps: { refetch }, mutate }) => ({
+    props: ({ mutate }) => ({
       uploadFiles: async files => {
         try {
-          const {
-            data: { uploadFiles }
-          } = await mutate({
-            variables: { files }
+          await mutate({
+            variables: { files },
+            refetchQueries: [{ query: FILES_QUERY }]
           });
-
-          refetch();
-          return uploadFiles;
         } catch (e) {
           return { error: e.graphQLErrors[0].message };
         }
@@ -77,17 +69,30 @@ export default compose(
     })
   }),
   graphql(REMOVE_FILE, {
-    props: ({ ownProps: { refetch }, mutate }) => ({
+    props: ({ mutate }) => ({
       removeFile: async id => {
         try {
-          const {
-            data: { removeFile }
-          } = await mutate({
-            variables: { id }
-          });
+          await mutate({
+            variables: { id },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              removeFile: {
+                removeFile: true,
+                __typename: 'File'
+              }
+            },
+            update: store => {
+              // check if ROOT_QUERY exists
+              if (store.data.data.ROOT_QUERY.files) {
+                const cachedFiles = store.readQuery({ query: FILES_QUERY });
 
-          refetch();
-          return removeFile;
+                store.writeQuery({
+                  query: FILES_QUERY,
+                  data: { files: cachedFiles.files.filter(file => file.id !== id) }
+                });
+              }
+            }
+          });
         } catch (e) {
           return { error: e.graphQLErrors[0].message };
         }

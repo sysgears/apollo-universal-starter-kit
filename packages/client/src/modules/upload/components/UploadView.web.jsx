@@ -7,7 +7,7 @@ import filesize from 'filesize';
 import { PageLayout, Row, Col, Table, Button, Alert } from '../../common/components/web';
 import settings from '../../../../../../settings';
 
-const UploadView = ({ files, t, handleRemoveFile, handleUploadFiles, error }) => {
+const UploadView = ({ files, error, loading, handleUploadFiles, handleRemoveFile, t }) => {
   const renderMetaData = () => {
     return (
       <Helmet
@@ -60,8 +60,9 @@ const UploadView = ({ files, t, handleRemoveFile, handleUploadFiles, error }) =>
             </Dropzone>
           </Col>
           <Col xs={8}>
-            {error && <Alert color="error">{error}</Alert>}
+            {loading && <span>Loading...</span>}
             {files && <Table dataSource={files} columns={columns} />}
+            {error && <Alert color="error">{error}</Alert>}
           </Col>
         </Row>
       </div>
@@ -71,10 +72,10 @@ const UploadView = ({ files, t, handleRemoveFile, handleUploadFiles, error }) =>
 
 UploadView.propTypes = {
   files: PropTypes.array,
-  uploadFiles: PropTypes.func.isRequired,
   error: PropTypes.string,
-  handleRemoveFile: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
   handleUploadFiles: PropTypes.func.isRequired,
+  handleRemoveFile: PropTypes.func.isRequired,
   t: PropTypes.func
 };
 

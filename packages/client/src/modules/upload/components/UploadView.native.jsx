@@ -1,14 +1,6 @@
-// Common react native component - iOS + Android
-
-// React
 import React from 'react';
-
 import PropTypes from 'prop-types';
-
-// React native UI
 import { StyleSheet, Text, View } from 'react-native';
-
-import translate from '../../../i18n';
 
 const UploadView = ({ t }) => {
   return (
@@ -41,4 +33,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('upload')(UploadView);
+export default UploadView;

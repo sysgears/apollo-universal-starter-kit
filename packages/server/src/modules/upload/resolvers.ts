@@ -2,14 +2,24 @@ import fs from 'fs';
 import mkdirp from 'mkdirp';
 import shortid from 'shortid';
 
-const UPLOAD_DIR = 'public';
+import settings from '../../../../../settings';
 
-interface StoreFsProps {
-  filename: string;
+const UPLOAD_DIR = settings.upload.uploadDir;
+
+interface FileProcessData {
   stream: any;
+  filename: string;
+  mimetype: string;
 }
 
-const storeFS = ({ stream, filename }: StoreFsProps): Promise<{ path: string; size: number }> => {
+interface FileData {
+  name: string;
+  type: string;
+  path: string;
+  size: number;
+}
+
+const storeFS = ({ stream, filename, mimetype }: FileProcessData): Promise<FileData> => {
   // Check if UPLOAD_DIR exists, create one if not
   if (!fs.existsSync(UPLOAD_DIR)) {
     mkdirp.sync(UPLOAD_DIR);
@@ -29,22 +39,13 @@ const storeFS = ({ stream, filename }: StoreFsProps): Promise<{ path: string; si
       })
       .pipe(fs.createWriteStream(path))
       .on('error', (error: Error) => reject(error))
-      .on('finish', () => resolve({ path, size: fs.statSync(path).size }))
+      .on('finish', () => resolve({ path, size: fs.statSync(path).size, name: filename, type: mimetype }))
   );
 };
 
-interface ProcessUploadProps {
-  filename: string;
-  mimetype: string;
-  stream: any;
+interface FileProcessProps {
+  files: [Promise<FileProcessData>];
 }
-
-const processUpload = async (uploadPromise: Promise<ProcessUploadProps>) => {
-  const { stream, filename, mimetype } = await uploadPromise;
-  const { path, size } = await storeFS({ stream, filename });
-
-  return { name: filename, type: mimetype, path, size };
-};
 
 export default () => ({
   Query: {
@@ -53,13 +54,15 @@ export default () => ({
     }
   },
   Mutation: {
-    async uploadFiles(obj: any, { files }: { files: [Promise<ProcessUploadProps>] }, { Upload, req }: any) {
+    async uploadFiles(obj: any, { files }: FileProcessProps, { Upload, req }: any) {
       const { t } = req;
 
       try {
-        const results = await Promise.all(files.map(processUpload));
+        // load files to fs
+        const filesData = await Promise.all(files.map(async uploadPromise => storeFS(await uploadPromise)));
 
-        return Upload.saveFiles(results);
+        // save files data into DB
+        return Upload.saveFiles(filesData);
       } catch (e) {
         throw new Error(t('upload:fileNotLoaded'));
       }

@@ -1,26 +1,37 @@
 /*eslint-disable no-unused-vars*/
-// General imports
-import chai from 'chai';
+import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
-// Helpers
-import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
+import { getApollo } from '../../../testHelpers/integrationSetup';
+
+import CURRENT_USER_QUERY from '../../../../../client/src/modules/user/graphql/CurrentUserQuery.graphql';
+import LOGIN from '../../../../../client/src/modules/user/graphql/Login.graphql';
+import LOGOUT from '../../../../../client/src/modules/user/access/session/graphql/Logout.graphql';
 
 describe('User API works', () => {
-  let server, apollo;
+  let apollo;
 
   before(() => {
-    server = getServer();
     apollo = getApollo();
   });
 
-  step('Has GraphQL Playground endpoint', () => {
-    return chai
-      .request(server)
-      .get('/gplayground')
-      .then(res => {
-        res.should.have.status(200);
-        res.body.should.be.eql({});
-      });
+  step('User not logged in initially', async () => {
+    const result = await apollo.query({ query: CURRENT_USER_QUERY });
+    expect(result.data).to.deep.equal({ currentUser: null });
+  });
+
+  step('Siging in as ordinary user works', async () => {
+    await apollo.mutate({
+      mutation: LOGIN,
+      variables: { input: { usernameOrEmail: 'user', password: 'user1234' } }
+    });
+    const result = await apollo.query({ query: CURRENT_USER_QUERY });
+    expect(result.data.currentUser.username).to.equal('user');
+  });
+
+  step('Signing out as ordinary user works', async () => {
+    await apollo.mutate({ mutation: LOGOUT });
+    const result = await apollo.query({ query: CURRENT_USER_QUERY });
+    expect(result.data).to.deep.equal({ currentUser: null });
   });
 });

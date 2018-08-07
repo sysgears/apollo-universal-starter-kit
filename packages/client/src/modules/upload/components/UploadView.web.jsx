@@ -61,8 +61,8 @@ const UploadView = ({ files, error, loading, handleUploadFiles, handleRemoveFile
           </Col>
           <Col xs={8}>
             {loading && <span>Loading...</span>}
-            {files && <Table dataSource={files} columns={columns} />}
             {error && <Alert color="error">{error}</Alert>}
+            {files && <Table dataSource={files} columns={columns} />}
           </Col>
         </Row>
       </div>

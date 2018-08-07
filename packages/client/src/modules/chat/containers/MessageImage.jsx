@@ -1,10 +1,10 @@
 import React from 'react';
-import { Constants, FileSystem, ImagePicker } from 'expo';
+import { Constants, FileSystem, ImagePicker, Permissions } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import url from 'url';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from 'react-native';
 
 import { Modal } from '../../common/components/native';
 
@@ -57,7 +57,7 @@ const messageImage = Component => {
       messages: null,
       endCursor: 0,
       images: true,
-      showModal: false
+      notify: null
     };
 
     componentDidMount() {
@@ -99,32 +99,40 @@ const messageImage = Component => {
       });
     };
 
+    checkPermission = async type => {
+      const { status } = await Permissions.getAsync(type);
+      return status !== 'granted' ? await Permissions.askAsync(type).status : status;
+    };
+
     pickImage = async ({ onSend }) => {
-      const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
-      if (!cancelled) {
-        const { size } = await FileSystem.getInfoAsync(uri);
-        if (size <= maxImageSize) {
-          const type = mime.lookup(uri);
+      const { t } = this.props;
+      const permission = Platform.OS === 'ios' ? await this.checkPermission(Permissions.CAMERA_ROLL) : 'granted';
+      if (permission === 'granted') {
+        const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
+        if (!cancelled) {
+          const { size } = await FileSystem.getInfoAsync(uri);
           const reg = /[^\\/]*\.\w+$/;
-          if (reg.test(uri)) {
+          if (size <= maxImageSize && reg.test(uri)) {
+            const type = mime.lookup(uri);
             const name = uri.match(reg)[0];
             const imageData = new ReactNativeFile({ uri, type, name });
             onSend({ image: imageData });
+          } else {
+            this.setState({ notify: t('attachment.errorMsg') });
           }
-        } else {
-          this.setState({ showModal: true });
         }
+      } else {
+        this.setState({ notify: t('permission.errorMsg') });
       }
     };
 
     renderModal = () => {
-      const { t } = this.props;
-      const { showModal } = this.state;
-      if (showModal) {
+      const { notify } = this.state;
+      if (notify) {
         return (
-          <Modal isVisible={showModal} onBackdropPress={() => this.setState({ showModal: false })}>
+          <Modal isVisible={!!notify} onBackdropPress={() => this.setState({ notify: null })}>
             <View style={styles.alertTextWrapper}>
-              <Text>{t('attachment.errorMsg')}</Text>
+              <Text>{notify}</Text>
             </View>
           </Modal>
         );

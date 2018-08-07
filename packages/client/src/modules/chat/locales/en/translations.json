@@ -18,5 +18,9 @@
 
   "attachment": {
     "errorMsg": "Error: the file exceeds the maximum size limit"
+  },
+
+  "permission": {
+    "errorMsg": "Access error!"
   }
 }

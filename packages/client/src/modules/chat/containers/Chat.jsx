@@ -110,6 +110,7 @@ class Chat extends React.Component {
     deleteMessage: PropTypes.func,
     editMessage: PropTypes.func,
     subscribeToMore: PropTypes.func.isRequired,
+    loadData: PropTypes.func.isRequired,
     currentUser: PropTypes.object,
     uuid: PropTypes.string,
     pickImage: PropTypes.func,
@@ -292,12 +293,29 @@ class Chat extends React.Component {
     }
   };
 
+  onLoadEarlier = () => {
+    const {
+      messages: {
+        pageInfo: { endCursor }
+      },
+      loadData
+    } = this.props;
+
+    if (this.allowDataLoad) {
+      if (this.props.messages.pageInfo.hasNextPage) {
+        this.allowDataLoad = false;
+        return loadData(endCursor + 1, 'add');
+      }
+    }
+  };
+
   render() {
     const { currentUser, deleteMessage, uuid, messages, loading, t } = this.props;
 
     if (loading) {
       return <Loading text={t('loading')} />;
     } else {
+      this.allowDataLoad = true;
       const { message } = this.state;
       const messagesEdges = messages ? messages.edges : [];
       const { id = uuid, username = null } = currentUser ? currentUser : {};
@@ -312,6 +330,8 @@ class Chat extends React.Component {
             messages={messagesEdges}
             renderSend={this.renderSend}
             onSend={this.onSend}
+            loadEarlier={true}
+            onLoadEarlier={this.onLoadEarlier}
             user={{ _id: id, name: username }}
             showAvatarForEveryMessage
             renderChatFooter={this.renderChatFooter}
@@ -336,9 +356,33 @@ export default compose(
       };
     },
     props: ({ data }) => {
-      const { loading, error, messages, subscribeToMore, refetch } = data;
+      const { loading, error, messages, fetchMore, subscribeToMore } = data;
+      const loadData = (after, dataDelivery) => {
+        return fetchMore({
+          variables: {
+            after: after
+          },
+          updateQuery: (previousResult, { fetchMoreResult }) => {
+            const totalCount = fetchMoreResult.messages.totalCount;
+            const newEdges = fetchMoreResult.messages.edges;
+            const pageInfo = fetchMoreResult.messages.pageInfo;
+            const displayedEdges = dataDelivery === 'add' ? [...previousResult.messages.edges, ...newEdges] : newEdges;
+
+            return {
+              // By returning `cursor` here, we update the `fetchMore` function
+              // to the new cursor.
+              messages: {
+                totalCount,
+                edges: displayedEdges,
+                pageInfo,
+                __typename: 'Messages'
+              }
+            };
+          }
+        });
+      };
       if (error) throw new Error(error);
-      return { loading, messages, subscribeToMore, refetch };
+      return { loading, messages, subscribeToMore, loadData };
     }
   }),
   graphql(ADD_MESSAGE, {

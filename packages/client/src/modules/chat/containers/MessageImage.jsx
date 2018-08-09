@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 
 import { Modal } from '../../common/components/native';
+import chatConfig from '../../../../../../config/chat';
 
 const {
   manifest: { bundleUrl }
@@ -15,13 +16,8 @@ const { protocol, port, hostname } = url.parse(__API_URL__);
 const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl).hostname : hostname}${
   port ? ':' + port : ''
 }`;
-const maxImageSize = 1000000;
-const imageDir = FileSystem.cacheDirectory + 'ImagePicker/';
-const imagePickerOptions = {
-  allowsEditing: true,
-  base64: false,
-  quality: 0.75
-};
+
+const imageDir = FileSystem.cacheDirectory + chatConfig.image.dirName + '/';
 
 const messageImage = Component => {
   return class MessageImage extends React.Component {
@@ -56,7 +52,7 @@ const messageImage = Component => {
     state = {
       messages: null,
       endCursor: 0,
-      images: true,
+      images: chatConfig.images,
       notify: null
     };
 
@@ -108,11 +104,11 @@ const messageImage = Component => {
       const { t } = this.props;
       const permission = Platform.OS === 'ios' ? await this.checkPermission(Permissions.CAMERA_ROLL) : 'granted';
       if (permission === 'granted') {
-        const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
+        const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(chatConfig.image.imagePicker);
         if (!cancelled) {
           const { size } = await FileSystem.getInfoAsync(uri);
           const reg = /[^\\/]*\.\w+$/;
-          if (size <= maxImageSize && reg.test(uri)) {
+          if (size <= chatConfig.image.maxSize && reg.test(uri)) {
             const type = mime.lookup(uri);
             const name = uri.match(reg)[0];
             const imageData = new ReactNativeFile({ uri, type, name });

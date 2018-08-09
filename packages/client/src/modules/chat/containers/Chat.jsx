@@ -19,6 +19,7 @@ import RenderCustomActions from '../components/RenderCustomActions';
 import messageImage from './MessageImage';
 import messagesFormatter from './MessagesFormatter';
 import { Loading } from '../../common/components/native';
+import chatConfig from '../../../../../../config/chat';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
@@ -322,18 +323,17 @@ class Chat extends React.Component {
       return (
         <View style={{ flex: 1 }}>
           <GiftedChat
+            {...chatConfig.giftedChat}
             ref={gc => (this.gc = gc)}
             text={message}
             onInputTextChanged={text => this.setMessageState(text)}
             placeholder={t('input.text')}
-            keyboardShouldPersistTaps="never"
             messages={messagesEdges}
             renderSend={this.renderSend}
             onSend={this.onSend}
             loadEarlier
             onLoadEarlier={this.onLoadEarlier}
             user={{ _id: id, name: username }}
-            showAvatarForEveryMessage
             renderChatFooter={this.renderChatFooter}
             renderCustomView={this.renderCustomView}
             renderActions={this.renderCustomActions}
@@ -352,7 +352,7 @@ export default compose(
   graphql(MESSAGES_QUERY, {
     options: () => {
       return {
-        variables: { limit: 100, after: 0 }
+        variables: { limit: chatConfig.limit, after: 0 }
       };
     },
     props: ({ data }) => {

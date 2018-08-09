@@ -50,7 +50,7 @@ export default class Chat {
       .leftJoin('attachment as a', function() {
         this.on('a.message_id', '=', 'm.id');
       })
-      .orderBy('m.id', 'asc')
+      .orderBy('m.id', 'desc')
       .limit(limit)
       .offset(after);
   }

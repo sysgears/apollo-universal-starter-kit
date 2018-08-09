@@ -57,7 +57,7 @@ export default pubsub => ({
 
       return {
         totalCount: total,
-        edges: edgesArray,
+        edges: edgesArray.reverse(),
         pageInfo: {
           endCursor: endCursor,
           hasNextPage: hasNextPage

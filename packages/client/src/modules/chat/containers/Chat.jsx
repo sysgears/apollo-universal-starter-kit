@@ -330,7 +330,7 @@ class Chat extends React.Component {
             messages={messagesEdges}
             renderSend={this.renderSend}
             onSend={this.onSend}
-            loadEarlier={true}
+            loadEarlier
             onLoadEarlier={this.onLoadEarlier}
             user={{ _id: id, name: username }}
             showAvatarForEveryMessage
@@ -366,7 +366,7 @@ export default compose(
             const totalCount = fetchMoreResult.messages.totalCount;
             const newEdges = fetchMoreResult.messages.edges;
             const pageInfo = fetchMoreResult.messages.pageInfo;
-            const displayedEdges = dataDelivery === 'add' ? [...previousResult.messages.edges, ...newEdges] : newEdges;
+            const displayedEdges = dataDelivery === 'add' ? [...newEdges, ...previousResult.messages.edges] : newEdges;
 
             return {
               // By returning `cursor` here, we update the `fetchMore` function

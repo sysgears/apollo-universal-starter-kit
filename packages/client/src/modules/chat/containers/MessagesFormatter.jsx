@@ -14,8 +14,7 @@ const messagesFormatter = Component => {
           user: { _id: userId ? userId : uuid, name: username || 'Anonymous' },
           reply,
           image,
-          loadingImage: path && !image,
-          update: reply ? Date.now() : null
+          loadingImage: path && !image
         }))
         .reverse();
       return <Component {...props} messages={{ ...props.messages, edges: formatMessages }} />;

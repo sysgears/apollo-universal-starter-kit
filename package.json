@@ -76,7 +76,7 @@
   "devDependencies": {
     "awesome-typescript-loader": "^3.4.1",
     "husky": "^0.14.3",
-    "lerna": "^2.5.1",
+    "lerna": "^3.0.0",
     "lint-staged": "^7.1.2",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.5.0",

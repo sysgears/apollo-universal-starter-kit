@@ -331,7 +331,7 @@ class Chat extends React.Component {
             messages={messagesEdges}
             renderSend={this.renderSend}
             onSend={this.onSend}
-            loadEarlier
+            loadEarlier={messages.totalCount > messages.edges.length}
             onLoadEarlier={this.onLoadEarlier}
             user={{ _id: id, name: username }}
             renderChatFooter={this.renderChatFooter}

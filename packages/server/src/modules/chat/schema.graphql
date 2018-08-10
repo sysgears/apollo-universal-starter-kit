@@ -1,5 +1,10 @@
 scalar UploadAttachment
 
+type ReplyMessage {
+  text: String
+  username: String
+}
+
 # Message
 type Message {
   id: Int!
@@ -11,6 +16,7 @@ type Message {
   reply: Int
   name: String
   path: String
+  replyMessage: ReplyMessage
 }
 
 # Edges for Messages

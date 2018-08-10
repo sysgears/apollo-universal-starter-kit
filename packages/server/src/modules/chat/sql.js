@@ -1,4 +1,4 @@
-import { returnId } from '../../sql/helpers';
+import { orderedFor, returnId } from '../../sql/helpers';
 import knex from '../../sql/connector';
 
 export default class Chat {
@@ -22,6 +22,16 @@ export default class Chat {
       })
       .where('m.id', '=', id)
       .first();
+  }
+
+  async getQuatedMessages(messageIds) {
+    const res = await knex
+      .select('m.id', 'm.text', 'm.userId', 'u.username')
+      .from('message as m')
+      .leftJoin('user as u', 'u.id', 'm.userId')
+      .whereIn('m.id', messageIds);
+
+    return orderedFor(res, messageIds, 'id', true);
   }
 
   attachment(id) {

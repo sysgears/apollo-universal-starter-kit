@@ -1,6 +1,7 @@
 import fs from 'fs';
 import mkdirp from 'mkdirp';
 import shell from 'shelljs';
+import { createBatchResolver } from 'graphql-resolve-batch';
 
 const MESSAGE_SUBSCRIPTION = 'message_subscription';
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
@@ -67,6 +68,11 @@ export default pubsub => ({
     message(obj, { id }, { Chat }) {
       return Chat.message(id);
     }
+  },
+  Message: {
+    replyMessage: createBatchResolver((sources, args, context) => {
+      return context.Chat.getQuatedMessages(sources.map(({ reply }) => reply));
+    })
   },
   Mutation: {
     async addMessage(obj, { input }, context) {

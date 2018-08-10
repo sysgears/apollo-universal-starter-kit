@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 
 const CustomView = props => {
   const {
-    messages,
     images,
     currentMessage: {
       loadingImage,
       reply,
+      replyMessage,
       user: { _id: id }
     },
     user: { _id: userId }
@@ -23,18 +23,12 @@ const CustomView = props => {
   }
 
   if (reply) {
-    const replyMessage = messages.find(({ _id }) => _id === reply);
     if (replyMessage) {
-      const {
-        text,
-        image,
-        user: { name }
-      } = replyMessage;
+      const { text, userName } = replyMessage;
       const color = userId === id ? styles.ownColorText : styles.colorText;
       return (
         <View style={styles.container}>
-          <Text style={[styles.username, color]}>{name}</Text>
-          <Image style={styles.image} source={{ uri: image ? image : null }} />
+          <Text style={[styles.username, color]}>{userName}</Text>
           <Text style={color}>{text}</Text>
         </View>
       );

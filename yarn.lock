@@ -1309,9 +1309,9 @@ apollo-cache-inmemory@^1.1.12:
     apollo-utilities "^1.0.17"
     graphql-anywhere "^4.1.15"
 
-apollo-cache-router@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/apollo-cache-router/-/apollo-cache-router-1.1.2.tgz#b1ef0b9b140eeb24627821a534bb23932ab21827"
+apollo-cache-router@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/apollo-cache-router/-/apollo-cache-router-1.1.6.tgz#32a7bcd975825e0a1150bd0603a779aa9bd24227"
 
 apollo-cache@^1.1.13:
   version "1.1.13"

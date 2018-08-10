@@ -82,15 +82,12 @@ export default compose(
               }
             },
             update: store => {
-              // check if ROOT_QUERY exists
-              if (store.data.data.ROOT_QUERY.files) {
-                const cachedFiles = store.readQuery({ query: FILES_QUERY });
+              const cachedFiles = store.readQuery({ query: FILES_QUERY });
 
-                store.writeQuery({
-                  query: FILES_QUERY,
-                  data: { files: cachedFiles.files.filter(file => file.id !== id) }
-                });
-              }
+              store.writeQuery({
+                query: FILES_QUERY,
+                data: { files: cachedFiles.files.filter(file => file.id !== id) }
+              });
             }
           });
         } catch (e) {

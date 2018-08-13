@@ -1,23 +1,29 @@
-/*eslint-disable no-unused-vars*/
 import knex from '../../sql/connector';
 
+interface File {
+  name: string;
+  type: string;
+  path: string;
+  size: number;
+}
+
 export default class Upload {
-  files() {
+  public files() {
     return knex('upload').select('*');
   }
 
-  file(id) {
+  public file(id: number) {
     return knex('upload')
       .select('*')
       .where({ id })
       .first();
   }
 
-  saveFiles(files) {
+  public saveFiles(files: [File]) {
     return knex('upload').insert(files);
   }
 
-  deleteFile(id) {
+  public deleteFile(id: number) {
     return knex('upload')
       .where({ id })
       .del();

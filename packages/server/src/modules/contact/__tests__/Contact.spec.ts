@@ -15,6 +15,7 @@ describe('Contact API works', () => {
   step('Has GraphQL Playground endpoint', () => {
     return chai
       .request(server)
+      .keepOpen()
       .get('/gplayground')
       .then(res => {
         res.should.have.status(200);

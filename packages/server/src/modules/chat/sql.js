@@ -26,8 +26,11 @@ export default class Chat {
 
   async getQuatedMessages(messageIds) {
     const res = await knex
-      .select('m.id', 'm.text', 'm.userId', 'u.username')
+      .select('m.id', 'm.text', 'm.userId', 'u.username', 'a.name', 'a.path')
       .from('message as m')
+      .leftJoin('attachment as a', function() {
+        this.on('a.message_id', '=', 'm.id');
+      })
       .leftJoin('user as u', 'u.id', 'm.userId')
       .whereIn('m.id', messageIds);
 

@@ -7,12 +7,14 @@ const messagesFormatter = Component => {
 
     if (messages) {
       const formatMessages = messages.edges
-        .map(({ node: { id, text, userId, username, createdAt, uuid, reply, image, path, replyMessage } }) => ({
+        .map(({ node: { id, text, userId, username, createdAt, uuid, reply, image, path, name, replyMessage } }) => ({
           _id: id ? id : uuidGenerator.v4(),
           text,
           createdAt: new Date(Date.parse(createdAt.replace(' ', 'T'))),
           user: { _id: userId ? userId : uuid, name: username || 'Anonymous' },
           reply,
+          path,
+          name,
           replyMessage,
           image,
           loadingImage: path && !image

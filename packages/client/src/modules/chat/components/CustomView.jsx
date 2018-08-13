@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
 const CustomView = props => {
@@ -23,12 +23,13 @@ const CustomView = props => {
   }
 
   if (reply) {
-    if (replyMessage) {
-      const { text, userName } = replyMessage;
+    const { text, userName, image } = replyMessage;
+    if (text || image) {
       const color = userId === id ? styles.ownColorText : styles.colorText;
       return (
         <View style={styles.container}>
           <Text style={[styles.username, color]}>{userName}</Text>
+          <Image style={styles.image} source={{ uri: image ? image : null }} />
           <Text style={color}>{text}</Text>
         </View>
       );

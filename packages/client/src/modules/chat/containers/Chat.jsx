@@ -192,17 +192,19 @@ class Chat extends React.Component {
     const { isEdit, messageInfo, message, quotedMessage } = this.state;
     const { addMessage, editMessage, uuid } = this.props;
     const reply = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
+    const defReply = { name: null, path: null, text: null, username: null };
 
     if (isEdit) {
       editMessage({
         ...messageInfo,
         text: message,
+        replyMessage: quotedMessage ? quotedMessage : defReply,
         uuid
       });
       this.setState({ isEdit: false });
     } else {
       const {
-        text = '',
+        text = null,
         image = null,
         user: { _id: userId, name: username },
         _id: id
@@ -215,6 +217,7 @@ class Chat extends React.Component {
         id,
         uuid,
         reply,
+        replyMessage: quotedMessage ? quotedMessage : defReply,
         image
       });
 
@@ -261,8 +264,8 @@ class Chat extends React.Component {
     this.gc.focusTextInput();
   };
 
-  setReplyState = ({ _id: id, text, user: { name: username } }) => {
-    this.setState({ isReply: true, quotedMessage: { id, text, username } });
+  setReplyState = ({ _id: id, text = null, path = null, name = null, user: { name: username } }) => {
+    this.setState({ isReply: true, quotedMessage: { id, text, path, name, username } });
     this.gc.focusTextInput();
   };
 
@@ -387,7 +390,7 @@ export default compose(
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
-      addMessage: async ({ text, userId, username, uuid, reply, image }) => {
+      addMessage: async ({ text, userId, username, uuid, reply, image, replyMessage }) => {
         mutate({
           variables: { input: { text, uuid, reply, attachment: image } },
           updateQueries: {
@@ -413,6 +416,10 @@ export default compose(
               uuid: uuid,
               id: null,
               reply: reply,
+              replyMessage: {
+                __typename: 'ReplyMessage',
+                ...replyMessage
+              },
               name: image ? image.name : null,
               path: image ? image.uri : null
             }
@@ -451,7 +458,7 @@ export default compose(
   }),
   graphql(EDIT_MESSAGE, {
     props: ({ mutate }) => ({
-      editMessage: ({ text, id, createdAt, userId, username, uuid, reply }) => {
+      editMessage: ({ text, id, createdAt, userId, username, uuid, reply, replyMessage }) => {
         mutate({
           variables: { input: { text, id } },
           optimisticResponse: {
@@ -464,6 +471,10 @@ export default compose(
               createdAt: createdAt.toISOString(),
               uuid: uuid,
               reply: reply,
+              replyMessage: {
+                __typename: 'ReplyMessage',
+                ...replyMessage
+              },
               name: null,
               path: null,
               __typename: 'Message'

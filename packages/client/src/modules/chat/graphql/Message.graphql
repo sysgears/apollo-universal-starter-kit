@@ -11,5 +11,7 @@ fragment MessageInfo on Message {
   replyMessage {
     text
     username
+    path
+    name
   }
 }

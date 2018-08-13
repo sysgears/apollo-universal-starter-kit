@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, KeyboardAvoidingView, Clipboard } from 'react-native';
+import { View, KeyboardAvoidingView, Clipboard, Platform } from 'react-native';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
@@ -344,7 +344,7 @@ class Chat extends React.Component {
               this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
             }
           />
-          <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={120} />
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? null : 'padding'} keyboardVerticalOffset={120} />
         </View>
       );
     }

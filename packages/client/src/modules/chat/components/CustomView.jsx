@@ -21,15 +21,15 @@ const CustomView = props => {
       </View>
     );
   }
-
   if (quotedId) {
-    const { text, userName, image } = quotedMessage;
+    const { text, username, image } = quotedMessage;
     if (text || image) {
       const color = userId === id ? styles.ownColorText : styles.colorText;
+      const imageBlock = image ? <Image style={styles.image} source={{ uri: image }} /> : null;
       return (
         <View style={styles.container}>
-          <Text style={[styles.username, color]}>{userName}</Text>
-          <Image style={styles.image} source={{ uri: image ? image : null }} />
+          <Text style={[styles.username, color]}>{username ? username : 'Anonymous'}</Text>
+          {imageBlock}
           <Text style={color}>{text}</Text>
         </View>
       );

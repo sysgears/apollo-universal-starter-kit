@@ -17,7 +17,7 @@ const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl
   port ? ':' + port : ''
 }`;
 
-const imageDir = FileSystem.cacheDirectory + chatConfig.image.dirName + '/';
+const imageDir = FileSystem.cacheDirectory + 'ImagePicker/';
 
 const messageImage = Component => {
   return class MessageImage extends React.Component {
@@ -27,7 +27,6 @@ const messageImage = Component => {
     };
 
     static getDerivedStateFromProps(props, state) {
-      console.log('props = ', props);
       const { messages } = props;
       const { images, messages: messagesState } = state;
       if (images && messages && messages.edges) {
@@ -87,7 +86,7 @@ const messageImage = Component => {
       const { isDirectory } = await FileSystem.getInfoAsync(imageDir);
       if (!isDirectory) await FileSystem.makeDirectoryAsync(imageDir);
       const files = await FileSystem.readDirectoryAsync(imageDir);
-      newMsg.forEach(async ({ cursor, node }) => {
+      await newMsg.forEach(async ({ cursor, node }) => {
         const messageImages = [node, node.quotedMessage];
         await messageImages.forEach(({ filename, path }) => {
           if (filename && path) {

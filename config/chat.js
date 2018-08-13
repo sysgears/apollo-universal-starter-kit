@@ -13,7 +13,6 @@ export default {
     keyboardShouldPersistTaps: 'never'
   },
   image: {
-    dirName: 'ImagePicker',
     maxSize: 1000000,
     imagePicker: {
       allowsEditing: true,

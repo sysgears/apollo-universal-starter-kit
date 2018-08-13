@@ -3,7 +3,7 @@ import chai, { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 import { getApollo } from '../../../testHelpers/integrationSetup';
-import { login, logout } from '../../../testHelpers/session';
+import { login, logout } from '../testHelpers';
 
 import CURRENT_USER_QUERY from '../../../../../client/src/modules/user/graphql/CurrentUserQuery.graphql';
 import USER_QUERY from '../../../../../client/src/modules/user/graphql/UserQuery.graphql';
@@ -39,11 +39,11 @@ describe('User API works', () => {
       .catch(ex => {
         // Check for values in the thrown graphQL error object here
         // e.g. message, extensions.code or other
-        chai.expect(ex.graphQLErrors).to.containSubset([
-          {
-            extensions: { code: 'UNAUTHENTICATED' }
-          }
-        ]);
+        chai
+          .expect(ex.graphQLErrors[0])
+          .to.have.property('extensions')
+          .with.property('code')
+          .to.be.equal('UNAUTHENTICATED');
         // Error received as expected, consider test as done
         done();
       })

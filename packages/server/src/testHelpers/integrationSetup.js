@@ -1,6 +1,5 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import chaiSubset from 'chai-subset';
 
 import WebSocket from 'ws';
 
@@ -9,7 +8,6 @@ import '../../knexdata';
 import knex from '../sql/connector';
 
 chai.use(chaiHttp);
-chai.use(chaiSubset);
 chai.should();
 
 let server;

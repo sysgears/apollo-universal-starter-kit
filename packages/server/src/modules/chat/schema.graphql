@@ -1,9 +1,9 @@
 scalar UploadAttachment
 
-type ReplyMessage {
+type QuotedMessage {
   text: String
   username: String
-  name: String
+  filename: String
   path: String
 }
 
@@ -15,10 +15,10 @@ type Message {
   createdAt: String
   username: String
   uuid: String
-  reply: Int
-  name: String
+  quotedId: Int
+  filename: String
   path: String
-  replyMessage: ReplyMessage
+  quotedMessage: QuotedMessage
 }
 
 # Edges for Messages
@@ -61,7 +61,7 @@ input AddMessageInput {
   text: String
   userId: Int
   uuid: String
-  reply: Int
+  quotedId: Int
   attachment: UploadAttachment
 }
 

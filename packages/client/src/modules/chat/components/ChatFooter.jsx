@@ -4,7 +4,7 @@ import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
 const ChatFooter = props => {
-  const { text, username, undoReply } = props;
+  const { text, username, undoQuote } = props;
   return (
     <View style={styles.container}>
       <View style={styles.leftLine} />
@@ -14,7 +14,7 @@ const ChatFooter = props => {
       </View>
       <View style={styles.closeButton}>
         <TouchableOpacity>
-          <Icon name="x" type="feather" color="#0084ff" onPress={undoReply} />
+          <Icon name="x" type="feather" color="#0084ff" onPress={undoQuote} />
         </TouchableOpacity>
       </View>
     </View>
@@ -24,7 +24,7 @@ const ChatFooter = props => {
 ChatFooter.propTypes = {
   username: PropTypes.string,
   text: PropTypes.string,
-  undoReply: PropTypes.func
+  undoQuote: PropTypes.func
 };
 
 const styles = StyleSheet.create({

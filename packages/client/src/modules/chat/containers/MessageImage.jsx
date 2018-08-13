@@ -40,8 +40,8 @@ const messageImage = Component => {
                 const { node } = message;
                 const currentMessage = messagesState.edges.find(({ node: { id } }) => node.id === id || id === null);
                 if (currentMessage) {
-                  const replyMessage = { ...node.replyMessage, image: currentMessage.node.replyMessage.image };
-                  return { ...message, node: { ...node, image: currentMessage.node.image, replyMessage } };
+                  const quotedMessage = { ...node.quotedMessage, image: currentMessage.node.quotedMessage.image };
+                  return { ...message, node: { ...node, image: currentMessage.node.image, quotedMessage } };
                 } else {
                   return message;
                 }
@@ -74,24 +74,25 @@ const messageImage = Component => {
       const { messages, endCursor } = this.state;
       if (messages && endCursor < messages.pageInfo.endCursor) {
         const newMsg = messages.edges.filter(
-          ({ cursor, node }) => (node.path || node.replyMessage.path) && (cursor > endCursor || !endCursor)
+          ({ cursor, node }) => (node.path || node.quotedMessage.path) && (cursor > endCursor || !endCursor)
         );
         if (newMsg.length) this.addImageToMessage(newMsg);
       }
     };
 
-    downloadImage = async (path, name) => await FileSystem.downloadAsync(serverUrl + '/' + path, imageDir + name).uri;
+    downloadImage = async (path, filename) =>
+      await FileSystem.downloadAsync(serverUrl + '/' + path, imageDir + filename).uri;
 
     addImageToMessage = async newMsg => {
       const { isDirectory } = await FileSystem.getInfoAsync(imageDir);
       if (!isDirectory) await FileSystem.makeDirectoryAsync(imageDir);
       const files = await FileSystem.readDirectoryAsync(imageDir);
       newMsg.forEach(async ({ cursor, node }) => {
-        const messageImages = [node, node.replyMessage];
-        await messageImages.forEach(({ name, path }) => {
-          if (name && path) {
-            const result = files.find(filename => filename === name);
-            if (!result) this.downloadImage(path, name);
+        const messageImages = [node, node.quotedMessage];
+        await messageImages.forEach(({ filename, path }) => {
+          if (filename && path) {
+            const result = files.find(name => name === filename);
+            if (!result) this.downloadImage(path, filename);
           }
         });
         const { messages } = this.state;
@@ -102,9 +103,9 @@ const messageImage = Component => {
             edges: messages.edges.map(item => {
               const { cursor: itemCursor, node } = item;
               if (itemCursor === cursor) {
-                const { replyMessage: reply, name } = node;
-                const replyMessage = { ...reply, image: reply.name ? imageDir + reply.name : null };
-                return { ...item, node: { ...node, replyMessage, image: name ? imageDir + name : null } };
+                const { quotedMessage: reply, filename } = node;
+                const quotedMessage = { ...reply, image: reply.filename ? imageDir + reply.filename : null };
+                return { ...item, node: { ...node, quotedMessage, image: filename ? imageDir + filename : null } };
               } else {
                 return item;
               }

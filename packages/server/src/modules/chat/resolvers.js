@@ -36,7 +36,7 @@ const storeFS = ({ stream, filename }) => {
 const processUpload = async uploadPromise => {
   const { stream, filename, mimetype } = await uploadPromise;
   const { path, size } = await storeFS({ stream, filename });
-  return { name: filename, type: mimetype, path, size };
+  return { filename, type: mimetype, path, size };
 };
 
 export default pubsub => ({
@@ -70,8 +70,8 @@ export default pubsub => ({
     }
   },
   Message: {
-    replyMessage: createBatchResolver((sources, args, context) => {
-      return context.Chat.getQuatedMessages(sources.map(({ reply }) => reply));
+    quotedMessage: createBatchResolver((sources, args, context) => {
+      return context.Chat.getQuatedMessages(sources.map(({ quotedId }) => quotedId));
     })
   },
   Mutation: {

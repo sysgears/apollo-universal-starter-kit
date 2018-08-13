@@ -4,9 +4,9 @@ export async function up(knex, Promise) {
       .createTable('message', table => {
         table.increments();
         table.string('text').nullable();
-        table.integer('userId').nullable();
+        table.integer('user_id').nullable();
         table.string('uuid').notNull();
-        table.integer('reply').nullable();
+        table.integer('quoted_id').nullable();
         table.timestamps(false, true);
       })
       .createTable('attachment', table => {
@@ -18,7 +18,7 @@ export async function up(knex, Promise) {
           .references('id')
           .inTable('message')
           .onDelete('CASCADE');
-        table.string('name').notNull();
+        table.string('filename').notNull();
         table.string('type').notNull();
         table.integer('size').notNull();
         table.string('path').notNull();

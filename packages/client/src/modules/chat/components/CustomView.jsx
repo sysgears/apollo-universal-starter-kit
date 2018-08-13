@@ -7,8 +7,8 @@ const CustomView = props => {
     images,
     currentMessage: {
       loadingImage,
-      reply,
-      replyMessage,
+      quotedId,
+      quotedMessage,
       user: { _id: id }
     },
     user: { _id: userId }
@@ -22,8 +22,8 @@ const CustomView = props => {
     );
   }
 
-  if (reply) {
-    const { text, userName, image } = replyMessage;
+  if (quotedId) {
+    const { text, userName, image } = quotedMessage;
     if (text || image) {
       const color = userId === id ? styles.ownColorText : styles.colorText;
       return (

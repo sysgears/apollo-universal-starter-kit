@@ -7,16 +7,16 @@ export default class Chat {
       .select(
         'm.id',
         'm.text',
-        'm.userId',
+        'm.user_id as userId',
         'm.uuid',
         'u.username',
-        'a.name',
+        'a.filename',
         'a.path',
         'm.created_at as createdAt',
-        'm.reply'
+        'm.quoted_id as quotedId'
       )
       .from('message as m')
-      .leftJoin('user as u', 'u.id', 'm.userId')
+      .leftJoin('user as u', 'u.id', 'm.user_id')
       .leftJoin('attachment as a', function() {
         this.on('a.message_id', '=', 'm.id');
       })
@@ -26,12 +26,12 @@ export default class Chat {
 
   async getQuatedMessages(messageIds) {
     const res = await knex
-      .select('m.id', 'm.text', 'm.userId', 'u.username', 'a.name', 'a.path')
+      .select('m.id', 'm.text', 'm.user_id as userId', 'u.username', 'a.filename', 'a.path')
       .from('message as m')
       .leftJoin('attachment as a', function() {
         this.on('a.message_id', '=', 'm.id');
       })
-      .leftJoin('user as u', 'u.id', 'm.userId')
+      .leftJoin('user as u', 'u.id', 'm.user_id')
       .whereIn('m.id', messageIds);
 
     return orderedFor(res, messageIds, 'id', true);
@@ -39,7 +39,7 @@ export default class Chat {
 
   attachment(id) {
     return knex
-      .select('id', 'name', 'type', 'size', 'path')
+      .select('id', 'filename', 'type', 'size', 'path')
       .from('attachment')
       .where('message_id', '=', id)
       .first();
@@ -50,16 +50,16 @@ export default class Chat {
       .select(
         'm.id',
         'm.text',
-        'm.userId',
+        'm.user_id as userId',
         'm.uuid',
         'u.username',
-        'a.name',
+        'a.filename',
         'a.path',
         'm.created_at as createdAt',
-        'm.reply'
+        'm.quoted_id as quotedId'
       )
       .from('message as m')
-      .leftJoin('user as u', 'u.id', 'm.userId')
+      .leftJoin('user as u', 'u.id', 'm.user_id')
       .leftJoin('attachment as a', function() {
         this.on('a.message_id', '=', 'm.id');
       })
@@ -74,15 +74,15 @@ export default class Chat {
       .first();
   }
 
-  addMessage({ text, userId, uuid, reply }) {
-    return returnId(knex('message')).insert({ text, userId, uuid, reply });
+  addMessage({ text, userId: user_id, uuid, quotedId: quoted_id }) {
+    return returnId(knex('message')).insert({ text, user_id, uuid, quoted_id });
   }
 
-  addMessageWithAttachment({ text, userId, uuid, reply, attachment }) {
+  addMessageWithAttachment({ text, userId: user_id, uuid, quotedId: quoted_id, attachment }) {
     return knex.transaction(trx => {
       knex('message')
         .transacting(trx)
-        .insert({ text, userId, uuid, reply })
+        .insert({ text, user_id, uuid, quoted_id })
         .then(resp => {
           const id = resp[0];
           return knex('attachment')
@@ -101,12 +101,12 @@ export default class Chat {
       .del();
   }
 
-  editMessage({ id, text, userId }) {
+  editMessage({ id, text, userId: user_id }) {
     return knex('message')
       .where('id', '=', id)
       .update({
-        text: text,
-        userId: userId
+        text,
+        user_id
       });
   }
 }

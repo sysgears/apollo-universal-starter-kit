@@ -128,7 +128,7 @@ class Chat extends React.Component {
     message: '',
     isEdit: false,
     messageInfo: null,
-    isReply: false,
+    isQuoted: false,
     quotedMessage: null
   };
 
@@ -191,14 +191,14 @@ class Chat extends React.Component {
   onSend = (messages = []) => {
     const { isEdit, messageInfo, message, quotedMessage } = this.state;
     const { addMessage, editMessage, uuid } = this.props;
-    const reply = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
-    const defReply = { name: null, path: null, text: null, username: null };
+    const quotedId = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
+    const defQuote = { filename: null, path: null, text: null, username: null };
 
     if (isEdit) {
       editMessage({
         ...messageInfo,
         text: message,
-        replyMessage: quotedMessage ? quotedMessage : defReply,
+        quotedMessage: quotedMessage ? quotedMessage : defQuote,
         uuid
       });
       this.setState({ isEdit: false });
@@ -216,12 +216,12 @@ class Chat extends React.Component {
         userId,
         id,
         uuid,
-        reply,
-        replyMessage: quotedMessage ? quotedMessage : defReply,
+        quotedId,
+        quotedMessage: quotedMessage ? quotedMessage : defQuote,
         image
       });
 
-      this.setState({ isReply: false, quotedMessage: null });
+      this.setState({ isQuoted: false, quotedMessage: null });
     }
   };
 
@@ -244,7 +244,7 @@ class Chat extends React.Component {
             break;
 
           case 1:
-            this.setReplyState(currentMessage);
+            this.setQuotedState(currentMessage);
             break;
 
           case 2:
@@ -259,25 +259,25 @@ class Chat extends React.Component {
     );
   };
 
-  setEditState = ({ _id: id, text, createdAt, reply, user: { _id: userId, name: username } }) => {
-    this.setState({ isEdit: true, message: text, messageInfo: { id, text, createdAt, userId, username, reply } });
+  setEditState = ({ _id: id, text, createdAt, quotedId, user: { _id: userId, name: username } }) => {
+    this.setState({ isEdit: true, message: text, messageInfo: { id, text, createdAt, userId, username, quotedId } });
     this.gc.focusTextInput();
   };
 
-  setReplyState = ({ _id: id, text = null, path = null, name = null, user: { name: username } }) => {
-    this.setState({ isReply: true, quotedMessage: { id, text, path, name, username } });
+  setQuotedState = ({ _id: id, text = null, path = null, filename = null, user: { name: username } }) => {
+    this.setState({ isQuoted: true, quotedMessage: { id, text, path, filename, username } });
     this.gc.focusTextInput();
   };
 
   renderChatFooter = () => {
-    if (this.state.isReply) {
+    if (this.state.isQuoted) {
       const { quotedMessage } = this.state;
-      return <ChatFooter {...quotedMessage} undoReply={this.clearReplyState.bind(this)} />;
+      return <ChatFooter {...quotedMessage} undoQuote={this.clearQuotedState.bind(this)} />;
     }
   };
 
-  clearReplyState = () => {
-    this.setState({ isReply: false, quotedMessage: null });
+  clearQuotedState = () => {
+    this.setState({ isQuoted: false, quotedMessage: null });
   };
 
   renderCustomView = chatProps => {
@@ -390,9 +390,9 @@ export default compose(
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
-      addMessage: async ({ text, userId, username, uuid, reply, image, replyMessage }) => {
+      addMessage: async ({ text, userId, username, uuid, quotedId, image, quotedMessage }) => {
         mutate({
-          variables: { input: { text, uuid, reply, attachment: image } },
+          variables: { input: { text, uuid, quotedId, attachment: image } },
           updateQueries: {
             messages: (
               prev,
@@ -415,12 +415,12 @@ export default compose(
               userId: userId,
               uuid: uuid,
               id: null,
-              reply: reply,
-              replyMessage: {
-                __typename: 'ReplyMessage',
-                ...replyMessage
+              quotedId: quotedId,
+              quotedMessage: {
+                __typename: 'QuotedMessage',
+                ...quotedMessage
               },
-              name: image ? image.name : null,
+              filename: image ? image.name : null,
               path: image ? image.uri : null
             }
           }
@@ -458,7 +458,7 @@ export default compose(
   }),
   graphql(EDIT_MESSAGE, {
     props: ({ mutate }) => ({
-      editMessage: ({ text, id, createdAt, userId, username, uuid, reply, replyMessage }) => {
+      editMessage: ({ text, id, createdAt, userId, username, uuid, quotedId, quotedMessage }) => {
         mutate({
           variables: { input: { text, id } },
           optimisticResponse: {
@@ -470,12 +470,12 @@ export default compose(
               username: username,
               createdAt: createdAt.toISOString(),
               uuid: uuid,
-              reply: reply,
-              replyMessage: {
-                __typename: 'ReplyMessage',
-                ...replyMessage
+              quotedId: quotedId,
+              quotedMessage: {
+                __typename: 'QuotedMessage',
+                ...quotedMessage
               },
-              name: null,
+              filename: null,
               path: null,
               __typename: 'Message'
             }

@@ -5,13 +5,13 @@ fragment MessageInfo on Message {
   username
   createdAt
   uuid
-  reply
-  name
+  quotedId
+  filename
   path
-  replyMessage {
+  quotedMessage {
     text
     username
     path
-    name
+    filename
   }
 }

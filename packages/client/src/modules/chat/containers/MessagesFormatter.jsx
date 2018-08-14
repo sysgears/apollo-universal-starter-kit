@@ -6,7 +6,7 @@ const messagesFormatter = Component => {
     const { messages } = props;
 
     if (messages) {
-      const formatMessages = messages.edges
+      const formattedEdges = messages.edges
         .map(
           ({
             node: { id, text, userId, username, createdAt, uuid, quotedId, image = null, path, filename, quotedMessage }
@@ -24,7 +24,7 @@ const messagesFormatter = Component => {
           })
         )
         .reverse();
-      return <Component {...props} messages={{ ...props.messages, edges: formatMessages }} />;
+      return <Component {...props} messages={{ ...props.messages, edges: formattedEdges }} />;
     } else {
       return <Component {...props} />;
     }

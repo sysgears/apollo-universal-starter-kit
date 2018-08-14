@@ -46,7 +46,7 @@ export default class ChatOperations extends React.Component {
     const { isEdit, messageInfo, message, quotedMessage } = this.state;
     const { addMessage, editMessage, uuid } = this.props;
     const quotedId = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
-    const defQuote = { filename: null, path: null, text: null, username: null };
+    const defQuote = { filename: null, path: null, text: null, username: null, id: quotedId };
 
     if (isEdit) {
       editMessage({
@@ -59,7 +59,7 @@ export default class ChatOperations extends React.Component {
     } else {
       const {
         text = null,
-        image = null,
+        attachment,
         user: { _id: userId, name: username },
         _id: id
       } = messages[0];
@@ -72,7 +72,7 @@ export default class ChatOperations extends React.Component {
         uuid,
         quotedId,
         quotedMessage: quotedMessage ? quotedMessage : defQuote,
-        image
+        attachment
       });
 
       this.setState({ isQuoted: false, quotedMessage: null });
@@ -87,30 +87,25 @@ export default class ChatOperations extends React.Component {
       options.push(t('msg.btn.edit'), t('msg.btn.delete'));
     }
 
-    context.actionSheet().showActionSheetWithOptions(
-      {
-        options
-      },
-      buttonIndex => {
-        switch (buttonIndex) {
-          case 0:
-            Clipboard.setString(currentMessage.text);
-            break;
+    context.actionSheet().showActionSheetWithOptions({ options }, buttonIndex => {
+      switch (buttonIndex) {
+        case 0:
+          Clipboard.setString(currentMessage.text);
+          break;
 
-          case 1:
-            this.setQuotedState(currentMessage);
-            break;
+        case 1:
+          this.setQuotedState(currentMessage);
+          break;
 
-          case 2:
-            setEditState(currentMessage);
-            break;
+        case 2:
+          setEditState(currentMessage);
+          break;
 
-          case 3:
-            deleteMessage({ id: currentMessage._id });
-            break;
-        }
+        case 3:
+          deleteMessage({ id: currentMessage._id });
+          break;
       }
-    );
+    });
   };
 
   setEditState = ({ _id: id, text, createdAt, quotedId, user: { _id: userId, name: username } }) => {
@@ -118,7 +113,7 @@ export default class ChatOperations extends React.Component {
     this.gc.focusTextInput();
   };
 
-  setQuotedState = ({ _id: id, text = null, path = null, filename = null, user: { name: username } }) => {
+  setQuotedState = ({ _id: id, text, path, filename, user: { name: username } }) => {
     this.setState({ isQuoted: true, quotedMessage: { id, text, path, filename, username } });
     this.gc.focusTextInput();
   };
@@ -126,7 +121,7 @@ export default class ChatOperations extends React.Component {
   renderChatFooter = () => {
     if (this.state.isQuoted) {
       const { quotedMessage } = this.state;
-      return <ChatFooter {...quotedMessage} undoQuote={this.clearQuotedState.bind(this)} />;
+      return <ChatFooter {...quotedMessage} undoQuote={this.clearQuotedState} />;
     }
   };
 
@@ -175,7 +170,7 @@ export default class ChatOperations extends React.Component {
     } else {
       this.allowDataLoad = true;
       const { message } = this.state;
-      const messagesEdges = messages ? messages.edges : [];
+      const edges = messages ? messages.edges : [];
       const { id = uuid, username = null } = currentUser ? currentUser : {};
       return (
         <View style={{ flex: 1 }}>
@@ -185,7 +180,7 @@ export default class ChatOperations extends React.Component {
             text={message}
             onInputTextChanged={text => this.setMessageState(text)}
             placeholder={t('input.text')}
-            messages={messagesEdges}
+            messages={edges}
             renderSend={this.renderSend}
             onSend={this.onSend}
             loadEarlier={messages.totalCount > messages.edges.length}

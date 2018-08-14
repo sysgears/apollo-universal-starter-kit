@@ -2,18 +2,16 @@ import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
-const CustomView = props => {
-  const {
-    images,
-    currentMessage: {
-      loadingImage,
-      quotedId,
-      quotedMessage,
-      user: { _id: id }
-    },
-    user: { _id: userId }
-  } = props;
-
+const CustomView = ({
+  images,
+  currentMessage: {
+    loadingImage,
+    quotedId,
+    quotedMessage,
+    user: { _id: currentId }
+  },
+  user: { _id: userId }
+}) => {
   if (images && loadingImage) {
     return (
       <View style={styles.uploading}>
@@ -22,9 +20,9 @@ const CustomView = props => {
     );
   }
   if (quotedId) {
-    const { text, username, image } = quotedMessage;
-    if (text || image) {
-      const color = userId === id ? styles.ownColorText : styles.colorText;
+    const { text, username, image, id } = quotedMessage;
+    if (id) {
+      const color = userId === currentId ? styles.ownColorText : styles.colorText;
       const imageBlock = image ? <Image style={styles.image} source={{ uri: image }} /> : null;
       return (
         <View style={styles.container}>

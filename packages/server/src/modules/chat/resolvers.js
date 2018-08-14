@@ -75,12 +75,11 @@ export default pubsub => ({
     })
   },
   Mutation: {
-    async addMessage(obj, { input }, context) {
-      const { Chat, user } = context;
-      const { attachment = null } = input;
+    async addMessage(obj, { input }, { Chat, user }) {
+      const { attachment } = input;
       const userId = user ? user.id : null;
-      const results = attachment ? await processUpload(attachment) : null;
-      const data = { ...input, attachment: results, userId };
+      const result = attachment ? await processUpload(attachment) : null;
+      const data = { ...input, attachment: result, userId };
       const [id] = attachment ? await Chat.addMessageWithAttachment(data) : await Chat.addMessage(data);
       const message = await Chat.message(id);
       // publish for message list

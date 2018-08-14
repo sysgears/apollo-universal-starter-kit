@@ -9,6 +9,7 @@ fragment MessageInfo on Message {
   filename
   path
   quotedMessage {
+    id
     text
     username
     path

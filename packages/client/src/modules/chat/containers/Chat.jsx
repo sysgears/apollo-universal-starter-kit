@@ -18,11 +18,11 @@ import chatConfig from '../../../../../../config/chat';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
-  if (prev.messages.edges.some(message => node.id === message.node.id)) {
+  if (prev.messages.edges.some(edge => node.id === edge.node.id)) {
     return prev;
   }
 
-  const filteredMessages = prev.messages.edges.filter(message => message.node.id !== null);
+  const filteredEdges = prev.messages.edges.filter(edge => edge.node.id !== null);
   const edge = {
     cursor: prev.messages.totalCount,
     node: node,
@@ -35,7 +35,7 @@ function AddMessage(prev, node) {
         $set: prev.messages.totalCount + 1
       },
       edges: {
-        $set: [...filteredMessages, edge]
+        $set: [...filteredEdges, edge]
       },
       pageInfo: {
         endCursor: {
@@ -54,8 +54,8 @@ function DeleteMessage(prev, id) {
     return prev;
   }
 
-  const filteredEdges = prev.messages.edges.filter((item, i) => i !== index);
-  const updatedEdges = filteredEdges.map((item, i) => (item.cursor > index ? { ...item, cursor: i } : item));
+  const filteredEdges = prev.messages.edges.filter((edge, i) => i !== index);
+  const updatedEdges = filteredEdges.map((edge, i) => (edge.cursor > index ? { ...edge, cursor: i } : edge));
 
   return update(prev, {
     messages: {
@@ -75,7 +75,7 @@ function DeleteMessage(prev, id) {
 }
 
 function EditMessage(prev, node) {
-  const index = prev.messages.edges.findIndex(x => x.node.id === node.id);
+  const index = prev.messages.edges.findIndex(edge => edge.node.id === node.id);
 
   // ignore if not found
   if (index < 0) {
@@ -201,9 +201,9 @@ export default compose(
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
-      addMessage: async ({ text, userId, username, uuid, quotedId, image, quotedMessage }) => {
+      addMessage: async ({ text, userId, username, uuid, quotedId, attachment, quotedMessage }) => {
         mutate({
-          variables: { input: { text, uuid, quotedId, attachment: image } },
+          variables: { input: { text, uuid, quotedId, attachment } },
           updateQueries: {
             messages: (
               prev,
@@ -231,8 +231,8 @@ export default compose(
                 __typename: 'QuotedMessage',
                 ...quotedMessage
               },
-              filename: image ? image.name : null,
-              path: image ? image.uri : null
+              filename: attachment ? attachment.name : null,
+              path: attachment ? attachment.uri : null
             }
           }
         });

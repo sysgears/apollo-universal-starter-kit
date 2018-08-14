@@ -77,9 +77,10 @@ const messageImage = Component => {
       await FileSystem.downloadAsync(serverUrl + '/' + path, imageDir + filename).uri;
 
     addImageToMessage = async newMessages => {
-      const { isDirectory } = await FileSystem.getInfoAsync(imageDir);
-      if (!isDirectory) await FileSystem.makeDirectoryAsync(imageDir);
-      const files = await FileSystem.readDirectoryAsync(imageDir);
+      const { getInfoAsync, makeDirectoryAsync, readDirectoryAsync } = FileSystem;
+      const { isDirectory } = await getInfoAsync(imageDir);
+      if (!isDirectory) await makeDirectoryAsync(imageDir);
+      const files = await readDirectoryAsync(imageDir);
       await newMessages.forEach(async ({ cursor, node }) => {
         await [node, node.quotedMessage].forEach(({ filename, path }) => {
           if (filename && path && !files.includes(filename)) {
@@ -92,8 +93,8 @@ const messageImage = Component => {
           stateEdges: stateEdges.map(edge => {
             const { cursor: edgeCursor, node } = edge;
             if (edgeCursor === cursor) {
-              const { quotedMessage: reply, filename } = node;
-              const quotedMessage = { ...reply, image: reply.filename ? `${imageDir}${reply.filename}` : null };
+              const { quotedMessage: quoted, filename } = node;
+              const quotedMessage = { ...quoted, image: quoted.filename ? `${imageDir}${quoted.filename}` : null };
               return { ...edge, node: { ...node, quotedMessage, image: filename ? `${imageDir}${filename}` : null } };
             } else {
               return edge;
@@ -104,9 +105,10 @@ const messageImage = Component => {
     };
 
     checkPermission = async type => {
-      const { status } = await Permissions.getAsync(type);
+      const { getAsync, askAsync } = Permissions;
+      const { status } = await getAsync(type);
       if (status !== 'granted') {
-        const { status } = await Permissions.askAsync(type);
+        const { status } = await askAsync(type);
         return status === 'granted';
       }
       return true;
@@ -124,7 +126,7 @@ const messageImage = Component => {
             const type = mime.lookup(uri);
             const name = uri.match(reg)[0];
             const imageData = new ReactNativeFile({ uri, type, name });
-            onSend({ image: imageData });
+            onSend({ attachment: imageData });
           } else {
             this.setState({ notify: t('attachment.errorMsg') });
           }

@@ -3,23 +3,20 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
-const ChatFooter = props => {
-  const { text, username, undoQuote } = props;
-  return (
-    <View style={styles.container}>
-      <View style={styles.leftLine} />
-      <View>
-        <Text style={styles.username}>{username}</Text>
-        <Text style={styles.text}>{text}</Text>
-      </View>
-      <View style={styles.closeButton}>
-        <TouchableOpacity>
-          <Icon name="x" type="feather" color="#0084ff" onPress={undoQuote} />
-        </TouchableOpacity>
-      </View>
+const ChatFooter = ({ text, username, undoQuote }) => (
+  <View style={styles.container}>
+    <View style={styles.leftLine} />
+    <View>
+      <Text style={styles.username}>{username}</Text>
+      <Text style={styles.text}>{text}</Text>
     </View>
-  );
-};
+    <View style={styles.closeButton}>
+      <TouchableOpacity>
+        <Icon name="x" type="feather" color="#0084ff" onPress={undoQuote} />
+      </TouchableOpacity>
+    </View>
+  </View>
+);
 
 ChatFooter.propTypes = {
   username: PropTypes.string,

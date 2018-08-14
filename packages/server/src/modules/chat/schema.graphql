@@ -1,6 +1,7 @@
 scalar UploadAttachment
 
 type QuotedMessage {
+  id: Int
   text: String
   username: String
   filename: String

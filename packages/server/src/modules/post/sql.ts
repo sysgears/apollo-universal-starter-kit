@@ -1,8 +1,34 @@
 import { returnId, orderedFor } from '../../sql/helpers';
 import knex from '../../sql/connector';
 
-export default class Post {
-  postsPagination(limit, after) {
+interface PostItem {
+  id: number;
+  title: string;
+  content: string;
+}
+
+interface CommentItem {
+  id: number;
+  post_id: string;
+  content: string;
+}
+
+interface PostModel {
+  postsPagination(limit: number, after: number): Promise<PostItem[]>;
+  getCommentsForPostIds(postIds: number[]): Promise<CommentItem[]>;
+  getTotal(): Promise<number>;
+  post(id: number): Promise<PostItem>;
+  addPost(inputPost: { title: string; content: string }): Promise<number>;
+  deletePost(id: number): Promise<number>;
+  editPost(post: PostItem): Promise<number>;
+  addComment(inputComment: { content: string; postId: number }): Promise<number>;
+  getComment(id: number): Promise<CommentItem>;
+  deleteComment(id: number): Promise<number>;
+  editComment(editedComment: { id: number; content: string }): Promise<number>;
+}
+
+export default class Post implements PostModel {
+  public postsPagination(limit: number, after: number) {
     return knex
       .select('id', 'title', 'content')
       .from('post')
@@ -11,7 +37,7 @@ export default class Post {
       .offset(after);
   }
 
-  async getCommentsForPostIds(postIds) {
+  public async getCommentsForPostIds(postIds: number[]) {
     const res = await knex
       .select('id', 'content', 'post_id AS postId')
       .from('comment')
@@ -20,13 +46,13 @@ export default class Post {
     return orderedFor(res, postIds, 'postId', false);
   }
 
-  getTotal() {
+  public getTotal() {
     return knex('post')
       .countDistinct('id as count')
       .first();
   }
 
-  post(id) {
+  public post(id: number) {
     return knex
       .select('id', 'title', 'content')
       .from('post')
@@ -34,30 +60,27 @@ export default class Post {
       .first();
   }
 
-  addPost({ title, content }) {
+  public addPost({ title, content }: { title: string; content: string }) {
     return returnId(knex('post')).insert({ title, content });
   }
 
-  deletePost(id) {
+  public deletePost(id: number) {
     return knex('post')
       .where('id', '=', id)
       .del();
   }
 
-  editPost({ id, title, content }) {
+  public editPost({ id, title, content }: PostItem) {
     return knex('post')
       .where('id', '=', id)
-      .update({
-        title: title,
-        content: content
-      });
+      .update({ title, content });
   }
 
-  addComment({ content, postId }) {
+  public addComment({ content, postId }: { content: string; postId: number }) {
     return returnId(knex('comment')).insert({ content, post_id: postId });
   }
 
-  getComment(id) {
+  public getComment(id: number) {
     return knex
       .select('id', 'content')
       .from('comment')
@@ -65,17 +88,17 @@ export default class Post {
       .first();
   }
 
-  deleteComment(id) {
+  public deleteComment(id: number) {
     return knex('comment')
       .where('id', '=', id)
       .del();
   }
 
-  editComment({ id, content }) {
+  public editComment({ id, content }: { id: number; content: string }) {
     return knex('comment')
       .where('id', '=', id)
       .update({
-        content: content
+        content
       });
   }
 }

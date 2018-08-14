@@ -105,13 +105,17 @@ const messageImage = Component => {
 
     checkPermission = async type => {
       const { status } = await Permissions.getAsync(type);
-      return status !== 'granted' ? await Permissions.askAsync(type).status : status;
+      if (status !== 'granted') {
+        const { status } = await Permissions.askAsync(type);
+        return status === 'granted';
+      }
+      return true;
     };
 
     pickImage = async ({ onSend }) => {
       const { t } = this.props;
-      const permission = Platform.OS === 'ios' ? await this.checkPermission(Permissions.CAMERA_ROLL) : 'granted';
-      if (permission === 'granted') {
+      const permission = Platform.OS === 'ios' ? await this.checkPermission(Permissions.CAMERA_ROLL) : true;
+      if (permission) {
         const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(chatConfig.image.imagePicker);
         if (!cancelled) {
           const { size } = await FileSystem.getInfoAsync(uri);

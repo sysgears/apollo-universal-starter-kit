@@ -28,35 +28,29 @@ const messageImage = Component => {
 
     static getDerivedStateFromProps(props, state) {
       const { messages } = props;
-      const { images, messages: messagesState } = state;
-      if (images && messages && messages.edges) {
-        if (messagesState) {
-          return {
-            endCursor: messagesState.pageInfo.endCursor,
-            messages: {
-              ...messages,
-              edges: messages.edges.map(message => {
-                const { node } = message;
-                const currentMessage = messagesState.edges.find(({ node: { id } }) => node.id === id || id === null);
-                if (currentMessage) {
-                  const quotedMessage = { ...node.quotedMessage, image: currentMessage.node.quotedMessage.image };
-                  return { ...message, node: { ...node, image: currentMessage.node.image, quotedMessage } };
-                } else {
-                  return message;
-                }
-              })
-            }
-          };
-        } else {
-          return { messages };
+      const { images, stateEdges } = state;
+      if (images && messages) {
+        if (!stateEdges) {
+          return { stateEdges: messages.edges };
         }
+        const addImageToNode = (node, { node: currentNode }) => {
+          const quotedMessage = { ...node.quotedMessage, image: currentNode.quotedMessage.image };
+          return { ...node, image: currentNode.image, quotedMessage };
+        };
+
+        return {
+          stateEdges: messages.edges.map(({ node, cursor }) => {
+            const currentEdge = stateEdges.find(({ node: { id } }) => node.id === id || !id);
+            return currentEdge ? { node: addImageToNode(node, currentEdge), cursor } : { node, cursor };
+          })
+        };
       }
       return null;
     }
 
     state = {
-      messages: null,
-      endCursor: null,
+      stateEdges: null,
+      stateEndCursor: null,
       images: chatConfig.images,
       notify: null
     };
@@ -70,46 +64,41 @@ const messageImage = Component => {
     }
 
     checkImages = () => {
-      const { messages, endCursor } = this.state;
-      if (messages && endCursor < messages.pageInfo.endCursor) {
-        const newMsg = messages.edges.filter(
-          ({ cursor, node }) => (node.path || node.quotedMessage.path) && (cursor > endCursor || !endCursor)
+      const { stateEdges, stateEndCursor } = this.state;
+      if (stateEdges && stateEndCursor < this.props.messages.pageInfo.endCursor) {
+        const newEdges = stateEdges.filter(
+          ({ cursor, node }) => (node.path || node.quotedMessage.path) && (cursor > stateEndCursor || !stateEndCursor)
         );
-        if (newMsg.length) this.addImageToMessage(newMsg);
+        if (newEdges.length) this.addImageToMessage(newEdges);
       }
     };
 
     downloadImage = async (path, filename) =>
       await FileSystem.downloadAsync(serverUrl + '/' + path, imageDir + filename).uri;
 
-    addImageToMessage = async newMsg => {
+    addImageToMessage = async newMessages => {
       const { isDirectory } = await FileSystem.getInfoAsync(imageDir);
       if (!isDirectory) await FileSystem.makeDirectoryAsync(imageDir);
       const files = await FileSystem.readDirectoryAsync(imageDir);
-      await newMsg.forEach(async ({ cursor, node }) => {
-        const messageImages = [node, node.quotedMessage];
-        await messageImages.forEach(({ filename, path }) => {
-          if (filename && path) {
-            const result = files.find(name => name === filename);
-            if (!result) this.downloadImage(path, filename);
+      await newMessages.forEach(async ({ cursor, node }) => {
+        await [node, node.quotedMessage].forEach(({ filename, path }) => {
+          if (filename && path && !files.includes(filename)) {
+            this.downloadImage(path, filename);
           }
         });
-        const { messages } = this.state;
+        const { stateEdges } = this.state;
         this.setState({
-          endCursor: messages.pageInfo.endCursor,
-          messages: {
-            ...messages,
-            edges: messages.edges.map(item => {
-              const { cursor: itemCursor, node } = item;
-              if (itemCursor === cursor) {
-                const { quotedMessage: reply, filename } = node;
-                const quotedMessage = { ...reply, image: reply.filename ? imageDir + reply.filename : null };
-                return { ...item, node: { ...node, quotedMessage, image: filename ? imageDir + filename : null } };
-              } else {
-                return item;
-              }
-            })
-          }
+          stateEndCursor: this.props.messages.pageInfo.endCursor,
+          stateEdges: stateEdges.map(edge => {
+            const { cursor: edgeCursor, node } = edge;
+            if (edgeCursor === cursor) {
+              const { quotedMessage: reply, filename } = node;
+              const quotedMessage = { ...reply, image: reply.filename ? `${imageDir}${reply.filename}` : null };
+              return { ...edge, node: { ...node, quotedMessage, image: filename ? `${imageDir}${filename}` : null } };
+            } else {
+              return edge;
+            }
+          })
         });
       });
     };
@@ -155,17 +144,17 @@ const messageImage = Component => {
     };
 
     render() {
-      const { images } = this.state;
-      const props = {
-        ...this.props,
+      const { images, stateEdges } = this.state;
+      const { messages } = this.props;
+      const newProps = {
         images,
-        messages: images ? this.state.messages : this.props.messages,
+        messages: stateEdges ? { ...messages, edges: stateEdges } : messages,
         pickImage: this.pickImage
       };
 
       return (
         <View style={{ flex: 1 }}>
-          <Component {...props} />
+          <Component {...this.props} {...newProps} />
           {this.renderModal()}
         </View>
       );

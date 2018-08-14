@@ -1,33 +1,35 @@
 import { returnId, orderedFor } from '../../sql/helpers';
 import knex from '../../sql/connector';
 
-interface PostItem {
-  id: number;
+export interface Post {
   title: string;
   content: string;
 }
 
-interface CommentItem {
-  id: number;
-  post_id: string;
+export interface Comment {
+  postId: number;
   content: string;
 }
 
-interface PostModel {
-  postsPagination(limit: number, after: number): Promise<PostItem[]>;
-  getCommentsForPostIds(postIds: number[]): Promise<CommentItem[]>;
-  getTotal(): Promise<number>;
-  post(id: number): Promise<PostItem>;
-  addPost(inputPost: { title: string; content: string }): Promise<number>;
-  deletePost(id: number): Promise<number>;
-  editPost(post: PostItem): Promise<number>;
-  addComment(inputComment: { content: string; postId: number }): Promise<number>;
-  getComment(id: number): Promise<CommentItem>;
-  deleteComment(id: number): Promise<number>;
-  editComment(editedComment: { id: number; content: string }): Promise<number>;
+export interface Identifier {
+  id: number;
 }
 
-export default class Post implements PostModel {
+interface PostDAO {
+  postsPagination(limit: number, after: number): Promise<Post & Identifier[]>;
+  getCommentsForPostIds(postIds: number[]): Promise<Comment[]>;
+  getTotal(): Promise<number>;
+  post(id: number): Promise<Post & Identifier>;
+  addPost(inputPost: Post): Promise<number>;
+  deletePost(id: number): Promise<number>;
+  editPost(post: Post): Promise<number>;
+  addComment(inputComment: Comment): Promise<number>;
+  getComment(id: number): Promise<Comment & Identifier>;
+  deleteComment(id: number): Promise<number>;
+  editComment(editedComment: Comment & Identifier): Promise<number>;
+}
+
+export default class PostDAOImpl implements PostDAO {
   public postsPagination(limit: number, after: number) {
     return knex
       .select('id', 'title', 'content')
@@ -60,8 +62,8 @@ export default class Post implements PostModel {
       .first();
   }
 
-  public addPost({ title, content }: { title: string; content: string }) {
-    return returnId(knex('post')).insert({ title, content });
+  public addPost(params: Post) {
+    return returnId(knex('post')).insert(params);
   }
 
   public deletePost(id: number) {
@@ -70,13 +72,15 @@ export default class Post implements PostModel {
       .del();
   }
 
-  public editPost({ id, title, content }: PostItem) {
+  public editPost(params: Post & Identifier) {
+    const { id, title, content } = params;
     return knex('post')
       .where('id', '=', id)
       .update({ title, content });
   }
 
-  public addComment({ content, postId }: { content: string; postId: number }) {
+  public addComment(params: Comment) {
+    const { content, postId } = params;
     return returnId(knex('comment')).insert({ content, post_id: postId });
   }
 
@@ -94,7 +98,8 @@ export default class Post implements PostModel {
       .del();
   }
 
-  public editComment({ id, content }: { id: number; content: string }) {
+  public editComment(params: Comment & Identifier) {
+    const { id, content } = params;
     return knex('comment')
       .where('id', '=', id)
       .update({

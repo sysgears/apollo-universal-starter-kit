@@ -1,7 +1,0 @@
-#import "./Message.graphql"
-
-query message($id: Int!) {
-  message(id: $id) {
-    ...MessageInfo
-  }
-}

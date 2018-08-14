@@ -72,15 +72,13 @@ export default class PostDAOImpl implements PostDAO {
       .del();
   }
 
-  public editPost(params: Post & Identifier) {
-    const { id, title, content } = params;
+  public editPost({ id, title, content }: Post & Identifier) {
     return knex('post')
       .where('id', '=', id)
       .update({ title, content });
   }
 
-  public addComment(params: Comment) {
-    const { content, postId } = params;
+  public addComment({ content, postId }: Comment) {
     return returnId(knex('comment')).insert({ content, post_id: postId });
   }
 
@@ -98,8 +96,7 @@ export default class PostDAOImpl implements PostDAO {
       .del();
   }
 
-  public editComment(params: Comment & Identifier) {
-    const { id, content } = params;
+  public editComment({ id, content }: Comment & Identifier) {
     return knex('comment')
       .where('id', '=', id)
       .update({

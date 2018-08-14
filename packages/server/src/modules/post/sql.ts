@@ -15,21 +15,7 @@ export interface Identifier {
   id: number;
 }
 
-interface PostDAO {
-  postsPagination(limit: number, after: number): Promise<Post & Identifier[]>;
-  getCommentsForPostIds(postIds: number[]): Promise<Comment[]>;
-  getTotal(): Promise<number>;
-  post(id: number): Promise<Post & Identifier>;
-  addPost(inputPost: Post): Promise<number>;
-  deletePost(id: number): Promise<number>;
-  editPost(post: Post): Promise<number>;
-  addComment(inputComment: Comment): Promise<number>;
-  getComment(id: number): Promise<Comment & Identifier>;
-  deleteComment(id: number): Promise<number>;
-  editComment(editedComment: Comment & Identifier): Promise<number>;
-}
-
-export default class PostDAOImpl implements PostDAO {
+export default class PostDAO {
   public postsPagination(limit: number, after: number) {
     return knex
       .select('id', 'title', 'content')

@@ -58,8 +58,7 @@ export default (pubsub: PubSub) => ({
         }
       };
     },
-    post(obj: any, params: Identifier, context: any) {
-      const { id } = params;
+    post(obj: any, { id }: Identifier, context: any) {
       return context.Post.post(id);
     }
   },

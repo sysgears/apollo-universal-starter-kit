@@ -26,12 +26,11 @@ const messageImage = Component => {
       t: PropTypes.func
     };
 
-    static getDerivedStateFromProps(props, state) {
-      const { messages } = props;
-      const { images, stateEdges } = state;
+    static getDerivedStateFromProps({ messages }, { images, stateEdges, amountEdges }) {
       if (images && messages) {
+        const { edges } = messages;
         if (!stateEdges) {
-          return { stateEdges: messages.edges };
+          return { stateEdges: edges };
         }
         const addImageToNode = (node, { node: currentNode }) => {
           const quotedMessage = { ...node.quotedMessage, image: currentNode.quotedMessage.image };
@@ -39,7 +38,8 @@ const messageImage = Component => {
         };
 
         return {
-          stateEdges: messages.edges.map(({ node, cursor }) => {
+          edgesLength: edges.length < amountEdges ? edges.length : amountEdges,
+          stateEdges: edges.map(({ node, cursor }) => {
             const currentEdge = stateEdges.find(({ node: { id } }) => node.id === id || !id);
             return currentEdge ? { node: addImageToNode(node, currentEdge), cursor } : { node, cursor };
           })
@@ -50,7 +50,7 @@ const messageImage = Component => {
 
     state = {
       stateEdges: null,
-      stateEndCursor: null,
+      amountEdges: 0,
       images: chatConfig.images,
       notify: null
     };
@@ -64,10 +64,10 @@ const messageImage = Component => {
     }
 
     checkImages = () => {
-      const { stateEdges, stateEndCursor } = this.state;
-      if (stateEdges && stateEndCursor < this.props.messages.pageInfo.endCursor) {
+      const { stateEdges, amountEdges } = this.state;
+      if (stateEdges && amountEdges < stateEdges.length) {
         const newEdges = stateEdges.filter(
-          ({ cursor, node }) => (node.path || node.quotedMessage.path) && (cursor > stateEndCursor || !stateEndCursor)
+          ({ node }) => (node.path && !node.image) || (node.quotedMessage.path && !node.quotedMessage.image)
         );
         if (newEdges.length) this.addImageToMessage(newEdges);
       }
@@ -81,7 +81,8 @@ const messageImage = Component => {
       const { isDirectory } = await getInfoAsync(imageDir);
       if (!isDirectory) await makeDirectoryAsync(imageDir);
       const files = await readDirectoryAsync(imageDir);
-      await newMessages.forEach(async ({ cursor, node }) => {
+      await newMessages.forEach(async ({ node }) => {
+        const { id } = node;
         await [node, node.quotedMessage].forEach(({ filename, path }) => {
           if (filename && path && !files.includes(filename)) {
             this.downloadImage(path, filename);
@@ -89,15 +90,14 @@ const messageImage = Component => {
         });
         const { stateEdges } = this.state;
         this.setState({
-          stateEndCursor: this.props.messages.pageInfo.endCursor,
-          stateEdges: stateEdges.map(edge => {
-            const { cursor: edgeCursor, node } = edge;
-            if (edgeCursor === cursor) {
+          amountEdges: stateEdges.length,
+          stateEdges: stateEdges.map(({ node, cursor }) => {
+            if (node.id === id) {
               const { quotedMessage: quoted, filename } = node;
               const quotedMessage = { ...quoted, image: quoted.filename ? `${imageDir}${quoted.filename}` : null };
-              return { ...edge, node: { ...node, quotedMessage, image: filename ? `${imageDir}${filename}` : null } };
+              return { cursor, node: { ...node, quotedMessage, image: filename ? `${imageDir}${filename}` : null } };
             } else {
-              return edge;
+              return { node, cursor };
             }
           })
         });

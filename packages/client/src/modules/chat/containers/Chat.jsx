@@ -24,10 +24,12 @@ function AddMessage(prev, node) {
 
   const filteredEdges = prev.messages.edges.filter(edge => edge.node.id !== null);
   const edge = {
-    cursor: prev.messages.totalCount,
+    cursor: 0,
     node: node,
     __typename: 'MessageEdges'
   };
+
+  const updatedEdges = [...filteredEdges, edge].map((edge, i) => ({ ...edge, cursor: filteredEdges.length - i }));
 
   return update(prev, {
     messages: {
@@ -35,7 +37,7 @@ function AddMessage(prev, node) {
         $set: prev.messages.totalCount + 1
       },
       edges: {
-        $set: [...filteredEdges, edge]
+        $set: updatedEdges
       },
       pageInfo: {
         endCursor: {

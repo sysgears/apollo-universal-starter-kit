@@ -26,10 +26,10 @@ const messageImage = Component => {
       t: PropTypes.func
     };
 
-    static getDerivedStateFromProps({ messages }, { images, stateEdges, amountEdges }) {
+    static getDerivedStateFromProps({ messages }, { images, stateEdges }) {
       if (images && messages) {
         const { edges } = messages;
-        if (!stateEdges) {
+        if (!stateEdges.length) {
           return { stateEdges: edges };
         }
         const addImageToNode = (node, { node: currentNode }) => {
@@ -38,7 +38,6 @@ const messageImage = Component => {
         };
 
         return {
-          edgesLength: edges.length < amountEdges ? edges.length : amountEdges,
           stateEdges: edges.map(({ node, cursor }) => {
             const currentEdge = stateEdges.find(({ node: { id } }) => node.id === id || !id);
             return currentEdge ? { node: addImageToNode(node, currentEdge), cursor } : { node, cursor };
@@ -49,8 +48,8 @@ const messageImage = Component => {
     }
 
     state = {
-      stateEdges: null,
-      amountEdges: 0,
+      stateEdges: [],
+      stateEndCursor: 0,
       images: chatConfig.images,
       notify: null
     };
@@ -64,10 +63,10 @@ const messageImage = Component => {
     }
 
     checkImages = () => {
-      const { stateEdges, amountEdges } = this.state;
-      if (stateEdges && amountEdges < stateEdges.length) {
+      const { stateEdges, stateEndCursor } = this.state;
+      if (stateEdges.length && (!stateEndCursor || stateEndCursor < this.props.messages.pageInfo.endCursor)) {
         const newEdges = stateEdges.filter(
-          ({ node }) => (node.path && !node.image) || (node.quotedMessage.path && !node.quotedMessage.image)
+          ({ node: { path, image, quotedMessage } }) => (path && !image) || (quotedMessage.path && !quotedMessage.image)
         );
         if (newEdges.length) this.downloadImages(newEdges);
       }
@@ -85,14 +84,14 @@ const messageImage = Component => {
               return downloadAsync(serverUrl + '/' + path, imageDir + filename);
             }
           })
-        ).then(this.addImagesToEdge(node.id));
+        ).then(() => this.addImagesToEdge(node.id));
       });
     };
 
-    addImagesToEdge = id => {
+    addImagesToEdge = async id => {
       const { stateEdges } = this.state;
       this.setState({
-        amountEdges: stateEdges.length,
+        stateEndCursor: this.props.messages.pageInfo.endCursor,
         stateEdges: stateEdges.map(({ node, cursor }) => {
           if (node.id === id) {
             const { quotedMessage: quoted, filename } = node;
@@ -155,7 +154,7 @@ const messageImage = Component => {
       const { messages } = this.props;
       const newProps = {
         images,
-        messages: stateEdges ? { ...messages, edges: stateEdges } : messages,
+        messages: stateEdges.length ? { ...messages, edges: stateEdges } : messages,
         pickImage: this.pickImage
       };
 

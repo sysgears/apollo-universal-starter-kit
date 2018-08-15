@@ -69,38 +69,39 @@ const messageImage = Component => {
         const newEdges = stateEdges.filter(
           ({ node }) => (node.path && !node.image) || (node.quotedMessage.path && !node.quotedMessage.image)
         );
-        if (newEdges.length) this.addImageToMessage(newEdges);
+        if (newEdges.length) this.downloadImages(newEdges);
       }
     };
 
-    downloadImage = async (path, filename) =>
-      await FileSystem.downloadAsync(serverUrl + '/' + path, imageDir + filename).uri;
-
-    addImageToMessage = async newMessages => {
-      const { getInfoAsync, makeDirectoryAsync, readDirectoryAsync } = FileSystem;
+    downloadImages = async newMessages => {
+      const { getInfoAsync, makeDirectoryAsync, readDirectoryAsync, downloadAsync } = FileSystem;
       const { isDirectory } = await getInfoAsync(imageDir);
       if (!isDirectory) await makeDirectoryAsync(imageDir);
       const files = await readDirectoryAsync(imageDir);
-      await newMessages.forEach(async ({ node }) => {
-        const { id } = node;
-        await [node, node.quotedMessage].forEach(({ filename, path }) => {
-          if (filename && path && !files.includes(filename)) {
-            this.downloadImage(path, filename);
-          }
-        });
-        const { stateEdges } = this.state;
-        this.setState({
-          amountEdges: stateEdges.length,
-          stateEdges: stateEdges.map(({ node, cursor }) => {
-            if (node.id === id) {
-              const { quotedMessage: quoted, filename } = node;
-              const quotedMessage = { ...quoted, image: quoted.filename ? `${imageDir}${quoted.filename}` : null };
-              return { cursor, node: { ...node, quotedMessage, image: filename ? `${imageDir}${filename}` : null } };
-            } else {
-              return { node, cursor };
+      newMessages.forEach(({ node }) => {
+        Promise.all(
+          [node, node.quotedMessage].map(({ filename, path }) => {
+            if (filename && path && !files.includes(filename)) {
+              return downloadAsync(serverUrl + '/' + path, imageDir + filename);
             }
           })
-        });
+        ).then(this.addImagesToEdge(node.id));
+      });
+    };
+
+    addImagesToEdge = id => {
+      const { stateEdges } = this.state;
+      this.setState({
+        amountEdges: stateEdges.length,
+        stateEdges: stateEdges.map(({ node, cursor }) => {
+          if (node.id === id) {
+            const { quotedMessage: quoted, filename } = node;
+            const quotedMessage = { ...quoted, image: quoted.filename ? `${imageDir}${quoted.filename}` : null };
+            return { cursor, node: { ...node, quotedMessage, image: filename ? `${imageDir}${filename}` : null } };
+          } else {
+            return { node, cursor };
+          }
+        })
       });
     };
 

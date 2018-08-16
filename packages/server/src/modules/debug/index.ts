@@ -4,13 +4,29 @@ import settings from '../../../../../settings';
 import knex from '../../sql/connector';
 import log from '../../../../common/log';
 
+interface EventQuery {
+  __knexQueryUid: string;
+  sql: string;
+  bindings: any[];
+}
+
+interface Times {
+  [key: string]: {
+    position: number;
+    query: EventQuery;
+    startTime: number;
+    endTime?: number;
+    finished: boolean;
+  };
+}
+
 // The map used to store the query times, where the query unique
 // identifier is the key.
-const times = {};
+const times: Times = {};
 // Used for keeping track of the order queries are executed.
 let count = 0;
 
-const printQueryWithTime = uid => {
+const printQueryWithTime = (uid: string) => {
   const { startTime, endTime, query } = times[uid];
   const elapsedTime = endTime - startTime;
 
@@ -24,7 +40,7 @@ const printQueryWithTime = uid => {
   delete times[uid];
 };
 
-const printIfPossible = uid => {
+const printIfPossible = (uid: string) => {
   const { position } = times[uid];
 
   // Look of a query with a position one less than the current query
@@ -36,7 +52,7 @@ const printIfPossible = uid => {
   }
 };
 
-const printQueriesAfterGivenPosition = position => {
+const printQueriesAfterGivenPosition = (position: number) => {
   // Look for the next query in the queue
   const nextTimeUid = Object.keys(times).find(key => times[key].position === position + 1);
 
@@ -52,7 +68,7 @@ const printQueriesAfterGivenPosition = position => {
 
 if (__DEV__ && settings.app.logging.debugSQL) {
   knex
-    .on('query', query => {
+    .on('query', (query: EventQuery) => {
       const uid = query.__knexQueryUid;
       times[uid] = {
         position: count,
@@ -64,7 +80,7 @@ if (__DEV__ && settings.app.logging.debugSQL) {
       };
       count = count + 1;
     })
-    .on('query-response', (response, query) => {
+    .on('query-response', (response: any, query: EventQuery) => {
       const uid = query.__knexQueryUid;
       times[uid].endTime = now();
       times[uid].finished = true;
@@ -74,7 +90,7 @@ if (__DEV__ && settings.app.logging.debugSQL) {
       printIfPossible(uid);
 
       // Check to see if queries further down the queue can be executed,
-      //in case they weren't able to be printed when they first responded.
+      // in case they weren't able to be printed when they first responded.
       printQueriesAfterGivenPosition(position);
     });
 }

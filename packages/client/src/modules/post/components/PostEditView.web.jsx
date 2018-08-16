@@ -9,15 +9,11 @@ import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
 import settings from '../../../../../../settings';
 
-const onSubmit = (post, addPost, editPost) => values => {
-  if (post) {
-    editPost(post.id, values.title, values.content);
-  } else {
-    addPost(values.title, values.content);
-  }
+const onSubmit = (post, editPost) => values => {
+  editPost(post.id, values.title, values.content);
 };
 
-const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost, editPost, t }) => {
+const PostEditView = ({ loading, post, match, location, subscribeToMore, editPost, t }) => {
   let postObj = post;
   // if new post was just added read it from router
   if (!postObj && location.state) {
@@ -51,9 +47,9 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
           {t('post.btn.back')}
         </Link>
         <h2>
-          {t(`post.label.${post ? 'edit' : 'create'}`)} {t('post.label.post')}
+          {t(`post.label.edit`)} {t('post.label.post')}
         </h2>
-        <PostForm onSubmit={onSubmit(postObj, addPost, editPost)} post={post} />
+        <PostForm onSubmit={onSubmit(postObj, editPost)} post={post} />
         <br />
         {postObj && (
           <PostComments
@@ -70,7 +66,6 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, addPost
 PostEditView.propTypes = {
   loading: PropTypes.bool.isRequired,
   post: PropTypes.object,
-  addPost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,

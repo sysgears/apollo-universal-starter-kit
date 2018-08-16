@@ -95,7 +95,7 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
 
   const allLinks = [...(links || []), linkState, apiLink];
 
-  if (settings.app.logging.apolloLogging) {
+  if (settings.app.logging.apolloLogging && (!__TEST__ || typeof window !== 'undefined')) {
     allLinks.unshift(new LoggingLink({ logger: log.debug.bind(log) }));
   }
 
@@ -103,13 +103,21 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
     link: ApolloLink.from(allLinks),
     cache
   };
-  if (__SSR__) {
+  if (__SSR__ && !__TEST__) {
     if (typeof window !== 'undefined' && window.__APOLLO_STATE__) {
       clientParams.initialState = window.__APOLLO_STATE__;
     } else {
       clientParams.ssrMode = true;
       clientParams.ssrForceFetchDelay = 100;
     }
+  }
+
+  if (__TEST__) {
+    clientParams.defaultOptions = {
+      query: {
+        fetchPolicy: 'no-cache'
+      }
+    };
   }
 
   const client = new ApolloClient(clientParams);

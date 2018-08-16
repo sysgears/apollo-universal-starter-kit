@@ -6,12 +6,12 @@ type Counter {
 
 extend type Query {
   # Counter
-  counter: Counter
+  serverCounter: Counter
 }
 
 extend type Mutation {
   # Increase counter value, returns current counter amount
-  addCounter(
+  addServerCounter(
     # Amount to add to counter
     amount: Int!
   ): Counter

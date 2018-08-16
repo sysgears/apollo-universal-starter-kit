@@ -16,11 +16,11 @@ type UserProfile {
 
 # Additional authentication service info
 type UserAuth {
-    certificate: CertificateAuth
-    facebook: FacebookAuth
-    google: GoogleAuth
-    github: GithubAuth
-    linkedin: LinkedInAuth
+  certificate: CertificateAuth
+  facebook: FacebookAuth
+  google: GoogleAuth
+  github: GithubAuth
+  linkedin: LinkedInAuth
 }
 
 type CertificateAuth {
@@ -38,12 +38,13 @@ type GoogleAuth {
 }
 
 type GithubAuth {
-    ghId: String
-    displayName: String
+  ghId: String
+  displayName: String
 }
+
 type LinkedInAuth {
-    lnId: String
-    displayName: String
+  lnId: String
+  displayName: String
 }
 
 extend type Query {
@@ -89,11 +90,11 @@ input FilterUserInput {
 
 # Additional authentication service info
 input AuthInput {
-    certificate: AuthCertificateInput
-    facebook: AuthFacebookInput
-    google: AuthGoogleInput
-    github: AuthGitHubInput 
-    linkedin: AuthLinkedInInput
+  certificate: AuthCertificateInput
+  facebook: AuthFacebookInput
+  google: AuthGoogleInput
+  github: AuthGitHubInput
+  linkedin: AuthLinkedInInput
 }
 
 input AuthCertificateInput {
@@ -111,13 +112,13 @@ input AuthGoogleInput {
 }
 
 input AuthGitHubInput {
-    ghId: String
-    displayName: String
+  ghId: String
+  displayName: String
 }
 
 input AuthLinkedInInput {
-    lnId: String
-    displayName: String
+  lnId: String
+  displayName: String
 }
 
 # Input for addUser Mutation

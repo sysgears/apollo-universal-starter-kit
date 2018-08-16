@@ -11,10 +11,10 @@ describe('$Module$ API works', () => {
     apollo = getApollo();
   });
 
-  step('Has GraphiQL endpoint', () => {
+  step('Has GraphQL Playground endpoint', () => {
     return chai
       .request(server)
-      .get('/graphiql')
+      .get('/gplayground')
       .end((err, res) => {
         res.status.should.be(200);
         res.body.should.be('{}');

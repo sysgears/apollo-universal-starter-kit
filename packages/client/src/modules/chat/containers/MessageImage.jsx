@@ -26,6 +26,13 @@ const messageImage = Component => {
       t: PropTypes.func
     };
 
+    state = {
+      stateEdges: [],
+      stateEndCursor: 0,
+      images: chatConfig.images,
+      notify: null
+    };
+
     static getDerivedStateFromProps({ messages }, { images, stateEdges }) {
       if (images && messages) {
         const { edges } = messages;
@@ -46,13 +53,6 @@ const messageImage = Component => {
       }
       return null;
     }
-
-    state = {
-      stateEdges: [],
-      stateEndCursor: 0,
-      images: chatConfig.images,
-      notify: null
-    };
 
     componentDidMount() {
       this.checkImages();

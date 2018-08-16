@@ -9,7 +9,7 @@ const messagesFormatter = Component => {
       const formattedEdges = messages.edges
         .map(
           ({
-            node: { id, text, userId, username, createdAt, uuid, quotedId, image = null, path, filename, quotedMessage }
+            node: { id, text, userId, username, createdAt, uuid, quotedId, image, path, filename, quotedMessage }
           }) => ({
             _id: id ? id : uuidGenerator.v4(),
             text,

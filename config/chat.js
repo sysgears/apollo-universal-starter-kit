@@ -1,5 +1,5 @@
 export default {
-  limit: 2,
+  limit: 50,
   images: true,
   giftedChat: {
     alwaysShowSend: false,

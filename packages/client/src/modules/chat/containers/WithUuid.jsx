@@ -1,5 +1,5 @@
 import React from 'react';
-import uuid from 'react-native-uuid';
+import uuid from 'uuid';
 import { getItem, setItem } from '../../common/clientStorage';
 
 const withUuid = Component => {

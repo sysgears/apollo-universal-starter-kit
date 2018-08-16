@@ -1,5 +1,5 @@
 import React from 'react';
-import * as uuidGenerator from 'react-native-uuid';
+import * as uuidGenerator from 'uuid';
 
 const messagesFormatter = Component => {
   return props => {

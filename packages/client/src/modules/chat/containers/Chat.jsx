@@ -29,19 +29,20 @@ function AddMessage(prev, node) {
     __typename: 'MessageEdges'
   };
 
+  const diff = prev.messages.edges.length === filteredEdges.length ? 1 : 0;
   const updatedEdges = [...filteredEdges, edge].map((edge, i) => ({ ...edge, cursor: filteredEdges.length - i }));
 
   return update(prev, {
     messages: {
       totalCount: {
-        $set: prev.messages.totalCount + 1
+        $set: prev.messages.totalCount + diff
       },
       edges: {
         $set: updatedEdges
       },
       pageInfo: {
         endCursor: {
-          $set: prev.messages.pageInfo.endCursor + 1
+          $set: prev.messages.pageInfo.endCursor + diff
         }
       }
     }
@@ -57,7 +58,7 @@ function DeleteMessage(prev, id) {
   }
 
   const filteredEdges = prev.messages.edges.filter((edge, i) => i !== index);
-  const updatedEdges = filteredEdges.map((edge, i) => (edge.cursor > index ? { ...edge, cursor: i } : edge));
+  const updatedEdges = filteredEdges.map((edge, i) => ({ ...edge, cursor: i }));
 
   return update(prev, {
     messages: {

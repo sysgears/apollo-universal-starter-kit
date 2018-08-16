@@ -33,7 +33,7 @@ const messageImage = Component => {
       notify: null
     };
 
-    static getDerivedStateFromProps({ messages }, { images, stateEdges }) {
+    static getDerivedStateFromProps({ messages }, { images, stateEdges, stateEndCursor }) {
       if (images && messages) {
         const { edges } = messages;
         if (!stateEdges.length) {
@@ -45,6 +45,7 @@ const messageImage = Component => {
         };
 
         return {
+          stateEndCursor: stateEdges.length > edges.length ? messages.pageInfo.endCursor : stateEndCursor,
           stateEdges: edges.map(({ node, cursor }) => {
             const currentEdge = stateEdges.find(({ node: { id } }) => node.id === id || !id);
             return currentEdge ? { node: addImageToNode(node, currentEdge), cursor } : { node, cursor };

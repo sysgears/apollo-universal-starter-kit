@@ -4,7 +4,6 @@ import path from 'path';
 import { isApiExternal } from './net';
 import modules from './modules';
 import websiteMiddleware from './middleware/website';
-import gplaygroundMiddleware from './middleware/gplayground';
 import createApolloServer from './graphql';
 import errorMiddleware from './middleware/error';
 
@@ -41,7 +40,9 @@ if (!isApiExternal) {
   });
 }
 
-app.get('/gplayground', (...args) => gplaygroundMiddleware(args[0])(...args));
+// Workaround: this middleware should be because playground calls next func
+// See: https://github.com/prisma/graphql-playground/issues/557
+app.get('/graphql', () => {});
 
 app.use((...args) => websiteMiddleware(...args));
 

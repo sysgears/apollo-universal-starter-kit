@@ -25,6 +25,13 @@ export default () => {
           apiKey: settings.engine.apiKey
         }
       : false,
-    playground: false
+    playground: {
+      tabs: [
+        {
+          endpoint: '/graphql',
+          query: '{\n' + '  serverCounter {\n' + '    amount\n' + '  }\n' + '}'
+        }
+      ]
+    }
   });
 };

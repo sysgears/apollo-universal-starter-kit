@@ -1,21 +1,23 @@
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe } from 'graphql';
+import { Server } from 'http';
 
 import schema from './schema';
 import log from '../../../common/log';
 import modules from '../modules';
 
-let subscriptionServer;
+let subscriptionServer: SubscriptionServer;
 
-const addSubscriptions = httpServer => {
+const addSubscriptions = (httpServer: Server) => {
   subscriptionServer = SubscriptionServer.create(
     {
       schema,
       execute,
       subscribe,
-      onConnect: (connectionParams, webSocket) => modules.createContext(null, connectionParams, webSocket),
-      onOperation: async (message, params, webSocket) => {
-        params.context = await modules.createContext(null, message.payload, webSocket);
+      onConnect: (connectionParams: any, webSocket: any) =>
+        modules.createContext(null, null, connectionParams, webSocket),
+      onOperation: async (message: any, params: any, webSocket: any) => {
+        params.context = await modules.createContext(null, null, message.payload, webSocket);
         return params;
       }
     },
@@ -26,7 +28,7 @@ const addSubscriptions = httpServer => {
   );
 };
 
-const addGraphQLSubscriptions = httpServer => {
+const addGraphQLSubscriptions = (httpServer: Server) => {
   if (module.hot && module.hot.data) {
     const prevServer = module.hot.data.subscriptionServer;
     if (prevServer && prevServer.wsServer) {

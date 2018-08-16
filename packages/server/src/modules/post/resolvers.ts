@@ -1,35 +1,64 @@
-import { withFilter } from 'graphql-subscriptions';
+import { PubSub, withFilter } from 'graphql-subscriptions';
 import { createBatchResolver } from 'graphql-resolve-batch';
+// interfaces
+import { Post, Comment, Identifier } from './sql';
+
+interface Edges {
+  cursor: number;
+  node: Post & Identifier;
+}
+
+interface PostsParams {
+  limit: number;
+  after: number;
+}
+
+interface PostInput {
+  input: Post;
+}
+
+interface PostInputWithId {
+  input: Post & Identifier;
+}
+
+interface CommentInput {
+  input: Comment;
+}
+
+interface CommentInputWithId {
+  input: Comment & Identifier;
+}
 
 const POST_SUBSCRIPTION = 'post_subscription';
 const POSTS_SUBSCRIPTION = 'posts_subscription';
 const COMMENT_SUBSCRIPTION = 'comment_subscription';
 
-export default pubsub => ({
+export default (pubsub: PubSub) => ({
   Query: {
-    async posts(obj, { limit, after }, context) {
-      let edgesArray = [];
-      let posts = await context.Post.postsPagination(limit, after);
+    async posts(obj: any, { limit, after }: PostsParams, context: any) {
+      const edgesArray: Edges[] = [];
+      const posts = await context.Post.postsPagination(limit, after);
+      const total = (await context.Post.getTotal()).count;
+      const hasNextPage = total > after + limit;
 
-      posts.map((post, index) => {
+      posts.map((post: Post & Identifier, index: number) => {
         edgesArray.push({
           cursor: after + index,
           node: post
         });
       });
       const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
-      const total = (await context.Post.getTotal()).count;
-      const hasNextPage = total > after + limit;
+
       return {
         totalCount: total,
         edges: edgesArray,
         pageInfo: {
-          endCursor: endCursor,
-          hasNextPage: hasNextPage
+          endCursor,
+          hasNextPage
         }
       };
     },
-    post(obj, { id }, context) {
+    post(obj: any, { id }: Identifier, context: any) {
       return context.Post.post(id);
     }
   },
@@ -39,7 +68,7 @@ export default pubsub => ({
     })
   },
   Mutation: {
-    async addPost(obj, { input }, context) {
+    async addPost(obj: any, { input }: PostInput, context: any) {
       const [id] = await context.Post.addPost(input);
       const post = await context.Post.post(id);
       // publish for post list
@@ -52,7 +81,7 @@ export default pubsub => ({
       });
       return post;
     },
-    async deletePost(obj, { id }, context) {
+    async deletePost(obj: any, { id }: Identifier, context: any) {
       const post = await context.Post.post(id);
       const isDeleted = await context.Post.deletePost(id);
       if (isDeleted) {
@@ -77,7 +106,7 @@ export default pubsub => ({
         return { id: null };
       }
     },
-    async editPost(obj, { input }, context) {
+    async editPost(obj: any, { input }: PostInputWithId, context: any) {
       await context.Post.editPost(input);
       const post = await context.Post.post(input.id);
       // publish for post list
@@ -98,7 +127,7 @@ export default pubsub => ({
       });
       return post;
     },
-    async addComment(obj, { input }, context) {
+    async addComment(obj: any, { input }: CommentInput, context: any) {
       const [id] = await context.Post.addComment(input);
       const comment = await context.Post.getComment(id);
       // publish for edit post page
@@ -112,13 +141,7 @@ export default pubsub => ({
       });
       return comment;
     },
-    async deleteComment(
-      obj,
-      {
-        input: { id, postId }
-      },
-      context
-    ) {
+    async deleteComment(obj: any, { input: { id, postId } }: CommentInputWithId, context: any) {
       await context.Post.deleteComment(id);
       // publish for edit post page
       pubsub.publish(COMMENT_SUBSCRIPTION, {
@@ -131,7 +154,7 @@ export default pubsub => ({
       });
       return { id };
     },
-    async editComment(obj, { input }, context) {
+    async editComment(obj: any, { input }: CommentInputWithId, context: any) {
       await context.Post.editComment(input);
       const comment = await context.Post.getComment(input.id);
       // publish for edit post page

@@ -41,13 +41,13 @@ function errorMiddleware(e: Error, req: any, res: any, next: () => void) {
       stripCircular(e, null)
     )};</script>`;
     const vendorScript = assetMap['vendor.js']
-      ? `<script src="/${assetMap['vendor.js']}" charSet="utf-8"></script>`
+      ? `<script src="${assetMap['vendor.js']}" charSet="utf-8"></script>`
       : '';
 
     res.status(200).send(
       `<html>${serverErrorScript}<body><div id="root"></div>
       ${vendorScript}
-          <script src="/${assetMap['index.js']}" charSet="utf-8"></script>
+          <script src="${assetMap['index.js']}" charSet="utf-8"></script>
           </body></html>`
     );
   }

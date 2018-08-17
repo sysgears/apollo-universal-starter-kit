@@ -4,9 +4,9 @@ import fs from 'fs';
 import { isApiExternal } from '../net';
 import log from '../../../common/log';
 
-let assetMap;
+let assetMap: { [key: string]: string };
 
-const stripCircular = (from, seen) => {
+const stripCircular = (from: any, seen: any[] | null) => {
   const to = Array.isArray(from) ? [] : {};
   seen = seen || [];
   seen.push(from);
@@ -15,7 +15,9 @@ const stripCircular = (from, seen) => {
       to[key] = from[key];
     } else if (seen.indexOf(from[key]) < 0) {
       to[key] = stripCircular(from[key], seen.slice(0));
-    } else to[key] = '[Circular]';
+    } else {
+      to[key] = '[Circular]';
+    }
   });
   return to;
 };
@@ -24,8 +26,7 @@ const stripCircular = (from, seen) => {
  * The code below MUST be declared as a function, not closure,
  * otherwise Express will fail to execute this handler
  */
-// eslint-disable-next-line no-unused-vars
-function errorMiddleware(e, req, res, next) {
+function errorMiddleware(e: Error, req: any, res: any, next: () => void) {
   if (!isApiExternal && req.path === __API_URL__) {
     const stack = e.stack.toString().replace(/[\n]/g, '\\n');
     res.status(200).send(`[{"data": {}, "errors":[{"message": "${stack}"}]}]`);
@@ -33,11 +34,11 @@ function errorMiddleware(e, req, res, next) {
     log.error(e);
 
     if (__DEV__ || !assetMap) {
-      assetMap = JSON.parse(fs.readFileSync(path.join(__FRONTEND_BUILD_DIR__, 'assets.json')));
+      assetMap = JSON.parse(fs.readFileSync(path.join(__FRONTEND_BUILD_DIR__, 'assets.json')).toString());
     }
 
     const serverErrorScript = `<script charset="UTF-8">window.__SERVER_ERROR__=${JSON.stringify(
-      stripCircular(e)
+      stripCircular(e, null)
     )};</script>`;
     const vendorScript = assetMap['vendor.js']
       ? `<script src="/${assetMap['vendor.js']}" charSet="utf-8"></script>`

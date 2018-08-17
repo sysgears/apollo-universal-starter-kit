@@ -27,17 +27,17 @@ const messageImage = Component => {
     };
 
     state = {
-      stateEdges: [],
-      stateEndCursor: 0,
+      edges: [],
+      endCursor: 0,
       images: chatConfig.images,
       notify: null
     };
 
-    static getDerivedStateFromProps({ messages }, { images, stateEdges, stateEndCursor }) {
+    static getDerivedStateFromProps({ messages }, { images, edges: stateEdges, endCursor }) {
       if (images && messages) {
         const { edges } = messages;
         if (!stateEdges.length) {
-          return { stateEdges: edges };
+          return { edges };
         }
         const addImageToNode = (node, { node: currentNode }) => {
           const quotedMessage = { ...node.quotedMessage, image: currentNode.quotedMessage.image };
@@ -45,8 +45,8 @@ const messageImage = Component => {
         };
 
         return {
-          stateEndCursor: stateEdges.length > edges.length ? messages.pageInfo.endCursor : stateEndCursor,
-          stateEdges: edges.map(({ node, cursor }) => {
+          endCursor: stateEdges.length > edges.length ? messages.pageInfo.endCursor : endCursor,
+          edges: edges.map(({ node, cursor }) => {
             const currentEdge = stateEdges.find(({ node: { id } }) => node.id === id || !id);
             return currentEdge ? { node: addImageToNode(node, currentEdge), cursor } : { node, cursor };
           })
@@ -64,9 +64,9 @@ const messageImage = Component => {
     }
 
     checkImages = () => {
-      const { stateEdges, stateEndCursor } = this.state;
-      if (stateEdges.length && (!stateEndCursor || stateEndCursor < this.props.messages.pageInfo.endCursor)) {
-        const newEdges = stateEdges.filter(
+      const { edges, endCursor } = this.state;
+      if (edges.length && (!endCursor || endCursor < this.props.messages.pageInfo.endCursor)) {
+        const newEdges = edges.filter(
           ({ node: { path, image, quotedMessage } }) => (path && !image) || (quotedMessage.path && !quotedMessage.image)
         );
         if (newEdges.length) this.downloadImages(newEdges);
@@ -90,10 +90,10 @@ const messageImage = Component => {
     };
 
     addImagesToEdge = async id => {
-      const { stateEdges } = this.state;
+      const { edges } = this.state;
       this.setState({
-        stateEndCursor: this.props.messages.pageInfo.endCursor,
-        stateEdges: stateEdges.map(({ node, cursor }) => {
+        endCursor: this.props.messages.pageInfo.endCursor,
+        edges: edges.map(({ node, cursor }) => {
           if (node.id === id) {
             const { quotedMessage: quoted, filename } = node;
             const quotedMessage = { ...quoted, image: quoted.filename ? `${imageDir}${quoted.filename}` : null };
@@ -105,7 +105,10 @@ const messageImage = Component => {
       });
     };
 
-    checkPermission = async type => {
+    checkPermission = async (type, skip) => {
+      if (skip === Platform.OS) {
+        return true;
+      }
       const { getAsync, askAsync } = Permissions;
       const { status } = await getAsync(type);
       if (status !== 'granted') {
@@ -117,8 +120,7 @@ const messageImage = Component => {
 
     pickImage = async ({ onSend }) => {
       const { t } = this.props;
-      const permission = Platform.OS === 'ios' ? await this.checkPermission(Permissions.CAMERA_ROLL) : true;
-      if (permission) {
+      if (await this.checkPermission(Permissions.CAMERA_ROLL, 'android')) {
         const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(chatConfig.image.imagePicker);
         if (!cancelled) {
           const { size } = await FileSystem.getInfoAsync(uri);
@@ -151,11 +153,11 @@ const messageImage = Component => {
     };
 
     render() {
-      const { images, stateEdges } = this.state;
+      const { images, edges } = this.state;
       const { messages } = this.props;
       const newProps = {
         images,
-        messages: stateEdges.length ? { ...messages, edges: stateEdges } : messages,
+        messages: edges.length ? { ...messages, edges } : messages,
         pickImage: this.pickImage
       };
 

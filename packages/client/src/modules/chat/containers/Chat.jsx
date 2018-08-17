@@ -25,24 +25,24 @@ function AddMessage(prev, node) {
   const filteredEdges = prev.messages.edges.filter(edge => edge.node.id !== null);
   const edge = {
     cursor: 0,
-    node: node,
+    node,
     __typename: 'MessageEdges'
   };
 
-  const diff = prev.messages.edges.length === filteredEdges.length ? 1 : 0;
+  const increment = edge.node.id ? 1 : 0;
   const updatedEdges = [...filteredEdges, edge].map((edge, i) => ({ ...edge, cursor: filteredEdges.length - i }));
 
   return update(prev, {
     messages: {
       totalCount: {
-        $set: prev.messages.totalCount + diff
+        $set: prev.messages.totalCount + increment
       },
       edges: {
         $set: updatedEdges
       },
       pageInfo: {
         endCursor: {
-          $set: prev.messages.pageInfo.endCursor + diff
+          $set: prev.messages.pageInfo.endCursor + increment
         }
       }
     }
@@ -57,8 +57,9 @@ function DeleteMessage(prev, id) {
     return prev;
   }
 
-  const filteredEdges = prev.messages.edges.filter((edge, i) => i !== index);
-  const updatedEdges = filteredEdges.map((edge, i) => ({ ...edge, cursor: i }));
+  const updatedEdges = prev.messages.edges
+    .filter((edge, i) => i !== index)
+    .map((edge, cursor) => ({ ...edge, cursor }));
 
   return update(prev, {
     messages: {
@@ -78,23 +79,16 @@ function DeleteMessage(prev, id) {
 }
 
 function EditMessage(prev, node) {
-  const index = prev.messages.edges.findIndex(edge => edge.node.id === node.id);
-
-  // ignore if not found
-  if (index < 0) {
-    return prev;
-  }
-
-  const edge = {
+  const newEdge = {
     cursor: node.id,
-    node: node,
+    node,
     __typename: 'MessageEdges'
   };
 
   return update(prev, {
     messages: {
       edges: {
-        $splice: [[index, 1, edge]]
+        $set: prev.messages.edges.map(edge => (edge.node.id === node.id ? newEdge : edge))
       }
     }
   });
@@ -108,10 +102,11 @@ class Chat extends React.Component {
     loadData: PropTypes.func.isRequired
   };
 
-  componentDidUpdate(prevProps) {
-    if (!this.props.loading) {
-      const endCursor = this.props.messages ? this.props.messages.pageInfo.endCursor : 0;
-      const prevEndCursor = prevProps.messages ? prevProps.messages.pageInfo.endCursor : null;
+  componentDidUpdate({ messages: prevMessages }) {
+    const { loading, messages } = this.props;
+    if (!loading && messages) {
+      const endCursor = messages.pageInfo.endCursor || 0;
+      const prevEndCursor = prevMessages ? prevMessages.pageInfo.endCursor : null;
       // Check if props have changed and, if necessary, stop the subscription
       if (this.subscription && prevEndCursor !== endCursor) {
         this.subscription();
@@ -179,18 +174,20 @@ export default compose(
           variables: {
             after: after
           },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            const totalCount = fetchMoreResult.messages.totalCount;
-            const newEdges = fetchMoreResult.messages.edges;
-            const pageInfo = fetchMoreResult.messages.pageInfo;
-            const displayedEdges = dataDelivery === 'add' ? [...newEdges, ...previousResult.messages.edges] : newEdges;
-
+          updateQuery: (
+            previousResult,
+            {
+              fetchMoreResult: {
+                messages: { totalCount, edges, pageInfo }
+              }
+            }
+          ) => {
             return {
               // By returning `cursor` here, we update the `fetchMore` function
               // to the new cursor.
               messages: {
                 totalCount,
-                edges: displayedEdges,
+                edges: dataDelivery === 'add' ? [...edges, ...previousResult.messages.edges] : edges,
                 pageInfo,
                 __typename: 'Messages'
               }
@@ -224,12 +221,12 @@ export default compose(
             addMessage: {
               __typename: 'Message',
               createdAt: new Date().toISOString(),
-              text: text,
-              username: username,
-              userId: userId,
-              uuid: uuid,
+              text,
+              username,
+              userId,
+              uuid,
               id: null,
-              quotedId: quotedId,
+              quotedId,
               quotedMessage: {
                 __typename: 'QuotedMessage',
                 ...quotedMessage
@@ -278,13 +275,13 @@ export default compose(
           optimisticResponse: {
             __typename: 'Mutation',
             editMessage: {
-              id: id,
-              text: text,
-              userId: userId,
-              username: username,
+              id,
+              text,
+              userId,
+              username,
               createdAt: createdAt.toISOString(),
-              uuid: uuid,
-              quotedId: quotedId,
+              uuid,
+              quotedId,
               quotedMessage: {
                 __typename: 'QuotedMessage',
                 ...quotedMessage

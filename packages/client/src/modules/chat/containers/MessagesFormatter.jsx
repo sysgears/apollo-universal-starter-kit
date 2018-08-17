@@ -11,10 +11,10 @@ const messagesFormatter = Component => {
           ({
             node: { id, text, userId, username, createdAt, uuid, quotedId, image, path, filename, quotedMessage }
           }) => ({
-            _id: id ? id : uuidGenerator.v4(),
+            _id: id || uuidGenerator.v4(),
             text,
             createdAt: new Date(Date.parse(createdAt.replace(' ', 'T'))),
-            user: { _id: userId ? userId : uuid, name: username || 'Anonymous' },
+            user: { _id: userId || uuid, name: username || 'Anonymous' },
             quotedId,
             path,
             filename,

@@ -10,7 +10,7 @@ const withUuid = Component => {
 
     componentDidMount() {
       getItem('uuid').then(res => {
-        this.setState({ uuid: res ? res : uuid.v4() });
+        this.setState({ uuid: res || uuid.v4() });
         if (!res) setItem('uuid', this.state.uuid);
       });
     }

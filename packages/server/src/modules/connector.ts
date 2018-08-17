@@ -47,7 +47,7 @@ export default class {
     return this.schema;
   }
 
-  public async createContext(req: any, res: any, connectionParams: any, webSocket: any) {
+  public async createContext(req: any, res: any, connectionParams?: any, webSocket?: any) {
     let context = {};
     for (const createContextFunc of this.createContextFunc) {
       context = merge(context, await createContextFunc({ req, res, connectionParams, webSocket, context }));

@@ -17,24 +17,20 @@ import Routes from '../../../client/src/app/Routes';
 import modules from '../modules';
 import schema from '../api/schema';
 
-let assetMap;
+let assetMap: { [key: string]: string };
 
-const renderServerSide = async (req, res) => {
+const renderServerSide = async (req: any, res: any) => {
   const clientModules = require('../../../client/src/modules').default;
-
   const schemaLink = new SchemaLink({ schema, context: await modules.createContext(req, res) });
-
   const client = createApolloClient({
     apiUrl,
     createNetLink: !isApiExternal ? () => schemaLink : undefined,
     links: clientModules.link,
-    clientResolvers: clientModules.resolvers
+    clientResolvers: clientModules.resolvers,
+    connectionParams: null
   });
-
-  let initialState = {};
-  const store = createReduxStore(initialState, client);
-
-  const context = {};
+  const store = createReduxStore({}, client);
+  const context: any = {};
   const App = clientModules.getWrappedRoot(
     <Provider store={store}>
       <ApolloProvider client={client}>
@@ -50,34 +46,31 @@ const renderServerSide = async (req, res) => {
 
   await getDataFromTree(App);
 
-  if (context.pageNotFound === true) {
-    res.status(404);
-  } else {
-    res.status(200);
-  }
-
-  const sheet = new ServerStyleSheet();
-  const html = ReactDOMServer.renderToString(sheet.collectStyles(App));
-  const css = sheet.getStyleElement().map((el, idx) => (el ? React.cloneElement(el, { key: idx }) : el));
-  const helmet = Helmet.renderStatic(); // Avoid memory leak while tracking mounted instances
+  context.pageNotFound === true ? res.status(404) : res.status(200);
 
   if (context.url) {
     res.writeHead(301, { Location: context.url });
     res.end();
   } else {
     if (__DEV__ || !assetMap) {
-      assetMap = JSON.parse(fs.readFileSync(path.join(__FRONTEND_BUILD_DIR__, 'assets.json')));
+      assetMap = JSON.parse(fs.readFileSync(path.join(__FRONTEND_BUILD_DIR__, 'assets.json')).toString());
     }
 
-    const apolloState = Object.assign({}, client.cache.extract());
+    const sheet = new ServerStyleSheet();
+    const htmlProps = {
+      content: ReactDOMServer.renderToString(sheet.collectStyles(App)),
+      css: sheet.getStyleElement().map((el, idx) => (el ? React.cloneElement(el, { key: idx }) : el)),
+      helmet: Helmet.renderStatic(), // Avoid memory leak while tracking mounted instances
+      state: { ...client.cache.extract() },
+      assetMap
+    };
 
-    const page = <Html content={html} state={apolloState} assetMap={assetMap} css={css} helmet={helmet} />;
-    res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(page)}`);
+    res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(<Html {...htmlProps} />)}`);
     res.end();
   }
 };
 
-export default async (req, res, next) => {
+export default async (req: any, res: any, next: (e?: Error) => void) => {
   try {
     if (req.path.indexOf('.') < 0 && __SSR__) {
       return await renderServerSide(req, res);

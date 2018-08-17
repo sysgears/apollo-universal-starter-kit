@@ -6,25 +6,34 @@ import log from '../../../common/log';
 
 let assetMap: { [key: string]: string };
 
-const stripCircular = (from: any, seen: any[] | null) => {
-  const to = Array.isArray(from) ? [] : {};
+/**
+ * Gets rid of circular data in the object,
+ * replaces circular links to '[Circular]' string
+ * It is needed for converting the Error object into JSON via JSON.stringify
+ */
+const stripCircular = (cilcularData: any, seen: any[] | null) => {
+  const notCilcularData = Array.isArray(cilcularData) ? [] : {};
   seen = seen || [];
-  seen.push(from);
-  Object.getOwnPropertyNames(from).forEach(key => {
-    if (!from[key] || (typeof from[key] !== 'object' && !Array.isArray(from[key]))) {
-      to[key] = from[key];
-    } else if (seen.indexOf(from[key]) < 0) {
-      to[key] = stripCircular(from[key], seen.slice(0));
+  seen.push(cilcularData);
+
+  Object.getOwnPropertyNames(cilcularData).forEach(key => {
+    if (!cilcularData[key] || (typeof cilcularData[key] !== 'object' && !Array.isArray(cilcularData[key]))) {
+      notCilcularData[key] = cilcularData[key];
+    } else if (seen.indexOf(cilcularData[key]) < 0) {
+      notCilcularData[key] = stripCircular(cilcularData[key], seen.slice(0));
     } else {
-      to[key] = '[Circular]';
+      notCilcularData[key] = '[Circular]';
     }
   });
-  return to;
+
+  return notCilcularData;
 };
 
-/*
+/**
  * The code below MUST be declared as a function, not closure,
  * otherwise Express will fail to execute this handler
+ *
+ * Important: should have 4 params, even if they don't used
  */
 function errorMiddleware(e: Error, req: any, res: any, next: () => void) {
   if (!isApiExternal && req.path === __API_URL__) {
@@ -37,18 +46,15 @@ function errorMiddleware(e: Error, req: any, res: any, next: () => void) {
       assetMap = JSON.parse(fs.readFileSync(path.join(__FRONTEND_BUILD_DIR__, 'assets.json')).toString());
     }
 
-    const serverErrorScript = `<script charset="UTF-8">window.__SERVER_ERROR__=${JSON.stringify(
-      stripCircular(e, null)
-    )};</script>`;
-    const vendorScript = assetMap['vendor.js']
-      ? `<script src="${assetMap['vendor.js']}" charSet="utf-8"></script>`
-      : '';
-
     res.status(200).send(
-      `<html>${serverErrorScript}<body><div id="root"></div>
-      ${vendorScript}
-          <script src="${assetMap['index.js']}" charSet="utf-8"></script>
-          </body></html>`
+      `<html>
+            <script charset="UTF-8">window.__SERVER_ERROR__=${JSON.stringify(stripCircular(e, null))};</script>
+            <body>
+                 <div id="root"></div>
+                 ${assetMap['vendor.js'] ? `<script src="${assetMap['vendor.js']}" charSet="utf-8"></script>` : ''}
+                 <script src="${assetMap['index.js']}" charSet="utf-8"></script>
+          </body>
+       </html>`
     );
   }
 }

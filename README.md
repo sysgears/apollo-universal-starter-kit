@@ -427,7 +427,7 @@ cd apollo-universal-starter-kit
 2. Install dependencies.
 
 ```
-yarn
+yarn --prod=false
 ```
 
 3. Seed production database data.

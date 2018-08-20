@@ -116,7 +116,6 @@
     "eslint": "^4.13.1",
     "graphql-tools": "^2.13.0",
     "jsdom": "^11.5.1",
-    "mini-css-extract-plugin": "^0.4.0",
     "mkdirp": "^0.5.1",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",

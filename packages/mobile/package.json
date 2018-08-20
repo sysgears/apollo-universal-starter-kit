@@ -90,7 +90,7 @@
     "eslint": "^4.13.1",
     "exp": "^53.1.0",
     "freeport-async": "^1.1.1",
-    "haul": "1.0.0-beta.14",
+    "haul": "^1.0.0-rc.7",
     "image-size": "^0.6.2",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",

@@ -59,7 +59,7 @@
     "extract-files": "^3.1.0",
     "filesize": "^3.5.11",
     "formik": "^1.0.2",
-    "graphql": "0.13.0",
+    "graphql": "^0.13.0",
     "graphql-iso-date": "^3.3.0",
     "graphql-tag": "^2.6.0",
     "history": "^4.7.2",

@@ -140,10 +140,10 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.150"
+    "spinjs": "^0.4.152"
   },
   "resolutions": {
-    "graphql": "0.13.0",
+    "graphql": "0.13.2",
     "iterall": "^1.2.2",
     "upath": "^1.1.0"
   }

@@ -70,7 +70,7 @@
     "error-stack-parser": "^2.0.1",
     "express": "^4.16.2",
     "filesize": "^3.5.11",
-    "graphql": "0.13.0",
+    "graphql": "^0.13.0",
     "graphql-auth": "0.2.2",
     "graphql-iso-date": "^3.3.0",
     "graphql-playground-middleware-express": "^1.7.1",

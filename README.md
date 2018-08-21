@@ -261,7 +261,7 @@ yarn cli
 * Full LOGIN funcionality in user example with [JWT] tokens stored in `localStorage` and `cookies`
 
 * [Stripe] Payment Processor integration as a starting point for apps that use user subscriptions.
-Check [subscription module documentation](packages/client/src/modules/subscription/README.md) for details.
+Check [subscription module documentation](docs/subscriptionStripe.md) for details.
 
 * [GraphQL] API
 

@@ -135,7 +135,9 @@
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",
-    "react-navigation": "^2.0.0",
+    "react-navigation": "^2.0.0"
+  },
+  "peerDependencies": {
     "spinjs": "^0.4.0"
   }
 }

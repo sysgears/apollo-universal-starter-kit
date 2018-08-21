@@ -97,7 +97,6 @@
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",
     "mocha-webpack": "^0.7.0",
-    "postcss-loader": "^2.0.9",
     "react-addons-test-utils": "^16.0.0-alpha.3",
     "react-test-renderer": "^16.2.0",
     "request": "^2.83.0",

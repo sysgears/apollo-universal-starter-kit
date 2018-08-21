@@ -1,8 +1,22 @@
 import { returnId, orderedFor } from '../../sql/helpers';
 import knex from '../../sql/connector';
 
-export default class Post {
-  postsPagination(limit, after) {
+export interface Post {
+  title: string;
+  content: string;
+}
+
+export interface Comment {
+  postId: number;
+  content: string;
+}
+
+export interface Identifier {
+  id: number;
+}
+
+export default class PostDAO {
+  public postsPagination(limit: number, after: number) {
     return knex
       .select('id', 'title', 'content')
       .from('post')
@@ -11,7 +25,7 @@ export default class Post {
       .offset(after);
   }
 
-  async getCommentsForPostIds(postIds) {
+  public async getCommentsForPostIds(postIds: number[]) {
     const res = await knex
       .select('id', 'content', 'post_id AS postId')
       .from('comment')
@@ -20,13 +34,13 @@ export default class Post {
     return orderedFor(res, postIds, 'postId', false);
   }
 
-  getTotal() {
+  public getTotal() {
     return knex('post')
       .countDistinct('id as count')
       .first();
   }
 
-  post(id) {
+  public post(id: number) {
     return knex
       .select('id', 'title', 'content')
       .from('post')
@@ -34,30 +48,27 @@ export default class Post {
       .first();
   }
 
-  addPost({ title, content }) {
-    return returnId(knex('post')).insert({ title, content });
+  public addPost(params: Post) {
+    return returnId(knex('post')).insert(params);
   }
 
-  deletePost(id) {
+  public deletePost(id: number) {
     return knex('post')
       .where('id', '=', id)
       .del();
   }
 
-  editPost({ id, title, content }) {
+  public editPost({ id, title, content }: Post & Identifier) {
     return knex('post')
       .where('id', '=', id)
-      .update({
-        title: title,
-        content: content
-      });
+      .update({ title, content });
   }
 
-  addComment({ content, postId }) {
+  public addComment({ content, postId }: Comment) {
     return returnId(knex('comment')).insert({ content, post_id: postId });
   }
 
-  getComment(id) {
+  public getComment(id: number) {
     return knex
       .select('id', 'content')
       .from('comment')
@@ -65,17 +76,17 @@ export default class Post {
       .first();
   }
 
-  deleteComment(id) {
+  public deleteComment(id: number) {
     return knex('comment')
       .where('id', '=', id)
       .del();
   }
 
-  editComment({ id, content }) {
+  public editComment({ id, content }: Comment & Identifier) {
     return knex('comment')
       .where('id', '=', id)
       .update({
-        content: content
+        content
       });
   }
 }

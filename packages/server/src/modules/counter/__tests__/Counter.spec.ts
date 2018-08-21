@@ -20,7 +20,8 @@ describe('Counter example API works', () => {
     return chai
       .request(server)
       .keepOpen()
-      .get('/gplayground')
+      .get('/graphql')
+      .set('Accept', 'text/html')
       .then(res => {
         res.should.have.status(200);
         res.body.should.be.eql({});

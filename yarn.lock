@@ -12873,9 +12873,9 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.154:
-  version "0.4.154"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.154.tgz#383b465840b129a248aa9c26eae5d45e64cd77f1"
+spinjs@^0.4.155:
+  version "0.4.155"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.155.tgz#b97414e4349ef3c0114e71a6cee042576332cdbf"
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"

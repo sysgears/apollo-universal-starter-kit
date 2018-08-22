@@ -482,6 +482,25 @@ To persist port forwaring after boot add this line without `sudo` to `/etc/rc.lo
 You can see latest version of this app deployed to Heroku here:
 [https://apollo-universal-starter-kit.herokuapp.com](https://apollo-universal-starter-kit.herokuapp.com)
 
+### Subscription not working on Mobile
+
+1. This is because of change in name of Heroku app
+2. Main URL becomes `https://<AppName>.herokuapp.com`
+3. To resolve this issue you need to change the values in `packages/client/.spinrc.js`
+4. Change following values
+   ```
+   config.options.defines.__API_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
+   config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
+   ```
+   To
+   ```
+   config.options.defines.__API_URL__ = '"https://<AppName>.herokuapp.com/graphql"';
+   config.options.defines.__WEBSITE_URL__ = '"https://<AppName>.herokuapp.com"';
+   ```
+5. Push code to heroku, It will redeploy your app. Close and Open your app, It should start. 
+6. If you have added `Custom Domain Name` then above URL's should point to `Your Custom URL`. 
+
+
 ## Contributors
 
 Thanks goes to all the wonderful people who already contributed to Apollo Universal Starter Kit!

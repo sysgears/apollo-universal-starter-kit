@@ -164,6 +164,7 @@ export default compose(
   graphql(MESSAGES_QUERY, {
     options: () => {
       return {
+        fetchPolicy: 'network-only',
         variables: { limit: chatConfig.limit, after: 0 }
       };
     },

@@ -1,5 +1,5 @@
-import log from '../../../../common/log';
-import settings from '../../../../../settings';
+import log from '../../../../../../common/log';
+import settings from '../../../../../../../settings';
 
 export default () => {
   let running = false;

@@ -2,9 +2,9 @@
 import { pick } from 'lodash';
 import Stripe from 'stripe';
 
-import log from '../../../../common/log';
-import FieldError from '../../../../common/FieldError';
-import settings from '../../../../../settings';
+import log from '../../../../../../common/log';
+import FieldError from '../../../../../../common/FieldError';
+import settings from '../../../../../../../settings';
 
 const stripe = Stripe(settings.subscription.stripeSecretKey);
 

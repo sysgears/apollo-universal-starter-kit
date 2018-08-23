@@ -1,9 +1,9 @@
 import Stripe from 'stripe';
 
 import SubscriptionDAO from './sql';
-import mailer from '../mailer/mailer';
-import User from '../user/sql';
-import settings from '../../../../../settings';
+import mailer from '../../../mailer/mailer';
+import User from '../../../user/sql';
+import settings from '../../../../../../../settings';
 
 const Subscription = new SubscriptionDAO();
 const stripe = Stripe(settings.subscription.stripeSecretKey);

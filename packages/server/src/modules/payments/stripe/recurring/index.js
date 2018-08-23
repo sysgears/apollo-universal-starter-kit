@@ -4,12 +4,12 @@ import SubscriptionDAO from './sql';
 
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
-import Feature from '../connector';
+import Feature from '../../../connector';
 
 import stripeLocalMiddleware from './stripeLocal';
 import webhookMiddleware from './webhook';
 import resources from './locales';
-import settings from '../../../../../settings';
+import settings from '../../../../../../../settings';
 
 const Subscription = new SubscriptionDAO();
 

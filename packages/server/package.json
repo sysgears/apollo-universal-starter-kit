@@ -21,7 +21,7 @@
     "watch": "spin watch",
     "heroku-postbuild": "yarn build && yarn seed",
     "cli": "node ../../tools/cli",
-    "stripe:setup": "node src/modules/subscription/cli/stripeSetup"
+    "stripe:setup": "node src/modules/payments/stripe/recurring/cli/stripeSetup"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [

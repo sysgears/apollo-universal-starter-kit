@@ -1,4 +1,5 @@
 import { json } from 'body-parser';
+import { Express } from 'express';
 
 import SubscriptionDAO from './sql';
 
@@ -18,14 +19,14 @@ export default new Feature(
     ? {
         schema,
         createResolversFunc: createResolvers,
-        createContextFunc: async ({ context: { user } }) => ({
+        createContextFunc: async ({ context: { user } }: any) => ({
           Subscription,
           subscription: user ? await Subscription.getSubscription(user.id) : null
         }),
-        beforeware: app => {
+        beforeware: (app: Express) => {
           app.use(settings.subscription.webhookUrl, json());
         },
-        middleware: app => {
+        middleware: (app: Express) => {
           app.use(stripeLocalMiddleware());
           app.post(settings.subscription.webhookUrl, webhookMiddleware);
         },

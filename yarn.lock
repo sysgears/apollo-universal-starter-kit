@@ -12865,9 +12865,9 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.157:
-  version "0.4.157"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.157.tgz#3951783fdef6a1584f0cc364e8130dcb1369ab2c"
+spinjs@^0.4.158:
+  version "0.4.158"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.158.tgz#e34003eb5ca7969a6024a68ad517922bda260084"
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"
@@ -14151,9 +14151,9 @@ webpack@^4.12.0:
     watchpack "^1.5.0"
     webpack-sources "^1.0.1"
 
-webpack@^4.17.0:
-  version "4.17.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.17.0.tgz#7e8df9529dd5fca65c700b3341a001aeae27c749"
+webpack@^4.17.1:
+  version "4.17.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.17.1.tgz#0f026e3d823f3fc604f811ed3ea8f0d9b267fb1e"
   dependencies:
     "@webassemblyjs/ast" "1.5.13"
     "@webassemblyjs/helper-module-context" "1.5.13"

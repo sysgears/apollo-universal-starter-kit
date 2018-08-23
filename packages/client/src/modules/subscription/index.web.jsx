@@ -19,25 +19,24 @@ const NavLinkWithI18n = translate('subscription')(({ t }) => (
   </NavLink>
 ));
 
-export default new Feature({
-  route: settings.subscription.enabled
-    ? [
-        <AuthRoute exact role="user" path="/subscription" component={Subscription} />,
-        <SubscriberRoute exact path="/subscribers-only" component={SubscribersOnly} />,
-        <SubscriberRoute exact path="/update-card" component={UpdateCard} />
-      ]
-    : [],
-  navItem: settings.subscription.enabled ? (
-    <IfLoggedIn role="user">
-      <MenuItem key="/subscribers-only">
-        <NavLinkWithI18n />
-      </MenuItem>
-    </IfLoggedIn>
-  ) : (
-    []
-  ),
-  reducer: { subscription: reducers },
-  scriptsInsert:
-    settings.subscription.enabled && settings.subscription.stripeSecretKey ? 'https://js.stripe.com/v3/' : undefined,
-  localization: { ns: 'subscription', resources }
-});
+export default new Feature(
+  settings.subscription.enabled
+    ? {
+        route: [
+          <AuthRoute exact role="user" path="/subscription" component={Subscription} />,
+          <SubscriberRoute exact path="/subscribers-only" component={SubscribersOnly} />,
+          <SubscriberRoute exact path="/update-card" component={UpdateCard} />
+        ],
+        navItem: (
+          <IfLoggedIn role="user">
+            <MenuItem key="/subscribers-only">
+              <NavLinkWithI18n />
+            </MenuItem>
+          </IfLoggedIn>
+        ),
+        reducer: { subscription: reducers },
+        scriptsInsert: settings.subscription.stripeSecretKey ? 'https://js.stripe.com/v3/' : undefined,
+        localization: { ns: 'subscription', resources }
+      }
+    : {}
+);

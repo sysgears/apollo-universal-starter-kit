@@ -436,6 +436,17 @@ yarn --prod=false
 NODE_ENV=production yarn seed
 ```
 
+4. Set proper values for `config.options.defines.__SERVER_PORT__` and `config.options.defines.__WEBSITE_URL__` in `packages/server/.spinrc.js` to match your production set up.
+5. If you are interested in mobile front end edit `packages/mobile/.spinrc.js` and change these lines:
+   ```js
+   config.options.defines.__API_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
+   config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
+   ```
+   If you are deploying on Heroku without custom domain name, production URLs might look like this:
+   ```js
+   config.options.defines.__API_URL__ = '"https://<AppName>.herokuapp.com/graphql"';
+   config.options.defines.__WEBSITE_URL__ = '"https://<AppName>.herokuapp.com"';
+   ```
 5. Compile project.
 
 ```
@@ -448,12 +459,6 @@ yarn build
 yarn start
 ```
 
-7. Forward traffic from port `80` to `8080`:
-```
-sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
-```
-To persist port forwaring after boot add this line without `sudo` to `/etc/rc.local`
- 
 ### Publishing mobile apps
 
 1. Compile project for production via `yarn build`
@@ -481,25 +486,6 @@ To persist port forwaring after boot add this line without `sudo` to `/etc/rc.lo
 
 You can see latest version of this app deployed to Heroku here:
 [https://apollo-universal-starter-kit.herokuapp.com](https://apollo-universal-starter-kit.herokuapp.com)
-
-### Subscription not working on Mobile
-
-1. This is because of change in name of Heroku app
-2. Main URL becomes `https://<AppName>.herokuapp.com`
-3. To resolve this issue you need to change the values in `packages/client/.spinrc.js`
-4. Change following values
-   ```
-   config.options.defines.__API_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
-   config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
-   ```
-   To
-   ```
-   config.options.defines.__API_URL__ = '"https://<AppName>.herokuapp.com/graphql"';
-   config.options.defines.__WEBSITE_URL__ = '"https://<AppName>.herokuapp.com"';
-   ```
-5. Push code to heroku, It will redeploy your app. Close and Open your app, It should start. 
-6. If you have added `Custom Domain Name` then above URL's should point to `Your Custom URL`. 
-
 
 ## Contributors
 

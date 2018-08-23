@@ -475,10 +475,10 @@ yarn start
 
 ### Deploying to [Heroku]
 
-1. Add your app to Heroku
-2. Allow Heroku to install build time dependencies from the devDependencies in `package.json`: `Settings -> Config Variables -> Add`, KEY: `YARN_PRODUCTION`, VALUE: `false`.
-3. Add `EXP_USERNAME` and `EXP_PASSWORD` config variables there as well. They will be used to publish mobile Expo Client applications
-4. Deploy your app on Heroku
+1. Add your app to Heroku (see full instructions on [Deploying a Node.js app] tutorial).
+2. Allow Heroku to install build time dependencies from the devDependencies in `package.json` - go to your [Dashboard] on Heroku and choose your app, then go to `Settings -> Config Variables -> Add`, set KEY: `YARN_PRODUCTION` and VALUE: `false`.
+3. Add `EXP_USERNAME` and `EXP_PASSWORD` config variables there as well from [Expo]. They will be used to publish mobile Expo Client applications.
+4. Deploy your app on Heroku.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
@@ -539,6 +539,8 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [debug sql]: https://spin.atomicobject.com/2017/03/27/timing-queries-knexjs-nodejs/
 [expo build standalone apps documentation]: https://docs.expo.io/versions/v18.0.0/guides/building-standalone-apps.html
 [heroku]: https://heroku.com
+[Dashboard]: https://dashboard.heroku.com/apps
+[Deploying a Node.js app]: https://devcenter.heroku.com/articles/getting-started-with-nodejs
 [eslint]: http://eslint.org
 [sysgears inc]: http://sysgears.com
 [persistgraphql webpack plugin]: https://github.com/sysgears/persistgraphql-webpack-plugin

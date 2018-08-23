@@ -12,11 +12,12 @@ export default () => {
     const { enabled, stripeSecretKey } = settings.subscription;
 
     if (__DEV__ && enabled && stripeSecretKey && !running) {
-      log('Starting stripe local proxy');
+      log.debug('Starting stripe local proxy');
       require('stripe-local')({
         secretKey: settings.subscription.stripeSecretKey,
-        webhookUrl: `http://localhost:3000/stripe/webhook`
+        webhookUrl: `http://localhost:${__SERVER_PORT__}/stripe/webhook`
       });
+
       running = true;
     }
     next();

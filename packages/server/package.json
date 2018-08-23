@@ -21,7 +21,7 @@
     "watch": "spin watch",
     "heroku-postbuild": "yarn build && yarn seed",
     "cli": "node ../../tools/cli",
-    "stripe:setup": "node src/server/modules/subscription/cli/stripeSetup"
+    "stripe:setup": "node src/modules/subscription/cli/stripeSetup"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [
@@ -66,6 +66,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
     "dotenv": "^5.0.1",
     "error-stack-parser": "^2.0.1",
     "express": "^4.16.2",

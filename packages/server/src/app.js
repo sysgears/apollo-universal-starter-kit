@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import bodyParser from 'body-parser';
 
 import { isApiExternal } from './net';
 import modules from './modules';
@@ -12,6 +13,9 @@ const app = express();
 for (const applyBeforeware of modules.beforewares) {
   applyBeforeware(app);
 }
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Don't rate limit heroku
 app.enable('trust proxy');

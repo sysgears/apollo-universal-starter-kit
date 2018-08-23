@@ -2,6 +2,7 @@
 import { pick } from 'lodash';
 import Stripe from 'stripe';
 
+import log from '../../../../common/log';
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
 
@@ -13,19 +14,17 @@ export default pubsub => ({
       return context.subscription;
     },
     subscribersOnlyNumber(obj, args, context) {
-      if (!context.subscription.active) return;
-      const number = Math.floor(Math.random() * 10);
-      return { number };
+      if (!context.subscription || !context.subscription.active) return;
+      return { number: Math.floor(Math.random() * 10) };
     },
-    async subscriptionCardInfo(obj, args, context) {
-      const { user } = context;
-      return !user ? undefined : context.Subscription.getCardInfo(user.id);
+    async subscriptionCardInfo(obj, args, { user, Subscription }) {
+      return !user ? undefined : Subscription.getCardInfo(user.id);
     }
   },
   Mutation: {
     async subscribe(obj, { input }, context) {
       try {
-        const e = new FieldError();
+        // const e = new FieldError();
         const data = pick(input, ['token', 'expiryMonth', 'expiryYear', 'last4', 'brand']);
         const user = await context.User.getUserByUsername(context.user.username);
         const { subscription } = context;
@@ -35,9 +34,7 @@ export default pubsub => ({
         // use existing stripe customer if user has subscribed before
         if (subscription && subscription.stripeCustomerId) {
           customerId = subscription.stripeCustomerId;
-          const source = await stripe.customers.createSource(customerId, {
-            source: data.token
-          });
+          const source = await stripe.customers.createSource(customerId, { source: data.token });
           stripeSourceId = source.id;
         } else {
           const customer = await stripe.customers.create({ email: user.email, source: data.token });
@@ -118,6 +115,7 @@ export default pubsub => ({
           await stripe.subscriptions.del(stripeSubscriptionId);
           await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
         } catch (e) {
+          log.error(e);
           const e = new FieldError();
           e.setError('subscription', context.req.t('subscription:cancelSubscription'));
           e.throwIf();

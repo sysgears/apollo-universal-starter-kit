@@ -1,10 +1,7 @@
-/*eslint-disable no-unused-vars*/
-import { step } from 'mocha-steps';
-
 import { getApollo } from '../../../../../testHelpers/integrationSetup';
 
-describe('Subscription API works', () => {
-  let apollo;
+describe('Stripe recurring API works', () => {
+  let apollo: string;
 
   before(() => {
     apollo = getApollo();

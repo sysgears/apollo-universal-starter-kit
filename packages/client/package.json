@@ -128,7 +128,7 @@
   },
   "optionalDependencies": {
     "@expo/vector-icons": "^6.2.1",
-    "antd-mobile": "^2.1.2",
+    "antd-mobile-rn": "^2.2.1",
     "expo": "^27.0.2",
     "native-base": "^2.3.5",
     "react-native": "0.55.3",

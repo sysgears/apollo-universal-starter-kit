@@ -1,5 +1,5 @@
 import React from 'react';
-import ADSwitch from 'antd-mobile/lib/switch';
+import { Switch as ADSwitch } from 'antd-mobile-rn';
 import PropTypes from 'prop-types';
 
 const Switch = ({ checked, value, onValueChange, onChange, ...props }) => {

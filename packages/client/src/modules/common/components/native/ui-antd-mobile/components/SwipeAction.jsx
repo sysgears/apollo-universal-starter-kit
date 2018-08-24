@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ADSwipeAction from 'antd-mobile/lib/swipe-action';
-import List from 'antd-mobile/lib/list';
+import { SwipeAction as ADSwipeAction, List } from 'antd-mobile-rn';
 
 const SwipeAction = ({ children, onPress, right, ...props }) => {
   return (

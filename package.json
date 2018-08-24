@@ -142,7 +142,7 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.158"
+    "spinjs": "^0.4.159"
   },
   "resolutions": {
     "graphql": "0.13.2",

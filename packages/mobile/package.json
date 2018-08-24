@@ -43,7 +43,7 @@
   "license": "MIT",
   "dependencies": {
     "@expo/vector-icons": "^6.2.1",
-    "antd-mobile": "^2.1.2",
+    "antd-mobile-rn": "^2.2.1",
     "apollo-cache-inmemory": "^1.1.12",
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.3.1",

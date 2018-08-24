@@ -2,7 +2,7 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 import knex from '../../../../sql/connector';
 import { returnId } from '../../../../sql/helpers';
 
-interface Subscription {
+export interface Subscription {
   userId: number;
   active: boolean;
   stripeSourceId: string;
@@ -30,14 +30,14 @@ export default class SubscriptionDAO {
     }
   }
 
-  public async getSubscription(userId: number) {
+  public async getSubscription(userId: number): Promise<Subscription> {
     return camelizeKeys(
       await knex('subscription')
         .select('s.*')
         .from('subscription as s')
         .where('s.user_id', '=', userId)
         .first()
-    );
+    ) as Subscription;
   }
 
   public async getSubscriptionByStripeSubscriptionId(stripeSubscriptionId: string): Promise<Subscription> {

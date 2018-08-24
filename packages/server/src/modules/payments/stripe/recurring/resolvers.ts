@@ -1,41 +1,52 @@
-/*eslint-disable no-unused-vars*/
-import { pick } from 'lodash';
+// import { pick } from 'lodash';
 import Stripe from 'stripe';
 
 import log from '../../../../../../common/log';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
 
-const stripe = Stripe(settings.subscription.stripeSecretKey);
+const stripe = new Stripe(settings.subscription.stripeSecretKey);
 
-export default pubsub => ({
+interface CreditCard {
+  input: {
+    token: string;
+    expiryMonth: number;
+    expiryYear: number;
+    last4: number;
+    brand: string;
+  };
+}
+
+export default () => ({
   Query: {
-    subscription(obj, args, context) {
+    subscription(obj: any, args: any, context: any) {
       return context.subscription;
     },
-    subscribersOnlyNumber(obj, args, context) {
-      if (!context.subscription || !context.subscription.active) { return; }
+    subscribersOnlyNumber(obj: any, args: any, context: any) {
+      if (!context.subscription || !context.subscription.active) {
+        return;
+      }
       return { number: Math.floor(Math.random() * 10) };
     },
-    async subscriptionCardInfo(obj, args, { user, Subscription }) {
-      return !user ? undefined : Subscription.getCardInfo(user.id);
+    async subscriptionCardInfo(obj: any, args: any, context: any) {
+      return !context.user ? undefined : context.Subscription.getCardInfo(context.user.id);
     }
   },
   Mutation: {
-    async subscribe(obj, { input }, context) {
+    async subscribe(obj: any, { input }: CreditCard, context: any) {
       try {
-        const { subscription, Subscription } = context;
-        const data = pick(input, ['token', 'expiryMonth', 'expiryYear', 'last4', 'brand']);
-        const user = await context.User.getUserByUsername(context.user.username);
-        let stripeCustomerId, stripeSourceId;
+        const { user, subscription, Subscription } = context;
+        const { token, expiryMonth, expiryYear, last4, brand } = input;
+        let stripeCustomerId;
+        let stripeSourceId;
 
         // use existing stripe customer if user has subscribed before
         if (subscription && subscription.stripeCustomerId) {
-          const source = await stripe.customers.createSource(stripeCustomerId, { source: data.token });
+          const source = await stripe.customers.createSource(subscription.stripeCustomerId, { source: token });
           stripeCustomerId = subscription.stripeCustomerId;
           stripeSourceId = source.id;
         } else {
-          const { id, default_source } = await stripe.customers.create({ email: user.email, source: data.token });
+          const { id, default_source } = await stripe.customers.create({ email: user.email, source: token });
           stripeCustomerId = id;
           stripeSourceId = default_source;
         }
@@ -44,19 +55,15 @@ export default pubsub => ({
           userId: user.id,
           stripeCustomerId,
           stripeSourceId,
-          expiryMonth: data.expiryMonth,
-          expiryYear: data.expiryYear,
-          last4: data.last4,
-          brand: data.brand
+          expiryMonth,
+          expiryYear,
+          last4,
+          brand
         });
 
         const newSubscription = await stripe.subscriptions.create({
           customer: stripeCustomerId,
-          items: [
-            {
-              plan: 'basic'
-            }
-          ]
+          items: [{ plan: 'basic' }]
         });
 
         await Subscription.editSubscription({
@@ -70,49 +77,46 @@ export default pubsub => ({
         return { active: false, errors: e };
       }
     },
-    async updateCard(obj, { input }, context) {
+    async updateCard(obj: any, { input }: CreditCard, context: any) {
       try {
-        const data = pick(input, ['token', 'expiryMonth', 'expiryYear', 'last4', 'brand']);
-        const user = await context.User.getUserByUsername(context.user.username);
-        const {
-          subscription: { stripeCustomerId, stripeSourceId }
-        } = context;
+        const { token, expiryMonth, expiryYear, last4, brand } = input;
+        const { Subscription, user, subscription } = context;
 
-        await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
-        const source = await stripe.customers.createSource(stripeCustomerId, { source: data.token });
+        await stripe.customers.deleteSource(subscription.stripeCustomerId, subscription.stripeSourceId);
+        const source = await stripe.customers.createSource(subscription.stripeCustomerId, { source: token });
 
-        await context.Subscription.editSubscription({
+        await Subscription.editSubscription({
           userId: user.id,
           stripeSourceId: source.id,
-          expiryMonth: data.expiryMonth,
-          expiryYear: data.expiryYear,
-          last4: data.last4,
-          brand: data.brand
+          expiryMonth,
+          expiryYear,
+          last4,
+          brand
         });
 
         return true;
       } catch (e) {
-        console.log(e);
+        log.error(e);
         return false;
       }
     },
-    async cancel(obj, args, context) {
+    async cancel(obj: any, args: any, context: any) {
       try {
-        const { id } = await context.User.getUserByUsername(context.user.username);
-        const { stripeSubscriptionId, stripeCustomerId, stripeSourceId } = context.subscription;
+        const { user, subscription, Subscription, req } = context;
+        const { stripeSubscriptionId, stripeCustomerId, stripeSourceId } = subscription;
 
         try {
           await stripe.subscriptions.del(stripeSubscriptionId);
           await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
-        } catch (e) {
-          log.error(e);
+        } catch (err) {
+          log.error(err);
           const e = new FieldError();
-          e.setError('subscription', context.req.t('subscription:cancelSubscription'));
+          e.setError('subscription', req.t('subscription:cancelSubscription'));
           e.throwIf();
         }
 
-        await context.Subscription.editSubscription({
-          userId: id,
+        await Subscription.editSubscription({
+          userId: user.id,
           active: false,
           stripeSourceId: null,
           stripeSubscriptionId: null,

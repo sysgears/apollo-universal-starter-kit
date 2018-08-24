@@ -14,7 +14,7 @@ export default pubsub => ({
       return context.subscription;
     },
     subscribersOnlyNumber(obj, args, context) {
-      if (!context.subscription || !context.subscription.active) return;
+      if (!context.subscription || !context.subscription.active) { return; }
       return { number: Math.floor(Math.random() * 10) };
     },
     async subscriptionCardInfo(obj, args, { user, Subscription }) {

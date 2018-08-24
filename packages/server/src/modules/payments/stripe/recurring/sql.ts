@@ -1,41 +1,22 @@
-// Helpers
 import { camelizeKeys, decamelizeKeys } from 'humps';
 import knex from '../../../../sql/connector';
 import { returnId } from '../../../../sql/helpers';
 
-// Actual query fetching and transformation in DB
-export default class Subscription {
-  public async getSubscription(userId) {
-    return camelizeKeys(
-      await knex('subscription')
-        .select('s.*')
-        .from('subscription as s')
-        .where('s.user_id', '=', userId)
-        .first()
-    );
-  }
+interface Subscription {
+  userId: number;
+  subscription: {
+    active: boolean;
+    stripeSourceId: string;
+    stripeSubscriptionId: string;
+    expiryMonth: number;
+    expiryYear: number;
+    last4: number;
+    brand: string;
+  };
+}
 
-  public async getSubscriptionByStripeSubscriptionId(stripeSubscriptionId) {
-    return camelizeKeys(
-      await knex('subscription')
-        .select('s.*')
-        .from('subscription as s')
-        .where('s.stripe_subscription_id', '=', stripeSubscriptionId)
-        .first()
-    );
-  }
-
-  public async getSubscriptionByStripeCustomerId(stripeCustomerId) {
-    return camelizeKeys(
-      await knex('subscription')
-        .select('s.*')
-        .from('subscription as s')
-        .where('s.stripe_customer_id', '=', stripeCustomerId)
-        .first()
-    );
-  }
-
-  public async editSubscription({ userId, subscription }) {
+export default class SubscriptionDAO {
+  public async editSubscription({ userId, subscription }: Subscription) {
     const userSubscription = await knex('subscription')
       .select('id')
       .where({ user_id: userId })
@@ -50,7 +31,37 @@ export default class Subscription {
     }
   }
 
-  public async getCardInfo(userId) {
+  public async getSubscription(userId: number) {
+    return camelizeKeys(
+      await knex('subscription')
+        .select('s.*')
+        .from('subscription as s')
+        .where('s.user_id', '=', userId)
+        .first()
+    );
+  }
+
+  public async getSubscriptionByStripeSubscriptionId(stripeSubscriptionId: string) {
+    return camelizeKeys(
+      await knex('subscription')
+        .select('s.*')
+        .from('subscription as s')
+        .where('s.stripe_subscription_id', '=', stripeSubscriptionId)
+        .first()
+    );
+  }
+
+  public async getSubscriptionByStripeCustomerId(stripeCustomerId: string) {
+    return camelizeKeys(
+      await knex('subscription')
+        .select('s.*')
+        .from('subscription as s')
+        .where('s.stripe_customer_id', '=', stripeCustomerId)
+        .first()
+    );
+  }
+
+  public async getCardInfo(userId: number) {
     return camelizeKeys(
       await knex('subscription')
         .select('s.expiry_month', 's.expiry_year', 's.last4', 's.brand')

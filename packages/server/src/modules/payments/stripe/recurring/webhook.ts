@@ -6,68 +6,84 @@ import User from '../../../user/sql';
 import settings from '../../../../../../../settings';
 
 const Subscription = new SubscriptionDAO();
-const stripe = Stripe(settings.subscription.stripeSecretKey);
+const stripe = new Stripe(settings.subscription.stripeSecretKey);
 
-export default async (req, res) => {
+const sendEmailToUser = async (userId: number, subject: string, html: string) => {
+  const { email }: any = await User.getUser(userId);
+
+  mailer.sendMail({
+    from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject,
+    html
+  });
+};
+
+const deleteSubscription = async (event: any, rootUrl: string) => {
+  const subscription = await Subscription.getSubscriptionByStripeSubscriptionId(event.data.object.id);
+
+  if (subscription) {
+    const { userId, stripeCustomerId, stripeSourceId } = subscription;
+    const url = `${rootUrl}/subscription`;
+
+    await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
+    await Subscription.editSubscription({
+      userId,
+      active: false,
+      stripeSourceId: null,
+      stripeSubscriptionId: null,
+      expiryMonth: null,
+      expiryYear: null,
+      last4: null,
+      brand: null
+    });
+
+    await sendEmailToUser(
+      userId,
+      'Subscription Canceled',
+      `Your subscription has been canceled. To resubscribe click here: <a href="${url}">${url}</a>`
+    );
+  }
+};
+
+const notifyFailedSubscription = async (event: any, rootUrl: string) => {
+  const subscription = await Subscription.getSubscriptionByStripeCustomerId(event.data.object.customer);
+
+  if (subscription) {
+    const { userId } = subscription;
+    const url = `${rootUrl}/profile`;
+
+    await sendEmailToUser(
+      userId,
+      'Charge Failed',
+      `We are having trouble charging your card. Please update your card details here: <a href="${url}">${url}</a>`
+    );
+  }
+};
+
+/**
+ * Webhook middleware.
+ * Endpoint which provides works with Stripe events
+ */
+export default async (req: any, res: any) => {
   try {
-    const { stripeEndpointSecret } = settings.subscription;
+    const rootUrl = `${req.protocol}://${req.get('host')}`;
     let event;
 
-    if (stripeEndpointSecret) {
-      const sig = req.headers['stripe-signature'];
-      event = stripe.webhooks.constructEvent(req.body, sig, settings.subscription.stripeEndpointSecret);
+    if (settings.subscription.stripeEndpointSecret) {
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        req.headers['stripe-signature'],
+        settings.subscription.stripeEndpointSecret
+      );
     } else {
       event = req.body;
     }
 
     if (event.type === 'customer.subscription.deleted') {
-      const response = event.data.object;
-      const subscription = await Subscription.getSubscriptionByStripeSubscriptionId(response.id);
-      if (subscription) {
-        const { userId, stripeCustomerId, stripeSourceId } = subscription;
-        const user = await User.getUser(userId);
-
-        await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
-        await Subscription.editSubscription({
-          userId: userId,
-          subscription: {
-            active: false,
-            stripeSourceId: null,
-            stripeSubscriptionId: null,
-            expiryMonth: null,
-            expiryYear: null,
-            last4: null,
-            brand: null
-          }
-        });
-
-        const url = `${req.protocol}://${req.get('host')}/subscription`;
-
-        mailer.sendMail({
-          from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
-          to: user.email,
-          subject: 'Subscription Canceled',
-          html: `Your subscription has been canceled. To resubscribe click here: <a href="${url}">${url}</a>`
-        });
-      }
-    }
-
-    if (event.type === 'invoice.payment_failed') {
-      const response = event.data.object;
-      const subscription = await Subscription.getSubscriptionByStripeCustomerId(response.customer);
-      if (subscription) {
-        const { userId } = subscription;
-        const user = await User.getUser(userId);
-
-        const url = `${req.protocol}://${req.get('host')}/profile`;
-
-        mailer.sendMail({
-          from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
-          to: user.email,
-          subject: 'Charge Failed',
-          html: `We are having trouble charging your card. Please update your card details here: <a href="${url}">${url}</a>`
-        });
-      }
+      await deleteSubscription(event, rootUrl);
+    } else if (event.type === 'invoice.payment_failed') {
+      await notifyFailedSubscription(event, rootUrl);
     }
 
     res.json({ success: true });

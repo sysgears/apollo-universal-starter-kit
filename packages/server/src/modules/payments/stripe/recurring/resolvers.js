@@ -24,38 +24,34 @@ export default pubsub => ({
   Mutation: {
     async subscribe(obj, { input }, context) {
       try {
-        // const e = new FieldError();
+        const { subscription, Subscription } = context;
         const data = pick(input, ['token', 'expiryMonth', 'expiryYear', 'last4', 'brand']);
         const user = await context.User.getUserByUsername(context.user.username);
-        const { subscription } = context;
-
-        let customerId, stripeSourceId;
+        let stripeCustomerId, stripeSourceId;
 
         // use existing stripe customer if user has subscribed before
         if (subscription && subscription.stripeCustomerId) {
-          customerId = subscription.stripeCustomerId;
-          const source = await stripe.customers.createSource(customerId, { source: data.token });
+          const source = await stripe.customers.createSource(stripeCustomerId, { source: data.token });
+          stripeCustomerId = subscription.stripeCustomerId;
           stripeSourceId = source.id;
         } else {
-          const customer = await stripe.customers.create({ email: user.email, source: data.token });
-          customerId = customer.id;
-          stripeSourceId = customer.default_source;
+          const { id, default_source } = await stripe.customers.create({ email: user.email, source: data.token });
+          stripeCustomerId = id;
+          stripeSourceId = default_source;
         }
 
-        await context.Subscription.editSubscription({
+        await Subscription.editSubscription({
           userId: user.id,
-          subscription: {
-            stripeCustomerId: customerId,
-            stripeSourceId,
-            expiryMonth: data.expiryMonth,
-            expiryYear: data.expiryYear,
-            last4: data.last4,
-            brand: data.brand
-          }
+          stripeCustomerId,
+          stripeSourceId,
+          expiryMonth: data.expiryMonth,
+          expiryYear: data.expiryYear,
+          last4: data.last4,
+          brand: data.brand
         });
 
         const newSubscription = await stripe.subscriptions.create({
-          customer: customerId,
+          customer: stripeCustomerId,
           items: [
             {
               plan: 'basic'
@@ -63,12 +59,10 @@ export default pubsub => ({
           ]
         });
 
-        await context.Subscription.editSubscription({
+        await Subscription.editSubscription({
           userId: user.id,
-          subscription: {
-            active: true,
-            stripeSubscriptionId: newSubscription.id
-          }
+          active: true,
+          stripeSubscriptionId: newSubscription.id
         });
 
         return { active: true, errors: null };
@@ -85,19 +79,15 @@ export default pubsub => ({
         } = context;
 
         await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
-        const source = await stripe.customers.createSource(stripeCustomerId, {
-          source: data.token
-        });
+        const source = await stripe.customers.createSource(stripeCustomerId, { source: data.token });
 
         await context.Subscription.editSubscription({
           userId: user.id,
-          subscription: {
-            stripeSourceId: source.id,
-            expiryMonth: data.expiryMonth,
-            expiryYear: data.expiryYear,
-            last4: data.last4,
-            brand: data.brand
-          }
+          stripeSourceId: source.id,
+          expiryMonth: data.expiryMonth,
+          expiryYear: data.expiryYear,
+          last4: data.last4,
+          brand: data.brand
         });
 
         return true;
@@ -123,15 +113,13 @@ export default pubsub => ({
 
         await context.Subscription.editSubscription({
           userId: id,
-          subscription: {
-            active: false,
-            stripeSourceId: null,
-            stripeSubscriptionId: null,
-            expiryMonth: null,
-            expiryYear: null,
-            last4: null,
-            brand: null
-          }
+          active: false,
+          stripeSourceId: null,
+          stripeSubscriptionId: null,
+          expiryMonth: null,
+          expiryYear: null,
+          last4: null,
+          brand: null
         });
 
         return { active: false, errors: null };

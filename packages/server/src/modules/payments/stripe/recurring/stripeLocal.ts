@@ -3,7 +3,7 @@ import settings from '../../../../../../../settings';
 
 export default () => {
   let running = false;
-  return async (req, res, next) => {
+  return async (req: any, res: any, next: () => void) => {
     if (running) {
       next();
       return;

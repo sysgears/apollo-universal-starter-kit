@@ -1019,6 +1019,12 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/shortid/-/shortid-0.0.29.tgz#8093ee0416a6e2bf2aa6338109114b3fbffa0e9b"
 
+"@types/stripe@^5.0.21":
+  version "5.0.21"
+  resolved "https://registry.yarnpkg.com/@types/stripe/-/stripe-5.0.21.tgz#a229dbbd3626a9dfaefa5d3cc11d6c5dc2d1ce42"
+  dependencies:
+    "@types/node" "*"
+
 "@types/superagent@*":
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-3.8.3.tgz#51aa6040c21b66df00f46e10bb08fb51c541acfc"

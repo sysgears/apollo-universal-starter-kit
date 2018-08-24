@@ -5,7 +5,7 @@ import { returnId } from '../../../../sql/helpers';
 
 // Actual query fetching and transformation in DB
 export default class Subscription {
-  async getSubscription(userId) {
+  public async getSubscription(userId) {
     return camelizeKeys(
       await knex('subscription')
         .select('s.*')
@@ -15,7 +15,7 @@ export default class Subscription {
     );
   }
 
-  async getSubscriptionByStripeSubscriptionId(stripeSubscriptionId) {
+  public async getSubscriptionByStripeSubscriptionId(stripeSubscriptionId) {
     return camelizeKeys(
       await knex('subscription')
         .select('s.*')
@@ -25,7 +25,7 @@ export default class Subscription {
     );
   }
 
-  async getSubscriptionByStripeCustomerId(stripeCustomerId) {
+  public async getSubscriptionByStripeCustomerId(stripeCustomerId) {
     return camelizeKeys(
       await knex('subscription')
         .select('s.*')
@@ -35,22 +35,22 @@ export default class Subscription {
     );
   }
 
-  async editSubscription({ userId, subscription }) {
+  public async editSubscription({ userId, subscription }) {
     const userSubscription = await knex('subscription')
       .select('id')
       .where({ user_id: userId })
       .first();
 
     if (userSubscription) {
-      return await returnId(knex('subscription'))
+      return returnId(knex('subscription'))
         .update(decamelizeKeys(subscription))
         .where({ user_id: userId });
     } else {
-      return await returnId(knex('subscription')).insert({ ...decamelizeKeys(subscription), user_id: userId });
+      return returnId(knex('subscription')).insert({ ...decamelizeKeys(subscription), user_id: userId });
     }
   }
 
-  async getCardInfo(userId) {
+  public async getCardInfo(userId) {
     return camelizeKeys(
       await knex('subscription')
         .select('s.expiry_month', 's.expiry_year', 's.last4', 's.brand')

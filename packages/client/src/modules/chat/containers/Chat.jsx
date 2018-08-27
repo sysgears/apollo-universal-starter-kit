@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo/index';
+import { compose, graphql } from 'react-apollo';
 import update from 'immutability-helper';
 
 import translate from '../../../i18n';
@@ -12,7 +12,7 @@ import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 import withUuid from './WithUuid';
 import ChatOperations from './ChatOperations';
-import messageImage from './MessageImage';
+//import messageImage from './MessageImage';
 import messagesFormatter from './MessagesFormatter';
 import chatConfig from '../../../../../../config/chat';
 
@@ -311,6 +311,6 @@ export default compose(
   translate('chat'),
   withUuid,
   withUser,
-  messageImage,
+  // messageImage,
   messagesFormatter
 )(Chat);

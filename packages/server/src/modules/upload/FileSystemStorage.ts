@@ -2,31 +2,31 @@ import fs from 'fs';
 import mkdirp from 'mkdirp';
 import shortid from 'shortid';
 
-export interface FileData {
-  name: string;
-  type: string;
+export interface SavedFileInfo {
   path: string;
+  name: string;
   size: number;
+  type: string;
 }
 
-export interface FileProcessData {
+export interface FileUploadProcess {
   stream: any;
   filename: string;
   mimetype: string;
 }
 
 /**
- * Class FileManipulator provides works (saving, removing, getting info) with files in the file system.
+ * Class FileSystemStorage provides works (saving, delete, getting info) with files in the file system.
  */
-class FileManipulator {
-  public saveFileToFs(FileProcess: FileProcessData, uploadDir: string, generateId = true): Promise<FileData> {
-    const { stream, filename, mimetype } = FileProcess;
-    const id = generateId ? `${shortid.generate()}-` : '';
-    const path = `${uploadDir}/${id}${filename}`;
+class FileSystemStorage {
+  public save(fileUploadProcess: FileUploadProcess, location: string, shouldGenerateId = true): Promise<SavedFileInfo> {
+    const { stream, filename, mimetype } = fileUploadProcess;
+    const id = shouldGenerateId ? `${shortid.generate()}-` : '';
+    const path = `${location}/${id}${filename}`;
 
     // Check if UPLOAD_DIR exists, create one if not
-    if (!fs.existsSync(uploadDir)) {
-      mkdirp.sync(uploadDir);
+    if (!fs.existsSync(location)) {
+      mkdirp.sync(location);
     }
 
     return new Promise((resolve, reject) =>
@@ -36,15 +36,16 @@ class FileManipulator {
             // Delete the truncated file
             fs.unlinkSync(path);
           }
+
           reject(error);
         })
         .pipe(fs.createWriteStream(path))
         .on('error', (error: Error) => reject(error))
-        .on('finish', () => resolve({ path, size: fs.statSync(path).size, name: filename, type: mimetype }))
+        .on('finish', () => resolve({ path, name: filename, size: fs.statSync(path).size, type: mimetype }))
     );
   }
 
-  public removeFileFromFs = (filePath: string) => {
+  public delete = (filePath: string) => {
     return new Promise((resolve, reject) => {
       fs.unlink(filePath, err => {
         if (err) {
@@ -56,7 +57,7 @@ class FileManipulator {
     });
   };
 
-  public getFileInfo = (filePath: string) => {
+  public getInfo = (filePath: string) => {
     return new Promise((resolve, reject) => {
       fs.stat(filePath, (err, stats) => {
         if (err) {
@@ -69,4 +70,4 @@ class FileManipulator {
   };
 }
 
-export default new FileManipulator();
+export default new FileSystemStorage();

@@ -1,8 +1,8 @@
-import FileManipulator, { FileProcessData } from './FileManipulator';
+import fileSystemStorage, { FileUploadProcess } from './FileSystemStorage';
 import settings from '../../../../../settings';
 
-interface FileProcessProps {
-  files: [Promise<FileProcessData>];
+interface FileUploadProcesses {
+  files: [Promise<FileUploadProcess>];
 }
 
 export default () => ({
@@ -12,17 +12,17 @@ export default () => ({
     }
   },
   Mutation: {
-    async uploadFiles(obj: any, { files }: FileProcessProps, { Upload, req }: any) {
+    async uploadFiles(obj: any, { files }: FileUploadProcesses, { Upload, req }: any) {
       const { t } = req;
 
       try {
         // load files to fs
-        const filesData = await Promise.all(
-          files.map(async uploadPromise => FileManipulator.saveFileToFs(await uploadPromise, settings.upload.uploadDir))
+        const filesInfo = await Promise.all(
+          files.map(async uploadPromise => fileSystemStorage.save(await uploadPromise, settings.upload.uploadDir))
         );
 
         // save files data into DB
-        return Upload.saveFiles(filesData);
+        return Upload.saveFiles(filesInfo);
       } catch (e) {
         throw new Error(t('upload:fileNotLoaded'));
       }
@@ -37,7 +37,7 @@ export default () => ({
 
       // remove file
       try {
-        await FileManipulator.removeFileFromFs(file.path);
+        await fileSystemStorage.delete(file.path);
       } catch (e) {
         throw new Error(t('upload:fileNotDeleted'));
       }

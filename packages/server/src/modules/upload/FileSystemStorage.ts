@@ -1,26 +1,26 @@
-import fs from 'fs';
+import fs, { Stats } from 'fs';
 import mkdirp from 'mkdirp';
 import shortid from 'shortid';
 
-export interface SavedFileInfo {
+export interface UploadedFile {
   path: string;
   name: string;
   size: number;
   type: string;
 }
 
-export interface FileUploadProcess {
+export interface UploadFileStream {
   stream: any;
   filename: string;
   mimetype: string;
 }
 
 /**
- * Class FileSystemStorage provides works (saving, delete, getting info) with files in the file system.
+ * Class FileSystemStorage provides saving, getting info, deleting the files in the file system.
  */
 class FileSystemStorage {
-  public save(fileUploadProcess: FileUploadProcess, location: string, shouldGenerateId = true): Promise<SavedFileInfo> {
-    const { stream, filename, mimetype } = fileUploadProcess;
+  public save(uploadFileStream: UploadFileStream, location: string, shouldGenerateId = true): Promise<UploadedFile> {
+    const { stream, filename, mimetype } = uploadFileStream;
     const id = shouldGenerateId ? `${shortid.generate()}-` : '';
     const path = `${location}/${id}${filename}`;
 
@@ -31,21 +31,24 @@ class FileSystemStorage {
 
     return new Promise((resolve, reject) =>
       stream
-        .on('error', (error: Error) => {
+        .on('error', async (error: Error) => {
           if (stream.truncated) {
             // Delete the truncated file
-            fs.unlinkSync(path);
+            await this.delete(path);
           }
 
           reject(error);
         })
         .pipe(fs.createWriteStream(path))
         .on('error', (error: Error) => reject(error))
-        .on('finish', () => resolve({ path, name: filename, size: fs.statSync(path).size, type: mimetype }))
+        .on('finish', async () => {
+          const { size } = await this.getInfo(path);
+          resolve({ path, size, name: filename, type: mimetype });
+        })
     );
   }
 
-  public delete = (filePath: string) => {
+  public delete(filePath: string): Promise<void> {
     return new Promise((resolve, reject) => {
       fs.unlink(filePath, err => {
         if (err) {
@@ -55,9 +58,9 @@ class FileSystemStorage {
         resolve();
       });
     });
-  };
+  }
 
-  public getInfo = (filePath: string) => {
+  public getInfo(filePath: string): Promise<Stats> {
     return new Promise((resolve, reject) => {
       fs.stat(filePath, (err, stats) => {
         if (err) {
@@ -67,7 +70,7 @@ class FileSystemStorage {
         resolve(stats);
       });
     });
-  };
+  }
 }
 
 export default new FileSystemStorage();

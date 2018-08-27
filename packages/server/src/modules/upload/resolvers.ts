@@ -1,8 +1,8 @@
-import fileSystemStorage, { FileUploadProcess } from './FileSystemStorage';
+import fileSystemStorage, { UploadFileStream } from './FileSystemStorage';
 import settings from '../../../../../settings';
 
-interface FileUploadProcesses {
-  files: [Promise<FileUploadProcess>];
+interface UploadFileStreams {
+  files: [Promise<UploadFileStream>];
 }
 
 export default () => ({
@@ -12,17 +12,17 @@ export default () => ({
     }
   },
   Mutation: {
-    async uploadFiles(obj: any, { files }: FileUploadProcesses, { Upload, req }: any) {
+    async uploadFiles(obj: any, { files }: UploadFileStreams, { Upload, req }: any) {
       const { t } = req;
 
       try {
         // load files to fs
-        const filesInfo = await Promise.all(
+        const uploadedFiles = await Promise.all(
           files.map(async uploadPromise => fileSystemStorage.save(await uploadPromise, settings.upload.uploadDir))
         );
 
         // save files data into DB
-        return Upload.saveFiles(filesInfo);
+        return Upload.saveFiles(uploadedFiles);
       } catch (e) {
         throw new Error(t('upload:fileNotLoaded'));
       }

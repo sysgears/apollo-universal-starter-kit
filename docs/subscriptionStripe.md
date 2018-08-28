@@ -18,8 +18,8 @@ The purpose of this module is to provide a starting point for applications that 
 ### Getting Started
 
 1. Sign up for a [Stripe](https://stripe.com) developer account.
-2. Ensure subscriptions are enabled in `config/subscription.js`.
-3. Place your Stripe publishable key in `config/subscription.js`.
+2. Ensure subscriptions are enabled in `config/payments.js`.
+3. Place your Stripe publishable key in `config/payments.js`.
 4. Place your Stripe secret key in your `.env` file (stripe endpoint secret not needed right away).
 5. Run `yarn stripe:setup`, which will create a subscription plan for you using Stripe's API.
 6. Start the app, register a new user, and go through the subscription creation process.

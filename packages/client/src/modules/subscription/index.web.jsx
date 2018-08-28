@@ -20,7 +20,7 @@ const NavLinkWithI18n = translate('subscription')(({ t }) => (
 ));
 
 export default new Feature(
-  settings.subscription.enabled
+  settings.payments.stripe.recurring.enabled
     ? {
         route: [
           <AuthRoute exact role="user" path="/subscription" component={Subscription} />,
@@ -35,7 +35,7 @@ export default new Feature(
           </IfLoggedIn>
         ),
         reducer: { subscription: reducers },
-        scriptsInsert: settings.subscription.stripeSecretKey ? 'https://js.stripe.com/v3/' : undefined,
+        scriptsInsert: settings.payments.stripe.recurring.stripeSecretKey ? 'https://js.stripe.com/v3/' : undefined,
         localization: { ns: 'subscription', resources }
       }
     : {}

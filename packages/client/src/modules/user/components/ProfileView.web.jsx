@@ -58,7 +58,7 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
                   <CardText>{currentUser.profile.fullName}</CardText>
                 </CardGroup>
               )}
-            {settings.subscription.enabled && <SubscriptionProfile />}
+            {settings.payments.stripe.recurring.enabled && <SubscriptionProfile />}
           </Card>
           <Link
             className="mt-2 btn user-link"

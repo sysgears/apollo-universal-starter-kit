@@ -7,7 +7,7 @@ import settings from '../../../../../../settings';
 import Renderer from '../../../testHelpers/Renderer';
 import { updateContent, waitForElementRender } from '../../../testHelpers/testUtils';
 
-const { enabled, stripePublishableKey } = settings.subscription;
+const { enabled, stripePublishableKey } = settings.payments.stripe.recurring;
 
 if (enabled && stripePublishableKey !== '') {
   const mocks = {

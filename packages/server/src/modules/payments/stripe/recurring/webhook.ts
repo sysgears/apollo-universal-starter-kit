@@ -6,7 +6,7 @@ import User from '../../../user/sql';
 import settings from '../../../../../../../settings';
 
 const StripeRecurrent = new StripeRecurrentDAO();
-const stripe = new Stripe(settings.subscription.stripeSecretKey);
+const stripe = new Stripe(settings.payments.stripe.recurring.stripeSecretKey);
 
 const sendEmailToUser = async (userId: number, subject: string, html: string) => {
   const { email }: any = await User.getUser(userId);
@@ -70,11 +70,11 @@ export default async (req: any, res: any) => {
     const rootUrl = `${req.protocol}://${req.get('host')}`;
     let event;
 
-    if (settings.subscription.stripeEndpointSecret) {
+    if (settings.payments.stripe.recurring.stripeEndpointSecret) {
       event = stripe.webhooks.constructEvent(
         req.body,
         req.headers['stripe-signature'],
-        settings.subscription.stripeEndpointSecret
+        settings.payments.stripe.recurring.stripeEndpointSecret
       );
     } else {
       event = req.body;

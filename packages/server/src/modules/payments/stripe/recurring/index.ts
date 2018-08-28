@@ -15,7 +15,7 @@ import settings from '../../../../../../../settings';
 const StripeRecurrent = new StripeRecurrentDAO();
 
 export default new Feature(
-  settings.subscription.enabled
+  settings.payments.stripe.recurring.enabled
     ? {
         schema,
         createResolversFunc: createResolvers,
@@ -24,11 +24,11 @@ export default new Feature(
           subscription: user ? await StripeRecurrent.getStripeRecurrent(user.id) : null
         }),
         beforeware: (app: Express) => {
-          app.use(settings.subscription.webhookUrl, json());
+          app.use(settings.payments.stripe.recurring.webhookUrl, json());
         },
         middleware: (app: Express) => {
           app.use(stripeLocalMiddleware());
-          app.post(settings.subscription.webhookUrl, webhookMiddleware);
+          app.post(settings.payments.stripe.recurring.webhookUrl, webhookMiddleware);
         },
         localization: { ns: 'subscription', resources }
       }

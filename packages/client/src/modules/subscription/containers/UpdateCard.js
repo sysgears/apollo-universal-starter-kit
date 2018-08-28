@@ -15,7 +15,7 @@ class UpdateCard extends React.Component {
     return (
       <div>
         {__CLIENT__ ? (
-          <StripeProvider apiKey={settings.subscription.stripePublishableKey}>
+          <StripeProvider apiKey={settings.payments.stripe.recurring.stripePublishableKey}>
             <UpdateCardView {...this.props} />
           </StripeProvider>
         ) : (

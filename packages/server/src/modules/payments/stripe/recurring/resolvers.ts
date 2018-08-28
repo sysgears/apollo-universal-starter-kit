@@ -112,7 +112,7 @@ export default () => ({
         } catch (err) {
           log.error(err);
           const e = new FieldError();
-          e.setError('subscription', req.t('subscription:cancelSubscription'));
+          e.setError('stripeRecurring', req.t('stripeRecurring:cancelRecurringError'));
           e.throwIf();
         }
 

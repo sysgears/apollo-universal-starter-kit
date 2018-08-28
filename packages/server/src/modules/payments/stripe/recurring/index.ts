@@ -31,7 +31,7 @@ export default new Feature(
           app.use(stripeLocalMiddleware());
           app.post(webhookUrl, webhookMiddleware);
         },
-        localization: { ns: 'subscription', resources }
+        localization: { ns: 'stripeRecurring', resources }
       }
     : {}
 );

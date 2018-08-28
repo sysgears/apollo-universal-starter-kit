@@ -69,6 +69,7 @@
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
+    "moment": "^2.22.2",
     "prop-types": "^15.6.0",
     "react": "16.3.1",
     "react-apollo": "^2.1.4",
@@ -188,13 +189,13 @@
     "expo": "^27.0.2",
     "native-base": "^2.3.5",
     "react-native": "0.55.3",
-    "uuid": "^3.3.2",
     "react-native-elements": "^0.19.1",
     "react-native-keyboard-spacer": "^0.4.1",
+    "react-native-mime-types": "^2.2.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",
     "react-navigation": "^2.0.0",
-    "react-native-mime-types": "^2.2.1",
-    "spinjs": "^0.4.0"
+    "spinjs": "^0.4.0",
+    "uuid": "^3.3.2"
   }
 }

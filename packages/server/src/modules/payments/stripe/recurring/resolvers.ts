@@ -4,7 +4,8 @@ import log from '../../../../../../common/log';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
 
-const stripe = new Stripe(settings.payments.stripe.recurring.stripeSecretKey);
+const { secretKey } = settings.payments.stripe.recurring;
+const stripe = new Stripe(secretKey);
 
 interface CreditCard {
   input: {

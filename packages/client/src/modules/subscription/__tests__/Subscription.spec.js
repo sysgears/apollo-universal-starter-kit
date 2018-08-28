@@ -7,9 +7,9 @@ import settings from '../../../../../../settings';
 import Renderer from '../../../testHelpers/Renderer';
 import { updateContent, waitForElementRender } from '../../../testHelpers/testUtils';
 
-const { enabled, stripePublishableKey } = settings.payments.stripe.recurring;
+const { enabled, piblicKey } = settings.payments.stripe.recurring;
 
-if (enabled && stripePublishableKey !== '') {
+if (enabled && piblicKey !== '') {
   const mocks = {
     Query: () => ({
       currentUser() {

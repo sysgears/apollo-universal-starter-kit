@@ -35,7 +35,7 @@ export default new Feature(
           </IfLoggedIn>
         ),
         reducer: { subscription: reducers },
-        scriptsInsert: settings.payments.stripe.recurring.stripeSecretKey ? 'https://js.stripe.com/v3/' : undefined,
+        scriptsInsert: settings.payments.stripe.recurring.secretKey ? 'https://js.stripe.com/v3/' : undefined,
         localization: { ns: 'subscription', resources }
       }
     : {}

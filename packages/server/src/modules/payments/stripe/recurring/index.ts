@@ -13,6 +13,7 @@ import resources from './locales';
 import settings from '../../../../../../../settings';
 
 const StripeRecurring = new StripeRecurringDAO();
+const { webhookUrl } = settings.payments.stripe.recurring;
 
 export default new Feature(
   settings.payments.stripe.recurring.enabled
@@ -24,11 +25,11 @@ export default new Feature(
           stripeRecurring: user ? await StripeRecurring.getRecurring(user.id) : null
         }),
         beforeware: (app: Express) => {
-          app.use(settings.payments.stripe.recurring.webhookUrl, json());
+          app.use(webhookUrl, json());
         },
         middleware: (app: Express) => {
           app.use(stripeLocalMiddleware());
-          app.post(settings.payments.stripe.recurring.webhookUrl, webhookMiddleware);
+          app.post(webhookUrl, webhookMiddleware);
         },
         localization: { ns: 'subscription', resources }
       }

@@ -5,8 +5,9 @@ import mailer from '../../../mailer/mailer';
 import User from '../../../user/sql';
 import settings from '../../../../../../../settings';
 
+const { secretKey, endpointSecret } = settings.payments.stripe.recurring;
 const StripeRecurring = new StripeRecurringDAO();
-const stripe = new Stripe(settings.payments.stripe.recurring.stripeSecretKey);
+const stripe = new Stripe(secretKey);
 
 const sendEmailToUser = async (userId: number, subject: string, html: string) => {
   const { email }: any = await User.getUser(userId);
@@ -19,11 +20,11 @@ const sendEmailToUser = async (userId: number, subject: string, html: string) =>
   });
 };
 
-const deleteSubscription = async (event: any, rootUrl: string) => {
-  const subscription = await StripeRecurring.getRecurringByStripeRecurringId(event.data.object.id);
+const deleteSubscription = async (stripeEvent: any, rootUrl: string) => {
+  const recurring = await StripeRecurring.getRecurringByStripeRecurringId(stripeEvent.data.object.id);
 
-  if (subscription) {
-    const { userId, stripeCustomerId, stripeSourceId } = subscription;
+  if (recurring) {
+    const { userId, stripeCustomerId, stripeSourceId } = recurring;
     const url = `${rootUrl}/subscription`;
 
     await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
@@ -46,12 +47,12 @@ const deleteSubscription = async (event: any, rootUrl: string) => {
   }
 };
 
-const notifyFailedSubscription = async (event: any, rootUrl: string) => {
-  const subscription = await StripeRecurring.getRecurringByStripeCustomerId(event.data.object.customer);
+const notifyFailedSubscription = async (stripeEvent: any, websiteUrl: string) => {
+  const recurring = await StripeRecurring.getRecurringByStripeCustomerId(stripeEvent.data.object.customer);
 
-  if (subscription) {
-    const { userId } = subscription;
-    const url = `${rootUrl}/profile`;
+  if (recurring) {
+    const { userId } = recurring;
+    const url = `${websiteUrl}/profile`;
 
     await sendEmailToUser(
       userId,
@@ -63,27 +64,19 @@ const notifyFailedSubscription = async (event: any, rootUrl: string) => {
 
 /**
  * Webhook middleware.
- * Endpoint which provides works with Stripe events
+ * This Endpoint handles Stripe events
  */
 export default async (req: any, res: any) => {
   try {
-    const rootUrl = `${req.protocol}://${req.get('host')}`;
-    let event;
+    const websiteUrl = `${req.protocol}://${req.get('host')}`;
+    const stripeEvent = endpointSecret
+      ? stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], endpointSecret)
+      : req.body;
 
-    if (settings.payments.stripe.recurring.stripeEndpointSecret) {
-      event = stripe.webhooks.constructEvent(
-        req.body,
-        req.headers['stripe-signature'],
-        settings.payments.stripe.recurring.stripeEndpointSecret
-      );
-    } else {
-      event = req.body;
-    }
-
-    if (event.type === 'customer.subscription.deleted') {
-      await deleteSubscription(event, rootUrl);
-    } else if (event.type === 'invoice.payment_failed') {
-      await notifyFailedSubscription(event, rootUrl);
+    if (stripeEvent.type === 'customer.subscription.deleted') {
+      await deleteSubscription(stripeEvent, websiteUrl);
+    } else if (stripeEvent.type === 'invoice.payment_failed') {
+      await notifyFailedSubscription(stripeEvent, websiteUrl);
     }
 
     res.json({ success: true });

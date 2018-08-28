@@ -3,7 +3,7 @@ import settings from '../../../../../../../settings';
 
 export default () => {
   let running = false;
-  const { enabled, stripeSecretKey, webhookUrl } = settings.payments.stripe.recurring;
+  const { enabled, secretKey, webhookUrl } = settings.payments.stripe.recurring;
 
   return async (req: any, res: any, next: () => void) => {
     if (running) {
@@ -11,10 +11,10 @@ export default () => {
       return;
     }
 
-    if (__DEV__ && enabled && stripeSecretKey && !running) {
+    if (__DEV__ && enabled && secretKey && !running) {
       log.debug('Starting stripe local proxy');
       require('stripe-local')({
-        secretKey: stripeSecretKey,
+        secretKey,
         webhookUrl: `http://localhost:${__SERVER_PORT__}${webhookUrl}`
       });
 

@@ -427,7 +427,7 @@ cd apollo-universal-starter-kit
 2. Install dependencies.
 
 ```
-yarn
+yarn --prod=false
 ```
 
 3. Seed production database data.
@@ -436,6 +436,17 @@ yarn
 NODE_ENV=production yarn seed
 ```
 
+4. Set proper values for `config.options.defines.__SERVER_PORT__` and `config.options.defines.__WEBSITE_URL__` in `packages/server/.spinrc.js` to match your production set up.
+5. If you are interested in mobile front end edit `packages/mobile/.spinrc.js` and change these lines:
+   ```js
+   config.options.defines.__API_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
+   config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
+   ```
+   If you are deploying on Heroku without custom domain name, production URLs might look like this:
+   ```js
+   config.options.defines.__API_URL__ = '"https://<AppName>.herokuapp.com/graphql"';
+   config.options.defines.__WEBSITE_URL__ = '"https://<AppName>.herokuapp.com"';
+   ```
 5. Compile project.
 
 ```
@@ -464,10 +475,21 @@ yarn start
 
 ### Deploying to [Heroku]
 
-1. Add your app to Heroku
-2. Allow Heroku to install build time dependencies from the devDependencies in `package.json`: `Settings -> Config Variables -> Add`, KEY: `YARN_PRODUCTION`, VALUE: `false`.
-3. Add `EXP_USERNAME` and `EXP_PASSWORD` config variables there as well. They will be used to publish mobile Expo Client applications
-4. Deploy your app on Heroku
+1. Add your app to Heroku (see full instructions on [Deploying a Node.js app] tutorial).
+2. Allow Heroku to install build time dependencies from the devDependencies in `package.json` - go to your [Dashboard] on Heroku and choose your app, then go to `Settings -> Config Variables -> Add`, set KEY: `YARN_PRODUCTION` and VALUE: `false`.
+3. Add `EXP_USERNAME` and `EXP_PASSWORD` config variables there as well from [Expo]. They will be used to publish mobile Expo Client applications.
+4. Set proper values for `config.options.defines.__SERVER_PORT__` and `config.options.defines.__WEBSITE_URL__` in `packages/server/.spinrc.js` to match your production set up.
+5. In order for mobile Expo client app to connect to proper backend URL, edit `packages/mobile/.spinrc.js` and change these lines:
+   ```js
+   config.options.defines.__API_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
+   config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
+   ```
+   If you are deploying on Heroku without custom domain name, production URLs might look like this:
+   ```js
+   config.options.defines.__API_URL__ = '"https://<AppName>.herokuapp.com/graphql"';
+   config.options.defines.__WEBSITE_URL__ = '"https://<AppName>.herokuapp.com"';
+   ```
+6. Deploy your app on Heroku.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
@@ -528,6 +550,8 @@ Copyright © 2016, 2017 [SysGears INC]. This source code is licensed under the [
 [debug sql]: https://spin.atomicobject.com/2017/03/27/timing-queries-knexjs-nodejs/
 [expo build standalone apps documentation]: https://docs.expo.io/versions/v18.0.0/guides/building-standalone-apps.html
 [heroku]: https://heroku.com
+[Dashboard]: https://dashboard.heroku.com/apps
+[Deploying a Node.js app]: https://devcenter.heroku.com/articles/getting-started-with-nodejs
 [eslint]: http://eslint.org
 [sysgears inc]: http://sysgears.com
 [persistgraphql webpack plugin]: https://github.com/sysgears/persistgraphql-webpack-plugin

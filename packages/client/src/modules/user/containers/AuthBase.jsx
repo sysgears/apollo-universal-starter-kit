@@ -66,7 +66,20 @@ const IfNotLoggedIn = withLoadedUser(IfNotLoggedInComponent);
 
 const withLogout = Component =>
   withApollo(({ client, ...props }) => {
-    const newProps = { ...props, logout: () => access.doLogout(client) };
+    const newProps = {
+      ...props,
+      logout: async () => {
+        await access.doLogout(client);
+        try {
+          await client.resetStore();
+        } catch (e) {
+          // Ignore Error: Network error: Store reset while query was in flight(not completed in link chain)
+          if (e.message.indexOf('Store reset while query was in flight') < 0) {
+            throw e;
+          }
+        }
+      }
+    };
     return <Component {...newProps} />;
   });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Pagination as ADPagination, Button } from 'antd-mobile';
+import { Pagination as ADPagination, Button } from 'antd-mobile-rn';
 import { Text } from 'react-native';
 
 export default class Pagination extends React.Component {

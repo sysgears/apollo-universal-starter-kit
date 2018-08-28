@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ADInputItem from 'antd-mobile/lib/input-item';
+import { InputItem as ADInputItem } from 'antd-mobile-rn';
 import { Text, View, StyleSheet } from 'react-native';
 import InputItemStyles from '../styles/InputItem';
 

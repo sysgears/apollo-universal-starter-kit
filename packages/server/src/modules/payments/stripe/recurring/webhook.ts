@@ -1,11 +1,11 @@
 import Stripe from 'stripe';
 
-import StripeRecurrentDAO from './sql';
+import StripeRecurringDAO from './sql';
 import mailer from '../../../mailer/mailer';
 import User from '../../../user/sql';
 import settings from '../../../../../../../settings';
 
-const StripeRecurrent = new StripeRecurrentDAO();
+const StripeRecurring = new StripeRecurringDAO();
 const stripe = new Stripe(settings.payments.stripe.recurring.stripeSecretKey);
 
 const sendEmailToUser = async (userId: number, subject: string, html: string) => {
@@ -20,14 +20,14 @@ const sendEmailToUser = async (userId: number, subject: string, html: string) =>
 };
 
 const deleteSubscription = async (event: any, rootUrl: string) => {
-  const subscription = await StripeRecurrent.getStripeRecurrentByStripeRecurrentId(event.data.object.id);
+  const subscription = await StripeRecurring.getRecurringByStripeRecurringId(event.data.object.id);
 
   if (subscription) {
     const { userId, stripeCustomerId, stripeSourceId } = subscription;
     const url = `${rootUrl}/subscription`;
 
     await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
-    await StripeRecurrent.editStripeRecurrent({
+    await StripeRecurring.editRecurring({
       userId,
       active: false,
       stripeSourceId: null,
@@ -47,7 +47,7 @@ const deleteSubscription = async (event: any, rootUrl: string) => {
 };
 
 const notifyFailedSubscription = async (event: any, rootUrl: string) => {
-  const subscription = await StripeRecurrent.getStripeRecurrentByStripeCustomerId(event.data.object.customer);
+  const subscription = await StripeRecurring.getRecurringByStripeCustomerId(event.data.object.customer);
 
   if (subscription) {
     const { userId } = subscription;

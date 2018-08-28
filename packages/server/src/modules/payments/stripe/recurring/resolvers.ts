@@ -1,4 +1,3 @@
-// import { pick } from 'lodash';
 import Stripe from 'stripe';
 
 import log from '../../../../../../common/log';
@@ -29,13 +28,13 @@ export default () => ({
       return { number: Math.floor(Math.random() * 10) };
     },
     async subscriptionCardInfo(obj: any, args: any, context: any) {
-      return !context.user ? undefined : context.Subscription.getCardInfo(context.user.id);
+      return !context.user ? undefined : context.StripeRecurrent.getCardInfo(context.user.id);
     }
   },
   Mutation: {
     async subscribe(obj: any, { input }: CreditCard, context: any) {
       try {
-        const { user, subscription, Subscription } = context;
+        const { user, subscription, StripeRecurrent } = context;
         const { token, expiryMonth, expiryYear, last4, brand } = input;
         let stripeCustomerId;
         let stripeSourceId;
@@ -51,8 +50,9 @@ export default () => ({
           stripeSourceId = default_source;
         }
 
-        await Subscription.editSubscription({
+        await StripeRecurrent.editStripeRecurrent({
           userId: user.id,
+          active: false,
           stripeCustomerId,
           stripeSourceId,
           expiryMonth,
@@ -66,7 +66,7 @@ export default () => ({
           items: [{ plan: 'basic' }]
         });
 
-        await Subscription.editSubscription({
+        await StripeRecurrent.editStripeRecurrent({
           userId: user.id,
           active: true,
           stripeSubscriptionId: newSubscription.id
@@ -80,12 +80,12 @@ export default () => ({
     async updateCard(obj: any, { input }: CreditCard, context: any) {
       try {
         const { token, expiryMonth, expiryYear, last4, brand } = input;
-        const { Subscription, user, subscription } = context;
+        const { StripeRecurrent, user, subscription } = context;
 
         await stripe.customers.deleteSource(subscription.stripeCustomerId, subscription.stripeSourceId);
         const source = await stripe.customers.createSource(subscription.stripeCustomerId, { source: token });
 
-        await Subscription.editSubscription({
+        await StripeRecurrent.editStripeRecurrent({
           userId: user.id,
           stripeSourceId: source.id,
           expiryMonth,
@@ -102,7 +102,7 @@ export default () => ({
     },
     async cancel(obj: any, args: any, context: any) {
       try {
-        const { user, subscription, Subscription, req } = context;
+        const { user, subscription, StripeRecurrent, req } = context;
         const { stripeSubscriptionId, stripeCustomerId, stripeSourceId } = subscription;
 
         try {
@@ -115,7 +115,7 @@ export default () => ({
           e.throwIf();
         }
 
-        await Subscription.editSubscription({
+        await StripeRecurrent.editStripeRecurrent({
           userId: user.id,
           active: false,
           stripeSourceId: null,

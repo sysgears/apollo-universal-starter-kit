@@ -2,62 +2,67 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 import knex from '../../../../sql/connector';
 import { returnId } from '../../../../sql/helpers';
 
-export interface Subscription {
+export interface StripeRecurrent {
   userId: number;
   active: boolean;
   stripeSourceId: string;
-  stripeCustomerId?: string;
-  stripeSubscriptionId?: string;
+  stripeCustomerId: string;
+  stripeSubscriptionId: string;
   expiryMonth: number;
   expiryYear: number;
   last4: number;
   brand: string;
 }
 
-export default class SubscriptionDAO {
-  public async editSubscription({ userId, ...subscription }: Subscription) {
-    const userSubscription = await knex('subscription')
+interface StripeRecurrentProps {
+  userId: number;
+  [key: string]: any;
+}
+
+export default class StripeRecurrentDAO {
+  public async editStripeRecurrent({ userId, ...stripeRecurrent }: StripeRecurrentProps) {
+    const userStripeRecurrent = await knex('subscription')
       .select('id')
       .where({ user_id: userId })
       .first();
 
-    if (userSubscription) {
+    if (userStripeRecurrent) {
       return returnId(knex('subscription'))
-        .update(decamelizeKeys(subscription))
+        .update(decamelizeKeys(stripeRecurrent))
         .where({ user_id: userId });
     } else {
-      return returnId(knex('subscription')).insert({ ...decamelizeKeys(subscription), user_id: userId });
+      return returnId(knex('subscription')).insert({ ...decamelizeKeys(stripeRecurrent), user_id: userId });
     }
   }
 
-  public async getSubscription(userId: number): Promise<Subscription> {
+  public async getStripeRecurrent(userId: number): Promise<StripeRecurrent> {
     return camelizeKeys(
       await knex('subscription')
         .select('s.*')
         .from('subscription as s')
         .where('s.user_id', '=', userId)
         .first()
-    ) as Subscription;
+    ) as StripeRecurrent;
   }
 
-  public async getSubscriptionByStripeSubscriptionId(stripeSubscriptionId: string): Promise<Subscription> {
+  public async getStripeRecurrentByStripeRecurrentId(stripeRecurrentId: string): Promise<StripeRecurrent> {
     return camelizeKeys(
       await knex('subscription')
         .select('s.*')
         .from('subscription as s')
-        .where('s.stripe_subscription_id', '=', stripeSubscriptionId)
+        .where('s.stripe_subscription_id', '=', stripeRecurrentId)
         .first()
-    ) as Subscription;
+    ) as StripeRecurrent;
   }
 
-  public async getSubscriptionByStripeCustomerId(stripeCustomerId: string): Promise<Subscription> {
+  public async getStripeRecurrentByStripeCustomerId(stripeCustomerId: string): Promise<StripeRecurrent> {
     return camelizeKeys(
       await knex('subscription')
         .select('s.*')
         .from('subscription as s')
         .where('s.stripe_customer_id', '=', stripeCustomerId)
         .first()
-    ) as Subscription;
+    ) as StripeRecurrent;
   }
 
   public async getCardInfo(userId: number) {

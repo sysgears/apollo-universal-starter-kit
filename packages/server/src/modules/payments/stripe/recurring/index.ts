@@ -1,7 +1,7 @@
 import { json } from 'body-parser';
 import { Express } from 'express';
 
-import SubscriptionDAO from './sql';
+import StripeRecurrentDAO from './sql';
 
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
@@ -12,7 +12,7 @@ import webhookMiddleware from './webhook';
 import resources from './locales';
 import settings from '../../../../../../../settings';
 
-const Subscription = new SubscriptionDAO();
+const StripeRecurrent = new StripeRecurrentDAO();
 
 export default new Feature(
   settings.subscription.enabled
@@ -20,8 +20,8 @@ export default new Feature(
         schema,
         createResolversFunc: createResolvers,
         createContextFunc: async ({ context: { user } }: any) => ({
-          Subscription,
-          subscription: user ? await Subscription.getSubscription(user.id) : null
+          StripeRecurrent,
+          subscription: user ? await StripeRecurrent.getStripeRecurrent(user.id) : null
         }),
         beforeware: (app: Express) => {
           app.use(settings.subscription.webhookUrl, json());

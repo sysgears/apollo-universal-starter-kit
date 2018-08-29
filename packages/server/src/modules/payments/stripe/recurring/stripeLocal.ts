@@ -10,7 +10,7 @@ export default () => {
       next();
       return;
     }
-
+    // TODO: fix error - Cannot find name '__SERVER_PORT__'.
     if (__DEV__ && enabled && secretKey && !running) {
       log.debug('Starting stripe local proxy');
       require('stripe-local')({

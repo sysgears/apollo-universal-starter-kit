@@ -20,30 +20,30 @@ interface CreditCard {
 export default () => ({
   Query: {
     subscription(obj: any, args: any, context: any) {
-      return context.stripeRecurring;
+      return context.stripeSubscription;
     },
     subscribersOnlyNumber(obj: any, args: any, context: any) {
-      if (!context.stripeRecurring || !context.stripeRecurring.active) {
+      if (!context.stripeSubscription || !context.stripeSubscription.active) {
         return;
       }
       return { number: Math.floor(Math.random() * 10) };
     },
     async subscriptionCardInfo(obj: any, args: any, context: any) {
-      return !context.user ? undefined : context.StripeRecurring.getCardInfo(context.user.id);
+      return !context.user ? undefined : context.StripeSubscription.getCardInfo(context.user.id);
     }
   },
   Mutation: {
     async subscribe(obj: any, { input }: CreditCard, context: any) {
       try {
-        const { user, stripeRecurring, StripeRecurring } = context;
+        const { user, stripeSubscription, StripeSubscription } = context;
         const { token, expiryMonth, expiryYear, last4, brand } = input;
         let stripeCustomerId;
         let stripeSourceId;
 
         // use existing stripe customer if user has subscribed before
-        if (stripeRecurring && stripeRecurring.stripeCustomerId) {
-          const source = await stripe.customers.createSource(stripeRecurring.stripeCustomerId, { source: token });
-          stripeCustomerId = stripeRecurring.stripeCustomerId;
+        if (stripeSubscription && stripeSubscription.stripeCustomerId) {
+          const source = await stripe.customers.createSource(stripeSubscription.stripeCustomerId, { source: token });
+          stripeCustomerId = stripeSubscription.stripeCustomerId;
           stripeSourceId = source.id;
         } else {
           const { id, default_source } = await stripe.customers.create({ email: user.email, source: token });
@@ -51,7 +51,7 @@ export default () => ({
           stripeSourceId = default_source;
         }
 
-        await StripeRecurring.editRecurring({
+        await StripeSubscription.editSubscription({
           userId: user.id,
           active: false,
           stripeCustomerId,
@@ -67,7 +67,7 @@ export default () => ({
           items: [{ plan: 'basic' }]
         });
 
-        await StripeRecurring.editRecurring({
+        await StripeSubscription.editSubscription({
           userId: user.id,
           active: true,
           stripeSubscriptionId: newSubscriber.id
@@ -81,12 +81,12 @@ export default () => ({
     async updateCard(obj: any, { input }: CreditCard, context: any) {
       try {
         const { token, expiryMonth, expiryYear, last4, brand } = input;
-        const { StripeRecurring, user, stripeRecurring } = context;
+        const { StripeSubscription, user, stripeSubscription } = context;
 
-        await stripe.customers.deleteSource(stripeRecurring.stripeCustomerId, stripeRecurring.stripeSourceId);
-        const source = await stripe.customers.createSource(stripeRecurring.stripeCustomerId, { source: token });
+        await stripe.customers.deleteSource(stripeSubscription.stripeCustomerId, stripeSubscription.stripeSourceId);
+        const source = await stripe.customers.createSource(stripeSubscription.stripeCustomerId, { source: token });
 
-        await StripeRecurring.editRecurring({
+        await StripeSubscription.editSubscription({
           userId: user.id,
           stripeSourceId: source.id,
           expiryMonth,
@@ -103,8 +103,8 @@ export default () => ({
     },
     async cancel(obj: any, args: any, context: any) {
       try {
-        const { user, stripeRecurring, StripeRecurring, req } = context;
-        const { stripeSubscriptionId, stripeCustomerId, stripeSourceId } = stripeRecurring;
+        const { user, stripeSubscription, StripeSubscription, req } = context;
+        const { stripeSubscriptionId, stripeCustomerId, stripeSourceId } = stripeSubscription;
 
         try {
           await stripe.subscriptions.del(stripeSubscriptionId);
@@ -112,11 +112,11 @@ export default () => ({
         } catch (err) {
           log.error(err);
           const e = new FieldError();
-          e.setError('stripeRecurring', req.t('stripeRecurring:cancelRecurringError'));
+          e.setError('stripeSubscription', req.t('stripeSubscription:cancelError'));
           e.throwIf();
         }
 
-        await StripeRecurring.editRecurring({
+        await StripeSubscription.editSubscription({
           userId: user.id,
           active: false,
           stripeSourceId: null,

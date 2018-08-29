@@ -1,7 +1,7 @@
 import { json } from 'body-parser';
 import { Express } from 'express';
 
-import StripeRecurringDAO from './sql';
+import StripeSubscriptionDAO from './sql';
 
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
@@ -12,17 +12,17 @@ import webhookMiddleware from './webhook';
 import resources from './locales';
 import settings from '../../../../../../../settings';
 
-const StripeRecurring = new StripeRecurringDAO();
-const { webhookUrl } = settings.payments.stripe.recurring;
+const StripeSubscription = new StripeSubscriptionDAO();
+const { webhookUrl, enabled } = settings.payments.stripe.recurring;
 
 export default new Feature(
-  settings.payments.stripe.recurring.enabled
+  enabled
     ? {
         schema,
         createResolversFunc: createResolvers,
         createContextFunc: async ({ context: { user } }: any) => ({
-          StripeRecurring,
-          stripeRecurring: user ? await StripeRecurring.getRecurring(user.id) : null
+          StripeSubscription,
+          stripeSubscription: user ? await StripeSubscription.getSubscription(user.id) : null
         }),
         beforeware: (app: Express) => {
           app.use(webhookUrl, json());
@@ -31,7 +31,7 @@ export default new Feature(
           app.use(stripeLocalMiddleware());
           app.post(webhookUrl, webhookMiddleware);
         },
-        localization: { ns: 'stripeRecurring', resources }
+        localization: { ns: 'stripeSubscription', resources }
       }
     : {}
 );

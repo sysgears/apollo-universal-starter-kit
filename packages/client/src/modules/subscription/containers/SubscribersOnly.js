@@ -16,8 +16,8 @@ SubscribersOnly.propTypes = {
 const SubscribersOnlyWithApollo = compose(
   graphql(NUMBER_QUERY, {
     options: { fetchPolicy: 'network-only' },
-    props({ data: { loading, subscribersOnlyNumber } }) {
-      return { loading, number: subscribersOnlyNumber && subscribersOnlyNumber.number };
+    props({ data: { loading, stripeSubscriptionProtectedNumber } }) {
+      return { loading, number: stripeSubscriptionProtectedNumber && stripeSubscriptionProtectedNumber.number };
     }
   })
 )(SubscribersOnly);

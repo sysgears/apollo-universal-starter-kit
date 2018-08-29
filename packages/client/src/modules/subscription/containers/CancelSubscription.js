@@ -27,10 +27,10 @@ const CancelSubscriptionWithApollo = compose(
     // skipping for now on server.
     skip: __SERVER__,
     options: { fetchPolicy: 'network-only' },
-    props({ data: { loading, subscription } }) {
+    props({ data: { loading, stripeSubscription } }) {
       return {
         loading,
-        active: subscription && subscription.active
+        active: stripeSubscription && stripeSubscription.active
       };
     }
   }),
@@ -39,18 +39,18 @@ const CancelSubscriptionWithApollo = compose(
       cancel: async () => {
         try {
           const {
-            data: { cancel }
+            data: { cancelStripeSubscription }
           } = await mutate({
-            update: (store, { data: { cancel } }) => {
+            update: (store, { data: { cancelStripeSubscription } }) => {
               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
-              data.subscription = cancel;
+              data.subscription = cancelStripeSubscription;
               store.writeQuery({ query: SUBSCRIPTION_QUERY, data });
             },
             refetchQueries: [{ query: CARD_INFO }]
           });
 
-          if (cancel.errors) {
-            return { errors: cancel.errors.map(e => e.message).join('\n') };
+          if (cancelStripeSubscription.errors) {
+            return { errors: cancelStripeSubscription.errors.map(e => e.message).join('\n') };
           }
 
           return true;

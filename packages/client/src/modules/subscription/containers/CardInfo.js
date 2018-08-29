@@ -23,13 +23,13 @@ CardInfo.propTypes = {
 const CardInfoWithApollo = compose(
   graphql(CARD_INFO_QUERY, {
     options: { fetchPolicy: 'network-only' },
-    props({ data: { loading, subscriptionCardInfo } }) {
+    props({ data: { loading, stripeSubscriptionCard } }) {
       return {
         loading,
-        expiryMonth: subscriptionCardInfo && subscriptionCardInfo.expiryMonth,
-        expiryYear: subscriptionCardInfo && subscriptionCardInfo.expiryYear,
-        last4: subscriptionCardInfo && subscriptionCardInfo.last4,
-        brand: subscriptionCardInfo && subscriptionCardInfo.brand
+        expiryMonth: stripeSubscriptionCard && stripeSubscriptionCard.expiryMonth,
+        expiryYear: stripeSubscriptionCard && stripeSubscriptionCard.expiryYear,
+        last4: stripeSubscriptionCard && stripeSubscriptionCard.last4,
+        brand: stripeSubscriptionCard && stripeSubscriptionCard.brand
       };
     }
   })

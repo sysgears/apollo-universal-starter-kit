@@ -32,20 +32,20 @@ const UpdateCardWithApollo = compose(
       updateCard: async ({ token, expiryMonth, expiryYear, last4, brand }) => {
         try {
           const {
-            data: { updateCard }
+            data: { updateStripeSubscriptionCard }
           } = await mutate({
             variables: { input: { token, expiryMonth, expiryYear, last4, brand } },
             refetchQueries: [{ query: CARD_INFO }]
           });
 
-          if (!updateCard) {
+          if (!updateStripeSubscriptionCard) {
             return { errors: ['Error updating card.'] };
           }
 
           if (history) {
             history.push('/profile');
           }
-          return updateCard;
+          return updateStripeSubscriptionCard;
         } catch (e) {
           console.log(e.graphQLErrors);
         }

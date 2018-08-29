@@ -1,41 +1,41 @@
-type UserSubscription {
+type StripeSubscription {
   active: Boolean!
   errors: [FieldError!]
 }
 
-type UserSubscriptionCardInfo {
+type StripeSubscriptionCard {
   expiryMonth: Int
   expiryYear: Int
   last4: String
   brand: String
 }
 
-type SubscriberNumber {
+type StripeSubscriberProtectedNumber {
   number: Int
 }
 
-extend type Query {
-  # Get current user's subscription
-  subscription: UserSubscription
-  # Get magic number only available to subscribers
-  subscribersOnlyNumber: SubscriberNumber
-  # Get payment information for current user's subscription
-  subscriptionCardInfo: UserSubscriptionCardInfo
-}
-
-extend type Mutation {
-  # Subscribe a user
-  subscribe(input: SubscribeInput!): UserSubscription!
-  # Cancel a user's subscription
-  cancel: UserSubscription!
-  # Update a user's card information
-  updateCard(input: SubscribeInput!): Boolean!
-}
-
-input SubscribeInput {
+input StripeSubscribtionInput {
   token: String!
   expiryMonth: Int!
   expiryYear: Int!
   last4: String!
   brand: String!
+}
+
+extend type Query {
+  # Get current user's subscription
+  stripeSubscription: StripeSubscription
+  # Get magic number only available to subscribers
+  stripeSubscriptionProtectedNumber: StripeSubscriberProtectedNumber
+  # Get payment information for current user's subscription
+  stripeSubscriptionCard: StripeSubscriptionCard
+}
+
+extend type Mutation {
+  # Subscribe a user
+  addStripeSubscription(input: StripeSubscribtionInput!): StripeSubscription!
+  # Cancel a user's subscription
+  cancelStripeSubscription: StripeSubscription!
+  # Update a user's card information
+  updateStripeSubscriptionCard(input: StripeSubscribtionInput!): Boolean!
 }

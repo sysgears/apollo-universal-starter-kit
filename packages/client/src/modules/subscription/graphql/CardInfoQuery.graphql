@@ -1,5 +1,5 @@
-query CardInfoQuery {
-  subscriptionCardInfo {
+query stripeSubscriptionCardQuery {
+  stripeSubscriptionCard {
     expiryMonth
     expiryYear
     last4

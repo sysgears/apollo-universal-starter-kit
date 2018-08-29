@@ -1,8 +1,8 @@
 #import "./Subscription.graphql"
 
-mutation cancel {
-  cancel {
-    ...SubscriptionInfo
+mutation cancelStripeSubscription {
+  cancelStripeSubscription {
+    ...StripeSubscription
     errors {
       field
       message

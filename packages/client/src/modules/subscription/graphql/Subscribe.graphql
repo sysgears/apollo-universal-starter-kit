@@ -1,8 +1,8 @@
 #import "./Subscription.graphql"
 
-mutation subscribe($input: SubscribeInput!) {
-  subscribe(input: $input) {
-    ...SubscriptionInfo
+mutation addStripeSubscription($input: StripeSubscribtionInput!) {
+  addStripeSubscription(input: $input) {
+    ...StripeSubscription
     errors {
       field
       message

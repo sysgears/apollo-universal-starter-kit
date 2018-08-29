@@ -24,10 +24,10 @@ SubscriberNav.propTypes = {
 const SubscriberNavWithApollo = compose(
   graphql(SUBSCRIPTION_QUERY, {
     props: ({ data }) => {
-      const { loading, subscription } = data;
+      const { loading, stripeSubscription } = data;
       return {
         loading,
-        active: subscription && subscription.active
+        active: stripeSubscription && stripeSubscription.active
       };
     }
   })
@@ -57,10 +57,10 @@ SubscriberRoute.propTypes = {
 const SubscriberRouteWithApollo = compose(
   graphql(SUBSCRIPTION_QUERY, {
     props: ({ data }) => {
-      const { loading, subscription } = data;
+      const { loading, stripeSubscription } = data;
       return {
         loading,
-        active: subscription && subscription.active
+        active: stripeSubscription && stripeSubscription.active
       };
     }
   })

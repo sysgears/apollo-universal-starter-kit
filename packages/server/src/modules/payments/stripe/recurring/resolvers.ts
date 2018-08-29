@@ -19,21 +19,21 @@ interface CreditCard {
 
 export default () => ({
   Query: {
-    subscription(obj: any, args: any, context: any) {
+    stripeSubscription(obj: any, args: any, context: any) {
       return context.stripeSubscription;
     },
-    subscribersOnlyNumber(obj: any, args: any, context: any) {
+    stripeSubscriptionProtectedNumber(obj: any, args: any, context: any) {
       if (!context.stripeSubscription || !context.stripeSubscription.active) {
         return;
       }
       return { number: Math.floor(Math.random() * 10) };
     },
-    async subscriptionCardInfo(obj: any, args: any, context: any) {
+    async stripeSubscriptionCard(obj: any, args: any, context: any) {
       return !context.user ? undefined : context.StripeSubscription.getCardInfo(context.user.id);
     }
   },
   Mutation: {
-    async subscribe(obj: any, { input }: CreditCard, context: any) {
+    async addStripeSubscription(obj: any, { input }: CreditCard, context: any) {
       try {
         const { user, stripeSubscription, StripeSubscription } = context;
         const { token, expiryMonth, expiryYear, last4, brand } = input;
@@ -42,9 +42,9 @@ export default () => ({
 
         // use existing stripe customer if user has subscribed before
         if (stripeSubscription && stripeSubscription.stripeCustomerId) {
-          const source = await stripe.customers.createSource(stripeSubscription.stripeCustomerId, { source: token });
+          const { id } = await stripe.customers.createSource(stripeSubscription.stripeCustomerId, { source: token });
           stripeCustomerId = stripeSubscription.stripeCustomerId;
-          stripeSourceId = source.id;
+          stripeSourceId = id;
         } else {
           const { id, default_source } = await stripe.customers.create({ email: user.email, source: token });
           stripeCustomerId = id;
@@ -78,7 +78,7 @@ export default () => ({
         return { active: false, errors: e };
       }
     },
-    async updateCard(obj: any, { input }: CreditCard, context: any) {
+    async updateStripeSubscriptionCard(obj: any, { input }: CreditCard, context: any) {
       try {
         const { token, expiryMonth, expiryYear, last4, brand } = input;
         const { StripeSubscription, user, stripeSubscription } = context;
@@ -101,7 +101,7 @@ export default () => ({
         return false;
       }
     },
-    async cancel(obj: any, args: any, context: any) {
+    async cancelStripeSubscription(obj: any, args: any, context: any) {
       try {
         const { user, stripeSubscription, StripeSubscription, req } = context;
         const { stripeSubscriptionId, stripeCustomerId, stripeSourceId } = stripeSubscription;

@@ -33,19 +33,19 @@ const SubscriptionViewWithApollo = compose(
       subscribe: async ({ token, expiryMonth, expiryYear, last4, brand }) => {
         try {
           const {
-            data: { subscribe }
+            data: { addStripeSubscription }
           } = await mutate({
             variables: { input: { token, expiryMonth, expiryYear, last4, brand } },
-            update: (store, { data: { subscribe } }) => {
+            update: (store, { data: { addStripeSubscription } }) => {
               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
-              data.subscription = subscribe;
+              data.stripeSubscription = addStripeSubscription;
               store.writeQuery({ query: SUBSCRIPTION_QUERY, data });
             },
             refetchQueries: [{ query: CARD_INFO }]
           });
 
-          if (subscribe.errors) {
-            return { errors: subscribe.errors };
+          if (addStripeSubscription.errors) {
+            return { errors: addStripeSubscription.errors };
           }
 
           if (history) {
@@ -55,7 +55,7 @@ const SubscriptionViewWithApollo = compose(
             navigation.goBack();
           }
 
-          return subscribe;
+          return addStripeSubscription;
         } catch (e) {
           console.log(e.graphQLErrors);
         }

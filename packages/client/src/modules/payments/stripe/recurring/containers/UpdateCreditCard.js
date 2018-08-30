@@ -2,32 +2,32 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
-import UpdateCardView from '../components/UpdateCardView.web';
+import UpdateCreditCardView from '../components/UpdateCreditCardView';
 
-import UPDATE_CARD from '../graphql/UpdateCard.graphql';
-import CARD_INFO from '../graphql/CardInfoQuery.graphql';
+import UPDATE_CREDIT_CARD from '../graphql/UpdateCreditCard.graphql';
+import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
 import settings from '../../../../../../../../settings';
 
 // react-stripe-elements will not render on the server.
-class UpdateCard extends React.Component {
+class UpdateCreditCard extends React.Component {
   render() {
     return (
       <div>
         {__CLIENT__ ? (
           <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
-            <UpdateCardView {...this.props} />
+            <UpdateCreditCardView {...this.props} />
           </StripeProvider>
         ) : (
-          <UpdateCardView {...this.props} />
+          <UpdateCreditCardView {...this.props} />
         )}
       </div>
     );
   }
 }
 
-const UpdateCardWithApollo = compose(
-  graphql(UPDATE_CARD, {
+const UpdateCreditCardWithApollo = compose(
+  graphql(UPDATE_CREDIT_CARD, {
     props: ({ ownProps: { history }, mutate }) => ({
       updateCard: async ({ token, expiryMonth, expiryYear, last4, brand }) => {
         try {
@@ -35,7 +35,7 @@ const UpdateCardWithApollo = compose(
             data: { updateStripeSubscriptionCard }
           } = await mutate({
             variables: { input: { token, expiryMonth, expiryYear, last4, brand } },
-            refetchQueries: [{ query: CARD_INFO }]
+            refetchQueries: [{ query: CREDIT_CARD_QUERY }]
           });
 
           if (!updateStripeSubscriptionCard) {
@@ -52,6 +52,6 @@ const UpdateCardWithApollo = compose(
       }
     })
   })
-)(UpdateCard);
+)(UpdateCreditCard);
 
-export default UpdateCardWithApollo;
+export default UpdateCreditCardWithApollo;

@@ -1,12 +1,12 @@
 import React from 'react';
 
-import CardInfo from './CardInfo';
+import CreditCardInfo from './CreditCardInfo';
 import CancelSubscription from './CancelSubscription';
 
 const SubscriptionProfile = () => {
   return (
     <div>
-      <CardInfo />
+      <CreditCardInfo />
       <CancelSubscription />
     </div>
   );

@@ -20,12 +20,7 @@ class CancelSubscriptionView extends React.Component {
   onClick = async () => {
     this.setState({ cancelling: true });
     const { errors } = await this.props.cancel();
-    if (errors) {
-      this.setState({
-        cancelling: false,
-        errors
-      });
-    }
+    this.setState({ cancelling: false, errors: errors ? errors : null });
   };
 
   render() {
@@ -34,6 +29,7 @@ class CancelSubscriptionView extends React.Component {
 
     if (loading) return <p>{t('cancel.load')}</p>;
 
+    // TODO: fix hiding cancel button after success canceling
     return (
       <CardGroup>
         <CardTitle>{t('cancel.title')}</CardTitle>

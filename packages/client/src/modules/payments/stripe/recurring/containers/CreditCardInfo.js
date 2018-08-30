@@ -2,17 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
-import CardInfoView from '../components/CardInfoView';
+import CreditCardInfoView from '../components/CreditCardInfoView';
 
-import CARD_INFO_QUERY from '../graphql/CardInfoQuery.graphql';
+import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
-const CardInfo = ({ loading, expiryMonth, expiryYear, last4, brand }) => {
+const CreditCardInfo = ({ loading, expiryMonth, expiryYear, last4, brand }) => {
   return (
-    <CardInfoView loading={loading} expiryMonth={expiryMonth} expiryYear={expiryYear} last4={last4} brand={brand} />
+    <CreditCardInfoView
+      loading={loading}
+      expiryMonth={expiryMonth}
+      expiryYear={expiryYear}
+      last4={last4}
+      brand={brand}
+    />
   );
 };
 
-CardInfo.propTypes = {
+CreditCardInfo.propTypes = {
   loading: PropTypes.bool.isRequired,
   expiryMonth: PropTypes.number,
   expiryYear: PropTypes.number,
@@ -20,8 +26,8 @@ CardInfo.propTypes = {
   brand: PropTypes.string
 };
 
-const CardInfoWithApollo = compose(
-  graphql(CARD_INFO_QUERY, {
+const CreditCardInfoWithApollo = compose(
+  graphql(CREDIT_CARD_QUERY, {
     options: { fetchPolicy: 'network-only' },
     props({ data: { loading, stripeSubscriptionCard } }) {
       return {
@@ -33,6 +39,6 @@ const CardInfoWithApollo = compose(
       };
     }
   })
-)(CardInfo);
+)(CreditCardInfo);
 
-export default CardInfoWithApollo;
+export default CreditCardInfoWithApollo;

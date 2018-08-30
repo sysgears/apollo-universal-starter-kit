@@ -2,24 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
-import SubscribersOnlyView from '../components/SubscribersOnlyView';
+import SubscriberPageView from '../components/SubscriberPageView';
 
-import NUMBER_QUERY from '../graphql/SubscribersOnlyNumberQuery.graphql';
+import SUBSCRIBER_NUMBER_QUERY from '../graphql/SubscriptionProtectedNumberQuery.graphql';
 
-const SubscribersOnly = ({ loading, number }) => <SubscribersOnlyView loading={loading} number={number} />;
+const SubscriberPage = ({ loading, number }) => <SubscriberPageView loading={loading} number={number} />;
 
-SubscribersOnly.propTypes = {
+SubscriberPage.propTypes = {
   loading: PropTypes.bool.isRequired,
   number: PropTypes.number
 };
 
 const SubscribersOnlyWithApollo = compose(
-  graphql(NUMBER_QUERY, {
+  graphql(SUBSCRIBER_NUMBER_QUERY, {
     options: { fetchPolicy: 'network-only' },
     props({ data: { loading, stripeSubscriptionProtectedNumber } }) {
       return { loading, number: stripeSubscriptionProtectedNumber && stripeSubscriptionProtectedNumber.number };
     }
   })
-)(SubscribersOnly);
+)(SubscriberPage);
 
 export default SubscribersOnlyWithApollo;

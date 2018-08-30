@@ -5,8 +5,8 @@ import { graphql, compose } from 'react-apollo';
 import CancelSubscriptionView from '../components/CancelSubscriptionView';
 
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
-import CARD_INFO from '../graphql/CardInfoQuery.graphql';
-import CANCEL from '../graphql/CancelSubscription.graphql';
+import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
+import CANCEL_SUBSCRIPTION from '../graphql/CancelSubscription.graphql';
 
 const CancelSubscription = ({ loading, active, cancel }) => {
   return <CancelSubscriptionView loading={__SERVER__ ? true : loading} active={active} cancel={cancel} />;
@@ -34,7 +34,7 @@ const CancelSubscriptionWithApollo = compose(
       };
     }
   }),
-  graphql(CANCEL, {
+  graphql(CANCEL_SUBSCRIPTION, {
     props: ({ mutate }) => ({
       cancel: async () => {
         try {
@@ -46,7 +46,7 @@ const CancelSubscriptionWithApollo = compose(
               data.subscription = cancelStripeSubscription;
               store.writeQuery({ query: SUBSCRIPTION_QUERY, data });
             },
-            refetchQueries: [{ query: CARD_INFO }]
+            refetchQueries: [{ query: CREDIT_CARD_QUERY }]
           });
 
           if (cancelStripeSubscription.errors) {

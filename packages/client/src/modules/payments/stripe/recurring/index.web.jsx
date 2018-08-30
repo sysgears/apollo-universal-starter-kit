@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 
 import translate from '../../../../i18n';
 import { MenuItem } from '../../../../modules/common/components/web';
-import Subscription from './containers/Subscription';
-import SubscribersOnly from './containers/SubscribersOnly';
-import UpdateCard from './containers/UpdateCard';
+import AddSubscription from './containers/AddSubscription';
+import SubscriberPage from './containers/SubscriberPage';
+import UpdateCreditCard from './containers/UpdateCreditCard';
 import SubscriberRoute from './containers/Auth';
 import { IfLoggedIn, AuthRoute } from '../../../user';
 import settings from '../../../../../../../settings';
@@ -22,9 +22,9 @@ export default new Feature(
   settings.payments.stripe.recurring.enabled
     ? {
         route: [
-          <AuthRoute exact role="user" path="/subscription" component={Subscription} />,
-          <SubscriberRoute exact path="/subscribers-only" component={SubscribersOnly} />,
-          <SubscriberRoute exact path="/update-card" component={UpdateCard} />
+          <AuthRoute exact role="user" path="/subscription" component={AddSubscription} />,
+          <SubscriberRoute exact path="/subscribers-only" component={SubscriberPage} />,
+          <SubscriberRoute exact path="/update-card" component={UpdateCreditCard} />
         ],
         navItem: (
           <IfLoggedIn role="user">

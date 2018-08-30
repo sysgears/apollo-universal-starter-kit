@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
 import translate from '../../../i18n';
-import SubscriptionProfile from '../../subscription/containers/SubscriptionProfile';
+import SubscriptionProfile from '../../payments/stripe/recurring/containers/SubscriptionProfile';
 import { LayoutCenter } from '../../common/components';
 import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
 

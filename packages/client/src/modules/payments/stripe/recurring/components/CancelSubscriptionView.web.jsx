@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import translate from '../../../i18n';
-import { Button, Alert, CardGroup, CardTitle, CardText } from '../../common/components/web';
+import translate from '../../../../../i18n';
+import { Button, Alert, CardGroup, CardTitle, CardText } from '../../../../common/components/web';
 
 class CancelSubscriptionView extends React.Component {
   static propTypes = {

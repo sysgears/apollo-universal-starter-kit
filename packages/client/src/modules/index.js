@@ -4,7 +4,7 @@ import counter from './counter';
 import post from './post';
 import upload from './upload';
 import user from './user';
-import subscription from './subscription';
+import payments from './payments';
 import contact from './contact';
 import pageNotFound from './pageNotFound';
 import pagination from './pagination';
@@ -18,7 +18,7 @@ export default new Feature(
   post,
   upload,
   user,
-  subscription,
+  payments,
   contact,
   pagination,
   pageNotFound,

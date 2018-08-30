@@ -3,9 +3,9 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 // Components and helpers
-import settings from '../../../../../../settings';
-import Renderer from '../../../testHelpers/Renderer';
-import { updateContent, waitForElementRender } from '../../../testHelpers/testUtils';
+import settings from '../../../../../../../../settings';
+import Renderer from '../../../../../testHelpers/Renderer';
+import { updateContent, waitForElementRender } from '../../../../../testHelpers/testUtils';
 
 const { enabled, piblicKey } = settings.payments.stripe.recurring;
 

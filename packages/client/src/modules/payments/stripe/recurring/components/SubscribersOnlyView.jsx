@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import translate from '../../../i18n';
+import translate from '../../../../../i18n';
 
-import { PageLayout } from '../../common/components/web';
+import { PageLayout } from '../../../../common/components/web';
 
 const SubscribersOnlyView = ({ loading, number, t }) => {
   return (

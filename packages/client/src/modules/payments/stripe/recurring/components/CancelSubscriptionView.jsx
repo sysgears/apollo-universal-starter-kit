@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { CardText, CardSubtitleText, Button } from '../../common/components/native';
-import translate from '../../../i18n';
+import { CardText, CardSubtitleText, Button } from '../../../../common/components/native';
+import translate from '../../../../../i18n';
 
 class CancelSubscriptionView extends React.Component {
   static propTypes = {

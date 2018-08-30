@@ -1,17 +1,16 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import translate from '../../i18n';
-import { MenuItem } from '../../modules/common/components/web';
+import translate from '../../../../i18n';
+import { MenuItem } from '../../../../modules/common/components/web';
 import Subscription from './containers/Subscription';
 import SubscribersOnly from './containers/SubscribersOnly';
 import UpdateCard from './containers/UpdateCard';
 import { SubscriberRoute } from './containers/Auth';
-import { IfLoggedIn, AuthRoute } from '../user';
-import reducers from './reducers';
-import settings from '../../../../../settings';
+import { IfLoggedIn, AuthRoute } from '../../../user';
+import settings from '../../../../../../../settings';
 import resources from './locales';
-import Feature from '../connector';
+import Feature from '../../../connector';
 
 const NavLinkWithI18n = translate('subscription')(({ t }) => (
   <NavLink to="/subscribers-only" className="nav-link" activeClassName="active">
@@ -34,7 +33,6 @@ export default new Feature(
             </MenuItem>
           </IfLoggedIn>
         ),
-        reducer: { subscription: reducers },
         scriptsInsert: settings.payments.stripe.recurring.secretKey ? 'https://js.stripe.com/v3/' : undefined,
         localization: { ns: 'subscription', resources }
       }

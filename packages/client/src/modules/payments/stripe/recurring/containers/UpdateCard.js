@@ -2,12 +2,12 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
-import UpdateCardView from '../components/UpdateCardView';
+import UpdateCardView from '../components/UpdateCardView.web';
 
 import UPDATE_CARD from '../graphql/UpdateCard.graphql';
 import CARD_INFO from '../graphql/CardInfoQuery.graphql';
 
-import settings from '../../../../../../settings';
+import settings from '../../../../../../../../settings';
 
 // react-stripe-elements will not render on the server.
 class UpdateCard extends React.Component {

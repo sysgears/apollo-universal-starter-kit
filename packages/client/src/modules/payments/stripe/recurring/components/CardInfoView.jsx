@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
-import translate from '../../../i18n';
-import { CardItem, CardText, CardSubtitleText, CardLabel, Button, primary } from '../../common/components/native';
+import translate from '../../../../../i18n';
+import { CardItem, CardText, CardSubtitleText, CardLabel, Button, primary } from '../../../../common/components/native';
 
 const renderCardItem = (title, value) => (
   <CardItem>

@@ -8,7 +8,7 @@ import SUBSCRIBE from '../graphql/Subscribe.graphql';
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 import CARD_INFO from '../graphql/CardInfoQuery.graphql';
 
-import settings from '../../../../../../settings';
+import settings from '../../../../../../../../settings';
 
 // react-stripe-elements will not render on the server.
 class Subscription extends React.Component {

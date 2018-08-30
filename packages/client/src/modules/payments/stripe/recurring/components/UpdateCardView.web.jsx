@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Elements } from 'react-stripe-elements';
 
-import translate from '../../../i18n';
-import { LayoutCenter } from '../../common/components';
-import { PageLayout } from '../../common/components/web';
+import translate from '../../../../../i18n';
+import { LayoutCenter } from '../../../../common/components';
+import { PageLayout } from '../../../../common/components/web';
 
 import SubscriptionCardForm from './SubscriptionCardForm';
-import settings from '../../../../../../settings';
+import settings from '../../../../../../../../settings';
 
 class UpdateCardView extends React.Component {
   static propTypes = {

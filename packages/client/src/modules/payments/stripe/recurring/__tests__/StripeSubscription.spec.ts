@@ -1,16 +1,15 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
-
 import settings from '../../../../../../../../settings';
 import Renderer from '../../../../../testHelpers/Renderer';
 import { updateContent, waitForElementRender } from '../../../../../testHelpers/testUtils';
 
-const { enabled, piblicKey } = settings.payments.stripe.recurring;
+const { enabled, publicKey } = settings.payments.stripe.recurring;
 
-if (enabled && piblicKey !== '') {
+if (enabled && publicKey !== '') {
   const mocks = {
     Query: () => ({
-      currentUser() {
+      currentUser(): any {
         return {
           id: 1,
           username: 'user',
@@ -30,8 +29,10 @@ if (enabled && piblicKey !== '') {
 
     step('Stripe subscription page renders on mount', async () => {
       const app = renderer.mount();
+
       await waitForElementRender(app.container, 'a[href="/subscribers-only"]');
       renderer.history.push('/subscription');
+      // tslint:disable:no-unused-expression
       expect(updateContent(app.container)).to.not.be.empty;
     });
   });

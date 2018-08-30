@@ -6,7 +6,7 @@ import { MenuItem } from '../../../../modules/common/components/web';
 import Subscription from './containers/Subscription';
 import SubscribersOnly from './containers/SubscribersOnly';
 import UpdateCard from './containers/UpdateCard';
-import { SubscriberRoute } from './containers/Auth';
+import SubscriberRoute from './containers/Auth';
 import { IfLoggedIn, AuthRoute } from '../../../user';
 import settings from '../../../../../../../settings';
 import resources from './locales';

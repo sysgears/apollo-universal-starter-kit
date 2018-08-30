@@ -1,70 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
-import { Redirect, NavLink } from 'react-router-dom';
+import { Query } from 'react-apollo';
+import { Redirect } from 'react-router-dom';
 
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 
-import { IfLoggedIn, AuthRoute } from '../../../../user';
-
-const SubscriberNav = ({ loading, active, children, ...rest }) => {
-  return (
-    <IfLoggedIn>
-      <NavLink {...rest}>{loading || !active ? null : children}</NavLink>
-    </IfLoggedIn>
-  );
-};
-
-SubscriberNav.propTypes = {
-  active: PropTypes.bool,
-  loading: PropTypes.bool.isRequired,
-  children: PropTypes.object
-};
-
-const SubscriberNavWithApollo = compose(
-  graphql(SUBSCRIPTION_QUERY, {
-    props: ({ data }) => {
-      const { loading, stripeSubscription } = data;
-      return {
-        loading,
-        active: stripeSubscription && stripeSubscription.active
-      };
-    }
-  })
-)(SubscriberNav);
+import { AuthRoute } from '../../../../user';
 
 const SubscribeRedirect = () => <Redirect to="/subscription" />;
+const SubscribeLoading = () => <div>Loading...</div>;
 
-const LoadingComponent = () => <div>Loading...</div>;
+const SubscriberRoute = ({ component, ...rest }) => (
+  <Query query={SUBSCRIPTION_QUERY}>
+    {({ loading, data }) => {
+      const { stripeSubscription } = data;
+      const active = stripeSubscription && stripeSubscription.active;
 
-const SubscriberRoute = ({ loading, active, component, ...rest }) => {
-  return (
-    <AuthRoute
-      component={loading ? LoadingComponent : !loading && active ? component : SubscribeRedirect}
-      role="user"
-      {...rest}
-      redirect={'/login'}
-    />
-  );
-};
+      return (
+        <AuthRoute
+          component={loading ? SubscribeLoading : !loading && active ? component : SubscribeRedirect}
+          role="user"
+          {...rest}
+          redirect={'/login'}
+        />
+      );
+    }}
+  </Query>
+);
 
 SubscriberRoute.propTypes = {
-  component: PropTypes.func,
-  loading: PropTypes.bool.isRequired,
-  active: PropTypes.bool
+  component: PropTypes.func
 };
 
-const SubscriberRouteWithApollo = compose(
-  graphql(SUBSCRIPTION_QUERY, {
-    props: ({ data }) => {
-      const { loading, stripeSubscription } = data;
-      return {
-        loading,
-        active: stripeSubscription && stripeSubscription.active
-      };
-    }
-  })
-)(SubscriberRoute);
-
-export { SubscriberNavWithApollo as SubscriberNav };
-export { SubscriberRouteWithApollo as SubscriberRoute };
+export default SubscriberRoute;

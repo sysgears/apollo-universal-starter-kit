@@ -1,6 +1,6 @@
 import { getApollo } from '../../../../../testHelpers/integrationSetup';
 
-describe('Stripe recurring API works', () => {
+describe('Stripe subscription API works', () => {
   let apollo: string;
 
   before(() => {

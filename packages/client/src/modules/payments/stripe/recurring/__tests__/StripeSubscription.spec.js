@@ -1,8 +1,6 @@
-// General imports
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
-// Components and helpers
 import settings from '../../../../../../../../settings';
 import Renderer from '../../../../../testHelpers/Renderer';
 import { updateContent, waitForElementRender } from '../../../../../testHelpers/testUtils';
@@ -27,17 +25,14 @@ if (enabled && piblicKey !== '') {
     })
   };
 
-  describe('Subscription UI works', () => {
+  describe('Stripe subscription UI works', () => {
     const renderer = new Renderer(mocks, {});
-    let app;
-    let content;
 
-    step('Subscription page renders on mount', async () => {
-      app = renderer.mount();
+    step('Stripe subscription page renders on mount', async () => {
+      const app = renderer.mount();
       await waitForElementRender(app.container, 'a[href="/subscribers-only"]');
       renderer.history.push('/subscription');
-      content = updateContent(app.container);
-      expect(content).to.not.be.empty;
+      expect(updateContent(app.container)).to.not.be.empty;
     });
   });
 }

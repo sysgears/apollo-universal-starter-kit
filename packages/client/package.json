@@ -131,7 +131,7 @@
     "antd-mobile-rn": "^2.2.1",
     "expo": "^27.0.2",
     "native-base": "^2.3.5",
-    "react-native": "0.55.3",
+    "react-native": "~0.55.4",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",

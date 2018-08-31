@@ -1,20 +1,14 @@
-// Common react native component - iOS + Android
-
-// React
 import React from 'react';
 
-// React native UI
 import { StyleSheet, Text, View } from 'react-native';
 
-const SubscriptionView = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.element}>
-        <Text style={styles.box}>Hello Subscription!</Text>
-      </View>
+export default () => (
+  <View style={styles.container}>
+    <View style={styles.element}>
+      <Text style={styles.box}>Hello Subscription!</Text>
     </View>
-  );
-};
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -32,5 +26,3 @@ const styles = StyleSheet.create({
     marginRight: 15
   }
 });
-
-export default SubscriptionView;

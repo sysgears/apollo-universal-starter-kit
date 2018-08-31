@@ -998,6 +998,13 @@
     "@types/history" "*"
     "@types/react" "*"
 
+"@types/react-stripe-elements@^1.1.7":
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/@types/react-stripe-elements/-/react-stripe-elements-1.1.7.tgz#edba2667b1a10a70862801a0c8a8973f7cb8672c"
+  dependencies:
+    "@types/react" "*"
+    "@types/stripe-v3" "*"
+
 "@types/react@*", "@types/react@^16.4.6":
   version "16.4.7"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.7.tgz#f33f6d759a7e1833befa15224d68942d178a5a3f"
@@ -1018,6 +1025,10 @@
 "@types/shortid@0.0.29":
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/shortid/-/shortid-0.0.29.tgz#8093ee0416a6e2bf2aa6338109114b3fbffa0e9b"
+
+"@types/stripe-v3@*":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@types/stripe-v3/-/stripe-v3-3.0.8.tgz#9c2816acf34dcf0948236fc81ce99442344ebfb4"
 
 "@types/stripe@^5.0.21":
   version "5.0.21"
@@ -6514,7 +6525,7 @@ graphql-tools@^3.0.4:
 
 graphql@0.13.2, graphql@^0.13.0:
   version "0.13.2"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.13.2.tgz#4c740ae3c222823e7004096f832e7b93b2108270"
+  resolved "http://registry.npmjs.org/graphql/-/graphql-0.13.2.tgz#4c740ae3c222823e7004096f832e7b93b2108270"
   dependencies:
     iterall "^1.2.1"
 

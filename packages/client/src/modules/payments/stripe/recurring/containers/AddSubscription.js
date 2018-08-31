@@ -1,5 +1,6 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
+import PropTypes from 'prop-types';
 import { StripeProvider } from 'react-stripe-elements';
 
 import AddSubscriptionView from '../components/AddSubscriptionView';
@@ -12,12 +13,32 @@ import settings from '../../../../../../../../settings';
 
 // react-stripe-elements will not render on the server.
 class AddSubscription extends React.Component {
+  static propTypes = {
+    subscribe: PropTypes.func.isRequired,
+    t: PropTypes.func
+  };
+
+  onSubmit = subscribe => async values => {
+    const result = await subscribe(values);
+    const { t } = this.props;
+
+    if (result.errors) {
+      let submitError = {
+        _error: t('errorMsg')
+      };
+      result.errors.map(error => (submitError[error.field] = error.message));
+      throw submitError;
+    }
+  };
+
   render() {
+    const { subscribe } = this.props;
+
     return (
       <div>
         {__CLIENT__ ? (
           <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
-            <AddSubscriptionView {...this.props} />
+            <AddSubscriptionView onSubmit={this.onSubmit(subscribe)} {...this.props} />
           </StripeProvider>
         ) : (
           <AddSubscriptionView {...this.props} />

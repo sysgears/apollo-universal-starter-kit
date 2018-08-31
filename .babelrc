@@ -14,7 +14,7 @@
       "compact": true,
       "presets": [["minify", { "mangle": false }]]
     },
-    "test": {
+    "jest": {
       "presets": ["react", "env", "stage-0"]
     }
   }

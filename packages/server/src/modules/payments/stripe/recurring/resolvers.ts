@@ -1,5 +1,9 @@
 import Stripe from 'stripe';
 
+// tslint:disable:no-var-requires
+// TODO: refactor from 'require' to 'import' after writing the types for graphql-auth module
+const withAuth = require('graphql-auth').default;
+
 import log from '../../../../../../common/log';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
@@ -19,21 +23,20 @@ interface CreditCard {
 
 export default () => ({
   Query: {
-    stripeSubscription(obj: any, args: any, context: any) {
+    stripeSubscription: withAuth(['user:view:self'], (obj: any, args: any, context: any) => {
       return context.stripeSubscription;
-    },
-    stripeSubscriptionProtectedNumber(obj: any, args: any, context: any) {
-      if (!context.stripeSubscription || !context.stripeSubscription.active) {
-        return;
-      }
-      return { number: Math.floor(Math.random() * 10) };
-    },
-    async stripeSubscriptionCard(obj: any, args: any, context: any) {
-      return !context.user ? undefined : context.StripeSubscription.getCardInfo(context.user.id);
-    }
+    }),
+    stripeSubscriptionProtectedNumber: withAuth(['user:view:self'], (obj: any, args: any, context: any) => {
+      return context.stripeSubscription && context.stripeSubscription.active
+        ? { number: Math.floor(Math.random() * 10) }
+        : null;
+    }),
+    stripeSubscriptionCard: withAuth(['user:view:self'], (obj: any, args: any, context: any) => {
+      return context.StripeSubscription.getCardInfo(context.user.id);
+    })
   },
   Mutation: {
-    async addStripeSubscription(obj: any, { input }: CreditCard, context: any) {
+    addStripeSubscription: withAuth(['user:update:self'], async (obj: any, { input }: CreditCard, context: any) => {
       try {
         const { user, stripeSubscription, StripeSubscription } = context;
         const { token, expiryMonth, expiryYear, last4, brand } = input;
@@ -77,10 +80,10 @@ export default () => ({
       } catch (e) {
         return { active: false, errors: e };
       }
-    },
-    async updateStripeSubscriptionCard(obj: any, { input }: CreditCard, context: any) {
+    }),
+    updateStripeSubscriptionCard: withAuth(['user:update:self'], async (obj: any, args: CreditCard, context: any) => {
       try {
-        const { token, expiryMonth, expiryYear, last4, brand } = input;
+        const { token, expiryMonth, expiryYear, last4, brand } = args.input;
         const { StripeSubscription, user, stripeSubscription } = context;
 
         await stripe.customers.deleteSource(stripeSubscription.stripeCustomerId, stripeSubscription.stripeSourceId);
@@ -100,8 +103,8 @@ export default () => ({
         log.error(e);
         return false;
       }
-    },
-    async cancelStripeSubscription(obj: any, args: any, context: any) {
+    }),
+    cancelStripeSubscription: withAuth(['user:update:self'], async (obj: any, args: any, context: any) => {
       try {
         const { user, stripeSubscription, StripeSubscription, req } = context;
         const { stripeSubscriptionId, stripeCustomerId, stripeSourceId } = stripeSubscription;
@@ -131,7 +134,7 @@ export default () => ({
       } catch (e) {
         return { active: true, errors: e };
       }
-    }
+    })
   },
   Subscription: {}
 });

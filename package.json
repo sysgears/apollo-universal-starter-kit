@@ -148,5 +148,29 @@
     "graphql": "0.13.2",
     "iterall": "^1.2.2",
     "upath": "^1.1.0"
+  },
+  "jest": {
+    "verbose": true,
+    "preset": "jest-expo",
+    "testPathIgnorePatterns": ["node_modules", ".history"],
+    "testRegex": "packages/mobile/src.*/__tests__/.*\\.(js|jsx|ts|tsx)$",
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "modulePathIgnorePatterns": [
+      "<rootDir>/node_modules/react-native/Libraries/react-native/",
+      "<rootDir>/node_modules/haul/",
+      "<rootDir>/packages/mobile/.expo/"
+    ],
+    "globals": {
+      "__CLIENT__": true,
+      "__SERVER__": false,
+      "__TEST__": true,
+      "ts-jest": {
+        "tsConfigFile": "packages/mobile/tsconfig.jest.json"
+      }
+    }
   }
 }

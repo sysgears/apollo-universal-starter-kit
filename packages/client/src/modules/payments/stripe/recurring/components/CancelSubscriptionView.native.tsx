@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { CardText, CardSubtitleText, Button } from '../../../../common/components/native';
 import translate from '../../../../../i18n';
 
-class CancelSubscriptionView extends React.Component {
+class CancelSubscriptionViewNative extends React.Component {
   static propTypes = {
     loading: PropTypes.bool,
     active: PropTypes.bool,
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('subscription')(CancelSubscriptionView);
+export default translate('subscription')(CancelSubscriptionViewNative);

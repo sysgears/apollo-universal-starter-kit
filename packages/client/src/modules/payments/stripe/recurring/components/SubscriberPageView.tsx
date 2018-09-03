@@ -1,24 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import translate from '../../../../../i18n';
+import { TranslateFunction } from '../../../../../i18n';
 
 import { PageLayout } from '../../../../common/components/web';
 
-const SubscribersOnlyView = ({ loading, number, t }) => {
+interface SubscribersOnlyViewProps {
+  loading: boolean;
+  subscriberNumber: number;
+  t: TranslateFunction;
+}
+
+export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
   return (
     <PageLayout>
       <h1>{t('subOnly.title')}</h1>
       <p>
-        {t('subOnly.msg')} {loading ? t('subOnly.load') : number}.
+        {t('subOnly.msg')} {loading ? t('subOnly.load') : subscriberNumber}.
       </p>
     </PageLayout>
   );
 };
-
-SubscribersOnlyView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  number: PropTypes.number,
-  t: PropTypes.func
-};
-
-export default translate('subscription')(SubscribersOnlyView);

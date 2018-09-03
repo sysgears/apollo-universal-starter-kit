@@ -1,17 +1,25 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
-import translate from '../../../../../i18n';
+import { TranslateFunction } from '../../../../../i18n';
 import { CardItem, CardText, CardSubtitleText, CardLabel, Button, primary } from '../../../../common/components/native';
 
-const renderCardItem = (title, value) => (
+interface CardInfoViewProps {
+  loading: boolean;
+  expiryMonth: number;
+  expiryYear: number;
+  last4: string;
+  brand: string;
+  t: TranslateFunction;
+}
+
+const renderCardItem = (title: string, value: string) => (
   <CardItem>
-    <CardLabel>{title}</CardLabel>
-    <CardText>{value}</CardText>
+    <CardLabel style>{title}</CardLabel>
+    <CardText style>{value}</CardText>
   </CardItem>
 );
 
-const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand, t }) => {
+export default ({ loading, expiryMonth, expiryYear, last4, brand, t }: CardInfoViewProps) => {
   return (
     <View style={styles.container}>
       {!loading &&
@@ -20,7 +28,7 @@ const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand, t }) => 
         last4 &&
         brand && (
           <View>
-            <CardSubtitleText>{t('card.title')}</CardSubtitleText>
+            <CardSubtitleText style>{t('card.title')}</CardSubtitleText>
             {renderCardItem(`${t('card.text.card')}: `, `${brand} ************${last4}`)}
             {renderCardItem(`${t('card.text.expires')}: `, `${expiryMonth}/${expiryYear}`)}
             <View>
@@ -42,14 +50,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   }
 });
-
-CardInfoView.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  expiryMonth: PropTypes.number,
-  expiryYear: PropTypes.number,
-  last4: PropTypes.string,
-  brand: PropTypes.string,
-  t: PropTypes.func
-};
-
-export default translate('subscription')(CardInfoView);

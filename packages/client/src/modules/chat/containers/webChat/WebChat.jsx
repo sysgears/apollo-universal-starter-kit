@@ -12,7 +12,7 @@ import uuid from 'uuid';
 //import MessageText from './MessageText';
 //import Composer from './Composer';
 //import Day from './Day';
-// import InputToolbar from './InputToolbar';
+import InputToolbar from './InputToolbar';
 //import LoadEarlier from './LoadEarlier';
 //import Message from './Message';
 import MessageContainer from './MessageContainer';
@@ -236,7 +236,7 @@ class WebChat extends React.Component {
     if (this.props.renderInputToolbar) {
       return this.props.renderInputToolbar(inputToolbarProps);
     }
-    //return <InputToolbar {...inputToolbarProps} />;
+    return <InputToolbar {...inputToolbarProps} />;
   }
 
   renderChatFooter() {
@@ -260,7 +260,7 @@ class WebChat extends React.Component {
     return (
       <div>
         {this.renderMessages()}
-        {/*{this.renderInputToolbar()}*/}
+        {this.renderInputToolbar()}
       </div>
     );
     // return <div>{this.renderLoading()}</div>;
@@ -374,7 +374,7 @@ export {
   // MessageText,
   // Composer,
   // Day,
-  // InputToolbar,
+  InputToolbar,
   // LoadEarlier,
   // Message,
   MessageContainer

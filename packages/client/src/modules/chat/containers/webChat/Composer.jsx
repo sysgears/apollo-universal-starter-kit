@@ -6,7 +6,7 @@ import Color from './Color';
 
 export default class Composer extends React.Component {
   onChangeText(text) {
-    this.props.onTextChanged(text);
+    this.props.onTextChanged(text.target.value);
   }
 
   render() {
@@ -15,8 +15,8 @@ export default class Composer extends React.Component {
         placeholder={this.props.placeholder}
         //placeholderTextColor={this.props.placeholderTextColor}
         //multiline={this.props.multiline}
-        onChange={e => this.onContentSizeChange(e)}
-        // onChangeText={(text) => this.onChangeText(text)}
+        //onChange={e => this.onContentSizeChange(e)}
+        onChange={text => this.onChangeText(text)}
         style={[styles.textInput, this.props.textInputStyle, { height: this.props.composerHeight }]}
         value={this.props.text}
       />

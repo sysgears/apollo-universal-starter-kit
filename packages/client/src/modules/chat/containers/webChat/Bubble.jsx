@@ -3,7 +3,7 @@ import React from 'react';
 
 import MessageText from './MessageText';
 //import MessageImage from './MessageImage';
-//import Time from './Time';
+import Time from './Time';
 import Color from './Color';
 
 import { isSameUser, isSameDay } from './utils';
@@ -111,7 +111,7 @@ export default class Bubble extends React.PureComponent {
       if (this.props.renderTime) {
         return this.props.renderTime(timeProps);
       }
-      // return <Time {...timeProps} />;
+      return <Time {...timeProps} />;
     }
     return null;
   }

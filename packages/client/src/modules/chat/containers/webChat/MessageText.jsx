@@ -7,9 +7,9 @@ import React from 'react';
 export default class MessageText extends React.Component {
   constructor(props) {
     super(props);
-    this.onUrlPress = this.onUrlPress.bind(this);
-    this.onPhonePress = this.onPhonePress.bind(this);
-    this.onEmailPress = this.onEmailPress.bind(this);
+    // this.onUrlPress = this.onUrlPress.bind(this);
+    // this.onPhonePress = this.onPhonePress.bind(this);
+    // this.onEmailPress = this.onEmailPress.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {

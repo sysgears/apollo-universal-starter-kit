@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-//import MessageText from './MessageText';
+import MessageText from './MessageText';
 //import MessageImage from './MessageImage';
 //import Time from './Time';
 import Color from './Color';
@@ -70,7 +70,7 @@ export default class Bubble extends React.PureComponent {
       if (this.props.renderMessageText) {
         return this.props.renderMessageText(messageTextProps);
       }
-      // return <MessageText {...messageTextProps} />;
+      return <MessageText {...messageTextProps} />;
     }
     return null;
   }

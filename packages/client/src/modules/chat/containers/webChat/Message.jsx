@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 //import Avatar from './Avatar';
-//import Bubble from './Bubble';
+import Bubble from './Bubble';
 //import SystemMessage from './SystemMessage';
 import Day from './Day';
 
@@ -55,7 +55,7 @@ export default class Message extends React.PureComponent {
     if (this.props.renderBubble) {
       return this.props.renderBubble(bubbleProps);
     }
-    // return <Bubble {...bubbleProps} />;
+    return <Bubble {...bubbleProps} />;
   }
 
   renderSystemMessage() {

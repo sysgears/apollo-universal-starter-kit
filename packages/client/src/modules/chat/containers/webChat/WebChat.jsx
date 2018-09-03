@@ -144,11 +144,7 @@ class WebChat extends React.Component {
 
   renderMessages() {
     return (
-      <div
-      // style={{
-      //   height: this.state.messagesContainerHeight
-      // }}
-      >
+      <div>
         <MessageContainer
           {...this.props}
           invertibleScrollViewProps={this.invertibleScrollViewProps}

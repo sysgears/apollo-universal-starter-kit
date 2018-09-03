@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 //import LoadEarlier from './LoadEarlier';
-//import Message from './Message';
+import Message from './Message';
 
 export default class MessageContainer extends React.PureComponent {
   constructor(props) {
@@ -37,7 +37,7 @@ export default class MessageContainer extends React.PureComponent {
     return null;
   }
 
-  renderRow({ item, index }) {
+  renderRow(item, index) {
     if (!item._id && item._id !== 0) {
       console.warn('GiftedChat: `_id` is missing for message', JSON.stringify(item));
     }
@@ -63,7 +63,8 @@ export default class MessageContainer extends React.PureComponent {
     if (this.props.renderMessage) {
       return this.props.renderMessage(messageProps);
     }
-    //return <Message {...messageProps} />;
+
+    return <Message {...messageProps} />;
   }
 
   renderHeaderWrapper() {
@@ -75,8 +76,7 @@ export default class MessageContainer extends React.PureComponent {
       return <div style={styles.container} />;
     }
 
-    // const messages = this.props.messages.map(message => this.renderRow(<div key={message.id}>{message.text}</div>));
-    const messages = this.props.messages.map(message => <div key={message._id}>{message.text}</div>);
+    const messages = this.props.messages.map((message, i) => this.renderRow(message, i));
     return (
       <div style={styles.contentContainerStyle}>
         <div style={styles.listStyle}>{messages}</div>

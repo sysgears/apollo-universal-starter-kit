@@ -6,18 +6,18 @@ import uuid from 'uuid';
 //import * as utils from './utils';
 //import Actions from './Actions';
 //import Avatar from './Avatar';
-//import Bubble from './Bubble';
+import Bubble from './Bubble';
 //import SystemMessage from './SystemMessage';
 //import MessageImage from './MessageImage';
 //import MessageText from './MessageText';
-//import Composer from './Composer';
-//import Day from './Day';
+import Composer from './Composer';
+import Day from './Day';
 import InputToolbar from './InputToolbar';
 //import LoadEarlier from './LoadEarlier';
 //import Message from './Message';
 import MessageContainer from './MessageContainer';
-//import Send from './Send';
-//import Time from './Time';
+import Send from './Send';
+import Time from './Time';
 //import GiftedAvatar from './GiftedAvatar';
 
 import { MIN_COMPOSER_HEIGHT, DEFAULT_PLACEHOLDER, TIME_FORMAT, DATE_FORMAT } from './Constant';
@@ -174,7 +174,7 @@ class WebChat extends React.Component {
     }
 
     this.props.onSend(messages);
-    this.scrollToBottom();
+    // this.scrollToBottom();
 
     if (shouldResetInputToolbar === true) {
       setTimeout(() => {
@@ -183,6 +183,20 @@ class WebChat extends React.Component {
         }
       }, 100);
     }
+  }
+
+  resetInputToolbar() {
+    if (this.textInput) {
+      this.textInput.clear();
+    }
+    this.notifyInputTextReset();
+    const newComposerHeight = MIN_COMPOSER_HEIGHT;
+    // const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight);
+    this.setState({
+      text: this.getTextFromProp(''),
+      composerHeight: newComposerHeight
+      // messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight),
+    });
   }
 
   focusTextInput() {
@@ -368,18 +382,18 @@ export {
   WebChat,
   // Actions,
   // Avatar,
-  // Bubble,
+  Bubble,
   // SystemMessage,
   // MessageImage,
   // MessageText,
-  // Composer,
-  // Day,
+  Composer,
+  Day,
   InputToolbar,
   // LoadEarlier,
   // Message,
-  MessageContainer
-  // Send,
-  // Time,
+  MessageContainer,
+  Send,
+  Time
   // GiftedAvatar,
   // utils,
 };

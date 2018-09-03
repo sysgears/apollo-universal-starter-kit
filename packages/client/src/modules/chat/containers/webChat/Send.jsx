@@ -9,7 +9,7 @@ export default function Send({ text, containerStyle, onSend, children, textStyle
         {children || (
           <button
             style={[styles.text, textStyle]}
-            onKeyPress={() => {
+            onClick={() => {
               onSend({ text: text.trim() }, true);
             }}
           >

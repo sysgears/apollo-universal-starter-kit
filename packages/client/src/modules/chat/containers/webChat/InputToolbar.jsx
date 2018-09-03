@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import Composer from './Composer';
-// import Send from './Send';
+import Send from './Send';
 // import Actions from './Actions';
 import Color from './Color';
 
@@ -24,7 +24,7 @@ export default class InputToolbar extends React.Component {
     if (this.props.renderSend) {
       return this.props.renderSend(this.props);
     }
-    //return <Send {...this.props} />;
+    return <Send {...this.props} />;
   }
 
   renderComposer() {

@@ -14,7 +14,7 @@ const commentFormSchema = {
 
 const validate = values => validateForm(values, commentFormSchema);
 
-class SubscriptionCardForm extends React.Component {
+class SubscriptionCardFormView extends React.Component {
   static propTypes = {
     submitting: PropTypes.bool,
     action: PropTypes.string.isRequired,
@@ -77,4 +77,4 @@ const SubscriptionFormWithFormik = withFormik({
   enableReinitialize: true
 });
 
-export default translate('subscription')(injectStripe(SubscriptionFormWithFormik(SubscriptionCardForm)));
+export default translate('subscription')(injectStripe(SubscriptionFormWithFormik(SubscriptionCardFormView)));

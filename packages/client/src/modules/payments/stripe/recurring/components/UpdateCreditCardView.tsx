@@ -10,7 +10,7 @@ import SubscriptionCardForm from './SubscriptionCardFormView';
 import settings from '../../../../../../../../settings';
 
 interface UpdateCardViewProps {
-  onSubmit: () => void; // TODO: write types
+  onSubmit: any; // TODO: write types
   t: TranslateFunction;
 }
 

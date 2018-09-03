@@ -10,7 +10,7 @@ import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import { withUser } from '../../user/containers/AuthBase';
-import withUuid from './WithUuid';
+//import withUuid from './WithUuid';
 import ChatOperations from './ChatOperations';
 //import messageImage from './MessageImage';
 import messagesFormatter from './MessagesFormatter';
@@ -309,7 +309,7 @@ export default compose(
     })
   }),
   translate('chat'),
-  withUuid,
+  //withUuid,
   withUser,
   // messageImage,
   messagesFormatter

@@ -75,7 +75,8 @@ export default class MessageContainer extends React.PureComponent {
       return <div style={styles.container} />;
     }
 
-    const messages = this.props.messages.map(message => this.renderRow(<div key={message.id}>{message.text}</div>));
+    // const messages = this.props.messages.map(message => this.renderRow(<div key={message.id}>{message.text}</div>));
+    const messages = this.props.messages.map(message => <div key={message._id}>{message.text}</div>);
     return (
       <div style={styles.contentContainerStyle}>
         <div style={styles.listStyle}>{messages}</div>

@@ -6,7 +6,7 @@ import { TranslateFunction } from '../../../../../i18n';
 import { LayoutCenter } from '../../../../common/components/web';
 import { PageLayout } from '../../../../common/components/web';
 
-import SubscriptionCardForm from './SubscriptionCardForm.web';
+import SubscriptionCardForm from './SubscriptionCardFormView';
 import settings from '../../../../../../../../settings';
 
 interface UpdateCardViewProps {

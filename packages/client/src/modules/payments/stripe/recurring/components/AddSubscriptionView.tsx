@@ -5,7 +5,7 @@ import { Elements } from 'react-stripe-elements';
 import { TranslateFunction } from '../../../../../i18n';
 import { LayoutCenter, clientOnly } from '../../../../common/components/index.web';
 import { PageLayout } from '../../../../common/components/web';
-import SubscriptionCardForm from './SubscriptionCardForm.web';
+import SubscriptionCardForm from './SubscriptionCardFormView';
 import settings from '../../../../../../../../settings';
 
 const ElementsClientOnly = clientOnly(Elements);

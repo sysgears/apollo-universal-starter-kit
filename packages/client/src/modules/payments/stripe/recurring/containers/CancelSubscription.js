@@ -3,20 +3,48 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 import CancelSubscriptionView from '../components/CancelSubscriptionView';
+import translate from '../../../../../i18n';
 
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 import CANCEL_SUBSCRIPTION from '../graphql/CancelSubscription.graphql';
 
-const CancelSubscription = ({ loading, active, cancel }) => {
-  return <CancelSubscriptionView loading={__SERVER__ ? true : loading} active={active} cancel={cancel} />;
-};
+class CancelSubscription extends React.Component {
+  static propTypes = {
+    cancel: PropTypes.func.isRequired,
+    loading: PropTypes.bool,
+    active: PropTypes.bool,
+    t: PropTypes.func
+  };
 
-CancelSubscription.propTypes = {
-  cancel: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
-  active: PropTypes.bool
-};
+  constructor(props) {
+    super(props);
+    this.state = {
+      cancelling: false,
+      errors: null
+    };
+  }
+
+  onClick = async () => {
+    this.setState({ cancelling: true });
+    const { errors } = await this.props.cancel();
+    this.setState({ cancelling: false, errors: errors ? errors : null });
+  };
+
+  render() {
+    const { loading, active, t } = this.props;
+    return (
+      <CancelSubscriptionView
+        loading={__SERVER__ ? true : loading}
+        cancelling={this.state.cancelling}
+        errors={this.state.errors}
+        active={active}
+        onClick={this.onClick}
+        t={t}
+      />
+    );
+  }
+}
 
 const CancelSubscriptionWithApollo = compose(
   graphql(SUBSCRIPTION_QUERY, {
@@ -43,7 +71,7 @@ const CancelSubscriptionWithApollo = compose(
           } = await mutate({
             update: (store, { data: { cancelStripeSubscription } }) => {
               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
-              data.subscription = cancelStripeSubscription;
+              data.stripeSubscription = cancelStripeSubscription;
               store.writeQuery({ query: SUBSCRIPTION_QUERY, data });
             },
             refetchQueries: [{ query: CREDIT_CARD_QUERY }]
@@ -59,7 +87,8 @@ const CancelSubscriptionWithApollo = compose(
         }
       }
     })
-  })
+  }),
+  translate('subscription')
 )(CancelSubscription);
 
 export default CancelSubscriptionWithApollo;

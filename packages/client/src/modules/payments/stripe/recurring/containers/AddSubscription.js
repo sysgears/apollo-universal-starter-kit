@@ -10,6 +10,7 @@ import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
 import settings from '../../../../../../../../settings';
+import translate from '../../../../../i18n'
 
 // react-stripe-elements will not render on the server.
 class AddSubscription extends React.Component {
@@ -82,7 +83,8 @@ const SubscriptionViewWithApollo = compose(
         }
       }
     })
-  })
+  }),
+  translate('subscription')
 )(AddSubscription);
 
 export default SubscriptionViewWithApollo;

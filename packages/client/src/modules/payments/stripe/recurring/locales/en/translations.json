@@ -5,7 +5,7 @@
   "meta": "Subscription example page",
   "subTitle": "Subscription!",
   "action": "Subscribe",
-
+  "loading": "loading...",
   "card": {
     "title": "Card Info",
     "text": {

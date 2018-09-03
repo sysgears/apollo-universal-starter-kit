@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { WebChat } from './webChat/WebChat';
 
+import chatConfig from '../../../../../../config/chat';
+
 export default class ChatOperations extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
@@ -56,7 +58,7 @@ export default class ChatOperations extends React.Component {
         username,
         userId: 1,
         id,
-        uuid: 'sdfsdfsdf8273482sdfdsf',
+        uuid,
         quotedId,
         quotedMessage: quotedMessage ? quotedMessage : defQuote,
         attachment
@@ -75,6 +77,7 @@ export default class ChatOperations extends React.Component {
     const { id = uuid, username = null } = currentUser ? currentUser : {};
     return (
       <WebChat
+        {...chatConfig.giftedChat}
         ref={gc => (this.gc = gc)}
         text={message}
         onInputTextChanged={text => this.setMessageState(text)}

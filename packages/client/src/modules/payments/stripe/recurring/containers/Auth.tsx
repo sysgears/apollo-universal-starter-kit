@@ -1,16 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Query } from 'react-apollo';
 import { Redirect } from 'react-router-dom';
 
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 
-import { AuthRoute } from '../../../../user';
+import { AuthRoute } from '../../../../user/containers/Auth.web';
 
 const SubscribeRedirect = () => <Redirect to="/subscription" />;
 const SubscribeLoading = () => <div>Loading...</div>;
 
-const SubscriberRoute = ({ component, ...rest }) => (
+export default ({ component, ...rest }: any) => (
   <Query query={SUBSCRIPTION_QUERY}>
     {({ loading, data }) => {
       const { stripeSubscription } = data;
@@ -27,9 +26,3 @@ const SubscriberRoute = ({ component, ...rest }) => (
     }}
   </Query>
 );
-
-SubscriberRoute.propTypes = {
-  component: PropTypes.func
-};
-
-export default SubscriberRoute;

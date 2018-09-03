@@ -11,7 +11,7 @@ import settings from '../../../../../../../../settings';
 const ElementsClientOnly = clientOnly(Elements);
 
 interface SubscriptionViewProps {
-  onSubmit: () => void; // TODO: write types
+  onSubmit: (values: any) => void; // TODO: write types
   t: TranslateFunction;
 }
 

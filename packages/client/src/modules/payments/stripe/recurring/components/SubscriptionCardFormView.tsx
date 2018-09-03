@@ -64,7 +64,7 @@ const SubscriptionFormWithFormik = withFormik({
     await onSubmit({ token: id, expiryMonth: exp_month, expiryYear: exp_year, last4, brand });
   },
   validate: values => validateForm(values, { name: [required] }),
-  displayName: 'SubscriptionForm', // helps with React DevTools,
+  displayName: 'StripeSubscriptionForm', // helps with React DevTools,
   enableReinitialize: true
 });
 

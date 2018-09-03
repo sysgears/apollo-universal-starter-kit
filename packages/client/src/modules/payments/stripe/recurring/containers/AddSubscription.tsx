@@ -1,6 +1,8 @@
+/*tslint:disable:no-reference */
+/// <reference path="../../../../../../typings/typings.d.ts" />
+
 import React from 'react';
-import { graphql, compose } from 'react-apollo';
-import PropTypes from 'prop-types';
+import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
 import AddSubscriptionView from '../components/AddSubscriptionView';
@@ -10,81 +12,63 @@ import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
 import settings from '../../../../../../../../settings';
-import translate from '../../../../../i18n'
+import translate, { TranslateFunction } from '../../../../../i18n';
+
+interface AddSubscriptionProps {
+  t: TranslateFunction;
+  history: any; // TODO: write types
+  navigation: any;
+}
 
 // react-stripe-elements will not render on the server.
-class AddSubscription extends React.Component {
-  static propTypes = {
-    subscribe: PropTypes.func.isRequired,
-    t: PropTypes.func
-  };
+const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
+  const onSubmit = (addSubscription: any) => async (subscriptionInput: any) => {
+    const {
+      data: { addStripeSubscription }
+    } = await addSubscription({ variables: { input: subscriptionInput } });
 
-  onSubmit = subscribe => async values => {
-    const result = await subscribe(values);
-    const { t } = this.props;
-
-    if (result.errors) {
-      let submitError = {
-        _error: t('errorMsg')
-      };
-      result.errors.map(error => (submitError[error.field] = error.message));
+    if (addStripeSubscription.errors) {
+      const submitError = { _error: t('errorMsg') };
+      addStripeSubscription.errors.map(
+        (error: { [key: string]: string }) => (submitError[error.field] = error.message)
+      );
       throw submitError;
+    }
+
+    if (history) {
+      history.push('/subscribers-only');
+    }
+
+    if (navigation) {
+      navigation.goBack();
     }
   };
 
-  render() {
-    const { subscribe } = this.props;
+  return (
+    <Mutation
+      mutation={ADD_SUBSCRIPTION}
+      update={(cache, { data: { addStripeSubscription } }) => {
+        const data: any = cache.readQuery({ query: SUBSCRIPTION_QUERY });
+        data.stripeSubscription = addStripeSubscription;
+        cache.writeQuery({ query: SUBSCRIPTION_QUERY, data });
+      }}
+      refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
+    >
+      {addSubscription => {
+        return (
+          <div>
+            {__CLIENT__ ? (
+              <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
+                <AddSubscriptionView onSubmit={onSubmit(addSubscription)} t={t} />
+              </StripeProvider>
+            ) : (
+              <AddSubscriptionView onSubmit={onSubmit(addSubscription)} t={t} />
+            )}
+          </div>
+        );
+      }}
+    </Mutation>
+  );
+};
 
-    return (
-      <div>
-        {__CLIENT__ ? (
-          <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
-            <AddSubscriptionView onSubmit={this.onSubmit(subscribe)} {...this.props} />
-          </StripeProvider>
-        ) : (
-          <AddSubscriptionView {...this.props} />
-        )}
-      </div>
-    );
-  }
-}
-
-const SubscriptionViewWithApollo = compose(
-  graphql(ADD_SUBSCRIPTION, {
-    props: ({ ownProps: { history, navigation }, mutate }) => ({
-      subscribe: async ({ token, expiryMonth, expiryYear, last4, brand }) => {
-        try {
-          const {
-            data: { addStripeSubscription }
-          } = await mutate({
-            variables: { input: { token, expiryMonth, expiryYear, last4, brand } },
-            update: (store, { data: { addStripeSubscription } }) => {
-              const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
-              data.stripeSubscription = addStripeSubscription;
-              store.writeQuery({ query: SUBSCRIPTION_QUERY, data });
-            },
-            refetchQueries: [{ query: CREDIT_CARD_QUERY }]
-          });
-
-          if (addStripeSubscription.errors) {
-            return { errors: addStripeSubscription.errors };
-          }
-
-          if (history) {
-            history.push('/subscribers-only');
-          }
-          if (navigation) {
-            navigation.goBack();
-          }
-
-          return addStripeSubscription;
-        } catch (e) {
-          console.log(e.graphQLErrors);
-        }
-      }
-    })
-  }),
-  translate('subscription')
-)(AddSubscription);
-
-export default SubscriptionViewWithApollo;
+export default translate('subscription')(AddSubscription);

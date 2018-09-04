@@ -5,9 +5,13 @@ import Upload from './sql';
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
 import resources from './locales';
+import fileSystemStorage from './FileSystemStorage';
 
 export default new Feature({
   schema,
+  data: {
+    fileSystemStorage
+  },
   createResolversFunc: createResolvers,
   createContextFunc: () => ({ Upload: new Upload() }),
   middleware: (app: Express) => {

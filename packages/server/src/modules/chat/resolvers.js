@@ -1,6 +1,6 @@
 import { createBatchResolver } from 'graphql-resolve-batch';
-import fileSystemStorage from '../upload/FileSystemStorage';
 import settings from '../../../../../settings';
+import modules from '../../modules';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
 
@@ -43,6 +43,14 @@ export default pubsub => ({
     async addMessage(obj, { input }, { Chat, user }) {
       const { attachment } = input;
       const userId = user ? user.id : null;
+      const {
+        data: [{ fileSystemStorage }]
+      } = modules;
+
+      if (!fileSystemStorage) {
+        throw new Error('Unable to add message with attachment.');
+      }
+
       const result = attachment ? await fileSystemStorage.save(await attachment, settings.upload.uploadDir) : null;
       const data = { ...input, attachment: result, userId };
       const [id] = attachment ? await Chat.addMessageWithAttachment(data) : await Chat.addMessage(data);
@@ -58,11 +66,14 @@ export default pubsub => ({
       return message;
     },
     async deleteMessage(obj, { id }, { Chat }) {
+      const {
+        data: [{ fileSystemStorage }]
+      } = modules;
       const message = await Chat.message(id);
       const attachment = await Chat.attachment(id);
       const isDeleted = await Chat.deleteMessage(id);
 
-      if (isDeleted && attachment) {
+      if (isDeleted && attachment && fileSystemStorage) {
         // remove file
         try {
           await fileSystemStorage.delete(attachment.path);

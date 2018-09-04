@@ -121,7 +121,10 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
   }
 
   const client = new ApolloClient(clientParams);
-  client.onResetStore(linkState.writeDefaults);
+  if (cache.constructor.name !== 'OverrideCache') {
+    // Restore Apollo Link State defaults only if we don't use `apollo-cache-router`
+    client.onResetStore(linkState.writeDefaults);
+  }
 
   if (typeof window !== 'undefined' && window.__APOLLO_STATE__) {
     cache.restore(window.__APOLLO_STATE__);

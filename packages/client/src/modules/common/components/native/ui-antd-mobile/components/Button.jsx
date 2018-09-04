@@ -1,25 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ADButton from 'antd-mobile/lib/button';
+import { Button as ADButton } from 'antd-mobile-rn';
 import { Text } from 'react-native';
 import * as TYPES from '../../ButtonTypes';
 
-const Button = ({ textStyle, children, onPress, onClick, type, style, ...props }) => {
-  const btnData = buttonTypes[type] || {};
-  const btnProps = {
-    ...props,
-    type: btnData.type || 'default',
-    style: [btnData.styles, style]
-  };
+class Button extends React.Component {
+  render() {
+    const { textStyle, children, onClick, onPress, type, style, ...props } = this.props;
+    const btnData = buttonTypes[type] || {};
+    const btnProps = {
+      ...props,
+      type: btnData.type || 'default',
+      style: [btnData.styles, style]
+    };
 
-  return (
-    <ADButton onClick={onPress || onClick} {...btnProps}>
-      <Text style={textStyle} numberOfLines={1}>
-        {children}
-      </Text>
-    </ADButton>
-  );
-};
+    return (
+      <ADButton onClick={onPress || onClick} {...btnProps}>
+        <Text style={textStyle} numberOfLines={1}>
+          {children}
+        </Text>
+      </ADButton>
+    );
+  }
+}
 
 Button.propTypes = {
   children: PropTypes.node,

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Picker, List } from 'antd-mobile/lib';
+import { Picker, List } from 'antd-mobile-rn';
 import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet } from 'react-native';
 import SelectStyles from '../styles/Select';

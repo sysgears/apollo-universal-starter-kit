@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-//import Avatar from './Avatar';
+import Avatar from './Avatar';
 import Bubble from './Bubble';
 //import SystemMessage from './SystemMessage';
 import Day from './Day';
@@ -75,7 +75,7 @@ export default class Message extends React.PureComponent {
     if (currentMessage.user.avatar === null) {
       return null;
     }
-    // return <Avatar {...avatarProps} />;
+    return <Avatar {...avatarProps} />;
   }
 
   render() {

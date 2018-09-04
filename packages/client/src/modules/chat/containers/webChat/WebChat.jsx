@@ -3,22 +3,22 @@ import React from 'react';
 import moment from 'moment';
 import uuid from 'uuid';
 
-//import * as utils from './utils';
+import * as utils from './utils';
 //import Actions from './Actions';
-//import Avatar from './Avatar';
+import Avatar from './Avatar';
 import Bubble from './Bubble';
 //import SystemMessage from './SystemMessage';
 //import MessageImage from './MessageImage';
-//import MessageText from './MessageText';
+import MessageText from './MessageText';
 import Composer from './Composer';
 import Day from './Day';
 import InputToolbar from './InputToolbar';
 //import LoadEarlier from './LoadEarlier';
-//import Message from './Message';
+import Message from './Message';
 import MessageContainer from './MessageContainer';
 import Send from './Send';
 import Time from './Time';
-//import GiftedAvatar from './GiftedAvatar';
+import GiftedAvatar from './GiftedAvatar';
 
 import { MIN_COMPOSER_HEIGHT, DEFAULT_PLACEHOLDER, TIME_FORMAT, DATE_FORMAT } from './Constant';
 
@@ -381,19 +381,19 @@ WebChat.propTypes = {
 export {
   WebChat,
   // Actions,
-  // Avatar,
+  Avatar,
   Bubble,
   // SystemMessage,
   // MessageImage,
-  // MessageText,
+  MessageText,
   Composer,
   Day,
   InputToolbar,
   // LoadEarlier,
-  // Message,
+  Message,
   MessageContainer,
   Send,
-  Time
-  // GiftedAvatar,
-  // utils,
+  Time,
+  GiftedAvatar,
+  utils
 };

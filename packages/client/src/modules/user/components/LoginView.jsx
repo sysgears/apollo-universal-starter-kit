@@ -62,7 +62,9 @@ class LoginView extends React.PureComponent {
       <Text style={styles.title}>{this.props.t('login.cardTitle')}:</Text>
       <Text style={styles.exampleText}>admin@example.com: admin123</Text>
       <Text style={styles.exampleText}>user@example.com: user1234</Text>
-      {settings.subscription.enabled && <Text style={styles.exampleText}>subscriber@example.com: subscriber</Text>}
+      {settings.payments.stripe.recurring.enabled && (
+        <Text style={styles.exampleText}>subscriber@example.com: subscriber</Text>
+      )}
     </View>
   );
 

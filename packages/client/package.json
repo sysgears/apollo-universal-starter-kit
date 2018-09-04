@@ -132,7 +132,7 @@
     "antd-mobile-rn": "^2.2.1",
     "expo": "^27.0.2",
     "native-base": "^2.3.5",
-    "react-native": "0.55.3",
+    "react-native": "~0.55.4",
     "uuid": "^3.3.2",
     "react-native-elements": "^0.19.1",
     "react-native-keyboard-spacer": "^0.4.1",

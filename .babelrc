@@ -13,6 +13,9 @@
     "production": {
       "compact": true,
       "presets": [["minify", { "mangle": false }]]
+    },
+    "jest": {
+      "presets": ["react", "env", "stage-0"]
     }
   }
 }

@@ -7,8 +7,6 @@ import SubscriberPage from './containers/SubscriberPage';
 import resources from './locales';
 
 import Feature from '../../../connector';
-import UserScreenNavigator from '../../../user/containers/UserScreenNavigator';
-import modules from '../../../';
 
 const HeaderTitleWithI18n = translate('subscription')(HeaderTitle);
 
@@ -35,8 +33,5 @@ export default new Feature({
       }
     }
   },
-  localization: { ns: 'subscription', resources },
-  routerFactory: () => {
-    return UserScreenNavigator(modules.drawerItems);
-  }
+  localization: { ns: 'subscription', resources }
 });

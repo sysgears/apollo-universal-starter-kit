@@ -4,25 +4,20 @@ import { Redirect } from 'react-router-dom';
 
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 
-import { AuthRoute } from '../../../../user/containers/Auth.web';
+const SubscriptionAuthRouter = ({ component: Component, ...props }: any) => {
+  return (
+    <Query query={SUBSCRIPTION_QUERY}>
+      {({ loading, data: { stripeSubscription } }) => {
+        if (loading) {
+          return <div>Loading...</div>; // TODO: internationalisation
+        } else if (!loading && stripeSubscription && stripeSubscription.active) {
+          return <Component {...props} />;
+        } else {
+          return <Redirect to="/subscription" />;
+        }
+      }}
+    </Query>
+  );
+};
 
-const SubscribeRedirect = () => <Redirect to="/subscription" />;
-const SubscribeLoading = () => <div>Loading...</div>;
-
-export default ({ component, ...rest }: any) => (
-  <Query query={SUBSCRIPTION_QUERY}>
-    {({ loading, data }) => {
-      const { stripeSubscription } = data;
-      const active = stripeSubscription && stripeSubscription.active;
-
-      return (
-        <AuthRoute
-          component={loading ? SubscribeLoading : !loading && active ? component : SubscribeRedirect}
-          role="user"
-          {...rest}
-          redirect={'/login'}
-        />
-      );
-    }}
-  </Query>
-);
+export { SubscriptionAuthRouter };

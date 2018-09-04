@@ -6,7 +6,7 @@ import { MenuItem } from '../../../../modules/common/components/web';
 import AddSubscription from './containers/AddSubscription';
 import SubscriberPage from './containers/SubscriberPage';
 import UpdateCreditCard from './containers/UpdateCreditCard';
-import SubscriberRoute from './containers/Auth';
+import { SubscriptionAuthRouter } from './containers/Auth';
 import { IfLoggedIn, AuthRoute } from '../../../user';
 import settings from '../../../../../../../settings';
 import resources from './locales';
@@ -23,8 +23,18 @@ export default new Feature(
     ? {
         route: [
           <AuthRoute exact role="user" path="/subscription" component={AddSubscription} />,
-          <SubscriberRoute exact path="/subscribers-only" component={SubscriberPage} />,
-          <SubscriberRoute exact path="/update-card" component={UpdateCreditCard} />
+          <AuthRoute
+            exact
+            role="user"
+            path="/subscribers-only"
+            component={props => <SubscriptionAuthRouter {...props} component={SubscriberPage} />}
+          />,
+          <AuthRoute
+            exact
+            role="user"
+            path="/update-card"
+            component={props => <SubscriptionAuthRouter {...props} component={UpdateCreditCard} />}
+          />
         ],
         navItem: (
           <IfLoggedIn role="user">

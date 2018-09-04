@@ -3,7 +3,6 @@ import mkdirp from 'mkdirp';
 import shell from 'shelljs';
 import { createBatchResolver } from 'graphql-resolve-batch';
 
-const MESSAGE_SUBSCRIPTION = 'message_subscription';
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
 const UPLOAD_DIR = 'public';
 
@@ -131,8 +130,6 @@ export default pubsub => ({
         }
       });
 
-      // publish for edit post page
-      pubsub.publish(MESSAGE_SUBSCRIPTION, { messagesUpdated: message });
       return message;
     }
   },

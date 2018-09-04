@@ -1,42 +1,8 @@
-import fs from 'fs';
-import mkdirp from 'mkdirp';
-import shell from 'shelljs';
 import { createBatchResolver } from 'graphql-resolve-batch';
+import fileSystemStorage from '../upload/FileSystemStorage';
+import settings from '../../../../../settings';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
-const UPLOAD_DIR = 'public';
-
-const storeFS = ({ stream, filename }) => {
-  // Check if UPLOAD_DIR exists, create one if not
-  if (!fs.existsSync(UPLOAD_DIR)) {
-    mkdirp(UPLOAD_DIR, err => {
-      if (err) throw new Error(err);
-    });
-  }
-
-  const path = `${UPLOAD_DIR}/${filename}`;
-  return new Promise((resolve, reject) =>
-    stream
-      .on('error', error => {
-        if (stream.truncated) {
-          // Delete the truncated file
-          fs.unlinkSync(path);
-        }
-        reject(error);
-      })
-      .pipe(fs.createWriteStream(path))
-      .on('error', error => {
-        return reject(error);
-      })
-      .on('finish', () => resolve({ path, size: fs.statSync(path).size }))
-  );
-};
-
-const processUpload = async uploadPromise => {
-  const { stream, filename, mimetype } = await uploadPromise;
-  const { path, size } = await storeFS({ stream, filename });
-  return { filename, type: mimetype, path, size };
-};
 
 export default pubsub => ({
   Query: {
@@ -77,7 +43,7 @@ export default pubsub => ({
     async addMessage(obj, { input }, { Chat, user }) {
       const { attachment } = input;
       const userId = user ? user.id : null;
-      const result = attachment ? await processUpload(attachment) : null;
+      const result = attachment ? await fileSystemStorage.save(await attachment, settings.upload.uploadDir) : null;
       const data = { ...input, attachment: result, userId };
       const [id] = attachment ? await Chat.addMessageWithAttachment(data) : await Chat.addMessage(data);
       const message = await Chat.message(id);
@@ -97,9 +63,10 @@ export default pubsub => ({
       const isDeleted = await Chat.deleteMessage(id);
 
       if (isDeleted && attachment) {
-        const attachmentPath = `${attachment.path}`;
-        const res = shell.rm(attachmentPath);
-        if (res.code > 0) {
+        // remove file
+        try {
+          await fileSystemStorage.delete(attachment.path);
+        } catch (e) {
           throw new Error('Unable to delete attachment.');
         }
       }

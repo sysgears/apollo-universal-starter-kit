@@ -18,7 +18,7 @@ export async function up(knex, Promise) {
           .references('id')
           .inTable('message')
           .onDelete('CASCADE');
-        table.string('filename').notNull();
+        table.string('name').notNull();
         table.string('type').notNull();
         table.integer('size').notNull();
         table.string('path').notNull();

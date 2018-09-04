@@ -10,7 +10,7 @@ export default class Chat {
         'm.user_id as userId',
         'm.uuid',
         'u.username',
-        'a.filename',
+        'a.name as filename',
         'a.path',
         'm.created_at as createdAt',
         'm.quoted_id as quotedId'
@@ -26,7 +26,7 @@ export default class Chat {
 
   async getQuatedMessages(messageIds) {
     const res = await knex
-      .select('m.id', 'm.text', 'm.user_id as userId', 'u.username', 'a.filename', 'a.path')
+      .select('m.id', 'm.text', 'm.user_id as userId', 'u.username', 'a.name as filename', 'a.path')
       .from('message as m')
       .leftJoin('attachment as a', function() {
         this.on('a.message_id', '=', 'm.id');
@@ -39,7 +39,7 @@ export default class Chat {
 
   attachment(id) {
     return knex
-      .select('id', 'filename', 'type', 'size', 'path')
+      .select('id', 'name as filename', 'type', 'size', 'path')
       .from('attachment')
       .where('message_id', '=', id)
       .first();
@@ -53,7 +53,7 @@ export default class Chat {
         'm.user_id as userId',
         'm.uuid',
         'u.username',
-        'a.filename',
+        'a.name as filename',
         'a.path',
         'm.created_at as createdAt',
         'm.quoted_id as quotedId'

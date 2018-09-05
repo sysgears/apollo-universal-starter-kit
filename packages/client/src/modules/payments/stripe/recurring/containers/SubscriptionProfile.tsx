@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import CreditCardInfo from './CreditCardInfo';
 import CancelSubscription from './CancelSubscription';
 
 export default () => (
-  <div>
+  <Fragment>
     <CreditCardInfo />
     <CancelSubscription />
-  </div>
+  </Fragment>
 );

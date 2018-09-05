@@ -24,7 +24,6 @@ export default ({ loading, active, t, onClick, errors, cancelling }: CancelSubsc
 
   return (
     <View style={styles.container}>
-      <CardSubtitleText style>{t('cancel.title')}</CardSubtitleText>
       <View style={styles.buttonWrapper}>
         {active && (
           <Button onPress={onClick} disabled={cancelling} danger>
@@ -85,6 +84,6 @@ const styles = StyleSheet.create({
     paddingLeft: 5
   },
   buttonWrapper: {
-    paddingHorizontal: 10
+    padding: 10
   }
 });

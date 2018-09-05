@@ -5,32 +5,35 @@ import { CardItem, CardText, CardSubtitleText, CardLabel, Button, primary } from
 
 interface CardInfoViewProps {
   loading: boolean;
-  expiryMonth: number;
-  expiryYear: number;
-  last4: string;
-  brand: string;
+  creditCard: {
+    expiryMonth: number;
+    expiryYear: number;
+    last4: string;
+    brand: string;
+  };
   t: TranslateFunction;
 }
 
 const renderCardItem = (title: string, value: string) => (
   <CardItem>
-    <CardLabel style>{title}</CardLabel>
-    <CardText style>{value}</CardText>
+    <CardLabel style={styles.container}>{title}</CardLabel>
+    <CardText style={styles.container}>{value}</CardText>
   </CardItem>
 );
 
-export default ({ loading, expiryMonth, expiryYear, last4, brand, t }: CardInfoViewProps) => {
+export default ({ loading, t, creditCard }: CardInfoViewProps) => {
   return (
     <View style={styles.container}>
       {!loading &&
-        expiryMonth &&
-        expiryYear &&
-        last4 &&
-        brand && (
+        creditCard &&
+        creditCard.expiryMonth &&
+        creditCard.expiryYear &&
+        creditCard.last4 &&
+        creditCard.brand && (
           <View>
-            <CardSubtitleText style>{t('card.title')}</CardSubtitleText>
-            {renderCardItem(`${t('card.text.card')}: `, `${brand} ************${last4}`)}
-            {renderCardItem(`${t('card.text.expires')}: `, `${expiryMonth}/${expiryYear}`)}
+            <CardSubtitleText style={styles.container}>{t('card.title')}</CardSubtitleText>
+            {renderCardItem(`${t('card.text.card')}: `, `${creditCard.brand} ************${creditCard.last4}`)}
+            {renderCardItem(`${t('card.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
             <View>
               <View style={styles.buttonWrapper}>
                 <Button color={primary}>{t('card.btnUpdate')}</Button>
@@ -47,6 +50,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   buttonWrapper: {
-    paddingHorizontal: 10
+    padding: 10
   }
 });

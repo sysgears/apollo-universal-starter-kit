@@ -18,6 +18,8 @@ const NavLinkWithI18n = translate('subscription')(({ t }) => (
   </NavLink>
 ));
 
+const Loader = () => <span>Loading...</span>; // TODO: internationalisation
+
 export default new Feature(
   settings.payments.stripe.recurring.enabled
     ? {
@@ -27,13 +29,13 @@ export default new Feature(
             exact
             role="user"
             path="/subscribers-only"
-            component={props => <SubscriptionAuthRouter {...props} component={SubscriberPage} />}
+            component={props => <SubscriptionAuthRouter {...props} loader={Loader} component={SubscriberPage} />}
           />,
           <AuthRoute
             exact
             role="user"
             path="/update-card"
-            component={props => <SubscriptionAuthRouter {...props} component={UpdateCreditCard} />}
+            component={props => <SubscriptionAuthRouter {...props} loader={Loader} component={UpdateCreditCard} />}
           />
         ],
         navItem: (

@@ -11,7 +11,7 @@ const SubscriptionAuthRouter = ({ component: Component, loader: Loader, ...props
         const { navigation, history } = props;
 
         if (loading) {
-          return <Loader />;
+          return null;
         } else if (!loading && stripeSubscription && stripeSubscription.active) {
           return <Component {...props} />;
         } else {

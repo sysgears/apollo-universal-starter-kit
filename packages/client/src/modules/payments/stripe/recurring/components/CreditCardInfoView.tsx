@@ -12,6 +12,7 @@ interface CardInfoViewProps {
     brand: string;
   };
   t: TranslateFunction;
+  navigation: any;
 }
 
 export default ({ loading, t, creditCard }: CardInfoViewProps) => {

@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { withNavigation } from 'react-navigation';
+
 import { TranslateFunction } from '../../../../../i18n';
 import { CardItem, CardText, CardSubtitleText, CardLabel, Button, primary } from '../../../../common/components/native';
 
@@ -12,6 +14,7 @@ interface CardInfoViewProps {
     brand: string;
   };
   t: TranslateFunction;
+  navigation: any;
 }
 
 const renderCardItem = (title: string, value: string) => (
@@ -21,7 +24,7 @@ const renderCardItem = (title: string, value: string) => (
   </CardItem>
 );
 
-export default ({ loading, t, creditCard }: CardInfoViewProps) => {
+const CreditCardInfoView = ({ loading, t, creditCard, navigation }: CardInfoViewProps) => {
   return (
     <View style={styles.container}>
       {!loading &&
@@ -36,7 +39,9 @@ export default ({ loading, t, creditCard }: CardInfoViewProps) => {
             {renderCardItem(`${t('card.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
             <View>
               <View style={styles.buttonWrapper}>
-                <Button color={primary}>{t('card.btnUpdate')}</Button>
+                <Button color={primary} onPress={() => navigation.push('UpdateCreditCard')}>
+                  {t('card.btnUpdate')}
+                </Button>
               </View>
             </View>
           </View>
@@ -44,6 +49,8 @@ export default ({ loading, t, creditCard }: CardInfoViewProps) => {
     </View>
   );
 };
+
+export default withNavigation(CreditCardInfoView);
 
 const styles = StyleSheet.create({
   container: {

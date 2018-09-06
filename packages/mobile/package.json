@@ -83,9 +83,9 @@
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
+    "@types/expo__vector-icons": "^6.2.3",
     "@types/jest": "^23.3.1",
     "@types/react-test-renderer": "^16.0.2",
-    "@types/expo__vector-icons": "^6.2.3",
     "apollo-utilities": "^1.0.3",
     "caporal": "^0.10.0",
     "chai": "^4.1.2",

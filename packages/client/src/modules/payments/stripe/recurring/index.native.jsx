@@ -6,6 +6,7 @@ import translate from '../../../../i18n';
 import { HeaderTitle, IconButton } from '../../../common/components/native';
 import SubscriberPage from './containers/SubscriberPage';
 import AddSubscription from './containers/AddSubscription';
+import UpdateCreditCard from './containers/UpdateCreditCard';
 import { SubscriptionAuthRouter } from './containers/Auth';
 import resources from './locales';
 
@@ -18,7 +19,7 @@ const Loader = () => <Text>Loading...</Text>; // TODO: internationalisation
 /*PLUG components for testing*/
 // const AddSubscription = () => <Text>ADD SUBSCRIPTION COMPONENT...</Text>;
 // const SubscriberPage = () => <Text>SUBSCRIBER PAGE COMPONENT...</Text>;
-const UpdateCreditCard = () => <Text>UPDATE CARD PAGE COMPONENT...</Text>;
+// const UpdateCreditCard = () => <Text>UPDATE CARD PAGE COMPONENT...</Text>;
 /*PLUG components for testing*/
 
 export default new Feature({
@@ -36,11 +37,16 @@ export default new Feature({
         },
         UpdateCreditCard: {
           screen: props => <SubscriptionAuthRouter {...props} loader={Loader} component={UpdateCreditCard} />,
-          navigationOptions: ({ navigation }) => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="update.title" style="subTitle" />,
-            headerLeft: (
-              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-            )
+          navigationOptions: () => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="update.title" style="subTitle" />
+            // headerLeft: ( // TODO: implement go back to Profile
+            //   <IconButton
+            //     iconName="menu"
+            //     iconSize={32}
+            //     iconColor="#0275d8"
+            //     onPress={() => navigation.navigate('Profile')}
+            //   />
+            // )
           })
         },
         Subscription: {

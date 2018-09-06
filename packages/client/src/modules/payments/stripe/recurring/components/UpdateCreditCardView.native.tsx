@@ -4,7 +4,7 @@ import SubscriptionCardForm from './SubscriptionCardFormView';
 
 export default ({ t }: any) => (
   <View style={styles.container}>
-    <Text>Hi ADD CARD</Text>
+    <Text>Hi UPDATE CARD</Text>
     <SubscriptionCardForm />
   </View>
 );

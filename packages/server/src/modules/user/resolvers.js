@@ -236,7 +236,9 @@ export default pubsub => ({
           const checkByFilter =
             !!node.isActive === isActive &&
             (!role || role === node.role) &&
-            (!searchText || node.username.includes(searchText) || node.email.includes(searchText));
+            (!searchText ||
+              node.username.toUpperCase().includes(searchText.toUpperCase()) ||
+              node.email.toUpperCase().includes(searchText.toUpperCase()));
 
           switch (mutation) {
             case 'DELETED':

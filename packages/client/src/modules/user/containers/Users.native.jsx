@@ -2,40 +2,28 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
+
 import UsersList from '../components/UsersListView';
 import UsersFilter from '../components/UsersFilterView';
+import withSubscription from './withSubscription';
 import {
-  withUsersState,
+  updateUsersState,
+  withFilterUpdating,
+  withOrderByUpdating,
   withUsers,
   withUsersDeleting,
-  withOrderByUpdating,
-  withFilterUpdating,
-  subscribeToUsersList
+  withUsersState
 } from './UserOperations';
 
 class Users extends React.Component {
   constructor(props) {
     super(props);
-    this.subscription = null;
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { subscribeToMore, filter, users } = this.props;
-    if (!nextProps.loading) {
-      if (this.subscription && nextProps.users.length !== users.length) {
-        this.subscription();
-        this.subscription = null;
-      }
-
-      if (!this.subscription) {
-        this.subscription = subscribeToUsersList(subscribeToMore, filter);
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.subscription) {
-      this.subscription();
+  componentDidUpdate() {
+    const { usersUpdated, updateQuery } = this.props;
+    if (usersUpdated) {
+      updateUsersState(usersUpdated, updateQuery);
     }
   }
 
@@ -55,6 +43,13 @@ class Users extends React.Component {
     );
   }
 }
+
+Users.propTypes = {
+  navigation: PropTypes.object,
+  usersUpdated: PropTypes.object,
+  updateQuery: PropTypes.func,
+  loading: PropTypes.bool
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -76,18 +71,11 @@ const styles = StyleSheet.create({
   }
 });
 
-Users.propTypes = {
-  filter: PropTypes.object,
-  navigation: PropTypes.object,
-  users: PropTypes.array,
-  subscribeToMore: PropTypes.func,
-  loading: PropTypes.bool
-};
-
 export default compose(
   withUsersState,
   withUsers,
   withUsersDeleting,
   withOrderByUpdating,
-  withFilterUpdating
+  withFilterUpdating,
+  withSubscription
 )(Users);

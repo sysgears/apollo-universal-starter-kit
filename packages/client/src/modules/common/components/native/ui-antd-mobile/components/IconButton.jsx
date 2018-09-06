@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'antd-mobile/lib/button';
+import { Button } from 'antd-mobile-rn';
 import { Feather } from '@expo/vector-icons';
 
 const IconButton = ({ iconName, iconColor, iconSize, onPress }) => {

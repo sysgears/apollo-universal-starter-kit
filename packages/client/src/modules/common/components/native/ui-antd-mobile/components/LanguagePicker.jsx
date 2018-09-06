@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
-import { Picker, List } from 'antd-mobile';
+import { View, Text } from 'react-native';
+import { Picker, List } from 'antd-mobile-rn';
 
 import { HeaderTitle } from '../..';
 
@@ -45,7 +45,7 @@ export default class LanguagePicker extends React.Component {
                   fontWeight: 'bold'
                 }}
               >
-                {i18n.t('i18n:pickerMenu')}
+                <Text>{i18n.t('i18n:pickerMenu')}</Text>
               </HeaderTitle>
             </List.Item>
           </Picker>

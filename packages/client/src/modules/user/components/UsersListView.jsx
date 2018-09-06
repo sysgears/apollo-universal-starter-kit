@@ -33,10 +33,10 @@ const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
               users.length && (
                 <List>
                   {users.map(({ username, email, isActive, role, id }, idx) => (
-                    <ListItem key={idx} onPress={() => navigation.navigate('UserEdit', { id })}>
-                      <Card>
+                    <ListItem style={styles.listItem} key={idx} onPress={() => navigation.navigate('UserEdit', { id })}>
+                      <Card style={styles.cardItem}>
                         <CardItem>
-                          <View style={styles.itemsContainer}>
+                          <View style={styles.cardItem}>
                             <CardItem style={styles.cardItemWrapper}>
                               <CardLabel>{`${t('users.column.name')}: `}</CardLabel>
                               <CardText>{username}</CardText>
@@ -103,7 +103,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  itemsContainer: {
+  listItem: {
+    marginRight: 15,
+    paddingRight: 0
+  },
+  cardItem: {
     flex: 9
   },
   cardItemWrapper: {

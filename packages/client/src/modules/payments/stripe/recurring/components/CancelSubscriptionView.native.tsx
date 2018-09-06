@@ -32,7 +32,7 @@ export default ({ loading, active, t, onClick, errors, cancelling }: CancelSubsc
         )}
         {!active && (
           <View style={styles.subscriptionText}>
-            <CardText style>{t('cancel.msg')}</CardText>
+            <CardText style={styles.subscriptionText}>{t('cancel.msg')}</CardText>
           </View>
         )}
         {errors && (

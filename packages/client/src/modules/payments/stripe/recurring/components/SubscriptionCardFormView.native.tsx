@@ -1,9 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+// @ts-ignore
+import { CreditCardInput } from 'react-native-credit-card-input';
 
 export default ({ t }: any) => (
   <View style={styles.container}>
-    <Text>Hi FORM CARD</Text>
+    <CreditCardInput onChange={(props: any) => console.log(props)} />
   </View>
 );
 

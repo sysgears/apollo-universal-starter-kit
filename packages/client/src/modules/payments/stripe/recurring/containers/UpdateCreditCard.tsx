@@ -9,6 +9,7 @@ import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
 import settings from '../../../../../../../../settings';
 import translate, { TranslateFunction } from '../../../../../i18n';
+import { PLATFORM } from '../../../../../../../common/utils';
 
 interface UpdateCreditCardProps {
   t: TranslateFunction;
@@ -49,7 +50,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps> {
         {updateCard => {
           return (
             <div>
-              {__CLIENT__ ? (
+              {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
                   <UpdateCreditCardView onSubmit={this.onSubmit(updateCard)} t={t} />
                 </StripeProvider>

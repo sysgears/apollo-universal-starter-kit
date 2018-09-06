@@ -1,7 +1,7 @@
 /*tslint:disable:no-reference */
 /// <reference path="../../../../../../typings/typings.d.ts" />
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
@@ -13,6 +13,7 @@ import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
 import settings from '../../../../../../../../settings';
 import translate, { TranslateFunction } from '../../../../../i18n';
+import { PLATFORM } from '../../../../../../../common/utils';
 
 interface AddSubscriptionProps {
   t: TranslateFunction;
@@ -20,7 +21,7 @@ interface AddSubscriptionProps {
   navigation: any;
 }
 
-// react-stripe-elements will not render on the server.
+// react-stripe-elements will not render on the server and on the mobile.
 const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
   const onSubmit = (addSubscription: any) => async (subscriptionInput: any) => {
     const {
@@ -56,15 +57,15 @@ const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
     >
       {addSubscription => {
         return (
-          <div>
-            {__CLIENT__ ? (
+          <Fragment>
+            {__CLIENT__ && PLATFORM === 'web' ? (
               <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
                 <AddSubscriptionView onSubmit={onSubmit(addSubscription)} t={t} />
               </StripeProvider>
             ) : (
               <AddSubscriptionView onSubmit={onSubmit(addSubscription)} t={t} />
             )}
-          </div>
+          </Fragment>
         );
       }}
     </Mutation>

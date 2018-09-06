@@ -14,7 +14,7 @@ interface CardInfoViewProps {
     brand: string;
   };
   t: TranslateFunction;
-  navigation: any;
+  navigation?: any;
 }
 
 const renderCardItem = (title: string, value: string) => (

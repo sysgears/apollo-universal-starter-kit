@@ -16,12 +16,6 @@ const HeaderTitleWithI18n = translate('subscription')(HeaderTitle);
 
 const Loader = () => <Text>Loading...</Text>; // TODO: internationalisation
 
-/*PLUG components for testing*/
-// const AddSubscription = () => <Text>ADD SUBSCRIPTION COMPONENT...</Text>;
-// const SubscriberPage = () => <Text>SUBSCRIBER PAGE COMPONENT...</Text>;
-// const UpdateCreditCard = () => <Text>UPDATE CARD PAGE COMPONENT...</Text>;
-/*PLUG components for testing*/
-
 export default new Feature({
   drawerItem: {
     Subscription: {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
@@ -49,7 +49,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps> {
       <Mutation mutation={UPDATE_CREDIT_CARD} refetchQueries={[{ query: CREDIT_CARD_QUERY }]}>
         {updateCard => {
           return (
-            <div>
+            <Fragment>
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
                   <UpdateCreditCardView onSubmit={this.onSubmit(updateCard)} t={t} />
@@ -57,7 +57,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps> {
               ) : (
                 <UpdateCreditCardView onSubmit={this.onSubmit(updateCard)} t={t} />
               )}
-            </div>
+            </Fragment>
           );
         }}
       </Mutation>

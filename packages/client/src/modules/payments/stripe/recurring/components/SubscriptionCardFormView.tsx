@@ -9,10 +9,10 @@ import { required, validateForm } from '../../../../../../../common/validation';
 
 interface SubscriptionCardFormViewProps {
   submitting: boolean;
-  action: string;
+  buttonName: string;
   error: string;
   handleSubmit: () => void; // TODO: write types
-  onSubmit: (subscriptionInput: any) => void;
+  onSubmit: (subscriptionInput: any, stripe: any) => void;
   values: any;
   stripe: any;
   t: TranslateFunction;
@@ -21,7 +21,7 @@ interface SubscriptionCardFormViewProps {
 const SubscriptionCardFormView = ({
   handleSubmit,
   submitting,
-  action,
+  buttonName,
   error,
   values,
   t
@@ -40,7 +40,7 @@ const SubscriptionCardFormView = ({
       <CardElement className="form-control" style={{ base: { lineHeight: '30px' } }} />
       {error && <Alert color="error">{error}</Alert>}
       <Button color="primary" type="submit" disabled={submitting} style={{ marginTop: 15 }}>
-        {action}
+        {buttonName}
       </Button>
     </Form>
   );
@@ -48,20 +48,8 @@ const SubscriptionCardFormView = ({
 
 const SubscriptionFormWithFormik = withFormik({
   mapPropsToValues: () => ({ name: '' }),
-  async handleSubmit({ name }, { props }: { props: SubscriptionCardFormViewProps }) {
-    const { stripe, onSubmit } = props;
-    const { token, error } = await stripe.createToken({ name });
-
-    if (error) {
-      return;
-    }
-
-    const {
-      id,
-      card: { exp_month, exp_year, last4, brand }
-    } = token;
-
-    await onSubmit({ token: id, expiryMonth: exp_month, expiryYear: exp_year, last4, brand });
+  async handleSubmit({ name }, { props: { stripe, onSubmit } }: { props: SubscriptionCardFormViewProps }) {
+    onSubmit({ name }, stripe);
   },
   validate: values => validateForm(values, { name: [required] }),
   displayName: 'StripeSubscriptionForm', // helps with React DevTools,

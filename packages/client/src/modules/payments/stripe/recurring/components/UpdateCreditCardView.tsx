@@ -23,7 +23,7 @@ export default ({ onSubmit, t }: UpdateCardViewProps) => (
     <LayoutCenter>
       <h1 className="text-center">{t('update.subTitle')}</h1>
       <Elements>
-        <SubscriptionCardForm onSubmit={onSubmit} action={t('update.action')} />
+        <SubscriptionCardForm onSubmit={onSubmit} buttonName={t('update.action')} />
       </Elements>
     </LayoutCenter>
   </PageLayout>

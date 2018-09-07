@@ -13,9 +13,10 @@ const ElementsClientOnly = clientOnly(Elements);
 interface SubscriptionViewProps {
   onSubmit: (values: any) => void; // TODO: write types
   t: TranslateFunction;
+  submitting: boolean;
 }
 
-export default ({ onSubmit, t }: SubscriptionViewProps) => (
+export default ({ onSubmit, t, submitting }: SubscriptionViewProps) => (
   <PageLayout>
     <Helmet
       title={`${settings.app.name} - ${t('title')}`}
@@ -24,7 +25,7 @@ export default ({ onSubmit, t }: SubscriptionViewProps) => (
     <LayoutCenter>
       <h1 className="text-center">{t('subTitle')}</h1>
       <ElementsClientOnly>
-        <SubscriptionCardForm onSubmit={onSubmit} action={t('action')} />
+        <SubscriptionCardForm submitting={submitting} onSubmit={onSubmit} buttonName={t('action')} />
       </ElementsClientOnly>
     </LayoutCenter>
   </PageLayout>

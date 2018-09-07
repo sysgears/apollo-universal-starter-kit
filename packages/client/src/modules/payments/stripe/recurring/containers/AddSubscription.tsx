@@ -13,6 +13,7 @@ import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
 import settings from '../../../../../../../../settings';
 import translate, { TranslateFunction } from '../../../../../i18n';
+import { createCardTokenFromMobile } from './stripeOperations';
 import { PLATFORM } from '../../../../../../../common/utils';
 
 interface AddSubscriptionProps {
@@ -20,29 +21,6 @@ interface AddSubscriptionProps {
   history: any; // TODO: write types
   navigation: any;
 }
-
-const createCardTokenFromMobile = async (cardInfo: any) => {
-  const card = {
-    'card[number]': cardInfo.values.number.replace(/ /g, ''),
-    'card[exp_month]': cardInfo.values.expiry.split('/')[0],
-    'card[exp_year]': cardInfo.values.expiry.split('/')[1],
-    'card[cvc]': cardInfo.values.cvc
-  };
-
-  const body = Object.keys(card)
-    .map(key => key + '=' + card[key])
-    .join('&');
-
-  return fetch('https://api.stripe.com/v1/tokens', {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': ' application/x-www-form-urlencoded',
-      Authorization: `Bearer ${settings.payments.stripe.recurring.publicKey}`
-    },
-    method: 'post',
-    body
-  }).then(response => response.json());
-};
 
 // react-stripe-elements will not render on the server and on the mobile.
 class AddSubscription extends React.Component<AddSubscriptionProps, any> {

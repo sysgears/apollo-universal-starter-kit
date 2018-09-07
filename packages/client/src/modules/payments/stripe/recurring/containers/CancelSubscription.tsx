@@ -60,49 +60,4 @@ class CancelSubscription extends React.Component<CancelSubscriptionProps, { [key
   }
 }
 
-// const CancelSubscriptionWithApollo = compose(
-//   graphql(SUBSCRIPTION_QUERY, {
-//     // i'm not sure why but this query causes SSR to hang. it seems to have
-//     // to do with the fact that this query exists in other places in the tree.
-//     // possibly having to do with the query name, as if you duplicate the query
-//     // file and change the query name to `SubscriptionDataTwo`, then it works.
-//     // skipping for now on server.
-//     skip: __SERVER__,
-//     options: { fetchPolicy: 'network-only' },
-//     props({ data: { loading, stripeSubscription } }) {
-//       return {
-//         loading,
-//         active: stripeSubscription && stripeSubscription.active
-//       };
-//     }
-//   }),
-//   graphql(CANCEL_SUBSCRIPTION, {
-//     props: ({ mutate }) => ({
-//       cancel: async () => {
-//         try {
-//           const {
-//             data: { cancelStripeSubscription }
-//           } = await mutate({
-//             update: (store, { data: { cancelStripeSubscription } }) => {
-//               const data = store.readQuery({ query: SUBSCRIPTION_QUERY });
-//               data.stripeSubscription = cancelStripeSubscription;
-//               store.writeQuery({ query: SUBSCRIPTION_QUERY, data });
-//             },
-//             refetchQueries: [{ query: CREDIT_CARD_QUERY }]
-//           });
-//
-//           if (cancelStripeSubscription.errors) {
-//             return { errors: cancelStripeSubscription.errors.map(e => e.message).join('\n') };
-//           }
-//
-//           return true;
-//         } catch (e) {
-//           console.log(e.graphQLErrors);
-//         }
-//       }
-//     })
-//   }),
-//   translate('subscription')
-// )(CancelSubscription);
-
 export default translate('subscription')(CancelSubscription);

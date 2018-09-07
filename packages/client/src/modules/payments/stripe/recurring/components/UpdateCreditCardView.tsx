@@ -12,9 +12,10 @@ import settings from '../../../../../../../../settings';
 interface UpdateCardViewProps {
   onSubmit: any; // TODO: write types
   t: TranslateFunction;
+  submitting: boolean;
 }
 
-export default ({ onSubmit, t }: UpdateCardViewProps) => (
+export default ({ onSubmit, t, submitting }: UpdateCardViewProps) => (
   <PageLayout>
     <Helmet
       title={`${settings.app.name} - ${t('update.title')}`}
@@ -23,7 +24,7 @@ export default ({ onSubmit, t }: UpdateCardViewProps) => (
     <LayoutCenter>
       <h1 className="text-center">{t('update.subTitle')}</h1>
       <Elements>
-        <SubscriptionCardForm onSubmit={onSubmit} buttonName={t('update.action')} />
+        <SubscriptionCardForm submitting={submitting} onSubmit={onSubmit} buttonName={t('update.action')} />
       </Elements>
     </LayoutCenter>
   </PageLayout>

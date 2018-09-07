@@ -10,6 +10,7 @@ import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 import settings from '../../../../../../../../settings';
 import translate, { TranslateFunction } from '../../../../../i18n';
 import { PLATFORM } from '../../../../../../../common/utils';
+import { createCardTokenFromMobile } from './stripeOperations';
 
 interface UpdateCreditCardProps {
   t: TranslateFunction;
@@ -18,28 +19,56 @@ interface UpdateCreditCardProps {
 }
 
 // react-stripe-elements will not render on the server.
-class UpdateCreditCard extends React.Component<UpdateCreditCardProps> {
-  public onSubmit = (updateCard: any) => async (subscriptionInput: any) => {
+class UpdateCreditCard extends React.Component<UpdateCreditCardProps, any> {
+  constructor(props: UpdateCreditCardProps) {
+    super(props);
+    this.state = {
+      submitting: false
+    };
+  }
+
+  public onSubmit = (updateCard: any) => async (creditCardInput: any, stripe?: any) => {
+    this.setState({ submitting: true });
+    const { t, history, navigation } = this.props;
+    let subscriptionInput: any;
+    const { name } = creditCardInput;
+
+    if (stripe) {
+      const { token, error } = await stripe.createToken({ name });
+
+      if (error) {
+        return; // TODO: ADD error
+      }
+
+      const { id, card } = token;
+      const { exp_month, exp_year, last4, brand } = card;
+      subscriptionInput = { token: id, expiryMonth: exp_month, expiryYear: exp_year, last4, brand };
+    } else {
+      const { id, card, error } = await createCardTokenFromMobile(creditCardInput);
+      if (error) {
+        return; // TODO: ADD error
+      }
+
+      const { exp_month, exp_year, last4, brand } = card;
+      subscriptionInput = { token: id, expiryMonth: exp_month, expiryYear: exp_year, last4, brand };
+    }
+
     const {
       data: { updateStripeSubscriptionCard }
     } = await updateCard({ variables: { input: subscriptionInput } });
-    const { t, history } = this.props;
 
     if (!updateStripeSubscriptionCard) {
       return { errors: ['Error updating card.'] };
     }
 
-    // TODO: Implement error handling
-    // if (result.errors) {
-    //   const submitError = {
-    //     _error: t('update.errorMsg')
-    //   };
-    //   result.errors.map((error: any) => (submitError[error.field] = error.message));
-    //   throw submitError;
-    // }
+    this.setState({ submitting: false });
 
     if (history) {
       history.push('/profile');
+    }
+
+    if (navigation) {
+      navigation.goBack();
     }
   };
 
@@ -52,10 +81,10 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps> {
             <Fragment>
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
-                  <UpdateCreditCardView onSubmit={this.onSubmit(updateCard)} t={t} />
+                  <UpdateCreditCardView submitting={this.state.submitting} onSubmit={this.onSubmit(updateCard)} t={t} />
                 </StripeProvider>
               ) : (
-                <UpdateCreditCardView onSubmit={this.onSubmit(updateCard)} t={t} />
+                <UpdateCreditCardView submitting={this.state.submitting} onSubmit={this.onSubmit(updateCard)} t={t} />
               )}
             </Fragment>
           );
@@ -64,34 +93,5 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps> {
     );
   }
 }
-
-// const UpdateCreditCardWithApollo = compose(
-//   graphql(UPDATE_CREDIT_CARD, {
-//     props: ({ ownProps: { history }, mutate }) => ({
-//       updateCard: async ({ token, expiryMonth, expiryYear, last4, brand }) => {
-//         try {
-//           const {
-//             data: { updateStripeSubscriptionCard }
-//           } = await mutate({
-//             variables: { input: { token, expiryMonth, expiryYear, last4, brand } },
-//             refetchQueries: [{ query: CREDIT_CARD_QUERY }]
-//           });
-//
-//           if (!updateStripeSubscriptionCard) {
-//             return { errors: ['Error updating card.'] };
-//           }
-//
-//           if (history) {
-//             history.push('/profile');
-//           }
-//           return updateStripeSubscriptionCard;
-//         } catch (e) {
-//           console.log(e.graphQLErrors);
-//         }
-//       }
-//     })
-//   }),
-//   translate('subscription')
-// )(UpdateCreditCard);
 
 export default translate('subscription')(UpdateCreditCard);

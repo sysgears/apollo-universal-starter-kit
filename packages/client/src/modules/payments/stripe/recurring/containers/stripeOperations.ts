@@ -22,3 +22,28 @@ export const createCardTokenFromMobile = async (cardInfo: any) => {
     body
   }).then(response => response.json());
 };
+
+export const createCreditCardToken = async (creditCardInput: any, stripe: any) => {
+  const { name } = creditCardInput;
+
+  if (stripe) {
+    const { token, error } = await stripe.createToken({ name });
+
+    if (error) {
+      return; // TODO: ADD error
+    }
+
+    const { id, card } = token;
+    const { exp_month, exp_year, last4, brand } = card;
+
+    return { token: id, expiryMonth: exp_month, expiryYear: exp_year, last4, brand };
+  } else {
+    const { id, card, error } = await createCardTokenFromMobile(creditCardInput);
+    if (error) {
+      return; // TODO: ADD error
+    }
+
+    const { exp_month, exp_year, last4, brand } = card;
+    return { token: id, expiryMonth: exp_month, expiryYear: exp_year, last4, brand };
+  }
+};

@@ -17,6 +17,13 @@
     "info": "Payment Info"
   },
 
+  "add": {
+    "title": "Add subscription",
+    "btn": "Subscribe",
+    "load": "Loading...",
+    "description": "To get the magic private number you should subscribe."
+  },
+
   "cancel": {
     "title": "Subscription",
     "load": "Loading...",

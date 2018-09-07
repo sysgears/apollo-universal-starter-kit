@@ -3,17 +3,17 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 
-// TODO: translate
 export default (props: any) => {
   const { t } = props;
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.textWrapper}>
-          <Text style={styles.infoText}>To get magic PRIVATE number you should subscribe!</Text>
+          <Text style={styles.infoText}>{t('add.description')}</Text>
         </View>
         <View style={styles.cardFormWrapper}>
-          <SubscriptionCardForm {...props} buttonName="Subscribe" />
+          <SubscriptionCardForm {...props} buttonName={t('add.btn')} />
         </View>
       </ScrollView>
     </View>

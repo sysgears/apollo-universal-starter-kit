@@ -10,7 +10,7 @@ import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 import settings from '../../../../../../../../settings';
 import translate, { TranslateFunction } from '../../../../../i18n';
 import { PLATFORM } from '../../../../../../../common/utils';
-import { createCardTokenFromMobile } from './stripeOperations';
+import { createCreditCardToken } from './stripeOperations';
 
 interface UpdateCreditCardProps {
   t: TranslateFunction;
@@ -30,46 +30,18 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, any> {
   public onSubmit = (updateCard: any) => async (creditCardInput: any, stripe?: any) => {
     this.setState({ submitting: true });
     const { t, history, navigation } = this.props;
-    let subscriptionInput: any;
-    const { name } = creditCardInput;
-
-    if (stripe) {
-      const { token, error } = await stripe.createToken({ name });
-
-      if (error) {
-        return; // TODO: ADD error
-      }
-
-      const { id, card } = token;
-      const { exp_month, exp_year, last4, brand } = card;
-      subscriptionInput = { token: id, expiryMonth: exp_month, expiryYear: exp_year, last4, brand };
-    } else {
-      const { id, card, error } = await createCardTokenFromMobile(creditCardInput);
-      if (error) {
-        return; // TODO: ADD error
-      }
-
-      const { exp_month, exp_year, last4, brand } = card;
-      subscriptionInput = { token: id, expiryMonth: exp_month, expiryYear: exp_year, last4, brand };
-    }
-
-    const {
-      data: { updateStripeSubscriptionCard }
-    } = await updateCard({ variables: { input: subscriptionInput } });
+    const preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
+    const { data } = await updateCard({ variables: { input: preparedCreditCard } });
+    const { updateStripeSubscriptionCard } = data;
 
     if (!updateStripeSubscriptionCard) {
-      return { errors: ['Error updating card.'] };
+      /*tslint:disable:no-console*/
+      console.log('Error updating card');
+      // return { errors: ['Error updating card.'] };
     }
 
     this.setState({ submitting: false });
-
-    if (history) {
-      history.push('/profile');
-    }
-
-    if (navigation) {
-      navigation.goBack();
-    }
+    history ? history.push('/profile') : navigation.goBack();
   };
 
   public render() {

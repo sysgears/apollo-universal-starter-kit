@@ -1,21 +1,28 @@
-import { Ionicons } from '@expo/vector-icons';
-import { createTabBarIconWrapper } from '../common/components/native';
-import $Module$ from './containers/$Module$';
-import reducers from './reducers';
+import React from 'react';
+import { createStackNavigator } from 'react-navigation';
 
+import { IconButton } from '../common/components/native';
+import $Module$ from './containers/$Module$';
 import Feature from '../connector';
 
 export default new Feature({
-  tabItem: {
+  drawerItem: {
     $Module$: {
-      screen: $Module$,
+      screen: createStackNavigator({
+        $Module$: {
+          screen: $Module$,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: `$Module$`,
+            headerLeft: (
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+            ),
+            headerStyle: { backgroundColor: '#fff' }
+          })
+        }
+      }),
       navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(Ionicons, {
-          name: 'ios-browsers-outline',
-          size: 30
-        })
+        drawerLabel: `$Module$`
       }
     }
-  },
-  reducer: { $module$: reducers }
+  }
 });

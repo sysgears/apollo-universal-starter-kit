@@ -10,17 +10,16 @@ import DELETE_POST from '../../../../../client/src/modules/post/graphql/DeletePo
 import POSTS_SUBSCRIPTION from '../../../../../client/src/modules/post/graphql/PostsSubscription.graphql';
 
 describe('Post and comments example API works', () => {
-  let apollo;
+  let apollo: any;
 
   before(() => {
     apollo = getApollo();
   });
 
   step('Query post list works', async () => {
-    let result = await apollo.query({
+    const result = await apollo.query({
       query: POSTS_QUERY,
-      variables: { limit: 1, after: 0 },
-      fetchPolicy: 'network-only'
+      variables: { limit: 1, after: 0 }
     });
 
     expect(result.data).to.deep.equal({
@@ -49,7 +48,7 @@ describe('Post and comments example API works', () => {
   });
 
   step('Query single post with comments works', async () => {
-    let result = await apollo.query({ query: POST_QUERY, variables: { id: 1 } });
+    const result = await apollo.query({ query: POST_QUERY, variables: { id: 1 } });
 
     expect(result.data).to.deep.equal({
       post: {
@@ -84,15 +83,13 @@ describe('Post and comments example API works', () => {
       }
     });
 
-    let subscription;
-
-    subscription = apollo
+    const subscription = apollo
       .subscribe({
         query: POSTS_SUBSCRIPTION,
         variables: { endCursor: 10 }
       })
       .subscribe({
-        next(data) {
+        next(data: any) {
           expect(data).to.deep.equal({
             data: {
               postsUpdated: {
@@ -114,10 +111,9 @@ describe('Post and comments example API works', () => {
   });
 
   step('Adding post works', async () => {
-    let result = await apollo.query({
+    const result = await apollo.query({
       query: POSTS_QUERY,
-      variables: { limit: 1, after: 0 },
-      fetchPolicy: 'network-only'
+      variables: { limit: 1, after: 0 }
     });
     expect(result.data.posts).to.have.property('totalCount', 21);
     expect(result.data.posts).to.have.nested.property('edges[0].node.title', 'New post 1');
@@ -136,15 +132,13 @@ describe('Post and comments example API works', () => {
       }
     });
 
-    let subscription;
-
-    subscription = apollo
+    const subscription = apollo
       .subscribe({
         query: POSTS_SUBSCRIPTION,
         variables: { endCursor: 10 }
       })
       .subscribe({
-        next(data) {
+        next(data: any) {
           expect(data).to.deep.equal({
             data: {
               postsUpdated: {
@@ -166,10 +160,9 @@ describe('Post and comments example API works', () => {
   });
 
   step('Updating post works', async () => {
-    let result = await apollo.query({
+    const result = await apollo.query({
       query: POSTS_QUERY,
-      variables: { limit: 1, after: 0 },
-      fetchPolicy: 'network-only'
+      variables: { limit: 1, after: 0 }
     });
     expect(result.data.posts).to.have.property('totalCount', 21);
     expect(result.data.posts).to.have.nested.property('edges[0].node.title', 'New post 2');
@@ -182,15 +175,13 @@ describe('Post and comments example API works', () => {
       variables: { id: '21' }
     });
 
-    let subscription;
-
-    subscription = apollo
+    const subscription = apollo
       .subscribe({
         query: POSTS_SUBSCRIPTION,
         variables: { endCursor: 10 }
       })
       .subscribe({
-        next(data) {
+        next(data: any) {
           expect(data).to.deep.equal({
             data: {
               postsUpdated: {
@@ -212,10 +203,9 @@ describe('Post and comments example API works', () => {
   });
 
   step('Deleting post works', async () => {
-    let result = await apollo.query({
+    const result = await apollo.query({
       query: POSTS_QUERY,
-      variables: { limit: 2, after: 0 },
-      fetchPolicy: 'network-only'
+      variables: { limit: 2, after: 0 }
     });
     expect(result.data.posts).to.have.property('totalCount', 20);
     expect(result.data.posts).to.have.nested.property('edges[0].node.title', 'Post title 20');

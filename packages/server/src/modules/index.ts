@@ -8,21 +8,8 @@ import subscription from './subscription';
 import contact from './contact';
 import mailer from './mailer';
 import graphqlTypes from './graphqlTypes';
-import apolloEngine from './apolloEngine';
 import './debug';
 
 import Feature from './connector';
 
-export default new Feature(
-  cookies,
-  i18n,
-  counter,
-  post,
-  upload,
-  user,
-  subscription,
-  contact,
-  mailer,
-  graphqlTypes,
-  apolloEngine
-);
+export default new Feature(cookies, i18n, counter, post, upload, user, subscription, contact, mailer, graphqlTypes);

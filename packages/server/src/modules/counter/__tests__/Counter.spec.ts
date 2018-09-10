@@ -6,7 +6,6 @@ import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
 import COUNTER_QUERY from '../../../../../client/src/modules/counter/serverCounter/graphql/CounterQuery.graphql';
 import ADD_COUNTER from '../../../../../client/src/modules/counter/serverCounter/graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from '../../../../../client/src/modules/counter/serverCounter/graphql/CounterSubscription.graphql';
-import { ISuiteCallbackContext } from 'mocha';
 
 describe('Counter example API works', () => {
   let server: any;
@@ -17,10 +16,12 @@ describe('Counter example API works', () => {
     apollo = getApollo();
   });
 
-  step('Has GraphiQL endpoint', () => {
+  step('Has GraphQL Playground endpoint', () => {
     return chai
       .request(server)
-      .get('/graphiql')
+      .keepOpen()
+      .get('/graphql')
+      .set('Accept', 'text/html')
       .then(res => {
         res.should.have.status(200);
         res.body.should.be.eql({});

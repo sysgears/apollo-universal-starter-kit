@@ -15,7 +15,8 @@ const CardInfoView = ({ loading, expiryMonth, expiryYear, last4, brand, t }) => 
           <CardGroup>
             <CardTitle>{t('card.title')}</CardTitle>
             <CardText>
-              {t('card.text.card')}: {brand} ************{last4}
+              {t('card.text.card')}: {brand} ************
+              {last4}
             </CardText>
             <CardText>
               {t('card.text.expires')}: {expiryMonth}/{expiryYear}

@@ -13,8 +13,11 @@ server.on('request', app);
 
 addGraphQLSubscriptions(server);
 
-server.listen(serverPort, () => {
-  log.info(`API is now running on port ${serverPort}`);
+const serverPromise = new Promise(resolve => {
+  server.listen(serverPort, () => {
+    log.info(`API is now running on port ${serverPort}`);
+    resolve(server);
+  });
 });
 
 server.on('close', () => {
@@ -46,4 +49,4 @@ if (module.hot) {
   module.hot.accept();
 }
 
-export default server;
+export default serverPromise;

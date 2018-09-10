@@ -59,17 +59,7 @@ export default new Feature(
         grant,
         schema,
         createResolversFunc: resolvers,
-        createContextFunc,
-        middleware: app => {
-          app.use((req, res, next) => {
-            try {
-              attachSession(req);
-              next();
-            } catch (e) {
-              next(e);
-            }
-          });
-        }
+        createContextFunc
       }
     : {}
 );

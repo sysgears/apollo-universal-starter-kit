@@ -64,8 +64,8 @@ class UserEditView extends React.PureComponent {
           </h2>
           <UserForm
             onSubmit={this.props.onSubmit}
-            shouldRoleDisplay={isNotSelf}
-            shouldActiveDisplay={isNotSelf}
+            shouldDisplayRole={isNotSelf}
+            shouldDisplayActive={isNotSelf}
             initialValues={user}
           />
         </PageLayout>

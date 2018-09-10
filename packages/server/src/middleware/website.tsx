@@ -77,7 +77,7 @@ const Html = ({ content, state, css, clientModules, helmet }: HtmlProps) => (
 
 const renderServerSide = async (req: any, res: any) => {
   const clientModules = require('../../../client/src/modules').default;
-  const schemaLink = new SchemaLink({ schema, context: await modules.createContext(req, res) });
+  const schemaLink = new SchemaLink({ schema, context: { ...(await modules.createContext(req, res)), req, res } });
   const client = createApolloClient({
     apiUrl,
     createNetLink: !isApiExternal ? () => schemaLink : undefined,

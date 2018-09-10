@@ -5,6 +5,7 @@ import { pick } from 'lodash';
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
 import settings from '../../../../../../settings';
+import translate from '../../../i18n';
 import UserFormatter from '../helpers/UserFormatter';
 
 class UserAdd extends React.Component {
@@ -44,6 +45,7 @@ class UserAdd extends React.Component {
 }
 
 export default compose(
+  translate('user'),
   graphql(ADD_USER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       addUser: async input => {

@@ -192,6 +192,18 @@ export default compose(
               filename: attachment ? attachment.name : null,
               path: attachment ? attachment.uri : null
             }
+          },
+          updateQueries: {
+            messages: (
+              prev,
+              {
+                mutationResult: {
+                  data: { addMessage }
+                }
+              }
+            ) => {
+              return AddMessage(prev, addMessage);
+            }
           }
         });
       }
@@ -207,6 +219,18 @@ export default compose(
             deleteMessage: {
               id: id,
               __typename: 'Message'
+            }
+          },
+          updateQueries: {
+            messages: (
+              prev,
+              {
+                mutationResult: {
+                  data: { deleteMessage }
+                }
+              }
+            ) => {
+              return DeleteMessage(prev, deleteMessage.id);
             }
           }
         });
@@ -235,6 +259,18 @@ export default compose(
               filename: null,
               path: null,
               __typename: 'Message'
+            }
+          },
+          updateQueries: {
+            messages: (
+              prev,
+              {
+                mutationResult: {
+                  data: { editMessage }
+                }
+              }
+            ) => {
+              return EditMessage(prev, editMessage);
             }
           }
         });

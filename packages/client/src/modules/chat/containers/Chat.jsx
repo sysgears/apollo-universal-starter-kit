@@ -213,11 +213,11 @@ export default compose(
     props: ({ mutate }) => ({
       deleteMessage: id => {
         mutate({
-          variables: id,
+          variables: { id },
           optimisticResponse: {
             __typename: 'Mutation',
             deleteMessage: {
-              id: id,
+              id,
               __typename: 'Message'
             }
           },

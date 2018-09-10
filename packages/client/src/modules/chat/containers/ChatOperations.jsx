@@ -102,7 +102,7 @@ export default class ChatOperations extends React.Component {
           break;
 
         case 3:
-          deleteMessage({ id: currentMessage._id });
+          deleteMessage(currentMessage._id);
           break;
       }
     });

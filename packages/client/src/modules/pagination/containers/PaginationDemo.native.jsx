@@ -61,7 +61,7 @@ class PaginationDemo extends React.Component {
               mode="dropdown"
               data={options}
               selectedValue={pagination}
-              onValueChange={this.onPaginationTypeChange}
+              onChange={this.onPaginationTypeChange}
               okText={t('list.select.ok')}
               dismissText={t('list.select.dismiss')}
               cols={1}

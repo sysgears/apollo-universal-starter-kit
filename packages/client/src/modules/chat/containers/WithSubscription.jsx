@@ -7,7 +7,7 @@ import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 export default Component => {
   return class MessagesWithSubscription extends React.Component {
     static propTypes = {
-      filter: PropTypes.object
+      messages: PropTypes.object
     };
 
     render() {

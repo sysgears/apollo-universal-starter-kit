@@ -8,13 +8,13 @@ import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
 import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
-import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 import { withUser } from '../../user/containers/AuthBase';
 import withUuid from './WithUuid';
 import ChatOperations from './ChatOperations';
 import messageImage from './MessageImage';
 import messagesFormatter from './MessagesFormatter';
 import chatConfig from '../../../../../../config/chat';
+import withSubscription from './WithSubscription';
 
 function AddMessage(prev, node) {
   // ignore if duplicate
@@ -98,59 +98,28 @@ class Chat extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     messages: PropTypes.object,
-    subscribeToMore: PropTypes.func.isRequired,
     loadData: PropTypes.func.isRequired
   };
 
-  componentDidUpdate({ messages: prevMessages }) {
-    const { loading, messages } = this.props;
-    if (!loading && messages) {
-      const endCursor = messages.pageInfo.endCursor || 0;
-      const prevEndCursor = prevMessages ? prevMessages.pageInfo.endCursor : null;
-      // Check if props have changed and, if necessary, stop the subscription
-      if (this.subscription && prevEndCursor !== endCursor) {
-        this.subscription();
-        this.subscription = null;
-      }
-      if (!this.subscription) {
-        this.subscribeToMessageList(endCursor);
-      }
+  componentDidUpdate() {
+    const { messagesUpdated, updateQuery } = this.props;
+    if (messagesUpdated) {
+      this.updateMessagesState(messagesUpdated, updateQuery);
     }
   }
 
-  componentWillUnmount() {
-    if (this.subscription) {
-      // unsubscribe
-      this.subscription();
-    }
-  }
-
-  subscribeToMessageList = endCursor => {
-    const { subscribeToMore } = this.props;
-
-    this.subscription = subscribeToMore({
-      document: MESSAGES_SUBSCRIPTION,
-      variables: { endCursor },
-      updateQuery: (
-        prev,
-        {
-          subscriptionData: {
-            data: {
-              messagesUpdated: { mutation, node }
-            }
-          }
-        }
-      ) => {
-        let newResult = prev;
-        if (mutation === 'CREATED') {
-          newResult = AddMessage(prev, node);
-        } else if (mutation === 'DELETED') {
-          newResult = DeleteMessage(prev, node.id);
-        } else if (mutation === 'UPDATED') {
-          newResult = EditMessage(prev, node);
-        }
-
-        return newResult;
+  updateMessagesState = (messagesUpdated, updateQuery) => {
+    const { mutation, node } = messagesUpdated;
+    updateQuery(prev => {
+      switch (mutation) {
+        case 'CREATED':
+          return AddMessage(prev, node);
+        case 'DELETED':
+          return DeleteMessage(prev, node.id);
+        case 'UPDATED':
+          return EditMessage(prev, node);
+        default:
+          return prev;
       }
     });
   };
@@ -169,7 +138,7 @@ export default compose(
       };
     },
     props: ({ data }) => {
-      const { loading, error, messages, fetchMore, subscribeToMore } = data;
+      const { loading, error, messages, fetchMore, updateQuery } = data;
       const loadData = (after, dataDelivery) => {
         return fetchMore({
           variables: {
@@ -197,7 +166,7 @@ export default compose(
         });
       };
       if (error) throw new Error(error);
-      return { loading, messages, subscribeToMore, loadData };
+      return { loading, messages, updateQuery, loadData };
     }
   }),
   graphql(ADD_MESSAGE, {
@@ -205,18 +174,6 @@ export default compose(
       addMessage: async ({ text, userId, username, uuid, quotedId, attachment, quotedMessage }) => {
         mutate({
           variables: { input: { text, uuid, quotedId, attachment } },
-          updateQueries: {
-            messages: (
-              prev,
-              {
-                mutationResult: {
-                  data: { addMessage }
-                }
-              }
-            ) => {
-              return AddMessage(prev, addMessage);
-            }
-          },
           optimisticResponse: {
             __typename: 'Mutation',
             addMessage: {
@@ -251,18 +208,6 @@ export default compose(
               id: id,
               __typename: 'Message'
             }
-          },
-          updateQueries: {
-            messages: (
-              prev,
-              {
-                mutationResult: {
-                  data: { deleteMessage }
-                }
-              }
-            ) => {
-              return DeleteMessage(prev, deleteMessage.id);
-            }
           }
         });
       }
@@ -291,18 +236,6 @@ export default compose(
               path: null,
               __typename: 'Message'
             }
-          },
-          updateQueries: {
-            messages: (
-              prev,
-              {
-                mutationResult: {
-                  data: { editMessage }
-                }
-              }
-            ) => {
-              return EditMessage(prev, editMessage);
-            }
           }
         });
       }
@@ -312,5 +245,6 @@ export default compose(
   withUuid,
   withUser,
   messageImage,
-  messagesFormatter
+  messagesFormatter,
+  withSubscription
 )(Chat);

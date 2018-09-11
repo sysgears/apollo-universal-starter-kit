@@ -79,18 +79,19 @@ export default class ChatOperations extends React.Component {
     }
   };
 
-  onLongPress = (context, currentMessage, id, deleteMessage, setEditState) => {
-    const { t } = this.props;
+  onLongPress = ({ actionSheet }, currentMessage, id) => {
+    const { t, deleteMessage } = this.props;
+    const { _id: messageId, text, user } = currentMessage;
     const options = [t('msg.btn.copy'), t('msg.btn.reply')];
 
-    if (id === currentMessage.user._id) {
+    if (id === user._id) {
       options.push(t('msg.btn.edit'), t('msg.btn.delete'));
     }
 
-    context.actionSheet().showActionSheetWithOptions({ options }, buttonIndex => {
+    actionSheet().showActionSheetWithOptions({ options }, buttonIndex => {
       switch (buttonIndex) {
         case 0:
-          Clipboard.setString(currentMessage.text);
+          Clipboard.setString(text);
           break;
 
         case 1:
@@ -98,11 +99,11 @@ export default class ChatOperations extends React.Component {
           break;
 
         case 2:
-          setEditState(currentMessage);
+          this.setEditState(currentMessage);
           break;
 
         case 3:
-          deleteMessage(currentMessage._id);
+          deleteMessage(messageId);
           break;
       }
     });
@@ -163,7 +164,7 @@ export default class ChatOperations extends React.Component {
   };
 
   render() {
-    const { currentUser, deleteMessage, uuid, messages, loading, t } = this.props;
+    const { currentUser, uuid, messages, loading, t } = this.props;
 
     if (loading) {
       return <Loading text={t('loading')} />;
@@ -189,9 +190,7 @@ export default class ChatOperations extends React.Component {
             renderChatFooter={this.renderChatFooter}
             renderCustomView={this.renderCustomView}
             renderActions={this.renderCustomActions}
-            onLongPress={(context, currentMessage) =>
-              this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
-            }
+            onLongPress={(context, currentMessage) => this.onLongPress(context, currentMessage, id)}
           />
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? null : 'padding'} keyboardVerticalOffset={120} />
         </View>

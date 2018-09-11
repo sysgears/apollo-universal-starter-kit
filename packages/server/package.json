@@ -110,7 +110,6 @@
     "react-stripe-elements": "^1.2.1",
     "redux": "^4.0.0",
     "serialize-javascript": "^1.4.0",
-    "shelljs": "^0.8.1",
     "shortid": "^2.2.8",
     "source-map-support": "^0.5.0",
     "sourcemapped-stacktrace": "^1.1.8",

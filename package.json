@@ -135,7 +135,8 @@
     "webpack-merge": "^4.1.4",
     "webpack-node-externals": "^1.7.2",
     "webpack-sources": "^1.1.0",
-    "webpack-virtual-modules": "^0.1.10"
+    "webpack-virtual-modules": "^0.1.10",
+    "shelljs": "^0.8.1"
   },
   "optionalDependencies": {
     "dotenv": "^6.0.0",

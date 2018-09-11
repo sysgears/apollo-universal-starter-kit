@@ -1,11 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { TranslateFunction } from '../../../i18n';
 
-const $Module$View = () => {
+interface $Module$ViewProps {
+  t: TranslateFunction;
+}
+
+const $Module$View = ({ t }: $Module$ViewProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.element}>
-        <Text style={styles.box}>Hello $Module$!</Text>
+        <Text style={styles.box}>{t('welcomeText')}</Text>
       </View>
     </View>
   );

@@ -1,5 +1,16 @@
-extend type Query {}
+# Entity
+type TypeName {
+  typeName: String!
+}
 
-extend type Mutation {}
+extend type Query {
+  queryName: TypeName
+}
 
-extend type Subscription {}
+extend type Mutation {
+  mutationName(varName: Int!): TypeName
+}
+
+extend type Subscription {
+  subscriptionName: TypeName
+}

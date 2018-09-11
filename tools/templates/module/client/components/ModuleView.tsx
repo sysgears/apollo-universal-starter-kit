@@ -1,16 +1,26 @@
-/*tslint:disable:no-implicit-dependencies*/
 import React from 'react';
 import Helmet from 'react-helmet';
 import { PageLayout } from '../../common/components/web';
+import { TranslateFunction } from '../../../i18n';
+import settings from '../../../../../../settings';
 
-const renderMetaData = () => <Helmet title="$Module$" meta={[{ name: 'description', content: '$Module$ page' }]} />;
+interface $Module$ViewProps {
+  t: TranslateFunction;
+}
 
-const $Module$View = () => {
+const renderMetaData = (t: TranslateFunction) => (
+  <Helmet
+    title={`${settings.app.name} - ${t('title')}`}
+    meta={[{ name: 'description', content: `${settings.app.name} - ${t('meta')}` }]}
+  />
+);
+
+const $Module$View = ({ t }: $Module$ViewProps) => {
   return (
     <PageLayout>
-      {renderMetaData()}
+      {renderMetaData(t)}
       <div className="text-center">
-        <p>Hello $Module$!</p>
+        <p>{t('welcomeText')}</p>
       </div>
     </PageLayout>
   );

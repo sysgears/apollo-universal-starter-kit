@@ -1,10 +1,13 @@
-/*tslint:disable:no-implicit-dependencies*/
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
-import { IconButton } from '../common/components/native';
+import resources from './locales';
+import { HeaderTitle, IconButton } from '../common/components/native';
 import $Module$ from './containers/$Module$';
 import Feature from '../connector.native';
+import translate from '../../i18n';
+
+const HeaderTitleWithI18n = translate('$module$')(HeaderTitle);
 
 export default new Feature({
   drawerItem: {
@@ -13,7 +16,7 @@ export default new Feature({
         $Module$: {
           screen: $Module$,
           navigationOptions: ({ navigation }: any) => ({
-            headerTitle: `$Module$`,
+            headerTitle: <HeaderTitleWithI18n style="subTitle" />,
             headerLeft: (
               <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
             ),
@@ -22,8 +25,9 @@ export default new Feature({
         }
       }),
       navigationOptions: {
-        drawerLabel: `$Module$`
+        drawerLabel: <HeaderTitleWithI18n />
       }
     }
-  }
+  },
+  localization: { ns: '$module$', resources }
 });

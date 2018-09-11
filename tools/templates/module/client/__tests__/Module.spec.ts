@@ -1,4 +1,3 @@
-/*tslint:disable:no-implicit-dependencies*/
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 

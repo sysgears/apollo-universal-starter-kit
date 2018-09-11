@@ -1,4 +1,3 @@
-/*tslint:disable:no-implicit-dependencies*/
 import chai from 'chai';
 import { step } from 'mocha-steps';
 import { getServer, getApollo } from '../../../testHelpers/integrationSetup';

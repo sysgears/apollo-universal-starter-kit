@@ -40,7 +40,8 @@ export default pubsub => ({
     })
   },
   Mutation: {
-    async addMessage(obj, { input }, { Chat, user }) {
+    async addMessage(obj, { input }, { Chat, user, req }) {
+      const { t } = req;
       const { attachment } = input;
       const userId = user ? user.id : null;
       const {
@@ -48,7 +49,7 @@ export default pubsub => ({
       } = modules;
 
       if (!fileSystemStorage) {
-        throw new Error('Unable to add message with attachment.');
+        throw new Error(t('chat:messageNotAdded'));
       }
 
       const result = attachment ? await fileSystemStorage.save(await attachment, settings.upload.uploadDir) : null;
@@ -65,7 +66,8 @@ export default pubsub => ({
       });
       return message;
     },
-    async deleteMessage(obj, { id }, { Chat }) {
+    async deleteMessage(obj, { id }, { Chat, req }) {
+      const { t } = req;
       const {
         data: [{ fileSystemStorage }]
       } = modules;
@@ -78,7 +80,7 @@ export default pubsub => ({
         try {
           await fileSystemStorage.delete(attachment.path);
         } catch (e) {
-          throw new Error('Unable to delete attachment.');
+          throw new Error(t('chat:fileNotDeleted'));
         }
       }
 

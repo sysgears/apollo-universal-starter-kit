@@ -4,28 +4,29 @@ const chalk = require('chalk');
 const { copyFiles, renameFiles, computeModulesPath } = require('../helpers/util');
 
 /**
- * Add module in client or server and add new module to the Feature connector
- * @param logger
- * @param templatesPath
- * @param module
- * @param location
- * @param finished
+ * Adds module in client or server and adds a new module to the Feature connector.
+ *
+ * @param logger - The Logger.
+ * @param templatesPath - The path to the templates for a new module.
+ * @param moduleName - The name of a new module.
+ * @param location - The location for a new module [client|server|both].
+ * @param finished - The flag about the end of the generating process.
  */
-function addModule(logger, templatesPath, module, location, finished = true) {
+function addModule(logger, templatesPath, moduleName, location, finished = true) {
   logger.info(`Copying ${location} files…`);
 
   // create new module directory
-  const modulePath = computeModulesPath(location, module);
-  const newModule = shell.mkdir(modulePath);
+  const destinationPath = computeModulesPath(location, moduleName);
+  const newModule = shell.mkdir(destinationPath);
 
   // continue only if directory does not jet exist
   if (newModule.code !== 0) {
-    logger.error(chalk.red(`The ${module} directory is already exists.`));
+    logger.error(chalk.red(`The ${moduleName} directory is already exists.`));
     process.exit();
   }
   //copy and rename templates in destination directory
-  copyFiles(modulePath, templatesPath, location);
-  renameFiles(modulePath, module);
+  copyFiles(destinationPath, templatesPath, location);
+  renameFiles(destinationPath, moduleName);
 
   logger.info(chalk.green(`✔ The ${location} files have been copied!`));
 
@@ -37,7 +38,7 @@ function addModule(logger, templatesPath, module, location, finished = true) {
 
   try {
     // prepend import module
-    indexContent = `import ${module} from './${module}';\n` + fs.readFileSync(indexPath);
+    indexContent = `import ${moduleName} from './${moduleName}';\n` + fs.readFileSync(indexPath);
   } catch (e) {
     logger.error(chalk.red(`Failed to read ${indexPath} file`));
     process.exit();
@@ -49,7 +50,7 @@ function addModule(logger, templatesPath, module, location, finished = true) {
 
   // add module to Feature connector
   shell
-    .ShellString(indexContent.replace(RegExp(featureRegExp, 'g'), `Feature(${module}, ${featureModules})`))
+    .ShellString(indexContent.replace(RegExp(featureRegExp, 'g'), `Feature(${moduleName}, ${featureModules})`))
     .to(indexPath);
 
   if (finished) {

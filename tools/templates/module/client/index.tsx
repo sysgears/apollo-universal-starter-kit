@@ -1,3 +1,4 @@
+/*tslint:disable:no-implicit-dependencies*/
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';

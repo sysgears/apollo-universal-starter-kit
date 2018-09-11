@@ -1,10 +1,11 @@
-/*eslint-disable no-unused-vars*/
+/*tslint:disable:no-implicit-dependencies*/
 import chai from 'chai';
 import { step } from 'mocha-steps';
 import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
 
 describe('$Module$ API works', () => {
-  let server, apollo;
+  let server: any;
+  let apollo: any;
 
   before(() => {
     server = getServer();

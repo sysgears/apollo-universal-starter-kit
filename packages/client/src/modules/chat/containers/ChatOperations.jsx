@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, KeyboardAvoidingView, Clipboard, Platform } from 'react-native';
+import { View, KeyboardAvoidingView, Clipboard, Platform, Text, StyleSheet } from 'react-native';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 
 import ChatFooter from '../components/ChatFooter';
 import CustomView from '../components/CustomView';
 import RenderCustomActions from '../components/RenderCustomActions';
-import { Loading } from '../../common/components/native';
+import { Loading, Modal } from '../../common/components/native';
 import chatConfig from '../../../../../../config/chat';
 
 export default class ChatOperations extends React.Component {
@@ -35,7 +35,8 @@ export default class ChatOperations extends React.Component {
     isEdit: false,
     messageInfo: null,
     isQuoted: false,
-    quotedMessage: null
+    quotedMessage: null,
+    notify: null
   };
 
   setMessageState = text => {
@@ -54,7 +55,7 @@ export default class ChatOperations extends React.Component {
         text: message,
         quotedMessage: quotedMessage ? quotedMessage : defQuote,
         uuid
-      });
+      }).then(res => this.setState({ notify: res && res.error ? res.error : null }));
       this.setState({ isEdit: false });
     } else {
       const {
@@ -73,7 +74,7 @@ export default class ChatOperations extends React.Component {
         quotedId,
         quotedMessage: quotedMessage ? quotedMessage : defQuote,
         attachment
-      });
+      }).then(res => this.setState({ notify: res && res.error ? res.error : null }));
 
       this.setState({ isQuoted: false, quotedMessage: null });
     }
@@ -103,7 +104,7 @@ export default class ChatOperations extends React.Component {
           break;
 
         case 3:
-          deleteMessage(messageId);
+          deleteMessage(messageId).then(res => this.setState({ notify: res && res.error ? res.error : null }));
           break;
       }
     });
@@ -163,38 +164,59 @@ export default class ChatOperations extends React.Component {
     }
   };
 
+  renderModal = () => {
+    const { notify } = this.state;
+    if (notify) {
+      return (
+        <Modal isVisible={!!notify} onBackdropPress={() => this.setState({ notify: null })}>
+          <View style={styles.alertTextWrapper}>
+            <Text>{notify}</Text>
+          </View>
+        </Modal>
+      );
+    }
+  };
+
   render() {
     const { currentUser, uuid, messages, loading, t } = this.props;
 
     if (loading) {
       return <Loading text={t('loading')} />;
-    } else {
-      this.allowDataLoad = true;
-      const { message } = this.state;
-      const edges = messages ? messages.edges : [];
-      const { id = uuid, username = null } = currentUser ? currentUser : {};
-      return (
-        <View style={{ flex: 1 }}>
-          <GiftedChat
-            {...chatConfig.giftedChat}
-            ref={gc => (this.gc = gc)}
-            text={message}
-            onInputTextChanged={text => this.setMessageState(text)}
-            placeholder={t('input.text')}
-            messages={edges}
-            renderSend={this.renderSend}
-            onSend={this.onSend}
-            loadEarlier={messages.totalCount > messages.edges.length}
-            onLoadEarlier={this.onLoadEarlier}
-            user={{ _id: id, name: username }}
-            renderChatFooter={this.renderChatFooter}
-            renderCustomView={this.renderCustomView}
-            renderActions={this.renderCustomActions}
-            onLongPress={(context, currentMessage) => this.onLongPress(context, currentMessage, id)}
-          />
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? null : 'padding'} keyboardVerticalOffset={120} />
-        </View>
-      );
     }
+
+    this.allowDataLoad = true;
+    const { message } = this.state;
+    const edges = messages ? messages.edges : [];
+    const { id = uuid, username = null } = currentUser ? currentUser : {};
+    return (
+      <View style={{ flex: 1 }}>
+        {this.renderModal()}
+        <GiftedChat
+          {...chatConfig.giftedChat}
+          ref={gc => (this.gc = gc)}
+          text={message}
+          onInputTextChanged={text => this.setMessageState(text)}
+          placeholder={t('input.text')}
+          messages={edges}
+          renderSend={this.renderSend}
+          onSend={this.onSend}
+          loadEarlier={messages.totalCount > messages.edges.length}
+          onLoadEarlier={this.onLoadEarlier}
+          user={{ _id: id, name: username }}
+          renderChatFooter={this.renderChatFooter}
+          renderCustomView={this.renderCustomView}
+          renderActions={this.renderCustomActions}
+          onLongPress={(context, currentMessage) => this.onLongPress(context, currentMessage, id)}
+        />
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? null : 'padding'} keyboardVerticalOffset={120} />
+      </View>
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  alertTextWrapper: {
+    backgroundColor: '#fff',
+    padding: 10
+  }
+});

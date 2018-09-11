@@ -172,108 +172,120 @@ export default compose(
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
       addMessage: async ({ text, userId, username, uuid, quotedId, attachment, quotedMessage }) => {
-        mutate({
-          variables: { input: { text, uuid, quotedId, attachment } },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            addMessage: {
-              __typename: 'Message',
-              createdAt: new Date().toISOString(),
-              text,
-              username,
-              userId,
-              uuid,
-              id: null,
-              quotedId,
-              quotedMessage: {
-                __typename: 'QuotedMessage',
-                ...quotedMessage
-              },
-              filename: attachment ? attachment.name : null,
-              path: attachment ? attachment.uri : null
-            }
-          },
-          updateQueries: {
-            messages: (
-              prev,
-              {
-                mutationResult: {
-                  data: { addMessage }
-                }
+        try {
+          await mutate({
+            variables: { input: { text, uuid, quotedId, attachment } },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              addMessage: {
+                __typename: 'Message',
+                createdAt: new Date().toISOString(),
+                text,
+                username,
+                userId,
+                uuid,
+                id: null,
+                quotedId,
+                quotedMessage: {
+                  __typename: 'QuotedMessage',
+                  ...quotedMessage
+                },
+                filename: attachment ? attachment.name : null,
+                path: attachment ? attachment.uri : null
               }
-            ) => {
-              return AddMessage(prev, addMessage);
+            },
+            updateQueries: {
+              messages: (
+                prev,
+                {
+                  mutationResult: {
+                    data: { addMessage }
+                  }
+                }
+              ) => {
+                return AddMessage(prev, addMessage);
+              }
             }
-          }
-        });
+          });
+        } catch (e) {
+          return { error: e.graphQLErrors[0].message };
+        }
       }
     })
   }),
   graphql(DELETE_MESSAGE, {
     props: ({ mutate }) => ({
-      deleteMessage: id => {
-        mutate({
-          variables: { id },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            deleteMessage: {
-              id,
-              __typename: 'Message'
-            }
-          },
-          updateQueries: {
-            messages: (
-              prev,
-              {
-                mutationResult: {
-                  data: { deleteMessage }
-                }
+      deleteMessage: async id => {
+        try {
+          await mutate({
+            variables: { id },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              deleteMessage: {
+                id,
+                __typename: 'Message'
               }
-            ) => {
-              return DeleteMessage(prev, deleteMessage.id);
+            },
+            updateQueries: {
+              messages: (
+                prev,
+                {
+                  mutationResult: {
+                    data: { deleteMessage }
+                  }
+                }
+              ) => {
+                return DeleteMessage(prev, deleteMessage.id);
+              }
             }
-          }
-        });
+          });
+        } catch (e) {
+          return { error: e.graphQLErrors[0].message };
+        }
       }
     })
   }),
   graphql(EDIT_MESSAGE, {
     props: ({ mutate }) => ({
-      editMessage: ({ text, id, createdAt, userId, username, uuid, quotedId, quotedMessage }) => {
-        mutate({
-          variables: { input: { text, id } },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            editMessage: {
-              id,
-              text,
-              userId,
-              username,
-              createdAt: createdAt.toISOString(),
-              uuid,
-              quotedId,
-              quotedMessage: {
-                __typename: 'QuotedMessage',
-                ...quotedMessage
-              },
-              filename: null,
-              path: null,
-              __typename: 'Message'
-            }
-          },
-          updateQueries: {
-            messages: (
-              prev,
-              {
-                mutationResult: {
-                  data: { editMessage }
-                }
+      editMessage: async ({ text, id, createdAt, userId, username, uuid, quotedId, quotedMessage }) => {
+        try {
+          await mutate({
+            variables: { input: { text, id } },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              editMessage: {
+                id,
+                text,
+                userId,
+                username,
+                createdAt: createdAt.toISOString(),
+                uuid,
+                quotedId,
+                quotedMessage: {
+                  __typename: 'QuotedMessage',
+                  ...quotedMessage
+                },
+                filename: null,
+                path: null,
+                __typename: 'Message'
               }
-            ) => {
-              return EditMessage(prev, editMessage);
+            },
+            updateQueries: {
+              messages: (
+                prev,
+                {
+                  mutationResult: {
+                    data: { editMessage }
+                  }
+                }
+              ) => {
+                return EditMessage(prev, editMessage);
+              }
             }
-          }
-        });
+          });
+        } catch (e) {
+          return { error: e.graphQLErrors[0].message };
+        }
       }
     })
   }),

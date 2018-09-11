@@ -5,12 +5,7 @@ import { PageLayout } from '../../common/components/web';
 const renderMetaData = () => (
   <Helmet
     title="$Module$"
-    meta={[
-      {
-        name: 'description',
-        content: '$Module$ page'
-      }
-    ]}
+    meta={[{name: 'description', content: '$Module$ page'}]}
   />
 );
 

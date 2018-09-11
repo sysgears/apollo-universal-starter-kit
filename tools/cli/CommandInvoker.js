@@ -1,4 +1,4 @@
-const { CRUD_TEMPLATES, MODULE_TEMPLATES } = require('./config');
+const { MODULE_TEMPLATES } = require('./config');
 
 class CommandInvoker {
   static runCommand(func, location, ...args) {
@@ -12,16 +12,9 @@ class CommandInvoker {
     }
   }
 
-  constructor(addModule, addCrud, deleteModule) {
+  constructor(addModule, deleteModule) {
     this.addModule = addModule;
-    this.addCrud = addCrud;
     this.deleteModule = deleteModule;
-  }
-
-  runAddCrud(args, options, logger) {
-    const { module, tablePrefix = '' } = args;
-    // server - is only available location for addCrud, client in development
-    CommandInvoker.runCommand(this.addCrud, 'server', logger, CRUD_TEMPLATES, module, tablePrefix);
   }
 
   runAddModule(args, options, logger) {

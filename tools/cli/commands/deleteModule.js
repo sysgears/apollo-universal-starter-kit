@@ -1,8 +1,8 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const deleteMigrations = require('./subCommands/deleteMigrations');
 const { computeModulesPath } = require('../helpers/util');
+
 /**
  * Delete module
  * @param logger
@@ -23,8 +23,8 @@ function deleteModule(logger, module, options, location) {
     // get index file path
     const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
     const indexPath = modulesPath + indexFullFileName;
-
     let indexContent;
+
     try {
       indexContent = fs.readFileSync(indexPath);
     } catch (e) {
@@ -48,10 +48,6 @@ function deleteModule(logger, module, options, location) {
 
     fs.writeFileSync(indexPath, contentWithoutDeletedModule);
 
-    // delete migrations and seeds if server location and option -m specified
-    if (location === 'server' && options.m) {
-      deleteMigrations(logger, module);
-    }
     logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));
   } else {
     logger.info(chalk.red(`✘ Module ${location} location for ${modulePath} not found!`));

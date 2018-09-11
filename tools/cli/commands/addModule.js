@@ -34,6 +34,7 @@ function addModule(logger, templatesPath, module, location, finished = true) {
   const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
   const indexPath = modulesPath + indexFullFileName;
   let indexContent;
+
   try {
     // prepend import module
     indexContent = `import ${module} from './${module}';\n` + fs.readFileSync(indexPath);

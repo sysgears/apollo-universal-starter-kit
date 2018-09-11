@@ -4,14 +4,14 @@ import { step } from 'mocha-steps';
 import Renderer from '../../../testHelpers/Renderer';
 import { updateContent } from '../../../testHelpers/testUtils';
 
-describe('TodoList UI works', () => {
+describe('$Module$ UI works', () => {
   const renderer = new Renderer({});
   let app;
   let content;
 
-  step('TodoList page renders on mount', () => {
+  step('$Module$ page renders on mount', () => {
     app = renderer.mount();
-    renderer.history.push('/todoList');
+    renderer.history.push('/$Module$');
     content = updateContent(app.container);
     expect(content).to.not.be.empty;
   });

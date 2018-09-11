@@ -165,8 +165,7 @@ export default compose(
           }
         });
       };
-      if (error) throw new Error(error);
-      return { loading, messages, updateQuery, loadData };
+      return { error: error ? error.graphQLErrors[0].message : null, loading, messages, updateQuery, loadData };
     }
   }),
   graphql(ADD_MESSAGE, {

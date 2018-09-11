@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, KeyboardAvoidingView, Clipboard, Platform, Text, StyleSheet } from 'react-native';
+import { View, KeyboardAvoidingView, Clipboard, Platform } from 'react-native';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 
 import ChatFooter from '../components/ChatFooter';
 import CustomView from '../components/CustomView';
 import RenderCustomActions from '../components/RenderCustomActions';
-import { Loading, Modal } from '../../common/components/native';
+import { Loading } from '../../common/components/native';
+import ModalNotify from '../components/ModalNotify';
 import chatConfig from '../../../../../../config/chat';
 
 export default class ChatOperations extends React.Component {
@@ -38,6 +39,10 @@ export default class ChatOperations extends React.Component {
     quotedMessage: null,
     notify: null
   };
+
+  static getDerivedStateFromProps({ error }) {
+    return error ? { notify: error } : null;
+  }
 
   setMessageState = text => {
     this.setState({ message: text });
@@ -167,25 +172,19 @@ export default class ChatOperations extends React.Component {
   renderModal = () => {
     const { notify } = this.state;
     if (notify) {
-      return (
-        <Modal isVisible={!!notify} onBackdropPress={() => this.setState({ notify: null })}>
-          <View style={styles.alertTextWrapper}>
-            <Text>{notify}</Text>
-          </View>
-        </Modal>
-      );
+      return <ModalNotify notify={notify} callback={() => this.setState({ notify: null })} />;
     }
   };
 
   render() {
     const { currentUser, uuid, messages, loading, t } = this.props;
+    const { message } = this.state;
 
     if (loading) {
       return <Loading text={t('loading')} />;
     }
 
     this.allowDataLoad = true;
-    const { message } = this.state;
     const edges = messages ? messages.edges : [];
     const { id = uuid, username = null } = currentUser ? currentUser : {};
     return (
@@ -200,7 +199,7 @@ export default class ChatOperations extends React.Component {
           messages={edges}
           renderSend={this.renderSend}
           onSend={this.onSend}
-          loadEarlier={messages.totalCount > messages.edges.length}
+          loadEarlier={messages ? messages.totalCount > messages.edges.length : false}
           onLoadEarlier={this.onLoadEarlier}
           user={{ _id: id, name: username }}
           renderChatFooter={this.renderChatFooter}
@@ -213,10 +212,3 @@ export default class ChatOperations extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  alertTextWrapper: {
-    backgroundColor: '#fff',
-    padding: 10
-  }
-});

@@ -4,10 +4,10 @@ import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import url from 'url';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
 
-import { Modal } from '../../common/components/native';
 import chatConfig from '../../../../../../config/chat';
+import ModalNotify from '../components/ModalNotify';
 
 const {
   manifest: { bundleUrl }
@@ -142,13 +142,7 @@ const messageImage = Component => {
     renderModal = () => {
       const { notify } = this.state;
       if (notify) {
-        return (
-          <Modal isVisible={!!notify} onBackdropPress={() => this.setState({ notify: null })}>
-            <View style={styles.alertTextWrapper}>
-              <Text>{notify}</Text>
-            </View>
-          </Modal>
-        );
+        return <ModalNotify notify={notify} callback={() => this.setState({ notify: null })} />;
       }
     };
 
@@ -170,12 +164,5 @@ const messageImage = Component => {
     }
   };
 };
-
-const styles = StyleSheet.create({
-  alertTextWrapper: {
-    backgroundColor: '#fff',
-    padding: 10
-  }
-});
 
 export default messageImage;

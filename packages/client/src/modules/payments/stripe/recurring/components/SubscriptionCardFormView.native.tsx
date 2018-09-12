@@ -1,15 +1,18 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-// TODO: move it to the types file
-// @ts-ignore
 import { CreditCardInput } from 'react-native-credit-card-input';
 
 import { Button, primary } from '../../../../common/components/native';
 
+interface SubscriptionCardFormViewProps {
+  submitting: boolean;
+  buttonName: string;
+  onSubmit: (subscriptionInput: any, stripe?: any) => void;
+}
+
 // TODO: translate
-// TODO: types
-export default class SubscriptionCardFormView extends React.Component<any, any> {
-  constructor(props: any) {
+export default class SubscriptionCardFormView extends React.Component<SubscriptionCardFormViewProps, any> {
+  constructor(props: SubscriptionCardFormViewProps) {
     super(props);
     this.state = { cardInfo: { valid: false } };
   }

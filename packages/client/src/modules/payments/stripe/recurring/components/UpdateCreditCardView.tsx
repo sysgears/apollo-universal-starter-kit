@@ -8,24 +8,26 @@ import { PageLayout } from '../../../../common/components/web';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import settings from '../../../../../../../../settings';
+import { CreditCardInput } from '../types';
 
 interface UpdateCardViewProps {
-  onSubmit: any; // TODO: write types
+  onSubmit: (subscriptionInput: CreditCardInput, stripe: any) => void;
   t: TranslateFunction;
   submitting: boolean;
 }
 
-export default ({ onSubmit, t, submitting }: UpdateCardViewProps) => (
-  <PageLayout>
-    <Helmet
-      title={`${settings.app.name} - ${t('update.title')}`}
-      meta={[{ name: 'description', content: `${settings.app.name} - ${t('update.meta')}` }]}
-    />
-    <LayoutCenter>
-      <h1 className="text-center">{t('update.subTitle')}</h1>
-      <Elements>
-        <SubscriptionCardForm submitting={submitting} onSubmit={onSubmit} buttonName={t('update.action')} />
-      </Elements>
-    </LayoutCenter>
-  </PageLayout>
-);
+export default (props: UpdateCardViewProps) => {
+  const { t } = props;
+
+  return (
+    <PageLayout>
+      <Helmet title={`${settings.app.name} - ${t('update.title')}`} />
+      <LayoutCenter>
+        <h1 className="text-center">{t('update.subTitle')}</h1>
+        <Elements>
+          <SubscriptionCardForm {...props} buttonName={t('update.action')} />
+        </Elements>
+      </LayoutCenter>
+    </PageLayout>
+  );
+};

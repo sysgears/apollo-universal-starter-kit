@@ -14,7 +14,7 @@ interface CardInfoViewProps {
     brand: string;
   };
   t: TranslateFunction;
-  navigation?: any;
+  navigation: any;
 }
 
 const renderCardItem = (title: string, value: string) => (
@@ -50,8 +50,6 @@ const CreditCardInfoView = ({ loading, t, creditCard, navigation }: CardInfoView
   );
 };
 
-export default withNavigation(CreditCardInfoView);
-
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -60,3 +58,5 @@ const styles = StyleSheet.create({
     padding: 10
   }
 });
+
+export default withNavigation(CreditCardInfoView);

@@ -7,8 +7,8 @@ import { TranslateFunction } from '../../../../../i18n';
 interface CancelSubscriptionViewProps {
   loading: boolean;
   active: boolean;
-  onClick: () => void; // TODO: write types
-  errors: any;
+  onClick: () => void;
+  errors: string;
   cancelling: boolean;
   t: TranslateFunction;
 }

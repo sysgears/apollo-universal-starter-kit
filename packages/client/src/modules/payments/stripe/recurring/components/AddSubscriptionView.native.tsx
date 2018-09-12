@@ -2,8 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
+import { TranslateFunction } from '../../../../../i18n';
+import { CreditCardInput } from '../types';
 
-export default (props: any) => {
+interface AddSubscriptionViewProps {
+  t: TranslateFunction;
+  submitting: boolean;
+  onSubmit: (subscriptionInput: CreditCardInput, stripe: any) => void;
+}
+
+export default (props: AddSubscriptionViewProps) => {
   const { t } = props;
 
   return (
@@ -19,6 +27,7 @@ export default (props: any) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

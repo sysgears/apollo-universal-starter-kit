@@ -7,26 +7,28 @@ import { LayoutCenter, clientOnly } from '../../../../common/components/index.we
 import { PageLayout } from '../../../../common/components/web';
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import settings from '../../../../../../../../settings';
+import { CreditCardInput } from '../types';
 
 const ElementsClientOnly = clientOnly(Elements);
 
-interface SubscriptionViewProps {
-  onSubmit: (values: any) => void; // TODO: write types
+interface AddSubscriptionViewProps {
   t: TranslateFunction;
   submitting: boolean;
+  onSubmit: (subscriptionInput: CreditCardInput, stripe: any) => void;
 }
 
-export default ({ onSubmit, t, submitting }: SubscriptionViewProps) => (
-  <PageLayout>
-    <Helmet
-      title={`${settings.app.name} - ${t('title')}`}
-      meta={[{ name: 'description', content: `${settings.app.name} - ${t('meta')}` }]}
-    />
-    <LayoutCenter>
-      <h1 className="text-center">{t('subTitle')}</h1>
-      <ElementsClientOnly>
-        <SubscriptionCardForm submitting={submitting} onSubmit={onSubmit} buttonName={t('action')} />
-      </ElementsClientOnly>
-    </LayoutCenter>
-  </PageLayout>
-);
+export default (props: AddSubscriptionViewProps) => {
+  const { t } = props;
+
+  return (
+    <PageLayout>
+      <Helmet title={`${settings.app.name} - ${t('title')}`} />
+      <LayoutCenter>
+        <h1 className="text-center">{t('subTitle')}</h1>
+        <ElementsClientOnly>
+          <SubscriptionCardForm {...props} buttonName={t('action')} />
+        </ElementsClientOnly>
+      </LayoutCenter>
+    </PageLayout>
+  );
+};

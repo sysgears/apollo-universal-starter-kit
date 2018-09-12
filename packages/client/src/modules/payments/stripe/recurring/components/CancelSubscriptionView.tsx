@@ -7,7 +7,7 @@ interface CancelSubscriptionViewProps {
   loading: boolean;
   active: boolean;
   onClick: () => void; // TODO: write types
-  errors: any;
+  errors: string;
   cancelling: boolean;
   t: TranslateFunction;
 }

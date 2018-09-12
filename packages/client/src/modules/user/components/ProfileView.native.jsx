@@ -8,7 +8,8 @@ import translate from '../../../i18n';
 
 import { Card, CardItem, CardText, CardHeader, CardLabel, Loading } from '../../common/components/native';
 import { linkText } from '../../common/components/native/styles';
-import SubscriptionProfile from '../../payments/stripe/recurring/containers/SubscriptionProfile';
+import CreditCardInfo from '../../payments/stripe/recurring/containers/CreditCardInfo';
+import CancelSubscription from '../../payments/stripe/recurring/containers/CancelSubscription';
 import settings from '../../../../../../settings';
 
 const renderProfileItem = (title, value, idx) => (
@@ -56,7 +57,8 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
             {settings.payments.stripe.recurring.enabled && (
               <Card>
                 <CardHeader title="Subscription info" />
-                <SubscriptionProfile />
+                <CreditCardInfo />
+                <CancelSubscription />
               </Card>
             )}
           </View>

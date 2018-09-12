@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
 import translate from '../../../i18n';
-import SubscriptionProfile from '../../payments/stripe/recurring/containers/SubscriptionProfile';
+import CreditCardInfo from '../../payments/stripe/recurring/containers/CreditCardInfo';
+import CancelSubscription from '../../payments/stripe/recurring/containers/CancelSubscription';
 import { LayoutCenter } from '../../common/components';
 import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
 
@@ -58,7 +59,12 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
                   <CardText>{currentUser.profile.fullName}</CardText>
                 </CardGroup>
               )}
-            {settings.payments.stripe.recurring.enabled && <SubscriptionProfile />}
+            {settings.payments.stripe.recurring.enabled && (
+              <Fragment>
+                <CreditCardInfo />
+                <CancelSubscription />
+              </Fragment>
+            )}
           </Card>
           <Link
             className="mt-2 btn user-link"

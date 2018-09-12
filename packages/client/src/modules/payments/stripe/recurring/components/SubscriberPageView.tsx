@@ -2,6 +2,8 @@ import React from 'react';
 import { TranslateFunction } from '../../../../../i18n';
 
 import { PageLayout } from '../../../../common/components/web';
+import Helmet from 'react-helmet';
+import settings from '../../../../../../../../settings';
 
 interface SubscribersOnlyViewProps {
   loading: boolean;
@@ -18,9 +20,10 @@ export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
 
   return (
     <PageLayout>
+      <Helmet title={`${settings.app.name} - ${t('subOnly.title')}`} />
       <h1>{t('subOnly.title')}</h1>
       <p>
-        {t('subOnly.msg')} {loading ? t('subOnly.load') : subscriberNumber.number}.
+        {t('subOnly.msg')} {subscriberNumber.number}.
       </p>
     </PageLayout>
   );

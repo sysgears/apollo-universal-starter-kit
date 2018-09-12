@@ -1,16 +1,28 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import SubscriptionCardForm from './SubscriptionCardFormView';
+import { CreditCardInput } from '../types';
+import { TranslateFunction } from '../../../../../i18n';
 
-export default (props: any) => (
-  <View style={styles.container}>
-    <ScrollView>
-      <View style={styles.cardFormWrapper}>
-        <SubscriptionCardForm {...props} buttonName="Update Card" />
-      </View>
-    </ScrollView>
-  </View>
-);
+interface UpdateCardViewProps {
+  onSubmit: (subscriptionInput: CreditCardInput, stripe: any) => void;
+  t: TranslateFunction;
+  submitting: boolean;
+}
+
+export default (props: UpdateCardViewProps) => {
+  const { t } = props;
+
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.cardFormWrapper}>
+          <SubscriptionCardForm {...props} buttonName={t('update.action')} />
+        </View>
+      </ScrollView>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

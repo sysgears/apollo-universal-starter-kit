@@ -11,15 +11,16 @@ import settings from '../../../../../../../../settings';
 import translate, { TranslateFunction } from '../../../../../i18n';
 import { PLATFORM } from '../../../../../../../common/utils';
 import { createCreditCardToken } from './stripeOperations';
+import { CreditCardInput } from '../types';
 
 interface UpdateCreditCardProps {
   t: TranslateFunction;
-  history: any; // TODO: write types
+  history: any;
   navigation: any;
 }
 
 // react-stripe-elements will not render on the server.
-class UpdateCreditCard extends React.Component<UpdateCreditCardProps, any> {
+class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: string]: any }> {
   constructor(props: UpdateCreditCardProps) {
     super(props);
     this.state = {
@@ -27,7 +28,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, any> {
     };
   }
 
-  public onSubmit = (updateCard: any) => async (creditCardInput: any, stripe?: any) => {
+  public onSubmit = (updateCard: any) => async (creditCardInput: CreditCardInput, stripe?: any) => {
     this.setState({ submitting: true });
     const { t, history, navigation } = this.props;
     const preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);

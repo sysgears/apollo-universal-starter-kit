@@ -15,15 +15,16 @@ import settings from '../../../../../../../../settings';
 import translate, { TranslateFunction } from '../../../../../i18n';
 import { createCreditCardToken } from './stripeOperations';
 import { PLATFORM } from '../../../../../../../common/utils';
+import { CreditCardInput } from '../types';
 
 interface AddSubscriptionProps {
   t: TranslateFunction;
-  history: any; // TODO: write types
+  history: any;
   navigation: any;
 }
 
 // react-stripe-elements will not render on the server and on the mobile.
-class AddSubscription extends React.Component<AddSubscriptionProps, any> {
+class AddSubscription extends React.Component<AddSubscriptionProps, { [key: string]: any }> {
   constructor(props: AddSubscriptionProps) {
     super(props);
     this.state = {
@@ -31,13 +32,14 @@ class AddSubscription extends React.Component<AddSubscriptionProps, any> {
     };
   }
 
-  public onSubmit = (addSubscription: any) => async (creditCardInput: any, stripe?: any) => {
+  public onSubmit = (addSubscription: any) => async (creditCardInput: CreditCardInput, stripe?: any) => {
     this.setState({ submitting: true });
     const { t, history, navigation } = this.props;
     const preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
     const { data } = await addSubscription({ variables: { input: preparedCreditCard } });
     const { addStripeSubscription } = data;
 
+    // TODO: implement error handlers
     if (addStripeSubscription.errors) {
       const submitError = { _error: t('errorMsg') };
       addStripeSubscription.errors.map((error: { [key: string]: any }) => (submitError[error.field] = error.message));
@@ -63,6 +65,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, any> {
         {addSubscription => {
           return (
             <Fragment>
+              {/* Stripe elements should render only for web*/}
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
                   <AddSubscriptionView

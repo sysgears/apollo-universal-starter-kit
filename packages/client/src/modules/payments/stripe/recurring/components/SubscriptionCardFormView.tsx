@@ -11,21 +11,18 @@ interface SubscriptionCardFormViewProps {
   submitting: boolean;
   buttonName: string;
   error: string;
-  handleSubmit: () => void; // TODO: write types
+  handleSubmit: () => void;
   onSubmit: (subscriptionInput: any, stripe: any) => void;
-  values: any;
+  values: {
+    name: string;
+  };
   stripe: any;
   t: TranslateFunction;
 }
 
-const SubscriptionCardFormView = ({
-  handleSubmit,
-  submitting,
-  buttonName,
-  error,
-  values,
-  t
-}: SubscriptionCardFormViewProps) => {
+const SubscriptionCardFormView = (props: SubscriptionCardFormViewProps) => {
+  const { handleSubmit, submitting, buttonName, error, values, t } = props;
+
   return (
     <Form layout="block" name="subscription" onSubmit={handleSubmit}>
       <Field
@@ -48,7 +45,8 @@ const SubscriptionCardFormView = ({
 
 const SubscriptionFormWithFormik = withFormik({
   mapPropsToValues: () => ({ name: '' }),
-  async handleSubmit({ name }, { props: { stripe, onSubmit } }: { props: SubscriptionCardFormViewProps }) {
+  async handleSubmit({ name }, { props }: { props: SubscriptionCardFormViewProps }) {
+    const { stripe, onSubmit } = props;
     onSubmit({ name }, stripe);
   },
   validate: values => validateForm(values, { name: [required] }),

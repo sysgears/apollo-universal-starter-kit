@@ -29,6 +29,7 @@ class CancelSubscription extends React.Component<CancelSubscriptionProps, { [key
 
   public render() {
     const { t } = this.props;
+
     return (
       <Query query={SUBSCRIPTION_QUERY} skip={__SERVER__} fetchPolicy="network-only">
         {({ loading, data }) => (

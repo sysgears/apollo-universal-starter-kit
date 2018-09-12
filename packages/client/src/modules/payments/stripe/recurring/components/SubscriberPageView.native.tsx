@@ -1,9 +1,7 @@
 import React from 'react';
-import { TranslateFunction } from '../../../../../i18n';
-
 import { Text, View } from 'react-native';
 
-// import { PageLayout } from '../../../../common/components/web';
+import { TranslateFunction } from '../../../../../i18n';
 
 interface SubscribersOnlyViewProps {
   loading: boolean;
@@ -18,15 +16,11 @@ export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
     return <Text>{t('loading')}</Text>; // TODO: remove all loaders from translation
   }
 
-  // TODO: should refactor
-  const subscriberNumberView =
-    subscriberNumber && subscriberNumber.number ? subscriberNumber.number : 'NO SUBSCRIPTION';
-
   return (
     <View>
       <Text>{t('subOnly.title')}</Text>
       <Text>
-        {t('subOnly.msg')} {subscriberNumberView}.
+        {t('subOnly.msg')} {subscriberNumber.number}.
       </Text>
     </View>
   );

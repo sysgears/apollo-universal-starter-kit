@@ -1,18 +1,21 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import translate from '../../../../i18n';
+import translate, { TranslateFunction } from '../../../../i18n';
 import { MenuItem } from '../../../../modules/common/components/web';
+import * as user from '../../../user/index.web';
+import settings from '../../../../../../../settings';
+import Feature from '../../../connector';
+
+import { SubscriptionAuthRouter } from './containers/Auth';
+import resources from './locales';
 import AddSubscription from './containers/AddSubscription';
 import SubscriberPage from './containers/SubscriberPage';
 import UpdateCreditCard from './containers/UpdateCreditCard';
-import { SubscriptionAuthRouter } from './containers/Auth';
-import { IfLoggedIn, AuthRoute } from '../../../user';
-import settings from '../../../../../../../settings';
-import resources from './locales';
-import Feature from '../../../connector';
 
-const NavLinkWithI18n = translate('subscription')(({ t }) => (
+const { AuthRoute, IfLoggedIn }: any = user;
+
+const NavLinkWithI18n = translate('subscription')(({ t }: { t: TranslateFunction }) => (
   <NavLink to="/subscribers-only" className="nav-link" activeClassName="active">
     {t('navLink')}
   </NavLink>
@@ -29,13 +32,15 @@ export default new Feature(
             exact
             role="user"
             path="/subscribers-only"
-            component={props => <SubscriptionAuthRouter {...props} loader={Loader} component={SubscriberPage} />}
+            component={(props: any) => <SubscriptionAuthRouter {...props} loader={Loader} component={SubscriberPage} />}
           />,
           <AuthRoute
             exact
             role="user"
             path="/update-card"
-            component={props => <SubscriptionAuthRouter {...props} loader={Loader} component={UpdateCreditCard} />}
+            component={(props: any) => (
+              <SubscriptionAuthRouter {...props} loader={Loader} component={UpdateCreditCard} />
+            )}
           />
         ],
         navItem: (

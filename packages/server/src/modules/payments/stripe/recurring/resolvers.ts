@@ -1,14 +1,11 @@
 import Stripe from 'stripe';
-
-// tslint:disable:no-var-requires
-// TODO: refactor from 'require' to 'import' after writing the types for graphql-auth module
-const withAuth = require('graphql-auth').default;
+import withAuth from 'graphql-auth';
 
 import log from '../../../../../../common/log';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
 
-const { secretKey } = settings.payments.stripe.recurring;
+const { secretKey, plan } = settings.payments.stripe.recurring;
 const stripe = new Stripe(secretKey);
 
 interface CreditCard {
@@ -67,7 +64,7 @@ export default () => ({
 
         const newSubscriber = await stripe.subscriptions.create({
           customer: stripeCustomerId,
-          items: [{ plan: 'basic' }]
+          items: [{ plan: plan.id }]
         });
 
         await StripeSubscription.editSubscription({

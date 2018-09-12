@@ -9,6 +9,13 @@ const { secretKey, endpointSecret } = settings.payments.stripe.recurring;
 const StripeSubscription = new StripeSubscriptionDAO();
 const stripe = new Stripe(secretKey);
 
+/**
+ * Gets user email from database and sends email.
+ *
+ * @param userId - The user id.
+ * @param subject - The title for email.
+ * @param html - The body for email.
+ */
 const sendEmailToUser = async (userId: number, subject: string, html: string) => {
   const { email }: any = await User.getUser(userId);
 
@@ -20,12 +27,18 @@ const sendEmailToUser = async (userId: number, subject: string, html: string) =>
   });
 };
 
-const deleteSubscription = async (stripeEvent: any, rootUrl: string) => {
+/**
+ * Deletes subscription and notifies user about canceling the subscription.
+ *
+ * @param stripeEvent - The stripe event.
+ * @param websiteUrl - The website url for sending to email.
+ */
+const deleteSubscription = async (stripeEvent: any, websiteUrl: string) => {
   const subscription = await StripeSubscription.getSubscriptionByStripeSubscriptionId(stripeEvent.data.object.id);
 
   if (subscription) {
     const { userId, stripeCustomerId, stripeSourceId } = subscription;
-    const url = `${rootUrl}/subscription`;
+    const url = `${websiteUrl}/subscription`;
 
     await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
     await StripeSubscription.editSubscription({
@@ -47,6 +60,12 @@ const deleteSubscription = async (stripeEvent: any, rootUrl: string) => {
   }
 };
 
+/**
+ * Notifies user via email about failed payment.
+ *
+ * @param stripeEvent - The stripe event.
+ * @param websiteUrl - The website url for sending to email.
+ */
 const notifyFailedSubscription = async (stripeEvent: any, websiteUrl: string) => {
   const subscription = await StripeSubscription.getSubscriptionByStripeCustomerId(stripeEvent.data.object.customer);
 

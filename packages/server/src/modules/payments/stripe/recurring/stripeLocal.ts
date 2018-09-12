@@ -4,6 +4,10 @@
 import log from '../../../../../../common/log';
 import settings from '../../../../../../../settings';
 
+/**
+ * Imitates events from the Stripe.
+ * To imitate stripe events to our webhook, the 'stripe-local' library is used.
+ */
 export default () => {
   let running = false;
   const { enabled, secretKey, webhookUrl } = settings.payments.stripe.recurring;

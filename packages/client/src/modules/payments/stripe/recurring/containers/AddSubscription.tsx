@@ -89,4 +89,4 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
   }
 }
 
-export default translate('subscription')(AddSubscription);
+export default translate('stripeSubscription')(AddSubscription);

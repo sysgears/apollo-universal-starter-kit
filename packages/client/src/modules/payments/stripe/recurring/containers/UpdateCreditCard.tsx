@@ -54,10 +54,20 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
             <Fragment>
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
-                  <UpdateCreditCardView submitting={this.state.submitting} onSubmit={this.onSubmit(updateCard)} t={t} />
+                  <UpdateCreditCardView
+                    error={null}
+                    submitting={this.state.submitting}
+                    onSubmit={this.onSubmit(updateCard)}
+                    t={t}
+                  />
                 </StripeProvider>
               ) : (
-                <UpdateCreditCardView submitting={this.state.submitting} onSubmit={this.onSubmit(updateCard)} t={t} />
+                <UpdateCreditCardView
+                  error={null}
+                  submitting={this.state.submitting}
+                  onSubmit={this.onSubmit(updateCard)}
+                  t={t}
+                />
               )}
             </Fragment>
           );
@@ -67,4 +77,4 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
   }
 }
 
-export default translate('subscription')(UpdateCreditCard);
+export default translate('stripeSubscription')(UpdateCreditCard);

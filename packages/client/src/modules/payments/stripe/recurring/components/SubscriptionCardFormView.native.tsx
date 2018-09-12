@@ -8,6 +8,7 @@ interface SubscriptionCardFormViewProps {
   submitting: boolean;
   buttonName: string;
   onSubmit: (subscriptionInput: any, stripe?: any) => void;
+  error: string;
 }
 
 // TODO: translate

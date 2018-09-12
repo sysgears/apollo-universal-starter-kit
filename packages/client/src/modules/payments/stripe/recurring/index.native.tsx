@@ -2,7 +2,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
-import translate from '../../../../i18n';
+import translate, { TranslateFunction } from '../../../../i18n';
 import { HeaderTitle, IconButton } from '../../../common/components/native';
 import Feature from '../../../connector.native';
 
@@ -12,18 +12,17 @@ import SubscriberPage from './containers/SubscriberPage';
 import AddSubscription from './containers/AddSubscription';
 import UpdateCreditCard from './containers/UpdateCreditCard';
 
-const HeaderTitleWithI18n = translate('subscription')(HeaderTitle);
-
-const Loader = () => <Text>Loading...</Text>; // TODO: internationalisation
+const HeaderTitleWithI18n = translate('stripeSubscription')(HeaderTitle);
+const Loader = translate('stripeSubscription')(({ t }: { t: TranslateFunction }) => <Text>{t('loading')}</Text>);
 
 export default new Feature({
   drawerItem: {
     Subscription: {
       screen: createStackNavigator({
         SubscriberPage: {
-          screen: (props: any) => <SubscriptionAuthRouter {...props} loader={Loader} component={SubscriberPage} />, // TODO: Fix react error
+          screen: (props: any) => <SubscriptionAuthRouter {...props} loader={Loader} component={SubscriberPage} />,
           navigationOptions: ({ navigation }: any) => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="subOnly.title" style="subTitle" />,
+            headerTitle: <HeaderTitleWithI18n i18nKey="subscriberPage.title" style="subTitle" />,
             headerLeft: (
               <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
             )
@@ -54,7 +53,7 @@ export default new Feature({
       }
     }
   },
-  localization: { ns: 'subscription', resources }
+  localization: { ns: 'stripeSubscription', resources }
 });
 
 // headerLeft: ( // TODO: implement go back to Profile

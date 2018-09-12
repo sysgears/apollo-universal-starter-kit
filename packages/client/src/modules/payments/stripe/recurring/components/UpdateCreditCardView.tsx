@@ -14,6 +14,7 @@ interface UpdateCardViewProps {
   onSubmit: (subscriptionInput: CreditCardInput, stripe: any) => void;
   t: TranslateFunction;
   submitting: boolean;
+  error: string;
 }
 
 export default (props: UpdateCardViewProps) => {
@@ -25,7 +26,7 @@ export default (props: UpdateCardViewProps) => {
       <LayoutCenter>
         <h1 className="text-center">{t('update.subTitle')}</h1>
         <Elements>
-          <SubscriptionCardForm {...props} buttonName={t('update.action')} />
+          <SubscriptionCardForm {...props} buttonName={t('update.btn')} />
         </Elements>
       </LayoutCenter>
     </PageLayout>

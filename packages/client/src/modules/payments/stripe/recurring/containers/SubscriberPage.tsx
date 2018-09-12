@@ -14,4 +14,4 @@ const SubscriberPage = ({ t }: { t: TranslateFunction }) => (
   </Query>
 );
 
-export default translate('subscription')(SubscriberPage);
+export default translate('stripeSubscription')(SubscriberPage);

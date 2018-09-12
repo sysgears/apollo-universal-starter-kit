@@ -12,4 +12,4 @@ const CreditCardInfo = ({ t }: { t: TranslateFunction }) => (
   </Query>
 );
 
-export default translate('subscription')(CreditCardInfo);
+export default translate('stripeSubscription')(CreditCardInfo);

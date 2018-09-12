@@ -25,6 +25,7 @@ const renderCardItem = (title: string, value: string) => (
 );
 
 const CreditCardInfoView = ({ loading, t, creditCard, navigation }: CardInfoViewProps) => {
+  // TODO: Implement error showing, instead of empty screen
   return (
     <View style={styles.container}>
       {!loading &&
@@ -34,13 +35,13 @@ const CreditCardInfoView = ({ loading, t, creditCard, navigation }: CardInfoView
         creditCard.last4 &&
         creditCard.brand && (
           <View>
-            <CardSubtitleText style={styles.container}>{t('card.title')}</CardSubtitleText>
-            {renderCardItem(`${t('card.text.card')}: `, `${creditCard.brand} ************${creditCard.last4}`)}
-            {renderCardItem(`${t('card.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
+            <CardSubtitleText style={styles.container}>{t('creditCard.title')}</CardSubtitleText>
+            {renderCardItem(`${t('creditCard.text.card')}: `, `${creditCard.brand} ************${creditCard.last4}`)}
+            {renderCardItem(`${t('creditCard.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
             <View>
               <View style={styles.buttonWrapper}>
                 <Button color={primary} onPress={() => navigation.push('UpdateCreditCard')}>
-                  {t('card.btnUpdate')}
+                  {t('update.btn')}
                 </Button>
               </View>
             </View>

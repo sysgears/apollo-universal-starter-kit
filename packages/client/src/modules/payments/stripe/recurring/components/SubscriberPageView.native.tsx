@@ -18,9 +18,9 @@ export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
 
   return (
     <View>
-      <Text>{t('subOnly.title')}</Text>
+      <Text>{t('subscriberPage.title')}</Text>
       <Text>
-        {t('subOnly.msg')} {subscriberNumber.number}.
+        {t('subscriberPage.msg')} {subscriberNumber.number}.
       </Text>
     </View>
   );

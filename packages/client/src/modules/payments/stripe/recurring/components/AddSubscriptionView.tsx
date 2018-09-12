@@ -15,6 +15,7 @@ interface AddSubscriptionViewProps {
   t: TranslateFunction;
   submitting: boolean;
   onSubmit: (subscriptionInput: CreditCardInput, stripe: any) => void;
+  error: string;
 }
 
 export default (props: AddSubscriptionViewProps) => {
@@ -25,8 +26,9 @@ export default (props: AddSubscriptionViewProps) => {
       <Helmet title={`${settings.app.name} - ${t('title')}`} />
       <LayoutCenter>
         <h1 className="text-center">{t('subTitle')}</h1>
+        <p>{t('add.description')}</p>
         <ElementsClientOnly>
-          <SubscriptionCardForm {...props} buttonName={t('action')} />
+          <SubscriptionCardForm {...props} buttonName={t('add.btn')} />
         </ElementsClientOnly>
       </LayoutCenter>
     </PageLayout>

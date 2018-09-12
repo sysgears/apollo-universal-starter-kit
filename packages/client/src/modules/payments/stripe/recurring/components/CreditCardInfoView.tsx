@@ -24,17 +24,17 @@ export default ({ loading, t, creditCard }: CardInfoViewProps) => {
         creditCard.last4 &&
         creditCard.brand && (
           <CardGroup>
-            <CardTitle>{t('card.title')}</CardTitle>
+            <CardTitle>{t('creditCard.title')}</CardTitle>
             <CardText>
-              {t('card.text.card')}: {creditCard.brand} ************
+              {t('creditCard.text.card')}: {creditCard.brand} ************
               {creditCard.last4}
             </CardText>
             <CardText>
-              {t('card.text.expires')}: {creditCard.expiryMonth}/{creditCard.expiryYear}
+              {t('creditCard.text.expires')}: {creditCard.expiryMonth}/{creditCard.expiryYear}
             </CardText>
             <CardText>
               <Link to="/update-credit-card">
-                <Button color="primary">{t('card.btnUpdate')}</Button>
+                <Button color="primary">{t('update.btn')}</Button>
               </Link>
             </CardText>
           </CardGroup>

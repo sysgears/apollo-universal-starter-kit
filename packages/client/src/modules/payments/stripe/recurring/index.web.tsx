@@ -15,13 +15,13 @@ import UpdateCreditCard from './containers/UpdateCreditCard';
 
 const { AuthRoute, IfLoggedIn }: any = user;
 
-const NavLinkWithI18n = translate('subscription')(({ t }: { t: TranslateFunction }) => (
+const NavLinkWithI18n = translate('stripeSubscription')(({ t }: { t: TranslateFunction }) => (
   <NavLink to="/subscriber-page" className="nav-link" activeClassName="active">
     {t('navLink')}
   </NavLink>
 ));
 
-const Loader = () => <span>Loading...</span>; // TODO: internationalisation
+const Loader = translate('stripeSubscription')(({ t }: { t: TranslateFunction }) => <span>{t('loading')}</span>);
 
 export default new Feature(
   settings.payments.stripe.recurring.enabled
@@ -51,7 +51,7 @@ export default new Feature(
           </IfLoggedIn>
         ),
         scriptsInsert: settings.payments.stripe.recurring.secretKey ? 'https://js.stripe.com/v3/' : undefined,
-        localization: { ns: 'subscription', resources }
+        localization: { ns: 'stripeSubscription', resources }
       }
     : {}
 );

@@ -6,7 +6,7 @@ import { Button, Alert, CardGroup, CardTitle, CardText } from '../../../../commo
 interface CancelSubscriptionViewProps {
   loading: boolean;
   active: boolean;
-  onClick: () => void; // TODO: write types
+  onClick: () => void;
   errors: string;
   cancelling: boolean;
   t: TranslateFunction;
@@ -14,7 +14,7 @@ interface CancelSubscriptionViewProps {
 
 export default ({ loading, active, t, onClick, errors, cancelling }: CancelSubscriptionViewProps) => {
   if (loading) {
-    return <p>{t('cancel.load')}</p>;
+    return <p>{t('loading')}</p>;
   }
 
   return (

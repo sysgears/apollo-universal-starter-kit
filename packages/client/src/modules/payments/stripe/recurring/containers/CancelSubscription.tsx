@@ -61,4 +61,4 @@ class CancelSubscription extends React.Component<CancelSubscriptionProps, { [key
   }
 }
 
-export default translate('subscription')(CancelSubscription);
+export default translate('stripeSubscription')(CancelSubscription);

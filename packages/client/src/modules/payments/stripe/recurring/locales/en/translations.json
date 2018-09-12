@@ -6,13 +6,13 @@
   "subTitle": "Subscription!",
   "action": "Subscribe",
   "loading": "loading...",
-  "card": {
+
+  "creditCard": {
     "title": "Card Info",
     "text": {
       "card": "card",
       "expires": "expires"
     },
-    "btnUpdate": "Update Card",
     "name": "Name On Card",
     "info": "Payment Info"
   },
@@ -20,28 +20,24 @@
   "add": {
     "title": "Add subscription",
     "btn": "Subscribe",
-    "load": "Loading...",
     "description": "To get the magic private number you should subscribe."
   },
 
   "cancel": {
     "title": "Subscription",
-    "load": "Loading...",
     "btn": "Cancel Subscription",
     "msg": "You do not have a subscription."
   },
 
-  "subOnly": {
+  "subscriberPage": {
     "title": "Private",
-    "msg": "Your magic number is",
-    "load": "loading..."
+    "msg": "Your magic number is"
   },
 
   "update": {
-    "errorMsg": "Update failed!",
     "title": "Update Card",
-    "meta": "Update card example page",
+    "errorMsg": "Update failed!",
     "subTitle": "Update card!",
-    "action": "Update Card"
+    "btn": "Update Card"
   }
 }

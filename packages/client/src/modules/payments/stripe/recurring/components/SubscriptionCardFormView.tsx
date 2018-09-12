@@ -2,7 +2,7 @@ import React from 'react';
 import { withFormik } from 'formik';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 
-import translate, { TranslateFunction } from '../../../../../i18n';
+import { TranslateFunction } from '../../../../../i18n';
 import Field from '../../../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert, Label } from '../../../../common/components/web';
 import { required, validateForm } from '../../../../../../../common/validation';
@@ -11,12 +11,12 @@ interface SubscriptionCardFormViewProps {
   submitting: boolean;
   buttonName: string;
   error: string;
-  handleSubmit: () => void;
+  handleSubmit?: () => void;
   onSubmit: (subscriptionInput: any, stripe: any) => void;
-  values: {
+  values?: {
     name: string;
   };
-  stripe: any;
+  stripe?: any;
   t: TranslateFunction;
 }
 
@@ -29,11 +29,11 @@ const SubscriptionCardFormView = (props: SubscriptionCardFormViewProps) => {
         name="name"
         component={RenderField}
         type="text"
-        label={t('card.name')}
+        label={t('creditCard.name')}
         validate={required}
         value={values.name}
       />
-      <Label>{t('card.info')}</Label>
+      <Label>{t('creditCard.info')}</Label>
       <CardElement className="form-control" style={{ base: { lineHeight: '30px' } }} />
       {error && <Alert color="error">{error}</Alert>}
       <Button color="primary" type="submit" disabled={submitting} style={{ marginTop: 15 }}>
@@ -54,4 +54,4 @@ const SubscriptionFormWithFormik = withFormik({
   enableReinitialize: true
 });
 
-export default translate('subscription')(injectStripe(SubscriptionFormWithFormik(SubscriptionCardFormView)));
+export default injectStripe(SubscriptionFormWithFormik(SubscriptionCardFormView));

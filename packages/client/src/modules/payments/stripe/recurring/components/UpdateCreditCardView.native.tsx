@@ -8,6 +8,7 @@ interface UpdateCardViewProps {
   onSubmit: (subscriptionInput: CreditCardInput, stripe: any) => void;
   t: TranslateFunction;
   submitting: boolean;
+  error: string;
 }
 
 export default (props: UpdateCardViewProps) => {
@@ -17,7 +18,7 @@ export default (props: UpdateCardViewProps) => {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.cardFormWrapper}>
-          <SubscriptionCardForm {...props} buttonName={t('update.action')} />
+          <SubscriptionCardForm {...props} buttonName={t('update.btn')} />
         </View>
       </ScrollView>
     </View>

@@ -17,7 +17,7 @@ export default ({ loading, active, t, onClick, errors, cancelling }: CancelSubsc
   if (loading) {
     return (
       <View>
-        <Text>{t('cancel.load')}</Text>
+        <Text>{t('loading')}</Text>
       </View>
     );
   }

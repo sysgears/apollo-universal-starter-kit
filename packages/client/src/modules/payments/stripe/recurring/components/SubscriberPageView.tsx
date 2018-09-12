@@ -20,10 +20,10 @@ export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
 
   return (
     <PageLayout>
-      <Helmet title={`${settings.app.name} - ${t('subOnly.title')}`} />
-      <h1>{t('subOnly.title')}</h1>
+      <Helmet title={`${settings.app.name} - ${t('subscriberPage.title')}`} />
+      <h1>{t('subscriberPage.title')}</h1>
       <p>
-        {t('subOnly.msg')} {subscriberNumber.number}.
+        {t('subscriberPage.msg')} {subscriberNumber.number}.
       </p>
     </PageLayout>
   );

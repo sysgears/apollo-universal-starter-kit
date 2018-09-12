@@ -16,12 +16,12 @@ const SubscriptionAuthRouter = ({ component: Component, loader: Loader, ...props
           return <Component {...props} />;
         } else {
           if (history) {
-            history.push('/subscription');
+            history.push('/add-subscription');
             return <Loader />;
           }
 
           if (navigation) {
-            navigation.push('Subscription');
+            navigation.push('AddSubscription');
             return <Loader />;
           }
         }

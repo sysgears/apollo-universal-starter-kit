@@ -33,7 +33,7 @@ export default ({ loading, t, creditCard }: CardInfoViewProps) => {
               {t('card.text.expires')}: {creditCard.expiryMonth}/{creditCard.expiryYear}
             </CardText>
             <CardText>
-              <Link to="/update-card">
+              <Link to="/update-credit-card">
                 <Button color="primary">{t('card.btnUpdate')}</Button>
               </Link>
             </CardText>

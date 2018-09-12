@@ -47,7 +47,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
     }
 
     this.setState({ submitting: false });
-    history ? history.push('/subscribers-only') : navigation.goBack();
+    history ? history.push('/subscriber-page') : navigation.goBack();
   };
 
   public render() {

@@ -35,7 +35,7 @@ export default new Feature({
             headerTitle: <HeaderTitleWithI18n i18nKey="update.title" style="subTitle" />
           })
         },
-        Subscription: {
+        AddSubscription: {
           screen: AddSubscription,
           navigationOptions: ({ navigation }: any) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="add.title" style="subTitle" />,

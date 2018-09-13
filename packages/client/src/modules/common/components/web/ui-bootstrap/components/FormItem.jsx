@@ -5,7 +5,12 @@ import { FormGroup, Label } from 'reactstrap';
 const FormItem = ({ children, labelCol, wrapperCol, validateStatus, label, ...props }) => {
   return (
     <FormGroup {...props}>
-      {label && <Label size="md">{label}:&nbsp;</Label>}
+      {label && (
+        <Label size="md">
+          {label}
+          :&nbsp;
+        </Label>
+      )}
       {children}
     </FormGroup>
   );

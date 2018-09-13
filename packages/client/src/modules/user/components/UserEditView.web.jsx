@@ -20,14 +20,14 @@ class UserEditView extends React.PureComponent {
     onSubmit: PropTypes.func
   };
 
+  state = {};
+
   static getDerivedStateFromProps(nextProps) {
     if (!nextProps.loading && nextProps.errors && nextProps.errors.length) {
       nextProps.history.push('/profile');
     }
     return null;
   }
-
-  state = {};
 
   renderMetaData = t => (
     <Helmet
@@ -64,8 +64,8 @@ class UserEditView extends React.PureComponent {
           </h2>
           <UserForm
             onSubmit={this.props.onSubmit}
-            shouldRoleDisplay={isNotSelf}
-            shouldActiveDisplay={isNotSelf}
+            shouldDisplayRole={isNotSelf}
+            shouldDisplayActive={isNotSelf}
             initialValues={user}
           />
         </PageLayout>

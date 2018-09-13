@@ -19,8 +19,8 @@ class UserAddView extends React.PureComponent {
         <UserForm
           onSubmit={this.props.onSubmit}
           initialValues={{}}
-          shouldRoleDisplay={true}
-          shouldActiveDisplay={true}
+          shouldDisplayRole={true}
+          shouldDisplayActive={true}
         />
       </View>
     );

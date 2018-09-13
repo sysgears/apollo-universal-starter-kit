@@ -1,5 +1,0 @@
-query CounterState {
-  counterState @client {
-    counter
-  }
-}

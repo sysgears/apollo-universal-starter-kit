@@ -29,7 +29,7 @@ const updateUserFormSchema = {
 
 const validate = (values, createNew) => validateForm(values, createNew ? createUserFormSchema : updateUserFormSchema);
 
-const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldRoleDisplay, shouldActiveDisplay }) => {
+const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
 
   return (
@@ -42,7 +42,7 @@ const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldRoleDis
         value={username}
       />
       <Field name="email" component={RenderField} type="email" label={t('userEdit.form.field.email')} value={email} />
-      {shouldRoleDisplay && (
+      {shouldDisplayRole && (
         <Field
           name="role"
           component={RenderSelect}
@@ -54,7 +54,7 @@ const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldRoleDis
           <Option value="admin">{t('userEdit.form.field.role.admin')}</Option>
         </Field>
       )}
-      {shouldActiveDisplay && (
+      {shouldDisplayActive && (
         <Field
           name="isActive"
           component={RenderCheckBox}
@@ -118,8 +118,8 @@ UserForm.propTypes = {
   onSubmit: PropTypes.func,
   setTouched: PropTypes.func,
   isValid: PropTypes.bool,
-  shouldRoleDisplay: PropTypes.bool,
-  shouldActiveDisplay: PropTypes.bool,
+  shouldDisplayRole: PropTypes.bool,
+  shouldDisplayActive: PropTypes.bool,
   error: PropTypes.string,
   values: PropTypes.object,
   errors: PropTypes.object,

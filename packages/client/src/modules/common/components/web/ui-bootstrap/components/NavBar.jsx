@@ -19,8 +19,8 @@ const NavBar = () => (
         {modules.navItemsRight}
         {__DEV__ && (
           <NavItem>
-            <a href="/graphiql" className="nav-link">
-              GraphiQL
+            <a href="/graphql" className="nav-link">
+              GPlayground
             </a>
           </NavItem>
         )}

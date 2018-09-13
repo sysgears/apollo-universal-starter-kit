@@ -2,13 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button as RSButton } from 'reactstrap';
 
-const Button = ({ children, htmlType, ...props }) => {
+const Button = ({ children, ...props }) => {
   return <RSButton {...props}>{children}</RSButton>;
 };
 
 Button.propTypes = {
-  children: PropTypes.node,
-  htmlType: PropTypes.any
+  children: PropTypes.node
 };
 
 export default Button;

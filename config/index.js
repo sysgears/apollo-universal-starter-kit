@@ -7,3 +7,4 @@ export { default as analytics } from './analytics';
 export { default as subscription } from './subscription';
 export { default as i18n } from './i18n';
 export { default as pagination } from './pagination';
+export { default as upload } from './upload';

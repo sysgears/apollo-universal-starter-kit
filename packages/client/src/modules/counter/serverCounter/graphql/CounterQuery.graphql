@@ -1,0 +1,5 @@
+query serverCounterQuery {
+  serverCounter {
+    amount
+  }
+}

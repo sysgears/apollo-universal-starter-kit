@@ -7,6 +7,7 @@ import UserEditView from '../components/UserEditView';
 import USER_QUERY from '../graphql/UserQuery.graphql';
 import EDIT_USER from '../graphql/EditUser.graphql';
 import settings from '../../../../../../settings';
+import translate from '../../../i18n';
 import UserFormatter from '../helpers/UserFormatter';
 
 class UserEdit extends React.Component {
@@ -42,6 +43,7 @@ class UserEdit extends React.Component {
 }
 
 export default compose(
+  translate('user'),
   graphql(USER_QUERY, {
     options: props => {
       let id = 0;

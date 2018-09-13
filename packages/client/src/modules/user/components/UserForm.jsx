@@ -25,7 +25,7 @@ const handleRoleChange = (type, value, setFieldValue) => {
 
 const validate = values => validateForm(values, userFormSchema);
 
-const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldRoleDisplay, shouldActiveDisplay }) => {
+const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
   const options = [
     {
       value: 'user',
@@ -57,7 +57,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldRoleDisplay, s
           keyboardType="email-address"
           placeholderTextColor={placeholderColor}
         />
-        {shouldRoleDisplay && (
+        {shouldDisplayRole && (
           <Field
             name="role"
             component={RenderSelect}
@@ -66,16 +66,16 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldRoleDisplay, s
             dismissText={t('userEdit.select.dismissText')}
             placeholderTextColor={placeholderColor}
             selectedValue={role}
-            onValueChange={value => handleRoleChange('role', value, setFieldValue)}
+            onChange={value => handleRoleChange('role', value, setFieldValue)}
             cols={1}
             data={options}
           />
         )}
-        {shouldActiveDisplay && (
+        {shouldDisplayActive && (
           <Field
             name="isActive"
             label={t('userEdit.form.field.active')}
-            onValueChange={() => setFieldValue('isActive', !isActive)}
+            onChange={() => setFieldValue('isActive', !isActive)}
             component={RenderSwitch}
             placeholder={t('userEdit.form.field.active')}
             checked={isActive}
@@ -146,8 +146,8 @@ UserForm.propTypes = {
   setTouched: PropTypes.func,
   isValid: PropTypes.bool,
   error: PropTypes.string,
-  shouldRoleDisplay: PropTypes.bool,
-  shouldActiveDisplay: PropTypes.bool,
+  shouldDisplayRole: PropTypes.bool,
+  shouldDisplayActive: PropTypes.bool,
   values: PropTypes.object,
   errors: PropTypes.object,
   initialValues: PropTypes.object.isRequired,

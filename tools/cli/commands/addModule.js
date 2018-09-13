@@ -1,92 +1,59 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { pascalize } = require('humps');
-const { renameFiles, updateFileWithExports } = require('../helpers/util');
+const { copyFiles, renameFiles, computeModulesPath } = require('../helpers/util');
 
 /**
+ * Adds module in client or server and adds a new module to the Feature connector.
  *
- * @param logger
- * @param templatePath
- * @param module
- * @param action
- * @param tablePrefix
- * @param location
+ * @param logger - The Logger.
+ * @param templatesPath - The path to the templates for a new module.
+ * @param moduleName - The name of a new module.
+ * @param location - The location for a new module [client|server|both].
+ * @param finished - The flag about the end of the generating process.
  */
-function addModule(logger, templatePath, module, action, tablePrefix, location) {
+function addModule(logger, templatesPath, moduleName, location, finished = true) {
   logger.info(`Copying ${location} files…`);
 
-  // pascalize
-  const Module = pascalize(module);
-
   // create new module directory
-  const startPath = `${__dirname}/../../..`;
-  const mkdir = shell.mkdir(`${startPath}/packages/${location}/src/modules/${module}`);
+  const destinationPath = computeModulesPath(location, moduleName);
+  const newModule = shell.mkdir(destinationPath);
 
   // continue only if directory does not jet exist
-  if (mkdir.code === 0) {
-    const destinationPath = `${startPath}/packages/${location}/src/modules/${module}`;
-    renameFiles(destinationPath, templatePath, module, location);
+  if (newModule.code !== 0) {
+    logger.error(chalk.red(`The ${moduleName} directory is already exists.`));
+    process.exit();
+  }
+  //copy and rename templates in destination directory
+  copyFiles(destinationPath, templatesPath, location);
+  renameFiles(destinationPath, moduleName);
 
-    logger.info(chalk.green(`✔ The ${location} files have been copied!`));
+  logger.info(chalk.green(`✔ The ${location} files have been copied!`));
 
-    shell.cd('..');
-    // get module input data
-    const path = `${startPath}/packages/${location}/src/modules/index.js`;
-    let data = fs.readFileSync(path);
+  // get index file path
+  const modulesPath = computeModulesPath(location);
+  const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
+  const indexPath = modulesPath + indexFullFileName;
+  let indexContent;
 
-    // extract Feature modules
-    const re = /Feature\(([^()]+)\)/g;
-    const match = re.exec(data);
-
+  try {
     // prepend import module
-    const prepend = `import ${module} from './${module}';\n`;
-    fs.writeFileSync(path, prepend + data);
+    indexContent = `import ${moduleName} from './${moduleName}';\n` + fs.readFileSync(indexPath);
+  } catch (e) {
+    logger.error(chalk.red(`Failed to read ${indexPath} file`));
+    process.exit();
+  }
 
-    // add module to Feature function
-    shell.ShellString(shell.cat('index.js').replace(RegExp(re, 'g'), `Feature(${module}, ${match[1]})`)).to('index.js');
+  // extract Feature modules
+  const featureRegExp = /Feature\(([^()]+)\)/g;
+  const [, featureModules] = featureRegExp.exec(indexContent) || ['', ''];
 
-    if (action === 'addcrud' && location === 'client') {
-      const generatedContainerFile = 'generatedContainers.js';
-      const graphqlQuery = `${Module}Query`;
-      const options = {
-        pathToFileWithExports: `${startPath}/packages/${location}/src/modules/common/${generatedContainerFile}`,
-        exportName: graphqlQuery,
-        importString: `import ${graphqlQuery} from '../${module}/containers/${graphqlQuery}';\n`
-      };
-      updateFileWithExports(options);
-    }
+  // add module to Feature connector
+  shell
+    .ShellString(indexContent.replace(RegExp(featureRegExp, 'g'), `Feature(${moduleName}, ${featureModules})`))
+    .to(indexPath);
 
-    if (action === 'addcrud' && location === 'server') {
-      console.log('copy database files');
-      const destinationPath = `${startPath}/packages/${location}/src/database`;
-      renameFiles(destinationPath, templatePath, module, 'database');
-
-      const timestamp = new Date().getTime();
-      shell.cd(`${startPath}/packages/${location}/src/database/migrations`);
-      shell.mv(`_${Module}.js`, `${timestamp}_${Module}.js`);
-      shell.cd(`${startPath}/packages/${location}/src/database/seeds`);
-      shell.mv(`_${Module}.js`, `${timestamp}_${Module}.js`);
-
-      logger.info(chalk.green(`✔ The database files have been copied!`));
-
-      if (tablePrefix !== '') {
-        shell.cd(`${startPath}/packages/${location}/src/modules/${module}`);
-        shell.sed('-i', /this.prefix = '';/g, `this.prefix = '${tablePrefix}';`, 'sql.js');
-
-        logger.info(chalk.green(`✔ Inserted db table prefix!`));
-      }
-
-      const generatedSchemasFile = 'generatedSchemas.js';
-      const schema = `${Module}Schema`;
-      const options = {
-        pathToFileWithExports: `${startPath}/packages/${location}/src/modules/common/${generatedSchemasFile}`,
-        exportName: schema,
-        importString: `import { ${schema} } from '../${module}/schema';\n`
-      };
-      updateFileWithExports(options);
-    }
-
+  if (finished) {
     logger.info(chalk.green(`✔ Module for ${location} successfully created!`));
   }
 }

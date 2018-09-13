@@ -23,12 +23,13 @@ prog
     'both'
   )
   .action((args, options, logger) => commandInvoker.runAddModule(args, options, logger))
+  //.action((args, options, logger) => moduleCmd('addmodule', args, options, logger))
   // Delete module
   .command('deletemodule', 'Delete a Module')
   .argument('<moduleName>', 'Module name')
   .argument('[location]', 'Where should we delete module. [both, server, client]', ['both', 'server', 'client'], 'both')
   .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger))
-  .action((args, options, logger) => moduleCmd('addmodule', args, options, logger))
+  //.action((args, options, logger) => moduleCmd('deletemodule', args, options, logger))
   // Add crud
   .command('addcrud', 'Create a new Module with CRUD')
   .argument('<module>', 'Module name')
@@ -40,7 +41,6 @@ prog
   )
   .argument('[tablePrefix]', 'DB table prefix.')
   .action((args, options, logger) => moduleCmd('addcrud', args, options, logger))
-  .action((args, options, logger) => moduleCmd('deletemodule', args, options, logger))
   // Update schema
   .command('updateschema', 'Update Module Schema')
   .argument('<module>', 'Module name')

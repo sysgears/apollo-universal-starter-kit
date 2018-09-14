@@ -19,14 +19,14 @@ class SubscriptionAuthRouter extends React.Component<SubscriptionAuthRouterProps
   public componentDidUpdate() {
     const { loading, navigation, stripeSubscription } = this.props;
 
-    if (!loading && !stripeSubscription.active && navigation) {
+    if (!loading && stripeSubscription && !stripeSubscription.active && navigation) {
       navigation.push('AddSubscription');
     }
   }
 
   public render() {
     const { component: Component, loading, stripeSubscription, ...props } = this.props;
-    return !loading && stripeSubscription.active ? <Component {...props} /> : null;
+    return !loading && stripeSubscription && stripeSubscription.active ? <Component {...props} /> : null;
   }
 }
 

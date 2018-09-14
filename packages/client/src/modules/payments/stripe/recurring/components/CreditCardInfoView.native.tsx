@@ -35,7 +35,7 @@ const CreditCardInfoView = ({ loading, t, creditCard, navigation }: CardInfoView
         creditCard.last4 &&
         creditCard.brand && (
           <View>
-            <CardSubtitleText style={styles.container}>{t('creditCard.title')}</CardSubtitleText>
+            <CardSubtitleText style={styles.title}>{t('creditCard.title')}</CardSubtitleText>
             {renderCardItem(`${t('creditCard.text.card')}: `, `${creditCard.brand} ************${creditCard.last4}`)}
             {renderCardItem(`${t('creditCard.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
             <View>
@@ -54,6 +54,11 @@ const CreditCardInfoView = ({ loading, t, creditCard, navigation }: CardInfoView
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  title: {
+    flex: 1,
+    fontWeight: 'bold',
+    fontSize: 20
   },
   buttonWrapper: {
     padding: 10

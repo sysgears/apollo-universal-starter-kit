@@ -7,8 +7,13 @@
   "action": "Подписаться",
   "loading": "Загрузка...",
 
+  "subscriptionProfile":{
+    "noSubscription": "У вас нет подписки.",
+    "title": "Subscription info"
+  },
+
   "creditCard": {
-    "title": "Информация о карте",
+    "title": "Информация о кредитной карте",
     "text": {
       "card": "карта",
       "expires": "истекает"
@@ -24,9 +29,8 @@
   },
 
   "cancel": {
-    "title": "Подписка",
-    "btn": "Отменить подписку",
-    "msg": "У вас нет подписки."
+    "title": "Отменить подписку",
+    "btn": "Отменить подписку"
   },
 
   "subscriberPage": {

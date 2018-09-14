@@ -31,32 +31,26 @@ class CancelSubscription extends React.Component<CancelSubscriptionProps, { [key
     const { t } = this.props;
 
     return (
-      <Query query={SUBSCRIPTION_QUERY} skip={__SERVER__} fetchPolicy="network-only">
-        {({ loading, data }) => (
-          <Mutation
-            mutation={CANCEL_SUBSCRIPTION}
-            update={(cache, { data: { cancelStripeSubscription } }) => {
-              const cachedSubscription: any = cache.readQuery({ query: SUBSCRIPTION_QUERY });
-              cachedSubscription.stripeSubscription = cancelStripeSubscription;
-              cache.writeQuery({ query: SUBSCRIPTION_QUERY, data: cachedSubscription });
-            }}
-            refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
-          >
-            {cancelSubscription => {
-              return (
-                <CancelSubscriptionView
-                  loading={__SERVER__ ? true : loading}
-                  cancelling={this.state.cancelling}
-                  errors={this.state.errors}
-                  active={!!(data.stripeSubscription && data.stripeSubscription.active)}
-                  onClick={this.onClick(cancelSubscription)}
-                  t={t}
-                />
-              );
-            }}
-          </Mutation>
-        )}
-      </Query>
+      <Mutation
+        mutation={CANCEL_SUBSCRIPTION}
+        update={(cache, { data: { cancelStripeSubscription } }) => {
+          const cachedSubscription: any = cache.readQuery({ query: SUBSCRIPTION_QUERY });
+          cachedSubscription.stripeSubscription = cancelStripeSubscription;
+          cache.writeQuery({ query: SUBSCRIPTION_QUERY, data: cachedSubscription });
+        }}
+        refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
+      >
+        {cancelSubscription => {
+          return (
+            <CancelSubscriptionView
+              cancelling={this.state.cancelling}
+              errors={this.state.errors}
+              onClick={this.onClick(cancelSubscription)}
+              t={t}
+            />
+          );
+        }}
+      </Mutation>
     );
   }
 }

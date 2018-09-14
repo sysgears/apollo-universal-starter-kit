@@ -21,7 +21,7 @@ interface CreditCard {
 export default () => ({
   Query: {
     stripeSubscription: withAuth(['user:view:self'], (obj: any, args: any, context: any) => {
-      return context.stripeSubscription;
+      return { active: !!(context.stripeSubscription && context.stripeSubscription.active) };
     }),
     stripeSubscriptionProtectedNumber: withAuth(['user:view:self'], (obj: any, args: any, context: any) => {
       return context.stripeSubscription && context.stripeSubscription.active

@@ -5,36 +5,19 @@ import { CardText, CardSubtitleText, Button } from '../../../../common/component
 import { TranslateFunction } from '../../../../../i18n';
 
 interface CancelSubscriptionViewProps {
-  loading: boolean;
-  active: boolean;
   onClick: () => void;
   errors: string;
   cancelling: boolean;
   t: TranslateFunction;
 }
 
-export default ({ loading, active, t, onClick, errors, cancelling }: CancelSubscriptionViewProps) => {
-  if (loading) {
-    return (
-      <View>
-        <Text>{t('loading')}</Text>
-      </View>
-    );
-  }
-
+export default ({ t, onClick, errors, cancelling }: CancelSubscriptionViewProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonWrapper}>
-        {active && (
-          <Button onPress={onClick} disabled={cancelling} danger>
-            {t('cancel.btn')}
-          </Button>
-        )}
-        {!active && (
-          <View style={styles.subscriptionText}>
-            <CardText style={styles.subscriptionText}>{t('cancel.msg')}</CardText>
-          </View>
-        )}
+        <Button onPress={onClick} disabled={cancelling} danger>
+          {t('cancel.btn')}
+        </Button>
         {errors && (
           <View style={styles.alertWrapper}>
             <View style={styles.alertIconWrapper}>
@@ -79,9 +62,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 5,
     marginTop: 10
-  },
-  subscriptionText: {
-    paddingLeft: 5
   },
   buttonWrapper: {
     padding: 10

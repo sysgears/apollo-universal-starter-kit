@@ -7,8 +7,13 @@
   "action": "Subscribe",
   "loading": "loading...",
 
+  "subscriptionProfile":{
+    "noSubscription": "You do not have a subscription.",
+    "title": "Subscription info"
+  },
+
   "creditCard": {
-    "title": "Card Info",
+    "title": "Credit card Info",
     "text": {
       "card": "card",
       "expires": "expires"
@@ -24,9 +29,8 @@
   },
 
   "cancel": {
-    "title": "Subscription",
-    "btn": "Cancel Subscription",
-    "msg": "You do not have a subscription."
+    "title": "Cancel subscription",
+    "btn": "Cancel Subscription"
   },
 
   "subscriberPage": {

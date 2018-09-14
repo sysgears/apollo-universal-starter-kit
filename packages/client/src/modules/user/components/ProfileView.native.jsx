@@ -8,8 +8,7 @@ import translate from '../../../i18n';
 
 import { Card, CardItem, CardText, CardHeader, CardLabel, Loading } from '../../common/components/native';
 import { linkText } from '../../common/components/native/styles';
-import CreditCardInfo from '../../payments/stripe/recurring/containers/CreditCardInfo';
-import CancelSubscription from '../../payments/stripe/recurring/containers/CancelSubscription';
+import StripeSubscriptionProfile from '../../payments/stripe/recurring/containers/SubscriptionProfile';
 import settings from '../../../../../../settings';
 
 const renderProfileItem = (title, value, idx) => (
@@ -54,13 +53,8 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
             </Card>
           </View>
           <View style={styles.cardWrapper}>
-            {settings.payments.stripe.recurring.enabled && (
-              <Card>
-                <CardHeader title="Subscription info" />
-                <CreditCardInfo />
-                <CancelSubscription />
-              </Card>
-            )}
+            {/* Credit card info (Stripe Recurring module)*/}
+            {settings.payments.stripe.recurring.enabled && currentUser.role === 'user' && <StripeSubscriptionProfile />}
           </View>
           <TouchableOpacity
             style={styles.linkWrapper}

@@ -28,9 +28,9 @@ const SubscriptionAuthRouter = ({
   // Important: You don't need to include page layout for protected routes!
   return (
     <PageLayout>
-      {!loading && stripeSubscription.active ? (
+      {!loading && stripeSubscription && stripeSubscription.active ? (
         <Component {...props} />
-      ) : !loading && !stripeSubscription.active ? (
+      ) : !loading && stripeSubscription && !stripeSubscription.active ? (
         <Redirect to="/add-subscription" />
       ) : null}
     </PageLayout>

@@ -33,6 +33,9 @@ export const createToken = (creditCardInput: CreditCardInput) => {
 
 /**
  * Creates stripe credit card token.
+ * Select way for creating the token:
+ *  - via stripe library if exists (for web)
+ *  - manually via fetch (for mobile)
  *
  * @param creditCardInput - The credit card data.
  * @param stripe - The stripe.

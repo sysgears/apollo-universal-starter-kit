@@ -17,10 +17,10 @@ export default new Feature(
   counter,
   post,
   upload,
-  user,
-  payments,
   contact,
   pagination,
-  pageNotFound,
-  i18n
+  payments,
+  user,
+  i18n,
+  pageNotFound
 );

@@ -69,6 +69,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
                   <AddSubscriptionView
+                    error={null}
                     submitting={this.state.submitting}
                     onSubmit={this.onSubmit(addSubscription)}
                     t={t}
@@ -76,6 +77,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
                 </StripeProvider>
               ) : (
                 <AddSubscriptionView
+                  error={null}
                   submitting={this.state.submitting}
                   onSubmit={this.onSubmit(addSubscription)}
                   t={t}

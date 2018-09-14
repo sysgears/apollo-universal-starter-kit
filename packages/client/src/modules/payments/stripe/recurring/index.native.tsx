@@ -7,20 +7,19 @@ import { HeaderTitle, IconButton } from '../../../common/components/native';
 import Feature from '../../../connector.native';
 
 import resources from './locales';
-import { SubscriptionAuthRouter } from './containers/Auth';
+import SubscriptionAuthRouter from './containers/Auth';
 import SubscriberPage from './containers/SubscriberPage';
 import AddSubscription from './containers/AddSubscription';
 import UpdateCreditCard from './containers/UpdateCreditCard';
 
 const HeaderTitleWithI18n = translate('stripeSubscription')(HeaderTitle);
-const Loader = translate('stripeSubscription')(({ t }: { t: TranslateFunction }) => <Text>{t('loading')}</Text>);
 
 export default new Feature({
   drawerItem: {
     Subscription: {
       screen: createStackNavigator({
         SubscriberPage: {
-          screen: (props: any) => <SubscriptionAuthRouter {...props} loader={Loader} component={SubscriberPage} />,
+          screen: (props: any) => <SubscriptionAuthRouter {...props} component={SubscriberPage} />,
           navigationOptions: ({ navigation }: any) => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="subscriberPage.title" style="subTitle" />,
             headerLeft: (
@@ -29,7 +28,7 @@ export default new Feature({
           })
         },
         UpdateCreditCard: {
-          screen: (props: any) => <SubscriptionAuthRouter {...props} loader={Loader} component={UpdateCreditCard} />,
+          screen: (props: any) => <SubscriptionAuthRouter {...props} component={UpdateCreditCard} />,
           navigationOptions: () => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="update.title" style="subTitle" />
           })

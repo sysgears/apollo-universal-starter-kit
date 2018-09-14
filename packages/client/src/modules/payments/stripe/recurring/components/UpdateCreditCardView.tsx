@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { Elements } from 'react-stripe-elements';
 
@@ -21,7 +21,7 @@ export default (props: UpdateCardViewProps) => {
   const { t } = props;
 
   return (
-    <PageLayout>
+    <Fragment>
       <Helmet title={`${settings.app.name} - ${t('update.title')}`} />
       <LayoutCenter>
         <h1 className="text-center">{t('update.subTitle')}</h1>
@@ -29,6 +29,6 @@ export default (props: UpdateCardViewProps) => {
           <SubscriptionCardForm {...props} buttonName={t('update.btn')} />
         </Elements>
       </LayoutCenter>
-    </PageLayout>
+    </Fragment>
   );
 };

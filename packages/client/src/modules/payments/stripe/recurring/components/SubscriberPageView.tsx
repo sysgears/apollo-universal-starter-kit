@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { TranslateFunction } from '../../../../../i18n';
 
+import { LayoutCenter } from '../../../../common/components/index.web';
 import { PageLayout } from '../../../../common/components/web';
 import Helmet from 'react-helmet';
 import settings from '../../../../../../../../settings';
@@ -19,12 +20,14 @@ export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
   }
 
   return (
-    <PageLayout>
+    <Fragment>
       <Helmet title={`${settings.app.name} - ${t('subscriberPage.title')}`} />
-      <h1>{t('subscriberPage.title')}</h1>
+      <LayoutCenter>
+        <h1 className="text-center">{t('subscriberPage.title')}</h1>
+      </LayoutCenter>
       <p>
         {t('subscriberPage.msg')} {subscriberNumber.number}.
       </p>
-    </PageLayout>
+    </Fragment>
   );
 };

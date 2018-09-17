@@ -118,6 +118,7 @@
     "qrcode-terminal": "^0.12.0",
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.1.0",
+    "shelljs": "^0.8.1",
     "source-list-map": "^2.0.0",
     "style-loader": "^0.21.0",
     "ts-loader": "^4.5.0",
@@ -125,6 +126,7 @@
     "tslint-config-prettier": "^1.5.0",
     "tslint-plugin-prettier": "^1.3.0",
     "typescript": "^2.9.2",
+    "uglifyjs-webpack-plugin": "^2.0.0",
     "url-loader": "^1.0.1",
     "wait-on": "^2.0.2",
     "webpack": "^4.17.1",
@@ -135,8 +137,7 @@
     "webpack-merge": "^4.1.4",
     "webpack-node-externals": "^1.7.2",
     "webpack-sources": "^1.1.0",
-    "webpack-virtual-modules": "^0.1.10",
-    "shelljs": "^0.8.1"
+    "webpack-virtual-modules": "^0.1.10"
   },
   "optionalDependencies": {
     "dotenv": "^6.0.0",
@@ -154,9 +155,17 @@
   "jest": {
     "verbose": true,
     "preset": "jest-expo",
-    "testPathIgnorePatterns": ["node_modules", ".history"],
+    "testPathIgnorePatterns": [
+      "node_modules",
+      ".history"
+    ],
     "testRegex": "packages/mobile/src.*/__tests__/.*\\.(js|jsx|ts|tsx)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx"
+    ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest",
       "^.+\\.tsx?$": "ts-jest"

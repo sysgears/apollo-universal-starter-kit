@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, KeyboardAvoidingView } from 'react-native';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import { TranslateFunction } from '../../../../../i18n';
@@ -17,8 +17,8 @@ export default (props: AddSubscriptionViewProps) => {
   const { t } = props;
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
+    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={styles.scrollView}>
+      <ScrollView style={styles.scrollView}>
         <View style={styles.textWrapper}>
           <Text style={styles.infoText}>{t('add.description')}</Text>
         </View>
@@ -34,7 +34,7 @@ export default (props: AddSubscriptionViewProps) => {
           <SubscriptionCardForm {...props} buttonName={t('add.btn')} />
         </View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -42,6 +42,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center'
+  },
+  scrollView: {
+    flex: 1
   },
   textWrapper: {
     margin: 10

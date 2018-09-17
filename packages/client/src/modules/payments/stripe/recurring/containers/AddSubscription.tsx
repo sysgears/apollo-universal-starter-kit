@@ -61,7 +61,15 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
   public render() {
     const { t } = this.props;
     return (
-      <Mutation mutation={ADD_SUBSCRIPTION} refetchQueries={[{ query: CREDIT_CARD_QUERY }]}>
+      <Mutation
+        mutation={ADD_SUBSCRIPTION}
+        update={(cache, { data: { addStripeSubscription } }) => {
+          const data: any = cache.readQuery({ query: SUBSCRIPTION_QUERY });
+          data.stripeSubscription = addStripeSubscription;
+          cache.writeQuery({ query: SUBSCRIPTION_QUERY, data });
+        }}
+        refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
+      >
         {addSubscription => {
           return (
             <Fragment>

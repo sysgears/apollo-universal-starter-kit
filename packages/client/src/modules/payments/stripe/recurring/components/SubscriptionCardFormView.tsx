@@ -10,7 +10,7 @@ import { required, validateForm } from '../../../../../../../common/validation';
 interface SubscriptionCardFormViewProps {
   submitting: boolean;
   buttonName: string;
-  error: string;
+  error: string | null;
   handleSubmit?: () => void;
   onSubmit: (subscriptionInput: any, stripe: any) => void;
   values?: {

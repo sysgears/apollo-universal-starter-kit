@@ -54,9 +54,8 @@ export const createCreditCardToken = async (creditCardInput: CreditCardInput, st
     stripeResponse = await createToken(creditCardInput);
   }
 
-  // TODO: check errors
   return stripeResponse.error
-    ? stripeResponse.error
+    ? { error: stripeResponse.error }
     : {
         token: stripeResponse.id,
         expiryMonth: stripeResponse.card.exp_month,

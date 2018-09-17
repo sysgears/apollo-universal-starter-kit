@@ -24,25 +24,36 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
   constructor(props: UpdateCreditCardProps) {
     super(props);
     this.state = {
-      submitting: false
+      submitting: false,
+      error: null
     };
   }
 
   public onSubmit = (updateCard: any) => async (creditCardInput: CreditCardInput, stripe?: any) => {
     this.setState({ submitting: true });
     const { t, history, navigation } = this.props;
-    const preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
-    const { data } = await updateCard({ variables: { input: preparedCreditCard } });
-    const { updateStripeSubscriptionCard } = data;
 
-    if (!updateStripeSubscriptionCard) {
-      /*tslint:disable:no-console*/
-      console.log('Error updating card');
-      // return { errors: ['Error updating card.'] };
+    try {
+      // create credit card token
+      const preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
+      if (preparedCreditCard.error) {
+        this.setState({ submitting: false, error: t('stripeError') });
+        return;
+      }
+
+      const { data } = await updateCard({ variables: { input: preparedCreditCard } });
+      const { updateStripeSubscriptionCard } = data;
+
+      if (!updateStripeSubscriptionCard) {
+        this.setState({ submitting: false, error: t('serverError') });
+        return;
+      }
+
+      this.setState({ submitting: false });
+      history ? history.push('/profile') : navigation.navigate('Profile');
+    } catch (e) {
+      this.setState({ submitting: false, error: t('serverError') });
     }
-
-    this.setState({ submitting: false });
-    history ? history.push('/profile') : navigation.goBack();
   };
 
   public render() {
@@ -55,7 +66,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
                   <UpdateCreditCardView
-                    error={null}
+                    error={this.state.error}
                     submitting={this.state.submitting}
                     onSubmit={this.onSubmit(updateCard)}
                     t={t}
@@ -63,7 +74,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
                 </StripeProvider>
               ) : (
                 <UpdateCreditCardView
-                  error={null}
+                  error={this.state.error}
                   submitting={this.state.submitting}
                   onSubmit={this.onSubmit(updateCard)}
                   t={t}

@@ -28,40 +28,40 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
   constructor(props: AddSubscriptionProps) {
     super(props);
     this.state = {
-      submitting: false
+      submitting: false,
+      error: null
     };
   }
 
   public onSubmit = (addSubscription: any) => async (creditCardInput: CreditCardInput, stripe?: any) => {
-    this.setState({ submitting: true });
     const { t, history, navigation } = this.props;
-    const preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
-    const { data } = await addSubscription({ variables: { input: preparedCreditCard } });
-    const { addStripeSubscription } = data;
+    this.setState({ submitting: true });
 
-    // TODO: implement error handlers
-    if (addStripeSubscription.errors) {
-      const submitError = { _error: t('errorMsg') };
-      addStripeSubscription.errors.map((error: { [key: string]: any }) => (submitError[error.field] = error.message));
-      throw submitError;
+    try {
+      // create credit card token
+      const preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
+      if (preparedCreditCard.error) {
+        this.setState({ submitting: false, error: t('stripeError') });
+        return;
+      }
+
+      const { data } = await addSubscription({ variables: { input: preparedCreditCard } });
+      const { addStripeSubscription } = data;
+
+      this.setState({
+        submitting: false,
+        error: addStripeSubscription.errors ? addStripeSubscription.errors.map((e: any) => e.message).join('\n') : null
+      });
+      history ? history.push('/subscriber-page') : navigation.goBack();
+    } catch (e) {
+      this.setState({ submitting: false, error: t('serverError') });
     }
-
-    this.setState({ submitting: false });
-    history ? history.push('/subscriber-page') : navigation.goBack();
   };
 
   public render() {
     const { t } = this.props;
     return (
-      <Mutation
-        mutation={ADD_SUBSCRIPTION}
-        update={(cache, { data: { addStripeSubscription } }) => {
-          const data: any = cache.readQuery({ query: SUBSCRIPTION_QUERY });
-          data.stripeSubscription = addStripeSubscription;
-          cache.writeQuery({ query: SUBSCRIPTION_QUERY, data });
-        }}
-        refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
-      >
+      <Mutation mutation={ADD_SUBSCRIPTION} refetchQueries={[{ query: CREDIT_CARD_QUERY }]}>
         {addSubscription => {
           return (
             <Fragment>
@@ -69,7 +69,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
                   <AddSubscriptionView
-                    error={null}
+                    error={this.state.error}
                     submitting={this.state.submitting}
                     onSubmit={this.onSubmit(addSubscription)}
                     t={t}
@@ -77,7 +77,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
                 </StripeProvider>
               ) : (
                 <AddSubscriptionView
-                  error={null}
+                  error={this.state.error}
                   submitting={this.state.submitting}
                   onSubmit={this.onSubmit(addSubscription)}
                   t={t}

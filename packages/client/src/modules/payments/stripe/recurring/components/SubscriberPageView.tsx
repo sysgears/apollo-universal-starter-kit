@@ -16,7 +16,7 @@ interface SubscribersOnlyViewProps {
 
 export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
   if (loading) {
-    return <p>{t('loading')}</p>; // TODO: remove all loaders from translation
+    return <p>{t('loading')}</p>;
   }
 
   return (

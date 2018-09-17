@@ -3,9 +3,5 @@
 mutation addStripeSubscription($input: StripeSubscribtionInput!) {
   addStripeSubscription(input: $input) {
     ...StripeSubscription
-    errors {
-      field
-      message
-    }
   }
 }

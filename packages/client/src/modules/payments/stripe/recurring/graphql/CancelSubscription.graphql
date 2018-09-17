@@ -3,9 +3,5 @@
 mutation cancelStripeSubscription {
   cancelStripeSubscription {
     ...StripeSubscription
-    errors {
-      field
-      message
-    }
   }
 }

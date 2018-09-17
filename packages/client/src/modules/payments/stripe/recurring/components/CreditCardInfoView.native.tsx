@@ -24,41 +24,33 @@ const renderCardItem = (title: string, value: string) => (
   </CardItem>
 );
 
-const CreditCardInfoView = ({ loading, t, creditCard, navigation }: CardInfoViewProps) => {
-  // TODO: Implement error showing, instead of empty screen
-  return (
-    <View style={styles.container}>
-      {!loading &&
-        creditCard &&
-        creditCard.expiryMonth &&
-        creditCard.expiryYear &&
-        creditCard.last4 &&
-        creditCard.brand && (
+const CreditCardInfoView = ({ loading, t, creditCard, navigation }: CardInfoViewProps) => (
+  <View style={styles.container}>
+    {!loading &&
+      creditCard &&
+      creditCard.expiryMonth &&
+      creditCard.expiryYear &&
+      creditCard.last4 &&
+      creditCard.brand && (
+        <View>
+          <CardSubtitleText style={styles.container}>{t('creditCard.title')}</CardSubtitleText>
+          {renderCardItem(`${t('creditCard.text.card')}: `, `${creditCard.brand} ************${creditCard.last4}`)}
+          {renderCardItem(`${t('creditCard.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
           <View>
-            <CardSubtitleText style={styles.title}>{t('creditCard.title')}</CardSubtitleText>
-            {renderCardItem(`${t('creditCard.text.card')}: `, `${creditCard.brand} ************${creditCard.last4}`)}
-            {renderCardItem(`${t('creditCard.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
-            <View>
-              <View style={styles.buttonWrapper}>
-                <Button color={primary} onPress={() => navigation.push('UpdateCreditCard')}>
-                  {t('update.btn')}
-                </Button>
-              </View>
+            <View style={styles.buttonWrapper}>
+              <Button color={primary} onPress={() => navigation.push('UpdateCreditCard')}>
+                {t('update.btn')}
+              </Button>
             </View>
           </View>
-        )}
-    </View>
-  );
-};
+        </View>
+      )}
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  },
-  title: {
-    flex: 1,
-    fontWeight: 'bold',
-    fontSize: 20
   },
   buttonWrapper: {
     padding: 10

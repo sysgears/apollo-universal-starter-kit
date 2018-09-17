@@ -1,5 +1,5 @@
 import React from 'react';
-import { Query, Mutation } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 
 import CancelSubscriptionView from '../components/CancelSubscriptionView';
 import translate, { TranslateFunction } from '../../../../../i18n';
@@ -16,15 +16,19 @@ class CancelSubscription extends React.Component<CancelSubscriptionProps, { [key
   constructor(props: CancelSubscriptionProps) {
     super(props);
     this.state = {
-      cancelling: false,
-      errors: null
+      submitting: false,
+      error: null
     };
   }
 
   public onClick = (cancelSubscription: any) => async () => {
-    this.setState({ cancelling: true });
-    const { errors } = await cancelSubscription();
-    this.setState({ cancelling: false, errors: errors ? errors.map((e: any) => e.message).join('\n') : null });
+    this.setState({ submitting: true });
+
+    try {
+      await cancelSubscription();
+    } catch (e) {
+      this.setState({ submitting: false, error: this.props.t('serverError') });
+    }
   };
 
   public render() {
@@ -43,8 +47,8 @@ class CancelSubscription extends React.Component<CancelSubscriptionProps, { [key
         {cancelSubscription => {
           return (
             <CancelSubscriptionView
-              cancelling={this.state.cancelling}
-              errors={this.state.errors}
+              submitting={this.state.submitting}
+              error={this.state.error}
               onClick={this.onClick(cancelSubscription)}
               t={t}
             />

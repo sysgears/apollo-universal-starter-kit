@@ -25,7 +25,7 @@ const SubscriptionAuthRouter = ({
 }: SubscriptionAuthRouterProps) => {
   // PageLayout must be used here to prevent showing
   // empty screen when stripe subscription info is loading
-  // Important: You don't need to include page layout for protected routes!
+  // Important: You don't need to include page layout inside protected routes!
   return (
     <PageLayout>
       {!loading && stripeSubscription && stripeSubscription.active ? (

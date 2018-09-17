@@ -1,8 +1,7 @@
 import React from 'react';
-import { Text } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
-import translate, { TranslateFunction } from '../../../../i18n';
+import translate from '../../../../i18n';
 import { HeaderTitle, IconButton } from '../../../common/components/native';
 import Feature from '../../../connector.native';
 
@@ -29,8 +28,17 @@ export default new Feature({
         },
         UpdateCreditCard: {
           screen: (props: any) => <SubscriptionAuthRouter {...props} component={UpdateCreditCard} />,
-          navigationOptions: () => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="update.title" style="subTitle" />
+          navigationOptions: ({ navigation }: any) => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="update.title" style="subTitle" />,
+            // custom back button to User profile
+            headerLeft: (
+              <IconButton
+                iconName="arrow-left"
+                iconSize={32}
+                iconColor="#000"
+                onPress={() => navigation.navigate('Profile')}
+              />
+            )
           })
         },
         AddSubscription: {
@@ -54,12 +62,3 @@ export default new Feature({
   },
   localization: { ns: 'stripeSubscription', resources }
 });
-
-// headerLeft: ( // TODO: implement go back to Profile
-//   <IconButton
-//     iconName="menu"
-//     iconSize={32}
-//     iconColor="#0275d8"
-//     onPress={() => navigation.navigate('Profile')}
-//   />
-// )

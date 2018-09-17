@@ -6,25 +6,25 @@ import { TranslateFunction } from '../../../../../i18n';
 
 interface CancelSubscriptionViewProps {
   onClick: () => void;
-  errors: string;
-  cancelling: boolean;
+  error: string | null;
+  submitting: boolean;
   t: TranslateFunction;
 }
 
-export default ({ t, onClick, errors, cancelling }: CancelSubscriptionViewProps) => {
+export default ({ t, onClick, error, submitting }: CancelSubscriptionViewProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonWrapper}>
-        <Button onPress={onClick} disabled={cancelling} danger>
+        <Button onPress={onClick} disabled={submitting} danger>
           {t('cancel.btn')}
         </Button>
-        {errors && (
+        {error && (
           <View style={styles.alertWrapper}>
             <View style={styles.alertIconWrapper}>
               <FontAwesome name="exclamation-circle" size={20} style={{ color: '#c22' }} />
             </View>
             <View style={styles.alertTextWrapper}>
-              <Text style={styles.alertText}>{errors}</Text>
+              <Text style={styles.alertText}>{error}</Text>
             </View>
           </View>
         )}

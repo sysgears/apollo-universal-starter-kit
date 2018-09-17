@@ -15,7 +15,7 @@ interface AddSubscriptionViewProps {
   t: TranslateFunction;
   submitting: boolean;
   onSubmit: (subscriptionInput: CreditCardInput, stripe: any) => void;
-  error: string;
+  error: string | null;
 }
 
 export default (props: AddSubscriptionViewProps) => {

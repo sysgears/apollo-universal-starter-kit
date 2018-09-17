@@ -75,6 +75,7 @@ export default () => ({
 
         return { active: true, errors: null };
       } catch (e) {
+        log.error(e);
         return { active: false, errors: e };
       }
     }),
@@ -112,7 +113,7 @@ export default () => ({
         } catch (err) {
           log.error(err);
           const e = new FieldError();
-          e.setError('stripeSubscription', req.t('stripeSubscription:cancelError'));
+          e.setError('cancelSubscription', req.t('stripeSubscription:cancelError'));
           e.throwIf();
         }
 
@@ -129,6 +130,7 @@ export default () => ({
 
         return { active: false, errors: null };
       } catch (e) {
+        log.error(e);
         return { active: true, errors: e };
       }
     })

@@ -4,19 +4,20 @@ import CreditCardInfo from '../containers/CreditCardInfo';
 import CancelSubscription from '../containers/CancelSubscription';
 import { CardGroup, CardText, CardTitle } from '../../../../common/components/web';
 import './stripeSubscription.scss';
+import { TranslateFunction } from '../../../../../i18n';
 
-// TODO: ADD types
-export default ({ t, loading, stripeSubscription }: any) => {
+interface SubscriptionProfileViewProps {
+  loading: boolean;
+  stripeSubscription: {
+    active: boolean;
+  };
+  t: TranslateFunction;
+}
+
+export default ({ t, loading, stripeSubscription }: SubscriptionProfileViewProps) => {
   if (loading) {
-    return <span>Loading</span>;
+    return <p>{t('loading')}</p>;
   }
-
-  // TODO: refactor this
-  // if (stripeSubscription && !stripeSubscription.active) {
-  //   return (
-  //
-  //   );
-  // }
 
   return (
     <div className="subscriptionProfileWrapper">

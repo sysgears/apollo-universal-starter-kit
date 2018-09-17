@@ -24,9 +24,15 @@ export default (props: AddSubscriptionViewProps) => {
   return (
     <PageLayout>
       <Helmet title={`${settings.app.name} - ${t('title')}`} />
+      <h1 className="text-center">{t('subTitle')}</h1>
+      <p>{t('add.description')}</p>
+      <p>{t('add.product')}</p>
+      <p>
+        {t('add.price')} {settings.payments.stripe.recurring.plan.amount / 100}
+      </p>
       <LayoutCenter>
-        <h1 className="text-center">{t('subTitle')}</h1>
-        <p>{t('add.description')}</p>
+        <h3 className="text-center"> {t('add.creditCard')}</h3>
+
         <ElementsClientOnly>
           <SubscriptionCardForm {...props} buttonName={t('add.btn')} />
         </ElementsClientOnly>

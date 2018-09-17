@@ -25,8 +25,11 @@
   "add": {
     "title": "Add subscription",
     "btn": "Subscribe",
-    "description": "To get the magic private number you should subscribe."
-  },
+    "description": "Apollo Universal Starter Kit provides basic example how to use Stripe Subscription in real production application, also implements functionality for developing (shows how to imitate real production payment service in the developing mode).",
+    "product": "To get the magic private number you should subscribe.",
+    "price": "Price per month ($):",
+    "creditCard": "Credit card"
+    },
 
   "cancel": {
     "title": "Cancel subscription",

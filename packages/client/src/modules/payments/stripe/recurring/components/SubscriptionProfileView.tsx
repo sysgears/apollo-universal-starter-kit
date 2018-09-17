@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import CreditCardInfo from '../containers/CreditCardInfo';
 import CancelSubscription from '../containers/CancelSubscription';
 import { CardGroup, CardText, CardTitle } from '../../../../common/components/web';
+import './stripeSubscription.scss';
 
 // TODO: ADD types
 export default ({ t, loading, stripeSubscription }: any) => {
@@ -18,7 +19,7 @@ export default ({ t, loading, stripeSubscription }: any) => {
   // }
 
   return (
-    <div style={{ border: '2px dashed black', margin: '20px' }}>
+    <div className="subscriptionProfileWrapper">
       <CardGroup>
         <CardTitle>{t('subscriptionProfile.title')}</CardTitle>
       </CardGroup>

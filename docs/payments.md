@@ -14,8 +14,8 @@ The purpose of this module is to provide a starting point for applications that
 wish to charge users a monthly subscription fee for access to certain features 
 of the site. This is implemented using [Stripe](https://stripe.com).
 
-Apollo Universal Starter Kit provides good basic example how to use Stripe Subscription in real production aplication, 
-also implement functionality for developing (shows how to imitate real production payment service in the developing mode).
+Apollo Universal Starter Kit provides basic example how to use Stripe Subscription in real production application,
+ also implements functionality for developing (shows how to imitate real production payment service in the developing mode).
 
 #### Features
 - After registering an account, users will be redirected to the page for subscribing using a credit card.

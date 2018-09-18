@@ -14,8 +14,9 @@ const schemas = require('../../../packages/server/src/modules/common/generatedSc
  * @param moduleName
  * @returns {*|void}
  */
-function updateModule(location, logger, moduleName) {
+function updateModule(logger, moduleName, location) {
   logger.info(`Updating ${moduleName} Schema…`);
+  console.log('location:', location);
 
   // pascalize
   const Module = pascalize(moduleName);

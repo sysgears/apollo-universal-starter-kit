@@ -1,4 +1,4 @@
-import { groupBy } from 'lodash';
+import { groupBy, findIndex } from 'lodash';
 import { decamelize } from 'humps';
 import settings from '../../../../settings';
 
@@ -45,58 +45,97 @@ export const orderedForArray = (rows, collection, field, arrayElement) => {
   });
 };
 
-const _getSelectFields = (fields, parentPath, parentKey, domainSchema, selectItems, joinNames, single) => {
-  for (const key of Object.keys(fields)) {
-    if (key !== '__typename') {
-      const value = domainSchema.values[key];
-      if (fields[key] === true) {
-        if (value && value.transient) {
-          continue;
-        }
-        const as = parentPath.length > 0 ? `${parentPath.join('_')}_${key}` : key;
-        const tableName = `${decamelize(domainSchema.__.tableName ? domainSchema.__.tableName : domainSchema.name)}`;
-        const fullTableName = parentKey !== null && parentKey !== tableName ? `${parentKey}_${tableName}` : tableName;
-        const arrayPrefix = single ? '' : '_';
-        selectItems.push(`${decamelize(fullTableName)}.${decamelize(key)} as ${arrayPrefix}${as}`);
-      } else {
-        if (value.type.constructor === Array) {
-          //console.log('Array');
-          //console.log(key);
-          //console.log(fields[key]);
-          //console.log(value.type[0].name);
-        } else {
-          if (!value.type.__.transient) {
-            joinNames.push({
-              key: decamelize(key),
-              prefix: value.type.__.tablePrefix ? value.type.__.tablePrefix : '',
-              name: decamelize(value.type.__.tableName ? value.type.__.tableName : value.type.name),
-              schemaName: decamelize(domainSchema.name)
-            });
-          }
-
-          parentPath.push(key);
-
-          _getSelectFields(fields[key], parentPath, decamelize(key), value.type, selectItems, joinNames, single);
-
-          parentPath.pop();
-        }
+/**
+ * Collecting selects and joins
+ * @param graphqlFields
+ * @param domainSchema
+ * @param selectItems
+ * @param joinNames
+ * @param single
+ * @param parentField
+ * @private
+ */
+const _getSelectFields = (graphqlFields, domainSchema, selectItems, joinNames, single, parentField = '') => {
+  for (const fieldName of Object.keys(graphqlFields)) {
+    if (fieldName === '__typename') {
+      continue;
+    }
+    const value = domainSchema.values[fieldName];
+    if (graphqlFields[fieldName] === true) {
+      if (value && value.transient) {
+        continue;
       }
+      selectItems.push(_getSelectField(fieldName, parentField, domainSchema, single));
+    } else {
+      if (Array.isArray(value.type) || findIndex(joinNames, { fieldName: decamelize(fieldName) }) > -1) {
+        continue;
+      }
+      if (!value.type.__.transient) {
+        joinNames.push(_getJoinEntity(fieldName, value, domainSchema));
+      }
+      _getSelectFields(graphqlFields[fieldName], value.type, selectItems, joinNames, single, fieldName);
     }
   }
 };
 
+/**
+ * Computing select field
+ * @param fieldName
+ * @param parentField
+ * @param domainSchema
+ * @param single
+ * @returns {string}
+ * @private
+ */
+const _getSelectField = (fieldName, parentField, domainSchema, single) => {
+  const alias = parentField.length > 0 ? `${parentField}_${fieldName}` : fieldName;
+  const tableName = `${decamelize(domainSchema.__.tableName ? domainSchema.__.tableName : domainSchema.name)}`;
+  // returning object would be array or no
+  const arrayPrefix = single ? '' : '_';
+  return `${tableName}.${decamelize(fieldName)} as ${arrayPrefix}${alias}`;
+};
+
+/**
+ * Computing join entity object
+ * @param fieldName
+ * @param value
+ * @param domainSchema
+ * @returns {{fieldName: *, prefix: string, baseTableName: *, foreignTableName: *}}
+ * @private
+ */
+const _getJoinEntity = (fieldName, value, domainSchema) => {
+  return {
+    fieldName: decamelize(fieldName),
+    prefix: value.type.__.tablePrefix ? value.type.__.tablePrefix : '',
+    baseTableName: decamelize(domainSchema.name),
+    foreignTableName: decamelize(value.type.__.tableName ? value.type.__.tableName : value.type.name)
+  };
+};
+
+/**
+ * Computing query with selects and joins
+ * @param schema
+ * @param fields
+ * @param single
+ * @returns {function(*): *}
+ */
 export const selectBy = (schema, fields, single = false) => {
-  // select fields
-  const parentPath = [];
+  // select fields and joins
   const selectItems = [];
   const joinNames = [];
-  _getSelectFields(fields, parentPath, null, schema, selectItems, joinNames, single);
+  _getSelectFields(fields, schema, selectItems, joinNames, single);
 
   return query => {
     // join table names
-    joinNames.map(({ key, prefix, name, schemaName }) => {
-      const tableName = key !== null && key !== name ? `${key}_${name}` : name;
-      query.leftJoin(`${prefix}${name} as ${tableName}`, `${tableName}.id`, `${schemaName}.${key}_id`);
+    joinNames.map(({ fieldName, prefix, baseTableName, foreignTableName }) => {
+      // if fieldName (schema key) diff with table name than make proper table alias
+      const tableNameAlias =
+        fieldName !== null && fieldName !== foreignTableName ? `${fieldName}_${foreignTableName}` : foreignTableName;
+      query.leftJoin(
+        `${prefix}${foreignTableName} as ${tableNameAlias}`,
+        `${tableNameAlias}.id`,
+        `${baseTableName}.${fieldName}_id`
+      );
     });
 
     return query.select(selectItems);

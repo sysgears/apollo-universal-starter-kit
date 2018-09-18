@@ -6901,8 +6901,8 @@ graphql-extensions@0.1.2:
     apollo-server-env "2.0.2"
 
 graphql-iso-date@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.5.0.tgz#55a1be0efa8d28c1453afd2eb5ce1d052189a513"
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.6.1.tgz#bd2d0dc886e0f954cbbbc496bbf1d480b57ffa96"
 
 graphql-parse-fields@^1.2.0:
   version "1.2.0"

@@ -11,10 +11,10 @@ class CommandInvoker {
    * @param addModule - The function for creating a new module.
    * @param deleteModule - The function for deleting existing module.
    */
-  constructor(addModule, deleteModule, addCrud, updateSchema) {
+  constructor(addModule, addCrud, deleteModule, updateSchema) {
     this.addModule = addModule;
-    this.deleteModule = deleteModule;
     this.addCrud = addCrud;
+    this.deleteModule = deleteModule;
     this.updateSchema = updateSchema;
   }
 
@@ -28,11 +28,11 @@ class CommandInvoker {
   static runCommand(func, location, ...args) {
     // client
     if (location === 'client' || location === 'both') {
-      func('client', ...args);
+      func(...args, 'client');
     }
     // server
     if (location === 'server' || location === 'both') {
-      func('server', ...args);
+      func(...args, 'server');
     }
   }
 
@@ -49,7 +49,6 @@ class CommandInvoker {
    */
   runAddCrud(args, options, logger) {
     const { moduleName, tablePrefix, location = 'both' } = args;
-    CommandInvoker.runCommand(this.addModule, location, logger, CRUD_TEMPLATES, moduleName, false);
     CommandInvoker.runCommand(this.addCrud, location, logger, CRUD_TEMPLATES, moduleName, tablePrefix);
   }
 
@@ -58,7 +57,7 @@ class CommandInvoker {
    */
   runDeleteModule(args, options, logger) {
     const { moduleName, location = 'both' } = args;
-    CommandInvoker.runCommand(this.deleteModule, location, logger, moduleName);
+    CommandInvoker.runCommand(this.deleteModule, location, logger, moduleName, options);
   }
 
   /**

@@ -1,19 +1,24 @@
 const shell = require('shelljs');
 const chalk = require('chalk');
 const { pascalize } = require('humps');
-const { copyFiles, renameFiles, updateFileWithExports } = require('../helpers/util');
+const addModule = require('./addModule');
+const addMigration = require('./subCommands/addMigration');
+const { computeModulesPath, updateFileWithExports } = require('../helpers/util');
 const { BASE_PATH } = require('../config');
 
 /**
- * Adds module in client or server and adds a new module to the Feature connector.
+ * Adds CRUD module in client or server and adds a new module to the Feature connector.
  *
- * @param location - The location for a new module [client|server|both].
  * @param logger - The Logger.
  * @param templatesPath - The path to the templates for a new module.
  * @param moduleName - The name of a new module.
- * @param finished - The flag about the end of the generating process.
+ * @param tablePrefix
+ * @param location - The location for a new module [client|server|both].
  */
-function addCrud(location, logger, templatesPath, moduleName, tablePrefix, finished = true) {
+function addCrud(logger, templatesPath, moduleName, tablePrefix, location) {
+  // add module in server, client
+  addModule(logger, templatesPath, moduleName, location, false);
+
   // pascalize
   const Module = pascalize(moduleName);
 
@@ -29,22 +34,12 @@ function addCrud(location, logger, templatesPath, moduleName, tablePrefix, finis
   }
 
   if (location === 'server') {
-    logger.info('Copying database files…');
-    const destinationPath = `${BASE_PATH}/packages/${location}/src/database`;
-    copyFiles(destinationPath, templatesPath, 'database');
-    renameFiles(destinationPath, moduleName);
+    // add migration and seed for new module
+    addMigration(logger, templatesPath, moduleName);
 
-    const timestamp = new Date().getTime();
-    shell.cd(`${BASE_PATH}/packages/${location}/src/database/migrations`);
-    shell.mv(`_${Module}.js`, `${timestamp}_${Module}.js`);
-    shell.cd(`${BASE_PATH}/packages/${location}/src/database/seeds`);
-    shell.mv(`_${Module}.js`, `${timestamp}_${Module}.js`);
-
-    logger.info(chalk.green(`✔ The database files have been copied!`));
-
-    if (tablePrefix !== '') {
-      shell.cd(`${BASE_PATH}/packages/${location}/src/modules/${moduleName}`);
-      shell.sed('-i', /this.prefix = '';/g, `this.prefix = '${tablePrefix}';`, 'sql.js');
+    if (tablePrefix) {
+      shell.cd(computeModulesPath(location, moduleName));
+      shell.sed('-i', /tablePrefix: ''/g, `tablePrefix: '${tablePrefix}'`, 'schema.js');
 
       logger.info(chalk.green(`✔ Inserted db table prefix!`));
     }
@@ -59,9 +54,7 @@ function addCrud(location, logger, templatesPath, moduleName, tablePrefix, finis
     updateFileWithExports(options);
   }
 
-  if (finished) {
-    logger.info(chalk.green(`✔ Module for ${location} successfully created!`));
-  }
+  logger.info(chalk.green(`✔ Module for ${location} successfully created!`));
 }
 
 module.exports = addCrud;

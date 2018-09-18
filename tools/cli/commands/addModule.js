@@ -6,13 +6,13 @@ const { copyFiles, renameFiles, computeModulesPath } = require('../helpers/util'
 /**
  * Adds module in client or server and adds a new module to the Feature connector.
  *
- * @param location - The location for a new module [client|server|both].
  * @param logger - The Logger.
  * @param templatesPath - The path to the templates for a new module.
  * @param moduleName - The name of a new module.
+ * @param location - The location for a new module [client|server|both].
  * @param finished - The flag about the end of the generating process.
  */
-function addModule(location, logger, templatesPath, moduleName, finished = true) {
+function addModule(logger, templatesPath, moduleName, location, finished = true) {
   logger.info(`Copying ${location} files…`);
 
   // create new module directory

@@ -32,29 +32,35 @@ export default (props: AddSubscriptionViewProps) => {
           <p>
             {t('add.price')} {settings.payments.stripe.recurring.plan.amount / 100}
           </p>
-          {/* Displays testing credit cards!*/}
-          {renderTestingCards(t)}
         </Col>
         <Col xs={6}>
-          <LayoutCenter>
-            <h3 className="text-center"> {t('add.creditCard')}</h3>
-
-            <ElementsClientOnly>
-              <SubscriptionCardForm {...props} buttonName={t('add.btn')} />
-            </ElementsClientOnly>
-          </LayoutCenter>
+          {/* Displays testing credit cards when stripe test keys are used!!!*/}
+          {settings.payments.stripe.recurring.publicKey.includes('test') && renderTestingCards(t)}
         </Col>
       </Row>
+      <LayoutCenter>
+        <h3 className="text-center"> {t('add.creditCard')}</h3>
+
+        <ElementsClientOnly>
+          <SubscriptionCardForm {...props} buttonName={t('add.btn')} />
+        </ElementsClientOnly>
+      </LayoutCenter>
     </PageLayout>
   );
 };
 
+/**
+ * Renders test credit cards table.
+ *
+ * @param t - The translate function.
+ * @return Returns header and table with test credit cards
+ */
 const renderTestingCards = (t: TranslateFunction) => {
   const testCreditCard = [
     {
       id: 1,
       number: '4242 4242 4242 4242',
-      brand: 'visa',
+      type: 'visa',
       date: '02/22',
       csv: '242',
       zip: '42424'
@@ -62,7 +68,7 @@ const renderTestingCards = (t: TranslateFunction) => {
     {
       id: 2,
       number: '5555 5555 5555 4444',
-      brand: 'Mastercard',
+      type: 'Mastercard',
       date: '02/22',
       csv: '242',
       zip: '42424'
@@ -70,7 +76,7 @@ const renderTestingCards = (t: TranslateFunction) => {
     {
       id: 3,
       number: '3782 8224 6310 005',
-      brand: 'American Express',
+      type: 'American Express',
       date: '02/22',
       csv: '242',
       zip: '42424'
@@ -79,9 +85,9 @@ const renderTestingCards = (t: TranslateFunction) => {
 
   const columns = [
     {
-      title: 'brand',
-      dataIndex: 'brand',
-      key: 'brand',
+      title: 'type',
+      dataIndex: 'type',
+      key: 'type',
       render(text: string) {
         return <span>{text}</span>;
       }
@@ -122,7 +128,7 @@ const renderTestingCards = (t: TranslateFunction) => {
 
   return (
     <div>
-      <h3 className="text-center">{t('add.testCreditCards')}</h3>
+      <h5 className="text-center">{t('add.testCreditCards')}</h5>
       <Table style={{ fontSize: '13px' }} dataSource={testCreditCard} columns={columns} />
     </div>
   );

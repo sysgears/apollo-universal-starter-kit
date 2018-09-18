@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, KeyboardAvoidingView, Keyboard } from 'react-native';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import { TranslateFunction } from '../../../../../i18n';
@@ -13,37 +13,55 @@ interface AddSubscriptionViewProps {
   error: string | null;
 }
 
-export default (props: AddSubscriptionViewProps) => {
-  const { t } = props;
+export default class AddSubscriptionView extends React.Component<AddSubscriptionViewProps> {
+  /**
+   * This functionality demonstrates how to prevent covering the inputs when the keyboard pops up.
+   * Main scroll container is carolling down after popping up the keyboard.
+   */
+  private scrollViewRef: any;
+  private keyboardSub: any;
 
-  return (
-    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={styles.scrollView}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.textWrapper}>
-          <Text style={styles.infoText}>{t('add.description')}</Text>
-        </View>
-        <View style={styles.textWrapper}>
-          <Text style={styles.infoText}>{t('add.product')}</Text>
-        </View>
-        <View style={styles.textWrapper}>
-          <Text style={styles.infoText}>
-            {t('add.price')} {settings.payments.stripe.recurring.plan.amount / 100}
-          </Text>
-        </View>
-        <View style={styles.cardFormWrapper}>
-          <SubscriptionCardForm {...props} buttonName={t('add.btn')} />
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
-  );
-};
+  public componentDidMount() {
+    this.keyboardSub = Keyboard.addListener('keyboardDidShow', () => {
+      setTimeout(() => {
+        this.scrollViewRef.scrollToEnd({ animated: true });
+      }, 0);
+    });
+  }
+
+  public componentWillUnmount() {
+    this.keyboardSub.remove();
+  }
+
+  public render() {
+    const { t } = this.props;
+    return (
+      <View style={styles.container}>
+        <ScrollView style={styles.container} ref={ref => (this.scrollViewRef = ref)}>
+          <View style={styles.textWrapper}>
+            <Text style={styles.infoText}>{t('add.description')}</Text>
+          </View>
+          <View style={styles.textWrapper}>
+            <Text style={styles.infoText}>{t('add.product')}</Text>
+          </View>
+          <View style={styles.textWrapper}>
+            <Text style={styles.infoText}>
+              {t('add.price')} {settings.payments.stripe.recurring.plan.amount / 100}
+            </Text>
+          </View>
+          <View style={styles.cardFormWrapper}>
+            <SubscriptionCardForm {...this.props} buttonName={t('add.btn')} />
+          </View>
+        </ScrollView>
+        {/* TODO: set offset for ios */}
+        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} />
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center'
-  },
-  scrollView: {
     flex: 1
   },
   textWrapper: {

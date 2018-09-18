@@ -11,8 +11,10 @@ const commandInvoker = new CommandInvoker(addModuleCommand, addCrudCommand, dele
 
 prog
   .version('1.0.0')
-  .command('addmodule', 'Create a new Module')
-  .argument('<module>', 'Module name')
+  .description('Full info: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Apollo-Starter-Kit-CLI')
+  // Add module
+  .command('addmodule', 'Create a new Module.')
+  .argument('<moduleName>', 'Module name')
   .argument(
     '[location]',
     'Where should new module be created. [both, server, client]',
@@ -20,8 +22,9 @@ prog
     'both'
   )
   .action((args, options, logger) => commandInvoker.runAddModule(args, options, logger))
+  // Add CRUD module
   .command('addcrud', 'Create a new Module with CRUD')
-  .argument('<module>', 'Module name')
+  .argument('<moduleName>', 'Module name')
   .argument(
     '[location]',
     'Where should CRUD module be created. [both, server, client]',
@@ -30,8 +33,9 @@ prog
   )
   .argument('[tablePrefix]', 'DB table prefix.')
   .action((args, options, logger) => commandInvoker.runAddCrud(args, options, logger))
+  // Delete module
   .command('deletemodule', 'Delete a Module')
-  .argument('<module>', 'Module name')
+  .argument('<moduleName>', 'Module name')
   .argument('[location]', 'Where should we delete module. [both, server, client]', ['both', 'server', 'client'], 'both')
   .option('-m', 'Delete migration and seeds')
   .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger));

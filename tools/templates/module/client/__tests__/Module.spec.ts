@@ -4,15 +4,14 @@ import { step } from 'mocha-steps';
 import Renderer from '../../../testHelpers/Renderer';
 import { updateContent } from '../../../testHelpers/testUtils';
 
-describe('TodoList UI works', () => {
+describe('$Module$ UI works', () => {
   const renderer = new Renderer({});
   let app;
-  let content;
 
-  step('TodoList page renders on mount', () => {
+  step('$Module$ page renders on mount', () => {
     app = renderer.mount();
-    renderer.history.push('/todoList');
-    content = updateContent(app.container);
-    expect(content).to.not.be.empty;
+    renderer.history.push('/$Module$');
+    // tslint:disable:no-unused-expression
+    expect(updateContent(app.container)).to.not.be.empty;
   });
 });

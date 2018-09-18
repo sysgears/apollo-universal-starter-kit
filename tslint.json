@@ -12,7 +12,7 @@
     ]
   },
   "linterOptions": {
-    "exclude": ["**/*.js", "**/*.jsx", "**/*.d.ts"]
+    "exclude": ["**/*.js", "**/*.jsx", "**/*.d.ts", "tools/**/*.*"]
   },
   "rules": {
     "prettier": [true, {

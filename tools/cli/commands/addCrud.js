@@ -12,16 +12,16 @@ const { computeModulesPath } = require('../helpers/util');
  * @param tablePrefix
  * @param location
  */
-function addCrud(logger, templatesPath, module, tablePrefix, location) {
+function addCrud(logger, templatesPath, moduleName, tablePrefix, location) {
   // add module in server, client
-  addModule(logger, templatesPath, module, location, false);
+  addModule(logger, templatesPath, moduleName, location, false);
 
   if (location === 'server') {
     // add migration and seed for new module
-    addMigration(logger, templatesPath, module);
+    addMigration(logger, templatesPath, moduleName);
 
     if (tablePrefix) {
-      shell.cd(computeModulesPath(location, module));
+      shell.cd(computeModulesPath(location, moduleName));
       shell.sed('-i', /tablePrefix: ''/g, `tablePrefix: '${tablePrefix}'`, 'schema.js');
 
       logger.info(chalk.green(`✔ Inserted db table prefix!`));

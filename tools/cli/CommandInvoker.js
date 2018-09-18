@@ -1,4 +1,4 @@
-const { MODULE_TEMPLATES } = require('./config');
+const { MODULE_TEMPLATES, CRUD_TEMPLATES } = require('./config');
 
 /**
  * Class CommandInvoker. Takes all CLI operations and calls certain CLI operation depends of variables.
@@ -11,9 +11,11 @@ class CommandInvoker {
    * @param addModule - The function for creating a new module.
    * @param deleteModule - The function for deleting existing module.
    */
-  constructor(addModule, deleteModule) {
+  constructor(addModule, deleteModule, addCrud, updateSchema) {
     this.addModule = addModule;
     this.deleteModule = deleteModule;
+    this.addCrud = addCrud;
+    this.updateSchema = updateSchema;
   }
 
   /**
@@ -26,11 +28,11 @@ class CommandInvoker {
   static runCommand(func, location, ...args) {
     // client
     if (location === 'client' || location === 'both') {
-      func(...args, 'client');
+      func('client', ...args);
     }
     // server
     if (location === 'server' || location === 'both') {
-      func(...args, 'server');
+      func('server', ...args);
     }
   }
 
@@ -43,11 +45,28 @@ class CommandInvoker {
   }
 
   /**
+   * Runs operation (function) for creating a new CRUD module.
+   */
+  runAddCrud(args, options, logger) {
+    const { moduleName, tablePrefix, location = 'both' } = args;
+    CommandInvoker.runCommand(this.addModule, location, logger, CRUD_TEMPLATES, moduleName, false);
+    CommandInvoker.runCommand(this.addCrud, location, logger, CRUD_TEMPLATES, moduleName, tablePrefix);
+  }
+
+  /**
    * Runs operation (function) for deleting existing module.
    */
   runDeleteModule(args, options, logger) {
     const { moduleName, location = 'both' } = args;
     CommandInvoker.runCommand(this.deleteModule, location, logger, moduleName);
+  }
+
+  /**
+   * Runs operation (function) for updating existing module schema.
+   */
+  runUpdateSchema(args, options, logger) {
+    const { moduleName, location = 'both' } = args;
+    CommandInvoker.runCommand(this.updateSchema, location, logger, moduleName);
   }
 }
 

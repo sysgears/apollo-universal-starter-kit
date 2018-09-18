@@ -4,30 +4,30 @@ const chalk = require('chalk');
 const GraphQLGenerator = require('@domain-schema/graphql').default;
 const { pascalize, camelize } = require('humps');
 
+const { BASE_PATH } = require('../config');
 const { generateField } = require('../helpers/util');
 const schemas = require('../../../packages/server/src/modules/common/generatedSchemas');
 
 /**
  *
  * @param logger
- * @param module
+ * @param moduleName
  * @returns {*|void}
  */
-function updateSchema(logger, module) {
-  logger.info(`Updating ${module} Schema…`);
+function updateModule(location, logger, moduleName) {
+  logger.info(`Updating ${moduleName} Schema…`);
 
   // pascalize
-  const Module = pascalize(module);
+  const Module = pascalize(moduleName);
 
-  const startPath = `${__dirname}/../../..`;
-  const modulePath = `${startPath}/packages/server/src/modules/${module}`;
+  const modulePath = `${BASE_PATH}/packages/server/src/modules/${moduleName}`;
 
   if (fs.existsSync(modulePath)) {
     // get module schema
     const schema = schemas.default[`${Module}Schema`];
 
     // get schema file
-    const pathSchema = `${startPath}/packages/server/src/modules/${module}/`;
+    const pathSchema = `${BASE_PATH}/packages/server/src/modules/${moduleName}/`;
     if (fs.existsSync(pathSchema)) {
       const file = `schema.graphql`;
 
@@ -157,7 +157,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     }
 
     // get fragment file
-    const pathFragment = `${startPath}/packages/client/src/modules/${module}/graphql/`;
+    const pathFragment = `${BASE_PATH}/packages/client/src/modules/${moduleName}/graphql/`;
     if (fs.existsSync(pathFragment)) {
       const fragmentGraphqlFile = `${Module}.graphql`;
 
@@ -184,7 +184,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     }
 
     // get state client file
-    const pathStateClient = `${startPath}/packages/client/src/modules/${module}/graphql/`;
+    const pathStateClient = `${BASE_PATH}/packages/client/src/modules/${moduleName}/graphql/`;
     if (fs.existsSync(pathStateClient)) {
       const file = `${Module}State.client.graphql`;
 
@@ -218,7 +218,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
     }
 
     // get state resolver file
-    const pathStateResolver = `${startPath}/packages/client/src/modules/${module}/resolvers/`;
+    const pathStateResolver = `${BASE_PATH}/packages/client/src/modules/${moduleName}/resolvers/`;
     if (fs.existsSync(pathStateResolver)) {
       const file = `index.js`;
 
@@ -258,7 +258,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
       logger.error(chalk.red(`✘ State Resolver path ${pathStateResolver} not found!`));
     }
   } else {
-    logger.info(chalk.red(`✘ Module ${module} in path ${modulePath} not found!`));
+    logger.info(chalk.red(`✘ Module ${moduleName} in path ${modulePath} not found!`));
   }
 }
 
@@ -288,4 +288,4 @@ const regenerateGraphqlFragment = (value, key, spaces = '') => {
   }
 };
 
-module.exports = updateSchema;
+module.exports = updateModule;

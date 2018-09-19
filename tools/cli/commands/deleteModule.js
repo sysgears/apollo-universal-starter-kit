@@ -2,7 +2,7 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const deleteMigrations = require('./subCommands/deleteMigrations');
-const { computeModulesPath } = require('../helpers/util');
+const { computeModulesPath, runPrittier } = require('../helpers/util');
 
 /**
  * Removes the module from client, server or both locations and removes the module from the Feature connector.
@@ -48,6 +48,7 @@ function deleteModule(logger, moduleName, options, location) {
       .replace(RegExp(`import ${moduleName} from './${moduleName}';\n`, 'g'), '');
 
     fs.writeFileSync(indexPath, contentWithoutDeletedModule);
+    runPrittier(indexPath);
 
     // delete migrations and seeds if server location and option -m specified
     if (location === 'server' && options.m) {

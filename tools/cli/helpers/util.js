@@ -1,4 +1,5 @@
 const shell = require('shelljs');
+const fs = require('fs');
 const { pascalize, decamelize } = require('humps');
 const { startCase } = require('lodash');
 const { BASE_PATH } = require('../config');
@@ -56,8 +57,20 @@ function computeModulesPath(location, moduleName = '') {
   return `${BASE_PATH}/packages/${location}/src/modules/${moduleName}`;
 }
 
+/**
+ * Run prettier on file that was changed.
+ *
+ * @param pathToFile
+ */
+function runPrittier(pathToFile) {
+  if (fs.existsSync(pathToFile)) {
+    shell.exec(`prettier --print-width 120 --single-quote --loglevel error --write ${pathToFile}`);
+  }
+}
+
 module.exports = {
   renameFiles,
   copyFiles,
-  computeModulesPath
+  computeModulesPath,
+  runPrittier
 };

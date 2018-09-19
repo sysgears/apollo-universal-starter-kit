@@ -1,6 +1,8 @@
 import DomainSchema, { Schema } from '@domain-schema/core';
 
 export class $Module$ extends Schema {
+  public id: any;
+  public name: object;
   constructor() {
     super();
     this.__ = { name: '$Module$', tablePrefix: '' };

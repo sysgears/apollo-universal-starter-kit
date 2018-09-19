@@ -4,7 +4,8 @@ import { step } from 'mocha-steps';
 import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
 
 describe('$Module$ API works', () => {
-  let server, apollo;
+  let server: any;
+  let apollo: any;
 
   before(() => {
     server = getServer();
@@ -15,7 +16,7 @@ describe('$Module$ API works', () => {
     return chai
       .request(server)
       .keepOpen()
-      .get('/graphql')
+      .get('/graphiql')
       .set('Accept', 'text/html')
       .then(res => {
         res.should.have.status(200);

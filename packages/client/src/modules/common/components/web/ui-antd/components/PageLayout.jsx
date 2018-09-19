@@ -81,7 +81,7 @@ class PageLayout extends React.Component {
                     {modules.navItemsRight}
                     {__DEV__ && (
                       <MenuItem>
-                        <a href="/graphql">GPlayground</a>
+                        <a href="/graphiql">GraphiQL</a>
                       </MenuItem>
                     )}
                   </Menu>

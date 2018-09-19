@@ -100,13 +100,14 @@ const _getSelectField = (fieldName, parentField, domainSchema, single) => {
  * @param fieldName
  * @param value
  * @param domainSchema
- * @returns {{fieldName: *, prefix: string, baseTableName: *, foreignTableName: *}}
+ * @returns {{fieldName: *, prefix: string, suffix: string, baseTableName: *, foreignTableName: *}}
  * @private
  */
 const _getJoinEntity = (fieldName, value, domainSchema) => {
   return {
     fieldName: decamelize(fieldName),
     prefix: value.type.__.tablePrefix ? value.type.__.tablePrefix : '',
+    suffix: value.noIdSuffix ? '' : '_id',
     baseTableName: decamelize(domainSchema.name),
     foreignTableName: decamelize(value.type.__.tableName ? value.type.__.tableName : value.type.name)
   };
@@ -127,14 +128,14 @@ export const selectBy = (schema, fields, single = false) => {
 
   return query => {
     // join table names
-    joinNames.map(({ fieldName, prefix, baseTableName, foreignTableName }) => {
+    joinNames.map(({ fieldName, prefix, suffix, baseTableName, foreignTableName }) => {
       // if fieldName (schema key) diff with table name than make proper table alias
       const tableNameAlias =
         fieldName !== null && fieldName !== foreignTableName ? `${fieldName}_${foreignTableName}` : foreignTableName;
       query.leftJoin(
         `${prefix}${foreignTableName} as ${tableNameAlias}`,
         `${tableNameAlias}.id`,
-        `${baseTableName}.${fieldName}_id`
+        `${baseTableName}.${fieldName}${suffix}`
       );
     });
 

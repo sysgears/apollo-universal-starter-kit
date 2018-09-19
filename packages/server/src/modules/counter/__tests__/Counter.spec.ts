@@ -20,7 +20,7 @@ describe('Counter example API works', () => {
     return chai
       .request(server)
       .keepOpen()
-      .get('/graphql')
+      .get('/graphiql')
       .set('Accept', 'text/html')
       .then(res => {
         res.should.have.status(200);

@@ -65,6 +65,7 @@
     "apollo-link-ws": "^1.0.3",
     "apollo-logger": "^0.3.0",
     "apollo-server-express": "^2.0.0",
+    "apollo-server-module-graphiql": "^1.4.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",

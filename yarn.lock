@@ -1803,6 +1803,10 @@ apollo-server-express@^2.0.0:
     graphql-tools "^3.0.4"
     type-is "^1.6.16"
 
+apollo-server-module-graphiql@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/apollo-server-module-graphiql/-/apollo-server-module-graphiql-1.4.0.tgz#c559efa285578820709f1769bb85d3b3eed3d8ec"
+
 apollo-tracing@0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/apollo-tracing/-/apollo-tracing-0.2.2.tgz#f69f13366a643ab75f2eb145ec49a57e4e43181a"

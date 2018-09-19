@@ -442,7 +442,6 @@ export default class Crud {
   _getList({ limit, offset, orderBy, filter }, info) {
     const select = selectBy(this.schema, info, false);
     const queryBuilder = select(this.getBaseQuery());
-    const tableName = this.getFullTableName();
 
     if (limit) {
       queryBuilder.limit(limit);
@@ -475,6 +474,14 @@ export default class Crud {
     } else {
       queryBuilder.orderBy(`${this.getFullTableName()}.id`);
     }
+
+    this._filter(filter, queryBuilder);
+
+    return knexnest(queryBuilder);
+  }
+
+  _filter(filter, queryBuilder) {
+    const tableName = this.getFullTableName();
 
     if (!_.isEmpty(filter)) {
       const addFilterWhere = this.schemaIterator((filterKey, value, isSchema, _this, tableName, filter) => {
@@ -516,8 +523,6 @@ export default class Crud {
         });
       }
     }
-
-    return knexnest(queryBuilder);
   }
 
   schemaIterator = fn => {
@@ -532,7 +537,7 @@ export default class Crud {
 
   async getPaginated(args, info) {
     const edges = await this._getList(args, parseFields(info).edges);
-    const { count } = await this.getTotal();
+    const { count } = await this.getTotal(args);
 
     return {
       edges,
@@ -547,10 +552,14 @@ export default class Crud {
     return this._getList(args, parseFields(info));
   }
 
-  getTotal() {
-    return knex(this.getFullTableName())
+  getTotal({ filter }) {
+    const queryBuilder = knex(this.getFullTableName())
       .countDistinct('id as count')
       .first();
+
+    this._filter(filter, queryBuilder);
+
+    return queryBuilder;
   }
 
   _get({ where }, info) {

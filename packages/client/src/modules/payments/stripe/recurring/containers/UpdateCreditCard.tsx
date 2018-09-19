@@ -32,12 +32,18 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
   public onSubmit = (updateCard: any) => async (creditCardInput: CreditCardInput, stripe?: any) => {
     this.setState({ submitting: true });
     const { t, history, navigation } = this.props;
+    let preparedCreditCard;
 
     try {
       // create credit card token
-      const preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
-      if (preparedCreditCard.error) {
-        this.setState({ submitting: false, error: t('stripeError') });
+      try {
+        preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
+        if (preparedCreditCard.error) {
+          this.setState({ submitting: false, error: t('stripeError') });
+          return;
+        }
+      } catch (e) {
+        this.setState({ submitting: false, error: t('creditCardError') });
         return;
       }
 

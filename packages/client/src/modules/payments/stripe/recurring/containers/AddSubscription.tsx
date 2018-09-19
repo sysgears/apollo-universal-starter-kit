@@ -36,12 +36,18 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
   public onSubmit = (addSubscription: any) => async (creditCardInput: CreditCardInput, stripe?: any) => {
     const { t, history, navigation } = this.props;
     this.setState({ submitting: true });
+    let preparedCreditCard;
 
     try {
       // create credit card token
-      const preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
-      if (preparedCreditCard.error) {
-        this.setState({ submitting: false, error: t('stripeError') });
+      try {
+        preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
+        if (preparedCreditCard.error) {
+          this.setState({ submitting: false, error: t('stripeError') });
+          return;
+        }
+      } catch (e) {
+        this.setState({ submitting: false, error: t('creditCardError') });
         return;
       }
 

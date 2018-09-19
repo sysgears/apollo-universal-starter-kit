@@ -42,9 +42,10 @@ function updateModule(logger, moduleName, location) {
         const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
         if (value.type.isSchema) {
           let required = value.optional ? '' : '!';
-          inputCreate += `  ${key}Id: Int${required}\n`;
-          inputUpdate += `  ${key}Id: Int\n`;
-          inputFilter += `  ${key}Id: Int\n`;
+          const id = value.noIdSuffix ? '' : 'Id';
+          inputCreate += `  ${key}${id}: Int${required}\n`;
+          inputUpdate += `  ${key}${id}: Int\n`;
+          inputFilter += `  ${key}${id}: Int\n`;
         } else if (value.type.constructor !== Array) {
           if (key !== 'id') {
             inputCreate += `  ${key}: ${generateField(value)}\n`;
@@ -123,11 +124,13 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
       logger.info(chalk.green(`✔ Schema in ${pathSchema}${file} successfully updated!`));
 
       const resolverFile = `resolvers.js`;
+      let hasBatchResolvers = false;
       let replace = `  ${schema.name}: {
 `;
       for (const key of schema.keys()) {
         const value = schema.values[key];
         if (value.type.constructor === Array) {
+          hasBatchResolvers = true;
           replace += `    ${key}: createBatchResolver((sources, args, ctx, info) => {
       return ctx.${schema.name}.getByIds(sources.map(({ id }) => id), '${camelize(schema.name)}', ctx.${
             value.type[0].name
@@ -138,6 +141,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
       }
       replace += `  },
 `;
+      replace = hasBatchResolvers ? replace : '';
 
       // override batch resolvers in resolvers.js file
       const replaceBatchResolvers = `// schema batch resolvers([^*]+)// end schema batch resolvers`;
@@ -195,7 +199,8 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         const value = schema.values[key];
         const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
         if (value.type.isSchema) {
-          graphql += `    ${key}Id\n`;
+          const id = value.noIdSuffix ? '' : 'Id';
+          graphql += `    ${key}${id}\n`;
         } else {
           if (hasTypeOf(Date)) {
             graphql += `    ${key}_lte\n`;
@@ -229,7 +234,8 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         const value = schema.values[key];
         const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
         if (value.type.isSchema) {
-          defaults += `  ${key}Id: '',\n`;
+          const id = value.noIdSuffix ? '' : 'Id';
+          defaults += `  ${key}${id}: '',\n`;
         } else {
           if (hasTypeOf(Date)) {
             defaults += `  ${key}_lte: '',\n`;

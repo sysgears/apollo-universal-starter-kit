@@ -11,3 +11,4 @@ interface Window {
 
 // packages without types
 declare module 'react-native-credit-card-input';
+declare module 'react-native-keyboard-spacer';

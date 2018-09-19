@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import { TranslateFunction } from '../../../../../i18n';
@@ -14,27 +15,11 @@ interface AddSubscriptionViewProps {
 }
 
 export default class AddSubscriptionView extends React.Component<AddSubscriptionViewProps> {
-  /**
-   * This functionality demonstrates how to prevent covering the inputs when the keyboard pops up.
-   * Main scroll container is carolling down after popping up the keyboard.
-   */
   private scrollViewRef: any;
-  private keyboardSub: any;
-
-  public componentDidMount() {
-    this.keyboardSub = Keyboard.addListener('keyboardDidShow', () => {
-      setTimeout(() => {
-        this.scrollViewRef.scrollToEnd({ animated: true });
-      }, 0);
-    });
-  }
-
-  public componentWillUnmount() {
-    this.keyboardSub.remove();
-  }
 
   public render() {
     const { t } = this.props;
+
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} ref={ref => (this.scrollViewRef = ref)}>
@@ -53,8 +38,15 @@ export default class AddSubscriptionView extends React.Component<AddSubscription
             <SubscriptionCardForm {...this.props} buttonName={t('add.btn')} />
           </View>
         </ScrollView>
-        {/* TODO: set offset for ios */}
-        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} />
+        <KeyboardSpacer
+          onToggle={() => {
+            /**
+             * This functionality demonstrates how to prevent covering the inputs when the keyboard pops up.
+             * Main scroll container is carolling down after popping up the keyboard.
+             */
+            setTimeout(() => this.scrollViewRef.scrollToEnd({ animated: true }), 0);
+          }}
+        />
       </View>
     );
   }

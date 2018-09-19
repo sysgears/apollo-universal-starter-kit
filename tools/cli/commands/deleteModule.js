@@ -1,7 +1,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { computeModulesPath } = require('../helpers/util');
+const { computeModulesPath, runPrittier } = require('../helpers/util');
 
 /**
  * Removes the module from client, server or both locations and removes the module from the Feature connector.
@@ -47,6 +47,7 @@ function deleteModule(logger, moduleName, location) {
       .replace(RegExp(`import ${moduleName} from './${moduleName}';\n`, 'g'), '');
 
     fs.writeFileSync(indexPath, contentWithoutDeletedModule);
+    runPrittier(indexPath);
 
     logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));
   } else {

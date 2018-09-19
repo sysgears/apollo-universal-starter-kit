@@ -434,7 +434,7 @@ class EditableCell extends React.Component {
     dirty: false,
     editable: false
   };
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { value } = this.props;
     if (nextProps.value !== value) {
       this.setState({ value: nextProps.value });

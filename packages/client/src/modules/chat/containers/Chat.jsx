@@ -10,7 +10,7 @@ import { Loading } from '../../common/components/native';
 import ModalNotify from '../components/ModalNotify';
 import chatConfig from '../../../../../../config/chat';
 
-export default class Chat extends React.Component {
+export default class extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     t: PropTypes.func,

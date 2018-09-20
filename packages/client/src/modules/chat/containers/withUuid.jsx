@@ -2,7 +2,7 @@ import React from 'react';
 import uuid from 'uuid';
 import { getItem, setItem } from '../../common/clientStorage';
 
-const withUuid = Component => {
+export default Component => {
   return class WithUuid extends React.Component {
     state = {
       uuid: null
@@ -20,5 +20,3 @@ const withUuid = Component => {
     }
   };
 };
-
-export default withUuid;

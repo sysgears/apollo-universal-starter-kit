@@ -19,7 +19,7 @@ const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl
 
 const imageDir = FileSystem.cacheDirectory + 'ImagePicker/';
 
-const withImage = Component => {
+export default Component => {
   return class MessageImage extends React.Component {
     static propTypes = {
       messages: PropTypes.object,
@@ -164,5 +164,3 @@ const withImage = Component => {
     }
   };
 };
-
-export default withImage;

@@ -10,7 +10,7 @@ import settings from '../../../../../../../settings';
  */
 export default () => {
   let running = false;
-  const { enabled, secretKey, webhookUrl } = settings.payments.stripe.recurring;
+  const { enabled, secretKey, webhookUrl } = settings.payments.stripe.subscription;
 
   return async (req: any, res: any, next: () => void) => {
     if (running) {

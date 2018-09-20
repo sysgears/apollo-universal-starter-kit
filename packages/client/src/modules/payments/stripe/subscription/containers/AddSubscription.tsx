@@ -5,17 +5,16 @@ import React, { Fragment } from 'react';
 import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
-import AddSubscriptionView from '../components/AddSubscriptionView';
-
-import ADD_SUBSCRIPTION from '../graphql/AddSubscription.graphql';
-import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
-import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
-
 import settings from '../../../../../../../../settings';
 import translate, { TranslateFunction } from '../../../../../i18n';
 import { createCreditCardToken } from './stripeOperations';
 import { PLATFORM } from '../../../../../../../common/utils';
 import { CreditCardInput } from '../types';
+import AddSubscriptionView from '../components/AddSubscriptionView';
+
+import ADD_SUBSCRIPTION from '../graphql/AddSubscription.graphql';
+import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
+import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
 interface AddSubscriptionProps {
   t: TranslateFunction;
@@ -81,7 +80,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
             <Fragment>
               {/* Stripe elements should render only for web*/}
               {__CLIENT__ && PLATFORM === 'web' ? (
-                <StripeProvider apiKey={settings.payments.stripe.recurring.publicKey}>
+                <StripeProvider apiKey={settings.payments.stripe.subscription.publicKey}>
                   <AddSubscriptionView
                     error={this.state.error}
                     submitting={this.state.submitting}

@@ -30,12 +30,12 @@ export default (props: AddSubscriptionViewProps) => {
           <p>{t('add.description')}</p>
           <p>{t('add.product')}</p>
           <p>
-            {t('add.price')} {settings.payments.stripe.recurring.plan.amount / 100}
+            {t('add.price')} {settings.payments.stripe.subscription.plan.amount / 100}
           </p>
         </Col>
         <Col xs={6}>
           {/* Displays testing credit cards when stripe test keys are used!!!*/}
-          {settings.payments.stripe.recurring.publicKey.includes('test') && renderTestingCards(t)}
+          {settings.payments.stripe.subscription.publicKey.includes('test') && renderTestingCards(t)}
         </Col>
       </Row>
       <LayoutCenter>

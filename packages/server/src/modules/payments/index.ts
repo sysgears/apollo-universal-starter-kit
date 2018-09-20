@@ -1,5 +1,5 @@
-import stripeRecurring from './stripe/recurring';
+import stripeSubscription from './stripe/subscription';
 
 import Feature from '../connector';
 
-export default new Feature(stripeRecurring);
+export default new Feature(stripeSubscription);

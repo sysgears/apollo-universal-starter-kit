@@ -65,7 +65,7 @@ export default class StripeSubscriptionDAO {
     ) as Subscription;
   }
 
-  public async getCardInfo(userId: number) {
+  public async getCreditCard(userId: number) {
     return camelizeKeys(
       await knex('stripe_subscription')
         .select('s.expiry_month', 's.expiry_year', 's.last4', 's.brand')

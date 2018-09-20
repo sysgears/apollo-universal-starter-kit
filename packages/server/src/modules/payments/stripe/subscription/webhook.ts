@@ -1,11 +1,12 @@
 import Stripe from 'stripe';
+import { TranslationFunction } from 'i18next';
 
 import StripeSubscriptionDAO from './sql';
 import mailer from '../../../mailer/mailer';
 import User from '../../../user/sql';
 import settings from '../../../../../../../settings';
 
-const { secretKey, endpointSecret } = settings.payments.stripe.recurring;
+const { secretKey, endpointSecret } = settings.payments.stripe.subscription;
 const StripeSubscription = new StripeSubscriptionDAO();
 const stripe = new Stripe(secretKey);
 
@@ -32,8 +33,9 @@ const sendEmailToUser = async (userId: number, subject: string, html: string) =>
  *
  * @param stripeEvent - The stripe event.
  * @param websiteUrl - The website url for sending to email.
+ * @param t - The translate function.
  */
-const deleteSubscription = async (stripeEvent: any, websiteUrl: string) => {
+const deleteSubscription = async (stripeEvent: any, websiteUrl: string, t: TranslationFunction) => {
   const subscription = await StripeSubscription.getSubscriptionByStripeSubscriptionId(stripeEvent.data.object.id);
 
   if (subscription) {
@@ -54,8 +56,8 @@ const deleteSubscription = async (stripeEvent: any, websiteUrl: string) => {
 
     await sendEmailToUser(
       userId,
-      'Subscription Canceled',
-      `Your subscription has been canceled. To resubscribe click here: <a href="${url}">${url}</a>`
+      t('stripeSubscription:deleteEmail.subject'),
+      `${t('stripeSubscription:deleteEmail.text')} <a href="${url}">${url}</a>`
     );
   }
 };
@@ -65,8 +67,9 @@ const deleteSubscription = async (stripeEvent: any, websiteUrl: string) => {
  *
  * @param stripeEvent - The stripe event.
  * @param websiteUrl - The website url for sending to email.
+ * @param t - The translate function.
  */
-const notifyFailedSubscription = async (stripeEvent: any, websiteUrl: string) => {
+const notifyFailedSubscription = async (stripeEvent: any, websiteUrl: string, t: TranslationFunction) => {
   const subscription = await StripeSubscription.getSubscriptionByStripeCustomerId(stripeEvent.data.object.customer);
 
   if (subscription) {
@@ -75,8 +78,8 @@ const notifyFailedSubscription = async (stripeEvent: any, websiteUrl: string) =>
 
     await sendEmailToUser(
       userId,
-      'Charge Failed',
-      `We are having trouble charging your card. Please update your card details here: <a href="${url}">${url}</a>`
+      t('stripeSubscription:failedEmail.subject'),
+      `${t('stripeSubscription:failedEmail.text')} <a href="${url}">${url}</a>`
     );
   }
 };
@@ -93,9 +96,9 @@ export default async (req: any, res: any) => {
       : req.body;
 
     if (stripeEvent.type === 'customer.subscription.deleted') {
-      await deleteSubscription(stripeEvent, websiteUrl);
+      await deleteSubscription(stripeEvent, websiteUrl, req.t);
     } else if (stripeEvent.type === 'invoice.payment_failed') {
-      await notifyFailedSubscription(stripeEvent, websiteUrl);
+      await notifyFailedSubscription(stripeEvent, websiteUrl, req.t);
     }
 
     res.json({ success: true });

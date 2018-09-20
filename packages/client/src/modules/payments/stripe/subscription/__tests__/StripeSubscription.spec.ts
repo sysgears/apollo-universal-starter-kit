@@ -4,7 +4,7 @@ import settings from '../../../../../../../../settings';
 import Renderer from '../../../../../testHelpers/Renderer';
 import { updateContent, waitForElementRender } from '../../../../../testHelpers/testUtils';
 
-const { enabled, publicKey } = settings.payments.stripe.recurring;
+const { enabled, publicKey } = settings.payments.stripe.subscription;
 
 if (enabled && publicKey !== '') {
   const mocks = {
@@ -30,8 +30,8 @@ if (enabled && publicKey !== '') {
     step('Stripe subscription page renders on mount', async () => {
       const app = renderer.mount();
 
-      await waitForElementRender(app.container, 'a[href="/subscribers-only"]');
-      renderer.history.push('/subscription');
+      await waitForElementRender(app.container, 'a[href="/subscriber-page"]');
+      renderer.history.push('/add-subscription');
       // tslint:disable:no-unused-expression
       expect(updateContent(app.container)).to.not.be.empty;
     });

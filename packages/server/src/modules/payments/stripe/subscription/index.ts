@@ -13,7 +13,7 @@ import resources from './locales';
 import settings from '../../../../../../../settings';
 
 const StripeSubscription = new StripeSubscriptionDAO();
-const { webhookUrl, enabled } = settings.payments.stripe.recurring;
+const { webhookUrl, enabled } = settings.payments.stripe.subscription;
 
 export default new Feature(
   enabled

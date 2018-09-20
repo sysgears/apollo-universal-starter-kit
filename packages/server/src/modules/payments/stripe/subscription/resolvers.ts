@@ -5,7 +5,7 @@ import log from '../../../../../../common/log';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
 
-const { secretKey, plan } = settings.payments.stripe.recurring;
+const { secretKey, plan } = settings.payments.stripe.subscription;
 const stripe = new Stripe(secretKey);
 
 interface CreditCard {
@@ -29,7 +29,7 @@ export default () => ({
         : null;
     }),
     stripeSubscriptionCard: withAuth(['user:view:self'], (obj: any, args: any, context: any) => {
-      return context.StripeSubscription.getCardInfo(context.user.id);
+      return context.StripeSubscription.getCreditCard(context.user.id);
     })
   },
   Mutation: {

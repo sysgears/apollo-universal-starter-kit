@@ -1,6 +1,6 @@
 export default {
   stripe: {
-    recurring: {
+    subscription: {
       enabled: true,
       webhookUrl: '/stripe/webhook',
       publicKey: 'pk_test_ww70oUQ44vVJ3HO4AnvglxCp',

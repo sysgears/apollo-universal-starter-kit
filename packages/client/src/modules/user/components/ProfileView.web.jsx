@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
 import translate from '../../../i18n';
-import StripeSubscriptionProfile from '../../payments/stripe/recurring/containers/SubscriptionProfile';
+import StripeSubscriptionProfile from '../../payments/stripe/subscription/containers/SubscriptionProfile';
 import { LayoutCenter } from '../../common/components';
 import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
 
@@ -58,8 +58,9 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
                   <CardText>{currentUser.profile.fullName}</CardText>
                 </CardGroup>
               )}
-            {/* Credit card info (Stripe Recurring module)*/}
-            {settings.payments.stripe.recurring.enabled && currentUser.role === 'user' && <StripeSubscriptionProfile />}
+            {/* Credit card info (Stripe subscription module)*/}
+            {settings.payments.stripe.subscription.enabled &&
+              currentUser.role === 'user' && <StripeSubscriptionProfile />}
           </Card>
           <Link
             className="mt-2 btn user-link"

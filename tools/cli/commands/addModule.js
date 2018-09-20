@@ -1,7 +1,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { copyFiles, renameFiles, computeModulesPath, runPrittier } = require('../helpers/util');
+const { copyFiles, renameFiles, computeModulesPath, runPrettier } = require('../helpers/util');
 
 /**
  * Adds module in client or server and adds a new module to the Feature connector.
@@ -52,7 +52,7 @@ function addModule(logger, templatesPath, moduleName, location, finished = true)
   shell
     .ShellString(indexContent.replace(RegExp(featureRegExp, 'g'), `Feature(${moduleName}, ${featureModules})`))
     .to(indexPath);
-  runPrittier(indexPath);
+  runPrettier(indexPath);
 
   if (finished) {
     logger.info(chalk.green(`✔ Module for ${location} successfully created!`));

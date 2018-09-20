@@ -63,7 +63,7 @@ function computeModulesPath(location, moduleName = '') {
  *
  * @param pathToFile
  */
-function runPrittier(pathToFile) {
+function runPrettier(pathToFile) {
   if (fs.existsSync(pathToFile)) {
     shell.exec(`prettier --print-width 120 --single-quote --loglevel error --write ${pathToFile}`);
   }
@@ -130,7 +130,7 @@ function updateFileWithExports({ pathToFileWithExports, exportName, importString
   } else {
     fs.writeFileSync(pathToFileWithExports, importString + exportGraphqlContainer);
   }
-  runPrittier(pathToFileWithExports);
+  runPrettier(pathToFileWithExports);
 }
 
 /**
@@ -145,7 +145,7 @@ function deleteFromFileWithExports(pathToFileWithExports, exportName) {
     const generatedElement = generatedElementData.toString().replace(new RegExp(reg, 'g'), '');
     fs.writeFileSync(pathToFileWithExports, generatedElement);
 
-    runPrittier(pathToFileWithExports);
+    runPrettier(pathToFileWithExports);
   }
 }
 
@@ -153,7 +153,7 @@ module.exports = {
   copyFiles,
   renameFiles,
   computeModulesPath,
-  runPrittier,
+  runPrettier,
   generateField,
   updateFileWithExports,
   deleteFromFileWithExports

@@ -64,18 +64,19 @@ function deleteModule(logger, moduleName, options, location) {
     if (location === 'server' && options.m) {
       deleteMigrations(logger, moduleName);
     }
+
+    if (fs.existsSync(generatedContainerPath)) {
+      const graphqlQuery = `${Module}Query`;
+      deleteFromFileWithExports(generatedContainerPath, graphqlQuery);
+    }
+    if (fs.existsSync(generatedSchemaPath)) {
+      const schema = `${Module}Schema`;
+      deleteFromFileWithExports(generatedSchemaPath, schema);
+    }
+
     logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));
   } else {
     logger.info(chalk.red(`✘ Module ${location} location for ${modulePath} not found!`));
-  }
-
-  if (fs.existsSync(generatedContainerPath)) {
-    const graphqlQuery = `${Module}Query`;
-    deleteFromFileWithExports(generatedContainerPath, graphqlQuery);
-  }
-  if (fs.existsSync(generatedSchemaPath)) {
-    const schema = `${Module}Schema`;
-    deleteFromFileWithExports(generatedSchemaPath, schema);
   }
 }
 

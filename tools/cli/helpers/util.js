@@ -124,11 +124,13 @@ function updateFileWithExports({ pathToFileWithExports, exportName, importString
           importString +
           generatedContainer.slice(computedIndex, generatedContainer.length);
         computedGeneratedContainer = computedGeneratedContainer.replace(/(,|)\s};/g, `,\n  ${exportName}\n};`);
-        return fs.writeFileSync(pathToFileWithExports, computedGeneratedContainer);
+        fs.writeFileSync(pathToFileWithExports, computedGeneratedContainer);
       }
     }
+  } else {
+    fs.writeFileSync(pathToFileWithExports, importString + exportGraphqlContainer);
   }
-  return fs.writeFileSync(pathToFileWithExports, importString + exportGraphqlContainer);
+  runPrittier(pathToFileWithExports);
 }
 
 /**
@@ -142,6 +144,8 @@ function deleteFromFileWithExports(pathToFileWithExports, exportName) {
     const reg = `(\\n\\s\\s${exportName}(.|)|import (${exportName}|{ ${exportName} }).+;\\n+(?!ex))`;
     const generatedElement = generatedElementData.toString().replace(new RegExp(reg, 'g'), '');
     fs.writeFileSync(pathToFileWithExports, generatedElement);
+
+    runPrittier(pathToFileWithExports);
   }
 }
 

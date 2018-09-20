@@ -4,7 +4,7 @@ import createResolvers from './resolvers';
 import Feature from '../connector';
 
 export default new Feature({
-  schema: schema,
+  schema,
   createResolversFunc: createResolvers,
   createContextFunc: () => ({ $Module$: new $Module$() })
 });

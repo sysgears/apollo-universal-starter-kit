@@ -59,6 +59,17 @@ function computeModulesPath(location, moduleName = '') {
 }
 
 /**
+ * Run prettier on file that was changed.
+ *
+ * @param pathToFile
+ */
+function runPrittier(pathToFile) {
+  if (fs.existsSync(pathToFile)) {
+    shell.exec(`prettier --print-width 120 --single-quote --loglevel error --write ${pathToFile}`);
+  }
+}
+
+/**
  *
  * @param value
  * @param update
@@ -138,6 +149,7 @@ module.exports = {
   copyFiles,
   renameFiles,
   computeModulesPath,
+  runPrittier,
   generateField,
   updateFileWithExports,
   deleteFromFileWithExports

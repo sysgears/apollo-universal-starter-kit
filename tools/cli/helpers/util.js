@@ -62,7 +62,7 @@ function computeModulesPath(location, moduleName = '') {
  *
  * @param pathToFile
  */
-function runPrittier(pathToFile) {
+function runPrettier(pathToFile) {
   if (fs.existsSync(pathToFile)) {
     shell.exec(`prettier --print-width 120 --single-quote --loglevel error --write ${pathToFile}`);
   }
@@ -72,5 +72,5 @@ module.exports = {
   renameFiles,
   copyFiles,
   computeModulesPath,
-  runPrittier
+  runPrettier
 };

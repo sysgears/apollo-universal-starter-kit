@@ -10,7 +10,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production spin build",
     "clean": "rimraf build .tmp",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --exit \"src/**/*.spec.*\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"src/**/*.spec.*\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.*\"",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
@@ -121,7 +121,7 @@
     "mkdirp": "^0.5.1",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",
-    "mocha-webpack": "^0.7.0",
+    "mocha-webpack": "^2.0.0-beta.0",
     "react-addons-test-utils": "^16.0.0-alpha.3",
     "react-test-renderer": "^16.2.0",
     "react-testing-library": "^3.0.2",

@@ -1,7 +1,7 @@
 import React from 'react';
 import * as uuidGenerator from 'uuid';
 
-const messagesFormatter = Component => {
+const withMessagesFormatter = Component => {
   return props => {
     const { messages } = props;
 
@@ -31,4 +31,4 @@ const messagesFormatter = Component => {
   };
 };
 
-export default messagesFormatter;
+export default withMessagesFormatter;

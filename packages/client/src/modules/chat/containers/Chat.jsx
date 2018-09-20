@@ -1,297 +1,214 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo/index';
-import update from 'immutability-helper';
+import { View, KeyboardAvoidingView, Clipboard, Platform } from 'react-native';
+import { GiftedChat, Send } from 'react-native-gifted-chat';
 
-import translate from '../../../i18n';
-import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
-import ADD_MESSAGE from '../graphql/AddMessage.graphql';
-import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
-import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
-import { withUser } from '../../user/containers/AuthBase';
-import withUuid from './WithUuid';
-import ChatOperations from './ChatOperations';
-import messageImage from './MessageImage';
-import messagesFormatter from './MessagesFormatter';
+import ChatFooter from '../components/ChatFooter';
+import CustomView from '../components/CustomView';
+import RenderCustomActions from '../components/RenderCustomActions';
+import { Loading } from '../../common/components/native';
+import ModalNotify from '../components/ModalNotify';
 import chatConfig from '../../../../../../config/chat';
-import withSubscription from './WithSubscription';
 
-function AddMessage(prev, node) {
-  // ignore if duplicate
-  if (prev.messages.edges.some(edge => node.id === edge.node.id)) {
-    return prev;
-  }
-
-  const filteredEdges = prev.messages.edges.filter(edge => edge.node.id !== null);
-  const edge = {
-    cursor: 0,
-    node,
-    __typename: 'MessageEdges'
-  };
-
-  const increment = edge.node.id ? 1 : 0;
-  const updatedEdges = [...filteredEdges, edge].map((edge, i) => ({ ...edge, cursor: filteredEdges.length - i }));
-
-  return update(prev, {
-    messages: {
-      totalCount: {
-        $set: prev.messages.totalCount + increment
-      },
-      edges: {
-        $set: updatedEdges
-      },
-      pageInfo: {
-        endCursor: {
-          $set: prev.messages.pageInfo.endCursor + increment
-        }
-      }
-    }
-  });
-}
-
-function DeleteMessage(prev, id) {
-  const index = prev.messages.edges.findIndex(x => x.node.id === id);
-
-  // ignore if not found
-  if (index < 0) {
-    return prev;
-  }
-
-  const updatedEdges = prev.messages.edges
-    .filter((edge, i) => i !== index)
-    .map((edge, cursor) => ({ ...edge, cursor }));
-
-  return update(prev, {
-    messages: {
-      totalCount: {
-        $set: prev.messages.totalCount - 1
-      },
-      edges: {
-        $set: updatedEdges
-      },
-      pageInfo: {
-        endCursor: {
-          $set: prev.messages.pageInfo.endCursor - 1
-        }
-      }
-    }
-  });
-}
-
-function EditMessage(prev, node) {
-  const newEdge = {
-    cursor: node.id,
-    node,
-    __typename: 'MessageEdges'
-  };
-
-  return update(prev, {
-    messages: {
-      edges: {
-        $set: prev.messages.edges.map(edge => (edge.node.id === node.id ? newEdge : edge))
-      }
-    }
-  });
-}
-
-class Chat extends React.Component {
+export default class Chat extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
+    t: PropTypes.func,
     messages: PropTypes.object,
-    loadData: PropTypes.func.isRequired
+    addMessage: PropTypes.func,
+    deleteMessage: PropTypes.func,
+    editMessage: PropTypes.func,
+    loadData: PropTypes.func.isRequired,
+    currentUser: PropTypes.object,
+    uuid: PropTypes.string,
+    pickImage: PropTypes.func,
+    images: PropTypes.bool
   };
 
-  componentDidUpdate() {
-    const { messagesUpdated, updateQuery } = this.props;
-    if (messagesUpdated) {
-      this.updateMessagesState(messagesUpdated, updateQuery);
-    }
+  constructor(props) {
+    super(props);
+    this.subscription = null;
+    this.gc = React.createRef();
   }
 
-  updateMessagesState = (messagesUpdated, updateQuery) => {
-    const { mutation, node } = messagesUpdated;
-    updateQuery(prev => {
-      switch (mutation) {
-        case 'CREATED':
-          return AddMessage(prev, node);
-        case 'DELETED':
-          return DeleteMessage(prev, node.id);
-        case 'UPDATED':
-          return EditMessage(prev, node);
-        default:
-          return prev;
+  state = {
+    message: '',
+    isEdit: false,
+    messageInfo: null,
+    isQuoted: false,
+    quotedMessage: null,
+    notify: null
+  };
+
+  static getDerivedStateFromProps({ error }) {
+    return error ? { notify: error } : null;
+  }
+
+  setMessageState = text => {
+    this.setState({ message: text });
+  };
+
+  onSend = (messages = []) => {
+    const { isEdit, messageInfo, message, quotedMessage } = this.state;
+    const { addMessage, editMessage, uuid } = this.props;
+    const quotedId = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
+    const defQuote = { filename: null, path: null, text: null, username: null, id: quotedId };
+
+    if (isEdit) {
+      editMessage({
+        ...messageInfo,
+        text: message,
+        quotedMessage: quotedMessage ? quotedMessage : defQuote,
+        uuid
+      }).then(res => this.setState({ notify: res && res.error ? res.error : null }));
+      this.setState({ isEdit: false });
+    } else {
+      const {
+        text = null,
+        attachment,
+        user: { _id: userId, name: username },
+        _id: id
+      } = messages[0];
+
+      addMessage({
+        text,
+        username,
+        userId,
+        id,
+        uuid,
+        quotedId,
+        quotedMessage: quotedMessage ? quotedMessage : defQuote,
+        attachment
+      }).then(res => this.setState({ notify: res && res.error ? res.error : null }));
+
+      this.setState({ isQuoted: false, quotedMessage: null });
+    }
+  };
+
+  onLongPress = ({ actionSheet }, currentMessage, id) => {
+    const { t, deleteMessage } = this.props;
+    const { _id: messageId, text, user } = currentMessage;
+    const options = [t('msg.btn.copy'), t('msg.btn.reply')];
+
+    if (id === user._id) {
+      options.push(t('msg.btn.edit'), t('msg.btn.delete'));
+    }
+
+    actionSheet().showActionSheetWithOptions({ options }, buttonIndex => {
+      switch (buttonIndex) {
+        case 0:
+          Clipboard.setString(text);
+          break;
+
+        case 1:
+          this.setQuotedState(currentMessage);
+          break;
+
+        case 2:
+          this.setEditState(currentMessage);
+          break;
+
+        case 3:
+          deleteMessage(messageId).then(res => this.setState({ notify: res && res.error ? res.error : null }));
+          break;
       }
     });
   };
 
+  setEditState = ({ _id: id, text, createdAt, quotedId, user: { _id: userId, name: username } }) => {
+    this.setState({ isEdit: true, message: text, messageInfo: { id, text, createdAt, userId, username, quotedId } });
+    this.gc.focusTextInput();
+  };
+
+  setQuotedState = ({ _id: id, text, path, filename, user: { name: username } }) => {
+    this.setState({ isQuoted: true, quotedMessage: { id, text, path, filename, username } });
+    this.gc.focusTextInput();
+  };
+
+  renderChatFooter = () => {
+    if (this.state.isQuoted) {
+      const { quotedMessage } = this.state;
+      return <ChatFooter {...quotedMessage} undoQuote={this.clearQuotedState} />;
+    }
+  };
+
+  clearQuotedState = () => {
+    this.setState({ isQuoted: false, quotedMessage: null });
+  };
+
+  renderCustomView = chatProps => {
+    const { images } = this.props;
+    return <CustomView {...chatProps} images={images} />;
+  };
+
+  renderSend = chatProps => {
+    const { t } = this.props;
+    return <Send {...chatProps} label={t('input.btn')} />;
+  };
+
+  renderCustomActions = chatProps => {
+    const { images } = this.props;
+    if (images) {
+      return <RenderCustomActions {...chatProps} pickImage={this.props.pickImage} />;
+    }
+  };
+
+  onLoadEarlier = () => {
+    const {
+      messages: {
+        pageInfo: { endCursor }
+      },
+      loadData
+    } = this.props;
+
+    if (this.allowDataLoad) {
+      if (this.props.messages.pageInfo.hasNextPage) {
+        this.allowDataLoad = false;
+        return loadData(endCursor + 1, 'add');
+      }
+    }
+  };
+
+  renderModal = () => {
+    const { notify } = this.state;
+    if (notify) {
+      return <ModalNotify notify={notify} callback={() => this.setState({ notify: null })} />;
+    }
+  };
+
   render() {
-    return <ChatOperations {...this.props} />;
+    const { currentUser, uuid, messages, loading, t } = this.props;
+    const { message } = this.state;
+
+    if (loading) {
+      return <Loading text={t('loading')} />;
+    }
+
+    this.allowDataLoad = true;
+    const edges = messages ? messages.edges : [];
+    const { id = uuid, username = null } = currentUser ? currentUser : {};
+    return (
+      <View style={{ flex: 1 }}>
+        {this.renderModal()}
+        <GiftedChat
+          {...chatConfig.giftedChat}
+          ref={gc => (this.gc = gc)}
+          text={message}
+          onInputTextChanged={text => this.setMessageState(text)}
+          placeholder={t('input.text')}
+          messages={edges}
+          renderSend={this.renderSend}
+          onSend={this.onSend}
+          loadEarlier={messages ? messages.totalCount > messages.edges.length : false}
+          onLoadEarlier={this.onLoadEarlier}
+          user={{ _id: id, name: username }}
+          renderChatFooter={this.renderChatFooter}
+          renderCustomView={this.renderCustomView}
+          renderActions={this.renderCustomActions}
+          onLongPress={(context, currentMessage) => this.onLongPress(context, currentMessage, id)}
+        />
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? null : 'padding'} keyboardVerticalOffset={120} />
+      </View>
+    );
   }
 }
-
-export default compose(
-  graphql(MESSAGES_QUERY, {
-    options: () => {
-      return {
-        fetchPolicy: 'network-only',
-        variables: { limit: chatConfig.limit, after: 0 }
-      };
-    },
-    props: ({ data }) => {
-      const { loading, error, messages, fetchMore, updateQuery } = data;
-      const loadData = (after, dataDelivery) => {
-        return fetchMore({
-          variables: {
-            after: after
-          },
-          updateQuery: (
-            previousResult,
-            {
-              fetchMoreResult: {
-                messages: { totalCount, edges, pageInfo }
-              }
-            }
-          ) => {
-            return {
-              // By returning `cursor` here, we update the `fetchMore` function
-              // to the new cursor.
-              messages: {
-                totalCount,
-                edges: dataDelivery === 'add' ? [...edges, ...previousResult.messages.edges] : edges,
-                pageInfo,
-                __typename: 'Messages'
-              }
-            };
-          }
-        });
-      };
-      return { error: error ? error.graphQLErrors[0].message : null, loading, messages, updateQuery, loadData };
-    }
-  }),
-  graphql(ADD_MESSAGE, {
-    props: ({ mutate }) => ({
-      addMessage: async ({ text, userId, username, uuid, quotedId, attachment, quotedMessage }) => {
-        try {
-          await mutate({
-            variables: { input: { text, uuid, quotedId, attachment } },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              addMessage: {
-                __typename: 'Message',
-                createdAt: new Date().toISOString(),
-                text,
-                username,
-                userId,
-                uuid,
-                id: null,
-                quotedId,
-                quotedMessage: {
-                  __typename: 'QuotedMessage',
-                  ...quotedMessage
-                },
-                filename: attachment ? attachment.name : null,
-                path: attachment ? attachment.uri : null
-              }
-            },
-            updateQueries: {
-              messages: (
-                prev,
-                {
-                  mutationResult: {
-                    data: { addMessage }
-                  }
-                }
-              ) => {
-                return AddMessage(prev, addMessage);
-              }
-            }
-          });
-        } catch (e) {
-          return { error: e.graphQLErrors[0].message };
-        }
-      }
-    })
-  }),
-  graphql(DELETE_MESSAGE, {
-    props: ({ mutate }) => ({
-      deleteMessage: async id => {
-        try {
-          await mutate({
-            variables: { id },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              deleteMessage: {
-                id,
-                __typename: 'Message'
-              }
-            },
-            updateQueries: {
-              messages: (
-                prev,
-                {
-                  mutationResult: {
-                    data: { deleteMessage }
-                  }
-                }
-              ) => {
-                return DeleteMessage(prev, deleteMessage.id);
-              }
-            }
-          });
-        } catch (e) {
-          return { error: e.graphQLErrors[0].message };
-        }
-      }
-    })
-  }),
-  graphql(EDIT_MESSAGE, {
-    props: ({ mutate }) => ({
-      editMessage: async ({ text, id, createdAt, userId, username, uuid, quotedId, quotedMessage }) => {
-        try {
-          await mutate({
-            variables: { input: { text, id } },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              editMessage: {
-                id,
-                text,
-                userId,
-                username,
-                createdAt: createdAt.toISOString(),
-                uuid,
-                quotedId,
-                quotedMessage: {
-                  __typename: 'QuotedMessage',
-                  ...quotedMessage
-                },
-                filename: null,
-                path: null,
-                __typename: 'Message'
-              }
-            },
-            updateQueries: {
-              messages: (
-                prev,
-                {
-                  mutationResult: {
-                    data: { editMessage }
-                  }
-                }
-              ) => {
-                return EditMessage(prev, editMessage);
-              }
-            }
-          });
-        } catch (e) {
-          return { error: e.graphQLErrors[0].message };
-        }
-      }
-    })
-  }),
-  translate('chat'),
-  withUuid,
-  withUser,
-  messageImage,
-  messagesFormatter,
-  withSubscription
-)(Chat);

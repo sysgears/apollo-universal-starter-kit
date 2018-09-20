@@ -5,7 +5,7 @@ import { Subscription } from 'react-apollo';
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 
 export default Component => {
-  return class MessagesWithSubscription extends React.Component {
+  return class WithMessagesSubscription extends React.Component {
     static propTypes = {
       messages: PropTypes.object
     };

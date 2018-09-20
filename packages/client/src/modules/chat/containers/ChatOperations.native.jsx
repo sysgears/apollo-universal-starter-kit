@@ -4,7 +4,7 @@ import { View, KeyboardAvoidingView, Clipboard, Platform } from 'react-native';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 
 import ChatFooter from '../components/ChatFooter';
-import CustomView from '../components/CustomView';
+import CustomViewNative from '../components/CustomView.native';
 import RenderCustomActions from '../components/RenderCustomActions';
 import { Loading } from '../../common/components/native';
 import chatConfig from '../../../../../../config/chat';
@@ -131,7 +131,7 @@ export default class ChatOperations extends React.Component {
 
   renderCustomView = chatProps => {
     const { images } = this.props;
-    return <CustomView {...chatProps} images={images} />;
+    return <CustomViewNative {...chatProps} images={images} />;
   };
 
   renderSend = chatProps => {

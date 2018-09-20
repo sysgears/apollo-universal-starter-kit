@@ -1,55 +1,42 @@
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
 const CustomView = ({
-  images,
   currentMessage: {
-    loadingImage,
     quotedId,
     quotedMessage,
     user: { _id: currentId }
   },
   user: { _id: userId }
 }) => {
-  if (images && loadingImage) {
-    return (
-      <View style={styles.uploading}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
   if (quotedId) {
-    const { text, username, image, id } = quotedMessage;
+    const { text, username, id } = quotedMessage;
     if (id) {
       const color = userId === currentId ? styles.ownColorText : styles.colorText;
-      const imageBlock = image ? <Image style={styles.image} source={{ uri: image }} /> : null;
       return (
-        <View style={styles.container}>
-          <Text style={[styles.username, color]}>{username ? username : 'Anonymous'}</Text>
-          {imageBlock}
-          <Text style={color}>{text}</Text>
-        </View>
+        <div style={styles.container}>
+          <span style={[styles.username, color]}>{username ? username : 'Anonymous'}</span>
+          <span style={color}>{text}</span>
+        </div>
       );
     } else {
       return (
-        <View style={styles.container}>
-          <Text style={styles.status}>{'Deleted message'}</Text>
-        </View>
+        <div style={styles.container}>
+          <span style={styles.status}>{'Deleted message'}</span>
+        </div>
       );
     }
   }
-  return <View />;
+  return <div />;
 };
 
 CustomView.propTypes = {
   messages: PropTypes.array,
   currentMessage: PropTypes.object,
-  user: PropTypes.object,
-  images: PropTypes.bool
+  user: PropTypes.object
 };
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     margin: 5,
     paddingBottom: 2,
@@ -87,6 +74,6 @@ const styles = StyleSheet.create({
   ownColorText: {
     color: '#fff'
   }
-});
+};
 
 export default CustomView;

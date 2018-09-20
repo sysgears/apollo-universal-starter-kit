@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { WebChat } from './webChat/WebChat';
 
 import chatConfig from '../../../../../../config/chat';
+import CustomView from '../components/CustomView';
 
 export default class ChatOperations extends React.Component {
   static propTypes = {
@@ -66,6 +67,10 @@ export default class ChatOperations extends React.Component {
 
       this.setState({ isQuoted: false, quotedMessage: null });
     }
+  };
+
+  renderCustomView = chatProps => {
+    return <CustomView {...chatProps} />;
   };
 
   render() {

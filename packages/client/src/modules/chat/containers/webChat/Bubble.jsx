@@ -158,7 +158,7 @@ export default class Bubble extends React.PureComponent {
 const styles = {
   left: {
     container: {
-      flex: 1,
+      display: 'flex',
       alignItems: 'flex-start'
     },
     wrapper: {
@@ -177,7 +177,7 @@ const styles = {
   },
   right: {
     container: {
-      flex: 1,
+      display: 'flex',
       alignItems: 'flex-end'
     },
     wrapper: {

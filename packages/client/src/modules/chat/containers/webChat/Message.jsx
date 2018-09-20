@@ -11,6 +11,7 @@ import { isSameUser, isSameDay } from './utils';
 const styles = {
   left: {
     container: {
+      display: 'flex',
       flexDirection: 'row',
       alignItems: 'flex-end',
       justifyContent: 'flex-start',
@@ -20,6 +21,7 @@ const styles = {
   },
   right: {
     container: {
+      display: 'flex',
       flexDirection: 'row',
       alignItems: 'flex-end',
       justifyContent: 'flex-end',
@@ -80,6 +82,7 @@ export default class Message extends React.PureComponent {
 
   render() {
     const sameUser = isSameUser(this.props.currentMessage, this.props.nextMessage);
+    console.log('this.props.position ===== ', this.props.position);
     return (
       <div>
         {this.renderDay()}
@@ -87,12 +90,12 @@ export default class Message extends React.PureComponent {
           this.renderSystemMessage()
         ) : (
           <div
-            style={[
-              styles[this.props.position].container,
-              { marginBottom: sameUser ? 2 : 10 },
-              !this.props.inverted && { marginBottom: 2 },
-              this.props.containerStyle[this.props.position]
-            ]}
+            style={{
+              ...styles[this.props.position].container,
+              ...{ marginBottom: sameUser ? 2 : 10 }
+              // !this.props.inverted && { marginBottom: 2 },
+              // ...this.props.containerStyle[this.props.position]
+            }}
           >
             {this.props.position === 'left' ? this.renderAvatar() : null}
             {this.renderBubble()}

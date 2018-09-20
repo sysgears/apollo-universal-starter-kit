@@ -3,7 +3,7 @@ export default {
     subscription: {
       enabled: true,
       webhookUrl: '/stripe/webhook',
-      publicKey: 'pk_test_ww70oUQ44vVJ3HO4AnvglxCp',
+      publicKey: '', // <-Public key
       secretKey: process.env.STRIPE_SECRET_KEY,
       endpointSecret: process.env.STRIPE_ENDPOINT_SECRET,
       // for initializing the Stripe

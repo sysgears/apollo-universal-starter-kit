@@ -26,14 +26,14 @@ export default (props: AddSubscriptionViewProps) => {
       <Helmet title={`${settings.app.name} - ${t('title')}`} />
       <h1 className="text-center">{t('subTitle')}</h1>
       <Row>
-        <Col xs={6}>
+        <Col xs={12} md={6}>
           <p>{t('add.description')}</p>
           <p>{t('add.product')}</p>
           <p>
             {t('add.price')} {settings.payments.stripe.subscription.plan.amount / 100}
           </p>
         </Col>
-        <Col xs={6}>
+        <Col xs={12} md={6}>
           {/* Displays testing credit cards when stripe test keys are used!!!*/}
           {settings.payments.stripe.subscription.publicKey.includes('test') && renderTestingCards(t)}
         </Col>
@@ -128,7 +128,7 @@ const renderTestingCards = (t: TranslateFunction) => {
 
   return (
     <div>
-      <h5 className="text-center">{t('add.testCreditCards')}</h5>
+      <h3 className="text-center">{t('add.testCreditCards')}</h3>
       <Table style={{ fontSize: '13px' }} dataSource={testCreditCard} columns={columns} />
     </div>
   );

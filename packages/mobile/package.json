@@ -83,6 +83,7 @@
   "devDependencies": {
     "@types/expo__vector-icons": "^6.2.3",
     "@types/jest": "^23.3.1",
+    "@types/react-native-keyboard-spacer": "^0.4.1",
     "@types/react-test-renderer": "^16.0.2",
     "apollo-utilities": "^1.0.3",
     "caporal": "^0.10.0",

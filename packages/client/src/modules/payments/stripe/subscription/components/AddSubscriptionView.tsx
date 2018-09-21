@@ -24,7 +24,7 @@ export default (props: AddSubscriptionViewProps) => {
   return (
     <PageLayout>
       <Helmet title={`${settings.app.name} - ${t('title')}`} />
-      <h1 className="text-center">{t('subTitle')}</h1>
+      <h1 className="text-center">{t('title')}</h1>
       <Row>
         <Col xs={12} md={6}>
           <p>{t('add.description')}</p>

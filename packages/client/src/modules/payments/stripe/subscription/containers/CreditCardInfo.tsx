@@ -7,7 +7,7 @@ import translate, { TranslateFunction } from '../../../../../i18n';
 import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
 const CreditCardInfo = ({ t }: { t: TranslateFunction }) => (
-  <Query query={CREDIT_CARD_QUERY}>
+  <Query query={CREDIT_CARD_QUERY} fetchPolicy="network-only">
     {({ loading, data }) => <CreditCardInfoView loading={loading} t={t} creditCard={data.stripeSubscriptionCard} />}
   </Query>
 );

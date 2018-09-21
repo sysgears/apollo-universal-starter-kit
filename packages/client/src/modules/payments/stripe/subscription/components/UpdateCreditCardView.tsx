@@ -24,7 +24,7 @@ export default (props: UpdateCardViewProps) => {
     <Fragment>
       <Helmet title={`${settings.app.name} - ${t('update.title')}`} />
       <LayoutCenter>
-        <h1 className="text-center">{t('update.subTitle')}</h1>
+        <h1 className="text-center">{t('update.title')}</h1>
         <Elements>
           <SubscriptionCardForm {...props} buttonName={t('update.btn')} />
         </Elements>

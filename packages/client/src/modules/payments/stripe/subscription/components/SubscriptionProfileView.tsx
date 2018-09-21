@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 import CreditCardInfo from '../containers/CreditCardInfo';
 import CancelSubscription from '../containers/CancelSubscription';
 import { CardGroup, CardText, CardTitle } from '../../../../common/components/web';
-import './stripeSubscription.scss';
 import { TranslateFunction } from '../../../../../i18n';
 
 interface SubscriptionProfileViewProps {
@@ -20,7 +19,7 @@ export default ({ t, loading, stripeSubscription }: SubscriptionProfileViewProps
   }
 
   return (
-    <div className="subscriptionProfileWrapper">
+    <div style={{ border: '1px solid black' }}>
       <CardGroup>
         <CardTitle>{t('subscriptionProfile.title')}</CardTitle>
       </CardGroup>

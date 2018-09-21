@@ -1,7 +1,6 @@
 {
-  "navLink": "Subscriber page",
+  "navLink": "For subscribers",
   "title": "Subscription",
-  "subTitle": "Subscription!",
   "loading": "loading...",
   "serverError": "Server error, try again later!",
   "stripeError": "Payment service error, try again later!",

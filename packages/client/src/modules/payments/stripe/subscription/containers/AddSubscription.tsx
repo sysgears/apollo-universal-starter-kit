@@ -65,6 +65,8 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
 
   public render() {
     const { t } = this.props;
+    const { error, submitting } = this.state;
+
     return (
       <Mutation
         mutation={ADD_SUBSCRIPTION}
@@ -82,16 +84,16 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.payments.stripe.subscription.publicKey}>
                   <AddSubscriptionView
-                    error={this.state.error}
-                    submitting={this.state.submitting}
+                    error={error}
+                    submitting={submitting}
                     onSubmit={this.onSubmit(addSubscription)}
                     t={t}
                   />
                 </StripeProvider>
               ) : (
                 <AddSubscriptionView
-                  error={this.state.error}
-                  submitting={this.state.submitting}
+                  error={error}
+                  submitting={submitting}
                   onSubmit={this.onSubmit(addSubscription)}
                   t={t}
                 />

@@ -4,6 +4,7 @@ import { WebChat } from './webChat/WebChat';
 
 import chatConfig from '../../../../../../config/chat';
 import CustomView from '../components/CustomView';
+import { Button } from '../../common/components/web';
 
 export default class ChatOperations extends React.Component {
   static propTypes = {
@@ -25,11 +26,23 @@ export default class ChatOperations extends React.Component {
     isEdit: false,
     messageInfo: null,
     isQuoted: false,
-    quotedMessage: null
+    quotedMessage: null,
+    showActionSheet: true
   };
 
   setMessageState = text => {
     this.setState({ message: text });
+  };
+
+  onLongPress = (context, currentMessage, id) => {
+    const { t } = this.props;
+    const options = [t('msg.btn.copy'), t('msg.btn.reply')];
+
+    if (id === currentMessage.user._id) {
+      options.push(t('msg.btn.edit'), t('msg.btn.delete'));
+    }
+
+    this.setState({ showActionSheet: !this.state.showActionSheet });
   };
 
   onSend = (messages = []) => {
@@ -73,6 +86,28 @@ export default class ChatOperations extends React.Component {
     return <CustomView {...chatProps} />;
   };
 
+  renderActionSheet = () => {
+    return this.state.showActionSheet ? (
+      <div>
+        <Button id="apollo-link-button" color="primary">
+          Copy
+        </Button>
+        <Button id="apollo-link-button" color="primary">
+          Edit
+        </Button>
+        <Button id="apollo-link-button" color="primary">
+          Reply
+        </Button>
+        <Button id="apollo-link-button" color="primary">
+          Delete
+        </Button>
+        <Button id="apollo-link-button" color="primary">
+          Cancel
+        </Button>
+      </div>
+    ) : null;
+  };
+
   render() {
     const { currentUser, deleteMessage, uuid, messages, t } = this.props;
 
@@ -81,25 +116,28 @@ export default class ChatOperations extends React.Component {
     const edges = messages ? messages.edges : [];
     const { id = uuid, username = null } = currentUser ? currentUser : {};
     return (
-      <WebChat
-        {...chatConfig.giftedChat}
-        ref={gc => (this.gc = gc)}
-        text={message}
-        onInputTextChanged={text => this.setMessageState(text)}
-        placeholder={t('input.text')}
-        messages={edges}
-        //renderSend={this.renderSend}
-        onSend={this.onSend}
-        //loadEarlier={messages.totalCount > messages.edges.length}
-        //onLoadEarlier={this.onLoadEarlier}
-        user={{ _id: id, name: username }}
-        renderChatFooter={this.renderChatFooter}
-        renderCustomView={this.renderCustomView}
-        renderActions={this.renderCustomActions}
-        onLongPress={(context, currentMessage) =>
-          this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
-        }
-      />
+      <div style={{ backgroundColor: '#eee' }}>
+        <WebChat
+          {...chatConfig.giftedChat}
+          ref={gc => (this.gc = gc)}
+          text={message}
+          onInputTextChanged={text => this.setMessageState(text)}
+          placeholder={t('input.text')}
+          messages={edges}
+          //renderSend={this.renderSend}
+          onSend={this.onSend}
+          //loadEarlier={messages.totalCount > messages.edges.length}
+          //onLoadEarlier={this.onLoadEarlier}
+          user={{ _id: id, name: username }}
+          renderChatFooter={this.renderChatFooter}
+          renderCustomView={this.renderCustomView}
+          renderActions={this.renderCustomActions}
+          onLongPress={(context, currentMessage) =>
+            this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
+          }
+        />
+        {this.renderActionSheet()}
+      </div>
     );
   }
 }

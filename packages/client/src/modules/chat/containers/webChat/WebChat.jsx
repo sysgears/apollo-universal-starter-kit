@@ -272,7 +272,7 @@ class WebChat extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{ width: '700px', margin: '0px auto', backgroundColor: '#fff', padding: '0px 50px' }}>
         {this.renderMessages()}
         {this.renderInputToolbar()}
       </div>

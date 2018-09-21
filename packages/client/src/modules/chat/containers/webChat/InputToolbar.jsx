@@ -37,15 +37,19 @@ export default class InputToolbar extends React.Component {
 
   renderAccessory() {
     if (this.props.renderAccessory) {
-      return <div style={[styles.accessory, this.props.accessoryStyle]}>{this.props.renderAccessory(this.props)}</div>;
+      return (
+        <div style={{ ...styles.accessory, ...this.props.accessoryStyle }}>
+          {this.props.renderAccessory(this.props)}
+        </div>
+      );
     }
     return null;
   }
 
   render() {
     return (
-      <div style={[styles.container, this.props.containerStyle]}>
-        <div style={[styles.primary, this.props.primaryStyle]}>
+      <div style={{ ...styles.container, ...this.props.containerStyle }}>
+        <div style={{ ...styles.primary, ...this.props.primaryStyle }}>
           {this.renderActions()}
           {this.renderComposer()}
           {this.renderSend()}
@@ -58,14 +62,15 @@ export default class InputToolbar extends React.Component {
 
 const styles = {
   container: {
-    'border-top-width': '2px',
-    'border-top-color': Color.defaultColor,
-    'background-color': Color.white,
+    borderTopWidth: '2px',
+    borderTopColor: Color.defaultColor,
+    backgroundColor: Color.white,
     bottom: '0px',
     left: '0px',
     right: '0px'
   },
   primary: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end'
   },

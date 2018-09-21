@@ -1,14 +1,14 @@
-## Apollo Universal Starter Kit payment Modules
+# Apollo Universal Starter Kit Payment Module
 
-In this review, you can find information about payments implemented modules available in Apollo Universal Starter Kit. 
-You can follow to dedicated documents that give more details about: 
- - features and basic review about payment modules;
- - how to configure and quickly start using modules;
- - how to use modules;
- - how to configure modules for deployment;
+In this review, you can find information about payment module in Apollo Universal Starter Kit. 
+You can follow to dedicated documents that give more details about:
 
+* Features and basic review about payment modules;
+* How to configure and quickly start using modules;
+* How to use modules;
+* How to configure modules for deployment;
 
-# Stripe subscription Module
+## Stripe Subscription Module
 
 The purpose of this module is to provide a starting point for applications that 
 wish to charge users a monthly subscription fee for access to certain features 
@@ -17,7 +17,7 @@ of the site. This is implemented using [Stripe](https://stripe.com).
 Apollo Universal Starter Kit provides basic example how to use Stripe Subscription in real production application,
  also implements functionality for developing (shows how to imitate real production payment service in the developing mode).
 
-#### Features
+### Features
 - After registering an account, users will be redirected to the page for subscribing using a credit card.
 - After subscribing, the user will be charged $10 (according to the stripe plan) a month.
 - Users can update their card details from the profile page.

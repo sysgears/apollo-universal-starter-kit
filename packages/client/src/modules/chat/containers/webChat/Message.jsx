@@ -82,9 +82,8 @@ export default class Message extends React.PureComponent {
 
   render() {
     const sameUser = isSameUser(this.props.currentMessage, this.props.nextMessage);
-    console.log('this.props.position ===== ', this.props.position);
     return (
-      <div>
+      <div className="message" style={{ width: '100%' }}>
         {this.renderDay()}
         {this.props.currentMessage.system ? (
           this.renderSystemMessage()

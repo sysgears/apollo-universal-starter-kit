@@ -27,7 +27,9 @@ export default class ChatOperations extends React.Component {
     messageInfo: null,
     isQuoted: false,
     quotedMessage: null,
-    showActionSheet: true
+    showActionSheet: true,
+    activeMessage: null,
+    currentMessage: () => {}
   };
 
   setMessageState = text => {
@@ -42,27 +44,27 @@ export default class ChatOperations extends React.Component {
       options.push(t('msg.btn.edit'), t('msg.btn.delete'));
     }
 
-    this.setState({ showActionSheet: !this.state.showActionSheet });
+    this.setState({ showActionSheet: true, currentMessage, activeMessage: currentMessage._id });
   };
 
   onSend = (messages = []) => {
-    const { isEdit, messageInfo, message, quotedMessage } = this.state;
+    const { isEdit, messageInfo, message, currentMessage } = this.state;
     const { addMessage, editMessage, uuid } = this.props;
-    const quotedId = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
+    const quotedId = currentMessage && currentMessage.hasOwnProperty('_id') ? currentMessage._id : null;
+    console.log('quotedId === ', quotedId);
     const defQuote = { filename: null, path: null, text: null, username: null, id: quotedId };
 
     if (isEdit) {
       editMessage({
         ...messageInfo,
         text: message,
-        quotedMessage: quotedMessage ? quotedMessage : defQuote,
+        quotedMessage: currentMessage ? currentMessage : defQuote,
         uuid
       });
       this.setState({ isEdit: false });
     } else {
       const {
         text = null,
-        attachment,
         user: { name: username },
         _id: id
       } = messages[0];
@@ -74,11 +76,10 @@ export default class ChatOperations extends React.Component {
         id,
         uuid,
         quotedId,
-        quotedMessage: quotedMessage ? quotedMessage : defQuote,
-        attachment
+        quotedMessage: currentMessage ? currentMessage : defQuote
       });
 
-      this.setState({ isQuoted: false, quotedMessage: null });
+      this.setState({ isQuoted: false, currentMessage: null });
     }
   };
 
@@ -87,21 +88,25 @@ export default class ChatOperations extends React.Component {
   };
 
   renderActionSheet = () => {
-    return this.state.showActionSheet ? (
+    const { deleteMessage } = this.props;
+    const { currentMessage, showActionSheet } = this.state;
+    return showActionSheet ? (
       <div>
-        <Button id="apollo-link-button" color="primary">
+        <Button color="primary">
           Copy
         </Button>
-        <Button id="apollo-link-button" color="primary">
+        <Button color="primary">
           Edit
         </Button>
-        <Button id="apollo-link-button" color="primary">
+        <Button color="primary" onClick={() => {
+          this.setState({ isQuoted: true });
+        }}>
           Reply
         </Button>
-        <Button id="apollo-link-button" color="primary">
+        <Button color="primary" onClick={() => deleteMessage({ id: currentMessage._id })}>
           Delete
         </Button>
-        <Button id="apollo-link-button" color="primary">
+        <Button color="primary">
           Cancel
         </Button>
       </div>
@@ -132,6 +137,7 @@ export default class ChatOperations extends React.Component {
           renderChatFooter={this.renderChatFooter}
           renderCustomView={this.renderCustomView}
           renderActions={this.renderCustomActions}
+          activeMessage={this.state.activeMessage}
           onLongPress={(context, currentMessage) =>
             this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
           }

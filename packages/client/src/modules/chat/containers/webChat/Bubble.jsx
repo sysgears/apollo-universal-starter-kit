@@ -124,28 +124,34 @@ export default class Bubble extends React.PureComponent {
   }
 
   render() {
+    const { currentMessage, activeMessage } = this.props;
+    const background = currentMessage._id === activeMessage ? { backgroundColor: '#eee' } : {};
     return (
-      <div style={{ ...styles[this.props.position].container, ...this.props.containerStyle[this.props.position] }}>
+      <div onClick={this.onLongPress} style={{ width: '100%', ...background }}>
         <div
-          style={{
-            ...styles[this.props.position].wrapper,
-            ...this.props.wrapperStyle[this.props.position],
-            ...this.handleBubbleToNext(),
-            ...this.handleBubbleToPrevious()
-          }}
+          className="message"
+          style={{ ...styles[this.props.position].container, ...this.props.containerStyle[this.props.position] }}
         >
           <div
-            onClick={this.onLongPress}
-            //accessibilityTraits="text"
-            {...this.props.touchableProps}
+            style={{
+              ...styles[this.props.position].wrapper,
+              ...this.props.wrapperStyle[this.props.position],
+              ...this.handleBubbleToNext(),
+              ...this.handleBubbleToPrevious()
+            }}
           >
-            <div>
-              {this.renderCustomView()}
-              {this.renderMessageImage()}
-              {this.renderMessageText()}
-              <div style={{ ...styles.bottom, ...this.props.bottomContainerStyle[this.props.position] }}>
-                {this.renderTime()}
-                {this.renderTicks()}
+            <div
+              //accessibilityTraits="text"
+              {...this.props.touchableProps}
+            >
+              <div>
+                {this.renderCustomView()}
+                {this.renderMessageImage()}
+                {this.renderMessageText()}
+                <div style={{ ...styles.bottom, ...this.props.bottomContainerStyle[this.props.position] }}>
+                  {this.renderTime()}
+                  {this.renderTicks()}
+                </div>
               </div>
             </div>
           </div>
@@ -178,7 +184,8 @@ const styles = {
   right: {
     container: {
       display: 'flex',
-      alignItems: 'flex-end'
+      alignItems: 'flex-end',
+      justifyContent: 'flex-end'
     },
     wrapper: {
       borderRadius: 15,
@@ -250,6 +257,7 @@ Bubble.propTypes = {
   currentMessage: PropTypes.object,
   nextMessage: PropTypes.object,
   previousMessage: PropTypes.object,
+  activeMessage: PropTypes.number,
   containerStyle: PropTypes.shape({
     left: PropTypes.object,
     right: PropTypes.object

@@ -44,7 +44,7 @@ The two events from the Stripe currently supported in Apollo Universal Starter K
 2. Ensure subscriptions are enabled in `config/payments.js`, set `true` to `stripe.recurring.enable` property.
 3. Place your Stripe publishable key in `config/payments.js`.
 4. Place your Stripe secret key in your `.env` file (stripe endpoint secret not needed right away).
-5. Run `yarn stripe:setup` in the server folder (`/packages/server/`), which will create a subscription plan for you using Stripe's API.
+5. Run `yarn stripe:setup`, which will create a product and subscription plan  for you using Stripe's API.
 6. Start the app, register a new user or log in as `user@example.com`, and go through the subscription creation process.
 6. Subscription info is displayed in the user profile.
 
@@ -56,5 +56,5 @@ In production mode module has no differences with development mode, except using
 2. Place your Live Stripe publishable key in `config/payments.js`.
 3. Place your Live Stripe secret key in your `.env`.
 4. If you would like to validate the events from the Stripe to your webhook ([Checking Webhook Signatures](https://stripe.com/docs/webhooks/signatures)). It helps prevent fraudulent webhooks from being processed. Add stripe signing secret key from your stripe webhook in your `.env`. 
-5. Run `yarn stripe:setup` in the server folder (`/packages/server/`), which will create a subscription plan for you using Stripe's API.
+5. Run `yarn stripe:setup` , which will create a product and subscription plan for you using Stripe's API.
 6. Deploy app.

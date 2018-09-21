@@ -1,13 +1,12 @@
 package modules
 
 import akka.actor.ActorSystem
-import com.google.inject.{AbstractModule, Provides}
+import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.ScalaModule
 
-class AkkaModule extends AbstractModule with ScalaModule {
+class AkkaModule(implicit actorSystem: ActorSystem) extends AbstractModule with ScalaModule {
 
-  @Provides
-  def actorSystem: ActorSystem = {
-    ActorSystem("scala-starter-kit")
+  override def configure {
+    bind[ActorSystem].toInstance(actorSystem)
   }
 }

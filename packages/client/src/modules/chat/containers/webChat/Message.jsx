@@ -83,13 +83,15 @@ export default class Message extends React.PureComponent {
   render() {
     const sameUser = isSameUser(this.props.currentMessage, this.props.nextMessage);
     return (
-      <div className="message" style={{ width: '100%' }}>
+      <div>
         {this.renderDay()}
         {this.props.currentMessage.system ? (
           this.renderSystemMessage()
         ) : (
           <div
+            className="message"
             style={{
+              width: '100%',
               ...styles[this.props.position].container,
               ...{ marginBottom: sameUser ? 2 : 10 }
               // !this.props.inverted && { marginBottom: 2 },

@@ -9,7 +9,7 @@ export default {
     showUserAvatar: false,
     showAvatarForEveryMessage: true,
     renderAvatarOnTop: false,
-    inverted: true,
+    inverted: false,
     keyboardShouldPersistTaps: 'never'
   },
   image: {

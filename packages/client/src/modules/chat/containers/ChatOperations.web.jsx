@@ -27,9 +27,10 @@ export default class ChatOperations extends React.Component {
     messageInfo: null,
     isQuoted: false,
     quotedMessage: null,
-    showActionSheet: true,
+    showActionSheet: false,
     activeMessage: null,
-    currentMessage: () => {}
+    currentMessage: () => {
+    }
   };
 
   setMessageState = text => {
@@ -44,7 +45,9 @@ export default class ChatOperations extends React.Component {
       options.push(t('msg.btn.edit'), t('msg.btn.delete'));
     }
 
-    this.setState({ showActionSheet: true, currentMessage, activeMessage: currentMessage._id });
+    this.setState(currentMessage._id === this.state.activeMessage
+      ? { showActionSheet: !this.state.showActionSheet, currentMessage: null, activeMessage: null }
+      : { showActionSheet: true, currentMessage, activeMessage: currentMessage._id });
   };
 
   onSend = (messages = []) => {
@@ -76,7 +79,7 @@ export default class ChatOperations extends React.Component {
         id,
         uuid,
         quotedId,
-        quotedMessage: currentMessage ? currentMessage : defQuote
+        quotedMessage: this.state.isQuoted ? defQuote : defQuote
       });
 
       this.setState({ isQuoted: false, currentMessage: null });
@@ -91,7 +94,7 @@ export default class ChatOperations extends React.Component {
     const { deleteMessage } = this.props;
     const { currentMessage, showActionSheet } = this.state;
     return showActionSheet ? (
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button color="primary">
           Copy
         </Button>
@@ -122,27 +125,29 @@ export default class ChatOperations extends React.Component {
     const { id = uuid, username = null } = currentUser ? currentUser : {};
     return (
       <div style={{ backgroundColor: '#eee' }}>
-        <WebChat
-          {...chatConfig.giftedChat}
-          ref={gc => (this.gc = gc)}
-          text={message}
-          onInputTextChanged={text => this.setMessageState(text)}
-          placeholder={t('input.text')}
-          messages={edges}
-          //renderSend={this.renderSend}
-          onSend={this.onSend}
-          //loadEarlier={messages.totalCount > messages.edges.length}
-          //onLoadEarlier={this.onLoadEarlier}
-          user={{ _id: id, name: username }}
-          renderChatFooter={this.renderChatFooter}
-          renderCustomView={this.renderCustomView}
-          renderActions={this.renderCustomActions}
-          activeMessage={this.state.activeMessage}
-          onLongPress={(context, currentMessage) =>
-            this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
-          }
-        />
-        {this.renderActionSheet()}
+        <div style={{ maxWidth: '700px', margin: '0px auto' }}>
+          <WebChat
+            {...chatConfig.giftedChat}
+            ref={gc => (this.gc = gc)}
+            text={message}
+            onInputTextChanged={text => this.setMessageState(text)}
+            placeholder={t('input.text')}
+            messages={edges}
+            //renderSend={this.renderSend}
+            onSend={this.onSend}
+            //loadEarlier={messages.totalCount > messages.edges.length}
+            //onLoadEarlier={this.onLoadEarlier}
+            user={{ _id: id, name: username }}
+            renderChatFooter={this.renderChatFooter}
+            renderCustomView={this.renderCustomView}
+            renderActions={this.renderCustomActions}
+            activeMessage={this.state.activeMessage}
+            onLongPress={(context, currentMessage) =>
+              this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
+            }
+          />
+          {this.renderActionSheet()}
+        </div>
       </div>
     );
   }

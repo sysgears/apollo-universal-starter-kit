@@ -18,7 +18,7 @@ interface CardInfoViewProps {
 }
 
 const renderCardItem = (title: string, value: string) => (
-  <CardItem>
+  <CardItem style={styles.container}>
     <CardLabel style={styles.container}>{title}</CardLabel>
     <CardText style={styles.container}>{value}</CardText>
   </CardItem>

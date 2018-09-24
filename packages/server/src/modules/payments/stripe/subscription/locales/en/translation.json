@@ -1,9 +1,9 @@
 {
-  "cancelError": "Error cancelling subscription.",
+  "cancelError": "Error when cancelling subscription.",
 
   "deleteEmail" : {
     "subject" : "Subscription Canceled",
-    "text" : "Your subscription has been canceled. To resubscribe click here: "
+    "text" : "Your subscription has been canceled. To subscribe again, click here: "
   },
 
   "failedEmail" : {

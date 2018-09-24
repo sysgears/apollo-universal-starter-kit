@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Col as ADCol } from 'antd';
 
-const Col = ({ children, xs, ...props }) => {
+const Col = ({ children, xs, md = 12, ...props }) => {
   return (
-    <ADCol span={(xs * 2).toString()} {...props}>
+    <ADCol span={(xs * 2).toString()} md={md * 2} {...props}>
       {children}
     </ADCol>
   );

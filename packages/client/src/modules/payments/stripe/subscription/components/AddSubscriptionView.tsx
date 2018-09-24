@@ -24,27 +24,30 @@ export default (props: AddSubscriptionViewProps) => {
   return (
     <PageLayout>
       <Helmet title={`${settings.app.name} - ${t('title')}`} />
-      <h1 className="text-center">{t('subTitle')}</h1>
-      <Row>
-        <Col xs={6}>
-          <p>{t('add.description')}</p>
-          <p>{t('add.product')}</p>
-          <p>
-            {t('add.price')} {settings.payments.stripe.subscription.plan.amount / 100}
+      <h1 className="text-center">{t('title')}</h1>
+      <Row style={{ justifyContent: 'center' }}>
+        <Col xs={12} md={10}>
+          <p className="text-center">{t('add.description')}</p>
+          <p className="text-center">{t('add.product')}</p>
+          <p className="text-center">
+            {t('add.price')}
+            {settings.payments.stripe.subscription.plan.amount / 100}
           </p>
         </Col>
-        <Col xs={6}>
+        <Col xs={12} md={12}>
+          <LayoutCenter>
+            <h3 className="text-center"> {t('add.creditCard')}</h3>
+            <ElementsClientOnly>
+              <SubscriptionCardForm {...props} buttonName={t('add.btn')} />
+            </ElementsClientOnly>
+          </LayoutCenter>
+        </Col>
+        <Col xs={12} md={8}>
+          <hr />
           {/* Displays testing credit cards when stripe test keys are used!!!*/}
           {settings.payments.stripe.subscription.publicKey.includes('test') && renderTestingCards(t)}
         </Col>
       </Row>
-      <LayoutCenter>
-        <h3 className="text-center"> {t('add.creditCard')}</h3>
-
-        <ElementsClientOnly>
-          <SubscriptionCardForm {...props} buttonName={t('add.btn')} />
-        </ElementsClientOnly>
-      </LayoutCenter>
     </PageLayout>
   );
 };
@@ -128,8 +131,8 @@ const renderTestingCards = (t: TranslateFunction) => {
 
   return (
     <div>
-      <h5 className="text-center">{t('add.testCreditCards')}</h5>
-      <Table style={{ fontSize: '13px' }} dataSource={testCreditCard} columns={columns} />
+      <h3 className="text-center">{t('add.testCreditCards')}</h3>
+      <Table dataSource={testCreditCard} columns={columns} />
     </div>
   );
 };

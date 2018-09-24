@@ -21,9 +21,7 @@ export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
     <View style={styles.subscriberPageWrapper}>
       <Card>
         <CardSubtitleText style={styles.title}>{t('subscriberPage.title')}</CardSubtitleText>
-        <CardSubtitleText style={styles.container}>
-          {`${t('subscriberPage.msg')} ${subscriberNumber.number}.`}
-        </CardSubtitleText>
+        <CardSubtitleText style={{}}>{`${t('subscriberPage.msg')} ${subscriberNumber.number}.`}</CardSubtitleText>
       </Card>
     </View>
   );
@@ -31,14 +29,11 @@ export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
 
 const styles = StyleSheet.create({
   subscriberPageWrapper: {
-    paddingTop: 10,
+    flex: 1,
+    padding: 10,
     paddingHorizontal: 20
   },
-  container: {
-    flex: 1
-  },
   title: {
-    flex: 1,
     fontWeight: 'bold',
     fontSize: 20
   }

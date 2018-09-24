@@ -10,7 +10,7 @@ const { product, plan } = settings.payments.stripe.subscription;
  */
 Promise.resolve()
   .then(() => stripe.products.create(product))
-  .then(product => stripe.plans.create({ product: product.id, ...plan }))
+  .then(({ id: product }) => stripe.plans.create({ product, ...plan }))
   .then(() => {
     console.log('----------------------------------------------------------------------------------------------------');
     console.log(`${plan.nickname} created.`);

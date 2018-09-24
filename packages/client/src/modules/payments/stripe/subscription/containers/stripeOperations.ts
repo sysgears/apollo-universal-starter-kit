@@ -2,9 +2,9 @@ import settings from '../../../../../../../../settings';
 import { CreditCardInput } from '../types';
 
 /**
- * Sends request to the Stripe api for creating credit card token.
- * This method was create to provide right working on the mobile platforms, because stripe-elements (web) are not
- * supported on the mobile devices.
+ * Sends the request to the Stripe api for creating credit card token.
+ * This method was created to work correctly on the mobile platforms, because stripe elements designed for web only
+ * and not supported on the mobile devices.
  *
  * @param creditCardInput - The credit card data.
  *
@@ -33,9 +33,9 @@ export const createToken = (creditCardInput: CreditCardInput) => {
 
 /**
  * Creates stripe credit card token.
- * Select way for creating the token:
- *  - via stripe library if exists (for web)
- *  - manually via fetch (for mobile)
+ * Selects the way of creating the token:
+ *  - using stripe library, if exists (for web)
+ *  - manually, using fetch (for mobile)
  *
  * @param creditCardInput - The credit card data.
  * @param stripe - The stripe.

@@ -1,7 +1,7 @@
 package controllers
 
 import sangria.ast.Document
-import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
+import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError, QueryReducer}
 import sangria.parser.{QueryParser, SyntaxError}
 import sangria.renderer.SchemaRenderer
 import sangria.marshalling.sprayJson._
@@ -50,7 +50,6 @@ object GraphQLController {
       complete(SchemaRenderer.renderSchema(GraphQL.Schema))
     }
 
-  @Inject
   private def handleQuery(query: String, operation: Option[String], variables: JsObject = JsObject.empty) = {
     QueryParser.parse(query) match {
       case Success(queryAst) =>
@@ -72,7 +71,11 @@ object GraphQLController {
       (),
       (),
       operation,
-      variables
+      variables,
+      queryReducers = List(
+        QueryReducer.rejectMaxDepth[Unit](GraphQL.maxQueryDepth),
+        QueryReducer.rejectComplexQueries[Unit](GraphQL.maxQueryComplexity, (_, _) => new Exception("Max query complexity"))
+      )
     )
   }
 }

@@ -16,6 +16,7 @@ import Logout from './containers/Logout';
 import Register from './containers/Register';
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
+import UserAdd from './containers/UserAdd';
 import modules from '..';
 import Feature from '../connector';
 
@@ -87,15 +88,26 @@ UsersListScreen.propTypes = {
 };
 
 class UserEditScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: `${navigation.state.params.id === 0 ? 'Create' : 'Edit'} user`
+  static navigationOptions = () => ({
+    title: 'Edit user'
   });
   render() {
     return <UserEdit navigation={this.props.navigation} />;
   }
 }
-
 UserEditScreen.propTypes = {
+  navigation: PropTypes.object
+};
+
+class UserAddScreen extends React.Component {
+  static navigationOptions = () => ({
+    title: 'Create user'
+  });
+  render() {
+    return <UserAdd navigation={this.props.navigation} />;
+  }
+}
+UserAddScreen.propTypes = {
   navigation: PropTypes.object
 };
 
@@ -190,6 +202,12 @@ export default new Feature(access, {
         },
         UserEdit: {
           screen: UserEditScreen,
+          navigationOptions: () => ({
+            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
+          })
+        },
+        UserAdd: {
+          screen: UserAddScreen,
           navigationOptions: () => ({
             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
           })

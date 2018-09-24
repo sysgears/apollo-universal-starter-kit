@@ -5,7 +5,6 @@ import createNetLink from './netLink';
 import translate from '../../i18n';
 import { MenuItem } from '../../modules/common/components/web';
 import Upload from './containers/Upload';
-import reducers from './reducers';
 import resources from './locales';
 
 import Feature from '../connector';
@@ -24,7 +23,6 @@ export default new Feature({
       <NavLinkWithI18n />
     </MenuItem>
   ),
-  reducer: { upload: reducers },
   localization: { ns: 'upload', resources },
   createNetLink
 });

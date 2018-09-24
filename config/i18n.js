@@ -1,4 +1,7 @@
 export default {
+  enabled: true,
   langPickerRender: true,
-  defaultLang: ''
+  langList: ['en-US', 'ru-RU'],
+  fallbackLng: 'en-US',
+  cookie: 'lang'
 };

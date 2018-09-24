@@ -5,7 +5,6 @@ import createNetLink from './netLink';
 import translate from '../../i18n';
 import { HeaderTitle, IconButton } from '../common/components/native';
 import Upload from './containers/Upload';
-import reducers from './reducers';
 import resources from './locales';
 
 import Feature from '../connector';
@@ -33,7 +32,6 @@ export default new Feature({
       }
     }
   },
-  reducer: { upload: reducers },
   localization: { ns: 'upload', resources },
   createNetLink
 });

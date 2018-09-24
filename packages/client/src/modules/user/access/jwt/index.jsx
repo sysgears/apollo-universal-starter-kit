@@ -40,6 +40,17 @@ const JWTLink = new ApolloLink((operation, forward) => {
     let sub, retrySub;
     const queue = [];
     (async () => {
+      // Optimisation: imitate server response with empty user if no JWT token present in local storage
+      if (
+        !settings.user.auth.access.session.enabled &&
+        operation.operationName === 'currentUser' &&
+        !(await getItem('refreshToken'))
+      ) {
+        observer.next({ data: { currentUser: null } });
+        observer.complete();
+        return;
+      }
+
       await setJWTContext(operation);
       try {
         sub = forward(operation).subscribe({

@@ -9,9 +9,17 @@ export const createSession = req => {
 };
 
 export const readSession = req => {
-  let session = decryptSession(req.universalCookies.get('session', { doNotParse: true }));
-  if (req.headers.session) {
-    session = decryptSession(req.headers.session);
+  let session;
+  if (__TEST__) {
+    session = global.__TEST_SESSION__;
+    if (session) {
+      req.universalCookies.set('x-token', session.csrfToken);
+    }
+  } else {
+    session = decryptSession(req.universalCookies.get('session', { doNotParse: true }));
+    if (req.headers.session) {
+      session = decryptSession(req.headers.session);
+    }
   }
   if (__DEV__) {
     log.debug('read session', session);
@@ -20,14 +28,17 @@ export const readSession = req => {
 };
 
 export const writeSession = (req, session) => {
-  const cookieParams = {
-    httpOnly: true,
-    secure: !__DEV__,
-    maxAge: 7 * 24 * 3600,
-    path: '/'
-  };
-  req.universalCookies.set('session', encryptSession(session), cookieParams);
-  req.universalCookies.set('x-token', session.csrfToken, cookieParams);
+  if (__TEST__) {
+    global.__TEST_SESSION__ = session;
+  } else {
+    const cookieParams = {
+      httpOnly: true,
+      maxAge: 7 * 24 * 3600,
+      path: '/'
+    };
+    req.universalCookies.set('session', encryptSession(session), cookieParams);
+    req.universalCookies.set('x-token', session.csrfToken, cookieParams);
+  }
   if (__DEV__) {
     log.debug('write session', session);
   }

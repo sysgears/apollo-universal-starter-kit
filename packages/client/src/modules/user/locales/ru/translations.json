@@ -28,6 +28,10 @@
     "errorMsg": "Ошибка входа!",
     "cardTitle": "Доступные учетные записи",
     "notRegText": "Ещё не зарегистрированы?",
+    "fbBtn": "Войти через Facebook",
+    "googleBtn": "Войти через Google",
+    "githubBtn": "Войти через GitHub",
+    "linkedinBtn": "Войти через LinkedIn",
     "form": {
       "title": "Вход в систему",
       "field": {
@@ -166,8 +170,8 @@
   "mobile": {
     "login": {
       "usernameOrEmail": {
-        "label": "Имя пользователи или email",
-        "placeholder": "Введите имя полыьзователя или email"
+        "label": "Имя пользователя или email",
+        "placeholder": "Введите имя пользователя или email"
       },
       "pass": {
         "label": "Пароль",

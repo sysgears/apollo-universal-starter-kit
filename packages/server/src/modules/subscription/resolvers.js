@@ -1,9 +1,9 @@
 /*eslint-disable no-unused-vars*/
 import { pick } from 'lodash';
 import Stripe from 'stripe';
+
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
-import log from '../../../../common/log';
 
 const stripe = Stripe(settings.subscription.stripeSecretKey);
 
@@ -119,7 +119,7 @@ export default pubsub => ({
           await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
         } catch (e) {
           const e = new FieldError();
-          e.setError('subscription', 'Error cancelling subscription.');
+          e.setError('subscription', context.req.t('subscription:cancelSubscription'));
           e.throwIf();
         }
 

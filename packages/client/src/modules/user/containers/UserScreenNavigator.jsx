@@ -2,24 +2,26 @@ import { createDrawerNavigator } from 'react-navigation';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
+import { compose } from 'react-apollo';
 import { withUser } from './Auth';
 import { DrawerComponent } from '../../common/components/native';
 
 class UserScreenNavigator extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
+    context: PropTypes.object,
     currentUserLoading: PropTypes.bool.isRequired,
     routeConfigs: PropTypes.object
   };
 
   shouldComponentUpdate(nextProps) {
+    const { currentUserLoading, currentUser } = this.props;
     /**
      * After a user edits the profile the CurrentUser being updated in the State as well.
      * That leads to the Navigator re-rendering and, as a result, takes the user back to the initial route.
      * In order to let the user get back to his/her profile we need to prevent the Navigator
      * re-render action after profile was edited
      */
-    const { currentUserLoading, currentUser } = this.props;
     return !(
       !currentUserLoading &&
       currentUser &&
@@ -68,7 +70,10 @@ const drawerNavigator = routeConfigs => {
     return WithRoutesComponent;
   };
 
-  return withRoutes(withUser(UserScreenNavigator));
+  return compose(
+    withUser,
+    withRoutes
+  )(UserScreenNavigator);
 };
 
 export default drawerNavigator;

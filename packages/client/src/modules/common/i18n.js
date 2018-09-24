@@ -1,14 +1,13 @@
 import React from 'react';
+import settings from '../../../../../settings';
+
+const reactI18next = settings.i18n.enabled ? require('react-i18next') : null;
 
 export default ns => {
   return Component => {
-    try {
-      const reactI18next = require('react-i18next');
-      if (!reactI18next.getI18n()) {
-        throw new Error();
-      }
+    if (settings.i18n.enabled) {
       return reactI18next.translate(ns)(Component);
-    } catch (e) {
+    } else {
       // eslint-disable-next-line react/display-name
       return props => React.createElement(Component, { ...props, t: key => key });
     }

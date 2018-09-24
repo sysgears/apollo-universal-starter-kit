@@ -1,47 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet } from 'react-native';
-import { pick } from 'lodash';
+import { StyleSheet, View } from 'react-native';
 
 import translate from '../../../i18n';
 import UserForm from './UserForm';
 import { withLoadedUser } from '../containers/Auth';
 import { Loading } from '../../common/components/native';
 
-import settings from '../../../../../../settings';
-
 class UserEditView extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
     currentUser: PropTypes.object,
-    addUser: PropTypes.func.isRequired,
     editUser: PropTypes.func.isRequired,
-    t: PropTypes.func
-  };
-
-  onSubmit = async values => {
-    const { user, addUser, editUser, t } = this.props;
-
-    let insertValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
-
-    insertValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
-
-    if (settings.user.auth.certificate.enabled) {
-      insertValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
-    }
-
-    const result = user ? await editUser({ id: user.id, ...insertValues }) : await addUser(insertValues);
-
-    if (result && result.errors) {
-      throw result.errors.reduce(
-        (res, error) => {
-          res[error.field] = error.message;
-          return res;
-        },
-        { _error: t('userEdit.errorMsg') }
-      );
-    }
+    t: PropTypes.func,
+    onSubmit: PropTypes.func
   };
 
   render() {
@@ -54,9 +27,9 @@ class UserEditView extends React.PureComponent {
       return (
         <View style={styles.container}>
           <UserForm
-            onSubmit={this.onSubmit}
-            shouldRoleDisplay={isNotSelf}
-            shouldActiveDisplay={isNotSelf}
+            onSubmit={this.props.onSubmit}
+            shouldDisplayRole={isNotSelf}
+            shouldDisplayActive={isNotSelf}
             initialValues={user || {}}
           />
         </View>

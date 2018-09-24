@@ -7,8 +7,20 @@ import user from './user';
 import subscription from './subscription';
 import contact from './contact';
 import pageNotFound from './pageNotFound';
+import pagination from './pagination';
 import './favicon';
 
 import Feature from './connector';
 
-export default new Feature(defaultRouter, counter, post, upload, user, subscription, contact, pageNotFound, i18n);
+export default new Feature(
+  defaultRouter,
+  counter,
+  post,
+  upload,
+  user,
+  subscription,
+  contact,
+  pagination,
+  pageNotFound,
+  i18n
+);

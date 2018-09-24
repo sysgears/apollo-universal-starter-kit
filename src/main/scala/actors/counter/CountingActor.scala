@@ -1,6 +1,6 @@
 package actors.counter
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, Props}
 import util.Named
 
 object CountingActor extends Named {
@@ -8,6 +8,8 @@ object CountingActor extends Named {
   object GetAmount
 
   case class IncrementAndGet(amount: Int)
+
+  def props = Props(new CountingActor)
 
   override final val name = "CountingActor"
 }

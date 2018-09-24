@@ -1,7 +1,7 @@
 package modules
 
 import actors.counter.CountingActor
-import akka.actor.{ActorRef, ActorSystem, Props}
+import akka.actor.{ActorRef, ActorSystem}
 import com.google.inject.name.Named
 import com.google.inject.{AbstractModule, Provides, Singleton}
 import net.codingwell.scalaguice.ScalaModule
@@ -17,6 +17,6 @@ class CountingModule extends AbstractModule with ScalaModule {
   @Singleton
   @Named(CountingActor.name)
   def countingActor(actorSystem: ActorSystem): ActorRef = {
-    actorSystem.actorOf(Props(new CountingActor))
+    actorSystem.actorOf(CountingActor.props)
   }
 }

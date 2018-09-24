@@ -3,12 +3,13 @@ package actors.counter
 import akka.actor.{Actor, ActorLogging}
 import com.typesafe.config.Config
 import javax.inject.Inject
-import models.counter.Counter
 import util.Named
 
 object CountingActor extends Named {
 
   object GetAmount
+
+  case class IncrementAndGet(amount: Int)
 
   override final val name = "CountingActor"
 }
@@ -21,9 +22,10 @@ class CountingActor @Inject()(config: Config) extends Actor with ActorLogging {
 
   override def receive: Receive = {
 
-    case Counter(amount) =>
+    case IncrementAndGet(amount) =>
       counter += amount
       log.info(s"Counter was increased [counter: $counter]")
+      sender ! counter
 
     case GetAmount => sender ! counter
   }

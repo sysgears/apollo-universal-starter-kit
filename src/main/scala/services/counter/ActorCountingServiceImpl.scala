@@ -3,7 +3,7 @@ package services.counter
 import java.util.concurrent.TimeUnit.SECONDS
 
 import actors.counter.CountingActor
-import actors.counter.CountingActor.GetAmount
+import actors.counter.CountingActor.IncrementAndGet
 import akka.actor.ActorRef
 import akka.util.Timeout
 import com.google.inject.name.Named
@@ -16,9 +16,8 @@ class ActorCountingServiceImpl @Inject()(@Named(CountingActor.name) counterActor
 
   import akka.pattern.ask
 
-  override def increment(count: Counter): Future[Int] = {
+  override def increment(counter: Counter): Future[Int] = {
     implicit val timeout: Timeout = Timeout(5, SECONDS)
-    counterActor ! count
-    ask(counterActor, GetAmount).mapTo[Int]
+    ask(counterActor, IncrementAndGet(counter.amount)).mapTo[Int]
   }
 }

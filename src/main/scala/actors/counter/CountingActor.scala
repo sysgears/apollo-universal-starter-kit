@@ -1,8 +1,6 @@
 package actors.counter
 
 import akka.actor.{Actor, ActorLogging}
-import com.typesafe.config.Config
-import javax.inject.Inject
 import util.Named
 
 object CountingActor extends Named {
@@ -14,11 +12,11 @@ object CountingActor extends Named {
   override final val name = "CountingActor"
 }
 
-class CountingActor @Inject()(config: Config) extends Actor with ActorLogging {
+class CountingActor extends Actor with ActorLogging {
 
   import CountingActor._
 
-  var counter: Int = config.getInt("counter.initial-amount")
+  var counter: Int = 0
 
   override def receive: Receive = {
 

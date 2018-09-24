@@ -1,4 +1,3 @@
-
 name := "scala-starter-kit"
 
 version := "0.1"
@@ -12,6 +11,10 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
+  
+  "com.google.inject" % "guice" % "4.1.0",
+  "net.codingwell" %% "scala-guice" % "4.2.1",
+
   "org.sangria-graphql" %% "sangria" % "1.4.2",
   "org.sangria-graphql" %% "sangria-spray-json" % "1.0.1"
 )

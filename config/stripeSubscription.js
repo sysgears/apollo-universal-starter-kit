@@ -3,10 +3,12 @@ export default {
     subscription: {
       enabled: true,
       webhookUrl: '/stripe/webhook',
-      publicKey: '', // <-Public key
+      publicKey: '', // Provide your publishable key
       secretKey: process.env.STRIPE_SECRET_KEY,
       endpointSecret: process.env.STRIPE_ENDPOINT_SECRET,
-      // for initializing the Stripe
+      /**
+       * Default Service
+       */
       product: {
         name: 'Magic number',
         type: 'service'

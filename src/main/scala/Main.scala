@@ -1,9 +1,9 @@
+import InjectionModules.Modules
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import com.google.inject.Guice
 import controllers.Routes.Routes
-import modules.{AkkaModule, ConfigModule, CounterModule, ExecutionModule}
 
 import scala.concurrent.ExecutionContextExecutor
 
@@ -13,11 +13,6 @@ object Main extends App {
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
-  val injector = Guice.createInjector(
-    new CounterModule,
-    new ConfigModule,
-    new AkkaModule,
-    new ExecutionModule
-  )
+  Guice.createInjector(Modules)
   Http().bindAndHandle(Routes, "0.0.0.0")
 }

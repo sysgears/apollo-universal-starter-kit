@@ -2,8 +2,8 @@ package services.counter
 
 import java.util.concurrent.TimeUnit.SECONDS
 
-import actors.counter.CountingActor
-import actors.counter.CountingActor.IncrementAndGet
+import actors.counter.CounterActor
+import actors.counter.CounterActor.IncrementAndGet
 import akka.actor.ActorRef
 import akka.util.Timeout
 import com.google.inject.name.Named
@@ -12,7 +12,7 @@ import models.counter.Counter
 
 import scala.concurrent.Future
 
-class ActorCountingServiceImpl @Inject()(@Named(CountingActor.name) counterActor: ActorRef) extends CountingService {
+class ActorCounterServiceImpl @Inject()(@Named(CounterActor.name) counterActor: ActorRef) extends CounterService {
 
   import akka.pattern.ask
 

@@ -3,7 +3,7 @@ import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import com.google.inject.Guice
 import controllers.Routes.Routes
-import modules.{AkkaModule, ConfigModule, CountingModule, ExecutionModule}
+import modules.{AkkaModule, ConfigModule, CounterModule, ExecutionModule}
 
 import scala.concurrent.ExecutionContextExecutor
 
@@ -14,7 +14,7 @@ object Main extends App {
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
   val injector = Guice.createInjector(
-    new CountingModule,
+    new CounterModule,
     new ConfigModule,
     new AkkaModule,
     new ExecutionModule

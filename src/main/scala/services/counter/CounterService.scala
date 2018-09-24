@@ -4,6 +4,6 @@ import models.counter.Counter
 
 import scala.concurrent.Future
 
-trait CountingService {
+trait CounterService {
   def increment(count: Counter): Future[Int]
 }

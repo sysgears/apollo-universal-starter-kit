@@ -3,20 +3,20 @@ package actors.counter
 import akka.actor.{Actor, ActorLogging, Props}
 import util.Named
 
-object CountingActor extends Named {
+object CounterActor extends Named {
 
   object GetAmount
 
   case class IncrementAndGet(amount: Int)
 
-  def props = Props(new CountingActor)
+  def props = Props(new CounterActor)
 
   override final val name = "CountingActor"
 }
 
-class CountingActor extends Actor with ActorLogging {
+class CounterActor extends Actor with ActorLogging {
 
-  import CountingActor._
+  import CounterActor._
 
   var counter: Int = 0
 

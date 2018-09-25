@@ -11,11 +11,11 @@ const StripeSubscription = new StripeSubscriptionDAO();
 const stripe = new Stripe(secretKey);
 
 /**
- * Gets user email from database and sends email.
+ * Gets a user email from the database and sends an email.
  *
- * @param userId - The user id.
- * @param subject - The title for email.
- * @param html - The body for email.
+ * @param userId - The user ID.
+ * @param subject - The email title.
+ * @param html - The email body.
  */
 const sendEmailToUser = async (userId: number, subject: string, html: string) => {
   const { email }: any = await User.getUser(userId);
@@ -29,10 +29,10 @@ const sendEmailToUser = async (userId: number, subject: string, html: string) =>
 };
 
 /**
- * Deletes subscription and notifies user about canceling the subscription.
+ * Deletes a subscription and notifies the user that the subscription was canceled.
  *
- * @param stripeEvent - The stripe event.
- * @param websiteUrl - The website url for sending to email.
+ * @param stripeEvent - A Stripe event.
+ * @param websiteUrl - The URL of the subscription page to be sent in the email.
  * @param t - The translate function.
  */
 const deleteSubscription = async (stripeEvent: any, websiteUrl: string, t: TranslationFunction) => {
@@ -63,10 +63,10 @@ const deleteSubscription = async (stripeEvent: any, websiteUrl: string, t: Trans
 };
 
 /**
- * Notifies user via email about failed payment.
+ * Notifies the user via email about the failed payment.
  *
- * @param stripeEvent - The stripe event.
- * @param websiteUrl - The website url for sending to email.
+ * @param stripeEvent - A Stripe event.
+ * @param websiteUrl - The URL of the subscription page to be sent in the email.
  * @param t - The translate function.
  */
 const notifyFailedSubscription = async (stripeEvent: any, websiteUrl: string, t: TranslationFunction) => {
@@ -86,7 +86,7 @@ const notifyFailedSubscription = async (stripeEvent: any, websiteUrl: string, t:
 
 /**
  * Webhook middleware.
- * This Endpoint handles Stripe events
+ * This endpoint handles Stripe events
  */
 export default async (req: any, res: any) => {
   try {

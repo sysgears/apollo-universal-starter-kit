@@ -1,4 +1,4 @@
-/*tslint:disable:no-reference */
+/* tslint:disable:no-reference */
 /// <reference path="../../../../../typings/typings.d.ts" />
 import { json } from 'body-parser';
 import { Express } from 'express';
@@ -18,10 +18,11 @@ const StripeSubscription = new StripeSubscriptionDAO();
 const { webhookUrl, enabled, secretKey } = settings.payments.stripe.subscription;
 
 /**
- * Imitates events from the Stripe to our webhook in dev mode as it should be in production mode.
+ * Requests Stripe events and sends them to our webhook in development mode.
+ * This functionality allows for full Stripe functionality just as in production mode.
  */
 if (__DEV__ && enabled && secretKey) {
-  log.debug('Starting stripe local proxy');
+  log.debug('Starting stripe-local proxy');
   stripeLocal({ secretKey, webhookUrl: `http://localhost:${__SERVER_PORT__}${webhookUrl}` });
 }
 

@@ -20,7 +20,7 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <Row gutter={8}>
+      <Row gutter={0}>
         <Col span={14}>
           <Menu
             onClick={this.handleClick}

@@ -5,7 +5,7 @@ import { Card } from '../../../../common/components/native';
 import CreditCardInfo from '../containers/CreditCardInfo';
 import CancelSubscription from '../containers/CancelSubscription';
 import { TranslateFunction } from '../../../../../i18n';
-import { CardItem, CardSubtitleText } from '../../../../common/components/native';
+import { CardSubtitleText } from '../../../../common/components/native';
 
 interface SubscriptionProfileViewProps {
   loading: boolean;

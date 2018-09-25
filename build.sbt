@@ -17,5 +17,6 @@ libraryDependencies ++= Seq(
   "net.codingwell" %% "scala-guice" % "4.2.1",
 
   "org.sangria-graphql" %% "sangria" % "1.4.2",
-  "org.sangria-graphql" %% "sangria-spray-json" % "1.0.1"
+  "org.sangria-graphql" %% "sangria-spray-json" % "1.0.1",
+  "org.sangria-graphql" %% "sangria-akka-streams" % "1.0.1"
 )

@@ -1,9 +1,10 @@
 package services.counter
 
-import models.counter.Counter
-
 import scala.concurrent.Future
 
 trait CounterService {
-  def increment(count: Counter): Future[Int]
+
+  def increment(amount: Int): Future[Int]
+
+  def getAmount: Future[Int]
 }

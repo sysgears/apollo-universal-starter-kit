@@ -467,12 +467,12 @@ export default class Crud {
           });
           column = `${tableName}.${foundValue ? foundValue.sortBy : 'name'}`;
         } else {
-          column = `${this.getFullTableName()}.${decamelize(column)}`;
+          column = `${this.getTableName()}.${decamelize(column)}`;
         }
       }
       queryBuilder.orderBy(column, order);
     } else {
-      queryBuilder.orderBy(`${this.getFullTableName()}.id`);
+      queryBuilder.orderBy(`${this.getTableName()}.id`);
     }
 
     this._filter(filter, queryBuilder);
@@ -481,7 +481,7 @@ export default class Crud {
   }
 
   _filter(filter, queryBuilder) {
-    const tableName = this.getFullTableName();
+    const tableName = this.getTableName();
 
     if (!_.isEmpty(filter)) {
       const addFilterWhere = this.schemaIterator((filterKey, value, isSchema, _this, tableName, filter) => {
@@ -515,10 +515,10 @@ export default class Crud {
       if (filter.searchText) {
         const addSearchTextWhere = this.schemaIterator((key, value, isSchema, _this, tableName, filter) => {
           if (value.searchText) {
-            _this.where(`${tableName}.${decamelize(key)}`, 'like', `%${filter.searchText}%`);
+            _this.orWhere(`${tableName}.${decamelize(key)}`, 'like', `%${filter.searchText}%`);
           }
         });
-        queryBuilder.orWhere(function() {
+        queryBuilder.where(function() {
           addSearchTextWhere(this, tableName, filter);
         });
       }
@@ -553,7 +553,7 @@ export default class Crud {
   }
 
   getTotal({ filter }) {
-    const queryBuilder = knex(this.getFullTableName())
+    const queryBuilder = knex(`${this.getFullTableName()} as ${this.getTableName()}`)
       .countDistinct('id as count')
       .first();
 

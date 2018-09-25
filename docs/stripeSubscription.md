@@ -113,8 +113,7 @@ subscribe in development mode. If there are any new events, `stripe-local` will 
 application on `localhost:port`. Simply put, you can consider `stripe-local` a proxy between your application and 
 Stripe.
 
-${img (location:"",
-        alt:"Stripe payment flow with stripe-local in development mode")}
+![stripe_local_diagram](https://user-images.githubusercontent.com/24529997/46010501-91188f00-c0cb-11e8-8bf0-58e21b125588.png)
 
 #### Configuring stripe-local
 

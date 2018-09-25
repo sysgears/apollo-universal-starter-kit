@@ -55,7 +55,7 @@ export const orderedForArray = (rows, collection, field, arrayElement) => {
  * @param parentField
  * @private
  */
-const _getSelectFields = (graphqlFields, domainSchema, selectItems, joinNames, single, parentField = '') => {
+const _getSelectFields = (graphqlFields, domainSchema, selectItems, joinNames, single, parentKey, parentPath) => {
   for (const fieldName of Object.keys(graphqlFields)) {
     if (fieldName === '__typename') {
       continue;
@@ -65,7 +65,7 @@ const _getSelectFields = (graphqlFields, domainSchema, selectItems, joinNames, s
       if (value && value.transient) {
         continue;
       }
-      selectItems.push(_getSelectField(fieldName, parentField, domainSchema, single));
+      selectItems.push(_getSelectField(fieldName, parentPath, domainSchema, single, parentKey));
     } else {
       if (Array.isArray(value.type) || findIndex(joinNames, { fieldName: decamelize(fieldName) }) > -1) {
         continue;
@@ -73,7 +73,20 @@ const _getSelectFields = (graphqlFields, domainSchema, selectItems, joinNames, s
       if (!value.type.__.transient) {
         joinNames.push(_getJoinEntity(fieldName, value, domainSchema));
       }
-      _getSelectFields(graphqlFields[fieldName], value.type, selectItems, joinNames, single, fieldName);
+
+      parentPath.push(fieldName);
+
+      _getSelectFields(
+        graphqlFields[fieldName],
+        value.type,
+        selectItems,
+        joinNames,
+        single,
+        decamelize(fieldName),
+        parentPath
+      );
+
+      parentPath.pop();
     }
   }
 };
@@ -87,12 +100,13 @@ const _getSelectFields = (graphqlFields, domainSchema, selectItems, joinNames, s
  * @returns {string}
  * @private
  */
-const _getSelectField = (fieldName, parentField, domainSchema, single) => {
-  const alias = parentField.length > 0 ? `${parentField}_${fieldName}` : fieldName;
+const _getSelectField = (fieldName, parentPath, domainSchema, single, parentKey) => {
+  const alias = parentPath.length > 0 ? `${parentPath.join('_')}_${fieldName}` : fieldName;
   const tableName = `${decamelize(domainSchema.__.tableName ? domainSchema.__.tableName : domainSchema.name)}`;
+  const fullTableName = parentKey !== null && parentKey !== tableName ? `${parentKey}_${tableName}` : tableName;
   // returning object would be array or no
   const arrayPrefix = single ? '' : '_';
-  return `${tableName}.${decamelize(fieldName)} as ${arrayPrefix}${alias}`;
+  return `${fullTableName}.${decamelize(fieldName)} as ${arrayPrefix}${alias}`;
 };
 
 /**
@@ -122,9 +136,10 @@ const _getJoinEntity = (fieldName, value, domainSchema) => {
  */
 export const selectBy = (schema, fields, single = false) => {
   // select fields and joins
+  const parentPath = [];
   const selectItems = [];
   const joinNames = [];
-  _getSelectFields(fields, schema, selectItems, joinNames, single);
+  _getSelectFields(fields, schema, selectItems, joinNames, single, null, parentPath);
 
   return query => {
     // join table names

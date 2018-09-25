@@ -5,12 +5,13 @@ const addMigration = require('./subCommands/addMigration');
 const { computeModulesPath } = require('../helpers/util');
 
 /**
- * Add CRUD module command
- * @param logger
- * @param templatesPath
- * @param module
+ * Adds CRUD module in server and adds a new module to the Feature connector.
+ *
+ * @param logger - The Logger.
+ * @param templatesPath - The path to the templates for a new module.
+ * @param moduleName - The name of a new module.
  * @param tablePrefix
- * @param location
+ * @param location - The location for a new module [client|server|both].
  */
 function addCrud(logger, templatesPath, moduleName, tablePrefix, location) {
   // add module in server, client

@@ -69,8 +69,8 @@ function runPrettier(pathToFile) {
 }
 
 module.exports = {
-  renameFiles,
   copyFiles,
+  renameFiles,
   computeModulesPath,
   runPrettier
 };

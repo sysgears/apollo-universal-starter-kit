@@ -1,6 +1,5 @@
 /*tslint:disable:no-reference */
 /// <reference path="../../../../../../typings/typings.d.ts" />
-
 import React, { Fragment } from 'react';
 import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
@@ -82,7 +81,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
             <Fragment>
               {/* Stripe elements should render only for web*/}
               {__CLIENT__ && PLATFORM === 'web' ? (
-                <StripeProvider apiKey={settings.payments.stripe.subscription.publicKey}>
+                <StripeProvider apiKey={settings.stripeSubscription.stripe.subscription.publicKey}>
                   <AddSubscriptionView
                     error={error}
                     submitting={submitting}

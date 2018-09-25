@@ -4,7 +4,6 @@ import { StyleSheet, View, Text, Linking, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
 import { placeholderColor } from '../../common/components/native/styles';
 
-import settings from '../../../../../../settings';
 import translate from '../../../i18n';
 
 import LoginForm from './LoginForm';

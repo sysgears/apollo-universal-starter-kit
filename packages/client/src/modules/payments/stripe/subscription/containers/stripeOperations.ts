@@ -22,7 +22,7 @@ export const createToken = (creditCardInput: CreditCardInput) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': ' application/x-www-form-urlencoded',
-      Authorization: `Bearer ${settings.payments.stripe.subscription.publicKey}`
+      Authorization: `Bearer ${settings.stripeSubscription.stripe.subscription.publicKey}`
     },
     method: 'post',
     body: Object.keys(card)

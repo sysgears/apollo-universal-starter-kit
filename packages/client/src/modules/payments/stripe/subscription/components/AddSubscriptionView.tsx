@@ -31,7 +31,7 @@ export default (props: AddSubscriptionViewProps) => {
           <p className="text-center">{t('add.product')}</p>
           <p className="text-center">
             {t('add.price')}
-            {settings.payments.stripe.subscription.plan.amount / 100}
+            {settings.stripeSubscription.stripe.subscription.plan.amount / 100}
           </p>
         </Col>
         <Col xs={12} md={12}>
@@ -45,7 +45,7 @@ export default (props: AddSubscriptionViewProps) => {
         <Col xs={12} md={8}>
           <hr />
           {/* Displays testing credit cards when stripe test keys are used!!!*/}
-          {settings.payments.stripe.subscription.publicKey.includes('test') && renderTestingCards(t)}
+          {settings.stripeSubscription.stripe.subscription.publicKey.includes('test') && renderTestingCards(t)}
         </Col>
       </Row>
     </PageLayout>

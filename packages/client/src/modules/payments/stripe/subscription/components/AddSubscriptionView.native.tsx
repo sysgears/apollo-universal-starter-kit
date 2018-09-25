@@ -31,7 +31,7 @@ export default class AddSubscriptionView extends React.Component<AddSubscription
           </View>
           <View style={styles.textWrapper}>
             <Text style={styles.infoText}>
-              {t('add.price')} {settings.payments.stripe.subscription.plan.amount / 100}
+              {t('add.price')} {settings.stripeSubscription.stripe.subscription.plan.amount / 100}
             </Text>
           </View>
           <View style={styles.cardFormWrapper}>

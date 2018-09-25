@@ -22,7 +22,7 @@ const NavLinkWithI18n = translate('stripeSubscription')(({ t }: { t: TranslateFu
 ));
 
 export default new Feature(
-  settings.payments.stripe.subscription.enabled
+  settings.stripeSubscription.stripe.subscription.enabled
     ? {
         route: [
           <AuthRoute exact role="user" path="/add-subscription" component={AddSubscription} />,
@@ -46,7 +46,9 @@ export default new Feature(
             </MenuItem>
           </IfLoggedIn>
         ),
-        scriptsInsert: settings.payments.stripe.subscription.secretKey ? 'https://js.stripe.com/v3/' : undefined,
+        scriptsInsert: settings.stripeSubscription.stripe.subscription.secretKey
+          ? 'https://js.stripe.com/v3/'
+          : undefined,
         localization: { ns: 'stripeSubscription', resources }
       }
     : {}

@@ -3,7 +3,7 @@ require('dotenv/config');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const settings = require('../../../../../../../../settings').default;
 
-const { product, plan } = settings.payments.stripe.subscription;
+const { product, plan } = settings.stripeSubscription.stripe.subscription;
 
 /**
  * Initializes the Stripe: creates product and plan.

@@ -6,7 +6,7 @@ import mailer from '../../../mailer/mailer';
 import User from '../../../user/sql';
 import settings from '../../../../../../../settings';
 
-const { secretKey, endpointSecret } = settings.payments.stripe.subscription;
+const { secretKey, endpointSecret } = settings.stripeSubscription.stripe.subscription;
 const StripeSubscription = new StripeSubscriptionDAO();
 const stripe = new Stripe(secretKey);
 

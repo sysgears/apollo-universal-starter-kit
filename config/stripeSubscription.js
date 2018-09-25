@@ -1,7 +1,7 @@
 export default {
   stripe: {
     subscription: {
-      enabled: true,
+      enabled: false,
       webhookUrl: '/stripe/webhook',
       publicKey: '', // Provide your publishable key
       secretKey: process.env.STRIPE_SECRET_KEY,

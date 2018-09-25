@@ -15,7 +15,7 @@ import UpdateCreditCard from './containers/UpdateCreditCard';
 const HeaderTitleWithI18n = translate('stripeSubscription')(HeaderTitle);
 
 export default new Feature(
-  settings.payments.stripe.subscription.enabled
+  settings.stripeSubscription.stripe.subscription.enabled
     ? {
         drawerItem: {
           Subscription: {

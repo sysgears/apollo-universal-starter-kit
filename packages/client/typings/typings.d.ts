@@ -8,3 +8,6 @@ declare var __WEBSITE_URL__: string;
 interface Window {
   __APOLLO_STATE__?: any;
 }
+
+// packages without types
+declare module 'react-native-credit-card-input';

@@ -53,10 +53,10 @@ object GraphQLController {
     QueryParser.parse(query) match {
       case Success(queryAst) =>
         complete(executeQuery(queryAst, operation, variables)
-          .map(OK → _)
+          .map(OK -> _)
           .recover {
-            case error: QueryAnalysisError => BadRequest → error.resolveError
-            case error: ErrorWithResolver => InternalServerError → error.resolveError
+            case error: QueryAnalysisError => BadRequest -> error.resolveError
+            case error: ErrorWithResolver => InternalServerError -> error.resolveError
           })
       case Failure(e: SyntaxError) => complete(BadRequest)
       case Failure(_) => complete(InternalServerError)

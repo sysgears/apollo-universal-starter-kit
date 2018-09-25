@@ -1,18 +1,17 @@
 package controllers
 
-import sangria.ast.Document
-import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError, QueryReducer}
-import sangria.parser.{QueryParser, SyntaxError}
-import sangria.renderer.SchemaRenderer
-import sangria.marshalling.sprayJson._
-import spray.json._
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.scaladsl.marshalling.{ToResponseMarshallable, ToResponseMarshaller}
 import akka.http.scaladsl.server.Route
 import graphql.GraphQL
 import javax.inject.Inject
+import sangria.ast.Document
+import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError, QueryReducer}
+import sangria.marshalling.sprayJson._
+import sangria.parser.{QueryParser, SyntaxError}
+import sangria.renderer.SchemaRenderer
+import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}

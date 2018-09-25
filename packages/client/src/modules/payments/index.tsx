@@ -1,4 +1,4 @@
-import stripeSubscription from './stripe/subscription/index.web';
+import stripe from './stripe';
 import Feature from '../connector';
 
-export default new Feature(stripeSubscription);
+export default new Feature(stripe);

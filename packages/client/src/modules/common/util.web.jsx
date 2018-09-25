@@ -45,7 +45,7 @@ export const createColumnFields = ({
   customActions
 }) => {
   let columns = [];
-
+  // use customFields if definded otherwise use schema.keys()
   const keys =
     customFields.constructor === Object && Object.keys(customFields).length !== 0
       ? Object.keys(customFields)
@@ -250,7 +250,7 @@ export const createFormFields = ({
     const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
 
     if (value.show !== false && value.type.constructor !== Array) {
-      let formField = createFormField(key, type, values, formItemLayout, formType, hasTypeOf, prefix);
+      let formField = createFormField(schema, key, type, values, formItemLayout, formType, hasTypeOf, prefix);
       if (formField) {
         if (Array.isArray(formField)) {
           formField.forEach(field => fields.push(field));
@@ -270,7 +270,7 @@ export const createFormFields = ({
   return fields;
 };
 
-const createFormField = (key, type, values, formItemLayout, formType, hasTypeOf, prefix) => {
+const createFormField = (schema, key, type, values, formItemLayout, formType, hasTypeOf, prefix) => {
   let component = RenderField;
   const value = values ? values[key] : '';
   let style = {};
@@ -329,9 +329,9 @@ const createFormField = (key, type, values, formItemLayout, formType, hasTypeOf,
   } else if (hasTypeOf(Number)) {
     inputType = 'number';
     component = RenderNumber;
-  } else if (hasTypeOf(String) && value.fieldInput === 'textarea' && formType !== 'filter') {
+  } else if (hasTypeOf(String) && schema.values[key].fieldInput === 'textarea' && formType !== 'filter') {
     component = RenderTextArea;
-  } else if (hasTypeOf(String) && value.fieldInput === 'country' && formType !== 'filter') {
+  } else if (hasTypeOf(String) && schema.values[key].fieldInput === 'country' && formType !== 'filter') {
     component = RenderSelectCountry;
   }
 

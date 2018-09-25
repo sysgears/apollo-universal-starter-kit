@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const { pascalize } = require('humps');
 const addModule = require('./addModule');
 const addMigration = require('./subCommands/addMigration');
-const { computeModulesPath, updateFileWithExports } = require('../helpers/util');
+const { computeModulesPath, updateFileWithExports, runPrettier } = require('../helpers/util');
 const { BASE_PATH } = require('../config');
 
 /**
@@ -31,6 +31,7 @@ function addCrud(logger, templatesPath, moduleName, tablePrefix, location) {
       importString: `import ${graphqlQuery} from '../${moduleName}/containers/${graphqlQuery}';\n`
     };
     updateFileWithExports(options);
+    runPrettier(options.pathToFileWithExports);
   }
 
   if (location === 'server') {
@@ -52,6 +53,7 @@ function addCrud(logger, templatesPath, moduleName, tablePrefix, location) {
       importString: `import { ${schema} } from '../${moduleName}/schema';\n`
     };
     updateFileWithExports(options);
+    runPrettier(options.pathToFileWithExports);
   }
 
   logger.info(chalk.green(`✔ Module for ${location} successfully created!`));

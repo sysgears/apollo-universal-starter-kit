@@ -24,12 +24,12 @@ object GraphQLController {
   val Routes: Route =
     path("graphql") {
       get {
-        parameters('query, 'operation.?) { (query, operation) ⇒
+        parameters('query, 'operation.?) { (query, operation) =>
           handleQuery(query, operation)
         }
       } ~
       post {
-        entity(as[JsValue]) { requestJson ⇒
+        entity(as[JsValue]) { requestJson =>
           val JsObject(fields) = requestJson
           val JsString(query) = fields("query")
 
@@ -56,8 +56,8 @@ object GraphQLController {
         complete(executeQuery(queryAst, operation, variables)
           .map(OK → _)
           .recover {
-            case error: QueryAnalysisError ⇒ BadRequest → error.resolveError
-            case error: ErrorWithResolver ⇒ InternalServerError → error.resolveError
+            case error: QueryAnalysisError => BadRequest → error.resolveError
+            case error: ErrorWithResolver => InternalServerError → error.resolveError
           })
       case Failure(e: SyntaxError) => complete(BadRequest)
       case Failure(_) => complete(InternalServerError)

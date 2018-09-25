@@ -17,8 +17,8 @@ import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
 @Singleton
-class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
-                                  implicit val executionContext: ExecutionContext) {
+class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory)
+                                 (implicit executionContext: ExecutionContext) {
 
   val Routes: Route =
     path("graphql") {

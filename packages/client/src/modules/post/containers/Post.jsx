@@ -18,7 +18,16 @@ const limit =
 export function AddPost(prev, node) {
   // ignore if duplicate
   if (prev.posts.edges.some(post => node.id === post.cursor)) {
-    return prev;
+    return update(prev, {
+      posts: {
+        totalCount: {
+          $set: prev.posts.totalCount - 1
+        },
+        edges: {
+          $set: prev.posts.edges
+        }
+      }
+    });
   }
 
   const filteredPosts = prev.posts.edges.filter(post => post.node.id !== null);

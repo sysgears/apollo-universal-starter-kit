@@ -1,25 +1,24 @@
 package controllers
 
-import sangria.ast.Document
-import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError, QueryReducer}
-import sangria.parser.{QueryParser, SyntaxError}
-import sangria.renderer.SchemaRenderer
-import sangria.marshalling.sprayJson._
-import spray.json._
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.scaladsl.marshalling.{ToResponseMarshallable, ToResponseMarshaller}
 import akka.http.scaladsl.server.Route
-import graphql.GraphQL
-import javax.inject.Inject
+import graphql.{GraphQL, GraphQLContext, GraphQLContextFactory}
+import javax.inject.{Inject, Singleton}
+import sangria.ast.Document
+import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError, QueryReducer}
+import sangria.marshalling.sprayJson._
+import sangria.parser.{QueryParser, SyntaxError}
+import sangria.renderer.SchemaRenderer
+import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-object GraphQLController {
-
-  @Inject implicit val ec: ExecutionContext = null
+@Singleton
+class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
+                                  implicit val executionContext: ExecutionContext) {
 
   val Routes: Route =
     path("graphql") {
@@ -53,7 +52,7 @@ object GraphQLController {
   private def handleQuery(query: String, operation: Option[String], variables: JsObject = JsObject.empty) = {
     QueryParser.parse(query) match {
       case Success(queryAst) =>
-        complete(executeQuery(queryAst, operation, variables)
+        complete(executeQuery(queryAst, operation, variables)(graphQlContextFactory.createContextForRequest)
           .map(OK → _)
           .recover {
             case error: QueryAnalysisError ⇒ BadRequest → error.resolveError
@@ -64,17 +63,17 @@ object GraphQLController {
     }
   }
 
-  private def executeQuery(queryAst: Document, operation: Option[String], variables: JsObject = JsObject.empty) = {
+  private def executeQuery(queryAst: Document, operation: Option[String], variables: JsObject = JsObject.empty)
+                          (graphQLContext: GraphQLContext) = {
     Executor.execute(
-      GraphQL.Schema,
-      queryAst,
-      (),
-      (),
-      operation,
-      variables,
+      schema = GraphQL.Schema,
+      queryAst = queryAst,
+      userContext = graphQLContext,
+      operationName = operation,
+      variables = variables,
       queryReducers = List(
-        QueryReducer.rejectMaxDepth[Unit](GraphQL.maxQueryDepth),
-        QueryReducer.rejectComplexQueries[Unit](GraphQL.maxQueryComplexity, (_, _) => new Exception("Max query complexity"))
+        QueryReducer.rejectMaxDepth[GraphQLContext](GraphQL.maxQueryDepth),
+        QueryReducer.rejectComplexQueries[GraphQLContext](GraphQL.maxQueryComplexity, (_, _) => new Exception("Max query complexity"))
       )
     )
   }

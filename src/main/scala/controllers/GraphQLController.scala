@@ -10,7 +10,7 @@ import akka.stream.ActorMaterializer
 import graphql.{GraphQL, GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import sangria.ast.OperationType.Subscription
-import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError, QueryReducer}
+import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
 import sangria.renderer.SchemaRenderer
@@ -21,18 +21,10 @@ import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
 @Singleton
-class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory)
+class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
+                                  graphQlExecutor: Executor[GraphQLContext, Unit])
                                  (implicit val executionContext: ExecutionContext,
                                   implicit val actorMaterializer: ActorMaterializer) {
-
-  val executor = Executor(
-    schema = GraphQL.Schema,
-    queryReducers = List(
-      QueryReducer.rejectMaxDepth[GraphQLContext](GraphQL.maxQueryDepth),
-      QueryReducer.rejectComplexQueries[GraphQLContext](GraphQL.maxQueryComplexity, (_, _) => new Exception("Max query complexity"))
-    )
-  )
-
   val Routes: Route =
     path("graphql") {
       get {
@@ -69,7 +61,7 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory)
             import sangria.execution.ExecutionScheme.Stream
             import sangria.streaming.akkaStreams._
             complete(
-              executor.prepare(queryAst, ctx, (), operation, variables)
+              graphQlExecutor.prepare(queryAst, ctx, (), operation, variables)
                 .map {
                   preparedQuery =>
                     ToResponseMarshallable(preparedQuery.execute()
@@ -87,7 +79,7 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory)
             )
           case _ =>
             complete(
-              executor.execute(queryAst, ctx, (), operation, variables)
+              graphQlExecutor.execute(queryAst, ctx, (), operation, variables)
                 .map(OK -> _)
                 .recover {
                   case error: QueryAnalysisError => BadRequest -> error.resolveError

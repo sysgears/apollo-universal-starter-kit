@@ -1,4 +1,4 @@
-package controllers
+package controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.marshalling.ToResponseMarshallable
@@ -32,24 +32,24 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
           handleQuery(query, operation)
         }
       } ~
-      post {
-        entity(as[JsValue]) { requestJson =>
-          val JsObject(fields) = requestJson
-          val JsString(query) = fields("query")
-          val operation = fields.get("operationName") collect {
-            case JsString(op) => op
+        post {
+          entity(as[JsValue]) { requestJson =>
+            val JsObject(fields) = requestJson
+            val JsString(query) = fields("query")
+            val operation = fields.get("operationName") collect {
+              case JsString(op) => op
+            }
+            val vars = fields.get("variables") match {
+              case Some(obj: JsObject) => obj
+              case _ => JsObject.empty
+            }
+            handleQuery(query, operation, vars)
           }
-          val vars = fields.get("variables") match {
-            case Some(obj: JsObject) => obj
-            case _ => JsObject.empty
-          }
-          handleQuery(query, operation, vars)
         }
-      }
     } ~
-    (path("schema") & get) {
-      complete(SchemaRenderer.renderSchema(GraphQL.Schema))
-    }
+      (path("schema") & get) {
+        complete(SchemaRenderer.renderSchema(GraphQL.Schema))
+      }
 
   private def handleQuery(query: String, operation: Option[String], variables: JsObject = JsObject.empty) = {
     val ctx = graphQlContextFactory.createContextForRequest

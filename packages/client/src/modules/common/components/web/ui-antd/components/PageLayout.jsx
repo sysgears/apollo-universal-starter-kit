@@ -58,7 +58,7 @@ class PageLayout extends React.Component {
         <Layout>
           {navBar !== false && (
             <Header style={{ padding: 0 }}>
-              <Row gutter={8}>
+              <Row gutter={0}>
                 <Col span={14}>
                   <Menu mode="horizontal" theme="dark" selectable={false} style={{ lineHeight: '64px' }}>
                     <MenuItem key="trigger">

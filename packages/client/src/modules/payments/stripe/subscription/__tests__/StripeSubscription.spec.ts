@@ -6,7 +6,7 @@ import { updateContent, waitForElementRender } from '../../../../../testHelpers/
 
 const { enabled, publicKey } = settings.stripe.subscription;
 
-if (enabled && publicKey !== '') {
+if (enabled && !!publicKey) {
   const mocks = {
     Query: () => ({
       currentUser(): any {

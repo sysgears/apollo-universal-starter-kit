@@ -1,13 +1,14 @@
-import akka.actor.ActorSystem
-import modules.{AkkaModule, ConfigModule, CounterModule, ExecutionModule}
+import java.util
+
+import modules.{AkkaModule, ConfigModule, CounterModule}
+import net.codingwell.scalaguice.ScalaModule
 
 object InjectionModules {
 
-  def Modules(implicit actorSystem: ActorSystem) =
+  def Modules: util.List[ScalaModule] =
     java.util.Arrays.asList(
       new CounterModule,
       new ConfigModule,
-      new AkkaModule,
-      new ExecutionModule
+      new AkkaModule
     )
 }

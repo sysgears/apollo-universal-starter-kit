@@ -6,6 +6,7 @@ scalaVersion := "2.12.6"
 
 val akkaVersion = "2.5.16"
 val akkaHttpVersion = "10.1.5"
+val sangriaVersion = "1.0.1"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
@@ -17,5 +18,6 @@ libraryDependencies ++= Seq(
   "net.codingwell" %% "scala-guice" % "4.2.1",
 
   "org.sangria-graphql" %% "sangria" % "1.4.2",
-  "org.sangria-graphql" %% "sangria-spray-json" % "1.0.1"
+  "org.sangria-graphql" %% "sangria-spray-json" % sangriaVersion,
+  "org.sangria-graphql" %% "sangria-akka-streams" % sangriaVersion
 )

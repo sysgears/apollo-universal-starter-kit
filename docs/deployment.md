@@ -1,6 +1,6 @@
 # Deployment with Apollo Universal Starter Kit
 
-## Deploying to Linux Running Node.js
+## Deploying to Linux Running on Node.js
 
 1. Clone the latest stable starter kit.
 
@@ -15,16 +15,20 @@ cd apollo-universal-starter-kit
 yarn
 ```
 
-3. Seed production database data:
+3. Seed production database data from the command line:
 
 ```bash
 NODE_ENV=production yarn seed
 ```
 
-4. Set proper values for `config.options.defines.__SERVER_PORT__` and `config.options.defines.__WEBSITE_URL__` in 
-`packages/server/.spinrc.js` to match your production setup.
+4. Replace the default server port and website URL in `packages/server/.spinrc.js` to match your production setup: 
 
-5. If you need to run the mobile app, edit the following lines in `packages/mobile/.spinrc.js`:
+```javascript
+config.options.defines.__SERVER_PORT__ = 8080; // Set to your server port
+config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"'; // Set the URL for prod
+``` 
+
+5. If you need to run the mobile app, set the `__API_URL__` and `__WEBSITE_URL__` values in `packages/mobile/.spinrc.js`:
 
 ```javascript
 // Other configurations for the mobile app are omitted for brevity
@@ -47,13 +51,13 @@ config.options.defines.__WEBSITE_URL__ = '"https://<AppName>.herokuapp.com"';
 // code is omitted for brevity
 ```
 
-5. Compile the project:
+6. Compile the project:
 
 ```bash
 yarn build
 ```
 
-6. Run the project in production mode:
+7. Run the project in production mode:
 
 ```bash
 yarn start
@@ -61,46 +65,54 @@ yarn start
 
 ## Deploying to Heroku
 
-
-
-1. Create an account on the Heruku - [Heroku sign up]
+1. Create an account on [Heroku].
 
 2. Install the [Heroku Command Line Interface] (CLI):
-- Ubuntu - run ```sudo snap install heroku --classic```
-- Windows/macOS - download the appropriate installer: [Heroku Command Line Interface]
+    
+    - On Ubuntu, run `sudo snap install heroku --classic`
+    - For Windows and MacOS, download the appropriate installer from [Heroku Command Line Interface]
 
-3. Login with Heroku cli - run ```heroku login``` in the terminal and enter login and password from Heroku.
+3. Log in to Heroku CLI with your Heroku login and password (follow the suggestions shown by the CLI):
 
-4. Create your app on the heroku via CLI - ```heroku create application-name-example``` where ```application-name-example```
- is name of your aplication and future basic url (domain name). This operation also adds ```git remote``` with 
- the name ```heroky``` for pushing. If ```git remote``` was not added - you can see git link in your heroku 
- dashboard settings.
- (Full tutorial you can see here: [Deploying a Node.js app])
+```bash
+heroku login
+```
+
+4. Create your application on Heroku via the CLI. Use the name of your application instead of `application-name`:
+
+```bash
+heroku create application-name
+```
+
+In the command line will generate two links. The first link is the URL for your Heroku application, while the second is 
+the Git repository to which you'll push your application:
+
+```bash
+https://application-name.herokuapp.com/ | https://git.heroku.com/application-name.git
+```
+
+Consult [deploying a Node.js app] for full details about creating your application on Heroku.
  
-5. Create account in [expo.io] for publishing the mobile apps.
+5. Create an account in [Expo] for publishing your mobile app (optional).
 
-6. Set your deployment config Variables to the Heroku.
-Go to your Heroku [Dashboard], choose your application, under the `Settings` tab, click `Config Variables`. 
-Then you need to add basic variables which for the basic production app should look like this: 
+6. Set your deployment configuration variables in [Heroku Dashboard]. 
 
-| Var key        | Var Value           |
-| ------------- |:-------------:|
-| YARN_PRODUCTION      | false | 
-| EXP_USERNAME     | exampleUsername      | 
-| EXP_PASSWORD | examplePassword     | 
-The `EXP_USERNAME` and `EXP_PASSWORD` config variables will be used to publish your mobile Expo applications.
+    * Choose your application and then follow to the `Settings` tab. In Settings, click on the `Config Variables` link. 
+    Add a variable `YARN_PRODUCTION` and set it to `false`. Additionally, if you're also deploying a mobile app, you 
+    need to set the variable `EXP_USERNAME` to `your_expo_account_username` and `EXP_PASSWORD` to 
+    `your_expo_account_password`. The `EXP_USERNAME` and `EXP_PASSWORD` config variables will be used to publish your 
+    mobile Expo application.
 
-Also you need to set the email setting (for conformation the new registered account). 
-But it's not important, because Kit uses ```ethereal.email``` as Fake smtp service - you just will not have possibility to sign up new accounts.
+    * Configure your SMTP server to let your application register new users. By default, Apollo Universal Starter Kit uses 
+`ethereal.email`, but Ethereal shouldn't be used for production application.
 
-| Var key        | Var Value           |
-| ------------- |:-------------:|
-| EMAIL_HOST      | mailboxExample.example.com | 
-| EMAIL_PASSWORD     | examplePassword      | 
-| EMAIL_USER | example@example.com     | 
+| Variable       | Value                      |
+| -------------- | -------------------------- |
+| EMAIL_HOST     | mailboxExample.example.com | 
+| EMAIL_PASSWORD | examplePassword            |
+| EMAIL_USER     | example@example.com        | 
 
-
-6. Set proper values for server website url in `packages/server/.spinrc.js` to match your production setup.
+7. Set proper values for server website url in `packages/server/.spinrc.js` to match your production setup.
  - If you are deploying your app on Heroku without a custom domain name, the production URLs will look like this:
 
 ```javascript
@@ -135,8 +147,8 @@ config.options.defines.__WEBSITE_URL__ = '"http://domainExample.com"';
 **http/https** - depends of your plan.
 Also, to use your custom domain name, you need to add this domain in the Heroku dashbouard, in the `Settings` tab.
 
-8. Push to Heroku remoute repository. Commit your changes and run ```git push heroky master``` or if you would like to push another branch 
-run ```git push --force heroky branchExample:master```
+8. Push to Heroku remote repository. Commit your changes and run ```git push heroku master``` or if you would like to 
+push another branch run ```git push --force heroky branchExample:master```
 
 9. Heroku automatic starts the building the project and publishing website to Heroku and mobile apps to expo.io.
 
@@ -148,7 +160,8 @@ run ```git push --force heroky branchExample:master```
 yarn build
 ```
 
-2. Run the following command:
+2. Run the following command to publish your mobile app:
+
 ```bash
 yarn exp publish
 ```
@@ -173,18 +186,17 @@ You need to run the command below to build a signed `.iap` for iOS:
 yarn exp bi
 ```
 
-3. Run `yarn exp bs` to get status and links for signed standalone mobile applications when the build finishes. 
-For more details refer to **Building Standalone Apps** in [the Expo documentation], but use `yarn exp ..` instead of 
+3. Run `yarn exp bs` to get the status and links for signed standalone mobile apps when the build finishes. 
+
+For more details refer to Building Standalone Apps in [the Expo documentation], but use `yarn exp ..` instead of 
 `exp ...` command.
 
-
 [heroku]: https://heroku.com
-[Deploying a Node.js app]: https://devcenter.heroku.com/articles/getting-started-with-nodejs
-[Dashboard]: https://dashboard.heroku.com/apps
-[Heroku Command Line Interface]: https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
-[Heroku sign up]: https://signup.heroku.com/dc
-
-[expo.io]: https://expo.io
+[deploying a Node.js app]: https://devcenter.heroku.com/articles/getting-started-with-nodejs
+[heroku dashboard]: https://dashboard.heroku.com/apps
+[heroku command line interface]: https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
+[heroku sign up]: https://signup.heroku.com/dc
+[expo]: https://expo.io
 [genymotion]: https://www.genymotion.com
 [xcode]: https://developer.apple.com/xcode/
 [virtualbox]: https://www.virtualbox.org/wiki/Downloads

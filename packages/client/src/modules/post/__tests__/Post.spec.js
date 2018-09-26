@@ -3,7 +3,16 @@ import { step } from 'mocha-steps';
 import _ from 'lodash';
 
 import Renderer from '../../../testHelpers/Renderer';
-import { wait, find, findAll, updateContent, click, change, submit } from '../../../testHelpers/testUtils';
+import {
+  find,
+  findAll,
+  updateContent,
+  click,
+  change,
+  submit,
+  wait,
+  waitForElementRender
+} from '../../../testHelpers/testUtils';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
@@ -78,12 +87,12 @@ describe('Posts and comments example UI works', () => {
     }
   });
 
-  step('Posts page renders without data', () => {
+  step('Posts page renders without data with no post message', () => {
     app = renderer.mount();
     container = app.container;
     renderer.history.push('/posts');
     content = updateContent(container);
-    content.textContent.should.equal('Loading...');
+    expect(content.textContent).to.include('There are no posts yet.');
   });
 
   step('Posts page renders with data', () => {
@@ -303,7 +312,7 @@ describe('Posts and comments example UI works', () => {
     const editButtons = findAll(container, '.edit-comment');
     expect(editButtons).has.lengthOf(2);
     click(editButtons[editButtons.length - 1]);
-    await wait(() => app.getByPlaceholderText('Comment', { exact: false }));
+    await wait(() => app.getByPlaceholderText('Comment'));
     const commentForm = find(container, 'form[name="comment"]');
     expect(find(commentForm, '[name="content"]').value).to.equal('Post comment 2');
     change(find(commentForm, '[name="content"]'), { target: { name: 'content', value: 'Edited comment 2' } });
@@ -314,6 +323,9 @@ describe('Posts and comments example UI works', () => {
     expect(content.textContent).to.include('Edited comment 2');
     const backButton = find(container, '#back-button');
     click(backButton);
+    const loadMoreButton = await waitForElementRender(app.container, '#load-more');
+    click(loadMoreButton);
+    await waitForElementRender(app.container, 'a[href="/post/3"]');
     content = updateContent(container);
     // change posts query fetching policy, now if present difference in data we will get data from network
     expect(content.textContent).to.include('Post title 1');

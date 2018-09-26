@@ -4,7 +4,6 @@ import { StyleSheet, View, Text, Linking, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
 import { placeholderColor } from '../../common/components/native/styles';
 
-import settings from '../../../../../../settings';
 import translate from '../../../i18n';
 
 import LoginForm from './LoginForm';
@@ -62,7 +61,6 @@ class LoginView extends React.PureComponent {
       <Text style={styles.title}>{this.props.t('login.cardTitle')}:</Text>
       <Text style={styles.exampleText}>admin@example.com: admin123</Text>
       <Text style={styles.exampleText}>user@example.com: user1234</Text>
-      {settings.subscription.enabled && <Text style={styles.exampleText}>subscriber@example.com: subscriber</Text>}
     </View>
   );
 

@@ -39,7 +39,8 @@ const config = {
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"http://localhost:8080/graphql"',
-      __WEBSITE_URL__: '"http://localhost:8080"'
+      __WEBSITE_URL__: '"http://localhost:8080"',
+      'process.env.STRIPE_PUBLIC_KEY': `"${process.env.STRIPE_PUBLIC_KEY}"`
     }
   }
 };

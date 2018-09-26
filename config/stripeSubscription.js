@@ -3,7 +3,7 @@ export default {
     subscription: {
       enabled: false,
       webhookUrl: '/stripe/webhook',
-      publicKey: '', // Provide your publishable key
+      publicKey: process.env.STRIPE_PUBLIC_KEY,
       secretKey: process.env.STRIPE_SECRET_KEY,
       endpointSecret: process.env.STRIPE_ENDPOINT_SECRET,
       // Default Stripe product object

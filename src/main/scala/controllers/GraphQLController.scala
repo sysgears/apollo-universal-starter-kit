@@ -9,7 +9,7 @@ import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import graphql.{GraphQL, GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
-import sangria.ast.OperationType
+import sangria.ast.OperationType.Subscription
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError, QueryReducer}
 import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
@@ -40,31 +40,31 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory)
           handleQuery(query, operation)
         }
       } ~
-      post {
-        entity(as[JsValue]) { requestJson =>
-          val JsObject(fields) = requestJson
-          val JsString(query) = fields("query")
-          val operation = fields.get("operationName") collect {
-            case JsString(op) => op
+        post {
+          entity(as[JsValue]) { requestJson =>
+            val JsObject(fields) = requestJson
+            val JsString(query) = fields("query")
+            val operation = fields.get("operationName") collect {
+              case JsString(op) => op
+            }
+            val vars = fields.get("variables") match {
+              case Some(obj: JsObject) => obj
+              case _ => JsObject.empty
+            }
+            handleQuery(query, operation, vars)
           }
-          val vars = fields.get("variables") match {
-            case Some(obj: JsObject) => obj
-            case _ => JsObject.empty
-          }
-          handleQuery(query, operation, vars)
         }
-      }
     } ~
-    (path("schema") & get) {
-      complete(SchemaRenderer.renderSchema(GraphQL.Schema))
-    }
+      (path("schema") & get) {
+        complete(SchemaRenderer.renderSchema(GraphQL.Schema))
+      }
 
   private def handleQuery(query: String, operation: Option[String], variables: JsObject = JsObject.empty) = {
     val ctx = graphQlContextFactory.createContextForRequest
     QueryParser.parse(query) match {
       case Success(queryAst) =>
         queryAst.operationType(operation) match {
-          case Some(OperationType.Subscription) =>
+          case Some(Subscription) =>
             import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling._
             import sangria.execution.ExecutionScheme.Stream
             import sangria.streaming.akkaStreams._
@@ -77,21 +77,34 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory)
                       .recover {
                         case NonFatal(error) =>
                           ServerSentEvent(error.getMessage)
-                      })
+                      }
+                    )
                 }
                 .recover {
                   case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
                   case error: ErrorWithResolver => ToResponseMarshallable(InternalServerError -> error.resolveError)
-                })
+                }
+            )
           case _ =>
             complete(executor.execute(queryAst, ctx, (), operation, variables)
-              .map(OK → _)
+              .map(OK -> _)
               .recover {
                 case error: QueryAnalysisError => BadRequest -> error.resolveError
                 case error: ErrorWithResolver => InternalServerError -> error.resolveError
               })
         }
-      case Failure(e: SyntaxError) => complete(BadRequest)
+      case Failure(e: SyntaxError) =>
+        complete(BadRequest,
+          JsObject(
+            "syntaxError" -> JsString(e.getMessage),
+            "locations" -> JsArray(
+              JsObject(
+                "line" -> JsNumber(e.originalError.position.line),
+                "column" -> JsNumber(e.originalError.position.column)
+              )
+            )
+          )
+        )
       case Failure(_) => complete(InternalServerError)
     }
   }

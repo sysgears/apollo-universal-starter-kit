@@ -26,9 +26,9 @@ class HttpHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
                             implicit val actorMaterializer: ActorMaterializer) {
 
   def handleQuery(query: String, operation: Option[String], variables: JsObject = JsObject.empty): StandardRoute = {
-    val ctx = graphQlContextFactory.createContextForRequest
     QueryParser.parse(query) match {
       case Success(queryAst) =>
+        val ctx = graphQlContextFactory.createContextForRequest
         queryAst.operationType(operation) match {
           case Some(Subscription) =>
             import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling._

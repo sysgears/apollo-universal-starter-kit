@@ -8,6 +8,7 @@ import graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import sangria.ast.OperationType.Subscription
 import sangria.execution.Executor
+import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
 import spray.json._
 
@@ -37,7 +38,7 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
                   val ctx = graphQlContextFactory.createContextForRequest
                   graphQlExecutor.execute(queryAst, ctx, (), None)
                     .viaMat(killSwitches.flow)(Keep.right)
-                    .runForeach(result => queue.offer(TextMessage(result.toString)))
+                    .runForeach(result => queue.offer(TextMessage(result.compactPrint)))
                 case _ =>
                   queue.offer(TextMessage(s"Unsupported type: ${queryAst.operationType(None)}"))
               }

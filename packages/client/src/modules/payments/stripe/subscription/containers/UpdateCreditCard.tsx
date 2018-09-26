@@ -70,7 +70,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
           return (
             <Fragment>
               {__CLIENT__ && PLATFORM === 'web' ? (
-                <StripeProvider apiKey={settings.stripeSubscription.stripe.subscription.publicKey}>
+                <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
                   <UpdateCreditCardView
                     error={this.state.error}
                     submitting={this.state.submitting}

@@ -31,7 +31,7 @@ const RegisterWithApollo = compose(
           if (register.errors) {
             return { errors: register.errors };
           } else if (history) {
-            if (settings.subscription.enabled) {
+            if (settings.stripe.subscription.enabled && settings.stripe.subscription.publicKey) {
               history.push('/subscription');
             } else {
               history.push('/profile');

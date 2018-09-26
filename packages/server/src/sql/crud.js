@@ -497,7 +497,7 @@ export default class Crud {
             _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '<=', `${filterValue_gte}`);
           }
         } else if (hasTypeOf(Boolean)) {
-          if (filter[filterKey]) {
+          if (_.has(filter, filterKey)) {
             _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '=', `${+filter[filterKey]}`);
           }
         } else {

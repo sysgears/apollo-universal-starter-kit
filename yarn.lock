@@ -1361,7 +1361,7 @@
     component-type "^1.2.1"
     join-component "^1.1.0"
 
-"@types/accepts@*", "@types/accepts@^1.3.5":
+"@types/accepts@^1.3.5":
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/@types/accepts/-/accepts-1.3.5.tgz#c34bec115cfc746e04fe5a059df4ce7e7b391575"
   dependencies:
@@ -1382,13 +1382,6 @@
     "@types/connect" "*"
     "@types/node" "*"
 
-"@types/bunyan@*":
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/@types/bunyan/-/bunyan-1.8.4.tgz#69c11adc7b50538d45fb68d9ae39d062b9432f38"
-  dependencies:
-    "@types/events" "*"
-    "@types/node" "*"
-
 "@types/chai-http@^3.0.5":
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/@types/chai-http/-/chai-http-3.0.5.tgz#a56d1113f50309b96905935aab45dd2496ea558e"
@@ -1401,7 +1394,7 @@
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.1.4.tgz#5ca073b330d90b4066d6ce18f60d57f2084ce8ca"
 
-"@types/connect@*", "@types/connect@^3.4.31":
+"@types/connect@*":
   version "3.4.32"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.32.tgz#aa0e9616b9435ccad02bc52b5b454ffc2c70ba28"
   dependencies:
@@ -1410,15 +1403,6 @@
 "@types/cookiejar@*":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@types/cookiejar/-/cookiejar-2.1.0.tgz#4b7daf2c51696cfc70b942c11690528229d1a1ce"
-
-"@types/cookies@*":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@types/cookies/-/cookies-0.7.1.tgz#f9f204bd6767d389eea3b87609e30c090c77a540"
-  dependencies:
-    "@types/connect" "*"
-    "@types/express" "*"
-    "@types/keygrip" "*"
-    "@types/node" "*"
 
 "@types/cors@^2.8.4":
   version "2.8.4"
@@ -1430,6 +1414,14 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
 
+"@types/expo__vector-icons@^6.2.3":
+  version "6.2.3"
+  resolved "https://registry.yarnpkg.com/@types/expo__vector-icons/-/expo__vector-icons-6.2.3.tgz#68f2018a40dcfccb9bae79461080cc4d129b451f"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+    "@types/react-native-vector-icons" "*"
+
 "@types/express-serve-static-core@*":
   version "4.16.0"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.16.0.tgz#fdfe777594ddc1fe8eb8eccce52e261b496e43e7"
@@ -1438,7 +1430,7 @@
     "@types/node" "*"
     "@types/range-parser" "*"
 
-"@types/express@*", "@types/express@4.16.0", "@types/express@^4.0.36":
+"@types/express@*", "@types/express@4.16.0":
   version "4.16.0"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.16.0.tgz#6d8bc42ccaa6f35cf29a2b7c3333cb47b5a32a19"
   dependencies:
@@ -1478,9 +1470,9 @@
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.0.tgz#2fac51050c68f7d6f96c5aafc631132522f4aa3f"
 
-"@types/http-assert@*":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@types/http-assert/-/http-assert-1.3.0.tgz#5e932606153da28e1d04f9043f4912cf61fd55dd"
+"@types/humps@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@types/humps/-/humps-1.1.2.tgz#fbcaf596d20ff2ed78f8f511c5d6a943b51101d6"
 
 "@types/i18next-express-middleware@^0.0.33":
   version "0.0.33"
@@ -1497,44 +1489,12 @@
   version "23.3.1"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.1.tgz#a4319aedb071d478e6f407d1c4578ec8156829cf"
 
-"@types/keygrip@*":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@types/keygrip/-/keygrip-1.0.1.tgz#ff540462d2fb4d0a88441ceaf27d287b01c3d878"
-
 "@types/knex@^0.14.20":
   version "0.14.23"
   resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.14.23.tgz#8145977f96bc8014ec17c22d8aa0a1e0cc86934b"
   dependencies:
     "@types/bluebird" "*"
     "@types/events" "*"
-    "@types/node" "*"
-
-"@types/koa-bodyparser@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@types/koa-bodyparser/-/koa-bodyparser-4.2.0.tgz#04febc567f3d3dd40e3d1a0e095cdf7b07c4d7ce"
-  dependencies:
-    "@types/koa" "*"
-
-"@types/koa-compose@*":
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/@types/koa-compose/-/koa-compose-3.2.2.tgz#dc106e000bbf92a3ac900f756df47344887ee847"
-
-"@types/koa-router@^7.0.27":
-  version "7.0.32"
-  resolved "https://registry.yarnpkg.com/@types/koa-router/-/koa-router-7.0.32.tgz#a2d8adc65ad3d58aeb94d056650920c085817697"
-  dependencies:
-    "@types/koa" "*"
-
-"@types/koa@*", "@types/koa@^2.0.39":
-  version "2.0.46"
-  resolved "https://registry.yarnpkg.com/@types/koa/-/koa-2.0.46.tgz#24bc3cd405d10fcde81f876cd8285b44d4ddc3e9"
-  dependencies:
-    "@types/accepts" "*"
-    "@types/cookies" "*"
-    "@types/events" "*"
-    "@types/http-assert" "*"
-    "@types/keygrip" "*"
-    "@types/koa-compose" "*"
     "@types/node" "*"
 
 "@types/lodash@^4.14.112":
@@ -1597,6 +1557,20 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-native-keyboard-spacer@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@types/react-native-keyboard-spacer/-/react-native-keyboard-spacer-0.4.1.tgz#2bc5bf42df1c99ddd99bd5be0f0815df3f28e938"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
+"@types/react-native-vector-icons@*":
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-4.6.3.tgz#eb0e487c1bfbd8c9c68a297eb03d494420bb5e6b"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native@*":
   version "0.56.15"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.56.15.tgz#b1b2693153859f3a3d49533a3539ca83edd45b91"
@@ -1638,6 +1612,13 @@
     "@types/history" "*"
     "@types/react" "*"
 
+"@types/react-stripe-elements@^1.1.7":
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/@types/react-stripe-elements/-/react-stripe-elements-1.1.7.tgz#edba2667b1a10a70862801a0c8a8973f7cb8672c"
+  dependencies:
+    "@types/react" "*"
+    "@types/stripe-v3" "*"
+
 "@types/react-test-renderer@^16.0.2":
   version "16.0.2"
   resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-16.0.2.tgz#2715eae40df08f80b3620c498598c8615693b6c6"
@@ -1650,14 +1631,6 @@
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
-
-"@types/restify@^5.0.7":
-  version "5.0.9"
-  resolved "https://registry.yarnpkg.com/@types/restify/-/restify-5.0.9.tgz#95bf30b0fd7b92329a695bbd60feae019f3e31fd"
-  dependencies:
-    "@types/bunyan" "*"
-    "@types/node" "*"
-    "@types/spdy" "*"
 
 "@types/serialize-javascript@^1.3.2":
   version "1.3.2"
@@ -1674,13 +1647,24 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/shortid/-/shortid-0.0.29.tgz#8093ee0416a6e2bf2aa6338109114b3fbffa0e9b"
 
-"@types/spdy@*":
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/@types/spdy/-/spdy-3.4.4.tgz#3282fd4ad8c4603aa49f7017dd520a08a345b2bc"
+"@types/stripe-v3@*":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@types/stripe-v3/-/stripe-v3-3.0.8.tgz#9c2816acf34dcf0948236fc81ce99442344ebfb4"
+
+"@types/stripe@^5.0.21":
+  version "5.0.21"
+  resolved "https://registry.yarnpkg.com/@types/stripe/-/stripe-5.0.21.tgz#a229dbbd3626a9dfaefa5d3cc11d6c5dc2d1ce42"
   dependencies:
     "@types/node" "*"
 
-"@types/superagent@*", "@types/superagent@^3.8.3":
+"@types/superagent@*":
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-3.8.3.tgz#51aa6040c21b66df00f46e10bb08fb51c541acfc"
+  dependencies:
+    "@types/cookiejar" "*"
+    "@types/node" "*"
+
+"@types/superagent@^3.8.3":
   version "3.8.4"
   resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-3.8.4.tgz#24a5973c7d1a9c024b4bbda742a79267c33fb86a"
   dependencies:
@@ -2218,18 +2202,6 @@ apollo-datasource@0.1.2:
     apollo-server-caching "0.1.2"
     apollo-server-env "2.0.2"
 
-apollo-engine-binary-darwin@0.2018.6-20-gc0e4bb519:
-  version "0.2018.6-20-gc0e4bb519"
-  resolved "https://registry.yarnpkg.com/apollo-engine-binary-darwin/-/apollo-engine-binary-darwin-0.2018.6-20-gc0e4bb519.tgz#1458cf9af9adff1248730b9e7ea3408a778ff20e"
-
-apollo-engine-binary-linux@0.2018.6-20-gc0e4bb519:
-  version "0.2018.6-20-gc0e4bb519"
-  resolved "https://registry.yarnpkg.com/apollo-engine-binary-linux/-/apollo-engine-binary-linux-0.2018.6-20-gc0e4bb519.tgz#0f61d7e7888a58d8723516d1dc44d4c8a6688df2"
-
-apollo-engine-binary-windows@0.2018.6-20-gc0e4bb519:
-  version "0.2018.6-20-gc0e4bb519"
-  resolved "https://registry.yarnpkg.com/apollo-engine-binary-windows/-/apollo-engine-binary-windows-0.2018.6-20-gc0e4bb519.tgz#288c718a730f2a1f8bb0aae9fff3e6da23c1f00f"
-
 apollo-engine-reporting-protobuf@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/apollo-engine-reporting-protobuf/-/apollo-engine-reporting-protobuf-0.0.1.tgz#cd394f0f769c6f97d8621c4a7839095c84efcdb0"
@@ -2245,21 +2217,6 @@ apollo-engine-reporting@0.0.2:
     async-retry "^1.2.1"
     graphql-extensions "0.1.2"
     lodash "^4.17.10"
-
-apollo-engine@^1.1.0:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/apollo-engine/-/apollo-engine-1.1.2.tgz#ef8465fe5234b3bfe034b7e96d37bc441b72a9cb"
-  dependencies:
-    "@types/connect" "^3.4.31"
-    "@types/express" "^4.0.36"
-    "@types/koa" "^2.0.39"
-    "@types/koa-bodyparser" "^4.2.0"
-    "@types/koa-router" "^7.0.27"
-    "@types/restify" "^5.0.7"
-  optionalDependencies:
-    apollo-engine-binary-darwin "0.2018.6-20-gc0e4bb519"
-    apollo-engine-binary-linux "0.2018.6-20-gc0e4bb519"
-    apollo-engine-binary-windows "0.2018.6-20-gc0e4bb519"
 
 apollo-link-batch-http@1.2.2:
   version "1.2.2"
@@ -3984,7 +3941,7 @@ body-parser@1.18.2:
     raw-body "2.3.2"
     type-is "~1.6.15"
 
-body-parser@^1.15.2, body-parser@^1.18.2, body-parser@^1.18.3:
+body-parser@^1.15.2, body-parser@^1.18.3:
   version "1.18.3"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.18.3.tgz#5b292198ffdd553b3a0f20ded0592b956955c8b4"
   dependencies:
@@ -4392,6 +4349,13 @@ capture-exit@^1.2.0:
 capture-stack-trace@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/capture-stack-trace/-/capture-stack-trace-1.0.0.tgz#4a6fa07399c26bba47f0b2496b4d0fb408c5550d"
+
+card-validator@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/card-validator/-/card-validator-3.0.1.tgz#dcc2fabd6a1cd21f361b2536423a72de99a0894f"
+  dependencies:
+    credit-card-type "^5.0.0"
+    lodash "3.10.1"
 
 cardinal@2.1.1:
   version "2.1.1"
@@ -5200,6 +5164,10 @@ create-react-context@^0.2.1, create-react-context@^0.2.2:
   dependencies:
     fbjs "^0.8.0"
     gud "^1.0.0"
+
+credit-card-type@^5.0.0:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/credit-card-type/-/credit-card-type-5.0.4.tgz#2dd9df280411ce2bb91ed95ac31e814605717aed"
 
 cross-env@^5.1.1:
   version "5.2.0"
@@ -9859,6 +9827,10 @@ lodash.clonedeep@^4.3.2, lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
 
+lodash.compact@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/lodash.compact/-/lodash.compact-3.0.1.tgz#540ce3837745975807471e16b4a2ba21e7256ca5"
+
 lodash.debounce@^4, lodash.debounce@^4.0.0, lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
@@ -9881,6 +9853,10 @@ lodash.difference@^4.5.0:
 lodash.endswith@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/lodash.endswith/-/lodash.endswith-4.2.1.tgz#fed59ac1738ed3e236edd7064ec456448b37bc09"
+
+lodash.every@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.every/-/lodash.every-4.6.0.tgz#eb89984bebc4364279bb3aefbbd1ca19bfa6c6a7"
 
 lodash.get@^4.4.2:
   version "4.4.2"
@@ -10031,9 +10007,17 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
+lodash.values@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/lodash.values/-/lodash.values-4.3.0.tgz#a3a6c2b0ebecc5c2cba1c17e6e620fe81b53d347"
+
 lodash.zipobject@^4.1.3:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/lodash.zipobject/-/lodash.zipobject-4.1.3.tgz#b399f5aba8ff62a746f6979bf20b214f964dbef8"
+
+lodash@3.10.1, lodash@^3.10.1, lodash@^3.5.0, lodash@^3.7.0:
+  version "3.10.1"
+  resolved "http://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
 lodash@4.13.1:
   version "4.13.1"
@@ -10046,10 +10030,6 @@ lodash@4.16.2:
 lodash@4.17.10, lodash@4.x, "lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.10.1, lodash@^4.11.1, lodash@^4.13.1, lodash@^4.14.1, lodash@^4.16.5, lodash@^4.16.6, lodash@^4.17.10, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1, lodash@~4.17.10:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
-
-lodash@^3.10.1, lodash@^3.5.0, lodash@^3.7.0:
-  version "3.10.1"
-  resolved "http://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
 lodash@^4.16.4, lodash@^4.17.0, lodash@^4.2.0:
   version "4.17.11"
@@ -10735,7 +10715,7 @@ modify-values@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
 
-moment@2.x, moment@^2.10.6, moment@^2.19.3, moment@^2.20.1, moment@^2.6.0:
+moment@2.x, moment@^2.10.6, moment@^2.19.3, moment@^2.20.1, moment@^2.22.2, moment@^2.6.0:
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
 
@@ -13089,6 +13069,18 @@ react-native-collapsible@^0.9.0:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-credit-card-input@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-credit-card-input/-/react-native-credit-card-input-0.4.1.tgz#e62dd1a9beeab6787e5373ba23b93831cbf5f3de"
+  dependencies:
+    card-validator "^3.0.0"
+    lodash.compact "^3.0.1"
+    lodash.every "^4.6.0"
+    lodash.pick "^4.4.0"
+    lodash.values "^4.3.0"
+    prop-types "^15.6.0"
+    react-native-flip-card "^3.4.1"
+
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
@@ -13117,6 +13109,12 @@ react-native-easy-grid@0.2.0:
   resolved "https://registry.yarnpkg.com/react-native-easy-grid/-/react-native-easy-grid-0.2.0.tgz#4718031aa1baaa2613b829fc807da288eb0d2797"
   dependencies:
     lodash "^4.11.1"
+
+react-native-flip-card@^3.4.1:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-flip-card/-/react-native-flip-card-3.5.2.tgz#6563f4a6d95b999c21e82deec9b2f502175847d6"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-gesture-handler@1.0.0-alpha.41:
   version "1.0.0-alpha.41"

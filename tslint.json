@@ -63,6 +63,7 @@
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
     "no-unused-expression": true,
+    "no-unused-variable": true,
     "no-var-keyword": true,
     "no-var-requires": true,
     "object-literal-sort-keys": false,

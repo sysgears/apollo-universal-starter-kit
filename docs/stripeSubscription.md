@@ -1,23 +1,23 @@
 # Apollo Universal Starter Kit Subscription Module with Stripe
 
-The Apollo Starter Kit subscription module is a great starting point for your application when you want to provide 
+The Apollo Starter Kit subscription module is a great starting point for your application when you want to provide
 subscription plans and, therefore, when you need to charge users for access to certain features or services available
 through your application.
 
-The subscription module is based on a popular payment processor [Stripe], and it provides a basic example of using 
-Stripe subscriptions in a real production application. Moreover, the subscription module also implements specific 
-functionality to help you simulate a real production-ready payment service in _the development mode_ thanks to 
+The subscription module is based on a popular payment processor [Stripe], and it provides a basic example of using
+Stripe subscriptions in a real production application. Moreover, the subscription module also implements specific
+functionality to help you simulate a real production-ready payment service in _the development mode_ thanks to
 `stripe-local`.
 
-The entire code for the Stripe subscription module is located under `packages/server/src/modules/payments/stripe/` 
-directory. (When talking about the module files, we'll omit the long `packages/server/src/modules/payments/` part for 
-brevity, and will simply start the path with `stripe/`. If a path doesn't start with `stripe/`, you should look for a 
+The entire code for the Stripe subscription module is located under `packages/server/src/modules/payments/stripe/`
+directory. (When talking about the module files, we'll omit the long `packages/server/src/modules/payments/` part for
+brevity, and will simply start the path with `stripe/`. If a path doesn't start with `stripe/`, you should look for a
 respective file or directory from the project root.)
 
 ### Getting Started
 
 1. Sign into [Stripe Dashboard].
-2. Enable the subscription module in `config/stripeSubscription.js` by setting the `stripe.subscription.enable` property 
+2. Enable the subscription module in `config/stripeSubscription.js` by setting the `stripe.subscription.enable` property
 to `true`:
 ```javascript
 export default {
@@ -41,6 +41,7 @@ export default {
   }
 };
 ```
+or set Stripe publishable key value to environment variable `STRIPE_PUBLIC_KEY`
 4. Add your Stripe secret key into the `packages/server/.env` file:
 
 ```
@@ -51,19 +52,19 @@ STRIPE_SECRET_KEY="your Stripe secret key"
 
 5. Run `yarn stripe:setup` from the root project directory.
 
-This command will create a product and plan using the Stripe API according to the default subscription plan and product 
+This command will create a product and plan using the Stripe API according to the default subscription plan and product
 that are configured in the `config/stripeSubscription.js` file.
 
 6. [Start the application], and sign in as `user@example.com`. (Apollo Universal Starter Kit provides default username
 and password that you can use to sign in. Alternatively, you can create a new user to subscribe.)
-7. Visit the `/subscriber-page` page and subscribe. The subscription page provides test credit cards that you can use to 
+7. Visit the `/subscriber-page` page and subscribe. The subscription page provides test credit cards that you can use to
 subscribe.
-8. Once the payment is processed, visit the `/subscriber-page` page again to view the secret number. The subscription 
+8. Once the payment is processed, visit the `/subscriber-page` page again to view the secret number. The subscription
 information is available on the `/profile` page.
 
 ## Implemented Stripe Subscription Features
 
-The subscription module in Apollo Universal Starter Kit implements a few features to help you build upon them and add 
+The subscription module in Apollo Universal Starter Kit implements a few features to help you build upon them and add
 the specific functionality for your particular application.
 
 Currently, Apollo Universal Starter Kit includes the following subscription features:
@@ -76,48 +77,48 @@ Currently, Apollo Universal Starter Kit includes the following subscription feat
 * Protection of application routes with `SubscriptionRoute` (non-subscribers are redirected)
 * Authentication of subscription endpoints on the server
 * Integration with [Stripe Elements in React] for the web application
-* Integration with [React Native Credit Card Input] to enable Stripe subscription for mobile. The requests for credit card 
+* Integration with [React Native Credit Card Input] to enable Stripe subscription for mobile. The requests for credit card
 token are built manually and sent using the Fetch API.
 * Integration with **[stripe-local]** to query Stripe for events and to post them to the webhook endpoint
 
 ## Webhook
 
-The Apollo Starter Kit subscription module uses webhook, an Express middleware, to handle request that are coming from 
+The Apollo Starter Kit subscription module uses webhook, an Express middleware, to handle request that are coming from
 Stripe and notify the user about the changes to their subscription. The code that manages requests and notifies users is
 located in `stripe/subscription/webhook.ts`.
 
 Currently, Apollo Universal Starter Kit supports two Stripe events:
 
-* `customer.subscription.deleted`. If the user exists in the database, then the application deletes the [source] from 
+* `customer.subscription.deleted`. If the user exists in the database, then the application deletes the [source] from
 Stripe and updates the database. Finally, an email is sent to the user to confirm that their subscription was canceled.
 * `invoice.payment_failed`. If a payment has failed, an email will be sent to the user.
 
 ### Simulation of Full Subscription Functionality in Development Mode
 
 If you've already used Stripe, you might know that Stripe doesn't allow you to get information about the subscription if
-you're running the application in development mode. 
+you're running the application in development mode.
 
-In a production application, if a payment was declined, Stripe sends a request to the endpoint&mdash;a webhook&mdash;that 
-you registered with Stripe. These requests typically contain such data about the subscription cancellation or payment 
-failure, and you handle such situations in your production application. 
-  
-The described flow, however, is only possible in a production application with a _real domain_.  
+In a production application, if a payment was declined, Stripe sends a request to the endpoint&mdash;a webhook&mdash;that
+you registered with Stripe. These requests typically contain such data about the subscription cancellation or payment
+failure, and you handle such situations in your production application.
 
-When you work on your application in development mode on your computer, Stripe can't send any data to `localhost:port` 
+The described flow, however, is only possible in a production application with a _real domain_.
+
+When you work on your application in development mode on your computer, Stripe can't send any data to `localhost:port`
 (in fact, Stripe sends a request to the webhook that you registered, but the request never reaches your application).
-Therefore, in order to get full subscription functionality&mdash;to be able to test various payment problems in 
-development mode&mdash;we integrated a small library `stripe-local` into the subscription module. 
+Therefore, in order to get full subscription functionality&mdash;to be able to test various payment problems in
+development mode&mdash;we integrated a small library `stripe-local` into the subscription module.
 
-`stripe-local` sends a request to Stripe every 15 seconds to verify if any new events were registered when you tried to 
-subscribe in development mode. If there are any new events, `stripe-local` will get them and send them to your 
-application on `localhost:port`. Simply put, you can consider `stripe-local` a proxy between your application and 
+`stripe-local` sends a request to Stripe every 15 seconds to verify if any new events were registered when you tried to
+subscribe in development mode. If there are any new events, `stripe-local` will get them and send them to your
+application on `localhost:port`. Simply put, you can consider `stripe-local` a proxy between your application and
 Stripe.
 
 ![stripe_local_diagram](https://user-images.githubusercontent.com/24529997/46010501-91188f00-c0cb-11e8-8bf0-58e21b125588.png)
 
 #### Configuring stripe-local
 
-You can change [stripe-local options] in the `stripe/subscription/index.ts` file. As shown in the example below, you can 
+You can change [stripe-local options] in the `stripe/subscription/index.ts` file. As shown in the example below, you can
 add stripe-local properties to the object attribute passed to `stripeLocal()`:
 
 ```javascript
@@ -158,12 +159,12 @@ To configure the module, you can change the settings listed in the table below::
 
 ## Deployment with Apollo Starter Kit Subscription Module
 
-1. Create a [webhook endpoint] inside the Stripe dashboard with the `webhookUrl` property set 
+1. Create a [webhook endpoint] inside the Stripe dashboard with the `webhookUrl` property set
 `config/stripeSubscription.js`.
 2. Add your live publishable key from Stripe in `config/stripeSubscription.js`.
 3. Add your live secret key from Stripe in the `packages/server/.env`.
-4. Set up [webhook signatures] to prevent fraudulent webhooks from being processed. 
-5. Add Stripe secret key from your Stripe webhook in `packages/server/.env`. 
+4. Set up [webhook signatures] to prevent fraudulent webhooks from being processed.
+5. Add Stripe secret key from your Stripe webhook in `packages/server/.env`.
 6. Run `yarn stripe:setup` from the root directory to create a subscription plan using Stripe API. The default plan is
 configured in the `config/stripeSubscription.js` file.
 7. [Deploy your application].

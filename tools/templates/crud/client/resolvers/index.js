@@ -1,5 +1,7 @@
 import update from 'immutability-helper';
 
+import { mergeFilter } from '../../common/crud';
+import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
 import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
 
 const TYPE_$MODULE$_STATE = '$Module$State';
@@ -50,15 +52,8 @@ const resolvers = {
     },
     update$Module$Filter: (_, { filter }, { cache }) => {
       const { $module$State } = cache.readQuery({ query: $MODULE$_STATE_QUERY });
-
-      let mergeFilter = filter;
-      if (!filter.hasOwnProperty('searchText')) {
-        const { searchText, ...restFilters } = defaults.$module$State.filter;
-        mergeFilter = { ...restFilters, ...filter };
-      }
-
       const new$Module$State = update($module$State, {
-        filter: { $merge: mergeFilter }
+        filter: { $merge: mergeFilter(filter, defaults, $Module$Schema) }
       });
 
       cache.writeData({

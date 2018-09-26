@@ -16,6 +16,7 @@ import {
   RenderTextArea,
   RenderSelectQuery,
   RenderSelectCountry,
+  RenderSelectFilterBoolean,
   RenderDate,
   RenderSwitch,
   Popconfirm,
@@ -287,7 +288,11 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
       style = { width: 100 };
     }
   } else if (hasTypeOf(Boolean)) {
-    component = RenderSwitch;
+    if (formType === 'filter') {
+      component = RenderSelectFilterBoolean;
+    } else {
+      component = RenderSwitch;
+    }
   } else if (hasTypeOf(Date)) {
     component = RenderDate;
     if (formType === 'filter') {

@@ -39,3 +39,25 @@ export const deleteEntry = async ({ ownProps: { refetch }, mutate }, { where }, 
     console.log(e.graphQLErrors);
   }
 };
+
+export const mergeFilter = (filter, defaults, schema) => {
+  let mergeFilter = filter;
+  if (!filter.hasOwnProperty('searchText')) {
+    const { searchText, ...restFilters } = defaults.testModuleState.filter;
+    mergeFilter = { ...restFilters, ...filter };
+  }
+
+  for (const key of schema.keys()) {
+    const value = schema.values[key];
+    const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+    if (hasTypeOf(Boolean)) {
+      if (mergeFilter[key] === 'true') {
+        mergeFilter[key] = true;
+      } else if (filter[key] === 'false') {
+        mergeFilter[key] = false;
+      }
+    }
+  }
+
+  return mergeFilter;
+};

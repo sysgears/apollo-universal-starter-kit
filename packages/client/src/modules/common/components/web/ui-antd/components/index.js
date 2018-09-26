@@ -17,6 +17,7 @@ export { default as RenderDate } from './RenderDate';
 export { default as RenderSelect } from './RenderSelect';
 export { default as RenderSelectCountry } from './RenderSelectCountry';
 export { default as RenderSelectQuery } from './RenderSelectQuery';
+export { default as RenderSelectFilterBoolean } from './RenderSelectFilterBoolean';
 export { default as RenderCheckBox } from './RenderCheckBox';
 export { default as RenderSwitch } from './RenderSwitch';
 export { default as Alert } from './Alert';

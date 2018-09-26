@@ -31,7 +31,7 @@ const config = {
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"/graphql"',
-      'process.env.STRIPE_PUBLIC_KEY': `"${process.env.STRIPE_PUBLIC_KEY}"`
+      'process.env.STRIPE_PUBLIC_KEY': !!process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
     },
     webpackConfig: {
       devServer: {

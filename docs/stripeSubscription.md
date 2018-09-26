@@ -17,7 +17,7 @@ respective file or directory from the project root.)
 ### Getting Started
 
 1. Sign into [Stripe Dashboard].
-2. Enable the subscription module in `config/stripeSubscription.js` by setting the `stripe.subscription.enable` property
+2. Enable the subscription module in `config/stripe/subscription.js` by setting the `stripe.subscription.enable` property
 to `true`:
 ```javascript
 export default {
@@ -29,7 +29,7 @@ export default {
   }
 };
 ```
-3. Add your Stripe publishable key into the `config/stripeSubscription.js` configuration file:
+3. Add your Stripe publishable key into the `config/stripe/subscription.js` configuration file:
 ```javascript
 export default {
   stripe: {
@@ -53,7 +53,7 @@ STRIPE_SECRET_KEY="your Stripe secret key"
 5. Run `yarn stripe:setup` from the root project directory.
 
 This command will create a product and plan using the Stripe API according to the default subscription plan and product
-that are configured in the `config/stripeSubscription.js` file.
+that are configured in the `config/stripe/subscription.js` file.
 
 6. [Start the application], and sign in as `user@example.com`. (Apollo Universal Starter Kit provides default username
 and password that you can use to sign in. Alternatively, you can create a new user to subscribe.)
@@ -135,7 +135,7 @@ if (__DEV__ && enabled && secretKey) {
 ## Subscription Module Settings
 
 To use the subscription module, you can add Stripe keys into the `packages/server/.env` file and configure the module
-in the `config/stripeSubscription.js` file.
+in the `config/stripe/subscription.js` file.
 
 First, add your Stripe secret and endpoint keys to the `packages/server/.env` file:
 
@@ -160,13 +160,13 @@ To configure the module, you can change the settings listed in the table below::
 ## Deployment with Apollo Starter Kit Subscription Module
 
 1. Create a [webhook endpoint] inside the Stripe dashboard with the `webhookUrl` property set
-`config/stripeSubscription.js`.
-2. Add your live publishable key from Stripe in `config/stripeSubscription.js`.
+`config/stripe/subscription.js`.
+2. Add your live publishable key from Stripe in `config/stripe/subscription.js`.
 3. Add your live secret key from Stripe in the `packages/server/.env`.
 4. Set up [webhook signatures] to prevent fraudulent webhooks from being processed.
 5. Add Stripe secret key from your Stripe webhook in `packages/server/.env`.
 6. Run `yarn stripe:setup` from the root directory to create a subscription plan using Stripe API. The default plan is
-configured in the `config/stripeSubscription.js` file.
+configured in the `config/stripe/subscription.js` file.
 7. [Deploy your application].
 
 [stripe]: https://stripe.com

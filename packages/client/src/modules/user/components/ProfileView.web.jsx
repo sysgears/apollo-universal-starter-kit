@@ -59,7 +59,8 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
                 </CardGroup>
               )}
             {/* Credit card info (Stripe subscription module)*/}
-            {settings.stripeSubscription.stripe.subscription.enabled &&
+            {settings.stripe.subscription.enabled &&
+              settings.stripe.subscription.publicKey &&
               currentUser.role === 'user' && <StripeSubscriptionProfile />}
           </Card>
           <Link

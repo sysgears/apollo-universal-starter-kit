@@ -4,7 +4,7 @@ import settings from '../../../../../../../../settings';
 import Renderer from '../../../../../testHelpers/Renderer';
 import { updateContent, waitForElementRender } from '../../../../../testHelpers/testUtils';
 
-const { enabled, publicKey } = settings.stripeSubscription.stripe.subscription;
+const { enabled, publicKey } = settings.stripe.subscription;
 
 if (enabled && publicKey !== '') {
   const mocks = {

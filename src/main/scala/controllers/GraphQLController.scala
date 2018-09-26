@@ -86,15 +86,18 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory)
                 }
             )
           case _ =>
-            complete(executor.execute(queryAst, ctx, (), operation, variables)
-              .map(OK -> _)
-              .recover {
-                case error: QueryAnalysisError => BadRequest -> error.resolveError
-                case error: ErrorWithResolver => InternalServerError -> error.resolveError
-              })
+            complete(
+              executor.execute(queryAst, ctx, (), operation, variables)
+                .map(OK -> _)
+                .recover {
+                  case error: QueryAnalysisError => BadRequest -> error.resolveError
+                  case error: ErrorWithResolver => InternalServerError -> error.resolveError
+                }
+            )
         }
       case Failure(e: SyntaxError) =>
-        complete(BadRequest,
+        complete(
+          BadRequest,
           JsObject(
             "syntaxError" -> JsString(e.getMessage),
             "locations" -> JsArray(

@@ -28,6 +28,7 @@ export { default as Switch } from './Switch';
 export { default as InputNumber } from './InputNumber';
 export { default as RenderNumber } from './RenderNumber';
 export { default as RenderSelectQuery } from './RenderSelectQuery';
+export { default as RenderSelectFilterBoolean } from './RenderSelectFilterBoolean';
 export { default as RenderSwitch } from './RenderSwitch';
 export { default as RenderTextArea } from './RenderTextArea';
 export { default as DatePicker } from './DatePicker';

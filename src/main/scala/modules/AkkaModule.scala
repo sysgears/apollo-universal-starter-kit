@@ -1,12 +1,18 @@
 package modules
 
 import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
 import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.ScalaModule
 
-class AkkaModule(implicit actorSystem: ActorSystem) extends AbstractModule with ScalaModule {
+import scala.concurrent.ExecutionContext
 
-  override def configure {
-    bind[ActorSystem].toInstance(actorSystem)
+class AkkaModule extends AbstractModule with ScalaModule {
+
+  override def configure() {
+    implicit val system: ActorSystem = ActorSystem("scala-starter-kit")
+    bind[ActorSystem].toInstance(system)
+    bind[ActorMaterializer].toInstance(ActorMaterializer())
+    bind[ExecutionContext].toInstance(system.dispatcher)
   }
 }

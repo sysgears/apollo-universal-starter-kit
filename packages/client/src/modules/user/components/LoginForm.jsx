@@ -17,7 +17,7 @@ import settings from '../../../../../../settings';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
-  password: [required, minLength(8)]
+  password: [required, minLength(settings.user.auth.password.minLength)]
 };
 
 const validate = values => validateForm(values, loginFormSchema);

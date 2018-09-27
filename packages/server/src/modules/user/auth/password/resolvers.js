@@ -149,8 +149,11 @@ export default () => ({
           e.setError('password', t('user:auth.password.passwordsIsNotMatch'));
         }
 
-        if (reset.password.length < 8) {
-          e.setError('password', t('user:auth.password.passwordLength'));
+        if (reset.password.length < settings.user.auth.password.minLength) {
+          e.setError(
+            'password',
+            t('user:auth.password.passwordLength', { length: settings.user.auth.password.minLength })
+          );
         }
         e.throwIf();
 

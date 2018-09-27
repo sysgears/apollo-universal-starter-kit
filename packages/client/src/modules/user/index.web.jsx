@@ -10,12 +10,13 @@ import ProfileView from './components/ProfileView';
 import { MenuItem } from '../../modules/common/components/web';
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
+import UserAdd from './containers/UserAdd';
 import Register from './containers/Register';
 import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 
-import { AuthRoute, IfLoggedIn, withLoadedUser, withLogout, IfNotLoggedIn } from './containers/Auth';
+import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
 
 import Feature from '../connector';
 
@@ -58,14 +59,17 @@ export default new Feature(access, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
     <AuthRoute exact path="/users" redirect="/profile" role="admin" component={Users} />,
-    <AuthRoute exact path="/users/:id" redirect="/profile" role={['user', 'admin']} component={UserEdit} />,
+    <AuthRoute exact path="/users/new" role={['admin']} component={UserAdd} />,
+    <AuthRoute path="/users/:id" redirect="/profile" role={['user', 'admin']} component={UserEdit} />,
     <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
     <AuthRoute
       exact
       path="/login"
       redirectOnLoggedIn
       redirect="/"
-      component={withRouter(({ history }) => <Login onLogin={() => history.push('/profile')} />)}
+      component={withRouter(({ history }) => (
+        <Login onLogin={() => history.push('/profile')} />
+      ))}
     />,
     <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,
     <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />
@@ -99,5 +103,5 @@ export default new Feature(access, {
   resolver: resolvers,
   localization: { ns: 'user', resources },
   // eslint-disable-next-line react/display-name
-  rootComponentFactory: req => <CookiesProvider cookies={req ? req.universalCookies : undefined} />
+  rootComponentFactory: req => (req ? <CookiesProvider cookies={req.universalCookies} /> : <CookiesProvider />)
 });

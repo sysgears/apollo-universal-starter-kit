@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Picker, List } from 'antd-mobile/lib';
+import { Picker, List } from 'antd-mobile-rn';
 import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet } from 'react-native';
 import SelectStyles from '../styles/Select';
 
-const Select = ({ icon, iconName, iconColor, iconSize, onValueChange, cols, selectedValue, value, ...props }) => {
+const Select = ({ icon, iconName, iconColor, iconSize, onChange, cols, selectedValue, value, ...props }) => {
   return (
     <View style={styles.container}>
       <View style={styles.pickerWrapper}>
         <Picker
-          onChange={val => onValueChange(cols === 1 ? val[0] : val)}
+          onChange={val => onChange(cols === 1 ? val[0] : val)}
           value={[selectedValue || value]}
           cols={cols || 1}
           {...props}
@@ -31,7 +31,7 @@ const Select = ({ icon, iconName, iconColor, iconSize, onValueChange, cols, sele
 };
 
 Select.propTypes = {
-  onValueChange: PropTypes.func,
+  onChange: PropTypes.func,
   cols: PropTypes.number,
   value: PropTypes.string,
   selectedValue: PropTypes.string,

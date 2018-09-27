@@ -178,7 +178,7 @@ class UsersFilterView extends React.PureComponent {
               mode="dropdown"
               data={options}
               selectedValue={role}
-              onValueChange={value => this.handleRole(value)}
+              onChange={value => this.handleRole(value)}
               okText={t('users.select.okText')}
               dismissText={t('users.select.dismissText')}
               cols={1}
@@ -189,7 +189,7 @@ class UsersFilterView extends React.PureComponent {
         <View style={styles.itemContainer}>
           <Text style={styles.itemTitle}>{t('users.column.active')}</Text>
           <View style={styles.itemAction}>
-            <Switch onValueChange={this.handleIsActive} value={isActive} />
+            <Switch onChange={this.handleIsActive} value={isActive} />
           </View>
         </View>
         <TouchableOpacity style={styles.itemContainer} onPress={() => this.setState({ showModal: true })}>

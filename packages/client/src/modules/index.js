@@ -4,11 +4,23 @@ import counter from './counter';
 import post from './post';
 import upload from './upload';
 import user from './user';
-import subscription from './subscription';
+import payments from './payments';
 import contact from './contact';
 import pageNotFound from './pageNotFound';
+import pagination from './pagination';
 import './favicon';
 
 import Feature from './connector';
 
-export default new Feature(defaultRouter, counter, post, upload, user, subscription, contact, pageNotFound, i18n);
+export default new Feature(
+  defaultRouter,
+  counter,
+  post,
+  upload,
+  contact,
+  pagination,
+  payments,
+  user,
+  i18n,
+  pageNotFound
+);

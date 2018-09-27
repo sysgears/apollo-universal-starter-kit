@@ -5,10 +5,9 @@ import schema from './schema.graphql';
 import resolvers from './resolvers';
 import scopes from './scopes';
 import settings from '../../../../../settings';
-import UserDAO from './sql';
+import User from './sql';
 import Feature from '../connector';
-
-const User = new UserDAO();
+import resources from './locales';
 
 const createContextFunc = async ({ context: { user } }) => ({
   User,
@@ -27,5 +26,6 @@ export default new Feature(access, auth, {
     if (settings.user.auth.password.sendConfirmationEmail) {
       app.get('/confirmation/:token', confirmMiddleware);
     }
-  }
+  },
+  localization: { ns: 'user', resources }
 });

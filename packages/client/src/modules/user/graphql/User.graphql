@@ -21,5 +21,13 @@ fragment UserInfo on User {
       googleId
       displayName
     }
+    github {
+      ghId
+      displayName
+    }
+    linkedin {
+      lnId
+      displayName
+    }
   }
 }

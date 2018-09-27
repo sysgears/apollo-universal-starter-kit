@@ -3,29 +3,27 @@ import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 
 import access from '../../access';
-import UserDAO from '../../sql';
+import User from '../../sql';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
 
-const User = new UserDAO();
-
-const validateUserPassword = async (user, password) => {
+const validateUserPassword = async (user, password, t) => {
   const e = new FieldError();
 
   if (!user) {
     // user with provided email not found
-    e.setError('usernameOrEmail', 'Please enter a valid username or e-mail.');
+    e.setError('usernameOrEmail', t('user:auth.password.validPasswordEmail'));
     e.throwIf();
   }
   if (settings.user.auth.password.confirm && !user.isActive) {
-    e.setError('usernameOrEmail', 'Please confirm your e-mail first.');
+    e.setError('usernameOrEmail', t('user:auth.password.emailConfirmation'));
     e.throwIf();
   }
 
   const valid = await bcrypt.compare(password, user.passwordHash);
   if (!valid) {
     // bad password
-    e.setError('password', 'Please enter a valid password.');
+    e.setError('password', t('user:auth.password.validPassword'));
     e.throwIf();
   }
 };
@@ -42,7 +40,7 @@ export default () => ({
       try {
         const user = await User.getUserByUsernameOrEmail(usernameOrEmail);
 
-        await validateUserPassword(user, password);
+        await validateUserPassword(user, password, req.t);
 
         const tokens = await access.grantAccess(user, req);
 
@@ -51,18 +49,18 @@ export default () => ({
         return { errors: e };
       }
     },
-    async register(obj, { input }, context) {
+    async register(obj, { input }, { mailer, User, req }) {
       try {
+        const { t } = req;
         const e = new FieldError();
-
-        const userExists = await context.User.getUserByUsername(input.username);
+        const userExists = await User.getUserByUsername(input.username);
         if (userExists) {
-          e.setError('username', 'Username already exists.');
+          e.setError('username', t('user:auth.password.usernameIsExisted'));
         }
 
-        const emailExists = await context.User.getUserByEmail(input.email);
+        const emailExists = await User.getUserByEmail(input.email);
         if (emailExists) {
-          e.setError('email', 'E-mail already exists.');
+          e.setError('email', t('user:auth.password.emailIsExisted'));
         }
 
         e.throwIf();
@@ -74,22 +72,22 @@ export default () => ({
             isActive = true;
           }
 
-          [userId] = await context.User.register({ ...input, isActive });
+          [userId] = await User.register({ ...input, isActive });
 
           // if user has previously logged with facebook auth
         } else {
-          await context.User.updatePassword(emailExists.userId, input.password);
+          await User.updatePassword(emailExists.userId, input.password);
           userId = emailExists.userId;
         }
 
-        const user = await context.User.getUser(userId);
+        const user = await User.getUser(userId);
 
-        if (context.mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && context.req) {
+        if (mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && req) {
           // async email
           jwt.sign({ user: pick(user, 'id') }, settings.user.secret, { expiresIn: '1d' }, (err, emailToken) => {
             const encodedToken = Buffer.from(emailToken).toString('base64');
             const url = `${__WEBSITE_URL__}/confirmation/${encodedToken}`;
-            context.mailer.sendMail({
+            mailer.sendMail({
               from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
               to: user.email,
               subject: 'Confirm Email',
@@ -136,29 +134,39 @@ export default () => ({
         // don't throw error so you can't discover users this way
       }
     },
-    async resetPassword(obj, { input }, context) {
+    async resetPassword(
+      obj,
+      { input },
+      {
+        req: { t },
+        User
+      }
+    ) {
       try {
         const e = new FieldError();
         const reset = pick(input, ['password', 'passwordConfirmation', 'token']);
         if (reset.password !== reset.passwordConfirmation) {
-          e.setError('password', 'Passwords do not match.');
+          e.setError('password', t('user:auth.password.passwordsIsNotMatch'));
         }
 
-        if (reset.password.length < 8) {
-          e.setError('password', `Password must be 8 characters or more.`);
+        if (reset.password.length < settings.user.auth.password.minLength) {
+          e.setError(
+            'password',
+            t('user:auth.password.passwordLength', { length: settings.user.auth.password.minLength })
+          );
         }
         e.throwIf();
 
         const token = Buffer.from(reset.token, 'base64').toString();
         const { email, password } = jwt.verify(token, settings.user.secret);
-        const user = await context.User.getUserByEmail(email);
+        const user = await User.getUserByEmail(email);
         if (user.passwordHash !== password) {
-          e.setError('token', 'Invalid token');
+          e.setError('token', t('user:auth.password.invalidToken'));
           e.throwIf();
         }
 
         if (user) {
-          await context.User.updatePassword(user.id, reset.password);
+          await User.updatePassword(user.id, reset.password);
         }
         return { errors: null };
       } catch (e) {

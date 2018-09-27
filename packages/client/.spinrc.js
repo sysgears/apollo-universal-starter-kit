@@ -28,10 +28,10 @@ const config = {
     ssr: true,
     webpackDll: true,
     reactHotLoader: false,
-    frontendRefreshOnBackendChange: true,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
-      __API_URL__: '"/graphql"'
+      __API_URL__: '"/graphql"',
+      'process.env.STRIPE_PUBLIC_KEY': !!process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
     },
     webpackConfig: {
       devServer: {

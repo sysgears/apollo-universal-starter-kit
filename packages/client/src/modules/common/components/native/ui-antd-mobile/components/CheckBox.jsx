@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ADCheckbox from 'antd-mobile/lib/checkbox';
+import { Checkbox as ADCheckbox } from 'antd-mobile-rn';
 
 const CheckBox = props => {
   return <ADCheckbox onChange={props.onChange || props.onPress} {...props} />;

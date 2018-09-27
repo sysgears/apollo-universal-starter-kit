@@ -11,16 +11,39 @@ import { placeholderColor, submit } from '../../common/components/native/styles'
 import { required, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
+import GitHubButton from '../auth/github';
+import LinkedInButton from '../auth/linkedin';
 import settings from '../../../../../../settings';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
-  password: [required, minLength(8)]
+  password: [required, minLength(settings.user.auth.password.minLength)]
 };
 
 const validate = values => validateForm(values, loginFormSchema);
+const { facebook, linkedin, google, github } = settings.user.auth;
+
+const renderSocialButtons = (buttonsLength, t) => {
+  return buttonsLength > 2 ? (
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+      {facebook.enabled && <FacebookButton text={t('login.fbBtn')} type="icon" />}
+      {google.enabled && <GoogleButton text={t('login.googleBtn')} type="icon" />}
+      {github.enabled && <GitHubButton text={t('login.githubBtn')} type="icon" />}
+      {linkedin.enabled && <LinkedInButton text={t('login.linkedinBtn')} type="icon" />}
+    </View>
+  ) : buttonsLength > 0 ? (
+    <View>
+      {facebook.enabled && <FacebookButton text={t('login.fbBtn')} type="button" />}
+      {google.enabled && <GoogleButton text={t('login.googleBtn')} type="button" />}
+      {github.enabled && <GitHubButton text={t('login.githubBtn')} type="button" />}
+      {linkedin.enabled && <LinkedInButton text={t('login.linkedinBtn')} type="button" />}
+    </View>
+  ) : null;
+};
 
 const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
+  const buttonsLength = [facebook.enabled, linkedin.enabled, google.enabled, github.enabled].filter(button => button)
+    .length;
   return (
     <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
       <View style={styles.formContainer}>
@@ -55,10 +78,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
                 {t('login.form.btnSubmit')}
               </Button>
             </View>
-            <View>
-              {settings.user.auth.facebook.enabled && <FacebookButton type="button" />}
-              {settings.user.auth.google.enabled && <GoogleButton type="button" />}
-            </View>
+            {renderSocialButtons(buttonsLength, t)}
             <View style={styles.buttonsGroup}>
               <Text style={styles.signUpText} onPress={() => navigation.navigate('ForgotPassword')}>
                 {t('login.btn.forgotPass')}

@@ -1,0 +1,5 @@
+mutation addClientCounter($amount: Int!) {
+  addClientCounter(increment: $amount) @client {
+    amount
+  }
+}

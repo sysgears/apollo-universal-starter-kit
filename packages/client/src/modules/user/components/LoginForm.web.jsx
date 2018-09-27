@@ -9,6 +9,8 @@ import { Form, RenderField, Alert, Button } from '../../common/components/web';
 import { required, minLength, validateForm } from '../../../../../common/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
+import LinkedInButton from '../auth/linkedin';
+import GitHubButton from '../auth/github';
 
 import settings from '../../../../../../settings';
 
@@ -18,15 +20,68 @@ const loginFormSchema = {
 };
 
 const validate = values => validateForm(values, loginFormSchema);
+const { facebook, linkedin, google, github } = settings.user.auth;
+
+const renderSocialButtons = (buttonsLength, t) => {
+  return buttonsLength > 2 ? (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: 200 }}>
+      {settings.user.auth.facebook.enabled && (
+        <div className="text-center">
+          <FacebookButton text={t('login.fbBtn')} type={'icon'} />
+        </div>
+      )}
+      {settings.user.auth.google.enabled && (
+        <div className="text-center">
+          <GoogleButton text={t('login.googleBtn')} type={'icon'} />
+        </div>
+      )}
+      {settings.user.auth.github.enabled && (
+        <div className="text-center">
+          <GitHubButton text={t('login.githubBtn')} type={'icon'} />
+        </div>
+      )}
+      {settings.user.auth.linkedin.enabled && (
+        <div className="text-center">
+          <LinkedInButton text={t('login.linkedinBtn')} type={'icon'} />
+        </div>
+      )}
+    </div>
+  ) : (
+    <div>
+      {settings.user.auth.facebook.enabled && (
+        <div className="text-center">
+          <FacebookButton text={t('login.fbBtn')} type={'button'} />
+        </div>
+      )}
+      {settings.user.auth.google.enabled && (
+        <div className="text-center">
+          <GoogleButton text={t('login.googleBtn')} type={'button'} />
+        </div>
+      )}
+      {settings.user.auth.github.enabled && (
+        <div className="text-center">
+          <GitHubButton text={t('login.githubBtn')} type={'button'} />
+        </div>
+      )}
+      {settings.user.auth.linkedin.enabled && (
+        <div className="text-center">
+          <LinkedInButton text={t('login.linkedinBtn')} type={'button'} />
+        </div>
+      )}
+    </div>
+  );
+};
 
 const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
+  const buttonsLength = [facebook.enabled, linkedin.enabled, google.enabled, github.enabled].filter(button => button)
+    .length;
   return (
     <Form name="login" onSubmit={handleSubmit}>
       <Field
         name="usernameOrEmail"
         component={RenderField}
         type="text"
-        label={t('login.form.field.usenameOrEmail')}
+        label={t('login.form.field.usernameOrEmail')}
         value={values.usernameOrEmail}
       />
       <Field
@@ -37,21 +92,14 @@ const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
         value={values.password}
       />
       <div className="text-center">{error && <Alert color="error">{error}</Alert>}</div>
-      <div className="text-center">
-        <Button color="primary" type="submit" disabled={submitting}>
-          {t('login.form.btnSubmit')}
-        </Button>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <div className="text-center">
+          <Button size="lg" style={{ minWidth: '320px' }} color="primary" type="submit" disabled={submitting}>
+            {t('login.form.btnSubmit')}
+          </Button>
+        </div>
+        {renderSocialButtons(buttonsLength, t)}
       </div>
-      {settings.user.auth.facebook.enabled && (
-        <div className="text-center">
-          <FacebookButton type={'button'} />
-        </div>
-      )}
-      {settings.user.auth.google.enabled && (
-        <div className="text-center">
-          <GoogleButton type={'button'} />
-        </div>
-      )}
       <div className="text-center" style={{ marginTop: 10 }}>
         <Link to="/forgot-password">{t('login.btn.forgotPass')}</Link>
       </div>

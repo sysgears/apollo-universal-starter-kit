@@ -1,14 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Linking, Platform } from 'react-native';
+import { WebBrowser } from 'expo';
 import { placeholderColor } from '../../common/components/native/styles';
 
-import settings from '../../../../../../settings';
 import translate from '../../../i18n';
 
 import LoginForm from './LoginForm';
 
+import { setItem } from '../../common/clientStorage';
+import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
+
 class LoginView extends React.PureComponent {
+  componentDidMount() {
+    Linking.addEventListener('url', this.handleOpenURL);
+  }
+
+  componentWillUnmount() {
+    Linking.removeListener('url');
+  }
+
+  handleOpenURL = async ({ url }) => {
+    // Extract stringified user string out of the URL
+    const [, data] = url.match(/data=([^#]+)/);
+    const decodedData = JSON.parse(decodeURI(data));
+    const { client } = this.props;
+    if (decodedData.tokens) {
+      await setItem('accessToken', decodedData.tokens.accessToken);
+      await setItem('refreshToken', decodedData.tokens.refreshToken);
+    }
+
+    if (decodedData.user) {
+      await client.writeQuery({
+        query: CURRENT_USER_QUERY,
+        data: decodedData.user
+      });
+    }
+
+    if (Platform.OS === 'ios') {
+      WebBrowser.dismissBrowser();
+    }
+  };
+
   onSubmit = login => async values => {
     const { errors } = await login(values);
 
@@ -28,7 +61,6 @@ class LoginView extends React.PureComponent {
       <Text style={styles.title}>{this.props.t('login.cardTitle')}:</Text>
       <Text style={styles.exampleText}>admin@example.com: admin123</Text>
       <Text style={styles.exampleText}>user@example.com: user1234</Text>
-      {settings.subscription.enabled && <Text style={styles.exampleText}>subscriber@example.com: subscriber</Text>}
     </View>
   );
 

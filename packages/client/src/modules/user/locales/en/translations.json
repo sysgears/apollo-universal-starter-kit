@@ -28,10 +28,14 @@
     "errorMsg": "Login failed!",
     "cardTitle": "Available logins",
     "notRegText": "Not registered yet?",
+    "fbBtn": "Login with Facebook",
+    "googleBtn": "Login with Google",
+    "githubBtn": "Login with GitHub",
+    "linkedinBtn": "Login with LinkedIn",
     "form": {
       "title": "Sign In",
       "field": {
-        "usenameOrEmail": "Username or Email",
+        "usernameOrEmail": "Username or Email",
         "pass": "Password"
       },
       "btnSubmit": "Login"

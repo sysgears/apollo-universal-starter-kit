@@ -5,7 +5,7 @@
   "env": {
     "production": {
       "compact": true,
-      "presets": [["minify", { "mangle": false }]]
+      "presets": [["minify", { "mangle": false, "guards": false }]]
     }
   }
 }

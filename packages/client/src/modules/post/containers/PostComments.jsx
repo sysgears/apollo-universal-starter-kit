@@ -59,16 +59,18 @@ class PostComments extends React.Component {
     this.subscription = null;
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
+    this.initCommentListSubscription();
+  }
+
+  componentDidUpdate(prevProps) {
+    let prevPostId = prevProps.postId || null;
     // Check if props have changed and, if necessary, stop the subscription
-    if (this.subscription && this.props.postId !== nextProps.postId) {
+    if (this.subscription && this.props.postId !== prevPostId) {
+      this.subscription();
       this.subscription = null;
     }
-
-    // Subscribe or re-subscribe
-    if (!this.subscription) {
-      this.subscribeToCommentList(nextProps.postId);
-    }
+    this.initCommentListSubscription();
   }
 
   componentWillUnmount() {
@@ -77,6 +79,13 @@ class PostComments extends React.Component {
     if (this.subscription) {
       // unsubscribe
       this.subscription();
+      this.subscription = null;
+    }
+  }
+
+  initCommentListSubscription() {
+    if (!this.subscription) {
+      this.subscribeToCommentList(this.props.postId);
     }
   }
 

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { pick } from 'lodash';
 import { PageLayout } from '../../common/components/web';
 
 import UserForm from './UserForm';
@@ -15,11 +14,13 @@ class UserEditView extends React.PureComponent {
     user: PropTypes.object,
     currentUser: PropTypes.object,
     errors: PropTypes.array,
-    addUser: PropTypes.func.isRequired,
     history: PropTypes.object,
     t: PropTypes.func,
-    editUser: PropTypes.func.isRequired
+    editUser: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func
   };
+
+  state = {};
 
   static getDerivedStateFromProps(nextProps) {
     if (!nextProps.loading && nextProps.errors && nextProps.errors.length) {
@@ -27,32 +28,6 @@ class UserEditView extends React.PureComponent {
     }
     return null;
   }
-
-  state = {};
-
-  onSubmit = async values => {
-    const { user, addUser, editUser, t } = this.props;
-
-    let insertValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
-
-    insertValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
-
-    if (settings.user.auth.certificate.enabled) {
-      insertValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
-    }
-
-    const result = user ? await editUser({ id: user.id, ...insertValues }) : await addUser(insertValues);
-
-    if (result && result.errors) {
-      throw result.errors.reduce(
-        (res, error) => {
-          res[error.field] = error.message;
-          return res;
-        },
-        { _error: t('userEdit.errorMsg') }
-      );
-    }
-  };
 
   renderMetaData = t => (
     <Helmet
@@ -85,13 +60,13 @@ class UserEditView extends React.PureComponent {
             Back
           </Link>
           <h2>
-            {t(`userEdit.form.${user ? 'titleEdit' : 'titleCreate'}`)} {t('userEdit.form.title')}
+            {t('userEdit.form.titleEdit')} {t('userEdit.form.title')}
           </h2>
           <UserForm
-            onSubmit={this.onSubmit}
-            shouldRoleDisplay={isNotSelf}
-            shouldActiveDisplay={isNotSelf}
-            initialValues={user || {}}
+            onSubmit={this.props.onSubmit}
+            shouldDisplayRole={isNotSelf}
+            shouldDisplayActive={isNotSelf}
+            initialValues={user}
           />
         </PageLayout>
       );

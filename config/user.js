@@ -16,6 +16,7 @@ export default {
       confirm: true,
       sendConfirmationEmail: true,
       sendAddNewUserEmail: true,
+      minLength: 8,
       enabled: true
     },
     certificate: {
@@ -28,6 +29,18 @@ export default {
       clientSecret: process.env.FACEBOOK_CLIENTSECRET,
       scope: ['email'],
       profileFields: ['id', 'emails', 'displayName']
+    },
+    github: {
+      enabled: false,
+      clientID: process.env.GITHUB_CLIENTID,
+      clientSecret: process.env.GITHUB_CLIENTSECRET,
+      scope: ['user:email']
+    },
+    linkedin: {
+      enabled: false,
+      clientID: process.env.LINKEDIN_CLIENTID,
+      clientSecret: process.env.LINKEDIN_CLIENTSECRET,
+      scope: ['r_emailaddress', 'r_basicprofile']
     },
     google: {
       enabled: false,

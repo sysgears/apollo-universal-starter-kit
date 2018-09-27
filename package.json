@@ -3,16 +3,20 @@
   "private": true,
   "version": "1.0.0",
   "engines": {
-    "node": ">= 6.11.1 < 10",
+    "node": ">= 6.11.1",
     "yarn": ">= 1.0.0"
   },
-  "cacheDirectories": [".cache"],
+  "cacheDirectories": [
+    ".cache"
+  ],
   "scripts": {
     "build": "lerna run build --stream",
     "clean": "lerna run clean --stream",
     "exp": "yarn --cwd packages/mobile exp",
     "start": "lerna run --scope=server start --stream",
+    "jest": "jest",
     "tests": "lerna run tests --stream",
+    "tests:watch": "lerna run tests:watch --stream",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json .",
     "tslint": "tslint --fix -p tsconfig.json -c tslint.json",
@@ -23,12 +27,22 @@
     "heroku-postbuild": "lerna run heroku-postbuild --stream",
     "cli": "node tools/cli",
     "precommit": "lint-staged",
-    "postinstall": "opencollective postinstall"
+    "postinstall": "opencollective postinstall",
+    "stripe:setup": "lerna run --scope=server stripe:setup"
   },
   "lint-staged": {
-    "*.{js,jsx,json}": ["eslint --fix", "git add"],
-    "*.{ts,tsx}": ["tslint --fix", "git add"],
-    "*.graphql": ["prettier --parser graphql --write", "git add"]
+    "*.{js,jsx,json}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "tslint --fix",
+      "git add"
+    ],
+    "*.graphql": [
+      "prettier --parser graphql --write",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -38,12 +52,23 @@
     "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
   },
   "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
-  "keywords": ["apollo", "universal", "starter", "graphql", "react", "redux"],
+  "keywords": [
+    "apollo",
+    "universal",
+    "starter",
+    "graphql",
+    "react",
+    "redux"
+  ],
   "author": "SysGears INC",
   "license": "MIT",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "greenkeeper": {
-    "ignore": ["graphql"]
+    "ignore": [
+      "graphql"
+    ]
   },
   "collective": {
     "type": "opencollective",
@@ -51,25 +76,112 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "devDependencies": {
-    "awesome-typescript-loader": "^3.4.1",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^9.0.0",
+    "babel-plugin-import": "^1.7.0",
+    "babel-plugin-styled-components": "^1.3.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.12",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-minify": "^0.5.0-alpha.a24dd066",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "cache-loader": "^1.2.2",
+    "css-loader": "^1.0.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-import-resolver-webpack": "^0.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-jsx-a11y": "6.0.3",
+    "eslint-plugin-mocha": "^5.0.0",
+    "eslint-plugin-prettier": "^2.4.0",
+    "eslint-plugin-react": "^7.5.1",
+    "file-loader": "^1.1.6",
+    "fork-ts-checker-webpack-plugin": "^0.4.9",
+    "heroku-babel-loader": "^7.1.2",
+    "html-webpack-plugin": "^3.2.0",
+    "http-proxy-middleware": "^0.19.0",
     "husky": "^0.14.3",
-    "lerna": "^2.5.1",
-    "lint-staged": "^7.0.4",
-    "tslint": "^5.2.0",
+    "ignore-loader": "^0.1.2",
+    "isomorphic-style-loader": "^4.0.0",
+    "lerna": "^3.4.0",
+    "less": "^3.0.2",
+    "less-loader": "^4.1.0",
+    "lint-staged": "^7.1.2",
+    "mini-css-extract-plugin": "^0.4.1",
+    "node-sass": "^4.7.2",
+    "openurl": "^1.1.1",
+    "postcss-loader": "^3.0.0",
+    "prettier": "^1.9.2",
+    "qrcode-terminal": "^0.12.0",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^7.1.0",
+    "shelljs": "^0.8.1",
+    "source-list-map": "^2.0.0",
+    "style-loader": "^0.23.0",
+    "ts-loader": "^4.5.0",
+    "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.5.0",
-    "tslint-plugin-prettier": "^1.3.0",
-    "typescript": "^2.7.2"
+    "tslint-plugin-prettier": "^2.0.0",
+    "typescript": "^2.9.2",
+    "url-loader": "^1.0.1",
+    "wait-on": "^3.0.1",
+    "webpack": "^4.17.1",
+    "webpack-dev-middleware": "^3.1.3",
+    "webpack-dev-server": "^3.1.5",
+    "webpack-hot-middleware": "^2.22.3",
+    "webpack-manifest-plugin": "^2.0.3",
+    "webpack-merge": "^4.1.4",
+    "webpack-node-externals": "^1.7.2",
+    "webpack-sources": "^1.1.0",
+    "webpack-virtual-modules": "^0.1.10"
   },
   "optionalDependencies": {
-    "dotenv": "^5.0.1",
+    "dotenv": "^6.0.0",
     "lodash": "^4.17.4"
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.128"
+    "spinjs": "^0.4.159"
   },
   "resolutions": {
-    "graphql": "0.13.0",
-    "iterall": "^1.2.2"
+    "graphql": "0.13.2",
+    "iterall": "^1.2.2",
+    "upath": "^1.1.0"
+  },
+  "jest": {
+    "verbose": true,
+    "preset": "jest-expo",
+    "testPathIgnorePatterns": [
+      "node_modules",
+      ".history"
+    ],
+    "testRegex": "packages/mobile/src.*/__tests__/.*\\.(js|jsx|ts|tsx)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx"
+    ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "modulePathIgnorePatterns": [
+      "<rootDir>/node_modules/react-native/Libraries/react-native/",
+      "<rootDir>/node_modules/haul/",
+      "<rootDir>/packages/mobile/.expo/"
+    ],
+    "globals": {
+      "__CLIENT__": true,
+      "__SERVER__": false,
+      "__TEST__": true,
+      "ts-jest": {
+        "tsConfigFile": "packages/mobile/tsconfig.jest.json"
+      }
+    }
   }
 }

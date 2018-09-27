@@ -1,11 +1,12 @@
 import React from 'react';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, Button, primary } from '../../common/components/native';
-import { placeholderColor } from '../../common/components/native/styles';
+import { placeholderColor, submit } from '../../common/components/native/styles';
 import { required, validateForm } from '../../../../../common/validation';
 
 const commentFormSchema = {
@@ -27,9 +28,11 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
         placeholder={t('comment.label.field')}
         placeholderTextColor={placeholderColor}
       />
-      <Button type={primary} onPress={handleSubmit}>
-        {operation}
-      </Button>
+      <View style={submit}>
+        <Button type={primary} onPress={handleSubmit}>
+          {operation}
+        </Button>
+      </View>
     </FormView>
   );
 };
@@ -48,7 +51,7 @@ const PostCommentFormWithFormik = withFormik({
   validate: values => validate(values),
   handleSubmit: async (values, { resetForm, props: { onSubmit } }) => {
     await onSubmit(values);
-    resetForm({ content: '' });
+    resetForm();
   },
   displayName: 'CommentForm', // helps with React DevTools
   enableReinitialize: true

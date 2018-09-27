@@ -120,7 +120,8 @@ const styles = StyleSheet.create({
     margin: 10
   },
   list: {
-    paddingTop: 10
+    paddingTop: 10,
+    paddingHorizontal: 15
   },
   text: {
     fontSize: 18

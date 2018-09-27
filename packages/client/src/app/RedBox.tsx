@@ -17,12 +17,9 @@ interface RedBoxProps {
 }
 
 export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
-  public state = {
-    mapped: false
-  };
-
   constructor(props: RedBoxProps) {
     super(props);
+    this.state = { mapped: false };
   }
 
   public componentDidMount() {

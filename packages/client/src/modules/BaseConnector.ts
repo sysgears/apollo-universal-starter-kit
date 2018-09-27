@@ -90,7 +90,7 @@ export default class {
     return nestedRoot;
   }
 
-  public getWrappedRoot(root: any, req: any) {
+  public getWrappedRoot(root: any, req?: any) {
     let nestedRoot = root;
     for (const componentFactory of this.rootComponentFactory) {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);

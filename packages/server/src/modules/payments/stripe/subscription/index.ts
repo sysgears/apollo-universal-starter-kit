@@ -15,7 +15,7 @@ import webhookMiddleware from './webhook';
 import resources from './locales';
 
 const StripeSubscription = new StripeSubscriptionDAO();
-const { webhookUrl, enabled, secretKey } = settings.stripeSubscription.stripe.subscription;
+const { webhookUrl, enabled, secretKey } = settings.stripe.subscription;
 
 /**
  * Requests Stripe events and sends them to our webhook in development mode.

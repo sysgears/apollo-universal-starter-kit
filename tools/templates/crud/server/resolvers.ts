@@ -1,26 +1,26 @@
 import withAuth from 'graphql-auth';
-// eslint-disable-next-line no-unused-vars
+
+// tslint:disable:no-unused-variable
 import { createBatchResolver } from 'graphql-resolve-batch';
 
 const $MODULE$S_SUBSCRIPTION = '$module$s_subscription';
 
-// eslint-disable-next-line no-unused-vars
-export default pubsub => ({
+export default (pubsub: any) => ({
   Query: {
-    $module$s: withAuth(['editor:view:all'], (parent, args, ctx, info) => {
+    $module$s: withAuth(['editor:view:all'], (parent: any, args: any, ctx: any, info: any) => {
       return ctx.$Module$.getList(args, info);
     }),
-    $module$sConnection: withAuth(['editor:view:all'], (parent, args, ctx, info) => {
+    $module$sConnection: withAuth(['editor:view:all'], (parent: any, args: any, ctx: any, info: any) => {
       return ctx.$Module$.getPaginated(args, info);
     }),
-    $module$: withAuth(['editor:view'], (parent, args, ctx, info) => {
+    $module$: withAuth(['editor:view'], (parent: any, args: any, ctx: any, info: any) => {
       return ctx.$Module$.get(args, info);
     })
   },
   // schema batch resolvers
   // end schema batch resolvers
   Mutation: {
-    create$Module$: withAuth(['editor:create'], async (parent, args, ctx, info) => {
+    create$Module$: withAuth(['editor:create'], async (parent: any, args: any, ctx: any, info: any) => {
       const $module$ = await ctx.$Module$.create(args, ctx, info);
 
       pubsub.publish($MODULE$S_SUBSCRIPTION, {
@@ -32,19 +32,19 @@ export default pubsub => ({
 
       return $module$;
     }),
-    update$Module$: withAuth(['editor:update'], (parent, args, ctx, info) => {
+    update$Module$: withAuth(['editor:update'], (parent: any, args: any, ctx: any, info: any) => {
       return ctx.$Module$.update(args, ctx, info);
     }),
-    delete$Module$: withAuth(['editor:delete'], (parent, args, ctx, info) => {
+    delete$Module$: withAuth(['editor:delete'], (parent: any, args: any, ctx: any, info: any) => {
       return ctx.$Module$.delete(args, info);
     }),
-    sort$Module$s: withAuth(['editor:update'], (parent, args, ctx) => {
+    sort$Module$s: withAuth(['editor:update'], (parent: any, args: any, ctx: any) => {
       return ctx.$Module$.sort(args);
     }),
-    updateMany$Module$s: withAuth(['editor:update'], (parent, args, ctx) => {
+    updateMany$Module$s: withAuth(['editor:update'], (parent: any, args: any, ctx: any) => {
       return ctx.$Module$.updateMany(args);
     }),
-    deleteMany$Module$s: withAuth(['editor:delete'], (parent, args, ctx) => {
+    deleteMany$Module$s: withAuth(['editor:delete'], (parent: any, args: any, ctx: any) => {
       return ctx.$Module$.deleteMany(args);
     })
   },

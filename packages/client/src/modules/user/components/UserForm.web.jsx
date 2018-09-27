@@ -17,14 +17,14 @@ const userFormSchema = {
 
 const createUserFormSchema = {
   ...userFormSchema,
-  password: [required, minLength(8)],
-  passwordConfirmation: [required, match('password'), minLength(8)]
+  password: [required, minLength(settings.user.auth.password.minLength)],
+  passwordConfirmation: [required, match('password'), minLength(settings.user.auth.password.minLength)]
 };
 
 const updateUserFormSchema = {
   ...userFormSchema,
-  password: minLength(8),
-  passwordConfirmation: [match('password'), minLength(8)]
+  password: minLength(settings.user.auth.password.minLength),
+  passwordConfirmation: [match('password'), minLength(settings.user.auth.password.minLength)]
 };
 
 const validate = (values, createNew) => validateForm(values, createNew ? createUserFormSchema : updateUserFormSchema);

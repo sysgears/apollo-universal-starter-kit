@@ -82,8 +82,8 @@ export default pubsub => ({
             e.setError('email', t('user:emailIsExisted'));
           }
 
-          if (input.password.length < 8) {
-            e.setError('password', t('user:passwordLength'));
+          if (input.password.length < settings.user.auth.password.minLength) {
+            e.setError('password', t('user:passwordLength', { length: settings.user.auth.password.minLength }));
           }
 
           e.throwIf();
@@ -149,8 +149,8 @@ export default pubsub => ({
             e.setError('email', t('user:emailIsExisted'));
           }
 
-          if (input.password && input.password.length < 8) {
-            e.setError('password', t('user:passwordLength'));
+          if (input.password && input.password.length < settings.user.auth.password.minLength) {
+            e.setError('password', t('user:passwordLength', { length: settings.user.auth.password.minLength }));
           }
 
           e.throwIf();

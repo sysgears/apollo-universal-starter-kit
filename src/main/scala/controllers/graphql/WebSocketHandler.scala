@@ -62,8 +62,8 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
       }
       .to(Sink.onComplete {
         _ =>
-          queue.complete()
           killSwitches.shutdown()
+          queue.complete()
       })
     upgradeToWebSocket.handleMessagesWithSinkSource(incoming, Source.fromPublisher(publisher))
   }

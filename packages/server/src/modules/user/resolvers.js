@@ -83,7 +83,7 @@ export default pubsub => ({
           }
 
           if (input.password.length < settings.user.auth.password.minLength) {
-            e.setError('password', t('user:passwordLength', { lenght: settings.user.auth.password.minLength }));
+            e.setError('password', t('user:passwordLength', { length: settings.user.auth.password.minLength }));
           }
 
           e.throwIf();
@@ -150,7 +150,7 @@ export default pubsub => ({
           }
 
           if (input.password && input.password.length < settings.user.auth.password.minLength) {
-            e.setError('password', t('user:passwordLength', { lenght: settings.user.auth.password.minLength }));
+            e.setError('password', t('user:passwordLength', { length: settings.user.auth.password.minLength }));
           }
 
           e.throwIf();

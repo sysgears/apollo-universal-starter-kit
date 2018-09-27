@@ -152,7 +152,7 @@ export default () => ({
         if (reset.password.length < settings.user.auth.password.minLength) {
           e.setError(
             'password',
-            t('user:auth.password.passwordLength', { lenght: settings.user.auth.password.minLength })
+            t('user:auth.password.passwordLength', { length: settings.user.auth.password.minLength })
           );
         }
         e.throwIf();

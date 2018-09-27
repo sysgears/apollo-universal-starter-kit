@@ -57,6 +57,9 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory)
     } ~
       (path("schema") & get) {
         complete(SchemaRenderer.renderSchema(GraphQL.Schema))
+      } ~
+      get {
+        getFromResource("web/graphiql.html")
       }
 
   private def handleQuery(query: String, operation: Option[String], variables: JsObject = JsObject.empty) = {

@@ -81,6 +81,7 @@
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
+    "@types/expo": "^27.0.11",
     "@types/expo__vector-icons": "^6.2.3",
     "@types/jest": "^23.3.1",
     "@types/react-native-keyboard-spacer": "^0.4.1",

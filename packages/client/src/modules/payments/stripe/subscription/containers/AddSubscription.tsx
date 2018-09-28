@@ -81,7 +81,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
             <Fragment>
               {/* Stripe elements should render only for web*/}
               {__CLIENT__ && PLATFORM === 'web' ? (
-                <StripeProvider apiKey={settings.stripeSubscription.stripe.subscription.publicKey}>
+                <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
                   <AddSubscriptionView
                     error={error}
                     submitting={submitting}

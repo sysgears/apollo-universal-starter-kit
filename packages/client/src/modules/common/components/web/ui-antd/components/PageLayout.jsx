@@ -21,7 +21,9 @@ class PageLayout extends React.Component {
         <Content id="content" style={{ background: '#fff', padding: 24 }}>
           {children}
         </Content>
-        <Footer style={{ textAlign: 'center' }}>&copy; 2017. {settings.app.name}.</Footer>
+        <Footer style={{ textAlign: 'center' }}>
+          &copy; {new Date().getFullYear()}. {settings.app.name}.
+        </Footer>
       </Layout>
     );
   }

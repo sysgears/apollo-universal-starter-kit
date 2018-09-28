@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
@@ -10,6 +9,7 @@ import modules from '../../client/src/modules';
 import MainScreenNavigator from '../../client/src/app/Routes';
 import createApolloClient from '../../common/createApolloClient';
 
+const { protocol, pathname, port } = url.parse(__API_URL__);
 const store = createStore(
   combineReducers({
     ...modules.reducers
@@ -17,21 +17,17 @@ const store = createStore(
   {} // initial state
 );
 
-const { protocol, pathname, port } = url.parse(__API_URL__);
+interface MainProps {
+  exp: any;
+}
 
-export default class Main extends React.Component {
-  static propTypes = {
-    exp: PropTypes.object
-  };
-
-  render() {
+export default class Main extends React.Component<MainProps> {
+  public render() {
     const { hostname } = url.parse(__API_URL__);
     const apiUrl =
       this.props.exp.manifest.bundleUrl && hostname === 'localhost'
         ? `${protocol}//${url.parse(this.props.exp.manifest.bundleUrl).hostname}:${port}${pathname}`
         : __API_URL__;
-
-    log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
     const client = createApolloClient({
       apiUrl,
       createNetLink: modules.createNetLink,
@@ -39,6 +35,8 @@ export default class Main extends React.Component {
       connectionParams: modules.connectionParams,
       clientResolvers: modules.resolvers
     });
+
+    log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
     return modules.getWrappedRoot(
       <Provider store={store}>

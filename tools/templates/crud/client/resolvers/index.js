@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 
-import { mergeFilter } from '../../common/crud';
+import { mergeFilter } from '../../../utils/crud';
 import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
 import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
 

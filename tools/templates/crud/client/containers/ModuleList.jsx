@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { removeTypename, removeEmpty } from '../../../../../common/utils';
 import { ListView } from '../../common/components/crud';
-import { updateEntry, deleteEntry } from '../../common/crud';
+import { updateEntry, deleteEntry } from '../../../utils/crud';
 import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
 
 import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';

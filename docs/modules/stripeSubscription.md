@@ -9,7 +9,7 @@ Stripe subscriptions in a real production application. Moreover, the subscriptio
 functionality to help you simulate a real production-ready payment service in _the development mode_ thanks to
 `stripe-local`.
 
-The entire code for the Stripe subscription module is located under `packages/server/src/modules/payments/stripe/`
+The entire code for the Stripe subscription module is located under the `packages/server/src/modules/payments/stripe/`
 directory. (When talking about the module files, we'll omit the long `packages/server/src/modules/payments/` part for
 brevity, and will simply start the path with `stripe/`. If a path doesn't start with `stripe/`, you should look for a
 respective file or directory from the project root.)
@@ -17,8 +17,8 @@ respective file or directory from the project root.)
 ### Getting Started
 
 1. Sign into [Stripe Dashboard].
-2. Enable the subscription module in `config/stripe/subscription.js` by setting the `stripe.subscription.enable` property
-to `true`:
+2. Enable the subscription module in `config/stripe/subscription.js` by setting the `stripe.subscription.enable` 
+property to `true`:
 ```javascript
 export default {
   stripe: {
@@ -29,26 +29,19 @@ export default {
   }
 };
 ```
-3. Add your Stripe publishable key into the `config/stripe/subscription.js` configuration file:
-```javascript
-export default {
-  stripe: {
-    subscription: {
-      enabled: true,
-      publicKey: 'your Stripe publishable key'
-      // other code is omitted for brevity
-    }
-  }
-};
-```
-or set Stripe publishable key value to environment variable `STRIPE_PUBLIC_KEY`
-4. Add your Stripe secret key into the `packages/server/.env` file:
+3. Add your Stripe publishable key and secret key into the `packages/server/.env` file:
 
 ```
 # Stripe
-STRIPE_SECRET_KEY="your Stripe secret key"
+STRIPE_PUBLIC_KEY=your_stripe_publishable_key
+STRIPE_SECRET_KEY=your_stripe_secret_key
 ```
-**Note**: You don't need the Stripe endpoint secret key to run the application in development mode.
+
+**NOTE**: In `packages/server/.env`, you'll see also the `STRIPE_ENDPOINT_SECRET` environment variable. You don't need 
+to set this variable to run the application in development mode. You only need to specify this variable when you're 
+deploying your application. 
+
+For more information, read the [deployment section](#deployment-with-apollo-starter-kit-subscription-module).
 
 5. Run `yarn stripe:setup` from the root project directory.
 
@@ -114,7 +107,9 @@ subscribe in development mode. If there are any new events, `stripe-local` will 
 application on `localhost:port`. Simply put, you can consider `stripe-local` a proxy between your application and
 Stripe.
 
-![stripe_local_diagram](https://user-images.githubusercontent.com/24529997/46010501-91188f00-c0cb-11e8-8bf0-58e21b125588.png)
+<p align="center">
+  <img alt="Stripe local diagram" src="https://user-images.githubusercontent.com/24529997/46010501-91188f00-c0cb-11e8-8bf0-58e21b125588.png" />
+</p>
 
 #### Configuring stripe-local
 
@@ -159,8 +154,10 @@ To configure the module, you can change the settings listed in the table below::
 
 ## Deployment with Apollo Starter Kit Subscription Module
 
-1. Create a [webhook endpoint] inside the Stripe dashboard with the `webhookUrl` property set
-`config/stripe/subscription.js`.
+1. Create a [webhook endpoint] in the [Stripe dashboard]. The webhook URLs that are set in the Stripe dashboard and the 
+`config/stripe/subscription.js` file must be the same. 
+By default, `webhookUrl` is set to `/stripe/webhook` in `config/stripe/subscription.js`; therefore, in the Stripe 
+dashboard you need to set the webhook endpoint to `https://your-website-name.com/stripe/webhook`.  
 2. Add your live publishable key from Stripe in `config/stripe/subscription.js`.
 3. Add your live secret key from Stripe in the `packages/server/.env`.
 4. Set up [webhook signatures] to prevent fraudulent webhooks from being processed.

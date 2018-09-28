@@ -24,11 +24,12 @@ NODE_ENV=production yarn seed
 4. Replace the default server port and website URL in `packages/server/.spinrc.js` to match your production setup: 
 
 ```javascript
-config.options.defines.__SERVER_PORT__ = 8080; // Set to your server port
-config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"'; // Set the URL for prod
+config.options.defines.__SERVER_PORT__ = 8080;
+config.options.defines.__WEBSITE_URL__ = '"https://your-website-name.com"';
 ``` 
 
-5. If you need to run the mobile app, set the `__API_URL__` and `__WEBSITE_URL__` values in `packages/mobile/.spinrc.js`:
+5. If you need to run the mobile app, set the `__API_URL__` and `__WEBSITE_URL__` properties in 
+`packages/mobile/.spinrc.js`:
 
 ```javascript
 // Other configurations for the mobile app are omitted for brevity
@@ -36,19 +37,10 @@ config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.
 if (process.env.NODE_ENV === 'production') {
   // Other settings are omitted for brevity
   // Change the following two line
-  config.options.defines.__API_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com/graphql"';
-  config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
+  config.options.defines.__API_URL__ = '"https://your-website-name.com/graphql"';
+  config.options.defines.__WEBSITE_URL__ = '"https://your-website-name.com"';
   // Other settings are omitted for brevity
 }
-```
-
-If you are deploying on Heroku without a custom domain name, the production URLs may look like this:
-
-```javascript
-// code is omitted for brevity
-config.options.defines.__API_URL__ = '"https://<AppName>.herokuapp.com/graphql"';
-config.options.defines.__WEBSITE_URL__ = '"https://<AppName>.herokuapp.com"';
-// code is omitted for brevity
 ```
 
 6. Compile the project:
@@ -72,7 +64,7 @@ yarn start
     - On Ubuntu, run `sudo snap install heroku --classic`
     - For Windows and MacOS, download the appropriate installer from [Heroku Command Line Interface]
 
-3. Log in to Heroku CLI with your Heroku login and password (follow the suggestions shown by the CLI):
+3. Log in to the Heroku CLI with your Heroku login and password and follow the suggestions shown by the CLI:
 
 ```bash
 heroku login
@@ -84,27 +76,46 @@ heroku login
 heroku create application-name
 ```
 
-In the command line will generate two links. The first link is the URL for your Heroku application, while the second is 
+The command line will generate two links. The first link is the URL for your Heroku application, while the second URL is 
 the Git repository to which you'll push your application:
 
 ```bash
 https://application-name.herokuapp.com/ | https://git.heroku.com/application-name.git
 ```
-
 Consult [deploying a Node.js app] for full details about creating your application on Heroku.
  
-5. Create an account in [Expo] for publishing your mobile app (optional).
+5. Set your deployment configuration variables in [Heroku Dashboard]. 
 
-6. Set your deployment configuration variables in [Heroku Dashboard]. 
+Click the name of your application in the list and then follow to the `Settings` tab. In Settings, click on the 
+`Config Variables` link and add the following variable: 
 
-    * Choose your application and then follow to the `Settings` tab. In Settings, click on the `Config Variables` link. 
-    Add a variable `YARN_PRODUCTION` and set it to `false`. Additionally, if you're also deploying a mobile app, you 
-    need to set the variable `EXP_USERNAME` to `your_expo_account_username` and `EXP_PASSWORD` to 
-    `your_expo_account_password`. The `EXP_USERNAME` and `EXP_PASSWORD` config variables will be used to publish your 
-    mobile Expo application.
+| Variable        | Value |
+| --------------- | ----- |
+| YARN_PRODUCTION | false |
 
-    * Configure your SMTP server to let your application register new users. By default, Apollo Universal Starter Kit uses 
-`ethereal.email`, but Ethereal shouldn't be used for production application.
+**NOTE**: If you don't need the mobile app when deploying to Heroku, open the file `packages/mobile/.spinrc.js` and set 
+both `config.builders.android.enabled` and `config.builders.ios.enabled` to `false` as shown in the example below:
+          
+```javascript
+if (process.env.NODE_ENV === 'production') {
+    config.builders.android.enabled = false;
+    config.builders.ios.enabled = false;
+    // Other code is omitted for brevity
+}
+```
+ 
+However, if you want to deploy a mobile app, first create an account in [Expo]. Additionally, you need to set these 
+three variables in Heroku dashboard:
+
+| Variable        | Value                      |
+| --------------- | -------------------------- |
+| YARN_PRODUCTION | false                      |
+| EXP_USERNAME    | your_expo_account_username | 
+| EXP_PASSWORD    | your_expo_account_password |
+    
+**NOTE**: To register new users, configure your SMTP server. By default, Apollo Universal Starter Kit uses [Ethereal] 
+for the fake SMTP server, but you shouldn't use Ethereal for production application because the registration emails with 
+the validation link will be sent to Ethereal, _not_ to the real users.
 
 | Variable       | Value                      |
 | -------------- | -------------------------- |
@@ -112,45 +123,56 @@ Consult [deploying a Node.js app] for full details about creating your applicati
 | EMAIL_PASSWORD | examplePassword            |
 | EMAIL_USER     | example@example.com        | 
 
-7. Set proper values for server website url in `packages/server/.spinrc.js` to match your production setup.
- - If you are deploying your app on Heroku without a custom domain name, the production URLs will look like this:
+6. Set proper values for server website URL in `packages/server/.spinrc.js` to match your production setup.
+ 
+- If you're deploying your application on Heroku without a custom domain name, the production URL will look like this:
 
 ```javascript
-config.options.defines.__WEBSITE_URL__ = '"https://application-name-example.herokuapp.com"';
+config.options.defines.__WEBSITE_URL__ = '"https://application-name.herokuapp.com"';
 ```
-```applicationNameExample``` - name of your application from the 4 part.
 
- - If you your custom domain, the production URLs will look like this:
+`application-name` is the name of your application you've generated at the step 4 (creation of an app with the Heroku 
+CLI).
+
+- If you're using a custom domain, the production URL will look like this:
 
 ```javascript
-config.options.defines.__WEBSITE_URL__ = '"http://domainExample.com"';
+config.options.defines.__WEBSITE_URL__ = '"http://domain-example.com"';
 ```
-**http/https** - depends of your plan.
-Also, to use your custom domain name, you need to add this domain in the Heroku dashboard, in the `Settings` tab.
 
+Also, to use your custom domain name, you need to add this domain in [Heroku Dashboard]. Select your application from
+the list, and then follow to the `Settings` tab. Scroll to the button **Add domain** and add your domain.  
 
-7. In order for the mobile Expo app to connect to the back-end URL, edit `packages/mobile/.spinrc.js`.
+7. If you're deploying your mobile app to Expo, you need to connect the app to the back-end URL. To do that, edit the 
+`packages/mobile/.spinrc.js` file:
+
 - If you are deploying your app on Heroku without a custom domain name, the production URLs will look like this:
 
 ```javascript
-config.options.defines.__API_URL__ = '"https://application-name-example.herokuapp.com/graphql"';
-config.options.defines.__WEBSITE_URL__ = '"https://application-name-example.herokuapp.com"';
+config.options.defines.__API_URL__ = '"https://application-name.herokuapp.com/graphql"';
+config.options.defines.__WEBSITE_URL__ = '"https://application-name.herokuapp.com"';
 ```
-```applicationNameExample``` - name of your application from the 4 part.
 
- - If you your custom domain, the production URLs will look like this:
+- If you're using a custom domain, the production URLs will look like this:
 
 ```javascript
-config.options.defines.__API_URL__ = '"http://domainExample.com/graphql"';
-config.options.defines.__WEBSITE_URL__ = '"http://domainExample.com"';
+config.options.defines.__API_URL__ = '"http://domain-example.com/graphql"';
+config.options.defines.__WEBSITE_URL__ = '"http://domain-example.com"';
 ```
-**http/https** - depends of your plan.
-Also, to use your custom domain name, you need to add this domain in the Heroku dashbouard, in the `Settings` tab.
 
-8. Push to Heroku remote repository. Commit your changes and run ```git push heroku master``` or if you would like to 
-push another branch run ```git push --force heroky branchExample:master```
+8. Commit your changes and run (use the name of your application instead of `application-name` in the link above):
+ 
+```bash
+git push https://git.heroku.com/application-name.git
+```
 
-9. Heroku automatic starts the building the project and publishing website to Heroku and mobile apps to expo.io.
+If you're deploying from another branch (not from master) run:
+ 
+```bash
+git push --force heroku your_branch:master
+```
+
+9. Heroku automatically starts building your project and publishing a website to Heroku and mobile app to [Expo.io].
 
 ## Publishing a Mobile App
 
@@ -201,6 +223,7 @@ For more details refer to Building Standalone Apps in [the Expo documentation], 
 [xcode]: https://developer.apple.com/xcode/
 [virtualbox]: https://www.virtualbox.org/wiki/Downloads
 [android studio]: https://developer.android.com/studio/
+[ethereal]: https://ethereal.email/
 [README.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/README.md
 [the Expo documentation]: https://docs.expo.io/versions/latest/
 [Features and Modules]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Features-and-Modules

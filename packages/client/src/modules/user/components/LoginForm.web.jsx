@@ -81,7 +81,7 @@ const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
         name="usernameOrEmail"
         component={RenderField}
         type="text"
-        label={t('login.form.field.usenameOrEmail')}
+        label={t('login.form.field.usernameOrEmail')}
         value={values.usernameOrEmail}
       />
       <Field

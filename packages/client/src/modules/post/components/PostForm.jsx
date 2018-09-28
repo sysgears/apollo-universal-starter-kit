@@ -1,11 +1,12 @@
 import React from 'react';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, Button, primary } from '../../common/components/native';
-import { placeholderColor } from '../../common/components/native/styles';
+import { placeholderColor, submit } from '../../common/components/native/styles';
 import { required, validateForm } from '../../../../../common/validation';
 
 const postFormSchema = {
@@ -34,9 +35,11 @@ const PostForm = ({ values, handleSubmit, t }) => {
         value={values.content}
         placeholderTextColor={placeholderColor}
       />
-      <Button type={primary} onPress={handleSubmit}>
-        {t('post.btn.submit')}
-      </Button>
+      <View style={submit}>
+        <Button type={primary} onPress={handleSubmit}>
+          {t('post.btn.submit')}
+        </Button>
+      </View>
     </FormView>
   );
 };

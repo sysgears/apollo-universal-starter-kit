@@ -16,6 +16,7 @@ export default {
       confirm: true,
       sendConfirmationEmail: true,
       sendAddNewUserEmail: true,
+      minLength: 8,
       enabled: true
     },
     certificate: {

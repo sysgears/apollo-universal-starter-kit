@@ -24,7 +24,9 @@ class PageLayout extends React.Component {
           <Container id="content">{children}</Container>
         </section>
         <Footer className="d-flex flex-shrink-0 justify-content-center">
-          <span>&copy; 2017. {settings.app.name}.</span>
+          <span>
+            &copy; {new Date().getFullYear()}. {settings.app.name}.
+          </span>
         </Footer>
       </section>
     );

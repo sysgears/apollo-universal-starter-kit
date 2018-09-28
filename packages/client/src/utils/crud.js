@@ -67,6 +67,14 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
           if (values[`${key}_gte`]) {
             inputValues[`${key}_gte`] = values[`${key}_gte`];
           }
+        } else if (hasTypeOf(Boolean)) {
+          if (values[key] === 'true') {
+            inputValues[key] = true;
+          } else if (values[key] === 'false') {
+            inputValues[key] = false;
+          } else {
+            inputValues[key] = '';
+          }
         } else {
           if (key in values && values[key]) {
             inputValues[key] = values[key];

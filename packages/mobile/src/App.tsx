@@ -28,8 +28,6 @@ export default class Main extends React.Component<MainProps> {
       this.props.exp.manifest.bundleUrl && hostname === 'localhost'
         ? `${protocol}//${url.parse(this.props.exp.manifest.bundleUrl).hostname}:${port}${pathname}`
         : __API_URL__;
-
-    log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
     const client = createApolloClient({
       apiUrl,
       createNetLink: modules.createNetLink,
@@ -37,6 +35,8 @@ export default class Main extends React.Component<MainProps> {
       connectionParams: modules.connectionParams,
       clientResolvers: modules.resolvers
     });
+
+    log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
     return modules.getWrappedRoot(
       <Provider store={store}>

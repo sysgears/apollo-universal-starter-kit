@@ -66,7 +66,6 @@ export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
   public render() {
     const error: Error = this.props.error;
     const { redbox, message, stack, frame } = styles;
-    let parseError: Error;
     let frames: any;
 
     try {
@@ -77,19 +76,13 @@ export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
         error.stack = error.message;
         error.message = error.stack.split('\n')[0];
       }
-      frames = ErrorStackParser.parse(error);
+      frames = this.renderFrames(ErrorStackParser.parse(error));
     } catch (e) {
-      parseError = new Error('Failed to parse stack trace. Stack trace information unavailable.');
-    }
-
-    if (parseError) {
       frames = (
         <div style={frame} key={0}>
-          <div>{parseError.message}</div>
+          <div>Failed to parse stack trace. Stack trace information unavailable.</div>
         </div>
       );
-    } else {
-      frames = this.renderFrames(frames);
     }
 
     return (

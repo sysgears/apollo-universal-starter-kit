@@ -7,6 +7,7 @@ declare var __WEBSITE_URL__: string;
 
 interface Window {
   __APOLLO_STATE__?: any;
+  __SERVER_ERROR__?: any;
 }
 
 // packages without types

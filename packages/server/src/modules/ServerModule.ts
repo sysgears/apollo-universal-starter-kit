@@ -20,6 +20,10 @@ class ServerModule {
 }
 
 export default class extends ServerModule {
+  public get schemas() {
+    return this.schema;
+  }
+
   public async createContext(req: any, res: any, connectionParams?: any, webSocket?: any) {
     let context = {};
     for (const createContextFunc of this.createContextFunc) {

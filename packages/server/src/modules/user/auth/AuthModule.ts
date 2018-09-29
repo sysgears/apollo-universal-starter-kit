@@ -1,14 +1,16 @@
-import { map, union, without, castArray } from 'lodash';
+import { unfoldTo } from 'fractal-objects';
 
-const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
+class AuthModule {
+  // GraphQL API
+  public schema?: any[];
+  public createResolversFunc?: any[];
+  // Middleware
+  public middleware?: any[];
 
-class Feature {
   // eslint-disable-next-line
-  constructor({ schema, middleware, createResolversFunc }) {
-    this.schema = combine(arguments, arg => arg.schema);
-    this.middleware = combine(arguments, arg => arg.middleware);
-    this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
+  constructor(...modules: AuthModule[]) {
+    unfoldTo(this, modules);
   }
 }
 
-export default Feature;
+export default AuthModule;

@@ -1,20 +1,27 @@
-import { merge, map, union, without, castArray } from 'lodash';
+import { unfoldTo } from 'fractal-objects';
+import { merge } from 'lodash';
 
-const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
+class AccessModule {
+  public grant: any[];
+  // GraphQL API
+  public schema?: any[];
+  public createResolversFunc?: any[];
+  public createContextFunc?: any[];
+  // Middleware
+  public beforeware?: any[];
+  public middleware?: any[];
 
-class Feature {
+  public htmlHeadComponent?: any[];
+
   // eslint-disable-next-line
-  constructor({ grant, schema, middleware, createResolversFunc, createContextFunc, htmlHeadComponent }) {
-    this.grant = combine(arguments, arg => arg.grant);
-    this.schema = combine(arguments, arg => arg.schema);
-    this.middleware = combine(arguments, arg => arg.middleware);
-    this.createResolversFunc = combine(arguments, arg => arg.createResolversFunc);
-    this.createContextFunc = combine(arguments, arg => arg.createContextFunc);
-    this.htmlHeadComponent = combine(arguments, arg => arg.htmlHeadComponent);
+  constructor(...modules: AccessModule[]) {
+    unfoldTo(this, modules);
   }
+}
 
+export default class extends AccessModule {
   get grantAccess() {
-    return async (user, req) => {
+    return async (user: any, req: any) => {
       let result = {};
       for (const grant of this.grant) {
         result = merge(result, await grant(user, req));
@@ -23,5 +30,3 @@ class Feature {
     };
   }
 }
-
-export default Feature;

@@ -7824,10 +7824,10 @@ forwarded@~0.1.2:
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
   integrity sha1-mMI9qxF1ZXuMBXPozszZGw/xjIQ=
 
-fractal-objects@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/fractal-objects/-/fractal-objects-0.9.0.tgz#ceafe592b54ba0c996826a949b929d8ed055d54e"
-  integrity sha512-iKFdLsBCinf1UoQ0TRlUaoRtf385Juw0TyGFf00vvfr/tLlzEkzerD9PynR+pEvoRFEDol2dOnCT+XnJPOrjbA==
+fractal-objects@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/fractal-objects/-/fractal-objects-0.9.1.tgz#2b2958cf4af1b5ec3abf897cf920f3f126d67e37"
+  integrity sha512-LZYi3UyCQKaSBIs+bsTikk8D9GXvxjoM84n5F3DBGhIhtfUGWE7G4bMNa61uu5Zw7ePUyz7HQcZQEViW+l0kxQ==
 
 fragment-cache@^0.2.1:
   version "0.2.1"

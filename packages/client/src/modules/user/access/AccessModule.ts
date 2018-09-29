@@ -1,23 +1,24 @@
-import { map, union, without, castArray } from 'lodash';
+import { unfoldTo } from 'fractal-objects';
 
-const combine = (features, extractor) => without(union(...map(features, res => castArray(extractor(res)))), undefined);
+class AccessModule {
+  public link: any[];
+  public dataRootComponent: any[];
+  public login: any[];
+  public logout: any[];
 
-export default class {
-  // eslint-disable-next-line no-unused-vars
-  constructor({ link, dataRootComponent, login, logout }, ...features) {
-    this.link = combine(arguments, arg => arg.link);
-    this.dataRootComponent = combine(arguments, arg => arg.dataRootComponent);
-    this.login = combine(arguments, arg => arg.login);
-    this.logout = combine(arguments, arg => arg.logout);
+  constructor(...modules: AccessModule[]) {
+    unfoldTo(this, modules);
   }
+}
 
-  public async doLogin(client) {
+export default class extends AccessModule {
+  public async doLogin(client: any) {
     for (const login of this.login) {
       await login(client);
     }
   }
 
-  public async doLogout(client) {
+  public async doLogout(client: any) {
     for (const logout of this.logout) {
       await logout(client);
     }

@@ -18,7 +18,7 @@ import ResetPassword from './containers/ResetPassword';
 
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
 
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 
 const ProfileName = withLoadedUser(
   ({ currentUser }) => (currentUser ? currentUser.fullName || currentUser.username : null)
@@ -55,7 +55,7 @@ const NavLinkLoginWithI18n = translate('user')(({ t }) => (
   </NavLink>
 ));
 
-export default new Feature(access, {
+export default new ClientModule(access, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
     <AuthRoute exact path="/users" redirect="/profile" role="admin" component={Users} />,
@@ -100,8 +100,8 @@ export default new Feature(access, {
       </MenuItem>
     </IfNotLoggedIn>
   ],
-  resolver: resolvers,
-  localization: { ns: 'user', resources },
+  resolver: [resolvers],
+  localization: [{ ns: 'user', resources }],
   // eslint-disable-next-line react/display-name
-  rootComponentFactory: req => (req ? <CookiesProvider cookies={req.universalCookies} /> : <CookiesProvider />)
+  rootComponentFactory: [req => (req ? <CookiesProvider cookies={req.universalCookies} /> : <CookiesProvider />)]
 });

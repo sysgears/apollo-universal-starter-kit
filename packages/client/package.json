@@ -116,6 +116,7 @@
     "cross-env": "^5.1.1",
     "dom-testing-library": "^2.3.0",
     "eslint": "^4.13.1",
+    "fractal-objects": "^0.9.1",
     "graphql-tools": "^2.13.0",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",

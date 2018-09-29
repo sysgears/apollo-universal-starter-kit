@@ -1,29 +1,34 @@
-import BaseConnector, { BaseFeature, combine } from './BaseConnector';
+import { BaseModule, addBaseModuleMethods } from './BaseModule';
 
+import { unfoldTo } from 'fractal-objects';
 import { merge } from 'lodash';
 
-interface FeatureShape extends BaseFeature {
-  drawerItem?: any | any[];
-}
+class ClientModule extends BaseModule {
+  public drawerItem?: any[];
 
-export default class extends BaseConnector {
-  public drawerItem: any[];
-
-  constructor(...features: FeatureShape[]) {
-    super(...features);
-
-    // Navigation
-    this.drawerItem = combine(features, arg => arg.drawerItem);
-  }
-
-  get drawerItems() {
-    return merge({}, ...this.drawerItem);
-  }
-
-  public getSkippedDrawerItems() {
-    const items = this.drawerItems;
-    return Object.keys(items).filter(itemName => {
-      return items[itemName].skip;
-    });
+  constructor(...modules: ClientModule[]) {
+    super();
+    unfoldTo(this, modules);
   }
 }
+
+type Constructor = new (...args: any[]) => ClientModule;
+
+export const addClientModuleMethods = (Base: Constructor) => {
+  return class extends Base {
+    public drawerItem?: any[];
+
+    get drawerItems() {
+      return merge({}, ...this.drawerItem);
+    }
+
+    public getSkippedDrawerItems() {
+      const items = this.drawerItems;
+      return Object.keys(items).filter(itemName => {
+        return items[itemName].skip;
+      });
+    }
+  };
+};
+
+export default addBaseModuleMethods(addClientModuleMethods(ClientModule));

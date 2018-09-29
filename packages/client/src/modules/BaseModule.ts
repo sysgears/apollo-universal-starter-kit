@@ -20,9 +20,7 @@ export class BaseModule {
   }
 }
 
-type Constructor = new (...args: any[]) => BaseModule;
-
-export const addBaseModuleMethods = (Base: Constructor) => {
+export const addBaseModuleMethods = (Base: { new (...args: any[]): BaseModule }) => {
   return class extends Base {
     get localizations() {
       return this.localization;

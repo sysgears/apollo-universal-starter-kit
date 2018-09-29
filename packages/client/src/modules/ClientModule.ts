@@ -15,9 +15,8 @@ class ClientModule extends BaseModule {
     unfoldTo(this, modules);
   }
 }
-type Constructor = new (...args: any[]) => ClientModule;
 
-export const addClientModuleMethods = (Base: Constructor) => {
+export const addClientModuleMethods = (Base: { new (...args: any[]): ClientModule }) => {
   return class extends Base {
     get routes() {
       return this.route.map((component: any, idx: number) =>

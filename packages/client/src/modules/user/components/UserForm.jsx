@@ -7,15 +7,14 @@ import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, RenderSelect, RenderSwitch, FormView, primary } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
 import { email, minLength, required, match, validateForm } from '../../../../../common/validation';
-
 import settings from '../../../../../../settings';
 import translate from '../../../i18n';
 
 const userFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
-  password: [required, minLength(8)],
-  passwordConfirmation: [match('password'), required, minLength(8)]
+  password: [required, minLength(settings.user.auth.password.minLength)],
+  passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
 };
 
 const handleRoleChange = (type, value, setFieldValue) => {

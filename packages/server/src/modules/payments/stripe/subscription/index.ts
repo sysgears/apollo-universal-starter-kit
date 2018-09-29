@@ -4,7 +4,7 @@ import { json } from 'body-parser';
 import { Express } from 'express';
 import stripeLocal from 'stripe-local';
 
-import Feature from '../../../connector';
+import ServerModule from '../../../ServerModule';
 import settings from '../../../../../../../settings';
 import log from '../../../../../../common/log';
 
@@ -26,22 +26,26 @@ if (__DEV__ && enabled && secretKey) {
   stripeLocal({ secretKey, webhookUrl: `http://localhost:${__SERVER_PORT__}${webhookUrl}` });
 }
 
-export default new Feature(
-  enabled
-    ? {
-        schema,
-        createResolversFunc: createResolvers,
-        createContextFunc: async ({ context: { user } }: any) => ({
-          StripeSubscription,
-          stripeSubscription: user ? await StripeSubscription.getSubscription(user.id) : null
-        }),
-        beforeware: (app: Express) => {
-          app.use(webhookUrl, json());
-        },
-        middleware: (app: Express) => {
-          app.post(webhookUrl, webhookMiddleware);
-        },
-        localization: { ns: 'stripeSubscription', resources }
-      }
-    : {}
-);
+const createContext = async ({ context: { user } }: any) => ({
+  StripeSubscription,
+  stripeSubscription: user ? await StripeSubscription.getSubscription(user.id) : null
+});
+
+const beforeware = (app: Express) => {
+  app.use(webhookUrl, json());
+};
+
+const middleware = (app: Express) => {
+  app.post(webhookUrl, webhookMiddleware);
+};
+
+export default (enabled
+  ? new ServerModule({
+      schema: [schema],
+      createResolversFunc: [createResolvers],
+      createContextFunc: [createContext],
+      beforeware: [beforeware],
+      middleware: [middleware],
+      localization: [{ ns: 'stripeSubscription', resources }]
+    })
+  : undefined);

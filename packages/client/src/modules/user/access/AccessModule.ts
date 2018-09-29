@@ -11,13 +11,13 @@ export default class {
     this.logout = combine(arguments, arg => arg.logout);
   }
 
-  async doLogin(client) {
+  public async doLogin(client) {
     for (const login of this.login) {
       await login(client);
     }
   }
 
-  async doLogout(client) {
+  public async doLogout(client) {
     for (const logout of this.logout) {
       await logout(client);
     }

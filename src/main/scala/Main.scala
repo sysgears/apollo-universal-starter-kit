@@ -3,7 +3,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import com.google.inject.Guice
-import controllers.GraphQLController
+import controllers.graphql.GraphQLController
 import net.codingwell.scalaguice.InjectorExtensions._
 
 object Main extends App {

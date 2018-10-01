@@ -97,7 +97,7 @@
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-jsx-a11y": "6.0.3",
     "eslint-plugin-mocha": "^5.0.0",
-    "eslint-plugin-prettier": "^2.4.0",
+    "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.5.1",
     "file-loader": "^1.1.6",
     "fork-ts-checker-webpack-plugin": "^0.4.9",

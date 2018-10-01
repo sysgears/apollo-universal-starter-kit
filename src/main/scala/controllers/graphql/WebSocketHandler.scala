@@ -37,7 +37,7 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
                   import sangria.streaming.akkaStreams._
                   val ctx = graphQlContextFactory.createContextForRequest
                   graphQlExecutor.execute(queryAst, ctx, (), None)
-                    .viaMat(killSwitches.flow)(Keep.right)
+                    .viaMat(killSwitches.flow)(Keep.none)
                     .runForeach(result => queue.offer(TextMessage(result.compactPrint)))
                 case _ =>
                   queue.offer(TextMessage(s"Unsupported type: ${queryAst.operationType(None)}"))

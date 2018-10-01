@@ -4,9 +4,9 @@ import settings from '../../../../../../../../settings';
 import Renderer from '../../../../../testHelpers/Renderer';
 import { updateContent, waitForElementRender } from '../../../../../testHelpers/testUtils';
 
-const { enabled, publicKey } = settings.stripe.subscription;
+const { publicKey } = settings.stripe.subscription;
 
-if (enabled && !!publicKey) {
+if (!!publicKey) {
   const mocks = {
     Query: () => ({
       currentUser(): any {

@@ -54,9 +54,7 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
           </View>
           <View style={styles.cardWrapper}>
             {/* Credit card info (Stripe subscription module)*/}
-            {settings.stripe.subscription.enabled &&
-              settings.stripe.subscription.publicKey &&
-              currentUser.role === 'user' && <StripeSubscriptionProfile />}
+            {settings.stripe.subscription.publicKey && currentUser.role === 'user' && <StripeSubscriptionProfile />}
           </View>
           <TouchableOpacity
             style={styles.linkWrapper}

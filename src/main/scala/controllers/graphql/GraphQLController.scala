@@ -53,7 +53,7 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
       (path("schema") & get) {
         complete(SchemaRenderer.renderSchema(GraphQL.Schema))
       } ~
-      get {
+      (path("graphiql") & get) {
         getFromResource("web/graphiql.html")
       }
 }

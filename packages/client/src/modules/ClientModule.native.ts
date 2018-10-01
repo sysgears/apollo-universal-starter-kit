@@ -19,13 +19,6 @@ export const addClientModuleMethods = (Base: { new (...args: any[]): ClientModul
     get drawerItems() {
       return merge({}, ...this.drawerItem);
     }
-
-    public getSkippedDrawerItems() {
-      const items = this.drawerItems;
-      return Object.keys(items).filter(itemName => {
-        return items[itemName].skip;
-      });
-    }
   };
 };
 

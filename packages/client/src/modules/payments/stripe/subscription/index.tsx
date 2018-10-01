@@ -22,7 +22,7 @@ const NavLinkWithI18n = translate('stripeSubscription')(({ t }: { t: TranslateFu
 ));
 
 export default new Feature(
-  settings.stripe.subscription.publicKey
+  settings.stripe.subscription.enabled && settings.stripe.subscription.publicKey
     ? {
         route: [
           <AuthRoute exact role="user" path="/add-subscription" component={AddSubscription} />,

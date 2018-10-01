@@ -1,11 +1,11 @@
 require('babel-register')({ presets: ['env'] });
 require('dotenv/config');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const settings = require('../../../../../../../../settings').default;
 
-const { product, plan, secretKey } = settings.stripe.subscription;
-const stripe = require('stripe')(secretKey);
+const { product, plan, enabled } = settings.stripe.subscription;
 
-if (secretKey) {
+if (enabled && process.env.STRIPE_SECRET_KEY) {
   /**
    * Creates Stripe product if it haven't been already created or if parameters of product were changed
    *

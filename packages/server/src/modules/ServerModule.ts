@@ -1,7 +1,8 @@
 import { merge } from 'lodash';
-import { unfoldTo } from 'fractal-objects';
 
-class ServerModule {
+import Module from './Module';
+
+export default class ServerModule extends Module {
   // Localization
   public localization?: any[];
   // GraphQL API
@@ -14,12 +15,10 @@ class ServerModule {
   // Shared modules data
   public data?: any;
 
-  constructor(...modules: ServerModule[]) {
-    unfoldTo(this, modules);
+  constructor(...modules: Array<typeof ServerModule>) {
+    super(...modules);
   }
-}
 
-export default class extends ServerModule {
   public get schemas() {
     return this.schema;
   }

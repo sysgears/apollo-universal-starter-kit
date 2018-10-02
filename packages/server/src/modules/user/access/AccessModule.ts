@@ -1,25 +1,14 @@
-import { unfoldTo } from 'fractal-objects';
 import { merge } from 'lodash';
 
-class AccessModule {
+import ServerModule from '../../ServerModule';
+
+export default class AccessModule extends ServerModule {
   public grant: any[];
-  // GraphQL API
-  public schema?: any[];
-  public createResolversFunc?: any[];
-  public createContextFunc?: any[];
-  // Middleware
-  public beforeware?: any[];
-  public middleware?: any[];
 
-  public htmlHeadComponent?: any[];
-
-  // eslint-disable-next-line
-  constructor(...modules: AccessModule[]) {
-    unfoldTo(this, modules);
+  constructor(...modules: Array<typeof AccessModule>) {
+    super(...modules);
   }
-}
 
-export default class extends AccessModule {
   get grantAccess() {
     return async (user: any, req: any) => {
       let result = {};

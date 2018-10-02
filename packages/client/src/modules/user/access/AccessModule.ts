@@ -1,17 +1,13 @@
-import { unfoldTo } from 'fractal-objects';
+import BaseModule from '../../BaseModule';
 
-class AccessModule {
-  public link: any[];
-  public dataRootComponent: any[];
-  public login: any[];
-  public logout: any[];
+class AccessModule extends BaseModule {
+  public login: Array<(client: any) => void>;
+  public logout: Array<(client: any) => void>;
 
-  constructor(...modules: AccessModule[]) {
-    unfoldTo(this, modules);
+  constructor(...modules: Array<typeof AccessModule>) {
+    super(...modules);
   }
-}
 
-export default class extends AccessModule {
   public async doLogin(client: any) {
     for (const login of this.login) {
       await login(client);
@@ -24,3 +20,5 @@ export default class extends AccessModule {
     }
   }
 }
+
+export default AccessModule;

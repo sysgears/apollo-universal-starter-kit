@@ -1,25 +1,17 @@
-import { BaseModule, addBaseModuleMethods } from './BaseModule';
+import BaseModule from './BaseModule';
 
-import { unfoldTo } from 'fractal-objects';
 import { merge } from 'lodash';
 
 class ClientModule extends BaseModule {
   public drawerItem?: any[];
 
-  constructor(...modules: ClientModule[]) {
-    super();
-    unfoldTo(this, modules);
+  constructor(...modules: Array<typeof ClientModule>) {
+    super(...modules);
+  }
+
+  get drawerItems() {
+    return merge({}, ...this.drawerItem);
   }
 }
 
-export const addClientModuleMethods = (Base: { new (...args: any[]): ClientModule }) => {
-  return class extends Base {
-    public drawerItem?: any[];
-
-    get drawerItems() {
-      return merge({}, ...this.drawerItem);
-    }
-  };
-};
-
-export default addBaseModuleMethods(addClientModuleMethods(ClientModule));
+export default ClientModule;

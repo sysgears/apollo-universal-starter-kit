@@ -12,6 +12,6 @@ const logout = client => {
 };
 
 export default new AccessModule(jwt, session, {
-  login,
-  logout
+  login: [login],
+  logout: [logout]
 });

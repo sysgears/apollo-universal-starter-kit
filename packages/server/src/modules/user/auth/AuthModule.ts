@@ -1,15 +1,8 @@
-import { unfoldTo } from 'fractal-objects';
+import ServerModule from '../../ServerModule';
 
-class AuthModule {
-  // GraphQL API
-  public schema?: any[];
-  public createResolversFunc?: any[];
-  // Middleware
-  public middleware?: any[];
-
-  // eslint-disable-next-line
-  constructor(...modules: AuthModule[]) {
-    unfoldTo(this, modules);
+class AuthModule extends ServerModule {
+  constructor(...modules: Array<typeof AuthModule>) {
+    super(...modules);
   }
 }
 

@@ -7,6 +7,6 @@ const logout = client => client.mutate({ mutation: LOGOUT });
 
 export default (settings.user.auth.access.session.enabled
   ? new AccessModule({
-      logout
+      logout: [logout]
     })
   : undefined);

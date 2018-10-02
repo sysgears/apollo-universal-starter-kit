@@ -27,7 +27,7 @@ export const addClientModuleMethods = (Base: { new (...args: any[]): ClientModul
     get navItems() {
       return this.navItem.map((component: any, idx: number) =>
         React.cloneElement(component, {
-          key: component.key ? component.key : idx + this.navItem.length
+          key: component.key || idx + this.navItem.length
         })
       );
     }
@@ -35,7 +35,7 @@ export const addClientModuleMethods = (Base: { new (...args: any[]): ClientModul
     get navItemsRight() {
       return this.navItemRight.map((component: any, idx: number) =>
         React.cloneElement(component, {
-          key: component.key ? component.key : idx + this.navItem.length
+          key: component.key || idx + this.navItem.length
         })
       );
     }

@@ -1,11 +1,15 @@
-import BaseModule from './BaseModule';
+import BaseModule, { BaseModuleShape } from './BaseModule';
 
 import { merge } from 'lodash';
 
-class ClientModule extends BaseModule {
+export interface ClientModuleShape extends BaseModuleShape {
+  drawerItem?: any[];
+}
+
+export default class ClientModule extends BaseModule implements ClientModuleShape {
   public drawerItem?: any[];
 
-  constructor(...modules: Array<typeof ClientModule>) {
+  constructor(...modules: ClientModuleShape[]) {
     super(...modules);
   }
 
@@ -13,5 +17,3 @@ class ClientModule extends BaseModule {
     return merge({}, ...this.drawerItem);
   }
 }
-
-export default ClientModule;

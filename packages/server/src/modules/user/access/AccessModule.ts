@@ -1,11 +1,15 @@
 import { merge } from 'lodash';
 
-import ServerModule from '../../ServerModule';
+import ServerModule, { ServerModuleShape } from '../../ServerModule';
 
-export default class AccessModule extends ServerModule {
+interface AccessModuleShape extends ServerModuleShape {
+  grant: any[];
+}
+
+export default class AccessModule extends ServerModule implements AccessModuleShape {
   public grant: any[];
 
-  constructor(...modules: Array<typeof AccessModule>) {
+  constructor(...modules: AccessModuleShape[]) {
     super(...modules);
   }
 

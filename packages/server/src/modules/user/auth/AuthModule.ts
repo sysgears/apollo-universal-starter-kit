@@ -1,7 +1,10 @@
-import ServerModule from '../../ServerModule';
+import ServerModule, { ServerModuleShape } from '../../ServerModule';
 
-class AuthModule extends ServerModule {
-  constructor(...modules: Array<typeof AuthModule>) {
+// tslint:disable-next-line
+interface AuthModuleShape extends ServerModuleShape {}
+
+class AuthModule extends ServerModule implements AuthModuleShape {
+  constructor(...modules: AuthModuleShape[]) {
     super(...modules);
   }
 }

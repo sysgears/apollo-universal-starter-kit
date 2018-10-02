@@ -1,14 +1,22 @@
 import React from 'react';
-import BaseModule from './BaseModule';
+import BaseModule, { BaseModuleShape } from './BaseModule';
 
-class ClientModule extends BaseModule {
+export interface ClientModuleShape extends BaseModuleShape {
+  route?: any[];
+  navItem?: any[];
+  navItemRight?: any[];
+  stylesInsert?: any[];
+  scriptsInsert?: any[];
+}
+
+export default class ClientModule extends BaseModule implements ClientModuleShape {
   public route?: any[];
   public navItem?: any[];
   public navItemRight?: any[];
   public stylesInsert?: any[];
   public scriptsInsert?: any[];
 
-  constructor(...modules: Array<typeof ClientModule>) {
+  constructor(...modules: ClientModuleShape[]) {
     super(...modules);
   }
 
@@ -42,5 +50,3 @@ class ClientModule extends BaseModule {
     return this.scriptsInsert || [];
   }
 }
-
-export default ClientModule;

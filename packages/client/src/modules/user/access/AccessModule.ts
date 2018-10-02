@@ -1,10 +1,15 @@
-import BaseModule from '../../BaseModule';
+import BaseModule, { BaseModuleShape } from '../../BaseModule';
 
-class AccessModule extends BaseModule {
-  public login: Array<(client: any) => void>;
-  public logout: Array<(client: any) => void>;
+export interface AccessModuleShape extends BaseModuleShape {
+  login?: Array<(client: any) => void>;
+  logout?: Array<(client: any) => void>;
+}
 
-  constructor(...modules: Array<typeof AccessModule>) {
+export default class AccessModule extends BaseModule implements AccessModuleShape {
+  public login?: Array<(client: any) => void>;
+  public logout?: Array<(client: any) => void>;
+
+  constructor(...modules: AccessModuleShape[]) {
     super(...modules);
   }
 
@@ -20,5 +25,3 @@ class AccessModule extends BaseModule {
     }
   }
 }
-
-export default AccessModule;

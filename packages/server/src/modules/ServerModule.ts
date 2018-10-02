@@ -2,7 +2,21 @@ import { merge } from 'lodash';
 
 import Module from './Module';
 
-export default class ServerModule extends Module {
+export interface ServerModuleShape {
+  // Localization
+  localization?: any[];
+  // GraphQL API
+  schema?: any[];
+  createResolversFunc?: any[];
+  createContextFunc?: any[];
+  // Middleware
+  beforeware?: any[];
+  middleware?: any[];
+  // Shared modules data
+  data?: any;
+}
+
+export default class ServerModule extends Module implements ServerModuleShape {
   // Localization
   public localization?: any[];
   // GraphQL API
@@ -15,7 +29,7 @@ export default class ServerModule extends Module {
   // Shared modules data
   public data?: any;
 
-  constructor(...modules: Array<typeof ServerModule>) {
+  constructor(...modules: ServerModuleShape[]) {
     super(...modules);
   }
 

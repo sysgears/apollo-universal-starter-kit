@@ -4,7 +4,20 @@ import { merge } from 'lodash';
 
 import Module from './Module';
 
-class BaseModule extends Module {
+export interface BaseModuleShape {
+  localization?: any[];
+  link?: any[];
+  createNetLink?: () => any;
+  connectionParam?: any[];
+  reducer?: any[];
+  resolver?: any[];
+  routerFactory?: () => any;
+  rootComponentFactory?: any[];
+  dataRootComponent?: any[];
+  data?: any[];
+}
+
+export default class BaseModule extends Module implements BaseModuleShape {
   public localization?: any[];
   public link?: any[];
   public createNetLink?: () => any;
@@ -16,7 +29,7 @@ class BaseModule extends Module {
   public dataRootComponent?: any[];
   public data?: any[];
 
-  constructor(...modules: Array<typeof BaseModule>) {
+  constructor(...modules: BaseModuleShape[]) {
     super(...modules);
   }
 
@@ -56,5 +69,3 @@ class BaseModule extends Module {
     return nestedRoot;
   }
 }
-
-export default BaseModule;

@@ -184,7 +184,7 @@ DataRootComponent.propTypes = {
 
 export default (settings.user.auth.access.jwt.enabled
   ? new AccessModule({
-      dataRootComponent: withApollo(DataRootComponent),
+      dataRootComponent: [withApollo(DataRootComponent)],
       link: __CLIENT__ ? JWTLink : undefined,
       logout: removeTokens
     })

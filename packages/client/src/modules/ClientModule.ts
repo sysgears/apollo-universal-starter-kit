@@ -41,11 +41,11 @@ export const addClientModuleMethods = (Base: { new (...args: any[]): ClientModul
     }
 
     get stylesInserts() {
-      return this.stylesInsert;
+      return this.stylesInsert || [];
     }
 
     get scriptsInserts() {
-      return this.scriptsInsert;
+      return this.scriptsInsert || [];
     }
   };
 };

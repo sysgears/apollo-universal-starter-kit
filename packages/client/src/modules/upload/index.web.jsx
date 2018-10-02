@@ -24,5 +24,5 @@ export default new ClientModule({
     </MenuItem>
   ],
   localization: [{ ns: 'upload', resources }],
-  createNetLink: [createNetLink]
+  createNetLink
 });

@@ -35,5 +35,5 @@ export default new ClientModule({
     }
   ],
   localization: [{ ns: 'upload', resources }],
-  createNetLink: [createNetLink]
+  createNetLink
 });

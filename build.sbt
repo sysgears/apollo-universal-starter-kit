@@ -19,5 +19,8 @@ libraryDependencies ++= Seq(
 
   "org.sangria-graphql" %% "sangria" % "1.4.2",
   "org.sangria-graphql" %% "sangria-spray-json" % sangriaVersion,
-  "org.sangria-graphql" %% "sangria-akka-streams" % sangriaVersion
+  "org.sangria-graphql" %% "sangria-akka-streams" % sangriaVersion,
+  
+  "io.monix" %% "monix" % "2.3.3",
+  "org.sangria-graphql" %% "sangria-monix" % "1.0.0"
 )

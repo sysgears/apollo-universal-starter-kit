@@ -19,23 +19,23 @@ class ClientModule extends BaseModule {
 export const addClientModuleMethods = (Base: { new (...args: any[]): ClientModule }) => {
   return class extends Base {
     get routes() {
-      return this.route.map((component: any, idx: number) =>
-        React.cloneElement(component, { key: idx + this.route.length })
+      return this.route.map((component: any, idx: number, items: any) =>
+        React.cloneElement(component, { key: component.key || idx + items.length })
       );
     }
 
     get navItems() {
-      return this.navItem.map((component: any, idx: number) =>
+      return this.navItem.map((component: any, idx: number, items: any) =>
         React.cloneElement(component, {
-          key: component.key || idx + this.navItem.length
+          key: component.key || idx + items.length
         })
       );
     }
 
     get navItemsRight() {
-      return this.navItemRight.map((component: any, idx: number) =>
+      return this.navItemRight.map((component: any, idx: number, items: any) =>
         React.cloneElement(component, {
-          key: component.key || idx + this.navItem.length
+          key: component.key || idx + items.length
         })
       );
     }

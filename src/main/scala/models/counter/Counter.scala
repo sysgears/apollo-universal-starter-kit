@@ -26,8 +26,6 @@ object Counter {
 
   object GraphQL {
 
-    val source: ConcurrentSubject[Counter, Counter] = ConcurrentSubject.publish[Counter]
-
     val Queries: List[Field[GraphQLContext, Unit]] = List(
       Field(
         name = "serverCounter",
@@ -43,11 +41,7 @@ object Counter {
         arguments = Argument(name = "amount", argumentType = IntType) :: Nil,
         resolve = sc => {
           val amount = sc.args.arg[Int]("amount")
-          sc.ctx.counterResolver.addServerCounter(amount).map {
-            counter =>
-              source.onNext(counter)
-              counter
-          }
+          sc.ctx.counterResolver.addServerCounter(amount)
         }
       )
     )
@@ -59,5 +53,6 @@ object Counter {
         resolve = _ => source.map(Action(_))
       )
     )
+    val source: ConcurrentSubject[Counter, Counter] = ConcurrentSubject.publish[Counter]
   }
 }

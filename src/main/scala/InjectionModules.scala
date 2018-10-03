@@ -1,6 +1,6 @@
 import java.util
 
-import modules.{AkkaModule, ConfigModule, CounterModule, SangriaModule}
+import modules._
 import net.codingwell.scalaguice.ScalaModule
 
 object InjectionModules {
@@ -10,6 +10,7 @@ object InjectionModules {
       new AkkaModule,
       new CounterModule,
       new ConfigModule,
-      new SangriaModule
+      new SangriaModule,
+      new MonixModule
     )
 }

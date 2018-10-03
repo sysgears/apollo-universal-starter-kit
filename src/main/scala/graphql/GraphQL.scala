@@ -17,6 +17,12 @@ object GraphQL {
         name = "Mutation",
         fields = Counter.GraphQL.Mutations
       )
+    ),
+    subscription = Some(
+      ObjectType(
+        name = "Subscription",
+        fields = Counter.GraphQL.Subscriptions
+      )
     )
   )
 }

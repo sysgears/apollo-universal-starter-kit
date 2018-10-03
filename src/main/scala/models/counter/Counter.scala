@@ -1,12 +1,24 @@
 package models.counter
 
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
 import graphql.GraphQLContext
+import javax.inject.Inject
+import monix.execution.{Ack, Scheduler}
+import monix.reactive.subjects.ConcurrentSubject
 import sangria.macros.derive._
-import sangria.schema.{Argument, Field, IntType, ObjectType}
+import sangria.schema.{Action, Argument, Field, IntType, ObjectType}
 
 case class Counter(amount: Int)
 
 object Counter {
+
+  import sangria.streaming.monix._
+  import monix.reactive.Observable
+
+  @Inject implicit var actorSystem: ActorSystem = _
+  @Inject implicit var scheduler: Scheduler = _
+  @Inject implicit var materializer: ActorMaterializer = _
 
   object Types {
     implicit val Сounter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"))
@@ -18,7 +30,6 @@ object Counter {
       Field(
         name = "serverCounter",
         fieldType = Types.Сounter,
-        arguments = Nil,
         resolve = sc => sc.ctx.counterResolver.serverCounter
       )
     )
@@ -34,5 +45,14 @@ object Counter {
         }
       )
     )
+
+    val Subscriptions: List[Field[GraphQLContext, Unit]] = List(
+      Field.subs(
+        name = "counterUpdated",
+        fieldType = Types.Сounter,
+        resolve = _ => sourceCounter.map(Action(_))
+      )
+    )
+    val sourceCounter: ConcurrentSubject[Counter, Counter] = ConcurrentSubject.publish[Counter]
   }
 }

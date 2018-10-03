@@ -1,11 +1,14 @@
 package controllers.graphql
 
+import akka.NotUsed
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.ws.{Message, TextMessage, UpgradeToWebSocket}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy}
 import graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
+import monix.execution.{CancelableFuture, Scheduler}
+import monix.reactive.Observable
 import sangria.ast.OperationType.Subscription
 import sangria.execution.Executor
 import sangria.marshalling.sprayJson._
@@ -18,10 +21,14 @@ import scala.util.{Failure, Success}
 @Singleton
 class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
                                  graphQlExecutor: Executor[GraphQLContext, Unit])
-                                (implicit val executionContext: ExecutionContext,
-                                 implicit val actorMaterializer: ActorMaterializer) {
+                                (implicit val actorMaterializer: ActorMaterializer,
+                                 implicit val scheduler: Scheduler) {
 
   def handleQuery(upgradeToWebSocket: UpgradeToWebSocket): HttpResponse = {
+
+    import sangria.execution.ExecutionScheme.Stream
+    import sangria.streaming.monix._
+
     val (queue, publisher) = Source.queue[Message](0, OverflowStrategy.fail)
       .toMat(Sink.asPublisher(false))(Keep.both)
       .run()
@@ -33,12 +40,21 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
             case Success(queryAst) =>
               queryAst.operationType(None) match {
                 case Some(Subscription) =>
-                  import sangria.execution.ExecutionScheme.Stream
-                  import sangria.streaming.akkaStreams._
                   val ctx = graphQlContextFactory.createContextForRequest
-                  graphQlExecutor.execute(queryAst, ctx, (), None)
+
+                  val observable: Observable[JsValue] = graphQlExecutor
+                    .execute(
+                      queryAst = queryAst,
+                      userContext = ctx,
+                      root = ()
+                    )
+                  Source.fromPublisher(observable.toReactivePublisher)
                     .viaMat(killSwitches.flow)(Keep.none)
-                    .runForeach(result => queue.offer(TextMessage(result.compactPrint)))
+                    .runForeach {
+                      result => {
+                        queue.offer(TextMessage(result.compactPrint))
+                      }
+                    }
                 case _ =>
                   queue.offer(TextMessage(s"Unsupported type: ${queryAst.operationType(None)}"))
               }
@@ -60,11 +76,13 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
               queue.offer(TextMessage(s"Internal Server Error"))
           }
       }
-      .to(Sink.onComplete {
-        _ =>
-          killSwitches.shutdown()
-          queue.complete()
-      })
+      .to {
+        Sink.onComplete {
+          _ =>
+            killSwitches.shutdown
+            queue.complete
+        }
+      }
     upgradeToWebSocket.handleMessagesWithSinkSource(incoming, Source.fromPublisher(publisher))
   }
 }

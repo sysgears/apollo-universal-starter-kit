@@ -5,8 +5,7 @@ import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import graphql.GraphQLContext
 import javax.inject.Inject
-import monix.execution.{Ack, Scheduler}
-import monix.reactive.subjects.ConcurrentSubject
+import monix.execution.Scheduler
 import sangria.macros.derive._
 import sangria.schema.{Action, Argument, Field, IntType, ObjectType}
 
@@ -50,9 +49,13 @@ object Counter {
       Field.subs(
         name = "counterUpdated",
         fieldType = Types.Сounter,
-        resolve = _ => Source.fromPublisher(sourceCounter.map(Action(_)).toReactivePublisher)
+        resolve = sc => Source.fromPublisher(sc.ctx.publisherService.getPublisher).map {
+          e =>
+            println(s"Sending event [$e] to client ...")
+            Action(e)
+        }
       )
     )
-    val sourceCounter: ConcurrentSubject[Counter, Counter] = ConcurrentSubject.publish[Counter]
   }
+
 }

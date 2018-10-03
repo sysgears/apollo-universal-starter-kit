@@ -10,7 +10,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CounterResolver @Inject()(val counterService: CounterService)
                                (implicit executionContext: ExecutionContext) extends PublisherService {
 
-  def addServerCounter(amount: Int): Future[Counter] = withResultPublishing {
+  def addServerCounter(amount: Int): Future[Counter] = withPublishing {
     counterService.increment(amount).map(Counter(_))
   }
 

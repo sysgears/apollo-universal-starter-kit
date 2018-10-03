@@ -5,14 +5,14 @@ import models.counter.Counter
 import scala.concurrent.ExecutionContext
 
 import scala.concurrent.Future
-import models.counter.Counter.GraphQL.source
+import models.counter.Counter.GraphQL.sourceCounter
 
 trait PublisherService {
 
-  def withResultPublishing(f: => Future[Counter])(implicit executionContext: ExecutionContext): Future[Counter] = {
+  def withPublishing(f: => Future[Counter])(implicit executionContext: ExecutionContext): Future[Counter] = {
     f.map {
       counter =>
-        source.onNext(counter)
+        sourceCounter.onNext(counter)
         counter
     }
   }

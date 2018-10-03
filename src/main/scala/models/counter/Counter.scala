@@ -50,9 +50,9 @@ object Counter {
       Field.subs(
         name = "counterUpdated",
         fieldType = Types.Сounter,
-        resolve = _ => source.map(Action(_))
+        resolve = _ => sourceCounter.map(Action(_))
       )
     )
-    val source: ConcurrentSubject[Counter, Counter] = ConcurrentSubject.publish[Counter]
+    val sourceCounter: ConcurrentSubject[Counter, Counter] = ConcurrentSubject.publish[Counter]
   }
 }

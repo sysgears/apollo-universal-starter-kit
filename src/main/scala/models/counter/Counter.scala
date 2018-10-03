@@ -2,6 +2,7 @@ package models.counter
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
+import akka.stream.scaladsl.Source
 import graphql.GraphQLContext
 import javax.inject.Inject
 import monix.execution.{Ack, Scheduler}
@@ -13,8 +14,7 @@ case class Counter(amount: Int)
 
 object Counter {
 
-  import sangria.streaming.monix._
-  import monix.reactive.Observable
+  import sangria.streaming.akkaStreams._
 
   @Inject implicit var actorSystem: ActorSystem = _
   @Inject implicit var scheduler: Scheduler = _
@@ -50,7 +50,7 @@ object Counter {
       Field.subs(
         name = "counterUpdated",
         fieldType = Types.Сounter,
-        resolve = _ => sourceCounter.map(Action(_))
+        resolve = _ => Source.fromPublisher(sourceCounter.map(Action(_)).toReactivePublisher)
       )
     )
     val sourceCounter: ConcurrentSubject[Counter, Counter] = ConcurrentSubject.publish[Counter]

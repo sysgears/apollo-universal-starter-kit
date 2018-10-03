@@ -1,21 +1,19 @@
 package controllers.graphql
 
-import akka.NotUsed
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.ws.{Message, TextMessage, UpgradeToWebSocket}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy}
 import graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
-import monix.execution.{CancelableFuture, Scheduler}
-import monix.reactive.Observable
+import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
+import sangria.execution.ExecutionScheme.Stream
 import sangria.execution.Executor
 import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
 import spray.json._
 
-import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
 @Singleton
@@ -26,8 +24,7 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
 
   def handleQuery(upgradeToWebSocket: UpgradeToWebSocket): HttpResponse = {
 
-    import sangria.execution.ExecutionScheme.Stream
-    import sangria.streaming.monix._
+    import sangria.streaming.akkaStreams._
 
     val (queue, publisher) = Source.queue[Message](0, OverflowStrategy.fail)
       .toMat(Sink.asPublisher(false))(Keep.both)
@@ -42,13 +39,12 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
                 case Some(Subscription) =>
                   val ctx = graphQlContextFactory.createContextForRequest
 
-                  val observable: Observable[JsValue] = graphQlExecutor
+                  graphQlExecutor
                     .execute(
                       queryAst = queryAst,
                       userContext = ctx,
                       root = ()
                     )
-                  Source.fromPublisher(observable.toReactivePublisher)
                     .viaMat(killSwitches.flow)(Keep.none)
                     .runForeach {
                       result => {

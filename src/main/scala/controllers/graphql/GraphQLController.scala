@@ -30,11 +30,11 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
           entity(as[GraphQLMessage]) {
             graphQlMessage =>
               httpHandler.handleQuery(graphQlMessage)
-          }
-          entity(as[Seq[GraphQLMessage]]) {
-            graphQlMessages =>
-              httpHandler.handleBatchQuery(graphQlMessages)
-          }
+          } ~
+            entity(as[Seq[GraphQLMessage]]) {
+              graphQlMessages =>
+                httpHandler.handleBatchQuery(graphQlMessages)
+            }
         }
     } ~
       (path("schema") & get) {

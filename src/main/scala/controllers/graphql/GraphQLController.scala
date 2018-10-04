@@ -1,10 +1,8 @@
 package controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.scaladsl.model.ws.UpgradeToWebSocket
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.server.directives.HeaderDirectives.optionalHeaderValueByType
 import akka.stream.ActorMaterializer
 import controllers.graphql.jsonProtocols.GraphQLMessage
 import controllers.graphql.jsonProtocols.GraphQLMessageProtocol._
@@ -26,15 +24,7 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
   val Routes: Route =
     path("graphql") {
       get {
-        optionalHeaderValueByType[UpgradeToWebSocket](()) {
-          case Some(upgrade) =>
-            complete(webSocketHandler.handleMessages(upgrade))
-          case None =>
-            entity(as[GraphQLMessage]) {
-              graphQlMessage =>
-                httpHandler.handleQuery(graphQlMessage)
-            }
-        }
+        handleWebSocketMessagesForProtocol(webSocketHandler.handleMessages, "graphql-ws")
       } ~
         post {
           entity(as[GraphQLMessage]) {

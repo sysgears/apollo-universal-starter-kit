@@ -1,7 +1,7 @@
 package controllers.graphql
 
-import akka.http.scaladsl.model.HttpResponse
-import akka.http.scaladsl.model.ws.{Message, TextMessage, UpgradeToWebSocket}
+import akka.NotUsed
+import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
 import controllers.graphql.jsonProtocols.GraphQLMessageProtocol._
@@ -28,9 +28,7 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
 
   import spray.json.DefaultJsonProtocol._
 
-  private val graphqlWebsocketProtocol = Some("graphql-ws")
-
-  def handleMessages(upgradeToWebSocket: UpgradeToWebSocket): HttpResponse = {
+  def handleMessages: Flow[Message, Message, NotUsed] = {
     implicit val (queue, publisher) = Source.queue[Message](0, OverflowStrategy.fail)
       .toMat(Sink.asPublisher(false))(Keep.both)
       .run()
@@ -53,7 +51,7 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
             queue.complete
         }
       }
-    upgradeToWebSocket.handleMessagesWithSinkSource(incoming, Source.fromPublisher(publisher), graphqlWebsocketProtocol)
+    Flow.fromSinkAndSource(incoming, Source.fromPublisher(publisher))
   }
 
   private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)

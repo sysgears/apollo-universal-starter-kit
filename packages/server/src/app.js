@@ -10,7 +10,7 @@ import errorMiddleware from './middleware/error';
 
 const app = express();
 
-for (const applyBeforeware of modules.beforewares) {
+for (const applyBeforeware of modules.beforeware) {
   applyBeforeware(app);
 }
 
@@ -22,7 +22,7 @@ const corsOptions = {
   origin: true
 };
 
-for (const applyMiddleware of modules.middlewares) {
+for (const applyMiddleware of modules.middleware) {
   applyMiddleware(app);
 }
 

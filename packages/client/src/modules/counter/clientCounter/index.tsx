@@ -1,11 +1,11 @@
 import resolvers from './resolvers';
 import resources from './locales';
-import Feature from '../../connector';
+import ClientModule from '../../ClientModule';
 import ClientCounter from './containers/ClientCounter';
 
-export default new Feature({
-  resolver: resolvers,
-  localization: { ns: 'clientCounter', resources }
+export default new ClientModule({
+  resolver: [resolvers],
+  localization: [{ ns: 'clientCounter', resources }]
 });
 
 export { ClientCounter };

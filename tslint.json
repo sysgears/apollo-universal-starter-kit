@@ -44,6 +44,7 @@
     "no-any": false,
     "no-arg": true,
     "no-bitwise": true,
+    "no-empty-interface": false,
     "no-conditional-assignment": true,
     "no-consecutive-blank-lines": false,
     "no-console": [true, "log", "debug", "info", "time", "timeEnd", "trace"],

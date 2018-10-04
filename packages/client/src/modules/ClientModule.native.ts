@@ -6,9 +6,8 @@ export interface ClientModuleShape extends BaseModuleShape {
   drawerItem?: any[];
 }
 
-export default class ClientModule extends BaseModule implements ClientModuleShape {
-  public drawerItem?: any[];
-
+interface ClientModule extends ClientModuleShape {}
+class ClientModule extends BaseModule {
   constructor(...modules: ClientModuleShape[]) {
     super(...modules);
   }
@@ -17,3 +16,5 @@ export default class ClientModule extends BaseModule implements ClientModuleShap
     return merge({}, ...this.drawerItem);
   }
 }
+
+export default ClientModule;

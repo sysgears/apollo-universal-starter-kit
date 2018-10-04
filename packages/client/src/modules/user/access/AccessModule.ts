@@ -5,10 +5,9 @@ export interface AccessModuleShape extends BaseModuleShape {
   logout?: Array<(client: any) => void>;
 }
 
-export default class AccessModule extends BaseModule implements AccessModuleShape {
-  public login?: Array<(client: any) => void>;
-  public logout?: Array<(client: any) => void>;
+interface AccessModule extends AccessModuleShape {}
 
+class AccessModule extends BaseModule {
   constructor(...modules: AccessModuleShape[]) {
     super(...modules);
   }
@@ -25,3 +24,5 @@ export default class AccessModule extends BaseModule implements AccessModuleShap
     }
   }
 }
+
+export default AccessModule;

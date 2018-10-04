@@ -17,18 +17,8 @@ export interface BaseModuleShape {
   data?: any[];
 }
 
-export default class BaseModule extends Module implements BaseModuleShape {
-  public localization?: any[];
-  public link?: any[];
-  public createNetLink?: () => any;
-  public connectionParam?: any[];
-  public reducer?: any[];
-  public resolver?: any[];
-  public routerFactory?: () => any;
-  public rootComponentFactory?: any[];
-  public dataRootComponent?: any[];
-  public data?: any[];
-
+interface BaseModule extends BaseModuleShape {}
+class BaseModule extends Module {
   constructor(...modules: BaseModuleShape[]) {
     super(...modules);
   }
@@ -69,3 +59,5 @@ export default class BaseModule extends Module implements BaseModuleShape {
     return nestedRoot;
   }
 }
+
+export default BaseModule;

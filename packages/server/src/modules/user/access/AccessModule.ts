@@ -6,9 +6,8 @@ interface AccessModuleShape extends ServerModuleShape {
   grant: any[];
 }
 
-export default class AccessModule extends ServerModule implements AccessModuleShape {
-  public grant: any[];
-
+interface AccessModule extends AccessModuleShape {}
+class AccessModule extends ServerModule {
   constructor(...modules: AccessModuleShape[]) {
     super(...modules);
   }
@@ -23,3 +22,5 @@ export default class AccessModule extends ServerModule implements AccessModuleSh
     };
   }
 }
+
+export default AccessModule;

@@ -9,13 +9,8 @@ export interface ClientModuleShape extends BaseModuleShape {
   scriptsInsert?: any[];
 }
 
-export default class ClientModule extends BaseModule implements ClientModuleShape {
-  public route?: any[];
-  public navItem?: any[];
-  public navItemRight?: any[];
-  public stylesInsert?: any[];
-  public scriptsInsert?: any[];
-
+interface ClientModule extends ClientModuleShape {}
+class ClientModule extends BaseModule {
   constructor(...modules: ClientModuleShape[]) {
     super(...modules);
   }
@@ -50,3 +45,5 @@ export default class ClientModule extends BaseModule implements ClientModuleShap
     return this.scriptsInsert || [];
   }
 }
+
+export default ClientModule;

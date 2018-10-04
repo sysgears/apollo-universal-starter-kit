@@ -16,19 +16,8 @@ export interface ServerModuleShape {
   data?: any;
 }
 
-export default class ServerModule extends Module implements ServerModuleShape {
-  // Localization
-  public localization?: any[];
-  // GraphQL API
-  public schema?: any[];
-  public createResolversFunc?: any[];
-  public createContextFunc?: any[];
-  // Middleware
-  public beforeware?: any[];
-  public middleware?: any[];
-  // Shared modules data
-  public data?: any;
-
+interface ServerModule extends ServerModuleShape {}
+class ServerModule extends Module {
   constructor(...modules: ServerModuleShape[]) {
     super(...modules);
   }
@@ -49,3 +38,5 @@ export default class ServerModule extends Module implements ServerModuleShape {
     return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
   }
 }
+
+export default ServerModule;

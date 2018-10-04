@@ -37,7 +37,8 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
       } ~
         post {
           entity(as[JsValue]) { requestJson =>
-            val JsObject(fields) = requestJson
+            val JsArray(array) = requestJson
+            val JsObject(fields) = array(0)
             val JsString(query) = fields("query")
             val operation = fields.get("operationName") collect {
               case JsString(op) => op

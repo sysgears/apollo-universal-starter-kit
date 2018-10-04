@@ -2,7 +2,6 @@ package services.publisher.actor
 
 import actors.counter.CounterEventActor
 import actors.counter.CounterEventActor.Subscribe
-import akka.NotUsed
 import akka.actor.{ActorSystem, PoisonPill}
 import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.stream.{ActorMaterializer, OverflowStrategy}
@@ -27,13 +26,7 @@ class CounterActorPublisherServiceImpl @Inject()(implicit val actorSystem: Actor
     val (queue, publisher) = Source.queue[Counter](16, OverflowStrategy.fail)
       .toMat(Sink.asPublisher(false))(Keep.both)
       .run()
-
-    Source.actorRef[Counter](16, OverflowStrategy.fail).mapMaterializedValue {
-      _ =>
-        counterEventPublisher ! Subscribe(queue)
-        NotUsed
-    }.runWith(Sink.ignore)
-
+    counterEventPublisher ! Subscribe(queue)
     queue.watchCompletion.onComplete {
       case Success(_) =>
         println(s"Stream closed successfully.")//TODO connect logging

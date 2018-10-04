@@ -21,20 +21,20 @@ class CounterActorPublisherServiceImpl @Inject()(implicit val actorSystem: Actor
   override def publish(event: Counter) = actorSystem.eventStream.publish(event)
 
   override def getPublisher: Publisher[Counter] = {
-    val counterEventPublisher = actorSystem.actorOf(CounterEventActor.props)
+    val counterEventActor = actorSystem.actorOf(CounterEventActor.props)
 
     val (queue, publisher) = Source.queue[Counter](16, OverflowStrategy.fail)
       .toMat(Sink.asPublisher(false))(Keep.both)
       .run()
-    counterEventPublisher ! Subscribe(queue)
+    counterEventActor ! Subscribe(queue)
     queue.watchCompletion.onComplete {
       case Success(_) =>
-        println(s"Stream closed successfully.")//TODO connect logging
-        counterEventPublisher ! PoisonPill
+        println(s"Queue [$queue] closed successfully")//TODO connect logging
+        counterEventActor ! PoisonPill
 
       case Failure(exception) =>
-        println(s"Stream closed with fail. Reason: $exception.")
-        counterEventPublisher ! PoisonPill
+        println(s"Queue [$queue] closed with fail. Reason: [${exception.getMessage}]")
+        counterEventActor ! PoisonPill
     }
     publisher
   }

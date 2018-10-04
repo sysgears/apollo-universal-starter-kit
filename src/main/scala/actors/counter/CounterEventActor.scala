@@ -12,7 +12,7 @@ object CounterEventActor {
 
   case class Subscribe(queue: SourceQueue[Counter])
 
-  def props[T](implicit actorSystem: ActorSystem, executionContext: ExecutionContext): Props = {
+  def props(implicit actorSystem: ActorSystem, executionContext: ExecutionContext): Props = {
     Props(new CounterEventActor(actorSystem))
   }
 }
@@ -28,22 +28,22 @@ class CounterEventActor(actorSystem: ActorSystem)
 
     case Subscribe(queue) =>
       actorSystem.eventStream.subscribe(self, classOf[Counter])
-      log.info(s"Created actor [$self] for a newly subscribed client.")
+      log.info(s"Actor [$self] has been created for a newly subscribed client")
       context.become(subscribed(queue))
   }
 
   def subscribed(queue: SourceQueue[Counter]): Receive = {
     case e: Counter =>
-      log.info(s"Pushing element [element: $e] into queue $queue")
+      log.info(s"Pushing element [$e] into queue [$queue]...")
       queue.offer(e).map {
-        case Enqueued => log.info(s"Enqueued $e")
-        case Dropped => log.info(s"Dropped $e")
-        case Failure(ex) => log.info(s"Offer failed ${ex.getMessage}")
-        case QueueClosed => log.info("Source Queue closed")
+        case Enqueued => log.info(s"Enqueued [$e]")
+        case Dropped => log.info(s"Dropped [$e]")
+        case Failure(ex) => log.info(s"Offer failed [${ex.getMessage}]")
+        case QueueClosed => log.info(s"Queue [$queue] closed")
       }
   }
 
   override def postStop() {
-    log.info(s"Actor [$self] was stopped")
+    log.info(s"Actor [$self] has been stopped")
   }
 }

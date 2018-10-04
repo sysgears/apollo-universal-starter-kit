@@ -8,6 +8,7 @@ import akka.http.scaladsl.model.sse.ServerSentEvent
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.StandardRoute
 import akka.stream.ActorMaterializer
+import controllers.graphql.jsonProtocols.GraphQLMessage
 import graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
@@ -27,50 +28,46 @@ class HttpHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
                            (implicit val scheduler: Scheduler,
                             implicit val actorMaterializer: ActorMaterializer) {
 
-  def handleQuery(query: String, operation: Option[String], variables: JsObject = JsObject.empty): StandardRoute = {
-    QueryParser.parse(query) match {
+  def handleQuery(graphQlMessage: GraphQLMessage): StandardRoute = {
+    QueryParser.parse(graphQlMessage.query) match {
       case Success(queryAst) =>
         val ctx = graphQlContextFactory.createContextForRequest
-        queryAst.operationType(operation) match {
+        queryAst.operationType(graphQlMessage.operationName) match {
           case Some(Subscription) =>
-
             import sangria.streaming.akkaStreams._
-
             complete {
-              graphQlExecutor.prepare(queryAst, ctx, (), operation, variables)
-                .map {
-                  preparedQuery =>
-                    val akkaSource = graphQlExecutor
-                      .execute(
-                        queryAst = queryAst,
-                        userContext = ctx,
-                        root = (),
-                        operationName = operation,
-                        variables = variables
-                      )
-
-                    ToResponseMarshallable(
-                      akkaSource
-                        .map(r => ServerSentEvent(r.compactPrint))
-                        .recover {
-                          case NonFatal(error) =>
-                            ServerSentEvent(error.getMessage)
-                        }
-                    )
-                }
-                .recover {
-                  case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
-                  case error: ErrorWithResolver => ToResponseMarshallable(InternalServerError -> error.resolveError)
-                }
+              graphQlExecutor.prepare(
+                queryAst = queryAst,
+                userContext = ctx,
+                root = (),
+                operationName = graphQlMessage.operationName,
+                variables = graphQlMessage.variables.getOrElse(JsObject.empty)
+              ).map {
+                preparedQuery =>
+                  ToResponseMarshallable(preparedQuery.execute()
+                    .map(r => ServerSentEvent(r.compactPrint))
+                    .recover {
+                      case NonFatal(error) =>
+                        ServerSentEvent(error.getMessage)
+                    }
+                  )
+              }.recover {
+                case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
+                case error: ErrorWithResolver => ToResponseMarshallable(InternalServerError -> error.resolveError)
+              }
             }
           case _ =>
             complete(
-              graphQlExecutor.execute(queryAst, ctx, (), operation, variables)
-                .map(OK -> _)
-                .recover {
-                  case error: QueryAnalysisError => BadRequest -> error.resolveError
-                  case error: ErrorWithResolver => InternalServerError -> error.resolveError
-                }
+              graphQlExecutor.execute(
+                queryAst = queryAst,
+                userContext = ctx,
+                root = (),
+                operationName = graphQlMessage.operationName,
+                variables = graphQlMessage.variables.getOrElse(JsObject.empty)
+              ).map(OK -> _).recover {
+                case error: QueryAnalysisError => BadRequest -> error.resolveError
+                case error: ErrorWithResolver => InternalServerError -> error.resolveError
+              }
             )
         }
       case Failure(e: SyntaxError) =>
@@ -89,4 +86,6 @@ class HttpHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
       case Failure(_) => complete(InternalServerError)
     }
   }
+
+  def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage]): StandardRoute = ???
 }

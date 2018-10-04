@@ -27,7 +27,7 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
       get {
         optionalHeaderValueByType[UpgradeToWebSocket](()) {
           case Some(upgrade) =>
-            complete(webSocketHandler.handleQuery(upgrade))
+            complete(webSocketHandler.handleMessages(upgrade))
           case None =>
             parameters('query, 'operation.?) {
               (query, operation) =>

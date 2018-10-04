@@ -27,7 +27,7 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
 
   private val graphqlWebsocketProtocol = Some("graphql-ws")
 
-  def handleQuery(upgradeToWebSocket: UpgradeToWebSocket): HttpResponse = {
+  def handleMessages(upgradeToWebSocket: UpgradeToWebSocket): HttpResponse = {
     implicit val (queue, publisher) = Source.queue[Message](0, OverflowStrategy.fail)
       .toMat(Sink.asPublisher(false))(Keep.both)
       .run()

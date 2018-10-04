@@ -26,6 +26,8 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
                                 (implicit val actorMaterializer: ActorMaterializer,
                                  implicit val scheduler: Scheduler) {
 
+  import spray.json.DefaultJsonProtocol._
+
   private val graphqlWebsocketProtocol = Some("graphql-ws")
 
   def handleMessages(upgradeToWebSocket: UpgradeToWebSocket): HttpResponse = {
@@ -56,15 +58,13 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
 
   private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)
                                 (implicit queue: SourceQueueWithComplete[Message]): Unit = {
-
     import sangria.streaming.akkaStreams._
-
     operationMessage.payload.foreach {
       payload =>
         val graphQlMessage = payload.convertTo[GraphQLMessage]
         QueryParser.parse(graphQlMessage.query) match {
           case Success(queryAst) =>
-            queryAst.operationType(operation) match {
+            queryAst.operationType(graphQlMessage.operationName) match {
               case Some(Subscription) =>
                 val ctx = graphQlContextFactory.createContextForRequest
                 graphQlExecutor.execute(

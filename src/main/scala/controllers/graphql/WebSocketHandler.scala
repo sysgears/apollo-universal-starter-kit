@@ -4,9 +4,10 @@ import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.ws.{Message, TextMessage, UpgradeToWebSocket}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
-import controllers.graphql.jsonProtocols.OperationMessage
+import controllers.graphql.jsonProtocols.GraphQLMessageProtocol._
 import controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
 import controllers.graphql.jsonProtocols.OperationMessageType._
+import controllers.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
 import graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
@@ -60,27 +61,18 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
 
     operationMessage.payload.foreach {
       payload =>
-        val JsObject(fields) = payload
-        val JsString(query) = fields("query")
-        val operation = fields.get("operationName") collect {
-          case JsString(op) => op
-        }
-        val vars = fields.get("variables") match {
-          case Some(obj: JsObject) => obj
-          case _ => JsObject.empty
-        }
-        QueryParser.parse(query) match {
+        val graphQlMessage = payload.convertTo[GraphQLMessage]
+        QueryParser.parse(graphQlMessage.query) match {
           case Success(queryAst) =>
             queryAst.operationType(operation) match {
               case Some(Subscription) =>
                 val ctx = graphQlContextFactory.createContextForRequest
-
                 graphQlExecutor.execute(
                   queryAst = queryAst,
                   userContext = ctx,
                   root = (),
-                  operationName = operation,
-                  variables = vars
+                  operationName = graphQlMessage.operationName,
+                  variables = graphQlMessage.variables.getOrElse(JsObject.empty)
                 ).viaMat(killSwitches.flow)(Keep.none)
                   .runForeach {
                     result =>

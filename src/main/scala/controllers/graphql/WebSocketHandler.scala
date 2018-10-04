@@ -4,9 +4,9 @@ import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.ws.{Message, TextMessage, UpgradeToWebSocket}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
-import controllers.graphql.websocket.OperationMessage
-import controllers.graphql.websocket.OperationMessageJsonProtocol._
-import controllers.graphql.websocket.OperationMessageType._
+import controllers.graphql.jsonProtocols.OperationMessage
+import controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
+import controllers.graphql.jsonProtocols.OperationMessageType._
 import graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler

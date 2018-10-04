@@ -2,17 +2,17 @@ package controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.marshalling.ToResponseMarshallable
+import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.sse.ServerSentEvent
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.StandardRoute
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.Source
 import graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
-import monix.reactive.Observable
 import sangria.ast.OperationType.Subscription
+import sangria.execution.ExecutionScheme.Stream
 import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
 import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
@@ -33,27 +33,24 @@ class HttpHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
         val ctx = graphQlContextFactory.createContextForRequest
         queryAst.operationType(operation) match {
           case Some(Subscription) =>
-            import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling._
-            import sangria.execution.ExecutionScheme.Stream
-            import sangria.streaming.monix._
+
+            import sangria.streaming.akkaStreams._
 
             complete {
               graphQlExecutor.prepare(queryAst, ctx, (), operation, variables)
                 .map {
                   preparedQuery =>
-                    val observable: Observable[JsValue] =
-                      graphQlExecutor
-                        .execute(
-                          queryAst = queryAst,
-                          userContext = ctx,
-                          root = (),
-                          operationName = operation,
-                          variables = variables
-                        )
+                    val akkaSource = graphQlExecutor
+                      .execute(
+                        queryAst = queryAst,
+                        userContext = ctx,
+                        root = (),
+                        operationName = operation,
+                        variables = variables
+                      )
 
                     ToResponseMarshallable(
-                      Source
-                        .fromPublisher(observable.toReactivePublisher)
+                      akkaSource
                         .map(r => ServerSentEvent(r.compactPrint))
                         .recover {
                           case NonFatal(error) =>

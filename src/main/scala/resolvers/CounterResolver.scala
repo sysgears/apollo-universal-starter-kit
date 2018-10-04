@@ -3,14 +3,16 @@ package resolvers
 import javax.inject.Inject
 import models.counter.Counter
 import services.counter.CounterService
-import util.PublisherService
+import services.publisher.PublisherService
+import util.PublisherHelper
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CounterResolver @Inject()(val counterService: CounterService)
-                               (implicit executionContext: ExecutionContext) extends PublisherService {
+class CounterResolver @Inject()(val counterService: CounterService,
+                                publisherService: PublisherService[Counter])
+                               (implicit executionContext: ExecutionContext) extends PublisherHelper[Counter] {
 
-  def addServerCounter(amount: Int): Future[Counter] = withPublishing {
+  def addServerCounter(amount: Int): Future[Counter] = withPublishing(publisherService) {
     counterService.increment(amount).map(Counter(_))
   }
 

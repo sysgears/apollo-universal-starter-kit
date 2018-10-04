@@ -10,8 +10,8 @@ import controllers.graphql.websocket.OperationMessageType._
 import graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
-import monix.reactive.Observable
 import sangria.ast.OperationType.Subscription
+import sangria.execution.ExecutionScheme.Stream
 import sangria.execution.Executor
 import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
@@ -55,8 +55,9 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
 
   private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)
                                 (implicit queue: SourceQueueWithComplete[Message]): Unit = {
-    import sangria.execution.ExecutionScheme.Stream
-    import sangria.streaming.monix._
+
+    import sangria.streaming.akkaStreams._
+
     operationMessage.payload.foreach {
       payload =>
         val JsObject(fields) = payload
@@ -73,15 +74,14 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
             queryAst.operationType(operation) match {
               case Some(Subscription) =>
                 val ctx = graphQlContextFactory.createContextForRequest
-                val observable: Observable[JsValue] = graphQlExecutor.execute(
+
+                graphQlExecutor.execute(
                   queryAst = queryAst,
                   userContext = ctx,
                   root = (),
                   operationName = operation,
                   variables = vars
-                )
-                Source.fromPublisher(observable.toReactivePublisher)
-                  .viaMat(killSwitches.flow)(Keep.none)
+                ).viaMat(killSwitches.flow)(Keep.none)
                   .runForeach {
                     result =>
                       reply(OperationMessage(GQL_DATA, operationMessage.id, Some(result)))

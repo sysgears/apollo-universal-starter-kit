@@ -11,6 +11,7 @@ object InjectionModules {
       new CounterModule,
       new ConfigModule,
       new SangriaModule,
-      new MonixModule
+      new MonixModule,
+      new PublisherModule
     )
 }

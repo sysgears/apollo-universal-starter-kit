@@ -1,9 +1,9 @@
 import ServerCounter from './containers/ServerCounter';
 import resources from './locales';
-import Feature from '../../connector';
+import ClientModule from '../../ClientModule';
 
-export default new Feature({
-  localization: { ns: 'serverCounter', resources }
+export default new ClientModule({
+  localization: [{ ns: 'serverCounter', resources }]
 });
 
 export { ServerCounter };

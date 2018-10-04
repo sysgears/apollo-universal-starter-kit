@@ -18,7 +18,7 @@ import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
 import modules from '..';
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -141,100 +141,102 @@ const HeaderTitleWithI18n = translate('user')(HeaderTitle);
 
 export * from './containers/Auth';
 
-export default new Feature(access, {
-  drawerItem: {
-    Profile: {
-      screen: createStackNavigator({
-        Profile: {
-          screen: Profile,
-          navigationOptions: ({ navigation }) => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
-            headerLeft: (
-              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-            )
-          })
+export default new ClientModule(access, {
+  drawerItem: [
+    {
+      Profile: {
+        screen: createStackNavigator({
+          Profile: {
+            screen: Profile,
+            navigationOptions: ({ navigation }) => ({
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
+              headerLeft: (
+                <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+              )
+            })
+          },
+          ProfileEdit: {
+            screen: ProfilerEditScreen,
+            navigationOptions: () => ({
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editProfile" style="subTitle" />
+            })
+          }
+        }),
+        userInfo: {
+          showOnLogin: true,
+          role: ['user', 'admin']
         },
-        ProfileEdit: {
-          screen: ProfilerEditScreen,
-          navigationOptions: () => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editProfile" style="subTitle" />
-          })
+        navigationOptions: {
+          drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.profile" />
         }
-      }),
-      userInfo: {
-        showOnLogin: true,
-        role: ['user', 'admin']
       },
-      navigationOptions: {
-        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.profile" />
-      }
-    },
-    Login: {
-      screen: AuthScreen,
-      userInfo: {
-        showOnLogin: false
-      },
-      navigationOptions: {
-        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.sign" />
-      }
-    },
-    Users: {
-      screen: createStackNavigator({
-        Users: {
-          screen: UsersListScreen,
-          navigationOptions: ({ navigation }) => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.users" style="subTitle" />,
-            headerLeft: (
-              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-            ),
-            headerRight: (
-              <IconButton
-                iconName="filter"
-                iconSize={32}
-                iconColor="#0275d8"
-                onPress={() => {
-                  const isOpenFilter = navigation.getParam('isOpenFilter');
-                  navigation.setParams({ isOpenFilter: !isOpenFilter });
-                }}
-              />
-            )
-          })
+      Login: {
+        screen: AuthScreen,
+        userInfo: {
+          showOnLogin: false
         },
-        UserEdit: {
-          screen: UserEditScreen,
-          navigationOptions: () => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
-          })
-        },
-        UserAdd: {
-          screen: UserAddScreen,
-          navigationOptions: () => ({
-            headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
-          })
+        navigationOptions: {
+          drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.sign" />
         }
-      }),
-      userInfo: {
-        showOnLogin: true,
-        role: 'admin'
       },
-      navigationOptions: {
-        drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.users" />
-      }
-    },
-    Logout: {
-      screen: () => null,
-      userInfo: {
-        showOnLogin: true
+      Users: {
+        screen: createStackNavigator({
+          Users: {
+            screen: UsersListScreen,
+            navigationOptions: ({ navigation }) => ({
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.users" style="subTitle" />,
+              headerLeft: (
+                <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+              ),
+              headerRight: (
+                <IconButton
+                  iconName="filter"
+                  iconSize={32}
+                  iconColor="#0275d8"
+                  onPress={() => {
+                    const isOpenFilter = navigation.getParam('isOpenFilter');
+                    navigation.setParams({ isOpenFilter: !isOpenFilter });
+                  }}
+                />
+              )
+            })
+          },
+          UserEdit: {
+            screen: UserEditScreen,
+            navigationOptions: () => ({
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
+            })
+          },
+          UserAdd: {
+            screen: UserAddScreen,
+            navigationOptions: () => ({
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
+            })
+          }
+        }),
+        userInfo: {
+          showOnLogin: true,
+          role: 'admin'
+        },
+        navigationOptions: {
+          drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.users" />
+        }
       },
-      navigationOptions: ({ navigation }) => {
-        return {
-          drawerLabel: <Logout navigation={navigation} />
-        };
+      Logout: {
+        screen: () => null,
+        userInfo: {
+          showOnLogin: true
+        },
+        navigationOptions: ({ navigation }) => {
+          return {
+            drawerLabel: <Logout navigation={navigation} />
+          };
+        }
       }
     }
-  },
-  resolver: resolvers,
-  localization: { ns: 'user', resources },
+  ],
+  resolver: [resolvers],
+  localization: [{ ns: 'user', resources }],
   routerFactory: () => {
     return UserScreenNavigator(modules.drawerItems);
   }

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { LayoutCenter } from '../../../common/components';
 import { getItem, setItem, removeItem } from '../../../common/clientStorage';
-import Feature from '../connector';
+import AccessModule from '../AccessModule';
 import settings from '../../../../../../../settings';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
@@ -182,12 +182,10 @@ DataRootComponent.propTypes = {
   children: PropTypes.node
 };
 
-export default new Feature(
-  settings.user.auth.access.jwt.enabled
-    ? {
-        dataRootComponent: withApollo(DataRootComponent),
-        link: __CLIENT__ ? JWTLink : undefined,
-        logout: removeTokens
-      }
-    : {}
-);
+export default (settings.user.auth.access.jwt.enabled
+  ? new AccessModule({
+      dataRootComponent: [withApollo(DataRootComponent)],
+      link: __CLIENT__ ? JWTLink : undefined,
+      logout: [removeTokens]
+    })
+  : undefined);

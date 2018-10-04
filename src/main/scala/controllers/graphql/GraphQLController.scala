@@ -27,7 +27,7 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
       get {
         optionalHeaderValueByType[UpgradeToWebSocket](()) {
           case Some(upgrade) =>
-            complete(webSocketHandler.handleQuery(upgrade))
+            complete(webSocketHandler.handleMessages(upgrade))
           case None =>
             parameters('query, 'operation.?) {
               (query, operation) =>
@@ -37,7 +37,8 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
       } ~
         post {
           entity(as[JsValue]) { requestJson =>
-            val JsObject(fields) = requestJson
+            val JsArray(array) = requestJson
+            val JsObject(fields) = array(0)
             val JsString(query) = fields("query")
             val operation = fields.get("operationName") collect {
               case JsString(op) => op

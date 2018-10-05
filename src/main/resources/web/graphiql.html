@@ -77,11 +77,14 @@
       if (parameters.variables) {
         try {
           parameters.variables =
-            JSON.stringify(JSON.parse(parameters.variables), null, 2);
+            JSON.stringify(JSON.parse(parameters.variables));
         } catch (e) {
           // Do nothing, we want to display the invalid JSON as a string, rather
           // than present an error.
         }
+      }
+      else {
+          parameters.variables = null
       }
 
       // When the query and variables string is edited, update the URL bar so

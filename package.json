@@ -95,7 +95,7 @@
     "eslint-import-resolver-webpack": "^0.9.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-json": "^1.2.0",
-    "eslint-plugin-jsx-a11y": "6.0.3",
+    "eslint-plugin-jsx-a11y": "6.1.2",
     "eslint-plugin-mocha": "^5.0.0",
     "eslint-plugin-prettier": "^2.4.0",
     "eslint-plugin-react": "^7.5.1",

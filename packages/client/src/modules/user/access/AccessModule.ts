@@ -1,13 +1,13 @@
-import BaseModule, { BaseModuleShape } from '../../BaseModule';
+import ClientModule, { ClientModuleShape } from '../../ClientModule';
 
-export interface AccessModuleShape extends BaseModuleShape {
+export interface AccessModuleShape extends ClientModuleShape {
   login?: Array<(client: any) => void>;
   logout?: Array<(client: any) => void>;
 }
 
 interface AccessModule extends AccessModuleShape {}
 
-class AccessModule extends BaseModule {
+class AccessModule extends ClientModule {
   constructor(...modules: AccessModuleShape[]) {
     super(...modules);
   }

@@ -1,9 +1,10 @@
-package controllers.graphql
+package controllers.graphql.counter
 
 import akka.http.scaladsl.model.{HttpEntity, MediaTypes, StatusCodes}
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.util.ByteString
+import controllers.graphql.GraphQLController
 import models.counter.Counter
 import org.scalatest.{Matchers, WordSpec}
 import spray.json._

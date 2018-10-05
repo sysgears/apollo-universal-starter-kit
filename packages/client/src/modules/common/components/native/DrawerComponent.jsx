@@ -13,7 +13,9 @@ const styles = StyleSheet.create({
 });
 
 const DrawerComponent = props => {
-  const skippedItems = Object.keys(modules.drawerItems).filter((name, _, items) => items[name].skip);
+  const skippedItems = Object.keys(modules.drawerItems).filter(
+    name => !!modules.drawerItems[name].skip
+  );
   return (
     <ScrollView style={styles.container}>
       <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>

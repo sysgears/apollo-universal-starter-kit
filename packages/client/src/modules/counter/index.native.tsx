@@ -4,15 +4,13 @@ import { createStackNavigator } from 'react-navigation';
 import translate from '../../i18n';
 import { HeaderTitle, IconButton } from '../common/components/native';
 import Counter from './containers/Counter';
-import clientCounter from './clientCounter';
-import reduxCounter from './reduxCounter';
-import serverCounter from './serverCounter';
+import counters from './counters';
 import resources from './locales';
 import ClientModule from '../ClientModule.native';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 
-export default new ClientModule(clientCounter, reduxCounter, serverCounter, {
+export default new ClientModule(counters, {
   drawerItem: [
     {
       Counter: {

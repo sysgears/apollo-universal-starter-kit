@@ -2,9 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import translate, { TranslateFunction } from '../../../i18n';
-import { ClientCounter } from '../clientCounter';
-import { ReduxCounter } from '../reduxCounter';
-import { ServerCounter } from '../serverCounter';
+import counters from '../counters';
 
 interface CounterProps {
   t: TranslateFunction;
@@ -12,9 +10,9 @@ interface CounterProps {
 
 const Counter = ({ t }: CounterProps) => (
   <View style={styles.container}>
-    <ServerCounter />
-    <ReduxCounter />
-    <ClientCounter />
+    {counters.counterComponent.map((component: any, idx: number, items: any) =>
+      React.cloneElement(component, { key: idx + items.length })
+    )}
   </View>
 );
 

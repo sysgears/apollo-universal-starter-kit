@@ -4,9 +4,7 @@ import Helmet from 'react-helmet';
 import { PageLayout } from '../../common/components/web';
 import settings from '../../../../../../settings';
 import translate, { TranslateFunction } from '../../../i18n';
-import { ClientCounter } from '../clientCounter';
-import { ServerCounter } from '../serverCounter';
-import { ReduxCounter } from '../reduxCounter';
+import counters from '../counters';
 
 interface CounterProps {
   t: TranslateFunction;
@@ -23,9 +21,9 @@ const Counter = ({ t }: CounterProps) => (
         }
       ]}
     />
-    <ServerCounter />
-    <ReduxCounter />
-    <ClientCounter />
+    {counters.counterComponent.map((component: any, idx: number, items: any) =>
+      React.cloneElement(component, { key: idx + items.length })
+    )}
   </PageLayout>
 );
 

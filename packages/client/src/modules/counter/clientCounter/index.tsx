@@ -1,11 +1,11 @@
+import React from 'react';
 import resolvers from './resolvers';
 import resources from './locales';
-import ClientModule from '../../ClientModule';
 import ClientCounter from './containers/ClientCounter';
+import CounterModule from '../CounterModule';
 
-export default new ClientModule({
+export default new CounterModule({
   resolver: [resolvers],
-  localization: [{ ns: 'clientCounter', resources }]
+  localization: [{ ns: 'clientCounter', resources }],
+  counterComponent: [<ClientCounter />]
 });
-
-export { ClientCounter };

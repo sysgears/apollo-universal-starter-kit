@@ -7,7 +7,7 @@ const { product, plan, enabled } = settings.stripe.subscription;
 
 if (enabled && process.env.STRIPE_SECRET_KEY) {
   /**
-   * Creates Stripe product if it haven't been already created or if parameters of product were changed
+   * Creates Stripe product if it hasn't been already created or if parameters of product were changed
    *
    * @return {Promise<void>} - Stripe product
    */
@@ -17,16 +17,18 @@ if (enabled && process.env.STRIPE_SECRET_KEY) {
 
     if (!stripeProduct || (stripeProduct && stripeProduct.type !== product.type)) {
       stripeProduct = await stripe.products.create(product);
-      console.log(`Product - OK -->  '${stripeProduct.name}' with id '${stripeProduct.id}' was created`);
+      console.log(`Product - OK -->  '${stripeProduct.name}' with id '${stripeProduct.id}' has been created`);
     } else {
-      console.log(`Product - OK -->  '${stripeProduct.name}' with id '${stripeProduct.id}' was already created before`);
+      console.log(
+        `Product - OK -->  '${stripeProduct.name}' with id '${stripeProduct.id}' has been already created before`
+      );
     }
 
     return stripeProduct;
   };
 
   /**
-   * Creates Stripe plan if it haven't been already created or if parameters of plan were changed
+   * Creates Stripe plan if it hasn't been already created or if parameters of plan were changed
    *
    * @param product - Stripe product
    * @return {Promise<void>} - Stripe plan
@@ -45,18 +47,20 @@ if (enabled && process.env.STRIPE_SECRET_KEY) {
         stripePlan.product === product.id
       ) {
         console.log(
-          `Plan - OK -->  '${stripePlan.nickname}' with product id '${stripePlan.product}' was already created before`
+          `Plan - OK -->  '${stripePlan.nickname}' with product id 
+          '${stripePlan.product}' has been already created before`
         );
       } else {
         // if plan was changed then delete existing stripe plan
         await stripe.plans.del(plan.id);
         stripePlan = await stripe.plans.create({ product: product.id, ...plan });
-        console.log(`Plan - OK -->  '${stripePlan.nickname}' with product id '${stripePlan.product}' was created`);
+        console.log(`Plan - OK -->  '${stripePlan.nickname}' with product id '${stripePlan.product}' has been created`);
       }
     } else {
       stripePlan = await stripe.plans.create({ product: product.id, ...plan });
-      console.log(`Plan - OK -->  '${stripePlan.nickname}' with product id '${stripePlan.product}' was created`);
+      console.log(`Plan - OK -->  '${stripePlan.nickname}' with product id '${stripePlan.product}' has been created`);
     }
+
     return stripePlan;
   };
 
@@ -73,7 +77,7 @@ if (enabled && process.env.STRIPE_SECRET_KEY) {
       console.log(`-----`);
       console.log(`Subscribers will be charged $${plan.amount / 100} a ${plan.interval}`);
       console.log(
-        'You will need to configure a webhook endpoint manually in the Stripe interface when ready to deploy'
+        'You will need to configure a webhook endpoint manually in the Stripe dashboard when ready to deploy'
       );
       console.log('This webhook will enable automatic cancellation and automated emails about failed charges');
       console.log(

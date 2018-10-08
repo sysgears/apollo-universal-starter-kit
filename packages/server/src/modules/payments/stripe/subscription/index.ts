@@ -1,3 +1,5 @@
+// TypeScript compiler doesn't see global variables in deeply nested files
+// without explicit reference to the declaration file.
 /* tslint:disable:no-reference */
 /// <reference path="../../../../../typings/typings.d.ts" />
 import { json } from 'body-parser';
@@ -19,7 +21,6 @@ const { webhookUrl, enabled } = settings.stripe.subscription;
 
 /**
  * Requests Stripe events and sends them to our webhook in development mode.
- * This functionality allows for full Stripe functionality just as in production mode.
  */
 if (__DEV__ && enabled && process.env.STRIPE_SECRET_KEY) {
   log.debug('Starting stripe-local proxy');

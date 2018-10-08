@@ -8,7 +8,7 @@ import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.util.ByteString
 import controllers.graphql.GraphQLController
 import controllers.graphql.jsonProtocols.GraphQLMessage
-import controllers.graphql.jsonProtocols.GraphQLMessageProtocol._
+import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import models.counter.Counter
 import org.scalatest.{Matchers, WordSpec}
 import spray.json._

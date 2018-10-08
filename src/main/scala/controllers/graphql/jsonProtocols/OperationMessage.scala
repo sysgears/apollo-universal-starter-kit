@@ -3,7 +3,7 @@ package controllers.graphql.jsonProtocols
 import controllers.graphql.jsonProtocols.OperationMessageType.OperationMessageType
 import spray.json.{DefaultJsonProtocol, DeserializationException, JsObject, JsString, JsValue, JsonFormat}
 
-case class OperationMessage(operationType: OperationMessageType, id: Option[String], payload: Option[JsValue])
+case class OperationMessage(operationType: OperationMessageType, id: Option[String] = None, payload: Option[JsValue] = None)
 
 object OperationMessageType extends Enumeration {
   type OperationMessageType = Value

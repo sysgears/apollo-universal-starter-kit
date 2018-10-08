@@ -130,7 +130,7 @@ class MockLink extends ApolloLink {
 export default class Renderer {
   constructor(graphqlMocks, reduxState, resolvers) {
     const schema = makeExecutableSchema({
-      typeDefs: [rootSchema, ...serverModules.schemas]
+      typeDefs: [rootSchema, ...serverModules.schema]
     });
     addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
 

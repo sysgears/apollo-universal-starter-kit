@@ -1,6 +1,6 @@
 import mailer from './mailer';
-import Feature from '../connector';
+import ServerModule from '../ServerModule';
 
-export default new Feature({
-  createContextFunc: () => ({ mailer })
+export default new ServerModule({
+  createContextFunc: [() => ({ mailer })]
 });

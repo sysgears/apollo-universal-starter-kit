@@ -13,7 +13,7 @@ import PostAdd from './containers/PostAdd';
 import resources from './locales';
 import resolvers from './resolvers';
 
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 
 const withI18N = (Component, props) => {
   const WithI18N = translate('post')(Component);
@@ -131,15 +131,17 @@ const styles = StyleSheet.create({
   }
 });
 
-export default new Feature({
-  drawerItem: {
-    Post: {
-      screen: PostNavigator,
-      navigationOptions: {
-        drawerLabel: withI18N(HeaderTitle, { i18nKey: 'list.title' })
+export default new ClientModule({
+  drawerItem: [
+    {
+      Post: {
+        screen: PostNavigator,
+        navigationOptions: {
+          drawerLabel: withI18N(HeaderTitle, { i18nKey: 'list.title' })
+        }
       }
     }
-  },
-  resolver: resolvers,
-  localization: { ns: 'post', resources }
+  ],
+  resolver: [resolvers],
+  localization: [{ ns: 'post', resources }]
 });

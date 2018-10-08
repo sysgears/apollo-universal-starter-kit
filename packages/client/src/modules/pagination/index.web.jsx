@@ -5,7 +5,7 @@ import translate from '../../i18n';
 import { MenuItem } from '../../modules/common/components/web';
 import PaginationDemo from './containers/PaginationDemo.web';
 import resources from './locales';
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 
 const NavLinkWithI18n = translate()(({ t }) => (
   <NavLink to="/pagination" className="nav-link" activeClassName="active">
@@ -13,12 +13,12 @@ const NavLinkWithI18n = translate()(({ t }) => (
   </NavLink>
 ));
 
-export default new Feature({
+export default new ClientModule({
   route: [<Route exact path="/pagination" component={PaginationDemo} />],
-  navItem: (
+  navItem: [
     <MenuItem key="/pagination">
       <NavLinkWithI18n />
     </MenuItem>
-  ),
-  localization: { ns: 'pagination', resources }
+  ],
+  localization: [{ ns: 'pagination', resources }]
 });

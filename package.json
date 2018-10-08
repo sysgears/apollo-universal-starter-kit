@@ -137,7 +137,8 @@
     "webpack-merge": "^4.1.4",
     "webpack-node-externals": "^1.7.2",
     "webpack-sources": "^1.1.0",
-    "webpack-virtual-modules": "^0.1.10"
+    "webpack-virtual-modules": "^0.1.10",
+    "whatwg-fetch": "^2.0.4"
   },
   "optionalDependencies": {
     "dotenv": "^6.0.0",
@@ -145,7 +146,7 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.159"
+    "spinjs": "^0.4.166"
   },
   "resolutions": {
     "graphql": "0.13.2",
@@ -172,6 +173,7 @@
     },
     "modulePathIgnorePatterns": [
       "<rootDir>/node_modules/react-native/Libraries/react-native/",
+      "<rootDir>/node_modules/react-native/jest/",
       "<rootDir>/node_modules/haul/",
       "<rootDir>/packages/mobile/.expo/"
     ],
@@ -180,7 +182,7 @@
       "__SERVER__": false,
       "__TEST__": true,
       "ts-jest": {
-        "tsConfigFile": "packages/mobile/tsconfig.jest.json"
+        "tsConfig": "packages/mobile/tsconfig.jest.json"
       }
     }
   }

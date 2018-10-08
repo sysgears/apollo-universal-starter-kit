@@ -1,42 +1,46 @@
 package controllers.graphql.counter
 
-import akka.http.scaladsl.model.{HttpEntity, MediaTypes, StatusCodes}
+import akka.http.scaladsl.model.HttpEntity
+import akka.http.scaladsl.model.MediaTypes.`application/json`
+import akka.http.scaladsl.model.StatusCodes.OK
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.util.ByteString
 import controllers.graphql.GraphQLController
+import controllers.graphql.jsonProtocols.GraphQLMessage
+import controllers.graphql.jsonProtocols.GraphQLMessageProtocol._
 import models.counter.Counter
 import org.scalatest.{Matchers, WordSpec}
 import spray.json._
 import util.Injecting
 
-class GraphQLControllerSpec extends WordSpec with Matchers with ScalatestRouteTest with Injecting {
+class QuerySpec extends WordSpec with Matchers with ScalatestRouteTest with Injecting {
 
   val routes: Route = inject[GraphQLController].Routes
-  val addServerCounter = ByteString(
-    """
-      [
-          {
-              "query" : "mutation Increment { addServerCounter(amount: 2) { amount } }"
-          }
-      ]
-    """.stripMargin
-  )
 
-  "GraphQLControler" must {
+  val addServerCounterMutation = "mutation Increment { addServerCounter(amount: 2) { amount } }"
+  val addServerCounterGraphQLMessage = ByteString(GraphQLMessage(addServerCounterMutation, None, None).toJson.compactPrint)
+  val addServerCounterEntity = HttpEntity(`application/json`, addServerCounterGraphQLMessage)
 
-    "increment amount of counter" in {
-      implicit val counterJsonReader = CounterJsonReader
+  val serverCounter = "query IncrementAndGet { serverCounter { amount } }"
+  val serverCounterGraphQLMessage = ByteString(GraphQLMessage(serverCounter, None, None).toJson.compactPrint)
+  val serverCounterEntity = HttpEntity(`application/json`, serverCounterGraphQLMessage)
 
-      val contentType = MediaTypes.`application/json`
-      val addServerCounterEntity = HttpEntity(contentType, addServerCounter)
+  "GraphQLController" must {
 
+    "increment and get amount of counter" in {
       Post("/graphql", addServerCounterEntity) ~> routes ~> check {
+        val counter = responseAs[String].parseJson.convertTo[Counter](CounterJsonReader)
 
-        status shouldBe StatusCodes.OK
-        contentType shouldBe MediaTypes.`application/json`
+        status shouldBe OK
+        contentType.mediaType shouldBe `application/json`
+        counter.amount shouldBe 2
+      }
+      Post("/graphql", serverCounterEntity) ~> routes ~> check {
+        val counter = responseAs[String].parseJson.convertTo[Counter](CounterJsonReader)
 
-        val counter = responseAs[String].parseJson.convertTo[Counter]
+        status shouldBe OK
+        contentType.mediaType shouldBe `application/json`
         counter.amount shouldBe 2
       }
     }
@@ -46,8 +50,8 @@ class GraphQLControllerSpec extends WordSpec with Matchers with ScalatestRouteTe
 object CounterJsonReader extends JsonReader[Counter] {
   override def read(json: JsValue): Counter = {
     val fields = json.asJsObject.fields
-    val serverCounter = fields("data").asJsObject.fields("addServerCounter")
-    val amount: JsNumber = serverCounter.asJsObject.fields("amount").asInstanceOf[JsNumber]
+    val counter = fields("data").asJsObject.fields.head._2
+    val amount: JsNumber = counter.asJsObject.fields("amount").asInstanceOf[JsNumber]
     Counter(amount.value.toInt)
   }
 }

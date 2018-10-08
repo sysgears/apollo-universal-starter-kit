@@ -4,7 +4,7 @@ import akka.NotUsed
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
-import controllers.graphql.jsonProtocols.GraphQLMessageProtocol._
+import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
 import controllers.graphql.jsonProtocols.OperationMessageType._
 import controllers.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}

@@ -8,6 +8,6 @@ object GraphQLMessage {
   val graphQlWebsocketProtocol: String = "graphql-ws"
 }
 
-object GraphQLMessageProtocol extends DefaultJsonProtocol {
+object GraphQLMessageJsonProtocol extends DefaultJsonProtocol {
   implicit val graphQLMessageFormat: RootJsonFormat[GraphQLMessage] = jsonFormat3(GraphQLMessage.apply)
 }

@@ -5,7 +5,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import controllers.graphql.jsonProtocols.GraphQLMessage
-import controllers.graphql.jsonProtocols.GraphQLMessageProtocol._
+import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import graphql.{GraphQL, GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import sangria.execution.Executor

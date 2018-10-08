@@ -94,9 +94,7 @@ Learn more about the main modules in [Architecture and Implemented Modules](#arc
 
 ### Architecture and Implemented Modules
 
-Among all the approaches to building the application architecture, we chose the modular architecture. You can remove any 
-built-in modules without breaking the application. We recommend that you develop your custom modules with the same idea 
-in mind when using the starter kit.
+Among all the approaches to building the application architecture, we chose the disposable fractal-based modular architecture. You can remove any built-in modules without breaking the application. We recommend that you develop your custom modules with the same idea in mind when using the starter kit.
 
 The implemented modules are:
 

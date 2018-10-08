@@ -1,15 +1,20 @@
 package util
 
+import java.lang.annotation.Annotation
+
 import com.google.inject.{Guice, Injector}
-import util.InjectionModules.Modules
 import net.codingwell.scalaguice.InjectorExtensions._
-import scala.reflect.ClassTag
+import util.InjectionModules.Modules
 
 trait Injecting {
   val injector: Injector = Injecting.injector
 
   def inject[T: Manifest]: T = {
     injector.instance[T]
+  }
+
+  def inject[T: Manifest](ann: Annotation): T = {
+    injector.instance[T](ann)
   }
 }
 

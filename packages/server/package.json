@@ -19,7 +19,7 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "watch": "spin watch",
-    "heroku-postbuild": "yarn build && yarn seed",
+    "heroku-postbuild": "yarn build && yarn seed && yarn stripe:setup",
     "cli": "node ../../tools/cli",
     "stripe:setup": "node src/modules/payments/stripe/subscription/cli/stripeSetup"
   },

@@ -146,7 +146,7 @@ the list, and then follow to the `Settings` tab. Scroll to the button **Add doma
 7. If you're deploying your mobile app to Expo, you need to connect the app to the back-end URL. To do that, edit the 
 `packages/mobile/.spinrc.js` file:
 
-- If you are deploying your app on Heroku without a custom domain name, the production URLs will look like this:
+- If you're deploying your app on Heroku without a custom domain name, the production URLs will look like this:
 
 ```javascript
 config.options.defines.__API_URL__ = '"https://application-name.herokuapp.com/graphql"';
@@ -160,7 +160,7 @@ config.options.defines.__API_URL__ = '"http://domain-example.com/graphql"';
 config.options.defines.__WEBSITE_URL__ = '"http://domain-example.com"';
 ```
 
-8. If you have to configurable some other modules such as `Stripe module`, please do them on this step.
+8. Configure other Apollo Starter Kit modules such as [the Stripe module] if necessary.
 
 9. Commit your changes and run (use the name of your application instead of `application-name` in the link above):
  
@@ -229,3 +229,4 @@ For more details refer to Building Standalone Apps in [the Expo documentation], 
 [README.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/README.md
 [the Expo documentation]: https://docs.expo.io/versions/latest/
 [Features and Modules]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Features-and-Modules
+[the Stripe module]: https://github.com/sysgears/apollo-universal-starter-kit/blob/synchronize-documentation/docs/modules/stripeSubscription.md

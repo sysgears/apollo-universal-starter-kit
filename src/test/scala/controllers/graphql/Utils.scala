@@ -1,7 +1,7 @@
 package controllers.graphql
 
-import actors.counter.CounterActor
-import actors.counter.CounterActor.Reset
+import actors.counter.CounterPersistentActor
+import actors.counter.CounterPersistentActor.Reset
 import akka.actor.ActorRef
 import akka.http.scaladsl.server.Route
 import com.google.inject.name.Names
@@ -17,7 +17,7 @@ object Utils extends Injecting {
 
   // TODO It is necessary remove after fix of actor counter
   def resetCounter(implicit executionContext: ExecutionContext): Unit = {
-    val counteRef = inject[ActorRef](Names.named(CounterActor.name))
-    Await.ready(Future(counteRef ! Reset), Duration.Inf)
+    val persistentCounterActor = inject[ActorRef](Names.named(CounterPersistentActor.name))
+    Await.ready(Future(persistentCounterActor ! Reset), Duration.Inf)
   }
 }

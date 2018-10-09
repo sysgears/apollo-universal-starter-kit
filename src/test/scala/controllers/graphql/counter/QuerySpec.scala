@@ -27,6 +27,10 @@ class QuerySpec extends WordSpec with Matchers with ScalatestRouteTest with Inje
   val serverCounterGraphQLMessage = ByteString(GraphQLMessage(serverCounter, None, None).toJson.compactPrint)
   val serverCounterEntity = HttpEntity(`application/json`, serverCounterGraphQLMessage)
 
+  before {
+    resetCounter
+  }
+
   after {
     resetCounter
   }

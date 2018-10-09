@@ -18,6 +18,10 @@ class WebSocketSpec extends WordSpec with Matchers with ScalatestRouteTest with 
   private val websocketProtocol = Seq(graphQlWebsocketProtocol)
   private val websocketMessageId = Some("1")
 
+  before {
+    resetCounter
+  }
+
   after {
     resetCounter
   }

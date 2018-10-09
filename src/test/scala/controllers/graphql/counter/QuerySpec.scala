@@ -7,14 +7,15 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.util.ByteString
 import controllers.graphql.GraphQLController
+import controllers.graphql.Utils.resetCounter
 import controllers.graphql.jsonProtocols.GraphQLMessage
 import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import models.counter.Counter
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{BeforeAndAfter, Matchers, WordSpec}
 import spray.json._
 import util.Injecting
 
-class QuerySpec extends WordSpec with Matchers with ScalatestRouteTest with Injecting {
+class QuerySpec extends WordSpec with Matchers with ScalatestRouteTest with Injecting with BeforeAndAfter {
 
   val routes: Route = inject[GraphQLController].Routes
 
@@ -25,6 +26,10 @@ class QuerySpec extends WordSpec with Matchers with ScalatestRouteTest with Inje
   val serverCounter = "query IncrementAndGet { serverCounter { amount } }"
   val serverCounterGraphQLMessage = ByteString(GraphQLMessage(serverCounter, None, None).toJson.compactPrint)
   val serverCounterEntity = HttpEntity(`application/json`, serverCounterGraphQLMessage)
+
+  after {
+    resetCounter
+  }
 
   "GraphQLController" must {
 

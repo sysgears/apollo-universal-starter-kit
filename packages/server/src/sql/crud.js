@@ -416,6 +416,20 @@ export default class Crud {
     return `${this.schema.__.tablePrefix}${this.getTableName()}`;
   }
 
+  isSortable() {
+    if (this.schema.__.sortable) {
+      return true;
+    }
+    return false;
+  }
+
+  sortableField() {
+    if (this.schema.__.sortable) {
+      return this.schema.__.sortable;
+    }
+    return null;
+  }
+
   getSchema() {
     return this.schema;
   }
@@ -552,13 +566,14 @@ export default class Crud {
     return this._getList(args, parseFields(info));
   }
 
-  getTotal({ filter }) {
+  getTotal(args = {}) {
     const queryBuilder = knex(`${this.getFullTableName()} as ${this.getTableName()}`)
       .countDistinct('id as count')
       .first();
 
-    this._filter(filter, queryBuilder);
-
+    if (args.filter) {
+      this._filter(args.filter, queryBuilder);
+    }
     return queryBuilder;
   }
 
@@ -596,7 +611,8 @@ export default class Crud {
   }
 
   _create(data) {
-    return knex(`${this.getFullTableName()}`)
+    console.log('_create:', data);
+    return knex(this.getFullTableName())
       .insert(decamelizeKeys(this.normalizeFields(data)))
       .returning('id');
   }
@@ -613,10 +629,12 @@ export default class Crud {
         if (value.type.constructor === Array && data[key]) {
           nestedEntries.push({ key, data: data[key] });
           delete data[key];
-        } else if (key === 'rank') {
-          const total = await this.getTotal();
-          data[key] = total.count + 1;
         }
+      }
+
+      if (this.isSortable()) {
+        const total = await this.getTotal();
+        data[this.sortableField()] = total.count + 1;
       }
 
       const [id] = await this._create(data);
@@ -640,7 +658,7 @@ export default class Crud {
   }
 
   _update({ data, where }) {
-    return knex(`${this.getFullTableName()}`)
+    return knex(this.getFullTableName())
       .update(decamelizeKeys(this.normalizeFields(data)))
       .where(where);
   }
@@ -691,7 +709,7 @@ export default class Crud {
   }
 
   _delete({ where }) {
-    return knex(`${this.getFullTableName()}`)
+    return knex(this.getFullTableName())
       .where(where)
       .del();
   }
@@ -705,6 +723,16 @@ export default class Crud {
       if (!node) {
         e.setError('delete', 'Node does not exist.');
         e.throwIf();
+      }
+      if (this.isSortable()) {
+        const object = await knex(this.getFullTableName())
+          .select(`${this.sortableField()} as rank`)
+          .where(args.where)
+          .first();
+
+        await knex(this.getFullTableName())
+          .decrement(this.sortableField(), 1)
+          .where(this.sortableField(), '>', object.rank);
       }
 
       const isDeleted = await this._delete(args);
@@ -720,11 +748,50 @@ export default class Crud {
     }
   }
 
-  _sort({ data }) {
-    return Promise.all([
-      this._update({ data: { rank: data[2] }, where: { id: data[0] } }),
-      this._update({ data: { rank: data[3] }, where: { id: data[1] } })
-    ]);
+  async _sort({ data }) {
+    // console.log('_sort, data:', data);
+    const oldId = data[0];
+    // const newId = data[1];
+
+    const oldPosition = data[3];
+    const newPosition = data[2];
+
+    if (oldPosition === newPosition) {
+      return 0;
+    }
+
+    const fullTableName = this.getFullTableName();
+    const sortableField = this.sortableField();
+    const total = await this.getTotal();
+    return knex.transaction(async function(trx) {
+      try {
+        // Move the object away
+        await knex(fullTableName)
+          .update({ [sortableField]: total.count + 1 })
+          .where({ id: oldId })
+          .transacting(trx);
+        // Shift the objects between the old and the new position
+        const baseQuery = knex(fullTableName);
+        if (oldPosition < newPosition) {
+          baseQuery.decrement(sortableField, 1);
+        } else {
+          baseQuery.increment(sortableField, 1);
+        }
+        let count = await baseQuery
+          .whereBetween(sortableField, [Math.min(oldPosition, newPosition), Math.max(oldPosition, newPosition)])
+          .transacting(trx);
+        // Move the object back in
+        count += await knex(fullTableName)
+          .update({ [sortableField]: newPosition })
+          .where({ id: oldId })
+          .transacting(trx);
+        await trx.commit;
+        return count;
+      } catch (e) {
+        trx.rollback;
+        return 0;
+      }
+    });
   }
 
   async sort(args) {
@@ -732,8 +799,7 @@ export default class Crud {
       const e = new FieldError();
       e.throwIf();
 
-      const sortCount = await this._sort(args);
-      const count = sortCount.reduce((total, num) => total + num);
+      const count = await this._sort(args);
       if (count > 1) {
         return { count };
       } else {
@@ -746,7 +812,7 @@ export default class Crud {
   }
 
   _updateMany({ data, where: { id_in } }) {
-    return knex(`${this.getFullTableName()}`)
+    return knex(this.getFullTableName())
       .update(decamelizeKeys(this.normalizeFields(data)))
       .whereIn('id', id_in);
   }
@@ -768,7 +834,7 @@ export default class Crud {
   }
 
   _deleteMany({ where: { id_in } }) {
-    return knex(`${this.getFullTableName()}`)
+    return knex(this.getFullTableName())
       .whereIn('id', id_in)
       .del();
   }
@@ -776,6 +842,20 @@ export default class Crud {
   async deleteMany(args) {
     try {
       const e = new FieldError();
+
+      if (this.isSortable()) {
+        // for every deleted object decrease rank acordingly
+        for (const id of args.where.id_in) {
+          const object = await knex(this.getFullTableName())
+            .select(`${this.sortableField()} as rank`)
+            .where({ id })
+            .first();
+
+          await knex(this.getFullTableName())
+            .decrement(this.sortableField(), 1)
+            .where(this.sortableField(), '>', object.rank);
+        }
+      }
 
       const deleteCount = await this._deleteMany(args);
 

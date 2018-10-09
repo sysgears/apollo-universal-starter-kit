@@ -7,7 +7,7 @@ import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 import { getItem, setItem } from '../common/clientStorage';
 import { LanguagePicker, Root } from '../../modules/common/components/native';
 import resources from './locales';
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 import modules from '../';
 import settings from '../../../../../settings';
 
@@ -65,26 +65,27 @@ i18n
     }
   });
 
-const langPicker = {};
-if (settings.i18n.enabled && settings.i18n.langPickerRender) {
-  langPicker.drawerItem = {
-    LangPicker: {
-      screen: () => null,
-      navigationOptions: {
-        drawerLabel: <LanguagePicker key={'picker'} i18n={i18n} />
-      },
-      skip: true
-    }
-  };
-}
+const langPicker =
+  settings.i18n.enabled && settings.i18n.langPickerRender
+    ? new ClientModule({
+        drawerItem: [
+          {
+            LangPicker: {
+              screen: () => null,
+              navigationOptions: {
+                drawerLabel: <LanguagePicker key={'picker'} i18n={i18n} />
+              },
+              skip: true
+            }
+          }
+        ]
+      })
+    : undefined;
 
-export default new Feature(
-  settings.i18n.enabled
-    ? {
-        ...langPicker,
-        localization: { ns: 'i18n', resources },
-        // eslint-disable-next-line react/display-name
-        rootComponentFactory: () => <I18nProvider i18n={i18n} />
-      }
-    : {}
-);
+export default (settings.i18n.enabled
+  ? new ClientModule(langPicker, {
+      localization: [{ ns: 'i18n', resources }],
+      // eslint-disable-next-line react/display-name
+      rootComponentFactory: [() => <I18nProvider i18n={i18n} />]
+    })
+  : undefined);

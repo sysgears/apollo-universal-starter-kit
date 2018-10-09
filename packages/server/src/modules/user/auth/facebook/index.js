@@ -3,7 +3,7 @@ import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 
 import resolvers from './resolvers';
-import Feature from '../connector';
+import AuthModule from '../AuthModule';
 import User from '../../sql';
 import settings from '../../../../../../../settings';
 import access from '../../access';
@@ -91,4 +91,6 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
   };
 }
 
-export default new Feature({ middleware, createResolversFunc: resolvers });
+export default (middleware
+  ? new AuthModule({ middleware: [middleware], createResolversFunc: [resolvers] })
+  : undefined);

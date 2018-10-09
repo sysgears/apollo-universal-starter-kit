@@ -1,9 +1,9 @@
+import React from 'react';
 import resources from './locales';
-import Feature from '../../connector';
+import CounterModule from '../CounterModule';
 import ServerCounter from './containers/ServerCounter';
 
-export default new Feature({
-  localization: { ns: 'serverCounter', resources }
+export default new CounterModule({
+  localization: [{ ns: 'serverCounter', resources }],
+  counterComponent: [<ServerCounter />]
 });
-
-export { ServerCounter };

@@ -4,8 +4,7 @@
   "plugins": ["haul/src/utils/fixRequireIssues"],
   "env": {
     "production": {
-      "compact": true,
-      "presets": [["minify", { "mangle": false, "guards": false }]]
+      "compact": true
     }
   }
 }

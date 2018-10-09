@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import createTokens from './createTokens';
 import resolvers from './resolvers';
 import schema from './schema.graphql';
-import Feature from '../connector';
+import AccessModule from '../AccessModule';
 import settings from '../../../../../../../settings';
 
 const grant = async user => {
@@ -35,13 +35,13 @@ const createContextFunc = async ({ req, res, connectionParams, webSocket, contex
   }
 };
 
-export default new Feature(
+export default new AccessModule(
   settings.user.auth.access.jwt.enabled
     ? {
-        grant,
-        schema,
-        createResolversFunc: resolvers,
-        createContextFunc
+        grant: [grant],
+        schema: [schema],
+        createResolversFunc: [resolvers],
+        createContextFunc: [createContextFunc]
       }
     : {}
 );

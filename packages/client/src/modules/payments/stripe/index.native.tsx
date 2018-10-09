@@ -1,4 +1,4 @@
 import stripeSubscription from './subscription';
-import Feature from '../../connector';
+import ClientModule from '../../ClientModule';
 
-export default new Feature(stripeSubscription);
+export default new ClientModule(stripeSubscription);

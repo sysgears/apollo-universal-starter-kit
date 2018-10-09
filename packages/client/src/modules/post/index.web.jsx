@@ -8,7 +8,7 @@ import PostEdit from './containers/PostEdit';
 import PostAdd from './containers/PostAdd';
 import resources from './locales';
 import resolvers from './resolvers';
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 
 const NavLinkWithI18n = translate()(({ t }) => (
   <NavLink to="/posts" className="nav-link" activeClassName="active">
@@ -16,17 +16,17 @@ const NavLinkWithI18n = translate()(({ t }) => (
   </NavLink>
 ));
 
-export default new Feature({
+export default new ClientModule({
   route: [
     <Route exact path="/posts" component={Post} />,
     <Route exact path="/post/new" component={PostAdd} />,
     <Route path="/post/:id" component={PostEdit} />
   ],
-  navItem: (
+  navItem: [
     <MenuItem key="/posts">
       <NavLinkWithI18n />
     </MenuItem>
-  ),
-  resolver: resolvers,
-  localization: { ns: 'post', resources }
+  ],
+  resolver: [resolvers],
+  localization: [{ ns: 'post', resources }]
 });

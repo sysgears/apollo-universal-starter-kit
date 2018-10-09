@@ -160,7 +160,9 @@ config.options.defines.__API_URL__ = '"http://domain-example.com/graphql"';
 config.options.defines.__WEBSITE_URL__ = '"http://domain-example.com"';
 ```
 
-8. Commit your changes and run (use the name of your application instead of `application-name` in the link above):
+8. If you have to configurable some other modules such as `Stripe module`, please do them on this step.
+
+9. Commit your changes and run (use the name of your application instead of `application-name` in the link above):
  
 ```bash
 git push https://git.heroku.com/application-name.git
@@ -172,7 +174,7 @@ If you're deploying from another branch (not from master) run:
 git push --force heroku your_branch:master
 ```
 
-9. Heroku automatically starts building your project and publishing a website to Heroku and mobile app to [Expo.io].
+10. Heroku automatically starts building your project and publishing a website to Heroku and mobile app to [Expo.io].
 
 ## Publishing a Mobile App
 

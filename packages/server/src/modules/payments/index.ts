@@ -1,4 +1,4 @@
 import stripe from './stripe';
-import Feature from '../connector';
+import ServerModule from '../ServerModule';
 
-export default new Feature(stripe);
+export default new ServerModule(stripe);

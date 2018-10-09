@@ -5,6 +5,6 @@ import password from './password';
 import linkedin from './linkedIn';
 // import serial from './serial';
 
-import Feature from './connector';
+import AuthModule from './AuthModule';
 
-export default new Feature(facebook, github, google, linkedin, password);
+export default new AuthModule(facebook, github, google, linkedin, password);

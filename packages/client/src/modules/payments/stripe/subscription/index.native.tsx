@@ -3,7 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import translate from '../../../../i18n';
 import { HeaderTitle, IconButton } from '../../../common/components/native';
-import Feature from '../../../connector.native';
+import ClientModule from '../../../ClientModule.native';
 import settings from '../../../../../../../settings';
 
 import resources from './locales';
@@ -14,10 +14,10 @@ import UpdateCreditCard from './containers/UpdateCreditCard';
 
 const HeaderTitleWithI18n = translate('stripeSubscription')(HeaderTitle);
 
-export default new Feature(
-  settings.stripe.subscription.enabled && settings.stripe.subscription.publicKey
-    ? {
-        drawerItem: {
+export default (settings.stripe.subscription.enabled && settings.stripe.subscription.publicKey
+  ? new ClientModule({
+      drawerItem: [
+        {
           Subscription: {
             screen: createStackNavigator({
               SubscriberPage: {
@@ -72,8 +72,8 @@ export default new Feature(
               drawerLabel: <HeaderTitleWithI18n />
             }
           }
-        },
-        localization: { ns: 'stripeSubscription', resources }
-      }
-    : {}
-);
+        }
+      ],
+      localization: [{ ns: 'stripeSubscription', resources }]
+    })
+  : undefined);

@@ -1,3 +1,5 @@
+// TypeScript compiler doesn't see global variables in deeply nested files
+// without explicit reference to the declaration file.
 /*tslint:disable:no-reference */
 /// <reference path="../../../../../../typings/typings.d.ts" />
 import React, { Fragment } from 'react';

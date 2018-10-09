@@ -229,4 +229,4 @@ For more details refer to Building Standalone Apps in [the Expo documentation], 
 [README.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/README.md
 [the Expo documentation]: https://docs.expo.io/versions/latest/
 [Features and Modules]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Features-and-Modules
-[the Stripe module]: https://github.com/sysgears/apollo-universal-starter-kit/blob/synchronize-documentation/docs/modules/stripeSubscription.md
+[the Stripe module]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/stripeSubscription.md

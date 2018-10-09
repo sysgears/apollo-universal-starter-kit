@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion,
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
+  "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
 
   "com.typesafe.akka" %% "akka-http-testkit" % "10.1.5",
   "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test",
@@ -23,6 +24,9 @@ libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria" % "1.4.2",
   "org.sangria-graphql" %% "sangria-spray-json" % sangriaVersion,
   "org.sangria-graphql" %% "sangria-akka-streams" % sangriaVersion,
-  
-  "org.sangria-graphql" %% "sangria-monix" % "1.0.0"
+
+  "org.sangria-graphql" %% "sangria-monix" % "1.0.0",
+
+  "org.iq80.leveldb" % "leveldb" % "0.9",
+  "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8"
 )

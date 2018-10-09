@@ -123,7 +123,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
 
       logger.info(chalk.green(`✔ Schema in ${pathSchema}${file} successfully updated!`));
 
-      const resolverFile = `resolvers.js`;
+      const resolverFile = `resolvers.ts`;
       let hasBatchResolvers = false;
       let replace = `  ${schema.name}: {
 `;

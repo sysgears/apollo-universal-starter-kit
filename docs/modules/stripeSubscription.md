@@ -14,27 +14,37 @@ directory. (When talking about the module files, we'll omit the long `packages/s
 brevity, and will simply start the path with `stripe/`. If a path doesn't start with `stripe/`, you should look for a
 respective file or directory from the project root.)
 
-### Getting Started
+### Getting Started (Development mode)
 
 1. Sign into [Stripe Dashboard].
-2. Enable the subscription module in `config/stripe/subscription.js` by setting the `stripe.subscription.enable` 
-property to `true`:
+2. Enable the subscription module in `config/stripe/subscription.js` by setting the `stripe.subscription.enable` property
+to `true`:
 ```javascript
 export default {
-  stripe: {
-    subscription: {
-      enabled: true,
-      // other code is omitted for brevity
-    }
-  }
+  enabled: true,
+  // other code is omitted for brevity
 };
 ```
-3. Add your Stripe publishable key and secret key into the `packages/server/.env` file:
+3. Add your Stripe publishable key into the `config/stripe/subscription.js` configuration file:
+```javascript
+export default {
+   enabled: true,
+   publicKey: 'your_public_key',
+};
+```
+**NOTE**: By default `publicKey` value looks:
+```javascript
+export default {
+   enabled: true,
+    publicKey: process.env.STRIPE_PUBLIC_KEY,
+};
+```
+This trick helps in deployment, read below.
+4. Add your Stripe secret key into the `packages/server/.env` file:
 
 ```
 # Stripe
-STRIPE_PUBLIC_KEY=your_stripe_publishable_key
-STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_SECRET_KEY="your Stripe secret key"
 ```
 
 **NOTE**: In `packages/server/.env`, you'll see also the `STRIPE_ENDPOINT_SECRET` environment variable. You don't need 

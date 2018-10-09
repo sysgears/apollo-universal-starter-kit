@@ -7,6 +7,8 @@ object CounterActor extends Named {
 
   object GetAmount
 
+  object Reset
+
   case class IncrementAndGet(amount: Int)
 
   def props = Props(new CounterActor)
@@ -18,7 +20,7 @@ class CounterActor extends Actor with ActorLogging {
 
   import CounterActor._
 
-  var counter: Int = 0
+  private var counter: Int = 0
 
   override def receive: Receive = {
 
@@ -28,5 +30,7 @@ class CounterActor extends Actor with ActorLogging {
       sender ! counter
 
     case GetAmount => sender ! counter
+
+    case Reset => counter = 0
   }
 }

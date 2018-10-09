@@ -5,8 +5,8 @@ import log from '../../../../../../common/log';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
 
-const { secretKey, plan } = settings.stripe.subscription;
-const stripe = new Stripe(secretKey);
+const { plan } = settings.stripe.subscription;
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 interface CreditCard {
   input: {

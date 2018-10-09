@@ -1,5 +1,5 @@
 import stripeSubscription from './subscription';
 
-import Feature from '../../connector';
+import ServerModule from '../../ServerModule';
 
-export default new Feature(stripeSubscription);
+export default new ServerModule(stripeSubscription);

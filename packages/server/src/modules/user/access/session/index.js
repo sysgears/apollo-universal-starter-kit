@@ -1,6 +1,6 @@
 import { writeSession, createSession, readSession } from './sessions';
 import { isApiExternal } from '../../../../net';
-import Feature from '../connector';
+import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
 import resolvers from './resolvers';
 import scopes from '../../scopes';
@@ -53,13 +53,13 @@ const createContextFunc = async ({ req, connectionParams, webSocket, context }) 
   };
 };
 
-export default new Feature(
+export default new AccessModule(
   settings.user.auth.access.session.enabled
     ? {
-        grant,
-        schema,
-        createResolversFunc: resolvers,
-        createContextFunc
+        grant: [grant],
+        schema: [schema],
+        createResolversFunc: [resolvers],
+        createContextFunc: [createContextFunc]
       }
     : {}
 );

@@ -5,7 +5,7 @@ import modules from '../modules';
 import pubsub from './pubsub';
 
 const executableSchema = makeExecutableSchema({
-  typeDefs: [rootSchemaDef].concat(modules.schemas),
+  typeDefs: [rootSchemaDef].concat(modules.schema),
   resolvers: modules.createResolvers(pubsub)
 });
 

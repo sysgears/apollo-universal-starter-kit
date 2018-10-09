@@ -1,11 +1,11 @@
+import React from 'react';
 import resolvers from './resolvers';
 import resources from './locales';
-import Feature from '../../connector';
 import ClientCounter from './containers/ClientCounter';
+import CounterModule from '../CounterModule';
 
-export default new Feature({
-  resolver: resolvers,
-  localization: { ns: 'clientCounter', resources }
+export default new CounterModule({
+  resolver: [resolvers],
+  localization: [{ ns: 'clientCounter', resources }],
+  counterComponent: [<ClientCounter />]
 });
-
-export { ClientCounter };

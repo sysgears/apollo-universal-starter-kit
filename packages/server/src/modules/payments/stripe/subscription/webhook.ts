@@ -6,9 +6,8 @@ import mailer from '../../../mailer/mailer';
 import User from '../../../user/sql';
 import settings from '../../../../../../../settings';
 
-const { secretKey, endpointSecret } = settings.stripe.subscription;
 const StripeSubscription = new StripeSubscriptionDAO();
-const stripe = new Stripe(secretKey);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 /**
  * Gets a user email from the database and sends an email.
@@ -91,8 +90,8 @@ const notifyFailedSubscription = async (stripeEvent: any, websiteUrl: string, t:
 export default async (req: any, res: any) => {
   try {
     const websiteUrl = `${req.protocol}://${req.get('host')}`;
-    const stripeEvent = endpointSecret
-      ? stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], endpointSecret)
+    const stripeEvent = process.env.STRIPE_ENDPOINT_SECRET
+      ? stripe.webhooks.constructEvent(req.body, req.headers['stripe-signature'], process.env.STRIPE_ENDPOINT_SECRET)
       : req.body;
 
     if (stripeEvent.type === 'customer.subscription.deleted') {

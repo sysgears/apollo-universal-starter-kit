@@ -1,5 +1,5 @@
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
-import Feature from '../connector';
+import ServerModule from '../ServerModule';
 
-export default new Feature({ schema, createResolversFunc: createResolvers });
+export default new ServerModule({ schema: [schema], createResolversFunc: [createResolvers] });

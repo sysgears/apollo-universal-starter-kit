@@ -10,9 +10,9 @@ import pageNotFound from './pageNotFound';
 import pagination from './pagination';
 import './favicon';
 
-import Feature from './connector';
+import ClientModule from './ClientModule';
 
-export default new Feature(
+export default new ClientModule(
   defaultRouter,
   counter,
   post,

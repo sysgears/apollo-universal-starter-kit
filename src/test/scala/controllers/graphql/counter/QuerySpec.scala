@@ -38,15 +38,16 @@ class QuerySpec extends WordSpec with Matchers with ScalatestRouteTest with Inje
   "GraphQLController" must {
 
     "increment and get amount of counter" in {
+      implicit val counterJsonReader = CounterJsonReader
       Post("/graphql", addServerCounterEntity) ~> routes ~> check {
-        val counter = responseAs[String].parseJson.convertTo[Counter](CounterJsonReader)
+        val counter = responseAs[String].parseJson.convertTo[Counter]
 
         status shouldBe OK
         contentType.mediaType shouldBe `application/json`
         counter.amount shouldBe 2
       }
       Post("/graphql", serverCounterEntity) ~> routes ~> check {
-        val counter = responseAs[String].parseJson.convertTo[Counter](CounterJsonReader)
+        val counter = responseAs[String].parseJson.convertTo[Counter]
 
         status shouldBe OK
         contentType.mediaType shouldBe `application/json`
@@ -56,11 +57,9 @@ class QuerySpec extends WordSpec with Matchers with ScalatestRouteTest with Inje
   }
 }
 
-object CounterJsonReader extends JsonReader[Counter] {
+object CounterJsonReader extends JsonReader[Counter] with DefaultJsonProtocol {
   override def read(json: JsValue): Counter = {
-    val fields = json.asJsObject.fields
-    val counter = fields("data").asJsObject.fields.head._2
-    val amount: JsNumber = counter.asJsObject.fields("amount").asInstanceOf[JsNumber]
-    Counter(amount.value.toInt)
+    val data = json.asJsObject.fields("data").asJsObject
+    data.fields.head._2.convertTo[Counter](jsonFormat1(Counter.apply))
   }
 }

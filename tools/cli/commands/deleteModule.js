@@ -5,7 +5,7 @@ const deleteMigrations = require('./subCommands/deleteMigrations');
 const { computeModulesPath, runPrettier } = require('../helpers/util');
 
 /**
- * Removes the module from client, server or both locations and removes the module from the Feature connector.
+ * Removes the module from client, server or both locations and removes the module from the module list.
  *
  * @param logger - The Logger.
  * @param moduleName - The name of a new module.
@@ -33,18 +33,16 @@ function deleteModule(logger, moduleName, options, location) {
       process.exit();
     }
 
-    // extract Feature modules
-    const featureRegExp = /Feature\(([^()]+)\)/g;
-    const [, featureModules] = featureRegExp.exec(indexContent) || ['', ''];
-    const featureModulesWithoutDeleted = featureModules
-      .split(',')
-      .filter(featureModule => featureModule.trim() !== moduleName);
+    // extract application modules
+    const appModuleRegExp = /Module\(([^()]+)\)/g;
+    const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
+    const appModulesWithoutDeleted = appModules.split(',').filter(appModule => appModule.trim() !== moduleName);
 
     const contentWithoutDeletedModule = indexContent
       .toString()
-      // replace features modules on features without deleted module
-      .replace(featureRegExp, `Feature(${featureModulesWithoutDeleted.toString().trim()})`)
-      // remove import module
+      // remove module from modules list
+      .replace(appModuleRegExp, `Module(${appModulesWithoutDeleted.toString().trim()})`)
+      // remove module import
       .replace(RegExp(`import ${moduleName} from './${moduleName}';\n`, 'g'), '');
 
     fs.writeFileSync(indexPath, contentWithoutDeletedModule);

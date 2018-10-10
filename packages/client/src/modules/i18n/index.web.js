@@ -54,7 +54,7 @@ const langPicker =
   settings.i18n.enabled && settings.i18n.langPickerRender
     ? new ClientModule({
         navItemRight: [
-          <MenuItem key="languagePicker" style={{ display: 'flex', alignItems: 'center' }}>
+          <MenuItem key="languagePicker" className="menu-center">
             <LanguagePicker i18n={i18n} />
           </MenuItem>
         ]

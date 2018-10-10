@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const { copyFiles, renameFiles, computeModulesPath, runPrettier } = require('../helpers/util');
 
 /**
- * Adds module in client or server and adds a new module to the Feature connector.
+ * Adds application module to client or server code and adds it to the module list.
  *
  * @param logger - The Logger.
  * @param templatesPath - The path to the templates for a new module.
@@ -44,13 +44,13 @@ function addModule(logger, templatesPath, moduleName, location, finished = true)
     process.exit();
   }
 
-  // extract Feature modules
-  const featureRegExp = /Feature\(([^()]+)\)/g;
-  const [, featureModules] = featureRegExp.exec(indexContent) || ['', ''];
+  // extract application modules
+  const appModuleRegExp = /Module\(([^()]+)\)/g;
+  const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
 
-  // add module to Feature connector
+  // add module to app module list
   shell
-    .ShellString(indexContent.replace(RegExp(featureRegExp, 'g'), `Feature(${moduleName}, ${featureModules})`))
+    .ShellString(indexContent.replace(RegExp(appModuleRegExp, 'g'), `Module(${moduleName}, ${appModules})`))
     .to(indexPath);
   runPrettier(indexPath);
 

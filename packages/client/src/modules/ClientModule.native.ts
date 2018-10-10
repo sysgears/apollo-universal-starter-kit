@@ -3,10 +3,11 @@ import BaseModule, { BaseModuleShape } from './BaseModule';
 import { merge } from 'lodash';
 
 export interface ClientModuleShape extends BaseModuleShape {
-  drawerItem?: any[];
+  drawerItem?: Array<{ [key: string]: any }>;
 }
 
 interface ClientModule extends ClientModuleShape {}
+
 class ClientModule extends BaseModule {
   constructor(...modules: ClientModuleShape[]) {
     super(...modules);

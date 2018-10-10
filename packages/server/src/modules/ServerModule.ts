@@ -19,7 +19,7 @@ export interface ServerModuleShape {
   beforeware?: Array<(app: Express) => void>;
   middleware?: Array<(app: Express) => void>;
   // Shared modules data
-  data?: any;
+  data?: { [key: string]: any };
 }
 
 interface ServerModule extends ServerModuleShape {}

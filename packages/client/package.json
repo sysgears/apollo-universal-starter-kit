@@ -46,7 +46,7 @@
     "@fortawesome/fontawesome-free-brands": "^5.0.6",
     "@fortawesome/fontawesome-free-webfonts": "^1.0.9",
     "@fortawesome/react-fontawesome": "0.0.18",
-    "antd": "^3.3.3",
+    "antd": "^3.10.0",
     "apollo-cache-inmemory": "1.2.9",
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.3.4",

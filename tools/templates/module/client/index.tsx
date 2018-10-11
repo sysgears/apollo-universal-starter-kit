@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 import translate, { TranslateFunction } from '../../i18n';
 
 import { Route, NavLink } from 'react-router-dom';
@@ -14,12 +14,12 @@ const NavLinkWithI18n = translate()(({ t }: { t: TranslateFunction }) => (
   </NavLink>
 ));
 
-export default new Feature({
-  route: <Route exact path="/$module$" component={$Module$} />,
-  navItem: (
+export default new ClientModule({
+  route: [<Route exact path="/$module$" component={$Module$} />],
+  navItem: [
     <MenuItem key="/$module$">
       <NavLinkWithI18n />
     </MenuItem>
-  ),
-  localization: { ns: '$module$', resources }
+  ],
+  localization: [{ ns: '$module$', resources }]
 });

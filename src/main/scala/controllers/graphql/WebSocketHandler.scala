@@ -29,7 +29,7 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
   import spray.json.DefaultJsonProtocol._
 
   def handleMessages: Flow[Message, Message, NotUsed] = {
-    implicit val (queue, publisher) = Source.queue[Message](0, OverflowStrategy.fail)
+    implicit val (queue, publisher) = Source.queue[Message](16, OverflowStrategy.backpressure)
       .toMat(Sink.asPublisher(false))(Keep.both)
       .run()
     val killSwitches = KillSwitches.shared(this.getClass.getSimpleName)

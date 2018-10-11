@@ -36,11 +36,9 @@ const FormView = ({ schema, updateEntry, createEntry, title, customFields, data 
     <Formik
       initialValues={mapFormPropsToValues({ schema, data: data ? data.node : null })}
       validate={values => {
-        console.log('validate, values:', values);
         DomainValidation.validate(values, schema);
       }}
       onSubmit={async values => {
-        console.log('onSubmit, values:', values);
         await onSubmit({ schema, values, updateEntry, createEntry, title, data: data ? data.node : null });
       }}
       render={({ values, handleChange, handleBlur, handleSubmit }) => (

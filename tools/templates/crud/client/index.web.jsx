@@ -6,9 +6,9 @@ import $Module$Edit from './containers/$Module$Edit';
 import resolvers from './resolvers';
 
 import { AuthRoute, IfLoggedIn } from '../user/containers/Auth';
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 
-export default new Feature({
+export default new ClientModule({
   route: [
     <AuthRoute
       exact
@@ -27,7 +27,7 @@ export default new Feature({
       link="$module$"
     />
   ],
-  navItem: (
+  navItem: [
     <IfLoggedIn role={['editor', 'admin']}>
       <MenuItem key="/$module$">
         <NavLink to="/$module$" className="nav-link" activeClassName="active">
@@ -35,6 +35,6 @@ export default new Feature({
         </NavLink>
       </MenuItem>
     </IfLoggedIn>
-  ),
-  resolver: resolvers
+  ],
+  resolver: [resolvers]
 });

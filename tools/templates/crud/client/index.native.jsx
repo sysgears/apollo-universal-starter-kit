@@ -7,8 +7,7 @@ import { createTabBarIconWrapper } from '../common/components/native';
 import $Module$List from './containers/$Module$List';
 import $Module$Edit from './containers/$Module$Edit';
 import resolvers from './resolvers';
-
-import Feature from '../connector';
+import ClientModule from '../ClientModule.native';
 
 class $Module$ListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -16,7 +15,7 @@ class $Module$ListScreen extends React.Component {
     headerRight: <Button title="Add" onPress={() => navigation.navigate('$Module$Edit', { id: 0 })} />
   });
   render() {
-    return <$Module$List navigation={this.props.navigation} title="$MoDuLe$" nativeLink={"$MoDuLe$Edit"} />;
+    return <$Module$List navigation={this.props.navigation} title="$MoDuLe$" nativeLink={'$MoDuLe$Edit'} />;
   }
 }
 
@@ -42,20 +41,22 @@ const $Module$Navigator = createStackNavigator({
   $Module$Edit: { screen: $Module$EditScreen }
 });
 
-export default new Feature({
-  drawerItem: {
-    $Module$: {
-      screen: $Module$Navigator,
-      navigationOptions: {
-        tabBarIcon: createTabBarIconWrapper(Ionicons, {
-          name: 'ios-browsers-outline',
-          size: 30
-        })
-      },
-      userInfo: {
-        showOnLogin: true
+export default new ClientModule({
+  drawerItem: [
+    {
+      $Module$: {
+        screen: $Module$Navigator,
+        navigationOptions: {
+          tabBarIcon: createTabBarIconWrapper(Ionicons, {
+            name: 'ios-browsers-outline',
+            size: 30
+          })
+        },
+        userInfo: {
+          showOnLogin: true
+        }
       }
     }
-  },
-  resolver: resolvers
+  ],
+  resolver: [resolvers]
 });

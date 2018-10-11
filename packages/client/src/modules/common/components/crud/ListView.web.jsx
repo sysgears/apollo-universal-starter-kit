@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import React from 'react';
 import PropTypes from 'prop-types';
-import DomainValidator from '@domain-schema/validation';
+import DomainValidation from '@domain-schema/validation';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
@@ -10,7 +10,6 @@ import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from
 import { createColumnFields, createFormFields } from '../../util';
 import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
 import { hasRole } from '../../../user/containers/Auth';
-import { computeDomainValidationErrors } from '../../../../../../common/validation';
 
 function dragDirection(dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
@@ -341,8 +340,7 @@ class ListView extends React.Component {
               <Formik
                 initialValues={mapFormPropsToValues({ schema })}
                 validate={values => {
-                  const rawErrors = DomainValidator.validate(schema, values);
-                  return computeDomainValidationErrors(rawErrors);
+                  DomainValidation.validate(values, schema);
                 }}
                 onSubmit={async (values, { resetForm }) => {
                   const insertValues = pickInputFields({ schema, values });

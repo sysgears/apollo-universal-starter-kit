@@ -1,9 +1,11 @@
+import { NavigationRouteConfig } from 'react-navigation';
+
 import BaseModule, { BaseModuleShape } from './BaseModule';
 
 import { merge } from 'lodash';
 
 export interface ClientModuleShape extends BaseModuleShape {
-  drawerItem?: Array<{ [key: string]: any }>;
+  drawerItem?: NavigationRouteConfig[];
 }
 
 interface ClientModule extends ClientModuleShape {}

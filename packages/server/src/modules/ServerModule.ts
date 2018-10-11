@@ -1,20 +1,28 @@
 import { merge } from 'lodash';
-
-// types
 import { DocumentNode } from 'graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { IResolvers } from 'graphql-tools';
 import { Express } from 'express';
+import { Resource } from 'i18next';
+import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
+import { IResolvers } from 'graphql-tools';
 
 import Module from './Module';
 
+interface CreateContextFuncProps {
+  req: Request;
+  res: Response;
+  connectionParams: ConnectionParamsOptions;
+  webSocket: WebSocket;
+  context: { [key: string]: any };
+}
+
 export interface ServerModuleShape {
   // Localization
-  localization?: Array<{ ns: string; resources: any }>;
+  localization?: Array<{ ns: string; resources: Resource }>;
   // GraphQL API
   schema?: DocumentNode[];
-  createResolversFunc?: Array<(pubsub?: PubSub) => IResolvers>;
-  createContextFunc?: Array<({ req, res, connectionParams, webSocket, context }: any) => { [key: string]: any }>;
+  createResolversFunc?: Array<(pubsub: PubSub) => IResolvers>;
+  createContextFunc?: Array<(props: CreateContextFuncProps) => { [key: string]: any }>;
   // Middleware
   beforeware?: Array<(app: Express) => void>;
   middleware?: Array<(app: Express) => void>;
@@ -33,7 +41,12 @@ class ServerModule extends Module {
     return this.schema;
   }
 
-  public async createContext(req: any, res: any, connectionParams?: any, webSocket?: any) {
+  public async createContext(
+    req: Request,
+    res: Response,
+    connectionParams?: ConnectionParamsOptions,
+    webSocket?: WebSocket
+  ) {
     let context = {};
     for (const createContextFunc of this.createContextFunc) {
       context = merge(context, await createContextFunc({ req, res, connectionParams, webSocket, context }));

@@ -2,6 +2,7 @@ import { ApolloServer, AuthenticationError, ApolloError } from 'apollo-server-ex
 import { formatResponse } from 'apollo-logger';
 import { GraphQLResponse } from '../../../node_modules/apollo-server-core/dist/runQuery';
 import { Context } from '../../../node_modules/apollo-server-core';
+import 'isomorphic-fetch';
 
 import modules from './modules/index';
 import schema from './api/schema';

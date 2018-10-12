@@ -8,4 +8,4 @@ const pubsub = settings.app.logging.apolloLogging
   ? wrapPubSub(new PubSub(), { logger: log.debug.bind(log) })
   : new PubSub();
 
-export default pubsub;
+export default pubsub as PubSub;

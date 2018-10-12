@@ -649,7 +649,7 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.1.7"
 
-"@fortawesome/fontawesome@^1.1.3":
+"@fortawesome/fontawesome@^1.1.8":
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome/-/fontawesome-1.1.8.tgz#75fe66a60f95508160bb16bd781ad7d89b280f5b"
   dependencies:
@@ -7277,7 +7277,7 @@ graphql-extensions@^0.2.1:
   dependencies:
     apollo-server-env "^2.0.3"
 
-graphql-iso-date@^3.3.0:
+graphql-iso-date@^3.5.0:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.6.1.tgz#bd2d0dc886e0f954cbbbc496bbf1d480b57ffa96"
 

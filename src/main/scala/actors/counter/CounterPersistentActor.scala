@@ -1,61 +1,65 @@
 package actors.counter
 
-import actors.counter.CounterPersistentActor.{GetAmount, IncrementAndGet, Reset}
+import actors.counter.CounterPersistentActor.{GetAmount, IncrementAndGet, Init}
 import akka.actor.{ActorLogging, Props}
-import akka.persistence.{PersistentActor, SnapshotOffer, SnapshotSelectionCriteria}
+import akka.persistence._
 import util.Named
 
 object CounterPersistentActor extends Named {
 
   object GetAmount
 
-  object Reset
+  case class Init(amount: Int)
 
   case class IncrementAndGet(amount: Int)
 
   def props = Props(new CounterPersistentActor)
 
-  override final val name = "PersistentCounterActor"
+  override final val name = "CounterPersistentActor"
 }
 
 class CounterPersistentActor extends PersistentActor with ActorLogging {
 
   override def preStart {
     log.info(s"Actor [$self] starting ...")
-    self ! Reset
+    deleteSnapshots(SnapshotSelectionCriteria())
   }
 
-  override def persistenceId: String = "counter-persistent"
+  override def persistenceId: String = CounterPersistentActor.name
 
   private var counter: Int = 0
 
   override def receiveRecover: Receive = {
-    case SnapshotOffer(_, snapshot: Int) => {
-      log.info(s"Recovered snapshot [$snapshot]")
-      counter = snapshot
-    }
+    case SnapshotOffer(metadata, snapshot: Int) => counter = snapshot
+
+    case RecoveryCompleted => log.info(s"Counter recovery complited. Current state: [$counter]")
   }
 
   override def receiveCommand: Receive = {
     case incrementAndGet: IncrementAndGet =>
-      log.info(s"Received message: [$incrementAndGet]")
-      counter += incrementAndGet.amount
+      log.info(s"Received message: [ $incrementAndGet ]")
+      increment(incrementAndGet.amount)
       saveSnapshot(counter)
       sender ! counter
 
     case GetAmount => sender ! counter
 
-    case Reset => {
-      log.info(s"Reseting state of Actor [$self]...")
-      deleteSnapshots(SnapshotSelectionCriteria())
-      resetCounter
-    }
+    case init: Init =>
+      initCounter(init.amount)
+      saveSnapshot(counter)
+      sender ! counter
+
+    case DeleteSnapshotsSuccess(criteria) => log.info("Snapshots successfully deleted")
+
+    case DeleteMessagesSuccess(toSequenceNr) => log.info("Messages successfully deleted")
   }
 
-  private def resetCounter = counter = 0
+  private def initCounter(amount: Int) = counter = amount
+
+  private def increment(amount: Int) = counter += amount
 
   override def postStop {
-    log.info(s"Actor [$self] has stopped")
+    log.info(s"Execution stopped")
   }
 
   override def postRestart(reason: Throwable) {

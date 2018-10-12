@@ -2,29 +2,20 @@ package controllers.graphql.counter.subscriptions
 
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
-import akka.http.scaladsl.testkit.{ScalatestRouteTest, WSProbe}
-import controllers.graphql.Utils._
+import akka.http.scaladsl.testkit.WSProbe
+import controllers.graphql.TestHelper
 import controllers.graphql.jsonProtocols.GraphQLMessage.graphQlWebsocketProtocol
 import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import controllers.graphql.jsonProtocols.GraphQLResponseJsonProtocol._
 import controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
 import controllers.graphql.jsonProtocols.OperationMessageType._
 import controllers.graphql.jsonProtocols.{GraphQLMessage, GraphQLResponse, OperationMessage}
-import org.scalatest.{BeforeAndAfter, Matchers, WordSpec}
 import spray.json._
 
-class WebSocketSpec extends WordSpec with Matchers with ScalatestRouteTest with BeforeAndAfter {
+class WebSocketSpec extends TestHelper {
 
   private val websocketProtocol = Seq(graphQlWebsocketProtocol)
   private val websocketMessageId = Some("1")
-
-  before {
-    resetCounter
-  }
-
-  after {
-    resetCounter
-  }
 
   "WebSocket" must {
     "subscribe to counter updated events and receive several event" in {

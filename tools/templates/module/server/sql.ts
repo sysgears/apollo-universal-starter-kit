@@ -1,4 +1,7 @@
-// @ts-ignore
 import knex from '../../sql/connector';
 
-export default class $Module$ {}
+export default class $Module$ {
+  public $module$s() {
+    return knex.select();
+  }
+}

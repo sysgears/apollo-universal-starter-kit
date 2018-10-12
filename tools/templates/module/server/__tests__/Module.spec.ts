@@ -1,15 +1,12 @@
 import chai from 'chai';
 import { step } from 'mocha-steps';
-import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
+import { getServer } from '../../../testHelpers/integrationSetup';
 
 describe('$Module$ API works', () => {
   let server: any;
-  // @ts-ignore
-  let apollo: any;
 
   before(() => {
     server = getServer();
-    apollo = getApollo();
   });
 
   step('Has GraphiQL endpoint', () => {

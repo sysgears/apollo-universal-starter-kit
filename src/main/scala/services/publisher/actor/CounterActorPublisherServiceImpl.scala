@@ -9,6 +9,7 @@ import javax.inject.{Inject, Singleton}
 import models.counter.Counter
 import org.reactivestreams.Publisher
 import services.publisher.PublisherService
+import util.Logger
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
@@ -16,7 +17,8 @@ import scala.util.{Failure, Success}
 @Singleton
 class CounterActorPublisherServiceImpl @Inject()(implicit val actorSystem: ActorSystem,
                                                  executionContext: ExecutionContext,
-                                                 actorMaterializer: ActorMaterializer) extends PublisherService[Counter] {
+                                                 actorMaterializer: ActorMaterializer) extends PublisherService[Counter]
+  with Logger {
 
   override def publish(event: Counter) = actorSystem.eventStream.publish(event)
 
@@ -29,11 +31,11 @@ class CounterActorPublisherServiceImpl @Inject()(implicit val actorSystem: Actor
     counterEventPublisher ! Subscribe(queue)
     queue.watchCompletion.onComplete {
       case Success(_) =>
-        println(s"Stream closed successfully.")//TODO connect logging
+        log.info(s"Stream closed successfully.")
         counterEventPublisher ! PoisonPill
 
       case Failure(exception) =>
-        println(s"Stream closed with fail. Reason: $exception.")
+        log.info(s"Stream closed with fail. Reason: $exception.")
         counterEventPublisher ! PoisonPill
     }
     publisher

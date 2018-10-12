@@ -94,7 +94,7 @@
     "jsonwebtoken": "^8.1.0",
     "knex": "^0.14.2",
     "knex-migrate": "^1.6.1",
-    "knexnest": "^0.4.1",
+    "knexnest": "^1.0.0",
     "lerna": "^2.5.1",
     "lint-staged": "^7.0.4",
     "lodash": "^4.17.4",

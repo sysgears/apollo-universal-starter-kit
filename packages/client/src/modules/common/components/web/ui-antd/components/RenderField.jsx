@@ -5,13 +5,13 @@ import { Form, Input } from 'antd';
 const FormItem = Form.Item;
 
 const RenderField = ({ input, label, type, formItemLayout, meta: { touched, error }, placeholder }) => {
+  let validateStatus = '';
+  if (touched && error) {
+    validateStatus = 'error';
+  }
+
   return (
-    <FormItem
-      label={label}
-      {...formItemLayout}
-      validateStatus={touched && error ? 'error' : ''}
-      help={touched && error}
-    >
+    <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
       <div>
         <Input {...input} placeholder={label || placeholder} type={type} />
       </div>

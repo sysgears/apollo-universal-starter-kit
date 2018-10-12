@@ -5,8 +5,13 @@ import { Form } from 'antd';
 const FormItem = Form.Item;
 
 const RenderField = ({ input, label, type, children, meta: { touched, error } }) => {
+  let validateStatus = '';
+  if (touched && error) {
+    validateStatus = 'error';
+  }
+
   return (
-    <FormItem label={label} validateStatus={touched && error ? 'error' : ''} help={error}>
+    <FormItem label={label} validateStatus={validateStatus} help={error}>
       <div>
         <select {...input} type={type}>
           {children}

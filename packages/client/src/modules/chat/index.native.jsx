@@ -6,28 +6,30 @@ import { HeaderTitle, IconButton } from '../common/components/native';
 import Chat from './containers/ChatOperations';
 import resources from './locales';
 
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 
 const HeaderTitleWithI18n = translate('chat')(HeaderTitle);
 
-export default new Feature({
-  drawerItem: {
-    Chat: {
-      screen: createStackNavigator({
-        Chat: {
-          screen: Chat,
-          navigationOptions: ({ navigation }) => ({
-            headerTitle: <HeaderTitleWithI18n style="subTitle" />,
-            headerLeft: (
-              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-            )
-          })
+export default new ClientModule({
+  drawerItem: [
+    {
+      Chat: {
+        screen: createStackNavigator({
+          Chat: {
+            screen: Chat,
+            navigationOptions: ({ navigation }) => ({
+              headerTitle: <HeaderTitleWithI18n style="subTitle" />,
+              headerLeft: (
+                <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+              )
+            })
+          }
+        }),
+        navigationOptions: {
+          drawerLabel: <HeaderTitleWithI18n />
         }
-      }),
-      navigationOptions: {
-        drawerLabel: <HeaderTitleWithI18n />
       }
     }
-  },
-  localization: { ns: 'chat', resources }
+  ],
+  localization: [{ ns: 'chat', resources }]
 });

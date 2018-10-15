@@ -45,7 +45,7 @@ export default pubsub => ({
       const { attachment } = input;
       const userId = user ? user.id : null;
       const {
-        data: [{ fileSystemStorage }]
+        data: { fileSystemStorage }
       } = modules;
 
       if (!fileSystemStorage) {

@@ -1,3 +1,3 @@
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 
-export default new Feature({});
+export default new ClientModule({});

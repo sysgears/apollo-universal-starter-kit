@@ -143,7 +143,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
 `;
       replace = hasBatchResolvers ? replace : '';
 
-      // override batch resolvers in resolvers.js file
+      // override batch resolvers in resolvers.ts file
       const replaceBatchResolvers = `// schema batch resolvers([^*]+)// end schema batch resolvers`;
       shell
         .ShellString(

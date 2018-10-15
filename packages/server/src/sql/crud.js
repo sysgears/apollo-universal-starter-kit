@@ -611,7 +611,6 @@ export default class Crud {
   }
 
   _create(data) {
-    console.log('_create:', data);
     return knex(this.getFullTableName())
       .insert(decamelizeKeys(this.normalizeFields(data)))
       .returning('id');

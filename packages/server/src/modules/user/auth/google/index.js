@@ -3,7 +3,7 @@ import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
 import resolvers from './resolvers';
-import Feature from '../connector';
+import AuthModule from '../AuthModule';
 import User from '../../sql';
 import access from '../../access';
 import settings from '../../../../../../../settings';
@@ -102,4 +102,6 @@ if (settings.user.auth.google.enabled && !__TEST__) {
   };
 }
 
-export default new Feature({ middleware, createResolversFunc: resolvers });
+export default (middleware
+  ? new AuthModule({ middleware: [middleware], createResolversFunc: [resolvers] })
+  : undefined);

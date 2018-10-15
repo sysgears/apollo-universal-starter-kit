@@ -19,8 +19,14 @@
   }
 }
 
+.menu-center {
+  display: flex;
+  align-items: center;
+}
+
 .pagination {
-  .page-item:focus, .page-link:focus {
+  .page-item:focus,
+  .page-link:focus {
     border-color: inherit;
     -webkit-box-shadow: none;
     box-shadow: none;

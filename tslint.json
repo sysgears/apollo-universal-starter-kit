@@ -12,7 +12,7 @@
     ]
   },
   "linterOptions": {
-    "exclude": ["**/*.js", "**/*.jsx", "**/*.d.ts"]
+    "exclude": ["**/*.js", "**/*.jsx", "**/*.d.ts", "tools/**/*.*"]
   },
   "rules": {
     "prettier": [true, {
@@ -44,6 +44,7 @@
     "no-any": false,
     "no-arg": true,
     "no-bitwise": true,
+    "no-empty-interface": false,
     "no-conditional-assignment": true,
     "no-consecutive-blank-lines": false,
     "no-console": [true, "log", "debug", "info", "time", "timeEnd", "trace"],
@@ -63,6 +64,7 @@
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
     "no-unused-expression": true,
+    "no-unused-variable": true,
     "no-var-keyword": true,
     "no-var-requires": true,
     "object-literal-sort-keys": false,

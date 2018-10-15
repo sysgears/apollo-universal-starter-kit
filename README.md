@@ -33,7 +33,7 @@ styling for your applications.
     * [Architecture and Implemented Modules](#architecture-and-implemented-modules)
 * [Demo](#demo)
 * [Branches](#branches)
-* [Download and Run Apollo Universal Starter Kit](#download-and-run-apollo-universal-starter-kit)
+* [First Run of Apollo Universal Starter Kit](#first-run-of-apollo-universal-starter-kit)
 * [Project Structure](#project-structure)
 * [Wiki Sections on Apollo Universal Starter Kit](#wiki-sections-on-apollo-universal-starter-kit)
 * [Support](#support)
@@ -52,7 +52,7 @@ styling for your applications.
 
 * Better productivity thanks to live reloading
 * An example of the modular architecture that's easy to support and extend
-* The possibility to write app modules using both TypeScript and JavaScript (both ES6- and ES7-styles)
+* The possibility to write app modules using both TypeScript and JavaScript (both ES6 and ES7 styles)
 * No need to develop [typical functionalities](#architecture-and-implemented-modules) for your app
 * Zero Webpack configurations thanks to [SpinJS]
 
@@ -70,14 +70,14 @@ styling for your applications.
 
 Configuring JavaScript-based client-server-mobile projects never was a trivial task. Not only do you have to spend time
 installing all the dependencies and managing them, but you're also constrained to implement many basic functionalities
-over and over again. And you always lack time for creating a basic project that you can reuse across all of your projects.
+over and over again. And you never have time for building a starter codebase that you can reuse across all of your projects.
 
 To relieve you from the burden of configuring the project, building the application structure, and implementing typical 
-features, Apollo Universal Starter Kit was created.
+features, we've created Apollo Universal Starter Kit.
 
 Apollo Universal Starter Kit provides you with a client-server-mobile application that you can employ as a foundation 
 for developing new web or mobile projects using popular tools from the JavaScript ecosystem. But the starter kit doesn't
-just creates a mix of top JS technologies. In fact, the basic projects is powered by several custom libraries to simplify
+just creates a mix of top JS technologies. In fact, the kit is powered by several _custom_ libraries and solutions to simplify
 managing project configurations, creating new modules, building GraphQL queries, and carry out other tasks. 
 
 One such solution that helps to build and configure your Apollo Universal Starter Kit project without any complications 
@@ -94,9 +94,7 @@ Learn more about the main modules in [Architecture and Implemented Modules](#arc
 
 ### Architecture and Implemented Modules
 
-Among all the approaches to building the application architecture, we chose the modular architecture. You can remove any 
-built-in modules without breaking the application. We recommend that you develop your custom modules with the same idea 
-in mind when using the starter kit.
+Among all the approaches to building the application architecture, we chose the disposable fractal-based modular architecture. You can remove any built-in modules without breaking the application. We recommend that you develop your custom modules with the same idea in mind when using the starter kit.
 
 The implemented modules are:
 
@@ -135,8 +133,8 @@ If you want to see a mobile application in action, check out [this demo on Expo.
 
 ## First Run of Apollo Universal Starter Kit
 
-Verify if you use Node.js 6.x or higher (Node.js 8.x is recommended) before running the starter kit on your development
-machine.
+Verify if you use Node.js 6.x or higher (Node.js 8.x is recommended) before running the starter kit in your development
+environment.
 
 1. Clone the stable branch of Apollo Universal Starter Kit.
 
@@ -212,7 +210,7 @@ apollo-universal-starter-kit
 
 ## Wiki Sections on Apollo Universal Starter Kit
 
-In the list below, you can follow to various documents that are concerned with different aspects of running, using, and
+In the list below, you can follow to various documents that explain different aspects of running, using, and
 configuring Apollo Universal Starter Kit.
 
 * [Getting Started]

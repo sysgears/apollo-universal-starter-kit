@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { Text, StyleSheet } from 'react-native';
 import SubtitleTextStyles from '../styles/CardSubTitleText';
 
-const CardSubtitleText = ({ children, style, ...props }) => {
+/* eslint-disable no-unused-vars */
+const CardSubtitleText = ({ children, style, styles = {}, ...props }) => {
   return (
-    <Text style={[styles.text, style]} {...props}>
+    <Text style={[defaultStyles.text, style]} {...props}>
       {children}
     </Text>
   );
@@ -16,6 +17,6 @@ CardSubtitleText.propTypes = {
   style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
 };
 
-const styles = StyleSheet.create(SubtitleTextStyles);
+const defaultStyles = StyleSheet.create(SubtitleTextStyles);
 
 export default CardSubtitleText;

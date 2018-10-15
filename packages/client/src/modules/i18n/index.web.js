@@ -4,7 +4,7 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 import { MenuItem, LanguagePicker } from '../../modules/common/components/web';
 import modules from '../';
 import settings from '../../../../../settings';
@@ -50,14 +50,16 @@ if (__CLIENT__) {
 
 i18n.use(reactI18nextModule).init(I18N_CONFIG);
 
-const langPicker = {};
-if (settings.i18n.enabled && settings.i18n.langPickerRender) {
-  langPicker.navItemRight = (
-    <MenuItem key="languagePicker" style={{ display: 'flex', alignItems: 'center' }}>
-      <LanguagePicker i18n={i18n} />
-    </MenuItem>
-  );
-}
+const langPicker =
+  settings.i18n.enabled && settings.i18n.langPickerRender
+    ? new ClientModule({
+        navItemRight: [
+          <MenuItem key="languagePicker" className="menu-center">
+            <LanguagePicker i18n={i18n} />
+          </MenuItem>
+        ]
+      })
+    : undefined;
 
 class RootComponent extends React.Component {
   constructor(props) {
@@ -80,13 +82,10 @@ RootComponent.propTypes = {
   children: PropTypes.node
 };
 
-export default new Feature(
-  settings.i18n.enabled
-    ? {
-        data: { i18n: true },
-        // eslint-disable-next-line react/display-name
-        rootComponentFactory: req => <RootComponent req={req} />,
-        ...langPicker
-      }
-    : {}
-);
+export default (settings.i18n.enabled
+  ? new ClientModule(langPicker, {
+      data: { i18n: true },
+      // eslint-disable-next-line react/display-name
+      rootComponentFactory: [req => <RootComponent req={req} />]
+    })
+  : undefined);

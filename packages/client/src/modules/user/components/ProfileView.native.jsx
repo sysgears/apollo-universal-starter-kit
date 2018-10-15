@@ -8,6 +8,8 @@ import translate from '../../../i18n';
 
 import { Card, CardItem, CardText, CardHeader, CardLabel, Loading } from '../../common/components/native';
 import { linkText } from '../../common/components/native/styles';
+import StripeSubscriptionProfile from '../../payments/stripe/subscription/containers/SubscriptionProfile';
+import settings from '../../../../../../settings';
 
 const renderProfileItem = (title, value, idx) => (
   <CardItem key={idx}>
@@ -50,15 +52,12 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
               {profileItems.map((item, idx) => renderProfileItem(item.label, item.value, idx))}
             </Card>
           </View>
-          {/* 
-            * TODO Add this code after implementation Subscription module for mobile platform          
-          */}
-          {/* <View style={styles.cardWrapper}>
-            <Card>
-              <CardHeader title="Subscription info" />
-              <SubscriptionProfile />
-            </Card>
-          </View> */}
+          <View style={styles.cardWrapper}>
+            {/* Credit card info (Stripe subscription module)*/}
+            {settings.stripe.subscription.enabled &&
+              settings.stripe.subscription.publicKey &&
+              currentUser.role === 'user' && <StripeSubscriptionProfile />}
+          </View>
           <TouchableOpacity
             style={styles.linkWrapper}
             onPress={() => navigation.navigate('ProfileEdit', { id: currentUser.id })}

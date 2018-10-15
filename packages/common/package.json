@@ -8,9 +8,9 @@
     "lint": "yarn eslint && yarn tslint"
   },
   "dependencies": {
-    "apollo-cache-inmemory": "^1.1.12",
+    "apollo-cache-inmemory": "1.2.9",
     "apollo-cache-router": "^1.1.6",
-    "apollo-client": "^2.3.1",
+    "apollo-client": "^2.3.4",
     "apollo-link": "^1.0.6",
     "apollo-link-batch-http": "1.2.2",
     "apollo-link-state": "^0.4.1",

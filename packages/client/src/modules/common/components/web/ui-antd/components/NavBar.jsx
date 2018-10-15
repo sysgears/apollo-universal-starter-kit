@@ -20,7 +20,7 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <Row gutter={8}>
+      <Row gutter={0}>
         <Col span={14}>
           <Menu
             onClick={this.handleClick}
@@ -48,7 +48,7 @@ class NavBar extends React.Component {
             {modules.navItemsRight}
             {__DEV__ && (
               <MenuItem>
-                <a href="/graphql">GPlayground</a>
+                <a href="/graphiql">GraphiQL</a>
               </MenuItem>
             )}
           </Menu>

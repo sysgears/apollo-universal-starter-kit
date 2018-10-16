@@ -1,16 +1,15 @@
 package controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.scaladsl.model.ws.UpgradeToWebSocket
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.server.directives.HeaderDirectives.optionalHeaderValueByType
 import akka.stream.ActorMaterializer
+import controllers.graphql.jsonProtocols.GraphQLMessage
+import controllers.graphql.jsonProtocols.GraphQLMessageProtocol._
 import graphql.{GraphQL, GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import sangria.execution.Executor
 import sangria.renderer.SchemaRenderer
-import spray.json._
 
 import scala.concurrent.ExecutionContext
 
@@ -25,30 +24,17 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
   val Routes: Route =
     path("graphql") {
       get {
-        optionalHeaderValueByType[UpgradeToWebSocket](()) {
-          case Some(upgrade) =>
-            complete(webSocketHandler.handleMessages(upgrade))
-          case None =>
-            parameters('query, 'operation.?) {
-              (query, operation) =>
-                httpHandler.handleQuery(query, operation)
-            }
-        }
+        handleWebSocketMessagesForProtocol(webSocketHandler.handleMessages, "graphql-ws")
       } ~
         post {
-          entity(as[JsValue]) { requestJson =>
-            val JsArray(array) = requestJson
-            val JsObject(fields) = array(0)
-            val JsString(query) = fields("query")
-            val operation = fields.get("operationName") collect {
-              case JsString(op) => op
+          entity(as[GraphQLMessage]) {
+            graphQlMessage =>
+              httpHandler.handleQuery(graphQlMessage)
+          } ~
+            entity(as[Seq[GraphQLMessage]]) {
+              graphQlMessages =>
+                httpHandler.handleBatchQuery(graphQlMessages)
             }
-            val vars = fields.get("variables") match {
-              case Some(obj: JsObject) => obj
-              case _ => JsObject.empty
-            }
-            httpHandler.handleQuery(query, operation, vars)
-          }
         }
     } ~
       (path("schema") & get) {

@@ -1,12 +1,13 @@
 package controllers.graphql
 
-import akka.http.scaladsl.model.HttpResponse
-import akka.http.scaladsl.model.ws.{Message, TextMessage, UpgradeToWebSocket}
+import akka.NotUsed
+import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
-import controllers.graphql.websocket.OperationMessage
-import controllers.graphql.websocket.OperationMessageJsonProtocol._
-import controllers.graphql.websocket.OperationMessageType._
+import controllers.graphql.jsonProtocols.GraphQLMessageProtocol._
+import controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
+import controllers.graphql.jsonProtocols.OperationMessageType._
+import controllers.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
 import graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
@@ -25,9 +26,9 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
                                 (implicit val actorMaterializer: ActorMaterializer,
                                  implicit val scheduler: Scheduler) {
 
-  private val graphqlWebsocketProtocol = Some("graphql-ws")
+  import spray.json.DefaultJsonProtocol._
 
-  def handleMessages(upgradeToWebSocket: UpgradeToWebSocket): HttpResponse = {
+  def handleMessages: Flow[Message, Message, NotUsed] = {
     implicit val (queue, publisher) = Source.queue[Message](0, OverflowStrategy.fail)
       .toMat(Sink.asPublisher(false))(Keep.both)
       .run()
@@ -50,37 +51,26 @@ class WebSocketHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
             queue.complete
         }
       }
-    upgradeToWebSocket.handleMessagesWithSinkSource(incoming, Source.fromPublisher(publisher), graphqlWebsocketProtocol)
+    Flow.fromSinkAndSource(incoming, Source.fromPublisher(publisher))
   }
 
   private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)
                                 (implicit queue: SourceQueueWithComplete[Message]): Unit = {
-
     import sangria.streaming.akkaStreams._
-
     operationMessage.payload.foreach {
       payload =>
-        val JsObject(fields) = payload
-        val JsString(query) = fields("query")
-        val operation = fields.get("operationName") collect {
-          case JsString(op) => op
-        }
-        val vars = fields.get("variables") match {
-          case Some(obj: JsObject) => obj
-          case _ => JsObject.empty
-        }
-        QueryParser.parse(query) match {
+        val graphQlMessage = payload.convertTo[GraphQLMessage]
+        QueryParser.parse(graphQlMessage.query) match {
           case Success(queryAst) =>
-            queryAst.operationType(operation) match {
+            queryAst.operationType(graphQlMessage.operationName) match {
               case Some(Subscription) =>
                 val ctx = graphQlContextFactory.createContextForRequest
-
                 graphQlExecutor.execute(
                   queryAst = queryAst,
                   userContext = ctx,
                   root = (),
-                  operationName = operation,
-                  variables = vars
+                  operationName = graphQlMessage.operationName,
+                  variables = graphQlMessage.variables.getOrElse(JsObject.empty)
                 ).viaMat(killSwitches.flow)(Keep.none)
                   .runForeach {
                     result =>

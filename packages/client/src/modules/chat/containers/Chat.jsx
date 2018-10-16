@@ -22,7 +22,7 @@ export default class extends React.Component {
     currentUser: PropTypes.object,
     uuid: PropTypes.string,
     pickImage: PropTypes.func,
-    images: PropTypes.bool
+    allowImages: PropTypes.bool
   };
 
   constructor(props) {
@@ -137,8 +137,8 @@ export default class extends React.Component {
   };
 
   renderCustomView = chatProps => {
-    const { images } = this.props;
-    return <CustomView {...chatProps} images={images} />;
+    const { allowImages } = this.props;
+    return <CustomView {...chatProps} allowImages={allowImages} />;
   };
 
   renderSend = chatProps => {
@@ -147,8 +147,8 @@ export default class extends React.Component {
   };
 
   renderCustomActions = chatProps => {
-    const { images } = this.props;
-    if (images) {
+    const { allowImages } = this.props;
+    if (allowImages) {
       return <RenderCustomActions {...chatProps} pickImage={this.props.pickImage} />;
     }
   };

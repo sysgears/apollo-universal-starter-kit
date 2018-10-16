@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
 const CustomView = ({
-  images,
+  allowImages,
   currentMessage: {
     loadingImage,
     quotedId,
@@ -12,7 +12,7 @@ const CustomView = ({
   },
   user: { _id: userId }
 }) => {
-  if (images && loadingImage) {
+  if (allowImages && loadingImage) {
     return (
       <View style={styles.uploading}>
         <ActivityIndicator size="large" color="#0000ff" />
@@ -46,7 +46,7 @@ CustomView.propTypes = {
   messages: PropTypes.array,
   currentMessage: PropTypes.object,
   user: PropTypes.object,
-  images: PropTypes.bool
+  allowImages: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

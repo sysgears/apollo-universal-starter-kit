@@ -29,12 +29,12 @@ export default Component => {
     state = {
       edges: [],
       endCursor: 0,
-      images: chatConfig.images,
+      allowImages: chatConfig.allowImages,
       notify: null
     };
 
-    static getDerivedStateFromProps({ messages }, { images, edges: stateEdges, endCursor }) {
-      if (images && messages) {
+    static getDerivedStateFromProps({ messages }, { allowImages, edges: stateEdges, endCursor }) {
+      if (allowImages && messages) {
         const { edges } = messages;
         if (!stateEdges.length) {
           return { edges };
@@ -147,10 +147,10 @@ export default Component => {
     };
 
     render() {
-      const { images, edges } = this.state;
+      const { allowImages, edges } = this.state;
       const { messages } = this.props;
       const newProps = {
-        images,
+        allowImages,
         messages: edges.length ? { ...messages, edges } : messages,
         pickImage: this.pickImage
       };

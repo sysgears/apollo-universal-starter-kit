@@ -1,6 +1,6 @@
 export default {
   limit: 50,
-  images: true,
+  allowImages: true,
   giftedChat: {
     alwaysShowSend: false,
     timeFormat: 'LT',

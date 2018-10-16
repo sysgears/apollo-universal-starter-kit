@@ -32,7 +32,7 @@ class CounterPersistentActor extends PersistentActor with ActorLogging {
   override def receiveRecover: Receive = {
     case SnapshotOffer(metadata, snapshot: Int) => counter = snapshot
 
-    case RecoveryCompleted => log.info(s"Counter recovery complited. Current state: [$counter]")
+    case RecoveryCompleted => log.info(s"Counter recovery completed. Current state: [$counter]")
   }
 
   override def receiveCommand: Receive = {
@@ -49,9 +49,9 @@ class CounterPersistentActor extends PersistentActor with ActorLogging {
       saveSnapshot(counter)
       sender ! counter
 
-    case DeleteSnapshotsSuccess(criteria) => log.info("Snapshots successfully deleted")
+    case DeleteSnapshotsSuccess(_) => log.info("Snapshots successfully deleted")
 
-    case DeleteMessagesSuccess(toSequenceNr) => log.info("Messages successfully deleted")
+    case DeleteMessagesSuccess(_) => log.info("Messages successfully deleted")
   }
 
   private def initCounter(amount: Int) = counter = amount
@@ -59,7 +59,7 @@ class CounterPersistentActor extends PersistentActor with ActorLogging {
   private def increment(amount: Int) = counter += amount
 
   override def postStop {
-    log.info(s"Execution stopped")
+    log.info(s"Actor [$self] stopped")
   }
 
   override def postRestart(reason: Throwable) {

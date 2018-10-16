@@ -20,12 +20,14 @@ class QuerySpec extends TestHelper {
   val serverCounterGraphQLMessage = ByteString(GraphQLMessage(serverCounter).toJson.compactPrint)
   val serverCounterEntity = HttpEntity(`application/json`, serverCounterGraphQLMessage)
 
+  val batchQueries = Seq(GraphQLMessage(addServerCounterMutation, Some("Increment")), GraphQLMessage(serverCounter, Some("IncrementAndGet")))
+  val batchEntity = HttpEntity(`application/json`, batchQueries.toJson.compactPrint)
   "GraphQLController" must {
 
     implicit val counterJsonReader = CounterJsonReader
 
     "increment amount of counter" in {
-      Post("/graphql", addServerCounterEntity) ~> routes ~> check {
+      Post(endpoint, addServerCounterEntity) ~> routes ~> check {
         val counter = responseAs[String].parseJson.convertTo[Counter]
 
         status shouldBe OK
@@ -35,9 +37,9 @@ class QuerySpec extends TestHelper {
     }
 
     "increment several times and then get an amount of counter" in {
-      Post("/graphql", addServerCounterEntity) ~> routes ~> check {
+      Post(endpoint, addServerCounterEntity) ~> routes ~> check {
 
-        Post("/graphql", addServerCounterEntity) ~> routes ~> check {
+        Post(endpoint, addServerCounterEntity) ~> routes ~> check {
           val counter = responseAs[String].parseJson.convertTo[Counter]
 
           status shouldBe OK
@@ -45,13 +47,20 @@ class QuerySpec extends TestHelper {
           counter.amount shouldBe 2
         }
 
-        Post("/graphql", serverCounterEntity) ~> routes ~> check {
+        Post(endpoint, serverCounterEntity) ~> routes ~> check {
           val counter = responseAs[String].parseJson.convertTo[Counter]
 
           status shouldBe OK
           contentType.mediaType shouldBe `application/json`
           counter.amount shouldBe 2
         }
+      }
+    }
+
+    "execute batch query" in {
+      Post(endpoint, batchEntity) ~> routes ~> check {
+        status shouldBe OK
+        contentType.mediaType shouldBe `application/json`
       }
     }
   }

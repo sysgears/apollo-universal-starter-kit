@@ -16,12 +16,10 @@ class QuerySpec extends TestHelper {
   val addServerCounterGraphQLMessage = ByteString(GraphQLMessage(addServerCounterMutation).toJson.compactPrint)
   val addServerCounterEntity = HttpEntity(`application/json`, addServerCounterGraphQLMessage)
 
-  val serverCounter = "query IncrementAndGet { serverCounter { amount } }"
+  val serverCounter = "query Get { serverCounter { amount } }"
   val serverCounterGraphQLMessage = ByteString(GraphQLMessage(serverCounter).toJson.compactPrint)
   val serverCounterEntity = HttpEntity(`application/json`, serverCounterGraphQLMessage)
 
-  val batchQueries = Seq(GraphQLMessage(addServerCounterMutation, Some("Increment")), GraphQLMessage(serverCounter, Some("IncrementAndGet")))
-  val batchEntity = HttpEntity(`application/json`, batchQueries.toJson.compactPrint)
   "GraphQLController" must {
 
     implicit val counterJsonReader = CounterJsonReader
@@ -57,10 +55,27 @@ class QuerySpec extends TestHelper {
       }
     }
 
-    "execute batch query" in {
+    "execute batch mutation" in {
+
+      val batchQueries = Array(
+        GraphQLMessage(
+          "mutation Increment1 { addServerCounter(amount: 1) { amount } }", Some("Increment1")
+        ),
+        GraphQLMessage(
+          "mutation Increment2 { addServerCounter(amount: 1) { amount } }", Some("Increment2")
+        )
+      )
+      val batchEntity = HttpEntity(`application/json`, batchQueries.toJson.compactPrint)
+
       Post(endpoint, batchEntity) ~> routes ~> check {
         status shouldBe OK
         contentType.mediaType shouldBe `application/json`
+
+        responseAs[String] should include("\"batch\":{\"operationName\":\"Increment1\"}")
+        responseAs[String] should include("\"batch\":{\"operationName\":\"Increment2\"}")
+
+        responseAs[String] should include("{\"addServerCounter\":{\"amount\":1}}")
+        responseAs[String] should include("{\"addServerCounter\":{\"amount\":2}}")
       }
     }
   }

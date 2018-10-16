@@ -4,7 +4,6 @@ import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
 
 describe('$Module$ API works', () => {
   let server: any;
-  // @ts-ignore
   let apollo: any;
 
   before(() => {

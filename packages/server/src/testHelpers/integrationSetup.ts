@@ -1,4 +1,5 @@
 import chai from 'chai';
+import { Server } from 'http';
 import chaiHttp from 'chai-http';
 import { ApolloClient } from 'apollo-client';
 import WebSocket from 'ws';
@@ -10,7 +11,7 @@ import knex from '../sql/connector';
 chai.use(chaiHttp);
 chai.should();
 
-let server: any;
+let server: Server;
 let apollo: ApolloClient<any>;
 
 before(async () => {

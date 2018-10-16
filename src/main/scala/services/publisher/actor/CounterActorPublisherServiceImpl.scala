@@ -27,15 +27,15 @@ class CounterActorPublisherServiceImpl @Inject()(implicit val actorSystem: Actor
 
     val (queue, publisher) = Source.queue[Counter](16, OverflowStrategy.fail)
       .toMat(Sink.asPublisher(false))(Keep.both)
-      .run()
+      .run
     counterEventPublisher ! Subscribe(queue)
     queue.watchCompletion.onComplete {
       case Success(_) =>
-        log.info(s"Stream closed successfully.")
+        log.info(s"Queue [$queue] closed successfully.")
         counterEventPublisher ! PoisonPill
 
       case Failure(exception) =>
-        log.info(s"Stream closed with fail. Reason: $exception.")
+        log.info(s"Queue [$queue] closed with fail. Reason: $exception.")
         counterEventPublisher ! PoisonPill
     }
     publisher

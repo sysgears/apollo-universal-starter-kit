@@ -53,8 +53,6 @@ export default class RenderSelectFilterBoolean extends React.Component {
       defaultStyle = style;
     }
 
-    console.log('value:', value);
-
     let props = {
       style: defaultStyle,
       name: inputRest.name,

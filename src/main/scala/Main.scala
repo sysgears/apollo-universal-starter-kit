@@ -1,4 +1,4 @@
-import InjectionModules.Modules
+import InjectionModules.modules
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
@@ -10,7 +10,7 @@ import net.codingwell.scalaguice.InjectorExtensions._
 
 object Main extends App {
 
-  val injector = Guice.createInjector(Modules)
+  val injector = Guice.createInjector(modules)
   val routes = injector.instance[GraphQLController].Routes ~ injector.instance[FrontendController].Routes
 
   implicit val system: ActorSystem = injector.instance[ActorSystem]

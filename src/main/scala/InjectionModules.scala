@@ -5,7 +5,7 @@ import net.codingwell.scalaguice.ScalaModule
 
 object InjectionModules {
 
-  def Modules: util.List[ScalaModule] =
+  def modules: util.List[ScalaModule] =
     java.util.Arrays.asList(
       new AkkaModule,
       new CounterModule,

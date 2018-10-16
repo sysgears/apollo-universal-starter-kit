@@ -18,11 +18,8 @@ object CounterEventActor {
 }
 
 class CounterEventActor(actorSystem: ActorSystem)
-                       (implicit val executionContext: ExecutionContext) extends Actor with ActorLogging {
-
-  override def preStart {
-    log.info(s"Actor [$self] starting...")
-  }
+                       (implicit val executionContext: ExecutionContext) extends Actor
+  with ActorLogging {
 
   override def receive: Receive = {
 
@@ -33,17 +30,17 @@ class CounterEventActor(actorSystem: ActorSystem)
   }
 
   def subscribed(queue: SourceQueue[Counter]): Receive = {
-    case e: Counter =>
-      log.info(s"Pushing element [element: $e] into queue $queue")
-      queue.offer(e).map {
-        case Enqueued => log.info(s"Enqueued $e")
-        case Dropped => log.info(s"Dropped $e")
-        case Failure(ex) => log.info(s"Offer failed ${ex.getMessage}")
-        case QueueClosed => log.info("Source Queue closed")
+    case counter: Counter =>
+      log.info(s"Pushing element [$counter] into queue [$queue]")
+      queue.offer(counter).map {
+        case Enqueued => log.info(s"Added [$counter] to queue [${queue.hashCode}]")
+        case Dropped => log.info(s"Dropped [$counter] from [$queue]")
+        case Failure(ex) => log.info(s"Queue [$queue]. Offer failed [${ex.getMessage}]")
+        case QueueClosed => log.info(s"Queue [$queue] closed")
       }
   }
 
-  override def postStop() {
+  override def postStop {
     log.info(s"Actor [$self] was stopped")
   }
 }

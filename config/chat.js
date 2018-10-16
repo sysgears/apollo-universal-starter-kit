@@ -1,6 +1,7 @@
 export default {
   limit: 50,
   allowImages: true,
+  uploadDir: 'public',
   giftedChat: {
     alwaysShowSend: false,
     timeFormat: 'LT',

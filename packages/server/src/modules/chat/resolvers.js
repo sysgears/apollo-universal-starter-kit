@@ -52,7 +52,7 @@ export default pubsub => ({
         throw new Error(t('chat:messageNotAdded'));
       }
 
-      const result = attachment ? await fileSystemStorage.save(await attachment, settings.upload.uploadDir) : null;
+      const result = attachment ? await fileSystemStorage.save(await attachment, settings.chat.uploadDir) : null;
       const data = { ...input, attachment: result, userId };
       const [id] = attachment ? await Chat.addMessageWithAttachment(data) : await Chat.addMessage(data);
       const message = await Chat.message(id);

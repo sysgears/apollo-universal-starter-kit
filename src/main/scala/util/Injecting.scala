@@ -19,5 +19,5 @@ trait Injecting {
 }
 
 object Injecting {
-  val injector = Guice.createInjector(modules)
+  val injector: Injector = Guice.createInjector(modules)
 }

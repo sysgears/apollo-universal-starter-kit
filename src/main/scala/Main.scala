@@ -11,7 +11,7 @@ import net.codingwell.scalaguice.InjectorExtensions._
 object Main extends App {
 
   val injector = Guice.createInjector(modules)
-  val routes = injector.instance[GraphQLController].Routes ~ injector.instance[FrontendController].Routes
+  val routes = injector.instance[GraphQLController].routes ~ injector.instance[FrontendController].Routes
 
   implicit val system: ActorSystem = injector.instance[ActorSystem]
   implicit val materializer: ActorMaterializer = injector.instance[ActorMaterializer]

@@ -99,7 +99,7 @@ class HttpHandler @Inject()(graphQlContextFactory: GraphQLContextFactory,
         val ctx = graphQlContextFactory.createContextForRequest
         complete {
           BatchExecutor.executeBatch(
-            schema = GraphQL.Schema,
+            schema = GraphQL.schema,
             queryAst = queryAst,
             operationNames = operations,
             userContext = ctx,

@@ -7,21 +7,21 @@ object GraphQL {
   val maxQueryDepth = 15
   val maxQueryComplexity = 1000
 
-  val Schema: Schema[GraphQLContext, Unit] = sangria.schema.Schema(
+  val schema: Schema[GraphQLContext, Unit] = sangria.schema.Schema(
     query = ObjectType(
       name = "Query",
-      fields = Counter.GraphQL.Queries
+      fields = Counter.GraphQL.queries
     ),
     mutation = Some(
       ObjectType(
         name = "Mutation",
-        fields = Counter.GraphQL.Mutations
+        fields = Counter.GraphQL.mutations
       )
     ),
     subscription = Some(
       ObjectType(
         name = "Subscription",
-        fields = Counter.GraphQL.Subscriptions
+        fields = Counter.GraphQL.subscriptions
       )
     )
   )

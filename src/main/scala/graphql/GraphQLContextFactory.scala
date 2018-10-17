@@ -8,7 +8,7 @@ import services.publisher.PublisherService
 class GraphQLContextFactory @Inject()(val counterResolver: CounterResolver,
                                       val publisherService: PublisherService[Counter]) {
 
-  def createContextForRequest = {
+  def createContextForRequest: GraphQLContext = {
     GraphQLContext(counterResolver, publisherService)
   }
 }

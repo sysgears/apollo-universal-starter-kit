@@ -21,7 +21,7 @@ class GraphQLController @Inject()(graphQlContextFactory: GraphQLContextFactory,
                                  (implicit val executionContext: ExecutionContext,
                                   implicit val actorMaterializer: ActorMaterializer) {
 
-  val routes: Route =
+  val Routes: Route =
     path("graphql") {
       get {
         handleWebSocketMessagesForProtocol(webSocketHandler.handleMessages, GraphQLMessage.graphQlWebsocketProtocol)

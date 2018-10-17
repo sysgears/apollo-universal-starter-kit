@@ -20,7 +20,7 @@ class CounterActorPublisherServiceImpl @Inject()(implicit val actorSystem: Actor
                                                  actorMaterializer: ActorMaterializer) extends PublisherService[Counter]
   with Logger {
 
-  override def publish(event: Counter) = actorSystem.eventStream.publish(event)
+  override def publish(event: Counter): Unit = actorSystem.eventStream.publish(event)
 
   override def getPublisher: Publisher[Counter] = {
     val counterEventPublisher = actorSystem.actorOf(CounterEventActor.props)

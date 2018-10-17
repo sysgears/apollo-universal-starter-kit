@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Apollo Universal Starter Kit",
+    "description": "A React Native mobile app based on Apollo Universal Starter Kit",
     "icon": "../../app.png",
     "version": "1.0.0",
     "slug": "apollo-universal-starter-kit",

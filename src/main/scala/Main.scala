@@ -1,20 +1,16 @@
-import InjectionModules.modules
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
-import com.google.inject.Guice
 import controllers.frontend.FrontendController
 import controllers.graphql.GraphQLController
-import net.codingwell.scalaguice.InjectorExtensions._
+import util.Injecting
 
-object Main extends App {
+object Main extends App with Injecting {
+  val routes = inject[GraphQLController].Routes ~ inject[FrontendController].Routes
 
-  val injector = Guice.createInjector(modules)
-  val routes = injector.instance[GraphQLController].routes ~ injector.instance[FrontendController].Routes
-
-  implicit val system: ActorSystem = injector.instance[ActorSystem]
-  implicit val materializer: ActorMaterializer = injector.instance[ActorMaterializer]
+  implicit val system: ActorSystem = inject[ActorSystem]
+  implicit val materializer: ActorMaterializer = inject[ActorMaterializer]
 
   Http().bindAndHandle(routes, "0.0.0.0")
 }

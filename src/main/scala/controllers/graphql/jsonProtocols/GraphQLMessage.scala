@@ -2,8 +2,12 @@ package controllers.graphql.jsonProtocols
 
 import spray.json.{DefaultJsonProtocol, JsObject, RootJsonFormat}
 
-case class GraphQLMessage(query: String, operationName: Option[String], variables: Option[JsObject])
+case class GraphQLMessage(query: String, operationName: Option[String] = None, variables: Option[JsObject] = None)
+
+object GraphQLMessage {
+  val graphQlWebsocketProtocol: String = "graphql-ws"
+}
 
 object GraphQLMessageJsonProtocol extends DefaultJsonProtocol {
-  implicit val graphQLMessageJsonFormat: RootJsonFormat[GraphQLMessage] = jsonFormat3(GraphQLMessage)
+  implicit val graphQLMessageJsonFormat: RootJsonFormat[GraphQLMessage] = jsonFormat3(GraphQLMessage.apply)
 }

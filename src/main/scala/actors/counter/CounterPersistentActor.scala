@@ -20,7 +20,7 @@ object CounterPersistentActor extends Named {
 
 class CounterPersistentActor extends PersistentActor with ActorLogging {
 
-  override def preStart {
+  override def preStart() {
     log.info(s"Actor [$self] starting ...")
     deleteSnapshots(SnapshotSelectionCriteria())
   }
@@ -30,7 +30,7 @@ class CounterPersistentActor extends PersistentActor with ActorLogging {
   private var counter: Int = 0
 
   override def receiveRecover: Receive = {
-    case SnapshotOffer(metadata, snapshot: Int) => counter = snapshot
+    case SnapshotOffer(_, snapshot: Int) => counter = snapshot
 
     case RecoveryCompleted => log.info(s"Counter recovery completed. Current state: [$counter]")
   }
@@ -38,14 +38,14 @@ class CounterPersistentActor extends PersistentActor with ActorLogging {
   override def receiveCommand: Receive = {
     case incrementAndGet: IncrementAndGet =>
       log.info(s"Received message: [ $incrementAndGet ]")
-      increment(incrementAndGet.amount)
+      counter += incrementAndGet.amount
       saveSnapshot(counter)
       sender ! counter
 
     case GetAmount => sender ! counter
 
     case init: Init =>
-      initCounter(init.amount)
+      counter = init.amount
       saveSnapshot(counter)
       sender ! counter
 
@@ -54,11 +54,7 @@ class CounterPersistentActor extends PersistentActor with ActorLogging {
     case DeleteMessagesSuccess(_) => log.info("Messages successfully deleted")
   }
 
-  private def initCounter(amount: Int) = counter = amount
-
-  private def increment(amount: Int) = counter += amount
-
-  override def postStop {
+  override def postStop() {
     log.info(s"Actor [$self] stopped")
   }
 

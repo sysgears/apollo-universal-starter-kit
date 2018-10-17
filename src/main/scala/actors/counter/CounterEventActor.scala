@@ -12,7 +12,7 @@ object CounterEventActor {
 
   case class Subscribe(queue: SourceQueue[Counter])
 
-  def props[T](implicit actorSystem: ActorSystem, executionContext: ExecutionContext): Props = {
+  def props(implicit actorSystem: ActorSystem, executionContext: ExecutionContext): Props = {
     Props(new CounterEventActor(actorSystem))
   }
 }
@@ -25,7 +25,7 @@ class CounterEventActor(actorSystem: ActorSystem)
 
     case Subscribe(queue) =>
       actorSystem.eventStream.subscribe(self, classOf[Counter])
-      log.info(s"Created actor [$self] for a newly subscribed client.")
+      log.info(s"Actor [$self] has been created for a newly subscribed client")
       context.become(subscribed(queue))
   }
 
@@ -41,6 +41,6 @@ class CounterEventActor(actorSystem: ActorSystem)
   }
 
   override def postStop {
-    log.info(s"Actor [$self] was stopped")
+    log.info(s"Actor [$self] has been stopped")
   }
 }

@@ -1,4 +1,4 @@
 {
-    "text": "Current apolloLinkStateCount, is {{amount}}. This is being stored client-side with Apollo Link State.",
-    "btnLabel": "Click to increase apolloLinkState"
+    "text": "The apolloLinkStateCount value is {{amount}}. This value is stored on the client using Apollo Link State.",
+    "btnLabel": "Increase apolloLinkState"
 }

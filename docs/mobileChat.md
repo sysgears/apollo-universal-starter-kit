@@ -9,7 +9,7 @@ and `packages/client/src/modules/chat` directories respectively.
 
 ## Getting Started
 
-To be able to use the mobile chat, you need to run Apollo Universal Starter Kit for mobile devices.
+To be able to use the mobile chat, you need to run Apollo Universal Starter Kit on a mobile device.
 
 You can run the project in Android Studio or Xcode, or you can install Expo Client on your [Android] or [iOS] device and
 scan the QR codes that will be provided in the terminal.
@@ -86,22 +86,17 @@ The mobile chat provides the following features:
 
 ### Access Rights Management for Users
 
-The access rights management is a special feature in the Apollo Starter Kit mobile chat. The current implementation of 
-the mobile chat has two types of users &ndash; the anonymous user and the registered user. 
+The current implementation of the mobile chat has two types of users &ndash; the anonymous user and the registered user. 
 
-If the user isn’t logged in, he or she chats _anonymously_, and the user's messages are labelled accordingly. 
-Alternately, if the user has logged in, the user's messages are signed with the username. 
+If the user isn’t logged in, he or she will be able to chat as _anonymous user_, and the user's messages are labelled 
+accordingly. Alternately, if the user has logged in, the user's messages are signed with the username. 
 
 Authorization in the mobile chat is configured in such a way that a _logged-in user_ can’t edit or delete messages that 
 he or she sent as _anonymous user_ from the same mobile device. And vice versa, the _anonymous_ user isn't authorized to 
 change or delete the messages sent by a _logged-in_ user from the same device.
 
-The mechanism for the access rights management is based on the use of universally unique identifier (UUID) and 
-authentication tokens.
-
-When you run the app without logging in, the app only generates a UUID and stores it to your device's local storage. 
-Then, the app uses the UUID to identify you as _anonymous user_ when you chat. Afterwards, if you log in to the app, the 
-app will use the authentication token for identification and label all your messages with your username.
+The mobile app uses the Universally Unique Identifier to differentiate which messages are sent by a non-authenticated 
+user.
 
 You can test this functionality with the following demo users in Apollo Universal Starter Kit:
 
@@ -153,7 +148,7 @@ chat configurations for your Apollo Starter Kit-based project:
 | giftedChat    | Object  | React Native Gifted Chat settings. Consult the [Gifted Chat documentation] about possible settings |
 | ------------- | ------- | -------------------------------------------------------------------------------------------------- |
 | image         | Object  | Contains various settings related to image quality and image processing in chat                    |
-| maxSize       | Number  | `image` property. Set the maximal size for images in bytes                                         |
+| maxSize       | Number  | `image` property. Set the maximal size for images in bytes. Defaults to 1 MB                       |
 | ------------- | ------- | -------------------------------------------------------------------------------------------------- |
 | imagePicker   | Object  | The property of `image`. Consult the [Expo documentation on ImagePicker] for configurations        |
 | allowsEditing | Boolean | `imagePicker` property. Allow image editing for users. Defaults to `true`                          |

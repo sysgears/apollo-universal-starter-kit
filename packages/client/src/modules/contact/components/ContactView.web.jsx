@@ -9,22 +9,12 @@ import settings from '../../../../../../settings';
 
 const ContactView = props => {
   const { t } = props;
-
-  const renderMetaData = () => (
-    <Helmet
-      title={`${settings.app.name} - ${t('title')}`}
-      meta={[
-        {
-          name: 'description',
-          content: `${settings.app.name} - ${t('meta')}`
-        }
-      ]}
-    />
-  );
-
   return (
     <PageLayout>
-      {renderMetaData()}
+      <Helmet
+        title={`${settings.app.name} - ${t('title')}`}
+        meta={[{ name: 'description', content: `${settings.app.name} - ${t('meta')}` }]}
+      />
       <LayoutCenter>
         <h1 className="text-center">{t('form.title')}</h1>
         <ContactForm {...props} />

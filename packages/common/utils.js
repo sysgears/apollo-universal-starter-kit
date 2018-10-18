@@ -43,3 +43,28 @@ const getPlatform = () => {
 };
 
 export const PLATFORM = getPlatform();
+
+/**
+ * Formats Yup error into Graphql Type FieldError
+ *
+ * @param yupError - Yup error after validation the yup schema
+ * @return  Array of formatted errors
+ */
+export const formatYupError = yupError => {
+  return yupError.inner.reduce(
+    (formattedErrors, error) => [...formattedErrors, { field: error.path, message: error.message }],
+    []
+  );
+};
+
+/**
+ * Prepares errors from FieldError Graphql Type into Formik error type
+ *
+ * @param errors - Array of errors
+ * @return Errors in Formik format (simple object)
+ */
+export const normalizeErrorsForFormik = errors => {
+  const normalizedErrors = {};
+  errors.forEach(error => (normalizedErrors[error.field] = error.message));
+  return normalizedErrors;
+};

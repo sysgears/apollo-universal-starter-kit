@@ -3,24 +3,19 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import * as Yup from 'yup';
 
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, FormView, Button, Modal, danger, success } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { email, minLength, required, validateForm } from '../../../../../common/validation';
-
-const contactFormSchema = {
-  name: [required, minLength(3)],
-  email: [required, email],
-  content: [required, minLength(10)]
-};
+import { normalizeErrorsForFormik } from '../../../../../common/utils';
 
 const ContactForm = ({ values, handleSubmit, t, errors, status, setStatus }) => (
   <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
     <Modal isVisible={status && status.showModal} onBackdropPress={setStatus}>
       <View style={styles.modal}>
-        <Text style={styles.modalText}>{errors._error ? errors._error : t('successMsg')}</Text>
-        <Button type={errors._error ? danger : success} onPress={setStatus}>
+        <Text style={styles.modalText}>{errors.serverError ? errors.serverError : t('successMsg')}</Text>
+        <Button type={errors.serverError ? danger : success} onPress={setStatus}>
           {t('modal.btnMsg')}
         </Button>
       </View>
@@ -31,7 +26,7 @@ const ContactForm = ({ values, handleSubmit, t, errors, status, setStatus }) => 
           name="name"
           component={RenderField}
           type="text"
-          placeholder={t('form.field.name')}
+          placeholder={t('form.nameField.name')}
           value={values.name}
           placeholderTextColor={placeholderColor}
         />
@@ -39,7 +34,7 @@ const ContactForm = ({ values, handleSubmit, t, errors, status, setStatus }) => 
           name="email"
           component={RenderField}
           type="text"
-          placeholder={t('form.field.email')}
+          placeholder={t('form.emailField.name')}
           value={values.email}
           keyboardType="email-address"
           placeholderTextColor={placeholderColor}
@@ -48,7 +43,7 @@ const ContactForm = ({ values, handleSubmit, t, errors, status, setStatus }) => 
           name="content"
           component={RenderField}
           type="textarea"
-          placeholder={t('form.field.content')}
+          placeholder={t('form.contentField.name')}
           value={values.content}
           placeholderTextColor={placeholderColor}
         />
@@ -95,27 +90,39 @@ const styles = StyleSheet.create({
 
 const ContactFormWithFormik = withFormik({
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-  async handleSubmit(
-    values,
-    {
-      resetForm,
-      setErrors,
-      setStatus,
-      props: { onSubmit }
-    }
-  ) {
+  async handleSubmit(values, { resetForm, setErrors, setStatus, props }) {
+    const { t, contact } = props;
+
     Keyboard.dismiss();
-
     try {
-      await onSubmit(values);
-      resetForm();
-    } catch (e) {
-      setErrors(e);
-    }
+      const { data } = await contact({ variables: { input: values } });
 
-    setStatus({ showModal: true });
+      if (data.contact.errors) {
+        setErrors(normalizeErrorsForFormik(data.contact.errors));
+      } else {
+        resetForm();
+        setStatus({ showModal: true });
+      }
+    } catch (e) {
+      setStatus({ showModal: false });
+      setErrors({ serverError: t('serverError') });
+    }
   },
-  validate: values => validateForm(values, contactFormSchema),
+  validationSchema: ({ t }) => {
+    return Yup.object().shape({
+      name: Yup.string()
+        .min(3, t('form.nameField.errors.min', { min: 3 }))
+        .max(50, t('form.nameField.errors.max', { max: 50 }))
+        .required(t('form.required')),
+      email: Yup.string()
+        .email(t('form.emailField.errors.invalid'))
+        .required(t('form.required')),
+      content: Yup.string()
+        .min(2, t('form.contentField.errors.min', { min: 2 }))
+        .max(1000, t('form.contentField.errors.min', { max: 1000 }))
+        .required(t('form.required'))
+    });
+  },
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 

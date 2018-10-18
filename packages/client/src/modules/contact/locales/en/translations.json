@@ -4,16 +4,34 @@
   "meta": "Contact us example page",
   "form": {
     "title": "Contact Us",
-    "field": {
+
+    "nameField": {
       "name": "Name",
-      "email": "Email",
-      "content": "Content"
+      "errors": {
+        "min": "Name must have {{min}} characters or more",
+        "max": "Name must have {{max}} characters or less"
+      }
     },
-    "btnSubmit": "Send"
+    "emailField": {
+      "name": "Email",
+      "errors": {
+        "invalid": "Email must be a valid"
+      }
+    },
+    "contentField": {
+      "name": "Content",
+      "errors": {
+        "min": "Content must have {{min}} characters or more",
+        "max": "Content must have {{max}} characters or less"
+      }
+    },
+
+    "btnSubmit": "Send",
+    "required": "Required"
   },
   "modal": {
     "btnMsg": "OK"
   },
-  "errorMsg": "Contact request failed! Try again later.",
+  "serverError": "Contact request failed! Try again later.",
   "successMsg": "Thank you for contacting us!"
 }

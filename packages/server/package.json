@@ -124,7 +124,8 @@
     "tslint-config-prettier": "^1.5.0",
     "typescript": "^2.7.2",
     "universal-cookie-express": "^2.2.0",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "yup": "^0.26.6"
   },
   "devDependencies": {
     "@alienfast/i18next-loader": "^1.0.15",
@@ -143,6 +144,7 @@
     "@types/shortid": "0.0.29",
     "@types/stripe": "^5.0.21",
     "@types/webpack-env": "^1.13.5",
+    "@types/yup": "^0.26.0",
     "apollo-utilities": "^1.0.3",
     "canvas-prebuilt": "^1.6.5-prerelease.1",
     "caporal": "^0.10.0",

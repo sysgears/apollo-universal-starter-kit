@@ -1,0 +1,16 @@
+{
+  "validation": {
+    "name": {
+      "min": "Name must have 3 characters or more",
+      "max": "Name must have 50 characters or less"
+    },
+    "email": {
+      "invalid": "Email must be a valid"
+    },
+    "content": {
+      "min": "Content must have 2 characters or more",
+      "max": "Content must have 1000 characters or less"
+    },
+    "required": "Required"
+  }
+}

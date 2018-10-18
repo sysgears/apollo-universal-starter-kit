@@ -92,7 +92,8 @@
     "redux-devtools-extension": "^2.13.2",
     "sourcemapped-stacktrace": "^1.1.8",
     "styled-components": "^3.2.6",
-    "subscriptions-transport-ws": "^0.9.4"
+    "subscriptions-transport-ws": "^0.9.4",
+    "yup": "^0.26.6"
   },
   "devDependencies": {
     "@alienfast/i18next-loader": "^1.0.16",
@@ -109,6 +110,7 @@
     "@types/react-router-redux": "^5.0.16",
     "@types/react-stripe-elements": "^1.1.7",
     "@types/webpack-env": "^1.13.6",
+    "@types/yup": "^0.26.0",
     "apollo-utilities": "^1.0.3",
     "autoprefixer": "^8.3.0",
     "chai": "^4.1.2",

@@ -1,16 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+import * as Yup from 'yup';
 
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { email, minLength, required, validateForm } from '../../../../../common/validation';
-
-const contactFormSchema = {
-  name: [required, minLength(3)],
-  email: [required, email],
-  content: [required, minLength(10)]
-};
 
 const ContactForm = ({ values, handleSubmit, errors, t, status }) => (
   <Form name="contact" onSubmit={handleSubmit}>
@@ -62,7 +56,21 @@ const ContactFormWithFormik = withFormik({
       setErrors(e);
     }
   },
-  validate: values => validateForm(values, contactFormSchema),
+  validationSchema: ({ t }) => {
+    return Yup.object().shape({
+      name: Yup.string()
+        .min(3, t('form.field.name'))
+        .max(50, 'Too Long!')
+        .required('Required'),
+      email: Yup.string()
+        .email('Invalid email')
+        .required('Required'),
+      content: Yup.string()
+        .min(2, 'Too Short!')
+        .max(1000, 'Too Long!')
+        .required('Required')
+    });
+  },
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 

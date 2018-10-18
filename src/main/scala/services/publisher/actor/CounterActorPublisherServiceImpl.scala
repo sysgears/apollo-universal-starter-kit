@@ -20,12 +20,12 @@ class CounterActorPublisherServiceImpl @Inject()(implicit val actorSystem: Actor
                                                  actorMaterializer: ActorMaterializer) extends PublisherService[Counter]
   with Logger {
 
-  override def publish(event: Counter) = actorSystem.eventStream.publish(event)
+  override def publish(event: Counter): Unit = actorSystem.eventStream.publish(event)
 
   override def getPublisher: Publisher[Counter] = {
     val counterEventActor = actorSystem.actorOf(CounterEventActor.props)
 
-    val (queue, publisher) = Source.queue[Counter](16, OverflowStrategy.fail)
+    val (queue, publisher) = Source.queue[Counter](16, OverflowStrategy.dropHead)
       .toMat(Sink.asPublisher(false))(Keep.both)
       .run
     counterEventActor ! Subscribe(queue)

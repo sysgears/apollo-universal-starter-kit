@@ -10,7 +10,7 @@ import services.counter.{ActorCounterServiceImpl, CounterService}
 
 class CounterModule extends AbstractModule with ScalaModule {
 
-  override def configure {
+  override def configure() {
     bind[CounterService].to[ActorCounterServiceImpl]
     bind[Counter.type].toInstance(Counter)
   }

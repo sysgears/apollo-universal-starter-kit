@@ -20,23 +20,23 @@ object Counter {
   @Inject implicit var materializer: ActorMaterializer = _
 
   object Types {
-    implicit val Сounter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"))
+    implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"))
   }
 
   object GraphQL {
 
-    val Queries: List[Field[GraphQLContext, Unit]] = List(
+    val queries: List[Field[GraphQLContext, Unit]] = List(
       Field(
         name = "serverCounter",
-        fieldType = Types.Сounter,
+        fieldType = Types.counter,
         resolve = sc => sc.ctx.counterResolver.serverCounter
       )
     )
 
-    val Mutations: List[Field[GraphQLContext, Unit]] = List(
+    val mutations: List[Field[GraphQLContext, Unit]] = List(
       Field(
         name = "addServerCounter",
-        fieldType = Types.Сounter,
+        fieldType = Types.counter,
         arguments = Argument(name = "amount", argumentType = IntType) :: Nil,
         resolve = sc => {
           val amount = sc.args.arg[Int]("amount")
@@ -45,10 +45,10 @@ object Counter {
       )
     )
 
-    val Subscriptions: List[Field[GraphQLContext, Unit]] = List(
+    val subscriptions: List[Field[GraphQLContext, Unit]] = List(
       Field.subs(
         name = "counterUpdated",
-        fieldType = Types.Сounter,
+        fieldType = Types.counter,
         resolve = sc => Source.fromPublisher(sc.ctx.publisherService.getPublisher).map {
           e =>
             println(s"Sending event [$e] to client ...")

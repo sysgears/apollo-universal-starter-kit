@@ -29,17 +29,17 @@ trait TestHelper extends WordSpec
   val endpoint: String = "/graphql"
   val routes: Route = inject[GraphQLController].Routes
 
-  before(resetCounter)
-  after(resetCounter)
+  before(resetCounter())
+  after(resetCounter())
 
-  def resetCounter = {
+  def resetCounter(): Unit = {
     val persistentCounterActor = inject[ActorRef](Names.named(CounterPersistentActor.name))
     Await.result(Future(ask(persistentCounterActor, Init(0))), Duration.Inf)
-    deleteStorageLocations
+    deleteStorageLocations()
   }
 
-  override protected def afterAll = {
+  override protected def afterAll() {
     cleanUp
-    deleteStorageLocations
+    deleteStorageLocations()
   }
 }

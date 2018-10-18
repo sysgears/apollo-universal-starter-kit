@@ -8,15 +8,15 @@ import services.publisher.actor.CounterActorPublisherServiceImpl
 import services.publisher.monix.MonixPublisherServiceImpl
 
 class PublisherModule extends AbstractModule with ScalaModule {
-  override def configure {
-    monixImpl
+  override def configure() {
+    monixImpl()
   }
 
-  def monixImpl {
+  def monixImpl() {
     bind[PublisherService[Counter]].to[MonixPublisherServiceImpl[Counter]]
   }
 
-  def actorsImpl {
+  def actorsImpl() {
     bind[PublisherService[Counter]].to[CounterActorPublisherServiceImpl]
   }
 }

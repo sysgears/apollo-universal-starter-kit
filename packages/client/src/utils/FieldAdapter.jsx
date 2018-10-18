@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'formik';
+import { PLATFORM } from '../../../common/utils';
 
 class FieldAdapter extends Component {
   static propTypes = {
@@ -36,7 +37,7 @@ class FieldAdapter extends Component {
     if (onBlur) {
       onBlur(e);
     } else {
-      if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+      if (PLATFORM === 'mobile') {
         formik.setFieldTouched(name, true);
       } else {
         formik.handleBlur(e);
@@ -75,8 +76,7 @@ class FieldAdapter extends Component {
       disabled
     };
 
-    const changeEventHandler =
-      typeof navigator !== 'undefined' && navigator.product === 'ReactNative' ? 'onChangeText' : 'onChange';
+    const changeEventHandler = PLATFORM === 'mobile' ? 'onChangeText' : 'onChange';
     input[changeEventHandler] = this[changeEventHandler];
 
     return React.createElement(component, {

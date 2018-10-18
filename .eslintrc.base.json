@@ -36,7 +36,6 @@
     "fetch": true,
     "window": true,
     "document": true,
-    "navigator": true,
     "__DEV__": true,
     "__TEST__": true,
     "__CLIENT__": true,

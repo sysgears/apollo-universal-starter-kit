@@ -1,0 +1,26 @@
+{
+  "navLink": "Chat",
+  "loading": "Loading...",
+
+  "msg": {
+    "btn": {
+      "copy": "Copy",
+      "reply": "Reply",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  },
+
+  "input": {
+    "text": "Type a message...",
+    "btn": "Send"
+  },
+
+  "attachment": {
+    "errorMsg": "Error: the file exceeds the maximum size limit"
+  },
+
+  "permission": {
+    "errorMsg": "Access error!"
+  }
+}

@@ -1,0 +1,18 @@
+fragment MessageInfo on Message {
+  id
+  text
+  userId
+  username
+  createdAt
+  uuid
+  quotedId
+  filename
+  path
+  quotedMessage {
+    id
+    text
+    username
+    path
+    filename
+  }
+}

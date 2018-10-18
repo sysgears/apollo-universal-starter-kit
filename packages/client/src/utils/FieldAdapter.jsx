@@ -14,8 +14,7 @@ class FieldAdapter extends Component {
     defaultValue: PropTypes.string,
     checked: PropTypes.bool,
     defaultChecked: PropTypes.bool,
-    disabled: PropTypes.bool,
-    navigator: PropTypes.any
+    disabled: PropTypes.bool
   };
 
   constructor(props) {
@@ -33,7 +32,7 @@ class FieldAdapter extends Component {
   };
 
   onBlur = e => {
-    const { navigator, formik, onBlur, name } = this.props;
+    const { formik, onBlur, name } = this.props;
     if (onBlur) {
       onBlur(e);
     } else {
@@ -57,7 +56,7 @@ class FieldAdapter extends Component {
   };
 
   render() {
-    const { formik, component, name, defaultValue, defaultChecked, disabled, navigator } = this.props;
+    const { formik, component, name, defaultValue, defaultChecked, disabled } = this.props;
     let { value, checked } = this.props;
     value = value || '';
     checked = checked || false;

@@ -33,7 +33,7 @@ const isRoleMatch = (role, currentUser) => {
   if (!role) {
     return true;
   }
-  return currentUser && (Array.isArray(role) ? role : [role]).includes(currentUser.role);
+  return currentUser && (Array.isArray(role) ? [role] : role).includes(currentUser.role);
 };
 
 export * from './AuthBase';

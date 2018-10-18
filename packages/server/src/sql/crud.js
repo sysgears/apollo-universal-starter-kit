@@ -515,10 +515,21 @@ export default class Crud {
             _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '=', `${+filter[filterKey]}`);
           }
         } else {
-          const filterValue = isSchema ? filter[`${filterKey}Id`] : filter[filterKey];
           const tableColumn = isSchema ? `${decamelize(filterKey)}_id` : decamelize(filterKey);
+
+          const filterValue = isSchema ? filter[`${filterKey}Id`] : filter[filterKey];
           if (filterValue) {
             _this.andWhere(`${tableName}.${tableColumn}`, '=', `${filterValue}`);
+          }
+
+          const filterValueIn = isSchema ? filter[`${filterKey}Id_in`] : filter[`${filterKey}_in`];
+          if (filterValueIn) {
+            _this.orWhereIn(`${tableName}.${tableColumn}`, filterValueIn);
+          }
+
+          const filterValueContains = isSchema ? filter[`${filterKey}Id_contains`] : filter[`${filterKey}_contains`];
+          if (filterValueContains) {
+            _this.andWhere(`${tableName}.${tableColumn}`, 'like', `%${filterValueContains}%`);
           }
         }
       });

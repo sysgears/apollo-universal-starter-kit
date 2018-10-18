@@ -36,6 +36,12 @@ input OrderByInput {
 
 input $Module$FilterInput {
   searchText: String
+  id: Int
+  id_in: [Int!]
+  id_contains: Int
+  name: String
+  name_in: [String!]
+  name_contains: String
 }
 
 input $Module$CreateInput {

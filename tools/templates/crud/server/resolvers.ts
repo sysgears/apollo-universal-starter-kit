@@ -1,6 +1,6 @@
 import withAuth from 'graphql-auth';
 
-// tslint:disable:no-unused-variable
+// @ts-ignore
 import { createBatchResolver } from 'graphql-resolve-batch';
 
 const $MODULE$S_SUBSCRIPTION = '$module$s_subscription';

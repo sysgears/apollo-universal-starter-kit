@@ -14,7 +14,8 @@ class FieldAdapter extends Component {
     defaultValue: PropTypes.string,
     checked: PropTypes.bool,
     defaultChecked: PropTypes.bool,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    navigator: PropTypes.any
   };
 
   constructor(props) {
@@ -32,14 +33,14 @@ class FieldAdapter extends Component {
   };
 
   onBlur = e => {
-    const { formik, onBlur, name } = this.props;
+    const { navigator, formik, onBlur, name } = this.props;
     if (onBlur) {
       onBlur(e);
     } else {
-      if (typeof document !== 'undefined') {
-        formik.handleBlur(e);
-      } else {
+      if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
         formik.setFieldTouched(name, true);
+      } else {
+        formik.handleBlur(e);
       }
     }
   };
@@ -56,7 +57,7 @@ class FieldAdapter extends Component {
   };
 
   render() {
-    const { formik, component, name, defaultValue, defaultChecked, disabled } = this.props;
+    const { formik, component, name, defaultValue, defaultChecked, disabled, navigator } = this.props;
     let { value, checked } = this.props;
     value = value || '';
     checked = checked || false;
@@ -75,7 +76,8 @@ class FieldAdapter extends Component {
       disabled
     };
 
-    const changeEventHandler = typeof document !== 'undefined' ? 'onChange' : 'onChangeText';
+    const changeEventHandler =
+      typeof navigator !== 'undefined' && navigator.product === 'ReactNative' ? 'onChangeText' : 'onChange';
     input[changeEventHandler] = this[changeEventHandler];
 
     return React.createElement(component, {

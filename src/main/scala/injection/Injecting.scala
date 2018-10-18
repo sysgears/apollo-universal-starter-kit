@@ -29,6 +29,6 @@ object Injecting {
   }
 
   private def classesNames: List[String] = {
-    ConfigFactory.load.getList("modules").asScala.map(_.render.drop(1).dropRight(1)).toList
+    ConfigFactory.load.getList("guice.modules").asScala.map(_.render.drop(1).dropRight(1)).toList
   }
 }

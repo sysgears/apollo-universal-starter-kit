@@ -2,8 +2,8 @@ package services.counter
 
 import java.util.concurrent.TimeUnit.SECONDS
 
-import actors.counter.CounterActor
-import actors.counter.CounterActor.{GetAmount, IncrementAndGet}
+import actors.counter.CounterPersistentActor
+import actors.counter.CounterPersistentActor.{GetAmount, IncrementAndGet}
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 import scala.concurrent.Future
 
-class ActorCounterServiceImpl @Inject()(@Named(CounterActor.name) counterActor: ActorRef) extends CounterService {
+class ActorCounterServiceImpl @Inject()(@Named(CounterPersistentActor.name) counterActor: ActorRef) extends CounterService {
 
   implicit val timeout: Timeout = Timeout(5, SECONDS)
 

@@ -14,7 +14,7 @@ export default {
     keyboardShouldPersistTaps: 'never'
   },
   image: {
-    maxSize: 1000000,
+    maxSize: 1048576,
     imagePicker: {
       allowsEditing: true,
       base64: false,

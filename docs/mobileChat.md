@@ -127,10 +127,10 @@ When a user sends an image via the mobile chat, the image is copied and saved in
 shown to the sender. If the user re-sizes or crops the image before sending, the device will store the
 _modified image_ to the cache (the original image stays unchanged.)
 
-When an image is sent via the chat, the other users first receive a message that an image was loaded, and the mobile app 
-starts checking whether that image was already loaded before. Put simply, the app searches for the image in the device's 
-cache. If the image was found, then it's loaded directly from cache thus economizing the network traffic. Otherwise, the 
-image is loaded by the app via the network.
+When an image is sent via the chat, the other users are first notified that an image was loaded, and the mobile app 
+checks whether that image was already loaded before. Put simply, the app searches for the image in the device's cache. 
+If the image was found, then it's loaded directly from cache thus economizing the network traffic. Otherwise, the image 
+is loaded via the network.
 
 Before the image is loaded to the mobile chat, the users first see the pre-loader icon, and only after that the image is
 shown.

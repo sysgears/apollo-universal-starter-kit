@@ -56,5 +56,10 @@
     "react",
     "json",
     "prettier"
-  ]
+  ],
+  "settings": {
+    "react": {
+      "version": "16.3"
+    }
+  }
 }

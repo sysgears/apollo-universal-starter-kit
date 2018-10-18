@@ -1,4 +1,5 @@
 {
-    "text": "Счетчик apolloLinkState равен {{amount}}. Значение хранится на клиенте с помощью Apollo Link State.",
-    "btnLabel": "Увеличить значение"
+    "text":
+    "Текущий apolloLinkState счетчик, равен {{amount}}. Он хранится на стороне клиента с помощью Apollo Link State.",
+    "btnLabel": "Нажмите, чтобы увеличить apolloLinkState счетчик"
 }

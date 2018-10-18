@@ -69,7 +69,7 @@ export default pubsub => ({
     async deleteMessage(obj, { id }, { Chat, req }) {
       const { t } = req;
       const {
-        data: [{ fileSystemStorage }]
+        data: { fileSystemStorage }
       } = modules;
       const message = await Chat.message(id);
       const attachment = await Chat.attachment(id);

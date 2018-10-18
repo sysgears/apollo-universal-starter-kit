@@ -29,6 +29,8 @@ export const mapFormPropsToValues = ({ schema, data = null, formType = 'form' })
         if (hasTypeOf(Date)) {
           fields[`${key}_lte`] = data ? data[key] : '';
           fields[`${key}_gte`] = data ? data[key] : '';
+        } else if (hasTypeOf(String)) {
+          fields[`${key}_contains`] = data ? data[key] : '';
         } else {
           fields[key] = data ? data[key] : '';
         }
@@ -74,6 +76,10 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
             inputValues[key] = false;
           } else {
             inputValues[key] = '';
+          }
+        } else if (hasTypeOf(String)) {
+          if (values[`${key}_contains`]) {
+            inputValues[`${key}_contains`] = values[`${key}_contains`];
           }
         } else {
           if (key in values && values[key]) {

@@ -5,8 +5,8 @@ fragment $Module$StateInfo on $Module$State {
     order
   }
   filter {
-    id
-    name
     searchText
+    id
+    name_contains
   }
 }

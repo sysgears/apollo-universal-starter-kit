@@ -273,10 +273,11 @@ export const createFormFields = ({
 
 const createFormField = (schema, key, type, values, formItemLayout, formType, hasTypeOf, prefix) => {
   let component = RenderField;
-  const value = values ? values[key] : '';
+  let value = values ? values[key] : '';
   let style = {};
   let dateFields = [];
   let inputType = 'text';
+  let inputKey = key;
 
   if (key === 'id' && formType !== 'filter') {
     return false;
@@ -334,6 +335,9 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
   } else if (hasTypeOf(Number)) {
     inputType = 'number';
     component = RenderNumber;
+  } else if (hasTypeOf(String) && formType === 'filter') {
+    inputKey = `${key}_contains`;
+    value = values ? values[`${key}_contains`] : '';
   } else if (hasTypeOf(String) && schema.values[key].fieldInput === 'textarea' && formType !== 'filter') {
     component = RenderTextArea;
   } else if (hasTypeOf(String) && schema.values[key].fieldInput === 'country' && formType !== 'filter') {
@@ -342,8 +346,8 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
 
   let field = (
     <Field
-      name={`${prefix}${key}`}
-      key={key}
+      name={`${prefix}${inputKey}`}
+      key={inputKey}
       component={component}
       schema={type}
       value={value}

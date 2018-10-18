@@ -5,7 +5,7 @@ const GraphQLGenerator = require('@domain-schema/graphql').default;
 const { pascalize, camelize } = require('humps');
 
 const { BASE_PATH } = require('../config');
-const { generateField } = require('../helpers/util');
+const { generateField, runPrettier } = require('../helpers/util');
 const schemas = require('../../../packages/server/src/modules/common/generatedSchemas');
 
 /**
@@ -46,6 +46,8 @@ function updateModule(logger, moduleName, location) {
           inputCreate += `  ${key}${id}: Int${required}\n`;
           inputUpdate += `  ${key}${id}: Int\n`;
           inputFilter += `  ${key}${id}: Int\n`;
+          inputFilter += `  ${key}${id}_in: [Int!]\n`;
+          inputFilter += `  ${key}${id}_contains: Int\n`;
         } else if (value.type.constructor !== Array) {
           if (key !== 'id') {
             inputCreate += `  ${key}: ${generateField(value)}\n`;
@@ -55,6 +57,10 @@ function updateModule(logger, moduleName, location) {
           if (hasTypeOf(Date)) {
             inputFilter += `  ${key}_lte: ${generateField(value, true)}\n`;
             inputFilter += `  ${key}_gte: ${generateField(value, true)}\n`;
+          } else if (hasTypeOf(String)) {
+            inputFilter += `  ${key}: ${generateField(value, true)}\n`;
+            inputFilter += `  ${key}_in: [${generateField(value, true)}!]\n`;
+            inputFilter += `  ${key}_contains: ${generateField(value, true)}\n`;
           } else {
             inputFilter += `  ${key}: ${generateField(value, true)}\n`;
           }
@@ -194,7 +200,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
       const file = `${Module}State.client.graphql`;
 
       // regenerate graphql fragment
-      let graphql = '';
+      let graphql = '    searchText,\n';
       for (const key of schema.keys()) {
         const value = schema.values[key];
         const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
@@ -205,12 +211,14 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
           if (hasTypeOf(Date)) {
             graphql += `    ${key}_lte\n`;
             graphql += `    ${key}_gte\n`;
+          } else if (hasTypeOf(String)) {
+            graphql += `    ${key}_contains\n`;
           } else {
             graphql += `    ${key}\n`;
           }
         }
       }
-      graphql += `    searchText
+      graphql += `
   }\n`;
 
       shell.cd(pathStateClient);
@@ -230,24 +238,26 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
 
       // regenerate resolver defaults
       let defaults = `const defaultFilters = {\n`;
+      defaults += `searchText: '',\n`;
       for (const key of schema.keys()) {
         const value = schema.values[key];
         const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
         if (value.type.isSchema) {
           const id = value.noIdSuffix ? '' : 'Id';
-          defaults += `  ${key}${id}: '',\n`;
+          defaults += `${key}${id}: '',\n`;
         } else {
           if (hasTypeOf(Date)) {
-            defaults += `  ${key}_lte: '',\n`;
-            defaults += `  ${key}_gte: '',\n`;
+            defaults += `${key}_lte: '',\n`;
+            defaults += `${key}_gte: '',\n`;
+          } else if (hasTypeOf(String)) {
+            defaults += `${key}_contains: '',\n`;
           } else {
-            defaults += `  ${key}: '',\n`;
+            defaults += `${key}: '',\n`;
           }
         }
       }
 
-      defaults += `  searchText: ''
-};\n`;
+      defaults += `};`;
 
       shell.cd(pathStateResolver);
       // override state resolver file
@@ -259,6 +269,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
             .replace(RegExp(replaceStateResolverDefaults, 'g'), `// filter data\n${defaults}// end filter data`)
         )
         .to(file);
+      runPrettier(file);
 
       logger.info(chalk.green(`✔ State Resolver in ${pathStateResolver}${file} successfully updated!`));
     } else {

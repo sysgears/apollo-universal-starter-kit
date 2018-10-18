@@ -10,9 +10,9 @@ const TYPE_$MODULE$_STATE_ORDER_BY = 'OrderBy$Module$Input';
 
 // filter data
 const defaultFilters = {
+  searchText: '',
   id: '',
-  name: '',
-  searchText: ''
+  name_contains: ''
 };
 // end filter data
 

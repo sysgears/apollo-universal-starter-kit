@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'formik';
+import { PLATFORM } from '../../../common/utils';
 
 class FieldAdapter extends Component {
   static propTypes = {
@@ -36,10 +37,10 @@ class FieldAdapter extends Component {
     if (onBlur) {
       onBlur(e);
     } else {
-      if (typeof document !== 'undefined') {
-        formik.handleBlur(e);
-      } else {
+      if (PLATFORM === 'mobile') {
         formik.setFieldTouched(name, true);
+      } else {
+        formik.handleBlur(e);
       }
     }
   };
@@ -75,7 +76,7 @@ class FieldAdapter extends Component {
       disabled
     };
 
-    const changeEventHandler = typeof document !== 'undefined' ? 'onChange' : 'onChangeText';
+    const changeEventHandler = PLATFORM === 'mobile' ? 'onChangeText' : 'onChange';
     input[changeEventHandler] = this[changeEventHandler];
 
     return React.createElement(component, {

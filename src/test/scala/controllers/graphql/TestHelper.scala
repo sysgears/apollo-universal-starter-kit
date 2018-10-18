@@ -10,8 +10,8 @@ import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.pattern.ask
 import akka.util.Timeout
 import com.google.inject.name.Names
+import injection.Injecting
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
-import util.Injecting
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

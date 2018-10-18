@@ -145,10 +145,14 @@
     "native-base": "^2.3.5",
     "react-native": "~0.55.4",
     "react-native-credit-card-input": "^0.4.1",
+    "uuid": "^3.3.2",
+    "react-native-elements": "^0.19.1",
+    "react-native-gifted-chat": "^0.4.3",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",
-    "react-navigation": "^2.0.0"
+    "react-navigation": "^2.0.0",
+    "react-native-mime-types": "^2.2.1"
   },
   "peerDependencies": {
     "spinjs": "^0.4.0"

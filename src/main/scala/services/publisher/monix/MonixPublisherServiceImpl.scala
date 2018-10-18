@@ -15,7 +15,7 @@ class MonixPublisherServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) 
 
   override def getPublisher: Publisher[T] = sourceCounter.toReactivePublisher[T]
 
-  override def publish(event: T) = {
+  override def publish(event: T): Unit = {
     log.info(s"Event [$event] is publishing...")
     sourceCounter.onNext(event)
   }

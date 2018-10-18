@@ -22,7 +22,7 @@ class QuerySpec extends TestHelper {
 
   "GraphQLController" must {
 
-    implicit val counterJsonReader = CounterJsonReader
+    implicit val counterJsonReader: CounterJsonReader.type = CounterJsonReader
 
     "increment amount of counter" in {
       Post(endpoint, addServerCounterEntity) ~> routes ~> check {

@@ -4,7 +4,7 @@ import java.lang.annotation.Annotation
 
 import com.google.inject.{Guice, Injector}
 import net.codingwell.scalaguice.InjectorExtensions._
-import util.InjectionModules.Modules
+import util.InjectionModules._
 
 trait Injecting {
   val injector: Injector = Injecting.injector
@@ -19,5 +19,5 @@ trait Injecting {
 }
 
 object Injecting {
-  val injector = Guice.createInjector(Modules)
+  val injector: Injector = Guice.createInjector(modules)
 }

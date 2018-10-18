@@ -9,5 +9,5 @@ object GraphQLMessage {
 }
 
 object GraphQLMessageJsonProtocol extends DefaultJsonProtocol {
-  implicit val graphQLMessageFormat: RootJsonFormat[GraphQLMessage] = jsonFormat3(GraphQLMessage.apply)
+  implicit val graphQLMessageJsonFormat: RootJsonFormat[GraphQLMessage] = jsonFormat3(GraphQLMessage.apply)
 }

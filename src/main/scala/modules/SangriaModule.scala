@@ -15,7 +15,7 @@ class SangriaModule extends AbstractModule with ScalaModule {
   @Singleton
   def provideSangriaExecutor(implicit executionContext: ExecutionContext): Executor[GraphQLContext, Unit] = {
     Executor(
-      schema = GraphQL.Schema,
+      schema = GraphQL.schema,
       queryReducers = List(
         QueryReducer.rejectMaxDepth[GraphQLContext](GraphQL.maxQueryDepth),
         QueryReducer.rejectComplexQueries[GraphQLContext](GraphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))

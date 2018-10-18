@@ -8,7 +8,7 @@ import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
 import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
-import { withUser } from '../../user/containers/AuthBase';
+import { withUser } from '../../user/';
 import withUuid from './withUuid';
 import Chat from './Chat';
 import withImage from './withImage';

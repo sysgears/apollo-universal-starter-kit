@@ -6,17 +6,13 @@ import akka.stream.scaladsl.Source
 import graphql.{GraphQLContext, GraphQLSchema}
 import javax.inject.Inject
 import monix.execution.Scheduler
-import sangria.schema.{Action, Argument, Field, IntType}
+import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
+import sangria.schema.{Action, Argument, Field, IntType, ObjectType}
+import sangria.streaming.akkaStreams._
 
-class CounterSchema extends GraphQLSchema {
-
-  import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
-  import sangria.schema.ObjectType
-  import sangria.streaming.akkaStreams._
-
-  @Inject implicit var actorSystem: ActorSystem = _
-  @Inject implicit var scheduler: Scheduler = _
-  @Inject implicit var materializer: ActorMaterializer = _
+class CounterSchema @Inject()(implicit val actorSystem: ActorSystem,
+                              implicit val scheduler: Scheduler,
+                              implicit val materializer: ActorMaterializer) extends GraphQLSchema {
 
   object Types {
     implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"))

@@ -14,6 +14,5 @@ declare namespace NodeJS {
 declare var global: Global;
 
 // packages without types
-declare module 'graphql-auth';
 declare module 'stripe-local';
 declare module 'universal-cookie-express';

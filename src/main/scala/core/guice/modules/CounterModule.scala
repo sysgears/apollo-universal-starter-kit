@@ -1,12 +1,11 @@
 package core.guice.modules
 
-import actors.counter.CounterPersistentActor
 import akka.actor.{ActorRef, ActorSystem}
 import com.google.inject.name.Named
 import com.google.inject.{AbstractModule, Provides, Singleton}
 import core.services.persistence.PersistenceCleanup
+import modules.counter.services.count.{ActorCounterServiceImpl, CounterPersistentActor, CounterService}
 import net.codingwell.scalaguice.ScalaModule
-import services.counter.{ActorCounterServiceImpl, CounterService}
 
 class CounterModule extends AbstractModule with ScalaModule {
 

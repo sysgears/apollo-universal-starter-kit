@@ -1,13 +1,12 @@
-package services.publisher.actor
+package modules.counter.services.publish
 
-import actors.counter.CounterEventActor
-import actors.counter.CounterEventActor.Subscribe
 import akka.actor.{ActorSystem, PoisonPill}
 import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.stream.{ActorMaterializer, OverflowStrategy}
 import core.services.publisher.PublisherService
 import javax.inject.{Inject, Singleton}
-import models.counter.Counter
+import modules.counter.models.Counter
+import modules.counter.services.publish.CounterEventActor.Subscribe
 import org.reactivestreams.Publisher
 import util.Logger
 

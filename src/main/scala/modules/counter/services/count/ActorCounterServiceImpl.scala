@@ -1,14 +1,13 @@
-package services.counter
+package modules.counter.services.count
 
 import java.util.concurrent.TimeUnit.SECONDS
 
-import actors.counter.CounterPersistentActor
-import actors.counter.CounterPersistentActor.{GetAmount, IncrementAndGet}
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
 import com.google.inject.name.Named
 import javax.inject.Inject
+import modules.counter.services.count.CounterPersistentActor.{GetAmount, IncrementAndGet}
 
 import scala.concurrent.Future
 

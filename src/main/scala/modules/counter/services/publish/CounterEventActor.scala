@@ -1,10 +1,10 @@
-package actors.counter
+package modules.counter.services.publish
 
-import actors.counter.CounterEventActor.Subscribe
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.stream.QueueOfferResult._
 import akka.stream.scaladsl.SourceQueue
-import models.counter.Counter
+import modules.counter.models.Counter
+import modules.counter.services.publish.CounterEventActor.Subscribe
 
 import scala.concurrent.ExecutionContext
 

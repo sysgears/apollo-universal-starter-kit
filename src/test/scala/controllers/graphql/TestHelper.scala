@@ -2,8 +2,6 @@ package controllers.graphql
 
 import java.util.concurrent.TimeUnit.SECONDS
 
-import actors.counter.CounterPersistentActor
-import actors.counter.CounterPersistentActor.Init
 import akka.actor.ActorRef
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
@@ -13,6 +11,8 @@ import com.google.inject.name.Names
 import core.controllers.graphql.GraphQLController
 import core.guice.injection.Injecting
 import core.services.persistence.PersistenceCleanup
+import modules.counter.services.count.CounterPersistentActor
+import modules.counter.services.count.CounterPersistentActor.Init
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
 
 import scala.concurrent.duration.Duration

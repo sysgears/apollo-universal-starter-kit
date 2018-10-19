@@ -1,4 +1,4 @@
-package services.counter
+package modules.counter.services.count
 
 import scala.concurrent.Future
 

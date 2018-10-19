@@ -1,9 +1,9 @@
-package resolvers
+package modules.counter.graphql.resolvers
 
 import core.services.publisher.{PublisherHelper, PublisherService}
 import javax.inject.Inject
-import models.counter.Counter
-import services.counter.CounterService
+import modules.counter.models.Counter
+import modules.counter.services.count.CounterService
 
 import scala.concurrent.{ExecutionContext, Future}
 

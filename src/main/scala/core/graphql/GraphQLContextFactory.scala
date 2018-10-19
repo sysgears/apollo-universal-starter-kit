@@ -2,8 +2,8 @@ package core.graphql
 
 import core.services.publisher.PublisherService
 import javax.inject.Inject
-import models.counter.Counter
-import resolvers.CounterResolver
+import modules.counter.graphql.resolvers.CounterResolver
+import modules.counter.models.Counter
 
 class GraphQLContextFactory @Inject()(val counterResolver: CounterResolver,
                                       val publisherService: PublisherService[Counter]) {

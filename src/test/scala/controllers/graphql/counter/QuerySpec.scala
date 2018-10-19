@@ -7,7 +7,7 @@ import akka.util.ByteString
 import controllers.graphql.TestHelper
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import models.counter.Counter
+import modules.counter.models.Counter
 import spray.json._
 
 class QuerySpec extends TestHelper {

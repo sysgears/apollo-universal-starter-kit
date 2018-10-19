@@ -1,9 +1,10 @@
-package models.counter
+package modules.counter.graphql.schema
 
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import core.graphql.{GraphQLContext, GraphQLSchema}
 import javax.inject.Inject
+import modules.counter.models.Counter
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Action, Argument, Field, IntType, ObjectType}
 import sangria.streaming.akkaStreams._

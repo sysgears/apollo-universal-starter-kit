@@ -25,10 +25,19 @@ trait Injecting {
 object Injecting {
 
   val injector: Injector = Guice.createInjector {
-    getInstances[ScalaModule](classesNames).asJava
+    getInstances[ScalaModule](classesNames("guice.modules")).asJava
   }
 
-  private def classesNames: List[String] = {
-    ConfigFactory.load.getList("guice.modules").asScala.map(_.render.drop(1).dropRight(1)).toList
+  def loadClasses[T](propertyName: String): List[T] = {
+    classesNames(propertyName).map {
+      className =>
+        injector.getInstance(classLoader.loadClass(className)).asInstanceOf[T]
+    }
+  }
+
+  private val classLoader = getClass.getClassLoader
+
+  private def classesNames(propertyName: String): List[String] = {
+    ConfigFactory.load.getList(propertyName).asScala.map(_.render.drop(1).dropRight(1)).toList
   }
 }

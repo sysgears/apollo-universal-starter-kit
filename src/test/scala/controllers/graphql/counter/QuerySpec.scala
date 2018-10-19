@@ -5,8 +5,8 @@ import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.model.StatusCodes.OK
 import akka.util.ByteString
 import controllers.graphql.TestHelper
-import controllers.graphql.jsonProtocols.GraphQLMessage
-import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import core.controllers.graphql.jsonProtocols.GraphQLMessage
+import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import models.counter.Counter
 import spray.json._
 

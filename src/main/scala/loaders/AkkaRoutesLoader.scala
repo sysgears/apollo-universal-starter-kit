@@ -2,7 +2,7 @@ package loaders
 
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import controllers.AkkaRoute
+import core.controllers.AkkaRoute
 import core.guice.injection.Injecting.loadClasses
 
 object AkkaRoutesLoader {

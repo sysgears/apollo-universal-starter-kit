@@ -1,6 +1,6 @@
-package controllers.graphql.jsonProtocols
+package core.controllers.graphql.jsonProtocols
 
-import controllers.graphql.jsonProtocols.OperationMessageType.OperationMessageType
+import core.controllers.graphql.jsonProtocols.OperationMessageType.OperationMessageType
 import spray.json.{DefaultJsonProtocol, DeserializationException, JsObject, JsString, JsValue, JsonFormat}
 
 case class OperationMessage(operationType: OperationMessageType, id: Option[String] = None, payload: Option[JsValue] = None)

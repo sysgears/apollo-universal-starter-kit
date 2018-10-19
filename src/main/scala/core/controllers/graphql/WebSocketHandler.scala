@@ -1,13 +1,13 @@
-package controllers.graphql
+package core.controllers.graphql
 
 import akka.NotUsed
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
-import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
-import controllers.graphql.jsonProtocols.OperationMessageType._
-import controllers.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
+import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import core.controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
+import core.controllers.graphql.jsonProtocols.OperationMessageType._
+import core.controllers.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
 import graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler

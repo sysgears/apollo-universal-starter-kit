@@ -1,12 +1,12 @@
-package controllers.graphql
+package core.controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
-import controllers.AkkaRoute
-import controllers.graphql.jsonProtocols.GraphQLMessage
-import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import core.controllers.AkkaRoute
+import core.controllers.graphql.jsonProtocols.GraphQLMessage
+import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import graphql.{GraphQL, GraphQLContext, GraphQLContextFactory}
 import javax.inject.Inject
 import sangria.execution.Executor

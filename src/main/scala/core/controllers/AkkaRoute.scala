@@ -1,4 +1,4 @@
-package controllers
+package core.controllers
 
 import akka.http.scaladsl.server.Route
 

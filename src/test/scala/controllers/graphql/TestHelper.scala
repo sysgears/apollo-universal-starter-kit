@@ -10,6 +10,7 @@ import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.pattern.ask
 import akka.util.Timeout
 import com.google.inject.name.Names
+import core.controllers.graphql.GraphQLController
 import core.guice.injection.Injecting
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
 import services.persistence.PersistenceCleanup

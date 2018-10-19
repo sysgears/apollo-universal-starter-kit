@@ -1,4 +1,4 @@
-package controllers.graphql
+package core.controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.marshalling.ToResponseMarshallable
@@ -8,7 +8,7 @@ import akka.http.scaladsl.model.sse.ServerSentEvent
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.StandardRoute
 import akka.stream.ActorMaterializer
-import controllers.graphql.jsonProtocols.GraphQLMessage
+import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import graphql.{GraphQL, GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler

@@ -27,7 +27,7 @@ trait TestHelper extends WordSpec
   implicit val timeout: Timeout = Timeout(5, SECONDS)
 
   val endpoint: String = "/graphql"
-  val routes: Route = inject[GraphQLController].Routes
+  val routes: Route = inject[GraphQLController].routes
   val persistenceCleanup: PersistenceCleanup = inject[PersistenceCleanup]
 
   before(resetCounter())

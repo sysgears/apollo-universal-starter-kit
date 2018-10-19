@@ -1,6 +1,6 @@
 package graphql
 
-import models.counter.Counter
+import loaders.GraphQLSchemaLoader
 import sangria.schema.{ObjectType, Schema}
 
 object GraphQL {
@@ -10,18 +10,18 @@ object GraphQL {
   val schema: Schema[GraphQLContext, Unit] = sangria.schema.Schema(
     query = ObjectType(
       name = "Query",
-      fields = Counter.GraphQL.queries
+      fields = GraphQLSchemaLoader.queries
     ),
     mutation = Some(
       ObjectType(
         name = "Mutation",
-        fields = Counter.GraphQL.mutations
+        fields = GraphQLSchemaLoader.mutations
       )
     ),
     subscription = Some(
       ObjectType(
         name = "Subscription",
-        fields = Counter.GraphQL.subscriptions
+        fields = GraphQLSchemaLoader.subscriptions
       )
     )
   )

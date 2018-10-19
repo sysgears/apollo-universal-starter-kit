@@ -1,3 +1,5 @@
+import org.ensime.EnsimeKeys._
+
 name := "scala-starter-kit"
 
 version := "0.1"
@@ -7,6 +9,9 @@ scalaVersion := "2.12.6"
 val akkaVersion = "2.5.16"
 val akkaHttpVersion = "10.1.5"
 val sangriaVersion = "1.0.1"
+
+ensimeIgnoreMissingDirectories := true
+ensimeScalaVersion in ThisBuild := scalaVersion.value
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,

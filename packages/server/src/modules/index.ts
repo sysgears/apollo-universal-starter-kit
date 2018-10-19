@@ -7,6 +7,7 @@ import user from './user';
 import subscription from './payments';
 import contact from './contact';
 import mailer from './mailer';
+import chat from './chat';
 import graphqlTypes from './graphqlTypes';
 import './debug';
 
@@ -22,5 +23,6 @@ export default new ServerModule(
   subscription,
   contact,
   mailer,
+  chat,
   graphqlTypes
 );

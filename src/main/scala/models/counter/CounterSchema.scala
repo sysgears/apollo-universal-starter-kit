@@ -1,18 +1,14 @@
 package models.counter
 
-import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import graphql.{GraphQLContext, GraphQLSchema}
 import javax.inject.Inject
-import monix.execution.Scheduler
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Action, Argument, Field, IntType, ObjectType}
 import sangria.streaming.akkaStreams._
 
-class CounterSchema @Inject()(implicit val actorSystem: ActorSystem,
-                              implicit val scheduler: Scheduler,
-                              implicit val materializer: ActorMaterializer) extends GraphQLSchema {
+class CounterSchema @Inject()(implicit val materializer: ActorMaterializer) extends GraphQLSchema {
 
   object Types {
     implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"))

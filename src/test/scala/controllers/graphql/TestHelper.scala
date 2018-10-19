@@ -12,6 +12,7 @@ import akka.util.Timeout
 import com.google.inject.name.Names
 import injection.Injecting
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
+import services.persistence.PersistenceCleanup
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -21,13 +22,13 @@ trait TestHelper extends WordSpec
   with Matchers
   with ScalatestRouteTest
   with BeforeAndAfter
-  with BeforeAndAfterAll
-  with PersistenceCleanup {
+  with BeforeAndAfterAll {
 
   implicit val timeout: Timeout = Timeout(5, SECONDS)
 
   val endpoint: String = "/graphql"
   val routes: Route = inject[GraphQLController].Routes
+  val persistenceCleanup: PersistenceCleanup = inject[PersistenceCleanup]
 
   before(resetCounter())
   after(resetCounter())
@@ -35,11 +36,11 @@ trait TestHelper extends WordSpec
   def resetCounter(): Unit = {
     val persistentCounterActor = inject[ActorRef](Names.named(CounterPersistentActor.name))
     Await.result(Future(ask(persistentCounterActor, Init(0))), Duration.Inf)
-    deleteStorageLocations()
+    persistenceCleanup.deleteStorageLocations()
   }
 
   override protected def afterAll() {
     cleanUp
-    deleteStorageLocations()
+    persistenceCleanup.deleteStorageLocations()
   }
 }

@@ -1,4 +1,4 @@
-package controllers.graphql
+package core.controllers.graphql
 
 import java.util.concurrent.TimeUnit.SECONDS
 
@@ -8,7 +8,6 @@ import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.pattern.ask
 import akka.util.Timeout
 import com.google.inject.name.Names
-import core.controllers.graphql.GraphQLController
 import core.guice.injection.Injecting
 import core.services.persistence.PersistenceCleanup
 import modules.counter.services.count.CounterPersistentActor

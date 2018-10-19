@@ -1,9 +1,9 @@
-package controllers.graphql.counter.subscriptions
+package core.controllers.graphql.counter.subscriptions
 
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.testkit.WSProbe
-import controllers.graphql.TestHelper
+import core.controllers.graphql.TestHelper
 import core.controllers.graphql.jsonProtocols.GraphQLMessage.graphQlWebsocketProtocol
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import core.controllers.graphql.jsonProtocols.GraphQLResponseJsonProtocol._

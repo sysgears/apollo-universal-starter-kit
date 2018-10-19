@@ -1,10 +1,10 @@
-package controllers.graphql.counter
+package core.controllers.graphql.counter
 
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.model.StatusCodes.OK
 import akka.util.ByteString
-import controllers.graphql.TestHelper
+import core.controllers.graphql.TestHelper
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.counter.models.Counter

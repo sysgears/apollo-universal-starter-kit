@@ -6,6 +6,7 @@ import com.google.inject.name.Named
 import com.google.inject.{AbstractModule, Provides, Singleton}
 import net.codingwell.scalaguice.ScalaModule
 import services.counter.{ActorCounterServiceImpl, CounterService}
+import services.persistence.PersistenceCleanup
 
 class CounterModule extends AbstractModule with ScalaModule {
 
@@ -16,7 +17,7 @@ class CounterModule extends AbstractModule with ScalaModule {
   @Provides
   @Singleton
   @Named(CounterPersistentActor.name)
-  def counterActor(actorSystem: ActorSystem): ActorRef = {
-    actorSystem.actorOf(CounterPersistentActor.props)
+  def counterActor(actorSystem: ActorSystem, persistenceCleanup: PersistenceCleanup): ActorRef = {
+    actorSystem.actorOf(CounterPersistentActor.props(persistenceCleanup))
   }
 }

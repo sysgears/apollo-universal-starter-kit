@@ -1,7 +1,7 @@
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
-import injection.Injecting
+import core.guice.injection.Injecting
 import loaders.AkkaRoutesLoader.routes
 
 object Main extends App with Injecting {

@@ -1,4 +1,4 @@
-package injection
+package core.guice.injection
 
 import java.lang.annotation.Annotation
 

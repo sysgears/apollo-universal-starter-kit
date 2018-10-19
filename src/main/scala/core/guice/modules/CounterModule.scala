@@ -1,4 +1,4 @@
-package modules
+package core.guice.modules
 
 import actors.counter.CounterPersistentActor
 import akka.actor.{ActorRef, ActorSystem}

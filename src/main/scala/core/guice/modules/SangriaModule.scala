@@ -1,4 +1,4 @@
-package modules
+package core.guice.modules
 
 import com.google.inject.{AbstractModule, Provides}
 import graphql.{GraphQL, GraphQLContext}

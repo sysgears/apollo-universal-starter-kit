@@ -1,4 +1,4 @@
-package modules
+package core.guice.modules
 
 import com.google.inject.AbstractModule
 import com.typesafe.config.{Config, ConfigFactory}

@@ -1,7 +1,7 @@
 package loaders
 
 import graphql.{GraphQLContext, GraphQLSchema}
-import injection.Injecting.loadClasses
+import core.guice.injection.Injecting.loadClasses
 import sangria.schema.Field
 
 object GraphQLSchemaLoader {

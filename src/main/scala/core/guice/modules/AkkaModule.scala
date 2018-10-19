@@ -1,4 +1,4 @@
-package modules
+package core.guice.modules
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer

@@ -3,12 +3,11 @@ package controllers.frontend
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import javax.inject.Singleton
+import controllers.AkkaRoute
 
-@Singleton
-class FrontendController {
+class FrontendController extends AkkaRoute {
 
-  val Routes: Route =
+  override val routes: Route =
     (get & pathEndOrSingleSlash & redirectToTrailingSlashIfMissing(StatusCodes.TemporaryRedirect)) {
       getFromResource("web/frontend/index.html")
     } ~ {

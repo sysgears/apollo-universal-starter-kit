@@ -1,4 +1,4 @@
-package loaders
+package core.config.loaders
 
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route

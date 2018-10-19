@@ -1,6 +1,6 @@
-package loaders
+package core.config.loaders
 
-import graphql.{GraphQLContext, GraphQLSchema}
+import core.graphql.{GraphQLContext, GraphQLSchema}
 import core.guice.injection.Injecting.loadClasses
 import sangria.schema.Field
 

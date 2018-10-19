@@ -1,4 +1,4 @@
-package services.persistence
+package core.services.persistence
 
 import java.io.File
 

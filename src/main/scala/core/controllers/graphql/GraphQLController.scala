@@ -7,7 +7,7 @@ import akka.stream.ActorMaterializer
 import core.controllers.AkkaRoute
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import graphql.{GraphQL, GraphQLContext, GraphQLContextFactory}
+import core.graphql.{GraphQL, GraphQLContext, GraphQLContextFactory}
 import javax.inject.Inject
 import sangria.execution.Executor
 import sangria.renderer.SchemaRenderer

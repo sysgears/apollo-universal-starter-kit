@@ -5,10 +5,10 @@ import actors.counter.CounterEventActor.Subscribe
 import akka.actor.{ActorSystem, PoisonPill}
 import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.stream.{ActorMaterializer, OverflowStrategy}
+import core.services.publisher.PublisherService
 import javax.inject.{Inject, Singleton}
 import models.counter.Counter
 import org.reactivestreams.Publisher
-import services.publisher.PublisherService
 import util.Logger
 
 import scala.concurrent.ExecutionContext

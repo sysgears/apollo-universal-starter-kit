@@ -1,7 +1,4 @@
-package util
-
-
-import services.publisher.PublisherService
+package core.services.publisher
 
 import scala.concurrent.{ExecutionContext, Future}
 

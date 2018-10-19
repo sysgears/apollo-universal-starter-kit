@@ -4,9 +4,9 @@ import actors.counter.CounterPersistentActor
 import akka.actor.{ActorRef, ActorSystem}
 import com.google.inject.name.Named
 import com.google.inject.{AbstractModule, Provides, Singleton}
+import core.services.persistence.PersistenceCleanup
 import net.codingwell.scalaguice.ScalaModule
 import services.counter.{ActorCounterServiceImpl, CounterService}
-import services.persistence.PersistenceCleanup
 
 class CounterModule extends AbstractModule with ScalaModule {
 

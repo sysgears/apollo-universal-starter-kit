@@ -1,10 +1,9 @@
 package resolvers
 
+import core.services.publisher.{PublisherHelper, PublisherService}
 import javax.inject.Inject
 import models.counter.Counter
 import services.counter.CounterService
-import services.publisher.PublisherService
-import util.PublisherHelper
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -1,11 +1,10 @@
-package services.publisher.monix
+package core.services.publisher
 
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
 import monix.reactive.OverflowStrategy
 import monix.reactive.subjects.ConcurrentSubject
 import org.reactivestreams.Publisher
-import services.publisher.PublisherService
 import util.Logger
 
 @Singleton

@@ -8,7 +8,7 @@ import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import core.controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
 import core.controllers.graphql.jsonProtocols.OperationMessageType._
 import core.controllers.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
-import graphql.{GraphQLContext, GraphQLContextFactory}
+import core.graphql.{GraphQLContext, GraphQLContextFactory}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription

@@ -1,7 +1,7 @@
 package core.guice.modules
 
 import com.google.inject.{AbstractModule, Provides}
-import graphql.{GraphQL, GraphQLContext}
+import core.graphql.{GraphQL, GraphQLContext}
 import javax.inject.Singleton
 import net.codingwell.scalaguice.ScalaModule
 import sangria.execution.batch.BatchExecutor

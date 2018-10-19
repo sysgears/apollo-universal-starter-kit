@@ -1,4 +1,4 @@
-package services.publisher
+package core.services.publisher
 
 import org.reactivestreams.Publisher
 

@@ -2,7 +2,7 @@ package models.counter
 
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
-import graphql.{GraphQLContext, GraphQLSchema}
+import core.graphql.{GraphQLContext, GraphQLSchema}
 import javax.inject.Inject
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Action, Argument, Field, IntType, ObjectType}

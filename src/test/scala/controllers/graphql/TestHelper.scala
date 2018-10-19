@@ -12,8 +12,8 @@ import akka.util.Timeout
 import com.google.inject.name.Names
 import core.controllers.graphql.GraphQLController
 import core.guice.injection.Injecting
+import core.services.persistence.PersistenceCleanup
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
-import services.persistence.PersistenceCleanup
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

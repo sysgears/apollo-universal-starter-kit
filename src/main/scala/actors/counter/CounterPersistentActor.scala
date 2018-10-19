@@ -3,6 +3,7 @@ package actors.counter
 import actors.counter.CounterPersistentActor.{GetAmount, IncrementAndGet, Init}
 import akka.actor.{ActorLogging, Props}
 import akka.persistence._
+import services.persistence.PersistenceCleanup
 import util.Named
 
 object CounterPersistentActor extends Named {
@@ -13,16 +14,16 @@ object CounterPersistentActor extends Named {
 
   case class IncrementAndGet(amount: Int)
 
-  def props = Props(new CounterPersistentActor)
+  def props(persistenceCleanup: PersistenceCleanup) = Props(new CounterPersistentActor(persistenceCleanup))
 
   override final val name = "CounterPersistentActor"
 }
 
-class CounterPersistentActor extends PersistentActor with ActorLogging {
+class CounterPersistentActor(persistenceCleanup: PersistenceCleanup) extends PersistentActor with ActorLogging {
 
   override def preStart() {
     log.info(s"Actor [$self] starting ...")
-    deleteSnapshots(SnapshotSelectionCriteria())
+    persistenceCleanup.deleteStorageLocations()
   }
 
   override def persistenceId: String = CounterPersistentActor.name

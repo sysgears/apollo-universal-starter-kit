@@ -7,8 +7,9 @@ import javax.inject.Inject
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Action, Argument, Field, IntType, ObjectType}
 import sangria.streaming.akkaStreams._
+import util.Logger
 
-class CounterSchema @Inject()(implicit val materializer: ActorMaterializer) extends GraphQLSchema {
+class CounterSchema @Inject()(implicit val materializer: ActorMaterializer) extends GraphQLSchema with Logger {
 
   object Types {
     implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"))
@@ -40,7 +41,7 @@ class CounterSchema @Inject()(implicit val materializer: ActorMaterializer) exte
       fieldType = Types.counter,
       resolve = sc => Source.fromPublisher(sc.ctx.publisherService.getPublisher).map {
         e =>
-          println(s"Sending event [$e] to client ...")
+          log.info(s"Sending event [$e] to client ...")
           Action(e)
       }
     )

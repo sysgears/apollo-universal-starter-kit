@@ -8320,10 +8320,10 @@ graphql-anywhere@^4.1.0-alpha.0, graphql-anywhere@^4.1.18:
   dependencies:
     apollo-utilities "^1.0.21"
 
-graphql-auth@0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/graphql-auth/-/graphql-auth-0.2.2.tgz#52b73ba46854365b615e7a95f1d3d490d7be1e63"
-  integrity sha512-TSl4p64xukDlaLAL6nqJ2GO+uMDzdQ74x10nmSixBbIZI+gQm5eSLG12fdaBcgtc+5gtfzoej43O3UGPlDP8Vg==
+graphql-auth@0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/graphql-auth/-/graphql-auth-0.2.3.tgz#1e3e2aa3022da093465af7febe3fd534c0b4d55b"
+  integrity sha512-HHHwehYLJbaiQd0Uon2nhklI/ha4SP9VfUGRZc4mU78l3Sr1ty0skeYa5SPyiToXMf9c5NmxuQ6e9Z7hkmvcTA==
 
 graphql-extensions@^0.2.1:
   version "0.2.1"

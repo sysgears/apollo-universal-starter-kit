@@ -2,7 +2,7 @@ package modules.graphql.types
 
 import java.util.Date
 
-import modules.graphql.types.DateHelper.{parseDate, _}
+import modules.graphql.types.DateHelper._
 import sangria.marshalling.DateSupport
 import sangria.schema.ScalarType
 

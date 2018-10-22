@@ -1,4 +1,4 @@
-package core.guice.modules
+package modules.counter.guice.modules
 
 import com.google.inject.AbstractModule
 import core.services.publisher.{MonixPublisherServiceImpl, PublisherService}

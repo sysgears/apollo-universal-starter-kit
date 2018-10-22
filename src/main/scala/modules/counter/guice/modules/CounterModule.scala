@@ -1,4 +1,4 @@
-package core.guice.modules
+package modules.counter.guice.modules
 
 import akka.actor.{ActorRef, ActorSystem}
 import com.google.inject.name.Named

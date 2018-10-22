@@ -1,15 +1,12 @@
 package modules.graphql.types
 
-import java.text.SimpleDateFormat
-import java.util.{Date, TimeZone}
+import java.util.Date
 
-import modules.graphql.types.DateHelper.parseDate
+import modules.graphql.types.DateHelper.{parseDate, _}
 import sangria.marshalling.DateSupport
 import sangria.schema.ScalarType
 
 object GraphQLTypes {
-
-  private val dateTimeFormat: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:dd'Z'") // ISO 8601 date format
 
   implicit val dateTimeType: ScalarType[Date] = ScalarType[Date](
     name = "DateTime",
@@ -27,8 +24,6 @@ object GraphQLTypes {
     }
   )
 
-  private val dateFormat: SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
-
   implicit val dateType: ScalarType[Date] = ScalarType[Date](
     name = "Date",
     coerceOutput = (date, caps) => {
@@ -44,10 +39,6 @@ object GraphQLTypes {
       case _ => Left(DateCoercionViolation)
     }
   )
-
-  private val timeFormat: SimpleDateFormat = new SimpleDateFormat("HH:mm:ss'Z'")
-
-  timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
 
   implicit val timeType: ScalarType[Date] = ScalarType[Date](
     name = "Time",

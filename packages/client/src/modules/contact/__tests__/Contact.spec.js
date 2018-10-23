@@ -2,7 +2,13 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 import Renderer from '../../../../src/testHelpers/Renderer';
-import { click, blur, find, change, updateContent } from '../../../testHelpers/testUtils';
+import { click, blur, find, change, updateContent, wait } from '../../../testHelpers/testUtils';
+
+/**
+ * *NOTICE*
+ * Formik uses the asynchronous validation fields. If you want to test form validation, you have to check the error
+ * validation messages on the next tick of the JavaScript event loop. You can use the 'wait()' function to do that.
+ */
 
 describe('Contact UI works', () => {
   const renderer = new Renderer({});
@@ -20,65 +26,73 @@ describe('Contact UI works', () => {
     expect(content).to.not.be.empty;
   });
 
-  step('Name validation works', () => {
+  step('Name validation works', async () => {
     blur(nameInput);
-    expect(content.textContent).to.include('Required');
+    await wait(() => expect(content.textContent).to.include('Required'));
 
     change(nameInput, { target: { name: 'name', value: 'na' } });
     blur(nameInput);
-    expect(content.textContent).to.include('Must be 3 characters or more');
+    await wait(() => expect(content.textContent).to.include('Must be 3 characters or more'));
 
     change(nameInput, { target: { name: 'name', value: 'name' } });
-    expect(content.textContent).to.not.include('Must be 3 characters or more');
-    expect(content.textContent).to.not.include('Required');
+    await wait(() => {
+      expect(content.textContent).to.not.include('Must be 3 characters or more');
+      expect(content.textContent).to.not.include('Required');
+    });
   });
 
-  step('Email validation works', () => {
+  step('Email validation works', async () => {
     blur(emailInput);
-    expect(content.textContent).to.include('Required');
+    await wait(() => expect(content.textContent).to.include('Required'));
 
     change(emailInput, { target: { name: 'email', value: 'admin' } });
     blur(emailInput);
-    expect(content.textContent).to.include('Invalid email address');
+    await wait(() => expect(content.textContent).to.include('Invalid email address'));
 
     change(emailInput, { target: { name: 'email', value: 'admin@example.com' } });
-    expect(content.textContent).to.not.include('Invalid email address');
-    expect(content.textContent).to.not.include('Required');
+    await wait(() => {
+      expect(content.textContent).to.not.include('Invalid email address');
+      expect(content.textContent).to.not.include('Required');
+    });
   });
 
-  step('Content validation works', () => {
+  step('Content validation works', async () => {
     blur(contentInput);
-    expect(content.textContent).to.include('Required');
+    await wait(() => expect(content.textContent).to.include('Required'));
 
     change(contentInput, { target: { name: 'content', value: 'Text' } });
     blur(contentInput);
-    expect(content.textContent).to.include('Must be 10 characters or more');
+    await wait(() => expect(content.textContent).to.include('Must be 10 characters or more'));
 
     change(contentInput, { target: { name: 'content', value: 'Some text for test' } });
-    expect(content.textContent).to.not.include('Must be 10 characters or more');
-    expect(content.textContent).to.not.include('Required');
+    await wait(() => {
+      expect(content.textContent).to.not.include('Must be 10 characters or more');
+      expect(content.textContent).to.not.include('Required');
+    });
   });
 
   step('Click on submit button works', () => {
     click(submitButton);
   });
 
-  step('Form is not submited with not valid data', () => {
+  step('Form is not submitted with not valid data', async () => {
     change(nameInput, { target: { name: 'name', value: '' } });
     change(emailInput, { target: { name: 'email', value: 'admin' } });
     change(contentInput, { target: { name: 'content', value: 'test' } });
     click(submitButton);
-    expect(content.textContent).to.not.include('Thank you for contacting us!');
+    await wait(() => expect(content.textContent).to.not.include('Thank you for contacting us!'));
   });
 
-  step('Form is submited with valid data', () => {
+  step('Form is submited with valid data', async () => {
     change(nameInput, { target: { name: 'name', value: 'admin' } });
     change(emailInput, { target: { name: 'email', value: 'admin@example.com' } });
     change(contentInput, { target: { name: 'content', value: 'Some text for test' } });
     click(submitButton);
-    expect(content.textContent).to.not.include('Must be 3 characters or more');
-    expect(content.textContent).to.not.include('Invalid email address');
-    expect(content.textContent).to.not.include('Must be 10 characters or more');
-    expect(content.textContent).to.not.include('Required');
+    await wait(() => {
+      expect(content.textContent).to.not.include('Must be 3 characters or more');
+      expect(content.textContent).to.not.include('Invalid email address');
+      expect(content.textContent).to.not.include('Must be 10 characters or more');
+      expect(content.textContent).to.not.include('Required');
+    });
   });
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import DomainValidation from '@domain-schema/validation';
+import DomainValidator from '@domain-schema/validation';
 
 import { onSubmit, mapFormPropsToValues } from '../../../../utils/crud';
 import { createFormFields } from '../../util';
@@ -12,7 +12,7 @@ const Form = ({ schema, data: { node }, updateEntry, createEntry }) => {
     <Formik
       initialValues={mapFormPropsToValues({ schema, data: node })}
       validate={values => {
-        DomainValidation.validate(values, schema);
+        DomainValidator.validate(schema, values);
       }}
       onSubmit={async values => {
         let title = node && node.__typename ? node.__typename : 'Model',

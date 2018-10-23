@@ -199,7 +199,7 @@ export const deleteEntry = async ({ ownProps: { refetch }, mutate }, { where }, 
 export const mergeFilter = (filter, defaults, schema) => {
   let mergeFilter = filter;
   if (!filter.hasOwnProperty('searchText')) {
-    const { searchText, ...restFilters } = defaults.testModuleState.filter;
+    const { searchText, ...restFilters } = defaults;
     mergeFilter = { ...restFilters, ...filter };
   }
 

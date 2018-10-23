@@ -40,7 +40,7 @@
   "license": "MIT",
   "dependencies": {
     "@domain-schema/core": "^0.0.34",
-    "@domain-schema/validation": "^0.0.33",
+    "@domain-schema/validation": "^0.0.36",
     "@domain-schema/formik": "^0.0.34",
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.6",

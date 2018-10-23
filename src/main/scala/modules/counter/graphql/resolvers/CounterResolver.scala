@@ -1,19 +1,17 @@
 package modules.counter.graphql.resolvers
 
-import core.services.publisher.{PublisherHelper, PublisherService}
-import javax.inject.Inject
+import akka.NotUsed
+import akka.stream.scaladsl.Source
 import modules.counter.models.Counter
-import modules.counter.services.count.CounterService
+import sangria.schema.Action
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
-class CounterResolver @Inject()(val counterService: CounterService,
-                                publisherService: PublisherService[Counter])
-                               (implicit executionContext: ExecutionContext) extends PublisherHelper[Counter] {
+trait CounterResolver {
 
-  def addServerCounter(amount: Int): Future[Counter] = withPublishing(publisherService) {
-    counterService.increment(amount).map(Counter(_))
-  }
+  def addServerCounter(amount: Int): Future[Counter]
 
-  def serverCounter: Future[Counter] = counterService.getAmount.map(Counter(_))
+  def serverCounter: Future[Counter]
+
+  def counterUpdated: Source[Action[Unit, Counter], NotUsed]
 }

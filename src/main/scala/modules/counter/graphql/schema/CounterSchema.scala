@@ -1,19 +1,16 @@
 package modules.counter.graphql.schema
 
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.Source
 import core.graphql.GraphQLSchema
-import core.services.publisher.PublisherService
 import javax.inject.Inject
 import modules.counter.graphql.resolvers.CounterResolver
 import modules.counter.models.Counter
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
-import sangria.schema.{Action, Argument, Field, IntType, ObjectType}
+import sangria.schema.{Argument, Field, IntType, ObjectType}
 import sangria.streaming.akkaStreams._
 import util.Logger
 
-class CounterSchema @Inject()(counterResolver: CounterResolver,
-                              publisherService: PublisherService[Counter])
+class CounterSchema @Inject()(counterResolver: CounterResolver)
                              (implicit val materializer: ActorMaterializer) extends GraphQLSchema with Logger {
 
   object Types {
@@ -44,11 +41,7 @@ class CounterSchema @Inject()(counterResolver: CounterResolver,
     Field.subs(
       name = "counterUpdated",
       fieldType = Types.counter,
-      resolve = _ => Source.fromPublisher(publisherService.getPublisher).map {
-        e =>
-          log.info(s"Sending event [$e] to client ...")
-          Action(e)
-      }
+      resolve = _ => counterResolver.counterUpdated
     )
   )
 }

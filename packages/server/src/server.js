@@ -5,9 +5,12 @@ import { serverPort } from './net';
 import app from './app';
 import log from '../../common/log';
 
-let server = http.createServer();
+// eslint-disable-next-line import/no-mutable-exports
+let server;
 
+server = http.createServer();
 server.on('request', app);
+
 addGraphQLSubscriptions(server);
 
 const serverPromise = new Promise(resolve => {

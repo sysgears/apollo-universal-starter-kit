@@ -5,7 +5,7 @@
     "icon": "../../app.png",
     "version": "1.0.0",
     "slug": "apollo-universal-starter-kit",
-    "sdkVersion": "27.0.0",
+    "sdkVersion": "30.0.0",
     "ios": {
       "bundleIdentifier": "com.sysgears.apollokit"
     },

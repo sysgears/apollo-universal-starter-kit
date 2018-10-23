@@ -191,7 +191,7 @@ export default compose(
           const {
             data: { updateMany$Module$s }
           } = await mutate({
-            variables: { data: removeEmpty(data), where }
+            variables: { data: removeEmpty(data, $Module$Schema), where }
           });
 
           if (updateMany$Module$s.errors) {

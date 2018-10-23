@@ -4,7 +4,7 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { reactI18nextModule, I18nextProvider } from 'react-i18next';
 
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 import { MenuItem, LanguagePicker } from '../../modules/common/components/web';
 import modules from '../';
 import settings from '../../../../../settings';
@@ -27,36 +27,39 @@ I18nProvider.propTypes = {
   children: PropTypes.node
 };
 
-const LANG_COOKIE = 'lang';
+const I18N_CONFIG = {
+  fallbackLng: settings.i18n.fallbackLng,
+  resources: {},
+  debug: false, // set true to show logs
+  whitelist: settings.i18n.langList,
+  detection: {
+    lookupCookie: settings.i18n.cookie,
+    caches: __SSR__ ? ['cookie'] : ['localStorage']
+  },
+  interpolation: {
+    escapeValue: false // not needed for react!!
+  },
+  react: {
+    wait: false
+  }
+};
 
-i18n
-  .use(LanguageDetector)
-  .use(reactI18nextModule)
-  .init({
-    fallbackLng: settings.i18n.fallbackLng,
-    resources: {},
-    debug: false, // set true to show logs
-    whitelist: settings.i18n.langList,
-    detection: {
-      lookupCookie: LANG_COOKIE,
-      caches: __SSR__ ? ['cookie'] : ['localStorage']
-    },
-    interpolation: {
-      escapeValue: false // not needed for react!!
-    },
-    react: {
-      wait: false
-    }
-  });
-
-const langPicker = {};
-if (settings.i18n.langPickerRender) {
-  langPicker.navItemRight = (
-    <MenuItem key="languagePicker" style={{ display: 'flex', alignItems: 'center' }}>
-      <LanguagePicker i18n={i18n} />
-    </MenuItem>
-  );
+if (__CLIENT__) {
+  i18n.use(LanguageDetector);
 }
+
+i18n.use(reactI18nextModule).init(I18N_CONFIG);
+
+const langPicker =
+  settings.i18n.enabled && settings.i18n.langPickerRender
+    ? new ClientModule({
+        navItemRight: [
+          <MenuItem key="languagePicker" className="menu-center">
+            <LanguagePicker i18n={i18n} />
+          </MenuItem>
+        ]
+      })
+    : undefined;
 
 class RootComponent extends React.Component {
   constructor(props) {
@@ -64,9 +67,7 @@ class RootComponent extends React.Component {
     this.props = props;
 
     if (this.props.req) {
-      const lang =
-        this.props.req.universalCookies.get(LANG_COOKIE) || this.props.req.acceptsLanguages(settings.i18n.langList);
-      this.props.req.universalCookies.set(LANG_COOKIE, lang);
+      const lang = this.props.req.universalCookies.get(settings.i18n.cookie);
       i18n.changeLanguage(lang);
     }
   }
@@ -81,9 +82,10 @@ RootComponent.propTypes = {
   children: PropTypes.node
 };
 
-export default new Feature({
-  data: { i18n: true },
-  // eslint-disable-next-line react/display-name
-  rootComponentFactory: req => <RootComponent req={req} />,
-  ...langPicker
-});
+export default (settings.i18n.enabled
+  ? new ClientModule(langPicker, {
+      data: { i18n: true },
+      // eslint-disable-next-line react/display-name
+      rootComponentFactory: [req => <RootComponent req={req} />]
+    })
+  : undefined);

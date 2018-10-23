@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'formik';
+import { PLATFORM } from '../../../common/utils';
 
-export default class FieldAdapter extends Component {
-  static contextTypes = {
-    formik: PropTypes.object
-  };
-
+class FieldAdapter extends Component {
   static propTypes = {
+    formik: PropTypes.object.isRequired,
     component: PropTypes.func,
     onChangeText: PropTypes.func,
     onChange: PropTypes.func,
@@ -19,11 +18,9 @@ export default class FieldAdapter extends Component {
     disabled: PropTypes.bool
   };
 
-  constructor(props, context) {
-    super(props, context);
-    if (!context.formik) {
-      throw new Error('Field must be inside a component decorated with formik()');
-    }
+  constructor(props) {
+    super(props);
+    this.props = props;
   }
 
   onChange = e => {
@@ -31,38 +28,36 @@ export default class FieldAdapter extends Component {
     if (onChange) {
       onChange(e.target.value, e);
     } else {
-      this.context.formik.handleChange(e);
+      this.props.formik.handleChange(e);
     }
   };
 
   onBlur = e => {
-    const { onBlur, name } = this.props;
-    const { formik } = this.context;
+    const { formik, onBlur, name } = this.props;
     if (onBlur) {
       onBlur(e);
     } else {
-      if (typeof document !== 'undefined') {
-        formik.handleBlur(e);
-      } else {
+      if (PLATFORM === 'mobile') {
         formik.setFieldTouched(name, true);
+      } else {
+        formik.handleBlur(e);
       }
     }
   };
 
   onChangeText = value => {
-    const { onChangeText, onChange, name } = this.props;
+    const { formik, onChangeText, onChange, name } = this.props;
     if (onChange && !onChangeText) {
       onChange(value);
     } else if (onChangeText) {
       onChangeText(value);
     } else {
-      this.context.formik.setFieldValue(name, value);
+      formik.setFieldValue(name, value);
     }
   };
 
   render() {
-    const { formik } = this.context;
-    const { component, name, defaultValue, defaultChecked, disabled } = this.props;
+    const { formik, component, name, defaultValue, defaultChecked, disabled } = this.props;
     let { value, checked } = this.props;
     value = value || '';
     checked = checked || false;
@@ -81,7 +76,7 @@ export default class FieldAdapter extends Component {
       disabled
     };
 
-    const changeEventHandler = typeof document !== 'undefined' ? 'onChange' : 'onChangeText';
+    const changeEventHandler = PLATFORM === 'mobile' ? 'onChangeText' : 'onChange';
     input[changeEventHandler] = this[changeEventHandler];
 
     return React.createElement(component, {
@@ -91,3 +86,5 @@ export default class FieldAdapter extends Component {
     });
   }
 }
+
+export default connect(FieldAdapter);

@@ -2,7 +2,7 @@ import { createDrawerNavigator } from 'react-navigation';
 
 import modules from '..';
 import { DrawerComponent } from '../common/components/native';
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 
 const routerFactory = () =>
   createDrawerNavigator(
@@ -14,6 +14,6 @@ const routerFactory = () =>
     }
   );
 
-export default new Feature({
+export default new ClientModule({
   routerFactory
 });

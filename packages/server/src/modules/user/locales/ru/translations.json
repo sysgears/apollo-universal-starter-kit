@@ -1,0 +1,21 @@
+{
+  "accessDenied": "Доступ запрещен",
+  "usernameIsExisted": "Данное имя пользователя уже используется.",
+  "emailIsExisted": "Данный e-mail уже используется.",
+  "passwordLength": "Длина пароля должна составлять {{length}} символов и больше.",
+  "userIsNotExisted": "Такого пользователя не существует.",
+  "userCannotDeleteYourself": "Вы не можете удалить себя",
+  "userCouldNotDeleted": "Невозможно удалить пользователя. Побробуйте повторить попытку позже.",
+  "auth": {
+    "password": {
+      "validPasswordEmail": "Пожалуйста, введите Ваш username или e-mail.",
+      "emailConfirmation": "Пожалуйста, подтвердите Ваш e-mail",
+      "validPassword": "Пожалуйста, введите действительный пароль.",
+      "usernameIsExisted": "Данное имя пользователя уже используется",
+      "emailIsExisted": "Данный e-mail уже используется.",
+      "passwordsIsNotMatch": "Пароли не совпадают.",
+      "passwordLength": "Длина пароля должна составлять {{length}} символов и больше.",
+      "invalidToken": "Не действительный токен"
+    }
+  }
+}

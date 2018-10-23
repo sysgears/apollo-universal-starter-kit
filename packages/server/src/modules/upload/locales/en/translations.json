@@ -1,0 +1,5 @@
+{
+  "fileNotFound": "File was not found.",
+  "fileNotLoaded": "Unable to load file(s).",
+  "fileNotDeleted": "Unable to delete file."
+}

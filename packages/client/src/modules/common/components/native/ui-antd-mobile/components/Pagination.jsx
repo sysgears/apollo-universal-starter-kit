@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Pagination as ADPagination, Button } from 'antd-mobile';
+import { Pagination as ADPagination, Button } from 'antd-mobile-rn';
 import { Text } from 'react-native';
 
 export default class Pagination extends React.Component {
@@ -12,11 +12,11 @@ export default class Pagination extends React.Component {
     hasNextPage: PropTypes.bool
   };
 
+  state = { pageNumber: 1, pagination: this.props.pagination };
+
   static getDerivedStateFromProps(nextProps, prevState) {
     return nextProps.pagination !== prevState.pagination ? { pageNumber: 1, pagination: nextProps.pagination } : null;
   }
-
-  state = { pageNumber: 1, pagination: this.props.pagination };
 
   onPageChange = pageNumber => {
     const { pagination, handlePageChange } = this.props;

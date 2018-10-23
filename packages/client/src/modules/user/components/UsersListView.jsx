@@ -1,18 +1,18 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import {
-  List,
-  ListItem,
+  Button,
   Card,
   CardItem,
   CardLabel,
   CardText,
-  Button,
-  primary,
-  Loading
+  List,
+  ListItem,
+  Loading,
+  primary
 } from '../../common/components/native';
 import translate from '../../../i18n';
 
@@ -25,7 +25,7 @@ const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
         <ScrollView>
           <View>
             <View style={styles.buttonWrapper}>
-              <Button type={primary} onPress={() => navigation.navigate('UserEdit', { id: 0 })}>
+              <Button type={primary} onPress={() => navigation.navigate('UserAdd')}>
                 {t('users.btn.add')}
               </Button>
             </View>
@@ -33,10 +33,10 @@ const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
               users.length && (
                 <List>
                   {users.map(({ username, email, isActive, role, id }, idx) => (
-                    <ListItem key={idx} onPress={() => navigation.navigate('UserEdit', { id })}>
-                      <Card>
+                    <ListItem style={styles.listItem} key={idx} onPress={() => navigation.navigate('UserEdit', { id })}>
+                      <Card style={styles.cardItem}>
                         <CardItem>
-                          <View style={styles.itemsContainer}>
+                          <View style={styles.cardItem}>
                             <CardItem style={styles.cardItemWrapper}>
                               <CardLabel>{`${t('users.column.name')}: `}</CardLabel>
                               <CardText>{username}</CardText>
@@ -103,7 +103,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  itemsContainer: {
+  listItem: {
+    marginRight: 15,
+    paddingRight: 0
+  },
+  cardItem: {
     flex: 9
   },
   cardItemWrapper: {

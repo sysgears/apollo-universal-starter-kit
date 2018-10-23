@@ -18,7 +18,16 @@ const limit =
 export function AddPost(prev, node) {
   // ignore if duplicate
   if (prev.posts.edges.some(post => node.id === post.cursor)) {
-    return prev;
+    return update(prev, {
+      posts: {
+        totalCount: {
+          $set: prev.posts.totalCount - 1
+        },
+        edges: {
+          $set: prev.posts.edges
+        }
+      }
+    });
   }
 
   const filteredPosts = prev.posts.edges.filter(post => post.node.id !== null);
@@ -73,20 +82,17 @@ class Post extends React.Component {
     this.subscription = null;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.loading) {
+  componentDidUpdate(prevProps) {
+    if (!this.props.loading) {
       const endCursor = this.props.posts ? this.props.posts.pageInfo.endCursor : 0;
-      const nextEndCursor = nextProps.posts.pageInfo.endCursor;
-
+      const prevEndCursor = prevProps.posts ? prevProps.posts.pageInfo.endCursor : null;
       // Check if props have changed and, if necessary, stop the subscription
-      if (this.subscription && endCursor !== nextEndCursor) {
+      if (this.subscription && prevEndCursor !== endCursor) {
         this.subscription();
         this.subscription = null;
       }
-
-      // Subscribe or re-subscribe
       if (!this.subscription) {
-        this.subscribeToPostList(nextEndCursor);
+        this.subscribeToPostList(endCursor);
       }
     }
   }
@@ -95,6 +101,7 @@ class Post extends React.Component {
     if (this.subscription) {
       // unsubscribe
       this.subscription();
+      this.subscription = null;
     }
   }
 
@@ -136,7 +143,8 @@ export default compose(
   graphql(POSTS_QUERY, {
     options: () => {
       return {
-        variables: { limit: limit, after: 0 }
+        variables: { limit: limit, after: 0 },
+        fetchPolicy: 'cache-and-network'
       };
     },
     props: ({ data }) => {

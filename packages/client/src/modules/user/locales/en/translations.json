@@ -35,7 +35,7 @@
     "form": {
       "title": "Sign In",
       "field": {
-        "usenameOrEmail": "Username or Email",
+        "usernameOrEmail": "Username or Email",
         "pass": "Password"
       },
       "btnSubmit": "Login"

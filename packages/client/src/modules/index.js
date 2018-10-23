@@ -4,23 +4,25 @@ import counter from './counter';
 import post from './post';
 import upload from './upload';
 import user from './user';
-import subscription from './subscription';
+import payments from './payments';
 import contact from './contact';
 import pageNotFound from './pageNotFound';
 import pagination from './pagination';
+import chat from './chat';
 import './favicon';
 
-import Feature from './connector';
+import ClientModule from './ClientModule';
 
-export default new Feature(
+export default new ClientModule(
   defaultRouter,
   counter,
   post,
   upload,
-  user,
-  subscription,
   contact,
   pagination,
-  pageNotFound,
-  i18n
+  chat,
+  payments,
+  user,
+  i18n,
+  pageNotFound
 );

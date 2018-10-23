@@ -17,6 +17,8 @@ import serverModules from '../../../server/src/modules';
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 global.document = dom.window.document;
 global.window = dom.window;
+// Needed by Formik >= 1.x
+global.HTMLButtonElement = dom.window.HTMLButtonElement;
 global.navigator = dom.window.navigator;
 
 const { render } = require('./testUtils');
@@ -126,17 +128,18 @@ class MockLink extends ApolloLink {
 }
 
 export default class Renderer {
-  constructor(graphqlMocks, reduxState) {
+  constructor(graphqlMocks, reduxState, resolvers) {
     const schema = makeExecutableSchema({
-      typeDefs: [rootSchema, ...serverModules.schemas]
+      typeDefs: [rootSchema, ...serverModules.schema]
     });
     addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
 
     const schemaLink = new MockLink(schema);
+
     const client = createApolloClient({
       createNetLink: () => schemaLink,
       links: clientModules.link,
-      clientResolvers: clientModules.resolvers
+      clientResolvers: resolvers || clientModules.resolvers
     });
 
     const store = createStore(

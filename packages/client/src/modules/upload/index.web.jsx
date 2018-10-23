@@ -5,10 +5,9 @@ import createNetLink from './netLink';
 import translate from '../../i18n';
 import { MenuItem } from '../../modules/common/components/web';
 import Upload from './containers/Upload';
-import reducers from './reducers';
 import resources from './locales';
 
-import Feature from '../connector';
+import ClientModule from '../ClientModule';
 
 const NavLinkWithI18n = translate('upload')(({ t }) => (
   <NavLink to="/upload" className="nav-link" activeClassName="active">
@@ -16,15 +15,14 @@ const NavLinkWithI18n = translate('upload')(({ t }) => (
   </NavLink>
 ));
 
-export default new Feature({
+export default new ClientModule({
   data: { upload: true },
-  route: <Route exact path="/upload" component={Upload} />,
-  navItem: (
+  route: [<Route exact path="/upload" component={Upload} />],
+  navItem: [
     <MenuItem key="/upload">
       <NavLinkWithI18n />
     </MenuItem>
-  ),
-  reducer: { upload: reducers },
-  localization: { ns: 'upload', resources },
+  ],
+  localization: [{ ns: 'upload', resources }],
   createNetLink
 });

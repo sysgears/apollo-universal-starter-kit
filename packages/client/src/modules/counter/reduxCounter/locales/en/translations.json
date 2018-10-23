@@ -1,0 +1,4 @@
+{
+    "text": "Current reduxCount, is {{reduxCount}}. This is being stored client-side with Redux.",
+    "btnLabel": "Click to increase reduxCount"
+}

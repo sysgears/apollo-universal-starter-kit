@@ -1,3 +1,8 @@
 mutation contact($input: ContactInput!) {
-  contact(input: $input)
+  contact(input: $input) {
+    errors {
+      field
+      message
+    }
+  }
 }

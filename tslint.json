@@ -12,7 +12,7 @@
     ]
   },
   "linterOptions": {
-    "exclude": ["**/*.js", "**/*.jsx", "**/*.d.ts"]
+    "exclude": ["**/*.js", "**/*.jsx", "**/*.d.ts", "tools/**/*.*"]
   },
   "rules": {
     "prettier": [true, {
@@ -44,8 +44,10 @@
     "no-any": false,
     "no-arg": true,
     "no-bitwise": true,
+    "no-empty-interface": false,
     "no-conditional-assignment": true,
     "no-consecutive-blank-lines": false,
+    "no-namespace": [true, "allow-declarations"],
     "no-console": [true, "log", "debug", "info", "time", "timeEnd", "trace"],
     "no-construct": true,
     "no-debugger": true,
@@ -53,6 +55,7 @@
     "no-duplicate-imports": false,
     "no-empty": false,
     "no-eval": true,
+    "no-implicit-dependencies": [true, "dev", "optional"],
     "no-inferrable-types": false,
     "no-internal-module": true,
     "no-null-keyword": false,
@@ -62,9 +65,11 @@
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,
     "no-unused-expression": true,
+    "no-unused-variable": true,
     "no-var-keyword": true,
     "no-var-requires": true,
     "object-literal-sort-keys": false,
+    "ordered-imports": false,
     "radix": true,
     "switch-default": true,
     "triple-equals": [true, "allow-null-check"],

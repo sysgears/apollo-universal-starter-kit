@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { LayoutCenter } from '../../../common/components';
 import { getItem, setItem, removeItem } from '../../../common/clientStorage';
-import Feature from '../connector';
+import AccessModule from '../AccessModule';
 import settings from '../../../../../../../settings';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
@@ -40,6 +40,17 @@ const JWTLink = new ApolloLink((operation, forward) => {
     let sub, retrySub;
     const queue = [];
     (async () => {
+      // Optimisation: imitate server response with empty user if no JWT token present in local storage
+      if (
+        !settings.user.auth.access.session.enabled &&
+        operation.operationName === 'currentUser' &&
+        !(await getItem('refreshToken'))
+      ) {
+        observer.next({ data: { currentUser: null } });
+        observer.complete();
+        return;
+      }
+
       await setJWTContext(operation);
       try {
         sub = forward(operation).subscribe({
@@ -171,12 +182,10 @@ DataRootComponent.propTypes = {
   children: PropTypes.node
 };
 
-export default new Feature(
-  settings.user.auth.access.jwt.enabled
-    ? {
-        dataRootComponent: withApollo(DataRootComponent),
-        link: __CLIENT__ ? JWTLink : undefined,
-        logout: removeTokens
-      }
-    : {}
-);
+export default (settings.user.auth.access.jwt.enabled
+  ? new AccessModule({
+      dataRootComponent: [withApollo(DataRootComponent)],
+      link: __CLIENT__ ? JWTLink : undefined,
+      logout: [removeTokens]
+    })
+  : undefined);

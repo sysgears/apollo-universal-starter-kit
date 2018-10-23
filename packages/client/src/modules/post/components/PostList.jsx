@@ -1,4 +1,3 @@
-/*eslint-disable react/display-name*/
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
@@ -15,8 +14,6 @@ class PostList extends React.PureComponent {
     loadData: PropTypes.func.isRequired,
     t: PropTypes.func
   };
-
-  keyExtractor = item => `${item.node.id}`;
 
   renderItemIOS = ({
     item: {
@@ -70,9 +67,11 @@ class PostList extends React.PureComponent {
 
   render() {
     const { loading, posts, t } = this.props;
-    const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
+
     if (loading) {
       return <Loading text={t('post.loadMsg')} />;
+    } else if (posts && !posts.totalCount) {
+      return <Loading text={t('post.noPostsMsg')} />;
     } else {
       this.allowDataLoad = true;
       return (
@@ -81,8 +80,8 @@ class PostList extends React.PureComponent {
             data={posts.edges}
             ref={ref => (this.listRef = ref)}
             style={styles.list}
-            keyExtractor={this.keyExtractor}
-            renderItem={renderItem}
+            keyExtractor={item => `${item.node.id}`}
+            renderItem={Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS}
             onEndReachedThreshold={0.5}
             onEndReached={this.handleScrollEvent}
           />

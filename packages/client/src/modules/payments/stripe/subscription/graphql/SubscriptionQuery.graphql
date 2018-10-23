@@ -1,0 +1,7 @@
+#import "./Subscription.graphql"
+
+query stripeSubscription {
+  stripeSubscription {
+    ...StripeSubscription
+  }
+}

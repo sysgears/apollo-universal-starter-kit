@@ -33,4 +33,7 @@ LogoutView.propTypes = {
   t: PropTypes.func
 };
 
-export default compose(translate('user'), withLogout)(LogoutView);
+export default compose(
+  translate('user'),
+  withLogout
+)(LogoutView);

@@ -7,7 +7,7 @@ object GraphQL {
   val maxQueryDepth = 15
   val maxQueryComplexity = 1000
 
-  val schema: Schema[GraphQLContext, Unit] = sangria.schema.Schema(
+  val schema: Schema[Unit, Unit] = sangria.schema.Schema(
     query = ObjectType(
       name = "Query",
       fields = GraphQLSchemaLoader.queries

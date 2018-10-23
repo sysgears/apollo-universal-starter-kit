@@ -524,7 +524,7 @@ export default class Crud {
 
           const filterValueIn = isSchema ? filter[`${filterKey}Id_in`] : filter[`${filterKey}_in`];
           if (filterValueIn) {
-            _this.andWhereIn(`${tableName}.${tableColumn}`, filterValueIn);
+            _this.whereIn(`${tableName}.${tableColumn}`, filterValueIn);
           }
 
           const filterValueContains = isSchema ? filter[`${filterKey}Id_contains`] : filter[`${filterKey}_contains`];

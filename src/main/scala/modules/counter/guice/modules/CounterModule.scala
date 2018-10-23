@@ -4,14 +4,10 @@ import akka.actor.{ActorRef, ActorSystem}
 import com.google.inject.name.Named
 import com.google.inject.{AbstractModule, Provides, Singleton}
 import core.services.persistence.PersistenceCleanup
-import modules.counter.services.count.{ActorCounterServiceImpl, CounterPersistentActor, CounterService}
+import modules.counter.services.count.CounterPersistentActor
 import net.codingwell.scalaguice.ScalaModule
 
 class CounterModule extends AbstractModule with ScalaModule {
-
-  override def configure() {
-    bind[CounterService].to[ActorCounterServiceImpl]
-  }
 
   @Provides
   @Singleton

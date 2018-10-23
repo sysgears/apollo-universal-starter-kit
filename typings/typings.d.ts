@@ -1,7 +1,8 @@
 /// <reference types="mocha" />
 
 declare module '*.graphql' {
-  import { DocumentNode } from 'graphql';
+  // tslint:disable-next-line
+  import { DocumentNode } from "graphql";
 
   const value: DocumentNode;
   export = value;
@@ -18,6 +19,6 @@ declare module '*.scss' {
 }
 
 declare module 'mocha-steps' {
-  const step: Mocha.TestFunction;
-  const xstep: Mocha.TestFunction;
+  var step: Mocha.TestFunction;
+  var xstep: Mocha.TestFunction;
 }

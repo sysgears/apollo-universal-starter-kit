@@ -112,7 +112,7 @@
     "@types/react-dom": "^16.0.5",
     "@types/react-helmet": "^5.0.6",
     "@types/react-native": "^0.55.7",
-    "@types/react-navigation": "^2.0.11",
+    "@types/react-navigation": "^2.0.24",
     "@types/react-redux": "^6.0.4",
     "@types/react-router-dom": "^4.2.7",
     "@types/react-router-redux": "^5.0.16",
@@ -141,9 +141,9 @@
   "optionalDependencies": {
     "@expo/vector-icons": "^6.2.1",
     "antd-mobile-rn": "^2.2.1",
-    "expo": "^27.0.2",
+    "expo": "^30.0.1",
     "native-base": "^2.3.5",
-    "react-native": "~0.55.4",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",
     "uuid": "^3.3.2",
     "react-native-elements": "^0.19.1",
@@ -151,7 +151,7 @@
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",
-    "react-navigation": "^2.0.0",
+    "react-navigation": "^2.13.0",
     "react-native-mime-types": "^2.2.1"
   },
   "peerDependencies": {

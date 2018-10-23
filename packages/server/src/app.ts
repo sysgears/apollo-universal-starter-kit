@@ -34,7 +34,7 @@ if (__DEV__) {
 }
 
 if (module.hot) {
-  module.hot.accept(['./middleware/website'], null);
+  module.hot.accept(['./middleware/website'], () => {});
 }
 
 export default app;

@@ -32,7 +32,9 @@ export default class RenderSelectQuery extends React.Component {
       setFieldValue
     } = this.props;
 
-    setFieldValue(name, edges.find(item => item.id === parseInt(value.key)) || '');
+    const key = value && value.key ? parseInt(value.key) : '';
+
+    setFieldValue(name, edges.find(item => item.id === key) || '');
   };
 
   handleBlur = () => {
@@ -75,64 +77,66 @@ export default class RenderSelectQuery extends React.Component {
         <div>
           <Query limit={10} filter={{ searchText }} orderBy={orderBy()}>
             {({ loading, data }) => {
-              if (loading || !data) {
+              if (!loading || data) {
+                const {
+                  edges,
+                  pageInfo: { totalCount }
+                } = data;
+                const isEdgesNotIncludeValue = value && edges && !edges.find(({ id }) => id === value.id);
+                const renderOptions = () => {
+                  const defaultValue = `Select ${pascalize(schema.name)}`;
+                  const defaultOption =
+                    parseInt(formattedValue.key) === 0
+                      ? [
+                          <Option key="0" value="0">
+                            {defaultValue}
+                          </Option>
+                        ]
+                      : [];
+                  return edges
+                    ? edges.reduce((acc, opt) => {
+                        acc.push(
+                          <Option key={opt.id} value={`${opt.id}`}>
+                            {toString(opt)}
+                          </Option>
+                        );
+                        return acc;
+                      }, defaultOption)
+                    : defaultOption;
+                };
+
+                const getSearchProps = () => {
+                  return {
+                    filterOption: false,
+                    value: isEdgesNotIncludeValue && dirty ? { key: `${edges[0].id}` } : formattedValue
+                  };
+                };
+
+                const getChildrenProps = () => {
+                  return {
+                    optionFilterProp: 'children',
+                    filterOption: (input, { props: { children } }) =>
+                      children.toLowerCase().includes(input.toLowerCase()),
+                    value: formattedValue
+                  };
+                };
+
+                const basicProps = {
+                  allowClear: formType !== 'form',
+                  showSearch: true,
+                  labelInValue: true,
+                  dropdownMatchSelectWidth: false,
+                  style,
+                  onSearch: this.search,
+                  onChange: this.handleChange(edges || null),
+                  onBlur: this.handleBlur
+                };
+                const filterProps = totalCount > LIMIT ? getSearchProps() : getChildrenProps();
+                const props = { ...basicProps, ...filterProps };
+                return <Select {...props}>{renderOptions()}</Select>;
+              } else {
                 return <Spin size="small" />;
               }
-              const {
-                edges,
-                pageInfo: { totalCount }
-              } = data;
-              const isEdgesNotIncludeValue = value && edges && !edges.find(({ id }) => id === value.id);
-              const renderOptions = () => {
-                const defaultOption =
-                  parseInt(formattedValue.key) === 0
-                    ? [
-                        <Option key="0" value="0">
-                          Select {pascalize(schema.name)}
-                        </Option>
-                      ]
-                    : [];
-                return edges
-                  ? edges.reduce((acc, opt) => {
-                      acc.push(
-                        <Option key={opt.id} value={`${opt.id}`}>
-                          {toString(opt)}
-                        </Option>
-                      );
-                      return acc;
-                    }, defaultOption)
-                  : defaultOption;
-              };
-
-              const getSearchProps = () => {
-                return {
-                  filterOption: false,
-                  onSearch: this.search,
-                  value: isEdgesNotIncludeValue && dirty ? { key: `${edges[0].id}` } : formattedValue
-                };
-              };
-
-              const getChildrenProps = () => {
-                return {
-                  optionFilterProp: 'children',
-                  filterOption: (input, { props: { children } }) =>
-                    children.toLowerCase().includes(input.toLowerCase()),
-                  value: formattedValue
-                };
-              };
-
-              const basicProps = {
-                allowClear: formType !== 'form',
-                showSearch: true,
-                labelInValue: true,
-                dropdownMatchSelectWidth: false,
-                style,
-                onChange: this.handleChange(edges || null),
-                onBlur: this.handleBlur
-              };
-              const filterProps = totalCount > LIMIT ? getSearchProps() : getChildrenProps();
-              const props = { ...basicProps, ...filterProps };
-              return <Select {...props}>{renderOptions()}</Select>;
             }}
           </Query>
         </div>

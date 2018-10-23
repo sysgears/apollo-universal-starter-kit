@@ -1,9 +1,9 @@
-// TODO: convert to TypeScript when types will be released: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/28017
 import cookiesMiddleware from 'universal-cookie-express';
+import { Express } from 'express';
 
 import ServerModule from '../ServerModule';
 
-const beforeware = app => {
+const beforeware = (app: Express) => {
   app.use(cookiesMiddleware());
 };
 

@@ -4,7 +4,7 @@ import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 
 import resolvers from './resolvers';
 import AuthModule from '../AuthModule';
-import { User } from '../../sql';
+import userInstance from '../../sql';
 import settings from '../../../../../../../settings';
 import access from '../../access';
 import getCurrentUser from '../utils';
@@ -28,26 +28,26 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
           emails: [{ value }]
         } = profile;
         try {
-          let user = await User.getUserByLnInIdOrEmail(id, value);
+          let user = await userInstance.getUserByLnInIdOrEmail(id, value);
 
           if (!user) {
             const isActive = true;
-            const [createdUserId] = await User.register({
+            const [createdUserId] = await userInstance.register({
               username: username ? username : displayName,
               email: value,
               password: id,
               isActive
             });
 
-            await User.createLinkedInAuth({
+            await userInstance.createLinkedInAuth({
               id,
               displayName,
               userId: createdUserId
             });
 
-            user = await User.getUser(createdUserId);
+            user = await userInstance.getUser(createdUserId);
           } else if (!user.lnId) {
-            await User.createLinkedInAuth({
+            await userInstance.createLinkedInAuth({
               id,
               displayName,
               userId: user.id
@@ -70,7 +70,7 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
       '/auth/linkedin/callback',
       passport.authenticate('linkedin', { session: false, failureRedirect: '/login' }),
       async function(req, res) {
-        const user = await User.getUser(req.user.id);
+        const user = await userInstance.getUser(req.user.id);
         const redirectUrl = req.query.state;
         const tokens = await access.grantAccess(user, req);
         const currentUser = await getCurrentUser(req, res);

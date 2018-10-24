@@ -4,7 +4,7 @@ import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
 import resolvers from './resolvers';
 import scopes from '../../scopes';
-import { User } from '../../sql';
+import userInstance from '../../sql';
 import settings from '../../../../../../../settings';
 
 const grant = async (user, req) => {
@@ -18,7 +18,7 @@ const grant = async (user, req) => {
 
 const getCurrentUser = async ({ req }) => {
   if (req && req.session.userId) {
-    return await User.getUser(req.session.userId);
+    return await userInstance.getUser(req.session.userId);
   }
 };
 
@@ -47,7 +47,7 @@ const createContextFunc = async ({ req, connectionParams, webSocket, context }) 
   };
 
   return {
-    User,
+    User: userInstance,
     user,
     auth
   };

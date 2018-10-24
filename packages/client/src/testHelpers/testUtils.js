@@ -37,6 +37,10 @@ const submit = element => {
   Simulate.submit(element);
 };
 
+const blur = element => {
+  Simulate.blur(element);
+};
+
 const updateContent = container => {
   return find(container, '#content');
 };
@@ -56,5 +60,6 @@ export {
   updateContent,
   click,
   change,
-  submit
+  submit,
+  blur
 };

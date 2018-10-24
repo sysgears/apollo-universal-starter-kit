@@ -4,7 +4,7 @@ import GitHubStrategy from 'passport-github';
 
 import resolvers from './resolvers';
 import AuthModule from '../AuthModule';
-import User from '../../sql';
+import { User } from '../../sql';
 import settings from '../../../../../../../settings';
 import access from '../../access';
 import getCurrentUser from '../utils';

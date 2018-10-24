@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User from './sql';
+import { User } from './sql';
 import settings from '../../../../../settings';
 
 export default async (req, res) => {

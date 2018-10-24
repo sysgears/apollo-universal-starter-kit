@@ -1,18 +1,24 @@
-import fileSystemStorage, { UploadFileStream } from './FileSystemStorage';
+import fileSystemStorage from './FileSystemStorage';
 import settings from '../../../../../settings';
+import * as models from '../../../typings/graphql';
+import IUpload from './sql';
 
-interface UploadFileStreams {
-  files: [Promise<UploadFileStream>];
+interface Context {
+  Upload: IUpload;
+  req: any;
 }
 
-export default () => ({
+export default (): {
+  Query: models.QueryResolvers.Resolvers<Context>;
+  Mutation: models.MutationResolvers.Resolvers<Context>;
+} => ({
   Query: {
-    files(obj: any, args: any, { Upload }: any) {
+    async files(obj, args, { Upload }) {
       return Upload.files();
     }
   },
   Mutation: {
-    async uploadFiles(obj: any, { files }: UploadFileStreams, { Upload, req }: any) {
+    async uploadFiles(obj, { files }, { Upload, req }) {
       const { t } = req;
 
       try {
@@ -44,6 +50,5 @@ export default () => ({
 
       return true;
     }
-  },
-  Subscription: {}
+  }
 });

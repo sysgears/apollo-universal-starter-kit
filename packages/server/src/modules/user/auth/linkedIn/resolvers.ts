@@ -1,4 +1,9 @@
-export default () => ({
+import * as models from '../../../../../typings/graphql';
+
+export default (): {
+  UserAuth: models.UserAuthResolvers.Resolvers;
+  LinkedInAuth: models.LinkedInAuthResolvers.Resolvers;
+} => ({
   UserAuth: {
     linkedin(obj) {
       return obj;

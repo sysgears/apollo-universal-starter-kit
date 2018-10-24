@@ -1,4 +1,9 @@
-export default () => ({
+import * as models from '../../../../../typings/graphql';
+
+export default (): {
+  UserAuth: models.UserAuthResolvers.Resolvers;
+  GoogleAuth: models.GoogleAuthResolvers.Resolvers;
+} => ({
   UserAuth: {
     google(obj) {
       return obj;

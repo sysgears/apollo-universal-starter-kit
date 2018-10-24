@@ -16,7 +16,7 @@ export default new ServerModule({
   data: {
     fileSystemStorage
   },
-  createResolversFunc: [createResolvers],
+  createResolversFunc: [createResolvers as any],
   createContextFunc: [() => ({ Upload: new Upload() })],
   middleware: [middleware],
   localization: [{ ns: 'upload', resources }]

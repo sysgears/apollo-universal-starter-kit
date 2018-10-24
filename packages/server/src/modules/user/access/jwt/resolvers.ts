@@ -1,13 +1,22 @@
 import jwt from 'jsonwebtoken';
 import createTokens from './createTokens';
 import settings from '../../../../../../../settings';
+import * as models from '../../../../../typings/graphql';
+import { User as IUser } from '../../sql';
 
-export default () => ({
+interface Context {
+  res: any;
+  User: IUser;
+}
+
+export default (): {
+  Mutation: models.MutationResolvers.Resolvers<Context>;
+} => ({
   Mutation: {
     async refreshTokens(obj, { refreshToken: inputRefreshToken }, { User, res }) {
-      const { user: id } = jwt.decode(inputRefreshToken);
+      const { user: id }: any = jwt.decode(inputRefreshToken);
 
-      const user = await User.getUserWithPassword(id);
+      const user: any = await User.getUserWithPassword(id);
       const refreshSecret = settings.user.secret + user.passwordHash;
 
       try {

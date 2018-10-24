@@ -19,7 +19,7 @@ export default class Upload {
       .first();
   }
 
-  public saveFiles(files: [File]) {
+  public saveFiles(files: File[]) {
     return knex('upload').insert(files);
   }
 

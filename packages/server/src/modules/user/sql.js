@@ -7,7 +7,7 @@ import knex from '../../sql/connector';
 import { returnId } from '../../sql/helpers';
 
 // Actual query fetching and transformation in DB
-class User {
+export class User {
   async getUsers(orderBy, filter) {
     const queryBuilder = knex
       .select(

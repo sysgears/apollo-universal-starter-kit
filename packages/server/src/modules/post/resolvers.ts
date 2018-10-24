@@ -1,47 +1,32 @@
 import { PubSub, withFilter } from 'graphql-subscriptions';
 import { createBatchResolver } from 'graphql-resolve-batch';
-// interfaces
-import { Post, Comment, Identifier } from './sql';
-
-interface Edges {
-  cursor: number;
-  node: Post & Identifier;
-}
-
-interface PostsParams {
-  limit: number;
-  after: number;
-}
-
-interface PostInput {
-  input: Post;
-}
-
-interface PostInputWithId {
-  input: Post & Identifier;
-}
-
-interface CommentInput {
-  input: Comment;
-}
-
-interface CommentInputWithId {
-  input: Comment & Identifier;
-}
+import IPost from './sql';
+import * as models from '../../../typings/graphql';
 
 const POST_SUBSCRIPTION = 'post_subscription';
 const POSTS_SUBSCRIPTION = 'posts_subscription';
 const COMMENT_SUBSCRIPTION = 'comment_subscription';
 
-export default (pubsub: PubSub) => ({
+interface Context {
+  Post: IPost;
+}
+
+export default (
+  pubsub: PubSub
+): {
+  Query: models.QueryResolvers.Resolvers<Context>;
+  Post: models.PostResolvers.Resolvers<Context>;
+  Mutation: models.MutationResolvers.Resolvers<Context>;
+  Subscription: models.SubscriptionResolvers.Resolvers<Context>;
+} => ({
   Query: {
-    async posts(obj: any, { limit, after }: PostsParams, context: any) {
-      const edgesArray: Edges[] = [];
-      const posts = await context.Post.postsPagination(limit, after);
+    async posts(obj, { limit, after }, context) {
+      const edgesArray: models.PostEdges[] = [];
+      const posts: models.Post[] = await context.Post.postsPagination(limit, after);
       const total = (await context.Post.getTotal()).count;
       const hasNextPage = total > after + limit;
 
-      posts.map((post: Post & Identifier, index: number) => {
+      posts.map((post, index) => {
         edgesArray.push({
           cursor: after + index,
           node: post
@@ -58,7 +43,7 @@ export default (pubsub: PubSub) => ({
         }
       };
     },
-    post(obj: any, { id }: Identifier, context: any) {
+    async post(obj, { id }, context) {
       return context.Post.post(id);
     }
   },
@@ -68,7 +53,7 @@ export default (pubsub: PubSub) => ({
     })
   },
   Mutation: {
-    async addPost(obj: any, { input }: PostInput, context: any) {
+    async addPost(obj, { input }, context) {
       const [id] = await context.Post.addPost(input);
       const post = await context.Post.post(id);
       // publish for post list
@@ -81,7 +66,7 @@ export default (pubsub: PubSub) => ({
       });
       return post;
     },
-    async deletePost(obj: any, { id }: Identifier, context: any) {
+    async deletePost(obj, { id }, context) {
       const post = await context.Post.post(id);
       const isDeleted = await context.Post.deletePost(id);
       if (isDeleted) {
@@ -101,12 +86,12 @@ export default (pubsub: PubSub) => ({
             node: post
           }
         });
-        return { id: post.id };
+        return { id: post.id, content: post.content, title: post.title };
       } else {
-        return { id: null };
+        return { id: null, content: null, title: null };
       }
     },
-    async editPost(obj: any, { input }: PostInputWithId, context: any) {
+    async editPost(obj, { input }, context) {
       await context.Post.editPost(input);
       const post = await context.Post.post(input.id);
       // publish for post list
@@ -127,7 +112,7 @@ export default (pubsub: PubSub) => ({
       });
       return post;
     },
-    async addComment(obj: any, { input }: CommentInput, context: any) {
+    async addComment(obj, { input }, context) {
       const [id] = await context.Post.addComment(input);
       const comment = await context.Post.getComment(id);
       // publish for edit post page
@@ -141,7 +126,7 @@ export default (pubsub: PubSub) => ({
       });
       return comment;
     },
-    async deleteComment(obj: any, { input: { id, postId } }: CommentInputWithId, context: any) {
+    async deleteComment(obj, { input: { id, postId } }, context) {
       await context.Post.deleteComment(id);
       // publish for edit post page
       pubsub.publish(COMMENT_SUBSCRIPTION, {
@@ -152,9 +137,9 @@ export default (pubsub: PubSub) => ({
           node: null
         }
       });
-      return { id };
+      return { id, content: null };
     },
-    async editComment(obj: any, { input }: CommentInputWithId, context: any) {
+    async editComment(obj, { input }, context) {
       await context.Post.editComment(input);
       const comment = await context.Post.getComment(input.id);
       // publish for edit post page

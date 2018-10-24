@@ -46,7 +46,7 @@ const middleware = (app: Express) => {
 export default (enabled
   ? new ServerModule({
       schema: [schema],
-      createResolversFunc: [createResolvers],
+      createResolversFunc: [createResolvers as any],
       createContextFunc: [createContext],
       beforeware: [beforeware],
       middleware: [middleware],

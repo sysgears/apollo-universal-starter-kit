@@ -1,13 +1,27 @@
+import * as models from '../../../typings/graphql';
+import Counter from './sql';
+import { PubSub } from 'graphql-subscriptions';
+
 const COUNTER_SUBSCRIPTION = 'counter_subscription';
 
-export default (pubsub: any) => ({
+interface Context {
+  Counter: Counter;
+}
+
+export default (
+  pubsub: PubSub
+): {
+  Query: models.QueryResolvers.Resolvers<Context>;
+  Mutation: models.MutationResolvers.Resolvers<Context>;
+  Subscription: models.SubscriptionResolvers.Resolvers<Context>;
+} => ({
   Query: {
-    serverCounter(obj: any, args: any, context: any) {
+    async serverCounter(obj, args, context) {
       return context.Counter.counterQuery();
     }
   },
   Mutation: {
-    async addServerCounter(obj: any, { amount }: any, context: any) {
+    async addServerCounter(obj, { amount }, context) {
       await context.Counter.addCounter(amount);
       const counter = await context.Counter.counterQuery();
 

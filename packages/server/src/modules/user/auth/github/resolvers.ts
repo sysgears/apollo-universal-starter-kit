@@ -1,4 +1,9 @@
-export default () => ({
+import * as models from '../../../../../typings/graphql';
+
+export default (): {
+  UserAuth: models.UserAuthResolvers.Resolvers;
+  GithubAuth: models.GithubAuthResolvers.Resolvers;
+} => ({
   UserAuth: {
     github(obj) {
       return obj;

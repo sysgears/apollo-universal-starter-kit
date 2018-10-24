@@ -1,14 +1,14 @@
-interface ContactInput {
-  input: {
-    name: string;
-    email: string;
-    content: string;
-  };
+import * as models from '../../../typings/graphql';
+
+interface Context {
+  mailer: any;
 }
 
-export default () => ({
+export default (): {
+  Mutation: models.MutationResolvers.Resolvers<Context>;
+} => ({
   Mutation: {
-    async contact(obj: any, { input }: ContactInput, { mailer }: any): Promise<{ errors: null }> {
+    async contact(_, { input }, { mailer }) {
       await mailer.sendMail({
         from: input.email,
         to: process.env.EMAIL_USER,

@@ -1,14 +1,30 @@
 import { createBatchResolver } from 'graphql-resolve-batch';
 import settings from '../../../../../settings';
 import modules from '../../modules';
+import * as models from '../../../typings/graphql';
+import IChat from './sql';
+import { PubSub } from 'graphql-subscriptions';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
 
-export default pubsub => ({
+interface Context {
+  Chat: IChat;
+  user: any;
+  req: any;
+}
+
+export default (
+  pubsub: PubSub
+): {
+  Query: models.QueryResolvers.Resolvers<Context>;
+  Message: models.MessageResolvers.Resolvers<Context>;
+  Mutation: models.MutationResolvers.Resolvers<Context>;
+  Subscription: models.SubscriptionResolvers.Resolvers<Context>;
+} => ({
   Query: {
     async messages(obj, { limit, after }, { Chat }) {
-      const edgesArray = [];
-      const messages = await Chat.messagesPagination(limit, after);
+      const edgesArray: models.MessageEdges[] = [];
+      const messages: models.Message[] = await Chat.messagesPagination(limit, after);
 
       messages.map((message, index) => {
         edgesArray.push({
@@ -25,12 +41,12 @@ export default pubsub => ({
         totalCount: total,
         edges: edgesArray.reverse(),
         pageInfo: {
-          endCursor: endCursor,
-          hasNextPage: hasNextPage
+          endCursor,
+          hasNextPage
         }
       };
     },
-    message(obj, { id }, { Chat }) {
+    async message(obj, { id }, { Chat }) {
       return Chat.message(id);
     }
   },
@@ -53,7 +69,7 @@ export default pubsub => ({
       }
 
       const result = attachment ? await fileSystemStorage.save(await attachment, settings.chat.uploadDir) : null;
-      const data = { ...input, attachment: result, userId };
+      const data: any = { ...input, attachment: result, userId };
       const [id] = attachment ? await Chat.addMessageWithAttachment(data) : await Chat.addMessage(data);
       const message = await Chat.message(id);
       // publish for message list
@@ -99,7 +115,7 @@ export default pubsub => ({
       }
     },
     async editMessage(obj, { input }, { Chat }) {
-      await Chat.editMessage(input);
+      await Chat.editMessage(input as any);
       const message = await Chat.message(input.id);
       // publish for post list
       pubsub.publish(MESSAGES_SUBSCRIPTION, {

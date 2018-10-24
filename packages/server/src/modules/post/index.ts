@@ -6,6 +6,6 @@ import ServerModule from '../ServerModule';
 
 export default new ServerModule({
   schema: [schema],
-  createResolversFunc: [createResolvers],
+  createResolversFunc: [createResolvers as any],
   createContextFunc: [() => ({ Post: new Post() })]
 });

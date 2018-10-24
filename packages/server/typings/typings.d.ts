@@ -5,3 +5,25 @@ declare var __SSR__: boolean;
 
 // packages without types
 declare module 'stripe-local';
+
+declare module 'graphql-auth' {
+  import { Resolver } from './graphql';
+  export = withAuth;
+
+  declare function withAuth<R = Resolver>(resolve: R): R;
+  declare function withAuth<R = Resolver, P = any, A = any, C = any>(
+    scopes:
+      | string[]
+      | ((
+          parent: P,
+          args: A,
+          context: C,
+          info: GraphQLResolveInfo,
+        ) => string[]),
+    resolver: R,
+  ): R;
+
+  declare namespace withAuth {
+
+  }
+}

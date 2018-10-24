@@ -1,23 +1,28 @@
 import React from 'react';
-
 import { merge } from 'lodash';
+import { ApolloLink } from 'apollo-link';
+import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
+import { Resource } from 'i18next';
+import { Reducer } from 'redux';
+import { IResolvers } from 'graphql-tools';
 
 import Module from './Module';
 
 export interface BaseModuleShape {
-  localization?: any[];
-  link?: any[];
-  createNetLink?: () => any;
-  connectionParam?: any[];
-  reducer?: any[];
-  resolver?: any[];
-  routerFactory?: () => any;
-  rootComponentFactory?: any[];
-  dataRootComponent?: any[];
-  data?: any[];
+  localization?: Array<{ ns: string; resources: Resource }>;
+  link?: ApolloLink[];
+  createNetLink?: () => ApolloLink;
+  connectionParam?: ConnectionParamsOptions[];
+  reducer?: Array<{ [key: string]: Reducer }>;
+  resolver?: Array<{ defaults: { [key: string]: any }; resolvers: IResolvers }>;
+  routerFactory?: () => React.ComponentType;
+  rootComponentFactory?: Array<(req: Request) => React.ReactElement<any>>;
+  dataRootComponent?: React.ComponentType[];
+  data?: { [key: string]: any };
 }
 
 interface BaseModule extends BaseModuleShape {}
+
 class BaseModule extends Module {
   constructor(...modules: BaseModuleShape[]) {
     super(...modules);
@@ -43,7 +48,7 @@ class BaseModule extends Module {
     return this.routerFactory();
   }
 
-  public getDataRoot(root: any) {
+  public getDataRoot(root: React.ReactElement<any>) {
     let nestedRoot = root;
     for (const component of this.dataRootComponent) {
       nestedRoot = React.createElement(component, {}, nestedRoot);
@@ -51,7 +56,7 @@ class BaseModule extends Module {
     return nestedRoot;
   }
 
-  public getWrappedRoot(root: any, req?: any) {
+  public getWrappedRoot(root: React.ReactElement<any>, req?: Request) {
     let nestedRoot = root;
     for (const componentFactory of this.rootComponentFactory) {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);

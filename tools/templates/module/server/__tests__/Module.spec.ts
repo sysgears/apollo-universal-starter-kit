@@ -11,7 +11,7 @@ describe('$Module$ API works', () => {
     apollo = getApollo();
   });
 
-  step('Has GraphQL Playground endpoint', () => {
+  step('Has GraphiQL endpoint', () => {
     return chai
       .request(server)
       .keepOpen()

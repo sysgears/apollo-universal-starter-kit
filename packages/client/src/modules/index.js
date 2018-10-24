@@ -8,6 +8,7 @@ import payments from './payments';
 import contact from './contact';
 import pageNotFound from './pageNotFound';
 import pagination from './pagination';
+import chat from './chat';
 import './favicon';
 
 import ClientModule from './ClientModule';
@@ -19,6 +20,7 @@ export default new ClientModule(
   upload,
   contact,
   pagination,
+  chat,
   payments,
   user,
   i18n,

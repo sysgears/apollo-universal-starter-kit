@@ -35,7 +35,10 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
 
   "org.iq80.leveldb" % "leveldb" % "0.9",
-  "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8"
+  "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
+
+  "org.xerial" % "sqlite-jdbc" % "3.7.2",
+  "com.typesafe.slick" %% "slick" % "3.2.3"
 )
 
 parallelExecution in test := false

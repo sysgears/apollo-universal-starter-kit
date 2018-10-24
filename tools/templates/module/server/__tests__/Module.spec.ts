@@ -5,8 +5,8 @@ import { step } from 'mocha-steps';
 import { getServer, getApollo } from '../../../testHelpers/integrationSetup';
 import gql from 'graphql-tag';
 
-const BACKEND_SUPPORTED_QUERIES_QUERY = gql`
-  query __schema {
+const INTROSPECTION_QUERY = gql`
+  query introspectionQuery {
     __schema {
       types {
         name
@@ -24,7 +24,7 @@ describe('$Module$ API works', () => {
     apollo = getApollo();
   });
 
-  step('Has GraphiQL endpoint', () => {
+  step('Should have a GraphiQL endpoint', () => {
     return chai
       .request(server)
       .keepOpen()
@@ -36,8 +36,8 @@ describe('$Module$ API works', () => {
       });
   });
 
-  step('Can query to Graphql backend', async () => {
-    const result = await apollo.query({ query: BACKEND_SUPPORTED_QUERIES_QUERY });
+  step('Should send a query to the GraphQL back end', async () => {
+    const result = await apollo.query({ query: INTROSPECTION_QUERY });
     expect(result.data).to.have.property('__schema');
   });
 });

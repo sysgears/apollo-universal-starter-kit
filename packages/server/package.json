@@ -20,7 +20,7 @@
     "rollback": "knex migrate:rollback",
     "prebuild": "yarn graphql",
     "graphql": "node src/codegen/generate.js",
-    "watch": "spin watch",
+    "watch": "concurrently -n graphql,server \"yarn graphql watch\" \"yarn spin watch\"",
     "heroku-postbuild": "yarn build && yarn seed && yarn stripe:setup",
     "cli": "node ../../tools/cli",
     "stripe:setup": "node src/modules/payments/stripe/subscription/cli/stripeSetup"
@@ -155,6 +155,7 @@
     "caporal": "^0.10.0",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
+    "concurrently": "^4.0.1",
     "cross-env": "^5.1.1",
     "eslint": "^4.13.1",
     "ip": "^1.1.5",

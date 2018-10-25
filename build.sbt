@@ -37,7 +37,9 @@ libraryDependencies ++= Seq(
   "org.iq80.leveldb" % "leveldb" % "0.9",
   "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
 
-  "com.github.jurajburian" %% "mailer" % "1.2.3"
+  "com.github.jurajburian" %% "mailer" % "1.2.3",
+
+  "org.clapper" %% "classutil" % "1.3.0"
 )
 
 parallelExecution in test := false

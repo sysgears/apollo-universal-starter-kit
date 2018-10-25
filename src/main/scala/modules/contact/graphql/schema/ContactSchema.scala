@@ -9,7 +9,9 @@ import sangria.marshalling.FromInput
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType}
 import util.{InputUnmarshallerGenerator, Logger}
 
-class ContactSchema @Inject()(contactResolver: ContactResolver) extends GraphQLSchema with InputUnmarshallerGenerator with Logger {
+class ContactSchema @Inject()(contactResolver: ContactResolver) extends GraphQLSchema
+  with InputUnmarshallerGenerator
+  with Logger {
 
   implicit val contactInput: InputObjectType[Contact] = deriveInputObjectType[Contact](InputObjectTypeName("ContactInput"))
   implicit val contactInputUnmarshaller: FromInput[Contact] = inputUnmarshaller {
@@ -31,8 +33,4 @@ class ContactSchema @Inject()(contactResolver: ContactResolver) extends GraphQLS
       resolve = sc => contactResolver.sendMail(sc.args.arg[Contact]("input"))
     )
   )
-
-  override def queries: List[Field[Unit, Unit]] = List.empty
-
-  override def subscriptions: List[Field[Unit, Unit]] = List.empty
 }

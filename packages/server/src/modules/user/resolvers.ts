@@ -13,7 +13,7 @@ const USERS_SUBSCRIPTION = 'users_subscription';
 
 interface Context {
   User: sql.User;
-  user: sql.instance;
+  user: any;
   req: any;
   mailer: any;
 }

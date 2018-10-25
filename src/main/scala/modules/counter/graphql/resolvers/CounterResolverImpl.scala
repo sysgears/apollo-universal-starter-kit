@@ -4,21 +4,21 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 import akka.NotUsed
 import akka.actor.ActorRef
+import akka.pattern.ask
 import akka.stream.scaladsl.Source
 import akka.util.Timeout
+import com.google.inject.name.Named
 import core.services.publisher.{PublisherHelper, PublisherService}
 import javax.inject.Inject
 import modules.counter.models.Counter
-import modules.counter.services.count.CounterPersistentActor.{GetAmount, IncrementAndGet}
+import modules.counter.services.count.CounterActor
+import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
 import sangria.schema.Action
-import akka.pattern.ask
-import com.google.inject.name.Named
-import modules.counter.services.count.CounterPersistentActor
 import util.Logger
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CounterResolverImpl @Inject()(@Named(CounterPersistentActor.name) counterActor: ActorRef,
+class CounterResolverImpl @Inject()(@Named(CounterActor.name) counterActor: ActorRef,
                                     publisherService: PublisherService[Counter])
                                    (implicit executionContext: ExecutionContext) extends PublisherHelper[Counter]
   with Logger
@@ -27,11 +27,11 @@ class CounterResolverImpl @Inject()(@Named(CounterPersistentActor.name) counterA
   implicit val timeout: Timeout = Timeout(5, SECONDS)
 
   def addServerCounter(amount: Int): Future[Counter] = withPublishing(publisherService) {
-    ask(counterActor, IncrementAndGet(amount)).mapTo[Int].map(Counter)
+    ask(counterActor, IncrementAndGet(amount)).mapTo[Counter]
   }
 
   def serverCounter: Future[Counter] = {
-    ask(counterActor, GetAmount).mapTo[Int].map(Counter)
+    ask(counterActor, GetAmount).mapTo[Counter]
   }
 
   def counterUpdated: Source[Action[Unit, Counter], NotUsed] = {

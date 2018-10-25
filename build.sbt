@@ -18,7 +18,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion,
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-  "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
 
   "com.typesafe.akka" %% "akka-http-testkit" % "10.1.5",
   "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test",
@@ -33,9 +32,6 @@ libraryDependencies ++= Seq(
 
   "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.3",
-
-  "org.iq80.leveldb" % "leveldb" % "0.9",
-  "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8",
 
   "org.xerial" % "sqlite-jdbc" % "3.7.2",
   "com.typesafe.slick" %% "slick" % "3.2.3"

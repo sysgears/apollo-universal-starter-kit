@@ -5,7 +5,7 @@ import core.graphql.GraphQLSchema
 import javax.inject.Inject
 import modules.counter.graphql.resolvers.CounterResolver
 import modules.counter.models.Counter
-import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
+import sangria.macros.derive.{ObjectTypeName, deriveObjectType, ExcludeFields}
 import sangria.schema.{Argument, Field, IntType, ObjectType}
 import sangria.streaming.akkaStreams._
 import util.Logger
@@ -14,7 +14,7 @@ class CounterSchema @Inject()(counterResolver: CounterResolver)
                              (implicit val materializer: ActorMaterializer) extends GraphQLSchema with Logger {
 
   object Types {
-    implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"))
+    implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"), ExcludeFields("id"))
   }
 
   override def queries: List[Field[Unit, Unit]] = List(

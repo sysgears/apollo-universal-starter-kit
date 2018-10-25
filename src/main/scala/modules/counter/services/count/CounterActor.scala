@@ -2,7 +2,6 @@ package modules.counter.services.count
 
 import akka.actor.{Actor, ActorLogging, Props}
 import akka.pattern._
-import core.services.persistence.PersistenceCleanup
 import modules.counter.models.Counter
 import modules.counter.repositories.CounterRepo
 import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}

@@ -2,11 +2,9 @@ package core.guice.injection
 
 import java.lang.annotation.Annotation
 
-import _root_.util.ReflectionHelper.getInstances
 import com.google.inject.{Guice, Injector}
-import com.typesafe.config.ConfigFactory
+import core.loaders.ModuleLoader.guiceModules
 import net.codingwell.scalaguice.InjectorExtensions._
-import net.codingwell.scalaguice.ScalaModule
 
 import scala.collection.JavaConverters._
 
@@ -23,21 +21,5 @@ trait Injecting {
 }
 
 object Injecting {
-
-  val injector: Injector = Guice.createInjector {
-    getInstances[ScalaModule](classesNames("guice.modules")).asJava
-  }
-
-  def loadClasses[T](propertyName: String): List[T] = {
-    classesNames(propertyName).map {
-      className =>
-        injector.getInstance(classLoader.loadClass(className)).asInstanceOf[T]
-    }
-  }
-
-  private val classLoader = getClass.getClassLoader
-
-  private def classesNames(propertyName: String): List[String] = {
-    ConfigFactory.load.getList(propertyName).asScala.map(_.render.drop(1).dropRight(1)).toList
-  }
+  val injector: Injector = Guice.createInjector(guiceModules.asJava)
 }

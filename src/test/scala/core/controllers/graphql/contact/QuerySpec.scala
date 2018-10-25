@@ -45,7 +45,6 @@ class QuerySpec extends TestHelper {
 
 object ContactPayloadJsonReader extends JsonReader[ContactPayload] with DefaultJsonProtocol {
   override def read(json: JsValue): ContactPayload = {
-    println(json)
     json.asJsObject.getFields("data", "errors") match {
       case Seq(_) => ContactPayload(None)
       case Seq(_, JsArray(errors)) =>

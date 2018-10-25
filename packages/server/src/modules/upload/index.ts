@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 
 import ServerModule from '../ServerModule';
-import Upload from './sql';
+import * as sql from './sql';
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
 import resources from './locales';
@@ -17,7 +17,7 @@ export default new ServerModule({
     fileSystemStorage
   },
   createResolversFunc: [createResolvers as any],
-  createContextFunc: [() => ({ Upload: new Upload() })],
+  createContextFunc: [() => ({ Upload: new sql.Upload() })],
   middleware: [middleware],
   localization: [{ ns: 'upload', resources }]
 });

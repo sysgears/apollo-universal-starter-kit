@@ -5,7 +5,7 @@ import log from '../../../../../../common/log';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
 import * as models from '../../../../../typings/graphql';
-import StripeSubscriptionDAO, { Subscription } from './sql';
+import * as sql from './sql';
 
 const { plan } = settings.stripe.subscription;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -13,8 +13,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 interface Context {
   user: any;
   req: any;
-  StripeSubscription: StripeSubscriptionDAO;
-  stripeSubscription: Subscription;
+  StripeSubscription: sql.StripeSubscriptionDAO;
+  stripeSubscription: sql.Subscription;
 }
 
 export default (): {

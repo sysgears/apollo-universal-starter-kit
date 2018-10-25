@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import userInstance from './sql';
+import * as sql from './sql';
 import settings from '../../../../../settings';
 
 export default async (req, res) => {
@@ -9,7 +9,7 @@ export default async (req, res) => {
       user: { id }
     } = jwt.verify(token, settings.user.secret);
 
-    await userInstance.updateActive(id, true);
+    await sql.instance.updateActive(id, true);
 
     res.redirect('/login');
   } catch (e) {

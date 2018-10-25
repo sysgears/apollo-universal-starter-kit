@@ -1,12 +1,12 @@
 import Stripe from 'stripe';
 import { TranslationFunction } from 'i18next';
 
-import StripeSubscriptionDAO from './sql';
+import * as sql from './sql';
 import mailer from '../../../mailer/mailer';
 import User from '../../../user/sql';
 import settings from '../../../../../../../settings';
 
-const StripeSubscription = new StripeSubscriptionDAO();
+const StripeSubscription = new sql.StripeSubscriptionDAO();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 /**

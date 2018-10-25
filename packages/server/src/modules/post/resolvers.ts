@@ -1,6 +1,6 @@
 import { PubSub, withFilter } from 'graphql-subscriptions';
 import { createBatchResolver } from 'graphql-resolve-batch';
-import IPost from './sql';
+import * as sql from './sql';
 import * as models from '../../../typings/graphql';
 
 const POST_SUBSCRIPTION = 'post_subscription';
@@ -8,7 +8,7 @@ const POSTS_SUBSCRIPTION = 'posts_subscription';
 const COMMENT_SUBSCRIPTION = 'comment_subscription';
 
 interface Context {
-  Post: IPost;
+  Post: sql.PostDAO;
 }
 
 export default (

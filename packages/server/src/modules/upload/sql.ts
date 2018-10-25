@@ -7,7 +7,7 @@ interface File {
   size: number;
 }
 
-export default class Upload {
+export class Upload {
   public files() {
     return knex('upload').select('*');
   }

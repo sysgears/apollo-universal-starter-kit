@@ -1,11 +1,11 @@
 import * as models from '../../../typings/graphql';
-import Counter from './sql';
+import * as sql from './sql';
 import { PubSub } from 'graphql-subscriptions';
 
 const COUNTER_SUBSCRIPTION = 'counter_subscription';
 
 interface Context {
-  Counter: Counter;
+  Counter: sql.Counter;
 }
 
 export default (

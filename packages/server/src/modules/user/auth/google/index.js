@@ -4,7 +4,7 @@ import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
 import resolvers from './resolvers';
 import AuthModule from '../AuthModule';
-import userInstance from '../../sql';
+import * as sql from '../../sql';
 import access from '../../access';
 import settings from '../../../../../../../settings';
 import getCurrentUser from '../utils';
@@ -27,24 +27,24 @@ if (settings.user.auth.google.enabled && !__TEST__) {
           emails: [{ value }]
         } = profile;
         try {
-          let user = await userInstance.getUserByGoogleIdOrEmail(id, value);
+          let user = await sql.instance.getUserByGoogleIdOrEmail(id, value);
 
           if (!user) {
             const isActive = true;
-            const [createdUserId] = await userInstance.register({
+            const [createdUserId] = await sql.instance.register({
               username: username ? username : value,
               email: value,
               password: id,
               isActive
             });
 
-            await userInstance.createGoogleOAuth({
+            await sql.instance.createGoogleOAuth({
               id,
               displayName,
               userId: createdUserId
             });
 
-            await userInstance.editUserProfile({
+            await sql.instance.editUserProfile({
               id: createdUserId,
               profile: {
                 firstName: profile.name.givenName,
@@ -52,9 +52,9 @@ if (settings.user.auth.google.enabled && !__TEST__) {
               }
             });
 
-            user = await userInstance.getUser(createdUserId);
+            user = await sql.instance.getUser(createdUserId);
           } else if (!user.googleId) {
-            await userInstance.createGoogleOAuth({
+            await sql.instance.createGoogleOAuth({
               id,
               displayName,
               userId: user.id
@@ -79,7 +79,7 @@ if (settings.user.auth.google.enabled && !__TEST__) {
     });
 
     app.get('/auth/google/callback', passport.authenticate('google', { session: false }), async function(req, res) {
-      const user = await userInstance.getUser(req.user.id);
+      const user = await sql.instance.getUser(req.user.id);
       const redirectUrl = req.query.state;
       const tokens = await access.grantAccess(user, req);
       const currentUser = await getCurrentUser(req, res);

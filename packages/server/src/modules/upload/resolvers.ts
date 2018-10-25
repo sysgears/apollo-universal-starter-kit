@@ -1,10 +1,10 @@
 import fileSystemStorage from './FileSystemStorage';
 import settings from '../../../../../settings';
 import * as models from '../../../typings/graphql';
-import IUpload from './sql';
+import * as sql from './sql';
 
 interface Context {
-  Upload: IUpload;
+  Upload: sql.Upload;
   req: any;
 }
 

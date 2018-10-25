@@ -383,6 +383,7 @@ export class User {
     );
   }
 }
-const userDAO = new User();
 
-export default userDAO;
+export const instance = new User();
+
+export default instance;

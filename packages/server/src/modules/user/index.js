@@ -5,12 +5,12 @@ import schema from './schema.graphql';
 import resolvers from './resolvers';
 import scopes from './scopes';
 import settings from '../../../../../settings';
-import userInstance from './sql';
+import * as sql from './sql';
 import ServerModule from '../ServerModule';
 import resources from './locales';
 
 const createContextFunc = async ({ context: { user } }) => ({
-  User: userInstance,
+  User: sql.instance,
   user,
   auth: {
     isAuthenticated: !!user,

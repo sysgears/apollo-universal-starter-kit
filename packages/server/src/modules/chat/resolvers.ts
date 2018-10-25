@@ -2,13 +2,13 @@ import { createBatchResolver } from 'graphql-resolve-batch';
 import settings from '../../../../../settings';
 import modules from '../../modules';
 import * as models from '../../../typings/graphql';
-import IChat from './sql';
+import * as sql from './sql';
 import { PubSub } from 'graphql-subscriptions';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
 
 interface Context {
-  Chat: IChat;
+  Chat: sql.Chat;
   user: any;
   req: any;
 }

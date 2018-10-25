@@ -4,7 +4,7 @@ import FacebookStrategy from 'passport-facebook';
 
 import resolvers from './resolvers';
 import AuthModule from '../AuthModule';
-import userInstance from '../../sql';
+import * as sql from '../../sql';
 import settings from '../../../../../../../settings';
 import access from '../../access';
 import getCurrentUser from '../utils';
@@ -29,26 +29,26 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
           emails: [{ value }]
         } = profile;
         try {
-          let user = await userInstance.getUserByFbIdOrEmail(id, value);
+          let user = await sql.instance.getUserByFbIdOrEmail(id, value);
 
           if (!user) {
             const isActive = true;
-            const [createdUserId] = await userInstance.register({
+            const [createdUserId] = await sql.instance.register({
               username: username ? username : displayName,
               email: value,
               password: id,
               isActive
             });
 
-            await userInstance.createFacebookAuth({
+            await sql.instance.createFacebookAuth({
               id,
               displayName,
               userId: createdUserId
             });
 
-            user = await userInstance.getUser(createdUserId);
+            user = await sql.instance.getUser(createdUserId);
           } else if (!user.fbId) {
-            await userInstance.createFacebookAuth({
+            await sql.instance.createFacebookAuth({
               id,
               displayName,
               userId: user.id
@@ -68,7 +68,7 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
       passport.authenticate('facebook', { state: req.query.expoUrl })(req, res, next);
     });
     app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
-      const user = await userInstance.getUser(req.user.id);
+      const user = await sql.instance.getUser(req.user.id);
       const redirectUrl = req.query.state;
       const tokens = await access.grantAccess(user, req);
       const currentUser = await getCurrentUser(req, res);

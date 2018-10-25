@@ -15,7 +15,7 @@ export interface Identifier {
   id: number;
 }
 
-export default class PostDAO {
+export class PostDAO {
   public postsPagination(limit: number, after: number) {
     return knex
       .select('id', 'title', 'content')

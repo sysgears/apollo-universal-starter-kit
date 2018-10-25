@@ -7,12 +7,13 @@ import { withFilter, PubSub } from 'graphql-subscriptions';
 import * as models from '../../../typings/graphql';
 import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
+import * as sql from './sql';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
 
 interface Context {
-  User: any;
-  user: any;
+  User: sql.User;
+  user: sql.instance;
   req: any;
   mailer: any;
 }
@@ -48,7 +49,7 @@ export default (
     ),
     currentUser(obj, args, { User, user }) {
       if (user) {
-        return User.getUser(user.id);
+        return User.getUser(user.id) as any;
       } else {
         return null;
       }

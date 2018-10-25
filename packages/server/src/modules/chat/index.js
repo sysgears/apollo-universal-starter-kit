@@ -1,4 +1,4 @@
-import Chat from './sql';
+import * as sql from './sql';
 
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
@@ -8,6 +8,6 @@ import resources from './locales';
 export default new ServerModule({
   schema: [schema],
   createResolversFunc: [createResolvers],
-  createContextFunc: [() => ({ Chat: new Chat() })],
+  createContextFunc: [() => ({ Chat: new sql.Chat() })],
   localization: [{ ns: 'chat', resources }]
 });

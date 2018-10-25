@@ -1,7 +1,7 @@
 import { orderedFor, returnId } from '../../sql/helpers';
 import knex from '../../sql/connector';
 
-export default class Chat {
+export class Chat {
   message(id) {
     return knex
       .select(
@@ -110,3 +110,5 @@ export default class Chat {
       });
   }
 }
+
+export default Chat;

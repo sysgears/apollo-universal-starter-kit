@@ -2,11 +2,11 @@ import jwt from 'jsonwebtoken';
 import createTokens from './createTokens';
 import settings from '../../../../../../../settings';
 import * as models from '../../../../../typings/graphql';
-import { User as IUser } from '../../sql';
+import * as sql from '../../sql';
 
 interface Context {
   res: any;
-  User: IUser;
+  User: sql.User;
 }
 
 export default (): {

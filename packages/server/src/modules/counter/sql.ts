@@ -1,6 +1,6 @@
 import knex from '../../sql/connector';
 
-export default class Counter {
+export class Counter {
   public counterQuery() {
     return knex('counter').first();
   }

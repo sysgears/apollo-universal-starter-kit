@@ -3,7 +3,7 @@ import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 
 import access from '../../access';
-import UserSQL, { User as IUser } from '../../sql';
+import * as sql from '../../sql';
 import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
 import * as models from '../../../../../typings/graphql';
@@ -31,7 +31,7 @@ const validateUserPassword = async (user: any, password: string, t: (s: string) 
 
 interface Context {
   req: any;
-  User: IUser;
+  User: sql.User;
   mailer: any;
 }
 
@@ -41,7 +41,7 @@ export default (): {
   Mutation: {
     async login(obj, { input: { usernameOrEmail, password } }, { req }) {
       try {
-        const user: any = await UserSQL.getUserByUsernameOrEmail(usernameOrEmail);
+        const user: any = await sql.instance.getUserByUsernameOrEmail(usernameOrEmail);
 
         await validateUserPassword(user, password, req.t);
 

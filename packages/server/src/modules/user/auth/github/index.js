@@ -4,7 +4,7 @@ import GitHubStrategy from 'passport-github';
 
 import resolvers from './resolvers';
 import AuthModule from '../AuthModule';
-import userInstance from '../../sql';
+import * as sql from '../../sql';
 import settings from '../../../../../../../settings';
 import access from '../../access';
 import getCurrentUser from '../utils';
@@ -28,26 +28,26 @@ if (settings.user.auth.github.enabled && !__TEST__) {
           emails: [{ value }]
         } = profile;
         try {
-          let user = await userInstance.getUserByGHIdOrEmail(id, value);
+          let user = await sql.instance.getUserByGHIdOrEmail(id, value);
 
           if (!user) {
             const isActive = true;
-            const [createdUserId] = await userInstance.register({
+            const [createdUserId] = await sql.instance.register({
               username: username ? username : displayName,
               email: value,
               password: id,
               isActive
             });
 
-            await userInstance.createGithubAuth({
+            await sql.instance.createGithubAuth({
               id,
               displayName,
               userId: createdUserId
             });
 
-            user = await userInstance.getUser(createdUserId);
+            user = await sql.instance.getUser(createdUserId);
           } else if (!user.ghId) {
-            await userInstance.createGithubAuth({
+            await sql.instance.createGithubAuth({
               id,
               displayName,
               userId: user.id
@@ -70,7 +70,7 @@ if (settings.user.auth.github.enabled && !__TEST__) {
       '/auth/github/callback',
       passport.authenticate('github', { session: false, failureRedirect: '/login' }),
       async function(req, res) {
-        const user = await userInstance.getUser(req.user.id);
+        const user = await sql.instance.getUser(req.user.id);
         const redirectUrl = req.query.state;
         const tokens = await access.grantAccess(user, req);
         const currentUser = await getCurrentUser(req, res);

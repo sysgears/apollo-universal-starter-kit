@@ -3,12 +3,16 @@ package core.controllers.graphql.counter
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.model.StatusCodes.OK
+import akka.http.scaladsl.testkit.RouteTestTimeout
+import akka.testkit.TestDuration
 import akka.util.ByteString
 import core.controllers.graphql.TestHelper
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.counter.models.Counter
 import spray.json._
+
+import scala.concurrent.duration._
 
 class QuerySpec extends TestHelper {
 
@@ -19,6 +23,8 @@ class QuerySpec extends TestHelper {
   val serverCounter = "query Get { serverCounter { amount } }"
   val serverCounterGraphQLMessage = ByteString(GraphQLMessage(serverCounter).toJson.compactPrint)
   val serverCounterEntity = HttpEntity(`application/json`, serverCounterGraphQLMessage)
+
+  implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
   "GraphQLController" must {
 
@@ -84,6 +90,6 @@ class QuerySpec extends TestHelper {
 object CounterJsonReader extends JsonReader[Counter] with DefaultJsonProtocol {
   override def read(json: JsValue): Counter = {
     val data = json.asJsObject.fields("data").asJsObject
-    data.fields.head._2.convertTo[Counter](jsonFormat1(Counter.apply))
+    data.fields.head._2.convertTo[Counter](jsonFormat2(Counter))
   }
 }

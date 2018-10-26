@@ -1,7 +1,6 @@
 package modules.counter.repositories
 
 import com.google.inject.Inject
-import core.guice.modules.Database
 import core.models.BadRequest
 import javax.inject.Singleton
 import modules.counter.models.Counter
@@ -18,11 +17,9 @@ trait CounterRepo {
 }
 
 @Singleton
-class CounterRepoImpl @Inject()(database: Database) extends CounterRepo {
+class CounterRepoImpl @Inject()(db: Database) extends CounterRepo {
 
   val query: TableQuery[Counter.Table] = TableQuery[Counter.Table]
-
-  val db = database.db
 
   override def inc(counter: Counter): Future[Counter] = db.run(Actions.inc(counter))
 

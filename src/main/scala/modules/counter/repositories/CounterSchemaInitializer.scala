@@ -1,11 +1,10 @@
 package modules.counter.repositories
 
-import core.guice.modules.Database
 import core.slick.{SchemaInitializer, SchemaUtil}
 import javax.inject.Inject
 import modules.counter.models.Counter
-import slick.lifted.TableQuery
 import slick.jdbc.SQLiteProfile.api._
+import slick.lifted.TableQuery
 
 import scala.concurrent.{ExecutionContext, Future}
 

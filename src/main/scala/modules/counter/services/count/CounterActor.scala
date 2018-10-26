@@ -5,7 +5,7 @@ import akka.pattern._
 import modules.counter.models.Counter
 import modules.counter.repositories.CounterRepo
 import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
-import util.Named
+import common.Named
 
 import scala.concurrent.ExecutionContext
 

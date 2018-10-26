@@ -2,7 +2,7 @@ package core.slick
 
 import scala.concurrent.Future
 
-abstract class SchemaInitializer {
+trait SchemaInitializer {
 
   def create(): Future[Unit]
 

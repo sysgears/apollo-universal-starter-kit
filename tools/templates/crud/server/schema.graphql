@@ -3,6 +3,7 @@ type $Module$ {
   id: Int!
   name: String!
 }
+
 ### end schema type definitions
 
 type $Module$Connection {
@@ -17,21 +18,6 @@ type $Module$Data {
 type $Module$Payload {
   node: $Module$
   errors: [FieldError!]
-}
-
-type PageInfo {
-  totalCount: Int
-  hasNextPage: Boolean
-}
-
-type BatchPayload {
-  count: Int
-  errors: [FieldError!]
-}
-
-input OrderByInput {
-  column: String
-  order: String
 }
 
 input $Module$FilterInput {

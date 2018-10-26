@@ -11,10 +11,11 @@ class CommandInvoker {
    * @param addModule - The function for creating a new module.
    * @param deleteModule - The function for deleting existing module.
    */
-  constructor(addModule, addCrud, deleteModule) {
+  constructor(addModule, addCrud, deleteModule, updateSchema) {
     this.addModule = addModule;
     this.addCrud = addCrud;
     this.deleteModule = deleteModule;
+    this.updateSchema = updateSchema;
   }
 
   /**
@@ -58,6 +59,14 @@ class CommandInvoker {
   runDeleteModule(args, options, logger) {
     const { moduleName, location = 'both' } = args;
     CommandInvoker.runCommand(this.deleteModule, location, logger, moduleName, options);
+  }
+
+  /**
+   * Runs operation (function) for updating existing module schema.
+   */
+  runUpdateSchema(args, options, logger) {
+    const { moduleName, location = 'both' } = args;
+    CommandInvoker.runCommand(this.updateSchema, location, logger, moduleName);
   }
 }
 

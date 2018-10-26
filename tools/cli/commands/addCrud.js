@@ -1,8 +1,10 @@
 const shell = require('shelljs');
 const chalk = require('chalk');
+const { pascalize } = require('humps');
 const addModule = require('./addModule');
 const addMigration = require('./subCommands/addMigration');
-const { computeModulesPath } = require('../helpers/util');
+const { computeModulesPath, updateFileWithExports, runPrettier } = require('../helpers/util');
+const { BASE_PATH } = require('../config');
 
 /**
  * Adds CRUD module in server and adds a new module to the Feature connector.
@@ -17,6 +19,9 @@ function addCrud(logger, templatesPath, moduleName, tablePrefix, location) {
   // add module in server, client
   addModule(logger, templatesPath, moduleName, location, false);
 
+  // pascalize
+  const Module = pascalize(moduleName);
+
   if (location === 'server') {
     // add migration and seed for new module
     addMigration(logger, templatesPath, moduleName);
@@ -27,6 +32,16 @@ function addCrud(logger, templatesPath, moduleName, tablePrefix, location) {
 
       logger.info(chalk.green(`✔ Inserted db table prefix!`));
     }
+
+    const generatedSchemasFile = 'generatedSchemas.js';
+    const schema = `${Module}Schema`;
+    const options = {
+      pathToFileWithExports: `${BASE_PATH}/packages/${location}/src/modules/common/${generatedSchemasFile}`,
+      exportName: schema,
+      importString: `import { ${schema} } from '../${moduleName}/schema';\n`
+    };
+    updateFileWithExports(options);
+    runPrettier(options.pathToFileWithExports);
   }
 
   logger.info(chalk.green(`✔ Module for ${location} successfully created!`));

@@ -3,11 +3,12 @@ require('babel-polyfill');
 const addModuleCommand = require('./cli/commands/addModule');
 const addCrudCommand = require('./cli/commands/addCrud');
 const deleteModuleCommand = require('./cli/commands/deleteModule');
+const updateSchemaCommand = require('./cli/commands/updateSchema');
 const CommandInvoker = require('./cli/CommandInvoker');
 
 const prog = require('caporal');
 
-const commandInvoker = new CommandInvoker(addModuleCommand, addCrudCommand, deleteModuleCommand);
+const commandInvoker = new CommandInvoker(addModuleCommand, addCrudCommand, deleteModuleCommand, updateSchemaCommand);
 
 prog
   .version('1.0.0')
@@ -38,6 +39,10 @@ prog
   .argument('<moduleName>', 'Module name')
   .argument('[location]', 'Where should we delete module. [both, server, client]', ['both', 'server', 'client'], 'both')
   .option('-m', 'Delete migration and seeds')
-  .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger));
+  .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger))
+  // Update schema
+  .command('updateschema', 'Update Module Schema')
+  .argument('<moduleName>', 'Module name')
+  .action((args, options, logger) => commandInvoker.runUpdateSchema(args, options, logger));
 
 prog.parse(process.argv);

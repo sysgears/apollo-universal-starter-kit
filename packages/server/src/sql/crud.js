@@ -622,7 +622,6 @@ export default class Crud {
   }
 
   _create(data) {
-    console.log('_create:', data);
     return knex(this.getFullTableName())
       .insert(decamelizeKeys(this.normalizeFields(data)))
       .returning('id');
@@ -823,9 +822,36 @@ export default class Crud {
   }
 
   _updateMany({ data, where: { id_in } }) {
-    return knex(this.getFullTableName())
-      .update(decamelizeKeys(this.normalizeFields(data)))
-      .whereIn('id', id_in);
+    const query = this.getBaseQuery();
+    let normalizedData = {};
+    for (const key of Object.keys(data)) {
+      const value = this.schema.values[key];
+      // add fields from one to one relation
+      if (value.type.constructor === Array && value.hasOne) {
+        const type = value.type[0];
+        const fieldName = decamelize(key);
+        const prefix = type.__.tablePrefix ? type.__.tablePrefix : '';
+        const suffix = value.noIdSuffix ? '' : '_id';
+        const foreignTableName = decamelize(type.__.tableName ? type.__.tableName : type.name);
+        query.leftJoin(
+          `${prefix}${foreignTableName} as ${fieldName}`,
+          `${fieldName}.id`,
+          `${fieldName}.${this.getTableName()}${suffix}`
+        );
+
+        for (const nestedKey of Object.keys(data[key].update[0].data)) {
+          const schemaKey = nestedKey.endsWith('Id') ? nestedKey.substring(0, nestedKey.length - 2) : nestedKey;
+          if (type.values[schemaKey].type.constructor !== Array) {
+            normalizedData[`${fieldName}.${nestedKey}`] = data[key].update[0].data[nestedKey];
+          }
+        }
+      } else {
+        normalizedData[`${this.getTableName()}.${key}`] = data[key];
+      }
+    }
+
+    normalizedData = decamelizeKeys(this.normalizeFields(normalizedData));
+    return query.update(normalizedData).whereIn(`${this.getTableName()}.id`, id_in);
   }
 
   async updateMany(args) {
@@ -840,6 +866,7 @@ export default class Crud {
         e.throwIf();
       }
     } catch (e) {
+      log.error(`Error in ${this.getFullTableName()}.updateMany()`, e);
       return { errors: e };
     }
   }

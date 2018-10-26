@@ -1,8 +1,9 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
+const { pascalize } = require('humps');
 const deleteMigrations = require('./subCommands/deleteMigrations');
-const { computeModulesPath, runPrettier } = require('../helpers/util');
+const { computeModulesPath, runPrettier, deleteFromFileWithExports } = require('../helpers/util');
 
 /**
  * Removes the module from client, server or both locations and removes the module from the module list.
@@ -13,7 +14,16 @@ const { computeModulesPath, runPrettier } = require('../helpers/util');
  */
 function deleteModule(logger, moduleName, options, location) {
   logger.info(`Deleting ${location} files…`);
+
+  // pascalize
+  const Module = pascalize(moduleName);
   const modulePath = computeModulesPath(location, moduleName);
+  const modulesPath = computeModulesPath(location);
+  const moduleCommonPath = `${modulesPath}/common`;
+  const generatedContainerFile = 'generatedContainers.js';
+  const generatedContainerPath = `${moduleCommonPath}/${generatedContainerFile}`;
+  const generatedSchemasFile = 'generatedSchemas.js';
+  const generatedSchemaPath = `${moduleCommonPath}/${generatedSchemasFile}`;
 
   if (fs.existsSync(modulePath)) {
     // remove module directory
@@ -52,6 +62,16 @@ function deleteModule(logger, moduleName, options, location) {
     if (location === 'server' && options.m) {
       deleteMigrations(logger, moduleName);
     }
+
+    if (fs.existsSync(generatedContainerPath)) {
+      const graphqlQuery = `${Module}Query`;
+      deleteFromFileWithExports(generatedContainerPath, graphqlQuery);
+    }
+    if (fs.existsSync(generatedSchemaPath)) {
+      const schema = `${Module}Schema`;
+      deleteFromFileWithExports(generatedSchemaPath, schema);
+    }
+
     logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));
   } else {
     logger.info(chalk.red(`✘ Module ${location} location for ${modulePath} not found!`));

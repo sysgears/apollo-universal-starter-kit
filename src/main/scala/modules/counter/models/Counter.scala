@@ -9,7 +9,9 @@ case class Counter(id: Option[Int] = None, amount: Int)
 
 object Counter extends ((Option[Int], Int) => Counter) {
 
-  class Table(tag: Tag) extends SlickTable[Counter](tag, "COUNTERS") {
+  val name = "COUNTER"
+
+  class Table(tag: Tag) extends SlickTable[Counter](tag, name) {
     val id = column[Int]("ID", O.PrimaryKey)
     val amount = column[Int]("AMOUNT")
 

@@ -14,11 +14,9 @@ class CounterSchemaInitializer @Inject()(database: Database)
 
   val counters: TableQuery[Counter.Table] = TableQuery[Counter.Table]
 
-  val name = "COUNTERS"
-
   override def create(): Future[Unit] = {
 
-    withTable(database, counters, name, _.isEmpty) {
+    withTable(database, counters, Counter.name, _.isEmpty) {
       DBIO.seq(
         counters.schema.create,
         counters += Counter(Some(1), 0)
@@ -27,7 +25,7 @@ class CounterSchemaInitializer @Inject()(database: Database)
   }
 
   override def drop(): Future[Unit] = {
-    withTable(database, counters, name, _.nonEmpty) {
+    withTable(database, counters, Counter.name, _.nonEmpty) {
       DBIO.seq(counters.schema.drop)
     }
   }

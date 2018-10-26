@@ -1,6 +1,6 @@
 package core.graphql
 
-import core.loaders.GraphQLSchemaLoader
+import core.loaders.GraphQLSchemaLoader.{mutations, queries, subscriptions}
 import sangria.schema.{Field, IntType, ObjectType, Schema}
 
 object GraphQL {
@@ -8,48 +8,11 @@ object GraphQL {
   val maxQueryDepth = 15
   val maxQueryComplexity = 1000
 
-  private val dummy = ObjectType(
-    name = "Query",
-    fields = List[Field[Unit, Unit]](
-      Field(
-        name = "dummy",
-        fieldType = IntType,
-        resolve = _ => 0
-      )
-    )
-  )
+  private val dummy = ObjectType("Query", List[Field[Unit, Unit]](Field("dummy", IntType, resolve = _ => 0)))
 
   val schema: Schema[Unit, Unit] = sangria.schema.Schema(
-    query =
-      if (GraphQLSchemaLoader.queries.isEmpty) {
-        dummy
-      } else {
-        ObjectType(
-          name = "Query",
-          fields = GraphQLSchemaLoader.queries
-        )
-      },
-    mutation =
-      if (GraphQLSchemaLoader.mutations.isEmpty) {
-        None
-      } else {
-        Some(
-          ObjectType(
-            name = "Mutation",
-            fields = GraphQLSchemaLoader.mutations
-          )
-        )
-      },
-    subscription =
-      if (GraphQLSchemaLoader.subscriptions.isEmpty) {
-        None
-      } else {
-        Some(
-          ObjectType(
-            name = "Subscription",
-            fields = GraphQLSchemaLoader.subscriptions
-          )
-        )
-      }
+    query = if (queries.nonEmpty) ObjectType("Query", queries) else dummy,
+    mutation = if (mutations.nonEmpty) Some(ObjectType("Mutation", mutations)) else None,
+    subscription = if (subscriptions.nonEmpty) Some(ObjectType("Subscription", subscriptions)) else None
   )
 }

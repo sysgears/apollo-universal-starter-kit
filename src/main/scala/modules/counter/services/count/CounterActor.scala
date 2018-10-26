@@ -30,8 +30,6 @@ class CounterActor(counterRepo: CounterRepo)
       log.info(s"Received message: [ $incrementAndGet ]")
       counterRepo.inc(Counter(Some(defaultId), incrementAndGet.amount)).pipeTo(sender)
 
-    case GetAmount => {
-      counterRepo.find(defaultId).pipeTo(sender)
-    }
+    case GetAmount => counterRepo.find(defaultId).pipeTo(sender)
   }
 }

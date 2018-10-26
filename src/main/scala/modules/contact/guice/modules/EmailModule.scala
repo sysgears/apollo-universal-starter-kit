@@ -1,12 +1,12 @@
 package modules.contact.guice.modules
 
 import com.github.jurajburian.mailer.{Mailer, SessionFactory, SmtpAddress, SmtpStartTls}
-import com.google.inject.{AbstractModule, Provides}
+import com.google.inject.Provides
 import com.typesafe.config.Config
 import javax.inject.Singleton
 import net.codingwell.scalaguice.ScalaModule
 
-class EmailModule extends AbstractModule with ScalaModule {
+class EmailModule extends ScalaModule {
 
   @Provides
   @Singleton

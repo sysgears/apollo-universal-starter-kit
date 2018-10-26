@@ -7,7 +7,7 @@ import javax.mail.internet.InternetAddress
 import modules.common.FieldError
 import modules.contact.actor.ContactActor.SendMail
 import modules.contact.models.{Contact, ContactPayload}
-import util.Named
+import common.Named
 
 import scala.util.{Failure, Success, Try}
 

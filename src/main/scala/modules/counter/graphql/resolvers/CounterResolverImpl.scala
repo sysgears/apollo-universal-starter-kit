@@ -14,7 +14,7 @@ import sangria.schema.Action
 import akka.pattern.ask
 import com.google.inject.name.Named
 import modules.counter.services.count.CounterPersistentActor
-import util.Logger
+import common.Logger
 
 import scala.concurrent.{ExecutionContext, Future}
 

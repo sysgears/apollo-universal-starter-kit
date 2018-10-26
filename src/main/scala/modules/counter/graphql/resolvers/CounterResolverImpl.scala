@@ -14,7 +14,7 @@ import modules.counter.models.Counter
 import modules.counter.services.count.CounterActor
 import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
 import sangria.schema.Action
-import util.Logger
+import common.Logger
 
 import scala.concurrent.{ExecutionContext, Future}
 

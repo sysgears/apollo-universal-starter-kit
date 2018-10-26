@@ -8,7 +8,7 @@ import modules.counter.models.Counter
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType, ExcludeFields}
 import sangria.schema.{Argument, Field, IntType, ObjectType}
 import sangria.streaming.akkaStreams._
-import util.Logger
+import common.Logger
 
 class CounterSchema @Inject()(counterResolver: CounterResolver)
                              (implicit val materializer: ActorMaterializer) extends GraphQLSchema with Logger {

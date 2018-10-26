@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
 
   "com.typesafe.akka" %% "akka-http-testkit" % "10.1.5",
   "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test",
-  
+
   "com.google.inject" % "guice" % "4.1.0",
   "net.codingwell" %% "scala-guice" % "4.2.1",
 
@@ -35,7 +35,10 @@ libraryDependencies ++= Seq(
 
   "org.xerial" % "sqlite-jdbc" % "3.7.2",
   "com.typesafe.slick" %% "slick" % "3.2.3",
-  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.3"
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.3",
+
+  "com.github.jurajburian" %% "mailer" % "1.2.3",
+  "org.clapper" %% "classutil" % "1.3.0"
 )
 
 parallelExecution in test := false

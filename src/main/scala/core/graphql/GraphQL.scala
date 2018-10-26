@@ -1,6 +1,6 @@
 package core.graphql
 
-import core.config.loaders.GraphQLSchemaLoader
+import core.loaders.GraphQLSchemaLoader
 import sangria.schema.{ObjectType, Schema}
 
 object GraphQL {

@@ -1,9 +1,9 @@
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
-import core.config.loaders.AkkaRoutesLoader.routes
-import core.config.loaders.SlickSchemaLoader
 import core.guice.injection.Injecting
+import core.config.loaders.SlickSchemaLoader
+import core.config.loaders.AkkaRoutesLoader.routes
 
 import scala.concurrent.{ExecutionContext, Future}
 

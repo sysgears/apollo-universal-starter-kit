@@ -7,7 +7,7 @@ import core.graphql.GraphQLSchema
 import core.guice.injection.Injecting.injector
 import net.codingwell.scalaguice.ScalaModule
 import org.clapper.classutil.{ClassFinder, ClassInfo}
-import util.Logger
+import common.Logger
 
 object ModuleLoader extends Logger {
 

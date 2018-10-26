@@ -4,7 +4,7 @@ import akka.actor.{ActorLogging, Props}
 import akka.persistence._
 import core.services.persistence.PersistenceCleanup
 import modules.counter.services.count.CounterPersistentActor.{GetAmount, IncrementAndGet, Init}
-import util.Named
+import common.Named
 
 object CounterPersistentActor extends Named {
 

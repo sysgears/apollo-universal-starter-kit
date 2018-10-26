@@ -5,7 +5,7 @@ import monix.execution.Scheduler
 import monix.reactive.OverflowStrategy
 import monix.reactive.subjects.ConcurrentSubject
 import org.reactivestreams.Publisher
-import util.Logger
+import common.Logger
 
 @Singleton
 class MonixPublisherServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends PublisherService[T] with Logger {

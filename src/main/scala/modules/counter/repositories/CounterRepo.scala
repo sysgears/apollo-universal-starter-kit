@@ -1,7 +1,7 @@
 package modules.counter.repositories
 
 import com.google.inject.Inject
-import core.models.BadRequest
+import core.models.InternalServerError
 import javax.inject.Singleton
 import modules.counter.models.Counter
 import slick.jdbc.SQLiteProfile.api._
@@ -30,7 +30,7 @@ class CounterRepoImpl @Inject()(db: Database) extends CounterRepo {
     def inc(counter: Counter): DBIO[Counter] = (
       for {
         result <- query.filter(_.id === counter.id).result
-        foundCounter <- if (result.lengthCompare(1) == 0) DBIO.successful(result.head) else DBIO.failed(BadRequest())
+        foundCounter <- if (result.lengthCompare(1) == 0) DBIO.successful(result.head) else DBIO.failed(InternalServerError())
         newCounter = foundCounter.copy(amount = foundCounter.amount + counter.amount)
         _ <- query.update(newCounter)
       } yield newCounter
@@ -39,7 +39,7 @@ class CounterRepoImpl @Inject()(db: Database) extends CounterRepo {
     def find(id: Int): DBIO[Counter] = {
       for {
         result <- query.filter(_.id === id).result
-        foundCounter <- if (result.lengthCompare(1) == 0) DBIO.successful(result.head) else DBIO.failed(BadRequest())
+        foundCounter <- if (result.lengthCompare(1) == 0) DBIO.successful(result.head) else DBIO.failed(InternalServerError())
       } yield foundCounter
     }
   }

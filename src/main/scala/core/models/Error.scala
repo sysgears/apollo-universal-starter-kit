@@ -2,4 +2,4 @@ package core.models
 
 class Error extends Exception
 
-case class BadRequest(msg: String = "") extends Error
+case class InternalServerError(msg: String = "") extends Error

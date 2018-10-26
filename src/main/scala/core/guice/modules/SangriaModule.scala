@@ -1,6 +1,6 @@
 package core.guice.modules
 
-import com.google.inject.{AbstractModule, Provides}
+import com.google.inject.Provides
 import core.graphql.GraphQL
 import javax.inject.Singleton
 import net.codingwell.scalaguice.ScalaModule
@@ -9,7 +9,7 @@ import sangria.execution.{Executor, QueryReducer}
 
 import scala.concurrent.ExecutionContext
 
-class SangriaModule extends AbstractModule with ScalaModule {
+class SangriaModule extends ScalaModule {
 
   @Provides
   @Singleton

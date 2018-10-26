@@ -2,13 +2,13 @@ package modules.contact.guice.modules
 
 import akka.actor.{ActorRef, ActorSystem}
 import com.github.jurajburian.mailer.Mailer
+import com.google.inject.Provides
 import com.google.inject.name.Named
-import com.google.inject.{AbstractModule, Provides}
 import com.typesafe.config.Config
 import modules.contact.actor.ContactActor
 import net.codingwell.scalaguice.ScalaModule
 
-class ContactModule extends AbstractModule with ScalaModule {
+class ContactModule extends ScalaModule {
 
   @Provides
   @Named(ContactActor.name)

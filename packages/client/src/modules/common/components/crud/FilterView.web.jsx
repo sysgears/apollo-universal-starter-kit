@@ -26,7 +26,8 @@ class FilterView extends React.PureComponent {
     onFilterChange: PropTypes.func.isRequired,
     customFields: PropTypes.object,
     currentUser: PropTypes.object,
-    currentUserLoading: PropTypes.bool
+    currentUserLoading: PropTypes.bool,
+    data: PropTypes.object
   };
 
   state = {
@@ -44,7 +45,7 @@ class FilterView extends React.PureComponent {
   };
 
   render() {
-    const { schema, onFilterChange, customFields, currentUser } = this.props;
+    const { schema, onFilterChange, customFields, currentUser, data } = this.props;
     const { expand } = this.state;
 
     const showFilter =
@@ -60,7 +61,7 @@ class FilterView extends React.PureComponent {
 
     return (
       <Formik
-        initialValues={mapFormPropsToValues({ schema, formType: 'filter' })}
+        initialValues={mapFormPropsToValues({ schema, formType: 'filter', data: data ? data : null })}
         onSubmit={values => {
           onFilterChange(pickInputFields({ schema, values, formType: 'filter' }));
         }}

@@ -359,8 +359,7 @@ class ListView extends React.Component {
                       values,
                       formItemLayout: {},
                       prefix: '',
-                      formType: 'batch',
-                      customFields: customBatchFields
+                      formType: 'batch'
                     })}
                     <FormItem>
                       <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>

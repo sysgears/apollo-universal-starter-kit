@@ -5,7 +5,7 @@ import core.slick.{SchemaInitializer, SchemaUtil}
 import javax.inject.Inject
 import modules.counter.models.Counter
 import slick.lifted.TableQuery
-import slick.driver.SQLiteDriver.api._
+import slick.jdbc.SQLiteProfile.api._
 
 import scala.concurrent.{ExecutionContext, Future}
 

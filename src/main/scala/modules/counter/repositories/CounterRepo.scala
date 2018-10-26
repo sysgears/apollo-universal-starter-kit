@@ -5,7 +5,7 @@ import core.guice.modules.Database
 import core.models.BadRequest
 import javax.inject.Singleton
 import modules.counter.models.Counter
-import slick.driver.SQLiteDriver.api._
+import slick.jdbc.SQLiteProfile.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

@@ -9,7 +9,11 @@ class DBModule extends ScalaModule {
 
   @Provides
   def database(config: Config): Database = Option(System.getenv("env")) match {
-    case Some(_) => Database.forConfig("slick.dbs.test")
-    case _ => Database.forConfig("slick.dbs.default")
+    case Some(env) => if (env equals "test") loadConf("slick.dbs.test") else defaultConf
+    case _ => defaultConf
   }
+
+  private def defaultConf = loadConf("slick.dbs.default")
+
+  private def loadConf(path: String) = Database.forConfig(path)
 }

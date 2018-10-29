@@ -1,11 +1,12 @@
 package modules.counter.services.count
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{Actor, ActorLogging}
 import akka.pattern._
+import com.google.inject.Inject
+import common.Named
 import modules.counter.models.Counter
 import modules.counter.repositories.CounterRepo
 import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
-import common.Named
 
 import scala.concurrent.ExecutionContext
 
@@ -15,13 +16,11 @@ object CounterActor extends Named {
 
   case class IncrementAndGet(amount: Int)
 
-  def props(counterRepo: CounterRepo)(implicit executionContext: ExecutionContext) = Props(new CounterActor(counterRepo))
-
   override final val name = "CounterActor"
 }
 
-class CounterActor(counterRepo: CounterRepo)
-                  (implicit executionContext: ExecutionContext) extends Actor with ActorLogging {
+class CounterActor @Inject()(counterRepo: CounterRepo)
+                            (implicit executionContext: ExecutionContext) extends Actor with ActorLogging {
 
   private val defaultId = 1
 

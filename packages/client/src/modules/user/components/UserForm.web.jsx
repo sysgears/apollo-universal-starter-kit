@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
-import { email, minLength, required, match, validateForm } from '../../formValidation/validation';
+import { email, minLength, required, match, validateForm } from '../../../../../common/modules/validation';
 
 import settings from '../../../../../../settings';
 

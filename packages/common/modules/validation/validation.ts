@@ -5,84 +5,96 @@ import i18n from 'i18next';
  * Non empty validation
  *
  * @param value
- * @return undefined if it's valid, error message otherwise
+ * @return {undefined | message}
  */
-export const required = (value: any) => (value ? undefined : i18n.t('fieldValidation:required'));
+export const required = (value: any) => (value ? undefined : i18n.t('validation:required'));
 
 /**
  * Match a particular field
  * @param comparableField
  */
-export const match = (comparableField: any) => (value: any, values: any) =>
-  value !== values[comparableField] ? i18n.t('fieldValidation:match', { comparableField }) : undefined;
+export const match = (comparableField: string) => (value: any, values: any) =>
+  value !== values[comparableField] ? i18n.t('validation:match', { comparableField }) : undefined;
 
 /**
  * Max length validation
  * Usage: const maxLength15 = maxLength(15)
  *
  * @param max
+ * @return {undefined | message}
  */
 export const maxLength = (max: number) => (value: any) =>
-  value && value.length > max ? i18n.t('fieldValidation:maxLength', { max }) : undefined;
+  value && value.length > max ? i18n.t('validation:maxLength', { max }) : undefined;
 
 /**
  * Min length validation
  * Usage: export const minLength2 = minLength(2)
  *
  * @param min
+ * @return {undefined | message}
  */
 export const minLength = (min: number) => (value: any) =>
-  value && value.length < min ? i18n.t('fieldValidation:minLength', { min }) : undefined;
+  value && value.length < min ? i18n.t('validation:minLength', { min }) : undefined;
 
 /**
  * Number validation
  *
  * @param value
+ * @return {undefined | message}
  */
-export const number = (value: any) => (value && isNaN(Number(value)) ? i18n.t('fieldValidation:number') : undefined);
+export const number = (value: any) => (value && isNaN(Number(value)) ? i18n.t('validation:number') : undefined);
 
 /**
  * Minimum value validation
  * Usage: export const minValue18 = minValue(18);
  *
  * @param min
+ * @return {undefined | message}
  */
 export const minValue = (min: number) => (value: any) =>
-  value && value < min ? i18n.t('fieldValidation:minValue', { min }) : undefined;
+  value && value < min ? i18n.t('validation:minValue', { min }) : undefined;
 
 /**
  * Email validation
  *
  * @param value
+ * @return {undefined | message}
  */
 export const email = (value: any) =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? i18n.t('fieldValidation:email') : undefined;
+  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? i18n.t('validation:email') : undefined;
 
 /**
  * Alpha numeric validation
  *
  * @param value
+ * @return {undefined | message}
  */
 export const alphaNumeric = (value: any) =>
-  value && /[^a-zA-Z0-9 ]/i.test(value) ? i18n.t('fieldValidation:alphaNumeric') : undefined;
+  value && /[^a-zA-Z0-9 ]/i.test(value) ? i18n.t('validation:alphaNumeric') : undefined;
 
 /**
  * Phone number validation
  *
  * @param value
+ * @return {undefined | message}
  */
 export const phoneNumber = (value: any) =>
-  value && !/^(0|[1-9][0-9]{9})$/i.test(value) ? i18n.t('fieldValidation:phoneNumber') : undefined;
+  value && !/^(0|[1-9][0-9]{9})$/i.test(value) ? i18n.t('validation:phoneNumber') : undefined;
 
 /**
- * Validates form to from schema
+ * Validates form according to the from schema
  *
  * @param formValues
  * @param formSchema
+ * @return object with errors
  */
-export const validateForm = (formValues: any, formSchema: any) => {
+export const validateForm = (formValues: { [key: string]: any }, formSchema: { [key: string]: any }) => {
   const errors = {};
-  const validateFormInner = (values: any, schema: any, collector: any) => {
+  const validateFormInner = (
+    values: { [key: string]: any },
+    schema: { [key: string]: any },
+    collector: { [key: string]: any }
+  ) => {
     Object.keys(schema)
       .filter(v => schema.hasOwnProperty(v))
       .forEach(v => {

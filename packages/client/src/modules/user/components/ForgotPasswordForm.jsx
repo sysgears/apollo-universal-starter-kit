@@ -7,7 +7,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { required, email, validateForm } from '../../formValidation/validation';
+import { required, email, validateForm } from '../../../../../common/modules/validation';
 import translate from '../../../i18n';
 
 const forgotPasswordFormSchema = {

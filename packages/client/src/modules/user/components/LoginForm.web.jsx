@@ -6,7 +6,7 @@ import { NavLink, Link } from 'react-router-dom';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
-import { required, minLength, validateForm } from '../../formValidation/validation';
+import { required, minLength, validateForm } from '../../../../../common/modules/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
 import LinkedInButton from '../auth/linkedin';

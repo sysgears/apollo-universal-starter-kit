@@ -5,7 +5,7 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { required, minLength, validateForm, match } from '../../formValidation/validation';
+import { required, minLength, validateForm, match } from '../../../../../common/modules/validation';
 import settings from '../../../../../../settings';
 
 const resetPasswordFormSchema = {

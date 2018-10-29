@@ -1,3 +1,8 @@
 import CommonModule from '../CommonModule';
+import resources from './locales';
 
-export default new CommonModule({ localization: [] });
+export * from './validation';
+
+export default new CommonModule({
+  localization: [{ ns: 'validation', resources }]
+});

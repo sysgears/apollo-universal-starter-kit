@@ -4,7 +4,7 @@ import { withFormik } from 'formik';
 
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { required, email, minLength, validateForm } from '../../formValidation/validation';
+import { required, email, minLength, validateForm } from '../../../../../common/modules/validation';
 
 const contactFormSchema = {
   name: [required, minLength(3)],

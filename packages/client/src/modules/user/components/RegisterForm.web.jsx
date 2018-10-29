@@ -5,7 +5,7 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { match, email, minLength, required, validateForm } from '../../formValidation/validation';
+import { match, email, minLength, required, validateForm } from '../../../../../common/modules/validation';
 import settings from '../../../../../../settings';
 
 const registerFormSchema = {

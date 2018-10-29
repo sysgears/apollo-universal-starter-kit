@@ -5,7 +5,7 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button } from '../../common/components/web';
-import { required, validateForm } from '../../formValidation/validation';
+import { required, validateForm } from '../../../../../common/modules/validation';
 
 const postFormSchema = {
   title: [required],

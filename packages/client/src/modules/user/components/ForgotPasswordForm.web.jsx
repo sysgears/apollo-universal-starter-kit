@@ -5,7 +5,7 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { required, email, validateForm } from '../../formValidation/validation';
+import { required, email, validateForm } from '../../../../../common/modules/validation';
 
 const forgotPasswordFormSchema = {
   email: [required, email]

@@ -5,11 +5,10 @@ import akka.pattern._
 import modules.counter.models.Counter
 import modules.counter.repositories.CounterRepo
 import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
-import common.Named
 
 import scala.concurrent.ExecutionContext
 
-object CounterActor extends Named {
+object CounterActor {
 
   object GetAmount
 
@@ -17,7 +16,7 @@ object CounterActor extends Named {
 
   def props(counterRepo: CounterRepo)(implicit executionContext: ExecutionContext) = Props(new CounterActor(counterRepo))
 
-  override final val name = "CounterActor"
+  val name = "CounterActor"
 }
 
 class CounterActor(counterRepo: CounterRepo)

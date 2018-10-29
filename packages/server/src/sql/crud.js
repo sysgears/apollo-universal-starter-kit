@@ -825,7 +825,8 @@ export default class Crud {
     const query = this.getBaseQuery();
     let normalizedData = {};
     for (const key of Object.keys(data)) {
-      const value = this.schema.values[key];
+      const schemaKey = key.endsWith('Id') ? key.substring(0, key.length - 2) : key;
+      const value = this.schema.values[schemaKey];
       // add fields from one to one relation
       if (value.type.constructor === Array && value.hasOne) {
         const type = value.type[0];
@@ -840,8 +841,8 @@ export default class Crud {
         );
 
         for (const nestedKey of Object.keys(data[key].update[0].data)) {
-          const schemaKey = nestedKey.endsWith('Id') ? nestedKey.substring(0, nestedKey.length - 2) : nestedKey;
-          if (type.values[schemaKey].type.constructor !== Array) {
+          const nestedSchemaKey = nestedKey.endsWith('Id') ? nestedKey.substring(0, nestedKey.length - 2) : nestedKey;
+          if (type.values[nestedSchemaKey].type.constructor !== Array) {
             normalizedData[`${fieldName}.${nestedKey}`] = data[key].update[0].data[nestedKey];
           }
         }

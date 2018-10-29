@@ -16,7 +16,7 @@ object CounterActor {
 
   def props(counterRepo: CounterRepo)(implicit executionContext: ExecutionContext) = Props(new CounterActor(counterRepo))
 
-  val name = "CounterActor"
+  final val name = "CounterActor"
 }
 
 class CounterActor(counterRepo: CounterRepo)

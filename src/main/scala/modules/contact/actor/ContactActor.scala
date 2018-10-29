@@ -16,7 +16,7 @@ object ContactActor {
 
   def props(mailer: Mailer, config: Config) = Props(new ContactActor(mailer, config))
 
-  val name = "ContactActor"
+  final val name = "ContactActor"
 }
 
 class ContactActor(mailer: Mailer,

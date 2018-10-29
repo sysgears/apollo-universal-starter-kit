@@ -4,7 +4,7 @@ import akka.actor.{Actor, IndirectActorProducer}
 import com.google.inject.Key
 import com.google.inject.name.Names
 
-class GuiceActorProducer(val actorName: String) extends IndirectActorProducer with Injecting {
+class GuiceActorProducer(actorName: String) extends IndirectActorProducer with Injecting {
   override def produce(): Actor = {
     injector.getBinding(Key.get(classOf[Actor], Names.named(actorName))).getProvider.get()
   }

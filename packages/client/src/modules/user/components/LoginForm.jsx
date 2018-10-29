@@ -8,7 +8,7 @@ import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary, FormView } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { required, minLength, validateForm } from '../../../../../common/validation';
+import { required, minLength, validateForm } from '../../formValidation/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
 import GitHubButton from '../auth/github';

@@ -5,7 +5,7 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
-import { required, validateForm } from '../../../../../common/validation';
+import { required, validateForm } from '../../formValidation/validation';
 
 const commentFormSchema = {
   content: [required]

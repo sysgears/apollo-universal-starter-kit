@@ -2,14 +2,12 @@ import React from 'react';
 import { merge } from 'lodash';
 import { ApolloLink } from 'apollo-link';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
-import { Resource } from 'i18next';
 import { Reducer } from 'redux';
 import { IResolvers } from 'graphql-tools';
 
-import Module from './Module';
+import CommonModule, { CommonModuleShape } from '../../../common/modules/CommonModule';
 
-export interface BaseModuleShape {
-  localization?: Array<{ ns: string; resources: Resource }>;
+export interface BaseModuleShape extends CommonModuleShape {
   link?: ApolloLink[];
   createNetLink?: () => ApolloLink;
   connectionParam?: ConnectionParamsOptions[];
@@ -23,13 +21,9 @@ export interface BaseModuleShape {
 
 interface BaseModule extends BaseModuleShape {}
 
-class BaseModule extends Module {
+class BaseModule extends CommonModule {
   constructor(...modules: BaseModuleShape[]) {
     super(...modules);
-  }
-
-  get localizations() {
-    return this.localization;
   }
 
   get reducers() {

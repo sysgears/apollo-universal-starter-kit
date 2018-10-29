@@ -260,9 +260,17 @@ export const createFormFields = ({
         }
       }
     } else {
-      if (value.type.constructor === Array && formType === 'form') {
-        if (values[key]) {
-          fields.push(createFormFieldsArray(key, values, value, type, handleChange, handleBlur, formItemLayout));
+      if (value.type.constructor === Array) {
+        if (formType === 'form') {
+          if (values[key]) {
+            fields.push(
+              createFormFieldsArray(key, values, value, type, handleChange, handleBlur, formItemLayout, formType)
+            );
+          }
+        } else if (formType === 'batch' && value.hasOne) {
+          fields.push(
+            createFormFieldsArray(key, values, value, type, handleChange, handleBlur, formItemLayout, formType)
+          );
         }
       }
     }
@@ -278,6 +286,7 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
   let dateFields = [];
   let inputType = 'text';
   let inputKey = key;
+  const optional = schema.values[key].optional;
 
   if (key === 'id' && formType !== 'filter') {
     return false;
@@ -311,6 +320,7 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
             formItemLayout={formItemLayout}
             formType={formType}
             hasTypeOf={hasTypeOf}
+            optional={optional}
           />
         </Col>
       );
@@ -328,6 +338,7 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
             formItemLayout={formItemLayout}
             formType={formType}
             hasTypeOf={hasTypeOf}
+            optional={optional}
           />
         </Col>
       );
@@ -357,6 +368,7 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
       formItemLayout={formItemLayout}
       formType={formType}
       hasTypeOf={hasTypeOf}
+      optional={optional}
     />
   );
 
@@ -384,7 +396,16 @@ const tailFormItemLayout = {
   }
 };
 
-const createFormFieldsArray = (key, values, value, type, handleChange, handleBlur, formItemLayout) => {
+const createFormFieldsArray = (
+  key,
+  values,
+  value,
+  type,
+  handleChange,
+  handleBlur,
+  formItemLayout,
+  formType = 'form'
+) => {
   return (
     <FieldArray
       name={key}
@@ -400,24 +421,27 @@ const createFormFieldsArray = (key, values, value, type, handleChange, handleBlu
                   schema: type,
                   values: mapFormPropsToValues({ schema: type, data: field }),
                   formItemLayout: formItemLayout,
-                  prefix: `${key}[${index}].`
+                  prefix: `${key}[${index}].`,
+                  formType
                 })}
-                {!value.hasOne && (
-                  <FormItem {...tailFormItemLayout}>
-                    <Button color="primary" size="sm" onClick={() => remove(index)}>
-                      Delete
-                    </Button>
-                  </FormItem>
-                )}
+                {!value.hasOne &&
+                  formType !== 'batch' && (
+                    <FormItem {...tailFormItemLayout}>
+                      <Button color="primary" size="sm" onClick={() => remove(index)}>
+                        Delete
+                      </Button>
+                    </FormItem>
+                  )}
               </div>
             ))}
-            {!value.hasOne && (
-              <FormItem {...tailFormItemLayout}>
-                <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
-                  Add field
-                </Button>
-              </FormItem>
-            )}
+            {!value.hasOne &&
+              formType !== 'batch' && (
+                <FormItem {...tailFormItemLayout}>
+                  <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
+                    Add field
+                  </Button>
+                </FormItem>
+              )}
           </FormItem>
         );
       }}

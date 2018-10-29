@@ -18,7 +18,8 @@ export default class RenderSelectQuery extends React.Component {
     meta: PropTypes.object,
     schema: PropTypes.object,
     style: PropTypes.object,
-    formType: PropTypes.string.isRequired
+    formType: PropTypes.string.isRequired,
+    optional: PropTypes.bool
   };
 
   state = {
@@ -60,7 +61,8 @@ export default class RenderSelectQuery extends React.Component {
       formItemLayout,
       meta: { touched, error },
       formType,
-      label
+      label,
+      optional
     } = this.props;
     const { searchText, dirty } = this.state;
     const column = schema.keys().find(key => !!schema.values[key].sortBy) || 'name';
@@ -122,7 +124,7 @@ export default class RenderSelectQuery extends React.Component {
                 };
 
                 const basicProps = {
-                  allowClear: formType !== 'form',
+                  allowClear: formType !== 'form' ? true : optional,
                   showSearch: true,
                   labelInValue: true,
                   dropdownMatchSelectWidth: false,

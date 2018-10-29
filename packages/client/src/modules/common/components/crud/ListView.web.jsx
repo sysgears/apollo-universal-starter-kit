@@ -114,6 +114,7 @@ class ListView extends React.Component {
     link: PropTypes.string.isRequired,
     customColumnFields: PropTypes.object,
     customColumnActions: PropTypes.object,
+    customBatchActions: PropTypes.object,
     customBatchFields: PropTypes.object,
     customActions: PropTypes.object,
     tableScroll: PropTypes.object,
@@ -270,6 +271,7 @@ class ListView extends React.Component {
       customColumnFields = {},
       customColumnActions,
       customActions,
+      customBatchActions,
       customBatchFields,
       updateManyEntries,
       tableScroll = null,
@@ -281,8 +283,8 @@ class ListView extends React.Component {
     const showBatchFields =
       customBatchFields === null
         ? false
-        : customBatchFields && customBatchFields.role
-          ? !!hasRole(customBatchFields.role, currentUser)
+        : customBatchActions && customBatchActions.role
+          ? !!hasRole(customBatchActions.role, currentUser)
           : true;
 
     const showCustomActions =
@@ -338,12 +340,12 @@ class ListView extends React.Component {
             </Col>,
             <Col span={20} key="batchUpdate">
               <Formik
-                initialValues={mapFormPropsToValues({ schema })}
+                initialValues={mapFormPropsToValues({ schema, formType: 'batch' })}
                 validate={values => {
                   DomainValidator.validate(schema, values);
                 }}
                 onSubmit={async (values, { resetForm }) => {
-                  const insertValues = pickInputFields({ schema, values });
+                  const insertValues = pickInputFields({ schema, values, formType: 'batch' });
                   if (selectedRowKeys && Object.keys(insertValues).length > 0) {
                     await updateManyEntries(insertValues, { id_in: selectedRowKeys });
                     this.setState({ selectedRowKeys: [] });
@@ -359,7 +361,8 @@ class ListView extends React.Component {
                       values,
                       formItemLayout: {},
                       prefix: '',
-                      formType: 'batch'
+                      formType: 'batch',
+                      customFields: customBatchFields
                     })}
                     <FormItem>
                       <Button color="primary" type="submit" disabled={!hasSelected} loading={loading && !data}>

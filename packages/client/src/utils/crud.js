@@ -38,10 +38,12 @@ export const mapFormPropsToValues = ({ schema, data = null, formType = 'form' })
         fields[key] = data ? data[key] : [];
       }
     } else {
-      if (value.show !== false && value.type.constructor !== Array) {
-        fields[key] = data ? data[key] : '';
-      } else if (value.type.constructor === Array) {
-        fields[key] = data ? data[key] : [];
+      if (value.show !== false) {
+        if (value.type.constructor === Array && value.type[0].isSchema) {
+          fields[key] = data ? data[key] : [mapFormPropsToValues({ schema: value.type[0], formType })];
+        } else {
+          fields[key] = data ? data[key] : '';
+        }
       }
     }
   }
@@ -90,7 +92,7 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
     } else {
       if (key in values && has(values, key)) {
         if (value.type.isSchema) {
-          inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
+          inputValues[`${key}Id`] = values[key] ? Number(values[key].id ? values[key].id : values[key]) : null;
         } else if (key !== 'id' && value.type.constructor !== Array) {
           inputValues[key] = values[key];
         } else if (value.type.constructor === Array) {
@@ -122,7 +124,7 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
                 if (!isEqual(obj, item)) {
                   update.push({
                     where: { id: obj.id },
-                    data: pickInputFields({ schema: value.type[0], values: obj, data: obj })
+                    data: pickInputFields({ schema: value.type[0], values: obj, data: obj, formType })
                   });
                 }
               }
@@ -130,18 +132,29 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
           }
 
           if (values && values.hasOwnProperty(key)) {
-            values[key].forEach(item => {
-              if (!keys1[item.id]) {
-                create.push(pickInputFields({ schema: value.type[0], values: item, data: item }));
-              }
-            });
+            if (formType === 'batch') {
+              values[key].forEach(item => {
+                if (!keys1[item.id]) {
+                  update.push({
+                    where: { id: 0 },
+                    data: pickInputFields({ schema: value.type[0], values: item, data: item, formType })
+                  });
+                }
+              });
+            } else {
+              values[key].forEach(item => {
+                if (!keys1[item.id]) {
+                  create.push(pickInputFields({ schema: value.type[0], values: item, data: item, formType }));
+                }
+              });
+            }
           }
 
           //console.log('created: ', create);
           //console.log('updated: ', update);
           //console.log('deleted: ', deleted);
 
-          if (data) {
+          if (data || formType === 'batch') {
             inputValues[key] = { create, update, delete: deleted };
           } else {
             inputValues[key] = { create };

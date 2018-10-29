@@ -61,7 +61,22 @@ export const removeEmpty = (obj, schema = null) => {
   return Object.keys(obj)
     .filter(key => removeBySchema(key, obj, schema))
     .reduce((redObj, key) => {
-      redObj[key] = obj[key];
+      if (schema && schema.values[key] && schema.values[key].type.constructor === Array) {
+        if (obj[key].create && obj[key].create.length > 0) {
+          let tmpObj = obj[key];
+          tmpObj.create[0] = removeEmpty(obj[key].create[0], schema.values[key].type[0]);
+          redObj[key] = tmpObj;
+        } else if (obj[key].update && obj[key].update.length > 0) {
+          let tmpObj = obj[key];
+          tmpObj.update[0].data = removeEmpty(obj[key].update[0].data, schema.values[key].type[0]);
+          redObj[key] = tmpObj;
+        } else {
+          redObj[key] = obj[key];
+        }
+      } else {
+        redObj[key] = obj[key];
+      }
+
       return redObj;
     }, {});
 };

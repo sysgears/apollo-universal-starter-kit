@@ -18,7 +18,7 @@ class CounterModule extends ScalaModule with GuiceActorRefProvider {
 
   @Provides
   @Named(CounterActor.name)
-  def counterActor(actorSystem: ActorSystem) = {
+  def actor(actorSystem: ActorSystem) = {
     provideActorRef(actorSystem, CounterActor.name)
   }
 }

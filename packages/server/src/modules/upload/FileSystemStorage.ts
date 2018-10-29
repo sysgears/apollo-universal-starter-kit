@@ -22,7 +22,8 @@ class FileSystemStorage {
   public save(uploadFileStream: UploadFileStream, location: string, shouldGenerateId = true): Promise<UploadedFile> {
     const { stream, filename, mimetype } = uploadFileStream;
     const id = shouldGenerateId ? `${shortid.generate()}-` : '';
-    const path = `${location}/${id}${filename}`;
+    const sanitizedFilename = filename.replace(/[^a-z0-9_.\-]/gi, '_').toLowerCase();
+    const path = `${location}/${id}${sanitizedFilename}`;
 
     // Check if UPLOAD_DIR exists, create one if not
     if (!fs.existsSync(location)) {

@@ -47,6 +47,7 @@
     "no-empty-interface": false,
     "no-conditional-assignment": true,
     "no-consecutive-blank-lines": false,
+    "no-namespace": [true, "allow-declarations"],
     "no-console": [true, "log", "debug", "info", "time", "timeEnd", "trace"],
     "no-construct": true,
     "no-debugger": true,

@@ -1,6 +1,7 @@
 import chai from 'chai';
+import { Server } from 'http';
 import chaiHttp from 'chai-http';
-
+import { ApolloClient } from 'apollo-client';
 import WebSocket from 'ws';
 
 import createApolloClient from '../../../common/createApolloClient';
@@ -10,8 +11,8 @@ import knex from '../sql/connector';
 chai.use(chaiHttp);
 chai.should();
 
-let server;
-let apollo;
+let server: Server;
+let apollo: ApolloClient<any>;
 
 before(async () => {
   require('babel-register')({ presets: ['env'] });
@@ -22,9 +23,8 @@ before(async () => {
   server = await require('../server').default;
 
   global.WebSocket = WebSocket;
-  apollo = createApolloClient({
-    apiUrl: `http://localhost:${process.env['PORT']}/graphql`
-  });
+  // TODO: remove any type after converting the createApolloClient.js file into Typescript
+  apollo = createApolloClient({ apiUrl: `http://localhost:${process.env.PORT}/graphql` } as any);
 });
 
 after(() => {

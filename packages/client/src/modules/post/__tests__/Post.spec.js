@@ -290,12 +290,14 @@ describe('Posts and comments example UI works', () => {
     expect(content.textContent).to.not.include('Post comment 3');
   });
 
-  step('Comment deleting optimistically removes comment', () => {
+  step('Comment deleting optimistically removes comment', async () => {
     const deleteButtons = findAll(container, '.delete-comment');
     expect(deleteButtons).has.lengthOf(3);
     click(deleteButtons[deleteButtons.length - 1]);
-    expect(content.textContent).to.not.include('Post comment 24');
-    expect(findAll(container, '.delete-comment')).has.lengthOf(2);
+    await wait(() => {
+      expect(content.textContent).to.not.include('Post comment 24');
+      expect(findAll(container, '.delete-comment')).has.lengthOf(2);
+    });
   });
 
   step('Clicking comment delete removes the comment', () => {

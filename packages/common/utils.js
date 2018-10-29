@@ -50,7 +50,7 @@ const removeBySchema = (key, obj, schema) => {
   } else {
     const schemaKey = key.endsWith('Id') ? key.substring(0, key.length - 2) : key;
     if (schema.values[schemaKey].type.isSchema) {
-      return obj[key] !== '' && obj[key] !== 0;
+      return obj[key] !== '' && obj[key] !== null;
     } else {
       return obj[key] !== '';
     }

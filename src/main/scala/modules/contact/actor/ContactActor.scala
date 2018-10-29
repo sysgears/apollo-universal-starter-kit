@@ -7,17 +7,16 @@ import javax.mail.internet.InternetAddress
 import modules.common.FieldError
 import modules.contact.actor.ContactActor.SendMail
 import modules.contact.models.{Contact, ContactPayload}
-import common.Named
 
 import scala.util.{Failure, Success, Try}
 
-object ContactActor extends Named {
+object ContactActor {
 
   case class SendMail(contact: Contact)
 
   def props(mailer: Mailer, config: Config) = Props(new ContactActor(mailer, config))
 
-  override final val name = "ContactActor"
+  final val name = "ContactActor"
 }
 
 class ContactActor(mailer: Mailer,

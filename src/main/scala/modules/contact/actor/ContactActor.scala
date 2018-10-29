@@ -4,7 +4,6 @@ import akka.actor.{Actor, ActorLogging}
 import com.github.jurajburian.mailer.{Content, Mailer, Message}
 import com.google.inject.Inject
 import com.typesafe.config.Config
-import common.Named
 import javax.mail.internet.InternetAddress
 import modules.common.FieldError
 import modules.contact.actor.ContactActor.SendMail
@@ -12,11 +11,11 @@ import modules.contact.models.{Contact, ContactPayload}
 
 import scala.util.{Failure, Success, Try}
 
-object ContactActor extends Named {
+object ContactActor {
 
   case class SendMail(contact: Contact)
 
-  override final val name = "ContactActor"
+  final val name = "ContactActor"
 }
 
 class ContactActor @Inject()(mailer: Mailer,

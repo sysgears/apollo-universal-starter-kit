@@ -3,20 +3,19 @@ package modules.counter.services.count
 import akka.actor.{Actor, ActorLogging}
 import akka.pattern._
 import com.google.inject.Inject
-import common.Named
 import modules.counter.models.Counter
 import modules.counter.repositories.CounterRepo
 import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
 
 import scala.concurrent.ExecutionContext
 
-object CounterActor extends Named {
+object CounterActor {
 
   object GetAmount
 
   case class IncrementAndGet(amount: Int)
 
-  override final val name = "CounterActor"
+  final val name = "CounterActor"
 }
 
 class CounterActor @Inject()(counterRepo: CounterRepo)

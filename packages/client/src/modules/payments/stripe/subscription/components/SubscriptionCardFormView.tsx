@@ -5,7 +5,7 @@ import { CardElement, injectStripe } from 'react-stripe-elements';
 import { TranslateFunction } from '../../../../../i18n';
 import Field from '../../../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert, Label } from '../../../../common/components/web';
-import { required, validateForm } from '../../../../../../../common/modules/validation';
+import { required, validate } from '../../../../../../../common/modules/validation';
 
 interface SubscriptionCardFormViewProps {
   submitting: boolean;
@@ -49,7 +49,7 @@ const SubscriptionFormWithFormik = withFormik({
     const { stripe, onSubmit } = props;
     onSubmit({ name }, stripe);
   },
-  validate: values => validateForm(values, { name: [required] }),
+  validate: values => validate(values, { name: [required] }),
   displayName: 'StripeSubscriptionForm', // helps with React DevTools,
   enableReinitialize: true
 });

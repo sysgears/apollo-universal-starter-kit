@@ -6,7 +6,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, RenderSelect, RenderSwitch, FormView, primary } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { email, minLength, required, match, validateForm } from '../../../../../common/modules/validation';
+import { email, minLength, required, match, validate } from '../../../../../common/modules/validation';
 import settings from '../../../../../../settings';
 import translate from '../../../i18n';
 
@@ -21,8 +21,6 @@ const handleRoleChange = (type, value, setFieldValue) => {
   const preparedValue = Array.isArray(value) ? value[0] : value;
   setFieldValue(type, preparedValue);
 };
-
-const validate = values => validateForm(values, userFormSchema);
 
 const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
   const options = [
@@ -182,7 +180,7 @@ const UserFormWithFormik = withFormik({
     onSubmit(values).catch(e => setErrors(e));
   },
   displayName: 'SignUpForm ', // helps with React DevTools
-  validate: values => validate(values)
+  validate: values => validate(values, userFormSchema)
 });
 
 const styles = StyleSheet.create({

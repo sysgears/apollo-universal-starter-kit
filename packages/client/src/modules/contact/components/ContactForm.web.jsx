@@ -4,7 +4,7 @@ import { withFormik } from 'formik';
 
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { required, email, minLength, validateForm } from '../../../../../common/modules/validation';
+import { required, email, minLength, validate } from '../../../../../common/modules/validation';
 
 const contactFormSchema = {
   name: [required, minLength(3)],
@@ -62,7 +62,7 @@ const ContactFormWithFormik = withFormik({
       setErrors(e);
     }
   },
-  validate: values => validateForm(values, contactFormSchema),
+  validate: values => validate(values, contactFormSchema),
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 

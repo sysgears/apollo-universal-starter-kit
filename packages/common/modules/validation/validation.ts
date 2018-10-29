@@ -82,18 +82,25 @@ export const phoneNumber = (value: any) =>
   value && !/^(0|[1-9][0-9]{9})$/i.test(value) ? i18n.t('validation:phoneNumber') : undefined;
 
 /**
- * Validates form according to the from schema
+ * Schema interface for validate function
+ */
+export interface Schema {
+  [key: string]: Array<(value: any, values: { [key: string]: any }) => string | undefined> | Schema;
+}
+
+/**
+ * Validates the income object according to the income schema
  *
- * @param formValues
- * @param formSchema
+ * @param object
+ * @param schema
  * @return object with errors
  */
-export const validateForm = (formValues: { [key: string]: any }, formSchema: { [key: string]: any }) => {
+export const validate = (object: { [key: string]: any }, schema: Schema) => {
   const errors = {};
   const validateFormInner = (
     values: { [key: string]: any },
-    schema: { [key: string]: any },
-    collector: { [key: string]: any }
+    innerSchema: Schema,
+    collector: { [key: string]: string }
   ) => {
     Object.keys(schema)
       .filter(v => schema.hasOwnProperty(v))
@@ -108,12 +115,12 @@ export const validateForm = (formValues: { [key: string]: any }, formSchema: { [
             }
           });
         } else {
-          validateFormInner(values[v], schema[v], collector);
+          validateFormInner(values[v], schema[v] as Schema, collector);
         }
       });
 
     return collector;
   };
 
-  return validateFormInner(formValues, formSchema, errors);
+  return validateFormInner(object, schema, errors);
 };

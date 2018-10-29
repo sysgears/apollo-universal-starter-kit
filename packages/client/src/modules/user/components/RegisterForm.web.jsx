@@ -5,7 +5,7 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { match, email, minLength, required, validateForm } from '../../../../../common/modules/validation';
+import { match, email, minLength, required, validate } from '../../../../../common/modules/validation';
 import settings from '../../../../../../settings';
 
 const registerFormSchema = {
@@ -14,8 +14,6 @@ const registerFormSchema = {
   password: [required, minLength(settings.user.auth.password.minLength)],
   passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
 };
-
-const validate = values => validateForm(values, registerFormSchema);
 
 const RegisterForm = ({ values, handleSubmit, submitting, error, t }) => {
   return (
@@ -62,7 +60,7 @@ RegisterForm.propTypes = {
 
 const RegisterFormWithFormik = withFormik({
   mapPropsToValues: () => ({ username: '', email: '', password: '', passwordConfirmation: '' }),
-  validate: values => validate(values),
+  validate: values => validate(values, registerFormSchema),
   async handleSubmit(
     values,
     {

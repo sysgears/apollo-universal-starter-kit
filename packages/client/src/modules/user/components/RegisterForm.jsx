@@ -6,7 +6,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary, FormView } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { match, email, minLength, required, validateForm } from '../../../../../common/modules/validation';
+import { match, email, minLength, required, validate } from '../../../../../common/modules/validation';
 import settings from '../../../../../../settings';
 import translate from '../../../i18n';
 
@@ -16,8 +16,6 @@ const registerFormSchema = {
   password: [required, minLength(settings.user.auth.password.minLength)],
   passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
 };
-
-const validate = values => validateForm(values, registerFormSchema);
 
 const RegisterForm = ({ values, handleSubmit, t }) => {
   return (
@@ -79,7 +77,7 @@ RegisterForm.propTypes = {
 
 const RegisterFormWithFormik = withFormik({
   mapPropsToValues: () => ({ username: '', email: '', password: '', passwordConfirmation: '' }),
-  validate: values => validate(values),
+  validate: values => validate(values, registerFormSchema),
   async handleSubmit(
     values,
     {

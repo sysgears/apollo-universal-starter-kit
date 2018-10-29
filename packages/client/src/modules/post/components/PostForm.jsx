@@ -7,14 +7,12 @@ import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, Button, primary } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { required, validateForm } from '../../../../../common/modules/validation';
+import { required, validate } from '../../../../../common/modules/validation';
 
 const postFormSchema = {
   title: [required],
   content: [required]
 };
-
-const validate = values => validateForm(values, postFormSchema);
 
 const PostForm = ({ values, handleSubmit, t }) => {
   return (
@@ -56,7 +54,7 @@ const PostFormWithFormik = withFormik({
     title: props.post && props.post.title,
     content: props.post && props.post.content
   }),
-  validate: values => validate(values),
+  validate: values => validate(values, postFormSchema),
   handleSubmit(
     values,
     {

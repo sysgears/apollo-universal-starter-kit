@@ -1,13 +1,14 @@
 package modules.contact.actor
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{Actor, ActorLogging}
 import com.github.jurajburian.mailer.{Content, Mailer, Message}
+import com.google.inject.Inject
 import com.typesafe.config.Config
+import common.Named
 import javax.mail.internet.InternetAddress
 import modules.common.FieldError
 import modules.contact.actor.ContactActor.SendMail
 import modules.contact.models.{Contact, ContactPayload}
-import common.Named
 
 import scala.util.{Failure, Success, Try}
 
@@ -15,13 +16,11 @@ object ContactActor extends Named {
 
   case class SendMail(contact: Contact)
 
-  def props(mailer: Mailer, config: Config) = Props(new ContactActor(mailer, config))
-
   override final val name = "ContactActor"
 }
 
-class ContactActor(mailer: Mailer,
-                   config: Config) extends Actor with ActorLogging {
+class ContactActor @Inject()(mailer: Mailer,
+                             config: Config) extends Actor with ActorLogging {
 
   def receive: Receive = {
     case sendMail: SendMail =>

@@ -5,7 +5,9 @@
   "scripts": {
     "eslint": "eslint --fix --ext js --ext jsx --ext json .",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
-    "lint": "yarn eslint && yarn tslint"
+    "lint": "yarn eslint && yarn tslint",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"modules/**/*.spec.*\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"modules/**/*.spec.*\""
   },
   "dependencies": {
     "apollo-cache-inmemory": "1.2.9",
@@ -28,6 +30,10 @@
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
-    "eslint": "^4.13.1"
+    "eslint": "^4.13.1",
+    "chai": "^4.1.2",
+    "mocha": "^5.1.1",
+    "mocha-steps": "^1.1.0",
+    "mocha-webpack": "^2.0.0-beta.0"
   }
 }

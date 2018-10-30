@@ -8,8 +8,8 @@ trait AppInitialization {
 
   def withActionsBefore(actionsBefore: => Seq[Future[Unit]])
                        (bindAndHandle: => Future[ServerBinding])
-                       (implicit executionContext: ExecutionContext): Future[Unit] = for {
+                       (implicit executionContext: ExecutionContext): Future[ServerBinding] = for {
     _ <- Future.sequence(actionsBefore)
-    _ <- bindAndHandle
-  } yield ()
+    serverBinding <- bindAndHandle
+  } yield serverBinding
 }

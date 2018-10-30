@@ -1,95 +1,95 @@
-/*tslint:disable: variable-name*/
+/* tslint:disable: variable-name */
 import i18n from 'i18next';
 
 /**
- * Non empty validation
+ * Validates if the value is empty.
  *
  * @param value
- * @return {undefined | message}
+ * @return {undefined | string}
  */
 export const required = (value: any) => (value ? undefined : i18n.t('validation:required'));
 
 /**
- * Match a particular field
+ * Validates if the value matches a particular value.
  * @param comparableField
  */
 export const match = (comparableField: string) => (value: any, values: any) =>
   value !== values[comparableField] ? i18n.t('validation:match', { comparableField }) : undefined;
 
 /**
- * Max length validation
+ * Validates the maximal length of the value.
  * Usage: const maxLength15 = maxLength(15)
  *
  * @param max
- * @return {undefined | message}
+ * @return {undefined | string}
  */
 export const maxLength = (max: number) => (value: any) =>
   value && value.length > max ? i18n.t('validation:maxLength', { max }) : undefined;
 
 /**
- * Min length validation
+ * Validates the minimal length of the value.
  * Usage: export const minLength2 = minLength(2)
  *
  * @param min
- * @return {undefined | message}
+ * @return {undefined | string}
  */
 export const minLength = (min: number) => (value: any) =>
   value && value.length < min ? i18n.t('validation:minLength', { min }) : undefined;
 
 /**
- * Number validation
+ * Validates if the value is a number.
  *
  * @param value
- * @return {undefined | message}
+ * @return {undefined | string}
  */
 export const number = (value: any) => (value && isNaN(Number(value)) ? i18n.t('validation:number') : undefined);
 
 /**
- * Minimum value validation
+ * Validates the minimal value.
  * Usage: export const minValue18 = minValue(18);
  *
  * @param min
- * @return {undefined | message}
+ * @return {undefined | string}
  */
 export const minValue = (min: number) => (value: any) =>
   value && value < min ? i18n.t('validation:minValue', { min }) : undefined;
 
 /**
- * Email validation
+ * Validates the email.
  *
  * @param value
- * @return {undefined | message}
+ * @return {undefined | string}
  */
 export const email = (value: any) =>
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? i18n.t('validation:email') : undefined;
 
 /**
- * Alpha numeric validation
+ * Validates if the value is alpha-numeric.
  *
  * @param value
- * @return {undefined | message}
+ * @return {undefined | string}
  */
 export const alphaNumeric = (value: any) =>
   value && /[^a-zA-Z0-9 ]/i.test(value) ? i18n.t('validation:alphaNumeric') : undefined;
 
 /**
- * Phone number validation
+ * Validates the phone number.
  *
  * @param value
- * @return {undefined | message}
+ * @return {undefined | string}
  */
 export const phoneNumber = (value: any) =>
   value && !/^(0|[1-9][0-9]{9})$/i.test(value) ? i18n.t('validation:phoneNumber') : undefined;
 
 /**
- * Schema interface for validate function
+ * Schema interface for the validate function.
  */
 export interface Schema {
   [key: string]: Array<(value: any, values: { [key: string]: any }) => string | undefined> | Schema;
 }
 
 /**
- * Validates the income object according to the income schema
+ * Validates the input object according to the input schema.
  *
  * @param object
  * @param schema

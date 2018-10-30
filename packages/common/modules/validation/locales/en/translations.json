@@ -1,7 +1,7 @@
 {
   "required": "Required",
-  "match": "Should match field '{{ comparableField }}'",
-  "maxLength": "Must be {{ max }} characters or less",
+  "match": "Must match the field '{{ comparableField }}'",
+  "maxLength": "Must be {{ max }} or fewer characters",
   "minLength": "Must be {{ min }} characters or more",
   "number": "Must be a number",
   "minValue": "Must be at least {{ min }}",

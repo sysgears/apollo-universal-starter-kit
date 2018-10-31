@@ -4,6 +4,7 @@
   "maxLength": "Must be {{ max }} or fewer characters",
   "minLength": "Must be {{ min }} characters or more",
   "number": "Must be a number",
+  "string": "Must be a string",
   "minValue": "Must be at least {{ min }}",
   "email": "Invalid email address",
   "alphaNumeric": "Only alphanumeric characters",

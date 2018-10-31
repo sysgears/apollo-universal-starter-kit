@@ -45,6 +45,15 @@ export const minLength = (min: number) => (value: any) =>
 export const number = (value: any) => (value && isNaN(Number(value)) ? i18n.t('validation:number') : undefined);
 
 /**
+ * Validates if the value is a string.
+ *
+ * @param value
+ * @return {undefined | string}
+ */
+export const string = (value: any) =>
+  value && !(typeof value === 'string' || value instanceof String) ? i18n.t('validation:string') : undefined;
+
+/**
  * Validates the minimal value.
  * Usage: export const minValue18 = minValue(18);
  *
@@ -79,7 +88,7 @@ export const alphaNumeric = (value: any) =>
  * @return {undefined | string}
  */
 export const phoneNumber = (value: any) =>
-  value && !/^(0|[1-9][0-9]{9})$/i.test(value) ? i18n.t('validation:phoneNumber') : undefined;
+  value && !/^(\+)?([ 0-9]){10,16}$/i.test(value) ? i18n.t('validation:phoneNumber') : undefined;
 
 /**
  * Schema interface for the validate function.
@@ -102,10 +111,10 @@ export const validate = (object: { [key: string]: any }, schema: Schema) => {
     innerSchema: Schema,
     collector: { [key: string]: string }
   ) => {
-    Object.keys(schema)
-      .filter(v => schema.hasOwnProperty(v))
+    Object.keys(innerSchema)
+      .filter(v => innerSchema.hasOwnProperty(v))
       .forEach(v => {
-        const s = schema[v];
+        const s = innerSchema[v];
 
         if (Array.isArray(s)) {
           s.forEach(validator => {
@@ -115,7 +124,7 @@ export const validate = (object: { [key: string]: any }, schema: Schema) => {
             }
           });
         } else {
-          validateFormInner(values[v], schema[v] as Schema, collector);
+          validateFormInner(values[v], innerSchema[v] as Schema, collector);
         }
       });
 

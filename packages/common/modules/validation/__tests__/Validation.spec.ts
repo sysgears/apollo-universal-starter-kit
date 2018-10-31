@@ -98,7 +98,7 @@ describe('Validation functionality works', () => {
     expect(phoneNumber('639991122')).to.be.a('string');
   });
 
-  step('"validate" should validate simple income object to income schema ', () => {
+  step('"validate" should compare the simple input object to input schema ', () => {
     let schema: Schema = { name: [required, minLength(5), maxLength(7)] };
     let dataToValidate: { [key: string]: any } = { name: 'login' };
     expect(validate(dataToValidate, schema)).to.be.empty;
@@ -137,7 +137,7 @@ describe('Validation functionality works', () => {
       .to.be.a('string');
   });
 
-  step('"validate" should validate income object with nesting object to income schema', () => {
+  step('"validate" should compare the input object with nested objects to the input schema', () => {
     let schema: Schema = { name: { firstName: [required, minLength(5), maxLength(8)] } };
     let dataToValidate: { [key: string]: any } = { name: { firstName: 'GoodName' } };
     expect(validate(dataToValidate, schema)).to.be.empty;
@@ -150,7 +150,7 @@ describe('Validation functionality works', () => {
       .to.be.a('string');
   });
 
-  step('Should change language of validation message from English into Russian and back', () => {
+  step('Should change the language of the validation message from English to Russian and vice versa', () => {
     expect(required('')).to.match(/[a-zA-Z]/g);
     i18n.changeLanguage('ru-RU');
     expect(required('')).to.match(/[а-яА-Я]/g);

@@ -4,18 +4,18 @@ import { i18n as i18next, Resource } from 'i18next';
 import log from './log';
 
 /**
- * Creates an object composed of the own and inherited enumerable property paths of object that are not omitted,
- * working with the nesting objects.
+ * Removes the specified paths from the input object and the nested objects.
+ * Returns a new object composed of the properties that were not removed.
  *
  * @param obj - The source object
- * @param paths - The property paths to omit
+ * @param paths - The property paths to remove
  */
-export const nestedOmit = (obj: { [key: string]: any }, paths: string | string[]) => {
+export const omitNested = (obj: { [key: string]: any }, paths: string | string[]) => {
   const omittedObject = _.omit(obj, paths);
 
   Object.keys(omittedObject).forEach((key: string) => {
     if (typeof omittedObject[key] === 'object') {
-      omittedObject[key] = nestedOmit(omittedObject[key], paths);
+      omittedObject[key] = omitNested(omittedObject[key], paths);
     }
   });
 
@@ -23,14 +23,14 @@ export const nestedOmit = (obj: { [key: string]: any }, paths: string | string[]
 };
 
 /**
- * Removes '__typename' field in the incoming object.
+ * Removes the '__typename' field from the incoming object.
  *
  * @param obj - The source object
  */
-export const removeTypename = (obj: { [key: string]: any }) => nestedOmit(obj, '__typename');
+export const removeTypename = (obj: { [key: string]: any }) => omitNested(obj, '__typename');
 
 /**
- * Wraps target object to trace and log all method calls
+ * Wraps the target object to trace and log all method calls
  *
  * @param {*} obj target object to trace
  */
@@ -48,9 +48,9 @@ export const traceMethodCalls = (obj: any) => {
 };
 
 /**
- * Adds resources into i18next bundle
+ * Adds resources into the i18next bundle
  *
- * @param i18n - I18next
+ * @param i18n - i18next
  * @param resources - The resources to add
  */
 export const addResourcesI18n = (i18n: i18next, resources: Array<{ ns: string; resources: Resource }>) => {
@@ -66,7 +66,7 @@ export const addResourcesI18n = (i18n: i18next, resources: Array<{ ns: string; r
 };
 
 /**
- * Gets current platform
+ * Gets the current platform such as web, server, or mobile
  */
 const getPlatform = () => {
   if (typeof document !== 'undefined') {

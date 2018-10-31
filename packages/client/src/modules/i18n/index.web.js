@@ -8,17 +8,11 @@ import ClientModule from '../ClientModule';
 import { MenuItem, LanguagePicker } from '../../modules/common/components/web';
 import modules from '../';
 import settings from '../../../../../settings';
+import { addResourcesI18n } from '../../../../common/utils';
 
 const I18nProvider = ({ i18n, children }) => {
-  for (const localization of modules.localizations) {
-    for (const lang of Object.keys(localization.resources)) {
-      i18n.addResourceBundle(
-        i18n.options.whitelist.filter(lng => lng.indexOf(lang) > -1)[0] || lang,
-        localization.ns,
-        localization.resources[lang]
-      );
-    }
-  }
+  addResourcesI18n(i18n, modules.localizations);
+
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };
 

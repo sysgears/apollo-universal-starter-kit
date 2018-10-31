@@ -2,8 +2,10 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 import i18n from 'i18next';
-import resources from '../locales';
 
+import modules from '../..';
+import { addResourcesI18n } from '../../../utils';
+import settings from '../../../../../settings';
 import {
   required,
   match,
@@ -18,25 +20,14 @@ import {
   validate,
   Schema
 } from '../validation';
-// import settings from '../../../../../settings';
 
-const I18N_CONFIG = {
-  resources: {
-    en: {
-      validation: {
-        ...resources.en
-      }
-    },
-    ru: {
-      validation: {
-        ...resources.ru
-      }
-    }
-  },
-  lng: 'en'
-};
-
-i18n.init(I18N_CONFIG);
+i18n.init({
+  fallbackLng: settings.i18n.fallbackLng,
+  resources: {},
+  lng: 'en',
+  whitelist: settings.i18n.langList
+});
+addResourcesI18n(i18n, modules.localizations);
 
 describe('Validation functionality works', () => {
   step('Validation "required"  works correctly', () => {
@@ -161,9 +152,9 @@ describe('Validation functionality works', () => {
 
   step('Should change language of validation message from English into Russian and back', () => {
     expect(required('')).to.match(/[a-zA-Z]/g);
-    i18n.changeLanguage('ru');
+    i18n.changeLanguage('ru-RU');
     expect(required('')).to.match(/[а-яА-Я]/g);
-    i18n.changeLanguage('en');
+    i18n.changeLanguage('en-US');
     expect(required('')).to.match(/[a-zA-Z]/g);
   });
 });

@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import { i18n as i18next, Resource } from 'i18next';
+
 import log from './log';
 
 /**
@@ -6,7 +8,7 @@ import log from './log';
  * working with the nesting objects.
  *
  * @param obj - The source object
- * @param paths - The property paths to omit.
+ * @param paths - The property paths to omit
  */
 export const nestedOmit = (obj: { [key: string]: any }, paths: string | string[]) => {
   const omittedObject = _.omit(obj, paths);
@@ -46,6 +48,24 @@ export const traceMethodCalls = (obj: any) => {
 };
 
 /**
+ * Adds resources into i18next bundle
+ *
+ * @param i18n - I18next
+ * @param resources - The resources to add
+ */
+export const addResourcesI18n = (i18n: i18next, resources: Array<{ ns: string; resources: Resource }>) => {
+  for (const localization of resources) {
+    for (const lang of Object.keys(localization.resources)) {
+      i18n.addResourceBundle(
+        (i18n.options.whitelist as string[]).filter((lng: string) => lng.indexOf(lang) > -1)[0] || lang,
+        localization.ns,
+        localization.resources[lang]
+      );
+    }
+  }
+};
+
+/**
  * Gets current platform
  */
 const getPlatform = () => {
@@ -58,4 +78,7 @@ const getPlatform = () => {
   }
 };
 
+/**
+ * Current platform
+ */
 export const PLATFORM = getPlatform();

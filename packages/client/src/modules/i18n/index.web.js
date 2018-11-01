@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import i18n from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import { reactI18nextModule, I18nextProvider } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 
 import ClientModule from '../ClientModule';
 import { MenuItem, LanguagePicker } from '../../modules/common/components/web';
@@ -20,29 +19,6 @@ I18nProvider.propTypes = {
   i18n: PropTypes.object,
   children: PropTypes.node
 };
-
-const I18N_CONFIG = {
-  fallbackLng: settings.i18n.fallbackLng,
-  resources: {},
-  debug: false, // set true to show logs
-  whitelist: settings.i18n.langList,
-  detection: {
-    lookupCookie: settings.i18n.cookie,
-    caches: __SSR__ ? ['cookie'] : ['localStorage']
-  },
-  interpolation: {
-    escapeValue: false // not needed for react!!
-  },
-  react: {
-    wait: false
-  }
-};
-
-if (__CLIENT__) {
-  i18n.use(LanguageDetector);
-}
-
-i18n.use(reactI18nextModule).init(I18N_CONFIG);
 
 const langPicker =
   settings.i18n.enabled && settings.i18n.langPickerRender

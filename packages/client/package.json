@@ -64,7 +64,6 @@
     "graphql-tag": "^2.6.0",
     "history": "^4.7.2",
     "i18next": "^11.2.3",
-    "i18next-browser-languagedetector": "^2.1.0",
     "immutability-helper": "^2.6.2",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",

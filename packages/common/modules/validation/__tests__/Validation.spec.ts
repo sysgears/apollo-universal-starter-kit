@@ -3,9 +3,8 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 import i18n from 'i18next';
 
-import modules from '../..';
-import { addResourcesI18n } from '../../../utils';
-import settings from '../../../../../settings';
+import '../..';
+
 import {
   required,
   match,
@@ -21,37 +20,29 @@ import {
   Schema
 } from '../validation';
 
-i18n.init({
-  fallbackLng: settings.i18n.fallbackLng,
-  resources: {},
-  lng: 'en',
-  whitelist: settings.i18n.langList
-});
-addResourcesI18n(i18n, modules.localizations);
-
-describe('Validation functionality works', () => {
-  step('Validation "required"  works correctly', () => {
+describe('Check if validation works', () => {
+  step('Validator "required"  works correctly', () => {
     expect(required('')).to.be.a('string');
     expect(required('work')).to.be.equal(undefined);
   });
 
-  step('Validation "match" works correctly', () => {
+  step('Validator "match" works correctly', () => {
     expect(match('name')('Login', { name: 'Login' })).to.be.an('undefined');
     expect(match('name')('Login', { name: 'Loginnn' })).to.be.a('string');
     expect(match('name')('Login', {})).to.be.a('string');
   });
 
-  step('Validation "maxLength" works correctly', () => {
+  step('Validator "maxLength" works correctly', () => {
     expect(maxLength(5)('Login')).to.be.an('undefined');
     expect(maxLength(5)('Loginn')).to.be.a('string');
   });
 
-  step('Validation "maxLength" works correctly', () => {
+  step('Validator "maxLength" works correctly', () => {
     expect(minLength(5)('Login')).to.be.an('undefined');
     expect(minLength(5)('Logi')).to.be.a('string');
   });
 
-  step('Validation "number" works correctly', () => {
+  step('Validator "number" works correctly', () => {
     expect(number(5)).to.be.an('undefined');
     expect(number('5')).to.be.an('undefined');
     expect(number('0')).to.be.an('undefined');
@@ -60,7 +51,7 @@ describe('Validation functionality works', () => {
     expect(number('..11')).to.be.a('string');
   });
 
-  step('Validation "string" works correctly', () => {
+  step('Validator "string" works correctly', () => {
     expect(string('string')).to.be.an('undefined');
     expect(string('&*(&*(')).to.be.an('undefined');
     expect(string('!')).to.be.an('undefined');
@@ -71,19 +62,19 @@ describe('Validation functionality works', () => {
     expect(string(/^[A-Z0-9._%+-]{2,4}$/)).to.be.a('string');
   });
 
-  step('Validation "minValue" works correctly', () => {
+  step('Validator "minValue" works correctly', () => {
     expect(minValue(5)(5)).to.be.an('undefined');
     expect(minValue(5)(4)).to.be.a('string');
   });
 
-  step('Validation "email" works correctly', () => {
+  step('Validator "email" works correctly', () => {
     expect(email('test@test.ru')).to.be.an('undefined');
     expect(email('te234st@te32st.com')).to.be.an('undefined');
     expect(email('te-234st@te32st.c')).to.be.a('string');
     expect(email('test*@te32st.com')).to.be.a('string');
   });
 
-  step('Validation "alphaNumeric" works correctly', () => {
+  step('Validator "alphaNumeric" works correctly', () => {
     expect(alphaNumeric('d')).to.be.an('undefined');
     expect(alphaNumeric('2')).to.be.an('undefined');
     expect(alphaNumeric('*')).to.be.a('string');
@@ -91,7 +82,7 @@ describe('Validation functionality works', () => {
     expect(alphaNumeric('`')).to.be.a('string');
   });
 
-  step('Validation "phoneNumber" works correctly', () => {
+  step('Validator "phoneNumber" works correctly', () => {
     expect(phoneNumber('0639991122')).to.be.an('undefined');
     expect(phoneNumber('+380639991122')).to.be.an('undefined');
     expect(phoneNumber('+38 063 999 11 22')).to.be.an('undefined');

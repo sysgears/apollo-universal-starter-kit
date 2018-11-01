@@ -7,14 +7,12 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { required, email, validateForm } from '../../../../../common/validation';
+import { required, email, validate } from '../../../../../common/modules/validation';
 import translate from '../../../i18n';
 
 const forgotPasswordFormSchema = {
   email: [required, email]
 };
-
-const validate = values => validateForm(values, forgotPasswordFormSchema);
 
 const ForgotPasswordForm = ({ handleSubmit, values, sent, t }) => {
   return (
@@ -79,7 +77,7 @@ const ForgotPasswordFormWithFormik = withFormik({
       })
       .catch(e => setErrors(e));
   },
-  validate: values => validate(values),
+  validate: values => validate(values, forgotPasswordFormSchema),
   displayName: 'ForgotPasswordForm' // helps with React DevTools
 });
 

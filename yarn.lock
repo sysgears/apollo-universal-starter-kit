@@ -1504,10 +1504,10 @@
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
   integrity sha512-KEIlhXnIutzKwRbQkGWb/I4HFqBuUykAdHgDED6xqwXJfONCjF5VoE0cXEiurh3XauygxzeDzgtXUqvLkxFzzA==
 
-"@types/expo@^27.0.11":
-  version "27.0.11"
-  resolved "https://registry.yarnpkg.com/@types/expo/-/expo-27.0.11.tgz#459b1523e4862f0952ad25ca812b03265dcf654c"
-  integrity sha512-u4mrkfJ9WkuK7n9s42t0MEOQjnPnPde7nPr/hS8BGy48we7wMn8jmpHDfLk67vYq0X7fLyUN2oX/lw2BdVHN8A==
+"@types/expo@^30.0.0":
+  version "30.0.0"
+  resolved "https://registry.yarnpkg.com/@types/expo/-/expo-30.0.0.tgz#fb19a1148b8d3136bf31cdc2ea09baa81b282a36"
+  integrity sha512-LFpFv/vVB8e2rO9yxC3MVMXZfzCe7hK6TV6xsneUbtG+lduGAaqNeT1w8paiPuK5jTp5Xe+ZnAC/TSFi5h+12Q==
   dependencies:
     "@types/fbemitter" "*"
     "@types/react" "*"
@@ -1582,6 +1582,11 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@types/humps/-/humps-1.1.2.tgz#fbcaf596d20ff2ed78f8f511c5d6a943b51101d6"
   integrity sha1-+8r1ltIP8u14+PURxdapQ7URAdY=
+
+"@types/i18next-browser-languagedetector@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@types/i18next-browser-languagedetector/-/i18next-browser-languagedetector-2.0.1.tgz#35490253884b15311c54108697d5a7147a75df95"
+  integrity sha512-9TwP0tw0PSXUtBtM12PFUjBsl9sP5bNHd54qdSXBrrZ4HJmtVdqbKvmXLH4Qd3KQzIS2g/Z7HhLhygL2LUSb8w==
 
 "@types/i18next-express-middleware@^0.0.33":
   version "0.0.33"
@@ -1683,6 +1688,14 @@
   resolved "https://registry.yarnpkg.com/@types/react-helmet/-/react-helmet-5.0.7.tgz#1cae65b2c37fe54cf56f40cd388836d4619dbc51"
   integrity sha512-FbDibfkcGsD/N+3k47bfLcr5uAzSi64LJ2OOILz/P5vtBwT5A92KZAU5H9/7OjhUN6au5k+BbNplhVfp6IXDcQ==
   dependencies:
+    "@types/react" "*"
+
+"@types/react-i18next@^7.8.3":
+  version "7.8.3"
+  resolved "https://registry.yarnpkg.com/@types/react-i18next/-/react-i18next-7.8.3.tgz#ba1820c91923c7f2b2abf6755d4372e503821c4b"
+  integrity sha512-VPopxbHXz/1Sjl+ljXQQchf6FHXaYLaH0a6TH6KnGOQGD4LzNbUVlofK26S30OIYfYibm8r/sAb2KeTst+AwTQ==
+  dependencies:
+    "@types/i18next" "*"
     "@types/react" "*"
 
 "@types/react-native-keyboard-spacer@^0.4.1":

@@ -6,7 +6,7 @@ import KeyboardSpacer from 'react-native-keyboard-spacer';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { required, minLength, validateForm, match } from '../../../../../common/validation';
+import { required, minLength, validate, match } from '../../../../../common/modules/validation';
 import settings from '../../../../../../settings';
 import translate from '../../../i18n';
 
@@ -14,8 +14,6 @@ const resetPasswordFormSchema = {
   password: [required, minLength(settings.user.auth.password.minLength)],
   passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
 };
-
-const validate = values => validateForm(values, resetPasswordFormSchema);
 
 const ResetPasswordForm = ({ values, handleSubmit, t }) => {
   return (
@@ -71,7 +69,7 @@ const ResetPasswordFormWithFormik = withFormik({
       .then(() => resetForm())
       .catch(e => setErrors(e));
   },
-  validate: values => validate(values),
+  validate: values => validate(values, resetPasswordFormSchema),
   displayName: 'LoginForm' // helps with React DevTools
 });
 

@@ -6,7 +6,7 @@ import { NavLink, Link } from 'react-router-dom';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
-import { required, minLength, validateForm } from '../../../../../common/validation';
+import { required, minLength, validate } from '../../../../../common/modules/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
 import LinkedInButton from '../auth/linkedin';
@@ -18,8 +18,6 @@ const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
   password: [required, minLength(8)]
 };
-
-const validate = values => validateForm(values, loginFormSchema);
 const { facebook, linkedin, google, github } = settings.user.auth;
 
 const renderSocialButtons = (buttonsLength, t) => {
@@ -139,7 +137,7 @@ const LoginFormWithFormik = withFormik({
       setErrors(e);
     });
   },
-  validate: values => validate(values),
+  validate: values => validate(values, loginFormSchema),
   displayName: 'LoginForm' // helps with React DevTools
 });
 

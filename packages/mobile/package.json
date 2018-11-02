@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "src",
   "engines": {
-    "node": ">= 6.11.1",
+    "node": ">= 6.11.1 <= 10",
     "yarn": ">= 1.0.0"
   },
   "scripts": {
@@ -84,7 +84,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@types/expo": "^27.0.11",
+    "@types/expo": "^30.0.0",
     "@types/expo__vector-icons": "^6.2.3",
     "@types/jest": "^23.3.1",
     "@types/react-native-keyboard-spacer": "^0.4.1",

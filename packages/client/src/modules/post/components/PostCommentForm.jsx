@@ -7,13 +7,11 @@ import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, Button, primary } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { required, validateForm } from '../../../../../common/validation';
+import { required, validate } from '../../../../../common/modules/validation';
 
 const commentFormSchema = {
   content: [required]
 };
-
-const validate = values => validateForm(values, commentFormSchema);
 
 const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
   const operation = t(`comment.label.${comment.id ? 'edit' : 'add'}`);
@@ -48,7 +46,7 @@ PostCommentForm.propTypes = {
 
 const PostCommentFormWithFormik = withFormik({
   mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
-  validate: values => validate(values),
+  validate: values => validate(values, commentFormSchema),
   handleSubmit: async (values, { resetForm, props: { onSubmit } }) => {
     await onSubmit(values);
     resetForm();

@@ -19,7 +19,7 @@ const I18N_CONFIG: i18n.InitOptions = {
 };
 
 if (PLATFORM === 'web') {
-  (I18N_CONFIG.detection as any).caches = __SSR__ ? ['cookie'] : ['localStorage'];
+  (I18N_CONFIG.detection as any).caches = __SSR__ ? ['cookie'] : ['sessionStorage'];
   I18N_CONFIG.interpolation = {
     escapeValue: false // not needed for React!!
   };

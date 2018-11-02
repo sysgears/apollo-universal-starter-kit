@@ -17,7 +17,7 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
       {
         clientID: settings.user.auth.facebook.clientID,
         clientSecret: settings.user.auth.facebook.clientSecret,
-        callbackURL: '/auth/facebook/callback',
+        callbackURL: settings.user.auth.facebook.callbackURL,
         scope: settings.user.auth.facebook.scope,
         profileFields: settings.user.auth.facebook.profileFields
       },

@@ -7,6 +7,5 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Interceptors {
-    Class<? extends Interceptor>[] classes();
+public @interface InjectInterceptor {
 }

@@ -69,7 +69,7 @@
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
     "prop-types": "^15.6.0",
-    "react": "16.3.1",
+    "react": "16.5.0",
     "react-apollo": "^2.1.4",
     "react-art": "^16.3.2",
     "react-cookie": "^2.2.0",
@@ -131,7 +131,7 @@
   "optionalDependencies": {
     "@expo/vector-icons": "^6.2.1",
     "antd-mobile-rn": "^2.2.1",
-    "expo": "^30.0.1",
+    "expo": "^31.0.2",
     "native-base": "^2.3.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",

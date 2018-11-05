@@ -1,7 +1,12 @@
 package core.interceptor
 
+import javax.inject.Inject
 import org.aopalliance.intercept.{MethodInterceptor, MethodInvocation}
 
-class InterceptorService extends MethodInterceptor {
-  override def invoke(invocation: MethodInvocation): AnyRef = ???
+import scala.concurrent.ExecutionContext
+
+class InterceptorService @Inject()(implicit executionContext: ExecutionContext) extends MethodInterceptor {
+  override def invoke(invocation: MethodInvocation): AnyRef = {
+    invocation.proceed()
+  }
 }

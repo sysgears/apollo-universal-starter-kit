@@ -1,5 +1,3 @@
-package core.models
-
-class Error extends Exception
+package common.errors
 
 case class InternalServerError(msg: String = "") extends Error

@@ -22,7 +22,7 @@ import scala.util.{Failure, Success}
 @Singleton
 class WebSocketHandler @Inject()(graphQlExecutor: Executor[Unit, Unit])
                                 (implicit val actorMaterializer: ActorMaterializer,
-                                 implicit val scheduler: Scheduler) {
+                                 implicit val scheduler: Scheduler) extends ControllerUtil {
 
   import spray.json.DefaultJsonProtocol._
 
@@ -81,20 +81,11 @@ class WebSocketHandler @Inject()(graphQlExecutor: Executor[Unit, Unit])
                 ))
             }
           case Failure(e: SyntaxError) =>
-            val syntaxError = JsObject(
-              "syntaxError" -> JsString(e.getMessage),
-              "locations" -> JsArray(
-                JsObject(
-                  "line" -> JsNumber(e.originalError.position.line),
-                  "column" -> JsNumber(e.originalError.position.column)
-                )
-              )
-            )
-            reply(OperationMessage(
-              GQL_ERROR,
-              operationMessage.id,
-              Some(syntaxError)
-            ))
+              reply(OperationMessage(
+                GQL_ERROR,
+                operationMessage.id,
+                Some(syntaxError(e))
+              ))
           case Failure(_) =>
             reply(OperationMessage(
               GQL_ERROR,

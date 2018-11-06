@@ -29,7 +29,7 @@ import scala.util.{Failure, Success}
 class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
                             graphQlBatchExecutor: BatchExecutor.type)
                            (implicit val scheduler: Scheduler,
-                            implicit val actorMaterializer: ActorMaterializer) {
+                            implicit val actorMaterializer: ActorMaterializer) extends ControllerUtil {
 
   def handleQuery(graphQlMessage: GraphQLMessage): Route = {
     QueryParser.parse(graphQlMessage.query) match {
@@ -72,19 +72,7 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
               }
             )
         }
-      case Failure(e: SyntaxError) =>
-        complete(
-          BadRequest,
-          JsObject(
-            "syntaxError" -> JsString(e.getMessage),
-            "locations" -> JsArray(
-              JsObject(
-                "line" -> JsNumber(e.originalError.position.line),
-                "column" -> JsNumber(e.originalError.position.column)
-              )
-            )
-          )
-        )
+      case Failure(e: SyntaxError) => complete(BadRequest, syntaxError(e))
       case Failure(_) => complete(InternalServerError)
     }
   }
@@ -129,19 +117,7 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
             case error: ErrorWithResolver => InternalServerError -> error.resolveError
           }
         }
-      case Failure(e: SyntaxError) =>
-        complete(
-          BadRequest,
-          JsObject(
-            "syntaxError" -> JsString(e.getMessage),
-            "locations" -> JsArray(
-              JsObject(
-                "line" -> JsNumber(e.originalError.position.line),
-                "column" -> JsNumber(e.originalError.position.column)
-              )
-            )
-          )
-        )
+      case Failure(e: SyntaxError) => complete(BadRequest, syntaxError(e))
       case Failure(_) => complete(InternalServerError)
     }
   }

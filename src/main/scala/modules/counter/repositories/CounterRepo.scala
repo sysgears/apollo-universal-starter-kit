@@ -1,7 +1,7 @@
 package modules.counter.repositories
 
 import com.google.inject.Inject
-import core.models.InternalServerError
+import common.models.InternalServerError
 import javax.inject.Singleton
 import modules.counter.models.Counter
 import slick.jdbc.SQLiteProfile.api._

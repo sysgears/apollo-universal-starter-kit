@@ -1,4 +1,4 @@
-package core.models
+package common.models
 
 class Error extends Exception
 

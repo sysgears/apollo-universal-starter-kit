@@ -1,10 +1,12 @@
 package core.graphql
 
-class GraphQLContextFactory {
+import akka.http.scaladsl.model.HttpRequest
 
-  def createGraphQLContextForRequest() = {
-    GraphQLContext()
+object GraphQLContextFactory {
+
+  def createGraphQLContextForRequest(implicit request: HttpRequest) = {
+    GraphQLContext(request)
   }
 }
 
-case class GraphQLContext()
+case class GraphQLContext(request: HttpRequest)

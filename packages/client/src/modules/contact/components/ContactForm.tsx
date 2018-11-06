@@ -1,18 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
+import { withFormik, FormikProps } from 'formik';
 
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { required, email, minLength, validate } from '../../../../../common/modules/validation';
+import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
+import { validate } from '../../../../../common/modules/validation';
+import { TranslateFunction } from '../../../i18n';
 
-const contactFormSchema = {
-  name: [required, minLength(3)],
-  email: [required, email],
-  content: [required, minLength(10)]
-};
+interface FormValues {
+  content: string;
+  email: string;
+  name: string;
+}
 
-const ContactForm = ({ values, handleSubmit, errors, t, status }) => (
+interface ContactFormProps {
+  t: TranslateFunction;
+  onSubmit: (values: FormValues) => Promise<void>;
+}
+
+const ContactForm = ({ values, handleSubmit, t, status }: FormikProps<FormValues> & ContactFormProps) => (
   <Form name="contact" onSubmit={handleSubmit}>
     {status && status.sent && <Alert color="success">{t('successMsg')}</Alert>}
     <Field name="name" component={RenderField} type="text" label={t('form.field.name')} value={values.name} />
@@ -25,7 +31,7 @@ const ContactForm = ({ values, handleSubmit, errors, t, status }) => (
       value={values.content}
     />
     <div className="text-center">
-      {errors._error && <Alert color="error">{errors._error}</Alert>}
+      {status && status.serverError && <Alert color="error">{status.serverError}</Alert>}
       <Button color="primary" type="submit">
         {t('form.btnSubmit')}
       </Button>
@@ -33,33 +39,16 @@ const ContactForm = ({ values, handleSubmit, errors, t, status }) => (
   </Form>
 );
 
-ContactForm.propTypes = {
-  values: PropTypes.object,
-  handleSubmit: PropTypes.func,
-  errors: PropTypes.object,
-  status: PropTypes.object,
-  t: PropTypes.func
-};
-
-const ContactFormWithFormik = withFormik({
+const ContactFormWithFormik = withFormik<ContactFormProps, FormValues>({
   enableReinitialize: true,
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-  async handleSubmit(
-    values,
-    {
-      resetForm,
-      setErrors,
-      setStatus,
-      props: { onSubmit }
-    }
-  ) {
+  async handleSubmit(values, { resetForm, setStatus, props: { onSubmit } }) {
     try {
       await onSubmit(values);
       resetForm();
       setStatus({ sent: true });
     } catch (e) {
-      setStatus({ sent: false });
-      setErrors(e);
+      setStatus({ sent: false, serverError: 'SERVER ERROR' });
     }
   },
   validate: values => validate(values, contactFormSchema),

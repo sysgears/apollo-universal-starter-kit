@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import ContactForm from './ContactForm';
 
-const ContactView = props => (
+const ContactView = (props: any) => (
   <View style={styles.container}>
     <ContactForm {...props} />
   </View>

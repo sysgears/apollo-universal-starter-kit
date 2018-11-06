@@ -6,7 +6,7 @@ import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.sse.ServerSentEvent
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.StandardRoute
+import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.graphql.GraphQL
@@ -31,7 +31,7 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
                            (implicit val scheduler: Scheduler,
                             implicit val actorMaterializer: ActorMaterializer) {
 
-  def handleQuery(graphQlMessage: GraphQLMessage): StandardRoute = {
+  def handleQuery(graphQlMessage: GraphQLMessage): Route = {
     QueryParser.parse(graphQlMessage.query) match {
       case Success(queryAst) =>
         queryAst.operationType(graphQlMessage.operationName) match {
@@ -89,7 +89,7 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
     }
   }
 
-  def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage]): StandardRoute = {
+  def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage]): Route = {
     import sangria.streaming.monix._
     val operations = graphQlMessages.map(_.operationName.getOrElse("")).filter(_ != "")
     QueryParser.parse(graphQlMessages.map(_.query).mkString(" ")) match {

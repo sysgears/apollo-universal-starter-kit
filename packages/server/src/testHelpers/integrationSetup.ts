@@ -19,7 +19,7 @@ const BABEL_CONFIG = path.resolve(require.resolve('../../../../babel.config.knex
 
 before(async () => {
   // tslint:disable-next-line
-  require('@babel/register')({ cwd: path.dirname(BABEL_CONFIG), configFile: BABEL_CONFIG, ignore: [/[\/\\]node_modules[\/\\]/, /[\/\\]build[\/\\]/] });
+  require('@babel/register')({ cwd: path.dirname(BABEL_CONFIG), configFile: BABEL_CONFIG, ignore: [/[\/\\]node_modules[\/\\]/, /[\/\\]server[\/\\]build[\/\\]/] });
   // , configFile: BABEL_CONFIG,
   await knex.migrate.latest();
   await knex.seed.run();

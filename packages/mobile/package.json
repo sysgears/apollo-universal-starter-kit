@@ -109,10 +109,10 @@
     "mocha-steps": "^1.1.0",
     "mocha-webpack": "^2.0.0-beta.0",
     "react-addons-test-utils": "^16.0.0-alpha.3",
-    "react-test-renderer": "^16.2.0",
+    "react-test-renderer": "16.5.0",
     "request": "^2.83.0",
     "rimraf": "^2.6.2",
-    "ts-jest": "^23.1.4",
+    "ts-jest": "^23.10.4",
     "ws": "^5.1.1",
     "xdl": "^49.2.0"
   },

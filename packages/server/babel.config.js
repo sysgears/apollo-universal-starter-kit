@@ -13,8 +13,7 @@ module.exports = {
   ],
   env: {
     production: {
-      compact: true,
-      presets: [['minify', { mangle: false }]]
+      compact: true
     }
   }
 };

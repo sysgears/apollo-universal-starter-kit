@@ -1,7 +1,8 @@
 module.exports = {
   compact: false,
-  presets: ['@babel/preset-react', ['@babel/preset-env', { modules: false }]],
+  presets: ['@babel/preset-react', ['@babel/preset-env', { modules: 'commonjs' }]],
   plugins: [
+    '@babel/plugin-transform-modules-commonjs',
     '@babel/plugin-transform-destructuring',
     '@babel/plugin-transform-regenerator',
     '@babel/plugin-transform-runtime',

@@ -2,6 +2,6 @@ package core.interceptor
 
 import scala.concurrent.Future
 
-trait Interceptor[T] {
-  def handle(ctx: T): Future[T]
+trait Interceptor[A, B] {
+  def handle(ctx: A): Future[Either[B, Option[A]]]
 }

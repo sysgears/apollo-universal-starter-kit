@@ -154,7 +154,7 @@
     "spinjs": "^0.4.169"
   },
   "resolutions": {
-    "schedule": "0.4.0",
+    "react": "16.5.0",
     "graphql": "0.13.2",
     "iterall": "^1.2.2",
     "upath": "^1.1.0"

@@ -1,14 +1,14 @@
 package modules.counter.graphql.schema
 
 import akka.stream.ActorMaterializer
-import core.graphql.GraphQLSchema
+import common.Logger
+import core.graphql.{GraphQLSchema, UserContext}
 import javax.inject.Inject
 import modules.counter.graphql.resolvers.CounterResolver
 import modules.counter.models.Counter
-import sangria.macros.derive.{ObjectTypeName, deriveObjectType, ExcludeFields}
+import sangria.macros.derive.{ExcludeFields, ObjectTypeName, deriveObjectType}
 import sangria.schema.{Argument, Field, IntType, ObjectType}
 import sangria.streaming.akkaStreams._
-import common.Logger
 
 class CounterSchema @Inject()(counterResolver: CounterResolver)
                              (implicit val materializer: ActorMaterializer) extends GraphQLSchema with Logger {
@@ -17,7 +17,7 @@ class CounterSchema @Inject()(counterResolver: CounterResolver)
     implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"), ExcludeFields("id"))
   }
 
-  override def queries: List[Field[Unit, Unit]] = List(
+  override def queries: List[Field[UserContext, Unit]] = List(
     Field(
       name = "serverCounter",
       fieldType = Types.counter,
@@ -25,7 +25,7 @@ class CounterSchema @Inject()(counterResolver: CounterResolver)
     )
   )
 
-  override def mutations: List[Field[Unit, Unit]] = List(
+  override def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "addServerCounter",
       fieldType = Types.counter,
@@ -37,7 +37,7 @@ class CounterSchema @Inject()(counterResolver: CounterResolver)
     )
   )
 
-  override def subscriptions: List[Field[Unit, Unit]] = List(
+  override def subscriptions: List[Field[UserContext, Unit]] = List(
     Field.subs(
       name = "counterUpdated",
       fieldType = Types.counter,

@@ -7,14 +7,14 @@ import akka.stream.ActorMaterializer
 import core.controllers.AkkaRoute
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import core.graphql.GraphQL
+import core.graphql.{GraphQL, UserContext}
 import javax.inject.Inject
 import sangria.execution.Executor
 import sangria.renderer.SchemaRenderer
 
 import scala.concurrent.ExecutionContext
 
-class GraphQLController @Inject()(graphQlExecutor: Executor[Unit, Unit],
+class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
                                   httpHandler: HttpHandler,
                                   webSocketHandler: WebSocketHandler)
                                  (implicit val executionContext: ExecutionContext,

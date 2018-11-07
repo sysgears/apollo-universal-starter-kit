@@ -22,10 +22,10 @@ class InterceptorService @Inject() extends MethodInterceptor with Logger {
       val clazz = classAndArg._1
       val argIndex = classAndArg._2
       log.debug(s"Handle $clazz with argument index $argIndex")
-      Await.ready(
+      Await.result(
         injector.getInstance(clazz).asInstanceOf[Interceptor[AnyRef, AnyRef]].handle(args(argIndex)),
         Inf
-      ).value.get.get match {
+      ) match {
         case Left(error) =>
           log.debug(s"Handled with error: $error")
           return error

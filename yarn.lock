@@ -3779,7 +3779,7 @@ babel-jest@^23.6.0:
     babel-plugin-istanbul "^4.1.6"
     babel-preset-jest "^23.2.0"
 
-babel-loader@^8.0.2, babel-loader@^8.0.4:
+babel-loader@^8.0.2:
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.0.4.tgz#7bbf20cbe4560629e2e41534147692d3fecbdce6"
   integrity sha512-fhBhNkUToJcW9nV46v8w87AJOwAJDz84c1CL57n3Stj73FANM/b9TbCUK4YhdOwEyZ+OxhYpdeZDNzSI29Firw==
@@ -9091,6 +9091,16 @@ he@1.1.1, he@1.1.x:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/he/-/he-1.1.1.tgz#93410fd21b009735151f8868c2f271f3427e23fd"
   integrity sha1-k0EP0hsAlzUVH4howvJx80J+I/0=
+
+heroku-babel-loader@^8.0.4:
+  version "8.0.4"
+  resolved "https://registry.yarnpkg.com/heroku-babel-loader/-/heroku-babel-loader-8.0.4.tgz#675eebb014c72f75e2ed02a8d027611851119db7"
+  integrity sha512-HsKCc+AUt/c8p2i72cZMESs8NHC/UeXR5k6WMmQgw/wsVTalTL3DxaDxiXISS+md0jpb+jDG/gH2OBjS4njRFw==
+  dependencies:
+    find-cache-dir "^1.0.0"
+    loader-utils "^1.0.2"
+    mkdirp "^0.5.1"
+    util.promisify "^1.0.0"
 
 history@^4.7.2:
   version "4.7.2"

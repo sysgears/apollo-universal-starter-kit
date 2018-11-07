@@ -1,4 +1,4 @@
-import Expo, { Constants } from 'expo';
+import * as Expo from 'expo';
 import React from 'react';
 import { View } from 'react-native';
 import App from './App';
@@ -38,7 +38,7 @@ class AwakeInDevApp extends React.Component<AwakeInDevAppProps, AwakeInDevAppSta
       {
         style: {
           flex: 1,
-          marginTop: Constants.statusBarHeight
+          marginTop: Expo.Constants.statusBarHeight
         }
       },
       React.createElement(App, this.props),

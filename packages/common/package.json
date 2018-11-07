@@ -41,6 +41,6 @@
     "mocha-webpack": "^2.0.0-beta.0"
   },
   "optionalDependencies": {
-    "expo": "^30.0.1"
+    "expo": "^31.0.2"
   }
 }

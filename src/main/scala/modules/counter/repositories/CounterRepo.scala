@@ -1,7 +1,7 @@
 package modules.counter.repositories
 
 import com.google.inject.Inject
-import core.models.InternalServerError
+import common.errors.InternalServerError
 import javax.inject.Singleton
 import modules.counter.models.Counter
 import slick.jdbc.SQLiteProfile.api._
@@ -43,4 +43,5 @@ class CounterRepoImpl @Inject()(db: Database) extends CounterRepo {
       } yield foundCounter
     }
   }
+
 }

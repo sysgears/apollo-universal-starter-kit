@@ -70,14 +70,7 @@ const withLogout = Component =>
       ...props,
       logout: async () => {
         await access.doLogout(client);
-        try {
-          await client.resetStore();
-        } catch (e) {
-          // Ignore Error: Network error: Store reset while query was in flight(not completed in link chain)
-          if (e.message.indexOf('Store reset while query was in flight') < 0) {
-            throw e;
-          }
-        }
+        await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
       }
     };
     return <Component {...newProps} />;

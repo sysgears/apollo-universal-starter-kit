@@ -19,8 +19,7 @@ class InterceptorService @Inject() extends MethodInterceptor with Logger {
     }).toList
     val args = invocation.getArguments
     for (classAndArg <- classesAndArgs) {
-      val clazz = classAndArg._1
-      val argIndex = classAndArg._2
+      val (clazz, argIndex) = classAndArg
       log.debug(s"Handle $clazz with argument index $argIndex")
       Await.result(
         injector.getInstance(clazz).asInstanceOf[Interceptor[AnyRef, AnyRef]].handle(args(argIndex)),

@@ -1,6 +1,6 @@
 package modules.contact.actor
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, ActorRef}
 import com.github.jurajburian.mailer.{Content, Mailer, Message}
 import com.google.inject.Inject
 import com.typesafe.config.Config
@@ -13,7 +13,7 @@ import scala.util.{Failure, Success, Try}
 
 object ContactActor {
 
-  case class SendMail(contact: Contact)
+  case class SendMail(contact: Contact, sender: ActorRef)
 
   final val name = "ContactActor"
 }
@@ -38,7 +38,7 @@ class ContactActor @Inject()(mailer: Mailer,
         case Success(_) => ContactPayload()
         case Failure(exception) => ContactPayload(Some(List(FieldError("", exception.getMessage))))
       }
-      sender ! payload
+      sendMail.sender ! payload
 
     case _ => log.info("Received unknown message")
   }

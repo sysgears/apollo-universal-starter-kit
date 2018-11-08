@@ -2,10 +2,10 @@ package modules.counter.graphql.resolvers
 
 import akka.NotUsed
 import akka.actor.ActorRef
-import akka.stream.scaladsl.{Sink, Source}
-import akka.stream.{ActorMaterializer, OverflowStrategy}
+import akka.stream.ActorMaterializer
+import akka.stream.scaladsl.Source
 import com.google.inject.name.Named
-import common.Logger
+import common.{ActorUtil, Logger}
 import core.services.publisher.{PublisherHelper, PublisherService}
 import javax.inject.Inject
 import modules.counter.models.Counter
@@ -20,14 +20,15 @@ class CounterResolverImpl @Inject()(@Named(CounterActor.name) counterActor: Acto
                                    (implicit executionContext: ExecutionContext,
                                     materializer: ActorMaterializer) extends PublisherHelper[Counter]
   with Logger
+  with ActorUtil
   with CounterResolver {
 
   def addServerCounter(amount: Int): Future[Counter] = withPublishing(publisherService) {
-    sendMessageToActor(actorRef => counterActor ! IncrementAndGet(amount, actorRef))
+    sendMessageToActor[Counter](actorRef => counterActor ! IncrementAndGet(amount, actorRef))
   }
 
   def serverCounter: Future[Counter] = {
-    sendMessageToActor(actorRef => counterActor ! GetAmount(actorRef))
+    sendMessageToActor[Counter](actorRef => counterActor ! GetAmount(actorRef))
   }
 
   def counterUpdated: Source[Action[Unit, Counter], NotUsed] = {
@@ -36,11 +37,5 @@ class CounterResolverImpl @Inject()(@Named(CounterActor.name) counterActor: Acto
         log.info(s"Sending event [$counter] to client ...")
         Action(counter)
     }
-  }
-
-  private def sendMessageToActor(f: ActorRef => Unit): Future[Counter] = {
-    Source.actorRef[Counter](0, OverflowStrategy.dropHead)
-      .mapMaterializedValue(f)
-      .runWith(Sink.head[Counter])
   }
 }

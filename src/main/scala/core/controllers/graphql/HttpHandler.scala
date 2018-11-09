@@ -6,10 +6,13 @@ import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.sse.ServerSentEvent
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.model.HttpHeader
+import akka.http.scaladsl.model.headers.`Set-Cookie`
 import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.server.directives.RespondWithDirectives.respondWithHeaders
 import akka.stream.ActorMaterializer
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.graphql.{GraphQL, UserContext}
+import core.graphql.{GraphQL, UserContext, UserContextFactory}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
@@ -24,16 +27,9 @@ import spray.json._
 import scala.collection.mutable.ListBuffer
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
-import akka.http.scaladsl.model.HttpHeader
-import akka.http.scaladsl.model.headers.`Set-Cookie`
-import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.server.directives.RespondWithDirectives.respondWithHeaders
-import core.graphql.{GraphQL, UserContext, UserContextFactory}
-import monix.execution.Scheduler
 
 @Singleton
 class HttpHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit],
-                            graphQlBatchExecutor: BatchExecutor.type,
                             userContextFactory: UserContextFactory)
                            (implicit val scheduler: Scheduler,
                             implicit val actorMaterializer: ActorMaterializer) extends ControllerUtil {

@@ -12,7 +12,7 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.directives.RespondWithDirectives.respondWithHeaders
 import akka.stream.ActorMaterializer
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.graphql.{GraphQL, UserContext, UserContextFactory}
+import core.graphql.{GraphQL, UserContext}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
@@ -29,14 +29,13 @@ import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
 @Singleton
-class HttpHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit],
-                            userContextFactory: UserContextFactory)
+class HttpHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
                            (implicit val scheduler: Scheduler,
                             implicit val actorMaterializer: ActorMaterializer) extends ControllerUtil {
 
   def handleQuery(graphQlMessage: GraphQLMessage): Route = extractRequest {
     request =>
-      withHeaders(userContextFactory.createContext(request.headers.toList)) {
+      withHeaders(UserContext(request.headers.toList)) {
         userCtx =>
           QueryParser.parse(graphQlMessage.query) match {
             case Success(queryAst) =>
@@ -93,7 +92,7 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit],
     request =>
       import sangria.streaming.monix._
       val operations = graphQlMessages.map(_.operationName.getOrElse("")).filter(_ != "")
-      withHeaders(userContextFactory.createContext(request.headers.toList)) {
+      withHeaders(UserContext(request.headers.toList)) {
         userCtx =>
           QueryParser.parse(graphQlMessages.map(_.query).mkString(" ")) match {
             case Success(queryAst) =>

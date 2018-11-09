@@ -21,7 +21,8 @@ import spray.json._
 import scala.util.{Failure, Success}
 
 @Singleton
-class WebSocketHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
+class WebSocketHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit],
+                                 userContextFactory: UserContextFactory)
                                 (implicit val actorMaterializer: ActorMaterializer,
                                  implicit val scheduler: Scheduler) extends ControllerUtil {
 
@@ -65,7 +66,7 @@ class WebSocketHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
               case Some(Subscription) =>
                 graphQlExecutor.execute(
                   queryAst = queryAst,
-                  userContext = UserContextFactory.createUserContextForRequest(),
+                  userContext = userContextFactory.createContext(),
                   root = (),
                   operationName = graphQlMessage.operationName,
                   variables = graphQlMessage.variables.getOrElse(JsObject.empty)

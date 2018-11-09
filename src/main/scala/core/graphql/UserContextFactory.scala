@@ -1,12 +1,19 @@
 package core.graphql
 
-import akka.http.scaladsl.model.HttpRequest
+import akka.http.scaladsl.model.HttpHeader
+import akka.http.scaladsl.model.headers.HttpCookie
 
-object UserContextFactory {
+import scala.collection.mutable.ListBuffer
 
-  def createUserContextForRequest(request: Option[HttpRequest] = None): UserContext = {
-    UserContext(request)
+class UserContextFactory {
+
+  def createContext(requestHeaders: List[HttpHeader] = List.empty,
+                    newHeaders: ListBuffer[HttpHeader] = ListBuffer.empty,
+                    newCookies: ListBuffer[HttpCookie] = ListBuffer.empty): UserContext = {
+    UserContext(requestHeaders, newHeaders, newCookies)
   }
 }
 
-case class UserContext(request: Option[HttpRequest] = None)
+case class UserContext(requestHeaders: List[HttpHeader],
+                       newHeaders: ListBuffer[HttpHeader],
+                       newCookies: ListBuffer[HttpCookie])

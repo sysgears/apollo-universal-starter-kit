@@ -9,7 +9,6 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.graphql.UserContextFactory.createUserContextForRequest
 import core.graphql.{GraphQL, UserContext}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
@@ -25,16 +24,23 @@ import spray.json._
 import scala.collection.mutable.ListBuffer
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
+import akka.http.scaladsl.model.HttpHeader
+import akka.http.scaladsl.model.headers.`Set-Cookie`
+import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.server.directives.RespondWithDirectives.respondWithHeaders
+import core.graphql.{GraphQL, UserContext, UserContextFactory}
+import monix.execution.Scheduler
 
 @Singleton
 class HttpHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit],
-                            graphQlBatchExecutor: BatchExecutor.type)
+                            graphQlBatchExecutor: BatchExecutor.type,
+                            userContextFactory: UserContextFactory)
                            (implicit val scheduler: Scheduler,
                             implicit val actorMaterializer: ActorMaterializer) extends ControllerUtil {
 
   def handleQuery(graphQlMessage: GraphQLMessage): Route = extractRequest {
     request =>
-      val userCtx = createUserContextForRequest(Some(request))
+      val userCtx = userContextFactory.createContext(request.headers.toList)
       QueryParser.parse(graphQlMessage.query) match {
         case Success(queryAst) =>
           queryAst.operationType(graphQlMessage.operationName) match {
@@ -82,7 +88,7 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit],
 
   def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage]): Route = extractRequest {
     request =>
-      val userCtx = createUserContextForRequest(Some(request))
+      val userCtx = userContextFactory.createContext(request.headers.toList)
       import sangria.streaming.monix._
       val operations = graphQlMessages.map(_.operationName.getOrElse("")).filter(_ != "")
       QueryParser.parse(graphQlMessages.map(_.query).mkString(" ")) match {

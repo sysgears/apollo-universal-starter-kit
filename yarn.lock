@@ -966,6 +966,28 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
+"@domain-schema/core@^0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@domain-schema/core/-/core-0.0.34.tgz#5900ae4f0844cb8e7ffa91f5be32bd0417d96429"
+  integrity sha512-XpYSDStMKxMtRQ81DHwNTjN7psCoPp+1PBMEfG4vsroyUVn7zV8K0wGb9AszJaPvdqhIuVQZiWUS04ukCf1Yxw==
+  dependencies:
+    debug "^3.1.0"
+
+"@domain-schema/graphql@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@domain-schema/graphql/-/graphql-0.0.33.tgz#201d8cc5d21a9eba69f2eb8cb1fe44f012381cec"
+  integrity sha512-s81kImrjdwzzXU/nRBdNnw4ujqSAToKApUYUTaDF92vfesWsvmEFKhkYLC9L0tFx2XyAQrMmh+w5zG7lZkBBow==
+  dependencies:
+    debug "^3.1.0"
+
+"@domain-schema/knex@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@domain-schema/knex/-/knex-0.0.35.tgz#3ea8fb1fdf57e9c9334843ed8bfa3b4e9e1f03c4"
+  integrity sha512-Qd3Q4MGiSJh7XxodMSTFBSHy0PzoB9DXrvLstsNe0Enn5mi6sYEZ08HYzVgvtdbh6zvpqSARs6aZeWmZgEeydQ==
+  dependencies:
+    debug "^3.1.0"
+    humps "^2.0.1"
+
 "@expo/bunyan@3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@expo/bunyan/-/bunyan-3.0.2.tgz#775680bd479a8b79ada4a5676936a58eef1579c9"
@@ -5061,6 +5083,13 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
+cast-array@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/cast-array/-/cast-array-1.0.1.tgz#264ef1129e5888bc48cac40fe914e9f69b8d189d"
+  integrity sha1-Jk7xEp5YiLxIysQP6RTp9puNGJ0=
+  dependencies:
+    isarray "0.0.1"
+
 chai-http@^4.0.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/chai-http/-/chai-http-4.2.0.tgz#25dc0c0cf9560802f069092ca834a81f04c673bc"
@@ -8820,6 +8849,13 @@ graphql-iso-date@^3.5.0:
   resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.6.1.tgz#bd2d0dc886e0f954cbbbc496bbf1d480b57ffa96"
   integrity sha512-AwFGIuYMJQXOEAgRlJlFL4H1ncFM8n8XmoVDTNypNOZyQ8LFDG2ppMFlsS862BSTCDcSUfHp8PD3/uJhv7t59Q==
 
+graphql-parse-fields@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/graphql-parse-fields/-/graphql-parse-fields-1.2.0.tgz#c97119a91951b98dcbe656c46a203e966a720f28"
+  integrity sha1-yXEZqRlRuY3L5lbEaiA+lmpyDyg=
+  dependencies:
+    cast-array "^1.0.1"
+
 graphql-resolve-batch@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/graphql-resolve-batch/-/graphql-resolve-batch-1.0.2.tgz#ab069df8ab3410a0188701ed9fa8e382bbb8d6a5"
@@ -10985,7 +11021,7 @@ kleur@^2.0.1:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-2.0.2.tgz#b704f4944d95e255d038f0cb05fb8a602c55a300"
   integrity sha512-77XF9iTllATmG9lSlIv0qdQ2BQ/h9t0bJllHlbvsQ0zUWfU7Yi0S8L5JXzPZgkefIiajLmBJJ4BsMJmqcf7oxQ==
 
-knex@^0.14.2:
+knex@^0.14.2, knex@^0.14.6:
   version "0.14.6"
   resolved "https://registry.yarnpkg.com/knex/-/knex-0.14.6.tgz#ad57c4ef8fa1b51ebc8c37c2c9b483f6fb34e41e"
   integrity sha512-A+iP8oSSmEF3JbSMfUGuJveqduDMEgyS5E/dO0ycVzAT4EE5askfunk7+37+hPqC951vnbFK/fIiNDaJIjVW0w==
@@ -11008,6 +11044,14 @@ knex@^0.14.2:
     tildify "1.2.0"
     uuid "^3.2.1"
     v8flags "^3.0.2"
+
+knexnest@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/knexnest/-/knexnest-1.0.0.tgz#b8840d13c2692bdd5fa3d5de67a456283d538fce"
+  integrity sha512-pClYHQu04G7yFBCRdwWxG/OPUAw/GR/A1Soqqb/JtcM2TADunt490HFA9+5nx1nC+MnnAIaCVgeAt0yiqBt0Kg==
+  dependencies:
+    knex "^0.14.6"
+    nesthydrationjs "^1.0.5"
 
 lcid@^1.0.0:
   version "1.0.0"
@@ -11435,6 +11479,11 @@ lodash.isarray@^3.0.0:
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
   integrity sha1-eeTriMNqgSKvhvhEqpvNhRtfu1U=
 
+lodash.isarray@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-4.0.0.tgz#2aca496b28c4ca6d726715313590c02e6ea34403"
+  integrity sha1-KspJayjEym1yZxUxNZDALm6jRAM=
+
 lodash.isboolean@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz#6c2e171db2a257cd96802fd43b01b20d5f5870f6"
@@ -11488,6 +11537,11 @@ lodash.keys@^3.0.0, lodash.keys@^3.1.2:
     lodash._getnative "^3.0.0"
     lodash.isarguments "^3.0.0"
     lodash.isarray "^3.0.0"
+
+lodash.keys@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/lodash.keys/-/lodash.keys-4.2.0.tgz#a08602ac12e4fb83f91fc1fb7a360a4d9ba35205"
+  integrity sha1-oIYCrBLk+4P5H8H7ejYKTZujUgU=
 
 lodash.map@^4.6.0:
   version "4.6.0"
@@ -12484,7 +12538,7 @@ modify-values@^1.0.0:
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
-moment@2.x, moment@^2.10.6, moment@^2.19.3, moment@^2.6.0:
+moment@2.x, moment@^2.10.6, moment@^2.19.3, moment@^2.22.2, moment@^2.6.0:
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
   integrity sha1-PCV/mDn8DpP/UxSWMiOeuQeD/2Y=
@@ -12703,6 +12757,17 @@ neo-async@^2.5.0:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.5.2.tgz#489105ce7bc54e709d736b195f82135048c50fcc"
   integrity sha512-vdqTKI9GBIYcAEbFAcpKPErKINfPF5zIuz3/niBfq8WUZjpT2tytLlFVrBgWdOtqI4uaA/Rb6No0hux39XXDuw==
+
+nesthydrationjs@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/nesthydrationjs/-/nesthydrationjs-1.0.5.tgz#89fe5be87055184461de5a550475ac515491f921"
+  integrity sha512-LnqhV0LfczSX5LTp3UP1QIIyP8iEd0tn5ckslsPsnnbFxHWU25VXmR4cj/Ast/4MuEEYC8hxjrTQSHaZYwmBDQ==
+  dependencies:
+    lodash.isarray "^4.0.0"
+    lodash.isfunction "^3.0.9"
+    lodash.isplainobject "^4.0.6"
+    lodash.keys "^4.2.0"
+    lodash.values "^4.3.0"
 
 next-tick@^1.0.0:
   version "1.0.0"

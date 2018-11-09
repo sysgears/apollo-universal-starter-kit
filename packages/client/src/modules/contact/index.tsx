@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 
-import translate from '../../i18n';
+import translate, { TranslateFunction } from '../../i18n';
 import { MenuItem } from '../../modules/common/components/web';
 import Contact from './containers/Contact';
 import resources from './locales';
 import ClientModule from '../ClientModule';
 
-const NavLinkWithI18n = translate('contact')(({ t }) => (
+const NavLinkWithI18n = translate('contact')(({ t }: { t: TranslateFunction }) => (
   <NavLink to="/contact" className="nav-link" activeClassName="active">
     {t('navLink')}
   </NavLink>

@@ -6,19 +6,15 @@ import { Form, RenderField, Button, Alert } from '../../common/components/web';
 import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
 import { validate } from '../../../../../common/modules/validation';
 import { TranslateFunction } from '../../../i18n';
-
-interface FormValues {
-  content: string;
-  email: string;
-  name: string;
-}
+import { ContactFields } from '../types';
 
 interface ContactFormProps {
   t: TranslateFunction;
-  onSubmit: (values: FormValues) => Promise<void>;
+  // TODO: types
+  onSubmit: (values: ContactFields) => Promise<void>;
 }
 
-const ContactForm = ({ values, handleSubmit, t, status }: FormikProps<FormValues> & ContactFormProps) => (
+const ContactForm = ({ values, handleSubmit, t, status }: FormikProps<ContactFields> & ContactFormProps) => (
   <Form name="contact" onSubmit={handleSubmit}>
     {status && status.sent && <Alert color="success">{t('successMsg')}</Alert>}
     <Field name="name" component={RenderField} type="text" label={t('form.field.name')} value={values.name} />
@@ -39,7 +35,7 @@ const ContactForm = ({ values, handleSubmit, t, status }: FormikProps<FormValues
   </Form>
 );
 
-const ContactFormWithFormik = withFormik<ContactFormProps, FormValues>({
+const ContactFormWithFormik = withFormik<ContactFormProps, ContactFields>({
   enableReinitialize: true,
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
   async handleSubmit(values, { resetForm, setStatus, props: { onSubmit } }) {

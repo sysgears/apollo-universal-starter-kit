@@ -1,60 +1,28 @@
 import React from 'react';
-import { graphql, compose } from 'react-apollo';
-import PropTypes from 'prop-types';
+import { Mutation, MutationFn } from 'react-apollo';
 
 import ContactView from '../components/ContactView';
 
 import CONTACT from '../graphql/Contact.graphql';
-import translate from '../../../i18n';
+import translate, { TranslateFunction } from '../../../i18n';
+import { ContactFields } from '../types';
 
-class Contact extends React.Component {
-  static propTypes = {
-    contact: PropTypes.func.isRequired,
-    t: PropTypes.func
+class Contact extends React.Component<{ t: TranslateFunction }> {
+  // TODO: Add types for values
+  public onSubmit = (contact: MutationFn) => async (values: ContactFields) => {
+    // const { t } = this.props;
+    // const result = await contact({ variables: { input: values } });
+    //
+    // console.log('datadatadata', result);
   };
 
-  onSubmit = async values => {
-    const { contact, t } = this.props;
-    const result = await contact(values);
-
-    // set general error message if server has an error
-    if (!result) {
-      throw { _error: t('errorMsg') };
-    }
-
-    // set custom errors
-    if (result && result.errors) {
-      throw result.errors.reduce((res, error) => {
-        res[error.field] = error.message;
-        return res;
-      }, {});
-    }
-  };
-
-  render() {
-    return <ContactView {...this.props} onSubmit={this.onSubmit} />;
+  public render() {
+    return (
+      <Mutation mutation={CONTACT}>
+        {mutate => <ContactView {...this.props} onSubmit={this.onSubmit(mutate)} />}
+      </Mutation>
+    );
   }
 }
 
-export default compose(
-  graphql(CONTACT, {
-    props: ({ mutate }) => ({
-      contact: async ({ name, email, content }) => {
-        try {
-          const {
-            data: { contact }
-          } = await mutate({ variables: { input: { name, email, content } } });
-
-          if (contact.errors) {
-            return { errors: contact.errors };
-          }
-
-          return contact;
-        } catch (e) {
-          console.log(e.graphQLErrors);
-          return false;
-        }
-      }
-    })
-  })
-)(translate('contact')(Contact));
+export default translate('contact')(Contact);

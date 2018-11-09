@@ -1,6 +1,7 @@
 package core.controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import akka.http.scaladsl.model.headers.`Set-Cookie`
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
@@ -22,19 +23,25 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
 
   override val routes: Route =
     path("graphql") {
-      get {
-        handleWebSocketMessagesForProtocol(webSocketHandler.handleMessages, GraphQLMessage.graphQlWebsocketProtocol)
-      } ~
-        post {
-          entity(as[GraphQLMessage]) {
-            graphQlMessage =>
-              httpHandler.handleQuery(graphQlMessage)
+      extractRequest {
+        request =>
+          get {
+            handleWebSocketMessagesForProtocol(webSocketHandler.handleMessages, GraphQLMessage.graphQlWebsocketProtocol)
           } ~
-            entity(as[Seq[GraphQLMessage]]) {
-              graphQlMessages =>
-                httpHandler.handleBatchQuery(graphQlMessages)
+            post {
+              withHeaders(UserContext(request.headers.toList)) {
+                userCtx =>
+                  entity(as[GraphQLMessage]) {
+                    graphQlMessage =>
+                      httpHandler.handleQuery(graphQlMessage, userCtx)
+                  } ~
+                    entity(as[Seq[GraphQLMessage]]) {
+                      graphQlMessages =>
+                        httpHandler.handleBatchQuery(graphQlMessages, userCtx)
+                    }
+              }
             }
-        }
+      }
     } ~
       (path("schema") & get) {
         complete(SchemaRenderer.renderSchema(GraphQL.schema))
@@ -42,4 +49,10 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
       (path("graphiql") & get) {
         getFromResource("web/graphiql.html")
       }
+
+  private def withHeaders(userCtx: UserContext)(ctxToRoute: UserContext => Route) =
+    mapResponseHeaders(_ ++
+      userCtx.newHeaders.toList ++
+      userCtx.newCookies.toList.map(`Set-Cookie`(_))
+    )(ctxToRoute(userCtx))
 }

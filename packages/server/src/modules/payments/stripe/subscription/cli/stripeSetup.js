@@ -1,7 +1,4 @@
-const path = require('path');
-
-const BABEL_CONFIG = path.resolve(require.resolve('../../../../../../../../babel.config.node.js'));
-require('@babel/register')({ cwd: path.dirname(BABEL_CONFIG), configFile: BABEL_CONFIG });
+require('@babel/register')({ cwd: __dirname + '/../../../../../../../..' });
 require('@babel/polyfill');
 require('dotenv/config');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);

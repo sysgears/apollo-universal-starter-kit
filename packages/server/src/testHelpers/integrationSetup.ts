@@ -15,8 +15,9 @@ let server: Server;
 let apollo: ApolloClient<any>;
 
 before(async () => {
-  require('babel-register')({ presets: ['env'] });
-
+  // tslint:disable-next-line
+  require('@babel/register')({ cwd: __dirname + '/../../../..' });
+  // , configFile: BABEL_CONFIG,
   await knex.migrate.latest();
   await knex.seed.run();
 

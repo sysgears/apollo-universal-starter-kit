@@ -1,23 +1,21 @@
 import i18n from 'i18next';
-import expo, { SecureStore } from 'expo';
+import * as Expo from 'expo';
 import { reactI18nextModule } from 'react-i18next';
 
 import settings from '../../../../settings';
 import { addResourcesI18n } from '../../utils';
 import modules from '..';
 
-const { Localization } = (expo as any).DangerZone;
-
 const languageDetector = {
   type: 'languageDetector',
   async: true, // flags below detection to be async
   detect: async (callback: (lang: string) => string) => {
-    const lng = await SecureStore.getItemAsync('i18nextLng');
-    return callback(lng || (await Localization.getCurrentLocaleAsync()).replace('_', '-'));
+    const lng = await Expo.SecureStore.getItemAsync('i18nextLng');
+    return callback(lng || (await (Expo as any).Localization.getLocalizationAsync()).locale.replace('_', '-'));
   },
   init: () => {},
   cacheUserLanguage: async (lng: string) => {
-    SecureStore.setItemAsync('i18nextLng', lng);
+    Expo.SecureStore.setItemAsync('i18nextLng', lng);
   }
 };
 

@@ -1,5 +1,5 @@
-require('babel-register')({ presets: ['env'], plugins: ['transform-class-properties'] });
-require('babel-polyfill');
+require('@babel/register')({ cwd: __dirname + '/..' });
+require('@babel/polyfill');
 const prog = require('caporal');
 
 const addModuleCommand = require('./cli/commands/addModule');

@@ -3,7 +3,6 @@ import { Server } from 'http';
 import chaiHttp from 'chai-http';
 import { ApolloClient } from 'apollo-client';
 import WebSocket from 'ws';
-import * as path from 'path';
 
 import createApolloClient from '../../../common/createApolloClient';
 import '../../knexdata';
@@ -15,11 +14,9 @@ chai.should();
 let server: Server;
 let apollo: ApolloClient<any>;
 
-const BABEL_CONFIG = path.resolve(require.resolve('../../../../babel.config.node.js'));
-
 before(async () => {
   // tslint:disable-next-line
-  require('@babel/register')({ cwd: path.dirname(BABEL_CONFIG), configFile: BABEL_CONFIG, ignore: [/[\/\\]node_modules[\/\\]/, /[\/\\]server[\/\\]build[\/\\]/] });
+  require('@babel/register')({ cwd: __dirname + '/../../../..' });
   // , configFile: BABEL_CONFIG,
   await knex.migrate.latest();
   await knex.seed.run();

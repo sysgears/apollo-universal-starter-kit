@@ -6,10 +6,8 @@ import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.sse.ServerSentEvent
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.model.HttpHeader
 import akka.http.scaladsl.model.headers.`Set-Cookie`
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.server.directives.RespondWithDirectives.respondWithHeaders
 import akka.stream.ActorMaterializer
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.graphql.{GraphQL, UserContext}
@@ -39,48 +37,43 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
         userCtx =>
           QueryParser.parse(graphQlMessage.query) match {
             case Success(queryAst) =>
-              val headers: ListBuffer[HttpHeader] = ListBuffer.empty
               queryAst.operationType(graphQlMessage.operationName) match {
                 case Some(Subscription) =>
                   import sangria.streaming.akkaStreams._
-                  respondWithHeaders(headers.toList) {
-                    complete {
-                      graphQlExecutor.prepare(
-                        queryAst = queryAst,
-                        userContext = userCtx,
-                        root = (),
-                        operationName = graphQlMessage.operationName,
-                        variables = graphQlMessage.variables.getOrElse(JsObject.empty)
-                      ).map {
-                        preparedQuery =>
-                          ToResponseMarshallable(preparedQuery.execute()
-                            .map(r => ServerSentEvent(r.compactPrint))
-                            .recover {
-                              case NonFatal(error) =>
-                                ServerSentEvent(error.getMessage)
-                            }
-                          )
-                      }.recover {
-                        case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
-                        case error: ErrorWithResolver => ToResponseMarshallable(InternalServerError -> error.resolveError)
-                      }
+                  complete {
+                    graphQlExecutor.prepare(
+                      queryAst = queryAst,
+                      userContext = userCtx,
+                      root = (),
+                      operationName = graphQlMessage.operationName,
+                      variables = graphQlMessage.variables.getOrElse(JsObject.empty)
+                    ).map {
+                      preparedQuery =>
+                        ToResponseMarshallable(preparedQuery.execute()
+                          .map(r => ServerSentEvent(r.compactPrint))
+                          .recover {
+                            case NonFatal(error) =>
+                              ServerSentEvent(error.getMessage)
+                          }
+                        )
+                    }.recover {
+                      case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
+                      case error: ErrorWithResolver => ToResponseMarshallable(InternalServerError -> error.resolveError)
                     }
                   }
                 case _ =>
-                  respondWithHeaders(headers.toList) {
-                    complete(
-                      graphQlExecutor.execute(
-                        queryAst = queryAst,
-                        userContext = userCtx,
-                        root = (),
-                        operationName = graphQlMessage.operationName,
-                        variables = graphQlMessage.variables.getOrElse(JsObject.empty)
-                      ).map(OK -> _).recover {
-                        case error: QueryAnalysisError => BadRequest -> error.resolveError
-                        case error: ErrorWithResolver => InternalServerError -> error.resolveError
-                      }
-                    )
-                  }
+                  complete(
+                    graphQlExecutor.execute(
+                      queryAst = queryAst,
+                      userContext = userCtx,
+                      root = (),
+                      operationName = graphQlMessage.operationName,
+                      variables = graphQlMessage.variables.getOrElse(JsObject.empty)
+                    ).map(OK -> _).recover {
+                      case error: QueryAnalysisError => BadRequest -> error.resolveError
+                      case error: ErrorWithResolver => InternalServerError -> error.resolveError
+                    }
+                  )
               }
             case Failure(e: SyntaxError) => complete(BadRequest, syntaxError(e))
             case Failure(_) => complete(InternalServerError)

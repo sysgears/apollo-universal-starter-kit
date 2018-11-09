@@ -1,6 +1,6 @@
 package modules.counter.services.count
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.pattern._
 import com.google.inject.Inject
 import modules.counter.models.Counter
@@ -11,9 +11,9 @@ import scala.concurrent.ExecutionContext
 
 object CounterActor {
 
-  object GetAmount
+  case class GetAmount(sender: ActorRef)
 
-  case class IncrementAndGet(amount: Int)
+  case class IncrementAndGet(amount: Int, sender: ActorRef)
 
   final val name = "CounterActor"
 }
@@ -26,8 +26,8 @@ class CounterActor @Inject()(counterRepo: CounterRepo)
   override def receive: Receive = {
     case incrementAndGet: IncrementAndGet =>
       log.info(s"Received message: [ $incrementAndGet ]")
-      counterRepo.inc(Counter(Some(defaultId), incrementAndGet.amount)).pipeTo(sender)
+      counterRepo.inc(Counter(Some(defaultId), incrementAndGet.amount)).pipeTo(incrementAndGet.sender)
 
-    case GetAmount => counterRepo.find(defaultId).pipeTo(sender)
+    case getAmount: GetAmount => counterRepo.find(defaultId).pipeTo(getAmount.sender)
   }
 }

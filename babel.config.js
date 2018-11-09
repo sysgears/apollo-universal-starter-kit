@@ -1,8 +1,14 @@
 module.exports = {
   compact: false,
-  presets: ['babel-preset-expo'],
+  presets: ['@babel/preset-react', ['@babel/preset-env', { modules: 'commonjs' }]],
   plugins: [
-    'haul/src/utils/fixRequireIssues',
+    '@babel/plugin-transform-modules-commonjs',
+    '@babel/plugin-transform-destructuring',
+    '@babel/plugin-transform-regenerator',
+    '@babel/plugin-transform-runtime',
+    '@babel/plugin-proposal-class-properties',
+    ['@babel/plugin-proposal-decorators', { legacy: true }],
+    '@babel/plugin-proposal-object-rest-spread',
     ['styled-components', { ssr: true }],
     ['import', { libraryName: 'antd-mobile' }]
   ],

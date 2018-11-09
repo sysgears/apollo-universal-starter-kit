@@ -118,6 +118,7 @@ class ListView extends React.Component {
     customBatchFields: PropTypes.object,
     customActions: PropTypes.object,
     tableScroll: PropTypes.object,
+    rowClassName: PropTypes.func,
     currentUser: PropTypes.object,
     currentUserLoading: PropTypes.bool,
     parentWait: PropTypes.bool,
@@ -275,6 +276,7 @@ class ListView extends React.Component {
       customBatchFields,
       updateManyEntries,
       tableScroll = null,
+      rowClassName = null,
       tableHeaderColumnHeight
     } = this.props;
     const { selectedRowKeys, wait, error, success } = this.state;
@@ -406,6 +408,13 @@ class ListView extends React.Component {
       tableProps = {
         ...tableProps,
         scroll: tableScroll
+      };
+    }
+
+    if (rowClassName) {
+      tableProps = {
+        ...tableProps,
+        rowClassName
       };
     }
 

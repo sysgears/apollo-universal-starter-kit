@@ -25,12 +25,12 @@ class InterceptorService @Inject() extends MethodInterceptor with Logger {
         injector.getInstance(clazz).asInstanceOf[Interceptor[AnyRef, AnyRef]].handle(args(argIndex)),
         Inf
       ) match {
-        case Left(error) =>
-          log.debug(s"Handled with error: $error")
-          return error
-        case Right(value) =>
-          log.debug(s"Handled with value: $value")
-          value.foreach(args(argIndex) = _)
+        case Left(result) =>
+          log.debug(s"Handled with result: $result")
+          return result
+        case Right(arg) =>
+          log.debug(s"Handled with arg: $arg")
+          arg.foreach(args(argIndex) = _)
       }
     }
     log.debug(s"Proceed to the next interceptor in the chain")

@@ -5,13 +5,11 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { required, email, validateForm } from '../../../../../common/validation';
+import { required, email, validate } from '../../../../../common/modules/validation';
 
 const forgotPasswordFormSchema = {
   email: [required, email]
 };
-
-const validate = values => validateForm(values, forgotPasswordFormSchema);
 
 const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
   return (
@@ -58,7 +56,7 @@ const ForgotPasswordFormWithFormik = withFormik({
       .then(() => resetForm())
       .catch(e => setErrors(e));
   },
-  validate: values => validate(values),
+  validate: values => validate(values, forgotPasswordFormSchema),
   displayName: 'ForgotPasswordForm' // helps with React DevTools
 });
 

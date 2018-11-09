@@ -1,4 +1,8 @@
-require('babel-register')({ presets: ['env'] });
+const path = require('path');
+
+const BABEL_CONFIG = path.resolve(require.resolve('../../../../../../../../babel.config.node.js'));
+require('@babel/register')({ cwd: path.dirname(BABEL_CONFIG), configFile: BABEL_CONFIG });
+require('@babel/polyfill');
 require('dotenv/config');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const settings = require('../../../../../../../../settings').default;
@@ -47,7 +51,7 @@ if (enabled && process.env.STRIPE_SECRET_KEY) {
         stripePlan.product === product.id
       ) {
         console.log(
-          `Plan - OK -->  '${stripePlan.nickname}' with product id 
+          `Plan - OK -->  '${stripePlan.nickname}' with product id
           '${stripePlan.product}' has been already created before`
         );
       } else {

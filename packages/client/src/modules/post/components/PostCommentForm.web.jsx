@@ -5,13 +5,11 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
-import { required, validateForm } from '../../../../../common/validation';
+import { required, validate } from '../../../../../common/modules/validation';
 
 const commentFormSchema = {
   content: [required]
 };
-
-const validate = values => validateForm(values, commentFormSchema);
 
 const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
   return (
@@ -64,7 +62,7 @@ const PostCommentFormWithFormik = withFormik({
     await onSubmit(values);
     resetForm({ content: '' });
   },
-  validate: values => validate(values),
+  validate: values => validate(values, commentFormSchema),
   displayName: 'CommentForm', // helps with React DevTools,
   enableReinitialize: true
 });

@@ -2,11 +2,10 @@ import { merge } from 'lodash';
 import { DocumentNode } from 'graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { Express } from 'express';
-import { Resource } from 'i18next';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 
-import Module from './Module';
+import CommonModule, { CommonModuleShape } from '../../../common/modules/CommonModule';
 
 interface CreateContextFuncProps {
   req: Request;
@@ -16,9 +15,7 @@ interface CreateContextFuncProps {
   context: { [key: string]: any };
 }
 
-export interface ServerModuleShape {
-  // Localization
-  localization?: Array<{ ns: string; resources: Resource }>;
+export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API
   schema?: DocumentNode[];
   createResolversFunc?: Array<(pubsub: PubSub) => IResolvers>;
@@ -32,7 +29,7 @@ export interface ServerModuleShape {
 
 interface ServerModule extends ServerModuleShape {}
 
-class ServerModule extends Module {
+class ServerModule extends CommonModule {
   constructor(...modules: ServerModuleShape[]) {
     super(...modules);
   }

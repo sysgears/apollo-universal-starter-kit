@@ -11,29 +11,29 @@ let assetMap: { [key: string]: string };
  * replaces circular links to '[Circular]' string
  * It is needed for converting the Error object into JSON via JSON.stringify
  */
-const stripCircular = (cilcularData: any, seen: any[] | null) => {
-  const notCilcularData = Array.isArray(cilcularData) ? [] : {};
+const stripCircular = (circularData: any, seen: any[] | null) => {
+  const notCircularData = Array.isArray(circularData) ? [] : {};
   seen = seen || [];
-  seen.push(cilcularData);
+  seen.push(circularData);
 
-  Object.getOwnPropertyNames(cilcularData).forEach(key => {
-    if (!cilcularData[key] || (typeof cilcularData[key] !== 'object' && !Array.isArray(cilcularData[key]))) {
-      notCilcularData[key] = cilcularData[key];
-    } else if (seen.indexOf(cilcularData[key]) < 0) {
-      notCilcularData[key] = stripCircular(cilcularData[key], seen.slice(0));
+  Object.getOwnPropertyNames(circularData).forEach(key => {
+    if (!circularData[key] || (typeof circularData[key] !== 'object' && !Array.isArray(circularData[key]))) {
+      notCircularData[key] = circularData[key];
+    } else if (seen.indexOf(circularData[key]) < 0) {
+      notCircularData[key] = stripCircular(circularData[key], seen.slice(0));
     } else {
-      notCilcularData[key] = '[Circular]';
+      notCircularData[key] = '[Circular]';
     }
   });
 
-  return notCilcularData;
+  return notCircularData;
 };
 
 /**
  * The code below MUST be declared as a function, not closure,
  * otherwise Express will fail to execute this handler
  *
- * Important: should have 4 params, even if they don't used
+ * Important: should have 4 params, even if they are not used
  */
 function errorMiddleware(e: Error, req: any, res: any, next: () => void) {
   if (!isApiExternal && req.path === __API_URL__) {

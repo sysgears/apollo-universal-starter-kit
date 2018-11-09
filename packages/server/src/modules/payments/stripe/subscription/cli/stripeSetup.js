@@ -1,6 +1,6 @@
 const path = require('path');
 
-const BABEL_CONFIG = path.resolve(require.resolve('../../../../../../../../babel.config.knex.js'));
+const BABEL_CONFIG = path.resolve(require.resolve('../../../../../../../../babel.config.node.js'));
 require('@babel/register')({ cwd: path.dirname(BABEL_CONFIG), configFile: BABEL_CONFIG });
 require('@babel/polyfill');
 require('dotenv/config');

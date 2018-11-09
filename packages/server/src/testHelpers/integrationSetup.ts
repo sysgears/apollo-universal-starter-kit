@@ -15,7 +15,7 @@ chai.should();
 let server: Server;
 let apollo: ApolloClient<any>;
 
-const BABEL_CONFIG = path.resolve(require.resolve('../../../../babel.config.knex.js'));
+const BABEL_CONFIG = path.resolve(require.resolve('../../../../babel.config.node.js'));
 
 before(async () => {
   // tslint:disable-next-line

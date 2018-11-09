@@ -1,5 +1,8 @@
-require('babel-register')({ presets: ['env'], plugins: ['transform-class-properties'] });
-require('babel-polyfill');
+const path = require('path');
+
+const BABEL_CONFIG = path.resolve(require.resolve('../babel.config.node.js'));
+require('@babel/register')({ cwd: path.dirname(BABEL_CONFIG), configFile: BABEL_CONFIG });
+require('@babel/polyfill');
 const prog = require('caporal');
 
 const addModuleCommand = require('./cli/commands/addModule');

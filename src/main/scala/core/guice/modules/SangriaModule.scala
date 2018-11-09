@@ -1,10 +1,9 @@
 package core.guice.modules
 
 import com.google.inject.Provides
-import core.graphql.GraphQL
+import core.graphql.{GraphQL, UserContext}
 import javax.inject.Singleton
 import net.codingwell.scalaguice.ScalaModule
-import sangria.execution.batch.BatchExecutor
 import sangria.execution.{Executor, QueryReducer}
 
 import scala.concurrent.ExecutionContext
@@ -13,19 +12,13 @@ class SangriaModule extends ScalaModule {
 
   @Provides
   @Singleton
-  def provideSangriaExecutor(implicit executionContext: ExecutionContext): Executor[Unit, Unit] = {
+  def provideSangriaExecutor(implicit executionContext: ExecutionContext): Executor[UserContext, Unit] = {
     Executor(
       schema = GraphQL.schema,
       queryReducers = List(
-        QueryReducer.rejectMaxDepth[Unit](GraphQL.maxQueryDepth),
-        QueryReducer.rejectComplexQueries[Unit](GraphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
+        QueryReducer.rejectMaxDepth[UserContext](GraphQL.maxQueryDepth),
+        QueryReducer.rejectComplexQueries[UserContext](GraphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
       )
     )
-  }
-
-  @Provides
-  @Singleton
-  def provideSangriaBatchExecutor(implicit executionContext: ExecutionContext): BatchExecutor.type = {
-    BatchExecutor
   }
 }

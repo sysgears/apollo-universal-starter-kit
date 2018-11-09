@@ -1,6 +1,6 @@
 package modules.contact.graphql.schema
 
-import core.graphql.GraphQLSchema
+import core.graphql.{GraphQLSchema, UserContext}
 import javax.inject.Inject
 import modules.contact.graphql.resolvers.ContactResolver
 import modules.contact.models.{Contact, ContactPayload}
@@ -23,9 +23,9 @@ class ContactSchema @Inject()(contactResolver: ContactResolver) extends GraphQLS
       )
   }
 
-  implicit val contactPayload: ObjectType[Unit, ContactPayload] = deriveObjectType(ObjectTypeName("ContactPayload"))
+  implicit val contactPayload: ObjectType[UserContext, ContactPayload] = deriveObjectType(ObjectTypeName("ContactPayload"))
 
-  override def mutations: List[Field[Unit, Unit]] = List(
+  override def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "contact",
       fieldType = contactPayload,

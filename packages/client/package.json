@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "src",
   "engines": {
-    "node": ">= 6.11.1",
+    "node": ">= 6.11.1 <= 10",
     "yarn": ">= 1.0.0"
   },
   "scripts": {
@@ -64,18 +64,17 @@
     "graphql-tag": "^2.6.0",
     "history": "^4.7.2",
     "i18next": "^11.2.3",
-    "i18next-browser-languagedetector": "^2.1.0",
     "immutability-helper": "^2.6.2",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
     "prop-types": "^15.6.0",
-    "react": "16.3.1",
+    "react": "16.5.0",
     "react-apollo": "^2.1.4",
-    "react-art": "^16.3.2",
+    "react-art": "16.5.0",
     "react-cookie": "^2.2.0",
     "react-debounce-input": "^3.1.0",
-    "react-dom": "^16.2.0",
+    "react-dom": "16.5.0",
     "react-dropzone": "^4.2.3",
     "react-ga": "^2.3.5",
     "react-helmet": "^5.2.0",
@@ -132,9 +131,9 @@
   "optionalDependencies": {
     "@expo/vector-icons": "^6.2.1",
     "antd-mobile-rn": "^2.2.1",
-    "expo": "^30.0.1",
+    "expo": "^31.0.2",
     "native-base": "^2.3.5",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",
     "uuid": "^3.3.2",
     "react-native-elements": "^0.19.1",
@@ -147,5 +146,18 @@
   },
   "peerDependencies": {
     "spinjs": "^0.4.0"
+  },
+  "browserslist": {
+    "development": [
+      "last 2 chrome versions",
+      "last 2 firefox versions",
+      "last 2 edge versions"
+    ],
+    "production": [
+      ">1%",
+      "last 4 versions",
+      "Firefox ESR",
+      "not ie < 11"
+    ]
   }
 }

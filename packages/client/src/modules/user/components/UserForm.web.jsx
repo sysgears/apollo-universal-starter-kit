@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
-import { email, minLength, required, match, validateForm } from '../../../../../common/validation';
+import { email, minLength, required, match, validate } from '../../../../../common/modules/validation';
 
 import settings from '../../../../../../settings';
 
@@ -26,8 +26,6 @@ const updateUserFormSchema = {
   password: minLength(settings.user.auth.password.minLength),
   passwordConfirmation: [match('password'), minLength(settings.user.auth.password.minLength)]
 };
-
-const validate = (values, createNew) => validateForm(values, createNew ? createUserFormSchema : updateUserFormSchema);
 
 const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
@@ -157,7 +155,8 @@ const UserFormWithFormik = withFormik({
     await onSubmit(values).catch(e => setErrors(e));
   },
   displayName: 'SignUpForm ', // helps with React DevTools
-  validate: (values, props) => validate(values, isEmpty(props.initialValues))
+  validate: (values, props) =>
+    validate(values, isEmpty(props.initialValues) ? createUserFormSchema : updateUserFormSchema)
 });
 
 export default translate('user')(UserFormWithFormik(UserForm));

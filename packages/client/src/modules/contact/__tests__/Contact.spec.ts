@@ -23,7 +23,7 @@ describe('Contact UI works', () => {
   const submitButton = find(contactForm, 'button.btn-primary');
 
   step('Contact page renders on mount', () => {
-    expect(content).to.not.be.empty;
+    expect(content).to.not.be.empty('string');
   });
 
   step('Name validation works', async () => {

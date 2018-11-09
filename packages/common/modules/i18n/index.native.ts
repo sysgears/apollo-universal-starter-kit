@@ -11,7 +11,7 @@ const languageDetector = {
   async: true, // flags below detection to be async
   detect: async (callback: (lang: string) => string) => {
     const lng = await Expo.SecureStore.getItemAsync('i18nextLng');
-    return callback(lng || (await (Expo as any).Localization.getCurrentLocaleAsync()).replace('_', '-'));
+    return callback(lng || (await (Expo as any).Localization.getLocalizationAsync()).locale.replace('_', '-'));
   },
   init: () => {},
   cacheUserLanguage: async (lng: string) => {

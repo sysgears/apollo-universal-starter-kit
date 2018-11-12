@@ -1,4 +1,4 @@
-package modules.jwt
+package modules.jwt.decoder
 
 import scala.util.Try
 

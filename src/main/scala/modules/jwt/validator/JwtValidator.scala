@@ -1,4 +1,4 @@
-package modules.jwt
+package modules.jwt.validator
 
 import scala.util.Try
 

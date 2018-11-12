@@ -1,4 +1,4 @@
-package modules.jwt
+package modules.jwt.encoder
 
 import java.time.Duration
 

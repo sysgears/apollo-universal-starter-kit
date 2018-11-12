@@ -1,3 +1,4 @@
+/* tslint:disable:no-unused-expression*/
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
@@ -23,7 +24,7 @@ describe('Contact UI works', () => {
   const submitButton = find(contactForm, 'button.btn-primary');
 
   step('Contact page renders on mount', () => {
-    expect(content).to.not.be.empty('string');
+    expect(content).to.not.be.empty;
   });
 
   step('Name validation works', async () => {

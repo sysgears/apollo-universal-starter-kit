@@ -1,19 +1,19 @@
 import React from 'react';
-import { Mutation, MutationFn } from 'react-apollo';
+import { Mutation, MutationFn, FetchResult } from 'react-apollo';
 
 import ContactView from '../components/ContactView';
 
 import CONTACT from '../graphql/Contact.graphql';
 import translate, { TranslateFunction } from '../../../i18n';
-import { ContactFields } from '../types';
+import { ContactForm } from '../types';
 
 class Contact extends React.Component<{ t: TranslateFunction }> {
-  // TODO: Add types for values
-  public onSubmit = (contact: MutationFn) => async (values: ContactFields) => {
-    // const { t } = this.props;
-    // const result = await contact({ variables: { input: values } });
-    //
-    // console.log('datadatadata', result);
+  public onSubmit = (contactMutate: MutationFn) => async (values: ContactForm) => {
+    const {
+      data: { contact }
+    } = (await contactMutate({ variables: { input: values } })) as FetchResult;
+
+    return { errors: contact.errors ? contact.errors : undefined };
   };
 
   public render() {

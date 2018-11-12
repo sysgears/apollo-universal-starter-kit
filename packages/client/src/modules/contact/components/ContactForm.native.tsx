@@ -8,13 +8,13 @@ import { RenderField, FormView, Button, Modal, danger, success } from '../../com
 import { placeholderColor, submit } from '../../common/components/native/styles';
 import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
 import { validate } from '../../../../../common/modules/validation';
+import { transformValidationMessagesFromGraphql } from '../../../../../common/utils';
 import { TranslateFunction } from '../../../i18n';
-import { ContactFields } from '../types';
+import { ContactForm } from '../types';
 
 interface ContactFormProps {
   t: TranslateFunction;
-  // TODO: types
-  onSubmit: (values: ContactFields) => Promise<void>;
+  onSubmit: (values: ContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
 }
 
 const ContactForm = ({
@@ -24,7 +24,7 @@ const ContactForm = ({
   errors,
   status,
   setStatus
-}: FormikProps<ContactFields> & ContactFormProps) => (
+}: FormikProps<ContactForm> & ContactFormProps) => (
   <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
     <Modal isVisible={status && status.showModal} onBackdropPress={setStatus}>
       <View style={styles.modal}>
@@ -93,19 +93,18 @@ const styles = StyleSheet.create({
   submit
 });
 
-const ContactFormWithFormik = withFormik<ContactFormProps, ContactFields>({
+const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
   async handleSubmit(values, { resetForm, setErrors, setStatus, props: { onSubmit } }) {
     Keyboard.dismiss();
 
-    try {
-      await onSubmit(values);
+    const { errors } = await onSubmit(values);
+    if (errors) {
+      setErrors(transformValidationMessagesFromGraphql(errors));
+    } else {
+      setStatus({ showModal: true });
       resetForm();
-    } catch (e) {
-      setErrors(e);
     }
-
-    setStatus({ showModal: true });
   },
   validate: values => validate(values, contactFormSchema),
   displayName: 'ContactUsForm' // helps with React DevTools

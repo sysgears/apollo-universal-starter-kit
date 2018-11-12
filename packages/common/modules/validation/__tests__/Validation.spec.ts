@@ -92,7 +92,7 @@ describe('Check if validation works', () => {
   step('"validate" should compare the simple input object to input schema ', () => {
     let schema: Schema = { name: [required, minLength(5), maxLength(7)] };
     let dataToValidate: { [key: string]: any } = { name: 'login' };
-    expect(validate(dataToValidate, schema)).to.be.empty;
+    expect(validate(dataToValidate, schema)).to.be.an('undefined');
 
     schema = {
       name: [required, minLength(5), maxLength(8)],
@@ -100,7 +100,7 @@ describe('Check if validation works', () => {
       duplicatePassword: [required, match('password'), minLength(5), maxLength(8)]
     };
     dataToValidate = { name: 'login', password: 'password', duplicatePassword: 'password' };
-    expect(validate(dataToValidate, schema)).to.be.empty;
+    expect(validate(dataToValidate, schema)).to.be.an('undefined');
 
     schema = { name: [required, minLength(5), maxLength(7)] };
     dataToValidate = { name: 'logi' };
@@ -131,7 +131,7 @@ describe('Check if validation works', () => {
   step('"validate" should compare the input object with nested objects to the input schema', () => {
     let schema: Schema = { name: { firstName: [required, minLength(5), maxLength(8)] } };
     let dataToValidate: { [key: string]: any } = { name: { firstName: 'GoodName' } };
-    expect(validate(dataToValidate, schema)).to.be.empty;
+    expect(validate(dataToValidate, schema)).to.be.an('undefined');
 
     schema = { name: { firstName: [required, minLength(5), maxLength(8)] } };
     dataToValidate = { name: { firstName: 'bad' } };

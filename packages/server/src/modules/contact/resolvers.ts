@@ -1,3 +1,8 @@
+import { validate } from '../../../../common/modules/validation';
+import { contactFormSchema } from './contactFormSchema';
+import log from '../../../../common/log';
+import { transformValidationMessagesForGraphql } from '../../../../common/utils';
+
 interface ContactInput {
   input: {
     name: string;
@@ -8,13 +13,24 @@ interface ContactInput {
 
 export default () => ({
   Mutation: {
-    async contact(obj: any, { input }: ContactInput, { mailer }: any): Promise<{ errors: null }> {
-      await mailer.sendMail({
-        from: input.email,
-        to: process.env.EMAIL_USER,
-        subject: 'New email through contact us page',
-        html: `<p>${input.name} is sending the following message.</p><p>${input.content}</p>`
-      });
+    async contact(obj: any, { input }: ContactInput, { mailer }: any) {
+      const errors = validate(input, contactFormSchema);
+
+      if (errors) {
+        return { errors: transformValidationMessagesForGraphql(errors) };
+      }
+
+      try {
+        await mailer.sendMail({
+          from: input.email,
+          to: process.env.EMAIL_USER,
+          subject: 'New email through contact us page',
+          html: `<p>${input.name} is sending the following message.</p><p>${input.content}</p>`
+        });
+      } catch (e) {
+        log.error(e);
+        return { errors: { serverError: 'SERVER ERROR REAL' } };
+      }
 
       return { errors: null };
     }

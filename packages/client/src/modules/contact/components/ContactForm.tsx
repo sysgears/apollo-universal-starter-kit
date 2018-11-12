@@ -3,18 +3,25 @@ import { withFormik, FormikProps } from 'formik';
 
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
+// import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
 import { validate } from '../../../../../common/modules/validation';
+import { transformValidationMessagesFromGraphql } from '../../../../../common/utils';
 import { TranslateFunction } from '../../../i18n';
-import { ContactFields } from '../types';
+import { ContactForm } from '../types';
+// import { email, minLength, required } from '../../../../../common/modules/validation';
+
+const contactFormSchema = {
+  // name: [required, minLength(1)],
+  // email: [required, email],
+  // content: [required, minLength(10)]
+};
 
 interface ContactFormProps {
   t: TranslateFunction;
-  // TODO: types
-  onSubmit: (values: ContactFields) => Promise<void>;
+  onSubmit: (values: ContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
 }
 
-const ContactForm = ({ values, handleSubmit, t, status }: FormikProps<ContactFields> & ContactFormProps) => (
+const ContactForm = ({ values, handleSubmit, t, status }: FormikProps<ContactForm> & ContactFormProps) => (
   <Form name="contact" onSubmit={handleSubmit}>
     {status && status.sent && <Alert color="success">{t('successMsg')}</Alert>}
     <Field name="name" component={RenderField} type="text" label={t('form.field.name')} value={values.name} />
@@ -35,16 +42,18 @@ const ContactForm = ({ values, handleSubmit, t, status }: FormikProps<ContactFie
   </Form>
 );
 
-const ContactFormWithFormik = withFormik<ContactFormProps, ContactFields>({
+const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   enableReinitialize: true,
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-  async handleSubmit(values, { resetForm, setStatus, props: { onSubmit } }) {
-    try {
-      await onSubmit(values);
-      resetForm();
+  async handleSubmit(values, { resetForm, setErrors, setStatus, props: { onSubmit } }) {
+    const { errors } = await onSubmit(values);
+    if (errors) {
+      setStatus({ sent: false });
+      const errorstr = transformValidationMessagesFromGraphql(errors);
+      setErrors(errorstr);
+    } else {
       setStatus({ sent: true });
-    } catch (e) {
-      setStatus({ sent: false, serverError: 'SERVER ERROR' });
+      resetForm();
     }
   },
   validate: values => validate(values, contactFormSchema),

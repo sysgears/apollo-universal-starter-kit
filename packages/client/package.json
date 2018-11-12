@@ -39,9 +39,15 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
+    "@angular/common": "^7.0.3",
+    "@angular/compiler": "^7.0.3",
+    "@angular/core": "^7.0.3",
+    "@angular/platform-browser": "^7.0.3",
+    "@angular/platform-browser-dynamic": "^7.0.3",
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.6",
     "@fortawesome/react-fontawesome": "0.0.18",
+    "angular2-template-loader": "^0.6.2",
     "antd": "^3.10.0",
     "apollo-cache-inmemory": "1.2.9",
     "apollo-cache-router": "^1.1.6",
@@ -55,6 +61,7 @@
     "apollo-upload-client": "^8.0.0",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.1.1",
+    "core-js": "^2.5.7",
     "error-stack-parser": "^2.0.1",
     "extract-files": "^3.1.0",
     "filesize": "^3.5.11",
@@ -89,9 +96,11 @@
     "reactstrap": "^5.0.0-beta",
     "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.2",
+    "rxjs": "^6.3.3",
     "sourcemapped-stacktrace": "^1.1.8",
     "styled-components": "^3.2.6",
-    "subscriptions-transport-ws": "^0.9.4"
+    "subscriptions-transport-ws": "^0.9.4",
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
     "@alienfast/i18next-loader": "^1.0.16",
@@ -135,14 +144,14 @@
     "native-base": "^2.3.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",
-    "uuid": "^3.3.2",
     "react-native-elements": "^0.19.1",
     "react-native-gifted-chat": "^0.4.3",
     "react-native-keyboard-spacer": "^0.4.1",
+    "react-native-mime-types": "^2.2.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",
     "react-navigation": "^2.13.0",
-    "react-native-mime-types": "^2.2.1"
+    "uuid": "^3.3.2"
   },
   "peerDependencies": {
     "spinjs": "^0.4.0"

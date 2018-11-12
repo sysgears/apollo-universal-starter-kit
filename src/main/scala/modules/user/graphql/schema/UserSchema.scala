@@ -6,14 +6,14 @@ import javax.inject.Inject
 import modules.user.graphql.resolvers.UserResolver
 import modules.user.model.{RegisterUserInput, User, UserPayload}
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType}
-import sangria.macros.derive.{InputObjectTypeName, ObjectTypeName, deriveInputObjectType, deriveObjectType}
+import sangria.macros.derive._
 import sangria.marshalling.FromInput
 
 class UserSchema @Inject()(userResolver: UserResolver) extends GraphQLSchema
   with InputUnmarshallerGenerator {
 
   implicit val registerUserInput: InputObjectType[RegisterUserInput] = deriveInputObjectType(InputObjectTypeName("RegisterUserInput"))
-  implicit val user: ObjectType[UserContext, User] = deriveObjectType(ObjectTypeName("User"))
+  implicit val user: ObjectType[UserContext, User] = deriveObjectType(ObjectTypeName("User"), ExcludeFields("password"))
   implicit val UserPayload: ObjectType[UserContext, UserPayload] = deriveObjectType(ObjectTypeName("UserPayload"))
 
   implicit val registerUserInputUnmarshaller: FromInput[RegisterUserInput] = inputUnmarshaller {

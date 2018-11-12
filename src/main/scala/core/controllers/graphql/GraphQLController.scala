@@ -1,14 +1,20 @@
 package core.controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import akka.http.scaladsl.model.Multipart.FormData
 import akka.http.scaladsl.model.headers.`Set-Cookie`
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
+import akka.stream.scaladsl.Source
 import core.controllers.AkkaRoute
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import core.graphql.{GraphQL, UserContext}
+import core.graphql.UserContext
+import spray.json.JsValue
+
+import akka.http.scaladsl.model.Multipart
+import core.graphql.GraphQL
 import javax.inject.Inject
 import sangria.execution.Executor
 import sangria.renderer.SchemaRenderer
@@ -38,6 +44,16 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
                     entity(as[Seq[GraphQLMessage]]) {
                       graphQlMessages =>
                         httpHandler.handleBatchQuery(graphQlMessages, userCtx)
+                    } ~
+                    formFields('operations.as[GraphQLMessage], 'map.as[JsValue]) {
+                      (graphQLMessage, filesOccurredJsValue) =>
+                        //for each file, the key is the file multipart form field name and the value is an array of operations paths
+                        val filesOccurredMap = filesOccurredJsValue.convertTo[Map[String, List[String]]]
+                        entity(as[Multipart.FormData]) {
+                          formData =>
+                            val formDataParts: Source[FormData.BodyPart, Any] = formData.parts.filter(part => filesOccurredMap.keySet.contains(part.name))
+                            httpHandler.handleQuery(graphQLMessage, userCtx.copy(filesData = formDataParts))
+                        }
                     }
               }
             }

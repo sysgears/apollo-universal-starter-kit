@@ -64,6 +64,9 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
       } ~
       (path("graphiql") & get) {
         getFromResource("web/graphiql.html")
+      } ~
+      (path("public" / Segment) & get) { str =>
+        getFromResource(s"public/$str")
       }
 
   private def withHeaders(userCtx: UserContext)(ctxToRoute: UserContext => Route) =

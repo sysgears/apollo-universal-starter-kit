@@ -8,9 +8,9 @@ object GraphQL {
   val maxQueryDepth = 15
   val maxQueryComplexity = 1000
 
-  private val dummy = ObjectType("Query", List[Field[Unit, Unit]](Field("dummy", IntType, resolve = _ => 0)))
+  private val dummy = ObjectType("Query", List[Field[UserContext, Unit]](Field("dummy", IntType, resolve = _ => 0)))
 
-  val schema: Schema[Unit, Unit] = sangria.schema.Schema(
+  val schema: Schema[UserContext, Unit] = sangria.schema.Schema(
     query = if (queries.nonEmpty) ObjectType("Query", queries) else dummy,
     mutation = if (mutations.nonEmpty) Some(ObjectType("Mutation", mutations)) else None,
     subscription = if (subscriptions.nonEmpty) Some(ObjectType("Subscription", subscriptions)) else None

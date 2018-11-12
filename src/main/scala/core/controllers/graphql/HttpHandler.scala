@@ -6,10 +6,10 @@ import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.sse.ServerSentEvent
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.StandardRoute
+import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.graphql.GraphQL
+import core.graphql.{GraphQL, UserContext}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
@@ -26,12 +26,11 @@ import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
 @Singleton
-class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
-                            graphQlBatchExecutor: BatchExecutor.type)
+class HttpHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
                            (implicit val scheduler: Scheduler,
-                            implicit val actorMaterializer: ActorMaterializer) {
+                            implicit val actorMaterializer: ActorMaterializer) extends ControllerUtil {
 
-  def handleQuery(graphQlMessage: GraphQLMessage): StandardRoute = {
+  def handleQuery(graphQlMessage: GraphQLMessage, userCtx: UserContext): Route =
     QueryParser.parse(graphQlMessage.query) match {
       case Success(queryAst) =>
         queryAst.operationType(graphQlMessage.operationName) match {
@@ -40,7 +39,7 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
             complete {
               graphQlExecutor.prepare(
                 queryAst = queryAst,
-                userContext = (),
+                userContext = userCtx,
                 root = (),
                 operationName = graphQlMessage.operationName,
                 variables = graphQlMessage.variables.getOrElse(JsObject.empty)
@@ -62,7 +61,7 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
             complete(
               graphQlExecutor.execute(
                 queryAst = queryAst,
-                userContext = (),
+                userContext = userCtx,
                 root = (),
                 operationName = graphQlMessage.operationName,
                 variables = graphQlMessage.variables.getOrElse(JsObject.empty)
@@ -72,24 +71,11 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
               }
             )
         }
-      case Failure(e: SyntaxError) =>
-        complete(
-          BadRequest,
-          JsObject(
-            "syntaxError" -> JsString(e.getMessage),
-            "locations" -> JsArray(
-              JsObject(
-                "line" -> JsNumber(e.originalError.position.line),
-                "column" -> JsNumber(e.originalError.position.column)
-              )
-            )
-          )
-        )
+      case Failure(e: SyntaxError) => complete(BadRequest, syntaxError(e))
       case Failure(_) => complete(InternalServerError)
     }
-  }
 
-  def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage]): StandardRoute = {
+  def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage], userCtx: UserContext): Route = {
     import sangria.streaming.monix._
     val operations = graphQlMessages.map(_.operationName.getOrElse("")).filter(_ != "")
     QueryParser.parse(graphQlMessages.map(_.query).mkString(" ")) match {
@@ -102,9 +88,10 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
             variables = graphQlMessages.map(_.variables.getOrElse(JsObject.empty)).fold(JsObject.empty) {
               (o1, o2) => JsObject(o1.fields ++ o2.fields)
             },
+            userContext = userCtx,
             queryReducers = List(
-              QueryReducer.rejectMaxDepth[Unit](GraphQL.maxQueryDepth),
-              QueryReducer.rejectComplexQueries[Unit](GraphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
+              QueryReducer.rejectMaxDepth[UserContext](GraphQL.maxQueryDepth),
+              QueryReducer.rejectComplexQueries[UserContext](GraphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
             ),
             middleware = List(
               BatchExecutor.OperationNameExtension
@@ -129,19 +116,7 @@ class HttpHandler @Inject()(graphQlExecutor: Executor[Unit, Unit],
             case error: ErrorWithResolver => InternalServerError -> error.resolveError
           }
         }
-      case Failure(e: SyntaxError) =>
-        complete(
-          BadRequest,
-          JsObject(
-            "syntaxError" -> JsString(e.getMessage),
-            "locations" -> JsArray(
-              JsObject(
-                "line" -> JsNumber(e.originalError.position.line),
-                "column" -> JsNumber(e.originalError.position.column)
-              )
-            )
-          )
-        )
+      case Failure(e: SyntaxError) => complete(BadRequest, syntaxError(e))
       case Failure(_) => complete(InternalServerError)
     }
   }

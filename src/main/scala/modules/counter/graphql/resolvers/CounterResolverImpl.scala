@@ -12,6 +12,8 @@ import modules.counter.models.Counter
 import modules.counter.services.count.CounterActor
 import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
 import sangria.schema.Action
+import common.Logger
+import core.graphql.UserContext
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,7 +33,7 @@ class CounterResolverImpl @Inject()(@Named(CounterActor.name) counterActor: Acto
     sendMessageToActor[Counter](actorRef => counterActor ! GetAmount(actorRef))
   }
 
-  def counterUpdated: Source[Action[Unit, Counter], NotUsed] = {
+  def counterUpdated: Source[Action[UserContext, Counter], NotUsed] = {
     Source.fromPublisher(publisherService.getPublisher).map {
       counter =>
         log.info(s"Sending event [$counter] to client ...")

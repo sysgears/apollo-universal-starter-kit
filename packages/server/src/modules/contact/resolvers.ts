@@ -13,7 +13,7 @@ interface ContactInput {
 
 export default () => ({
   Mutation: {
-    async contact(obj: any, { input }: ContactInput, { mailer }: any) {
+    async contact(obj: any, { input }: ContactInput, { mailer, req: { t } }: any) {
       const errors = validate(input, contactFormSchema);
 
       if (errors) {
@@ -29,7 +29,7 @@ export default () => ({
         });
       } catch (e) {
         log.error(e);
-        return { errors: { serverError: 'SERVER ERROR REAL' } };
+        return { errors: [{ field: 'serverError', message: t('contact:sendError') }] };
       }
 
       return { errors: null };

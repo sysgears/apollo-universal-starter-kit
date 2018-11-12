@@ -24,12 +24,12 @@ const ContactForm = ({
   errors,
   status,
   setStatus
-}: FormikProps<ContactForm> & ContactFormProps) => (
+}: FormikProps<ContactForm> & ContactFormProps & { errors: { serverError: string } }) => (
   <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
     <Modal isVisible={status && status.showModal} onBackdropPress={setStatus}>
       <View style={styles.modal}>
-        <Text style={styles.modalText}>{status && status.serverError ? status.serverError : t('successMsg')}</Text>
-        <Button type={status.serverError ? danger : success} onPress={setStatus}>
+        <Text style={styles.modalText}>{errors && errors.serverError ? errors.serverError : t('successMsg')}</Text>
+        <Button type={errors.serverError ? danger : success} onPress={setStatus}>
           {t('modal.btnMsg')}
         </Button>
       </View>
@@ -99,11 +99,14 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
     Keyboard.dismiss();
 
     const { errors } = await onSubmit(values);
+
     if (errors) {
-      setErrors(transformValidationMessagesFromGraphql(errors));
+      const validationErrors: { [key: string]: string } = transformValidationMessagesFromGraphql(errors);
+      setStatus({ showModal: !!validationErrors.serverError });
+      setErrors(validationErrors);
     } else {
-      setStatus({ showModal: true });
       resetForm();
+      setStatus({ showModal: true });
     }
   },
   validate: values => validate(values, contactFormSchema),

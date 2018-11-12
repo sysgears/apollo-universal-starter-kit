@@ -4,12 +4,13 @@ import Helmet from 'react-helmet';
 import { LayoutCenter } from '../../common/components/index.web';
 import { PageLayout } from '../../common/components/web';
 import ContactForm from './ContactForm';
+import { ContactForm as IContactForm } from '../types';
 import settings from '../../../../../../settings';
 import { TranslateFunction } from '../../../i18n';
 
 interface ContactViewProps {
   t: TranslateFunction;
-  onSubmit: (values: any) => Promise<any>;
+  onSubmit: (values: IContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
 }
 
 const ContactView = (props: ContactViewProps) => {

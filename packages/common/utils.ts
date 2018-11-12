@@ -82,7 +82,7 @@ const getPlatform = () => {
  * Transforms errors from object into array of object (For Grapqhl type FieldError)
  */
 export const transformValidationMessagesForGraphql = (errors: { [key: string]: string }) =>
-  Object.keys(errors).reduce((formattedErrors, key) => [...formattedErrors, { field: key, message: errors[key] }], []);
+  Object.keys(errors).map(field => ({ field, message: errors[field] }));
 
 /**
  * Transforms errors array of object into simple object

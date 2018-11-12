@@ -9,11 +9,16 @@ import { ContactForm } from '../types';
 
 class Contact extends React.Component<{ t: TranslateFunction }> {
   public onSubmit = (contactMutate: MutationFn) => async (values: ContactForm) => {
-    const {
-      data: { contact }
-    } = (await contactMutate({ variables: { input: values } })) as FetchResult;
+    const { t } = this.props;
 
-    return { errors: contact.errors ? contact.errors : undefined };
+    try {
+      const {
+        data: { contact }
+      } = (await contactMutate({ variables: { input: values } })) as FetchResult;
+      return { errors: contact.errors ? contact.errors : undefined };
+    } catch (e) {
+      return { errors: { serverError: t('serverError') } };
+    }
   };
 
   public render() {

@@ -9,7 +9,7 @@
     "allowJs": true,
     "noUnusedLocals": true,
     "jsx": "react",
-    "lib": ["es2015", "dom", "esnext"],
+    "lib": ["es2015", "dom", "esnext", "esnext.asynciterable"],
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
@@ -17,14 +17,8 @@
     "removeComments": true,
     "skipLibCheck": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ],
+  "include": ["**/*.ts", "**/*.tsx"],
   "awesomeTypescriptLoaderOptions": {
-    "reportFiles": [
-      "**/*.ts",
-      "**/*.tsx"
-    ]
+    "reportFiles": ["**/*.ts", "**/*.tsx"]
   }
 }

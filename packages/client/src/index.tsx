@@ -1,30 +1,28 @@
-import { ApplicationRef, NgModule, Component } from '@angular/core';
+import { ApplicationRef, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgStyles } from '@angularclass/hmr';
+import { HttpClientModule } from '@angular/common/http';
+import { ApolloModule, Apollo } from 'apollo-angular';
+import { HttpLinkModule } from 'apollo-angular-link-http';
 
 // Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
 // tslint:disable-next-line
 import 'backend_reload';
 
+import { client, MainComponent } from './app/Main';
 import log from '../../common/log';
 
-@Component({
-  selector: 'body div:first-child',
-  template: '<h1>Hello, {{name}}</h1>'
-})
-export class AppComponent {
-  private name = 'Angular';
-}
-
 @NgModule({
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-  imports: [BrowserModule],
+  declarations: [MainComponent],
+  bootstrap: [MainComponent],
+  imports: [BrowserModule, HttpClientModule, ApolloModule, HttpLinkModule],
   providers: []
 })
 class MainModule {
-  constructor(public appRef: ApplicationRef) {}
+  constructor(public appRef: ApplicationRef, apollo: Apollo) {
+    apollo.create(client);
+  }
 
   public hmrOnInit(store: any) {
     if (!store || !store.state) {

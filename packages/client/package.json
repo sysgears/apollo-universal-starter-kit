@@ -50,6 +50,8 @@
     "@fortawesome/react-fontawesome": "0.0.18",
     "angular2-template-loader": "^0.6.2",
     "antd": "^3.10.0",
+    "apollo-angular": "^1.5.0",
+    "apollo-angular-link-http": "^1.4.0",
     "apollo-cache-inmemory": "1.2.9",
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.3.4",

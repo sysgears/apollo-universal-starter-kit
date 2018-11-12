@@ -2675,6 +2675,29 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
+apollo-angular-link-http-common@~1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/apollo-angular-link-http-common/-/apollo-angular-link-http-common-1.4.0.tgz#9e361f481562fad9151f95c43ccafc10ba728426"
+  integrity sha512-VAneRp1YYwaggOKgbMGVSuLMpYroLL6tEgS5WH3iNBg4P7cBcubo3uajWRih7E4pZlzX+bCJ5GNqNDJ6xMFT7Q==
+  dependencies:
+    tslib "^1.9.0"
+
+apollo-angular-link-http@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/apollo-angular-link-http/-/apollo-angular-link-http-1.4.0.tgz#6ae499b3ed44e2201a31f41efef1771580b14069"
+  integrity sha512-YMtk4ZmmQ32kvQVnKNhkqk4QQQ+xb5aaq5XVxLv7AX6S7jDfHDLi18Hc25C4c8revM6gLoGV2Xj9ijvyGGbRCg==
+  dependencies:
+    apollo-angular-link-http-common "~1.4.0"
+    tslib "^1.9.0"
+
+apollo-angular@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/apollo-angular/-/apollo-angular-1.5.0.tgz#da653b76189fb72ea801c51996ea87fe19aa064f"
+  integrity sha512-zAyMev+bU7cdqRm2AbAH0hJqJOVRN/PpllJ+eqqA0O9dV570RUs2sGehn3dtOcwPHNRof/qrCRoWBEwGrP6hog==
+  dependencies:
+    semver "^5.5.1"
+    tslib "^1.9.0"
+
 apollo-cache-control@^0.2.5:
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/apollo-cache-control/-/apollo-cache-control-0.2.5.tgz#0831ad796754a7beec858668f99e7517fe744a1e"

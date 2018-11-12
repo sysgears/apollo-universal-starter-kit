@@ -107,7 +107,7 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
     if (typeof window !== 'undefined' && window.__APOLLO_STATE__) {
       clientParams.initialState = window.__APOLLO_STATE__;
     } else {
-      clientParams.ssrMode = true;
+      // clientParams.ssrMode = false;
       clientParams.ssrForceFetchDelay = 100;
     }
   }

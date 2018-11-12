@@ -1,3 +1,4 @@
+import { Component } from '@angular/core';
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
@@ -92,4 +93,12 @@ class Main extends React.Component<any, MainState> {
   }
 }
 
-export default Main;
+@Component({
+  selector: 'body div:first-child',
+  template: '<h1>Hello, {{name}}</h1>'
+})
+class MainComponent {
+  public name = 'Angular';
+}
+
+export { client, MainComponent };

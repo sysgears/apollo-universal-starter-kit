@@ -8,6 +8,7 @@ import modules.jwt.encoder.{JwtEncoder, JwtEncoderImpl}
 import modules.jwt.validator.{JwtValidator, JwtValidatorImpl}
 import net.codingwell.scalaguice.ScalaModule
 import pdi.jwt.JwtAlgorithm
+import pdi.jwt.algorithms.JwtHmacAlgorithm
 
 class JwtModule extends ScalaModule {
 
@@ -18,7 +19,7 @@ class JwtModule extends ScalaModule {
   }
 
   @Provides
-  def algorithm: JwtAlgorithm = {
+  def algorithm: JwtHmacAlgorithm = {
     JwtAlgorithm.HS512
   }
 

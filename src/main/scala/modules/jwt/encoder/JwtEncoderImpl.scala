@@ -3,10 +3,11 @@ package modules.jwt.encoder
 import java.time.Duration
 
 import javax.inject.{Inject, Named}
-import pdi.jwt.{Jwt, JwtAlgorithm, JwtClaim}
+import pdi.jwt.algorithms.JwtHmacAlgorithm
+import pdi.jwt.{Jwt, JwtClaim}
 
 class JwtEncoderImpl @Inject()(@Named("jwt.secretKey") secretKey: String,
-                               algorithm: JwtAlgorithm) extends JwtEncoder {
+                               algorithm: JwtHmacAlgorithm) extends JwtEncoder {
 
   override def encode(content: String): String = {
     Jwt.encode(content, secretKey, algorithm)

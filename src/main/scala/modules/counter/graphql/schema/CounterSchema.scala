@@ -8,7 +8,7 @@ import common.Logger
 import core.graphql.{GraphQLSchema, UserContext}
 import core.services.publisher.PublisherService
 import javax.inject.Inject
-import common.actors.DispatcherActor
+import common.actors.Dispatcher
 import common.graphql.GraphQLUtil
 import modules.counter.graphql.resolvers.CounterResolver
 import modules.counter.models.Counter
@@ -19,7 +19,7 @@ import sangria.streaming.akkaStreams._
 
 import scala.concurrent.ExecutionContext
 
-class CounterSchema @Inject()(@Named(DispatcherActor.name) dispatcherActor: ActorRef,
+class CounterSchema @Inject()(@Named(Dispatcher.name) dispatcherActor: ActorRef,
                               publisherService: PublisherService[Counter])
                              (implicit val materializer: ActorMaterializer,
                               actorSystem: ActorSystem,

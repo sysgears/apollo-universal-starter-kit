@@ -7,11 +7,11 @@ import core.graphql.UserContext
 import javax.inject.Inject
 import akka.pattern._
 import common.ActorUtil
-import common.actors.DispatcherActor.DispatcherInput
+import common.actors.Dispatcher.DispatcherInput
 
 import scala.concurrent.{ExecutionContext, Future}
 
-object DispatcherActor {
+object Dispatcher {
 
   final val name = "Dispatcher"
 
@@ -39,8 +39,8 @@ object DispatcherActor {
 
 }
 
-class DispatcherActor @Inject()(implicit actorMaterializer: ActorMaterializer,
-                                executionContext: ExecutionContext) extends Actor
+class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
+                           executionContext: ExecutionContext) extends Actor
   with ActorLogging
   with ActorUtil {
 

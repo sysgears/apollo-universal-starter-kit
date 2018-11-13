@@ -3,7 +3,7 @@ package core.guice.modules
 import akka.actor.{Actor, ActorSystem}
 import com.google.inject.Provides
 import com.google.inject.name.Names
-import common.actors.DispatcherActor
+import common.actors.Dispatcher
 import core.guice.injection.GuiceActorRefProvider
 import javax.inject.Named
 import net.codingwell.scalaguice.ScalaModule
@@ -11,12 +11,12 @@ import net.codingwell.scalaguice.ScalaModule
 class ActorModule extends ScalaModule with GuiceActorRefProvider {
 
   override def configure(): Unit = {
-    bind[Actor].annotatedWith(Names.named(DispatcherActor.name)).to[DispatcherActor]
+    bind[Actor].annotatedWith(Names.named(Dispatcher.name)).to[Dispatcher]
   }
 
   @Provides
-  @Named(DispatcherActor.name)
+  @Named(Dispatcher.name)
   def dispatcherActor(implicit actorSystem: ActorSystem) = {
-    provideActorRef(DispatcherActor.name)
+    provideActorRef(Dispatcher.name)
   }
 }

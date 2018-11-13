@@ -5,8 +5,8 @@ import akka.stream.ActorMaterializer
 import common.ActorUtil
 import core.graphql.UserContext
 import core.guice.injection.GuiceActorRefProvider
-import common.actors.DispatcherActor
-import common.actors.DispatcherActor.DispatcherInput
+import common.actors.Dispatcher
+import common.actors.Dispatcher.DispatcherInput
 
 import scala.concurrent.Future
 
@@ -23,7 +23,7 @@ trait GraphQLUtil extends ActorUtil
 
     sendMessageWithFunc[T] {
       actorRef =>
-        provideActorRef(DispatcherActor.name) ! DispatcherInput(
+        provideActorRef(Dispatcher.name) ! DispatcherInput(
           input,
           userContext,
           provideActorRef(resolverActor),

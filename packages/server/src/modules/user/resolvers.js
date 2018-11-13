@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 
-import FieldError from '../../../../common/FieldError';
+import FieldError from '../../../../common/modules/validation/FieldError';
 import settings from '../../../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';

@@ -3,12 +3,11 @@ import { withFormik, FormikProps } from 'formik';
 
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-// import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
-// import { validate } from '../../../../../common/modules/validation';
-// import { transformValidationMessagesFromGraphql } from '../../../../../common/utils';
+import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
+import { validate } from '../../../../../common/modules/validation';
 import { TranslateFunction } from '../../../i18n';
 import { ContactForm } from '../types';
-import FieldError from '../../../../../common/FieldError';
+import FieldError from '../../../../../common/modules/validation/FieldError';
 
 interface ContactFormProps {
   t: TranslateFunction;
@@ -56,7 +55,7 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
       setStatus({ sent: true });
     }
   },
-  // validate: values => validate(values, contactFormSchema),
+  validate: values => validate(values, contactFormSchema),
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 

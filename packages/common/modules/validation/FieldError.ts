@@ -3,7 +3,7 @@ export type Errors = Array<{ field: string; message: string }> | { [key: string]
 export default class FieldError {
   public errors: { [key: string]: string };
 
-  constructor(errors: Errors) {
+  constructor(errors?: Errors) {
     this.errors = {};
     this.setErrors(errors);
   }

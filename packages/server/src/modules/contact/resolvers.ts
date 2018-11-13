@@ -1,7 +1,7 @@
 import { validate } from '../../../../common/modules/validation';
 import { contactFormSchema } from './contactFormSchema';
 import log from '../../../../common/log';
-import FieldError from '../../../../common/FieldError';
+import FieldError from '../../../../common/modules/validation/FieldError';
 
 interface ContactInput {
   input: {

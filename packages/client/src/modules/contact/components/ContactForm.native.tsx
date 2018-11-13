@@ -8,7 +8,7 @@ import { RenderField, FormView, Button, Modal, danger, success } from '../../com
 import { placeholderColor, submit } from '../../common/components/native/styles';
 import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
 import { validate } from '../../../../../common/modules/validation';
-import { transformValidationMessagesFromGraphql } from '../../../../../common/utils';
+import FieldError from '../../../../../common/modules/validation/FieldError';
 import { TranslateFunction } from '../../../i18n';
 import { ContactForm } from '../types';
 
@@ -98,12 +98,11 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   async handleSubmit(values, { resetForm, setErrors, setStatus, props: { onSubmit } }) {
     Keyboard.dismiss();
 
-    const { errors } = await onSubmit(values);
+    const errors = new FieldError((await onSubmit(values)).errors);
 
-    if (errors) {
-      const validationErrors: { [key: string]: string } = transformValidationMessagesFromGraphql(errors);
-      setStatus({ showModal: !!validationErrors.serverError });
-      setErrors(validationErrors);
+    if (errors.hasAny()) {
+      setStatus({ showModal: !!errors.errors.serverError });
+      setErrors(errors.errors);
     } else {
       resetForm();
       setStatus({ showModal: true });

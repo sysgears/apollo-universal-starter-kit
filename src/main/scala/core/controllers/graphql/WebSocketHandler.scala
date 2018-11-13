@@ -18,6 +18,7 @@ import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
 import spray.json._
 
+import scala.collection.mutable
 import scala.util.{Failure, Success}
 
 @Singleton
@@ -65,7 +66,7 @@ class WebSocketHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
               case Some(Subscription) =>
                 graphQlExecutor.execute(
                   queryAst = queryAst,
-                  userContext = UserContext(),
+                  userContext = UserContext(newSession = mutable.Map.empty),
                   root = (),
                   operationName = graphQlMessage.operationName,
                   variables = graphQlMessage.variables.getOrElse(JsObject.empty)

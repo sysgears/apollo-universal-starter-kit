@@ -1,18 +1,23 @@
 package modules.counter.graphql.resolvers
 
-import akka.NotUsed
-import akka.stream.scaladsl.Source
-import core.graphql.UserContext
-import modules.counter.models.Counter
-import sangria.schema.Action
+import akka.actor.{Actor, ActorLogging, ActorRef}
+import com.google.inject.name.Named
+import javax.inject.Inject
+import modules.counter.services.count.CounterActor
+import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
 
-import scala.concurrent.Future
+object CounterResolver {
+  final val name = "CounterResolver"
+}
 
-trait CounterResolver {
+class CounterResolver @Inject()(@Named(CounterActor.name) counterActor: ActorRef) extends Actor
+  with ActorLogging {
 
-  def addServerCounter(amount: Int): Future[Counter]
+  override def receive: Receive = {
+    case amount: Int =>
+      counterActor.tell(IncrementAndGet(amount), sender)
 
-  def serverCounter: Future[Counter]
-
-  def counterUpdated: Source[Action[UserContext, Counter], NotUsed]
+    case GetAmount =>
+      counterActor.tell(GetAmount, sender)
+  }
 }

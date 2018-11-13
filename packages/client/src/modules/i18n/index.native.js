@@ -8,7 +8,7 @@ import resources from './locales';
 import ClientModule from '../ClientModule';
 import modules from '../';
 import settings from '../../../../../settings';
-import { addResourcesI18n } from '../../../../common/utils';
+import addResourcesI18n from '../../../../common/modules/i18n/addResourcesI18n';
 
 const I18nProvider = ({ i18n, children }) => {
   addResourcesI18n(i18n, modules.localizations);

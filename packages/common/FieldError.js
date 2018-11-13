@@ -11,6 +11,12 @@ export default class FieldError {
     this.errors[field] = message;
   }
 
+  setErrors(errors) {
+    this.errors = Array.isArray(errors)
+      ? errors.reduce((formattedErrors, error) => ({ ...formattedErrors, [error.field]: error.message }), {})
+      : { ...this.errors, ...errors };
+  }
+
   getErrors() {
     return Object.keys(this.errors).map(field => ({
       field,

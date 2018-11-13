@@ -3,7 +3,7 @@ import * as Expo from 'expo';
 import { reactI18nextModule } from 'react-i18next';
 
 import settings from '../../../../settings';
-import { addResourcesI18n } from '../../utils';
+import addResourcesI18n from './addResourcesI18n';
 import modules from '..';
 
 const languageDetector = {

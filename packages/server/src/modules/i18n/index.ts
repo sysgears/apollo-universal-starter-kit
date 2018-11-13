@@ -3,7 +3,7 @@ import { Express } from 'express';
 import ServerModule from '../ServerModule';
 import settings from '../../../../../settings';
 import modules from '../../modules';
-import { addResourcesI18n } from '../../../../common/utils';
+import addResourcesI18n from '../../../../common/modules/i18n/addResourcesI18n';
 
 const beforeware = (app: Express) => {
   const i18n = require('i18next');

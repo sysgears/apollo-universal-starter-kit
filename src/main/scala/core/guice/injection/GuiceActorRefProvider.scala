@@ -3,7 +3,7 @@ package core.guice.injection
 import akka.actor.{ActorRef, ActorSystem, Props}
 
 trait GuiceActorRefProvider {
-  def provideActorRef(actorSystem: ActorSystem, name: String): ActorRef = {
+  def provideActorRef(name: String)(implicit actorSystem: ActorSystem): ActorRef = {
     actorSystem.actorOf(Props(classOf[GuiceActorProducer], name))
   }
 }

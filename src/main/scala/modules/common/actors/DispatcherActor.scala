@@ -1,8 +1,15 @@
 package modules.common.actors
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
+import akka.stream.scaladsl.{Sink, Source}
+import akka.stream.{ActorMaterializer, OverflowStrategy}
 import core.graphql.UserContext
+import javax.inject.Inject
+import akka.pattern._
+import common.ActorUtil
 import modules.common.actors.DispatcherActor.DispatcherInput
+
+import scala.concurrent.{ExecutionContext, Future}
 
 object DispatcherActor {
 
@@ -32,8 +39,15 @@ object DispatcherActor {
 
 }
 
-class DispatcherActor extends Actor with ActorLogging {
+class DispatcherActor @Inject()(implicit actorMaterializer: ActorMaterializer,
+                                executionContext: ExecutionContext) extends Actor
+  with ActorLogging
+  with ActorUtil {
+
   override def receive: Receive = {
-    case msg: DispatcherInput => ()
+    case dispatcherInput: DispatcherInput => {
+      sendMessageToActor[Any](dispatcherInput.resolverActor, dispatcherInput.input)
+        .pipeTo(dispatcherInput.sender)
+    }
   }
 }

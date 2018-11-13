@@ -14,10 +14,8 @@ class CounterResolver @Inject()(@Named(CounterActor.name) counterActor: ActorRef
   with ActorLogging {
 
   override def receive: Receive = {
-    case amount: Int =>
-      counterActor.tell(IncrementAndGet(amount), sender)
+    case amount: Int => counterActor.forward(IncrementAndGet(amount))
 
-    case GetAmount =>
-      counterActor.tell(GetAmount, sender)
+    case GetAmount => counterActor.forward(GetAmount)
   }
 }

@@ -4,7 +4,8 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import core.guice.injection.Injecting
 import modules.counter.repositories.CounterSchemaInitializer
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
+import modules.upload.repositories.FileSchemaInitializer
+import org.scalatest._
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
@@ -20,18 +21,23 @@ trait TestHelper extends WordSpec
   val routes: Route = inject[GraphQLController].routes
 
   val initializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]
+  val fileInitializer: FileSchemaInitializer = inject[FileSchemaInitializer]
 
   before {
     await(initializer.drop())
+    await(fileInitializer.drop())
     await(initializer.create())
+    await(fileInitializer.create())
   }
 
   after {
     await(initializer.drop())
+    await(fileInitializer.drop())
   }
 
   override def afterAll(): Unit = {
     await(initializer.drop())
+    await(fileInitializer.drop())
   }
 
   def await[T](asyncFunc: => Future[T]): T = Await.result[T](asyncFunc, Duration.Inf)

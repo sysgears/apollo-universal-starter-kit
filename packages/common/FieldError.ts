@@ -1,31 +1,35 @@
+export type Errors = Array<{ field: string; message: string }> | { [key: string]: string };
+
 export default class FieldError {
-  constructor(errors) {
+  public errors: { [key: string]: string };
+
+  constructor(errors: Errors) {
     this.errors = {};
     this.setErrors(errors);
   }
 
-  hasAny() {
+  public hasAny() {
     return !!Object.keys(this.errors).length;
   }
 
-  setError(field, message) {
+  public setError(field: string, message: string) {
     this.errors[field] = message;
   }
 
-  setErrors(errors) {
+  public setErrors(errors: Errors) {
     this.errors = Array.isArray(errors)
       ? errors.reduce((formattedErrors, error) => ({ ...formattedErrors, [error.field]: error.message }), {})
       : { ...this.errors, ...errors };
   }
 
-  getErrors() {
+  public getErrors() {
     return Object.keys(this.errors).map(field => ({
       field,
       message: this.errors[field]
     }));
   }
 
-  throwIf() {
+  public throwIf() {
     if (this.hasAny()) {
       throw this.getErrors();
     }

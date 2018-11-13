@@ -1,7 +1,7 @@
 import { validate } from '../../../../common/modules/validation';
 import { contactFormSchema } from './contactFormSchema';
 import log from '../../../../common/log';
-import { transformValidationMessagesForGraphql } from '../../../../common/utils';
+import FieldError from '../../../../common/FieldError';
 
 interface ContactInput {
   input: {
@@ -14,10 +14,10 @@ interface ContactInput {
 export default () => ({
   Mutation: {
     async contact(obj: any, { input }: ContactInput, { mailer, req: { t } }: any) {
-      const errors = validate(input, contactFormSchema);
+      const errors = new FieldError(validate(input, contactFormSchema));
 
-      if (errors) {
-        return { errors: transformValidationMessagesForGraphql(errors) };
+      if (errors.hasAny()) {
+        return { errors: errors.getErrors() };
       }
 
       try {

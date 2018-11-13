@@ -1,6 +1,7 @@
 export default class FieldError {
-  constructor() {
+  constructor(errors) {
     this.errors = {};
+    this.setErrors(errors);
   }
 
   hasAny() {

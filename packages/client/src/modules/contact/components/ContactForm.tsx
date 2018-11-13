@@ -3,11 +3,12 @@ import { withFormik, FormikProps } from 'formik';
 
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
-import { validate } from '../../../../../common/modules/validation';
-import { transformValidationMessagesFromGraphql } from '../../../../../common/utils';
+// import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
+// import { validate } from '../../../../../common/modules/validation';
+// import { transformValidationMessagesFromGraphql } from '../../../../../common/utils';
 import { TranslateFunction } from '../../../i18n';
 import { ContactForm } from '../types';
+import FieldError from '../../../../../common/FieldError';
 
 interface ContactFormProps {
   t: TranslateFunction;
@@ -45,17 +46,17 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   enableReinitialize: true,
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
   async handleSubmit(values, { resetForm, setErrors, setStatus, props: { onSubmit } }) {
-    const { errors } = await onSubmit(values);
+    const errors = new FieldError((await onSubmit(values)).errors);
 
-    if (errors) {
+    if (errors.hasAny()) {
       setStatus({ sent: false });
-      setErrors(transformValidationMessagesFromGraphql(errors));
+      setErrors(errors.errors);
     } else {
       resetForm();
       setStatus({ sent: true });
     }
   },
-  validate: values => validate(values, contactFormSchema),
+  // validate: values => validate(values, contactFormSchema),
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 

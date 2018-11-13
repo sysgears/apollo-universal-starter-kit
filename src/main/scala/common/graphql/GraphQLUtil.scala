@@ -1,12 +1,12 @@
-package modules.common.graphql
+package common.graphql
 
 import akka.actor.{ActorRef, ActorSystem}
 import akka.stream.ActorMaterializer
 import common.ActorUtil
 import core.graphql.UserContext
 import core.guice.injection.GuiceActorRefProvider
-import modules.common.actors.DispatcherActor
-import modules.common.actors.DispatcherActor.DispatcherInput
+import common.actors.DispatcherActor
+import common.actors.DispatcherActor.DispatcherInput
 
 import scala.concurrent.Future
 

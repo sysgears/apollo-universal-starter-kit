@@ -6,14 +6,13 @@ import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
 import com.google.inject.name.Named
 import common.{ActorUtil, Logger}
+import core.graphql.UserContext
 import core.services.publisher.{PublisherHelper, PublisherService}
 import javax.inject.Inject
 import modules.counter.models.Counter
 import modules.counter.services.count.CounterActor
 import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
 import sangria.schema.Action
-import common.Logger
-import core.graphql.UserContext
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -26,11 +25,11 @@ class CounterResolverImpl @Inject()(@Named(CounterActor.name) counterActor: Acto
   with CounterResolver {
 
   def addServerCounter(amount: Int): Future[Counter] = withPublishing(publisherService) {
-    sendMessageToActor[Counter](actorRef => counterActor ! IncrementAndGet(amount, actorRef))
+    sendMessageWithFunc[Counter](actorRef => counterActor ! IncrementAndGet(amount))
   }
 
   def serverCounter: Future[Counter] = {
-    sendMessageToActor[Counter](actorRef => counterActor ! GetAmount(actorRef))
+    sendMessageWithFunc[Counter](actorRef => counterActor ! GetAmount)
   }
 
   def counterUpdated: Source[Action[UserContext, Counter], NotUsed] = {

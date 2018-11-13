@@ -16,6 +16,6 @@ class ContactResolverImpl @Inject()(@Named(ContactActor.name) contactActor: Acto
   with ActorUtil {
 
   override def sendMail(contact: Contact): Future[ContactPayload] = {
-    sendMessageToActor[ContactPayload](actorRef => contactActor ! SendMail(contact, actorRef))
+    sendMessageWithFunc[ContactPayload](actorRef => contactActor ! SendMail(contact, actorRef))
   }
 }

@@ -1,4 +1,4 @@
-package modules.common.actors
+package common.actors
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.stream.scaladsl.{Sink, Source}
@@ -7,7 +7,7 @@ import core.graphql.UserContext
 import javax.inject.Inject
 import akka.pattern._
 import common.ActorUtil
-import modules.common.actors.DispatcherActor.DispatcherInput
+import common.actors.DispatcherActor.DispatcherInput
 
 import scala.concurrent.{ExecutionContext, Future}
 

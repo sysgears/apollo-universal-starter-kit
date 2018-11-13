@@ -10,6 +10,7 @@ import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import core.graphql.{GraphQL, UserContext}
 import javax.inject.Inject
+import modules.session.{JWTSessionImpl, SessionData}
 import sangria.execution.Executor
 import sangria.renderer.SchemaRenderer
 
@@ -17,6 +18,7 @@ import scala.concurrent.ExecutionContext
 
 class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
                                   httpHandler: HttpHandler,
+                                  session: JWTSessionImpl,
                                   webSocketHandler: WebSocketHandler)
                                  (implicit val executionContext: ExecutionContext,
                                   implicit val actorMaterializer: ActorMaterializer) extends AkkaRoute {
@@ -30,15 +32,17 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
           } ~
             post {
               withHeaders(UserContext(request.headers.toList)) {
-                userCtx =>
-                  entity(as[GraphQLMessage]) {
-                    graphQlMessage =>
-                      httpHandler.handleQuery(graphQlMessage, userCtx)
-                  } ~
-                    entity(as[Seq[GraphQLMessage]]) {
-                      graphQlMessages =>
-                        httpHandler.handleBatchQuery(graphQlMessages, userCtx)
-                    }
+                withSession(_) {
+                  userCtx =>
+                    entity(as[GraphQLMessage]) {
+                      graphQlMessage =>
+                        httpHandler.handleQuery(graphQlMessage, userCtx)
+                    } ~
+                      entity(as[Seq[GraphQLMessage]]) {
+                        graphQlMessages =>
+                          httpHandler.handleBatchQuery(graphQlMessages, userCtx)
+                      }
+                }
               }
             }
       }
@@ -55,4 +59,19 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
       userCtx.newHeaders.toList ++
       userCtx.newCookies.toList.map(`Set-Cookie`(_))
     )(ctxToRoute(userCtx))
+
+  //FIXME: find out how to create a session after setting data to newSession in UserContext
+  private def withSession(userCtx: UserContext)(ctxToRoute: UserContext => Route) = {
+    session.withOptionalSession {
+      case Some(storedSession) => ctxToRoute(userCtx.copy(storedSession = storedSession.value))
+      case None =>
+        ctxToRoute.andThen {
+          route =>
+            if (userCtx.newSession.isEmpty) route
+            else {
+              session.withNewSession(SessionData(userCtx.newSession.toMap))(route)
+            }
+        }(userCtx)
+    }
+  }
 }

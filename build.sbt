@@ -1,3 +1,4 @@
+import java.nio.file.Files
 import org.ensime.EnsimeKeys._
 
 name := "scala-starter-kit"
@@ -44,3 +45,17 @@ libraryDependencies ++= Seq(
 parallelExecution in test := false
 fork in Test := true
 envVars in Test := Map("env" -> "test")
+
+lazy val publicDirGenerator = taskKey[Seq[File]]("Creates 'public' directory in resources")
+lazy val testPublicDirGenerator = taskKey[Seq[File]]("Creates 'public' directory in test resources")
+
+def generate(file: File): Seq[File] = {
+  if (!file.exists()) Files.createDirectory(file.toPath)
+  Seq.empty
+}
+
+publicDirGenerator := generate((resourceDirectory in Compile).value / "public")
+testPublicDirGenerator := generate((resourceDirectory in Test).value / "public")
+
+sourceGenerators in Compile += publicDirGenerator
+sourceGenerators in Test += testPublicDirGenerator

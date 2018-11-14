@@ -40,6 +40,7 @@ const config = {
     ssr: false,
     webpackDll: true,
     reactHotLoader: false,
+    htmlTemplate: './html-template.ejs',
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"/graphql"',

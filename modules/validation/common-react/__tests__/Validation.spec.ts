@@ -2,9 +2,10 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 import i18next from 'i18next';
-import { addResourcesI18n } from '@module/i18n';
-
+import CommonModule from '@module/module';
+import i18n from '@module/i18n';
 import validation from '..';
+
 import {
   required,
   match,
@@ -20,7 +21,7 @@ import {
   Schema
 } from '../validation';
 
-addResourcesI18n(i18next, validation.localizations);
+new CommonModule(i18n, validation).triggerOnCreate();
 
 describe('Check if validation works', () => {
   step('Validator "required"  works correctly', () => {

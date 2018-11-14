@@ -1,15 +1,13 @@
 import { Resource } from 'i18next';
 
-import Module from './Module';
+import Module, { ModuleShape } from './Module';
 
-export interface CommonModuleShape {
+export interface CommonModuleShape extends ModuleShape {
   localization?: Array<{ ns: string; resources: Resource }>;
 }
 
 interface CommonModule extends CommonModuleShape {}
 class CommonModule extends Module {
-  public modules?: CommonModule;
-
   constructor(...modules: CommonModuleShape[]) {
     super(...modules);
   }

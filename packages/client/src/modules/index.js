@@ -14,7 +14,7 @@ import pagination from './pagination';
 import chat from './chat';
 import './favicon';
 
-export default new ClientModule(
+const modules = new ClientModule(
   validation,
   defaultRouter,
   counter,
@@ -28,3 +28,6 @@ export default new ClientModule(
   i18n,
   pageNotFound
 );
+modules.triggerOnCreate();
+
+export default modules;

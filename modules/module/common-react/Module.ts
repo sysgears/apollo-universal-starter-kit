@@ -1,8 +1,19 @@
-import { foldTo, getParts } from 'fractal-objects';
+import { foldTo } from 'fractal-objects';
 
-export default class Module {
-  constructor(...modules: Module[]) {
+export interface ModuleShape {
+  onCreate?: Array<(modules: Module) => void>;
+}
+interface Module extends ModuleShape {}
+class Module {
+  constructor(...modules: ModuleShape[]) {
     foldTo(this, modules);
-    getParts(this).forEach((module: any) => (module.modules = this));
+  }
+
+  public triggerOnCreate() {
+    if (this.onCreate) {
+      this.onCreate.forEach(callback => callback(this));
+    }
   }
 }
+
+export default Module;

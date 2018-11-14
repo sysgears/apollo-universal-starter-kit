@@ -2,7 +2,7 @@ import React from 'react';
 import { default as i18next } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import ClientModule from '@module/module-client';
-import commonI18n, { addResourcesI18n } from '@module/i18n';
+import commonI18n from '@module/i18n';
 
 import { MenuItem, LanguagePicker } from '../../../packages/client/src/modules/common/components/web';
 import settings from '../../../settings';
@@ -10,8 +10,6 @@ import settings from '../../../settings';
 export * from './translate';
 
 const I18nProvider = ({ i18n, children }: any) => {
-  addResourcesI18n(i18next, commonI18n.modules.localizations);
-
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };
 

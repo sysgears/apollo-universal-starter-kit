@@ -12,8 +12,6 @@ export interface ClientModuleShape extends BaseModuleShape {
 interface ClientModule extends ClientModuleShape {}
 
 class ClientModule extends BaseModule {
-  public modules?: ClientModule;
-
   constructor(...modules: ClientModuleShape[]) {
     super(...modules);
   }

@@ -8324,10 +8324,10 @@ forwarded@~0.1.2:
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
   integrity sha1-mMI9qxF1ZXuMBXPozszZGw/xjIQ=
 
-fractal-objects@^0.10.0-alpha.3:
-  version "0.10.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/fractal-objects/-/fractal-objects-0.10.0-alpha.3.tgz#ae89ad272b1962f5181e200bfc02604da75ef26e"
-  integrity sha512-TGVySOfFMRd0ft8vLe89VmZeUOooE0696+zYwxy4g3IVIM4VyF29sZB1TS01ZfMjpSFlqBvAglY9siBq1letNQ==
+fractal-objects@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/fractal-objects/-/fractal-objects-0.10.0.tgz#6eec3e09a5caf80066f8496383c9033f90492938"
+  integrity sha512-LZBO0rb1OEfCOMAMWoWlBUDIZhsNLErMMbA00Z9aV5fniw0VXewDyiKm0lz77Mul5KcMofJw6xyccUxUQBrdeA==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
@@ -17140,10 +17140,10 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.173-alpha.1:
-  version "0.4.173-alpha.1"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.173-alpha.1.tgz#e4cc989f7f432201fc38d498f0916af568616c14"
-  integrity sha512-N41FmWYKtz1f5TIlPsPI8lPHCKPFl+IYpz0wcuRHGMub8DyLW6IFEalLxZtsr5xLOFebcX5VIfIg8+6yU6DJ1w==
+spinjs@^0.4.173:
+  version "0.4.173"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.173.tgz#004a363370bdadf59718f8a3bcd54bb610c2816e"
+  integrity sha512-syaWudckn33wDTknZ8lpqEO7XXkGsd+GEdGXZ0P6JJACo4ZaH3DAUEGxrWAFZRY2fJOJDoQ3xJpn8AzvNgd4CQ==
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"

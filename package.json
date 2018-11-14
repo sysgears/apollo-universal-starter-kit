@@ -154,7 +154,7 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.173-alpha.1"
+    "spinjs": "^0.4.173"
   },
   "resolutions": {
     "react": "16.5.0",

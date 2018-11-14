@@ -5,6 +5,8 @@ import akka.stream.ActorMaterializer
 import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
 import modules.upload.graphql.resovlers.FileUploadResolver
+import modules.upload.models.FileMetadata
+import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Argument, Field, _}
 import spray.json.DefaultJsonProtocol
 
@@ -21,14 +23,24 @@ class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)
     coerceInput = _ => Right(null)
   )
 
+  implicit val fileMetadata: ObjectType[Unit, FileMetadata] = deriveObjectType(ObjectTypeName("File"))
+
   override def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "uploadFiles",
       fieldType = sangria.schema.BooleanType,
       arguments = Argument(name = "files", argumentType = ListInputType(fileUploadType)) :: Nil,
       resolve = sc => {
-        fileUploadResolver.upload(sc.ctx.filesData)
+        fileUploadResolver.uploadFiles(sc.ctx.filesData)
       }
+    )
+  )
+
+  override def queries: List[Field[UserContext, Unit]] = List(
+    Field(
+      name = "files",
+      fieldType = ListType(fileMetadata),
+      resolve = _ => fileUploadResolver.files
     )
   )
 }

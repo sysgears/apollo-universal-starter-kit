@@ -1,5 +1,6 @@
 package modules.upload.graphql.resovlers
 
+import java.io.File
 import java.nio.file.Paths
 
 import akka.actor.ActorRef
@@ -11,7 +12,7 @@ import common.errors._
 import common.{ActorUtil, Logger}
 import javax.inject.Inject
 import modules.upload.actors.FileActor
-import modules.upload.actors.FileActor.SaveFileMetadata
+import modules.upload.actors.FileActor.{GetFilesMetadata, SaveFileMetadata}
 import modules.upload.models.FileMetadata
 import modules.upload.services.HashAppender
 
@@ -22,7 +23,7 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
                                       (implicit executionContext: ExecutionContext,
                                        materializer: ActorMaterializer) extends FileUploadResolver with Logger with ActorUtil {
 
-  override def upload(parts: Source[FormData.BodyPart, Any]): Future[Boolean] = {
+  override def uploadFiles(parts: Source[FormData.BodyPart, Any]): Future[Boolean] = {
     parts.filter(_.filename.nonEmpty).mapAsync(1) {
       part => {
         val hashedFilename = hashAppender.append(part.filename.get)
@@ -42,5 +43,9 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
     }.map(_ => true)
   }.recover {
     case _: Error => false
+  }
+
+  override def files: Future[List[FileMetadata]] = {
+    sendMessageToActor[List[FileMetadata]](actorRef => fileActor ! GetFilesMetadata(actorRef))
   }
 }

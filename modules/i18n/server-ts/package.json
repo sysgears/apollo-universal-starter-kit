@@ -1,5 +1,5 @@
 {
-  "name": "@module/i18n-server",
+  "name": "@module/i18n-server-ts",
   "version": "1.0.0",
   "private": true
 }

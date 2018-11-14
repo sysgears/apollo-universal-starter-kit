@@ -5,7 +5,7 @@ import { step } from 'mocha-steps';
 import Renderer from '../../../../../packages/client/src/testHelpers/Renderer';
 import { click, find, wait, render } from '../../../../../packages/client/src/testHelpers/testUtils';
 import ClientCounter from '../containers/ClientCounter';
-import { translate } from '@module/i18n-client';
+import { translate } from '@module/i18n-client-react';
 
 chai.should();
 

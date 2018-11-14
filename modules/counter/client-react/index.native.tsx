@@ -1,12 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
-import { translate } from '@module/i18n-client';
+import { translate } from '@module/i18n-client-react';
 import { HeaderTitle, IconButton } from '../../../packages/client/src/modules/common/components/native';
 import Counter from './containers/Counter';
 import counters from './counters';
 import resources from './locales';
-import ClientModule from '@module/module-client/index.native';
+import ClientModule from '@module/module-client-react/index.native';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 

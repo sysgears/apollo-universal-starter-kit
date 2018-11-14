@@ -1,7 +1,7 @@
-import i18n from '@module/i18n-client';
-import counter from '@module/counter-client';
-import validation from '@module/validation';
-import ClientModule from '@module/module-client';
+import i18n from '@module/i18n-client-react';
+import counter from '@module/counter-client-react';
+import validation from '@module/validation-common-react';
+import ClientModule from '@module/module-client-react';
 
 import defaultRouter from './defaultRouter';
 import post from './post';

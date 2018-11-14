@@ -1,8 +1,8 @@
 import React from 'react';
 import { default as i18next } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import ClientModule from '@module/module-client';
-import commonI18n from '@module/i18n';
+import ClientModule from '@module/module-client-react';
+import commonI18n from '@module/i18n-common-react';
 
 import { MenuItem, LanguagePicker } from '../../../packages/client/src/modules/common/components/web';
 import settings from '../../../settings';

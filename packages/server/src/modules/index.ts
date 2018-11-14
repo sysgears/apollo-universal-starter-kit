@@ -1,6 +1,6 @@
-import i18n from '@module/i18n-server';
-import validation from '@module/validation';
-import counter from '@module/counter-server';
+import i18n from '@module/i18n-server-ts';
+import validation from '@module/validation-common-react';
+import counter from '@module/counter-server-ts';
 
 import cookies from './cookies';
 import post from './post';
@@ -13,7 +13,7 @@ import chat from './chat';
 import graphqlTypes from './graphqlTypes';
 import './debug';
 
-import ServerModule from '@module/module-server';
+import ServerModule from '@module/module-server-ts';
 
 const modules: ServerModule = new ServerModule(
   cookies,

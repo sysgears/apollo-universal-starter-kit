@@ -7,7 +7,7 @@ import Renderer from '../../../../../packages/client/src/testHelpers/Renderer';
 import { click, find } from '../../../../../packages/client/src/testHelpers/testUtils';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 import ServerCounter from '../containers/ServerCounter';
-import { translate } from '@module/i18n-client';
+import { translate } from '@module/i18n-client-react';
 
 chai.should();
 

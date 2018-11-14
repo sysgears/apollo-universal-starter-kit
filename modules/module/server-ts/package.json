@@ -1,9 +1,9 @@
 {
-  "name": "@module/module-server",
+  "name": "@module/module-server-ts",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@module/module": "^1.0.0"
+    "@module/module-common-react": "^1.0.0"
   }
 }
 

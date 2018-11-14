@@ -1,5 +1,5 @@
 {
-  "name": "@module/counter-server",
+  "name": "@module/counter-server-ts",
   "version": "1.0.0",
   "private": true
 }

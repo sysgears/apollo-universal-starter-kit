@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { translate, TranslateFunction } from '@module/i18n-client';
+import { translate, TranslateFunction } from '@module/i18n-client-react';
 import counters from '../counters';
 
 interface CounterProps {

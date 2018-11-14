@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 
 import { PageLayout } from '../../../../packages/client/src/modules/common/components/web';
 import settings from '../../../../settings';
-import { translate, TranslateFunction } from '@module/i18n-client';
+import { translate, TranslateFunction } from '@module/i18n-client-react';
 import counters from '../counters';
 
 interface CounterProps {

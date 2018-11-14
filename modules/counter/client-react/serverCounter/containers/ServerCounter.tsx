@@ -2,7 +2,7 @@ import React from 'react';
 import { Mutation, Query } from 'react-apollo';
 import update from 'immutability-helper';
 
-import { translate, TranslateFunction } from '@module/i18n-client';
+import { translate, TranslateFunction } from '@module/i18n-client-react';
 import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
 import ADD_COUNTER from '../graphql/AddCounter.graphql';
 import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';

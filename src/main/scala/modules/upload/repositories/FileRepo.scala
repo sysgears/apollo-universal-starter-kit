@@ -14,6 +14,8 @@ trait FileRepo {
   def create(fileMetadata: FileMetadata): Future[FileMetadata]
 
   def find(id: Int): Future[Option[FileMetadata]]
+
+  def findAll(): Future[List[FileMetadata]]
 }
 
 @Singleton
@@ -24,6 +26,8 @@ class FileRepoImpl @Inject()(db: Database) extends FileRepo {
   override def create(file: FileMetadata): Future[FileMetadata] = db.run(Actions.create(file))
 
   override def find(id: Int): Future[Option[FileMetadata]] = db.run(Actions.find(id))
+
+  override def findAll(): Future[List[FileMetadata]] = db.run(Actions.findAll())
 
   object Actions {
 
@@ -42,5 +46,7 @@ class FileRepoImpl @Inject()(db: Database) extends FileRepo {
         _ => DBIO.failed(AlreadyExists(s"FileMetadata with id = ${fileMetadata.id}"))
       }
     } yield file
+
+    def findAll(): DBIO[List[FileMetadata]] = query.result.map(_.toList)
   }
 }

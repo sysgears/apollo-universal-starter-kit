@@ -2,7 +2,6 @@ import React from 'react';
 import BaseModule, { BaseModuleShape } from './BaseModule';
 
 export interface ClientModuleShape extends BaseModuleShape {
-  modules?: ClientModule;
   route?: Array<React.ReactElement<any>>;
   navItem?: Array<React.ReactElement<any>>;
   navItemRight?: Array<React.ReactElement<any>>;
@@ -13,6 +12,8 @@ export interface ClientModuleShape extends BaseModuleShape {
 interface ClientModule extends ClientModuleShape {}
 
 class ClientModule extends BaseModule {
+  public modules?: ClientModule;
+
   constructor(...modules: ClientModuleShape[]) {
     super(...modules);
   }

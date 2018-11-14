@@ -15,7 +15,6 @@ interface CreateContextFuncProps {
 }
 
 export interface ServerModuleShape extends CommonModuleShape {
-  modules?: ServerModule;
   // GraphQL API
   schema?: DocumentNode[];
   createResolversFunc?: Array<(pubsub: PubSub) => IResolvers>;
@@ -30,6 +29,8 @@ export interface ServerModuleShape extends CommonModuleShape {
 interface ServerModule extends ServerModuleShape {}
 
 class ServerModule extends CommonModule {
+  public modules?: ServerModule;
+
   constructor(...modules: ServerModuleShape[]) {
     super(...modules);
   }

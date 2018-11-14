@@ -8,6 +8,8 @@ export interface CommonModuleShape {
 
 interface CommonModule extends CommonModuleShape {}
 class CommonModule extends Module {
+  public modules?: CommonModule;
+
   constructor(...modules: CommonModuleShape[]) {
     super(...modules);
   }

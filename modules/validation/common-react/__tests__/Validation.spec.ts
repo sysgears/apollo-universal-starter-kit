@@ -1,10 +1,10 @@
 // tslint:disable:no-unused-expression
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
-import i18n from 'i18next';
+import i18next from 'i18next';
+import { addResourcesI18n } from '@module/i18n';
 
-import '../..';
-
+import validation from '..';
 import {
   required,
   match,
@@ -19,6 +19,8 @@ import {
   validate,
   Schema
 } from '../validation';
+
+addResourcesI18n(i18next, validation.localizations);
 
 describe('Check if validation works', () => {
   step('Validator "required"  works correctly', () => {
@@ -143,9 +145,9 @@ describe('Check if validation works', () => {
 
   step('Should change the language of the validation message from English to Russian and vice versa', () => {
     expect(required('')).to.match(/[a-zA-Z]/g);
-    i18n.changeLanguage('ru-RU');
+    i18next.changeLanguage('ru-RU');
     expect(required('')).to.match(/[а-яА-Я]/g);
-    i18n.changeLanguage('en-US');
+    i18next.changeLanguage('en-US');
     expect(required('')).to.match(/[a-zA-Z]/g);
   });
 });

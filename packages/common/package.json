@@ -6,8 +6,8 @@
     "eslint": "eslint --fix --ext js --ext jsx --ext json .",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"modules/**/*.spec.*\"",
-    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"modules/**/*.spec.*\""
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"../../modules/**/common-react/**/*.spec.*\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"../../modules/**/common-react/**/*.spec.*\""
   },
   "dependencies": {
     "apollo-cache-inmemory": "1.2.9",

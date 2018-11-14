@@ -2,16 +2,15 @@ import React from 'react';
 import { default as i18next } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import ClientModule from '@module/module-client';
+import commonI18n, { addResourcesI18n } from '@module/i18n';
 
 import { MenuItem, LanguagePicker } from '../../../packages/client/src/modules/common/components/web';
 import settings from '../../../settings';
-import init from './init';
-import { addResourcesI18n } from '@module/i18n';
 
 export * from './translate';
 
 const I18nProvider = ({ i18n, children }: any) => {
-  addResourcesI18n(i18n, init.modules.localizations);
+  addResourcesI18n(i18next, commonI18n.modules.localizations);
 
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };
@@ -47,7 +46,7 @@ class RootComponent extends React.Component<Props> {
 }
 
 export default (settings.i18n.enabled
-  ? new ClientModule(init, langPicker, {
+  ? new ClientModule(commonI18n, langPicker, {
       data: { i18n: true },
       // eslint-disable-next-line react/display-name
       rootComponentFactory: [req => <RootComponent req={req} />]

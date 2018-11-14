@@ -1,16 +1,17 @@
 import React from 'react';
 import { default as i18next } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import { addResourcesI18n } from '@module/i18n';
 import ClientModule from '@module/module-client/index.native';
+import commonI18n, { addResourcesI18n } from '@module/i18n';
 
 import { LanguagePicker, Root } from '../../../packages/client/src/modules/common/components/native';
 import resources from './locales';
 import settings from '../../../settings';
-import init from './init';
+
+export * from './translate';
 
 const I18nProvider = ({ i18n, children }: any) => {
-  addResourcesI18n(i18n, init.modules.localizations);
+  addResourcesI18n(i18next, commonI18n.modules.localizations);
 
   return (
     <Root>
@@ -37,7 +38,7 @@ const langPicker =
     : undefined;
 
 export default (settings.i18n.enabled
-  ? new ClientModule(init, langPicker, {
+  ? new ClientModule(commonI18n, langPicker, {
       localization: [{ ns: 'i18n', resources }],
       // eslint-disable-next-line react/display-name
       rootComponentFactory: [() => <I18nProvider i18n={i18next} />]

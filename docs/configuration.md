@@ -1,13 +1,14 @@
-# Configuring Apollo Universal Starter Kit
+# Apollo Universal Starter Kit Configurations
 
-This section contains information about Apollo Universal Starter Kit configurations. Follow to the configuration 
-sections you're interested in by clicking the links below:
+This section contains information about Apollo Universal Starter Kit configurations. You can follow to various sections 
+by clicking the links below:
 
-* [General Info about Application Settings](#general-information)
-* [Global Application Settings](#global-application-settings)
-* [Configuring Apollo Universal Starter Kit with SpinJS](#configuring-apollo-universal-starter-kit-with-spinjs)
-* [UI Libraries](#built-in-ui-libraries)
-* [Engine](#apollo-engine)
+* [General Information](#general-information)
+* [Apollo Engine](#apollo-engine)
+* [Basic Application Settings](#basic-application-settings)
+* [Build Configuration with SpinJS](#build-configuration-with-spinjs)
+* [Built-In UI Libraries](#built-in-ui-libraries)
+* [Database](#database)
 * [Internationalization](#internationalization)
 * [Mailer](#mailer)
 * [Mobile Chat](#mobile-chat)
@@ -18,81 +19,89 @@ sections you're interested in by clicking the links below:
 
 ## General Information
 
-Apollo Universal Starter Kit root configuration file is called `setting.js`, and it imports all `config/*.js` files. 
-Various starter kit modules import the `settings.js` file to get the necessary configuration values from `config/*.js`.
+The main configuration file in Apollo Universal Starter Kit is called `settings.js` and it's stored in the root of the
+project. This file doesn't contain any project properties but _imports_ the configuration files from the `config` 
+folder. The starter kit modules use `settings.js` to get the necessary values specified in the `config/*.js` files.
 
 The flow looks similar to this: 
 
 ```
-config/*.js => settings.js => actualApplicationFil.js
+config/*.js => settings.js => ApplicationFile.js
 ```
 
-For example, the `packages/server/src/modules/user/auth/facebook/index.js` file imports `settings.js` to get access to 
-the `config/user.js` properties to use social authentication with Facebook.
+If you wish to add specific configurations to your Apollo Universal Starter Kit project, we recommend creating the 
+configuration file under the `config` folder. Then, you can import the settings in your concrete module as shown in the
+example below:
 
-```js
-// Other imports are omitted
-import passport from 'passport';
-import FacebookStrategy from 'passport-facebook';
+```javascript
+// entry index.ts file located in packages/server/src/modules/yourModule
+import settings from '../../../../../settings';
 
-import settings from '../../../../../../../settings'; // Imported configurations from the root setting.js
+// your code
+``` 
 
-let middleware;
+## Apollo Engine
 
-if (settings.user.auth.facebook.enabled && !__TEST__) {
-  passport.use(
-    new FacebookStrategy(
-      {
-        clientID: settings.user.auth.facebook.clientID,
-        clientSecret: settings.user.auth.facebook.clientSecret,
-        callbackURL: settings.user.auth.facebook.callbackUrl,
-        scope: settings.user.auth.facebook.scope,
-        profileFields: settings.user.auth.facebook.profileFields
-      },
-// Other code is omitted
+Apollo Universal Starter Kit uses [Apollo Engine] and stores the Engine configurations in the `config/engine.js` file. 
+
+| Property | Type   | Description                                                  |
+| -------- | ------ | ------------------------------------------------------------ |
+| apiKey   | String | Sets the [Apollo Engine API key]                             |
+| logging  | Object | Holds the Apollo Engine properties such as the logging level |
+| level    | String | Sets the `logging` level for Apollo Engine                   |
+
+**NOTE**: we advise against setting the Apollo Engine API key directly in the `config/engine.js` file. Instead, set your 
+Apollo Engine API key in the `packages/server/.env` file as shown in the example below:
+ 
+```dotenv
+# Apollo Engine API Key
+APOLLO_ENGINE_API_KEY=your_api_key
 ```
 
-## Global Application Settings
+**NOTE**: you can set the `logging` level for Apollo Engine to `'DEBUG'`, `'INFO'`, `'WARN'`, or `'ERROR'`. Consult 
+[Apollo Engine documentation for logging levels].
 
-The global application settings are located in the `config/app.js` file.
+## Basic Application Settings
 
-| Option              | Type    | Description                                                                    |
-| ------------------- | ------- | ------------------------------------------------------------------------------ |
-| name                | String  | The project name. Defaults to 'Apollo Starter Kit'                             |
-| ------------------- | ------- | ------------------------------------------------------------------------------ |
-| logging             | Object  | Contains the `level`, `debugSQL`, and `apolloLogging` logging properties       |
-| level               | String  | Sets the logging level to `debug` for development and `info` for production    |
-| debugSQL            | Boolean | Prints the SQL commands that are executed on the back end. Defaults to `false` |
-| apolloLogging       | Boolean | Logs all Apollo operations in the development environment. Defaults to `false` |
-| ------------------- | ------- | ------------------------------------------------------------------------------ |
-| stackFragmentFormat | String  | Special URL setting for Visual Studio Code IDE                                 |
+You can set the basic application settings in the `config/app.js` file.
 
-You can learn more about the last setting, `stackFragmentFormat`, in the following documents:
+| Property            | Type    | Description                                                      |
+| ------------------- | ------- | ---------------------------------------------------------------  |
+| name                | String  | The project name. Defaults to 'Apollo Starter Kit'               |
+| stackFragmentFormat | String  | Special URL setting for Visual Studio Code IDE                   |
+| logging             | Object  | Stores various [logging properties](#logging-properties-logging) |
 
-* Consult [Opening VS Code with URLs] for Windows and MacOS
+You can learn more about `stackFragmentFormat` in the following documents:
+
+* Consult [Opening Visual Studio Code with URLs] for Windows and MacOS
 * Consult [Visual Studio Code URL Handler] for Linux
 
-## Configuring Apollo Universal Starter Kit with SpinJS 
+### Logging Properties `logging`
 
-Apollo Universal Starter Kit uses [SpinJS], a custom JavaScript library, to configure and build the web, server, and 
-mobile applications with webpack.
+| Property      | Type    | Description                                                                    |
+| ------------- | ------- | ------------------------------------------------------------------------------ |
+| level         | String  | Sets the `logging` level to `debug` for development and `info` for production  |
+| debugSQL      | Boolean | Logs the SQL commands that are executed on the back end. Defaults to `false`   |
+| apolloLogging | Boolean | Logs all Apollo operations in the development environment. Defaults to `false` |
 
-You can change the SpinJS configurations in the `.spinrc.js` files that are located in the following starter kit
-packages:
+## Build Configuration with SpinJS 
 
-* `packages/client/.spinrc.js` contains SpinJS settings for the client-side application
-* `packages/server/.spinrc.js` contains SpinJS settings for the server-side application
-* `packages/mobile/.spinrc.js` contains SpinJS settings for the React Native mobile app
+Apollo Universal Starter Kit uses [SpinJS], a custom JavaScript library, to configure and create builds of the web, 
+server, and React Native mobile applications using the same bundler [webpack]. You can change various build 
+configurations in the `.spinrc.js` files:
 
-Consult the [SpinJS documentation] for more information on how you can configure SpinJS for your Apollo Universal 
-Starter Kit project.
+* `packages/client/.spinrc.js` contains the SpinJS settings for the client-side application
+* `packages/server/.spinrc.js` contains the SpinJS settings for the server-side application
+* `packages/mobile/.spinrc.js` contains the SpinJS settings for the React Native mobile app
+
+Consult the [SpinJS documentation] for more information on how you can work with SpinJS in your Apollo Universal Starter 
+Kit projects.
 
 ## Built-In UI Libraries
 
 Apollo Universal Starter Kit uses [Twitter Bootstrap] to help you quickly add generic styles to the client application. 
-Besides Twitter Bootstrap, the starter kit also integrates [Ant Design] for the web application.
-
-For the React Native mobile app, you can use [Ant Design Mobile] or [NativeBase].
+Besides Twitter Bootstrap, the starter kit also integrates [Ant Design]. For the React Native mobile app, you can use 
+[Ant Design Mobile] or [NativeBase].
 
 By default, Apollo Universal Starter Kit uses Twitter Bootstrap for the client application and NativeBase for the mobile
 app. You can enable the alternatives this way: 
@@ -115,74 +124,87 @@ export * from './ui-antd-mobile';
 
 ## Database
 
-Apollo Universal Starter Kit supports SQL databases such as PostgreSQL, MySQL, and SQLite (used by default). The 
-database configurations are located in the `config/db.js` file.
+Apollo Universal Starter Kit supports SQL databases (the commonest examples are PostgreSQL, MySQL, and SQLite; the 
+latter is used by default in the starter kit). The database configurations are located in the `config/db.js` file.
 
-To be able to use PostgreSQL or MySQL, you only need to add necessary environment variables to the 
+To be able to use PostgreSQL or MySQL, you only need to add necessary environment variables to `config/db.js` file. 
 `packages/server/.env` file:
 
-* `DB_HOST`, use `localhost` for development mode
+* `DB_TYPE`. Use `mysql` for MySQL or `pg` for PostgreSQL. If you don't set this property, SQLite will be used by 
+default
+* `DB_HOST`, you can use `localhost` for development mode.
 * `DB_USER`, database username
 * `DB_PASSWORD`, database password
 * `DB_DATABASE`, the database to which the application will connect
 * `DB_SOCKET_PATH`, the socket path 
 * `DB_SSL`, use the SSL certificate to connect with SSL
 
+**NOTE**: we advise against setting the environment variables directly in the configurations. Instead, set the variables
+in the `packages/server/.env` file:
+
+```dotenv
+# Database
+DB_TYPE="use mysql or pg or leave empty"
+DB_HOST=
+DB_SOCKET_PATH=
+DB_USER=
+DB_PASSWORD=
+DB_DATABASE=
+DB_SSL=
+```
+
 To set the correct values for the listed variables, consult the following documentation:
 
-* [Connection URIs] for PostgreSQL
-* [Connecting using a URI String] for MySQL
-* [MySQL socket path]
+For PostgreSQL:
+
+* [Connection URIs]
+* [Secure TCP/IP Connections with SSL]
 * [PostgreSQL socket path]
 
-## Apollo Engine
+For MySQL:
 
-Apollo Universal Starter Kit uses [Apollo Engine]. The Engine configurations are stored in the `config/engine.js` file. 
-
-| Setting | Type   | Definition                                                                                |
-| ------- | ------ | ----------------------------------------------------------------------------------------- |
-| apiKey  | String | Sets the [Engine API key]                                                                 |
-| ------- | ------ | ----------------------------------------------------------------------------------------- |
-| logging | Object | Holds the Engine properties such as the logging level                                     |
-| level   | String | Sets the logging level for Apollo Engine. Use `'DEBUG'`, `'INFO'`, `'WARN'`, or `'ERROR'` |
+* [Connecting using a URI String]
+* [Using Encrypted Connections]
+* [MySQL socket path]
 
 ## Internationalization
 
 The internationalization configurations are stored in the `config/i18n.js` file. Apollo Universal Starter Kit uses the
-i18next library to implement internationalization.
+i18next library to implement internationalization for all the platforms &ndash; client, server, and mobile.
 
-Consult the table below for the configuration details:
+| Property         | Type          | Description                                                              |
+| ---------------- | ------------- | ------------------------------------------------------------------------ |
+| enabled          | Boolean       | Enables the i18n module for all the platforms. Defaults to `true`        |
+| langPickerRender | Boolean       | Enables the select component on the HTML page. Defaults to `true`        |
+| langList         | Array<String> | Sets the list of supported languages. Defaults to `['en-US', 'ru-RU']`   |
+| fallbackLng      | Object        | Sets the default language. Defaults to `'en-US'`                         |
+| cookie           | String        | Sets the name for the cookie to store the language. Defaults to `'lang'` |
 
-| Setting            | Type          | Definition                                                              |
-| ------------------ | ------------- | ----------------------------------------------------------------------- |
-| enabled            | Boolean       | Enables the i18n module for the client, server, and mobile applications |
-| langPickerRender   | Boolean       | Enables the select component on the HTML page                           |
-| langList           | Array<String> | Sets the list of supported languages                                    |
-| fallbackLng        | Object        | Sets the default language for the application                           |
-| cookie             | String        | Sets the name for the cookie that will store the language               |
-
-**NOTE**: The `fallbackLng` and `langList` properties are used by i18next. Consult [i18next documentation] for 
-more information. The `cookie` property is used by the [i18next-express-middleware].
+**NOTE**: the `langList` and `fallbackLng` properties are used by i18next. Consult the [i18next documentation] for more 
+information. The `cookie` property is used by [i18next-express-middleware].
 
 ## Mailer
 
-Apollo Universal Starter Kit uses Nodemailer to provide emailing functionality. The mailer configurations are stored in 
-the `config/mailer.js` file. 
+Apollo Universal Starter Kit uses [Nodemailer] to provide the emailing functionality. The Nodemailer configurations are 
+stored in the `config/mailer.js` file.
 
-The mailer module (located in `packages/server/src/modules/mailer`) requires these data:
+To make the mailer module work, you need to specify these data in `packages/server/.env`:
 
-| Setting | Type   | Description                                              |
-| ------- | ------ | -------------------------------------------------------- |
-| host    | String | Sets the email host. Defaults to `smtp.ethereal.email`   |
-| port    | Number | Sets the email host port                                 |
-| auth    | Object | Contains the `user` and `pass` authentication properties |
-| user    | String | Sets the user emails address                             |
-| pass    | String | Sets the password for authenticating the requests        |
+| Property | Type   | Description                                                                      |
+| -------- | ------ | -------------------------------------------------------------------------------- |
+| host     | String | Sets the email host. Defaults to `smtp.ethereal.email`                           |
+| port     | Number | Sets the email host port. Defaults to `587`                                      |
+| auth     | Object | Sets the [user and password for authentication](#authentication-properties-auth) |
 
-Consult Nodemailer [general options] and [authentication] documentation for more information about the required data.
+### Authentication Properties `auth`
 
-You need to provide the values for `host`, `port`, `user`, and `pass` in the `packages/server/.env` file. The following
-extract from the `.env` uses the default values. You need to change them when using mailer for production.
+| Property | Type   | Description                                                                 |
+| -------- | ------ | --------------------------------------------------------------------------- |
+| user     | String | Sets the user emails address. Defaults to `olgv7abv3lcmipb7@ethereal.email` |
+| pass     | String | Sets the password for authenticating the requests                           |
+
+**NOTE**: we advise against setting the values directly in the `config/mailer.js` file. Instead, set the Nodemailer 
+properties in the `packages/server/.env` file as shown in the example below:
 
 ```dotenv
 # Email
@@ -192,60 +214,81 @@ EMAIL_USER=olgv7abv3lcmipb7@ethereal.email
 EMAIL_PASSWORD=VTKxTbK7RPFNBjQwp9
 ```
 
+Consult Nodemailer [general options] and [authentication] documentation for more information about the properties.
+
 ## Mobile Chat
 
-To configure the mobile chat module, follow to the section below:
+To configure the mobile chat module, follow to the dedicated section:
 
-* [`docs/modules/mobileChat.md`]
+* [docs/modules/mobileChat.md]
 
 ## Pagination
 
+You can change the pagination settings in the `config/pagination.js` file. Apollo Universal Starter Kit lets you 
+configure pagination for the client-side application and for the mobile app separately.
+
 Apollo Universal Starter Kit implements the relay- and cursor-based pagination types:
 
-* The relay pagination provides the **Load More** button. By clicking **Load More**, you tell the application to load a 
-number of new items asynchronously and show them _in the same page_.
+* The relay pagination provides the **Load More** button. By clicking **Load More**, the user tell the application to 
+load a number of the new items asynchronously and show them in the same page.
 
-* The standard pagination is cursor-based: the items are shown page by page, and you need to navigate between pages to 
-see items. You can learn more about the cursor-based pagination in the [dedicated Apollo blog post].
+* The standard pagination is cursor-based: the items are shown page by page, and the user needs to navigate between 
+pages to see the items. You can learn more about the cursor-based pagination in the [dedicated Apollo blog post]. 
 
-You can change the pagination settings in the `config/pagination.js` file. Apollo Universal Starter Kit lets you 
-configure pagination for the web application and for the mobile app separately, meaning you can use different pagination 
-types for the web and mobile applications. 
+### Pagination Settings for the Client-Side Application
 
-| Pagination Setting | Type   | Definition                                                                                   |
-| ------------------ | ------ | -------------------------------------------------------------------------------------------- |
-| web                | Object | Contains the `itemsNumber` and `type` pagination properties for the web application          |
-| itemsNumber        | Number | Sets the number of shown items per page. Defaults to `10`                                    |
-| type               | String | Sets the `'relay'` or `'standard'` pagination for the web application. Defaults to `'relay'` |
-| mobile             | Object | Contains the `itemsNumber` and `type` pagination properties for the mobile app               |
-| itemsNumber        | Number | Sets the number of shown items per page. Defaults to `10`                                    |
-| type               | String | Sets the `'relay'` or `'standard'` pagination for the mobile app. Defaults to `'relay'`      |
+| Property    | Type   | Description                                                                    |
+| ----------- | ------ | ------------------------------------------------------------------------------ |
+| itemsNumber | Number | Sets the number of the displayed items per page. Defaults to `10`              |
+| type        | String | Sets the pagination type. Use `'relay'` or `'standard'`. Defaults to `'relay'` |
 
-## Stripe Subscription
+Usage example (the configuration set in `config/pagination.js`):
 
-To configure Stripe subscription, follow to the section below:
-
-* [`docs/modules/stripeSubscription.md`]
-
-## Upload Module
-
-Currently, you can only change the folder for the uploaded files in the upload module in Apollo Universal Starter Kit. 
-
-The upload module configuration is located in the `config/upload.js` file. The configuration below will set the
-folder for uploaded files to `packages/server/public`:
-
-```js
-// Upload directory is packages/server/public/
-// The path is resolved from the packages/server directory
+```javascript
 export default {
-  uploadDir: 'public'
+  web: {
+    itemsNumber: 10,
+    type: 'relay' // Use 'standard' or 'relay' for the web application
+  }
+}
+```
+
+### Pagination Settings for the Mobile App
+
+| Property    | Type   | Description                                                                    |
+| ----------- | ------ | ------------------------------------------------------------------------------ |
+| itemsNumber | Number | Sets the number of the displayed items per page. Defaults to `10`              |
+| type        | String | Sets the pagination type. Use `'relay'` or `'standard'`. Defaults to `'relay'` |
+
+Usage example (the configuration set in `config/pagination.js`):
+
+```javascript
+export default {
+  mobile: {
+    itemsNumber: 10,
+    type: 'relay' // Use 'standard' or 'relay' for the mobile app
+  }
 };
 ```
 
-The path to the `uploadDir` is resolved from `apollo-universal-starter-kit/packages/server`. If you set the `uploadDir` 
-property to `uploads`, the uploaded files will be located under `packages/server/uploads`. 
+## Stripe Subscription
 
-The upload directory is generated automatically when you upload a file to the server.
+To configure the Stripe subscription module, follow to the dedicated section:
+
+* [docs/modules/stripeSubscription.md]
+
+## Upload Module
+
+The upload module configuration is located in the `config/upload.js` file. Currently, you can only change the folder for 
+the uploaded files.
+
+| Property  | Type   | Description                                     |
+| --------- | ------ | ----------------------------------------------- |
+| uploadDir | String | Sets the upload directory. Defaults to `public` |
+
+**NOTE**: the path to the upload directory is resolved from `packages/server`. If you set the `uploadDir` property to 
+`uploads`, the uploaded files will be located under `packages/server/uploads`. The upload directory is generated 
+automatically when you upload a file to the server.
 
 ## User Authentication
 
@@ -275,18 +318,9 @@ the social authentication properties for Facebook, GitHub, LinkedIn, and Google.
 #### `access`
 
 Configures the authentication methods. By default, Apollo Universal Starter Kit uses both JSON Web Token and 
-session-based authentication mechanisms. 
+session-based authentication mechanisms.
 
-| Value                 | Type    | Description                                                                  |
-| --------------------- | ------- | ---------------------------------------------------------------------------- |
-| session               | Object  | Contains the global properties for the server session-based authentication   |
-| enabled               | Boolean | Enables sessions for authentication. Defaults to `true`                      |
-| jwt                   | Object  | Contains the global properties for the JWT-based authentication              |
-| enabled               | Boolean | Enables JWT for authentication. Defaults to `true`                           |
-| tokenExpiresIn        | String  | Sets the expiration period for the authentication token. Defaults to `'1m'`  |
-| refreshTokenExpiresIn | String  | Sets the expiration period for the refresh token. Defaults to `'7d'`         |
-
-Usage example:
+**Usage Example**
 
 ```js
 export default {
@@ -303,7 +337,21 @@ export default {
     }
   }
 }
-```
+``` 
+
+**Session Properties**
+
+| access.session        | Object  | Contains the global properties for the server session-based authentication |
+| --------------------- | ------- | -------------------------------------------------------------------------- |
+| enabled               | Boolean | Enables the session mechanism for authentication. Defaults to `true`       |
+
+**JWT Properties**
+
+| access.jwt            | Object  | Contains the global properties for the JWT-based authentication             |
+| --------------------- | ------- | --------------------------------------------------------------------------- |
+| enabled               | Boolean | Enables the JWT-based authentication. Defaults to `true`                    |
+| tokenExpiresIn        | String  | Sets the expiration period for the authentication token. Defaults to `'1m'` |
+| refreshTokenExpiresIn | String  | Sets the expiration period for the refresh token. Defaults to `'7d'`        |
 
 #### `password`
 
@@ -374,15 +422,15 @@ The `facebook` property contains configurations for Facebook authentication impl
 `FACEBOOK_CLIENTID` and `FACEBOOK_CLIENTSECRET` values into the `packages/server/.env` file:
 
 ```dotenv
-FACEBOOK_CLIENTID="set to your Facebook client ID. It's similar to bv32cu82e926u543a534ha"
-FACEBOOK_CLIENTSECRET="set to your Facebook client secret. It's similar to 56g7heuz7dhwq725r78wern73a92c3fsfd7430e9"
+FACEBOOK_CLIENTID="set to your Facebook client ID"
+FACEBOOK_CLIENTSECRET="set to your Facebook client secret"
 ``` 
 
 To get the client ID and client secret values, you need to register with [Facebook Apps]. Consult [Connect Your App to 
 Facebook] for details.
 
 **NOTE**: When you create a Facebook application with Facebook Apps, you need to enter the correct **absolute** callback 
-URL to the **Valid OAuth redirect URIs** field.
+URL into the **Valid OAuth redirect URIs** field.
 
 The `auth.facebook.callbackURL` property stores the relative callback URL `/auth/facebook/callback`, which gets 
 concatenated with `http://localhost:3000/` in development mode. The absolute callback URL for Facebook Login is 
@@ -404,8 +452,8 @@ The `github` property contains configurations for GitHub authentication implemen
 `GITHUB_CLIENTSECRET` values into the `packages/server/.env` file:
 
 ```dotenv
-GITHUB_CLIENTID="Use your GitHub client ID. It's similar to bv32cu82e926u543a534ha"
-GITHUB_CLIENTSECRET="Use your GitHub client secret. It's similar to 56g7heuz7dhwq725r78wern73a92c3fsfd7430e9"
+GITHUB_CLIENTID="Use your GitHub client ID"
+GITHUB_CLIENTSECRET="Use your GitHub client secret"
 ```
 
 To get the client ID and client secret values, you need to register with [GitHub OAuth Apps]. Consult [Connect Your App 
@@ -434,8 +482,8 @@ The `linkedin` property contains configurations for LinkedIn authentication impl
 `LINKEDIN_CLIENTID` and `LINKEDIN_CLIENTSECRET` values into the `packages/server/.env` file:
 
 ```dotenv
-LINKEDIN_CLIENTID="Use your LinkedIn client ID. It's similar to bv32cu82e926u543a534ha"
-LINKEDIN_CLIENTSECRET="Use your LinkedIn client secret. It's similar to 56g7heuz7dhwq725r78wern73a92c3fsfd7430e9"
+LINKEDIN_CLIENTID="Use your LinkedIn client ID"
+LINKEDIN_CLIENTSECRET="Use your LinkedIn client secret"
 ```
 
 To get the client ID and client secret values from LinkedIn, you need to register with [LinkedIn OAuth Apps]. Consult 
@@ -465,8 +513,8 @@ The `google` property contains configurations for Google authentication implemen
 `GOOLGE_CLIENTSECRET` values into the `packages/server/.env` file:
 
 ```dotenv
-GOOLGE_CLIENTID="Use your Google client ID. It's similar to bv32cu82e926u543a534ha"
-GOOLGE_CLIENTSECRET="Use your Google client secret. It's similar to 56g7heuz7dhwq725r78wern73a92c3fsfd7430e9"
+GOOLGE_CLIENTID="Use your Google client ID"
+GOOLGE_CLIENTSECRET="Use your Google client secret"
 ```
 
 To get the client ID and client secret values from Google, you need to register with [Google Identity Platform]. Consult 
@@ -480,8 +528,8 @@ concatenated with `http://localhost:3000/`. The absolute callback URL for Google
 `http://localhost:3000/auth/google/callback`, and you need to add this URL to your app in Google Identity Platform 
 settings for development mode.
 
-**NOTE**: You may also need to activate Google+ API to be able to authenticate with Google, otherwise, you may see the 
-error `ServerError: Access Not Configured. Google+ API has not been used in project 245355975001 before or it is 
+**NOTE**: You may also need to activate the Google+ API to be able to authenticate with Google. Otherwise, you may see 
+the error `ServerError: Access Not Configured. Google+ API has not been used in project 245355975001 before or it is 
 disabled.` (Instead of `245355975001` the error will contain the actual number of your project.)
 
 You can also view the error in the console:
@@ -496,28 +544,33 @@ code: 403 }
  
 If the error was produced, you need to visit the link shown in the terminal and activate Google+ for your application. 
 
-[opening vs code with urls]: https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
+[opening visual studio code with urls]: https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
 [visual studio code url handler]: https://github.com/sysgears/vscode-handler#visual-studio-code-url-handler
+[webpack]: https://webpack.js.org/
 [spinjs]: https://github.com/sysgears/spinjs
 [spinjs documentation]: https://github.com/sysgears/spinjs/blob/master/docs
 [twitter bootstrap]: http://getbootstrap.com
 [ant design]: https://ant.design
 [ant design mobile]: https://mobile.ant.design
 [nativebase]: https://nativebase.io/
+[connection uris]: https://www.postgresql.org/docs/10/static/libpq-connect.html
+[secure tcp/ip connections with ssl]: https://www.postgresql.org/docs/9.1/ssl-tcp.html
 [postgresql socket path]: https://www.postgresql.org/message-id/21044.1326496507@sss.pgh.pa.us
-[mysql socket path]: https://dev.mysql.com/doc/refman/8.0/en/problems-with-mysql-sock.html
-[postgres connection uris]: https://www.postgresql.org/docs/10/static/libpq-connect.html
 [connecting using a uri string]: https://dev.mysql.com/doc/refman/8.0/en/connecting-using-path.html#connecting-using-paths-uri
+[using encrypted connections]: https://dev.mysql.com/doc/refman/8.0/en/encrypted-connections.html
+[mysql socket path]: https://dev.mysql.com/doc/refman/8.0/en/problems-with-mysql-sock.html
 [apollo engine]: https://www.apollographql.com/engine/
-[engine api key]: https://www.apollographql.com/docs/engine/setup-node.html#api-key
+[apollo engine api key]: https://www.apollographql.com/docs/engine/setup-node.html#api-key
+[apollo engine documentation for logging levels]: https://www.apollographql.com/docs/engine/proxy-config.html#mdg.engine.config.proto.Config.Logging
 [iso language codes]: http://www.lingoes.net/en/translator/langcode.htm
 [i18next documentation]: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
 [i18next-express-middleware]: https://github.com/i18next/i18next-express-middleware#detector-options
+[nodemailer]: https://nodemailer.com/about/
 [general options]: https://nodemailer.com/smtp/#general-options
 [authentication]: https://nodemailer.com/smtp/#authentication
-[`docs/modules/mobileChat.md`]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/mobileChat.md
+[docs/modules/mobileChat.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/mobileChat.md
 [dedicated apollo blog post]: https://blog.apollographql.com/understanding-pagination-rest-graphql-and-relay-b10f835549e7
-[`docs/modules/stripeSubscription.md`]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/stripeSubscription.md
+[docs/modules/stripeSubscription.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/stripeSubscription.md
 [passport-facebook]: https://github.com/jaredhanson/passport-facebook
 [facebook apps]: https://developers.facebook.com/apps
 [connect your app to facebook]: https://auth0.com/docs/connections/social/facebook

@@ -1,8 +1,7 @@
-import React from 'react';
 import ClientModule, { ClientModuleShape } from '../ClientModule';
 
 export interface CounterModuleShape extends ClientModuleShape {
-  counterComponent?: Array<React.ReactElement<any>>;
+  counterComponent?: any[];
 }
 
 interface CounterModule extends CounterModuleShape {}

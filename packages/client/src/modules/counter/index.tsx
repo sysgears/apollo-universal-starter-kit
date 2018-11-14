@@ -1,12 +1,13 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
-
-import Counter from './containers/Counter';
+import { Component } from '@angular/core';
 import counters from './counters';
 import ClientModule from '../ClientModule';
-import resources from './locales';
+
+@Component({
+  selector: 'app-counter',
+  template: '<server-counter></server-counter>'
+})
+export class CounterComponent {}
 
 export default new ClientModule(counters, {
-  route: [<Route exact path="/" component={Counter} />],
-  localization: [{ ns: 'counter', resources }]
+  route: [{ path: '', component: CounterComponent }]
 });

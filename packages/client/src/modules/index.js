@@ -16,15 +16,15 @@ import ClientModule from './ClientModule';
 
 export default new ClientModule(
   commonModules,
-  defaultRouter,
-  counter,
-  post,
-  upload,
-  contact,
-  pagination,
-  chat,
-  payments,
-  user,
-  i18n,
-  pageNotFound
+  // defaultRouter,
+  counter
+  // post,
+  // upload,
+  // contact,
+  // pagination,
+  // chat,
+  // payments,
+  // user,
+  // i18n,
+  // pageNotFound
 );

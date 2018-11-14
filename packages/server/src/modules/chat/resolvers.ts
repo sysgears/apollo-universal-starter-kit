@@ -1,16 +1,31 @@
 import { createBatchResolver } from 'graphql-resolve-batch';
+import { PubSub } from 'graphql-subscriptions';
+
 import settings from '../../../../../settings';
 import modules from '../../modules';
+import ChatDAO from './sql';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
 
-export default pubsub => ({
+interface Message {
+  id: number;
+  text: string;
+  userId: number;
+  uuid: string;
+  username: string;
+  filename: string;
+  path: string;
+  createdAt: string;
+  quotedId: string;
+}
+
+export default (pubsub: PubSub) => ({
   Query: {
-    async messages(obj, { limit, after }, { Chat }) {
-      const edgesArray = [];
+    async messages(obj: any, { limit, after }: { limit: number; after: number }, { Chat }: { Chat: ChatDAO }) {
+      const edgesArray: Array<{ cursor: number; node: Message }> = [];
       const messages = await Chat.messagesPagination(limit, after);
 
-      messages.map((message, index) => {
+      messages.map((message: Message, index: number) => {
         edgesArray.push({
           cursor: after + index,
           node: message
@@ -25,12 +40,12 @@ export default pubsub => ({
         totalCount: total,
         edges: edgesArray.reverse(),
         pageInfo: {
-          endCursor: endCursor,
-          hasNextPage: hasNextPage
+          endCursor,
+          hasNextPage
         }
       };
     },
-    message(obj, { id }, { Chat }) {
+    message(obj: any, { id }: { id: number }, { Chat }: { Chat: ChatDAO }) {
       return Chat.message(id);
     }
   },
@@ -40,7 +55,7 @@ export default pubsub => ({
     })
   },
   Mutation: {
-    async addMessage(obj, { input }, { Chat, user, req }) {
+    async addMessage(obj: any, { input }, { Chat, user, req }: { Chat: ChatDAO }) {
       const { t } = req;
       const { attachment } = input;
       const userId = user ? user.id : null;
@@ -65,8 +80,8 @@ export default pubsub => ({
         }
       });
       return message;
-    },
-    async deleteMessage(obj, { id }, { Chat, req }) {
+    }, // TODO t -types
+    async deleteMessage(obj: any, { id }: { id: number }, { Chat, req }: { Chat: ChatDAO; req: Request & { t: any } }) {
       const { t } = req;
       const {
         data: { fileSystemStorage }
@@ -98,7 +113,11 @@ export default pubsub => ({
         return { id: null };
       }
     },
-    async editMessage(obj, { input }, { Chat }) {
+    async editMessage(
+      obj: any,
+      { input }: { input: { id: number; text: string; userId: number } },
+      { Chat }: { Chat: ChatDAO }
+    ) {
       await Chat.editMessage(input);
       const message = await Chat.message(input.id);
       // publish for post list

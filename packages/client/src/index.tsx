@@ -5,18 +5,25 @@ import { bootloader, createInputTransfer, createNewHosts, hmrModule, removeNgSty
 import { HttpClientModule } from '@angular/common/http';
 import { ApolloModule, Apollo } from 'apollo-angular';
 import { HttpLinkModule } from 'apollo-angular-link-http';
+import { RouterModule } from '@angular/router';
 
 // Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
 // tslint:disable-next-line
 import 'backend_reload';
 
 import { client, MainComponent } from './app/Main';
+import { CounterComponent } from './modules/counter';
+import routes from './app/Routes';
 import log from '../../common/log';
+import {
+  ServerCounterViewComponent,
+  ServerCounterButtonComponent
+} from './modules/counter/serverCounter/components/ServerCounterView';
 
 @NgModule({
-  declarations: [MainComponent],
+  declarations: [MainComponent, CounterComponent, ServerCounterViewComponent, ServerCounterButtonComponent],
   bootstrap: [MainComponent],
-  imports: [BrowserModule, HttpClientModule, ApolloModule, HttpLinkModule],
+  imports: [BrowserModule, HttpClientModule, ApolloModule, HttpLinkModule, RouterModule.forRoot(routes)],
   providers: []
 })
 class MainModule {

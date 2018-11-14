@@ -1,8 +1,9 @@
 import React from 'react';
 import BaseModule, { BaseModuleShape } from './BaseModule';
+import { Route, Routes } from '@angular/router';
 
 export interface ClientModuleShape extends BaseModuleShape {
-  route?: Array<React.ReactElement<any>>;
+  route?: Routes;
   navItem?: Array<React.ReactElement<any>>;
   navItemRight?: Array<React.ReactElement<any>>;
   stylesInsert?: string[];
@@ -16,10 +17,8 @@ class ClientModule extends BaseModule {
     super(...modules);
   }
 
-  get routes() {
-    return this.route.map((component: React.ReactElement<any>, idx: number, items: Array<React.ReactElement<any>>) =>
-      React.cloneElement(component, { key: component.key || idx + items.length })
-    );
+  get routes(): Routes {
+    return this.route.map((component: Route) => component);
   }
 
   get navItems() {

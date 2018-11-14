@@ -95,7 +95,7 @@ class Main extends React.Component<any, MainState> {
 
 @Component({
   selector: 'body div:first-child',
-  template: '<h1>Hello, {{name}}</h1>'
+  template: '<h1>Hello, {{name}}</h1><router-outlet></router-outlet>'
 })
 class MainComponent {
   public name = 'Angular';

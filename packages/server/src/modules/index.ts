@@ -1,7 +1,8 @@
-import commonModules from '../../../common/modules';
+import i18n from '@module/i18n-server';
+import validation from '@module/validation';
+import counter from '@module/counter-server';
+
 import cookies from './cookies';
-import i18n from './i18n';
-import counter from './counter';
 import post from './post';
 import upload from './upload';
 import user from './user';
@@ -12,12 +13,12 @@ import chat from './chat';
 import graphqlTypes from './graphqlTypes';
 import './debug';
 
-import ServerModule from './ServerModule';
+import ServerModule from '@module/module-server';
 
-export default new ServerModule(
-  commonModules,
+const modules: ServerModule = new ServerModule(
   cookies,
   i18n,
+  validation,
   counter,
   post,
   upload,
@@ -28,3 +29,5 @@ export default new ServerModule(
   chat,
   graphqlTypes
 );
+
+export default modules;

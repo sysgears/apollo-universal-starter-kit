@@ -1,6 +1,6 @@
 package modules.session
 
-import akka.http.scaladsl.server.{Directive0, Directive1}
+import akka.http.scaladsl.server.{Directive, Directive0, Directive1}
 import com.google.inject.Inject
 import com.softwaremill.session._
 import com.softwaremill.session.SessionDirectives.{invalidateSession, optionalSession, setSession}
@@ -23,7 +23,16 @@ class JWTSessionImpl @Inject()(implicit val executionContext: ExecutionContext)
     def log(msg: String): Unit = LoggerFactory.getLogger(this.getClass.getName).info(msg)
   }
 
-  def withNewSession(value: SessionData): Directive0 = setSession(refreshable, usingCookies, value)
-  def withOptionalSession: Directive1[Option[SessionData]] = optionalSession(refreshable, usingCookies)
-  def withInvalidateSession: Directive0 = invalidateSession(refreshable, usingCookies)
+  def withNew(value: SessionData): Directive0 = setSession(refreshable, usingCookies, value)
+
+  def withOptional: Directive1[Option[SessionData]] = optionalSession(refreshable, usingCookies)
+
+  def withInvalidating: Directive0 = invalidateSession(refreshable, usingCookies)
+
+  def withChanges(requestSession: Option[SessionData], newSession: Option[SessionData]): Directive0 =
+    newSession match {
+      case Some(sessionData) if requestSession.isEmpty => withNew(sessionData)
+      case None if requestSession.isDefined => withInvalidating
+      case _ => Directive.Empty
+    }
 }

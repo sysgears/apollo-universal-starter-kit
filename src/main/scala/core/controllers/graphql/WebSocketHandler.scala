@@ -8,7 +8,7 @@ import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import core.controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
 import core.controllers.graphql.jsonProtocols.OperationMessageType._
 import core.controllers.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
-import core.graphql.{UserContext, UserContextFactory}
+import core.graphql.UserContext
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
@@ -65,7 +65,7 @@ class WebSocketHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
               case Some(Subscription) =>
                 graphQlExecutor.execute(
                   queryAst = queryAst,
-                  userContext = UserContextFactory.createUserContextForRequest(),
+                  userContext = UserContext(),
                   root = (),
                   operationName = graphQlMessage.operationName,
                   variables = graphQlMessage.variables.getOrElse(JsObject.empty)

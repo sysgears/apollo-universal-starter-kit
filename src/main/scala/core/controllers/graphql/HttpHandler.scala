@@ -9,7 +9,6 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.graphql.UserContextFactory.createUserContextForRequest
 import core.graphql.{GraphQL, UserContext}
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
@@ -27,104 +26,98 @@ import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
 @Singleton
-class HttpHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit],
-                            graphQlBatchExecutor: BatchExecutor.type)
+class HttpHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
                            (implicit val scheduler: Scheduler,
                             implicit val actorMaterializer: ActorMaterializer) extends ControllerUtil {
 
-  def handleQuery(graphQlMessage: GraphQLMessage): Route = extractRequest {
-    request =>
-      val userCtx = createUserContextForRequest(Some(request))
-      QueryParser.parse(graphQlMessage.query) match {
-        case Success(queryAst) =>
-          queryAst.operationType(graphQlMessage.operationName) match {
-            case Some(Subscription) =>
-              import sangria.streaming.akkaStreams._
-              complete {
-                graphQlExecutor.prepare(
-                  queryAst = queryAst,
-                  userContext = userCtx,
-                  root = (),
-                  operationName = graphQlMessage.operationName,
-                  variables = graphQlMessage.variables.getOrElse(JsObject.empty)
-                ).map {
-                  preparedQuery =>
-                    ToResponseMarshallable(preparedQuery.execute()
-                      .map(r => ServerSentEvent(r.compactPrint))
-                      .recover {
-                        case NonFatal(error) =>
-                          ServerSentEvent(error.getMessage)
-                      }
-                    )
-                }.recover {
-                  case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
-                  case error: ErrorWithResolver => ToResponseMarshallable(InternalServerError -> error.resolveError)
-                }
+  def handleQuery(graphQlMessage: GraphQLMessage, userCtx: UserContext): Route =
+    QueryParser.parse(graphQlMessage.query) match {
+      case Success(queryAst) =>
+        queryAst.operationType(graphQlMessage.operationName) match {
+          case Some(Subscription) =>
+            import sangria.streaming.akkaStreams._
+            complete {
+              graphQlExecutor.prepare(
+                queryAst = queryAst,
+                userContext = userCtx,
+                root = (),
+                operationName = graphQlMessage.operationName,
+                variables = graphQlMessage.variables.getOrElse(JsObject.empty)
+              ).map {
+                preparedQuery =>
+                  ToResponseMarshallable(preparedQuery.execute()
+                    .map(r => ServerSentEvent(r.compactPrint))
+                    .recover {
+                      case NonFatal(error) =>
+                        ServerSentEvent(error.getMessage)
+                    }
+                  )
+              }.recover {
+                case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
+                case error: ErrorWithResolver => ToResponseMarshallable(InternalServerError -> error.resolveError)
               }
-            case _ =>
-              complete(
-                graphQlExecutor.execute(
-                  queryAst = queryAst,
-                  userContext = userCtx,
-                  root = (),
-                  operationName = graphQlMessage.operationName,
-                  variables = graphQlMessage.variables.getOrElse(JsObject.empty)
-                ).map(OK -> _).recover {
-                  case error: QueryAnalysisError => BadRequest -> error.resolveError
-                  case error: ErrorWithResolver => InternalServerError -> error.resolveError
-                }
-              )
-          }
-        case Failure(e: SyntaxError) => complete(BadRequest, syntaxError(e))
-        case Failure(_) => complete(InternalServerError)
-      }
-  }
-
-  def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage]): Route = extractRequest {
-    request =>
-      val userCtx = createUserContextForRequest(Some(request))
-      import sangria.streaming.monix._
-      val operations = graphQlMessages.map(_.operationName.getOrElse("")).filter(_ != "")
-      QueryParser.parse(graphQlMessages.map(_.query).mkString(" ")) match {
-        case Success(queryAst) =>
-          complete {
-            BatchExecutor.executeBatch(
-              schema = GraphQL.schema,
-              queryAst = queryAst,
-              operationNames = operations,
-              variables = graphQlMessages.map(_.variables.getOrElse(JsObject.empty)).fold(JsObject.empty) {
-                (o1, o2) => JsObject(o1.fields ++ o2.fields)
-              },
-              userContext = userCtx,
-              queryReducers = List(
-                QueryReducer.rejectMaxDepth[UserContext](GraphQL.maxQueryDepth),
-                QueryReducer.rejectComplexQueries[UserContext](GraphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
-              ),
-              middleware = List(
-                BatchExecutor.OperationNameExtension
-              )
-            ).toListL.runAsync.map {
-              jsonResponse =>
-                var jsonResponseList = new ListBuffer[JsValue]()
-                operations.foreach {
-                  operation =>
-                    jsonResponse.find {
-                      jsonElement =>
-                        jsonElement
-                          .asJsObject.fields("extensions")
-                          .asJsObject.fields("batch")
-                          .asJsObject.fields("operationName")
-                          .convertTo[String] == operation
-                    }.foreach(jsonResponseList += _)
-                }
-                OK -> jsonResponseList.toList.toJson
-            }.recover {
-              case error: QueryAnalysisError => BadRequest -> error.resolveError
-              case error: ErrorWithResolver => InternalServerError -> error.resolveError
             }
+          case _ =>
+            complete(
+              graphQlExecutor.execute(
+                queryAst = queryAst,
+                userContext = userCtx,
+                root = (),
+                operationName = graphQlMessage.operationName,
+                variables = graphQlMessage.variables.getOrElse(JsObject.empty)
+              ).map(OK -> _).recover {
+                case error: QueryAnalysisError => BadRequest -> error.resolveError
+                case error: ErrorWithResolver => InternalServerError -> error.resolveError
+              }
+            )
+        }
+      case Failure(e: SyntaxError) => complete(BadRequest, syntaxError(e))
+      case Failure(_) => complete(InternalServerError)
+    }
+
+  def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage], userCtx: UserContext): Route = {
+    import sangria.streaming.monix._
+    val operations = graphQlMessages.map(_.operationName.getOrElse("")).filter(_ != "")
+    QueryParser.parse(graphQlMessages.map(_.query).mkString(" ")) match {
+      case Success(queryAst) =>
+        complete {
+          BatchExecutor.executeBatch(
+            schema = GraphQL.schema,
+            queryAst = queryAst,
+            operationNames = operations,
+            variables = graphQlMessages.map(_.variables.getOrElse(JsObject.empty)).fold(JsObject.empty) {
+              (o1, o2) => JsObject(o1.fields ++ o2.fields)
+            },
+            userContext = userCtx,
+            queryReducers = List(
+              QueryReducer.rejectMaxDepth[UserContext](GraphQL.maxQueryDepth),
+              QueryReducer.rejectComplexQueries[UserContext](GraphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
+            ),
+            middleware = List(
+              BatchExecutor.OperationNameExtension
+            )
+          ).toListL.runAsync.map {
+            jsonResponse =>
+              var jsonResponseList = new ListBuffer[JsValue]()
+              operations.foreach {
+                operation =>
+                  jsonResponse.find {
+                    jsonElement =>
+                      jsonElement
+                        .asJsObject.fields("extensions")
+                        .asJsObject.fields("batch")
+                        .asJsObject.fields("operationName")
+                        .convertTo[String] == operation
+                  }.foreach(jsonResponseList += _)
+              }
+              OK -> jsonResponseList.toList.toJson
+          }.recover {
+            case error: QueryAnalysisError => BadRequest -> error.resolveError
+            case error: ErrorWithResolver => InternalServerError -> error.resolveError
           }
-        case Failure(e: SyntaxError) => complete(BadRequest, syntaxError(e))
-        case Failure(_) => complete(InternalServerError)
-      }
+        }
+      case Failure(e: SyntaxError) => complete(BadRequest, syntaxError(e))
+      case Failure(_) => complete(InternalServerError)
+    }
   }
 }

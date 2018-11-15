@@ -14,9 +14,6 @@ trait ActorUtil {
   }
 
   def sendMessageToActor[T](recipient: ActorRef, message: Any)(implicit actorMaterializer: ActorMaterializer): Future[T] = {
-    sendMessageWithFunc{
-      sender =>
-        recipient.tell(message, sender)
-    }
+    sendMessageWithFunc[T](sender => recipient.tell(message, sender))
   }
 }

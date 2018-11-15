@@ -3,13 +3,19 @@ import { FormikProps, withFormik } from 'formik';
 import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
-import Field from '../../../utils/FieldAdapter';
-import { RenderField, FormView, Button, Modal, danger, success } from '../../common/components/native';
-import { placeholderColor, submit } from '../../common/components/native/styles';
-import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
-import { validate } from '../../../../../common/modules/validation';
-import FieldError from '../../../../../common/modules/validation/FieldError';
-import { TranslateFunction } from '../../../i18n';
+import Field from '../../../../packages/client/src/utils/FieldAdapter';
+import {
+  RenderField,
+  FormView,
+  Button,
+  Modal,
+  danger,
+  success
+} from '../../../../packages/client/src/modules/common/components/native';
+import { placeholderColor, submit } from '../../../../packages/client/src/modules/common/components/native/styles';
+import { contactFormSchema } from '@module/contact-server-ts';
+import { validate, FieldError } from '@module/validation-common-react';
+import { TranslateFunction } from '@module/i18n-client-react';
 import { ContactForm } from '../types';
 
 interface ContactFormProps {

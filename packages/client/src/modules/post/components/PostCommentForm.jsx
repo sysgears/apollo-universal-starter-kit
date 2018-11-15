@@ -3,11 +3,11 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 
+import { validate, required } from '@module/validation-common-react';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { FormView, RenderField, Button, primary } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
-import { required, validate } from '../../../../../common/modules/validation';
 
 const commentFormSchema = {
   content: [required]

@@ -1,12 +1,12 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
-import { LayoutCenter } from '../../common/components/index.web';
-import { PageLayout } from '../../common/components/web';
+import { LayoutCenter } from '../../../../packages/client/src/modules/common/components/index.web';
+import { PageLayout } from '../../../../packages/client/src/modules/common/components/web';
 import ContactForm from './ContactForm';
 import { ContactForm as IContactForm } from '../types';
-import settings from '../../../../../../settings';
-import { TranslateFunction } from '../../../i18n';
+import settings from '../../../../settings';
+import { TranslateFunction } from '@module/i18n-client-react';
 
 interface ContactViewProps {
   t: TranslateFunction;

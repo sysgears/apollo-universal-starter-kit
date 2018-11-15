@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { isEmpty } from 'lodash';
 
+import { validate, required, minLength, match, email } from '@module/validation-common-react';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '../../common/components/web';
-import { email, minLength, required, match, validate } from '../../../../../common/modules/validation';
-
 import settings from '../../../../../../settings';
 
 const userFormSchema = {

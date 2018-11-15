@@ -1,7 +1,6 @@
-import { validate } from '../../../../common/modules/validation';
 import { contactFormSchema } from './contactFormSchema';
-import log from '../../../../common/log';
-import FieldError from '../../../../common/modules/validation/FieldError';
+import log from '../../../packages/common/log';
+import { validate, FieldError } from '@module/validation-common-react';
 
 interface ContactInput {
   input: {

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { NavLink, Link } from 'react-router-dom';
 
+import { validate, required, minLength } from '@module/validation-common-react';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Alert, Button } from '../../common/components/web';
-import { required, minLength, validate } from '../../../../../common/modules/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
 import LinkedInButton from '../auth/linkedin';

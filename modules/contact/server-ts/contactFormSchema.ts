@@ -1,4 +1,4 @@
-import { email, minLength, required } from '../../../../common/modules/validation';
+import { email, minLength, required } from '@module/validation-common-react';
 
 export const contactFormSchema = {
   name: [required, minLength(3)],

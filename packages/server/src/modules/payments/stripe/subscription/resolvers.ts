@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 import withAuth from 'graphql-auth';
 
 import log from '../../../../../../common/log';
-import FieldError from '../../../../../../common/modules/validation/FieldError';
+import { FieldError } from '@module/validation-common-react';
 import settings from '../../../../../../../settings';
 
 const { plan } = settings.stripe.subscription;

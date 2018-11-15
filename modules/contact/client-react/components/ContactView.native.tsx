@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import ContactForm from './ContactForm';
-import { TranslateFunction } from '../../../i18n';
+import { TranslateFunction } from '@module/i18n-client-react';
 import { ContactForm as IContactForm } from '../types';
 
 interface ContactViewProps {

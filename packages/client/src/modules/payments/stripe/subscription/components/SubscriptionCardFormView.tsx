@@ -2,10 +2,10 @@ import React from 'react';
 import { withFormik } from 'formik';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 
+import { validate, required } from '@module/validation-common-react';
 import { TranslateFunction } from '../../../../../i18n';
 import Field from '../../../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert, Label } from '../../../../common/components/web';
-import { required, validate } from '../../../../../../../common/modules/validation';
 
 interface SubscriptionCardFormViewProps {
   submitting: boolean;

@@ -15,7 +15,7 @@ trait FileRepo {
 
   def find(id: Int): Future[Option[FileMetadata]]
 
-  def findAll(): Future[List[FileMetadata]]
+  def findAll: Future[List[FileMetadata]]
 }
 
 @Singleton
@@ -27,7 +27,7 @@ class FileRepoImpl @Inject()(db: Database) extends FileRepo {
 
   override def find(id: Int): Future[Option[FileMetadata]] = db.run(Actions.find(id))
 
-  override def findAll(): Future[List[FileMetadata]] = db.run(Actions.findAll())
+  override def findAll: Future[List[FileMetadata]] = db.run(Actions.findAll)
 
   object Actions {
 
@@ -47,6 +47,6 @@ class FileRepoImpl @Inject()(db: Database) extends FileRepo {
       }
     } yield file
 
-    def findAll(): DBIO[List[FileMetadata]] = query.result.map(_.toList)
+    def findAll: DBIO[List[FileMetadata]] = query.result.map(_.toList)
   }
 }

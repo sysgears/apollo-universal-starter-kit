@@ -27,6 +27,6 @@ class FileActor @Inject()(fileRepo: FileRepo,
       fileRepo.create(saveFileMetadata.file).pipeTo(saveFileMetadata.sender)
     case getFilesMetadata: GetFilesMetadata =>
       log.info(s"Received a message: [ $getFilesMetadata ]")
-      fileRepo.findAll().pipeTo(getFilesMetadata.sender)
+      fileRepo.findAll.pipeTo(getFilesMetadata.sender)
   }
 }

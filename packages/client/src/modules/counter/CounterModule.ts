@@ -1,7 +1,7 @@
 import ClientModule, { ClientModuleShape } from '../ClientModule';
 
 export interface CounterModuleShape extends ClientModuleShape {
-  counterComponent?: any[];
+  counterModule?: any[];
 }
 
 interface CounterModule extends CounterModuleShape {}

@@ -1,13 +1,18 @@
-import { Component } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import counters from './counters';
 import ClientModule from '../ClientModule';
+import { CounterComponent } from './containers/Counter';
 
-@Component({
-  selector: 'app-counter',
-  template: '<server-counter></server-counter>'
+@NgModule({
+  imports: [CommonModule, ...counters.counterModule],
+  declarations: [CounterComponent],
+  exports: [...counters.counterModule]
 })
-export class CounterComponent {}
+export class CounterModule {}
 
 export default new ClientModule(counters, {
-  route: [{ path: '', component: CounterComponent }]
+  route: [{ path: '', component: CounterComponent }],
+  module: [CounterModule]
 });

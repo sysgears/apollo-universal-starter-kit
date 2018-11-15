@@ -1,3 +1,4 @@
+import { Component } from '@angular/core';
 import React from 'react';
 import Helmet from 'react-helmet';
 
@@ -27,4 +28,10 @@ const Counter = ({ t }: CounterProps) => (
   </PageLayout>
 );
 
-export default translate('counter')(Counter);
+@Component({
+  selector: 'app-counter',
+  template: `
+    <div><server-counter></server-counter></div>
+  `
+})
+export class CounterComponent {}

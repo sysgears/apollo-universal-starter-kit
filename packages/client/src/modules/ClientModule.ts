@@ -3,6 +3,7 @@ import BaseModule, { BaseModuleShape } from './BaseModule';
 import { Route, Routes } from '@angular/router';
 
 export interface ClientModuleShape extends BaseModuleShape {
+  module?: any;
   route?: Routes;
   navItem?: Array<React.ReactElement<any>>;
   navItemRight?: Array<React.ReactElement<any>>;
@@ -15,6 +16,10 @@ interface ClientModule extends ClientModuleShape {}
 class ClientModule extends BaseModule {
   constructor(...modules: ClientModuleShape[]) {
     super(...modules);
+  }
+
+  get modules(): any {
+    return this.module.map((module: any) => module);
   }
 
   get routes(): Routes {

@@ -1,10 +1,16 @@
-import React from 'react';
-import resources from './locales';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import CounterModule from '../CounterModule';
-import ServerCounter from './containers/ServerCounter';
-import { ServerCounterViewComponent } from './components/ServerCounterView';
+import { ServerCounterViewComponent, ServerCounterButtonComponent } from './components/ServerCounterView';
+
+@NgModule({
+  imports: [CommonModule],
+  declarations: [ServerCounterButtonComponent, ServerCounterViewComponent],
+  exports: [ServerCounterButtonComponent, ServerCounterViewComponent]
+})
+class ServerCounterModule {}
 
 export default new CounterModule({
-  localization: [{ ns: 'serverCounter', resources }],
-  counterComponent: [ServerCounterViewComponent]
+  counterModule: [ServerCounterModule]
 });

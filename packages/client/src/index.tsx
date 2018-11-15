@@ -12,18 +12,23 @@ import { RouterModule } from '@angular/router';
 import 'backend_reload';
 
 import { client, MainComponent } from './app/Main';
-import { CounterComponent } from './modules/counter';
+import { CounterModule } from './modules/counter';
 import routes from './app/Routes';
 import log from '../../common/log';
-import {
-  ServerCounterViewComponent,
-  ServerCounterButtonComponent
-} from './modules/counter/serverCounter/components/ServerCounterView';
+import modules from './modules';
 
 @NgModule({
-  declarations: [MainComponent, CounterComponent, ServerCounterViewComponent, ServerCounterButtonComponent],
+  declarations: [MainComponent],
   bootstrap: [MainComponent],
-  imports: [BrowserModule, HttpClientModule, ApolloModule, HttpLinkModule, RouterModule.forRoot(routes)],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    ApolloModule,
+    HttpLinkModule,
+    RouterModule.forRoot(routes),
+    CounterModule,
+    ...modules.modules
+  ],
   providers: []
 })
 class MainModule {

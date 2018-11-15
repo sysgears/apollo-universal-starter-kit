@@ -1,11 +1,18 @@
-import React from 'react';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import resolvers from './resolvers';
-import resources from './locales';
-import ClientCounter from './containers/ClientCounter';
 import CounterModule from '../CounterModule';
+import { ClientCounterButtonComponent, ClientCounterViewComponent } from './components/ClientCounterView';
+
+@NgModule({
+  imports: [CommonModule],
+  declarations: [ClientCounterButtonComponent, ClientCounterViewComponent],
+  exports: [ClientCounterButtonComponent, ClientCounterViewComponent]
+})
+class ClientCounterModule {}
 
 export default new CounterModule({
   resolver: [resolvers],
-  localization: [{ ns: 'clientCounter', resources }],
-  counterComponent: [<ClientCounter />]
+  counterModule: [ClientCounterModule]
 });

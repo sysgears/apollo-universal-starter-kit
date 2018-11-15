@@ -31,7 +31,10 @@ const Counter = ({ t }: CounterProps) => (
 @Component({
   selector: 'app-counter',
   template: `
-    <div><server-counter></server-counter></div>
+    <div>
+      <server-counter></server-counter>
+      <client-counter></client-counter>
+    </div>
   `
 })
 export class CounterComponent {}

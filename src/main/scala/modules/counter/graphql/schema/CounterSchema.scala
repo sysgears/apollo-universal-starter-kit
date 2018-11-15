@@ -1,15 +1,13 @@
 package modules.counter.graphql.schema
 
-import akka.actor.{ActorRef, ActorSystem}
+import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
-import com.google.inject.name.Named
 import common.Logger
+import common.graphql.GraphQLUtil
 import core.graphql.{GraphQLSchema, UserContext}
 import core.services.publisher.PublisherService
 import javax.inject.Inject
-import common.actors.Dispatcher
-import common.graphql.GraphQLUtil
 import modules.counter.graphql.resolvers.CounterResolver
 import modules.counter.models.Counter
 import modules.counter.services.count.CounterActor.GetAmount
@@ -19,8 +17,7 @@ import sangria.streaming.akkaStreams._
 
 import scala.concurrent.ExecutionContext
 
-class CounterSchema @Inject()(@Named(Dispatcher.name) dispatcherActor: ActorRef,
-                              publisherService: PublisherService[Counter])
+class CounterSchema @Inject()(publisherService: PublisherService[Counter])
                              (implicit val materializer: ActorMaterializer,
                               actorSystem: ActorSystem,
                               executionContext: ExecutionContext) extends GraphQLSchema
@@ -38,6 +35,7 @@ class CounterSchema @Inject()(@Named(Dispatcher.name) dispatcherActor: ActorRef,
       resolve = sc => sendMessageToDispatcher[Counter](
         input = GetAmount,
         userContext = sc.ctx,
+        onException = _ => Counter(amount = 0),
         resolverActor = CounterResolver.name
       )
     )
@@ -53,7 +51,8 @@ class CounterSchema @Inject()(@Named(Dispatcher.name) dispatcherActor: ActorRef,
         sendMessageToDispatcher[Counter](
           input = amount,
           userContext = sc.ctx,
-          resolverActor = CounterResolver.name
+          onException = _ => Counter(amount = 0),
+          resolverActor = CounterResolver.name,
         ).map {
           counter => {
             publisherService.publish(counter)

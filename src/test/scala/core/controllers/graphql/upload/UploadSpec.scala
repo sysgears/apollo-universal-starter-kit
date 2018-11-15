@@ -3,11 +3,15 @@ package core.controllers.graphql.upload
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, Multipart}
 import akka.http.scaladsl.model.MediaTypes._
 import akka.http.scaladsl.model.StatusCodes._
+import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.util.ByteString
 import core.controllers.graphql.TestHelper
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import modules.upload.models.FileMetadata
 import spray.json._
+import scala.concurrent.duration._
+import akka.testkit.TestDuration
 
 class UploadSpec extends TestHelper {
 
@@ -34,7 +38,16 @@ class UploadSpec extends TestHelper {
     )
   )
 
+  val filesQuery = "query { files { id, name, contentType, size, path } }"
+  val filesQueryGraphQLMessage = ByteString(GraphQLMessage(filesQuery).toJson.compactPrint)
+  val filesQueryEntity = HttpEntity(`application/json`, filesQueryGraphQLMessage )
+
+  implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
+
   "UploadSpec" should {
+
+    import modules.upload.models.FileMetadataJsonProtocol._
+
     "upload files" in {
       Post(endpoint, addFilesEntity) ~> routes ~> check {
 
@@ -46,6 +59,22 @@ class UploadSpec extends TestHelper {
         status shouldBe OK
         contentType.mediaType shouldBe `application/json`
         uploadFilesResult shouldBe true
+      }
+    }
+
+    "get files metadata" in {
+      Post(endpoint, addFilesEntity) ~> routes ~> check {
+        Post(endpoint, filesQueryEntity) ~> routes ~> check {
+
+          val filesMetadata: List[FileMetadata] = responseAs[String].parseJson
+            .asJsObject.fields("data")
+              .asJsObject.fields("files")
+              .convertTo[List[FileMetadata]]
+
+          status shouldBe OK
+          contentType.mediaType shouldBe `application/json`
+          filesMetadata.size shouldBe 2
+        }
       }
     }
   }

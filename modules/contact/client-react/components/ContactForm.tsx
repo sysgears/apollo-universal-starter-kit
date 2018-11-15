@@ -2,11 +2,10 @@ import React from 'react';
 import { withFormik, FormikProps } from 'formik';
 
 import Field from '../../../utils/FieldAdapter';
-import { Form, RenderField, Button, Alert } from '../../common/components/web';
-import { contactFormSchema } from '../../../../../server/src/modules/contact/contactFormSchema';
+import { Form, RenderField, Button, Alert } from '../../../../packages/client/src/modules/common/components/web';
+import { contactFormSchema } from '../../../../packages/server/src/modules/contact/contactFormSchema';
 import { TranslateFunction } from '../../../i18n';
 import { ContactForm } from '../types';
-import FieldError from '../../../../../common/modules/validation/FieldError';
 import { validate, FieldError } from '@module/validation-common-react';
 
 interface ContactFormProps {

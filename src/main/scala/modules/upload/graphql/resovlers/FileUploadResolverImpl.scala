@@ -1,7 +1,6 @@
 package modules.upload.graphql.resovlers
 
-import java.io.File
-import java.nio.file.Paths
+import java.nio.file.{Files, Paths}
 
 import akka.actor.ActorRef
 import akka.http.scaladsl.model.Multipart.FormData
@@ -27,8 +26,10 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
     parts.filter(_.filename.nonEmpty).mapAsync(1) {
       part => {
         val hashedFilename = hashAppender.append(part.filename.get)
+        val publicDirPath = Paths.get(getClass.getResource("/").getPath, "public")
+        if (!publicDirPath.toFile.exists) Files.createDirectory(publicDirPath)
         part.entity.dataBytes
-          .runWith(FileIO.toPath(Paths.get(getClass.getResource("/public").getPath) resolve hashedFilename))
+          .runWith(FileIO.toPath(publicDirPath resolve hashedFilename))
           .map(ioResult => (ioResult, s"public/$hashedFilename"))
       }.map(result =>
         FileMetadata(

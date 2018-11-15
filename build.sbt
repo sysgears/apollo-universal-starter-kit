@@ -39,6 +39,9 @@ libraryDependencies ++= Seq(
 
   "com.github.jurajburian" %% "mailer" % "1.2.3",
   "org.clapper" %% "classutil" % "1.3.0",
+
+  "com.pauldijou" %% "jwt-core" % "0.19.0",
+  
   "commons-io" % "commons-io" % "2.6"
 )
 

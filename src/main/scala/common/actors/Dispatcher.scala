@@ -33,9 +33,13 @@ object Dispatcher {
                               dispatcherActor: ActorRef,
                               filtersAfter: List[ActorRef])
 
-  case class ResolverInput(input: Any,
-                           context: UserContext,
-                           dispatcherActor: ActorRef)
+  case class ResolverMessage(input: Any, context: UserContext)
+
+  sealed trait InterceptorResultStatus
+
+  final case class Failure(e: Exception) extends InterceptorResultStatus
+
+  final object Success extends InterceptorResultStatus
 
 }
 

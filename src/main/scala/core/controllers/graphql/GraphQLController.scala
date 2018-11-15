@@ -69,13 +69,13 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
   //FIXME: find out how to create a session after setting data to newSession in UserContext
   private def withSession(userCtx: UserContext)(ctxToRoute: UserContext => Route) = {
     session.withOptionalSession {
-      case Some(storedSession) => ctxToRoute(userCtx.copy(storedSession = storedSession.value))
+      case Some(storedSession) => ctxToRoute(userCtx.copy(session = Some(storedSession)))
       case None =>
         ctxToRoute.andThen {
           route =>
-            if (userCtx.newSession.isEmpty) route
+            if (userCtx.session.isEmpty) route
             else {
-              session.withNewSession(SessionData(userCtx.newSession.toMap))(route)
+              session.withNewSession(SessionData(""))(route)
             }
         }(userCtx)
     }

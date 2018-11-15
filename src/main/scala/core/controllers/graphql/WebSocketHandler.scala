@@ -66,7 +66,7 @@ class WebSocketHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
               case Some(Subscription) =>
                 graphQlExecutor.execute(
                   queryAst = queryAst,
-                  userContext = UserContext(newSession = mutable.Map.empty),
+                  userContext = UserContext(),
                   root = (),
                   operationName = graphQlMessage.operationName,
                   variables = graphQlMessage.variables.getOrElse(JsObject.empty)

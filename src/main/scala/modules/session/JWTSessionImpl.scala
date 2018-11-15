@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext
 class JWTSessionImpl @Inject()(implicit val executionContext: ExecutionContext)
   extends JWTSession[SessionData] {
 
-  override val sessionConfig: SessionConfig = SessionConfig.default("c05ll3lesrinf39t7mc5h6un6r0c69lgfno69dsak3vabeqamouq4328cuaekros401ajdpkh60rrtpd8ro24rbuqmgtnd1ebag6ljnb65i8a55d482ok7o0nch0bfbe")
+  override val sessionConfig: SessionConfig = SessionConfig.fromConfig()
 
   override implicit val serializer: SessionSerializer[SessionData, JValue] = JValueSessionSerializer.caseClass[SessionData]
   override implicit val encoder: JwtSessionEncoder[SessionData] = new JwtSessionEncoder[SessionData]

@@ -63,7 +63,10 @@
   "author": "SysGears INC",
   "license": "MIT",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "modules/**/client-react",
+    "modules/**/common-react",
+    "modules/**/server-ts"
   ],
   "greenkeeper": {
     "ignore": [
@@ -87,8 +90,8 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@babel/runtime": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@babel/runtime": "^7.0.0",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.2.6",
     "babel-plugin-import": "^1.7.0",
@@ -151,12 +154,13 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.169"
+    "spinjs": "^0.4.173"
   },
   "resolutions": {
     "react": "16.5.0",
     "graphql": "0.13.2",
     "iterall": "^1.2.2",
-    "upath": "^1.1.0"
+    "upath": "^1.1.0",
+    "watchpack": "https://github.com/Globegitter/watchpack"
   }
 }

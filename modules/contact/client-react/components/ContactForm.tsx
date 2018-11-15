@@ -7,7 +7,7 @@ import { contactFormSchema } from '../../../../../server/src/modules/contact/con
 import { TranslateFunction } from '../../../i18n';
 import { ContactForm } from '../types';
 import FieldError from '../../../../../common/modules/validation/FieldError';
-import { validate } from '@module/validation-common-react';
+import { validate, FieldError } from '@module/validation-common-react';
 
 interface ContactFormProps {
   t: TranslateFunction;

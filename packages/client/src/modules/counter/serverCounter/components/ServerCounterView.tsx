@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Component } from '@angular/core';
-import { Apollo, Query } from 'apollo-angular';
+import { Apollo, Query, QueryRef } from 'apollo-angular';
 import { map } from 'rxjs/operators';
+import gql from 'graphql-tag';
 
 import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
 import ADD_COUNTER from '../graphql/AddCounter.graphql';
+import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
 
 import { Button } from '../../../common/components/web';
 import { TranslateFunction } from '../../../../i18n';
@@ -25,9 +27,7 @@ interface ViewProps {
 @Component({
   selector: 'server-counter-button',
   template: `
-    <Button id="graphql-button" color="primary" (click)="increaseCounter()">
-      Click to increase counter
-    </Button>
+    <button id="graphql-button" color="primary" (click)="increaseCounter()">Click to increase counter</button>
   `,
   styles: []
 })
@@ -37,10 +37,24 @@ export class ServerCounterButtonComponent {
   public increaseCounter() {
     this.apollo
       .mutate({
-        mutation: ADD_COUNTER,
+        mutation: gql`
+          mutation addServerCounter($amount: Int!) {
+            addServerCounter(amount: $amount) {
+              amount
+            }
+          }
+        `,
         variables: {
           amount: 1
         }
+        // update: (store, { data: { addServerCounter } }) => {
+        //   // Read the data from our cache for this query.
+        //   const data: any = store.readQuery({ query: COUNTER_QUERY });
+        //   // Add our comment from the mutation to the end.
+        //   data.serverCounter.amount = addServerCounter.amount;
+        //   // Write our data back to the cache.
+        //   store.writeQuery({ query: COUNTER_QUERY, data });
+        // }
       })
       .subscribe();
   }
@@ -49,11 +63,9 @@ export class ServerCounterButtonComponent {
 @Component({
   selector: 'server-counter',
   template: `
-    <section *ngIf="!counter">
-      <div className="text-center">Loading</div>
-    </section>
+    <section *ngIf="!counter"><div className="text-center">Loading</div></section>
     <section *ngIf="counter">
-      <p>Amount: {{counter | async}}</p>
+      <p>Amount: {{ counter | async }}</p>
       <server-counter-button></server-counter-button>
     </section>
   `,
@@ -68,17 +80,48 @@ export class ServerCounterButtonComponent {
 })
 export class ServerCounterViewComponent extends Component {
   public counter: any;
+  public commentsQuery: QueryRef<any>;
 
   constructor(private apollo: Apollo) {
     super();
   }
 
   public ngOnInit() {
-    this.counter = this.apollo
-      .watchQuery<Query>({
-        query: COUNTER_QUERY
-      })
-      .valueChanges.pipe(map((result: any) => result.data.serverCounter.amount));
+    this.commentsQuery = this.apollo.watchQuery<Query>({
+      query: gql`
+        query serverCounterQuery {
+          serverCounter {
+            amount
+          }
+        }
+      `
+    });
+
+    this.counter = this.commentsQuery.valueChanges.pipe(map((result: any) => result.data.serverCounter.amount));
+
+    this.commentsQuery.subscribeToMore({
+      document: COUNTER_SUBSCRIPTION,
+      variables: {},
+      updateQuery: (prev, { subscriptionData }: any) => {
+        if (!subscriptionData.data) {
+          return prev;
+        }
+
+        const {
+          data: {
+            counterUpdated: { amount }
+          }
+        } = subscriptionData;
+
+        return {
+          ...prev,
+          serverCounter: {
+            amount,
+            __typename: 'Counter'
+          }
+        };
+      }
+    });
   }
 }
 

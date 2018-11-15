@@ -1,9 +1,5 @@
 {
-  "extends": [
-    "tslint:latest",
-    "tslint-plugin-prettier",
-    "tslint-config-prettier"
-  ],
+  "extends": ["tslint:latest", "tslint-plugin-prettier", "tslint-config-prettier"],
   "cliOptions": {
     "exclude": ["node_modules", "dist", "lib"]
   },
@@ -81,12 +77,6 @@
       "variable-declaration",
       "member-variable-declaration"
     ],
-    "variable-name": [
-      true,
-      "check-format",
-      "allow-leading-underscore",
-      "allow-pascal-case",
-      "ban-keywords"
-    ]
+    "variable-name": [true, "check-format", "allow-leading-underscore", "allow-pascal-case", "ban-keywords"]
   }
 }

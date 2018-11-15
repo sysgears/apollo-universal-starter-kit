@@ -8,7 +8,7 @@ import scala.concurrent.Future
 
 trait ActorUtil {
   def sendMessageWithFunc[T](f: ActorRef => Unit)(implicit actorMaterializer: ActorMaterializer): Future[T] = {
-    Source.actorRef[T](0, OverflowStrategy.dropHead)
+    Source.actorRef[T](1024, OverflowStrategy.fail)
       .mapMaterializedValue(f)
       .runWith(Sink.head[T])
   }

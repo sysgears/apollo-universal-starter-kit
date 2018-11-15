@@ -1,5 +1,7 @@
 package core.controllers.graphql.upload
 
+import java.nio.file.{Path, Paths}
+
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, Multipart}
 import akka.http.scaladsl.model.MediaTypes._
 import akka.http.scaladsl.model.StatusCodes._
@@ -10,8 +12,10 @@ import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.upload.models.FileMetadata
 import spray.json._
+
 import scala.concurrent.duration._
 import akka.testkit.TestDuration
+import org.apache.commons.io.FileUtils
 
 class UploadSpec extends TestHelper {
 
@@ -77,5 +81,13 @@ class UploadSpec extends TestHelper {
         }
       }
     }
+  }
+
+  override def clean(): Unit = {
+    deleteDirIfExists(Paths.get(getClass.getResource("/").getPath, "public"))
+  }
+
+  def deleteDirIfExists(path: Path): Unit = {
+    if (path.toFile.exists()) FileUtils.deleteDirectory(path.toFile)
   }
 }

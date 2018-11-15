@@ -28,17 +28,22 @@ trait TestHelper extends WordSpec
     await(fileInitializer.drop())
     await(initializer.create())
     await(fileInitializer.create())
+    clean()
   }
 
   after {
     await(initializer.drop())
     await(fileInitializer.drop())
+    clean()
   }
 
   override def afterAll(): Unit = {
     await(initializer.drop())
     await(fileInitializer.drop())
+    clean()
   }
 
   def await[T](asyncFunc: => Future[T]): T = Await.result[T](asyncFunc, Duration.Inf)
+
+  def clean(): Unit
 }

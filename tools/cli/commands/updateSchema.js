@@ -57,7 +57,7 @@ function updateModule(logger, moduleName, location) {
           if (hasTypeOf(Date)) {
             inputFilter += `  ${key}_lte: ${generateField(value, true)}\n`;
             inputFilter += `  ${key}_gte: ${generateField(value, true)}\n`;
-          } else if (hasTypeOf(String)) {
+          } else if (key === 'id' || hasTypeOf(String)) {
             inputFilter += `  ${key}: ${generateField(value, true)}\n`;
             inputFilter += `  ${key}_in: [${generateField(value, true)}!]\n`;
             inputFilter += `  ${key}_contains: ${generateField(value, true)}\n`;
@@ -200,7 +200,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
       const file = `${Module}State.client.graphql`;
 
       // regenerate graphql fragment
-      let graphql = '    searchText,\n';
+      let graphql = '    searchText\n';
       for (const key of schema.keys()) {
         const value = schema.values[key];
         const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
@@ -218,8 +218,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
           }
         }
       }
-      graphql += `
-  }\n`;
+      graphql += `  }\n`;
 
       shell.cd(pathStateClient);
       // override graphql fragment file
@@ -266,7 +265,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         .ShellString(
           shell
             .cat(file)
-            .replace(RegExp(replaceStateResolverDefaults, 'g'), `// filter data\n${defaults}// end filter data`)
+            .replace(RegExp(replaceStateResolverDefaults, 'g'), `// filter data\n${defaults}\n// end filter data`)
         )
         .to(file);
       runPrettier(file);

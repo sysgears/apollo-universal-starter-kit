@@ -1,6 +1,7 @@
 package core.controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import akka.http.scaladsl.marshalling.ToResponseMarshallable
 import akka.http.scaladsl.model.headers.`Set-Cookie`
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
@@ -15,6 +16,7 @@ import sangria.execution.Executor
 import sangria.renderer.SchemaRenderer
 
 import scala.concurrent.ExecutionContext
+import scala.util.Try
 
 class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
                                   httpHandler: HttpHandler,
@@ -36,11 +38,15 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
                   userCtx =>
                     entity(as[GraphQLMessage]) {
                       graphQlMessage =>
-                        httpHandler.handleQuery(graphQlMessage, userCtx)
+                        onComplete(httpHandler.handleQuery(graphQlMessage, userCtx)) {
+                          response: Try[ToResponseMarshallable] => complete(response)
+                        }
                     } ~
                       entity(as[Seq[GraphQLMessage]]) {
                         graphQlMessages =>
-                          httpHandler.handleBatchQuery(graphQlMessages, userCtx)
+                          onComplete(httpHandler.handleBatchQuery(graphQlMessages, userCtx)) {
+                            response: Try[ToResponseMarshallable] => complete(response)
+                          }
                       }
                 }
               }

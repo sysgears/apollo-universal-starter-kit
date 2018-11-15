@@ -3,6 +3,9 @@ import { FormikProps, withFormik } from 'formik';
 import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
+import { contactFormSchema } from '@module/contact-server-ts';
+import { validate, FieldError } from '@module/validation-common-react';
+import { TranslateFunction } from '@module/i18n-client-react';
 import Field from '../../../../packages/client/src/utils/FieldAdapter';
 import {
   RenderField,
@@ -13,9 +16,6 @@ import {
   success
 } from '../../../../packages/client/src/modules/common/components/native';
 import { placeholderColor, submit } from '../../../../packages/client/src/modules/common/components/native/styles';
-import { contactFormSchema } from '@module/contact-server-ts';
-import { validate, FieldError } from '@module/validation-common-react';
-import { TranslateFunction } from '@module/i18n-client-react';
 import { ContactForm } from '../types';
 
 interface ContactFormProps {

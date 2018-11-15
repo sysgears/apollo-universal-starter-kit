@@ -1,10 +1,9 @@
 import React from 'react';
 import { Mutation, MutationFn, FetchResult } from 'react-apollo';
 
-import ContactView from '../components/ContactView';
-
-import CONTACT from '../graphql/Contact.graphql';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
+import ContactView from '../components/ContactView';
+import CONTACT from '../graphql/Contact.graphql';
 import { ContactForm } from '../types';
 
 class Contact extends React.Component<{ t: TranslateFunction }> {

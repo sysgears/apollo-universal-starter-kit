@@ -1,5 +1,5 @@
-import schema from './schema.graphql';
 import ServerModule from '@module/module-server-ts';
+import schema from './schema.graphql';
 import createResolvers from './resolvers';
 import resources from './locales';
 

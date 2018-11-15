@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import ContactForm from './ContactForm';
 import { TranslateFunction } from '@module/i18n-client-react';
+import ContactForm from './ContactForm';
 import { ContactForm as IContactForm } from '../types';
 
 interface ContactViewProps {

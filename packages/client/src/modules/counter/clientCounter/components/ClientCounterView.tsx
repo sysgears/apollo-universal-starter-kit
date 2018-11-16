@@ -1,17 +1,9 @@
 import { Component } from '@angular/core';
-import { Apollo, Query, QueryRef } from 'apollo-angular';
+import { Apollo, Query } from 'apollo-angular';
 import { map } from 'rxjs/operators';
-import gql from 'graphql-tag';
 
-import React from 'react';
-import styled from 'styled-components';
-
-import { Button } from '../../../common/components/web';
-
-const Section = styled.section`
-  margin-bottom: 30px;
-  text-align: center;
-`;
+import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
+import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
 
 @Component({
   selector: 'client-counter-button',
@@ -26,13 +18,7 @@ export class ClientCounterButtonComponent {
   public increaseCounter() {
     this.apollo
       .mutate({
-        mutation: gql`
-          mutation addClientCounter($amount: Int!) {
-            addClientCounter(increment: $amount) @client {
-              amount
-            }
-          }
-        `,
+        mutation: ADD_COUNTER_CLIENT,
         variables: {
           amount: 1
         }
@@ -58,48 +44,15 @@ export class ClientCounterButtonComponent {
     `
   ]
 })
-export class ClientCounterViewComponent extends Component {
+export class ClientCounterViewComponent {
   public counter: any;
-  public commentsQuery: QueryRef<any>;
-
-  constructor(private apollo: Apollo) {
-    super();
-  }
+  constructor(private apollo: Apollo) {}
 
   public ngOnInit() {
-    this.commentsQuery = this.apollo.watchQuery<Query>({
-      query: gql`
-        query clientCounterQuery {
-          clientCounter @client {
-            amount
-          }
-        }
-      `
-    });
-
-    this.counter = this.commentsQuery.valueChanges.pipe(map((result: any) => result.data.clientCounter.amount));
+    this.counter = this.apollo
+      .watchQuery<Query>({
+        query: COUNTER_QUERY_CLIENT
+      })
+      .valueChanges.pipe(map((result: any) => result.data.clientCounter.amount));
   }
 }
-
-interface ViewProps {
-  text: string;
-  children: any;
-}
-
-const ClientCounterView = ({ text, children }: ViewProps) => (
-  <Section>
-    <p>{text}</p>
-    {children}
-  </Section>
-);
-
-interface ButtonProps {
-  onClick: () => any;
-  text: string;
-}
-
-const ClientCounterButton = ({ onClick, text }: ButtonProps) => (
-  <Button id="apollo-link-button" color="primary" onClick={onClick}>
-    {text}
-  </Button>
-);

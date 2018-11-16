@@ -77,7 +77,7 @@ class Main extends React.Component<any, MainState> {
       <RedBox error={this.state.error} />
     ) : (
       modules.getWrappedRoot(
-        <Provider store={store}>
+        <Provider store={null}>
           <ApolloProvider client={client}>
             {modules.getDataRoot(<ConnectedRouter history={history}>{Routes}</ConnectedRouter>)}
           </ApolloProvider>

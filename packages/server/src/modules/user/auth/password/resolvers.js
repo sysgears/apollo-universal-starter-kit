@@ -2,9 +2,9 @@ import bcrypt from 'bcryptjs';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 
-import { FieldError } from '@module/validation-common-react';
 import access from '../../access';
 import User from '../../sql';
+import FieldError from '../../../../../../common/FieldError';
 import settings from '../../../../../../../settings';
 
 const validateUserPassword = async (user, password, t) => {

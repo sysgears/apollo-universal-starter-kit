@@ -4,11 +4,11 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { withFormik } from 'formik';
 
-import { validate, required, minLength } from '@module/validation-common-react';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary, FormView } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
+import { required, minLength, validate } from '../../../../../common/modules/validation';
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';
 import GitHubButton from '../auth/github';

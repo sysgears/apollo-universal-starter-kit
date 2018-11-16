@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import { withFormik } from 'formik';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-
-import { validate, required, minLength, match, email } from '@module/validation-common-react';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary, FormView } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
+import { match, email, minLength, required, validate } from '../../../../../common/modules/validation';
 import settings from '../../../../../../settings';
 import translate from '../../../i18n';
 

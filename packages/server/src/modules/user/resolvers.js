@@ -3,8 +3,8 @@ import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
-import { FieldError } from '@module/validation-common-react';
 
+import FieldError from '../../../../common/FieldError';
 import settings from '../../../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';

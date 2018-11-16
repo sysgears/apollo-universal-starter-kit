@@ -4,11 +4,10 @@ import { withFormik } from 'formik';
 import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet, Text, Keyboard } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-
-import { validate, required, email } from '@module/validation-common-react';
 import Field from '../../../utils/FieldAdapter';
 import { RenderField, Button, primary } from '../../common/components/native';
 import { placeholderColor, submit } from '../../common/components/native/styles';
+import { required, email, validate } from '../../../../../common/modules/validation';
 import translate from '../../../i18n';
 
 const forgotPasswordFormSchema = {

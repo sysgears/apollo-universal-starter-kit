@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 
-import { validate, required, email } from '@module/validation-common-react';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '../../common/components/web';
+import { required, email, validate } from '../../../../../common/modules/validation';
 
 const forgotPasswordFormSchema = {
   email: [required, email]

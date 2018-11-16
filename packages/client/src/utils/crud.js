@@ -55,7 +55,8 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
   let inputValues = {};
   //console.log('pickInputFields');
   //console.log('formType:', formType);
-  //console.log(values);
+  // console.log('values:', values);
+  // console.log('data:', data);
 
   for (const key of schema.keys()) {
     const value = schema.values[key];
@@ -122,9 +123,10 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
                 deleted.push({ id: item.id });
               } else {
                 if (!isEqual(obj, item)) {
+                  const dataObj = keys1[item.id];
                   update.push({
                     where: { id: obj.id },
-                    data: pickInputFields({ schema: value.type[0], values: obj, data: obj, formType })
+                    data: pickInputFields({ schema: value.type[0], values: obj, data: dataObj, formType })
                   });
                 }
               }
@@ -135,9 +137,10 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
             if (formType === 'batch') {
               values[key].forEach(item => {
                 if (!keys1[item.id]) {
+                  const dataObj = keys1[item.id];
                   update.push({
                     where: { id: 0 },
-                    data: pickInputFields({ schema: value.type[0], values: item, data: item, formType })
+                    data: pickInputFields({ schema: value.type[0], values: item, data: dataObj, formType })
                   });
                 }
               });

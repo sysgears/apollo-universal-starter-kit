@@ -55,8 +55,7 @@ export const createColumnFields = ({
   for (const key of keys) {
     const role = customFields && customFields[key] && customFields[key].role ? customFields[key].role : false;
 
-    const hasRole =
-      currentUser && (!role || (Array.isArray(role) ? role : [role]).indexOf(currentUser.role) >= 0) ? true : false;
+    const customFieldsHasRole = hasRole(role, currentUser);
 
     if (schema.values[key]) {
       const value = schema.values[key];
@@ -68,7 +67,7 @@ export const createColumnFields = ({
         </a>
       );
 
-      if (hasRole && value.show !== false && (key !== 'id' || customFields['id'])) {
+      if (customFieldsHasRole && value.show !== false && (key !== 'id' || customFields['id'])) {
         if (value.type.isSchema) {
           let column = 'name';
           for (const remoteKey of value.type.keys()) {
@@ -162,7 +161,7 @@ export const createColumnFields = ({
         }
       }
     } else {
-      if (hasRole) {
+      if (customFieldsHasRole) {
         columns.push(
           createColumnField(
             key,
@@ -264,12 +263,22 @@ export const createFormFields = ({
         if (formType === 'form') {
           if (values[key]) {
             fields.push(
-              createFormFieldsArray(key, values, value, type, handleChange, handleBlur, formItemLayout, formType)
+              createFormFieldsArray(
+                key,
+                values,
+                value,
+                type,
+                handleChange,
+                handleBlur,
+                formItemLayout,
+                prefix,
+                formType
+              )
             );
           }
-        } else if (formType === 'batch' && value.hasOne) {
+        } else if (formType === 'batch') {
           fields.push(
-            createFormFieldsArray(key, values, value, type, handleChange, handleBlur, formItemLayout, formType)
+            createFormFieldsArray(key, values, value, type, handleChange, handleBlur, formItemLayout, prefix, formType)
           );
         }
       }
@@ -404,12 +413,13 @@ const createFormFieldsArray = (
   handleChange,
   handleBlur,
   formItemLayout,
+  prefix = '',
   formType = 'form'
 ) => {
   return (
     <FieldArray
-      name={key}
-      key={key}
+      name={`${prefix}${key}`}
+      key={`${prefix}${key}`}
       render={({ push, remove }) => {
         return (
           <FormItem {...formItemLayout} label={startCase(key)}>
@@ -421,7 +431,7 @@ const createFormFieldsArray = (
                   schema: type,
                   values: mapFormPropsToValues({ schema: type, data: field }),
                   formItemLayout: formItemLayout,
-                  prefix: `${key}[${index}].`,
+                  prefix: `${prefix}${key}[${index}].`,
                   formType
                 })}
                 {!value.hasOne &&

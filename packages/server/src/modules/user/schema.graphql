@@ -1,7 +1,13 @@
+enum Role {
+  admin
+  editor
+  user
+}
+
 type User {
   id: Int!
   username: String!
-  role: String!
+  role: Role!
   isActive: Boolean
   email: String!
   profile: UserProfile
@@ -126,7 +132,7 @@ input AddUserInput {
   username: String!
   email: String!
   password: String!
-  role: String!
+  role: Role!
   isActive: Boolean
   profile: ProfileInput
   auth: AuthInput
@@ -136,7 +142,7 @@ input AddUserInput {
 input EditUserInput {
   id: Int!
   username: String!
-  role: String!
+  role: Role!
   isActive: Boolean
   email: String!
   password: String

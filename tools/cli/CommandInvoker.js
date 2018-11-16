@@ -1,4 +1,4 @@
-const { CRUD_TEMPLATES, MODULE_TEMPLATES } = require('./config');
+const { MODULE_TEMPLATES, CRUD_TEMPLATES } = require('./config');
 
 /**
  * Class CommandInvoker. Takes all CLI operations and calls certain CLI operation depends of variables.

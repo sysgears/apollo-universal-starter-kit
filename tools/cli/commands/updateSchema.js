@@ -57,7 +57,7 @@ function updateModule(logger, moduleName, location) {
           if (hasTypeOf(Date)) {
             inputFilter += `  ${key}_lte: ${generateField(value, true)}\n`;
             inputFilter += `  ${key}_gte: ${generateField(value, true)}\n`;
-          } else if (hasTypeOf(String)) {
+          } else if (key === 'id' || hasTypeOf(String)) {
             inputFilter += `  ${key}: ${generateField(value, true)}\n`;
             inputFilter += `  ${key}_in: [${generateField(value, true)}!]\n`;
             inputFilter += `  ${key}_contains: ${generateField(value, true)}\n`;

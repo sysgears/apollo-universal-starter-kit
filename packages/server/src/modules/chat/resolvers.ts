@@ -1,9 +1,11 @@
 import { createBatchResolver } from 'graphql-resolve-batch';
 import { PubSub } from 'graphql-subscriptions';
+import { TranslationFunction } from 'i18next';
 
 import settings from '../../../../../settings';
 import modules from '../../modules';
 import ChatDAO from './sql';
+import { FileSystemStorage, UploadFileStream } from '../upload/FileSystemStorage';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
 
@@ -19,17 +21,42 @@ interface Message {
   quotedId: string;
 }
 
+interface Identifier {
+  id: number;
+}
+
+interface ChatContext {
+  Chat: ChatDAO;
+  req?: Request & { t: TranslationFunction };
+  user?: any; // TODO: Add user type after converting the UserDAO into TS
+}
+
+interface AddMessageParams {
+  input: {
+    text: string;
+    userId: number;
+    uuid: string;
+    quotedId: number;
+    attachment: UploadFileStream;
+  };
+}
+
+interface EditMessageParams {
+  input: {
+    id: number;
+    text: string;
+    userId: number;
+  };
+}
+
 export default (pubsub: PubSub) => ({
   Query: {
-    async messages(obj: any, { limit, after }: { limit: number; after: number }, { Chat }: { Chat: ChatDAO }) {
+    async messages(obj: any, { limit, after }: { limit: number; after: number }, { Chat }: ChatContext) {
       const edgesArray: Array<{ cursor: number; node: Message }> = [];
       const messages = await Chat.messagesPagination(limit, after);
 
       messages.map((message: Message, index: number) => {
-        edgesArray.push({
-          cursor: after + index,
-          node: message
-        });
+        edgesArray.push({ cursor: after + index, node: message });
       });
 
       const endCursor = edgesArray.length > 0 ? edgesArray[edgesArray.length - 1].cursor : 0;
@@ -45,7 +72,7 @@ export default (pubsub: PubSub) => ({
         }
       };
     },
-    message(obj: any, { id }: { id: number }, { Chat }: { Chat: ChatDAO }) {
+    message(obj: any, { id }: Identifier, { Chat }: ChatContext) {
       return Chat.message(id);
     }
   },
@@ -55,13 +82,11 @@ export default (pubsub: PubSub) => ({
     })
   },
   Mutation: {
-    async addMessage(obj: any, { input }, { Chat, user, req }: { Chat: ChatDAO }) {
+    async addMessage(obj: any, { input }: AddMessageParams, { Chat, user, req }: ChatContext) {
       const { t } = req;
       const { attachment } = input;
       const userId = user ? user.id : null;
-      const {
-        data: { fileSystemStorage }
-      } = modules;
+      const fileSystemStorage: FileSystemStorage = modules.data.fileSystemStorage;
 
       if (!fileSystemStorage) {
         throw new Error(t('chat:messageNotAdded'));
@@ -72,20 +97,13 @@ export default (pubsub: PubSub) => ({
       const [id] = attachment ? await Chat.addMessageWithAttachment(data) : await Chat.addMessage(data);
       const message = await Chat.message(id);
       // publish for message list
-      pubsub.publish(MESSAGES_SUBSCRIPTION, {
-        messagesUpdated: {
-          mutation: 'CREATED',
-          id,
-          node: message
-        }
-      });
+      pubsub.publish(MESSAGES_SUBSCRIPTION, { messagesUpdated: { mutation: 'CREATED', id, node: message } });
       return message;
-    }, // TODO t -types
-    async deleteMessage(obj: any, { id }: { id: number }, { Chat, req }: { Chat: ChatDAO; req: Request & { t: any } }) {
+    },
+    async deleteMessage(obj: any, { id }: Identifier, context: ChatContext) {
+      const { Chat, req } = context;
       const { t } = req;
-      const {
-        data: { fileSystemStorage }
-      } = modules;
+      const fileSystemStorage: FileSystemStorage = modules.data.fileSystemStorage;
       const message = await Chat.message(id);
       const attachment = await Chat.attachment(id);
       const isDeleted = await Chat.deleteMessage(id);
@@ -101,34 +119,19 @@ export default (pubsub: PubSub) => ({
 
       if (isDeleted) {
         // publish for message list
-        pubsub.publish(MESSAGES_SUBSCRIPTION, {
-          messagesUpdated: {
-            mutation: 'DELETED',
-            id,
-            node: message
-          }
-        });
+        pubsub.publish(MESSAGES_SUBSCRIPTION, { messagesUpdated: { mutation: 'DELETED', id, node: message } });
         return { id: message.id };
       } else {
         return { id: null };
       }
     },
-    async editMessage(
-      obj: any,
-      { input }: { input: { id: number; text: string; userId: number } },
-      { Chat }: { Chat: ChatDAO }
-    ) {
+    async editMessage(obj: any, { input }: EditMessageParams, { Chat }: ChatContext) {
       await Chat.editMessage(input);
       const message = await Chat.message(input.id);
       // publish for post list
       pubsub.publish(MESSAGES_SUBSCRIPTION, {
-        messagesUpdated: {
-          mutation: 'UPDATED',
-          id: message.id,
-          node: message
-        }
+        messagesUpdated: { mutation: 'UPDATED', id: message.id, node: message }
       });
-
       return message;
     }
   },

@@ -32,9 +32,9 @@ const Counter = ({ t }: CounterProps) => (
   selector: 'app-counter',
   template: `
     <div>
-      <server-counter></server-counter>
       <client-counter></client-counter>
       <redux-counter></redux-counter>
+      <server-counter></server-counter>
     </div>
   `
 })

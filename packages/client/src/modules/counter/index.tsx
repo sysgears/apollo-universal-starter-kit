@@ -13,6 +13,6 @@ import { CounterComponent } from './containers/Counter';
 export class CounterModule {}
 
 export default new ClientModule(counters, {
-  route: [{ path: '', component: CounterComponent }],
+  route: [{ path: '', component: CounterComponent, data: { title: 'Counter', meta: 'Counter example page' } }],
   module: [CounterModule]
 });

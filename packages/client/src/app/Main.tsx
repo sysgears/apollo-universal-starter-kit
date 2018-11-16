@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter, map, mergeMap } from 'rxjs/operators';
+
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
@@ -85,10 +89,37 @@ class Main extends React.Component<any, MainState> {
 
 @Component({
   selector: 'body div:first-child',
-  template: '<h1>Hello, {{name}}</h1><router-outlet></router-outlet>'
+  template: '<router-outlet></router-outlet>'
 })
-class MainComponent {
-  public name = 'Angular';
+class MainComponent implements OnInit {
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private titleService: Title,
+    private meta: Meta
+  ) {
+    this.meta.addTag({ name: 'description', content: 'Apollo Universal Starter Kit' });
+  }
+
+  public ngOnInit(): void {
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(() => this.activatedRoute),
+        map(route => {
+          while (route.firstChild) {
+            route = route.firstChild;
+          }
+          return route;
+        }),
+        filter(route => route.outlet === 'primary'),
+        mergeMap(route => route.data)
+      )
+      .subscribe(event => {
+        this.titleService.setTitle(event.title);
+        this.meta.updateTag({ name: 'description', content: event.meta });
+      });
+  }
 }
 
 export { client, MainComponent };

@@ -38,7 +38,10 @@ libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick-hikaricp" % "3.2.3",
 
   "com.github.jurajburian" %% "mailer" % "1.2.3",
-  "org.clapper" %% "classutil" % "1.3.0"
+  "org.clapper" %% "classutil" % "1.3.0",
+  
+  "org.mindrot" % "jbcrypt" % "0.3m",
+  "com.pauldijou" %% "jwt-core" % "0.19.0"
 )
 
 parallelExecution in test := false

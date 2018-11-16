@@ -4,6 +4,7 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import core.guice.injection.Injecting
 import modules.counter.repositories.CounterSchemaInitializer
+import modules.user.repositories.UserSchemaInitializer
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
 
 import scala.concurrent.{Await, Future}
@@ -19,19 +20,29 @@ trait TestHelper extends WordSpec
   val endpoint: String = "/graphql"
   val routes: Route = inject[GraphQLController].routes
 
-  val initializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]
+  val counterInitializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]
+  val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
 
   before {
-    await(initializer.drop())
-    await(initializer.create())
+    dropDb()
+    initDb()
   }
 
   after {
-    await(initializer.drop())
+    dropDb()
+    clean()
   }
 
-  override def afterAll(): Unit = {
-    await(initializer.drop())
+  def clean(): Unit = ()
+
+  private def initDb(): Unit = {
+    await(counterInitializer.create())
+    await(userInitializer.create())
+  }
+
+  private def dropDb(): Unit = {
+    await(counterInitializer.drop())
+    await(userInitializer.drop())
   }
 
   def await[T](asyncFunc: => Future[T]): T = Await.result[T](asyncFunc, Duration.Inf)

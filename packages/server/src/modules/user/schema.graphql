@@ -2,8 +2,6 @@ enum Role {
   admin
   editor
   user
-  distributor
-  producer
 }
 
 type User {

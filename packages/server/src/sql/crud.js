@@ -667,7 +667,39 @@ export default class Crud {
     }
   }
 
-  _update({ data, where }) {
+  _update({ data, where }, ctx) {
+    // extract nested entries from data
+    let nestedEntries = [];
+    for (const key of this.schema.keys()) {
+      const value = this.schema.values[key];
+      if (value.type.constructor === Array && data[key]) {
+        nestedEntries.push({ key: value.type[0].name, data: data[key] });
+        delete data[key];
+      }
+    }
+
+    // create, update, delete nested entries
+    if (nestedEntries.length > 0) {
+      nestedEntries.map(nested => {
+        if (nested.data.create) {
+          nested.data.create.map(async create => {
+            create[`${this.getTableName()}Id`] = where.id;
+            await ctx[pascalize(nested.key)]._create(create);
+          });
+        }
+        if (nested.data.update) {
+          nested.data.update.map(async update => {
+            await ctx[pascalize(nested.key)]._update(update, ctx);
+          });
+        }
+        if (nested.data.delete) {
+          nested.data.delete.map(async where => {
+            await ctx[pascalize(nested.key)]._delete({ where });
+          });
+        }
+      });
+    }
+
     return knex(this.getFullTableName())
       .update(decamelizeKeys(this.normalizeFields(data)))
       .where(where);
@@ -678,39 +710,7 @@ export default class Crud {
       const e = new FieldError();
       e.throwIf();
 
-      // extract nested entries from data
-      let nestedEntries = [];
-      for (const key of this.schema.keys()) {
-        const value = this.schema.values[key];
-        if (value.type.constructor === Array && args.data[key]) {
-          nestedEntries.push({ key: value.type[0].name, data: args.data[key] });
-          delete args.data[key];
-        }
-      }
-
-      await this._update(args);
-
-      // create, update, delete nested entries
-      if (nestedEntries.length > 0) {
-        nestedEntries.map(nested => {
-          if (nested.data.create) {
-            nested.data.create.map(async create => {
-              create[`${this.getTableName()}Id`] = args.where.id;
-              await ctx[pascalize(nested.key)]._create(create);
-            });
-          }
-          if (nested.data.update) {
-            nested.data.update.map(async update => {
-              await ctx[pascalize(nested.key)]._update(update);
-            });
-          }
-          if (nested.data.delete) {
-            nested.data.delete.map(async where => {
-              await ctx[pascalize(nested.key)]._delete({ where });
-            });
-          }
-        });
-      }
+      await this._update(args, ctx);
 
       return await this.get(args, info);
     } catch (e) {
@@ -821,38 +821,103 @@ export default class Crud {
     }
   }
 
-  _updateMany({ data, where: { id_in } }) {
-    const query = this.getBaseQuery();
+  async _updateMany({ data, where: { id_in } }) {
+    // console.log('_updateMany:', data);
     let normalizedData = {};
     for (const key of Object.keys(data)) {
       const schemaKey = key.endsWith('Id') ? key.substring(0, key.length - 2) : key;
       const value = this.schema.values[schemaKey];
       // add fields from one to one relation
       if (value.type.constructor === Array && value.hasOne) {
+        let normalizedNestedData = {};
         const type = value.type[0];
         const fieldName = decamelize(key);
         const prefix = type.__.tablePrefix ? type.__.tablePrefix : '';
         const suffix = value.noIdSuffix ? '' : '_id';
         const foreignTableName = decamelize(type.__.tableName ? type.__.tableName : type.name);
-        query.leftJoin(
-          `${prefix}${foreignTableName} as ${fieldName}`,
-          `${fieldName}.id`,
-          `${fieldName}.${this.getTableName()}${suffix}`
-        );
+
+        // get ids of one to one entity
+        const ids = await knex
+          .select('id')
+          .from(`${prefix}${foreignTableName}`)
+          .whereIn(`${this.getTableName()}${suffix}`, id_in)
+          .reduce((array, value) => {
+            array.push(value.id);
+            return array;
+          }, []);
+        // console.log('ids:', ids);
 
         for (const nestedKey of Object.keys(data[key].update[0].data)) {
           const nestedSchemaKey = nestedKey.endsWith('Id') ? nestedKey.substring(0, nestedKey.length - 2) : nestedKey;
           if (type.values[nestedSchemaKey].type.constructor !== Array) {
-            normalizedData[`${fieldName}.${nestedKey}`] = data[key].update[0].data[nestedKey];
+            normalizedNestedData[nestedKey] = data[key].update[0].data[nestedKey];
+          } else {
+            // add new entries for many to many properties
+            if (Object.keys(data[key].update[0].data[nestedKey].update[0].data).length > 0) {
+              const nestedType = type.values[nestedSchemaKey].type[0];
+
+              // console.log('nestedKey:', nestedKey);
+              // console.log('type:', nestedType.name);
+              // console.log('tableName:', nestedType.__.tableName);
+
+              const nestedTableName = `${nestedType.__.tablePrefix}${decamelize(
+                nestedType.__.tableName ? nestedType.__.tableName : nestedType.name
+              )}`;
+
+              // get related field
+              let nestedChildId = null;
+              let nestedChildValue = null;
+              for (const nestedChildKey of Object.keys(data[key].update[0].data[nestedKey].update[0].data)) {
+                if (nestedChildKey.endsWith('Id')) {
+                  nestedChildId = decamelize(nestedChildKey);
+                  nestedChildValue = data[key].update[0].data[nestedKey].update[0].data[nestedChildKey];
+                }
+              }
+
+              if (nestedChildId) {
+                // console.log('nestedTableName:', nestedTableName);
+                // console.log('nestedChildId:', nestedChildId);
+                // console.log('nestedChildValue:', nestedChildValue);
+                // console.log('field name:', `${fieldName}${suffix}`);
+                // console.log('ids:', ids);
+                // delete all existing records for this property
+                await knex(nestedTableName)
+                  .whereIn(`${fieldName}${suffix}`, ids)
+                  .andWhere(nestedChildId, '=', nestedChildValue)
+                  .del();
+
+                // insert new entries for all selected records
+                for (const id of ids) {
+                  let insertFields = decamelizeKeys(data[key].update[0].data[nestedKey].update[0].data);
+                  insertFields[`${fieldName}${suffix}`] = id;
+                  // console.log('insertFields:', insertFields);
+                  await knex(nestedTableName).insert(insertFields);
+                }
+              }
+            }
           }
+        }
+
+        if (Object.keys(normalizedNestedData).length > 0) {
+          normalizedNestedData = decamelizeKeys(this.normalizeFields(normalizedNestedData));
+          // console.log('normalizedNestedData:', normalizedNestedData);
+          return knex(`${prefix}${foreignTableName}`)
+            .update(normalizedNestedData)
+            .whereIn('id', ids);
         }
       } else {
         normalizedData[`${this.getTableName()}.${key}`] = data[key];
       }
     }
 
-    normalizedData = decamelizeKeys(this.normalizeFields(normalizedData));
-    return query.update(normalizedData).whereIn(`${this.getTableName()}.id`, id_in);
+    if (Object.keys(normalizedData).length > 0) {
+      normalizedData = decamelizeKeys(this.normalizeFields(normalizedData));
+      return this.getBaseQuery()
+        .update(normalizedData)
+        .whereIn(`${this.getTableName()}.id`, id_in);
+    } else {
+      return 1;
+    }
   }
 
   async updateMany(args) {
@@ -911,10 +976,11 @@ export default class Crud {
 
   async getByIds(ids, by, Obj, info) {
     info = parseFields(info);
-    info[`${by}Id`] = true;
+    const remoteId = by !== 'id' ? `${by}Id` : by;
+    info[remoteId] = true;
     const baseQuery = knex(`${Obj.getFullTableName()} as ${Obj.getTableName()}`);
     const select = selectBy(Obj.getSchema(), info, false);
-    const res = await knexnest(select(baseQuery).whereIn(`${Obj.getTableName()}.${decamelize(by)}_id`, ids));
-    return orderedFor(res, ids, `${by}Id`, false);
+    const res = await knexnest(select(baseQuery).whereIn(`${Obj.getTableName()}.${decamelize(remoteId)}`, ids));
+    return orderedFor(res, ids, remoteId, false);
   }
 }

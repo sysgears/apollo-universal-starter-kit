@@ -2,10 +2,10 @@ import { createBatchResolver } from 'graphql-resolve-batch';
 import { PubSub } from 'graphql-subscriptions';
 import { TranslationFunction } from 'i18next';
 
-import settings from '../../../../../settings';
-import modules from '../../modules';
+import settings from '../../../settings';
+import modules from '../../../packages/server/src/modules';
 import ChatDAO, { Message, Identifier } from './sql';
-import { FileSystemStorage, UploadFileStream } from '../upload/FileSystemStorage';
+import { FileSystemStorage, UploadFileStream } from '../../../packages/server/src/modules/upload/FileSystemStorage';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
 

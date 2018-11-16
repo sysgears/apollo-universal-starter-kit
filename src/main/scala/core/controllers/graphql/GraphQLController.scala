@@ -11,6 +11,7 @@ import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import core.graphql.{GraphQL, UserContext}
 import javax.inject.Inject
+import modules.session.JWTSessionImpl
 import sangria.execution.Executor
 import sangria.renderer.SchemaRenderer
 
@@ -19,6 +20,7 @@ import scala.util.Try
 
 class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
                                   httpHandler: HttpHandler,
+                                  session: JWTSessionImpl,
                                   webSocketHandler: WebSocketHandler)
                                  (implicit val executionContext: ExecutionContext,
                                   implicit val actorMaterializer: ActorMaterializer) extends AkkaRoute {
@@ -31,20 +33,29 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
             handleWebSocketMessagesForProtocol(webSocketHandler.handleMessages, GraphQLMessage.graphQlWebsocketProtocol)
           } ~
             post {
-              withHeaders(UserContext(request.headers.toList)) {
-                userCtx =>
-                  entity(as[GraphQLMessage]) {
-                    graphQlMessage =>
-                      onComplete(httpHandler.handleQuery(graphQlMessage, userCtx)) {
-                        response: Try[ToResponseMarshallable] => complete(response)
-                      }
-                  } ~
-                    entity(as[Seq[GraphQLMessage]]) {
-                      graphQlMessages =>
-                        onComplete(httpHandler.handleBatchQuery(graphQlMessages, userCtx)) {
-                          response: Try[ToResponseMarshallable] => complete(response)
+              session.withOptional {
+                maybeSession =>
+                  withHeaders(UserContext(requestHeaders = request.headers.toList, session = maybeSession)) {
+                    userCtx =>
+                      entity(as[GraphQLMessage]) {
+                        graphQlMessage =>
+                          onComplete(httpHandler.handleQuery(graphQlMessage, userCtx)) {
+                            response: Try[ToResponseMarshallable] =>
+                              session.withChanges(maybeSession, userCtx.session) {
+                                complete(response)
+                              }
+                          }
+                      } ~
+                        entity(as[Seq[GraphQLMessage]]) {
+                          graphQlMessages =>
+                            onComplete(httpHandler.handleBatchQuery(graphQlMessages, userCtx)) {
+                              response: Try[ToResponseMarshallable] =>
+                                session.withChanges(maybeSession, userCtx.session) {
+                                  complete(response)
+                                }
+                            }
                         }
-                    }
+                  }
               }
             }
       }

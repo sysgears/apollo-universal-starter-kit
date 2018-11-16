@@ -1,6 +1,6 @@
 package modules.user.repositories
 
-import common.models.{AmbigousResult, NotFound}
+import common.errors.{AmbigousResult, NotFound}
 import javax.inject.{Inject, Singleton}
 import modules.user.model.User
 import slick.jdbc.SQLiteProfile.api._

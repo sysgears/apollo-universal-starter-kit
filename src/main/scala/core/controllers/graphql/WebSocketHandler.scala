@@ -18,7 +18,6 @@ import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
 import spray.json._
 
-import scala.collection.mutable
 import scala.util.{Failure, Success}
 
 @Singleton

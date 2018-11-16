@@ -4,26 +4,10 @@ import { TranslationFunction } from 'i18next';
 
 import settings from '../../../../../settings';
 import modules from '../../modules';
-import ChatDAO from './sql';
+import ChatDAO, { Message, Identifier } from './sql';
 import { FileSystemStorage, UploadFileStream } from '../upload/FileSystemStorage';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
-
-interface Message {
-  id: number;
-  text: string;
-  userId: number;
-  uuid: string;
-  username: string;
-  filename: string;
-  path: string;
-  createdAt: string;
-  quotedId: string;
-}
-
-interface Identifier {
-  id: number;
-}
 
 interface ChatContext {
   Chat: ChatDAO;

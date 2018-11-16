@@ -34,6 +34,7 @@ const Counter = ({ t }: CounterProps) => (
     <div>
       <server-counter></server-counter>
       <client-counter></client-counter>
+      <redux-counter></redux-counter>
     </div>
   `
 })

@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ApolloModule, Apollo } from 'apollo-angular';
 import { HttpLinkModule } from 'apollo-angular-link-http';
 import { RouterModule } from '@angular/router';
+import { take } from 'rxjs/operators';
 
 // Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
 // tslint:disable-next-line
@@ -16,6 +17,8 @@ import { CounterModule } from './modules/counter';
 import routes from './app/Routes';
 import log from '../../common/log';
 import modules from './modules';
+import { reducers, metaReducers } from '../../common/createReduxStore';
+import { StoreModule, Store } from '@ngrx/store';
 
 @NgModule({
   declarations: [MainComponent],
@@ -26,13 +29,14 @@ import modules from './modules';
     ApolloModule,
     HttpLinkModule,
     RouterModule.forRoot(routes),
+    StoreModule.forRoot(reducers, { metaReducers }),
     CounterModule,
     ...modules.modules
   ],
   providers: []
 })
 class MainModule {
-  constructor(public appRef: ApplicationRef, apollo: Apollo) {
+  constructor(public appRef: ApplicationRef, apollo: Apollo, private appStore: Store<any>) {
     apollo.create(client);
   }
 
@@ -40,6 +44,7 @@ class MainModule {
     if (!store || !store.state) {
       return;
     }
+    this.appStore.dispatch({ type: 'SET_ROOT_STATE', payload: store.state });
     log.debug('Updating front-end', store.state.data);
     // inject AppStore here and update it
     // this.AppStore.update(store.state)
@@ -54,12 +59,10 @@ class MainModule {
 
   public hmrOnDestroy(store: any) {
     const cmpLocation = this.appRef.components.map(cmp => cmp.location.nativeElement);
-    // recreate elements
     store.disposeOldHosts = createNewHosts(cmpLocation);
-    // inject your AppStore and grab state then set it on store
-    // var appState = this.AppStore.get()
-    store.state = { data: 'yolo' };
-    // store.state = Object.assign({}, appState)
+    let currentStore: any;
+    this.appStore.pipe(take(1)).subscribe(state => (currentStore = state));
+    store.state = { ...currentStore };
     // save input values
     store.restoreInputValues = createInputTransfer();
     // remove styles

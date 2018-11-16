@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { Apollo, Query, QueryRef } from 'apollo-angular';
-import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { CounterIncrement } from '../reducers';
 
@@ -43,7 +41,6 @@ export class ReduxCounterButtonComponent {
 })
 export class ReduxCounterViewComponent extends Component {
   public counter: any;
-  public commentsQuery: QueryRef<any>;
 
   constructor(private store: Store<{ counter: number }>) {
     super();

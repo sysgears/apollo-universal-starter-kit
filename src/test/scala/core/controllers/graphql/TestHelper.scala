@@ -6,6 +6,7 @@ import core.guice.injection.Injecting
 import modules.counter.repositories.CounterSchemaInitializer
 import modules.user.repositories.UserSchemaInitializer
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
+import modules.upload.repositories.FileSchemaInitializer
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
@@ -15,15 +16,18 @@ trait TestHelper extends WordSpec
   with BeforeAndAfter
   with BeforeAndAfterAll
   with Injecting
-  with Matchers {
+  with Matchers
+  with LazyAppComponents {
 
   val endpoint: String = "/graphql"
   val routes: Route = inject[GraphQLController].routes
 
   val counterInitializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]
   val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
+  val fileInitializer: FileSchemaInitializer = inject[FileSchemaInitializer]
 
   before {
+    clean()
     dropDb()
     initDb()
   }
@@ -38,11 +42,13 @@ trait TestHelper extends WordSpec
   private def initDb(): Unit = {
     await(counterInitializer.create())
     await(userInitializer.create())
+    await(fileInitializer.create())
   }
 
   private def dropDb(): Unit = {
     await(counterInitializer.drop())
     await(userInitializer.drop())
+    await(fileInitializer.drop())
   }
 
   def await[T](asyncFunc: => Future[T]): T = Await.result[T](asyncFunc, Duration.Inf)

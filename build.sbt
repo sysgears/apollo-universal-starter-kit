@@ -42,9 +42,12 @@ libraryDependencies ++= Seq(
 
   "com.github.jurajburian" %% "mailer" % "1.2.3",
   "org.clapper" %% "classutil" % "1.3.0",
+
+  "com.pauldijou" %% "jwt-core" % "0.19.0",
   
-  "org.mindrot" % "jbcrypt" % "0.3m",
-  "com.pauldijou" %% "jwt-core" % "0.19.0"
+  "commons-io" % "commons-io" % "2.6",
+  
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )
 
 parallelExecution in test := false

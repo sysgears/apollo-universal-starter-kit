@@ -50,7 +50,9 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
         sendMessageToActor[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))
     }.toMat(Sink.ignore)(Keep.right).run.map(_ => true)
   }.recover {
-    case _: Error => false
+    case error: Error =>
+      log.error(s"Failed to upload files. Reason: [$error")
+      false
   }
 
   override def files: Future[List[FileMetadata]] = fileRepo.findAll
@@ -62,11 +64,13 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
       deleteResult <- Future(Files.deleteIfExists(resourcesDirPath.resolve(fileMetadata.path)))
     } yield deleteResult
   }.recover {
-    case _: Error => false
+    case error: Error =>
+      log.error(s"Failed to upload files. Reason: [$error")
+      false
   }
 }
 
 object FileUploadResolverImpl {
   val resourcesDirPath: Path = Paths.get(getClass.getResource("/").getPath)
-  val publicDirPath: Path = resourcesDirPath.resolve( "public")
+  val publicDirPath: Path = resourcesDirPath.resolve("public")
 }

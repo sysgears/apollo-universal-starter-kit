@@ -176,7 +176,7 @@ class ListView extends React.Component {
   };
 
   renderLoadMore = (data, loadMoreRows) => {
-    const leftToLoad = data.pageInfo.totalCount - data.edges.length;
+    const leftToLoad = data.edges ? data.pageInfo.totalCount - data.edges.length : data.pageInfo.totalCount;
     if (data.pageInfo.hasNextPage && leftToLoad > 0) {
       return (
         <span>

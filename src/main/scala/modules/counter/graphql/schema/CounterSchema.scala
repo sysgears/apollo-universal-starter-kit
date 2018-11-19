@@ -1,5 +1,6 @@
 package modules.counter.graphql.schema
 
+import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
@@ -14,11 +15,12 @@ import modules.counter.services.count.CounterActor.GetAmount
 import sangria.macros.derive.{ExcludeFields, ObjectTypeName, deriveObjectType}
 import sangria.schema.{Action, Argument, Field, IntType, ObjectType}
 import sangria.streaming.akkaStreams._
+import core.services.publisher.PublisherImplicits._
 
 import scala.concurrent.ExecutionContext
 
-class CounterSchema @Inject()(publisherService: PublisherService[Counter])
-                             (implicit val materializer: ActorMaterializer,
+class CounterSchema @Inject()(implicit val publisherService: PublisherService[Counter],
+                              materializer: ActorMaterializer,
                               actorSystem: ActorSystem,
                               executionContext: ExecutionContext) extends GraphQLSchema
   with Logger {
@@ -52,12 +54,7 @@ class CounterSchema @Inject()(publisherService: PublisherService[Counter])
           userContext = sc.ctx,
           onException = _ => Counter(amount = 0),
           resolverActor = CounterResolver.name
-        ).map {
-          counter => {
-            publisherService.publish(counter)
-            counter
-          }
-        }
+        ).pub
       }
     )
   )

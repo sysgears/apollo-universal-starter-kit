@@ -46,6 +46,10 @@ class UploadSpec extends TestHelper {
   val filesQueryGraphQLMessage = ByteString(GraphQLMessage(filesQuery).toJson.compactPrint)
   val filesQueryEntity = HttpEntity(`application/json`, filesQueryGraphQLMessage )
 
+  def removeFileMutation(id: Int) = s"mutation { removeFile(id: $id) }"
+  def removeFileMutationGraphQLMessage(id: Int) = ByteString(GraphQLMessage(removeFileMutation(id)).toJson.compactPrint)
+  def removeFileEntity(id: Int) = HttpEntity(`application/json`, removeFileMutationGraphQLMessage(id) )
+
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
   "UploadSpec" should {
@@ -78,6 +82,34 @@ class UploadSpec extends TestHelper {
           status shouldBe OK
           contentType.mediaType shouldBe `application/json`
           filesMetadata.size shouldBe 2
+        }
+      }
+    }
+
+    "remove a file by id" in {
+      Post(endpoint, addFilesEntity) ~> routes ~> check {
+        Post(endpoint, filesQueryEntity) ~> routes ~> check {
+
+          val filesMetadata: List[FileMetadata] = responseAs[String].parseJson
+            .asJsObject.fields("data")
+            .asJsObject.fields("files")
+            .convertTo[List[FileMetadata]]
+
+          status shouldBe OK
+          contentType.mediaType shouldBe `application/json`
+          filesMetadata.size shouldBe 2
+          val fileId = filesMetadata.head.id.get
+
+          Post(endpoint, removeFileEntity(fileId)) ~> routes ~> check {
+
+            val removeFileResult = responseAs[String].parseJson
+              .asJsObject.fields("data")
+              .asJsObject.fields("removeFile")
+              .convertTo[Boolean]
+
+            removeFileResult shouldBe true
+            await(fileMetadataRepo.find(fileId)) shouldNot be(defined)
+          }
         }
       }
     }

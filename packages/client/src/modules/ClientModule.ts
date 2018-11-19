@@ -53,3 +53,6 @@ class ClientModule extends BaseModule {
 }
 
 export default ClientModule;
+// Reexport for backward-compatibility purposes
+export { default } from '@module/module-client-react';
+export * from '@module/module-client-react';

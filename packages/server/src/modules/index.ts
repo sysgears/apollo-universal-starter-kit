@@ -1,7 +1,8 @@
-import commonModules from '../../../common/modules';
+import i18n from '@module/i18n-server-ts';
+import validation from '@module/validation-common-react';
+import counter from '@module/counter-server-ts';
+
 import cookies from './cookies';
-import i18n from './i18n';
-import counter from './counter';
 import post from './post';
 import upload from './upload';
 import user from './user';
@@ -12,12 +13,12 @@ import chat from './chat';
 import graphqlTypes from './graphqlTypes';
 import './debug';
 
-import ServerModule from './ServerModule';
+import ServerModule from '@module/module-server-ts';
 
-export default new ServerModule(
-  commonModules,
+const modules: ServerModule = new ServerModule(
   cookies,
   i18n,
+  validation,
   counter,
   post,
   upload,
@@ -28,3 +29,6 @@ export default new ServerModule(
   chat,
   graphqlTypes
 );
+modules.triggerOnCreate();
+
+export default modules;

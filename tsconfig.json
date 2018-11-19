@@ -7,6 +7,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowJs": true,
+    "noEmit": true,
     "noUnusedLocals": true,
     "jsx": "react",
     "lib": ["es2015", "dom", "esnext", "esnext.asynciterable"],
@@ -17,8 +18,8 @@
     "removeComments": true,
     "skipLibCheck": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "awesomeTypescriptLoaderOptions": {
-    "reportFiles": ["**/*.ts", "**/*.tsx"]
-  }
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }

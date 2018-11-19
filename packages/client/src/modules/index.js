@@ -1,7 +1,9 @@
-import commonModules from '../../../common/modules';
+import i18n from '@module/i18n-client-react';
+import counter from '@module/counter-client-react';
+import validation from '@module/validation-common-react';
+import ClientModule from '@module/module-client-react';
+
 import defaultRouter from './defaultRouter';
-import i18n from './i18n';
-import counter from './counter';
 import post from './post';
 import upload from './upload';
 import user from './user';
@@ -12,10 +14,8 @@ import pagination from './pagination';
 import chat from './chat';
 import './favicon';
 
-import ClientModule from './ClientModule';
-
-export default new ClientModule(
-  commonModules,
+const modules = new ClientModule(
+  // validation,
   // defaultRouter,
   counter
   // post,
@@ -28,3 +28,6 @@ export default new ClientModule(
   // i18n,
   // pageNotFound
 );
+modules.triggerOnCreate();
+
+export default modules;

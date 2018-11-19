@@ -48,10 +48,6 @@ The starter kit also integrates [Twitter Bootstrap], [Ant Design], [Ant Design M
 * [Sponsors](#sponsors)
 * [License Info](#license)
 
-## Official Website
-
-You can visit [apollokit.org] to learn more about Apollo Universal Starter Kit.
-
 ## Overview
 
 ### Why Use Apollo Universal Starter Kit

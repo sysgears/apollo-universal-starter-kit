@@ -1,13 +1,13 @@
 import i18n from '@module/i18n-server-ts';
 import validation from '@module/validation-common-react';
 import counter from '@module/counter-server-ts';
+import contact from '@module/contact-server-ts';
 
 import cookies from './cookies';
 import post from './post';
 import upload from './upload';
 import user from './user';
 import subscription from './payments';
-import contact from './contact';
 import mailer from './mailer';
 import chat from './chat';
 import graphqlTypes from './graphqlTypes';

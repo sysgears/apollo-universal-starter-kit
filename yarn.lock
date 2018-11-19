@@ -8304,10 +8304,10 @@ formidable@^1.2.0:
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.2.1.tgz#70fb7ca0290ee6ff961090415f4b3df3d2082659"
   integrity sha512-Fs9VRguL0gqGHkXS5GQiMCr1VhZBxz0JnJs4JmMp/2jL18Fmbzvv7vOFRU+U8TBkHEE/CX1qDXzJplVULgsLeg==
 
-formik@^1.0.2:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/formik/-/formik-1.3.0.tgz#0ef20938f40c3b4bd46003c0b069bdd2d5a90118"
-  integrity sha512-vW72DluHwQPmCkkSQGlFRAsuVaNElO/zT71FApr7yFHSEA6qBf1socKWcw0muQDp6fvD/Z6wo2itlQLnggP4UA==
+formik@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/formik/-/formik-1.3.1.tgz#ff2bb4c0144585297cf9a371081326e8d816fe6f"
+  integrity sha512-cOTpwP4vy8bj7HhEGC2IWFFhsztBlZOJoTRgGa64NxcM30rV15ub5nTliQA3Vs8vqWSlGEc6k67SR8YZIV7pew==
   dependencies:
     create-react-context "^0.2.2"
     deepmerge "^2.1.1"

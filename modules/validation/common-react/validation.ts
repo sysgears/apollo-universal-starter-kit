@@ -131,5 +131,6 @@ export const validate = (object: { [key: string]: any }, schema: Schema) => {
     return collector;
   };
 
-  return validateFormInner(object, schema, errors);
+  const collectedErrors = validateFormInner(object, schema, errors);
+  return Object.keys(collectedErrors).length ? collectedErrors : undefined;
 };

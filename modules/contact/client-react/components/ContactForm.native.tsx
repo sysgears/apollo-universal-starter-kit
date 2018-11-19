@@ -1,26 +1,41 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withFormik } from 'formik';
+import { FormikProps, withFormik } from 'formik';
 import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
-import Field from '../../../utils/FieldAdapter';
-import { RenderField, FormView, Button, Modal, danger, success } from '../../common/components/native';
-import { placeholderColor, submit } from '../../common/components/native/styles';
-import { email, minLength, required, validate } from '../../../../../common/modules/validation';
+import { contactFormSchema } from '@module/contact-server-ts';
+import { validate, FieldError } from '@module/validation-common-react';
+import { TranslateFunction } from '@module/i18n-client-react';
+import Field from '../../../../packages/client/src/utils/FieldAdapter';
+import {
+  RenderField,
+  FormView,
+  Button,
+  Modal,
+  danger,
+  success
+} from '../../../../packages/client/src/modules/common/components/native';
+import { placeholderColor, submit } from '../../../../packages/client/src/modules/common/components/native/styles';
+import { ContactForm } from '../types';
 
-const contactFormSchema = {
-  name: [required, minLength(3)],
-  email: [required, email],
-  content: [required, minLength(10)]
-};
+interface ContactFormProps {
+  t: TranslateFunction;
+  onSubmit: (values: ContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
+}
 
-const ContactForm = ({ values, handleSubmit, t, errors, status, setStatus }) => (
+const ContactForm = ({
+  values,
+  handleSubmit,
+  t,
+  errors,
+  status,
+  setStatus
+}: FormikProps<ContactForm> & ContactFormProps & { errors: { serverError: string } }) => (
   <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
     <Modal isVisible={status && status.showModal} onBackdropPress={setStatus}>
       <View style={styles.modal}>
-        <Text style={styles.modalText}>{errors._error ? errors._error : t('successMsg')}</Text>
-        <Button type={errors._error ? danger : success} onPress={setStatus}>
+        <Text style={styles.modalText}>{errors && errors.serverError ? errors.serverError : t('successMsg')}</Text>
+        <Button type={errors.serverError ? danger : success} onPress={setStatus}>
           {t('modal.btnMsg')}
         </Button>
       </View>
@@ -61,15 +76,6 @@ const ContactForm = ({ values, handleSubmit, t, errors, status, setStatus }) => 
   </FormView>
 );
 
-ContactForm.propTypes = {
-  handleSubmit: PropTypes.func,
-  setStatus: PropTypes.func,
-  errors: PropTypes.object,
-  status: PropTypes.object,
-  values: PropTypes.object,
-  t: PropTypes.func
-};
-
 const styles = StyleSheet.create({
   formContainer: {
     paddingHorizontal: 15,
@@ -93,27 +99,20 @@ const styles = StyleSheet.create({
   submit
 });
 
-const ContactFormWithFormik = withFormik({
+const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
-  async handleSubmit(
-    values,
-    {
-      resetForm,
-      setErrors,
-      setStatus,
-      props: { onSubmit }
-    }
-  ) {
+  async handleSubmit(values, { resetForm, setErrors, setStatus, props: { onSubmit } }) {
     Keyboard.dismiss();
 
-    try {
-      await onSubmit(values);
-      resetForm();
-    } catch (e) {
-      setErrors(e);
-    }
+    const errors = new FieldError((await onSubmit(values)).errors);
 
-    setStatus({ showModal: true });
+    if (errors.hasAny()) {
+      setStatus({ showModal: !!errors.errors.serverError });
+      setErrors(errors.errors);
+    } else {
+      resetForm();
+      setStatus({ showModal: true });
+    }
   },
   validate: values => validate(values, contactFormSchema),
   displayName: 'ContactUsForm' // helps with React DevTools

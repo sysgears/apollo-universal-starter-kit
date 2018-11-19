@@ -1,8 +1,9 @@
+/* tslint:disable:no-unused-expression*/
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
-import Renderer from '../../../../src/testHelpers/Renderer';
-import { click, blur, find, change, updateContent, wait } from '../../../testHelpers/testUtils';
+import Renderer from '../../../../packages/client/src/testHelpers/Renderer';
+import { click, blur, find, change, updateContent, wait } from '../../../../packages/client/src/testHelpers/testUtils';
 
 /**
  * *NOTICE*

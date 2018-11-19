@@ -52,9 +52,9 @@ class UploadSpec extends TestHelper {
 
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
-  "UploadSpec" should {
+  import modules.upload.models.FileMetadataJsonProtocol._
 
-    import modules.upload.models.FileMetadataJsonProtocol._
+  "UploadSpec" should {
 
     "upload files" in {
       Post(endpoint, addFilesEntity) ~> routes ~> check {
@@ -98,9 +98,9 @@ class UploadSpec extends TestHelper {
           status shouldBe OK
           contentType.mediaType shouldBe `application/json`
           filesMetadata.size shouldBe 2
-          val fileId = filesMetadata.head.id.get
+          val fileMetadata = filesMetadata.head
 
-          Post(endpoint, removeFileEntity(fileId)) ~> routes ~> check {
+          Post(endpoint, removeFileEntity(fileMetadata.id.get)) ~> routes ~> check {
 
             val removeFileResult = responseAs[String].parseJson
               .asJsObject.fields("data")
@@ -108,7 +108,8 @@ class UploadSpec extends TestHelper {
               .convertTo[Boolean]
 
             removeFileResult shouldBe true
-            await(fileMetadataRepo.find(fileId)) shouldNot be(defined)
+            await(fileMetadataRepo.find(fileMetadata.id.get)) shouldNot be(defined)
+            Paths.get(getClass.getResource("/").getPath, fileMetadata.path).toFile.exists shouldBe false
           }
         }
       }
@@ -119,7 +120,5 @@ class UploadSpec extends TestHelper {
     deleteDirIfExists(Paths.get(getClass.getResource("/").getPath, "public"))
   }
 
-  def deleteDirIfExists(path: Path): Unit = {
-    if (path.toFile.exists()) FileUtils.deleteDirectory(path.toFile)
-  }
+  def deleteDirIfExists(path: Path): Unit = if (path.toFile.exists) FileUtils.deleteDirectory(path.toFile)
 }

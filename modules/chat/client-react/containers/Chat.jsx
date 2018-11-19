@@ -6,9 +6,9 @@ import { GiftedChat, Send } from 'react-native-gifted-chat';
 import ChatFooter from '../components/ChatFooter';
 import CustomView from '../components/CustomView';
 import RenderCustomActions from '../components/RenderCustomActions';
-import { Loading } from '../../common/components/native';
+import { Loading } from '../../../../packages/client/src/modules/common/components/native';
 import ModalNotify from '../components/ModalNotify';
-import chatConfig from '../../../../../../config/chat';
+import chatConfig from '../../../../config/chat';
 
 export default class extends React.Component {
   static propTypes = {

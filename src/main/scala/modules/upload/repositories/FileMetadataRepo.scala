@@ -25,7 +25,7 @@ class FileMetadataRepoImpl @Inject()(db: Database) extends FileMetadataRepo {
 
   val query: TableQuery[FileMetadata.Table] = TableQuery[FileMetadata.Table]
 
-  override def create(file: FileMetadata): Future[FileMetadata] = db.run(Actions.create(file)) /*Future.failed(InternalServerError("smth went wrong"))*/
+  override def create(file: FileMetadata): Future[FileMetadata] = db.run(Actions.create(file))
 
   override def find(id: Int): Future[Option[FileMetadata]] = db.run(Actions.find(id))
 

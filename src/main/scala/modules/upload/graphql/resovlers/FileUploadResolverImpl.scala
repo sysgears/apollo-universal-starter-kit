@@ -36,15 +36,16 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
         if (!publicDirPath.toFile.exists) Files.createDirectory(publicDirPath)
         part.entity.dataBytes
           .runWith(FileIO.toPath(publicDirPath resolve hashedFilename))
-          .map(ioResult => (ioResult, s"public/$hashedFilename"))
-      }.map(result =>
-        FileMetadata(
-          name = part.filename.get,
-          contentType = part.entity.contentType.toString,
-          size = result._1.count,
-          path = result._2
-        )
-      )
+          .map {
+            ioResult =>
+              FileMetadata(
+                name = part.filename.get,
+                contentType = part.entity.contentType.toString,
+                size = ioResult.count,
+                path = s"public/$hashedFilename"
+              )
+          }
+      }
     }.mapAsync(1) {
       fileMetadata =>
         sendMessageToActor[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))

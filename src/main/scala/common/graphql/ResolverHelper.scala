@@ -10,17 +10,17 @@ import core.guice.injection.GuiceActorRefProvider
 
 import scala.concurrent.Future
 
-trait GraphQLUtil extends ActorUtil
+object ResolverHelper extends ActorUtil
   with GuiceActorRefProvider {
 
-  def sendMessageToDispatcher[T](input: Any,
-                                 userContext: UserContext,
-                                 resolverActor: String,
-                                 onException: Exception => Any,
-                                 filtersBefore: List[ActorRef] = Nil,
-                                 filtersAfter: List[ActorRef] = Nil)
-                                (implicit actorSystem: ActorSystem,
-                                 materializer: ActorMaterializer): Future[T] = {
+  def resolveWithDispatcher[T](input: Any,
+                               userContext: UserContext,
+                               resolverActor: String,
+                               onException: Exception => Any,
+                               before: List[ActorRef] = Nil,
+                               after: List[ActorRef] = Nil)
+                              (implicit actorSystem: ActorSystem,
+                               materializer: ActorMaterializer): Future[T] = {
 
     sendMessageWithFunc[T] {
       replyTo =>
@@ -30,8 +30,8 @@ trait GraphQLUtil extends ActorUtil
           replyTo,
           provideActorRef(resolverActor),
           onException,
-          filtersBefore,
-          filtersAfter
+          before,
+          after
         )
     }
   }

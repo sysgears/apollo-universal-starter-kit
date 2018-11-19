@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
+//TODO: implement "interceptors after" functionality
 object Dispatcher extends Named {
 
   final val name = "Dispatcher"
@@ -20,19 +21,19 @@ object Dispatcher extends Named {
                                      replyTo: ActorRef,
                                      resolverActor: ActorRef,
                                      onException: Exception => Any,
-                                     filtersBefore: List[ActorRef] = Nil,
-                                     filtersAfter: List[ActorRef] = Nil)
+                                     before: List[ActorRef] = Nil,
+                                     after: List[ActorRef] = Nil)
 
   final case class InterceptorBeforeMessage(input: Any,
                                             context: UserContext,
-                                            filtersBefore: List[ActorRef])
+                                            before: List[ActorRef])
 
   final case class InterceptorAfterMessage(input: Any,
                                            output: Any,
                                            context: UserContext,
-                                           filtersAfter: List[ActorRef])
+                                           after: List[ActorRef])
 
-  case class ResolverMessage(input: Any, context: UserContext)
+  final case class ResolverMessage(input: Any, context: UserContext)
 
   sealed trait InterceptorResultStatus
 
@@ -49,15 +50,15 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
 
   override def receive: Receive = {
     case msg: DispatcherMessage =>
-      val filters = msg.filtersBefore
-      if (filters.nonEmpty) {
-        context.become(withFilters(msg))
-        val (head, tail) = filters.cutOff
+      val interceptors = msg.before
+      if (interceptors.nonEmpty) {
+        context.become(withInterceptors(msg))
+        val (head, tail) = interceptors.cutOff
 
         head ! InterceptorBeforeMessage(
           input = msg.input,
           context = msg.context,
-          filtersBefore = tail
+          before = tail
         )
       } else {
         sendMessageToActor(msg.resolverActor, msg.input)
@@ -65,7 +66,7 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
       }
   }
 
-  def withFilters(msg: DispatcherMessage): Receive = {
+  def withInterceptors(msg: DispatcherMessage): Receive = {
     case Success =>
       log.info(s"Interceptor has finished successfully")
       sendMessageToActor(msg.resolverActor, msg.input)

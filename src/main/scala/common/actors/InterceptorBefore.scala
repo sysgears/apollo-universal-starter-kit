@@ -23,10 +23,10 @@ trait InterceptorBefore extends Actor
         case Left(e) => sender ! Failure(e)
 
         case Right(_) =>
-          val filters = msg.filtersBefore
-          if (filters.nonEmpty) {
-            val (head, tail) = filters.cutOff
-            head.forward(msg.copy(filtersBefore = tail))
+          val interceptors = msg.before
+          if (interceptors.nonEmpty) {
+            val (head, tail) = interceptors.cutOff
+            head.forward(msg.copy(before = tail))
           } else {
             sender ! Success
           }

@@ -1,4 +1,4 @@
-package modules.upload.graphql.resovlers
+package modules.upload.graphql.resolvers
 
 import akka.http.scaladsl.model.Multipart.FormData
 import akka.stream.scaladsl.Source

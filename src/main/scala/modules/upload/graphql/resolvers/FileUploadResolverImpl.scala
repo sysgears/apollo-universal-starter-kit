@@ -1,4 +1,4 @@
-package modules.upload.graphql.resovlers
+package modules.upload.graphql.resolvers
 
 import java.nio.file.{Files, Path, Paths}
 
@@ -12,7 +12,7 @@ import common.{ActorUtil, Logger}
 import javax.inject.Inject
 import modules.upload.actors.FileActor
 import modules.upload.actors.FileActor.SaveFileMetadata
-import modules.upload.graphql.resovlers.FileUploadResolverImpl._
+import modules.upload.graphql.resolvers.FileUploadResolverImpl._
 import modules.upload.models.FileMetadata
 import modules.upload.repositories.FileMetadataRepo
 import modules.upload.services.HashAppender

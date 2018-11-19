@@ -4,7 +4,7 @@ import javax.inject.Inject
 import akka.stream.ActorMaterializer
 import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
-import modules.upload.graphql.resovlers.FileUploadResolver
+import modules.upload.graphql.resolvers.FileUploadResolver
 import modules.upload.models.FileMetadata
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Argument, Field, _}

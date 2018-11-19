@@ -9,6 +9,7 @@ import { updateEntry, deleteEntry } from '../../../utils/crud';
 import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
 
 import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
+import UPDATE_LIMIT from '../graphql/UpdateLimit.client.graphql';
 import UPDATE_ORDER_BY from '../graphql/UpdateOrderBy.client.graphql';
 import $MODULE$S_QUERY from '../graphql/$Module$sQuery.graphql';
 import UPDATE_$MODULE$ from '../graphql/Update$Module$.graphql';
@@ -102,9 +103,10 @@ export default compose(
       };
     },
     props: ({ data: { loading, $module$sConnection, refetch, error, fetchMore, subscribeToMore } }) => {
-      const loadMoreRows = () => {
+      const loadMoreRows = limit => {
         return fetchMore({
           variables: {
+            limit,
             offset: $module$sConnection.edges.length
           },
           updateQuery: (previousResult, { fetchMoreResult }) => {
@@ -202,6 +204,13 @@ export default compose(
         } catch (e) {
           console.log(e.graphQLErrors);
         }
+      }
+    })
+  }),
+  graphql(UPDATE_LIMIT, {
+    props: ({ mutate }) => ({
+      onLimit: limit => {
+        mutate({ variables: { limit } });
       }
     })
   }),

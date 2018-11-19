@@ -34,6 +34,22 @@ const defaults = {
 
 const resolvers = {
   Mutation: {
+    update$Module$Limit: (_, { limit }, { cache }) => {
+      const { $module$State } = cache.readQuery({ query: $MODULE$_STATE_QUERY });
+
+      const new$Module$State = update($module$State, {
+        limit: { $set: limit }
+      });
+
+      cache.writeData({
+        data: {
+          $module$State: new$Module$State,
+          __type: TYPE_$MODULE$_STATE
+        }
+      });
+
+      return null;
+    },
     update$Module$OrderBy: (_, { orderBy }, { cache }) => {
       const { $module$State } = cache.readQuery({ query: $MODULE$_STATE_QUERY });
 

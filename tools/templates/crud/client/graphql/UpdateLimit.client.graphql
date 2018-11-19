@@ -1,0 +1,5 @@
+#import "./$Module$State.client.graphql"
+
+mutation update$Module$Limit($limit: Int!) {
+  update$Module$Limit(limit: $limit) @client
+}

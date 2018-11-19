@@ -176,11 +176,29 @@ class ListView extends React.Component {
   };
 
   renderLoadMore = (data, loadMoreRows) => {
-    if (data.pageInfo.hasNextPage) {
+    const leftToLoad = data.pageInfo.totalCount - data.edges.length;
+    if (data.pageInfo.hasNextPage && leftToLoad > 0) {
       return (
-        <Button id="load-more" color="primary" onClick={loadMoreRows}>
-          Load more ...
-        </Button>
+        <span>
+          {leftToLoad > 25 && (
+            <Button id="load-more" color="primary" onClick={() => loadMoreRows(25)}>
+              Load next 25
+            </Button>
+          )}
+          {leftToLoad > 50 && (
+            <Button id="load-more" color="primary" style={{ marginLeft: '5px' }} onClick={() => loadMoreRows(50)}>
+              Load next 50
+            </Button>
+          )}
+          {leftToLoad > 100 && (
+            <Button id="load-more" color="primary" style={{ marginLeft: '5px' }} onClick={() => loadMoreRows(100)}>
+              Load next 100
+            </Button>
+          )}
+          <Button id="load-more" color="primary" style={{ marginLeft: '5px' }} onClick={() => loadMoreRows(leftToLoad)}>
+            Load all ({leftToLoad})
+          </Button>
+        </span>
       );
     }
   };

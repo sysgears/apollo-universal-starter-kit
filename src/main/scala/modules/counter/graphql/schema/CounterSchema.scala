@@ -63,11 +63,7 @@ class CounterSchema @Inject()(implicit val publisherService: PublisherService[Co
     Field.subs(
       name = "counterUpdated",
       fieldType = Types.counter,
-      resolve = _ => Source.fromPublisher(publisherService.getPublisher).map {
-        counter =>
-          log.info(s"Sending event [$counter] to client ...")
-          Action(counter)
-      }
+      resolve = _ => publisherService.subscribe
     )
   )
 }

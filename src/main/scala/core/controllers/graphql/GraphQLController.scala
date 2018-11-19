@@ -1,6 +1,7 @@
 package core.controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
+import akka.http.scaladsl.marshalling.ToResponseMarshallable
 import akka.http.scaladsl.model.Multipart.FormData
 import akka.http.scaladsl.model.headers.`Set-Cookie`
 import akka.http.scaladsl.server.Directives._
@@ -16,13 +17,16 @@ import spray.json.JsValue
 import akka.http.scaladsl.model.Multipart
 import core.graphql.GraphQL
 import javax.inject.Inject
+import modules.session.JWTSessionImpl
 import sangria.execution.Executor
 import sangria.renderer.SchemaRenderer
 
 import scala.concurrent.ExecutionContext
+import scala.util.Try
 
 class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
                                   httpHandler: HttpHandler,
+                                  session: JWTSessionImpl,
                                   webSocketHandler: WebSocketHandler)
                                  (implicit val executionContext: ExecutionContext,
                                   implicit val actorMaterializer: ActorMaterializer) extends AkkaRoute {
@@ -35,26 +39,39 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
             handleWebSocketMessagesForProtocol(webSocketHandler.handleMessages, GraphQLMessage.graphQlWebsocketProtocol)
           } ~
             post {
-              withHeaders(UserContext(request.headers.toList)) {
-                userCtx =>
-                  entity(as[GraphQLMessage]) {
-                    graphQlMessage =>
-                      httpHandler.handleQuery(graphQlMessage, userCtx)
-                  } ~
-                    entity(as[Seq[GraphQLMessage]]) {
-                      graphQlMessages =>
-                        httpHandler.handleBatchQuery(graphQlMessages, userCtx)
-                    } ~
-                    formFields('operations.as[GraphQLMessage], 'map.as[JsValue]) {
-                      (graphQLMessage, filesOccurredJsValue) =>
-                        //for each file, the key is the file multipart form field name and the value is an array of operations paths
-                        val filesOccurredMap = filesOccurredJsValue.convertTo[Map[String, List[String]]]
-                        entity(as[Multipart.FormData]) {
-                          formData =>
-                            val formDataParts: Source[FormData.BodyPart, Any] = formData.parts.filter(part => filesOccurredMap.keySet.contains(part.name))
-                            httpHandler.handleQuery(graphQLMessage, userCtx.copy(filesData = formDataParts))
+              session.withOptional {
+                maybeSession =>
+                  withHeaders(UserContext(requestHeaders = request.headers.toList, session = maybeSession)) {
+                    userCtx =>
+                      entity(as[GraphQLMessage]) {
+                        graphQlMessage =>
+                          onComplete(httpHandler.handleQuery(graphQlMessage, userCtx)) {
+                            response: Try[ToResponseMarshallable] =>
+                              session.withChanges(maybeSession, userCtx.session) {
+                                complete(response)
+                              }
+                          }
+                      } ~
+                        entity(as[Seq[GraphQLMessage]]) {
+                          graphQlMessages =>
+                            onComplete(httpHandler.handleBatchQuery(graphQlMessages, userCtx)) {
+                              response: Try[ToResponseMarshallable] =>
+                                session.withChanges(maybeSession, userCtx.session) {
+                                  complete(response)
+                                }
+                            }
+                        } ~
+                        formFields('operations.as[GraphQLMessage], 'map.as[JsValue]) {
+                          (graphQLMessage, filesOccurredJsValue) =>
+                            //for each file, the key is the file multipart form field name and the value is an array of operations paths
+                            val filesOccurredMap = filesOccurredJsValue.convertTo[Map[String, List[String]]]
+                            entity(as[Multipart.FormData]) {
+                              formData =>
+                                val formDataParts: Source[FormData.BodyPart, Any] = formData.parts.filter(part => filesOccurredMap.keySet.contains(part.name))
+                                httpHandler.handleQuery(graphQLMessage, userCtx.copy(filesData = formDataParts))
+                            }
                         }
-                    }
+                  }
               }
             }
       }

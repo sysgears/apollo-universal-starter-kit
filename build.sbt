@@ -19,6 +19,9 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
 
+  "com.softwaremill.akka-http-session" %% "core" % "0.5.6",
+  "com.softwaremill.akka-http-session" %% "jwt"  % "0.5.6",
+
   "com.typesafe.akka" %% "akka-http-testkit" % "10.1.5",
   "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test",
 
@@ -42,7 +45,9 @@ libraryDependencies ++= Seq(
 
   "com.pauldijou" %% "jwt-core" % "0.19.0",
   
-  "commons-io" % "commons-io" % "2.6"
+  "commons-io" % "commons-io" % "2.6",
+  
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )
 
 parallelExecution in test := false

@@ -11,7 +11,7 @@ import org.reactivestreams.Publisher
 import sangria.schema.Action
 
 @Singleton
-class PublisherServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends PublisherService[T] with Logger {
+class PublishSubscribeServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends PublishSubscribeService[T] with Logger {
 
   lazy val source: ConcurrentSubject[T, T] = ConcurrentSubject.publish[T](OverflowStrategy.DropOld(16))
 
@@ -21,9 +21,9 @@ class PublisherServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) exten
 
   override def subscribe: Source[Action[Nothing, T], NotUsed] = {
     Source.fromPublisher(getPublisher).map {
-      counter =>
-        log.info(s"Sending event [$counter] to client ...")
-        Action(counter)
+      element =>
+        log.info(s"Sending event [$element] to client ...")
+        Action(element)
     }
   }
 }

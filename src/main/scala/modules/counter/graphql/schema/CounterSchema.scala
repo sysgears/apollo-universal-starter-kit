@@ -7,7 +7,7 @@ import akka.stream.scaladsl.Source
 import common.Logger
 import common.graphql.ResolverHelper._
 import core.graphql.{GraphQLSchema, UserContext}
-import core.services.publisher.PublisherService
+import core.services.publisher.PublishSubscribeService
 import javax.inject.Inject
 import modules.counter.graphql.resolvers.CounterResolver
 import modules.counter.models.Counter
@@ -19,7 +19,7 @@ import core.services.publisher.PublisherImplicits._
 
 import scala.concurrent.ExecutionContext
 
-class CounterSchema @Inject()(implicit val publisherService: PublisherService[Counter],
+class CounterSchema @Inject()(implicit val publisherService: PublishSubscribeService[Counter],
                               materializer: ActorMaterializer,
                               actorSystem: ActorSystem,
                               executionContext: ExecutionContext) extends GraphQLSchema

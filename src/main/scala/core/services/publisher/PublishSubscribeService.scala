@@ -5,7 +5,7 @@ import akka.stream.scaladsl.Source
 import org.reactivestreams.Publisher
 import sangria.schema.Action
 
-trait PublisherService[T] {
+trait PublishSubscribeService[T] {
 
   def publish(event: T)
 

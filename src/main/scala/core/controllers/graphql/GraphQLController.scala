@@ -62,12 +62,12 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
                             }
                         } ~
                         formFields('operations.as[GraphQLMessage], 'map.as[JsValue]) {
-                          (graphQLMessage, filesOccurredJsValue) =>
-                            //for each file, the key is the file multipart form field name and the value is an array of operations paths
-                            val filesOccurredMap = filesOccurredJsValue.convertTo[Map[String, List[String]]]
+                          (graphQLMessage, filesJsValue) =>
                             entity(as[Multipart.FormData]) {
                               formData =>
-                                val formDataParts: Source[FormData.BodyPart, Any] = formData.parts.filter(part => filesOccurredMap.keySet.contains(part.name))
+                                //for each file, the key is the file multipart form field name and the value is an array of operations paths
+                                val filesMap = filesJsValue.convertTo[Map[String, List[String]]]
+                                val formDataParts: Source[FormData.BodyPart, Any] = formData.parts.filter(part => filesMap.keySet.contains(part.name))
                                 onComplete(httpHandler.handleQuery(graphQLMessage, userCtx.copy(filesData = formDataParts))) {
                                   response: Try[ToResponseMarshallable] =>
                                     session.withChanges(maybeSession, userCtx.session) {

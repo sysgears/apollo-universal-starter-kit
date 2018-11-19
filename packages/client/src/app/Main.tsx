@@ -1,17 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { Title, Meta } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, map, mergeMap } from 'rxjs/operators';
-
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import ReactGA from 'react-ga';
 
 import RedBox from './RedBox';
 import createApolloClient from '../../../common/createApolloClient';
+import createReduxStore, { storeReducer } from '../../../common/createReduxStore';
 import Routes from './Routes';
 import modules from '../modules';
 import log from '../../../common/log';
@@ -32,6 +28,7 @@ const logPageView = (location: any) => {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);
 };
+let store: any;
 
 // Initialize Google Analytics and send events on each location change
 ReactGA.initialize(settings.analytics.ga.trackingId);
@@ -39,8 +36,16 @@ logPageView(window.location);
 
 history.listen(location => logPageView(location));
 
+if (module.hot && module.hot.data && module.hot.data.store) {
+  store = module.hot.data.store;
+  store.replaceReducer(storeReducer);
+} else {
+  store = createReduxStore({}, client, routerMiddleware(history));
+}
+
 if (module.hot) {
-  module.hot.dispose(() => {
+  module.hot.dispose(data => {
+    data.store = store;
     delete window.__APOLLO_STATE__;
   });
 }
@@ -77,7 +82,7 @@ class Main extends React.Component<any, MainState> {
       <RedBox error={this.state.error} />
     ) : (
       modules.getWrappedRoot(
-        <Provider store={null}>
+        <Provider store={store}>
           <ApolloProvider client={client}>
             {modules.getDataRoot(<ConnectedRouter history={history}>{Routes}</ConnectedRouter>)}
           </ApolloProvider>
@@ -87,39 +92,4 @@ class Main extends React.Component<any, MainState> {
   }
 }
 
-@Component({
-  selector: 'body div:first-child',
-  template: '<router-outlet></router-outlet>'
-})
-class MainComponent implements OnInit {
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private titleService: Title,
-    private meta: Meta
-  ) {
-    this.meta.addTag({ name: 'description', content: 'Apollo Universal Starter Kit' });
-  }
-
-  public ngOnInit(): void {
-    this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd),
-        map(() => this.activatedRoute),
-        map(route => {
-          while (route.firstChild) {
-            route = route.firstChild;
-          }
-          return route;
-        }),
-        filter(route => route.outlet === 'primary'),
-        mergeMap(route => route.data)
-      )
-      .subscribe(event => {
-        this.titleService.setTitle(event.title);
-        this.meta.updateTag({ name: 'description', content: event.meta });
-      });
-  }
-}
-
-export { client, MainComponent };
+export default Main;

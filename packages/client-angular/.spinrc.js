@@ -12,7 +12,7 @@ const config = {
       },
       // Wait for backend to start prior to letting webpack load frontend page
       waitOn: ['tcp:localhost:8080'],
-      enabled: false
+      enabled: true
     },
     test: {
       stack: ['server'],
@@ -23,11 +23,24 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack', 'i18next'],
+    stack: [
+      'apollo',
+      'react',
+      'styled-components',
+      'css',
+      'sass',
+      'less',
+      'es6',
+      'ts',
+      'webpack',
+      'i18next',
+      'angular'
+    ],
     cache: '../../.cache',
-    ssr: true,
+    ssr: false,
     webpackDll: true,
     reactHotLoader: false,
+    htmlTemplate: './html-template.ejs',
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"/graphql"',

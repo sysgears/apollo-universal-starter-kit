@@ -1,8 +1,8 @@
-package core.implicits
+package common.implicits
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait FutureImplicits {
+object RichFuture {
 
   /**
     * Adds various extension methods to the Future[Option] class.

@@ -9,7 +9,6 @@ import akka.stream.scaladsl.{FileIO, Keep, Sink, Source}
 import com.google.inject.name.Named
 import common.errors._
 import common.{ActorUtil, Logger}
-import core.implicits.FutureImplicits
 import javax.inject.Inject
 import modules.upload.actors.FileActor
 import modules.upload.actors.FileActor.SaveFileMetadata
@@ -17,6 +16,7 @@ import modules.upload.graphql.resovlers.FileUploadResolverImpl.publicDirPath
 import modules.upload.models.FileMetadata
 import modules.upload.repositories.FileMetadataRepo
 import modules.upload.services.HashAppender
+import common.implicits.RichFuture._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -26,8 +26,7 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
                                       (implicit executionContext: ExecutionContext,
                                        materializer: ActorMaterializer) extends FileUploadResolver
   with Logger
-  with ActorUtil
-  with FutureImplicits {
+  with ActorUtil {
 
   override def uploadFiles(parts: Source[FormData.BodyPart, Any]): Future[Boolean] = {
     parts.filter(_.filename.nonEmpty).mapAsync(1) {

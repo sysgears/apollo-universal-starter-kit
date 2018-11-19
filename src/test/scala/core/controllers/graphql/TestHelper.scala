@@ -7,7 +7,6 @@ import modules.counter.repositories.CounterSchemaInitializer
 import modules.user.repositories.UserSchemaInitializer
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
 import modules.upload.repositories.FileSchemaInitializer
-import org.scalatest._
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
@@ -17,7 +16,8 @@ trait TestHelper extends WordSpec
   with BeforeAndAfter
   with BeforeAndAfterAll
   with Injecting
-  with Matchers {
+  with Matchers
+  with LazyAppComponents {
 
   val endpoint: String = "/graphql"
   val routes: Route = inject[GraphQLController].routes

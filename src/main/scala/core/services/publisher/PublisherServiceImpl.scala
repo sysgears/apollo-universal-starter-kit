@@ -11,7 +11,7 @@ import org.reactivestreams.Publisher
 import sangria.schema.Action
 
 @Singleton
-class MonixPublisherServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends PublisherService[T] with Logger {
+class PublisherServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends PublisherService[T] with Logger {
 
   lazy val source: ConcurrentSubject[T, T] = ConcurrentSubject.publish[T](OverflowStrategy.DropOld(16))
 

@@ -68,7 +68,12 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
                             entity(as[Multipart.FormData]) {
                               formData =>
                                 val formDataParts: Source[FormData.BodyPart, Any] = formData.parts.filter(part => filesOccurredMap.keySet.contains(part.name))
-                                httpHandler.handleQuery(graphQLMessage, userCtx.copy(filesData = formDataParts))
+                                onComplete(httpHandler.handleQuery(graphQLMessage, userCtx.copy(filesData = formDataParts))) {
+                                  response: Try[ToResponseMarshallable] =>
+                                    session.withChanges(maybeSession, userCtx.session) {
+                                      complete(response)
+                                    }
+                                }
                             }
                         }
                   }

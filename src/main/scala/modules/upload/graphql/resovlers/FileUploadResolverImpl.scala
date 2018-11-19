@@ -5,15 +5,16 @@ import java.nio.file.{Files, Path, Paths}
 import akka.actor.ActorRef
 import akka.http.scaladsl.model.Multipart.FormData
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.{FileIO, Source}
+import akka.stream.scaladsl.{FileIO, Keep, Sink, Source}
 import com.google.inject.name.Named
 import common.errors._
 import common.{ActorUtil, Logger}
 import javax.inject.Inject
 import modules.upload.actors.FileActor
-import modules.upload.actors.FileActor.{GetFilesMetadata, SaveFileMetadata}
+import modules.upload.actors.FileActor.{FindFileMetadata, GetFilesMetadata, SaveFileMetadata}
 import modules.upload.graphql.resovlers.FileUploadResolverImpl.publicDirPath
 import modules.upload.models.FileMetadata
+import modules.upload.repositories.FileRepo
 import modules.upload.services.HashAppender
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,9 +40,10 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
           path = result._2
         )
       )
-    }.runForeach {
-      fileMetadata => sendMessageToActor[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))
-    }.map(_ => true)
+    }.mapAsync(1) {
+      fileMetadata =>
+        sendMessageToActor[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))
+    }.toMat(Sink.ignore)(Keep.right).run.map(_ => true)
   }.recover {
     case _: Error => false
   }

@@ -1,18 +1,11 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
+import React from 'react';
+import resources from './locales';
 import CounterModule from '../CounterModule';
-import { reducer } from './reducers';
-import { ReduxCounterButtonComponent, ReduxCounterViewComponent } from './components/ReduxCounterView';
-
-@NgModule({
-  imports: [CommonModule],
-  declarations: [ReduxCounterButtonComponent, ReduxCounterViewComponent],
-  exports: [ReduxCounterButtonComponent, ReduxCounterViewComponent]
-})
-class ReduxCounterModule {}
+import reducers from './reducers';
+import ReduxCounter from './containers/ReduxCounter';
 
 export default new CounterModule({
-  reducer: [{ counter: reducer }],
-  counterModule: [ReduxCounterModule]
+  reducer: [{ counter: reducers }],
+  localization: [{ ns: 'reduxCounter', resources }],
+  counterComponent: [<ReduxCounter />]
 });

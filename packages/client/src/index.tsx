@@ -13,7 +13,6 @@ import { take } from 'rxjs/operators';
 import 'backend_reload';
 
 import { client, MainComponent } from './app/Main';
-import { CounterModule } from './modules/counter';
 import routes from './app/Routes';
 import log from '../../common/log';
 import modules from './modules';
@@ -30,7 +29,6 @@ import { StoreModule, Store } from '@ngrx/store';
     HttpLinkModule,
     RouterModule.forRoot(routes),
     StoreModule.forRoot(reducers, { metaReducers }),
-    CounterModule,
     ...modules.modules
   ],
   providers: []

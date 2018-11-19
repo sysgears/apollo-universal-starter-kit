@@ -1,18 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import React from 'react';
+import { Route } from 'react-router-dom';
 
+import Counter from './containers/Counter';
 import counters from './counters';
 import ClientModule from '@module/module-client-react';
-import { CounterComponent } from './containers/Counter';
-
-@NgModule({
-  imports: [CommonModule, ...counters.counterModule],
-  declarations: [CounterComponent],
-  exports: [...counters.counterModule]
-})
-export class CounterModule {}
+import resources from './locales';
 
 export default new ClientModule(counters, {
-  route: [{ path: '', component: CounterComponent, data: { title: 'Counter', meta: 'Counter example page' } }],
-  module: [CounterModule]
+  route: [<Route exact path="/" component={Counter} />],
+  localization: [{ ns: 'counter', resources }]
 });

@@ -1,58 +1,32 @@
-import { Component } from '@angular/core';
-import { Apollo, Query } from 'apollo-angular';
-import { map } from 'rxjs/operators';
+import React from 'react';
+import styled from 'styled-components';
 
-import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
-import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
+import { Button } from '../../../../../packages/client/src/modules/common/components/web';
 
-@Component({
-  selector: 'client-counter-button',
-  template: `
-    <button id="apollo-link-button" (click)="increaseCounter()">Click to increase apolloLinkState</button>
-  `,
-  styles: []
-})
-export class ClientCounterButtonComponent {
-  constructor(private apollo: Apollo) {}
+const Section = styled.section`
+  margin-bottom: 30px;
+  text-align: center;
+`;
 
-  public increaseCounter() {
-    this.apollo
-      .mutate({
-        mutation: ADD_COUNTER_CLIENT,
-        variables: {
-          amount: 1
-        }
-      })
-      .subscribe();
-  }
+interface ViewProps {
+  text: string;
+  children: any;
 }
 
-@Component({
-  selector: 'client-counter',
-  template: `
-    <section>
-      <p>Client Counter Amount: {{ counter | async }}</p>
-      <client-counter-button></client-counter-button>
-    </section>
-  `,
-  styles: [
-    `
-      section {
-        margin-bottom: 30px;
-        text-align: center;
-      }
-    `
-  ]
-})
-export class ClientCounterViewComponent {
-  public counter: any;
-  constructor(private apollo: Apollo) {}
+export const ClientCounterView = ({ text, children }: ViewProps) => (
+  <Section>
+    <p>{text}</p>
+    {children}
+  </Section>
+);
 
-  public ngOnInit() {
-    this.counter = this.apollo
-      .watchQuery<Query>({
-        query: COUNTER_QUERY_CLIENT
-      })
-      .valueChanges.pipe(map((result: any) => result.data.clientCounter.amount));
-  }
+interface ButtonProps {
+  onClick: () => any;
+  text: string;
 }
+
+export const ClientCounterButton = ({ onClick, text }: ButtonProps) => (
+  <Button id="apollo-link-button" color="primary" onClick={onClick}>
+    {text}
+  </Button>
+);

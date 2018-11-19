@@ -1,43 +1,32 @@
-import { Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { CounterIncrement } from '../reducers';
+import React from 'react';
+import styled from 'styled-components';
 
-@Component({
-  selector: 'redux-counter-button',
-  template: `
-    <button id="redux-button" (click)="increaseCounter()">Click to increase reduxCount</button>
-  `,
-  styles: []
-})
-export class ReduxCounterButtonComponent {
-  constructor(private store: Store<{ counter: number }>) {}
+import { Button } from '../../../../../packages/client/src/modules/common/components/web';
 
-  public increaseCounter() {
-    this.store.dispatch(new CounterIncrement());
-  }
+const Section = styled.section`
+  margin-bottom: 30px;
+  text-align: center;
+`;
+
+interface ViewProps {
+  text: string;
+  children: any;
 }
 
-@Component({
-  selector: 'redux-counter',
-  template: `
-    <section>
-      <p>Redux Counter Amount: {{ counter }}</p>
-      <redux-counter-button></redux-counter-button>
-    </section>
-  `,
-  styles: [
-    `
-      section {
-        margin-bottom: 30px;
-        text-align: center;
-      }
-    `
-  ]
-})
-export class ReduxCounterViewComponent {
-  public counter: any;
+export const ReduxCounterView = ({ text, children }: ViewProps): any => (
+  <Section>
+    <p>{text}</p>
+    {children}
+  </Section>
+);
 
-  constructor(private store: Store<{ counter: number }>) {
-    this.store.pipe(select('counter')).subscribe(result => (this.counter = result.reduxCount));
-  }
+interface ButtonProps {
+  onClick: () => any;
+  text: string;
 }
+
+export const ReduxCounterButton = ({ onClick, text }: ButtonProps): any => (
+  <Button id="redux-button" color="primary" onClick={onClick}>
+    {text}
+  </Button>
+);

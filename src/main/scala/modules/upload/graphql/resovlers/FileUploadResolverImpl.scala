@@ -12,7 +12,7 @@ import common.{ActorUtil, Logger}
 import javax.inject.Inject
 import modules.upload.actors.FileActor
 import modules.upload.actors.FileActor.SaveFileMetadata
-import modules.upload.graphql.resovlers.FileUploadResolverImpl.publicDirPath
+import modules.upload.graphql.resovlers.FileUploadResolverImpl._
 import modules.upload.models.FileMetadata
 import modules.upload.repositories.FileMetadataRepo
 import modules.upload.services.HashAppender
@@ -34,7 +34,7 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
         val hashedFilename = hashAppender.append(part.filename.get)
         if (!publicDirPath.toFile.exists) Files.createDirectory(publicDirPath)
         part.entity.dataBytes
-          .runWith(FileIO.toPath(publicDirPath resolve hashedFilename))
+          .runWith(FileIO.toPath(publicDirPath.resolve(hashedFilename)))
           .map {
             ioResult =>
               FileMetadata(
@@ -59,7 +59,7 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
     for {
       fileMetadata <- fileRepo.find(id) failOnNone NotFound(s"FileMetadata(id: $id)")
       _ <- fileRepo.delete(id)
-      deleteResult <- Future(Files.deleteIfExists(Paths.get(getClass.getResource("/").getPath, fileMetadata.path)))
+      deleteResult <- Future(Files.deleteIfExists(resourcesDirPath.resolve(fileMetadata.path)))
     } yield deleteResult
   }.recover {
     case _: Error => false
@@ -67,5 +67,6 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
 }
 
 object FileUploadResolverImpl {
-  val publicDirPath: Path = Paths.get(getClass.getResource("/").getPath, "public")
+  val resourcesDirPath: Path = Paths.get(getClass.getResource("/").getPath)
+  val publicDirPath: Path = resourcesDirPath.resolve( "public")
 }

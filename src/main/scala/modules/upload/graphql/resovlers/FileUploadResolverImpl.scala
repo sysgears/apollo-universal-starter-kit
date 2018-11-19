@@ -15,13 +15,13 @@ import modules.upload.actors.FileActor
 import modules.upload.actors.FileActor.SaveFileMetadata
 import modules.upload.graphql.resovlers.FileUploadResolverImpl.publicDirPath
 import modules.upload.models.FileMetadata
-import modules.upload.repositories.FileRepo
+import modules.upload.repositories.FileMetadataRepo
 import modules.upload.services.HashAppender
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRef,
-                                       fileRepo: FileRepo,
+                                       fileRepo: FileMetadataRepo,
                                        hashAppender: HashAppender)
                                       (implicit executionContext: ExecutionContext,
                                        materializer: ActorMaterializer) extends FileUploadResolver

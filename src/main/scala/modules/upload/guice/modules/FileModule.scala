@@ -7,13 +7,13 @@ import com.google.inject.Provides
 import com.google.inject.name.Names
 import core.guice.injection.GuiceActorRefProvider
 import modules.upload.actors.FileActor
-import modules.upload.repositories.{FileRepo, FileRepoImpl}
+import modules.upload.repositories.{FileMetadataRepo, FileMetadataRepoImpl}
 import net.codingwell.scalaguice.ScalaModule
 
 class FileModule extends ScalaModule with GuiceActorRefProvider {
 
   override def configure() {
-    bind[FileRepo].to[FileRepoImpl]
+    bind[FileMetadataRepo].to[FileMetadataRepoImpl]
     bind[Actor].annotatedWith(Names.named(FileActor.name)).to[FileActor]
   }
 

@@ -5,7 +5,7 @@ import akka.pattern._
 import com.google.inject.Inject
 import modules.upload.actors.FileActor.SaveFileMetadata
 import modules.upload.models.FileMetadata
-import modules.upload.repositories.FileRepo
+import modules.upload.repositories.FileMetadataRepo
 
 import scala.concurrent.ExecutionContext
 
@@ -16,7 +16,7 @@ object FileActor {
   final val name = "FileActor"
 }
 
-class FileActor @Inject()(fileRepo: FileRepo,
+class FileActor @Inject()(fileRepo: FileMetadataRepo,
                           implicit val executionContext: ExecutionContext) extends Actor with ActorLogging {
 
   override def receive: Receive = {

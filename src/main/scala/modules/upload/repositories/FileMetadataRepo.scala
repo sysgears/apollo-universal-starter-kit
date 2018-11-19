@@ -9,19 +9,19 @@ import slick.jdbc.SQLiteProfile.api._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-trait FileRepo {
+trait FileMetadataRepo {
 
   def create(fileMetadata: FileMetadata): Future[FileMetadata]
 
   def find(id: Int): Future[Option[FileMetadata]]
 
   def findAll: Future[List[FileMetadata]]
-  
+
   def delete(id: Int): Future[Int]
 }
 
 @Singleton
-class FileRepoImpl @Inject()(db: Database) extends FileRepo {
+class FileMetadataRepoImpl @Inject()(db: Database) extends FileMetadataRepo {
 
   val query: TableQuery[FileMetadata.Table] = TableQuery[FileMetadata.Table]
 

@@ -33,6 +33,12 @@ class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)
       resolve = sc => {
         fileUploadResolver.uploadFiles(sc.ctx.filesData)
       }
+    ),
+    Field(
+      name = "removeFile",
+      fieldType = sangria.schema.BooleanType,
+      arguments = Argument(name = "id", argumentType = IntType) :: Nil,
+      resolve = sc => fileUploadResolver.removeFile(sc.args.arg[Int]("id"))
     )
   )
 

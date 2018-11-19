@@ -1,11 +1,14 @@
 package core.services.publisher
 
+import akka.NotUsed
+import akka.stream.scaladsl.Source
+import common.Logger
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
 import monix.reactive.OverflowStrategy
 import monix.reactive.subjects.ConcurrentSubject
 import org.reactivestreams.Publisher
-import common.Logger
+import sangria.schema.Action
 
 @Singleton
 class MonixPublisherServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends PublisherService[T] with Logger {
@@ -14,8 +17,13 @@ class MonixPublisherServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) 
 
   override def getPublisher: Publisher[T] = source.toReactivePublisher[T]
 
-  override def publish(event: T): Unit = {
-    log.info(s"Event [$event] is publishing...")
-    source.onNext(event)
+  override def publish(event: T): Unit = source.onNext(event)
+
+  override def subscribe: Source[Action[Nothing, T], NotUsed] = {
+    Source.fromPublisher(getPublisher).map {
+      counter =>
+        log.info(s"Sending event [$counter] to client ...")
+        Action(counter)
+    }
   }
 }

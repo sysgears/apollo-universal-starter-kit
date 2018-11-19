@@ -2,7 +2,7 @@ package modules.upload.repositories
 
 import javax.inject.Singleton
 import com.google.inject.Inject
-import common.errors.{AlreadyExists, AmbigousResult}
+import common.errors.{AlreadyExists, AmbigousResult, InternalServerError}
 import modules.upload.models.FileMetadata
 import slick.jdbc.SQLiteProfile.api._
 
@@ -16,6 +16,8 @@ trait FileRepo {
   def find(id: Int): Future[Option[FileMetadata]]
 
   def findAll: Future[List[FileMetadata]]
+  
+  def delete(id: Int): Future[Int]
 }
 
 @Singleton
@@ -23,11 +25,13 @@ class FileRepoImpl @Inject()(db: Database) extends FileRepo {
 
   val query: TableQuery[FileMetadata.Table] = TableQuery[FileMetadata.Table]
 
-  override def create(file: FileMetadata): Future[FileMetadata] = db.run(Actions.create(file))
+  override def create(file: FileMetadata): Future[FileMetadata] = db.run(Actions.create(file)) /*Future.failed(InternalServerError("smth went wrong"))*/
 
   override def find(id: Int): Future[Option[FileMetadata]] = db.run(Actions.find(id))
 
   override def findAll: Future[List[FileMetadata]] = db.run(Actions.findAll)
+  
+  override def delete(id: Int): Future[Int] = db.run(Actions.delete(id))
 
   object Actions {
 
@@ -48,5 +52,7 @@ class FileRepoImpl @Inject()(db: Database) extends FileRepo {
     } yield file
 
     def findAll: DBIO[List[FileMetadata]] = query.result.map(_.toList)
+    
+    def delete(id: Int): DBIO[Int] = query.filter(_.id === id).delete
   }
 }

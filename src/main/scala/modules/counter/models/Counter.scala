@@ -1,9 +1,7 @@
 package modules.counter.models
 
-import core.slick.SchemaInitializer
-import slick.lifted.Tag
 import slick.jdbc.SQLiteProfile.api.{Table => SlickTable, _}
-import slick.model.Column
+import slick.lifted.Tag
 
 case class Counter(id: Option[Int] = None, amount: Int)
 

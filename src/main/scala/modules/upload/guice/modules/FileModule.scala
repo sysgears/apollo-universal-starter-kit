@@ -19,7 +19,5 @@ class FileModule extends ScalaModule with GuiceActorRefProvider {
 
   @Provides
   @Named(FileActor.name)
-  def actor(actorSystem: ActorSystem): ActorRef = {
-    provideActorRef(actorSystem, FileActor.name)
-  }
+  def actor(implicit actorSystem: ActorSystem): ActorRef = provideActorRef(FileActor)
 }

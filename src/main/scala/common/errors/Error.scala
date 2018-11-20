@@ -1,3 +1,3 @@
 package common.errors
 
-class Error extends Exception
+class Error(msg: String = "") extends Exception(msg)

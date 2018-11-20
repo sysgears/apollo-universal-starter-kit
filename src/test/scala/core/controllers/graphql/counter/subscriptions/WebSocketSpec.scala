@@ -88,4 +88,6 @@ class WebSocketSpec extends TestHelper {
                                     (payload: Option[JsValue] = None) = {
     OperationMessage(operationType, id, payload).toJson.compactPrint
   }
+
+  override def clean(): Unit = {}
 }

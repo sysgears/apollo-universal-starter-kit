@@ -1,5 +1,5 @@
 package common
 
-trait Named {
+trait ActorNamed {
   val name: String
 }

@@ -3,13 +3,14 @@ package modules.upload.actors
 import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.pattern._
 import com.google.inject.Inject
+import common.ActorNamed
 import modules.upload.actors.FileActor.SaveFileMetadata
 import modules.upload.models.FileMetadata
 import modules.upload.repositories.FileMetadataRepo
 
 import scala.concurrent.ExecutionContext
 
-object FileActor {
+object FileActor extends ActorNamed {
 
   case class SaveFileMetadata(file: FileMetadata, sender: ActorRef)
 

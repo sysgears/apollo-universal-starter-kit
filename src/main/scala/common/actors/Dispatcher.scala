@@ -5,14 +5,14 @@ import akka.pattern._
 import akka.stream.ActorMaterializer
 import common.RichList._
 import common.actors.Dispatcher.{DispatcherMessage, Failure, InterceptorBeforeMessage, Success}
-import common.{ActorMessageDelivering, Named}
+import common.{ActorMessageDelivering, ActorNamed}
 import core.graphql.UserContext
 import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
 
 //TODO: implement "interceptors after" functionality
-object Dispatcher extends Named {
+object Dispatcher extends ActorNamed {
 
   final val name = "Dispatcher"
 

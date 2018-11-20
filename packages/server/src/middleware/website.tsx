@@ -23,10 +23,10 @@ interface HtmlProps {
   clientModules: any;
   css: Array<ReactElement<{}>>;
   helmet: HelmetData;
+  styles: any;
 }
 
-const Html = ({ content, state, css, clientModules, helmet }: HtmlProps) => {
-  const { styles } = require('../../../client/src/modules/common/components/web');
+const Html = ({ content, state, css, clientModules, helmet, styles }: HtmlProps) => {
   return (
     <html lang="en" {...helmet.htmlAttributes.toComponent()}>
       <head>
@@ -75,10 +75,7 @@ const Html = ({ content, state, css, clientModules, helmet }: HtmlProps) => {
   );
 };
 
-const renderServerSide = async (req: any, res: any) => {
-  const clientModules = require('../../../client/src/modules').default;
-  const createReduxStore = require('../../../common/createReduxStore').default;
-  const Routes = require('../../../client/src/app/Routes').default;
+const renderServerSide = async (req: any, res: any, clientModules: any, createReduxStore: any, styles: any) => {
   const schemaLink = new SchemaLink({ schema, context: { ...(await modules.createContext(req, res)), req, res } });
   const client = createApolloClient({
     apiUrl,
@@ -94,7 +91,7 @@ const renderServerSide = async (req: any, res: any) => {
       <ApolloProvider client={client}>
         {clientModules.getDataRoot(
           <StaticRouter location={req.url} context={context}>
-            {Routes}
+            {clientModules.router}
           </StaticRouter>
         )}
       </ApolloProvider>
@@ -120,7 +117,8 @@ const renderServerSide = async (req: any, res: any) => {
       css: sheet.getStyleElement().map((el, idx) => (el ? React.cloneElement(el, { key: idx }) : el)),
       helmet: Helmet.renderStatic(), // Avoid memory leak while tracking mounted instances
       state: { ...client.cache.extract() },
-      clientModules
+      clientModules,
+      styles
     };
 
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(<Html {...htmlProps} />)}`);
@@ -131,7 +129,10 @@ const renderServerSide = async (req: any, res: any) => {
 export default async (req: any, res: any, next: (e?: Error) => void) => {
   try {
     if (req.path.indexOf('.') < 0 && __SSR__) {
-      return await renderServerSide(req, res);
+      const clientModules = require('../../../client/src/modules').default;
+      const createReduxStore = require('../../../common/createReduxStore').default;
+      const { styles } = require('../../../client/src/modules/common/components/web');
+      return await renderServerSide(req, res, clientModules, createReduxStore, styles);
     } else if (!__SSR__ && req.method === 'GET') {
       res.sendFile(path.resolve(__FRONTEND_BUILD_DIR__, 'index.html'));
     } else {

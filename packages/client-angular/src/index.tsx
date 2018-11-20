@@ -12,11 +12,10 @@ import { take } from 'rxjs/operators';
 // tslint:disable-next-line
 import 'backend_reload';
 
-import { client, MainComponent } from './app/Main';
+import { client, MainComponent, metaReducers } from './app/Main';
 import routes from './app/Routes';
 import log from '../../common/log';
 import modules from './modules';
-import { reducers, metaReducers } from '../../common/createReduxStore';
 import { StoreModule, Store } from '@ngrx/store';
 
 @NgModule({
@@ -28,7 +27,7 @@ import { StoreModule, Store } from '@ngrx/store';
     ApolloModule,
     HttpLinkModule,
     RouterModule.forRoot(routes),
-    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreModule.forRoot(modules.reducers, { metaReducers }),
     ...modules.modules
   ],
   providers: []

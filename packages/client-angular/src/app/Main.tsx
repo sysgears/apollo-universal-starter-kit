@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
+import { ActionReducer } from '@ngrx/store';
 
 import createApolloClient from '../../../common/createApolloClient';
 import modules from '../modules';
@@ -17,6 +18,17 @@ const client = createApolloClient({
   connectionParams: modules.connectionParams,
   clientResolvers: modules.resolvers
 });
+
+function stateSetter(reducer: ActionReducer<any>): ActionReducer<any> {
+  return (state: any, action: any) => {
+    if (action.type === 'SET_ROOT_STATE') {
+      return action.payload;
+    }
+    return reducer(state, action);
+  };
+}
+
+const metaReducers: Array<ActionReducer<any, any>> = [stateSetter];
 
 if (module.hot) {
   module.hot.dispose(() => {
@@ -59,4 +71,4 @@ class MainComponent implements OnInit {
   }
 }
 
-export { client, MainComponent };
+export { client, MainComponent, metaReducers };

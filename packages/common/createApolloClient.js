@@ -9,14 +9,13 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import ApolloClient from 'apollo-client';
 import ApolloCacheRouter from 'apollo-cache-router';
 import { hasDirectives } from 'apollo-utilities';
-import LogCache from 'apollo-cache-logger';
 
 import log from './log';
 import settings from '../../settings';
 
 const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, clientResolvers }) => {
-  const netCache = new LogCache(new InMemoryCache(), { logger: msg => console.log(msg) });
-  const localCache = new LogCache(new InMemoryCache(), { logger: msg => console.log(msg) });
+  const netCache = new InMemoryCache();
+  const localCache = new InMemoryCache();
   let cache;
   cache = ApolloCacheRouter.override(
     ApolloCacheRouter.route([netCache, localCache], document => {

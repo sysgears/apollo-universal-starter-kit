@@ -84,7 +84,7 @@ const renderServerSide = async (req: any, res: any, clientModules: any, createRe
     clientResolvers: clientModules.resolvers,
     connectionParams: null
   });
-  const store = createReduxStore({}, client);
+  const store = createReduxStore(clientModules.reducers, {}, client);
   const context: any = {};
   const App = clientModules.getWrappedRoot(
     <Provider store={store}>

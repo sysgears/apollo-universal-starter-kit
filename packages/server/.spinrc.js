@@ -19,21 +19,9 @@ const config = {
     }
   },
   options: {
-    stack: [
-      'apollo',
-      'react',
-      'styled-components',
-      'css',
-      'sass',
-      'less',
-      'es6',
-      'js',
-      'ts',
-      'webpack',
-      'i18next'
-    ],
+    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'js', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
-    ssr: false,
+    ssr: true,
     webpackDll: true,
     reactHotLoader: false,
     persistGraphQL: false,
@@ -51,8 +39,7 @@ config.options.devProxy = config.options.ssr;
 
 if (process.env.NODE_ENV === 'production') {
   config.options.defines.__SERVER_PORT__ = 8080;
-  config.options.defines.__WEBSITE_URL__ =
-    '"https://apollo-universal-starter-kit.herokuapp.com"';
+  config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
   // Generating source maps for production will slowdown compilation for roughly 25%
   config.options.sourceMap = false;
 }

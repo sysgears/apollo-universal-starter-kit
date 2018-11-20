@@ -1,18 +1,19 @@
-import { ActionReducerMap, ActionReducer } from '@ngrx/store';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { routerReducer } from 'react-router-redux';
+import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
-import modules from '../client/src/modules';
+export const getStoreReducer = (reducers: any) =>
+  combineReducers({
+    router: routerReducer,
+    ...reducers
+  });
 
-export const reducers: ActionReducerMap<any> = {
-  ...modules.reducers
+const createReduxStore = (reducers: any, initialState: any, client: any, routerMiddleware: any) => {
+  return createStore(
+    getStoreReducer(reducers),
+    initialState, // initial state
+    routerMiddleware ? composeWithDevTools(applyMiddleware(routerMiddleware)) : undefined
+  );
 };
 
-function stateSetter(reducer: ActionReducer<any>): ActionReducer<any> {
-  return (state: any, action: any) => {
-    if (action.type === 'SET_ROOT_STATE') {
-      return action.payload;
-    }
-    return reducer(state, action);
-  };
-}
-
-export const metaReducers: Array<ActionReducer<any, any>> = [stateSetter];
+export default createReduxStore;

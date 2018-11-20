@@ -1,4 +1,4 @@
-package modules.mail
+package modules.mail.service
 
 import scala.concurrent.Future
 

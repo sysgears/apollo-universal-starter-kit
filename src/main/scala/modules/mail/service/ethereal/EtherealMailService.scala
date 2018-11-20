@@ -6,7 +6,8 @@ import com.github.jurajburian.mailer.{Mailer, Message}
 import common.ActorMessageDelivering
 import javax.inject.{Inject, Named}
 import modules.mail.actor.MailActor
-import modules.mail.models.{MailPayload, SendMail}
+import modules.mail.actor.MailActor.SendMail
+import modules.mail.models.MailPayload
 import modules.mail.service.MailService
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -1,10 +1,20 @@
 package modules.mail.actor
 
 import akka.actor.{Actor, ActorLogging}
+import com.github.jurajburian.mailer.{Mailer, Message}
+import common.ActorNamed
 import modules.common.FieldError
-import modules.mail.models.{MailPayload, SendMail}
+import modules.mail.actor.MailActor.SendMail
+import modules.mail.models.MailPayload
 
 import scala.util.{Failure, Success, Try}
+
+object MailActor extends ActorNamed {
+
+  case class SendMail(message: Message, mailer: Mailer)
+
+  final val name = "MailActor"
+}
 
 class MailActor extends Actor with ActorLogging {
 
@@ -21,8 +31,4 @@ class MailActor extends Actor with ActorLogging {
 
     case _ => log.warning("Received unknown message")
   }
-}
-
-object MailActor {
-  final val name = "MailActor"
 }

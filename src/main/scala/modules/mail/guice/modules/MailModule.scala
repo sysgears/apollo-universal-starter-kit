@@ -1,26 +1,37 @@
 package modules.mail.guice.modules
 
+import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.github.jurajburian.mailer.{Mailer, SessionFactory, SmtpAddress, SmtpStartTls}
-import com.google.inject.{Inject, Provides, Singleton}
+import com.google.inject.name.{Named, Names}
+import com.google.inject.{Provides, Singleton}
 import com.typesafe.config.Config
+import core.guice.injection.GuiceActorRefProvider
+import modules.mail.actor.MailActor
 import net.codingwell.scalaguice.ScalaModule
 
-class MailModule @Inject()(config: Config) extends ScalaModule {
+class MailModule extends ScalaModule with GuiceActorRefProvider {
 
-  val service: String = config.getString("email.service")
+  override def configure(): Unit = {
+    bind[Actor].annotatedWith(Names.named(MailActor.name)).to[MailActor]
+  }
+
+  @Provides
+  @Named(MailActor.name)
+  def actor(actorSystem: ActorSystem): ActorRef = provideActorRef(actorSystem, MailActor.name)
 
   @Provides
   @Singleton
-  def provideMailer: Mailer = {
+  @Named("ethereal")
+  def provideMailer(config: Config): Mailer = {
     val session = (
       SmtpAddress(
-        config.getString(s"email.$service.host"),
-        config.getInt(s"email.$service.port")
+        config.getString(s"email.ethereal.host"),
+        config.getInt(s"email.ethereal.port")
       )
         :: SmtpStartTls()
         :: SessionFactory()).session(
       Some(
-        config.getString(s"email.$service.user") -> config.getString(s"email.$service.password")
+        config.getString(s"email.ethereal.user") -> config.getString(s"email.ethereal.password")
       )
     )
     Mailer(session)

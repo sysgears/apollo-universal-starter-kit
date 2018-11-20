@@ -1,19 +1,18 @@
-package modules.mail
+package modules.mail.actor
 
 import akka.actor.{Actor, ActorLogging}
-import com.github.jurajburian.mailer.Mailer
-import com.google.inject.Inject
 import modules.common.FieldError
+import modules.mail.models.{MailPayload, SendMail}
 
 import scala.util.{Failure, Success, Try}
 
-class MailActor @Inject()(mailer: Mailer) extends Actor with ActorLogging {
+class MailActor extends Actor with ActorLogging {
 
   def receive: Receive = {
     case sendMail: SendMail =>
       log.info(s"Received message: [ $sendMail ]")
       val payload = Try {
-        mailer.send(sendMail.message)
+        sendMail.mailer.send(sendMail.message)
       } match {
         case Success(_) => MailPayload()
         case Failure(exception) => MailPayload(Some(List(FieldError("", exception.getMessage))))

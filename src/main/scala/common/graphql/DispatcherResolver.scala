@@ -10,7 +10,7 @@ import core.guice.injection.GuiceActorRefProvider
 
 import scala.concurrent.Future
 
-object ResolverHelper extends ActorMessageDelivering
+object DispatcherResolver extends ActorMessageDelivering
   with GuiceActorRefProvider {
 
   def resolveWithDispatcher[T](input: Any,

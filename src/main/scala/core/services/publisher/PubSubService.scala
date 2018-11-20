@@ -4,7 +4,7 @@ import akka.NotUsed
 import akka.stream.scaladsl.Source
 import sangria.schema.Action
 
-trait PublishSubscribeService[T] {
+trait PubSubService[T] {
 
   def publish(event: T)
 

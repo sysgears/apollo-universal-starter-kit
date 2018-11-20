@@ -3,7 +3,7 @@ package common.actors
 import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.pattern._
 import akka.stream.ActorMaterializer
-import common.ListUtil._
+import common.RichList._
 import common.actors.Dispatcher.{DispatcherMessage, Failure, InterceptorBeforeMessage, Success}
 import common.{ActorMessageDelivering, Named}
 import core.graphql.UserContext

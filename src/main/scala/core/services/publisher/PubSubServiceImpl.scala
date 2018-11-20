@@ -10,7 +10,8 @@ import monix.reactive.subjects.ConcurrentSubject
 import sangria.schema.Action
 
 @Singleton
-class PublishSubscribeServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends PublishSubscribeService[T] with Logger {
+class PubSubServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends PubSubService[T]
+  with Logger {
 
   lazy val source: ConcurrentSubject[T, T] = ConcurrentSubject.publish[T](OverflowStrategy.DropOld(16))
 

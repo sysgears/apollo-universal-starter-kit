@@ -8,7 +8,7 @@ import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{FileIO, Keep, Sink, Source}
 import com.google.inject.name.Named
 import common.errors._
-import common.{ActorUtil, Logger}
+import common.{ActorMessageDelivering, Logger}
 import javax.inject.Inject
 import modules.upload.actors.FileActor
 import modules.upload.actors.FileActor.SaveFileMetadata
@@ -26,7 +26,7 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
                                       (implicit executionContext: ExecutionContext,
                                        materializer: ActorMaterializer) extends FileUploadResolver
   with Logger
-  with ActorUtil {
+  with ActorMessageDelivering {
 
   override def uploadFiles(parts: Source[FormData.BodyPart, Any]): Future[Boolean] = {
     parts.filter(_.filename.nonEmpty).mapAsync(1) {
@@ -47,7 +47,7 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
       }
     }.mapAsync(1) {
       fileMetadata =>
-        sendMessageToActor[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))
+        sendMessageWithFunc[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))
     }.toMat(Sink.ignore)(Keep.right).run.map(_ => true)
   }.recover {
     case error: Error =>

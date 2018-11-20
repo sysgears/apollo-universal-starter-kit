@@ -6,11 +6,12 @@ import common.ActorUtil
 import javax.inject.Inject
 import javax.mail.internet.InternetAddress
 import modules.contact.models.{Contact, ContactPayload}
-import modules.mail.service.ethereal.EtherealMailService
+import modules.mail.models.MailPayload
+import modules.mail.service.MailService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactResolverImpl @Inject()(mailService: EtherealMailService,
+class ContactResolverImpl @Inject()(mailService: MailService[Message, MailPayload],
                                     config: Config)
                                    (implicit executionContext: ExecutionContext) extends ContactResolver
   with ActorUtil {

@@ -18,5 +18,5 @@ class EtherealMailService @Inject()(@Named(MailActor.name) mailActor: ActorRef,
                                     materializer: ActorMaterializer) extends MailService[Message, MailPayload]
   with ActorMessageDelivering {
 
-  def sent(message: Message): Future[MailPayload] = sendMessageToActor(mailActor, SendMail(message, mailer))
+  override def send(message: Message): Future[MailPayload] = sendMessageToActor(mailActor, SendMail(message, mailer))
 }

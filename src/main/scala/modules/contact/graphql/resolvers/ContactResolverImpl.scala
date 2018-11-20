@@ -15,7 +15,7 @@ class ContactResolverImpl @Inject()(mailService: MailService[Message, MailPayloa
                                    (implicit executionContext: ExecutionContext) extends ContactResolver {
 
   override def sendMail(contact: Contact): Future[ContactPayload] =
-    mailService.sent(
+    mailService.send(
       Message(
         subject = "New email through contact us page",
         content = Content().html(s"<p>${contact.name} is sending the following message.</p><p>${contact.content}</p>"),

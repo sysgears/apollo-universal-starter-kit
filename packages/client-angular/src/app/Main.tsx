@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { ActionReducer } from '@ngrx/store';
+import { ActionReducer, MetaReducer } from '@ngrx/store';
 
 import createApolloClient from '../../../common/createApolloClient';
 import modules from '../modules';
@@ -28,7 +28,7 @@ function stateSetter(reducer: ActionReducer<any>): ActionReducer<any> {
   };
 }
 
-const metaReducers: Array<ActionReducer<any, any>> = [stateSetter];
+const metaReducers: Array<MetaReducer<any, any>> = [stateSetter];
 
 if (module.hot) {
   module.hot.dispose(() => {

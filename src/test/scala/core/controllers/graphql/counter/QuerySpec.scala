@@ -85,6 +85,8 @@ class QuerySpec extends TestHelper {
       }
     }
   }
+
+  override def clean(): Unit = {}
 }
 
 object CounterJsonReader extends JsonReader[Counter] with DefaultJsonProtocol {

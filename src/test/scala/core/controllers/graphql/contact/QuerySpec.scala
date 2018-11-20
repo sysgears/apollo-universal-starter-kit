@@ -41,6 +41,8 @@ class QuerySpec extends TestHelper {
       }
     }
   }
+
+  override def clean(): Unit = {}
 }
 
 object ContactPayloadJsonReader extends JsonReader[ContactPayload] with DefaultJsonProtocol {

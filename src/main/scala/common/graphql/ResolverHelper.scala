@@ -2,7 +2,7 @@ package common.graphql
 
 import akka.actor.{ActorRef, ActorSystem}
 import akka.stream.ActorMaterializer
-import common.ActorUtil
+import common.ActorMessageDelivering
 import common.actors.Dispatcher
 import common.actors.Dispatcher.DispatcherMessage
 import core.graphql.UserContext
@@ -10,7 +10,7 @@ import core.guice.injection.GuiceActorRefProvider
 
 import scala.concurrent.Future
 
-object ResolverHelper extends ActorUtil
+object ResolverHelper extends ActorMessageDelivering
   with GuiceActorRefProvider {
 
   def resolveWithDispatcher[T](input: Any,

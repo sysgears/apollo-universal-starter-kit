@@ -5,7 +5,7 @@ import akka.pattern._
 import akka.stream.ActorMaterializer
 import common.ListUtil._
 import common.actors.Dispatcher.{DispatcherMessage, Failure, InterceptorBeforeMessage, Success}
-import common.{ActorUtil, Named}
+import common.{ActorMessageDelivering, Named}
 import core.graphql.UserContext
 import javax.inject.Inject
 
@@ -46,7 +46,7 @@ object Dispatcher extends Named {
 class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
                            executionContext: ExecutionContext) extends Actor
   with ActorLogging
-  with ActorUtil {
+  with ActorMessageDelivering {
 
   override def receive: Receive = {
     case msg: DispatcherMessage =>

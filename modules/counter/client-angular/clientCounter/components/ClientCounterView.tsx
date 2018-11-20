@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { Apollo, Query } from 'apollo-angular';
 import { map } from 'rxjs/operators';
 
-import COUNTER_QUERY_CLIENT from '../graphql/CounterQuery.client.graphql';
-import ADD_COUNTER_CLIENT from '../graphql/AddCounter.client.graphql';
+import { COUNTER_QUERY_CLIENT, ADD_COUNTER_CLIENT } from '@module/counter-common';
 
 @Component({
   selector: 'client-counter-button',

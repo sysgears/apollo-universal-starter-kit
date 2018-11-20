@@ -3,9 +3,7 @@ import { Apollo, Query, QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
-import ADD_COUNTER from '../graphql/AddCounter.graphql';
-import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
+import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@module/counter-common';
 
 @Component({
   selector: 'server-counter-button',

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import resolvers from './resolvers';
+import { resolvers } from '@module/counter-common';
 import CounterModule from '../CounterModule';
 import { ClientCounterButtonComponent, ClientCounterViewComponent } from './components/ClientCounterView';
 

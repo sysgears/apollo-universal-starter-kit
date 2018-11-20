@@ -3,13 +3,11 @@ package modules.mail
 import akka.actor.{Actor, ActorLogging}
 import com.github.jurajburian.mailer.Mailer
 import com.google.inject.Inject
-import com.typesafe.config.Config
 import modules.common.FieldError
 
 import scala.util.{Failure, Success, Try}
 
-class MailActor @Inject()(mailer: Mailer,
-                          config: Config) extends Actor with ActorLogging {
+class MailActor @Inject()(mailer: Mailer) extends Actor with ActorLogging {
 
   def receive: Receive = {
     case sendMail: SendMail =>

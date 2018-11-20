@@ -2,7 +2,7 @@ package common.graphql
 
 import akka.actor.{ActorRef, ActorSystem}
 import akka.stream.ActorMaterializer
-import common.ActorMessageDelivering
+import common.{ActorMessageDelivering, ActorNamed}
 import common.actors.Dispatcher
 import common.actors.Dispatcher.DispatcherMessage
 import core.graphql.UserContext
@@ -15,7 +15,7 @@ object DispatcherResolver extends ActorMessageDelivering
 
   def resolveWithDispatcher[T](input: Any,
                                userContext: UserContext,
-                               resolverActor: String,
+                               namedResolverActor: ActorNamed,
                                onException: Exception => Any,
                                before: List[ActorRef] = Nil,
                                after: List[ActorRef] = Nil)
@@ -24,11 +24,11 @@ object DispatcherResolver extends ActorMessageDelivering
 
     sendMessageWithFunc[T] {
       replyTo =>
-        provideActorRef(Dispatcher.name) ! DispatcherMessage(
+        provideActorRef(Dispatcher) ! DispatcherMessage(
           input,
           userContext,
           replyTo,
-          provideActorRef(resolverActor),
+          provideActorRef(namedResolverActor),
           onException,
           before,
           after

@@ -7,6 +7,7 @@ import akka.stream.scaladsl.Source
 import common.Logger
 import common.graphql.DispatcherResolver._
 import core.graphql.{GraphQLSchema, UserContext}
+import core.guice.injection.GuiceActorRefProvider
 import core.services.publisher.PubSubService
 import javax.inject.Inject
 import modules.counter.graphql.resolvers.CounterResolver
@@ -37,7 +38,7 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
         input = GetAmount,
         userContext = sc.ctx,
         onException = _ => Counter(amount = 0),
-        resolverActor = CounterResolver.name
+        namedResolverActor = CounterResolver
       )
     )
   )
@@ -53,7 +54,7 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
           input = amount,
           userContext = sc.ctx,
           onException = _ => Counter(amount = 0),
-          resolverActor = CounterResolver.name
+          namedResolverActor = CounterResolver
         ).pub
       }
     )

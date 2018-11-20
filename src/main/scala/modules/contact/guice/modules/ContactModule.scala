@@ -15,7 +15,5 @@ class ContactModule extends ScalaModule with GuiceActorRefProvider {
 
   @Provides
   @Named(ContactActor.name)
-  def actor(implicit actorSystem: ActorSystem): ActorRef = {
-    provideActorRef(ContactActor.name)
-  }
+  def actor(implicit actorSystem: ActorSystem): ActorRef = provideActorRef(ContactActor)
 }

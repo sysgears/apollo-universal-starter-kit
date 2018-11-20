@@ -17,7 +17,7 @@ class MailModule extends ScalaModule with GuiceActorRefProvider {
 
   @Provides
   @Named(MailActor.name)
-  def actor(actorSystem: ActorSystem): ActorRef = provideActorRef(actorSystem, MailActor.name)
+  def actor(actorSystem: ActorSystem): ActorRef = provideActorRef(MailActor.name)(actorSystem)
 
   @Provides
   @Singleton

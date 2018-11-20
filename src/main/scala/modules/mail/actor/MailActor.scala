@@ -17,7 +17,7 @@ class MailActor extends Actor with ActorLogging {
         case Success(_) => MailPayload()
         case Failure(exception) => MailPayload(Some(List(FieldError("", exception.getMessage))))
       }
-      sendMail.actor ! payload
+      sender ! payload
 
     case _ => log.warning("Received unknown message")
   }

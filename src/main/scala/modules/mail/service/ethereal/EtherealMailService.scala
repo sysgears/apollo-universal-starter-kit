@@ -3,7 +3,7 @@ package modules.mail.service.ethereal
 import akka.actor.ActorRef
 import akka.stream.ActorMaterializer
 import com.github.jurajburian.mailer.{Mailer, Message}
-import common.ActorUtil
+import common.ActorMessageDelivering
 import javax.inject.{Inject, Named}
 import modules.mail.actor.MailActor
 import modules.mail.models.{MailPayload, SendMail}
@@ -15,9 +15,7 @@ class EtherealMailService @Inject()(@Named(MailActor.name) mailActor: ActorRef,
                                     @Named("ethereal") mailer: Mailer)
                                    (implicit executionContext: ExecutionContext,
                                     materializer: ActorMaterializer) extends MailService[Message, MailPayload]
-  with ActorUtil {
+  with ActorMessageDelivering {
 
-  def sent(message: Message): Future[MailPayload] = {
-    sendMessageToActor[MailPayload](actorRef => mailActor ! SendMail(message, mailer, actorRef))
-  }
+  def sent(message: Message): Future[MailPayload] = sendMessageToActor(mailActor, SendMail(message, mailer))
 }

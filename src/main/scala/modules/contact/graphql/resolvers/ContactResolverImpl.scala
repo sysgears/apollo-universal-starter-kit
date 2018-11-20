@@ -2,7 +2,6 @@ package modules.contact.graphql.resolvers
 
 import com.github.jurajburian.mailer.{Content, Message}
 import com.typesafe.config.Config
-import common.ActorUtil
 import javax.inject.Inject
 import javax.mail.internet.InternetAddress
 import modules.contact.models.{Contact, ContactPayload}
@@ -13,8 +12,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ContactResolverImpl @Inject()(mailService: MailService[Message, MailPayload],
                                     config: Config)
-                                   (implicit executionContext: ExecutionContext) extends ContactResolver
-  with ActorUtil {
+                                   (implicit executionContext: ExecutionContext) extends ContactResolver {
 
   override def sendMail(contact: Contact): Future[ContactPayload] =
     mailService.sent(

@@ -47,7 +47,9 @@ libraryDependencies ++= Seq(
   
   "commons-io" % "commons-io" % "2.6",
   
-  "org.mindrot" % "jbcrypt" % "0.3m"
+  "org.mindrot" % "jbcrypt" % "0.3m",
+
+  "com.byteslounge" %% "slick-repo" % "1.5.2"
 )
 
 parallelExecution in test := false

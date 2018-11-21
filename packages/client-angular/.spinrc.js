@@ -3,7 +3,7 @@ const url = require('url');
 const config = {
   builders: {
     web: {
-      entry: './src/index.tsx',
+      entry: './src/index.ts',
       stack: ['web'],
       openBrowser: true,
       dllExcludes: ['bootstrap'],
@@ -23,19 +23,7 @@ const config = {
     }
   },
   options: {
-    stack: [
-      'apollo',
-      'react',
-      'styled-components',
-      'css',
-      'sass',
-      'less',
-      'es6',
-      'ts',
-      'webpack',
-      'i18next',
-      'angular'
-    ],
+    stack: ['apollo', 'css', 'sass', 'less', 'ts', 'webpack', 'i18next', 'angular'],
     cache: '../../.cache',
     ssr: false,
     webpackDll: true,

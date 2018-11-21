@@ -23,6 +23,7 @@ interface AddMessageParams {
   userId: number;
   uuid: string;
   quotedId: number;
+  attachment?: UploadedFile;
 }
 
 export default class ChatDAO {
@@ -102,13 +103,7 @@ export default class ChatDAO {
     return returnId(knex('message')).insert({ text, user_id, uuid, quoted_id });
   }
 
-  public addMessageWithAttachment({
-    text,
-    userId: user_id,
-    uuid,
-    quotedId: quoted_id,
-    attachment
-  }: AddMessageParams & { attachment: UploadedFile }) {
+  public addMessageWithAttachment({ text, userId: user_id, uuid, quotedId: quoted_id, attachment }: AddMessageParams) {
     return knex.transaction(trx => {
       knex('message')
         .transacting(trx)

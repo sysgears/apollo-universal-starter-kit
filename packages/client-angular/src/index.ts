@@ -55,11 +55,8 @@ class MainModule {
   }
 
   public hmrOnDestroy(store: any) {
-    const cmpLocation = this.appRef.components.map(cmp => cmp.location.nativeElement);
-    store.disposeOldHosts = createNewHosts(cmpLocation);
-    let currentStore: any;
-    this.appStore.pipe(take(1)).subscribe(state => (currentStore = state));
-    store.state = { ...currentStore };
+    store.disposeOldHosts = createNewHosts(this.appRef.components.map(cmp => cmp.location.nativeElement));
+    this.appStore.pipe(take(1)).subscribe(state => (store.state = state));
     // save input values
     store.restoreInputValues = createInputTransfer();
     // remove styles

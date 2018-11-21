@@ -1,19 +1,24 @@
 {
-  "extends": ["tslint:latest", "tslint-plugin-prettier", "tslint-config-prettier"],
+  "extends": [
+    "tslint:latest",
+    "tslint-plugin-prettier",
+    "tslint-config-prettier"
+  ],
   "cliOptions": {
-    "exclude": ["node_modules", "dist", "lib"]
+    "exclude": [
+      "node_modules",
+      "dist",
+      "lib"
+    ]
   },
   "linterOptions": {
     "exclude": ["**/*.js", "**/*.jsx", "**/*.d.ts", "tools/**/*.*"]
   },
   "rules": {
-    "prettier": [
-      true,
-      {
-        "printWidth": 120,
-        "singleQuote": true
-      }
-    ],
+    "prettier": [true, {
+      "printWidth": 120,
+      "singleQuote": true
+    }],
     "max-classes-per-file": false,
     "ban": false,
     "class-name": true,

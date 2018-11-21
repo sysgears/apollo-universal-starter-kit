@@ -16,8 +16,7 @@ import settings from '../../settings';
 const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, clientResolvers }) => {
   const netCache = new InMemoryCache();
   const localCache = new InMemoryCache();
-  let cache;
-  cache = ApolloCacheRouter.override(
+  const cache = ApolloCacheRouter.override(
     ApolloCacheRouter.route([netCache, localCache], document => {
       const operationName = getOperationAST(document).name;
       if (hasDirectives(['client'], document) || (operationName && operationName.value === 'GeneratedClientQuery')) {

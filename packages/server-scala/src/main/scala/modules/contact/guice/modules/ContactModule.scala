@@ -1,19 +1,15 @@
 package modules.contact.guice.modules
 
-import akka.actor.{Actor, ActorRef, ActorSystem}
-import com.google.inject.Provides
-import com.google.inject.name.{Named, Names}
-import core.guice.injection.GuiceActorRefProvider
-import modules.contact.actor.ContactActor
+import com.github.jurajburian.mailer.Message
+import modules.contact.graphql.resolvers.{ContactResolver, ContactResolverImpl}
+import modules.mail.models.MailPayload
+import modules.mail.service.MailService
+import modules.mail.service.ethereal.EtherealMailService
 import net.codingwell.scalaguice.ScalaModule
 
-class ContactModule extends ScalaModule with GuiceActorRefProvider {
-
+class ContactModule extends ScalaModule {
   override def configure(): Unit = {
-    bind[Actor].annotatedWith(Names.named(ContactActor.name)).to[ContactActor]
+    bind[ContactResolver].to[ContactResolverImpl]
+    bind[MailService[Message, MailPayload]].to[EtherealMailService]
   }
-
-  @Provides
-  @Named(ContactActor.name)
-  def actor(implicit actorSystem: ActorSystem): ActorRef = provideActorRef(ContactActor)
 }

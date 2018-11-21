@@ -1,21 +1,26 @@
 package modules.contact.graphql.resolvers
 
-import akka.actor.ActorRef
-import akka.stream.ActorMaterializer
-import common.ActorMessageDelivering
-import javax.inject.{Inject, Named}
-import modules.contact.actor.ContactActor
-import modules.contact.actor.ContactActor.SendMail
+import com.github.jurajburian.mailer.{Content, Message}
+import com.typesafe.config.Config
+import javax.inject.Inject
+import javax.mail.internet.InternetAddress
 import modules.contact.models.{Contact, ContactPayload}
+import modules.mail.models.MailPayload
+import modules.mail.service.MailService
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactResolverImpl @Inject()(@Named(ContactActor.name) contactActor: ActorRef)
-                                   (implicit executionContext: ExecutionContext,
-                                    materializer: ActorMaterializer) extends ContactResolver
-  with ActorMessageDelivering {
+class ContactResolverImpl @Inject()(mailService: MailService[Message, MailPayload],
+                                    config: Config)
+                                   (implicit executionContext: ExecutionContext) extends ContactResolver {
 
-  override def sendMail(contact: Contact): Future[ContactPayload] = {
-    sendMessageWithFunc[ContactPayload](actorRef => contactActor ! SendMail(contact, actorRef))
-  }
+  override def sendMail(contact: Contact): Future[ContactPayload] =
+    mailService.send(
+      Message(
+        subject = "New email through contact us page",
+        content = Content().html(s"<p>${contact.name} is sending the following message.</p><p>${contact.content}</p>"),
+        from = new InternetAddress(contact.email),
+        to = Seq(new InternetAddress(config.getString("email.ethereal.user")))
+      )
+    ).map(mailPayload => ContactPayload(mailPayload.errors))
 }

@@ -18,6 +18,8 @@ Visit [apollokit.org] to learn more about Apollo Universal Starter Kit.
 
 ## Description
 
+![](Technologies.png)
+
 Apollo Universal Starter Kit is an SEO-friendly, fully-configured, modular starter project for developing [Universal
 JavaScript] applications. You can use our kit to create your applications in JavaScript or TypeScript for all major
 platforms &ndash; mobile, web, and server.

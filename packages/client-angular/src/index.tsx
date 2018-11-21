@@ -34,7 +34,7 @@ import { StoreModule, Store } from '@ngrx/store';
 })
 class MainModule {
   constructor(public appRef: ApplicationRef, apollo: Apollo, private appStore: Store<any>) {
-    apollo.create(client);
+    apollo.setClient(client);
   }
 
   public hmrOnInit(store: any) {

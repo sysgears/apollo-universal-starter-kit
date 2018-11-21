@@ -29,42 +29,41 @@ const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
                 {t('users.btn.add')}
               </Button>
             </View>
-            {(users &&
-              users.length && (
-                <List>
-                  {users.map(({ username, email, isActive, role, id }, idx) => (
-                    <ListItem style={styles.listItem} key={idx} onPress={() => navigation.navigate('UserEdit', { id })}>
-                      <Card style={styles.cardItem}>
-                        <CardItem>
-                          <View style={styles.cardItem}>
-                            <CardItem style={styles.cardItemWrapper}>
-                              <CardLabel>{`${t('users.column.name')}: `}</CardLabel>
-                              <CardText>{username}</CardText>
-                            </CardItem>
-                            <CardItem style={styles.cardItemWrapper}>
-                              <CardLabel>{`${t('users.column.email')}: `}</CardLabel>
-                              <CardText>{email}</CardText>
-                            </CardItem>
-                            <CardItem style={styles.cardItemWrapper}>
-                              <CardLabel>{`${t('users.column.role')}: `}</CardLabel>
-                              <CardText>{role}</CardText>
-                            </CardItem>
-                            <CardItem style={styles.cardItemWrapper}>
-                              <CardLabel>{`${t('users.column.active')}: `}</CardLabel>
-                              <CardText>{String(isActive)}</CardText>
-                            </CardItem>
-                          </View>
-                          <View style={styles.buttonContainer}>
-                            <TouchableOpacity style={styles.iconWrapper} onPress={() => deleteUser(id)}>
-                              <FontAwesome name="trash" size={25} style={{ color: '#de5251' }} />
-                            </TouchableOpacity>
-                          </View>
-                        </CardItem>
-                      </Card>
-                    </ListItem>
-                  ))}
-                </List>
-              )) || (
+            {(users && users.length && (
+              <List>
+                {users.map(({ username, email, isActive, role, id }, idx) => (
+                  <ListItem style={styles.listItem} key={idx} onPress={() => navigation.navigate('UserEdit', { id })}>
+                    <Card style={styles.cardItem}>
+                      <CardItem>
+                        <View style={styles.cardItem}>
+                          <CardItem style={styles.cardItemWrapper}>
+                            <CardLabel>{`${t('users.column.name')}: `}</CardLabel>
+                            <CardText>{username}</CardText>
+                          </CardItem>
+                          <CardItem style={styles.cardItemWrapper}>
+                            <CardLabel>{`${t('users.column.email')}: `}</CardLabel>
+                            <CardText>{email}</CardText>
+                          </CardItem>
+                          <CardItem style={styles.cardItemWrapper}>
+                            <CardLabel>{`${t('users.column.role')}: `}</CardLabel>
+                            <CardText>{role}</CardText>
+                          </CardItem>
+                          <CardItem style={styles.cardItemWrapper}>
+                            <CardLabel>{`${t('users.column.active')}: `}</CardLabel>
+                            <CardText>{String(isActive)}</CardText>
+                          </CardItem>
+                        </View>
+                        <View style={styles.buttonContainer}>
+                          <TouchableOpacity style={styles.iconWrapper} onPress={() => deleteUser(id)}>
+                            <FontAwesome name="trash" size={25} style={{ color: '#de5251' }} />
+                          </TouchableOpacity>
+                        </View>
+                      </CardItem>
+                    </Card>
+                  </ListItem>
+                ))}
+              </List>
+            )) || (
               <View style={styles.notificationContainer}>
                 <Text style={styles.notificationText}>Users not found</Text>
               </View>

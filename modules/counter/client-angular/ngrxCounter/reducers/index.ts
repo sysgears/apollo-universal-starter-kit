@@ -19,7 +19,7 @@ const defaultState: CounterState = {
 export function reducer(state = defaultState, action: CounterActions) {
   switch (action.type) {
     case COUNTER_INCREMENT:
-      return { ngrxCount: ++state.ngrxCount };
+      return { ngrxCount: state.ngrxCount + 1 };
 
     default:
       return state;

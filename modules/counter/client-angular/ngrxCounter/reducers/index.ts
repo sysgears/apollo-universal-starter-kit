@@ -9,17 +9,17 @@ export class CounterIncrement implements Action {
 export type CounterActions = CounterIncrement;
 
 export interface CounterState {
-  reduxCount: number;
+  ngrxCount: number;
 }
 
 const defaultState: CounterState = {
-  reduxCount: 1
+  ngrxCount: 1
 };
 
 export function reducer(state = defaultState, action: CounterActions) {
   switch (action.type) {
     case COUNTER_INCREMENT:
-      return { reduxCount: ++state.reduxCount };
+      return { ngrxCount: ++state.ngrxCount };
 
     default:
       return state;

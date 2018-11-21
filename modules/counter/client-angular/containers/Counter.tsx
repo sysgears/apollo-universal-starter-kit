@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   template: `
     <div>
       <client-counter></client-counter>
-      <redux-counter></redux-counter>
+      <ngrx-counter></ngrx-counter>
       <server-counter></server-counter>
     </div>
   `

@@ -144,7 +144,7 @@ export default compose(
     options: () => {
       return {
         variables: { limit: limit, after: 0 },
-        fetchPolicy: 'cache-and-network'
+        fetchPolicy: 'network-only'
       };
     },
     props: ({ data }) => {

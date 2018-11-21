@@ -92,7 +92,6 @@
   "devDependencies": {
     "@alienfast/i18next-loader": "^1.0.16",
     "@types/chai": "^4.1.4",
-    "@types/lodash": "^4.14.112",
     "@types/mocha": "^5.2.5",
     "@types/webpack-env": "^1.13.6",
     "apollo-utilities": "^1.0.3",
@@ -100,7 +99,6 @@
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
-    "dom-testing-library": "^2.3.0",
     "eslint": "^4.13.1",
     "graphql-tools": "^2.13.0",
     "jsdom": "^11.5.1",

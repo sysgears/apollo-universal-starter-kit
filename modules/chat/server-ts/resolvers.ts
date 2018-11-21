@@ -84,8 +84,7 @@ export default (pubsub: PubSub) => ({
       pubsub.publish(MESSAGES_SUBSCRIPTION, { messagesUpdated: { mutation: 'CREATED', id, node: message } });
       return message;
     },
-    async deleteMessage(obj: any, { id }: Identifier, context: ChatContext) {
-      const { Chat, req } = context;
+    async deleteMessage(obj: any, { id }: Identifier, { Chat, req }: ChatContext) {
       const { t } = req;
       const fileSystemStorage: FileSystemStorage = modules.data.fileSystemStorage;
       const message = await Chat.message(id);

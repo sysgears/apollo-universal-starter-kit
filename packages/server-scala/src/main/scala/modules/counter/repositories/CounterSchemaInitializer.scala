@@ -2,6 +2,7 @@ package modules.counter.repositories
 
 import core.slick.{SchemaInitializer, SchemaUtil}
 import javax.inject.Inject
+import modules.counter.models.CounterTable.CounterTable
 import modules.counter.models.{Counter, CounterTable}
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery

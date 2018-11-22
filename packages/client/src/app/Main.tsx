@@ -7,7 +7,7 @@ import ReactGA from 'react-ga';
 
 import RedBox from './RedBox';
 import createApolloClient from '../../../common/createApolloClient';
-import createReduxStore, { getStoreReducer } from '../../../common/createReduxStore';
+import createReduxStore, { storeReducer } from '../../../common/createReduxStore';
 import Routes from './Routes';
 import modules from '../modules';
 import log from '../../../common/log';
@@ -38,9 +38,9 @@ history.listen(location => logPageView(location));
 
 if (module.hot && module.hot.data && module.hot.data.store) {
   store = module.hot.data.store;
-  store.replaceReducer(getStoreReducer(modules.reducers));
+  store.replaceReducer(storeReducer);
 } else {
-  store = createReduxStore(modules.reducers, {}, client, routerMiddleware(history));
+  store = createReduxStore({}, client, routerMiddleware(history));
 }
 
 if (module.hot) {

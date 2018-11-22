@@ -33,7 +33,6 @@
   "devDependencies": {
     "@types/i18next-browser-languagedetector": "^2.0.1",
     "@types/react-i18next": "^7.8.3",
-    "@types/react-router-redux": "^5.0.16",
     "chai": "^4.1.2",
     "eslint": "^4.13.1",
     "mocha": "^5.1.1",

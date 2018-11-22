@@ -1,13 +1,14 @@
 package modules.user.graphql.resolvers
 
 import com.google.inject.Inject
+import common.DatabaseExecutor._
 import modules.user.model.{RegisterUserInput, User, UserPayload}
-import modules.user.repositories.UserRepo
+import modules.user.repositories.UserRepository
 import org.mindrot.jbcrypt.BCrypt
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserResolverImpl @Inject()(userRepo: UserRepo)
+class UserResolverImpl @Inject()(userRepository: UserRepository)
                                 (implicit executionContext: ExecutionContext) extends UserResolver {
   override def register(input: RegisterUserInput): Future[UserPayload] = {
 
@@ -17,6 +18,6 @@ class UserResolverImpl @Inject()(userRepo: UserRepo)
       email = input.email,
       password = hashedPassword
     )
-    userRepo.save(user).map(createdUser => UserPayload(Some(createdUser)))
+    userRepository.save(user).run.map(createdUser => UserPayload(Some(createdUser)))
   }
 }

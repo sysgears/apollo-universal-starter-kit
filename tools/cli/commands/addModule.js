@@ -9,15 +9,16 @@ const { copyFiles, renameFiles, computeModulesPath, runPrettier } = require('../
  * @param logger - The Logger.
  * @param templatesPath - The path to the templates for a new module.
  * @param moduleName - The name of a new module.
+ * @param options - User defined options
  * @param location - The location for a new module [client|server|both].
  * @param finished - The flag about the end of the generating process.
  */
-function addModule(logger, templatesPath, moduleName, location, finished = true) {
+function addModule(logger, templatesPath, moduleName, options, location, finished = true) {
   logger.info(`Copying ${location} files…`);
 
   // create new module directory
-  const destinationPath = computeModulesPath(location, moduleName);
-  const newModule = shell.mkdir(destinationPath);
+  const destinationPath = computeModulesPath(location, options, moduleName);
+  const newModule = shell.mkdir('-p', destinationPath);
 
   // continue only if directory does not jet exist
   if (newModule.code !== 0) {
@@ -31,14 +32,15 @@ function addModule(logger, templatesPath, moduleName, location, finished = true)
   logger.info(chalk.green(`✔ The ${location} files have been copied!`));
 
   // get index file path
-  const modulesPath = computeModulesPath(location);
+  const modulesPath = computeModulesPath(location, options);
   const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
   const indexPath = modulesPath + indexFullFileName;
   let indexContent;
 
   try {
     // prepend import module
-    indexContent = `import ${moduleName} from './${moduleName}';\n` + fs.readFileSync(indexPath);
+    const importFrom = options.old ? `./${moduleName}` : `@module/${moduleName}-${location}`;
+    indexContent = `import ${moduleName} from '${importFrom}';\n` + fs.readFileSync(indexPath);
   } catch (e) {
     logger.error(chalk.red(`Failed to read ${indexPath} file`));
     process.exit();

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form as RSForm } from 'reactstrap';
 
-const Form = ({ children, layout, ...props }) => {
+const Form = ({ children, layout = 'horizontal', ...props }) => {
   let inline = false;
   if (layout === 'inline') {
     inline = true;

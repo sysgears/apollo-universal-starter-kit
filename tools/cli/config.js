@@ -6,6 +6,7 @@ const MIGRATIONS_DIR = `${DATABASE_DIR}/migrations`;
 const SEEDS_DIR = `${DATABASE_DIR}/seeds`;
 const TEMPLATES_DIR = `${BASE_PATH}/tools/templates`;
 const MODULE_TEMPLATES = `${TEMPLATES_DIR}/module`;
+const MODULE_TEMPLATES_OLD = `${TEMPLATES_DIR}/module_old`;
 const CRUD_TEMPLATES = `${TEMPLATES_DIR}/crud`;
 
 module.exports = {
@@ -15,5 +16,6 @@ module.exports = {
   SEEDS_DIR,
   TEMPLATES_DIR,
   MODULE_TEMPLATES,
+  MODULE_TEMPLATES_OLD,
   CRUD_TEMPLATES
 };

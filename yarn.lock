@@ -8333,10 +8333,10 @@ formidable@^1.2.0:
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.2.1.tgz#70fb7ca0290ee6ff961090415f4b3df3d2082659"
   integrity sha512-Fs9VRguL0gqGHkXS5GQiMCr1VhZBxz0JnJs4JmMp/2jL18Fmbzvv7vOFRU+U8TBkHEE/CX1qDXzJplVULgsLeg==
 
-formik@^1.0.2:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/formik/-/formik-1.3.0.tgz#0ef20938f40c3b4bd46003c0b069bdd2d5a90118"
-  integrity sha512-vW72DluHwQPmCkkSQGlFRAsuVaNElO/zT71FApr7yFHSEA6qBf1socKWcw0muQDp6fvD/Z6wo2itlQLnggP4UA==
+formik@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/formik/-/formik-1.3.1.tgz#ff2bb4c0144585297cf9a371081326e8d816fe6f"
+  integrity sha512-cOTpwP4vy8bj7HhEGC2IWFFhsztBlZOJoTRgGa64NxcM30rV15ub5nTliQA3Vs8vqWSlGEc6k67SR8YZIV7pew==
   dependencies:
     create-react-context "^0.2.2"
     deepmerge "^2.1.1"
@@ -8353,10 +8353,10 @@ forwarded@~0.1.2:
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
   integrity sha1-mMI9qxF1ZXuMBXPozszZGw/xjIQ=
 
-fractal-objects@^0.9.2:
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/fractal-objects/-/fractal-objects-0.9.2.tgz#6c335179946a842de242fbcd7e2634d929d785a3"
-  integrity sha512-z9ZF8GpMoGSQJxf3sgYqGi/+OMHUJBCGgx+KaaB0pYwYn7U9ddRlr1AV0WuH8wV884pq9H/nmsRAZdsxKH8ctA==
+fractal-objects@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/fractal-objects/-/fractal-objects-0.10.0.tgz#6eec3e09a5caf80066f8496383c9033f90492938"
+  integrity sha512-LZBO0rb1OEfCOMAMWoWlBUDIZhsNLErMMbA00Z9aV5fniw0VXewDyiKm0lz77Mul5KcMofJw6xyccUxUQBrdeA==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
@@ -17205,10 +17205,10 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.169:
-  version "0.4.169"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.169.tgz#6db6338323ef1facefedd5f5e143cd4979534ccb"
-  integrity sha512-5Yj+V67kYF2zij2ytlh9JgzW9VIxyW5nR8VplK5hSakStg1erqjTh6HA4XlMT/QDBa7zwbB9H7xrT4lWGT2LLw==
+spinjs@^0.4.173:
+  version "0.4.173"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.173.tgz#004a363370bdadf59718f8a3bcd54bb610c2816e"
+  integrity sha512-syaWudckn33wDTknZ8lpqEO7XXkGsd+GEdGXZ0P6JJACo4ZaH3DAUEGxrWAFZRY2fJOJDoQ3xJpn8AzvNgd4CQ==
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"
@@ -18567,10 +18567,9 @@ watch@~0.18.0:
     exec-sh "^0.2.0"
     minimist "^1.2.0"
 
-watchpack@^1.5.0:
+watchpack@^1.5.0, "watchpack@https://github.com/Globegitter/watchpack":
   version "1.6.0"
-  resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.6.0.tgz#4bc12c2ebe8aa277a71f1d3f14d685c7b446cd00"
-  integrity sha512-i6dHe3EyLjMmDlU1/bGQpEw25XSjkJULPuAVKCbNRefQVq48yXKUpwg538F7AZTf9kyr57zj++pQFltUa5H7yA==
+  resolved "https://github.com/Globegitter/watchpack#d903e64a910ab068299f824b04a5e216a15672e9"
   dependencies:
     chokidar "^2.0.2"
     graceful-fs "^4.1.2"

@@ -1,0 +1,9 @@
+{
+  "name": "@module/module-common-react",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "fractal-objects": "^0.10.0"
+  }
+}
+

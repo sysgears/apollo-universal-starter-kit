@@ -1,4 +1,4 @@
-const { MODULE_TEMPLATES, CRUD_TEMPLATES } = require('./config');
+const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, CRUD_TEMPLATES } = require('./config');
 
 /**
  * Class CommandInvoker. Takes all CLI operations and calls certain CLI operation depends of variables.
@@ -25,14 +25,14 @@ class CommandInvoker {
    * @param location - The location for a new module [client|server|both].
    * @param args - The function for deleting existing module.
    */
-  static runCommand(func, location, ...args) {
+  static runCommand(func, options, location, ...args) {
     // client
     if (location === 'client' || location === 'both') {
-      func(...args, 'client');
+      func(...args, options, options.old ? 'client' : 'client-react');
     }
     // server
     if (location === 'server' || location === 'both') {
-      func(...args, 'server');
+      func(...args, options, options.old ? 'server' : 'server-ts');
     }
   }
 
@@ -41,7 +41,14 @@ class CommandInvoker {
    */
   runAddModule(args, options, logger) {
     const { moduleName, location = 'both' } = args;
-    CommandInvoker.runCommand(this.addModule, location, logger, MODULE_TEMPLATES, moduleName);
+    CommandInvoker.runCommand(
+      this.addModule,
+      options,
+      location,
+      logger,
+      options.old ? MODULE_TEMPLATES_OLD : MODULE_TEMPLATES,
+      moduleName
+    );
   }
 
   /**
@@ -58,7 +65,7 @@ class CommandInvoker {
    */
   runDeleteModule(args, options, logger) {
     const { moduleName, location = 'both' } = args;
-    CommandInvoker.runCommand(this.deleteModule, location, logger, moduleName, options);
+    CommandInvoker.runCommand(this.deleteModule, options, location, logger, moduleName);
   }
 
   /**

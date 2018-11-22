@@ -7,11 +7,10 @@ object CounterTable extends JdbcProfile {
 
   import api.{Table => SlickTable, _}
 
-  type CounterTable = Table
-
   val name = "COUNTER"
 
-  class Table(tag: Tag) extends SlickTable[Counter](tag, name) with Keyed[Int] {
+  class CounterTable(tag: Tag) extends SlickTable[Counter](tag, name) with Keyed[Int] {
+
     def id = column[Int]("ID", O.PrimaryKey)
 
     def amount = column[Int]("AMOUNT")

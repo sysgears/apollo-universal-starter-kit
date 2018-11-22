@@ -10,7 +10,7 @@
     "noEmit": true,
     "noUnusedLocals": true,
     "jsx": "react",
-    "lib": ["es2015", "dom", "esnext", "esnext.asynciterable"],
+    "lib": ["es2015", "dom", "esnext"],
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,

@@ -26,20 +26,25 @@ const renderCardItem = (title: string, value: string) => (
 
 const CreditCardInfoView = ({ loading, t, creditCard, navigation }: CardInfoViewProps) => (
   <View style={styles.container}>
-    {!loading && creditCard && creditCard.expiryMonth && creditCard.expiryYear && creditCard.last4 && creditCard.brand && (
-      <View>
-        <CardSubtitleText style={styles.container}>{t('creditCard.title')}</CardSubtitleText>
-        {renderCardItem(`${t('creditCard.text.card')}: `, `${creditCard.brand} ************${creditCard.last4}`)}
-        {renderCardItem(`${t('creditCard.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
+    {!loading &&
+      creditCard &&
+      creditCard.expiryMonth &&
+      creditCard.expiryYear &&
+      creditCard.last4 &&
+      creditCard.brand && (
         <View>
-          <View style={styles.buttonWrapper}>
-            <Button color={primary} onPress={() => navigation.push('UpdateCreditCard')}>
-              {t('update.btn')}
-            </Button>
+          <CardSubtitleText style={styles.container}>{t('creditCard.title')}</CardSubtitleText>
+          {renderCardItem(`${t('creditCard.text.card')}: `, `${creditCard.brand} ************${creditCard.last4}`)}
+          {renderCardItem(`${t('creditCard.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
+          <View>
+            <View style={styles.buttonWrapper}>
+              <Button color={primary} onPress={() => navigation.push('UpdateCreditCard')}>
+                {t('update.btn')}
+              </Button>
+            </View>
           </View>
         </View>
-      </View>
-    )}
+      )}
   </View>
 );
 

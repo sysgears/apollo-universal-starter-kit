@@ -20,8 +20,8 @@ import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from
 
 import ClientModule from '../ClientModule';
 
-const ProfileName = withLoadedUser(({ currentUser }) =>
-  currentUser ? currentUser.fullName || currentUser.username : null
+const ProfileName = withLoadedUser(
+  ({ currentUser }) => (currentUser ? currentUser.fullName || currentUser.username : null)
 );
 
 const LogoutLink = withRouter(

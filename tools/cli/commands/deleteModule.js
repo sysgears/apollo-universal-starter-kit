@@ -1,7 +1,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { computeModulesPath, runPrettier } = require('../helpers/util');
+const { computeModulesPath, computeRootModulesPath, runPrettier } = require('../helpers/util');
 
 /**
  * Removes the module from client, server or both locations and removes the module from the module list.
@@ -19,6 +19,13 @@ function deleteModule(logger, moduleName, options, location) {
     // remove module directory
     shell.rm('-rf', modulePath);
 
+    // in new module structure remove root dir if no submodules exist
+    if (!options.old) {
+      const rootModulePath = computeRootModulesPath(moduleName);
+      if (shell.ls(rootModulePath).length === 0) {
+        shell.rm('-rf', rootModulePath);
+      }
+    }
     const modulesPath = computeModulesPath(location, options);
 
     // get index file path

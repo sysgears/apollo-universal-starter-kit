@@ -60,6 +60,16 @@ function computeModulesPath(location, options, moduleName = '') {
 }
 
 /**
+ * Gets the computed path of the root module path.
+ *
+ * @param moduleName - The name of a new module.
+ * @returns {string} - Return the computed path
+ */
+function computeRootModulesPath(moduleName) {
+  return `${BASE_PATH}/modules/${moduleName}`;
+}
+
+/**
  * Run prettier on file that was changed.
  *
  * @param pathToFile
@@ -74,5 +84,6 @@ module.exports = {
   renameFiles,
   copyFiles,
   computeModulesPath,
+  computeRootModulesPath,
   runPrettier
 };

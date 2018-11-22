@@ -12,7 +12,7 @@ object DatabaseExecutor {
   implicit private var db: Database = _
 
   implicit class DatabaseRunner[T] @Inject()(databaseOperation: DBIO[T]) {
-    def toFuture: Future[T] = db.run(databaseOperation)
+    def run: Future[T] = db.run(databaseOperation)
   }
 
 }

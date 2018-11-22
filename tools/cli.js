@@ -20,11 +20,13 @@ prog
     ['both', 'server', 'client'],
     'both'
   )
+  .option('-o, --old', 'Old Structure')
   .action((args, options, logger) => commandInvoker.runAddModule(args, options, logger))
   // Delete module
   .command('deletemodule', 'Delete a Module')
   .argument('<moduleName>', 'Module name')
   .argument('[location]', 'Where should we delete module. [both, server, client]', ['both', 'server', 'client'], 'both')
+  .option('-o, --old', 'Old Structure')
   .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger));
 
 prog.parse(process.argv);

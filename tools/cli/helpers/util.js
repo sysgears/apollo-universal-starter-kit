@@ -53,8 +53,10 @@ function renameFiles(destinationPath, moduleName) {
  * @param moduleName - The name of a new module.
  * @returns {string} - Return the computed path
  */
-function computeModulesPath(location, moduleName = '') {
-  return `${BASE_PATH}/packages/${location}/src/modules/${moduleName}`;
+function computeModulesPath(location, options, moduleName = '') {
+  return options.old || moduleName === ''
+    ? `${BASE_PATH}/packages/${location.split('-')[0]}/src/modules/${moduleName}`
+    : `${BASE_PATH}/modules/${moduleName}/${location}`;
 }
 
 /**

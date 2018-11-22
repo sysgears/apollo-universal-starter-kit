@@ -14,7 +14,7 @@ import pagination from './pagination';
 import chat from './chat';
 import './favicon';
 
-const modules = new ClientModule(
+const modules: ClientModule = new ClientModule(
   validation,
   defaultRouter,
   counter,

@@ -1,11 +1,11 @@
 package modules.upload.repositories
 
-import javax.inject.Inject
-
 import core.slick.{SchemaInitializer, SchemaUtil}
-import modules.upload.models.FileMetadata
-import slick.lifted.TableQuery
+import javax.inject.Inject
+import modules.upload.models.FileMetadataTable
+import modules.upload.models.FileMetadataTable.FileMetadataTable
 import slick.jdbc.SQLiteProfile.api._
+import slick.lifted.TableQuery
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -13,10 +13,10 @@ class FileSchemaInitializer @Inject()(database: Database)
                                      (implicit executionContext: ExecutionContext) extends SchemaInitializer
   with SchemaUtil {
 
-  val files: TableQuery[FileMetadata.Table] = TableQuery[FileMetadata.Table]
+  val files: TableQuery[FileMetadataTable] = TableQuery[FileMetadataTable]
 
   override def create(): Future[Unit] = {
-    withTable(database, files, FileMetadata.name, _.isEmpty) {
+    withTable(database, files, FileMetadataTable.name, _.isEmpty) {
       DBIO.seq(
         files.schema.create,
       )
@@ -24,7 +24,7 @@ class FileSchemaInitializer @Inject()(database: Database)
   }
 
   override def drop(): Future[Unit] = {
-    withTable(database, files, FileMetadata.name, _.nonEmpty) {
+    withTable(database, files, FileMetadataTable.name, _.nonEmpty) {
       DBIO.seq(files.schema.drop)
     }
   }

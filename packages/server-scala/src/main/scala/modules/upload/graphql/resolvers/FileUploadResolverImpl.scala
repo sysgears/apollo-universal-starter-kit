@@ -7,21 +7,22 @@ import akka.http.scaladsl.model.Multipart.FormData
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{FileIO, Keep, Sink, Source}
 import com.google.inject.name.Named
+import common.DatabaseExecutor._
 import common.errors._
+import common.implicits.RichFuture._
 import common.{ActorMessageDelivering, Logger}
 import javax.inject.Inject
 import modules.upload.actors.FileActor
 import modules.upload.actors.FileActor.SaveFileMetadata
 import modules.upload.graphql.resolvers.FileUploadResolverImpl._
 import modules.upload.models.FileMetadata
-import modules.upload.repositories.FileMetadataRepo
+import modules.upload.repositories.FileMetadataRepository
 import modules.upload.services.HashAppender
-import common.implicits.RichFuture._
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRef,
-                                       fileRepo: FileMetadataRepo,
+                                       fileRepository: FileMetadataRepository,
                                        hashAppender: HashAppender)
                                       (implicit executionContext: ExecutionContext,
                                        materializer: ActorMaterializer) extends FileUploadResolver
@@ -55,12 +56,12 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
       false
   }
 
-  override def files: Future[List[FileMetadata]] = fileRepo.findAll
+  override def files: Future[List[FileMetadata]] = fileRepository.findAll.run.map(_.toList)
 
   override def removeFile(id: Int): Future[Boolean] = {
     for {
-      fileMetadata <- fileRepo.find(id) failOnNone NotFound(s"FileMetadata(id: $id)")
-      _ <- fileRepo.delete(id)
+      fileMetadata <- fileRepository.findOne(id).run failOnNone NotFound(s"FileMetadata(id: $id)")
+      _ <- fileRepository.delete(fileMetadata).run
       deleteResult <- Future(Files.deleteIfExists(resourcesDirPath.resolve(fileMetadata.path)))
     } yield deleteResult
   }.recover {

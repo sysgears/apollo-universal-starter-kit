@@ -489,73 +489,103 @@ export default class Crud {
       queryBuilder.orderBy(`${this.getTableName()}.id`);
     }
 
-    this._filter(filter, queryBuilder);
+    this._filter(filter, this.schema, queryBuilder, this.getTableName());
 
     return knexnest(queryBuilder);
   }
 
-  _filter(filter, queryBuilder) {
-    const tableName = this.getTableName();
-
+  _filter(filter, schema, queryBuilder, tableName) {
     if (!_.isEmpty(filter)) {
-      const addFilterWhere = this.schemaIterator((filterKey, value, isSchema, _this, tableName, filter) => {
-        const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+      const addFilterWhere = this.schemaIterator(
+        (filterKey, value, isSchema, isArray, _this, tableName, schema, filter) => {
+          const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+          if (hasTypeOf(Date)) {
+            if (filter[`${filterKey}_lte`]) {
+              const filterValue_lte = moment(filter[`${filterKey}_lte`]).format(dateFormat);
+              _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '>=', `${filterValue_lte}`);
+            }
+            if (filter[`${filterKey}_gte`]) {
+              const filterValue_gte = moment(filter[`${filterKey}_gte`]).format(dateFormat);
+              _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '<=', `${filterValue_gte}`);
+            }
+          } else if (hasTypeOf(Boolean)) {
+            if (_.has(filter, filterKey)) {
+              _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '=', `${+filter[filterKey]}`);
+            }
+          } else if (isArray) {
+            // do nothing
+          } else {
+            const tableColumn = isSchema ? `${decamelize(filterKey)}_id` : decamelize(filterKey);
 
-        if (hasTypeOf(Date)) {
-          if (filter[`${filterKey}_lte`]) {
-            const filterValue_lte = moment(filter[`${filterKey}_lte`]).format(dateFormat);
-            _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '>=', `${filterValue_lte}`);
-          }
-          if (filter[`${filterKey}_gte`]) {
-            const filterValue_gte = moment(filter[`${filterKey}_gte`]).format(dateFormat);
-            _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '<=', `${filterValue_gte}`);
-          }
-        } else if (hasTypeOf(Boolean)) {
-          if (_.has(filter, filterKey)) {
-            _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '=', `${+filter[filterKey]}`);
-          }
-        } else {
-          const tableColumn = isSchema ? `${decamelize(filterKey)}_id` : decamelize(filterKey);
+            const filterValue = isSchema ? filter[`${filterKey}Id`] : filter[filterKey];
+            if (filterValue) {
+              _this.andWhere(`${tableName}.${tableColumn}`, '=', `${filterValue}`);
+            }
 
-          const filterValue = isSchema ? filter[`${filterKey}Id`] : filter[filterKey];
-          if (filterValue) {
-            _this.andWhere(`${tableName}.${tableColumn}`, '=', `${filterValue}`);
-          }
+            const filterValueIn = isSchema ? filter[`${filterKey}Id_in`] : filter[`${filterKey}_in`];
+            if (filterValueIn) {
+              _this.whereIn(`${tableName}.${tableColumn}`, filterValueIn);
+            }
 
-          const filterValueIn = isSchema ? filter[`${filterKey}Id_in`] : filter[`${filterKey}_in`];
-          if (filterValueIn) {
-            _this.whereIn(`${tableName}.${tableColumn}`, filterValueIn);
-          }
+            const filterValueContains = isSchema ? filter[`${filterKey}Id_contains`] : filter[`${filterKey}_contains`];
+            if (filterValueContains) {
+              _this.andWhere(`${tableName}.${tableColumn}`, 'like', `%${filterValueContains}%`);
+            }
 
-          const filterValueContains = isSchema ? filter[`${filterKey}Id_contains`] : filter[`${filterKey}_contains`];
-          if (filterValueContains) {
-            _this.andWhere(`${tableName}.${tableColumn}`, 'like', `%${filterValueContains}%`);
+            const filterValueGt = isSchema ? filter[`${filterKey}Id_gt`] : filter[`${filterKey}_gt`];
+            if (_.isString(filterValueGt) || _.isNumber(filterValueGt)) {
+              _this.andWhere(`${tableName}.${tableColumn}`, '>', filterValueGt);
+            }
           }
         }
-      });
+      );
+
+      for (const key of schema.keys()) {
+        const value = schema.values[key];
+        const isArray = value.type.constructor === Array;
+        if (isArray && filter[key]) {
+          const type = value.type[0];
+          const fieldName = decamelize(key);
+          const prefix = type.__.tablePrefix ? type.__.tablePrefix : '';
+          const foreignTableName = decamelize(type.__.tableName ? type.__.tableName : type.name);
+          const baseTableName = decamelize(schema.name);
+          const suffix = value.noIdSuffix ? '' : '_id';
+
+          queryBuilder.leftJoin(
+            `${prefix}${foreignTableName} as ${fieldName}`,
+            `${baseTableName}.id`,
+            `${fieldName}.${baseTableName}${suffix}`
+          );
+
+          this._filter(filter[key], value.type[0], queryBuilder, fieldName);
+        }
+      }
 
       queryBuilder.where(function() {
-        addFilterWhere(this, tableName, filter);
+        addFilterWhere(this, tableName, schema, filter);
       });
       if (filter.searchText) {
-        const addSearchTextWhere = this.schemaIterator((key, value, isSchema, _this, tableName, filter) => {
-          if (value.searchText) {
-            _this.orWhere(`${tableName}.${decamelize(key)}`, 'like', `%${filter.searchText}%`);
+        const addSearchTextWhere = this.schemaIterator(
+          (key, value, isSchema, isArray, _this, tableName, schema, filter) => {
+            if (value.searchText) {
+              _this.orWhere(`${tableName}.${decamelize(key)}`, 'like', `%${filter.searchText}%`);
+            }
           }
-        });
+        );
         queryBuilder.where(function() {
-          addSearchTextWhere(this, tableName, filter);
+          addSearchTextWhere(this, tableName, schema, filter);
         });
       }
     }
   }
 
   schemaIterator = fn => {
-    return (...args) => {
-      for (const key of this.schema.keys()) {
-        const value = this.schema.values[key];
+    return (_this, tableName, schema, filter) => {
+      for (const key of schema.keys()) {
+        const value = schema.values[key];
         const isSchema = value.type.isSchema;
-        fn(key, value, isSchema, ...args);
+        const isArray = value.type.constructor === Array;
+        fn(key, value, isSchema, isArray, _this, tableName, schema, filter);
       }
     };
   };
@@ -579,11 +609,11 @@ export default class Crud {
 
   getTotal(args = {}) {
     const queryBuilder = knex(`${this.getFullTableName()} as ${this.getTableName()}`)
-      .countDistinct('id as count')
+      .countDistinct(`${this.getTableName()}.id as count`)
       .first();
 
     if (args.filter) {
-      this._filter(args.filter, queryBuilder);
+      this._filter(args.filter, this.schema, queryBuilder, this.getTableName());
     }
     return queryBuilder;
   }

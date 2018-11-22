@@ -5,7 +5,7 @@ const GraphQLGenerator = require('@domain-schema/graphql').default;
 const { pascalize, camelize } = require('humps');
 
 const { BASE_PATH } = require('../config');
-const { generateField } = require('../helpers/util');
+const { generateField, runPrettier } = require('../helpers/util');
 const schemas = require('../../../packages/server/src/modules/common/generatedSchemas');
 
 /**
@@ -67,7 +67,7 @@ function updateModule(logger, moduleName, location) {
         } else if (value.type.constructor === Array && value.type[0].isSchema) {
           inputCreate += `  ${key}: ${pascalize(key)}CreateManyInput\n`;
           inputUpdate += `  ${key}: ${pascalize(key)}UpdateManyInput\n`;
-
+          inputFilter += `  ${key}: ${pascalize(value.type[0].name)}FilterInput\n`;
           manyInput += `
 
 input ${pascalize(key)}CreateManyInput {
@@ -137,8 +137,9 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         const value = schema.values[key];
         if (value.type.constructor === Array) {
           hasBatchResolvers = true;
+          const remoteField = value.remoteField ? camelize(value.remoteField) : camelize(schema.name);
           replace += `    ${key}: createBatchResolver((sources, args, ctx, info) => {
-      return ctx.${schema.name}.getByIds(sources.map(({ id }) => id), '${camelize(schema.name)}', ctx.${
+      return ctx.${schema.name}.getByIds(sources.map(({ id }) => id), '${remoteField}', ctx.${
             value.type[0].name
           }, info);
     }),
@@ -161,6 +162,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
             )
         )
         .to(resolverFile);
+      runPrettier(resolverFile);
 
       logger.info(chalk.green(`✔ Resolver in ${pathSchema}${resolverFile} successfully updated!`));
     } else {

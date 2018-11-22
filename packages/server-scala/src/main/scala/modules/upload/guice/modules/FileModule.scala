@@ -21,7 +21,7 @@ class FileModule extends ScalaModule with GuiceActorRefProvider {
   }
 
   @Provides
-  def counterRepository(driver: JdbcProfile): Repository[FileMetadata, Int] = new FileMetadataRepository(driver)
+  def fileMetadataRepository(driver: JdbcProfile): Repository[FileMetadata, Int] = new FileMetadataRepository(driver)
 
   @Provides
   @Named(FileActor.name)

@@ -7,10 +7,12 @@ import com.google.inject.Inject
 import common.ActorNamed
 import common.RichDBIO._
 import common.errors.InternalServerError
+import common.implicits.RichFuture._
 import modules.counter.models.Counter
 import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
+import slick.dbio.DBIO
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 object CounterActor extends ActorNamed {
 
@@ -31,15 +33,11 @@ class CounterActor @Inject()(counterRepository: Repository[Counter, Int])
     case incrementAndGet: IncrementAndGet =>
       log.info(s"Received message: [ $incrementAndGet ]")
       (for {
-        optionCounter <- counterRepository.findOne(defaultId).run
-        counter <- if (optionCounter.nonEmpty) Future(optionCounter.get) else Future.failed(InternalServerError())
-        updatedCounter <- counterRepository.update(counter.copy(amount = counter.amount + incrementAndGet.amount)).run
-      } yield updatedCounter).pipeTo(sender())
+        optionCounter <- counterRepository.findOne(defaultId)
+        counter <- if (optionCounter.nonEmpty) DBIO.successful(optionCounter.get) else DBIO.failed(InternalServerError())
+        updatedCounter <- counterRepository.update(counter.copy(amount = counter.amount + incrementAndGet.amount))
+      } yield updatedCounter).run.pipeTo(sender)
 
-    case GetAmount =>
-      (for {
-        optionCounter <- counterRepository.findOne(defaultId).run
-        counter <- if (optionCounter.nonEmpty) Future(optionCounter.get) else Future.failed(InternalServerError())
-      } yield counter).pipeTo(sender())
+    case GetAmount => counterRepository.findOne(defaultId).run.failOnNone(InternalServerError()).pipeTo(sender)
   }
 }

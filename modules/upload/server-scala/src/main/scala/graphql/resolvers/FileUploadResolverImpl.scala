@@ -29,7 +29,6 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
   with ActorUtil {
 
   override def uploadFiles(parts: Source[FormData.BodyPart, Any]): Future[Boolean] = {
-    println("fdsafasdfas")
     parts.filter(_.filename.nonEmpty).mapAsync(1) {
       part => {
         val hashedFilename = hashAppender.append(part.filename.get)

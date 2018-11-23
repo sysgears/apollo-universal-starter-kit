@@ -22,8 +22,6 @@ trait TestHelper extends WordSpec
   val routes: Route = inject[GraphQLController].routes
 
   val counterInitializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]
- // val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
-//  val fileInitializer: FileSchemaInitializer = inject[FileSchemaInitializer]
 
   before {
     clean()
@@ -40,14 +38,10 @@ trait TestHelper extends WordSpec
 
   private def initDb(): Unit = {
     await(counterInitializer.create())
-  //  await(userInitializer.create())
-//    await(fileInitializer.create())
   }
 
   private def dropDb(): Unit = {
     await(counterInitializer.drop())
-//    await(userInitializer.drop())
-//    await(fileInitializer.drop())
   }
 
   def await[T](asyncFunc: => Future[T]): T = Await.result[T](asyncFunc, Duration.Inf)

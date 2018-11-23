@@ -1,5 +1,7 @@
 import org.ensime.EnsimeKeys._
 
+lazy val core = project in file(".")
+
 name := "core"
 
 version := "0.1"

@@ -11,7 +11,7 @@ trait ClassFinder {
   val config: Config = ConfigFactory.load()
   def findClasses: List[ClassInfo] = {
     val modulesPaths = config.getStringList("loadPaths").toList
-    findClasses(List(".") ++ modulesPaths)
+    findClasses(List(".", "../../modules/core/server-scala") ++ modulesPaths)
   }
 
   def findClasses(path: List[String]): List[ClassInfo] = {

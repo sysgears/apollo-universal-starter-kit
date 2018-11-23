@@ -1,7 +1,8 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { copyFiles, renameFiles, computeModulesPath, runPrettier } = require('../helpers/util');
+const { decamelize } = require('humps');
+const { copyFiles, renameFiles, computeModulesPath, computePackagePath, runPrettier } = require('../helpers/util');
 
 /**
  * Adds application module to client or server code and adds it to the module list.
@@ -55,6 +56,33 @@ function addModule(logger, templatesPath, moduleName, options, location, finishe
     .ShellString(indexContent.replace(RegExp(appModuleRegExp, 'g'), `Module(${moduleName}, ${appModules})`))
     .to(indexPath);
   runPrettier(indexPath);
+
+  // get package content
+  const packagePath = computePackagePath(location);
+  const packageContent = `` + fs.readFileSync(packagePath);
+
+  // extract dependencies
+  const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
+  const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
+
+  // insert package and sort
+  const dependenciesSorted = dependencies.split(',');
+  dependenciesSorted.push(
+    `\n    "@module/${decamelize(moduleName, {
+      separator: '-'
+    })}-${location}": "^1.0.0"`
+  );
+  dependenciesSorted.sort();
+
+  // add module to package list
+  shell
+    .ShellString(
+      packageContent.replace(
+        RegExp(dependenciesRegExp, 'g'),
+        `"dependencies": {${dependenciesSorted}},\n  "devDependencies"`
+      )
+    )
+    .to(packagePath);
 
   if (finished) {
     logger.info(chalk.green(`✔ Module for ${location} successfully created!`));

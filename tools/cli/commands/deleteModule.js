@@ -1,7 +1,8 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { computeModulesPath, computeRootModulesPath, runPrettier } = require('../helpers/util');
+const { decamelize } = require('humps');
+const { computeModulesPath, computeRootModulesPath, computePackagePath, runPrettier } = require('../helpers/util');
 
 /**
  * Removes the module from client, server or both locations and removes the module from the module list.
@@ -55,6 +56,27 @@ function deleteModule(logger, moduleName, options, location) {
 
     fs.writeFileSync(indexPath, contentWithoutDeletedModule);
     runPrettier(indexPath);
+
+    // get package content
+    const packagePath = computePackagePath(location);
+    const packageContent = `` + fs.readFileSync(packagePath);
+
+    // extract dependencies
+    const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
+    const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
+    const dependenciesWithoutDeleted = dependencies
+      .split(',')
+      .filter(pkg => pkg.indexOf(decamelize(moduleName, { separator: '-' })) < 0);
+
+    // add module to package list
+    shell
+      .ShellString(
+        packageContent.replace(
+          RegExp(dependenciesRegExp, 'g'),
+          `"dependencies": {${dependenciesWithoutDeleted}},\n  "devDependencies"`
+        )
+      )
+      .to(packagePath);
 
     logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));
   } else {

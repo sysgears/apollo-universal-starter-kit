@@ -112,7 +112,8 @@ const config = {
 ```
 
 **NOTE**: If you want to run the project on an Android or iOS device, check out the [Running a React Native App with
-Expo](#running-a-mobile-app-with-expo) and [Running the Starter Kit in a Mobile Simulator](#running-the-starter-kit-in-a-mobile-simulator) sections.
+Expo](#running-the-mobile-app-with-expo) and [Running the Starter Kit in a Mobile Simulator](#running-the-starter-kit-in-a-mobile-simulator) 
+sections.
 
 ## Running the Mobile App with Expo
 

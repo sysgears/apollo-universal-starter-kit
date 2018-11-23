@@ -237,5 +237,5 @@ product using the Stripe API. The default plan and product are configured in the
 [webhook endpoint]: https://stripe.com/docs/webhooks
 [heroku dashboard]: https://dashboard.heroku.com/apps
 [webhook signatures]: https://stripe.com/docs/webhooks/signatures
-[deploy your application]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Getting-Started#deploying-apollo-starter-kit-application-to-production
+[deploy your application]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/deployment.md
 [heroku]: https://heroku.com

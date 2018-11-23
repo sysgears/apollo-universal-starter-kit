@@ -143,7 +143,8 @@ the files are fixed, the file is committed to Git. During the checks, the code i
 When formatting the code isn't possible, however, the changes won't be committed, and the issues (the files and the 
 lines where issues were found) will be shown in the console.
 
-[lerna]: https://github.com/lerna/lerna
+[lerna]: https://lernajs.io/
+[cli guide]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/cli.md
 [`expo`]: https://docs.expo.io/versions/latest/workflow/expo-cli
 [spinjs]: https://github.com/sysgears/spinjs
 [webpack]: https://webpack.js.org/
@@ -152,5 +153,4 @@ lines where issues were found) will be shown in the console.
 [expo cli documentation]: https://docs.expo.io/versions/latest/workflow/expo-cli
 [esLint]: https://eslint.org/
 [tslint]: https://palantir.github.io/tslint/ 
-[cli guide]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Apollo-Starter-Kit-CLI
 [lint-staged]: https://www.npmjs.com/package/lint-staged

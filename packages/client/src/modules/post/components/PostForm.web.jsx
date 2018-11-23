@@ -5,14 +5,12 @@ import { withFormik } from 'formik';
 import translate from '../../../i18n';
 import Field from '../../../utils/FieldAdapter';
 import { Form, RenderField, Button } from '../../common/components/web';
-import { required, validateForm } from '../../../../../common/validation';
+import { required, validate } from '../../../../../common/modules/validation';
 
 const postFormSchema = {
   title: [required],
   content: [required]
 };
-
-const validate = values => validateForm(values, postFormSchema);
 
 const PostForm = ({ values, handleSubmit, submitting, t }) => {
   return (
@@ -46,7 +44,7 @@ const PostFormWithFormik = withFormik({
     title: props.post && props.post.title,
     content: props.post && props.post.content
   }),
-  validate: values => validate(values),
+  validate: values => validate(values, postFormSchema),
   handleSubmit(
     values,
     {

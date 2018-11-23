@@ -11,7 +11,14 @@
 
 **Use [our chat] to get help or to discuss general topics about Apollo Universal Starter Kit.**
 
+
+## Official Website
+
+Visit [apollokit.org] to learn more about Apollo Universal Starter Kit.
+
 ## Description
+
+![](Technologies.png)
 
 Apollo Universal Starter Kit is an SEO-friendly, fully-configured, modular starter project for developing [Universal
 JavaScript] applications. You can use our kit to create your applications in JavaScript or TypeScript for all major
@@ -288,6 +295,7 @@ Copyright &copy; 2016, 2017 [SysGears INC]. This source code is licensed under t
 [ant design mobile]: https://mobile.ant.design
 [styled components]: https://www.styled-components.com/
 [nativebase]: https://nativebase.io
+[apollokit.org]: https://apollokit.org
 [spinjs]: https://github.com/sysgears/spinjs
 [dedicated wiki section]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Features-and-Modules
 [apollo universal starter kit deployed to heroku]: https://apollo-universal-starter-kit.herokuapp.com

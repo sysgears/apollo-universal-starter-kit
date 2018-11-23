@@ -1,7 +1,7 @@
 package modules.user.graphql.resolvers
 
 import com.google.inject.Inject
-import common.DatabaseExecutor._
+import common.RichDBIO._
 import modules.user.model.{RegisterUserInput, User, UserPayload}
 import modules.user.repositories.UserRepository
 import org.mindrot.jbcrypt.BCrypt

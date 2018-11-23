@@ -2,7 +2,7 @@ package core.guice.modules
 
 import com.google.inject.Provides
 import com.typesafe.config.Config
-import common.DatabaseExecutor
+import common.RichDBIO
 import net.codingwell.scalaguice.ScalaModule
 import slick.jdbc.JdbcBackend._
 import slick.jdbc.JdbcProfile
@@ -10,7 +10,7 @@ import slick.jdbc.JdbcProfile
 class DBModule extends ScalaModule {
 
   override def configure(): Unit = {
-    bind[DatabaseExecutor.type].toInstance(DatabaseExecutor)
+    bind[RichDBIO.type].toInstance(RichDBIO)
   }
 
   @Provides

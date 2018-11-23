@@ -7,7 +7,7 @@ import akka.http.scaladsl.model.Multipart.FormData
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{FileIO, Keep, Sink, Source}
 import com.google.inject.name.Named
-import common.DatabaseExecutor._
+import common.RichDBIO._
 import common.errors._
 import common.implicits.RichFuture._
 import common.{ActorMessageDelivering, Logger}

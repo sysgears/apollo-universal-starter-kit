@@ -5,7 +5,7 @@ import akka.pattern._
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Inject
 import common.ActorNamed
-import common.DatabaseExecutor._
+import common.RichDBIO._
 import common.errors.InternalServerError
 import modules.counter.models.Counter
 import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}

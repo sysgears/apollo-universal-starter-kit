@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.pattern._
 import com.google.inject.Inject
 import common.ActorNamed
-import common.DatabaseExecutor._
+import common.RichDBIO._
 import modules.upload.actors.FileActor.SaveFileMetadata
 import modules.upload.models.FileMetadata
 import modules.upload.repositories.FileMetadataRepository

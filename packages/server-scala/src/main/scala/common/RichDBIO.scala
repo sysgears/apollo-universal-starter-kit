@@ -6,12 +6,12 @@ import slick.jdbc.JdbcBackend._
 
 import scala.concurrent.Future
 
-object DatabaseExecutor {
+object RichDBIO {
 
   @Inject
   implicit private var db: Database = _
 
-  implicit class DatabaseRunner[T] @Inject()(databaseOperation: DBIO[T]) {
+  implicit class QueryExecutor[T] @Inject()(databaseOperation: DBIO[T]) {
     def run: Future[T] = db.run(databaseOperation)
   }
 

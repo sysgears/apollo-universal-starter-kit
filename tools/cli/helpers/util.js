@@ -56,7 +56,7 @@ function renameFiles(destinationPath, moduleName) {
  * @returns {string} - Return the computed path
  */
 function computeModulesPath(location, options, moduleName = '') {
-  return options.old || moduleName === ''
+  return moduleName === '' || options.old
     ? `${BASE_PATH}/packages/${location.split('-')[0]}/src/modules/${moduleName}`
     : `${BASE_PATH}/modules/${moduleName}/${location}`;
 }

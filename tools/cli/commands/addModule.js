@@ -40,7 +40,11 @@ function addModule(logger, templatesPath, moduleName, options, location, finishe
 
   try {
     // prepend import module
-    const importFrom = options.old ? `./${moduleName}` : `@module/${moduleName}-${location}`;
+    const importFrom = options.old
+      ? `./${moduleName}`
+      : `@module/${decamelize(moduleName, {
+          separator: '-'
+        })}-${location}`;
     indexContent = `import ${moduleName} from '${importFrom}';\n` + fs.readFileSync(indexPath);
   } catch (e) {
     logger.error(chalk.red(`Failed to read ${indexPath} file`));

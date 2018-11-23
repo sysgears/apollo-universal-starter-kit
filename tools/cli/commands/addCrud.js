@@ -15,9 +15,9 @@ const { BASE_PATH } = require('../config');
  * @param tablePrefix
  * @param location - The location for a new module [client|server|both].
  */
-function addCrud(logger, templatesPath, moduleName, tablePrefix, location) {
+function addCrud(logger, templatesPath, moduleName, tablePrefix, options, location) {
   // add module in server, client
-  addModule(logger, templatesPath, moduleName, location, false);
+  addModule(logger, templatesPath, moduleName, options, location, false);
 
   // pascalize
   const Module = pascalize(moduleName);

@@ -77,29 +77,21 @@ const Html = ({ content, state, css, clientModules, helmet }: HtmlProps) => (
 
 const renderServerSide = async (req: any, res: any) => {
   const clientModules = require('../../../client/src/modules').default;
-  let context;
-  try {
-    context = { ...(await modules.createContext(req, res)), req, res };
-  } catch (e) {
-    context = () => {
-      throw e;
-    };
-  }
-  const schemaLink = new SchemaLink({ schema, context });
+  const schemaLink = new SchemaLink({ schema, context: { ...(await modules.createContext(req, res)), req, res } });
   const client = createApolloClient({
     apiUrl,
     createNetLink: !isApiExternal ? () => schemaLink : undefined,
-    createLinks: clientModules.createLinks.bind(clientModules),
+    links: clientModules.link,
     clientResolvers: clientModules.resolvers,
     connectionParams: null
   });
   const store = createReduxStore({}, client);
-  const routerContext: any = {};
+  const context: any = {};
   const App = clientModules.getWrappedRoot(
     <Provider store={store}>
       <ApolloProvider client={client}>
         {clientModules.getDataRoot(
-          <StaticRouter location={req.url} context={routerContext}>
+          <StaticRouter location={req.url} context={context}>
             {Routes}
           </StaticRouter>
         )}
@@ -110,10 +102,10 @@ const renderServerSide = async (req: any, res: any) => {
 
   await getDataFromTree(App);
 
-  routerContext.pageNotFound === true ? res.status(404) : res.status(200);
+  context.pageNotFound === true ? res.status(404) : res.status(200);
 
-  if (routerContext.url) {
-    res.writeHead(301, { Location: routerContext.url });
+  if (context.url) {
+    res.writeHead(301, { Location: context.url });
     res.end();
   } else {
     if (__DEV__ || !assetMap) {

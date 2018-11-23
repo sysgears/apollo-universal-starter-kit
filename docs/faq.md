@@ -3,13 +3,13 @@
 In this section, you'll find answers on the following frequently asked questions:
 
 * [How do I update my Apollo Universal Starter Kit project without forking the repository?](#how-do-i-update-my-apollo-universal-starter-kit-project-without-forking-the-repository)
-* [How do I use a custom GraphQL backend](#how-do-i-use-a-custom-graphql-back-end)
-* [How do I use a different database](#how-do-i-use-a-different-database-instead-of-sqlite)
-* [How do I enable Facebook and Google OAuth](#how-do-i-enable-facebook-and-google-oauth)
-* [How do I set up environment variables for development](#how-do-i-set-up-environment-variables-for-development)
-* [How do I add support for a custom domain name in the local development environment](#how-do-i-add-support-for-a-custom-domain-name-in-the-local-development-environment)
-* [What extensions can I use when creating files in my project](#what-extensions-can-i-use-when-creating-files-in-my-project)
-* [How do I always keep my Apollo Starter Kit project up-to-date](#how-do-i-always-keep-my-apollo-starter-kit-project-up-to-date)
+* [How do I use a custom GraphQL backend?](#how-do-i-use-a-custom-graphql-back-end)
+* [How do I use a different database?](#how-do-i-use-a-different-database-instead-of-sqlite)
+* [How do I enable Facebook and Google OAuth?](#how-do-i-enable-facebook-and-google-oauth)
+* [How do I set up environment variables for development?](#how-do-i-set-up-environment-variables-for-development)
+* [How do I add support for a custom domain name in the local development environment?](#how-do-i-add-support-for-a-custom-domain-name-in-the-local-development-environment)
+* [What extensions can I use when creating files in my project?](#what-extensions-can-i-use-when-creating-files-in-my-project)
+* [How do I always keep my Apollo Starter Kit project up-to-date?](#how-do-i-always-keep-my-apollo-starter-kit-project-up-to-date)
 
 ## How do I update my Apollo Universal Starter Kit project without forking the repository?
 

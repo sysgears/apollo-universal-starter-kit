@@ -1,14 +1,14 @@
 import React from 'react';
 import { merge } from 'lodash';
-import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { Reducer } from 'redux';
 import { IResolvers } from 'graphql-tools';
 
 import CommonModule, { CommonModuleShape } from '@module/module-common-react';
+
 export interface BaseModuleShape extends CommonModuleShape {
-  createLink?: Array<(getClientRef: () => ApolloClient<any>) => ApolloLink>;
+  link?: ApolloLink[];
   createNetLink?: () => ApolloLink;
   connectionParam?: ConnectionParamsOptions[];
   reducer?: Array<{ [key: string]: Reducer }>;
@@ -42,13 +42,9 @@ class BaseModule extends CommonModule {
     return this.routerFactory();
   }
 
-  public createLinks(getClientRef: () => ApolloClient<any>): ApolloLink[] {
-    return (this.createLink || []).map(createLink => createLink(getClientRef));
-  }
-
   public getDataRoot(root: React.ReactElement<any>) {
     let nestedRoot = root;
-    for (const component of this.dataRootComponent || []) {
+    for (const component of this.dataRootComponent) {
       nestedRoot = React.createElement(component, {}, nestedRoot);
     }
     return nestedRoot;

@@ -13,7 +13,7 @@ import { hasDirectives } from 'apollo-utilities';
 import log from './log';
 import settings from '../../settings';
 
-const createApolloClient = ({ apiUrl, createNetLink, createLinks, connectionParams, clientResolvers }) => {
+const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, clientResolvers }) => {
   const netCache = new InMemoryCache();
   const localCache = new InMemoryCache();
   const cache = ApolloCacheRouter.override(
@@ -92,12 +92,15 @@ const createApolloClient = ({ apiUrl, createNetLink, createLinks, connectionPara
   }
 
   const linkState = withClientState({ ...clientResolvers, cache });
-  const logLink =
-    settings.app.logging.apolloLogging && (!__TEST__ || typeof window !== 'undefined')
-      ? new LoggingLink({ logger: log.debug.bind(log) })
-      : undefined;
+
+  const allLinks = [...(links || []), linkState, apiLink];
+
+  if (settings.app.logging.apolloLogging && (!__TEST__ || typeof window !== 'undefined')) {
+    allLinks.unshift(new LoggingLink({ logger: log.debug.bind(log) }));
+  }
 
   const clientParams = {
+    link: ApolloLink.from(allLinks),
     cache
   };
   if (__SSR__ && !__TEST__) {
@@ -117,19 +120,7 @@ const createApolloClient = ({ apiUrl, createNetLink, createLinks, connectionPara
     };
   }
 
-  const getClientRef = () => client;
-
-  const allLinks = [
-    ...(logLink ? [logLink] : []),
-    ...(createLinks ? createLinks(getClientRef) : []),
-    linkState,
-    apiLink
-  ];
-
-  clientParams.link = ApolloLink.from(allLinks);
-
   const client = new ApolloClient(clientParams);
-
   if (cache.constructor.name !== 'OverrideCache') {
     // Restore Apollo Link State defaults only if we don't use `apollo-cache-router`
     client.onResetStore(linkState.writeDefaults);

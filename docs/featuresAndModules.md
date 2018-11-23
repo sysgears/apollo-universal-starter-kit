@@ -177,7 +177,7 @@ Just as JavaScript, TypeScript is also compiled to ES5 code.
 [i18next]: https://www.i18next.com
 [optimistic ui]: https://www.apollographql.com/docs/react/features/optimistic-ui.html
 [stripe]: https://stripe.com
-[payments module documentation]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/stripePayments.md
+[payments module documentation]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/stripeSubscription.md
 [graphql-subscriptions]: https://github.com/apollographql/graphql-subscriptions
 [graphql cursor pagination]: https://medium.com/@gethylgeorge/infinite-scrolling-in-react-using-apollo-and-react-virtualized-graphql-cursor-pagination-bf80617a8a1a#.jkmmu9qz8
 [relay-style cursor pagination]: http://dev.apollodata.com/react/pagination.html#relay-cursors

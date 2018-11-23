@@ -25,7 +25,7 @@ const config = {
   options: {
     stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
-    ssr: true,
+    ssr: !!process.env.DISABLE_SSR,
     webpackDll: true,
     reactHotLoader: false,
     defines: {

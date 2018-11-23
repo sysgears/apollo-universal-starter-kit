@@ -47,7 +47,9 @@ libraryDependencies ++= Seq(
   
   "commons-io" % "commons-io" % "2.6",
   
-  "org.mindrot" % "jbcrypt" % "0.3m"
+  "org.mindrot" % "jbcrypt" % "0.3m",
+
+  "ch.megard" %% "akka-http-cors" % "0.3.1"
 )
 
 parallelExecution in test := false

@@ -11,24 +11,31 @@ import Helmet, { HelmetData } from 'react-helmet';
 import serialize from 'serialize-javascript';
 
 import { isApiExternal, apiUrl } from '../net';
-import createApolloClient from '../../../common/createApolloClient';
-import createReduxStore from '../../../common/createReduxStore';
-import Routes from '../../../client/src/app/Routes';
 import modules from '../modules';
 import schema from '../api/schema';
-import { styles } from '../../../client/src/modules/common/components/web';
+
+// tslint:disable no-var-requires
+let clientModules: any;
+let createApolloClient: any;
+let createReduxStore: any;
+let styles: any;
+if (__SSR__) {
+  clientModules = require('../../../client/src/modules').default;
+  createApolloClient = require('../../../common/createApolloClient').default;
+  createReduxStore = require('../../../common/createReduxStore').default;
+  styles = require('../../../client/src/modules/common/components/web').styles;
+}
 
 let assetMap: { [key: string]: string };
 
 interface HtmlProps {
   content: string;
   state: any;
-  clientModules: any;
   css: Array<ReactElement<{}>>;
   helmet: HelmetData;
 }
 
-const Html = ({ content, state, css, clientModules, helmet }: HtmlProps) => (
+const Html = ({ content, state, css, helmet }: HtmlProps) => (
   <html lang="en" {...helmet.htmlAttributes.toComponent()}>
     <head>
       {helmet.title.toComponent()}
@@ -76,7 +83,6 @@ const Html = ({ content, state, css, clientModules, helmet }: HtmlProps) => (
 );
 
 const renderServerSide = async (req: any, res: any) => {
-  const clientModules = require('../../../client/src/modules').default;
   const schemaLink = new SchemaLink({ schema, context: { ...(await modules.createContext(req, res)), req, res } });
   const client = createApolloClient({
     apiUrl,
@@ -92,7 +98,7 @@ const renderServerSide = async (req: any, res: any) => {
       <ApolloProvider client={client}>
         {clientModules.getDataRoot(
           <StaticRouter location={req.url} context={context}>
-            {Routes}
+            {clientModules.router}
           </StaticRouter>
         )}
       </ApolloProvider>
@@ -117,8 +123,7 @@ const renderServerSide = async (req: any, res: any) => {
       content: ReactDOMServer.renderToString(sheet.collectStyles(App)),
       css: sheet.getStyleElement().map((el, idx) => (el ? React.cloneElement(el, { key: idx }) : el)),
       helmet: Helmet.renderStatic(), // Avoid memory leak while tracking mounted instances
-      state: { ...client.cache.extract() },
-      clientModules
+      state: { ...client.cache.extract() }
     };
 
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(<Html {...htmlProps} />)}`);

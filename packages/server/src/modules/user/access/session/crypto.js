@@ -14,6 +14,20 @@ const hmac = (val, macKey) => {
     .digest();
 };
 
+// Calculates HMAC using user password as a randomizer for _macKey
+export const passwordBasedHmac = (val, passwordHash) =>
+  crypto
+    .createHmac(
+      'sha256',
+      crypto
+        .createHash('sha256')
+        .update(_macKey)
+        .update(passwordHash)
+        .digest('binary')
+    )
+    .update('' + val)
+    .digest('hex');
+
 // Encrypt then MAC session object as JSON
 export const encryptSession = session => {
   const iv = crypto.randomBytes(16);

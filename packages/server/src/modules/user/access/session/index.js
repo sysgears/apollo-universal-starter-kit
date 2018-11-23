@@ -1,4 +1,7 @@
+import { AuthenticationError } from 'apollo-server-errors';
+
 import { writeSession, createSession, readSession } from './sessions';
+import { passwordBasedHmac } from './crypto';
 import { isApiExternal } from '../../../../net';
 import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
@@ -10,21 +13,27 @@ import settings from '../../../../../../../settings';
 const grant = async (user, req) => {
   const session = {
     ...req.session,
-    userId: user.id
+    userId: user.id,
+    userIdMAC: passwordBasedHmac(user.id, user.passwordHash)
   };
 
   req.session = writeSession(req, session);
 };
 
-const getCurrentUser = async ({ req }) => {
-  if (req && req.session.userId) {
-    return await User.getUser(req.session.userId);
-  }
-};
-
-const attachSession = req => {
+const maintainUserInSession = async (context, req) => {
+  let user = context.user;
   if (req) {
     req.session = readSession(req);
+    if (!user && req.session && req.session.userId) {
+      // Get user from userId stored inside session
+      user = await User.getUserWithPassword(req.session.userId);
+      // Validate user from session
+      if (!user || passwordBasedHmac(user.id, user.passwordHash) !== req.session.userIdMAC) {
+        // User do not exist or user has changed password, recreate session
+        req.session = createSession(req);
+        throw new AuthenticationError('SessionExpiredError');
+      }
+    }
     if (!req.session) {
       req.session = createSession(req);
     } else {
@@ -36,11 +45,11 @@ const attachSession = req => {
       }
     }
   }
+  return user;
 };
 
-const createContextFunc = async ({ req, connectionParams, webSocket, context }) => {
-  attachSession(req);
-  const user = context.user || (await getCurrentUser({ req, connectionParams, webSocket }));
+const createContextFunc = async ({ req, res, context }) => {
+  const user = await maintainUserInSession(context, req, res);
   const auth = {
     isAuthenticated: !!user,
     scope: user ? scopes[user.role] : null

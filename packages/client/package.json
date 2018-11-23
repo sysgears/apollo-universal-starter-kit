@@ -47,7 +47,7 @@
     "@module/i18n-client-react": "^1.0.0",
     "@module/i18n-common-react": "^1.0.0",
     "@module/module-client-react": "^1.0.0",
-    "@module/validation-common-react": "^1.0.0",
+    "@module/validation-common-react": "./modules/validation/common-react",
     "antd": "^3.10.0",
     "apollo-cache-inmemory": "1.2.9",
     "apollo-cache-router": "^1.1.6",

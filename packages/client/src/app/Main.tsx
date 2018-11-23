@@ -19,7 +19,7 @@ log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 const client = createApolloClient({
   apiUrl,
   createNetLink: modules.createNetLink,
-  links: modules.link,
+  createLinks: modules.createLinks.bind(modules),
   connectionParams: modules.connectionParams,
   clientResolvers: modules.resolvers
 });

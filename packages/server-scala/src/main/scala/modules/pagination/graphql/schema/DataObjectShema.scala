@@ -2,8 +2,8 @@ package modules.pagination.graphql.schema
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import common.Logger
 import common.graphql.DispatcherResolver.resolveWithDispatcher
+import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
 import core.services.publisher.PubSubService
 import core.services.publisher.RichPubSubService._
@@ -11,33 +11,43 @@ import javax.inject.Inject
 import modules.pagination.Pagination
 import modules.pagination.graphql.resolvers.DataObjectResolver
 import modules.pagination.model.{DataObject, DataObjectsPayload}
-import sangria.macros.derive.{ExcludeFields, ObjectTypeName, deriveObjectType}
-import sangria.schema.{Argument, Field, IntType, ObjectType}
+import sangria.macros.derive._
+import sangria.marshalling.FromInput
+import sangria.schema.{Argument, Field, InputObjectType, ObjectType}
 
 import scala.concurrent.ExecutionContext
 
 class DataObjectShema @Inject()(implicit val pubsubService: PubSubService[DataObjectsPayload],
                                 materializer: ActorMaterializer,
                                 actorSystem: ActorSystem,
-                                executionContext: ExecutionContext) extends GraphQLSchema
+                                executionContext: ExecutionContext) extends GraphQLSchema with InputUnmarshallerGenerator
   with Logger {
 
-  implicit val dataObject: ObjectType[Unit, DataObject] = deriveObjectType(ObjectTypeName("DataObject"), ExcludeFields("id"))
-  implicit val dataObjectPayload: ObjectType[Unit, DataObjectsPayload] = deriveObjectType(ObjectTypeName("DataObjectsPayload"))
+  implicit val paginationInputUnmarshaller: FromInput[Pagination] = inputUnmarshaller {
+    input =>
+      Pagination(
+        offset = input("offset").asInstanceOf[Int],
+        limit = input("limit").asInstanceOf[Int]
+      )
+  }
+
+  object Types {
+
+    implicit val DataObject: ObjectType[Unit, DataObject] = deriveObjectType(ObjectTypeName("DataObject"), ExcludeFields("id"))
+    implicit val DataObjectPayload: ObjectType[Unit, DataObjectsPayload] = deriveObjectType(ObjectTypeName("DataObjectsPayload"))
+    implicit val PaginationInput: InputObjectType[Pagination] = deriveInputObjectType[Pagination](InputObjectTypeName("Pagination"))
+  }
 
   override def queries: List[Field[UserContext, Unit]] = List(
     Field(
       name = "getPaginatedList",
-      fieldType = dataObjectPayload,
+      fieldType = Types.DataObjectPayload,
       arguments = List(
-        Argument(name = "offset", argumentType = IntType),
-        Argument(name = "limit", argumentType = IntType)
+        Argument(name = "input", argumentType = Types.PaginationInput)
       ),
       resolve = sc => {
-        val offset = sc.args.arg[Int]("offset")
-        val limit = sc.args.arg[Int]("limit")
         resolveWithDispatcher[DataObjectsPayload](
-          input = Pagination(offset, limit),
+          input = sc.args.arg[Pagination]("input"),
           userContext = sc.ctx,
           onException = _ => Pagination(offset = 0, limit = 1),
           namedResolverActor = DataObjectResolver
@@ -45,5 +55,4 @@ class DataObjectShema @Inject()(implicit val pubsubService: PubSubService[DataOb
       }
     )
   )
-
 }

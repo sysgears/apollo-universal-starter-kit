@@ -1,11 +1,12 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { pascalize } = require('humps');
+const { decamelize, pascalize } = require('humps');
 const deleteMigrations = require('./subCommands/deleteMigrations');
 const {
   computeModulesPath,
   computeRootModulesPath,
+  computePackagePath,
   runPrettier,
   deleteFromFileWithExports
 } = require('../helpers/util');
@@ -71,6 +72,27 @@ function deleteModule(logger, moduleName, options, location) {
 
     fs.writeFileSync(indexPath, contentWithoutDeletedModule);
     runPrettier(indexPath);
+
+    // get package content
+    const packagePath = computePackagePath(location);
+    const packageContent = `` + fs.readFileSync(packagePath);
+
+    // extract dependencies
+    const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
+    const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
+    const dependenciesWithoutDeleted = dependencies
+      .split(',')
+      .filter(pkg => pkg.indexOf(decamelize(moduleName, { separator: '-' })) < 0);
+
+    // remove module from package list
+    shell
+      .ShellString(
+        packageContent.replace(
+          RegExp(dependenciesRegExp, 'g'),
+          `"dependencies": {${dependenciesWithoutDeleted}},\n  "devDependencies"`
+        )
+      )
+      .to(packagePath);
 
     // delete migrations and seeds if server location and option -m specified
     if (location === 'server' && options.m) {

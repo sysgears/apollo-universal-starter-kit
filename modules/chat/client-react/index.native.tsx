@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, NavigationScreenConfigProps } from 'react-navigation';
 
 import ClientModule from '@module/module-client-react/index.native';
 import { translate } from '@module/i18n-client-react';
@@ -16,7 +16,7 @@ export default new ClientModule({
         screen: createStackNavigator({
           Chat: {
             screen: Chat,
-            navigationOptions: ({ navigation }) => ({
+            navigationOptions: ({ navigation }: NavigationScreenConfigProps) => ({
               headerTitle: <HeaderTitleWithI18n style="subTitle" />,
               headerLeft: (
                 <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />

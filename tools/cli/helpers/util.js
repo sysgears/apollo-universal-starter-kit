@@ -40,6 +40,7 @@ function renameFiles(destinationPath, moduleName) {
     if (entry.isFile()) {
       shell.sed('-i', /\$module\$/g, moduleName, entry.name);
       shell.sed('-i', /\$_module\$/g, decamelize(moduleName), entry.name);
+      shell.sed('-i', /\$-module\$/g, decamelize(moduleName, { separator: '-' }), entry.name);
       shell.sed('-i', /\$Module\$/g, Module, entry.name);
       shell.sed('-i', /\$MoDuLe\$/g, startCase(moduleName), entry.name);
       shell.sed('-i', /\$MODULE\$/g, moduleName.toUpperCase(), entry.name);

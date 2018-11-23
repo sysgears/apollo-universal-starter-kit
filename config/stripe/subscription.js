@@ -1,7 +1,7 @@
 export default {
   enabled: true,
   webhookUrl: '/stripe/webhook',
-  publicKey: process.env.STRIPE_PUBLIC_KEY, // or 'your-public-key', for development
+  publicKey: process.env.STRIPE_PUBLIC_KEY, // Set to your Stripe publishable key for development mode
   // Default Stripe product object
   product: {
     name: 'Magic number',

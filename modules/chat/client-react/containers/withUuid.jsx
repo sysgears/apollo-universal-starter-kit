@@ -1,6 +1,6 @@
 import React from 'react';
 import uuid from 'uuid';
-import { getItem, setItem } from '../../common/clientStorage';
+import { getItem, setItem } from '../../../../packages/client/src/modules/common/clientStorage';
 
 export default Component => {
   return class WithUuid extends React.Component {

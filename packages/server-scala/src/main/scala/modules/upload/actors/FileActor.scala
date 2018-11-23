@@ -2,12 +2,12 @@ package modules.upload.actors
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
 import akka.pattern._
+import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Inject
 import common.ActorNamed
 import common.RichDBIO._
 import modules.upload.actors.FileActor.SaveFileMetadata
 import modules.upload.models.FileMetadata
-import modules.upload.repositories.FileMetadataRepository
 
 import scala.concurrent.ExecutionContext
 
@@ -18,7 +18,7 @@ object FileActor extends ActorNamed {
   final val name = "FileActor"
 }
 
-class FileActor @Inject()(fileMetadataRepository: FileMetadataRepository)
+class FileActor @Inject()(fileMetadataRepository: Repository[FileMetadata, Int])
                          (implicit val executionContext: ExecutionContext) extends Actor with ActorLogging {
 
   override def receive: Receive = {

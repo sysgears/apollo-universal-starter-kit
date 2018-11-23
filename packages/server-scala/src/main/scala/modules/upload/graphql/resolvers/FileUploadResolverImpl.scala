@@ -6,6 +6,7 @@ import akka.actor.ActorRef
 import akka.http.scaladsl.model.Multipart.FormData
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{FileIO, Keep, Sink, Source}
+import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.name.Named
 import common.RichDBIO._
 import common.errors._
@@ -16,13 +17,12 @@ import modules.upload.actors.FileActor
 import modules.upload.actors.FileActor.SaveFileMetadata
 import modules.upload.graphql.resolvers.FileUploadResolverImpl._
 import modules.upload.models.FileMetadata
-import modules.upload.repositories.FileMetadataRepository
 import modules.upload.services.HashAppender
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRef,
-                                       fileRepository: FileMetadataRepository,
+                                       fileRepository: Repository[FileMetadata, Int],
                                        hashAppender: HashAppender)
                                       (implicit executionContext: ExecutionContext,
                                        materializer: ActorMaterializer) extends FileUploadResolver

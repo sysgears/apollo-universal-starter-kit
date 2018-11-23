@@ -71,6 +71,62 @@ function computeRootModulesPath(moduleName) {
 }
 
 /**
+ * Gets the computed package path for the module.
+ *
+ * @param moduleName - The name of a new module.
+ * @param location - The location for a new module [client|server|both].
+ * @returns {string} - Return the computed path
+ */
+function computeModulePackageName(location, options, moduleName) {
+  return options.old
+    ? `./${moduleName}`
+    : `@module/${decamelize(moduleName, {
+        separator: '-'
+      })}-${location}`;
+}
+
+/**
+ * Gets the computed package path for the module.
+ *
+ * @param moduleName - The name of a new module.
+ * @returns {string} - Return the computed path
+ */
+function computePackagePath(location) {
+  return `${BASE_PATH}/packages/${location.split('-')[0]}/package.json`;
+}
+
+/**
+ * Add symlink
+ *
+ * @param moduleName - The name of a new module.
+ * @param location - The location for a new module [client|server].
+ */
+function addSymlink(location, moduleName) {
+  shell.ln(
+    '-s',
+    `${BASE_PATH}/modules/${moduleName}/${location}`,
+    `${BASE_PATH}/node_modules/@module/${decamelize(moduleName, {
+      separator: '-'
+    })}-${location}`
+  );
+}
+
+/**
+ * Remove symlink
+ *
+ * @param moduleName - The name of a new module.
+ * @param location - The location for a new module [client|server].
+ */
+function removeSymlink(location, moduleName) {
+  shell.rm(
+    `${BASE_PATH}/modules/${moduleName}/${location}`,
+    `${BASE_PATH}/node_modules/@module/${decamelize(moduleName, {
+      separator: '-'
+    })}-${location}`
+  );
+}
+
+/**
  * Run prettier on file that was changed.
  *
  * @param pathToFile
@@ -86,5 +142,9 @@ module.exports = {
   copyFiles,
   computeModulesPath,
   computeRootModulesPath,
+  computePackagePath,
+  computeModulePackageName,
+  addSymlink,
+  removeSymlink,
   runPrettier
 };

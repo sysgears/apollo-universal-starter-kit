@@ -1,7 +1,15 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { copyFiles, renameFiles, computeModulesPath, runPrettier } = require('../helpers/util');
+const {
+  copyFiles,
+  renameFiles,
+  computeModulesPath,
+  computePackagePath,
+  computeModulePackageName,
+  addSymlink,
+  runPrettier
+} = require('../helpers/util');
 
 /**
  * Adds application module to client or server code and adds it to the module list.
@@ -39,8 +47,9 @@ function addModule(logger, templatesPath, moduleName, options, location, finishe
 
   try {
     // prepend import module
-    const importFrom = options.old ? `./${moduleName}` : `@module/${moduleName}-${location}`;
-    indexContent = `import ${moduleName} from '${importFrom}';\n` + fs.readFileSync(indexPath);
+    indexContent =
+      `import ${moduleName} from '${computeModulePackageName(location, options, moduleName)}';\n` +
+      fs.readFileSync(indexPath);
   } catch (e) {
     logger.error(chalk.red(`Failed to read ${indexPath} file`));
     process.exit();
@@ -56,6 +65,32 @@ function addModule(logger, templatesPath, moduleName, options, location, finishe
     .to(indexPath);
   runPrettier(indexPath);
 
+  if (!options.old) {
+    // get package content
+    const packagePath = computePackagePath(location);
+    const packageContent = `` + fs.readFileSync(packagePath);
+
+    // extract dependencies
+    const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
+    const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
+
+    // insert package and sort
+    const dependenciesSorted = dependencies.split(',');
+    dependenciesSorted.push(`\n    "${computeModulePackageName(location, options, moduleName)}": "^1.0.0"`);
+    dependenciesSorted.sort();
+
+    // add module to package list
+    shell
+      .ShellString(
+        packageContent.replace(
+          RegExp(dependenciesRegExp, 'g'),
+          `"dependencies": {${dependenciesSorted}},\n  "devDependencies"`
+        )
+      )
+      .to(packagePath);
+
+    addSymlink(location, moduleName);
+  }
   if (finished) {
     logger.info(chalk.green(`✔ Module for ${location} successfully created!`));
   }

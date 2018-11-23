@@ -14,7 +14,7 @@ import pageNotFound from './pageNotFound';
 import pagination from './pagination';
 import './favicon';
 
-const modules = new ClientModule(
+const modules: ClientModule = new ClientModule(
   validation,
   defaultRouter,
   counter,

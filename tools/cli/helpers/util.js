@@ -39,6 +39,7 @@ function renameFiles(destinationPath, moduleName) {
     if (entry.isFile()) {
       shell.sed('-i', /\$module\$/g, moduleName, entry.name);
       shell.sed('-i', /\$_module\$/g, decamelize(moduleName), entry.name);
+      shell.sed('-i', /\$-module\$/g, decamelize(moduleName, { separator: '-' }), entry.name);
       shell.sed('-i', /\$Module\$/g, Module, entry.name);
       shell.sed('-i', /\$MoDuLe\$/g, startCase(moduleName), entry.name);
       shell.sed('-i', /\$MODULE\$/g, moduleName.toUpperCase(), entry.name);
@@ -53,8 +54,20 @@ function renameFiles(destinationPath, moduleName) {
  * @param moduleName - The name of a new module.
  * @returns {string} - Return the computed path
  */
-function computeModulesPath(location, moduleName = '') {
-  return `${BASE_PATH}/packages/${location}/src/modules/${moduleName}`;
+function computeModulesPath(location, options, moduleName = '') {
+  return options.old || moduleName === ''
+    ? `${BASE_PATH}/packages/${location.split('-')[0]}/src/modules/${moduleName}`
+    : `${BASE_PATH}/modules/${moduleName}/${location}`;
+}
+
+/**
+ * Gets the computed path of the root module path.
+ *
+ * @param moduleName - The name of a new module.
+ * @returns {string} - Return the computed path
+ */
+function computeRootModulesPath(moduleName) {
+  return `${BASE_PATH}/modules/${moduleName}`;
 }
 
 /**
@@ -72,5 +85,6 @@ module.exports = {
   renameFiles,
   copyFiles,
   computeModulesPath,
+  computeRootModulesPath,
   runPrettier
 };

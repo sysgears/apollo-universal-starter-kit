@@ -157,11 +157,11 @@ chat configurations for your Apollo Starter Kit-based project:
 
 ## Deploying a Mobile App with Chat
 
-To deploy the Apollo Universal Starter Kit mobile app with chat, consult a [dedicated Wiki section].
+To deploy the Apollo Universal Starter Kit mobile app with chat, consult the [Deployment] section.
 
 [react native gifted chat]: https://github.com/FaridSafi/react-native-gifted-chat
 [android]: https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en_US
 [ios]: https://itunes.apple.com/ru/app/expo-client/id982107779?mt=8
 [gifted chat documentation]: https://github.com/FaridSafi/react-native-gifted-chat#props
 [expo documentation on imagepicker]: https://docs.expo.io/versions/latest/sdk/imagepicker
-[dedicated wiki section]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Getting-Started#building-a-standalone-mobile-app-for-google-play-or-app-store
+[Deployment]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/deployment.md

@@ -8,7 +8,7 @@ import { MenuItem } from '../../modules/common/components/web';
 import $Module$ from './containers/$Module$';
 import resources from './locales';
 
-const NavLinkWithI18n = translate()(({ t }: { t: TranslateFunction }) => (
+const NavLinkWithI18n = translate('$module$')(({ t }: { t: TranslateFunction }) => (
   <NavLink to="/$module$" className="nav-link" activeClassName="active">
     {t('$module$:navLink')}
   </NavLink>

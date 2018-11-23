@@ -53,21 +53,20 @@ class PostList extends React.PureComponent {
   handleScrollEvent = () => {
     const {
       posts: {
-        pageInfo: { endCursor }
+        pageInfo: { endCursor, hasNextPage }
       },
+      loading,
       loadData
     } = this.props;
-    if (this.allowDataLoad) {
-      if (this.props.posts.pageInfo.hasNextPage) {
-        this.allowDataLoad = false;
-        return loadData(endCursor + 1, 'add');
-      }
+
+    if (this.allowDataLoad && !loading && hasNextPage) {
+      this.allowDataLoad = false;
+      return loadData(endCursor + 1, 'add');
     }
   };
 
   render() {
     const { loading, posts, t } = this.props;
-
     if (loading) {
       return <Loading text={t('post.loadMsg')} />;
     } else if (posts && !posts.totalCount) {

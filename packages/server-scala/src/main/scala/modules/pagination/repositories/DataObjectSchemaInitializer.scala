@@ -14,14 +14,20 @@ class DataObjectSchemaInitializer @Inject()(database: Database)
   val objects: TableQuery[DataObject.Table] = TableQuery[DataObject.Table]
 
   override def create(): Future[Unit] = {
-    withTable(database, objects, DataObject.name, _.isEmpty){
-      DBIO.seq(objects.schema.create)
+    withTable(database, objects, DataObject.name, _.isEmpty) {
+      DBIO.seq(objects.schema.create,
+        objects ++= seedDatabase
+      )
     }
   }
 
   override def drop(): Future[Unit] = {
-    withTable(database, objects, DataObject.name, _.nonEmpty){
+    withTable(database, objects, DataObject.name, _.nonEmpty) {
       DBIO.seq(objects.schema.drop)
     }
+  }
+
+  def seedDatabase: List[DataObject] = {
+    List.range(1, 100).map(num => DataObject(Some(num), s"Item $num"))
   }
 }

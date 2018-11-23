@@ -45,10 +45,6 @@ libraryDependencies ++= Seq(
 
   "com.pauldijou" %% "jwt-core" % "0.19.0",
 
-  /*
-    "commons-io" % "commons-io" % "2.6",
-  */
-
   "org.mindrot" % "jbcrypt" % "0.3m"
 )
 

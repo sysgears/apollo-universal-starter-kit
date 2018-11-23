@@ -59,11 +59,13 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
   override def files: Future[List[FileMetadata]] = fileRepository.findAll.run.map(_.toList)
 
   override def removeFile(id: Int): Future[Boolean] = {
-    (for {
-      fileMetadataOption <- fileRepository.findOne(id)
-      fileMetadata <- if (fileMetadataOption.nonEmpty) DBIO.successful(fileMetadataOption.get) else DBIO.failed(NotFound(s"FileMetadata(id: $id)"))
-      deletedFileMetadata <- fileRepository.delete(fileMetadata)
-    } yield deletedFileMetadata).run.map {
+    fileRepository.executeTransactionally(
+      for {
+        fileMetadataOption <- fileRepository.findOne(id)
+        fileMetadata <- if (fileMetadataOption.nonEmpty) DBIO.successful(fileMetadataOption.get) else DBIO.failed(NotFound(s"FileMetadata(id: $id)"))
+        deletedFileMetadata <- fileRepository.delete(fileMetadata)
+      } yield deletedFileMetadata
+    ).run.map {
       deletedFileMetadata =>
         Files.deleteIfExists(resourcesDirPath.resolve(deletedFileMetadata.path))
     }

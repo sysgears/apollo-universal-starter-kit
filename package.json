@@ -68,7 +68,8 @@
     "packages/*",
     "modules/**/client-react",
     "modules/**/common-react",
-    "modules/**/server-ts"
+    "modules/**/server-ts",
+    "modules/**/common"
   ],
   "greenkeeper": {
     "ignore": [

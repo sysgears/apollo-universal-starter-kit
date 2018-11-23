@@ -1,4 +1,4 @@
-package moduless
+package modules
 
 import com.google.inject.Scopes
 import net.codingwell.scalaguice.ScalaModule

@@ -1,4 +1,4 @@
-package moduless
+package modules
 
 import actors.FileActor
 import akka.actor.{Actor, ActorRef, ActorSystem}

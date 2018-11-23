@@ -1,4 +1,4 @@
-package moduless
+package modules
 
 import graphql.resolvers.{FileUploadResolver, FileUploadResolverImpl}
 import net.codingwell.scalaguice.ScalaModule

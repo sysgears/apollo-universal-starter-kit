@@ -10,7 +10,6 @@ import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.name.Named
 import common.RichDBIO._
 import common.errors._
-import common.implicits.RichFuture._
 import common.{ActorMessageDelivering, Logger}
 import javax.inject.Inject
 import modules.upload.actors.FileActor
@@ -18,6 +17,7 @@ import modules.upload.actors.FileActor.SaveFileMetadata
 import modules.upload.graphql.resolvers.FileUploadResolverImpl._
 import modules.upload.models.FileMetadata
 import modules.upload.services.HashAppender
+import slick.dbio.DBIO
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -59,11 +59,14 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
   override def files: Future[List[FileMetadata]] = fileRepository.findAll.run.map(_.toList)
 
   override def removeFile(id: Int): Future[Boolean] = {
-    for {
-      fileMetadata <- fileRepository.findOne(id).run failOnNone NotFound(s"FileMetadata(id: $id)")
-      _ <- fileRepository.delete(fileMetadata).run
-      deleteResult <- Future(Files.deleteIfExists(resourcesDirPath.resolve(fileMetadata.path)))
-    } yield deleteResult
+    (for {
+      fileMetadataOption <- fileRepository.findOne(id)
+      fileMetadata <- if (fileMetadataOption.nonEmpty) DBIO.successful(fileMetadataOption.get) else DBIO.failed(NotFound(s"FileMetadata(id: $id)"))
+      deletedFileMetadata <- fileRepository.delete(fileMetadata)
+    } yield deletedFileMetadata).run.map {
+      deletedFileMetadata =>
+        Files.deleteIfExists(resourcesDirPath.resolve(deletedFileMetadata.path))
+    }
   }.recover {
     case error: Error =>
       log.error(s"Failed to upload files. Reason: [$error")

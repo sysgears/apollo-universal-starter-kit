@@ -14,6 +14,7 @@
     "clean": "lerna run clean --stream",
     "start": "lerna run --scope=server start --stream",
     "watch": "spin watch",
+    "watch-client": "cross-env ONLY_CLIENT=true lerna run --scope=client watch --stream",
     "cli": "node tools/cli",
     "stripe:setup": "lerna run --scope=server stripe:setup",
     "seed": "lerna run --scope=server seed --stream",

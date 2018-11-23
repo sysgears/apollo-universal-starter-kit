@@ -74,6 +74,21 @@ function computeRootModulesPath(moduleName) {
  * Gets the computed package path for the module.
  *
  * @param moduleName - The name of a new module.
+ * @param location - The location for a new module [client|server|both].
+ * @returns {string} - Return the computed path
+ */
+function computeModulePackageName(location, options, moduleName) {
+  return options.old
+    ? `./${moduleName}`
+    : `@module/${decamelize(moduleName, {
+        separator: '-'
+      })}-${location}`;
+}
+
+/**
+ * Gets the computed package path for the module.
+ *
+ * @param moduleName - The name of a new module.
  * @returns {string} - Return the computed path
  */
 function computePackagePath(location) {
@@ -97,5 +112,6 @@ module.exports = {
   computeModulesPath,
   computeRootModulesPath,
   computePackagePath,
+  computeModulePackageName,
   runPrettier
 };

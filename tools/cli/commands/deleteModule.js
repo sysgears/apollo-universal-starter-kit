@@ -1,8 +1,13 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
-const { decamelize } = require('humps');
-const { computeModulesPath, computeRootModulesPath, computePackagePath, runPrettier } = require('../helpers/util');
+const {
+  computeModulesPath,
+  computeRootModulesPath,
+  computePackagePath,
+  computeModulePackageName,
+  runPrettier
+} = require('../helpers/util');
 
 /**
  * Removes the module from client, server or both locations and removes the module from the module list.
@@ -46,37 +51,41 @@ function deleteModule(logger, moduleName, options, location) {
     const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
     const appModulesWithoutDeleted = appModules.split(',').filter(appModule => appModule.trim() !== moduleName);
 
-    const importFrom = options.old ? `./${moduleName}` : `@module/${moduleName}-${location}`;
     const contentWithoutDeletedModule = indexContent
       .toString()
       // remove module from modules list
       .replace(appModuleRegExp, `Module(${appModulesWithoutDeleted.toString().trim()})`)
       // remove module import
-      .replace(RegExp(`import ${moduleName} from '${importFrom}';\n`, 'g'), '');
+      .replace(
+        RegExp(`import ${moduleName} from '${computeModulePackageName(location, options, moduleName)}';\n`, 'g'),
+        ''
+      );
 
     fs.writeFileSync(indexPath, contentWithoutDeletedModule);
     runPrettier(indexPath);
 
-    // get package content
-    const packagePath = computePackagePath(location);
-    const packageContent = `` + fs.readFileSync(packagePath);
+    if (!options.old) {
+      // get package content
+      const packagePath = computePackagePath(location);
+      const packageContent = `` + fs.readFileSync(packagePath);
 
-    // extract dependencies
-    const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
-    const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
-    const dependenciesWithoutDeleted = dependencies
-      .split(',')
-      .filter(pkg => pkg.indexOf(decamelize(moduleName, { separator: '-' })) < 0);
+      // extract dependencies
+      const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
+      const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
+      const dependenciesWithoutDeleted = dependencies
+        .split(',')
+        .filter(pkg => pkg.indexOf(computeModulePackageName(location, options, moduleName)) < 0);
 
-    // remove module from package list
-    shell
-      .ShellString(
-        packageContent.replace(
-          RegExp(dependenciesRegExp, 'g'),
-          `"dependencies": {${dependenciesWithoutDeleted}},\n  "devDependencies"`
+      // remove module from package list
+      shell
+        .ShellString(
+          packageContent.replace(
+            RegExp(dependenciesRegExp, 'g'),
+            `"dependencies": {${dependenciesWithoutDeleted}},\n  "devDependencies"`
+          )
         )
-      )
-      .to(packagePath);
+        .to(packagePath);
+    }
 
     logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));
   } else {

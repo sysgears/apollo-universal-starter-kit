@@ -7,6 +7,7 @@ const {
   computeModulesPath,
   computePackagePath,
   computeModulePackageName,
+  addSymlink,
   runPrettier
 } = require('../helpers/util');
 
@@ -87,6 +88,8 @@ function addModule(logger, templatesPath, moduleName, options, location, finishe
         )
       )
       .to(packagePath);
+
+    addSymlink(location, moduleName);
   }
   if (finished) {
     logger.info(chalk.green(`✔ Module for ${location} successfully created!`));

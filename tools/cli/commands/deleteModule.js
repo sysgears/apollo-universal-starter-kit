@@ -6,6 +6,7 @@ const {
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,
+  removeSymlink,
   runPrettier
 } = require('../helpers/util');
 
@@ -85,6 +86,8 @@ function deleteModule(logger, moduleName, options, location) {
           )
         )
         .to(packagePath);
+
+      removeSymlink(location, moduleName);
     }
 
     logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));

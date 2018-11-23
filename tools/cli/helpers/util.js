@@ -96,6 +96,37 @@ function computePackagePath(location) {
 }
 
 /**
+ * Add symlink
+ *
+ * @param moduleName - The name of a new module.
+ * @param location - The location for a new module [client|server].
+ */
+function addSymlink(location, moduleName) {
+  shell.ln(
+    '-s',
+    `${BASE_PATH}/modules/${moduleName}/${location}`,
+    `${BASE_PATH}/node_modules/@module/${decamelize(moduleName, {
+      separator: '-'
+    })}-${location}`
+  );
+}
+
+/**
+ * Remove symlink
+ *
+ * @param moduleName - The name of a new module.
+ * @param location - The location for a new module [client|server].
+ */
+function removeSymlink(location, moduleName) {
+  shell.rm(
+    `${BASE_PATH}/modules/${moduleName}/${location}`,
+    `${BASE_PATH}/node_modules/@module/${decamelize(moduleName, {
+      separator: '-'
+    })}-${location}`
+  );
+}
+
+/**
  * Run prettier on file that was changed.
  *
  * @param pathToFile
@@ -113,5 +144,7 @@ module.exports = {
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,
+  addSymlink,
+  removeSymlink,
   runPrettier
 };

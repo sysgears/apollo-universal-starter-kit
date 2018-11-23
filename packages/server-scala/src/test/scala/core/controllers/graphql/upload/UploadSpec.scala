@@ -2,20 +2,21 @@ package core.controllers.graphql.upload
 
 import java.nio.file.{Path, Paths}
 
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, Multipart}
 import akka.http.scaladsl.model.MediaTypes._
 import akka.http.scaladsl.model.StatusCodes._
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, Multipart}
 import akka.http.scaladsl.testkit.RouteTestTimeout
+import akka.testkit.TestDuration
 import akka.util.ByteString
+import common.RichDBIO._
 import core.controllers.graphql.TestHelper
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.upload.models.FileMetadata
+import org.apache.commons.io.FileUtils
 import spray.json._
 
 import scala.concurrent.duration._
-import akka.testkit.TestDuration
-import org.apache.commons.io.FileUtils
 
 class UploadSpec extends TestHelper {
 
@@ -44,11 +45,13 @@ class UploadSpec extends TestHelper {
 
   val filesQuery = "query { files { id, name, contentType, size, path } }"
   val filesQueryGraphQLMessage = ByteString(GraphQLMessage(filesQuery).toJson.compactPrint)
-  val filesQueryEntity = HttpEntity(`application/json`, filesQueryGraphQLMessage )
+  val filesQueryEntity = HttpEntity(`application/json`, filesQueryGraphQLMessage)
 
   def removeFileMutation(id: Int) = s"mutation { removeFile(id: $id) }"
+
   def removeFileMutationGraphQLMessage(id: Int) = ByteString(GraphQLMessage(removeFileMutation(id)).toJson.compactPrint)
-  def removeFileEntity(id: Int) = HttpEntity(`application/json`, removeFileMutationGraphQLMessage(id) )
+
+  def removeFileEntity(id: Int) = HttpEntity(`application/json`, removeFileMutationGraphQLMessage(id))
 
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
@@ -76,8 +79,8 @@ class UploadSpec extends TestHelper {
 
           val filesMetadata: List[FileMetadata] = responseAs[String].parseJson
             .asJsObject.fields("data")
-              .asJsObject.fields("files")
-              .convertTo[List[FileMetadata]]
+            .asJsObject.fields("files")
+            .convertTo[List[FileMetadata]]
 
           status shouldBe OK
           contentType.mediaType shouldBe `application/json`
@@ -108,7 +111,7 @@ class UploadSpec extends TestHelper {
               .convertTo[Boolean]
 
             removeFileResult shouldBe true
-            await(fileMetadataRepo.find(fileMetadata.id.get)) shouldNot be(defined)
+            await(fileMetadataRepo.findOne(fileMetadata.id.get).run) shouldNot be(defined)
             Paths.get(getClass.getResource("/").getPath, fileMetadata.path).toFile.exists shouldBe false
           }
         }

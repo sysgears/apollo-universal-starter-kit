@@ -1,8 +1,8 @@
 package core.controllers.graphql
 
-import modules.upload.repositories.FileMetadataRepo
 import core.guice.injection.Injecting
+import modules.upload.repositories.FileMetadataRepository
 
 trait LazyAppComponents extends Injecting {
-  lazy val fileMetadataRepo: FileMetadataRepo = inject[FileMetadataRepo]
+  lazy val fileMetadataRepo: FileMetadataRepository = inject[FileMetadataRepository]
 }

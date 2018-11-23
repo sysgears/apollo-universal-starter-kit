@@ -9,6 +9,7 @@ import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import scala.concurrent.duration._
 import akka.testkit.TestDuration
+import modules.pagination.model.DataObject
 import spray.json._
 
 class PaginationSpec extends TestHelper {
@@ -23,11 +24,17 @@ class PaginationSpec extends TestHelper {
   "PaginationSpec" must {
 
     "return paginated list of objects" in {
+      val testObject1 = await(dataObjectRepo.save(DataObject(None, "Object1")))
+      val testObject2 = await(dataObjectRepo.save(DataObject(None, "Object2")))
+      val testObject3 = await(dataObjectRepo.save(DataObject(None, "Object3")))
+      val testObject4 = await(dataObjectRepo.save(DataObject(None, "Object4")))
+
       val entity = HttpEntity(`application/json`, graphQLMessage)
       Post(endpoint, entity) ~> routes ~> check {
         val paginatedResult = responseAs[String]
-        println(paginatedResult)
-        paginatedResult.contains("hasNextPage")
+        paginatedResult shouldEqual "{\"data\":{\"getPaginatedList\":{\"totalCount\":4," +
+          "\"entities\":[{\"description\":\"Object1\"},{\"description\":\"Object2\"},{\"description\":\"Object3\"}]," +
+          "\"hasNextPage\":true}}}"
       }
     }
 

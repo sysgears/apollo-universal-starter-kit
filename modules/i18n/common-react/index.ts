@@ -1,5 +1,5 @@
 import i18next, { i18n as I18N, Resource } from 'i18next';
-import CommonModule from '@module/module-common-react';
+import CommonModule from '@module/module-common';
 import settings from '../../../settings';
 import './init';
 

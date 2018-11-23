@@ -1,4 +1,4 @@
-import CommonModule from '@module/module-common-react';
+import CommonModule from '@module/module-common';
 import resources from './locales';
 
 export * from './validation';

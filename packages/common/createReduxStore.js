@@ -2,16 +2,15 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
-import modules from '../client/src/modules';
+export const getStoreReducer = reducers =>
+  combineReducers({
+    router: routerReducer,
+    ...reducers
+  });
 
-export const storeReducer = combineReducers({
-  router: routerReducer,
-  ...modules.reducers
-});
-
-const createReduxStore = (initialState, client, routerMiddleware) => {
+const createReduxStore = (reducers, initialState, client, routerMiddleware) => {
   return createStore(
-    storeReducer,
+    getStoreReducer(reducers),
     initialState, // initial state
     routerMiddleware ? composeWithDevTools(applyMiddleware(routerMiddleware)) : undefined
   );

@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
 
-import translate from '../../../i18n';
-import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
-import ADD_MESSAGE from '../graphql/AddMessage.graphql';
-import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
-import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
-import { withUser } from '../../user/';
+import { translate } from '@module/i18n-client-react';
+import chatConfig from '../../../../config/chat';
+import { withUser } from '../../../../packages/client/src/modules/user/';
 import withUuid from './withUuid';
 import Chat from './Chat';
 import withImage from './withImage';
 import withMessagesFormatter from './withMessagesFormatter';
-import chatConfig from '../../../../../../config/chat';
 import withMessagesSubscription from './withMessagesSubscription';
+
+import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
+import ADD_MESSAGE from '../graphql/AddMessage.graphql';
+import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
+import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 
 function AddMessage(prev, node) {
   // ignore if duplicate

@@ -205,15 +205,52 @@ simulator when you run the Apollo Universal Starter Kit project for mobile.
 **NOTE**: use the username on you development computer instead of the `/username/` part in `PATH`, for example,
 `"/home/johndoe/Android/Sdk/platform-tools:$PATH"`.
 
-6. Launch your virtual phone from AVD Manager: open the **Tools** menu and click **AVD Manager**. In the list of
+6. Activate building the mobile app code for Android or iOS (or both) in the application properties in the
+`packages/mobile/.spinrc.js` configuration file:
+
+    * Set `builders.android.enabled` to `true` to build the mobile app for an Android
+    * Set `builders.ios.enabled` to `true` to run the mobile app for iOS
+
+Example:
+```javascript
+const url = require('url');
+
+const config = {
+  builders: {
+    android: {
+      entry: './src/index.ts',
+      buildDir: 'build/android',
+      dllBuildDir: 'build/android/dll',
+      stack: ['react-native', 'android'],
+      defines: {
+        __CLIENT__: true
+      },
+      enabled: false // Set to true to run the app on Android
+    },
+    ios: {
+      entry: './src/index.ts',
+      buildDir: 'build/ios',
+      dllBuildDir: 'build/ios/dll',
+      stack: ['react-native', 'ios'],
+      defines: {
+        __CLIENT__: true
+      },
+      enabled: false // Set to true to run the app on iOS
+    },
+  },
+};
+  //...other configurations are omitted.
+```
+
+7. Launch your virtual phone from AVD Manager: open the **Tools** menu and click **AVD Manager**. In the list of
 available virtual devices, run the one you created.
 
-7. Launch the starter kit with `yarn watch`.
+8. Launch the starter kit with `yarn watch`.
 
 **NOTE**: If you're launching the starter kit for the first time, you may need to first run `yarn seed` to generate
 sample data. After that, you can start the app with `yarn watch`.
 
-8. The Expo Client app will automatically start. You don't need to additionally install Expo Client on the virtual
+9. The Expo Client app will automatically start. You don't need to additionally install Expo Client on the virtual
 smartphone.
 
 **NOTE**: It may take up to a minute or two to build and run the mobile app on Android for the first time. The next runs

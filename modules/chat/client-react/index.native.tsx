@@ -1,12 +1,11 @@
 import React from 'react';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, NavigationScreenConfigProps } from 'react-navigation';
 
-import translate from '../../i18n';
-import { HeaderTitle, IconButton } from '../common/components/native';
+import ClientModule from '@module/module-client-react/index.native';
+import { translate } from '@module/i18n-client-react';
+import { HeaderTitle, IconButton } from '../../../packages/client/src/modules/common/components/native';
 import Chat from './containers/ChatOperations';
 import resources from './locales';
-
-import ClientModule from '../ClientModule';
 
 const HeaderTitleWithI18n = translate('chat')(HeaderTitle);
 
@@ -17,7 +16,7 @@ export default new ClientModule({
         screen: createStackNavigator({
           Chat: {
             screen: Chat,
-            navigationOptions: ({ navigation }) => ({
+            navigationOptions: ({ navigation }: NavigationScreenConfigProps) => ({
               headerTitle: <HeaderTitleWithI18n style="subTitle" />,
               headerLeft: (
                 <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />

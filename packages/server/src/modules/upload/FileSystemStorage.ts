@@ -18,7 +18,7 @@ export interface UploadFileStream {
 /**
  * Class FileSystemStorage provides saving, getting info, deleting the files in the file system.
  */
-class FileSystemStorage {
+export class FileSystemStorage {
   public save(uploadFileStream: UploadFileStream, location: string, shouldGenerateId = true): Promise<UploadedFile> {
     const { stream, filename, mimetype } = uploadFileStream;
     const id = shouldGenerateId ? `${shortid.generate()}-` : '';

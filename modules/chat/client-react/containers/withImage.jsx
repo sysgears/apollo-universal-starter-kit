@@ -6,7 +6,7 @@ import url from 'url';
 import PropTypes from 'prop-types';
 import { View, Platform } from 'react-native';
 
-import chatConfig from '../../../../../../config/chat';
+import chatConfig from '../../../../config/chat';
 import ModalNotify from '../components/ModalNotify';
 
 const {

@@ -1,8 +1,33 @@
-import { orderedFor, returnId } from '../../sql/helpers';
-import knex from '../../sql/connector';
+/*tslint:disable:variable-name*/
+import { orderedFor, returnId } from '../../../packages/server/src/sql/helpers';
+import knex from '../../../packages/server/src/sql/connector';
+import { UploadedFile } from '../../../packages/server/src/modules/upload/FileSystemStorage';
 
-export default class Chat {
-  message(id) {
+export interface Identifier {
+  id: number;
+}
+
+export type Message = {
+  text: string;
+  userId: number;
+  uuid: string;
+  username: string;
+  filename: string;
+  path: string;
+  createdAt: string;
+  quotedId: string;
+} & Identifier;
+
+interface AddMessageParams {
+  text: string;
+  userId: number;
+  uuid: string;
+  quotedId: number;
+  attachment?: UploadedFile;
+}
+
+export default class ChatDAO {
+  public message(id: number) {
     return knex
       .select(
         'm.id',
@@ -24,7 +49,7 @@ export default class Chat {
       .first();
   }
 
-  async getQuatedMessages(messageIds) {
+  public async getQuatedMessages(messageIds: number[]) {
     const res = await knex
       .select('m.id', 'm.text', 'm.user_id as userId', 'u.username', 'a.name as filename', 'a.path')
       .from('message as m')
@@ -37,7 +62,7 @@ export default class Chat {
     return orderedFor(res, messageIds, 'id', true);
   }
 
-  attachment(id) {
+  public attachment(id: number) {
     return knex
       .select('id', 'name as filename', 'type', 'size', 'path')
       .from('attachment')
@@ -45,7 +70,7 @@ export default class Chat {
       .first();
   }
 
-  messagesPagination(limit, after) {
+  public messagesPagination(limit: number, after: number) {
     return knex
       .select(
         'm.id',
@@ -68,17 +93,17 @@ export default class Chat {
       .offset(after);
   }
 
-  getTotal() {
+  public getTotal() {
     return knex('message')
       .countDistinct('id as count')
       .first();
   }
 
-  addMessage({ text, userId: user_id, uuid, quotedId: quoted_id }) {
+  public addMessage({ text, userId: user_id, uuid, quotedId: quoted_id }: AddMessageParams) {
     return returnId(knex('message')).insert({ text, user_id, uuid, quoted_id });
   }
 
-  addMessageWithAttachment({ text, userId: user_id, uuid, quotedId: quoted_id, attachment }) {
+  public addMessageWithAttachment({ text, userId: user_id, uuid, quotedId: quoted_id, attachment }: AddMessageParams) {
     return knex.transaction(trx => {
       knex('message')
         .transacting(trx)
@@ -95,13 +120,13 @@ export default class Chat {
     });
   }
 
-  deleteMessage(id) {
+  public deleteMessage(id: number) {
     return knex('message')
       .where('id', '=', id)
       .del();
   }
 
-  editMessage({ id, text, userId: user_id }) {
+  public editMessage({ id, text, userId: user_id }: { text: string; userId: number } & Identifier) {
     return knex('message')
       .where('id', '=', id)
       .update({

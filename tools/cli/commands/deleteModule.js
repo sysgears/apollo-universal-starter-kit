@@ -68,7 +68,7 @@ function deleteModule(logger, moduleName, options, location) {
       .split(',')
       .filter(pkg => pkg.indexOf(decamelize(moduleName, { separator: '-' })) < 0);
 
-    // add module to package list
+    // remove module from package list
     shell
       .ShellString(
         packageContent.replace(

@@ -71,7 +71,7 @@ function computeRootModulesPath(moduleName) {
 }
 
 /**
- * Gets the computed package path of the module.
+ * Gets the computed package path for the module.
  *
  * @param moduleName - The name of a new module.
  * @returns {string} - Return the computed path

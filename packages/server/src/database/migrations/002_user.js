@@ -21,6 +21,17 @@ exports.up = function(knex, Promise) {
         .onDelete('CASCADE');
       table.timestamps(false, true);
     }),
+    knex.schema.createTable('user_sessions', table => {
+      table.increments();
+      table.string('session_token');
+      table
+        .integer('user_id')
+        .unsigned()
+        .references('id')
+        .inTable('user')
+        .onDelete('CASCADE');
+      table.timestamps(false, true);
+    }),
     knex.schema.createTable('auth_certificate', table => {
       table.increments();
       table.string('serial').unique();

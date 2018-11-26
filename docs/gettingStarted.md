@@ -61,12 +61,10 @@ that all opened tabs are updated simultaneously.
 **NOTE**: Apollo Universal Starter Kit provides two client-side applications. One application is built with React and
 runs by default; the other is built with Angular and is disabled by default.
 
-If you want to develop your web application using Angular instead of React, you need to enable the Angular build in the 
-configurations and disable the React build. Also note both Angular and React applications run on the same port; 
-therefore, if you run both applications at the same time, only one application (most likely, React) will be actually 
-running.
+If you want to develop your web application using Angular instead of React, you need to enable the Angular application 
+and disable the React application. 
 
-To build the Angular application, do the following:
+To run the Angular application, do the following:
 
 1. Open the `packages/client/.spinrc.js` file and set the `builders.web.enabled` to `false` (the default value is set to 
 `true`):
@@ -113,6 +111,9 @@ const config = {
 };
 //...
 ```
+
+**NOTE**: both Angular and React applications run on the same port; therefore, if you run them at the same time, 
+only one of them (most likely, the React application) will be actually running.
 
 ## Running the Mobile App with Expo
 

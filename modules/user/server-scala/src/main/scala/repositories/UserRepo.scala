@@ -13,6 +13,8 @@ trait UserRepo {
 
   def find(id: Int): Future[Option[User]]
 
+  def find(usernameOrEmail: String): Future[Option[User]]
+
   def update(user: User): Future[User]
 
   def delete(id: Int): Future[Int]
@@ -26,6 +28,8 @@ class UserRepoImpl @Inject()(db: Database)(implicit executionContext: ExecutionC
   override def save(user: User): Future[User] = db.run(Actions.save(user))
 
   override def find(id: Int): Future[Option[User]] = db.run(Actions.find(id))
+
+  override def find(usernameOrEmail: String): Future[Option[User]] = db.run(Actions.find(usernameOrEmail))
 
   override def update(user: User): Future[User] = db.run(Actions.update(user))
 
@@ -41,11 +45,16 @@ class UserRepoImpl @Inject()(db: Database)(implicit executionContext: ExecutionC
       user <- if (users.lengthCompare(2) < 0) DBIO.successful(users.headOption) else DBIO.failed(AmbigousResult(s"User with id = $id"))
     } yield user
 
+    def find(usernameOrEmail: String): DBIO[Option[User]] = for {
+      users <- query.filter(user => user.email === usernameOrEmail || user.username === usernameOrEmail).result
+      user <- if (users.lengthCompare(2) < 0) DBIO.successful(users.headOption) else DBIO.failed(AmbigousResult(s"User with username or email = $usernameOrEmail"))
+    } yield user
+
     def update(user: User): DBIO[User] = {
       for {
         count <- query.filter(_.id === user.id).update(user)
         _ <- count match {
-          case 0 => DBIO.failed(NotFound(s"User with id=$user"))
+          case 0 => DBIO.failed(NotFound(s"User with id = $user"))
           case _ => DBIO.successful(())
         }
       } yield user

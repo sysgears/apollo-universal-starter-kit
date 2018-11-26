@@ -8,6 +8,8 @@ import StripeSubscriptionProfile from '../../payments/stripe/subscription/contai
 import { LayoutCenter } from '../../common/components';
 import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
 
+import { withLogoutFromAllDevices } from '../containers/Auth';
+
 import settings from '../../../../../../settings';
 
 const renderMetaData = t => {
@@ -24,7 +26,7 @@ const renderMetaData = t => {
   );
 };
 
-const ProfileView = ({ currentUserLoading, currentUser, t }) => {
+const ProfileView = ({ currentUserLoading, currentUser, t, logoutFromAllDevices }) => {
   if (currentUserLoading && !currentUser) {
     return (
       <PageLayout>
@@ -69,6 +71,11 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
           >
             {t('profile.editProfileText')}
           </Link>
+          <div>
+            <a href="#" className="mt-2 btn user-link" onClick={logoutFromAllDevices}>
+              {t('profile.logoutFAD')}
+            </a>
+          </div>
         </LayoutCenter>
       </PageLayout>
     );
@@ -85,7 +92,8 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
 ProfileView.propTypes = {
   currentUserLoading: PropTypes.bool,
   currentUser: PropTypes.object,
+  logoutFromAllDevices: PropTypes.func,
   t: PropTypes.func
 };
 
-export default translate('user')(ProfileView);
+export default withLogoutFromAllDevices(translate('user')(ProfileView));

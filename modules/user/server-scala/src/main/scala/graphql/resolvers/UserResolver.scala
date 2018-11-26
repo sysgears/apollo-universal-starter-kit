@@ -9,5 +9,7 @@ trait UserResolver {
 
   def confirmRegistration(input: ConfirmRegistrationInput): Future[AuthPayload]
 
+  def resendConfirmationMessage(input: ResendConfirmationMessageInput): Future[UserPayload]
+
   def login(loginUserInput: LoginUserInput): Future[AuthPayload]
 }

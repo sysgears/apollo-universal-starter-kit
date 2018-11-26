@@ -63,6 +63,21 @@ class UserResolverImpl @Inject()(userRepo: UserRepo,
     refreshToken = jwtAuthService.createRefreshToken(JwtContent(userId), user.password)
   } yield AuthPayload(Some(user), Some(Tokens(accessToken, refreshToken)))
 
+  override def resendConfirmationMessage(input: ResendConfirmationMessageInput): Future[UserPayload] = for {
+    user <- userRepo.find(input.usernameOrEmail) failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
+    _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful() else Future.failed(Unauthenticated())
+    userId <- user.id noneAsFutureFail NotFound(s"Id for user: [${user.username}] is none.")
+    accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
+    mailingResult <- mailService.send(
+      Message(
+        subject = "Apollo universal starter kit registration.",
+        content = Content().html(s"<p>${user.username}, please follow the link to confirm registration.</p><br><p>${websiteConfig.url + authConfig.confirmRegistrationRoute + accessToken}</p>"),
+        from = new InternetAddress(mailConfig.address),
+        to = Seq(new InternetAddress(user.email))
+      )
+    )
+  } yield UserPayload(Some(user), mailingResult.errors)
+
   override def login(input: LoginUserInput): Future[AuthPayload] = for {
     user <- userRepo.find(input.usernameOrEmail) failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
     _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful() else Future.failed(Unauthenticated())

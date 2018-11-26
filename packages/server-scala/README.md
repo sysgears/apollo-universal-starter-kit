@@ -1,6 +1,6 @@
-##Scala implementation of the Kit
+## Scala implementation of the Kit
 
-###Project structure
+### Project structure
 
 The current multi-module architecture of the Scala implementation of the Kit implies each module as a separate SBT project that can depend on another module.  
 
@@ -10,7 +10,7 @@ The **core** module is intended to store the base essential code that is used by
 
 The **main** module resides on `packages/server-scala` folder and is intended to run all the modules as a single application.  
 
-###How to add a new module
+### How to add a new module
 
 To properly set up a new module, the following steps should be done:
 

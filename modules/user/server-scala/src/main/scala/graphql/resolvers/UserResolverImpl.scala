@@ -29,18 +29,30 @@ class UserResolverImpl @Inject()(userRepo: UserRepo,
                                  authConfig: AuthConfig,
                                  websiteConfig: WebsiteConfig)
                                 (implicit executionContext: ExecutionContext) extends UserResolver {
-  override def register(input: RegisterUserInput): Future[UserPayload] = {
 
-    val hashedPassword = BCrypt.hashpw(input.password, BCrypt.gensalt)
-    val user = User(
-      username = input.username,
-      email = input.email,
-      password = hashedPassword,
-      role = "user",
-      isActive = false
-    )
-    userRepo.save(user).map(createdUser => UserPayload(Some(createdUser)))
-  }
+  override def register(input: RegisterUserInput,
+                        skipConfirmation: Boolean = authConfig.skipConfirmation): Future[UserPayload] = for {
+    createdUser <- userRepo.save(
+      User(
+        username = input.username,
+        email = input.email,
+        role = "user",
+        isActive = skipConfirmation,
+        password = BCrypt.hashpw(input.password, BCrypt.gensalt)
+      ))
+    userId <- createdUser.id noneAsFutureFail NotFound(s"Id for user: [${createdUser.username}] is none.")
+    accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
+    mailingResult <- if (!skipConfirmation) {
+      mailService.send(
+        Message(
+          subject = "Apollo universal starter kit registration.",
+          content = Content().html(s"<p>${createdUser.username}, please follow the link to confirm registration.</p><br><p>${websiteConfig.url + authConfig.confirmRegistrationRoute + accessToken}</p>"),
+          from = new InternetAddress(mailConfig.address),
+          to = Seq(new InternetAddress(createdUser.email))
+        )
+      )
+    } else Future.successful(MailPayload())
+  } yield UserPayload(Some(createdUser), mailingResult.errors)
 
   override def login(input: LoginUserInput): Future[AuthPayload] = for {
     user <- userRepo.find(input.usernameOrEmail) failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")

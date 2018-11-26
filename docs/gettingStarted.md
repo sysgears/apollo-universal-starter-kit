@@ -53,19 +53,23 @@ yarn seed
 yarn watch
 ```
 
-After running `yarn watch`, your default browser will automatically open at [http://localhost:3000/]. You can start
-changing the application code, and the changes will be applied immediately thanks to the live reload. You can also open
-the app in multiple tabs and test it: Increase the counter or add a new post or comment, and you'll see that all opened
-tabs are updated simultaneously.
+After running `yarn watch`, your default browser will automatically open the web application at [http://localhost:3000/]. 
+You can start changing the application code, and the changes will be applied immediately thanks to the live reload. You 
+can also open the app in multiple tabs and test it: Increase the counter or add a new post or comment, and you'll see 
+that all opened tabs are updated simultaneously.
 
 **NOTE**: Apollo Universal Starter Kit provides two client-side applications. One application is built with React and
 runs by default; the other is built with Angular and is disabled by default.
 
-If you want to develop an Angular application instead of React app with the starter kit, you need to _enable_ the
-Angular build in the configurations and _disable_ the React build. Also note both Angular and React applications run on
-the same port; therefore, if you run both applications at the same time, only one application (most likely, React) will be actually running.
+If you want to develop your web application using Angular instead of React, you need to enable the Angular build in the 
+configurations and disable the React build. Also note both Angular and React applications run on the same port; 
+therefore, if you run both applications at the same time, only one application (most likely, React) will be actually 
+running.
 
-1. Open the `packages/client/.spinrc.js` file and set the `build.web.enabled` to `false`. The default value is `true`:
+To build the Angular application, do the following:
+
+1. Open the `packages/client/.spinrc.js` file and set the `builders.web.enabled` to `false` (the default value is set to 
+`true`):
 
 ```javascript
 const url = require('url');
@@ -74,7 +78,7 @@ const config = {
   builders: {
     web: {
       //...
-      enabled: true // Set to false to disable building the React application
+      enabled: true // Set to false to disable the React application
     },
     test: {
       //...
@@ -87,9 +91,8 @@ const config = {
 //...
 ```
 
-2. Open the `packages/client-angular/.spinrc.js` file and set the `build.web.enabled` to true. The default value is
-`false`:
-
+2. Open the `packages/client-angular/.spinrc.js` file and set the `builders.web.enabled` to true (the default value is
+set to `false`):
 
 ```javascript
 const url = require('url');
@@ -98,7 +101,7 @@ const config = {
   builders: {
     web: {
       //...
-      enabled: false // Set to true to enable building the Angular application
+      enabled: false // Set to true to enable the Angular application
     },
     test: {
       //...
@@ -110,10 +113,6 @@ const config = {
 };
 //...
 ```
-
-**NOTE**: If you want to run the project on an Android or iOS device, check out the [Running a React Native App with
-Expo](#running-the-mobile-app-with-expo) and [Running the Starter Kit in a Mobile Simulator](#running-the-starter-kit-in-a-mobile-simulator) 
-sections.
 
 ## Running the Mobile App with Expo
 

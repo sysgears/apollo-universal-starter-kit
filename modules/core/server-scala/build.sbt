@@ -24,6 +24,8 @@ libraryDependencies ++= Seq(
   "com.softwaremill.akka-http-session" %% "core" % "0.5.6",
   "com.softwaremill.akka-http-session" %% "jwt" % "0.5.6",
 
+  "ch.megard" %% "akka-http-cors" % "0.3.1",
+
   "com.typesafe.akka" %% "akka-http-testkit" % "10.1.5",
   "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test",
 

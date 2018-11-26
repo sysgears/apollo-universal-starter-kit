@@ -4,7 +4,7 @@
 
 The current multi-module architecture of the Scala implementation of the Kit implies each module as a separate SBT project that can depend on another module.  
 
-All the custom modules along with the **core** module resides on the top-level in the `modules` folder. Scala implementation of a module resides on a `server-scala` subfolder, e.g. `modules/user/server-scala`.
+All the custom modules along with the **core** module reside on the top-level in the `modules` folder. Scala implementation of a module resides on a `server-scala` subfolder, e.g. `modules/user/server-scala`.
 
 The **core** module is intended to store the base essential code that is used by other custom modules.
 
@@ -20,6 +20,8 @@ To properly set up a new module, the following steps should be done:
 ```
 lazy val module-name = project in file(".")
 ```
+The name of the val is used as the project’s ID, which is used to refer to the project.
+
 For example, in **upload** module it looks like the following:
 ```
 lazy val upload = project in file(".")

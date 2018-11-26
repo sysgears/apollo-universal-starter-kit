@@ -76,4 +76,16 @@ const withLogout = Component =>
     return <Component {...newProps} />;
   });
 
-export { withUser, hasRole, withLoadedUser, IfLoggedIn, IfNotLoggedIn, withLogout };
+const withLogoutFromAllDevices = Component =>
+  withApollo(({ client, ...props }) => {
+    const newProps = {
+      ...props,
+      logoutFromAllDevices: async () => {
+        await access.doLogoutFromAllDevices(client);
+        await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
+      }
+    };
+    return <Component {...newProps} />;
+  });
+
+export { withUser, hasRole, withLoadedUser, IfLoggedIn, IfNotLoggedIn, withLogout, withLogoutFromAllDevices };

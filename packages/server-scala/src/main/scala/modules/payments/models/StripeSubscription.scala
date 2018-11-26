@@ -39,4 +39,26 @@ object StripeSubscription extends ((Option[Long], Long, Boolean, String, String,
     override def * = (id ?, userId, active, stripeSourceId, stripeCustomerId, stripeSubscriptionId, expiryMonth,
       expiryYear, last4, brand).mapTo[StripeSubscription]
   }
+
+  /**
+    * A separate model, which contains a subset of StripeSubscription's fields, which represent the subscriber's
+    * credit card
+    *
+    * @param expiryMonth a month of a card expiration date
+    * @param expiryYear a month of a card expiration date
+    * @param last4 last four digits of a credit card number
+    * @param brand a credit card brand - "Visa", "MasterCard", etc.
+    */
+  case class CreditCard(expiryMonth: Long, expiryYear: Long, last4: Int, brand: String)
+  object CreditCard {
+    /**
+      * A helper apply-method for this model that constructs instance from a tuple
+      */
+    def apply(ccDataTuple: (Long, Long, Int, String)): CreditCard = CreditCard(
+      expiryMonth = ccDataTuple._1,
+      expiryYear = ccDataTuple._2,
+      last4 = ccDataTuple._3,
+      brand = ccDataTuple._4
+    )
+  }
 }

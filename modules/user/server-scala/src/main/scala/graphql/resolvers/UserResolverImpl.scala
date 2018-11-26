@@ -54,6 +54,15 @@ class UserResolverImpl @Inject()(userRepo: UserRepo,
     } else Future.successful(MailPayload())
   } yield UserPayload(Some(createdUser), mailingResult.errors)
 
+  override def confirmRegistration(input: ConfirmRegistrationInput): Future[AuthPayload] = for {
+    tokenContent <- jwtAuthService.decodeContent(input.token) asFuture (e => InvalidToken(e.getMessage))
+    user <- userRepo.find(tokenContent.id) failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
+    activeUser <- userRepo.update(user.copy(isActive = true))
+    userId <- activeUser.id noneAsFutureFail NotFound(s"Id for user: [${activeUser.username}] is none.")
+    accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
+    refreshToken = jwtAuthService.createRefreshToken(JwtContent(userId), user.password)
+  } yield AuthPayload(Some(user), Some(Tokens(accessToken, refreshToken)))
+
   override def login(input: LoginUserInput): Future[AuthPayload] = for {
     user <- userRepo.find(input.usernameOrEmail) failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
     _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful() else Future.failed(Unauthenticated())

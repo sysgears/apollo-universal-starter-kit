@@ -3,7 +3,7 @@ import { ApolloLink } from 'apollo-link';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 
-import CommonModule, { CommonModuleShape } from '@module/module-common-react';
+import CommonModule, { CommonModuleShape } from '@module/module-common';
 
 export interface BaseModuleShape extends CommonModuleShape {
   link?: ApolloLink[];

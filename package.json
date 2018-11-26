@@ -71,8 +71,7 @@
     "modules/**/client-angular",
     "modules/**/common",
     "modules/**/common-react",
-    "modules/**/server-ts",
-    "modules/**/common"
+    "modules/**/server-ts"
   ],
   "greenkeeper": {
     "ignore": [

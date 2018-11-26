@@ -1,4 +1,4 @@
-package modules.pagination.model
+package model
 
 /**
   * Entity for representing paginated result.

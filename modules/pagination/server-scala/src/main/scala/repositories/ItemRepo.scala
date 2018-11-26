@@ -1,9 +1,9 @@
-package modules.pagination.repositories
+package repositories
 
+import com.google.inject.{Inject, Singleton}
 import common.errors.{AmbigousResult, NotFound}
-import javax.inject.{Inject, Singleton}
-import modules.pagination.model.Item
-import modules.pagination.{PaginatedResult, Pagination, PaginationUtil}
+import model.Item
+import model.{PaginatedResult, Pagination, PaginationUtil}
 import slick.jdbc.SQLiteProfile.api._
 
 import scala.concurrent.{ExecutionContext, Future}

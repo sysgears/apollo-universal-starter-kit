@@ -1,4 +1,4 @@
-package modules.pagination.model
+package model
 
 import slick.jdbc.SQLiteProfile.api.{Table => SlickTable, _}
 import slick.lifted.Tag

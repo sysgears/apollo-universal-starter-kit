@@ -1,10 +1,10 @@
-package modules.pagination.guice.modules
+package guice.modules
 
 import akka.actor.Actor
 import com.google.inject.name.Names
 import core.guice.injection.GuiceActorRefProvider
-import modules.pagination.graphql.resolvers.ItemResolver
-import modules.pagination.repositories.{ItemRepo, ItemRepoImpl}
+import graphql.resolvers.ItemResolver
+import repositories.{ItemRepo, ItemRepoImpl}
 import net.codingwell.scalaguice.ScalaModule
 
 /**

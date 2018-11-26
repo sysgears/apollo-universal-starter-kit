@@ -1,4 +1,4 @@
-package modules.pagination
+package model
 
 /**
   * An object defining pagination parameters.

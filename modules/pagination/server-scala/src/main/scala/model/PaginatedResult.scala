@@ -1,4 +1,4 @@
-package modules.pagination
+package model
 
 /**
   * Container entity for representing paginated result of type T

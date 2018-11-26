@@ -1,14 +1,14 @@
-package modules.pagination.graphql.schema
+package graphql.schema
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import common.graphql.DispatcherResolver.resolveWithDispatcher
 import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
+import graphql.resolvers.ItemResolver
 import javax.inject.Inject
-import modules.pagination.Pagination
-import modules.pagination.graphql.resolvers.ItemResolver
-import modules.pagination.model.{Item, ItemsPayload}
+import model.Pagination
+import model.{Item, ItemsPayload}
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType}

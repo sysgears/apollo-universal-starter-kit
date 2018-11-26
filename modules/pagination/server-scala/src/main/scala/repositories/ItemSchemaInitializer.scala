@@ -1,8 +1,8 @@
-package modules.pagination.repositories
+package repositories;
 
 import core.slick.{SchemaInitializer, SchemaUtil}
 import javax.inject.Inject
-import modules.pagination.model.Item
+import model.Item
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
 

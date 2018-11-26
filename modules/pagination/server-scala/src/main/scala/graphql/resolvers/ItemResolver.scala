@@ -1,12 +1,12 @@
-package modules.pagination.graphql.resolvers
+package graphql.resolvers
 
 import akka.actor.{Actor, ActorLogging}
 import akka.pattern._
+import com.google.inject.Inject
 import common.ActorNamed
-import javax.inject.Inject
-import modules.pagination.Pagination
-import modules.pagination.model.ItemsPayload
-import modules.pagination.repositories.ItemRepo
+import model.Pagination
+import model.ItemsPayload
+import repositories.ItemRepo
 
 import scala.concurrent.ExecutionContext
 

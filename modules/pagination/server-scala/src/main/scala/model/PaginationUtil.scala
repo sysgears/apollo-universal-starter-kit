@@ -1,6 +1,6 @@
-package modules.pagination
+package model
 
-import slick.jdbc.SQLiteProfile.api._
+import slick.lifted.Query
 import slick.relational.RelationalProfile
 
 /**

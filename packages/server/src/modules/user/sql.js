@@ -397,6 +397,12 @@ class User {
         .first()
     );
   }
+
+  async deleteUserSessions(id) {
+    return knex('user_sessions')
+      .where('user_id', '=', id)
+      .del();
+  }
 }
 const userDAO = new User();
 

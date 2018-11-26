@@ -1,5 +1,0 @@
-query clientCounterQuery {
-  clientCounter @client {
-    amount
-  }
-}

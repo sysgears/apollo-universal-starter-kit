@@ -20,7 +20,7 @@ object RichTry {
       * @param ec           an execution context for the Future
       * @return a Future.failed with a errorHandler output type error.
       */
-    def asFuture(errorHandler: Throwable => Throwable = _)(implicit ec: ExecutionContext): Future[A] = tryVal match {
+    def asFuture(errorHandler: Throwable => Throwable)(implicit ec: ExecutionContext): Future[A] = tryVal match {
       case Success(value) => Future.successful(value)
       case Failure(exception) => Future.failed(errorHandler(exception))
     }

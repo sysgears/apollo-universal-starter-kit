@@ -1,7 +1,7 @@
 package common.actors
 
 import akka.actor.{Actor, ActorLogging}
-import common.RichList._
+import common.implicits.RichList._
 import common.actors.Dispatcher.{Failure, InterceptorBeforeMessage, Success}
 import core.graphql.UserContext
 

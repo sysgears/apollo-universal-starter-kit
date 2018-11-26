@@ -13,7 +13,6 @@ import { take } from 'rxjs/operators';
 import 'backend_reload';
 
 import { client, MainComponent, metaReducers } from './app/Main';
-import routes from './app/Routes';
 import log from '../../common/log';
 import modules from './modules';
 import { StoreModule, Store } from '@ngrx/store';
@@ -26,7 +25,7 @@ import { StoreModule, Store } from '@ngrx/store';
     HttpClientModule,
     ApolloModule,
     HttpLinkModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(modules.routes),
     StoreModule.forRoot(modules.reducers, { metaReducers }),
     ...modules.modules
   ],

@@ -12,15 +12,15 @@ case class StripeSubscription(id: Option[Long] = None,
                               stripeSourceId: String,
                               stripeCustomerId: String,
                               stripeSubscriptionId: String,
-                              expiryMonth: Long,
-                              expiryYear: Long,
+                              expiryMonth: Int,
+                              expiryYear: Int,
                               last4: Int,
                               brand: String)
 
 /**
   * Defines slick schema for the "stripe_subscription" table
   */
-object StripeSubscription extends ((Option[Long], Long, Boolean, String, String, String, Long, Long, Int, String) => StripeSubscription) {
+object StripeSubscription extends ((Option[Long], Long, Boolean, String, String, String, Int, Int, Int, String) => StripeSubscription) {
   val name = "stripe_subscription"
 
   class Table(tag: Tag) extends SlickTable[StripeSubscription](tag, name) {
@@ -31,8 +31,8 @@ object StripeSubscription extends ((Option[Long], Long, Boolean, String, String,
     def stripeSourceId = column[String]("stripe_source_id")
     def stripeCustomerId = column[String]("stripe_customer_id")
     def stripeSubscriptionId = column[String]("stripe_subscription_id")
-    def expiryMonth = column[Long]("expiry_month")
-    def expiryYear = column[Long]("expiry_year")
+    def expiryMonth = column[Int]("expiry_month")
+    def expiryYear = column[Int]("expiry_year")
     def last4 = column[Int]("last4")
     def brand = column[String]("brand")
 
@@ -49,12 +49,12 @@ object StripeSubscription extends ((Option[Long], Long, Boolean, String, String,
     * @param last4 last four digits of a credit card number
     * @param brand a credit card brand - "Visa", "MasterCard", etc.
     */
-  case class CreditCard(expiryMonth: Long, expiryYear: Long, last4: Int, brand: String)
+  case class CreditCard(expiryMonth: Int, expiryYear: Int, last4: Int, brand: String)
   object CreditCard {
     /**
       * A helper apply-method for this model that constructs instance from a tuple
       */
-    def apply(ccDataTuple: (Long, Long, Int, String)): CreditCard = CreditCard(
+    def apply(ccDataTuple: (Int, Int, Int, String)): CreditCard = CreditCard(
       expiryMonth = ccDataTuple._1,
       expiryYear = ccDataTuple._2,
       last4 = ccDataTuple._3,

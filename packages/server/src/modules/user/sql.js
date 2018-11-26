@@ -382,6 +382,21 @@ class User {
         .first()
     );
   }
+
+  async writeUserSession(userId, sessionToken) {
+    return camelizeKeys(await returnId(knex('user_sessions')).insert({ user_id: userId, session_token: sessionToken }));
+  }
+
+  async checkUserSession(userId, sessionToken) {
+    return camelizeKeys(
+      await knex
+        .select('u_s.user_id', 'u_s.session_token')
+        .from('user_sessions AS u_s')
+        .where('u_s.user_id', '=', userId)
+        .andWhere('u_s.session_token', '=', sessionToken)
+        .first()
+    );
+  }
 }
 const userDAO = new User();
 

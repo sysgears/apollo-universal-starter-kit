@@ -11,7 +11,12 @@ const logout = client => {
   return client.cache.reset();
 };
 
+const logoutFromAllDevices = client => {
+  return client.cache.reset();
+};
+
 export default new AccessModule(jwt, session, {
   login: [login],
-  logout: [logout]
+  logout: [logout],
+  logoutFromAllDevices: [logoutFromAllDevices]
 });

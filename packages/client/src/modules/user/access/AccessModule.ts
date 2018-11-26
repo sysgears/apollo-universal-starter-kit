@@ -5,6 +5,7 @@ import ClientModule, { ClientModuleShape } from '../../ClientModule';
 export interface AccessModuleShape extends ClientModuleShape {
   login?: Array<(client: ApolloClient<any>) => Promise<void>>;
   logout?: Array<(client: ApolloClient<any>) => Promise<void>>;
+  logoutFromAllDevices?: Array<(client: ApolloClient<any>) => Promise<void>>;
 }
 
 interface AccessModule extends AccessModuleShape {}
@@ -23,6 +24,12 @@ class AccessModule extends ClientModule {
   public async doLogout(client: ApolloClient<any>) {
     for (const logout of this.logout) {
       await logout(client);
+    }
+  }
+
+  public async doLogoutFromAllDevices(client: ApolloClient<any>) {
+    for (const logoutFromAllDevices of this.logoutFromAllDevices) {
+      await logoutFromAllDevices(client);
     }
   }
 }

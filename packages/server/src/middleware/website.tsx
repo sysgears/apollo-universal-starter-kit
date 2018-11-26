@@ -11,16 +11,17 @@ import Helmet, { HelmetData } from 'react-helmet';
 import serialize from 'serialize-javascript';
 
 import { isApiExternal, apiUrl } from '../net';
-import createApolloClient from '../../../common/createApolloClient';
 import modules from '../modules';
 import schema from '../api/schema';
 
 // tslint:disable no-var-requires
 let clientModules: any;
+let createApolloClient: any;
 let createReduxStore: any;
 let styles: any;
 if (__SSR__) {
   clientModules = require('../../../client/src/modules').default;
+  createApolloClient = require('../../../common/createApolloClient').default;
   createReduxStore = require('../../../common/createReduxStore').default;
   styles = require('../../../client/src/modules/common/components/web').styles;
 }
@@ -90,7 +91,7 @@ const renderServerSide = async (req: any, res: any) => {
     clientResolvers: clientModules.resolvers,
     connectionParams: null
   });
-  const store = createReduxStore({}, client);
+  const store = createReduxStore(clientModules.reducers, {}, client);
   const context: any = {};
   const App = clientModules.getWrappedRoot(
     <Provider store={store}>

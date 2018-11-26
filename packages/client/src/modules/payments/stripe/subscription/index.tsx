@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 import translate, { TranslateFunction } from '../../../../i18n';
 import { MenuItem } from '../../../../modules/common/components/web';
-import * as user from '../../../user/index.web';
+import * as user from '../../../user';
 import settings from '../../../../../../../settings';
 import ClientModule from '../../../ClientModule';
 

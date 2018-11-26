@@ -17,7 +17,7 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
       {
         clientID: settings.user.auth.linkedin.clientID,
         clientSecret: settings.user.auth.linkedin.clientSecret,
-        callbackURL: '/auth/linkedin/callback',
+        callbackURL: settings.user.auth.linkedin.callbackURL,
         scope: settings.user.auth.linkedin.scope
       },
       async function(accessToken, refreshToken, profile, cb) {

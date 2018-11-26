@@ -1,3 +1,3 @@
 package modules.pagination
 
-case class PaginatedResult[T](totalCount: Long, entities: List[T], hasNextPage: Boolean)
+case class PaginatedResult[T](totalCount: Int, entities: List[T], hasNextPage: Boolean)

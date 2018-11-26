@@ -18,7 +18,7 @@ if (settings.user.auth.github.enabled && !__TEST__) {
         clientID: settings.user.auth.github.clientID,
         clientSecret: settings.user.auth.github.clientSecret,
         scope: settings.user.auth.github.scope,
-        callbackURL: '/auth/github/callback'
+        callbackURL: settings.user.auth.github.callbackURL
       },
       async function(accessToken, refreshToken, profile, cb) {
         const {

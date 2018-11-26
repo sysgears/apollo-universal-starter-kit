@@ -17,7 +17,7 @@ if (settings.user.auth.google.enabled && !__TEST__) {
       {
         clientID: settings.user.auth.google.clientID,
         clientSecret: settings.user.auth.google.clientSecret,
-        callbackURL: '/auth/google/callback'
+        callbackURL: settings.user.auth.google.callbackURL
       },
       async function(accessToken, refreshToken, profile, cb) {
         const {

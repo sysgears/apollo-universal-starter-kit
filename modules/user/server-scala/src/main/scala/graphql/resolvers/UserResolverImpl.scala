@@ -1,6 +1,6 @@
 package graphql.resolvers
 
-import com.github.jurajburian.mailer.{Content, Message}
+import com.github.jurajburian.mailer.Message
 import com.google.inject.Inject
 import model._
 import repositories.UserRepo
@@ -11,20 +11,21 @@ import common.implicits.RichOption._
 import common.implicits.RichTry._
 import config.AuthConfig
 import errors.Unauthenticated
-import javax.mail.internet.InternetAddress
 import modules.jwt.errors.InvalidToken
 import modules.jwt.model.JwtContent
 import modules.jwt.service.JwtAuthService
 import modules.mail.config.MailConfig
 import modules.mail.models.MailPayload
-import modules.mail.service.MailService
+import modules.mail.services.MailService
 import org.mindrot.jbcrypt.BCrypt
+import services.MessageTemplateService
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class UserResolverImpl @Inject()(userRepo: UserRepo,
                                  jwtAuthService: JwtAuthService[JwtContent],
                                  mailService: MailService[Message, MailPayload],
+                                 messageTemplateService: MessageTemplateService,
                                  mailConfig: MailConfig,
                                  authConfig: AuthConfig,
                                  websiteConfig: WebsiteConfig)
@@ -44,12 +45,10 @@ class UserResolverImpl @Inject()(userRepo: UserRepo,
     accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
     mailingResult <- if (!skipConfirmation) {
       mailService.send(
-        Message(
-          subject = "Apollo universal starter kit registration.",
-          content = Content().html(s"<p>${createdUser.username}, please follow the link to confirm registration.</p><br><p>${websiteConfig.url + authConfig.confirmRegistrationRoute + accessToken}</p>"),
-          from = new InternetAddress(mailConfig.address),
-          to = Seq(new InternetAddress(createdUser.email))
-        )
+        messageTemplateService.createConfirmRegistrationMessage(
+          createdUser,
+          mailConfig.address,
+          websiteConfig.url + authConfig.confirmRegistrationRoute + accessToken)
       )
     } else Future.successful(MailPayload())
   } yield UserPayload(Some(createdUser), mailingResult.errors)
@@ -69,12 +68,10 @@ class UserResolverImpl @Inject()(userRepo: UserRepo,
     userId <- user.id noneAsFutureFail NotFound(s"Id for user: [${user.username}] is none.")
     accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
     mailingResult <- mailService.send(
-      Message(
-        subject = "Apollo universal starter kit registration.",
-        content = Content().html(s"<p>${user.username}, please follow the link to confirm registration.</p><br><p>${websiteConfig.url + authConfig.confirmRegistrationRoute + accessToken}</p>"),
-        from = new InternetAddress(mailConfig.address),
-        to = Seq(new InternetAddress(user.email))
-      )
+      messageTemplateService.createConfirmRegistrationMessage(
+        user,
+        mailConfig.address,
+        websiteConfig.url + authConfig.confirmRegistrationRoute + accessToken)
     )
   } yield UserPayload(Some(user), mailingResult.errors)
 

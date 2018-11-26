@@ -18,7 +18,8 @@ const grant = async (user, req) => {
 
 const getCurrentUser = async ({ req }) => {
   if (req && req.session.userId) {
-    return await User.getUser(req.session.userId);
+    const result = await User.checkUserSession(req.session.userId, req.session.csrfToken);
+    return result ? await User.getUser(req.session.userId) : null;
   }
 };
 

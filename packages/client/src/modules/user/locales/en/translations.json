@@ -49,6 +49,7 @@
 
   "profile": {
     "title": "Profile",
+    "logoutFAD": "Logout from all devices",
     "headerText": "Profile info",
     "meta": "Profile example page",
     "loadMsg": "Loading...",

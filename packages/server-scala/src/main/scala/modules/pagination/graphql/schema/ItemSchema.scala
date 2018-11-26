@@ -15,6 +15,9 @@ import sangria.schema.{Argument, Field, InputObjectType, ObjectType}
 
 import scala.concurrent.ExecutionContext
 
+/**
+  * Defines the graphQl scheme for working with the 'Item' objects in a paginated form.
+  */
 class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
                            actorSystem: ActorSystem,
                            executionContext: ExecutionContext) extends GraphQLSchema with InputUnmarshallerGenerator
@@ -28,6 +31,9 @@ class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
       )
   }
 
+  /**
+    * Defines a list of graphQl types for input and output data.
+    */
   object Types {
 
     implicit val Item: ObjectType[Unit, Item] = deriveObjectType(ObjectTypeName("Item"), ExcludeFields("id"))
@@ -35,6 +41,9 @@ class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
     implicit val PaginationInput: InputObjectType[Pagination] = deriveInputObjectType[Pagination](InputObjectTypeName("Pagination"))
   }
 
+  /**
+    * List of endpoints.
+    */
   override def queries: List[Field[UserContext, Unit]] = List(
     Field(
       name = "getPaginatedList",

@@ -14,6 +14,11 @@ object ItemResolver extends ActorNamed {
   final val name = "ItemResolver"
 }
 
+/**
+  * Defines the resolve function for pagination input using actor model.
+  *
+  * @param ItemRepo provides methods for operating an entity in a database
+  */
 class ItemResolver @Inject()(ItemRepo: ItemRepo)
                             (implicit executionContext: ExecutionContext) extends Actor with ActorLogging {
 

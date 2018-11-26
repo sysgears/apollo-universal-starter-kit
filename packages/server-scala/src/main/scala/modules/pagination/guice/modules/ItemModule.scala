@@ -7,6 +7,9 @@ import modules.pagination.graphql.resolvers.ItemResolver
 import modules.pagination.repositories.{ItemRepo, ItemRepoImpl}
 import net.codingwell.scalaguice.ScalaModule
 
+/**
+  * Provides dependency injection functionality.
+  */
 class ItemModule extends ScalaModule with GuiceActorRefProvider {
 
   override def configure() = {

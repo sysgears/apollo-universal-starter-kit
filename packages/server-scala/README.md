@@ -20,7 +20,7 @@ To properly set up a new module, the following steps should be done:
 ```
 lazy val module-name = project in file(".")
 ```
-For example, in 'upload' module it looks like the following:
+For example, in **upload** module it looks like the following:
 ```
 lazy val upload = project in file(".")
 ```
@@ -62,7 +62,7 @@ loadPaths = [
 ]
 ```
 
-7. In test resources in your module create `application.conf` and add the same path to your module as you did in the previous step: 
+7. In test resources of your module create `application.conf` and add the same path to your module as you did in the previous step: 
 ```
 loadPaths = ["../../modules/upload/server-scala"]
 ```

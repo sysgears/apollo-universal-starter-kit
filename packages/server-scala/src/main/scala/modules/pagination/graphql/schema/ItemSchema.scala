@@ -7,8 +7,8 @@ import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
 import javax.inject.Inject
 import modules.pagination.Pagination
-import modules.pagination.graphql.resolvers.DataObjectResolver
-import modules.pagination.model.{DataObject, DataObjectsPayload}
+import modules.pagination.graphql.resolvers.ItemResolver
+import modules.pagination.model.{Item, ItemsPayload}
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType}
@@ -30,20 +30,20 @@ class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
 
   object Types {
 
-    implicit val DataObject: ObjectType[Unit, DataObject] = deriveObjectType(ObjectTypeName("DataObject"), ExcludeFields("id"))
-    implicit val DataObjectPayload: ObjectType[Unit, DataObjectsPayload] = deriveObjectType(ObjectTypeName("DataObjectsPayload"))
+    implicit val Item: ObjectType[Unit, Item] = deriveObjectType(ObjectTypeName("Item"), ExcludeFields("id"))
+    implicit val ItemsPayload: ObjectType[Unit, ItemsPayload] = deriveObjectType(ObjectTypeName("ItemsPayload"))
     implicit val PaginationInput: InputObjectType[Pagination] = deriveInputObjectType[Pagination](InputObjectTypeName("Pagination"))
   }
 
   override def queries: List[Field[UserContext, Unit]] = List(
     Field(
       name = "getPaginatedList",
-      fieldType = Types.DataObjectPayload,
+      fieldType = Types.ItemsPayload,
       arguments = List(
         Argument(name = "input", argumentType = Types.PaginationInput)
       ),
       resolve = sc => {
-        resolveWithDispatcher[DataObjectsPayload](
+        resolveWithDispatcher[ItemsPayload](
           input = sc.args.arg[Pagination]("input"),
           userContext = sc.ctx,
           onException = _ => Pagination(offset = 0, limit = 1),

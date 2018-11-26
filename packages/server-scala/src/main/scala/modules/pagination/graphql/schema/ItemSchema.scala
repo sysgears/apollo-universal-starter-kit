@@ -5,8 +5,6 @@ import akka.stream.ActorMaterializer
 import common.graphql.DispatcherResolver.resolveWithDispatcher
 import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
-import core.services.publisher.PubSubService
-import core.services.publisher.RichPubSubService._
 import javax.inject.Inject
 import modules.pagination.Pagination
 import modules.pagination.graphql.resolvers.DataObjectResolver
@@ -17,10 +15,9 @@ import sangria.schema.{Argument, Field, InputObjectType, ObjectType}
 
 import scala.concurrent.ExecutionContext
 
-class DataObjectShema @Inject()(implicit val pubsubService: PubSubService[DataObjectsPayload],
-                                materializer: ActorMaterializer,
-                                actorSystem: ActorSystem,
-                                executionContext: ExecutionContext) extends GraphQLSchema with InputUnmarshallerGenerator
+class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
+                           actorSystem: ActorSystem,
+                           executionContext: ExecutionContext) extends GraphQLSchema with InputUnmarshallerGenerator
   with Logger {
 
   implicit val paginationInputUnmarshaller: FromInput[Pagination] = inputUnmarshaller {
@@ -50,8 +47,8 @@ class DataObjectShema @Inject()(implicit val pubsubService: PubSubService[DataOb
           input = sc.args.arg[Pagination]("input"),
           userContext = sc.ctx,
           onException = _ => Pagination(offset = 0, limit = 1),
-          namedResolverActor = DataObjectResolver
-        ).pub
+          namedResolverActor = ItemResolver
+        )
       }
     )
   )

@@ -17140,10 +17140,10 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.173:
-  version "0.4.173"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.173.tgz#004a363370bdadf59718f8a3bcd54bb610c2816e"
-  integrity sha512-syaWudckn33wDTknZ8lpqEO7XXkGsd+GEdGXZ0P6JJACo4ZaH3DAUEGxrWAFZRY2fJOJDoQ3xJpn8AzvNgd4CQ==
+spinjs@^0.4.175:
+  version "0.4.175"
+  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.175.tgz#44bf3aa29ee55256e58c240aa3ad586c05ff5903"
+  integrity sha512-R79esaMhqjtZLn6WxbgHZh7CkzjxUEgMdm5vWdZYKO1vMULiGkWWksq+LJJwTVaMbVE5HKbnNNMP5/lpgXzRYA==
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"

@@ -23,6 +23,9 @@ class UserSchema @Inject()(userResolver: UserResolver,
   implicit val loginUserInput: InputObjectType[LoginUserInput] = deriveInputObjectType(InputObjectTypeName("LoginUserInput"))
   implicit val tokens: ObjectType[UserContext, Tokens] = deriveObjectType(ObjectTypeName("Tokens"))
   implicit val AuthPayload: ObjectType[UserContext, AuthPayload] = deriveObjectType(ObjectTypeName("AuthPayload"))
+  implicit val forgotPasswordInput: InputObjectType[ForgotPasswordInput] = deriveInputObjectType(InputObjectTypeName("ForgotPasswordInput"))
+  implicit val resetPasswordInput: InputObjectType[ResetPasswordInput] = deriveInputObjectType(InputObjectTypeName("ResetPasswordInput"))
+  implicit val ResetPayload: ObjectType[UserContext, ResetPayload] = deriveObjectType(ObjectTypeName("ResetPayload"))
 
   implicit val registerUserInputUnmarshaller: FromInput[RegisterUserInput] = inputUnmarshaller {
     input =>
@@ -56,6 +59,22 @@ class UserSchema @Inject()(userResolver: UserResolver,
       )
   }
 
+  implicit val forgotPasswordInputUnmarshaller:  FromInput[ForgotPasswordInput] = inputUnmarshaller {
+    input =>
+      ForgotPasswordInput(
+        usernameOrEmail = input("usernameOrEmail").asInstanceOf[String]
+      )
+  }
+
+  implicit val resetPasswordInputUnmarshaller:  FromInput[ResetPasswordInput] = inputUnmarshaller {
+    input =>
+      ResetPasswordInput(
+       token = input("token").asInstanceOf[String],
+        password = input("password").asInstanceOf[String]
+      )
+  }
+
+
   override def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "register",
@@ -87,5 +106,17 @@ class UserSchema @Inject()(userResolver: UserResolver,
       arguments = List(Argument("refreshToken", StringType)),
       resolve = sangriaContext => tokensResolver.refreshTokens(sangriaContext.args.arg[String]("refreshToken"))
     ),
+    Field(
+      name = "forgotPassword",
+      fieldType = StringType,
+      arguments = List(Argument("input", forgotPasswordInput)),
+      resolve = sangriaContext => userResolver.forgotPassword(sangriaContext.args.arg[ForgotPasswordInput]("input"))
+    ),
+    Field(
+      name = "resetPassword",
+      fieldType = ResetPayload,
+      arguments = List(Argument("input", resetPasswordInput)),
+      resolve = sangriaContext => userResolver.resetPassword(sangriaContext.args.arg[ResetPasswordInput]("input"))
+    )
   )
 }

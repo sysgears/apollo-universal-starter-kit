@@ -8,7 +8,7 @@ export default () => ({
       const { user: id } = jwt.decode(inputRefreshToken);
 
       const user = await User.getUserWithPassword(id);
-      const refreshSecret = settings.user.secret + user.passwordHash;
+      const refreshSecret = settings.user.secret + user.passwordHash + user.token_salt;
 
       try {
         jwt.verify(inputRefreshToken, refreshSecret);

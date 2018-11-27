@@ -3,7 +3,7 @@ package model
 import slick.jdbc.SQLiteProfile.api.{Table => SlickTable, _}
 import slick.lifted.Tag
 
-case class Post(id: Int,
+case class Post(id: Int = 0,
                 title: String,
                 content: String,
                 comments: Seq[Comment] = Seq.empty)

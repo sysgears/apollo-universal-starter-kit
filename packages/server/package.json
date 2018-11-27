@@ -53,8 +53,8 @@
   "license": "MIT",
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "@babel/register": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "apollo-cache-inmemory": "1.2.9",
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.3.4",
@@ -65,7 +65,7 @@
     "apollo-link-ws": "^1.0.3",
     "apollo-logger": "^0.3.0",
     "apollo-server-express": "^2.0.0",
-    "apollo-server-module-graphiql": "^1.4.0",
+    "apollo-server-module-graphiql": "1.3.4",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "dotenv": "^5.0.1",

@@ -18,7 +18,8 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
   const localCache = new InMemoryCache();
   const cache = ApolloCacheRouter.override(
     ApolloCacheRouter.route([netCache, localCache], document => {
-      if (hasDirectives(['client'], document) || getOperationAST(document).name.value === 'GeneratedClientQuery') {
+      const operationName = getOperationAST(document).name;
+      if (hasDirectives(['client'], document) || (operationName && operationName.value === 'GeneratedClientQuery')) {
         // Pass all @client queries and @client defaults to localCache
         return [localCache];
       } else {

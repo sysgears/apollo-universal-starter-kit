@@ -4,9 +4,7 @@ import update from 'immutability-helper';
 
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
-import ADD_COUNTER from '../graphql/AddCounter.graphql';
-import COUNTER_SUBSCRIPTION from '../graphql/CounterSubscription.graphql';
-import COUNTER_QUERY from '../graphql/CounterQuery.graphql';
+import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@module/counter-common';
 
 interface ButtonProps {
   counterAmount: number;

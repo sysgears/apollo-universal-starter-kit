@@ -6,7 +6,7 @@ import modules.payments._
 
 object mappings {
   implicit def stripeSubscriptionMapping(model: models.StripeSubscription): graphql.schema.types.StripeSubscription = {
-    graphql.schema.types.StripeSubscription(model.active, errors = Nil)
+    graphql.schema.types.StripeSubscription(model.active)
   }
 
   implicit def creditCardMapping(model: models.StripeSubscription.CreditCard): graphql.schema.types.StripeSubscriptionCard = {

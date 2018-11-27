@@ -4,18 +4,18 @@ import modules.common.FieldError
 package object types {
   case class StripeSubscription(
     active: Boolean,
-    errors: Option[List[FieldError]]
+    errors: Option[List[FieldError]] = None
   )
 
   case class StripeSubscriptionCard(
-    expiryMonth: Option[Int],
-    expiryYear: Option[Int],
-    last4: Option[String],
-    brand: Option[String]
+    expiryMonth: Option[Int] = None,
+    expiryYear: Option[Int] = None,
+    last4: Option[String] = None,
+    brand: Option[String] = None
   )
 
   case class StripeSubscriberProtectedNumber(
-    number: Option[Int]
+    number: Option[Int] = None
   )
 
   case class StripeSubscriptionInput(

@@ -8,7 +8,7 @@ export default () => ({
       const { user: id } = jwt.decode(inputRefreshToken);
 
       const user = await User.getUserWithPassword(id);
-      const refreshSecret = settings.user.secret + user.passwordHash + user.token_salt;
+      const refreshSecret = settings.user.secret + user.passwordHash + user.tokenSalt;
 
       try {
         jwt.verify(inputRefreshToken, refreshSecret);
@@ -23,6 +23,9 @@ export default () => ({
         accessToken,
         refreshToken
       };
+    },
+    async jwtLogoutFromAllDevices(obj, { userId }, { User }) {
+      User.increaseTokenSalt(userId);
     }
   }
 });

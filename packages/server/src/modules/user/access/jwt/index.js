@@ -7,7 +7,7 @@ import AccessModule from '../AccessModule';
 import settings from '../../../../../../../settings';
 
 const grant = async user => {
-  const refreshSecret = settings.user.secret + user.passwordHash + user.token_salt;
+  const refreshSecret = settings.user.secret + user.passwordHash + user.tokenSalt;
   const [accessToken, refreshToken] = await createTokens(user, settings.user.secret, refreshSecret);
 
   return {

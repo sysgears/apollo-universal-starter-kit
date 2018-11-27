@@ -96,4 +96,10 @@ class UserResolverImpl @Inject()(userRepo: UserRepo,
         appConfig.url + authConfig.confirmRegistrationRoute + token)
     )
   } yield token
+
+  override def resetPassword(input: ResetPasswordInput): Future[ResetPayload] = for {
+    tokenContent <- jwtAuthService.decodeContent(input.token) asFuture (e => InvalidToken(e.getMessage))
+    user <- userRepo.find(tokenContent.id) failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
+    _ <- userRepo.update(user.copy(password = BCrypt.hashpw(input.password, BCrypt.gensalt)))
+  } yield ResetPayload()
 }

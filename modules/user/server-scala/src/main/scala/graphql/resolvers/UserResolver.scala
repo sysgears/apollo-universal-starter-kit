@@ -14,4 +14,6 @@ trait UserResolver {
   def login(loginUserInput: LoginUserInput): Future[AuthPayload]
 
   def forgotPassword(input: ForgotPasswordInput): Future[String]
+
+  def resetPassword(input: ResetPasswordInput): Future[ResetPayload]
 }

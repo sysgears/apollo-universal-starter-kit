@@ -10,6 +10,7 @@ import settings from '../../../../../../../settings';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import CURRENT_USER_QUERY from '../../graphql/CurrentUserQuery.graphql';
+import LOGOUT_FROM_ALL_DEVICES from './graphql/LogoutFromAllDevices.graphql';
 
 const setJWTContext = async operation => {
   const accessToken = await getItem('accessToken');
@@ -182,10 +183,20 @@ DataRootComponent.propTypes = {
   children: PropTypes.node
 };
 
+const logoutFromAllDevices = async client => {
+  const { currentUser } = await client.readQuery({ query: CURRENT_USER_QUERY });
+
+  if (currentUser) {
+    await client.mutate({ mutation: LOGOUT_FROM_ALL_DEVICES, variables: { userId: currentUser.id } });
+    removeTokens();
+  }
+};
+
 export default (settings.user.auth.access.jwt.enabled
   ? new AccessModule({
       dataRootComponent: [withApollo(DataRootComponent)],
       link: __CLIENT__ ? [JWTLink] : [],
-      logout: [removeTokens]
+      logout: [removeTokens],
+      logoutFromAllDevices: [logoutFromAllDevices]
     })
   : undefined);

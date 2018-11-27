@@ -1,0 +1,3 @@
+mutation jwtLogoutFromAllDevices($userId: Int!) {
+  jwtLogoutFromAllDevices(userId: $userId)
+}

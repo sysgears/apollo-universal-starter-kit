@@ -6,7 +6,6 @@ import url from 'url';
 import log from '../../common/log';
 
 import modules from '../../client/src/modules';
-import MainScreenNavigator from '../../client/src/app/Routes';
 import createApolloClient from '../../common/createApolloClient';
 
 const { protocol, pathname, port } = url.parse(__API_URL__);
@@ -40,9 +39,7 @@ export default class Main extends React.Component<MainProps> {
 
     return modules.getWrappedRoot(
       <Provider store={store}>
-        <ApolloProvider client={client}>
-          <MainScreenNavigator />
-        </ApolloProvider>
+        <ApolloProvider client={client}>{modules.router}</ApolloProvider>
       </Provider>
     );
   }

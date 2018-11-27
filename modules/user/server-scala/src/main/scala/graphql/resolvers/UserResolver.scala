@@ -12,4 +12,6 @@ trait UserResolver {
   def resendConfirmationMessage(input: ResendConfirmationMessageInput): Future[UserPayload]
 
   def login(loginUserInput: LoginUserInput): Future[AuthPayload]
+
+  def forgotPassword(input: ForgotPasswordInput): Future[String]
 }

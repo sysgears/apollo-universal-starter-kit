@@ -419,6 +419,12 @@ class User {
       .where('user_id', '=', id)
       .del();
   }
+
+  async increaseTokenSalt(userId) {
+    return knex('user')
+      .where('id', '=', userId)
+      .increment('token_salt', 1);
+  }
 }
 const userDAO = new User();
 

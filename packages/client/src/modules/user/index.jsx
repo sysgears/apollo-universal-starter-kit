@@ -51,7 +51,7 @@ const NavLinkUsersWithI18n = translate('user')(({ t }) => (
 ));
 const NavLinkLoginWithI18n = translate('user')(({ t }) => (
   <NavLink to="/login" className="nav-link" activeClassName="active">
-    {t('navLink.sign')}
+    {t('navLink.signIn')}
   </NavLink>
 ));
 

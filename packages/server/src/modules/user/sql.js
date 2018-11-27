@@ -114,6 +114,7 @@ class User {
           'u.id',
           'u.username',
           'u.password_hash',
+          'u.token_salt',
           'u.role',
           'u.is_active',
           'u.email',
@@ -130,7 +131,16 @@ class User {
   async getUserWithSerial(serial) {
     return camelizeKeys(
       await knex
-        .select('u.id', 'u.username', 'u.role', 'u.is_active', 'ca.serial', 'up.first_name', 'up.last_name')
+        .select(
+          'u.id',
+          'u.username',
+          'u.role',
+          'u.is_active',
+          'ca.serial',
+          'up.first_name',
+          'up.last_name',
+          'u.token_salt'
+        )
         .from('user AS u')
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
@@ -249,6 +259,7 @@ class User {
           'u.role',
           'u.is_active',
           'u.email',
+          'u.token_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -270,6 +281,7 @@ class User {
           'fa.fb_id',
           'u.email',
           'u.password_hash',
+          'u.token_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -293,6 +305,7 @@ class User {
           'lna.ln_id',
           'u.email',
           'u.password_hash',
+          'u.token_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -316,6 +329,7 @@ class User {
           'gha.gh_id',
           'u.email',
           'u.password_hash',
+          'u.token_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -339,6 +353,7 @@ class User {
           'ga.google_id',
           'u.email',
           'u.password_hash',
+          'u.token_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -372,6 +387,7 @@ class User {
           'u.role',
           'u.is_active',
           'u.email',
+          'u.token_salt',
           'up.first_name',
           'up.last_name'
         )

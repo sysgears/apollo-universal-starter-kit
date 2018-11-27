@@ -1,9 +1,9 @@
-package modules.counter.repositories
+package repositories
 
 import com.byteslounge.slickrepo.repository.Repository
 import javax.inject.Inject
-import modules.counter.models.Counter
-import modules.counter.models.CounterTable.CounterTable
+import models.Counter
+import models.CounterTable.CounterTable
 import slick.ast.BaseTypedType
 import slick.jdbc.JdbcProfile
 

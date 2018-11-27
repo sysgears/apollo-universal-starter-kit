@@ -1,21 +1,19 @@
-package modules.counter.graphql.schema
+package graphql.schema
 
-import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.Source
 import common.Logger
 import common.graphql.DispatcherResolver._
 import core.graphql.{GraphQLSchema, UserContext}
 import core.services.publisher.PubSubService
-import javax.inject.Inject
-import modules.counter.graphql.resolvers.CounterResolver
-import modules.counter.models.Counter
-import modules.counter.services.count.CounterActor.GetAmount
-import sangria.macros.derive.{ExcludeFields, ObjectTypeName, deriveObjectType}
-import sangria.schema.{Action, Argument, Field, IntType, ObjectType}
-import sangria.streaming.akkaStreams._
 import core.services.publisher.RichPubSubService._
+import graphql.resolvers.CounterResolver
+import javax.inject.Inject
+import models.Counter
+import sangria.macros.derive.{ExcludeFields, ObjectTypeName, deriveObjectType}
+import sangria.schema.{Argument, Field, IntType, ObjectType}
+import sangria.streaming.akkaStreams._
+import services.count.CounterActor.GetAmount
 
 import scala.concurrent.ExecutionContext
 

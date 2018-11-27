@@ -1,4 +1,4 @@
-package modules.counter.models
+package models
 
 import akka.japi.Option.Some
 import com.byteslounge.slickrepo.meta.Entity

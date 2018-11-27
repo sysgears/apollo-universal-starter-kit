@@ -1,4 +1,4 @@
-package modules.counter.services.count
+package services.count
 
 import akka.actor.{Actor, ActorLogging}
 import akka.pattern._
@@ -8,8 +8,8 @@ import common.ActorNamed
 import common.RichDBIO._
 import common.errors.InternalServerError
 import common.implicits.RichFuture._
-import modules.counter.models.Counter
-import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
+import models.Counter
+import services.count.CounterActor.{GetAmount, IncrementAndGet}
 import slick.dbio.DBIO
 
 import scala.concurrent.ExecutionContext

@@ -1,11 +1,11 @@
-package modules.counter.graphql.resolvers
+package graphql.resolvers
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
 import com.google.inject.name.Named
 import common.ActorNamed
 import javax.inject.Inject
-import modules.counter.services.count.CounterActor
-import modules.counter.services.count.CounterActor.{GetAmount, IncrementAndGet}
+import services.count.CounterActor
+import services.count.CounterActor.{GetAmount, IncrementAndGet}
 
 object CounterResolver extends ActorNamed {
   final val name = "CounterResolver"

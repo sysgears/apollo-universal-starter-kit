@@ -1,4 +1,4 @@
-package modules.counter.models
+package models
 
 import com.byteslounge.slickrepo.meta.Keyed
 import slick.jdbc.JdbcProfile

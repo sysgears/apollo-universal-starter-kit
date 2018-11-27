@@ -3,7 +3,6 @@ package core.controllers.graphql
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import core.guice.injection.Injecting
-import modules.counter.repositories.CounterSchemaInitializer
 //import repositories.UserSchemaInitializer
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
 //import guice.modules.upload.repositories.FileSchemaInitializer

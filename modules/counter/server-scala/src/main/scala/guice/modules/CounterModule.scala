@@ -1,16 +1,16 @@
-package modules.counter.guice.modules
+package guice.modules
 
 import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Provides
 import com.google.inject.name.Names
 import core.guice.injection.GuiceActorRefProvider
+import graphql.resolvers.CounterResolver
 import javax.inject.Named
-import modules.counter.graphql.resolvers.CounterResolver
-import modules.counter.models.Counter
-import modules.counter.repositories.CounterRepository
-import modules.counter.services.count.CounterActor
+import models.Counter
 import net.codingwell.scalaguice.ScalaModule
+import repositories.CounterRepository
+import services.count.CounterActor
 import slick.jdbc.JdbcProfile
 
 class CounterModule extends ScalaModule with GuiceActorRefProvider {

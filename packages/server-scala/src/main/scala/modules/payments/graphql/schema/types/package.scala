@@ -4,7 +4,7 @@ import modules.common.FieldError
 package object types {
   case class StripeSubscription(
     active: Boolean,
-    errors: List[FieldError]
+    errors: Option[List[FieldError]]
   )
 
   case class StripeSubscriptionCard(

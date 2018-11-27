@@ -2,7 +2,8 @@ package modules.counter.repositories
 
 import core.slick.{SchemaInitializer, SchemaUtil}
 import javax.inject.Inject
-import modules.counter.models.Counter
+import modules.counter.models.CounterTable.CounterTable
+import modules.counter.models.{Counter, CounterTable}
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
 
@@ -12,11 +13,11 @@ class CounterSchemaInitializer @Inject()(database: Database)
                                         (implicit executionContext: ExecutionContext) extends SchemaInitializer
   with SchemaUtil {
 
-  val counters: TableQuery[Counter.Table] = TableQuery[Counter.Table]
+  val counters: TableQuery[CounterTable] = TableQuery[CounterTable]
 
   override def create(): Future[Unit] = {
 
-    withTable(database, counters, Counter.name, _.isEmpty) {
+    withTable(database, counters, CounterTable.name, _.isEmpty) {
       DBIO.seq(
         counters.schema.create,
         counters += Counter(Some(1), 0)
@@ -25,7 +26,7 @@ class CounterSchemaInitializer @Inject()(database: Database)
   }
 
   override def drop(): Future[Unit] = {
-    withTable(database, counters, Counter.name, _.nonEmpty) {
+    withTable(database, counters, CounterTable.name, _.nonEmpty) {
       DBIO.seq(counters.schema.drop)
     }
   }

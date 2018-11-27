@@ -68,10 +68,7 @@ const withLogout = Component =>
   withApollo(({ client, ...props }) => {
     const newProps = {
       ...props,
-      logout: async () => {
-        await access.doLogout(client);
-        await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
-      }
+      logout: () => access.doLogout(client)
     };
     return <Component {...newProps} />;
   });

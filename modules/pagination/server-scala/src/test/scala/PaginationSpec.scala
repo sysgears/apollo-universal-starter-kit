@@ -1,6 +1,7 @@
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.testkit.RouteTestTimeout
+import common.RichDBIO._
 import akka.util.ByteString
 import core.controllers.graphql.TestHelper
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
@@ -9,12 +10,12 @@ import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import scala.concurrent.duration._
 import akka.testkit.TestDuration
 import model.Item
-import repositories.ItemRepo
+import repositories.ItemRepository
 import spray.json._
 
 class PaginationSpec extends TestHelper {
 
-  lazy val itemRepo: ItemRepo = inject[ItemRepo]
+  lazy val itemRepo: ItemRepository = inject[ItemRepository]
   val offset = 0
   val limit = 3
   val query = s"query { getPaginatedList(input: { offset: $offset, limit:$limit } ) { totalCount, entities { description }, hasNextPage } }"
@@ -25,10 +26,10 @@ class PaginationSpec extends TestHelper {
   "PaginationSpec" must {
 
     "return paginated list of objects" in {
-      val testObject1 = await(itemRepo.save(Item(None, "Object1")))
-      val testObject2 = await(itemRepo.save(Item(None, "Object2")))
-      val testObject3 = await(itemRepo.save(Item(None, "Object3")))
-      val testObject4 = await(itemRepo.save(Item(None, "Object4")))
+      val testObject1 = await(itemRepo.save(Item(None, "Object1")).run)
+      val testObject2 = await(itemRepo.save(Item(None, "Object2")).run)
+      val testObject3 = await(itemRepo.save(Item(None, "Object3")).run)
+      val testObject4 = await(itemRepo.save(Item(None, "Object4")).run)
 
       val entity = HttpEntity(`application/json`, graphQLMessage)
       Post(endpoint, entity) ~> routes ~> check {

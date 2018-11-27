@@ -1,8 +1,9 @@
-package repositories;
+package repositories
 
 import core.slick.{SchemaInitializer, SchemaUtil}
 import javax.inject.Inject
-import model.Item
+import model.{Item, ItemTable}
+import model.ItemTable.ItemTable
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
 
@@ -18,18 +19,18 @@ class ItemSchemaInitializer @Inject()(database: Database)
   /**
     * Entity that defines the database schema.
     */
-  val items: TableQuery[Item.Table] = TableQuery[Item.Table]
+  val items: TableQuery[ItemTable] = TableQuery[ItemTable]
 
   override def create(): Future[Unit] = {
-    withTable(database, items, Item.name, _.isEmpty) {
+    withTable(database, items, ItemTable.name, _.isEmpty) {
       DBIO.seq(items.schema.create,
-        items ++= seedDatabase
+      items ++= seedDatabase
       )
     }
   }
 
   override def drop(): Future[Unit] = {
-    withTable(database, items, Item.name, _.nonEmpty) {
+    withTable(database, items, ItemTable.name, _.nonEmpty) {
       DBIO.seq(items.schema.drop)
     }
   }

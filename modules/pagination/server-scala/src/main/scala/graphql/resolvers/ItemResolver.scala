@@ -3,10 +3,11 @@ package graphql.resolvers
 import akka.actor.{Actor, ActorLogging}
 import akka.pattern._
 import com.google.inject.Inject
+import common.RichDBIO._
 import common.ActorNamed
 import model.Pagination
 import model.ItemsPayload
-import repositories.ItemRepo
+import repositories.ItemRepository
 
 import scala.concurrent.ExecutionContext
 
@@ -17,17 +18,18 @@ object ItemResolver extends ActorNamed {
 /**
   * Defines the resolve function for pagination input using actor model.
   *
-  * @param ItemRepo provides methods for operating an entity in a database
+  * @param itemRepo provides methods for operating an entity in a database
   */
-class ItemResolver @Inject()(ItemRepo: ItemRepo)
+class ItemResolver @Inject()(itemRepo: ItemRepository)
                             (implicit executionContext: ExecutionContext) extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case paginationParams: Pagination => {
       log.info(s"Received message: [ $paginationParams ]")
-      ItemRepo.getPaginatedObjectsList(paginationParams)
-        .map(res => ItemsPayload(hasNextPage = res.hasNextPage, entities = res.entities, totalCount = res.totalCount))
-        .pipeTo(sender)
-    }
+        itemRepo.getPaginatedObjectsList(paginationParams)
+          .map(res => ItemsPayload(hasNextPage = res.hasNextPage, entities = res.entities, totalCount = res.totalCount))
+          .run
+          .pipeTo(sender)
+      }
   }
 }

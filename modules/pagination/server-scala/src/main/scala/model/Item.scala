@@ -1,26 +1,20 @@
 package model
 
-import slick.jdbc.SQLiteProfile.api.{Table => SlickTable, _}
-import slick.lifted.Tag
+import com.byteslounge.slickrepo.meta.Entity
+import spray.json.{DefaultJsonProtocol, JsonFormat}
 
 /**
-  * The Item entity.
+  * The 'Item' entity.
   */
-case class Item(id: Option[Long] = None, description: String)
+case class Item(id: Option[Int] = None,
+                description: String) extends Entity[Item, Int] {
 
-object Item extends ((Option[Long], String) => Item) {
-
-  val name = "ITEMS"
-
-  /**
-    * Defines entity fields for slick.
-    */
-  class Table(tag: Tag) extends SlickTable[Item](tag, name) {
-    def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
-
-    def description = column[String]("DESCRIPTION")
-
-    def * = (id.?, description).mapTo[Item]
-  }
-
+  override def withId(id: Int): Item = this.copy(id = Some(id))
 }
+
+object ItemJsonProtocol extends DefaultJsonProtocol {
+  implicit val itemFormat: JsonFormat[Item] = jsonFormat2(Item)
+}
+
+
+

@@ -10,16 +10,17 @@ import settings from '../../../../../../../settings';
 const grant = async (user, req) => {
   const session = {
     ...req.session,
-    userId: user.id
+    userId: user.id,
+    authSalt: user.authSalt
   };
 
   req.session = writeSession(req, session);
 };
 
 const getCurrentUser = async ({ req }) => {
-  if (req && req.session.userId) {
-    const result = await User.checkUserSession(req.session.userId, req.session.csrfToken);
-    return result ? await User.getUser(req.session.userId) : null;
+  if (req && req.session.userId && req.session.authSalt) {
+    const result = await User.getUser(req.session.userId);
+    return result && result.authSalt === req.session.authSalt ? result : null;
   }
 };
 

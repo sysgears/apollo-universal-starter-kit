@@ -1,5 +1,6 @@
 import { writeSession } from './sessions';
 import User from '../../sql';
+import settings from '../../../../../../../settings';
 
 export default () => ({
   Mutation: {
@@ -13,8 +14,12 @@ export default () => ({
     async logoutFromAllDevices(obj, args, { req }) {
       const session = { ...req.session };
 
-      await User.deleteUserSessions(session.userId);
+      if (!settings.user.auth.access.jwt) {
+        await User.increaseAuthSalt(session.userId);
+      }
+
       delete session.userId;
+      delete session.authSalt;
 
       req.session = writeSession(req, session);
     }

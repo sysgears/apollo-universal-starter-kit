@@ -3,21 +3,11 @@ import { Title, Meta } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { ActionReducer, MetaReducer } from '@ngrx/store';
+import { apiUrl } from '@module/core-common';
 
-import createApolloClient from '../../../common/createApolloClient';
-import modules from '../modules';
-import log from '../../../common/log';
-import { apiUrl } from '../net';
+import log from '../../../packages/common/log';
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
-
-const client = createApolloClient({
-  apiUrl,
-  createNetLink: modules.createNetLink,
-  links: modules.link,
-  connectionParams: modules.connectionParams,
-  clientResolvers: modules.resolvers
-});
 
 function stateSetter(reducer: ActionReducer<any>): ActionReducer<any> {
   return (state: any, action: any) => {
@@ -71,4 +61,4 @@ class MainComponent implements OnInit {
   }
 }
 
-export { client, MainComponent, metaReducers };
+export { MainComponent, metaReducers };

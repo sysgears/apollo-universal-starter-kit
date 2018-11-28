@@ -29,4 +29,11 @@ class StripeSubscriptionResolverImpl @Inject()(stripeSubscriptionRepo: StripeSub
   override def stripeSubscriptionProtectedNumber(inputCtx: StripeSubscriptionInputContext): types.StripeSubscriberProtectedNumber = {
     inputCtx.subscriptionOwner.map(_ => Math.floor(Math.random() * 10) toInt)
   }
+
+  override def addStripeSubscription(inputCtx: StripeSubscriptionInputContext)
+                                    (input: types.StripeSubscriptionInput): Future[types.StripeSubscription] = ???
+
+  override def cancelStripeSubscription: Future[types.StripeSubscription] = ???
+
+  override def updateStripeSubscriptionCard(input: types.StripeSubscriptionInput): Future[Boolean] = ???
 }

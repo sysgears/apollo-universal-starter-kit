@@ -9,4 +9,7 @@ trait StripeSubscriptionResolver {
   def stripeSubscription(inputCtx: StripeSubscriptionInputContext): Future[StripeSubscription]
   def stripeSubscriptionCard(inputCtx: StripeSubscriptionInputContext): Future[StripeSubscriptionCard]
   def stripeSubscriptionProtectedNumber(inputCtx: StripeSubscriptionInputContext): StripeSubscriberProtectedNumber
+  def addStripeSubscription(inputCtx: StripeSubscriptionInputContext)(input: StripeSubscriptionInput): Future[StripeSubscription]
+  def cancelStripeSubscription: Future[StripeSubscription]
+  def updateStripeSubscriptionCard(input: StripeSubscriptionInput): Future[Boolean]
 }

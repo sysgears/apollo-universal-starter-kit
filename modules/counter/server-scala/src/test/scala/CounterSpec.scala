@@ -1,20 +1,17 @@
-package core.controllers.graphql.counter
-
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.model.StatusCodes.OK
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
-import core.controllers.graphql.TestHelper
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import modules.counter.models.Counter
+import models.Counter
 import spray.json._
 
 import scala.concurrent.duration._
 
-class QuerySpec extends TestHelper {
+class CounterSpec extends CounterSpecHelper {
 
   val addServerCounterMutation = "mutation Increment { addServerCounter(amount: 1) { amount } }"
   val addServerCounterGraphQLMessage = ByteString(GraphQLMessage(addServerCounterMutation).toJson.compactPrint)
@@ -26,7 +23,7 @@ class QuerySpec extends TestHelper {
 
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
-  "GraphQLController" must {
+  "Counter" must {
 
     implicit val counterJsonReader: CounterJsonReader.type = CounterJsonReader
 

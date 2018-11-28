@@ -1,16 +1,14 @@
-package core.controllers.graphql
-
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
+import core.controllers.graphql.GraphQLController
 import core.guice.injection.Injecting
-//import repositories.UserSchemaInitializer
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
-//import guice.modules.upload.repositories.FileSchemaInitializer
+import repositories.CounterSchemaInitializer
 
-import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
-trait TestHelper extends WordSpec
+trait CounterSpecHelper extends WordSpec
   with ScalatestRouteTest
   with BeforeAndAfter
   with BeforeAndAfterAll

@@ -1,7 +1,7 @@
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.testkit.RouteTestTimeout
-import common.RichDBIO._
+import common.implicits.RichDBIO._
 import akka.util.ByteString
 import core.controllers.graphql.TestHelper
 import core.controllers.graphql.jsonProtocols.GraphQLMessage

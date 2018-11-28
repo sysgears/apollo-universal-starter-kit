@@ -55,7 +55,7 @@ class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
         resolveWithDispatcher[ItemsPayload](
           input = sc.args.arg[PaginationParams]("input"),
           userContext = sc.ctx,
-          onException = _ => PaginationParams(offset = 0, limit = 1),
+          onError = _ => PaginationParams(offset = 0, limit = 1),
           namedResolverActor = ItemResolver
         )
       }

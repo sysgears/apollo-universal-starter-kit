@@ -18,7 +18,11 @@ object UserTable extends JdbcProfile {
 
     def password = column[String]("PASSWORD")
 
-    def * = (id.?, username, email, password).mapTo[User]
+    def role = column[String]("ROLE")
+
+    def isActive = column[Boolean]("IS_ACTIVE")
+
+    def * = (id.?, username, email, password, role, isActive).mapTo[User]
   }
 
 }

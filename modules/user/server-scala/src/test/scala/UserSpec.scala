@@ -8,7 +8,8 @@ import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.jwt.model.JwtContent
 import modules.jwt.service.JwtAuthService
-import repositories.UserRepo
+import repositories.UserRepository
+import common.implicits.RichDBIO._
 import spray.json._
 
 import scala.concurrent.duration._
@@ -17,7 +18,7 @@ class UserSpec extends UserHelper {
 
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
-  val userRepo: UserRepo = inject[UserRepo]
+  val userRepo: UserRepository = inject[UserRepository]
   val authService: JwtAuthService[JwtContent] = inject[JwtAuthService[JwtContent]]
 
   val testEmail = "scala-test@gmail.com"
@@ -125,8 +126,8 @@ class UserSpec extends UserHelper {
     "confirm registration" in {
       registrationStep ~> check()
 
-      val user = await(userRepo.find(testEmail))
-      await(userRepo.update(user.get.copy(isActive = false)))
+      val user = await(userRepo.findOne(testEmail).run)
+      await(userRepo.update(user.get.copy(isActive = false)).run)
       val token = authService.createAccessToken(JwtContent(1))
 
       val confirmRegistrationMutation =
@@ -177,8 +178,8 @@ class UserSpec extends UserHelper {
     "resend confirmation message" in {
       registrationStep ~> check()
 
-      val user = await(userRepo.find(testEmail))
-      await(userRepo.update(user.get.copy(isActive = false)))
+      val user = await(userRepo.findOne(testEmail).run)
+      await(userRepo.update(user.get.copy(isActive = false)).run)
 
       val resendConfirmationMessageMutation =
         """

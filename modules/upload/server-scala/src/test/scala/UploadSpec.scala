@@ -6,7 +6,7 @@ import akka.http.scaladsl.model.{ContentTypes, HttpEntity, Multipart}
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
-import common.RichDBIO._
+import common.implicits.RichDBIO._
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import models.FileMetadata

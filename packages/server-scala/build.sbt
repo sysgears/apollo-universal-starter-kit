@@ -4,7 +4,7 @@ version := "0.1"
 
 scalaVersion := "2.12.7"
 
-lazy val global = project in file(".") dependsOn(upload, user, counter, contact) aggregate(user, upload, counter, contact)
+lazy val global = project in file(".") dependsOn(upload, user, counter, mailer, contact) aggregate(user, upload, counter, mailer, contact)
 
 lazy val upload = ProjectRef(base = file("../../modules/upload/server-scala"), id = "upload")
 
@@ -13,3 +13,5 @@ lazy val user = ProjectRef(base = file("../../modules/user/server-scala"), id = 
 lazy val counter = ProjectRef(base = file("../../modules/counter/server-scala"), id = "counter")
 
 lazy val contact = ProjectRef(base = file("../../modules/contact/server-scala"), id = "contact")
+
+lazy val mailer = ProjectRef(base = file("../../modules/mailer/server-scala"), id = "mailer")

@@ -1,12 +1,12 @@
-package modules.mail.guice.modules
+package modules
 
+import actor.MailActor
 import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.github.jurajburian.mailer.{Mailer, SessionFactory, SmtpAddress, SmtpStartTls}
 import com.google.inject.name.{Named, Names}
 import com.google.inject.{Provides, Singleton}
 import com.typesafe.config.Config
 import core.guice.injection.GuiceActorRefProvider
-import modules.mail.actor.MailActor
 import net.codingwell.scalaguice.ScalaModule
 
 class MailModule extends ScalaModule with GuiceActorRefProvider {

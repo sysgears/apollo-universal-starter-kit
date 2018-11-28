@@ -1,14 +1,14 @@
-package modules.mail.service.ethereal
+package service.ethereal
 
+import actor.MailActor
+import actor.MailActor.SendMail
 import akka.actor.ActorRef
 import akka.stream.ActorMaterializer
 import com.github.jurajburian.mailer.{Mailer, Message}
 import common.ActorMessageDelivering
 import javax.inject.{Inject, Named}
-import modules.mail.actor.MailActor
-import modules.mail.actor.MailActor.SendMail
-import modules.mail.models.MailPayload
-import modules.mail.service.MailService
+import models.MailPayload
+import service.MailService
 
 import scala.concurrent.{ExecutionContext, Future}
 

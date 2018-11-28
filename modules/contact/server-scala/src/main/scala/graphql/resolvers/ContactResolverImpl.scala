@@ -4,9 +4,8 @@ import com.github.jurajburian.mailer.{Content, Message}
 import com.google.inject.Inject
 import com.typesafe.config.Config
 import javax.mail.internet.InternetAddress
-import models.{Contact, ContactPayload}
-import modules.mail.models.MailPayload
-import modules.mail.service.MailService
+import models.{Contact, ContactPayload, MailPayload}
+import service.MailService
 
 import scala.concurrent.{ExecutionContext, Future}
 

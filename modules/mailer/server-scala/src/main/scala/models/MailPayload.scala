@@ -1,4 +1,4 @@
-package modules.mail.models
+package models
 
 import modules.common.FieldError
 

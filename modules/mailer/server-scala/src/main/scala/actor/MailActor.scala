@@ -1,11 +1,11 @@
-package modules.mail.actor
+package actor
 
+import actor.MailActor.SendMail
 import akka.actor.{Actor, ActorLogging}
 import com.github.jurajburian.mailer.{Mailer, Message}
 import common.ActorNamed
+import models.MailPayload
 import modules.common.FieldError
-import modules.mail.actor.MailActor.SendMail
-import modules.mail.models.MailPayload
 
 import scala.util.{Failure, Success, Try}
 

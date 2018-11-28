@@ -2,10 +2,10 @@ package guice.modules
 
 import com.github.jurajburian.mailer.Message
 import graphql.resolvers.{ContactResolver, ContactResolverImpl}
-import modules.mail.models.MailPayload
-import modules.mail.service.MailService
-import modules.mail.service.ethereal.EtherealMailService
+import models.MailPayload
 import net.codingwell.scalaguice.ScalaModule
+import service.MailService
+import service.ethereal.EtherealMailService
 
 class ContactModule extends ScalaModule {
   override def configure(): Unit = {

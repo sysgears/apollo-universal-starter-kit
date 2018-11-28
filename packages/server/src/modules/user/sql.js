@@ -114,7 +114,7 @@ class User {
           'u.id',
           'u.username',
           'u.password_hash',
-          'u.token_salt',
+          'u.auth_salt',
           'u.role',
           'u.is_active',
           'u.email',
@@ -139,7 +139,7 @@ class User {
           'ca.serial',
           'up.first_name',
           'up.last_name',
-          'u.token_salt'
+          'u.auth_salt'
         )
         .from('user AS u')
         .leftJoin('auth_certificate AS ca', 'ca.user_id', 'u.id')
@@ -259,7 +259,7 @@ class User {
           'u.role',
           'u.is_active',
           'u.email',
-          'u.token_salt',
+          'u.auth_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -281,7 +281,7 @@ class User {
           'fa.fb_id',
           'u.email',
           'u.password_hash',
-          'u.token_salt',
+          'u.auth_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -305,7 +305,7 @@ class User {
           'lna.ln_id',
           'u.email',
           'u.password_hash',
-          'u.token_salt',
+          'u.auth_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -329,7 +329,7 @@ class User {
           'gha.gh_id',
           'u.email',
           'u.password_hash',
-          'u.token_salt',
+          'u.auth_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -353,7 +353,7 @@ class User {
           'ga.google_id',
           'u.email',
           'u.password_hash',
-          'u.token_salt',
+          'u.auth_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -387,7 +387,7 @@ class User {
           'u.role',
           'u.is_active',
           'u.email',
-          'u.token_salt',
+          'u.auth_salt',
           'up.first_name',
           'up.last_name'
         )
@@ -420,10 +420,10 @@ class User {
       .del();
   }
 
-  async increaseTokenSalt(userId) {
+  async increaseAuthSalt(userId) {
     return knex('user')
       .where('id', '=', userId)
-      .increment('token_salt', 1);
+      .increment('auth_salt', 1);
   }
 }
 const userDAO = new User();

@@ -2,7 +2,8 @@ package repositories
 
 import core.slick.{SchemaInitializer, SchemaUtil}
 import javax.inject.Inject
-import model.Post
+import model.PostTable
+import model.PostTable.PostTable
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
 
@@ -12,16 +13,16 @@ class PostSchemaInitializer @Inject()(database: Database)
                                      (implicit executionContext: ExecutionContext) extends SchemaInitializer
   with SchemaUtil {
 
-  val posts: TableQuery[Post.Table] = TableQuery[Post.Table]
+  val posts: TableQuery[PostTable] = TableQuery[PostTable]
 
   override def create(): Future[Unit] = {
-    withTable(database, posts, Post.name, _.isEmpty) {
+    withTable(database, posts, PostTable.name, _.isEmpty) {
       DBIO.seq(posts.schema.create)
     }
   }
 
   override def drop(): Future[Unit] = {
-    withTable(database, posts, Post.name, _.nonEmpty) {
+    withTable(database, posts, PostTable.name, _.nonEmpty) {
       DBIO.seq(posts.schema.drop)
     }
   }

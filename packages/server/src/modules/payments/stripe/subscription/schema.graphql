@@ -14,7 +14,7 @@ type StripeSubscriberProtectedNumber {
   number: Int
 }
 
-input StripeSubscribtionInput {
+input StripeSubscriptionInput {
   token: String!
   expiryMonth: Int!
   expiryYear: Int!
@@ -33,9 +33,9 @@ extend type Query {
 
 extend type Mutation {
   # Subscribe a user
-  addStripeSubscription(input: StripeSubscribtionInput!): StripeSubscription!
+  addStripeSubscription(input: StripeSubscriptionInput!): StripeSubscription!
   # Cancel a user's subscription
   cancelStripeSubscription: StripeSubscription!
   # Update a user's card information
-  updateStripeSubscriptionCard(input: StripeSubscribtionInput!): Boolean!
+  updateStripeSubscriptionCard(input: StripeSubscriptionInput!): Boolean!
 }

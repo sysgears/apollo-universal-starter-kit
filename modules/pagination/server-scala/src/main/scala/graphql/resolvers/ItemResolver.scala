@@ -5,7 +5,7 @@ import akka.pattern._
 import com.google.inject.Inject
 import common.RichDBIO._
 import common.ActorNamed
-import model.Pagination
+import model.PaginationParams
 import model.ItemsPayload
 import repositories.ItemRepository
 
@@ -24,7 +24,7 @@ class ItemResolver @Inject()(itemRepo: ItemRepository)
                             (implicit executionContext: ExecutionContext) extends Actor with ActorLogging {
 
   override def receive: Receive = {
-    case paginationParams: Pagination => {
+    case paginationParams: PaginationParams => {
       log.info(s"Received message: [ $paginationParams ]")
         itemRepo.getPaginatedObjectsList(paginationParams)
           .map(res => ItemsPayload(hasNextPage = res.hasNextPage, entities = res.entities, totalCount = res.totalCount))

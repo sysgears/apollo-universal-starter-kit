@@ -7,7 +7,7 @@ import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.ItemResolver
 import javax.inject.Inject
-import model.Pagination
+import model.PaginationParams
 import model.{Item, ItemsPayload}
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
@@ -23,9 +23,9 @@ class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
                            executionContext: ExecutionContext) extends GraphQLSchema with InputUnmarshallerGenerator
   with Logger {
 
-  implicit val paginationInputUnmarshaller: FromInput[Pagination] = inputUnmarshaller {
+  implicit val paginationInputUnmarshaller: FromInput[PaginationParams] = inputUnmarshaller {
     input =>
-      Pagination(
+      PaginationParams(
         offset = input("offset").asInstanceOf[Int],
         limit = input("limit").asInstanceOf[Int]
       )
@@ -38,7 +38,7 @@ class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
 
     implicit val Item: ObjectType[Unit, Item] = deriveObjectType(ObjectTypeName("Item"), ExcludeFields("id"))
     implicit val ItemsPayload: ObjectType[Unit, ItemsPayload] = deriveObjectType(ObjectTypeName("ItemsPayload"))
-    implicit val PaginationInput: InputObjectType[Pagination] = deriveInputObjectType[Pagination](InputObjectTypeName("Pagination"))
+    implicit val PaginationInput: InputObjectType[PaginationParams] = deriveInputObjectType[PaginationParams](InputObjectTypeName("Pagination"))
   }
 
   /**
@@ -53,9 +53,9 @@ class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
       ),
       resolve = sc => {
         resolveWithDispatcher[ItemsPayload](
-          input = sc.args.arg[Pagination]("input"),
+          input = sc.args.arg[PaginationParams]("input"),
           userContext = sc.ctx,
-          onException = _ => Pagination(offset = 0, limit = 1),
+          onException = _ => PaginationParams(offset = 0, limit = 1),
           namedResolverActor = ItemResolver
         )
       }

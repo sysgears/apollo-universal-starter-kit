@@ -7,24 +7,13 @@ exports.up = function(knex, Promise) {
       table.string('password_hash');
       table.string('role').defaultTo('user');
       table.boolean('is_active').defaultTo(false);
-      table.integer('auth_salt').defaultTo(0);
+      table.integer('auth_salt').defaultTo(1);
       table.timestamps(false, true);
     }),
     knex.schema.createTable('user_profile', table => {
       table.increments();
       table.string('first_name');
       table.string('last_name');
-      table
-        .integer('user_id')
-        .unsigned()
-        .references('id')
-        .inTable('user')
-        .onDelete('CASCADE');
-      table.timestamps(false, true);
-    }),
-    knex.schema.createTable('user_sessions', table => {
-      table.increments();
-      table.string('session_token');
       table
         .integer('user_id')
         .unsigned()

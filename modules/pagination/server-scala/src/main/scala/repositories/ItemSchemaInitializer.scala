@@ -1,13 +1,11 @@
 package repositories
 
-import core.slick.{SchemaInitializer, SchemaUtil}
+import core.slick.{SchemaLoader, TableInitializer}
 import javax.inject.Inject
-import model.{Item, ItemTable}
 import model.ItemTable.ItemTable
+import model.{Item, ItemTable}
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
-
-import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Contains methods for initializing and drop a database.
@@ -15,19 +13,8 @@ import scala.concurrent.{ExecutionContext, Future}
   * @param database base in which operations will be performed
   */
 class ItemSchemaInitializer @Inject()(database: Database)
-                                     (implicit executionContext: ExecutionContext) extends SchemaInitializer with SchemaUtil {
-  /**
-    * Entity that defines the database schema.
-    */
-  val items: TableQuery[ItemTable] = TableQuery[ItemTable]
-
-  override def create(): Future[Unit] = {
-    withTable(database, items, ItemTable.name, _.isEmpty) {
-      DBIO.seq(items.schema.create,
-      items ++= seedDatabase
-      )
-    }
-  }
+  extends TableInitializer[ItemTable](ItemTable.name, TableQuery[ItemTable], database)
+    with SchemaLoader {
 
   override def drop(): Future[Unit] = {
     withTable(database, items, ItemTable.name, _.nonEmpty) {

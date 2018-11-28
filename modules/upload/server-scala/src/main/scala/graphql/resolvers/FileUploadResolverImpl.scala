@@ -8,25 +8,26 @@ import akka.actor.ActorRef
 import akka.http.scaladsl.model.Multipart.FormData
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{FileIO, Keep, Sink, Source}
+import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.name.Named
+import common.RichDBIO._
 import common.errors._
-import common.{ActorUtil, Logger}
+import common.{ActorMessageDelivering, Logger}
+import graphql.resolvers.FileUploadResolverImpl._
 import javax.inject.Inject
-import common.implicits.RichFuture._
 import models.FileMetadata
-import repositories.FileMetadataRepo
 import services.HashAppender
-import FileUploadResolverImpl._
+import slick.dbio.DBIO
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRef,
-                                       fileRepo: FileMetadataRepo,
+                                       fileRepository: Repository[FileMetadata, Int],
                                        hashAppender: HashAppender)
                                       (implicit executionContext: ExecutionContext,
                                        materializer: ActorMaterializer) extends FileUploadResolver
   with Logger
-  with ActorUtil {
+  with ActorMessageDelivering {
 
   override def uploadFiles(parts: Source[FormData.BodyPart, Any]): Future[Boolean] = {
     parts.filter(_.filename.nonEmpty).mapAsync(1) {
@@ -47,7 +48,7 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
       }
     }.mapAsync(1) {
       fileMetadata =>
-        sendMessageToActor[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))
+        sendMessageWithFunc[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))
     }.toMat(Sink.ignore)(Keep.right).run.map(_ => true)
   }.recover {
     case error: Error =>
@@ -55,14 +56,19 @@ class FileUploadResolverImpl @Inject()(@Named(FileActor.name) fileActor: ActorRe
       false
   }
 
-  override def files: Future[List[FileMetadata]] = fileRepo.findAll
+  override def files: Future[List[FileMetadata]] = fileRepository.findAll.run.map(_.toList)
 
   override def removeFile(id: Int): Future[Boolean] = {
-    for {
-      fileMetadata <- fileRepo.find(id) failOnNone NotFound(s"FileMetadata(id: $id)")
-      _ <- fileRepo.delete(id)
-      deleteResult <- Future(Files.deleteIfExists(resourcesDirPath.resolve(fileMetadata.path)))
-    } yield deleteResult
+    fileRepository.executeTransactionally(
+      for {
+        fileMetadataOption <- fileRepository.findOne(id)
+        fileMetadata <- if (fileMetadataOption.nonEmpty) DBIO.successful(fileMetadataOption.get) else DBIO.failed(NotFound(s"FileMetadata(id: $id)"))
+        deletedFileMetadata <- fileRepository.delete(fileMetadata)
+      } yield deletedFileMetadata
+    ).run.map {
+      deletedFileMetadata =>
+        Files.deleteIfExists(resourcesDirPath.resolve(deletedFileMetadata.path))
+    }
   }.recover {
     case error: Error =>
       log.error(s"Failed to upload files. Reason: [$error")

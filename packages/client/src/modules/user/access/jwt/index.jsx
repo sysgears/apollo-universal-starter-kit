@@ -159,7 +159,7 @@ class DataRootComponent extends React.Component {
         if (currentUser) {
           // If we have received current user, then we had invalid Apollo Cache previously
           // and we should discard it
-          await client.cache.reset();
+          await client.clearStore();
           await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser } });
         }
       }

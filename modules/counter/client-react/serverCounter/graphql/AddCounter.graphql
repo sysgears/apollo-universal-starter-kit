@@ -1,5 +1,0 @@
-mutation addServerCounter($amount: Int!) {
-  addServerCounter(amount: $amount) {
-    amount
-  }
-}

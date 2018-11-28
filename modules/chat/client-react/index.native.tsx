@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator, NavigationScreenConfigProps } from 'react-navigation';
 
-import ClientModule from '@module/module-client-react/index.native';
+import ClientModule from '@module/module-client-react-native';
 import { translate } from '@module/i18n-client-react';
 import { HeaderTitle, IconButton } from '../../../packages/client/src/modules/common/components/native';
 import Chat from './containers/ChatOperations';

@@ -17,6 +17,11 @@ const logout = async client => {
   ref.current.reloadPage();
 };
 
+const logoutFromAllDevices = async client => {
+  await client.clearStore();
+  ref.current.reloadPage();
+};
+
 class PageReloader extends React.Component {
   constructor(props) {
     super(props);
@@ -43,10 +48,6 @@ PageReloader.propTypes = {
 const AuthPageReloader = ({ children }) => <PageReloader ref={ref}>{children}</PageReloader>;
 AuthPageReloader.propTypes = {
   children: PropTypes.node
-};
-
-const logoutFromAllDevices = client => {
-  return client.cache.reset();
 };
 
 export default new AccessModule(jwt, session, {

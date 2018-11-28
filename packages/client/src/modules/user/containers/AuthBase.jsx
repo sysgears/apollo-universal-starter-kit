@@ -77,10 +77,7 @@ const withLogoutFromAllDevices = Component =>
   withApollo(({ client, ...props }) => {
     const newProps = {
       ...props,
-      logoutFromAllDevices: async () => {
-        await access.doLogoutFromAllDevices(client);
-        await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
-      }
+      logoutFromAllDevices: async () => access.doLogoutFromAllDevices(client)
     };
     return <Component {...newProps} />;
   });

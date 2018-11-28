@@ -54,7 +54,7 @@ class UserRepoImpl @Inject()(db: Database)(implicit executionContext: ExecutionC
       for {
         count <- query.filter(_.id === user.id).update(user)
         _ <- count match {
-          case 0 => DBIO.failed(NotFound(s"User with id = $user"))
+          case 0 => DBIO.failed(NotFound(s"User with id = ${user.id}"))
           case _ => DBIO.successful(())
         }
       } yield user

@@ -20,7 +20,7 @@ object Dispatcher extends ActorNamed {
                                      context: UserContext,
                                      replyTo: ActorRef,
                                      resolverActor: ActorRef,
-                                     onException: Exception => Any,
+                                     onError: Throwable => Any,
                                      before: List[ActorRef] = Nil,
                                      after: List[ActorRef] = Nil)
 
@@ -37,7 +37,7 @@ object Dispatcher extends ActorNamed {
 
   sealed trait InterceptorResultStatus
 
-  final case class Failure(e: Exception) extends InterceptorResultStatus
+  final case class Failure(e: Throwable) extends InterceptorResultStatus
 
   final object Success extends InterceptorResultStatus
 
@@ -61,8 +61,10 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
           before = tail
         )
       } else {
-        sendMessageToActor(msg.resolverActor, msg.input)
-          .pipeTo(msg.replyTo)
+        sendMessageToActor[Any](msg.resolverActor, msg.input).andThen {
+          case scala.util.Success(r) => msg.replyTo ! r
+          case scala.util.Failure(f) => msg.replyTo ! msg.onError(f)
+        }
       }
   }
 
@@ -74,6 +76,6 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
 
     case Failure(e) =>
       log.info(s"Interceptor has finished with failure. Reason: '$e'")
-      msg.replyTo ! msg.onException(e)
+      msg.replyTo ! msg.onError(e)
   }
 }

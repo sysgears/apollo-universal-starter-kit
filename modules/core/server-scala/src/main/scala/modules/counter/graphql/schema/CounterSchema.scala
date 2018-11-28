@@ -1,9 +1,7 @@
 package modules.counter.graphql.schema
 
-import akka.NotUsed
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.Source
 import common.Logger
 import common.graphql.DispatcherResolver._
 import core.graphql.{GraphQLSchema, UserContext}
@@ -13,7 +11,7 @@ import modules.counter.graphql.resolvers.CounterResolver
 import modules.counter.models.Counter
 import modules.counter.services.count.CounterActor.GetAmount
 import sangria.macros.derive.{ExcludeFields, ObjectTypeName, deriveObjectType}
-import sangria.schema.{Action, Argument, Field, IntType, ObjectType}
+import sangria.schema.{Argument, Field, IntType, ObjectType}
 import sangria.streaming.akkaStreams._
 import core.services.publisher.RichPubSubService._
 
@@ -36,7 +34,7 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
       resolve = sc => resolveWithDispatcher[Counter](
         input = GetAmount,
         userContext = sc.ctx,
-        onException = _ => Counter(amount = 0),
+        onError = _ => Counter(amount = 0),
         namedResolverActor = CounterResolver
       )
     )
@@ -52,7 +50,7 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
         resolveWithDispatcher[Counter](
           input = amount,
           userContext = sc.ctx,
-          onException = _ => Counter(amount = 0),
+          onError = _ => Counter(amount = 0),
           namedResolverActor = CounterResolver
         ).pub
       }

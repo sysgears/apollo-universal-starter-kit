@@ -89,18 +89,7 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[UserPayload](
         input = (sc.args.arg[RegisterUserInput]("input"), authConfig.skipConfirmation),
         userContext = sc.ctx,
-        onException = e => UserPayload(errors = Some(List(FieldError("register", e.getMessage)))),
-        namedResolverActor = UserResolver
-      )
-    ),
-    Field(
-      name = "resendConfirmationMessage",
-      fieldType = userPayload,
-      arguments = List(Argument("input", resendConfirmationMessageInput)),
-      resolve = sc => resolveWithDispatcher[UserPayload](
-        input = sc.args.arg[ResendConfirmationMessageInput]("input"),
-        userContext = sc.ctx,
-        onException = e => UserPayload(errors = Some(List(FieldError("resendConfirmationMessage", e.getMessage)))),
+        onError = e => UserPayload(errors = Some(List(FieldError("register", e.getMessage)))),
         namedResolverActor = UserResolver
       )
     ),
@@ -111,7 +100,18 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[AuthPayload](
         input = sc.args.arg[ConfirmRegistrationInput]("input"),
         userContext = sc.ctx,
-        onException = e => AuthPayload(errors = Some(List(FieldError("confirmRegistration", e.getMessage)))),
+        onError = e => AuthPayload(errors = Some(List(FieldError("confirmRegistration", e.getMessage)))),
+        namedResolverActor = UserResolver
+      )
+    ),
+    Field(
+      name = "resendConfirmationMessage",
+      fieldType = userPayload,
+      arguments = List(Argument("input", resendConfirmationMessageInput)),
+      resolve = sc => resolveWithDispatcher[UserPayload](
+        input = sc.args.arg[ResendConfirmationMessageInput]("input"),
+        userContext = sc.ctx,
+        onError = e => UserPayload(errors = Some(List(FieldError("resendConfirmationMessage", e.getMessage)))),
         namedResolverActor = UserResolver
       )
     ),
@@ -122,7 +122,7 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[AuthPayload](
         input = sc.args.arg[LoginUserInput]("input"),
         userContext = sc.ctx,
-        onException = e => AuthPayload(errors = Some(List(FieldError("login", e.getMessage)))),
+        onError = e => AuthPayload(errors = Some(List(FieldError("login", e.getMessage)))),
         namedResolverActor = UserResolver
       )
     ),
@@ -133,7 +133,7 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[String](
         input = sc.args.arg[ForgotPasswordInput]("input"),
         userContext = sc.ctx,
-        onException = e => Future.failed(e),
+        onError = e => Future.failed(e),
         namedResolverActor = UserResolver
       )
     ),
@@ -144,7 +144,7 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[ResetPayload](
         input = sc.args.arg[ResetPasswordInput]("input"),
         userContext = sc.ctx,
-        onException = e => ResetPayload(errors = Some(List(FieldError("resetPassword", e.getMessage)))),
+        onError = e => ResetPayload(errors = Some(List(FieldError("resetPassword", e.getMessage)))),
         namedResolverActor = UserResolver
       )
     )

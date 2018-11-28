@@ -16,18 +16,9 @@ class ItemSchemaInitializer @Inject()(database: Database)
   extends TableInitializer[ItemTable](ItemTable.name, TableQuery[ItemTable], database)
     with SchemaLoader {
 
-  override def drop(): Future[Unit] = {
-    withTable(database, items, ItemTable.name, _.nonEmpty) {
-      DBIO.seq(items.schema.drop)
-    }
-  }
-
-  /**
-    * Helper method for generating 'Item' entities
-    *
-    * @return list of 'Item' entities
-    */
-  def seedDatabase: List[Item] = {
-    List.range(1, 100).map(num => Item(Some(num), s"Item $num"))
+  //  TODO: fix implementation
+  override def seedDatabase[ItemTable](tableQuery: TableQuery[ItemTable]) = {
+    val items = List.range(1, 100).map(num => Item(Some(num), s"Item $num"))
+    DBIO.successful()
   }
 }

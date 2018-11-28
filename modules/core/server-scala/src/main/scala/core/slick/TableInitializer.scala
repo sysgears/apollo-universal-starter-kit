@@ -12,7 +12,7 @@ abstract class TableInitializer[E <: RelationalProfile#Table[_]](name: String, t
 
   def create(): Future[Unit] = {
     database.run(MTable.getTables(name)).flatMap {
-      tables => if (tables.isEmpty) database.run(DBIO.seq(table.schema.create)) else Future.successful()
+      tables => if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, seedDatabase(table))) else Future.successful()
     }
   }
 
@@ -22,7 +22,7 @@ abstract class TableInitializer[E <: RelationalProfile#Table[_]](name: String, t
     }
   }
 
-  def seedDatabase(): Future[Unit] = {
-    Future.successful()
+  def seedDatabase[E <: RelationalProfile#Table[_]](tableQuery: TableQuery[E]): DBIO[Unit] = {
+    DBIO.successful()
   }
 }
